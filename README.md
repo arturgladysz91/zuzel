@@ -80,6 +80,7 @@ Jeżeli zawodnik jedzie zbyt szybko po ciasnej linii, system musi wymusić:
 3) ryzyko błędu / straty.
 
 Nie dopuszczamy “cudów”: szybka jazda przy krawężniku bez konsekwencji.
+Kontakty między zawodnikami w środkowej fazie łuku mają istotnie większe konsekwencje (wyniesienie, utrata prędkości, upadek) niż na prostej.
 
 #### 1.4 Stan toru
 Każdy segment i linia mają stan, m.in.:
