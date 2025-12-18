@@ -56,12 +56,19 @@ Tor składa się z segmentów decyzyjnych:
 Każdy segment posiada **5 linii jazdy**.
 
 #### 1.2 Linie jazdy
-- Linie są **lokalne dla segmentu**, nie przypisane do całego łuku ani biegu.
-- Zawodnik może wejść w łuk jedną linią, przejechać środek inną, wyjść jeszcze inną.
-- Zmiana linii:
-  - kosztuje (prędkość / ryzyko),
-  - zależy od stylu i umiejętności,
-  - nie jest natychmiastowa (ma bezwładność).
+Linie są lokalne dla segmentu, nie przypisane do całego łuku ani biegu.
+
+Zawodnik może wejść w łuk jedną linią, przejechać środek inną, wyjść jeszcze inną.
+
+Linie są strefami referencyjnymi (decyzje/ocena pozycji), a faktyczny ruch odbywa się po ciągłej trajektorii; pozycja względem linii jest zmienną ciągłą.
+
+Zmiana linii:
+
+kosztuje (prędkość / ryzyko),
+
+zależy od stylu i umiejętności,
+
+nie jest natychmiastowa (ma bezwładność i ograniczenia przyczepności).
 
 #### 1.3 Ograniczenie fizyczne w łuku (OBOWIĄZKOWE)
 W łuku obowiązuje zasada:
@@ -139,6 +146,27 @@ Styl określa:
 - zachowanie w walce.
 
 Styl nie zastępuje statystyk.
+
+####3.4 Interakcje między zawodnikami
+
+Zawodnicy muszą uwzględniać obecność innych zawodników na torze.
+System symuluje:
+
+unikanie kolizji (hamowanie, korekta trajektorii),
+
+lekkie kontakty (odbicia, strata rytmu),
+
+mocne kontakty (wysokie ryzyko błędu lub upadek).
+
+Skutki kontaktu zależą od:
+
+prędkości względnej,
+
+miejsca na torze (łuk / prosta),
+
+aktualnej przyczepności,
+
+umiejętności zawodników (panowanie w poślizgu, jazda parą, morale).
 
 ---
 
