@@ -69,6 +69,11 @@ kosztuje (prędkość / ryzyko),
 zależy od stylu i umiejętności,
 
 nie jest natychmiastowa (ma bezwładność i ograniczenia przyczepności).
+Linia = dyskretna strefa decyzyjna (1..5), lokalna dla segmentu.
+
+Ruch = ciągły (pozycja lateralna float), a „linia” to najbliższa strefa referencyjna.
+
+Zmiana linii ma bezwładność: nie przeskakujesz 1→5 w jednej klatce.
 
 #### 1.3 Ograniczenie fizyczne w łuku (OBOWIĄZKOWE)
 W łuku obowiązuje zasada:
