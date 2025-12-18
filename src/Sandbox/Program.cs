@@ -1,4 +1,4 @@
-// Aplikacja testowa do uruchamiania symulacji i wypisywania logów na konsolę.
+﻿// Aplikacja testowa do uruchamiania symulacji i wypisywania logów na konsolę.
 // Uruchamia minimalny bieg i wypisuje log z decyzji linii per segment.
 using CoreSim;
 using CoreSim.Decisions;
