@@ -1,5 +1,4 @@
-// Aktualny stan nawierzchni toru (Humidity, Packing, Ruts, Shift) liczony per segment.
-// Zmienny stan nawierzchni toru, liczony per segment.
+// Aktualny stan nawierzchni toru (HUM, PACK, RUTS, SHIFT) w wersji MVP (globalny; per segment dodamy później).
 namespace CoreSim;
 
 public sealed class TrackState
@@ -16,4 +15,6 @@ public sealed class TrackState
         Ruts = ruts;
         Shift = shift;
     }
+
+    public static TrackState CreateDefault() => new(55f, 60f, 10f, 18f);
 }
