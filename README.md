@@ -206,7 +206,8 @@ Decyzja zależy od charakteru i zaufania.
 Sprzęt zawodnika to w praktyce:
 - umiejętność doboru ustawień,
 - trafność diagnozy toru,
-- jakość feedbacku po biegu.
+- jakość feedbacku po biegu
+- umiejętności zawodnika (jego statystyki).
 
 ---
 
