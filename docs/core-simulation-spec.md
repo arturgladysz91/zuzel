@@ -1,1 +1,1 @@
-Dokument definiujący zasady, granice i cele symulacji menedżera żużlowego.
+// Dokument definiujący zasady, granice i cele symulacji menedżera żużlowego.
