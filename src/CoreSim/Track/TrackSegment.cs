@@ -7,7 +7,7 @@ public sealed class TrackSegment
     public int Id { get; }
     public SegmentType Type { get; }
 
-    public const int LanesCount = 5;
+    public const int LanesCount = LaneModel.LanesCount;
 
     public TrackSegment(int id, SegmentType type)
     {
