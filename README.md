@@ -69,7 +69,7 @@ kosztuje (prędkość / ryzyko),
 zależy od stylu i umiejętności,
 
 nie jest natychmiastowa (ma bezwładność i ograniczenia przyczepności).
-Linia = dyskretna strefa decyzyjna (1..5), lokalna dla segmentu.
+Linia = dyskretna strefa decyzyjna (0..4), lokalna dla segmentu.
 
 Ruch = ciągły (pozycja lateralna float), a „linia” to najbliższa strefa referencyjna.
 
