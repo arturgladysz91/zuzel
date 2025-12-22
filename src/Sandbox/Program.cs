@@ -5,7 +5,7 @@ using CoreSim.Decisions;
 using CoreSim.Race;
 
 var track = Track.CreateExample();
-var trackState = TrackState.CreateDefault();
+var trackState = TrackState.CreateDefault(track);
 
 var riders = new List<RiderState>
 {
