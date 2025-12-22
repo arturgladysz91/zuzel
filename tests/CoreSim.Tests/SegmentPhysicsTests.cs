@@ -32,6 +32,20 @@ public sealed class SegmentPhysicsTests
         Assert.Equal(lane, result.Lane);
         Assert.Equal(max, result.Speed, 3);
     }
+    
+    [Fact]
+    public void OuterLane_TooFast_Crashes_WhenNoRoomToRunWide()
+    {
+        var segment = new TrackSegment(0, SegmentType.TurnMiddle);
+        var lane = LaneModel.MaxLane;
+        var max = SegmentPhysics.MaxSafeTurnSpeed(lane);
+
+        var result = SegmentPhysics.Apply(segment, lane, max * 1.20f);
+
+        Assert.Equal(SegmentOutcome.Crash, result.Outcome);
+        Assert.Equal(lane, result.Lane);
+        Assert.Equal(0f, result.Speed, 3);
+    }
 
     [Fact]
     public void Turn_WithSpeedInBrakeRange_ReturnsBrakeAndCapsSpeed()
