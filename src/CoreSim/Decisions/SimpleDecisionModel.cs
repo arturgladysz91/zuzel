@@ -9,7 +9,7 @@ public sealed class SimpleDecisionModel : IRiderDecisionModel
     public RiderDecision Decide(CoreSim.TrackSegment segment, CoreSim.RiderState rider)
     {
         var delta = _rng.Next(-1, 2); // -1,0,1
-        var target = Math.Clamp(rider.Lane + delta, 0, 4);
+        var target = LaneModel.ClampLane(rider.Lane + delta);
         return new RiderDecision(target, 0f);
     }
 }
