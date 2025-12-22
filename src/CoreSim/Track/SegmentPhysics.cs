@@ -46,6 +46,11 @@ public static class SegmentPhysics
 
         if (speed <= max * RunWideSpeedFactor)
         {
+                        if (lane == LaneModel.MaxLane)
+            {
+                return new SegmentResolution(SegmentOutcome.Crash, lane, 0f);
+            }
+
             var widerLane = Math.Min(lane + 1, LaneModel.MaxLane);
             return new SegmentResolution(SegmentOutcome.RunWide, widerLane, speed);
         }
