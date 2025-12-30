@@ -62,11 +62,15 @@ Zawodnik może wejść w łuk jedną linią, przejechać środek inną, wyjść 
 
 Linie są strefami referencyjnymi (decyzje/ocena pozycji), a faktyczny ruch odbywa się po ciągłej trajektorii; pozycja względem linii jest zmienną ciągłą.
 
+Optymalna trajektoria nie musi oznaczać ciągłej jazdy po jednej linii.
+
+W zależności od warunków toru (przyczepność, koleiny/zużycie, wilgotność) lepsza może być linia mieszana, np. wąsko na wejściu i szerzej na wyjściu, bo pozwala utrzymać płynność bez nadmiernego hamowania.
+
+Model powinien premiować płynność i utrzymanie prędkości wyjściowej, a nie tylko “trzymanie krawężnika”.
+
 Zmiana linii:
 
-kosztuje (prędkość / ryzyko),
-
-zależy od stylu i umiejętności,
+zależy od stylu i umiejętności, oceny ryzyka kolizji z innym zawodnikiem.
 
 nie jest natychmiastowa (ma bezwładność i ograniczenia przyczepności).
 Linia = dyskretna strefa decyzyjna (0..4), lokalna dla segmentu.
