@@ -1,6 +1,7 @@
 // Minimalna symulacja biegu: iteruje segmenty, wywołuje decyzje i loguje zmiany linii.
 using CoreSim.Decisions;
 using CoreSim.Logging;
+using System.Globalization;
 
 namespace CoreSim.Race;
 
@@ -13,24 +14,37 @@ public sealed class HeatSimulator
     public SimLog Simulate(CoreSim.Track track, CoreSim.TrackState trackState, List<CoreSim.RiderState> riders, int heatId = 0)
     {
         var log = new SimLog();
-
-   for (var segIndex = 0; segIndex < track.Segments.Count; segIndex++)
+        var crashed = new bool[riders.Count];
+    for (var segIndex = 0; segIndex < track.Segments.Count; segIndex++)
         {
             var seg = track.Segments[segIndex];
             for (int i = 0; i < riders.Count; i++)
             {
+                    if (crashed[i])
+                        continue;
+
                 var r = riders[i];
                 var before = r.Lane;
+                var entrySpeed = r.Speed <= 0f ? SegmentPhysics.MaxSafeTurnSpeed(r.Lane) : r.Speed;
 
                 var d = _decision.Decide(seg, r);
+                var resolution = SegmentPhysics.Apply(seg, d.TargetLane, entrySpeed);
 
                 r.CurrentSegmentId = seg.Id;
-                r.Lane = d.TargetLane;
+                r.Lane = resolution.Lane;
+                r.Speed = resolution.Speed;
                 r.Risk = ApplySurfaceRisk(seg, trackState, segIndex, r.Lane, d.Risk);
 
-                log.Add($"SEG={seg.Id} {seg.Type} rider={r.RiderId} lane {before}->{r.Lane}");
-                
-                ApplySurfaceWear(seg, trackState, segIndex, r.Lane, heatId, segIndex, log);
+                log.Add($"SEG={seg.Id} {seg.Type} rider={r.RiderId} lane {before}->{r.Lane} outcome={resolution.Outcome} v_in={entrySpeed.ToString("F2", CultureInfo.InvariantCulture)} v_out={resolution.Speed.ToString("F2", CultureInfo.InvariantCulture)}");
+
+                if (resolution.Outcome != SegmentOutcome.Crash)
+                {
+                    ApplySurfaceWear(seg, trackState, segIndex, r.Lane, heatId, segIndex, log);
+                }
+                else
+                {
+                    crashed[i] = true;
+                }
             }
         }
 
