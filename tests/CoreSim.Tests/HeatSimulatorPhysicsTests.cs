@@ -12,6 +12,20 @@ public sealed class HeatSimulatorPhysicsTests
         public RiderDecision Decide(TrackSegment segment, RiderState rider)
             => new(rider.Lane, 0f);
     }
+    private sealed class TargetDecisionModel : IRiderDecisionModel
+    {
+        private readonly int _targetLane;
+        private readonly float _risk;
+
+        public TargetDecisionModel(int targetLane, float risk = 0f)
+        {
+            _targetLane = targetLane;
+            _risk = risk;
+        }
+
+        public RiderDecision Decide(TrackSegment segment, RiderState rider)
+            => new(_targetLane, _risk);
+    }
 
     [Fact]
     public void Simulate_BrakesWhenSpeedSlightlyAboveLimit()
@@ -30,7 +44,50 @@ public sealed class HeatSimulatorPhysicsTests
         Assert.Equal(max, rider.Speed, 3);
         Assert.Contains("outcome=Brake", log.Lines[0]);
     }
+    [Fact]
+    public void Simulate_RunWideMovesOutFromPlannedLane()
+    {
+        var track = new Track(new List<TrackSegment> { new(0, SegmentType.TurnMiddle) });
+        var trackState = TrackState.CreateDefault(track);
+        const int startLane = 1;
+        const int targetLane = 4;
+        const int plannedLane = startLane + 1;
+        var max = SegmentPhysics.MaxSafeTurnSpeed(plannedLane);
 
+        var rider = RiderState.CreateDefault(10, startLane);
+        rider.Speed = max * 1.20f;
+
+        var sim = new HeatSimulator(new TargetDecisionModel(targetLane));
+        var log = sim.Simulate(track, trackState, new List<RiderState> { rider });
+
+        Assert.Equal(plannedLane + 1, rider.Lane);
+        Assert.Equal(max * 1.20f, rider.Speed, 3);
+        Assert.Contains("outcome=RunWide", log.Lines[0]);
+        Assert.Contains($"lane {startLane}->{plannedLane}->{plannedLane + 1}", log.Lines[0]);
+    }
+
+    [Fact]
+    public void Simulate_BrakeKeepsPlannedLane()
+    {
+        var track = new Track(new List<TrackSegment> { new(0, SegmentType.TurnMiddle) });
+        var trackState = TrackState.CreateDefault(track);
+        const int startLane = 0;
+        const int targetLane = 3;
+        const int plannedLane = startLane + 1;
+        var max = SegmentPhysics.MaxSafeTurnSpeed(plannedLane);
+
+        var rider = RiderState.CreateDefault(11, startLane);
+        rider.Speed = max * 1.05f;
+
+        var sim = new HeatSimulator(new TargetDecisionModel(targetLane));
+        var log = sim.Simulate(track, trackState, new List<RiderState> { rider });
+
+        Assert.Equal(plannedLane, rider.Lane);
+        Assert.Equal(max, rider.Speed, 3);
+        Assert.Contains("outcome=Brake", log.Lines[0]);
+        Assert.Contains($"lane {startLane}->{plannedLane}->{plannedLane}", log.Lines[0]);
+    }
+}
     [Fact]
     public void Simulate_RunsWideWhenTooFast()
     {
