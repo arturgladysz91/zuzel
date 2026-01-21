@@ -19,7 +19,7 @@ public sealed class PhysicsTestRunnerTests
             trackState: trackState,
             initialLane: 0,
             safeSpeedMultiplier: 1.2f,
-            segmentPlans: new[] { new PhysicsTestSegmentPlan(targetLane: 0, note: "forces consequence") });
+            segmentPlans: new[] { new PhysicsTestSegmentPlan(TargetLane: 0, Note: "forces consequence") });
 
         var result = new PhysicsTestRunner().Run(scenario);
 
@@ -40,15 +40,15 @@ public sealed class PhysicsTestRunnerTests
         var initialMultiplier = 1.108f; // just above brake threshold on lane 0
 
         var brakeScenario = new PhysicsTestScenario(
-            name: "brake",
-            track: track,
-            trackState: trackState,
-            initialLane: 0,
-            initialSpeed: SegmentPhysics.MaxSafeTurnSpeed(0) * initialMultiplier,
-            segmentPlans: new[]
+            Name: "brake",
+            Track: track,
+            TrackState: trackState,
+            InitialLane: 0,
+            InitialSpeed: SegmentPhysics.MaxSafeTurnSpeed(0) * initialMultiplier,
+            SegmentPlans: new[]
             {
-                new PhysicsTestSegmentPlan(targetLane: 0, EntrySpeed: SegmentPhysics.MaxSafeTurnSpeed(0), note: "hard brake"),
-                new PhysicsTestSegmentPlan(targetLane: 0)
+                new PhysicsTestSegmentPlan(TargetLane: 0, EntrySpeed: SegmentPhysics.MaxSafeTurnSpeed(0), Note: "hard brake"),
+                new PhysicsTestSegmentPlan(TargetLane: 0)
             });
 
         var mixedScenario = PhysicsTestScenario.FromSafeSpeedMultiplier(
@@ -59,8 +59,8 @@ public sealed class PhysicsTestRunnerTests
             safeSpeedMultiplier: initialMultiplier,
             segmentPlans: new[]
             {
-                new PhysicsTestSegmentPlan(targetLane: 0, note: "allow run wide"),
-                new PhysicsTestSegmentPlan(targetLane: 1, note: "hold wider exit")
+                new PhysicsTestSegmentPlan(TargetLane: 0, Note: "allow run wide"),
+                new PhysicsTestSegmentPlan(TargetLane: 1, Note: "hold wider exit")
             });
 
         var runner = new PhysicsTestRunner();
