@@ -87,7 +87,7 @@ public sealed class HeatSimulatorPhysicsTests
         Assert.Contains("outcome=Brake", log.Lines[0]);
         Assert.Contains($"lane {startLane}->{plannedLane}->{plannedLane}", log.Lines[0]);
     }
-}
+
     [Fact]
     public void Simulate_RunsWideWhenTooFast()
     {
