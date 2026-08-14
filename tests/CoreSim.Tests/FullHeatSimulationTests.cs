@@ -37,6 +37,9 @@ public sealed class FullHeatSimulationTests
         Assert.Equal(resultA.Classification, resultB.Classification);
         Assert.Equal(resultA.Log.Lines, resultB.Log.Lines);
         Assert.Equal(resultA.Log.SurfaceChanges, resultB.Log.SurfaceChanges);
+        Assert.Equal(resultA.Log.Overtakes, resultB.Log.Overtakes);
+        Assert.Equal(4, resultA.Log.OrderSnapshots.Count);
+        Assert.All(resultA.Log.OrderSnapshots, snapshot => Assert.Equal(4, snapshot.Order.Count));
         Assert.All(resultA.Classification, result => Assert.Equal(4, result.LapsCompleted));
         Assert.Equal(new[] { 3, 2, 1, 0 }, resultA.Classification.Select(result => result.Points));
         Assert.Equal(1, resultA.Classification[0].RiderId);

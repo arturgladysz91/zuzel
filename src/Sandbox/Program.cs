@@ -1,4 +1,5 @@
 using CoreSim;
+using CoreSim.Analysis;
 using CoreSim.Decisions;
 using CoreSim.Race;
 using CoreSim.Setup;
@@ -6,13 +7,14 @@ using CoreSim.Setup;
 var track = Track.CreateExample();
 var trackState = TrackState.CreateDefault(track);
 
-var riders = new List<RiderState>
+var profiles = new[]
 {
-    new(new RiderProfile(1, "Kowalski", new RiderSkills(78, 72, 70, 82, 65, 75), RiderStyle.Balanced), 0),
-    new(new RiderProfile(2, "Nowak", new RiderSkills(64, 80, 76, 62, 72, 68), new RiderStyle(0.7f, 0.7f, 0.8f, 0.6f)), 1),
-    new(new RiderProfile(3, "Wiśniewski", new RiderSkills(84, 65, 58, 70, 60, 72), new RiderStyle(0.4f, 0.4f, 0.3f, 0.4f)), 2),
-    new(new RiderProfile(4, "Wójcik", new RiderSkills(69, 74, 82, 76, 80, 66), RiderStyle.Balanced), 3),
+    new RiderProfile(1, "Kowalski", new RiderSkills(78, 72, 70, 82, 65, 75), RiderStyle.Balanced),
+    new RiderProfile(2, "Nowak", new RiderSkills(64, 80, 76, 62, 72, 68), new RiderStyle(0.7f, 0.7f, 0.8f, 0.6f)),
+    new RiderProfile(3, "Wiśniewski", new RiderSkills(84, 65, 58, 70, 60, 72), new RiderStyle(0.4f, 0.4f, 0.3f, 0.4f)),
+    new RiderProfile(4, "Wójcik", new RiderSkills(69, 74, 82, 76, 80, 66), RiderStyle.Balanced),
 };
+var riders = profiles.Select((profile, lane) => new RiderState(profile, lane)).ToList();
 
 var setupResolver = new SetupResolver(seed: 11);
 foreach (var rider in riders)
@@ -52,3 +54,12 @@ foreach (var line in result.Log.Lines)
 Console.WriteLine("\nClassification:");
 foreach (var rider in result.Classification)
     Console.WriteLine($"{rider.Position}. rider={rider.RiderId} points={rider.Points} crashed={rider.Crashed} time={rider.TimeSeconds:F2}");
+
+var balance = BalanceAnalyzer.AnalyzeStartingGates(track, profiles, simulations: 2000, seed: 2026);
+Console.WriteLine("\nStarting-gate balance (2000 heats, riders rotated):");
+foreach (var gate in balance.Gates)
+{
+    Console.WriteLine(
+        $"Gate {gate.Gate}: win={gate.WinRate:P1} avgPos={gate.AveragePosition:F2} avgPts={gate.AveragePoints:F2} crash={gate.CrashRate:P1}");
+}
+Console.WriteLine($"Win-rate spread: {balance.WinRateSpread:P1}");

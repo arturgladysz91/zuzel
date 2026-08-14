@@ -23,6 +23,7 @@ public sealed record HeatSimulationOptions
     public int Seed { get; init; } = 1234;
     public WeatherState Weather { get; init; } = WeatherState.Dry;
     public float IncidentFrequency { get; init; } = 1f;
+    public bool EnableLogging { get; init; } = true;
 
     public void Validate()
     {
