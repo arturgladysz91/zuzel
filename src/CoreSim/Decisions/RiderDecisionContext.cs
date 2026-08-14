@@ -7,4 +7,5 @@ public sealed record RiderDecisionContext(
     RiderState Rider,
     IReadOnlyList<RiderState> Riders,
     int HeatId,
-    int Lap);
+    int Lap,
+    Track? Track = null);
