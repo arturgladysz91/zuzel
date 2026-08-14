@@ -32,8 +32,11 @@ public sealed record SegmentPhysicsContext(
 /// </summary>
 public static class SegmentPhysics
 {
-    public const float BaseTurnMaxSpeed = 12.0f;
-    public const float TurnMaxSpeedDeltaPerLane = 1.5f;
+    // Calibrated against the example 270-296 m lap. The previous 1.5 m/s lane
+    // step made the outside gate roughly 30% faster over a full lap. A 0.35 m/s
+    // step offsets the longer outside route without making it automatically best.
+    public const float BaseTurnMaxSpeed = 16.0f;
+    public const float TurnMaxSpeedDeltaPerLane = 0.35f;
     public const float BrakeSpeedFactor = 1.10f;
     public const float RunWideSpeedFactor = 1.30f;
 
@@ -52,7 +55,9 @@ public static class SegmentPhysics
     {
         var baseSpeed = MaxSafeTurnSpeed(lane);
         var control = RiderSkills.Normalize(skills.SlideControl);
-        var abilityMultiplier = 0.96f + control * 0.08f;
+        var speedAbility = RiderSkills.Normalize(skills.Speed);
+        var controlMultiplier = 0.97f + control * 0.06f;
+        var speedMultiplier = 0.94f + speedAbility * 0.12f;
         var moraleMultiplier = 0.98f + Math.Clamp(morale, 0f, 1f) * 0.04f;
 
         // Traction bias helps on loose/wet surfaces but costs the same amount on
@@ -62,7 +67,12 @@ public static class SegmentPhysics
         var setupMultiplier = 1.03f - setupError * 0.06f;
         var surfaceMultiplier = 0.74f + surface.EffectiveGrip * 0.26f;
 
-        return baseSpeed * abilityMultiplier * moraleMultiplier * setupMultiplier * surfaceMultiplier;
+        return baseSpeed
+            * controlMultiplier
+            * speedMultiplier
+            * moraleMultiplier
+            * setupMultiplier
+            * surfaceMultiplier;
     }
 
     /// <summary>Legacy neutral-surface contract retained for existing callers.</summary>
@@ -73,7 +83,14 @@ public static class SegmentPhysics
         if (segment.Type == SegmentType.Straight)
             return new SegmentResolution(SegmentOutcome.Ok, lane, speed);
 
-        return Resolve(segment, lane, speed, MaxSafeTurnSpeed(lane), BrakeSpeedFactor, RunWideSpeedFactor, 0f);
+        return Resolve(
+            lane,
+            speed,
+            MaxSafeTurnSpeed(lane),
+            BrakeSpeedFactor,
+            RunWideSpeedFactor,
+            0f,
+            quietCorrectionFactor: 1f);
     }
 
     public static SegmentResolution Apply(SegmentPhysicsContext context)
@@ -97,20 +114,27 @@ public static class SegmentPhysics
         var moraleRisk = (1f - Math.Clamp(context.Morale, 0f, 1f)) * 0.08f;
         var incidentRisk = TrackSurfaceState.Clamp01(context.DecisionRisk + surfaceRisk + moraleRisk);
 
-        return Resolve(context.Segment, context.Lane, context.Speed, max, brakeFactor, runWideFactor, incidentRisk);
+        return Resolve(
+            context.Lane,
+            context.Speed,
+            max,
+            brakeFactor,
+            runWideFactor,
+            incidentRisk,
+            quietCorrectionFactor: 1.015f);
     }
 
     private static SegmentResolution Resolve(
-        TrackSegment segment,
         int lane,
         float speed,
         float max,
         float brakeFactor,
         float runWideFactor,
-        float incidentRisk)
+        float incidentRisk,
+        float quietCorrectionFactor)
     {
-        if (speed <= max)
-            return new SegmentResolution(SegmentOutcome.Ok, lane, speed, incidentRisk);
+        if (speed <= max * quietCorrectionFactor)
+            return new SegmentResolution(SegmentOutcome.Ok, lane, MathF.Min(speed, max), incidentRisk);
 
         if (speed <= max * brakeFactor)
             return new SegmentResolution(SegmentOutcome.Brake, lane, max, incidentRisk);
