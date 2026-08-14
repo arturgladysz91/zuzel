@@ -1,7 +1,13 @@
-// Kontrakt dla logiki decyzji zawodnika: wybór linii na danym segmencie.
 namespace CoreSim.Decisions;
 
+/// <summary>
+/// Decision contract kept backward-compatible with the early MVP. Context-aware
+/// models override the second method; fixed test models only need the first one.
+/// </summary>
 public interface IRiderDecisionModel
 {
-    RiderDecision Decide(CoreSim.TrackSegment segment, CoreSim.RiderState rider);
+    RiderDecision Decide(TrackSegment segment, RiderState rider);
+
+    RiderDecision Decide(RiderDecisionContext context)
+        => Decide(context.Segment, context.Rider);
 }
