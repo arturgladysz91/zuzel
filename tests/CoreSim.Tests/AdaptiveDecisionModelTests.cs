@@ -28,4 +28,25 @@ public sealed class AdaptiveDecisionModelTests
 
         Assert.Equal(3, decision.TargetLane);
     }
+
+    [Fact]
+    public void UniformTrackDoesNotFreezeBalancedRiderOnOutsideGate()
+    {
+        var track = Track.CreateExample();
+        var state = TrackState.CreateDefault(track, new TrackSurfaceState(1f, 0f, 0.35f));
+        var rider = new RiderState(
+            new RiderProfile(
+                8,
+                "Balanced",
+                new RiderSkills(60f, 60f, 60f, 100f, 60f, 60f),
+                RiderStyle.Balanced),
+            lane: 3);
+        var model = new AdaptiveDecisionModel(seed: 42);
+        var context = new RiderDecisionContext(
+            track.Segments[0], 0, state, rider, new[] { rider }, 1, 0, track);
+
+        var decision = model.Decide(context);
+
+        Assert.Equal(2, decision.TargetLane);
+    }
 }
