@@ -1,8 +1,8 @@
 namespace CoreSim.Decisions;
 
 /// <summary>
-/// Data-driven lane selection. It reads the surface imperfectly according to the
-/// rider's skill, respects style and penalizes lanes occupied by nearby riders.
+/// Data-driven lane selection. It compares projected route time instead of raw
+/// lane speed, reads the surface imperfectly and respects rider style/traffic.
 /// </summary>
 public sealed class AdaptiveDecisionModel : IRiderDecisionModel
 {
@@ -20,36 +20,42 @@ public sealed class AdaptiveDecisionModel : IRiderDecisionModel
         var rider = context.Rider;
         var style = rider.Profile.Style;
         var reading = RiderSkills.Normalize(rider.Profile.Skills.TrackReading);
+        var (evaluationSegment, evaluationIndex) = ResolveEvaluationSegment(context);
         var bestLane = rider.Lane;
-        var bestScore = float.NegativeInfinity;
+        var bestCost = float.PositiveInfinity;
 
         for (var lane = LaneModel.MinLane; lane <= LaneModel.MaxLane; lane++)
         {
-            var surface = context.TrackState.GetSurface(context.SegmentIndex, lane);
+            var surface = context.TrackState.GetSurface(evaluationIndex, lane);
             var effectiveGrip = surface.EffectiveGrip;
 
             // Weak readers see a noisier and more conservative approximation.
             var observationNoise = ((float)_random.NextDouble() - 0.5f) * (1f - reading) * 0.18f;
-            var perceivedGrip = TrackSurfaceState.Clamp01(effectiveGrip + observationNoise);
+            var perceivedSurface = new TrackSurfaceState(
+                TrackSurfaceState.Clamp01(surface.Grip + observationNoise),
+                TrackSurfaceState.Clamp01(surface.Ruts - observationNoise * 0.5f),
+                surface.Moisture);
 
             var distance = Math.Abs(lane - rider.Lane);
-            var movementPenalty = distance * (0.24f - style.LaneChangeTendency * 0.14f);
-            var outsidePreference = (lane / (float)LaneModel.MaxLane - 0.5f)
-                                    * (style.OutsidePreference - 0.5f)
-                                    * 0.24f;
-            var occupancyPenalty = IsOccupied(context, lane) ? 0.35f : 0f;
+            var movementCost = distance * (0.015f + (1f - style.LaneChangeTendency) * 0.025f);
+            var preferredLane = style.OutsidePreference * LaneModel.MaxLane;
+            var styleCost = MathF.Abs(lane - preferredLane) * 0.035f;
+            var occupancyCost = IsOccupied(context, lane) ? 0.30f : 0f;
+            var surfaceRiskCost = (1f - effectiveGrip)
+                                  * (0.06f + (1f - style.RiskTolerance) * 0.12f)
+                                  + surface.Ruts * 0.08f;
+            var projectedSpeed = SegmentPhysics.MaxSafeTurnSpeed(
+                lane,
+                perceivedSurface,
+                rider.Profile.Skills,
+                rider.Morale,
+                rider.ActiveSetup);
+            var projectedTime = ProjectedRouteTime(evaluationSegment, lane, projectedSpeed);
+            var cost = projectedTime + movementCost + styleCost + occupancyCost + surfaceRiskCost;
 
-            // Straights only position the rider; they never award a speed score.
-            var surfaceWeight = context.Segment.Type == SegmentType.Straight ? 0.18f : 0.72f;
-            var score = perceivedGrip * surfaceWeight
-                        - surface.Ruts * 0.28f
-                        - movementPenalty
-                        + outsidePreference
-                        - occupancyPenalty;
-
-            if (score > bestScore)
+            if (cost < bestCost)
             {
-                bestScore = score;
+                bestCost = cost;
                 bestLane = lane;
             }
         }
@@ -61,7 +67,28 @@ public sealed class AdaptiveDecisionModel : IRiderDecisionModel
         return new RiderDecision(
             bestLane,
             TrackSurfaceState.Clamp01(baseRisk + surfaceRisk),
-            $"lane score={bestScore:F3}");
+            $"projected cost={bestCost:F3}");
+    }
+
+    private static (TrackSegment Segment, int Index) ResolveEvaluationSegment(RiderDecisionContext context)
+    {
+        if (context.Segment.Type != SegmentType.Straight || context.Track is null)
+            return (context.Segment, context.SegmentIndex);
+
+        var nextIndex = (context.SegmentIndex + 1) % context.Track.Segments.Count;
+        return (context.Track.Segments[nextIndex], nextIndex);
+    }
+
+    private static float ProjectedRouteTime(TrackSegment segment, int lane, float speed)
+    {
+        // A lane is judged over a complete bend plus the following straight.
+        // This balances the shorter inside route against the higher exit speed
+        // available outside. A straight decision prepares the next bend.
+        var bendLength = LaneModel.TurnArcLengthMeters(lane) * 3f;
+        var routeLength = segment.Type == SegmentType.Straight
+            ? LaneModel.StraightLengthMeters
+            : bendLength + LaneModel.StraightLengthMeters;
+        return routeLength / MathF.Max(speed, 1f);
     }
 
     private static bool IsOccupied(RiderDecisionContext context, int lane)
