@@ -39,6 +39,7 @@ public sealed class FullHeatSimulationTests
         Assert.Equal(resultA.Log.SurfaceChanges, resultB.Log.SurfaceChanges);
         Assert.All(resultA.Classification, result => Assert.Equal(4, result.LapsCompleted));
         Assert.Equal(new[] { 3, 2, 1, 0 }, resultA.Classification.Select(result => result.Points));
+        Assert.Equal(1, resultA.Classification[0].RiderId);
     }
 
     private static List<RiderState> CreateRiders()
