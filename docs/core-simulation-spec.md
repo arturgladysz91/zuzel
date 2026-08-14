@@ -43,4 +43,8 @@ Given identical domain state, options and random seed, a heat must produce ident
 
 ## Result and player information
 
-The core returns factual internal results and logs. A gameplay layer is responsible for hiding exact values and exposing observations, feedback and uncertainty to the player.
+The core returns factual internal results and logs. Segment logs distinguish entry speed, speed after the physical constraint and final exit speed. A change of running order between two active riders creates a typed overtake event; a retirement is not an overtake. Every completed lap creates a typed order snapshot with gaps to the active leader.
+
+A starting-gate balance report must rotate the same four rider profiles evenly through gates 1..4. This prevents rider strength from being mistaken for gate advantage. Large diagnostic batches may disable log capture, but this must not change track evolution or the simulated classification.
+
+A gameplay layer is responsible for hiding exact values and exposing observations, feedback and uncertainty to the player.

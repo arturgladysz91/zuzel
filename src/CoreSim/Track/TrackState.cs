@@ -1,4 +1,3 @@
-// Stan nawierzchni toru per segment i linia.
 using CoreSim.Logging;
 
 namespace CoreSim;
@@ -20,27 +19,26 @@ public sealed class TrackState
 
         var surface = defaultSurface ?? TrackSurfaceState.Default;
         _surface = new TrackSurfaceState[segmentCount, linesCount];
-        for (var s = 0; s < segmentCount; s++)
-        for (var l = 0; l < linesCount; l++)
-            _surface[s, l] = surface;
+        for (var segment = 0; segment < segmentCount; segment++)
+        for (var lane = 0; lane < linesCount; lane++)
+            _surface[segment, lane] = surface;
     }
 
     public TrackState(int segmentCount, int linesCount, Func<int, int, TrackSurfaceState> surfaceProfile)
     {
         if (segmentCount <= 0) throw new ArgumentOutOfRangeException(nameof(segmentCount));
         if (linesCount <= 0) throw new ArgumentOutOfRangeException(nameof(linesCount));
-        if (surfaceProfile is null) throw new ArgumentNullException(nameof(surfaceProfile));
+        ArgumentNullException.ThrowIfNull(surfaceProfile);
 
         SegmentCount = segmentCount;
         LinesCount = linesCount;
-
         _surface = new TrackSurfaceState[segmentCount, linesCount];
-        for (var s = 0; s < segmentCount; s++)
-        for (var l = 0; l < linesCount; l++)
-            _surface[s, l] = surfaceProfile(s, l);
+        for (var segment = 0; segment < segmentCount; segment++)
+        for (var lane = 0; lane < linesCount; lane++)
+            _surface[segment, lane] = surfaceProfile(segment, lane);
     }
 
-    public static TrackState CreateDefault(CoreSim.Track track, TrackSurfaceState? defaultSurface = null)
+    public static TrackState CreateDefault(Track track, TrackSurfaceState? defaultSurface = null)
         => new(track.Segments.Count, TrackSegment.LanesCount, defaultSurface ?? TrackSurfaceState.Default);
 
     public TrackSurfaceState GetSurface(int segmentIndex, int lineIndex)
@@ -61,12 +59,22 @@ public sealed class TrackState
         SimLog log)
     {
         ValidateIndices(segmentIndex, lineIndex);
-        if (log is null) throw new ArgumentNullException(nameof(log));
+        ArgumentNullException.ThrowIfNull(log);
 
         var current = _surface[segmentIndex, lineIndex];
-        var updated = current.WithDelta(deltaGrip, deltaRuts, deltaMoisture);
-        _surface[segmentIndex, lineIndex] = updated;
-        log.Add(new TrackSurfaceChange(segmentIndex, lineIndex, deltaGrip, deltaRuts, deltaMoisture, reason, heatId, tick));
+        _surface[segmentIndex, lineIndex] = current.WithDelta(deltaGrip, deltaRuts, deltaMoisture);
+        if (log.Enabled)
+        {
+            log.Add(new TrackSurfaceChange(
+                segmentIndex,
+                lineIndex,
+                deltaGrip,
+                deltaRuts,
+                deltaMoisture,
+                reason,
+                heatId,
+                tick));
+        }
     }
 
     private void ValidateIndices(int segmentIndex, int lineIndex)

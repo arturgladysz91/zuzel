@@ -94,7 +94,9 @@ public sealed class HeatSimulator
             throw new ArgumentException("Every rider in a heat must have a unique id.", nameof(riders));
 
         var random = new Random(options.Seed);
-        var log = new SimLog();
+        var log = new SimLog(options.EnableLogging);
+        var progress = options.EnableLogging ? new RaceProgressTracker() : null;
+        progress?.InitializeStartingGrid(riders);
         var tick = 0;
 
         for (var lap = 0; lap < options.Laps; lap++)
@@ -123,11 +125,15 @@ public sealed class HeatSimulator
 
                 ResolveInteractions(segment, trackState, segmentIndex, riders, random, log, lap);
 
-                if (segmentIndex == track.Segments.Count - 1)
+                var lapComplete = segmentIndex == track.Segments.Count - 1;
+
+                if (lapComplete)
                 {
                     foreach (var rider in riders.Where(rider => !rider.IsCrashed))
                         rider.LapsCompleted = lap + 1;
                 }
+
+                progress?.CaptureSegment(lap + 1, segment.Id, lapComplete, riders, log);
             }
         }
 
@@ -182,15 +188,18 @@ public sealed class HeatSimulator
         rider.ElapsedTimeSeconds += travelled / averageSpeed;
         rider.DistanceMeters += travelled;
 
-        log.Add(FormatSegmentLog(
-            lap + 1,
-            segment,
-            rider,
-            before,
-            plannedLane,
-            decision.TargetLane,
-            entrySpeed,
-            resolution));
+        if (log.Enabled)
+        {
+            log.Add(FormatSegmentLog(
+                lap + 1,
+                segment,
+                rider,
+                before,
+                plannedLane,
+                decision.TargetLane,
+                entrySpeed,
+                resolution));
+        }
 
         if (resolution.Outcome == SegmentOutcome.Crash)
         {
@@ -464,7 +473,7 @@ public sealed class HeatSimulator
         SegmentResolution resolution)
     {
         var prefix = lap.HasValue ? $"LAP={lap.Value} " : string.Empty;
-        return $"{prefix}SEG={segment.Id} {segment.Type} rider={rider.RiderId} lane {before}->{plannedLane}->{rider.Lane} targetLane={targetLane} outcome={resolution.Outcome} v_in={entrySpeed.ToString("F2", CultureInfo.InvariantCulture)} v_out={rider.Speed.ToString("F2", CultureInfo.InvariantCulture)}";
+        return $"{prefix}SEG={segment.Id} {segment.Type} rider={rider.RiderId} lane {before}->{plannedLane}->{rider.Lane} targetLane={targetLane} outcome={resolution.Outcome} v_in={entrySpeed.ToString("F2", CultureInfo.InvariantCulture)} v_physics={resolution.Speed.ToString("F2", CultureInfo.InvariantCulture)} v_out={rider.Speed.ToString("F2", CultureInfo.InvariantCulture)}";
     }
 
     private static int CalculatePlannedLane(int currentLane, int targetLane)
