@@ -151,7 +151,7 @@ public sealed class HeatSimulator
         SimLog log)
     {
         var before = rider.Lane;
-        var context = new RiderDecisionContext(segment, segmentIndex, trackState, rider, riders, heatId, lap);
+        var context = new RiderDecisionContext(segment, segmentIndex, trackState, rider, riders, heatId, lap, track);
         var decision = _decision.Decide(context);
         var targetLane = LaneModel.ClampLane(decision.TargetLane);
         var plannedLane = CalculatePlannedLane(before, targetLane);
@@ -224,7 +224,7 @@ public sealed class HeatSimulator
             rider.Morale,
             rider.ActiveSetup);
         var startSkill = RiderSkills.Normalize(rider.Profile.Skills.Start);
-        var startMultiplier = lap == 0 && segmentIndex == 0 ? 0.94f + startSkill * 0.08f : 1f;
+        var startMultiplier = lap == 0 && segmentIndex == 0 ? 0.90f + startSkill * 0.16f : 1f;
         return safeSpeed * startMultiplier;
     }
 
@@ -234,8 +234,8 @@ public sealed class HeatSimulator
             return speed;
 
         var speedSkill = RiderSkills.Normalize(rider.Profile.Skills.Speed);
-        var gearingTradeOff = (rider.ActiveSetup.Gearing - 0.5f) * 0.02f;
-        var multiplier = 0.985f + speedSkill * 0.025f + gearingTradeOff;
+        var gearingTradeOff = (rider.ActiveSetup.Gearing - 0.5f) * 0.03f;
+        var multiplier = 0.965f + speedSkill * 0.07f + gearingTradeOff;
         return speed * multiplier;
     }
 
