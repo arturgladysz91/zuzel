@@ -21,6 +21,7 @@ Given identical domain state, options and random seed, a heat must produce ident
 ## Physical constraints
 
 - A turn has a safe speed dependent on lane, surface, slide control, morale and setup fit.
+- Wider lanes allow a slightly higher speed but also add distance. On an equal surface, the projected full-lap time of the innermost and outermost reference lanes must stay within 2%; no gate may be an automatic winning strategy.
 - Exceeding the safe speed must cause braking, running wide or a crash.
 - A rider cannot run wider than lane 4; an unresolved high-speed run-wide there becomes a crash.
 - A straight preserves speed. It cannot create a passing advantage by itself; it only carries an advantage created at corner exit and positions riders for the next turn.
@@ -31,6 +32,7 @@ Given identical domain state, options and random seed, a heat must produce ident
 - Style uses normalized preferences: risk, lane changes, outside line and setup independence.
 - Morale is mutable and separate from physical form. It changes stability and follows results or incidents.
 - A decision model evaluates local lanes. Track reading controls observation quality; style controls preferences; occupied space is penalized.
+- Lane evaluation uses projected route time (bend plus following straight), not raw maximum speed. This lets a clean outside route beat a worn inside route without making the outside universally superior.
 - Rider-to-rider contact depends on the time gap, segment, surface and control skills. Contact in `TurnMiddle` is more dangerous than on a straight.
 
 ## Setup
