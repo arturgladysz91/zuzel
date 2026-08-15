@@ -8,7 +8,9 @@ The core simulates decisions and believable consequences. It does not integrate 
 
 ## Determinism
 
-Given identical domain state, options and random seed, a heat must produce identical classification, typed surface changes and text logs. Randomness may create uncertainty but cannot be hidden in global or time-based state.
+Given identical domain state, options and random seed, a heat must produce identical classification, typed surface changes and text logs. Randomness may create uncertainty but cannot be hidden in global or time-based state. Race draws are addressed by stable domain keys; changing the order of riders in the input collection must not change which draw belongs to which rider.
+
+Every segment uses snapshot/propose/resolve/commit processing. Decisions, movement and battle intent are calculated from one immutable snapshot of all riders. No proposal may observe another rider's uncommitted movement or same-segment lane wear.
 
 ## Track
 
@@ -25,6 +27,8 @@ Given identical domain state, options and random seed, a heat must produce ident
 - Exceeding the safe speed must cause braking, running wide or a crash.
 - A rider cannot run wider than lane 4; an unresolved high-speed run-wide there becomes a crash.
 - A straight preserves speed. It cannot create a passing advantage by itself; it only carries an advantage created at corner exit and positions riders for the next turn.
+- Safe turn speed is tied to lane radius and effective grip. An outside route can carry more speed but has a longer arc.
+- An advanced run-wide consequence loses speed. The legacy neutral `SegmentPhysics.Apply(segment, lane, speed)` overload keeps its original compatibility contract.
 
 ## Riders and decisions
 
@@ -33,7 +37,11 @@ Given identical domain state, options and random seed, a heat must produce ident
 - Morale is mutable and separate from physical form. It changes stability and follows results or incidents.
 - A decision model evaluates local lanes. Track reading controls observation quality; style controls preferences; occupied space is penalized.
 - Lane evaluation uses projected route time (bend plus following straight), not raw maximum speed. This lets a clean outside route beat a worn inside route without making the outside universally superior.
-- Rider-to-rider contact depends on the time gap, segment, surface and control skills. Contact in `TurnMiddle` is more dangerous than on a straight.
+- Rider position includes lap, segment, progress within the segment, local lane, continuous lateral position, speed, gap to the rider ahead and nearby occupied lanes.
+- An attack requires a small gap plus a speed advantage or corner-exit advantage. It must use a reachable free lane. Success follows projected physical progress, never a random passing bonus.
+- A defender with sufficient reading, pair-riding and control can close a reachable lane. An occupied or closed lane blocks the attack.
+- A failed attack costs speed and time. Higher risk tolerance increases attack frequency and the probability of contact; contact in `TurnMiddle` is more dangerous than on a straight.
+- Start performance combines start skill (reaction), setup gearing (launch torque), starting-field grip and the route to the first turn. The model does not force equal gate win rates.
 
 ## Setup
 
@@ -43,7 +51,7 @@ Given identical domain state, options and random seed, a heat must produce ident
 
 ## Result and player information
 
-The core returns factual internal results and logs. Segment logs distinguish entry speed, speed after the physical constraint and final exit speed. A change of running order between two active riders creates a typed overtake event; a retirement is not an overtake. Every completed lap creates a typed order snapshot with gaps to the active leader.
+The core returns factual internal results and logs. Segment logs distinguish entry speed, speed after the physical constraint and final exit speed. Typed events cover starts, attacks, defence, blocks, failures, contacts, running wide, lane changes and overtakes. A change of running order between two active riders creates a typed overtake event; a retirement is not an overtake. Every segment creates an order/gap snapshot, and every completed lap retains the existing lap snapshot.
 
 A starting-gate balance report must rotate the same four rider profiles evenly through gates 1..4. This prevents rider strength from being mistaken for gate advantage. Large diagnostic batches may disable log capture, but this must not change track evolution or the simulated classification.
 

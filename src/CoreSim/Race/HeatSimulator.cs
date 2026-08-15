@@ -93,10 +93,10 @@ public sealed class HeatSimulator
         if (riders.Select(r => r.RiderId).Distinct().Count() != riders.Count)
             throw new ArgumentException("Every rider in a heat must have a unique id.", nameof(riders));
 
-        var random = new Random(options.Seed);
         var log = new SimLog(options.EnableLogging);
         var progress = options.EnableLogging ? new RaceProgressTracker() : null;
         progress?.InitializeStartingGrid(riders);
+        var segmentEngine = new SegmentRaceEngine(_decision);
         var tick = 0;
 
         for (var lap = 0; lap < options.Laps; lap++)
@@ -106,24 +106,16 @@ public sealed class HeatSimulator
                 var segment = track.Segments[segmentIndex];
                 TrackEvolution.ApplyWeather(track, trackState, options.Weather, heatId, tick, log);
 
-                foreach (var rider in riders.Where(rider => !rider.IsCrashed))
-                {
-                    SimulateAdvancedSegment(
-                        track,
-                        trackState,
-                        riders,
-                        rider,
-                        segment,
-                        segmentIndex,
-                        lap,
-                        heatId,
-                        tick,
-                        options,
-                        random,
-                        log);
-                }
-
-                ResolveInteractions(segment, trackState, segmentIndex, riders, random, log, lap);
+                segmentEngine.SimulateSegment(
+                    track,
+                    trackState,
+                    riders,
+                    segmentIndex,
+                    lap,
+                    heatId,
+                    tick,
+                    options,
+                    log);
 
                 var lapComplete = segmentIndex == track.Segments.Count - 1;
 

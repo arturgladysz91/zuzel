@@ -43,7 +43,8 @@ public static class SegmentPhysics
     public static float MaxSafeTurnSpeed(int lane)
     {
         LaneModel.ValidateLane(lane);
-        return BaseTurnMaxSpeed + lane * TurnMaxSpeedDeltaPerLane;
+        var radiusRatio = LaneModel.TurnArcRadiusMeters(lane) / LaneModel.InnerRadiusMeters;
+        return BaseTurnMaxSpeed * MathF.Sqrt(radiusRatio);
     }
 
     public static float MaxSafeTurnSpeed(
@@ -65,7 +66,7 @@ public static class SegmentPhysics
         var neededTraction = 1f - surface.EffectiveGrip;
         var setupError = MathF.Abs(setup.TractionBias - neededTraction);
         var setupMultiplier = 1.03f - setupError * 0.06f;
-        var surfaceMultiplier = 0.74f + surface.EffectiveGrip * 0.26f;
+        var surfaceMultiplier = 0.72f + MathF.Sqrt(surface.EffectiveGrip) * 0.28f;
 
         return baseSpeed
             * controlMultiplier
@@ -90,7 +91,8 @@ public static class SegmentPhysics
             BrakeSpeedFactor,
             RunWideSpeedFactor,
             0f,
-            quietCorrectionFactor: 1f);
+            quietCorrectionFactor: 1f,
+            runWideSpeedRetention: 1f);
     }
 
     public static SegmentResolution Apply(SegmentPhysicsContext context)
@@ -112,7 +114,9 @@ public static class SegmentPhysics
         var runWideFactor = 1.18f + control * 0.16f;
         var surfaceRisk = (1f - context.Surface.EffectiveGrip) * 0.28f + context.Surface.Ruts * 0.18f;
         var moraleRisk = (1f - Math.Clamp(context.Morale, 0f, 1f)) * 0.08f;
-        var incidentRisk = TrackSurfaceState.Clamp01(context.DecisionRisk + surfaceRisk + moraleRisk);
+        var overspeedRisk = MathF.Max(0f, context.Speed / MathF.Max(max, 1f) - 1f) * 0.35f;
+        var incidentRisk = TrackSurfaceState.Clamp01(
+            context.DecisionRisk + surfaceRisk + moraleRisk + overspeedRisk);
 
         return Resolve(
             context.Lane,
@@ -121,7 +125,8 @@ public static class SegmentPhysics
             brakeFactor,
             runWideFactor,
             incidentRisk,
-            quietCorrectionFactor: 1.015f);
+            quietCorrectionFactor: 1.015f,
+            runWideSpeedRetention: 0.88f);
     }
 
     private static SegmentResolution Resolve(
@@ -131,7 +136,8 @@ public static class SegmentPhysics
         float brakeFactor,
         float runWideFactor,
         float incidentRisk,
-        float quietCorrectionFactor)
+        float quietCorrectionFactor,
+        float runWideSpeedRetention)
     {
         if (speed <= max * quietCorrectionFactor)
             return new SegmentResolution(SegmentOutcome.Ok, lane, MathF.Min(speed, max), incidentRisk);
@@ -144,7 +150,11 @@ public static class SegmentPhysics
             if (lane == LaneModel.MaxLane)
                 return new SegmentResolution(SegmentOutcome.Crash, lane, 0f, incidentRisk);
 
-            return new SegmentResolution(SegmentOutcome.RunWide, lane + 1, speed, incidentRisk);
+            return new SegmentResolution(
+                SegmentOutcome.RunWide,
+                lane + 1,
+                speed * runWideSpeedRetention,
+                incidentRisk);
         }
 
         return new SegmentResolution(SegmentOutcome.Crash, lane, 0f, incidentRisk);

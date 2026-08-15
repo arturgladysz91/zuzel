@@ -240,10 +240,12 @@ Priorytet: realistyczne konsekwencje decyzji i stabilny balans.
 ---
 
 ## Status / zakres (przykład)
-- [ ] Symulacja toru: segmenty + 5 linii
-- [ ] Ograniczenie łuku: minimalna linia dla prędkości (wynoszenie/hamowanie/błąd)
-- [ ] Proste: pozycjonowanie + wyprzedzanie tylko z przewagi po wyjściu z łuku
-- [ ] Zawodnicy: statystyki + styl + morale
-- [ ] Setup: sugestie menedżera vs decyzje zawodnika
+- [x] Symulacja toru: segmenty + 5 linii
+- [x] Jednoczesny ruch z niezmiennego snapshotu segmentu
+- [x] Ograniczenie łuku: promień + przyczepność + wynoszenie/hamowanie/błąd
+- [x] Proste: pozycjonowanie + wyprzedzanie tylko z przewagi po wyjściu z łuku
+- [x] Atak, obrona, blokowanie, kontakt i koszt nieudanego ataku
+- [x] Zawodnicy: statystyki + styl + morale
+- [x] Setup: sugestie menedżera vs decyzje zawodnika
 - [ ] Rozwój: wiek + kontuzje + cechy
 

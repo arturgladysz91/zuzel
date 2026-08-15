@@ -3,13 +3,34 @@ namespace CoreSim.Decisions;
 
 public sealed class SimpleDecisionModel : IRiderDecisionModel
 {
-    private readonly Random _rng;
-    public SimpleDecisionModel(int seed = 1234) => _rng = new Random(seed);
+    private readonly int _seed;
+    private int _legacySequence;
+
+    public SimpleDecisionModel(int seed = 1234) => _seed = seed;
 
     public RiderDecision Decide(CoreSim.TrackSegment segment, CoreSim.RiderState rider)
     {
-        var delta = _rng.Next(-1, 2); // -1,0,1
+        var sample = DeterministicRandom.Sample01(
+            _seed,
+            rider.RiderId,
+            segment.Id,
+            _legacySequence++,
+            201);
+        var delta = Math.Min(2, (int)(sample * 3f)) - 1;
         var target = LaneModel.ClampLane(rider.Lane + delta);
         return new RiderDecision(target, 0f);
+    }
+
+    public RiderDecision Decide(RiderDecisionContext context)
+    {
+        var sample = DeterministicRandom.Sample01(
+            _seed,
+            context.HeatId,
+            context.Lap,
+            context.SegmentIndex,
+            context.Rider.RiderId,
+            202);
+        var delta = Math.Min(2, (int)(sample * 3f)) - 1;
+        return new RiderDecision(LaneModel.ClampLane(context.Rider.Lane + delta), 0f);
     }
 }

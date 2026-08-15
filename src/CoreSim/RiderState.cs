@@ -10,15 +10,23 @@ public sealed class RiderState
 
     public int RiderId => Profile.Id;
     public RiderProfile Profile { get; }
+    public int StartingGate { get; set; }
+    public int CurrentLap { get; set; }
+    public int CurrentSegmentIndex { get; set; }
     public int CurrentSegmentId { get; set; }
+    public float SegmentProgressMeters { get; set; }
     public int Lane { get; set; }
     public float LateralPosition { get; set; }
     public float Speed { get; set; }
+    public float CornerExitSpeed { get; set; }
     public float Risk { get; set; }
     public bool IsCrashed { get; set; }
     public float ElapsedTimeSeconds { get; set; }
     public float DistanceMeters { get; set; }
     public int LapsCompleted { get; set; }
+    public float GapToRiderAheadSeconds { get; set; } = float.PositiveInfinity;
+    public float GapToRiderAheadMeters { get; set; } = float.PositiveInfinity;
+    public IReadOnlyList<int> OccupiedLanes { get; internal set; } = Array.Empty<int>();
     public BikeSetup ActiveSetup { get; set; } = BikeSetup.Neutral;
 
     public float Morale
@@ -42,6 +50,7 @@ public sealed class RiderState
     {
         Profile = profile ?? throw new ArgumentNullException(nameof(profile));
         LaneModel.ValidateLane(lane);
+        StartingGate = lane;
         Lane = lane;
         LateralPosition = lane;
         Morale = morale;
@@ -53,15 +62,23 @@ public sealed class RiderState
     public void ResetForHeat(int lane)
     {
         LaneModel.ValidateLane(lane);
+        StartingGate = lane;
+        CurrentLap = 0;
+        CurrentSegmentIndex = 0;
         CurrentSegmentId = 0;
+        SegmentProgressMeters = 0f;
         Lane = lane;
         LateralPosition = lane;
         Speed = 0f;
+        CornerExitSpeed = 0f;
         Risk = 0f;
         IsCrashed = false;
         ElapsedTimeSeconds = 0f;
         DistanceMeters = 0f;
         LapsCompleted = 0;
+        GapToRiderAheadSeconds = float.PositiveInfinity;
+        GapToRiderAheadMeters = float.PositiveInfinity;
+        OccupiedLanes = Array.Empty<int>();
     }
 
     public static RiderState CreateDefault(int riderId, int lane)

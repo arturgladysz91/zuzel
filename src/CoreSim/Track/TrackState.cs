@@ -47,6 +47,9 @@ public sealed class TrackState
         return _surface[segmentIndex, lineIndex];
     }
 
+    public TrackState Snapshot()
+        => new(SegmentCount, LinesCount, (segment, lane) => _surface[segment, lane]);
+
     public void ApplySurfaceDelta(
         int segmentIndex,
         int lineIndex,

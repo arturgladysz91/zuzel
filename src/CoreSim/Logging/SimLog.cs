@@ -10,6 +10,8 @@ public sealed class SimLog
     private readonly List<TrackSurfaceChange> _surfaceChanges = new();
     private readonly List<OvertakeEvent> _overtakes = new();
     private readonly List<RaceOrderSnapshot> _orderSnapshots = new();
+    private readonly List<SegmentOrderSnapshot> _segmentOrderSnapshots = new();
+    private readonly List<RaceEvent> _raceEvents = new();
 
     public SimLog(bool enabled = true) => Enabled = enabled;
 
@@ -18,6 +20,8 @@ public sealed class SimLog
     public IReadOnlyList<TrackSurfaceChange> SurfaceChanges => _surfaceChanges;
     public IReadOnlyList<OvertakeEvent> Overtakes => _overtakes;
     public IReadOnlyList<RaceOrderSnapshot> OrderSnapshots => _orderSnapshots;
+    public IReadOnlyList<SegmentOrderSnapshot> SegmentOrderSnapshots => _segmentOrderSnapshots;
+    public IReadOnlyList<RaceEvent> RaceEvents => _raceEvents;
 
     public void Add(string line)
     {
@@ -41,5 +45,17 @@ public sealed class SimLog
     {
         if (Enabled)
             _orderSnapshots.Add(snapshot);
+    }
+
+    public void Add(SegmentOrderSnapshot snapshot)
+    {
+        if (Enabled)
+            _segmentOrderSnapshots.Add(snapshot);
+    }
+
+    public void Add(RaceEvent raceEvent)
+    {
+        if (Enabled)
+            _raceEvents.Add(raceEvent);
     }
 }

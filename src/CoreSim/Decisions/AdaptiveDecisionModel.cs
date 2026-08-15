@@ -6,9 +6,9 @@ namespace CoreSim.Decisions;
 /// </summary>
 public sealed class AdaptiveDecisionModel : IRiderDecisionModel
 {
-    private readonly Random _random;
+    private readonly int _seed;
 
-    public AdaptiveDecisionModel(int seed = 1234) => _random = new Random(seed);
+    public AdaptiveDecisionModel(int seed = 1234) => _seed = seed;
 
     public RiderDecision Decide(TrackSegment segment, RiderState rider)
         => new(rider.Lane, rider.Profile.Style.RiskTolerance * 0.05f, "no track context");
@@ -30,7 +30,16 @@ public sealed class AdaptiveDecisionModel : IRiderDecisionModel
             var effectiveGrip = surface.EffectiveGrip;
 
             // Weak readers see a noisier and more conservative approximation.
-            var observationNoise = ((float)_random.NextDouble() - 0.5f) * (1f - reading) * 0.18f;
+            var observationNoise = DeterministicRandom.SampleSigned(
+                    _seed,
+                    context.HeatId,
+                    context.Lap,
+                    context.SegmentIndex,
+                    rider.RiderId,
+                    lane,
+                    101)
+                * (1f - reading)
+                * 0.09f;
             var perceivedSurface = new TrackSurfaceState(
                 TrackSurfaceState.Clamp01(surface.Grip + observationNoise),
                 TrackSurfaceState.Clamp01(surface.Ruts - observationNoise * 0.5f),
