@@ -23,3 +23,7 @@ jobs:
         run: dotnet build SpeedwayManager.sln --configuration Release --no-restore
       - name: Test
         run: dotnet test SpeedwayManager.sln --configuration Release --no-build --verbosity normal
+      - name: Sandbox smoke and 2000-heat balance analysis
+        run: |
+          dotnet run --project src/Sandbox/Sandbox.csproj --configuration Release --no-build > sandbox-output.txt
+          tail -n 12 sandbox-output.txt
