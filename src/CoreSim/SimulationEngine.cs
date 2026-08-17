@@ -27,6 +27,7 @@ public sealed record RiderStateChange(
     RiderRaceStatus Status,
     float ElapsedTimeSeconds,
     RiderPosition Position,
+    int LastResolvedSegmentId,
     float Morale,
     SegmentOutcome Outcome,
     float EntrySpeed,
@@ -99,6 +100,7 @@ public sealed class SimulationEngine
             rider.RiderId,
             rider.Profile,
             rider.PositionForTrack(track.Segments.Count),
+            rider.LastResolvedSegmentId,
             rider.Lane,
             rider.LateralPosition,
             rider.Speed,
@@ -188,6 +190,7 @@ public sealed class SimulationEngine
             rider.ElapsedTimeSeconds = change.ElapsedTimeSeconds;
             rider.Morale = change.Morale;
             rider.CommitPosition(change.Position);
+            rider.SetLastResolvedSegmentId(change.LastResolvedSegmentId);
             rider.SetStatus(change.Status);
         }
 
@@ -308,6 +311,7 @@ public sealed class SimulationEngine
             status,
             elapsedTime,
             position,
+            snapshot.Segment.Id,
             morale,
             resolution.Outcome,
             entrySpeed,

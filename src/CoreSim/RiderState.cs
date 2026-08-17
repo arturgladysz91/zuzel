@@ -10,6 +10,7 @@ public sealed class RiderState
     private float _managerTrust;
     private RiderPosition _position;
     private RiderRaceStatus _status;
+    private int _lastResolvedSegmentId;
 
     public int RiderId => Profile.Id;
     public RiderProfile Profile { get; }
@@ -20,7 +21,10 @@ public sealed class RiderState
     public int SegmentIndex => _position.SegmentIndex;
     public float SegmentProgress => _position.SegmentProgress;
     public double CanonicalProgress => _position.TotalSegmentProgress;
-    public int CurrentSegmentId => SegmentIndex;
+    /// <summary>TrackSegment.Id committed for the most recently resolved segment; never a topology key.</summary>
+    public int LastResolvedSegmentId => _lastResolvedSegmentId;
+    /// <summary>Backward-compatible alias for LastResolvedSegmentId.</summary>
+    public int CurrentSegmentId => LastResolvedSegmentId;
     public int Lane { get; set; }
     public float LateralPosition { get; set; }
     public float Speed { get; set; }
@@ -100,6 +104,8 @@ public sealed class RiderState
 
     internal void CommitPosition(RiderPosition position) => _position = position;
 
+    internal void SetLastResolvedSegmentId(int segmentId) => _lastResolvedSegmentId = segmentId;
+
     internal void SetStatus(RiderRaceStatus status) => _status = status;
 
     public void ResetForHeat(int lane)
@@ -108,6 +114,7 @@ public sealed class RiderState
         _position = _position.SegmentCount == 0
             ? default
             : RiderPosition.Start(_position.SegmentCount);
+        _lastResolvedSegmentId = 0;
         Lane = lane;
         LateralPosition = lane;
         Speed = 0f;

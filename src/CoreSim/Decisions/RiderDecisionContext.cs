@@ -60,6 +60,7 @@ public sealed class RiderDecisionContext
             rider.RiderId,
             rider.Profile,
             rider.PositionForTrack(segmentCount),
+            rider.LastResolvedSegmentId,
             rider.Lane,
             rider.LateralPosition,
             rider.Speed,

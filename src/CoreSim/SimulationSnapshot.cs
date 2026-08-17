@@ -18,6 +18,7 @@ public sealed record RiderSnapshot(
     int RiderId,
     RiderProfile Profile,
     RiderPosition Position,
+    int LastResolvedSegmentId,
     int Lane,
     float LateralPosition,
     float Speed,
@@ -34,7 +35,8 @@ public sealed record RiderSnapshot(
     public int SegmentIndex => Position.SegmentIndex;
     public float SegmentProgress => Position.SegmentProgress;
     public double CanonicalProgress => Position.TotalSegmentProgress;
-    public int CurrentSegmentId => SegmentIndex;
+    /// <summary>TrackSegment.Id of the most recently committed segment, not its index.</summary>
+    public int CurrentSegmentId => LastResolvedSegmentId;
     public float DistanceMeters => Position.DistanceMeters;
     public int LapsCompleted => Position.LapsCompleted;
     public bool IsCrashed => Status == RiderRaceStatus.Crashed;
@@ -51,6 +53,7 @@ public sealed record RiderSnapshot(
             ActiveSetup = ActiveSetup,
         };
         copy.RestorePosition(Position);
+        copy.SetLastResolvedSegmentId(LastResolvedSegmentId);
         copy.SetStatus(Status);
         return copy;
     }

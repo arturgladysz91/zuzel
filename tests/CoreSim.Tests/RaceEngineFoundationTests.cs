@@ -26,6 +26,27 @@ public sealed class RaceEngineFoundationTests
         }
     }
 
+    private sealed record LegacyDecisionObservation(
+        int SegmentId,
+        int CurrentSegmentId,
+        int LastResolvedSegmentId,
+        int SegmentIndex);
+
+    private sealed class SegmentRecordingLegacyDecisionModel : IRiderDecisionModel
+    {
+        public List<LegacyDecisionObservation> Observations { get; } = new();
+
+        public RiderDecision Decide(TrackSegment segment, RiderState rider)
+        {
+            Observations.Add(new LegacyDecisionObservation(
+                segment.Id,
+                rider.CurrentSegmentId,
+                rider.LastResolvedSegmentId,
+                rider.SegmentIndex));
+            return new RiderDecision(rider.Lane);
+        }
+    }
+
     private sealed class SnapshotRecordingDecisionModel : IRiderDecisionModel
     {
         public List<SimulationSnapshot> SeenSnapshots { get; } = new();
@@ -43,13 +64,22 @@ public sealed class RaceEngineFoundationTests
     private sealed record RiderProjection(
         int RiderId,
         RiderRaceStatus Status,
+        int LastResolvedSegmentId,
         double CanonicalProgress,
         float DistanceMeters,
         int Lane,
         float LateralPosition,
         float Speed,
+        float Risk,
         float ElapsedTimeSeconds,
         float Morale);
+
+    public enum InvalidCommitRiderSet
+    {
+        DuplicateId,
+        MissingRider,
+        ExtraRider,
+    }
 
     [Fact]
     public void SameSeedAndInitialStateProduceIdenticalResultAndLog()
@@ -212,16 +242,7 @@ public sealed class RaceEngineFoundationTests
             new[] { rider },
             new SimulationStepContext(3, 0, 0, 0, options.Seed, 1));
         var resolved = engine.Resolve(snapshot, engine.Decide(snapshot), options);
-        var riderBefore = new RiderProjection(
-            rider.RiderId,
-            rider.Status,
-            rider.CanonicalProgress,
-            rider.DistanceMeters,
-            rider.Lane,
-            rider.LateralPosition,
-            rider.Speed,
-            rider.ElapsedTimeSeconds,
-            rider.Morale);
+        var riderBefore = Project(rider);
         var surfacesBefore = Enumerable.Range(0, wrongTrackState.SegmentCount)
             .SelectMany(segment => Enumerable.Range(0, wrongTrackState.LinesCount)
                 .Select(lane => wrongTrackState.GetSurface(segment, lane)))
@@ -233,16 +254,7 @@ public sealed class RaceEngineFoundationTests
             () => engine.Commit(resolved, new[] { rider }, wrongTrackState, log));
 
         Assert.Equal("trackState", exception.ParamName);
-        Assert.Equal(riderBefore, new RiderProjection(
-            rider.RiderId,
-            rider.Status,
-            rider.CanonicalProgress,
-            rider.DistanceMeters,
-            rider.Lane,
-            rider.LateralPosition,
-            rider.Speed,
-            rider.ElapsedTimeSeconds,
-            rider.Morale));
+        Assert.Equal(riderBefore, Project(rider));
         Assert.Equal(new[] { "existing" }, log.Lines);
         Assert.Empty(log.SurfaceChanges);
         Assert.Empty(log.Overtakes);
@@ -251,6 +263,62 @@ public sealed class RaceEngineFoundationTests
             .SelectMany(segment => Enumerable.Range(0, wrongTrackState.LinesCount)
                 .Select(lane => wrongTrackState.GetSurface(segment, lane)))
             .ToArray());
+    }
+
+    [Theory]
+    [InlineData(InvalidCommitRiderSet.DuplicateId)]
+    [InlineData(InvalidCommitRiderSet.MissingRider)]
+    [InlineData(InvalidCommitRiderSet.ExtraRider)]
+    public void CommitRejectsInvalidRiderSetsBeforeMutatingRidersLogOrTrack(
+        InvalidCommitRiderSet invalidSet)
+    {
+        var track = new Track(new[] { new TrackSegment(10, SegmentType.Straight) });
+        var trackState = TrackState.CreateDefault(track);
+        var sourceRiders = new[]
+        {
+            new RiderState(1, lane: 1) { Speed = 12f },
+            new RiderState(2, lane: 2) { Speed = 13f },
+        };
+        var extraRider = new RiderState(3, lane: 3) { Speed = 14f };
+        var engine = new SimulationEngine(new HoldLaneDecisionModel());
+        var options = new HeatSimulationOptions
+        {
+            Laps = 1,
+            Seed = 18,
+            Weather = NeutralWeather,
+            IncidentFrequency = 0f,
+        };
+        var snapshot = engine.CaptureSnapshot(
+            track,
+            trackState,
+            sourceRiders,
+            new SimulationStepContext(4, 0, 0, 0, options.Seed, options.Laps));
+        var resolved = engine.Resolve(snapshot, engine.Decide(snapshot), options);
+        IReadOnlyList<RiderState> commitRiders = invalidSet switch
+        {
+            InvalidCommitRiderSet.DuplicateId => new[] { sourceRiders[0], sourceRiders[0] },
+            InvalidCommitRiderSet.MissingRider => new[] { sourceRiders[0] },
+            InvalidCommitRiderSet.ExtraRider => new[] { sourceRiders[0], sourceRiders[1], extraRider },
+            _ => throw new ArgumentOutOfRangeException(nameof(invalidSet)),
+        };
+        var observedRiders = sourceRiders
+            .Concat(commitRiders)
+            .Distinct()
+            .ToArray();
+        var ridersBefore = observedRiders.Select(Project).ToArray();
+        var surfacesBefore = CaptureSurfaces(trackState);
+        var log = new SimLog();
+        log.Add("existing");
+
+        Assert.Throws<ArgumentException>(
+            () => engine.Commit(resolved, commitRiders, trackState, log));
+
+        Assert.Equal(ridersBefore, observedRiders.Select(Project).ToArray());
+        Assert.Equal(surfacesBefore, CaptureSurfaces(trackState));
+        Assert.Equal(new[] { "existing" }, log.Lines);
+        Assert.Empty(log.SurfaceChanges);
+        Assert.Empty(log.Overtakes);
+        Assert.Empty(log.OrderSnapshots);
     }
 
     [Fact]
@@ -275,6 +343,78 @@ public sealed class RaceEngineFoundationTests
         Assert.Equal(13f, snapshot.Rider(1).Speed);
         Assert.Equal(capturedSurface, snapshot.TrackState.GetSurface(0, 1));
         Assert.NotEqual(trackState.GetSurface(0, 1), snapshot.TrackState.GetSurface(0, 1));
+    }
+
+    [Fact]
+    public void CurrentSegmentIdTracksLastResolvedTrackIdAcrossSnapshotLegacyCopyAndFinish()
+    {
+        var track = new Track(new[]
+        {
+            new TrackSegment(10, SegmentType.Straight),
+            new TrackSegment(20, SegmentType.Straight),
+        });
+        var trackState = TrackState.CreateDefault(track);
+        var rider = new RiderState(1, lane: 1) { Speed = 15f };
+        var model = new SegmentRecordingLegacyDecisionModel();
+        var engine = new SimulationEngine(model);
+        var options = new HeatSimulationOptions
+        {
+            Laps = 1,
+            Seed = 25,
+            Weather = NeutralWeather,
+            IncidentFrequency = 0f,
+        };
+
+        var firstSnapshot = engine.CaptureSnapshot(
+            track,
+            trackState,
+            new[] { rider },
+            new SimulationStepContext(5, 0, 0, 0, options.Seed, options.Laps));
+        var firstResolved = engine.Resolve(firstSnapshot, engine.Decide(firstSnapshot), options);
+
+        Assert.Equal(0, rider.CurrentSegmentId);
+        engine.Commit(firstResolved, new[] { rider }, trackState, new SimLog());
+        Assert.Equal(10, rider.CurrentSegmentId);
+        Assert.Equal(10, rider.LastResolvedSegmentId);
+        Assert.Equal(1, rider.SegmentIndex);
+
+        var secondSnapshot = engine.CaptureSnapshot(
+            track,
+            trackState,
+            new[] { rider },
+            new SimulationStepContext(5, 1, 0, 1, options.Seed, options.Laps));
+        Assert.Equal(10, secondSnapshot.Rider(1).CurrentSegmentId);
+        Assert.Equal(10, secondSnapshot.Rider(1).LastResolvedSegmentId);
+        Assert.Equal(1, secondSnapshot.Rider(1).SegmentIndex);
+
+        var secondIntents = engine.Decide(secondSnapshot);
+        var legacyCopy = Assert.Single(model.Observations.Skip(1));
+        Assert.Equal(20, legacyCopy.SegmentId);
+        Assert.Equal(10, legacyCopy.CurrentSegmentId);
+        Assert.Equal(10, legacyCopy.LastResolvedSegmentId);
+        Assert.Equal(1, legacyCopy.SegmentIndex);
+        var secondResolved = engine.Resolve(secondSnapshot, secondIntents, options);
+
+        Assert.Equal(10, rider.CurrentSegmentId);
+        engine.Commit(secondResolved, new[] { rider }, trackState, new SimLog());
+        Assert.Equal(RiderRaceStatus.Finished, rider.Status);
+        Assert.Equal(20, rider.CurrentSegmentId);
+        Assert.Equal(20, rider.LastResolvedSegmentId);
+        Assert.Equal(0, rider.SegmentIndex);
+
+        var finishedSnapshot = engine.CaptureSnapshot(
+            track,
+            trackState,
+            new[] { rider },
+            new SimulationStepContext(5, 2, 1, 0, options.Seed, options.Laps));
+        Assert.Equal(20, finishedSnapshot.Rider(1).CurrentSegmentId);
+        Assert.Equal(20, finishedSnapshot.Rider(1).LastResolvedSegmentId);
+
+        rider.ResetForHeat(lane: 1);
+        Assert.Equal(RiderRaceStatus.NotStarted, rider.Status);
+        Assert.Equal(0, rider.CurrentSegmentId);
+        Assert.Equal(0, rider.LastResolvedSegmentId);
+        Assert.Equal(0, rider.SegmentIndex);
     }
 
     [Fact]
@@ -336,6 +476,72 @@ public sealed class RaceEngineFoundationTests
     }
 
     [Fact]
+    public void ClassificationPreservesFinishedCrashedAndRetiredStatuses()
+    {
+        var retiredRider = new RiderState(1, lane: 1);
+        retiredRider.Retire();
+        var retired = Assert.Single(RaceClassification.Build(new[] { retiredRider }, requiredLaps: 1));
+        Assert.Equal(RiderRaceStatus.Retired, retired.Status);
+        Assert.True(retired.Retired);
+        Assert.True(retired.Dnf);
+        Assert.False(retired.Crashed);
+        Assert.False(retired.Finished);
+
+        var crashedRider = new RiderState(2, lane: 1) { IsCrashed = true };
+        var crashed = Assert.Single(RaceClassification.Build(new[] { crashedRider }, requiredLaps: 1));
+        Assert.Equal(RiderRaceStatus.Crashed, crashed.Status);
+        Assert.True(crashed.Crashed);
+        Assert.True(crashed.Dnf);
+        Assert.False(crashed.Retired);
+        Assert.False(crashed.Finished);
+
+        var track = new Track(new[] { new TrackSegment(10, SegmentType.Straight) });
+        var trackState = TrackState.CreateDefault(track);
+        var finishedRider = new RiderState(3, lane: 1) { Speed = 15f };
+        var engine = new SimulationEngine(new HoldLaneDecisionModel());
+        var options = new HeatSimulationOptions
+        {
+            Laps = 1,
+            Seed = 31,
+            Weather = NeutralWeather,
+            IncidentFrequency = 0f,
+        };
+        RunStep(engine, track, trackState, finishedRider, options, 0, 0, 0);
+        var finished = Assert.Single(RaceClassification.Build(new[] { finishedRider }, requiredLaps: 1));
+        Assert.Equal(RiderRaceStatus.Finished, finished.Status);
+        Assert.True(finished.Finished);
+        Assert.False(finished.Dnf);
+        Assert.False(finished.Crashed);
+        Assert.False(finished.Retired);
+    }
+
+    [Fact]
+    public void LegacyRiderHeatResultConstructorMapsOnlyConsistentStatuses()
+    {
+        var finished = new RiderHeatResult(
+            RiderId: 1,
+            Position: 1,
+            Points: 3,
+            Finished: true,
+            Crashed: false,
+            TimeSeconds: 10f,
+            DistanceMeters: 300f,
+            LapsCompleted: 4);
+
+        Assert.Equal(RiderRaceStatus.Finished, finished.Status);
+        Assert.True(finished.Finished);
+        Assert.Throws<ArgumentException>(() => new RiderHeatResult(
+            RiderId: 2,
+            Position: 2,
+            Points: 2,
+            Finished: true,
+            Crashed: true,
+            TimeSeconds: 11f,
+            DistanceMeters: 250f,
+            LapsCompleted: 3));
+    }
+
+    [Fact]
     public void SameStepEventsAreOrderedByStableRiderIdentity()
     {
         var run = RunHeat(CreateDistinctRiders().AsEnumerable().Reverse().ToList());
@@ -379,19 +585,30 @@ public sealed class RaceEngineFoundationTests
             heatId: 12);
         var projections = riders
             .OrderBy(rider => rider.RiderId)
-            .Select(rider => new RiderProjection(
-                rider.RiderId,
-                rider.Status,
-                rider.CanonicalProgress,
-                rider.DistanceMeters,
-                rider.Lane,
-                rider.LateralPosition,
-                rider.Speed,
-                rider.ElapsedTimeSeconds,
-                rider.Morale))
+            .Select(Project)
             .ToArray();
         return (result, projections);
     }
+
+    private static RiderProjection Project(RiderState rider)
+        => new(
+            rider.RiderId,
+            rider.Status,
+            rider.LastResolvedSegmentId,
+            rider.CanonicalProgress,
+            rider.DistanceMeters,
+            rider.Lane,
+            rider.LateralPosition,
+            rider.Speed,
+            rider.Risk,
+            rider.ElapsedTimeSeconds,
+            rider.Morale);
+
+    private static TrackSurfaceState[] CaptureSurfaces(TrackState trackState)
+        => Enumerable.Range(0, trackState.SegmentCount)
+            .SelectMany(segment => Enumerable.Range(0, trackState.LinesCount)
+                .Select(lane => trackState.GetSurface(segment, lane)))
+            .ToArray();
 
     private static HeatSimulationOptions Options() => new()
     {

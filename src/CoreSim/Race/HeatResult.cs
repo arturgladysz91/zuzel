@@ -6,11 +6,68 @@ public sealed record RiderHeatResult(
     int RiderId,
     int Position,
     int Points,
-    bool Finished,
-    bool Crashed,
+    RiderRaceStatus Status,
     float TimeSeconds,
     float DistanceMeters,
-    int LapsCompleted);
+    int LapsCompleted)
+{
+    public RiderHeatResult(
+        int RiderId,
+        int Position,
+        int Points,
+        bool Finished,
+        bool Crashed,
+        float TimeSeconds,
+        float DistanceMeters,
+        int LapsCompleted)
+        : this(
+            RiderId,
+            Position,
+            Points,
+            ResolveLegacyStatus(Finished, Crashed),
+            TimeSeconds,
+            DistanceMeters,
+            LapsCompleted)
+    {
+    }
+
+    public bool Finished => Status == RiderRaceStatus.Finished;
+    public bool Crashed => Status == RiderRaceStatus.Crashed;
+    public bool Retired => Status == RiderRaceStatus.Retired;
+    public bool Dnf => Crashed || Retired;
+
+    public void Deconstruct(
+        out int RiderId,
+        out int Position,
+        out int Points,
+        out bool Finished,
+        out bool Crashed,
+        out float TimeSeconds,
+        out float DistanceMeters,
+        out int LapsCompleted)
+    {
+        RiderId = this.RiderId;
+        Position = this.Position;
+        Points = this.Points;
+        Finished = this.Finished;
+        Crashed = this.Crashed;
+        TimeSeconds = this.TimeSeconds;
+        DistanceMeters = this.DistanceMeters;
+        LapsCompleted = this.LapsCompleted;
+    }
+
+    private static RiderRaceStatus ResolveLegacyStatus(bool finished, bool crashed)
+    {
+        if (finished && crashed)
+            throw new ArgumentException("A rider heat result cannot be both finished and crashed.");
+
+        return finished
+            ? RiderRaceStatus.Finished
+            : crashed
+                ? RiderRaceStatus.Crashed
+                : RiderRaceStatus.Racing;
+    }
+}
 
 public sealed record HeatResult(
     int HeatId,

@@ -19,6 +19,7 @@
    - `Resolve` calculates movement, existing incidents and stable events without changing live riders or the track.
    - `Commit` applies all rider changes, then stable logs and surface wear in rider-id order.
 6. `RiderPosition.TotalSegmentProgress` is the canonical topological position. Lap, segment index and progress in the segment are derived from it; physical distance is advanced atomically with it.
+   `LastResolvedSegmentId` (also exposed through the compatibility alias `CurrentSegmentId`) is observational metadata containing the real `TrackSegment.Id` committed for the previous step. It is not used by classification, physics or track occupancy.
 7. `RaceProgressTracker` and final classification sort by canonical track progress, with elapsed time and rider id used only as deterministic tie-breakers.
 8. The result contains classification, points and a deterministic log. Morale is updated after the heat.
 
@@ -30,4 +31,6 @@ The presentation layer must consume results and logs; it must never change the s
 
 ## Compatibility
 
-`HeatSimulator.Simulate` and `SegmentPhysics.Apply(segment, lane, speed)` remain as a small neutral-surface contract for existing experiments. The legacy heat pass also uses the four-phase commit, while retaining its original neutral-surface physics. New gameplay code should use `SimulateHeat` and `SegmentPhysicsContext`.
+Compatibility is intentionally limited to `HeatSimulator.Simulate`, `SegmentPhysics.Apply(segment, lane, speed)` and the older `IRiderDecisionModel.Decide(TrackSegment, RiderState)` overload. The legacy heat pass also uses the four-phase commit while retaining its original neutral-surface physics, and legacy decision models receive a detached mutable rider copy.
+
+`RiderDecisionContext.Rider`, `Riders` and `TrackState` now expose immutable snapshot types. Code compiled against their former mutable types is not source-compatible and should migrate to the snapshot API. New gameplay code should use `SimulateHeat` and `SegmentPhysicsContext`.

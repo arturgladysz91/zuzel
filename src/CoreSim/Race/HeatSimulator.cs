@@ -162,8 +162,7 @@ public static class RaceClassification
                     rider.RiderId,
                     position,
                     position switch { 1 => 3, 2 => 2, 3 => 1, _ => 0 },
-                    rider.Status == RiderRaceStatus.Finished && rider.LapsCompleted >= requiredLaps,
-                    rider.IsCrashed,
+                    rider.Status,
                     rider.ElapsedTimeSeconds,
                     rider.DistanceMeters,
                     rider.LapsCompleted);
