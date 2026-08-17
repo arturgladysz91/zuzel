@@ -74,12 +74,11 @@ public sealed class RiderState
     /// <summary>Marks an active rider as retired without exposing arbitrary status mutation.</summary>
     public void Retire()
     {
-        if (_status == RiderRaceStatus.Retired)
-            return;
         if (_status is RiderRaceStatus.Finished or RiderRaceStatus.Crashed)
             throw new InvalidOperationException($"A rider with status {_status} cannot retire.");
 
         _status = RiderRaceStatus.Retired;
+        Speed = 0f;
     }
 
     /// <summary>Restores a validated canonical position, for example from a save game.</summary>

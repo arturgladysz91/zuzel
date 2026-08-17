@@ -109,11 +109,11 @@ public sealed class RaceProgressTracker
                 IsDnf(rider) || leaderTime is null
                     ? float.PositiveInfinity
                     : MathF.Max(0f, rider.ElapsedTimeSeconds - leaderTime.Value),
-                IsDnf(rider)))
+                rider.Status))
             .ToArray();
 
         var orderText = string.Join(" | ", entries.Select(entry =>
-            entry.Crashed
+            entry.Dnf
                 ? $"{entry.Position}:rider={entry.RiderId} DNF"
                 : $"{entry.Position}:rider={entry.RiderId} gap={entry.GapSeconds.ToString("F2", CultureInfo.InvariantCulture)}s"));
 
