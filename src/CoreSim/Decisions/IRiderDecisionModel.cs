@@ -9,5 +9,5 @@ public interface IRiderDecisionModel
     RiderDecision Decide(TrackSegment segment, RiderState rider);
 
     RiderDecision Decide(RiderDecisionContext context)
-        => Decide(context.Segment, context.Rider);
+        => Decide(context.Segment, context.Rider.ToMutableCopy());
 }

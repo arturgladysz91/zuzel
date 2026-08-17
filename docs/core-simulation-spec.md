@@ -8,13 +8,17 @@ The core simulates decisions and believable consequences. It does not integrate 
 
 ## Determinism
 
-Given identical domain state, options and random seed, a heat must produce identical classification, typed surface changes and text logs. Randomness may create uncertainty but cannot be hidden in global or time-based state.
+Given identical domain state, options and random seed, a heat must produce identical classification, typed surface changes and text logs. Reordering riders in the input collection must not change the result associated with any rider.
+
+Every segment is processed as `CaptureSnapshot -> Decide -> Resolve -> Commit`. Decisions use one detached snapshot of all riders and all relevant surface cells. Neither decisions nor resolution may mutate live state. Random samples are addressed by seed, heat, step, rider id and a named channel; shared generator sequence, collection index, `string.GetHashCode()` and `HashCode` are forbidden for race outcomes.
 
 ## Track
 
 - A track is an ordered list of `TurnEntry`, `TurnMiddle`, `TurnExit` and `Straight` segments.
 - Every segment has five local reference lanes numbered `0..4` from inside to outside.
 - The chosen lane is discrete; `LateralPosition` is continuous and cannot jump directly across the track.
+- `RiderPosition.TotalSegmentProgress` is the single topological source of truth. Lap, segment index and normalized `0..1` segment progress are derived values. Physical distance is updated together with canonical progress.
+- Rider status distinguishes not started, racing, finished, crashed and retired states.
 - Every segment/lane cell stores base grip, ruts and moisture. `EffectiveGrip` derives usable grip from all three values.
 - Weather changes moisture unevenly. Rider passages wear the used lane and nearby material. Manager work can grade, water or pack a selected area.
 
@@ -43,7 +47,7 @@ Given identical domain state, options and random seed, a heat must produce ident
 
 ## Result and player information
 
-The core returns factual internal results and logs. Segment logs distinguish entry speed, speed after the physical constraint and final exit speed. A change of running order between two active riders creates a typed overtake event; a retirement is not an overtake. Every completed lap creates a typed order snapshot with gaps to the active leader.
+The core returns factual internal results and logs. Events created in one step are ordered by step, phase, rider id and event type. Segment logs distinguish entry speed, speed after the physical constraint and final exit speed. A change of running order between two active riders creates a typed overtake event; a retirement is not an overtake. Every completed lap creates a typed order snapshot with gaps to the active leader.
 
 A starting-gate balance report must rotate the same four rider profiles evenly through gates 1..4. This prevents rider strength from being mistaken for gate advantage. Large diagnostic batches may disable log capture, but this must not change track evolution or the simulated classification.
 

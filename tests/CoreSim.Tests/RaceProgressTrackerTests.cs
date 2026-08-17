@@ -8,7 +8,7 @@ namespace CoreSim.Tests;
 public sealed class RaceProgressTrackerTests
 {
     [Fact]
-    public void CapturesOvertakeAndLapOrderWithoutCountingRetirement()
+    public void CapturesOvertakeAndLapOrderWithoutCountingCrashAsOvertake()
     {
         var first = RiderState.CreateDefault(1, 0);
         var second = RiderState.CreateDefault(2, 1);
@@ -36,7 +36,40 @@ public sealed class RaceProgressTrackerTests
         Assert.Single(log.Overtakes);
         var snapshot = Assert.Single(log.OrderSnapshots);
         Assert.Equal(new[] { 2, 1 }, snapshot.Order.Select(entry => entry.RiderId));
-        Assert.True(snapshot.Order[1].Crashed);
+        var crashed = snapshot.Order[1];
+        Assert.Equal(RiderRaceStatus.Crashed, crashed.Status);
+        Assert.True(crashed.Crashed);
+        Assert.True(crashed.Dnf);
+        Assert.False(crashed.Retired);
         Assert.Contains(log.Lines, line => line.StartsWith("LAP_ORDER lap=1"));
+    }
+
+    [Fact]
+    public void PassingRetiredRiderDoesNotCreateOvertakeAndLapOrderMarksDnf()
+    {
+        var first = RiderState.CreateDefault(1, 0);
+        var second = RiderState.CreateDefault(2, 1);
+        first.ElapsedTimeSeconds = 10f;
+        first.Speed = 14f;
+        second.ElapsedTimeSeconds = 11f;
+        var riders = new[] { first, second };
+        var tracker = new RaceProgressTracker();
+        var log = new SimLog();
+        tracker.InitializeStartingGrid(riders);
+        tracker.CaptureSegment(1, 0, lapComplete: false, riders, log);
+
+        first.Retire();
+        Assert.Equal(0f, first.Speed);
+        tracker.CaptureSegment(1, 7, lapComplete: true, riders, log);
+
+        Assert.Empty(log.Overtakes);
+        var snapshot = Assert.Single(log.OrderSnapshots);
+        Assert.Equal(new[] { 2, 1 }, snapshot.Order.Select(entry => entry.RiderId));
+        var retired = snapshot.Order[1];
+        Assert.Equal(RiderRaceStatus.Retired, retired.Status);
+        Assert.False(retired.Crashed);
+        Assert.True(retired.Retired);
+        Assert.True(retired.Dnf);
+        Assert.Contains(log.Lines, line => line.Contains("2:rider=1 DNF"));
     }
 }

@@ -7,8 +7,11 @@ public sealed class Track
 
     public Track(IReadOnlyList<TrackSegment> segments)
     {
-        Segments = segments ?? throw new ArgumentNullException(nameof(segments));
+        ArgumentNullException.ThrowIfNull(segments);
         if (segments.Count == 0) throw new ArgumentException("Track must have at least one segment.", nameof(segments));
+        Segments = Array.AsReadOnly(segments
+            .Select(segment => new TrackSegment(segment.Id, segment.Type))
+            .ToArray());
     }
 
     // Przykładowy tor do uruchomienia Sandbox: 2 łuki (wejście/środek/wyjście) + 2 proste.

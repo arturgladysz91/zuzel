@@ -1,4 +1,5 @@
 using CoreSim.Setup;
+using CoreSim.Race;
 
 namespace CoreSim;
 
@@ -7,18 +8,42 @@ public sealed class RiderState
 {
     private float _morale;
     private float _managerTrust;
+    private RiderPosition _position;
+    private RiderRaceStatus _status;
+    private int _lastResolvedSegmentId;
 
     public int RiderId => Profile.Id;
     public RiderProfile Profile { get; }
-    public int CurrentSegmentId { get; set; }
+    public RiderPosition Position => _position;
+    public int LapNumber => _status == RiderRaceStatus.Finished
+        ? Math.Max(1, LapsCompleted)
+        : LapsCompleted + 1;
+    public int SegmentIndex => _position.SegmentIndex;
+    public float SegmentProgress => _position.SegmentProgress;
+    public double CanonicalProgress => _position.TotalSegmentProgress;
+    /// <summary>TrackSegment.Id committed for the most recently resolved segment; never a topology key.</summary>
+    public int LastResolvedSegmentId => _lastResolvedSegmentId;
+    /// <summary>Backward-compatible alias for LastResolvedSegmentId.</summary>
+    public int CurrentSegmentId => LastResolvedSegmentId;
     public int Lane { get; set; }
     public float LateralPosition { get; set; }
     public float Speed { get; set; }
     public float Risk { get; set; }
-    public bool IsCrashed { get; set; }
+    public RiderRaceStatus Status => _status;
+    public bool IsCrashed
+    {
+        get => _status == RiderRaceStatus.Crashed;
+        set
+        {
+            if (value)
+                _status = RiderRaceStatus.Crashed;
+            else if (_status == RiderRaceStatus.Crashed)
+                _status = RiderRaceStatus.Racing;
+        }
+    }
     public float ElapsedTimeSeconds { get; set; }
-    public float DistanceMeters { get; set; }
-    public int LapsCompleted { get; set; }
+    public float DistanceMeters => _position.DistanceMeters;
+    public int LapsCompleted => _position.LapsCompleted;
     public BikeSetup ActiveSetup { get; set; } = BikeSetup.Neutral;
 
     public float Morale
@@ -50,18 +75,52 @@ public sealed class RiderState
 
     public void ApplyMoraleDelta(float delta) => Morale += delta;
 
+    /// <summary>Marks an active rider as retired without exposing arbitrary status mutation.</summary>
+    public void Retire()
+    {
+        if (_status is RiderRaceStatus.Finished or RiderRaceStatus.Crashed)
+            throw new InvalidOperationException($"A rider with status {_status} cannot retire.");
+
+        _status = RiderRaceStatus.Retired;
+        Speed = 0f;
+    }
+
+    /// <summary>Restores a validated canonical position, for example from a save game.</summary>
+    public void RestorePosition(RiderPosition position)
+    {
+        if (position.SegmentCount <= 0)
+            throw new ArgumentException("Position must be initialized for a track.", nameof(position));
+        _position = position;
+    }
+
+    internal RiderPosition PositionForTrack(int segmentCount)
+    {
+        if (_position.SegmentCount == 0)
+            return RiderPosition.Start(segmentCount);
+        if (_position.SegmentCount != segmentCount)
+            throw new InvalidOperationException("Rider position belongs to a track with a different segment count.");
+        return _position;
+    }
+
+    internal void CommitPosition(RiderPosition position) => _position = position;
+
+    internal void SetLastResolvedSegmentId(int segmentId) => _lastResolvedSegmentId = segmentId;
+
+    internal void SetStatus(RiderRaceStatus status) => _status = status;
+
     public void ResetForHeat(int lane)
     {
         LaneModel.ValidateLane(lane);
-        CurrentSegmentId = 0;
+        _position = _position.SegmentCount == 0
+            ? default
+            : RiderPosition.Start(_position.SegmentCount);
+        _lastResolvedSegmentId = 0;
         Lane = lane;
         LateralPosition = lane;
         Speed = 0f;
         Risk = 0f;
-        IsCrashed = false;
+        _status = RiderRaceStatus.NotStarted;
         ElapsedTimeSeconds = 0f;
-        DistanceMeters = 0f;
-        LapsCompleted = 0;
     }
 
     public static RiderState CreateDefault(int riderId, int lane)
