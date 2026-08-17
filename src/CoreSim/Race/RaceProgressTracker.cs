@@ -123,9 +123,9 @@ public sealed class RaceProgressTracker
 
     private static RiderState[] BuildRunningOrder(IReadOnlyList<RiderState> riders)
         => riders
-            .OrderBy(rider => rider.IsCrashed)
+            .OrderByDescending(rider => rider.Status == RiderRaceStatus.Finished)
+            .ThenByDescending(rider => rider.CanonicalProgress)
             .ThenBy(rider => rider.IsCrashed ? float.MaxValue : rider.ElapsedTimeSeconds)
-            .ThenByDescending(rider => rider.DistanceMeters)
             .ThenBy(rider => rider.RiderId)
             .ToArray();
 }

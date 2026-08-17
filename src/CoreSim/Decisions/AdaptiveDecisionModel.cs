@@ -6,9 +6,9 @@ namespace CoreSim.Decisions;
 /// </summary>
 public sealed class AdaptiveDecisionModel : IRiderDecisionModel
 {
-    private readonly Random _random;
+    private readonly int _modelSeed;
 
-    public AdaptiveDecisionModel(int seed = 1234) => _random = new Random(seed);
+    public AdaptiveDecisionModel(int seed = 1234) => _modelSeed = seed;
 
     public RiderDecision Decide(TrackSegment segment, RiderState rider)
         => new(rider.Lane, rider.Profile.Style.RiskTolerance * 0.05f, "no track context");
@@ -30,7 +30,16 @@ public sealed class AdaptiveDecisionModel : IRiderDecisionModel
             var effectiveGrip = surface.EffectiveGrip;
 
             // Weak readers see a noisier and more conservative approximation.
-            var observationNoise = ((float)_random.NextDouble() - 0.5f) * (1f - reading) * 0.18f;
+            var observationNoise = DeterministicRandom.SampleSigned(
+                    context.Seed,
+                    context.HeatId,
+                    context.StepNumber,
+                    rider.RiderId,
+                    RandomChannel.TrackObservation,
+                    lane,
+                    _modelSeed)
+                * (1f - reading)
+                * 0.09f;
             var perceivedSurface = new TrackSurfaceState(
                 TrackSurfaceState.Clamp01(surface.Grip + observationNoise),
                 TrackSurfaceState.Clamp01(surface.Ruts - observationNoise * 0.5f),
@@ -94,8 +103,8 @@ public sealed class AdaptiveDecisionModel : IRiderDecisionModel
     private static bool IsOccupied(RiderDecisionContext context, int lane)
         => context.Riders.Any(other =>
             other.RiderId != context.Rider.RiderId
-            && !other.IsCrashed
-            && other.CurrentSegmentId == context.Segment.Id
+            && other.IsActive
+            && other.SegmentIndex == context.SegmentIndex
             && Math.Abs(other.LateralPosition - lane) < 0.55f
             && Math.Abs(other.ElapsedTimeSeconds - context.Rider.ElapsedTimeSeconds) < 0.30f);
 }
