@@ -10,7 +10,7 @@ namespace CoreSim.Race;
 public sealed class RaceProgressTracker
 {
     private IReadOnlyList<int> _previousOrder = Array.Empty<int>();
-    private IReadOnlyDictionary<int, bool> _previousCrashState = new Dictionary<int, bool>();
+    private IReadOnlyDictionary<int, bool> _previousDnfState = new Dictionary<int, bool>();
 
     public void InitializeStartingGrid(IReadOnlyList<RiderState> riders)
     {
@@ -20,7 +20,7 @@ public sealed class RaceProgressTracker
             .ThenBy(rider => rider.RiderId)
             .Select(rider => rider.RiderId)
             .ToArray();
-        _previousCrashState = riders.ToDictionary(rider => rider.RiderId, rider => rider.IsCrashed);
+        _previousDnfState = riders.ToDictionary(rider => rider.RiderId, IsDnf);
     }
 
     public void CaptureSegment(
@@ -39,16 +39,16 @@ public sealed class RaceProgressTracker
         var currentPositions = ordered
             .Select((rider, index) => new { rider.RiderId, Position = index + 1 })
             .ToDictionary(item => item.RiderId, item => item.Position);
-        var currentCrashState = ordered.ToDictionary(rider => rider.RiderId, rider => rider.IsCrashed);
+        var currentDnfState = ordered.ToDictionary(rider => rider.RiderId, IsDnf);
 
         if (_previousOrder.Count > 0)
-            CaptureOvertakes(lap, segmentId, ordered, currentPositions, currentCrashState, log);
+            CaptureOvertakes(lap, segmentId, ordered, currentPositions, currentDnfState, log);
 
         if (lapComplete)
             CaptureLapOrder(lap, segmentId, ordered, log);
 
         _previousOrder = ordered.Select(rider => rider.RiderId).ToArray();
-        _previousCrashState = currentCrashState;
+        _previousDnfState = currentDnfState;
     }
 
     private void CaptureOvertakes(
@@ -56,28 +56,28 @@ public sealed class RaceProgressTracker
         int segmentId,
         IReadOnlyList<RiderState> ordered,
         IReadOnlyDictionary<int, int> currentPositions,
-        IReadOnlyDictionary<int, bool> currentCrashState,
+        IReadOnlyDictionary<int, bool> currentDnfState,
         SimLog log)
     {
         var previousPositions = _previousOrder
             .Select((riderId, index) => new { RiderId = riderId, Position = index + 1 })
             .ToDictionary(item => item.RiderId, item => item.Position);
 
-        foreach (var rider in ordered.Where(rider => !rider.IsCrashed))
+        foreach (var rider in ordered.Where(rider => !IsDnf(rider)))
         {
             if (!previousPositions.TryGetValue(rider.RiderId, out var oldPosition))
                 continue;
 
             var newPosition = currentPositions[rider.RiderId];
             if (newPosition >= oldPosition
-                || _previousCrashState.GetValueOrDefault(rider.RiderId))
+                || _previousDnfState.GetValueOrDefault(rider.RiderId))
                 continue;
 
             foreach (var passedRiderId in _previousOrder.Take(oldPosition - 1))
             {
                 if (passedRiderId == rider.RiderId
-                    || _previousCrashState.GetValueOrDefault(passedRiderId)
-                    || currentCrashState.GetValueOrDefault(passedRiderId)
+                    || _previousDnfState.GetValueOrDefault(passedRiderId)
+                    || currentDnfState.GetValueOrDefault(passedRiderId)
                     || currentPositions[passedRiderId] <= newPosition)
                     continue;
 
@@ -100,16 +100,16 @@ public sealed class RaceProgressTracker
         IReadOnlyList<RiderState> ordered,
         SimLog log)
     {
-        var leader = ordered.FirstOrDefault(rider => !rider.IsCrashed);
+        var leader = ordered.FirstOrDefault(rider => !IsDnf(rider));
         var leaderTime = leader?.ElapsedTimeSeconds;
         var entries = ordered
             .Select((rider, index) => new RiderOrderEntry(
                 rider.RiderId,
                 index + 1,
-                rider.IsCrashed || leaderTime is null
+                IsDnf(rider) || leaderTime is null
                     ? float.PositiveInfinity
                     : MathF.Max(0f, rider.ElapsedTimeSeconds - leaderTime.Value),
-                rider.IsCrashed))
+                IsDnf(rider)))
             .ToArray();
 
         var orderText = string.Join(" | ", entries.Select(entry =>
@@ -125,7 +125,10 @@ public sealed class RaceProgressTracker
         => riders
             .OrderByDescending(rider => rider.Status == RiderRaceStatus.Finished)
             .ThenByDescending(rider => rider.CanonicalProgress)
-            .ThenBy(rider => rider.IsCrashed ? float.MaxValue : rider.ElapsedTimeSeconds)
+            .ThenBy(rider => IsDnf(rider) ? float.MaxValue : rider.ElapsedTimeSeconds)
             .ThenBy(rider => rider.RiderId)
             .ToArray();
+
+    private static bool IsDnf(RiderState rider)
+        => rider.Status is RiderRaceStatus.Crashed or RiderRaceStatus.Retired;
 }

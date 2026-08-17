@@ -192,6 +192,68 @@ public sealed class RaceEngineFoundationTests
     }
 
     [Fact]
+    public void CommitRejectsMismatchedTrackStateBeforeMutatingRidersLogOrTrack()
+    {
+        var track = new Track(new[] { new TrackSegment(0, SegmentType.Straight) });
+        var sourceTrackState = TrackState.CreateDefault(track);
+        var wrongTrackState = new TrackState(2, LaneModel.LanesCount);
+        var rider = new RiderState(1, lane: 2) { Speed = 14f };
+        var engine = new SimulationEngine(new HoldLaneDecisionModel());
+        var options = new HeatSimulationOptions
+        {
+            Laps = 1,
+            Seed = 8,
+            Weather = NeutralWeather,
+            IncidentFrequency = 0f,
+        };
+        var snapshot = engine.CaptureSnapshot(
+            track,
+            sourceTrackState,
+            new[] { rider },
+            new SimulationStepContext(3, 0, 0, 0, options.Seed, 1));
+        var resolved = engine.Resolve(snapshot, engine.Decide(snapshot), options);
+        var riderBefore = new RiderProjection(
+            rider.RiderId,
+            rider.Status,
+            rider.CanonicalProgress,
+            rider.DistanceMeters,
+            rider.Lane,
+            rider.LateralPosition,
+            rider.Speed,
+            rider.ElapsedTimeSeconds,
+            rider.Morale);
+        var surfacesBefore = Enumerable.Range(0, wrongTrackState.SegmentCount)
+            .SelectMany(segment => Enumerable.Range(0, wrongTrackState.LinesCount)
+                .Select(lane => wrongTrackState.GetSurface(segment, lane)))
+            .ToArray();
+        var log = new SimLog();
+        log.Add("existing");
+
+        var exception = Assert.Throws<ArgumentException>(
+            () => engine.Commit(resolved, new[] { rider }, wrongTrackState, log));
+
+        Assert.Equal("trackState", exception.ParamName);
+        Assert.Equal(riderBefore, new RiderProjection(
+            rider.RiderId,
+            rider.Status,
+            rider.CanonicalProgress,
+            rider.DistanceMeters,
+            rider.Lane,
+            rider.LateralPosition,
+            rider.Speed,
+            rider.ElapsedTimeSeconds,
+            rider.Morale));
+        Assert.Equal(new[] { "existing" }, log.Lines);
+        Assert.Empty(log.SurfaceChanges);
+        Assert.Empty(log.Overtakes);
+        Assert.Empty(log.OrderSnapshots);
+        Assert.Equal(surfacesBefore, Enumerable.Range(0, wrongTrackState.SegmentCount)
+            .SelectMany(segment => Enumerable.Range(0, wrongTrackState.LinesCount)
+                .Select(lane => wrongTrackState.GetSurface(segment, lane)))
+            .ToArray());
+    }
+
+    [Fact]
     public void SnapshotIsDetachedFromLaterSourceMutations()
     {
         var track = new Track(new[] { new TrackSegment(0, SegmentType.TurnMiddle) });

@@ -173,9 +173,8 @@ public sealed class SimulationEngine
         ArgumentNullException.ThrowIfNull(trackState);
         ArgumentNullException.ThrowIfNull(log);
 
+        ValidateCommitInputs(resolved, riders, trackState);
         var riderById = riders.ToDictionary(rider => rider.RiderId);
-        if (resolved.Changes.Any(change => !riderById.ContainsKey(change.RiderId)))
-            throw new ArgumentException("Commit riders do not match the resolved step.", nameof(riders));
 
         // All rider mutations happen before any observer-visible logging or
         // surface wear. No rider can see another rider's partial commit.
@@ -204,6 +203,39 @@ public sealed class SimulationEngine
             else
                 ApplyAdvancedSurfaceWear(resolved.Snapshot, trackState, change.Lane, log);
         }
+    }
+
+    private static void ValidateCommitInputs(
+        ResolvedSimulationStep resolved,
+        IReadOnlyList<RiderState> riders,
+        TrackState trackState)
+    {
+        var snapshot = resolved.Snapshot;
+        if (trackState.SegmentCount != snapshot.TrackState.SegmentCount
+            || trackState.LinesCount != snapshot.TrackState.LinesCount)
+            throw new ArgumentException("Track state dimensions must match the resolved snapshot.", nameof(trackState));
+
+        var snapshotIds = snapshot.Riders.Select(rider => rider.RiderId).ToArray();
+        if (snapshotIds.Distinct().Count() != snapshotIds.Length)
+            throw new InvalidOperationException("The resolved snapshot contains duplicate rider ids.");
+
+        var riderIds = riders.Select(rider => rider.RiderId).ToArray();
+        if (riderIds.Distinct().Count() != riderIds.Length)
+            throw new ArgumentException("Commit riders must have unique ids.", nameof(riders));
+        if (!snapshotIds.Order().SequenceEqual(riderIds.Order()))
+            throw new ArgumentException("Commit riders do not match the resolved snapshot.", nameof(riders));
+
+        var changeIds = resolved.Changes.Select(change => change.RiderId).ToArray();
+        if (changeIds.Distinct().Count() != changeIds.Length)
+            throw new InvalidOperationException("The resolved step contains duplicate rider changes.");
+
+        var activeSnapshotIds = snapshot.Riders
+            .Where(rider => rider.IsActive)
+            .Select(rider => rider.RiderId)
+            .Order()
+            .ToArray();
+        if (!activeSnapshotIds.SequenceEqual(changeIds.Order()))
+            throw new InvalidOperationException("The resolved rider changes do not match the snapshot.");
     }
 
     private static RiderStateChange ResolveRider(
