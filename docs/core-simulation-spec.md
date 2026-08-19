@@ -25,7 +25,9 @@ Every segment is processed as `CaptureSnapshot -> Decide -> Resolve -> Commit`. 
 
 ## Physical constraints
 
-- A turn's physical safe-speed boundary depends on the concrete track geometry, local lane and surface, trajectory, relevant control skill and setup fit. Morale does not change the physical traction boundary; it may affect a later decision, accepted risk and quality of execution.
+- The base curvature constraint for a turn uses the concrete line radius `R = LaneModel.TurnArcRadiusMeters(lane, geometry)` and `v_geometry = 16 m/s * sqrt(R / 24 m)`. The 24 m radius and 16 m/s speed normalize the example track; a larger radius raises the limit by the square root of the radius ratio rather than by a linear bonus for the lane number.
+- `TurnSegmentAngleRadians` changes path distance and time spent in a turn segment, but it does not change the radius-derived speed boundary. Surface, relevant control skill and setup fit modify that boundary. Morale does not; it may affect a later decision, accepted risk and quality of execution.
+- This curvature-based boundary is a simulation constraint, not a complete motorcycle dynamics or cornering model.
 - Deliberately choosing a wide line is a planned trajectory and can be advantageous for surface, passing or corner-exit reasons. `RunWide` is an unplanned or forced outward consequence of excessive speed, an error or contact; the two concepts must not be conflated.
 - Line advantage emerges from the geometry of the concrete track, surface and complete trajectory. A projected comparison of extreme-line lap times is a diagnostic for that track, not a global equality test or a fixed percentage invariant.
 - A concrete track may favor a particular line. No line may be universally best across all track geometries and surfaces.

@@ -58,9 +58,17 @@ public sealed class RaceBalanceTests
         var weak = new RiderSkills(70f, 30f, 30f, 70f, 70f, 70f);
 
         var strongSpeed = SegmentPhysics.MaxSafeTurnSpeed(
-            1, surface, strong, 0.5f, CoreSim.Setup.BikeSetup.Neutral);
+            1,
+            TrackGeometry.Default,
+            surface,
+            strong,
+            CoreSim.Setup.BikeSetup.Neutral);
         var weakSpeed = SegmentPhysics.MaxSafeTurnSpeed(
-            2, surface, weak, 0.5f, CoreSim.Setup.BikeSetup.Neutral);
+            2,
+            TrackGeometry.Default,
+            surface,
+            weak,
+            CoreSim.Setup.BikeSetup.Neutral);
 
         Assert.True(strongSpeed > weakSpeed);
     }

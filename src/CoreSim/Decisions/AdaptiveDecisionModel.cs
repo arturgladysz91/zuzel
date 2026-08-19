@@ -56,9 +56,9 @@ public sealed class AdaptiveDecisionModel : IRiderDecisionModel
                                   + surface.Ruts * 0.08f;
             var projectedSpeed = SegmentPhysics.MaxSafeTurnSpeed(
                 lane,
+                geometry,
                 perceivedSurface,
                 rider.Profile.Skills,
-                rider.Morale,
                 rider.ActiveSetup);
             var projectedTime = ProjectedRouteTime(evaluationSegment, lane, projectedSpeed, geometry);
             var cost = projectedTime + movementCost + styleCost + occupancyCost + surfaceRiskCost;

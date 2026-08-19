@@ -16,7 +16,7 @@
 5. Every segment has four explicit phases:
    - `CaptureSnapshot` copies every rider and every surface cell into a detached immutable view and preserves the track's immutable geometry.
    - `Decide` gives every active rider the same snapshot; legacy decision models receive a mutable clone, never the source state.
-   - `Resolve` calculates movement, existing incidents and stable events without changing live riders or the track.
+   - `Resolve` passes the snapshot's `TrackGeometry` through `SegmentPhysicsContext`, calculates movement, existing incidents and stable events without changing live riders or the track.
    - `Commit` applies all rider changes, then stable logs and surface wear in rider-id order.
 6. `RiderPosition.TotalSegmentProgress` is the canonical topological position. Lap, segment index and progress in the segment are derived from it; physical distance is advanced atomically with it.
    `LastResolvedSegmentId` (also exposed through the compatibility alias `CurrentSegmentId`) is observational metadata containing the real `TrackSegment.Id` committed for the previous step. It is not used by classification, physics or track occupancy.
@@ -34,5 +34,7 @@ The presentation layer must consume results and logs; it must never change the s
 Compatibility is intentionally limited to `HeatSimulator.Simulate`, `SegmentPhysics.Apply(segment, lane, speed)` and the older `IRiderDecisionModel.Decide(TrackSegment, RiderState)` overload. The legacy heat pass also uses the four-phase commit while retaining its original neutral-surface physics, and legacy decision models receive a detached mutable rider copy.
 
 The original `Track(segments)` constructor and geometry-free `LaneModel` overloads remain available. They use the example-compatible `TrackGeometry.Default`; new simulation paths pass the geometry of the concrete track explicitly.
+
+The canonical corner-speed path derives its base limit from the concrete lane radius and carries no morale argument. Morale remains in `SegmentPhysicsContext` only for the existing incident-risk calculation. The legacy `SegmentPhysics.Apply(segment, lane, speed)` and geometry-free speed overloads retain their signatures and use `TrackGeometry.Default`.
 
 `RiderDecisionContext.Rider`, `Riders` and `TrackState` now expose immutable snapshot types. Code compiled against their former mutable types is not source-compatible and should migrate to the snapshot API. New gameplay code should use `SimulateHeat` and `SegmentPhysicsContext`.

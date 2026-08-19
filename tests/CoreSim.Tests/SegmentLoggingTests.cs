@@ -20,9 +20,9 @@ public sealed class SegmentLoggingTests
         var rider = RiderState.CreateDefault(7, 1);
         rider.Speed = SegmentPhysics.MaxSafeTurnSpeed(
             1,
+            track.Geometry,
             TrackSurfaceState.Default,
             rider.Profile.Skills,
-            rider.Morale,
             rider.ActiveSetup) * 1.05f;
         var simulator = new HeatSimulator(new HoldLaneDecisionModel());
 

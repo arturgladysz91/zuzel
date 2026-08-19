@@ -44,10 +44,13 @@ public sealed class PhysicsTestRunnerTests
             Track: track,
             TrackState: trackState,
             InitialLane: 0,
-            InitialSpeed: SegmentPhysics.MaxSafeTurnSpeed(0) * initialMultiplier,
+            InitialSpeed: SegmentPhysics.MaxSafeTurnSpeed(0, track.Geometry) * initialMultiplier,
             SegmentPlans: new[]
             {
-                new PhysicsTestSegmentPlan(TargetLane: 0, EntrySpeed: SegmentPhysics.MaxSafeTurnSpeed(0), Note: "hard brake"),
+                new PhysicsTestSegmentPlan(
+                    TargetLane: 0,
+                    EntrySpeed: SegmentPhysics.MaxSafeTurnSpeed(0, track.Geometry),
+                    Note: "hard brake"),
                 new PhysicsTestSegmentPlan(TargetLane: 0)
             });
 
@@ -70,5 +73,63 @@ public sealed class PhysicsTestRunnerTests
         Assert.True(mixedResult.FinalSpeed > brakeResult.FinalSpeed);
         Assert.Equal(0, brakeResult.FinalLane);
         Assert.Equal(1, mixedResult.FinalLane);
+    }
+
+    [Fact]
+    public void SafeSpeedMultiplierUsesScenarioGeometry()
+    {
+        var track = new Track(
+            new[] { new TrackSegment(0, SegmentType.TurnMiddle) },
+            new TrackGeometry(60f, 54f, 1f, MathF.PI / 3f));
+        const float multiplier = 1.15f;
+
+        var scenario = PhysicsTestScenario.FromSafeSpeedMultiplier(
+            name: "broad-turn",
+            track: track,
+            trackState: TrackState.CreateDefault(track),
+            initialLane: LaneModel.MinLane,
+            safeSpeedMultiplier: multiplier,
+            segmentPlans: new[] { new PhysicsTestSegmentPlan(LaneModel.MinLane) });
+
+        Assert.Equal(
+            SegmentPhysics.MaxSafeTurnSpeed(LaneModel.MinLane, track.Geometry) * multiplier,
+            scenario.InitialSpeed,
+            3);
+        Assert.NotEqual(
+            SegmentPhysics.MaxSafeTurnSpeed(LaneModel.MinLane) * multiplier,
+            scenario.InitialSpeed);
+    }
+
+    [Fact]
+    public void RunnerUsesScenarioGeometry()
+    {
+        const float entrySpeedMetersPerSecond = 18f;
+        var segment = new TrackSegment(0, SegmentType.TurnMiddle);
+        var tightTrack = new Track(
+            new[] { segment },
+            new TrackGeometry(60f, 24f, 1f, MathF.PI / 3f));
+        var broadTrack = new Track(
+            new[] { segment },
+            new TrackGeometry(60f, 54f, 1f, MathF.PI / 3f));
+        var plan = new[] { new PhysicsTestSegmentPlan(LaneModel.MinLane) };
+        var runner = new PhysicsTestRunner();
+
+        var tightResult = runner.Run(new PhysicsTestScenario(
+            "tight",
+            tightTrack,
+            TrackState.CreateDefault(tightTrack),
+            LaneModel.MinLane,
+            entrySpeedMetersPerSecond,
+            plan));
+        var broadResult = runner.Run(new PhysicsTestScenario(
+            "broad",
+            broadTrack,
+            TrackState.CreateDefault(broadTrack),
+            LaneModel.MinLane,
+            entrySpeedMetersPerSecond,
+            plan));
+
+        Assert.Equal(SegmentOutcome.RunWide, Assert.Single(tightResult.Segments).Outcome);
+        Assert.Equal(SegmentOutcome.Ok, Assert.Single(broadResult.Segments).Outcome);
     }
 }
