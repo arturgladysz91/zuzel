@@ -210,6 +210,27 @@ public sealed class CornerPhysicsRadiusTests
     }
 
     [Fact]
+    public void StraightEntrySpeedFromRestDoesNotDependOnTurnRadius()
+    {
+        const int lane = 2;
+        var segment = new TrackSegment(0, SegmentType.Straight);
+        var tightTurnGeometryTrack = new Track(
+            new[] { segment },
+            new TrackGeometry(60f, 18f, 1f, MathF.PI / 3f));
+        var broadTurnGeometryTrack = new Track(
+            new[] { segment },
+            new TrackGeometry(60f, 54f, 1f, MathF.PI / 3f));
+
+        var tightTurnGeometryChange = ResolveFromRest(tightTurnGeometryTrack, lane);
+        var broadTurnGeometryChange = ResolveFromRest(broadTurnGeometryTrack, lane);
+
+        Assert.Equal(tightTurnGeometryChange.EntrySpeed, broadTurnGeometryChange.EntrySpeed);
+        Assert.Equal(tightTurnGeometryChange.PhysicsSpeed, broadTurnGeometryChange.PhysicsSpeed);
+        Assert.Equal(tightTurnGeometryChange.Speed, broadTurnGeometryChange.Speed);
+        Assert.Equal(tightTurnGeometryChange.Outcome, broadTurnGeometryChange.Outcome);
+    }
+
+    [Fact]
     public void LegacyOverloadsUseDefaultGeometry()
     {
         const int lane = 2;

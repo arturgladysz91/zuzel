@@ -443,7 +443,7 @@ public sealed class SimulationEngine
         if (rider.Speed > 0f)
             return rider.Speed;
         if (snapshot.Segment.Type == SegmentType.Straight)
-            return SegmentPhysics.MaxSafeTurnSpeed(lane, snapshot.Track.Geometry) * 0.95f;
+            return SegmentPhysics.MaxSafeTurnSpeed(lane) * 0.95f;
 
         var safeSpeed = SegmentPhysics.MaxSafeTurnSpeed(
             lane,
