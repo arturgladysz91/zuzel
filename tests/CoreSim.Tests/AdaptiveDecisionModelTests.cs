@@ -54,12 +54,12 @@ public sealed class AdaptiveDecisionModelTests
     public void ConcreteTrackGeometryChangesRouteChoiceDeterministically()
     {
         var segment = new TrackSegment(0, SegmentType.TurnMiddle);
-        var narrowSpacingTrack = new Track(
+        var tightRadiusTrack = new Track(
             new[] { segment },
-            new TrackGeometry(60f, 40f, 0.5f, 0.8f));
-        var wideSpacingTrack = new Track(
+            new TrackGeometry(60f, 10f, 2f, 0.8f));
+        var referenceRadiusTrack = new Track(
             new[] { segment },
-            new TrackGeometry(60f, 40f, 1.5f, 0.8f));
+            new TrackGeometry(60f, 24f, 1.5f, 0.8f));
         var surface = new TrackSurfaceState(1f, 0f, 0.35f);
         var rider = new RiderState(
             new RiderProfile(
@@ -78,24 +78,24 @@ public sealed class AdaptiveDecisionModelTests
             RequiredLaps: 1);
         var engine = new SimulationEngine(new AdaptiveDecisionModel(seed: 42));
 
-        var narrowDecision = DecideFor(
+        var tightRadiusDecision = DecideFor(
             engine,
-            narrowSpacingTrack,
+            tightRadiusTrack,
             surface,
             new[] { rider, rival },
             rider.RiderId,
             step);
-        var wideDecision = DecideFor(
+        var referenceRadiusDecision = DecideFor(
             engine,
-            wideSpacingTrack,
+            referenceRadiusTrack,
             surface,
             new[] { rival, rider },
             rider.RiderId,
             step);
 
-        Assert.Equal(LaneModel.MaxLane, narrowDecision.TargetLane);
-        Assert.Equal(2, wideDecision.TargetLane);
-        Assert.NotEqual(narrowDecision.Reason, wideDecision.Reason);
+        Assert.Equal(LaneModel.MaxLane, tightRadiusDecision.TargetLane);
+        Assert.Equal(2, referenceRadiusDecision.TargetLane);
+        Assert.NotEqual(tightRadiusDecision.Reason, referenceRadiusDecision.Reason);
     }
 
     private static RiderDecision DecideFor(

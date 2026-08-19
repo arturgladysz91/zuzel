@@ -17,7 +17,7 @@ PR #8 ukończył fundament Race Engine v2: niezmienny snapshot, fazy `Decide` / 
 Przed rozpoczęciem Track Engine pozostają:
 
 - start i pierwszy łuk,
-- ograniczenia jazdy w łuku i wynoszenie,
+- dalsza rozbudowa ograniczeń jazdy w łuku i wynoszenia,
 - czasowa zmiana linii,
 - atak, obrona i blokowanie,
 - kontakty, upadki i walidacja fizyki.
@@ -26,13 +26,15 @@ Track Engine, zarządzanie torem i systemy menedżerskie pozostają późniejszy
 
 PR #9 dodaje niezmienną geometrię konkretnego toru i wykorzystuje ją do obliczania dystansu oraz oceny tras przez `AdaptiveDecisionModel`. Jest to statyczne wejście potrzebne Race Engine, a nie rozpoczęcie właściwego Track Engine; nie obejmuje dynamicznej nawierzchni, pogody, zużycia ani prac torowych.
 
-Stan implementacji w PR #9 pozostaje celowo przejściowy:
+Kolejny etap Race Engine wykorzystuje statyczną geometrię w ograniczeniu prędkości łuku:
 
-- `SegmentPhysics` nie otrzymuje jeszcze `TrackGeometry` przez `SegmentPhysicsContext`,
-- wykorzystuje dotychczasowe progi hamowania, wynoszenia i upadku,
-- nadal uwzględnia morale w `MaxSafeTurnSpeed`.
+- `SegmentPhysicsContext` otrzymuje `TrackGeometry` ze snapshotu konkretnego toru,
+- bazowa granica rośnie jak pierwiastek ze stosunku promienia linii do promienia referencyjnego 24 m; przy 24 m wynosi 16 m/s,
+- `SimulationEngine`, `AdaptiveDecisionModel` i `PhysicsTestRunner` korzystają z geometrii konkretnego toru,
+- morale nie zmienia `MaxSafeTurnSpeed`, lecz pozostaje wejściem istniejącego ryzyka błędu lub incydentu,
+- dotychczasowe progi `Brake`, `RunWide` i `Crash` pozostają bez zmian.
 
-Usunięcie morale z fizycznej granicy przyczepności oraz wykorzystanie promienia w ograniczeniach jazdy w łuku są zakresem następnego, osobnego PR-a. Nie zmienia to docelowych zasad zapisanych w specyfikacji.
+Jest to ograniczenie oparte na krzywiźnie, a nie pełna fizyka motocykla. Nie obejmuje nowego zachowania wynoszenia, prędkości wyjściowej ani czasowego przechodzenia między liniami.
 
 ## Główna pętla gry — BINDING
 

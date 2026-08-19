@@ -52,8 +52,18 @@ public sealed class DynamicTrackTests
         var bad = new TrackSurfaceState(0.65f, 0.7f, 0.9f);
         var skills = RiderSkills.Balanced;
 
-        var goodSpeed = SegmentPhysics.MaxSafeTurnSpeed(2, good, skills, 0.5f, CoreSim.Setup.BikeSetup.Neutral);
-        var badSpeed = SegmentPhysics.MaxSafeTurnSpeed(2, bad, skills, 0.5f, CoreSim.Setup.BikeSetup.Neutral);
+        var goodSpeed = SegmentPhysics.MaxSafeTurnSpeed(
+            2,
+            TrackGeometry.Default,
+            good,
+            skills,
+            CoreSim.Setup.BikeSetup.Neutral);
+        var badSpeed = SegmentPhysics.MaxSafeTurnSpeed(
+            2,
+            TrackGeometry.Default,
+            bad,
+            skills,
+            CoreSim.Setup.BikeSetup.Neutral);
 
         Assert.True(badSpeed < goodSpeed);
     }

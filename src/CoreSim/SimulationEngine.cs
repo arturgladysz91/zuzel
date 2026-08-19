@@ -259,14 +259,15 @@ public sealed class SimulationEngine
         var resolution = snapshot.Step.UseLegacyPhysics
             ? SegmentPhysics.Apply(snapshot.Segment, plannedLane, entrySpeed)
             : SegmentPhysics.Apply(new SegmentPhysicsContext(
-                snapshot.Segment,
-                plannedLane,
-                entrySpeed,
-                surface,
-                rider.Profile.Skills,
-                rider.Morale,
-                rider.ActiveSetup,
-                decision.Risk));
+                Segment: snapshot.Segment,
+                Lane: plannedLane,
+                Speed: entrySpeed,
+                Geometry: snapshot.Track.Geometry,
+                Surface: surface,
+                Skills: rider.Profile.Skills,
+                Morale: rider.Morale,
+                Setup: rider.ActiveSetup,
+                DecisionRisk: decision.Risk));
 
         if (!snapshot.Step.UseLegacyPhysics)
             resolution = ResolveRandomIncident(snapshot, rider, plannedLane, resolution, options);
@@ -442,13 +443,13 @@ public sealed class SimulationEngine
         if (rider.Speed > 0f)
             return rider.Speed;
         if (snapshot.Segment.Type == SegmentType.Straight)
-            return SegmentPhysics.MaxSafeTurnSpeed(lane) * 0.95f;
+            return SegmentPhysics.MaxSafeTurnSpeed(lane, snapshot.Track.Geometry) * 0.95f;
 
         var safeSpeed = SegmentPhysics.MaxSafeTurnSpeed(
             lane,
+            snapshot.Track.Geometry,
             surface,
             rider.Profile.Skills,
-            rider.Morale,
             rider.ActiveSetup);
         var startSkill = RiderSkills.Normalize(rider.Profile.Skills.Start);
         var startMultiplier = snapshot.Step.LapIndex == 0 && snapshot.Step.SegmentIndex == 0

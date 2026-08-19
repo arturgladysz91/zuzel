@@ -30,7 +30,7 @@ public sealed record PhysicsTestScenario(
         float safeSpeedMultiplier,
         IReadOnlyList<PhysicsTestSegmentPlan> segmentPlans)
     {
-        var initialSpeed = SegmentPhysics.MaxSafeTurnSpeed(initialLane) * safeSpeedMultiplier;
+        var initialSpeed = SegmentPhysics.MaxSafeTurnSpeed(initialLane, track.Geometry) * safeSpeedMultiplier;
         return new PhysicsTestScenario(name, track, trackState, initialLane, initialSpeed, segmentPlans);
     }
 }
@@ -78,7 +78,11 @@ public sealed class PhysicsTestRunner
             var segment = scenario.Track.Segments[i];
             var plan = scenario.SegmentPlans[i];
             var entrySpeed = plan.ResolveEntrySpeed(speed);
-            var resolution = SegmentPhysics.Apply(segment, plan.TargetLane, entrySpeed);
+            var resolution = SegmentPhysics.Apply(
+                segment,
+                plan.TargetLane,
+                entrySpeed,
+                scenario.Track.Geometry);
             var surface = scenario.TrackState.GetSurface(i, plan.TargetLane);
 
             logs.Add(new PhysicsTestSegmentLog(
