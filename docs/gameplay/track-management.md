@@ -10,11 +10,19 @@ Track Engine jest następnym dużym systemem po ukończeniu Race Engine. Najpier
 
 Opisuje cechy, które nie zmieniają się podczas meczu:
 
-- geometrię segmentu: długość, typ, promień i nachylenie,
+- geometrię segmentu: długość, typ, promień i docelowo — gdy pojawi się konsument — nachylenie,
 - drenaż i ekspozycję na słońce oraz wiatr,
 - bazowy skład i zachowanie nawierzchni,
 - pojemność wodną, szybkość przesychania i podatność na koleiny,
 - ograniczenia sprzętu oraz prac możliwych na obiekcie.
+
+### Fundament statycznej geometrii — BINDING
+
+Pierwszy krok przechowuje w `TrackGeometry` wyłącznie długość prostej, wewnętrzny promień referencyjny łuku, odstęp między pięcioma liniami referencyjnymi i kąt pojedynczego segmentu łuku w radianach. Nachylenie oraz kolejne parametry profilu pozostają poza tym fundamentem, dopóki nie istnieje ich konsument.
+
+Przewidywane czasy jazdy liniami porównuje się diagnostycznie dla konkretnego toru. Wynik zależy od jego geometrii, lokalnej nawierzchni i całej trajektorii. Konkretna linia może być na danym torze uprzywilejowana; nie wymuszamy stałego procentu różnicy ani uniwersalnie najlepszej linii.
+
+Ten fundament jest statycznym wejściem Race Engine. Nie dodaje dynamicznej nawierzchni, pogody, zużycia ani zarządzania torem.
 
 ### 2. Dynamiczny stan komórki
 

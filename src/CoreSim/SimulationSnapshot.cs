@@ -122,7 +122,7 @@ public sealed class SimulationSnapshot
             throw new ArgumentOutOfRangeException(nameof(step), "Segment index is outside the track.");
 
         Step = step;
-        Track = new Track(track.Segments);
+        Track = new Track(track.Segments, track.Geometry);
         TrackState = trackState;
         _riders = Array.AsReadOnly(riders.OrderBy(rider => rider.RiderId).ToArray());
     }

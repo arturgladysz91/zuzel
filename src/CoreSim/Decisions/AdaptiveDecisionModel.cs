@@ -21,6 +21,7 @@ public sealed class AdaptiveDecisionModel : IRiderDecisionModel
         var style = rider.Profile.Style;
         var reading = RiderSkills.Normalize(rider.Profile.Skills.TrackReading);
         var (evaluationSegment, evaluationIndex) = ResolveEvaluationSegment(context);
+        var geometry = context.Track?.Geometry ?? TrackGeometry.Default;
         var bestLane = rider.Lane;
         var bestCost = float.PositiveInfinity;
 
@@ -59,7 +60,7 @@ public sealed class AdaptiveDecisionModel : IRiderDecisionModel
                 rider.Profile.Skills,
                 rider.Morale,
                 rider.ActiveSetup);
-            var projectedTime = ProjectedRouteTime(evaluationSegment, lane, projectedSpeed);
+            var projectedTime = ProjectedRouteTime(evaluationSegment, lane, projectedSpeed, geometry);
             var cost = projectedTime + movementCost + styleCost + occupancyCost + surfaceRiskCost;
 
             if (cost < bestCost)
@@ -88,15 +89,19 @@ public sealed class AdaptiveDecisionModel : IRiderDecisionModel
         return (context.Track.Segments[nextIndex], nextIndex);
     }
 
-    private static float ProjectedRouteTime(TrackSegment segment, int lane, float speed)
+    private static float ProjectedRouteTime(
+        TrackSegment segment,
+        int lane,
+        float speed,
+        TrackGeometry geometry)
     {
         // A lane is judged over a complete bend plus the following straight.
         // This balances the shorter inside route against the higher exit speed
         // available outside. A straight decision prepares the next bend.
-        var bendLength = LaneModel.TurnArcLengthMeters(lane) * 3f;
+        var bendLength = LaneModel.TurnArcLengthMeters(lane, geometry) * 3f;
         var routeLength = segment.Type == SegmentType.Straight
-            ? LaneModel.StraightLengthMeters
-            : bendLength + LaneModel.StraightLengthMeters;
+            ? geometry.StraightLengthMeters
+            : bendLength + geometry.StraightLengthMeters;
         return routeLength / MathF.Max(speed, 1f);
     }
 

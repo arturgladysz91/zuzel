@@ -285,7 +285,10 @@ public sealed class SimulationEngine
         var canonicalAdvance = resolution.Outcome == SegmentOutcome.Crash
             ? remainingProgress * 0.5f
             : remainingProgress;
-        var segmentLength = LaneModel.SegmentLengthMeters(snapshot.Segment, resolution.Lane);
+        var segmentLength = LaneModel.SegmentLengthMeters(
+            snapshot.Segment,
+            resolution.Lane,
+            snapshot.Track.Geometry);
         var travelled = segmentLength * canonicalAdvance;
         var averageSpeed = MathF.Max(1f, (entrySpeed + MathF.Max(speed, 0f)) * 0.5f);
         var elapsedTime = rider.ElapsedTimeSeconds + travelled / averageSpeed;

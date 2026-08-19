@@ -1,5 +1,5 @@
 // Kontrakt linii: indeks 0..4 oznacza środek ścieżki jazdy od krawędzi wewnętrznej (0) do zewnętrznej (4).
-// Długość w łuku liczona jest po łuku o promieniu R = Rwew + lane * szerokość_linii.
+// Długość w łuku liczona jest po łuku o promieniu R = Rwew + lane * odstęp_linii.
 namespace CoreSim;
 
 public static class LaneModel
@@ -8,9 +8,11 @@ public static class LaneModel
     public const int MaxLane = 4;
     public const int LanesCount = 5;
 
+    // Compatibility constants for callers that do not yet provide a concrete
+    // track. New simulation code must use the TrackGeometry overloads below.
     public const float LaneWidthMeters = 1.0f;
     public const float InnerRadiusMeters = 24.0f;
-    public const float TurnSegmentAngleRadians = MathF.PI / 3.0f; // 60° na segment łuku (3 segmenty = 180°).
+    public const float TurnSegmentAngleRadians = MathF.PI / 3.0f;
     public const float StraightLengthMeters = 60.0f;
 
     public static int ClampLane(int lane) => Math.Clamp(lane, MinLane, MaxLane);
@@ -24,13 +26,30 @@ public static class LaneModel
     }
 
     public static float TurnArcRadiusMeters(int lane)
+        => TurnArcRadiusMeters(lane, TrackGeometry.Default);
+
+    public static float TurnArcRadiusMeters(int lane, TrackGeometry geometry)
     {
+        ArgumentNullException.ThrowIfNull(geometry);
         ValidateLane(lane);
-        return InnerRadiusMeters + lane * LaneWidthMeters;
+        return geometry.InnerRadiusMeters + lane * geometry.LaneSpacingMeters;
     }
 
-    public static float TurnArcLengthMeters(int lane) => TurnArcRadiusMeters(lane) * TurnSegmentAngleRadians;
+    public static float TurnArcLengthMeters(int lane)
+        => TurnArcLengthMeters(lane, TrackGeometry.Default);
+
+    public static float TurnArcLengthMeters(int lane, TrackGeometry geometry)
+        => TurnArcRadiusMeters(lane, geometry) * geometry.TurnSegmentAngleRadians;
 
     public static float SegmentLengthMeters(TrackSegment segment, int lane)
-        => segment.Type == SegmentType.Straight ? StraightLengthMeters : TurnArcLengthMeters(lane);
+        => SegmentLengthMeters(segment, lane, TrackGeometry.Default);
+
+    public static float SegmentLengthMeters(TrackSegment segment, int lane, TrackGeometry geometry)
+    {
+        ArgumentNullException.ThrowIfNull(segment);
+        ArgumentNullException.ThrowIfNull(geometry);
+        return segment.Type == SegmentType.Straight
+            ? geometry.StraightLengthMeters
+            : TurnArcLengthMeters(lane, geometry);
+    }
 }

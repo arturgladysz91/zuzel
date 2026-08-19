@@ -24,6 +24,8 @@ Przed rozpoczęciem Track Engine pozostają:
 
 Track Engine, zarządzanie torem i systemy menedżerskie pozostają późniejszymi etapami.
 
+Niezmienna geometria konkretnego toru jest wejściem potrzebnym Race Engine i może powstać wcześniej jako mały fundament. Nie obejmuje dynamicznej nawierzchni, pogody, zużycia ani prac torowych i nie oznacza rozpoczęcia właściwego Track Engine.
+
 ## Główna pętla gry — BINDING
 
 `obserwacja → feedback → diagnoza → decyzja menedżera → wykonanie przez ludzi → kolejny bieg → ocena skutku`

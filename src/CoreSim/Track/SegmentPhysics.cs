@@ -32,9 +32,9 @@ public sealed record SegmentPhysicsContext(
 /// </summary>
 public static class SegmentPhysics
 {
-    // Calibrated against the example 270-296 m lap. The previous 1.5 m/s lane
-    // step made the outside gate roughly 30% faster over a full lap. A 0.35 m/s
-    // step offsets the longer outside route without making it automatically best.
+    // Legacy thresholds retained for compatibility in this foundation PR.
+    // Line-time balance is diagnosed for each concrete track geometry; it is
+    // not a global equality invariant enforced by these constants.
     public const float BaseTurnMaxSpeed = 16.0f;
     public const float TurnMaxSpeedDeltaPerLane = 0.35f;
     public const float BrakeSpeedFactor = 1.10f;

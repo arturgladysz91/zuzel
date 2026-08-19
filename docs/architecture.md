@@ -9,12 +9,12 @@
 
 ## Core flow
 
-1. The host creates a `Track`, a per-segment/per-lane `TrackState` and rider states.
+1. The host creates a `Track` from ordered segments and immutable `TrackGeometry`, plus a separate per-segment/per-lane `TrackState` and rider states.
 2. Optional manager actions change the surface through `TrackEvolution.ApplyTrackWork`.
 3. Optional setup advice is resolved by `SetupResolver`; trust and rider independence decide whether it is accepted, adjusted or ignored.
 4. `HeatSimulator.SimulateHeat` advances weather and delegates one segment at a time to the existing `SimulationEngine`.
 5. Every segment has four explicit phases:
-   - `CaptureSnapshot` copies every rider and every surface cell into a detached immutable view.
+   - `CaptureSnapshot` copies every rider and every surface cell into a detached immutable view and preserves the track's immutable geometry.
    - `Decide` gives every active rider the same snapshot; legacy decision models receive a mutable clone, never the source state.
    - `Resolve` calculates movement, existing incidents and stable events without changing live riders or the track.
    - `Commit` applies all rider changes, then stable logs and surface wear in rider-id order.
@@ -32,5 +32,7 @@ The presentation layer must consume results and logs; it must never change the s
 ## Compatibility
 
 Compatibility is intentionally limited to `HeatSimulator.Simulate`, `SegmentPhysics.Apply(segment, lane, speed)` and the older `IRiderDecisionModel.Decide(TrackSegment, RiderState)` overload. The legacy heat pass also uses the four-phase commit while retaining its original neutral-surface physics, and legacy decision models receive a detached mutable rider copy.
+
+The original `Track(segments)` constructor and geometry-free `LaneModel` overloads remain available. They use the example-compatible `TrackGeometry.Default`; new simulation paths pass the geometry of the concrete track explicitly.
 
 `RiderDecisionContext.Rider`, `Riders` and `TrackState` now expose immutable snapshot types. Code compiled against their former mutable types is not source-compatible and should migrate to the snapshot API. New gameplay code should use `SimulateHeat` and `SegmentPhysicsContext`.
