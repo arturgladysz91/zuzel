@@ -136,11 +136,34 @@ public sealed class TrackGeometryTests
         var shortTrack = SingleStraightTrack(40f);
         var longTrack = SingleStraightTrack(75f);
 
-        var shortDistance = SimulateSingleStraight(shortTrack);
-        var longDistance = SimulateSingleStraight(longTrack);
+        var shortDistance = SimulateSingleSegment(shortTrack, lane: 0);
+        var longDistance = SimulateSingleSegment(longTrack, lane: 0);
 
         Assert.Equal(40f, shortDistance, 3);
         Assert.Equal(75f, longDistance, 3);
+    }
+
+    [Fact]
+    public void SimulationUsesTrackSpecificTurnGeometry()
+    {
+        const int lane = 2;
+        var segment = new TrackSegment(0, SegmentType.TurnMiddle);
+        var compactTrack = new Track(
+            new[] { segment },
+            new TrackGeometry(60f, 18f, 0.9f, MathF.PI / 4f));
+        var broadTrack = new Track(
+            new[] { segment },
+            new TrackGeometry(60f, 30f, 0.9f, MathF.PI / 4f));
+
+        var compactDistance = SimulateSingleSegment(compactTrack, lane);
+        var broadDistance = SimulateSingleSegment(broadTrack, lane);
+        var expectedCompactDistance = LaneModel.SegmentLengthMeters(segment, lane, compactTrack.Geometry);
+        var expectedBroadDistance = LaneModel.SegmentLengthMeters(segment, lane, broadTrack.Geometry);
+
+        Assert.Equal(expectedCompactDistance, compactDistance, 3);
+        Assert.Equal(expectedBroadDistance, broadDistance, 3);
+        Assert.True(broadDistance > compactDistance);
+        Assert.NotEqual(LaneModel.SegmentLengthMeters(segment, lane), compactDistance);
     }
 
     [Fact]
@@ -166,9 +189,9 @@ public sealed class TrackGeometryTests
             new[] { new TrackSegment(0, SegmentType.Straight) },
             new TrackGeometry(straightLengthMeters, 24f, 1f, MathF.PI / 3f));
 
-    private static float SimulateSingleStraight(Track track)
+    private static float SimulateSingleSegment(Track track, int lane)
     {
-        var rider = new RiderState(1, lane: 0) { Speed = 10f };
+        var rider = new RiderState(1, lane) { Speed = 10f };
         new HeatSimulator(new HoldLaneDecisionModel()).Simulate(
             track,
             TrackState.CreateDefault(track),

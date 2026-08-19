@@ -14,9 +14,17 @@ public sealed class RaceBalanceTests
     }
 
     [Fact]
-    public void ExtremeLaneTimeComparisonIsAnExampleTrackDiagnostic()
+    public void ExtremeLaneDistanceComparisonUsesConcreteTrackGeometry()
     {
-        var track = Track.CreateExample();
+        var example = Track.CreateExample();
+        var geometry = new TrackGeometry(
+            straightLengthMeters: 54f,
+            innerRadiusMeters: 27f,
+            laneSpacingMeters: 1.25f,
+            turnSegmentAngleRadians: MathF.PI / 4f);
+        var track = new Track(example.Segments, geometry);
+        var innerRadius = LaneModel.TurnArcRadiusMeters(LaneModel.MinLane, track.Geometry);
+        var outerRadius = LaneModel.TurnArcRadiusMeters(LaneModel.MaxLane, track.Geometry);
         var innerDistance = track.Segments.Sum(segment => LaneModel.SegmentLengthMeters(
             segment,
             LaneModel.MinLane,
@@ -25,13 +33,21 @@ public sealed class RaceBalanceTests
             segment,
             LaneModel.MaxLane,
             track.Geometry));
-        var innerTime = innerDistance / SegmentPhysics.MaxSafeTurnSpeed(LaneModel.MinLane);
-        var outerTime = outerDistance / SegmentPhysics.MaxSafeTurnSpeed(LaneModel.MaxLane);
+        var distanceDifference = outerDistance - innerDistance;
+        var turnSegmentCount = track.Segments.Count(segment => segment.Type != SegmentType.Straight);
+        var expectedDifference = turnSegmentCount
+            * (outerRadius - innerRadius)
+            * track.Geometry.TurnSegmentAngleRadians;
 
+        Assert.Equal(track.Geometry.InnerRadiusMeters, innerRadius);
+        Assert.Equal(
+            track.Geometry.InnerRadiusMeters + LaneModel.MaxLane * track.Geometry.LaneSpacingMeters,
+            outerRadius);
+        Assert.True(outerRadius > innerRadius);
         Assert.True(outerDistance > innerDistance);
-        Assert.True(float.IsFinite(innerTime));
-        Assert.True(float.IsFinite(outerTime));
-        Assert.True(outerTime / innerTime > 0f);
+        Assert.True(float.IsFinite(distanceDifference));
+        Assert.True(distanceDifference > 0f);
+        Assert.Equal(expectedDifference, distanceDifference, 3);
     }
 
     [Fact]
