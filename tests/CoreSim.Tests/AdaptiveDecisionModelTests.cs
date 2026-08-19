@@ -49,4 +49,68 @@ public sealed class AdaptiveDecisionModelTests
 
         Assert.Equal(2, decision.TargetLane);
     }
+
+    [Fact]
+    public void ConcreteTrackGeometryChangesRouteChoiceDeterministically()
+    {
+        var segment = new TrackSegment(0, SegmentType.TurnMiddle);
+        var narrowSpacingTrack = new Track(
+            new[] { segment },
+            new TrackGeometry(60f, 40f, 0.5f, 0.8f));
+        var wideSpacingTrack = new Track(
+            new[] { segment },
+            new TrackGeometry(60f, 40f, 1.5f, 0.8f));
+        var surface = new TrackSurfaceState(1f, 0f, 0.35f);
+        var rider = new RiderState(
+            new RiderProfile(
+                12,
+                "Geometry reader",
+                new RiderSkills(60f, 60f, 60f, 100f, 60f, 60f),
+                RiderStyle.Balanced),
+            lane: 2);
+        var rival = new RiderState(21, lane: 1) { ElapsedTimeSeconds = 1f };
+        var step = new SimulationStepContext(
+            HeatId: 4,
+            StepNumber: 7,
+            LapIndex: 0,
+            SegmentIndex: 0,
+            Seed: 31415,
+            RequiredLaps: 1);
+        var engine = new SimulationEngine(new AdaptiveDecisionModel(seed: 42));
+
+        var narrowDecision = DecideFor(
+            engine,
+            narrowSpacingTrack,
+            surface,
+            new[] { rider, rival },
+            rider.RiderId,
+            step);
+        var wideDecision = DecideFor(
+            engine,
+            wideSpacingTrack,
+            surface,
+            new[] { rival, rider },
+            rider.RiderId,
+            step);
+
+        Assert.Equal(LaneModel.MaxLane, narrowDecision.TargetLane);
+        Assert.Equal(2, wideDecision.TargetLane);
+        Assert.NotEqual(narrowDecision.Reason, wideDecision.Reason);
+    }
+
+    private static RiderDecision DecideFor(
+        SimulationEngine engine,
+        Track track,
+        TrackSurfaceState surface,
+        IReadOnlyList<RiderState> riders,
+        int riderId,
+        SimulationStepContext step)
+    {
+        var snapshot = engine.CaptureSnapshot(
+            track,
+            TrackState.CreateDefault(track, surface),
+            riders,
+            step);
+        return engine.Decide(snapshot).Single(intent => intent.RiderId == riderId).Decision;
+    }
 }

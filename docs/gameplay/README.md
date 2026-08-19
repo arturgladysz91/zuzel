@@ -24,6 +24,16 @@ Przed rozpoczęciem Track Engine pozostają:
 
 Track Engine, zarządzanie torem i systemy menedżerskie pozostają późniejszymi etapami.
 
+PR #9 dodaje niezmienną geometrię konkretnego toru i wykorzystuje ją do obliczania dystansu oraz oceny tras przez `AdaptiveDecisionModel`. Jest to statyczne wejście potrzebne Race Engine, a nie rozpoczęcie właściwego Track Engine; nie obejmuje dynamicznej nawierzchni, pogody, zużycia ani prac torowych.
+
+Stan implementacji w PR #9 pozostaje celowo przejściowy:
+
+- `SegmentPhysics` nie otrzymuje jeszcze `TrackGeometry` przez `SegmentPhysicsContext`,
+- wykorzystuje dotychczasowe progi hamowania, wynoszenia i upadku,
+- nadal uwzględnia morale w `MaxSafeTurnSpeed`.
+
+Usunięcie morale z fizycznej granicy przyczepności oraz wykorzystanie promienia w ograniczeniach jazdy w łuku są zakresem następnego, osobnego PR-a. Nie zmienia to docelowych zasad zapisanych w specyfikacji.
+
 ## Główna pętla gry — BINDING
 
 `obserwacja → feedback → diagnoza → decyzja menedżera → wykonanie przez ludzi → kolejny bieg → ocena skutku`

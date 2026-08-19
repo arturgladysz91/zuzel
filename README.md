@@ -55,6 +55,8 @@ Tor składa się z segmentów decyzyjnych:
 
 Każdy segment posiada **5 linii jazdy**.
 
+Każdy konkretny tor przechowuje niezmienną geometrię: długość prostej, wewnętrzny promień referencyjny łuku, odstęp między liniami oraz kąt pojedynczego segmentu łuku. Geometria nie jest stanem nawierzchni i nie zmienia się podczas meczu.
+
 #### 1.2 Linie jazdy
 Linie są lokalne dla segmentu, nie przypisane do całego łuku ani biegu.
 
@@ -67,6 +69,8 @@ Optymalna trajektoria nie musi oznaczać ciągłej jazdy po jednej linii.
 W zależności od warunków toru (przyczepność, koleiny/zużycie, wilgotność) lepsza może być linia mieszana, np. wąsko na wejściu i szerzej na wyjściu, bo pozwala utrzymać płynność bez nadmiernego hamowania.
 
 Model powinien premiować płynność i utrzymanie prędkości wyjściowej, a nie tylko “trzymanie krawężnika”.
+
+Świadomy wybór szerokiej linii jest decyzją o trajektorii: może służyć znalezieniu lepszej nawierzchni, wyprzedzeniu albo przygotowaniu dłuższej prostej. Nie jest tym samym co wyniesienie, czyli nieplanowane lub wymuszone przesunięcie na zewnątrz po przekroczeniu ograniczenia, błędzie albo kontakcie.
 
 Zmiana linii:
 
@@ -90,6 +94,10 @@ Jeżeli zawodnik jedzie zbyt szybko po ciasnej linii, system musi wymusić:
 
 Nie dopuszczamy “cudów”: szybka jazda przy krawężniku bez konsekwencji.
 Kontakty między zawodnikami w środkowej fazie łuku mają istotnie większe konsekwencje (wyniesienie, utrata prędkości, upadek) niż na prostej.
+
+Fizyczna granica przyczepności wynika z geometrii konkretnego toru, lokalnej nawierzchni, trajektorii, setupu i odpowiednich umiejętności kontroli. Morale nie zmienia tej granicy; może później wpływać na decyzję zawodnika, podejmowane ryzyko i jakość wykonania.
+
+Przewaga linii wynika z połączenia geometrii konkretnego toru, nawierzchni i trajektorii. Porównanie przewidywanych czasów skrajnych linii jest diagnostyką danego toru, a nie testem ich sztucznej równości. Tor może premiować konkretną linię, ale żadna linia nie może być uniwersalnie najlepsza na wszystkich torach i nawierzchniach.
 
 #### 1.4 Stan toru
 Każdy segment i linia mają stan, m.in.:

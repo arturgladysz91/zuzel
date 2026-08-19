@@ -15,6 +15,7 @@ Every segment is processed as `CaptureSnapshot -> Decide -> Resolve -> Commit`. 
 ## Track
 
 - A track is an ordered list of `TurnEntry`, `TurnMiddle`, `TurnExit` and `Straight` segments.
+- Every concrete track owns immutable `TrackGeometry`: straight length, inner reference turn radius, spacing between its five reference lanes and the angle in radians covered by one turn segment. Geometry is separate from mutable surface state.
 - Every segment has five local reference lanes numbered `0..4` from inside to outside.
 - The chosen lane is discrete; `LateralPosition` is continuous and cannot jump directly across the track.
 - `RiderPosition.TotalSegmentProgress` is the single topological source of truth. Lap, segment index and normalized `0..1` segment progress are derived values. Physical distance is updated together with canonical progress.
@@ -24,8 +25,10 @@ Every segment is processed as `CaptureSnapshot -> Decide -> Resolve -> Commit`. 
 
 ## Physical constraints
 
-- A turn has a safe speed dependent on lane, surface, slide control, morale and setup fit.
-- Wider lanes allow a slightly higher speed but also add distance. On an equal surface, the projected full-lap time of the innermost and outermost reference lanes must stay within 2%; no gate may be an automatic winning strategy.
+- A turn's physical safe-speed boundary depends on the concrete track geometry, local lane and surface, trajectory, relevant control skill and setup fit. Morale does not change the physical traction boundary; it may affect a later decision, accepted risk and quality of execution.
+- Deliberately choosing a wide line is a planned trajectory and can be advantageous for surface, passing or corner-exit reasons. `RunWide` is an unplanned or forced outward consequence of excessive speed, an error or contact; the two concepts must not be conflated.
+- Line advantage emerges from the geometry of the concrete track, surface and complete trajectory. A projected comparison of extreme-line lap times is a diagnostic for that track, not a global equality test or a fixed percentage invariant.
+- A concrete track may favor a particular line. No line may be universally best across all track geometries and surfaces.
 - Exceeding the safe speed must cause braking, running wide or a crash.
 - A rider cannot run wider than lane 4; an unresolved high-speed run-wide there becomes a crash.
 - A straight preserves speed. It cannot create a passing advantage by itself; it only carries an advantage created at corner exit and positions riders for the next turn.
