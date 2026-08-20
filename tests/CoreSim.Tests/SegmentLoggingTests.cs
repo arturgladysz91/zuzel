@@ -1,6 +1,7 @@
 using CoreSim;
 using CoreSim.Decisions;
 using CoreSim.Race;
+using System.Globalization;
 using Xunit;
 
 namespace CoreSim.Tests;
@@ -17,13 +18,21 @@ public sealed class SegmentLoggingTests
     public void SpeedLogSeparatesPhysicsResolutionFromFinalExitSpeed()
     {
         var track = new Track(new[] { new TrackSegment(0, SegmentType.TurnExit) });
-        var rider = RiderState.CreateDefault(7, 1);
-        rider.Speed = SegmentPhysics.MaxSafeTurnSpeed(
+        var rider = new RiderState(
+            new RiderProfile(
+                7,
+                "Fast exit rider",
+                new RiderSkills(50f, 100f, 50f, 50f, 50f, 50f),
+                RiderStyle.Balanced),
+            lane: 1);
+        var maxSafeSpeed = SegmentPhysics.MaxSafeTurnSpeed(
             1,
             track.Geometry,
             TrackSurfaceState.Default,
             rider.Profile.Skills,
-            rider.ActiveSetup) * 1.05f;
+            rider.ActiveSetup);
+        var entrySpeed = maxSafeSpeed * 1.05f;
+        rider.Speed = entrySpeed;
         var simulator = new HeatSimulator(new HoldLaneDecisionModel());
 
         var result = simulator.SimulateHeat(
@@ -38,9 +47,10 @@ public sealed class SegmentLoggingTests
                 IncidentFrequency = 0f,
             });
 
-        Assert.Contains("outcome=Brake", result.Log.Lines[0]);
-        Assert.Contains("v_in=", result.Log.Lines[0]);
-        Assert.Contains("v_physics=", result.Log.Lines[0]);
-        Assert.Contains("v_out=", result.Log.Lines[0]);
+        var segmentLog = Assert.Single(result.Log.Lines, line => line.Contains("outcome=Brake"));
+        Assert.Contains($"v_in={entrySpeed.ToString("F2", CultureInfo.InvariantCulture)}", segmentLog);
+        Assert.Contains($"v_physics={maxSafeSpeed.ToString("F2", CultureInfo.InvariantCulture)}", segmentLog);
+        Assert.Contains($"v_out={rider.Speed.ToString("F2", CultureInfo.InvariantCulture)}", segmentLog);
+        Assert.True(rider.Speed > maxSafeSpeed);
     }
 }

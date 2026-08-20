@@ -72,6 +72,8 @@ Model powinien premiować płynność i utrzymanie prędkości wyjściowej, a ni
 
 Świadomy wybór szerokiej linii jest decyzją o trajektorii: może służyć znalezieniu lepszej nawierzchni, wyprzedzeniu albo przygotowaniu dłuższej prostej. Nie jest tym samym co wyniesienie, czyli nieplanowane lub wymuszone przesunięcie na zewnątrz po przekroczeniu ograniczenia, błędzie albo kontakcie.
 
+Wyniesienie wydłuża drogę po zewnętrznej linii. Gdy wywołuje je przekroczenie ograniczenia, zawodnik nie zachowuje całej prędkości ponad fizyczną granicą; lepsze panowanie w poślizgu zmniejsza tę stratę, ale nie usuwa konsekwencji.
+
 Zmiana linii:
 
 zależy od stylu i umiejętności, oceny ryzyka kolizji z innym zawodnikiem.
@@ -89,7 +91,7 @@ W łuku obowiązuje zasada:
 
 Jeżeli zawodnik jedzie zbyt szybko po ciasnej linii, system musi wymusić:
 1) spadek prędkości (hamowanie), albo  
-2) wyniesienie na szerszą linię (z inercją), albo  
+2) wyniesienie na szerszą linię (z inercją i utratą części nadmiernej prędkości), albo
 3) ryzyko błędu / straty.
 
 Nie dopuszczamy “cudów”: szybka jazda przy krawężniku bez konsekwencji.
@@ -254,4 +256,3 @@ Priorytet: realistyczne konsekwencje decyzji i stabilny balans.
 - [ ] Zawodnicy: statystyki + styl + morale
 - [ ] Setup: sugestie menedżera vs decyzje zawodnika
 - [ ] Rozwój: wiek + kontuzje + cechy
-

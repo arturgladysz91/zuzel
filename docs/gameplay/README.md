@@ -26,7 +26,7 @@ Track Engine, zarządzanie torem i systemy menedżerskie pozostają późniejszy
 
 PR #9 dodaje niezmienną geometrię konkretnego toru i wykorzystuje ją do obliczania dystansu oraz oceny tras przez `AdaptiveDecisionModel`. Jest to statyczne wejście potrzebne Race Engine, a nie rozpoczęcie właściwego Track Engine; nie obejmuje dynamicznej nawierzchni, pogody, zużycia ani prac torowych.
 
-Kolejny etap Race Engine wykorzystuje statyczną geometrię w ograniczeniu prędkości łuku:
+Ograniczenie prędkości łuku wykorzystuje statyczną geometrię konkretnego toru:
 
 - `SegmentPhysicsContext` otrzymuje `TrackGeometry` ze snapshotu konkretnego toru,
 - bazowa granica rośnie jak pierwiastek ze stosunku promienia linii do promienia referencyjnego 24 m; przy 24 m wynosi 16 m/s,
@@ -34,7 +34,13 @@ Kolejny etap Race Engine wykorzystuje statyczną geometrię w ograniczeniu pręd
 - morale nie zmienia `MaxSafeTurnSpeed`, lecz pozostaje wejściem istniejącego ryzyka błędu lub incydentu,
 - dotychczasowe progi `Brake`, `RunWide` i `Crash` pozostają bez zmian.
 
-Jest to ograniczenie oparte na krzywiźnie, a nie pełna fizyka motocykla. Nie obejmuje nowego zachowania wynoszenia, prędkości wyjściowej ani czasowego przechodzenia między liniami.
+### Świadoma szeroka linia i wymuszone wyniesienie — BINDING
+
+Świadome przejście na zewnątrz jest zwykłą decyzją o trajektorii: zmienia `PlannedLane`, może wykorzystać lepszą nawierzchnię lub przygotować wyjście i może zakończyć się `Ok`. Nie jest karane jako `RunWide` tylko dlatego, że zaplanowana linia jest szersza.
+
+`RunWide` oznacza wymuszoną korektę po przekroczeniu ograniczenia albo błędzie. Końcowa `Lane` wypada szerzej niż `PlannedLane`, więc zawodnik pokonuje dłuższą drogę. W ścieżce wywołanej przekroczeniem prędkości zachowuje tylko część nadwyżki ponad indywidualne `MaxSafeTurnSpeed`: w fizyce zaawansowanej lepsze `SlideControl` pozwala zachować większą część tej nadwyżki, ale nigdy całość, a legacy używa neutralnej retencji. Losowe incydenty zachowują osobne dotychczasowe rozstrzygnięcie.
+
+Ten etap nie dodaje `ControlledWide`, nie zmienia progów `Brake`, `RunWide` i `Crash`, zachowania na Lane 4, losowych incydentów ani `ApplyExitDrive`. Model nadal jest ograniczeniem opartym na krzywiźnie, a nie pełną fizyką motocykla, i nie obejmuje czasowego przechodzenia między liniami.
 
 ## Główna pętla gry — BINDING
 
