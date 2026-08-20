@@ -64,19 +64,22 @@ public sealed class SegmentPhysicsTests
     }
 
     [Fact]
-    public void Turn_WithSpeedInRunWideRange_ReturnsRunWideAndMovesOutward()
+    public void LegacyRunWide_UsesNeutralOverspeedRetentionAndMovesOutward()
     {
         var segment = new TrackSegment(4, SegmentType.TurnMiddle);
-        var lane = 1;
-        var max = SegmentPhysics.MaxSafeTurnSpeed(lane);
-        var speed = max * SegmentPhysics.RunWideSpeedFactor;
+        const int plannedLane = 1;
+        var maxSafeSpeed = SegmentPhysics.MaxSafeTurnSpeed(plannedLane);
+        var entrySpeed = maxSafeSpeed
+            * ((SegmentPhysics.BrakeSpeedFactor + SegmentPhysics.RunWideSpeedFactor) / 2f);
+        var expectedSpeed = maxSafeSpeed + (entrySpeed - maxSafeSpeed) * 0.50f;
 
-        var result = SegmentPhysics.Apply(segment, lane, speed);
+        var result = SegmentPhysics.Apply(segment, plannedLane, entrySpeed);
 
         Assert.Equal(SegmentOutcome.RunWide, result.Outcome);
-        Assert.Equal(lane + 1, result.Lane);
-        Assert.True(result.Speed < speed);
-        Assert.InRange(result.Speed, max, speed);
+        Assert.Equal(plannedLane + 1, result.Lane);
+        Assert.Equal(expectedSpeed, result.Speed, 4);
+        Assert.True(result.Speed < entrySpeed);
+        Assert.True(result.Speed >= maxSafeSpeed);
         Assert.True(result.Speed > 0f);
         Assert.True(float.IsFinite(result.Speed));
     }
@@ -114,31 +117,48 @@ public sealed class SegmentPhysicsTests
         Assert.True(float.IsFinite(result.Speed));
     }
 
-    [Fact]
-    public void AdvancedRunWide_HigherSlideControlRetainsMoreOfIndividualOverspeed()
+    [Theory]
+    [InlineData(0f, 0.35f)]
+    [InlineData(50f, 0.50f)]
+    [InlineData(100f, 0.65f)]
+    public void AdvancedRunWide_RetainsExpectedFractionOfIndividualOverspeed(
+        float slideControl,
+        float expectedRetainedFraction)
     {
         var segment = new TrackSegment(6, SegmentType.TurnMiddle);
-        const int lane = 1;
+        const int plannedLane = 1;
         var surface = new TrackSurfaceState(1f, 0f, 0.35f);
-        var lowControlSkills = new RiderSkills(50f, 50f, 0f, 50f, 50f, 50f);
-        var highControlSkills = new RiderSkills(50f, 50f, 100f, 50f, 50f, 50f);
+        var skills = new RiderSkills(50f, 50f, slideControl, 50f, 50f, 50f);
+        var maxSafeSpeed = SegmentPhysics.MaxSafeTurnSpeed(
+            plannedLane,
+            TrackGeometry.Default,
+            surface,
+            skills,
+            BikeSetup.Neutral);
+        var entrySpeed = maxSafeSpeed * 1.16f;
 
-        var lowControlResult = ResolveAdvancedRunWide(segment, lane, surface, lowControlSkills);
-        var highControlResult = ResolveAdvancedRunWide(segment, lane, surface, highControlSkills);
+        var result = SegmentPhysics.Apply(new SegmentPhysicsContext(
+            segment,
+            plannedLane,
+            entrySpeed,
+            TrackGeometry.Default,
+            surface,
+            skills,
+            Morale: 0.5f,
+            Setup: BikeSetup.Neutral));
+        var actualRetainedFraction = (result.Speed - maxSafeSpeed)
+            / (entrySpeed - maxSafeSpeed);
 
-        Assert.Equal(SegmentOutcome.RunWide, lowControlResult.Result.Outcome);
-        Assert.Equal(SegmentOutcome.RunWide, highControlResult.Result.Outcome);
-        Assert.True(lowControlResult.Result.Speed < lowControlResult.EntrySpeed);
-        Assert.True(highControlResult.Result.Speed < highControlResult.EntrySpeed);
-        Assert.True(lowControlResult.Result.Speed >= lowControlResult.MaxSafeSpeed);
-        Assert.True(highControlResult.Result.Speed >= highControlResult.MaxSafeSpeed);
-
-        var lowRetainedFraction = (lowControlResult.Result.Speed - lowControlResult.MaxSafeSpeed)
-            / (lowControlResult.EntrySpeed - lowControlResult.MaxSafeSpeed);
-        var highRetainedFraction = (highControlResult.Result.Speed - highControlResult.MaxSafeSpeed)
-            / (highControlResult.EntrySpeed - highControlResult.MaxSafeSpeed);
-
-        Assert.True(highRetainedFraction > lowRetainedFraction);
+        Assert.Equal(SegmentOutcome.RunWide, result.Outcome);
+        Assert.Equal(plannedLane + 1, result.Lane);
+        Assert.InRange(
+            MathF.Abs(actualRetainedFraction - expectedRetainedFraction),
+            0f,
+            0.0001f);
+        Assert.True(result.Speed < entrySpeed);
+        Assert.True(result.Speed >= maxSafeSpeed);
+        Assert.True(result.Speed > 0f);
+        Assert.True(float.IsFinite(result.Speed));
     }
 
     [Fact]
@@ -171,29 +191,4 @@ public sealed class SegmentPhysicsTests
         Assert.Equal(0f, result.Speed);
     }
 
-    private static (SegmentResolution Result, float MaxSafeSpeed, float EntrySpeed) ResolveAdvancedRunWide(
-        TrackSegment segment,
-        int lane,
-        TrackSurfaceState surface,
-        RiderSkills skills)
-    {
-        var maxSafeSpeed = SegmentPhysics.MaxSafeTurnSpeed(
-            lane,
-            TrackGeometry.Default,
-            surface,
-            skills,
-            BikeSetup.Neutral);
-        var entrySpeed = maxSafeSpeed * 1.15f;
-        var result = SegmentPhysics.Apply(new SegmentPhysicsContext(
-            segment,
-            lane,
-            entrySpeed,
-            TrackGeometry.Default,
-            surface,
-            skills,
-            Morale: 0.5f,
-            Setup: BikeSetup.Neutral));
-
-        return (result, maxSafeSpeed, entrySpeed);
-    }
 }
