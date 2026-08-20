@@ -176,6 +176,16 @@ public sealed class CornerPhysicsRadiusTests
         Assert.Equal(
             SegmentOutcome.Ok,
             broadForward.Single(change => change.RiderId == 1).Outcome);
+
+        var tightRunWide = tightForward.Single(change => change.RiderId == 1);
+        var tightMaxSafeSpeed = SegmentPhysics.MaxSafeTurnSpeed(
+            tightRunWide.PlannedLane,
+            tightTrack.Geometry,
+            IdealSurface,
+            RiderSkills.Balanced,
+            BikeSetup.Neutral);
+        Assert.True(tightRunWide.PhysicsSpeed < tightRunWide.EntrySpeed);
+        Assert.True(tightRunWide.PhysicsSpeed >= tightMaxSafeSpeed);
     }
 
     [Fact]

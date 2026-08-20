@@ -23,9 +23,15 @@ public sealed class PhysicsTestRunnerTests
 
         var result = new PhysicsTestRunner().Run(scenario);
 
-        var logLine = Assert.Single(result.Segments).ToString();
+        var segment = Assert.Single(result.Segments);
+        var logLine = segment.ToString();
+        var maxSafeSpeed = SegmentPhysics.MaxSafeTurnSpeed(LaneModel.MinLane, track.Geometry);
         Assert.Contains("outcome=RunWide", logLine);
         Assert.Equal(1, result.FinalLane);
+        Assert.True(segment.SpeedOut < segment.SpeedIn);
+        Assert.InRange(segment.SpeedOut, maxSafeSpeed, segment.SpeedIn);
+        Assert.True(segment.SpeedOut > 0f);
+        Assert.True(float.IsFinite(segment.SpeedOut));
     }
 
     [Fact]
