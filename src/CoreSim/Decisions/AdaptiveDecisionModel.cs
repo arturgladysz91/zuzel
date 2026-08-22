@@ -46,7 +46,7 @@ public sealed class AdaptiveDecisionModel : IRiderDecisionModel
                 TrackSurfaceState.Clamp01(surface.Ruts - observationNoise * 0.5f),
                 surface.Moisture);
 
-            var distance = Math.Abs(lane - rider.Lane);
+            var distance = MathF.Abs(lane - rider.LateralPosition);
             var movementCost = distance * (0.015f + (1f - style.LaneChangeTendency) * 0.025f);
             var preferredLane = style.OutsidePreference * LaneModel.MaxLane;
             var styleCost = MathF.Abs(lane - preferredLane) * 0.035f;

@@ -14,6 +14,12 @@ public sealed class SegmentLoggingTests
             => new(rider.Lane, 0f);
     }
 
+    private sealed class TargetLaneDecisionModel(int targetLane) : IRiderDecisionModel
+    {
+        public RiderDecision Decide(TrackSegment segment, RiderState rider)
+            => new(targetLane, 0f);
+    }
+
     [Fact]
     public void SpeedLogSeparatesPhysicsResolutionFromFinalExitSpeed()
     {
@@ -52,5 +58,38 @@ public sealed class SegmentLoggingTests
         Assert.Contains($"v_physics={maxSafeSpeed.ToString("F2", CultureInfo.InvariantCulture)}", segmentLog);
         Assert.Contains($"v_out={rider.Speed.ToString("F2", CultureInfo.InvariantCulture)}", segmentLog);
         Assert.True(rider.Speed > maxSafeSpeed);
+    }
+
+    [Fact]
+    public void SegmentLogDeterministicallyIncludesInvariantLateralTransition()
+    {
+        var geometry = new TrackGeometry(60f, 24f, 1f, 0.20f);
+        var track = new Track(new[] { new TrackSegment(0, SegmentType.TurnMiddle) }, geometry);
+        var surface = new TrackSurfaceState(1f, 0f, 0.35f);
+        var options = new HeatSimulationOptions
+        {
+            Laps = 1,
+            Seed = 19,
+            Weather = new WeatherState(WeatherCondition.Cloudy, 0f, 0f),
+            IncidentFrequency = 0f,
+        };
+
+        (HeatResult Result, RiderState Rider) Run()
+        {
+            var rider = new RiderState(9, lane: 0) { Speed = 10f };
+            var result = new HeatSimulator(new TargetLaneDecisionModel(1)).SimulateHeat(
+                track,
+                TrackState.CreateDefault(track, surface),
+                new List<RiderState> { rider },
+                options);
+            return (result, rider);
+        }
+
+        var first = Run();
+        var second = Run();
+        var expectedTransition = $"lateral=0.000->{first.Rider.LateralPosition.ToString("F3", CultureInfo.InvariantCulture)}";
+
+        Assert.Equal(first.Result.Log.Lines, second.Result.Log.Lines);
+        Assert.Contains(expectedTransition, Assert.Single(first.Result.Log.Lines, line => line.Contains("lateral=")));
     }
 }
