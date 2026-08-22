@@ -123,6 +123,56 @@ public sealed class AdaptiveDecisionModelTests
         Assert.NotEqual(centeredDecision.Reason, movingDecision.Reason);
     }
 
+    [Fact]
+    public void AdaptiveDecisionModelUsesConcreteGeometryForOccupancy()
+    {
+        var segment = new TrackSegment(0, SegmentType.TurnMiddle);
+        var oneMeterSpacingTrack = new Track(
+            new[] { segment },
+            new TrackGeometry(60f, 24f, 1f, MathF.PI / 3f));
+        var twoMeterSpacingTrack = new Track(
+            new[] { segment },
+            new TrackGeometry(60f, 24f, 2f, MathF.PI / 3f));
+        var surface = new TrackSurfaceState(1f, 0f, 0.35f);
+        var profile = new RiderProfile(
+            41,
+            "Occupancy reader",
+            new RiderSkills(50f, 50f, 50f, 100f, 50f, 50f),
+            RiderStyle.Balanced);
+        var rider = new RiderState(profile, lane: 2);
+        var rival = new RiderState(42, lane: 2) { LateralPosition = 2.4f };
+        var step = new SimulationStepContext(
+            HeatId: 5,
+            StepNumber: 8,
+            LapIndex: 0,
+            SegmentIndex: 0,
+            Seed: 27182,
+            RequiredLaps: 1);
+        var engine = new SimulationEngine(new AdaptiveDecisionModel(seed: 42));
+
+        var oneMeterBaseline = DecideFor(engine, oneMeterSpacingTrack, surface, new[] { rider }, rider.RiderId, step);
+        var twoMeterBaseline = DecideFor(engine, twoMeterSpacingTrack, surface, new[] { rider }, rider.RiderId, step);
+        var occupiedDecision = DecideFor(
+            engine,
+            oneMeterSpacingTrack,
+            surface,
+            new[] { rider, rival },
+            rider.RiderId,
+            step);
+        var clearDecision = DecideFor(
+            engine,
+            twoMeterSpacingTrack,
+            surface,
+            new[] { rival, rider },
+            rider.RiderId,
+            step);
+
+        Assert.Equal(2, oneMeterBaseline.TargetLane);
+        Assert.Equal(oneMeterBaseline.TargetLane, twoMeterBaseline.TargetLane);
+        Assert.Equal(1, occupiedDecision.TargetLane);
+        Assert.Equal(2, clearDecision.TargetLane);
+    }
+
     private static RiderDecision DecideFor(
         SimulationEngine engine,
         Track track,

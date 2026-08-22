@@ -50,7 +50,7 @@ public sealed class AdaptiveDecisionModel : IRiderDecisionModel
             var movementCost = distance * (0.015f + (1f - style.LaneChangeTendency) * 0.025f);
             var preferredLane = style.OutsidePreference * LaneModel.MaxLane;
             var styleCost = MathF.Abs(lane - preferredLane) * 0.035f;
-            var occupancyCost = IsOccupied(context, lane) ? 0.30f : 0f;
+            var occupancyCost = IsOccupied(context, lane, geometry) ? 0.30f : 0f;
             var surfaceRiskCost = (1f - effectiveGrip)
                                   * (0.06f + (1f - style.RiskTolerance) * 0.12f)
                                   + surface.Ruts * 0.08f;
@@ -105,11 +105,14 @@ public sealed class AdaptiveDecisionModel : IRiderDecisionModel
         return routeLength / MathF.Max(speed, 1f);
     }
 
-    private static bool IsOccupied(RiderDecisionContext context, int lane)
+    private static bool IsOccupied(RiderDecisionContext context, int lane, TrackGeometry geometry)
         => context.Riders.Any(other =>
             other.RiderId != context.Rider.RiderId
             && other.IsActive
             && other.SegmentIndex == context.SegmentIndex
-            && Math.Abs(other.LateralPosition - lane) < 0.55f
+            && LateralSpaceModel.IsWithinProvisionalOccupancyThreshold(
+                other.LateralPosition,
+                lane,
+                geometry)
             && Math.Abs(other.ElapsedTimeSeconds - context.Rider.ElapsedTimeSeconds) < 0.30f);
 }
