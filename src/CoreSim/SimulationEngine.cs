@@ -251,7 +251,12 @@ public sealed class SimulationEngine
             throw new InvalidOperationException($"Rider {rider.RiderId} is not in segment {snapshot.Step.SegmentIndex}.");
 
         var targetLane = LaneModel.ClampLane(decision.TargetLane);
-        var plannedLane = CalculatePlannedLane(rider.Lane, targetLane);
+        var plannedLane = LateralMovementModel.CalculatePlannedLane(
+            rider.Lane,
+            rider.LateralPosition,
+            targetLane,
+            snapshot.Track.Geometry,
+            useContinuousPlanning: !snapshot.Step.UseLegacyPhysics);
         var surface = snapshot.TrackState.GetSurface(snapshot.Step.SegmentIndex, plannedLane);
         var entrySpeed = snapshot.Step.UseLegacyPhysics
             ? ResolveLegacyEntrySpeed(plannedLane, rider)
@@ -278,9 +283,6 @@ public sealed class SimulationEngine
         var risk = snapshot.Step.UseLegacyPhysics
             ? ApplySurfaceRisk(snapshot, resolution.Lane, decision.Risk)
             : resolution.IncidentRisk;
-        var lateralPosition = snapshot.Step.UseLegacyPhysics
-            ? resolution.Lane
-            : MoveLateralPosition(rider.LateralPosition, resolution.Lane, surface, rider);
 
         var remainingProgress = 1f - rider.SegmentProgress;
         var canonicalAdvance = resolution.Outcome == SegmentOutcome.Crash
@@ -292,7 +294,17 @@ public sealed class SimulationEngine
             snapshot.Track.Geometry);
         var travelled = segmentLength * canonicalAdvance;
         var averageSpeed = MathF.Max(1f, (entrySpeed + MathF.Max(speed, 0f)) * 0.5f);
-        var elapsedTime = rider.ElapsedTimeSeconds + travelled / averageSpeed;
+        var segmentTravelTimeSeconds = travelled / averageSpeed;
+        var elapsedTime = rider.ElapsedTimeSeconds + segmentTravelTimeSeconds;
+        var lateralPosition = snapshot.Step.UseLegacyPhysics
+            ? resolution.Lane
+            : LateralMovementModel.MoveTowards(
+                rider.LateralPosition,
+                resolution.Lane,
+                segmentTravelTimeSeconds,
+                snapshot.Track.Geometry,
+                surface,
+                rider.Profile.Skills);
         var position = rider.Position.Advance(canonicalAdvance, travelled);
         var status = resolution.Outcome == SegmentOutcome.Crash
             ? RiderRaceStatus.Crashed
@@ -509,19 +521,6 @@ public sealed class SimulationEngine
         return speed * (0.965f + speedSkill * 0.07f + gearingTradeOff);
     }
 
-    private static float MoveLateralPosition(
-        float current,
-        int targetLane,
-        TrackSurfaceState surface,
-        RiderSnapshot rider)
-    {
-        var adaptability = RiderSkills.Normalize(rider.Profile.Skills.Adaptability);
-        var style = rider.Profile.Style.LaneChangeTendency;
-        var traction = 0.55f + surface.EffectiveGrip * 0.35f;
-        var maxStep = (0.45f + adaptability * 0.25f + style * 0.20f) * traction;
-        return current + Math.Clamp(targetLane - current, -maxStep, maxStep);
-    }
-
     private static float ApplySurfaceRisk(SimulationSnapshot snapshot, int lane, float baseRisk)
     {
         if (snapshot.Segment.Type == SegmentType.Straight)
@@ -592,19 +591,13 @@ public sealed class SimulationEngine
     private static string FormatSegmentLog(SimulationSnapshot snapshot, RiderStateChange change)
     {
         var prefix = snapshot.Step.UseLegacyPhysics ? string.Empty : $"LAP={snapshot.Step.LapIndex + 1} ";
+        var beforeLateralPosition = snapshot.Rider(change.RiderId).LateralPosition;
         return $"{prefix}SEG={snapshot.Segment.Id} {snapshot.Segment.Type} rider={change.RiderId} "
                + $"lane {change.BeforeLane}->{change.PlannedLane}->{change.Lane} targetLane={change.TargetLane} "
+               + $"lateral={beforeLateralPosition.ToString("F3", CultureInfo.InvariantCulture)}"
+               + $"->{change.LateralPosition.ToString("F3", CultureInfo.InvariantCulture)} "
                + $"outcome={change.Outcome} v_in={change.EntrySpeed.ToString("F2", CultureInfo.InvariantCulture)} "
                + $"v_physics={change.PhysicsSpeed.ToString("F2", CultureInfo.InvariantCulture)} "
                + $"v_out={change.Speed.ToString("F2", CultureInfo.InvariantCulture)}";
-    }
-
-    private static int CalculatePlannedLane(int currentLane, int targetLane)
-    {
-        if (targetLane > currentLane)
-            return LaneModel.ClampLane(currentLane + 1);
-        if (targetLane < currentLane)
-            return LaneModel.ClampLane(currentLane - 1);
-        return currentLane;
     }
 }

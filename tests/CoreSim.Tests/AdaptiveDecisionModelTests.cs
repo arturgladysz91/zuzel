@@ -98,6 +98,31 @@ public sealed class AdaptiveDecisionModelTests
         Assert.NotEqual(tightRadiusDecision.Reason, referenceRadiusDecision.Reason);
     }
 
+    [Fact]
+    public void MovementCostUsesContinuousLateralPosition()
+    {
+        var track = new Track(new[] { new TrackSegment(0, SegmentType.TurnMiddle) });
+        var state = TrackState.CreateDefault(track, new TrackSurfaceState(0.75f, 0.5f, 0.8f));
+        state.ApplySurfaceDelta(0, 3, 0.25f, -0.5f, -0.45f, "prepared", 0, 0, new SimLog());
+        var profile = new RiderProfile(
+            31,
+            "Reader",
+            new RiderSkills(50f, 50f, 60f, 100f, 50f, 70f),
+            RiderStyle.Balanced);
+        var centered = new RiderState(profile, lane: 2) { LateralPosition = 2f };
+        var alreadyMovingOutward = new RiderState(profile, lane: 2) { LateralPosition = 2.9f };
+        var model = new AdaptiveDecisionModel(seed: 42);
+
+        var centeredDecision = model.Decide(new RiderDecisionContext(
+            track.Segments[0], 0, state, centered, new[] { centered }, 1, 0));
+        var movingDecision = model.Decide(new RiderDecisionContext(
+            track.Segments[0], 0, state, alreadyMovingOutward, new[] { alreadyMovingOutward }, 1, 0));
+
+        Assert.Equal(3, centeredDecision.TargetLane);
+        Assert.Equal(3, movingDecision.TargetLane);
+        Assert.NotEqual(centeredDecision.Reason, movingDecision.Reason);
+    }
+
     private static RiderDecision DecideFor(
         SimulationEngine engine,
         Track track,

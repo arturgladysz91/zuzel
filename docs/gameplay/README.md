@@ -18,7 +18,7 @@ Przed rozpoczęciem Track Engine pozostają:
 
 - start i pierwszy łuk,
 - dalsza rozbudowa ograniczeń jazdy w łuku i wynoszenia,
-- czasowa zmiana linii,
+- późniejsza integracja ciągłej pozycji bocznej z promieniem, nawierzchnią i zużyciem,
 - atak, obrona i blokowanie,
 - kontakty, upadki i walidacja fizyki.
 
@@ -40,7 +40,19 @@ Ograniczenie prędkości łuku wykorzystuje statyczną geometrię konkretnego to
 
 `RunWide` oznacza wymuszoną korektę po przekroczeniu ograniczenia albo błędzie. Końcowa `Lane` wypada szerzej niż `PlannedLane`, więc zawodnik pokonuje dłuższą drogę. W ścieżce wywołanej przekroczeniem prędkości zachowuje tylko część nadwyżki ponad indywidualne `MaxSafeTurnSpeed`: w fizyce zaawansowanej lepsze `SlideControl` pozwala zachować większą część tej nadwyżki, ale nigdy całość, a legacy używa neutralnej retencji. Losowe incydenty zachowują osobne dotychczasowe rozstrzygnięcie.
 
-Ten etap nie dodaje `ControlledWide`, nie zmienia progów `Brake`, `RunWide` i `Crash`, zachowania na Lane 4, losowych incydentów ani `ApplyExitDrive`. Model nadal jest ograniczeniem opartym na krzywiźnie, a nie pełną fizyką motocykla, i nie obejmuje czasowego przechodzenia między liniami.
+Model nie dodaje `ControlledWide` i nie zmienia progów `Brake`, `RunWide` i `Crash`, zachowania na Lane 4, losowych incydentów ani `ApplyExitDrive`. Pozostaje ograniczeniem opartym na krzywiźnie, a nie pełną fizyką motocykla.
+
+### Czasowa zmiana linii — BINDING
+
+`TargetLane` jest celem decyzji, `PlannedLane` najbliższą dyskretną linią realizowaną w kroku, `Lane` linią rozstrzygniętą przez fizykę, a `LateralPosition` rzeczywistą ciągłą pozycją po kroku. Pozycja boczna ma zakres `0..4` w jednostkach linii; jej zmiana pomnożona przez `LaneSpacingMeters` daje fizyczne przesunięcie w metrach.
+
+Zaawansowana fizyka ogranicza ruch boczny czasem przejazdu bieżącego segmentu, odstępem między liniami, `SlideControl`, `Adaptability` i efektywną przyczepnością. Stylowa `LaneChangeTendency` nadal wpływa na decyzję i koszt trasy, ale nie na fizyczną szybkość wykonania; morale również jej nie zmienia. `PlannedLane` jest najbliższą niewykonaną referencją od rzeczywistego `LateralPosition` w stronę `TargetLane`; kolejny krok może rozpocząć się dopiero po osiągnięciu tej referencji z tolerancją `0.05 m`. Wcześniejszy `RunWide` nie pozwala pominąć nieosiągniętej linii, a odwrócenie decyzji działa natychmiast. `RunWide` nadal kieruje ruch ku wymuszonej końcowej `Lane`; legacy nadal wyrównuje pozycję od razu.
+
+### Parametry ruchu bocznego — PROVISIONAL
+
+Zakres fizycznej szybkości bocznej `0.35–0.65 m/s` oraz mnożnik `0.65 + 0.35 * EffectiveGrip` są wartościami roboczymi do późniejszego strojenia. Pozostają nazwanymi stałymi w C#; ten etap nie dodaje pliku balansu JSON.
+
+Ograniczenie przejściowe: `Lane` nadal steruje `SegmentPhysics`, dystansem i zużyciem. Promień, nawierzchnia i zużycie nie są jeszcze interpolowane według `LateralPosition`.
 
 ## Główna pętla gry — BINDING
 

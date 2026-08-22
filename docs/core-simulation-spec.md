@@ -17,7 +17,8 @@ Every segment is processed as `CaptureSnapshot -> Decide -> Resolve -> Commit`. 
 - A track is an ordered list of `TurnEntry`, `TurnMiddle`, `TurnExit` and `Straight` segments.
 - Every concrete track owns immutable `TrackGeometry`: straight length, inner reference turn radius, spacing between its five reference lanes and the angle in radians covered by one turn segment. Geometry is separate from mutable surface state.
 - Every segment has five local reference lanes numbered `0..4` from inside to outside.
-- The chosen lane is discrete; `LateralPosition` is continuous and cannot jump directly across the track.
+- `TargetLane` is the decision's requested destination. `PlannedLane` is the nearest discrete reference lane executed in the current step, `Lane` is the discrete lane resolved by physics for that step, and `LateralPosition` is the rider's actual continuous position at the end of the step.
+- `LateralPosition` uses lane units in the inclusive range `0..4`. Its physical displacement is `abs(deltaLateralPosition) * TrackGeometry.LaneSpacingMeters`; invalid, NaN and infinite values are rejected at the domain boundary.
 - `RiderPosition.TotalSegmentProgress` is the single topological source of truth. Lap, segment index and normalized `0..1` segment progress are derived values. Physical distance is updated together with canonical progress.
 - Rider status distinguishes not started, racing, finished, crashed and retired states.
 - Every segment/lane cell stores base grip, ruts and moisture. `EffectiveGrip` derives usable grip from all three values.
@@ -37,12 +38,23 @@ Every segment is processed as `CaptureSnapshot -> Decide -> Resolve -> Commit`. 
 - A rider cannot run wider than lane 4; an unresolved high-speed run-wide there becomes a crash.
 - A straight preserves speed. It cannot create a passing advantage by itself; it only carries an advantage created at corner exit and positions riders for the next turn.
 
+## Lateral movement
+
+- Advanced physics executes continuous lateral movement from the exact time added for the current segment: `segmentTravelTimeSeconds = travelledMeters / averageSpeedMetersPerSecond`. A rider's cumulative elapsed time is never used as a movement duration.
+- Physical execution is the equally weighted normalized `SlideControl` and `Adaptability`. Provisional lateral speed ranges from `0.35 m/s` to `0.65 m/s`; provisional grip scaling is `0.65 + 0.35 * EffectiveGrip`. The maximum change in lane units is physical lateral speed multiplied by segment time and grip scaling, divided by `LaneSpacingMeters`.
+- Movement is a bounded `MoveTowards` operation aimed at the physics-resolved `Lane`. It is symmetric inward and outward, cannot pass its target, remains finite and within `0..4`, and does not move for a zero-duration segment.
+- In advanced physics, `PlannedLane` is the nearest not-yet-executed reference lane from `LateralPosition` toward `TargetLane`. Reaching that reference uses `LaneArrivalToleranceMeters = 0.05 m`; only then may planning advance to the next reference. A discrete `Lane` placed farther away by an earlier `RunWide` cannot skip an unreached reference, and a decision reversing direction begins immediately from the actual lateral position.
+- A `RunWide` therefore aims continuous movement at its forced resolved lane while retaining the existing outcome, speed thresholds and overspeed-retention rules. Legacy physics remains compatible and may set `LateralPosition` directly to the resolved lane.
+- `LaneChangeTendency` remains a style preference used by decisions and route cost. It does not change physical lateral speed; neither does morale.
+- Transitional limitation: discrete `Lane` continues to select `SegmentPhysics`, distance and surface wear. Radius, surface and wear are not interpolated from `LateralPosition` in this stage.
+
 ## Riders and decisions
 
 - Skills use a `0..100` scale: start, speed, slide control, track reading, pair riding and adaptability.
 - Style uses normalized preferences: risk, lane changes, outside line and setup independence.
 - Morale is mutable and separate from physical form. It changes stability and follows results or incidents.
 - A decision model evaluates local lanes. Track reading controls observation quality; style controls preferences; occupied space is penalized.
+- The movement distance evaluated by `AdaptiveDecisionModel` starts at continuous `LateralPosition`, while style still changes the preference cost of choosing a lane.
 - Lane evaluation uses projected route time (bend plus following straight), not raw maximum speed. This lets a clean outside route beat a worn inside route without making the outside universally superior.
 - Rider-to-rider contact depends on the time gap, segment, surface and control skills. Contact in `TurnMiddle` is more dangerous than on a straight.
 
@@ -54,7 +66,7 @@ Every segment is processed as `CaptureSnapshot -> Decide -> Resolve -> Commit`. 
 
 ## Result and player information
 
-The core returns factual internal results and logs. Events created in one step are ordered by step, phase, rider id and event type. Segment logs distinguish entry speed, speed after the physical constraint and final exit speed. A change of running order between two active riders creates a typed overtake event; a retirement is not an overtake. Every completed lap creates a typed order snapshot with gaps to the active leader.
+The core returns factual internal results and logs. Events created in one step are ordered by step, phase, rider id and event type. Segment logs distinguish entry speed, speed after the physical constraint and final exit speed, and record continuous movement as `lateral=before->after` using invariant formatting. A change of running order between two active riders creates a typed overtake event; a retirement is not an overtake. Every completed lap creates a typed order snapshot with gaps to the active leader.
 
 A starting-gate balance report must rotate the same four rider profiles evenly through gates 1..4. This prevents rider strength from being mistaken for gate advantage. Large diagnostic batches may disable log capture, but this must not change track evolution or the simulated classification.
 

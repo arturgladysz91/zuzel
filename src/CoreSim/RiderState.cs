@@ -11,6 +11,7 @@ public sealed class RiderState
     private RiderPosition _position;
     private RiderRaceStatus _status;
     private int _lastResolvedSegmentId;
+    private float _lateralPosition;
 
     public int RiderId => Profile.Id;
     public RiderProfile Profile { get; }
@@ -26,7 +27,15 @@ public sealed class RiderState
     /// <summary>Backward-compatible alias for LastResolvedSegmentId.</summary>
     public int CurrentSegmentId => LastResolvedSegmentId;
     public int Lane { get; set; }
-    public float LateralPosition { get; set; }
+    public float LateralPosition
+    {
+        get => _lateralPosition;
+        set
+        {
+            LateralMovementModel.ValidateLateralPosition(value, nameof(LateralPosition));
+            _lateralPosition = value;
+        }
+    }
     public float Speed { get; set; }
     public float Risk { get; set; }
     public RiderRaceStatus Status => _status;
