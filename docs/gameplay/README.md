@@ -54,6 +54,8 @@ Zakres fizycznej szybkości bocznej `0.35–0.65 m/s` oraz mnożnik `0.65 + 0.35
 
 Ograniczenie przejściowe: `Lane` nadal steruje `SegmentPhysics`, dystansem i zużyciem. Promień, nawierzchnia i zużycie nie są jeszcze interpolowane według `LateralPosition`.
 
+Przy ocenie zajętej przestrzeni przez `AdaptiveDecisionModel` różnica `LateralPosition` jest przeliczana na metry przez `LaneSpacingMeters` konkretnego toru. Próg `0.55 m` jest wartością **PROVISIONAL**, zachowującą dotychczasowe zachowanie toru domyślnego, a nie ostatecznym wymiarem zawodnika lub motocykla. Kontakty nadal korzystają z dyskretnej `Lane`; ich przejście na ciągłą separację boczną pozostaje poza tym etapem.
+
 ## Główna pętla gry — BINDING
 
 `obserwacja → feedback → diagnoza → decyzja menedżera → wykonanie przez ludzi → kolejny bieg → ocena skutku`

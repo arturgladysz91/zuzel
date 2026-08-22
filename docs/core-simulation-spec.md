@@ -53,10 +53,10 @@ Every segment is processed as `CaptureSnapshot -> Decide -> Resolve -> Commit`. 
 - Skills use a `0..100` scale: start, speed, slide control, track reading, pair riding and adaptability.
 - Style uses normalized preferences: risk, lane changes, outside line and setup independence.
 - Morale is mutable and separate from physical form. It changes stability and follows results or incidents.
-- A decision model evaluates local lanes. Track reading controls observation quality; style controls preferences; occupied space is penalized.
+- A decision model evaluates local lanes. Track reading controls observation quality; style controls preferences; occupied space is penalized. `AdaptiveDecisionModel` converts continuous lateral separation to meters with the concrete track's `LaneSpacingMeters`; its current `0.55 m` occupancy threshold is provisional and preserves default-track compatibility.
 - The movement distance evaluated by `AdaptiveDecisionModel` starts at continuous `LateralPosition`, while style still changes the preference cost of choosing a lane.
 - Lane evaluation uses projected route time (bend plus following straight), not raw maximum speed. This lets a clean outside route beat a worn inside route without making the outside universally superior.
-- Rider-to-rider contact depends on the time gap, segment, surface and control skills. Contact in `TurnMiddle` is more dangerous than on a straight.
+- Rider-to-rider contact depends on the time gap, segment, surface and control skills. Contact in `TurnMiddle` is more dangerous than on a straight. Contact grouping still uses discrete `Lane`; continuous lateral separation is not integrated into contact resolution in this stage.
 
 ## Setup
 
