@@ -199,13 +199,13 @@ public sealed class LateralMovementModelTests
             currentLateralPosition: 0.97f,
             targetLane: 4,
             geometry,
-            requireArrivalAtCurrentLane: true);
+            useContinuousPlanning: true);
         var insideTolerance = LateralMovementModel.CalculatePlannedLane(
             currentLane: 1,
             currentLateralPosition: 0.98f,
             targetLane: 4,
             geometry,
-            requireArrivalAtCurrentLane: true);
+            useContinuousPlanning: true);
 
         Assert.Equal(1, outsideTolerance);
         Assert.Equal(2, insideTolerance);
@@ -349,6 +349,84 @@ public sealed class LateralMovementModelTests
         Assert.Equal(0, inwardChange.PlannedLane);
         Assert.Equal(0, inwardChange.Lane);
         Assert.True(inwardChange.LateralPosition < outwardChange.LateralPosition);
+    }
+
+    [Fact]
+    public void RunWideDoesNotSkipAnUnreachedReferenceLaneOnTheNextStep()
+    {
+        var track = TrackWithTurns(segmentCount: 2, turnAngleRadians: 0.10f);
+        var trackState = TrackState.CreateDefault(track, IdealSurface);
+        var rider = new RiderState(1, lane: 0);
+        rider.Speed = SegmentPhysics.MaxSafeTurnSpeed(
+            1,
+            track.Geometry,
+            IdealSurface,
+            rider.Profile.Skills,
+            rider.ActiveSetup) * 1.12f;
+        var engine = new SimulationEngine(new TargetDecisionModel(4));
+        var options = Options();
+
+        var first = ResolveStep(engine, track, trackState, rider, options, stepNumber: 0, segmentIndex: 0);
+        var firstChange = Assert.Single(first.Changes);
+        Assert.Equal(1, firstChange.PlannedLane);
+        Assert.Equal(SegmentOutcome.RunWide, firstChange.Outcome);
+        Assert.Equal(2, firstChange.Lane);
+        Assert.True(firstChange.LateralPosition < 1f);
+        engine.Commit(first, new[] { rider }, trackState, new SimLog());
+
+        var second = ResolveStep(engine, track, trackState, rider, options, stepNumber: 1, segmentIndex: 1);
+        var secondChange = Assert.Single(second.Changes);
+
+        Assert.Equal(2, secondChange.BeforeLane);
+        Assert.Equal(4, secondChange.TargetLane);
+        Assert.Equal(1, secondChange.PlannedLane);
+    }
+
+    [Fact]
+    public void ReversingAfterRunWideImmediatelyMovesTowardTheInnerTarget()
+    {
+        var track = TrackWithTurns(segmentCount: 2, turnAngleRadians: 0.10f);
+        var trackState = TrackState.CreateDefault(track, IdealSurface);
+        var rider = new RiderState(1, lane: 0);
+        rider.Speed = SegmentPhysics.MaxSafeTurnSpeed(
+            1,
+            track.Geometry,
+            IdealSurface,
+            rider.Profile.Skills,
+            rider.ActiveSetup) * 1.12f;
+        var options = Options();
+        var outwardEngine = new SimulationEngine(new TargetDecisionModel(4));
+
+        var outward = ResolveStep(
+            outwardEngine,
+            track,
+            trackState,
+            rider,
+            options,
+            stepNumber: 0,
+            segmentIndex: 0);
+        var outwardChange = Assert.Single(outward.Changes);
+        Assert.Equal(SegmentOutcome.RunWide, outwardChange.Outcome);
+        Assert.Equal(2, outwardChange.Lane);
+        Assert.True(outwardChange.LateralPosition < 1f);
+        outwardEngine.Commit(outward, new[] { rider }, trackState, new SimLog());
+        var beforeReversal = rider.LateralPosition;
+
+        var inwardEngine = new SimulationEngine(new TargetDecisionModel(0));
+        var inward = ResolveStep(
+            inwardEngine,
+            track,
+            trackState,
+            rider,
+            options,
+            stepNumber: 1,
+            segmentIndex: 1);
+        var inwardChange = Assert.Single(inward.Changes);
+
+        Assert.Equal(2, inwardChange.BeforeLane);
+        Assert.Equal(0, inwardChange.TargetLane);
+        Assert.Equal(0, inwardChange.PlannedLane);
+        Assert.True(inwardChange.LateralPosition < beforeReversal);
     }
 
     [Fact]

@@ -3,7 +3,7 @@
 # Glossary
 - Segment: element decyzyjny toru (wejście łuku / środek / wyjście / prosta).
 - TargetLane: docelowa linia żądana przez decyzję zawodnika.
-- PlannedLane: najbliższa dyskretna linia odniesienia realizowana w bieżącym kroku.
+- PlannedLane: w zaawansowanej fizyce najbliższa niewykonana linia odniesienia od rzeczywistego `LateralPosition` w stronę `TargetLane`; wcześniejszy dyskretny wynik `Lane` nie pozwala jej pominąć.
 - Lane: jedna z 5 lokalnych linii w segmencie (0..4), rozstrzygnięta przez fizykę i nadal używana do ograniczeń, dystansu oraz zużycia.
 - LateralPosition: rzeczywista ciągła pozycja boczna na końcu kroku w jednostkach linii `0..4`; fizyczne przesunięcie to zmiana tej wartości pomnożona przez `LaneSpacingMeters`.
 - Świadomy wybór szerokiej linii: zaplanowana trajektoria służąca nawierzchni, atakowi albo lepszemu wyjściu; zmienia `PlannedLane`, może zakończyć się `Ok` i nie jest zdarzeniem `RunWide`.

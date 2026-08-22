@@ -25,7 +25,7 @@
 
 Race randomness is stateless and addressed by seed, heat id, step number, rider id and a named `RandomChannel`. Optional discriminators such as lane or the other rider make separate draws explicit. Collection order and the number of unrelated draws cannot reassign randomness.
 
-`LateralMovementModel` is the single owner of time-based physical movement between reference lanes. It converts segment time and `LaneSpacingMeters` into a bounded change in lane units, validates the continuous `0..4` domain, and enforces arrival at the current discrete lane before another step farther in the same direction. `SimulationEngine` supplies immutable snapshot inputs and commits the returned position later; `AdaptiveDecisionModel` measures route-change distance from `LateralPosition` but may still price that choice using style.
+`LateralMovementModel` is the single owner of time-based physical movement between reference lanes. It converts segment time and `LaneSpacingMeters` into a bounded change in lane units, validates the continuous `0..4` domain, and selects the nearest unexecuted reference from `LateralPosition` toward `TargetLane`. A discrete lane forced farther away by `RunWide` cannot skip that reference. `SimulationEngine` supplies immutable snapshot inputs and commits the returned position later; `AdaptiveDecisionModel` measures route-change distance from `LateralPosition` but may still price that choice using style.
 
 This is a transitional split: `Lane` remains the discrete input for segment physics, distance and surface wear, while `LateralPosition` records continuous execution. Interpolation of radius, surface and wear between neighboring lanes belongs to a later stage.
 

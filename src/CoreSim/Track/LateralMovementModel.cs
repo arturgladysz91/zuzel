@@ -32,22 +32,38 @@ public static class LateralMovementModel
         float currentLateralPosition,
         int targetLane,
         TrackGeometry geometry,
-        bool requireArrivalAtCurrentLane)
+        bool useContinuousPlanning)
     {
         ArgumentNullException.ThrowIfNull(geometry);
         LaneModel.ValidateLane(currentLane);
         LaneModel.ValidateLane(targetLane);
         ValidateLateralPosition(currentLateralPosition, nameof(currentLateralPosition));
 
-        var direction = Math.Sign(targetLane - currentLane);
-        if (direction == 0)
-            return currentLane;
+        if (!useContinuousPlanning)
+        {
+            var legacyDirection = Math.Sign(targetLane - currentLane);
+            return LaneModel.ClampLane(currentLane + legacyDirection);
+        }
 
-        if (requireArrivalAtCurrentLane
-            && IsStillApproachingCurrentLane(currentLane, currentLateralPosition, direction, geometry))
-            return currentLane;
+        if (targetLane > currentLateralPosition)
+        {
+            var nearestOuterLane = (int)MathF.Ceiling(currentLateralPosition);
+            if (HasArrivedAtLane(currentLateralPosition, nearestOuterLane, geometry))
+                nearestOuterLane++;
 
-        return LaneModel.ClampLane(currentLane + direction);
+            return LaneModel.ClampLane(Math.Min(nearestOuterLane, targetLane));
+        }
+
+        if (targetLane < currentLateralPosition)
+        {
+            var nearestInnerLane = (int)MathF.Floor(currentLateralPosition);
+            if (HasArrivedAtLane(currentLateralPosition, nearestInnerLane, geometry))
+                nearestInnerLane--;
+
+            return LaneModel.ClampLane(Math.Max(nearestInnerLane, targetLane));
+        }
+
+        return targetLane;
     }
 
     public static float CalculateMaxLateralDelta(
@@ -123,15 +139,10 @@ public static class LateralMovementModel
         }
     }
 
-    private static bool IsStillApproachingCurrentLane(
-        int currentLane,
+    private static bool HasArrivedAtLane(
         float currentLateralPosition,
-        int desiredDirection,
+        int referenceLane,
         TrackGeometry geometry)
-    {
-        var signedDistanceMeters = (currentLane - currentLateralPosition) * geometry.LaneSpacingMeters;
-        return desiredDirection > 0
-            ? signedDistanceMeters > LaneArrivalToleranceMeters
-            : signedDistanceMeters < -LaneArrivalToleranceMeters;
-    }
+        => MathF.Abs(referenceLane - currentLateralPosition) * geometry.LaneSpacingMeters
+            <= LaneArrivalToleranceMeters;
 }

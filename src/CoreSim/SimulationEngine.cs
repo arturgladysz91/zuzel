@@ -256,7 +256,7 @@ public sealed class SimulationEngine
             rider.LateralPosition,
             targetLane,
             snapshot.Track.Geometry,
-            requireArrivalAtCurrentLane: !snapshot.Step.UseLegacyPhysics);
+            useContinuousPlanning: !snapshot.Step.UseLegacyPhysics);
         var surface = snapshot.TrackState.GetSurface(snapshot.Step.SegmentIndex, plannedLane);
         var entrySpeed = snapshot.Step.UseLegacyPhysics
             ? ResolveLegacyEntrySpeed(plannedLane, rider)
