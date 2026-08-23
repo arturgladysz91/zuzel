@@ -95,6 +95,21 @@ public sealed class LateralMovementModelTests
         Assert.Equal(3f, result);
     }
 
+    [Theory]
+    [InlineData(2.0f)]
+    [InlineData(2.8f)]
+    public void PhysicalOutwardMovementNeverMovesInwardWhenReferenceIsBehindCurrent(
+        float maximumLateralPosition)
+    {
+        var result = LateralMovementModel.MoveOutwardByPhysicalDistance(
+            currentLateralPosition: 2.8f,
+            physicalDistanceMeters: 0.50f,
+            maximumLateralPosition,
+            Geometry(laneSpacingMeters: 1f));
+
+        Assert.Equal(2.8f, result);
+    }
+
     [Fact]
     public void MoveTowardsIsSymmetricInwardAndOutward()
     {

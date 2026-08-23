@@ -147,6 +147,9 @@ public static class LateralMovementModel
                 "Physical distance must be finite and non-negative.");
         }
 
+        if (maximumLateralPosition <= currentLateralPosition)
+            return currentLateralPosition;
+
         var deltaLaneUnits = (double)physicalDistanceMeters / geometry.LaneSpacingMeters;
         var next = (float)Math.Min(currentLateralPosition + deltaLaneUnits, maximumLateralPosition);
         next = Math.Clamp(next, LaneModel.MinLane, LaneModel.MaxLane);
