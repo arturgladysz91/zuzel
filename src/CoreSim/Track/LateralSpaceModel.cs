@@ -11,6 +11,12 @@ public static class LateralSpaceModel
     /// </summary>
     public const float ProvisionalOccupancyThresholdMeters = 0.55f;
 
+    /// <summary>
+    /// Provisional contact-candidate distance. It intentionally remains separate
+    /// from decision occupancy so both values can be calibrated independently.
+    /// </summary>
+    public const float ProvisionalContactThresholdMeters = 0.55f;
+
     public static float LateralDistanceMeters(
         float firstLateralPosition,
         float secondLateralPosition,
@@ -29,4 +35,11 @@ public static class LateralSpaceModel
         TrackGeometry geometry)
         => LateralDistanceMeters(firstLateralPosition, secondLateralPosition, geometry)
             < ProvisionalOccupancyThresholdMeters;
+
+    public static bool IsWithinProvisionalContactThreshold(
+        float firstLateralPosition,
+        float secondLateralPosition,
+        TrackGeometry geometry)
+        => LateralDistanceMeters(firstLateralPosition, secondLateralPosition, geometry)
+            < ProvisionalContactThresholdMeters;
 }

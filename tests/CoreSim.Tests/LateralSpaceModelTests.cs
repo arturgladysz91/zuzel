@@ -72,6 +72,18 @@ public sealed class LateralSpaceModelTests
         Assert.Equal(innerResult, outerResult);
     }
 
+    [Fact]
+    public void ContactThresholdUsesPhysicalMeters()
+    {
+        var oneMeterSpacing = Geometry(laneSpacingMeters: 1f);
+        var twoMeterSpacing = Geometry(laneSpacingMeters: 2f);
+
+        Assert.True(LateralSpaceModel.IsWithinProvisionalContactThreshold(2f, 2.4f, oneMeterSpacing));
+        Assert.True(LateralSpaceModel.IsWithinProvisionalContactThreshold(2f, 1.6f, oneMeterSpacing));
+        Assert.False(LateralSpaceModel.IsWithinProvisionalContactThreshold(2f, 2.4f, twoMeterSpacing));
+        Assert.False(LateralSpaceModel.IsWithinProvisionalContactThreshold(2f, 1.6f, twoMeterSpacing));
+    }
+
     private static TrackGeometry Geometry(float laneSpacingMeters)
         => new(60f, 24f, laneSpacingMeters, 0.8f);
 }

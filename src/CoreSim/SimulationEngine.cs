@@ -340,105 +340,119 @@ public sealed class SimulationEngine
         IDictionary<int, RiderStateChange> changes,
         ICollection<SimulationStepEvent> events)
     {
-        var groups = changes.Values
+        var ordered = changes.Values
             .Where(change => change.Status is RiderRaceStatus.Racing or RiderRaceStatus.Finished)
-            .GroupBy(change => change.Lane)
-            .OrderBy(group => group.Key)
-            .Select(group => group
-                .OrderBy(change => change.ElapsedTimeSeconds)
-                .ThenBy(change => change.RiderId)
-                .ToArray())
+            .OrderBy(change => change.ElapsedTimeSeconds)
+            .ThenBy(change => change.RiderId)
             .ToArray();
 
-        foreach (var ordered in groups)
+        // Freeze pair identities from post-ResolveRider positions before any
+        // contact consequence can change time, lane, lateral position or status.
+        var candidates = new List<(int LeaderRiderId, int TrailingRiderId)>();
+
+        for (var trailingIndex = 1; trailingIndex < ordered.Length; trailingIndex++)
         {
-            for (var index = 1; index < ordered.Length; index++)
+            var trailing = ordered[trailingIndex];
+            for (var leaderIndex = trailingIndex - 1; leaderIndex >= 0; leaderIndex--)
             {
-                var leader = changes[ordered[index - 1].RiderId];
-                var trailing = changes[ordered[index].RiderId];
-                var gap = trailing.ElapsedTimeSeconds - leader.ElapsedTimeSeconds;
-                if (gap > 0.12f)
+                var leader = ordered[leaderIndex];
+                if (!LateralSpaceModel.IsWithinProvisionalContactThreshold(
+                        leader.LateralPosition,
+                        trailing.LateralPosition,
+                        snapshot.Track.Geometry))
                     continue;
 
-                var trailingSnapshot = snapshot.Rider(trailing.RiderId);
-                var control = RiderSkills.Normalize(trailingSnapshot.Profile.Skills.SlideControl);
-                var pairRiding = RiderSkills.Normalize(trailingSnapshot.Profile.Skills.PairRiding);
-                var surface = snapshot.TrackState.GetSurface(snapshot.Step.SegmentIndex, trailing.Lane);
-                var locationRisk = snapshot.Segment.Type switch
+                candidates.Add((leader.RiderId, trailing.RiderId));
+                break;
+            }
+        }
+
+        foreach (var candidate in candidates)
+        {
+            var leader = changes[candidate.LeaderRiderId];
+            var trailing = changes[candidate.TrailingRiderId];
+            var gap = trailing.ElapsedTimeSeconds - leader.ElapsedTimeSeconds;
+            if (gap > 0.12f)
+                continue;
+
+            var trailingSnapshot = snapshot.Rider(trailing.RiderId);
+            var control = RiderSkills.Normalize(trailingSnapshot.Profile.Skills.SlideControl);
+            var pairRiding = RiderSkills.Normalize(trailingSnapshot.Profile.Skills.PairRiding);
+            var surface = snapshot.TrackState.GetSurface(snapshot.Step.SegmentIndex, trailing.Lane);
+            var locationRisk = snapshot.Segment.Type switch
+            {
+                SegmentType.TurnMiddle => 0.24f,
+                SegmentType.TurnEntry or SegmentType.TurnExit => 0.12f,
+                _ => 0.025f,
+            };
+            var contactChance = locationRisk
+                * (1.20f - pairRiding * 0.45f)
+                * (1.15f - control * 0.35f)
+                * (1.10f + (1f - surface.EffectiveGrip) * 0.40f);
+            var contactSample = DeterministicRandom.Sample01(
+                snapshot.Step.Seed,
+                snapshot.Step.HeatId,
+                snapshot.Step.StepNumber,
+                trailing.RiderId,
+                RandomChannel.ContactOccurrence,
+                leader.RiderId,
+                trailing.Lane);
+            if (contactSample >= contactChance)
+                continue;
+
+            var crashChance = snapshot.Segment.Type == SegmentType.TurnMiddle ? 0.28f : 0.08f;
+            crashChance *= 1.20f - control * 0.55f;
+            var severitySample = DeterministicRandom.Sample01(
+                snapshot.Step.Seed,
+                snapshot.Step.HeatId,
+                snapshot.Step.StepNumber,
+                trailing.RiderId,
+                RandomChannel.ContactSeverity,
+                leader.RiderId,
+                trailing.Lane);
+
+            if (severitySample < crashChance)
+            {
+                trailing = trailing with
                 {
-                    SegmentType.TurnMiddle => 0.24f,
-                    SegmentType.TurnEntry or SegmentType.TurnExit => 0.12f,
-                    _ => 0.025f,
+                    Status = RiderRaceStatus.Crashed,
+                    Speed = 0f,
+                    Morale = Math.Clamp(trailing.Morale - 0.04f, 0f, 1f),
                 };
-                var contactChance = locationRisk
-                    * (1.20f - pairRiding * 0.45f)
-                    * (1.15f - control * 0.35f)
-                    * (1.10f + (1f - surface.EffectiveGrip) * 0.40f);
-                var contactSample = DeterministicRandom.Sample01(
-                    snapshot.Step.Seed,
-                    snapshot.Step.HeatId,
+                changes[trailing.RiderId] = trailing;
+                events.Add(new SimulationStepEvent(
                     snapshot.Step.StepNumber,
+                    20,
                     trailing.RiderId,
-                    RandomChannel.ContactOccurrence,
-                    leader.RiderId,
-                    trailing.Lane);
-                if (contactSample >= contactChance)
-                    continue;
+                    SimulationEventType.ContactCrash,
+                    $"LAP={snapshot.Step.LapIndex + 1} SEG={snapshot.Segment.Id} contact rider={trailing.RiderId} with={leader.RiderId} outcome=Crash",
+                    leader.RiderId));
+            }
+            else
+            {
+                var lane = trailing.Lane;
+                var lateral = trailing.LateralPosition;
+                if (snapshot.Segment.Type != SegmentType.Straight && lane < LaneModel.MaxLane)
+                {
+                    lane++;
+                    lateral = MathF.Min(lateral + 0.5f, lane);
+                }
 
-                var crashChance = snapshot.Segment.Type == SegmentType.TurnMiddle ? 0.28f : 0.08f;
-                crashChance *= 1.20f - control * 0.55f;
-                var severitySample = DeterministicRandom.Sample01(
-                    snapshot.Step.Seed,
-                    snapshot.Step.HeatId,
+                trailing = trailing with
+                {
+                    Speed = trailing.Speed * 0.82f,
+                    ElapsedTimeSeconds = trailing.ElapsedTimeSeconds + 0.20f,
+                    Lane = lane,
+                    LateralPosition = lateral,
+                };
+                changes[trailing.RiderId] = trailing;
+                events.Add(new SimulationStepEvent(
                     snapshot.Step.StepNumber,
+                    20,
                     trailing.RiderId,
-                    RandomChannel.ContactSeverity,
-                    leader.RiderId,
-                    trailing.Lane);
-
-                if (severitySample < crashChance)
-                {
-                    trailing = trailing with
-                    {
-                        Status = RiderRaceStatus.Crashed,
-                        Speed = 0f,
-                        Morale = Math.Clamp(trailing.Morale - 0.04f, 0f, 1f),
-                    };
-                    changes[trailing.RiderId] = trailing;
-                    events.Add(new SimulationStepEvent(
-                        snapshot.Step.StepNumber,
-                        20,
-                        trailing.RiderId,
-                        SimulationEventType.ContactCrash,
-                        $"LAP={snapshot.Step.LapIndex + 1} SEG={snapshot.Segment.Id} contact rider={trailing.RiderId} with={leader.RiderId} outcome=Crash",
-                        leader.RiderId));
-                }
-                else
-                {
-                    var lane = trailing.Lane;
-                    var lateral = trailing.LateralPosition;
-                    if (snapshot.Segment.Type != SegmentType.Straight && lane < LaneModel.MaxLane)
-                    {
-                        lane++;
-                        lateral = MathF.Min(lateral + 0.5f, lane);
-                    }
-
-                    trailing = trailing with
-                    {
-                        Speed = trailing.Speed * 0.82f,
-                        ElapsedTimeSeconds = trailing.ElapsedTimeSeconds + 0.20f,
-                        Lane = lane,
-                        LateralPosition = lateral,
-                    };
-                    changes[trailing.RiderId] = trailing;
-                    events.Add(new SimulationStepEvent(
-                        snapshot.Step.StepNumber,
-                        20,
-                        trailing.RiderId,
-                        SimulationEventType.ContactLostRhythm,
-                        $"LAP={snapshot.Step.LapIndex + 1} SEG={snapshot.Segment.Id} contact rider={trailing.RiderId} with={leader.RiderId} outcome=LostRhythm",
-                        leader.RiderId));
-                }
+                    SimulationEventType.ContactLostRhythm,
+                    $"LAP={snapshot.Step.LapIndex + 1} SEG={snapshot.Segment.Id} contact rider={trailing.RiderId} with={leader.RiderId} outcome=LostRhythm",
+                    leader.RiderId));
             }
         }
     }

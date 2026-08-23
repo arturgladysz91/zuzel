@@ -56,7 +56,7 @@ Every segment is processed as `CaptureSnapshot -> Decide -> Resolve -> Commit`. 
 - A decision model evaluates local lanes. Track reading controls observation quality; style controls preferences; occupied space is penalized. `AdaptiveDecisionModel` converts continuous lateral separation to meters with the concrete track's `LaneSpacingMeters`; its current `0.55 m` occupancy threshold is provisional and preserves default-track compatibility.
 - The movement distance evaluated by `AdaptiveDecisionModel` starts at continuous `LateralPosition`, while style still changes the preference cost of choosing a lane.
 - Lane evaluation uses projected route time (bend plus following straight), not raw maximum speed. This lets a clean outside route beat a worn inside route without making the outside universally superior.
-- Rider-to-rider contact depends on the time gap, segment, surface and control skills. Contact in `TurnMiddle` is more dangerous than on a straight. Contact grouping still uses discrete `Lane`; continuous lateral separation is not integrated into contact resolution in this stage.
+- Contact candidates are selected from post-`ResolveRider` `LateralPosition` using the concrete track's `LaneSpacingMeters` and a separate provisional `0.55 m` threshold. Riders are ordered by elapsed time and rider id; each trailing rider uses the nearest earlier rider within that lateral threshold, and the stable candidate list is fixed before contact effects. Longitudinal eligibility remains `0.12 s`. Contact probability and effects are not a complete collision model; surface and random discriminators still use the trailing rider's discrete `Lane`, while `ContactLostRhythm` retains its existing discrete outward push.
 
 ## Setup
 

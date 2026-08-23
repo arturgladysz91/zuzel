@@ -54,7 +54,9 @@ Zakres fizycznej szybkości bocznej `0.35–0.65 m/s` oraz mnożnik `0.65 + 0.35
 
 Ograniczenie przejściowe: `Lane` nadal steruje `SegmentPhysics`, dystansem i zużyciem. Promień, nawierzchnia i zużycie nie są jeszcze interpolowane według `LateralPosition`.
 
-Przy ocenie zajętej przestrzeni przez `AdaptiveDecisionModel` różnica `LateralPosition` jest przeliczana na metry przez `LaneSpacingMeters` konkretnego toru. Próg `0.55 m` jest wartością **PROVISIONAL**, zachowującą dotychczasowe zachowanie toru domyślnego, a nie ostatecznym wymiarem zawodnika lub motocykla. Kontakty nadal korzystają z dyskretnej `Lane`; ich przejście na ciągłą separację boczną pozostaje poza tym etapem.
+Przy ocenie zajętej przestrzeni przez `AdaptiveDecisionModel` różnica `LateralPosition` jest przeliczana na metry przez `LaneSpacingMeters` konkretnego toru. Próg occupancy `0.55 m` jest wartością **PROVISIONAL**, zachowującą dotychczasowe zachowanie toru domyślnego, a nie ostatecznym wymiarem zawodnika lub motocykla.
+
+Kandydaci do kontaktu są wybierani z pozycji bocznych po `ResolveRider` przez ten sam fizyczny przelicznik, lecz z osobnym progiem kontaktu `0.55 m` oznaczonym **PROVISIONAL** i gotowym do niezależnej kalibracji. Każdy trailing rider otrzymuje najwyżej jednego najbliższego wcześniejszego leadera, a pary są ustalane przed skutkami kontaktów. Eligibility podłużne nadal używa `0.12 s`; prawdopodobieństwo i skutki nie zostały przebudowane, surface oraz discriminatory RNG nadal pochodzą z dyskretnej `Lane` trailing ridera, a `ContactLostRhythm` zachowuje stare dyskretne wypchnięcie.
 
 ## Główna pętla gry — BINDING
 
