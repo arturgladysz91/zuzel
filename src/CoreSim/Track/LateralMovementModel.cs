@@ -126,6 +126,37 @@ public static class LateralMovementModel
         return next;
     }
 
+    /// <summary>
+    /// Applies an outward physical displacement and caps it at a supplied
+    /// continuous reference position within the track domain.
+    /// </summary>
+    public static float MoveOutwardByPhysicalDistance(
+        float currentLateralPosition,
+        float physicalDistanceMeters,
+        float maximumLateralPosition,
+        TrackGeometry geometry)
+    {
+        ArgumentNullException.ThrowIfNull(geometry);
+        ValidateLateralPosition(currentLateralPosition, nameof(currentLateralPosition));
+        ValidateLateralPosition(maximumLateralPosition, nameof(maximumLateralPosition));
+        if (!float.IsFinite(physicalDistanceMeters) || physicalDistanceMeters < 0f)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(physicalDistanceMeters),
+                physicalDistanceMeters,
+                "Physical distance must be finite and non-negative.");
+        }
+
+        if (maximumLateralPosition <= currentLateralPosition)
+            return currentLateralPosition;
+
+        var deltaLaneUnits = (double)physicalDistanceMeters / geometry.LaneSpacingMeters;
+        var next = (float)Math.Min(currentLateralPosition + deltaLaneUnits, maximumLateralPosition);
+        next = Math.Clamp(next, LaneModel.MinLane, LaneModel.MaxLane);
+        ValidateLateralPosition(next, "result");
+        return next;
+    }
+
     public static void ValidateLateralPosition(float lateralPosition, string parameterName)
     {
         if (!float.IsFinite(lateralPosition)

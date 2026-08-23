@@ -118,14 +118,87 @@ public sealed class ContactInteractionTests
         Assert.Equal(2, contacts[1].OtherRiderId);
     }
 
+    [Fact]
+    public void ContactLostRhythmUsesPhysicalMeters()
+    {
+        var oneMeterSpacing = Resolve(ContactRiders(), seed: 3, laneSpacingMeters: 1f);
+        var twoMeterSpacing = Resolve(ContactRiders(), seed: 3, laneSpacingMeters: 2f);
+
+        var oneMeterChange = LostRhythmChange(oneMeterSpacing);
+        var twoMeterChange = LostRhythmChange(twoMeterSpacing);
+        var oneMeterDeltaLaneUnits = oneMeterChange.LateralPosition - 2f;
+        var twoMeterDeltaLaneUnits = twoMeterChange.LateralPosition - 2f;
+
+        Assert.Equal(0.50f, oneMeterDeltaLaneUnits, 5);
+        Assert.Equal(0.25f, twoMeterDeltaLaneUnits, 5);
+        Assert.Equal(0.50f, oneMeterDeltaLaneUnits * 1f, 5);
+        Assert.Equal(0.50f, twoMeterDeltaLaneUnits * 2f, 5);
+    }
+
+    [Fact]
+    public void DefaultGeometryPreservesLostRhythmLateralEffect()
+    {
+        var resolved = Resolve(ContactRiders(), seed: 3, geometry: TrackGeometry.Default);
+
+        var change = LostRhythmChange(resolved);
+
+        Assert.Equal(3, change.Lane);
+        Assert.Equal(2.5f, change.LateralPosition, 5);
+    }
+
+    [Fact]
+    public void StraightContactLostRhythmDoesNotPushLaterally()
+    {
+        var resolved = Resolve(
+            ContactRiders(),
+            seed: 173,
+            segmentType: SegmentType.Straight,
+            geometry: TrackGeometry.Default);
+
+        var change = LostRhythmChange(resolved);
+
+        Assert.Equal(2, change.Lane);
+        Assert.Equal(2f, change.LateralPosition);
+    }
+
+    [Fact]
+    public void MaxLaneContactDoesNotLeaveTrack()
+    {
+        var resolved = Resolve(
+            ContactRiders(lane: LaneModel.MaxLane, lateralPosition: LaneModel.MaxLane),
+            seed: 4,
+            geometry: TrackGeometry.Default);
+
+        var change = LostRhythmChange(resolved);
+
+        Assert.Equal(LaneModel.MaxLane, change.Lane);
+        Assert.Equal(LaneModel.MaxLane, change.LateralPosition);
+        Assert.InRange(change.LateralPosition, LaneModel.MinLane, LaneModel.MaxLane);
+    }
+
+    [Fact]
+    public void ContactDisplacementIsIndependentOfRiderCollectionOrder()
+    {
+        var forward = Resolve(ContactRiders(), seed: 3);
+        var reversed = Resolve(ContactRiders().Reverse().ToArray(), seed: 3);
+
+        Assert.Equal(forward.Changes, reversed.Changes);
+        Assert.Equal(forward.Events, reversed.Events);
+        Assert.Equal(2.5f, LostRhythmChange(forward).LateralPosition, 5);
+        Assert.Equal(2.5f, LostRhythmChange(reversed).LateralPosition, 5);
+    }
+
     private static ResolvedSimulationStep Resolve(
         IReadOnlyList<RiderState> riders,
         int seed,
-        float laneSpacingMeters = 1f)
+        float laneSpacingMeters = 1f,
+        SegmentType segmentType = SegmentType.TurnMiddle,
+        TrackGeometry? geometry = null)
     {
+        geometry ??= new TrackGeometry(60f, 24f, laneSpacingMeters, 0.001f);
         var track = new Track(
-            new[] { new TrackSegment(0, SegmentType.TurnMiddle) },
-            new TrackGeometry(60f, 24f, laneSpacingMeters, 0.001f));
+            new[] { new TrackSegment(0, segmentType) },
+            geometry);
         var options = new HeatSimulationOptions
         {
             Laps = 1,
@@ -141,6 +214,20 @@ public sealed class ContactInteractionTests
             new SimulationStepContext(1, 0, 0, 0, seed, options.Laps));
 
         return engine.Resolve(snapshot, engine.Decide(snapshot), options);
+    }
+
+    private static RiderState[] ContactRiders(int lane = 2, float lateralPosition = 2f)
+        =>
+        [
+            Rider(1, lane, lateralPosition),
+            Rider(2, lane, lateralPosition),
+        ];
+
+    private static RiderStateChange LostRhythmChange(ResolvedSimulationStep resolved)
+    {
+        var contact = Assert.Single(ContactEvents(resolved));
+        Assert.Equal(SimulationEventType.ContactLostRhythm, contact.Type);
+        return Assert.Single(resolved.Changes.Where(change => change.RiderId == 2));
     }
 
     private static RiderState Rider(

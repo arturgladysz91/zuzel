@@ -74,6 +74,11 @@ public sealed class ResolvedSimulationStep
 /// </summary>
 public sealed class SimulationEngine
 {
+    /// <summary>
+    /// Provisional physical outward displacement after a non-crashing contact.
+    /// </summary>
+    public const float ProvisionalLostRhythmOutwardDisplacementMeters = 0.50f;
+
     private readonly IRiderDecisionModel _decisionModel;
 
     public SimulationEngine(IRiderDecisionModel decisionModel)
@@ -435,7 +440,11 @@ public sealed class SimulationEngine
                 if (snapshot.Segment.Type != SegmentType.Straight && lane < LaneModel.MaxLane)
                 {
                     lane++;
-                    lateral = MathF.Min(lateral + 0.5f, lane);
+                    lateral = LateralMovementModel.MoveOutwardByPhysicalDistance(
+                        lateral,
+                        ProvisionalLostRhythmOutwardDisplacementMeters,
+                        lane,
+                        snapshot.Track.Geometry);
                 }
 
                 trailing = trailing with

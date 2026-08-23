@@ -61,6 +61,55 @@ public sealed class LateralMovementModelTests
         Assert.Equal(2f, result);
     }
 
+    [Theory]
+    [InlineData(1.0f, 0.50f)]
+    [InlineData(2.0f, 0.25f)]
+    [InlineData(0.5f, 1.00f)]
+    public void PhysicalOutwardMovementUsesMeters(
+        float laneSpacingMeters,
+        float expectedDeltaLaneUnits)
+    {
+        const float currentLateralPosition = 1f;
+        const float physicalDistanceMeters = 0.50f;
+        var result = LateralMovementModel.MoveOutwardByPhysicalDistance(
+            currentLateralPosition,
+            physicalDistanceMeters,
+            maximumLateralPosition: 3f,
+            Geometry(laneSpacingMeters));
+
+        var deltaLaneUnits = result - currentLateralPosition;
+
+        Assert.Equal(expectedDeltaLaneUnits, deltaLaneUnits, 5);
+        Assert.Equal(physicalDistanceMeters, deltaLaneUnits * laneSpacingMeters, 5);
+    }
+
+    [Fact]
+    public void PhysicalOutwardMovementDoesNotOvershootReference()
+    {
+        var result = LateralMovementModel.MoveOutwardByPhysicalDistance(
+            currentLateralPosition: 2.8f,
+            physicalDistanceMeters: 0.50f,
+            maximumLateralPosition: 3f,
+            Geometry(laneSpacingMeters: 1f));
+
+        Assert.Equal(3f, result);
+    }
+
+    [Theory]
+    [InlineData(2.0f)]
+    [InlineData(2.8f)]
+    public void PhysicalOutwardMovementNeverMovesInwardWhenReferenceIsBehindCurrent(
+        float maximumLateralPosition)
+    {
+        var result = LateralMovementModel.MoveOutwardByPhysicalDistance(
+            currentLateralPosition: 2.8f,
+            physicalDistanceMeters: 0.50f,
+            maximumLateralPosition,
+            Geometry(laneSpacingMeters: 1f));
+
+        Assert.Equal(2.8f, result);
+    }
+
     [Fact]
     public void MoveTowardsIsSymmetricInwardAndOutward()
     {
