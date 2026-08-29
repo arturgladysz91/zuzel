@@ -32,7 +32,23 @@ public static class LaneModel
     {
         ArgumentNullException.ThrowIfNull(geometry);
         ValidateLane(lane);
-        return geometry.InnerRadiusMeters + lane * geometry.LaneSpacingMeters;
+        return TurnArcRadiusMeters((float)lane, geometry);
+    }
+
+    public static float TurnArcRadiusMeters(float lateralPosition, TrackGeometry geometry)
+    {
+        ArgumentNullException.ThrowIfNull(geometry);
+        if (!float.IsFinite(lateralPosition)
+            || lateralPosition < MinLane
+            || lateralPosition > MaxLane)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(lateralPosition),
+                lateralPosition,
+                "Lateral position must be finite and between 0 and 4 inclusive.");
+        }
+
+        return geometry.InnerRadiusMeters + lateralPosition * geometry.LaneSpacingMeters;
     }
 
     public static float TurnArcLengthMeters(int lane)

@@ -16,7 +16,7 @@
 5. Every segment has four explicit phases:
    - `CaptureSnapshot` copies every rider and every surface cell into a detached immutable view and preserves the track's immutable geometry.
    - `Decide` gives every active rider the same snapshot; legacy decision models receive a mutable clone, never the source state.
-   - `Resolve` passes the snapshot's `TrackGeometry` through `SegmentPhysicsContext`, calculates the exact current-segment travel time, delegates continuous movement to `LateralMovementModel`, and resolves existing incidents and stable events without changing live riders or the track.
+   - `Resolve` passes the snapshot's `TrackGeometry` and the rider's entry `LateralPosition` through `SegmentPhysicsContext`, calculates the exact current-segment travel time, delegates continuous movement to `LateralMovementModel`, and resolves existing incidents and stable events without changing live riders or the track.
    - `Commit` applies all rider changes, then stable logs and surface wear in rider-id order.
 6. `RiderPosition.TotalSegmentProgress` is the canonical topological position. Lap, segment index and progress in the segment are derived from it; physical distance is advanced atomically with it.
    `LastResolvedSegmentId` (also exposed through the compatibility alias `CurrentSegmentId`) is observational metadata containing the real `TrackSegment.Id` committed for the previous step. It is not used by classification, physics or track occupancy.
@@ -29,7 +29,7 @@ Race randomness is stateless and addressed by seed, heat id, step number, rider 
 
 `LateralSpaceModel` is the shared conversion boundary from continuous lane-unit positions to physical separation in meters. `AdaptiveDecisionModel` uses it with the concrete track geometry for occupancy. Contact candidate selection uses the same conversion on post-`ResolveRider` positions, with a separate provisional `0.55 m` threshold; candidates are fixed before any contact effects. Contact probability remains unchanged, and contact surface plus random discriminators still use the trailing rider's discrete `Lane`. For `ContactLostRhythm`, `LateralMovementModel` owns conversion of the provisional `0.50 m` outward displacement into lane units. The existing discrete outward `Lane` step remains the maximum reference for that continuous displacement; straight segments and riders already on lane 4 receive no outward push. This is not a final motorcycle contact-response model.
 
-This is a transitional split: `Lane` remains the discrete input for segment physics, distance and surface wear, while `LateralPosition` records continuous execution. Interpolation of radius, surface and wear between neighboring lanes belongs to a later stage.
+This is a transitional split: advanced corner-speed physics derives its radius from the snapshot's entry `LateralPosition` as `InnerRadiusMeters + LateralPosition * LaneSpacingMeters`, then preserves square-root speed scaling. Integer positions exactly match the existing reference-lane radii. Surface still comes from discrete `PlannedLane`, travelled distance from discrete resolved `Lane`, and wear remains discrete. Run-wide resolution also remains lane-based. Radius is not averaged or updated during one segment; surface and wear interpolation belong to later stages.
 
 `BalanceAnalyzer` is an offline diagnostic. It rotates the same four profiles through all four starting gates over a large deterministic batch. Detailed logging is disabled for these batches, while track evolution and race rules remain active.
 
@@ -41,6 +41,6 @@ Compatibility is intentionally limited to `HeatSimulator.Simulate`, `SegmentPhys
 
 The original `Track(segments)` constructor and geometry-free `LaneModel` overloads remain available. They use the example-compatible `TrackGeometry.Default`; new simulation paths pass the geometry of the concrete track explicitly.
 
-The canonical corner-speed path derives its base limit from the concrete lane radius and carries no morale argument. Morale remains in `SegmentPhysicsContext` only for the existing incident-risk calculation. The legacy `SegmentPhysics.Apply(segment, lane, speed)` and geometry-free speed overloads retain their signatures and use `TrackGeometry.Default`; the legacy heat path also keeps immediate alignment of `LateralPosition` with the resolved lane.
+The canonical corner-speed path derives its base limit from a continuous lateral radius and carries no morale argument. Integer overloads delegate to the same calculation and retain exactly the reference-lane results. Morale remains in `SegmentPhysicsContext` only for the existing incident-risk calculation. The legacy `SegmentPhysics.Apply(segment, lane, speed)` and geometry-free speed overloads retain their signatures and use `TrackGeometry.Default`; the legacy heat path also keeps immediate alignment of `LateralPosition` with the resolved lane.
 
 `RiderDecisionContext.Rider`, `Riders` and `TrackState` now expose immutable snapshot types. Code compiled against their former mutable types is not source-compatible and should migrate to the snapshot API. New gameplay code should use `SimulateHeat` and `SegmentPhysicsContext`.

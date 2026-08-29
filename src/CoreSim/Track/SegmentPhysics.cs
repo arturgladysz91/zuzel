@@ -25,7 +25,8 @@ public sealed record SegmentPhysicsContext(
     RiderSkills Skills,
     float Morale,
     BikeSetup Setup,
-    float DecisionRisk = 0f)
+    float DecisionRisk = 0f,
+    float? LateralPosition = null)
 {
     /// <summary>Compatibility constructor using the example-track geometry.</summary>
     public SegmentPhysicsContext(
@@ -36,7 +37,8 @@ public sealed record SegmentPhysicsContext(
         RiderSkills Skills,
         float Morale,
         BikeSetup Setup,
-        float DecisionRisk = 0f)
+        float DecisionRisk = 0f,
+        float? LateralPosition = null)
         : this(
             Segment,
             Lane,
@@ -46,7 +48,8 @@ public sealed record SegmentPhysicsContext(
             Skills,
             Morale,
             Setup,
-            DecisionRisk)
+            DecisionRisk,
+            LateralPosition)
     {
     }
 }
@@ -70,8 +73,15 @@ public static class SegmentPhysics
 
     public static float MaxSafeTurnSpeed(int lane, TrackGeometry geometry)
     {
+        ArgumentNullException.ThrowIfNull(geometry);
+        LaneModel.ValidateLane(lane);
+        return MaxSafeTurnSpeed((float)lane, geometry);
+    }
+
+    public static float MaxSafeTurnSpeed(float lateralPosition, TrackGeometry geometry)
+    {
         // This is a curvature-based constraint, not a motorcycle dynamics model.
-        var radiusMeters = LaneModel.TurnArcRadiusMeters(lane, geometry);
+        var radiusMeters = LaneModel.TurnArcRadiusMeters(lateralPosition, geometry);
         return ReferenceTurnSpeedMetersPerSecond
             * MathF.Sqrt(radiusMeters / ReferenceTurnRadiusMeters);
     }
@@ -85,8 +95,22 @@ public static class SegmentPhysics
     {
         ArgumentNullException.ThrowIfNull(skills);
         ArgumentNullException.ThrowIfNull(setup);
+        ArgumentNullException.ThrowIfNull(geometry);
+        LaneModel.ValidateLane(lane);
+        return MaxSafeTurnSpeed((float)lane, geometry, surface, skills, setup);
+    }
 
-        var geometrySpeedMetersPerSecond = MaxSafeTurnSpeed(lane, geometry);
+    public static float MaxSafeTurnSpeed(
+        float lateralPosition,
+        TrackGeometry geometry,
+        TrackSurfaceState surface,
+        RiderSkills skills,
+        BikeSetup setup)
+    {
+        ArgumentNullException.ThrowIfNull(skills);
+        ArgumentNullException.ThrowIfNull(setup);
+
+        var geometrySpeedMetersPerSecond = MaxSafeTurnSpeed(lateralPosition, geometry);
         var control = RiderSkills.Normalize(skills.SlideControl);
         var speedAbility = RiderSkills.Normalize(skills.Speed);
         var controlMultiplier = 0.97f + control * 0.06f;
@@ -160,7 +184,7 @@ public static class SegmentPhysics
 
         var control = RiderSkills.Normalize(context.Skills.SlideControl);
         var max = MaxSafeTurnSpeed(
-            context.Lane,
+            context.LateralPosition ?? (float)context.Lane,
             context.Geometry,
             context.Surface,
             context.Skills,

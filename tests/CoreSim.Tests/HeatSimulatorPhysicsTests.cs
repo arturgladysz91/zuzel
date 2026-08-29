@@ -126,7 +126,7 @@ public sealed class HeatSimulatorPhysicsTests
         var plannedWideRider = RiderState.CreateDefault(20, lane: 1);
         var forcedRunWideRider = RiderState.CreateDefault(30, lane: 1);
         var maxSafeSpeed = SegmentPhysics.MaxSafeTurnSpeed(
-            2,
+            plannedWideRider.LateralPosition,
             track.Geometry,
             surface,
             plannedWideRider.Profile.Skills,

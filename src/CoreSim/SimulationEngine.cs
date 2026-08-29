@@ -277,7 +277,8 @@ public sealed class SimulationEngine
                 Skills: rider.Profile.Skills,
                 Morale: rider.Morale,
                 Setup: rider.ActiveSetup,
-                DecisionRisk: decision.Risk));
+                DecisionRisk: decision.Risk,
+                LateralPosition: rider.LateralPosition));
 
         if (!snapshot.Step.UseLegacyPhysics)
             resolution = ResolveRandomIncident(snapshot, rider, plannedLane, resolution, options);
@@ -481,7 +482,7 @@ public sealed class SimulationEngine
             return SegmentPhysics.MaxSafeTurnSpeed(lane) * 0.95f;
 
         var safeSpeed = SegmentPhysics.MaxSafeTurnSpeed(
-            lane,
+            rider.LateralPosition,
             snapshot.Track.Geometry,
             surface,
             rider.Profile.Skills,
