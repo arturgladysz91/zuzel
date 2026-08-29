@@ -70,7 +70,6 @@ public static class LaneModel
     public static float SegmentLengthMeters(TrackSegment segment, int lane, TrackGeometry geometry)
     {
         ArgumentNullException.ThrowIfNull(geometry);
-        ValidateLane(lane);
         return SegmentLengthMeters(segment, (float)lane, geometry);
     }
 

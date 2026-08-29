@@ -82,6 +82,19 @@ public sealed class ContinuousTurnDistanceTests
     }
 
     [Theory]
+    [InlineData(-1)]
+    [InlineData(5)]
+    public void LegacyIntegerStraightSegmentLengthStillIgnoresLane(int lane)
+    {
+        var segment = new TrackSegment(0, SegmentType.Straight);
+        var geometry = new TrackGeometry(57f, 24f, 1.2f, 0.9f);
+
+        var length = LaneModel.SegmentLengthMeters(segment, lane, geometry);
+
+        Assert.Equal(geometry.StraightLengthMeters, length);
+    }
+
+    [Theory]
     [InlineData(0)]
     [InlineData(1)]
     [InlineData(2)]
