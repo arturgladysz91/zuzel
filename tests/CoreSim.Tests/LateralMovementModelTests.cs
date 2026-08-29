@@ -280,7 +280,10 @@ public sealed class LateralMovementModelTests
 
         var resolved = engine.Resolve(snapshot, engine.Decide(snapshot), options);
         var change = Assert.Single(resolved.Changes);
-        var travelledMeters = LaneModel.SegmentLengthMeters(track.Segments[0], change.Lane, track.Geometry);
+        var travelledMeters = LaneModel.SegmentLengthMeters(
+            track.Segments[0],
+            rider.LateralPosition,
+            track.Geometry);
         var averageSpeedMetersPerSecond = (change.EntrySpeed + change.Speed) * 0.5f;
         var segmentTravelTimeSeconds = travelledMeters / averageSpeedMetersPerSecond;
         var expectedLateralPosition = LateralMovementModel.MoveTowards(

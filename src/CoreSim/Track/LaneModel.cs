@@ -55,17 +55,34 @@ public static class LaneModel
         => TurnArcLengthMeters(lane, TrackGeometry.Default);
 
     public static float TurnArcLengthMeters(int lane, TrackGeometry geometry)
-        => TurnArcRadiusMeters(lane, geometry) * geometry.TurnSegmentAngleRadians;
+    {
+        ArgumentNullException.ThrowIfNull(geometry);
+        ValidateLane(lane);
+        return TurnArcLengthMeters((float)lane, geometry);
+    }
+
+    public static float TurnArcLengthMeters(float lateralPosition, TrackGeometry geometry)
+        => TurnArcRadiusMeters(lateralPosition, geometry) * geometry.TurnSegmentAngleRadians;
 
     public static float SegmentLengthMeters(TrackSegment segment, int lane)
         => SegmentLengthMeters(segment, lane, TrackGeometry.Default);
 
     public static float SegmentLengthMeters(TrackSegment segment, int lane, TrackGeometry geometry)
     {
+        ArgumentNullException.ThrowIfNull(geometry);
+        ValidateLane(lane);
+        return SegmentLengthMeters(segment, (float)lane, geometry);
+    }
+
+    public static float SegmentLengthMeters(
+        TrackSegment segment,
+        float lateralPosition,
+        TrackGeometry geometry)
+    {
         ArgumentNullException.ThrowIfNull(segment);
         ArgumentNullException.ThrowIfNull(geometry);
         return segment.Type == SegmentType.Straight
             ? geometry.StraightLengthMeters
-            : TurnArcLengthMeters(lane, geometry);
+            : TurnArcLengthMeters(lateralPosition, geometry);
     }
 }
