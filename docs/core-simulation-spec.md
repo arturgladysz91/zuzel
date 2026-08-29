@@ -26,7 +26,7 @@ Every segment is processed as `CaptureSnapshot -> Decide -> Resolve -> Commit`. 
 
 ## Physical constraints
 
-- The base curvature constraint for a turn uses the concrete line radius `R = LaneModel.TurnArcRadiusMeters(lane, geometry)` and `v_geometry = 16 m/s * sqrt(R / 24 m)`. The 24 m radius and 16 m/s speed normalize the example track; a larger radius raises the limit by the square root of the radius ratio rather than by a linear bonus for the lane number.
+- In advanced physics, the base curvature constraint for a turn uses the rider's actual entry position from the immutable snapshot: `R = InnerRadiusMeters + LateralPosition * LaneSpacingMeters`, followed by `v_geometry = 16 m/s * sqrt(R / 24 m)`. Integer `LateralPosition` values `0..4` exactly match the existing reference-lane radii and safe speeds. The 24 m radius and 16 m/s speed normalize the example track; a larger radius raises the limit by the square root of the radius ratio rather than by interpolating ready-made speeds.
 - `TurnSegmentAngleRadians` changes path distance and time spent in a turn segment, but it does not change the radius-derived speed boundary. Surface, relevant control skill and setup fit modify that boundary. Morale does not; it may affect a later decision, accepted risk and quality of execution.
 - This curvature-based boundary is a simulation constraint, not a complete motorcycle dynamics or cornering model.
 - Deliberately choosing a wide line is a planned trajectory and can be advantageous for surface, passing or corner-exit reasons. It changes `PlannedLane`; when the physical constraint is satisfied, `Outcome` may remain `Ok` and the final `Lane` equals `PlannedLane`. `RunWide` is an unplanned or forced outward consequence of excessive speed, an error or contact; the two concepts must not be conflated.
@@ -46,7 +46,7 @@ Every segment is processed as `CaptureSnapshot -> Decide -> Resolve -> Commit`. 
 - In advanced physics, `PlannedLane` is the nearest not-yet-executed reference lane from `LateralPosition` toward `TargetLane`. Reaching that reference uses `LaneArrivalToleranceMeters = 0.05 m`; only then may planning advance to the next reference. A discrete `Lane` placed farther away by an earlier `RunWide` cannot skip an unreached reference, and a decision reversing direction begins immediately from the actual lateral position.
 - A `RunWide` therefore aims continuous movement at its forced resolved lane while retaining the existing outcome, speed thresholds and overspeed-retention rules. Legacy physics remains compatible and may set `LateralPosition` directly to the resolved lane.
 - `LaneChangeTendency` remains a style preference used by decisions and route cost. It does not change physical lateral speed; neither does morale.
-- Transitional limitation: discrete `Lane` continues to select `SegmentPhysics`, distance and surface wear. Radius, surface and wear are not interpolated from `LateralPosition` in this stage.
+- Transitional limitation: only the advanced curvature limit uses entry `LateralPosition`. Surface still comes from discrete `PlannedLane`, travelled distance from discrete resolved `Lane`, surface wear remains discrete, and `RunWide` still resolves as the existing discrete `Lane + 1` operation including the lane-4 rule. The radius is fixed from segment-entry position for the current constraint; it is not varied during the segment or coupled iteratively to `MoveTowards` and travel time.
 
 ## Riders and decisions
 
