@@ -44,6 +44,16 @@ Every segment is processed as `CaptureSnapshot -> Decide -> Resolve -> Commit`. 
 - A rider cannot run wider than lane 4; an unresolved high-speed run-wide there becomes a crash.
 - A straight preserves speed. It cannot create a passing advantage by itself; it only carries an advantage created at corner exit and positions riders for the next turn.
 
+## Longitudinal movement
+
+- `SegmentPhysics` remains the physical constraint and outcome resolver, not a complete longitudinal dynamics model. `RiderStateChange.PhysicsSpeed` is its post-resolution speed; final `Speed` may differ only through a later explicitly eligible consequence.
+- Advanced `TurnExit` has a first distance-limited positive-drive phase after the existing current-segment `travelled` distance is known. For `Outcome` equal to `Ok` or `Brake`, positive physics speed and positive distance, it uses `v_out² = v_physics² + 2 * acceleration * travelledMeters`. A wider physical entry position can therefore create more speed only through its longer geometric path, never through a lane bonus.
+- Turn-exit acceleration is `baseAcceleration * gearingDriveMultiplier * surfaceDriveMultiplier`. Base acceleration interpolates from provisional `0.60 m/s²` to `1.40 m/s²` using normalized `Speed`. Gearing interpolates from provisional `1.10` at `Gearing = 0` through `1.00` at `0.5` to `0.90` at `1`. Surface drive is provisional `0.75 + 0.25 * entrySampledSurface.EffectiveGrip`.
+- The distance and physical surface both use the immutable segment-entry `LateralPosition`; the surface is not resampled after lateral movement. Morale, style, `SlideControl`, other skills and RNG do not modify positive longitudinal acceleration.
+- `Brake` may recover speed after the constraint without splitting the segment into separate braking and drive phases. `RunWide` receives no positive drive in that segment, and `Crash` remains at zero speed with its existing partial-distance semantics. `TurnEntry`, `TurnMiddle`, `Straight` and all legacy physics preserve their post-resolution speed.
+- The current parameters are provisional first-model values, not final motorcycle data. Straight acceleration, distance-limited braking and braking points, lookahead, top speed, drag, power curves, wheelspin, clutch/start dynamics and finish-aware optimization are not implemented.
+- Travel time retains `averageSpeed = max(1 m/s, (entrySpeed + finalSpeed) / 2)` and `segmentTravelTimeSeconds = travelled / averageSpeed`; no second physical resolution is run after positive drive.
+
 ## Lateral movement
 
 - Advanced physics executes continuous lateral movement from the exact time added for the current segment: `segmentTravelTimeSeconds = travelledMeters / averageSpeedMetersPerSecond`. A rider's cumulative elapsed time is never used as a movement duration.

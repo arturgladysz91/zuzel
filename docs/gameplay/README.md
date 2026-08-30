@@ -44,7 +44,15 @@ Ograniczenie prędkości łuku wykorzystuje statyczną geometrię konkretnego to
 
 `RunWide` oznacza wymuszoną korektę po przekroczeniu ograniczenia albo błędzie. Końcowa `Lane` wypada szerzej niż `PlannedLane`, więc zawodnik pokonuje dłuższą drogę. W ścieżce wywołanej przekroczeniem prędkości zachowuje tylko część nadwyżki ponad indywidualne `MaxSafeTurnSpeed`: w fizyce zaawansowanej lepsze `SlideControl` pozwala zachować większą część tej nadwyżki, ale nigdy całość, a legacy używa neutralnej retencji. Losowe incydenty zachowują osobne dotychczasowe rozstrzygnięcie.
 
-Model nie dodaje `ControlledWide` i nie zmienia progów `Brake`, `RunWide` i `Crash`, zachowania na Lane 4, losowych incydentów ani `ApplyExitDrive`. Pozostaje ograniczeniem opartym na krzywiźnie, a nie pełną fizyką motocykla.
+Model nie dodaje `ControlledWide` i nie zmienia progów `Brake`, `RunWide` i `Crash`, zachowania na Lane 4 ani losowych incydentów. Pozostaje ograniczeniem opartym na krzywiźnie, a nie pełną fizyką motocykla.
+
+### Distance-limited drive na wyjściu — PROVISIONAL
+
+`SegmentPhysics` nadal rozstrzyga ograniczenie i outcome; nie jest pełnym modelem dynamiki motocykla. Po tym rozstrzygnięciu advanced `TurnExit` może wykonać pierwszy deterministyczny krok longitudinal drive dla `Ok` albo `Brake`: `v_out² = v_physics² + 2 * a * s`, gdzie `s` jest rzeczywistym dystansem przejechanym w bieżącym segmencie, wyliczonym z wejściowego `LateralPosition`.
+
+Przyspieszenie zależy wyłącznie od `Speed` ability, corner-drive trade-off `Gearing` oraz `EffectiveGrip` nawierzchni próbkowanej wcześniej z tej samej pozycji wejściowej. Bazowy zakres `0.60–1.40 m/s²`, mnożnik gearing `1.10–0.90` i mnożnik nawierzchni `0.75 + 0.25 * EffectiveGrip` są wartościami **PROVISIONAL**, a nie finalnymi danymi motocykla. Morale, style, `SlideControl` i pozostałe umiejętności nie zmieniają tego fizycznego przyspieszenia.
+
+`RunWide` nie otrzymuje positive drive w tym samym segmencie, a `Crash` pozostaje z prędkością zero. `TurnEntry`, `TurnMiddle`, legacy oraz `Straight` nie dostają nowej akceleracji. Model nie zawiera jeszcze distance-limited braking, punktu hamowania, lookahead, top speed, drag, power curve, wheelspin, clutch/start dynamics ani optymalizacji zależnej od mety; są to późniejsze etapy pełnego modelu longitudinal.
 
 ### Czasowa zmiana linii — BINDING
 
