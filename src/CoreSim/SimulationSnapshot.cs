@@ -84,6 +84,32 @@ public sealed class TrackStateSnapshot
         return _surfaces[Offset(segmentIndex, lineIndex)];
     }
 
+    public TrackSurfaceState SampleSurface(int segmentIndex, float lateralPosition)
+    {
+        if (!float.IsFinite(lateralPosition)
+            || lateralPosition < 0f
+            || lateralPosition > LinesCount - 1)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(lateralPosition),
+                lateralPosition,
+                $"Lateral position must be finite and between 0 and {LinesCount - 1} inclusive.");
+        }
+
+        var innerLane = (int)MathF.Floor(lateralPosition);
+        var outerLane = (int)MathF.Ceiling(lateralPosition);
+        var inner = GetSurface(segmentIndex, innerLane);
+        if (innerLane == outerLane)
+            return inner;
+
+        var outer = GetSurface(segmentIndex, outerLane);
+        var fraction = lateralPosition - innerLane;
+        return new TrackSurfaceState(
+            inner.Grip + (outer.Grip - inner.Grip) * fraction,
+            inner.Ruts + (outer.Ruts - inner.Ruts) * fraction,
+            inner.Moisture + (outer.Moisture - inner.Moisture) * fraction);
+    }
+
     private int Offset(int segmentIndex, int lineIndex) => segmentIndex * LinesCount + lineIndex;
 
     private void ValidateIndices(int segmentIndex, int lineIndex)
