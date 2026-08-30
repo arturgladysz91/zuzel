@@ -74,6 +74,8 @@ public sealed class ResolvedSimulationStep
 /// </summary>
 public sealed class SimulationEngine
 {
+    private const float AdvancedAdjacentSurfaceWearFraction = 0.20f;
+
     /// <summary>
     /// Provisional physical outward displacement after a non-crashing contact.
     /// </summary>
@@ -209,7 +211,11 @@ public sealed class SimulationEngine
             if (resolved.Snapshot.Step.UseLegacyPhysics)
                 ApplyLegacySurfaceWear(resolved.Snapshot, trackState, change.Lane, log);
             else
-                ApplyAdvancedSurfaceWear(resolved.Snapshot, trackState, change.Lane, log);
+                ApplyAdvancedSurfaceWear(
+                    resolved.Snapshot,
+                    trackState,
+                    resolved.Snapshot.Rider(change.RiderId).LateralPosition,
+                    log);
         }
     }
 
@@ -586,37 +592,51 @@ public sealed class SimulationEngine
     private static void ApplyAdvancedSurfaceWear(
         SimulationSnapshot snapshot,
         TrackState trackState,
-        int lane,
+        float lateralPosition,
         SimLog log)
     {
+        LateralMovementModel.ValidateLateralPosition(lateralPosition, nameof(lateralPosition));
+
         var rutsDelta = snapshot.Segment.Type == SegmentType.Straight ? 0.004f : 0.015f;
         var gripDelta = -0.25f * rutsDelta;
-        trackState.ApplySurfaceDelta(
-            snapshot.Step.SegmentIndex,
-            lane,
-            gripDelta,
-            rutsDelta,
-            0f,
-            "pass",
-            snapshot.Step.HeatId,
-            snapshot.Step.StepNumber,
-            log);
+        var innerLane = (int)MathF.Floor(lateralPosition);
+        var outerLane = (int)MathF.Ceiling(lateralPosition);
+        var outerWeight = lateralPosition - innerLane;
+        var wearWeights = new float[LaneModel.LanesCount];
 
-        foreach (var adjacentLane in new[] { lane - 1, lane + 1 })
+        AddAdvancedSurfaceWearKernel(wearWeights, innerLane, 1f - outerWeight);
+        if (outerLane != innerLane)
+            AddAdvancedSurfaceWearKernel(wearWeights, outerLane, outerWeight);
+
+        for (var lane = LaneModel.MinLane; lane <= LaneModel.MaxLane; lane++)
         {
-            if (adjacentLane < LaneModel.MinLane || adjacentLane > LaneModel.MaxLane)
+            var wearWeight = wearWeights[lane];
+            if (wearWeight <= 0f)
                 continue;
+
+            var reason = innerLane == outerLane
+                ? lane == innerLane ? "pass" : "pass-adjacent"
+                : "pass-continuous";
             trackState.ApplySurfaceDelta(
                 snapshot.Step.SegmentIndex,
-                adjacentLane,
-                gripDelta * 0.20f,
-                rutsDelta * 0.20f,
+                lane,
+                gripDelta * wearWeight,
+                rutsDelta * wearWeight,
                 0f,
-                "pass-adjacent",
+                reason,
                 snapshot.Step.HeatId,
                 snapshot.Step.StepNumber,
                 log);
         }
+    }
+
+    private static void AddAdvancedSurfaceWearKernel(float[] wearWeights, int centerLane, float weight)
+    {
+        wearWeights[centerLane] += weight;
+        if (centerLane > LaneModel.MinLane)
+            wearWeights[centerLane - 1] += weight * AdvancedAdjacentSurfaceWearFraction;
+        if (centerLane < LaneModel.MaxLane)
+            wearWeights[centerLane + 1] += weight * AdvancedAdjacentSurfaceWearFraction;
     }
 
     private static string FormatSegmentLog(SimulationSnapshot snapshot, RiderStateChange change)
