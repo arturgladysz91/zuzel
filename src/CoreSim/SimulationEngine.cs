@@ -291,9 +291,6 @@ public sealed class SimulationEngine
         if (!snapshot.Step.UseLegacyPhysics)
             resolution = ResolveRandomIncident(snapshot, rider, plannedLane, resolution, options);
 
-        var speed = snapshot.Step.UseLegacyPhysics
-            ? resolution.Speed
-            : ApplyExitDrive(snapshot.Segment, resolution.Speed, rider);
         var risk = snapshot.Step.UseLegacyPhysics
             ? ApplySurfaceRisk(snapshot, resolution.Lane, decision.Risk)
             : resolution.IncidentRisk;
@@ -312,6 +309,24 @@ public sealed class SimulationEngine
                 rider.LateralPosition,
                 snapshot.Track.Geometry);
         var travelled = segmentLength * canonicalAdvance;
+        var speed = resolution.Speed;
+        if (!snapshot.Step.UseLegacyPhysics
+            && snapshot.Segment.Type == SegmentType.TurnExit
+            && resolution.Outcome is SegmentOutcome.Ok or SegmentOutcome.Brake
+            && resolution.Speed > 0f
+            && travelled > 0f)
+        {
+            var turnExitAcceleration = LongitudinalDynamics
+                .CalculateTurnExitAccelerationMetersPerSecondSquared(
+                    rider.Profile.Skills,
+                    rider.ActiveSetup,
+                    surface);
+            speed = LongitudinalDynamics.AccelerateOverDistance(
+                resolution.Speed,
+                turnExitAcceleration,
+                travelled);
+        }
+
         var averageSpeed = MathF.Max(1f, (entrySpeed + MathF.Max(speed, 0f)) * 0.5f);
         var segmentTravelTimeSeconds = travelled / averageSpeed;
         var elapsedTime = rider.ElapsedTimeSeconds + segmentTravelTimeSeconds;
@@ -546,16 +561,6 @@ public sealed class SimulationEngine
             Lane = Math.Min(plannedLane + 1, LaneModel.MaxLane),
             Speed = resolution.Speed * 0.88f,
         };
-    }
-
-    private static float ApplyExitDrive(TrackSegment segment, float speed, RiderSnapshot rider)
-    {
-        if (speed <= 0f || segment.Type != SegmentType.TurnExit)
-            return speed;
-
-        var speedSkill = RiderSkills.Normalize(rider.Profile.Skills.Speed);
-        var gearingTradeOff = (rider.ActiveSetup.Gearing - 0.5f) * 0.03f;
-        return speed * (0.965f + speedSkill * 0.07f + gearingTradeOff);
     }
 
     private static float ApplySurfaceRisk(SimulationSnapshot snapshot, int lane, float baseRisk)
