@@ -132,10 +132,16 @@ Prosta ma 5 linii, ponieważ:
 Linie na prostej **nie dają bonusu do prędkości**.
 
 #### 2.3 Wyprzedzanie na prostej
-Wyprzedzanie na prostej jest możliwe **wyłącznie** jako konsekwencja:
-> lepszego wyjścia z poprzedniego łuku (wyższa prędkość wejścia na prostą).
+Prosta nie dodaje osobnego outcome ataku ani arbitralnego bonusu linii.
+Różnica może wynikać z lepszego wyjścia z poprzedniego łuku oraz fizycznego
+profilu prędkości przejazdu; istniejące reguły kontaktu i interakcji pozostają
+bez zmian.
 
-Prosta przenosi przewagę, ale jej nie generuje.
+Legacy zachowuje na prostej prędkość. Advanced physics używa pierwszego
+distance-limited profilu longitudinal: zawodnik może przyspieszyć, a przed
+bezpośrednio następującym łukiem kontrolowanie wytracić prędkość. Linie prostej
+nadal nie dają arbitralnego bonusu; różnica wynika z umiejętności, wejściowej
+nawierzchni, dostępnego dystansu i potrzeby przygotowania do następnego łuku.
 
 ---
 

@@ -235,11 +235,21 @@ public sealed class ContinuousSurfaceSamplingTests
         var sampledSurface = state.Snapshot().SampleSurface(0, entryPosition);
 
         var change = ResolveSingle(segment, geometry, state, rider, targetLane: 2);
-        var segmentTravelTime = geometry.StraightLengthMeters / entrySpeed;
+        var acceleration = LongitudinalDynamics.CalculateStraightAccelerationMetersPerSecondSquared(
+            rider.Profile.Skills,
+            sampledSurface);
+        var deceleration = LongitudinalDynamics.CalculateCornerEntryDecelerationMetersPerSecondSquared(
+            rider.Profile.Skills,
+            sampledSurface);
+        var profile = LongitudinalDynamics.CalculateStraightSpeedProfile(
+            entrySpeed,
+            acceleration,
+            deceleration,
+            geometry.StraightLengthMeters);
         var expected = LateralMovementModel.MoveTowards(
             entryPosition,
             resolvedLane: 2,
-            segmentTravelTime,
+            profile.TravelTimeSeconds,
             geometry,
             sampledSurface,
             rider.Profile.Skills);

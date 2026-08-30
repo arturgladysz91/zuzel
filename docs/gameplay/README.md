@@ -46,13 +46,21 @@ Ograniczenie prędkości łuku wykorzystuje statyczną geometrię konkretnego to
 
 Model nie dodaje `ControlledWide` i nie zmienia progów `Brake`, `RunWide` i `Crash`, zachowania na Lane 4 ani losowych incydentów. Pozostaje ograniczeniem opartym na krzywiźnie, a nie pełną fizyką motocykla.
 
-### Distance-limited drive na wyjściu — PROVISIONAL
+### Distance-limited longitudinal physics — PROVISIONAL
 
 `SegmentPhysics` nadal rozstrzyga ograniczenie i outcome; nie jest pełnym modelem dynamiki motocykla. Po tym rozstrzygnięciu advanced `TurnExit` może wykonać pierwszy deterministyczny krok longitudinal drive dla `Ok` albo `Brake`: `v_out² = v_physics² + 2 * a * s`, gdzie `s` jest rzeczywistym dystansem przejechanym w bieżącym segmencie, wyliczonym z wejściowego `LateralPosition`.
 
 Przyspieszenie zależy wyłącznie od `Speed` ability, corner-drive trade-off `Gearing` oraz `EffectiveGrip` nawierzchni próbkowanej wcześniej z tej samej pozycji wejściowej. Bazowy zakres `0.60–1.40 m/s²`, mnożnik gearing `1.10–0.90` i mnożnik nawierzchni `0.75 + 0.25 * EffectiveGrip` są wartościami **PROVISIONAL**, a nie finalnymi danymi motocykla. Morale, style, `SlideControl` i pozostałe umiejętności nie zmieniają tego fizycznego przyspieszenia.
 
-`RunWide` nie otrzymuje positive drive w tym samym segmencie, a `Crash` pozostaje z prędkością zero. `TurnEntry`, `TurnMiddle`, legacy oraz `Straight` nie dostają nowej akceleracji. Model nie zawiera jeszcze distance-limited braking, punktu hamowania, lookahead, top speed, drag, power curve, wheelspin, clutch/start dynamics ani optymalizacji zależnej od mety; są to późniejsze etapy pełnego modelu longitudinal.
+`RunWide` nie otrzymuje positive drive w tym samym segmencie, a `Crash` pozostaje z prędkością zero. `TurnEntry`, `TurnMiddle` i legacy nie dostają nowej akceleracji.
+
+Advanced `Straight` ma pierwszy deterministyczny, distance-limited `StraightSpeedProfile`. Przyspieszenie korzysta z **PROVISIONAL** zakresu `0.80–1.60 m/s²` interpolowanego przez `Speed` i mnożnika wejściowego physical grip `0.75 + 0.25 * EffectiveGrip`. Zdolność kontrolowanego wytracenia prędkości przed łukiem używa **PROVISIONAL** zakresu `2.00–3.20 m/s²` interpolowanego przez `SlideControl` oraz tego samego mnożnika grip. Nie reprezentuje to klasycznego mechanicznego hamulca. Gearing, morale, style, pozostałe umiejętności i RNG nie zmieniają tych parametrów Straight.
+
+Jeżeli bezpośrednio następny segment jest `TurnEntry`, profil może składać się z faz `accelerate → decelerate`. Analityczny peak spełnia `peak² = (2*a*d*s + d*v_in² + a*v_target²)/(a+d)`, dystanse faz to `(peak²-v_in²)/(2*a)` oraz `(peak²-v_target²)/(2*d)`, a czas jest sumą `2*s_accel/(v_in+peak)` i `2*s_decel/(peak+v_out)`. Dzięki temu jednakowe endpointy nie ukrywają większej prędkości w środku prostej. Gdy dystansu brakuje, profil nie clampuje prędkości do targetu; nadmiar trafia do istniejącego constraint modelu następnego łuku.
+
+Lookahead obejmuje wyłącznie jeden bezpośredni segment. Target następnego `TurnEntry` wykorzystuje jego obecną immutable nawierzchnię, geometrię i wejściowe `LateralPosition` zawodnika; nie korzysta z `TargetLane`, `PlannedLane`, resolved lane ani pozycji po `MoveTowards`. Ostatni Straight nie-finalnego okrążenia zawija do segmentu `0`. Ostatni segment ostatniego wymaganego okrążenia nie przygotowuje motocykla do nieistniejącego następnego łuku i wykorzystuje pozostały dystans na acceleration. Rozpoznanie opiera się na `LapIndex`, `RequiredLaps`, `SegmentIndex` i liczbie segmentów — bez `lap == 4`, bonusu mety lub specjalnej reguły wewnętrznej linii.
+
+Advanced lateral movement na Straight otrzymuje rzeczywisty czas profilu. Model nie przelicza profilu po `MoveTowards`; current i next-turn surfaces oraz geometria nadal używają segment-entry position. Top speed, drag, gearing na prostej, power curve, wheelspin, start/clutch, intentional overspeed, trajectory-aware lookahead i finish-aware lane choice pozostają poza tym etapem.
 
 ### Czasowa zmiana linii — BINDING
 
