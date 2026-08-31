@@ -32,8 +32,9 @@ public static class LongitudinalDynamics
     public const float MinCornerEntryDecelerationMetersPerSecondSquared = 2.00f;
     public const float MaxCornerEntryDecelerationMetersPerSecondSquared = 3.20f;
 
-    // PROVISIONAL first-model parameters. These bound only positive drive;
-    // they are not final speedway-motorcycle data or a hard speed limiter.
+    // PROVISIONAL / NOT REAL-WORLD CALIBRATED first-model parameters.
+    // These bound only positive drive; they are not telemetry-derived final
+    // speedway-motorcycle speeds or a hard limiter for existing overspeed.
     public const float MinAttainableTopSpeedMetersPerSecond = 21.0f;
     public const float MaxAttainableTopSpeedMetersPerSecond = 25.0f;
     public const float LowGearingTopSpeedMultiplier = 0.94f;
