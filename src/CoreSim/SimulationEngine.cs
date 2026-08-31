@@ -322,11 +322,16 @@ public sealed class SimulationEngine
                 .CalculateCornerEntryDecelerationMetersPerSecondSquared(
                     rider.Profile.Skills,
                     surface);
+            var attainableTopSpeed = LongitudinalDynamics
+                .CalculateAttainableTopSpeedMetersPerSecond(
+                    rider.Profile.Skills,
+                    rider.ActiveSetup);
             straightProfile = LongitudinalDynamics.CalculateStraightSpeedProfile(
                 resolution.Speed,
                 straightAcceleration,
                 cornerEntryDeceleration,
                 travelled,
+                attainableTopSpeed,
                 ResolveImmediateNextTurnSafeSpeed(snapshot, rider));
             speed = straightProfile.Value.ExitSpeedMetersPerSecond;
         }
@@ -341,10 +346,15 @@ public sealed class SimulationEngine
                     rider.Profile.Skills,
                     rider.ActiveSetup,
                     surface);
-            speed = LongitudinalDynamics.AccelerateOverDistance(
+            var attainableTopSpeed = LongitudinalDynamics
+                .CalculateAttainableTopSpeedMetersPerSecond(
+                    rider.Profile.Skills,
+                    rider.ActiveSetup);
+            speed = LongitudinalDynamics.AccelerateOverDistanceWithSpeedCeiling(
                 resolution.Speed,
                 turnExitAcceleration,
-                travelled);
+                travelled,
+                attainableTopSpeed);
         }
 
         var averageSpeed = MathF.Max(1f, (entrySpeed + MathF.Max(speed, 0f)) * 0.5f);

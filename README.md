@@ -143,6 +143,21 @@ bezpośrednio następującym łukiem kontrolowanie wytracić prędkość. Linie 
 nadal nie dają arbitralnego bonusu; różnica wynika z umiejętności, wejściowej
 nawierzchni, dostępnego dystansu i potrzeby przygotowania do następnego łuku.
 
+Positive drive w advanced physics ma osiągalną, deterministyczną prędkość
+szczytową. Bazowy zakres **PROVISIONAL** `21–25 m/s` zależy od `Speed`, a
+`BikeSetup.Gearing` mnoży go w zakresie **PROVISIONAL** `0.94–1.06`. Niskie
+przełożenie nadal daje mocniejsze przyspieszenie na `TurnExit`, lecz obniża
+osiągalną prędkość szczytową; wysokie przełożenie daje odwrotny trade-off.
+Nawierzchnia wpływa na dystans i czas potrzebny do osiągnięcia granicy, ale nie
+zmienia samej granicy.
+
+Nie jest to hard limiter: istniejąca prędkość równa lub większa od granicy nie
+jest obcinana przez positive drive. Profil prostej może mieć fazy
+`accelerate → cruise → decelerate`, a czas przejazdu jest sumą czasu każdej z
+nich. Ten sam ceiling ogranicza positive drive na `TurnExit`. Legacy pozostaje
+bez zmian. Drag, opory ruchu, krzywa mocy i optymalizacja przełożenia pod metę
+nie są jeszcze modelowane.
+
 ---
 
 ### 3. Zawodnicy

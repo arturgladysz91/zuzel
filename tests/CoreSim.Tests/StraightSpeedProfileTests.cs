@@ -63,10 +63,14 @@ public sealed class StraightSpeedProfileTests
         var acceleration = LongitudinalDynamics.CalculateStraightAccelerationMetersPerSecondSquared(
             rider.Profile.Skills,
             PerfectSurface);
-        var expected = LongitudinalDynamics.AccelerateOverDistance(
+        var ceiling = LongitudinalDynamics.CalculateAttainableTopSpeedMetersPerSecond(
+            rider.Profile.Skills,
+            rider.ActiveSetup);
+        var expected = LongitudinalDynamics.AccelerateOverDistanceWithSpeedCeiling(
             rider.Speed,
             acceleration,
-            track.Geometry.StraightLengthMeters);
+            track.Geometry.StraightLengthMeters,
+            ceiling);
 
         var result = ResolveSingle(track, state, rider, targetLane: 1);
 
@@ -207,6 +211,9 @@ public sealed class StraightSpeedProfileTests
             acceleration,
             deceleration,
             track.Geometry.StraightLengthMeters,
+            LongitudinalDynamics.CalculateAttainableTopSpeedMetersPerSecond(
+                rider.Profile.Skills,
+                rider.ActiveSetup),
             target);
 
         var result = ResolveSingle(track, state, rider, targetLane: 1);
@@ -244,6 +251,9 @@ public sealed class StraightSpeedProfileTests
             acceleration,
             deceleration,
             geometry.StraightLengthMeters,
+            LongitudinalDynamics.CalculateAttainableTopSpeedMetersPerSecond(
+                rider.Profile.Skills,
+                rider.ActiveSetup),
             target);
         var expectedLateralPosition = LateralMovementModel.MoveTowards(
             entryPosition,
@@ -261,10 +271,209 @@ public sealed class StraightSpeedProfileTests
     }
 
     [Fact]
-    public void LegacyStraightRemainsUnchanged()
+    public void AdvancedStraightCannotPositiveDrivePastAttainableTopSpeed()
+    {
+        var track = TrackOf(500f, SegmentType.Straight);
+        var state = UniformState(track, PerfectSurface);
+        var rider = Rider(1, lane: 1, lateralPosition: 1f, speed: 10f);
+        var ceiling = AttainableTopSpeed(rider);
+
+        var result = ResolveSingle(track, state, rider, targetLane: 1);
+
+        Assert.Equal(ceiling, result.Change.Speed, 5);
+    }
+
+    [Fact]
+    public void LongFinalStraightCruisesAtAttainableTopSpeed()
+    {
+        var track = StandardOrderTrack(500f);
+        var state = UniformState(track, PerfectSurface);
+        var rider = RiderAt(
+            1, lane: 1, lateralPosition: 1f, speed: 10f, lapNumber: 1, segmentIndex: 3, track);
+        var acceleration = LongitudinalDynamics.CalculateStraightAccelerationMetersPerSecondSquared(
+            rider.Profile.Skills,
+            PerfectSurface);
+        var deceleration = LongitudinalDynamics.CalculateCornerEntryDecelerationMetersPerSecondSquared(
+            rider.Profile.Skills,
+            PerfectSurface);
+        var expected = LongitudinalDynamics.CalculateStraightSpeedProfile(
+            rider.Speed,
+            acceleration,
+            deceleration,
+            track.Geometry.StraightLengthMeters,
+            AttainableTopSpeed(rider));
+
+        var result = ResolveSingle(
+            track,
+            state,
+            rider,
+            targetLane: 1,
+            lapIndex: 0,
+            segmentIndex: 3,
+            requiredLaps: 1);
+
+        Assert.True(expected.CruiseDistanceMeters > 0f);
+        Assert.Equal(expected.ExitSpeedMetersPerSecond, result.Change.Speed, 5);
+        Assert.Equal(expected.TravelTimeSeconds, result.Change.ElapsedTimeSeconds, 5);
+        Assert.Equal(RiderRaceStatus.Finished, result.Change.Status);
+    }
+
+    [Fact]
+    public void HigherGearingCanReachHigherStraightSpeedOnLongEnoughStraight()
+    {
+        var track = TrackOf(500f, SegmentType.Straight);
+        var state = UniformState(track, PerfectSurface);
+        var lowGearing = ResolveSingle(
+            track,
+            state,
+            Rider(1, 1, 1f, 10f, gearing: 0f),
+            targetLane: 1);
+        var highGearing = ResolveSingle(
+            track,
+            state,
+            Rider(2, 1, 1f, 10f, gearing: 1f),
+            targetLane: 1);
+
+        Assert.True(highGearing.Change.Speed > lowGearing.Change.Speed);
+    }
+
+    [Fact]
+    public void ShortStraightDoesNotCreateArtificialGearingDifference()
+    {
+        var track = TrackOf(10f, SegmentType.Straight);
+        var state = UniformState(track, PerfectSurface);
+        var lowGearing = ResolveSingle(
+            track,
+            state,
+            Rider(1, 1, 1f, 10f, gearing: 0f),
+            targetLane: 1);
+        var highGearing = ResolveSingle(
+            track,
+            state,
+            Rider(2, 1, 1f, 10f, gearing: 1f),
+            targetLane: 1);
+
+        Assert.Equal(lowGearing.Change.Speed, highGearing.Change.Speed, 5);
+    }
+
+    [Fact]
+    public void LowGearingStillHasMoreTurnExitDriveBelowCeiling()
+    {
+        var track = TrackOf(60f, SegmentType.TurnExit);
+        var state = UniformState(track, PerfectSurface);
+        var lowGearing = ResolveSingle(
+            track,
+            state,
+            Rider(1, 1, 1f, 10f, gearing: 0f),
+            targetLane: 1);
+        var highGearing = ResolveSingle(
+            track,
+            state,
+            Rider(2, 1, 1f, 10f, gearing: 1f),
+            targetLane: 1);
+
+        Assert.Equal(SegmentOutcome.Ok, lowGearing.Change.Outcome);
+        Assert.Equal(SegmentOutcome.Ok, highGearing.Change.Outcome);
+        Assert.True(lowGearing.Change.Speed > highGearing.Change.Speed);
+        Assert.True(lowGearing.Change.Speed < AttainableTopSpeed(speedSkill: 50f, gearing: 0f));
+        Assert.True(highGearing.Change.Speed < AttainableTopSpeed(speedSkill: 50f, gearing: 1f));
+    }
+
+    [Fact]
+    public void TurnExitPositiveDriveStopsAtAttainableCeiling()
+    {
+        var geometry = new TrackGeometry(
+            straightLengthMeters: 60f,
+            innerRadiusMeters: 24f,
+            laneSpacingMeters: 1f,
+            turnSegmentAngleRadians: 10f);
+        var track = new Track(new[] { new TrackSegment(0, SegmentType.TurnExit) }, geometry);
+        var state = UniformState(track, PerfectSurface);
+        var rider = Rider(1, lane: 1, lateralPosition: 1f, speed: 10f);
+        var ceiling = AttainableTopSpeed(rider);
+
+        var result = ResolveSingle(track, state, rider, targetLane: 1);
+
+        Assert.Equal(SegmentOutcome.Ok, result.Change.Outcome);
+        Assert.Equal(ceiling, result.Change.Speed, 5);
+    }
+
+    [Fact]
+    public void TurnExitPositiveDriveDoesNotReduceExistingOverspeed()
+    {
+        var geometry = new TrackGeometry(
+            straightLengthMeters: 60f,
+            innerRadiusMeters: 100f,
+            laneSpacingMeters: 1f,
+            turnSegmentAngleRadians: 1f);
+        var track = new Track(new[] { new TrackSegment(0, SegmentType.TurnExit) }, geometry);
+        var state = UniformState(track, PerfectSurface);
+        var rider = Rider(1, lane: 1, lateralPosition: 1f, speed: 25f);
+
+        var result = ResolveSingle(track, state, rider, targetLane: 1);
+
+        Assert.True(rider.Speed > AttainableTopSpeed(rider));
+        Assert.Equal(SegmentOutcome.Ok, result.Change.Outcome);
+        Assert.Equal(25f, result.Change.PhysicsSpeed);
+        Assert.Equal(25f, result.Change.Speed);
+    }
+
+    [Fact]
+    public void NextTurnTargetBelowCeilingStillControlsStraightExit()
+    {
+        var track = TrackOf(100f, SegmentType.Straight, SegmentType.TurnEntry);
+        var state = UniformState(track, PerfectSurface);
+        var rider = Rider(1, lane: 1, lateralPosition: 1f, speed: 10f);
+        var target = NextTurnSafeSpeed(track, state, rider, nextSegmentIndex: 1);
+
+        var result = ResolveSingle(track, state, rider, targetLane: 1);
+
+        Assert.True(target < AttainableTopSpeed(rider));
+        Assert.Equal(target, result.Change.Speed, 5);
+    }
+
+    [Fact]
+    public void WorseSurfaceChangesTimeToCeilingButNotTheCeiling()
+    {
+        var rider = Rider(1, lane: 1, lateralPosition: 1f, speed: 10f);
+        var ceiling = AttainableTopSpeed(rider);
+        var good = ProfileWithoutTurnTarget(rider, PerfectSurface, distanceMeters: 500f);
+        var poor = ProfileWithoutTurnTarget(rider, PoorSurface, distanceMeters: 500f);
+
+        Assert.Equal(ceiling, good.ExitSpeedMetersPerSecond, 5);
+        Assert.Equal(ceiling, poor.ExitSpeedMetersPerSecond, 5);
+        Assert.True(poor.AccelerationDistanceMeters > good.AccelerationDistanceMeters);
+        Assert.True(poor.TravelTimeSeconds > good.TravelTimeSeconds);
+    }
+
+    [Fact]
+    public void PartialStraightUsesCeilingOverRemainingDistanceOnly()
+    {
+        var track = TrackOf(400f, SegmentType.Straight, SegmentType.Straight);
+        var state = UniformState(track, PerfectSurface);
+        var rider = RiderAt(
+            1,
+            lane: 1,
+            lateralPosition: 1f,
+            speed: 10f,
+            lapNumber: 1,
+            segmentIndex: 0,
+            track,
+            segmentProgress: 0.5f);
+        var expected = ProfileWithoutTurnTarget(rider, PerfectSurface, distanceMeters: 200f);
+
+        var result = ResolveSingle(track, state, rider, targetLane: 1);
+
+        Assert.Equal(200f, result.Change.Position.DistanceMeters, 5);
+        Assert.Equal(expected.ExitSpeedMetersPerSecond, result.Change.Speed, 5);
+        Assert.Equal(expected.TravelTimeSeconds, result.Change.ElapsedTimeSeconds, 5);
+    }
+
+    [Fact]
+    public void LegacyStraightIgnoresAttainableTopSpeed()
     {
         var track = TrackOf(60f, SegmentType.Straight);
-        var rider = Rider(1, lane: 1, lateralPosition: 1f, speed: 10f);
+        var rider = Rider(1, lane: 1, lateralPosition: 1f, speed: 30f);
 
         var result = ResolveSingle(
             track,
@@ -273,21 +482,22 @@ public sealed class StraightSpeedProfileTests
             targetLane: 1,
             useLegacyPhysics: true);
 
-        Assert.Equal(10f, result.Change.PhysicsSpeed);
+        Assert.True(rider.Speed > AttainableTopSpeed(rider));
+        Assert.Equal(30f, result.Change.PhysicsSpeed);
         Assert.Equal(result.Change.PhysicsSpeed, result.Change.Speed);
-        Assert.Equal(6f, result.Change.ElapsedTimeSeconds, 5);
+        Assert.Equal(2f, result.Change.ElapsedTimeSeconds, 5);
         Assert.Equal(60f, result.Change.Position.DistanceMeters, 5);
     }
 
     [Fact]
-    public void StraightProfileIsIndependentOfRiderCollectionOrder()
+    public void StraightTopSpeedIsIndependentOfRiderCollectionOrder()
     {
-        var track = TrackOf(80f, SegmentType.Straight, SegmentType.TurnEntry);
+        var track = TrackOf(500f, SegmentType.Straight);
         var state = UniformState(track, PerfectSurface);
         var riders = new[]
         {
-            Rider(1, lane: 0, lateralPosition: 0f, speed: 10f, speedSkill: 20f, slideControl: 80f),
-            Rider(2, lane: 4, lateralPosition: 4f, speed: 12f, speedSkill: 80f, slideControl: 20f),
+            Rider(1, lane: 0, lateralPosition: 0f, speed: 10f, speedSkill: 20f, slideControl: 80f, gearing: 0f),
+            Rider(2, lane: 4, lateralPosition: 4f, speed: 12f, speedSkill: 80f, slideControl: 20f, gearing: 1f),
         };
         var targets = new Dictionary<int, int> { [1] = 0, [2] = 4 };
 
@@ -318,10 +528,14 @@ public sealed class StraightSpeedProfileTests
         var acceleration = LongitudinalDynamics.CalculateStraightAccelerationMetersPerSecondSquared(
             rider.Profile.Skills,
             PerfectSurface);
-        var expected = LongitudinalDynamics.AccelerateOverDistance(
+        var ceiling = LongitudinalDynamics.CalculateAttainableTopSpeedMetersPerSecond(
+            rider.Profile.Skills,
+            rider.ActiveSetup);
+        var expected = LongitudinalDynamics.AccelerateOverDistanceWithSpeedCeiling(
             rider.Speed,
             acceleration,
-            track.Geometry.StraightLengthMeters);
+            track.Geometry.StraightLengthMeters,
+            ceiling);
 
         var result = ResolveSingle(
             track,
@@ -374,13 +588,39 @@ public sealed class StraightSpeedProfileTests
             rider.Profile.Skills,
             rider.ActiveSetup);
 
+    private static float AttainableTopSpeed(RiderState rider)
+        => LongitudinalDynamics.CalculateAttainableTopSpeedMetersPerSecond(
+            rider.Profile.Skills,
+            rider.ActiveSetup);
+
+    private static float AttainableTopSpeed(float speedSkill, float gearing)
+        => LongitudinalDynamics.CalculateAttainableTopSpeedMetersPerSecond(
+            new RiderSkills(50f, speedSkill, 50f, 50f, 50f, 50f),
+            new BikeSetup(gearing, tractionBias: 0.5f));
+
+    private static StraightSpeedProfile ProfileWithoutTurnTarget(
+        RiderState rider,
+        TrackSurfaceState surface,
+        float distanceMeters)
+        => LongitudinalDynamics.CalculateStraightSpeedProfile(
+            rider.Speed,
+            LongitudinalDynamics.CalculateStraightAccelerationMetersPerSecondSquared(
+                rider.Profile.Skills,
+                surface),
+            LongitudinalDynamics.CalculateCornerEntryDecelerationMetersPerSecondSquared(
+                rider.Profile.Skills,
+                surface),
+            distanceMeters,
+            AttainableTopSpeed(rider));
+
     private static RiderState Rider(
         int riderId,
         int lane,
         float lateralPosition,
         float speed,
         float speedSkill = 50f,
-        float slideControl = 50f)
+        float slideControl = 50f,
+        float gearing = 0.5f)
         => new(
             new RiderProfile(
                 riderId,
@@ -391,7 +631,7 @@ public sealed class StraightSpeedProfileTests
         {
             LateralPosition = lateralPosition,
             Speed = speed,
-            ActiveSetup = BikeSetup.Neutral,
+            ActiveSetup = new BikeSetup(gearing, tractionBias: 0.5f),
         };
 
     private static RiderState RiderAt(
@@ -420,7 +660,8 @@ public sealed class StraightSpeedProfileTests
             rider.LateralPosition,
             rider.Speed,
             rider.Profile.Skills.Speed,
-            rider.Profile.Skills.SlideControl);
+            rider.Profile.Skills.SlideControl,
+            rider.ActiveSetup.Gearing);
 
     private static ResolvedResult ResolveSingle(
         Track track,
