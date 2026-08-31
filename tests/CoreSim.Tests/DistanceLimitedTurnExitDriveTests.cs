@@ -81,8 +81,18 @@ public sealed class DistanceLimitedTurnExitDriveTests
         => AssertDoesNotReceivePositiveTurnExitDrive(SegmentType.TurnMiddle);
 
     [Fact]
-    public void StraightDoesNotReceiveNewAccelerationYet()
-        => AssertDoesNotReceivePositiveTurnExitDrive(SegmentType.Straight);
+    public void StraightUsesItsOwnLongitudinalProfile()
+    {
+        const float entrySpeed = 10f;
+        var result = ResolveSingle(
+            SegmentType.Straight,
+            Rider(1, lane: 1, lateralPosition: 1f, entrySpeed),
+            targetLane: 1);
+
+        Assert.Equal(SegmentOutcome.Ok, result.Change.Outcome);
+        Assert.Equal(entrySpeed, result.Change.PhysicsSpeed);
+        Assert.True(result.Change.Speed > result.Change.PhysicsSpeed);
+    }
 
     private static void AssertDoesNotReceivePositiveTurnExitDrive(SegmentType segmentType)
     {

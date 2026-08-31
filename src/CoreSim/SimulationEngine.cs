@@ -310,7 +310,27 @@ public sealed class SimulationEngine
                 snapshot.Track.Geometry);
         var travelled = segmentLength * canonicalAdvance;
         var speed = resolution.Speed;
+        StraightSpeedProfile? straightProfile = null;
         if (!snapshot.Step.UseLegacyPhysics
+            && snapshot.Segment.Type == SegmentType.Straight)
+        {
+            var straightAcceleration = LongitudinalDynamics
+                .CalculateStraightAccelerationMetersPerSecondSquared(
+                    rider.Profile.Skills,
+                    surface);
+            var cornerEntryDeceleration = LongitudinalDynamics
+                .CalculateCornerEntryDecelerationMetersPerSecondSquared(
+                    rider.Profile.Skills,
+                    surface);
+            straightProfile = LongitudinalDynamics.CalculateStraightSpeedProfile(
+                resolution.Speed,
+                straightAcceleration,
+                cornerEntryDeceleration,
+                travelled,
+                ResolveImmediateNextTurnSafeSpeed(snapshot, rider));
+            speed = straightProfile.Value.ExitSpeedMetersPerSecond;
+        }
+        else if (!snapshot.Step.UseLegacyPhysics
             && snapshot.Segment.Type == SegmentType.TurnExit
             && resolution.Outcome is SegmentOutcome.Ok or SegmentOutcome.Brake
             && resolution.Speed > 0f
@@ -328,7 +348,8 @@ public sealed class SimulationEngine
         }
 
         var averageSpeed = MathF.Max(1f, (entrySpeed + MathF.Max(speed, 0f)) * 0.5f);
-        var segmentTravelTimeSeconds = travelled / averageSpeed;
+        var segmentTravelTimeSeconds = straightProfile?.TravelTimeSeconds
+            ?? travelled / averageSpeed;
         var elapsedTime = rider.ElapsedTimeSeconds + segmentTravelTimeSeconds;
         var lateralPosition = snapshot.Step.UseLegacyPhysics
             ? resolution.Lane
@@ -367,6 +388,30 @@ public sealed class SimulationEngine
             entrySpeed,
             resolution.Speed,
             ApplySurfaceWear: resolution.Outcome != SegmentOutcome.Crash);
+    }
+
+    private static float? ResolveImmediateNextTurnSafeSpeed(
+        SimulationSnapshot snapshot,
+        RiderSnapshot rider)
+    {
+        var isFinalRaceSegment = snapshot.Step.LapIndex == snapshot.Step.RequiredLaps - 1
+            && snapshot.Step.SegmentIndex == snapshot.Track.Segments.Count - 1;
+        if (isFinalRaceSegment)
+            return null;
+
+        var nextSegmentIndex = (snapshot.Step.SegmentIndex + 1) % snapshot.Track.Segments.Count;
+        if (snapshot.Track.Segments[nextSegmentIndex].Type != SegmentType.TurnEntry)
+            return null;
+
+        var nextSurface = snapshot.TrackState.SampleSurface(
+            nextSegmentIndex,
+            rider.LateralPosition);
+        return SegmentPhysics.MaxSafeTurnSpeed(
+            rider.LateralPosition,
+            snapshot.Track.Geometry,
+            nextSurface,
+            rider.Profile.Skills,
+            rider.ActiveSetup);
     }
 
     private static void ResolveExistingInteractions(
