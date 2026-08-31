@@ -4,13 +4,15 @@ namespace CoreSim;
 
 /// <summary>
 /// Deterministic traversal result for one advanced-physics straight. Distances
-/// describe the acceleration and corner-entry deceleration phases actually used.
+/// describe the acceleration, positive-drive-ceiling cruise and corner-entry
+/// deceleration phases actually used.
 /// </summary>
 public readonly record struct StraightSpeedProfile(
     float ExitSpeedMetersPerSecond,
     float PeakSpeedMetersPerSecond,
     float TravelTimeSeconds,
     float AccelerationDistanceMeters,
+    float CruiseDistanceMeters,
     float DecelerationDistanceMeters);
 
 /// <summary>
@@ -29,6 +31,13 @@ public static class LongitudinalDynamics
     public const float MaxStraightAccelerationMetersPerSecondSquared = 1.60f;
     public const float MinCornerEntryDecelerationMetersPerSecondSquared = 2.00f;
     public const float MaxCornerEntryDecelerationMetersPerSecondSquared = 3.20f;
+
+    // PROVISIONAL first-model parameters. These bound only positive drive;
+    // they are not final speedway-motorcycle data or a hard speed limiter.
+    public const float MinAttainableTopSpeedMetersPerSecond = 21.0f;
+    public const float MaxAttainableTopSpeedMetersPerSecond = 25.0f;
+    public const float LowGearingTopSpeedMultiplier = 0.94f;
+    public const float HighGearingTopSpeedMultiplier = 1.06f;
 
     public static float AccelerateOverDistance(
         float initialSpeedMetersPerSecond,
@@ -71,6 +80,51 @@ public static class LongitudinalDynamics
             (double)initialSpeedMetersPerSecond * initialSpeedMetersPerSecond
             - 2d * decelerationMetersPerSecondSquared * distanceMeters);
         return (float)Math.Sqrt(finalSpeedSquared);
+    }
+
+    public static float AccelerateOverDistanceWithSpeedCeiling(
+        float initialSpeedMetersPerSecond,
+        float accelerationMetersPerSecondSquared,
+        float distanceMeters,
+        float speedCeilingMetersPerSecond)
+    {
+        ValidateNonNegativeFinite(initialSpeedMetersPerSecond, nameof(initialSpeedMetersPerSecond));
+        ValidateNonNegativeFinite(
+            accelerationMetersPerSecondSquared,
+            nameof(accelerationMetersPerSecondSquared));
+        ValidateNonNegativeFinite(distanceMeters, nameof(distanceMeters));
+        ValidatePositiveFinite(speedCeilingMetersPerSecond, nameof(speedCeilingMetersPerSecond));
+
+        if (initialSpeedMetersPerSecond >= speedCeilingMetersPerSecond
+            || accelerationMetersPerSecondSquared == 0f
+            || distanceMeters == 0f)
+        {
+            return initialSpeedMetersPerSecond;
+        }
+
+        var candidateSpeedSquared =
+            (double)initialSpeedMetersPerSecond * initialSpeedMetersPerSecond
+            + 2d * accelerationMetersPerSecondSquared * distanceMeters;
+        var candidateSpeed = Math.Sqrt(candidateSpeedSquared);
+        return (float)Math.Min(candidateSpeed, speedCeilingMetersPerSecond);
+    }
+
+    public static float CalculateAttainableTopSpeedMetersPerSecond(
+        RiderSkills skills,
+        BikeSetup setup)
+    {
+        ArgumentNullException.ThrowIfNull(skills);
+        ArgumentNullException.ThrowIfNull(setup);
+
+        var speedSkill = RiderSkills.Normalize(skills.Speed);
+        var baseTopSpeed = MinAttainableTopSpeedMetersPerSecond
+            + (MaxAttainableTopSpeedMetersPerSecond
+               - MinAttainableTopSpeedMetersPerSecond) * speedSkill;
+        var gearingTopSpeedMultiplier = LowGearingTopSpeedMultiplier
+            + (HighGearingTopSpeedMultiplier - LowGearingTopSpeedMultiplier) * setup.Gearing;
+        var attainableTopSpeed = baseTopSpeed * gearingTopSpeedMultiplier;
+        ValidatePositiveFinite(attainableTopSpeed, "result");
+        return attainableTopSpeed;
     }
 
     public static float CalculateTurnExitAccelerationMetersPerSecondSquared(
@@ -133,6 +187,7 @@ public static class LongitudinalDynamics
         float accelerationMetersPerSecondSquared,
         float cornerEntryDecelerationMetersPerSecondSquared,
         float distanceMeters,
+        float speedCeilingMetersPerSecond,
         float? targetExitSpeedMetersPerSecond = null)
     {
         ValidateNonNegativeFinite(initialSpeedMetersPerSecond, nameof(initialSpeedMetersPerSecond));
@@ -143,22 +198,30 @@ public static class LongitudinalDynamics
             cornerEntryDecelerationMetersPerSecondSquared,
             nameof(cornerEntryDecelerationMetersPerSecondSquared));
         ValidateNonNegativeFinite(distanceMeters, nameof(distanceMeters));
+        ValidatePositiveFinite(speedCeilingMetersPerSecond, nameof(speedCeilingMetersPerSecond));
         if (targetExitSpeedMetersPerSecond is { } target)
             ValidateNonNegativeFinite(target, nameof(targetExitSpeedMetersPerSecond));
 
-        var fullAccelerationExit = AccelerateOverDistance(
-            initialSpeedMetersPerSecond,
-            accelerationMetersPerSecondSquared,
-            distanceMeters);
-        if (targetExitSpeedMetersPerSecond is not { } targetExitSpeed
-            || fullAccelerationExit <= targetExitSpeed)
+        if (distanceMeters == 0f)
         {
             return CreateProfile(
                 initialSpeedMetersPerSecond,
-                fullAccelerationExit,
-                fullAccelerationExit,
-                distanceMeters,
+                initialSpeedMetersPerSecond,
+                initialSpeedMetersPerSecond,
+                0f,
+                0f,
                 0f);
+        }
+
+        var fullDriveProfile = CreateFullDriveProfile(
+            initialSpeedMetersPerSecond,
+            accelerationMetersPerSecondSquared,
+            distanceMeters,
+            speedCeilingMetersPerSecond);
+        if (targetExitSpeedMetersPerSecond is not { } targetExitSpeed
+            || fullDriveProfile.ExitSpeedMetersPerSecond <= targetExitSpeed)
+        {
+            return fullDriveProfile;
         }
 
         if (initialSpeedMetersPerSecond > targetExitSpeed)
@@ -178,6 +241,7 @@ public static class LongitudinalDynamics
                     initialSpeedMetersPerSecond,
                     exitSpeed,
                     0f,
+                    0f,
                     distanceMeters);
             }
         }
@@ -192,20 +256,96 @@ public static class LongitudinalDynamics
              + accelerationMetersPerSecondSquared * targetSpeedSquared)
             / (accelerationMetersPerSecondSquared
                + cornerEntryDecelerationMetersPerSecondSquared);
-        var peakSpeed = (float)Math.Sqrt(peakSpeedSquared);
-        var accelerationDistance = (float)(
-            (peakSpeedSquared - initialSpeedSquared)
-            / (2d * accelerationMetersPerSecondSquared));
-        var decelerationDistance = (float)(
-            (peakSpeedSquared - targetSpeedSquared)
-            / (2d * cornerEntryDecelerationMetersPerSecondSquared));
+        var analyticPeakSpeed = Math.Sqrt(peakSpeedSquared);
+        var maxPositiveDrivePeak = initialSpeedMetersPerSecond < speedCeilingMetersPerSecond
+            ? speedCeilingMetersPerSecond
+            : initialSpeedMetersPerSecond;
+
+        if (analyticPeakSpeed <= maxPositiveDrivePeak)
+        {
+            var accelerationDistance = (float)(
+                (peakSpeedSquared - initialSpeedSquared)
+                / (2d * accelerationMetersPerSecondSquared));
+            var decelerationDistance = (float)(
+                (peakSpeedSquared - targetSpeedSquared)
+                / (2d * cornerEntryDecelerationMetersPerSecondSquared));
+
+            return CreateProfile(
+                initialSpeedMetersPerSecond,
+                (float)analyticPeakSpeed,
+                targetExitSpeed,
+                accelerationDistance,
+                0f,
+                decelerationDistance);
+        }
+
+        var cappedPeakSpeedSquared = (double)maxPositiveDrivePeak * maxPositiveDrivePeak;
+        var cappedAccelerationDistance = maxPositiveDrivePeak > initialSpeedMetersPerSecond
+            ? (cappedPeakSpeedSquared - initialSpeedSquared)
+              / (2d * accelerationMetersPerSecondSquared)
+            : 0d;
+        var cappedDecelerationDistance = maxPositiveDrivePeak > targetExitSpeed
+            ? (cappedPeakSpeedSquared - targetSpeedSquared)
+              / (2d * cornerEntryDecelerationMetersPerSecondSquared)
+            : 0d;
+        var cruiseDistance = ResolveCruiseDistance(
+            distanceMeters,
+            cappedAccelerationDistance,
+            cappedDecelerationDistance);
 
         return CreateProfile(
             initialSpeedMetersPerSecond,
-            peakSpeed,
+            maxPositiveDrivePeak,
             targetExitSpeed,
-            accelerationDistance,
-            decelerationDistance);
+            (float)cappedAccelerationDistance,
+            (float)cruiseDistance,
+            (float)cappedDecelerationDistance);
+    }
+
+    private static StraightSpeedProfile CreateFullDriveProfile(
+        float initialSpeedMetersPerSecond,
+        float accelerationMetersPerSecondSquared,
+        float distanceMeters,
+        float speedCeilingMetersPerSecond)
+    {
+        if (initialSpeedMetersPerSecond >= speedCeilingMetersPerSecond)
+        {
+            return CreateProfile(
+                initialSpeedMetersPerSecond,
+                initialSpeedMetersPerSecond,
+                initialSpeedMetersPerSecond,
+                0f,
+                distanceMeters,
+                0f);
+        }
+
+        var distanceToCeiling =
+            ((double)speedCeilingMetersPerSecond * speedCeilingMetersPerSecond
+             - (double)initialSpeedMetersPerSecond * initialSpeedMetersPerSecond)
+            / (2d * accelerationMetersPerSecondSquared);
+        if (distanceToCeiling >= distanceMeters)
+        {
+            var exitSpeed = AccelerateOverDistanceWithSpeedCeiling(
+                initialSpeedMetersPerSecond,
+                accelerationMetersPerSecondSquared,
+                distanceMeters,
+                speedCeilingMetersPerSecond);
+            return CreateProfile(
+                initialSpeedMetersPerSecond,
+                exitSpeed,
+                exitSpeed,
+                distanceMeters,
+                0f,
+                0f);
+        }
+
+        return CreateProfile(
+            initialSpeedMetersPerSecond,
+            speedCeilingMetersPerSecond,
+            speedCeilingMetersPerSecond,
+            (float)distanceToCeiling,
+            (float)(distanceMeters - distanceToCeiling),
+            0f);
     }
 
     private static StraightSpeedProfile CreateProfile(
@@ -213,17 +353,21 @@ public static class LongitudinalDynamics
         float peakSpeedMetersPerSecond,
         float exitSpeedMetersPerSecond,
         float accelerationDistanceMeters,
+        float cruiseDistanceMeters,
         float decelerationDistanceMeters)
     {
         var accelerationTime = CalculatePhaseTimeSeconds(
             accelerationDistanceMeters,
             initialSpeedMetersPerSecond,
             peakSpeedMetersPerSecond);
+        var cruiseTime = CalculateCruiseTimeSeconds(
+            cruiseDistanceMeters,
+            peakSpeedMetersPerSecond);
         var decelerationTime = CalculatePhaseTimeSeconds(
             decelerationDistanceMeters,
             peakSpeedMetersPerSecond,
             exitSpeedMetersPerSecond);
-        var travelTime = accelerationTime + decelerationTime;
+        var travelTime = accelerationTime + cruiseTime + decelerationTime;
         if (!float.IsFinite(travelTime))
             throw new OverflowException("Straight travel time exceeds the finite single-precision domain.");
 
@@ -232,7 +376,37 @@ public static class LongitudinalDynamics
             peakSpeedMetersPerSecond,
             travelTime,
             accelerationDistanceMeters,
+            cruiseDistanceMeters,
             decelerationDistanceMeters);
+    }
+
+    private static double ResolveCruiseDistance(
+        double totalDistanceMeters,
+        double accelerationDistanceMeters,
+        double decelerationDistanceMeters)
+    {
+        var cruiseDistance = totalDistanceMeters
+            - accelerationDistanceMeters
+            - decelerationDistanceMeters;
+        var tolerance = Math.Max(1e-9d, totalDistanceMeters * 1e-7d);
+        if (cruiseDistance < -tolerance)
+        {
+            throw new InvalidOperationException(
+                "Straight phase distances exceed the available distance.");
+        }
+
+        return cruiseDistance < 0d ? 0d : cruiseDistance;
+    }
+
+    private static float CalculateCruiseTimeSeconds(
+        float distanceMeters,
+        float speedMetersPerSecond)
+    {
+        if (distanceMeters == 0f)
+            return 0f;
+        if (speedMetersPerSecond <= 0f)
+            throw new InvalidOperationException("A positive cruise distance requires positive speed.");
+        return distanceMeters / speedMetersPerSecond;
     }
 
     private static float CalculatePhaseTimeSeconds(

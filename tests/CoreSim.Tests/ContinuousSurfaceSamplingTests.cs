@@ -245,7 +245,10 @@ public sealed class ContinuousSurfaceSamplingTests
             entrySpeed,
             acceleration,
             deceleration,
-            geometry.StraightLengthMeters);
+            geometry.StraightLengthMeters,
+            LongitudinalDynamics.CalculateAttainableTopSpeedMetersPerSecond(
+                rider.Profile.Skills,
+                rider.ActiveSetup));
         var expected = LateralMovementModel.MoveTowards(
             entryPosition,
             resolvedLane: 2,

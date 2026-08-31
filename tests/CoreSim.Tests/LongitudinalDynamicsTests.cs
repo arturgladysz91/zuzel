@@ -160,6 +160,115 @@ public sealed class LongitudinalDynamicsTests
     }
 
     [Fact]
+    public void AttainableTopSpeedUsesSpeedSkill()
+    {
+        var low = AttainableTopSpeed(speedSkill: 0f, gearing: 0.5f);
+        var neutral = AttainableTopSpeed(speedSkill: 50f, gearing: 0.5f);
+        var high = AttainableTopSpeed(speedSkill: 100f, gearing: 0.5f);
+
+        Assert.Equal(21f, low, 5);
+        Assert.Equal(23f, neutral, 5);
+        Assert.Equal(25f, high, 5);
+        Assert.True(high > low);
+    }
+
+    [Fact]
+    public void HigherGearingRaisesAttainableTopSpeed()
+    {
+        var lowGearing = AttainableTopSpeed(speedSkill: 50f, gearing: 0f);
+        var highGearing = AttainableTopSpeed(speedSkill: 50f, gearing: 1f);
+
+        Assert.Equal(23f * 0.94f, lowGearing, 5);
+        Assert.Equal(23f * 1.06f, highGearing, 5);
+        Assert.True(highGearing > lowGearing);
+    }
+
+    [Fact]
+    public void GearingCreatesRealTradeOff()
+    {
+        var lowGearingDrive = CalculateAcceleration(50f, gearing: 0f, PerfectDriveSurface);
+        var highGearingDrive = CalculateAcceleration(50f, gearing: 1f, PerfectDriveSurface);
+        var lowGearingTopSpeed = AttainableTopSpeed(50f, gearing: 0f);
+        var highGearingTopSpeed = AttainableTopSpeed(50f, gearing: 1f);
+
+        Assert.True(lowGearingDrive > highGearingDrive);
+        Assert.True(lowGearingTopSpeed < highGearingTopSpeed);
+    }
+
+    [Fact]
+    public void SpeedCeilingHelperStopsPositiveDriveAtCeiling()
+    {
+        var result = LongitudinalDynamics.AccelerateOverDistanceWithSpeedCeiling(
+            initialSpeedMetersPerSecond: 20f,
+            accelerationMetersPerSecondSquared: 2f,
+            distanceMeters: 100f,
+            speedCeilingMetersPerSecond: 23f);
+
+        Assert.Equal(23f, result);
+    }
+
+    [Fact]
+    public void SpeedCeilingHelperDoesNotReduceExistingOverspeed()
+    {
+        var result = LongitudinalDynamics.AccelerateOverDistanceWithSpeedCeiling(
+            initialSpeedMetersPerSecond: 25f,
+            accelerationMetersPerSecondSquared: 2f,
+            distanceMeters: 100f,
+            speedCeilingMetersPerSecond: 23f);
+
+        Assert.Equal(25f, result);
+    }
+
+    [Theory]
+    [InlineData(10f, 2f, 0f)]
+    [InlineData(10f, 0f, 25f)]
+    public void SpeedCeilingHelperPreservesZeroDistanceAndZeroAcceleration(
+        float initialSpeed,
+        float acceleration,
+        float distance)
+    {
+        var result = LongitudinalDynamics.AccelerateOverDistanceWithSpeedCeiling(
+            initialSpeed,
+            acceleration,
+            distance,
+            speedCeilingMetersPerSecond: 23f);
+
+        Assert.Equal(initialSpeed, result);
+    }
+
+    [Theory]
+    [InlineData(-1f, 1f, 1f, 20f)]
+    [InlineData(float.NaN, 1f, 1f, 20f)]
+    [InlineData(float.PositiveInfinity, 1f, 1f, 20f)]
+    [InlineData(float.NegativeInfinity, 1f, 1f, 20f)]
+    [InlineData(1f, -1f, 1f, 20f)]
+    [InlineData(1f, float.NaN, 1f, 20f)]
+    [InlineData(1f, float.PositiveInfinity, 1f, 20f)]
+    [InlineData(1f, float.NegativeInfinity, 1f, 20f)]
+    [InlineData(1f, 1f, -1f, 20f)]
+    [InlineData(1f, 1f, float.NaN, 20f)]
+    [InlineData(1f, 1f, float.PositiveInfinity, 20f)]
+    [InlineData(1f, 1f, float.NegativeInfinity, 20f)]
+    [InlineData(1f, 1f, 1f, 0f)]
+    [InlineData(1f, 1f, 1f, -1f)]
+    [InlineData(1f, 1f, 1f, float.NaN)]
+    [InlineData(1f, 1f, 1f, float.PositiveInfinity)]
+    [InlineData(1f, 1f, 1f, float.NegativeInfinity)]
+    public void SpeedCeilingHelperRejectsInvalidInputs(
+        float initialSpeed,
+        float acceleration,
+        float distance,
+        float ceiling)
+    {
+        Assert.Throws<ArgumentOutOfRangeException>(() =>
+            LongitudinalDynamics.AccelerateOverDistanceWithSpeedCeiling(
+                initialSpeed,
+                acceleration,
+                distance,
+                ceiling));
+    }
+
+    [Fact]
     public void StraightAccelerationUsesSpeedSkillAndEntryGrip()
     {
         var noEffectiveGrip = new TrackSurfaceState(0f, 0f, 0.35f);
@@ -186,17 +295,19 @@ public sealed class LongitudinalDynamicsTests
     }
 
     [Fact]
-    public void FullDistanceAccelerationWhenTargetCannotBeReachedOrExceeded()
+    public void StraightBelowCeilingKeepsPureAcceleration()
     {
         var profile = LongitudinalDynamics.CalculateStraightSpeedProfile(
             initialSpeedMetersPerSecond: 10f,
             accelerationMetersPerSecondSquared: 1f,
             cornerEntryDecelerationMetersPerSecondSquared: 2f,
             distanceMeters: 20f,
+            speedCeilingMetersPerSecond: 30f,
             targetExitSpeedMetersPerSecond: 15f);
         var expectedExit = MathF.Sqrt(140f);
 
         Assert.Equal(20f, profile.AccelerationDistanceMeters);
+        Assert.Equal(0f, profile.CruiseDistanceMeters);
         Assert.Equal(0f, profile.DecelerationDistanceMeters);
         Assert.Equal(expectedExit, profile.PeakSpeedMetersPerSecond, 5);
         Assert.Equal(expectedExit, profile.ExitSpeedMetersPerSecond, 5);
@@ -210,9 +321,11 @@ public sealed class LongitudinalDynamicsTests
             accelerationMetersPerSecondSquared: 1f,
             cornerEntryDecelerationMetersPerSecondSquared: 2f,
             distanceMeters: 10f,
+            speedCeilingMetersPerSecond: 30f,
             targetExitSpeedMetersPerSecond: 15f);
 
         Assert.Equal(0f, profile.AccelerationDistanceMeters);
+        Assert.Equal(0f, profile.CruiseDistanceMeters);
         Assert.Equal(10f, profile.DecelerationDistanceMeters);
         Assert.Equal(20f, profile.PeakSpeedMetersPerSecond);
         Assert.True(profile.ExitSpeedMetersPerSecond > 15f);
@@ -220,7 +333,7 @@ public sealed class LongitudinalDynamicsTests
     }
 
     [Fact]
-    public void AccelerateThenDecelerateUsesAnalyticPeak()
+    public void AnalyticPeakBelowCeilingPreservesTwoPhaseProfile()
     {
         const float initialSpeed = 12f;
         const float targetSpeed = 14f;
@@ -243,10 +356,12 @@ public sealed class LongitudinalDynamicsTests
             acceleration,
             deceleration,
             distance,
-            targetSpeed);
+            speedCeilingMetersPerSecond: 30f,
+            targetExitSpeedMetersPerSecond: targetSpeed);
 
         Assert.Equal(expectedPeak, profile.PeakSpeedMetersPerSecond, 5);
         Assert.Equal(expectedAccelerationDistance, profile.AccelerationDistanceMeters, 4);
+        Assert.Equal(0f, profile.CruiseDistanceMeters);
         Assert.Equal(expectedDecelerationDistance, profile.DecelerationDistanceMeters, 4);
         Assert.Equal(distance, profile.AccelerationDistanceMeters + profile.DecelerationDistanceMeters, 4);
         Assert.Equal(targetSpeed, profile.ExitSpeedMetersPerSecond);
@@ -263,7 +378,8 @@ public sealed class LongitudinalDynamicsTests
             accelerationMetersPerSecondSquared: 1.2f,
             cornerEntryDecelerationMetersPerSecondSquared: 2.4f,
             distance,
-            targetSpeed);
+            speedCeilingMetersPerSecond: 30f,
+            targetExitSpeedMetersPerSecond: targetSpeed);
         var expectedTime =
             2f * profile.AccelerationDistanceMeters
             / (initialSpeed + profile.PeakSpeedMetersPerSecond)
@@ -274,6 +390,125 @@ public sealed class LongitudinalDynamicsTests
         Assert.True(profile.PeakSpeedMetersPerSecond > initialSpeed);
         Assert.Equal(expectedTime, profile.TravelTimeSeconds, 5);
         Assert.NotEqual(endpointAverageTime, profile.TravelTimeSeconds, 4);
+    }
+
+    [Fact]
+    public void StraightReachesCeilingThenCruises()
+    {
+        var profile = LongitudinalDynamics.CalculateStraightSpeedProfile(
+            initialSpeedMetersPerSecond: 10f,
+            accelerationMetersPerSecondSquared: 2f,
+            cornerEntryDecelerationMetersPerSecondSquared: 3f,
+            distanceMeters: 200f,
+            speedCeilingMetersPerSecond: 20f);
+
+        Assert.Equal(20f, profile.PeakSpeedMetersPerSecond);
+        Assert.Equal(20f, profile.ExitSpeedMetersPerSecond);
+        Assert.Equal(75f, profile.AccelerationDistanceMeters, 5);
+        Assert.Equal(125f, profile.CruiseDistanceMeters, 5);
+        Assert.Equal(0f, profile.DecelerationDistanceMeters);
+        Assert.Equal(200f, profile.AccelerationDistanceMeters + profile.CruiseDistanceMeters, 5);
+    }
+
+    [Fact]
+    public void InitialSpeedAtCeilingCruisesEntireDistance()
+    {
+        var profile = LongitudinalDynamics.CalculateStraightSpeedProfile(
+            20f, 2f, 3f, distanceMeters: 100f, speedCeilingMetersPerSecond: 20f);
+
+        Assert.Equal(0f, profile.AccelerationDistanceMeters);
+        Assert.Equal(100f, profile.CruiseDistanceMeters);
+        Assert.Equal(0f, profile.DecelerationDistanceMeters);
+        Assert.Equal(20f, profile.PeakSpeedMetersPerSecond);
+        Assert.Equal(20f, profile.ExitSpeedMetersPerSecond);
+    }
+
+    [Fact]
+    public void InitialSpeedAboveCeilingIsNotClamped()
+    {
+        var profile = LongitudinalDynamics.CalculateStraightSpeedProfile(
+            25f, 2f, 3f, distanceMeters: 100f, speedCeilingMetersPerSecond: 23f);
+
+        Assert.Equal(0f, profile.AccelerationDistanceMeters);
+        Assert.Equal(100f, profile.CruiseDistanceMeters);
+        Assert.Equal(0f, profile.DecelerationDistanceMeters);
+        Assert.Equal(25f, profile.PeakSpeedMetersPerSecond);
+        Assert.Equal(25f, profile.ExitSpeedMetersPerSecond);
+    }
+
+    [Fact]
+    public void TargetAboveCeilingDoesNotCauseUnnecessaryDeceleration()
+    {
+        var profile = LongitudinalDynamics.CalculateStraightSpeedProfile(
+            15f, 1f, 2f, distanceMeters: 200f, speedCeilingMetersPerSecond: 22f,
+            targetExitSpeedMetersPerSecond: 25f);
+
+        Assert.Equal(22f, profile.PeakSpeedMetersPerSecond);
+        Assert.Equal(22f, profile.ExitSpeedMetersPerSecond);
+        Assert.True(profile.CruiseDistanceMeters > 0f);
+        Assert.Equal(0f, profile.DecelerationDistanceMeters);
+    }
+
+    [Fact]
+    public void CeilingCreatesAccelerateCruiseDecelerateProfile()
+    {
+        var profile = LongitudinalDynamics.CalculateStraightSpeedProfile(
+            10f, 1f, 2f, distanceMeters: 300f, speedCeilingMetersPerSecond: 20f,
+            targetExitSpeedMetersPerSecond: 12f);
+
+        Assert.Equal(20f, profile.PeakSpeedMetersPerSecond);
+        Assert.Equal(12f, profile.ExitSpeedMetersPerSecond);
+        Assert.Equal(150f, profile.AccelerationDistanceMeters, 5);
+        Assert.Equal(86f, profile.CruiseDistanceMeters, 5);
+        Assert.Equal(64f, profile.DecelerationDistanceMeters, 5);
+        Assert.Equal(
+            300f,
+            profile.AccelerationDistanceMeters
+            + profile.CruiseDistanceMeters
+            + profile.DecelerationDistanceMeters,
+            5);
+    }
+
+    [Fact]
+    public void InitialAboveCeilingCanCruiseThenDecelerate()
+    {
+        var profile = LongitudinalDynamics.CalculateStraightSpeedProfile(
+            25f, 1f, 2f, distanceMeters: 200f, speedCeilingMetersPerSecond: 23f,
+            targetExitSpeedMetersPerSecond: 15f);
+
+        Assert.Equal(0f, profile.AccelerationDistanceMeters);
+        Assert.Equal(100f, profile.CruiseDistanceMeters, 5);
+        Assert.Equal(100f, profile.DecelerationDistanceMeters, 5);
+        Assert.Equal(25f, profile.PeakSpeedMetersPerSecond);
+        Assert.Equal(15f, profile.ExitSpeedMetersPerSecond);
+    }
+
+    [Fact]
+    public void TravelTimeIncludesCruisePhase()
+    {
+        var profile = LongitudinalDynamics.CalculateStraightSpeedProfile(
+            10f, 1f, 2f, distanceMeters: 300f, speedCeilingMetersPerSecond: 20f,
+            targetExitSpeedMetersPerSecond: 12f);
+        var expected = 2f * profile.AccelerationDistanceMeters / (10f + 20f)
+            + profile.CruiseDistanceMeters / 20f
+            + 2f * profile.DecelerationDistanceMeters / (20f + 12f);
+
+        Assert.Equal(expected, profile.TravelTimeSeconds, 5);
+    }
+
+    [Fact]
+    public void ZeroDistanceProfilePreservesSpeed()
+    {
+        var profile = LongitudinalDynamics.CalculateStraightSpeedProfile(
+            25f, 1f, 2f, distanceMeters: 0f, speedCeilingMetersPerSecond: 23f,
+            targetExitSpeedMetersPerSecond: 12f);
+
+        Assert.Equal(25f, profile.ExitSpeedMetersPerSecond);
+        Assert.Equal(25f, profile.PeakSpeedMetersPerSecond);
+        Assert.Equal(0f, profile.AccelerationDistanceMeters);
+        Assert.Equal(0f, profile.CruiseDistanceMeters);
+        Assert.Equal(0f, profile.DecelerationDistanceMeters);
+        Assert.Equal(0f, profile.TravelTimeSeconds);
     }
 
     private static float CalculateAcceleration(
@@ -294,4 +529,9 @@ public sealed class LongitudinalDynamicsTests
         => LongitudinalDynamics.CalculateCornerEntryDecelerationMetersPerSecondSquared(
             new RiderSkills(50f, 50f, slideControl, 50f, 50f, 50f),
             surface);
+
+    private static float AttainableTopSpeed(float speedSkill, float gearing)
+        => LongitudinalDynamics.CalculateAttainableTopSpeedMetersPerSecond(
+            new RiderSkills(50f, speedSkill, 50f, 50f, 50f, 50f),
+            new BikeSetup(gearing, tractionBias: 0.5f));
 }
