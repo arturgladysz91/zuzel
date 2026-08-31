@@ -144,12 +144,14 @@ nadal nie dają arbitralnego bonusu; różnica wynika z umiejętności, wejścio
 nawierzchni, dostępnego dystansu i potrzeby przygotowania do następnego łuku.
 
 Positive drive w advanced physics ma osiągalną, deterministyczną prędkość
-szczytową. Bazowy zakres **PROVISIONAL** `21–25 m/s` zależy od `Speed`, a
-`BikeSetup.Gearing` mnoży go w zakresie **PROVISIONAL** `0.94–1.06`. Niskie
-przełożenie nadal daje mocniejsze przyspieszenie na `TurnExit`, lecz obniża
-osiągalną prędkość szczytową; wysokie przełożenie daje odwrotny trade-off.
+szczytową. Bazowy zakres **PROVISIONAL / NOT REAL-WORLD CALIBRATED** `21–25 m/s`
+zależy od `Speed`, a `BikeSetup.Gearing` mnoży go w równie prowizorycznym zakresie
+`0.94–1.06`. Te wartości nie są jeszcze oparte na docelowej telemetrii i nie
+opisują finalnej prędkości prawdziwego motocykla żużlowego. Oś `Gearing` oznacza
+`drive-oriented ↔ speed-oriented`: `0` daje mocniejszy corner-exit drive kosztem
+niższej osiągalnej prędkości, a `1` słabszy drive i wyższą osiągalną prędkość.
 Nawierzchnia wpływa na dystans i czas potrzebny do osiągnięcia granicy, ale nie
-zmienia samej granicy.
+zmienia samej granicy. Istniejące wzory i zachowanie pozostają bez zmian.
 
 Nie jest to hard limiter: istniejąca prędkość równa lub większa od granicy nie
 jest obcinana przez positive drive. Profil prostej może mieć fazy
@@ -157,6 +159,16 @@ jest obcinana przez positive drive. Profil prostej może mieć fazy
 nich. Ten sam ceiling ogranicza positive drive na `TurnExit`. Legacy pozostaje
 bez zmian. Drag, opory ruchu, krzywa mocy i optymalizacja przełożenia pod metę
 nie są jeszcze modelowane.
+
+Realny motocykl żużlowy jedzie podczas biegu na jednym biegu, nie ma klasycznego
+układu hamulcowego, a przełożenie jest elementem setupu. Obecne kontrolowane
+wytracanie prędkości nie oznacza hamowania jak motocyklem drogowym: docelowo ma
+odzwierciedlać odjęcie gazu, ustawienie motocykla, uślizg i opory. Dzisiejszy
+lookahead jest uproszczeniem przejściowym pierwszego rzędu — sprowadza prędkość do
+przewidywanego `MaxSafeTurnSpeed` już na końcu Straight. Przyszły etap rozdzieli
+prędkość wejścia w `TurnEntry` od speed scrub podczas ustawienia i settled speed
+głębiej w łuku. Osobny późniejszy etap zbuduje jeden spójny model dostępnego napędu,
+gearingu i oporów zależnych od prędkości; przed nim nie dodajemy arbitralnego taperu.
 
 ---
 

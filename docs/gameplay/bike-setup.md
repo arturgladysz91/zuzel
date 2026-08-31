@@ -10,6 +10,13 @@ Menedżer sugeruje zmianę. Zawodnik może ją zaakceptować, skorygować albo o
 
 ### Przełożenie
 
+Motocykl żużlowy korzysta podczas jazdy z jednego biegu, a przełożenie końcowe
+jest elementem setupu. Obecne API `BikeSetup.Gearing` pozostaje skalarem `0..1`
+i należy je czytać jako oś `drive-oriented ↔ speed-oriented`: `0` jest bardziej
+drive-oriented (lepszy corner-exit drive, niższa osiągalna prędkość), a `1`
+bardziej speed-oriented (słabszy corner-exit drive, wyższa osiągalna prędkość).
+Nie jest to jeszcze mapa na skalibrowane zębatki ani finalne dane telemetryczne.
+
 Interfejs podstawowy:
 
 - dużo krótsze,
