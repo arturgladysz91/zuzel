@@ -163,12 +163,24 @@ nie są jeszcze modelowane.
 Realny motocykl żużlowy jedzie podczas biegu na jednym biegu, nie ma klasycznego
 układu hamulcowego, a przełożenie jest elementem setupu. Obecne kontrolowane
 wytracanie prędkości nie oznacza hamowania jak motocyklem drogowym: docelowo ma
-odzwierciedlać odjęcie gazu, ustawienie motocykla, uślizg i opory. Dzisiejszy
-lookahead jest uproszczeniem przejściowym pierwszego rzędu — sprowadza prędkość do
-przewidywanego `MaxSafeTurnSpeed` już na końcu Straight. Przyszły etap rozdzieli
-prędkość wejścia w `TurnEntry` od speed scrub podczas ustawienia i settled speed
-głębiej w łuku. Osobny późniejszy etap zbuduje jeden spójny model dostępnego napędu,
-gearingu i oporów zależnych od prędkości; przed nim nie dodajemy arbitralnego taperu.
+odzwierciedlać odjęcie gazu, ustawienie motocykla, uślizg i opory. Lookahead
+bezpośredniego `TurnEntry` nie targetuje już settled safe speed. Używa
+`MaxSafeTurnSpeed` jako settled speed i wyznacza maksymalną fizycznie odzyskiwalną
+approach speed ze wzoru `sqrt(settled² + 2 * deceleration * (turnEntryDistance * 0.50))`,
+na podstawie niezmiennej nawierzchni następnego łuku i wejściowego
+`LateralPosition`.
+
+W advanced physics pierwsze **PROVISIONAL / NOT REAL-WORLD CALIBRATED** `50%`
+faktycznie pozostałego dystansu `TurnEntry` jest coarse fazą setting / roll-off /
+slide-entry / speed scrub. Wspólna prowizoryczna capability `2.00–3.20 m/s²`
+zależy od `SlideControl` i wejściowej nawierzchni bieżącego `TurnEntry`. Skuteczny
+scrub może rozpocząć łuk powyżej settled speed i naturalnie zakończyć się `Ok`;
+residual overspeed dopiero potem rozstrzyga niezmieniony `SegmentPhysics`, a enum
+`Brake` nie oznacza hamulca tarczowego. Czas to czas scrub phase plus przejazd
+pozostałego dystansu z prędkością po constraint; crash zachowuje globalne `50%`
+remaining progress i wyłącznie czas scrub phase. `TurnMiddle`, `TurnExit` i legacy
+pozostają bez tej fazy. Osobny późniejszy etap zbuduje spójny model dostępnego
+napędu, gearing, drag, power curve i oporów zależnych od prędkości.
 
 ---
 
