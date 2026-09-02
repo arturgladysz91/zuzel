@@ -16,6 +16,16 @@ public readonly record struct StraightSpeedProfile(
     float DecelerationDistanceMeters);
 
 /// <summary>
+/// Deterministic first-phase traversal of an advanced TurnEntry. The exit
+/// speed is resolved before the residual corner constraint is applied.
+/// </summary>
+public readonly record struct TurnEntryScrubProfile(
+    float ExitSpeedMetersPerSecond,
+    float TravelTimeSeconds,
+    float DecelerationDistanceMeters,
+    float CarryDistanceMeters);
+
+/// <summary>
 /// Deterministic longitudinal motion helpers. The current acceleration values
 /// are provisional first-model parameters, not final motorcycle performance data.
 /// </summary>
@@ -31,6 +41,11 @@ public static class LongitudinalDynamics
     public const float MaxStraightAccelerationMetersPerSecondSquared = 1.60f;
     public const float MinCornerEntryDecelerationMetersPerSecondSquared = 2.00f;
     public const float MaxCornerEntryDecelerationMetersPerSecondSquared = 3.20f;
+
+    // PROVISIONAL / NOT REAL-WORLD CALIBRATED coarse phase split. The first
+    // half of the actually remaining TurnEntry represents setting, roll-off,
+    // slide entry and speed scrub rather than conventional mechanical braking.
+    public const float ProvisionalTurnEntryScrubDistanceFraction = 0.50f;
 
     // PROVISIONAL / NOT REAL-WORLD CALIBRATED first-model parameters.
     // These bound only positive drive; they are not telemetry-derived final
@@ -181,6 +196,122 @@ public static class LongitudinalDynamics
         var deceleration = baseDeceleration * surfaceMultiplier;
         ValidateNonNegativeFinite(deceleration, "result");
         return deceleration;
+    }
+
+    public static float CalculateMaximumTurnEntryApproachSpeedMetersPerSecond(
+        float settledTargetSpeedMetersPerSecond,
+        float decelerationMetersPerSecondSquared,
+        float availableTurnEntryDistanceMeters)
+    {
+        ValidateNonNegativeFinite(
+            settledTargetSpeedMetersPerSecond,
+            nameof(settledTargetSpeedMetersPerSecond));
+        ValidatePositiveFinite(
+            decelerationMetersPerSecondSquared,
+            nameof(decelerationMetersPerSecondSquared));
+        ValidateNonNegativeFinite(
+            availableTurnEntryDistanceMeters,
+            nameof(availableTurnEntryDistanceMeters));
+
+        var scrubDistanceMeters = (double)availableTurnEntryDistanceMeters
+            * ProvisionalTurnEntryScrubDistanceFraction;
+        var maximumApproachSpeedSquared =
+            (double)settledTargetSpeedMetersPerSecond * settledTargetSpeedMetersPerSecond
+            + 2d * decelerationMetersPerSecondSquared * scrubDistanceMeters;
+        var maximumApproachSpeed = (float)Math.Sqrt(maximumApproachSpeedSquared);
+        if (!float.IsFinite(maximumApproachSpeed))
+        {
+            throw new OverflowException(
+                "Maximum TurnEntry approach speed exceeds the finite single-precision domain.");
+        }
+
+        return maximumApproachSpeed;
+    }
+
+    public static TurnEntryScrubProfile CalculateTurnEntryScrubProfile(
+        float initialSpeedMetersPerSecond,
+        float settledTargetSpeedMetersPerSecond,
+        float decelerationMetersPerSecondSquared,
+        float availableTurnEntryDistanceMeters)
+    {
+        ValidateNonNegativeFinite(
+            initialSpeedMetersPerSecond,
+            nameof(initialSpeedMetersPerSecond));
+        ValidateNonNegativeFinite(
+            settledTargetSpeedMetersPerSecond,
+            nameof(settledTargetSpeedMetersPerSecond));
+        ValidatePositiveFinite(
+            decelerationMetersPerSecondSquared,
+            nameof(decelerationMetersPerSecondSquared));
+        ValidateNonNegativeFinite(
+            availableTurnEntryDistanceMeters,
+            nameof(availableTurnEntryDistanceMeters));
+
+        var scrubDistanceMeters = availableTurnEntryDistanceMeters
+            * ProvisionalTurnEntryScrubDistanceFraction;
+        if (scrubDistanceMeters == 0f)
+        {
+            return new TurnEntryScrubProfile(
+                initialSpeedMetersPerSecond,
+                0f,
+                0f,
+                0f);
+        }
+
+        if (initialSpeedMetersPerSecond <= settledTargetSpeedMetersPerSecond)
+        {
+            var carryTimeSeconds = CalculateCruiseTimeSeconds(
+                scrubDistanceMeters,
+                initialSpeedMetersPerSecond);
+            return new TurnEntryScrubProfile(
+                initialSpeedMetersPerSecond,
+                carryTimeSeconds,
+                0f,
+                scrubDistanceMeters);
+        }
+
+        var requiredDecelerationDistanceMeters =
+            ((double)initialSpeedMetersPerSecond * initialSpeedMetersPerSecond
+             - (double)settledTargetSpeedMetersPerSecond * settledTargetSpeedMetersPerSecond)
+            / (2d * decelerationMetersPerSecondSquared);
+        if (requiredDecelerationDistanceMeters >= scrubDistanceMeters)
+        {
+            var exitSpeedMetersPerSecond = DecelerateOverDistance(
+                initialSpeedMetersPerSecond,
+                decelerationMetersPerSecondSquared,
+                scrubDistanceMeters);
+            var travelTimeSeconds = CalculatePhaseTimeSeconds(
+                scrubDistanceMeters,
+                initialSpeedMetersPerSecond,
+                exitSpeedMetersPerSecond);
+            return new TurnEntryScrubProfile(
+                exitSpeedMetersPerSecond,
+                travelTimeSeconds,
+                scrubDistanceMeters,
+                0f);
+        }
+
+        var decelerationDistanceMeters = (float)requiredDecelerationDistanceMeters;
+        var carryDistanceMeters = scrubDistanceMeters - decelerationDistanceMeters;
+        var decelerationTimeSeconds = CalculatePhaseTimeSeconds(
+            decelerationDistanceMeters,
+            initialSpeedMetersPerSecond,
+            settledTargetSpeedMetersPerSecond);
+        var carryTimeSecondsAtTarget = CalculateCruiseTimeSeconds(
+            carryDistanceMeters,
+            settledTargetSpeedMetersPerSecond);
+        var travelTimeSecondsAtTarget = decelerationTimeSeconds + carryTimeSecondsAtTarget;
+        if (!float.IsFinite(travelTimeSecondsAtTarget))
+        {
+            throw new OverflowException(
+                "TurnEntry scrub travel time exceeds the finite single-precision domain.");
+        }
+
+        return new TurnEntryScrubProfile(
+            settledTargetSpeedMetersPerSecond,
+            travelTimeSecondsAtTarget,
+            decelerationDistanceMeters,
+            carryDistanceMeters);
     }
 
     public static StraightSpeedProfile CalculateStraightSpeedProfile(

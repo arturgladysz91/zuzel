@@ -274,12 +274,41 @@ public sealed class SimulationEngine
         var entrySpeed = snapshot.Step.UseLegacyPhysics
             ? ResolveLegacyEntrySpeed(plannedLane, rider)
             : ResolveAdvancedEntrySpeed(snapshot, plannedLane, surface, rider);
+        var remainingProgress = 1f - rider.SegmentProgress;
+        TurnEntryScrubProfile? turnEntryScrubProfile = null;
+        var speedForPhysicalResolution = entrySpeed;
+        if (!snapshot.Step.UseLegacyPhysics
+            && snapshot.Segment.Type == SegmentType.TurnEntry)
+        {
+            var fullRemainingTurnEntryDistance = LaneModel.SegmentLengthMeters(
+                    snapshot.Segment,
+                    rider.LateralPosition,
+                    snapshot.Track.Geometry)
+                * remainingProgress;
+            var settledSafeSpeed = SegmentPhysics.MaxSafeTurnSpeed(
+                rider.LateralPosition,
+                snapshot.Track.Geometry,
+                surface,
+                rider.Profile.Skills,
+                rider.ActiveSetup);
+            var scrubDeceleration = LongitudinalDynamics
+                .CalculateCornerEntryDecelerationMetersPerSecondSquared(
+                    rider.Profile.Skills,
+                    surface);
+            turnEntryScrubProfile = LongitudinalDynamics.CalculateTurnEntryScrubProfile(
+                entrySpeed,
+                settledSafeSpeed,
+                scrubDeceleration,
+                fullRemainingTurnEntryDistance);
+            speedForPhysicalResolution = turnEntryScrubProfile.Value.ExitSpeedMetersPerSecond;
+        }
+
         var resolution = snapshot.Step.UseLegacyPhysics
-            ? SegmentPhysics.Apply(snapshot.Segment, plannedLane, entrySpeed)
+            ? SegmentPhysics.Apply(snapshot.Segment, plannedLane, speedForPhysicalResolution)
             : SegmentPhysics.Apply(new SegmentPhysicsContext(
                 Segment: snapshot.Segment,
                 Lane: plannedLane,
-                Speed: entrySpeed,
+                Speed: speedForPhysicalResolution,
                 Geometry: snapshot.Track.Geometry,
                 Surface: surface,
                 Skills: rider.Profile.Skills,
@@ -295,7 +324,6 @@ public sealed class SimulationEngine
             ? ApplySurfaceRisk(snapshot, resolution.Lane, decision.Risk)
             : resolution.IncidentRisk;
 
-        var remainingProgress = 1f - rider.SegmentProgress;
         var canonicalAdvance = resolution.Outcome == SegmentOutcome.Crash
             ? remainingProgress * 0.5f
             : remainingProgress;
@@ -332,7 +360,7 @@ public sealed class SimulationEngine
                 cornerEntryDeceleration,
                 travelled,
                 attainableTopSpeed,
-                ResolveImmediateNextTurnSafeSpeed(snapshot, rider));
+                ResolveImmediateNextTurnApproachSpeed(snapshot, rider));
             speed = straightProfile.Value.ExitSpeedMetersPerSecond;
         }
         else if (!snapshot.Step.UseLegacyPhysics
@@ -357,9 +385,25 @@ public sealed class SimulationEngine
                 attainableTopSpeed);
         }
 
-        var averageSpeed = MathF.Max(1f, (entrySpeed + MathF.Max(speed, 0f)) * 0.5f);
-        var segmentTravelTimeSeconds = straightProfile?.TravelTimeSeconds
-            ?? travelled / averageSpeed;
+        float segmentTravelTimeSeconds;
+        if (turnEntryScrubProfile is { } scrubProfile)
+        {
+            segmentTravelTimeSeconds = CalculateTurnEntryTravelTimeSeconds(
+                scrubProfile,
+                travelled,
+                resolution.Speed,
+                resolution.Outcome);
+        }
+        else if (straightProfile is { } profile)
+        {
+            segmentTravelTimeSeconds = profile.TravelTimeSeconds;
+        }
+        else
+        {
+            var averageSpeed = MathF.Max(1f, (entrySpeed + MathF.Max(speed, 0f)) * 0.5f);
+            segmentTravelTimeSeconds = travelled / averageSpeed;
+        }
+
         var elapsedTime = rider.ElapsedTimeSeconds + segmentTravelTimeSeconds;
         var lateralPosition = snapshot.Step.UseLegacyPhysics
             ? resolution.Lane
@@ -400,7 +444,7 @@ public sealed class SimulationEngine
             ApplySurfaceWear: resolution.Outcome != SegmentOutcome.Crash);
     }
 
-    private static float? ResolveImmediateNextTurnSafeSpeed(
+    private static float? ResolveImmediateNextTurnApproachSpeed(
         SimulationSnapshot snapshot,
         RiderSnapshot rider)
     {
@@ -410,18 +454,69 @@ public sealed class SimulationEngine
             return null;
 
         var nextSegmentIndex = (snapshot.Step.SegmentIndex + 1) % snapshot.Track.Segments.Count;
-        if (snapshot.Track.Segments[nextSegmentIndex].Type != SegmentType.TurnEntry)
+        var nextSegment = snapshot.Track.Segments[nextSegmentIndex];
+        if (nextSegment.Type != SegmentType.TurnEntry)
             return null;
 
         var nextSurface = snapshot.TrackState.SampleSurface(
             nextSegmentIndex,
             rider.LateralPosition);
-        return SegmentPhysics.MaxSafeTurnSpeed(
+        var settledSafeSpeed = SegmentPhysics.MaxSafeTurnSpeed(
             rider.LateralPosition,
             snapshot.Track.Geometry,
             nextSurface,
             rider.Profile.Skills,
             rider.ActiveSetup);
+        var scrubDeceleration = LongitudinalDynamics
+            .CalculateCornerEntryDecelerationMetersPerSecondSquared(
+                rider.Profile.Skills,
+                nextSurface);
+        var turnEntryLength = LaneModel.SegmentLengthMeters(
+            nextSegment,
+            rider.LateralPosition,
+            snapshot.Track.Geometry);
+        return LongitudinalDynamics.CalculateMaximumTurnEntryApproachSpeedMetersPerSecond(
+            settledSafeSpeed,
+            scrubDeceleration,
+            turnEntryLength);
+    }
+
+    private static float CalculateTurnEntryTravelTimeSeconds(
+        TurnEntryScrubProfile scrubProfile,
+        float travelledMeters,
+        float postConstraintSpeedMetersPerSecond,
+        SegmentOutcome outcome)
+    {
+        if (outcome == SegmentOutcome.Crash)
+            return scrubProfile.TravelTimeSeconds;
+
+        var scrubDistanceMeters = scrubProfile.DecelerationDistanceMeters
+            + scrubProfile.CarryDistanceMeters;
+        var postScrubDistanceMeters = travelledMeters - scrubDistanceMeters;
+        var tolerance = MathF.Max(1e-6f, travelledMeters * 1e-6f);
+        if (postScrubDistanceMeters < -tolerance)
+        {
+            throw new InvalidOperationException(
+                "TurnEntry scrub distance exceeds the actual travelled distance.");
+        }
+
+        postScrubDistanceMeters = MathF.Max(0f, postScrubDistanceMeters);
+        if (postScrubDistanceMeters > 0f
+            && (!float.IsFinite(postConstraintSpeedMetersPerSecond)
+                || postConstraintSpeedMetersPerSecond <= 0f))
+        {
+            throw new InvalidOperationException(
+                "A non-crashing TurnEntry requires positive speed after the residual constraint.");
+        }
+
+        var postScrubTimeSeconds = postScrubDistanceMeters == 0f
+            ? 0f
+            : postScrubDistanceMeters / postConstraintSpeedMetersPerSecond;
+        var travelTimeSeconds = scrubProfile.TravelTimeSeconds + postScrubTimeSeconds;
+        if (!float.IsFinite(travelTimeSeconds))
+            throw new OverflowException("TurnEntry travel time exceeds the finite single-precision domain.");
+
+        return travelTimeSeconds;
     }
 
     private static void ResolveExistingInteractions(

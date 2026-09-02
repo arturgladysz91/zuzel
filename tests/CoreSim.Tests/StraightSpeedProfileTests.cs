@@ -37,16 +37,19 @@ public sealed class StraightSpeedProfileTests
     }
 
     [Fact]
-    public void StraightLooksAheadToImmediateTurnEntry()
+    public void StraightTargetsRecoverableTurnEntryApproachInsteadOfSettledSafeSpeed()
     {
         var track = TrackOf(100f, SegmentType.Straight, SegmentType.TurnEntry);
         var state = UniformState(track, PerfectSurface);
         var rider = Rider(1, lane: 1, lateralPosition: 1f, speed: 10f);
-        var expectedTarget = NextTurnSafeSpeed(track, state, rider, nextSegmentIndex: 1);
+        var settledSafeSpeed = NextTurnSettledSafeSpeed(track, state, rider, nextSegmentIndex: 1);
+        var expectedTarget = NextTurnApproachSpeed(track, state, rider, nextSegmentIndex: 1);
 
         var result = ResolveSingle(track, state, rider, targetLane: 1);
 
         Assert.Equal(10f, result.Change.PhysicsSpeed);
+        Assert.True(expectedTarget > settledSafeSpeed);
+        Assert.True(result.Change.Speed > settledSafeSpeed);
         Assert.Equal(expectedTarget, result.Change.Speed, 5);
     }
 
@@ -87,8 +90,8 @@ public sealed class StraightSpeedProfileTests
 
         var good = ResolveSingle(track, goodState, Clone(rider), targetLane: 1);
         var poor = ResolveSingle(track, poorState, Clone(rider), targetLane: 1);
-        var goodTarget = NextTurnSafeSpeed(track, goodState, rider, nextSegmentIndex: 1);
-        var poorTarget = NextTurnSafeSpeed(track, poorState, rider, nextSegmentIndex: 1);
+        var goodTarget = NextTurnApproachSpeed(track, goodState, rider, nextSegmentIndex: 1);
+        var poorTarget = NextTurnApproachSpeed(track, poorState, rider, nextSegmentIndex: 1);
 
         Assert.Equal(goodTarget, good.Change.Speed, 5);
         Assert.Equal(poorTarget, poor.Change.Speed, 5);
@@ -124,7 +127,7 @@ public sealed class StraightSpeedProfileTests
         var track = TrackOf(5f, SegmentType.Straight, SegmentType.TurnEntry);
         var state = UniformState(track, PerfectSurface);
         var rider = Rider(1, lane: 1, lateralPosition: 1f, speed: 20f);
-        var target = NextTurnSafeSpeed(track, state, rider, nextSegmentIndex: 1);
+        var target = NextTurnApproachSpeed(track, state, rider, nextSegmentIndex: 1);
 
         var result = ResolveSingle(track, state, rider, targetLane: 1);
 
@@ -138,7 +141,7 @@ public sealed class StraightSpeedProfileTests
         var track = StandardOrderTrack(100f);
         var state = UniformState(track, PerfectSurface);
         var rider = RiderAt(1, lane: 1, lateralPosition: 1f, speed: 10f, lapNumber: 1, segmentIndex: 3, track);
-        var target = NextTurnSafeSpeed(track, state, rider, nextSegmentIndex: 0);
+        var target = NextTurnApproachSpeed(track, state, rider, nextSegmentIndex: 0);
 
         var result = ResolveSingle(
             track,
@@ -198,7 +201,7 @@ public sealed class StraightSpeedProfileTests
         var track = TrackOf(100f, SegmentType.Straight, SegmentType.TurnEntry);
         var state = UniformState(track, PerfectSurface);
         var rider = Rider(1, lane: 1, lateralPosition: 1f, speed: 0f);
-        var target = NextTurnSafeSpeed(track, state, rider, nextSegmentIndex: 1);
+        var target = NextTurnApproachSpeed(track, state, rider, nextSegmentIndex: 1);
         rider.Speed = target;
         var acceleration = LongitudinalDynamics.CalculateStraightAccelerationMetersPerSecondSquared(
             rider.Profile.Skills,
@@ -239,7 +242,7 @@ public sealed class StraightSpeedProfileTests
             geometry);
         var state = UniformState(track, PerfectSurface);
         var rider = Rider(1, lane: 1, entryPosition, speed: 10f);
-        var target = NextTurnSafeSpeed(track, state, rider, nextSegmentIndex: 1);
+        var target = NextTurnApproachSpeed(track, state, rider, nextSegmentIndex: 1);
         var acceleration = LongitudinalDynamics.CalculateStraightAccelerationMetersPerSecondSquared(
             rider.Profile.Skills,
             PerfectSurface);
@@ -424,7 +427,7 @@ public sealed class StraightSpeedProfileTests
         var track = TrackOf(100f, SegmentType.Straight, SegmentType.TurnEntry);
         var state = UniformState(track, PerfectSurface);
         var rider = Rider(1, lane: 1, lateralPosition: 1f, speed: 10f);
-        var target = NextTurnSafeSpeed(track, state, rider, nextSegmentIndex: 1);
+        var target = NextTurnApproachSpeed(track, state, rider, nextSegmentIndex: 1);
 
         var result = ResolveSingle(track, state, rider, targetLane: 1);
 
@@ -576,7 +579,7 @@ public sealed class StraightSpeedProfileTests
             TrackSegment.LanesCount,
             (segmentIndex, _) => segmentIndex == 1 ? nextTurnSurface : PerfectSurface);
 
-    private static float NextTurnSafeSpeed(
+    private static float NextTurnSettledSafeSpeed(
         Track track,
         TrackState state,
         RiderState rider,
@@ -587,6 +590,33 @@ public sealed class StraightSpeedProfileTests
             state.Snapshot().SampleSurface(nextSegmentIndex, rider.LateralPosition),
             rider.Profile.Skills,
             rider.ActiveSetup);
+
+    private static float NextTurnApproachSpeed(
+        Track track,
+        TrackState state,
+        RiderState rider,
+        int nextSegmentIndex)
+    {
+        var surface = state.Snapshot().SampleSurface(nextSegmentIndex, rider.LateralPosition);
+        var settledSafeSpeed = SegmentPhysics.MaxSafeTurnSpeed(
+            rider.LateralPosition,
+            track.Geometry,
+            surface,
+            rider.Profile.Skills,
+            rider.ActiveSetup);
+        var scrubDeceleration = LongitudinalDynamics
+            .CalculateCornerEntryDecelerationMetersPerSecondSquared(
+                rider.Profile.Skills,
+                surface);
+        var turnEntryLength = LaneModel.SegmentLengthMeters(
+            track.Segments[nextSegmentIndex],
+            rider.LateralPosition,
+            track.Geometry);
+        return LongitudinalDynamics.CalculateMaximumTurnEntryApproachSpeedMetersPerSecond(
+            settledSafeSpeed,
+            scrubDeceleration,
+            turnEntryLength);
+    }
 
     private static float AttainableTopSpeed(RiderState rider)
         => LongitudinalDynamics.CalculateAttainableTopSpeedMetersPerSecond(

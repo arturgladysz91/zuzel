@@ -511,6 +511,286 @@ public sealed class LongitudinalDynamicsTests
         Assert.Equal(0f, profile.TravelTimeSeconds);
     }
 
+    [Fact]
+    public void MaximumApproachSpeedExceedsSettledSpeedWhenScrubDistanceExists()
+    {
+        var approach = LongitudinalDynamics.CalculateMaximumTurnEntryApproachSpeedMetersPerSecond(
+            settledTargetSpeedMetersPerSecond: 16f,
+            decelerationMetersPerSecondSquared: 2.5f,
+            availableTurnEntryDistanceMeters: 30f);
+
+        Assert.True(approach > 16f);
+    }
+
+    [Fact]
+    public void MaximumApproachSpeedUsesHalfTurnEntryDistance()
+    {
+        const float target = 16f;
+        const float deceleration = 2.5f;
+        const float distance = 30f;
+        var expected = MathF.Sqrt(
+            target * target
+            + 2f * deceleration * distance
+            * LongitudinalDynamics.ProvisionalTurnEntryScrubDistanceFraction);
+
+        var approach = LongitudinalDynamics.CalculateMaximumTurnEntryApproachSpeedMetersPerSecond(
+            target,
+            deceleration,
+            distance);
+
+        Assert.Equal(expected, approach, 5);
+    }
+
+    [Fact]
+    public void ZeroTurnEntryDistanceMakesApproachEqualSettledTarget()
+    {
+        var approach = LongitudinalDynamics.CalculateMaximumTurnEntryApproachSpeedMetersPerSecond(
+            16f,
+            2.5f,
+            0f);
+
+        Assert.Equal(16f, approach);
+    }
+
+    [Fact]
+    public void MoreScrubCapabilityRaisesRecoverableApproachSpeed()
+    {
+        var lower = LongitudinalDynamics.CalculateMaximumTurnEntryApproachSpeedMetersPerSecond(
+            16f,
+            2f,
+            30f);
+        var higher = LongitudinalDynamics.CalculateMaximumTurnEntryApproachSpeedMetersPerSecond(
+            16f,
+            3.2f,
+            30f);
+
+        Assert.True(higher > lower);
+    }
+
+    [Fact]
+    public void LongerTurnEntryRaisesRecoverableApproachSpeed()
+    {
+        var shorter = LongitudinalDynamics.CalculateMaximumTurnEntryApproachSpeedMetersPerSecond(
+            16f,
+            2.5f,
+            20f);
+        var longer = LongitudinalDynamics.CalculateMaximumTurnEntryApproachSpeedMetersPerSecond(
+            16f,
+            2.5f,
+            40f);
+
+        Assert.True(longer > shorter);
+    }
+
+    [Fact]
+    public void EntryBelowSettledTargetDoesNotDecelerate()
+    {
+        var profile = LongitudinalDynamics.CalculateTurnEntryScrubProfile(
+            initialSpeedMetersPerSecond: 14f,
+            settledTargetSpeedMetersPerSecond: 16f,
+            decelerationMetersPerSecondSquared: 2.5f,
+            availableTurnEntryDistanceMeters: 30f);
+
+        Assert.Equal(14f, profile.ExitSpeedMetersPerSecond);
+        Assert.Equal(0f, profile.DecelerationDistanceMeters);
+        Assert.Equal(15f, profile.CarryDistanceMeters, 5);
+        Assert.Equal(15f / 14f, profile.TravelTimeSeconds, 5);
+    }
+
+    [Fact]
+    public void EntryExactlyAtTargetCarriesThroughScrubPhase()
+    {
+        var profile = LongitudinalDynamics.CalculateTurnEntryScrubProfile(
+            initialSpeedMetersPerSecond: 16f,
+            settledTargetSpeedMetersPerSecond: 16f,
+            decelerationMetersPerSecondSquared: 2.5f,
+            availableTurnEntryDistanceMeters: 30f);
+
+        Assert.Equal(16f, profile.ExitSpeedMetersPerSecond);
+        Assert.Equal(0f, profile.DecelerationDistanceMeters);
+        Assert.Equal(15f, profile.CarryDistanceMeters, 5);
+    }
+
+    [Fact]
+    public void InsufficientScrubDistanceLeavesResidualOverspeed()
+    {
+        var profile = LongitudinalDynamics.CalculateTurnEntryScrubProfile(
+            initialSpeedMetersPerSecond: 22f,
+            settledTargetSpeedMetersPerSecond: 16f,
+            decelerationMetersPerSecondSquared: 2f,
+            availableTurnEntryDistanceMeters: 20f);
+
+        Assert.True(profile.ExitSpeedMetersPerSecond > 16f);
+        Assert.Equal(10f, profile.DecelerationDistanceMeters, 5);
+        Assert.Equal(0f, profile.CarryDistanceMeters);
+    }
+
+    [Fact]
+    public void SufficientScrubReachesTargetThenCarries()
+    {
+        const float initial = 18f;
+        const float target = 16f;
+        const float deceleration = 2.5f;
+        const float availableDistance = 40f;
+        var requiredDistance = (initial * initial - target * target) / (2f * deceleration);
+
+        var profile = LongitudinalDynamics.CalculateTurnEntryScrubProfile(
+            initial,
+            target,
+            deceleration,
+            availableDistance);
+
+        Assert.Equal(target, profile.ExitSpeedMetersPerSecond);
+        Assert.Equal(requiredDistance, profile.DecelerationDistanceMeters, 5);
+        Assert.Equal(
+            availableDistance * LongitudinalDynamics.ProvisionalTurnEntryScrubDistanceFraction
+            - requiredDistance,
+            profile.CarryDistanceMeters,
+            5);
+    }
+
+    [Fact]
+    public void ScrubPhaseDistancesSumExactlyToHalfAvailableDistance()
+    {
+        const float availableDistance = 37f;
+        var profile = LongitudinalDynamics.CalculateTurnEntryScrubProfile(
+            18f,
+            16f,
+            2.5f,
+            availableDistance);
+
+        Assert.Equal(
+            availableDistance * LongitudinalDynamics.ProvisionalTurnEntryScrubDistanceFraction,
+            profile.DecelerationDistanceMeters + profile.CarryDistanceMeters,
+            5);
+    }
+
+    [Fact]
+    public void InsufficientScrubTimeUsesEndpointKinematicTime()
+    {
+        const float initial = 22f;
+        const float availableDistance = 20f;
+        var profile = LongitudinalDynamics.CalculateTurnEntryScrubProfile(
+            initial,
+            16f,
+            2f,
+            availableDistance);
+        var scrubDistance = availableDistance
+            * LongitudinalDynamics.ProvisionalTurnEntryScrubDistanceFraction;
+        var expected = 2f * scrubDistance / (initial + profile.ExitSpeedMetersPerSecond);
+
+        Assert.Equal(expected, profile.TravelTimeSeconds, 5);
+    }
+
+    [Fact]
+    public void ReachTargetThenCarryTimeUsesBothPhases()
+    {
+        const float initial = 18f;
+        const float target = 16f;
+        var profile = LongitudinalDynamics.CalculateTurnEntryScrubProfile(
+            initial,
+            target,
+            2.5f,
+            40f);
+        var expected = 2f * profile.DecelerationDistanceMeters / (initial + target)
+            + profile.CarryDistanceMeters / target;
+
+        Assert.Equal(expected, profile.TravelTimeSeconds, 5);
+    }
+
+    [Fact]
+    public void MaximumApproachSpeedScrubsExactlyToTarget()
+    {
+        const float target = 16f;
+        const float deceleration = 2.5f;
+        const float availableDistance = 30f;
+        var approach = LongitudinalDynamics.CalculateMaximumTurnEntryApproachSpeedMetersPerSecond(
+            target,
+            deceleration,
+            availableDistance);
+
+        var profile = LongitudinalDynamics.CalculateTurnEntryScrubProfile(
+            approach,
+            target,
+            deceleration,
+            availableDistance);
+
+        Assert.Equal(target, profile.ExitSpeedMetersPerSecond, 5);
+    }
+
+    [Fact]
+    public void ZeroAvailableDistancePreservesSpeedAndZeroTime()
+    {
+        var profile = LongitudinalDynamics.CalculateTurnEntryScrubProfile(
+            22f,
+            16f,
+            2.5f,
+            0f);
+
+        Assert.Equal(22f, profile.ExitSpeedMetersPerSecond);
+        Assert.Equal(0f, profile.TravelTimeSeconds);
+        Assert.Equal(0f, profile.DecelerationDistanceMeters);
+        Assert.Equal(0f, profile.CarryDistanceMeters);
+    }
+
+    [Theory]
+    [InlineData(-1f, 16f, 2.5f, 30f)]
+    [InlineData(float.NaN, 16f, 2.5f, 30f)]
+    [InlineData(float.PositiveInfinity, 16f, 2.5f, 30f)]
+    [InlineData(float.NegativeInfinity, 16f, 2.5f, 30f)]
+    [InlineData(18f, -1f, 2.5f, 30f)]
+    [InlineData(18f, float.NaN, 2.5f, 30f)]
+    [InlineData(18f, float.PositiveInfinity, 2.5f, 30f)]
+    [InlineData(18f, float.NegativeInfinity, 2.5f, 30f)]
+    [InlineData(18f, 16f, -1f, 30f)]
+    [InlineData(18f, 16f, 0f, 30f)]
+    [InlineData(18f, 16f, float.NaN, 30f)]
+    [InlineData(18f, 16f, float.PositiveInfinity, 30f)]
+    [InlineData(18f, 16f, float.NegativeInfinity, 30f)]
+    [InlineData(18f, 16f, 2.5f, -1f)]
+    [InlineData(18f, 16f, 2.5f, float.NaN)]
+    [InlineData(18f, 16f, 2.5f, float.PositiveInfinity)]
+    [InlineData(18f, 16f, 2.5f, float.NegativeInfinity)]
+    public void TurnEntryScrubRejectsInvalidInputs(
+        float initialSpeed,
+        float targetSpeed,
+        float deceleration,
+        float availableDistance)
+    {
+        Assert.Throws<ArgumentOutOfRangeException>(() =>
+            LongitudinalDynamics.CalculateTurnEntryScrubProfile(
+                initialSpeed,
+                targetSpeed,
+                deceleration,
+                availableDistance));
+    }
+
+    [Theory]
+    [InlineData(-1f, 2.5f, 30f)]
+    [InlineData(float.NaN, 2.5f, 30f)]
+    [InlineData(float.PositiveInfinity, 2.5f, 30f)]
+    [InlineData(float.NegativeInfinity, 2.5f, 30f)]
+    [InlineData(16f, -1f, 30f)]
+    [InlineData(16f, 0f, 30f)]
+    [InlineData(16f, float.NaN, 30f)]
+    [InlineData(16f, float.PositiveInfinity, 30f)]
+    [InlineData(16f, float.NegativeInfinity, 30f)]
+    [InlineData(16f, 2.5f, -1f)]
+    [InlineData(16f, 2.5f, float.NaN)]
+    [InlineData(16f, 2.5f, float.PositiveInfinity)]
+    [InlineData(16f, 2.5f, float.NegativeInfinity)]
+    public void MaximumTurnEntryApproachSpeedRejectsInvalidInputs(
+        float targetSpeed,
+        float deceleration,
+        float availableDistance)
+    {
+        Assert.Throws<ArgumentOutOfRangeException>(() =>
+            LongitudinalDynamics.CalculateMaximumTurnEntryApproachSpeedMetersPerSecond(
+                targetSpeed,
+                deceleration,
+                availableDistance));
+    }
+
     private static float CalculateAcceleration(
         float speedSkill,
         float gearing,
