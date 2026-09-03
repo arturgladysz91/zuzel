@@ -124,7 +124,7 @@ public sealed class DistanceLimitedTurnExitDriveTests
         => AssertDoesNotReceivePositiveTurnExitDrive(SegmentType.TurnMiddle);
 
     [Fact]
-    public void StraightUsesItsOwnLongitudinalProfile()
+    public void AdvancedStraightUsesForceBasedProfile()
     {
         const float entrySpeed = 10f;
         var rider = Rider(1, lane: 1, lateralPosition: 1f, entrySpeed);
@@ -132,10 +132,6 @@ public sealed class DistanceLimitedTurnExitDriveTests
             SegmentType.Straight,
             rider,
             targetLane: 1);
-        var straightAcceleration = LongitudinalDynamics
-            .CalculateStraightAccelerationMetersPerSecondSquared(
-                rider.Profile.Skills,
-                PerfectDriveSurface);
         var cornerEntryDeceleration = LongitudinalDynamics
             .CalculateCornerEntryDecelerationMetersPerSecondSquared(
                 rider.Profile.Skills,
@@ -143,9 +139,11 @@ public sealed class DistanceLimitedTurnExitDriveTests
         var attainableTopSpeed = LongitudinalDynamics.CalculateAttainableTopSpeedMetersPerSecond(
             rider.Profile.Skills,
             rider.ActiveSetup);
-        var expected = LongitudinalDynamics.CalculateStraightSpeedProfile(
+        var expected = LongitudinalDynamics.CalculateForceBasedStraightSpeedProfile(
             entrySpeed,
-            straightAcceleration,
+            rider.Profile.Skills,
+            rider.ActiveSetup,
+            PerfectDriveSurface,
             cornerEntryDeceleration,
             TrackGeometry.Default.StraightLengthMeters,
             attainableTopSpeed);

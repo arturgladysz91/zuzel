@@ -137,8 +137,9 @@ Różnica może wynikać z lepszego wyjścia z poprzedniego łuku oraz fizyczneg
 profilu prędkości przejazdu; istniejące reguły kontaktu i interakcji pozostają
 bez zmian.
 
-Legacy zachowuje na prostej prędkość. Advanced physics używa pierwszego
-distance-limited profilu longitudinal: zawodnik może przyspieszyć, a przed
+Legacy zachowuje na prostej prędkość. Od #27 advanced physics używa
+speed-dependent, force-based i distance-limited profilu longitudinal: zawodnik
+może przyspieszyć, a przed
 bezpośrednio następującym łukiem kontrolowanie wytracić prędkość. Linie prostej
 nadal nie dają arbitralnego bonusu; różnica wynika z umiejętności, wejściowej
 nawierzchni, dostępnego dystansu i potrzeby przygotowania do następnego łuku.
@@ -154,12 +155,19 @@ Nawierzchnia wpływa na dystans i czas potrzebny do osiągnięcia granicy, ale n
 zmienia samej granicy. Istniejące wzory i zachowanie pozostają bez zmian.
 
 Nie jest to hard limiter: istniejąca prędkość równa lub większa od granicy nie
-jest obcinana przez positive drive. Profil prostej może mieć fazy
-`accelerate → cruise → decelerate`, a czas przejazdu jest sumą czasu każdej z
-nich. Ten sam ceiling nadal ogranicza positive drive na `TurnExit`.
+jest obcinana przez positive drive. Advanced Straight dzieli rzeczywisty dystans
+na deterministyczne kroki maksymalnie `1 m`, z dokładną końcową resztą. Każdy
+full-drive krok liczy predictor z acceleration na początku, następnie prędkość
+pośrednią i corrected acceleration w midpoint; czas kroku to
+`2 * ds / (v_start + v_end)`. Suma czasów kroków steruje również ruchem bocznym.
+Zachowany helper analityczny `CalculateStraightSpeedProfile` nie jest już
+produkcyjną ścieżką advanced Straight. Ten sam ceiling nadal ogranicza positive
+drive na `TurnExit`.
 
-Advanced `TurnExit` ma pierwszy force-based foundation pod istniejącym krokiem
-positive drive. Dostępna siła jest kalibrowana tak, aby przy referencyjnych
+Advanced `TurnExit` zachowuje bez zmian funkcjonalnych swój force-based
+foundation i pojedynczy distance-limited krok. Straight współdzieli wyłącznie
+ogólny one-gear envelope oraz przeliczenie reference force na actual force.
+Dostępna siła TurnExit jest kalibrowana tak, aby przy referencyjnych
 `16 m/s` zachować dotychczasowe przyspieszenie zależne od `Speed`, `Gearing` i
 wejściowej nawierzchni. Przy `v <= 16 m/s` one-gear drive envelope wynosi
 dokładnie `1`. Powyżej tej prędkości wynosi
@@ -177,12 +185,27 @@ jako reference force pomnożone przez envelope, aggregate resistance
 nie indywidualną wagą zawodnika. Zachowanie #25 pozostaje dokładnie takie samo
 przy i poniżej `16 m/s`.
 
+Straight ma własne provisional reference acceleration:
+`(0.80–1.60 m/s² przez Speed) * (0.75 + 0.25 * EffectiveGrip) *
+(1.10 + (0.90 - 1.10) * Gearing)`. Reference available force wynosi
+`142 kg * referenceAcceleration + F_resistance(16)`, po czym wspólny envelope,
+opór `40 + 0.20*v²` i nominalna masa `142 kg` dają speed-dependent positive net
+acceleration. Nawierzchnia jest próbkowana raz z wejściowego `LateralPosition`,
+nie co metr.
+
+Przy targetcie następnego `TurnEntry` profil buduje wsteczny allowed-speed
+envelope ze wspólnej corner-entry deceleration. Forward traversal wybiera
+najszybszy wykonalny koniec kroku; jeśli boundary wymagałoby zbyt dużej utraty
+prędkości, używa maksymalnego dozwolonego `DecelerateOverDistance`, zamiast
+teleportować speed do targetu. TurnEntry #24, TurnExit #26 i legacy pozostają
+funkcjonalnie bez zmian.
+
 Envelope jest coarse abstrakcją jednego biegu, a nie modelem RPM, torque/power
 curve, rev limiterem ani mapą realnych zębatek. Fundament nie generuje ujemnego
-przyspieszenia ani naturalnego wytracania prędkości, nie usuwa obecnego ceiling
-i nie obejmuje `Straight`. Legacy pozostaje bez zmian. Wheelspin, rozdzielenie
-oporów na rolling i aerodynamic drag, CdA oraz optymalizacja przełożenia pod
-metę nie są jeszcze modelowane.
+przyspieszenia ani naturalnego wytracania prędkości i nie usuwa obecnego ceiling.
+#27 nie jest finalną real-world calibration. Wheelspin, clutch, slip ratio,
+traction-force cap, wheel radius, real sprockets, rozdzielenie oporów, CdA, wind
+i finalna kalibracja osiągów nie są jeszcze modelowane.
 
 Realny motocykl żużlowy jedzie podczas biegu na jednym biegu, nie ma klasycznego
 układu hamulcowego, a przełożenie jest elementem setupu. Obecne kontrolowane

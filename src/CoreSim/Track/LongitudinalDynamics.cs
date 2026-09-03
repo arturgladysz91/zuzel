@@ -43,14 +43,20 @@ public static class LongitudinalDynamics
     public const float MaxCornerEntryDecelerationMetersPerSecondSquared = 3.20f;
 
     // PROVISIONAL / NOT REAL-WORLD CALIBRATED GAME MODEL INPUTS. These
-    // values provide only the first force-based TurnExit positive-drive
-    // foundation; mass is nominal system mass, not a rider attribute.
+    // values provide only the force-based positive-drive foundation shared by
+    // TurnExit and Straight; mass is nominal system mass, not a rider attribute.
     public const float ProvisionalNominalSystemMassKilograms = 142f;
     public const float ProvisionalBaseResistanceForceNewtons = 40f;
     public const float ProvisionalQuadraticResistanceCoefficient = 0.20f;
     public const float ProvisionalPositiveDriveReferenceSpeedMetersPerSecond = 16f;
     public const float ProvisionalDriveOrientedForceFadePerMeterPerSecond = 0.0175f;
     public const float ProvisionalSpeedOrientedForceFadePerMeterPerSecond = 0.0050f;
+
+    // PROVISIONAL / NUMERICAL INTEGRATION RESOLUTION. This is not a gameplay
+    // parameter; it bounds each deterministic distance step on a Straight.
+    public const float ProvisionalStraightIntegrationStepMeters = 1f;
+
+    private const float StraightPhaseSpeedToleranceMetersPerSecond = 1e-6f;
 
     // PROVISIONAL / NOT REAL-WORLD CALIBRATED coarse phase split. The first
     // half of the actually remaining TurnEntry represents setting, roll-off,
@@ -239,7 +245,7 @@ public static class LongitudinalDynamics
         return availableDriveForceNewtons;
     }
 
-    public static float CalculateTurnExitDriveEnvelopeMultiplier(
+    public static float CalculatePositiveDriveEnvelopeMultiplier(
         float speedMetersPerSecond,
         BikeSetup setup)
     {
@@ -266,6 +272,34 @@ public static class LongitudinalDynamics
         return result;
     }
 
+    public static float CalculateTurnExitDriveEnvelopeMultiplier(
+        float speedMetersPerSecond,
+        BikeSetup setup)
+        => CalculatePositiveDriveEnvelopeMultiplier(speedMetersPerSecond, setup);
+
+    public static float CalculateAvailableDriveForceAtSpeedNewtons(
+        float referenceAvailableDriveForceNewtons,
+        float speedMetersPerSecond,
+        BikeSetup setup)
+    {
+        ValidateNonNegativeFinite(
+            referenceAvailableDriveForceNewtons,
+            nameof(referenceAvailableDriveForceNewtons));
+        var envelope = CalculatePositiveDriveEnvelopeMultiplier(speedMetersPerSecond, setup);
+        var availableDriveForceAtSpeedNewtons =
+            (double)referenceAvailableDriveForceNewtons * envelope;
+        if (!double.IsFinite(availableDriveForceAtSpeedNewtons)
+            || availableDriveForceAtSpeedNewtons > float.MaxValue)
+        {
+            throw new OverflowException(
+                "Available drive force exceeds the finite single-precision domain.");
+        }
+
+        var result = (float)availableDriveForceAtSpeedNewtons;
+        ValidateNonNegativeFinite(result, "result");
+        return result;
+    }
+
     public static float CalculateTurnExitAvailableDriveForceAtSpeedNewtons(
         float speedMetersPerSecond,
         RiderSkills skills,
@@ -274,19 +308,10 @@ public static class LongitudinalDynamics
     {
         var referenceAvailableDriveForceNewtons =
             CalculateTurnExitAvailableDriveForceNewtons(skills, setup, surface);
-        var envelope = CalculateTurnExitDriveEnvelopeMultiplier(speedMetersPerSecond, setup);
-        var availableDriveForceAtSpeedNewtons =
-            (double)referenceAvailableDriveForceNewtons * envelope;
-        if (!double.IsFinite(availableDriveForceAtSpeedNewtons)
-            || availableDriveForceAtSpeedNewtons > float.MaxValue)
-        {
-            throw new OverflowException(
-                "Available TurnExit drive force exceeds the finite single-precision domain.");
-        }
-
-        var result = (float)availableDriveForceAtSpeedNewtons;
-        ValidateNonNegativeFinite(result, "result");
-        return result;
+        return CalculateAvailableDriveForceAtSpeedNewtons(
+            referenceAvailableDriveForceNewtons,
+            speedMetersPerSecond,
+            setup);
     }
 
     public static float CalculateTurnExitNetAccelerationMetersPerSecondSquared(
@@ -323,6 +348,64 @@ public static class LongitudinalDynamics
         var acceleration = baseAcceleration * surfaceDriveMultiplier;
         ValidateNonNegativeFinite(acceleration, "result");
         return acceleration;
+    }
+
+    public static float CalculateStraightReferenceDriveAccelerationMetersPerSecondSquared(
+        RiderSkills skills,
+        BikeSetup setup,
+        TrackSurfaceState surface)
+    {
+        ArgumentNullException.ThrowIfNull(setup);
+
+        var straightAcceleration = CalculateStraightAccelerationMetersPerSecondSquared(
+            skills,
+            surface);
+        var gearingDriveMultiplier = LowGearingDriveMultiplier
+            + (HighGearingDriveMultiplier - LowGearingDriveMultiplier) * setup.Gearing;
+        var referenceAcceleration = straightAcceleration * gearingDriveMultiplier;
+        ValidateNonNegativeFinite(referenceAcceleration, "result");
+        return referenceAcceleration;
+    }
+
+    public static float CalculateStraightAvailableDriveForceNewtons(
+        RiderSkills skills,
+        BikeSetup setup,
+        TrackSurfaceState surface)
+    {
+        var referenceAcceleration =
+            CalculateStraightReferenceDriveAccelerationMetersPerSecondSquared(
+                skills,
+                setup,
+                surface);
+        var referenceResistance = CalculateLongitudinalResistanceForceNewtons(
+            ProvisionalPositiveDriveReferenceSpeedMetersPerSecond);
+        var referenceAvailableForceNewtons =
+            ProvisionalNominalSystemMassKilograms * referenceAcceleration
+            + referenceResistance;
+        ValidateNonNegativeFinite(referenceAvailableForceNewtons, "result");
+        return referenceAvailableForceNewtons;
+    }
+
+    public static float CalculateStraightNetAccelerationMetersPerSecondSquared(
+        float speedMetersPerSecond,
+        RiderSkills skills,
+        BikeSetup setup,
+        TrackSurfaceState surface)
+    {
+        var referenceAvailableForceNewtons = CalculateStraightAvailableDriveForceNewtons(
+            skills,
+            setup,
+            surface);
+        var availableDriveForceNewtons = CalculateAvailableDriveForceAtSpeedNewtons(
+            referenceAvailableForceNewtons,
+            speedMetersPerSecond,
+            setup);
+        var resistanceForceNewtons = CalculateLongitudinalResistanceForceNewtons(
+            speedMetersPerSecond);
+        return CalculateAccelerationFromForcesMetersPerSecondSquared(
+            availableDriveForceNewtons,
+            resistanceForceNewtons,
+            ProvisionalNominalSystemMassKilograms);
     }
 
     public static float CalculateCornerEntryDecelerationMetersPerSecondSquared(
@@ -576,6 +659,227 @@ public static class LongitudinalDynamics
             (float)cappedAccelerationDistance,
             (float)cruiseDistance,
             (float)cappedDecelerationDistance);
+    }
+
+    public static StraightSpeedProfile CalculateForceBasedStraightSpeedProfile(
+        float initialSpeedMetersPerSecond,
+        RiderSkills skills,
+        BikeSetup setup,
+        TrackSurfaceState surface,
+        float cornerEntryDecelerationMetersPerSecondSquared,
+        float distanceMeters,
+        float speedCeilingMetersPerSecond,
+        float? targetExitSpeedMetersPerSecond = null)
+    {
+        ValidateNonNegativeFinite(initialSpeedMetersPerSecond, nameof(initialSpeedMetersPerSecond));
+        ArgumentNullException.ThrowIfNull(skills);
+        ArgumentNullException.ThrowIfNull(setup);
+        ValidatePositiveFinite(
+            cornerEntryDecelerationMetersPerSecondSquared,
+            nameof(cornerEntryDecelerationMetersPerSecondSquared));
+        ValidateNonNegativeFinite(distanceMeters, nameof(distanceMeters));
+        ValidatePositiveFinite(speedCeilingMetersPerSecond, nameof(speedCeilingMetersPerSecond));
+        if (targetExitSpeedMetersPerSecond is { } target)
+            ValidateNonNegativeFinite(target, nameof(targetExitSpeedMetersPerSecond));
+
+        if (distanceMeters == 0f)
+        {
+            return new StraightSpeedProfile(
+                initialSpeedMetersPerSecond,
+                initialSpeedMetersPerSecond,
+                0f,
+                0f,
+                0f,
+                0f);
+        }
+
+        var integrationStepsMeters = CreateStraightIntegrationSteps(distanceMeters);
+        var allowedSpeedEnvelope = targetExitSpeedMetersPerSecond is { } targetSpeed
+            ? CreateBackwardAllowedSpeedEnvelope(
+                integrationStepsMeters,
+                targetSpeed,
+                cornerEntryDecelerationMetersPerSecondSquared)
+            : null;
+
+        var currentSpeedMetersPerSecond = initialSpeedMetersPerSecond;
+        var peakSpeedMetersPerSecond = initialSpeedMetersPerSecond;
+        var travelTimeSeconds = 0d;
+        var accelerationDistanceMeters = 0d;
+        var cruiseDistanceMeters = 0d;
+        var decelerationDistanceMeters = 0d;
+        var lastPhase = StraightDistancePhase.Cruise;
+
+        for (var stepIndex = 0; stepIndex < integrationStepsMeters.Length; stepIndex++)
+        {
+            var stepDistanceMeters = (float)integrationStepsMeters[stepIndex];
+            var accelerationAtStart = CalculateStraightNetAccelerationMetersPerSecondSquared(
+                currentSpeedMetersPerSecond,
+                skills,
+                setup,
+                surface);
+            var predictedSpeedMetersPerSecond = AccelerateOverDistanceWithSpeedCeiling(
+                currentSpeedMetersPerSecond,
+                accelerationAtStart,
+                stepDistanceMeters,
+                speedCeilingMetersPerSecond);
+            var midpointSpeedMetersPerSecond = (float)(
+                ((double)currentSpeedMetersPerSecond + predictedSpeedMetersPerSecond) * 0.5d);
+            var accelerationAtMidpoint = CalculateStraightNetAccelerationMetersPerSecondSquared(
+                midpointSpeedMetersPerSecond,
+                skills,
+                setup,
+                surface);
+            var fullDriveEndSpeedMetersPerSecond = AccelerateOverDistanceWithSpeedCeiling(
+                currentSpeedMetersPerSecond,
+                accelerationAtMidpoint,
+                stepDistanceMeters,
+                speedCeilingMetersPerSecond);
+
+            var endSpeedMetersPerSecond = fullDriveEndSpeedMetersPerSecond;
+            if (allowedSpeedEnvelope is not null)
+            {
+                var allowedEndSpeedMetersPerSecond = (float)allowedSpeedEnvelope[stepIndex + 1];
+                if (fullDriveEndSpeedMetersPerSecond > allowedEndSpeedMetersPerSecond)
+                {
+                    var maximumDecelerationEndSpeedMetersPerSecond = DecelerateOverDistance(
+                        currentSpeedMetersPerSecond,
+                        cornerEntryDecelerationMetersPerSecondSquared,
+                        stepDistanceMeters);
+                    endSpeedMetersPerSecond = Math.Max(
+                        allowedEndSpeedMetersPerSecond,
+                        maximumDecelerationEndSpeedMetersPerSecond);
+                }
+            }
+
+            var speedSumMetersPerSecond =
+                (double)currentSpeedMetersPerSecond + endSpeedMetersPerSecond;
+            if (speedSumMetersPerSecond <= 0d)
+            {
+                throw new InvalidOperationException(
+                    "A positive Straight distance cannot be traversed at zero speed.");
+            }
+
+            travelTimeSeconds += 2d * stepDistanceMeters / speedSumMetersPerSecond;
+            var speedChangeMetersPerSecond =
+                endSpeedMetersPerSecond - currentSpeedMetersPerSecond;
+            if (speedChangeMetersPerSecond > StraightPhaseSpeedToleranceMetersPerSecond)
+            {
+                accelerationDistanceMeters += stepDistanceMeters;
+                lastPhase = StraightDistancePhase.Acceleration;
+            }
+            else if (speedChangeMetersPerSecond < -StraightPhaseSpeedToleranceMetersPerSecond)
+            {
+                decelerationDistanceMeters += stepDistanceMeters;
+                lastPhase = StraightDistancePhase.Deceleration;
+            }
+            else
+            {
+                cruiseDistanceMeters += stepDistanceMeters;
+                lastPhase = StraightDistancePhase.Cruise;
+            }
+
+            currentSpeedMetersPerSecond = endSpeedMetersPerSecond;
+            peakSpeedMetersPerSecond = Math.Max(
+                peakSpeedMetersPerSecond,
+                currentSpeedMetersPerSecond);
+        }
+
+        ReconcileStraightPhaseDistance(
+            distanceMeters,
+            lastPhase,
+            ref accelerationDistanceMeters,
+            ref cruiseDistanceMeters,
+            ref decelerationDistanceMeters);
+
+        if (!double.IsFinite(travelTimeSeconds) || travelTimeSeconds > float.MaxValue)
+            throw new OverflowException("Straight travel time exceeds the finite single-precision domain.");
+
+        return new StraightSpeedProfile(
+            currentSpeedMetersPerSecond,
+            peakSpeedMetersPerSecond,
+            (float)travelTimeSeconds,
+            (float)accelerationDistanceMeters,
+            (float)cruiseDistanceMeters,
+            (float)decelerationDistanceMeters);
+    }
+
+    private static double[] CreateStraightIntegrationSteps(float distanceMeters)
+    {
+        var fullStepCount = Math.Floor(
+            (double)distanceMeters / ProvisionalStraightIntegrationStepMeters);
+        var remainderMeters = distanceMeters
+            - fullStepCount * ProvisionalStraightIntegrationStepMeters;
+        var stepCount = fullStepCount + (remainderMeters > 0d ? 1d : 0d);
+        if (stepCount > int.MaxValue)
+        {
+            throw new OverflowException(
+                "Straight distance requires too many numerical integration steps.");
+        }
+
+        var steps = new double[(int)stepCount];
+        for (var index = 0; index < (int)fullStepCount; index++)
+            steps[index] = ProvisionalStraightIntegrationStepMeters;
+        if (remainderMeters > 0d)
+            steps[^1] = remainderMeters;
+        return steps;
+    }
+
+    private static double[] CreateBackwardAllowedSpeedEnvelope(
+        IReadOnlyList<double> integrationStepsMeters,
+        float targetExitSpeedMetersPerSecond,
+        float cornerEntryDecelerationMetersPerSecondSquared)
+    {
+        var allowedSpeeds = new double[integrationStepsMeters.Count + 1];
+        allowedSpeeds[^1] = targetExitSpeedMetersPerSecond;
+        for (var stepIndex = integrationStepsMeters.Count - 1; stepIndex >= 0; stepIndex--)
+        {
+            var allowedStartSpeedSquared =
+                allowedSpeeds[stepIndex + 1] * allowedSpeeds[stepIndex + 1]
+                + 2d * cornerEntryDecelerationMetersPerSecondSquared
+                  * integrationStepsMeters[stepIndex];
+            var allowedStartSpeed = Math.Sqrt(allowedStartSpeedSquared);
+            if (!double.IsFinite(allowedStartSpeed) || allowedStartSpeed > float.MaxValue)
+            {
+                throw new OverflowException(
+                    "Straight backward allowed-speed envelope exceeds the finite domain.");
+            }
+
+            allowedSpeeds[stepIndex] = allowedStartSpeed;
+        }
+
+        return allowedSpeeds;
+    }
+
+    private static void ReconcileStraightPhaseDistance(
+        float distanceMeters,
+        StraightDistancePhase lastPhase,
+        ref double accelerationDistanceMeters,
+        ref double cruiseDistanceMeters,
+        ref double decelerationDistanceMeters)
+    {
+        var correctionMeters = distanceMeters
+            - accelerationDistanceMeters
+            - cruiseDistanceMeters
+            - decelerationDistanceMeters;
+        switch (lastPhase)
+        {
+            case StraightDistancePhase.Acceleration:
+                accelerationDistanceMeters += correctionMeters;
+                break;
+            case StraightDistancePhase.Deceleration:
+                decelerationDistanceMeters += correctionMeters;
+                break;
+            default:
+                cruiseDistanceMeters += correctionMeters;
+                break;
+        }
+    }
+
+    private enum StraightDistancePhase
+    {
+        Acceleration,
+        Cruise,
+        Deceleration,
     }
 
     private static StraightSpeedProfile CreateFullDriveProfile(
