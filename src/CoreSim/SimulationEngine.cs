@@ -342,10 +342,6 @@ public sealed class SimulationEngine
         if (!snapshot.Step.UseLegacyPhysics
             && snapshot.Segment.Type == SegmentType.Straight)
         {
-            var straightAcceleration = LongitudinalDynamics
-                .CalculateStraightAccelerationMetersPerSecondSquared(
-                    rider.Profile.Skills,
-                    surface);
             var cornerEntryDeceleration = LongitudinalDynamics
                 .CalculateCornerEntryDecelerationMetersPerSecondSquared(
                     rider.Profile.Skills,
@@ -354,9 +350,11 @@ public sealed class SimulationEngine
                 .CalculateAttainableTopSpeedMetersPerSecond(
                     rider.Profile.Skills,
                     rider.ActiveSetup);
-            straightProfile = LongitudinalDynamics.CalculateStraightSpeedProfile(
+            straightProfile = LongitudinalDynamics.CalculateForceBasedStraightSpeedProfile(
                 resolution.Speed,
-                straightAcceleration,
+                rider.Profile.Skills,
+                rider.ActiveSetup,
+                surface,
                 cornerEntryDeceleration,
                 travelled,
                 attainableTopSpeed,

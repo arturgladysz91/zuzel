@@ -63,21 +63,14 @@ public sealed class StraightSpeedProfileTests
             SegmentType.TurnEntry);
         var state = UniformState(track, PerfectSurface);
         var rider = Rider(1, lane: 1, lateralPosition: 1f, speed: 10f);
-        var acceleration = LongitudinalDynamics.CalculateStraightAccelerationMetersPerSecondSquared(
-            rider.Profile.Skills,
-            PerfectSurface);
-        var ceiling = LongitudinalDynamics.CalculateAttainableTopSpeedMetersPerSecond(
-            rider.Profile.Skills,
-            rider.ActiveSetup);
-        var expected = LongitudinalDynamics.AccelerateOverDistanceWithSpeedCeiling(
-            rider.Speed,
-            acceleration,
-            track.Geometry.StraightLengthMeters,
-            ceiling);
+        var expected = ProfileWithoutTurnTarget(
+            rider,
+            PerfectSurface,
+            track.Geometry.StraightLengthMeters);
 
         var result = ResolveSingle(track, state, rider, targetLane: 1);
 
-        Assert.Equal(expected, result.Change.Speed, 5);
+        Assert.Equal(expected.ExitSpeedMetersPerSecond, result.Change.Speed, 5);
     }
 
     [Fact]
@@ -203,15 +196,14 @@ public sealed class StraightSpeedProfileTests
         var rider = Rider(1, lane: 1, lateralPosition: 1f, speed: 0f);
         var target = NextTurnApproachSpeed(track, state, rider, nextSegmentIndex: 1);
         rider.Speed = target;
-        var acceleration = LongitudinalDynamics.CalculateStraightAccelerationMetersPerSecondSquared(
-            rider.Profile.Skills,
-            PerfectSurface);
         var deceleration = LongitudinalDynamics.CalculateCornerEntryDecelerationMetersPerSecondSquared(
             rider.Profile.Skills,
             PerfectSurface);
-        var expectedProfile = LongitudinalDynamics.CalculateStraightSpeedProfile(
+        var expectedProfile = LongitudinalDynamics.CalculateForceBasedStraightSpeedProfile(
             target,
-            acceleration,
+            rider.Profile.Skills,
+            rider.ActiveSetup,
+            PerfectSurface,
             deceleration,
             track.Geometry.StraightLengthMeters,
             LongitudinalDynamics.CalculateAttainableTopSpeedMetersPerSecond(
@@ -243,15 +235,14 @@ public sealed class StraightSpeedProfileTests
         var state = UniformState(track, PerfectSurface);
         var rider = Rider(1, lane: 1, entryPosition, speed: 10f);
         var target = NextTurnApproachSpeed(track, state, rider, nextSegmentIndex: 1);
-        var acceleration = LongitudinalDynamics.CalculateStraightAccelerationMetersPerSecondSquared(
-            rider.Profile.Skills,
-            PerfectSurface);
         var deceleration = LongitudinalDynamics.CalculateCornerEntryDecelerationMetersPerSecondSquared(
             rider.Profile.Skills,
             PerfectSurface);
-        var profile = LongitudinalDynamics.CalculateStraightSpeedProfile(
+        var profile = LongitudinalDynamics.CalculateForceBasedStraightSpeedProfile(
             rider.Speed,
-            acceleration,
+            rider.Profile.Skills,
+            rider.ActiveSetup,
+            PerfectSurface,
             deceleration,
             geometry.StraightLengthMeters,
             LongitudinalDynamics.CalculateAttainableTopSpeedMetersPerSecond(
@@ -293,15 +284,14 @@ public sealed class StraightSpeedProfileTests
         var state = UniformState(track, PerfectSurface);
         var rider = RiderAt(
             1, lane: 1, lateralPosition: 1f, speed: 10f, lapNumber: 1, segmentIndex: 3, track);
-        var acceleration = LongitudinalDynamics.CalculateStraightAccelerationMetersPerSecondSquared(
-            rider.Profile.Skills,
-            PerfectSurface);
         var deceleration = LongitudinalDynamics.CalculateCornerEntryDecelerationMetersPerSecondSquared(
             rider.Profile.Skills,
             PerfectSurface);
-        var expected = LongitudinalDynamics.CalculateStraightSpeedProfile(
+        var expected = LongitudinalDynamics.CalculateForceBasedStraightSpeedProfile(
             rider.Speed,
-            acceleration,
+            rider.Profile.Skills,
+            rider.ActiveSetup,
+            PerfectSurface,
             deceleration,
             track.Geometry.StraightLengthMeters,
             AttainableTopSpeed(rider));
@@ -341,7 +331,7 @@ public sealed class StraightSpeedProfileTests
     }
 
     [Fact]
-    public void ShortStraightDoesNotCreateArtificialGearingDifference()
+    public void ShortStraightRewardsDriveOrientedGearing()
     {
         var track = TrackOf(10f, SegmentType.Straight);
         var state = UniformState(track, PerfectSurface);
@@ -356,7 +346,7 @@ public sealed class StraightSpeedProfileTests
             Rider(2, 1, 1f, 10f, gearing: 1f),
             targetLane: 1);
 
-        Assert.Equal(lowGearing.Change.Speed, highGearing.Change.Speed, 5);
+        Assert.True(lowGearing.Change.Speed > highGearing.Change.Speed);
     }
 
     [Fact]
@@ -493,7 +483,7 @@ public sealed class StraightSpeedProfileTests
     }
 
     [Fact]
-    public void StraightTopSpeedIsIndependentOfRiderCollectionOrder()
+    public void StraightForceTraversalIsIndependentOfRiderCollectionOrder()
     {
         var track = TrackOf(500f, SegmentType.Straight);
         var state = UniformState(track, PerfectSurface);
@@ -528,17 +518,10 @@ public sealed class StraightSpeedProfileTests
             lapNumber: requiredLaps,
             segmentIndex: 3,
             track);
-        var acceleration = LongitudinalDynamics.CalculateStraightAccelerationMetersPerSecondSquared(
-            rider.Profile.Skills,
-            PerfectSurface);
-        var ceiling = LongitudinalDynamics.CalculateAttainableTopSpeedMetersPerSecond(
-            rider.Profile.Skills,
-            rider.ActiveSetup);
-        var expected = LongitudinalDynamics.AccelerateOverDistanceWithSpeedCeiling(
-            rider.Speed,
-            acceleration,
-            track.Geometry.StraightLengthMeters,
-            ceiling);
+        var expected = ProfileWithoutTurnTarget(
+            rider,
+            PerfectSurface,
+            track.Geometry.StraightLengthMeters);
 
         var result = ResolveSingle(
             track,
@@ -549,7 +532,7 @@ public sealed class StraightSpeedProfileTests
             segmentIndex: 3,
             requiredLaps);
 
-        Assert.Equal(expected, result.Change.Speed, 5);
+        Assert.Equal(expected.ExitSpeedMetersPerSecond, result.Change.Speed, 5);
         Assert.Equal(RiderRaceStatus.Finished, result.Change.Status);
     }
 
@@ -632,11 +615,11 @@ public sealed class StraightSpeedProfileTests
         RiderState rider,
         TrackSurfaceState surface,
         float distanceMeters)
-        => LongitudinalDynamics.CalculateStraightSpeedProfile(
+        => LongitudinalDynamics.CalculateForceBasedStraightSpeedProfile(
             rider.Speed,
-            LongitudinalDynamics.CalculateStraightAccelerationMetersPerSecondSquared(
-                rider.Profile.Skills,
-                surface),
+            rider.Profile.Skills,
+            rider.ActiveSetup,
+            surface,
             LongitudinalDynamics.CalculateCornerEntryDecelerationMetersPerSecondSquared(
                 rider.Profile.Skills,
                 surface),
