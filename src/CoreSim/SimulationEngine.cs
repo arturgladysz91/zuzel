@@ -42,19 +42,34 @@ public sealed record SimulationStepEvent(
     string Text,
     int? OtherRiderId = null);
 
+/// <summary>Typed values captured from the production resolution path for one rider.</summary>
+public sealed record RiderStepDiagnostics(
+    int RiderId,
+    float TravelledMeters,
+    float TravelTimeSeconds,
+    float PeakSpeedMetersPerSecond,
+    float? AttainableTopSpeedMetersPerSecond,
+    float? TurnExitNetAccelerationMetersPerSecondSquared,
+    StraightSpeedProfile? StraightProfile,
+    TurnEntryScrubProfile? TurnEntryScrubProfile,
+    TrackSurfaceState EntrySurface);
+
 public sealed class ResolvedSimulationStep
 {
     private readonly ReadOnlyCollection<RiderStateChange> _changes;
     private readonly ReadOnlyCollection<SimulationStepEvent> _events;
+    private readonly ReadOnlyCollection<RiderStepDiagnostics> _diagnostics;
 
     public SimulationSnapshot Snapshot { get; }
     public IReadOnlyList<RiderStateChange> Changes => _changes;
     public IReadOnlyList<SimulationStepEvent> Events => _events;
+    public IReadOnlyList<RiderStepDiagnostics> Diagnostics => _diagnostics;
 
     internal ResolvedSimulationStep(
         SimulationSnapshot snapshot,
         IEnumerable<RiderStateChange> changes,
-        IEnumerable<SimulationStepEvent> events)
+        IEnumerable<SimulationStepEvent> events,
+        IEnumerable<RiderStepDiagnostics> diagnostics)
     {
         Snapshot = snapshot ?? throw new ArgumentNullException(nameof(snapshot));
         _changes = Array.AsReadOnly(changes.OrderBy(change => change.RiderId).ToArray());
@@ -65,6 +80,17 @@ public sealed class ResolvedSimulationStep
             .ThenBy(item => item.Type)
             .ThenBy(item => item.OtherRiderId)
             .ToArray());
+        _diagnostics = Array.AsReadOnly(diagnostics
+            .OrderBy(item => item.RiderId)
+            .ToArray());
+
+        if (!_changes.Select(item => item.RiderId)
+                .SequenceEqual(_diagnostics.Select(item => item.RiderId)))
+        {
+            throw new ArgumentException(
+                "Diagnostics must contain exactly one item for every rider change.",
+                nameof(diagnostics));
+        }
     }
 }
 
@@ -82,6 +108,15 @@ public sealed class SimulationEngine
     public const float ProvisionalLostRhythmOutwardDisplacementMeters = 0.50f;
 
     private readonly IRiderDecisionModel _decisionModel;
+
+    private sealed record ResolvedRider(
+        RiderStateChange Change,
+        float TravelledMeters,
+        float? AttainableTopSpeedMetersPerSecond,
+        float? TurnExitNetAccelerationMetersPerSecondSquared,
+        StraightSpeedProfile? StraightProfile,
+        TurnEntryScrubProfile? TurnEntryScrubProfile,
+        TrackSurfaceState EntrySurface);
 
     public SimulationEngine(IRiderDecisionModel decisionModel)
         => _decisionModel = decisionModel ?? throw new ArgumentNullException(nameof(decisionModel));
@@ -151,12 +186,19 @@ public sealed class SimulationEngine
 
         var intentByRider = intents.ToDictionary(intent => intent.RiderId);
         var changes = new Dictionary<int, RiderStateChange>(activeIds.Length);
+        var riderResolutions = new Dictionary<int, ResolvedRider>(activeIds.Length);
         var events = new List<SimulationStepEvent>();
 
         foreach (var rider in snapshot.Riders.Where(rider => rider.IsActive).OrderBy(rider => rider.RiderId))
         {
-            var change = ResolveRider(snapshot, rider, intentByRider[rider.RiderId].Decision, options);
+            var riderResolution = ResolveRider(
+                snapshot,
+                rider,
+                intentByRider[rider.RiderId].Decision,
+                options);
+            var change = riderResolution.Change;
             changes.Add(rider.RiderId, change);
+            riderResolutions.Add(rider.RiderId, riderResolution);
             events.Add(new SimulationStepEvent(
                 snapshot.Step.StepNumber,
                 10,
@@ -168,7 +210,27 @@ public sealed class SimulationEngine
         if (!snapshot.Step.UseLegacyPhysics)
             ResolveExistingInteractions(snapshot, changes, events);
 
-        return new ResolvedSimulationStep(snapshot, changes.Values, events);
+        var diagnostics = riderResolutions.Values.Select(resolution =>
+        {
+            var rider = snapshot.Rider(resolution.Change.RiderId);
+            var finalChange = changes[resolution.Change.RiderId];
+            var peakSpeed = resolution.StraightProfile?.PeakSpeedMetersPerSecond
+                ?? MathF.Max(resolution.Change.EntrySpeed, resolution.Change.PhysicsSpeed);
+            peakSpeed = MathF.Max(peakSpeed, finalChange.Speed);
+
+            return new RiderStepDiagnostics(
+                finalChange.RiderId,
+                resolution.TravelledMeters,
+                finalChange.ElapsedTimeSeconds - rider.ElapsedTimeSeconds,
+                peakSpeed,
+                resolution.AttainableTopSpeedMetersPerSecond,
+                resolution.TurnExitNetAccelerationMetersPerSecondSquared,
+                resolution.StraightProfile,
+                resolution.TurnEntryScrubProfile,
+                resolution.EntrySurface);
+        });
+
+        return new ResolvedSimulationStep(snapshot, changes.Values, events, diagnostics);
     }
 
     public void Commit(
@@ -252,7 +314,7 @@ public sealed class SimulationEngine
             throw new InvalidOperationException("The resolved rider changes do not match the snapshot.");
     }
 
-    private static RiderStateChange ResolveRider(
+    private static ResolvedRider ResolveRider(
         SimulationSnapshot snapshot,
         RiderSnapshot rider,
         RiderDecision decision,
@@ -339,6 +401,8 @@ public sealed class SimulationEngine
         var travelled = segmentLength * canonicalAdvance;
         var speed = resolution.Speed;
         StraightSpeedProfile? straightProfile = null;
+        float? attainableTopSpeed = null;
+        float? turnExitNetAcceleration = null;
         if (!snapshot.Step.UseLegacyPhysics
             && snapshot.Segment.Type == SegmentType.Straight)
         {
@@ -346,7 +410,7 @@ public sealed class SimulationEngine
                 .CalculateCornerEntryDecelerationMetersPerSecondSquared(
                     rider.Profile.Skills,
                     surface);
-            var attainableTopSpeed = LongitudinalDynamics
+            attainableTopSpeed = LongitudinalDynamics
                 .CalculateAttainableTopSpeedMetersPerSecond(
                     rider.Profile.Skills,
                     rider.ActiveSetup);
@@ -357,7 +421,7 @@ public sealed class SimulationEngine
                 surface,
                 cornerEntryDeceleration,
                 travelled,
-                attainableTopSpeed,
+                attainableTopSpeed.Value,
                 ResolveImmediateNextTurnApproachSpeed(snapshot, rider));
             speed = straightProfile.Value.ExitSpeedMetersPerSecond;
         }
@@ -367,21 +431,21 @@ public sealed class SimulationEngine
             && resolution.Speed > 0f
             && travelled > 0f)
         {
-            var turnExitAcceleration = LongitudinalDynamics
+            turnExitNetAcceleration = LongitudinalDynamics
                 .CalculateTurnExitNetAccelerationMetersPerSecondSquared(
                     resolution.Speed,
                     rider.Profile.Skills,
                     rider.ActiveSetup,
                     surface);
-            var attainableTopSpeed = LongitudinalDynamics
+            attainableTopSpeed = LongitudinalDynamics
                 .CalculateAttainableTopSpeedMetersPerSecond(
                     rider.Profile.Skills,
                     rider.ActiveSetup);
             speed = LongitudinalDynamics.AccelerateOverDistanceWithSpeedCeiling(
                 resolution.Speed,
-                turnExitAcceleration,
+                turnExitNetAcceleration.Value,
                 travelled,
-                attainableTopSpeed);
+                attainableTopSpeed.Value);
         }
 
         float segmentTravelTimeSeconds;
@@ -423,24 +487,31 @@ public sealed class SimulationEngine
             ? Math.Clamp(rider.Morale - 0.04f, 0f, 1f)
             : rider.Morale;
 
-        return new RiderStateChange(
-            rider.RiderId,
-            rider.Lane,
-            plannedLane,
-            decision.TargetLane,
-            resolution.Lane,
-            lateralPosition,
-            speed,
-            risk,
-            status,
-            elapsedTime,
-            position,
-            snapshot.Segment.Id,
-            morale,
-            resolution.Outcome,
-            entrySpeed,
-            resolution.Speed,
-            ApplySurfaceWear: resolution.Outcome != SegmentOutcome.Crash);
+        return new ResolvedRider(
+            new RiderStateChange(
+                rider.RiderId,
+                rider.Lane,
+                plannedLane,
+                decision.TargetLane,
+                resolution.Lane,
+                lateralPosition,
+                speed,
+                risk,
+                status,
+                elapsedTime,
+                position,
+                snapshot.Segment.Id,
+                morale,
+                resolution.Outcome,
+                entrySpeed,
+                resolution.Speed,
+                ApplySurfaceWear: resolution.Outcome != SegmentOutcome.Crash),
+            travelled,
+            attainableTopSpeed,
+            turnExitNetAcceleration,
+            straightProfile,
+            turnEntryScrubProfile,
+            surface);
     }
 
     private static float? ResolveImmediateNextTurnApproachSpeed(

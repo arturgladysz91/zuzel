@@ -36,17 +36,21 @@ TrackEvolution.ApplyTrackWork(
     preparationLog);
 
 var simulator = new HeatSimulator(new AdaptiveDecisionModel(seed: 1234));
+var options = new HeatSimulationOptions
+{
+    Laps = 4,
+    Seed = 2026,
+    Weather = WeatherState.LightRain,
+};
+var calibrationCollector = new CalibrationTraceCollector(track, options, heatId: 1);
 var result = simulator.SimulateHeat(
     track,
     trackState,
     riders,
-    new HeatSimulationOptions
-    {
-        Laps = 4,
-        Seed = 2026,
-        Weather = WeatherState.LightRain,
-    },
-    heatId: 1);
+    options,
+    heatId: 1,
+    observer: calibrationCollector);
+var calibrationTrace = calibrationCollector.Complete(result);
 
 foreach (var line in result.Log.Lines)
     Console.WriteLine(line);
@@ -54,6 +58,26 @@ foreach (var line in result.Log.Lines)
 Console.WriteLine("\nClassification:");
 foreach (var rider in result.Classification)
     Console.WriteLine($"{rider.Position}. rider={rider.RiderId} points={rider.Points} crashed={rider.Crashed} time={rider.TimeSeconds:F2}");
+
+Console.WriteLine($"\nCalibration summary: samples={calibrationTrace.StepSamples.Count}");
+foreach (var rider in calibrationTrace.RiderSummaries)
+{
+    Console.WriteLine(
+        $"rider={rider.RiderId} time={rider.TotalTimeSeconds:F3} distance={rider.TotalDistanceMeters:F3} vmax={rider.MaxSpeedMetersPerSecond:F3}");
+}
+foreach (var lap in calibrationTrace.LapSummaries)
+{
+    Console.WriteLine(
+        $"lap rider={lap.RiderId} number={lap.LapNumber} time={lap.LapTimeSeconds:F3} distance={lap.LapDistanceMeters:F3} vmax={lap.MaxSpeedMetersPerSecond:F3}");
+}
+
+Console.WriteLine("\nCalibration CSV sample:");
+foreach (var row in CalibrationCsvExporter.ExportSteps(calibrationTrace)
+             .Split('\n', StringSplitOptions.RemoveEmptyEntries)
+             .Take(4))
+{
+    Console.WriteLine(row);
+}
 
 var balance = BalanceAnalyzer.AnalyzeStartingGates(track, profiles, simulations: 2000, seed: 2026);
 Console.WriteLine("\nStarting-gate balance (2000 heats, riders rotated):");
