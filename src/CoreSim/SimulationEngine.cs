@@ -370,7 +370,8 @@ public sealed class SimulationEngine
             && travelled > 0f)
         {
             var turnExitAcceleration = LongitudinalDynamics
-                .CalculateTurnExitAccelerationMetersPerSecondSquared(
+                .CalculateTurnExitNetAccelerationMetersPerSecondSquared(
+                    resolution.Speed,
                     rider.Profile.Skills,
                     rider.ActiveSetup,
                     surface);

@@ -23,7 +23,7 @@ public sealed class DistanceLimitedTurnExitDriveTests
     }
 
     [Fact]
-    public void AdvancedTurnExitUsesDistanceLimitedDrive()
+    public void AdvancedTurnExitUsesForceBasedNetAcceleration()
     {
         const float entryPosition = 1.25f;
         const float entrySpeed = 10f;
@@ -35,11 +35,20 @@ public sealed class DistanceLimitedTurnExitDriveTests
             new TrackSegment(0, SegmentType.TurnExit),
             entryPosition,
             TrackGeometry.Default);
-        var acceleration = LongitudinalDynamics.CalculateTurnExitAccelerationMetersPerSecondSquared(
+        var acceleration = LongitudinalDynamics
+            .CalculateTurnExitNetAccelerationMetersPerSecondSquared(
+                entrySpeed,
+                result.Snapshot.Rider(1).Profile.Skills,
+                result.Snapshot.Rider(1).ActiveSetup,
+                PerfectDriveSurface);
+        var attainableTopSpeed = LongitudinalDynamics.CalculateAttainableTopSpeedMetersPerSecond(
             result.Snapshot.Rider(1).Profile.Skills,
-            result.Snapshot.Rider(1).ActiveSetup,
-            PerfectDriveSurface);
-        var expected = LongitudinalDynamics.AccelerateOverDistance(entrySpeed, acceleration, travelled);
+            result.Snapshot.Rider(1).ActiveSetup);
+        var expected = LongitudinalDynamics.AccelerateOverDistanceWithSpeedCeiling(
+            entrySpeed,
+            acceleration,
+            travelled,
+            attainableTopSpeed);
 
         Assert.Equal(SegmentOutcome.Ok, result.Change.Outcome);
         Assert.Equal(entrySpeed, result.Change.PhysicsSpeed);
@@ -48,7 +57,41 @@ public sealed class DistanceLimitedTurnExitDriveTests
         Assert.Equal(
             result.Change.PhysicsSpeed * result.Change.PhysicsSpeed + 2f * acceleration * travelled,
             result.Change.Speed * result.Change.Speed,
-            4);
+            3);
+    }
+
+    [Fact]
+    public void ReferenceSpeedTurnExitPreservesPreviousAccelerationContract()
+    {
+        var rider = Rider(
+            1,
+            lane: 1,
+            lateralPosition: 1f,
+            speed: LongitudinalDynamics.ProvisionalPositiveDriveReferenceSpeedMetersPerSecond);
+        var result = ResolveSingle(SegmentType.TurnExit, rider, targetLane: 1);
+        var travelled = LaneModel.SegmentLengthMeters(
+            new TrackSegment(0, SegmentType.TurnExit),
+            rider.LateralPosition,
+            TrackGeometry.Default);
+        var referenceAcceleration = LongitudinalDynamics
+            .CalculateTurnExitAccelerationMetersPerSecondSquared(
+                rider.Profile.Skills,
+                rider.ActiveSetup,
+                PerfectDriveSurface);
+        var attainableTopSpeed = LongitudinalDynamics.CalculateAttainableTopSpeedMetersPerSecond(
+            rider.Profile.Skills,
+            rider.ActiveSetup);
+        var expected = LongitudinalDynamics.AccelerateOverDistanceWithSpeedCeiling(
+            result.Change.PhysicsSpeed,
+            referenceAcceleration,
+            travelled,
+            attainableTopSpeed);
+
+        Assert.Equal(SegmentOutcome.Ok, result.Change.Outcome);
+        Assert.Equal(
+            LongitudinalDynamics.ProvisionalPositiveDriveReferenceSpeedMetersPerSecond,
+            result.Change.PhysicsSpeed);
+        Assert.Equal(expected, result.Change.Speed, 5);
     }
 
     [Fact]
@@ -84,14 +127,33 @@ public sealed class DistanceLimitedTurnExitDriveTests
     public void StraightUsesItsOwnLongitudinalProfile()
     {
         const float entrySpeed = 10f;
+        var rider = Rider(1, lane: 1, lateralPosition: 1f, entrySpeed);
         var result = ResolveSingle(
             SegmentType.Straight,
-            Rider(1, lane: 1, lateralPosition: 1f, entrySpeed),
+            rider,
             targetLane: 1);
+        var straightAcceleration = LongitudinalDynamics
+            .CalculateStraightAccelerationMetersPerSecondSquared(
+                rider.Profile.Skills,
+                PerfectDriveSurface);
+        var cornerEntryDeceleration = LongitudinalDynamics
+            .CalculateCornerEntryDecelerationMetersPerSecondSquared(
+                rider.Profile.Skills,
+                PerfectDriveSurface);
+        var attainableTopSpeed = LongitudinalDynamics.CalculateAttainableTopSpeedMetersPerSecond(
+            rider.Profile.Skills,
+            rider.ActiveSetup);
+        var expected = LongitudinalDynamics.CalculateStraightSpeedProfile(
+            entrySpeed,
+            straightAcceleration,
+            cornerEntryDeceleration,
+            TrackGeometry.Default.StraightLengthMeters,
+            attainableTopSpeed);
 
         Assert.Equal(SegmentOutcome.Ok, result.Change.Outcome);
         Assert.Equal(entrySpeed, result.Change.PhysicsSpeed);
-        Assert.True(result.Change.Speed > result.Change.PhysicsSpeed);
+        Assert.Equal(expected.ExitSpeedMetersPerSecond, result.Change.Speed, 5);
+        Assert.Equal(expected.TravelTimeSeconds, result.Change.ElapsedTimeSeconds, 5);
     }
 
     private static void AssertDoesNotReceivePositiveTurnExitDrive(SegmentType segmentType)
@@ -150,11 +212,20 @@ public sealed class DistanceLimitedTurnExitDriveTests
             new TrackSegment(0, SegmentType.TurnExit),
             entryPosition,
             TrackGeometry.Default);
-        var acceleration = LongitudinalDynamics.CalculateTurnExitAccelerationMetersPerSecondSquared(
+        var acceleration = LongitudinalDynamics
+            .CalculateTurnExitNetAccelerationMetersPerSecondSquared(
+                maxSafeSpeed,
+                rider.Profile.Skills,
+                rider.ActiveSetup,
+                PerfectDriveSurface);
+        var attainableTopSpeed = LongitudinalDynamics.CalculateAttainableTopSpeedMetersPerSecond(
             rider.Profile.Skills,
-            rider.ActiveSetup,
-            PerfectDriveSurface);
-        var expected = LongitudinalDynamics.AccelerateOverDistance(maxSafeSpeed, acceleration, travelled);
+            rider.ActiveSetup);
+        var expected = LongitudinalDynamics.AccelerateOverDistanceWithSpeedCeiling(
+            maxSafeSpeed,
+            acceleration,
+            travelled,
+            attainableTopSpeed);
 
         Assert.Equal(SegmentOutcome.Brake, result.Change.Outcome);
         Assert.Equal(maxSafeSpeed, result.Change.PhysicsSpeed, 5);
@@ -204,6 +275,45 @@ public sealed class DistanceLimitedTurnExitDriveTests
     }
 
     [Fact]
+    public void ExistingOverspeedAboveAttainableCeilingIsNotReduced()
+    {
+        var geometry = new TrackGeometry(
+            straightLengthMeters: TrackGeometry.Default.StraightLengthMeters,
+            innerRadiusMeters: 40f,
+            laneSpacingMeters: TrackGeometry.Default.LaneSpacingMeters,
+            turnSegmentAngleRadians: TrackGeometry.Default.TurnSegmentAngleRadians);
+        var rider = Rider(
+            1,
+            lane: 4,
+            lateralPosition: 4f,
+            speed: 0f,
+            speedSkill: 50f,
+            gearing: 0f);
+        var attainableTopSpeed = LongitudinalDynamics.CalculateAttainableTopSpeedMetersPerSecond(
+            rider.Profile.Skills,
+            rider.ActiveSetup);
+        var maxSafeSpeed = SegmentPhysics.MaxSafeTurnSpeed(
+            rider.LateralPosition,
+            geometry,
+            PerfectDriveSurface,
+            rider.Profile.Skills,
+            rider.ActiveSetup);
+        rider.Speed = (attainableTopSpeed + maxSafeSpeed) * 0.5f;
+
+        var result = ResolveSingle(
+            SegmentType.TurnExit,
+            rider,
+            targetLane: 4,
+            geometry: geometry);
+
+        Assert.True(rider.Speed > attainableTopSpeed);
+        Assert.True(rider.Speed < maxSafeSpeed);
+        Assert.Equal(SegmentOutcome.Ok, result.Change.Outcome);
+        Assert.Equal(rider.Speed, result.Change.PhysicsSpeed);
+        Assert.Equal(rider.Speed, result.Change.Speed);
+    }
+
+    [Fact]
     public void LegacyTurnExitDoesNotUseDistanceLimitedDrive()
     {
         var result = ResolveSingle(
@@ -232,14 +342,16 @@ public sealed class DistanceLimitedTurnExitDriveTests
         RiderState rider,
         int targetLane,
         TrackSurfaceState? surface = null,
-        bool useLegacyPhysics = false)
+        bool useLegacyPhysics = false,
+        TrackGeometry? geometry = null)
     {
         var resolved = Resolve(
             segmentType,
             new[] { rider },
             new FixedTargetDecisionModel(targetLane),
             surface ?? PerfectDriveSurface,
-            useLegacyPhysics);
+            useLegacyPhysics,
+            geometry);
         return new ResolvedResult(Assert.Single(resolved.Changes), resolved.Snapshot);
     }
 
@@ -266,9 +378,12 @@ public sealed class DistanceLimitedTurnExitDriveTests
         IReadOnlyList<RiderState> riders,
         IRiderDecisionModel decisionModel,
         TrackSurfaceState surface,
-        bool useLegacyPhysics)
+        bool useLegacyPhysics,
+        TrackGeometry? geometry = null)
     {
-        var track = new Track(new[] { new TrackSegment(0, segmentType) }, TrackGeometry.Default);
+        var track = new Track(
+            new[] { new TrackSegment(0, segmentType) },
+            geometry ?? TrackGeometry.Default);
         var trackState = TrackState.CreateDefault(track, surface);
         var engine = new SimulationEngine(decisionModel);
         var options = new HeatSimulationOptions
@@ -349,7 +464,9 @@ public sealed class DistanceLimitedTurnExitDriveTests
                 change.PhysicsSpeed,
                 change.Speed,
                 change.ElapsedTimeSeconds,
-                change.LateralPosition))
+                change.LateralPosition,
+                change.Position.DistanceMeters,
+                change.Lane))
             .ToArray();
 
     private sealed record ResolvedResult(RiderStateChange Change, SimulationSnapshot Snapshot);
@@ -360,5 +477,7 @@ public sealed class DistanceLimitedTurnExitDriveTests
         float PhysicsSpeed,
         float Speed,
         float ElapsedTimeSeconds,
-        float LateralPosition);
+        float LateralPosition,
+        float DistanceMeters,
+        int Lane);
 }

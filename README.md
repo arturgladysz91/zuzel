@@ -156,9 +156,23 @@ zmienia samej granicy. Istniejące wzory i zachowanie pozostają bez zmian.
 Nie jest to hard limiter: istniejąca prędkość równa lub większa od granicy nie
 jest obcinana przez positive drive. Profil prostej może mieć fazy
 `accelerate → cruise → decelerate`, a czas przejazdu jest sumą czasu każdej z
-nich. Ten sam ceiling ogranicza positive drive na `TurnExit`. Legacy pozostaje
-bez zmian. Drag, opory ruchu, krzywa mocy i optymalizacja przełożenia pod metę
-nie są jeszcze modelowane.
+nich. Ten sam ceiling nadal ogranicza positive drive na `TurnExit`.
+
+Advanced `TurnExit` ma pierwszy force-based foundation pod istniejącym krokiem
+positive drive. Dostępna siła jest kalibrowana tak, aby przy referencyjnych
+`16 m/s` zachować dotychczasowe przyspieszenie zależne od `Speed`, `Gearing` i
+wejściowej nawierzchni. Następnie model liczy **PROVISIONAL / NOT REAL-WORLD
+CALIBRATED** aggregate resistance `F_resistance = 40 N + 0.20 N/(m/s)² * v²`,
+`F_net_positive = max(0, F_drive - F_resistance)` i
+`a = F_net_positive / 142 kg`. `142 kg` jest nominalną wewnętrzną masą układu,
+nie indywidualną wagą zawodnika. Daje to trochę większy positive drive poniżej
+prędkości referencyjnej, taki sam przy `16 m/s` i mniejszy powyżej niej.
+
+Ten fundament nie generuje jeszcze ujemnego przyspieszenia ani naturalnego
+wytracania prędkości, nie usuwa obecnego ceiling i nie obejmuje `Straight`.
+Legacy pozostaje bez zmian. Krzywa mocy, RPM, wheelspin, rozdzielenie oporów na
+rolling i aerodynamic drag, CdA oraz optymalizacja przełożenia pod metę nie są
+jeszcze modelowane.
 
 Realny motocykl żużlowy jedzie podczas biegu na jednym biegu, nie ma klasycznego
 układu hamulcowego, a przełożenie jest elementem setupu. Obecne kontrolowane

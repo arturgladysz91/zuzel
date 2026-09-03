@@ -160,6 +160,221 @@ public sealed class LongitudinalDynamicsTests
     }
 
     [Fact]
+    public void ResistanceAtZeroSpeedEqualsBaseResistance()
+    {
+        var resistance = LongitudinalDynamics.CalculateLongitudinalResistanceForceNewtons(0f);
+
+        Assert.Equal(LongitudinalDynamics.ProvisionalBaseResistanceForceNewtons, resistance);
+    }
+
+    [Fact]
+    public void ResistanceUsesQuadraticSpeedTerm()
+    {
+        const float speed = 20f;
+        var expected = LongitudinalDynamics.ProvisionalBaseResistanceForceNewtons
+            + LongitudinalDynamics.ProvisionalQuadraticResistanceCoefficient * speed * speed;
+
+        var resistance = LongitudinalDynamics.CalculateLongitudinalResistanceForceNewtons(speed);
+
+        Assert.Equal(expected, resistance, 5);
+    }
+
+    [Fact]
+    public void ResistanceIncreasesWithSpeed()
+    {
+        var atTen = LongitudinalDynamics.CalculateLongitudinalResistanceForceNewtons(10f);
+        var atTwenty = LongitudinalDynamics.CalculateLongitudinalResistanceForceNewtons(20f);
+        var atThirty = LongitudinalDynamics.CalculateLongitudinalResistanceForceNewtons(30f);
+
+        Assert.True(atThirty > atTwenty);
+        Assert.True(atTwenty > atTen);
+    }
+
+    [Theory]
+    [InlineData(-1f)]
+    [InlineData(float.NaN)]
+    [InlineData(float.PositiveInfinity)]
+    [InlineData(float.NegativeInfinity)]
+    public void ResistanceRejectsInvalidSpeed(float speed)
+    {
+        Assert.Throws<ArgumentOutOfRangeException>(() =>
+            LongitudinalDynamics.CalculateLongitudinalResistanceForceNewtons(speed));
+    }
+
+    [Fact]
+    public void AccelerationFromForcesUsesFEqualsMA()
+    {
+        var acceleration = LongitudinalDynamics
+            .CalculateAccelerationFromForcesMetersPerSecondSquared(
+                availableDriveForceNewtons: 300f,
+                resistanceForceNewtons: 100f,
+                systemMassKilograms: 100f);
+
+        Assert.Equal(2f, acceleration);
+    }
+
+    [Fact]
+    public void AccelerationFromForcesNeverReturnsNegative()
+    {
+        var acceleration = LongitudinalDynamics
+            .CalculateAccelerationFromForcesMetersPerSecondSquared(
+                availableDriveForceNewtons: 100f,
+                resistanceForceNewtons: 300f,
+                systemMassKilograms: 100f);
+
+        Assert.Equal(0f, acceleration);
+    }
+
+    [Theory]
+    [InlineData(-1f, 0f, 100f)]
+    [InlineData(float.NaN, 0f, 100f)]
+    [InlineData(float.PositiveInfinity, 0f, 100f)]
+    [InlineData(float.NegativeInfinity, 0f, 100f)]
+    [InlineData(100f, -1f, 100f)]
+    [InlineData(100f, float.NaN, 100f)]
+    [InlineData(100f, float.PositiveInfinity, 100f)]
+    [InlineData(100f, float.NegativeInfinity, 100f)]
+    [InlineData(100f, 0f, 0f)]
+    [InlineData(100f, 0f, -1f)]
+    [InlineData(100f, 0f, float.NaN)]
+    [InlineData(100f, 0f, float.PositiveInfinity)]
+    [InlineData(100f, 0f, float.NegativeInfinity)]
+    public void AccelerationFromForcesRejectsInvalidInputs(
+        float availableDriveForceNewtons,
+        float resistanceForceNewtons,
+        float systemMassKilograms)
+    {
+        Assert.Throws<ArgumentOutOfRangeException>(() =>
+            LongitudinalDynamics.CalculateAccelerationFromForcesMetersPerSecondSquared(
+                availableDriveForceNewtons,
+                resistanceForceNewtons,
+                systemMassKilograms));
+    }
+
+    [Fact]
+    public void ReferenceSpeedPreservesExistingTurnExitAcceleration()
+    {
+        var existing = CalculateAcceleration(50f, 0.5f, PerfectDriveSurface);
+        var forceBased = NetTurnExitAcceleration(
+            LongitudinalDynamics.ProvisionalPositiveDriveReferenceSpeedMetersPerSecond,
+            50f,
+            0.5f,
+            PerfectDriveSurface);
+
+        Assert.Equal(existing, forceBased, 5);
+    }
+
+    [Theory]
+    [InlineData(0f, 0f, 0.35f, 0.6f, 0.75f)]
+    [InlineData(50f, 0.5f, 0.65f, 0.3f, 0.5f)]
+    [InlineData(100f, 1f, 1f, 0f, 0.35f)]
+    public void ReferenceSpeedInvariantAcrossSkillSetupAndSurface(
+        float speedSkill,
+        float gearing,
+        float grip,
+        float ruts,
+        float moisture)
+    {
+        var surface = new TrackSurfaceState(grip, ruts, moisture);
+        var existing = CalculateAcceleration(speedSkill, gearing, surface);
+        var forceBased = NetTurnExitAcceleration(
+            LongitudinalDynamics.ProvisionalPositiveDriveReferenceSpeedMetersPerSecond,
+            speedSkill,
+            gearing,
+            surface);
+
+        Assert.Equal(existing, forceBased, 5);
+    }
+
+    [Fact]
+    public void LowerSpeedHasMoreNetPositiveDriveThanReference()
+    {
+        var lower = NetTurnExitAcceleration(10f, 50f, 0.5f, PerfectDriveSurface);
+        var reference = NetTurnExitAcceleration(16f, 50f, 0.5f, PerfectDriveSurface);
+
+        Assert.True(lower > reference);
+    }
+
+    [Fact]
+    public void HigherSpeedHasLessNetPositiveDriveThanReference()
+    {
+        var reference = NetTurnExitAcceleration(16f, 50f, 0.5f, PerfectDriveSurface);
+        var higher = NetTurnExitAcceleration(25f, 50f, 0.5f, PerfectDriveSurface);
+
+        Assert.True(higher < reference);
+    }
+
+    [Fact]
+    public void SufficientlyHighSpeedCanReducePositiveDriveToZero()
+    {
+        var acceleration = NetTurnExitAcceleration(100f, 50f, 0.5f, PerfectDriveSurface);
+
+        Assert.Equal(0f, acceleration);
+    }
+
+    [Theory]
+    [InlineData(0f)]
+    [InlineData(10f)]
+    [InlineData(16f)]
+    [InlineData(25f)]
+    [InlineData(50f)]
+    [InlineData(100f)]
+    public void NetPositiveDriveNeverBecomesNegativeAcrossWideSpeedRange(float speed)
+    {
+        var acceleration = NetTurnExitAcceleration(
+            speed,
+            50f,
+            0.5f,
+            PerfectDriveSurface);
+
+        Assert.True(acceleration >= 0f);
+    }
+
+    [Fact]
+    public void HigherSpeedSkillProducesMoreAvailableTurnExitDriveForce()
+    {
+        var low = AvailableTurnExitDriveForce(0f, 0.5f, PerfectDriveSurface);
+        var high = AvailableTurnExitDriveForce(100f, 0.5f, PerfectDriveSurface);
+
+        Assert.True(high > low);
+    }
+
+    [Fact]
+    public void DriveOrientedGearingProducesMoreAvailableTurnExitDriveForce()
+    {
+        var driveOriented = AvailableTurnExitDriveForce(50f, 0f, PerfectDriveSurface);
+        var speedOriented = AvailableTurnExitDriveForce(50f, 1f, PerfectDriveSurface);
+
+        Assert.True(driveOriented > speedOriented);
+    }
+
+    [Fact]
+    public void BetterGripProducesMoreAvailableTurnExitDriveForce()
+    {
+        var noEffectiveGrip = new TrackSurfaceState(0f, 0f, 0.35f);
+        var poor = AvailableTurnExitDriveForce(50f, 0.5f, noEffectiveGrip);
+        var good = AvailableTurnExitDriveForce(50f, 0.5f, PerfectDriveSurface);
+
+        Assert.True(good > poor);
+    }
+
+    [Fact]
+    public void GearingIsNotDoubleCountedInAvailableDriveForce()
+    {
+        const float gearing = 0.2f;
+        var referenceAcceleration = CalculateAcceleration(50f, gearing, PerfectDriveSurface);
+        var referenceResistance = LongitudinalDynamics.CalculateLongitudinalResistanceForceNewtons(
+            LongitudinalDynamics.ProvisionalPositiveDriveReferenceSpeedMetersPerSecond);
+        var expected = LongitudinalDynamics.ProvisionalNominalSystemMassKilograms
+            * referenceAcceleration
+            + referenceResistance;
+
+        var actual = AvailableTurnExitDriveForce(50f, gearing, PerfectDriveSurface);
+
+        Assert.Equal(expected, actual, 5);
+    }
+
+    [Fact]
     public void AttainableTopSpeedUsesSpeedSkill()
     {
         var low = AttainableTopSpeed(speedSkill: 0f, gearing: 0.5f);
@@ -796,6 +1011,26 @@ public sealed class LongitudinalDynamicsTests
         float gearing,
         TrackSurfaceState surface)
         => LongitudinalDynamics.CalculateTurnExitAccelerationMetersPerSecondSquared(
+            new RiderSkills(50f, speedSkill, 50f, 50f, 50f, 50f),
+            new BikeSetup(gearing, tractionBias: 0.5f),
+            surface);
+
+    private static float NetTurnExitAcceleration(
+        float speed,
+        float speedSkill,
+        float gearing,
+        TrackSurfaceState surface)
+        => LongitudinalDynamics.CalculateTurnExitNetAccelerationMetersPerSecondSquared(
+            speed,
+            new RiderSkills(50f, speedSkill, 50f, 50f, 50f, 50f),
+            new BikeSetup(gearing, tractionBias: 0.5f),
+            surface);
+
+    private static float AvailableTurnExitDriveForce(
+        float speedSkill,
+        float gearing,
+        TrackSurfaceState surface)
+        => LongitudinalDynamics.CalculateTurnExitAvailableDriveForceNewtons(
             new RiderSkills(50f, speedSkill, 50f, 50f, 50f, 50f),
             new BikeSetup(gearing, tractionBias: 0.5f),
             surface);

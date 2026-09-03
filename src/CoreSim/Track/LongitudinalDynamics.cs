@@ -42,6 +42,14 @@ public static class LongitudinalDynamics
     public const float MinCornerEntryDecelerationMetersPerSecondSquared = 2.00f;
     public const float MaxCornerEntryDecelerationMetersPerSecondSquared = 3.20f;
 
+    // PROVISIONAL / NOT REAL-WORLD CALIBRATED GAME MODEL INPUTS. These
+    // values provide only the first force-based TurnExit positive-drive
+    // foundation; mass is nominal system mass, not a rider attribute.
+    public const float ProvisionalNominalSystemMassKilograms = 142f;
+    public const float ProvisionalBaseResistanceForceNewtons = 40f;
+    public const float ProvisionalQuadraticResistanceCoefficient = 0.20f;
+    public const float ProvisionalPositiveDriveReferenceSpeedMetersPerSecond = 16f;
+
     // PROVISIONAL / NOT REAL-WORLD CALIBRATED coarse phase split. The first
     // half of the actually remaining TurnEntry represents setting, roll-off,
     // slide entry and speed scrub rather than conventional mechanical braking.
@@ -162,6 +170,89 @@ public static class LongitudinalDynamics
         var acceleration = baseAcceleration * gearingDriveMultiplier * surfaceDriveMultiplier;
         ValidateNonNegativeFinite(acceleration, "result");
         return acceleration;
+    }
+
+    public static float CalculateLongitudinalResistanceForceNewtons(
+        float speedMetersPerSecond)
+    {
+        ValidateNonNegativeFinite(speedMetersPerSecond, nameof(speedMetersPerSecond));
+
+        var resistanceForceNewtons =
+            ProvisionalBaseResistanceForceNewtons
+            + ProvisionalQuadraticResistanceCoefficient
+              * (double)speedMetersPerSecond * speedMetersPerSecond;
+        if (!double.IsFinite(resistanceForceNewtons)
+            || resistanceForceNewtons > float.MaxValue)
+        {
+            throw new OverflowException(
+                "Longitudinal resistance exceeds the finite single-precision domain.");
+        }
+
+        var result = (float)resistanceForceNewtons;
+        ValidatePositiveFinite(result, "result");
+        return result;
+    }
+
+    public static float CalculateAccelerationFromForcesMetersPerSecondSquared(
+        float availableDriveForceNewtons,
+        float resistanceForceNewtons,
+        float systemMassKilograms)
+    {
+        ValidateNonNegativeFinite(
+            availableDriveForceNewtons,
+            nameof(availableDriveForceNewtons));
+        ValidateNonNegativeFinite(resistanceForceNewtons, nameof(resistanceForceNewtons));
+        ValidatePositiveFinite(systemMassKilograms, nameof(systemMassKilograms));
+
+        var positiveDriveNetForceNewtons = Math.Max(
+            0d,
+            (double)availableDriveForceNewtons - resistanceForceNewtons);
+        var accelerationMetersPerSecondSquared =
+            positiveDriveNetForceNewtons / systemMassKilograms;
+        if (!double.IsFinite(accelerationMetersPerSecondSquared)
+            || accelerationMetersPerSecondSquared > float.MaxValue)
+        {
+            throw new OverflowException(
+                "Acceleration exceeds the finite single-precision domain.");
+        }
+
+        return (float)accelerationMetersPerSecondSquared;
+    }
+
+    public static float CalculateTurnExitAvailableDriveForceNewtons(
+        RiderSkills skills,
+        BikeSetup setup,
+        TrackSurfaceState surface)
+    {
+        var referenceAcceleration = CalculateTurnExitAccelerationMetersPerSecondSquared(
+            skills,
+            setup,
+            surface);
+        var referenceResistance = CalculateLongitudinalResistanceForceNewtons(
+            ProvisionalPositiveDriveReferenceSpeedMetersPerSecond);
+        var availableDriveForceNewtons =
+            ProvisionalNominalSystemMassKilograms * referenceAcceleration
+            + referenceResistance;
+        ValidateNonNegativeFinite(availableDriveForceNewtons, "result");
+        return availableDriveForceNewtons;
+    }
+
+    public static float CalculateTurnExitNetAccelerationMetersPerSecondSquared(
+        float speedMetersPerSecond,
+        RiderSkills skills,
+        BikeSetup setup,
+        TrackSurfaceState surface)
+    {
+        var availableDriveForceNewtons = CalculateTurnExitAvailableDriveForceNewtons(
+            skills,
+            setup,
+            surface);
+        var resistanceForceNewtons = CalculateLongitudinalResistanceForceNewtons(
+            speedMetersPerSecond);
+        return CalculateAccelerationFromForcesMetersPerSecondSquared(
+            availableDriveForceNewtons,
+            resistanceForceNewtons,
+            ProvisionalNominalSystemMassKilograms);
     }
 
     public static float CalculateStraightAccelerationMetersPerSecondSquared(
