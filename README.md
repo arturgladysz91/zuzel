@@ -339,6 +339,27 @@ Na etapie core:
 
 Priorytet: realistyczne konsekwencje decyzji i stabilny balans.
 
+### 9. Observation / calibration harness
+
+#28 dodaje wyłącznie typed, read-only obserwację produkcyjnego
+`HeatSimulator`; nie kalibruje żadnych liczb i nie tworzy drugiej ścieżki
+symulacji. Opcjonalny `ISimulationStepObserver` jest wywoływany raz po
+`Resolve`, a przed `Commit`. `CalibrationTraceCollector` buduje próbki
+entry/physics/exit/peak, podsumowania okrążeń i zawodników bez parsowania
+tekstowego `SimLog`; działa również przy `EnableLogging=false`. Peak Straight
+pochodzi z faktycznie użytego `StraightSpeedProfile`, a time/distance z
+immutable snapshotu i rozwiązanego state change. CSV jest deterministyczny,
+uporządkowany i używa invariant culture.
+
+Harness nie wykonuje RNG i nie zmienia fizyki ani wyniku biegu. Obecny
+first-lap initial bootstrap **nie jest skalibrowanym standing startem**,
+`TurnExit` nadal nie jest stepped, artificial `AttainableTopSpeed` nadal
+istnieje, a signed negative drag/coasting nadal nie jest modelowany. Roadmap
+(numery PR są tylko opisem kolejności prac): #29 shared stepped TurnExit,
+#30 standing-start/launch, #31 signed net force i natural resistance
+deceleration przygotowujące usunięcie artificial ceiling, a dopiero potem
+porównanie z real-world calibration targets.
+
 ---
 
 ## Status / zakres (przykład)

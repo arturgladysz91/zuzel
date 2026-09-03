@@ -51,7 +51,8 @@ public sealed class HeatSimulator
         TrackState trackState,
         List<RiderState> riders,
         HeatSimulationOptions? options = null,
-        int heatId = 0)
+        int heatId = 0,
+        ISimulationStepObserver? observer = null)
     {
         ValidateInputs(track, trackState, riders);
         options ??= new HeatSimulationOptions();
@@ -84,6 +85,7 @@ public sealed class HeatSimulator
                 var snapshot = _engine.CaptureSnapshot(track, trackState, riders, step);
                 var intents = _engine.Decide(snapshot);
                 var resolved = _engine.Resolve(snapshot, intents, options);
+                observer?.OnStepResolved(resolved);
                 _engine.Commit(resolved, riders, trackState, log);
 
                 var lapComplete = segmentIndex == track.Segments.Count - 1;

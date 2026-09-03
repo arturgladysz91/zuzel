@@ -74,6 +74,25 @@ Kolejność to `original entry → scrub → SegmentPhysics → random incident 
 
 Advanced lateral movement na Straight i TurnEntry otrzymuje rzeczywisty czas odpowiedniego profilu. Model nie przelicza profilu po `MoveTowards`; surfaces i geometria nadal używają segment-entry position. `TurnMiddle`, legacy, cały model #24 TurnEntry i funkcjonalne zachowanie #26 TurnExit są niezmienione. Zakresy top-speed `21–25 m/s` i `0.94–1.06` nadal obowiązują jako artificial ceiling i są **PROVISIONAL / NOT REAL-WORLD CALIBRATED**. #27 także nie jest finalną kalibracją: nadal brak RPM, torque/power curve, engine kW, rev limiter, real sprockets, wheel radius, clutch, wheelspin, slip ratio, traction-force cap, CdA, wind, weather aero oraz natural negative drag/coast deceleration.
 
+### Calibration telemetry — OBSERVATION ONLY
+
+#28 obserwuje dokładnie produkcyjny `HeatSimulator`: opcjonalny observer działa
+raz po `Resolve` i przed `Commit`, a `CalibrationRunner` nie ma własnej pętli
+okrążeń i segmentów. Typed samples biorą rzeczywiste entry/physics/exit/peak
+speeds oraz time/distance i entry surface z immutable resolution data; peak
+Straight pochodzi z actual production `StraightSpeedProfile`. Podsumowania
+okrążeń i zawodników są derived observations. Nie parsują `SimLog`, działają
+przy `EnableLogging=false`, a deterministic CSV ma stable ordering i invariant
+culture. Harness nie dodaje RNG, nie zmienia physics ani wyników biegu i nie
+porównuje jeszcze wartości z real telemetry.
+
+FIRST-LAP INITIAL BOOTSTRAP IS NOT A CALIBRATED STANDING START. TurnExit nadal
+nie jest stepped, current artificial attainable ceiling nadal istnieje, a
+signed negative drag/coasting nie istnieje. Roadmap (numery nie są domain API):
+#29 shared stepped TurnExit traversal, #30 standing-start/launch, #31 signed
+net force i natural resistance deceleration przygotowujące usunięcie ceiling,
+a następnie real-world calibration targets.
+
 ### Czasowa zmiana linii — BINDING
 
 `TargetLane` jest celem decyzji, `PlannedLane` najbliższą dyskretną linią realizowaną w kroku, `Lane` linią rozstrzygniętą przez fizykę, a `LateralPosition` rzeczywistą ciągłą pozycją po kroku. Pozycja boczna ma zakres `0..4` w jednostkach linii; jej zmiana pomnożona przez `LaneSpacingMeters` daje fizyczne przesunięcie w metrach.

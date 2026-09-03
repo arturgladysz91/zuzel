@@ -49,6 +49,12 @@ The shared one-gear envelope is still only a foundation, and #27 is not final re
 
 `BalanceAnalyzer` is an offline diagnostic. It rotates the same four profiles through all four starting gates over a large deterministic batch. Detailed logging is disabled for these batches, while track evolution and race rules remain active.
 
+The #28 calibration telemetry harness is an observation boundary, not a physics calibration. `HeatSimulator.SimulateHeat` accepts an optional production `ISimulationStepObserver` and invokes it exactly once after `Resolve` and before `Commit`. `ResolvedSimulationStep.Diagnostics` retains the exact production values already calculated for each rider: travelled distance and time, actual peak, attainable ceiling when evaluated, TurnExit net acceleration when applied, and the actual Straight and TurnEntry profiles. The observer receives detached/read-only resolution data; it does not run RNG and cannot affect decisions, commit order, wear or classification.
+
+`CalibrationTraceCollector` converts that typed result into ordered step samples without parsing `SimLog`. It derives time and distance deltas from the immutable entry snapshot and resolved state change, uses the exact entry-sampled surface, and derives completed-lap and final-rider summaries that reconcile with `HeatResult`. `CalibrationRunner` only attaches the collector to the production `HeatSimulator`; it contains no laps-by-segments loop and mutates the caller-supplied rider and track state in the same way as a normal heat. Logging and telemetry are independent, so `EnableLogging=false` still produces a complete trace. The detached trace and invariant-culture CSV exports use stable rider/step ordering.
+
+This harness reports what production does now and contains no real-world target dataset. In particular, first-lap initial speed bootstrap is not a calibrated standing start, TurnExit remains a single acceleration evaluation rather than stepped traversal, the artificial attainable ceiling remains, and signed negative resistance/coasting remains absent. The roadmap labels #29 as shared stepped TurnExit traversal, #30 as standing-start/launch, and #31 as signed net force with natural resistance deceleration and preparation for removing the artificial ceiling; real-world calibration targets follow. These PR numbers are roadmap labels, not domain API.
+
 The presentation layer must consume results and logs; it must never change the simulation outcome.
 
 ## Compatibility
