@@ -161,18 +161,28 @@ nich. Ten sam ceiling nadal ogranicza positive drive na `TurnExit`.
 Advanced `TurnExit` ma pierwszy force-based foundation pod istniejącym krokiem
 positive drive. Dostępna siła jest kalibrowana tak, aby przy referencyjnych
 `16 m/s` zachować dotychczasowe przyspieszenie zależne od `Speed`, `Gearing` i
-wejściowej nawierzchni. Następnie model liczy **PROVISIONAL / NOT REAL-WORLD
-CALIBRATED** aggregate resistance `F_resistance = 40 N + 0.20 N/(m/s)² * v²`,
-`F_net_positive = max(0, F_drive - F_resistance)` i
-`a = F_net_positive / 142 kg`. `142 kg` jest nominalną wewnętrzną masą układu,
-nie indywidualną wagą zawodnika. Daje to trochę większy positive drive poniżej
-prędkości referencyjnej, taki sam przy `16 m/s` i mniejszy powyżej niej.
+wejściowej nawierzchni. Przy `v <= 16 m/s` one-gear drive envelope wynosi
+dokładnie `1`. Powyżej tej prędkości wynosi
+`max(0, 1 - fadeRate * (v - 16))`, gdzie `fadeRate` interpoluje przez `Gearing`
+od `0.0175 /(m/s)` dla ustawienia drive-oriented do `0.0050 /(m/s)` dla
+ustawienia speed-oriented. Dzięki temu mocniejsze reference force ustawienia
+drive-oriented zanika szybciej i krzywe mogą naturalnie przeciąć się przy
+większej prędkości.
 
-Ten fundament nie generuje jeszcze ujemnego przyspieszenia ani naturalnego
-wytracania prędkości, nie usuwa obecnego ceiling i nie obejmuje `Straight`.
-Legacy pozostaje bez zmian. Krzywa mocy, RPM, wheelspin, rozdzielenie oporów na
-rolling i aerodynamic drag, CdA oraz optymalizacja przełożenia pod metę nie są
-jeszcze modelowane.
+Model liczy **PROVISIONAL / NOT REAL-WORLD CALIBRATED** actual available force
+jako reference force pomnożone przez envelope, aggregate resistance
+`F_resistance = 40 N + 0.20 N/(m/s)² * v²`,
+`F_net_positive = max(0, F_drive(v) - F_resistance)` i
+`a = F_net_positive / 142 kg`. `142 kg` jest nominalną wewnętrzną masą układu,
+nie indywidualną wagą zawodnika. Zachowanie #25 pozostaje dokładnie takie samo
+przy i poniżej `16 m/s`.
+
+Envelope jest coarse abstrakcją jednego biegu, a nie modelem RPM, torque/power
+curve, rev limiterem ani mapą realnych zębatek. Fundament nie generuje ujemnego
+przyspieszenia ani naturalnego wytracania prędkości, nie usuwa obecnego ceiling
+i nie obejmuje `Straight`. Legacy pozostaje bez zmian. Wheelspin, rozdzielenie
+oporów na rolling i aerodynamic drag, CdA oraz optymalizacja przełożenia pod
+metę nie są jeszcze modelowane.
 
 Realny motocykl żużlowy jedzie podczas biegu na jednym biegu, nie ma klasycznego
 układu hamulcowego, a przełożenie jest elementem setupu. Obecne kontrolowane

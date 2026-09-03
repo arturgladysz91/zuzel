@@ -49,6 +49,8 @@ public static class LongitudinalDynamics
     public const float ProvisionalBaseResistanceForceNewtons = 40f;
     public const float ProvisionalQuadraticResistanceCoefficient = 0.20f;
     public const float ProvisionalPositiveDriveReferenceSpeedMetersPerSecond = 16f;
+    public const float ProvisionalDriveOrientedForceFadePerMeterPerSecond = 0.0175f;
+    public const float ProvisionalSpeedOrientedForceFadePerMeterPerSecond = 0.0050f;
 
     // PROVISIONAL / NOT REAL-WORLD CALIBRATED coarse phase split. The first
     // half of the actually remaining TurnEntry represents setting, roll-off,
@@ -237,13 +239,64 @@ public static class LongitudinalDynamics
         return availableDriveForceNewtons;
     }
 
+    public static float CalculateTurnExitDriveEnvelopeMultiplier(
+        float speedMetersPerSecond,
+        BikeSetup setup)
+    {
+        ValidateNonNegativeFinite(speedMetersPerSecond, nameof(speedMetersPerSecond));
+        ArgumentNullException.ThrowIfNull(setup);
+
+        if (speedMetersPerSecond <= ProvisionalPositiveDriveReferenceSpeedMetersPerSecond)
+            return 1f;
+
+        var fadeRatePerMeterPerSecond =
+            ProvisionalDriveOrientedForceFadePerMeterPerSecond
+            + (ProvisionalSpeedOrientedForceFadePerMeterPerSecond
+               - ProvisionalDriveOrientedForceFadePerMeterPerSecond)
+              * (double)setup.Gearing;
+        var excessSpeedMetersPerSecond =
+            (double)speedMetersPerSecond
+            - ProvisionalPositiveDriveReferenceSpeedMetersPerSecond;
+        var envelope = Math.Clamp(
+            1d - fadeRatePerMeterPerSecond * excessSpeedMetersPerSecond,
+            0d,
+            1d);
+        var result = (float)envelope;
+        ValidateNonNegativeFinite(result, "result");
+        return result;
+    }
+
+    public static float CalculateTurnExitAvailableDriveForceAtSpeedNewtons(
+        float speedMetersPerSecond,
+        RiderSkills skills,
+        BikeSetup setup,
+        TrackSurfaceState surface)
+    {
+        var referenceAvailableDriveForceNewtons =
+            CalculateTurnExitAvailableDriveForceNewtons(skills, setup, surface);
+        var envelope = CalculateTurnExitDriveEnvelopeMultiplier(speedMetersPerSecond, setup);
+        var availableDriveForceAtSpeedNewtons =
+            (double)referenceAvailableDriveForceNewtons * envelope;
+        if (!double.IsFinite(availableDriveForceAtSpeedNewtons)
+            || availableDriveForceAtSpeedNewtons > float.MaxValue)
+        {
+            throw new OverflowException(
+                "Available TurnExit drive force exceeds the finite single-precision domain.");
+        }
+
+        var result = (float)availableDriveForceAtSpeedNewtons;
+        ValidateNonNegativeFinite(result, "result");
+        return result;
+    }
+
     public static float CalculateTurnExitNetAccelerationMetersPerSecondSquared(
         float speedMetersPerSecond,
         RiderSkills skills,
         BikeSetup setup,
         TrackSurfaceState surface)
     {
-        var availableDriveForceNewtons = CalculateTurnExitAvailableDriveForceNewtons(
+        var availableDriveForceNewtons = CalculateTurnExitAvailableDriveForceAtSpeedNewtons(
+            speedMetersPerSecond,
             skills,
             setup,
             surface);
