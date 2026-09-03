@@ -374,6 +374,245 @@ public sealed class LongitudinalDynamicsTests
         Assert.Equal(expected, actual, 5);
     }
 
+    [Theory]
+    [InlineData(0f, 0f)]
+    [InlineData(0f, 0.5f)]
+    [InlineData(0f, 1f)]
+    [InlineData(10f, 0f)]
+    [InlineData(10f, 0.5f)]
+    [InlineData(10f, 1f)]
+    [InlineData(15.999f, 0f)]
+    [InlineData(15.999f, 0.5f)]
+    [InlineData(15.999f, 1f)]
+    public void DriveEnvelopeIsOneBelowReferenceSpeed(float speed, float gearing)
+    {
+        var envelope = DriveEnvelope(speed, gearing);
+
+        Assert.Equal(1f, envelope);
+    }
+
+    [Theory]
+    [InlineData(0f)]
+    [InlineData(0.5f)]
+    [InlineData(1f)]
+    public void DriveEnvelopeIsExactlyOneAtReferenceSpeed(float gearing)
+    {
+        var envelope = DriveEnvelope(
+            LongitudinalDynamics.ProvisionalPositiveDriveReferenceSpeedMetersPerSecond,
+            gearing);
+
+        Assert.Equal(1f, envelope);
+    }
+
+    [Fact]
+    public void DriveOrientedEnvelopeFadesFasterAboveReference()
+    {
+        var driveOriented = DriveEnvelope(25f, 0f);
+        var neutral = DriveEnvelope(25f, 0.5f);
+        var speedOriented = DriveEnvelope(25f, 1f);
+
+        Assert.True(driveOriented < neutral);
+        Assert.True(neutral < speedOriented);
+    }
+
+    [Theory]
+    [InlineData(0f, 0.0175f)]
+    [InlineData(1f, 0.0050f)]
+    public void DriveEnvelopeUsesExactFadeFormula(float gearing, float expectedFadeRate)
+    {
+        const float speed = 20f;
+        var expected = 1f - expectedFadeRate * (speed - 16f);
+
+        var envelope = DriveEnvelope(speed, gearing);
+
+        Assert.Equal(expected, envelope, 5);
+    }
+
+    [Fact]
+    public void NeutralGearingInterpolatesFadeRate()
+    {
+        const float speed = 20f;
+        const float expectedFadeRate = (0.0175f + 0.0050f) / 2f;
+        var expected = 1f - expectedFadeRate * (speed - 16f);
+
+        var envelope = DriveEnvelope(speed, 0.5f);
+
+        Assert.Equal(expected, envelope, 5);
+    }
+
+    [Fact]
+    public void DriveEnvelopeClampsAtZero()
+    {
+        var envelope = DriveEnvelope(100f, 0f);
+
+        Assert.Equal(0f, envelope);
+        Assert.True(envelope >= 0f);
+    }
+
+    [Theory]
+    [InlineData(-1f)]
+    [InlineData(float.NaN)]
+    [InlineData(float.PositiveInfinity)]
+    [InlineData(float.NegativeInfinity)]
+    public void DriveEnvelopeRejectsInvalidSpeed(float speed)
+    {
+        Assert.Throws<ArgumentOutOfRangeException>(() => DriveEnvelope(speed, 0.5f));
+    }
+
+    [Fact]
+    public void DriveEnvelopeRejectsNullSetup()
+    {
+        Assert.Throws<ArgumentNullException>(() =>
+            LongitudinalDynamics.CalculateTurnExitDriveEnvelopeMultiplier(20f, null!));
+    }
+
+    [Fact]
+    public void AvailableDriveForceAtSpeedEqualsReferenceBelowReferenceSpeed()
+    {
+        var reference = AvailableTurnExitDriveForce(50f, 0.5f, PerfectDriveSurface);
+        var atSpeed = AvailableTurnExitDriveForceAtSpeed(
+            10f,
+            50f,
+            0.5f,
+            PerfectDriveSurface);
+
+        Assert.Equal(reference, atSpeed);
+    }
+
+    [Fact]
+    public void AvailableDriveForceAtReferenceEqualsReferenceForce()
+    {
+        var reference = AvailableTurnExitDriveForce(50f, 0.5f, PerfectDriveSurface);
+        var atSpeed = AvailableTurnExitDriveForceAtSpeed(
+            LongitudinalDynamics.ProvisionalPositiveDriveReferenceSpeedMetersPerSecond,
+            50f,
+            0.5f,
+            PerfectDriveSurface);
+
+        Assert.Equal(reference, atSpeed);
+    }
+
+    [Fact]
+    public void AvailableDriveForceFadesAboveReference()
+    {
+        var reference = AvailableTurnExitDriveForce(50f, 0.5f, PerfectDriveSurface);
+        var atSpeed = AvailableTurnExitDriveForceAtSpeed(
+            25f,
+            50f,
+            0.5f,
+            PerfectDriveSurface);
+
+        Assert.True(atSpeed < reference);
+    }
+
+    [Fact]
+    public void AvailableForceAtSpeedIsExactlyReferenceForceTimesEnvelope()
+    {
+        const float speed = 23f;
+        const float gearing = 0.35f;
+        var reference = AvailableTurnExitDriveForce(50f, gearing, PerfectDriveSurface);
+        var envelope = DriveEnvelope(speed, gearing);
+        var expected = reference * envelope;
+
+        var actual = AvailableTurnExitDriveForceAtSpeed(
+            speed,
+            50f,
+            gearing,
+            PerfectDriveSurface);
+
+        Assert.Equal(expected, actual, 5);
+    }
+
+    [Fact]
+    public void BelowReferenceNetAccelerationRemainsExactlyAsInPr25()
+    {
+        const float speed = 10f;
+        var referenceForce = AvailableTurnExitDriveForce(50f, 0.5f, PerfectDriveSurface);
+        var resistance = LongitudinalDynamics.CalculateLongitudinalResistanceForceNewtons(speed);
+        var expected = LongitudinalDynamics
+            .CalculateAccelerationFromForcesMetersPerSecondSquared(
+                referenceForce,
+                resistance,
+                LongitudinalDynamics.ProvisionalNominalSystemMassKilograms);
+
+        var actual = NetTurnExitAcceleration(speed, 50f, 0.5f, PerfectDriveSurface);
+
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void DriveOrientedWinsAtLowerSpeed()
+    {
+        var driveOriented = NetTurnExitAcceleration(20f, 50f, 0f, PerfectDriveSurface);
+        var speedOriented = NetTurnExitAcceleration(20f, 50f, 1f, PerfectDriveSurface);
+
+        Assert.True(driveOriented > speedOriented);
+    }
+
+    [Fact]
+    public void SpeedOrientedWinsAfterCrossover()
+    {
+        var driveOriented = NetTurnExitAcceleration(26f, 50f, 0f, PerfectDriveSurface);
+        var speedOriented = NetTurnExitAcceleration(26f, 50f, 1f, PerfectDriveSurface);
+
+        Assert.True(speedOriented > driveOriented);
+    }
+
+    [Fact]
+    public void RepresentativeCurvesCrossNearMidHighSpeed()
+    {
+        var driveAtTwentyFour = NetTurnExitAcceleration(24f, 50f, 0f, PerfectDriveSurface);
+        var speedAtTwentyFour = NetTurnExitAcceleration(24f, 50f, 1f, PerfectDriveSurface);
+        var driveAtTwentySix = NetTurnExitAcceleration(26f, 50f, 0f, PerfectDriveSurface);
+        var speedAtTwentySix = NetTurnExitAcceleration(26f, 50f, 1f, PerfectDriveSurface);
+
+        Assert.True(driveAtTwentyFour >= speedAtTwentyFour);
+        Assert.True(speedAtTwentySix > driveAtTwentySix);
+    }
+
+    [Fact]
+    public void SpeedOrientedRetainsDriveAfterDriveOrientedHasFadedOut()
+    {
+        var driveOriented = NetTurnExitAcceleration(28f, 50f, 0f, PerfectDriveSurface);
+        var speedOriented = NetTurnExitAcceleration(28f, 50f, 1f, PerfectDriveSurface);
+
+        Assert.Equal(0f, driveOriented);
+        Assert.True(speedOriented > 0f);
+    }
+
+    [Fact]
+    public void NeutralGearingRemainsBetweenExtremesAtLowerSpeed()
+    {
+        var driveOriented = NetTurnExitAcceleration(20f, 50f, 0f, PerfectDriveSurface);
+        var neutral = NetTurnExitAcceleration(20f, 50f, 0.5f, PerfectDriveSurface);
+        var speedOriented = NetTurnExitAcceleration(20f, 50f, 1f, PerfectDriveSurface);
+
+        Assert.True(driveOriented > neutral);
+        Assert.True(neutral > speedOriented);
+    }
+
+    [Fact]
+    public void HigherSpeedSkillStillProducesMoreNetDriveAtSameSpeedAndGearing()
+    {
+        var lower = NetTurnExitAcceleration(22f, 0f, 0.5f, PerfectDriveSurface);
+        var higher = NetTurnExitAcceleration(22f, 100f, 0.5f, PerfectDriveSurface);
+
+        Assert.True(higher > lower);
+    }
+
+    [Fact]
+    public void DriveEnvelopeIgnoresTractionBias()
+    {
+        var lowerTractionBias = LongitudinalDynamics.CalculateTurnExitDriveEnvelopeMultiplier(
+            25f,
+            new BikeSetup(gearing: 0.5f, tractionBias: 0f));
+        var higherTractionBias = LongitudinalDynamics.CalculateTurnExitDriveEnvelopeMultiplier(
+            25f,
+            new BikeSetup(gearing: 0.5f, tractionBias: 1f));
+
+        Assert.Equal(lowerTractionBias, higherTractionBias);
+    }
+
     [Fact]
     public void AttainableTopSpeedUsesSpeedSkill()
     {
@@ -1031,6 +1270,22 @@ public sealed class LongitudinalDynamicsTests
         float gearing,
         TrackSurfaceState surface)
         => LongitudinalDynamics.CalculateTurnExitAvailableDriveForceNewtons(
+            new RiderSkills(50f, speedSkill, 50f, 50f, 50f, 50f),
+            new BikeSetup(gearing, tractionBias: 0.5f),
+            surface);
+
+    private static float DriveEnvelope(float speed, float gearing)
+        => LongitudinalDynamics.CalculateTurnExitDriveEnvelopeMultiplier(
+            speed,
+            new BikeSetup(gearing, tractionBias: 0.5f));
+
+    private static float AvailableTurnExitDriveForceAtSpeed(
+        float speed,
+        float speedSkill,
+        float gearing,
+        TrackSurfaceState surface)
+        => LongitudinalDynamics.CalculateTurnExitAvailableDriveForceAtSpeedNewtons(
+            speed,
             new RiderSkills(50f, speedSkill, 50f, 50f, 50f, 50f),
             new BikeSetup(gearing, tractionBias: 0.5f),
             surface);
