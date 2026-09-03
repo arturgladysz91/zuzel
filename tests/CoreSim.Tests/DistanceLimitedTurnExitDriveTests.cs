@@ -23,7 +23,7 @@ public sealed class DistanceLimitedTurnExitDriveTests
     }
 
     [Fact]
-    public void AdvancedTurnExitUsesForceBasedNetAcceleration()
+    public void AdvancedTurnExitUsesSteppedForceBasedProfile()
     {
         const float entryPosition = 1.25f;
         const float entrySpeed = 10f;
@@ -35,29 +35,22 @@ public sealed class DistanceLimitedTurnExitDriveTests
             new TrackSegment(0, SegmentType.TurnExit),
             entryPosition,
             TrackGeometry.Default);
-        var acceleration = LongitudinalDynamics
-            .CalculateTurnExitNetAccelerationMetersPerSecondSquared(
-                entrySpeed,
-                result.Snapshot.Rider(1).Profile.Skills,
-                result.Snapshot.Rider(1).ActiveSetup,
-                PerfectDriveSurface);
         var attainableTopSpeed = LongitudinalDynamics.CalculateAttainableTopSpeedMetersPerSecond(
             result.Snapshot.Rider(1).Profile.Skills,
             result.Snapshot.Rider(1).ActiveSetup);
-        var expected = LongitudinalDynamics.AccelerateOverDistanceWithSpeedCeiling(
+        var expected = LongitudinalDynamics.CalculateForceBasedTurnExitDriveProfile(
             entrySpeed,
-            acceleration,
+            result.Snapshot.Rider(1).Profile.Skills,
+            result.Snapshot.Rider(1).ActiveSetup,
+            PerfectDriveSurface,
             travelled,
             attainableTopSpeed);
 
         Assert.Equal(SegmentOutcome.Ok, result.Change.Outcome);
         Assert.Equal(entrySpeed, result.Change.PhysicsSpeed);
         Assert.True(result.Change.Speed > result.Change.PhysicsSpeed);
-        Assert.Equal(expected, result.Change.Speed, 5);
-        Assert.Equal(
-            result.Change.PhysicsSpeed * result.Change.PhysicsSpeed + 2f * acceleration * travelled,
-            result.Change.Speed * result.Change.Speed,
-            3);
+        Assert.Equal(expected.ExitSpeedMetersPerSecond, result.Change.Speed, 5);
+        Assert.Equal(expected.TravelTimeSeconds, result.Change.ElapsedTimeSeconds, 5);
     }
 
     [Fact]
@@ -81,9 +74,11 @@ public sealed class DistanceLimitedTurnExitDriveTests
         var attainableTopSpeed = LongitudinalDynamics.CalculateAttainableTopSpeedMetersPerSecond(
             rider.Profile.Skills,
             rider.ActiveSetup);
-        var expected = LongitudinalDynamics.AccelerateOverDistanceWithSpeedCeiling(
+        var profile = LongitudinalDynamics.CalculateForceBasedTurnExitDriveProfile(
             result.Change.PhysicsSpeed,
-            referenceAcceleration,
+            rider.Profile.Skills,
+            rider.ActiveSetup,
+            PerfectDriveSurface,
             travelled,
             attainableTopSpeed);
 
@@ -91,7 +86,8 @@ public sealed class DistanceLimitedTurnExitDriveTests
         Assert.Equal(
             LongitudinalDynamics.ProvisionalPositiveDriveReferenceSpeedMetersPerSecond,
             result.Change.PhysicsSpeed);
-        Assert.Equal(expected, result.Change.Speed, 5);
+        Assert.Equal(referenceAcceleration, profile.EntryNetAccelerationMetersPerSecondSquared, 6);
+        Assert.Equal(profile.ExitSpeedMetersPerSecond, result.Change.Speed, 5);
     }
 
     [Fact]
@@ -210,25 +206,21 @@ public sealed class DistanceLimitedTurnExitDriveTests
             new TrackSegment(0, SegmentType.TurnExit),
             entryPosition,
             TrackGeometry.Default);
-        var acceleration = LongitudinalDynamics
-            .CalculateTurnExitNetAccelerationMetersPerSecondSquared(
-                maxSafeSpeed,
-                rider.Profile.Skills,
-                rider.ActiveSetup,
-                PerfectDriveSurface);
         var attainableTopSpeed = LongitudinalDynamics.CalculateAttainableTopSpeedMetersPerSecond(
             rider.Profile.Skills,
             rider.ActiveSetup);
-        var expected = LongitudinalDynamics.AccelerateOverDistanceWithSpeedCeiling(
+        var expected = LongitudinalDynamics.CalculateForceBasedTurnExitDriveProfile(
             maxSafeSpeed,
-            acceleration,
+            rider.Profile.Skills,
+            rider.ActiveSetup,
+            PerfectDriveSurface,
             travelled,
             attainableTopSpeed);
 
         Assert.Equal(SegmentOutcome.Brake, result.Change.Outcome);
         Assert.Equal(maxSafeSpeed, result.Change.PhysicsSpeed, 5);
         Assert.True(result.Change.Speed > result.Change.PhysicsSpeed);
-        Assert.Equal(expected, result.Change.Speed, 5);
+        Assert.Equal(expected.ExitSpeedMetersPerSecond, result.Change.Speed, 5);
     }
 
     [Fact]

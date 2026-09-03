@@ -40,7 +40,22 @@ public sealed class CalibrationTraceCollector : ISimulationStepObserver
             var diagnostics = diagnosticsByRider[change.RiderId];
             var duration = change.ElapsedTimeSeconds - rider.ElapsedTimeSeconds;
             var distanceDelta = change.Position.DistanceMeters - rider.DistanceMeters;
-            ValidateEquivalent(duration, diagnostics.TravelTimeSeconds, "travel time");
+            if (diagnostics.TurnExitDriveProfile is { } turnExitProfile)
+            {
+                ValidateEquivalent(
+                    turnExitProfile.TravelTimeSeconds,
+                    diagnostics.TravelTimeSeconds,
+                    "TurnExit profile travel time");
+                if (duration + 1e-5f < diagnostics.TravelTimeSeconds)
+                {
+                    throw new InvalidOperationException(
+                        "Resolved time cannot be shorter than the TurnExit production profile.");
+                }
+            }
+            else
+            {
+                ValidateEquivalent(duration, diagnostics.TravelTimeSeconds, "travel time");
+            }
             ValidateEquivalent(distanceDelta, diagnostics.TravelledMeters, "travelled distance");
 
             _samples.Add(CreateSample(snapshot, rider, change, diagnostics));
@@ -79,6 +94,7 @@ public sealed class CalibrationTraceCollector : ISimulationStepObserver
         RiderStepDiagnostics diagnostics)
     {
         var straight = diagnostics.StraightProfile;
+        var turnExit = diagnostics.TurnExitDriveProfile;
         var scrub = diagnostics.TurnEntryScrubProfile;
         var surface = diagnostics.EntrySurface;
         return new CalibrationStepSample(
@@ -91,7 +107,7 @@ public sealed class CalibrationTraceCollector : ISimulationStepObserver
             rider.RiderId,
             rider.ElapsedTimeSeconds,
             change.ElapsedTimeSeconds,
-            diagnostics.TravelTimeSeconds,
+            change.ElapsedTimeSeconds - rider.ElapsedTimeSeconds,
             rider.DistanceMeters,
             change.Position.DistanceMeters,
             diagnostics.TravelledMeters,
@@ -116,6 +132,9 @@ public sealed class CalibrationTraceCollector : ISimulationStepObserver
             surface.EffectiveGrip,
             diagnostics.AttainableTopSpeedMetersPerSecond,
             diagnostics.TurnExitNetAccelerationMetersPerSecondSquared,
+            turnExit?.AccelerationDistanceMeters,
+            turnExit?.CruiseDistanceMeters,
+            turnExit?.TravelTimeSeconds,
             straight?.AccelerationDistanceMeters,
             straight?.CruiseDistanceMeters,
             straight?.DecelerationDistanceMeters,
