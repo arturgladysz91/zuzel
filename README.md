@@ -144,78 +144,62 @@ bezpośrednio następującym łukiem kontrolowanie wytracić prędkość. Linie 
 nadal nie dają arbitralnego bonusu; różnica wynika z umiejętności, wejściowej
 nawierzchni, dostępnego dystansu i potrzeby przygotowania do następnego łuku.
 
-Positive drive w advanced physics ma osiągalną, deterministyczną prędkość
-szczytową. Bazowy zakres **PROVISIONAL / NOT REAL-WORLD CALIBRATED** `21–25 m/s`
-zależy od `Speed`, a `BikeSetup.Gearing` mnoży go w równie prowizorycznym zakresie
-`0.94–1.06`. Te wartości nie są jeszcze oparte na docelowej telemetrii i nie
-opisują finalnej prędkości prawdziwego motocykla żużlowego. Oś `Gearing` oznacza
-`drive-oriented ↔ speed-oriented`: `0` daje mocniejszy corner-exit drive kosztem
-niższej osiągalnej prędkości, a `1` słabszy drive i wyższą osiągalną prędkość.
-Nawierzchnia wpływa na dystans i czas potrzebny do osiągnięcia granicy, ale nie
-zmienia samej granicy. Istniejące wzory i zachowanie pozostają bez zmian.
+Od #31 production advanced Straight, eligible TurnExit i standing launch nie
+korzystają z artificial attainable-speed ceiling. Usunięto model
+`21–25 m/s × 0.94–1.06` i osobny gearing top-speed multiplier.
+Full-drive acceleration jest signed: `a(v) = (F_drive(v) - F_resistance(v)) / 142`,
+bez `max(0)` na sile netto lub acceleration. Opór pozostaje
+`F_resistance(v) = 40 + 0.20*v²` N. Available drive to `referenceForce * envelope`.
+Envelope jest dokładnie `1` dla `v <= 16`; powyżej:
+`clamp(1 - fadeRate*(v-16), 0, 1)`, gdzie
+`fadeRate = 0.0175 + (0.0050 - 0.0175)*Gearing`.
 
-Nie jest to hard limiter: istniejąca prędkość równa lub większa od granicy nie
-jest obcinana przez positive drive. Advanced Straight dzieli rzeczywisty dystans
-na deterministyczne kroki maksymalnie `1 m`, z dokładną końcową resztą. Każdy
-full-drive krok liczy predictor z acceleration na początku, następnie prędkość
-pośrednią i corrected acceleration w midpoint; czas kroku to
-`2 * ds / (v_start + v_end)`. Suma czasów kroków steruje również ruchem bocznym.
-Zachowany helper analityczny `CalculateStraightSpeedProfile` nie jest już
-produkcyjną ścieżką advanced Straight. Ten sam ceiling nadal ogranicza positive
-drive na `TurnExit`.
+Naturalne `FullDriveEquilibriumSpeedMetersPerSecond` jest obserwacją
+`drive = resistance`, nie limiterem ani targetem. Solver to deterministyczna
+bisekcja w `[0, 16 + 1/fadeRate]`, maksymalnie 64 iteracje do szerokości bracketu
+`1e-6 m/s` (wynik float), bez RNG i initial guess. Force <40 N nie ma
+nieujemnego pierwiastka i jest odrzucane; force=40 N daje 0. Production nigdy
+nie clampuje speed do equilibrium: poniżej przyspiesza, powyżej naturalnie zwalnia.
 
-Od #29 eligible advanced `TurnExit` (`Ok`/`Brake`, dodatnia post-physics speed i
-dodatni dystans) używa tego samego deterministycznego fixed-distance traversal
-co positive-drive część Straight. Profil zaczyna się dokładnie od
-post-`SegmentPhysics` `resolution.Speed`, dzieli dystans na wspólne kroki do
-`1 m` z dokładną końcową resztą i używa wspólnego midpoint positive-drive step.
-Nie jest to fixed-time timestep. `RunWide` i `Crash` nie otrzymują profilu.
-TurnExit travel time jest sumą czasów jego kroków i automatycznie stanowi budżet
-`LateralMovementModel`.
+Wszystkie trzy ścieżki współdzielą signed midpoint i fixed-distance kroki
+maksymalnie `1 m` z exact final remainder. Predictor i corrected step używają
+`sqrt(max(0, v² + 2*a*ds))`; midpoint to `(start + predicted)/2`.
+To zabezpieczenie kwadratu prędkości przy zatrzymaniu, nie clamp acceleration.
+Czas przejazdu jest sumą `2*ds/(v_start+v_end)`, nie jednym średnim czasem
+całego segmentu. Equilibrium nie kończy integracji.
 
-Straight i TurnExit współdzielą numerical resolution, tworzenie kroków,
-one-gear envelope, resistance, generic net-positive-drive force oraz midpoint
-positive-drive step. Zachowują różne reference acceleration: TurnExit
-`0.60–1.40 × gearing × surface`, Straight `0.80–1.60 × gearing × surface`.
-Dostępna siła TurnExit jest kalibrowana tak, aby przy referencyjnych
-`16 m/s` zachować dotychczasowe przyspieszenie zależne od `Speed`, `Gearing` i
-wejściowej nawierzchni. Przy `v <= 16 m/s` one-gear drive envelope wynosi
-dokładnie `1`. Powyżej tej prędkości wynosi
-`max(0, 1 - fadeRate * (v - 16))`, gdzie `fadeRate` interpoluje przez `Gearing`
-od `0.0175 /(m/s)` dla ustawienia drive-oriented do `0.0050 /(m/s)` dla
-ustawienia speed-oriented. Dzięki temu mocniejsze reference force ustawienia
-drive-oriented zanika szybciej i krzywe mogą naturalnie przeciąć się przy
-większej prędkości.
+Reference acceleration TurnExit pozostaje `0.60–1.40`, Straight `0.80–1.60`
+przez Speed, razy `1.10–0.90` przez Gearing i
+`0.75 + 0.25*EffectiveGrip`. Reference force to `142*referenceAcceleration
++ resistance(16)`, więc kontrakt przy 16 m/s pozostaje. Surface jest próbkowana
+raz przy wejściu i nadal skaluje effective reference drive, a więc też equilibrium.
+Gearing=0 ma więcej reference drive, ale szybszy fade; Gearing=1 mniej drive
+i wolniejszy fade. Morale i TractionBias nie wpływają na siły ani equilibrium.
 
-Model liczy **PROVISIONAL / NOT REAL-WORLD CALIBRATED** actual available force
-jako reference force pomnożone przez envelope, aggregate resistance
-`F_resistance = 40 N + 0.20 N/(m/s)² * v²`,
-`F_net_positive = max(0, F_drive(v) - F_resistance)` i
-`a = F_net_positive / 142 kg`. `142 kg` jest nominalną wewnętrzną masą układu,
-nie indywidualną wagą zawodnika. Zachowanie #25 pozostaje dokładnie takie samo
-przy i poniżej `16 m/s`.
+TurnExit nadal wymaga `Ok`/ `Brake`, dodatniej post-physics speed i dystansu.
+Profil zaczyna od `resolution.Speed`; `RunWide` i `Crash` go nie otrzymują.
+Straight i TurnExit raportują acceleration + cruise + deceleration distance
+równe actual distance. Deceleration obejmuje naturalną utratę speed, a na
+Straight także explicit preparation; entry net acceleration TurnExit może być ujemne.
+Wszystkie profile zawierają equilibrium z dokładnie tej samej reference force/setup.
 
-Straight ma własne provisional reference acceleration:
-`(0.80–1.60 m/s² przez Speed) * (0.75 + 0.25 * EffectiveGrip) *
-(1.10 + (0.90 - 1.10) * Gearing)`. Reference available force wynosi
-`142 kg * referenceAcceleration + F_resistance(16)`, po czym wspólny envelope,
-opór `40 + 0.20*v²` i nominalna masa `142 kg` dają speed-dependent positive net
-acceleration. Nawierzchnia jest próbkowana raz z wejściowego `LateralPosition`,
-nie co metr.
+Dla immediate TurnEntry nadal działa maximum recoverable approach target oraz
+backward allowed-speed envelope. Final step to
+`min(fullDriveCandidate, max(allowedBoundary, preparationReachableSpeed))`.
+Target jest upper constraint i nigdy nie podnosi naturalnie zwalniającego candidate.
+Gdy target jest nieosiągalny, zostaje residual overspeed; preparation nie dostaje
+dodatkowej deceleration. Naturalny spadek od oporów może być silniejszy niż
+preparation i nie wolno go wyłączać. Corner-entry preparation pozostaje
+odrębnym efektywnym modelem throttle roll-off / engine-drivetrain / slide preparation
+`2.00–3.20 m/s²`; #24 TurnEntry scrub nadal używa 50% remaining distance.
 
-Przy targetcie następnego `TurnEntry` profil buduje wsteczny allowed-speed
-envelope ze wspólnej corner-entry deceleration. Forward traversal wybiera
-najszybszy wykonalny koniec kroku; jeśli boundary wymagałoby zbyt dużej utraty
-prędkości, używa maksymalnego dozwolonego `DecelerateOverDistance`, zamiast
-teleportować speed do targetu. TurnEntry #24, TurnExit #26 i legacy pozostają
-funkcjonalnie bez zmian.
-
-Envelope jest coarse abstrakcją jednego biegu, a nie modelem RPM, torque/power
-curve, rev limiterem ani mapą realnych zębatek. Fundament nie generuje ujemnego
-przyspieszenia ani naturalnego wytracania prędkości i nie usuwa obecnego ceiling.
-#27 nie jest finalną real-world calibration. Wheelspin, clutch, slip ratio,
-traction-force cap, wheel radius, real sprockets, rozdzielenie oporów, CdA, wind
-i finalna kalibracja osiągów nie są jeszcze modelowane.
+Pure zero-drive helper daje `-(40 + 0.20*v²)/142`, ale NIE jest finalnym
+engine-braking modelem ani zamiennikiem corner preparation. Nie dodano explicit
+throttle input, wheelspin, traction-force cap ani splitu engine/traction force.
+Wszystkie stałe są **PROVISIONAL / NOT REAL-WORLD CALIBRATED**, bez strojenia.
+Stary analityczny `CalculateStraightSpeedProfile` to wyłącznie non-production
+compatibility utility z jawnie podanym ogólnym ograniczeniem; nie wylicza Vmax,
+nie jest wywoływany przez SimulationEngine i ma null equilibrium.
 
 Realny motocykl żużlowy jedzie podczas biegu na jednym biegu, nie ma klasycznego
 układu hamulcowego, a przełożenie jest elementem setupu. Obecne kontrolowane
@@ -366,11 +350,22 @@ również faktycznie użyty `TurnExitDriveProfile`; zachowany scalar
 `TurnExitNetAcceleration` oznacza entry net acceleration początku profilu, a nie
 stałe acceleration dla całego segmentu. Od #30 jawnie oznaczony start używa
 production `StandingStartLaunchProfile`; stary bootstrap pozostaje tylko dla
-kompatybilności. Artificial `AttainableTopSpeed` nadal istnieje, a signed
-negative drag/coasting nadal nie jest modelowany.
-Roadmap: signed net force i natural resistance
-deceleration przygotowujące usunięcie artificial ceiling, a dopiero potem
-porównanie z real-world calibration targets.
+kompatybilności.
+
+#31 wprowadza breaking diagnostic-schema change przed ustaleniem real-world dataset:
+`FullDriveEquilibriumSpeedMetersPerSecond` zastępuje
+`AttainableTopSpeedMetersPerSecond` w RiderStepDiagnostics, CalibrationStepSample
+i CSV. Nie ma dwóch pól Vmax. Dla launch/Straight/eligible TurnExit pochodzi
+z użytego profilu; dla innych segmentów jest null.
+CSV dodaje `TurnExitDecelerationDistanceMeters` po TurnExitCruiseDistanceMeters;
+entry acceleration TurnExit jest signed. Nowy schema zachowuje stable order,
+invariant culture, decimal dot, `\n` i null = empty.
+
+Następny etap: **REAL-WORLD CALIBRATION DATASET + PARAMETER FITTING** dla reaction,
+TimeTo70, SpeedAt2s, first-turn entry speed, Straight Vmax, lap times i full heat time.
+Późniejsze refinements: F_engine vs F_traction, wheelspin/slip, TractionBias,
+real sprockets, RPM, torque/power curve, throttle, engine braking i oddzielna
+physical gate A/B/C/D geometry. #31 ich nie implementuje.
 
 ## Standing start / launch foundation — PROVISIONAL
 
@@ -391,16 +386,15 @@ segment, wyłącznie pod index 0, z końcowym Straight. Launch działa tylko w
 advanced physics, lap 0 / segment 0, na oznaczonym segmencie, z dokładnego
 canonical/physical początku, `NotStarted`, speed <= 0 i dodatnim pozostałym
 dystansem. Wtedy entry/physics speed jest dokładnie 0; kolejne okrążenia używają
-zwykłego Straight. `CreateExample`, legacy, #24 TurnEntry, #29 TurnExit i normal
-Straight nie zmieniają formuł; lookahead nadal nie przekracza jednego segmentu.
+zwykłego Straight. `CreateExample`, legacy i #24 TurnEntry są niezmienione;
+lookahead nadal nie przekracza jednego segmentu.
 
 Reaction: `0.28 + (0.20 - 0.28) * StartNorm` s: Start 0/50/100 → 0.28/0.24/0.20 s.
 Reference acceleration: `(9.0 + (11.0 - 9.0) * StartNorm) *
 (1.10 + (0.90 - 1.10) * Gearing) * (0.75 + 0.25 * EffectiveGrip)` m/s².
 Reference force: `142 * referenceAcceleration + resistance(0)` N.
 Launch współdzieli `40 + 0.20*v²` resistance, one-gear envelope, exact 1 m
-distance steps i midpoint, z niezmienionym artificial ceiling `21–25 m/s ×
-0.94–1.06`. Surface jest próbkowana raz przy wejściowym `LateralPosition`.
+distance steps i signed midpoint bez artificial ceiling. Surface jest próbkowana raz przy wejściowym `LateralPosition`.
 TractionBias i morale nie wpływają na reaction ani launch force.
 
 Launch przygotowuje wejście w bezpośrednio następny TurnEntry: używa tego samego
@@ -430,8 +424,8 @@ nie ma hardcoded bonusu pola A.
 
 Wszystkie launch constants są **PROVISIONAL / NOT REAL-WORLD CALIBRATED**.
 Brak clutch, RPM, torque/power, real sprockets, wheelspin, slip ratio, traction
-cap, false starts, reaction RNG i gate-specific reaction bonus. Najpierw signed
-net force/natural resistance deceleration, dopiero potem real-world calibration.
+cap, false starts, reaction RNG i gate-specific reaction bonus. #31 dostarcza
+signed force i natural equilibrium; następny etap to real-world calibration.
 
 ---
 

@@ -222,7 +222,7 @@ public sealed class LongitudinalDynamicsTests
                 resistanceForceNewtons: 300f,
                 systemMassKilograms: 100f);
 
-        Assert.Equal(0f, acceleration);
+        Assert.Equal(-2f, acceleration);
     }
 
     [Theory]
@@ -305,11 +305,11 @@ public sealed class LongitudinalDynamicsTests
     }
 
     [Fact]
-    public void SufficientlyHighSpeedCanReducePositiveDriveToZero()
+    public void SufficientlyHighSpeedProducesNegativeNetDrive()
     {
-        var acceleration = NetTurnExitAcceleration(100f, 50f, 0.5f, PerfectDriveSurface);
+        var acceleration = NetTurnExitAcceleration(200f, 50f, 0.5f, PerfectDriveSurface);
 
-        Assert.Equal(0f, acceleration);
+        Assert.Equal(-(40f + 0.20f * 200f * 200f) / 142f, acceleration, 5);
     }
 
     [Theory]
@@ -319,7 +319,7 @@ public sealed class LongitudinalDynamicsTests
     [InlineData(25f)]
     [InlineData(50f)]
     [InlineData(100f)]
-    public void NetPositiveDriveNeverBecomesNegativeAcrossWideSpeedRange(float speed)
+    public void NetDriveUsesSignedForceAcrossWideSpeedRange(float speed)
     {
         var acceleration = NetTurnExitAcceleration(
             speed,
@@ -327,7 +327,10 @@ public sealed class LongitudinalDynamicsTests
             0.5f,
             PerfectDriveSurface);
 
-        Assert.True(acceleration >= 0f);
+        var drive = LongitudinalDynamics.CalculateTurnExitAvailableDriveForceAtSpeedNewtons(
+            speed, new RiderSkills(50f, 50f, 50f, 50f, 50f, 50f), BikeSetup.Neutral, PerfectDriveSurface);
+        var resistance = LongitudinalDynamics.CalculateLongitudinalResistanceForceNewtons(speed);
+        Assert.Equal((drive - resistance) / 142f, acceleration, 5);
     }
 
     [Fact]
@@ -571,12 +574,12 @@ public sealed class LongitudinalDynamicsTests
     }
 
     [Fact]
-    public void SpeedOrientedRetainsDriveAfterDriveOrientedHasFadedOut()
+    public void SpeedOrientedRetainsNetDriveAfterDriveOrientedFallsBelowResistance()
     {
         var driveOriented = NetTurnExitAcceleration(28f, 50f, 0f, PerfectDriveSurface);
         var speedOriented = NetTurnExitAcceleration(28f, 50f, 1f, PerfectDriveSurface);
 
-        Assert.Equal(0f, driveOriented);
+        Assert.True(driveOriented < 0f);
         Assert.True(speedOriented > 0f);
     }
 
@@ -614,113 +617,63 @@ public sealed class LongitudinalDynamicsTests
     }
 
     [Fact]
-    public void AttainableTopSpeedUsesSpeedSkill()
+    public void HigherSpeedSkillRaisesStraightEquilibrium()
     {
-        var low = AttainableTopSpeed(speedSkill: 0f, gearing: 0.5f);
-        var neutral = AttainableTopSpeed(speedSkill: 50f, gearing: 0.5f);
-        var high = AttainableTopSpeed(speedSkill: 100f, gearing: 0.5f);
-
-        Assert.Equal(21f, low, 5);
-        Assert.Equal(23f, neutral, 5);
-        Assert.Equal(25f, high, 5);
-        Assert.True(high > low);
+        var low = StraightEquilibrium(0f, 0.5f);
+        var neutral = StraightEquilibrium(50f, 0.5f);
+        var high = StraightEquilibrium(100f, 0.5f);
+        Assert.True(low < neutral && neutral < high);
+        foreach (var skill in new[] { 0f, 50f, 100f })
+            Assert.InRange(Math.Abs(LongitudinalDynamics.CalculateStraightNetAccelerationMetersPerSecondSquared(
+                StraightEquilibrium(skill, 0.5f), new RiderSkills(50f, skill, 50f, 50f, 50f, 50f),
+                BikeSetup.Neutral, PerfectDriveSurface)), 0f, 1e-5f);
     }
 
     [Fact]
-    public void HigherGearingRaisesAttainableTopSpeed()
-    {
-        var lowGearing = AttainableTopSpeed(speedSkill: 50f, gearing: 0f);
-        var highGearing = AttainableTopSpeed(speedSkill: 50f, gearing: 1f);
-
-        Assert.Equal(23f * 0.94f, lowGearing, 5);
-        Assert.Equal(23f * 1.06f, highGearing, 5);
-        Assert.True(highGearing > lowGearing);
-    }
+    public void GearingTradeOffEmergesWithoutSeparateTopSpeedMultiplier()
+        => Assert.True(StraightEquilibrium(50f, 1f) > StraightEquilibrium(50f, 0f));
 
     [Fact]
     public void GearingCreatesRealTradeOff()
     {
-        var lowGearingDrive = CalculateAcceleration(50f, gearing: 0f, PerfectDriveSurface);
-        var highGearingDrive = CalculateAcceleration(50f, gearing: 1f, PerfectDriveSurface);
-        var lowGearingTopSpeed = AttainableTopSpeed(50f, gearing: 0f);
-        var highGearingTopSpeed = AttainableTopSpeed(50f, gearing: 1f);
-
-        Assert.True(lowGearingDrive > highGearingDrive);
-        Assert.True(lowGearingTopSpeed < highGearingTopSpeed);
+        Assert.True(CalculateAcceleration(50f, 0f, PerfectDriveSurface)
+            > CalculateAcceleration(50f, 1f, PerfectDriveSurface));
+        Assert.True(StraightEquilibrium(50f, 0f) < StraightEquilibrium(50f, 1f));
     }
 
     [Fact]
-    public void SpeedCeilingHelperStopsPositiveDriveAtCeiling()
-    {
-        var result = LongitudinalDynamics.AccelerateOverDistanceWithSpeedCeiling(
-            initialSpeedMetersPerSecond: 20f,
-            accelerationMetersPerSecondSquared: 2f,
-            distanceMeters: 100f,
-            speedCeilingMetersPerSecond: 23f);
-
-        Assert.Equal(23f, result);
-    }
+    public void SignedKinematicsAllowsAccelerationPastFormerCeiling()
+        => Assert.Equal(MathF.Sqrt(800f), LongitudinalDynamics.ApplySignedAccelerationOverDistance(20f, 2f, 100f));
 
     [Fact]
-    public void SpeedCeilingHelperDoesNotReduceExistingOverspeed()
-    {
-        var result = LongitudinalDynamics.AccelerateOverDistanceWithSpeedCeiling(
-            initialSpeedMetersPerSecond: 25f,
-            accelerationMetersPerSecondSquared: 2f,
-            distanceMeters: 100f,
-            speedCeilingMetersPerSecond: 23f);
-
-        Assert.Equal(25f, result);
-    }
+    public void SignedKinematicsDeceleratesWithoutAnArtificialSpeedTarget()
+        => Assert.Equal(15f, LongitudinalDynamics.ApplySignedAccelerationOverDistance(25f, -2f, 100f));
 
     [Theory]
     [InlineData(10f, 2f, 0f)]
     [InlineData(10f, 0f, 25f)]
-    public void SpeedCeilingHelperPreservesZeroDistanceAndZeroAcceleration(
-        float initialSpeed,
-        float acceleration,
-        float distance)
-    {
-        var result = LongitudinalDynamics.AccelerateOverDistanceWithSpeedCeiling(
-            initialSpeed,
-            acceleration,
-            distance,
-            speedCeilingMetersPerSecond: 23f);
-
-        Assert.Equal(initialSpeed, result);
-    }
+    public void SignedKinematicsPreservesZeroDistanceAndZeroAcceleration(float speed, float acceleration, float distance)
+        => Assert.Equal(speed, LongitudinalDynamics.ApplySignedAccelerationOverDistance(speed, acceleration, distance));
 
     [Theory]
-    [InlineData(-1f, 1f, 1f, 20f)]
-    [InlineData(float.NaN, 1f, 1f, 20f)]
-    [InlineData(float.PositiveInfinity, 1f, 1f, 20f)]
-    [InlineData(float.NegativeInfinity, 1f, 1f, 20f)]
-    [InlineData(1f, -1f, 1f, 20f)]
-    [InlineData(1f, float.NaN, 1f, 20f)]
-    [InlineData(1f, float.PositiveInfinity, 1f, 20f)]
-    [InlineData(1f, float.NegativeInfinity, 1f, 20f)]
-    [InlineData(1f, 1f, -1f, 20f)]
-    [InlineData(1f, 1f, float.NaN, 20f)]
-    [InlineData(1f, 1f, float.PositiveInfinity, 20f)]
-    [InlineData(1f, 1f, float.NegativeInfinity, 20f)]
-    [InlineData(1f, 1f, 1f, 0f)]
-    [InlineData(1f, 1f, 1f, -1f)]
-    [InlineData(1f, 1f, 1f, float.NaN)]
-    [InlineData(1f, 1f, 1f, float.PositiveInfinity)]
-    [InlineData(1f, 1f, 1f, float.NegativeInfinity)]
-    public void SpeedCeilingHelperRejectsInvalidInputs(
-        float initialSpeed,
-        float acceleration,
-        float distance,
-        float ceiling)
-    {
-        Assert.Throws<ArgumentOutOfRangeException>(() =>
-            LongitudinalDynamics.AccelerateOverDistanceWithSpeedCeiling(
-                initialSpeed,
-                acceleration,
-                distance,
-                ceiling));
-    }
+    [InlineData(-1f, 1f, 1f)]
+    [InlineData(float.NaN, 1f, 1f)]
+    [InlineData(float.PositiveInfinity, 1f, 1f)]
+    [InlineData(float.NegativeInfinity, 1f, 1f)]
+    [InlineData(1f, float.NaN, 1f)]
+    [InlineData(1f, float.PositiveInfinity, 1f)]
+    [InlineData(1f, float.NegativeInfinity, 1f)]
+    [InlineData(1f, 1f, -1f)]
+    [InlineData(1f, 1f, float.NaN)]
+    [InlineData(1f, 1f, float.PositiveInfinity)]
+    [InlineData(1f, 1f, float.NegativeInfinity)]
+    public void SignedKinematicsRejectsInvalidInputs(float speed, float acceleration, float distance)
+        => Assert.Throws<ArgumentOutOfRangeException>(() =>
+            LongitudinalDynamics.ApplySignedAccelerationOverDistance(speed, acceleration, distance));
+
+    [Fact]
+    public void SignedKinematicsStopsSafelyBeforeEndOfStep()
+        => Assert.Equal(0f, LongitudinalDynamics.ApplySignedAccelerationOverDistance(1f, -10f, 1f));
 
     [Fact]
     public void StraightAccelerationUsesSpeedSkillAndEntryGrip()
@@ -1300,8 +1253,11 @@ public sealed class LongitudinalDynamicsTests
             new RiderSkills(50f, 50f, slideControl, 50f, 50f, 50f),
             surface);
 
-    private static float AttainableTopSpeed(float speedSkill, float gearing)
-        => LongitudinalDynamics.CalculateAttainableTopSpeedMetersPerSecond(
-            new RiderSkills(50f, speedSkill, 50f, 50f, 50f, 50f),
-            new BikeSetup(gearing, tractionBias: 0.5f));
+    private static float StraightEquilibrium(float speedSkill, float gearing)
+    {
+        var skills = new RiderSkills(50f, speedSkill, 50f, 50f, 50f, 50f);
+        var setup = new BikeSetup(gearing, 0.5f);
+        return LongitudinalDynamics.CalculateFullDriveEquilibriumSpeedMetersPerSecond(
+            LongitudinalDynamics.CalculateStraightAvailableDriveForceNewtons(skills, setup, PerfectDriveSurface), setup);
+    }
 }

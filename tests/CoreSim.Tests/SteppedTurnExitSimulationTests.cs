@@ -11,6 +11,22 @@ public sealed class SteppedTurnExitSimulationTests
     private static readonly TrackSurfaceState PerfectSurface = new(1f, 0f, 0.35f);
 
     [Fact]
+    public void TurnExitEligibilityRemainsOkOrBrakeOnly()
+    {
+        foreach (var (ratio, outcome) in new[]
+                 { (0.9f, SegmentOutcome.Ok), (1.05f, SegmentOutcome.Brake),
+                   (1.20f, SegmentOutcome.RunWide), (1.30f, SegmentOutcome.Crash) })
+        {
+            var step = Resolve(SegmentType.TurnExit, new[] { OverspeedRider(ratio) });
+            Assert.Equal(outcome, step.Changes[0].Outcome);
+            Assert.Equal(outcome is SegmentOutcome.Ok or SegmentOutcome.Brake,
+                step.Diagnostics[0].TurnExitDriveProfile.HasValue);
+            if (outcome is SegmentOutcome.RunWide or SegmentOutcome.Crash)
+                Assert.Null(step.Diagnostics[0].FullDriveEquilibriumSpeedMetersPerSecond);
+        }
+    }
+
+    [Fact]
     public void EligibleTurnExitSpeedComesFromProfileExitSpeed()
     {
         var resolved = Resolve(SegmentType.TurnExit, new[] { Rider(1, 1, 1f, 12f) });
@@ -50,7 +66,7 @@ public sealed class SteppedTurnExitSimulationTests
     }
 
     [Fact]
-    public void RunWideDoesNotReceiveTurnExitDriveProfile()
+    public void RunWideStillDoesNotReceiveTurnExitDriveProfile()
     {
         var rider = OverspeedRider(1.20f);
         var diagnostics = Assert.Single(Resolve(SegmentType.TurnExit, new[] { rider }).Diagnostics);
@@ -58,7 +74,7 @@ public sealed class SteppedTurnExitSimulationTests
     }
 
     [Fact]
-    public void CrashDoesNotReceiveTurnExitDriveProfile()
+    public void CrashStillDoesNotReceiveTurnExitDriveProfile()
     {
         var rider = OverspeedRider(1.30f);
         var diagnostics = Assert.Single(Resolve(SegmentType.TurnExit, new[] { rider }).Diagnostics);
@@ -83,7 +99,7 @@ public sealed class SteppedTurnExitSimulationTests
             useLegacyPhysics: true).Diagnostics).TurnExitDriveProfile);
 
     [Fact]
-    public void BrakeTurnExitStartsPositiveDriveFromResolvedPhysicsSpeed()
+    public void BrakeTurnExitStartsSignedDriveFromResolvedPhysicsSpeed()
     {
         var rider = OverspeedRider(1.05f);
         var resolved = Resolve(SegmentType.TurnExit, new[] { rider });
@@ -95,20 +111,24 @@ public sealed class SteppedTurnExitSimulationTests
             rider.Profile.Skills,
             rider.ActiveSetup,
             diagnostics.EntrySurface,
-            diagnostics.TravelledMeters,
-            diagnostics.AttainableTopSpeedMetersPerSecond!.Value);
+            diagnostics.TravelledMeters);
 
         Assert.Equal(SegmentOutcome.Brake, change.Outcome);
         Assert.Equal(expected, profile);
     }
 
     [Fact]
-    public void ExistingOverspeedAboveCeilingIsStillNotReduced()
+    public void ExistingOverspeedAboveEquilibriumNaturallyDecelerates()
     {
         var geometry = new TrackGeometry(60f, 100f, 1f, 1f);
-        var rider = Rider(1, 4, 4f, 25f);
+        var force = LongitudinalDynamics.CalculateTurnExitAvailableDriveForceNewtons(
+            RiderSkills.Balanced, BikeSetup.Neutral, PerfectSurface);
+        var equilibrium = LongitudinalDynamics.CalculateFullDriveEquilibriumSpeedMetersPerSecond(force, BikeSetup.Neutral);
+        var rider = Rider(1, 4, 4f, equilibrium + 2f);
         var resolved = Resolve(SegmentType.TurnExit, new[] { rider }, geometry: geometry);
-        Assert.Equal(25f, Assert.Single(resolved.Changes).Speed);
+        var speed = Assert.Single(resolved.Changes).Speed;
+        Assert.True(speed < rider.Speed);
+        Assert.True(speed > equilibrium);
     }
 
     [Fact]
@@ -126,8 +146,7 @@ public sealed class SteppedTurnExitSimulationTests
             rider.Profile.Skills,
             rider.ActiveSetup,
             expectedSurface,
-            diagnostics.TravelledMeters,
-            diagnostics.AttainableTopSpeedMetersPerSecond!.Value);
+            diagnostics.TravelledMeters);
 
         Assert.Equal(expectedSurface, diagnostics.EntrySurface);
         Assert.Equal(expected, diagnostics.TurnExitDriveProfile);

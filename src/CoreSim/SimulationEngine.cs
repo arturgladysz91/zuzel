@@ -48,7 +48,7 @@ public sealed record RiderStepDiagnostics(
     float TravelledMeters,
     float TravelTimeSeconds,
     float PeakSpeedMetersPerSecond,
-    float? AttainableTopSpeedMetersPerSecond,
+    float? FullDriveEquilibriumSpeedMetersPerSecond,
     float? TurnExitNetAccelerationMetersPerSecondSquared,
     TurnExitDriveProfile? TurnExitDriveProfile,
     StraightSpeedProfile? StraightProfile,
@@ -114,7 +114,7 @@ public sealed class SimulationEngine
     private sealed record ResolvedRider(
         RiderStateChange Change,
         float TravelledMeters,
-        float? AttainableTopSpeedMetersPerSecond,
+        float? FullDriveEquilibriumSpeedMetersPerSecond,
         float? TurnExitNetAccelerationMetersPerSecondSquared,
         TurnExitDriveProfile? TurnExitDriveProfile,
         StraightSpeedProfile? StraightProfile,
@@ -254,7 +254,7 @@ public sealed class SimulationEngine
                 resolution.TravelledMeters,
                 diagnosticTravelTimeSeconds,
                 peakSpeed,
-                resolution.AttainableTopSpeedMetersPerSecond,
+                resolution.FullDriveEquilibriumSpeedMetersPerSecond,
                 resolution.TurnExitNetAccelerationMetersPerSecondSquared,
                 resolution.TurnExitDriveProfile,
                 resolution.StraightProfile,
@@ -446,14 +446,11 @@ public sealed class SimulationEngine
         StraightSpeedProfile? straightProfile = null;
         TurnExitDriveProfile? turnExitDriveProfile = null;
         StandingStartLaunchProfile? standingStartLaunchProfile = null;
-        float? attainableTopSpeed = null;
         float? turnExitNetAcceleration = null;
         if (standingStartEligible)
         {
-            attainableTopSpeed = LongitudinalDynamics.CalculateAttainableTopSpeedMetersPerSecond(
-                rider.Profile.Skills, rider.ActiveSetup);
             standingStartLaunchProfile = LongitudinalDynamics.CalculateStandingStartLaunchProfile(
-                rider.Profile.Skills, rider.ActiveSetup, surface, travelled, attainableTopSpeed.Value,
+                rider.Profile.Skills, rider.ActiveSetup, surface, travelled,
                 ResolveImmediateNextTurnApproachSpeed(snapshot, rider));
             speed = standingStartLaunchProfile.Value.ExitSpeedMetersPerSecond;
         }
@@ -464,10 +461,6 @@ public sealed class SimulationEngine
                 .CalculateCornerEntryDecelerationMetersPerSecondSquared(
                     rider.Profile.Skills,
                     surface);
-            attainableTopSpeed = LongitudinalDynamics
-                .CalculateAttainableTopSpeedMetersPerSecond(
-                    rider.Profile.Skills,
-                    rider.ActiveSetup);
             straightProfile = LongitudinalDynamics.CalculateForceBasedStraightSpeedProfile(
                 resolution.Speed,
                 rider.Profile.Skills,
@@ -475,7 +468,6 @@ public sealed class SimulationEngine
                 surface,
                 cornerEntryDeceleration,
                 travelled,
-                attainableTopSpeed.Value,
                 ResolveImmediateNextTurnApproachSpeed(snapshot, rider));
             speed = straightProfile.Value.ExitSpeedMetersPerSecond;
         }
@@ -485,18 +477,13 @@ public sealed class SimulationEngine
             && resolution.Speed > 0f
             && travelled > 0f)
         {
-            attainableTopSpeed = LongitudinalDynamics
-                .CalculateAttainableTopSpeedMetersPerSecond(
-                    rider.Profile.Skills,
-                    rider.ActiveSetup);
             turnExitDriveProfile = LongitudinalDynamics
                 .CalculateForceBasedTurnExitDriveProfile(
                 resolution.Speed,
                 rider.Profile.Skills,
                 rider.ActiveSetup,
                 surface,
-                travelled,
-                attainableTopSpeed.Value);
+                travelled);
             turnExitNetAcceleration =
                 turnExitDriveProfile.Value.EntryNetAccelerationMetersPerSecondSquared;
             speed = turnExitDriveProfile.Value.ExitSpeedMetersPerSecond;
@@ -571,7 +558,9 @@ public sealed class SimulationEngine
                 resolution.Speed,
                 ApplySurfaceWear: resolution.Outcome != SegmentOutcome.Crash),
             travelled,
-            attainableTopSpeed,
+            standingStartLaunchProfile?.FullDriveEquilibriumSpeedMetersPerSecond
+                ?? straightProfile?.FullDriveEquilibriumSpeedMetersPerSecond
+                ?? turnExitDriveProfile?.FullDriveEquilibriumSpeedMetersPerSecond,
             turnExitNetAcceleration,
             turnExitDriveProfile,
             straightProfile,

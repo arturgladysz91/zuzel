@@ -133,7 +133,7 @@ public sealed class CalibrationTraceCollector : ISimulationStepObserver
             surface.Ruts,
             surface.Moisture,
             surface.EffectiveGrip,
-            diagnostics.AttainableTopSpeedMetersPerSecond,
+            diagnostics.FullDriveEquilibriumSpeedMetersPerSecond,
             diagnostics.TurnExitNetAccelerationMetersPerSecondSquared,
             turnExit?.AccelerationDistanceMeters,
             turnExit?.CruiseDistanceMeters,
@@ -153,7 +153,8 @@ public sealed class CalibrationTraceCollector : ISimulationStepObserver
             launch?.EntryNetAccelerationMetersPerSecondSquared,
             launch?.TimeTo70KphSeconds,
             launch?.SpeedAtTwoSecondsMetersPerSecond,
-            launch?.PreparationDistanceMeters);
+            launch?.PreparationDistanceMeters,
+            turnExit?.DecelerationDistanceMeters);
     }
 
     private CalibrationLapSummary[] BuildLapSummaries(

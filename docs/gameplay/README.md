@@ -48,29 +48,62 @@ Model nie dodaje `ControlledWide` i nie zmienia progów `Brake`, `RunWide` i `Cr
 
 ### Distance-limited longitudinal physics — PROVISIONAL
 
-`SegmentPhysics` nadal rozstrzyga ograniczenie i outcome; nie jest pełnym modelem dynamiki motocykla. Po tym rozstrzygnięciu advanced `TurnExit` może wykonać pierwszy deterministyczny force-based foundation dla positive drive po `Ok` albo `Brake`. Reference available force jest kalibrowana względem dotychczasowego przyspieszenia przy `16 m/s`. One-gear envelope wynosi dokładnie `1` dla `v <= 16 m/s`; powyżej reference speed wynosi `max(0, 1 - fadeRate * (v - 16))`, gdzie `fadeRate = 0.0175 + (0.0050 - 0.0175) * Gearing` w `1/(m/s)`. Actual available force to reference force pomnożone przez envelope. Opór pozostaje `F_resistance = 40 N + 0.20 N/(m/s)² * v²`, dodatnia siła netto to `max(0, F_drive(v) - F_resistance)`, a przyspieszenie dzieli ją przez nominalne `142 kg`. Następnie istniejąca kinematyka liczy `sqrt(v_physics² + 2 * a * s)` dla rzeczywistego dystansu i zachowuje attainable ceiling.
+Od #31 production advanced Straight, eligible TurnExit i standing launch nie
+korzystają z artificial attainable-speed ceiling. Usunięto model
+`21–25 m/s × 0.94–1.06` i osobny gearing top-speed multiplier.
+Full-drive acceleration jest signed: `a(v) = (F_drive(v) - F_resistance(v)) / 142`,
+bez `max(0)` na sile netto lub acceleration. Opór pozostaje
+`F_resistance(v) = 40 + 0.20*v²` N. Available drive to `referenceForce * envelope`.
+Envelope jest dokładnie `1` dla `v <= 16`; powyżej:
+`clamp(1 - fadeRate*(v-16), 0, 1)`, gdzie
+`fadeRate = 0.0175 + (0.0050 - 0.0175)*Gearing`.
 
-Dotychczasowa metoda przyspieszenia i jej wzór pozostają niezmienionym targetem kalibracyjnym: `Speed` ability, corner-drive trade-off `Gearing` oraz `EffectiveGrip` wejściowej nawierzchni tworzą reference acceleration. Bazowy zakres `0.60–1.40 m/s²`, gearing `1.10–0.90`, surface `0.75 + 0.25 * EffectiveGrip`, `16 m/s`, `142 kg`, `40 N` i `0.20 N/(m/s)²` są **PROVISIONAL / NOT REAL-WORLD CALIBRATED**. Nominalna masa nie jest wagą konkretnego ridera, a aggregate resistance nie jest twierdzeniem o CdA ani czystym aerodynamic drag. `Gearing` i surface nie dostają drugiego mnożnika; `TractionBias`, morale, style, `SlideControl` i pozostałe umiejętności nie zmieniają available force.
+Naturalne `FullDriveEquilibriumSpeedMetersPerSecond` jest obserwacją
+`drive = resistance`, nie limiterem ani targetem. Solver to deterministyczna
+bisekcja w `[0, 16 + 1/fadeRate]`, maksymalnie 64 iteracje do szerokości bracketu
+`1e-6 m/s` (wynik float), bez RNG i initial guess. Force <40 N nie ma
+nieujemnego pierwiastka i jest odrzucane; force=40 N daje 0. Production nigdy
+nie clampuje speed do equilibrium: poniżej przyspiesza, powyżej naturalnie zwalnia.
 
-Zachowanie #25 jest identyczne przy i poniżej `16 m/s`. Powyżej reference speed drive-oriented (`Gearing = 0`) zachowuje większą siłę początkową, ale używa szybszego fade `0.0175 /(m/s)`; speed-oriented (`Gearing = 1`) zaczyna niżej, lecz zanika wolniej z `0.0050 /(m/s)`. Krzywe mogą dzięki temu naturalnie się przeciąć bez osobnego bonusu crossover. Gdy resistance osiąga available force, przyspieszenie wynosi `0`, nigdy wartość ujemną. Wszystkie fade rates są **PROVISIONAL / NOT REAL-WORLD CALIBRATED**.
+Wszystkie trzy ścieżki współdzielą signed midpoint i fixed-distance kroki
+maksymalnie `1 m` z exact final remainder. Predictor i corrected step używają
+`sqrt(max(0, v² + 2*a*ds))`; midpoint to `(start + predicted)/2`.
+To zabezpieczenie kwadratu prędkości przy zatrzymaniu, nie clamp acceleration.
+Czas przejazdu jest sumą `2*ds/(v_start+v_end)`, nie jednym średnim czasem
+całego segmentu. Equilibrium nie kończy integracji.
 
-Osiągalna prędkość szczytowa wynosi `baseTopSpeed * gearingMultiplier`, gdzie `baseTopSpeed = 21 + (25 - 21) * normalizedSpeed`, a `gearingMultiplier = 0.94 + (1.06 - 0.94) * Gearing`. Zakresy `21–25 m/s` i `0.94–1.06` są **PROVISIONAL / NOT REAL-WORLD CALIBRATED**: nie pochodzą jeszcze z docelowej telemetrii i nie są finalną prędkością prawdziwego motocykla. Oś `Gearing` to `drive-oriented ↔ speed-oriented`: `0` wzmacnia corner-exit drive, ale obniża osiągalną prędkość; `1` osłabia drive, ale podnosi osiągalną prędkość. Nawierzchnia nie zmienia tej granicy. Nie jest to hard limiter istniejącego overspeedu: gdy wejściowa prędkość już osiąga albo przekracza granicę, positive drive jej nie zmniejsza. Wzory i zachowanie #22 pozostają bez zmian.
+Reference acceleration TurnExit pozostaje `0.60–1.40`, Straight `0.80–1.60`
+przez Speed, razy `1.10–0.90` przez Gearing i
+`0.75 + 0.25*EffectiveGrip`. Reference force to `142*referenceAcceleration
++ resistance(16)`, więc kontrakt przy 16 m/s pozostaje. Surface jest próbkowana
+raz przy wejściu i nadal skaluje effective reference drive, a więc też equilibrium.
+Gearing=0 ma więcej reference drive, ale szybszy fade; Gearing=1 mniej drive
+i wolniejszy fade. Morale i TractionBias nie wpływają na siły ani equilibrium.
 
-Od #29 eligible advanced `TurnExit` zaczyna positive-drive profile dokładnie od
-post-`SegmentPhysics` `resolution.Speed` i używa shared fixed-distance midpoint
-traversal. Eligibility pozostaje bez zmian: tylko `Ok`/`Brake`, dodatnia speed i
-dodatni dystans. `RunWide` nie otrzymuje positive drive, `Crash` pozostaje z
-prędkością zero, a `TurnEntry`, `TurnMiddle` i legacy nie dostają profilu.
-TurnExit profile time jest produkcyjnym czasem segmentu i steruje istniejącym
-ruchem bocznym.
+TurnExit nadal wymaga `Ok`/ `Brake`, dodatniej post-physics speed i dystansu.
+Profil zaczyna od `resolution.Speed`; `RunWide` i `Crash` go nie otrzymują.
+Straight i TurnExit raportują acceleration + cruise + deceleration distance
+równe actual distance. Deceleration obejmuje naturalną utratę speed, a na
+Straight także explicit preparation; entry net acceleration TurnExit może być ujemne.
+Wszystkie profile zawierają equilibrium z dokładnie tej samej reference force/setup.
 
-Od #27 advanced `Straight` ma deterministyczny speed-dependent force traversal. Rzeczywisty dystans dzieli na fixed-distance kroki maksymalnie `1 m` (**PROVISIONAL / NUMERICAL INTEGRATION RESOLUTION**), a ostatnia reszta nie jest zaokrąglana. Każdy full-drive krok liczy predictor z `a_start`, midpoint speed `(start + predicted)/2` i corrected `a_mid`, a następnie `v_next² = v_start² + 2*a_mid*ds`. Nie ma timestepu, zależności od FPS ani ponownego próbkowania nawierzchni co metr.
+Dla immediate TurnEntry nadal działa maximum recoverable approach target oraz
+backward allowed-speed envelope. Final step to
+`min(fullDriveCandidate, max(allowedBoundary, preparationReachableSpeed))`.
+Target jest upper constraint i nigdy nie podnosi naturalnie zwalniającego candidate.
+Gdy target jest nieosiągalny, zostaje residual overspeed; preparation nie dostaje
+dodatkowej deceleration. Naturalny spadek od oporów może być silniejszy niż
+preparation i nie wolno go wyłączać. Corner-entry preparation pozostaje
+odrębnym efektywnym modelem throttle roll-off / engine-drivetrain / slide preparation
+`2.00–3.20 m/s²`; #24 TurnEntry scrub nadal używa 50% remaining distance.
 
-Straight reference acceleration to istniejące **PROVISIONAL** `0.80–1.60 m/s²` przez `Speed`, razy wejściowe `0.75 + 0.25 * EffectiveGrip`, razy ten sam drive multiplier `1.10–0.90` przez `Gearing`. Reference force wynosi `142 kg * referenceAcceleration + resistance(16)`. Wspólny z #26 one-gear envelope wyznacza actual available force; opór nadal wynosi `40 + 0.20*v²`, a positive net acceleration jest nieujemna. Drive-oriented ma więcej reference drive, ale szybszy fade; speed-oriented ma mniej reference drive, ale utrzymuje je dłużej.
-
-Jeżeli nie ma targetu następnego łuku, profil przyspiesza do retained ceiling i wykorzystuje pozostały dystans na cruise; istniejący overspeed nie jest clampowany. Dla bezpośredniego `TurnEntry` target nadal oznacza maximum recoverable approach speed. Od targetu budowany jest wsteczny allowed-speed envelope z istniejącej corner-entry deceleration. Forward traversal może przejść dokładnie na boundary tylko wtedy, gdy jest ono fizycznie osiągalne; w przeciwnym razie używa maksymalnej istniejącej deceleration, więc brak dystansu nie teleportuje speed. Target powyżej full-drive exit lub ceiling nie wywołuje niepotrzebnej preparation.
-
-Czas Straight jest sumą `2*ds/(v_start+v_end)` dla wszystkich kroków, a ten sam czas steruje `LateralMovementModel`. Każdy krok trafia do acceleration, cruise albo deceleration, a ich dystanse sumują się do dokładnego dystansu wejściowego. Stary analityczny `CalculateStraightSpeedProfile` pozostaje testowany, lecz nie jest już produkcyjną ścieżką advanced Straight.
+Pure zero-drive helper daje `-(40 + 0.20*v²)/142`, ale NIE jest finalnym
+engine-braking modelem ani zamiennikiem corner preparation. Nie dodano explicit
+throttle input, wheelspin, traction-force cap ani splitu engine/traction force.
+Wszystkie stałe są **PROVISIONAL / NOT REAL-WORLD CALIBRATED**, bez strojenia.
+Stary analityczny `CalculateStraightSpeedProfile` to wyłącznie non-production
+compatibility utility z jawnie podanym ogólnym ograniczeniem; nie wylicza Vmax,
+nie jest wywoływany przez SimulationEngine i ma null equilibrium.
 
 Lookahead obejmuje wyłącznie jeden bezpośredni segment. Target następnego `TurnEntry` wykorzystuje jego immutable nawierzchnię, pełną długość geometryczną i wejściowe `LateralPosition` zawodnika; nie korzysta z `TargetLane`, `PlannedLane`, resolved lane ani pozycji po `MoveTowards`. Ostatni Straight nie-finalnego okrążenia zawija do segmentu `0`. Ostatni segment ostatniego wymaganego okrążenia nie przygotowuje motocykla do nieistniejącego następnego łuku i wykorzystuje pozostały dystans na acceleration. Rozpoznanie opiera się na `LapIndex`, `RequiredLaps`, `SegmentIndex` i liczbie segmentów — bez `lap == 4`, bonusu mety lub specjalnej reguły wewnętrznej linii.
 
@@ -78,18 +111,9 @@ Realny motocykl żużlowy ma jeden bieg podczas jazdy, nie posiada klasycznego u
 
 Kolejność to `original entry → scrub → SegmentPhysics → random incident → distance/time`. Non-crash przejeżdża cały remaining distance, a czas wynosi czas profilu scrub plus post-scrub distance podzielony przez finalną prędkość resolution. Crash nadal przejeżdża połowę remaining progress — dokładnie provisional scrub distance — i dostaje wyłącznie czas scrub, także gdy crash powstał w random incident. Ten czas steruje również `LateralMovementModel`. Partial TurnEntry używa tylko remaining distance; surface nie jest ponownie próbkowane po ruchu bocznym.
 
-Straight i TurnExit współdzielą `1 m` numerical resolution, exact remainder,
-tworzenie kroków, one-gear envelope, resistance, generic net-positive-drive
-helper oraz midpoint step. Integration jest dystansowa, nie fixed-time, i nie
-próbkuje ponownie surface co metr. TurnExit zachowuje własne reference
-`0.60–1.40 × gearing × surface`, a Straight własne
-`0.80–1.60 × gearing × surface`. Advanced lateral movement na Straight,
-TurnEntry i eligible TurnExit otrzymuje rzeczywisty czas odpowiedniego profilu.
-Model nie przelicza profilu po `MoveTowards`; surface i geometria nadal używają
-immutable segment-entry position. `TurnMiddle`, legacy i cały model #24
-TurnEntry są niezmienione. Zakresy `21–25 m/s` i `0.94–1.06` nadal obowiązują
-jako artificial ceiling i są **PROVISIONAL / NOT REAL-WORLD CALIBRATED**.
-Signed negative drag/coast nadal nie istnieje; #30 dodaje poniższy provisional standing start.
+StandingStart, Straight i TurnExit współdzielą signed 1 m midpoint opisany powyżej.
+TurnEntry #24, continuous geometry/surface/wear, contact, lateral budget i legacy
+zachowują własne kontrakty; signed forces nie dodają drugiego resolve ani RNG.
 
 ### Standing start / launch — PROVISIONAL / NOT REAL-WORLD CALIBRATED
 
@@ -116,8 +140,7 @@ Reference acceleration =
 `(9.0 + (11.0 - 9.0) * StartNorm) * (1.10 + (0.90 - 1.10) * Gearing) *
 (0.75 + 0.25 * EffectiveGrip)` m/s². Reference force = `142 * acceleration +
 resistance(0)`. Dalej działają wspólne resistance `40 + 0.20*v²`, one-gear
-envelope, kroki 1 m z exact remainder i midpoint oraz dotychczasowy artificial
-ceiling `21–25 × 0.94–1.06`. Entry surface próbkujemy raz. TractionBias i morale
+envelope, kroki 1 m z exact remainder i signed midpoint bez artificial ceiling. Entry surface próbkujemy raz. TractionBias i morale
 nie wpływają na launch ani reaction; brak gate-specific bonusu.
 
 Launch przygotowuje wejście w bezpośrednio następny TurnEntry: ten sam maximum
@@ -130,8 +153,8 @@ sumuje `2*ds/(v_start+v_end)` wszystkich fixed-distance steps.
 
 Elapsed obejmuje reaction + movement; lateral budget tylko movement.
 Reaction nie powoduje ruchu bocznego, dystansu ani progress. Actual exit speed
-staje się wejściem do niezmienionego #24 TurnEntry; #29 TurnExit, normal Straight,
-legacy i compatibility bootstrap pozostają bez zmian. Lookahead nadal dotyczy
+staje się wejściem do niezmienionego #24 TurnEntry; legacy i compatibility
+bootstrap pozostają bez zmian. Lookahead nadal dotyczy
 tylko bezpośrednio następnego segmentu. Existing contact działa po profilu,
 więc final duration może zawierać penalty ponad pre-contact profile total.
 
@@ -142,7 +165,7 @@ z reaction delay. Czas do 70 zawiera interpolację corrected step,
 speed po 2 s używa kinematyki tego kroku, także podczas preparation. Null oznacza nieosiągnięty próg lub
 koniec launch przed 2 s. Nie dopasowujemy stałych do tych wyników.
 Brak clutch, RPM, torque/power, real sprockets, wheelspin, slip ratio, traction
-cap, false starts, reaction RNG oraz signed negative coasting.
+cap, false starts, reaction RNG oraz explicit throttle.
 
 Starting-gate geometry i pełna szerokość toru nie są jeszcze fizycznie odwzorowane.
 Initial `Lane/LateralPosition` pozostają compatibility representation pozycji
@@ -163,14 +186,20 @@ przy `EnableLogging=false`, a deterministic CSV ma stable ordering i invariant
 culture. Harness nie dodaje RNG, nie zmienia physics ani wyników biegu i nie
 porównuje jeszcze wartości z real telemetry.
 
-Od #29 harness eksportuje production `TurnExitDriveProfile`: acceleration/cruise
-distance i profile travel time. Zachowany `TurnExitNetAcceleration` oznacza
-entry net acceleration początku profilu, nie jedną acceleration dla segmentu.
-Compatibility bootstrap nie jest fizycznym startem; jawny launch #30 pozostaje
-provisional. Current artificial attainable ceiling nadal istnieje, a signed
-negative drag/coasting nie istnieje. Roadmap: signed net force i natural
-resistance deceleration przygotowujące usunięcie ceiling, a następnie
-real-world calibration targets.
+#31 wprowadza breaking diagnostic-schema change przed ustaleniem real-world dataset:
+`FullDriveEquilibriumSpeedMetersPerSecond` zastępuje
+`AttainableTopSpeedMetersPerSecond` w RiderStepDiagnostics, CalibrationStepSample
+i CSV. Nie ma dwóch pól Vmax. Dla launch/Straight/eligible TurnExit pochodzi
+z użytego profilu; dla innych segmentów jest null.
+CSV dodaje `TurnExitDecelerationDistanceMeters` po TurnExitCruiseDistanceMeters;
+entry acceleration TurnExit jest signed. Nowy schema zachowuje stable order,
+invariant culture, decimal dot, `\n` i null = empty.
+
+Następny etap: **REAL-WORLD CALIBRATION DATASET + PARAMETER FITTING** dla reaction,
+TimeTo70, SpeedAt2s, first-turn entry speed, Straight Vmax, lap times i full heat time.
+Późniejsze refinements: F_engine vs F_traction, wheelspin/slip, TractionBias,
+real sprockets, RPM, torque/power curve, throttle, engine braking i oddzielna
+physical gate A/B/C/D geometry. #31 ich nie implementuje.
 
 ### Czasowa zmiana linii — BINDING
 

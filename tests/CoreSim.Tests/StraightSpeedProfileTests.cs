@@ -206,9 +206,6 @@ public sealed class StraightSpeedProfileTests
             PerfectSurface,
             deceleration,
             track.Geometry.StraightLengthMeters,
-            LongitudinalDynamics.CalculateAttainableTopSpeedMetersPerSecond(
-                rider.Profile.Skills,
-                rider.ActiveSetup),
             target);
 
         var result = ResolveSingle(track, state, rider, targetLane: 1);
@@ -245,9 +242,6 @@ public sealed class StraightSpeedProfileTests
             PerfectSurface,
             deceleration,
             geometry.StraightLengthMeters,
-            LongitudinalDynamics.CalculateAttainableTopSpeedMetersPerSecond(
-                rider.Profile.Skills,
-                rider.ActiveSetup),
             target);
         var expectedLateralPosition = LateralMovementModel.MoveTowards(
             entryPosition,
@@ -265,22 +259,23 @@ public sealed class StraightSpeedProfileTests
     }
 
     [Fact]
-    public void AdvancedStraightCannotPositiveDrivePastAttainableTopSpeed()
+    public void AdvancedStraightConvergesToForceEquilibriumBeyondFormerCeiling()
     {
-        var track = TrackOf(500f, SegmentType.Straight);
+        var track = TrackOf(10_000f, SegmentType.Straight);
         var state = UniformState(track, PerfectSurface);
         var rider = Rider(1, lane: 1, lateralPosition: 1f, speed: 10f);
-        var ceiling = AttainableTopSpeed(rider);
+        var equilibrium = Equilibrium(rider);
 
         var result = ResolveSingle(track, state, rider, targetLane: 1);
 
-        Assert.Equal(ceiling, result.Change.Speed, 5);
+        Assert.InRange(Math.Abs(equilibrium - result.Change.Speed), 0f, 0.001f);
+        Assert.True(result.Change.Speed > 23f);
     }
 
     [Fact]
-    public void LongFinalStraightCruisesAtAttainableTopSpeed()
+    public void LongFinalStraightConvergesTowardEquilibrium()
     {
-        var track = StandardOrderTrack(500f);
+        var track = StandardOrderTrack(10_000f);
         var state = UniformState(track, PerfectSurface);
         var rider = RiderAt(
             1, lane: 1, lateralPosition: 1f, speed: 10f, lapNumber: 1, segmentIndex: 3, track);
@@ -293,8 +288,7 @@ public sealed class StraightSpeedProfileTests
             rider.ActiveSetup,
             PerfectSurface,
             deceleration,
-            track.Geometry.StraightLengthMeters,
-            AttainableTopSpeed(rider));
+            track.Geometry.StraightLengthMeters);
 
         var result = ResolveSingle(
             track,
@@ -314,7 +308,7 @@ public sealed class StraightSpeedProfileTests
     [Fact]
     public void HigherGearingCanReachHigherStraightSpeedOnLongEnoughStraight()
     {
-        var track = TrackOf(500f, SegmentType.Straight);
+        var track = TrackOf(10_000f, SegmentType.Straight);
         var state = UniformState(track, PerfectSurface);
         var lowGearing = ResolveSingle(
             track,
@@ -350,7 +344,7 @@ public sealed class StraightSpeedProfileTests
     }
 
     [Fact]
-    public void LowGearingStillHasMoreTurnExitDriveBelowCeiling()
+    public void LowGearingStillHasMoreTurnExitDriveBelowEquilibrium()
     {
         var track = TrackOf(60f, SegmentType.TurnExit);
         var state = UniformState(track, PerfectSurface);
@@ -368,22 +362,21 @@ public sealed class StraightSpeedProfileTests
         Assert.Equal(SegmentOutcome.Ok, lowGearing.Change.Outcome);
         Assert.Equal(SegmentOutcome.Ok, highGearing.Change.Outcome);
         Assert.True(lowGearing.Change.Speed > highGearing.Change.Speed);
-        Assert.True(lowGearing.Change.Speed < AttainableTopSpeed(speedSkill: 50f, gearing: 0f));
-        Assert.True(highGearing.Change.Speed < AttainableTopSpeed(speedSkill: 50f, gearing: 1f));
+        Assert.True(lowGearing.Change.Speed < Equilibrium(speedSkill: 50f, gearing: 0f));
+        Assert.True(highGearing.Change.Speed < Equilibrium(speedSkill: 50f, gearing: 1f));
     }
 
     [Fact]
-    public void TurnExitPositiveDriveStopsAtAttainableCeiling()
+    public void TurnExitDriveConvergesBeyondFormerCeiling()
     {
         var geometry = new TrackGeometry(
             straightLengthMeters: 60f,
             innerRadiusMeters: 24f,
             laneSpacingMeters: 1f,
-            turnSegmentAngleRadians: 10f);
+            turnSegmentAngleRadians: 200f);
         var track = new Track(new[] { new TrackSegment(0, SegmentType.TurnExit) }, geometry);
         var state = UniformState(track, PerfectSurface);
         var rider = Rider(1, lane: 1, lateralPosition: 1f, speed: 10f);
-        var ceiling = AttainableTopSpeed(rider);
 
         var result = ResolveSingle(track, state, rider, targetLane: 1);
 
@@ -393,34 +386,29 @@ public sealed class StraightSpeedProfileTests
             rider.Profile.Skills,
             rider.ActiveSetup,
             PerfectSurface,
-            LaneModel.SegmentLengthMeters(track.Segments[0], rider.LateralPosition, geometry),
-            ceiling);
+            LaneModel.SegmentLengthMeters(track.Segments[0], rider.LateralPosition, geometry));
         Assert.Equal(profile.ExitSpeedMetersPerSecond, result.Change.Speed, 5);
-        Assert.True(result.Change.Speed <= ceiling);
+        Assert.True(result.Change.Speed > 23f);
+        Assert.InRange(Math.Abs(result.Change.Speed - profile.FullDriveEquilibriumSpeedMetersPerSecond), 0f, 0.001f);
     }
 
     [Fact]
-    public void TurnExitPositiveDriveDoesNotReduceExistingOverspeed()
+    public void TurnExitSignedDriveNaturallyReducesExistingOverspeed()
     {
-        var geometry = new TrackGeometry(
-            straightLengthMeters: 60f,
-            innerRadiusMeters: 100f,
-            laneSpacingMeters: 1f,
-            turnSegmentAngleRadians: 1f);
+        var geometry = new TrackGeometry(60f, 100f, 1f, 1f);
         var track = new Track(new[] { new TrackSegment(0, SegmentType.TurnExit) }, geometry);
-        var state = UniformState(track, PerfectSurface);
-        var rider = Rider(1, lane: 1, lateralPosition: 1f, speed: 25f);
-
-        var result = ResolveSingle(track, state, rider, targetLane: 1);
-
-        Assert.True(rider.Speed > AttainableTopSpeed(rider));
+        var rider = Rider(1, 1, 1f, 0f);
+        var equilibrium = Equilibrium(rider, turnExit: true);
+        rider.Speed = equilibrium + 2f;
+        var result = ResolveSingle(track, UniformState(track, PerfectSurface), rider, targetLane: 1);
         Assert.Equal(SegmentOutcome.Ok, result.Change.Outcome);
-        Assert.Equal(25f, result.Change.PhysicsSpeed);
-        Assert.Equal(25f, result.Change.Speed);
+        Assert.Equal(rider.Speed, result.Change.PhysicsSpeed);
+        Assert.True(result.Change.Speed < rider.Speed);
+        Assert.True(result.Change.Speed > equilibrium);
     }
 
     [Fact]
-    public void NextTurnTargetBelowCeilingStillControlsStraightExit()
+    public void NextTurnTargetBelowEquilibriumStillControlsStraightExit()
     {
         var track = TrackOf(100f, SegmentType.Straight, SegmentType.TurnEntry);
         var state = UniformState(track, PerfectSurface);
@@ -429,26 +417,24 @@ public sealed class StraightSpeedProfileTests
 
         var result = ResolveSingle(track, state, rider, targetLane: 1);
 
-        Assert.True(target < AttainableTopSpeed(rider));
+        Assert.True(target < Equilibrium(rider));
         Assert.Equal(target, result.Change.Speed, 5);
     }
 
     [Fact]
-    public void WorseSurfaceChangesTimeToCeilingButNotTheCeiling()
+    public void WorseSurfaceLowersEffectiveForceEquilibrium()
     {
         var rider = Rider(1, lane: 1, lateralPosition: 1f, speed: 10f);
-        var ceiling = AttainableTopSpeed(rider);
-        var good = ProfileWithoutTurnTarget(rider, PerfectSurface, distanceMeters: 500f);
-        var poor = ProfileWithoutTurnTarget(rider, PoorSurface, distanceMeters: 500f);
-
-        Assert.Equal(ceiling, good.ExitSpeedMetersPerSecond, 5);
-        Assert.Equal(ceiling, poor.ExitSpeedMetersPerSecond, 5);
-        Assert.True(poor.AccelerationDistanceMeters > good.AccelerationDistanceMeters);
+        var good = ProfileWithoutTurnTarget(rider, PerfectSurface, 10_000f);
+        var poor = ProfileWithoutTurnTarget(rider, PoorSurface, 10_000f);
+        Assert.True(good.FullDriveEquilibriumSpeedMetersPerSecond > poor.FullDriveEquilibriumSpeedMetersPerSecond);
+        Assert.InRange(Math.Abs(good.ExitSpeedMetersPerSecond - good.FullDriveEquilibriumSpeedMetersPerSecond!.Value), 0f, 0.001f);
+        Assert.InRange(Math.Abs(poor.ExitSpeedMetersPerSecond - poor.FullDriveEquilibriumSpeedMetersPerSecond!.Value), 0f, 0.001f);
         Assert.True(poor.TravelTimeSeconds > good.TravelTimeSeconds);
     }
 
     [Fact]
-    public void PartialStraightUsesCeilingOverRemainingDistanceOnly()
+    public void PartialStraightIntegratesForcesOverRemainingDistanceOnly()
     {
         var track = TrackOf(400f, SegmentType.Straight, SegmentType.Straight);
         var state = UniformState(track, PerfectSurface);
@@ -471,7 +457,7 @@ public sealed class StraightSpeedProfileTests
     }
 
     [Fact]
-    public void LegacyStraightIgnoresAttainableTopSpeed()
+    public void LegacyStraightIgnoresForceEquilibrium()
     {
         var track = TrackOf(60f, SegmentType.Straight);
         var rider = Rider(1, lane: 1, lateralPosition: 1f, speed: 30f);
@@ -483,7 +469,7 @@ public sealed class StraightSpeedProfileTests
             targetLane: 1,
             useLegacyPhysics: true);
 
-        Assert.True(rider.Speed > AttainableTopSpeed(rider));
+        Assert.NotEqual(rider.Speed, Equilibrium(rider));
         Assert.Equal(30f, result.Change.PhysicsSpeed);
         Assert.Equal(result.Change.PhysicsSpeed, result.Change.Speed);
         Assert.Equal(2f, result.Change.ElapsedTimeSeconds, 5);
@@ -609,15 +595,18 @@ public sealed class StraightSpeedProfileTests
             turnEntryLength);
     }
 
-    private static float AttainableTopSpeed(RiderState rider)
-        => LongitudinalDynamics.CalculateAttainableTopSpeedMetersPerSecond(
-            rider.Profile.Skills,
-            rider.ActiveSetup);
+    private static float Equilibrium(RiderState rider, bool turnExit = false)
+        => Equilibrium(rider.Profile.Skills.Speed, rider.ActiveSetup.Gearing, turnExit);
 
-    private static float AttainableTopSpeed(float speedSkill, float gearing)
-        => LongitudinalDynamics.CalculateAttainableTopSpeedMetersPerSecond(
-            new RiderSkills(50f, speedSkill, 50f, 50f, 50f, 50f),
-            new BikeSetup(gearing, tractionBias: 0.5f));
+    private static float Equilibrium(float speedSkill, float gearing, bool turnExit = false)
+    {
+        var skills = new RiderSkills(50f, speedSkill, 50f, 50f, 50f, 50f);
+        var setup = new BikeSetup(gearing, 0.5f);
+        var force = turnExit
+            ? LongitudinalDynamics.CalculateTurnExitAvailableDriveForceNewtons(skills, setup, PerfectSurface)
+            : LongitudinalDynamics.CalculateStraightAvailableDriveForceNewtons(skills, setup, PerfectSurface);
+        return LongitudinalDynamics.CalculateFullDriveEquilibriumSpeedMetersPerSecond(force, setup);
+    }
 
     private static StraightSpeedProfile ProfileWithoutTurnTarget(
         RiderState rider,
@@ -631,8 +620,7 @@ public sealed class StraightSpeedProfileTests
             LongitudinalDynamics.CalculateCornerEntryDecelerationMetersPerSecondSquared(
                 rider.Profile.Skills,
                 surface),
-            distanceMeters,
-            AttainableTopSpeed(rider));
+            distanceMeters);
 
     private static RiderState Rider(
         int riderId,

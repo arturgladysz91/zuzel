@@ -72,8 +72,11 @@ public sealed class StandingStartPreparationTests
     }
 
     [Fact]
-    public void StandingStartTargetAboveCeilingDoesNotAddPreparation()
-        => Assert.Equal(Profile(100f, null), Profile(100f, 30f));
+    public void StandingStartTargetAboveEquilibriumDoesNotAddPreparation()
+    {
+        var unrestricted = Profile(100f, null);
+        Assert.Equal(unrestricted, Profile(100f, unrestricted.FullDriveEquilibriumSpeedMetersPerSecond + 1f));
+    }
 
     [Fact]
     public void StandingStartDoesNotLookThroughAnImmediateStraight()
@@ -163,7 +166,7 @@ public sealed class StandingStartPreparationTests
 
     private static StandingStartLaunchProfile Profile(float distance, float? target)
         => LongitudinalDynamics.CalculateStandingStartLaunchProfile(RiderSkills.Balanced, BikeSetup.Neutral,
-            Perfect, distance, 23f, target);
+            Perfect, distance, target);
 
     // Test-only independent midpoint/reference path. No production integration
     // resolution setting is introduced; the fine 0.05 m oracle exists only here.
@@ -171,20 +174,20 @@ public sealed class StandingStartPreparationTests
     {
         const double force = 142d * 10d + 40d;
         const double deceleration = 2.6d;
-        double Acceleration(double v) => Math.Max(0d,
-            (force * Math.Max(0d, 1d - 0.01125d * Math.Max(0d, v - 16d)) - 40d - 0.20d * v * v) / 142d);
+        double Acceleration(double v) =>
+            (force * Math.Max(0d, 1d - 0.01125d * Math.Max(0d, v - 16d)) - 40d - 0.20d * v * v) / 142d;
         var nodes = new List<Node>();
         var speed = 0f;
         var time = 0d;
         for (var position = 0d; position < distance;)
         {
             var ds = (float)Math.Min(step, distance - position);
-            var predicted = Math.Min(23d, Math.Sqrt((double)speed * speed + 2d * Acceleration(speed) * ds));
+            var predicted = Math.Sqrt(Math.Max(0d, (double)speed * speed + 2d * Acceleration(speed) * ds));
             var midpoint = (speed + predicted) / 2d;
-            var fullDrive = (float)Math.Min(23d, Math.Sqrt((double)speed * speed + 2d * Acceleration(midpoint) * ds));
+            var fullDrive = (float)Math.Sqrt(Math.Max(0d, (double)speed * speed + 2d * Acceleration(midpoint) * ds));
             var allowed = (float)Math.Sqrt((double)target * target + 2d * deceleration * (distance - position - ds));
             var maximumRollOff = (float)Math.Sqrt(Math.Max(0d, (double)speed * speed - 2d * deceleration * ds));
-            var end = fullDrive <= allowed ? fullDrive : Math.Max(allowed, maximumRollOff);
+            var end = Math.Min(fullDrive, Math.Max(allowed, maximumRollOff));
             var dt = 2d * ds / (speed + (double)end);
             nodes.Add(new Node(ds, speed, end, time, dt));
             speed = end;

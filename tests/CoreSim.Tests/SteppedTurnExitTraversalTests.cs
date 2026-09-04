@@ -9,14 +9,14 @@ public sealed class SteppedTurnExitTraversalTests
     private static readonly TrackSurfaceState PerfectSurface = new(1f, 0f, 0.35f);
 
     [Fact]
-    public void SharedNetPositiveDriveAccelerationPreservesTurnExitResults()
+    public void SharedNetDriveAccelerationPreservesTurnExitResults()
     {
         var skills = Skills();
         var setup = Setup();
         var referenceForce = LongitudinalDynamics.CalculateTurnExitAvailableDriveForceNewtons(
             skills, setup, PerfectSurface);
 
-        var shared = LongitudinalDynamics.CalculateNetPositiveDriveAccelerationMetersPerSecondSquared(
+        var shared = LongitudinalDynamics.CalculateNetDriveAccelerationMetersPerSecondSquared(
             18f, referenceForce, setup);
         var wrapper = LongitudinalDynamics.CalculateTurnExitNetAccelerationMetersPerSecondSquared(
             18f, skills, setup, PerfectSurface);
@@ -25,14 +25,14 @@ public sealed class SteppedTurnExitTraversalTests
     }
 
     [Fact]
-    public void SharedNetPositiveDriveAccelerationPreservesStraightResults()
+    public void SharedNetDriveAccelerationPreservesStraightResults()
     {
         var skills = Skills();
         var setup = Setup();
         var referenceForce = LongitudinalDynamics.CalculateStraightAvailableDriveForceNewtons(
             skills, setup, PerfectSurface);
 
-        var shared = LongitudinalDynamics.CalculateNetPositiveDriveAccelerationMetersPerSecondSquared(
+        var shared = LongitudinalDynamics.CalculateNetDriveAccelerationMetersPerSecondSquared(
             18f, referenceForce, setup);
         var wrapper = LongitudinalDynamics.CalculateStraightNetAccelerationMetersPerSecondSquared(
             18f, skills, setup, PerfectSurface);
@@ -45,13 +45,12 @@ public sealed class SteppedTurnExitTraversalTests
     {
         var skills = Skills();
         var setup = Setup();
-        var ceiling = Ceiling(skills, setup);
         var referenceForce = LongitudinalDynamics.CalculateStraightAvailableDriveForceNewtons(
             skills, setup, PerfectSurface);
-        var expected = LongitudinalDynamics.CalculateMidpointPositiveDriveEndSpeedMetersPerSecond(
-            12f, 1f, ceiling, referenceForce, setup);
+        var expected = LongitudinalDynamics.CalculateMidpointDriveEndSpeedMetersPerSecond(
+            12f, 1f, referenceForce, setup);
         var profile = LongitudinalDynamics.CalculateForceBasedStraightSpeedProfile(
-            12f, skills, setup, PerfectSurface, 2.5f, 1f, ceiling);
+            12f, skills, setup, PerfectSurface, 2.5f, 1f);
 
         Assert.Equal(expected, profile.ExitSpeedMetersPerSecond);
         Assert.Equal(2f / (12f + expected), profile.TravelTimeSeconds, 6);
@@ -83,14 +82,14 @@ public sealed class SteppedTurnExitTraversalTests
     public void TurnExitProfileConsumesExactRequestedDistance()
     {
         var profile = Profile(12f, 25.4f);
-        Assert.Equal(25.4f, profile.AccelerationDistanceMeters + profile.CruiseDistanceMeters);
+        Assert.Equal(25.4f, profile.AccelerationDistanceMeters + profile.CruiseDistanceMeters + profile.DecelerationDistanceMeters);
     }
 
     [Fact]
     public void TurnExitProfilePhaseDistancesSumToTotalDistance()
     {
         var profile = Profile(18f, 37.75f);
-        Assert.Equal(37.75f, profile.AccelerationDistanceMeters + profile.CruiseDistanceMeters);
+        Assert.Equal(37.75f, profile.AccelerationDistanceMeters + profile.CruiseDistanceMeters + profile.DecelerationDistanceMeters);
     }
 
     [Fact]
@@ -98,10 +97,9 @@ public sealed class SteppedTurnExitTraversalTests
     {
         var skills = Skills();
         var setup = Setup();
-        var ceiling = Ceiling(skills, setup);
         var referenceForce = LongitudinalDynamics.CalculateTurnExitAvailableDriveForceNewtons(
             skills, setup, PerfectSurface);
-        var expected = Integrate(12f, 25.4f, 1f, ceiling, referenceForce, setup);
+        var expected = Integrate(12f, 25.4f, 1f, referenceForce, setup);
         var profile = Profile(12f, 25.4f);
 
         Assert.Equal(expected.ExitSpeed, profile.ExitSpeedMetersPerSecond);
@@ -133,11 +131,10 @@ public sealed class SteppedTurnExitTraversalTests
     {
         var skills = Skills();
         var setup = Setup();
-        var ceiling = Ceiling(skills, setup);
         var acceleration = LongitudinalDynamics.CalculateTurnExitNetAccelerationMetersPerSecondSquared(
             12f, skills, setup, PerfectSurface);
-        var oneShot = LongitudinalDynamics.AccelerateOverDistanceWithSpeedCeiling(
-            12f, acceleration, 25.4f, ceiling);
+        var oneShot = LongitudinalDynamics.ApplySignedAccelerationOverDistance(
+            12f, acceleration, 25.4f);
         var stepped = Profile(12f, 25.4f).ExitSpeedMetersPerSecond;
 
         Assert.NotEqual(oneShot, stepped);
@@ -151,8 +148,8 @@ public sealed class SteppedTurnExitTraversalTests
         var setup = Setup();
         var acceleration = LongitudinalDynamics.CalculateTurnExitNetAccelerationMetersPerSecondSquared(
             16f, skills, setup, PerfectSurface);
-        var oneShot = LongitudinalDynamics.AccelerateOverDistanceWithSpeedCeiling(
-            16f, acceleration, 25.4f, Ceiling(skills, setup));
+        var oneShot = LongitudinalDynamics.ApplySignedAccelerationOverDistance(
+            16f, acceleration, 25.4f);
 
         Assert.True(Profile(16f, 25.4f).ExitSpeedMetersPerSecond <= oneShot);
     }
@@ -170,38 +167,31 @@ public sealed class SteppedTurnExitTraversalTests
     }
 
     [Fact]
-    public void TurnExitProfilePreservesExistingOverspeedAboveCeiling()
+    public void TurnExitProfileNaturallyDecreasesExistingOverspeedAboveEquilibrium()
     {
-        var profile = Profile(30f, 25.4f);
-
-        Assert.Equal(30f, profile.ExitSpeedMetersPerSecond);
-        Assert.Equal(30f, profile.PeakSpeedMetersPerSecond);
+        var profile = Profile(35f, 25.4f);
+        Assert.True(profile.ExitSpeedMetersPerSecond < 35f);
+        Assert.True(profile.ExitSpeedMetersPerSecond > profile.FullDriveEquilibriumSpeedMetersPerSecond);
+        Assert.Equal(35f, profile.PeakSpeedMetersPerSecond);
         Assert.Equal(0f, profile.AccelerationDistanceMeters);
-        Assert.Equal(25.4f, profile.CruiseDistanceMeters);
-        Assert.Equal(25.4f / 30f, profile.TravelTimeSeconds, 6);
+        Assert.Equal(25.4f, profile.DecelerationDistanceMeters);
+        Assert.True(profile.TravelTimeSeconds > 25.4f / 35f);
     }
 
     [Fact]
-    public void TurnExitProfileCruisesWhenNoPositiveNetDriveRemains()
+    public void TurnExitProfileDeceleratesWhenResistanceExceedsDrive()
     {
-        var skills = Skills();
-        var setup = Setup();
-        var referenceForce = LongitudinalDynamics.CalculateTurnExitAvailableDriveForceNewtons(
-            skills, setup, PerfectSurface);
-        Assert.Equal(
-            0f,
-            LongitudinalDynamics.CalculateNetPositiveDriveAccelerationMetersPerSecondSquared(
-                40f, referenceForce, setup));
-
-        var profile = LongitudinalDynamics.CalculateForceBasedTurnExitDriveProfile(
-            40f, skills, setup, PerfectSurface, 25.4f, 100f);
-        Assert.Equal(40f, profile.ExitSpeedMetersPerSecond);
+        var profile = Profile(40f, 25.4f);
+        Assert.True(profile.EntryNetAccelerationMetersPerSecondSquared < 0f);
+        Assert.True(profile.ExitSpeedMetersPerSecond < 40f);
+        Assert.True(profile.ExitSpeedMetersPerSecond > profile.FullDriveEquilibriumSpeedMetersPerSecond);
         Assert.Equal(0f, profile.AccelerationDistanceMeters);
-        Assert.Equal(25.4f, profile.CruiseDistanceMeters);
+        Assert.Equal(0f, profile.CruiseDistanceMeters);
+        Assert.Equal(25.4f, profile.DecelerationDistanceMeters);
     }
 
     [Fact]
-    public void TurnExitProfileNeverProducesNegativeAccelerationPhase()
+    public void TurnExitProfilePhaseDistancesRemainNonNegative()
     {
         var profile = Profile(20f, 25.4f);
         Assert.True(profile.ExitSpeedMetersPerSecond >= 20f);
@@ -214,10 +204,9 @@ public sealed class SteppedTurnExitTraversalTests
     {
         var skills = Skills();
         var setup = Setup();
-        var ceiling = Ceiling(skills, setup);
         var referenceForce = LongitudinalDynamics.CalculateTurnExitAvailableDriveForceNewtons(
             skills, setup, PerfectSurface);
-        var expected = Integrate(12f, 25.4f, 1f, ceiling, referenceForce, setup);
+        var expected = Integrate(12f, 25.4f, 1f, referenceForce, setup);
 
         Assert.Equal(expected.Time, Profile(12f, 25.4f).TravelTimeSeconds, 6);
     }
@@ -239,10 +228,9 @@ public sealed class SteppedTurnExitTraversalTests
     {
         var skills = Skills();
         var setup = Setup();
-        var ceiling = Ceiling(skills, setup);
         var referenceForce = LongitudinalDynamics.CalculateTurnExitAvailableDriveForceNewtons(
             skills, setup, PerfectSurface);
-        var fine = Integrate(16f, 25.4f, 0.05f, ceiling, referenceForce, setup);
+        var fine = Integrate(16f, 25.4f, 0.05f, referenceForce, setup);
         var profile = Profile(16f, 25.4f);
 
         Assert.InRange(MathF.Abs(profile.ExitSpeedMetersPerSecond - fine.ExitSpeed), 0f, 0.001f);
@@ -276,9 +264,8 @@ public sealed class SteppedTurnExitTraversalTests
         var poor = new TrackSurfaceState(0f, 0f, 0.35f);
         var skills = Skills();
         var setup = Setup();
-        var ceiling = Ceiling(skills, setup);
         var poorProfile = LongitudinalDynamics.CalculateForceBasedTurnExitDriveProfile(
-            12f, skills, setup, poor, 25.4f, ceiling);
+            12f, skills, setup, poor, 25.4f);
         var goodProfile = Profile(12f, 25.4f, skills, setup);
         Assert.True(goodProfile.ExitSpeedMetersPerSecond > poorProfile.ExitSpeedMetersPerSecond);
     }
@@ -314,15 +301,13 @@ public sealed class SteppedTurnExitTraversalTests
             skills,
             setup,
             PerfectSurface,
-            distance,
-            Ceiling(skills, setup));
+            distance);
     }
 
     private static (float ExitSpeed, float Time) Integrate(
         float initialSpeed,
         float distance,
         float maximumStep,
-        float ceiling,
         float referenceForce,
         BikeSetup setup)
     {
@@ -332,8 +317,8 @@ public sealed class SteppedTurnExitTraversalTests
         while (remaining > 0d)
         {
             var step = (float)Math.Min(maximumStep, remaining);
-            var end = LongitudinalDynamics.CalculateMidpointPositiveDriveEndSpeedMetersPerSecond(
-                speed, step, ceiling, referenceForce, setup);
+            var end = LongitudinalDynamics.CalculateMidpointDriveEndSpeedMetersPerSecond(
+                speed, step, referenceForce, setup);
             time += 2d * step / (speed + end);
             speed = end;
             remaining -= step;
@@ -348,6 +333,4 @@ public sealed class SteppedTurnExitTraversalTests
     private static BikeSetup Setup(float gearing = 0.5f)
         => new(gearing, 0.5f);
 
-    private static float Ceiling(RiderSkills skills, BikeSetup setup)
-        => LongitudinalDynamics.CalculateAttainableTopSpeedMetersPerSecond(skills, setup);
 }
