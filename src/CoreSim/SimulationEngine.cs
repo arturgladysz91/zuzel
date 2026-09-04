@@ -53,7 +53,8 @@ public sealed record RiderStepDiagnostics(
     TurnExitDriveProfile? TurnExitDriveProfile,
     StraightSpeedProfile? StraightProfile,
     TurnEntryScrubProfile? TurnEntryScrubProfile,
-    TrackSurfaceState EntrySurface);
+    TrackSurfaceState EntrySurface,
+    StandingStartLaunchProfile? StandingStartLaunchProfile = null);
 
 public sealed class ResolvedSimulationStep
 {
@@ -118,7 +119,8 @@ public sealed class SimulationEngine
         TurnExitDriveProfile? TurnExitDriveProfile,
         StraightSpeedProfile? StraightProfile,
         TurnEntryScrubProfile? TurnEntryScrubProfile,
-        TrackSurfaceState EntrySurface);
+        TrackSurfaceState EntrySurface,
+        StandingStartLaunchProfile? StandingStartLaunchProfile);
 
     public SimulationEngine(IRiderDecisionModel decisionModel)
         => _decisionModel = decisionModel ?? throw new ArgumentNullException(nameof(decisionModel));
@@ -217,12 +219,23 @@ public sealed class SimulationEngine
             var rider = snapshot.Rider(resolution.Change.RiderId);
             var finalChange = changes[resolution.Change.RiderId];
             var diagnosticTravelTimeSeconds =
-                resolution.TurnExitDriveProfile?.TravelTimeSeconds
+                resolution.StandingStartLaunchProfile?.TotalTimeSeconds
+                ?? resolution.TurnExitDriveProfile?.TravelTimeSeconds
                 ?? finalChange.ElapsedTimeSeconds - rider.ElapsedTimeSeconds;
-            var peakSpeed = resolution.StraightProfile?.PeakSpeedMetersPerSecond
+            var peakSpeed = resolution.StandingStartLaunchProfile?.PeakSpeedMetersPerSecond
+                ?? resolution.StraightProfile?.PeakSpeedMetersPerSecond
                 ?? resolution.TurnExitDriveProfile?.PeakSpeedMetersPerSecond
                 ?? MathF.Max(resolution.Change.EntrySpeed, resolution.Change.PhysicsSpeed);
             peakSpeed = MathF.Max(peakSpeed, finalChange.Speed);
+
+            if (resolution.StandingStartLaunchProfile is { } launchProfile)
+            {
+                ValidateEquivalent(launchProfile.ExitSpeedMetersPerSecond,
+                    resolution.Change.Speed, "Standing-start profile exit speed");
+                ValidateEquivalent(launchProfile.TotalTimeSeconds,
+                    resolution.Change.ElapsedTimeSeconds - rider.ElapsedTimeSeconds,
+                    "Standing-start profile total time");
+            }
 
             if (resolution.TurnExitDriveProfile is { } turnExitProfile)
             {
@@ -246,7 +259,8 @@ public sealed class SimulationEngine
                 resolution.TurnExitDriveProfile,
                 resolution.StraightProfile,
                 resolution.TurnEntryScrubProfile,
-                resolution.EntrySurface);
+                resolution.EntrySurface,
+                resolution.StandingStartLaunchProfile);
         });
 
         return new ResolvedSimulationStep(snapshot, changes.Values, events, diagnostics);
@@ -352,10 +366,20 @@ public sealed class SimulationEngine
         var surface = snapshot.Step.UseLegacyPhysics
             ? snapshot.TrackState.GetSurface(snapshot.Step.SegmentIndex, plannedLane)
             : snapshot.TrackState.SampleSurface(snapshot.Step.SegmentIndex, rider.LateralPosition);
+        var remainingProgress = 1f - rider.SegmentProgress;
+        var standingStartEligible = !snapshot.Step.UseLegacyPhysics
+            && snapshot.Step.LapIndex == 0
+            && snapshot.Step.SegmentIndex == 0
+            && snapshot.Segment.IsStandingStartSegment
+            && rider.Position.TotalSegmentProgress == 0d
+            && rider.Position.DistanceMeters == 0f
+            && rider.Status == RiderRaceStatus.NotStarted
+            && rider.Speed <= 0f
+            && LaneModel.SegmentLengthMeters(snapshot.Segment, rider.LateralPosition, snapshot.Track.Geometry)
+                * remainingProgress > 0f;
         var entrySpeed = snapshot.Step.UseLegacyPhysics
             ? ResolveLegacyEntrySpeed(plannedLane, rider)
-            : ResolveAdvancedEntrySpeed(snapshot, plannedLane, surface, rider);
-        var remainingProgress = 1f - rider.SegmentProgress;
+            : standingStartEligible ? 0f : ResolveAdvancedEntrySpeed(snapshot, plannedLane, surface, rider);
         TurnEntryScrubProfile? turnEntryScrubProfile = null;
         var speedForPhysicalResolution = entrySpeed;
         if (!snapshot.Step.UseLegacyPhysics
@@ -421,9 +445,19 @@ public sealed class SimulationEngine
         var speed = resolution.Speed;
         StraightSpeedProfile? straightProfile = null;
         TurnExitDriveProfile? turnExitDriveProfile = null;
+        StandingStartLaunchProfile? standingStartLaunchProfile = null;
         float? attainableTopSpeed = null;
         float? turnExitNetAcceleration = null;
-        if (!snapshot.Step.UseLegacyPhysics
+        if (standingStartEligible)
+        {
+            attainableTopSpeed = LongitudinalDynamics.CalculateAttainableTopSpeedMetersPerSecond(
+                rider.Profile.Skills, rider.ActiveSetup);
+            standingStartLaunchProfile = LongitudinalDynamics.CalculateStandingStartLaunchProfile(
+                rider.Profile.Skills, rider.ActiveSetup, surface, travelled, attainableTopSpeed.Value,
+                ResolveImmediateNextTurnApproachSpeed(snapshot, rider));
+            speed = standingStartLaunchProfile.Value.ExitSpeedMetersPerSecond;
+        }
+        else if (!snapshot.Step.UseLegacyPhysics
             && snapshot.Segment.Type == SegmentType.Straight)
         {
             var cornerEntryDeceleration = LongitudinalDynamics
@@ -468,10 +502,14 @@ public sealed class SimulationEngine
             speed = turnExitDriveProfile.Value.ExitSpeedMetersPerSecond;
         }
 
-        float segmentTravelTimeSeconds;
-        if (turnEntryScrubProfile is { } scrubProfile)
+        float segmentElapsedTimeSeconds;
+        if (standingStartLaunchProfile is { } launchProfile)
         {
-            segmentTravelTimeSeconds = CalculateTurnEntryTravelTimeSeconds(
+            segmentElapsedTimeSeconds = launchProfile.TotalTimeSeconds;
+        }
+        else if (turnEntryScrubProfile is { } scrubProfile)
+        {
+            segmentElapsedTimeSeconds = CalculateTurnEntryTravelTimeSeconds(
                 scrubProfile,
                 travelled,
                 resolution.Speed,
@@ -479,25 +517,27 @@ public sealed class SimulationEngine
         }
         else if (straightProfile is { } profile)
         {
-            segmentTravelTimeSeconds = profile.TravelTimeSeconds;
+            segmentElapsedTimeSeconds = profile.TravelTimeSeconds;
         }
         else if (turnExitDriveProfile is { } turnExitProfile)
         {
-            segmentTravelTimeSeconds = turnExitProfile.TravelTimeSeconds;
+            segmentElapsedTimeSeconds = turnExitProfile.TravelTimeSeconds;
         }
         else
         {
             var averageSpeed = MathF.Max(1f, (entrySpeed + MathF.Max(speed, 0f)) * 0.5f);
-            segmentTravelTimeSeconds = travelled / averageSpeed;
+            segmentElapsedTimeSeconds = travelled / averageSpeed;
         }
 
-        var elapsedTime = rider.ElapsedTimeSeconds + segmentTravelTimeSeconds;
+        var lateralMovementTimeSeconds = standingStartLaunchProfile?.MovementTimeSeconds
+            ?? segmentElapsedTimeSeconds;
+        var elapsedTime = rider.ElapsedTimeSeconds + segmentElapsedTimeSeconds;
         var lateralPosition = snapshot.Step.UseLegacyPhysics
             ? resolution.Lane
             : LateralMovementModel.MoveTowards(
                 rider.LateralPosition,
                 resolution.Lane,
-                segmentTravelTimeSeconds,
+                lateralMovementTimeSeconds,
                 snapshot.Track.Geometry,
                 surface,
                 rider.Profile.Skills);
@@ -536,7 +576,8 @@ public sealed class SimulationEngine
             turnExitDriveProfile,
             straightProfile,
             turnEntryScrubProfile,
-            surface);
+            surface,
+            standingStartLaunchProfile);
     }
 
     private static float? ResolveImmediateNextTurnApproachSpeed(
