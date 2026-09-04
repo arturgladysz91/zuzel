@@ -51,6 +51,7 @@ public readonly record struct StandingStartLaunchProfile(
     float PeakSpeedMetersPerSecond,
     float AccelerationDistanceMeters,
     float CruiseDistanceMeters,
+    float PreparationDistanceMeters,
     float EntryNetAccelerationMetersPerSecondSquared,
     float? TimeTo70KphSeconds,
     float? SpeedAtTwoSecondsMetersPerSecond);
@@ -63,10 +64,10 @@ public static class LongitudinalDynamics
 {
     // PROVISIONAL / NOT REAL-WORLD CALIBRATED. No RNG, morale, gate bonus,
     // clutch, wheelspin or TractionBias multiplier is part of this foundation.
-    public const float ProvisionalStandingStartSlowReactionSeconds = 0.30f;
+    public const float ProvisionalStandingStartSlowReactionSeconds = 0.28f;
     public const float ProvisionalStandingStartFastReactionSeconds = 0.20f;
-    public const float ProvisionalStandingStartMinAccelerationMetersPerSecondSquared = 4.5f;
-    public const float ProvisionalStandingStartMaxAccelerationMetersPerSecondSquared = 5.5f;
+    public const float ProvisionalStandingStartMinimumReferenceAccelerationMetersPerSecondSquared = 9.0f;
+    public const float ProvisionalStandingStartMaximumReferenceAccelerationMetersPerSecondSquared = 11.0f;
 
     // Telemetry observation thresholds, NOT physics calibration constants.
     public const float StandingStartTelemetry70KphMetersPerSecond = 70f / 3.6f;
@@ -240,9 +241,9 @@ public static class LongitudinalDynamics
     {
         ArgumentNullException.ThrowIfNull(skills);
         ArgumentNullException.ThrowIfNull(setup);
-        var baseAcceleration = ProvisionalStandingStartMinAccelerationMetersPerSecondSquared
-            + (ProvisionalStandingStartMaxAccelerationMetersPerSecondSquared
-                - ProvisionalStandingStartMinAccelerationMetersPerSecondSquared)
+        var baseAcceleration = ProvisionalStandingStartMinimumReferenceAccelerationMetersPerSecondSquared
+            + (ProvisionalStandingStartMaximumReferenceAccelerationMetersPerSecondSquared
+                - ProvisionalStandingStartMinimumReferenceAccelerationMetersPerSecondSquared)
             * RiderSkills.Normalize(skills.Start);
         var gearingDriveMultiplier = LowGearingDriveMultiplier
             + (HighGearingDriveMultiplier - LowGearingDriveMultiplier) * setup.Gearing;
@@ -270,26 +271,38 @@ public static class LongitudinalDynamics
         BikeSetup setup,
         TrackSurfaceState surface,
         float distanceMeters,
-        float speedCeilingMetersPerSecond)
+        float speedCeilingMetersPerSecond,
+        float? targetExitSpeedMetersPerSecond = null)
     {
         ValidateNonNegativeFinite(distanceMeters, nameof(distanceMeters));
         ValidatePositiveFinite(speedCeilingMetersPerSecond, nameof(speedCeilingMetersPerSecond));
+        if (targetExitSpeedMetersPerSecond is { } target)
+            ValidateNonNegativeFinite(target, nameof(targetExitSpeedMetersPerSecond));
         var reactionTime = CalculateStandingStartReactionTimeSeconds(skills);
         var referenceForce = CalculateStandingStartAvailableDriveForceNewtons(skills, setup, surface);
         var entryAcceleration = CalculateNetPositiveDriveAccelerationMetersPerSecondSquared(0f, referenceForce, setup);
         var speed = 0f;
+        var peakSpeed = 0f;
         var movementTime = 0d;
         var accelerationDistance = 0d;
         var cruiseDistance = 0d;
-        var lastStepAccelerated = false;
+        var preparationDistance = 0d;
+        var lastPhase = StraightDistancePhase.Cruise;
         float? timeTo70 = null;
         float? speedAtTwoSeconds = reactionTime >= StandingStartTelemetryObservationTimeSeconds ? 0f : null;
 
-        foreach (var integrationStep in CreateLongitudinalIntegrationSteps(distanceMeters))
+        var integrationSteps = CreateLongitudinalIntegrationSteps(distanceMeters);
+        var preparationDeceleration = CalculateCornerEntryDecelerationMetersPerSecondSquared(skills, surface);
+        var allowedSpeedEnvelope = targetExitSpeedMetersPerSecond is { } targetSpeed
+            ? CreateBackwardAllowedSpeedEnvelope(integrationSteps, targetSpeed, preparationDeceleration)
+            : null;
+        for (var index = 0; index < integrationSteps.Length; index++)
         {
-            var ds = (float)integrationStep;
-            var endSpeed = CalculateMidpointPositiveDriveEndSpeedMetersPerSecond(
+            var ds = (float)integrationSteps[index];
+            var fullDriveEndSpeed = CalculateMidpointPositiveDriveEndSpeedMetersPerSecond(
                 speed, ds, speedCeilingMetersPerSecond, referenceForce, setup);
+            var endSpeed = ApplyPreparationBoundary(speed, fullDriveEndSpeed, ds,
+                preparationDeceleration, allowedSpeedEnvelope is null ? null : (float)allowedSpeedEnvelope[index + 1]);
             var speedSum = (double)speed + endSpeed;
             if (speedSum <= 0d)
                 throw new InvalidOperationException("A positive launch distance cannot be traversed at zero speed.");
@@ -309,29 +322,39 @@ public static class LongitudinalDynamics
                 && StandingStartTelemetryObservationTimeSeconds <= stepStartTime + stepTime)
             {
                 var dt = StandingStartTelemetryObservationTimeSeconds - stepStartTime;
-                speedAtTwoSeconds = (float)Math.Clamp(speed + effectiveAcceleration * dt, speed, endSpeed);
+                speedAtTwoSeconds = (float)Math.Clamp(speed + effectiveAcceleration * dt,
+                    Math.Min(speed, endSpeed), Math.Max(speed, endSpeed));
             }
 
             movementTime += stepTime;
-            lastStepAccelerated = endSpeed - speed > LongitudinalPhaseSpeedToleranceMetersPerSecond;
-            if (lastStepAccelerated)
+            var speedChange = endSpeed - speed;
+            if (speedChange > LongitudinalPhaseSpeedToleranceMetersPerSecond)
+            {
                 accelerationDistance += ds;
+                lastPhase = StraightDistancePhase.Acceleration;
+            }
+            else if (speedChange < -LongitudinalPhaseSpeedToleranceMetersPerSecond)
+            {
+                preparationDistance += ds;
+                lastPhase = StraightDistancePhase.Deceleration;
+            }
             else
+            {
                 cruiseDistance += ds;
+                lastPhase = StraightDistancePhase.Cruise;
+            }
             speed = endSpeed;
+            peakSpeed = Math.Max(peakSpeed, speed);
         }
 
-        var distanceCorrection = distanceMeters - accelerationDistance - cruiseDistance;
-        if (lastStepAccelerated)
-            accelerationDistance += distanceCorrection;
-        else
-            cruiseDistance += distanceCorrection;
+        ReconcileStraightPhaseDistance(distanceMeters, lastPhase,
+            ref accelerationDistance, ref cruiseDistance, ref preparationDistance);
         if (!double.IsFinite(movementTime) || movementTime + reactionTime > float.MaxValue)
             throw new OverflowException("Launch time exceeds the finite single-precision domain.");
         var movementTimeSeconds = (float)movementTime;
         return new StandingStartLaunchProfile(
             reactionTime, movementTimeSeconds, reactionTime + movementTimeSeconds,
-            speed, speed, (float)accelerationDistance, (float)cruiseDistance,
+            speed, peakSpeed, (float)accelerationDistance, (float)cruiseDistance, (float)preparationDistance,
             entryAcceleration, timeTo70, speedAtTwoSeconds);
     }
 
@@ -930,21 +953,10 @@ public static class LongitudinalDynamics
                 referenceAvailableDriveForceNewtons,
                 setup);
 
-            var endSpeedMetersPerSecond = fullDriveEndSpeedMetersPerSecond;
-            if (allowedSpeedEnvelope is not null)
-            {
-                var allowedEndSpeedMetersPerSecond = (float)allowedSpeedEnvelope[stepIndex + 1];
-                if (fullDriveEndSpeedMetersPerSecond > allowedEndSpeedMetersPerSecond)
-                {
-                    var maximumDecelerationEndSpeedMetersPerSecond = DecelerateOverDistance(
-                        currentSpeedMetersPerSecond,
-                        cornerEntryDecelerationMetersPerSecondSquared,
-                        stepDistanceMeters);
-                    endSpeedMetersPerSecond = Math.Max(
-                        allowedEndSpeedMetersPerSecond,
-                        maximumDecelerationEndSpeedMetersPerSecond);
-                }
-            }
+            var endSpeedMetersPerSecond = ApplyPreparationBoundary(
+                currentSpeedMetersPerSecond, fullDriveEndSpeedMetersPerSecond, stepDistanceMeters,
+                cornerEntryDecelerationMetersPerSecondSquared,
+                allowedSpeedEnvelope is null ? null : (float)allowedSpeedEnvelope[stepIndex + 1]);
 
             var speedSumMetersPerSecond =
                 (double)currentSpeedMetersPerSecond + endSpeedMetersPerSecond;
@@ -1090,6 +1102,22 @@ public static class LongitudinalDynamics
             (float)accelerationDistanceMeters,
             (float)cruiseDistanceMeters,
             entryNetAccelerationMetersPerSecondSquared);
+    }
+
+    // Shared by ordinary Straight and standing start. Select the fastest feasible
+    // corrected step without exceeding either positive drive or available roll-off.
+    private static float ApplyPreparationBoundary(
+        float startSpeedMetersPerSecond,
+        float fullDriveEndSpeedMetersPerSecond,
+        float distanceMeters,
+        float decelerationMetersPerSecondSquared,
+        float? allowedEndSpeedMetersPerSecond)
+    {
+        if (allowedEndSpeedMetersPerSecond is not { } boundary
+            || fullDriveEndSpeedMetersPerSecond <= boundary)
+            return fullDriveEndSpeedMetersPerSecond;
+        return Math.Max(boundary, DecelerateOverDistance(
+            startSpeedMetersPerSecond, decelerationMetersPerSecondSquared, distanceMeters));
     }
 
     private static double[] CreateLongitudinalIntegrationSteps(float distanceMeters)

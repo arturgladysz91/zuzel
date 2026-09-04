@@ -18,8 +18,8 @@ public sealed class StandingStartDynamicsTests
             surface ?? Perfect, distance, ceiling ?? LongitudinalDynamics.CalculateAttainableTopSpeedMetersPerSecond(
                 Skills(start), new BikeSetup(gearing, 0.5f)));
 
-    [Fact] public void StandingStartReactionTimeIsPointThreeAtStartSkillZero() => Assert.Equal(0.30f, Reaction(0));
-    [Fact] public void StandingStartReactionTimeIsPointTwoFiveAtStartSkillFifty() => Assert.Equal(0.25f, Reaction(50));
+    [Fact] public void StandingStartReactionTimeIsPointTwoEightAtStartSkillZero() => Assert.Equal(0.28f, Reaction(0));
+    [Fact] public void StandingStartReactionTimeIsPointTwoFourAtStartSkillFifty() => Assert.Equal(0.24f, Reaction(50), 6);
     [Fact] public void StandingStartReactionTimeIsPointTwoAtStartSkillHundred() => Assert.Equal(0.20f, Reaction(100));
     [Fact] public void HigherStartSkillReducesReactionTime() => Assert.True(Reaction(0) > Reaction(50) && Reaction(50) > Reaction(100));
 
@@ -35,30 +35,30 @@ public sealed class StandingStartDynamicsTests
     [Fact]
     public void StandingStartReferenceAccelerationUsesStartSkill()
     {
-        Assert.Equal(4.5f, Acceleration(0));
-        Assert.Equal(5f, Acceleration(50));
-        Assert.Equal(5.5f, Acceleration(100));
+        Assert.Equal(9f, Acceleration(0));
+        Assert.Equal(10f, Acceleration(50));
+        Assert.Equal(11f, Acceleration(100));
     }
 
     [Fact]
     public void StandingStartReferenceAccelerationUsesExistingGearingDriveDirection()
     {
-        Assert.Equal(5f * 1.10f, Acceleration(gearing: 0));
-        Assert.Equal(5f * 0.90f, Acceleration(gearing: 1));
+        Assert.Equal(10f * 1.10f, Acceleration(gearing: 0));
+        Assert.Equal(10f * 0.90f, Acceleration(gearing: 1));
     }
 
     [Fact]
     public void StandingStartReferenceAccelerationUsesEntrySurface()
     {
         var surface = new TrackSurfaceState(0.4f, 0.2f, 0.6f);
-        Assert.Equal(5f * (0.75f + 0.25f * surface.EffectiveGrip), Acceleration(surface: surface));
+        Assert.Equal(10f * (0.75f + 0.25f * surface.EffectiveGrip), Acceleration(surface: surface));
     }
 
     [Fact]
     public void StandingStartReferenceForcePreservesLaunchAccelerationAtZeroSpeed()
     {
         var force = LongitudinalDynamics.CalculateStandingStartAvailableDriveForceNewtons(Skills(), BikeSetup.Neutral, Perfect);
-        Assert.Equal(750f, force);
+        Assert.Equal(1460f, force);
         Assert.Equal(Acceleration(), LongitudinalDynamics.CalculateNetPositiveDriveAccelerationMetersPerSecondSquared(0f, force, BikeSetup.Neutral));
     }
 
@@ -83,7 +83,7 @@ public sealed class StandingStartDynamicsTests
         var force = LongitudinalDynamics.CalculateStandingStartAvailableDriveForceNewtons(Skills(), BikeSetup.Neutral, Perfect);
         Assert.Equal((force - (40f + 0.20f * 12f * 12f)) / 142f,
             LongitudinalDynamics.CalculateNetPositiveDriveAccelerationMetersPerSecondSquared(12f, force, BikeSetup.Neutral), 5);
-        Assert.True(Profile().ExitSpeedMetersPerSecond < MathF.Sqrt(2f * 5f * 30f));
+        Assert.True(Profile(10f).ExitSpeedMetersPerSecond < MathF.Sqrt(2f * 10f * 10f));
     }
 
     [Fact]
@@ -111,7 +111,7 @@ public sealed class StandingStartDynamicsTests
     {
         var profile = Profile(0.25f);
         Assert.Equal(2f * 0.25f / profile.ExitSpeedMetersPerSecond, profile.MovementTimeSeconds);
-        Assert.Equal(5f, profile.EntryNetAccelerationMetersPerSecondSquared);
+        Assert.Equal(10f, profile.EntryNetAccelerationMetersPerSecondSquared);
     }
 
     [Fact]
@@ -174,8 +174,8 @@ public sealed class StandingStartDynamicsTests
         }
     }
 
-    [Fact] public void DriveOrientedGearingImprovesEarlyLaunch() => Assert.True(Profile(gearing: 0).ExitSpeedMetersPerSecond > Profile(gearing: 1).ExitSpeedMetersPerSecond);
-    [Fact] public void HigherStartSkillImprovesLaunchExitSpeed() => Assert.True(Profile(start: 100).ExitSpeedMetersPerSecond > Profile(start: 50).ExitSpeedMetersPerSecond && Profile(start: 50).ExitSpeedMetersPerSecond > Profile(start: 0).ExitSpeedMetersPerSecond);
+    [Fact] public void DriveOrientedGearingImprovesEarlyLaunch() => Assert.True(Profile(10f, gearing: 0).ExitSpeedMetersPerSecond > Profile(10f, gearing: 1).ExitSpeedMetersPerSecond);
+    [Fact] public void HigherStartSkillImprovesLaunchExitSpeed() => Assert.True(Profile(10f, start: 100).ExitSpeedMetersPerSecond > Profile(10f, start: 50).ExitSpeedMetersPerSecond && Profile(10f, start: 50).ExitSpeedMetersPerSecond > Profile(10f, start: 0).ExitSpeedMetersPerSecond);
     [Fact] public void BetterStartSurfaceImprovesLaunchExitSpeed() => Assert.True(Profile().ExitSpeedMetersPerSecond > Profile(surface: new TrackSurfaceState(0.2f, 0.5f, 0.7f)).ExitSpeedMetersPerSecond);
     [Fact] public void StandingStartProfileIsDeterministic() => Assert.Equal(Profile(), Profile());
 
@@ -192,7 +192,7 @@ public sealed class StandingStartDynamicsTests
         }
     }
 
-    [Fact] public void TimeTo70IsNullWhenThresholdIsNotReached() => Assert.Null(Profile().TimeTo70KphSeconds);
+    [Fact] public void TimeTo70IsNullWhenThresholdIsNotReached() => Assert.Null(Profile(5f).TimeTo70KphSeconds);
 
     [Fact]
     public void TimeTo70IncludesReactionTime()
@@ -226,7 +226,7 @@ public sealed class StandingStartDynamicsTests
     [Fact]
     public void SpeedAtTwoSecondsIsInterpolatedInsideCorrectedStep()
     {
-        foreach (var ceiling in new[] { 23f, 8.75f })
+        foreach (var ceiling in new[] { 23f, 17.4f })
         {
             var node = SharedSteps(30f, ceiling: ceiling).Single(s => s.StartTime + Reaction(50) <= 2d && s.StartTime + Reaction(50) + s.Time > 2d);
             if (ceiling < 23f)
@@ -245,12 +245,12 @@ public sealed class StandingStartDynamicsTests
     public void ZeroDistanceLaunchContainsReactionButNoMovement()
     {
         var p = Profile(0f);
-        Assert.Equal(0.25f, p.ReactionTimeSeconds);
+        Assert.Equal(0.24f, p.ReactionTimeSeconds, 6);
         Assert.Equal(p.ReactionTimeSeconds, p.TotalTimeSeconds);
         Assert.Equal(0f, p.MovementTimeSeconds);
         Assert.Equal(0f, p.ExitSpeedMetersPerSecond);
         Assert.Equal(0f, p.PeakSpeedMetersPerSecond);
-        Assert.Equal(0f, p.AccelerationDistanceMeters + p.CruiseDistanceMeters);
+        Assert.Equal(0f, p.AccelerationDistanceMeters + p.CruiseDistanceMeters + p.PreparationDistanceMeters);
         Assert.Null(p.TimeTo70KphSeconds);
         Assert.Null(p.SpeedAtTwoSecondsMetersPerSecond);
     }
@@ -298,7 +298,7 @@ public sealed class StandingStartDynamicsTests
     // Independent 0.05 m reference: no production integrator or force helper.
     private static (double Speed, double Time) FineReference(double distance, double gearing)
     {
-        var referenceForce = 142d * 5d * (1.10d - 0.20d * gearing) + 40d;
+        var referenceForce = 142d * 10d * (1.10d - 0.20d * gearing) + 40d;
         var ceiling = 23d * (0.94d + 0.12d * gearing);
         var fade = 0.0175d + (0.0050d - 0.0175d) * gearing;
         double AccelerationAt(double v) => Math.Max(0d,

@@ -376,10 +376,13 @@ porównanie z real-world calibration targets.
 
 `Track.CreateExample()` zachowuje dotychczasowe 8 segmentów i bootstrap.
 Nowy `Track.CreateStandingStartExample()` (także w Sandbox) umieszcza start/metę
-na canonical lap boundary: `Straight 30 m (start) → TurnEntry → TurnMiddle →
-TurnExit → Straight 60 m → TurnEntry → TurnMiddle → TurnExit → Straight 30 m
+na canonical lap boundary między segmentami 8 i 0: `Straight 35 m (start) → TurnEntry → TurnMiddle →
+TurnExit → Straight 60 m → TurnEntry → TurnMiddle → TurnExit → Straight 35 m
 (finish)`. Home straight to finish-half + start-half po dwóch stronach granicy
-okrążenia: 30 + 30 zastępuje 60 m, nie dodaje dystansu ani wirtualnego launch.
+okrążenia: 35 + 35 = 70 m. Pierwszy łuk zaczyna się 35 m od startu.
+Długość wynika wyłącznie z fizycznych segmentów: `130 + 6 * (24 + lateral) * PI/3`
+m, czyli około 280.8 m na inner reference trajectory. To 10 m więcej niż
+compatibility example; nie ma dodatkowego wirtualnego dystansu launch.
 
 `TrackSegment` ma opcjonalny `float? StraightLengthMetersOverride` (finite, >0,
 tylko Straight) i `bool IsStandingStartSegment=false` (tylko Straight).
@@ -391,8 +394,8 @@ dystansem. Wtedy entry/physics speed jest dokładnie 0; kolejne okrążenia uży
 zwykłego Straight. `CreateExample`, legacy, #24 TurnEntry, #29 TurnExit i normal
 Straight nie zmieniają formuł; lookahead nadal nie przekracza jednego segmentu.
 
-Reaction: `0.30 + (0.20 - 0.30) * StartNorm` s.
-Reference acceleration: `(4.5 + (5.5 - 4.5) * StartNorm) *
+Reaction: `0.28 + (0.20 - 0.28) * StartNorm` s: Start 0/50/100 → 0.28/0.24/0.20 s.
+Reference acceleration: `(9.0 + (11.0 - 9.0) * StartNorm) *
 (1.10 + (0.90 - 1.10) * Gearing) * (0.75 + 0.25 * EffectiveGrip)` m/s².
 Reference force: `142 * referenceAcceleration + resistance(0)` N.
 Launch współdzieli `40 + 0.20*v²` resistance, one-gear envelope, exact 1 m
@@ -400,13 +403,30 @@ distance steps i midpoint, z niezmienionym artificial ceiling `21–25 m/s ×
 0.94–1.06`. Surface jest próbkowana raz przy wejściowym `LateralPosition`.
 TractionBias i morale nie wpływają na reaction ani launch force.
 
+Launch przygotowuje wejście w bezpośrednio następny TurnEntry: używa tego samego
+`ResolveImmediateNextTurnApproachSpeed` co production Straight oraz backward
+allowed-speed envelope z istniejącą corner-entry deceleration. Fastest feasible
+profile obejmuje acceleration → ewentualny peak/cruise → preparation/roll-off.
+Nie teleportuje prędkości ani nie przekracza dostępnej deceleration.
+`AccelerationDistanceMeters + CruiseDistanceMeters + PreparationDistanceMeters`
+to dokładnie actual launch distance, a movement to suma czasów fixed-distance steps.
+Następny TurnEntry nadal wykonuje niezmieniony #24 scrub.
+
 Reaction nie przesuwa motocykla. Elapsed = reaction + movement; lateral budget
 = tylko movement. Rzeczywiste launch exit speed trafia do pierwszego TurnEntry.
 Profil i diagnostics zachowują czas pre-contact, final sample duration może
-zawierać późniejszy LostRhythm penalty. CSV dopisuje osiem nullable pól startu.
+zawierać późniejszy LostRhythm penalty. CSV dopisuje dziewięć nullable pól startu,
+w tym `StandingStartPreparationDistanceMeters` na końcu istniejących kolumn.
 `TimeTo70KphSeconds` (od taśmy, z interpolacją kroku) oraz
-`SpeedAtTwoSecondsMetersPerSecond` są outputs, nie targetami; null oznacza
+`SpeedAtTwoSecondsMetersPerSecond` (także od taśmy, z reaction delay) są outputs, nie targetami; null oznacza
 nieosiągnięty próg albo koniec launch przed 2 s.
+
+Starting-gate geometry nie jest jeszcze fizycznie odwzorowana. Początkowe
+`Lane/LateralPosition` są compatibility representation pozycji startowych, nie
+docelowym modelem pól A/B/C/D ani pełnej szerokości toru. Przed finalną kalibracją
+gate effects trzeba wprowadzić oddzielne physical starting-gate geometry/mapping.
+#30 porządkuje strukturę standing startu, nie kalibruje finalnego gate advantage;
+nie ma hardcoded bonusu pola A.
 
 Wszystkie launch constants są **PROVISIONAL / NOT REAL-WORLD CALIBRATED**.
 Brak clutch, RPM, torque/power, real sprockets, wheelspin, slip ratio, traction

@@ -94,10 +94,12 @@ Signed negative drag/coast nadal nie istnieje; #30 dodaje poniższy provisional 
 ### Standing start / launch — PROVISIONAL / NOT REAL-WORLD CALIBRATED
 
 `Track.CreateExample()` pozostaje 8-segmentowym compatibility layout.
-`CreateStandingStartExample()` rozdziela home straight na końcowe 30 m i
-początkowe 30 m po dwóch stronach canonical start/finish boundary. Topologia:
-marked Straight 30 → TurnEntry/Middle/Exit → Straight 60 → TurnEntry/Middle/Exit
-→ Straight 30. Długość okrążenia dla tej samej pozycji bocznej nie zmienia się.
+`CreateStandingStartExample()` rozdziela home straight na końcowe 35 m i
+początkowe 35 m po dwóch stronach canonical start/finish boundary (segment 8 → 0).
+Topologia: marked Straight 35 → TurnEntry/Middle/Exit → Straight 60 → TurnEntry/Middle/Exit
+→ Straight 35. Home straight ma 70 m; od startu do pierwszego łuku jest 35 m.
+Długość wynika tylko z fizycznych segmentów: `130 + 6 * (24 + lateral) * PI/3`
+m, około 280.8 m na inner reference trajectory, o 10 m więcej niż compatibility.
 Nie ma wirtualnego dystansu startu; meta i lap summaries używają ostatniego
 segmentu toru, bez hardcoded segment count.
 
@@ -109,13 +111,22 @@ segment 0 z markerem, canonical i physical start dokładnie zero, NotStarted,
 speed <=0 i dodatnim pozostałym dystansem. Entry speed jest wtedy 0, bez
 bootstrapu. Kolejne okrążenia używają zwykłego Straight.
 
-Reaction = `0.30 + (0.20 - 0.30) * StartNorm` s. Reference acceleration =
-`(4.5 + (5.5 - 4.5) * StartNorm) * (1.10 + (0.90 - 1.10) * Gearing) *
+Reaction = `0.28 + (0.20 - 0.28) * StartNorm` s (Start 0/50/100 → 0.28/0.24/0.20).
+Reference acceleration =
+`(9.0 + (11.0 - 9.0) * StartNorm) * (1.10 + (0.90 - 1.10) * Gearing) *
 (0.75 + 0.25 * EffectiveGrip)` m/s². Reference force = `142 * acceleration +
 resistance(0)`. Dalej działają wspólne resistance `40 + 0.20*v²`, one-gear
 envelope, kroki 1 m z exact remainder i midpoint oraz dotychczasowy artificial
 ceiling `21–25 × 0.94–1.06`. Entry surface próbkujemy raz. TractionBias i morale
 nie wpływają na launch ani reaction; brak gate-specific bonusu.
+
+Launch przygotowuje wejście w bezpośrednio następny TurnEntry: ten sam maximum
+recoverable approach target z `ResolveImmediateNextTurnApproachSpeed`, backward
+allowed-speed envelope i istniejąca corner-entry deceleration co production
+Straight. Fastest feasible profile to acceleration → ewentualny peak/cruise →
+preparation/roll-off; bez teleportacji prędkości i bez przekraczania deceleration.
+Acceleration + cruise + preparation distance = actual launch distance. Movement
+sumuje `2*ds/(v_start+v_end)` wszystkich fixed-distance steps.
 
 Elapsed obejmuje reaction + movement; lateral budget tylko movement.
 Reaction nie powoduje ruchu bocznego, dystansu ani progress. Actual exit speed
@@ -124,13 +135,21 @@ legacy i compatibility bootstrap pozostają bez zmian. Lookahead nadal dotyczy
 tylko bezpośrednio następnego segmentu. Existing contact działa po profilu,
 więc final duration może zawierać penalty ponad pre-contact profile total.
 
-CSV/sample dopisuje osiem nullable pól reaction/movement/total, acceleration/
-cruise distance, entry acceleration, TimeTo70 i SpeedAt2s. Metryki są outputs,
-nie targets: czas do 70 zawiera reaction i interpolację corrected step,
-speed po 2 s używa kinematyki tego kroku. Null oznacza nieosiągnięty próg lub
+CSV/sample dopisuje dziewięć nullable pól reaction/movement/total, acceleration/
+cruise distance, entry acceleration, TimeTo70, SpeedAt2s oraz preparation distance
+na końcu kolumn. Metryki są outputs, nie targets: obie liczymy od ruchu taśmy,
+z reaction delay. Czas do 70 zawiera interpolację corrected step,
+speed po 2 s używa kinematyki tego kroku, także podczas preparation. Null oznacza nieosiągnięty próg lub
 koniec launch przed 2 s. Nie dopasowujemy stałych do tych wyników.
 Brak clutch, RPM, torque/power, real sprockets, wheelspin, slip ratio, traction
 cap, false starts, reaction RNG oraz signed negative coasting.
+
+Starting-gate geometry i pełna szerokość toru nie są jeszcze fizycznie odwzorowane.
+Initial `Lane/LateralPosition` pozostają compatibility representation pozycji
+startowych; racing references nie są docelowym modelem pól A/B/C/D. Przed finalną
+kalibracją gate effects trzeba wprowadzić oddzielne physical starting-gate
+geometry/mapping. #30 kalibruje strukturę standing startu, nie finalny gate advantage.
+Nie dodajemy hardcoded bonusu pola A.
 
 ### Calibration telemetry — OBSERVATION ONLY
 

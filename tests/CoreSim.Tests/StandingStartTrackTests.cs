@@ -42,9 +42,9 @@ public sealed class StandingStartTrackTests
         var source = Track.CreateStandingStartExample();
         var copy = new Track(source.Segments, source.Geometry);
         Assert.NotSame(source.Segments[0], copy.Segments[0]);
-        Assert.Equal(30f, copy.Segments[0].StraightLengthMetersOverride);
+        Assert.Equal(35f, copy.Segments[0].StraightLengthMetersOverride);
         Assert.True(copy.Segments[0].IsStandingStartSegment);
-        Assert.Equal(30f, copy.Segments[^1].StraightLengthMetersOverride);
+        Assert.Equal(35f, copy.Segments[^1].StraightLengthMetersOverride);
     }
 
     [Fact]
@@ -99,20 +99,20 @@ public sealed class StandingStartTrackTests
     }
 
     [Fact]
-    public void CreateStandingStartExampleStartsWithMarkedThirtyMeterStraight()
+    public void CreateStandingStartExampleStartsWithMarkedThirtyFiveMeterStraight()
     {
         var track = Track.CreateStandingStartExample();
         Assert.True(track.Segments[0].IsStandingStartSegment);
         Assert.Single(track.Segments.Where(s => s.IsStandingStartSegment));
-        Assert.Equal(30f, Length(track, 0));
+        Assert.Equal(35f, Length(track, 0));
     }
 
     [Fact]
-    public void CreateStandingStartExampleEndsWithThirtyMeterStraight()
+    public void CreateStandingStartExampleEndsWithThirtyFiveMeterStraight()
     {
         var track = Track.CreateStandingStartExample();
         Assert.False(track.Segments[^1].IsStandingStartSegment);
-        Assert.Equal(30f, Length(track, 8));
+        Assert.Equal(35f, Length(track, 8));
     }
 
     [Fact]
@@ -124,13 +124,33 @@ public sealed class StandingStartTrackTests
     }
 
     [Fact]
-    public void StandingStartExampleLapDistanceMatchesCompatibilityExample()
+    public void StandingStartExampleLapDistanceIsDerivedOnlyFromItsPhysicalSegments()
     {
         var oldTrack = Track.CreateExample();
         var newTrack = Track.CreateStandingStartExample();
         Assert.Equal(oldTrack.Geometry, newTrack.Geometry);
         foreach (var lateral in new[] { 0f, 0.25f, 1f, 2.5f, 3f, 4f })
-            Assert.Equal(LapDistance(oldTrack, lateral), LapDistance(newTrack, lateral), 4);
+        {
+            var expected = 35f + 60f + 35f + 6f * (24f + lateral) * MathF.PI / 3f;
+            Assert.InRange(MathF.Abs(expected - LapDistance(newTrack, lateral)), 0f, 0.0001f);
+            Assert.Equal(10f, LapDistance(newTrack, lateral) - LapDistance(oldTrack, lateral), 3);
+        }
+        Assert.Equal(280.796f, LapDistance(newTrack, 0f), 3);
+    }
+
+    [Fact]
+    public void StandingStartExampleStartLineIsAtLeastThirtyFiveMetersFromFirstTurn()
+    {
+        var track = Track.CreateStandingStartExample();
+        Assert.Equal(SegmentType.TurnEntry, track.Segments[1].Type);
+        Assert.True(Length(track, 0) >= 35f);
+    }
+
+    [Fact]
+    public void StandingStartExampleHomeStraightIsSeventyMetersAcrossLapBoundary()
+    {
+        var track = Track.CreateStandingStartExample();
+        Assert.Equal(70f, Length(track, track.Segments.Count - 1) + Length(track, 0));
     }
 
     internal static float LapDistance(Track track, float lateral)

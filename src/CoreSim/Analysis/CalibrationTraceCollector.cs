@@ -152,7 +152,8 @@ public sealed class CalibrationTraceCollector : ISimulationStepObserver
             launch?.CruiseDistanceMeters,
             launch?.EntryNetAccelerationMetersPerSecondSquared,
             launch?.TimeTo70KphSeconds,
-            launch?.SpeedAtTwoSecondsMetersPerSecond);
+            launch?.SpeedAtTwoSecondsMetersPerSecond,
+            launch?.PreparationDistanceMeters);
     }
 
     private CalibrationLapSummary[] BuildLapSummaries(

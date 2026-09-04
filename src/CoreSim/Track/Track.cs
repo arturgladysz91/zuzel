@@ -53,12 +53,12 @@ public sealed class Track
         return new Track(segs, geometry);
     }
 
-    // Split the home straight across the canonical start/finish boundary;
-    // this changes topology, not the physical distance of a lap.
+    // A 70 m home straight crosses the canonical start/finish boundary.
+    // Unlike the compatibility example, each half is 35 m; no virtual distance.
     public static Track CreateStandingStartExample()
         => new(new TrackSegment[]
         {
-            new(0, SegmentType.Straight, 30f, isStandingStartSegment: true),
+            new(0, SegmentType.Straight, 35f, isStandingStartSegment: true),
             new(1, SegmentType.TurnEntry),
             new(2, SegmentType.TurnMiddle),
             new(3, SegmentType.TurnExit),
@@ -66,6 +66,6 @@ public sealed class Track
             new(5, SegmentType.TurnEntry),
             new(6, SegmentType.TurnMiddle),
             new(7, SegmentType.TurnExit),
-            new(8, SegmentType.Straight, 30f),
+            new(8, SegmentType.Straight, 35f),
         }, new TrackGeometry(60f, 24f, 1f, MathF.PI / 3f));
 }

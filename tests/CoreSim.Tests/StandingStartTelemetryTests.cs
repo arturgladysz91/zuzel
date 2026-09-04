@@ -16,7 +16,8 @@ public sealed class StandingStartTelemetryTests
         var d = Assert.Single(step.Diagnostics);
         var rider = step.Snapshot.Riders[0];
         var expected = LongitudinalDynamics.CalculateStandingStartLaunchProfile(rider.Profile.Skills,
-            rider.ActiveSetup, d.EntrySurface, d.TravelledMeters, d.AttainableTopSpeedMetersPerSecond!.Value);
+            rider.ActiveSetup, d.EntrySurface, d.TravelledMeters, d.AttainableTopSpeedMetersPerSecond!.Value,
+            FirstTurnApproachTarget(step));
         Assert.Equal(expected, d.StandingStartLaunchProfile);
         Assert.Equal(expected.ExitSpeedMetersPerSecond, Assert.Single(step.Changes).Speed);
     }
@@ -40,7 +41,7 @@ public sealed class StandingStartTelemetryTests
     public void StandingStartCalibrationSampleExportsReactionTime()
     {
         var sample = Run().Trace!.StepSamples[0];
-        Assert.Equal(0.25f, sample.StandingStartReactionTimeSeconds);
+        Assert.Equal(0.24f, sample.StandingStartReactionTimeSeconds!.Value, 6);
     }
 
     [Fact]
@@ -53,13 +54,16 @@ public sealed class StandingStartTelemetryTests
         Assert.Equal(profile.TotalTimeSeconds, sample.StandingStartProfileTotalTimeSeconds);
         Assert.Equal(profile.AccelerationDistanceMeters, sample.StandingStartAccelerationDistanceMeters);
         Assert.Equal(profile.CruiseDistanceMeters, sample.StandingStartCruiseDistanceMeters);
+        Assert.Equal(profile.PreparationDistanceMeters, sample.StandingStartPreparationDistanceMeters);
+        Assert.True(sample.StandingStartPreparationDistanceMeters > 0f);
         Assert.Equal(profile.EntryNetAccelerationMetersPerSecondSquared, sample.StandingStartEntryNetAccelerationMetersPerSecondSquared);
     }
 
     [Fact]
     public void StandingStartCalibrationSampleExportsTimeTo70()
     {
-        Assert.Null(Run().Trace!.StepSamples[0].StandingStartTimeTo70KphSeconds);
+        Assert.NotNull(Run().Trace!.StepSamples[0].StandingStartTimeTo70KphSeconds);
+        Assert.Null(ShortTrace(Resolve(StartTrack(1f))).StepSamples[0].StandingStartTimeTo70KphSeconds);
         var trace = ShortTrace(Resolve(StartTrack(100f)));
         Assert.NotNull(trace.StepSamples[0].StandingStartTimeTo70KphSeconds);
         Assert.Equal(Launch(Resolve(StartTrack(100f))).TimeTo70KphSeconds, trace.StepSamples[0].StandingStartTimeTo70KphSeconds);
@@ -85,6 +89,7 @@ public sealed class StandingStartTelemetryTests
             Assert.Null(s.StandingStartProfileTotalTimeSeconds);
             Assert.Null(s.StandingStartAccelerationDistanceMeters);
             Assert.Null(s.StandingStartCruiseDistanceMeters);
+            Assert.Null(s.StandingStartPreparationDistanceMeters);
             Assert.Null(s.StandingStartEntryNetAccelerationMetersPerSecondSquared);
             Assert.Null(s.StandingStartTimeTo70KphSeconds);
             Assert.Null(s.StandingStartSpeedAtTwoSecondsMetersPerSecond);
@@ -106,7 +111,7 @@ public sealed class StandingStartTelemetryTests
             var rows = polish.Split('\n', StringSplitOptions.RemoveEmptyEntries);
             var header = rows[0].Split(',');
             Assert.All(rows, row => Assert.Equal(header.Length, row.Split(',').Length));
-            Assert.Equal("0.25", rows[1].Split(',')[Array.IndexOf(header, "StandingStartReactionTimeSeconds")]);
+            Assert.Equal("0.24000001", rows[1].Split(',')[Array.IndexOf(header, "StandingStartReactionTimeSeconds")]);
             Assert.Equal(trace.StepSamples[0].StandingStartSpeedAtTwoSecondsMetersPerSecond!.Value.ToString("R", CultureInfo.InvariantCulture),
                 rows[1].Split(',')[Array.IndexOf(header, "StandingStartSpeedAtTwoSecondsMetersPerSecond")]);
         }
@@ -122,7 +127,7 @@ public sealed class StandingStartTelemetryTests
         var values = rows[1].Split(',');
         Assert.Equal(string.Empty, values[Array.IndexOf(header, "StandingStartTimeTo70KphSeconds")]);
         Assert.Equal(string.Empty, values[Array.IndexOf(header, "StandingStartSpeedAtTwoSecondsMetersPerSecond")]);
-        Assert.Equal("0.25", values[Array.IndexOf(header, "StandingStartReactionTimeSeconds")]);
+        Assert.Equal("0.24000001", values[Array.IndexOf(header, "StandingStartReactionTimeSeconds")]);
     }
 
     [Fact]

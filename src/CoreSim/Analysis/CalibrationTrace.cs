@@ -56,7 +56,8 @@ public sealed record CalibrationStepSample(
     float? StandingStartCruiseDistanceMeters = null,
     float? StandingStartEntryNetAccelerationMetersPerSecondSquared = null,
     float? StandingStartTimeTo70KphSeconds = null,
-    float? StandingStartSpeedAtTwoSecondsMetersPerSecond = null);
+    float? StandingStartSpeedAtTwoSecondsMetersPerSecond = null,
+    float? StandingStartPreparationDistanceMeters = null);
 
 public sealed record CalibrationLapSummary(
     int RiderId,

@@ -87,7 +87,7 @@ public sealed class StandingStartSimulationTests
         var step = Resolve();
         var launch = Launch(step);
         Assert.Equal(launch.MovementTimeSeconds + launch.ReactionTimeSeconds, Assert.Single(step.Changes).ElapsedTimeSeconds);
-        Assert.Equal(30f, Assert.Single(step.Changes).Position.DistanceMeters);
+        Assert.Equal(35f, Assert.Single(step.Changes).Position.DistanceMeters);
         Assert.Equal(1d, Assert.Single(step.Changes).Position.TotalSegmentProgress);
     }
 
@@ -223,8 +223,8 @@ public sealed class StandingStartSimulationTests
         var run = Run();
         var lap = run.Trace!.StepSamples.Where(s => s.RiderId == 1 && s.LapIndex == 0).ToArray();
         Assert.Equal(9, lap.Length);
-        Assert.Equal(120f, lap.Where(s => s.SegmentType == SegmentType.Straight).Sum(s => s.TravelledMeters));
-        Assert.Equal(StandingStartTrackTests.LapDistance(Track.CreateExample(), 0f), lap.Sum(s => s.TravelledMeters), 3);
+        Assert.Equal(130f, lap.Where(s => s.SegmentType == SegmentType.Straight).Sum(s => s.TravelledMeters));
+        Assert.Equal(StandingStartTrackTests.LapDistance(run.Track, 0f), lap.Sum(s => s.TravelledMeters), 3);
     }
 
     [Fact]
@@ -237,15 +237,15 @@ public sealed class StandingStartSimulationTests
     }
 
     [Fact]
-    public void FourLapStandingStartHeatPhysicalDistanceDoesNotContainExtraThirtyMeters()
+    public void FourLapStandingStartHeatPhysicalDistanceDoesNotContainVirtualLaunchMeters()
     {
         var run = Run();
         foreach (var rider in run.Riders)
         {
             var samples = run.Trace!.StepSamples.Where(s => s.RiderId == rider.RiderId).ToArray();
-            Assert.Equal(480f, samples.Where(s => s.SegmentType == SegmentType.Straight).Sum(s => s.TravelledMeters));
+            Assert.Equal(520f, samples.Where(s => s.SegmentType == SegmentType.Straight).Sum(s => s.TravelledMeters));
             Assert.InRange(MathF.Abs(rider.DistanceMeters - samples.Sum(s => s.TravelledMeters)), 0f, 0.002f);
-            Assert.InRange(MathF.Abs(rider.DistanceMeters - 4f * StandingStartTrackTests.LapDistance(Track.CreateExample(), rider.RiderId - 1)), 0f, 0.002f);
+            Assert.InRange(MathF.Abs(rider.DistanceMeters - 4f * StandingStartTrackTests.LapDistance(run.Track, rider.RiderId - 1)), 0f, 0.002f);
         }
     }
 
@@ -346,6 +346,7 @@ public sealed class StandingStartSimulationTests
         first.Morale = 0f;
         var last = Rider(lane: 4);
         last.Morale = 1f;
-        Assert.Equal(Launch(Resolve(riders: new[] { first })), Launch(Resolve(riders: new[] { last })));
+        // Isolate launch force from legitimate lane-dependent next-corner geometry.
+        Assert.Equal(Launch(Resolve(StartTrack(), new[] { first })), Launch(Resolve(StartTrack(), new[] { last })));
     }
 }

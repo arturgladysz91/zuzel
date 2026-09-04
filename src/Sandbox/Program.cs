@@ -58,7 +58,8 @@ var firstTurn = calibrationTrace.StepSamples.FirstOrDefault(sample =>
     sample.RiderId == 1 && sample.SegmentType == SegmentType.TurnEntry);
 Console.WriteLine($"\nProvisional standing start rider=1: reaction={launch.StandingStartReactionTimeSeconds:F3}s "
     + $"movement={launch.StandingStartMovementTimeSeconds:F3}s total={launch.StandingStartProfileTotalTimeSeconds:F3}s "
-    + $"exit={launch.ExitSpeedMetersPerSecond:F3}m/s");
+    + $"peak={launch.PeakSpeedMetersPerSecond:F3}m/s exit={launch.ExitSpeedMetersPerSecond:F3}m/s "
+    + $"preparation={launch.StandingStartPreparationDistanceMeters:F3}m");
 Console.WriteLine($"TimeTo70={launch.StandingStartTimeTo70KphSeconds?.ToString("F3") ?? "not reached"}; "
     + $"SpeedAt2s={launch.StandingStartSpeedAtTwoSecondsMetersPerSecond?.ToString("F3") ?? "not available"}; "
     + $"first TurnEntry entry={firstTurn?.EntrySpeedMetersPerSecond.ToString("F3") ?? "not available"}m/s");
@@ -88,7 +89,8 @@ foreach (var row in CalibrationCsvExporter.ExportSteps(calibrationTrace)
 }
 
 var balance = BalanceAnalyzer.AnalyzeStartingGates(track, profiles, simulations: 2000, seed: 2026);
-Console.WriteLine("\nStarting-gate balance (2000 heats, riders rotated):");
+Console.WriteLine("\nCompatibility start-position balance (2000 heats, riders rotated):");
+Console.WriteLine("Physical A/B/C/D gate geometry is not modeled; this is not final gate-advantage calibration.");
 foreach (var gate in balance.Gates)
 {
     Console.WriteLine(

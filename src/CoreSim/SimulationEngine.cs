@@ -453,7 +453,8 @@ public sealed class SimulationEngine
             attainableTopSpeed = LongitudinalDynamics.CalculateAttainableTopSpeedMetersPerSecond(
                 rider.Profile.Skills, rider.ActiveSetup);
             standingStartLaunchProfile = LongitudinalDynamics.CalculateStandingStartLaunchProfile(
-                rider.Profile.Skills, rider.ActiveSetup, surface, travelled, attainableTopSpeed.Value);
+                rider.Profile.Skills, rider.ActiveSetup, surface, travelled, attainableTopSpeed.Value,
+                ResolveImmediateNextTurnApproachSpeed(snapshot, rider));
             speed = standingStartLaunchProfile.Value.ExitSpeedMetersPerSecond;
         }
         else if (!snapshot.Step.UseLegacyPhysics

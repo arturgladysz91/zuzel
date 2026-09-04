@@ -44,6 +44,19 @@ internal static class StandingStartFixture
     internal static StandingStartLaunchProfile Launch(ResolvedSimulationStep step)
         => Assert.IsType<StandingStartLaunchProfile>(Assert.Single(step.Diagnostics).StandingStartLaunchProfile);
 
+    internal static float FirstTurnApproachTarget(ResolvedSimulationStep step, int riderId = 1)
+    {
+        var snapshot = step.Snapshot;
+        var rider = snapshot.Rider(riderId);
+        var next = snapshot.Track.Segments[1];
+        var surface = snapshot.TrackState.SampleSurface(1, rider.LateralPosition);
+        var safe = SegmentPhysics.MaxSafeTurnSpeed(rider.LateralPosition, snapshot.Track.Geometry,
+            surface, rider.Profile.Skills, rider.ActiveSetup);
+        var deceleration = LongitudinalDynamics.CalculateCornerEntryDecelerationMetersPerSecondSquared(rider.Profile.Skills, surface);
+        return LongitudinalDynamics.CalculateMaximumTurnEntryApproachSpeedMetersPerSecond(safe, deceleration,
+            LaneModel.SegmentLengthMeters(next, rider.LateralPosition, snapshot.Track.Geometry));
+    }
+
     internal static RunResult Run(bool observe = true, IEnumerable<int>? order = null, bool logging = false)
     {
         var track = Track.CreateStandingStartExample();

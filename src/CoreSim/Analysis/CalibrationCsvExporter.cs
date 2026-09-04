@@ -29,6 +29,7 @@ public static class CalibrationCsvExporter
                 "StandingStartProfileTotalTimeSeconds", "StandingStartAccelerationDistanceMeters",
                 "StandingStartCruiseDistanceMeters", "StandingStartEntryNetAccelerationMetersPerSecondSquared",
                 "StandingStartTimeTo70KphSeconds", "StandingStartSpeedAtTwoSecondsMetersPerSecond",
+                "StandingStartPreparationDistanceMeters",
             },
         };
 
@@ -56,6 +57,7 @@ public static class CalibrationCsvExporter
                 F(item.StandingStartProfileTotalTimeSeconds), F(item.StandingStartAccelerationDistanceMeters),
                 F(item.StandingStartCruiseDistanceMeters), F(item.StandingStartEntryNetAccelerationMetersPerSecondSquared),
                 F(item.StandingStartTimeTo70KphSeconds), F(item.StandingStartSpeedAtTwoSecondsMetersPerSecond),
+                F(item.StandingStartPreparationDistanceMeters),
             }));
 
         return Write(rows);
