@@ -50,6 +50,7 @@ public sealed record RiderStepDiagnostics(
     float PeakSpeedMetersPerSecond,
     float? AttainableTopSpeedMetersPerSecond,
     float? TurnExitNetAccelerationMetersPerSecondSquared,
+    TurnExitDriveProfile? TurnExitDriveProfile,
     StraightSpeedProfile? StraightProfile,
     TurnEntryScrubProfile? TurnEntryScrubProfile,
     TrackSurfaceState EntrySurface);
@@ -114,6 +115,7 @@ public sealed class SimulationEngine
         float TravelledMeters,
         float? AttainableTopSpeedMetersPerSecond,
         float? TurnExitNetAccelerationMetersPerSecondSquared,
+        TurnExitDriveProfile? TurnExitDriveProfile,
         StraightSpeedProfile? StraightProfile,
         TurnEntryScrubProfile? TurnEntryScrubProfile,
         TrackSurfaceState EntrySurface);
@@ -214,17 +216,34 @@ public sealed class SimulationEngine
         {
             var rider = snapshot.Rider(resolution.Change.RiderId);
             var finalChange = changes[resolution.Change.RiderId];
+            var diagnosticTravelTimeSeconds =
+                resolution.TurnExitDriveProfile?.TravelTimeSeconds
+                ?? finalChange.ElapsedTimeSeconds - rider.ElapsedTimeSeconds;
             var peakSpeed = resolution.StraightProfile?.PeakSpeedMetersPerSecond
+                ?? resolution.TurnExitDriveProfile?.PeakSpeedMetersPerSecond
                 ?? MathF.Max(resolution.Change.EntrySpeed, resolution.Change.PhysicsSpeed);
             peakSpeed = MathF.Max(peakSpeed, finalChange.Speed);
+
+            if (resolution.TurnExitDriveProfile is { } turnExitProfile)
+            {
+                ValidateEquivalent(
+                    turnExitProfile.ExitSpeedMetersPerSecond,
+                    resolution.Change.Speed,
+                    "TurnExit profile exit speed");
+                ValidateEquivalent(
+                    turnExitProfile.TravelTimeSeconds,
+                    resolution.Change.ElapsedTimeSeconds - rider.ElapsedTimeSeconds,
+                    "TurnExit profile travel time");
+            }
 
             return new RiderStepDiagnostics(
                 finalChange.RiderId,
                 resolution.TravelledMeters,
-                finalChange.ElapsedTimeSeconds - rider.ElapsedTimeSeconds,
+                diagnosticTravelTimeSeconds,
                 peakSpeed,
                 resolution.AttainableTopSpeedMetersPerSecond,
                 resolution.TurnExitNetAccelerationMetersPerSecondSquared,
+                resolution.TurnExitDriveProfile,
                 resolution.StraightProfile,
                 resolution.TurnEntryScrubProfile,
                 resolution.EntrySurface);
@@ -401,6 +420,7 @@ public sealed class SimulationEngine
         var travelled = segmentLength * canonicalAdvance;
         var speed = resolution.Speed;
         StraightSpeedProfile? straightProfile = null;
+        TurnExitDriveProfile? turnExitDriveProfile = null;
         float? attainableTopSpeed = null;
         float? turnExitNetAcceleration = null;
         if (!snapshot.Step.UseLegacyPhysics
@@ -431,21 +451,21 @@ public sealed class SimulationEngine
             && resolution.Speed > 0f
             && travelled > 0f)
         {
-            turnExitNetAcceleration = LongitudinalDynamics
-                .CalculateTurnExitNetAccelerationMetersPerSecondSquared(
-                    resolution.Speed,
-                    rider.Profile.Skills,
-                    rider.ActiveSetup,
-                    surface);
             attainableTopSpeed = LongitudinalDynamics
                 .CalculateAttainableTopSpeedMetersPerSecond(
                     rider.Profile.Skills,
                     rider.ActiveSetup);
-            speed = LongitudinalDynamics.AccelerateOverDistanceWithSpeedCeiling(
+            turnExitDriveProfile = LongitudinalDynamics
+                .CalculateForceBasedTurnExitDriveProfile(
                 resolution.Speed,
-                turnExitNetAcceleration.Value,
+                rider.Profile.Skills,
+                rider.ActiveSetup,
+                surface,
                 travelled,
                 attainableTopSpeed.Value);
+            turnExitNetAcceleration =
+                turnExitDriveProfile.Value.EntryNetAccelerationMetersPerSecondSquared;
+            speed = turnExitDriveProfile.Value.ExitSpeedMetersPerSecond;
         }
 
         float segmentTravelTimeSeconds;
@@ -460,6 +480,10 @@ public sealed class SimulationEngine
         else if (straightProfile is { } profile)
         {
             segmentTravelTimeSeconds = profile.TravelTimeSeconds;
+        }
+        else if (turnExitDriveProfile is { } turnExitProfile)
+        {
+            segmentTravelTimeSeconds = turnExitProfile.TravelTimeSeconds;
         }
         else
         {
@@ -509,6 +533,7 @@ public sealed class SimulationEngine
             travelled,
             attainableTopSpeed,
             turnExitNetAcceleration,
+            turnExitDriveProfile,
             straightProfile,
             turnEntryScrubProfile,
             surface);
@@ -587,6 +612,15 @@ public sealed class SimulationEngine
             throw new OverflowException("TurnEntry travel time exceeds the finite single-precision domain.");
 
         return travelTimeSeconds;
+    }
+
+    private static void ValidateEquivalent(float expected, float actual, string name)
+    {
+        var tolerance = MathF.Max(
+            1e-5f,
+            MathF.Max(MathF.Abs(expected), MathF.Abs(actual)) * 1e-5f);
+        if (MathF.Abs(expected - actual) > tolerance)
+            throw new InvalidOperationException($"{name} does not match production resolution.");
     }
 
     private static void ResolveExistingInteractions(

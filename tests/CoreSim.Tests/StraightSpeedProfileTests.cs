@@ -388,7 +388,15 @@ public sealed class StraightSpeedProfileTests
         var result = ResolveSingle(track, state, rider, targetLane: 1);
 
         Assert.Equal(SegmentOutcome.Ok, result.Change.Outcome);
-        Assert.Equal(ceiling, result.Change.Speed, 5);
+        var profile = LongitudinalDynamics.CalculateForceBasedTurnExitDriveProfile(
+            rider.Speed,
+            rider.Profile.Skills,
+            rider.ActiveSetup,
+            PerfectSurface,
+            LaneModel.SegmentLengthMeters(track.Segments[0], rider.LateralPosition, geometry),
+            ceiling);
+        Assert.Equal(profile.ExitSpeedMetersPerSecond, result.Change.Speed, 5);
+        Assert.True(result.Change.Speed <= ceiling);
     }
 
     [Fact]

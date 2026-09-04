@@ -56,7 +56,13 @@ Zachowanie #25 jest identyczne przy i poniżej `16 m/s`. Powyżej reference spee
 
 Osiągalna prędkość szczytowa wynosi `baseTopSpeed * gearingMultiplier`, gdzie `baseTopSpeed = 21 + (25 - 21) * normalizedSpeed`, a `gearingMultiplier = 0.94 + (1.06 - 0.94) * Gearing`. Zakresy `21–25 m/s` i `0.94–1.06` są **PROVISIONAL / NOT REAL-WORLD CALIBRATED**: nie pochodzą jeszcze z docelowej telemetrii i nie są finalną prędkością prawdziwego motocykla. Oś `Gearing` to `drive-oriented ↔ speed-oriented`: `0` wzmacnia corner-exit drive, ale obniża osiągalną prędkość; `1` osłabia drive, ale podnosi osiągalną prędkość. Nawierzchnia nie zmienia tej granicy. Nie jest to hard limiter istniejącego overspeedu: gdy wejściowa prędkość już osiąga albo przekracza granicę, positive drive jej nie zmniejsza. Wzory i zachowanie #22 pozostają bez zmian.
 
-`RunWide` nie otrzymuje positive drive w tym samym segmencie, a `Crash` pozostaje z prędkością zero. `TurnEntry`, `TurnMiddle` i legacy nie dostają force-based akceleracji. TurnExit #26 pozostaje funkcjonalnie bez zmian i nadal liczy acceleration raz przy `resolution.Speed`; nie przechodzi na stepped integration.
+Od #29 eligible advanced `TurnExit` zaczyna positive-drive profile dokładnie od
+post-`SegmentPhysics` `resolution.Speed` i używa shared fixed-distance midpoint
+traversal. Eligibility pozostaje bez zmian: tylko `Ok`/`Brake`, dodatnia speed i
+dodatni dystans. `RunWide` nie otrzymuje positive drive, `Crash` pozostaje z
+prędkością zero, a `TurnEntry`, `TurnMiddle` i legacy nie dostają profilu.
+TurnExit profile time jest produkcyjnym czasem segmentu i steruje istniejącym
+ruchem bocznym.
 
 Od #27 advanced `Straight` ma deterministyczny speed-dependent force traversal. Rzeczywisty dystans dzieli na fixed-distance kroki maksymalnie `1 m` (**PROVISIONAL / NUMERICAL INTEGRATION RESOLUTION**), a ostatnia reszta nie jest zaokrąglana. Każdy full-drive krok liczy predictor z `a_start`, midpoint speed `(start + predicted)/2` i corrected `a_mid`, a następnie `v_next² = v_start² + 2*a_mid*ds`. Nie ma timestepu, zależności od FPS ani ponownego próbkowania nawierzchni co metr.
 
@@ -72,7 +78,18 @@ Realny motocykl żużlowy ma jeden bieg podczas jazdy, nie posiada klasycznego u
 
 Kolejność to `original entry → scrub → SegmentPhysics → random incident → distance/time`. Non-crash przejeżdża cały remaining distance, a czas wynosi czas profilu scrub plus post-scrub distance podzielony przez finalną prędkość resolution. Crash nadal przejeżdża połowę remaining progress — dokładnie provisional scrub distance — i dostaje wyłącznie czas scrub, także gdy crash powstał w random incident. Ten czas steruje również `LateralMovementModel`. Partial TurnEntry używa tylko remaining distance; surface nie jest ponownie próbkowane po ruchu bocznym.
 
-Advanced lateral movement na Straight i TurnEntry otrzymuje rzeczywisty czas odpowiedniego profilu. Model nie przelicza profilu po `MoveTowards`; surfaces i geometria nadal używają segment-entry position. `TurnMiddle`, legacy, cały model #24 TurnEntry i funkcjonalne zachowanie #26 TurnExit są niezmienione. Zakresy top-speed `21–25 m/s` i `0.94–1.06` nadal obowiązują jako artificial ceiling i są **PROVISIONAL / NOT REAL-WORLD CALIBRATED**. #27 także nie jest finalną kalibracją: nadal brak RPM, torque/power curve, engine kW, rev limiter, real sprockets, wheel radius, clutch, wheelspin, slip ratio, traction-force cap, CdA, wind, weather aero oraz natural negative drag/coast deceleration.
+Straight i TurnExit współdzielą `1 m` numerical resolution, exact remainder,
+tworzenie kroków, one-gear envelope, resistance, generic net-positive-drive
+helper oraz midpoint step. Integration jest dystansowa, nie fixed-time, i nie
+próbkuje ponownie surface co metr. TurnExit zachowuje własne reference
+`0.60–1.40 × gearing × surface`, a Straight własne
+`0.80–1.60 × gearing × surface`. Advanced lateral movement na Straight,
+TurnEntry i eligible TurnExit otrzymuje rzeczywisty czas odpowiedniego profilu.
+Model nie przelicza profilu po `MoveTowards`; surface i geometria nadal używają
+immutable segment-entry position. `TurnMiddle`, legacy i cały model #24
+TurnEntry są niezmienione. Zakresy `21–25 m/s` i `0.94–1.06` nadal obowiązują
+jako artificial ceiling i są **PROVISIONAL / NOT REAL-WORLD CALIBRATED**.
+Signed negative drag/coast i standing start nadal nie istnieją.
 
 ### Calibration telemetry — OBSERVATION ONLY
 
@@ -86,12 +103,14 @@ przy `EnableLogging=false`, a deterministic CSV ma stable ordering i invariant
 culture. Harness nie dodaje RNG, nie zmienia physics ani wyników biegu i nie
 porównuje jeszcze wartości z real telemetry.
 
-FIRST-LAP INITIAL BOOTSTRAP IS NOT A CALIBRATED STANDING START. TurnExit nadal
-nie jest stepped, current artificial attainable ceiling nadal istnieje, a
-signed negative drag/coasting nie istnieje. Roadmap (numery nie są domain API):
-#29 shared stepped TurnExit traversal, #30 standing-start/launch, #31 signed
-net force i natural resistance deceleration przygotowujące usunięcie ceiling,
-a następnie real-world calibration targets.
+Od #29 harness eksportuje production `TurnExitDriveProfile`: acceleration/cruise
+distance i profile travel time. Zachowany `TurnExitNetAcceleration` oznacza
+entry net acceleration początku profilu, nie jedną acceleration dla segmentu.
+FIRST-LAP INITIAL BOOTSTRAP IS NOT A CALIBRATED STANDING START. Current
+artificial attainable ceiling nadal istnieje, a signed negative drag/coasting
+nie istnieje. Roadmap: standing-start/launch, signed net force i natural
+resistance deceleration przygotowujące usunięcie ceiling, a następnie
+real-world calibration targets.
 
 ### Czasowa zmiana linii — BINDING
 

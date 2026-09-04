@@ -37,7 +37,11 @@ public sealed record CalibrationStepSample(
     float EntrySurfaceMoisture,
     float EntrySurfaceEffectiveGrip,
     float? AttainableTopSpeedMetersPerSecond,
+    /// <summary>Net acceleration at the start of the TurnExit positive-drive profile.</summary>
     float? TurnExitNetAccelerationMetersPerSecondSquared,
+    float? TurnExitAccelerationDistanceMeters,
+    float? TurnExitCruiseDistanceMeters,
+    float? TurnExitProfileTravelTimeSeconds,
     float? StraightAccelerationDistanceMeters,
     float? StraightCruiseDistanceMeters,
     float? StraightDecelerationDistanceMeters,

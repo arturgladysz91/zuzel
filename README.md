@@ -164,9 +164,19 @@ Zachowany helper analityczny `CalculateStraightSpeedProfile` nie jest już
 produkcyjną ścieżką advanced Straight. Ten sam ceiling nadal ogranicza positive
 drive na `TurnExit`.
 
-Advanced `TurnExit` zachowuje bez zmian funkcjonalnych swój force-based
-foundation i pojedynczy distance-limited krok. Straight współdzieli wyłącznie
-ogólny one-gear envelope oraz przeliczenie reference force na actual force.
+Od #29 eligible advanced `TurnExit` (`Ok`/`Brake`, dodatnia post-physics speed i
+dodatni dystans) używa tego samego deterministycznego fixed-distance traversal
+co positive-drive część Straight. Profil zaczyna się dokładnie od
+post-`SegmentPhysics` `resolution.Speed`, dzieli dystans na wspólne kroki do
+`1 m` z dokładną końcową resztą i używa wspólnego midpoint positive-drive step.
+Nie jest to fixed-time timestep. `RunWide` i `Crash` nie otrzymują profilu.
+TurnExit travel time jest sumą czasów jego kroków i automatycznie stanowi budżet
+`LateralMovementModel`.
+
+Straight i TurnExit współdzielą numerical resolution, tworzenie kroków,
+one-gear envelope, resistance, generic net-positive-drive force oraz midpoint
+positive-drive step. Zachowują różne reference acceleration: TurnExit
+`0.60–1.40 × gearing × surface`, Straight `0.80–1.60 × gearing × surface`.
 Dostępna siła TurnExit jest kalibrowana tak, aby przy referencyjnych
 `16 m/s` zachować dotychczasowe przyspieszenie zależne od `Speed`, `Gearing` i
 wejściowej nawierzchni. Przy `v <= 16 m/s` one-gear drive envelope wynosi
@@ -351,12 +361,14 @@ pochodzi z faktycznie użytego `StraightSpeedProfile`, a time/distance z
 immutable snapshotu i rozwiązanego state change. CSV jest deterministyczny,
 uporządkowany i używa invariant culture.
 
-Harness nie wykonuje RNG i nie zmienia fizyki ani wyniku biegu. Obecny
-first-lap initial bootstrap **nie jest skalibrowanym standing startem**,
-`TurnExit` nadal nie jest stepped, artificial `AttainableTopSpeed` nadal
-istnieje, a signed negative drag/coasting nadal nie jest modelowany. Roadmap
-(numery PR są tylko opisem kolejności prac): #29 shared stepped TurnExit,
-#30 standing-start/launch, #31 signed net force i natural resistance
+Harness nie wykonuje RNG i nie zmienia fizyki ani wyniku biegu. Od #29 raportuje
+również faktycznie użyty `TurnExitDriveProfile`; zachowany scalar
+`TurnExitNetAcceleration` oznacza entry net acceleration początku profilu, a nie
+stałe acceleration dla całego segmentu. Obecny first-lap initial bootstrap
+**nie jest skalibrowanym standing startem**, artificial `AttainableTopSpeed`
+nadal istnieje, a signed negative drag/coasting nadal nie jest modelowany.
+Roadmap (numery PR są tylko opisem kolejności prac): standing-start/launch,
+signed net force i natural resistance
 deceleration przygotowujące usunięcie artificial ceiling, a dopiero potem
 porównanie z real-world calibration targets.
 
