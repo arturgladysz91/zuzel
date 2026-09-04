@@ -120,7 +120,7 @@ public sealed class ForceBasedStraightTraversalTests
     [Fact]
     public void ForceBasedStraightZeroDistancePreservesSpeedAndZeroTime()
     {
-        var profile = Profile(initialSpeed: 19f, distance: 0f, ceiling: 23f, target: 12f);
+        var profile = Profile(initialSpeed: 19f, distance: 0f, target: 12f);
 
         Assert.Equal(19f, profile.ExitSpeedMetersPerSecond);
         Assert.Equal(19f, profile.PeakSpeedMetersPerSecond);
@@ -133,7 +133,7 @@ public sealed class ForceBasedStraightTraversalTests
     {
         const float distance = 60.4f;
 
-        var profile = Profile(initialSpeed: 10f, distance, ceiling: 30f);
+        var profile = Profile(initialSpeed: 10f, distance);
 
         Assert.Equal(distance, TotalClassifiedDistance(profile));
     }
@@ -142,7 +142,7 @@ public sealed class ForceBasedStraightTraversalTests
     public void ForceBasedStraightUsesOneMeterStepsAndFinalRemainderWithoutDroppingDistance()
     {
         const float distance = 60.4f;
-        var whole = Profile(initialSpeed: 10f, distance, ceiling: 30f);
+        var whole = Profile(initialSpeed: 10f, distance);
         var currentSpeed = 10f;
         var composedTime = 0f;
         var composedAccelerationDistance = 0f;
@@ -151,7 +151,7 @@ public sealed class ForceBasedStraightTraversalTests
 
         for (var index = 0; index < 60; index++)
         {
-            var step = Profile(currentSpeed, distance: 1f, ceiling: 30f);
+            var step = Profile(currentSpeed, distance: 1f);
             currentSpeed = step.ExitSpeedMetersPerSecond;
             composedTime += step.TravelTimeSeconds;
             composedAccelerationDistance += step.AccelerationDistanceMeters;
@@ -159,7 +159,7 @@ public sealed class ForceBasedStraightTraversalTests
             composedDecelerationDistance += step.DecelerationDistanceMeters;
         }
 
-        var remainder = Profile(currentSpeed, distance - 60f, ceiling: 30f);
+        var remainder = Profile(currentSpeed, distance - 60f);
         currentSpeed = remainder.ExitSpeedMetersPerSecond;
         composedTime += remainder.TravelTimeSeconds;
         composedAccelerationDistance += remainder.AccelerationDistanceMeters;
@@ -176,19 +176,19 @@ public sealed class ForceBasedStraightTraversalTests
     [Fact]
     public void StraightTravelTimeEqualsSumOfStepTimes()
     {
-        var whole = Profile(initialSpeed: 10f, distance: 12.4f, ceiling: 30f);
+        var whole = Profile(initialSpeed: 10f, distance: 12.4f);
         var currentSpeed = 10f;
         var expectedTime = 0d;
 
         for (var index = 0; index < 12; index++)
         {
-            var step = Profile(currentSpeed, distance: 1f, ceiling: 30f);
+            var step = Profile(currentSpeed, distance: 1f);
             expectedTime += 2d / (currentSpeed + step.ExitSpeedMetersPerSecond);
             currentSpeed = step.ExitSpeedMetersPerSecond;
         }
 
         var remainderDistance = 0.4f;
-        var remainder = Profile(currentSpeed, remainderDistance, ceiling: 30f);
+        var remainder = Profile(currentSpeed, remainderDistance);
         expectedTime += 2d * remainderDistance
             / (currentSpeed + remainder.ExitSpeedMetersPerSecond);
 
@@ -198,32 +198,31 @@ public sealed class ForceBasedStraightTraversalTests
     [Fact]
     public void MidpointIntegrationIsDeterministic()
     {
-        var first = Profile(initialSpeed: 11f, distance: 93.7f, ceiling: 24f, target: 14f);
-        var second = Profile(initialSpeed: 11f, distance: 93.7f, ceiling: 24f, target: 14f);
+        var first = Profile(initialSpeed: 11f, distance: 93.7f, target: 14f);
+        var second = Profile(initialSpeed: 11f, distance: 93.7f, target: 14f);
 
         Assert.Equal(first, second);
     }
 
     [Fact]
-    public void ForceBasedStraightCanReachRetainedCeilingOnLongEnoughStraight()
+    public void ForceBasedStraightConvergesToNaturalEquilibriumOnLongStraight()
     {
-        var profile = Profile(initialSpeed: 10f, distance: 500f, ceiling: 23f);
-
-        Assert.Equal(23f, profile.ExitSpeedMetersPerSecond);
-        Assert.Equal(23f, profile.PeakSpeedMetersPerSecond);
+        var profile = Profile(10f, 10_000f);
+        Assert.InRange(Math.Abs(profile.ExitSpeedMetersPerSecond - profile.FullDriveEquilibriumSpeedMetersPerSecond!.Value), 0f, 0.001f);
+        Assert.Equal(profile.ExitSpeedMetersPerSecond, profile.PeakSpeedMetersPerSecond);
         Assert.True(profile.AccelerationDistanceMeters > 0f);
         Assert.True(profile.CruiseDistanceMeters > 0f);
         Assert.Equal(0f, profile.DecelerationDistanceMeters);
     }
 
     [Fact]
-    public void InitialOverspeedAboveCeilingIsPreservedWithoutTarget()
+    public void InitialOverspeedAboveEquilibriumDeceleratesWithoutTarget()
     {
-        var profile = Profile(initialSpeed: 25f, distance: 60f, ceiling: 23f);
-
-        Assert.Equal(25f, profile.ExitSpeedMetersPerSecond);
-        Assert.Equal(25f, profile.PeakSpeedMetersPerSecond);
-        Assert.Equal(60f, profile.CruiseDistanceMeters);
+        var profile = Profile(35f, 60f);
+        Assert.True(profile.ExitSpeedMetersPerSecond < 35f);
+        Assert.True(profile.ExitSpeedMetersPerSecond > profile.FullDriveEquilibriumSpeedMetersPerSecond);
+        Assert.Equal(35f, profile.PeakSpeedMetersPerSecond);
+        Assert.Equal(60f, profile.DecelerationDistanceMeters);
     }
 
     [Fact]
@@ -231,7 +230,7 @@ public sealed class ForceBasedStraightTraversalTests
     {
         const float target = 14f;
 
-        var profile = Profile(initialSpeed: 10f, distance: 100f, ceiling: 23f, target);
+        var profile = Profile(initialSpeed: 10f, distance: 100f, target);
 
         Assert.Equal(target, profile.ExitSpeedMetersPerSecond, 5);
         Assert.True(profile.PeakSpeedMetersPerSecond > target);
@@ -251,7 +250,7 @@ public sealed class ForceBasedStraightTraversalTests
             deceleration,
             distance);
 
-        var profile = Profile(initialSpeed, distance, ceiling: 30f, target);
+        var profile = Profile(initialSpeed, distance, target);
 
         Assert.True(profile.ExitSpeedMetersPerSecond > target);
         Assert.Equal(expected, profile.ExitSpeedMetersPerSecond, 5);
@@ -259,12 +258,12 @@ public sealed class ForceBasedStraightTraversalTests
     }
 
     [Fact]
-    public void TargetAboveCeilingDoesNotCauseUnnecessaryDeceleration()
+    public void TargetAboveEquilibriumDoesNotCauseUnnecessaryDeceleration()
     {
-        var profile = Profile(initialSpeed: 10f, distance: 500f, ceiling: 23f, target: 25f);
-
-        Assert.Equal(23f, profile.ExitSpeedMetersPerSecond);
-        Assert.Equal(0f, profile.DecelerationDistanceMeters);
+        var fullDrive = Profile(10f, 500f);
+        var withTarget = Profile(10f, 500f, fullDrive.FullDriveEquilibriumSpeedMetersPerSecond + 1f);
+        Assert.Equal(fullDrive, withTarget);
+        Assert.Equal(0f, withTarget.DecelerationDistanceMeters);
     }
 
     [Fact]
@@ -272,9 +271,8 @@ public sealed class ForceBasedStraightTraversalTests
     {
         const float initialSpeed = 10f;
         const float distance = 60f;
-        const float ceiling = 30f;
-        var profile = Profile(initialSpeed, distance, ceiling);
-        var fine = IntegrateWithoutTarget(initialSpeed, distance, ceiling, stepMeters: 0.05f);
+        var profile = Profile(initialSpeed, distance);
+        var fine = IntegrateWithoutTarget(initialSpeed, distance, stepMeters: 0.05f);
 
         Assert.InRange(
             MathF.Abs(profile.ExitSpeedMetersPerSecond - fine.ExitSpeedMetersPerSecond),
@@ -289,8 +287,8 @@ public sealed class ForceBasedStraightTraversalTests
     [Fact]
     public void ForceBasedStraightPhaseDistancesSumToTotalDistance()
     {
-        const float distance = 300.75f;
-        var profile = Profile(initialSpeed: 10f, distance, ceiling: 23f, target: 12f);
+        const float distance = 10_000.75f;
+        var profile = Profile(initialSpeed: 10f, distance, target: 12f);
 
         Assert.True(profile.AccelerationDistanceMeters > 0f);
         Assert.True(profile.CruiseDistanceMeters > 0f);
@@ -301,19 +299,20 @@ public sealed class ForceBasedStraightTraversalTests
     [Fact]
     public void ForceBasedStraightAcceleratesWithoutNextTurnTarget()
     {
-        var profile = Profile(initialSpeed: 10f, distance: 60f, ceiling: 23f);
+        var profile = Profile(initialSpeed: 10f, distance: 60f);
 
         Assert.True(profile.ExitSpeedMetersPerSecond > 10f);
         Assert.True(profile.TravelTimeSeconds > 0f);
     }
 
     [Fact]
-    public void ForceBasedStraightDoesNotPositiveDrivePastRetainedCeiling()
+    public void ForceBasedStraightPassesFormerCeilingAndApproachesForceEquilibrium()
     {
-        var profile = Profile(initialSpeed: 10f, distance: 1_000f, ceiling: 22f);
-
-        Assert.Equal(22f, profile.PeakSpeedMetersPerSecond);
-        Assert.Equal(22f, profile.ExitSpeedMetersPerSecond);
+        var profile = Profile(10f, 1_000f);
+        Assert.True(profile.ExitSpeedMetersPerSecond > 23f);
+        Assert.True(profile.ExitSpeedMetersPerSecond < profile.FullDriveEquilibriumSpeedMetersPerSecond);
+        Assert.Equal(profile.ExitSpeedMetersPerSecond, profile.PeakSpeedMetersPerSecond);
+        Assert.True(Profile(10f, 2_000f).ExitSpeedMetersPerSecond > profile.ExitSpeedMetersPerSecond);
     }
 
     [Fact]
@@ -323,8 +322,8 @@ public sealed class ForceBasedStraightTraversalTests
         var speedSetup = new BikeSetup(gearing: 1f, tractionBias: 0.5f);
         var driveShort = ProfileForSetup(10f, 10f, driveSetup);
         var speedShort = ProfileForSetup(10f, 10f, speedSetup);
-        var driveLong = ProfileForSetup(10f, 500f, driveSetup);
-        var speedLong = ProfileForSetup(10f, 500f, speedSetup);
+        var driveLong = ProfileForSetup(10f, 10_000f, driveSetup);
+        var speedLong = ProfileForSetup(10f, 10_000f, speedSetup);
 
         Assert.True(driveShort.ExitSpeedMetersPerSecond > speedShort.ExitSpeedMetersPerSecond);
         Assert.True(speedLong.ExitSpeedMetersPerSecond > driveLong.ExitSpeedMetersPerSecond);
@@ -335,7 +334,7 @@ public sealed class ForceBasedStraightTraversalTests
     {
         const float initialSpeed = 25f;
         const float distance = 2f;
-        var profile = Profile(initialSpeed, distance, ceiling: 30f, target: 10f);
+        var profile = Profile(initialSpeed, distance, target: 10f);
         var maximumSquaredSpeedReduction = 2f * CornerEntryDeceleration() * distance;
         var actualSquaredSpeedReduction = initialSpeed * initialSpeed
             - profile.ExitSpeedMetersPerSecond * profile.ExitSpeedMetersPerSecond;
@@ -346,11 +345,10 @@ public sealed class ForceBasedStraightTraversalTests
     [Fact]
     public void TargetAboveFullDriveExitDoesNotCauseUnnecessaryPreparation()
     {
-        var withoutTarget = Profile(initialSpeed: 10f, distance: 10f, ceiling: 23f);
+        var withoutTarget = Profile(initialSpeed: 10f, distance: 10f);
         var withHighTarget = Profile(
             initialSpeed: 10f,
             distance: 10f,
-            ceiling: 23f,
             target: 22f);
 
         Assert.Equal(withoutTarget, withHighTarget);
@@ -359,17 +357,17 @@ public sealed class ForceBasedStraightTraversalTests
     [Fact]
     public void InitialOverspeedCanDecelerateTowardTarget()
     {
-        var profile = Profile(initialSpeed: 25f, distance: 100f, ceiling: 23f, target: 14f);
+        var profile = Profile(initialSpeed: 25f, distance: 100f, target: 14f);
 
         Assert.True(profile.ExitSpeedMetersPerSecond < 25f);
         Assert.True(profile.DecelerationDistanceMeters > 0f);
-        Assert.Equal(25f, profile.PeakSpeedMetersPerSecond);
+        Assert.True(profile.PeakSpeedMetersPerSecond >= 25f);
     }
 
     [Fact]
     public void FastestFeasibleProfileAcceleratesBeforePreparingWhenDistanceAllows()
     {
-        var profile = Profile(initialSpeed: 10f, distance: 100f, ceiling: 23f, target: 14f);
+        var profile = Profile(initialSpeed: 10f, distance: 100f, target: 14f);
 
         Assert.True(profile.AccelerationDistanceMeters > 0f);
         Assert.True(profile.DecelerationDistanceMeters > 0f);
@@ -380,7 +378,7 @@ public sealed class ForceBasedStraightTraversalTests
     {
         const float initialSpeed = 10f;
         const float target = 14f;
-        var profile = Profile(initialSpeed, distance: 100f, ceiling: 23f, target);
+        var profile = Profile(initialSpeed, distance: 100f, target);
 
         Assert.True(profile.AccelerationDistanceMeters > 0f);
         Assert.True(profile.DecelerationDistanceMeters > 0f);
@@ -391,7 +389,7 @@ public sealed class ForceBasedStraightTraversalTests
     [Fact]
     public void StraightTravelTimeIsFiniteAndPositiveForPositiveDistance()
     {
-        var profile = Profile(initialSpeed: 10f, distance: 60.4f, ceiling: 23f);
+        var profile = Profile(initialSpeed: 10f, distance: 60.4f);
 
         Assert.True(float.IsFinite(profile.TravelTimeSeconds));
         Assert.True(profile.TravelTimeSeconds > 0f);
@@ -400,7 +398,6 @@ public sealed class ForceBasedStraightTraversalTests
     private static StraightSpeedProfile Profile(
         float initialSpeed,
         float distance,
-        float ceiling,
         float? target = null)
         => LongitudinalDynamics.CalculateForceBasedStraightSpeedProfile(
             initialSpeed,
@@ -409,7 +406,6 @@ public sealed class ForceBasedStraightTraversalTests
             PerfectSurface,
             CornerEntryDeceleration(),
             distance,
-            ceiling,
             target);
 
     private static StraightSpeedProfile ProfileForSetup(
@@ -422,10 +418,7 @@ public sealed class ForceBasedStraightTraversalTests
             setup,
             PerfectSurface,
             CornerEntryDeceleration(),
-            distance,
-            LongitudinalDynamics.CalculateAttainableTopSpeedMetersPerSecond(
-                NeutralSkills,
-                setup));
+            distance);
 
     private static float StraightReferenceAcceleration(float gearing)
         => LongitudinalDynamics.CalculateStraightReferenceDriveAccelerationMetersPerSecondSquared(
@@ -453,7 +446,6 @@ public sealed class ForceBasedStraightTraversalTests
     private static FineProfile IntegrateWithoutTarget(
         float initialSpeed,
         float distance,
-        float ceiling,
         float stepMeters)
     {
         var currentSpeed = initialSpeed;
@@ -468,11 +460,10 @@ public sealed class ForceBasedStraightTraversalTests
                     NeutralSkills,
                     NeutralSetup,
                     PerfectSurface);
-            var predictedSpeed = LongitudinalDynamics.AccelerateOverDistanceWithSpeedCeiling(
+            var predictedSpeed = LongitudinalDynamics.ApplySignedAccelerationOverDistance(
                 currentSpeed,
                 accelerationAtStart,
-                stepDistance,
-                ceiling);
+                stepDistance);
             var midpointSpeed = (currentSpeed + predictedSpeed) * 0.5f;
             var midpointAcceleration = LongitudinalDynamics
                 .CalculateStraightNetAccelerationMetersPerSecondSquared(
@@ -480,11 +471,10 @@ public sealed class ForceBasedStraightTraversalTests
                     NeutralSkills,
                     NeutralSetup,
                     PerfectSurface);
-            var endSpeed = LongitudinalDynamics.AccelerateOverDistanceWithSpeedCeiling(
+            var endSpeed = LongitudinalDynamics.ApplySignedAccelerationOverDistance(
                 currentSpeed,
                 midpointAcceleration,
-                stepDistance,
-                ceiling);
+                stepDistance);
             travelTime += 2d * stepDistance / (currentSpeed + endSpeed);
             currentSpeed = endSpeed;
             remainingDistance -= stepDistance;

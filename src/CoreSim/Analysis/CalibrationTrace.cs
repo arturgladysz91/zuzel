@@ -36,8 +36,8 @@ public sealed record CalibrationStepSample(
     float EntrySurfaceRuts,
     float EntrySurfaceMoisture,
     float EntrySurfaceEffectiveGrip,
-    float? AttainableTopSpeedMetersPerSecond,
-    /// <summary>Net acceleration at the start of the TurnExit positive-drive profile.</summary>
+    float? FullDriveEquilibriumSpeedMetersPerSecond,
+    /// <summary>Signed net acceleration at the start of the TurnExit full-drive profile.</summary>
     float? TurnExitNetAccelerationMetersPerSecondSquared,
     float? TurnExitAccelerationDistanceMeters,
     float? TurnExitCruiseDistanceMeters,
@@ -57,7 +57,8 @@ public sealed record CalibrationStepSample(
     float? StandingStartEntryNetAccelerationMetersPerSecondSquared = null,
     float? StandingStartTimeTo70KphSeconds = null,
     float? StandingStartSpeedAtTwoSecondsMetersPerSecond = null,
-    float? StandingStartPreparationDistanceMeters = null);
+    float? StandingStartPreparationDistanceMeters = null,
+    float? TurnExitDecelerationDistanceMeters = null);
 
 public sealed record CalibrationLapSummary(
     int RiderId,

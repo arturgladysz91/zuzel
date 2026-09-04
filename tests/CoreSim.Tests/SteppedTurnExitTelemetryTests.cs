@@ -12,6 +12,34 @@ public sealed class SteppedTurnExitTelemetryTests
     private static readonly TrackSurfaceState PerfectSurface = new(1f, 0f, 0.35f);
 
     [Fact]
+    public void NaturalTurnExitDecelerationAndEquilibriumAreExportedFromProduction()
+    {
+        var track = new Track(new[] { new TrackSegment(0, SegmentType.TurnExit) },
+            new TrackGeometry(60f, 200f, 1f, 0.3f));
+        var rider = Rider(1, 0, 0f);
+        var force = LongitudinalDynamics.CalculateTurnExitAvailableDriveForceNewtons(
+            rider.Profile.Skills, rider.ActiveSetup, PerfectSurface);
+        var equilibrium = LongitudinalDynamics.CalculateFullDriveEquilibriumSpeedMetersPerSecond(force, rider.ActiveSetup);
+        rider.Speed = equilibrium + 5f;
+        var trace = CalibrationRunner.RunHeat(track, TrackState.CreateDefault(track, PerfectSurface),
+            new List<RiderState> { rider }, new HoldLaneDecisionModel(),
+            Options(laps: 1) with { Weather = new WeatherState(WeatherCondition.Cloudy, 0f, 0f) }, heatId: 17);
+        var sample = Assert.Single(trace.StepSamples);
+        Assert.Equal(equilibrium, sample.FullDriveEquilibriumSpeedMetersPerSecond);
+        Assert.True(sample.TurnExitNetAccelerationMetersPerSecondSquared < 0f);
+        Assert.InRange(MathF.Abs(sample.TravelledMeters - sample.TurnExitDecelerationDistanceMeters!.Value), 0f, 0.00001f);
+        Assert.Equal(sample.TravelledMeters, sample.TurnExitAccelerationDistanceMeters
+            + sample.TurnExitCruiseDistanceMeters + sample.TurnExitDecelerationDistanceMeters);
+        var rows = CalibrationCsvExporter.ExportSteps(trace).Split('\n', StringSplitOptions.RemoveEmptyEntries);
+        var header = rows[0].Split(',');
+        var values = rows[1].Split(',');
+        Assert.Equal(sample.TurnExitDecelerationDistanceMeters!.Value.ToString("R", System.Globalization.CultureInfo.InvariantCulture),
+            values[Array.IndexOf(header, "TurnExitDecelerationDistanceMeters")]);
+        Assert.Equal(equilibrium.ToString("R", System.Globalization.CultureInfo.InvariantCulture),
+            values[Array.IndexOf(header, "FullDriveEquilibriumSpeedMetersPerSecond")]);
+    }
+
+    [Fact]
     public void TurnExitDiagnosticsExposeActualProductionDriveProfile()
     {
         var resolved = ResolveSingle(SegmentType.TurnExit, Rider(1, 1, 12f));
@@ -22,8 +50,7 @@ public sealed class SteppedTurnExitTelemetryTests
             resolved.Snapshot.Rider(1).Profile.Skills,
             resolved.Snapshot.Rider(1).ActiveSetup,
             diagnostics.EntrySurface,
-            diagnostics.TravelledMeters,
-            diagnostics.AttainableTopSpeedMetersPerSecond!.Value);
+            diagnostics.TravelledMeters);
 
         Assert.Equal(expected, diagnostics.TurnExitDriveProfile);
         Assert.Equal(expected.ExitSpeedMetersPerSecond, change.Speed);
@@ -83,7 +110,7 @@ public sealed class SteppedTurnExitTelemetryTests
         Assert.NotNull(sample.TurnExitProfileTravelTimeSeconds);
         Assert.Equal(
             sample.TravelledMeters,
-            sample.TurnExitAccelerationDistanceMeters + sample.TurnExitCruiseDistanceMeters);
+            sample.TurnExitAccelerationDistanceMeters + sample.TurnExitCruiseDistanceMeters + sample.TurnExitDecelerationDistanceMeters);
     }
 
     [Fact]
@@ -117,6 +144,7 @@ public sealed class SteppedTurnExitTelemetryTests
                  {
                      "TurnExitAccelerationDistanceMeters",
                      "TurnExitCruiseDistanceMeters",
+                     "TurnExitDecelerationDistanceMeters",
                      "TurnExitProfileTravelTimeSeconds",
                  })
         {

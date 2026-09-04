@@ -196,7 +196,7 @@ public sealed class CalibrationTelemetryHarnessTests
         var resolved = ResolveStep(track, new List<RiderState> { rider });
         Assert.Equal(SegmentOutcome.Crash, Assert.Single(resolved.Changes).Outcome);
         Assert.Null(Assert.Single(resolved.Diagnostics).TurnExitNetAccelerationMetersPerSecondSquared);
-        Assert.Null(Assert.Single(resolved.Diagnostics).AttainableTopSpeedMetersPerSecond);
+        Assert.Null(Assert.Single(resolved.Diagnostics).FullDriveEquilibriumSpeedMetersPerSecond);
     }
 
     [Fact]
@@ -220,7 +220,7 @@ public sealed class CalibrationTelemetryHarnessTests
         Assert.Null(diagnostics.StraightProfile);
         Assert.Null(diagnostics.TurnEntryScrubProfile);
         Assert.Null(diagnostics.TurnExitNetAccelerationMetersPerSecondSquared);
-        Assert.Null(diagnostics.AttainableTopSpeedMetersPerSecond);
+        Assert.Null(diagnostics.FullDriveEquilibriumSpeedMetersPerSecond);
     }
 
     [Fact]
@@ -481,7 +481,7 @@ public sealed class CalibrationTelemetryHarnessTests
         var lines = CalibrationCsvExporter.ExportSteps(trace).Split('\n', StringSplitOptions.RemoveEmptyEntries);
         var header = lines[0].Split(',');
         var row = lines[1].Split(',');
-        Assert.Equal(string.Empty, row[Array.IndexOf(header, "AttainableTopSpeedMetersPerSecond")]);
+        Assert.Equal(string.Empty, row[Array.IndexOf(header, "FullDriveEquilibriumSpeedMetersPerSecond")]);
         Assert.Equal(string.Empty, row[Array.IndexOf(header, "StraightProfileTravelTimeSeconds")]);
         Assert.Equal(string.Empty, row[Array.IndexOf(header, "TurnEntryScrubTravelTimeSeconds")]);
     }

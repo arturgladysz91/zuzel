@@ -16,7 +16,7 @@ public sealed class StandingStartTelemetryTests
         var d = Assert.Single(step.Diagnostics);
         var rider = step.Snapshot.Riders[0];
         var expected = LongitudinalDynamics.CalculateStandingStartLaunchProfile(rider.Profile.Skills,
-            rider.ActiveSetup, d.EntrySurface, d.TravelledMeters, d.AttainableTopSpeedMetersPerSecond!.Value,
+            rider.ActiveSetup, d.EntrySurface, d.TravelledMeters,
             FirstTurnApproachTarget(step));
         Assert.Equal(expected, d.StandingStartLaunchProfile);
         Assert.Equal(expected.ExitSpeedMetersPerSecond, Assert.Single(step.Changes).Speed);

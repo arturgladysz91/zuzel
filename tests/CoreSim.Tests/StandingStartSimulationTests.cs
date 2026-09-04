@@ -135,7 +135,7 @@ public sealed class StandingStartSimulationTests
         var step = Resolve(track, new[] { rider }, state, targetLane: 2);
         var surface = step.Snapshot.TrackState.SampleSurface(0, 1.25f);
         var expected = LongitudinalDynamics.CalculateStandingStartLaunchProfile(rider.Profile.Skills,
-            rider.ActiveSetup, surface, 30f, 23f);
+            rider.ActiveSetup, surface, 30f);
         Assert.Equal(expected, Launch(step));
         Assert.Equal(surface, Assert.Single(step.Diagnostics).EntrySurface);
         Assert.NotEqual(surface, step.Snapshot.TrackState.SampleSurface(0, Assert.Single(step.Changes).LateralPosition));
@@ -185,8 +185,7 @@ public sealed class StandingStartSimulationTests
             var rider = step.Snapshot.Rider(d.RiderId);
             var change = step.Changes.Single(c => c.RiderId == d.RiderId);
             Assert.Equal(LongitudinalDynamics.CalculateForceBasedTurnExitDriveProfile(change.PhysicsSpeed,
-                rider.Profile.Skills, rider.ActiveSetup, d.EntrySurface, d.TravelledMeters,
-                d.AttainableTopSpeedMetersPerSecond!.Value), d.TurnExitDriveProfile);
+                rider.Profile.Skills, rider.ActiveSetup, d.EntrySurface, d.TravelledMeters), d.TurnExitDriveProfile);
         }
     }
 
@@ -200,7 +199,7 @@ public sealed class StandingStartSimulationTests
         Assert.Null(d.StandingStartLaunchProfile);
         var deceleration = LongitudinalDynamics.CalculateCornerEntryDecelerationMetersPerSecondSquared(rider.Profile.Skills, Perfect);
         Assert.Equal(LongitudinalDynamics.CalculateForceBasedStraightSpeedProfile(12f, rider.Profile.Skills,
-            rider.ActiveSetup, Perfect, deceleration, 30f, 23f, null), d.StraightProfile);
+            rider.ActiveSetup, Perfect, deceleration, 30f, null), d.StraightProfile);
     }
 
     [Fact]
