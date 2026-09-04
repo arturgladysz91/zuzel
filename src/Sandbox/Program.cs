@@ -4,7 +4,7 @@ using CoreSim.Decisions;
 using CoreSim.Race;
 using CoreSim.Setup;
 
-var track = Track.CreateExample();
+var track = Track.CreateStandingStartExample();
 var trackState = TrackState.CreateDefault(track);
 
 var profiles = new[]
@@ -41,6 +41,7 @@ var options = new HeatSimulationOptions
     Laps = 4,
     Seed = 2026,
     Weather = WeatherState.LightRain,
+    EnableLogging = false,
 };
 var calibrationCollector = new CalibrationTraceCollector(track, options, heatId: 1);
 var result = simulator.SimulateHeat(
@@ -52,8 +53,15 @@ var result = simulator.SimulateHeat(
     observer: calibrationCollector);
 var calibrationTrace = calibrationCollector.Complete(result);
 
-foreach (var line in result.Log.Lines)
-    Console.WriteLine(line);
+var launch = calibrationTrace.StepSamples.First(sample => sample.RiderId == 1);
+var firstTurn = calibrationTrace.StepSamples.FirstOrDefault(sample =>
+    sample.RiderId == 1 && sample.SegmentType == SegmentType.TurnEntry);
+Console.WriteLine($"\nProvisional standing start rider=1: reaction={launch.StandingStartReactionTimeSeconds:F3}s "
+    + $"movement={launch.StandingStartMovementTimeSeconds:F3}s total={launch.StandingStartProfileTotalTimeSeconds:F3}s "
+    + $"exit={launch.ExitSpeedMetersPerSecond:F3}m/s");
+Console.WriteLine($"TimeTo70={launch.StandingStartTimeTo70KphSeconds?.ToString("F3") ?? "not reached"}; "
+    + $"SpeedAt2s={launch.StandingStartSpeedAtTwoSecondsMetersPerSecond?.ToString("F3") ?? "not available"}; "
+    + $"first TurnEntry entry={firstTurn?.EntrySpeedMetersPerSecond.ToString("F3") ?? "not available"}m/s");
 
 Console.WriteLine("\nClassification:");
 foreach (var rider in result.Classification)

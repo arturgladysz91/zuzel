@@ -364,13 +364,54 @@ uporządkowany i używa invariant culture.
 Harness nie wykonuje RNG i nie zmienia fizyki ani wyniku biegu. Od #29 raportuje
 również faktycznie użyty `TurnExitDriveProfile`; zachowany scalar
 `TurnExitNetAcceleration` oznacza entry net acceleration początku profilu, a nie
-stałe acceleration dla całego segmentu. Obecny first-lap initial bootstrap
-**nie jest skalibrowanym standing startem**, artificial `AttainableTopSpeed`
-nadal istnieje, a signed negative drag/coasting nadal nie jest modelowany.
-Roadmap (numery PR są tylko opisem kolejności prac): standing-start/launch,
-signed net force i natural resistance
+stałe acceleration dla całego segmentu. Od #30 jawnie oznaczony start używa
+production `StandingStartLaunchProfile`; stary bootstrap pozostaje tylko dla
+kompatybilności. Artificial `AttainableTopSpeed` nadal istnieje, a signed
+negative drag/coasting nadal nie jest modelowany.
+Roadmap: signed net force i natural resistance
 deceleration przygotowujące usunięcie artificial ceiling, a dopiero potem
 porównanie z real-world calibration targets.
+
+## Standing start / launch foundation — PROVISIONAL
+
+`Track.CreateExample()` zachowuje dotychczasowe 8 segmentów i bootstrap.
+Nowy `Track.CreateStandingStartExample()` (także w Sandbox) umieszcza start/metę
+na canonical lap boundary: `Straight 30 m (start) → TurnEntry → TurnMiddle →
+TurnExit → Straight 60 m → TurnEntry → TurnMiddle → TurnExit → Straight 30 m
+(finish)`. Home straight to finish-half + start-half po dwóch stronach granicy
+okrążenia: 30 + 30 zastępuje 60 m, nie dodaje dystansu ani wirtualnego launch.
+
+`TrackSegment` ma opcjonalny `float? StraightLengthMetersOverride` (finite, >0,
+tylko Straight) i `bool IsStandingStartSegment=false` (tylko Straight).
+Immutable copy zachowuje oba pola. Track dopuszcza najwyżej jeden oznaczony
+segment, wyłącznie pod index 0, z końcowym Straight. Launch działa tylko w
+advanced physics, lap 0 / segment 0, na oznaczonym segmencie, z dokładnego
+canonical/physical początku, `NotStarted`, speed <= 0 i dodatnim pozostałym
+dystansem. Wtedy entry/physics speed jest dokładnie 0; kolejne okrążenia używają
+zwykłego Straight. `CreateExample`, legacy, #24 TurnEntry, #29 TurnExit i normal
+Straight nie zmieniają formuł; lookahead nadal nie przekracza jednego segmentu.
+
+Reaction: `0.30 + (0.20 - 0.30) * StartNorm` s.
+Reference acceleration: `(4.5 + (5.5 - 4.5) * StartNorm) *
+(1.10 + (0.90 - 1.10) * Gearing) * (0.75 + 0.25 * EffectiveGrip)` m/s².
+Reference force: `142 * referenceAcceleration + resistance(0)` N.
+Launch współdzieli `40 + 0.20*v²` resistance, one-gear envelope, exact 1 m
+distance steps i midpoint, z niezmienionym artificial ceiling `21–25 m/s ×
+0.94–1.06`. Surface jest próbkowana raz przy wejściowym `LateralPosition`.
+TractionBias i morale nie wpływają na reaction ani launch force.
+
+Reaction nie przesuwa motocykla. Elapsed = reaction + movement; lateral budget
+= tylko movement. Rzeczywiste launch exit speed trafia do pierwszego TurnEntry.
+Profil i diagnostics zachowują czas pre-contact, final sample duration może
+zawierać późniejszy LostRhythm penalty. CSV dopisuje osiem nullable pól startu.
+`TimeTo70KphSeconds` (od taśmy, z interpolacją kroku) oraz
+`SpeedAtTwoSecondsMetersPerSecond` są outputs, nie targetami; null oznacza
+nieosiągnięty próg albo koniec launch przed 2 s.
+
+Wszystkie launch constants są **PROVISIONAL / NOT REAL-WORLD CALIBRATED**.
+Brak clutch, RPM, torque/power, real sprockets, wheelspin, slip ratio, traction
+cap, false starts, reaction RNG i gate-specific reaction bonus. Najpierw signed
+net force/natural resistance deceleration, dopiero potem real-world calibration.
 
 ---
 

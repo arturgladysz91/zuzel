@@ -81,7 +81,7 @@ public static class LaneModel
         ArgumentNullException.ThrowIfNull(segment);
         ArgumentNullException.ThrowIfNull(geometry);
         return segment.Type == SegmentType.Straight
-            ? geometry.StraightLengthMeters
+            ? segment.StraightLengthMetersOverride ?? geometry.StraightLengthMeters
             : TurnArcLengthMeters(lateralPosition, geometry);
     }
 }

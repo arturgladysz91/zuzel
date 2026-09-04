@@ -48,7 +48,15 @@ public sealed record CalibrationStepSample(
     float? StraightProfileTravelTimeSeconds,
     float? TurnEntryScrubDecelerationDistanceMeters,
     float? TurnEntryScrubCarryDistanceMeters,
-    float? TurnEntryScrubTravelTimeSeconds);
+    float? TurnEntryScrubTravelTimeSeconds,
+    float? StandingStartReactionTimeSeconds = null,
+    float? StandingStartMovementTimeSeconds = null,
+    float? StandingStartProfileTotalTimeSeconds = null,
+    float? StandingStartAccelerationDistanceMeters = null,
+    float? StandingStartCruiseDistanceMeters = null,
+    float? StandingStartEntryNetAccelerationMetersPerSecondSquared = null,
+    float? StandingStartTimeTo70KphSeconds = null,
+    float? StandingStartSpeedAtTwoSecondsMetersPerSecond = null);
 
 public sealed record CalibrationLapSummary(
     int RiderId,

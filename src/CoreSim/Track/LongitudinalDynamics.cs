@@ -39,11 +39,39 @@ public readonly record struct TurnEntryScrubProfile(
     float CarryDistanceMeters);
 
 /// <summary>
+/// Pre-contact traversal from rest, measured from tape movement. Reaction is
+/// stationary; only MovementTimeSeconds contributes to lateral movement.
+/// Start metrics are observed outputs, never physics calibration targets.
+/// </summary>
+public readonly record struct StandingStartLaunchProfile(
+    float ReactionTimeSeconds,
+    float MovementTimeSeconds,
+    float TotalTimeSeconds,
+    float ExitSpeedMetersPerSecond,
+    float PeakSpeedMetersPerSecond,
+    float AccelerationDistanceMeters,
+    float CruiseDistanceMeters,
+    float EntryNetAccelerationMetersPerSecondSquared,
+    float? TimeTo70KphSeconds,
+    float? SpeedAtTwoSecondsMetersPerSecond);
+
+/// <summary>
 /// Deterministic longitudinal motion helpers. The current acceleration values
 /// are provisional first-model parameters, not final motorcycle performance data.
 /// </summary>
 public static class LongitudinalDynamics
 {
+    // PROVISIONAL / NOT REAL-WORLD CALIBRATED. No RNG, morale, gate bonus,
+    // clutch, wheelspin or TractionBias multiplier is part of this foundation.
+    public const float ProvisionalStandingStartSlowReactionSeconds = 0.30f;
+    public const float ProvisionalStandingStartFastReactionSeconds = 0.20f;
+    public const float ProvisionalStandingStartMinAccelerationMetersPerSecondSquared = 4.5f;
+    public const float ProvisionalStandingStartMaxAccelerationMetersPerSecondSquared = 5.5f;
+
+    // Telemetry observation thresholds, NOT physics calibration constants.
+    public const float StandingStartTelemetry70KphMetersPerSecond = 70f / 3.6f;
+    public const float StandingStartTelemetryObservationTimeSeconds = 2f;
+
     public const float MinTurnExitAccelerationMetersPerSecondSquared = 0.60f;
     public const float MaxTurnExitAccelerationMetersPerSecondSquared = 1.40f;
     public const float LowGearingDriveMultiplier = 1.10f;
@@ -57,7 +85,7 @@ public static class LongitudinalDynamics
 
     // PROVISIONAL / NOT REAL-WORLD CALIBRATED GAME MODEL INPUTS. These
     // values provide only the force-based positive-drive foundation shared by
-    // TurnExit and Straight; mass is nominal system mass, not a rider attribute.
+    // TurnExit, Straight and launch; mass is nominal system mass, not a rider attribute.
     public const float ProvisionalNominalSystemMassKilograms = 142f;
     public const float ProvisionalBaseResistanceForceNewtons = 40f;
     public const float ProvisionalQuadraticResistanceCoefficient = 0.20f;
@@ -193,6 +221,118 @@ public static class LongitudinalDynamics
         var acceleration = baseAcceleration * gearingDriveMultiplier * surfaceDriveMultiplier;
         ValidateNonNegativeFinite(acceleration, "result");
         return acceleration;
+    }
+
+    public static float CalculateStandingStartReactionTimeSeconds(RiderSkills skills)
+    {
+        ArgumentNullException.ThrowIfNull(skills);
+        var reactionTime = ProvisionalStandingStartSlowReactionSeconds
+            + (ProvisionalStandingStartFastReactionSeconds - ProvisionalStandingStartSlowReactionSeconds)
+            * RiderSkills.Normalize(skills.Start);
+        ValidateNonNegativeFinite(reactionTime, "result");
+        return reactionTime;
+    }
+
+    public static float CalculateStandingStartReferenceDriveAccelerationMetersPerSecondSquared(
+        RiderSkills skills,
+        BikeSetup setup,
+        TrackSurfaceState surface)
+    {
+        ArgumentNullException.ThrowIfNull(skills);
+        ArgumentNullException.ThrowIfNull(setup);
+        var baseAcceleration = ProvisionalStandingStartMinAccelerationMetersPerSecondSquared
+            + (ProvisionalStandingStartMaxAccelerationMetersPerSecondSquared
+                - ProvisionalStandingStartMinAccelerationMetersPerSecondSquared)
+            * RiderSkills.Normalize(skills.Start);
+        var gearingDriveMultiplier = LowGearingDriveMultiplier
+            + (HighGearingDriveMultiplier - LowGearingDriveMultiplier) * setup.Gearing;
+        var surfaceDriveMultiplier = MinSurfaceDriveMultiplier
+            + SurfaceDriveMultiplierRange * surface.EffectiveGrip;
+        var acceleration = baseAcceleration * gearingDriveMultiplier * surfaceDriveMultiplier;
+        ValidateNonNegativeFinite(acceleration, "result");
+        return acceleration;
+    }
+
+    public static float CalculateStandingStartAvailableDriveForceNewtons(
+        RiderSkills skills,
+        BikeSetup setup,
+        TrackSurfaceState surface)
+    {
+        var force = ProvisionalNominalSystemMassKilograms
+            * CalculateStandingStartReferenceDriveAccelerationMetersPerSecondSquared(skills, setup, surface)
+            + CalculateLongitudinalResistanceForceNewtons(0f);
+        ValidateNonNegativeFinite(force, "result");
+        return force;
+    }
+
+    public static StandingStartLaunchProfile CalculateStandingStartLaunchProfile(
+        RiderSkills skills,
+        BikeSetup setup,
+        TrackSurfaceState surface,
+        float distanceMeters,
+        float speedCeilingMetersPerSecond)
+    {
+        ValidateNonNegativeFinite(distanceMeters, nameof(distanceMeters));
+        ValidatePositiveFinite(speedCeilingMetersPerSecond, nameof(speedCeilingMetersPerSecond));
+        var reactionTime = CalculateStandingStartReactionTimeSeconds(skills);
+        var referenceForce = CalculateStandingStartAvailableDriveForceNewtons(skills, setup, surface);
+        var entryAcceleration = CalculateNetPositiveDriveAccelerationMetersPerSecondSquared(0f, referenceForce, setup);
+        var speed = 0f;
+        var movementTime = 0d;
+        var accelerationDistance = 0d;
+        var cruiseDistance = 0d;
+        var lastStepAccelerated = false;
+        float? timeTo70 = null;
+        float? speedAtTwoSeconds = reactionTime >= StandingStartTelemetryObservationTimeSeconds ? 0f : null;
+
+        foreach (var integrationStep in CreateLongitudinalIntegrationSteps(distanceMeters))
+        {
+            var ds = (float)integrationStep;
+            var endSpeed = CalculateMidpointPositiveDriveEndSpeedMetersPerSecond(
+                speed, ds, speedCeilingMetersPerSecond, referenceForce, setup);
+            var speedSum = (double)speed + endSpeed;
+            if (speedSum <= 0d)
+                throw new InvalidOperationException("A positive launch distance cannot be traversed at zero speed.");
+            var stepTime = 2d * ds / speedSum;
+            var stepStartTime = reactionTime + movementTime;
+            // Kinematics of this corrected production step, including any
+            // ceiling clamp. Do not interpolate over the whole launch profile.
+            var effectiveAcceleration = ((double)endSpeed * endSpeed - (double)speed * speed) / (2d * ds);
+            if (timeTo70 is null && speed < StandingStartTelemetry70KphMetersPerSecond
+                && endSpeed >= StandingStartTelemetry70KphMetersPerSecond)
+            {
+                timeTo70 = (float)(stepStartTime
+                    + (StandingStartTelemetry70KphMetersPerSecond - speed) / effectiveAcceleration);
+            }
+            if (speedAtTwoSeconds is null
+                && StandingStartTelemetryObservationTimeSeconds >= stepStartTime
+                && StandingStartTelemetryObservationTimeSeconds <= stepStartTime + stepTime)
+            {
+                var dt = StandingStartTelemetryObservationTimeSeconds - stepStartTime;
+                speedAtTwoSeconds = (float)Math.Clamp(speed + effectiveAcceleration * dt, speed, endSpeed);
+            }
+
+            movementTime += stepTime;
+            lastStepAccelerated = endSpeed - speed > LongitudinalPhaseSpeedToleranceMetersPerSecond;
+            if (lastStepAccelerated)
+                accelerationDistance += ds;
+            else
+                cruiseDistance += ds;
+            speed = endSpeed;
+        }
+
+        var distanceCorrection = distanceMeters - accelerationDistance - cruiseDistance;
+        if (lastStepAccelerated)
+            accelerationDistance += distanceCorrection;
+        else
+            cruiseDistance += distanceCorrection;
+        if (!double.IsFinite(movementTime) || movementTime + reactionTime > float.MaxValue)
+            throw new OverflowException("Launch time exceeds the finite single-precision domain.");
+        var movementTimeSeconds = (float)movementTime;
+        return new StandingStartLaunchProfile(
+            reactionTime, movementTimeSeconds, reactionTime + movementTimeSeconds,
+            speed, speed, (float)accelerationDistance, (float)cruiseDistance,
+            entryAcceleration, timeTo70, speedAtTwoSeconds);
     }
 
     public static float CalculateLongitudinalResistanceForceNewtons(

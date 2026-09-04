@@ -17,12 +17,18 @@ public sealed class Track
         ArgumentNullException.ThrowIfNull(geometry);
         if (segments.Count == 0) throw new ArgumentException("Track must have at least one segment.", nameof(segments));
         Segments = Array.AsReadOnly(segments
-            .Select(segment => new TrackSegment(segment.Id, segment.Type))
+            .Select(segment => new TrackSegment(segment.Id, segment.Type,
+                segment.StraightLengthMetersOverride, segment.IsStandingStartSegment))
             .ToArray());
+        if (Segments.Count(segment => segment.IsStandingStartSegment) > 1)
+            throw new ArgumentException("Track may contain at most one standing-start segment.", nameof(segments));
+        if (Segments.Any(segment => segment.IsStandingStartSegment)
+            && (!Segments[0].IsStandingStartSegment || Segments[^1].Type != SegmentType.Straight))
+            throw new ArgumentException("Standing start must be at index zero with a final Straight across the start/finish boundary.", nameof(segments));
         Geometry = geometry;
     }
 
-    // Przykładowy tor do uruchomienia Sandbox: 2 łuki (wejście/środek/wyjście) + 2 proste.
+    // Compatibility layout: 2 łuki (wejście/środek/wyjście) + 2 proste.
     public static Track CreateExample()
     {
         var geometry = new TrackGeometry(
@@ -46,4 +52,20 @@ public sealed class Track
 
         return new Track(segs, geometry);
     }
+
+    // Split the home straight across the canonical start/finish boundary;
+    // this changes topology, not the physical distance of a lap.
+    public static Track CreateStandingStartExample()
+        => new(new TrackSegment[]
+        {
+            new(0, SegmentType.Straight, 30f, isStandingStartSegment: true),
+            new(1, SegmentType.TurnEntry),
+            new(2, SegmentType.TurnMiddle),
+            new(3, SegmentType.TurnExit),
+            new(4, SegmentType.Straight),
+            new(5, SegmentType.TurnEntry),
+            new(6, SegmentType.TurnMiddle),
+            new(7, SegmentType.TurnExit),
+            new(8, SegmentType.Straight, 30f),
+        }, new TrackGeometry(60f, 24f, 1f, MathF.PI / 3f));
 }

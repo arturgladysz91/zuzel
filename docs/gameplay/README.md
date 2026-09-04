@@ -89,7 +89,48 @@ Model nie przelicza profilu po `MoveTowards`; surface i geometria nadal używaj�
 immutable segment-entry position. `TurnMiddle`, legacy i cały model #24
 TurnEntry są niezmienione. Zakresy `21–25 m/s` i `0.94–1.06` nadal obowiązują
 jako artificial ceiling i są **PROVISIONAL / NOT REAL-WORLD CALIBRATED**.
-Signed negative drag/coast i standing start nadal nie istnieją.
+Signed negative drag/coast nadal nie istnieje; #30 dodaje poniższy provisional standing start.
+
+### Standing start / launch — PROVISIONAL / NOT REAL-WORLD CALIBRATED
+
+`Track.CreateExample()` pozostaje 8-segmentowym compatibility layout.
+`CreateStandingStartExample()` rozdziela home straight na końcowe 30 m i
+początkowe 30 m po dwóch stronach canonical start/finish boundary. Topologia:
+marked Straight 30 → TurnEntry/Middle/Exit → Straight 60 → TurnEntry/Middle/Exit
+→ Straight 30. Długość okrążenia dla tej samej pozycji bocznej nie zmienia się.
+Nie ma wirtualnego dystansu startu; meta i lap summaries używają ostatniego
+segmentu toru, bez hardcoded segment count.
+
+`StraightLengthMetersOverride` jest opcjonalny, finite, dodatni i tylko dla
+Straight. `IsStandingStartSegment` domyślnie false, także tylko Straight;
+immutable copy zachowuje oba pola. Track dopuszcza jeden marker, wyłącznie
+index 0, i wymaga końcowego Straight. Launch dotyczy tylko advanced lap 0 /
+segment 0 z markerem, canonical i physical start dokładnie zero, NotStarted,
+speed <=0 i dodatnim pozostałym dystansem. Entry speed jest wtedy 0, bez
+bootstrapu. Kolejne okrążenia używają zwykłego Straight.
+
+Reaction = `0.30 + (0.20 - 0.30) * StartNorm` s. Reference acceleration =
+`(4.5 + (5.5 - 4.5) * StartNorm) * (1.10 + (0.90 - 1.10) * Gearing) *
+(0.75 + 0.25 * EffectiveGrip)` m/s². Reference force = `142 * acceleration +
+resistance(0)`. Dalej działają wspólne resistance `40 + 0.20*v²`, one-gear
+envelope, kroki 1 m z exact remainder i midpoint oraz dotychczasowy artificial
+ceiling `21–25 × 0.94–1.06`. Entry surface próbkujemy raz. TractionBias i morale
+nie wpływają na launch ani reaction; brak gate-specific bonusu.
+
+Elapsed obejmuje reaction + movement; lateral budget tylko movement.
+Reaction nie powoduje ruchu bocznego, dystansu ani progress. Actual exit speed
+staje się wejściem do niezmienionego #24 TurnEntry; #29 TurnExit, normal Straight,
+legacy i compatibility bootstrap pozostają bez zmian. Lookahead nadal dotyczy
+tylko bezpośrednio następnego segmentu. Existing contact działa po profilu,
+więc final duration może zawierać penalty ponad pre-contact profile total.
+
+CSV/sample dopisuje osiem nullable pól reaction/movement/total, acceleration/
+cruise distance, entry acceleration, TimeTo70 i SpeedAt2s. Metryki są outputs,
+nie targets: czas do 70 zawiera reaction i interpolację corrected step,
+speed po 2 s używa kinematyki tego kroku. Null oznacza nieosiągnięty próg lub
+koniec launch przed 2 s. Nie dopasowujemy stałych do tych wyników.
+Brak clutch, RPM, torque/power, real sprockets, wheelspin, slip ratio, traction
+cap, false starts, reaction RNG oraz signed negative coasting.
 
 ### Calibration telemetry — OBSERVATION ONLY
 
@@ -106,9 +147,9 @@ porównuje jeszcze wartości z real telemetry.
 Od #29 harness eksportuje production `TurnExitDriveProfile`: acceleration/cruise
 distance i profile travel time. Zachowany `TurnExitNetAcceleration` oznacza
 entry net acceleration początku profilu, nie jedną acceleration dla segmentu.
-FIRST-LAP INITIAL BOOTSTRAP IS NOT A CALIBRATED STANDING START. Current
-artificial attainable ceiling nadal istnieje, a signed negative drag/coasting
-nie istnieje. Roadmap: standing-start/launch, signed net force i natural
+Compatibility bootstrap nie jest fizycznym startem; jawny launch #30 pozostaje
+provisional. Current artificial attainable ceiling nadal istnieje, a signed
+negative drag/coasting nie istnieje. Roadmap: signed net force i natural
 resistance deceleration przygotowujące usunięcie ceiling, a następnie
 real-world calibration targets.
 
