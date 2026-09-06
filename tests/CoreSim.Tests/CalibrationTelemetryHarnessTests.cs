@@ -439,7 +439,11 @@ public sealed class CalibrationTelemetryHarnessTests
             var csv = CalibrationCsvExporter.ExportSteps(
                 RunCalibration(StraightTrack(), CreateRiders(1), Options(laps: 1)));
             Assert.Contains("0.5", csv);
-            Assert.DoesNotContain("0,5", csv);
+            var rows = csv.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+            var header = rows[0].Split(',');
+            var values = rows[1].Split(',');
+            Assert.Equal("0.5", values[Array.IndexOf(header, "Gearing")]);
+            Assert.Equal("0.5", values[Array.IndexOf(header, "TractionBias")]);
             Assert.DoesNotContain('\r', csv);
         }
         finally

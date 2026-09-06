@@ -436,3 +436,9 @@ signed force i natural equilibrium; następny etap to real-world calibration.
 - [ ] Zawodnicy: statystyki + styl + morale
 - [ ] Setup: sugestie menedżera vs decyzje zawodnika
 - [ ] Rozwój: wiek + kontuzje + cechy
+
+## Real-world calibration dataset and evaluator (#32)
+
+The repository contains a versioned, offline PGEE telemetry snapshot, a pure C# distribution/evaluation layer, production-path RiderSkills sweeps, and a deterministic [current-model baseline](docs/calibration/current-model-baseline.md). See [calibration.md](docs/calibration.md) for rules and reproduction.
+
+Telemetry defines distributions, not hard caps. Age is not a physics multiplier, Skill 50 is not an “average PGEE rider,” and source `speed_2s`/`curve_speed` values are gate rankings rather than numeric speeds. Absolute race times remain track-geometry context. #32 changes no physics constants; empirical physics tuning is reserved for #33.

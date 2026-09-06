@@ -17,4 +17,10 @@
     <ProjectReference Include="..\..\src\CoreSim\CoreSim.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="..\..\data\calibration\pge\v1\**\*"
+          Link="data\calibration\pge\v1\%(RecursiveDir)%(Filename)%(Extension)"
+          CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>

@@ -21,5 +21,7 @@ jobs:
         run: dotnet restore SpeedwayManager.sln
       - name: Build
         run: dotnet build SpeedwayManager.sln --configuration Release --no-restore
+      - name: Test deterministic dataset preparation rules
+        run: python -m unittest discover -s tests/calibration -p 'test_*.py'
       - name: Test
         run: dotnet test SpeedwayManager.sln --configuration Release --no-build --verbosity normal
