@@ -1,0 +1,56 @@
+{
+  "authentication": "No credentials or authentication are used by this offline preparation pipeline.",
+  "calibration_dataset_version": "pge-v1",
+  "generated_at_utc": "2026-09-05T21:03:47.868178Z",
+  "schema_version": "1.0",
+  "source_description": "PGE Ekstraliga public Firestore telemetry",
+  "source_row_counts": {
+    "downloaded_matches": 100,
+    "heats_csv_rows": 6772,
+    "matches_csv_rows": 100,
+    "telemetry_detail_records": 6021,
+    "telemetry_full_csv_rows": 6789
+  },
+  "sources": [
+    {
+      "file_name": "telemetry_full.csv",
+      "row_or_document_count": 6789,
+      "sha256": "7c9f9c50eddab7fcc6ab1bd24aa3b3fd83fcc7cdd83c7ac186609cdc503cb355"
+    },
+    {
+      "file_name": "matches.csv",
+      "row_or_document_count": 100,
+      "sha256": "4501f897d5e3d8651bc57c5e8035bd7cc49cbe6917cb9e7da14f8766054347ef"
+    },
+    {
+      "file_name": "heats.csv",
+      "row_or_document_count": 6772,
+      "sha256": "5941c7241d4059f44c1824a8399e8584918a193666df41c96c6d170b2615d0a9"
+    },
+    {
+      "file_name": "run_summary.json",
+      "row_or_document_count": 100,
+      "sha256": "78d9975f805dbf11b125d25a88e53c11b093523981e5b43e6386517616decb2f"
+    },
+    {
+      "file_name": "README.md",
+      "row_or_document_count": null,
+      "sha256": "2e1554418e7ce0d2f4b098b62c16b4ecc38b7549d798af1966dbe62f86a94760"
+    },
+    {
+      "file_name": "download_telemetry.py",
+      "row_or_document_count": null,
+      "sha256": "0e30795a6871e2b83ad9784387157fc1a4c72d49b9e67670d620dc7a30c1e5dc"
+    },
+    {
+      "file_name": "sample_match_raw.json",
+      "row_or_document_count": 1,
+      "sha256": "d3ee80f1a28796b34c19f6e6d666ce3cddfc0188a4705361ac16a3f49399f020"
+    },
+    {
+      "file_name": "7734.json",
+      "row_or_document_count": 1,
+      "sha256": "d3ee80f1a28796b34c19f6e6d666ce3cddfc0188a4705361ac16a3f49399f020"
+    }
+  ]
+}

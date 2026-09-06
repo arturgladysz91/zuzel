@@ -4,6 +4,20 @@ using CoreSim.Decisions;
 using CoreSim.Race;
 using CoreSim.Setup;
 
+if (args.Length > 0)
+{
+    if (args.Length == 3 && StringComparer.Ordinal.Equals(args[0], "calibration-report"))
+    {
+        CalibrationBaselineReportWriter.Write(args[1], args[2]);
+        Console.WriteLine($"Wrote deterministic calibration report: {args[2]}");
+        return;
+    }
+
+    Console.Error.WriteLine("Usage: Sandbox calibration-report <dataset-directory> <output-markdown>");
+    Environment.ExitCode = 2;
+    return;
+}
+
 var track = Track.CreateStandingStartExample();
 var trackState = TrackState.CreateDefault(track);
 

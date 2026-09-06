@@ -132,3 +132,9 @@ The core returns factual internal results and logs. Events created in one step a
 A starting-gate balance report must rotate the same four rider profiles evenly through gates 1..4. This prevents rider strength from being mistaken for gate advantage. Large diagnostic batches may disable log capture, but this must not change track evolution or the simulated classification.
 
 A gameplay layer is responsible for hiding exact values and exposing observations, feedback and uncertainty to the player.
+
+## Calibration evidence boundary (#32)
+
+The versioned PGEE snapshot and evaluator measure the current production model without modifying it. Real Vmax, average speed, first-lap penalty, and within-heat spreads are distribution envelopes rather than caps or equality targets. Absolute heat/lap time and distance remain context until a concrete simulated track matches real geometry. Source `speed_2s` and `curve_speed` are gate rankings, not individual physical speeds; reaction has separate literature context supplied in the task specification.
+
+RiderSkills express capability; age/category does not apply a speed, start, or corner multiplier. Skill 50 is not assigned the meaning “average PGEE rider,” and #32 adds neither new execution RNG nor real-rider skill labels. The calibration observer and added skill metadata cannot affect results. #33 is the first stage allowed to change empirical calibration parameters after the evidence is reviewed.

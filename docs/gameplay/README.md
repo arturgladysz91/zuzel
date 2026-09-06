@@ -259,3 +259,9 @@ data/
 ```
 
 Dokładne pliki danych powstaną razem z systemem, który je waliduje. Nie tworzymy pustych konfiguracji bez konsumenta i testu schematu.
+
+## Calibration evidence and gameplay meaning
+
+The PGEE snapshot in `data/calibration/pge/v1` is validation evidence for distributions, not a set of hard limits or a roster mapping. Rider age/category never supplies a physics multiplier, no real rider receives an arbitrary RiderSkills value, and Skill 50 does not mean “average PGE Ekstraliga.” Individual performance may later include execution variation, but #32 adds no such RNG.
+
+CleanPhysics is only a conservative analysis subset; other retained rows are not declared invalid. Absolute times depend on exact track geometry, so the example track is not fitted directly to every PGEE venue. Vmax remains a distribution. Source `speed_2s` and `curve_speed` are gate rankings, while reaction populations come from separate task-supplied literature context. #32 provides measurement/evaluation infrastructure without physics changes; #33 is the first empirical tuning step.

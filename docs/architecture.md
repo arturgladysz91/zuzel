@@ -79,6 +79,12 @@ This harness reports what production does now and contains no real-world target 
 
 The presentation layer must consume results and logs; it must never change the simulation outcome.
 
+## Real-world calibration boundary (#32)
+
+External PGEE files are normalized offline by the standard-library Python tool into `data/calibration/pge/v1`; CoreSim never depends on Python or performs source file/network access. `RealWorldCalibrationDataset` accepts text, validates the snapshot, and exposes typed distributions. `CalibrationSkillSweep` measures only the production `CalibrationRunner -> HeatSimulator` path, and `RealWorldCalibrationEvaluator` emits component comparisons without an optimizer or overall score. Sandbox owns filesystem I/O and deterministic Markdown report generation.
+
+Telemetry values are population envelopes, not hard limits. Source gate `speed_2s`/`curve_speed` values remain rankings, reaction observations come from separate task-supplied literature context, and absolute timing stays context until concrete track geometry matches. Rider category is not a physics multiplier; no real rider is assigned a game skill. #32 is observational and changes no physics constants or outcomes; #33 is the first empirical-physics tuning boundary.
+
 ## Compatibility
 
 Compatibility is intentionally limited to `HeatSimulator.Simulate`, `SegmentPhysics.Apply(segment, lane, speed)` and the older `IRiderDecisionModel.Decide(TrackSegment, RiderState)` overload. The legacy heat pass also uses the four-phase commit while retaining its original neutral-surface physics, and legacy decision models receive a detached mutable rider copy.
