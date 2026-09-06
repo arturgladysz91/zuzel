@@ -325,7 +325,7 @@ internal static class CalibrationBaselineReportWriter
             builder.AppendLine($"- {Labels[item.Definition.MetricId]}: balanced model P50 {F(item.Comparison.SimulationValue)} {item.Definition.Unit}, real P50 {F(item.Comparison.RealValue)} {item.Definition.Unit}, percentile {F(position)} — {assessment}.");
         }
         builder.AppendLine();
-        builder.AppendLine("This is a measurement result for review, not a recommendation or an automatically selected set of constants. Physics calibration belongs to PR #33.");
+        builder.AppendLine("This is a measurement result for review, not a recommendation or an automatically selected set of constants. Physics calibration remains future work.");
         builder.AppendLine();
     }
 

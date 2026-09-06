@@ -79,14 +79,53 @@ python tools/calibration/prepare_pge_dataset.py \
   --generated-at-utc 2026-09-05T21:03:47.868178Z
 ```
 
-Generate the unchanged current-model report:
+Generate a report of the checked-out model into a disposable output. The committed
+`current-model-baseline.md` is the historical PR #32 snapshot and must not be
+overwritten after a geometry change:
 
 ```text
-dotnet run --project src/Sandbox/Sandbox.csproj --configuration Release -- calibration-report data/calibration/pge/v1 docs/calibration/current-model-baseline.md
+dotnet run --project src/Sandbox/Sandbox.csproj --configuration Release -- calibration-report data/calibration/pge/v1 <temporary-output.md>
 ```
 
-Both committed artifacts are deterministic. CI runs Python standard-library tests plus the .NET build/test suite and performs no telemetry download.
+The dataset and reports are deterministic. CI runs Python standard-library tests plus the .NET build/test suite and performs no telemetry download.
+
+## Physical-width observation (#33)
+
+`TrackGeometry` now stores separate straight/turn physical widths. Lane references
+and continuous lateral positions remain dimensionless `0..4`, with fraction
+`position / 4`. Usable span subtracts the 1 m inner measurement/reference offset
+and a separate provisional 1 m outer game margin. `InnerRadiusMeters` describes
+the inner reference trajectory, not the kerb. The standing example uses 10/14 m
+widths; these are minimum-width examples rather than a fit to every real venue.
+The synthetic compatibility example uses 6/6 m.
+
+The geometric reference is [FIM Track Racing Circuits Standards 2026](https://www.fim-moto.com/en/documents/view/fim-standards-for-track-racing-circuits):
+track length measured 1 m from the inner edge, 260–425 m for speedway, minimum
+straight width 10 m and bend width 14 m. Only the inner reference trajectory is
+the length reference; outer trajectory distance is not official track length.
+Generic geometry validation permits synthetic tracks with widths greater than
+the 2 m sum of margins. The optional width-envelope helper does not certify a
+whole circuit or run automatically in the constructor.
+
+The [physical-width impact report](calibration/physical-width-impact.md) compares
+the historical #32 measurements with the current production sweep/evaluator:
+
+```text
+dotnet run --project src/Sandbox/Sandbox.csproj --configuration Release -- physical-width-impact-report data/calibration/pge/v1 docs/calibration/current-model-baseline.md docs/calibration/physical-width-impact.md
+```
+
+Radius, arc length, contact/occupancy separation and lateral displacement use
+local physical metres. Surface storage remains five normalized bands with
+unchanged wear/grip formulas. Width transitions remain segment-local without
+extra movement/time/distance; gradual transitions, active lateral diagonal/spiral
+path correction and physical A/B/C/D gates are future work. No speed/performance
+constants changed and no calibration was performed. The six versioned dataset
+files and historical report remain byte-identical.
 
 ## Change boundary
 
-PR #32 changes no constants or production result. It adds the evidence, metadata, controlled measurements, comparison semantics, and current-model baseline needed for review. PR #33 is the first PR allowed to modify empirical physics calibration parameters, after these gaps and metric definitions are reviewed.
+PR #32 adds measurement infrastructure. PR #33 changes only physical lateral
+geometry and its required conversions, and records the observed impact. Earlier
+roadmap text in the historical #32 report assigned tuning to #33; the revised
+specification supersedes that plan. Empirical performance tuning remains future
+work.

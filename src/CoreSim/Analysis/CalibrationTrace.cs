@@ -111,7 +111,8 @@ public sealed class CalibrationTrace
         TrackGeometry = new TrackGeometry(
             trackGeometry.StraightLengthMeters,
             trackGeometry.InnerRadiusMeters,
-            trackGeometry.LaneSpacingMeters,
+            trackGeometry.StraightWidthMeters,
+            trackGeometry.TurnWidthMeters,
             trackGeometry.TurnSegmentAngleRadians);
         Options = options with { };
         _stepSamples = Array.AsReadOnly(stepSamples

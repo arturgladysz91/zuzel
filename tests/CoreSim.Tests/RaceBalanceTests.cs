@@ -41,7 +41,8 @@ public sealed class RaceBalanceTests
 
         Assert.Equal(track.Geometry.InnerRadiusMeters, innerRadius);
         Assert.Equal(
-            track.Geometry.InnerRadiusMeters + LaneModel.MaxLane * track.Geometry.LaneSpacingMeters,
+            track.Geometry.InnerRadiusMeters
+                + LaneModel.UsableRacingWidthMeters(SegmentType.TurnMiddle, track.Geometry),
             outerRadius);
         Assert.True(outerRadius > innerRadius);
         Assert.True(outerDistance > innerDistance);

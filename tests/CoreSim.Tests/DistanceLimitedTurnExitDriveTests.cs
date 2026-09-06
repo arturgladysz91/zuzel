@@ -254,7 +254,8 @@ public sealed class DistanceLimitedTurnExitDriveTests
         var geometry = new TrackGeometry(
             straightLengthMeters: TrackGeometry.Default.StraightLengthMeters,
             innerRadiusMeters: 200f,
-            laneSpacingMeters: TrackGeometry.Default.LaneSpacingMeters,
+            straightWidthMeters: TrackGeometry.Default.StraightWidthMeters,
+            turnWidthMeters: TrackGeometry.Default.TurnWidthMeters,
             turnSegmentAngleRadians: TrackGeometry.Default.TurnSegmentAngleRadians);
         var rider = Rider(
             1,

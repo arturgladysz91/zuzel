@@ -173,6 +173,37 @@ public sealed class AdaptiveDecisionModelTests
         Assert.Equal(2, clearDecision.TargetLane);
     }
 
+    [Theory]
+    [InlineData(SegmentType.Straight)]
+    [InlineData(SegmentType.TurnEntry)]
+    [InlineData(SegmentType.TurnMiddle)]
+    [InlineData(SegmentType.TurnExit)]
+    public void OccupancyIntegrationUsesCurrentSegmentWidth(SegmentType type)
+    {
+        var track = new Track(new[] { new TrackSegment(0, type) },
+            new TrackGeometry(60f, 24f, 10f, 14f, MathF.PI / 3f));
+        var profile = new RiderProfile(41, "Local width reader",
+            new RiderSkills(50f, 50f, 50f, 100f, 50f, 50f), RiderStyle.Balanced);
+        var rider = new RiderState(profile, lane: 2);
+        var engine = new SimulationEngine(new AdaptiveDecisionModel(seed: 42));
+        var step = new SimulationStepContext(5, 8, 0, 0, 27182, 1);
+        var surface = new TrackSurfaceState(1f, 0f, 0.35f);
+        var baseline = DecideFor(engine, track, surface, new[] { rider }, 41, step);
+        // Put the rival beside the strategy's own preferred reference so this
+        // test isolates occupancy rather than imposing an inner/outer preference.
+        var rival = new RiderState(42, baseline.TargetLane)
+        {
+            LateralPosition = baseline.TargetLane == 4
+                ? baseline.TargetLane - 0.25f : baseline.TargetLane + 0.25f,
+        };
+        var withRival = DecideFor(engine, track, surface, new[] { rider, rival }, 41, step);
+
+        if (type == SegmentType.Straight)
+            Assert.NotEqual(baseline.TargetLane, withRival.TargetLane);
+        else
+            Assert.Equal(baseline.TargetLane, withRival.TargetLane);
+    }
+
     private static RiderDecision DecideFor(
         SimulationEngine engine,
         Track track,

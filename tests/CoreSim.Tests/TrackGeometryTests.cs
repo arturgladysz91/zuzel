@@ -174,7 +174,8 @@ public sealed class TrackGeometryTests
 
         Assert.Equal(LaneModel.StraightLengthMeters, track.Geometry.StraightLengthMeters);
         Assert.Equal(LaneModel.InnerRadiusMeters, track.Geometry.InnerRadiusMeters);
-        Assert.Equal(LaneModel.LaneWidthMeters, track.Geometry.LaneSpacingMeters);
+        Assert.Equal(1f, LaneModel.ReferenceLaneSpacingMeters(SegmentType.Straight, track.Geometry));
+        Assert.Equal(1f, LaneModel.ReferenceLaneSpacingMeters(SegmentType.TurnMiddle, track.Geometry));
         Assert.Equal(LaneModel.TurnSegmentAngleRadians, track.Geometry.TurnSegmentAngleRadians);
         Assert.Equal(
             LaneModel.TurnArcLengthMeters(2),

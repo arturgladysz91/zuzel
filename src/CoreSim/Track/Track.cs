@@ -29,12 +29,14 @@ public sealed class Track
     }
 
     // Compatibility layout: 2 łuki (wejście/środek/wyjście) + 2 proste.
+    /// <summary>Synthetic 6 m / 6 m compatibility fixture, not regulatory-size geometry.</summary>
     public static Track CreateExample()
     {
         var geometry = new TrackGeometry(
             straightLengthMeters: 60.0f,
             innerRadiusMeters: 24.0f,
-            laneSpacingMeters: 1.0f,
+            straightWidthMeters: 6.0f,
+            turnWidthMeters: 6.0f,
             turnSegmentAngleRadians: MathF.PI / 3.0f);
 
         var segs = new List<TrackSegment>
@@ -67,5 +69,5 @@ public sealed class Track
             new(6, SegmentType.TurnMiddle),
             new(7, SegmentType.TurnExit),
             new(8, SegmentType.Straight, 35f),
-        }, new TrackGeometry(60f, 24f, 1f, MathF.PI / 3f));
+        }, new TrackGeometry(60f, 24f, 10f, 14f, MathF.PI / 3f));
 }

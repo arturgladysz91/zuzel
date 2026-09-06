@@ -536,7 +536,8 @@ public sealed class StraightSpeedProfileTests
             new TrackGeometry(
                 straightLengthMeters,
                 TrackGeometry.Default.InnerRadiusMeters,
-                TrackGeometry.Default.LaneSpacingMeters,
+                TrackGeometry.Default.StraightWidthMeters,
+                TrackGeometry.Default.TurnWidthMeters,
                 TrackGeometry.Default.TurnSegmentAngleRadians));
 
     private static Track StandardOrderTrack(float straightLengthMeters)

@@ -22,19 +22,18 @@ public sealed class LateralMovementModelTests
     }
 
     [Fact]
-    public void MaxDeltaUsesExecutionTravelTimeGripAndLaneSpacingFormula()
+    public void NormalizedMovementCapabilityPreservesPreviousCompatibilityBehavior()
     {
         var geometry = Geometry(laneSpacingMeters: 1.5f);
         var surface = new TrackSurfaceState(0.82f, 0.15f, 0.40f);
         var skills = Skills(slideControl: 80f, adaptability: 40f);
         const float travelTimeSeconds = 2.25f;
         const float execution = 0.50f * 0.80f + 0.50f * 0.40f;
-        var lateralSpeedMetersPerSecond = 0.35f + 0.30f * execution;
+        var laneRate = 0.35f + 0.30f * execution;
         var gripMultiplier = 0.65f + 0.35f * surface.EffectiveGrip;
-        var expected = lateralSpeedMetersPerSecond
+        var expected = laneRate
             * travelTimeSeconds
-            * gripMultiplier
-            / geometry.LaneSpacingMeters;
+            * gripMultiplier;
 
         var actual = LateralMovementModel.CalculateMaxLateralDelta(
             travelTimeSeconds,
@@ -171,7 +170,7 @@ public sealed class LateralMovementModelTests
     }
 
     [Fact]
-    public void WiderLaneSpacingReducesDeltaInLaneUnits()
+    public void NormalizedMovementDoesNotChangeWithPhysicalReferenceSpacing()
     {
         var narrow = LateralMovementModel.CalculateMaxLateralDelta(
             1f,
@@ -184,8 +183,7 @@ public sealed class LateralMovementModelTests
             IdealSurface,
             RiderSkills.Balanced);
 
-        Assert.Equal(narrow / 2f, wide, 5);
-        Assert.True(wide < narrow);
+        Assert.Equal(narrow, wide, 5);
     }
 
     [Theory]

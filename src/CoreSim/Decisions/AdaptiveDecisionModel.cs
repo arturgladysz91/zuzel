@@ -113,6 +113,7 @@ public sealed class AdaptiveDecisionModel : IRiderDecisionModel
             && LateralSpaceModel.IsWithinProvisionalOccupancyThreshold(
                 other.LateralPosition,
                 lane,
+                context.Segment.Type,
                 geometry)
             && Math.Abs(other.ElapsedTimeSeconds - context.Rider.ElapsedTimeSeconds) < 0.30f);
 }

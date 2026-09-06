@@ -1,5 +1,5 @@
-// Kontrakt linii: indeks 0..4 oznacza środek ścieżki jazdy od krawędzi wewnętrznej (0) do zewnętrznej (4).
-// Długość w łuku liczona jest po łuku o promieniu R = Rwew + lane * odstęp_linii.
+// Lane/LateralPosition 0..4 are dimensionless normalized cross-track
+// coordinates. Physical positions are derived from segment-local track width.
 namespace CoreSim;
 
 public static class LaneModel
@@ -10,7 +10,6 @@ public static class LaneModel
 
     // Compatibility constants for callers that do not yet provide a concrete
     // track. New simulation code must use the TrackGeometry overloads below.
-    public const float LaneWidthMeters = 1.0f;
     public const float InnerRadiusMeters = 24.0f;
     public const float TurnSegmentAngleRadians = MathF.PI / 3.0f;
     public const float StraightLengthMeters = 60.0f;
@@ -23,6 +22,72 @@ public static class LaneModel
         {
             throw new ArgumentOutOfRangeException(nameof(lane), lane, "Lane must be between 0 and 4 inclusive.");
         }
+    }
+
+    public static float PhysicalTrackWidthMeters(SegmentType segmentType, TrackGeometry geometry)
+    {
+        ArgumentNullException.ThrowIfNull(geometry);
+        return segmentType switch
+        {
+            SegmentType.Straight => geometry.StraightWidthMeters,
+            SegmentType.TurnEntry or SegmentType.TurnMiddle or SegmentType.TurnExit => geometry.TurnWidthMeters,
+            _ => throw new ArgumentOutOfRangeException(nameof(segmentType)),
+        };
+    }
+
+    public static float UsableRacingWidthMeters(SegmentType segmentType, TrackGeometry geometry)
+    {
+        var width = PhysicalTrackWidthMeters(segmentType, geometry)
+            - TrackGeometry.InnerReferenceOffsetFromTrackEdgeMeters
+            - TrackGeometry.ProvisionalOuterReferenceOffsetFromTrackEdgeMeters;
+        if (!float.IsFinite(width) || width <= 0f)
+            throw new ArgumentOutOfRangeException(nameof(geometry), "Usable racing width must be positive and finite.");
+
+        return width;
+    }
+
+    public static float ReferenceLaneSpacingMeters(SegmentType segmentType, TrackGeometry geometry)
+        => UsableRacingWidthMeters(segmentType, geometry) / MaxLane;
+
+    public static float NormalizedLateralFraction(float lateralPosition)
+    {
+        ValidateLateralPosition(lateralPosition);
+        return lateralPosition / MaxLane;
+    }
+
+    public static float PhysicalLateralOffsetFromInnerReferenceMeters(
+        float lateralPosition,
+        SegmentType segmentType,
+        TrackGeometry geometry)
+        => NormalizedLateralFraction(lateralPosition)
+            * UsableRacingWidthMeters(segmentType, geometry);
+
+    public static float PhysicalLateralOffsetFromInnerEdgeMeters(
+        float lateralPosition,
+        SegmentType segmentType,
+        TrackGeometry geometry)
+        => TrackGeometry.InnerReferenceOffsetFromTrackEdgeMeters
+            + PhysicalLateralOffsetFromInnerReferenceMeters(lateralPosition, segmentType, geometry);
+
+    public static float LateralPositionFromPhysicalOffsetMeters(
+        float offsetFromInnerReferenceMeters,
+        SegmentType segmentType,
+        TrackGeometry geometry)
+    {
+        var usableWidth = UsableRacingWidthMeters(segmentType, geometry);
+        if (!float.IsFinite(offsetFromInnerReferenceMeters)
+            || offsetFromInnerReferenceMeters < 0f
+            || offsetFromInnerReferenceMeters > usableWidth)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(offsetFromInnerReferenceMeters),
+                offsetFromInnerReferenceMeters,
+                "Physical offset must be finite and within the usable racing width.");
+        }
+
+        var lateralPosition = offsetFromInnerReferenceMeters / usableWidth * MaxLane;
+        ValidateLateralPosition(lateralPosition);
+        return lateralPosition;
     }
 
     public static float TurnArcRadiusMeters(int lane)
@@ -38,17 +103,12 @@ public static class LaneModel
     public static float TurnArcRadiusMeters(float lateralPosition, TrackGeometry geometry)
     {
         ArgumentNullException.ThrowIfNull(geometry);
-        if (!float.IsFinite(lateralPosition)
-            || lateralPosition < MinLane
-            || lateralPosition > MaxLane)
-        {
-            throw new ArgumentOutOfRangeException(
-                nameof(lateralPosition),
+        ValidateLateralPosition(lateralPosition);
+        return geometry.InnerRadiusMeters
+            + PhysicalLateralOffsetFromInnerReferenceMeters(
                 lateralPosition,
-                "Lateral position must be finite and between 0 and 4 inclusive.");
-        }
-
-        return geometry.InnerRadiusMeters + lateralPosition * geometry.LaneSpacingMeters;
+                SegmentType.TurnMiddle,
+                geometry);
     }
 
     public static float TurnArcLengthMeters(int lane)
@@ -83,5 +143,18 @@ public static class LaneModel
         return segment.Type == SegmentType.Straight
             ? segment.StraightLengthMetersOverride ?? geometry.StraightLengthMeters
             : TurnArcLengthMeters(lateralPosition, geometry);
+    }
+
+    private static void ValidateLateralPosition(float lateralPosition)
+    {
+        if (!float.IsFinite(lateralPosition)
+            || lateralPosition < MinLane
+            || lateralPosition > MaxLane)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(lateralPosition),
+                lateralPosition,
+                "Lateral position must be finite and between 0 and 4 inclusive.");
+        }
     }
 }
