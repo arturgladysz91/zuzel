@@ -375,9 +375,12 @@ na canonical lap boundary między segmentami 8 i 0: `Straight 35 m (start) → T
 TurnExit → Straight 60 m → TurnEntry → TurnMiddle → TurnExit → Straight 35 m
 (finish)`. Home straight to finish-half + start-half po dwóch stronach granicy
 okrążenia: 35 + 35 = 70 m. Pierwszy łuk zaczyna się 35 m od startu.
-Długość wynika wyłącznie z fizycznych segmentów: `130 + 6 * (24 + lateral) * PI/3`
-m, czyli około 280.8 m na inner reference trajectory. To 10 m więcej niż
-compatibility example; nie ma dodatkowego wirtualnego dystansu launch.
+Długość wynika wyłącznie z fizycznych segmentów. `LateralPosition` jest
+bezwymiarową współrzędną `0..4`; dla standing example promień wynosi
+`24 + 3 * lateral` m, więc pełne okrążenie ma
+`130 + 2 * PI * (24 + 3 * lateral)` m. Wewnętrzna linia pomiarowa nadal ma
+około 280.796 m, a zewnętrzna trajektoria referencyjna około 356.195 m. Nie ma
+dodatkowego wirtualnego dystansu launch.
 
 `TrackSegment` ma opcjonalny `float? StraightLengthMetersOverride` (finite, >0,
 tylko Straight) i `bool IsStandingStartSegment=false` (tylko Straight).
@@ -417,7 +420,7 @@ nieosiągnięty próg albo koniec launch przed 2 s.
 
 Starting-gate geometry nie jest jeszcze fizycznie odwzorowana. Początkowe
 `Lane/LateralPosition` są compatibility representation pozycji startowych, nie
-docelowym modelem pól A/B/C/D ani pełnej szerokości toru. Przed finalną kalibracją
+docelowym modelem pól A/B/C/D. Przed finalną kalibracją
 gate effects trzeba wprowadzić oddzielne physical starting-gate geometry/mapping.
 #30 porządkuje strukturę standing startu, nie kalibruje finalnego gate advantage;
 nie ma hardcoded bonusu pola A.
@@ -441,4 +444,33 @@ signed force i natural equilibrium; następny etap to real-world calibration.
 
 The repository contains a versioned, offline PGEE telemetry snapshot, a pure C# distribution/evaluation layer, production-path RiderSkills sweeps, and a deterministic [current-model baseline](docs/calibration/current-model-baseline.md). See [calibration.md](docs/calibration.md) for rules and reproduction.
 
-Telemetry defines distributions, not hard caps. Age is not a physics multiplier, Skill 50 is not an “average PGEE rider,” and source `speed_2s`/`curve_speed` values are gate rankings rather than numeric speeds. Absolute race times remain track-geometry context. #32 changes no physics constants; empirical physics tuning is reserved for #33.
+Telemetry defines distributions, not hard caps. Age is not a physics multiplier, Skill 50 is not an “average PGEE rider,” and source `speed_2s`/`curve_speed` values are gate rankings rather than numeric speeds. Absolute race times remain track-geometry context. #32 changes no physics constants; #33 adds physical-width geometry and measures its impact without tuning.
+
+## Physical track width and lateral geometry (#33)
+
+`Lane` and continuous `LateralPosition` retain the inclusive `0..4` domain, but
+they are normalized reference coordinates rather than metres. The normalized
+fraction is `LateralPosition / 4`; physical offset from the inner reference line
+is that fraction times the usable local span. `TrackGeometry` stores independent
+`StraightWidthMeters` and `TurnWidthMeters`. Usable span subtracts the 1 m FIM
+inner measurement/reference offset and a separate provisional 1 m game-geometry
+outer margin. `InnerRadiusMeters` is the radius of that inner reference
+trajectory, not the kerb radius.
+
+`Track.CreateExample()` uses 6 m / 6 m synthetic compatibility widths, retaining
+1 m between reference positions; it is not a regulatory-size track.
+`CreateStandingStartExample()` uses a 10 m straight and 14 m turns as an
+FIM-minimum-width example, not as universal dimensions for real tracks. It has
+2 m straight and 3 m turn reference spacing, with turn radii
+24/27/30/33/36 m.
+
+Turn radius/path length, occupancy/contact separation, arrival tolerance and
+physical displacement use metres derived from the current segment width. The
+surface remains five normalized bands with unchanged grip/wear formulas.
+Segment boundaries reinterpret the same normalized position against local width;
+there is no width-transition spline, artificial movement event or extra distance.
+Active lateral movement has no diagonal/spiral path-length correction, and the
+A/B/C/D physical gate model remains future work. The
+[physical-width impact report](docs/calibration/physical-width-impact.md) is
+observation-only: no speed/performance constant was changed and no calibration
+was performed.

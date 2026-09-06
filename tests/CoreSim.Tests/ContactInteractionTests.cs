@@ -188,6 +188,40 @@ public sealed class ContactInteractionTests
         Assert.Equal(2.5f, LostRhythmChange(reversed).LateralPosition, 5);
     }
 
+    [Theory]
+    [InlineData(SegmentType.Straight, 10f, 14f, true)]
+    [InlineData(SegmentType.TurnEntry, 10f, 14f, false)]
+    [InlineData(SegmentType.TurnMiddle, 10f, 14f, false)]
+    [InlineData(SegmentType.TurnExit, 10f, 14f, false)]
+    [InlineData(SegmentType.Straight, 14f, 10f, false)]
+    [InlineData(SegmentType.TurnEntry, 14f, 10f, true)]
+    [InlineData(SegmentType.TurnMiddle, 14f, 10f, true)]
+    [InlineData(SegmentType.TurnExit, 14f, 10f, true)]
+    public void ContactIntegrationUsesCurrentSegmentWidth(
+        SegmentType type, float straightWidth, float turnWidth, bool expectsContact)
+    {
+        // Short segments preserve the deliberately chosen 0.25 normalized gap
+        // through movement: about 0.5 m in 10 m width, 0.75 m in 14 m width.
+        var geometry = new TrackGeometry(0.03f, 24f, straightWidth, turnWidth, 0.001f);
+        var resolved = Resolve(
+            new[] { Rider(1, 2, 2f), Rider(2, 2, 2.25f) },
+            seed: 173,
+            segmentType: type,
+            geometry: geometry);
+
+        Assert.Equal(expectsContact ? 1 : 0, ContactEvents(resolved).Length);
+    }
+
+    [Fact]
+    public void LostRhythmIntegrationUsesTurnWidthWhenStraightWidthDiffers()
+    {
+        var geometry = new TrackGeometry(60f, 24f, 10f, 14f, 0.001f);
+        var change = LostRhythmChange(Resolve(ContactRiders(), seed: 3, geometry: geometry));
+
+        Assert.Equal(2f + 0.5f / 3f, change.LateralPosition, 6);
+        Assert.Equal(3, change.Lane);
+    }
+
     private static ResolvedSimulationStep Resolve(
         IReadOnlyList<RiderState> riders,
         int seed,

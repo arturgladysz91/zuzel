@@ -361,6 +361,7 @@ public sealed class SimulationEngine
             rider.Lane,
             rider.LateralPosition,
             targetLane,
+            snapshot.Segment.Type,
             snapshot.Track.Geometry,
             useContinuousPlanning: !snapshot.Step.UseLegacyPhysics);
         var surface = snapshot.Step.UseLegacyPhysics
@@ -525,6 +526,7 @@ public sealed class SimulationEngine
                 rider.LateralPosition,
                 resolution.Lane,
                 lateralMovementTimeSeconds,
+                snapshot.Segment.Type,
                 snapshot.Track.Geometry,
                 surface,
                 rider.Profile.Skills);
@@ -677,6 +679,7 @@ public sealed class SimulationEngine
                 if (!LateralSpaceModel.IsWithinProvisionalContactThreshold(
                         leader.LateralPosition,
                         trailing.LateralPosition,
+                        snapshot.Segment.Type,
                         snapshot.Track.Geometry))
                     continue;
 
@@ -757,6 +760,7 @@ public sealed class SimulationEngine
                         lateral,
                         ProvisionalLostRhythmOutwardDisplacementMeters,
                         lane,
+                        snapshot.Segment.Type,
                         snapshot.Track.Geometry);
                 }
 

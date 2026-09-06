@@ -441,7 +441,8 @@ public sealed class TurnEntrySpeedScrubTests
             new TrackGeometry(
                 straightLengthMeters,
                 TrackGeometry.Default.InnerRadiusMeters,
-                TrackGeometry.Default.LaneSpacingMeters,
+                TrackGeometry.Default.StraightWidthMeters,
+                TrackGeometry.Default.TurnWidthMeters,
                 TrackGeometry.Default.TurnSegmentAngleRadians));
 
     private static TrackState UniformState(Track track, TrackSurfaceState surface)

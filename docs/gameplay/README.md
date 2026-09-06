@@ -30,7 +30,7 @@ Ograniczenie prędkości łuku wykorzystuje statyczną geometrię konkretnego to
 
 - `SegmentPhysicsContext` otrzymuje `TrackGeometry` ze snapshotu konkretnego toru,
 - bazowa granica rośnie jak pierwiastek ze stosunku promienia linii do promienia referencyjnego 24 m; przy 24 m wynosi 16 m/s,
-- w advanced physics promień ograniczenia pochodzi z rzeczywistego wejściowego `LateralPosition`: `InnerRadiusMeters + LateralPosition * LaneSpacingMeters`; pozycje całkowite dokładnie odpowiadają dotychczasowym liniom referencyjnym,
+- w advanced physics `LateralPosition` jest bezwymiarową współrzędną `0..4`, a promień ograniczenia pochodzi z fizycznego offsetu wyliczonego z lokalnej szerokości łuku: `InnerRadiusMeters + (LateralPosition / 4) * usableTurnWidth`; `InnerRadiusMeters` opisuje linię pomiarową/referencyjną 1 m od inner edge, nie krawężnik,
 - długość łuku advanced physics korzysta z tego samego promienia próbkowanego na wejściu do segmentu i mnoży go przez `TurnSegmentAngleRadians`; `StraightLengthMeters` pozostaje stałe niezależnie od pozycji bocznej,
 - fizyczna nawierzchnia advanced physics jest próbkowana raz z tego samego wejściowego `LateralPosition`: liniowo interpolowane są surowe `Grip`, `Ruts` i `Moisture`, po czym `EffectiveGrip` jest ponownie wyliczane przez `TrackSurfaceState`, a nie interpolowane jako gotowa wartość,
 - zużycie advanced physics korzysta z tego samego wejściowego `LateralPosition`: miesza istniejące dyskretne kernela dla `floor` i `ceil` pozycji, z `100%` obciążenia w centrum kernela i `20%` na każdej istniejącej komórce sąsiedniej; wspólne wkłady są sumowane przed jednym zapisem do komórki,
@@ -122,8 +122,9 @@ zachowują własne kontrakty; signed forces nie dodają drugiego resolve ani RNG
 początkowe 35 m po dwóch stronach canonical start/finish boundary (segment 8 → 0).
 Topologia: marked Straight 35 → TurnEntry/Middle/Exit → Straight 60 → TurnEntry/Middle/Exit
 → Straight 35. Home straight ma 70 m; od startu do pierwszego łuku jest 35 m.
-Długość wynika tylko z fizycznych segmentów: `130 + 6 * (24 + lateral) * PI/3`
-m, około 280.8 m na inner reference trajectory, o 10 m więcej niż compatibility.
+Długość wynika tylko z fizycznych segmentów:
+`130 + 2 * PI * (24 + 3 * lateral)` m, około 280.796 m na inner
+measurement/reference trajectory i 356.195 m na outer reference trajectory.
 Nie ma wirtualnego dystansu startu; meta i lap summaries używają ostatniego
 segmentu toru, bez hardcoded segment count.
 
@@ -167,8 +168,8 @@ koniec launch przed 2 s. Nie dopasowujemy stałych do tych wyników.
 Brak clutch, RPM, torque/power, real sprockets, wheelspin, slip ratio, traction
 cap, false starts, reaction RNG oraz explicit throttle.
 
-Starting-gate geometry i pełna szerokość toru nie są jeszcze fizycznie odwzorowane.
-Initial `Lane/LateralPosition` pozostają compatibility representation pozycji
+Physical straight/turn width jest odwzorowana niezależnie od znormalizowanych
+pozycji, ale starting-gate geometry nadal nie jest. Initial `Lane/LateralPosition` pozostają compatibility representation pozycji
 startowych; racing references nie są docelowym modelem pól A/B/C/D. Przed finalną
 kalibracją gate effects trzeba wprowadzić oddzielne physical starting-gate
 geometry/mapping. #30 kalibruje strukturę standing startu, nie finalny gate advantage.
@@ -203,23 +204,38 @@ physical gate A/B/C/D geometry. #31 ich nie implementuje.
 
 ### Czasowa zmiana linii — BINDING
 
-`TargetLane` jest celem decyzji, `PlannedLane` najbliższą dyskretną linią realizowaną w kroku, `Lane` linią rozstrzygniętą przez fizykę, a `LateralPosition` rzeczywistą ciągłą pozycją po kroku. Pozycja boczna ma zakres `0..4` w jednostkach linii; jej zmiana pomnożona przez `LaneSpacingMeters` daje fizyczne przesunięcie w metrach.
+`TargetLane` jest celem decyzji, `PlannedLane` najbliższą dyskretną referencją realizowaną w kroku, `Lane` referencją rozstrzygniętą przez fizykę, a `LateralPosition` rzeczywistą ciągłą pozycją po kroku. Obie domeny pozostają `0..4`, lecz są znormalizowane i bezwymiarowe. Ułamek szerokości to `LateralPosition / 4`; fizyczny offset od inner reference trajectory to ten ułamek razy usable span bieżącego segmentu. Odwrotna konwersja to `offset / usableSpan * 4`.
 
 Zaawansowana fizyka ogranicza ruch boczny czasem przejazdu bieżącego segmentu, odstępem między liniami, `SlideControl`, `Adaptability` i efektywną przyczepnością. Stylowa `LaneChangeTendency` nadal wpływa na decyzję i koszt trasy, ale nie na fizyczną szybkość wykonania; morale również jej nie zmienia. `PlannedLane` jest najbliższą niewykonaną referencją od rzeczywistego `LateralPosition` w stronę `TargetLane`; kolejny krok może rozpocząć się dopiero po osiągnięciu tej referencji z tolerancją `0.05 m`. Wcześniejszy `RunWide` nie pozwala pominąć nieosiągniętej linii, a odwrócenie decyzji działa natychmiast. `RunWide` nadal kieruje ruch ku wymuszonej końcowej `Lane`; legacy nadal wyrównuje pozycję od razu.
 
 ### Parametry ruchu bocznego — PROVISIONAL
 
-Zakres fizycznej szybkości bocznej `0.35–0.65 m/s` oraz mnożnik `0.65 + 0.35 * EffectiveGrip` są wartościami roboczymi do późniejszego strojenia. Pozostają nazwanymi stałymi w C#; ten etap nie dodaje pliku balansu JSON.
+Zakres `0.35–0.65` oznacza znormalizowaną szybkość traversal w lane-units/s, nie fizyczne m/s. Mnożnik `0.65 + 0.35 * EffectiveGrip` pozostaje bez zmian. Maksymalny normalized delta jest jawnie zamieniany na metry przez spacing pochodzący z lokalnej szerokości, ruch odbywa się w metrach, a wynik wraca do `0..4`. To korekta jednostki, nie tuning.
 
 Ograniczenie przejściowe: advanced corner constraint, długość łuku, fizyczny odczyt nawierzchni i zużycie używają wspólnego `LateralPosition` na wejściu do segmentu. Surface nie jest ponownie próbkowane po `MoveTowards`, a model nie całkuje jeszcze promienia, drogi ani zużycia po pozycji zmieniającej się w czasie segmentu. Pozycje całkowite zachowują wcześniejszy kernel zużycia advanced dokładnie, a ułamkowe płynnie rozdzielają jego delty na istniejące komórki. `RunWide`, późniejszy ruch boczny ani kontakt nie przesuwają zużycia całego segmentu na końcową pozycję.
 
 `TrackState` i `TrackEvolution` nadal przechowują oraz zmieniają dyskretną siatkę segment × lane; ciągłe zużycie interpoluje wyłącznie delty kerneli, a nie stan nawierzchni. `AdaptiveDecisionModel` ocenia dokładne dyskretne komórki kandydackich linii, contact surface pozostaje dyskretne, a `RunWide` nadal wykonuje istniejące `Lane + 1` wraz z regułą lane 4. Odczyt nawierzchni, dystans i zużycie legacy pozostają dyskretne.
 
-Przy ocenie zajętej przestrzeni przez `AdaptiveDecisionModel` różnica `LateralPosition` jest przeliczana na metry przez `LaneSpacingMeters` konkretnego toru. Próg occupancy `0.55 m` jest wartością **PROVISIONAL**, zachowującą dotychczasowe zachowanie toru domyślnego, a nie ostatecznym wymiarem zawodnika lub motocykla.
+Przy ocenie zajętej przestrzeni przez `AdaptiveDecisionModel` różnica `LateralPosition` jest przeliczana na metry przez fizyczną szerokość bieżącego segmentu. Próg occupancy `0.55 m` jest wartością **PROVISIONAL**, zachowującą dotychczasowe zachowanie toru domyślnego, a nie ostatecznym wymiarem zawodnika lub motocykla.
 
 Kandydaci do kontaktu są wybierani z pozycji bocznych po `ResolveRider` przez ten sam fizyczny przelicznik, lecz z osobnym progiem kontaktu `0.55 m` oznaczonym **PROVISIONAL** i gotowym do niezależnej kalibracji. Każdy trailing rider otrzymuje najwyżej jednego najbliższego wcześniejszego leadera, a pary są ustalane przed skutkami kontaktów. Eligibility podłużne nadal używa `0.12 s`; prawdopodobieństwo, surface oraz discriminatory RNG pozostają bez zmian i nadal pochodzą z dyskretnej `Lane` trailing ridera.
 
-Po `ContactLostRhythm` przejściowa `Lane` nadal wykonuje jeden dyskretny krok na zewnątrz poza prostą. Ciągłe wypchnięcie `LateralPosition` jest natomiast mierzone fizycznie: obecna wartość **PROVISIONAL** wynosi `0.50 m`, jest przeliczana przez `LaneSpacingMeters` i nie może przekroczyć wymuszonej referencji `Lane` ani domeny `0..4`. Na `Straight` oraz na zewnętrznej lane 4 nie ma outward push. Nie jest to jeszcze finalny model reakcji motocykla na kontakt.
+Po `ContactLostRhythm` przejściowa `Lane` nadal wykonuje jeden dyskretny krok na zewnątrz poza prostą. Ciągłe wypchnięcie `LateralPosition` jest natomiast mierzone fizycznie: obecna wartość **PROVISIONAL** wynosi `0.50 m`, jest przeliczana przez lokalną szerokość segmentu i nie może przekroczyć wymuszonej referencji `Lane` ani domeny `0..4`. Ta sama liczba metrów daje mniejszą zmianę normalized position na szerszej części toru. Na `Straight` oraz na zewnętrznej lane 4 nie ma outward push.
+
+`TrackGeometry` przechowuje osobno `StraightWidthMeters` i `TurnWidthMeters`.
+Usable span odejmuje FIM inner measurement/reference offset 1 m oraz oddzielny,
+provisional game margin 1 m od outer edge. `CreateExample()` ma syntetyczne
+6 m / 6 m i zachowuje 1 m reference spacing; nie jest legal-size speedway
+track. `CreateStandingStartExample()` ma 10 m / 14 m jako przykład minimalnego
+FIM envelope, nie globalny rozmiar prawdziwych torów. Daje spacing 2 m / 3 m i
+turn radii 24/27/30/33/36 m.
+
+Surface nadal ma pięć znormalizowanych bandów; interpolation, grip i wear kernel
+nie zmieniają stałych. Ten sam normalized position oznacza ten sam fraction na
+straight i turn, a fizyczny offset zmienia się segment-local bez dodatkowego
+movement eventu. Nie ma jeszcze width-transition spline ani dodatkowego czasu/
+dystansu na rozszerzenie, diagonal/spiral correction aktywnego ruchu bocznego,
+rider/motorcycle width czy fizycznego modelu pól A/B/C/D.
 
 ## Główna pętla gry — BINDING
 

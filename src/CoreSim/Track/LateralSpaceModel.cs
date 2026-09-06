@@ -1,7 +1,7 @@
 namespace CoreSim;
 
 /// <summary>
-/// Converts continuous lane-unit positions into physical lateral separation.
+/// Converts normalized cross-track positions into segment-local physical separation.
 /// </summary>
 public static class LateralSpaceModel
 {
@@ -20,26 +20,75 @@ public static class LateralSpaceModel
     public static float LateralDistanceMeters(
         float firstLateralPosition,
         float secondLateralPosition,
+        SegmentType segmentType,
         TrackGeometry geometry)
     {
         ArgumentNullException.ThrowIfNull(geometry);
         LateralMovementModel.ValidateLateralPosition(firstLateralPosition, nameof(firstLateralPosition));
         LateralMovementModel.ValidateLateralPosition(secondLateralPosition, nameof(secondLateralPosition));
 
-        return MathF.Abs(firstLateralPosition - secondLateralPosition) * geometry.LaneSpacingMeters;
+        var firstOffset = LaneModel.PhysicalLateralOffsetFromInnerReferenceMeters(
+            firstLateralPosition,
+            segmentType,
+            geometry);
+        var secondOffset = LaneModel.PhysicalLateralOffsetFromInnerReferenceMeters(
+            secondLateralPosition,
+            segmentType,
+            geometry);
+        return MathF.Abs(firstOffset - secondOffset);
+    }
+
+    /// <summary>Compatibility overload for equal-width synthetic geometry.</summary>
+    public static float LateralDistanceMeters(
+        float firstLateralPosition,
+        float secondLateralPosition,
+        TrackGeometry geometry)
+    {
+        TrackGeometry.RequireEqualWidthCompatibility(geometry);
+        return LateralDistanceMeters(firstLateralPosition, secondLateralPosition, SegmentType.Straight, geometry);
     }
 
     public static bool IsWithinProvisionalOccupancyThreshold(
         float firstLateralPosition,
         float secondLateralPosition,
+        SegmentType segmentType,
         TrackGeometry geometry)
-        => LateralDistanceMeters(firstLateralPosition, secondLateralPosition, geometry)
+        => LateralDistanceMeters(firstLateralPosition, secondLateralPosition, segmentType, geometry)
             < ProvisionalOccupancyThresholdMeters;
+
+    /// <summary>Compatibility overload for equal-width synthetic geometry.</summary>
+    public static bool IsWithinProvisionalOccupancyThreshold(
+        float firstLateralPosition,
+        float secondLateralPosition,
+        TrackGeometry geometry)
+    {
+        TrackGeometry.RequireEqualWidthCompatibility(geometry);
+        return IsWithinProvisionalOccupancyThreshold(
+            firstLateralPosition,
+            secondLateralPosition,
+            SegmentType.Straight,
+            geometry);
+    }
 
     public static bool IsWithinProvisionalContactThreshold(
         float firstLateralPosition,
         float secondLateralPosition,
+        SegmentType segmentType,
         TrackGeometry geometry)
-        => LateralDistanceMeters(firstLateralPosition, secondLateralPosition, geometry)
+        => LateralDistanceMeters(firstLateralPosition, secondLateralPosition, segmentType, geometry)
             < ProvisionalContactThresholdMeters;
+
+    /// <summary>Compatibility overload for equal-width synthetic geometry.</summary>
+    public static bool IsWithinProvisionalContactThreshold(
+        float firstLateralPosition,
+        float secondLateralPosition,
+        TrackGeometry geometry)
+    {
+        TrackGeometry.RequireEqualWidthCompatibility(geometry);
+        return IsWithinProvisionalContactThreshold(
+            firstLateralPosition,
+            secondLateralPosition,
+            SegmentType.Straight,
+            geometry);
+    }
 }

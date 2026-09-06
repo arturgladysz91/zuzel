@@ -8,7 +8,9 @@ public sealed class LateralSpaceModelTests
     [Fact]
     public void DefaultGeometryPreservesPreviousOccupancyDistance()
     {
-        Assert.Equal(1f, TrackGeometry.Default.LaneSpacingMeters);
+        Assert.Equal(1f, LaneModel.ReferenceLaneSpacingMeters(
+            SegmentType.Straight,
+            TrackGeometry.Default));
 
         Assert.True(LateralSpaceModel.IsWithinProvisionalOccupancyThreshold(
             2f,

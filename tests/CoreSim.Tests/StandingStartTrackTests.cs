@@ -128,14 +128,15 @@ public sealed class StandingStartTrackTests
     {
         var oldTrack = Track.CreateExample();
         var newTrack = Track.CreateStandingStartExample();
-        Assert.Equal(oldTrack.Geometry, newTrack.Geometry);
         foreach (var lateral in new[] { 0f, 0.25f, 1f, 2.5f, 3f, 4f })
         {
-            var expected = 35f + 60f + 35f + 6f * (24f + lateral) * MathF.PI / 3f;
+            var physicalTurnOffset = lateral / LaneModel.MaxLane * 12f;
+            var expected = 35f + 60f + 35f + 6f * (24f + physicalTurnOffset) * MathF.PI / 3f;
             Assert.InRange(MathF.Abs(expected - LapDistance(newTrack, lateral)), 0f, 0.0001f);
-            Assert.Equal(10f, LapDistance(newTrack, lateral) - LapDistance(oldTrack, lateral), 3);
         }
         Assert.Equal(280.796f, LapDistance(newTrack, 0f), 3);
+        Assert.Equal(356.195f, LapDistance(newTrack, 4f), 3);
+        Assert.Equal(10f, LapDistance(newTrack, 0f) - LapDistance(oldTrack, 0f), 3);
     }
 
     [Fact]
