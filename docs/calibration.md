@@ -129,3 +129,32 @@ geometry and its required conversions, and records the observed impact. Earlier
 roadmap text in the historical #32 report assigned tuning to #33; the revised
 specification supersedes that plan. Empirical performance tuning remains future
 work.
+
+## Continuous corner-speed correction observation (#34)
+
+The [continuous-correction impact report](calibration/continuous-corner-correction-impact.md)
+is generated deterministically from the production simulation path. It validates
+the committed #33 report as its immutable before-state, runs balanced and
+Speed/SlideControl 0/50/100 production sweeps through the existing evaluator,
+and adds controlled TurnEntry/TurnMiddle/TurnExit probes for below-max, quiet,
+Brake and RunWide bands.
+
+Calibration step samples append nullable correction entry/target/exit speed,
+phase time, required/actual/remaining distance, effective deceleration and
+target-reached fields. Existing columns retain their order, invariant culture,
+decimal point, stable rider order and `\n`; null remains empty. Diagnostic total
+travel time is the actual final elapsed delta even when scrub, correction and
+TurnExit drive coexist.
+
+Regenerate with:
+
+```text
+dotnet run --project src/Sandbox/Sandbox.csproj --configuration Release -- \
+  continuous-corner-correction-impact-report \
+  data/calibration/pge/v1 \
+  docs/calibration/physical-width-impact.md \
+  docs/calibration/continuous-corner-correction-impact.md
+```
+
+This is a structural physics observation. It does not tune the physical model,
+modify the versioned PGEE snapshot or overwrite the historical #32/#33 reports.

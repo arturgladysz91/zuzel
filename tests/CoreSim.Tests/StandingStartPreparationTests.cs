@@ -146,15 +146,16 @@ public sealed class StandingStartPreparationTests
         var run = Run();
         var rows = CalibrationCsvExporter.ExportSteps(run.Trace!).Split('\n', StringSplitOptions.RemoveEmptyEntries);
         var header = rows[0].Split(',');
-        Assert.Equal("StandingStartPreparationDistanceMeters", header[^1]);
-        Assert.Equal("StandingStartSpeedAtTwoSecondsMetersPerSecond", header[^2]);
+        var preparationIndex = Array.IndexOf(header, "StandingStartPreparationDistanceMeters");
+        Assert.Equal("StandingStartSpeedAtTwoSecondsMetersPerSecond", header[preparationIndex - 1]);
+        Assert.Equal("CornerCorrectionEntrySpeedMetersPerSecond", header[preparationIndex + 1]);
         var sample = run.Trace!.StepSamples[0];
         Assert.True(sample.StandingStartPreparationDistanceMeters > 0f);
         Assert.Equal(sample.TravelledMeters, sample.StandingStartAccelerationDistanceMeters
             + sample.StandingStartCruiseDistanceMeters + sample.StandingStartPreparationDistanceMeters);
         Assert.Equal(sample.StandingStartPreparationDistanceMeters!.Value.ToString("R", System.Globalization.CultureInfo.InvariantCulture),
-            rows[1].Split(',')[^1]);
-        Assert.Equal(string.Empty, rows[5].Split(',')[^1]);
+            rows[1].Split(',')[preparationIndex]);
+        Assert.Equal(string.Empty, rows[5].Split(',')[preparationIndex]);
     }
 
     [Fact]

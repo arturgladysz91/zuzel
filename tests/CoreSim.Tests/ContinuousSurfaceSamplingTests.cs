@@ -189,7 +189,9 @@ public sealed class ContinuousSurfaceSamplingTests
 
         Assert.Equal(SegmentOutcome.Ok, good.Outcome);
         Assert.Equal(SegmentOutcome.Brake, bad.Outcome);
-        Assert.True(good.PhysicsSpeed > bad.PhysicsSpeed);
+        Assert.Equal(entrySpeed, good.PhysicsSpeed);
+        Assert.Equal(entrySpeed, bad.PhysicsSpeed);
+        Assert.True(good.Speed > bad.Speed);
     }
 
     [Fact]

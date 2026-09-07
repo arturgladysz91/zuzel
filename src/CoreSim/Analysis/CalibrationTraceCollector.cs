@@ -40,24 +40,7 @@ public sealed class CalibrationTraceCollector : ISimulationStepObserver
             var diagnostics = diagnosticsByRider[change.RiderId];
             var duration = change.ElapsedTimeSeconds - rider.ElapsedTimeSeconds;
             var distanceDelta = change.Position.DistanceMeters - rider.DistanceMeters;
-            var preContactProfileTime = diagnostics.StandingStartLaunchProfile?.TotalTimeSeconds
-                ?? diagnostics.TurnExitDriveProfile?.TravelTimeSeconds;
-            if (preContactProfileTime is { } profileTime)
-            {
-                ValidateEquivalent(
-                    profileTime,
-                    diagnostics.TravelTimeSeconds,
-                    "pre-contact profile travel time");
-                if (duration + 1e-5f < diagnostics.TravelTimeSeconds)
-                {
-                    throw new InvalidOperationException(
-                        "Resolved time cannot be shorter than the pre-contact production profile.");
-                }
-            }
-            else
-            {
-                ValidateEquivalent(duration, diagnostics.TravelTimeSeconds, "travel time");
-            }
+            ValidateEquivalent(duration, diagnostics.TravelTimeSeconds, "travel time");
             ValidateEquivalent(distanceDelta, diagnostics.TravelledMeters, "travelled distance");
 
             _samples.Add(CreateSample(snapshot, rider, change, diagnostics));
@@ -99,6 +82,7 @@ public sealed class CalibrationTraceCollector : ISimulationStepObserver
         var turnExit = diagnostics.TurnExitDriveProfile;
         var scrub = diagnostics.TurnEntryScrubProfile;
         var launch = diagnostics.StandingStartLaunchProfile;
+        var correction = diagnostics.CornerSpeedCorrectionProfile;
         var surface = diagnostics.EntrySurface;
         return new CalibrationStepSample(
             snapshot.Step.HeatId,
@@ -160,7 +144,16 @@ public sealed class CalibrationTraceCollector : ISimulationStepObserver
             launch?.TimeTo70KphSeconds,
             launch?.SpeedAtTwoSecondsMetersPerSecond,
             launch?.PreparationDistanceMeters,
-            turnExit?.DecelerationDistanceMeters);
+            turnExit?.DecelerationDistanceMeters,
+            correction?.EntrySpeedMetersPerSecond,
+            correction?.TargetSpeedMetersPerSecond,
+            correction?.ExitSpeedMetersPerSecond,
+            correction?.TravelTimeSeconds,
+            correction?.RequiredCorrectionDistanceMeters,
+            correction?.CorrectionDistanceMeters,
+            correction?.RemainingDistanceMeters,
+            correction?.DecelerationMetersPerSecondSquared,
+            correction?.TargetReached);
     }
 
     private CalibrationLapSummary[] BuildLapSummaries(

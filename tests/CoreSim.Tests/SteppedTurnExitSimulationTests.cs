@@ -106,14 +106,17 @@ public sealed class SteppedTurnExitSimulationTests
         var change = Assert.Single(resolved.Changes);
         var diagnostics = Assert.Single(resolved.Diagnostics);
         var profile = Assert.IsType<TurnExitDriveProfile>(diagnostics.TurnExitDriveProfile);
+        var correction = Assert.IsType<CornerSpeedCorrectionProfile>(
+            diagnostics.CornerSpeedCorrectionProfile);
         var expected = LongitudinalDynamics.CalculateForceBasedTurnExitDriveProfile(
-            change.PhysicsSpeed,
+            correction.ExitSpeedMetersPerSecond,
             rider.Profile.Skills,
             rider.ActiveSetup,
             diagnostics.EntrySurface,
-            diagnostics.TravelledMeters);
+            correction.RemainingDistanceMeters);
 
         Assert.Equal(SegmentOutcome.Brake, change.Outcome);
+        Assert.Equal(rider.Speed, change.PhysicsSpeed);
         Assert.Equal(expected, profile);
     }
 

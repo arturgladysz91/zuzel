@@ -98,3 +98,23 @@ The original `Track(segments)` constructor and geometry-free `LaneModel` overloa
 The canonical corner-speed path derives its base limit from a continuous lateral radius and carries no morale argument. Integer overloads delegate to the same calculation and retain exactly the reference-lane results. Morale remains in `SegmentPhysicsContext` only for the existing incident-risk calculation. The legacy `SegmentPhysics.Apply(segment, lane, speed)` and geometry-free speed overloads retain their signatures and use `TrackGeometry.Default`; the legacy heat path also keeps immediate alignment of `LateralPosition` with the resolved lane.
 
 `RiderDecisionContext.Rider`, `Riders` and `TrackState` now expose immutable snapshot types. Code compiled against their former mutable types is not source-compatible and should migrate to the snapshot API. New gameplay code should use `SimulateHeat` and `SegmentPhysicsContext`.
+
+## Continuous corner correction (#34)
+
+For advanced turns, `SegmentPhysics` owns discrete classification and the typed
+`ContinuousCorrectionTargetSpeedMetersPerSecond`; recoverable outcomes keep the
+actual input speed. `SimulationEngine` then asks `LongitudinalDynamics` for a
+`CornerSpeedCorrectionProfile` over actual remaining metres. `PhysicsSpeed` is
+the speed after the discrete constraint/incident stage and before this profile;
+final `Speed` is the speed after correction, optional carry and optional TurnExit
+drive.
+
+TurnEntry composes unchanged first-half scrub, residual correction and residual
+carry. TurnMiddle composes correction and carry. TurnExit composes correction
+with a drive profile only over `RemainingDistanceMeters`; a target that cannot be
+reached consumes the segment and prevents drive. RunWide uses correction plus
+carry and no drive. Each composition validates distance conservation, while
+diagnostic `TravelTimeSeconds` is always the actual final elapsed delta and phase
+times remain separately observable. Incident-created Crash/RunWide clears a
+stale constraint target so the unchanged incident consequence cannot be applied
+twice. Resolve remains mutation-free and adds no RNG.

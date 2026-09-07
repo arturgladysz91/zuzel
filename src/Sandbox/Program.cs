@@ -20,9 +20,17 @@ if (args.Length > 0)
         return;
     }
 
+    if (args.Length == 4 && StringComparer.Ordinal.Equals(args[0], "continuous-corner-correction-impact-report"))
+    {
+        ContinuousCornerCorrectionImpactReportWriter.Write(args[1], args[2], args[3]);
+        Console.WriteLine($"Wrote deterministic continuous corner-correction impact report: {args[3]}");
+        return;
+    }
+
     Console.Error.WriteLine("Usage:");
     Console.Error.WriteLine("  Sandbox calibration-report <dataset-directory> <output-markdown>");
     Console.Error.WriteLine("  Sandbox physical-width-impact-report <dataset-directory> <historical-baseline-markdown> <output-markdown>");
+    Console.Error.WriteLine("  Sandbox continuous-corner-correction-impact-report <dataset-directory> <historical-width-report-markdown> <output-markdown>");
     Environment.ExitCode = 2;
     return;
 }

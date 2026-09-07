@@ -32,6 +32,11 @@ public static class CalibrationCsvExporter
                 "StandingStartCruiseDistanceMeters", "StandingStartEntryNetAccelerationMetersPerSecondSquared",
                 "StandingStartTimeTo70KphSeconds", "StandingStartSpeedAtTwoSecondsMetersPerSecond",
                 "StandingStartPreparationDistanceMeters",
+                "CornerCorrectionEntrySpeedMetersPerSecond", "CornerCorrectionTargetSpeedMetersPerSecond",
+                "CornerCorrectionExitSpeedMetersPerSecond", "CornerCorrectionTravelTimeSeconds",
+                "CornerCorrectionRequiredDistanceMeters", "CornerCorrectionDistanceMeters",
+                "CornerCorrectionRemainingDistanceMeters",
+                "CornerCorrectionDecelerationMetersPerSecondSquared", "CornerCorrectionTargetReached",
             },
         };
 
@@ -62,6 +67,15 @@ public static class CalibrationCsvExporter
                 F(item.StandingStartCruiseDistanceMeters), F(item.StandingStartEntryNetAccelerationMetersPerSecondSquared),
                 F(item.StandingStartTimeTo70KphSeconds), F(item.StandingStartSpeedAtTwoSecondsMetersPerSecond),
                 F(item.StandingStartPreparationDistanceMeters),
+                F(item.CornerCorrectionEntrySpeedMetersPerSecond),
+                F(item.CornerCorrectionTargetSpeedMetersPerSecond),
+                F(item.CornerCorrectionExitSpeedMetersPerSecond),
+                F(item.CornerCorrectionTravelTimeSeconds),
+                F(item.CornerCorrectionRequiredDistanceMeters),
+                F(item.CornerCorrectionDistanceMeters),
+                F(item.CornerCorrectionRemainingDistanceMeters),
+                F(item.CornerCorrectionDecelerationMetersPerSecondSquared),
+                B(item.CornerCorrectionTargetReached),
             }));
 
         return Write(rows);
@@ -127,4 +141,5 @@ public static class CalibrationCsvExporter
     private static string I(int value) => value.ToString(Invariant);
     private static string F(float value) => value.ToString("R", Invariant);
     private static string? F(float? value) => value?.ToString("R", Invariant);
+    private static string? B(bool? value) => value?.ToString(Invariant);
 }

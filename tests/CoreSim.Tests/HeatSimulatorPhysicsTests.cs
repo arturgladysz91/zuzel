@@ -180,11 +180,11 @@ public sealed class HeatSimulatorPhysicsTests
         Assert.Equal(forcedRunWide.PlannedLane + 1, forcedRunWide.Lane);
         Assert.Equal(SegmentOutcome.RunWide, forcedRunWide.Outcome);
         Assert.Equal(forcedRunWideEntrySpeed, forcedRunWide.EntrySpeed);
-        Assert.True(forcedRunWide.PhysicsSpeed < forcedRunWide.EntrySpeed);
-        Assert.True(forcedRunWide.PhysicsSpeed >= maxSafeSpeed);
+        Assert.Equal(forcedRunWide.EntrySpeed, forcedRunWide.PhysicsSpeed);
+        Assert.True(forcedRunWide.Speed < forcedRunWide.PhysicsSpeed);
+        Assert.True(forcedRunWide.Speed >= maxSafeSpeed);
         Assert.True(forcedRunWide.PhysicsSpeed > 0f);
         Assert.True(float.IsFinite(forcedRunWide.PhysicsSpeed));
-        Assert.Equal(forcedRunWide.PhysicsSpeed, forcedRunWide.Speed);
     }
 
     [Fact]

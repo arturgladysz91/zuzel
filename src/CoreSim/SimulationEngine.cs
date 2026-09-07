@@ -54,7 +54,8 @@ public sealed record RiderStepDiagnostics(
     StraightSpeedProfile? StraightProfile,
     TurnEntryScrubProfile? TurnEntryScrubProfile,
     TrackSurfaceState EntrySurface,
-    StandingStartLaunchProfile? StandingStartLaunchProfile = null);
+    StandingStartLaunchProfile? StandingStartLaunchProfile = null,
+    CornerSpeedCorrectionProfile? CornerSpeedCorrectionProfile = null);
 
 public sealed class ResolvedSimulationStep
 {
@@ -120,7 +121,8 @@ public sealed class SimulationEngine
         StraightSpeedProfile? StraightProfile,
         TurnEntryScrubProfile? TurnEntryScrubProfile,
         TrackSurfaceState EntrySurface,
-        StandingStartLaunchProfile? StandingStartLaunchProfile);
+        StandingStartLaunchProfile? StandingStartLaunchProfile,
+        CornerSpeedCorrectionProfile? CornerSpeedCorrectionProfile);
 
     public SimulationEngine(IRiderDecisionModel decisionModel)
         => _decisionModel = decisionModel ?? throw new ArgumentNullException(nameof(decisionModel));
@@ -219,14 +221,10 @@ public sealed class SimulationEngine
             var rider = snapshot.Rider(resolution.Change.RiderId);
             var finalChange = changes[resolution.Change.RiderId];
             var diagnosticTravelTimeSeconds =
-                resolution.StandingStartLaunchProfile?.TotalTimeSeconds
-                ?? resolution.TurnExitDriveProfile?.TravelTimeSeconds
-                ?? finalChange.ElapsedTimeSeconds - rider.ElapsedTimeSeconds;
-            var peakSpeed = resolution.StandingStartLaunchProfile?.PeakSpeedMetersPerSecond
-                ?? resolution.StraightProfile?.PeakSpeedMetersPerSecond
-                ?? resolution.TurnExitDriveProfile?.PeakSpeedMetersPerSecond
-                ?? MathF.Max(resolution.Change.EntrySpeed, resolution.Change.PhysicsSpeed);
-            peakSpeed = MathF.Max(peakSpeed, finalChange.Speed);
+                finalChange.ElapsedTimeSeconds - rider.ElapsedTimeSeconds;
+            var peakSpeed = CalculateResolvedPeakSpeedMetersPerSecond(
+                resolution,
+                finalChange);
 
             if (resolution.StandingStartLaunchProfile is { } launchProfile)
             {
@@ -244,9 +242,10 @@ public sealed class SimulationEngine
                     resolution.Change.Speed,
                     "TurnExit profile exit speed");
                 ValidateEquivalent(
-                    turnExitProfile.TravelTimeSeconds,
+                    turnExitProfile.TravelTimeSeconds
+                    + (resolution.CornerSpeedCorrectionProfile?.TravelTimeSeconds ?? 0f),
                     resolution.Change.ElapsedTimeSeconds - rider.ElapsedTimeSeconds,
-                    "TurnExit profile travel time");
+                    "TurnExit physical phase time");
             }
 
             return new RiderStepDiagnostics(
@@ -260,10 +259,37 @@ public sealed class SimulationEngine
                 resolution.StraightProfile,
                 resolution.TurnEntryScrubProfile,
                 resolution.EntrySurface,
-                resolution.StandingStartLaunchProfile);
+                resolution.StandingStartLaunchProfile,
+                resolution.CornerSpeedCorrectionProfile);
         });
 
         return new ResolvedSimulationStep(snapshot, changes.Values, events, diagnostics);
+    }
+
+    private static float CalculateResolvedPeakSpeedMetersPerSecond(
+        ResolvedRider resolution,
+        RiderStateChange finalChange)
+    {
+        var peakSpeed = MathF.Max(
+            resolution.Change.EntrySpeed,
+            resolution.Change.PhysicsSpeed);
+        peakSpeed = MathF.Max(peakSpeed, resolution.Change.Speed);
+        peakSpeed = MathF.Max(peakSpeed, finalChange.Speed);
+
+        if (resolution.CornerSpeedCorrectionProfile is { } correction)
+        {
+            peakSpeed = MathF.Max(peakSpeed, correction.EntrySpeedMetersPerSecond);
+            peakSpeed = MathF.Max(peakSpeed, correction.ExitSpeedMetersPerSecond);
+        }
+
+        if (resolution.StandingStartLaunchProfile is { } launch)
+            peakSpeed = MathF.Max(peakSpeed, launch.PeakSpeedMetersPerSecond);
+        if (resolution.StraightProfile is { } straight)
+            peakSpeed = MathF.Max(peakSpeed, straight.PeakSpeedMetersPerSecond);
+        if (resolution.TurnExitDriveProfile is { } turnExit)
+            peakSpeed = MathF.Max(peakSpeed, turnExit.PeakSpeedMetersPerSecond);
+
+        return peakSpeed;
     }
 
     public void Commit(
@@ -446,8 +472,48 @@ public sealed class SimulationEngine
         var speed = resolution.Speed;
         StraightSpeedProfile? straightProfile = null;
         TurnExitDriveProfile? turnExitDriveProfile = null;
+        CornerSpeedCorrectionProfile? cornerSpeedCorrectionProfile = null;
         StandingStartLaunchProfile? standingStartLaunchProfile = null;
         float? turnExitNetAcceleration = null;
+
+        if (!snapshot.Step.UseLegacyPhysics
+            && snapshot.Segment.Type != SegmentType.Straight
+            && resolution.Outcome != SegmentOutcome.Crash
+            && resolution.ContinuousCorrectionTargetSpeedMetersPerSecond is { } correctionTarget)
+        {
+            var availableCorrectionDistanceMeters = travelled;
+            if (snapshot.Segment.Type == SegmentType.TurnEntry)
+            {
+                var scrubProfile = turnEntryScrubProfile
+                    ?? throw new InvalidOperationException(
+                        "Advanced TurnEntry correction requires its scrub profile.");
+                availableCorrectionDistanceMeters -=
+                    scrubProfile.DecelerationDistanceMeters + scrubProfile.CarryDistanceMeters;
+                var tolerance = MathF.Max(1e-6f, travelled * 1e-6f);
+                if (availableCorrectionDistanceMeters < -tolerance)
+                {
+                    throw new InvalidOperationException(
+                        "TurnEntry scrub distance exceeds the actual travelled distance.");
+                }
+
+                availableCorrectionDistanceMeters = MathF.Max(
+                    0f,
+                    availableCorrectionDistanceMeters);
+            }
+
+            var correctionDeceleration = LongitudinalDynamics
+                .CalculateCornerCorrectionDecelerationMetersPerSecondSquared(
+                    rider.Profile.Skills,
+                    surface);
+            cornerSpeedCorrectionProfile = LongitudinalDynamics
+                .CalculateCornerSpeedCorrectionProfile(
+                    resolution.Speed,
+                    correctionTarget,
+                    correctionDeceleration,
+                    availableCorrectionDistanceMeters);
+            speed = cornerSpeedCorrectionProfile.Value.ExitSpeedMetersPerSecond;
+        }
+
         if (standingStartEligible)
         {
             standingStartLaunchProfile = LongitudinalDynamics.CalculateStandingStartLaunchProfile(
@@ -475,19 +541,36 @@ public sealed class SimulationEngine
         else if (!snapshot.Step.UseLegacyPhysics
             && snapshot.Segment.Type == SegmentType.TurnExit
             && resolution.Outcome is SegmentOutcome.Ok or SegmentOutcome.Brake
-            && resolution.Speed > 0f
-            && travelled > 0f)
+            && speed > 0f)
         {
-            turnExitDriveProfile = LongitudinalDynamics
-                .CalculateForceBasedTurnExitDriveProfile(
-                resolution.Speed,
-                rider.Profile.Skills,
-                rider.ActiveSetup,
-                surface,
-                travelled);
-            turnExitNetAcceleration =
-                turnExitDriveProfile.Value.EntryNetAccelerationMetersPerSecondSquared;
-            speed = turnExitDriveProfile.Value.ExitSpeedMetersPerSecond;
+            var driveDistanceMeters = cornerSpeedCorrectionProfile?.RemainingDistanceMeters
+                ?? travelled;
+            var correctionAllowsDrive = cornerSpeedCorrectionProfile is not { } correction
+                || correction.TargetReached;
+            if (correctionAllowsDrive && driveDistanceMeters > 0f)
+            {
+                turnExitDriveProfile = LongitudinalDynamics
+                    .CalculateForceBasedTurnExitDriveProfile(
+                    speed,
+                    rider.Profile.Skills,
+                    rider.ActiveSetup,
+                    surface,
+                    driveDistanceMeters);
+                turnExitNetAcceleration =
+                    turnExitDriveProfile.Value.EntryNetAccelerationMetersPerSecondSquared;
+                speed = turnExitDriveProfile.Value.ExitSpeedMetersPerSecond;
+            }
+        }
+
+        if (!snapshot.Step.UseLegacyPhysics)
+        {
+            ValidateTurnDistanceConservation(
+                snapshot.Segment.Type,
+                resolution.Outcome,
+                travelled,
+                turnEntryScrubProfile,
+                cornerSpeedCorrectionProfile,
+                turnExitDriveProfile);
         }
 
         float segmentElapsedTimeSeconds;
@@ -499,6 +582,7 @@ public sealed class SimulationEngine
         {
             segmentElapsedTimeSeconds = CalculateTurnEntryTravelTimeSeconds(
                 scrubProfile,
+                cornerSpeedCorrectionProfile,
                 travelled,
                 resolution.Speed,
                 resolution.Outcome);
@@ -509,7 +593,16 @@ public sealed class SimulationEngine
         }
         else if (turnExitDriveProfile is { } turnExitProfile)
         {
-            segmentElapsedTimeSeconds = turnExitProfile.TravelTimeSeconds;
+            segmentElapsedTimeSeconds = turnExitProfile.TravelTimeSeconds
+                + (cornerSpeedCorrectionProfile?.TravelTimeSeconds ?? 0f);
+        }
+        else if (cornerSpeedCorrectionProfile is { } correctionProfile)
+        {
+            segmentElapsedTimeSeconds = correctionProfile.TravelTimeSeconds
+                + CalculateConstantSpeedTravelTimeSeconds(
+                    correctionProfile.RemainingDistanceMeters,
+                    correctionProfile.ExitSpeedMetersPerSecond,
+                    "corner correction carry");
         }
         else
         {
@@ -568,7 +661,8 @@ public sealed class SimulationEngine
             straightProfile,
             turnEntryScrubProfile,
             surface,
-            standingStartLaunchProfile);
+            standingStartLaunchProfile,
+            cornerSpeedCorrectionProfile);
     }
 
     private static float? ResolveImmediateNextTurnApproachSpeed(
@@ -610,6 +704,7 @@ public sealed class SimulationEngine
 
     private static float CalculateTurnEntryTravelTimeSeconds(
         TurnEntryScrubProfile scrubProfile,
+        CornerSpeedCorrectionProfile? correctionProfile,
         float travelledMeters,
         float postConstraintSpeedMetersPerSecond,
         SegmentOutcome outcome)
@@ -628,6 +723,28 @@ public sealed class SimulationEngine
         }
 
         postScrubDistanceMeters = MathF.Max(0f, postScrubDistanceMeters);
+        if (correctionProfile is { } correction)
+        {
+            ValidateDistanceComposition(
+                postScrubDistanceMeters,
+                "TurnEntry residual correction",
+                correction.CorrectionDistanceMeters,
+                correction.RemainingDistanceMeters);
+            var composedTravelTimeSeconds = scrubProfile.TravelTimeSeconds
+                + correction.TravelTimeSeconds
+                + CalculateConstantSpeedTravelTimeSeconds(
+                    correction.RemainingDistanceMeters,
+                    correction.ExitSpeedMetersPerSecond,
+                    "TurnEntry residual carry");
+            if (!float.IsFinite(composedTravelTimeSeconds))
+            {
+                throw new OverflowException(
+                    "TurnEntry travel time exceeds the finite single-precision domain.");
+            }
+
+            return composedTravelTimeSeconds;
+        }
+
         if (postScrubDistanceMeters > 0f
             && (!float.IsFinite(postConstraintSpeedMetersPerSecond)
                 || postConstraintSpeedMetersPerSecond <= 0f))
@@ -644,6 +761,94 @@ public sealed class SimulationEngine
             throw new OverflowException("TurnEntry travel time exceeds the finite single-precision domain.");
 
         return travelTimeSeconds;
+    }
+
+    private static void ValidateTurnDistanceConservation(
+        SegmentType segmentType,
+        SegmentOutcome outcome,
+        float travelledMeters,
+        TurnEntryScrubProfile? scrubProfile,
+        CornerSpeedCorrectionProfile? correctionProfile,
+        TurnExitDriveProfile? turnExitDriveProfile)
+    {
+        if (segmentType == SegmentType.Straight || outcome == SegmentOutcome.Crash)
+            return;
+
+        var phaseDistances = new List<float>();
+        if (segmentType == SegmentType.TurnEntry)
+        {
+            var scrub = scrubProfile
+                ?? throw new InvalidOperationException(
+                    "Advanced TurnEntry traversal requires its scrub profile.");
+            phaseDistances.Add(scrub.DecelerationDistanceMeters);
+            phaseDistances.Add(scrub.CarryDistanceMeters);
+        }
+
+        if (correctionProfile is { } correction)
+        {
+            phaseDistances.Add(correction.CorrectionDistanceMeters);
+            if (turnExitDriveProfile is { } drive)
+            {
+                phaseDistances.Add(drive.AccelerationDistanceMeters);
+                phaseDistances.Add(drive.CruiseDistanceMeters);
+                phaseDistances.Add(drive.DecelerationDistanceMeters);
+            }
+            else
+            {
+                phaseDistances.Add(correction.RemainingDistanceMeters);
+            }
+        }
+        else if (turnExitDriveProfile is { } drive)
+        {
+            phaseDistances.Add(drive.AccelerationDistanceMeters);
+            phaseDistances.Add(drive.CruiseDistanceMeters);
+            phaseDistances.Add(drive.DecelerationDistanceMeters);
+        }
+        else
+        {
+            phaseDistances.Add(travelledMeters - phaseDistances.Sum());
+        }
+
+        ValidateDistanceComposition(
+            travelledMeters,
+            $"{segmentType} physical phases",
+            phaseDistances.ToArray());
+    }
+
+    private static void ValidateDistanceComposition(
+        float expectedDistanceMeters,
+        string name,
+        params float[] phaseDistancesMeters)
+    {
+        if (phaseDistancesMeters.Any(distance => !float.IsFinite(distance) || distance < 0f))
+            throw new InvalidOperationException($"{name} contains an invalid phase distance.");
+
+        var actualDistanceMeters = phaseDistancesMeters.Sum();
+        var tolerance = MathF.Max(1e-5f, expectedDistanceMeters * 1e-5f);
+        if (MathF.Abs(actualDistanceMeters - expectedDistanceMeters) > tolerance)
+        {
+            throw new InvalidOperationException(
+                $"{name} does not conserve travelled distance.");
+        }
+    }
+
+    private static float CalculateConstantSpeedTravelTimeSeconds(
+        float distanceMeters,
+        float speedMetersPerSecond,
+        string phaseName)
+    {
+        if (distanceMeters == 0f)
+            return 0f;
+        if (!float.IsFinite(speedMetersPerSecond) || speedMetersPerSecond <= 0f)
+        {
+            throw new InvalidOperationException(
+                $"A positive {phaseName} distance requires positive finite speed.");
+        }
+
+        var timeSeconds = distanceMeters / speedMetersPerSecond;
+        if (!float.IsFinite(timeSeconds))
+            throw new OverflowException($"{phaseName} time exceeds the finite domain.");
+        return timeSeconds;
     }
 
     private static void ValidateEquivalent(float expected, float actual, string name)
@@ -841,13 +1046,21 @@ public sealed class SimulationEngine
             RandomChannel.IncidentSeverity,
             plannedLane);
         if (severity < resolution.IncidentRisk * 0.35f || plannedLane == LaneModel.MaxLane)
-            return resolution with { Outcome = SegmentOutcome.Crash, Speed = 0f };
+        {
+            return resolution with
+            {
+                Outcome = SegmentOutcome.Crash,
+                Speed = 0f,
+                ContinuousCorrectionTargetSpeedMetersPerSecond = null,
+            };
+        }
 
         return resolution with
         {
             Outcome = SegmentOutcome.RunWide,
             Lane = Math.Min(plannedLane + 1, LaneModel.MaxLane),
             Speed = resolution.Speed * 0.88f,
+            ContinuousCorrectionTargetSpeedMetersPerSecond = null,
         };
     }
 

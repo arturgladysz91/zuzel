@@ -435,7 +435,9 @@ public sealed class LateralMovementModelTests
     [Fact]
     public void ReversingAfterRunWideImmediatelyMovesTowardTheInnerTarget()
     {
-        var track = TrackWithTurns(segmentCount: 2, turnAngleRadians: 0.10f);
+        // Give the first RunWide enough physical path to reach its retained-overspeed
+        // target; the second segment then isolates the intended reversal behavior.
+        var track = TrackWithTurns(segmentCount: 2, turnAngleRadians: 0.40f);
         var trackState = TrackState.CreateDefault(track, IdealSurface);
         var rider = new RiderState(1, lane: 0);
         rider.Speed = SegmentPhysics.MaxSafeTurnSpeed(
@@ -476,7 +478,10 @@ public sealed class LateralMovementModelTests
         Assert.Equal(2, inwardChange.BeforeLane);
         Assert.Equal(0, inwardChange.TargetLane);
         Assert.Equal(0, inwardChange.PlannedLane);
-        Assert.True(inwardChange.LateralPosition < beforeReversal);
+        Assert.True(
+            inwardChange.LateralPosition < beforeReversal,
+            $"Expected inward movement from {beforeReversal:R}, got {inwardChange.LateralPosition:R} "
+            + $"with outcome {inwardChange.Outcome} and lane {inwardChange.Lane}.");
     }
 
     [Fact]

@@ -189,7 +189,7 @@ public sealed class StandingStartTelemetryTests
         var d = step.Diagnostics.Single(d => d.RiderId == contact.RiderId);
         var change = step.Changes.Single(c => c.RiderId == contact.RiderId);
         var profile = d.StandingStartLaunchProfile!.Value;
-        Assert.Equal(profile.TotalTimeSeconds, d.TravelTimeSeconds);
+        Assert.Equal(change.ElapsedTimeSeconds, d.TravelTimeSeconds);
         Assert.True(change.ElapsedTimeSeconds > profile.TotalTimeSeconds);
         Assert.True(change.Speed < profile.ExitSpeedMetersPerSecond);
         Assert.Equal(profile.PeakSpeedMetersPerSecond, d.PeakSpeedMetersPerSecond);

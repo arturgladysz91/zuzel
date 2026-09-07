@@ -474,3 +474,22 @@ A/B/C/D physical gate model remains future work. The
 [physical-width impact report](docs/calibration/physical-width-impact.md) is
 observation-only: no speed/performance constant was changed and no calibration
 was performed.
+
+## Continuous corner-speed correction (#34)
+
+Advanced `SegmentPhysics` now classifies a corner constraint and supplies a
+nullable correction target without instantly assigning recoverable speed to that
+target. `LongitudinalDynamics` spends actual distance and time on deterministic
+correction with the unchanged `2.00–3.20 m/s²` SlideControl-and-surface
+capability. In advanced physics `Brake` therefore means controlled speed scrub,
+not use of a mechanical brake; legacy physics retains its exact instantaneous
+clamp and retention behavior.
+
+TurnEntry keeps its coarse first-half scrub and gives only the residual distance
+to continuous correction. TurnMiddle corrects and then carries. TurnExit corrects
+before drive, and the drive profile can use only the distance left by correction;
+RunWide never receives drive. Insufficient distance leaves residual overspeed,
+while Crash remains a terminal event abstraction. Random incident probability,
+RNG channels and the immediate `0.88` consequence are unchanged. The
+[continuous-correction impact report](docs/calibration/continuous-corner-correction-impact.md)
+is observation-only; no physics calibration was performed.
