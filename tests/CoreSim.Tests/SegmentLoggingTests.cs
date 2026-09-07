@@ -55,7 +55,7 @@ public sealed class SegmentLoggingTests
 
         var segmentLog = Assert.Single(result.Log.Lines, line => line.Contains("outcome=Brake"));
         Assert.Contains($"v_in={entrySpeed.ToString("F2", CultureInfo.InvariantCulture)}", segmentLog);
-        Assert.Contains($"v_physics={maxSafeSpeed.ToString("F2", CultureInfo.InvariantCulture)}", segmentLog);
+        Assert.Contains($"v_physics={entrySpeed.ToString("F2", CultureInfo.InvariantCulture)}", segmentLog);
         Assert.Contains($"v_out={rider.Speed.ToString("F2", CultureInfo.InvariantCulture)}", segmentLog);
         Assert.True(rider.Speed > maxSafeSpeed);
     }

@@ -120,7 +120,10 @@ public sealed class ContinuousCornerRadiusTests
         Assert.Equal(SegmentOutcome.Ok, outer.Outcome);
         Assert.Equal(lane, inner.Lane);
         Assert.Equal(lane, outer.Lane);
-        Assert.True(outer.Speed > inner.Speed);
+        Assert.Equal(entrySpeed, inner.Speed);
+        Assert.Equal(entrySpeed, outer.Speed);
+        Assert.NotNull(inner.ContinuousCorrectionTargetSpeedMetersPerSecond);
+        Assert.Null(outer.ContinuousCorrectionTargetSpeedMetersPerSecond);
     }
 
     [Fact]
@@ -178,7 +181,9 @@ public sealed class ContinuousCornerRadiusTests
         Assert.Equal(entrySpeed, outer.EntrySpeed);
         Assert.Equal(SegmentOutcome.Brake, inner.Outcome);
         Assert.Equal(SegmentOutcome.Ok, outer.Outcome);
-        Assert.True(outer.PhysicsSpeed > inner.PhysicsSpeed);
+        Assert.Equal(entrySpeed, inner.PhysicsSpeed);
+        Assert.Equal(entrySpeed, outer.PhysicsSpeed);
+        Assert.True(outer.Speed > inner.Speed);
     }
 
     [Fact]

@@ -85,7 +85,7 @@ public sealed class SegmentPhysicsTests
     }
 
     [Fact]
-    public void AdvancedRunWide_CorrectsSpeedWithoutDroppingBelowIndividualLimit()
+    public void AdvancedRunWide_ProducesContinuousTargetWithoutChangingInputSpeed()
     {
         var segment = new TrackSegment(5, SegmentType.TurnMiddle);
         const int lane = 1;
@@ -111,8 +111,10 @@ public sealed class SegmentPhysicsTests
 
         Assert.Equal(SegmentOutcome.RunWide, result.Outcome);
         Assert.Equal(lane + 1, result.Lane);
-        Assert.True(result.Speed < entrySpeed);
-        Assert.InRange(result.Speed, max, entrySpeed);
+        Assert.Equal(entrySpeed, result.Speed);
+        var target = Assert.IsType<float>(result.ContinuousCorrectionTargetSpeedMetersPerSecond);
+        Assert.True(target < entrySpeed);
+        Assert.InRange(target, max, entrySpeed);
         Assert.True(result.Speed > 0f);
         Assert.True(float.IsFinite(result.Speed));
     }
@@ -146,7 +148,9 @@ public sealed class SegmentPhysicsTests
             skills,
             Morale: 0.5f,
             Setup: BikeSetup.Neutral));
-        var actualRetainedFraction = (result.Speed - maxSafeSpeed)
+        var correctionTarget = Assert.IsType<float>(
+            result.ContinuousCorrectionTargetSpeedMetersPerSecond);
+        var actualRetainedFraction = (correctionTarget - maxSafeSpeed)
             / (entrySpeed - maxSafeSpeed);
 
         Assert.Equal(SegmentOutcome.RunWide, result.Outcome);
@@ -155,8 +159,9 @@ public sealed class SegmentPhysicsTests
             MathF.Abs(actualRetainedFraction - expectedRetainedFraction),
             0f,
             0.0001f);
-        Assert.True(result.Speed < entrySpeed);
-        Assert.True(result.Speed >= maxSafeSpeed);
+        Assert.Equal(entrySpeed, result.Speed);
+        Assert.True(correctionTarget < entrySpeed);
+        Assert.True(correctionTarget >= maxSafeSpeed);
         Assert.True(result.Speed > 0f);
         Assert.True(float.IsFinite(result.Speed));
     }

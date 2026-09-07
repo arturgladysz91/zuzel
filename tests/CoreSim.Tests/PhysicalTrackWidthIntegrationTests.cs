@@ -70,7 +70,8 @@ public sealed class PhysicalTrackWidthIntegrationTests
             track, new[] { newRider }, segment: 2).Changes);
         Assert.Equal(SegmentOutcome.Brake, oldChange.Outcome);
         Assert.Equal(SegmentOutcome.Ok, newChange.Outcome);
-        Assert.Equal(oldOuter, oldChange.PhysicsSpeed, 5);
+        Assert.Equal(18f, oldChange.PhysicsSpeed, 5);
+        Assert.Equal(oldOuter, oldChange.Speed, 5);
         Assert.Equal(18f, newChange.PhysicsSpeed, 5);
     }
 

@@ -64,7 +64,16 @@ public sealed record CalibrationStepSample(
     float? StandingStartTimeTo70KphSeconds = null,
     float? StandingStartSpeedAtTwoSecondsMetersPerSecond = null,
     float? StandingStartPreparationDistanceMeters = null,
-    float? TurnExitDecelerationDistanceMeters = null);
+    float? TurnExitDecelerationDistanceMeters = null,
+    float? CornerCorrectionEntrySpeedMetersPerSecond = null,
+    float? CornerCorrectionTargetSpeedMetersPerSecond = null,
+    float? CornerCorrectionExitSpeedMetersPerSecond = null,
+    float? CornerCorrectionTravelTimeSeconds = null,
+    float? CornerCorrectionRequiredDistanceMeters = null,
+    float? CornerCorrectionDistanceMeters = null,
+    float? CornerCorrectionRemainingDistanceMeters = null,
+    float? CornerCorrectionDecelerationMetersPerSecondSquared = null,
+    bool? CornerCorrectionTargetReached = null);
 
 public sealed record CalibrationLapSummary(
     int RiderId,

@@ -14,7 +14,8 @@ public sealed record SegmentResolution(
     SegmentOutcome Outcome,
     int Lane,
     float Speed,
-    float IncidentRisk = 0f);
+    float IncidentRisk = 0f,
+    float? ContinuousCorrectionTargetSpeedMetersPerSecond = null);
 
 public sealed record SegmentPhysicsContext(
     TrackSegment Segment,
@@ -67,6 +68,13 @@ public static class SegmentPhysics
     public const float MinRunWideOverspeedRetention = 0.35f;
     public const float MaxRunWideOverspeedRetention = 0.65f;
     public const float NeutralRunWideOverspeedRetention = 0.50f;
+    public const float AdvancedQuietCorrectionSpeedFactor = 1.015f;
+    public const float MinAdvancedBrakeSpeedFactor = 1.06f;
+    public const float MaxAdvancedBrakeSpeedFactor = 1.14f;
+    public const float AdvancedBrakeSpeedFactorRange = 0.08f;
+    public const float MinAdvancedRunWideSpeedFactor = 1.18f;
+    public const float MaxAdvancedRunWideSpeedFactor = 1.34f;
+    public const float AdvancedRunWideSpeedFactorRange = 0.16f;
 
     public static float MaxSafeTurnSpeed(int lane)
         => MaxSafeTurnSpeed(lane, TrackGeometry.Default);
@@ -162,7 +170,7 @@ public static class SegmentPhysics
         if (segment.Type == SegmentType.Straight)
             return new SegmentResolution(SegmentOutcome.Ok, lane, speed);
 
-        return Resolve(
+        return ResolveLegacy(
             lane,
             speed,
             MaxSafeTurnSpeed(lane, geometry),
@@ -189,26 +197,28 @@ public static class SegmentPhysics
             context.Surface,
             context.Skills,
             context.Setup);
-        var brakeFactor = 1.06f + control * 0.08f;
-        var runWideFactor = 1.18f + control * 0.16f;
+        var brakeFactor = MinAdvancedBrakeSpeedFactor
+            + control * AdvancedBrakeSpeedFactorRange;
+        var runWideFactor = MinAdvancedRunWideSpeedFactor
+            + control * AdvancedRunWideSpeedFactorRange;
         var runWideOverspeedRetention = MinRunWideOverspeedRetention
             + (MaxRunWideOverspeedRetention - MinRunWideOverspeedRetention) * control;
         var surfaceRisk = (1f - context.Surface.EffectiveGrip) * 0.28f + context.Surface.Ruts * 0.18f;
         var moraleRisk = (1f - Math.Clamp(context.Morale, 0f, 1f)) * 0.08f;
         var incidentRisk = TrackSurfaceState.Clamp01(context.DecisionRisk + surfaceRisk + moraleRisk);
 
-        return Resolve(
+        return ResolveAdvanced(
             context.Lane,
             context.Speed,
             max,
             brakeFactor,
             runWideFactor,
             incidentRisk,
-            quietCorrectionFactor: 1.015f,
+            quietCorrectionFactor: AdvancedQuietCorrectionSpeedFactor,
             runWideOverspeedRetention: runWideOverspeedRetention);
     }
 
-    private static SegmentResolution Resolve(
+    private static SegmentResolution ResolveLegacy(
         int lane,
         float speed,
         float max,
@@ -232,6 +242,57 @@ public static class SegmentPhysics
             var overspeed = speed - max;
             var correctedSpeed = max + overspeed * runWideOverspeedRetention;
             return new SegmentResolution(SegmentOutcome.RunWide, lane + 1, correctedSpeed, incidentRisk);
+        }
+
+        return new SegmentResolution(SegmentOutcome.Crash, lane, 0f, incidentRisk);
+    }
+
+    private static SegmentResolution ResolveAdvanced(
+        int lane,
+        float speed,
+        float max,
+        float brakeFactor,
+        float runWideFactor,
+        float incidentRisk,
+        float quietCorrectionFactor,
+        float runWideOverspeedRetention)
+    {
+        if (speed <= max)
+            return new SegmentResolution(SegmentOutcome.Ok, lane, speed, incidentRisk);
+
+        if (speed <= max * quietCorrectionFactor)
+        {
+            return new SegmentResolution(
+                SegmentOutcome.Ok,
+                lane,
+                speed,
+                incidentRisk,
+                max);
+        }
+
+        if (speed <= max * brakeFactor)
+        {
+            return new SegmentResolution(
+                SegmentOutcome.Brake,
+                lane,
+                speed,
+                incidentRisk,
+                max);
+        }
+
+        if (speed <= max * runWideFactor)
+        {
+            if (lane == LaneModel.MaxLane)
+                return new SegmentResolution(SegmentOutcome.Crash, lane, 0f, incidentRisk);
+
+            var overspeed = speed - max;
+            var correctionTarget = max + overspeed * runWideOverspeedRetention;
+            return new SegmentResolution(
+                SegmentOutcome.RunWide,
+                lane + 1,
+                speed,
+                incidentRisk,
+                correctionTarget);
         }
 
         return new SegmentResolution(SegmentOutcome.Crash, lane, 0f, incidentRisk);

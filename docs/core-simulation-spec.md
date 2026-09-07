@@ -141,3 +141,35 @@ A gameplay layer is responsible for hiding exact values and exposing observation
 The versioned PGEE snapshot and evaluator measure the current production model without modifying it. Real Vmax, average speed, first-lap penalty, and within-heat spreads are distribution envelopes rather than caps or equality targets. Absolute heat/lap time and distance remain context until a concrete simulated track matches real geometry. Source `speed_2s` and `curve_speed` are gate rankings, not individual physical speeds; reaction has separate literature context supplied in the task specification.
 
 RiderSkills express capability; age/category does not apply a speed, start, or corner multiplier. Skill 50 is not assigned the meaning “average PGEE rider,” and #32 adds neither new execution RNG nor real-rider skill labels. The calibration observer and added skill metadata cannot affect results. #33 changes physical-width geometry and records observations only; empirical performance calibration remains future work.
+
+## Continuous corner-speed correction (#34)
+
+- Advanced corner resolution keeps recoverable input speed and emits a nullable
+  target: none at/below `MaxSafeTurnSpeed`, `max` in the quiet `1.015` and Brake
+  bands, and `max + (input - max) × retention` for RunWide. Thresholds remain
+  `1.06–1.14` for Brake, `1.18–1.34` for RunWide and `0.35–0.65` retention.
+  The RunWide target uses the constraint's entry radius and is not recomputed on
+  the forced outer lane. Outer-lane RunWide and above-threshold speed still crash.
+- `CornerSpeedCorrectionProfile` uses the unchanged effective corner correction
+  capability `2.00–3.20 m/s² × (0.75 + 0.25 × EffectiveGrip)`. For entry above
+  target, required distance is `(entry²-target²)/(2a)`. Sufficient distance ends
+  exactly at target and returns the remainder; insufficient distance is consumed
+  completely and leaves exit speed above target. Phase time is
+  `2d/(entry+exit)`. Zero distance preserves speed and takes zero time.
+- TurnEntry retains the `0.50` first-half scrub. Only post-scrub metres can be
+  used by residual correction, followed by constant-speed carry. TurnMiddle uses
+  correction then carry. TurnExit applies correction first and may run its
+  existing drive profile only on correction remainder; it never reuses the full
+  segment. RunWide receives carry but no drive. Crash retains half-remaining
+  progress and existing time/status semantics.
+- `RiderStateChange.PhysicsSpeed` is actual speed after the discrete
+  constraint/random-incident stage and before continuous correction. `Speed` is
+  final speed after all physical phases. `RiderStepDiagnostics.TravelTimeSeconds`
+  is always final elapsed minus entry elapsed. Typed correction diagnostics may
+  coexist with TurnEntry scrub and TurnExit drive profiles.
+- Random incident probability, addressed RNG channels, severity, immediate
+  `0.88` loss and crash behavior remain unchanged. An incident-created
+  Crash/RunWide clears the earlier constraint target, preventing a double loss.
+  Correction itself is deterministic and uses no RNG. Legacy physics remains
+  byte/float-compatible and instantaneous. No calibration or constant tuning was
+  performed.

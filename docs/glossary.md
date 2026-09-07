@@ -48,3 +48,21 @@
 - Compatibility geometry: `TrackGeometry.Default` and `CreateExample()` use synthetic 6/6 m widths, 4/4 m usable spans and 1/1 m reference spacings; these are not regulatory-size tracks.
 - Segment-local lateral geometry: the same normalized fraction maps through the current straight/turn width without a transition event or added distance/time. Gradual width transitions and diagonal/spiral path corrections remain future refinements.
 - Surface bands: five normalized reference bands, independent of physical width. Adjacent-band wear remains a numerical kernel with unchanged grip/wear values.
+- Corner correction target: nullable target emitted by advanced `SegmentPhysics`
+  after constraint classification. It is not `RiderStateChange.Speed` or
+  `PhysicsSpeed` and is cleared when a random incident replaces the constraint
+  consequence.
+- CornerSpeedCorrectionProfile: deterministic correction-only phase containing
+  entry, target and exit speed, required/actual/remaining distance, phase time,
+  effective deceleration and target-reached state. It never consumes remaining
+  carry or TurnExit drive distance.
+- Advanced Brake: compatibility enum value meaning controlled corner speed
+  scrub/correction, not a mechanical brake. Legacy Brake keeps its instantaneous
+  clamp.
+- PhysicsSpeed after #34: actual speed after discrete constraint and incident,
+  before continuous correction. Final `Speed` includes correction, carry and any
+  eligible TurnExit drive.
+- Continuous-correction PR boundary: TurnEntry scrub + residual correction,
+  TurnMiddle correction + carry and TurnExit correction-before-drive are
+  structural physics only. Thresholds, correction strength, incidents, RNG,
+  geometry and all calibration constants are unchanged.

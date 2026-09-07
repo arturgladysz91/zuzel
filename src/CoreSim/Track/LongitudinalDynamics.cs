@@ -43,6 +43,21 @@ public readonly record struct TurnEntryScrubProfile(
     float CarryDistanceMeters);
 
 /// <summary>
+/// Deterministic correction phase for a recoverable advanced corner constraint.
+/// Remaining distance is deliberately not consumed by this profile.
+/// </summary>
+public readonly record struct CornerSpeedCorrectionProfile(
+    float EntrySpeedMetersPerSecond,
+    float TargetSpeedMetersPerSecond,
+    float ExitSpeedMetersPerSecond,
+    float TravelTimeSeconds,
+    float RequiredCorrectionDistanceMeters,
+    float CorrectionDistanceMeters,
+    float RemainingDistanceMeters,
+    float DecelerationMetersPerSecondSquared,
+    bool TargetReached);
+
+/// <summary>
 /// Pre-contact traversal from rest, measured from tape movement. Reaction is
 /// stationary; only MovementTimeSeconds contributes to lateral movement.
 /// Start metrics are observed outputs, never physics calibration targets.
@@ -602,7 +617,7 @@ public static class LongitudinalDynamics
             + (ProvisionalSpeedOrientedForceFadePerMeterPerSecond
                - ProvisionalDriveOrientedForceFadePerMeterPerSecond) * (double)setup.Gearing;
 
-    public static float CalculateCornerEntryDecelerationMetersPerSecondSquared(
+    public static float CalculateCornerCorrectionDecelerationMetersPerSecondSquared(
         RiderSkills skills,
         TrackSurfaceState surface)
     {
@@ -617,6 +632,108 @@ public static class LongitudinalDynamics
         var deceleration = baseDeceleration * surfaceMultiplier;
         ValidateNonNegativeFinite(deceleration, "result");
         return deceleration;
+    }
+
+    /// <summary>Compatibility alias for the canonical corner-correction capability.</summary>
+    public static float CalculateCornerEntryDecelerationMetersPerSecondSquared(
+        RiderSkills skills,
+        TrackSurfaceState surface)
+        => CalculateCornerCorrectionDecelerationMetersPerSecondSquared(skills, surface);
+
+    public static CornerSpeedCorrectionProfile CalculateCornerSpeedCorrectionProfile(
+        float initialSpeedMetersPerSecond,
+        float targetSpeedMetersPerSecond,
+        float decelerationMetersPerSecondSquared,
+        float availableDistanceMeters)
+    {
+        ValidateNonNegativeFinite(
+            initialSpeedMetersPerSecond,
+            nameof(initialSpeedMetersPerSecond));
+        ValidateNonNegativeFinite(
+            targetSpeedMetersPerSecond,
+            nameof(targetSpeedMetersPerSecond));
+        ValidatePositiveFinite(
+            decelerationMetersPerSecondSquared,
+            nameof(decelerationMetersPerSecondSquared));
+        ValidateNonNegativeFinite(
+            availableDistanceMeters,
+            nameof(availableDistanceMeters));
+
+        var targetAlreadyReached = initialSpeedMetersPerSecond <= targetSpeedMetersPerSecond;
+        var requiredDistance = targetAlreadyReached
+            ? 0d
+            : ((double)initialSpeedMetersPerSecond * initialSpeedMetersPerSecond
+               - (double)targetSpeedMetersPerSecond * targetSpeedMetersPerSecond)
+              / (2d * decelerationMetersPerSecondSquared);
+        if (!double.IsFinite(requiredDistance) || requiredDistance > float.MaxValue)
+        {
+            throw new OverflowException(
+                "Corner correction distance exceeds the finite single-precision domain.");
+        }
+
+        var requiredDistanceMeters = (float)requiredDistance;
+        if (availableDistanceMeters == 0f)
+        {
+            return new CornerSpeedCorrectionProfile(
+                initialSpeedMetersPerSecond,
+                targetSpeedMetersPerSecond,
+                initialSpeedMetersPerSecond,
+                0f,
+                requiredDistanceMeters,
+                0f,
+                0f,
+                decelerationMetersPerSecondSquared,
+                targetAlreadyReached);
+        }
+
+        if (targetAlreadyReached)
+        {
+            return new CornerSpeedCorrectionProfile(
+                initialSpeedMetersPerSecond,
+                targetSpeedMetersPerSecond,
+                initialSpeedMetersPerSecond,
+                0f,
+                0f,
+                0f,
+                availableDistanceMeters,
+                decelerationMetersPerSecondSquared,
+                true);
+        }
+
+        var targetReached = requiredDistance <= availableDistanceMeters;
+        var correctionDistanceMeters = targetReached
+            ? MathF.Min(requiredDistanceMeters, availableDistanceMeters)
+            : availableDistanceMeters;
+        var exitSpeedMetersPerSecond = targetReached
+            ? targetSpeedMetersPerSecond
+            : DecelerateOverDistance(
+                initialSpeedMetersPerSecond,
+                decelerationMetersPerSecondSquared,
+                correctionDistanceMeters);
+        var remainingDistanceMeters = targetReached
+            ? availableDistanceMeters - correctionDistanceMeters
+            : 0f;
+        var travelTimeSeconds = CalculatePhaseTimeSeconds(
+            correctionDistanceMeters,
+            initialSpeedMetersPerSecond,
+            exitSpeedMetersPerSecond);
+
+        if (!targetReached && exitSpeedMetersPerSecond <= targetSpeedMetersPerSecond)
+        {
+            throw new InvalidOperationException(
+                "An insufficient corner-correction distance must retain residual overspeed.");
+        }
+
+        return new CornerSpeedCorrectionProfile(
+            initialSpeedMetersPerSecond,
+            targetSpeedMetersPerSecond,
+            exitSpeedMetersPerSecond,
+            travelTimeSeconds,
+            requiredDistanceMeters,
+            correctionDistanceMeters,
+            remainingDistanceMeters,
+            decelerationMetersPerSecondSquared,
+            targetReached);
     }
 
     public static float CalculateMaximumTurnEntryApproachSpeedMetersPerSecond(

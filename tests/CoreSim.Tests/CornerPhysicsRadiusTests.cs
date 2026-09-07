@@ -184,8 +184,9 @@ public sealed class CornerPhysicsRadiusTests
             IdealSurface,
             RiderSkills.Balanced,
             BikeSetup.Neutral);
-        Assert.True(tightRunWide.PhysicsSpeed < tightRunWide.EntrySpeed);
-        Assert.True(tightRunWide.PhysicsSpeed >= tightMaxSafeSpeed);
+        Assert.Equal(tightRunWide.EntrySpeed, tightRunWide.PhysicsSpeed);
+        Assert.True(tightRunWide.Speed < tightRunWide.PhysicsSpeed);
+        Assert.True(tightRunWide.Speed >= tightMaxSafeSpeed);
     }
 
     [Fact]

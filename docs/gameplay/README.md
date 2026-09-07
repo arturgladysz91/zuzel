@@ -281,3 +281,20 @@ Dokładne pliki danych powstaną razem z systemem, który je waliduje. Nie tworz
 The PGEE snapshot in `data/calibration/pge/v1` is validation evidence for distributions, not a set of hard limits or a roster mapping. Rider age/category never supplies a physics multiplier, no real rider receives an arbitrary RiderSkills value, and Skill 50 does not mean “average PGE Ekstraliga.” Individual performance may later include execution variation, but #32 adds no such RNG.
 
 CleanPhysics is only a conservative analysis subset; other retained rows are not declared invalid. Absolute times depend on exact track geometry, so the example track is not fitted directly to every PGEE venue. Vmax remains a distribution. Source `speed_2s` and `curve_speed` are gate rankings, while reaction populations come from separate task-supplied literature context. #32 provides measurement/evaluation infrastructure without physics changes; #33 is the first empirical tuning step.
+
+### Continuous corner correction — BINDING
+
+Advanced corner constraints classify the situation before changing recoverable
+speed. `Brake` is retained as a compatibility outcome name but means controlled
+roll-off/setting/slide speed scrub, not a mechanical brake. The unchanged
+effective correction consumes physical metres and seconds; insufficient distance
+therefore leaves residual overspeed.
+
+TurnEntry keeps its first-half coarse scrub and corrects only through the
+remaining half. TurnMiddle corrects and carries. TurnExit corrects before drive,
+and drive may use only unconsumed distance. RunWide correction is continuous and
+never followed by TurnExit drive; Crash remains terminal. The entry surface and
+entry `LateralPosition` still define the segment geometry/capability, without
+radius integration or resampling during lateral movement. Legacy and random
+incident semantics remain separate and unchanged. #34 performs no physics
+calibration.
