@@ -154,6 +154,12 @@ public static class CalibrationSkillSweep
             new HoldLaneDecisionModel(),
             options,
             heatId: 32);
+        return new CalibrationSkillSweepResult(scenario, ObserveRiders(trace));
+    }
+
+    // Shared standing-start telemetry projection; existing sweep behavior and API are unchanged.
+    internal static IReadOnlyList<CalibrationSkillRiderObservation> ObserveRiders(CalibrationTrace trace)
+    {
         var observations = trace.RiderSummaries.Select(summary =>
         {
             var samples = trace.StepSamples.Where(item => item.RiderId == summary.RiderId).ToArray();
@@ -186,7 +192,7 @@ public static class CalibrationSkillSweep
 
             float? Lap(int index) => laps.Length > index ? laps[index].LapTimeSeconds : null;
         });
-        return new CalibrationSkillSweepResult(scenario, observations);
+        return Array.AsReadOnly(observations.OrderBy(item => item.RiderId).ToArray());
     }
 
     private static RiderSkills Skills(

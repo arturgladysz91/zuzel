@@ -9,6 +9,16 @@
 
 ## Core flow
 
+Version precedence: the older longitudinal paragraphs below describe the #24–#31
+foundation. Their pre-#34 statements about immediate corner speed changes,
+whole-segment TurnExit drive and corner timing are historical, superseded by
+the continuous-correction contract in [the core specification](core-simulation-spec.md#continuous-corner-speed-correction-34).
+Current advanced flow is scrub (TurnEntry only) → constraint/incident →
+distance-limited correction → remaining-distance carry or eligible TurnExit
+drive. Lateral movement receives the complete segment duration (launch excludes
+stationary reaction), not drive time alone. #35 observes this existing flow;
+it does not change production behavior.
+
 1. The host creates a `Track` from ordered segments and immutable `TrackGeometry`, plus a separate per-segment/per-lane `TrackState` and rider states.
 2. Optional manager actions change the surface through `TrackEvolution.ApplyTrackWork`.
 3. Optional setup advice is resolved by `SetupResolver`; trust and rider independence decide whether it is accepted, adjusted or ignored.

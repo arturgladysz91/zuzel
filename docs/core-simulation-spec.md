@@ -2,6 +2,16 @@
 
 This document defines the binding invariants of the speedway manager simulation.
 
+Version precedence clarified in #35: [Continuous corner-speed correction (#34)](#continuous-corner-speed-correction-34)
+supersedes earlier #24–#31 descriptions of immediate recoverable speed loss,
+whole-distance TurnExit drive and pre-correction timing in the longitudinal,
+standing-start diagnostics and lateral-movement paragraphs below. For current
+advanced physics, correction consumes physical distance and time before carry
+or remaining-distance drive. Peaks include actual pre-correction speed; lateral
+movement uses total segment duration, with stationary launch reaction excluded.
+Legacy behavior is not changed. This is documentation reconciliation with the
+already merged #34 production code, not a new physics contract.
+
 ## Scope
 
 The core simulates decisions and believable consequences. It does not integrate a complete motorcycle physics model. Rendering, economy, league rules and persistence remain outside `CoreSim`.
