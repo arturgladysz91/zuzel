@@ -158,3 +158,54 @@ dotnet run --project src/Sandbox/Sandbox.csproj --configuration Release -- \
 
 This is a structural physics observation. It does not tune the physical model,
 modify the versioned PGEE snapshot or overwrite the historical #32/#33 reports.
+
+## Calibration Scenario Suite (#35): measurement only
+
+`CalibrationScenarioCatalog` defines explicit one-axis-at-a-time experiments
+around the standing-start example, balanced skills/style, neutral setup,
+surface `(1, 0, 0.35)`, Dry weather, incidents 0 and seed 320032. Skill 50 is a
+fixture, not a real rider mapping. The few interaction probes are labelled:
+gearing × short/long distance, traction bias × moisture and synthetic skill
+patterns on fixed four-rider lines. All input values and resulting EffectiveGrip
+are printed, including the distinction between initial surface and normal
+production surface evolution during a heat.
+
+The `CoreSim.Analysis` layer uses immutable typed scenario metadata/inputs and
+separate Start, Straight, Turn, LineGeometry and FullHeat results. Seven kinds
+distinguish the three turn phases. `CalibrationScenarioSuite` invokes existing
+production primitives for pure launch/free straights; prepared launch and turn
+probes retain `SimulationEngine.Resolve` diagnostics. Full heat and single-rider
+line experiments use `CalibrationRunner -> HeatSimulator`. No second engine,
+physics formulas, new RNG, constants, tuning or diagnostic production API changes
+were introduced. The existing `CalibrationSkillSweep` keeps its public contract
+and shares only its unchanged rider-telemetry projection with the suite.
+
+Corner transitions and RunWide retention are measured by calls to
+`SegmentPhysics.Apply`, not copied threshold equations. At outer lane 4 no
+recoverable RunWide band exists: production crashes instead, and the corresponding
+observation is absent. TurnEntry scrub precedes correction; TurnMiddle has no
+drive; TurnExit drives only after a reached correction target and only on its
+remaining distance. Crash probes preserve production half-distance semantics.
+Requested HoldLane geometry probes never overwrite a resolved lateral position;
+the report prints observed min/max lateral positions to disclose any deviation.
+
+`CalibrationScenarioReport` is a pure, ordinal-ordered, invariant-culture LF
+Markdown renderer; only Sandbox reads files and accepts the provenance SHA.
+The CLI refuses to overwrite the dataset directory or the three prior report
+filenames. The existing evaluator supplies comparability classifications and
+real quantiles; absolute times/distance stay `ContextOnlyUntilTrackGeometry`.
+Synthetic within-heat spreads include fixed-line geometry and are not an
+unconfounded skill-only estimate or an estimated real population distribution.
+
+The [scenario baseline](calibration/calibration-scenarios-baseline.md) is the
+historical **pre-tuning baseline after PR #34**, based on main
+`4572ad9c5af032572f528f0ce434df9c97153594`. Later tuning PRs must preserve it and
+write a separately named report. Tests protect determinism, production reuse,
+input-order independence and phase/distance semantics, not hundreds of frozen
+performance numbers or perpetual equality with this historical Markdown.
+
+Generate from the repository root:
+
+```text
+dotnet run --project src/Sandbox/Sandbox.csproj --configuration Release -- calibration-scenarios-report data/calibration/pge/v1 4572ad9c5af032572f528f0ce434df9c97153594 docs/calibration/calibration-scenarios-baseline.md
+```

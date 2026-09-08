@@ -6,6 +6,13 @@ using CoreSim.Setup;
 
 if (args.Length > 0)
 {
+    if (args.Length == 4 && StringComparer.Ordinal.Equals(args[0], "calibration-scenarios-report"))
+    {
+        CalibrationScenarioReportWriter.Write(args[1], args[2], args[3]);
+        Console.WriteLine($"Wrote deterministic calibration scenarios report: {args[3]}");
+        return;
+    }
+
     if (args.Length == 3 && StringComparer.Ordinal.Equals(args[0], "calibration-report"))
     {
         CalibrationBaselineReportWriter.Write(args[1], args[2]);
@@ -28,6 +35,7 @@ if (args.Length > 0)
     }
 
     Console.Error.WriteLine("Usage:");
+    Console.Error.WriteLine("  Sandbox calibration-scenarios-report <dataset-directory> <baseline-main-sha> <output-markdown>");
     Console.Error.WriteLine("  Sandbox calibration-report <dataset-directory> <output-markdown>");
     Console.Error.WriteLine("  Sandbox physical-width-impact-report <dataset-directory> <historical-baseline-markdown> <output-markdown>");
     Console.Error.WriteLine("  Sandbox continuous-corner-correction-impact-report <dataset-directory> <historical-width-report-markdown> <output-markdown>");
