@@ -14,7 +14,7 @@ internal static class SignedForceReference
     {
         double Acceleration(double speed)
         {
-            var fade = 0.0175d + (0.005d - 0.0175d) * gearing;
+            var fade = 0.035d + (0.010d - 0.035d) * gearing;
             var envelope = speed <= 16d ? 1d : Math.Clamp(1d - fade * (speed - 16d), 0d, 1d);
             return (force * envelope - (40d + 0.20d * speed * speed)) / 142d;
         }

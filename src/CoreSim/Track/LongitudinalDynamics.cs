@@ -93,26 +93,29 @@ public static class LongitudinalDynamics
     public const float StandingStartTelemetry70KphMetersPerSecond = 70f / 3.6f;
     public const float StandingStartTelemetryObservationTimeSeconds = 2f;
 
-    public const float MinTurnExitAccelerationMetersPerSecondSquared = 0.60f;
-    public const float MaxTurnExitAccelerationMetersPerSecondSquared = 1.40f;
+    // Calibrated together in #36 from deterministic finite-distance, force,
+    // equilibrium, gearing-crossover and full-heat diagnostics. The model form
+    // remains the signed one-gear foundation and is still a coarse abstraction.
+    public const float MinTurnExitAccelerationMetersPerSecondSquared = 1.20f;
+    public const float MaxTurnExitAccelerationMetersPerSecondSquared = 2.80f;
     public const float LowGearingDriveMultiplier = 1.10f;
     public const float HighGearingDriveMultiplier = 0.90f;
     public const float MinSurfaceDriveMultiplier = 0.75f;
     public const float SurfaceDriveMultiplierRange = 0.25f;
-    public const float MinStraightAccelerationMetersPerSecondSquared = 0.80f;
-    public const float MaxStraightAccelerationMetersPerSecondSquared = 1.60f;
+    public const float MinStraightAccelerationMetersPerSecondSquared = 1.60f;
+    public const float MaxStraightAccelerationMetersPerSecondSquared = 3.20f;
     public const float MinCornerEntryDecelerationMetersPerSecondSquared = 2.00f;
     public const float MaxCornerEntryDecelerationMetersPerSecondSquared = 3.20f;
 
-    // PROVISIONAL / NOT REAL-WORLD CALIBRATED GAME MODEL INPUTS. These
-    // values provide only the signed full-drive foundation shared by
-    // TurnExit, Straight and launch; mass is nominal system mass, not a rider attribute.
+    // Coarse game-model inputs. #36 calibrates only the two acceleration ranges
+    // and both fade endpoints; mass, resistance and reference speed remain frozen.
+    // Mass is nominal system mass, not a rider attribute.
     public const float ProvisionalNominalSystemMassKilograms = 142f;
     public const float ProvisionalBaseResistanceForceNewtons = 40f;
     public const float ProvisionalQuadraticResistanceCoefficient = 0.20f;
     public const float ProvisionalPositiveDriveReferenceSpeedMetersPerSecond = 16f;
-    public const float ProvisionalDriveOrientedForceFadePerMeterPerSecond = 0.0175f;
-    public const float ProvisionalSpeedOrientedForceFadePerMeterPerSecond = 0.0050f;
+    public const float ProvisionalDriveOrientedForceFadePerMeterPerSecond = 0.0350f;
+    public const float ProvisionalSpeedOrientedForceFadePerMeterPerSecond = 0.0100f;
 
     // PROVISIONAL / NUMERICAL INTEGRATION RESOLUTION. This is not a gameplay
     // parameter; it bounds each deterministic longitudinal distance step.

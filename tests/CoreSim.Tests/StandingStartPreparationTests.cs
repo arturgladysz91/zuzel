@@ -176,7 +176,7 @@ public sealed class StandingStartPreparationTests
         const double force = 142d * 10d + 40d;
         const double deceleration = 2.6d;
         double Acceleration(double v) =>
-            (force * Math.Max(0d, 1d - 0.01125d * Math.Max(0d, v - 16d)) - 40d - 0.20d * v * v) / 142d;
+            (force * Math.Max(0d, 1d - 0.02250d * Math.Max(0d, v - 16d)) - 40d - 0.20d * v * v) / 142d;
         var nodes = new List<Node>();
         var speed = 0f;
         var time = 0d;

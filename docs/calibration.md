@@ -209,3 +209,36 @@ Generate from the repository root:
 ```text
 dotnet run --project src/Sandbox/Sandbox.csproj --configuration Release -- calibration-scenarios-report data/calibration/pge/v1 4572ad9c5af032572f528f0ce434df9c97153594 docs/calibration/calibration-scenarios-baseline.md
 ```
+
+## Longitudinal speed-envelope calibration (#36)
+
+#36 is the first bounded calibration of the existing signed-force model. It
+doubles the Straight reference-acceleration range to `1.60–3.20 m/s²`, doubles
+the TurnExit range to `1.20–2.80 m/s²`, and doubles both linear fade endpoints
+to `0.0350/0.0100 1/(m/s)`. Reference speed remains 16 m/s. Mass, resistance,
+the 1 m integration step, gearing/surface mappings, standing-start constants and
+all corner physics remain unchanged.
+
+The [impact report](calibration/longitudinal-speed-envelope-impact.md) pairs a
+serialized production snapshot from base main with the current production
+candidate. It covers Straight distance/entry/Speed axes, force and effective
+`F_drive × v` diagnostics, signed equilibrium, gearing crossover, legal
+TurnExit recovery distance, prepared/pure start regression, complete production
+heats, corner transition equality and within-heat spreads. The before snapshot
+is measurement evidence, not a second engine or a runtime input.
+
+Regenerate a candidate report from the repository root:
+
+```text
+dotnet run --project src/Sandbox/Sandbox.csproj --configuration Release -- \
+  longitudinal-speed-envelope-impact-report \
+  data/calibration/pge/v1 \
+  docs/calibration/longitudinal-speed-envelope-before.json \
+  842e0ce861466cdf5a67287c155f81d879cf6666 \
+  <candidate-code-head-sha> \
+  docs/calibration/longitudinal-speed-envelope-impact.md
+```
+
+Full-heat Vmax remains a secondary diagnostic rather than a target forced onto
+Speed 100. Residual system-level speed and average-speed deficits are left
+visible for the later corner-envelope calibration phase.

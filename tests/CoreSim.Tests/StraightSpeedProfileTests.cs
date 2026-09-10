@@ -86,8 +86,8 @@ public sealed class StraightSpeedProfileTests
         var goodTarget = NextTurnApproachSpeed(track, goodState, rider, nextSegmentIndex: 1);
         var poorTarget = NextTurnApproachSpeed(track, poorState, rider, nextSegmentIndex: 1);
 
-        Assert.Equal(goodTarget, good.Change.Speed, 5);
-        Assert.Equal(poorTarget, poor.Change.Speed, 5);
+        Assert.InRange(MathF.Abs(goodTarget - good.Change.Speed), 0f, 0.00001f);
+        Assert.InRange(MathF.Abs(poorTarget - poor.Change.Speed), 0f, 0.00001f);
         Assert.True(poorTarget < goodTarget);
         Assert.True(poor.Change.Speed < good.Change.Speed);
     }
@@ -395,7 +395,7 @@ public sealed class StraightSpeedProfileTests
     [Fact]
     public void TurnExitSignedDriveNaturallyReducesExistingOverspeed()
     {
-        var geometry = new TrackGeometry(60f, 100f, 1f, 1f);
+        var geometry = new TrackGeometry(60f, 150f, 1f, 1f);
         var track = new Track(new[] { new TrackSegment(0, SegmentType.TurnExit) }, geometry);
         var rider = Rider(1, 1, 1f, 0f);
         var equilibrium = Equilibrium(rider, turnExit: true);

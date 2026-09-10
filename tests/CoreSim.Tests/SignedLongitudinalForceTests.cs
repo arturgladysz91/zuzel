@@ -77,9 +77,9 @@ public sealed class SignedLongitudinalForceTests
             var skills = new RiderSkills(50f, speed, 50f, 50f, 50f, 50f);
             var setup = new BikeSetup(gearing, 0.5f);
             var multiplier = (1.10f + (0.90f - 1.10f) * gearing) * (0.75f + 0.25f * surface.EffectiveGrip);
-            Assert.InRange(MathF.Abs((0.80f + 0.80f * speed / 100f) * multiplier
+            Assert.InRange(MathF.Abs((1.60f + 1.60f * speed / 100f) * multiplier
                 - CalculateStraightNetAccelerationMetersPerSecondSquared(16f, skills, setup, surface)), 0f, 0.000001f);
-            Assert.InRange(MathF.Abs((0.60f + 0.80f * speed / 100f) * multiplier
+            Assert.InRange(MathF.Abs((1.20f + 1.60f * speed / 100f) * multiplier
                 - CalculateTurnExitNetAccelerationMetersPerSecondSquared(16f, skills, setup, surface)), 0f, 0.000001f);
         }
     }
