@@ -128,9 +128,9 @@ public sealed class LongitudinalDynamicsTests
         var neutral = CalculateAcceleration(speedSkill: 50f, gearing: 0.5f, PerfectDriveSurface);
         var high = CalculateAcceleration(speedSkill: 100f, gearing: 0.5f, PerfectDriveSurface);
 
-        Assert.Equal(0.60f, low, 5);
-        Assert.Equal(1.00f, neutral, 5);
-        Assert.Equal(1.40f, high, 5);
+        Assert.Equal(1.20f, low, 5);
+        Assert.Equal(2.00f, neutral, 5);
+        Assert.Equal(2.80f, high, 5);
         Assert.True(high > low);
     }
 
@@ -141,9 +141,9 @@ public sealed class LongitudinalDynamicsTests
         var neutralGearing = CalculateAcceleration(speedSkill: 50f, gearing: 0.5f, PerfectDriveSurface);
         var highGearing = CalculateAcceleration(speedSkill: 50f, gearing: 1f, PerfectDriveSurface);
 
-        Assert.Equal(1.10f, lowGearing, 5);
-        Assert.Equal(1.00f, neutralGearing, 5);
-        Assert.Equal(0.90f, highGearing, 5);
+        Assert.Equal(2.20f, lowGearing, 5);
+        Assert.Equal(2.00f, neutralGearing, 5);
+        Assert.Equal(1.80f, highGearing, 5);
         Assert.True(lowGearing > highGearing);
     }
 
@@ -154,8 +154,8 @@ public sealed class LongitudinalDynamicsTests
         var low = CalculateAcceleration(speedSkill: 50f, gearing: 0.5f, noEffectiveGrip);
         var high = CalculateAcceleration(speedSkill: 50f, gearing: 0.5f, PerfectDriveSurface);
 
-        Assert.Equal(0.75f, low, 5);
-        Assert.Equal(1.00f, high, 5);
+        Assert.Equal(1.50f, low, 5);
+        Assert.Equal(2.00f, high, 5);
         Assert.True(high > low);
     }
 
@@ -419,8 +419,8 @@ public sealed class LongitudinalDynamicsTests
     }
 
     [Theory]
-    [InlineData(0f, 0.0175f)]
-    [InlineData(1f, 0.0050f)]
+    [InlineData(0f, 0.0350f)]
+    [InlineData(1f, 0.0100f)]
     public void DriveEnvelopeUsesExactFadeFormula(float gearing, float expectedFadeRate)
     {
         const float speed = 20f;
@@ -435,7 +435,7 @@ public sealed class LongitudinalDynamicsTests
     public void NeutralGearingInterpolatesFadeRate()
     {
         const float speed = 20f;
-        const float expectedFadeRate = (0.0175f + 0.0050f) / 2f;
+        const float expectedFadeRate = (0.0350f + 0.0100f) / 2f;
         var expected = 1f - expectedFadeRate * (speed - 16f);
 
         var envelope = DriveEnvelope(speed, 0.5f);
@@ -564,20 +564,20 @@ public sealed class LongitudinalDynamicsTests
     [Fact]
     public void RepresentativeCurvesCrossNearMidHighSpeed()
     {
-        var driveAtTwentyFour = NetTurnExitAcceleration(24f, 50f, 0f, PerfectDriveSurface);
-        var speedAtTwentyFour = NetTurnExitAcceleration(24f, 50f, 1f, PerfectDriveSurface);
-        var driveAtTwentySix = NetTurnExitAcceleration(26f, 50f, 0f, PerfectDriveSurface);
-        var speedAtTwentySix = NetTurnExitAcceleration(26f, 50f, 1f, PerfectDriveSurface);
+        var driveAtTwenty = NetTurnExitAcceleration(20f, 50f, 0f, PerfectDriveSurface);
+        var speedAtTwenty = NetTurnExitAcceleration(20f, 50f, 1f, PerfectDriveSurface);
+        var driveAtTwentyTwo = NetTurnExitAcceleration(22f, 50f, 0f, PerfectDriveSurface);
+        var speedAtTwentyTwo = NetTurnExitAcceleration(22f, 50f, 1f, PerfectDriveSurface);
 
-        Assert.True(driveAtTwentyFour >= speedAtTwentyFour);
-        Assert.True(speedAtTwentySix > driveAtTwentySix);
+        Assert.True(driveAtTwenty > speedAtTwenty);
+        Assert.True(speedAtTwentyTwo > driveAtTwentyTwo);
     }
 
     [Fact]
     public void SpeedOrientedRetainsNetDriveAfterDriveOrientedFallsBelowResistance()
     {
-        var driveOriented = NetTurnExitAcceleration(28f, 50f, 0f, PerfectDriveSurface);
-        var speedOriented = NetTurnExitAcceleration(28f, 50f, 1f, PerfectDriveSurface);
+        var driveOriented = NetTurnExitAcceleration(30f, 50f, 0f, PerfectDriveSurface);
+        var speedOriented = NetTurnExitAcceleration(30f, 50f, 1f, PerfectDriveSurface);
 
         Assert.True(driveOriented < 0f);
         Assert.True(speedOriented > 0f);

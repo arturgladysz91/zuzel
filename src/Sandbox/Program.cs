@@ -6,6 +6,20 @@ using CoreSim.Setup;
 
 if (args.Length > 0)
 {
+    if (args.Length == 3 && StringComparer.Ordinal.Equals(args[0], "longitudinal-speed-envelope-snapshot"))
+    {
+        LongitudinalCalibrationReportWriter.WriteSnapshot(args[1], args[2]);
+        Console.WriteLine($"Wrote deterministic longitudinal calibration snapshot: {args[2]}");
+        return;
+    }
+
+    if (args.Length == 6 && StringComparer.Ordinal.Equals(args[0], "longitudinal-speed-envelope-impact-report"))
+    {
+        LongitudinalCalibrationReportWriter.WriteImpact(args[1], args[2], args[3], args[4], args[5]);
+        Console.WriteLine($"Wrote deterministic longitudinal speed-envelope impact report: {args[5]}");
+        return;
+    }
+
     if (args.Length == 4 && StringComparer.Ordinal.Equals(args[0], "calibration-scenarios-report"))
     {
         CalibrationScenarioReportWriter.Write(args[1], args[2], args[3]);
@@ -35,6 +49,8 @@ if (args.Length > 0)
     }
 
     Console.Error.WriteLine("Usage:");
+    Console.Error.WriteLine("  Sandbox longitudinal-speed-envelope-snapshot <source-sha> <output-json>");
+    Console.Error.WriteLine("  Sandbox longitudinal-speed-envelope-impact-report <dataset-directory> <before-snapshot-json> <base-main-sha> <candidate-head-sha> <output-markdown>");
     Console.Error.WriteLine("  Sandbox calibration-scenarios-report <dataset-directory> <baseline-main-sha> <output-markdown>");
     Console.Error.WriteLine("  Sandbox calibration-report <dataset-directory> <output-markdown>");
     Console.Error.WriteLine("  Sandbox physical-width-impact-report <dataset-directory> <historical-baseline-markdown> <output-markdown>");

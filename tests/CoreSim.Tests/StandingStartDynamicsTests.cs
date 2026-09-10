@@ -68,9 +68,10 @@ public sealed class StandingStartDynamicsTests
         {
             var setup = new BikeSetup(gearing, 0.5f);
             var force = LongitudinalDynamics.CalculateStandingStartAvailableDriveForceNewtons(Skills(), setup, Perfect);
-            var fade = 0.0175f + (0.0050f - 0.0175f) * gearing;
+            var fade = 0.0350f + (0.0100f - 0.0350f) * gearing;
             var expectedForce = force * (1f - fade * (22f - 16f));
-            Assert.Equal(expectedForce, LongitudinalDynamics.CalculateAvailableDriveForceAtSpeedNewtons(force, 22f, setup), 4);
+            Assert.InRange(MathF.Abs(expectedForce
+                - LongitudinalDynamics.CalculateAvailableDriveForceAtSpeedNewtons(force, 22f, setup)), 0f, 0.001f);
             Assert.Equal(Profile(100f, gearing: gearing).ExitSpeedMetersPerSecond,
                 SharedSteps(100f, gearing: gearing)[^1].EndSpeed);
         }
@@ -304,7 +305,7 @@ public sealed class StandingStartDynamicsTests
     private static (double Speed, double Time) FineReference(double distance, double gearing)
     {
         var referenceForce = 142d * 10d * (1.10d - 0.20d * gearing) + 40d;
-        var fade = 0.0175d + (0.0050d - 0.0175d) * gearing;
+        var fade = 0.0350d + (0.0100d - 0.0350d) * gearing;
         double AccelerationAt(double v) =>
             (referenceForce * Math.Max(0d, 1d - fade * Math.Max(0d, v - 16d)) - 40d - 0.20d * v * v) / 142d;
         var speed = 0d;

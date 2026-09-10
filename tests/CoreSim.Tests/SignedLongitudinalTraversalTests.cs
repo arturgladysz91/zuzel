@@ -196,7 +196,8 @@ public sealed class SignedLongitudinalTraversalTests
     }
 
     [Fact]
-    public void TurnExitReferenceAccelerationAtSixteenIsUnchanged() => Assert.Equal(1f, Exit(16f).EntryNetAccelerationMetersPerSecondSquared, 6);
+    public void TurnExitReferenceAccelerationAtSixteenUsesCalibratedNeutralValue()
+        => Assert.Equal(2f, Exit(16f).EntryNetAccelerationMetersPerSecondSquared, 6);
 
     [Fact]
     public void StandingStartStillBeginsAtZero()

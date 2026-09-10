@@ -56,7 +56,7 @@ bez `max(0)` na sile netto lub acceleration. Opór pozostaje
 `F_resistance(v) = 40 + 0.20*v²` N. Available drive to `referenceForce * envelope`.
 Envelope jest dokładnie `1` dla `v <= 16`; powyżej:
 `clamp(1 - fadeRate*(v-16), 0, 1)`, gdzie
-`fadeRate = 0.0175 + (0.0050 - 0.0175)*Gearing`.
+`fadeRate = 0.0350 + (0.0100 - 0.0350)*Gearing` po kalibracji #36.
 
 Naturalne `FullDriveEquilibriumSpeedMetersPerSecond` jest obserwacją
 `drive = resistance`, nie limiterem ani targetem. Solver to deterministyczna
@@ -72,7 +72,7 @@ To zabezpieczenie kwadratu prędkości przy zatrzymaniu, nie clamp acceleration.
 Czas przejazdu jest sumą `2*ds/(v_start+v_end)`, nie jednym średnim czasem
 całego segmentu. Equilibrium nie kończy integracji.
 
-Reference acceleration TurnExit pozostaje `0.60–1.40`, Straight `0.80–1.60`
+Reference acceleration po #36 wynosi TurnExit `1.20–2.80`, Straight `1.60–3.20`
 przez Speed, razy `1.10–0.90` przez Gearing i
 `0.75 + 0.25*EffectiveGrip`. Reference force to `142*referenceAcceleration
 + resistance(16)`, więc kontrakt przy 16 m/s pozostaje. Surface jest próbkowana
@@ -100,7 +100,9 @@ odrębnym efektywnym modelem throttle roll-off / engine-drivetrain / slide prepa
 Pure zero-drive helper daje `-(40 + 0.20*v²)/142`, ale NIE jest finalnym
 engine-braking modelem ani zamiennikiem corner preparation. Nie dodano explicit
 throttle input, wheelspin, traction-force cap ani splitu engine/traction force.
-Wszystkie stałe są **PROVISIONAL / NOT REAL-WORLD CALIBRATED**, bez strojenia.
+W #36 zestrojono wyłącznie zakresy reference acceleration Straight/TurnExit i oba
+końce fade. Masa, resistance, reference speed, integration step, gearing/surface
+mapping oraz cały corner model pozostają **PROVISIONAL / NOT REAL-WORLD CALIBRATED**.
 Stary analityczny `CalculateStraightSpeedProfile` to wyłącznie non-production
 compatibility utility z jawnie podanym ogólnym ograniczeniem; nie wylicza Vmax,
 nie jest wywoływany przez SimulationEngine i ma null equilibrium.
@@ -196,8 +198,8 @@ CSV dodaje `TurnExitDecelerationDistanceMeters` po TurnExitCruiseDistanceMeters;
 entry acceleration TurnExit jest signed. Nowy schema zachowuje stable order,
 invariant culture, decimal dot, `\n` i null = empty.
 
-Następny etap: **REAL-WORLD CALIBRATION DATASET + PARAMETER FITTING** dla reaction,
-TimeTo70, SpeedAt2s, first-turn entry speed, Straight Vmax, lap times i full heat time.
+Pierwszy bounded longitudinal fitting wykonano w #36 bez zmiany reaction,
+TimeTo70/SpeedAt2s targets, corner envelope ani fizyki pól startowych.
 Późniejsze refinements: F_engine vs F_traction, wheelspin/slip, TractionBias,
 real sprockets, RPM, torque/power curve, throttle, engine braking i oddzielna
 physical gate A/B/C/D geometry. #31 ich nie implementuje.

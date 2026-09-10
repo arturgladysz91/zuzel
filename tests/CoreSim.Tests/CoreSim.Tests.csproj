@@ -23,4 +23,10 @@
           CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="..\..\docs\calibration\longitudinal-speed-envelope-before.json"
+          Link="docs\calibration\longitudinal-speed-envelope-before.json"
+          CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>
