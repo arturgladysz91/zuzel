@@ -27,7 +27,8 @@ public sealed record SegmentPhysicsContext(
     float Morale,
     BikeSetup Setup,
     float DecisionRisk = 0f,
-    float? LateralPosition = null)
+    float? LateralPosition = null,
+    CornerPhaseContext? CornerPhase = null)
 {
     /// <summary>Compatibility constructor using the example-track geometry.</summary>
     public SegmentPhysicsContext(
@@ -50,7 +51,8 @@ public sealed record SegmentPhysicsContext(
             Morale,
             Setup,
             DecisionRisk,
-            LateralPosition)
+            LateralPosition,
+            CornerPhase: null)
     {
     }
 }
@@ -186,6 +188,14 @@ public static class SegmentPhysics
         ArgumentNullException.ThrowIfNull(context);
         ArgumentNullException.ThrowIfNull(context.Geometry);
         LaneModel.ValidateLane(context.Lane);
+        if (context.CornerPhase is { } cornerPhase
+            && (context.Segment.Type == SegmentType.Straight
+                || cornerPhase.CompatibilitySegmentType != context.Segment.Type))
+        {
+            throw new ArgumentException(
+                "Corner phase context must describe the current turn segment.",
+                nameof(context));
+        }
 
         if (context.Segment.Type == SegmentType.Straight)
             return new SegmentResolution(SegmentOutcome.Ok, context.Lane, context.Speed, context.DecisionRisk);

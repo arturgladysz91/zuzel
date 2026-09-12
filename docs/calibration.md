@@ -242,3 +242,26 @@ dotnet run --project src/Sandbox/Sandbox.csproj --configuration Release -- \
 Full-heat Vmax remains a secondary diagnostic rather than a target forced onto
 Speed 100. Residual system-level speed and average-speed deficits are left
 visible for the later corner-envelope calibration phase.
+
+## Continuous corner phase foundation (#37)
+
+The [foundation impact report](calibration/continuous-corner-foundation-impact.md)
+documents the immutable logical-corner map for both example tracks and proves
+that the complete production Calibration Scenario Suite is byte-identical
+before and after the structural refactor. It includes controlled start,
+straight, turn-phase and full-heat before/after/delta observations.
+
+Regenerate from a base-main Calibration Scenario Suite capture:
+
+    dotnet run --project src/Sandbox/Sandbox.csproj --configuration Release -- \
+      continuous-corner-foundation-impact-report \
+      data/calibration/pge/v1 \
+      <base-main-calibration-scenarios-report.md> \
+      0f6dfba7767b155a9c988687a95c5cc7e50a50bd \
+      <candidate-code-head-sha> \
+      docs/calibration/continuous-corner-foundation-impact.md
+
+The before capture must be produced on the exact base SHA with
+calibration-scenarios-report and that same base SHA argument. The generator
+refuses any scenario-byte difference. The report is observation only: no
+longitudinal, corner, start, contact, lateral or surface constant is changed.

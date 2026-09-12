@@ -20,6 +20,13 @@ if (args.Length > 0)
         return;
     }
 
+    if (args.Length == 6 && StringComparer.Ordinal.Equals(args[0], "continuous-corner-foundation-impact-report"))
+    {
+        ContinuousCornerFoundationReportWriter.Write(args[1], args[2], args[3], args[4], args[5]);
+        Console.WriteLine($"Wrote deterministic continuous-corner foundation impact report: {args[5]}");
+        return;
+    }
+
     if (args.Length == 4 && StringComparer.Ordinal.Equals(args[0], "calibration-scenarios-report"))
     {
         CalibrationScenarioReportWriter.Write(args[1], args[2], args[3]);
@@ -51,6 +58,7 @@ if (args.Length > 0)
     Console.Error.WriteLine("Usage:");
     Console.Error.WriteLine("  Sandbox longitudinal-speed-envelope-snapshot <source-sha> <output-json>");
     Console.Error.WriteLine("  Sandbox longitudinal-speed-envelope-impact-report <dataset-directory> <before-snapshot-json> <base-main-sha> <candidate-head-sha> <output-markdown>");
+    Console.Error.WriteLine("  Sandbox continuous-corner-foundation-impact-report <dataset-directory> <before-calibration-scenarios-report> <base-main-sha> <candidate-code-head-sha> <output-markdown>");
     Console.Error.WriteLine("  Sandbox calibration-scenarios-report <dataset-directory> <baseline-main-sha> <output-markdown>");
     Console.Error.WriteLine("  Sandbox calibration-report <dataset-directory> <output-markdown>");
     Console.Error.WriteLine("  Sandbox physical-width-impact-report <dataset-directory> <historical-baseline-markdown> <output-markdown>");

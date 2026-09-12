@@ -508,3 +508,20 @@ the candidate menu, force/power curves, equilibrium signs, gearing crossover,
 finite-distance response, TurnExit recovery, start/corner regressions and full
 production heats. Residual whole-heat speed remains visible for the later
 corner-envelope phase rather than being hidden by a cap or overfit.
+
+## Continuous corner phase foundation (#37)
+
+Track.CornerTopology now identifies each maximal contiguous run of turn
+segments without joining across the lap boundary. For advanced physics,
+CornerPhaseContext maps local segment progress to canonical CornerProgress
+in [0,1] by accumulated physical arc distance and exposes the total and
+remaining corner length.
+
+The coordinate domains remain distinct: LateralPosition is continuous
+cross-track position 0..4, CornerProgress is longitudinal progress through
+one logical corner, TurnEntry/TurnMiddle/TurnExit are compatibility and
+reporting labels, and Lane is the discrete resolved reference. Existing
+TurnEntry scrub, TurnExit drive and immediate-corner lookahead retain identical
+numerical behavior as explicit bridges for #38. No speed/performance constant
+or physics calibration changed; see the deterministic
+[foundation impact report](docs/calibration/continuous-corner-foundation-impact.md).

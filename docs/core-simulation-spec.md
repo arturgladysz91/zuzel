@@ -183,3 +183,32 @@ RiderSkills express capability; age/category does not apply a speed, start, or c
   Correction itself is deterministic and uses no RNG. Legacy physics remains
   byte/float-compatible and instantaneous. No calibration or constant tuning was
   performed.
+
+## Continuous corner phase foundation (#37)
+
+- Track.CornerTopology owns the canonical immutable logical-corner map. A
+  logical corner is one maximal contiguous run of TurnEntry, TurnMiddle and
+  TurnExit segments in topology order. Runs are never joined across the lap
+  boundary, even when the last and first segments are both turns.
+- CornerPhaseContext projects local segment progress to CornerProgress in
+  [0,1] from accumulated physical arc distance divided by total logical-corner
+  length at the rider's immutable entry LateralPosition. It exposes corner
+  id, membership, current subsegment start/end progress, total corner length
+  and remaining corner length. It does not assume equal thirds.
+- The domains remain separate: LateralPosition is continuous cross-track
+  position, CornerProgress is longitudinal logical-corner phase,
+  TurnEntry/TurnMiddle/TurnExit are compatibility/reporting labels, and
+  Lane is a discrete reference used by decisions and constraints.
+- Advanced SimulationEngine.Resolve computes the context from the immutable
+  snapshot and passes it through SegmentPhysicsContext and typed diagnostics.
+  Legacy resolution receives no context and keeps identical behavior. This adds
+  no state mutation, random draw, surface resampling or second physics path.
+- Straight lookahead resolves an immediately adjacent logical-corner start,
+  then retains the existing TurnEntry compatibility requirement and exact
+  approach-speed calculation. Existing TurnEntry scrub and TurnExit drive use
+  the same context but remain compatibility bridges for #38. Their order,
+  distances, times, thresholds, outcomes and numerical results are unchanged.
+- #37 performs no calibration. All #36 longitudinal constants, standing-start
+  constants, corner constants, contact/lateral/surface behavior, production
+  CaptureSnapshot -> Decide -> Resolve -> Commit flow and historical reports
+  remain unchanged.
