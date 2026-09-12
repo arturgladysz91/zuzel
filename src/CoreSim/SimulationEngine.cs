@@ -55,7 +55,8 @@ public sealed record RiderStepDiagnostics(
     TurnEntryScrubProfile? TurnEntryScrubProfile,
     TrackSurfaceState EntrySurface,
     StandingStartLaunchProfile? StandingStartLaunchProfile = null,
-    CornerSpeedCorrectionProfile? CornerSpeedCorrectionProfile = null);
+    CornerSpeedCorrectionProfile? CornerSpeedCorrectionProfile = null,
+    CornerPhaseContext? CornerPhaseContext = null);
 
 public sealed class ResolvedSimulationStep
 {
@@ -122,7 +123,8 @@ public sealed class SimulationEngine
         TurnEntryScrubProfile? TurnEntryScrubProfile,
         TrackSurfaceState EntrySurface,
         StandingStartLaunchProfile? StandingStartLaunchProfile,
-        CornerSpeedCorrectionProfile? CornerSpeedCorrectionProfile);
+        CornerSpeedCorrectionProfile? CornerSpeedCorrectionProfile,
+        CornerPhaseContext? CornerPhaseContext);
 
     public SimulationEngine(IRiderDecisionModel decisionModel)
         => _decisionModel = decisionModel ?? throw new ArgumentNullException(nameof(decisionModel));
@@ -260,7 +262,8 @@ public sealed class SimulationEngine
                 resolution.TurnEntryScrubProfile,
                 resolution.EntrySurface,
                 resolution.StandingStartLaunchProfile,
-                resolution.CornerSpeedCorrectionProfile);
+                resolution.CornerSpeedCorrectionProfile,
+                resolution.CornerPhaseContext);
         });
 
         return new ResolvedSimulationStep(snapshot, changes.Values, events, diagnostics);
@@ -382,6 +385,13 @@ public sealed class SimulationEngine
         if (rider.SegmentIndex != snapshot.Step.SegmentIndex)
             throw new InvalidOperationException($"Rider {rider.RiderId} is not in segment {snapshot.Step.SegmentIndex}.");
 
+        var cornerPhaseContext = snapshot.Step.UseLegacyPhysics
+            ? null
+            : snapshot.Track.CornerTopology.Resolve(
+                snapshot.Step.SegmentIndex,
+                rider.SegmentProgress,
+                rider.LateralPosition,
+                snapshot.Track.Geometry);
         var targetLane = LaneModel.ClampLane(decision.TargetLane);
         var plannedLane = LateralMovementModel.CalculatePlannedLane(
             rider.Lane,
@@ -409,8 +419,11 @@ public sealed class SimulationEngine
             : standingStartEligible ? 0f : ResolveAdvancedEntrySpeed(snapshot, plannedLane, surface, rider);
         TurnEntryScrubProfile? turnEntryScrubProfile = null;
         var speedForPhysicalResolution = entrySpeed;
-        if (!snapshot.Step.UseLegacyPhysics
-            && snapshot.Segment.Type == SegmentType.TurnEntry)
+        // Compatibility bridge for #38: the legacy phase label still selects
+        // the existing scrub, while the same logical-corner context now flows
+        // through the complete advanced resolution.
+        if (cornerPhaseContext is
+            { CompatibilitySegmentType: SegmentType.TurnEntry })
         {
             var fullRemainingTurnEntryDistance = LaneModel.SegmentLengthMeters(
                     snapshot.Segment,
@@ -428,6 +441,7 @@ public sealed class SimulationEngine
                     rider.Profile.Skills,
                     surface);
             turnEntryScrubProfile = LongitudinalDynamics.CalculateTurnEntryScrubProfile(
+                cornerPhaseContext.Value,
                 entrySpeed,
                 settledSafeSpeed,
                 scrubDeceleration,
@@ -447,7 +461,8 @@ public sealed class SimulationEngine
                 Morale: rider.Morale,
                 Setup: rider.ActiveSetup,
                 DecisionRisk: decision.Risk,
-                LateralPosition: rider.LateralPosition));
+                LateralPosition: rider.LateralPosition,
+                CornerPhase: cornerPhaseContext));
 
         if (!snapshot.Step.UseLegacyPhysics)
             resolution = ResolveRandomIncident(snapshot, rider, plannedLane, resolution, options);
@@ -476,13 +491,12 @@ public sealed class SimulationEngine
         StandingStartLaunchProfile? standingStartLaunchProfile = null;
         float? turnExitNetAcceleration = null;
 
-        if (!snapshot.Step.UseLegacyPhysics
-            && snapshot.Segment.Type != SegmentType.Straight
+        if (cornerPhaseContext is not null
             && resolution.Outcome != SegmentOutcome.Crash
             && resolution.ContinuousCorrectionTargetSpeedMetersPerSecond is { } correctionTarget)
         {
             var availableCorrectionDistanceMeters = travelled;
-            if (snapshot.Segment.Type == SegmentType.TurnEntry)
+            if (cornerPhaseContext.Value.CompatibilitySegmentType == SegmentType.TurnEntry)
             {
                 var scrubProfile = turnEntryScrubProfile
                     ?? throw new InvalidOperationException(
@@ -538,8 +552,10 @@ public sealed class SimulationEngine
                 ResolveImmediateNextTurnApproachSpeed(snapshot, rider));
             speed = straightProfile.Value.ExitSpeedMetersPerSecond;
         }
-        else if (!snapshot.Step.UseLegacyPhysics
-            && snapshot.Segment.Type == SegmentType.TurnExit
+        // Compatibility bridge for #38: TurnExit keeps its current drive
+        // placement, but it is now explicitly attached to the same corner.
+        else if (cornerPhaseContext is
+            { CompatibilitySegmentType: SegmentType.TurnExit }
             && resolution.Outcome is SegmentOutcome.Ok or SegmentOutcome.Brake
             && speed > 0f)
         {
@@ -551,6 +567,7 @@ public sealed class SimulationEngine
             {
                 turnExitDriveProfile = LongitudinalDynamics
                     .CalculateForceBasedTurnExitDriveProfile(
+                    cornerPhaseContext.Value,
                     speed,
                     rider.Profile.Skills,
                     rider.ActiveSetup,
@@ -662,7 +679,8 @@ public sealed class SimulationEngine
             turnEntryScrubProfile,
             surface,
             standingStartLaunchProfile,
-            cornerSpeedCorrectionProfile);
+            cornerSpeedCorrectionProfile,
+            cornerPhaseContext);
     }
 
     private static float? ResolveImmediateNextTurnApproachSpeed(
@@ -674,9 +692,24 @@ public sealed class SimulationEngine
         if (isFinalRaceSegment)
             return null;
 
-        var nextSegmentIndex = (snapshot.Step.SegmentIndex + 1) % snapshot.Track.Segments.Count;
+        var allowLapWrap = snapshot.Step.SegmentIndex == snapshot.Track.Segments.Count - 1;
+        var nextCorner = snapshot.Track.CornerTopology.ImmediateNextCorner(
+            snapshot.Step.SegmentIndex,
+            allowLapWrap);
+        if (nextCorner is null)
+            return null;
+
+        var nextSegmentIndex = nextCorner.StartSegmentIndex;
         var nextSegment = snapshot.Track.Segments[nextSegmentIndex];
-        if (nextSegment.Type != SegmentType.TurnEntry)
+        var nextCornerPhase = snapshot.Track.CornerTopology.Resolve(
+            nextSegmentIndex,
+            0f,
+            rider.LateralPosition,
+            snapshot.Track.Geometry)
+            ?? throw new InvalidOperationException("Immediate logical corner has no start phase.");
+        // Existing numerical behavior intentionally remains tied to a labelled
+        // TurnEntry until #38 replaces the compatibility phase implementation.
+        if (nextCornerPhase.CompatibilitySegmentType != SegmentType.TurnEntry)
             return null;
 
         var nextSurface = snapshot.TrackState.SampleSurface(

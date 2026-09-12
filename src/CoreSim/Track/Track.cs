@@ -5,6 +5,7 @@ public sealed class Track
 {
     public IReadOnlyList<TrackSegment> Segments { get; }
     public TrackGeometry Geometry { get; }
+    public CornerTopology CornerTopology { get; }
 
     public Track(IReadOnlyList<TrackSegment> segments)
         : this(segments, TrackGeometry.Default)
@@ -26,6 +27,7 @@ public sealed class Track
             && (!Segments[0].IsStandingStartSegment || Segments[^1].Type != SegmentType.Straight))
             throw new ArgumentException("Standing start must be at index zero with a final Straight across the start/finish boundary.", nameof(segments));
         Geometry = geometry;
+        CornerTopology = new CornerTopology(Segments);
     }
 
     // Compatibility layout: 2 łuki (wejście/środek/wyjście) + 2 proste.

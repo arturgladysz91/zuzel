@@ -35,7 +35,24 @@ it does not change production behavior.
 
 Race randomness is stateless and addressed by seed, heat id, step number, rider id and a named `RandomChannel`. Optional discriminators such as lane or the other rider make separate draws explicit. Collection order and the number of unrelated draws cannot reassign randomness.
 
+Track.CornerTopology is the canonical immutable grouping of maximal contiguous
+turn runs. It never joins a run ending at the lap boundary to one beginning on
+the next lap. CornerPhaseContext derives its [0,1] CornerProgress,
+subsegment start/end progress, total physical length and remaining physical
+length by summing actual arc lengths at the rider's immutable entry
+LateralPosition. Advanced Resolve carries this context into diagnostics and
+SegmentPhysicsContext; it introduces no mutation or RNG. Immediate Straight
+lookahead first resolves the next logical corner, then deliberately retains the
+current TurnEntry compatibility gate and identical approach-speed calculation.
+Current TurnEntry scrub and TurnExit drive are compatibility bridges for #38,
+not new phases or recalibrated behavior.
+
 `Lane` and continuous `LateralPosition` are dimensionless normalized `0..4` coordinates. `LaneModel` is the canonical conversion boundary: `fraction = LateralPosition / 4`, usable span is physical segment width minus the 1 m inner reference offset and provisional 1 m outer game margin, and physical offset is `fraction * usableSpan`. `TrackGeometry` owns independent straight/turn widths; `InnerRadiusMeters` is the radius of the inner FIM measurement/reference trajectory 1 m from the inner edge, not the kerb.
+
+These names describe separate axes and roles: LateralPosition is continuous
+cross-track position, CornerProgress is longitudinal progress within one
+logical corner, TurnEntry/TurnMiddle/TurnExit are legacy-compatible
+segment labels, and Lane is a discrete decision/constraint reference.
 
 `LateralMovementModel` is the single owner of time-based movement between reference positions. It preserves the `0.35..0.65` normalized lane-units/s execution capability, converts the budget to metres using reference spacing derived from the current segment width, moves in physical space, and converts back to `0..4`. It selects the nearest unexecuted reference from `LateralPosition` toward `TargetLane`; a discrete lane forced farther away by `RunWide` cannot skip that reference. `SimulationEngine` supplies immutable snapshot inputs and commits the returned position later; `AdaptiveDecisionModel` measures route-change distance from `LateralPosition` but may still price that choice using style.
 

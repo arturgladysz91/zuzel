@@ -769,6 +769,29 @@ public static class LongitudinalDynamics
         return maximumApproachSpeed;
     }
 
+    /// <summary>
+    /// Segment-aware compatibility bridge. The geometric corner phase is
+    /// validated and the unchanged TurnEntry calculation remains the single
+    /// numerical implementation.
+    /// </summary>
+    public static TurnEntryScrubProfile CalculateTurnEntryScrubProfile(
+        CornerPhaseContext cornerPhase,
+        float initialSpeedMetersPerSecond,
+        float settledTargetSpeedMetersPerSecond,
+        float decelerationMetersPerSecondSquared,
+        float availableTurnEntryDistanceMeters)
+    {
+        RequireCompatibilityCornerPhase(
+            cornerPhase,
+            SegmentType.TurnEntry,
+            nameof(cornerPhase));
+        return CalculateTurnEntryScrubProfile(
+            initialSpeedMetersPerSecond,
+            settledTargetSpeedMetersPerSecond,
+            decelerationMetersPerSecondSquared,
+            availableTurnEntryDistanceMeters);
+    }
+
     public static TurnEntryScrubProfile CalculateTurnEntryScrubProfile(
         float initialSpeedMetersPerSecond,
         float settledTargetSpeedMetersPerSecond,
@@ -1099,6 +1122,31 @@ public static class LongitudinalDynamics
             (float)cruiseDistanceMeters,
             (float)decelerationDistanceMeters,
             equilibrium);
+    }
+
+    /// <summary>
+    /// Segment-aware compatibility bridge. The geometric corner phase is
+    /// validated and the unchanged TurnExit calculation remains the single
+    /// numerical implementation.
+    /// </summary>
+    public static TurnExitDriveProfile CalculateForceBasedTurnExitDriveProfile(
+        CornerPhaseContext cornerPhase,
+        float initialSpeedMetersPerSecond,
+        RiderSkills skills,
+        BikeSetup setup,
+        TrackSurfaceState surface,
+        float distanceMeters)
+    {
+        RequireCompatibilityCornerPhase(
+            cornerPhase,
+            SegmentType.TurnExit,
+            nameof(cornerPhase));
+        return CalculateForceBasedTurnExitDriveProfile(
+            initialSpeedMetersPerSecond,
+            skills,
+            setup,
+            surface,
+            distanceMeters);
     }
 
     public static TurnExitDriveProfile CalculateForceBasedTurnExitDriveProfile(
@@ -1437,6 +1485,19 @@ public static class LongitudinalDynamics
                 parameterName,
                 value,
                 "Value must be finite and positive.");
+        }
+    }
+
+    private static void RequireCompatibilityCornerPhase(
+        CornerPhaseContext cornerPhase,
+        SegmentType requiredCompatibilityType,
+        string parameterName)
+    {
+        if (cornerPhase.CompatibilitySegmentType != requiredCompatibilityType)
+        {
+            throw new ArgumentException(
+                $"Corner phase must describe {requiredCompatibilityType}.",
+                parameterName);
         }
     }
 }
