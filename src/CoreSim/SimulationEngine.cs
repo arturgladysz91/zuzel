@@ -56,7 +56,8 @@ public sealed record RiderStepDiagnostics(
     TrackSurfaceState EntrySurface,
     StandingStartLaunchProfile? StandingStartLaunchProfile = null,
     CornerSpeedCorrectionProfile? CornerSpeedCorrectionProfile = null,
-    CornerPhaseContext? CornerPhaseContext = null);
+    CornerPhaseContext? CornerPhaseContext = null,
+    ContinuousCornerTraversalProfile? ContinuousCornerProfile = null);
 
 public sealed class ResolvedSimulationStep
 {
@@ -124,7 +125,8 @@ public sealed class SimulationEngine
         TrackSurfaceState EntrySurface,
         StandingStartLaunchProfile? StandingStartLaunchProfile,
         CornerSpeedCorrectionProfile? CornerSpeedCorrectionProfile,
-        CornerPhaseContext? CornerPhaseContext);
+        CornerPhaseContext? CornerPhaseContext,
+        ContinuousCornerTraversalProfile? ContinuousCornerProfile);
 
     public SimulationEngine(IRiderDecisionModel decisionModel)
         => _decisionModel = decisionModel ?? throw new ArgumentNullException(nameof(decisionModel));
@@ -263,7 +265,8 @@ public sealed class SimulationEngine
                 resolution.EntrySurface,
                 resolution.StandingStartLaunchProfile,
                 resolution.CornerSpeedCorrectionProfile,
-                resolution.CornerPhaseContext);
+                resolution.CornerPhaseContext,
+                resolution.ContinuousCornerProfile);
         });
 
         return new ResolvedSimulationStep(snapshot, changes.Values, events, diagnostics);
@@ -291,6 +294,9 @@ public sealed class SimulationEngine
             peakSpeed = MathF.Max(peakSpeed, straight.PeakSpeedMetersPerSecond);
         if (resolution.TurnExitDriveProfile is { } turnExit)
             peakSpeed = MathF.Max(peakSpeed, turnExit.PeakSpeedMetersPerSecond);
+
+        if (resolution.ContinuousCornerProfile is { } corner)
+            peakSpeed = MathF.Max(peakSpeed, corner.PeakSpeedMetersPerSecond);
 
         return peakSpeed;
     }
@@ -419,36 +425,6 @@ public sealed class SimulationEngine
             : standingStartEligible ? 0f : ResolveAdvancedEntrySpeed(snapshot, plannedLane, surface, rider);
         TurnEntryScrubProfile? turnEntryScrubProfile = null;
         var speedForPhysicalResolution = entrySpeed;
-        // Compatibility bridge for #38: the legacy phase label still selects
-        // the existing scrub, while the same logical-corner context now flows
-        // through the complete advanced resolution.
-        if (cornerPhaseContext is
-            { CompatibilitySegmentType: SegmentType.TurnEntry })
-        {
-            var fullRemainingTurnEntryDistance = LaneModel.SegmentLengthMeters(
-                    snapshot.Segment,
-                    rider.LateralPosition,
-                    snapshot.Track.Geometry)
-                * remainingProgress;
-            var settledSafeSpeed = SegmentPhysics.MaxSafeTurnSpeed(
-                rider.LateralPosition,
-                snapshot.Track.Geometry,
-                surface,
-                rider.Profile.Skills,
-                rider.ActiveSetup);
-            var scrubDeceleration = LongitudinalDynamics
-                .CalculateCornerEntryDecelerationMetersPerSecondSquared(
-                    rider.Profile.Skills,
-                    surface);
-            turnEntryScrubProfile = LongitudinalDynamics.CalculateTurnEntryScrubProfile(
-                cornerPhaseContext.Value,
-                entrySpeed,
-                settledSafeSpeed,
-                scrubDeceleration,
-                fullRemainingTurnEntryDistance);
-            speedForPhysicalResolution = turnEntryScrubProfile.Value.ExitSpeedMetersPerSecond;
-        }
-
         var resolution = snapshot.Step.UseLegacyPhysics
             ? SegmentPhysics.Apply(snapshot.Segment, plannedLane, speedForPhysicalResolution)
             : SegmentPhysics.Apply(new SegmentPhysicsContext(
@@ -491,41 +467,27 @@ public sealed class SimulationEngine
         StandingStartLaunchProfile? standingStartLaunchProfile = null;
         float? turnExitNetAcceleration = null;
 
-        if (cornerPhaseContext is not null
-            && resolution.Outcome != SegmentOutcome.Crash
-            && resolution.ContinuousCorrectionTargetSpeedMetersPerSecond is { } correctionTarget)
+        ContinuousCornerTraversalProfile? continuousCornerProfile = null;
+        if (cornerPhaseContext is { } phase && resolution.Outcome != SegmentOutcome.Crash)
         {
-            var availableCorrectionDistanceMeters = travelled;
-            if (cornerPhaseContext.Value.CompatibilitySegmentType == SegmentType.TurnEntry)
-            {
-                var scrubProfile = turnEntryScrubProfile
-                    ?? throw new InvalidOperationException(
-                        "Advanced TurnEntry correction requires its scrub profile.");
-                availableCorrectionDistanceMeters -=
-                    scrubProfile.DecelerationDistanceMeters + scrubProfile.CarryDistanceMeters;
-                var tolerance = MathF.Max(1e-6f, travelled * 1e-6f);
-                if (availableCorrectionDistanceMeters < -tolerance)
-                {
-                    throw new InvalidOperationException(
-                        "TurnEntry scrub distance exceeds the actual travelled distance.");
-                }
-
-                availableCorrectionDistanceMeters = MathF.Max(
-                    0f,
-                    availableCorrectionDistanceMeters);
-            }
-
-            var correctionDeceleration = LongitudinalDynamics
-                .CalculateCornerCorrectionDecelerationMetersPerSecondSquared(
-                    rider.Profile.Skills,
-                    surface);
-            cornerSpeedCorrectionProfile = LongitudinalDynamics
-                .CalculateCornerSpeedCorrectionProfile(
-                    resolution.Speed,
-                    correctionTarget,
-                    correctionDeceleration,
-                    availableCorrectionDistanceMeters);
-            speed = cornerSpeedCorrectionProfile.Value.ExitSpeedMetersPerSecond;
+            var envelope = ContinuousCornerEnvelope.Create(phase, rider.LateralPosition,
+                snapshot.Track.Geometry, surface, rider.Profile.Skills, rider.ActiveSetup);
+            var allowDrive = resolution.Outcome is SegmentOutcome.Ok or SegmentOutcome.Brake;
+            // Incident-created RunWide clears its target in ResolveRandomIncident.
+            // Preserve that immediate consequence without applying a second penalty.
+            var allowCorrection = resolution.Outcome != SegmentOutcome.RunWide
+                || resolution.ContinuousCorrectionTargetSpeedMetersPerSecond.HasValue;
+            var retainedOverspeed = resolution.Outcome == SegmentOutcome.RunWide
+                && resolution.ContinuousCorrectionTargetSpeedMetersPerSecond is { } retainedTarget
+                ? MathF.Max(0f, retainedTarget - envelope.SpeedMetersPerSecond(phase.CornerProgress))
+                : 0f;
+            continuousCornerProfile = envelope.Traverse(resolution.Speed, phase.CornerProgress, travelled,
+                allowDrive, allowCorrection, retainedOverspeed);
+            speed = continuousCornerProfile.ExitSpeedMetersPerSecond;
+            ValidateDistanceComposition(travelled, "continuous corner",
+                continuousCornerProfile.CorrectionDistanceMeters,
+                continuousCornerProfile.CarryDistanceMeters,
+                continuousCornerProfile.DriveDistanceMeters);
         }
 
         if (standingStartEligible)
@@ -552,74 +514,18 @@ public sealed class SimulationEngine
                 ResolveImmediateNextTurnApproachSpeed(snapshot, rider));
             speed = straightProfile.Value.ExitSpeedMetersPerSecond;
         }
-        // Compatibility bridge for #38: TurnExit keeps its current drive
-        // placement, but it is now explicitly attached to the same corner.
-        else if (cornerPhaseContext is
-            { CompatibilitySegmentType: SegmentType.TurnExit }
-            && resolution.Outcome is SegmentOutcome.Ok or SegmentOutcome.Brake
-            && speed > 0f)
-        {
-            var driveDistanceMeters = cornerSpeedCorrectionProfile?.RemainingDistanceMeters
-                ?? travelled;
-            var correctionAllowsDrive = cornerSpeedCorrectionProfile is not { } correction
-                || correction.TargetReached;
-            if (correctionAllowsDrive && driveDistanceMeters > 0f)
-            {
-                turnExitDriveProfile = LongitudinalDynamics
-                    .CalculateForceBasedTurnExitDriveProfile(
-                    cornerPhaseContext.Value,
-                    speed,
-                    rider.Profile.Skills,
-                    rider.ActiveSetup,
-                    surface,
-                    driveDistanceMeters);
-                turnExitNetAcceleration =
-                    turnExitDriveProfile.Value.EntryNetAccelerationMetersPerSecondSquared;
-                speed = turnExitDriveProfile.Value.ExitSpeedMetersPerSecond;
-            }
-        }
-
-        if (!snapshot.Step.UseLegacyPhysics)
-        {
-            ValidateTurnDistanceConservation(
-                snapshot.Segment.Type,
-                resolution.Outcome,
-                travelled,
-                turnEntryScrubProfile,
-                cornerSpeedCorrectionProfile,
-                turnExitDriveProfile);
-        }
-
         float segmentElapsedTimeSeconds;
         if (standingStartLaunchProfile is { } launchProfile)
         {
             segmentElapsedTimeSeconds = launchProfile.TotalTimeSeconds;
         }
-        else if (turnEntryScrubProfile is { } scrubProfile)
+        else if (continuousCornerProfile is { } cornerProfile)
         {
-            segmentElapsedTimeSeconds = CalculateTurnEntryTravelTimeSeconds(
-                scrubProfile,
-                cornerSpeedCorrectionProfile,
-                travelled,
-                resolution.Speed,
-                resolution.Outcome);
+            segmentElapsedTimeSeconds = cornerProfile.TravelTimeSeconds;
         }
         else if (straightProfile is { } profile)
         {
             segmentElapsedTimeSeconds = profile.TravelTimeSeconds;
-        }
-        else if (turnExitDriveProfile is { } turnExitProfile)
-        {
-            segmentElapsedTimeSeconds = turnExitProfile.TravelTimeSeconds
-                + (cornerSpeedCorrectionProfile?.TravelTimeSeconds ?? 0f);
-        }
-        else if (cornerSpeedCorrectionProfile is { } correctionProfile)
-        {
-            segmentElapsedTimeSeconds = correctionProfile.TravelTimeSeconds
-                + CalculateConstantSpeedTravelTimeSeconds(
-                    correctionProfile.RemainingDistanceMeters,
-                    correctionProfile.ExitSpeedMetersPerSecond,
-                    "corner correction carry");
         }
         else
         {
@@ -672,7 +578,7 @@ public sealed class SimulationEngine
             travelled,
             standingStartLaunchProfile?.FullDriveEquilibriumSpeedMetersPerSecond
                 ?? straightProfile?.FullDriveEquilibriumSpeedMetersPerSecond
-                ?? turnExitDriveProfile?.FullDriveEquilibriumSpeedMetersPerSecond,
+                ?? continuousCornerProfile?.FullDriveEquilibriumSpeedMetersPerSecond,
             turnExitNetAcceleration,
             turnExitDriveProfile,
             straightProfile,
@@ -680,7 +586,8 @@ public sealed class SimulationEngine
             surface,
             standingStartLaunchProfile,
             cornerSpeedCorrectionProfile,
-            cornerPhaseContext);
+            cornerPhaseContext,
+            continuousCornerProfile);
     }
 
     private static float? ResolveImmediateNextTurnApproachSpeed(
@@ -707,145 +614,10 @@ public sealed class SimulationEngine
             rider.LateralPosition,
             snapshot.Track.Geometry)
             ?? throw new InvalidOperationException("Immediate logical corner has no start phase.");
-        // Existing numerical behavior intentionally remains tied to a labelled
-        // TurnEntry until #38 replaces the compatibility phase implementation.
-        if (nextCornerPhase.CompatibilitySegmentType != SegmentType.TurnEntry)
-            return null;
-
-        var nextSurface = snapshot.TrackState.SampleSurface(
-            nextSegmentIndex,
-            rider.LateralPosition);
-        var settledSafeSpeed = SegmentPhysics.MaxSafeTurnSpeed(
-            rider.LateralPosition,
-            snapshot.Track.Geometry,
-            nextSurface,
-            rider.Profile.Skills,
-            rider.ActiveSetup);
-        var scrubDeceleration = LongitudinalDynamics
-            .CalculateCornerEntryDecelerationMetersPerSecondSquared(
-                rider.Profile.Skills,
-                nextSurface);
-        var turnEntryLength = LaneModel.SegmentLengthMeters(
-            nextSegment,
-            rider.LateralPosition,
-            snapshot.Track.Geometry);
-        return LongitudinalDynamics.CalculateMaximumTurnEntryApproachSpeedMetersPerSecond(
-            settledSafeSpeed,
-            scrubDeceleration,
-            turnEntryLength);
-    }
-
-    private static float CalculateTurnEntryTravelTimeSeconds(
-        TurnEntryScrubProfile scrubProfile,
-        CornerSpeedCorrectionProfile? correctionProfile,
-        float travelledMeters,
-        float postConstraintSpeedMetersPerSecond,
-        SegmentOutcome outcome)
-    {
-        if (outcome == SegmentOutcome.Crash)
-            return scrubProfile.TravelTimeSeconds;
-
-        var scrubDistanceMeters = scrubProfile.DecelerationDistanceMeters
-            + scrubProfile.CarryDistanceMeters;
-        var postScrubDistanceMeters = travelledMeters - scrubDistanceMeters;
-        var tolerance = MathF.Max(1e-6f, travelledMeters * 1e-6f);
-        if (postScrubDistanceMeters < -tolerance)
-        {
-            throw new InvalidOperationException(
-                "TurnEntry scrub distance exceeds the actual travelled distance.");
-        }
-
-        postScrubDistanceMeters = MathF.Max(0f, postScrubDistanceMeters);
-        if (correctionProfile is { } correction)
-        {
-            ValidateDistanceComposition(
-                postScrubDistanceMeters,
-                "TurnEntry residual correction",
-                correction.CorrectionDistanceMeters,
-                correction.RemainingDistanceMeters);
-            var composedTravelTimeSeconds = scrubProfile.TravelTimeSeconds
-                + correction.TravelTimeSeconds
-                + CalculateConstantSpeedTravelTimeSeconds(
-                    correction.RemainingDistanceMeters,
-                    correction.ExitSpeedMetersPerSecond,
-                    "TurnEntry residual carry");
-            if (!float.IsFinite(composedTravelTimeSeconds))
-            {
-                throw new OverflowException(
-                    "TurnEntry travel time exceeds the finite single-precision domain.");
-            }
-
-            return composedTravelTimeSeconds;
-        }
-
-        if (postScrubDistanceMeters > 0f
-            && (!float.IsFinite(postConstraintSpeedMetersPerSecond)
-                || postConstraintSpeedMetersPerSecond <= 0f))
-        {
-            throw new InvalidOperationException(
-                "A non-crashing TurnEntry requires positive speed after the residual constraint.");
-        }
-
-        var postScrubTimeSeconds = postScrubDistanceMeters == 0f
-            ? 0f
-            : postScrubDistanceMeters / postConstraintSpeedMetersPerSecond;
-        var travelTimeSeconds = scrubProfile.TravelTimeSeconds + postScrubTimeSeconds;
-        if (!float.IsFinite(travelTimeSeconds))
-            throw new OverflowException("TurnEntry travel time exceeds the finite single-precision domain.");
-
-        return travelTimeSeconds;
-    }
-
-    private static void ValidateTurnDistanceConservation(
-        SegmentType segmentType,
-        SegmentOutcome outcome,
-        float travelledMeters,
-        TurnEntryScrubProfile? scrubProfile,
-        CornerSpeedCorrectionProfile? correctionProfile,
-        TurnExitDriveProfile? turnExitDriveProfile)
-    {
-        if (segmentType == SegmentType.Straight || outcome == SegmentOutcome.Crash)
-            return;
-
-        var phaseDistances = new List<float>();
-        if (segmentType == SegmentType.TurnEntry)
-        {
-            var scrub = scrubProfile
-                ?? throw new InvalidOperationException(
-                    "Advanced TurnEntry traversal requires its scrub profile.");
-            phaseDistances.Add(scrub.DecelerationDistanceMeters);
-            phaseDistances.Add(scrub.CarryDistanceMeters);
-        }
-
-        if (correctionProfile is { } correction)
-        {
-            phaseDistances.Add(correction.CorrectionDistanceMeters);
-            if (turnExitDriveProfile is { } drive)
-            {
-                phaseDistances.Add(drive.AccelerationDistanceMeters);
-                phaseDistances.Add(drive.CruiseDistanceMeters);
-                phaseDistances.Add(drive.DecelerationDistanceMeters);
-            }
-            else
-            {
-                phaseDistances.Add(correction.RemainingDistanceMeters);
-            }
-        }
-        else if (turnExitDriveProfile is { } drive)
-        {
-            phaseDistances.Add(drive.AccelerationDistanceMeters);
-            phaseDistances.Add(drive.CruiseDistanceMeters);
-            phaseDistances.Add(drive.DecelerationDistanceMeters);
-        }
-        else
-        {
-            phaseDistances.Add(travelledMeters - phaseDistances.Sum());
-        }
-
-        ValidateDistanceComposition(
-            travelledMeters,
-            $"{segmentType} physical phases",
-            phaseDistances.ToArray());
+        var nextSurface = snapshot.TrackState.SampleSurface(nextSegmentIndex, rider.LateralPosition);
+        return ContinuousCornerEnvelope.Create(nextCornerPhase, rider.LateralPosition,
+            snapshot.Track.Geometry, nextSurface, rider.Profile.Skills, rider.ActiveSetup)
+            .SpeedMetersPerSecond(0f);
     }
 
     private static void ValidateDistanceComposition(
@@ -863,25 +635,6 @@ public sealed class SimulationEngine
             throw new InvalidOperationException(
                 $"{name} does not conserve travelled distance.");
         }
-    }
-
-    private static float CalculateConstantSpeedTravelTimeSeconds(
-        float distanceMeters,
-        float speedMetersPerSecond,
-        string phaseName)
-    {
-        if (distanceMeters == 0f)
-            return 0f;
-        if (!float.IsFinite(speedMetersPerSecond) || speedMetersPerSecond <= 0f)
-        {
-            throw new InvalidOperationException(
-                $"A positive {phaseName} distance requires positive finite speed.");
-        }
-
-        var timeSeconds = distanceMeters / speedMetersPerSecond;
-        if (!float.IsFinite(timeSeconds))
-            throw new OverflowException($"{phaseName} time exceeds the finite domain.");
-        return timeSeconds;
     }
 
     private static void ValidateEquivalent(float expected, float actual, string name)

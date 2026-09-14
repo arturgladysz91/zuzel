@@ -90,14 +90,16 @@ public static class CalibrationScenarioSuite
         if (!float.IsFinite(scenario.SegmentProgress) || scenario.SegmentProgress < 0f || scenario.SegmentProgress >= 1f)
             throw new ArgumentOutOfRangeException(nameof(scenario), "Progress must be in [0, 1).");
         var geometry = Track.CreateStandingStartExample().Geometry;
-        var track = new Track(new[] { new TrackSegment(0, scenario.SegmentType) }, geometry);
+        var track = new Track(new[] { new TrackSegment(0, SegmentType.TurnEntry),
+            new TrackSegment(1, SegmentType.TurnMiddle), new TrackSegment(2, SegmentType.TurnExit) }, geometry);
+        var segmentIndex = Array.FindIndex(track.Segments.ToArray(), segment => segment.Type == scenario.SegmentType);
         var rider = CreateRider(1, (int)scenario.LateralPosition, scenario.Fixture);
         rider.LateralPosition = scenario.LateralPosition;
         rider.Speed = scenario.EntrySpeedMetersPerSecond;
-        rider.RestorePosition(RiderPosition.Create(1, 0, scenario.SegmentProgress, 1));
+        rider.RestorePosition(RiderPosition.Create(1, segmentIndex, scenario.SegmentProgress, track.Segments.Count));
         var step = Resolve(track, rider, scenario.Fixture.Surface);
         return new(scenario, LaneModel.TurnArcRadiusMeters(scenario.LateralPosition, geometry),
-            LaneModel.SegmentLengthMeters(track.Segments[0], scenario.LateralPosition, geometry) * (1f - scenario.SegmentProgress),
+            LaneModel.SegmentLengthMeters(track.Segments[segmentIndex], scenario.LateralPosition, geometry) * (1f - scenario.SegmentProgress),
             ObserveCornerCapability(scenario.Fixture, scenario.LateralPosition), step.Diagnostics.Single(), step.Changes.Single());
     }
 
@@ -202,7 +204,7 @@ public static class CalibrationScenarioSuite
     {
         var engine = new SimulationEngine(new HoldLane());
         var snapshot = engine.CaptureSnapshot(track, TrackState.CreateDefault(track, surface), new[] { rider },
-            new SimulationStepContext(35, 0, 0, 0, CalibrationSkillSweep.FixedSeed, 4));
+            new SimulationStepContext(35, 0, rider.LapsCompleted, rider.SegmentIndex, CalibrationSkillSweep.FixedSeed, 4));
         return engine.Resolve(snapshot, engine.Decide(snapshot), Options());
     }
 

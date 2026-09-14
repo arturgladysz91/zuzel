@@ -20,7 +20,7 @@ public sealed class CalibrationScenarioSuiteTests
         Assert.Equal(ids.Order(StringComparer.Ordinal), ids);
         Assert.Equal(Enum.GetValues<CalibrationScenarioKind>().Order(), Definitions.Select(item => item.Metadata.Kind).Distinct().Order());
         Assert.Equal(ids, Results.Select(result => result.Metadata.ScenarioId));
-        Assert.Equal(5, Definitions.OfType<CalibrationLineScenario>().Count());
+        Assert.Equal(6, Definitions.OfType<CalibrationLineScenario>().Count());
         Assert.Equal(3, Definitions.OfType<CalibrationHeatScenario>().Count(item => item.Metadata.ScenarioId.Contains("/within_heat/", StringComparison.Ordinal)));
     }
 
@@ -140,28 +140,14 @@ public sealed class CalibrationScenarioSuiteTests
     [Fact]
     public void RecoverableCornerPhasesUseEveryPhysicalMeterExactlyOnce()
     {
-        foreach (var result in Results.OfType<CalibrationTurnResult>().Where(result => result.Change.Outcome != SegmentOutcome.Crash))
+        foreach (var r in Results.OfType<CalibrationTurnResult>().Where(r => r.Change.Outcome != SegmentOutcome.Crash))
         {
-            Near(result.AvailableDistanceMeters, result.Diagnostics.TravelledMeters);
-            Assert.True(result.CarryDistanceMeters >= -0.0001f);
-            Assert.True(result.CarryTimeSeconds >= -0.0001f);
-            if (result.Diagnostics.CornerSpeedCorrectionProfile is { } c)
-            {
-                Near(result.AvailableDistanceMeters, result.ScrubDistanceMeters + c.CorrectionDistanceMeters + c.RemainingDistanceMeters);
-                Near(c.RemainingDistanceMeters, result.DriveDistanceMeters + result.CarryDistanceMeters);
-                var f = result.Scenario.Fixture;
-                Assert.Equal(LongitudinalDynamics.CalculateCornerSpeedCorrectionProfile(c.EntrySpeedMetersPerSecond,
-                    c.TargetSpeedMetersPerSecond, c.DecelerationMetersPerSecondSquared,
-                    result.AvailableDistanceMeters - result.ScrubDistanceMeters), c);
-                if (result.Diagnostics.TurnExitDriveProfile is { } d)
-                    Assert.Equal(LongitudinalDynamics.CalculateForceBasedTurnExitDriveProfile(c.ExitSpeedMetersPerSecond,
-                        f.Skills, f.Setup, f.Surface, c.RemainingDistanceMeters), d);
-            }
-            Near(result.Diagnostics.TravelTimeSeconds, (result.Diagnostics.TurnEntryScrubProfile?.TravelTimeSeconds ?? 0f)
-                + (result.Diagnostics.CornerSpeedCorrectionProfile?.TravelTimeSeconds ?? 0f)
-                + (result.Diagnostics.TurnExitDriveProfile?.TravelTimeSeconds ?? 0f)
-                + result.CarryDistanceMeters / result.Change.Speed);
-            if (result.Scenario.SegmentType != SegmentType.TurnExit) Assert.Null(result.Diagnostics.TurnExitDriveProfile);
+            var p = Assert.IsType<ContinuousCornerTraversalProfile>(r.Diagnostics.ContinuousCornerProfile);
+            Near(r.AvailableDistanceMeters, r.Diagnostics.TravelledMeters);
+            Near(r.AvailableDistanceMeters, p.CorrectionDistanceMeters + p.CarryDistanceMeters + p.DriveDistanceMeters);
+            Near(r.Diagnostics.TravelTimeSeconds, p.CorrectionTimeSeconds + p.CarryTimeSeconds + p.DriveTimeSeconds);
+            Assert.Null(r.Diagnostics.TurnEntryScrubProfile);
+            Assert.Null(r.Diagnostics.TurnExitDriveProfile);
         }
     }
 
@@ -175,7 +161,7 @@ public sealed class CalibrationScenarioSuiteTests
             ("brake", SegmentOutcome.Brake), ("run_wide", SegmentOutcome.RunWide), ("crash_above_boundary", SegmentOutcome.Crash) })
             Assert.Equal(expected, Get<CalibrationTurnResult>($"{family}/band/{band}").Change.Outcome);
         Assert.Null(Get<CalibrationTurnResult>($"{family}/band/below_max").Diagnostics.CornerSpeedCorrectionProfile);
-        Assert.NotNull(Get<CalibrationTurnResult>($"{family}/band/quiet").Diagnostics.CornerSpeedCorrectionProfile);
+        Assert.NotNull(Get<CalibrationTurnResult>($"{family}/band/quiet").Diagnostics.ContinuousCornerProfile);
     }
 
     [Theory]
@@ -185,11 +171,11 @@ public sealed class CalibrationScenarioSuiteTests
     public void InsufficientLegalRemainingDistanceLeavesResidualOverspeedAndNoDrive(string family)
     {
         var r = Get<CalibrationTurnResult>($"{family}/insufficient_distance");
-        var c = r.Diagnostics.CornerSpeedCorrectionProfile!.Value;
+        var c = r.Diagnostics.ContinuousCornerProfile!;
         Assert.False(c.TargetReached);
-        Assert.True(c.ExitSpeedMetersPerSecond > c.TargetSpeedMetersPerSecond);
+        Assert.True(c.ExitSpeedMetersPerSecond > c.EnvelopeAtExitMetersPerSecond);
         Assert.True(r.ResidualOverspeedMetersPerSecond > 0f);
-        Assert.Equal(0f, c.RemainingDistanceMeters);
+        Assert.Equal(0f, c.CarryDistanceMeters);
         Assert.Equal(0f, r.DriveDistanceMeters);
         Assert.Null(r.Diagnostics.TurnExitDriveProfile);
         Near(r.Change.Speed, c.ExitSpeedMetersPerSecond);

@@ -14,9 +14,8 @@ public sealed class StandingStartPreparationTests
         var step = Resolve();
         var target = FirstTurnApproachTarget(step);
         var launch = Launch(step);
+        Assert.Equal(Profile(35f, target), launch);
         Assert.True(launch.PreparationDistanceMeters > 0f);
-        Assert.True(launch.PeakSpeedMetersPerSecond > launch.ExitSpeedMetersPerSecond);
-        Assert.Equal(target, launch.ExitSpeedMetersPerSecond, 4);
         Assert.Equal(launch.ExitSpeedMetersPerSecond, step.Changes[0].Speed);
     }
 
@@ -108,7 +107,9 @@ public sealed class StandingStartPreparationTests
     [Fact]
     public void StandingStartTimeTo70CanBeReachedBeforeLowerExitSpeed()
     {
-        var p = Launch(Resolve());
+        // Explicit lower preparation target exercises crossing before a lower exit;
+         // the new complete-corner target on the default fixture is now above 70 km/h.
+        var p = Profile(35f, 18f);
         Assert.True(p.PeakSpeedMetersPerSecond > LongitudinalDynamics.StandingStartTelemetry70KphMetersPerSecond);
         Assert.True(p.ExitSpeedMetersPerSecond < LongitudinalDynamics.StandingStartTelemetry70KphMetersPerSecond);
         Assert.NotNull(p.TimeTo70KphSeconds);

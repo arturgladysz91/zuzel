@@ -12,310 +12,178 @@ public sealed class ContinuousCornerCorrectionSimulationTests
     private static readonly TrackSurfaceState PerfectSurface = new(1f, 0f, 0.35f);
 
     [Fact]
-    public void ExistingFirstHalfTurnEntryScrubRemainsNumericallyUnchanged()
+    public void AdvancedEntryUsesContinuousEnvelopeInsteadOfSeparateScrub()
     {
-        var setup = TurnEntrySetup(MathF.PI / 3f, residualSpeedFactor: 1.05f);
-        var diagnostics = Assert.Single(Resolve(setup.Track, setup.Rider).Diagnostics);
-        var scrub = diagnostics.TurnEntryScrubProfile!.Value;
-        var expected = LongitudinalDynamics.CalculateTurnEntryScrubProfile(
-            setup.Rider.Speed,
-            SegmentPhysics.MaxSafeTurnSpeed(
-                setup.Rider.LateralPosition,
-                setup.Track.Geometry,
-                PerfectSurface,
-                setup.Rider.Profile.Skills,
-                setup.Rider.ActiveSetup),
-            LongitudinalDynamics.CalculateCornerCorrectionDecelerationMetersPerSecondSquared(
-                setup.Rider.Profile.Skills,
-                PerfectSurface),
-            diagnostics.TravelledMeters);
-
-        Assert.Equal(expected, scrub);
-        Assert.Equal(
-            diagnostics.TravelledMeters
-            * LongitudinalDynamics.ProvisionalTurnEntryScrubDistanceFraction,
-            scrub.DecelerationDistanceMeters + scrub.CarryDistanceMeters,
-            5);
+        var r = CornerTestSupport.Probe();
+        Assert.Null(r.Diagnostics.TurnEntryScrubProfile);
+        Assert.NotNull(r.Diagnostics.ContinuousCornerProfile);
+        Assert.True(r.Diagnostics.ContinuousCornerProfile!.CorrectionDistanceMeters > 0f);
     }
 
     [Fact]
-    public void ResidualCorrectionUsesOnlyPostScrubDistance()
+    public void EntryCorrectionUsesWholeAvailableCornerFragment()
     {
-        var setup = TurnEntrySetup(MathF.PI / 3f, residualSpeedFactor: 1.05f);
-        var step = Resolve(setup.Track, setup.Rider);
-        var diagnostics = Assert.Single(step.Diagnostics);
-        var scrub = Assert.IsType<TurnEntryScrubProfile>(diagnostics.TurnEntryScrubProfile);
-        var correction = Assert.IsType<CornerSpeedCorrectionProfile>(
-            diagnostics.CornerSpeedCorrectionProfile);
-
-        Assert.Equal(
-            diagnostics.TravelledMeters - scrub.DecelerationDistanceMeters - scrub.CarryDistanceMeters,
-            correction.CorrectionDistanceMeters + correction.RemainingDistanceMeters,
-            5);
+        var r = CornerTestSupport.Probe(factor: 1.05f);
+        var p = r.Diagnostics.ContinuousCornerProfile!;
+        Assert.Null(r.Diagnostics.TurnEntryScrubProfile);
+        Assert.Equal(r.Diagnostics.TravelledMeters, p.CorrectionDistanceMeters + p.CarryDistanceMeters + p.DriveDistanceMeters, 4);
     }
 
     [Fact]
     public void TurnEntryNoDistanceIsDoubleCounted()
     {
-        var setup = TurnEntrySetup(MathF.PI / 3f, residualSpeedFactor: 1.05f);
-        var diagnostics = Assert.Single(Resolve(setup.Track, setup.Rider).Diagnostics);
-        var scrub = diagnostics.TurnEntryScrubProfile!.Value;
-        var correction = diagnostics.CornerSpeedCorrectionProfile!.Value;
-
-        Assert.Equal(
-            diagnostics.TravelledMeters,
-            scrub.DecelerationDistanceMeters + scrub.CarryDistanceMeters
-            + correction.CorrectionDistanceMeters + correction.RemainingDistanceMeters,
-            5);
+        var r = CornerTestSupport.Probe();
+        var p = r.Diagnostics.ContinuousCornerProfile!;
+        Assert.Equal(r.Diagnostics.TravelledMeters, p.CorrectionDistanceMeters + p.CarryDistanceMeters + p.DriveDistanceMeters, 4);
+        Assert.Equal(0f, p.DriveDistanceMeters);
     }
 
     [Fact]
     public void TurnEntryResidualInsufficientDistanceLeavesOverspeed()
     {
-        var setup = TurnEntrySetup(0.10f, residualSpeedFactor: 1.05f);
-        var step = Resolve(setup.Track, setup.Rider);
-        var change = Assert.Single(step.Changes);
-        var correction = Assert.Single(step.Diagnostics).CornerSpeedCorrectionProfile!.Value;
-
-        Assert.False(correction.TargetReached);
-        Assert.Equal(0f, correction.RemainingDistanceMeters);
-        Assert.True(change.Speed > correction.TargetSpeedMetersPerSecond);
-        Assert.Equal(correction.ExitSpeedMetersPerSecond, change.Speed);
+        var r = CornerTestSupport.Probe(.333f, 1.05f);
+        var p = r.Diagnostics.ContinuousCornerProfile!;
+        Assert.False(p.TargetReached);
+        Assert.True(p.ResidualOverspeedMetersPerSecond > 0f);
+        Assert.Equal(p.ExitSpeedMetersPerSecond, r.Change.Speed);
     }
 
     [Fact]
-    public void TurnEntryResidualTargetReachedGivesCarryOnRemainingDistance()
+    public void EntryBelowEnvelopeCarriesWithoutResistanceOnlyBraking()
     {
-        var setup = TurnEntrySetup(MathF.PI / 3f, residualSpeedFactor: 1.03f);
-        var step = Resolve(setup.Track, setup.Rider);
-        var correction = Assert.Single(step.Diagnostics).CornerSpeedCorrectionProfile!.Value;
-
-        Assert.True(correction.TargetReached);
-        Assert.True(correction.RemainingDistanceMeters > 0f);
-        Assert.Equal(correction.TargetSpeedMetersPerSecond, Assert.Single(step.Changes).Speed);
+        var r = CornerTestSupport.Probe(factor: .80f);
+        var p = r.Diagnostics.ContinuousCornerProfile!;
+        Assert.True(p.TargetReached);
+        Assert.True(p.CarryDistanceMeters > 0f);
+        Assert.Equal(p.EntrySpeedMetersPerSecond, r.Change.Speed);
     }
 
     [Fact]
     public void FullTurnEntryTotalTimeEqualsPhaseSum()
     {
-        var setup = TurnEntrySetup(MathF.PI / 3f, residualSpeedFactor: 1.05f);
-        var step = Resolve(setup.Track, setup.Rider);
-        var diagnostics = Assert.Single(step.Diagnostics);
-        var scrub = diagnostics.TurnEntryScrubProfile!.Value;
-        var correction = diagnostics.CornerSpeedCorrectionProfile!.Value;
-        var expected = scrub.TravelTimeSeconds + correction.TravelTimeSeconds
-            + correction.RemainingDistanceMeters / correction.ExitSpeedMetersPerSecond;
-
-        Assert.Equal(expected, diagnostics.TravelTimeSeconds, 5);
-        Assert.Equal(expected, Assert.Single(step.Changes).ElapsedTimeSeconds, 5);
+        var r = CornerTestSupport.Probe(factor: 1.05f);
+        var p = r.Diagnostics.ContinuousCornerProfile!;
+        Assert.Equal(p.CorrectionTimeSeconds + p.CarryTimeSeconds + p.DriveTimeSeconds, r.Diagnostics.TravelTimeSeconds, 5);
+        Assert.Equal(p.TravelTimeSeconds, r.Change.ElapsedTimeSeconds, 5);
     }
 
     [Fact]
     public void PartialTurnEntryUsesOnlyActualRemainingDistance()
     {
-        const float entryProgress = 0.5f;
-        var setup = TurnEntrySetup(
-            MathF.PI / 3f,
-            residualSpeedFactor: 1.05f,
-            entryProgress);
-        var step = Resolve(setup.Track, setup.Rider);
-        var diagnostics = Assert.Single(step.Diagnostics);
-        var scrub = diagnostics.TurnEntryScrubProfile!.Value;
-        var correction = diagnostics.CornerSpeedCorrectionProfile!.Value;
-        var nominalDistance = LaneModel.SegmentLengthMeters(
-            setup.Track.Segments[0],
-            setup.Rider.LateralPosition,
-            setup.Track.Geometry);
-
-        Assert.Equal(nominalDistance * (1f - entryProgress), diagnostics.TravelledMeters, 5);
-        Assert.Equal(
-            diagnostics.TravelledMeters,
-            scrub.DecelerationDistanceMeters + scrub.CarryDistanceMeters
-            + correction.CorrectionDistanceMeters + correction.RemainingDistanceMeters,
-            5);
+        var r = CornerTestSupport.Probe(.125f);
+        var p = r.Diagnostics.ContinuousCornerProfile!;
+        Assert.Equal(r.AvailableDistanceMeters, p.CorrectionDistanceMeters + p.CarryDistanceMeters + p.DriveDistanceMeters, 4);
+        Assert.Equal(.125f, p.Nodes[0].CornerProgress, 6);
+        Assert.Equal(1f / 3f, p.Nodes[^1].CornerProgress, 6);
     }
 
     [Fact]
     public void BrakeBandTurnMiddleDoesNotInstantlyBecomeMax()
     {
-        var setup = OverspeedSetup(SegmentType.TurnMiddle, MathF.PI / 3f, 1.05f);
-        var step = Resolve(setup.Track, setup.Rider);
-        var change = Assert.Single(step.Changes);
-        var correction = Assert.Single(step.Diagnostics).CornerSpeedCorrectionProfile!.Value;
-
-        Assert.Equal(SegmentOutcome.Brake, change.Outcome);
-        Assert.Equal(setup.Rider.Speed, change.PhysicsSpeed);
-        Assert.True(change.PhysicsSpeed > correction.TargetSpeedMetersPerSecond);
+        var r = CornerTestSupport.Probe(.375f, 1.05f);
+        Assert.Equal(SegmentOutcome.Brake, r.Change.Outcome);
+        Assert.Equal(r.Scenario.EntrySpeedMetersPerSecond, r.Change.PhysicsSpeed);
+        Assert.True(r.Change.PhysicsSpeed > r.Diagnostics.ContinuousCornerProfile!.EnvelopeAtEntryMetersPerSecond);
     }
 
     [Fact]
     public void TurnMiddleCorrectionConsumesPhysicalDistance()
     {
-        var setup = OverspeedSetup(SegmentType.TurnMiddle, MathF.PI / 3f, 1.05f);
-        var diagnostics = Assert.Single(Resolve(setup.Track, setup.Rider).Diagnostics);
-        var correction = diagnostics.CornerSpeedCorrectionProfile!.Value;
-
-        Assert.Equal(
-            diagnostics.TravelledMeters,
-            correction.CorrectionDistanceMeters + correction.RemainingDistanceMeters,
-            5);
+        var r = CornerTestSupport.Probe(.375f, 1.05f);
+        var p = r.Diagnostics.ContinuousCornerProfile!;
+        Assert.True(p.CorrectionDistanceMeters > 0f);
+        Assert.Equal(r.AvailableDistanceMeters, p.CorrectionDistanceMeters + p.CarryDistanceMeters + p.DriveDistanceMeters, 4);
     }
 
     [Fact]
-    public void TurnMiddleEnoughDistanceReachesTargetAndCarries()
+    public void TurnMiddleCanCarryCorrectAndDriveAcrossApex()
     {
-        var setup = OverspeedSetup(SegmentType.TurnMiddle, MathF.PI / 3f, 1.03f);
-        var step = Resolve(setup.Track, setup.Rider);
-        var correction = Assert.Single(step.Diagnostics).CornerSpeedCorrectionProfile!.Value;
-
-        Assert.True(correction.TargetReached);
-        Assert.True(correction.RemainingDistanceMeters > 0f);
-        Assert.Equal(correction.TargetSpeedMetersPerSecond, Assert.Single(step.Changes).Speed);
+        var r = CornerTestSupport.Probe(.375f, .95f);
+        var p = r.Diagnostics.ContinuousCornerProfile!;
+        Assert.True(p.TargetReached);
+        Assert.True(p.CarryDistanceMeters > 0f);
+        Assert.True(p.DriveDistanceMeters > 0f);
     }
 
     [Fact]
     public void ShortTurnMiddlePreservesResidualOverspeed()
     {
-        var setup = OverspeedSetup(SegmentType.TurnMiddle, 0.05f, 1.05f);
-        var step = Resolve(setup.Track, setup.Rider);
-        var correction = Assert.Single(step.Diagnostics).CornerSpeedCorrectionProfile!.Value;
-
-        Assert.False(correction.TargetReached);
-        Assert.Equal(0f, correction.RemainingDistanceMeters);
-        Assert.True(Assert.Single(step.Changes).Speed > correction.TargetSpeedMetersPerSecond);
+        var r = CornerTestSupport.Probe(.6666f, 1.05f);
+        Assert.False(r.Diagnostics.ContinuousCornerProfile!.TargetReached);
+        Assert.True(r.Diagnostics.ContinuousCornerProfile!.ResidualOverspeedMetersPerSecond > 0f);
     }
 
     [Fact]
     public void TurnMiddleFinalSpeedEqualsPhysicalProfileExit()
     {
-        var setup = OverspeedSetup(SegmentType.TurnMiddle, MathF.PI / 3f, 1.05f);
-        var step = Resolve(setup.Track, setup.Rider);
-
-        Assert.Equal(
-            Assert.Single(step.Diagnostics).CornerSpeedCorrectionProfile!.Value.ExitSpeedMetersPerSecond,
-            Assert.Single(step.Changes).Speed);
+        var r = CornerTestSupport.Probe(.375f, 1.05f);
+        Assert.Equal(r.Diagnostics.ContinuousCornerProfile!.ExitSpeedMetersPerSecond, r.Change.Speed);
     }
 
     [Fact]
     public void TurnExitCorrectionHappensBeforeDrive()
     {
-        var setup = OverspeedSetup(SegmentType.TurnExit, MathF.PI / 3f, 1.05f);
-        var step = Resolve(setup.Track, setup.Rider);
-        var diagnostics = Assert.Single(step.Diagnostics);
-        var correction = diagnostics.CornerSpeedCorrectionProfile!.Value;
-        var drive = diagnostics.TurnExitDriveProfile!.Value;
-        var expected = LongitudinalDynamics.CalculateForceBasedTurnExitDriveProfile(
-            correction.ExitSpeedMetersPerSecond,
-            setup.Rider.Profile.Skills,
-            setup.Rider.ActiveSetup,
-            diagnostics.EntrySurface,
-            correction.RemainingDistanceMeters);
-
-        Assert.True(correction.TargetReached);
-        Assert.Equal(expected, drive);
+        var r = CornerTestSupport.Probe(.75f, 1.03f);
+        var p = r.Diagnostics.ContinuousCornerProfile!;
+        Assert.True(p.CorrectionDistanceMeters > 0f);
+        Assert.True(p.DriveDistanceMeters > 0f);
+        Assert.Null(r.Diagnostics.TurnExitDriveProfile);
+        Assert.Equal(p.ExitSpeedMetersPerSecond, r.Change.Speed);
     }
 
     [Fact]
     public void TurnExitDriveUsesOnlyRemainingDistance()
     {
-        var setup = OverspeedSetup(SegmentType.TurnExit, MathF.PI / 3f, 1.05f);
-        var diagnostics = Assert.Single(Resolve(setup.Track, setup.Rider).Diagnostics);
-        var correction = diagnostics.CornerSpeedCorrectionProfile!.Value;
-        var drive = diagnostics.TurnExitDriveProfile!.Value;
-
-        Assert.Equal(
-            correction.RemainingDistanceMeters,
-            drive.AccelerationDistanceMeters + drive.CruiseDistanceMeters
-            + drive.DecelerationDistanceMeters,
-            5);
-        Assert.Equal(
-            diagnostics.TravelledMeters,
-            correction.CorrectionDistanceMeters + drive.AccelerationDistanceMeters
-            + drive.CruiseDistanceMeters + drive.DecelerationDistanceMeters,
-            5);
+        var r = CornerTestSupport.Probe(.75f, 1.03f);
+        var p = r.Diagnostics.ContinuousCornerProfile!;
+        Assert.Equal(r.AvailableDistanceMeters, p.CorrectionDistanceMeters + p.CarryDistanceMeters + p.DriveDistanceMeters, 4);
     }
 
     [Fact]
     public void TurnExitWithoutEnoughCorrectionDistanceDoesNotDrive()
     {
-        var setup = OverspeedSetup(SegmentType.TurnExit, 0.05f, 1.05f);
-        var step = Resolve(setup.Track, setup.Rider);
-        var diagnostics = Assert.Single(step.Diagnostics);
-
-        Assert.False(diagnostics.CornerSpeedCorrectionProfile!.Value.TargetReached);
-        Assert.Null(diagnostics.TurnExitDriveProfile);
-        Assert.Equal(
-            diagnostics.CornerSpeedCorrectionProfile.Value.ExitSpeedMetersPerSecond,
-            Assert.Single(step.Changes).Speed);
+        var r = CornerTestSupport.Probe(.999f, 1.05f);
+        var p = r.Diagnostics.ContinuousCornerProfile!;
+        Assert.False(p.TargetReached);
+        Assert.Equal(0f, p.DriveDistanceMeters);
+        Assert.Equal(p.ExitSpeedMetersPerSecond, r.Change.Speed);
     }
 
     [Fact]
     public void CleanOkTurnExitStillDrivesAcrossFullDistance()
     {
-        var setup = OverspeedSetup(SegmentType.TurnExit, MathF.PI / 3f, 0.90f);
-        var step = Resolve(setup.Track, setup.Rider);
-        var diagnostics = Assert.Single(step.Diagnostics);
-        var drive = diagnostics.TurnExitDriveProfile!.Value;
-
-        Assert.Null(diagnostics.CornerSpeedCorrectionProfile);
-        Assert.Equal(
-            diagnostics.TravelledMeters,
-            drive.AccelerationDistanceMeters + drive.CruiseDistanceMeters
-            + drive.DecelerationDistanceMeters,
-            5);
+        var r = CornerTestSupport.Probe(.75f, .90f);
+        var p = r.Diagnostics.ContinuousCornerProfile!;
+        Assert.Equal(SegmentOutcome.Ok, r.Change.Outcome);
+        Assert.Equal(r.AvailableDistanceMeters, p.DriveDistanceMeters, 5);
     }
 
     [Fact]
     public void RunWideTurnExitUsesContinuousCorrectionAndNeverDrive()
     {
-        var setup = OverspeedSetup(SegmentType.TurnExit, MathF.PI / 3f, 1.15f);
-        var step = Resolve(setup.Track, setup.Rider);
-        var change = Assert.Single(step.Changes);
-        var diagnostics = Assert.Single(step.Diagnostics);
-        var correction = diagnostics.CornerSpeedCorrectionProfile!.Value;
-
-        Assert.Equal(SegmentOutcome.RunWide, change.Outcome);
-        Assert.Equal(setup.Rider.Speed, change.PhysicsSpeed);
-        Assert.True(correction.CorrectionDistanceMeters > 0f);
-        Assert.Equal(correction.ExitSpeedMetersPerSecond, change.Speed);
-        Assert.Null(diagnostics.TurnExitDriveProfile);
-        Assert.Equal(
-            diagnostics.TravelledMeters,
-            correction.CorrectionDistanceMeters + correction.RemainingDistanceMeters,
-            5);
+        var r = CornerTestSupport.Probe(.75f, 1.15f);
+        var p = r.Diagnostics.ContinuousCornerProfile!;
+        Assert.Equal(SegmentOutcome.RunWide, r.Change.Outcome);
+        Assert.Equal(r.Scenario.EntrySpeedMetersPerSecond, r.Change.PhysicsSpeed);
+        Assert.True(p.CorrectionDistanceMeters > 0f);
+        Assert.Equal(0f, p.DriveDistanceMeters);
+        Assert.Equal(p.ExitSpeedMetersPerSecond, r.Change.Speed);
     }
 
     [Fact]
     public void TurnExitTotalTimeEqualsCorrectionPlusDrive()
     {
-        var setup = OverspeedSetup(SegmentType.TurnExit, MathF.PI / 3f, 1.05f);
-        var step = Resolve(setup.Track, setup.Rider);
-        var diagnostics = Assert.Single(step.Diagnostics);
-        var expected = diagnostics.CornerSpeedCorrectionProfile!.Value.TravelTimeSeconds
-            + diagnostics.TurnExitDriveProfile!.Value.TravelTimeSeconds;
-
-        Assert.Equal(expected, diagnostics.TravelTimeSeconds, 5);
-        Assert.Equal(expected, Assert.Single(step.Changes).ElapsedTimeSeconds, 5);
+        var r = CornerTestSupport.Probe(.75f, 1.03f);
+        var p = r.Diagnostics.ContinuousCornerProfile!;
+        Assert.Equal(p.CorrectionTimeSeconds + p.CarryTimeSeconds + p.DriveTimeSeconds, r.Diagnostics.TravelTimeSeconds, 5);
     }
 
     [Fact]
     public void TurnExitPeakIncludesPreCorrectionSpeedWhenItExceedsDrivePeak()
     {
-        var setup = OverspeedSetup(SegmentType.TurnExit, 0.50f, 1.09f);
-        var step = Resolve(setup.Track, setup.Rider);
-        var change = Assert.Single(step.Changes);
-        var diagnostics = Assert.Single(step.Diagnostics);
-        var correction = diagnostics.CornerSpeedCorrectionProfile!.Value;
-        var drive = diagnostics.TurnExitDriveProfile!.Value;
-
-        Assert.Equal(SegmentOutcome.Brake, change.Outcome);
-        Assert.True(correction.TargetReached);
-        Assert.True(correction.RemainingDistanceMeters > 0f);
-        Assert.True(correction.EntrySpeedMetersPerSecond > drive.PeakSpeedMetersPerSecond);
-        Assert.Equal(
-            correction.EntrySpeedMetersPerSecond,
-            diagnostics.PeakSpeedMetersPerSecond,
-            5);
+        var r = CornerTestSupport.Probe(.999f, 1.09f);
+        Assert.Equal(SegmentOutcome.Brake, r.Change.Outcome);
+        Assert.Equal(r.Scenario.EntrySpeedMetersPerSecond, r.Diagnostics.PeakSpeedMetersPerSecond, 5);
     }
 
     [Fact]
@@ -349,28 +217,16 @@ public sealed class ContinuousCornerCorrectionSimulationTests
     [Fact]
     public void TurnEntryPeakIncludesActualSegmentEntrySpeed()
     {
-        var setup = TurnEntrySetup(MathF.PI / 3f, residualSpeedFactor: 1.05f);
-        var step = Resolve(setup.Track, setup.Rider);
-        var change = Assert.Single(step.Changes);
-        var diagnostics = Assert.Single(step.Diagnostics);
-
-        Assert.NotNull(diagnostics.CornerSpeedCorrectionProfile);
-        Assert.True(diagnostics.PeakSpeedMetersPerSecond >= change.EntrySpeed);
-        Assert.Equal(change.EntrySpeed, diagnostics.PeakSpeedMetersPerSecond, 5);
+        var r = CornerTestSupport.Probe(factor: 1.05f);
+        Assert.Equal(r.Change.EntrySpeed, r.Diagnostics.PeakSpeedMetersPerSecond, 5);
+        Assert.Equal(0f, r.Diagnostics.ContinuousCornerProfile!.PeakCornerProgress);
     }
 
     [Fact]
     public void TurnMiddlePeakIncludesCorrectionEntrySpeed()
     {
-        var setup = OverspeedSetup(SegmentType.TurnMiddle, MathF.PI / 3f, 1.05f);
-        var step = Resolve(setup.Track, setup.Rider);
-        var diagnostics = Assert.Single(step.Diagnostics);
-        var correction = diagnostics.CornerSpeedCorrectionProfile!.Value;
-
-        Assert.Equal(
-            correction.EntrySpeedMetersPerSecond,
-            diagnostics.PeakSpeedMetersPerSecond,
-            5);
+        var r = CornerTestSupport.Probe(.375f, 1.05f);
+        Assert.Equal(r.Change.EntrySpeed, r.Diagnostics.PeakSpeedMetersPerSecond, 5);
     }
 
     [Fact]
@@ -464,15 +320,16 @@ public sealed class ContinuousCornerCorrectionSimulationTests
             "CornerCorrectionTargetReached",
         };
 
-        Assert.Equal(expectedTail, header[^expectedTail.Length..]);
-        Assert.NotNull(sample.CornerCorrectionEntrySpeedMetersPerSecond);
-        Assert.NotNull(sample.CornerCorrectionTargetSpeedMetersPerSecond);
-        Assert.NotNull(sample.CornerCorrectionExitSpeedMetersPerSecond);
-        Assert.NotNull(sample.CornerCorrectionTravelTimeSeconds);
-        Assert.NotNull(sample.CornerCorrectionDistanceMeters);
-        Assert.NotNull(sample.CornerCorrectionRemainingDistanceMeters);
-        Assert.NotNull(sample.CornerCorrectionDecelerationMetersPerSecondSquared);
-        Assert.True(sample.CornerCorrectionTargetReached);
+        Assert.All(expectedTail, name => Assert.Contains(name, header));
+        Assert.Contains("ContinuousCornerMinimumProgress", header);
+        Assert.NotNull(sample.ContinuousCornerProfile);
+        Assert.Null(sample.CornerCorrectionTargetSpeedMetersPerSecond);
+        Assert.Null(sample.CornerCorrectionExitSpeedMetersPerSecond);
+        Assert.Null(sample.CornerCorrectionTravelTimeSeconds);
+        Assert.Null(sample.CornerCorrectionDistanceMeters);
+        Assert.Null(sample.CornerCorrectionRemainingDistanceMeters);
+        Assert.Null(sample.CornerCorrectionDecelerationMetersPerSecondSquared);
+        Assert.True(sample.ContinuousCornerProfile!.CorrectionDistanceMeters > 0f);
     }
 
     private static (Track Track, RiderState Rider) TurnEntrySetup(
@@ -525,12 +382,7 @@ public sealed class ContinuousCornerCorrectionSimulationTests
             LateralPosition = 1f,
             ActiveSetup = BikeSetup.Neutral,
         };
-        rider.Speed = SegmentPhysics.MaxSafeTurnSpeed(
-            rider.LateralPosition,
-            geometry,
-            PerfectSurface,
-            rider.Profile.Skills,
-            rider.ActiveSetup) * speedFactor;
+        rider.Speed = CornerTestSupport.Envelope(track, rider).SpeedMetersPerSecond(0f) * speedFactor;
         return (track, rider);
     }
 

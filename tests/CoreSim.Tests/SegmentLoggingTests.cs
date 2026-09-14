@@ -31,7 +31,7 @@ public sealed class SegmentLoggingTests
                 new RiderSkills(50f, 100f, 50f, 50f, 50f, 50f),
                 RiderStyle.Balanced),
             lane: 1);
-        var maxSafeSpeed = SegmentPhysics.MaxSafeTurnSpeed(
+        var maxSafeSpeed = CornerTestSupport.SingleEnvelopeSpeed(
             1,
             track.Geometry,
             TrackSurfaceState.Default,
@@ -57,7 +57,8 @@ public sealed class SegmentLoggingTests
         Assert.Contains($"v_in={entrySpeed.ToString("F2", CultureInfo.InvariantCulture)}", segmentLog);
         Assert.Contains($"v_physics={entrySpeed.ToString("F2", CultureInfo.InvariantCulture)}", segmentLog);
         Assert.Contains($"v_out={rider.Speed.ToString("F2", CultureInfo.InvariantCulture)}", segmentLog);
-        Assert.True(rider.Speed > maxSafeSpeed);
+        Assert.True(rider.Speed < entrySpeed);
+        Assert.True(rider.Speed > 0f);
     }
 
     [Fact]

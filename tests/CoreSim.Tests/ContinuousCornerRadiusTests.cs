@@ -164,7 +164,7 @@ public sealed class ContinuousCornerRadiusTests
         const float innerPosition = 1.2f;
         const float outerPosition = 1.8f;
         var geometry = TrackGeometry.Default;
-        var innerMaxSafeSpeed = SegmentPhysics.MaxSafeTurnSpeed(
+        var innerMaxSafeSpeed = CornerTestSupport.SingleEnvelopeSpeed(
             innerPosition,
             geometry,
             IdealSurface,

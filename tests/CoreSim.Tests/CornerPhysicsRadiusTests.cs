@@ -259,7 +259,7 @@ public sealed class CornerPhysicsRadiusTests
     {
         var riders = new List<RiderState>
         {
-            new(1, lane: 0) { Speed = 18f },
+            new(1, lane: 0) { Speed = CornerTestSupport.SingleEnvelopeSpeed(0f, TrackGeometry.Default, IdealSurface, RiderSkills.Balanced, BikeSetup.Neutral) * 1.15f },
             new(2, lane: 4) { Speed = 10f, ElapsedTimeSeconds = 1f },
         };
         if (reverseRiders)

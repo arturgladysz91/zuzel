@@ -73,7 +73,10 @@ public sealed record CalibrationStepSample(
     float? CornerCorrectionDistanceMeters = null,
     float? CornerCorrectionRemainingDistanceMeters = null,
     float? CornerCorrectionDecelerationMetersPerSecondSquared = null,
-    bool? CornerCorrectionTargetReached = null);
+    bool? CornerCorrectionTargetReached = null,
+    CornerPhaseContext? CornerPhase = null,
+    ContinuousCornerTraversalProfile? ContinuousCornerProfile = null,
+    float? PeakCornerProgress = null);
 
 public sealed record CalibrationLapSummary(
     int RiderId,

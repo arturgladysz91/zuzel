@@ -48,13 +48,10 @@ internal static class StandingStartFixture
     {
         var snapshot = step.Snapshot;
         var rider = snapshot.Rider(riderId);
-        var next = snapshot.Track.Segments[1];
         var surface = snapshot.TrackState.SampleSurface(1, rider.LateralPosition);
-        var safe = SegmentPhysics.MaxSafeTurnSpeed(rider.LateralPosition, snapshot.Track.Geometry,
-            surface, rider.Profile.Skills, rider.ActiveSetup);
-        var deceleration = LongitudinalDynamics.CalculateCornerEntryDecelerationMetersPerSecondSquared(rider.Profile.Skills, surface);
-        return LongitudinalDynamics.CalculateMaximumTurnEntryApproachSpeedMetersPerSecond(safe, deceleration,
-            LaneModel.SegmentLengthMeters(next, rider.LateralPosition, snapshot.Track.Geometry));
+        var phase = snapshot.Track.CornerTopology.Resolve(1, 0f, rider.LateralPosition, snapshot.Track.Geometry)!.Value;
+        return ContinuousCornerEnvelope.Create(phase, rider.LateralPosition, snapshot.Track.Geometry, surface,
+            rider.Profile.Skills, rider.ActiveSetup).SpeedMetersPerSecond(0f);
     }
 
     internal static RunResult Run(bool observe = true, IEnumerable<int>? order = null, bool logging = false)

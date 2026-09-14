@@ -87,15 +87,17 @@ public static class CalibrationScenarioCatalog
                     WithSurface(Surfaces.Single(surface => surface.Id == "moisture_070")) with { Setup = new BikeSetup(0.5f, bias) },
                     1f, baselineEntry);
 
-            float Incoming(float postScrubSpeed, float progress = 0f)
-                => type == SegmentType.TurnEntry && postScrubSpeed > capability.MaxSafeSpeedMetersPerSecond
-                    ? LongitudinalDynamics.CalculateMaximumTurnEntryApproachSpeedMetersPerSecond(postScrubSpeed,
-                        capability.CorrectionDecelerationMetersPerSecondSquared,
-                        LaneModel.TurnArcLengthMeters(1, geometry) * (1f - progress))
-                    : postScrubSpeed;
+            float Incoming(float settledBandSpeed, float progress = 0f)
+            {
+                var types = new[] { SegmentType.TurnEntry, SegmentType.TurnMiddle, SegmentType.TurnExit };
+                var track = new Track(types.Select((label, i) => new TrackSegment(i, label)).ToArray(), geometry);
+                var phase = track.CornerTopology.Resolve(Array.IndexOf(types, type), progress, 1f, geometry)!.Value;
+                var envelope = ContinuousCornerEnvelope.Create(phase, 1f, geometry, Baseline.Surface, Baseline.Skills, Baseline.Setup);
+                return settledBandSpeed / capability.MaxSafeSpeedMetersPerSecond * envelope.SpeedMetersPerSecond(phase.CornerProgress);
+            }
             void AddTurn(string suffix, CalibrationScenarioFixture fixture, float lateral, float entry, float progress = 0f)
                 => scenarios.Add(new CalibrationTurnScenario(Meta($"{prefix}/{suffix}", kind,
-                    "Production Resolve. Axis sweeps hold baseline incoming speed fixed; band probes derive post-scrub inputs from production transitions."),
+                    "Production Resolve in a full logical corner. Axis sweeps hold incoming speed fixed; band factors scale the local continuous envelope."),
                     fixture, type, lateral, entry, progress));
         }
 
@@ -115,6 +117,12 @@ public static class CalibrationScenarioCatalog
         }
         foreach (var surface in Surfaces) AddHeat($"surface/{surface.Id}", WithSurface(surface));
         foreach (var gearing in gearings) AddHeat($"gearing/{Id(gearing * 100)}", WithGearing(gearing));
+        var extreme = WithSkill("speed", 100f) with { Setup = new BikeSetup(1f, 0.5f) };
+        scenarios.Add(new CalibrationHeatScenario(Meta("full_heat/extreme_speed100_gearing100_outer",
+            CalibrationScenarioKind.FullHeat, "Maximum-skill speed, speed-oriented gearing, lanes 0-3 including outer line 3, best initial surface; actual production heat, no cap."),
+            extreme, Enumerable.Range(1, 4).Select(id => new CalibrationScenarioRider(id, id - 1, extreme.Skills))));
+        scenarios.Add(new CalibrationLineScenario(Meta("line_geometry/extreme_speed100_gearing100_outer4",
+            CalibrationScenarioKind.LineGeometry, "Maximum-skill speed, speed-oriented gearing, outermost line 4, best initial surface; actual production free heat, no cap."), extreme, 4));
         foreach (var axis in new[] { "track_reading", "adaptability", "pair_riding" })
         foreach (var value in new[] { 0, 100 })
         {
@@ -124,6 +132,19 @@ public static class CalibrationScenarioCatalog
                 "Isolated production corner probe: no decisions/contact influence is fabricated."),
                 WithSkill(axis, value), SegmentType.TurnMiddle, 1f,
                 (capability.FirstBrakeSpeedMetersPerSecond + capability.FirstRunWideSpeedMetersPerSecond!.Value) * 0.5f));
+        }
+        foreach (var progress in new[] { 0f, .125f, .25f, .375f, .5f, .625f, .75f, .875f, .999999f })
+        {
+            var index = Math.Min(2, (int)(progress * 3f));
+            var types = new[] { SegmentType.TurnEntry, SegmentType.TurnMiddle, SegmentType.TurnExit };
+            var kinds = new[] { CalibrationScenarioKind.TurnEntry, CalibrationScenarioKind.TurnMiddle, CalibrationScenarioKind.TurnExit };
+            var track = new Track(types.Select((type, i) => new TrackSegment(i, type)).ToArray(), geometry);
+            var phase = track.CornerTopology.Resolve(index, progress * 3f - index, 1f, geometry)!.Value;
+            var envelope = ContinuousCornerEnvelope.Create(phase, 1f, geometry, Baseline.Surface, Baseline.Skills, Baseline.Setup);
+            scenarios.Add(new CalibrationTurnScenario(Meta(
+                $"continuous_corner/progress/{progress.ToString("0.000000", CultureInfo.InvariantCulture)}", kinds[index],
+                "Production Resolve within a complete logical corner; initial speed equals the local reachable envelope."),
+                Baseline, types[index], 1f, envelope.SpeedMetersPerSecond(progress), progress * 3f - index));
         }
         return Array.AsReadOnly(scenarios.OrderBy(scenario => scenario.Metadata.ScenarioId, StringComparer.Ordinal).ToArray());
 

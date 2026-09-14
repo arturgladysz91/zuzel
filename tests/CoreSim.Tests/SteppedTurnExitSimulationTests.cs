@@ -14,15 +14,13 @@ public sealed class SteppedTurnExitSimulationTests
     public void TurnExitEligibilityRemainsOkOrBrakeOnly()
     {
         foreach (var (ratio, outcome) in new[]
-                 { (0.9f, SegmentOutcome.Ok), (1.05f, SegmentOutcome.Brake),
-                   (1.20f, SegmentOutcome.RunWide), (1.30f, SegmentOutcome.Crash) })
+            { (.9f, SegmentOutcome.Ok), (1.05f, SegmentOutcome.Brake), (1.20f, SegmentOutcome.RunWide), (1.30f, SegmentOutcome.Crash) })
         {
             var step = Resolve(SegmentType.TurnExit, new[] { OverspeedRider(ratio) });
             Assert.Equal(outcome, step.Changes[0].Outcome);
-            Assert.Equal(outcome is SegmentOutcome.Ok or SegmentOutcome.Brake,
-                step.Diagnostics[0].TurnExitDriveProfile.HasValue);
-            if (outcome is SegmentOutcome.RunWide or SegmentOutcome.Crash)
-                Assert.Null(step.Diagnostics[0].FullDriveEquilibriumSpeedMetersPerSecond);
+            Assert.Null(step.Diagnostics[0].TurnExitDriveProfile);
+            if (outcome == SegmentOutcome.Crash) Assert.Null(step.Diagnostics[0].ContinuousCornerProfile);
+            else Assert.Equal(outcome != SegmentOutcome.RunWide, step.Diagnostics[0].ContinuousCornerProfile!.DriveDistanceMeters > 0f);
         }
     }
 
@@ -31,7 +29,7 @@ public sealed class SteppedTurnExitSimulationTests
     {
         var resolved = Resolve(SegmentType.TurnExit, new[] { Rider(1, 1, 1f, 12f) });
         var change = Assert.Single(resolved.Changes);
-        var profile = Assert.IsType<TurnExitDriveProfile>(Assert.Single(resolved.Diagnostics).TurnExitDriveProfile);
+        var profile = Assert.IsType<ContinuousCornerTraversalProfile>(Assert.Single(resolved.Diagnostics).ContinuousCornerProfile);
         Assert.Equal(profile.ExitSpeedMetersPerSecond, change.Speed);
     }
 
@@ -40,7 +38,7 @@ public sealed class SteppedTurnExitSimulationTests
     {
         var resolved = Resolve(SegmentType.TurnExit, new[] { Rider(1, 1, 1f, 12f) });
         var diagnostics = Assert.Single(resolved.Diagnostics);
-        var profile = Assert.IsType<TurnExitDriveProfile>(diagnostics.TurnExitDriveProfile);
+        var profile = Assert.IsType<ContinuousCornerTraversalProfile>(diagnostics.ContinuousCornerProfile);
         Assert.Equal(profile.TravelTimeSeconds, diagnostics.TravelTimeSeconds);
     }
 
@@ -54,7 +52,7 @@ public sealed class SteppedTurnExitSimulationTests
             targetLanes: new Dictionary<int, int> { [1] = 1 });
         var change = Assert.Single(resolved.Changes);
         var diagnostics = Assert.Single(resolved.Diagnostics);
-        var profile = Assert.IsType<TurnExitDriveProfile>(diagnostics.TurnExitDriveProfile);
+        var profile = Assert.IsType<ContinuousCornerTraversalProfile>(diagnostics.ContinuousCornerProfile);
         var expected = LateralMovementModel.MoveTowards(
             0f,
             change.Lane,
@@ -103,21 +101,10 @@ public sealed class SteppedTurnExitSimulationTests
     {
         var rider = OverspeedRider(1.05f);
         var resolved = Resolve(SegmentType.TurnExit, new[] { rider });
-        var change = Assert.Single(resolved.Changes);
         var diagnostics = Assert.Single(resolved.Diagnostics);
-        var profile = Assert.IsType<TurnExitDriveProfile>(diagnostics.TurnExitDriveProfile);
-        var correction = Assert.IsType<CornerSpeedCorrectionProfile>(
-            diagnostics.CornerSpeedCorrectionProfile);
-        var expected = LongitudinalDynamics.CalculateForceBasedTurnExitDriveProfile(
-            correction.ExitSpeedMetersPerSecond,
-            rider.Profile.Skills,
-            rider.ActiveSetup,
-            diagnostics.EntrySurface,
-            correction.RemainingDistanceMeters);
-
-        Assert.Equal(SegmentOutcome.Brake, change.Outcome);
-        Assert.Equal(rider.Speed, change.PhysicsSpeed);
-        Assert.Equal(expected, profile);
+        Assert.Equal(SegmentOutcome.Brake, resolved.Changes[0].Outcome);
+        Assert.Equal(rider.Speed, resolved.Changes[0].PhysicsSpeed);
+        Assert.Equal(CornerTestSupport.Expected(resolved), diagnostics.ContinuousCornerProfile);
     }
 
     [Fact]
@@ -139,20 +126,10 @@ public sealed class SteppedTurnExitSimulationTests
     {
         var track = SingleTrack(SegmentType.TurnExit);
         var state = new TrackState(1, LaneModel.LanesCount, (_, lane) =>
-            lane == 1 ? new TrackSurfaceState(0.2f, 0f, 0.35f) : PerfectSurface);
-        var rider = Rider(1, 1, 1.25f, 12f);
-        var resolved = Resolve(track, state, new[] { rider });
-        var diagnostics = Assert.Single(resolved.Diagnostics);
-        var expectedSurface = resolved.Snapshot.TrackState.SampleSurface(0, 1.25f);
-        var expected = LongitudinalDynamics.CalculateForceBasedTurnExitDriveProfile(
-            Assert.Single(resolved.Changes).PhysicsSpeed,
-            rider.Profile.Skills,
-            rider.ActiveSetup,
-            expectedSurface,
-            diagnostics.TravelledMeters);
-
-        Assert.Equal(expectedSurface, diagnostics.EntrySurface);
-        Assert.Equal(expected, diagnostics.TurnExitDriveProfile);
+            lane == 1 ? new TrackSurfaceState(.2f, 0f, .35f) : PerfectSurface);
+        var resolved = Resolve(track, state, new[] { Rider(1, 1, 1.25f, 12f) });
+        Assert.Equal(resolved.Snapshot.TrackState.SampleSurface(0, 1.25f), resolved.Diagnostics[0].EntrySurface);
+        Assert.Equal(CornerTestSupport.Expected(resolved), resolved.Diagnostics[0].ContinuousCornerProfile);
     }
 
     [Fact]
@@ -165,8 +142,8 @@ public sealed class SteppedTurnExitSimulationTests
 
         Assert.True(outerDiagnostics.TravelledMeters > innerDiagnostics.TravelledMeters);
         Assert.True(
-            outerDiagnostics.TurnExitDriveProfile!.Value.ExitSpeedMetersPerSecond
-            > innerDiagnostics.TurnExitDriveProfile!.Value.ExitSpeedMetersPerSecond);
+            outerDiagnostics.ContinuousCornerProfile!.ExitSpeedMetersPerSecond
+            > innerDiagnostics.ContinuousCornerProfile!.ExitSpeedMetersPerSecond);
     }
 
     [Fact]
@@ -240,12 +217,7 @@ public sealed class SteppedTurnExitSimulationTests
     private static RiderState OverspeedRider(float multiplier)
     {
         var rider = Rider(1, 1, 1f, 0f);
-        rider.Speed = SegmentPhysics.MaxSafeTurnSpeed(
-            rider.LateralPosition,
-            TrackGeometry.Default,
-            PerfectSurface,
-            rider.Profile.Skills,
-            rider.ActiveSetup) * multiplier;
+        rider.Speed = CornerTestSupport.Envelope(SingleTrack(SegmentType.TurnExit), rider).SpeedMetersPerSecond(0f) * multiplier;
         return rider;
     }
 
@@ -273,7 +245,7 @@ public sealed class SteppedTurnExitSimulationTests
                     change.Speed,
                     change.ElapsedTimeSeconds,
                     change.LateralPosition,
-                    diagnostics.TurnExitDriveProfile))
+                    diagnostics.ContinuousCornerProfile))
             .ToArray();
 
     private static IEnumerable<int[]> Permutations(int[] values)
@@ -305,5 +277,5 @@ public sealed class SteppedTurnExitSimulationTests
         float Speed,
         float Time,
         float LateralPosition,
-        TurnExitDriveProfile? Profile);
+        ContinuousCornerTraversalProfile? Profile);
 }

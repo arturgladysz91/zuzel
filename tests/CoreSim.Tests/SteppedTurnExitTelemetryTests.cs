@@ -26,15 +26,16 @@ public sealed class SteppedTurnExitTelemetryTests
             Options(laps: 1) with { Weather = new WeatherState(WeatherCondition.Cloudy, 0f, 0f) }, heatId: 17);
         var sample = Assert.Single(trace.StepSamples);
         Assert.Equal(equilibrium, sample.FullDriveEquilibriumSpeedMetersPerSecond);
-        Assert.True(sample.TurnExitNetAccelerationMetersPerSecondSquared < 0f);
-        Assert.InRange(MathF.Abs(sample.TravelledMeters - sample.TurnExitDecelerationDistanceMeters!.Value), 0f, 0.00001f);
-        Assert.Equal(sample.TravelledMeters, sample.TurnExitAccelerationDistanceMeters
-            + sample.TurnExitCruiseDistanceMeters + sample.TurnExitDecelerationDistanceMeters);
+        var p = sample.ContinuousCornerProfile!;
+        Assert.True(p.Nodes[^1].NetDriveAccelerationMetersPerSecondSquared < 0f);
+        Assert.True(p.CarryDistanceMeters > 0f);
+        Assert.Equal(p.DriveDistanceMeters, p.DecelerationDistanceMeters, 4);
+        Assert.Equal(sample.TravelledMeters, p.CarryDistanceMeters + p.DriveDistanceMeters, 4);
         var rows = CalibrationCsvExporter.ExportSteps(trace).Split('\n', StringSplitOptions.RemoveEmptyEntries);
         var header = rows[0].Split(',');
         var values = rows[1].Split(',');
-        Assert.Equal(sample.TurnExitDecelerationDistanceMeters!.Value.ToString("R", System.Globalization.CultureInfo.InvariantCulture),
-            values[Array.IndexOf(header, "TurnExitDecelerationDistanceMeters")]);
+        Assert.Equal(p.DecelerationDistanceMeters.ToString("R", System.Globalization.CultureInfo.InvariantCulture),
+            values[Array.IndexOf(header, "ContinuousCornerDecelerationDistanceMeters")]);
         Assert.Equal(equilibrium.ToString("R", System.Globalization.CultureInfo.InvariantCulture),
             values[Array.IndexOf(header, "FullDriveEquilibriumSpeedMetersPerSecond")]);
     }
@@ -43,28 +44,18 @@ public sealed class SteppedTurnExitTelemetryTests
     public void TurnExitDiagnosticsExposeActualProductionDriveProfile()
     {
         var resolved = ResolveSingle(SegmentType.TurnExit, Rider(1, 1, 12f));
-        var change = Assert.Single(resolved.Changes);
-        var diagnostics = Assert.Single(resolved.Diagnostics);
-        var expected = LongitudinalDynamics.CalculateForceBasedTurnExitDriveProfile(
-            change.PhysicsSpeed,
-            resolved.Snapshot.Rider(1).Profile.Skills,
-            resolved.Snapshot.Rider(1).ActiveSetup,
-            diagnostics.EntrySurface,
-            diagnostics.TravelledMeters);
-
-        Assert.Equal(expected, diagnostics.TurnExitDriveProfile);
-        Assert.Equal(expected.ExitSpeedMetersPerSecond, change.Speed);
+        var expected = CornerTestSupport.Expected(resolved);
+        Assert.Equal(expected, resolved.Diagnostics[0].ContinuousCornerProfile);
+        Assert.Equal(expected.ExitSpeedMetersPerSecond, resolved.Changes[0].Speed);
     }
 
     [Fact]
     public void TurnExitDiagnosticsEntryAccelerationMatchesProfileStart()
     {
-        var diagnostics = Assert.Single(
-            ResolveSingle(SegmentType.TurnExit, Rider(1, 1, 12f)).Diagnostics);
-        var profile = Assert.IsType<TurnExitDriveProfile>(diagnostics.TurnExitDriveProfile);
-        Assert.Equal(
-            profile.EntryNetAccelerationMetersPerSecondSquared,
-            diagnostics.TurnExitNetAccelerationMetersPerSecondSquared);
+        var d = ResolveSingle(SegmentType.TurnExit, Rider(1, 1, 12f)).Diagnostics[0];
+        Assert.Equal(0f, d.ContinuousCornerProfile!.Nodes[0].NetDriveAccelerationMetersPerSecondSquared);
+        Assert.True(d.ContinuousCornerProfile.Nodes[^1].NetDriveAccelerationMetersPerSecondSquared > 0f);
+        Assert.Null(d.TurnExitNetAccelerationMetersPerSecondSquared);
     }
 
     [Fact]
@@ -73,7 +64,7 @@ public sealed class SteppedTurnExitTelemetryTests
         var diagnostics = Assert.Single(
             ResolveSingle(SegmentType.TurnExit, Rider(1, 1, 12f)).Diagnostics);
         Assert.Equal(
-            diagnostics.TurnExitDriveProfile!.Value.PeakSpeedMetersPerSecond,
+            diagnostics.ContinuousCornerProfile!.PeakSpeedMetersPerSecond,
             diagnostics.PeakSpeedMetersPerSecond);
     }
 
@@ -83,7 +74,7 @@ public sealed class SteppedTurnExitTelemetryTests
         var diagnostics = Assert.Single(
             ResolveSingle(SegmentType.TurnExit, Rider(1, 1, 12f)).Diagnostics);
         Assert.Equal(
-            diagnostics.TurnExitDriveProfile!.Value.TravelTimeSeconds,
+            diagnostics.ContinuousCornerProfile!.TravelTimeSeconds,
             diagnostics.TravelTimeSeconds);
     }
 
@@ -101,32 +92,27 @@ public sealed class SteppedTurnExitTelemetryTests
     }
 
     [Fact]
-    public void CalibrationSampleExportsTurnExitProfilePhases()
+    public void CalibrationSampleExportsContinuousProfilePhases()
     {
-        var sample = Assert.Single(RunCalibration(SingleTrack(SegmentType.TurnExit),
-            new List<RiderState> { Rider(1, 1, 12f) }).StepSamples);
-        Assert.NotNull(sample.TurnExitAccelerationDistanceMeters);
-        Assert.NotNull(sample.TurnExitCruiseDistanceMeters);
-        Assert.NotNull(sample.TurnExitProfileTravelTimeSeconds);
-        Assert.Equal(
-            sample.TravelledMeters,
-            sample.TurnExitAccelerationDistanceMeters + sample.TurnExitCruiseDistanceMeters + sample.TurnExitDecelerationDistanceMeters);
+        var sample = Assert.Single(RunCalibration(SingleTrack(SegmentType.TurnExit), new List<RiderState> { Rider(1, 1, 12f) }).StepSamples);
+        var p = Assert.IsType<ContinuousCornerTraversalProfile>(sample.ContinuousCornerProfile);
+        Assert.Equal(sample.TravelledMeters, p.CorrectionDistanceMeters + p.CarryDistanceMeters + p.DriveDistanceMeters, 4);
+        Assert.Equal(sample.DurationSeconds, p.TravelTimeSeconds, 5);
+        Assert.Null(sample.TurnExitAccelerationDistanceMeters);
     }
 
     [Fact]
-    public void CalibrationCsvExportsTurnExitProfileFields()
+    public void CalibrationCsvExportsContinuousProfileFields()
     {
-        var trace = RunCalibration(
-            SingleTrack(SegmentType.TurnExit),
-            new List<RiderState> { Rider(1, 1, 12f) });
-        var csv = CalibrationCsvExporter.ExportSteps(trace);
-        var lines = csv.Split('\n', StringSplitOptions.RemoveEmptyEntries);
-
-        Assert.Contains("TurnExitAccelerationDistanceMeters", lines[0]);
-        Assert.Contains("TurnExitCruiseDistanceMeters", lines[0]);
-        Assert.Contains("TurnExitProfileTravelTimeSeconds", lines[0]);
-        Assert.Contains(trace.StepSamples[0].TurnExitProfileTravelTimeSeconds!.Value.ToString(
-            "R", System.Globalization.CultureInfo.InvariantCulture), lines[1]);
+        var trace = RunCalibration(SingleTrack(SegmentType.TurnExit), new List<RiderState> { Rider(1, 1, 12f) });
+        var lines = CalibrationCsvExporter.ExportSteps(trace).Split('\n', StringSplitOptions.RemoveEmptyEntries);
+        var header = lines[0].Split(',');
+        var row = lines[1].Split(',');
+        var p = trace.StepSamples[0].ContinuousCornerProfile!;
+        Assert.Equal(p.TravelTimeSeconds.ToString("R", System.Globalization.CultureInfo.InvariantCulture),
+            row[Array.IndexOf(header, "ContinuousCornerTravelTimeSeconds")]);
+        Assert.Equal(p.DriveDistanceMeters.ToString("R", System.Globalization.CultureInfo.InvariantCulture),
+            row[Array.IndexOf(header, "ContinuousCornerDriveDistanceMeters")]);
     }
 
     [Fact]

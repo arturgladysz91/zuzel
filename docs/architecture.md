@@ -9,15 +9,14 @@
 
 ## Core flow
 
-Version precedence: the older longitudinal paragraphs below describe the #24–#31
-foundation. Their pre-#34 statements about immediate corner speed changes,
-whole-segment TurnExit drive and corner timing are historical, superseded by
-the continuous-correction contract in [the core specification](core-simulation-spec.md#continuous-corner-speed-correction-34).
-Current advanced flow is scrub (TurnEntry only) → constraint/incident →
-distance-limited correction → remaining-distance carry or eligible TurnExit
-drive. Lateral movement receives the complete segment duration (launch excludes
-stationary reaction), not drive time alone. #35 observes this existing flow;
-it does not change production behavior.
+Version precedence: the older longitudinal paragraphs below describe the #24–#37
+foundation. Their segment-gated TurnEntry scrub and TurnExit drive statements are
+historical, superseded in advanced production by the continuous-corner envelope
+contract. Current advanced flow is constraint/incident against the local
+CornerProgress envelope, then one distance-conserving corner traversal containing
+correction, carry and smoothly available signed drive. Lateral movement receives
+the complete segment duration (launch excludes stationary reaction), not drive
+time alone.
 
 1. The host creates a `Track` from ordered segments and immutable `TrackGeometry`, plus a separate per-segment/per-lane `TrackState` and rider states.
 2. Optional manager actions change the surface through `TrackEvolution.ApplyTrackWork`.
@@ -26,7 +25,7 @@ it does not change production behavior.
 5. Every segment has four explicit phases:
    - `CaptureSnapshot` copies every rider and every surface cell into a detached immutable view and preserves the track's immutable geometry.
    - `Decide` gives every active rider the same snapshot; legacy decision models receive a mutable clone, never the source state.
-   - `Resolve` samples geometry and physical surface once from the rider's entry `LateralPosition`. Advanced `TurnEntry` first builds its distance-limited scrub profile and passes the scrub exit speed to `SegmentPhysicsContext`; other segment types enter the constraint unchanged. It then resolves the existing random incident, canonical travelled distance and segment time, applies eligible distance-limited `TurnExit` drive or the advanced force-based stepped `StraightSpeedProfile` through `LongitudinalDynamics`, delegates continuous movement to `LateralMovementModel`, and produces stable events without changing live riders or the track.
+   - `Resolve` samples geometry and physical surface once from the rider's entry `LateralPosition`. Advanced turns derive a local envelope from the logical corner context and pass it to `SegmentPhysicsContext`; after the unchanged random incident they traverse one distance-conserving continuous-corner profile. Straights use the advanced force-based `StraightSpeedProfile` through `LongitudinalDynamics`. Resolution then delegates continuous movement to `LateralMovementModel` and produces stable events without changing live riders or the track.
    - `Commit` applies all rider changes, then stable logs and surface wear in rider-id order. Advanced wear is calculated from each rider's immutable segment-entry `LateralPosition`, not from the already committed lane or position.
 6. `RiderPosition.TotalSegmentProgress` is the canonical topological position. Lap, segment index and progress in the segment are derived from it; physical distance is advanced atomically with it.
    `LastResolvedSegmentId` (also exposed through the compatibility alias `CurrentSegmentId`) is observational metadata containing the real `TrackSegment.Id` committed for the previous step. It is not used by classification, physics or track occupancy.
@@ -42,10 +41,10 @@ subsegment start/end progress, total physical length and remaining physical
 length by summing actual arc lengths at the rider's immutable entry
 LateralPosition. Advanced Resolve carries this context into diagnostics and
 SegmentPhysicsContext; it introduces no mutation or RNG. Immediate Straight
-lookahead first resolves the next logical corner, then deliberately retains the
-current TurnEntry compatibility gate and identical approach-speed calculation.
-Current TurnEntry scrub and TurnExit drive are compatibility bridges for #38,
-not new phases or recalibrated behavior.
+lookahead resolves the next logical corner and queries the same envelope at
+CornerProgress zero that production traversal uses. TurnEntry, TurnMiddle and
+TurnExit remain topology/reporting compatibility labels, not longitudinal
+physics phases.
 
 `Lane` and continuous `LateralPosition` are dimensionless normalized `0..4` coordinates. `LaneModel` is the canonical conversion boundary: `fraction = LateralPosition / 4`, usable span is physical segment width minus the 1 m inner reference offset and provisional 1 m outer game margin, and physical offset is `fraction * usableSpan`. `TrackGeometry` owns independent straight/turn widths; `InnerRadiusMeters` is the radius of the inner FIM measurement/reference trajectory 1 m from the inner edge, not the kerb.
 
@@ -64,25 +63,23 @@ The entry sample is not updated after `MoveTowards`, contact or `RunWide`, so a 
 
 Width is segment-local. The same normalized position denotes the same fraction of usable span on a straight and a turn, so its physical offset changes at a boundary without a synthetic lateral event. This coarse geometry has no gradual straight-to-turn width spline and adds no transition distance or time. Turn distance uses the entry-position physical radius; straight length stays longitudinal. Active lateral movement does not yet add diagonal/spiral path length or couple lateral movement back into segment-time integration.
 
-`SegmentPhysics` remains the constraint and outcome resolver. For eligible advanced `TurnExit`, `LongitudinalDynamics` follows it with `TurnExitDriveProfile`, beginning exactly at post-constraint `resolution.Speed`. `Ok` and `Brake` with positive speed and distance traverse shared fixed-distance steps; `RunWide`, `Crash`, other turn segments and legacy bypass the profile. #36 calibrates the TurnExit reference acceleration to `1.20–2.80 × gearing × surface`. At and below the unchanged `16 m/s` reference the one-gear drive envelope is exactly `1`; above it the calibrated gearing-dependent fade applies. Full-drive acceleration remains signed; above natural equilibrium TurnExit can lose speed. There is no artificial attainable ceiling.
+`SegmentPhysics` remains the constraint and outcome resolver. Advanced turn thresholds are evaluated against the continuous envelope at the rider's current CornerProgress, not against one settled speed for an entire labelled segment. The subsequent continuous-corner traversal uses the existing turn full-drive force endpoint (`1.20–2.80 × gearing × surface`) with a smooth net-drive availability after the apex. At and below the unchanged `16 m/s` positive-drive reference the one-gear force envelope is exactly `1`; above it the calibrated gearing-dependent fade applies. Full-drive acceleration remains signed and there is no artificial attainable ceiling.
 
 Advanced `Straight` receives a deterministic force-based `StraightSpeedProfile` over the actually remaining distance without any attainable top-speed ceiling. It partitions distance, never time, into steps of at most the **PROVISIONAL / NUMERICAL INTEGRATION RESOLUTION** `1 m`; the final remainder preserves the exact distance. Each full-drive step predicts speed from acceleration at the start, evaluates corrected acceleration at `(start + predicted) / 2`, and applies `v_next² = max(0, v_start² + 2*a_mid*ds)`. #36 calibrates Straight reference acceleration to `1.60–3.20 m/s²` through Speed, times the unchanged entry-sampled `0.75 + 0.25 * EffectiveGrip` and `1.10–0.90` gearing drive multiplier. Reference force is `142 kg * referenceAcceleration + resistance(16)`. The same one-gear envelope and unchanged `40 + 0.20*v²` resistance used by TurnExit then produce signed net acceleration; surface remains sampled once, not at each numerical step.
 
-Standing start, TurnExit and Straight share one longitudinal integration constant, one exact step creator, the one-gear envelope, resistance, canonical signed net-drive calculation and one midpoint signed-drive step. They do not duplicate integration formulas and do not resample surface per metre. TurnExit profile time is the sum of its step times and is passed through the existing segment-time path to `LateralMovementModel`; the backward envelope and timing contract remain. Straight and TurnExit phase distances now include natural signed deceleration.
+Standing start, continuous-corner drive and Straight share one longitudinal integration constant, one exact step creator, the one-gear envelope, resistance, canonical signed net-drive calculation and one midpoint signed-drive step. They do not duplicate integration formulas and do not resample surface per metre. The corner profile's step times are passed through the existing segment-time path to `LateralMovementModel`; its correction, carry and drive distances account for every travelled metre exactly once.
 
-For an immediate `TurnEntry`, its target remains maximum recoverable approach speed, not settled `MaxSafeTurnSpeed`. A backward allowed-speed envelope starts at that target and walks backward with the existing corner-entry deceleration. Forward traversal follows full drive while it remains allowed; otherwise it uses `min(fullDriveCandidate, max(allowedEnd, preparationReachableSpeed))`. It never lifts a naturally decelerating candidate; unavailable preparation leaves residual overspeed. Natural resistance may exceed preparation deceleration and must not be suppressed. Per-step time is `2*ds/(v_start+v_end)`, and its sum is the advanced straight's lateral-movement budget. Phase distances classify the same steps and sum to exact travelled distance. The one-segment lookahead still uses immutable entry `LateralPosition`, wraps between non-final laps, and omits the nonexistent next lap on the final segment.
+For an immediate logical corner, the approach target is the canonical envelope at CornerProgress zero. Before the provisional apex at `0.5`, recoverable speed is `sqrt(v_apex² + 2*a_correction*distanceToApex)`; Straight and standing-start preparation consume this exact same target. A backward allowed-speed envelope then preserves the existing feasible-preparation behavior. It never lifts a naturally decelerating candidate; unavailable preparation leaves residual overspeed. The one-segment lookahead still uses immutable entry `LateralPosition`, wraps between non-final laps, and omits the nonexistent next lap on the final segment.
 
 #31 removes the artificial `21–25 × 0.94–1.06` ceiling and its constants/helpers from the active API. The non-production analytic `CalculateStraightSpeedProfile` is only a general constant-acceleration compatibility utility with an explicit constraint and null equilibrium; SimulationEngine never calls it. There is no second production Vmax model.
 
 The canonical signed equation is `(F_drive(v) - (40 + 0.20*v²))/142`, without clamping net force or acceleration. Available drive is reference force times the unchanged linear envelope form: 1 at/below 16, otherwise `clamp(1 - fadeRate*(v-16), 0, 1)`, with the #36-calibrated `fadeRate = 0.0350 + (0.0100 - 0.0350)*Gearing`. Equilibrium is the diagnostic root `drive = resistance`, never a limiter, target or integration stop. Deterministic bisection brackets `[0,16 + 1/fadeRate]`, uses at most 64 iterations and bracket-width tolerance `1e-6 m/s` (float output). Reference force <40 N has no nonnegative root and is rejected; exactly 40 N returns zero. The shared signed midpoint predicts and corrects via `sqrt(max(0,v²+2*a*ds))`; only squared speed is bounded for safe stopping. Below equilibrium full drive accelerates; above it full drive naturally decelerates.
 
-#36 calibrates only the Straight/TurnExit reference-acceleration ranges and both fade endpoints. Mass, resistance, reference speed, integration step, gearing and surface mappings remain **PROVISIONAL / NOT REAL-WORLD CALIBRATED** and frozen. Surface still scales effective reference drive and therefore equilibrium; resistance itself stays surface-independent. Morale and TractionBias do not affect forces/equilibrium, and there is no separate gearing top-speed multiplier. The pure zero-drive helper `-(40+0.20*v²)/142` is not final engine braking. Existing corner preparation remains the separate effective roll-off / engine-drivetrain / slide-preparation model, not zero-drive resistance. No explicit throttle or engine/traction split, wheelspin or traction-force cap is added.
+#36 calibrates only the Straight/turn reference-acceleration ranges and both fade endpoints. Mass, resistance, positive-drive reference speed, integration step, gearing and surface mappings remain **PROVISIONAL / NOT REAL-WORLD CALIBRATED** and frozen. Surface still scales effective reference drive and therefore equilibrium; resistance itself stays surface-independent. Morale and TractionBias do not affect forces/equilibrium, and there is no separate gearing top-speed multiplier. The pure zero-drive helper `-(40+0.20*v²)/142` is not final engine braking. Continuous corner correction is the effective roll-off / engine-drivetrain / slide-preparation capability, not zero-drive resistance. No explicit throttle or engine/traction split, wheelspin or traction-force cap is added.
 
-A real speedway motorcycle runs one gear during a race and has no conventional braking system; its final-drive ratio is a setup choice. Speed loss before and through a corner must not be interpreted as road-motorcycle braking: rolling off the throttle, setting the motorcycle, slide and resistance can all contribute. In advanced physics the first **PROVISIONAL / NOT REAL-WORLD CALIBRATED** `50%` of the actually remaining `TurnEntry` distance is a coarse scrub phase. `LongitudinalDynamics` decelerates toward settled `MaxSafeTurnSpeed` with the existing shared `2.00–3.20 m/s²` SlideControl-and-surface capability, then carries at the target if it is reached early. The scrub exit, not original entry speed, enters the unchanged residual `SegmentPhysics`; a recoverable high entry can therefore finish `Ok`, while `Brake`, `RunWide` and `Crash` still resolve residual overspeed.
+A real speedway motorcycle runs one gear during a race and has no conventional braking system; its final-drive ratio is a setup choice. Speed loss before and through a corner must not be interpreted as road-motorcycle braking: rolling off the throttle, setting the motorcycle, slide and resistance can all contribute. Advanced physics now uses the unchanged `2.00–3.20 m/s²` SlideControl-and-surface correction capability over physical distance whenever speed exceeds the local continuous envelope. No labelled segment owns a separate scrub phase. `Brake`, `RunWide` and `Crash` classify excess over the local recoverable envelope; `Brake` remains an outcome name rather than a literal mechanical brake.
 
-TurnEntry order is `original entry speed -> physical scrub -> SegmentPhysics -> random incident -> canonical distance/time`. A non-crash time is scrub-profile time plus post-scrub distance divided by the final resolution speed, and `LateralMovementModel` receives that exact duration. A crash keeps the global half-remaining-distance advance, which equals the provisional scrub distance, and receives exactly scrub-profile time so no traversal is counted beyond the crash point. `EntrySpeed` remains original and `PhysicsSpeed` remains post-constraint/post-random. `TurnMiddle`, `TurnExit` and legacy traversal are unchanged; `Brake` remains a residual enum name rather than a literal mechanical brake.
-
-#36 is a bounded first calibration of the shared one-gear envelope, Straight and stepped TurnExit. TurnEntry, TurnMiddle, standing-start constants and legacy are unchanged. Residual full-heat speed/average gaps are left for later corner-envelope calibration rather than being forced through longitudinal constants. Power and torque curves, RPM/rev limiting, real sprockets, wheel radius, clutch, wheelspin, slip ratio, traction-force cap, CdA and wind remain unimplemented.
+#38 calibrates only the advanced settled-corner reference from `16` to `19 m/s` after measuring architecture-only A0 and the bounded B17/B18/B19 menu. The legacy/reference compatibility path remains at `16 m/s`; all #36 longitudinal and standing-start constants, correction capability, outcome factors, contact/lateral/surface behavior and RNG remain unchanged. Power and torque curves, RPM/rev limiting, real sprockets, wheel radius, clutch, wheelspin, slip ratio, traction-force cap, CdA and wind remain unimplemented.
 
 ### Standing-start topology and resolution
 
@@ -90,7 +87,7 @@ TurnEntry order is `original entry speed -> physical scrub -> SegmentPhysics -> 
 
 `TrackSegment` accepts optional `StraightLengthMetersOverride` (finite, positive, Straight only) and `IsStandingStartSegment` (default false, Straight only). Track copies preserve both. At most one marker is allowed; it must be topology index zero and the last segment must also be Straight.
 
-Launch eligibility requires advanced physics, lap/segment zero, explicit marker, exact canonical and physical heat-start position, NotStarted, non-positive speed and positive remaining distance. Only then entry speed is exactly zero, passed through the existing Straight SegmentPhysics and incident-resolution order before a `StandingStartLaunchProfile` replaces (never accompanies) `StraightSpeedProfile`. Later laps and unmarked tracks retain their existing paths. Launch reuses `ResolveImmediateNextTurnApproachSpeed` and the same backward allowed-speed envelope and corner-entry deceleration as production Straight. The shared preparation-boundary helper constrains signed full drive only when preparation is needed; it never increases a naturally decelerating candidate. This yields the fastest feasible acceleration/optional cruise/preparation profile; peak may exceed exit speed. The next TurnEntry receives actual launch exit speed and applies unchanged #24 scrub. Lookahead still sees only the immediate next segment, not both halves across the boundary.
+Launch eligibility requires advanced physics, lap/segment zero, explicit marker, exact canonical and physical heat-start position, NotStarted, non-positive speed and positive remaining distance. Only then entry speed is exactly zero, passed through the existing Straight SegmentPhysics and incident-resolution order before a `StandingStartLaunchProfile` replaces (never accompanies) `StraightSpeedProfile`. Later laps and unmarked tracks retain their existing paths. Launch and production Straight query the same next logical-corner envelope at CornerProgress zero. The shared preparation-boundary helper constrains signed full drive only when preparation is needed; it never increases a naturally decelerating candidate. This yields the fastest feasible acceleration/optional cruise/preparation profile; peak may exceed exit speed. Lookahead still sees only the immediate next segment, not both halves across the boundary.
 
 Reaction is `0.28 + (0.20 - 0.28) * StartNorm` seconds (0.28/0.24/0.20 for Start 0/50/100). Reference acceleration is `(9.0 + (11.0 - 9.0) * StartNorm) * (1.10 + (0.90 - 1.10) * Gearing) * (0.75 + 0.25 * EffectiveGrip)`; reference force is `142 * acceleration + resistance(0)`. The shared exact 1 m distance-step creator and midpoint signed-drive helper apply the existing one-gear envelope and resistance `40 + 0.20*v²`, without an artificial ceiling. Entry surface is immutable and sampled once. TractionBias and morale have no launch-force or reaction role. These constants are **PROVISIONAL / NOT REAL-WORLD CALIBRATED**, not tuned to TimeTo70 or SpeedAt2s.
 
@@ -106,7 +103,7 @@ The #28 calibration telemetry harness is an observation boundary, not a physics 
 
 This harness reports what production does now and contains no real-world target dataset. From #29 it retains the exact production `TurnExitDriveProfile`; the existing TurnExit acceleration scalar means entry net acceleration at the profile start. From #30 it also retains the production standing-start profile. Unmarked-track bootstrap is compatibility behavior, not a physical launch. #31 supplies signed forces and natural deceleration without an artificial ceiling; real-world target calibration is next. Later refinements include F_engine vs F_traction, wheelspin/slip, TractionBias, RPM, torque/power, real sprockets, throttle, engine braking and physical gate geometry.
 
-#31 is a breaking diagnostic-schema change: `FullDriveEquilibriumSpeedMetersPerSecond` replaces `AttainableTopSpeedMetersPerSecond` in diagnostics, sample and CSV. It comes from the actual StandingStart/Straight/eligible TurnExit profile, otherwise null. `TurnExitDecelerationDistanceMeters` is inserted after TurnExitCruiseDistanceMeters in CSV; acceleration + cruise + deceleration equals profile distance. Entry net acceleration may be negative. The new schema keeps stable ordering, invariant decimal dots, `\n` and empty nullable fields. Equilibrium never feeds speed resolution.
+#31 is a breaking diagnostic-schema change: `FullDriveEquilibriumSpeedMetersPerSecond` replaces `AttainableTopSpeedMetersPerSecond` in diagnostics, sample and CSV. Current advanced production obtains it from the actual StandingStart, Straight or continuous-corner profile. Historical TurnExit fields remain stable schema compatibility fields and are null on the #38 path; #38 appends typed continuous-corner observations. Invariant decimal dots, `\n` and empty nullable fields remain. Equilibrium never feeds speed resolution.
 
 The presentation layer must consume results and logs; it must never change the simulation outcome.
 
@@ -126,7 +123,7 @@ The canonical corner-speed path derives its base limit from a continuous lateral
 
 `RiderDecisionContext.Rider`, `Riders` and `TrackState` now expose immutable snapshot types. Code compiled against their former mutable types is not source-compatible and should migrate to the snapshot API. New gameplay code should use `SimulateHeat` and `SegmentPhysicsContext`.
 
-## Continuous corner correction (#34)
+## Continuous corner correction (#34, historical foundation)
 
 For advanced turns, `SegmentPhysics` owns discrete classification and the typed
 `ContinuousCorrectionTargetSpeedMetersPerSecond`; recoverable outcomes keep the
@@ -145,3 +142,30 @@ diagnostic `TravelTimeSeconds` is always the actual final elapsed delta and phas
 times remain separately observable. Incident-created Crash/RunWide clears a
 stale constraint target so the unchanged incident consequence cannot be applied
 twice. Resolve remains mutation-free and adds no RNG.
+
+## Continuous corner envelope calibration (#38)
+
+Advanced production represents every logical corner with one canonical envelope
+over `CornerProgress` rather than with longitudinal phases selected by
+`TurnEntry`, `TurnMiddle` or `TurnExit`. The settled/apex capability uses the
+advanced `19 m/s` reference with existing radius, surface, rider-skill and setup
+factors. For `p < 0.5`, the recoverable envelope is
+`sqrt(v_apex² + 2*a_correction*(0.5-p)*totalCornerLength)`. At and after the
+provisional apex, the envelope is obtained by traversing the physical distance
+from the apex with the existing signed turn-drive midpoint integrator.
+
+Net drive availability is zero through the apex, then follows smoothstep from
+`0.5` to `5/6`, and is one thereafter. Zero means neutral carry, not an added
+resistance-only phase; one reproduces the existing full turn-drive endpoint.
+Each 1 m step, plus its exact final remainder, belongs to exactly one of
+correction, carry or drive. Insufficient correction preserves residual
+overspeed; no speed is teleported or capped.
+
+Straight and standing-start lookahead use this same envelope at progress zero.
+Advanced `SimulationEngine` no longer invokes the old TurnEntry scrub or a
+segment-gated TurnExit drive. Legacy remains on the previous compatibility
+path. `ApexProgress = 0.5` is a provisional geometry assumption and
+`FullDriveProgress = 5/6` is a behavior-derived starting assumption, not a
+telemetry-derived fit. The calibration changed no #36 longitudinal constants,
+standing-start constants, correction capability, outcome factors, incident,
+contact, lateral or surface rules.

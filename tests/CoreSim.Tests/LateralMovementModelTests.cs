@@ -283,7 +283,7 @@ public sealed class LateralMovementModelTests
             rider.LateralPosition,
             track.Geometry);
         var averageSpeedMetersPerSecond = (change.EntrySpeed + change.Speed) * 0.5f;
-        var segmentTravelTimeSeconds = travelledMeters / averageSpeedMetersPerSecond;
+        var segmentTravelTimeSeconds = resolved.Diagnostics.Single().ContinuousCornerProfile!.TravelTimeSeconds;
         var expectedLateralPosition = LateralMovementModel.MoveTowards(
             0f,
             change.Lane,
@@ -440,12 +440,7 @@ public sealed class LateralMovementModelTests
         var track = TrackWithTurns(segmentCount: 2, turnAngleRadians: 0.40f);
         var trackState = TrackState.CreateDefault(track, IdealSurface);
         var rider = new RiderState(1, lane: 0);
-        rider.Speed = SegmentPhysics.MaxSafeTurnSpeed(
-            1,
-            track.Geometry,
-            IdealSurface,
-            rider.Profile.Skills,
-            rider.ActiveSetup) * 1.12f;
+        rider.Speed = CornerTestSupport.Envelope(track, rider, IdealSurface).SpeedMetersPerSecond(0f) * 1.15f;
         var options = Options();
         var outwardEngine = new SimulationEngine(new TargetDecisionModel(4));
 
@@ -463,6 +458,11 @@ public sealed class LateralMovementModelTests
         Assert.True(outwardChange.LateralPosition < 1f);
         outwardEngine.Commit(outward, new[] { rider }, trackState, new SimLog());
         var beforeReversal = rider.LateralPosition;
+        // Isolate the lateral reversal from a second, legitimate overspeed event.
+        var nextPhase = track.CornerTopology.Resolve(1, 0f, rider.LateralPosition, track.Geometry)!.Value;
+        rider.Speed = CornerTestSupport.Envelope(track, rider,
+            trackState.Snapshot().SampleSurface(1, rider.LateralPosition), index: 1)
+            .SpeedMetersPerSecond(nextPhase.CornerProgress) * .95f;
 
         var inwardEngine = new SimulationEngine(new TargetDecisionModel(0));
         var inward = ResolveStep(
@@ -489,7 +489,7 @@ public sealed class LateralMovementModelTests
     {
         var track = TrackWithTurns(segmentCount: 1, turnAngleRadians: TrackGeometry.Default.TurnSegmentAngleRadians);
         var rider = new RiderState(1, lane: 1) { Speed = 0f };
-        var maxSafeSpeed = SegmentPhysics.MaxSafeTurnSpeed(
+        var maxSafeSpeed = CornerTestSupport.SingleEnvelopeSpeed(
             1,
             track.Geometry,
             IdealSurface,
@@ -505,7 +505,7 @@ public sealed class LateralMovementModelTests
             IdealSurface,
             rider.Profile.Skills,
             rider.Morale,
-            rider.ActiveSetup));
+            rider.ActiveSetup, CornerPhase: track.CornerTopology.Resolve(0, 0f, rider.LateralPosition, track.Geometry)));
 
         var change = ResolveSingle(track, rider, targetLane: 1);
 

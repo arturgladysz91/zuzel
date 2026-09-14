@@ -67,18 +67,21 @@ public sealed record CalibrationTurnResult(
 {
     public float ScrubDistanceMeters => Diagnostics.TurnEntryScrubProfile is { } scrub
         ? scrub.DecelerationDistanceMeters + scrub.CarryDistanceMeters : 0f;
-    public float CorrectionDistanceMeters => Diagnostics.CornerSpeedCorrectionProfile?.CorrectionDistanceMeters ?? 0f;
-    public float DriveDistanceMeters => Diagnostics.TurnExitDriveProfile is { } drive
-        ? drive.AccelerationDistanceMeters + drive.CruiseDistanceMeters + drive.DecelerationDistanceMeters : 0f;
+    public float CorrectionDistanceMeters => Diagnostics.ContinuousCornerProfile?.CorrectionDistanceMeters
+        ?? Diagnostics.CornerSpeedCorrectionProfile?.CorrectionDistanceMeters ?? 0f;
+    public float DriveDistanceMeters => Diagnostics.ContinuousCornerProfile?.DriveDistanceMeters
+        ?? (Diagnostics.TurnExitDriveProfile is { } drive
+        ? drive.AccelerationDistanceMeters + drive.CruiseDistanceMeters + drive.DecelerationDistanceMeters : 0f);
     public float CarryDistanceMeters => Diagnostics.TravelledMeters - ScrubDistanceMeters
         - CorrectionDistanceMeters - DriveDistanceMeters;
-    public float CarryTimeSeconds => Diagnostics.TravelTimeSeconds
+    public float CarryTimeSeconds => Diagnostics.ContinuousCornerProfile?.CarryTimeSeconds ?? (Diagnostics.TravelTimeSeconds
         - (Diagnostics.TurnEntryScrubProfile?.TravelTimeSeconds ?? 0f)
         - (Diagnostics.CornerSpeedCorrectionProfile?.TravelTimeSeconds ?? 0f)
-        - (Diagnostics.TurnExitDriveProfile?.TravelTimeSeconds ?? 0f);
+        - (Diagnostics.TurnExitDriveProfile?.TravelTimeSeconds ?? 0f));
     // Residual is observed at correction exit, not after legitimate TurnExit drive.
-    public float ResidualOverspeedMetersPerSecond => Diagnostics.CornerSpeedCorrectionProfile is { } correction
-        ? MathF.Max(0f, correction.ExitSpeedMetersPerSecond - correction.TargetSpeedMetersPerSecond) : 0f;
+    public float ResidualOverspeedMetersPerSecond => Diagnostics.ContinuousCornerProfile?.ResidualOverspeedMetersPerSecond
+        ?? (Diagnostics.CornerSpeedCorrectionProfile is { } correction
+        ? MathF.Max(0f, correction.ExitSpeedMetersPerSecond - correction.TargetSpeedMetersPerSecond) : 0f);
 }
 
 public sealed record CalibrationHeatRiderObservation(

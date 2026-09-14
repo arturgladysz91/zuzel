@@ -127,8 +127,8 @@ public sealed class ContinuousTurnDistanceTests
         Assert.Equal(SegmentOutcome.Ok, outer.Outcome);
         Assert.Equal(entrySpeed, inner.EntrySpeed);
         Assert.Equal(entrySpeed, outer.EntrySpeed);
-        Assert.Equal(entrySpeed, inner.Speed);
-        Assert.Equal(entrySpeed, outer.Speed);
+        Assert.True(inner.Speed > entrySpeed);
+        Assert.True(outer.Speed > entrySpeed);
         Assert.Equal(expectedInner, inner.Position.DistanceMeters, 5);
         Assert.Equal(expectedOuter, outer.Position.DistanceMeters, 5);
         Assert.True(outer.Position.DistanceMeters > inner.Position.DistanceMeters);
@@ -156,7 +156,7 @@ public sealed class ContinuousTurnDistanceTests
         const float entryLateralPosition = 1.2f;
         var geometry = TrackGeometry.Default;
         var segment = new TrackSegment(0, SegmentType.TurnMiddle);
-        var maxSafeSpeed = SegmentPhysics.MaxSafeTurnSpeed(
+        var maxSafeSpeed = CornerTestSupport.SingleEnvelopeSpeed(
             entryLateralPosition,
             geometry,
             IdealSurface,
@@ -184,7 +184,7 @@ public sealed class ContinuousTurnDistanceTests
         const float entryLateralPosition = 1.2f;
         var geometry = TrackGeometry.Default;
         var segment = new TrackSegment(0, SegmentType.TurnMiddle);
-        var maxSafeSpeed = SegmentPhysics.MaxSafeTurnSpeed(
+        var maxSafeSpeed = CornerTestSupport.SingleEnvelopeSpeed(
             entryLateralPosition,
             geometry,
             IdealSurface,

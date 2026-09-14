@@ -65,6 +65,9 @@ public static class SegmentPhysics
 {
     public const float ReferenceTurnRadiusMeters = 24.0f;
     public const float ReferenceTurnSpeedMetersPerSecond = 16.0f;
+    // ADVANCED settled/apex capability only. Geometry-only/legacy API remains
+    // at its original 16 m/s reference; this is not a longitudinal drive speed.
+    public const float AdvancedReferenceTurnSpeedMetersPerSecond = 19.0f;
     public const float BrakeSpeedFactor = 1.10f;
     public const float RunWideSpeedFactor = 1.30f;
     public const float MinRunWideOverspeedRetention = 0.35f;
@@ -120,7 +123,8 @@ public static class SegmentPhysics
         ArgumentNullException.ThrowIfNull(skills);
         ArgumentNullException.ThrowIfNull(setup);
 
-        var geometrySpeedMetersPerSecond = MaxSafeTurnSpeed(lateralPosition, geometry);
+        var geometrySpeedMetersPerSecond = AdvancedReferenceTurnSpeedMetersPerSecond
+            * MathF.Sqrt(LaneModel.TurnArcRadiusMeters(lateralPosition, geometry) / ReferenceTurnRadiusMeters);
         var control = RiderSkills.Normalize(skills.SlideControl);
         var speedAbility = RiderSkills.Normalize(skills.Speed);
         var controlMultiplier = 0.97f + control * 0.06f;
@@ -207,6 +211,12 @@ public static class SegmentPhysics
             context.Surface,
             context.Skills,
             context.Setup);
+        // Context-free calls preserve the settled-capability compatibility API.
+        // Production always supplies the complete logical-corner context.
+        if (context.CornerPhase is { } phase)
+            max = ContinuousCornerEnvelope.Create(phase, context.LateralPosition ?? context.Lane,
+                context.Geometry, context.Surface, context.Skills, context.Setup)
+                .SpeedMetersPerSecond(phase.CornerProgress);
         var brakeFactor = MinAdvancedBrakeSpeedFactor
             + control * AdvancedBrakeSpeedFactorRange;
         var runWideFactor = MinAdvancedRunWideSpeedFactor

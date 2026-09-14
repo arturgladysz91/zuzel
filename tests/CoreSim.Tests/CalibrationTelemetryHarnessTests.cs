@@ -171,20 +171,15 @@ public sealed class CalibrationTelemetryHarnessTests
     }
 
     [Fact]
-    public void TurnExitDiagnosticsExposeExactAppliedNetAcceleration()
+    public void CornerDiagnosticsExposeActualSignedDriveObservations()
     {
         var track = SingleSegmentTrack(SegmentType.TurnExit);
         var rider = Assert.Single(CreateRiders(1));
         rider.Speed = 10f;
         var resolved = ResolveStep(track, new List<RiderState> { rider });
-        var diagnostics = Assert.Single(resolved.Diagnostics);
-        var snapshotRider = resolved.Snapshot.Rider(1);
-        var expected = LongitudinalDynamics.CalculateTurnExitNetAccelerationMetersPerSecondSquared(
-            Assert.Single(resolved.Changes).PhysicsSpeed,
-            snapshotRider.Profile.Skills,
-            snapshotRider.ActiveSetup,
-            diagnostics.EntrySurface);
-        Assert.Equal(expected, diagnostics.TurnExitNetAccelerationMetersPerSecondSquared);
+        var d = Assert.Single(resolved.Diagnostics);
+        Assert.Null(d.TurnExitNetAccelerationMetersPerSecondSquared);
+        Assert.Equal(CornerTestSupport.Expected(resolved), d.ContinuousCornerProfile);
     }
 
     [Fact]
@@ -200,14 +195,14 @@ public sealed class CalibrationTelemetryHarnessTests
     }
 
     [Fact]
-    public void TurnEntryDiagnosticsExposeActualProductionScrubProfile()
+    public void TurnEntryDiagnosticsExposeActualContinuousProfile()
     {
         var track = SingleSegmentTrack(SegmentType.TurnEntry);
         var rider = Assert.Single(CreateRiders(1));
         rider.Speed = 18f;
         var resolved = ResolveStep(track, new List<RiderState> { rider });
         var diagnostics = Assert.Single(resolved.Diagnostics);
-        var profile = Assert.IsType<TurnEntryScrubProfile>(diagnostics.TurnEntryScrubProfile);
+        var profile = Assert.IsType<ContinuousCornerTraversalProfile>(diagnostics.ContinuousCornerProfile);
         Assert.True(profile.TravelTimeSeconds > 0f);
         Assert.Null(diagnostics.StraightProfile);
     }
@@ -220,7 +215,7 @@ public sealed class CalibrationTelemetryHarnessTests
         Assert.Null(diagnostics.StraightProfile);
         Assert.Null(diagnostics.TurnEntryScrubProfile);
         Assert.Null(diagnostics.TurnExitNetAccelerationMetersPerSecondSquared);
-        Assert.Null(diagnostics.FullDriveEquilibriumSpeedMetersPerSecond);
+        Assert.Equal(diagnostics.ContinuousCornerProfile!.FullDriveEquilibriumSpeedMetersPerSecond, diagnostics.FullDriveEquilibriumSpeedMetersPerSecond);
     }
 
     [Fact]
@@ -485,7 +480,7 @@ public sealed class CalibrationTelemetryHarnessTests
         var lines = CalibrationCsvExporter.ExportSteps(trace).Split('\n', StringSplitOptions.RemoveEmptyEntries);
         var header = lines[0].Split(',');
         var row = lines[1].Split(',');
-        Assert.Equal(string.Empty, row[Array.IndexOf(header, "FullDriveEquilibriumSpeedMetersPerSecond")]);
+        Assert.NotEqual(string.Empty, row[Array.IndexOf(header, "FullDriveEquilibriumSpeedMetersPerSecond")]);
         Assert.Equal(string.Empty, row[Array.IndexOf(header, "StraightProfileTravelTimeSeconds")]);
         Assert.Equal(string.Empty, row[Array.IndexOf(header, "TurnEntryScrubTravelTimeSeconds")]);
     }
