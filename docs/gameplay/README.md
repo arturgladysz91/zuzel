@@ -48,7 +48,7 @@ Model nie dodaje `ControlledWide` i nie zmienia progów `Brake`, `RunWide` i `Cr
 
 ### Distance-limited longitudinal physics — PROVISIONAL
 
-Od #31 production advanced Straight, eligible TurnExit i standing launch nie
+Od #31 production advanced Straight, continuous-corner drive i standing launch nie
 korzystają z artificial attainable-speed ceiling. Usunięto model
 `21–25 m/s × 0.94–1.06` i osobny gearing top-speed multiplier.
 Full-drive acceleration jest signed: `a(v) = (F_drive(v) - F_resistance(v)) / 142`,
@@ -72,7 +72,7 @@ To zabezpieczenie kwadratu prędkości przy zatrzymaniu, nie clamp acceleration.
 Czas przejazdu jest sumą `2*ds/(v_start+v_end)`, nie jednym średnim czasem
 całego segmentu. Equilibrium nie kończy integracji.
 
-Reference acceleration po #36 wynosi TurnExit `1.20–2.80`, Straight `1.60–3.20`
+Reference acceleration po #36 wynosi corner full-drive `1.20–2.80`, Straight `1.60–3.20`
 przez Speed, razy `1.10–0.90` przez Gearing i
 `0.75 + 0.25*EffectiveGrip`. Reference force to `142*referenceAcceleration
 + resistance(16)`, więc kontrakt przy 16 m/s pozostaje. Surface jest próbkowana
@@ -80,42 +80,43 @@ raz przy wejściu i nadal skaluje effective reference drive, a więc też equili
 Gearing=0 ma więcej reference drive, ale szybszy fade; Gearing=1 mniej drive
 i wolniejszy fade. Morale i TractionBias nie wpływają na siły ani equilibrium.
 
-TurnExit nadal wymaga `Ok`/ `Brake`, dodatniej post-physics speed i dystansu.
-Profil zaczyna od `resolution.Speed`; `RunWide` i `Crash` go nie otrzymują.
-Straight i TurnExit raportują acceleration + cruise + deceleration distance
-równe actual distance. Deceleration obejmuje naturalną utratę speed, a na
-Straight także explicit preparation; entry net acceleration TurnExit może być ujemne.
-Wszystkie profile zawierają equilibrium z dokładnie tej samej reference force/setup.
+Od #38 corner full-drive nie jest wybierany przez etykietę TurnExit. Jego
+dostępność rośnie płynnie po apexie zgodnie z CornerProgress, a każdy metr
+traversal należy dokładnie do correction, carry albo drive. Przy pełnej
+dostępności używany jest dokładnie istniejący signed-force endpoint; jego net
+acceleration może być ujemne. `RunWide` nie otrzymuje dodatniego drive, a Crash
+pozostaje terminalny.
 
-Dla immediate TurnEntry nadal działa maximum recoverable approach target oraz
-backward allowed-speed envelope. Final step to
+Dla immediate logical corner targetem jest canonical continuous envelope przy
+`CornerProgress = 0`, wspólny dla Straight, standing-start preparation i samego
+corner traversal. Backward allowed-speed envelope zachowuje final step
 `min(fullDriveCandidate, max(allowedBoundary, preparationReachableSpeed))`.
 Target jest upper constraint i nigdy nie podnosi naturalnie zwalniającego candidate.
 Gdy target jest nieosiągalny, zostaje residual overspeed; preparation nie dostaje
 dodatkowej deceleration. Naturalny spadek od oporów może być silniejszy niż
-preparation i nie wolno go wyłączać. Corner-entry preparation pozostaje
-odrębnym efektywnym modelem throttle roll-off / engine-drivetrain / slide preparation
-`2.00–3.20 m/s²`; #24 TurnEntry scrub nadal używa 50% remaining distance.
+preparation i nie wolno go wyłączać. Corner correction pozostaje efektywnym
+modelem throttle roll-off / engine-drivetrain / slide preparation
+`2.00–3.20 m/s²`, ale nie jest już osobną fazą przypisaną do TurnEntry.
 
 Pure zero-drive helper daje `-(40 + 0.20*v²)/142`, ale NIE jest finalnym
 engine-braking modelem ani zamiennikiem corner preparation. Nie dodano explicit
 throttle input, wheelspin, traction-force cap ani splitu engine/traction force.
-W #36 zestrojono wyłącznie zakresy reference acceleration Straight/TurnExit i oba
+W #36 zestrojono wyłącznie zakresy reference acceleration Straight/corner full-drive i oba
 końce fade. Masa, resistance, reference speed, integration step, gearing/surface
-mapping oraz cały corner model pozostają **PROVISIONAL / NOT REAL-WORLD CALIBRATED**.
+mapping pozostają **PROVISIONAL / NOT REAL-WORLD CALIBRATED**. #38 zmienia
+wyłącznie advanced settled-corner reference z `16` na `19 m/s` po ograniczonym
+screenie A0/B17/B18/B19; legacy reference pozostaje `16 m/s`.
 Stary analityczny `CalculateStraightSpeedProfile` to wyłącznie non-production
 compatibility utility z jawnie podanym ogólnym ograniczeniem; nie wylicza Vmax,
 nie jest wywoływany przez SimulationEngine i ma null equilibrium.
 
 Lookahead obejmuje wyłącznie jeden bezpośredni segment. Target następnego `TurnEntry` wykorzystuje jego immutable nawierzchnię, pełną długość geometryczną i wejściowe `LateralPosition` zawodnika; nie korzysta z `TargetLane`, `PlannedLane`, resolved lane ani pozycji po `MoveTowards`. Ostatni Straight nie-finalnego okrążenia zawija do segmentu `0`. Ostatni segment ostatniego wymaganego okrążenia nie przygotowuje motocykla do nieistniejącego następnego łuku i wykorzystuje pozostały dystans na acceleration. Rozpoznanie opiera się na `LapIndex`, `RequiredLaps`, `SegmentIndex` i liczbie segmentów — bez `lap == 4`, bonusu mety lub specjalnej reguły wewnętrznej linii.
 
-Realny motocykl żużlowy ma jeden bieg podczas jazdy, nie posiada klasycznego układu hamulcowego, a przełożenie jest elementem setupu. Advanced `TurnEntry` rozdziela approach speed od safe/settled speed coarse podziałem **PROVISIONAL / NOT REAL-WORLD CALIBRATED**: pierwsze `50%` faktycznie pozostałego dystansu reprezentuje roll-off, ustawienie motocykla, wejście w uślizg i scrub. Po osiągnięciu settled target przed końcem tej fazy reszta jest carry, nie dalszą deceleration. Skuteczny scrub może rozpocząć łuk szybciej niż settled speed i zakończyć się `Ok`; tylko residual overspeed trafia do niezmienionych progów `SegmentPhysics`, więc `Brake` pozostaje nazwą residual outcome, a nie literalnym hamulcem tarczowym.
+Realny motocykl żużlowy ma jeden bieg podczas jazdy, nie posiada klasycznego układu hamulcowego, a przełożenie jest elementem setupu. W advanced physics #38 recoverable speed przed apexem wynika z pozostałego fizycznego dystansu redukcji, a po apexie jest odbudowywany przez istniejący signed turn-drive model. `Brake` oznacza przekroczenie lokalnego recoverable envelope, nie settled apex speed na początku zakrętu ani literalne hamowanie tarczowe.
 
-Kolejność to `original entry → scrub → SegmentPhysics → random incident → distance/time`. Non-crash przejeżdża cały remaining distance, a czas wynosi czas profilu scrub plus post-scrub distance podzielony przez finalną prędkość resolution. Crash nadal przejeżdża połowę remaining progress — dokładnie provisional scrub distance — i dostaje wyłącznie czas scrub, także gdy crash powstał w random incident. Ten czas steruje również `LateralMovementModel`. Partial TurnEntry używa tylko remaining distance; surface nie jest ponownie próbkowane po ruchu bocznym.
-
-StandingStart, Straight i TurnExit współdzielą signed 1 m midpoint opisany powyżej.
-TurnEntry #24, continuous geometry/surface/wear, contact, lateral budget i legacy
-zachowują własne kontrakty; signed forces nie dodają drugiego resolve ani RNG.
+StandingStart, Straight i continuous corner drive współdzielą signed 1 m midpoint
+opisany powyżej. Continuous geometry/surface/wear, contact, lateral budget i
+legacy zachowują własne kontrakty; signed forces nie dodają drugiego resolve ani RNG.
 
 ### Standing start / launch — PROVISIONAL / NOT REAL-WORLD CALIBRATED
 
@@ -146,17 +147,17 @@ resistance(0)`. Dalej działają wspólne resistance `40 + 0.20*v²`, one-gear
 envelope, kroki 1 m z exact remainder i signed midpoint bez artificial ceiling. Entry surface próbkujemy raz. TractionBias i morale
 nie wpływają na launch ani reaction; brak gate-specific bonusu.
 
-Launch przygotowuje wejście w bezpośrednio następny TurnEntry: ten sam maximum
-recoverable approach target z `ResolveImmediateNextTurnApproachSpeed`, backward
-allowed-speed envelope i istniejąca corner-entry deceleration co production
-Straight. Fastest feasible profile to acceleration → ewentualny peak/cruise →
+Launch przygotowuje wejście w bezpośrednio następny logical corner: ten sam
+canonical envelope target przy `CornerProgress = 0`, backward allowed-speed
+envelope i istniejąca corner correction capability co production Straight.
+Fastest feasible profile to acceleration → ewentualny peak/cruise →
 preparation/roll-off; bez teleportacji prędkości i bez przekraczania deceleration.
 Acceleration + cruise + preparation distance = actual launch distance. Movement
 sumuje `2*ds/(v_start+v_end)` wszystkich fixed-distance steps.
 
 Elapsed obejmuje reaction + movement; lateral budget tylko movement.
 Reaction nie powoduje ruchu bocznego, dystansu ani progress. Actual exit speed
-staje się wejściem do niezmienionego #24 TurnEntry; legacy i compatibility
+staje się wejściem do continuous corner traversal; legacy i compatibility
 bootstrap pozostają bez zmian. Lookahead nadal dotyczy
 tylko bezpośrednio następnego segmentu. Existing contact działa po profilu,
 więc final duration może zawierać penalty ponad pre-contact profile total.
@@ -192,8 +193,8 @@ porównuje jeszcze wartości z real telemetry.
 #31 wprowadza breaking diagnostic-schema change przed ustaleniem real-world dataset:
 `FullDriveEquilibriumSpeedMetersPerSecond` zastępuje
 `AttainableTopSpeedMetersPerSecond` w RiderStepDiagnostics, CalibrationStepSample
-i CSV. Nie ma dwóch pól Vmax. Dla launch/Straight/eligible TurnExit pochodzi
-z użytego profilu; dla innych segmentów jest null.
+i CSV. Nie ma dwóch pól Vmax. Dla launch/Straight/continuous corner drive
+pochodzi z użytego profilu; dla innych segmentów jest null.
 CSV dodaje `TurnExitDecelerationDistanceMeters` po TurnExitCruiseDistanceMeters;
 entry acceleration TurnExit jest signed. Nowy schema zachowuje stable order,
 invariant culture, decimal dot, `\n` i null = empty.
@@ -284,7 +285,7 @@ The PGEE snapshot in `data/calibration/pge/v1` is validation evidence for distri
 
 CleanPhysics is only a conservative analysis subset; other retained rows are not declared invalid. Absolute times depend on exact track geometry, so the example track is not fitted directly to every PGEE venue. Vmax remains a distribution. Source `speed_2s` and `curve_speed` are gate rankings, while reaction populations come from separate task-supplied literature context. #32 provides measurement/evaluation infrastructure without physics changes; #33 is the first empirical tuning step.
 
-### Continuous corner correction — BINDING
+### Continuous corner correction (#34) — HISTORICAL FOUNDATION
 
 Advanced corner constraints classify the situation before changing recoverable
 speed. `Brake` is retained as a compatibility outcome name but means controlled
@@ -300,3 +301,23 @@ entry `LateralPosition` still define the segment geometry/capability, without
 radius integration or resampling during lateral movement. Legacy and random
 incident semantics remain separate and unchanged. #34 performs no physics
 calibration.
+
+### Continuous corner envelope (#38) — BINDING
+
+Advanced longitudinal corner behavior depends on `CornerProgress`, not on the
+TurnEntry/TurnMiddle/TurnExit label. Those labels remain topology, surface and
+reporting compatibility only. Before the provisional apex at `0.5`, the
+recoverable envelope is
+`sqrt(v_apex² + 2*a_correction*(0.5-p)*totalCornerLength)`. After the apex,
+the existing signed turn-drive endpoint builds the envelope over physical
+distance. Net drive availability is zero through the apex, smoothstep to full
+between `0.5` and `5/6`, then one.
+
+Correction, carry and drive consume disjoint physical metres in existing 1 m
+steps plus the exact remainder. There is no teleport, hard speed cap, outer-line
+bonus or final-corner bonus. Straight and standing-start preparation query the
+same envelope at progress zero. The advanced production engine no longer calls
+the historical TurnEntry scrub or segment-gated TurnExit drive. The advanced
+settled reference is calibrated to `19 m/s`; all #36 longitudinal and start
+constants, correction capability, outcome factors, incident/contact/lateral/
+surface behavior and legacy physics remain unchanged.

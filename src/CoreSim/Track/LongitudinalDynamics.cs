@@ -551,17 +551,20 @@ public static class LongitudinalDynamics
         float currentSpeedMetersPerSecond,
         float stepDistanceMeters,
         float referenceAvailableDriveForceNewtons,
-        BikeSetup setup)
+        BikeSetup setup,
+        float netDriveAvailability = 1f)
     {
         ValidateNonNegativeFinite(currentSpeedMetersPerSecond, nameof(currentSpeedMetersPerSecond));
         ValidateNonNegativeFinite(stepDistanceMeters, nameof(stepDistanceMeters));
+        if (!float.IsFinite(netDriveAvailability) || netDriveAvailability < 0f || netDriveAvailability > 1f)
+            throw new ArgumentOutOfRangeException(nameof(netDriveAvailability));
         var accelerationAtStart = CalculateNetDriveAccelerationMetersPerSecondSquared(
-            currentSpeedMetersPerSecond, referenceAvailableDriveForceNewtons, setup);
+            currentSpeedMetersPerSecond, referenceAvailableDriveForceNewtons, setup) * netDriveAvailability;
         var predictedSpeed = ApplySignedAccelerationOverDistance(
             currentSpeedMetersPerSecond, accelerationAtStart, stepDistanceMeters);
         var midpointSpeed = (float)(((double)currentSpeedMetersPerSecond + predictedSpeed) * 0.5d);
         var accelerationAtMidpoint = CalculateNetDriveAccelerationMetersPerSecondSquared(
-            midpointSpeed, referenceAvailableDriveForceNewtons, setup);
+            midpointSpeed, referenceAvailableDriveForceNewtons, setup) * netDriveAvailability;
         return ApplySignedAccelerationOverDistance(
             currentSpeedMetersPerSecond, accelerationAtMidpoint, stepDistanceMeters);
     }
@@ -721,7 +724,12 @@ public static class LongitudinalDynamics
             initialSpeedMetersPerSecond,
             exitSpeedMetersPerSecond);
 
-        if (!targetReached && exitSpeedMetersPerSecond <= targetSpeedMetersPerSecond)
+        // A positive double residual below half a float ULP is not observable
+        // in the public float speed domain. The entire available distance was
+        // still consumed; no speed assignment or extra correction is performed.
+        if (!targetReached && exitSpeedMetersPerSecond == targetSpeedMetersPerSecond)
+            targetReached = true;
+        if (!targetReached && exitSpeedMetersPerSecond < targetSpeedMetersPerSecond)
         {
             throw new InvalidOperationException(
                 "An insufficient corner-correction distance must retain residual overspeed.");

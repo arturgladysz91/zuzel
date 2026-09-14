@@ -102,7 +102,7 @@ public sealed class ContinuousSurfaceWearTests
     public void RunWideWearRemainsCenteredOnEntryPosition()
     {
         const float entryPosition = 1.40f;
-        var maxSafeSpeed = SegmentPhysics.MaxSafeTurnSpeed(
+        var maxSafeSpeed = CornerTestSupport.SingleEnvelopeSpeed(
             entryPosition,
             TrackGeometry.Default,
             NeutralSurface,
@@ -123,7 +123,7 @@ public sealed class ContinuousSurfaceWearTests
     public void PhysicsCrashStillSkipsSurfaceWear()
     {
         const float entryPosition = 1.40f;
-        var maxSafeSpeed = SegmentPhysics.MaxSafeTurnSpeed(
+        var maxSafeSpeed = CornerTestSupport.SingleEnvelopeSpeed(
             entryPosition,
             TrackGeometry.Default,
             NeutralSurface,

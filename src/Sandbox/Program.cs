@@ -6,6 +6,13 @@ using CoreSim.Setup;
 
 if (args.Length > 0)
 {
+    if (args.Length == 4 && StringComparer.Ordinal.Equals(args[0], "continuous-corner-envelope-impact-report"))
+    {
+        ContinuousCornerEnvelopeImpactReportWriter.Write(args[1], args[2], args[3]);
+        Console.WriteLine($"Wrote deterministic continuous corner-envelope impact report: {args[3]}");
+        return;
+    }
+
     if (args.Length == 3 && StringComparer.Ordinal.Equals(args[0], "longitudinal-speed-envelope-snapshot"))
     {
         LongitudinalCalibrationReportWriter.WriteSnapshot(args[1], args[2]);
@@ -56,6 +63,7 @@ if (args.Length > 0)
     }
 
     Console.Error.WriteLine("Usage:");
+    Console.Error.WriteLine("  Sandbox continuous-corner-envelope-impact-report <dataset-directory> <after-scenario-sha256> <output-markdown>");
     Console.Error.WriteLine("  Sandbox longitudinal-speed-envelope-snapshot <source-sha> <output-json>");
     Console.Error.WriteLine("  Sandbox longitudinal-speed-envelope-impact-report <dataset-directory> <before-snapshot-json> <base-main-sha> <candidate-head-sha> <output-markdown>");
     Console.Error.WriteLine("  Sandbox continuous-corner-foundation-impact-report <dataset-directory> <before-calibration-scenarios-report> <base-main-sha> <candidate-code-head-sha> <output-markdown>");

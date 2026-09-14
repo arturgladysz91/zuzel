@@ -43,11 +43,11 @@ public sealed class TurnEntrySpeedScrubTests
 
         Assert.True(straight.Change.Speed > settledSafeSpeed);
         Assert.Equal(SegmentOutcome.Ok, turnEntry.Change.Outcome);
-        Assert.Equal(settledSafeSpeed, turnEntry.Change.Speed, 5);
+        Assert.True(turnEntry.Change.Speed > settledSafeSpeed); // The logical corner also rebuilds after its apex.
     }
 
     [Fact]
-    public void RecoverableHighEntrySpeedScrubsToSafeAndReturnsOk()
+    public void RecoverableHighEntryUsesBoundedTraversalAndReturnsOk()
     {
         var track = TrackOf(60f, SegmentType.TurnEntry);
         var state = UniformState(track, PerfectSurface);
@@ -59,12 +59,13 @@ public sealed class TurnEntrySpeedScrubTests
 
         Assert.True(result.Change.EntrySpeed > settledSafeSpeed);
         Assert.Equal(SegmentOutcome.Ok, result.Change.Outcome);
-        Assert.Equal(settledSafeSpeed, result.Change.PhysicsSpeed, 5);
-        Assert.Equal(settledSafeSpeed, result.Change.Speed, 5);
+        Assert.Equal(rider.Speed, result.Change.PhysicsSpeed);
+        Assert.True(result.Change.Speed > settledSafeSpeed);
+        Assert.True(result.Change.Speed < rider.Speed);
     }
 
     [Fact]
-    public void TurnEntryDoesNotApplyConstraintBeforeScrub()
+    public void TurnEntryClassificationUsesSameRecoverableEnvelopeAsTraversal()
     {
         var track = TrackOf(60f, SegmentType.TurnEntry);
         var state = UniformState(track, PerfectSurface);
@@ -80,7 +81,7 @@ public sealed class TurnEntrySpeedScrubTests
 
         var result = ResolveSingle(track, state, rider, targetLane: 1);
 
-        Assert.NotEqual(SegmentOutcome.Ok, directConstraint.Outcome);
+        Assert.Equal(SegmentOutcome.Ok, directConstraint.Outcome);
         Assert.Equal(SegmentOutcome.Ok, result.Change.Outcome);
     }
 
@@ -190,107 +191,52 @@ public sealed class TurnEntrySpeedScrubTests
     [Fact]
     public void PartialTurnEntryUsesOnlyRemainingDistance()
     {
-        const float segmentProgress = 0.5f;
-        var track = TrackOf(60f, SegmentType.TurnEntry);
-        var state = UniformState(track, PerfectSurface);
-        var rider = RiderAt(
-            1,
-            lane: 1,
-            lateralPosition: 1f,
-            speed: 0f,
-            segmentIndex: 0,
-            track,
-            segmentProgress);
-        rider.Speed = MaximumApproachSpeed(track, state, rider, segmentIndex: 0);
-        var remainingDistance = TurnEntryLength(track, rider) * (1f - segmentProgress);
-        var scrubProfile = ScrubProfile(track, state, rider, 0, remainingDistance);
-        var expectedResolution = ApplyAdvancedConstraint(
-            track,
-            state,
-            rider,
-            0,
-            scrubProfile.ExitSpeedMetersPerSecond,
-            lane: 1);
-
-        var result = ResolveSingle(track, state, rider, targetLane: 1);
-
-        Assert.Equal(SegmentOutcome.Brake, expectedResolution.Outcome);
-        Assert.Equal(expectedResolution.Outcome, result.Change.Outcome);
-        Assert.Equal(expectedResolution.Speed, result.Change.PhysicsSpeed, 5);
-        Assert.Equal(remainingDistance, result.Change.Position.DistanceMeters, 5);
+        var r = CornerTestSupport.Probe(.125f);
+        var p = r.Diagnostics.ContinuousCornerProfile!;
+        Assert.Equal(r.AvailableDistanceMeters, r.Change.Position.DistanceMeters, 5);
+        Assert.Equal(.125f, p.Nodes[0].CornerProgress, 6);
+        Assert.Equal(1f / 3f, p.Nodes[^1].CornerProgress, 6);
     }
 
     [Fact]
-    public void TurnEntryNonCrashTravelTimeIncludesScrubAndPostScrubPhase()
+    public void TurnEntryTimeComesFromContinuousDistanceSteps()
     {
         var track = TrackOf(60f, SegmentType.TurnEntry);
         var state = UniformState(track, PerfectSurface);
-        var rider = Rider(1, lane: 1, lateralPosition: 1f, speed: 0f);
-        rider.Speed = MaximumApproachSpeed(track, state, rider, segmentIndex: 0);
+        var rider = Rider(1, 1, 1f, 0f);
+        rider.Speed = MaximumApproachSpeed(track, state, rider, 0);
         var distance = TurnEntryLength(track, rider);
-        var profile = ScrubProfile(track, state, rider, 0, distance);
-        var expectedTime = profile.TravelTimeSeconds
-            + (distance - profile.DecelerationDistanceMeters - profile.CarryDistanceMeters)
-            / profile.ExitSpeedMetersPerSecond;
-        var endpointAverageTime = distance
-            / ((rider.Speed + profile.ExitSpeedMetersPerSecond) * 0.5f);
-
-        var result = ResolveSingle(track, state, rider, targetLane: 1);
-
-        Assert.Equal(expectedTime, result.Change.ElapsedTimeSeconds, 5);
-        Assert.NotEqual(endpointAverageTime, result.Change.ElapsedTimeSeconds, 4);
+        var p = CornerTestSupport.Envelope(track, rider).Traverse(rider.Speed, 0f, distance);
+        var result = ResolveSingle(track, state, rider, 1);
+        Assert.Equal(p.TravelTimeSeconds, result.Change.ElapsedTimeSeconds, 5);
+        Assert.NotEqual(distance / ((rider.Speed + p.ExitSpeedMetersPerSecond) * .5f), result.Change.ElapsedTimeSeconds, 4);
     }
 
     [Fact]
-    public void PhysicsCrashTravelsExactlyScrubPhaseDistance()
+    public void PhysicsCrashKeepsExistingPartialAdvanceWithoutSeparateScrub()
     {
         var track = TrackOf(60f, SegmentType.TurnEntry);
-        var state = UniformState(track, PerfectSurface);
-        var rider = Rider(1, lane: 1, lateralPosition: 1f, speed: 40f);
-        var fullRemainingDistance = TurnEntryLength(track, rider);
-        var profile = ScrubProfile(track, state, rider, 0, fullRemainingDistance);
-
-        var result = ResolveSingle(track, state, rider, targetLane: 1);
-
+        var rider = Rider(1, 1, 1f, 40f);
+        var result = ResolveSingle(track, UniformState(track, PerfectSurface), rider, 1);
         Assert.Equal(SegmentOutcome.Crash, result.Change.Outcome);
-        Assert.Equal(
-            fullRemainingDistance * LongitudinalDynamics.ProvisionalTurnEntryScrubDistanceFraction,
-            result.Change.Position.DistanceMeters,
-            5);
-        Assert.Equal(profile.TravelTimeSeconds, result.Change.ElapsedTimeSeconds, 5);
+        var distance = TurnEntryLength(track, rider) * .5f; // Existing crash partial advance, not a scrub phase.
+        Assert.Equal(distance, result.Change.Position.DistanceMeters, 5);
+        Assert.Equal(distance / (rider.Speed * .5f), result.Change.ElapsedTimeSeconds, 5);
     }
 
     [Fact]
     public void TurnEntryProfileTimeControlsLateralMovementBudget()
     {
-        const float entryPosition = 1f;
-        var geometry = new TrackGeometry(
-            straightLengthMeters: 60f,
-            innerRadiusMeters: 24f,
-            laneSpacingMeters: 4f,
-            turnSegmentAngleRadians: TrackGeometry.Default.TurnSegmentAngleRadians);
+        var geometry = new TrackGeometry(60f, 24f, 4f, TrackGeometry.Default.TurnSegmentAngleRadians);
         var track = new Track(new[] { new TrackSegment(0, SegmentType.TurnEntry) }, geometry);
         var state = UniformState(track, PerfectSurface);
-        var rider = Rider(1, lane: 1, entryPosition, speed: 0f);
-        rider.Speed = MaximumApproachSpeed(track, state, rider, segmentIndex: 0);
-        var distance = TurnEntryLength(track, rider);
-        var profile = ScrubProfile(track, state, rider, 0, distance);
-        var settledSafeSpeed = SettledSafeSpeed(track, state, rider, 0);
-        var expectedTime = profile.TravelTimeSeconds
-            + (distance - profile.DecelerationDistanceMeters - profile.CarryDistanceMeters)
-            / settledSafeSpeed;
-        var expectedPosition = LateralMovementModel.MoveTowards(
-            entryPosition,
-            resolvedLane: 2,
-            expectedTime,
-            geometry,
-            PerfectSurface,
-            rider.Profile.Skills);
-
-        var result = ResolveSingle(track, state, rider, targetLane: 4);
-
-        Assert.Equal(expectedTime, result.Change.ElapsedTimeSeconds, 5);
-        Assert.Equal(expectedPosition, result.Change.LateralPosition, 5);
+        var rider = Rider(1, 1, 1f, 0f);
+        rider.Speed = MaximumApproachSpeed(track, state, rider, 0);
+        var p = CornerTestSupport.Envelope(track, rider).Traverse(rider.Speed, 0f, TurnEntryLength(track, rider));
+        var result = ResolveSingle(track, state, rider, 4);
+        var expected = LateralMovementModel.MoveTowards(1f, 2, p.TravelTimeSeconds, geometry, PerfectSurface, rider.Profile.Skills);
+        Assert.Equal(p.TravelTimeSeconds, result.Change.ElapsedTimeSeconds, 5);
+        Assert.Equal(expected, result.Change.LateralPosition, 5);
     }
 
     [Fact]
@@ -393,13 +339,9 @@ public sealed class TurnEntrySpeedScrubTests
         TrackState state,
         RiderState rider,
         int segmentIndex)
-        => LongitudinalDynamics.CalculateMaximumTurnEntryApproachSpeedMetersPerSecond(
-            SettledSafeSpeed(track, state, rider, segmentIndex),
-            ScrubDeceleration(state, rider, segmentIndex),
-            LaneModel.SegmentLengthMeters(
-                track.Segments[segmentIndex],
-                rider.LateralPosition,
-                track.Geometry));
+        => CornerTestSupport.Envelope(track, rider, state.Snapshot().SampleSurface(segmentIndex, rider.LateralPosition),
+            segmentIndex, rider.SegmentProgress).SpeedMetersPerSecond(
+                track.CornerTopology.Resolve(segmentIndex, rider.SegmentProgress, rider.LateralPosition, track.Geometry)!.Value.CornerProgress);
 
     private static TurnEntryScrubProfile ScrubProfile(
         Track track,
@@ -432,7 +374,8 @@ public sealed class TurnEntrySpeedScrubTests
             rider.Morale,
             rider.ActiveSetup,
             DecisionRisk: 0f,
-            LateralPosition: rider.LateralPosition));
+            LateralPosition: rider.LateralPosition,
+            CornerPhase: track.CornerTopology.Resolve(segmentIndex, rider.SegmentProgress, rider.LateralPosition, track.Geometry)));
     }
 
     private static Track TrackOf(float straightLengthMeters, params SegmentType[] segmentTypes)

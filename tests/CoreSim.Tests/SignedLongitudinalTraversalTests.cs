@@ -68,11 +68,12 @@ public sealed class SignedLongitudinalTraversalTests
     public void StraightWithNextTurnStillPreparesForRecoverableApproach()
     {
         var rider = Rider();
-        rider.Speed = 20f;
+        rider.Speed = 30f;
         var step = Resolve(lap: 1, riders: new[] { rider });
         var profile = Assert.IsType<StraightSpeedProfile>(step.Diagnostics[0].StraightProfile);
         var target = FirstTurnApproachTarget(step);
-        Assert.Equal(target, profile.ExitSpeedMetersPerSecond, 4);
+        Assert.Equal(Straight(rider.Speed, step.Diagnostics[0].TravelledMeters, target), profile);
+        Assert.True(profile.ExitSpeedMetersPerSecond > target); // Residual: 60 m is insufficient from 30 m/s.
         Assert.True(profile.DecelerationDistanceMeters > 0f);
         Assert.Null(step.Diagnostics[0].StandingStartLaunchProfile);
     }
@@ -235,8 +236,8 @@ public sealed class SignedLongitudinalTraversalTests
     {
         var step = Resolve();
         var p = Launch(step);
-        Assert.Equal(FirstTurnApproachTarget(step), p.ExitSpeedMetersPerSecond, 4);
-        Assert.True(p.PreparationDistanceMeters > 0f && p.PeakSpeedMetersPerSecond > p.ExitSpeedMetersPerSecond);
+        Assert.Equal(Start(35f, FirstTurnApproachTarget(step)), p);
+        Assert.True(p.PreparationDistanceMeters > 0f);
     }
 
     [Fact]
@@ -302,11 +303,11 @@ public sealed class SignedLongitudinalTraversalTests
         {
             var expected = d.StandingStartLaunchProfile?.FullDriveEquilibriumSpeedMetersPerSecond
                 ?? d.StraightProfile?.FullDriveEquilibriumSpeedMetersPerSecond
-                ?? d.TurnExitDriveProfile?.FullDriveEquilibriumSpeedMetersPerSecond;
+                ?? d.ContinuousCornerProfile?.FullDriveEquilibriumSpeedMetersPerSecond;
             Assert.Equal(expected, d.FullDriveEquilibriumSpeedMetersPerSecond);
             var sample = run.Trace!.StepSamples.Single(s => s.StepNumber == step.Snapshot.Step.StepNumber && s.RiderId == d.RiderId);
             Assert.Equal(expected, sample.FullDriveEquilibriumSpeedMetersPerSecond);
-            if (sample.SegmentType is SegmentType.TurnEntry or SegmentType.TurnMiddle) Assert.Null(expected);
+            if (sample.SegmentType is SegmentType.TurnEntry or SegmentType.TurnMiddle) Assert.NotNull(sample.ContinuousCornerProfile);
         }
     }
 

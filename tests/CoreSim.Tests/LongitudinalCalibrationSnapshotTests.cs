@@ -96,7 +96,7 @@ public sealed class LongitudinalCalibrationSnapshotTests
     }
 
     [Fact]
-    public void StartConstantsAndCornerCapabilityAreUnchanged()
+    public void StartAndControlConstantsAreFrozenWhileAdvancedCornerReferenceChanges()
     {
         Assert.Equal(Before.Constants.StartReactionSlow, After.Constants.StartReactionSlow);
         Assert.Equal(Before.Constants.StartReactionFast, After.Constants.StartReactionFast);
@@ -106,7 +106,15 @@ public sealed class LongitudinalCalibrationSnapshotTests
             Assert.Equal(Before.Starts.Single(item => item.ScenarioId == current.ScenarioId).ReactionTime,
                 current.ReactionTime);
         foreach (var current in After.Corners)
-            Assert.Equal(Before.Corners.Single(item => item.ScenarioId == current.ScenarioId), current);
+        {
+            var prior = Before.Corners.Single(item => item.ScenarioId == current.ScenarioId);
+            Assert.Equal(prior.CorrectionCapability, current.CorrectionCapability);
+            Assert.Equal(prior.MaxSafeSpeed * 19f / 16f, current.MaxSafeSpeed, 4);
+            Assert.Equal(prior.FirstBrakeSpeed * 19f / 16f, current.FirstBrakeSpeed, 4);
+            Assert.Equal(prior.FirstRunWideSpeed!.Value * 19f / 16f, current.FirstRunWideSpeed!.Value, 4);
+            Assert.Equal(prior.FirstCrashSpeed * 19f / 16f, current.FirstCrashSpeed, 4);
+            Assert.InRange(MathF.Abs(prior.RunWideRetention!.Value - current.RunWideRetention!.Value), 0f, 0.00001f);
+        }
     }
 
     [Fact]

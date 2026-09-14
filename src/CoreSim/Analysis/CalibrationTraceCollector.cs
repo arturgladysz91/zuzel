@@ -153,7 +153,13 @@ public sealed class CalibrationTraceCollector : ISimulationStepObserver
             correction?.CorrectionDistanceMeters,
             correction?.RemainingDistanceMeters,
             correction?.DecelerationMetersPerSecondSquared,
-            correction?.TargetReached);
+            correction?.TargetReached,
+            diagnostics.CornerPhaseContext,
+            diagnostics.ContinuousCornerProfile,
+            diagnostics.ContinuousCornerProfile is { } corner
+                ? diagnostics.PeakSpeedMetersPerSecond > corner.PeakSpeedMetersPerSecond
+                    ? diagnostics.CornerPhaseContext?.CornerProgress : corner.PeakCornerProgress
+                : diagnostics.CornerPhaseContext?.CornerProgress);
     }
 
     private CalibrationLapSummary[] BuildLapSummaries(

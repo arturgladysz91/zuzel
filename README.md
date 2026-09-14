@@ -144,7 +144,7 @@ bezpośrednio następującym łukiem kontrolowanie wytracić prędkość. Linie 
 nadal nie dają arbitralnego bonusu; różnica wynika z umiejętności, wejściowej
 nawierzchni, dostępnego dystansu i potrzeby przygotowania do następnego łuku.
 
-Od #31 production advanced Straight, eligible TurnExit i standing launch nie
+Od #31 production advanced Straight, continuous-corner drive i standing launch nie
 korzystają z artificial attainable-speed ceiling. Usunięto model
 `21–25 m/s × 0.94–1.06` i osobny gearing top-speed multiplier.
 Full-drive acceleration jest signed: `a(v) = (F_drive(v) - F_resistance(v)) / 142`,
@@ -189,9 +189,9 @@ backward allowed-speed envelope. Final step to
 Target jest upper constraint i nigdy nie podnosi naturalnie zwalniającego candidate.
 Gdy target jest nieosiągalny, zostaje residual overspeed; preparation nie dostaje
 dodatkowej deceleration. Naturalny spadek od oporów może być silniejszy niż
-preparation i nie wolno go wyłączać. Corner-entry preparation pozostaje
-odrębnym efektywnym modelem throttle roll-off / engine-drivetrain / slide preparation
-`2.00–3.20 m/s²`; #24 TurnEntry scrub nadal używa 50% remaining distance.
+preparation i nie wolno go wyłączać. Od #38 Straight i standing start targetują
+ten sam continuous-corner envelope przy `CornerProgress = 0`; późniejsza
+korekcja zużywa dystans do apexu z capability `2.00–3.20 m/s²`.
 
 Pure zero-drive helper daje `-(40 + 0.20*v²)/142`, ale NIE jest finalnym
 engine-braking modelem ani zamiennikiem corner preparation. Nie dodano explicit
@@ -357,8 +357,8 @@ kompatybilności.
 #31 wprowadza breaking diagnostic-schema change przed ustaleniem real-world dataset:
 `FullDriveEquilibriumSpeedMetersPerSecond` zastępuje
 `AttainableTopSpeedMetersPerSecond` w RiderStepDiagnostics, CalibrationStepSample
-i CSV. Nie ma dwóch pól Vmax. Dla launch/Straight/eligible TurnExit pochodzi
-z użytego profilu; dla innych segmentów jest null.
+i CSV. Nie ma dwóch pól Vmax. Dla launch/Straight/continuous-corner drive
+pochodzi z użytego profilu; dla innych segmentów jest null.
 CSV dodaje `TurnExitDecelerationDistanceMeters` po TurnExitCruiseDistanceMeters;
 entry acceleration TurnExit jest signed. Nowy schema zachowuje stable order,
 invariant culture, decimal dot, `\n` i null = empty.
@@ -477,7 +477,7 @@ A/B/C/D physical gate model remains future work. The
 observation-only: no speed/performance constant was changed and no calibration
 was performed.
 
-## Continuous corner-speed correction (#34)
+## Continuous corner-speed correction (#34, historical behavior superseded by #38)
 
 Advanced `SegmentPhysics` now classifies a corner constraint and supplies a
 nullable correction target without instantly assigning recoverable speed to that
@@ -487,10 +487,10 @@ capability. In advanced physics `Brake` therefore means controlled speed scrub,
 not use of a mechanical brake; legacy physics retains its exact instantaneous
 clamp and retention behavior.
 
-TurnEntry keeps its coarse first-half scrub and gives only the residual distance
-to continuous correction. TurnMiddle corrects and then carries. TurnExit corrects
-before drive, and the drive profile can use only the distance left by correction;
-RunWide never receives drive. Insufficient distance leaves residual overspeed,
+At #34, TurnEntry kept its coarse first-half scrub, TurnMiddle corrected and
+carried, and TurnExit corrected before its segment-gated drive. #38 replaces
+those ADVANCED production phase bridges with one continuous logical-corner
+traversal. Insufficient distance still leaves residual overspeed,
 while Crash remains a terminal event abstraction. Random incident probability,
 RNG channels and the immediate `0.88` consequence are unchanged. The
 [continuous-correction impact report](docs/calibration/continuous-corner-correction-impact.md)
@@ -520,8 +520,24 @@ remaining corner length.
 The coordinate domains remain distinct: LateralPosition is continuous
 cross-track position 0..4, CornerProgress is longitudinal progress through
 one logical corner, TurnEntry/TurnMiddle/TurnExit are compatibility and
-reporting labels, and Lane is the discrete resolved reference. Existing
-TurnEntry scrub, TurnExit drive and immediate-corner lookahead retain identical
-numerical behavior as explicit bridges for #38. No speed/performance constant
-or physics calibration changed; see the deterministic
+reporting labels, and Lane is the discrete resolved reference. #37 deliberately
+left TurnEntry scrub and TurnExit drive as temporary bridges; #38 removes their
+ADVANCED production use. No speed/performance constant changed in #37; see the deterministic
 [foundation impact report](docs/calibration/continuous-corner-foundation-impact.md).
+
+## Continuous corner envelope calibration (#38)
+
+ADVANCED production now traverses one `ContinuousCornerEnvelope` over the
+logical corner. Before the provisional apex at `0.50`, recoverable speed follows
+`sqrt(v_apex² + 2*a_correction*distanceToApex)`. After the apex, availability
+ramps with smoothstep to full drive at `5/6` and scales the existing signed
+Turn/full-drive contribution. Every metre belongs to correction, carry or drive
+exactly once; insufficient distance leaves residual overspeed and no speed cap
+or teleport is applied.
+
+The only bounded calibration is the ADVANCED settled/apex reference from
+`16 → 19 m/s`; all #36 longitudinal, launch, correction and outcome constants
+remain frozen, and Legacy retains its 16 m/s reference. The deterministic
+[impact report](docs/calibration/continuous-corner-envelope-impact.md) contains
+the A0/B17/B18/B19 screen, full-heat and geometry sweeps, telemetry context and
+known limitations.

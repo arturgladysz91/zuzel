@@ -61,7 +61,7 @@ public sealed class PhysicalTrackWidthIntegrationTests
         var oldTrack = new Track(track.Segments, compatibility);
         var oldRider = StandingStartFixture.Rider(lane: 4);
         var newRider = StandingStartFixture.Rider(lane: 4);
-        oldRider.Speed = newRider.Speed = 18f;
+        oldRider.Speed = newRider.Speed = CornerTestSupport.Envelope(oldTrack, oldRider, StandingStartFixture.Perfect, index: 2).SpeedMetersPerSecond(1f / 3f) * 1.025f;
         oldRider.RestorePosition(CoreSim.Race.RiderPosition.Create(1, 2, 0f, track.Segments.Count));
         newRider.RestorePosition(CoreSim.Race.RiderPosition.Create(1, 2, 0f, track.Segments.Count));
         var oldChange = Assert.Single(StandingStartFixture.Resolve(
@@ -70,9 +70,9 @@ public sealed class PhysicalTrackWidthIntegrationTests
             track, new[] { newRider }, segment: 2).Changes);
         Assert.Equal(SegmentOutcome.Brake, oldChange.Outcome);
         Assert.Equal(SegmentOutcome.Ok, newChange.Outcome);
-        Assert.Equal(18f, oldChange.PhysicsSpeed, 5);
-        Assert.Equal(oldOuter, oldChange.Speed, 5);
-        Assert.Equal(18f, newChange.PhysicsSpeed, 5);
+        Assert.Equal(oldRider.Speed, oldChange.PhysicsSpeed, 5);
+        Assert.True(oldChange.Speed < oldChange.PhysicsSpeed);
+        Assert.Equal(newRider.Speed, newChange.PhysicsSpeed, 5);
     }
 
     [Fact]

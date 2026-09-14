@@ -152,40 +152,48 @@ public sealed class StandingStartSimulationTests
     }
 
     [Fact]
-    public void FirstTurnStillUsesExistingTurnEntryScrub()
+    public void FirstTurnNowUsesContinuousEnvelopeProfile()
     {
         var run = Run();
         var step = run.Steps[1];
-        Assert.All(step.Diagnostics, d => Assert.NotNull(d.TurnEntryScrubProfile));
+        Assert.All(step.Diagnostics, d => Assert.NotNull(d.ContinuousCornerProfile));
         var d = step.Diagnostics[0];
-        Assert.Equal(d.TravelledMeters * 0.5f,
-            d.TurnEntryScrubProfile!.Value.CarryDistanceMeters + d.TurnEntryScrubProfile.Value.DecelerationDistanceMeters, 4);
+        Assert.Equal(d.TravelledMeters,
+            d.ContinuousCornerProfile!.CarryDistanceMeters + d.ContinuousCornerProfile.CorrectionDistanceMeters, 4);
+        Assert.Null(d.TurnEntryScrubProfile);
     }
 
     [Fact]
-    public void StandingStartDoesNotChangeTurnEntryFormula()
+    public void StandingStartUsesCanonicalTurnEntryFormula()
     {
         var step = Run().Steps[1];
         foreach (var d in step.Diagnostics)
         {
             var rider = step.Snapshot.Rider(d.RiderId);
-            var safe = SegmentPhysics.MaxSafeTurnSpeed(rider.LateralPosition, step.Snapshot.Track.Geometry,
+            var change = step.Changes.Single(c => c.RiderId == d.RiderId);
+            var phase = d.CornerPhaseContext!.Value;
+            var e = ContinuousCornerEnvelope.Create(phase, rider.LateralPosition, step.Snapshot.Track.Geometry,
                 d.EntrySurface, rider.Profile.Skills, rider.ActiveSetup);
-            var deceleration = LongitudinalDynamics.CalculateCornerEntryDecelerationMetersPerSecondSquared(rider.Profile.Skills, d.EntrySurface);
-            Assert.Equal(LongitudinalDynamics.CalculateTurnEntryScrubProfile(rider.Speed, safe, deceleration, d.TravelledMeters), d.TurnEntryScrubProfile);
+            Assert.Equal(e.Traverse(change.PhysicsSpeed, phase.CornerProgress, d.TravelledMeters), d.ContinuousCornerProfile);
+            Assert.Null(d.TurnEntryScrubProfile);
+            Assert.Null(d.TurnExitDriveProfile);
         }
     }
 
     [Fact]
-    public void StandingStartDoesNotChangeTurnExitFormula()
+    public void StandingStartUsesCanonicalTurnExitFormula()
     {
         var step = Run().Steps[3];
         foreach (var d in step.Diagnostics)
         {
             var rider = step.Snapshot.Rider(d.RiderId);
             var change = step.Changes.Single(c => c.RiderId == d.RiderId);
-            Assert.Equal(LongitudinalDynamics.CalculateForceBasedTurnExitDriveProfile(change.PhysicsSpeed,
-                rider.Profile.Skills, rider.ActiveSetup, d.EntrySurface, d.TravelledMeters), d.TurnExitDriveProfile);
+            var phase = d.CornerPhaseContext!.Value;
+            var e = ContinuousCornerEnvelope.Create(phase, rider.LateralPosition, step.Snapshot.Track.Geometry,
+                d.EntrySurface, rider.Profile.Skills, rider.ActiveSetup);
+            Assert.Equal(e.Traverse(change.PhysicsSpeed, phase.CornerProgress, d.TravelledMeters), d.ContinuousCornerProfile);
+            Assert.Null(d.TurnEntryScrubProfile);
+            Assert.Null(d.TurnExitDriveProfile);
         }
     }
 

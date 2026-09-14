@@ -121,6 +121,7 @@ public sealed class StraightSpeedProfileTests
         var state = UniformState(track, PerfectSurface);
         var rider = Rider(1, lane: 1, lateralPosition: 1f, speed: 20f);
         var target = NextTurnApproachSpeed(track, state, rider, nextSegmentIndex: 1);
+        rider.Speed = target + 5f;
 
         var result = ResolveSingle(track, state, rider, targetLane: 1);
 
@@ -145,7 +146,11 @@ public sealed class StraightSpeedProfileTests
             segmentIndex: 3,
             requiredLaps: 2);
 
-        Assert.Equal(target, result.Change.Speed, 5);
+        var expected = LongitudinalDynamics.CalculateForceBasedStraightSpeedProfile(rider.Speed,
+            rider.Profile.Skills, rider.ActiveSetup, PerfectSurface,
+            LongitudinalDynamics.CalculateCornerEntryDecelerationMetersPerSecondSquared(rider.Profile.Skills, PerfectSurface),
+            track.Geometry.StraightLengthMeters, target);
+        Assert.Equal(expected.ExitSpeedMetersPerSecond, result.Change.Speed, 5);
         Assert.Equal(RiderRaceStatus.Racing, result.Change.Status);
     }
 
@@ -158,6 +163,8 @@ public sealed class StraightSpeedProfileTests
             1, lane: 1, lateralPosition: 1f, speed: 10f, lapNumber: 1, segmentIndex: 3, track);
         var finalRider = RiderAt(
             1, lane: 1, lateralPosition: 1f, speed: 10f, lapNumber: 2, segmentIndex: 3, track);
+        var target = NextTurnApproachSpeed(track, state, nonFinalRider, nextSegmentIndex: 0);
+        nonFinalRider.Speed = finalRider.Speed = target + 5f;
 
         var nonFinal = ResolveSingle(
             track, state, nonFinalRider, 1, lapIndex: 0, segmentIndex: 3, requiredLaps: 2);
@@ -369,27 +376,16 @@ public sealed class StraightSpeedProfileTests
     [Fact]
     public void TurnExitDriveConvergesBeyondFormerCeiling()
     {
-        var geometry = new TrackGeometry(
-            straightLengthMeters: 60f,
-            innerRadiusMeters: 24f,
-            laneSpacingMeters: 1f,
-            turnSegmentAngleRadians: 200f);
+        var geometry = new TrackGeometry(60f, 24f, 1f, 1000f);
         var track = new Track(new[] { new TrackSegment(0, SegmentType.TurnExit) }, geometry);
-        var state = UniformState(track, PerfectSurface);
-        var rider = Rider(1, lane: 1, lateralPosition: 1f, speed: 10f);
-
-        var result = ResolveSingle(track, state, rider, targetLane: 1);
-
+        var rider = Rider(1, 1, 1f, 10f);
+        var result = ResolveSingle(track, UniformState(track, PerfectSurface), rider, 1);
+        var e = CornerTestSupport.Envelope(track, rider);
+        var p = e.Traverse(rider.Speed, 0f, e.TotalLengthMeters);
         Assert.Equal(SegmentOutcome.Ok, result.Change.Outcome);
-        var profile = LongitudinalDynamics.CalculateForceBasedTurnExitDriveProfile(
-            rider.Speed,
-            rider.Profile.Skills,
-            rider.ActiveSetup,
-            PerfectSurface,
-            LaneModel.SegmentLengthMeters(track.Segments[0], rider.LateralPosition, geometry));
-        Assert.Equal(profile.ExitSpeedMetersPerSecond, result.Change.Speed, 5);
+        Assert.Equal(p.ExitSpeedMetersPerSecond, result.Change.Speed, 5);
         Assert.True(result.Change.Speed > 23f);
-        Assert.InRange(Math.Abs(result.Change.Speed - profile.FullDriveEquilibriumSpeedMetersPerSecond), 0f, 0.001f);
+        Assert.InRange(MathF.Abs(result.Change.Speed - p.FullDriveEquilibriumSpeedMetersPerSecond), 0f, .001f);
     }
 
     [Fact]
@@ -576,24 +572,7 @@ public sealed class StraightSpeedProfileTests
         int nextSegmentIndex)
     {
         var surface = state.Snapshot().SampleSurface(nextSegmentIndex, rider.LateralPosition);
-        var settledSafeSpeed = SegmentPhysics.MaxSafeTurnSpeed(
-            rider.LateralPosition,
-            track.Geometry,
-            surface,
-            rider.Profile.Skills,
-            rider.ActiveSetup);
-        var scrubDeceleration = LongitudinalDynamics
-            .CalculateCornerEntryDecelerationMetersPerSecondSquared(
-                rider.Profile.Skills,
-                surface);
-        var turnEntryLength = LaneModel.SegmentLengthMeters(
-            track.Segments[nextSegmentIndex],
-            rider.LateralPosition,
-            track.Geometry);
-        return LongitudinalDynamics.CalculateMaximumTurnEntryApproachSpeedMetersPerSecond(
-            settledSafeSpeed,
-            scrubDeceleration,
-            turnEntryLength);
+        return CornerTestSupport.Envelope(track, rider, surface, nextSegmentIndex).SpeedMetersPerSecond(0f);
     }
 
     private static float Equilibrium(RiderState rider, bool turnExit = false)

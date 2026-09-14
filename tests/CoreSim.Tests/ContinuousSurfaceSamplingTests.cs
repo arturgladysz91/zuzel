@@ -166,7 +166,7 @@ public sealed class ContinuousSurfaceSamplingTests
         var goodState = SurfaceState(goodSurface, goodSurface);
         var badState = SurfaceState(badSurface, badSurface);
         var sample = badState.Snapshot().SampleSurface(0, entryPosition);
-        var maxOnBadSurface = SegmentPhysics.MaxSafeTurnSpeed(
+        var maxOnBadSurface = CornerTestSupport.SingleEnvelopeSpeed(
             entryPosition,
             geometry,
             sample,
@@ -209,7 +209,8 @@ public sealed class ContinuousSurfaceSamplingTests
 
         var change = ResolveSingle(segment, geometry, state, rider, targetLane: 2);
         var travelled = LaneModel.SegmentLengthMeters(segment, entryPosition, geometry);
-        var segmentTravelTime = travelled / entrySpeed;
+        var segmentTravelTime = CornerTestSupport.Envelope(new Track(new[] { segment }, geometry), rider, sampledSurface)
+            .Traverse(entrySpeed, 0f, travelled).TravelTimeSeconds;
         var expected = LateralMovementModel.MoveTowards(
             entryPosition,
             resolvedLane: 2,

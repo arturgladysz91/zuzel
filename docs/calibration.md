@@ -130,7 +130,7 @@ roadmap text in the historical #32 report assigned tuning to #33; the revised
 specification supersedes that plan. Empirical performance tuning remains future
 work.
 
-## Continuous corner-speed correction observation (#34)
+## Continuous corner-speed correction observation (#34, historical)
 
 The [continuous-correction impact report](calibration/continuous-corner-correction-impact.md)
 is generated deterministically from the production simulation path. It validates
@@ -143,8 +143,9 @@ Calibration step samples append nullable correction entry/target/exit speed,
 phase time, required/actual/remaining distance, effective deceleration and
 target-reached fields. Existing columns retain their order, invariant culture,
 decimal point, stable rider order and `\n`; null remains empty. Diagnostic total
-travel time is the actual final elapsed delta even when scrub, correction and
-TurnExit drive coexist.
+travel time was the actual final elapsed delta even when the then-current scrub,
+correction and TurnExit drive coexisted. #38 supersedes those phase bridges in
+ADVANCED production while preserving this artifact.
 
 Regenerate with:
 
@@ -183,9 +184,10 @@ and shares only its unchanged rider-telemetry projection with the suite.
 Corner transitions and RunWide retention are measured by calls to
 `SegmentPhysics.Apply`, not copied threshold equations. At outer lane 4 no
 recoverable RunWide band exists: production crashes instead, and the corresponding
-observation is absent. TurnEntry scrub precedes correction; TurnMiddle has no
-drive; TurnExit drives only after a reached correction target and only on its
-remaining distance. Crash probes preserve production half-distance semantics.
+observation is absent. The historical #35 baseline captured TurnEntry scrub,
+TurnMiddle carry and segment-gated TurnExit drive. Current #38 scenarios use a
+full logical-corner fixture and the continuous production traversal instead.
+Crash probes preserve production half-distance semantics.
 Requested HoldLane geometry probes never overwrite a resolved lateral position;
 the report prints observed min/max lateral positions to disclose any deviation.
 
@@ -265,3 +267,23 @@ The before capture must be produced on the exact base SHA with
 calibration-scenarios-report and that same base SHA argument. The generator
 refuses any scenario-byte difference. The report is observation only: no
 longitudinal, corner, start, contact, lateral or surface constant is changed.
+
+## Continuous corner envelope calibration (#38)
+
+The [#38 impact report](calibration/continuous-corner-envelope-impact.md) is
+regenerated from the final 197-scenario production suite and the unchanged
+`pge-v1` dataset. The complete base capture had 186 scenarios; new families are
+`continuous_corner/progress/*`, the bounded extreme production heat and the
+outermost-line extreme diagnostic. A0 keeps 16 m/s, while B17/B18/B19 change
+only the ADVANCED settled/apex reference. B19 is selected at 19 m/s; the report
+lists every frozen constant and the remaining telemetry/geometry gap.
+
+Regenerate from the repository root:
+
+```text
+dotnet run --project src/Sandbox/Sandbox.csproj --configuration Release -- \
+  continuous-corner-envelope-impact-report \
+  data/calibration/pge/v1 \
+  c06f632e04c72d119e5cf925f9f08a8e4ee6a9d6e2dde4c01491a462f8165417 \
+  docs/calibration/continuous-corner-envelope-impact.md
+```
