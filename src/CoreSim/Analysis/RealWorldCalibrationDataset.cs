@@ -189,6 +189,28 @@ public sealed class RealWorldCalibrationDataset
         return new RealWorldCalibrationDataset(rows);
     }
 
+    /// <summary>
+    /// Creates an independently validated immutable dataset from one exact
+    /// season/source-label selector. No aliases, team inference or mutation are
+    /// applied, and all distributions are rebuilt from the selected rows.
+    /// </summary>
+    public RealWorldCalibrationDataset FilterByExactVenue(int season, string sourceTrackLabel)
+    {
+        if (season <= 0)
+            throw new ArgumentOutOfRangeException(nameof(season));
+        ArgumentException.ThrowIfNullOrWhiteSpace(sourceTrackLabel);
+        var selected = _rows.Where(row => row.Season == season
+            && StringComparer.Ordinal.Equals(row.SourceTrackLabel, sourceTrackLabel)).ToArray();
+        if (selected.Length == 0)
+        {
+            throw new InvalidOperationException(
+                $"No observations match exact season {season} and source_track_label '{sourceTrackLabel}'.");
+        }
+
+        ValidateRows(selected);
+        return new RealWorldCalibrationDataset(selected);
+    }
+
     private static readonly string[] RequiredColumns =
     {
         "match_id", "date", "season", "league", "source_track_label", "heat_no", "heat_uid", "rider_id",

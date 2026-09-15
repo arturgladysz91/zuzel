@@ -287,3 +287,45 @@ dotnet run --project src/Sandbox/Sandbox.csproj --configuration Release -- \
   c06f632e04c72d119e5cf925f9f08a8e4ee6a9d6e2dde4c01491a462f8165417 \
   docs/calibration/continuous-corner-envelope-impact.md
 ```
+
+## Motoarena matched-venue calibration foundation (#39)
+
+The [Motoarena matched-venue report](calibration/motoarena-matched-venue.md)
+measures the frozen #38 production path on a concrete calibration geometry:
+published 318 m track length, two 62 m straights, 31 m reference-radius
+approximation, 12 m straight widths, and current published first/second bend
+widths of 17.0/16.2 m. Because production `TrackGeometry` has one symmetric
+turn width, the primary fixture transparently uses their 16.6 m arithmetic
+mean. This is classified as
+`DerivedSymmetricWidthApproximationFromCurrentPublishedBendWidths`, not as a
+published dimension. Production physics receives only the existing
+`TrackGeometry`; venue identity remains in `CoreSim.Analysis`.
+
+The real-data subset uses exact ordinal selection only:
+`season == 2026`, `league == "PGEE"`, and
+`source_track_label == "Motoarena im. Mariana Rosego"`. The 2025 `Toruń` label
+is not inferred as an alias. Subset distributions reuse the sole deterministic
+quantile contract and leave `CleanPhysics` unchanged.
+
+The public radius convention and start-line offset are not verified. The report
+therefore labels 31 m as
+`ExternalPublishedRadius / MeasurementConventionNotExplicitlyVerified`, uses a
+provisional 31/31 m home-straight split with 25/37 and 37/25 sensitivity checks,
+and treats L1 as `StartLineSensitiveContext`. Both corners remain a
+`SymmetricGeometryApproximation`; banking is known missing venue physics. The
+report includes 16.2/16.6/17.0 m symmetric-width sensitivity, retaining the
+older article's general 18 m bend width only as `OlderArticleReferenceOnly`.
+The historical 56.50 s record is context only.
+
+Regenerate offline from the repository root:
+
+```text
+dotnet run --project src/Sandbox/Sandbox.csproj --configuration Release -- \
+  motoarena-matched-venue-report \
+  data/calibration/pge/v1 \
+  docs/calibration/motoarena-matched-venue.md
+```
+
+#39 changes no production physics constant and performs no tuning. The complete
+`data/calibration/pge/v1` snapshot and all historical calibration reports remain
+byte-identical.
