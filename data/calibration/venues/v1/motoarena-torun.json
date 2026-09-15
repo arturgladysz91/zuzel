@@ -1,0 +1,89 @@
+{
+  "venue_id": "pge-2026-motoarena-torun",
+  "display_name": "Motoarena im. Mariana Rosego — Toruń",
+  "dataset_selector": {
+    "season": 2026,
+    "league": "PGEE",
+    "source_track_label": "Motoarena im. Mariana Rosego",
+    "matching": "exact ordinal; no alias inference"
+  },
+  "published_geometry": {
+    "track_length_m": 318,
+    "straight_length_m_each": 62,
+    "bend_radius_m": 31,
+    "starting_straight_width_m": 12,
+    "back_straight_width_m": 12,
+    "first_bend_width_m": 17.0,
+    "second_bend_width_m": 16.2,
+    "surface": "granite"
+  },
+  "modeled_geometry": {
+    "symmetric_turn_width_m": 16.6,
+    "classification": "DerivedSymmetricWidthApproximationFromCurrentPublishedBendWidths",
+    "derivation": "arithmetic mean of current published first and second bend widths: (17.0 + 16.2) / 2",
+    "preserves": "aggregate full-lap lateral path-length contribution for the same normalized lateral position in the current symmetric representation",
+    "does_not_preserve": [
+      "local radius of either bend",
+      "local safe speed",
+      "banking",
+      "first/second-corner asymmetry"
+    ]
+  },
+  "sources": {
+    "current_2026_primary": {
+      "publisher": "Speedway Ekstraliga",
+      "title": "PRES GRUPA DEWELOPERSKA Toruń — info — 2026",
+      "used_for": [
+        "track length 318.0 m",
+        "starting straight width 12.0 m",
+        "back straight width 12.0 m",
+        "first bend width 17.0 m",
+        "second bend width 16.2 m",
+        "record 56.500 s — Jack Holder"
+      ]
+    },
+    "supporting_geometry_history": {
+      "publisher": "Speedway Ekstraliga",
+      "title": "Czy podczas PGE IMME im. Zenona Plecha padnie nowy rekord toru?",
+      "used_for": [
+        "straight length 62 m each",
+        "bend radius 31 m",
+        "history of second-corner change before 2017"
+      ],
+      "older_general_bend_width_m": 18.0,
+      "older_general_bend_width_classification": "OlderArticleReferenceOnly"
+    },
+    "conflict_resolution": "The older article's general 18 m bend width is not canonical for 2026. The current official 2026 card's 17.0/16.2 m bend widths take precedence.",
+    "reference_note": "Published dimensions were supplied as externally verified task input; report generation performs no network access."
+  },
+  "confidence": {
+    "track_length": "ExternalPublished",
+    "straight_length": "ExternalPublished",
+    "bend_radius": "ExternalPublishedRadius / MeasurementConventionNotExplicitlyVerified",
+    "straight_widths": "Current2026ExternalPublished",
+    "bend_widths": "Current2026ExternalPublishedAsymmetric",
+    "modeled_turn_width": "DerivedSymmetricWidthApproximationFromCurrentPublishedBendWidths",
+    "surface": "ExternalPublished",
+    "start_line": "ProvisionalStartLineSplit",
+    "corner_symmetry": "SymmetricGeometryApproximation"
+  },
+  "assumptions": {
+    "primary_start_to_first_corner_m": 31,
+    "primary_finish_half_m": 31,
+    "start_split_sensitivity_m": [
+      [25, 37],
+      [31, 31],
+      [37, 25]
+    ],
+    "radius_model_use": "31 m is used as the inner reference-radius approximation; its public measurement convention is not asserted identical to the model convention.",
+    "turn_width_model_use": "16.6 m is the arithmetic mean of current published 17.0/16.2 m bend widths. It is a modeled proxy, not a published dimension.",
+    "corner_shape": "Both 180-degree logical corners use one symmetric radius and one symmetric 16.6 m width although current published widths differ and the supporting source reports that the second corner changed before 2017.",
+    "banking": "Known missing venue physics; not modeled in PR #39."
+  },
+  "historical_context": {
+    "track_record_s": 56.500,
+    "rider": "Jack Holder",
+    "year": 2017,
+    "classification": "HistoricalContext; not a calibration target"
+  }
+}
