@@ -254,7 +254,8 @@ public sealed class MotoarenaMatchedVenueCalibrationTests
     [Fact]
     public void ReportIsCommittedByteStableLfOnlyAndCultureIndependent()
     {
-        var expected = File.ReadAllText(Path.Combine(Root, "docs", "calibration", "motoarena-matched-venue.md"));
+        var expected = File.ReadAllText(Path.Combine(Root, "docs", "calibration", "motoarena-matched-venue.md"))
+            .Replace("\r\n", "\n", StringComparison.Ordinal).Replace('\r', '\n');
         string Render(string culture)
         {
             var prior = CultureInfo.CurrentCulture;
