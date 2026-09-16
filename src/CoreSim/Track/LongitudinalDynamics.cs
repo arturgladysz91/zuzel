@@ -15,7 +15,12 @@ public readonly record struct StraightSpeedProfile(
     float CruiseDistanceMeters,
     float DecelerationDistanceMeters,
     // Null only for the non-production constant-acceleration compatibility utility.
-    float? FullDriveEquilibriumSpeedMetersPerSecond = null);
+    float? FullDriveEquilibriumSpeedMetersPerSecond = null)
+{
+    // Populated only by the internal #41 experiment path. The default production
+    // profile remains allocation-free and keeps its public contract unchanged.
+    internal IReadOnlyList<StraightDriveStepObservation>? CalibrationSteps { get; init; }
+}
 
 /// <summary>
 /// Deterministic signed full-drive traversal of one eligible advanced TurnExit.
@@ -399,6 +404,23 @@ public static class LongitudinalDynamics
         return result;
     }
 
+    internal static float CalculateStraightDriveEnvelopeMultiplier(
+        float speedMetersPerSecond,
+        BikeSetup setup,
+        StraightDriveEnvelopeAdjustment adjustment)
+    {
+        var baseline = CalculatePositiveDriveEnvelopeMultiplier(speedMetersPerSecond, setup);
+        if (adjustment.IsProductionBaseline)
+            return baseline;
+
+        var result = (float)Math.Clamp(
+            (double)baseline + adjustment.Delta(speedMetersPerSecond),
+            0d,
+            1d);
+        ValidateNonNegativeFinite(result, "result");
+        return result;
+    }
+
     public static float CalculateTurnExitDriveEnvelopeMultiplier(
         float speedMetersPerSecond,
         BikeSetup setup)
@@ -547,6 +569,36 @@ public static class LongitudinalDynamics
             ProvisionalNominalSystemMassKilograms);
     }
 
+    internal static float CalculateStraightNetDriveAccelerationMetersPerSecondSquared(
+        float speedMetersPerSecond,
+        float referenceAvailableDriveForceNewtons,
+        BikeSetup setup,
+        StraightDriveEnvelopeAdjustment adjustment)
+    {
+        if (adjustment.IsProductionBaseline)
+        {
+            return CalculateNetDriveAccelerationMetersPerSecondSquared(
+                speedMetersPerSecond,
+                referenceAvailableDriveForceNewtons,
+                setup);
+        }
+
+        ValidateNonNegativeFinite(speedMetersPerSecond, nameof(speedMetersPerSecond));
+        ValidateNonNegativeFinite(
+            referenceAvailableDriveForceNewtons,
+            nameof(referenceAvailableDriveForceNewtons));
+        ArgumentNullException.ThrowIfNull(setup);
+        var envelope = CalculateStraightDriveEnvelopeMultiplier(
+            speedMetersPerSecond,
+            setup,
+            adjustment);
+        var availableDriveForceNewtons = (float)(referenceAvailableDriveForceNewtons * (double)envelope);
+        return CalculateAccelerationFromForcesMetersPerSecondSquared(
+            availableDriveForceNewtons,
+            CalculateLongitudinalResistanceForceNewtons(speedMetersPerSecond),
+            ProvisionalNominalSystemMassKilograms);
+    }
+
     public static float CalculateMidpointDriveEndSpeedMetersPerSecond(
         float currentSpeedMetersPerSecond,
         float stepDistanceMeters,
@@ -567,6 +619,75 @@ public static class LongitudinalDynamics
             midpointSpeed, referenceAvailableDriveForceNewtons, setup) * netDriveAvailability;
         return ApplySignedAccelerationOverDistance(
             currentSpeedMetersPerSecond, accelerationAtMidpoint, stepDistanceMeters);
+    }
+
+    private static StraightDriveStepObservation CalculateStraightMidpointDriveStep(
+        float startDistanceMeters,
+        float currentSpeedMetersPerSecond,
+        float stepDistanceMeters,
+        float referenceAvailableDriveForceNewtons,
+        BikeSetup setup,
+        StraightDriveEnvelopeAdjustment adjustment,
+        float? allowedEndSpeedMetersPerSecond,
+        float preparationDecelerationMetersPerSecondSquared)
+    {
+        var accelerationAtStart = CalculateStraightNetDriveAccelerationMetersPerSecondSquared(
+            currentSpeedMetersPerSecond,
+            referenceAvailableDriveForceNewtons,
+            setup,
+            adjustment);
+        var predictedSpeed = ApplySignedAccelerationOverDistance(
+            currentSpeedMetersPerSecond,
+            accelerationAtStart,
+            stepDistanceMeters);
+        var midpointSpeed = (float)(((double)currentSpeedMetersPerSecond + predictedSpeed) * 0.5d);
+        var accelerationAtMidpoint = CalculateStraightNetDriveAccelerationMetersPerSecondSquared(
+            midpointSpeed,
+            referenceAvailableDriveForceNewtons,
+            setup,
+            adjustment);
+        var fullDriveExitSpeed = adjustment.IsProductionBaseline
+            ? CalculateMidpointDriveEndSpeedMetersPerSecond(
+                currentSpeedMetersPerSecond,
+                stepDistanceMeters,
+                referenceAvailableDriveForceNewtons,
+                setup)
+            : ApplySignedAccelerationOverDistance(
+                currentSpeedMetersPerSecond,
+                accelerationAtMidpoint,
+                stepDistanceMeters);
+        var preparationReachableSpeed = DecelerateOverDistance(
+            currentSpeedMetersPerSecond,
+            preparationDecelerationMetersPerSecondSquared,
+            stepDistanceMeters);
+        var exitSpeed = ApplyPreparationBoundary(
+            currentSpeedMetersPerSecond,
+            fullDriveExitSpeed,
+            stepDistanceMeters,
+            preparationDecelerationMetersPerSecondSquared,
+            allowedEndSpeedMetersPerSecond);
+        var experimentalEnvelope = CalculateStraightDriveEnvelopeMultiplier(
+            midpointSpeed,
+            setup,
+            adjustment);
+        var availableDriveForce = (float)(referenceAvailableDriveForceNewtons * (double)experimentalEnvelope);
+
+        return new StraightDriveStepObservation(
+            startDistanceMeters,
+            startDistanceMeters + stepDistanceMeters,
+            currentSpeedMetersPerSecond,
+            predictedSpeed,
+            midpointSpeed,
+            fullDriveExitSpeed,
+            exitSpeed,
+            CalculatePositiveDriveEnvelopeMultiplier(midpointSpeed, setup),
+            experimentalEnvelope,
+            availableDriveForce,
+            CalculateLongitudinalResistanceForceNewtons(midpointSpeed),
+            accelerationAtMidpoint,
+            allowedEndSpeedMetersPerSecond,
+            preparationReachableSpeed,
+            exitSpeed < fullDriveExitSpeed - LongitudinalPhaseSpeedToleranceMetersPerSecond);
     }
 
     // Pure zero-drive aggregate resistance, NOT a final engine-braking model and
@@ -615,6 +736,46 @@ public static class LongitudinalDynamics
             else
                 upper = midpoint;
         }
+        return (float)((lower + upper) * 0.5d);
+    }
+
+    internal static float CalculateStraightFullDriveEquilibriumSpeedMetersPerSecond(
+        float referenceAvailableDriveForceNewtons,
+        BikeSetup setup,
+        StraightDriveEnvelopeAdjustment adjustment)
+    {
+        if (adjustment.IsProductionBaseline)
+            return CalculateFullDriveEquilibriumSpeedMetersPerSecond(referenceAvailableDriveForceNewtons, setup);
+
+        ValidateNonNegativeFinite(referenceAvailableDriveForceNewtons, nameof(referenceAvailableDriveForceNewtons));
+        ArgumentNullException.ThrowIfNull(setup);
+        var netAtRest = CalculateStraightNetDriveAccelerationMetersPerSecondSquared(
+            0f,
+            referenceAvailableDriveForceNewtons,
+            setup,
+            adjustment);
+        if (netAtRest < 0f)
+            throw new ArgumentOutOfRangeException(nameof(referenceAvailableDriveForceNewtons));
+        if (netAtRest == 0f)
+            return 0f;
+
+        var fadeRate = CalculateDriveForceFadeRatePerMeterPerSecond(setup);
+        var lower = 0d;
+        var upper = ProvisionalPositiveDriveReferenceSpeedMetersPerSecond + 1d / fadeRate;
+        for (var iteration = 0; iteration < 64
+             && upper - lower > EquilibriumSolverSpeedToleranceMetersPerSecond; iteration++)
+        {
+            var midpoint = (lower + upper) * 0.5d;
+            if (CalculateStraightNetDriveAccelerationMetersPerSecondSquared(
+                    (float)midpoint,
+                    referenceAvailableDriveForceNewtons,
+                    setup,
+                    adjustment) > 0f)
+                lower = midpoint;
+            else
+                upper = midpoint;
+        }
+
         return (float)((lower + upper) * 0.5d);
     }
 
@@ -1019,6 +1180,44 @@ public static class LongitudinalDynamics
         float cornerEntryDecelerationMetersPerSecondSquared,
         float distanceMeters,
         float? targetExitSpeedMetersPerSecond = null)
+        => CalculateForceBasedStraightSpeedProfileCore(
+            initialSpeedMetersPerSecond,
+            skills,
+            setup,
+            surface,
+            cornerEntryDecelerationMetersPerSecondSquared,
+            distanceMeters,
+            targetExitSpeedMetersPerSecond,
+            null);
+
+    internal static StraightSpeedProfile CalculateForceBasedStraightSpeedProfile(
+        float initialSpeedMetersPerSecond,
+        RiderSkills skills,
+        BikeSetup setup,
+        TrackSurfaceState surface,
+        float cornerEntryDecelerationMetersPerSecondSquared,
+        float distanceMeters,
+        float? targetExitSpeedMetersPerSecond,
+        StraightDriveEnvelopeAdjustment adjustment)
+        => CalculateForceBasedStraightSpeedProfileCore(
+            initialSpeedMetersPerSecond,
+            skills,
+            setup,
+            surface,
+            cornerEntryDecelerationMetersPerSecondSquared,
+            distanceMeters,
+            targetExitSpeedMetersPerSecond,
+            adjustment);
+
+    private static StraightSpeedProfile CalculateForceBasedStraightSpeedProfileCore(
+        float initialSpeedMetersPerSecond,
+        RiderSkills skills,
+        BikeSetup setup,
+        TrackSurfaceState surface,
+        float cornerEntryDecelerationMetersPerSecondSquared,
+        float distanceMeters,
+        float? targetExitSpeedMetersPerSecond,
+        StraightDriveEnvelopeAdjustment? adjustment)
     {
         ValidateNonNegativeFinite(initialSpeedMetersPerSecond, nameof(initialSpeedMetersPerSecond));
         ArgumentNullException.ThrowIfNull(skills);
@@ -1034,7 +1233,12 @@ public static class LongitudinalDynamics
             skills,
             setup,
             surface);
-        var equilibrium = CalculateFullDriveEquilibriumSpeedMetersPerSecond(referenceAvailableDriveForceNewtons, setup);
+        var equilibrium = adjustment is { } experimentalAdjustment
+            ? CalculateStraightFullDriveEquilibriumSpeedMetersPerSecond(
+                referenceAvailableDriveForceNewtons,
+                setup,
+                experimentalAdjustment)
+            : CalculateFullDriveEquilibriumSpeedMetersPerSecond(referenceAvailableDriveForceNewtons, setup);
 
         if (distanceMeters == 0f)
         {
@@ -1045,7 +1249,12 @@ public static class LongitudinalDynamics
                 0f,
                 0f,
                 0f,
-                equilibrium);
+                equilibrium)
+            {
+                CalibrationSteps = adjustment.HasValue
+                    ? Array.AsReadOnly(Array.Empty<StraightDriveStepObservation>())
+                    : null,
+            };
         }
 
         var integrationStepsMeters = CreateLongitudinalIntegrationSteps(distanceMeters);
@@ -1063,21 +1272,46 @@ public static class LongitudinalDynamics
         var cruiseDistanceMeters = 0d;
         var decelerationDistanceMeters = 0d;
         var lastPhase = StraightDistancePhase.Cruise;
+        var distanceProgressMeters = 0f;
+        var calibrationSteps = adjustment.HasValue
+            ? new List<StraightDriveStepObservation>(integrationStepsMeters.Length)
+            : null;
 
         for (var stepIndex = 0; stepIndex < integrationStepsMeters.Length; stepIndex++)
         {
             var stepDistanceMeters = (float)integrationStepsMeters[stepIndex];
-            var fullDriveEndSpeedMetersPerSecond =
-                CalculateMidpointDriveEndSpeedMetersPerSecond(
-                currentSpeedMetersPerSecond,
-                stepDistanceMeters,
-                referenceAvailableDriveForceNewtons,
-                setup);
-
-            var endSpeedMetersPerSecond = ApplyPreparationBoundary(
-                currentSpeedMetersPerSecond, fullDriveEndSpeedMetersPerSecond, stepDistanceMeters,
-                cornerEntryDecelerationMetersPerSecondSquared,
-                allowedSpeedEnvelope is null ? null : (float)allowedSpeedEnvelope[stepIndex + 1]);
+            var allowedEndSpeed = allowedSpeedEnvelope is null
+                ? (float?)null
+                : (float)allowedSpeedEnvelope[stepIndex + 1];
+            float endSpeedMetersPerSecond;
+            if (adjustment is { } activeAdjustment)
+            {
+                var observedStep = CalculateStraightMidpointDriveStep(
+                    distanceProgressMeters,
+                    currentSpeedMetersPerSecond,
+                    stepDistanceMeters,
+                    referenceAvailableDriveForceNewtons,
+                    setup,
+                    activeAdjustment,
+                    allowedEndSpeed,
+                    cornerEntryDecelerationMetersPerSecondSquared);
+                calibrationSteps!.Add(observedStep);
+                endSpeedMetersPerSecond = observedStep.ExitSpeedMetersPerSecond;
+            }
+            else
+            {
+                var fullDriveEndSpeedMetersPerSecond = CalculateMidpointDriveEndSpeedMetersPerSecond(
+                    currentSpeedMetersPerSecond,
+                    stepDistanceMeters,
+                    referenceAvailableDriveForceNewtons,
+                    setup);
+                endSpeedMetersPerSecond = ApplyPreparationBoundary(
+                    currentSpeedMetersPerSecond,
+                    fullDriveEndSpeedMetersPerSecond,
+                    stepDistanceMeters,
+                    cornerEntryDecelerationMetersPerSecondSquared,
+                    allowedEndSpeed);
+            }
 
             var speedSumMetersPerSecond =
                 (double)currentSpeedMetersPerSecond + endSpeedMetersPerSecond;
@@ -1107,6 +1341,7 @@ public static class LongitudinalDynamics
             }
 
             currentSpeedMetersPerSecond = endSpeedMetersPerSecond;
+            distanceProgressMeters += stepDistanceMeters;
             peakSpeedMetersPerSecond = Math.Max(
                 peakSpeedMetersPerSecond,
                 currentSpeedMetersPerSecond);
@@ -1129,7 +1364,12 @@ public static class LongitudinalDynamics
             (float)accelerationDistanceMeters,
             (float)cruiseDistanceMeters,
             (float)decelerationDistanceMeters,
-            equilibrium);
+            equilibrium)
+        {
+            CalibrationSteps = calibrationSteps is null
+                ? null
+                : Array.AsReadOnly(calibrationSteps.ToArray()),
+        };
     }
 
     /// <summary>

@@ -504,14 +504,25 @@ public sealed class SimulationEngine
                 .CalculateCornerEntryDecelerationMetersPerSecondSquared(
                     rider.Profile.Skills,
                     surface);
-            straightProfile = LongitudinalDynamics.CalculateForceBasedStraightSpeedProfile(
-                resolution.Speed,
-                rider.Profile.Skills,
-                rider.ActiveSetup,
-                surface,
-                cornerEntryDeceleration,
-                travelled,
-                ResolveImmediateNextTurnApproachSpeed(snapshot, rider));
+            var targetExitSpeed = ResolveImmediateNextTurnApproachSpeed(snapshot, rider);
+            straightProfile = options.StraightDriveEnvelopeAdjustment is { } adjustment
+                ? LongitudinalDynamics.CalculateForceBasedStraightSpeedProfile(
+                    resolution.Speed,
+                    rider.Profile.Skills,
+                    rider.ActiveSetup,
+                    surface,
+                    cornerEntryDeceleration,
+                    travelled,
+                    targetExitSpeed,
+                    adjustment)
+                : LongitudinalDynamics.CalculateForceBasedStraightSpeedProfile(
+                    resolution.Speed,
+                    rider.Profile.Skills,
+                    rider.ActiveSetup,
+                    surface,
+                    cornerEntryDeceleration,
+                    travelled,
+                    targetExitSpeed);
             speed = straightProfile.Value.ExitSpeedMetersPerSecond;
         }
         float segmentElapsedTimeSeconds;

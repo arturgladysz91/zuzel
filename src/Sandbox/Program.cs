@@ -6,6 +6,13 @@ using CoreSim.Setup;
 
 if (args.Length > 0)
 {
+    if (args.Length == 2 && StringComparer.Ordinal.Equals(args[0], "straight-drive-envelope-experiment-report"))
+    {
+        StraightDriveEnvelopeExperimentReportWriter.Write(args[1]);
+        Console.WriteLine($"Wrote deterministic straight drive-envelope experiment report: {args[1]}");
+        return;
+    }
+
     if (args.Length == 3 && StringComparer.Ordinal.Equals(args[0], "real-start-telemetry-report"))
     {
         RealStartTelemetryReportWriter.Write(args[1], args[2]);
@@ -77,6 +84,7 @@ if (args.Length > 0)
     }
 
     Console.Error.WriteLine("Usage:");
+    Console.Error.WriteLine("  Sandbox straight-drive-envelope-experiment-report <output-markdown>");
     Console.Error.WriteLine("  Sandbox motoarena-matched-venue-report <dataset-directory> <output-markdown>");
     Console.Error.WriteLine("  Sandbox continuous-corner-envelope-impact-report <dataset-directory> <after-scenario-sha256> <output-markdown>");
     Console.Error.WriteLine("  Sandbox longitudinal-speed-envelope-snapshot <source-sha> <output-json>");

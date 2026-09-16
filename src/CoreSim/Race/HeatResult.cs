@@ -82,6 +82,10 @@ public sealed record HeatSimulationOptions
     public float IncidentFrequency { get; init; } = 1f;
     public bool EnableLogging { get; init; } = true;
 
+    // Calibration-only; deliberately unavailable to gameplay callers outside
+    // CoreSim. Null preserves the reviewed production path exactly.
+    internal StraightDriveEnvelopeAdjustment? StraightDriveEnvelopeAdjustment { get; init; }
+
     public void Validate()
     {
         if (Laps <= 0)
