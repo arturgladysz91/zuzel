@@ -12,7 +12,8 @@ public sealed class ContinuousCornerEnvelopeImpactReportTests
     public void ReportIsByteStableLfOnlyAndCultureIndependent()
     {
         var expected = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "docs", "calibration",
-            "continuous-corner-envelope-impact.md"));
+            "continuous-corner-envelope-impact.md"))
+            .Replace("\r\n", "\n", StringComparison.Ordinal).Replace('\r', '\n');
         var csv = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "data", "calibration", "pge", "v1",
             "pge_rider_heats.csv"));
         var dataset = RealWorldCalibrationDataset.ParseCsv(csv);

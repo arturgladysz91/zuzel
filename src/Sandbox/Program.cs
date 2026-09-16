@@ -6,6 +6,13 @@ using CoreSim.Setup;
 
 if (args.Length > 0)
 {
+    if (args.Length == 3 && StringComparer.Ordinal.Equals(args[0], "real-start-telemetry-report"))
+    {
+        RealStartTelemetryReportWriter.Write(args[1], args[2]);
+        Console.WriteLine($"Wrote deterministic real-start telemetry report: {args[2]}");
+        return;
+    }
+
     if (args.Length == 3 && StringComparer.Ordinal.Equals(args[0], "motoarena-matched-venue-report"))
     {
         MotoarenaMatchedVenueReportWriter.Write(args[1], args[2]);
