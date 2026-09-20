@@ -86,6 +86,10 @@ public sealed record HeatSimulationOptions
     // CoreSim. Null preserves the reviewed production path exactly.
     internal StraightDriveEnvelopeAdjustment? StraightDriveEnvelopeAdjustment { get; init; }
 
+    // Calibration-only #42 corner-force experiment. Null preserves the
+    // reviewed post-#41 production path exactly and is not a gameplay option.
+    internal CornerReducedDriveResistanceAdjustment? CornerReducedDriveResistanceAdjustment { get; init; }
+
     public void Validate()
     {
         if (Laps <= 0)

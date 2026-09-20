@@ -481,8 +481,12 @@ public sealed class SimulationEngine
                 && resolution.ContinuousCorrectionTargetSpeedMetersPerSecond is { } retainedTarget
                 ? MathF.Max(0f, retainedTarget - envelope.SpeedMetersPerSecond(phase.CornerProgress))
                 : 0f;
-            continuousCornerProfile = envelope.Traverse(resolution.Speed, phase.CornerProgress, travelled,
-                allowDrive, allowCorrection, retainedOverspeed);
+            continuousCornerProfile = options.CornerReducedDriveResistanceAdjustment is { } adjustment
+                ? envelope.TraverseWithReducedDriveResistanceExposure(
+                    resolution.Speed, phase.CornerProgress, travelled, adjustment.Exposure,
+                    allowDrive, allowCorrection, retainedOverspeed)
+                : envelope.Traverse(resolution.Speed, phase.CornerProgress, travelled,
+                    allowDrive, allowCorrection, retainedOverspeed);
             speed = continuousCornerProfile.ExitSpeedMetersPerSecond;
             ValidateDistanceComposition(travelled, "continuous corner",
                 continuousCornerProfile.CorrectionDistanceMeters,

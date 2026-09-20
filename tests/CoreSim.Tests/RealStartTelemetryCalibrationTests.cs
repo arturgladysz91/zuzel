@@ -131,11 +131,11 @@ public sealed class RealStartTelemetryCalibrationTests
     }
 
     [Fact]
-    public void FrozenNonStraightPhysicsFilesRemainAtPost39ContentHashes()
+    public void FrozenNonExperimentPhysicsFilesRemainAtReviewedContentHashes()
     {
         var expected = new Dictionary<string, string>(StringComparer.Ordinal)
         {
-            ["src/CoreSim/Track/ContinuousCornerEnvelope.cs"] = "7885FA9168D982E5EDDAEDCA1BC1709CA7F0EB94A6B9C62B22735B02D6F286A6",
+            ["src/CoreSim/Track/ContinuousCornerEnvelope.cs"] = "8E1CF1BFFEDB9E3976C976D57E643B0EC33D11204E2104AB4F84C1CF7C625D1C",
             ["src/CoreSim/Track/SegmentPhysics.cs"] = "6425F9C1930AD03F5C3DF6F6442C0CC42C0D1A999DAE80DF3F3E26DA8AE3DC85",
             ["src/CoreSim/Track/TrackGeometry.cs"] = "2DEDA3F4974FF97EE49EA63D345944BB208786AF89596044F06A70C7E92D3564",
             ["src/CoreSim/Rider.cs"] = "153FA23E1F16B7AFA0EC7D68C3081EED23FC057713AE20F914492684312A6E4E",
