@@ -329,3 +329,35 @@ dotnet run --project src/Sandbox/Sandbox.csproj --configuration Release -- \
 #39 changes no production physics constant and performs no tuning. The complete
 `data/calibration/pge/v1` snapshot and all historical calibration reports remain
 byte-identical.
+
+## Straight drive-envelope shape experiment (#41)
+
+The deterministic [#41 experiment report](calibration/straight-drive-envelope-experiment.md)
+tests exactly five frozen multiplier shapes on the #39 Motoarena fixture. A0 is
+the reviewed production envelope. R08/R12 are signed-area-control proxies and
+H08/H12 retain progressively more high-speed drive after suppressing the same
+lower-mid-speed band. The perturbation is calibration-only and enters the
+existing `CalibrationRunner -> HeatSimulator -> SimulationEngine` path through
+an internal immutable `HeatSimulationOptions` context. It is consulted only for
+ordinary ADVANCED Straight traversal. Standing start, continuous-corner drive,
+the TurnExit compatibility helper, Legacy and default production options remain
+on the existing shared envelope.
+
+The menu shows a consistent causal result on fixed LateralPosition 1: every
+non-baseline candidate raises Vmax, but every one also shortens an already-too-
+fast flying lap. The bounded screen is therefore classified
+`StraightEnvelopeShapeInsufficient`; no candidate is made the production
+default. H12 is retained only as the strongest sensitivity/trace diagnostic.
+The next isolated subsystem indicated by this evidence is corner-speed loss /
+Straight-to-apex amplitude, without changing it in #41.
+
+Regenerate from the repository root:
+
+```text
+dotnet run --project src/Sandbox/Sandbox.csproj --configuration Release -- \
+  straight-drive-envelope-experiment-report \
+  docs/calibration/straight-drive-envelope-experiment.md
+```
+
+The report uses invariant culture, LF line endings and stable ordering. It does
+not rewrite `pge-v1` or the historical #38, #39 and #40 reports.

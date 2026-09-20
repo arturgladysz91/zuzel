@@ -159,7 +159,10 @@ public sealed class CalibrationTraceCollector : ISimulationStepObserver
             diagnostics.ContinuousCornerProfile is { } corner
                 ? diagnostics.PeakSpeedMetersPerSecond > corner.PeakSpeedMetersPerSecond
                     ? diagnostics.CornerPhaseContext?.CornerProgress : corner.PeakCornerProgress
-                : diagnostics.CornerPhaseContext?.CornerProgress);
+                : diagnostics.CornerPhaseContext?.CornerProgress)
+        {
+            StraightDriveCalibrationSteps = straight?.CalibrationSteps,
+        };
     }
 
     private CalibrationLapSummary[] BuildLapSummaries(

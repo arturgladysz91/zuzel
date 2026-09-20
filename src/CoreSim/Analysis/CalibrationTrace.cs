@@ -76,7 +76,10 @@ public sealed record CalibrationStepSample(
     bool? CornerCorrectionTargetReached = null,
     CornerPhaseContext? CornerPhase = null,
     ContinuousCornerTraversalProfile? ContinuousCornerProfile = null,
-    float? PeakCornerProgress = null);
+    float? PeakCornerProgress = null)
+{
+    internal IReadOnlyList<StraightDriveStepObservation>? StraightDriveCalibrationSteps { get; init; }
+}
 
 public sealed record CalibrationLapSummary(
     int RiderId,
