@@ -102,6 +102,47 @@ public sealed class ContinuousCornerEnvelope
         bool allowDrive = true,
         bool allowCorrection = true,
         float retainedOverspeedMetersPerSecond = 0f)
+        => TraverseCore(entrySpeedMetersPerSecond, startProgress, distanceMeters,
+            reducedDriveResistanceExposure, null, allowDrive, allowCorrection,
+            retainedOverspeedMetersPerSecond);
+
+    internal ContinuousCornerTraversalProfile TraverseWithPreApexScrubLoss(
+        float entrySpeedMetersPerSecond,
+        float startProgress,
+        float distanceMeters,
+        PreApexScrubLossAdjustment adjustment,
+        bool allowDrive = true,
+        bool allowCorrection = true,
+        float retainedOverspeedMetersPerSecond = 0f)
+    {
+        // An exact zero bypasses every #43 knot split and arithmetic operation.
+        if (adjustment.IsProductionBaseline)
+            return Traverse(entrySpeedMetersPerSecond, startProgress, distanceMeters,
+                allowDrive, allowCorrection, retainedOverspeedMetersPerSecond);
+        return TraverseCore(entrySpeedMetersPerSecond, startProgress, distanceMeters,
+            0f, adjustment, allowDrive, allowCorrection, retainedOverspeedMetersPerSecond);
+    }
+
+    internal ContinuousCornerTraversalProfile TraverseWithZeroForcePreApexScrubLossExperimentPath(
+        float entrySpeedMetersPerSecond,
+        float startProgress,
+        float distanceMeters,
+        bool allowDrive = true,
+        bool allowCorrection = true,
+        float retainedOverspeedMetersPerSecond = 0f)
+        => TraverseCore(entrySpeedMetersPerSecond, startProgress, distanceMeters,
+            0f, new PreApexScrubLossAdjustment(0f), allowDrive, allowCorrection,
+            retainedOverspeedMetersPerSecond);
+
+    private ContinuousCornerTraversalProfile TraverseCore(
+        float entrySpeedMetersPerSecond,
+        float startProgress,
+        float distanceMeters,
+        float reducedDriveResistanceExposure,
+        PreApexScrubLossAdjustment? scrubAdjustment,
+        bool allowDrive,
+        bool allowCorrection,
+        float retainedOverspeedMetersPerSecond)
     {
         RequirePositive(entrySpeedMetersPerSecond, nameof(entrySpeedMetersPerSecond));
         ValidateProgress(startProgress);
@@ -119,6 +160,12 @@ public sealed class ContinuousCornerEnvelope
         double passiveResistanceDistance = 0d, positiveDriveDistance = 0d;
         double negativeSignedDriveDistance = 0d, neutralCarryDistance = 0d;
         double zeroAvailabilityUncorrectedDistance = 0d;
+        double scrubDistance = 0d, scrubWhileDriveZeroDistance = 0d;
+        double scrubWhileDrivePositiveDistance = 0d, scrubWork = 0d;
+        float? firstCorrectionProgress = null, lastCorrectionProgress = null;
+        float? firstScrubProgress = null, lastScrubProgress = null;
+        float? firstScrubDistanceMeters = null;
+        float correctionDistanceBeforeFirstScrubMeters = 0f;
         var speed = entrySpeedMetersPerSecond;
         var peak = speed;
         var minimum = speed;
@@ -145,30 +192,133 @@ public sealed class ContinuousCornerEnvelope
                 speed, (float)step, availability, reducedDriveResistanceExposure);
             float nextSpeed;
             ContinuousCornerPhaseClassification phaseClassification;
+            var appliedScrubWindow = 0f;
+            var appliedScrubAcceleration = 0f;
+            var appliedScrubDistance = 0f;
             if (allowCorrection && speed > target)
             {
                 var correction = LongitudinalDynamics.CalculateCornerSpeedCorrectionProfile(
                     speed, target, CorrectionCapabilityMetersPerSecondSquared, (float)step);
                 nextSpeed = correction.ExitSpeedMetersPerSecond;
                 var carry = Math.Max(0d, step - correction.CorrectionDistanceMeters);
-                var carrySeconds = carry / nextSpeed;
+                var correctionEndProgress = (float)Math.Clamp(
+                    (absolute + correction.CorrectionDistanceMeters) / TotalLengthMeters, 0d, 1d);
+                firstCorrectionProgress ??= (float)(absolute / TotalLengthMeters);
+                lastCorrectionProgress = correctionEndProgress;
+                var carryAvailability = availability;
+                var scrubWindow = 0f;
+                var scrubAcceleration = 0f;
+                if (carry > 0d && scrubAdjustment is { } activeScrub)
+                {
+                    var carryMidpointProgress = (float)Math.Clamp(
+                        (absolute + correction.CorrectionDistanceMeters + carry * .5d) / TotalLengthMeters,
+                        0d, 1d);
+                    carryAvailability = allowDrive ? DriveAvailability(carryMidpointProgress) : 0f;
+                    scrubWindow = PreApexScrubLossAdjustment.Window(carryMidpointProgress);
+                    scrubAcceleration = activeScrub.PeakScrubDecelerationMetersPerSecondSquared
+                        * scrubWindow;
+                    if (scrubAcceleration > 0f)
+                    {
+                        nextSpeed = CalculateScrubEndSpeedMetersPerSecond(
+                            nextSpeed, (float)carry, carryAvailability,
+                            scrubAcceleration);
+                        appliedScrubWindow = scrubWindow;
+                        appliedScrubAcceleration = scrubAcceleration;
+                        appliedScrubDistance = (float)carry;
+                    }
+                }
+                var carrySeconds = carry == 0d ? 0d : 2d * carry / (correction.ExitSpeedMetersPerSecond + nextSpeed);
                 correctionDistance += correction.CorrectionDistanceMeters;
-                carryDistance += carry;
                 correctionTime += correction.TravelTimeSeconds;
-                carryTime += carrySeconds;
                 time += correction.TravelTimeSeconds + carrySeconds;
-                neutralCarryDistance += carry;
-                if (availability == 0f)
-                    zeroAvailabilityUncorrectedDistance += carry;
-                phaseClassification = ContinuousCornerPhaseClassification.Correction;
+                if (carry > 0d && scrubAcceleration > 0f)
+                {
+                    scrubDistance += carry;
+                    scrubWork += LongitudinalDynamics.ProvisionalNominalSystemMassKilograms
+                        * scrubAcceleration * carry;
+                    if (firstScrubProgress is null)
+                    {
+                        firstScrubProgress = correctionEndProgress;
+                        firstScrubDistanceMeters = (float)carry;
+                        correctionDistanceBeforeFirstScrubMeters = (float)correctionDistance;
+                    }
+                    lastScrubProgress = nextProgress;
+                    if (carryAvailability > 0f)
+                    {
+                        driveDistance += carry;
+                        driveTime += carrySeconds;
+                        scrubWhileDrivePositiveDistance += carry;
+                        phaseClassification = ContinuousCornerPhaseClassification.SignedDrivePlusScrub;
+                    }
+                    else
+                    {
+                        carryDistance += carry;
+                        carryTime += carrySeconds;
+                        zeroAvailabilityUncorrectedDistance += carry;
+                        scrubWhileDriveZeroDistance += carry;
+                        phaseClassification = ContinuousCornerPhaseClassification.ScrubOnly;
+                    }
+                    if (nextSpeed < correction.ExitSpeedMetersPerSecond)
+                        naturalDecelerationDistance += carry;
+                }
+                else
+                {
+                    carryDistance += carry;
+                    carryTime += carrySeconds;
+                    neutralCarryDistance += carry;
+                    if (carryAvailability == 0f)
+                        zeroAvailabilityUncorrectedDistance += carry;
+                    phaseClassification = ContinuousCornerPhaseClassification.Correction;
+                }
             }
             else
             {
                 // A rising envelope is an upper constraint, never an instruction
                 // to increase speed. Signed drive may naturally decelerate.
-                nextSpeed = candidate;
+                var scrubWindow = scrubAdjustment is null
+                    ? 0f
+                    : PreApexScrubLossAdjustment.Window(midpoint);
+                var scrubAcceleration = scrubAdjustment is null
+                    ? 0f
+                    : scrubAdjustment.Value.PeakScrubDecelerationMetersPerSecondSquared * scrubWindow;
+                nextSpeed = scrubAcceleration > 0f
+                    ? CalculateScrubEndSpeedMetersPerSecond(
+                        speed, (float)step, availability, scrubAcceleration)
+                    : candidate;
                 var seconds = 2d * step / (speed + nextSpeed);
-                if (availability > 0f)
+                if (scrubAcceleration > 0f)
+                {
+                    appliedScrubWindow = scrubWindow;
+                    appliedScrubAcceleration = scrubAcceleration;
+                    appliedScrubDistance = (float)step;
+                    scrubDistance += step;
+                    scrubWork += LongitudinalDynamics.ProvisionalNominalSystemMassKilograms
+                        * scrubAcceleration * step;
+                    if (firstScrubProgress is null)
+                    {
+                        firstScrubProgress = (float)(absolute / TotalLengthMeters);
+                        firstScrubDistanceMeters = (float)step;
+                        correctionDistanceBeforeFirstScrubMeters = (float)correctionDistance;
+                    }
+                    lastScrubProgress = nextProgress;
+                    if (availability > 0f)
+                    {
+                        driveDistance += step;
+                        driveTime += seconds;
+                        scrubWhileDrivePositiveDistance += step;
+                        phaseClassification = ContinuousCornerPhaseClassification.SignedDrivePlusScrub;
+                    }
+                    else
+                    {
+                        carryDistance += step;
+                        carryTime += seconds;
+                        zeroAvailabilityUncorrectedDistance += step;
+                        scrubWhileDriveZeroDistance += step;
+                        phaseClassification = ContinuousCornerPhaseClassification.ScrubOnly;
+                    }
+                    if (nextSpeed < speed) naturalDecelerationDistance += step;
+                }
+                else if (availability > 0f)
                 {
                     driveDistance += step;
                     driveTime += seconds;
@@ -211,7 +361,8 @@ public sealed class ContinuousCornerEnvelope
             speed = nextSpeed;
             if (speed > peak) { peak = speed; peakProgress = nextProgress; }
             if (speed < minimum) { minimum = speed; minimumProgress = nextProgress; }
-            nodes.Add(Node(nextProgress, speed, (float)time, phaseClassification));
+            nodes.Add(Node(nextProgress, speed, (float)time, phaseClassification,
+                appliedScrubWindow, appliedScrubAcceleration, appliedScrubDistance));
         }
         var endProgress = (float)Math.Clamp(startProgress + (double)distanceMeters / TotalLengthMeters, 0d, 1d);
         var endEnvelope = SpeedMetersPerSecond(endProgress);
@@ -230,12 +381,29 @@ public sealed class ContinuousCornerEnvelope
             NeutralCarryDistanceMeters = (float)neutralCarryDistance,
             ZeroAvailabilityUncorrectedDistanceMeters = (float)zeroAvailabilityUncorrectedDistance,
             ReducedDriveResistanceExposure = reducedDriveResistanceExposure,
+            ScrubDistanceMeters = (float)scrubDistance,
+            ScrubWhileDriveZeroDistanceMeters = (float)scrubWhileDriveZeroDistance,
+            ScrubWhileDrivePositiveDistanceMeters = (float)scrubWhileDrivePositiveDistance,
+            ScrubWorkJoules = scrubWork,
+            FirstCorrectionProgress = firstCorrectionProgress,
+            LastCorrectionProgress = lastCorrectionProgress,
+            FirstScrubProgress = firstScrubProgress,
+            LastScrubProgress = lastScrubProgress,
+            FirstScrubDistanceMeters = firstScrubDistanceMeters,
+            CorrectionDistanceBeforeFirstScrubMeters = correctionDistanceBeforeFirstScrubMeters,
         };
 
         ContinuousCornerNode Node(float p, float v, float elapsed,
-            ContinuousCornerPhaseClassification classification)
+            ContinuousCornerPhaseClassification classification,
+            float appliedScrubWindow = 0f,
+            float appliedScrubAcceleration = 0f,
+            float appliedScrubDistance = 0f)
         {
             var observation = ObserveReducedDriveForce(v, DriveAvailability(p), reducedDriveResistanceExposure);
+            var scrubWindow = scrubAdjustment is null || scrubAdjustment.Value.IsProductionBaseline
+                ? 0f
+                : PreApexScrubLossAdjustment.Window(p);
+            var scrubApplied = appliedScrubAcceleration > 0f && appliedScrubDistance > 0f;
             return new ContinuousCornerNode(p, v, SpeedMetersPerSecond(p),
                 DriveAvailability(p), observation.NetAccelerationMetersPerSecondSquared)
             {
@@ -245,8 +413,43 @@ public sealed class ContinuousCornerEnvelope
                 ExposedResistanceForceNewtons = observation.ExposedResistanceForceNewtons,
                 NetForceNewtons = observation.NetForceNewtons,
                 PhaseClassification = classification,
+                ScrubWindow = scrubWindow,
+                AppliedScrubWindow = appliedScrubWindow,
+                ScrubApplied = scrubApplied,
+                ScrubAppliedDistanceMeters = appliedScrubDistance,
+                ScrubAccelerationMetersPerSecondSquared = appliedScrubAcceleration,
+                ScrubForceNewtons = LongitudinalDynamics.ProvisionalNominalSystemMassKilograms
+                    * appliedScrubAcceleration,
+                ProductionSignedDriveAccelerationMetersPerSecondSquared =
+                    observation.NetAccelerationMetersPerSecondSquared,
+                FinalAccelerationMetersPerSecondSquared =
+                    observation.NetAccelerationMetersPerSecondSquared - appliedScrubAcceleration,
+                EnvelopeApexSpeedMetersPerSecond = ApexSpeedMetersPerSecond,
+                EnvelopeCorrectionCapabilityMetersPerSecondSquared =
+                    CorrectionCapabilityMetersPerSecondSquared,
+                EnvelopeTotalLengthMeters = TotalLengthMeters,
             };
         }
+
+    }
+
+    private float CalculateScrubEndSpeedMetersPerSecond(
+        float currentSpeedMetersPerSecond,
+        float stepDistanceMeters,
+        float driveAvailability,
+        float scrubDecelerationMetersPerSecondSquared)
+    {
+        var atStart = ObserveReducedDriveForce(currentSpeedMetersPerSecond, driveAvailability, 0f);
+        var predicted = LongitudinalDynamics.ApplySignedAccelerationOverDistance(
+            currentSpeedMetersPerSecond,
+            atStart.NetAccelerationMetersPerSecondSquared - scrubDecelerationMetersPerSecondSquared,
+            stepDistanceMeters);
+        var midpointSpeed = (float)(((double)currentSpeedMetersPerSecond + predicted) * .5d);
+        var atMidpoint = ObserveReducedDriveForce(midpointSpeed, driveAvailability, 0f);
+        return LongitudinalDynamics.ApplySignedAccelerationOverDistance(
+            currentSpeedMetersPerSecond,
+            atMidpoint.NetAccelerationMetersPerSecondSquared - scrubDecelerationMetersPerSecondSquared,
+            stepDistanceMeters);
     }
 
     private float CalculateExperimentalEndSpeedMetersPerSecond(
@@ -328,6 +531,8 @@ public enum ContinuousCornerPhaseClassification
     CarryPassive,
     SignedDriveAcceleration,
     SignedDriveDeceleration,
+    ScrubOnly,
+    SignedDrivePlusScrub,
 }
 
 public sealed record ContinuousCornerNode(float CornerProgress, float SpeedMetersPerSecond,
@@ -339,6 +544,17 @@ public sealed record ContinuousCornerNode(float CornerProgress, float SpeedMeter
     internal float ExposedResistanceForceNewtons { get; init; }
     internal float NetForceNewtons { get; init; }
     internal ContinuousCornerPhaseClassification PhaseClassification { get; init; }
+    internal float ScrubWindow { get; init; }
+    internal float AppliedScrubWindow { get; init; }
+    internal bool ScrubApplied { get; init; }
+    internal float ScrubAppliedDistanceMeters { get; init; }
+    internal float ScrubAccelerationMetersPerSecondSquared { get; init; }
+    internal float ScrubForceNewtons { get; init; }
+    internal float ProductionSignedDriveAccelerationMetersPerSecondSquared { get; init; }
+    internal float FinalAccelerationMetersPerSecondSquared { get; init; }
+    internal float EnvelopeApexSpeedMetersPerSecond { get; init; }
+    internal float EnvelopeCorrectionCapabilityMetersPerSecondSquared { get; init; }
+    internal float EnvelopeTotalLengthMeters { get; init; }
 }
 
 /// <summary>Immutable observations with value equality, including in diagnostic records.</summary>
@@ -379,6 +595,16 @@ public sealed record ContinuousCornerTraversalProfile(
     internal float NeutralCarryDistanceMeters { get; init; }
     internal float ZeroAvailabilityUncorrectedDistanceMeters { get; init; }
     internal float ReducedDriveResistanceExposure { get; init; }
+    internal float ScrubDistanceMeters { get; init; }
+    internal float ScrubWhileDriveZeroDistanceMeters { get; init; }
+    internal float ScrubWhileDrivePositiveDistanceMeters { get; init; }
+    internal double ScrubWorkJoules { get; init; }
+    internal float? FirstCorrectionProgress { get; init; }
+    internal float? LastCorrectionProgress { get; init; }
+    internal float? FirstScrubProgress { get; init; }
+    internal float? LastScrubProgress { get; init; }
+    internal float? FirstScrubDistanceMeters { get; init; }
+    internal float CorrectionDistanceBeforeFirstScrubMeters { get; init; }
 }
 
 internal readonly record struct ReducedDriveForceObservation(

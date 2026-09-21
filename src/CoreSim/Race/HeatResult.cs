@@ -90,11 +90,20 @@ public sealed record HeatSimulationOptions
     // reviewed post-#41 production path exactly and is not a gameplay option.
     internal CornerReducedDriveResistanceAdjustment? CornerReducedDriveResistanceAdjustment { get; init; }
 
+    // Calibration-only #43 diagnostic. Null preserves reviewed production
+    // physics exactly and is unavailable to gameplay callers outside CoreSim.
+    internal PreApexScrubLossAdjustment? PreApexScrubLossAdjustment { get; init; }
+
     public void Validate()
     {
         if (Laps <= 0)
             throw new ArgumentOutOfRangeException(nameof(Laps));
         if (IncidentFrequency is < 0f or > 2f)
             throw new ArgumentOutOfRangeException(nameof(IncidentFrequency));
+        if (PreApexScrubLossAdjustment is not null
+            && (StraightDriveEnvelopeAdjustment is not null
+                || CornerReducedDriveResistanceAdjustment is not null))
+            throw new InvalidOperationException(
+                "The pre-apex scrub diagnostic cannot be combined with another calibration experiment.");
     }
 }
