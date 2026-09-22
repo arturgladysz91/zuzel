@@ -94,16 +94,22 @@ public sealed record HeatSimulationOptions
     // physics exactly and is unavailable to gameplay callers outside CoreSim.
     internal PreApexScrubLossAdjustment? PreApexScrubLossAdjustment { get; init; }
 
+    // Calibration-only #44 gameplay diagnostic. Null preserves reviewed
+    // post-#43 production exactly and is not a gameplay or persistence setting.
+    internal ActiveCorrectionControlLossAdjustment? ActiveCorrectionControlLossAdjustment { get; init; }
+
     public void Validate()
     {
         if (Laps <= 0)
             throw new ArgumentOutOfRangeException(nameof(Laps));
         if (IncidentFrequency is < 0f or > 2f)
             throw new ArgumentOutOfRangeException(nameof(IncidentFrequency));
-        if (PreApexScrubLossAdjustment is not null
-            && (StraightDriveEnvelopeAdjustment is not null
-                || CornerReducedDriveResistanceAdjustment is not null))
+        var experimentCount = (StraightDriveEnvelopeAdjustment is null ? 0 : 1)
+            + (CornerReducedDriveResistanceAdjustment is null ? 0 : 1)
+            + (PreApexScrubLossAdjustment is null ? 0 : 1)
+            + (ActiveCorrectionControlLossAdjustment is null ? 0 : 1);
+        if (experimentCount > 1)
             throw new InvalidOperationException(
-                "The pre-apex scrub diagnostic cannot be combined with another calibration experiment.");
+                "Calibration experiments cannot be combined in one simulation run.");
     }
 }

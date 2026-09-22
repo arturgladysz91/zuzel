@@ -17,6 +17,7 @@ public static class CalibrationScenarioSuite
             CalibrationScenarioCatalog.RequiredScenarios(),
             new StraightDriveEnvelopeAdjustment(0f, 0f),
             null,
+            null,
             null);
 
     /// <summary>Calibration-only #42 R0 equivalence probe.</summary>
@@ -25,6 +26,7 @@ public static class CalibrationScenarioSuite
             CalibrationScenarioCatalog.RequiredScenarios(),
             null,
             new CornerReducedDriveResistanceAdjustment(0f),
+            null,
             null);
 
     /// <summary>Calibration-only #43 S0 equivalence probe.</summary>
@@ -33,15 +35,27 @@ public static class CalibrationScenarioSuite
             CalibrationScenarioCatalog.RequiredScenarios(),
             null,
             null,
+            null,
             new PreApexScrubLossAdjustment(0f));
 
+    /// <summary>Calibration-only #44 C0 full-suite equivalence probe.</summary>
+    internal static IReadOnlyList<CalibrationScenarioResult>
+        RunRequiredWithZeroActiveCorrectionControlLossExperiment()
+        => RunCore(
+            CalibrationScenarioCatalog.RequiredScenarios(),
+            null,
+            null,
+            new ActiveCorrectionControlLossAdjustment(0f),
+            null);
+
     public static IReadOnlyList<CalibrationScenarioResult> Run(IEnumerable<CalibrationScenario> scenarios)
-        => RunCore(scenarios, null, null, null);
+        => RunCore(scenarios, null, null, null, null);
 
     private static IReadOnlyList<CalibrationScenarioResult> RunCore(
         IEnumerable<CalibrationScenario> scenarios,
         StraightDriveEnvelopeAdjustment? adjustment,
         CornerReducedDriveResistanceAdjustment? cornerResistanceAdjustment,
+        ActiveCorrectionControlLossAdjustment? activeCorrectionControlLossAdjustment,
         PreApexScrubLossAdjustment? preApexScrubLossAdjustment)
     {
         ArgumentNullException.ThrowIfNull(scenarios);
@@ -49,16 +63,18 @@ public static class CalibrationScenarioSuite
         if (ordered.Select(item => item.Metadata.ScenarioId).Distinct(StringComparer.Ordinal).Count() != ordered.Length)
             throw new ArgumentException("Scenario ids must be unique.", nameof(scenarios));
         return Array.AsReadOnly(ordered.Select(item => RunScenarioCore(
-            item, adjustment, cornerResistanceAdjustment, preApexScrubLossAdjustment)).ToArray());
+            item, adjustment, cornerResistanceAdjustment,
+            activeCorrectionControlLossAdjustment, preApexScrubLossAdjustment)).ToArray());
     }
 
     public static CalibrationScenarioResult RunScenario(CalibrationScenario scenario)
-        => RunScenarioCore(scenario, null, null, null);
+        => RunScenarioCore(scenario, null, null, null, null);
 
     private static CalibrationScenarioResult RunScenarioCore(
         CalibrationScenario scenario,
         StraightDriveEnvelopeAdjustment? adjustment,
         CornerReducedDriveResistanceAdjustment? cornerResistanceAdjustment,
+        ActiveCorrectionControlLossAdjustment? activeCorrectionControlLossAdjustment,
         PreApexScrubLossAdjustment? preApexScrubLossAdjustment)
     {
         ArgumentNullException.ThrowIfNull(scenario);
@@ -81,14 +97,15 @@ public static class CalibrationScenarioSuite
         return scenario switch
         {
             CalibrationStartScenario start => RunStart(start, adjustment, cornerResistanceAdjustment,
-                preApexScrubLossAdjustment),
+                activeCorrectionControlLossAdjustment, preApexScrubLossAdjustment),
             CalibrationStraightScenario straight => RunStraight(straight, adjustment),
             CalibrationTurnScenario turn => RunTurn(turn, adjustment, cornerResistanceAdjustment,
-                preApexScrubLossAdjustment),
+                activeCorrectionControlLossAdjustment, preApexScrubLossAdjustment),
             CalibrationLineScenario line => RunLine(line, adjustment, cornerResistanceAdjustment,
-                preApexScrubLossAdjustment),
+                activeCorrectionControlLossAdjustment, preApexScrubLossAdjustment),
             CalibrationHeatScenario heat => RunHeatCore(
-                heat, null, adjustment, cornerResistanceAdjustment, preApexScrubLossAdjustment),
+                heat, null, adjustment, cornerResistanceAdjustment,
+                activeCorrectionControlLossAdjustment, preApexScrubLossAdjustment),
             _ => throw new ArgumentException("Unknown scenario type.", nameof(scenario)),
         };
     }
@@ -97,6 +114,7 @@ public static class CalibrationScenarioSuite
         CalibrationStartScenario scenario,
         StraightDriveEnvelopeAdjustment? adjustment,
         CornerReducedDriveResistanceAdjustment? cornerResistanceAdjustment,
+        ActiveCorrectionControlLossAdjustment? activeCorrectionControlLossAdjustment,
         PreApexScrubLossAdjustment? preApexScrubLossAdjustment)
     {
         var fixture = scenario.Fixture;
@@ -108,7 +126,8 @@ public static class CalibrationScenarioSuite
                 fixture.Skills, fixture.Setup, fixture.Surface, distance),
             CalibrationStartMode.FirstCornerPreparation => Resolve(
                     track, CreateRider(1, 1, fixture), fixture.Surface,
-                    adjustment, cornerResistanceAdjustment, preApexScrubLossAdjustment)
+                    adjustment, cornerResistanceAdjustment,
+                    activeCorrectionControlLossAdjustment, preApexScrubLossAdjustment)
                 .Diagnostics.Single().StandingStartLaunchProfile
                 ?? throw new InvalidOperationException("Production standing start did not produce a launch profile."),
             _ => throw new ArgumentOutOfRangeException(nameof(scenario)),
@@ -143,6 +162,7 @@ public static class CalibrationScenarioSuite
         CalibrationTurnScenario scenario,
         StraightDriveEnvelopeAdjustment? adjustment,
         CornerReducedDriveResistanceAdjustment? cornerResistanceAdjustment,
+        ActiveCorrectionControlLossAdjustment? activeCorrectionControlLossAdjustment,
         PreApexScrubLossAdjustment? preApexScrubLossAdjustment)
     {
         if (scenario.SegmentType is not (SegmentType.TurnEntry or SegmentType.TurnMiddle or SegmentType.TurnExit))
@@ -160,7 +180,8 @@ public static class CalibrationScenarioSuite
         rider.Speed = scenario.EntrySpeedMetersPerSecond;
         rider.RestorePosition(RiderPosition.Create(1, segmentIndex, scenario.SegmentProgress, track.Segments.Count));
         var step = Resolve(track, rider, scenario.Fixture.Surface,
-            adjustment, cornerResistanceAdjustment, preApexScrubLossAdjustment);
+            adjustment, cornerResistanceAdjustment,
+            activeCorrectionControlLossAdjustment, preApexScrubLossAdjustment);
         return new(scenario, LaneModel.TurnArcRadiusMeters(scenario.LateralPosition, geometry),
             LaneModel.SegmentLengthMeters(track.Segments[segmentIndex], scenario.LateralPosition, geometry) * (1f - scenario.SegmentProgress),
             ObserveCornerCapability(scenario.Fixture, scenario.LateralPosition), step.Diagnostics.Single(), step.Changes.Single());
@@ -206,13 +227,14 @@ public static class CalibrationScenarioSuite
     }
 
     public static CalibrationHeatResult RunHeat(CalibrationHeatScenario scenario, IEnumerable<int>? riderOrder = null)
-        => RunHeatCore(scenario, riderOrder, null, null, null);
+        => RunHeatCore(scenario, riderOrder, null, null, null, null);
 
     private static CalibrationHeatResult RunHeatCore(
         CalibrationHeatScenario scenario,
         IEnumerable<int>? riderOrder,
         StraightDriveEnvelopeAdjustment? adjustment,
         CornerReducedDriveResistanceAdjustment? cornerResistanceAdjustment,
+        ActiveCorrectionControlLossAdjustment? activeCorrectionControlLossAdjustment,
         PreApexScrubLossAdjustment? preApexScrubLossAdjustment)
     {
         ArgumentNullException.ThrowIfNull(scenario);
@@ -224,7 +246,7 @@ public static class CalibrationScenarioSuite
         var riders = order.Select(id => scenario.Riders.Single(rider => rider.RiderId == id))
             .Select(rider => CreateRider(rider.RiderId, rider.Lane, scenario.Fixture with { Skills = rider.Skills })).ToList();
         var trace = Trace(scenario.Fixture, riders, adjustment, cornerResistanceAdjustment,
-            preApexScrubLossAdjustment);
+            activeCorrectionControlLossAdjustment, preApexScrubLossAdjustment);
         var observations = ObserveHeat(trace);
         var performance = observations.Select(rider => rider.Performance).ToArray();
         double Spread(Func<CalibrationSkillRiderObservation, double> select)
@@ -240,6 +262,7 @@ public static class CalibrationScenarioSuite
         CalibrationLineScenario scenario,
         StraightDriveEnvelopeAdjustment? adjustment,
         CornerReducedDriveResistanceAdjustment? cornerResistanceAdjustment,
+        ActiveCorrectionControlLossAdjustment? activeCorrectionControlLossAdjustment,
         PreApexScrubLossAdjustment? preApexScrubLossAdjustment)
     {
         LaneModel.ValidateLane(scenario.LateralPosition);
@@ -249,7 +272,8 @@ public static class CalibrationScenarioSuite
         var trace = Trace(
             scenario.Fixture,
             new List<RiderState> { CreateRider(1, lateral, scenario.Fixture) },
-            adjustment, cornerResistanceAdjustment, preApexScrubLossAdjustment);
+            adjustment, cornerResistanceAdjustment,
+            activeCorrectionControlLossAdjustment, preApexScrubLossAdjustment);
         return new(scenario, LaneModel.NormalizedLateralFraction(lateral),
             LaneModel.PhysicalLateralOffsetFromInnerReferenceMeters(lateral, SegmentType.Straight, geometry),
             LaneModel.PhysicalLateralOffsetFromInnerReferenceMeters(lateral, SegmentType.TurnMiddle, geometry),
@@ -277,12 +301,13 @@ public static class CalibrationScenarioSuite
         List<RiderState> riders,
         StraightDriveEnvelopeAdjustment? adjustment,
         CornerReducedDriveResistanceAdjustment? cornerResistanceAdjustment,
+        ActiveCorrectionControlLossAdjustment? activeCorrectionControlLossAdjustment,
         PreApexScrubLossAdjustment? preApexScrubLossAdjustment)
     {
         var track = Track.CreateStandingStartExample();
         return CalibrationRunner.RunHeat(track, TrackState.CreateDefault(track, fixture.Surface), riders,
             new HoldLane(), Options(adjustment, cornerResistanceAdjustment,
-                preApexScrubLossAdjustment), heatId: 35);
+                activeCorrectionControlLossAdjustment, preApexScrubLossAdjustment), heatId: 35);
     }
 
     private static ResolvedSimulationStep Resolve(
@@ -291,13 +316,15 @@ public static class CalibrationScenarioSuite
         TrackSurfaceState surface,
         StraightDriveEnvelopeAdjustment? adjustment,
         CornerReducedDriveResistanceAdjustment? cornerResistanceAdjustment,
+        ActiveCorrectionControlLossAdjustment? activeCorrectionControlLossAdjustment,
         PreApexScrubLossAdjustment? preApexScrubLossAdjustment)
     {
         var engine = new SimulationEngine(new HoldLane());
         var snapshot = engine.CaptureSnapshot(track, TrackState.CreateDefault(track, surface), new[] { rider },
             new SimulationStepContext(35, 0, rider.LapsCompleted, rider.SegmentIndex, CalibrationSkillSweep.FixedSeed, 4));
         return engine.Resolve(snapshot, engine.Decide(snapshot),
-            Options(adjustment, cornerResistanceAdjustment, preApexScrubLossAdjustment));
+            Options(adjustment, cornerResistanceAdjustment,
+                activeCorrectionControlLossAdjustment, preApexScrubLossAdjustment));
     }
 
     private static RiderState CreateRider(int id, int lane, CalibrationScenarioFixture fixture)
@@ -307,12 +334,14 @@ public static class CalibrationScenarioSuite
     private static HeatSimulationOptions Options(
         StraightDriveEnvelopeAdjustment? adjustment = null,
         CornerReducedDriveResistanceAdjustment? cornerResistanceAdjustment = null,
+        ActiveCorrectionControlLossAdjustment? activeCorrectionControlLossAdjustment = null,
         PreApexScrubLossAdjustment? preApexScrubLossAdjustment = null) => new()
     {
         Laps = 4, Seed = CalibrationSkillSweep.FixedSeed, Weather = WeatherState.Dry,
         IncidentFrequency = 0f, EnableLogging = false,
         StraightDriveEnvelopeAdjustment = adjustment,
         CornerReducedDriveResistanceAdjustment = cornerResistanceAdjustment,
+        ActiveCorrectionControlLossAdjustment = activeCorrectionControlLossAdjustment,
         PreApexScrubLossAdjustment = preApexScrubLossAdjustment,
     };
 

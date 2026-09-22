@@ -481,7 +481,12 @@ public sealed class SimulationEngine
                 && resolution.ContinuousCorrectionTargetSpeedMetersPerSecond is { } retainedTarget
                 ? MathF.Max(0f, retainedTarget - envelope.SpeedMetersPerSecond(phase.CornerProgress))
                 : 0f;
-            continuousCornerProfile = options.PreApexScrubLossAdjustment is { } scrubAdjustment
+            continuousCornerProfile = options.ActiveCorrectionControlLossAdjustment is { } controlLossAdjustment
+                ? envelope.TraverseWithActiveCorrectionControlLoss(
+                    resolution.Speed, phase.CornerProgress, travelled, controlLossAdjustment,
+                    surface.EffectiveGrip, rider.Profile.Skills.Adaptability,
+                    allowDrive, allowCorrection, retainedOverspeed)
+                : options.PreApexScrubLossAdjustment is { } scrubAdjustment
                 ? envelope.TraverseWithPreApexScrubLoss(
                     resolution.Speed, phase.CornerProgress, travelled, scrubAdjustment,
                     allowDrive, allowCorrection, retainedOverspeed)

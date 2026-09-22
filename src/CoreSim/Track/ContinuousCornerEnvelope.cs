@@ -103,7 +103,8 @@ public sealed class ContinuousCornerEnvelope
         bool allowCorrection = true,
         float retainedOverspeedMetersPerSecond = 0f)
         => TraverseCore(entrySpeedMetersPerSecond, startProgress, distanceMeters,
-            reducedDriveResistanceExposure, null, allowDrive, allowCorrection,
+            reducedDriveResistanceExposure, null, null, 1f, 0f,
+            allowDrive, allowCorrection,
             retainedOverspeedMetersPerSecond);
 
     internal ContinuousCornerTraversalProfile TraverseWithPreApexScrubLoss(
@@ -120,7 +121,8 @@ public sealed class ContinuousCornerEnvelope
             return Traverse(entrySpeedMetersPerSecond, startProgress, distanceMeters,
                 allowDrive, allowCorrection, retainedOverspeedMetersPerSecond);
         return TraverseCore(entrySpeedMetersPerSecond, startProgress, distanceMeters,
-            0f, adjustment, allowDrive, allowCorrection, retainedOverspeedMetersPerSecond);
+            0f, adjustment, null, 1f, 0f,
+            allowDrive, allowCorrection, retainedOverspeedMetersPerSecond);
     }
 
     internal ContinuousCornerTraversalProfile TraverseWithZeroForcePreApexScrubLossExperimentPath(
@@ -131,8 +133,37 @@ public sealed class ContinuousCornerEnvelope
         bool allowCorrection = true,
         float retainedOverspeedMetersPerSecond = 0f)
         => TraverseCore(entrySpeedMetersPerSecond, startProgress, distanceMeters,
-            0f, new PreApexScrubLossAdjustment(0f), allowDrive, allowCorrection,
+            0f, new PreApexScrubLossAdjustment(0f), null, 1f, 0f,
+            allowDrive, allowCorrection,
             retainedOverspeedMetersPerSecond);
+
+    internal ContinuousCornerTraversalProfile TraverseWithActiveCorrectionControlLoss(
+        float entrySpeedMetersPerSecond,
+        float startProgress,
+        float distanceMeters,
+        ActiveCorrectionControlLossAdjustment adjustment,
+        float effectiveGrip,
+        float adaptability,
+        bool allowDrive = true,
+        bool allowCorrection = true,
+        float retainedOverspeedMetersPerSecond = 0f)
+        => TraverseCore(entrySpeedMetersPerSecond, startProgress, distanceMeters,
+            0f, null, adjustment, effectiveGrip, adaptability,
+            allowDrive, allowCorrection, retainedOverspeedMetersPerSecond);
+
+    internal ContinuousCornerTraversalProfile TraverseWithZeroForceActiveCorrectionControlLossExperimentPath(
+        float entrySpeedMetersPerSecond,
+        float startProgress,
+        float distanceMeters,
+        float effectiveGrip,
+        float adaptability,
+        bool allowDrive = true,
+        bool allowCorrection = true,
+        float retainedOverspeedMetersPerSecond = 0f)
+        => TraverseCore(entrySpeedMetersPerSecond, startProgress, distanceMeters,
+            0f, null, new ActiveCorrectionControlLossAdjustment(0f),
+            effectiveGrip, adaptability,
+            allowDrive, allowCorrection, retainedOverspeedMetersPerSecond);
 
     private ContinuousCornerTraversalProfile TraverseCore(
         float entrySpeedMetersPerSecond,
@@ -140,6 +171,9 @@ public sealed class ContinuousCornerEnvelope
         float distanceMeters,
         float reducedDriveResistanceExposure,
         PreApexScrubLossAdjustment? scrubAdjustment,
+        ActiveCorrectionControlLossAdjustment? controlLossAdjustment,
+        float controlLossEffectiveGrip,
+        float controlLossAdaptability,
         bool allowDrive,
         bool allowCorrection,
         float retainedOverspeedMetersPerSecond)
@@ -155,6 +189,12 @@ public sealed class ContinuousCornerEnvelope
             || reducedDriveResistanceExposure < 0f
             || reducedDriveResistanceExposure > 1f)
             throw new ArgumentOutOfRangeException(nameof(reducedDriveResistanceExposure));
+        if (controlLossAdjustment is not null)
+        {
+            _ = ActiveCorrectionControlLoss.SurfaceChallenge(controlLossEffectiveGrip);
+            _ = ActiveCorrectionControlLoss.SurfaceAdaptationPenalty(
+                controlLossEffectiveGrip, controlLossAdaptability);
+        }
         double travelled = 0d, correctionDistance = 0d, carryDistance = 0d, driveDistance = 0d, time = 0d;
         double correctionTime = 0d, carryTime = 0d, driveTime = 0d, naturalDecelerationDistance = 0d;
         double passiveResistanceDistance = 0d, positiveDriveDistance = 0d;
@@ -162,6 +202,10 @@ public sealed class ContinuousCornerEnvelope
         double zeroAvailabilityUncorrectedDistance = 0d;
         double scrubDistance = 0d, scrubWhileDriveZeroDistance = 0d;
         double scrubWhileDrivePositiveDistance = 0d, scrubWork = 0d;
+        double correctionEnergyRemoved = 0d, controlLossEnergy = 0d;
+        double controlLoadSum = 0d, controlLossPressureSum = 0d;
+        float maximumControlLoad = 0f, maximumControlLossPressure = 0f;
+        var controlLossStepCount = 0;
         float? firstCorrectionProgress = null, lastCorrectionProgress = null;
         float? firstScrubProgress = null, lastScrubProgress = null;
         float? firstScrubDistanceMeters = null;
@@ -195,12 +239,63 @@ public sealed class ContinuousCornerEnvelope
             var appliedScrubWindow = 0f;
             var appliedScrubAcceleration = 0f;
             var appliedScrubDistance = 0f;
+            var controlLossEligible = false;
+            var controlLoad = 0f;
+            var surfaceChallenge = 0f;
+            var surfaceAdaptationPenalty = 0f;
+            var controlLossPressure = 0f;
+            var requiredCorrectionDistance = 0f;
+            var appliedCorrectionDistance = 0f;
+            var productionCorrectionExit = 0f;
+            var finalCorrectionExit = 0f;
+            var stepCorrectionEnergyRemoved = 0d;
+            var stepControlLossEnergy = 0d;
             if (allowCorrection && speed > target)
             {
                 var correction = LongitudinalDynamics.CalculateCornerSpeedCorrectionProfile(
                     speed, target, CorrectionCapabilityMetersPerSecondSquared, (float)step);
-                nextSpeed = correction.ExitSpeedMetersPerSecond;
+                productionCorrectionExit = correction.ExitSpeedMetersPerSecond;
+                finalCorrectionExit = productionCorrectionExit;
+                nextSpeed = productionCorrectionExit;
+                requiredCorrectionDistance = correction.RequiredCorrectionDistanceMeters;
+                appliedCorrectionDistance = correction.CorrectionDistanceMeters;
+                var actualCorrectionSeconds = (double)correction.TravelTimeSeconds;
+                if (controlLossAdjustment is { } activeControlLoss
+                    && correction.CorrectionDistanceMeters > 0f
+                    && midpoint < ApexProgress)
+                {
+                    controlLossEligible = true;
+                    controlLoad = ActiveCorrectionControlLoss.ControlLoad(
+                        correction.RequiredCorrectionDistanceMeters, (float)step);
+                    surfaceChallenge = ActiveCorrectionControlLoss.SurfaceChallenge(
+                        controlLossEffectiveGrip);
+                    surfaceAdaptationPenalty = ActiveCorrectionControlLoss.SurfaceAdaptationPenalty(
+                        controlLossEffectiveGrip, controlLossAdaptability);
+                    controlLossPressure = ActiveCorrectionControlLoss.ControlLossPressure(
+                        controlLoad, surfaceAdaptationPenalty);
+                    stepCorrectionEnergyRemoved = ActiveCorrectionControlLoss
+                        .CorrectionEnergyRemovedJoules(speed, productionCorrectionExit);
+                    stepControlLossEnergy = ActiveCorrectionControlLoss.ControlLossEnergyJoules(
+                        stepCorrectionEnergyRemoved, activeControlLoss, controlLossPressure);
+                    finalCorrectionExit = ActiveCorrectionControlLoss.ApplyEnergyLoss(
+                        productionCorrectionExit, stepControlLossEnergy);
+                    nextSpeed = finalCorrectionExit;
+                    if (stepControlLossEnergy > 0d)
+                    {
+                        actualCorrectionSeconds = 2d * correction.CorrectionDistanceMeters
+                            / (speed + finalCorrectionExit);
+                    }
+                    correctionEnergyRemoved += stepCorrectionEnergyRemoved;
+                    controlLossEnergy += stepControlLossEnergy;
+                    controlLoadSum += controlLoad;
+                    controlLossPressureSum += controlLossPressure;
+                    maximumControlLoad = MathF.Max(maximumControlLoad, controlLoad);
+                    maximumControlLossPressure = MathF.Max(
+                        maximumControlLossPressure, controlLossPressure);
+                    controlLossStepCount++;
+                }
                 var carry = Math.Max(0d, step - correction.CorrectionDistanceMeters);
+                var carryStartSpeed = nextSpeed;
                 var correctionEndProgress = (float)Math.Clamp(
                     (absolute + correction.CorrectionDistanceMeters) / TotalLengthMeters, 0d, 1d);
                 firstCorrectionProgress ??= (float)(absolute / TotalLengthMeters);
@@ -227,10 +322,11 @@ public sealed class ContinuousCornerEnvelope
                         appliedScrubDistance = (float)carry;
                     }
                 }
-                var carrySeconds = carry == 0d ? 0d : 2d * carry / (correction.ExitSpeedMetersPerSecond + nextSpeed);
+                var carrySeconds = carry == 0d ? 0d
+                    : 2d * carry / (carryStartSpeed + nextSpeed);
                 correctionDistance += correction.CorrectionDistanceMeters;
-                correctionTime += correction.TravelTimeSeconds;
-                time += correction.TravelTimeSeconds + carrySeconds;
+                correctionTime += actualCorrectionSeconds;
+                time += actualCorrectionSeconds + carrySeconds;
                 if (carry > 0d && scrubAcceleration > 0f)
                 {
                     scrubDistance += carry;
@@ -258,7 +354,7 @@ public sealed class ContinuousCornerEnvelope
                         scrubWhileDriveZeroDistance += carry;
                         phaseClassification = ContinuousCornerPhaseClassification.ScrubOnly;
                     }
-                    if (nextSpeed < correction.ExitSpeedMetersPerSecond)
+                    if (nextSpeed < productionCorrectionExit)
                         naturalDecelerationDistance += carry;
                 }
                 else
@@ -362,7 +458,14 @@ public sealed class ContinuousCornerEnvelope
             if (speed > peak) { peak = speed; peakProgress = nextProgress; }
             if (speed < minimum) { minimum = speed; minimumProgress = nextProgress; }
             nodes.Add(Node(nextProgress, speed, (float)time, phaseClassification,
-                appliedScrubWindow, appliedScrubAcceleration, appliedScrubDistance));
+                appliedScrubWindow, appliedScrubAcceleration, appliedScrubDistance,
+                controlLossEligible, requiredCorrectionDistance, (float)step,
+                appliedCorrectionDistance, controlLoad, surfaceChallenge,
+                controlLossAdaptability, surfaceAdaptationPenalty, controlLossPressure,
+                stepCorrectionEnergyRemoved, stepControlLossEnergy,
+                controlLossEligible ? nodes[^1].SpeedMetersPerSecond : 0f,
+                controlLossEligible ? target : 0f,
+                productionCorrectionExit, finalCorrectionExit));
         }
         var endProgress = (float)Math.Clamp(startProgress + (double)distanceMeters / TotalLengthMeters, 0d, 1d);
         var endEnvelope = SpeedMetersPerSecond(endProgress);
@@ -391,13 +494,39 @@ public sealed class ContinuousCornerEnvelope
             LastScrubProgress = lastScrubProgress,
             FirstScrubDistanceMeters = firstScrubDistanceMeters,
             CorrectionDistanceBeforeFirstScrubMeters = correctionDistanceBeforeFirstScrubMeters,
+            CorrectionEnergyRemovedJoules = correctionEnergyRemoved,
+            ControlLossEnergyJoules = controlLossEnergy,
+            MeanControlLoad = controlLossStepCount == 0
+                ? 0f
+                : (float)(controlLoadSum / controlLossStepCount),
+            MaximumControlLoad = maximumControlLoad,
+            MeanControlLossPressure = controlLossStepCount == 0
+                ? 0f
+                : (float)(controlLossPressureSum / controlLossStepCount),
+            MaximumControlLossPressure = maximumControlLossPressure,
+            ControlLossStepCount = controlLossStepCount,
         };
 
         ContinuousCornerNode Node(float p, float v, float elapsed,
             ContinuousCornerPhaseClassification classification,
             float appliedScrubWindow = 0f,
             float appliedScrubAcceleration = 0f,
-            float appliedScrubDistance = 0f)
+            float appliedScrubDistance = 0f,
+            bool controlLossEligible = false,
+            float requiredCorrectionDistance = 0f,
+            float availableStepDistance = 0f,
+            float appliedCorrectionDistance = 0f,
+            float controlLoad = 0f,
+            float surfaceChallenge = 0f,
+            float adaptability = 0f,
+            float surfaceAdaptationPenalty = 0f,
+            float controlLossPressure = 0f,
+            double correctionEnergyRemovedJoules = 0d,
+            double controlLossEnergyJoules = 0d,
+            float correctionEntrySpeed = 0f,
+            float correctionTargetSpeed = 0f,
+            float productionCorrectionExit = 0f,
+            float finalCorrectionExit = 0f)
         {
             var observation = ObserveReducedDriveForce(v, DriveAvailability(p), reducedDriveResistanceExposure);
             var scrubWindow = scrubAdjustment is null || scrubAdjustment.Value.IsProductionBaseline
@@ -428,6 +557,22 @@ public sealed class ContinuousCornerEnvelope
                 EnvelopeCorrectionCapabilityMetersPerSecondSquared =
                     CorrectionCapabilityMetersPerSecondSquared,
                 EnvelopeTotalLengthMeters = TotalLengthMeters,
+                ControlLossEligible = controlLossEligible,
+                RequiredCorrectionDistanceMeters = requiredCorrectionDistance,
+                AvailableStepDistanceMeters = availableStepDistance,
+                AppliedCorrectionDistanceMeters = appliedCorrectionDistance,
+                ControlLoad = controlLoad,
+                ControlLossEffectiveGrip = controlLossEligible ? controlLossEffectiveGrip : 0f,
+                SurfaceChallenge = surfaceChallenge,
+                ControlLossAdaptability = controlLossEligible ? adaptability : 0f,
+                SurfaceAdaptationPenalty = surfaceAdaptationPenalty,
+                ControlLossPressure = controlLossPressure,
+                CorrectionEnergyRemovedJoules = correctionEnergyRemovedJoules,
+                ControlLossEnergyJoules = controlLossEnergyJoules,
+                CorrectionEntrySpeedMetersPerSecond = correctionEntrySpeed,
+                CorrectionTargetSpeedMetersPerSecond = correctionTargetSpeed,
+                ProductionCorrectionExitSpeedMetersPerSecond = productionCorrectionExit,
+                FinalCorrectionExitSpeedMetersPerSecond = finalCorrectionExit,
             };
         }
 
@@ -555,6 +700,22 @@ public sealed record ContinuousCornerNode(float CornerProgress, float SpeedMeter
     internal float EnvelopeApexSpeedMetersPerSecond { get; init; }
     internal float EnvelopeCorrectionCapabilityMetersPerSecondSquared { get; init; }
     internal float EnvelopeTotalLengthMeters { get; init; }
+    internal bool ControlLossEligible { get; init; }
+    internal float RequiredCorrectionDistanceMeters { get; init; }
+    internal float AvailableStepDistanceMeters { get; init; }
+    internal float AppliedCorrectionDistanceMeters { get; init; }
+    internal float ControlLoad { get; init; }
+    internal float ControlLossEffectiveGrip { get; init; }
+    internal float SurfaceChallenge { get; init; }
+    internal float ControlLossAdaptability { get; init; }
+    internal float SurfaceAdaptationPenalty { get; init; }
+    internal float ControlLossPressure { get; init; }
+    internal double CorrectionEnergyRemovedJoules { get; init; }
+    internal double ControlLossEnergyJoules { get; init; }
+    internal float CorrectionEntrySpeedMetersPerSecond { get; init; }
+    internal float CorrectionTargetSpeedMetersPerSecond { get; init; }
+    internal float ProductionCorrectionExitSpeedMetersPerSecond { get; init; }
+    internal float FinalCorrectionExitSpeedMetersPerSecond { get; init; }
 }
 
 /// <summary>Immutable observations with value equality, including in diagnostic records.</summary>
@@ -605,6 +766,13 @@ public sealed record ContinuousCornerTraversalProfile(
     internal float? LastScrubProgress { get; init; }
     internal float? FirstScrubDistanceMeters { get; init; }
     internal float CorrectionDistanceBeforeFirstScrubMeters { get; init; }
+    internal double CorrectionEnergyRemovedJoules { get; init; }
+    internal double ControlLossEnergyJoules { get; init; }
+    internal float MeanControlLoad { get; init; }
+    internal float MaximumControlLoad { get; init; }
+    internal float MeanControlLossPressure { get; init; }
+    internal float MaximumControlLossPressure { get; init; }
+    internal int ControlLossStepCount { get; init; }
 }
 
 internal readonly record struct ReducedDriveForceObservation(

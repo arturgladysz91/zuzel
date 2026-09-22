@@ -6,6 +6,14 @@ using CoreSim.Setup;
 
 if (args.Length > 0)
 {
+    if (args.Length == 2 && StringComparer.Ordinal.Equals(args[0],
+            "active-correction-control-loss-experiment-report"))
+    {
+        ActiveCorrectionControlLossExperimentReportWriter.Write(args[1]);
+        Console.WriteLine($"Wrote deterministic active-correction control-loss experiment report: {args[1]}");
+        return;
+    }
+
     if (args.Length == 2 && StringComparer.Ordinal.Equals(args[0], "pre-apex-scrub-loss-experiment-report"))
     {
         PreApexScrubLossExperimentReportWriter.Write(args[1]);
