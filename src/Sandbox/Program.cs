@@ -7,6 +7,14 @@ using CoreSim.Setup;
 if (args.Length > 0)
 {
     if (args.Length == 2 && StringComparer.Ordinal.Equals(args[0],
+            "dynamic-line-choice-track-evolution-report"))
+    {
+        DynamicLineChoiceTrackEvolutionReportWriter.Write(args[1]);
+        Console.WriteLine($"Wrote deterministic dynamic-line choice and track-evolution report: {args[1]}");
+        return;
+    }
+
+    if (args.Length == 2 && StringComparer.Ordinal.Equals(args[0],
             "active-correction-control-loss-experiment-report"))
     {
         ActiveCorrectionControlLossExperimentReportWriter.Write(args[1]);
@@ -106,6 +114,7 @@ if (args.Length > 0)
     }
 
     Console.Error.WriteLine("Usage:");
+    Console.Error.WriteLine("  Sandbox dynamic-line-choice-track-evolution-report <output-markdown>");
     Console.Error.WriteLine("  Sandbox pre-apex-scrub-loss-experiment-report <output-markdown>");
     Console.Error.WriteLine("  Sandbox corner-reduced-drive-resistance-experiment-report <output-markdown>");
     Console.Error.WriteLine("  Sandbox straight-drive-envelope-experiment-report <output-markdown>");
