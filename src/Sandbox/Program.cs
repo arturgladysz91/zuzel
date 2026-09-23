@@ -7,6 +7,14 @@ using CoreSim.Setup;
 if (args.Length > 0)
 {
     if (args.Length == 2 && StringComparer.Ordinal.Equals(args[0],
+            "dynamic-corner-trajectory-geometry-report"))
+    {
+        DynamicCornerTrajectoryGeometryReportWriter.Write(args[1]);
+        Console.WriteLine($"Wrote deterministic dynamic corner trajectory geometry report: {args[1]}");
+        return;
+    }
+
+    if (args.Length == 2 && StringComparer.Ordinal.Equals(args[0],
             "dynamic-line-choice-track-evolution-report"))
     {
         DynamicLineChoiceTrackEvolutionReportWriter.Write(args[1]);
@@ -114,6 +122,7 @@ if (args.Length > 0)
     }
 
     Console.Error.WriteLine("Usage:");
+    Console.Error.WriteLine("  Sandbox dynamic-corner-trajectory-geometry-report <output-markdown>");
     Console.Error.WriteLine("  Sandbox dynamic-line-choice-track-evolution-report <output-markdown>");
     Console.Error.WriteLine("  Sandbox pre-apex-scrub-loss-experiment-report <output-markdown>");
     Console.Error.WriteLine("  Sandbox corner-reduced-drive-resistance-experiment-report <output-markdown>");
