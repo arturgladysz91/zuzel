@@ -136,7 +136,7 @@ public sealed class RealStartTelemetryCalibrationTests
         var expected = new Dictionary<string, string>(StringComparer.Ordinal)
         {
             ["src/CoreSim/Track/ContinuousCornerEnvelope.cs"] = "4C86C9B232D8112150AD8FB9D5CF1E2B65941A3D132C7D82E61379FE367F748B",
-            ["src/CoreSim/Track/SegmentPhysics.cs"] = "6425F9C1930AD03F5C3DF6F6442C0CC42C0D1A999DAE80DF3F3E26DA8AE3DC85",
+            ["src/CoreSim/Track/SegmentPhysics.cs"] = "693D3C911F76CB83F60CD6DED850490F101B0FE0F6558D453DC35927DC123B16",
             ["src/CoreSim/Track/TrackGeometry.cs"] = "2DEDA3F4974FF97EE49EA63D345944BB208786AF89596044F06A70C7E92D3564",
             ["src/CoreSim/Rider.cs"] = "153FA23E1F16B7AFA0EC7D68C3081EED23FC057713AE20F914492684312A6E4E",
             ["src/CoreSim/Setup/BikeSetup.cs"] = "D36C27B91FD90F99D83891B33B73B1B404A7C288704C04C8400F15926B6E1767",

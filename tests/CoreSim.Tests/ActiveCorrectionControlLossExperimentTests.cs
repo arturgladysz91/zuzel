@@ -277,7 +277,7 @@ public sealed class ActiveCorrectionControlLossExperimentTests
     {
         var expected = new Dictionary<string, string>(StringComparer.Ordinal)
         {
-            ["src/CoreSim/Track/SegmentPhysics.cs"] = "6425F9C1930AD03F5C3DF6F6442C0CC42C0D1A999DAE80DF3F3E26DA8AE3DC85",
+            ["src/CoreSim/Track/SegmentPhysics.cs"] = "693D3C911F76CB83F60CD6DED850490F101B0FE0F6558D453DC35927DC123B16",
             ["src/CoreSim/Track/LateralMovementModel.cs"] = "4A5A71D726B10D1D52C84BCFC053E63E11A4F4D21A381225DC23821D3BA9AC44",
             ["src/CoreSim/Decisions/AdaptiveDecisionModel.cs"] = "A1FCBA7E068C09B69CF849492424C89083BAD69F965FC6D767415EA9F7478314",
         };

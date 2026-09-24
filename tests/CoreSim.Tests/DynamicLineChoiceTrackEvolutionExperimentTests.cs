@@ -627,7 +627,7 @@ public sealed class DynamicLineChoiceTrackEvolutionExperimentTests
     {
         AssertHashes(new Dictionary<string, string>(StringComparer.Ordinal)
         {
-            ["src/CoreSim/Track/SegmentPhysics.cs"] = "6425F9C1930AD03F5C3DF6F6442C0CC42C0D1A999DAE80DF3F3E26DA8AE3DC85",
+            ["src/CoreSim/Track/SegmentPhysics.cs"] = "693D3C911F76CB83F60CD6DED850490F101B0FE0F6558D453DC35927DC123B16",
             ["src/CoreSim/Track/ContinuousCornerEnvelope.cs"] = "4C86C9B232D8112150AD8FB9D5CF1E2B65941A3D132C7D82E61379FE367F748B",
             ["src/CoreSim/Track/LongitudinalDynamics.cs"] = "33349B6719C69F4F4743D69200A68266D452A7EDD601E702E1E7F9233640EF31",
             ["src/CoreSim/Track/LateralMovementModel.cs"] = "4A5A71D726B10D1D52C84BCFC053E63E11A4F4D21A381225DC23821D3BA9AC44",
