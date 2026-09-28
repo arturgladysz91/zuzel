@@ -248,6 +248,7 @@ Gracz zarządza niepewnością i ograniczonym czasem. Nie otrzymuje bezpośredni
 
 ## Dokumenty
 
+- [`rider-model.md`](rider-model.md) — docelowy model zawodnika: umiejętności, psychika, rozwój, forma, relacje, trening i zależności.
 - [`match-flow.md`](match-flow.md) — fazy meczu i miejsca podejmowania decyzji.
 - [`time-and-decision-windows.md`](time-and-decision-windows.md) — czas, kolejki prac i sytuacje bieg po biegu.
 - [`track-management.md`](track-management.md) — docelowy Track Engine, pogoda, zużycie i zakres wpływu gospodarza.
