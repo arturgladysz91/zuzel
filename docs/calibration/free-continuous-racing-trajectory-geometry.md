@@ -5747,12 +5747,13 @@ A geometry-diverse deterministic subset of **48** valid starts receives whole-pa
 
 ## N. Search budget and invalidations
 
-CandidatesEvaluated: **9137**; Valid: **5703**; InvalidGeometry: **1215**; InvalidLateralExecution: **1050**; InvalidCornerControlDeparture: **1074**; InvalidCrash: **93**; InvalidStraightReposition: **2**. Valid refined finals: **48**; refinement rounds: **6**.
+CandidatesEvaluated: **9196**; Valid: **5754**; InvalidGeometry: **1223**; InvalidLateralExecution: **1050**; InvalidCornerControlDeparture: **1074**; InvalidCrash: **93**; InvalidStraightReposition: **2**. Valid refined finals: **48**; refinement rounds: **6**.
 
 ## O. Objective convergence
 
 Unchanged-search archive: `FCT-B843ADDB373E` from `Flat-0`, controls `[0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000]`, sector **6.676829 s**. Its initial exhaustive best single-coordinate ±0.125/±0.0625 m improvement was **0.000000 s**; its bounded best-three adjacent-pair ±0.0625 m improvement was **0.000000 s**. Additional accepted closure moves: **0**.
-Independent refined starts within 0.02 s: **5**; same-basin count: **5**. Final residual best single-coordinate improvement: **0.000000 s**. Final residual adjacent-pair improvement: **0.000000 s**. LocalSearchConverged: **YES**. ObjectiveConvergence: **NO**.
+Independent refined starts within 0.02 s: **5**; same-basin count: **5**. Final residual best single-coordinate improvement: **0.000000 s**. Final residual adjacent-pair improvement: **0.000000 s**. LocalSearchConverged: **YES**. TopThreeStable: **YES**. ObjectiveConvergence: **YES**.
+Old top-three rule, LastRoundImprovement <= 0.002000 s: **NO**. LastRoundImprovement is the time decrease from entering to leaving the scheduled 0.0625 m round. It measures progress during that round, not the residual neighborhood of the stored final candidate. The repaired rule makes an independent deterministic closure pass for each leading start and tests the final ±0.125/±0.0625 m single-coordinate and ±0.0625 m adjacent-pair residuals against the same tolerance.
 
 ## P. Geometry convergence
 
@@ -5760,7 +5761,7 @@ Distinct near-optimal RMS shape basins: **1**. GeometryConvergence: **YES**. Geo
 
 ## Q. Multiple near-optimal basins
 
-MultipleNearOptimalBasins: **NO**. SearchConvergenceUncertain: **YES**. Uncertainty depends on objective convergence, final local improvement, and isolated-start dominance—not merely different shapes.
+MultipleNearOptimalBasins: **NO**. SearchConvergenceUncertain: **NO**. Uncertainty depends on objective convergence, final local improvement, and isolated-start dominance—not merely different shapes.
 
 ## R. Frozen and #46 controls
 
@@ -5826,6 +5827,24 @@ Halton-071 | `FCT-D4F683A9E75E` | 7.209944 | +0.533114
 Halton-072 | `FCT-650B2E538B52` | 7.229570 | +0.552741
 Halton-073 | `FCT-10567187F819` | 7.257326 | +0.580496
 Flat-100 | `FCT-D9EDC8DB5428` | 7.287529 | +0.610699
+
+Top three scheduled finals before additional local closure (Stable uses the old last-round rule):
+
+Seed | Final ID | Controls m | Sector s | Delta s | LastRoundImprovement s | Step improvements 2/1/.5/.25/.125/.0625 m s | Final single ±.0625 m s | Final single ±.125/.0625 m s | Final adjacent pair ±.0625 m s | Changed last round | Closure moves | Closure passes | Stable
+---|---|---|---:|---:|---:|---|---:|---:|---:|---:|---:|---:|---:
+Flat-0 | `FCT-B843ADDB373E` | `[0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000]` | 6.676829338 | 0.000000000 | 0.000000000 | `[0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000]` | 0.000000000 | 0.000000000 | 0.000000000 | NO | 0 | 0 | YES
+Flat-25 | `FCT-002565F7C843` | `[0.025000095, 0.025000095, 0.025000095, 0.025000095, 0.025000095, 0.025000095, 0.025000095, 0.025000095, 0.025000095, 0.025000095, 0.025000095]` | 6.677979469 | 0.001150131 | 0.000000000 | `[0.106228352, 0.049463272, 0.023875237, 0.000000000, 0.005790710, 0.000000000]` | 0.000000000 | 0.000000000 | 0.000000000 | NO | 0 | 0 | YES
+Low-phase-neutral | `FCT-AE7832278759` | `[0.522111535, 0.617457867, 0.604532838, 0.488273501, 0.313086927, 0.145888388, 0.050542116, 0.063467115, 0.179726511, 0.354912996, 0.584611535]` | 6.683063030 | 0.006233692 | 0.008813381 | `[0.000000000, 0.000000000, 0.000000000, 0.011482716, 0.006453037, 0.008813381]` | 0.000000000 | 0.000000000 | 0.000000000 | YES | 0 | 0 | NO
+OldTopThreeStable: **NO**. Failing finals: FCT-AE7832278759.
+
+Top three independently refined-start finals after deterministic local closure (Stable uses final residual neighborhoods):
+
+Seed | Final ID | Controls m | Sector s | Delta s | LastRoundImprovement s | Step improvements 2/1/.5/.25/.125/.0625 m s | Final single ±.0625 m s | Final single ±.125/.0625 m s | Final adjacent pair ±.0625 m s | Changed last round | Closure moves | Closure passes | Stable
+---|---|---|---:|---:|---:|---|---:|---:|---:|---:|---:|---:|---:
+Flat-0 | `FCT-B843ADDB373E` | `[0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000]` | 6.676829338 | 0.000000000 | 0.000000000 | `[0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000, 0.000000000]` | 0.000000000 | 0.000000000 | 0.000000000 | NO | 0 | 1 | YES
+Flat-25 | `FCT-002565F7C843` | `[0.025000095, 0.025000095, 0.025000095, 0.025000095, 0.025000095, 0.025000095, 0.025000095, 0.025000095, 0.025000095, 0.025000095, 0.025000095]` | 6.677979469 | 0.001150131 | 0.000000000 | `[0.106228352, 0.049463272, 0.023875237, 0.000000000, 0.005790710, 0.000000000]` | 0.000000000 | 0.000000000 | 0.000000000 | NO | 0 | 1 | YES
+Low-phase-neutral | `FCT-AE7832278759` | `[0.522111535, 0.617457867, 0.604532838, 0.488273501, 0.313086927, 0.145888388, 0.050542116, 0.063467115, 0.179726511, 0.354912996, 0.584611535]` | 6.683063030 | 0.006233692 | 0.008813381 | `[0.000000000, 0.000000000, 0.000000000, 0.011482716, 0.006453037, 0.008813381]` | 0.000000000 | 0.000000000 | 0.000000000 | YES | 0 | 1 | YES
+TopThreeStable: **YES**. Failing finals: none.
 
 ## T. Top 20 repaired trajectories
 
@@ -8062,13 +8081,13 @@ Best constant periodic sector: **6.676829 s**. Free-minus-best-constant: **0.000
 ## X. Periodic convergence and revised interpretation
 
 Repeated-lap free: 13.353217 s, stable entry 26.515173 m/s, iterations 2, converged YES. Repeated-lap constant: 13.353217 s, stable entry 26.515173 m/s, iterations 2, converged YES. Delta free-constant: 0.000000 s. Both replays carry speed through the same physical exit→next-entry straight geometry; lateral position is closed by construction.
-VariableCurvatureReplayHealthy: **YES**. FreeTrajectoryGeometrySignalHealthy: **NO**. Classification: `FreeTrajectoryTiesBestConstant, BestFoundTrajectoryIsConstant, LateralExecutionConstraintBinding, VariableCurvatureEnvelopeConsistent, LocalCornerControlConstraintActive, OldWinnerRejectedAfterRepair, StraightRepositionConstraintActive, GeometryConvergence, LocalSearchConverged, VariableCurvatureReplayHealthy, SearchConvergenceUncertain`. Revised first bottleneck: **search convergence**.
+VariableCurvatureReplayHealthy: **YES**. FreeTrajectoryGeometrySignalHealthy: **YES**. Classification: `FreeTrajectoryTiesBestConstant, BestFoundTrajectoryIsConstant, LateralExecutionConstraintBinding, VariableCurvatureEnvelopeConsistent, LocalCornerControlConstraintActive, OldWinnerRejectedAfterRepair, StraightRepositionConstraintActive, ObjectiveConvergence, GeometryConvergence, LocalSearchConverged, VariableCurvatureReplayHealthy, FreeTrajectoryGeometrySignalHealthy`. Revised first bottleneck: **corner trajectory physics economics after continuous geometry**.
 
 ## Y. Revised next subsystem
 
-DecisionCase: **D**. Recommended single next subsystem: **trajectory evaluator/search repair**.
-Evaluator sanity or objective convergence is not yet sufficient for physics interpretation; more evaluator/search repair is required before selecting a new production subsystem.
-Does continuous geometry alone suffice? **UNCERTAIN**. Is turning/slip cost needed now? **NOT YET DETERMINED**. Fixed p=.5 production drive availability remains a diagnostic limitation: **YES**.
+DecisionCase: **C**. Recommended single next subsystem: **corner turning/slip cost experiment**.
+Under the current frozen evaluator and Motoarena fixture, the converged search supports ConstantInner. This experiment does not establish an optimum for real speedway. Corner turning/slip cost remains a separate research question.
+Free geometry beats the best constant in this fixture: **NO**. Fixed p=.5 production drive availability remains a diagnostic limitation: **YES**.
 
 ## Z. Freeze, boundaries and provenance
 

@@ -915,7 +915,8 @@ public sealed class FreeContinuousRacingTrajectoryGeometryExperimentTests
     public void SearchConvergenceDimensionsAreComputedIndependently()
     {
         var search = Result.Value.Search;
-        Assert.False(search.ObjectiveConvergence);
+        Assert.True(search.ObjectiveConvergence);
+        Assert.True(search.TopThreeStable);
         Assert.True(search.GeometryConvergence);
         Assert.Equal(search.ObjectiveConvergence && !search.GeometryConvergence,
             search.MultipleNearOptimalBasins);
@@ -937,6 +938,93 @@ public sealed class FreeContinuousRacingTrajectoryGeometryExperimentTests
                      && Result.Value.Search.PairPerturbationImprovementSeconds <=
                      FreeContinuousRacingTrajectoryGeometryExperiment.LocalSearchImprovementToleranceSeconds,
             Result.Value.Search.LocalSearchConverged);
+    }
+
+    [Fact]
+    public void MaterialFinalScheduledRoundReceivesAnIndependentClosurePass()
+    {
+        var tolerance = FreeContinuousRacingTrajectoryGeometryExperiment
+            .LocalSearchImprovementToleranceSeconds;
+        var material = Result.Value.Search.TopThreeRefinementDiagnostics
+            .Where(item => item.LastRoundImprovementSeconds > tolerance).ToArray();
+        Assert.NotEmpty(material);
+        Assert.All(material, item =>
+        {
+            Assert.Equal(6, item.RefinementStepImprovementsSeconds.Count);
+            Assert.Equal(item.RefinementStepImprovementsSeconds[^1], item.LastRoundImprovementSeconds);
+            Assert.True(item.ChangedInLastRound);
+            Assert.True(item.ClosurePasses >= 1);
+            Assert.True(item.Stable);
+        });
+    }
+
+    [Fact]
+    public void TopThreeReportedStabilityMatchesIndependentlyEvaluatedFinalNeighborhoods()
+    {
+        var search = Result.Value.Search;
+        var diagnostics = search.TopThreeRefinementDiagnostics;
+        var tolerance = FreeContinuousRacingTrajectoryGeometryExperiment
+            .LocalSearchImprovementToleranceSeconds;
+        Assert.Equal(3, diagnostics.Count);
+        Assert.Equal(3, diagnostics.Select(item => item.Family).Distinct(StringComparer.Ordinal).Count());
+        Assert.Equal(search.TopThreeStable, diagnostics.All(item => item.Stable));
+        foreach (var item in diagnostics)
+        {
+            Assert.Equal(search.FamilyResults.Single(family => family.Family == item.Family)
+                .Best.Candidate.Id, item.Final.Candidate.Id);
+            var origin = item.Final;
+            var entrySpeed = Result.Value.EntrySpeedMetersPerSecond;
+            var singleAtFinalStep = BestSingleResidual(origin, entrySpeed, .0625f);
+            var expandedSingle = BestSingleResidual(origin, entrySpeed, .125f, .0625f);
+            var pair = BestAdjacentPairResidual(origin, entrySpeed);
+            Assert.InRange(MathF.Abs(singleAtFinalStep - item.ResidualSingleCoordinateImprovementSeconds),
+                0f, 1e-5f);
+            Assert.InRange(MathF.Abs(expandedSingle
+                - item.ResidualExpandedSingleCoordinateImprovementSeconds), 0f, 1e-5f);
+            Assert.InRange(MathF.Abs(pair - item.ResidualAdjacentPairImprovementSeconds), 0f, 1e-5f);
+            Assert.True(singleAtFinalStep <= tolerance);
+            Assert.True(expandedSingle <= tolerance);
+            Assert.True(pair <= tolerance);
+            Assert.Equal(item.ClosurePasses > 0 && expandedSingle <= tolerance && pair <= tolerance,
+                item.Stable);
+        }
+    }
+
+    private static float BestSingleResidual(
+        FreeTrajectoryEvaluation origin, float entrySpeedMetersPerSecond, params float[] stepsMeters)
+    {
+        var best = origin.SectorTimeSeconds;
+        foreach (var step in stepsMeters)
+        for (var station = 0; station < FreeContinuousRacingTrajectoryGeometryExperiment.ControlStationCount;
+             station++)
+        foreach (var direction in new[] { -1f, 1f })
+        {
+            var controls = origin.Candidate.ControlOffsetsMeters.ToArray();
+            controls[station] += direction * step;
+            var trial = FreeContinuousRacingTrajectoryGeometryExperiment.Evaluate(
+                controls, entrySpeedMetersPerSecond);
+            if (trial.IsValid) best = MathF.Min(best, trial.SectorTimeSeconds);
+        }
+        return MathF.Max(0f, origin.SectorTimeSeconds - best);
+    }
+
+    private static float BestAdjacentPairResidual(
+        FreeTrajectoryEvaluation origin, float entrySpeedMetersPerSecond)
+    {
+        var best = origin.SectorTimeSeconds;
+        for (var station = 0; station
+             < FreeContinuousRacingTrajectoryGeometryExperiment.ControlStationCount - 1; station++)
+        foreach (var firstDirection in new[] { -1f, 1f })
+        foreach (var secondDirection in new[] { -1f, 1f })
+        {
+            var controls = origin.Candidate.ControlOffsetsMeters.ToArray();
+            controls[station] += firstDirection * .0625f;
+            controls[station + 1] += secondDirection * .0625f;
+            var trial = FreeContinuousRacingTrajectoryGeometryExperiment.Evaluate(
+                controls, entrySpeedMetersPerSecond);
+            if (trial.IsValid) best = MathF.Min(best, trial.SectorTimeSeconds);
+        }
+        return MathF.Max(0f, origin.SectorTimeSeconds - best);
     }
 
     [Fact]
@@ -1002,7 +1090,7 @@ public sealed class FreeContinuousRacingTrajectoryGeometryExperimentTests
         Assert.True(Result.Value.OldWinnerRejectedAfterRepair);
         Assert.True(Result.Value.StraightRepositionConstraintActive);
         Assert.True(Result.Value.VariableCurvatureReplayHealthy);
-        Assert.False(Result.Value.FreeTrajectoryGeometrySignalHealthy);
+        Assert.True(Result.Value.FreeTrajectoryGeometrySignalHealthy);
     }
 
     [Fact]
@@ -1034,10 +1122,9 @@ public sealed class FreeContinuousRacingTrajectoryGeometryExperimentTests
     [Fact]
     public void DecisionTreeSelectsOneNextSubsystem()
     {
-        Assert.True(Result.Value.Search.SearchConvergenceUncertain);
-        Assert.Equal("D", Result.Value.DecisionCase);
-        Assert.Equal("trajectory evaluator/search repair", Result.Value.RecommendedSubsystem);
-        Assert.Equal("search convergence", Result.Value.FirstActualBottleneck);
+        Assert.False(Result.Value.Search.SearchConvergenceUncertain);
+        Assert.NotEqual("D", Result.Value.DecisionCase);
+        Assert.NotEqual("search convergence", Result.Value.FirstActualBottleneck);
     }
 
     [Fact]

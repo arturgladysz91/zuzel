@@ -11,11 +11,14 @@ public static class FreeContinuousRacingTrajectoryGeometryReport
         var output = new StringBuilder();
         void L(string value = "") => output.Append(value).Append('\n');
         static string F(double value) => value.ToString("0.000000", CultureInfo.InvariantCulture);
+        static string F9(double value) => value.ToString("0.000000000", CultureInfo.InvariantCulture);
         static string E(double value) => value.ToString("0.000000000E+0", CultureInfo.InvariantCulture);
         static string Signed(double value) => value.ToString("+0.000000;-0.000000;0.000000", CultureInfo.InvariantCulture);
         static string Yn(bool value) => value ? "YES" : "NO";
         static string Vector(IEnumerable<float> values) => "[" + string.Join(", ",
             values.Select(value => F(value))) + "]";
+        static string Vector9(IEnumerable<float> values) => "[" + string.Join(", ",
+            values.Select(value => F9(value))) + "]";
 
         var best = result.BestFound;
         var bestConstant = result.BestConstant;
@@ -24,6 +27,13 @@ public static class FreeContinuousRacingTrajectoryGeometryReport
         var priorReviewed = result.PriorReviewedWinnerAfterContinuityRepair;
         var priorBroad = result.PriorReviewedBroadLateWinnerAfterEnvelopeRepair;
         var bestPath = best.Path ?? throw new InvalidOperationException("The best trajectory must have geometry.");
+        void RefinedDiagnosticsTable(IEnumerable<FreeTrajectoryRefinedStartDiagnostic> diagnostics)
+        {
+            L("Seed | Final ID | Controls m | Sector s | Delta s | LastRoundImprovement s | Step improvements 2/1/.5/.25/.125/.0625 m s | Final single ±.0625 m s | Final single ±.125/.0625 m s | Final adjacent pair ±.0625 m s | Changed last round | Closure moves | Closure passes | Stable");
+            L("---|---|---|---:|---:|---:|---|---:|---:|---:|---:|---:|---:|---:");
+            foreach (var item in diagnostics)
+                L($"{item.Family} | `{item.Final.Candidate.Id}` | `{Vector9(item.Final.Candidate.ControlOffsetsMeters)}` | {F9(item.Final.SectorTimeSeconds)} | {F9(item.Final.SectorTimeSeconds - best.SectorTimeSeconds)} | {F9(item.LastRoundImprovementSeconds)} | `{Vector9(item.RefinementStepImprovementsSeconds)}` | {F9(item.ResidualSingleCoordinateImprovementSeconds)} | {F9(item.ResidualExpandedSingleCoordinateImprovementSeconds)} | {F9(item.ResidualAdjacentPairImprovementSeconds)} | {Yn(item.ChangedInLastRound)} | {item.AdditionalClosureMoves} | {item.ClosurePasses} | {Yn(item.Stable)}");
+        }
 
         L("# Free Continuous Racing Trajectory Geometry Experiment — complete sampled turning-demand envelope");
         L();
@@ -129,7 +139,8 @@ public static class FreeContinuousRacingTrajectoryGeometryReport
         L("## O. Objective convergence");
         L();
         L($"Unchanged-search archive: `{result.Search.ArchivedUnclosedBest.Candidate.Id}` from `{result.Search.ArchivedUnclosedBest.Candidate.SeedFamily}`, controls `{Vector(result.Search.ArchivedUnclosedBest.Candidate.ControlOffsetsMeters)}`, sector **{F(result.Search.ArchivedUnclosedBest.SectorTimeSeconds)} s**. Its initial exhaustive best single-coordinate ±0.125/±0.0625 m improvement was **{F(result.Search.InitialLocalPerturbationImprovementSeconds)} s**; its bounded best-three adjacent-pair ±0.0625 m improvement was **{F(result.Search.InitialPairPerturbationImprovementSeconds)} s**. Additional accepted closure moves: **{result.Search.AdditionalAcceptedLocalMoves}**.");
-        L($"Independent refined starts within 0.02 s: **{result.Search.WithinToleranceFamilyCount}**; same-basin count: **{result.Search.SameBasinFamilyCount}**. Final residual best single-coordinate improvement: **{F(result.Search.LocalPerturbationImprovementSeconds)} s**. Final residual adjacent-pair improvement: **{F(result.Search.PairPerturbationImprovementSeconds)} s**. LocalSearchConverged: **{Yn(result.Search.LocalSearchConverged)}**. ObjectiveConvergence: **{Yn(result.Search.ObjectiveConvergence)}**.");
+        L($"Independent refined starts within 0.02 s: **{result.Search.WithinToleranceFamilyCount}**; same-basin count: **{result.Search.SameBasinFamilyCount}**. Final residual best single-coordinate improvement: **{F(result.Search.LocalPerturbationImprovementSeconds)} s**. Final residual adjacent-pair improvement: **{F(result.Search.PairPerturbationImprovementSeconds)} s**. LocalSearchConverged: **{Yn(result.Search.LocalSearchConverged)}**. TopThreeStable: **{Yn(result.Search.TopThreeStable)}**. ObjectiveConvergence: **{Yn(result.Search.ObjectiveConvergence)}**.");
+        L($"Old top-three rule, LastRoundImprovement <= {F(FreeContinuousRacingTrajectoryGeometryExperiment.LocalSearchImprovementToleranceSeconds)} s: **{Yn(result.Search.ScheduledTopThreeStableByLastRound)}**. LastRoundImprovement is the time decrease from entering to leaving the scheduled 0.0625 m round. It measures progress during that round, not the residual neighborhood of the stored final candidate. The repaired rule makes an independent deterministic closure pass for each leading start and tests the final ±0.125/±0.0625 m single-coordinate and ±0.0625 m adjacent-pair residuals against the same tolerance.");
         L();
         L("## P. Geometry convergence");
         L();
@@ -153,6 +164,19 @@ public static class FreeContinuousRacingTrajectoryGeometryReport
         foreach (var family in result.Search.FamilyResults.OrderBy(item => item.Best.SectorTimeSeconds)
                      .ThenBy(item => item.Best.Candidate.Id, StringComparer.Ordinal))
             L($"{family.Family} | `{family.Best.Candidate.Id}` | {F(family.Best.SectorTimeSeconds)} | {Signed(family.Best.SectorTimeSeconds - best.SectorTimeSeconds)}");
+        L();
+        L("Top three scheduled finals before additional local closure (Stable uses the old last-round rule):");
+        L();
+        RefinedDiagnosticsTable(result.Search.ScheduledTopThreeRefinementDiagnostics);
+        L($"OldTopThreeStable: **{Yn(result.Search.ScheduledTopThreeStableByLastRound)}**. Failing finals: {(result.Search.ScheduledTopThreeRefinementDiagnostics.Any(item => !item.Stable) ? string.Join(", ", result.Search.ScheduledTopThreeRefinementDiagnostics.Where(item => !item.Stable).Select(item => item.Final.Candidate.Id)) : "none")}.");
+        L();
+        L("Top three independently refined-start finals after deterministic local closure (Stable uses final residual neighborhoods):");
+        L();
+        L("Seed | Final ID | Controls m | Sector s | Delta s | LastRoundImprovement s | Step improvements 2/1/.5/.25/.125/.0625 m s | Final single ±.0625 m s | Final single ±.125/.0625 m s | Final adjacent pair ±.0625 m s | Changed last round | Closure moves | Closure passes | Stable");
+        L("---|---|---|---:|---:|---:|---|---:|---:|---:|---:|---:|---:|---:");
+        foreach (var item in result.Search.TopThreeRefinementDiagnostics)
+            L($"{item.Family} | `{item.Final.Candidate.Id}` | `{Vector9(item.Final.Candidate.ControlOffsetsMeters)}` | {F9(item.Final.SectorTimeSeconds)} | {F9(item.Final.SectorTimeSeconds - best.SectorTimeSeconds)} | {F9(item.LastRoundImprovementSeconds)} | `{Vector9(item.RefinementStepImprovementsSeconds)}` | {F9(item.ResidualSingleCoordinateImprovementSeconds)} | {F9(item.ResidualExpandedSingleCoordinateImprovementSeconds)} | {F9(item.ResidualAdjacentPairImprovementSeconds)} | {Yn(item.ChangedInLastRound)} | {item.AdditionalClosureMoves} | {item.ClosurePasses} | {Yn(item.Stable)}");
+        L($"TopThreeStable: **{Yn(result.Search.TopThreeStable)}**. Failing finals: {(result.Search.TopThreeRefinementDiagnostics.Any(item => !item.Stable) ? string.Join(", ", result.Search.TopThreeRefinementDiagnostics.Where(item => !item.Stable).Select(item => item.Final.Candidate.Id)) : "none")}.");
         L();
         L("## T. Top 20 repaired trajectories");
         L();
@@ -229,13 +253,15 @@ public static class FreeContinuousRacingTrajectoryGeometryReport
         L($"DecisionCase: **{result.DecisionCase}**. Recommended single next subsystem: **{result.RecommendedSubsystem}**.");
         if (result.DecisionCase == "A")
             L("The repaired evaluator is semantically healthy, the objective converged, and a stable non-constant path beats the best constant. The next step is only a separately reviewed production continuous trajectory geometry integration experiment—not a direct production change.");
-        else if (result.DecisionCase is "B" or "C")
-            L("The repaired evaluator and objective converged without a decisive geometry-only gain, so the next isolated question is corner turning/slip cost.");
+        else if (result.DecisionCase == "B")
+            L("Under the current frozen evaluator and Motoarena fixture, a non-constant path is slightly faster than the best constant. This experiment does not establish an optimum for real speedway. Corner turning/slip cost remains a separate research question.");
+        else if (result.DecisionCase == "C")
+            L("Under the current frozen evaluator and Motoarena fixture, the converged search supports ConstantInner. This experiment does not establish an optimum for real speedway. Corner turning/slip cost remains a separate research question.");
         else if (result.DecisionCase == "E")
             L("Execution feasibility, rather than path economics, dominates the rejected search space; the next isolated question is continuous trajectory execution/planning.");
         else
             L("Evaluator sanity or objective convergence is not yet sufficient for physics interpretation; more evaluator/search repair is required before selecting a new production subsystem.");
-        L($"Does continuous geometry alone suffice? **{(result.FreeTrajectoryGeometrySignalHealthy ? (result.FreeTrajectoryBeatsBestConstant ? "YES" : "NO") : "UNCERTAIN")}**. Is turning/slip cost needed now? **{(result.FreeTrajectoryGeometrySignalHealthy ? (result.RecommendedSubsystem == "corner turning/slip cost experiment" ? "YES" : "NO") : "NOT YET DETERMINED")}**. Fixed p=.5 production drive availability remains a diagnostic limitation: **YES**.");
+        L($"Free geometry beats the best constant in this fixture: **{(result.FreeTrajectoryGeometrySignalHealthy ? (result.FreeTrajectoryBeatsBestConstant ? "YES" : "NO") : "UNCERTAIN")}**. Fixed p=.5 production drive availability remains a diagnostic limitation: **YES**.");
         L();
         L("## Z. Freeze, boundaries and provenance");
         L();

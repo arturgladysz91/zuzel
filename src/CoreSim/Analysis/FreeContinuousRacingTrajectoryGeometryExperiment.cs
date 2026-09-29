@@ -420,6 +420,19 @@ public sealed record FreeTrajectorySeedFamilyResult(
     string Family,
     FreeTrajectoryEvaluation Best);
 
+public sealed record FreeTrajectoryRefinedStartDiagnostic(
+    string Family,
+    FreeTrajectoryEvaluation Final,
+    IReadOnlyList<float> RefinementStepImprovementsSeconds,
+    float LastRoundImprovementSeconds,
+    float ResidualSingleCoordinateImprovementSeconds,
+    float ResidualExpandedSingleCoordinateImprovementSeconds,
+    float ResidualAdjacentPairImprovementSeconds,
+    bool ChangedInLastRound,
+    int AdditionalClosureMoves,
+    int ClosurePasses,
+    bool Stable);
+
 public sealed record FreeTrajectorySearchResult(
     IReadOnlyList<FreeTrajectoryEvaluation> TopTwenty,
     IReadOnlyList<FreeTrajectorySeedFamilyResult> FamilyResults,
@@ -456,6 +469,12 @@ public sealed record FreeTrajectorySearchResult(
     public float InitialLocalPerturbationImprovementSeconds { get; init; }
     public float InitialPairPerturbationImprovementSeconds { get; init; }
     public int AdditionalAcceptedLocalMoves { get; init; }
+    public IReadOnlyList<FreeTrajectoryRefinedStartDiagnostic> TopThreeRefinementDiagnostics { get; init; }
+        = Array.Empty<FreeTrajectoryRefinedStartDiagnostic>();
+    public IReadOnlyList<FreeTrajectoryRefinedStartDiagnostic> ScheduledTopThreeRefinementDiagnostics
+        { get; init; } = Array.Empty<FreeTrajectoryRefinedStartDiagnostic>();
+    public bool ScheduledTopThreeStableByLastRound { get; init; }
+    public bool TopThreeStable { get; init; }
 }
 
 public sealed record RepeatedTrajectoryLapResult(
@@ -575,6 +594,15 @@ public sealed class FreeContinuousRacingTrajectoryGeometryExperimentResult
 /// </summary>
 public static class FreeContinuousRacingTrajectoryGeometryExperiment
 {
+    private sealed record RefinedStartState(
+        string Family,
+        FreeTrajectoryEvaluation Evaluation,
+        IReadOnlyList<float> StepImprovements,
+        float LastRoundImprovement,
+        bool ChangedInLastRound,
+        int AdditionalClosureMoves = 0,
+        int ClosurePasses = 0);
+
     public const string BaseMainSha = "4abc9700dbc794802e5afb9364a718bb7ec57bd6";
     public const int ControlStationCount = 11;
     public const float PathSampleResolutionLimitMeters = .5f;
@@ -1141,7 +1169,6 @@ public static class FreeContinuousRacingTrajectoryGeometryExperiment
         var lowDiscrepancy = LowDiscrepancySeedFamilies(geometry).ToArray();
         var families = structured.Concat(lowDiscrepancy).ToArray();
         var evaluations = new List<FreeTrajectoryEvaluation>();
-        var familyResults = new List<FreeTrajectorySeedFamilyResult>();
         var cache = new Dictionary<string, FreeTrajectoryEvaluation>(StringComparer.Ordinal);
         var evaluated = 0;
         var valid = 0;
@@ -1182,16 +1209,19 @@ public static class FreeContinuousRacingTrajectoryGeometryExperiment
         var initialStraight = initial.Count(item =>
             item.Validity == FreeTrajectoryValidity.StraightRepositionConstraint);
         var selected = SelectGeometryDiverse(initialValid, RefinedStartCount);
-        var finalStates = new List<(FreeTrajectoryEvaluation Evaluation, float LastRoundImprovement)>();
+        var finalStates = new List<RefinedStartState>();
 
         foreach (var seed in selected)
         {
             var currentControls = seed.ControlOffsetsMeters.ToArray();
             var current = Test(seed);
             var lastRoundImprovement = 0f;
+            var stepImprovements = new List<float>();
+            var changedInLastRound = false;
             foreach (var step in RefinementStepsMeters)
             {
                 var before = current.SectorTimeSeconds;
+                var beforeId = current.Candidate.Id;
                 var globalChoices = new List<FreeTrajectoryEvaluation>();
                 if (current.IsValid) globalChoices.Add(current);
                 foreach (var direction in new[] { -1f, 1f })
@@ -1228,11 +1258,14 @@ public static class FreeContinuousRacingTrajectoryGeometryExperiment
                     currentControls = current.Candidate.ControlOffsetsMeters.ToArray();
                 }
                 lastRoundImprovement = before - current.SectorTimeSeconds;
+                stepImprovements.Add(lastRoundImprovement);
+                changedInLastRound = beforeId != current.Candidate.Id;
             }
             if (current.IsValid)
             {
-                familyResults.Add(new FreeTrajectorySeedFamilyResult(seed.SeedFamily, current));
-                finalStates.Add((current, lastRoundImprovement));
+                finalStates.Add(new RefinedStartState(seed.SeedFamily, current,
+                    Array.AsReadOnly(stepImprovements.ToArray()),
+                    lastRoundImprovement, changedInLastRound));
             }
         }
 
@@ -1243,10 +1276,11 @@ public static class FreeContinuousRacingTrajectoryGeometryExperiment
             .OrderBy(item => item.SectorTimeSeconds).ThenBy(item => item.Candidate.Id, StringComparer.Ordinal)
             .Take(20).ToArray();
 
-        FreeTrajectoryEvaluation BestSingleCoordinateMove(FreeTrajectoryEvaluation origin)
+        FreeTrajectoryEvaluation BestSingleCoordinateMove(
+            FreeTrajectoryEvaluation origin, IReadOnlyList<float>? steps = null)
         {
             var choices = new List<FreeTrajectoryEvaluation> { origin };
-            foreach (var step in new[] { .125f, .0625f })
+            foreach (var step in steps ?? new[] { .125f, .0625f })
             for (var station = 0; station < ControlStationCount; station++)
             foreach (var direction in new[] { -1f, 1f })
             {
@@ -1282,6 +1316,52 @@ public static class FreeContinuousRacingTrajectoryGeometryExperiment
                 .First();
         }
 
+        (FreeTrajectoryEvaluation Final, int Moves, int Passes) CloseLocalNeighborhood(
+            FreeTrajectoryEvaluation origin)
+        {
+            var current = origin;
+            var moves = 0;
+            var passes = 0;
+            while (true)
+            {
+                passes++;
+                var single = BestSingleCoordinateMove(current);
+                var pair = BestAdjacentPairMove(new[] { current });
+                var next = new[] { current, single, pair }
+                    .OrderBy(item => item.SectorTimeSeconds)
+                    .ThenBy(item => item.Candidate.Id, StringComparer.Ordinal)
+                    .First();
+                if (current.SectorTimeSeconds - next.SectorTimeSeconds
+                    <= LocalSearchImprovementToleranceSeconds)
+                    return (current, moves, passes);
+                current = next;
+                moves++;
+            }
+        }
+
+        FreeTrajectoryRefinedStartDiagnostic DiagnoseStart(
+            RefinedStartState item, bool useScheduledRoundMetric)
+        {
+            var single = BestSingleCoordinateMove(item.Evaluation, new[] { .0625f });
+            var expandedSingle = BestSingleCoordinateMove(item.Evaluation);
+            var pair = BestAdjacentPairMove(new[] { item.Evaluation });
+            var singleResidual = MathF.Max(0f,
+                item.Evaluation.SectorTimeSeconds - single.SectorTimeSeconds);
+            var expandedSingleResidual = MathF.Max(0f,
+                item.Evaluation.SectorTimeSeconds - expandedSingle.SectorTimeSeconds);
+            var pairResidual = MathF.Max(0f,
+                item.Evaluation.SectorTimeSeconds - pair.SectorTimeSeconds);
+            var stable = useScheduledRoundMetric
+                ? item.LastRoundImprovement <= LocalSearchImprovementToleranceSeconds
+                : item.ClosurePasses > 0
+                  && expandedSingleResidual <= LocalSearchImprovementToleranceSeconds
+                  && pairResidual <= LocalSearchImprovementToleranceSeconds;
+            return new FreeTrajectoryRefinedStartDiagnostic(
+                item.Family, item.Evaluation, item.StepImprovements, item.LastRoundImprovement,
+                singleResidual, expandedSingleResidual, pairResidual,
+                item.ChangedInLastRound, item.AdditionalClosureMoves, item.ClosurePasses, stable);
+        }
+
         var archivedTop = RankedTop();
         var archivedBest = archivedTop[0];
         var initialSingle = BestSingleCoordinateMove(archivedBest);
@@ -1290,49 +1370,64 @@ public static class FreeContinuousRacingTrajectoryGeometryExperiment
         var initialPair = BestAdjacentPairMove(archivedTop.Take(3));
         var initialPairImprovement = MathF.Max(0f,
             archivedBest.SectorTimeSeconds - initialPair.SectorTimeSeconds);
+        var scheduledTopThreeDiagnostics = finalStates
+            .OrderBy(item => item.Evaluation.SectorTimeSeconds)
+            .ThenBy(item => item.Evaluation.Candidate.Id, StringComparer.Ordinal)
+            .Take(3).Select(item => DiagnoseStart(item, useScheduledRoundMetric: true)).ToArray();
         var closureBest = archivedBest;
         var additionalAcceptedMoves = 0;
-        if (initialPairImprovement > LocalSearchImprovementToleranceSeconds)
+        var initialBest = new[] { archivedBest, initialSingle, initialPair }
+            .OrderBy(item => item.SectorTimeSeconds)
+            .ThenBy(item => item.Candidate.Id, StringComparer.Ordinal)
+            .First();
+        if (archivedBest.SectorTimeSeconds - initialBest.SectorTimeSeconds
+            > LocalSearchImprovementToleranceSeconds)
         {
-            closureBest = initialPair;
+            closureBest = initialBest;
             additionalAcceptedMoves++;
         }
-        else if (initialLocalImprovement > LocalSearchImprovementToleranceSeconds)
-        {
-            closureBest = initialSingle;
-            additionalAcceptedMoves++;
-        }
+        var globalClosure = CloseLocalNeighborhood(closureBest);
+        closureBest = globalClosure.Final;
+        additionalAcceptedMoves += globalClosure.Moves;
 
-        FreeTrajectoryEvaluation residualSingle;
-        FreeTrajectoryEvaluation residualPair;
+        // A last scheduled round can make material progress even when its stored final
+        // candidate is already locally closed. Check the final neighborhood itself.
+        // If closure changes the ranking, close any newly promoted top-three start too.
+        var closedFamilies = new HashSet<string>(StringComparer.Ordinal);
         while (true)
         {
-            residualSingle = BestSingleCoordinateMove(closureBest);
-            residualPair = BestAdjacentPairMove(new[] { closureBest });
-            var next = new[] { closureBest, residualSingle, residualPair }
-                .OrderBy(item => item.SectorTimeSeconds)
-                .ThenBy(item => item.Candidate.Id, StringComparer.Ordinal)
-                .First();
-            if (closureBest.SectorTimeSeconds - next.SectorTimeSeconds
-                <= LocalSearchImprovementToleranceSeconds)
-                break;
-            closureBest = next;
-            additionalAcceptedMoves++;
+            var next = finalStates.OrderBy(item => item.Evaluation.SectorTimeSeconds)
+                .ThenBy(item => item.Evaluation.Candidate.Id, StringComparer.Ordinal)
+                .Take(3).FirstOrDefault(item => !closedFamilies.Contains(item.Family));
+            if (next is null) break;
+            var closed = CloseLocalNeighborhood(next.Evaluation);
+            var index = finalStates.FindIndex(item => item.Family == next.Family);
+            finalStates[index] = next with
+            {
+                Evaluation = closed.Final,
+                AdditionalClosureMoves = closed.Moves,
+                ClosurePasses = closed.Passes,
+            };
+            closedFamilies.Add(next.Family);
         }
 
-        var localImprovement = MathF.Max(0f,
-            closureBest.SectorTimeSeconds - residualSingle.SectorTimeSeconds);
-        var pairImprovement = MathF.Max(0f,
-            closureBest.SectorTimeSeconds - residualPair.SectorTimeSeconds);
-        var localConverged = localImprovement <= LocalSearchImprovementToleranceSeconds
-            && pairImprovement <= LocalSearchImprovementToleranceSeconds;
-        var top = archivedTop.Append(closureBest)
+        var familyResults = finalStates.Select(item =>
+            new FreeTrajectorySeedFamilyResult(item.Family, item.Evaluation)).ToArray();
+        var top = archivedTop.Concat(finalStates.Select(item => item.Evaluation)).Append(closureBest)
             .GroupBy(item => item.PathFingerprint, StringComparer.Ordinal)
             .Select(group => group.OrderBy(item => item.SectorTimeSeconds)
                 .ThenBy(item => item.Candidate.Id, StringComparer.Ordinal).First())
             .OrderBy(item => item.SectorTimeSeconds).ThenBy(item => item.Candidate.Id, StringComparer.Ordinal)
             .Take(20).ToArray();
         var best = top[0];
+        var residualSingle = BestSingleCoordinateMove(best);
+        var residualPair = BestAdjacentPairMove(new[] { best });
+        var localImprovement = MathF.Max(0f,
+            best.SectorTimeSeconds - residualSingle.SectorTimeSeconds);
+        var pairImprovement = MathF.Max(0f,
+            best.SectorTimeSeconds - residualPair.SectorTimeSeconds);
+        var localConverged = localImprovement <= LocalSearchImprovementToleranceSeconds
+            && pairImprovement <= LocalSearchImprovementToleranceSeconds;
         var within = familyResults.Where(item =>
             item.Best.SectorTimeSeconds - best.SectorTimeSeconds <= GameplayTieToleranceSeconds).ToArray();
         var sameBasin = within.Count(item => RootMeanSquareDifference(
@@ -1344,8 +1439,10 @@ public static class FreeContinuousRacingTrajectoryGeometryExperiment
                     existing.Candidate.ControlOffsetsMeters, item.Best.Candidate.ControlOffsetsMeters) > .50f))
                 shapeRepresentatives.Add(item.Best);
         }
-        var topThreeStable = finalStates.OrderBy(item => item.Evaluation.SectorTimeSeconds).Take(3)
-            .All(item => item.LastRoundImprovement <= LocalSearchImprovementToleranceSeconds);
+        var topThreeDiagnostics = finalStates.OrderBy(item => item.Evaluation.SectorTimeSeconds)
+            .ThenBy(item => item.Evaluation.Candidate.Id, StringComparer.Ordinal).Take(3)
+            .Select(item => DiagnoseStart(item, useScheduledRoundMetric: false)).ToArray();
+        var topThreeStable = topThreeDiagnostics.All(item => item.Stable);
         var objectiveConvergence = within.Length >= 3 && localConverged && topThreeStable;
         var geometryConvergence = within.Length > 0 && within.All(item => RootMeanSquareDifference(
             item.Best.Candidate.ControlOffsetsMeters, best.Candidate.ControlOffsetsMeters) <= .50f);
@@ -1379,6 +1476,10 @@ public static class FreeContinuousRacingTrajectoryGeometryExperiment
             InitialLocalPerturbationImprovementSeconds = initialLocalImprovement,
             InitialPairPerturbationImprovementSeconds = initialPairImprovement,
             AdditionalAcceptedLocalMoves = additionalAcceptedMoves,
+            TopThreeRefinementDiagnostics = Array.AsReadOnly(topThreeDiagnostics),
+            ScheduledTopThreeRefinementDiagnostics = Array.AsReadOnly(scheduledTopThreeDiagnostics),
+            ScheduledTopThreeStableByLastRound = scheduledTopThreeDiagnostics.All(item => item.Stable),
+            TopThreeStable = topThreeStable,
         };
     }
 
