@@ -120,11 +120,50 @@ public static class SegmentPhysics
         RiderSkills skills,
         BikeSetup setup)
     {
+        ArgumentNullException.ThrowIfNull(geometry);
+        var radiusMeters = LaneModel.TurnArcRadiusMeters(lateralPosition, geometry);
+        return MaxSafeTurnSpeedForRadius(radiusMeters, surface, skills, setup);
+    }
+
+    /// <summary>
+    /// The production advanced corner-capability relationship for an explicit
+    /// local radius. Existing lateral-position callers delegate here so the
+    /// analysis layer can vary curvature without duplicating physics.
+    /// </summary>
+    public static float MaxSafeTurnSpeedForRadius(
+        float radiusMeters,
+        TrackSurfaceState surface,
+        RiderSkills skills,
+        BikeSetup setup)
+        => MaxSafeTurnSpeedForRadiusAtReference(
+            radiusMeters,
+            AdvancedReferenceTurnSpeedMetersPerSecond,
+            surface,
+            skills,
+            setup);
+
+    /// <summary>
+    /// Pure advanced corner-capability relationship for analysis sensitivity.
+    /// Production callers use <see cref="MaxSafeTurnSpeedForRadius"/>, whose
+    /// reference remains <see cref="AdvancedReferenceTurnSpeedMetersPerSecond"/>.
+    /// </summary>
+    public static float MaxSafeTurnSpeedForRadiusAtReference(
+        float radiusMeters,
+        float referenceTurnSpeedMetersPerSecond,
+        TrackSurfaceState surface,
+        RiderSkills skills,
+        BikeSetup setup)
+    {
         ArgumentNullException.ThrowIfNull(skills);
         ArgumentNullException.ThrowIfNull(setup);
+        if (!float.IsFinite(radiusMeters) || radiusMeters <= 0f)
+            throw new ArgumentOutOfRangeException(nameof(radiusMeters));
+        if (!float.IsFinite(referenceTurnSpeedMetersPerSecond)
+            || referenceTurnSpeedMetersPerSecond <= 0f)
+            throw new ArgumentOutOfRangeException(nameof(referenceTurnSpeedMetersPerSecond));
 
-        var geometrySpeedMetersPerSecond = AdvancedReferenceTurnSpeedMetersPerSecond
-            * MathF.Sqrt(LaneModel.TurnArcRadiusMeters(lateralPosition, geometry) / ReferenceTurnRadiusMeters);
+        var geometrySpeedMetersPerSecond = referenceTurnSpeedMetersPerSecond
+            * MathF.Sqrt(radiusMeters / ReferenceTurnRadiusMeters);
         var control = RiderSkills.Normalize(skills.SlideControl);
         var speedAbility = RiderSkills.Normalize(skills.Speed);
         var controlMultiplier = 0.97f + control * 0.06f;
@@ -204,7 +243,6 @@ public static class SegmentPhysics
         if (context.Segment.Type == SegmentType.Straight)
             return new SegmentResolution(SegmentOutcome.Ok, context.Lane, context.Speed, context.DecisionRisk);
 
-        var control = RiderSkills.Normalize(context.Skills.SlideControl);
         var max = MaxSafeTurnSpeed(
             context.LateralPosition ?? (float)context.Lane,
             context.Geometry,
@@ -217,20 +255,53 @@ public static class SegmentPhysics
             max = ContinuousCornerEnvelope.Create(phase, context.LateralPosition ?? context.Lane,
                 context.Geometry, context.Surface, context.Skills, context.Setup)
                 .SpeedMetersPerSecond(phase.CornerProgress);
+
+        return ResolveAdvancedForExplicitTarget(
+            context.Lane,
+            context.Speed,
+            max,
+            context.Surface,
+            context.Skills,
+            context.Morale,
+            context.DecisionRisk);
+    }
+
+    /// <summary>
+    /// Resolves the unchanged production advanced corner-control bands against
+    /// an explicit speed target. This is the shared primitive used by the
+    /// production wrapper and analysis-only variable-curvature replay.
+    /// </summary>
+    public static SegmentResolution ResolveAdvancedForExplicitTarget(
+        int lane,
+        float speed,
+        float targetSpeedMetersPerSecond,
+        TrackSurfaceState surface,
+        RiderSkills skills,
+        float morale,
+        float decisionRisk = 0f)
+    {
+        LaneModel.ValidateLane(lane);
+        ArgumentNullException.ThrowIfNull(skills);
+        if (!float.IsFinite(speed) || speed < 0f)
+            throw new ArgumentOutOfRangeException(nameof(speed));
+        if (!float.IsFinite(targetSpeedMetersPerSecond) || targetSpeedMetersPerSecond <= 0f)
+            throw new ArgumentOutOfRangeException(nameof(targetSpeedMetersPerSecond));
+
+        var control = RiderSkills.Normalize(skills.SlideControl);
         var brakeFactor = MinAdvancedBrakeSpeedFactor
             + control * AdvancedBrakeSpeedFactorRange;
         var runWideFactor = MinAdvancedRunWideSpeedFactor
             + control * AdvancedRunWideSpeedFactorRange;
         var runWideOverspeedRetention = MinRunWideOverspeedRetention
             + (MaxRunWideOverspeedRetention - MinRunWideOverspeedRetention) * control;
-        var surfaceRisk = (1f - context.Surface.EffectiveGrip) * 0.28f + context.Surface.Ruts * 0.18f;
-        var moraleRisk = (1f - Math.Clamp(context.Morale, 0f, 1f)) * 0.08f;
-        var incidentRisk = TrackSurfaceState.Clamp01(context.DecisionRisk + surfaceRisk + moraleRisk);
+        var surfaceRisk = (1f - surface.EffectiveGrip) * 0.28f + surface.Ruts * 0.18f;
+        var moraleRisk = (1f - Math.Clamp(morale, 0f, 1f)) * 0.08f;
+        var incidentRisk = TrackSurfaceState.Clamp01(decisionRisk + surfaceRisk + moraleRisk);
 
         return ResolveAdvanced(
-            context.Lane,
-            context.Speed,
-            max,
+            lane,
+            speed,
+            targetSpeedMetersPerSecond,
             brakeFactor,
             runWideFactor,
             incidentRisk,
