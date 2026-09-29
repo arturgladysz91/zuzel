@@ -248,14 +248,14 @@ Gracz zarządza niepewnością i ograniczonym czasem. Nie otrzymuje bezpośredni
 
 ## Dokumenty
 
-- [`rider-model.md`](rider-model.md) — docelowy model zawodnika: umiejętności, psychika, rozwój, forma, relacje, trening i zależności.
+- [`rider-model.md`](rider-model.md) — docelowy model zawodnika: umiejętności, Kondycja, doświadczenie, preferencje, rozwój, relacje i trening.
 - [`match-flow.md`](match-flow.md) — fazy meczu i miejsca podejmowania decyzji.
 - [`time-and-decision-windows.md`](time-and-decision-windows.md) — czas, kolejki prac i sytuacje bieg po biegu.
 - [`track-management.md`](track-management.md) — docelowy Track Engine, pogoda, zużycie i zakres wpływu gospodarza.
 - [`observations-and-feedback.md`](observations-and-feedback.md) — niepełna wiedza gracza i wiarygodność informacji.
-- [`bike-setup.md`](bike-setup.md) — przełożenie, reakcja motocykla i praca mechaników.
+- [`bike-setup.md`](bike-setup.md) — dwa motocykle, silniki, sprzętowa dyspozycja, tuner i cztery główne regulatory setupu.
 - [`team-orders.md`](team-orders.md) — polecenia parowe i ograniczenia ich wykonania.
-- [`staff-and-delegation.md`](staff-and-delegation.md) — dostępność personelu, równoległość i automatyzacja.
+- [`staff-and-delegation.md`](staff-and-delegation.md) — role managera, zawodnika, mechanika i tunera, kolejka prac, równoległość i delegowanie.
 - [`rulesets.md`](rulesets.md) — przepisy zależne od ligi oraz sezonu.
 
 ## Kolejność wdrażania — BINDING
