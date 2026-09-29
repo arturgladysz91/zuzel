@@ -7,6 +7,14 @@ using CoreSim.Setup;
 if (args.Length > 0)
 {
     if (args.Length == 2 && StringComparer.Ordinal.Equals(args[0],
+            "corner-turning-slip-cost-report"))
+    {
+        CornerTurningSlipCostReportWriter.Write(args[1]);
+        Console.WriteLine($"Wrote deterministic corner turning/slip cost report: {args[1]}");
+        return;
+    }
+
+    if (args.Length == 2 && StringComparer.Ordinal.Equals(args[0],
             "free-continuous-racing-trajectory-geometry-report"))
     {
         FreeContinuousRacingTrajectoryGeometryReportWriter.Write(args[1]);
@@ -130,6 +138,7 @@ if (args.Length > 0)
     }
 
     Console.Error.WriteLine("Usage:");
+    Console.Error.WriteLine("  Sandbox corner-turning-slip-cost-report <output-markdown>");
     Console.Error.WriteLine("  Sandbox free-continuous-racing-trajectory-geometry-report <output-markdown>");
     Console.Error.WriteLine("  Sandbox dynamic-corner-trajectory-geometry-report <output-markdown>");
     Console.Error.WriteLine("  Sandbox dynamic-line-choice-track-evolution-report <output-markdown>");
