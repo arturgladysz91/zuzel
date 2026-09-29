@@ -113,7 +113,7 @@ Wewnętrznie mogą istnieć:
 
 UI nie musi ujawniać ich jako dokładnych liczb. Powinny być poznawane przede wszystkim przez zachowanie zawodnika, raporty i wydarzenia.
 
-Nie przechowujemy osobnych sportowych ratingów `Jazda pod presją`, `Determinacja` i `Koncentracja`. Ich skutki wynikają z kontekstu, doświadczenia, osobowości, morale, formy i Kondycji.
+Nie przechowujemy osobnych sportowych ratingów `Jazda pod presją`, `Determinacja` i `Koncentracja`. Ich skutki wynikają z kontekstu, doświadczenia, osobowości, morale i Kondycji.
 
 ## 6. Preferencje torowe
 
@@ -209,22 +209,36 @@ Kondycja jest jedynym ogólnym stanem fizycznego obciążenia i działa zgodnie 
 
 Nie istnieją osobne stany `Świeżość`, `Zmęczenie` ani `Kondycja meczowa`.
 
-## 9. Ukryta forma
+## 9. Forma wynikowa i sprzętowa dyspozycja — BINDING
 
-Zawodnik posiada ukrytą **Formę okresową** oraz niewielką **Dyspozycję dnia**.
+Zawodnik **nie posiada ukrytej Formy okresowej ani losowej Dyspozycji dnia**, które dodawałyby lub odejmowały procent jego umiejętności.
 
-Forma okresowa:
+Słowo **forma** może być pokazywane graczowi wyłącznie jako opis ostatnich wyników, np. na podstawie kilku ostatnich spotkań. Taki wskaźnik jest obserwacją skutków i nie jest osobnym źródłem przewagi w symulacji.
 
-- trwa od kilku spotkań do kilku tygodni,
-- wpływa na powtarzalność, drobne błędy i wykorzystanie bazowych umiejętności,
-- nie zmienia bazowych statystyk,
-- ma częściowo losowy charakter,
-- zależy również od regularności jazdy, Kondycji, kontuzji i morale,
-- ma tendencję do powrotu do nominalnego poziomu zawodnika.
+Średnioterminowe okresy, w których ten sam zawodnik przez kilka tygodni, kilka miesięcy albo większość sezonu wygląda wyraźnie szybciej lub wolniej, mogą wynikać m.in. z:
 
-Dyspozycja dnia to mniejsze odchylenie dotyczące konkretnego meczu.
+- sprzętowej dyspozycji aktualnego pakietu silnikowego,
+- dopasowania setupu,
+- warunków i charakteru torów,
+- Kondycji i zdrowia,
+- rzeczywistych decyzji i zdarzeń wyścigowych.
 
-Forma i Kondycja są różnymi rzeczami. Zawodnik może być w świetnej formie, ale przyjechać na zawody z obniżoną Kondycją po intensywnym tygodniu.
+### Sprzętowa dyspozycja
+
+Sprzętowa dyspozycja należy do modelu motocykla, nie do umiejętności zawodnika. Jest ukrytym, wolnozmiennym modyfikatorem fizycznych możliwości aktualnego pakietu silnikowego.
+
+Nie zmienia ratingów Reakcji, Startu, Techniki, Czytania toru, Ataku, Obrony, Jazdy parą ani Siły.
+
+Docelowy kierunek balansu:
+
+- początek sezonu: typowo około **-3%..+3%**, wyjątkowo około **-5%..+5%**,
+- środek sezonu: najczęściej około **-2%..+2%**, sporadycznie nadal około **3–4%** odchylenia,
+- końcówka sezonu: zwykle około **-2%..+2%**,
+- system nie wymusza powrotu do zera; dobry albo słaby okres sprzętowy może utrzymywać się długo,
+- duże skoki po rozpoczęciu sezonu są rzadkie,
+- wartość nie jest losowana od nowa przed każdym meczem.
+
+Dokładne rozkłady, częstotliwość zmian i wpływ na parametry fizyczne są **PROVISIONAL** i mają zostać skalibrowane testami symulacji.
 
 ## 10. Relacje
 
@@ -403,7 +417,8 @@ Jakość informacji zawodnika wynika przede wszystkim z:
 - Techniki,
 - ukrytego doświadczenia,
 - znajomości toru i konkretnego sprzętu,
-- aktualnej Formy i Kondycji,
+- aktualnej Kondycji,
+- sprzętowej dyspozycji i znajomości konkretnego motocykla,
 - rzeczywistych zdarzeń z biegu.
 
 Mechanik posiada własne kompetencje dotyczące diagnozy, ustawienia i przygotowania sprzętu.
@@ -449,7 +464,7 @@ Nie ma osobnych statystyk sportowych:
 - Chęć odejścia,
 - Oczekiwana liczba biegów.
 
-Są to efekty wynikające z ośmiu głównych umiejętności, stylu, osobowości, doświadczenia, Formy, Kondycji, relacji, sprzętu albo sytuacji wyścigowej.
+Są to efekty wynikające z ośmiu głównych umiejętności, stylu, osobowości, doświadczenia, Kondycji, relacji, sprzętu albo sytuacji wyścigowej.
 
 ## 20. Tabela priorytetów wpływu
 
@@ -458,7 +473,7 @@ Są to efekty wynikające z ośmiu głównych umiejętności, stylu, osobowości
 | Sytuacja | P1 | P2 | P3 / kontekst |
 |---|---|---|---|
 | Przygotowanie pola startowego | Start | Czytanie toru | doświadczenie, znajomość toru |
-| Reakcja na taśmę | Reakcja | Forma | Kondycja, doświadczenie |
+| Reakcja na taśmę | Reakcja | Start | Kondycja, doświadczenie |
 | Wyjście spod taśmy | Start | Technika | masa, Siła, setup, przyczepność |
 | Dojazd do pierwszego łuku | wynik startu + fizyka | Atak / Obrona | Technika, sytuacja rywali |
 | Pierwszy łuk | Technika | Atak / Obrona | Czytanie toru, doświadczenie |
@@ -471,9 +486,9 @@ Są to efekty wynikające z ośmiu głównych umiejętności, stylu, osobowości
 | Jazda parą | Jazda parą | Czytanie toru | Zespołowość, relacja z partnerem |
 | Nagła koleina | Technika | Siła | Czytanie toru, doświadczenie, Kondycja |
 | Kontakt z rywalem | Siła | Technika | masa, Kondycja |
-| Jazda pod dużą presją | doświadczenie + Opanowanie | Forma | morale, sytuacja meczu |
+| Jazda pod dużą presją | doświadczenie + Opanowanie | morale | Kondycja, sytuacja meczu |
 | Walka po przegranym starcie | Atak | Technika | Ambicja, Waleczność, morale |
-| Kolejny ciężki bieg | Kondycja | Forma | zdrowie, czas od poprzedniego biegu |
+| Kolejny ciężki bieg | Kondycja | czas od poprzedniego biegu | zdrowie, obciążenie wcześniejszych biegów |
 | Odbudowa między biegami i dniami | czas + aktualna Kondycja | wiek | urazy, obciążenie kalendarza |
 | Diagnoza nawierzchni | Czytanie toru | doświadczenie | znajomość toru |
 | Opis zachowania motocykla | Technika | doświadczenie | znajomość sprzętu, Kondycja |
@@ -527,8 +542,7 @@ Są to efekty wynikające z ośmiu głównych umiejętności, stylu, osobowości
 - Jazda parą
 - Kondycja
 - zdrowie / ograniczenia urazowe
-- forma okresowa
-- dyspozycja dnia
+- integracja wyboru motocykla, setupu i sprzętowej dyspozycji
 
 ### P3 — warstwa managera i setupu
 
