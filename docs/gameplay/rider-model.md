@@ -8,13 +8,15 @@ Nie jest zgodą na natychmiastową zmianę istniejącego `RiderSkills`, `RiderSt
 
 ## Zasada nadrzędna
 
-Parametry opisują zdolności zawodnika, a nie fazy wyścigu. Jedna umiejętność może wpływać na kilka sytuacji, jeśli jej rola pozostaje logicznie taka sama.
+Zawodnik nie jest głównym źródłem prędkości motocykla. Tempo biegu ma wynikać przede wszystkim z fizycznych możliwości motocykla, silnika, setupu, lokalnych warunków toru i wybranej trajektorii, a umiejętności zawodnika określają jakość decyzji i wykonania.
 
 Kolejność rozstrzygania:
 
 **warunki → percepcja → decyzja → wykonanie → fizyka → wynik**
 
 Żadna pojedyncza statystyka nie powinna jednocześnie wybierać decyzji, poprawiać wykonania, zwiększać fizycznego limitu i ograniczać konsekwencji błędu.
+
+Model zawodnika ma pozostać oszczędny. Nowy atrybut powstaje tylko wtedy, gdy opisuje odrębne zjawisko, którego nie można sensownie wyprowadzić z istniejących parametrów, stanu zawodnika, sprzętu albo sytuacji wyścigowej.
 
 ## 1. Dane podstawowe
 
@@ -23,95 +25,109 @@ Kolejność rozstrzygania:
 - wiek — wyliczany,
 - narodowość — kategoria,
 - wzrost — cm, informacyjnie w v1,
-- masa — kg, używana przez fizykę,
+- **masa — kg, używana przez fizykę**,
 - status regulaminowy — np. junior / U24 / senior.
+
+Masa nie jest umiejętnością i nie jest przeliczana na rating 1–99. Jej wpływ powinien wynikać z fizyki całego układu zawodnik–motocykl.
 
 ## 2. Główne umiejętności sportowe — 1–99
 
-### Start
+Gracz widzi osiem podstawowych umiejętności. Nie tworzymy dodatkowych jawnych ratingów opisujących podfazę tej samej czynności.
 
 | Cecha | Odpowiedzialność |
 |---|---|
-| **Przygotowanie pola** | wybór miejsca, przygotowanie koleiny i ustawienie przed startem |
-| **Reakcja** | reakcja na zwolnienie taśmy |
-| **Wyjście spod taśmy** | sprzęgło, gaz, wykorzystanie przyczepności i pierwsze metry |
+| **Reakcja** | moment reakcji na zwolnienie taśmy |
+| **Start** | przygotowanie i techniczne wykonanie startu poza samą reakcją: sprzęgło, gaz, wykorzystanie przyczepności i pierwsze metry |
+| **Technika** | prowadzenie motocykla, geometria przejazdu, balans, kontrola uślizgu, gazu i korekt |
+| **Czytanie toru** | rozpoznawanie przyczepności, kolein, zmian nawierzchni i działających ścieżek |
+| **Atak** | jakość wykonania manewru ofensywnego przeciw rywalowi |
+| **Obrona** | jakość utrzymania pozycji i reakcji na atak |
+| **Jazda parą** | jakość współpracy z partnerem podczas biegu |
+| **Siła** | fizyczna kontrola motocykla w wymagających sytuacjach |
 
-Dojazd do pierwszego łuku nie jest osobną umiejętnością. Wynika z powyższych cech, fizyki, setupu, toru i decyzji zawodnika.
+### Granice
 
-### Technika jazdy
+- **Reakcja** odpowiada tylko za czas reakcji na taśmę.
+- **Start** nie jest bonusem do dalszej jazdy.
+- **Technika** nie wybiera najlepszej ścieżki; odpowiada za wykonanie.
+- **Czytanie toru** nie zwiększa fizycznej prędkości; poprawia percepcję i decyzje.
+- **Atak** i **Obrona** pozostają osobnymi umiejętnościami.
+- **Jazda parą** opisuje wykonanie współpracy, a nie chęć pomocy drużynie.
+- **Siła** nie zwiększa mocy silnika ani Vmax.
 
-| Cecha | Odpowiedzialność |
-|---|---|
-| **Technika łuku** | wejście, przejazd przez środek i przygotowanie wyjścia z łuku |
-| **Panowanie nad motocyklem** | gaz, trakcja, wheelspin, uślizg i korekty zachowania motocykla |
-| **Balans** | praca ciałem, stabilizacja i obciążanie motocykla |
+Nie istnieje osobna umiejętność **Szybkość**. Prędkość jest wynikiem symulacji.
 
-Rozdzielenie jest obowiązujące:
-- Technika łuku = geometria i sposób przejazdu.
-- Panowanie nad motocyklem = kontrola motocykla podczas wykonania.
-- Balans = praca ciałem i stabilizacja.
+## 3. Fizyczność i bieżąca Kondycja
 
-### Umiejętności wyścigowe
+Nie przechowujemy osobnych atrybutów `Wytrzymałość` ani `Regeneracja`.
 
-| Cecha | Odpowiedzialność |
-|---|---|
-| **Czytanie toru** | rozpoznanie przyczepności, kolein, zmian nawierzchni i działających ścieżek |
-| **Zmysł wyścigowy** | przewidywanie rywali i wybór właściwego rozwiązania |
-| **Atak** | wykonanie manewru ofensywnego przeciw rywalowi |
-| **Obrona** | utrzymanie pozycji i reakcja na atak |
-| **Jazda parą** | współpraca z partnerem podczas biegu |
+Fizyczna część profilu składa się z:
 
-Czytanie toru dotyczy nawierzchni. Zmysł wyścigowy dotyczy rywali i sytuacji wyścigu.
+- **Siły** — jednej z ośmiu głównych umiejętności,
+- **masy** — rzeczywiste kg,
+- **Kondycji** — dynamicznego stanu,
+- **zdrowia i kontuzji** — konkretnych stanów medycznych.
 
-### Fizyczność
+### Kondycja — BINDING
 
-- **Siła** — 1–99.
-- **Wytrzymałość** — 1–99.
-- **Regeneracja** — 1–99.
-- **Masa** — rzeczywiste kg.
+Kondycja jest jednym wspólnym stanem opisującym zarówno obciążenie z ostatnich dni, jak i zmęczenie narastające w aktualnych zawodach.
 
-Siła nie zwiększa mocy motocykla ani Vmax. Wytrzymałość odpowiada za utrzymanie jakości przy kolejnych wysiłkach. Regeneracja odpowiada za odzyskiwanie sprawności między wysiłkami.
+Zasady:
 
-### Psychika
+- zawodnik może rozpocząć zawody z obniżoną Kondycją po intensywnym kalendarzu,
+- Kondycja spada po każdym biegu,
+- spadek zależy od rzeczywistego obciążenia biegu,
+- ciężki bieg, trudny tor, intensywna walka lub upadek mogą zwiększyć koszt,
+- podczas przerw między biegami następuje tylko niewielka regeneracja,
+- główna odbudowa następuje w czasie bez zawodów,
+- jazda dzień po dniu może powodować rozpoczęcie kolejnych zawodów bez pełnej Kondycji,
+- kontuzja lub jazda mimo niepełnej sprawności może pogarszać startową Kondycję albo tempo jej odbudowy.
 
-- **Jazda pod presją** — 1–99; ogranicza pogorszenie wykonania w sytuacjach wysokiej stawki.
-- **Determinacja** — 1–99; wpływa na kontynuowanie walki po błędzie, przegranym starcie lub nieudanym ataku.
-- **Koncentracja** — 1–99; ważna przy reakcji startowej, obronie, koleinach, nagłych zdarzeniach i zmęczeniu.
+Kondycja jest **stanem**, nie talentem i nie ma własnego potencjału rozwojowego.
 
-Koncentracja nie jest ogólnym mnożnikiem wszystkich umiejętności.
+Sposób prezentacji w UI — opis, procent albo inny czytelny wskaźnik — pozostaje decyzją interfejsu. Gracz ma widzieć jedną Kondycję, a nie osobne paski świeżości, zmęczenia, wytrzymałości i regeneracji.
 
-## 3. Styl zawodnika
+## 4. Styl zawodnika
 
-- **Waleczność** — 1–99; jak chętnie zawodnik podejmuje bezpośrednią walkę. Nie zwiększa jakości Ataku.
-- **Preferowana linia** — kategoria: wewnętrzna / neutralna / szeroka. Nie daje bonusu do prędkości.
-- **Niezależność** — 1–99; jak mocno zawodnik obstaje przy własnym zdaniu dotyczącym setupu.
+Styl nie jest zestawem dodatkowych umiejętności sportowych i nie powinien być prezentowany jako kolejny blok ratingów porównywanych z podstawową ósemką.
+
+- **Waleczność** — jak chętnie zawodnik podejmuje bezpośrednią walkę; nie zwiększa jakości Ataku.
+- **Preferowana linia** — kategoria: wewnętrzna / neutralna / szeroka; nie daje bonusu do prędkości.
+- **Niezależność** — jak mocno zawodnik obstaje przy własnym zdaniu dotyczącym setupu.
 
 Wysoka wartość stylu nie zawsze oznacza „lepiej”.
 
-## 4. Osobowość — 1–99
+## 5. Osobowość
 
-- **Profesjonalizm** — podejście do treningu, regeneracji i prowadzenia kariery.
-- **Ambicja** — poziom oczekiwań sportowych i statusowych.
-- **Zespołowość** — gotowość działania dla dobra drużyny.
-- **Chęć nauki** — wykorzystanie treningu, uwag i mentoringu.
-- **Opanowanie** — siła i długość reakcji emocjonalnych na wydarzenia.
-- **Mentoring** — zdolność przekazywania własnej wiedzy innym.
+Osobowość działa głównie pod spodem. Nie jest częścią ośmiu widocznych umiejętności sportowych.
+
+Wewnętrznie mogą istnieć:
+
+- **Profesjonalizm** — podejście do treningu, odpoczynku i prowadzenia kariery,
+- **Ambicja** — poziom oczekiwań sportowych i statusowych,
+- **Zespołowość** — gotowość działania dla dobra drużyny,
+- **Chęć nauki** — wykorzystanie treningu, uwag i mentoringu,
+- **Opanowanie** — siła i długość reakcji emocjonalnych na wydarzenia,
+- **Mentoring** — zdolność przekazywania własnej wiedzy innym,
 - **Ugodowość** — skłonność do kompromisu i akceptowania decyzji niezgodnych z własnym interesem.
 
-Ugodowość nie jest Zespołowością. Ambicja nie jest osobną „chęcią odejścia”.
+UI nie musi ujawniać ich jako dokładnych liczb. Powinny być poznawane przede wszystkim przez zachowanie zawodnika, raporty i wydarzenia.
 
-## 5. Preferencje torowe
+Nie przechowujemy osobnych sportowych ratingów `Jazda pod presją`, `Determinacja` i `Koncentracja`. Ich skutki wynikają z kontekstu, doświadczenia, osobowości, morale, formy i Kondycji.
+
+## 6. Preferencje torowe
 
 Preferencje są kategoryczne, bez skali 1–99.
 
 Zawodnik może preferować albo nie lubić:
-- **twardej nawierzchni**,
-- **przyczepnej nawierzchni**,
-- **mokrego toru**,
-- **luźnej nawierzchni**,
-- **nierównego / pokoleinowanego toru**,
-- **technicznych torów**,
-- **szybkich torów**.
+
+- twardej nawierzchni,
+- przyczepnej nawierzchni,
+- mokrego toru,
+- luźnej nawierzchni,
+- nierównego / pokoleinowanego toru,
+- technicznych torów,
+- szybkich torów.
 
 Nie każdy zawodnik musi posiadać preferencję.
 
@@ -121,29 +137,42 @@ Preferencja daje niewielki efekt komfortu, stabilności wykonania i łatwości z
 
 Budowa składu pod charakter własnego toru jest zamierzoną strategią. Nadmierna specjalizacja ma koszt na wyjazdach i przy zmianie warunków.
 
-## 6. Doświadczenie i znajomość
+## 7. Doświadczenie i znajomość
 
-Wewnętrznie wartości mogą być ciągłe, ale UI powinno pokazywać je głównie opisowo, np.:
+### Doświadczenie ogólne — BINDING
 
-**brak → niewielka → podstawowa → dobra → bardzo dobra → doskonała**
+Doświadczenie nie jest widoczną statystyką ani ratingiem 1–99.
 
-Obszary:
-- doświadczenie meczowe,
-- doświadczenie w danych rodzajach nawierzchni,
-- doświadczenie na technicznych i szybkich torach,
-- znajomość konkretnego toru,
+Jest ukrytym modyfikatorem wynikającym **przede wszystkim z wieku**. Nie tworzymy osobnego rozwijanego paska „Experience”.
+
+Doświadczenie może wpływać m.in. na:
+
+- stabilność decyzji w nietypowych sytuacjach,
+- interpretację zachowania motocykla,
+- jakość opisu problemu po biegu,
+- wykorzystanie wcześniejszych doświadczeń przy zmianach toru,
+- ograniczenie błędnych ocen pod presją.
+
+Doświadczenie nie daje bezpośredniego bonusu do mocy, Vmax, Startu, Ataku, Obrony ani Techniki.
+
+### Znajomość
+
+Znajomość konkretnego toru albo sprzętu jest osobną wiedzą kontekstową wynikającą z faktycznego kontaktu z nimi, a nie częścią ogólnego doświadczenia.
+
+Może obejmować:
+
+- znajomość geometrii toru,
+- znajomość typowego zachowania jego nawierzchni,
+- krótkoterminową wiedzę o aktualnym stanie toru,
 - znajomość konkretnego motocykla / silnika.
 
-Znajomość konkretnego toru ma trzy warstwy:
-1. trwała znajomość geometrii,
-2. znajomość typowego zachowania nawierzchni,
-3. krótkoterminowa znajomość aktualnego stanu.
+Pogoda może zniszczyć wiedzę o aktualnym stanie nawierzchni, ale nie usuwa znajomości geometrii.
 
-Pogoda może zniszczyć trzecią warstwę, ale nie usuwa znajomości geometrii.
+Znajomość nie musi być pokazywana graczowi jako dokładna liczba.
 
-## 7. Stan bieżący
+## 8. Stan bieżący
 
-Stany nie są trwałymi cechami zawodnika.
+Stany nie są trwałymi umiejętnościami zawodnika.
 
 ### Morale
 
@@ -152,6 +181,7 @@ Wewnętrznie może być ciągłe, ale UI pokazuje poziom opisowy:
 **fatalne → bardzo niskie → niskie → średnie → dobre → bardzo dobre → świetne**
 
 Morale zależy m.in. od:
+
 - wyników,
 - zgodności faktycznego wykorzystania z rolą,
 - decyzji managera,
@@ -160,34 +190,43 @@ Morale zależy m.in. od:
 - kontuzji,
 - konfliktów i ważnych wydarzeń.
 
-Siłę reakcji modyfikują Ambicja, Ugodowość, Zespołowość, Opanowanie i Profesjonalizm.
+Siłę reakcji mogą modyfikować Ambicja, Ugodowość, Zespołowość, Opanowanie i Profesjonalizm.
 
 Morale nie daje prostego bonusu do prędkości.
 
-### Pozostałe stany
+### Zdrowie
 
-- **Zmęczenie** — opisowo: świeży → wyczerpany.
-- **Stan fizyczny / zdrowie**.
-- **Kondycja meczowa** — gotowość do regularnego ścigania po przerwie lub kontuzji.
-- **Kontuzje** — konkretne urazy i ich stan.
+- zdrowy,
+- poobijany / z drobnym ograniczeniem,
+- kontuzjowany,
+- medycznie dopuszczony, ale nie w pełni sprawny.
 
-Zdrowie i kondycja meczowa to różne rzeczy.
+Szczegóły wynikają z konkretnego urazu, nie z ogólnego ratingu zdrowia.
 
-## 8. Ukryta forma
+### Kondycja
+
+Kondycja jest jedynym ogólnym stanem fizycznego obciążenia i działa zgodnie z sekcją 3.
+
+Nie istnieją osobne stany `Świeżość`, `Zmęczenie` ani `Kondycja meczowa`.
+
+## 9. Ukryta forma
 
 Zawodnik posiada ukrytą **Formę okresową** oraz niewielką **Dyspozycję dnia**.
 
 Forma okresowa:
+
 - trwa od kilku spotkań do kilku tygodni,
 - wpływa na powtarzalność, drobne błędy i wykorzystanie bazowych umiejętności,
 - nie zmienia bazowych statystyk,
 - ma częściowo losowy charakter,
-- zależy również od regularności jazdy, treningu, zmęczenia, kontuzji i morale,
+- zależy również od regularności jazdy, Kondycji, kontuzji i morale,
 - ma tendencję do powrotu do nominalnego poziomu zawodnika.
 
 Dyspozycja dnia to mniejsze odchylenie dotyczące konkretnego meczu.
 
-## 9. Relacje
+Forma i Kondycja są różnymi rzeczami. Zawodnik może być w świetnej formie, ale przyjechać na zawody z obniżoną Kondycją po intensywnym tygodniu.
+
+## 10. Relacje
 
 Relacje mają być lekkim systemem, nie symulatorem szatni.
 
@@ -196,6 +235,7 @@ Relacje mają być lekkim systemem, nie symulatorem szatni.
 Wewnętrznie ciągłe, w UI opisowe.
 
 Wpływa na:
+
 - akceptację setupu,
 - reakcję na rolę i decyzje personalne,
 - rozmowy,
@@ -208,6 +248,7 @@ Analogicznie; dotyczy głównie sprzętu i setupu.
 ### Relacje zawodnik–zawodnik
 
 Przechowywane tylko, gdy są istotne:
+
 - konflikt,
 - napięta,
 - neutralna,
@@ -217,9 +258,10 @@ Przechowywane tylko, gdy są istotne:
 
 Nie tworzymy pełnej liczbowej macierzy każdy-z-każdym.
 
-## 10. Rola w drużynie
+## 11. Rola w drużynie
 
 Kategorie:
+
 - **Lider**,
 - **Podstawowy**,
 - **Uzupełnienie składu**,
@@ -229,9 +271,10 @@ Oczekiwania dotyczące liczby i znaczenia biegów wynikają z roli. Nie istnieje
 
 Reakcja zawodnika na zmianę zależy od kontekstu meczu, roli, wyników, Ugodowości, Ambicji, Zespołowości i zaufania do managera.
 
-## 11. Kontrakt
+## 12. Kontrakt
 
 Podstawowe elementy:
+
 - długość umowy,
 - kwota za podpis,
 - stawka za punkt,
@@ -240,15 +283,17 @@ Podstawowe elementy:
 - uzgodniona rola.
 
 Nie istnieją osobne statystyki:
+
 - chęć odejścia,
 - lojalność,
 - oczekiwana liczba biegów.
 
 Decyzja o pozostaniu lub odejściu wynika z sytuacji: morale, roli, Ambicji, zaufania, finansów, poziomu klubu i konkurencyjnych ofert.
 
-## 12. Rozwój i potencjał
+## 13. Rozwój i potencjał
 
-Każda rozwijalna umiejętność może posiadać ukryte:
+Każda z ośmiu rozwijalnych umiejętności może posiadać ukryte:
+
 - aktualny poziom,
 - potencjał życiowy,
 - aktualnie osiągalny potencjał,
@@ -258,31 +303,33 @@ Nie ma jednego ogólnego „Potential 92”.
 
 Największy wpływ na rozwój mają prawdziwe zawody. Rozwija się przede wszystkim to, czego zawodnik rzeczywiście używa i doświadcza.
 
-Zawodnik ma indywidualne:
-- krzywe rozwoju technicznego, wyścigowego, fizycznego i psychicznego,
+Zawodnik może mieć indywidualne:
+
+- krzywe rozwoju technicznego, wyścigowego i fizycznego,
 - okresy szybszego i wolniejszego rozwoju,
 - różne przedziały szczytu dla różnych grup zdolności,
 - tempo starzenia i regresu.
 
-Rozwój po 30. roku życia jest możliwy, szczególnie w cechach doświadczeniowych i taktycznych, ale słaby zawodnik nie powinien nagle stać się mistrzem tylko dzięki późnemu skokowi.
+Rozwój po 30. roku życia jest możliwy, szczególnie w cechach technicznych i taktycznych, ale słaby zawodnik nie powinien nagle stać się mistrzem tylko dzięki późnemu skokowi.
 
-## 13. Obciążenie kariery
+Ogólne doświadczenie z sekcji 7 nie ma własnego potencjału i nie jest trenowaną umiejętnością.
 
-Ukryty stan długoterminowy wynikający m.in. z:
-- liczby zawodów i biegów,
-- intensywnych sezonów,
-- jazdy w wielu ligach,
-- niedostatecznej regeneracji,
-- kontuzji,
-- jazdy mimo niepełnej sprawności.
+## 14. Obciążenie kariery
 
-Może wpływać na regenerację, podatność na urazy i późniejszy regres fizyczny.
+Nie przechowujemy osobnego widocznego atrybutu „zużycie zawodnika”.
 
-Nie jest widocznym paskiem „zużycia”.
+Historia liczby zawodów, biegów, kontuzji i jazdy dzień po dniu może być wykorzystywana jako wejście do:
 
-## 14. Kontuzje i powrót
+- aktualnej Kondycji,
+- skutków urazów,
+- długoterminowego regresu fizycznego.
 
-Każdy uraz ma:
+Jeżeli później potrzebny będzie dodatkowy ukryty model długoterminowego obciążenia, musi on mieć konkretny konsument i nie może dublować Kondycji.
+
+## 15. Kontuzje i powrót
+
+Każdy uraz może mieć:
+
 - rodzaj,
 - lokalizację,
 - ciężkość,
@@ -292,39 +339,42 @@ Każdy uraz ma:
 - konkretne ograniczenia.
 
 Fazy:
+
 1. niezdolny do jazdy,
-2. medycznie zdolny, ale nie w pełni odbudowany,
-3. pełna gotowość sportowa.
+2. medycznie zdolny, ale z ograniczeniami albo obniżoną Kondycją,
+3. pełna sprawność.
 
-Manager może zdecydować o wystawieniu zawodnika nie w pełni odbudowanego, jeśli jest dopuszczony do jazdy. Powrót zbyt wcześnie może zwiększyć zmęczenie, ryzyko nawrotu i wydłużyć odbudowę.
+Manager może zdecydować o wystawieniu zawodnika nie w pełni odbudowanego, jeśli jest dopuszczony do jazdy. Powrót zbyt wcześnie może pogorszyć Kondycję, zwiększyć ryzyko nawrotu albo wydłużyć odbudowę.
 
-Młodsi przeciętnie regenerują się szybciej, ale indywidualna Regeneracja pozostaje ważna.
+Nie istnieje osobna umiejętność Regeneracja. Tempo odbudowy wynika z czasu, wieku, obciążenia, urazu i pozostałych właściwych stanów systemu.
 
-## 15. Mentoring
+## 16. Mentoring
 
 Dobry zawodnik nie musi być dobrym mentorem.
 
 Efekt mentoringu zależy od:
+
 - wiedzy mentora w danym obszarze,
 - jego Mentoringu,
-- doświadczenia,
+- ukrytego doświadczenia,
 - Chęci nauki ucznia,
 - relacji mentor–uczeń,
 - wspólnej pracy.
 
 Mentoring pomaga przekształcać doświadczenie w rozwój; nie daje bezpośrednio punktów umiejętności.
 
-## 16. Trening
+## 17. Trening
 
 Manager ustala osobny kierunek treningu każdemu zawodnikowi każdego dnia.
 
 Główne kierunki:
+
 - Starty,
 - Technika,
 - Walka / sytuacje wyścigowe,
 - Jazda parą,
-- Trening fizyczny,
-- Regeneracja,
+- Siła / przygotowanie fizyczne,
+- Odnowa / lekki dzień,
 - Odpoczynek,
 - Rehabilitacja,
 - Przygotowanie do meczu.
@@ -335,37 +385,55 @@ Zwykłe treningi są symulowane.
 
 Zwykły trening na konkretnym torze również zwiększa znajomość jego geometrii i charakterystyki, ale nie daje managerowi takiej samej bezpośredniej wiedzy jak interaktywne przygotowanie.
 
-## 17. Sprzęt, mechanik i feedback
+## 18. Sprzęt, mechanik i feedback
 
 Zasada:
+
 - **zawodnik mówi, co czuje**,
 - **mechanik mówi, co jego zdaniem należy zmienić**,
 - **manager podejmuje ostateczną decyzję**.
 
 Jeden objaw może mieć kilka przyczyn jednocześnie. Zawodnik, mechanik i manager mogą widzieć różne części problemu.
 
-Zawodnik opisuje objawy na podstawie m.in. Czytania toru, doświadczenia, znajomości sprzętu i własnych odczuć z jazdy.
+Nie istnieje osobna umiejętność `Feedback techniczny`.
 
-Mechanik posiada co najmniej:
-- Diagnostykę,
-- Ustawianie motocykla,
-- Przygotowanie sprzętu,
-- Pracę pod presją.
+Jakość informacji zawodnika wynika przede wszystkim z:
+
+- Czytania toru,
+- Techniki,
+- ukrytego doświadczenia,
+- znajomości toru i konkretnego sprzętu,
+- aktualnej Formy i Kondycji,
+- rzeczywistych zdarzeń z biegu.
+
+Mechanik posiada własne kompetencje dotyczące diagnozy, ustawienia i przygotowania sprzętu.
 
 Manager może ustawić setup inaczej niż proponuje mechanik.
 
-Trafne decyzje managera stopniowo zwiększają zaufanie zawodnika i mechanika. Nietrafne je obniżają. Im niższe zaufanie, tym większa skłonność do obstawania przy własnej opinii.
+Trafne decyzje managera mogą stopniowo zwiększać zaufanie zawodnika i mechanika. Nietrafne mogą je obniżać. Im niższe zaufanie, tym większa skłonność do obstawania przy własnej opinii.
 
 Ocena decyzji setupowej opiera się na tym, czy rozwiązano konkretny problem, a nie tylko na wyniku biegu.
 
-## 18. Czego celowo NIE przechowujemy jako osobnych cech
+## 19. Czego celowo NIE przechowujemy jako osobnych cech
 
-Nie ma osobnych statystyk:
+Nie ma osobnych statystyk sportowych:
+
 - Szybkość,
+- Przygotowanie pola,
+- Wyjście spod taśmy,
+- Technika łuku,
+- Panowanie nad motocyklem,
+- Balans,
+- Zmysł wyścigowy,
+- Wytrzymałość,
+- Regeneracja,
+- Jazda pod presją,
+- Determinacja,
+- Koncentracja,
+- Feedback techniczny,
 - prędkość w łuku,
 - wyjście z łuku,
 - dojazd do pierwszego łuku,
-- jawna Forma,
 - Uniwersalność,
 - Adaptacja,
 - Ratowanie motocykla,
@@ -381,60 +449,55 @@ Nie ma osobnych statystyk:
 - Chęć odejścia,
 - Oczekiwana liczba biegów.
 
-Są to efekty wynikające z innych parametrów, warunków lub stanu gry.
+Są to efekty wynikające z ośmiu głównych umiejętności, stylu, osobowości, doświadczenia, Formy, Kondycji, relacji, sprzętu albo sytuacji wyścigowej.
 
-## 19. Tabela priorytetów wpływu
+## 20. Tabela priorytetów wpływu
 
 **P1 — kluczowy**, **P2 — ważny**, **P3 — sytuacyjny / kontekstowy**.
 
 | Sytuacja | P1 | P2 | P3 / kontekst |
 |---|---|---|---|
-| Przygotowanie pola startowego | Przygotowanie pola | Czytanie toru | doświadczenie, znajomość toru |
-| Reakcja na taśmę | Reakcja | Koncentracja | Jazda pod presją, forma |
-| Wyjście spod taśmy | Wyjście spod taśmy | Panowanie nad motocyklem, Balans | Masa, Siła, setup, przyczepność |
-| Dojazd do pierwszego łuku | wynik startu + fizyka | Zmysł wyścigowy | Atak, Obrona, Waleczność |
-| Pierwszy łuk | Technika łuku, Zmysł wyścigowy | Panowanie nad motocyklem, Balans | Atak/Obrona, Koncentracja, Waleczność |
-| Normalny przejazd łuku | Technika łuku | Panowanie nad motocyklem, Balans | Czytanie toru |
-| Wyjście z łuku | Panowanie nad motocyklem | Technika łuku, Balans | Masa, setup, tor |
-| Wybór ścieżki | Czytanie toru | Zmysł wyścigowy | Preferowana linia, doświadczenie |
-| Atak | Atak | Zmysł wyścigowy | Waleczność, Technika łuku, Panowanie nad motocyklem |
-| Obrona | Obrona | Zmysł wyścigowy | Koncentracja, Technika łuku, Waleczność |
-| Przycinka / zwód | Zmysł wyścigowy, Atak | Technika łuku | Panowanie nad motocyklem, Koncentracja |
-| Jazda parą | Jazda parą | Zmysł wyścigowy | Zespołowość, relacja z partnerem |
-| Nagła koleina | Koncentracja, Balans | Panowanie nad motocyklem | Siła, doświadczenie |
-| Kontakt z rywalem | Balans | Siła, Panowanie nad motocyklem | Koncentracja, Masa |
-| Jazda w dużej presji | Jazda pod presją | Koncentracja | Zmysł wyścigowy |
-| Walka po przegranym starcie | Determinacja | Zmysł wyścigowy | Atak, Waleczność |
-| Piąty/szósty bieg | Wytrzymałość | Koncentracja | zmęczenie, kondycja meczowa |
-| Regeneracja między wysiłkami | Regeneracja | Wytrzymałość | wiek, obciążenie kariery |
+| Przygotowanie pola startowego | Start | Czytanie toru | doświadczenie, znajomość toru |
+| Reakcja na taśmę | Reakcja | Forma | Kondycja, doświadczenie |
+| Wyjście spod taśmy | Start | Technika | masa, Siła, setup, przyczepność |
+| Dojazd do pierwszego łuku | wynik startu + fizyka | Atak / Obrona | Technika, sytuacja rywali |
+| Pierwszy łuk | Technika | Atak / Obrona | Czytanie toru, doświadczenie |
+| Normalny przejazd łuku | Technika | Czytanie toru | Kondycja, setup, tor |
+| Wyjście z łuku | Technika | Siła | masa, setup, lokalna przyczepność |
+| Wybór ścieżki | Czytanie toru | doświadczenie | preferowana linia, pozycja rywali |
+| Atak | Atak | Technika | Czytanie toru, Waleczność |
+| Obrona | Obrona | Technika | Czytanie toru, doświadczenie |
+| Przycinka / zwód | Atak | Technika | Czytanie toru, doświadczenie |
+| Jazda parą | Jazda parą | Czytanie toru | Zespołowość, relacja z partnerem |
+| Nagła koleina | Technika | Siła | Czytanie toru, doświadczenie, Kondycja |
+| Kontakt z rywalem | Siła | Technika | masa, Kondycja |
+| Jazda pod dużą presją | doświadczenie + Opanowanie | Forma | morale, sytuacja meczu |
+| Walka po przegranym starcie | Atak | Technika | Ambicja, Waleczność, morale |
+| Kolejny ciężki bieg | Kondycja | Forma | zdrowie, czas od poprzedniego biegu |
+| Odbudowa między biegami i dniami | czas + aktualna Kondycja | wiek | urazy, obciążenie kalendarza |
 | Diagnoza nawierzchni | Czytanie toru | doświadczenie | znajomość toru |
+| Opis zachowania motocykla | Technika | doświadczenie | znajomość sprzętu, Kondycja |
 | Akceptacja setupu managera | Zaufanie do managera | Niezależność | Zaufanie do mechanika, Ugodowość |
-| Rozwój po zawodach | doświadczenie + potencjał | Chęć nauki | mentor, manager, Profesjonalizm |
+| Rozwój po zawodach | używane umiejętności + potencjał | Chęć nauki | mentor, Profesjonalizm |
 | Rozwój treningowy | potencjał + trening | Chęć nauki, Profesjonalizm | sztab, wiek |
 | Reakcja na odsunięcie od składu | rola + Ugodowość | Ambicja, Zaufanie do managera | Zespołowość, Opanowanie |
 | Zmiana morale | wydarzenie + aktualne morale | Opanowanie | Ambicja, Ugodowość, Zespołowość |
 
-## 20. Tabela granic odpowiedzialności
+## 21. Tabela granic odpowiedzialności
 
 | Parametr | Odpowiada za | Nie powinien odpowiadać za |
 |---|---|---|
-| Przygotowanie pola | jakość przygotowania miejsca startowego | reakcję i przyspieszenie |
-| Reakcja | moment reakcji na taśmę | dalszą jazdę |
-| Wyjście spod taśmy | techniczne wykonanie pierwszych metrów | decyzje pierwszego łuku |
-| Technika łuku | geometria i wykonanie przejazdu łuku | wybór najlepszej ścieżki |
-| Panowanie nad motocyklem | trakcję, gaz, uślizg i korekty | decyzje taktyczne |
-| Balans | pracę ciałem i stabilizację | czytanie nawierzchni |
-| Czytanie toru | wiedzę o nawierzchni | fizyczne wykonanie |
-| Zmysł wyścigowy | decyzje względem rywali | techniczną jakość motocykla |
-| Atak | wykonanie ofensywnego manewru | częstotliwość atakowania |
-| Obrona | wykonanie obrony | ogólną technikę jazdy |
-| Jazda parą | wykonanie współpracy | chęć pomocy zespołowi |
+| Reakcja | moment reakcji na taśmę | dalsze przyspieszenie i jazdę |
+| Start | techniczne wykonanie startu i pierwszych metrów | dalszą jazdę po torze |
+| Technika | jakość fizycznego wykonania jazdy i korekt | wybór najlepszej ścieżki |
+| Czytanie toru | percepcję nawierzchni i działających linii | fizyczne wykonanie manewru |
+| Atak | wykonanie ofensywnego manewru | częstotliwość podejmowania ryzyka |
+| Obrona | wykonanie obrony pozycji | ogólną technikę jazdy |
+| Jazda parą | wykonanie współpracy | chęć działania dla zespołu |
 | Siła | kontrolę fizyczną w wymagających sytuacjach | moc i prędkość motocykla |
-| Wytrzymałość | odporność na narastające zmęczenie | regenerację między dniami |
-| Regeneracja | odzyskiwanie sprawności | jakość pierwszego biegu świeżego zawodnika |
-| Jazda pod presją | ograniczenie pogorszenia pod presją | bazową jakość jazdy |
-| Determinacja | dalszą walkę mimo niepowodzeń | jakość techniczną ataku |
-| Koncentracja | uwagę i reakcję na nagłe sytuacje | uniwersalny bonus do wszystkiego |
+| Masa | fizykę układu zawodnik–motocykl | poziom sportowy zawodnika |
+| Kondycja | aktualne fizyczne obciążenie | talent i trwałą jakość zawodnika |
+| Doświadczenie | stabilność ocen i wykorzystanie przeżyć | bezpośredni bonus do prędkości |
 | Waleczność | skłonność do podejmowania walki | skuteczność manewru |
 | Preferowana linia | naturalną skłonność wyboru linii | bonus do prędkości |
 | Niezależność | obstawanie przy swoim setupie | wiedzę techniczną |
@@ -442,39 +505,28 @@ Są to efekty wynikające z innych parametrów, warunków lub stanu gry.
 | Ambicja | oczekiwania zawodnika | umiejętności sportowe |
 | Zespołowość | gotowość działania dla zespołu | umiejętność Jazdy parą |
 | Chęć nauki | wykorzystanie okazji rozwojowych | wysokość potencjału |
-| Opanowanie | reakcje emocjonalne | Jazdę pod presją wprost |
+| Opanowanie | reakcje emocjonalne | bazową jakość jazdy |
 | Mentoring | przekazywanie wiedzy | własny poziom sportowy |
 | Ugodowość | gotowość do kompromisu | Zespołowość |
 
-## 21. Priorytet implementacyjny
+## 22. Priorytet implementacyjny
 
 ### P1 — pojedynczy bieg / Race Engine
 
-- Przygotowanie pola
 - Reakcja
-- Wyjście spod taśmy
-- Technika łuku
-- Panowanie nad motocyklem
-- Balans
+- Start
+- Technika
 - Czytanie toru
-- Zmysł wyścigowy
 - Atak
 - Obrona
-- Koncentracja
-- Waleczność
-- Masa
 - Siła
+- masa
 
 ### P2 — pełny mecz
 
 - Jazda parą
-- Wytrzymałość
-- Regeneracja
-- Jazda pod presją
-- Determinacja
-- Preferowana linia
-- zmęczenie
-- kondycja meczowa
+- Kondycja
+- zdrowie / ograniczenia urazowe
 - forma okresowa
 - dyspozycja dnia
 
@@ -483,7 +535,7 @@ Są to efekty wynikające z innych parametrów, warunków lub stanu gry.
 - Niezależność
 - Zaufanie do managera
 - Zaufanie do mechanika
-- doświadczenie
+- ukryte doświadczenie
 - znajomość toru
 - znajomość sprzętu
 - preferencje torowe
@@ -501,18 +553,20 @@ Są to efekty wynikające z innych parametrów, warunków lub stanu gry.
 - potencjały
 - krzywe rozwoju
 - regres
-- obciążenie kariery
 - kontuzje
 - kontrakty
 - role
 - relacje
 
-## 22. Zasada implementacyjna
+## 23. Zasada implementacyjna
 
 Nowy parametr może zostać dodany tylko wtedy, gdy da się jednoznacznie odpowiedzieć:
+
 1. jaką decyzję lub zjawisko opisuje,
 2. czego nie opisuje,
 3. w której warstwie działa: percepcja / decyzja / wykonanie / fizyka / feedback / rozwój,
 4. czy nie dubluje istniejącej cechy.
 
 Jeśli dwie cechy wpływają na to samo w ten sam sposób, należy je scalić albo jedną usunąć.
+
+W szczególności nie należy ponownie rozbijać Techniki na kilka ratingów ani Kondycji na osobne ratingi Wytrzymałości i Regeneracji bez nowej, zatwierdzonej decyzji projektowej.
