@@ -569,3 +569,483 @@ Nie są jeszcze finalnie zaprojektowane:
 - balans wszystkich powyższych systemów względem Race Engine.
 
 Przy implementacji należy najpierw przenieść odpowiednie decyzje z tego snapshotu do właściwych kanonicznych dokumentów, zamiast traktować ten plik jako pretekst do równoległego systemu.
+
+
+---
+
+## 13. Prowadzenie meczu i skład — BINDING
+
+Manager prowadzi mecz samodzielnie. Gra nie dobiera za niego składu, zmian ani biegów nominowanych.
+
+### Skład meczowy
+
+Pozycje startowe zależą od gospodarza / gościa:
+
+- gospodarz obsadza numery **1–8**,
+- gość obsadza numery **9–16**.
+
+Obsada musi być zgodna z aktualnym `Ruleset` danej ligi i sezonu.
+
+Ruleset ma określać m.in.:
+
+- które numery są przeznaczone lub ograniczone dla juniorów,
+- które pozycje dotyczą U24,
+- wymagania dotyczące zawodników krajowych i zagranicznych,
+- inne ograniczenia składu wynikające z regulaminu.
+
+Nie kodujemy reguł typu „numer 6 = junior” na stałe w UI. Powinny pochodzić z konfiguracji ligi/sezonu.
+
+### Decyzje w trakcie meczu
+
+Manager sam wykonuje:
+
+- zwykłe zmiany,
+- rezerwy,
+- zmiany taktyczne,
+- zastępstwa,
+- wykorzystanie U24 i rezerwowych,
+- reakcje na kontuzje / wykluczenia,
+- wybór zawodników do biegów nominowanych.
+
+UI ma pilnować legalności decyzji i wyjaśniać, dlaczego dana zmiana jest niedozwolona. Nie powinno automatycznie podpowiadać „najlepszego” zawodnika jako decyzji za gracza.
+
+AI rywala korzysta z tych samych zasad i ograniczeń.
+
+---
+
+## 14. Morale zawodnika — BINDING kierunek
+
+Morale jest jednym głównym, dynamicznym stanem zawodnika.
+
+Może być prezentowane opisowo, np.:
+
+- Bardzo wysokie
+- Wysokie
+- Dobre
+- Neutralne
+- Niskie
+- Bardzo niskie
+
+Dokładna skala i progi pozostają do kalibracji.
+
+### Główne źródła zmian morale
+
+Morale zmieniają przede wszystkim:
+
+1. **wyniki drużyny** — najważniejszy stały czynnik,
+2. **własne wyniki w biegach**,
+3. **wykorzystanie zgodnie z obiecaną rolą**,
+4. decyzje managera dotyczące składu i ważnych biegów.
+
+### Wyniki drużyny
+
+Zwycięstwa drużyny powinny wyraźnie podnosić morale, a serie zwycięstw budować je w dłuższym okresie.
+
+Porażki i serie porażek działają w przeciwną stronę.
+
+`Zespołowość` może zwiększać wagę wyniku drużyny:
+
+- zawodnik bardzo zespołowy mocniej przeżywa sukces/porażkę całej drużyny,
+- indywidualista większą wagę przykłada do własnego występu.
+
+Nawet indywidualista nadal reaguje na wynik drużyny; różni się tylko siła efektu.
+
+### Wynik indywidualny
+
+**Zwycięstwo w biegu zawsze podnosi morale**, również wtedy, gdy zawodnik był faworytem.
+
+Siła bonusu rośnie wraz z trudnością osiągnięcia:
+
+- zwycięstwo z wyraźnie słabszymi → normalny plus,
+- zwycięstwo z podobnymi → większy plus,
+- zwycięstwo z dużo mocniejszymi → bardzo duży plus.
+
+Przykład: zwycięstwo juniora w biegu z mocnymi seniorami powinno dawać znacznie większy impuls niż zwycięstwo w typowym biegu juniorskim.
+
+Model jest celowo **asymetryczny**:
+
+- przegrana juniora z liderami może być prawie neutralna,
+- przegrana lidera z juniorem daje minus,
+- ale pojedyncza niespodziewana porażka Lidera nie może kasować kilku wcześniejszych zwycięstw.
+
+### Rola i traktowanie przez klub
+
+Niezadowolenie z roli lub klubu wpływa negatywnie na główne morale.
+
+Przykłady:
+
+- Lider regularnie pomijany w nominowanych mimo dobrej jazdy,
+- Podstawowy regularnie traci swoje programowe biegi,
+- Rezerwowy przez bardzo długi okres nie dostaje żadnej realnej szansy,
+- zawodnik jest często odsuwany od składu mimo ustaleń kontraktowych.
+
+Dla logiki system może wewnętrznie pamiętać przyczynę niezadowolenia (np. wykorzystanie roli), ale gracz nie potrzebuje osobnego równorzędnego paska „zadowolenia z klubu”.
+
+`Ambicja` zwiększa wrażliwość na niewłaściwe wykorzystanie i status zawodnika.
+
+### Wpływ morale na jazdę
+
+Morale nie powinno działać jako duży, bezpośredni procentowy bonus/karę do prędkości.
+
+Główny wpływ dotyczy:
+
+- zachowania poza torem,
+- reakcji na decyzje managera,
+- negocjacji i chęci pozostania w klubie,
+- gotowości do akceptowania roli,
+- treningu / podejścia do obowiązków tam, gdzie istnieje odpowiedni konsument.
+
+Ewentualny wpływ na samą jazdę ma być niewielki i wymaga osobnej kalibracji.
+
+---
+
+## 15. Scouting zawodników — BINDING kierunek
+
+Klub posiada bazowo **1 scouta**.
+
+Ewentualny drugi scout może zostać rozważony później jako możliwość rozwoju organizacji, ale nie jest standardem.
+
+Każdy scout prowadzi **jedną aktywną obserwację zawodnika naraz**.
+
+### Widoczność 8 umiejętności
+
+Prawdziwe umiejętności zawodnika nadal istnieją w skali 1–99, ale scout nie pokazuje ich dokładnie.
+
+Gracz widzi **przedziały**, np.:
+
+- Start: 72–80,
+- Technika: 68–76,
+- Atak: 75–84.
+
+Lepszy scout daje węższy przedział.
+
+Dokładne szerokości przedziałów są do kalibracji.
+
+### Potencjał
+
+Potencjał istnieje wewnętrznie jako wartość liczbowa.
+
+Gracz widzi go wyłącznie opisowo, np.:
+
+- Niski
+- Przeciętny
+- Dobry
+- Wysoki
+- Bardzo wysoki
+- Świetny
+
+Scout może pomylić się w ocenie potencjału o **maksymalnie jeden poziom opisowy**.
+
+Przykład:
+
+- rzeczywisty potencjał: Świetny,
+- raport scouta: Bardzo wysoki albo Świetny,
+- nie powinien spaść do „Dobry”.
+
+### Czas obserwacji
+
+Preferowany prosty model:
+
+- około **7 dni** → raport wstępny,
+- około **14 dni** → raport pełniejszy.
+
+Po dłuższej obserwacji:
+
+- przedziały umiejętności się zawężają,
+- ocena potencjału może zostać skorygowana,
+- wcześniejsza wiedza nie resetuje się.
+
+Znajomość zawodnika z własnej ligi, wcześniejszy scouting albo wcześniejsza gra w klubie mogą skracać potrzebny czas lub poprawiać dokładność.
+
+### Scout — kompetencja
+
+Na obecnym etapie wystarcza jedna główna jakość scouta związana z oceną zawodników.
+
+Nie dodajemy osobnych ratingów „juniorzy”, „zagranica”, „aktualne umiejętności”, „potencjał” bez konkretnej potrzeby gameplayowej.
+
+---
+
+## 16. Trener młodzieży — BINDING
+
+Nie potrzebujemy osobnej cechy „Ocena rozwoju”. Ocenianiem poziomu/potencjału zajmuje się scouting.
+
+Trener młodzieży ma specjalizacje odpowiadające grupom treningowym:
+
+1. **Starty**
+2. **Technika**
+3. **Jazda wyścigowa**
+4. **Czytanie toru**
+5. **Przygotowanie fizyczne**
+
+Mapowanie na zawodnika:
+
+- Starty → Reakcja + Start,
+- Technika → Technika,
+- Jazda wyścigowa → Atak + Obrona + Jazda parą,
+- Czytanie toru → Czytanie toru,
+- Przygotowanie fizyczne → Siła.
+
+Trener może być mocny w jednych obszarach i przeciętny w innych.
+
+Nie dodajemy kolejnych ogólnych atrybutów trenera bez konkretnego konsumenta.
+
+---
+
+## 17. Finanse klubu — BINDING kierunek
+
+Nie ma osobnego, sztywnego „budżetu transferowego” ani salary capu narzucanego graczowi przez interfejs.
+
+Klub posiada **jedno rzeczywiste saldo**, ale gra śledzi też:
+
+- prognozę przychodów i kosztów sezonu,
+- już zawarte zobowiązania kontraktowe,
+- przewidywane saldo końcowe.
+
+Manager może podejmować ryzyko finansowe, ale zarząd może blokować skrajnie niebezpieczne zobowiązania.
+
+Zarząd nie powinien blokować każdej trochę ryzykownej decyzji.
+
+### Przychody
+
+Model powinien obejmować co najmniej:
+
+1. centralną wypłatę ligi / TV,
+2. sponsorów,
+3. wsparcie miasta,
+4. bilety i karnety,
+5. VIP / gastronomię / merchandising — mogą być agregowane,
+6. dodatkowe wydarzenia,
+7. transfery / wypożyczenia,
+8. ewentualne wkłady właścicieli / akcjonariuszy,
+9. kredyty / pożyczki jako finansowanie, a nie przychód operacyjny.
+
+### Koszty
+
+Co najmniej:
+
+1. zawodnicy — podpisy,
+2. zawodnicy — punkty,
+3. zawodnicy — startowe, jeśli pozostaną w systemie,
+4. personel,
+5. szkolenie juniorów,
+6. organizacja meczów,
+7. tor i koszty techniczne,
+8. administracja,
+9. marketing,
+10. koszty stadionu wynikające z warunków użytkowania,
+11. dodatkowe imprezy,
+12. obsługa zadłużenia.
+
+### Budżet klubu między sezonami
+
+Każdy klub ma własną bazową siłę finansową, ale jego realny budżet zmienia się co roku.
+
+Nie losujemy całego budżetu jedną wartością.
+
+Budżet wynika z osobnych źródeł, np.:
+
+`TV + miasto + sponsorzy + bilety + inne`
+
+Dzięki temu gracz widzi, **dlaczego** klub ma w danym sezonie więcej lub mniej środków.
+
+Normalna zmienność powinna być umiarkowana, natomiast większe skoki mogą powodować:
+
+- awans / spadek,
+- duży nowy sponsor,
+- utrata sponsora,
+- wyraźna zmiana wsparcia miasta,
+- wyjątkowy wynik sportowy lub kryzys.
+
+---
+
+## 18. Sponsorzy — BINDING kierunek
+
+W grze zarządzamy niewielką liczbą istotnych sponsorów zamiast odwzorowywać dziesiątki małych firm.
+
+### Zarządzane umowy
+
+Preferowany model:
+
+- **1 Sponsor tytularny**,
+- **2 Sponsorów głównych**,
+- reszta jako zagregowana pozycja **Pozostali partnerzy**.
+
+Pozostali partnerzy dają mniejszą, względnie stabilną łączną kwotę i nie wymagają indywidualnych negocjacji.
+
+### Oferty sponsorów
+
+Sponsorzy **zgłaszają się do klubu z ofertami**, a gracz wybiera, które przyjąć.
+
+Oferta nie składa się wyłącznie z jednej kwoty.
+
+Może zawierać:
+
+- kwotę gwarantowaną,
+- długość umowy,
+- premie za osiągnięcia.
+
+Przykładowe premie:
+
+- utrzymanie,
+- play-off,
+- finał,
+- mistrzostwo,
+- awans.
+
+Cele sponsora powinny być dopasowane do realnego poziomu klubu.
+
+Beniaminek może dostać dużą premię za utrzymanie, podczas gdy kandydat do tytułu otrzymuje większe premie za finał/mistrzostwo.
+
+### Różne profile ofert
+
+Oferty powinny tworzyć decyzję managerską.
+
+Przykład:
+
+- sponsor A: wysoka kwota gwarantowana + małe premie,
+- sponsor B: niższa gwarancja + bardzo wysokie premie za sukces,
+- sponsor C: dłuższa, stabilna umowa na kilka sezonów.
+
+### Co wpływa na ofertę
+
+Główne czynniki:
+
+- ranga klubu,
+- poziom ligi,
+- ostatnie wyniki,
+- frekwencja / popularność,
+- ekspozycja TV,
+- historia sponsora z klubem.
+
+Nie potrzebujemy kilkunastu dodatkowych współczynników.
+
+### Relacja sponsor–klub
+
+Istniejący sponsor może:
+
+- przedłużyć umowę,
+- zwiększyć zaangażowanie,
+- zmienić poziom współpracy,
+- obniżyć ofertę,
+- odejść po spadku lub utracie ekspozycji.
+
+Sponsor nie powinien być co roku wyłącznie losowany od zera.
+
+---
+
+## 19. Ranga klubu — BINDING kierunek
+
+Każdy klub posiada długoterminową **rangę / reputację**.
+
+Może istnieć wewnętrznie jako wartość liczbowa, a gracz może widzieć poziom opisowy.
+
+Przykładowe opisy:
+
+- Lokalny
+- Rozpoznawalny
+- Uznany
+- Duży klub
+- Czołowy klub
+- Potęga
+
+Dokładne nazwy/progi mogą zostać dopracowane.
+
+### Zasada
+
+Ranga zmienia się **powoli**.
+
+Jeden dobry sezon nie tworzy od razu potęgi, a jeden spadek nie kasuje wieloletniej historii.
+
+Wpływają na nią m.in.:
+
+- poziom ligi w dłuższym okresie,
+- wyniki z kilku sezonów,
+- mistrzostwa / medale,
+- frekwencja i popularność,
+- historia klubu,
+- długość obecności na wysokim poziomie.
+
+### Ranga vs bieżąca atrakcyjność
+
+Rozdzielamy:
+
+- **Ranga klubu** — długoterminowa marka,
+- **Bieżąca atrakcyjność** — ranga + aktualna liga + ostatnie wyniki + bieżąca sytuacja finansowa / sportowa.
+
+To może być wykorzystywane przez:
+
+- sponsorów,
+- zawodników przy wyborze klubu,
+- frekwencję,
+- inne przyszłe systemy.
+
+---
+
+## 20. Frekwencja i ceny biletów — BINDING kierunek
+
+Frekwencja na konkretny mecz zależy od:
+
+- popularności/rangi gospodarza,
+- atrakcyjności rywala,
+- rangi wydarzenia,
+- bieżących wyników,
+- ceny biletu,
+- pojemności stadionu.
+
+### Ranga wydarzenia
+
+Ranga konkretnego meczu jest niezależna od samej rangi klubu.
+
+Może rosnąć m.in. przez:
+
+- derby,
+- historycznego rywala,
+- mecz dwóch czołowych drużyn,
+- play-off,
+- finał,
+- mecz o awans,
+- mecz o utrzymanie,
+- ważny mecz pod koniec sezonu.
+
+Wyższa ranga wydarzenia:
+
+- podnosi zainteresowanie,
+- zwiększa akceptowalną cenę biletu,
+- może zwiększać przychód meczowy.
+
+### Cena biletu
+
+Manager ustala bazową cenę i może ją zmienić dla konkretnego meczu.
+
+Wyższa cena może obniżać frekwencję, ale przy bardzo atrakcyjnym wydarzeniu kibice są mniej wrażliwi na podwyżkę.
+
+Gra powinna tworzyć prosty wybór:
+
+- wyższa cena i potencjalnie mniej kibiców,
+- niższa cena i większa szansa na pełniejszy stadion.
+
+---
+
+## 21. Stadion — BINDING ograniczenie
+
+Nie projektujemy obecnie systemu rozbudowy stadionu.
+
+Każdy klub otrzyma **realną pojemność swojego stadionu / obiektu** na podstawie danych wejściowych.
+
+Pojemność jest limitem frekwencji.
+
+Nie dodajemy:
+
+- drzewka rozbudowy stadionu,
+- budowy nowych trybun przez gracza,
+- rozwoju infrastruktury jako osobnej ścieżki progresji.
+
+Rozwój klubu ma odbywać się przede wszystkim przez:
+
+- wyniki,
+- skład,
+- sponsorów,
+- rangę,
+- budżet i zarządzanie sportowe.
+
+Koszty użytkowania stadionu mogą różnić się między klubami zależnie od realnego modelu własności/umowy z miastem, ale nie oznacza to zarządzania inwestycjami stadionowymi.
