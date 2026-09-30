@@ -105,12 +105,133 @@ public sealed class CornerTurningSlipCostExperimentTests
         var correction = Step(passive.ExitSpeedMetersPerSecond - .01f);
         Assert.True(correction.CorrectionActive);
         Assert.InRange(correction.AdditionalCorrectionMetersPerSecondSquared, 0f, 2.6f);
-        Assert.InRange(MathF.Abs(correction.ExitSpeedMetersPerSecond
-            - (passive.ExitSpeedMetersPerSecond - .01f)), 0f, 2e-6f);
-        Assert.Equal(passive.LossEnergyJoules, correction.LossEnergyJoules);
+        Assert.Equal(passive.ExitSpeedMetersPerSecond - .01f, correction.CorrectionExitSpeedMetersPerSecond);
+        Assert.True(correction.ExitSpeedMetersPerSecond < correction.CorrectionExitSpeedMetersPerSecond);
+        Assert.InRange(correction.CorrectionDistanceMeters, 0f, 1f);
+        Assert.True(correction.CorrectionLossEnergyJoules > 0d);
+        Assert.True(correction.OutsideCorrectionLossEnergyJoules > 0d);
+        Assert.Equal(correction.CorrectionLossEnergyJoules + correction.OutsideCorrectionLossEnergyJoules,
+            correction.LossEnergyJoules);
         var unreachable = Step(1f);
         Assert.Equal(2.6f, unreachable.AdditionalCorrectionMetersPerSecondSquared);
         Assert.True(unreachable.ExitSpeedMetersPerSecond > 1f);
+    }
+
+    [Theory]
+    [InlineData(1e-8f)]
+    [InlineData(.001f)]
+    [InlineData(.005f)]
+    [InlineData(.32f)]
+    public void PartialCorrectionCrossingAndRemainingCarryPartitionDistanceAndEnergy(float coefficient)
+    {
+        const float entry = 26f, target = 24f, distance = 30f, capability = 2.6f;
+        const float curvature = 1f / 31f;
+        var step = TurningCostIntegrator.Step(entry, distance, curvature, coefficient,
+            0f, 700f, BikeSetup.Neutral, target, capability);
+        var legacy = LongitudinalDynamics.CalculateCornerSpeedCorrectionProfile(entry, target, capability, distance);
+        var midpoint = ((double)entry + target) * .5d;
+        var crossingDistance = ((double)entry * entry - (double)target * target)
+            / (2d * (capability + coefficient * Math.Abs((double)curvature) * midpoint * midpoint));
+        Assert.Equal((float)crossingDistance, step.CorrectionDistanceMeters);
+        Assert.InRange(step.CorrectionDistanceMeters, 0f, legacy.CorrectionDistanceMeters);
+        Assert.True(step.CorrectionDistanceMeters < distance);
+        Assert.Equal(target, step.CorrectionExitSpeedMetersPerSecond);
+        Assert.InRange(step.ExitSpeedMetersPerSecond, 0f, target);
+        Assert.Equal(capability, step.AdditionalCorrectionMetersPerSecondSquared);
+        Assert.True(step.CorrectionLossEnergyJoules > 0d && step.OutsideCorrectionLossEnergyJoules > 0d);
+        var carryDistance = distance - step.CorrectionDistanceMeters;
+        var carryMidpoint = (float)(((double)target + step.ExitSpeedMetersPerSecond) * .5d);
+        Assert.Equal((double)TurningCostForce.RequestedLossNewtons(coefficient, (float)midpoint, curvature)
+            * step.CorrectionDistanceMeters, step.CorrectionLossEnergyJoules);
+        Assert.Equal((double)TurningCostForce.RequestedLossNewtons(coefficient, carryMidpoint, curvature)
+            * carryDistance, step.OutsideCorrectionLossEnergyJoules);
+        Assert.Equal(step.CorrectionLossEnergyJoules + step.OutsideCorrectionLossEnergyJoules, step.LossEnergyJoules);
+        var mass = LongitudinalDynamics.ProvisionalNominalSystemMassKilograms;
+        var kineticDebit = .5d * mass * ((double)entry * entry
+            - (double)step.ExitSpeedMetersPerSecond * step.ExitSpeedMetersPerSecond);
+        var controlWork = (double)mass * capability * step.CorrectionDistanceMeters;
+        var roundingBound = mass * (entry + step.ExitSpeedMetersPerSecond)
+            * 2d * TurningCostZeroLimitDiagnostic.OutputUlp(entry);
+        Assert.InRange(Math.Abs(kineticDebit - controlWork - step.LossEnergyJoules), 0d, roundingBound);
+        // Roll-off/carry must not acquire propulsion from the availability argument.
+        Assert.Equal(step, TurningCostIntegrator.Step(entry, distance, curvature, coefficient,
+            1f, 700f, BikeSetup.Neutral, target, capability) with
+            { PassiveEndSpeedMetersPerSecond = step.PassiveEndSpeedMetersPerSecond });
+        if (coefficient == 1e-8f)
+        {
+            Assert.InRange(Math.Abs((double)step.CorrectionDistanceMeters - legacy.CorrectionDistanceMeters),
+                0d, 2d * TurningCostZeroLimitDiagnostic.OutputUlp(legacy.CorrectionDistanceMeters));
+            Assert.InRange(Math.Abs((double)step.CorrectionTimeSeconds - legacy.TravelTimeSeconds),
+                0d, 2d * TurningCostZeroLimitDiagnostic.OutputUlp(legacy.TravelTimeSeconds));
+        }
+    }
+
+    [Fact]
+    public void ControllerRequestedCarryBelowTargetHasLossWithoutInventingCorrectionDistance()
+    {
+        var step = TurningCostIntegrator.Step(20f, 1f, 1f / 31f, .005f,
+            1f, 700f, BikeSetup.Neutral, 21f, 2.6f, correctionRequested: true);
+        Assert.True(step.ControllerLimited);
+        Assert.False(step.CorrectionActive);
+        Assert.Equal(0f, step.CorrectionDistanceMeters);
+        Assert.Equal(0f, step.CorrectionTimeSeconds);
+        Assert.Equal(0d, step.CorrectionLossEnergyJoules);
+        Assert.True(step.ExitSpeedMetersPerSecond < step.EntrySpeedMetersPerSecond);
+        Assert.True(step.OutsideCorrectionLossEnergyJoules > 0d);
+    }
+
+    [Fact]
+    public void NonTraversableZeroSpeedCarryIsInvalidInsteadOfAbortingSearchOrWinningWithZeroTime()
+    {
+        var step = TurningCostIntegrator.Step(20f, 100f, 1f / 31f, .005f,
+            0f, 700f, BikeSetup.Neutral, 0f, 2.6f);
+        Assert.False(step.IsTraversable);
+        Assert.True(double.IsFinite(step.TimeSeconds));
+        Assert.True(step.TimeSeconds > 0d);
+        Assert.Equal(0f, step.CorrectionExitSpeedMetersPerSecond);
+        Assert.True(step.CorrectionDistanceMeters < step.DistanceMeters);
+        Assert.True(step.RemainingDistanceMeters > 0f);
+        Assert.Equal(step.CorrectionDistanceMeters, step.TraversedDistanceMeters);
+        var stoppedCarry = TurningCostIntegrator.Step(20f, 10f, .05f, 4.04f,
+            0f, 700f, BikeSetup.Neutral, 20f, 2.6f, correctionRequested: true);
+        var repeatedCarry = TurningCostIntegrator.Step(20f, 10f, .05f, 4.04f,
+            0f, 700f, BikeSetup.Neutral, 20f, 2.6f, correctionRequested: true);
+        Assert.Equal(stoppedCarry, repeatedCarry);
+        Assert.False(stoppedCarry.IsTraversable);
+        Assert.Equal(0f, stoppedCarry.ExitSpeedMetersPerSecond);
+        Assert.True(stoppedCarry.RemainingDistanceMeters > 0f);
+        Assert.InRange(stoppedCarry.TraversedDistanceMeters, 9.89f, 9.91f);
+        Assert.True(double.IsFinite(stoppedCarry.TimeSeconds) && stoppedCarry.TimeSeconds > 0d);
+        Assert.True(double.IsFinite(stoppedCarry.LossEnergyJoules) && stoppedCarry.LossEnergyJoules > 0d);
+        Assert.True(float.IsFinite(stoppedCarry.LossForceNewtons) && stoppedCarry.LossForceNewtons >= 0f);
+        Assert.True(float.IsFinite(stoppedCarry.LossPowerWatts) && stoppedCarry.LossPowerWatts >= 0f);
+        var traversableCarry = TurningCostIntegrator.Step(20f, 10f, .05f, 3.96f,
+            0f, 700f, BikeSetup.Neutral, 20f, 2.6f, correctionRequested: true);
+        Assert.True(traversableCarry.IsTraversable);
+        Assert.True(traversableCarry.ExitSpeedMetersPerSecond > 0f);
+        Assert.Equal(10f, traversableCarry.TraversedDistanceMeters);
+        Assert.Equal(0f, traversableCarry.RemainingDistanceMeters);
+        var controls = new float[FreeContinuousRacingTrajectoryGeometryExperiment.ControlStationCount];
+        var stalled = FreeContinuousRacingTrajectoryGeometryExperiment.EvaluateTurningCost(
+            controls, 128f);
+        Assert.False(stalled.IsValid);
+        Assert.Equal(FreeTrajectoryValidity.NonTraversable, stalled.Validity);
+        Assert.Equal("NonTraversable", stalled.InvalidReason);
+        Assert.True(stalled.RemainingCornerDistanceMeters > 0f);
+        Assert.InRange(stalled.NonTraversableProgress!.Value, 0f, 1f);
+        Assert.True(float.IsFinite(stalled.NonTraversableDistanceMeters!.Value));
+        Assert.Equal(stalled.Path!.TotalLengthMeters,
+            stalled.NonTraversableDistanceMeters + stalled.RemainingCornerDistanceMeters);
+        var repeated = FreeContinuousRacingTrajectoryGeometryExperiment.EvaluateTurningCost(controls, 128f);
+        Assert.Equal(stalled.Candidate.Id, repeated.Candidate.Id);
+        Assert.Equal(stalled.Validity, repeated.Validity);
+        Assert.Equal(stalled.InvalidReason, repeated.InvalidReason);
+        Assert.Equal(stalled.NonTraversableProgress, repeated.NonTraversableProgress);
+        Assert.Equal(stalled.NonTraversableDistanceMeters, repeated.NonTraversableDistanceMeters);
+        Assert.Equal(stalled.RemainingCornerDistanceMeters, repeated.RemainingCornerDistanceMeters);
+        Assert.All(new[] { stalled.SectorTimeSeconds, stalled.CornerTimeSeconds, stalled.ExitSpeedMetersPerSecond },
+            value => Assert.True(float.IsFinite(value) && value >= 0f));
+        Assert.Empty(stalled.Profile);
     }
 
     [Fact]
@@ -178,13 +299,19 @@ public sealed class CornerTurningSlipCostExperimentTests
         {
             Assert.Equal(106, scenario.Search.StartsGenerated);
             Assert.Equal(48, scenario.Search.RefinedStartCount);
+            Assert.Equal(scenario.Search.CandidatesEvaluated, scenario.Search.ValidCandidates
+                + scenario.Search.InvalidGeometryCandidates + scenario.Search.InvalidLateralExecutionCandidates
+                + scenario.Search.InvalidCornerControlDepartureCandidates + scenario.Search.InvalidCrashCandidates
+                + scenario.Search.InvalidStraightRepositionCandidates + scenario.Search.InvalidNonTraversableCandidates);
+            Assert.Equal(scenario.Search.InvalidGeometryCandidates, scenario.Search.InvalidTrackBoundaryCandidates
+                + scenario.Search.InvalidSelfIntersectionCandidates + scenario.Search.InvalidNonSmoothGeometryCandidates);
             Assert.InRange(Math.Abs(scenario.Winner.TotalTurningLossEnergyJoules
                 - scenario.Winner.TurningLossEnergyDuringCorrectionJoules
                 - scenario.Winner.TurningLossEnergyDuringDriveJoules), 0d, 1e-7d);
         });
         var atFive = result.Scenarios.Single(x => x.Coefficient == .005f);
-        Assert.Equal(FreeContinuousRacingTrajectoryGeometryExperiment.ReviewedTurningCostWinnerControls,
-            atFive.Winner.Candidate.ControlOffsetsMeters);
+        Assert.Equal(atFive.Winner.Candidate.ControlOffsetsMeters,
+            result.Robustness.Reference.Candidate.ControlOffsetsMeters);
         Assert.Equal(result.Robustness.Reference.SectorTimeSeconds, atFive.Winner.SectorTimeSeconds);
         Assert.Equal(CornerTurningSlipCostReport.Render(result),
             CornerTurningSlipCostReport.Render(result));

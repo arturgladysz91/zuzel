@@ -16,15 +16,16 @@ public sealed record TurningCostZeroLimitProbe(string Name, IReadOnlyList<Turnin
     public double EstimatedSectorInterceptSeconds => TurningCostZeroLimitDiagnostic.EstimateIntercept(
         Samples[1].Coefficient, SectorDeltaSeconds(Samples[1]),
         Samples[2].Coefficient, SectorDeltaSeconds(Samples[2]));
-    public bool SectorZeroLimitPass => Math.Abs(EstimatedSectorInterceptSeconds)
-        <= TurningCostZeroLimitDiagnostic.SectorResolutionSeconds;
+    public double OutputSectorUlpSeconds => TurningCostZeroLimitDiagnostic.OutputUlp(Samples[0].Evaluation.SectorTimeSeconds);
+    public double SectorInterceptInUlps => EstimatedSectorInterceptSeconds / OutputSectorUlpSeconds;
+    public bool SectorZeroLimitPass => Math.Abs(SectorInterceptInUlps)
+        <= TurningCostZeroLimitDiagnostic.MaximumInterceptUlps;
 }
 
 public static class TurningCostZeroLimitDiagnostic
 {
-    // About sixteen output-float ULPs at a 6.7 s sector; 750 times smaller
-    // than the reviewed 0.006022 s margin, not the old 0.01 s allowance.
-    public const double SectorResolutionSeconds = .000008d;
+    public const int MaximumInterceptUlps = 2;
+    public static double OutputUlp(float value) => (double)MathF.BitIncrement(value) - value;
 
     public static double EstimateIntercept(double lowerCoefficient, double lowerDeltaSeconds,
         double upperCoefficient, double upperDeltaSeconds)
@@ -62,15 +63,15 @@ public static partial class FreeContinuousRacingTrajectoryGeometryExperiment
     public const int TurningCostDisplacementSampleDivisions = 4096;
 
     /// <summary>Fixed-trajectory diagnostics only; never calls RunSearch or changes the integrator.</summary>
-    public static TurningCostRobustnessResult RunTurningCostRobustness()
+    public static TurningCostRobustnessResult RunTurningCostRobustness(IReadOnlyList<float>? referenceControls = null)
     {
         const float coefficient = .005f;
-        var controls = ReviewedTurningCostWinnerControls;
+        var controls = referenceControls ?? ReviewedTurningCostWinnerControls;
         var innerControls = new float[ControlStationCount];
         var reference = EvaluateTurningCost(controls, coefficient);
         var inner = EvaluateTurningCost(innerControls, coefficient);
         if (!reference.IsValid || !inner.IsValid)
-            throw new InvalidOperationException("Frozen robustness reference is invalid.");
+            throw new InvalidOperationException("Robustness reference is invalid.");
         var coefficients = new[] { 0f, .00000001f, .0000001f, .000001f, .00001f, .0001f, .001f };
         TurningCostZeroLimitProbe ZeroProbe(string name, IReadOnlyList<float> offsets) => new(name,
             Array.AsReadOnly(coefficients.Select(c =>
@@ -93,17 +94,18 @@ public static partial class FreeContinuousRacingTrajectoryGeometryExperiment
             return new TurningCostTrajectoryProbe(variation, parameter, evaluation, displacement);
         }
 
-        var variants = new[] { -1f, -.5f, -.25f, -.1f, 0f, .1f, .25f, .5f, 1f }
+        var variants = controls.All(x => x == 0f) ? Array.Empty<TurningCostTrajectoryProbe>()
+            : new[] { 0f, .1f, .25f, .5f, 1f }
             .Select(x => Probe(TurningCostTrajectoryVariation.WholeLineShift, x))
             .Concat(new[] { .75f, .9f, 1f, 1.1f, 1.25f }
                 .Select(x => Probe(TurningCostTrajectoryVariation.ShapeAmplitude, x))).ToArray();
 
         var local = new List<TurningCostTrajectoryProbe>();
         var better = variants.Where(x => x.Evaluation.IsValid)
-            .OrderBy(x => x.Evaluation.SectorTimeSeconds).First();
-        if (better.Variation == TurningCostTrajectoryVariation.ShapeAmplitude
+            .OrderBy(x => x.Evaluation.SectorTimeSeconds).FirstOrDefault();
+        if (better is { Variation: TurningCostTrajectoryVariation.ShapeAmplitude }
             && (double)reference.SectorTimeSeconds - better.Evaluation.SectorTimeSeconds
-                > TurningCostZeroLimitDiagnostic.SectorResolutionSeconds)
+                > TurningCostZeroLimitDiagnostic.MaximumInterceptUlps * TurningCostZeroLimitDiagnostic.OutputUlp(reference.SectorTimeSeconds))
         {
             // A separate one-dimensional, coherent-shape refinement, NOT the
             // 106-start/11-control search. One neighbour pair per halving level.
@@ -123,7 +125,7 @@ public static partial class FreeContinuousRacingTrajectoryGeometryExperiment
             .Select(index => reference.Path!.PointAt((float)index / TurningCostDisplacementSampleDivisions)
                 .LateralOffsetMeters).ToArray();
         return new TurningCostRobustnessResult(Array.AsReadOnly(new[]
-            { ZeroProbe("ConstantInner", innerControls), ZeroProbe("reviewed c=.005 winner", controls) }),
+            { ZeroProbe("ConstantInner", innerControls), ZeroProbe("reviewed c=.005 winner geometry", ReviewedTurningCostWinnerControls) }),
             reference, inner, referenceOffsets.Min(), referenceOffsets.Max(),
             Array.AsReadOnly(variants), Array.AsReadOnly(local.ToArray()));
     }
@@ -137,9 +139,9 @@ public static class TurningCostRobustnessReport
         void L(string line = "") => sb.Append(line).Append('\n');
         static string F(double value, string format = "0.000000000") => value.ToString(format, CultureInfo.InvariantCulture);
         static string B(bool value) => value ? "PASS" : "FAIL";
-        L("## Fixed-geometry zero-limit validation (reviewed HEAD 3b1a1a8995e8a4f7a79edb7388012bc2223b65c3)");
+        L("## Fixed-geometry zero-limit validation (repair after reviewed HEAD d9eebbf49d3c6bb2bc9f8f5cc1e14522bcc08db2)");
         L();
-        L("These are fixed ConstantInner and reviewed c=.005-winner controls, not fresh searches. The requested sequence is augmented with c=1e-8 and 1e-7 to resolve a finite offset. Delta/c should remain bounded with a zero intercept for an O(c) response. The two-point intercept uses only those two smallest positive coefficients; it is a numerical diagnostic, not an extrapolated physical calibration.");
+        L("These are fixed ConstantInner and the old reviewed c=.005-winner controls, not the fresh search winner. The seven coefficients include c=1e-8 and 1e-7 to resolve a finite offset. The two-point sector intercept uses those two smallest positive coefficients; its bound is two actual output-float ULPs, not a gameplay-scale time tolerance. Float quantization can make individual deltas or delta/c nonmonotonic; neither a slope fit nor an offset is applied to the simulation.");
         L();
         L("| geometry | c | sector s | delta vs c=0 s | delta/c s | corner s | exit m/s | correction m | correction s | work J |");
         L("|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|");
@@ -152,19 +154,19 @@ public static class TurningCostRobustnessReport
         }
         L();
         foreach (var probe in result.ZeroLimitProbes)
-            L($"{probe.Name}: estimated sector intercept {F(probe.EstimatedSectorInterceptSeconds)} s; zero-limit diagnostic {B(probe.SectorZeroLimitPass)} at ±{F(TurningCostZeroLimitDiagnostic.SectorResolutionSeconds)} s resolution (about sixteen sector-output float ULPs). This is far stricter than 0.01 s and the 0.006022 s winning margin.");
+            L($"{probe.Name}: output ULP {F(probe.OutputSectorUlpSeconds, "0.000000000000000")} s; estimated sector intercept {F(probe.EstimatedSectorInterceptSeconds, "0.000000000000000")} s = {F(probe.SectorInterceptInUlps, "0.000000")} ULPs; zero-limit diagnostic {B(probe.SectorZeroLimitPass)} within ±{TurningCostZeroLimitDiagnostic.MaximumInterceptUlps} output ULPs.");
         L();
         L(result.ZeroLimitProbes.All(x => x.SectorZeroLimitPass)
-            ? "No resolved finite sector-time intercept in these probes. This alone cannot rule out offsets below the diagnostic resolution."
-            : "Finite c=0 discontinuity detected: the positive-c deltas plateau rather than scale to zero. Thus the requested clean zero-limit validation FAILS. At zero, #47 uses partial bounded correction followed by constant-speed carry; positive c uses midpoint passive integration plus additional control over a whole interval and endpoint-average time. Correction distance/time also change definition, and tiny positive loss can activate many negligible whole-interval corrections. Energy tends to zero, but that does not establish controller/time continuity. The regression tests verify that this failure is detected; green software tests do NOT certify zero-limit continuity.");
+            ? "No resolved finite sector-time intercept in either fixed probe. At c=1e-8 the regression also requires sector/corner time, exit speed, actual correction distance/time and every sampled profile speed within two respective float ULPs of #47, with identical profile controller flags/outcomes. Work remains positive and tends to zero. This is a resolved numerical limit check, not a proof below float resolution."
+            : "Zero-limit validation FAILS: a finite sector-time intercept exceeds two output-float ULPs. Do not interpret the search as a clean continuous extension of #47.");
         L();
-        L("The integrator, force law, exact c=0 #47 branch, seven-coefficient search and convergence diagnostics are intentionally unchanged in this validation-only iteration. No fitted bridge, smoothing, tolerance relaxation or production change hides the failure.");
+        L("The positive-c integrator now preserves partial correction, target crossing and remaining dissipative carry. The force law and exact c=0 #47 branch are frozen. All seven full searches are rerun with unchanged starts, refinement and closure tolerances. No coefficient threshold, fitted bridge, smoothing or production change is used.");
         L();
         L("## Physical track-space robustness at c=.005");
         L();
-        L($"Frozen reference sector {F(result.Reference.SectorTimeSeconds)} s; ConstantInner {F(result.ConstantInner.SectorTimeSeconds)} s. Whole-line shift adds the same signed metres to all eleven controls; positive is outward. Amplitude multiplies all offsets relative to ConstantInner (zero). Maximum displacement samples the full spline at {FreeContinuousRacingTrajectoryGeometryExperiment.TurningCostDisplacementSampleDivisions + 1} equal-angle progress positions, comparing radial offsets at the same track angle, not just controls or percentage of arc length. This is a sampled maximum, not an analytical extremum. The reference occupies {F(result.MinimumReferenceOffsetMeters)}–{F(result.MaximumReferenceOffsetMeters)} m from the inside edge.");
+        L($"Reference {result.Reference.Candidate.Id}, sector {F(result.Reference.SectorTimeSeconds)} s; ConstantInner {F(result.ConstantInner.SectorTimeSeconds)} s. In the complete experiment this reference is the freshly searched c=.005 winner, not the old reviewed controls. Whole-line shift adds the same metres to all eleven controls; positive is outward. Amplitude multiplies all offsets relative to ConstantInner (zero). Maximum displacement samples the full spline at {FreeContinuousRacingTrajectoryGeometryExperiment.TurningCostDisplacementSampleDivisions + 1} equal-angle progress positions, comparing radial offsets at the same track angle, not just controls or percentage of arc length. This is a sampled maximum, not an analytical extremum. The reference occupies {F(result.MinimumReferenceOffsetMeters)}–{F(result.MaximumReferenceOffsetMeters)} m from the inside edge.");
         L();
-        L("Invalid variants retain their original controls/reasons; — means no valid trajectory/performance metric. No invalid path is clamped or assigned a zero time. The inward shifts cross the physical inner boundary, not the numerical lateral-execution gate.");
+        L("Invalid variants retain their original controls/reasons; — means no valid trajectory/performance metric. No invalid path is clamped or assigned a zero time. Only the requested outward shifts and coherent amplitudes are tested; impossible inward shifts and centimetre-scale reserve diagnostics are not rerun.");
         L();
         void Table(IReadOnlyList<TurningCostTrajectoryProbe> probes)
         {
@@ -182,13 +184,14 @@ public static class TurningCostRobustnessReport
                     : $"{prefix} — | — | — | — | — | — | — | — | — | — | — | — |");
             }
         }
-        Table(result.Variants);
+        if (result.Variants.Count > 0) Table(result.Variants);
+        else L("ConstantInner is the reference; no non-inner physical-width or amplitude probes are required.");
         L();
         L("### Separate local coherent-amplitude refinement");
         L();
         if (result.BestLocalAmplitude is { } best)
         {
-            L($"The fixed 90% probe improves on the frozen reference beyond the 8 µs numerical resolution, so a separate one-parameter refinement starts there. Eight levels test only amplitude ±0.05, halving the step each level; retain the best valid sector time with lower-amplitude tie-breaking. {result.LocalAmplitudeRefinement.Count} recorded evaluations including the seed; no 106-start searches or independent control perturbations. Best tested amplitude {F(best.Parameter * 100d, "0.000000")}%: sector {F(best.Evaluation.SectorTimeSeconds)} s, delta reference {F((double)best.Evaluation.SectorTimeSeconds - result.Reference.SectorTimeSeconds)} s, displacement {F(best.MaximumLateralDisplacementMeters!.Value)} m. This is local one-dimensional evidence, not a replacement globally converged winner.");
+            L($"The best fixed amplitude probe ({F(result.LocalAmplitudeRefinement[0].Parameter * 100d, "0.000000")}%) improves on the reference by more than two sector-output ULPs, so a separate one-parameter refinement starts there. Eight levels test only amplitude ±0.05, halving the step each level; retain the best valid sector time with lower-amplitude tie-breaking. {result.LocalAmplitudeRefinement.Count} recorded evaluations including the seed; no 106-start searches or independent control perturbations. Best tested amplitude {F(best.Parameter * 100d, "0.000000")}%: sector {F(best.Evaluation.SectorTimeSeconds)} s, delta reference {F((double)best.Evaluation.SectorTimeSeconds - result.Reference.SectorTimeSeconds)} s, displacement {F(best.MaximumLateralDisplacementMeters!.Value)} m. This is local one-dimensional evidence, not a replacement globally converged winner.");
             L();
             Table(result.LocalAmplitudeRefinement);
         }
@@ -201,12 +204,21 @@ public static class TurningCostRobustnessReport
             var shifts = result.Variants.Where(x => x.Variation == TurningCostTrajectoryVariation.WholeLineShift
                 && x.Evaluation.IsValid && (double)x.Evaluation.SectorTimeSeconds
                     - result.Reference.SectorTimeSeconds <= tolerance).ToArray();
-            L($"Within +{F(tolerance, "0.000")} s of the frozen reference: tested valid whole-line shifts {F(shifts.Min(x => x.Parameter), "0.00")} to {F(shifts.Max(x => x.Parameter), "0.00")} m. Only discrete tested points qualify; no claim that every intermediate shift qualifies or that the threshold boundary was located.");
+            L(shifts.Length == 0 ? $"Within +{F(tolerance, "0.000")} s: no qualifying whole-line shift was tested."
+                : $"Within +{F(tolerance, "0.000")} s of the reference: tested valid whole-line shifts {F(shifts.Min(x => x.Parameter), "0.00")} to {F(shifts.Max(x => x.Parameter), "0.00")} m. Only discrete tested points qualify; no claim that every intermediate shift qualifies or that the threshold boundary was located.");
         }
         L();
-        L("The measured basin is anisotropic and one-sided, not a millimetre needle. Outward shifts of 0.10/0.25/0.50/1.00 m lose about 4.61/11.61/23.39/47.46 ms; 0.10 m preserves a small advantage over ConstantInner, whereas 0.25 m loses that advantage. The 0.25–0.50 m whole-line direction is moderate rather than broad (losses are tens, not just a few, milliseconds). All five 75–125% amplitude probes remain valid within about 1.11 ms of the reference while displacing the full spline by up to 0.157 m; this is a comparatively flat coherent-shape direction. Inward shifts of 0.10 m or more are unavailable because the line already approaches the physical inner edge. These probes do not show validity dominated by the numerical gate, nor do they establish a two-sided 0.25–0.50 m basin.");
+        var outward = result.Variants.Where(x => x.Variation == TurningCostTrajectoryVariation.WholeLineShift
+            && x.Parameter > 0f && x.Evaluation.IsValid).ToArray();
+        if (outward.Length > 0)
+            L("Outward shift / measured delta: " + string.Join("; ", outward.Select(x =>
+                $"+{F(x.Parameter, "0.00")} m / {F(1000d * ((double)x.Evaluation.SectorTimeSeconds - result.Reference.SectorTimeSeconds), "0.000000")} ms")) + ". These one-sided discrete probes do not establish a two-sided basin or a continuous width boundary.");
+        var amplitudes = result.Variants.Where(x => x.Variation == TurningCostTrajectoryVariation.ShapeAmplitude
+            && x.Evaluation.IsValid).ToArray();
+        if (amplitudes.Length > 0)
+            L($"Valid coherent amplitudes: {amplitudes.Length} of 5; maximum absolute delta {F(amplitudes.Max(x => Math.Abs(1000d * ((double)x.Evaluation.SectorTimeSeconds - result.Reference.SectorTimeSeconds))), "0.000000")} ms; maximum sampled physical displacement {F(amplitudes.Max(x => x.MaximumLateralDisplacementMeters!.Value))} m. This direction is distinct from whole-line translation; percentages are not physical metres.");
         L();
-        L("The c=.005 non-inner advantage remains a reproducible exploratory result across a family of shapes; the tiny numerical headroom alone does not imply needle positioning. However, zero-limit validation has failed, so the model is NOT yet validated for production or as a clean physics baseline for the next experiment. Resolve the analysis integrator's c=0/controller semantics in a separately authorized iteration before using a small advantage as physical evidence. This iteration neither repairs that split nor changes the frozen full-search result.");
+        L("The repaired zero-limit check and fresh search/width results are separate evidence. Passing continuity removes the controller-state discontinuity; it does not calibrate the effective slip coefficient, certify a globally optimal geometry, or justify production promotion. Any unclosed sweep coefficient remains explicitly unresolved.");
         return sb.ToString();
     }
 }

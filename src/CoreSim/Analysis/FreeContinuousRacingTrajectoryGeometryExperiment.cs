@@ -16,6 +16,7 @@ public enum FreeTrajectoryValidity
     CornerControlPathDeparture,
     CornerControlCrash,
     StraightRepositionConstraint,
+    NonTraversable,
 }
 
 public sealed record FreeTrajectoryCandidate(
@@ -400,6 +401,9 @@ public sealed record FreeTrajectoryEvaluation(
     public float StraightRepositionDistanceMeters { get; init; }
     public float StraightRepositionLateralHeadroomMeters { get; init; }
     public double TurningLossEnergyJoules { get; init; }
+    public float? NonTraversableProgress { get; init; }
+    public float? NonTraversableDistanceMeters { get; init; }
+    public float? RemainingCornerDistanceMeters { get; init; }
     public double TotalTurningLossEnergyJoules => TurningLossEnergyJoules;
     public double TurningLossEnergyDuringCorrectionJoules { get; init; }
     public double TurningLossEnergyDuringDriveJoules { get; init; }
@@ -472,9 +476,14 @@ public sealed record FreeTrajectorySearchResult(
     public int InvalidInitialLateral { get; init; }
     public int InvalidInitialCornerControl { get; init; }
     public int InvalidInitialStraightReposition { get; init; }
+    public int InvalidInitialNonTraversable { get; init; }
     public int InvalidCornerControlDepartureCandidates { get; init; }
     public int InvalidCrashCandidates { get; init; }
     public int InvalidStraightRepositionCandidates { get; init; }
+    public int InvalidNonTraversableCandidates { get; init; }
+    public int InvalidTrackBoundaryCandidates { get; init; }
+    public int InvalidSelfIntersectionCandidates { get; init; }
+    public int InvalidNonSmoothGeometryCandidates { get; init; }
     public IReadOnlyList<float> FinalRefinementStepsMeters { get; init; } = Array.Empty<float>();
     public bool ObjectiveConvergence { get; init; }
     public bool GeometryConvergence { get; init; }
@@ -1195,6 +1204,10 @@ public static partial class FreeContinuousRacingTrajectoryGeometryExperiment
         var invalidDeparture = 0;
         var invalidCrash = 0;
         var invalidStraight = 0;
+        var invalidNonTraversable = 0;
+        var invalidTrackBoundary = 0;
+        var invalidSelfIntersection = 0;
+        var invalidNonSmoothGeometry = 0;
 
         FreeTrajectoryEvaluation Test(FreeTrajectoryCandidate candidate)
         {
@@ -1211,7 +1224,14 @@ public static partial class FreeContinuousRacingTrajectoryGeometryExperiment
             else if (result.Validity == FreeTrajectoryValidity.CornerControlPathDeparture) invalidDeparture++;
             else if (result.Validity == FreeTrajectoryValidity.CornerControlCrash) invalidCrash++;
             else if (result.Validity == FreeTrajectoryValidity.StraightRepositionConstraint) invalidStraight++;
-            else invalidGeometry++;
+            else if (result.Validity == FreeTrajectoryValidity.NonTraversable) invalidNonTraversable++;
+            else
+            {
+                invalidGeometry++;
+                if (result.Validity == FreeTrajectoryValidity.TrackBoundary) invalidTrackBoundary++;
+                else if (result.Validity == FreeTrajectoryValidity.SelfIntersection) invalidSelfIntersection++;
+                else if (result.Validity == FreeTrajectoryValidity.NonSmoothGeometry) invalidNonSmoothGeometry++;
+            }
             return result;
         }
 
@@ -1482,6 +1502,11 @@ public static partial class FreeContinuousRacingTrajectoryGeometryExperiment
             InvalidCornerControlDepartureCandidates = invalidDeparture,
             InvalidCrashCandidates = invalidCrash,
             InvalidStraightRepositionCandidates = invalidStraight,
+            InvalidNonTraversableCandidates = invalidNonTraversable,
+            InvalidInitialNonTraversable = initial.Count(item => item.Validity == FreeTrajectoryValidity.NonTraversable),
+            InvalidTrackBoundaryCandidates = invalidTrackBoundary,
+            InvalidSelfIntersectionCandidates = invalidSelfIntersection,
+            InvalidNonSmoothGeometryCandidates = invalidNonSmoothGeometry,
             FinalRefinementStepsMeters = RefinementStepsMeters,
             ObjectiveConvergence = objectiveConvergence,
             GeometryConvergence = geometryConvergence,
@@ -2288,9 +2313,23 @@ public static partial class FreeContinuousRacingTrajectoryGeometryExperiment
                 var availability = ContinuousCornerEnvelope.DriveAvailability(midpointProgress);
                 var turningStep = turningLossRatio > 0f
                     ? TurningCostIntegrator.Step(speed, stepDistance, midpointPoint.CurvaturePerMeter,
-                        turningLossRatio, availability, referenceDriveForce, Neutral, endTarget, correctionCapability)
+                        turningLossRatio, availability, referenceDriveForce, Neutral, endTarget, correctionCapability,
+                        startOutcome.ContinuousCorrectionTargetSpeedMetersPerSecond is not null)
                         with { StartProgress = startProgress }
                     : null;
+                if (turningStep is { IsTraversable: false })
+                {
+                    var stoppedDistance = MathF.Min(path.TotalLengthMeters,
+                        startDistance + turningStep.TraversedDistanceMeters);
+                    return Invalid(candidate, FreeTrajectoryValidity.NonTraversable, "NonTraversable",
+                        path, constraints, peakSettledRatio, peakEnvelopeRatio,
+                        peakSettledProgress, peakEnvelopeProgress, brakeSteps, firstCorrectionProgress) with
+                    {
+                        NonTraversableProgress = path.ProgressAtDistance(stoppedDistance),
+                        NonTraversableDistanceMeters = stoppedDistance,
+                        RemainingCornerDistanceMeters = path.TotalLengthMeters - stoppedDistance,
+                    };
+                }
                 var candidateSpeed = turningStep?.PassiveEndSpeedMetersPerSecond
                     ?? LongitudinalDynamics.CalculateMidpointDriveEndSpeedMetersPerSecond(
                         speed, stepDistance, referenceDriveForce, Neutral, availability);
@@ -2303,20 +2342,22 @@ public static partial class FreeContinuousRacingTrajectoryGeometryExperiment
                 float netAcceleration;
                 if (turningStep is not null)
                 {
-                    correctionActive = turningStep.CorrectionActive;
+                    correctionActive = turningStep.ControllerLimited;
                     nextSpeed = turningStep.ExitSpeedMetersPerSecond;
                     stepTime = turningStep.TimeSeconds;
                     netAcceleration = (nextSpeed * nextSpeed - speed * speed) / (2f * stepDistance);
                     turningLossEnergy += turningStep.LossEnergyJoules;
+                    correctionLossEnergy += turningStep.CorrectionLossEnergyJoules;
+                    driveLossEnergy += turningStep.OutsideCorrectionLossEnergyJoules;
+                    correctionDistance += turningStep.CorrectionDistanceMeters;
+                    correctionTime += turningStep.CorrectionTimeSeconds;
+                    correctionModeDistance += turningStep.CorrectionDistanceMeters;
+                    driveModeDistance += (double)stepDistance - turningStep.CorrectionDistanceMeters;
                     if (correctionActive)
                     {
-                        correctionLossEnergy += turningStep.LossEnergyJoules;
-                        correctionDistance += stepDistance;
-                        correctionTime += stepTime;
                         brakeSteps++;
                         firstCorrectionProgress = MathF.Min(firstCorrectionProgress, startProgress);
                     }
-                    else driveLossEnergy += turningStep.LossEnergyJoules;
                     peakTurningLossPower = MathF.Max(peakTurningLossPower, turningStep.LossPowerWatts);
                     turningIntervals?.Add(turningStep);
                 }
@@ -2343,8 +2384,11 @@ public static partial class FreeContinuousRacingTrajectoryGeometryExperiment
                     netAcceleration = availability * LongitudinalDynamics.CalculateNetDriveAccelerationMetersPerSecondSquared(
                         midpointSpeed, referenceDriveForce, Neutral);
                 }
-                if (correctionActive) correctionModeDistance += stepDistance;
-                else driveModeDistance += stepDistance;
+                if (turningStep is null)
+                {
+                    if (correctionActive) correctionModeDistance += stepDistance;
+                    else driveModeDistance += stepDistance;
+                }
                 var endOutcome = ResolveOutcome(endPoint, nextSpeed, endTarget);
                 Observe(endProgress, nextSpeed, endPoint, endTarget);
                 if (endOutcome.Outcome is SegmentOutcome.RunWide or SegmentOutcome.Crash)
