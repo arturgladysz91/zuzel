@@ -475,7 +475,7 @@ Robustness slopes are diagnostics, not another optimum: invalid inward translati
 3. Reuse v_settled²/R; no new lateral cap, energy loss or validity gate; do not stack #48 loss.
 4. q=0 directly executes #47; exact baseline/independent-search comparison: YES.
 5. Capacity is a pure state function without controller/line labels. Identical signed requests have identical available results.
-6. The all-interval residual and transition traces above test phase immunity. Effective scrub is deliberately unchanged and is not claimed to satisfy a braking ellipse. Capacity never disappears during correction.
+6. No controller-label discontinuity or capacity disappearance was detected. However, effective correction/scrub remains outside the positive-propulsion combined-force allocation, so a physically meaningful correction-phase exploitation cannot yet be excluded. This is an unresolved interpretation limit, not a proven bug; no braking traction ellipse or scrub-force decomposition is invented.
 7–9. q=0.000000000: ConstantInner winner YES; best-found gain 0.000000000 s; extra path 0.000000000 m; exit delta 0.000000000 m/s; objective convergence YES. A different ID alone is not evidence of a physical advantage or global optimum.
 7–9. q=0.250000000: ConstantInner winner YES; best-found gain 0.000000000 s; extra path 0.000000000 m; exit delta 0.000000000 m/s; objective convergence YES. A different ID alone is not evidence of a physical advantage or global optimum.
 7–9. q=0.500000000: ConstantInner winner NO; best-found gain 0.009528160 s; extra path 1.065055847 m; exit delta 0.274202347 m/s; objective convergence YES. A different ID alone is not evidence of a physical advantage or global optimum.

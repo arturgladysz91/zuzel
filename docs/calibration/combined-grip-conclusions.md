@@ -1,5 +1,9 @@
 # Combined grip: reviewed interpretation and required answers
 
+Follow-up: [execution-reserve reviewed interpretation](combined-grip-execution-reserve-conclusions.md)
+supersedes any inference from tiny per-interval raw headroom to a nearly
+exhausted execution budget. The original sweep and its numbers below are retained.
+
 Status: **analysis only; physical signal present, robustness limited**.
 Read with [the pre-implementation audit](combined-grip-audit.md) and
 [the independently reproduced numerical report](combined-grip-availability.md).
@@ -73,11 +77,12 @@ not refined or substituted as a new winner.
    signed requested action define the result; controller labels are not inputs.
    Negative effective scrub remains unchanged rather than being invented as
    friction braking.
-6. **Is there a phase exploit?** No new capacity-immunity exploit was detected by
-   the actual-transition regression, all-interval recomputation or manual trace
-   inspection. High curvature under zero propulsion request does not imply an
-   exemption. This conclusion is narrower than validating the abstract scrub
-   controller as a physical tyre model.
+6. **Is there a phase exploit?** No controller-label discontinuity or capacity
+   disappearance was detected. However, effective correction/scrub remains
+   outside the positive-propulsion combined-force allocation, so a physically
+   meaningful correction-phase exploitation cannot yet be excluded. This is an
+   unresolved interpretation limit, not a proven bug or a reason to invent a
+   braking traction ellipse without a supported scrub-force decomposition.
 7. **Does ConstantInner still win?** Yes at q=0/.25; all constant-line comparisons
    still prefer inner. The free search finds faster non-constant geometries at
    q=.5/.75/1 under the frozen convergence tolerance.

@@ -111,6 +111,10 @@ public sealed record CombinedGripInterval(float StartProgress, float EndProgress
     float ForceEvaluationSpeedMetersPerSecond, float CurvaturePerMeter, float ProgressDriveAvailability,
     bool ControllerLimited, float CorrectionDistanceMeters, CombinedGripState Grip)
 {
+    public float TravelTimeSeconds { get; init; }
+    public float MaximumLateralAllowedMeters { get; init; }
+    public float RequiredLateralMovementMeters { get; init; }
+    public float UnreservedLateralHeadroomMeters => MaximumLateralAllowedMeters - RequiredLateralMovementMeters;
     public string ControllerState => ControllerLimited
         ? CorrectionDistanceMeters > 0f ? "Correction/carry" : "Carry"
         : ProgressDriveAvailability > 0f ? "Drive" : "Neutral";
@@ -135,10 +139,12 @@ public static partial class FreeContinuousRacingTrajectoryGeometryExperiment
     public static IReadOnlyList<float> CombinedGripSweep { get; } = Array.AsReadOnly(new[] { 0f, .25f, .5f, .75f, 1f });
 
     public static FreeTrajectoryEvaluation EvaluateCombinedGrip(IReadOnlyList<float> offsetsMeters,
-        float coupling, float? entrySpeedMetersPerSecond = null, bool captureIntervals = true)
+        float coupling, float? entrySpeedMetersPerSecond = null, bool captureIntervals = true,
+        float lateralExecutionReserveMeters = 0f)
     {
         var baseline = DynamicCornerTrajectoryGeometryExperiment.RunUniform(new TrajectoryPlan(0, 0, 0));
         return new ExperimentalGeometryReplay(CreateTrack().Geometry, baseline.CornerEntrySpeedMetersPerSecond,
+            lateralExecutionReserveMeters: lateralExecutionReserveMeters,
             combinedGripCoupling: coupling, captureCombinedGripIntervals: captureIntervals)
             .Evaluate(Candidate("CombinedGripProbe", offsetsMeters), entrySpeedMetersPerSecond);
     }
@@ -391,7 +397,7 @@ public static class CombinedGripAvailabilityReport
         L("3. Reuse v_settled²/R; no new lateral cap, energy loss or validity gate; do not stack #48 loss.");
         L($"4. q=0 directly executes #47; exact baseline/independent-search comparison: {B(result.ZeroBaselineExact)}.");
         L("5. Capacity is a pure state function without controller/line labels. Identical signed requests have identical available results.");
-        L("6. The all-interval residual and transition traces above test phase immunity. Effective scrub is deliberately unchanged and is not claimed to satisfy a braking ellipse. Capacity never disappears during correction.");
+        L("6. No controller-label discontinuity or capacity disappearance was detected. However, effective correction/scrub remains outside the positive-propulsion combined-force allocation, so a physically meaningful correction-phase exploitation cannot yet be excluded. This is an unresolved interpretation limit, not a proven bug; no braking traction ellipse or scrub-force decomposition is invented.");
         foreach (var s in result.Scenarios)
         {
             var e = s.Winner.Evaluation; var inner = s.ConstantLines[0].Evaluation;

@@ -400,6 +400,8 @@ public sealed record FreeTrajectoryEvaluation(
     public float NextEntryLateralMeters { get; init; }
     public float StraightRepositionDistanceMeters { get; init; }
     public float StraightRepositionLateralHeadroomMeters { get; init; }
+    /// <summary>Minimum capacity minus requested movement, before any experimental reserve.</summary>
+    public float MinimumUnreservedLateralExecutionHeadroomMeters { get; init; }
     public double TurningLossEnergyJoules { get; init; }
     public float? NonTraversableProgress { get; init; }
     public float? NonTraversableDistanceMeters { get; init; }
@@ -2234,6 +2236,7 @@ public static partial class FreeContinuousRacingTrajectoryGeometryExperiment
             var correctionDistance = 0d;
             var correctionTime = 0d;
             var minimumHeadroom = float.PositiveInfinity;
+            var minimumUnreservedHeadroom = float.PositiveInfinity;
             var peakProxy = 0f;
             var weightedRadius = 0d;
             var weightedRadiusTime = 0d;
@@ -2427,7 +2430,14 @@ public static partial class FreeContinuousRacingTrajectoryGeometryExperiment
                     gripIntervals.Add(new CombinedGripInterval(startProgress, endProgress,
                         midpointProgress, stepDistance, speed, nextSpeed, midpointSpeed,
                         midpointPoint.CurvaturePerMeter, availability, correctionActive,
-                        actualCorrectionDistance, grip));
+                        actualCorrectionDistance, grip)
+                    {
+                        TravelTimeSeconds = (float)stepTime,
+                        MaximumLateralAllowedMeters = LateralMovementModel.CalculateMaxLateralDistanceMeters(
+                            (float)stepTime, SegmentType.TurnMiddle, geometry, UniformSurface, Balanced),
+                        RequiredLateralMovementMeters = MathF.Abs(endPoint.LateralOffsetMeters
+                            - startPoint.LateralOffsetMeters),
+                    });
                 }
                 if (turningStep is null)
                 {
@@ -2452,7 +2462,9 @@ public static partial class FreeContinuousRacingTrajectoryGeometryExperiment
                     - startPoint.LateralOffsetMeters);
                 var maximumLateralAllowed = LateralMovementModel.CalculateMaxLateralDistanceMeters(
                     (float)stepTime, SegmentType.TurnMiddle, geometry, UniformSurface, Balanced);
-                // Optional #48 fixed-winner sensitivity only; baseline gate is unchanged.
+                minimumUnreservedHeadroom = MathF.Min(minimumUnreservedHeadroom,
+                    maximumLateralAllowed - requiredLateral);
+                // Optional analysis reserve; the original gate and tolerance are unchanged.
                 var headroom = MathF.Max(0f, maximumLateralAllowed - lateralExecutionReserveMeters) - requiredLateral;
                 minimumHeadroom = MathF.Min(minimumHeadroom, headroom);
                 if (headroom < -1e-4f)
@@ -2487,6 +2499,8 @@ public static partial class FreeContinuousRacingTrajectoryGeometryExperiment
             var straightLateralCapacity = LateralMovementModel.CalculateMaxLateralDistanceMeters(
                 straightFull.TravelTimeSeconds, SegmentType.Straight, geometry, UniformSurface, Balanced);
             var straightHeadroom = MathF.Max(0f, straightLateralCapacity - lateralExecutionReserveMeters) - repositionLateral;
+            minimumUnreservedHeadroom = MathF.Min(minimumUnreservedHeadroom,
+                straightLateralCapacity - repositionLateral);
             minimumHeadroom = MathF.Min(minimumHeadroom, straightHeadroom);
             if (straightHeadroom < -1e-4f)
                 return Invalid(candidate, FreeTrajectoryValidity.StraightRepositionConstraint,
@@ -2587,6 +2601,7 @@ public static partial class FreeContinuousRacingTrajectoryGeometryExperiment
                 NextEntryLateralMeters = nextEntryLateral,
                 StraightRepositionDistanceMeters = straightDistance,
                 StraightRepositionLateralHeadroomMeters = straightHeadroom,
+                MinimumUnreservedLateralExecutionHeadroomMeters = minimumUnreservedHeadroom,
                 TurningLossEnergyJoules = turningLossEnergy,
                 TurningLossEnergyDuringCorrectionJoules = correctionLossEnergy,
                 TurningLossEnergyDuringDriveJoules = driveLossEnergy,
