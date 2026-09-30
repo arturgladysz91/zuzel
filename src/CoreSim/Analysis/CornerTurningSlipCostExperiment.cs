@@ -29,10 +29,57 @@ public static class TurningCostForce
         if (!float.IsFinite(driveAvailability) || driveAvailability < 0f || driveAvailability > 1f)
             throw new ArgumentOutOfRangeException(nameof(driveAvailability));
         var requested = RequestedLossNewtons(coefficient, speedMetersPerSecond, curvaturePerMeter);
-        if (requested == 0f || driveAvailability == 0f) return 0f;
-        var available = driveAvailability * LongitudinalDynamics.CalculateAvailableDriveForceAtSpeedNewtons(
-            referenceDriveForceNewtons, speedMetersPerSecond, setup);
-        return MathF.Min(requested, available);
+        // Dissipation is not engine propulsion: it remains present after the
+        // nonnegative engine contribution reaches zero, including during roll-off.
+        return requested;
+    }
+}
+
+public sealed record TurningCostInterval(
+    float StartProgress, float DistanceMeters, float EntrySpeedMetersPerSecond,
+    float CurvaturePerMeter, float PassiveEndSpeedMetersPerSecond,
+    float ExitSpeedMetersPerSecond, double TimeSeconds, float LossForceNewtons,
+    float LossPowerWatts, float AdditionalCorrectionMetersPerSecondSquared)
+{
+    public bool CorrectionActive => AdditionalCorrectionMetersPerSecondSquared > 0f;
+    public double LossEnergyJoules => (double)LossForceNewtons * DistanceMeters;
+}
+
+/// <summary>Analysis-only passive midpoint step followed by bounded additional control.</summary>
+public static class TurningCostIntegrator
+{
+    public static TurningCostInterval Step(float speed, float distance, float curvature,
+        float coefficient, float availability, float referenceDriveForce, BikeSetup setup,
+        float? maximumEndSpeed, float correctionCapability)
+    {
+        if (!float.IsFinite(speed) || speed <= 0f) throw new ArgumentOutOfRangeException(nameof(speed));
+        if (!float.IsFinite(distance) || distance <= 0f) throw new ArgumentOutOfRangeException(nameof(distance));
+        if (maximumEndSpeed is { } target && (!float.IsFinite(target) || target < 0f))
+            throw new ArgumentOutOfRangeException(nameof(maximumEndSpeed));
+        if (!float.IsFinite(correctionCapability) || correctionCapability <= 0f)
+            throw new ArgumentOutOfRangeException(nameof(correctionCapability));
+        float Acceleration(float atSpeed, out float loss)
+        {
+            loss = TurningCostForce.LossNewtons(coefficient, atSpeed, curvature,
+                availability, referenceDriveForce, setup);
+            return availability * LongitudinalDynamics.CalculateNetDriveAccelerationMetersPerSecondSquared(
+                atSpeed, referenceDriveForce, setup)
+                - loss / LongitudinalDynamics.ProvisionalNominalSystemMassKilograms;
+        }
+        var predicted = LongitudinalDynamics.ApplySignedAccelerationOverDistance(
+            speed, Acceleration(speed, out _), distance);
+        var midpoint = (float)(((double)speed + predicted) * .5d);
+        var passive = LongitudinalDynamics.ApplySignedAccelerationOverDistance(
+            speed, Acceleration(midpoint, out var lossForce), distance);
+        // Target is an upper constraint. Passive loss may already satisfy it;
+        // never lift that speed, or debit a full target correction plus loss.
+        var required = maximumEndSpeed is { } maximum && passive > maximum
+            ? (float)(((double)passive * passive - (double)maximum * maximum) / (2d * distance)) : 0f;
+        var additional = MathF.Min(correctionCapability, required);
+        var exit = additional == 0f ? passive
+            : LongitudinalDynamics.ApplySignedAccelerationOverDistance(passive, -additional, distance);
+        return new TurningCostInterval(0f, distance, speed, curvature, passive, exit,
+            2d * distance / (speed + exit), lossForce, lossForce * midpoint, additional);
     }
 }
 
@@ -45,6 +92,9 @@ public sealed record TurningCostScenario(
     RepeatedTrajectoryLapResult RepeatedLap)
 {
     public FreeTrajectoryEvaluation WinnerAtZero { get; init; } = null!;
+    public bool LateralExecutionBoundarySensitive => Winner.MinimumLateralExecutionHeadroomMeters <= .01f;
+    public IReadOnlyList<FreeTrajectoryEvaluation> TightenedWinnerDiagnostics { get; init; } =
+        Array.Empty<FreeTrajectoryEvaluation>();
     public bool MaximumSpeedBandExceeded => RepeatedLap.Converged
         && RepeatedLap.MaximumSpeedMetersPerSecond * 3.6f
             > FreeContinuousRacingTrajectoryGeometryExperiment.RealMotoarenaMaximumSpeedGuardrailKilometersPerHour
@@ -66,25 +116,43 @@ public sealed record TurningCostScenario(
 public sealed record CornerTurningSlipCostExperimentResult(
     string BaseMainSha,
     IReadOnlyList<TurningCostScenario> Scenarios,
-    FreeContinuousRacingTrajectoryGeometryExperimentResult Baseline);
+    FreeContinuousRacingTrajectoryGeometryExperimentResult Baseline)
+{
+    public FreeTrajectoryEvaluation ReviewedWinnerProbe { get; init; } = null!;
+    public TurningCostPhaseBoundaryProbe PhaseBoundaryProbe { get; init; } = null!;
+}
+
+public sealed record TurningCostPhaseBoundaryProbe(FreeTrajectoryEvaluation Below,
+    FreeTrajectoryEvaluation Above);
 
 public static partial class FreeContinuousRacingTrajectoryGeometryExperiment
 {
     public const string TurningCostBaseMainSha = "99f3afd08c8e6892a8b24eb785b5be6cbf116d38";
     public static IReadOnlyList<float> TurningCostSweep { get; } =
         Array.AsReadOnly(new[] { 0f, .001f, .005f, .02f, .08f, .32f, 1.28f });
+    public static IReadOnlyList<float> ReviewedTurningCostWinnerControls { get; } = Array.AsReadOnly(new[]
+    {
+        .522111535f, .617457867f, .604532838f, .488273501f, .313086927f,
+        .145888388f, .050542116f, .063467115f, .179726511f, .354912996f, .584611535f,
+    });
 
     public static FreeTrajectoryEvaluation EvaluateTurningCost(
-        IReadOnlyList<float> offsetsMeters, float coefficient)
+        IReadOnlyList<float> offsetsMeters, float coefficient, float? entrySpeedMetersPerSecond = null,
+        bool captureIntervals = false, float lateralExecutionReserveMeters = 0f)
     {
         var baseline = DynamicCornerTrajectoryGeometryExperiment.RunUniform(new TrajectoryPlan(0, 0, 0));
         return new ExperimentalGeometryReplay(CreateTrack().Geometry, baseline.CornerEntrySpeedMetersPerSecond,
-            turningLossRatio: coefficient).Evaluate(Candidate("TurningCostProbe", offsetsMeters));
+            turningLossRatio: coefficient, captureTurningIntervals: captureIntervals,
+            lateralExecutionReserveMeters: lateralExecutionReserveMeters)
+            .Evaluate(Candidate("TurningCostProbe", offsetsMeters), entrySpeedMetersPerSecond);
     }
 
     public static CornerTurningSlipCostExperimentResult RunTurningCostExperiment()
     {
         var baseline = Run();
+        // Freeze and evaluate reviewed geometry before searching or interpreting a new winner.
+        var reviewedProbe = EvaluateTurningCost(ReviewedTurningCostWinnerControls, .005f,
+            captureIntervals: true);
         var geometry = baseline.Geometry;
         var scenarios = new List<TurningCostScenario>();
         var baselineConstants = baseline.Controls.Where(item => item.Candidate.SeedFamily.StartsWith("Constant",
@@ -109,10 +177,50 @@ public static partial class FreeContinuousRacingTrajectoryGeometryExperiment
                 Array.AsReadOnly(constants), winner, constants[0], repeated)
             {
                 WinnerAtZero = zeroEvaluator.Evaluate(winner.Candidate),
+                TightenedWinnerDiagnostics = winner.MinimumLateralExecutionHeadroomMeters <= .01f
+                    ? Array.AsReadOnly(new[] { .01f, .02f }.Select(reserve =>
+                        new ExperimentalGeometryReplay(geometry, baseline.EntrySpeedMetersPerSecond,
+                            turningLossRatio: coefficient, lateralExecutionReserveMeters: reserve)
+                            .Evaluate(winner.Candidate)).ToArray())
+                    : Array.Empty<FreeTrajectoryEvaluation>(),
             });
         }
         return new CornerTurningSlipCostExperimentResult(TurningCostBaseMainSha,
-            Array.AsReadOnly(scenarios.ToArray()), baseline);
+            Array.AsReadOnly(scenarios.ToArray()), baseline)
+        {
+            ReviewedWinnerProbe = reviewedProbe,
+            PhaseBoundaryProbe = RunTurningCostPhaseBoundaryProbe(),
+        };
+    }
+
+    public static TurningCostPhaseBoundaryProbe RunTurningCostPhaseBoundaryProbe()
+    {
+        var controls = new float[ControlStationCount];
+        const float coefficient = .005f;
+        var original = EvaluateTurningCost(controls, coefficient, captureIntervals: true);
+        var first = original.TurningCostIntervals[0];
+        var capability = LongitudinalDynamics.CalculateCornerCorrectionDecelerationMetersPerSecondSquared(
+            Balanced, UniformSurface);
+        var force = LongitudinalDynamics.CalculateTurnExitAvailableDriveForceNewtons(Balanced, Neutral, UniformSurface);
+        var target = ReducedLookaheadTarget(ExtractTurningDemandConstraints(controls),
+            first.DistanceMeters, capability)!.Value;
+        // Construct the exact first-interval constraint boundary, not a fitted
+        // coefficient or smoothed law: passive end speed equals the frozen target.
+        var lower = target;
+        var upper = target + 1f;
+        for (var index = 0; index < 40; index++)
+        {
+            var middle = (lower + upper) * .5f;
+            var passive = TurningCostIntegrator.Step(middle, first.DistanceMeters, first.CurvaturePerMeter,
+                coefficient, 0f, force, Neutral, null, capability);
+            if (passive.ExitSpeedMetersPerSecond > target) upper = middle;
+            else lower = middle;
+        }
+        var boundary = (lower + upper) * .5f;
+        const float perturbationMetersPerSecond = .00005f;
+        return new TurningCostPhaseBoundaryProbe(
+            EvaluateTurningCost(controls, coefficient, boundary - perturbationMetersPerSecond, captureIntervals: true),
+            EvaluateTurningCost(controls, coefficient, boundary + perturbationMetersPerSecond, captureIntervals: true));
     }
 }
 
@@ -125,132 +233,121 @@ public static class CornerTurningSlipCostReport
         static string F(double value, string format = "0.000000") => value.ToString(format, CultureInfo.InvariantCulture);
         static string B(bool value) => value ? "YES" : "NO";
         var zero = result.Scenarios[0];
-        var firstChange = result.Scenarios.Skip(1).FirstOrDefault(item => item.Search.ObjectiveConvergence
-            && item.Winner.Candidate.Id != zero.Winner.Candidate.Id);
-        var firstNonInner = result.Scenarios.Skip(1).FirstOrDefault(item => item.Search.ObjectiveConvergence
-            && item.Winner.SectorTimeSeconds < item.ConstantInner.SectorTimeSeconds - 1e-5f);
-
         L("# Corner turning/slip energy cost experiment (#48)");
         L();
-        L($"Base merged main: `{result.BaseMainSha}`. Analysis-only; production race equations and #47 baseline are frozen.");
+        L($"Base merged main: {result.BaseMainSha}. Analysis-only; production physics, geometry, #47 envelope/search/lateral rules and historical artifacts are frozen.");
         L();
-        L("## Model fixed before sweep");
+        L("## Continuous dissipative model");
         L();
-        L("Let m = 142 kg (the existing provisional rider plus motorcycle mass), v be path speed in m/s, and κ be signed local path curvature in 1/m. Lateral demand is a_lat = v²|κ| in m/s² and lateral force is F_lat = m v²|κ| in N. With one dimensionless experimental coefficient c, requested effective slip drag is F_slip = c F_lat. Requested dissipated power is P_slip = F_slip v = c m v³|κ| in W. The coefficient represents an effective longitudinal-to-lateral force ratio, approximately tan(effective slip angle) for small angles; it is not a measured tyre slip angle.");
+        L("The frozen law is F_turn = c m v²|κ|, with m = 142 kg, speed v in m/s, signed path curvature κ in 1/m and dimensionless coefficient c. Power is F_turn v (W); work is Σ F_turn Δs (J). Force vanishes only at zero coefficient, speed or curvature, not at a controller phase boundary. The coefficients are a sensitivity sweep, not a fitted tyre model.");
         L();
-        L("The #47 availability factor A(p) and speed-dependent drive force F_drive(v) give available forward force A F_drive. Applied slip loss is min(F_slip, A F_drive), so useful drive force is max(0, A F_drive − F_slip). The original #47 net acceleration A(F_drive − F_resistance)/m is reduced by applied slip loss/m only during a positive-drive step. Existing explicit correction steps retain their #47 braking law and apply no additional slip debit. At c = 0 the original midpoint integrator is called directly. Work is integrated as Σ F_loss Δs over accepted corner drive steps; peak power is the maximum at integration midpoints and reported trajectory sample points.");
+        L("For c > 0 every interval first integrates the #47 passive drive/resistance acceleration A(p)(F_drive(v) − F_resistance(v))/m − F_turn/m with the existing signed distance-midpoint scheme. The predictor supplies the midpoint force, which is also used for work accounting. If passive end speed exceeds the unchanged maximum end target, only the required extra acceleration debit is applied, bounded by the unchanged #47 correction capability. Otherwise no active correction is applied, and passive speed is never raised to a target. Loss is debited exactly once; it is not appended to a full old target correction. Active correction occupies the accepted interval, with time 2Δs/(v_start+v_end).");
         L();
-        L("Units: kg·(m/s)²·(1/m) = N, and N·m/s = W; N·m = J. Loss tends to zero as κ → 0 or v → 0. It grows with |κ| and as v² in force / v³ in power until useful drive saturates at zero. The clamp prevents the surrogate from manufacturing negative propulsion, and it is continuous at the saturation boundary. No line ID, lane number, preferred offset, or time penalty enters this equation. The coefficient values were set as a logarithmic sensitivity sweep, not fitted to an optimizer winner.");
+        L("Engine forward force remains nonnegative. The displayed useful-drive remainder is max(0, A F_drive − F_turn); excess turning loss remains passive drag rather than negative engine propulsion. In particular, A = 0 and correction-active intervals still dissipate energy. Unlike the rejected drive-only model, large coefficients do not saturate total dissipation at available engine drive. The #47 availability-scaled resistance abstraction is deliberately unchanged.");
         L();
-        L("## Zero-cost regression");
+        L("At c = 0 the original #47 midpoint/correction/carry branches are called directly, including partial correction distance/time. The zero scenario reuses the complete merged #47 search and repeated-lap objects. For c > 0 correction distance/time denote intervals needing additional control; mode-distance accounting partitions every physical metre, including coasting in the outside-correction (Drive) bucket.");
         L();
-        L($"Winner `{zero.Winner.Candidate.SeedFamily}` / `{zero.Winner.Candidate.Id}` has eleven zero offsets, exactly the ConstantInner geometry; sector {F(zero.Winner.SectorTimeSeconds)} s; free minus ConstantInner {F(zero.Winner.SectorTimeSeconds - zero.ConstantInner.SectorTimeSeconds)} s; objective convergence {B(zero.Search.ObjectiveConvergence)}; geometry convergence {B(zero.Search.GeometryConvergence)}. The zero scenario directly reuses the merged #47 result, including all validity outcomes and search diagnostics.");
+        L("## Zero-cost invariant");
         L();
-        L("## Sensitivity sweep");
+        L($"Winner {zero.Winner.Candidate.Id}; eleven zero controls; ConstantInner sector {F(zero.ConstantInner.SectorTimeSeconds)} s; winner sector {F(zero.Winner.SectorTimeSeconds)} s; objective {B(zero.Search.ObjectiveConvergence)}; geometry {B(zero.Search.GeometryConvergence)}; repeated lap {F(zero.RepeatedLap.FlyingLapTimeSeconds)} s. Direct-replay regressions also compare validity, full profiles and exact correction distance/time.");
         L();
-        L("c is dimensionless. Δ values are relative to c = 0. All times are seconds, length m, energy J, peak power W, speed m/s, acceleration m/s², curvature 1/m. Repeated lap includes two periodic corner/straight sectors.");
+        L("## Frozen independent-review exploit regression");
         L();
-        L("| c | winner / controls (m) | nonconstant | path m | corner s | exit m/s | straight s | sector s | Δsector s | min radius m @p | max curvature | peak a_lat | loss J | peak W | max v | avg v | lap s | Δlap s | objective / geometry | guardrails V/A/L |");
-        L("|---:|---|:---:|---:|---:|---:|---:|---:|---:|---|---:|---:|---:|---:|---:|---:|---:|:---:|:---:|");
-        foreach (var scenario in result.Scenarios)
+        var frozen = result.ReviewedWinnerProbe;
+        L($"Reviewed c = 0.005 geometry: {frozen.Candidate.Id}. Controls (m): {string.Join(",", frozen.Candidate.ControlOffsetsMeters.Select(x => F(x, "0.000000000")))}.");
+        L();
+        L("| trajectory | total J | correction J | outside correction J | correction m | correction s | corner s | exit m/s | sector s | headroom m |");
+        L("|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|");
+        L($"| frozen reviewed winner | {F(frozen.TotalTurningLossEnergyJoules)} | {F(frozen.TurningLossEnergyDuringCorrectionJoules)} | {F(frozen.TurningLossEnergyDuringDriveJoules)} | {F(frozen.CorrectionDistanceMeters)} | {F(frozen.CorrectionTimeSeconds)} | {F(frozen.CornerTimeSeconds)} | {F(frozen.ExitSpeedMetersPerSecond)} | {F(frozen.SectorTimeSeconds)} | {F(frozen.MinimumLateralExecutionHeadroomMeters, "0.000000000")} |");
+        L();
+        L($"All accepted frozen-trajectory intervals with positive speed/nonzero curvature pay positive force, power and energy: {B(frozen.TurningCostIntervals.Count > 0 && frozen.TurningCostIntervals.All(x => x.LossForceNewtons > 0f && x.LossPowerWatts > 0f && x.LossEnergyJoules > 0d))}. The reviewed drive-only implementation had zero correction-phase work and fails this invariant.");
+        L();
+        L("## Phase-boundary continuity regression");
+        L();
+        L("Fixed ConstantInner geometry and c = 0.005. Construct the first interval's passive-end-speed equality with the unmodified end target by deterministic bisection, then perturb only entry speed by ±0.00005 m/s. This constructs the boundary; it changes neither coefficients nor the law and performs no smoothing. The whole corner and following straight are replayed.");
+        L();
+        L("| state | entry m/s | curvature 1/m | correction active | first force N | first power W | total J | sector s |");
+        L("|---|---:|---:|:---:|---:|---:|---:|---:|");
+        foreach (var item in new[] { ("below", result.PhaseBoundaryProbe.Below), ("above", result.PhaseBoundaryProbe.Above) })
         {
-            var w = scenario.Winner;
-            var controls = string.Join(",", w.Candidate.ControlOffsetsMeters.Select(x => F(x, "0.00")));
-            L($"| {F(scenario.Coefficient, "0.000")} | `{w.Candidate.SeedFamily}` `{w.Candidate.Id}`<br>{controls} | {B(w.IsNonConstant)} | {F(w.Path!.TotalLengthMeters, "0.000")} | {F(w.CornerTimeSeconds)} | {F(w.ExitSpeedMetersPerSecond)} | {F(w.FollowingStraightTimeSeconds)} | {F(w.SectorTimeSeconds)} | {F(w.SectorTimeSeconds - zero.Winner.SectorTimeSeconds)} | {F(w.MinimumRadiusMeters, "0.000")} @ {F(w.MinimumRadiusProgress, "0.000")} | {F(w.MaximumCurvaturePerMeter, "0.000000")} | {F(w.PeakLateralAccelerationProxyMetersPerSecondSquared, "0.000")} | {F(w.TurningLossEnergyJoules, "0.0")} | {F(w.PeakTurningLossPowerWatts, "0.0")} | {F(scenario.RepeatedLap.MaximumSpeedMetersPerSecond, "0.000")} | {F(scenario.RepeatedLap.AverageSpeedMetersPerSecond, "0.000")} | {F(scenario.RepeatedLap.FlyingLapTimeSeconds)} | {F(scenario.RepeatedLap.FlyingLapTimeSeconds - zero.RepeatedLap.FlyingLapTimeSeconds)} | {B(scenario.Search.ObjectiveConvergence)} / {B(scenario.Search.GeometryConvergence)} | {B(scenario.MaximumSpeedBandExceeded)}/{B(scenario.AverageSpeedBandExceeded)}/{B(scenario.LapBandExceeded)} |");
+            var interval = item.Item2.TurningCostIntervals[0];
+            L($"| {item.Item1} | {F(interval.EntrySpeedMetersPerSecond, "0.000000000")} | {F(interval.CurvaturePerMeter, "0.000000000")} | {B(interval.CorrectionActive)} | {F(interval.LossForceNewtons, "0.000000000")} | {F(interval.LossPowerWatts, "0.000000000")} | {F(item.Item2.TotalTurningLossEnergyJoules, "0.000000000")} | {F(item.Item2.SectorTimeSeconds, "0.000000000")} |");
         }
+        var low = result.PhaseBoundaryProbe.Below;
+        var high = result.PhaseBoundaryProbe.Above;
         L();
-        L("### Changes from the c = 0 winning geometry");
+        L($"Absolute whole-sector change {F(Math.Abs(high.SectorTimeSeconds - low.SectorTimeSeconds), "0.000000000")} s; total-work change {F(Math.Abs(high.TotalTurningLossEnergyJoules - low.TotalTurningLossEnergyJoules), "0.000000000")} J. Regression bounds are 0.0001 s / 0.1 J, with positive force and power on both sides.");
         L();
-        L("All deltas use the zero-coefficient winner as reference, even when the optimizer changes controls. The `same controls at c=0` column isolates the new loss effect from changing geometry.");
+        L("## Complete unchanged sensitivity sweep");
         L();
-        L("| c | Δpath m | Δcorner s | Δexit m/s | Δstraight s | Δmin radius m | Δmax curvature | Δpeak a_lat | Δenergy J | Δpeak W | Δmax v | Δavg v | same controls at c=0: Δsector s | winner advantage over inner s | correction distance winner / inner m | correction time winner / inner s | min lateral headroom m |");
-        L("|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|");
+        L("| c | winner / controls m | inner sector s | winner sector s | advantage s | path m | min radius m | max curvature 1/m | corner s | exit m/s | straight s | headroom m | boundary sensitive | objective / geometry |");
+        L("|---:|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|:---:|:---:|");
         foreach (var s in result.Scenarios)
         {
             var w = s.Winner;
-            var z = zero.Winner;
-            L($"| {F(s.Coefficient, "0.000")} | {F(w.Path!.TotalLengthMeters - z.Path!.TotalLengthMeters, "0.000")} | {F(w.CornerTimeSeconds - z.CornerTimeSeconds)} | {F(w.ExitSpeedMetersPerSecond - z.ExitSpeedMetersPerSecond)} | {F(w.FollowingStraightTimeSeconds - z.FollowingStraightTimeSeconds)} | {F(w.MinimumRadiusMeters - z.MinimumRadiusMeters, "0.000")} | {F(w.MaximumCurvaturePerMeter - z.MaximumCurvaturePerMeter, "0.000000")} | {F(w.PeakLateralAccelerationProxyMetersPerSecondSquared - z.PeakLateralAccelerationProxyMetersPerSecondSquared, "0.000")} | {F(w.TurningLossEnergyJoules, "0.0")} | {F(w.PeakTurningLossPowerWatts, "0.0")} | {F(s.RepeatedLap.MaximumSpeedMetersPerSecond - zero.RepeatedLap.MaximumSpeedMetersPerSecond, "0.000")} | {F(s.RepeatedLap.AverageSpeedMetersPerSecond - zero.RepeatedLap.AverageSpeedMetersPerSecond, "0.000")} | {F(s.WinnerAtZero.SectorTimeSeconds - z.SectorTimeSeconds)} | {F(s.ConstantInner.SectorTimeSeconds - w.SectorTimeSeconds)} | {F(w.CorrectionDistanceMeters, "0.000")} / {F(s.ConstantInner.CorrectionDistanceMeters, "0.000")} | {F(w.CorrectionTimeSeconds, "0.000")} / {F(s.ConstantInner.CorrectionTimeSeconds, "0.000")} | {F(w.MinimumLateralExecutionHeadroomMeters, "0.000")} |");
+            L($"| {F(s.Coefficient, "0.000")} | {w.Candidate.SeedFamily} / {w.Candidate.Id}<br>{string.Join(",", w.Candidate.ControlOffsetsMeters.Select(x => F(x, "0.000000000")))} | {F(s.ConstantInner.SectorTimeSeconds)} | {F(w.SectorTimeSeconds)} | {F(s.ConstantInner.SectorTimeSeconds - w.SectorTimeSeconds)} | {F(w.Path!.TotalLengthMeters)} | {F(w.MinimumRadiusMeters)} | {F(w.MaximumCurvaturePerMeter)} | {F(w.CornerTimeSeconds)} | {F(w.ExitSpeedMetersPerSecond)} | {F(w.FollowingStraightTimeSeconds)} | {F(w.MinimumLateralExecutionHeadroomMeters, "0.000000000")} | {B(s.LateralExecutionBoundarySensitive)} | {B(s.Search.ObjectiveConvergence)} / {B(s.Search.GeometryConvergence)} |");
         }
         L();
-        L("The descriptive guard band is ±15% around Motoarena maximum speed 111 km/h, average speed 22.38 m/s, and flying lap 14.71 s. V/A/L mark where the measured maximum-speed, average-speed, or lap-time band is exceeded. These are diagnostic bounds, never fitting targets. Repeated-lap convergence must be checked before interpreting them.");
+        L("### Phase energy and distance accounting: controls and winners");
         L();
-        L("### Constant-line controls and free winner");
+        L("Drive means every interval outside active correction, including zero-drive coast. Energies are independently accumulated per accepted interval; correction + drive must equal total within 1e-7 J. Average force = phase work / phase-mode distance. Correction m/s are actual active-control distance/time, while mode metres partition the entire path.");
         L();
-        L("| c | line | sector s | Δ vs zero inner s | slip J | exit m/s | valid |");
-        L("|---:|---|---:|---:|---:|---:|:---:|");
-        foreach (var scenario in result.Scenarios)
-        foreach (var line in scenario.ConstantLines.Append(scenario.Winner))
-            L($"| {F(scenario.Coefficient, "0.000")} | {line.Candidate.SeedFamily} | {F(line.SectorTimeSeconds)} | {F(line.SectorTimeSeconds - zero.ConstantInner.SectorTimeSeconds)} | {F(line.TurningLossEnergyJoules, "0.0")} | {F(line.ExitSpeedMetersPerSecond)} | {B(line.IsValid)} |");
-        L();
-        L("### Search closure and validity");
-        L();
-        L("| c | starts | refined | top-3 closed | independent near starts | single residual s | pair residual s | objective | geometry | valid / evaluated | repeat converged |");
-        L("|---:|---:|---:|:---:|---:|---:|---:|:---:|:---:|---:|:---:|");
+        L("| c | line | valid | sector s | total J | correction J | drive J | split error J | correction mode m | outside mode m | correction m | correction s | avg correction N | avg outside N |");
+        L("|---:|---|:---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|");
         foreach (var s in result.Scenarios)
-            L($"| {F(s.Coefficient, "0.000")} | {s.Search.StartsGenerated} | {s.Search.RefinedStartCount} | {B(s.Search.TopThreeRefinementDiagnostics.Count >= 3 && s.Search.TopThreeRefinementDiagnostics.Take(3).All(x => x.Stable))} | {s.Search.WithinToleranceFamilyCount} | {F(s.Search.LocalPerturbationImprovementSeconds)} | {F(s.Search.PairPerturbationImprovementSeconds)} | {B(s.Search.ObjectiveConvergence)} | {B(s.Search.GeometryConvergence)} | {s.Search.ValidCandidates} / {s.Search.CandidatesEvaluated} | {B(s.RepeatedLap.Converged)} |");
+        foreach (var w in s.ConstantLines.Append(s.Winner))
+            L($"| {F(s.Coefficient, "0.000")} | {w.Candidate.SeedFamily} | {B(w.IsValid)} | {F(w.SectorTimeSeconds)} | {F(w.TotalTurningLossEnergyJoules)} | {F(w.TurningLossEnergyDuringCorrectionJoules)} | {F(w.TurningLossEnergyDuringDriveJoules)} | {F(w.TotalTurningLossEnergyJoules - w.TurningLossEnergyDuringCorrectionJoules - w.TurningLossEnergyDuringDriveJoules, "0.000000000")} | {F(w.CorrectionModeDistanceMeters)} | {F(w.DriveModeDistanceMeters)} | {F(w.CorrectionDistanceMeters)} | {F(w.CorrectionTimeSeconds)} | {F(w.AverageTurningLossForceDuringCorrectionNewtons)} | {F(w.AverageTurningLossForceDuringDriveNewtons)} |");
         L();
-        L("## Trajectory samples");
+        L("### Every winner versus ConstantInner: integrated trade-off");
         L();
-        L("Each distinct converged winner is shown once. Drive remaining is useful forward force after the slip debit, in N; it is zero during explicit correction. Power is applied slip loss in W.");
-        var seen = new HashSet<string>(StringComparer.Ordinal);
-        foreach (var s in result.Scenarios.Where(x => x.Search.ObjectiveConvergence))
+        L("Values are winner / inner at the same coefficient, not evidence of a uniformly wider line. Integrated demand uses midpoint speed and |κ| over physical ds; time-weighted demand and radius use actual interval time.");
+        L();
+        L("| c | min R m | max κ 1/m | mean abs κ 1/m | time-weighted R m | time-weighted a_lat m/s² | integral v²abs(κ) ds m²/s² | total work J | drive work J | exit m/s | extra path m | lower demand / drive work / total work / better exit / longer path |");
+        L("|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|:---:|");
+        foreach (var s in result.Scenarios)
         {
-            if (!seen.Add(s.Winner.Candidate.Id)) continue;
-            L();
-            L($"### c = {F(s.Coefficient, "0.000")}: `{s.Winner.Candidate.Id}`");
-            L();
-            L("| p | lateral offset m | lateral position (lane units) | radius m | speed m/s | a_lat m/s² | slip W | drive remaining N |");
-            L("|---:|---:|---:|---:|---:|---:|---:|---:|");
-            foreach (var point in s.Winner.Profile.Where((_, index) => index % 2 == 0))
-                L($"| {F(point.Progress, "0.00")} | {F(point.LateralOffsetMeters, "0.000")} | {F(point.LateralPosition, "0.000")} | {F(point.LocalRadiusMeters, "0.000")} | {F(point.SpeedMetersPerSecond, "0.000")} | {F(point.LateralAccelerationProxyMetersPerSecondSquared, "0.000")} | {F(point.TurningLossPowerWatts, "0.0")} | {F(point.LongitudinalDriveRemainingNewtons, "0.0")} |");
+            var w = s.Winner;
+            var i = s.ConstantInner;
+            L($"| {F(s.Coefficient, "0.000")} | {F(w.MinimumRadiusMeters)} / {F(i.MinimumRadiusMeters)} | {F(w.MaximumCurvaturePerMeter)} / {F(i.MaximumCurvaturePerMeter)} | {F(w.MeanAbsoluteCurvaturePerMeter)} / {F(i.MeanAbsoluteCurvaturePerMeter)} | {F(w.TimeWeightedMeanRadiusMeters)} / {F(i.TimeWeightedMeanRadiusMeters)} | {F(w.TimeWeightedLateralDemandMetersPerSecondSquared)} / {F(i.TimeWeightedLateralDemandMetersPerSecondSquared)} | {F(w.IntegratedLateralDemandMetersSquaredPerSecondSquared)} / {F(i.IntegratedLateralDemandMetersSquaredPerSecondSquared)} | {F(w.TotalTurningLossEnergyJoules)} / {F(i.TotalTurningLossEnergyJoules)} | {F(w.TurningLossEnergyDuringDriveJoules)} / {F(i.TurningLossEnergyDuringDriveJoules)} | {F(w.ExitSpeedMetersPerSecond)} / {F(i.ExitSpeedMetersPerSecond)} | {F(w.Path!.TotalLengthMeters - i.Path!.TotalLengthMeters)} | {B(w.TimeWeightedLateralDemandMetersPerSecondSquared < i.TimeWeightedLateralDemandMetersPerSecondSquared)} / {B(w.TurningLossEnergyDuringDriveJoules < i.TurningLossEnergyDuringDriveJoules)} / {B(w.TotalTurningLossEnergyJoules < i.TotalTurningLossEnergyJoules)} / {B(w.ExitSpeedMetersPerSecond > i.ExitSpeedMetersPerSecond)} / {B(w.Path.TotalLengthMeters > i.Path.TotalLengthMeters)} |");
         }
         L();
-        L("## Interpretation");
+        L("### LateralExecutionBoundarySensitive diagnostic");
         L();
-        L($"First converged winner shape change: {(firstChange is null ? "none in tested sweep" : F(firstChange.Coefficient, "0.000"))}. First converged coefficient where free beats ConstantInner: {(firstNonInner is null ? "none in tested sweep" : F(firstNonInner.Coefficient, "0.000"))}. A discrete sampled interval, rather than an interpolated physical threshold, is reported; the prior tested coefficient is the lower bound.");
+        L("YES means minimum numerical interval headroom ≤ 0.01 m. For each such winner, replay the fixed controls after subtracting 0.01 / 0.02 m from the per-interval execution budget (floored at zero); no search, geometry or production limit is changed. This strict diagnostic is mesh-dependent, especially for dense variable-curvature intervals; rejection demonstrates numerical-boundary sensitivity, not a calibrated physical margin.");
         L();
-        if (firstNonInner is not null)
+        L("| c | reserve m | fixed winner valid | reason |");
+        L("|---:|---:|:---:|---|");
+        foreach (var s in result.Scenarios)
+        for (var index = 0; index < s.TightenedWinnerDiagnostics.Count; index++)
         {
-            var previous = result.Scenarios.TakeWhile(x => x.Coefficient < firstNonInner.Coefficient).Last();
-            L($"The first optimizer crossover is bracketed by c = {F(previous.Coefficient, "0.000")} and {F(firstNonInner.Coefficient, "0.000")}. At the upper endpoint the gain over ConstantInner is {F(firstNonInner.ConstantInner.SectorTimeSeconds - firstNonInner.Winner.SectorTimeSeconds)} s, the new path is {F(firstNonInner.Winner.Path!.TotalLengthMeters - firstNonInner.ConstantInner.Path!.TotalLengthMeters, "0.000")} m longer, and its applied slip work is {F(firstNonInner.Winner.TurningLossEnergyJoules - firstNonInner.ConstantInner.TurningLossEnergyJoules, "0.0")} J different. Its maximum curvature is {F(firstNonInner.Winner.MaximumCurvaturePerMeter, "0.000000")} 1/m versus inner {F(firstNonInner.ConstantInner.MaximumCurvaturePerMeter, "0.000000")} 1/m; this is a redistribution of curvature and drive-phase timing, not uniformly broader local radius. Correction distance is {F(firstNonInner.Winner.CorrectionDistanceMeters, "0.000")} m versus inner {F(firstNonInner.ConstantInner.CorrectionDistanceMeters, "0.000")} m; the higher correction-step count reflects a denser variable-curvature integration mesh, not greater corrected travel.");
-            L();
-            L("Fixed-shape probe across the first crossover: the geometry is held at the upper-endpoint winning controls. This checks that a winner switch is not caused by a jump in the objective or in the correction branch. It does not replace a full free search at intermediate c.");
-            L();
-            L("| c | fixed new shape − inner sector s | correction distance new / inner m | correction steps new / inner | new shape loss J | inner loss J |");
-            L("|---:|---:|---:|---:|---:|---:|");
-            foreach (var coefficient in new[] { 0f, .001f, .002f, .003f, .004f, .005f, .006f })
-            {
-                var newer = FreeContinuousRacingTrajectoryGeometryExperiment.EvaluateTurningCost(
-                    firstNonInner.Winner.Candidate.ControlOffsetsMeters, coefficient);
-                var inner = FreeContinuousRacingTrajectoryGeometryExperiment.EvaluateTurningCost(
-                    zero.ConstantInner.Candidate.ControlOffsetsMeters, coefficient);
-                L($"| {F(coefficient, "0.000")} | {F(newer.SectorTimeSeconds - inner.SectorTimeSeconds)} | {F(newer.CorrectionDistanceMeters, "0.000")} / {F(inner.CorrectionDistanceMeters, "0.000")} | {newer.BrakeStepCount} / {inner.BrakeStepCount} | {F(newer.TurningLossEnergyJoules, "0.0")} | {F(inner.TurningLossEnergyJoules, "0.0")} |");
-            }
-            L();
+            var probe = s.TightenedWinnerDiagnostics[index];
+            L($"| {F(s.Coefficient, "0.000")} | {F((index + 1) * .01, "0.00")} | {B(probe.IsValid)} | {(probe.IsValid ? "Valid" : probe.InvalidReason)} |");
         }
-        var anyUnconverged = result.Scenarios.Any(x => !x.Search.ObjectiveConvergence);
-        var priorGuardrail = firstNonInner is not null && result.Scenarios.TakeWhile(x => x.Coefficient < firstNonInner.Coefficient).Any(x => x.AnyGuardrailExceeded);
-        var crossoverGuardrail = firstNonInner?.AnyGuardrailExceeded ?? false;
-        var correctionAvoidance = firstNonInner is not null
-            && firstNonInner.Winner.CorrectionDistanceMeters
-                > firstNonInner.ConstantInner.CorrectionDistanceMeters + 5f;
-        var conclusion = anyUnconverged ? "Uncertain: at least one sweep search did not close."
-            : firstNonInner is null ? "Case B: ConstantInner remains the best line through the tested sweep."
-            : correctionAvoidance ? "Case D: a non-inner line wins, but it moves materially more distance into the explicit correction regime where this drive-only surrogate charges no slip work. The result is a model-accounting exploit, not a validated tyre-energy trade-off."
-            : priorGuardrail || crossoverGuardrail ? "Case C: a non-inner optimum appears only after, or at, a descriptive global guardrail break."
-            : "Case A: a converged non-inner optimum appears before the descriptive global guardrails break.";
-        L(conclusion);
         L();
-        L("1. **Does the optimum move?** Yes within this surrogate: the first converged non-inner winner occurs at c = 0.005.");
-        L("2. **Coefficient range?** The full searches bracket the first switch between 0.001 and 0.005; the fixed-shape probe crosses between 0.002 and 0.003, without claiming a global optimum at those intermediate values.");
-        L("3. **Physical trade-off?** Slip force removes useful drive work according to speed and curvature, while the selected geometry changes the turning-demand envelope and exit speed. It pays more path length for a small sector gain.");
-        L("4. **Smooth and feasible?** The #47 spline, turning-demand, lateral-execution, and straight-closure gates pass. The new line has near-zero remaining lateral headroom, so it is at the modeled execution boundary; real-bike plausibility remains unvalidated.");
-        L("5. **Before global guardrails break?** Yes: the V/A/L bands are unbroken at the first switch. These broad bounds do not establish a physically correct coefficient.");
-        L("6. **Search converged?** Objective and geometry convergence are YES at every sweep point, with three or more independent near starts and locally closed top-three results. The fixed-shape objective changes smoothly through the switch.");
-        L("7. **Future production experiment?** Only after a loss law valid through correction and measured force or speed traces support the coefficient. This draft makes no production change.");
-        L("8. **If unsupported, what next?** Test one coupled rear-tyre longitudinal/lateral force envelope.");
+        L("### Search closure and repeated-lap diagnostics");
         L();
-        L("At high c the useful-drive clamp saturates: c = 0.320 and 1.280 produce identical evaluated results. If c is interpreted literally as tan(effective slip angle), 1.280 implies about 52°, beyond the small-angle surrogate's defensible range. The upper-sweep wavy geometry is a possible #47 smoothness-gate limitation, not validated racing technique. No production calibration or promotion follows this result.");
+        L("| c | starts | refined | top-3 closed | independent near starts | single residual s | pair residual s | objective | geometry | valid / evaluated | repeat converged | max v m/s | avg v m/s | lap s | guardrail V/A/L |");
+        L("|---:|---:|---:|:---:|---:|---:|---:|:---:|:---:|---:|:---:|---:|---:|---:|:---:|");
+        foreach (var s in result.Scenarios)
+            L($"| {F(s.Coefficient, "0.000")} | {s.Search.StartsGenerated} | {s.Search.RefinedStartCount} | {B(s.Search.TopThreeRefinementDiagnostics.Count >= 3 && s.Search.TopThreeRefinementDiagnostics.Take(3).All(x => x.Stable))} | {s.Search.WithinToleranceFamilyCount} | {F(s.Search.LocalPerturbationImprovementSeconds)} | {F(s.Search.PairPerturbationImprovementSeconds)} | {B(s.Search.ObjectiveConvergence)} | {B(s.Search.GeometryConvergence)} | {s.Search.ValidCandidates} / {s.Search.CandidatesEvaluated} | {B(s.RepeatedLap.Converged)} | {F(s.RepeatedLap.MaximumSpeedMetersPerSecond)} | {F(s.RepeatedLap.AverageSpeedMetersPerSecond)} | {F(s.RepeatedLap.FlyingLapTimeSeconds)} | {B(s.MaximumSpeedBandExceeded)}/{B(s.AverageSpeedBandExceeded)}/{B(s.LapBandExceeded)} |");
+        L();
+        L("The unchanged descriptive ±15% guardrails reference maximum speed 111 km/h, average speed 22.38 m/s and flying lap 14.71 s. They are not optimization targets. Objective convergence and geometry convergence are separate; no conclusion is promoted from an unclosed search.");
+        L();
+        L("## Interpretation after repair");
+        L();
+        var atFive = result.Scenarios.Single(x => x.Coefficient == .005f);
+        L(atFive.Search.ObjectiveConvergence
+            ? atFive.Winner.Candidate.Id == zero.Winner.Candidate.Id
+                ? "At c = 0.005 ConstantInner is best again: the previous crossover does not survive removing free correction-phase turning loss."
+                : "At c = 0.005 a non-inner candidate remains best, but now pays turning loss through the whole corner. Its integrated trade-offs and numerical lateral-boundary dependence are reported above; it is not automatically validated by removal of the exploit."
+            : "At c = 0.005 the search is not objectively converged; no winner interpretation is justified.");
+        L();
+        var first = result.Scenarios.Skip(1).FirstOrDefault(x => x.Search.ObjectiveConvergence
+            && x.Winner.SectorTimeSeconds < x.ConstantInner.SectorTimeSeconds - 1e-5f);
+        L(first is null ? "No objectively converged non-inner advantage in the sampled sweep."
+            : $"First objectively converged sampled non-inner advantage: c = {F(first.Coefficient, "0.000")}; gain {F(first.ConstantInner.SectorTimeSeconds - first.Winner.SectorTimeSeconds)} s. This is a sampled result, not a fitted continuous threshold.");
+        L();
+        L("Any surviving non-inner result must be judged by the full-corner energy/demand comparison, exit speed, extra path and lateral-boundary diagnostic, not by the name 'wider'. No controller state receives free dissipation. Large c remains an uncalibrated effective-slip surrogate; c = 1.280 is far outside a small-angle interpretation. Unclosed searches and broken global guardrails remain explicit uncertainty. No production promotion follows; a coupled longitudinal/lateral tyre-force envelope is a separate future hypothesis, not part of this repair.");
         return sb.ToString();
     }
 }

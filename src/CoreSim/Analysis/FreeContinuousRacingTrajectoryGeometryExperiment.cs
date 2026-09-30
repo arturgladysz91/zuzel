@@ -400,6 +400,18 @@ public sealed record FreeTrajectoryEvaluation(
     public float StraightRepositionDistanceMeters { get; init; }
     public float StraightRepositionLateralHeadroomMeters { get; init; }
     public double TurningLossEnergyJoules { get; init; }
+    public double TotalTurningLossEnergyJoules => TurningLossEnergyJoules;
+    public double TurningLossEnergyDuringCorrectionJoules { get; init; }
+    public double TurningLossEnergyDuringDriveJoules { get; init; }
+    public double CorrectionModeDistanceMeters { get; init; }
+    public double DriveModeDistanceMeters { get; init; }
+    public double AverageTurningLossForceDuringCorrectionNewtons => CorrectionModeDistanceMeters > 0d
+        ? TurningLossEnergyDuringCorrectionJoules / CorrectionModeDistanceMeters : 0d;
+    public double AverageTurningLossForceDuringDriveNewtons => DriveModeDistanceMeters > 0d
+        ? TurningLossEnergyDuringDriveJoules / DriveModeDistanceMeters : 0d;
+    public double IntegratedLateralDemandMetersSquaredPerSecondSquared { get; init; }
+    public double TimeWeightedLateralDemandMetersPerSecondSquared { get; init; }
+    public IReadOnlyList<TurningCostInterval> TurningCostIntervals { get; init; } = Array.Empty<TurningCostInterval>();
     public float PeakTurningLossPowerWatts { get; init; }
 }
 
@@ -2110,6 +2122,8 @@ public static partial class FreeContinuousRacingTrajectoryGeometryExperiment
         private readonly float referenceTurnSpeedMetersPerSecond;
         private readonly bool useCanonicalSensitivityConstraint;
         private readonly float turningLossRatio;
+        private readonly bool captureTurningIntervals;
+        private readonly float lateralExecutionReserveMeters;
 
         internal ExperimentalGeometryReplay(
             TrackGeometry geometry,
@@ -2117,7 +2131,9 @@ public static partial class FreeContinuousRacingTrajectoryGeometryExperiment
             float referenceTurnSpeedMetersPerSecond =
                 SegmentPhysics.AdvancedReferenceTurnSpeedMetersPerSecond,
             bool useCanonicalSensitivityConstraint = false,
-            float turningLossRatio = 0f)
+            float turningLossRatio = 0f,
+            bool captureTurningIntervals = false,
+            float lateralExecutionReserveMeters = 0f)
         {
             this.geometry = geometry;
             this.defaultEntrySpeed = defaultEntrySpeed;
@@ -2129,6 +2145,10 @@ public static partial class FreeContinuousRacingTrajectoryGeometryExperiment
             if (!float.IsFinite(turningLossRatio) || turningLossRatio < 0f)
                 throw new ArgumentOutOfRangeException(nameof(turningLossRatio));
             this.turningLossRatio = turningLossRatio;
+            this.captureTurningIntervals = captureTurningIntervals;
+            if (!float.IsFinite(lateralExecutionReserveMeters) || lateralExecutionReserveMeters < 0f)
+                throw new ArgumentOutOfRangeException(nameof(lateralExecutionReserveMeters));
+            this.lateralExecutionReserveMeters = lateralExecutionReserveMeters;
             correctionCapability = LongitudinalDynamics.CalculateCornerCorrectionDecelerationMetersPerSecondSquared(
                 Balanced, UniformSurface);
             referenceDriveForce = LongitudinalDynamics.CalculateTurnExitAvailableDriveForceNewtons(
@@ -2185,6 +2205,13 @@ public static partial class FreeContinuousRacingTrajectoryGeometryExperiment
             var brakeSteps = 0;
             var firstCorrectionProgress = 1f;
             var turningLossEnergy = 0d;
+            var correctionLossEnergy = 0d;
+            var driveLossEnergy = 0d;
+            var correctionModeDistance = 0d;
+            var driveModeDistance = 0d;
+            var integratedLateralDemand = 0d;
+            var weightedLateralDemand = 0d;
+            var turningIntervals = captureTurningIntervals ? new List<TurningCostInterval>() : null;
             var peakTurningLossPower = 0f;
 
             void Observe(float progress, float observedSpeed, FreeTrajectoryGeometryPoint point, float? target)
@@ -2259,11 +2286,14 @@ public static partial class FreeContinuousRacingTrajectoryGeometryExperiment
                         runWideInvalidations: startOutcome.Outcome == SegmentOutcome.RunWide ? 1 : 0,
                         crashInvalidations: startOutcome.Outcome == SegmentOutcome.Crash ? 1 : 0);
                 var availability = ContinuousCornerEnvelope.DriveAvailability(midpointProgress);
-                var candidateSpeed = turningLossRatio == 0f
-                    ? LongitudinalDynamics.CalculateMidpointDriveEndSpeedMetersPerSecond(
-                        speed, stepDistance, referenceDriveForce, Neutral, availability)
-                    : TurningCostMidpointEndSpeed(speed, stepDistance, midpointPoint.CurvaturePerMeter,
-                        availability);
+                var turningStep = turningLossRatio > 0f
+                    ? TurningCostIntegrator.Step(speed, stepDistance, midpointPoint.CurvaturePerMeter,
+                        turningLossRatio, availability, referenceDriveForce, Neutral, endTarget, correctionCapability)
+                        with { StartProgress = startProgress }
+                    : null;
+                var candidateSpeed = turningStep?.PassiveEndSpeedMetersPerSecond
+                    ?? LongitudinalDynamics.CalculateMidpointDriveEndSpeedMetersPerSecond(
+                        speed, stepDistance, referenceDriveForce, Neutral, availability);
                 var correctionActive = endTarget is { } target
                     && (speed > target
                         || candidateSpeed > target
@@ -2271,7 +2301,26 @@ public static partial class FreeContinuousRacingTrajectoryGeometryExperiment
                 float nextSpeed;
                 double stepTime;
                 float netAcceleration;
-                if (correctionActive)
+                if (turningStep is not null)
+                {
+                    correctionActive = turningStep.CorrectionActive;
+                    nextSpeed = turningStep.ExitSpeedMetersPerSecond;
+                    stepTime = turningStep.TimeSeconds;
+                    netAcceleration = (nextSpeed * nextSpeed - speed * speed) / (2f * stepDistance);
+                    turningLossEnergy += turningStep.LossEnergyJoules;
+                    if (correctionActive)
+                    {
+                        correctionLossEnergy += turningStep.LossEnergyJoules;
+                        correctionDistance += stepDistance;
+                        correctionTime += stepTime;
+                        brakeSteps++;
+                        firstCorrectionProgress = MathF.Min(firstCorrectionProgress, startProgress);
+                    }
+                    else driveLossEnergy += turningStep.LossEnergyJoules;
+                    peakTurningLossPower = MathF.Max(peakTurningLossPower, turningStep.LossPowerWatts);
+                    turningIntervals?.Add(turningStep);
+                }
+                else if (correctionActive)
                 {
                     var correction = LongitudinalDynamics.CalculateCornerSpeedCorrectionProfile(
                         speed, endTarget!.Value, correctionCapability, stepDistance);
@@ -2293,15 +2342,9 @@ public static partial class FreeContinuousRacingTrajectoryGeometryExperiment
                     var midpointSpeed = (speed + nextSpeed) * .5f;
                     netAcceleration = availability * LongitudinalDynamics.CalculateNetDriveAccelerationMetersPerSecondSquared(
                         midpointSpeed, referenceDriveForce, Neutral);
-                    if (turningLossRatio > 0f)
-                    {
-                        var loss = TurningCostForce.LossNewtons(turningLossRatio, midpointSpeed,
-                            midpointPoint.CurvaturePerMeter, availability, referenceDriveForce, Neutral);
-                        netAcceleration -= loss / LongitudinalDynamics.ProvisionalNominalSystemMassKilograms;
-                        turningLossEnergy += (double)loss * stepDistance;
-                        peakTurningLossPower = MathF.Max(peakTurningLossPower, loss * midpointSpeed);
-                    }
                 }
+                if (correctionActive) correctionModeDistance += stepDistance;
+                else driveModeDistance += stepDistance;
                 var endOutcome = ResolveOutcome(endPoint, nextSpeed, endTarget);
                 Observe(endProgress, nextSpeed, endPoint, endTarget);
                 if (endOutcome.Outcome is SegmentOutcome.RunWide or SegmentOutcome.Crash)
@@ -2320,7 +2363,8 @@ public static partial class FreeContinuousRacingTrajectoryGeometryExperiment
                     - startPoint.LateralOffsetMeters);
                 var maximumLateralAllowed = LateralMovementModel.CalculateMaxLateralDistanceMeters(
                     (float)stepTime, SegmentType.TurnMiddle, geometry, UniformSurface, Balanced);
-                var headroom = maximumLateralAllowed - requiredLateral;
+                // Optional #48 fixed-winner sensitivity only; baseline gate is unchanged.
+                var headroom = MathF.Max(0f, maximumLateralAllowed - lateralExecutionReserveMeters) - requiredLateral;
                 minimumHeadroom = MathF.Min(minimumHeadroom, headroom);
                 if (headroom < -1e-4f)
                     return Invalid(candidate, FreeTrajectoryValidity.LateralExecutionConstraint,
@@ -2330,6 +2374,8 @@ public static partial class FreeContinuousRacingTrajectoryGeometryExperiment
                 cornerTime += stepTime;
                 var midpointSpeedForProxy = (speed + nextSpeed) * .5f;
                 var proxy = midpointSpeedForProxy * midpointSpeedForProxy / midpointPoint.LocalRadiusMeters;
+                integratedLateralDemand += (double)proxy * stepDistance;
+                weightedLateralDemand += proxy * stepTime;
                 peakProxy = MathF.Max(peakProxy, proxy);
                 weightedRadius += midpointPoint.LocalRadiusMeters * stepTime;
                 weightedRadiusTime += stepTime;
@@ -2351,7 +2397,7 @@ public static partial class FreeContinuousRacingTrajectoryGeometryExperiment
             var straightFull = StraightProfile(exitSpeed, straightDistance);
             var straightLateralCapacity = LateralMovementModel.CalculateMaxLateralDistanceMeters(
                 straightFull.TravelTimeSeconds, SegmentType.Straight, geometry, UniformSurface, Balanced);
-            var straightHeadroom = straightLateralCapacity - repositionLateral;
+            var straightHeadroom = MathF.Max(0f, straightLateralCapacity - lateralExecutionReserveMeters) - repositionLateral;
             minimumHeadroom = MathF.Min(minimumHeadroom, straightHeadroom);
             if (straightHeadroom < -1e-4f)
                 return Invalid(candidate, FreeTrajectoryValidity.StraightRepositionConstraint,
@@ -2375,7 +2421,7 @@ public static partial class FreeContinuousRacingTrajectoryGeometryExperiment
                 var availableDrive = LongitudinalDynamics.CalculateAvailableDriveForceAtSpeedNewtons(
                     referenceDriveForce, node.SpeedMetersPerSecond, Neutral)
                     * ContinuousCornerEnvelope.DriveAvailability(progress);
-                var profileLoss = node.CorrectionActive ? 0f : TurningCostForce.LossNewtons(
+                var profileLoss = TurningCostForce.LossNewtons(
                     turningLossRatio, node.SpeedMetersPerSecond, point.CurvaturePerMeter,
                     ContinuousCornerEnvelope.DriveAvailability(progress), referenceDriveForce, Neutral);
                 return new FreeTrajectoryProfilePoint(
@@ -2453,6 +2499,14 @@ public static partial class FreeContinuousRacingTrajectoryGeometryExperiment
                 StraightRepositionDistanceMeters = straightDistance,
                 StraightRepositionLateralHeadroomMeters = straightHeadroom,
                 TurningLossEnergyJoules = turningLossEnergy,
+                TurningLossEnergyDuringCorrectionJoules = correctionLossEnergy,
+                TurningLossEnergyDuringDriveJoules = driveLossEnergy,
+                CorrectionModeDistanceMeters = correctionModeDistance,
+                DriveModeDistanceMeters = driveModeDistance,
+                IntegratedLateralDemandMetersSquaredPerSecondSquared = integratedLateralDemand,
+                TimeWeightedLateralDemandMetersPerSecondSquared = weightedLateralDemand / cornerTime,
+                TurningCostIntervals = turningIntervals is null ? Array.Empty<TurningCostInterval>()
+                    : Array.AsReadOnly(turningIntervals.ToArray()),
                 PeakTurningLossPowerWatts = MathF.Max(peakTurningLossPower,
                     profile.Max(item => item.TurningLossPowerWatts)),
             };
@@ -2461,25 +2515,6 @@ public static partial class FreeContinuousRacingTrajectoryGeometryExperiment
                 (float)Math.Sqrt((double)constraint.SettledCapabilityMetersPerSecond
                     * constraint.SettledCapabilityMetersPerSecond
                     + 2d * correctionCapability * constraint.DistanceMeters);
-        }
-
-        private float TurningCostMidpointEndSpeed(float speed, float distance, float curvature,
-            float availability)
-        {
-            float Acceleration(float atSpeed)
-            {
-                var baseline = availability * LongitudinalDynamics.CalculateNetDriveAccelerationMetersPerSecondSquared(
-                    atSpeed, referenceDriveForce, Neutral);
-                var loss = TurningCostForce.LossNewtons(turningLossRatio, atSpeed, curvature,
-                    availability, referenceDriveForce, Neutral);
-                return baseline - loss / LongitudinalDynamics.ProvisionalNominalSystemMassKilograms;
-            }
-
-            var predicted = LongitudinalDynamics.ApplySignedAccelerationOverDistance(
-                speed, Acceleration(speed), distance);
-            var midpoint = (float)(((double)speed + predicted) * .5d);
-            return LongitudinalDynamics.ApplySignedAccelerationOverDistance(
-                speed, Acceleration(midpoint), distance);
         }
 
         private float? LookaheadTarget(

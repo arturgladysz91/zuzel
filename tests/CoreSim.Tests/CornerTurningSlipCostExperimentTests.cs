@@ -42,10 +42,75 @@ public sealed class CornerTurningSlipCostExperimentTests
             availability, referenceForce, BikeSetup.Neutral);
         Assert.InRange(at - below, 0f, .05f);
         Assert.InRange(above - at, 0f, .05f);
-        Assert.True(above <= drive);
-        Assert.True(drive - above >= 0f);
-        Assert.Equal(0f, TurningCostForce.LossNewtons(.1f, speed, curvature,
-            0f, referenceForce, BikeSetup.Neutral));
+        Assert.True(above > drive); // Remaining loss is passive drag, not negative engine propulsion.
+        Assert.Equal(0f, MathF.Max(0f, drive - above));
+        Assert.Equal(TurningCostForce.RequestedLossNewtons(.1f, speed, curvature),
+            TurningCostForce.LossNewtons(.1f, speed, curvature, 0f, referenceForce, BikeSetup.Neutral));
+    }
+
+    [Fact]
+    public void ReviewedWinnerPaysTurningLossDuringEveryCorrectionInterval()
+    {
+        var probe = FreeContinuousRacingTrajectoryGeometryExperiment.EvaluateTurningCost(
+            FreeContinuousRacingTrajectoryGeometryExperiment.ReviewedTurningCostWinnerControls,
+            .005f, captureIntervals: true);
+        Assert.True(probe.IsValid);
+        Assert.Contains(probe.TurningCostIntervals, interval => interval.CorrectionActive);
+        Assert.All(probe.TurningCostIntervals, interval =>
+        {
+            Assert.True(interval.EntrySpeedMetersPerSecond > 0f);
+            Assert.NotEqual(0f, interval.CurvaturePerMeter);
+            Assert.True(interval.LossForceNewtons > 0f);
+            Assert.True(interval.LossPowerWatts > 0f);
+            Assert.True(interval.LossEnergyJoules > 0d);
+        });
+        Assert.True(probe.TurningLossEnergyDuringCorrectionJoules > 0d);
+        Assert.True(probe.TurningLossEnergyDuringDriveJoules > 0d);
+        Assert.InRange(Math.Abs(probe.TotalTurningLossEnergyJoules
+            - probe.TurningLossEnergyDuringCorrectionJoules - probe.TurningLossEnergyDuringDriveJoules), 0d, 1e-8d);
+        Assert.Equal(probe.TurningCostIntervals.Sum(x => x.LossEnergyJoules), probe.TotalTurningLossEnergyJoules);
+        Assert.InRange(Math.Abs(probe.CorrectionModeDistanceMeters + probe.DriveModeDistanceMeters
+            - probe.Path!.TotalLengthMeters), 0d, 1e-6d);
+    }
+
+    [Fact]
+    public void PhaseBoundaryDoesNotRemoveLossOrDiscontinueWholeSector()
+    {
+        var probe = FreeContinuousRacingTrajectoryGeometryExperiment.RunTurningCostPhaseBoundaryProbe();
+        Assert.True(probe.Below.IsValid && probe.Above.IsValid);
+        var below = probe.Below.TurningCostIntervals[0];
+        var above = probe.Above.TurningCostIntervals[0];
+        Assert.False(below.CorrectionActive);
+        Assert.True(above.CorrectionActive);
+        Assert.Equal(below.CurvaturePerMeter, above.CurvaturePerMeter);
+        Assert.InRange(above.EntrySpeedMetersPerSecond - below.EntrySpeedMetersPerSecond, 0f, .00011f);
+        Assert.True(below.LossForceNewtons > 0f && above.LossForceNewtons > 0f);
+        Assert.True(below.LossPowerWatts > 0f && above.LossPowerWatts > 0f);
+        Assert.InRange(MathF.Abs(above.LossForceNewtons - below.LossForceNewtons), 0f, .001f);
+        Assert.InRange(MathF.Abs(above.LossPowerWatts - below.LossPowerWatts), 0f, .05f);
+        Assert.InRange(MathF.Abs(probe.Above.SectorTimeSeconds - probe.Below.SectorTimeSeconds), 0f, .0001f);
+        Assert.InRange(Math.Abs(probe.Above.TotalTurningLossEnergyJoules
+            - probe.Below.TotalTurningLossEnergyJoules), 0d, .1d);
+    }
+
+    [Fact]
+    public void PassiveLossIsNotLiftedToTargetOrDoubleDebitedByCorrection()
+    {
+        TurningCostInterval Step(float? target, float coefficient = .005f) => TurningCostIntegrator.Step(
+            20f, 1f, 1f / 31f, coefficient, 0f, 700f, BikeSetup.Neutral, target, 2.6f);
+        var passive = Step(null);
+        var unnecessary = Step(20f);
+        Assert.False(unnecessary.CorrectionActive);
+        Assert.Equal(passive.ExitSpeedMetersPerSecond, unnecessary.ExitSpeedMetersPerSecond);
+        var correction = Step(passive.ExitSpeedMetersPerSecond - .01f);
+        Assert.True(correction.CorrectionActive);
+        Assert.InRange(correction.AdditionalCorrectionMetersPerSecondSquared, 0f, 2.6f);
+        Assert.InRange(MathF.Abs(correction.ExitSpeedMetersPerSecond
+            - (passive.ExitSpeedMetersPerSecond - .01f)), 0f, 2e-6f);
+        Assert.Equal(passive.LossEnergyJoules, correction.LossEnergyJoules);
+        var unreachable = Step(1f);
+        Assert.Equal(2.6f, unreachable.AdditionalCorrectionMetersPerSecondSquared);
+        Assert.True(unreachable.ExitSpeedMetersPerSecond > 1f);
     }
 
     [Fact]
@@ -80,6 +145,9 @@ public sealed class CornerTurningSlipCostExperimentTests
             Assert.Equal(baseline.SectorTimeSeconds, additive.SectorTimeSeconds);
             Assert.Equal(baseline.ExitSpeedMetersPerSecond, additive.ExitSpeedMetersPerSecond);
             Assert.Equal(baseline.BrakeStepCount, additive.BrakeStepCount);
+            Assert.Equal(baseline.CorrectionDistanceMeters, additive.CorrectionDistanceMeters);
+            Assert.Equal(baseline.CorrectionTimeSeconds, additive.CorrectionTimeSeconds);
+            Assert.Equal(baseline.Profile, additive.Profile);
             Assert.Equal(baseline.PeakEnvelopeOverspeedRatio, additive.PeakEnvelopeOverspeedRatio);
             Assert.Equal(0d, additive.TurningLossEnergyJoules);
         }
@@ -96,6 +164,9 @@ public sealed class CornerTurningSlipCostExperimentTests
         Assert.Equal(result.Baseline.ConstantInner.SectorTimeSeconds, zero.ConstantInner.SectorTimeSeconds);
         Assert.Equal(result.Baseline.Search.ObjectiveConvergence, zero.Search.ObjectiveConvergence);
         Assert.Equal(result.Baseline.Search.GeometryConvergence, zero.Search.GeometryConvergence);
+        Assert.Same(result.Baseline.Search, zero.Search);
+        Assert.Same(result.Baseline.RepeatedBestFound, zero.RepeatedLap);
+        Assert.Equal("FCT-B843ADDB373E", zero.Winner.Candidate.Id);
         Assert.All(zero.Winner.Candidate.ControlOffsetsMeters, value => Assert.Equal(0f, value));
         Assert.InRange(zero.Winner.SectorTimeSeconds, 6.676828f, 6.676830f);
         Assert.Equal(0f, zero.Winner.SectorTimeSeconds - zero.ConstantInner.SectorTimeSeconds);
@@ -103,6 +174,14 @@ public sealed class CornerTurningSlipCostExperimentTests
         Assert.True(zero.Search.GeometryConvergence);
         Assert.Equal(FreeContinuousRacingTrajectoryGeometryExperiment.TurningCostSweep,
             result.Scenarios.Select(x => x.Coefficient));
+        Assert.All(result.Scenarios, scenario =>
+        {
+            Assert.Equal(106, scenario.Search.StartsGenerated);
+            Assert.Equal(48, scenario.Search.RefinedStartCount);
+            Assert.InRange(Math.Abs(scenario.Winner.TotalTurningLossEnergyJoules
+                - scenario.Winner.TurningLossEnergyDuringCorrectionJoules
+                - scenario.Winner.TurningLossEnergyDuringDriveJoules), 0d, 1e-7d);
+        });
         Assert.Equal(CornerTurningSlipCostReport.Render(result),
             CornerTurningSlipCostReport.Render(result));
     }
