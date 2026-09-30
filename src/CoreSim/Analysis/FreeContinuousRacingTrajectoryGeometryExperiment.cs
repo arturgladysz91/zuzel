@@ -417,6 +417,8 @@ public sealed record FreeTrajectoryEvaluation(
     public double TimeWeightedLateralDemandMetersPerSecondSquared { get; init; }
     public IReadOnlyList<TurningCostInterval> TurningCostIntervals { get; init; } = Array.Empty<TurningCostInterval>();
     public float PeakTurningLossPowerWatts { get; init; }
+    public IReadOnlyList<CombinedGripInterval> CombinedGripIntervals { get; init; } =
+        Array.Empty<CombinedGripInterval>();
 }
 
 public sealed record VariableCurvatureSanityControl(
@@ -2149,6 +2151,9 @@ public static partial class FreeContinuousRacingTrajectoryGeometryExperiment
         private readonly float turningLossRatio;
         private readonly bool captureTurningIntervals;
         private readonly float lateralExecutionReserveMeters;
+        private readonly float combinedGripCoupling;
+        private readonly bool captureCombinedGripIntervals;
+        private readonly float lateralAccelerationCapacity;
 
         internal ExperimentalGeometryReplay(
             TrackGeometry geometry,
@@ -2158,7 +2163,9 @@ public static partial class FreeContinuousRacingTrajectoryGeometryExperiment
             bool useCanonicalSensitivityConstraint = false,
             float turningLossRatio = 0f,
             bool captureTurningIntervals = false,
-            float lateralExecutionReserveMeters = 0f)
+            float lateralExecutionReserveMeters = 0f,
+            float combinedGripCoupling = 0f,
+            bool captureCombinedGripIntervals = false)
         {
             this.geometry = geometry;
             this.defaultEntrySpeed = defaultEntrySpeed;
@@ -2174,6 +2181,13 @@ public static partial class FreeContinuousRacingTrajectoryGeometryExperiment
             if (!float.IsFinite(lateralExecutionReserveMeters) || lateralExecutionReserveMeters < 0f)
                 throw new ArgumentOutOfRangeException(nameof(lateralExecutionReserveMeters));
             this.lateralExecutionReserveMeters = lateralExecutionReserveMeters;
+            CombinedGripAvailability.ValidateCoupling(combinedGripCoupling);
+            if (combinedGripCoupling > 0f && turningLossRatio > 0f)
+                throw new ArgumentException("Combined grip and dissipative turning cost are separate experiments.");
+            this.combinedGripCoupling = combinedGripCoupling;
+            this.captureCombinedGripIntervals = captureCombinedGripIntervals;
+            lateralAccelerationCapacity = CombinedGripAvailability.DeriveLateralAccelerationCapacity(
+                UniformSurface, Balanced, Neutral, referenceTurnSpeedMetersPerSecond);
             correctionCapability = LongitudinalDynamics.CalculateCornerCorrectionDecelerationMetersPerSecondSquared(
                 Balanced, UniformSurface);
             referenceDriveForce = LongitudinalDynamics.CalculateTurnExitAvailableDriveForceNewtons(
@@ -2238,6 +2252,7 @@ public static partial class FreeContinuousRacingTrajectoryGeometryExperiment
             var weightedLateralDemand = 0d;
             var turningIntervals = captureTurningIntervals ? new List<TurningCostInterval>() : null;
             var peakTurningLossPower = 0f;
+            var gripIntervals = captureCombinedGripIntervals ? new List<CombinedGripInterval>() : null;
 
             void Observe(float progress, float observedSpeed, FreeTrajectoryGeometryPoint point, float? target)
             {
@@ -2331,8 +2346,12 @@ public static partial class FreeContinuousRacingTrajectoryGeometryExperiment
                     };
                 }
                 var candidateSpeed = turningStep?.PassiveEndSpeedMetersPerSecond
-                    ?? LongitudinalDynamics.CalculateMidpointDriveEndSpeedMetersPerSecond(
-                        speed, stepDistance, referenceDriveForce, Neutral, availability);
+                    ?? (combinedGripCoupling == 0f
+                        ? LongitudinalDynamics.CalculateMidpointDriveEndSpeedMetersPerSecond(
+                            speed, stepDistance, referenceDriveForce, Neutral, availability)
+                        : CombinedGripIntegrator.DriveEndSpeed(speed, stepDistance,
+                            midpointPoint.CurvaturePerMeter, lateralAccelerationCapacity,
+                            combinedGripCoupling, referenceDriveForce, Neutral, availability));
                 var correctionActive = endTarget is { } target
                     && (speed > target
                         || candidateSpeed > target
@@ -2340,6 +2359,7 @@ public static partial class FreeContinuousRacingTrajectoryGeometryExperiment
                 float nextSpeed;
                 double stepTime;
                 float netAcceleration;
+                var actualCorrectionDistance = 0f;
                 if (turningStep is not null)
                 {
                     correctionActive = turningStep.ControllerLimited;
@@ -2371,6 +2391,7 @@ public static partial class FreeContinuousRacingTrajectoryGeometryExperiment
                     stepTime = correction.TravelTimeSeconds + carryTime;
                     correctionDistance += correction.CorrectionDistanceMeters;
                     correctionTime += correction.TravelTimeSeconds;
+                    actualCorrectionDistance = correction.CorrectionDistanceMeters;
                     netAcceleration = stepDistance <= 0f ? 0f
                         : (nextSpeed * nextSpeed - speed * speed) / (2f * stepDistance);
                     brakeSteps++;
@@ -2383,6 +2404,30 @@ public static partial class FreeContinuousRacingTrajectoryGeometryExperiment
                     var midpointSpeed = (speed + nextSpeed) * .5f;
                     netAcceleration = availability * LongitudinalDynamics.CalculateNetDriveAccelerationMetersPerSecondSquared(
                         midpointSpeed, referenceDriveForce, Neutral);
+                    if (combinedGripCoupling > 0f)
+                        netAcceleration = (nextSpeed * nextSpeed - speed * speed) / (2f * stepDistance);
+                }
+                if (gripIntervals is not null)
+                {
+                    var midpointSpeed = (speed + nextSpeed) * .5f;
+                    // Reproduce the actual distance-midpoint force evaluation on drive.
+                    if (!correctionActive)
+                        midpointSpeed = CombinedGripIntegrator.PredictorMidpointSpeed(speed, stepDistance,
+                            midpointPoint.CurvaturePerMeter, lateralAccelerationCapacity,
+                            combinedGripCoupling, referenceDriveForce, Neutral, availability);
+                    var engineForce = LongitudinalDynamics.CalculateAvailableDriveForceAtSpeedNewtons(
+                        referenceDriveForce, midpointSpeed, Neutral);
+                    var requested = correctionActive
+                        ? -LongitudinalDynamics.ProvisionalNominalSystemMassKilograms * correctionCapability
+                            * actualCorrectionDistance / stepDistance
+                        : availability * engineForce;
+                    var grip = CombinedGripAvailability.Evaluate(midpointSpeed,
+                        midpointPoint.CurvaturePerMeter, lateralAccelerationCapacity,
+                        engineForce, requested, combinedGripCoupling);
+                    gripIntervals.Add(new CombinedGripInterval(startProgress, endProgress,
+                        midpointProgress, stepDistance, speed, nextSpeed, midpointSpeed,
+                        midpointPoint.CurvaturePerMeter, availability, correctionActive,
+                        actualCorrectionDistance, grip));
                 }
                 if (turningStep is null)
                 {
@@ -2553,6 +2598,8 @@ public static partial class FreeContinuousRacingTrajectoryGeometryExperiment
                     : Array.AsReadOnly(turningIntervals.ToArray()),
                 PeakTurningLossPowerWatts = MathF.Max(peakTurningLossPower,
                     profile.Max(item => item.TurningLossPowerWatts)),
+                CombinedGripIntervals = gripIntervals is null ? Array.Empty<CombinedGripInterval>()
+                    : Array.AsReadOnly(gripIntervals.ToArray()),
             };
 
             float ConstraintReachabilityAtEntry(TurningDemandConstraint constraint) =>

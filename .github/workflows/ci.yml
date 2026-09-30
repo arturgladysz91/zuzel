@@ -11,9 +11,17 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    # Includes the analysis-only combined-grip sweep and independent zero-path optimizer replay.
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Record exact tested commit
+        run: |
+          git rev-parse HEAD
+          git rev-parse HEAD^{tree}
+          git log -1 --format=%P
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
