@@ -120,6 +120,7 @@ public sealed record CornerTurningSlipCostExperimentResult(
 {
     public FreeTrajectoryEvaluation ReviewedWinnerProbe { get; init; } = null!;
     public TurningCostPhaseBoundaryProbe PhaseBoundaryProbe { get; init; } = null!;
+    public TurningCostRobustnessResult Robustness { get; init; } = null!;
 }
 
 public sealed record TurningCostPhaseBoundaryProbe(FreeTrajectoryEvaluation Below,
@@ -190,6 +191,7 @@ public static partial class FreeContinuousRacingTrajectoryGeometryExperiment
         {
             ReviewedWinnerProbe = reviewedProbe,
             PhaseBoundaryProbe = RunTurningCostPhaseBoundaryProbe(),
+            Robustness = RunTurningCostRobustness(),
         };
     }
 
@@ -348,6 +350,8 @@ public static class CornerTurningSlipCostReport
             : $"First objectively converged sampled non-inner advantage: c = {F(first.Coefficient, "0.000")}; gain {F(first.ConstantInner.SectorTimeSeconds - first.Winner.SectorTimeSeconds)} s. This is a sampled result, not a fitted continuous threshold.");
         L();
         L("Any surviving non-inner result must be judged by the full-corner energy/demand comparison, exit speed, extra path and lateral-boundary diagnostic, not by the name 'wider'. No controller state receives free dissipation. Large c remains an uncalibrated effective-slip surrogate; c = 1.280 is far outside a small-angle interpretation. Unclosed searches and broken global guardrails remain explicit uncertainty. No production promotion follows; a coupled longitudinal/lateral tyre-force envelope is a separate future hypothesis, not part of this repair.");
+        L();
+        sb.Append(TurningCostRobustnessReport.Render(result.Robustness));
         return sb.ToString();
     }
 }

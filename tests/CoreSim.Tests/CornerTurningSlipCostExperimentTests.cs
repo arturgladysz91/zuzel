@@ -114,14 +114,14 @@ public sealed class CornerTurningSlipCostExperimentTests
     }
 
     [Fact]
-    public void FixedTrajectoryRespondsContinuouslyNearZeroAndSaturation()
+    public void FixedTrajectoryHasSmallFiniteResponseNearZeroAndSaturationButThisIsNotAZeroLimitProof()
     {
         var controls = Enumerable.Repeat(0f,
             FreeContinuousRacingTrajectoryGeometryExperiment.ControlStationCount).ToArray();
         var zero = FreeContinuousRacingTrajectoryGeometryExperiment.EvaluateTurningCost(controls, 0f);
         var tiny = FreeContinuousRacingTrajectoryGeometryExperiment.EvaluateTurningCost(controls, .00001f);
         Assert.True(zero.IsValid && tiny.IsValid);
-        Assert.InRange(tiny.SectorTimeSeconds - zero.SectorTimeSeconds, 0f, .01f);
+        Assert.InRange(tiny.SectorTimeSeconds - zero.SectorTimeSeconds, 0f, .0001f);
         Assert.True(tiny.TurningLossEnergyJoules >= 0d);
         var low = FreeContinuousRacingTrajectoryGeometryExperiment.EvaluateTurningCost(controls, .3199f);
         var high = FreeContinuousRacingTrajectoryGeometryExperiment.EvaluateTurningCost(controls, .3201f);
@@ -182,6 +182,10 @@ public sealed class CornerTurningSlipCostExperimentTests
                 - scenario.Winner.TurningLossEnergyDuringCorrectionJoules
                 - scenario.Winner.TurningLossEnergyDuringDriveJoules), 0d, 1e-7d);
         });
+        var atFive = result.Scenarios.Single(x => x.Coefficient == .005f);
+        Assert.Equal(FreeContinuousRacingTrajectoryGeometryExperiment.ReviewedTurningCostWinnerControls,
+            atFive.Winner.Candidate.ControlOffsetsMeters);
+        Assert.Equal(result.Robustness.Reference.SectorTimeSeconds, atFive.Winner.SectorTimeSeconds);
         Assert.Equal(CornerTurningSlipCostReport.Render(result),
             CornerTurningSlipCostReport.Render(result));
     }
