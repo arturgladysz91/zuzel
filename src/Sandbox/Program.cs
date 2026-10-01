@@ -6,6 +6,12 @@ using CoreSim.Setup;
 
 if (args.Length > 0)
 {
+    if (args.Length == 2 && StringComparer.Ordinal.Equals(args[0], "four-rider-race-behavior-report"))
+    {
+        FourRiderBehaviorReportWriter.Write(args[1]);
+        Console.WriteLine($"Wrote deterministic four-rider behavior audit: {args[1]}");
+        return;
+    }
     if (args.Length == 2 && StringComparer.Ordinal.Equals(args[0], "combined-grip-execution-reserve-report"))
     {
         CombinedGripExecutionReserveReportWriter.Write(args[1]);
@@ -151,6 +157,7 @@ if (args.Length > 0)
     }
 
     Console.Error.WriteLine("Usage:");
+    Console.Error.WriteLine("  Sandbox four-rider-race-behavior-report <output-directory>");
     Console.Error.WriteLine("  Sandbox combined-grip-availability-report <output-markdown>");
     Console.Error.WriteLine("  Sandbox combined-grip-execution-reserve-report <output-markdown>");
     Console.Error.WriteLine("  Sandbox corner-turning-slip-cost-report <output-markdown>");
