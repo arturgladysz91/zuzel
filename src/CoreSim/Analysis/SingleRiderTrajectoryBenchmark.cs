@@ -101,7 +101,8 @@ public static class SingleRiderTrajectoryBenchmark
     }
 
     public static string Evidence(IReadOnlyList<SingleRiderTrajectoryResult> results)
-        => JsonSerializer.Serialize(new { BaselineHead, Audit51 = RunAudit51(), Results = results }, new JsonSerializerOptions { WriteIndented = true }) + "\n";
+        => JsonSerializer.Serialize(new { BaselineHead, Audit51 = RunAudit51(), Results = results },
+            new JsonSerializerOptions { WriteIndented = true }).Replace("\r\n", "\n", StringComparison.Ordinal) + "\n";
 
     // Exact first-segment fixture from #51 D, isolated to rider 2 with incidents OFF.
     internal static ResolvedSimulationStep ResolveAudit51(int target)
