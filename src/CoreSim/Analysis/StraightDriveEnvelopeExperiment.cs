@@ -336,7 +336,7 @@ public static class StraightDriveEnvelopeExperiment
     {
         var fixtureArray = fixtures.ToArray();
         var track = MatchedVenueProfiles.Motoarena2026.CreateTrack(
-            MatchedVenueProfiles.MotoarenaPrimaryStartLineToFirstCornerMeters);
+            MatchedVenueProfiles.MotoarenaHistorical39StartLineToFirstCornerMeters);
         var riders = fixtureArray.Select(item => new RiderState(
             new RiderProfile(item.RiderId, $"#41 {scenarioId} rider {item.RiderId}", item.Skills, RiderStyle.Balanced),
             (int)item.LateralPosition)

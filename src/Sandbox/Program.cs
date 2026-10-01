@@ -190,7 +190,11 @@ var profiles = new[]
     new RiderProfile(3, "Wiśniewski", new RiderSkills(84, 65, 58, 70, 60, 72), new RiderStyle(0.4f, 0.4f, 0.3f, 0.4f)),
     new RiderProfile(4, "Wójcik", new RiderSkills(69, 74, 82, 76, 80, 66), RiderStyle.Balanced),
 };
-var riders = profiles.Select((profile, lane) => new RiderState(profile, lane)).ToList();
+var riders = StartingGrid.Create(track, new StartingGateAssignment[]
+{
+    new(profiles[0], StartingGate.A), new(profiles[1], StartingGate.B),
+    new(profiles[2], StartingGate.C), new(profiles[3], StartingGate.D),
+}).ToList();
 
 var setupResolver = new SetupResolver(seed: 11);
 foreach (var rider in riders)
@@ -266,7 +270,7 @@ foreach (var row in CalibrationCsvExporter.ExportSteps(calibrationTrace)
 
 var balance = BalanceAnalyzer.AnalyzeStartingGates(track, profiles, simulations: 2000, seed: 2026);
 Console.WriteLine("\nCompatibility start-position balance (2000 heats, riders rotated):");
-Console.WriteLine("Physical A/B/C/D gate geometry is not modeled; this is not final gate-advantage calibration.");
+Console.WriteLine("This historical balance diagnostic rotates racing references, not the physical A/B/C/D fields used in the standing-start example above.");
 foreach (var gate in balance.Gates)
 {
     Console.WriteLine(

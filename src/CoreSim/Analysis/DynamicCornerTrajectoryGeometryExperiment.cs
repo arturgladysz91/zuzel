@@ -847,7 +847,7 @@ public static class DynamicCornerTrajectoryGeometryExperiment
             == BitConverter.SingleToInt32Bits(right.FourLapDistanceMeters);
 
     private static Track CreateTrack() => MatchedVenueProfiles.Motoarena2026.CreateTrack(
-        MatchedVenueProfiles.MotoarenaPrimaryStartLineToFirstCornerMeters);
+        MatchedVenueProfiles.MotoarenaHistorical39StartLineToFirstCornerMeters);
 
     private static TrackState FreshSurface(Track track, string profile, float severity) =>
         DynamicLineChoiceTrackEvolutionExperiment.CreateProfileState(track, profile, severity);

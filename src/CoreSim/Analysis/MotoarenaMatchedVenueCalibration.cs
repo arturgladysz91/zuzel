@@ -127,7 +127,8 @@ public sealed class MotoarenaMatchedVenueCalibrationResult
 }
 
 /// <summary>
-/// Matched-venue measurement orchestration. Every heat runs through the
+/// Historical #39 matched-venue measurement orchestration, frozen at its 31/31 input.
+/// Not the current canonical start fixture. Every heat runs through the
 /// production CalibrationRunner -> HeatSimulator path with frozen physics.
 /// </summary>
 public static class MotoarenaMatchedVenueCalibration
@@ -141,10 +142,10 @@ public static class MotoarenaMatchedVenueCalibration
     public static MotoarenaMatchedVenueCalibrationResult Run(RealWorldCalibrationDataset globalDataset)
     {
         ArgumentNullException.ThrowIfNull(globalDataset);
-        var profile = MatchedVenueProfiles.Motoarena2026;
+        var profile = MatchedVenueProfiles.MotoarenaHistorical39;
         var venueDataset = globalDataset.FilterByExactVenue(profile.Season, profile.SourceTrackLabel);
         var coverage = Coverage(venueDataset);
-        var primaryTrack = profile.CreateTrack(MatchedVenueProfiles.MotoarenaPrimaryStartLineToFirstCornerMeters);
+        var primaryTrack = profile.CreateTrack(MatchedVenueProfiles.MotoarenaHistorical39StartLineToFirstCornerMeters);
         var balancedSpecs = BalancedRiders();
         var primary = RunHeat("motoarena/balanced", primaryTrack, balancedSpecs);
         var standing = RunHeat("standing-example/balanced", Track.CreateStandingStartExample(), balancedSpecs);
@@ -183,7 +184,7 @@ public static class MotoarenaMatchedVenueCalibration
             profile.OlderArticleBendWidthMeters,
         }.Select(width =>
         {
-            var track = profile.CreateTrack(MatchedVenueProfiles.MotoarenaPrimaryStartLineToFirstCornerMeters, width);
+            var track = profile.CreateTrack(MatchedVenueProfiles.MotoarenaHistorical39StartLineToFirstCornerMeters, width);
             var heat = width == profile.ModeledSymmetricTurnWidthMeters
                 ? primary
                 : RunHeat($"motoarena/turn-width/{width.ToString("0.0", CultureInfo.InvariantCulture)}", track, balancedSpecs);

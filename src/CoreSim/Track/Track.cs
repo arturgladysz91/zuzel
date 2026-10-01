@@ -6,6 +6,11 @@ public sealed class Track
     public IReadOnlyList<TrackSegment> Segments { get; }
     public TrackGeometry Geometry { get; }
     public CornerTopology CornerTopology { get; }
+    /// <summary>
+    /// The single start/finish boundary is before segment zero (and after the final segment).
+    /// RiderPosition uses this same boundary on every completed lap.
+    /// </summary>
+    public CoreSim.Race.RiderPosition StartFinishLine => CoreSim.Race.RiderPosition.Start(Segments.Count);
 
     public Track(IReadOnlyList<TrackSegment> segments)
         : this(segments, TrackGeometry.Default)

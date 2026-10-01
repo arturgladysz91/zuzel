@@ -98,7 +98,7 @@ public sealed class CornerReducedDriveResistanceExperimentTests
         }
 
         var track = MatchedVenueProfiles.Motoarena2026.CreateTrack(
-            MatchedVenueProfiles.MotoarenaPrimaryStartLineToFirstCornerMeters);
+            MatchedVenueProfiles.MotoarenaHistorical39StartLineToFirstCornerMeters);
         var phase = track.CornerTopology.Resolve(1, 0f,
             CornerReducedDriveResistanceExperiment.PrimaryLateralPosition, track.Geometry)!.Value;
         var envelope = ContinuousCornerEnvelope.Create(

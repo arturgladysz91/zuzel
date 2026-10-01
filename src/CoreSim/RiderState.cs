@@ -27,6 +27,9 @@ public sealed class RiderState
     /// <summary>Backward-compatible alias for LastResolvedSegmentId.</summary>
     public int CurrentSegmentId => LastResolvedSegmentId;
     public int Lane { get; set; }
+    /// <summary>Initial field identity and bounds only; never a constraint on racing movement.</summary>
+    public StartingGateBounds? StartingPosition { get; private set; }
+    public StartingGate? StartingGate => StartingPosition?.Gate;
     public float LateralPosition
     {
         get => _lateralPosition;
@@ -84,6 +87,25 @@ public sealed class RiderState
 
     public void ApplyMoraleDelta(float delta) => Morale += delta;
 
+    public RiderState(RiderProfile profile, StartingGate gate, Track track,
+        float morale = 0.5f, float managerTrust = 0.5f)
+        : this(profile, 0, morale, managerTrust)
+        => ResetForHeat(gate, track);
+
+    public void ResetForHeat(StartingGate gate, Track track)
+    {
+        ArgumentNullException.ThrowIfNull(track);
+        if (!track.Segments[0].IsStandingStartSegment)
+            throw new ArgumentException("Explicit starting gates require a marked standing-start track.", nameof(track));
+        var lateral = StartingGateGeometry.CenterLateralPosition(gate, track.Geometry);
+        var field = new StartingGateGeometry(track.Geometry.StraightWidthMeters).Field(gate);
+        // Lane remains a discrete racing/decision reference, not the gate number.
+        ResetForHeat((int)MathF.Round(lateral));
+        _position = track.StartFinishLine;
+        LateralPosition = lateral;
+        StartingPosition = field;
+    }
+
     /// <summary>Marks an active rider as retired without exposing arbitrary status mutation.</summary>
     public void Retire()
     {
@@ -116,10 +138,12 @@ public sealed class RiderState
     internal void SetLastResolvedSegmentId(int segmentId) => _lastResolvedSegmentId = segmentId;
 
     internal void SetStatus(RiderRaceStatus status) => _status = status;
+    internal void RestoreStartingPosition(StartingGateBounds? position) => StartingPosition = position;
 
     public void ResetForHeat(int lane)
     {
         LaneModel.ValidateLane(lane);
+        StartingPosition = null;
         _position = _position.SegmentCount == 0
             ? default
             : RiderPosition.Start(_position.SegmentCount);

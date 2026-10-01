@@ -124,7 +124,9 @@ public sealed class MatchedVenueProfile
 
 public static class MatchedVenueProfiles
 {
-    public const float MotoarenaPrimaryStartLineToFirstCornerMeters = 31f;
+    public const float MotoarenaPrimaryStartLineToFirstCornerMeters = 35f;
+    /// <summary>Frozen input for historical #39–#51 experiments, NOT the current start baseline.</summary>
+    public const float MotoarenaHistorical39StartLineToFirstCornerMeters = 31f;
     public const float MotoarenaPublishedStraightWidthMeters = 12f;
     public const float MotoarenaPublishedFirstBendWidthMeters = 17f;
     public const float MotoarenaPublishedSecondBendWidthMeters = 16.2f;
@@ -132,7 +134,18 @@ public static class MatchedVenueProfiles
         (MotoarenaPublishedFirstBendWidthMeters + MotoarenaPublishedSecondBendWidthMeters) / 2f;
     public const float MotoarenaOlderArticleBendWidthMeters = 18f;
 
-    public static MatchedVenueProfile Motoarena2026 { get; } = new(
+    public static MatchedVenueProfile Motoarena2026 { get; } = CreateMotoarenaProfile(
+        "FIMConstrainedStartLineBaseline / ExactMotoarenaOffsetNotPubliclyVerified: "
+        + "35 m to the first bend and 27 m from the second bend; not a measured offset or a telemetry fit.");
+
+    /// <summary>Current geometry-only baseline. Pair with explicit StartingGrid assignments.</summary>
+    public static Track CreateMotoarenaStandingStartTrack()
+        => Motoarena2026.CreateTrack(MotoarenaPrimaryStartLineToFirstCornerMeters);
+
+    internal static MatchedVenueProfile MotoarenaHistorical39 { get; } = CreateMotoarenaProfile(
+        "ProvisionalStartLineSplit: no verified start-line offset is available; the primary fixture uses 31 m / 31 m and reports 25/37 and 37/25 sensitivity cases.");
+
+    private static MatchedVenueProfile CreateMotoarenaProfile(string startLineConfidenceNotes) => new(
         venueId: "pge-2026-motoarena-torun",
         displayName: "Motoarena im. Mariana Rosego — Toruń",
         sourceTrackLabel: "Motoarena im. Mariana Rosego",
@@ -157,6 +170,5 @@ public static class MatchedVenueProfiles
             + "This is a SymmetricGeometryApproximation. "
             + "The 31 m radius remains an ExternalPublishedRadius / MeasurementConventionNotExplicitlyVerified reference-radius approximation. "
             + "This preserves aggregate full-lap lateral path contribution in the symmetric model, not local corner radius, safe speed, banking, or asymmetry.",
-        startLineConfidenceNotes:
-            "ProvisionalStartLineSplit: no verified start-line offset is available; the primary fixture uses 31 m / 31 m and reports 25/37 and 37/25 sensitivity cases.");
+        startLineConfidenceNotes: startLineConfidenceNotes);
 }

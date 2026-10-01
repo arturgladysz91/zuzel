@@ -420,10 +420,12 @@ w tym `StandingStartPreparationDistanceMeters` na końcu istniejących kolumn.
 `SpeedAtTwoSecondsMetersPerSecond` (także od taśmy, z reaction delay) są outputs, nie targetami; null oznacza
 nieosiągnięty próg albo koniec launch przed 2 s.
 
-Starting-gate geometry nie jest jeszcze fizycznie odwzorowana. Początkowe
-`Lane/LateralPosition` są compatibility representation pozycji startowych, nie
-docelowym modelem pól A/B/C/D. Przed finalną kalibracją
-gate effects trzeba wprowadzić oddzielne physical starting-gate geometry/mapping.
+Jawne `StartingGate A/B/C/D` dzielą pełną fizyczną szerokość prostej na cztery
+równe pola. `StartingGrid.Create` przyjmuje przypisania zawodnik → pole, ustawia
+neutralne środki i mapuje je na racing `LateralPosition`; nie dodaje gate bonusu
+ani gate lock. Stare ungated fixtures zachowują compatibility `Lane/LateralPosition`.
+Aktualna Motoarena używa jawnego baseline 35/27, nie zmierzonego offsetu.
+Szczegóły: [physical starting gates](docs/calibration/physical-starting-gates.md).
 #30 porządkuje strukturę standing startu, nie kalibruje finalnego gate advantage;
 nie ma hardcoded bonusu pola A.
 
@@ -472,7 +474,8 @@ surface remains five normalized bands with unchanged grip/wear formulas.
 Segment boundaries reinterpret the same normalized position against local width;
 there is no width-transition spline, artificial movement event or extra distance.
 Active lateral movement has no diagonal/spiral path-length correction, and the
-A/B/C/D physical gate model remains future work. The
+A/B/C/D physical bounds and neutral centers are now explicit; within-gate
+positioning and motorcycle footprint remain future work. The
 [physical-width impact report](docs/calibration/physical-width-impact.md) is
 observation-only: no speed/performance constant was changed and no calibration
 was performed.

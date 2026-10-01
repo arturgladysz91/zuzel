@@ -40,7 +40,8 @@ public sealed class MotoarenaMatchedVenueCalibrationTests
         Assert.Equal("granite", profile.SurfaceDescription);
         Assert.Contains("MeasurementConventionNotExplicitlyVerified", profile.GeometryConfidenceNotes);
         Assert.Contains("SymmetricGeometryApproximation", profile.GeometryConfidenceNotes);
-        Assert.Contains("ProvisionalStartLineSplit", profile.StartLineConfidenceNotes);
+        Assert.Contains("FIMConstrainedStartLineBaseline", profile.StartLineConfidenceNotes);
+        Assert.Contains("ExactMotoarenaOffsetNotPubliclyVerified", profile.StartLineConfidenceNotes);
     }
 
     [Fact]

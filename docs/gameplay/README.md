@@ -172,10 +172,12 @@ Brak clutch, RPM, torque/power, real sprockets, wheelspin, slip ratio, traction
 cap, false starts, reaction RNG oraz explicit throttle.
 
 Physical straight/turn width jest odwzorowana niezależnie od znormalizowanych
-pozycji, ale starting-gate geometry nadal nie jest. Initial `Lane/LateralPosition` pozostają compatibility representation pozycji
-startowych; racing references nie są docelowym modelem pól A/B/C/D. Przed finalną
-kalibracją gate effects trzeba wprowadzić oddzielne physical starting-gate
-geometry/mapping. #30 kalibruje strukturę standing startu, nie finalny gate advantage.
+pozycji. Jawne physical starting gates A/B/C/D mają teraz równe pola `W/4`,
+neutralne środki oraz transformację do racing `LateralPosition`; nie są racing lanes.
+`StartingGrid.Create` przyjmuje osobne przypisania zawodnik → pole. Stare ungated
+fixtures zachowują compatibility representation. Motoarena ma aktualny baseline
+35/27, nie zweryfikowany pomiar startu; [geometry i źródła](../calibration/physical-starting-gates.md).
+#30 kalibruje strukturę standing startu, nie finalny gate advantage.
 Nie dodajemy hardcoded bonusu pola A.
 
 ### Calibration telemetry — OBSERVATION ONLY

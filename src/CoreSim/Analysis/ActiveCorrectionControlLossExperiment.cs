@@ -441,7 +441,7 @@ public static class ActiveCorrectionControlLossExperiment
         TrackSurfaceState surface)
     {
         var track = MatchedVenueProfiles.Motoarena2026.CreateTrack(
-            MatchedVenueProfiles.MotoarenaPrimaryStartLineToFirstCornerMeters);
+            MatchedVenueProfiles.MotoarenaHistorical39StartLineToFirstCornerMeters);
         var riders = fixtures.Select(item => new RiderState(
             new RiderProfile(item.RiderId, $"#44 {scenarioId} rider {item.RiderId}",
                 item.Skills, RiderStyle.Balanced), (int)MathF.Round(item.LateralPosition))
@@ -605,7 +605,7 @@ public static class ActiveCorrectionControlLossExperiment
         TrackSurfaceState surface)
     {
         var track = MatchedVenueProfiles.Motoarena2026.CreateTrack(
-            MatchedVenueProfiles.MotoarenaPrimaryStartLineToFirstCornerMeters);
+            MatchedVenueProfiles.MotoarenaHistorical39StartLineToFirstCornerMeters);
         var rider = new RiderState(new RiderProfile(1, $"decision {archetype.Id}",
             archetype.Skills, RiderStyle.Balanced), 1)
         {
@@ -625,7 +625,7 @@ public static class ActiveCorrectionControlLossExperiment
     private static ContinuousCornerEnvelope CreatePrimaryEnvelope()
     {
         var track = MatchedVenueProfiles.Motoarena2026.CreateTrack(
-            MatchedVenueProfiles.MotoarenaPrimaryStartLineToFirstCornerMeters);
+            MatchedVenueProfiles.MotoarenaHistorical39StartLineToFirstCornerMeters);
         var phase = track.CornerTopology.Resolve(1, 0f, PrimaryLateralPosition, track.Geometry)
             ?? throw new InvalidOperationException("Motoarena first corner has no phase context.");
         return ContinuousCornerEnvelope.Create(phase, PrimaryLateralPosition, track.Geometry,

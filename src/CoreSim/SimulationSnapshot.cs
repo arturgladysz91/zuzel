@@ -41,6 +41,8 @@ public sealed record RiderSnapshot(
     public int LapsCompleted => Position.LapsCompleted;
     public bool IsCrashed => Status == RiderRaceStatus.Crashed;
     public bool IsActive => Status is RiderRaceStatus.NotStarted or RiderRaceStatus.Racing;
+    public StartingGateBounds? StartingPosition { get; init; }
+    public StartingGate? StartingGate => StartingPosition?.Gate;
 
     internal RiderState ToMutableCopy()
     {
@@ -55,6 +57,7 @@ public sealed record RiderSnapshot(
         copy.RestorePosition(Position);
         copy.SetLastResolvedSegmentId(LastResolvedSegmentId);
         copy.SetStatus(Status);
+        copy.RestoreStartingPosition(StartingPosition);
         return copy;
     }
 }

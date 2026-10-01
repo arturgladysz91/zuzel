@@ -627,7 +627,7 @@ public static class DynamicLineChoiceTrackEvolutionExperiment
     }
 
     private static Track CreateTrack() => MatchedVenueProfiles.Motoarena2026.CreateTrack(
-        MatchedVenueProfiles.MotoarenaPrimaryStartLineToFirstCornerMeters);
+        MatchedVenueProfiles.MotoarenaHistorical39StartLineToFirstCornerMeters);
 
     private static LineSweepSummary BenchmarkProfile(
         Track track,

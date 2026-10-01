@@ -406,7 +406,7 @@ public static class PreApexScrubLossExperiment
     {
         var fixtureArray = fixtures.ToArray();
         var track = MatchedVenueProfiles.Motoarena2026.CreateTrack(
-            MatchedVenueProfiles.MotoarenaPrimaryStartLineToFirstCornerMeters);
+            MatchedVenueProfiles.MotoarenaHistorical39StartLineToFirstCornerMeters);
         var riders = fixtureArray.Select(item => new RiderState(
             new RiderProfile(item.RiderId, $"#43 {scenarioId} rider {item.RiderId}", item.Skills,
                 RiderStyle.Balanced), (int)MathF.Round(item.LateralPosition))
@@ -440,7 +440,7 @@ public static class PreApexScrubLossExperiment
         float modeledLateralPosition)
     {
         var track = MatchedVenueProfiles.Motoarena2026.CreateTrack(
-            MatchedVenueProfiles.MotoarenaPrimaryStartLineToFirstCornerMeters);
+            MatchedVenueProfiles.MotoarenaHistorical39StartLineToFirstCornerMeters);
         var rider = CalibrationSkillSweep.ObserveRiders(trace).Single(item => item.RiderId == riderId);
         var samples = trace.StepSamples.Where(item => item.RiderId == riderId).ToArray();
         var flying = samples.Where(item => item.LapIndex == 1).OrderBy(item => item.SegmentIndex).ToArray();
@@ -678,7 +678,7 @@ public static class PreApexScrubLossExperiment
     private static IsolatedPreApexScrubObservation RunIsolatedCorner(PreApexScrubCandidate candidate)
     {
         var track = MatchedVenueProfiles.Motoarena2026.CreateTrack(
-            MatchedVenueProfiles.MotoarenaPrimaryStartLineToFirstCornerMeters);
+            MatchedVenueProfiles.MotoarenaHistorical39StartLineToFirstCornerMeters);
         var phase = track.CornerTopology.Resolve(1, 0f, PrimaryLateralPosition, track.Geometry)
             ?? throw new InvalidOperationException("Motoarena first corner has no phase context.");
         var envelope = ContinuousCornerEnvelope.Create(
@@ -729,7 +729,7 @@ public static class PreApexScrubLossExperiment
     private static ContinuousCornerEnvelope CreatePrimaryEnvelope()
     {
         var track = MatchedVenueProfiles.Motoarena2026.CreateTrack(
-            MatchedVenueProfiles.MotoarenaPrimaryStartLineToFirstCornerMeters);
+            MatchedVenueProfiles.MotoarenaHistorical39StartLineToFirstCornerMeters);
         var phase = track.CornerTopology.Resolve(1, 0f, PrimaryLateralPosition, track.Geometry)
             ?? throw new InvalidOperationException("Motoarena first corner has no phase context.");
         return ContinuousCornerEnvelope.Create(phase, PrimaryLateralPosition, track.Geometry,
