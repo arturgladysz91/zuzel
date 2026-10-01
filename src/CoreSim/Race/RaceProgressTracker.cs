@@ -11,16 +11,21 @@ public sealed class RaceProgressTracker
 {
     private IReadOnlyList<int> _previousOrder = Array.Empty<int>();
     private IReadOnlyDictionary<int, bool> _previousDnfState = new Dictionary<int, bool>();
+    private HashSet<(int, int)> _previousGatedTies = new();
+    /// <summary>Presentation identity, not a longitudinal lead or race classification.</summary>
+    public IReadOnlyList<int> StartingGridOrder { get; private set; } = Array.Empty<int>();
 
     public void InitializeStartingGrid(IReadOnlyList<RiderState> riders)
     {
         ArgumentNullException.ThrowIfNull(riders);
         _previousOrder = riders
-            .OrderBy(rider => rider.Lane)
+            .OrderBy(rider => rider.StartingGate.HasValue ? (int)rider.StartingGate.Value : rider.Lane)
             .ThenBy(rider => rider.RiderId)
             .Select(rider => rider.RiderId)
             .ToArray();
         _previousDnfState = riders.ToDictionary(rider => rider.RiderId, IsDnf);
+        StartingGridOrder = Array.AsReadOnly(_previousOrder.ToArray());
+        _previousGatedTies = GatedTies(riders);
     }
 
     public void CaptureSegment(
@@ -49,6 +54,7 @@ public sealed class RaceProgressTracker
 
         _previousOrder = ordered.Select(rider => rider.RiderId).ToArray();
         _previousDnfState = currentDnfState;
+        _previousGatedTies = GatedTies(riders);
     }
 
     private void CaptureOvertakes(
@@ -76,6 +82,7 @@ public sealed class RaceProgressTracker
             foreach (var passedRiderId in _previousOrder.Take(oldPosition - 1))
             {
                 if (passedRiderId == rider.RiderId
+                    || _previousGatedTies.Contains(Pair(rider.RiderId, passedRiderId))
                     || _previousDnfState.GetValueOrDefault(passedRiderId)
                     || currentDnfState.GetValueOrDefault(passedRiderId)
                     || currentPositions[passedRiderId] <= newPosition)
@@ -131,4 +138,18 @@ public sealed class RaceProgressTracker
 
     private static bool IsDnf(RiderState rider)
         => rider.Status is RiderRaceStatus.Crashed or RiderRaceStatus.Retired;
+
+    private static (int, int) Pair(int first, int second) => (Math.Min(first, second), Math.Max(first, second));
+
+    private static HashSet<(int, int)> GatedTies(IReadOnlyList<RiderState> riders)
+    {
+        var ties = new HashSet<(int, int)>();
+        // Breaking a longitudinal tie is not passing a leader. Keep ungated legacy logging unchanged.
+        foreach (var first in riders.Where(rider => rider.StartingGate.HasValue && !IsDnf(rider)))
+        foreach (var second in riders.Where(rider => rider.StartingGate.HasValue && !IsDnf(rider)))
+            if (first.RiderId < second.RiderId && first.CanonicalProgress == second.CanonicalProgress
+                && first.ElapsedTimeSeconds == second.ElapsedTimeSeconds)
+                ties.Add(Pair(first.RiderId, second.RiderId));
+        return ties;
+    }
 }

@@ -726,7 +726,7 @@ public sealed class DynamicLineChoiceTrackEvolutionExperimentTests
             == BitConverter.SingleToInt32Bits(severity));
 
     private static Track TrackFixture() => MatchedVenueProfiles.Motoarena2026.CreateTrack(
-        MatchedVenueProfiles.MotoarenaPrimaryStartLineToFirstCornerMeters);
+        MatchedVenueProfiles.MotoarenaHistorical39StartLineToFirstCornerMeters);
 
     private static string RenderUnderCulture(string culture)
     {
@@ -752,7 +752,7 @@ public sealed class DynamicLineChoiceTrackEvolutionExperimentTests
     {
         foreach (var (relative, sha) in expected)
         {
-            var text = CanonicalText(relative);
+            var text = HistoricalPhysicsSource.ForHash(relative, CanonicalText(relative));
             Assert.Equal(sha, Convert.ToHexString(SHA256.HashData(
                 Encoding.UTF8.GetBytes(text))));
         }

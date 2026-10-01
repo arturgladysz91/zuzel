@@ -600,7 +600,8 @@ public sealed class DynamicCornerTrajectoryGeometryExperimentTests
         value => Assert.True(double.IsFinite(value) && value >= 0d, $"Expected finite non-negative, got {value}."));
 
     private static void AssertCanonicalHash(string relative, string expected) => Assert.Equal(expected,
-        Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(CanonicalText(relative)))));
+        Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(
+            HistoricalPhysicsSource.ForHash(relative, CanonicalText(relative))))));
 
     private static string CanonicalText(string relative) => File.ReadAllText(Path.Combine(
             Root, relative.Replace('/', Path.DirectorySeparatorChar)))

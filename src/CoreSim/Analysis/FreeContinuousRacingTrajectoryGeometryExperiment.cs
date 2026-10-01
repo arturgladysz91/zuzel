@@ -2133,7 +2133,7 @@ public static partial class FreeContinuousRacingTrajectoryGeometryExperiment
                 Balanced, UniformSurface), distance);
 
     private static Track CreateTrack() => MatchedVenueProfiles.Motoarena2026.CreateTrack(
-        MatchedVenueProfiles.MotoarenaPrimaryStartLineToFirstCornerMeters);
+        MatchedVenueProfiles.MotoarenaHistorical39StartLineToFirstCornerMeters);
 
     private sealed record ProductionSectorObservation(
         float CornerTimeSeconds,
