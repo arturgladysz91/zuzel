@@ -235,8 +235,10 @@ public sealed class TurnEntrySpeedScrubTests
         var p = CornerTestSupport.Envelope(track, rider).Traverse(rider.Speed, 0f, TurnEntryLength(track, rider));
         var result = ResolveSingle(track, state, rider, 4);
         var expected = LateralMovementModel.MoveTowards(1f, 2, p.TravelTimeSeconds, geometry, PerfectSurface, rider.Profile.Skills);
-        Assert.Equal(p.TravelTimeSeconds, result.Change.ElapsedTimeSeconds, 5);
-        Assert.Equal(expected, result.Change.LateralPosition, 5);
+        var path = Assert.IsType<ExecutedSegmentPath>(result.Diagnostics.ExecutedPath);
+        Assert.Equal(path.TravelTimeSeconds, result.Change.ElapsedTimeSeconds);
+        Assert.Equal(path.Nodes[^1].LateralPosition, result.Change.LateralPosition);
+        Assert.NotEqual(TurnEntryLength(track, rider), path.DistanceMeters);
     }
 
     [Fact]
@@ -457,7 +459,7 @@ public sealed class TurnEntrySpeedScrubTests
             new FixedTargetDecisionModel(targetLane),
             segmentIndex,
             useLegacyPhysics);
-        return new ResolvedResult(Assert.Single(resolved.Changes), resolved.Snapshot);
+        return new ResolvedResult(Assert.Single(resolved.Changes), resolved.Snapshot, Assert.Single(resolved.Diagnostics));
     }
 
     private static ResolvedSimulationStep Resolve(
@@ -517,7 +519,7 @@ public sealed class TurnEntrySpeedScrubTests
             => new(targets[rider.RiderId], 0f);
     }
 
-    private sealed record ResolvedResult(RiderStateChange Change, SimulationSnapshot Snapshot);
+    private sealed record ResolvedResult(RiderStateChange Change, SimulationSnapshot Snapshot, RiderStepDiagnostics Diagnostics);
 
     private sealed record Projection(
         int RiderId,

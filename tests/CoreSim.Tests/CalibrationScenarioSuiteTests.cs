@@ -143,8 +143,9 @@ public sealed class CalibrationScenarioSuiteTests
         foreach (var r in Results.OfType<CalibrationTurnResult>().Where(r => r.Change.Outcome != SegmentOutcome.Crash))
         {
             var p = Assert.IsType<ContinuousCornerTraversalProfile>(r.Diagnostics.ContinuousCornerProfile);
-            Near(r.AvailableDistanceMeters, r.Diagnostics.TravelledMeters);
-            Near(r.AvailableDistanceMeters, p.CorrectionDistanceMeters + p.CarryDistanceMeters + p.DriveDistanceMeters);
+            if (r.Diagnostics.ExecutedPath is null) Near(r.AvailableDistanceMeters, r.Diagnostics.TravelledMeters);
+            else Near(r.Diagnostics.ExecutedPath.DistanceMeters, r.Diagnostics.TravelledMeters);
+            Near(r.Diagnostics.TravelledMeters, p.CorrectionDistanceMeters + p.CarryDistanceMeters + p.DriveDistanceMeters);
             Near(r.Diagnostics.TravelTimeSeconds, p.CorrectionTimeSeconds + p.CarryTimeSeconds + p.DriveTimeSeconds);
             Assert.Null(r.Diagnostics.TurnEntryScrubProfile);
             Assert.Null(r.Diagnostics.TurnExitDriveProfile);

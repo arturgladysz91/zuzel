@@ -1501,7 +1501,7 @@ public static class LongitudinalDynamics
 
     // Shared by ordinary Straight and standing start. Select the fastest feasible
     // corrected step without exceeding full drive or adding unavailable roll-off.
-    private static float ApplyPreparationBoundary(
+    internal static float ApplyPreparationBoundary(
         float startSpeedMetersPerSecond,
         float fullDriveEndSpeedMetersPerSecond,
         float distanceMeters,

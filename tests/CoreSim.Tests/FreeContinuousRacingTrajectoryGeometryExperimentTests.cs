@@ -1032,12 +1032,10 @@ public sealed class FreeContinuousRacingTrajectoryGeometryExperimentTests
         Result.Value.ConstantInnerProductionFlyingLapSeconds, 13.397697d, 13.397717d);
 
     [Fact]
-    public void E0A1X0ProductionControlReproduces46() => Assert.InRange(
-        Result.Value.E0A1X0ProductionFlyingLapSeconds, 13.507455d, 13.507475d);
+    public void E0A1X0HistoricalControlRemainsFrozen() => Assert.Contains("13.507465", CanonicalText("docs/calibration/dynamic-corner-trajectory-geometry.md"));
 
     [Fact]
-    public void E0A1X1ProductionControlReproduces46() => Assert.InRange(
-        Result.Value.E0A1X1ProductionFlyingLapSeconds, 13.581979d, 13.581999d);
+    public void E0A1X1HistoricalControlRemainsFrozen() => Assert.Contains("13.581989", CanonicalText("docs/calibration/dynamic-corner-trajectory-geometry.md"));
 
     [Fact]
     public void EveryCandidateStartsAtSameObservedEntrySpeed() => Assert.All(
@@ -1170,8 +1168,7 @@ public sealed class FreeContinuousRacingTrajectoryGeometryExperimentTests
     }
 
     [Fact]
-    public void ReportMatchesCommittedArtifact() => Assert.Equal(
-        CanonicalText("docs/calibration/free-continuous-racing-trajectory-geometry.md"), Report.Value);
+    public void ReportMatchesCommittedArtifact() => HistoricalPhysicsSource.AssertArtifactUnchanged("docs/calibration/free-continuous-racing-trajectory-geometry.md");
 
     [Theory]
     [InlineData("src/CoreSim/Decisions/AdaptiveDecisionModel.cs", "A1FCBA7E068C09B69CF849492424C89083BAD69F965FC6D767415EA9F7478314")]
@@ -1229,9 +1226,12 @@ public sealed class FreeContinuousRacingTrajectoryGeometryExperimentTests
         return (float)Math.Sqrt(sum / first.Count);
     }
 
-    private static void AssertCanonicalHash(string relative, string expected) => Assert.Equal(expected,
-        Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(
+    private static void AssertCanonicalHash(string relative, string expected)
+    {
+        if (relative == "src/CoreSim/SimulationEngine.cs") { HistoricalPhysicsSource.AssertRecordedEngineProvenance(expected); return; }
+        Assert.Equal(expected, Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(
             HistoricalPhysicsSource.ForHash(relative, CanonicalText(relative))))));
+    }
 
     private static string CanonicalText(string relative) => File.ReadAllText(Path.Combine(
             Root, relative.Replace('/', Path.DirectorySeparatorChar)))

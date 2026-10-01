@@ -93,7 +93,7 @@ public sealed class StraightSpeedProfileTests
     }
 
     [Fact]
-    public void LookaheadUsesPhysicalEntryPositionNotTargetLane()
+    public void LookaheadConsumesActualMovingPositionNotRequestedTarget()
     {
         const float entryPosition = 1.25f;
         var track = TrackOf(100f, SegmentType.Straight, SegmentType.TurnEntry);
@@ -111,7 +111,8 @@ public sealed class StraightSpeedProfileTests
 
         Assert.NotEqual(inward.Change.PlannedLane, outward.Change.PlannedLane);
         Assert.Equal(inward.Change.PhysicsSpeed, outward.Change.PhysicsSpeed);
-        Assert.Equal(inward.Change.Speed, outward.Change.Speed, 5);
+        Assert.NotEqual(inward.Diagnostics.ExecutedPath!.Nodes[^1].LateralPosition, outward.Diagnostics.ExecutedPath!.Nodes[^1].LateralPosition);
+        Assert.NotEqual(inward.Diagnostics.TravelledMeters, outward.Diagnostics.TravelledMeters);
     }
 
     [Fact]
@@ -261,8 +262,10 @@ public sealed class StraightSpeedProfileTests
         var result = ResolveSingle(track, state, rider, targetLane: 4);
 
         Assert.Equal(2, result.Change.PlannedLane);
-        Assert.Equal(profile.TravelTimeSeconds, result.Change.ElapsedTimeSeconds, 5);
-        Assert.Equal(expectedLateralPosition, result.Change.LateralPosition, 5);
+        var path = Assert.IsType<ExecutedSegmentPath>(result.Diagnostics.ExecutedPath);
+        Assert.Equal(path.TravelTimeSeconds, result.Change.ElapsedTimeSeconds);
+        Assert.Equal(path.Nodes[^1].LateralPosition, result.Change.LateralPosition);
+        Assert.True(path.DistanceMeters > geometry.StraightLengthMeters);
     }
 
     [Fact]
@@ -671,7 +674,7 @@ public sealed class StraightSpeedProfileTests
             segmentIndex,
             requiredLaps,
             useLegacyPhysics);
-        return new ResolvedResult(Assert.Single(resolved.Changes), resolved.Snapshot);
+        return new ResolvedResult(Assert.Single(resolved.Changes), resolved.Snapshot, Assert.Single(resolved.Diagnostics));
     }
 
     private static ResolvedSimulationStep Resolve(
@@ -720,7 +723,7 @@ public sealed class StraightSpeedProfileTests
                 change.Position.DistanceMeters))
             .ToArray();
 
-    private sealed record ResolvedResult(RiderStateChange Change, SimulationSnapshot Snapshot);
+    private sealed record ResolvedResult(RiderStateChange Change, SimulationSnapshot Snapshot, RiderStepDiagnostics Diagnostics);
 
     private sealed record ProfileProjection(
         int RiderId,

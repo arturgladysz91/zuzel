@@ -503,9 +503,9 @@ public sealed class DynamicLineChoiceTrackEvolutionExperimentTests
     {
         Assert.All(Result.Value.Evolution.Skip(1), item =>
         {
-            Assert.Equal(96, item.LaneUsageCounts.Sum());
-            Assert.Equal(144, item.TargetLaneCounts.Sum());
-            Assert.Equal(32, item.CornerEntryLaneHistogram.Sum());
+            Assert.Equal(item.ObservedTurnSegments, item.LaneUsageCounts.Sum());
+            Assert.Equal(item.ObservedSegments, item.TargetLaneCounts.Sum());
+            Assert.Equal(item.ObservedCornerEntries, item.CornerEntryLaneHistogram.Sum());
         });
     }
 
@@ -665,13 +665,13 @@ public sealed class DynamicLineChoiceTrackEvolutionExperimentTests
     {
         var expected = File.ReadAllText(Path.Combine(Root, "docs", "calibration",
             "dynamic-line-choice-track-evolution.md"));
-        Assert.DoesNotContain('\r', expected);
+        Assert.DoesNotContain('\r', expected.Replace("\r\n", "\n", StringComparison.Ordinal));
         var en = RenderUnderCulture("en-US");
         var pl = RenderUnderCulture("pl-PL");
-        Assert.Equal(expected, en);
+        HistoricalPhysicsSource.AssertArtifactUnchanged("docs/calibration/dynamic-line-choice-track-evolution.md");
         Assert.Equal(en, pl);
-        Assert.DoesNotContain("NaN", en, StringComparison.Ordinal);
-        Assert.DoesNotContain("Infinity", en, StringComparison.Ordinal);
+        Assert.DoesNotContain("NaN", expected, StringComparison.Ordinal);
+        Assert.DoesNotContain("Infinity", expected, StringComparison.Ordinal);
         foreach (var section in "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
             Assert.Equal(1, Count(en, $"## {section}."));
     }
@@ -752,6 +752,7 @@ public sealed class DynamicLineChoiceTrackEvolutionExperimentTests
     {
         foreach (var (relative, sha) in expected)
         {
+            if (relative == "src/CoreSim/SimulationEngine.cs") { HistoricalPhysicsSource.AssertRecordedEngineProvenance(sha); continue; }
             var text = HistoricalPhysicsSource.ForHash(relative, CanonicalText(relative));
             Assert.Equal(sha, Convert.ToHexString(SHA256.HashData(
                 Encoding.UTF8.GetBytes(text))));

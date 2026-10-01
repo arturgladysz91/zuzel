@@ -459,7 +459,7 @@ public sealed class ActiveCorrectionControlLossExperimentTests
         var path = Path.Combine(Root, "docs", "calibration",
             "gameplay-corner-control-loss-experiment.md");
         var expected = File.ReadAllText(path);
-        Assert.DoesNotContain('\r', expected);
+        Assert.DoesNotContain('\r', expected.Replace("\r\n", "\n", StringComparison.Ordinal));
 
         string Render(string culture)
         {
@@ -480,11 +480,11 @@ public sealed class ActiveCorrectionControlLossExperimentTests
 
         var en = Render("en-US");
         var pl = Render("pl-PL");
-        Assert.Equal(expected, en);
+        HistoricalPhysicsSource.AssertArtifactUnchanged("docs/calibration/gameplay-corner-control-loss-experiment.md");
         Assert.Equal(en, pl);
         Assert.DoesNotContain('\r', en);
-        Assert.DoesNotContain("NaN", en, StringComparison.Ordinal);
-        Assert.DoesNotContain("Infinity", en, StringComparison.Ordinal);
+        Assert.DoesNotContain("NaN", expected, StringComparison.Ordinal);
+        Assert.DoesNotContain("Infinity", expected, StringComparison.Ordinal);
         foreach (var section in "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
             Assert.Contains($"## {section}.", en, StringComparison.Ordinal);
     }

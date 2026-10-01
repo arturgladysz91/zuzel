@@ -6,6 +6,14 @@ using CoreSim.Setup;
 
 if (args.Length > 0)
 {
+    if (args.Length == 2 && args[0] == "single-rider-executed-trajectory-report")
+    {
+        var results = SingleRiderTrajectoryBenchmark.Run();
+        Directory.CreateDirectory(args[1]);
+        File.WriteAllText(Path.Combine(args[1], "single-rider-executed-trajectory.md"), SingleRiderTrajectoryBenchmark.Render(results));
+        File.WriteAllText(Path.Combine(args[1], "single-rider-executed-trajectory.json"), SingleRiderTrajectoryBenchmark.Evidence(results));
+        return;
+    }
     if (args.Length == 2 && StringComparer.Ordinal.Equals(args[0], "four-rider-race-behavior-report"))
     {
         FourRiderBehaviorReportWriter.Write(args[1]);

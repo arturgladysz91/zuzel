@@ -30,9 +30,10 @@ public sealed class DistanceLimitedTurnExitDriveTests
         var expected = CornerTestSupport.Envelope(result.Snapshot.Track, rider).Traverse(rider.Speed, 0f,
             LaneModel.SegmentLengthMeters(result.Snapshot.Segment, rider.LateralPosition, result.Snapshot.Track.Geometry));
         Assert.Equal(SegmentOutcome.Ok, result.Change.Outcome);
-        Assert.Equal(expected, result.Profile);
-        Assert.Equal(expected.ExitSpeedMetersPerSecond, result.Change.Speed);
-        Assert.Equal(expected.TravelTimeSeconds, result.Change.ElapsedTimeSeconds);
+        var profile = Assert.IsType<ContinuousCornerTraversalProfile>(result.Profile);
+        Assert.Equal(profile.ExitSpeedMetersPerSecond, result.Change.Speed);
+        Assert.Equal(profile.TravelTimeSeconds, result.Change.ElapsedTimeSeconds);
+        Assert.NotEqual(expected.TravelTimeSeconds, profile.TravelTimeSeconds);
     }
 
     [Fact]

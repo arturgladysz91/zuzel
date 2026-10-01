@@ -162,6 +162,7 @@ public sealed class CalibrationTraceCollector : ISimulationStepObserver
                 : diagnostics.CornerPhaseContext?.CornerProgress)
         {
             StraightDriveCalibrationSteps = straight?.CalibrationSteps,
+            ExecutedPath = diagnostics.ExecutedPath,
         };
     }
 

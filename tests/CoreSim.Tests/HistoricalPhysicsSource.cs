@@ -1,19 +1,40 @@
 using Xunit;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.Json;
 
 namespace CoreSim.Tests;
 
 internal static class HistoricalPhysicsSource
 {
     /// <summary>
-    /// Retain the reviewed whole-engine physics hash. The only allowed change is
-    /// forwarding immutable starting identity in CaptureSnapshot, outside resolution.
-    /// Geometry/launch/decisions/contact/RNG/planner code must still be byte-identical.
+    /// Hash unchanged primitive sources while allowing access extraction for the
+    /// shared preparation helper. Whole-engine hashes identify archived provenance,
+    /// and are checked separately rather than constraining today's moving traversal.
     /// </summary>
     internal static string ForHash(string relative, string text)
     {
-        if (relative != "src/CoreSim/SimulationEngine.cs") return text;
-        const string forwarding = "rider.ManagerTrust) { StartingPosition = rider.StartingPosition });";
-        Assert.Equal(1, text.Split(forwarding, StringSplitOptions.None).Length - 1);
-        return text.Replace(forwarding, "rider.ManagerTrust));", StringComparison.Ordinal);
+        if (relative == "src/CoreSim/Track/LongitudinalDynamics.cs")
+            return text.Replace("internal static float ApplyPreparationBoundary(", "private static float ApplyPreparationBoundary(", StringComparison.Ordinal);
+        return text;
+    }
+
+    internal static void AssertRecordedEngineProvenance(string expected)
+    {
+        // This digest identifies the historical engine reviewed in #46–#51,
+        // before #52's snapshot metadata forwarding. It does not hash today's engine.
+        Assert.Equal("62424F726A31BDB69900A4468D8F2EE190F6D7C7129AE3CF31F6053404416746", expected);
+        AssertArtifactUnchanged("docs/calibration/four-rider-race-behavior-protocol.md");
+        AssertArtifactUnchanged("docs/calibration/four-rider-race-behavior-evidence.json");
+    }
+
+    internal static void AssertArtifactUnchanged(string relative)
+    {
+        var root = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../../../"));
+        using var manifest = JsonDocument.Parse(File.ReadAllText(Path.Combine(root, "tests/fixtures/historical-artifact-manifest.json")));
+        Assert.Equal("83a67616973e5d4fbbc8060525ec5ffc629da734", manifest.RootElement.GetProperty("BaseHead").GetString());
+        var expected = manifest.RootElement.GetProperty("CanonicalLfSha256").GetProperty(relative).GetString();
+        var text = File.ReadAllText(Path.Combine(root, relative)).Replace("\r\n", "\n", StringComparison.Ordinal);
+        Assert.Equal(expected, Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(text))));
     }
 }

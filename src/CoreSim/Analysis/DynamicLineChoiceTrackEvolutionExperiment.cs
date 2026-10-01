@@ -113,7 +113,12 @@ public sealed record EvolutionHeatObservation(
     IReadOnlyList<int> CornerEntryLaneHistogram,
     float MeanCornerEntryLateralPosition,
     IReadOnlyList<FixedLineBenchmarkObservation> FixedLines,
-    IReadOnlyList<EvolutionCornerSurfaceObservation> CornerSurfaces);
+    IReadOnlyList<EvolutionCornerSurfaceObservation> CornerSurfaces)
+{
+    public int ObservedTurnSegments { get; init; }
+    public int ObservedSegments { get; init; }
+    public int ObservedCornerEntries { get; init; }
+}
 
 public sealed record TrackWorkLaneDelta(
     int Lane,
@@ -797,7 +802,12 @@ public static class DynamicLineChoiceTrackEvolutionExperiment
                 Array.AsReadOnly(entryHistogram),
                 entries.Length == 0 ? 0f : entries.Average(item => item.EntryLateralPosition),
                 sweep.Lines,
-                surfaces));
+                surfaces)
+            {
+                ObservedTurnSegments = turns.Length,
+                ObservedSegments = trace?.StepSamples.Count ?? 0,
+                ObservedCornerEntries = entries.Length,
+            });
         }
     }
 

@@ -195,7 +195,7 @@ public sealed class ContinuousSurfaceSamplingTests
     }
 
     [Fact]
-    public void AdvancedLateralMovementUsesSampledEntrySurface()
+    public void AdvancedLateralMovementFollowsLocalSurface()
     {
         const float entryPosition = 1.5f;
         const float entrySpeed = 8f;
@@ -221,7 +221,10 @@ public sealed class ContinuousSurfaceSamplingTests
 
         Assert.Equal(SegmentOutcome.Ok, change.Outcome);
         Assert.Equal(2, change.Lane);
-        Assert.Equal(expected, change.LateralPosition, 5);
+        var upperBound = LateralMovementModel.MoveTowards(entryPosition, change.Lane, change.ElapsedTimeSeconds,
+            geometry, sampledSurface, rider.Profile.Skills);
+        Assert.InRange(change.LateralPosition, entryPosition, upperBound + 1e-5f);
+        Assert.NotEqual(sampledSurface, state.Snapshot().SampleSurface(0, change.LateralPosition));
     }
 
     [Fact]
@@ -256,8 +259,11 @@ public sealed class ContinuousSurfaceSamplingTests
             sampledSurface,
             rider.Profile.Skills);
 
-        Assert.Equal(geometry.StraightLengthMeters, change.Position.DistanceMeters);
-        Assert.Equal(expected, change.LateralPosition, 5);
+        Assert.True(change.Position.DistanceMeters > geometry.StraightLengthMeters);
+        var upperBound = LateralMovementModel.MoveTowards(entryPosition, change.Lane, change.ElapsedTimeSeconds,
+            geometry, sampledSurface, rider.Profile.Skills);
+        Assert.InRange(change.LateralPosition, entryPosition, upperBound + 1e-5f);
+        Assert.NotEqual(sampledSurface, state.Snapshot().SampleSurface(0, change.LateralPosition));
     }
 
     [Fact]
