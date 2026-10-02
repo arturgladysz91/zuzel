@@ -93,11 +93,12 @@ public sealed class TrajectoryEvaluator
             if (retainResolvedMotions) motions.Add(motion);
             if (snapshot.Segment.Type != SegmentType.Straight)
             {
-                entrySpeed ??= motion.Initial.SpeedMetersPerSecond;
+                var corner = track.CornerTopology.CornerForSegment(part.SegmentIndex)!;
+                if (part.SegmentIndex == corner.StartSegmentIndex && motion.Initial.SegmentProgress == 0f)
+                    entrySpeed ??= motion.Initial.SpeedMetersPerSecond;
                 if (part.Phase == TrajectoryPhase.Entry) entryLateral = motion.Final.LateralPosition;
                 if (part.Phase == TrajectoryPhase.Middle) middleLateral = motion.Final.LateralPosition;
                 if (part.Phase == TrajectoryPhase.Exit) exitLateral = motion.Final.LateralPosition;
-                var corner = track.CornerTopology.CornerForSegment(part.SegmentIndex)!;
                 var apexProgress = (double)part.LapIndex * track.Segments.Count
                     + corner.StartSegmentIndex + corner.SegmentCount * (double)ContinuousCornerEnvelope.ApexProgress;
                 if (motion.Initial.CanonicalProgress <= apexProgress && motion.Final.CanonicalProgress >= apexProgress)

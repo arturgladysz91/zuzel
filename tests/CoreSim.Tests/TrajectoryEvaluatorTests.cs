@@ -359,6 +359,20 @@ public sealed class TrajectoryEvaluatorTests
     }
 
 
+    [Theory]
+    [InlineData(0, 0f, true)]
+    [InlineData(0, .125f, false)]
+    [InlineData(1, 0f, false)]
+    [InlineData(2, .125f, false)]
+    public void EntrySpeedIsObservedOnlyWhenReplayIncludesActualCornerStart(int segment, float progress, bool observed)
+    {
+        var track = CornerFirst(TrackGeometry.Default);
+        var context = Context(track, At(track, segment, 2, 20f, progress));
+        var result = new TrajectoryEvaluator(context).Evaluate(new(2, 2, 2));
+        if (observed) Assert.Equal(20f, result.CornerEntrySpeedMetersPerSecond);
+        else Assert.Null(result.CornerEntrySpeedMetersPerSecond);
+    }
+
     internal static Track CornerFirst(TrackGeometry geometry) => new(new[]
     {
         new TrackSegment(0, SegmentType.TurnEntry), new TrackSegment(1, SegmentType.TurnMiddle),
