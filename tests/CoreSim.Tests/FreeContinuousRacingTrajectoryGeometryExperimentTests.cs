@@ -1229,6 +1229,7 @@ public sealed class FreeContinuousRacingTrajectoryGeometryExperimentTests
     private static void AssertCanonicalHash(string relative, string expected)
     {
         if (relative == "src/CoreSim/SimulationEngine.cs") { HistoricalPhysicsSource.AssertRecordedEngineProvenance(expected); return; }
+        if (relative == "src/CoreSim/Track/LongitudinalDynamics.cs") { HistoricalPhysicsSource.AssertRecordedLongitudinalProvenance(expected); return; }
         Assert.Equal(expected, Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(
             HistoricalPhysicsSource.ForHash(relative, CanonicalText(relative))))));
     }

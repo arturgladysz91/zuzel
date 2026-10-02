@@ -1,5 +1,7 @@
 # Executed trajectory: method, audit and compatibility
 
+The #53 follow-up now exposes [canonical resolved rider motion](resolved-rider-motion.md) for fixed and moving riders through one time sampler, including t=0 reaction occupation, explicit width-boundary coordinate transitions and exact resolved endpoint reconciliation. The original moving path and fixed-line physics below remain canonical.
+
 Base is `83a67616973e5d4fbbc8060525ec5ffc629da734`, main after #52. This document and the new benchmark describe current production; all pre-existing calibration reports retain their original Git blob bytes.
 
 ## Audit finding

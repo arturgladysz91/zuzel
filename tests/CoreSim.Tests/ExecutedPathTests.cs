@@ -161,8 +161,8 @@ public sealed class ExecutedPathTests
         var first = SingleRiderTrajectoryBenchmark.Run(); var repeated = SingleRiderTrajectoryBenchmark.Run();
         Assert.Equal(21, first.Count);
         Assert.Equal(SingleRiderTrajectoryBenchmark.Evidence(first), SingleRiderTrajectoryBenchmark.Evidence(repeated));
-        Assert.Equal(File.ReadAllText(Path.Combine(Root, "docs/calibration/single-rider-executed-trajectory.json")),
-            SingleRiderTrajectoryBenchmark.Evidence(first));
+        Assert.Equal(File.ReadAllText(Path.Combine(Root, "docs/calibration/single-rider-executed-trajectory.json"))
+                .Replace("\r\n", "\n", StringComparison.Ordinal), SingleRiderTrajectoryBenchmark.Evidence(first));
         Assert.All(first, r => { Assert.True(float.IsFinite(r.ApexLateral)); Assert.True(float.IsFinite(r.CombinedTimeSeconds)); });
     }
 

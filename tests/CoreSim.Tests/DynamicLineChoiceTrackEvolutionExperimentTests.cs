@@ -753,6 +753,7 @@ public sealed class DynamicLineChoiceTrackEvolutionExperimentTests
         foreach (var (relative, sha) in expected)
         {
             if (relative == "src/CoreSim/SimulationEngine.cs") { HistoricalPhysicsSource.AssertRecordedEngineProvenance(sha); continue; }
+            if (relative == "src/CoreSim/Track/LongitudinalDynamics.cs") { HistoricalPhysicsSource.AssertRecordedLongitudinalProvenance(sha); continue; }
             var text = HistoricalPhysicsSource.ForHash(relative, CanonicalText(relative));
             Assert.Equal(sha, Convert.ToHexString(SHA256.HashData(
                 Encoding.UTF8.GetBytes(text))));

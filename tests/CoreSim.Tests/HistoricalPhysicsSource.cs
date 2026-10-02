@@ -28,6 +28,17 @@ internal static class HistoricalPhysicsSource
         AssertArtifactUnchanged("docs/calibration/four-rider-race-behavior-evidence.json");
     }
 
+    internal static void AssertRecordedLongitudinalProvenance(string expected)
+    {
+        // #53 now observes already-computed endpoints. Historical source identity
+        // stays archived; current arithmetic is covered by exact fixed-line and
+        // longitudinal primitive tests, without retaining an old physics engine.
+        Assert.Equal("33349B6719C69F4F4743D69200A68266D452A7EDD601E702E1E7F9233640EF31", expected);
+        AssertArtifactUnchanged("docs/calibration/dynamic-line-choice-track-evolution.md");
+        AssertArtifactUnchanged("docs/calibration/dynamic-corner-trajectory-geometry.md");
+        AssertArtifactUnchanged("docs/calibration/free-continuous-racing-trajectory-geometry.md");
+    }
+
     internal static void AssertArtifactUnchanged(string relative)
     {
         var root = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../../../"));

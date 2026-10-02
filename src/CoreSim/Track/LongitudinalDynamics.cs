@@ -242,6 +242,13 @@ public static class LongitudinalDynamics
         TrackSurfaceState surface,
         float distanceMeters,
         float? targetExitSpeedMetersPerSecond = null)
+        => CalculateStandingStartLaunchProfile(skills, setup, surface, distanceMeters,
+            targetExitSpeedMetersPerSecond, null);
+
+    // Read-only observation of the existing integration, never a second traversal.
+    internal static StandingStartLaunchProfile CalculateStandingStartLaunchProfile(
+        RiderSkills skills, BikeSetup setup, TrackSurfaceState surface, float distanceMeters,
+        float? targetExitSpeedMetersPerSecond, ICollection<LongitudinalMotionNode>? motionNodes)
     {
         ValidateNonNegativeFinite(distanceMeters, nameof(distanceMeters));
         if (targetExitSpeedMetersPerSecond is { } target)
@@ -253,6 +260,8 @@ public static class LongitudinalDynamics
         var speed = 0f;
         var peakSpeed = 0f;
         var movementTime = 0d;
+        var observedDistance = 0d;
+        motionNodes?.Add(new(0f, 0f, 0f));
         var accelerationDistance = 0d;
         var cruiseDistance = 0d;
         var preparationDistance = 0d;
@@ -314,6 +323,8 @@ public static class LongitudinalDynamics
             }
             speed = endSpeed;
             peakSpeed = Math.Max(peakSpeed, speed);
+            observedDistance += ds;
+            motionNodes?.Add(new((float)observedDistance, (float)movementTime, speed));
         }
 
         ReconcileStraightPhaseDistance(distanceMeters, lastPhase,
@@ -1209,6 +1220,15 @@ public static class LongitudinalDynamics
             targetExitSpeedMetersPerSecond,
             adjustment);
 
+    internal static StraightSpeedProfile CalculateForceBasedStraightSpeedProfile(
+        float initialSpeedMetersPerSecond, RiderSkills skills, BikeSetup setup,
+        TrackSurfaceState surface, float cornerEntryDecelerationMetersPerSecondSquared,
+        float distanceMeters, float? targetExitSpeedMetersPerSecond,
+        ICollection<LongitudinalMotionNode> motionNodes, StraightDriveEnvelopeAdjustment? adjustment = null)
+        => CalculateForceBasedStraightSpeedProfileCore(initialSpeedMetersPerSecond, skills, setup,
+            surface, cornerEntryDecelerationMetersPerSecondSquared, distanceMeters,
+            targetExitSpeedMetersPerSecond, adjustment, motionNodes);
+
     private static StraightSpeedProfile CalculateForceBasedStraightSpeedProfileCore(
         float initialSpeedMetersPerSecond,
         RiderSkills skills,
@@ -1217,7 +1237,8 @@ public static class LongitudinalDynamics
         float cornerEntryDecelerationMetersPerSecondSquared,
         float distanceMeters,
         float? targetExitSpeedMetersPerSecond,
-        StraightDriveEnvelopeAdjustment? adjustment)
+        StraightDriveEnvelopeAdjustment? adjustment,
+        ICollection<LongitudinalMotionNode>? motionNodes = null)
     {
         ValidateNonNegativeFinite(initialSpeedMetersPerSecond, nameof(initialSpeedMetersPerSecond));
         ArgumentNullException.ThrowIfNull(skills);
@@ -1273,6 +1294,8 @@ public static class LongitudinalDynamics
         var decelerationDistanceMeters = 0d;
         var lastPhase = StraightDistancePhase.Cruise;
         var distanceProgressMeters = 0f;
+        var observedDistance = 0d;
+        motionNodes?.Add(new(0f, 0f, initialSpeedMetersPerSecond));
         var calibrationSteps = adjustment.HasValue
             ? new List<StraightDriveStepObservation>(integrationStepsMeters.Length)
             : null;
@@ -1342,6 +1365,8 @@ public static class LongitudinalDynamics
 
             currentSpeedMetersPerSecond = endSpeedMetersPerSecond;
             distanceProgressMeters += stepDistanceMeters;
+            observedDistance += stepDistanceMeters;
+            motionNodes?.Add(new((float)observedDistance, (float)travelTimeSeconds, currentSpeedMetersPerSecond));
             peakSpeedMetersPerSecond = Math.Max(
                 peakSpeedMetersPerSecond,
                 currentSpeedMetersPerSecond);

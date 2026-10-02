@@ -1,0 +1,203 @@
+{
+  "AuditedHead": "daf88c1b5d95eed49c4b65f3bb4290c6312cfc1c",
+  "Crossing": {
+    "BracketStartSeconds": 1.0251153,
+    "BracketEndSeconds": 1.0251154,
+    "RiderOne": {
+      "LocalTimeSeconds": 1.0251154,
+      "CanonicalProgress": 0.3250050960207085,
+      "SegmentProgress": 0.32500508,
+      "TravelledMeters": 19.525953,
+      "LateralPosition": 0.5,
+      "PhysicalOffsetMeters": 1,
+      "SpeedMetersPerSecond": 20.051582,
+      "RadiusMeters": null,
+      "CurvaturePerMeter": 0,
+      "PhysicalOffsetFromInnerEdgeMeters": 2
+    },
+    "RiderTwo": {
+      "LocalTimeSeconds": 1.0251154,
+      "CanonicalProgress": 0.3250050960207085,
+      "SegmentProgress": 0.32500508,
+      "TravelledMeters": 19.525953,
+      "LateralPosition": 0.5,
+      "PhysicalOffsetMeters": 1,
+      "SpeedMetersPerSecond": 20.051582,
+      "RadiusMeters": null,
+      "CurvaturePerMeter": 0,
+      "PhysicalOffsetFromInnerEdgeMeters": 2
+    },
+    "LateralOrderReversed": true
+  },
+  "DistantLeader": [
+    {
+      "CommonTimeSeconds": 0,
+      "Leader": {
+        "LocalTimeSeconds": 0,
+        "CanonicalProgress": 0.25,
+        "SegmentProgress": 0.25,
+        "TravelledMeters": 0,
+        "LateralPosition": 1,
+        "PhysicalOffsetMeters": 2,
+        "SpeedMetersPerSecond": 14,
+        "RadiusMeters": null,
+        "CurvaturePerMeter": 0,
+        "PhysicalOffsetFromInnerEdgeMeters": 3
+      },
+      "Follower": {
+        "LocalTimeSeconds": 0,
+        "CanonicalProgress": 0,
+        "SegmentProgress": 0,
+        "TravelledMeters": 0,
+        "LateralPosition": 1,
+        "PhysicalOffsetMeters": 2,
+        "SpeedMetersPerSecond": 20,
+        "RadiusMeters": null,
+        "CurvaturePerMeter": 0,
+        "PhysicalOffsetFromInnerEdgeMeters": 3
+      },
+      "LongitudinalSeparationMeters": 15
+    },
+    {
+      "CommonTimeSeconds": 0.01,
+      "Leader": {
+        "LocalTimeSeconds": 0.01,
+        "CanonicalProgress": 0.25234518781040804,
+        "SegmentProgress": 0.2523452,
+        "TravelledMeters": 0.14071126,
+        "LateralPosition": 1,
+        "PhysicalOffsetMeters": 2,
+        "SpeedMetersPerSecond": 14.020017,
+        "RadiusMeters": null,
+        "CurvaturePerMeter": 0,
+        "PhysicalOffsetFromInnerEdgeMeters": 3
+      },
+      "Follower": {
+        "LocalTimeSeconds": 0.01,
+        "CanonicalProgress": 0.003343105394541445,
+        "SegmentProgress": 0.0033431055,
+        "TravelledMeters": 0.20058632,
+        "LateralPosition": 1,
+        "PhysicalOffsetMeters": 2,
+        "SpeedMetersPerSecond": 20.023521,
+        "RadiusMeters": null,
+        "CurvaturePerMeter": 0,
+        "PhysicalOffsetFromInnerEdgeMeters": 3
+      },
+      "LongitudinalSeparationMeters": 14.940126
+    },
+    {
+      "CommonTimeSeconds": 0.5,
+      "Leader": {
+        "LocalTimeSeconds": 0.5,
+        "CanonicalProgress": 0.37082823055155417,
+        "SegmentProgress": 0.37082824,
+        "TravelledMeters": 7.249694,
+        "LateralPosition": 1,
+        "PhysicalOffsetMeters": 2,
+        "SpeedMetersPerSecond": 14.99217,
+        "RadiusMeters": null,
+        "CurvaturePerMeter": 0,
+        "PhysicalOffsetFromInnerEdgeMeters": 3
+      },
+      "Follower": {
+        "LocalTimeSeconds": 0.5,
+        "CanonicalProgress": 0.17148166975495902,
+        "SegmentProgress": 0.17148167,
+        "TravelledMeters": 10.2889,
+        "LateralPosition": 1,
+        "PhysicalOffsetMeters": 2,
+        "SpeedMetersPerSecond": 21.140594,
+        "RadiusMeters": null,
+        "CurvaturePerMeter": 0,
+        "PhysicalOffsetFromInnerEdgeMeters": 3
+      },
+      "LongitudinalSeparationMeters": 11.960794
+    }
+  ],
+  "Storage": [
+    {
+      "Control": "fixed",
+      "Segments": 36,
+      "Nodes": 1525,
+      "Intervals": 1489,
+      "ExecutedPathNodes": 0,
+      "LongitudinalSolverFallbacks": 0
+    },
+    {
+      "Control": "moving",
+      "Segments": 36,
+      "Nodes": 1626,
+      "Intervals": 1590,
+      "ExecutedPathNodes": 1553,
+      "LongitudinalSolverFallbacks": 0
+    }
+  ],
+  "FixedLineCompatibility": [
+    {
+      "Lane": 0,
+      "ExactDiagnosticsSha256": "AE19A4E9CC2F386C6A52A417641984E779979FC7053136B8082A668D5D1A3331",
+      "DistanceMeters": 1275.1151,
+      "TimeSeconds": 55.006516,
+      "ExitSpeedMetersPerSecond": 24.940609,
+      "LapTimesSeconds": [
+        14.947026,
+        13.35316,
+        13.353165,
+        13.353165
+      ]
+    },
+    {
+      "Lane": 1,
+      "ExactDiagnosticsSha256": "B95D1F998910D12F95DD642FAE4F317E6219F07F48DA1141BCD608F21272C53B",
+      "DistanceMeters": 1366.8496,
+      "TimeSeconds": 56.463787,
+      "ExitSpeedMetersPerSecond": 25.852356,
+      "LapTimesSeconds": [
+        15.385055,
+        13.692914,
+        13.692909,
+        13.692909
+      ]
+    },
+    {
+      "Lane": 2,
+      "ExactDiagnosticsSha256": "8833A79AF55711C979DA6CFF0647FB9A2DE0694F3AD2E1F324D4F1DBDA2A59C0",
+      "DistanceMeters": 1458.584,
+      "TimeSeconds": 57.994816,
+      "ExitSpeedMetersPerSecond": 26.706709,
+      "LapTimesSeconds": [
+        15.854969,
+        14.046616,
+        14.046616,
+        14.046616
+      ]
+    },
+    {
+      "Lane": 3,
+      "ExactDiagnosticsSha256": "DA0A8F5632C28E1C1BBD707D1B0FE83720A2A1F43F915B4639070F1C791C3679",
+      "DistanceMeters": 1550.3185,
+      "TimeSeconds": 59.62657,
+      "ExitSpeedMetersPerSecond": 27.509739,
+      "LapTimesSeconds": [
+        16.395119,
+        14.410482,
+        14.410486,
+        14.410484
+      ]
+    },
+    {
+      "Lane": 4,
+      "ExactDiagnosticsSha256": "AA9545A7A40D5CD8DC5BE6DBB67BBD40C088E9DAE51CAD339160C88DA6EB4691",
+      "DistanceMeters": 1642.0527,
+      "TimeSeconds": 61.431065,
+      "ExitSpeedMetersPerSecond": 28.266489,
+      "LapTimesSeconds": [
+        17.085264,
+        14.781931,
+        14.781933,
+        14.781937
+      ]
+    }
+  ]
+}

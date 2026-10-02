@@ -127,6 +127,20 @@ Every segment is processed as `CaptureSnapshot -> Decide -> Resolve -> Commit`. 
 - `LaneChangeTendency` remains a style preference used by decisions and route cost. It does not change physical lateral speed; neither does morale.
 - Moving local capability uses actual radius and surface. `ContinuousCornerEnvelope` remains the exact fixed-line path and supplies a pointwise local continuation forecast for moving nodes; it does not predict future trajectory intent. Width transitions remain segment-local with no teleport distance. See [executed path method](calibration/executed-trajectory-method.md).
 
+## Canonical resolved motion (#53) — BINDING
+
+Every active resolved rider has one immutable `ResolvedSimulationStep.Motions` entry,
+including fixed lines, moving lines, launch and partial Crash. `SampleAtTime` reads
+stored production endpoints in a single segment frame, starts at snapshot local
+t=0, includes stationary launch reaction and reconciles its final canonical
+progress/lateral/speed/distance/time with the actual resolved state and diagnostics.
+Fixed-line endpoints observe the original integration without recomputing physics.
+Coordinate reinterpretations at width boundaries and existing coarse state events
+are explicit metadata; consumers must never sweep/interpolate across them as physical
+movement. Common heat time must include each motion's `StartElapsedTimeSeconds`.
+No interaction resolver or dimensions are added. See the full
+[audit, sampling/event/boundary contract and evidence](calibration/resolved-rider-motion.md).
+
 ## Riders and decisions
 
 - Skills use a `0..100` scale: start, speed, slide control, track reading, pair riding and adaptability.

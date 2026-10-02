@@ -6,6 +6,12 @@ using CoreSim.Setup;
 
 if (args.Length > 0)
 {
+    if (args.Length == 2 && args[0] == "resolved-rider-motion-report")
+    {
+        Directory.CreateDirectory(args[1]);
+        File.WriteAllText(Path.Combine(args[1], "resolved-rider-motion.json"), MotionFoundationDiagnostics.Evidence());
+        return;
+    }
     if (args.Length == 2 && args[0] == "single-rider-executed-trajectory-report")
     {
         var results = SingleRiderTrajectoryBenchmark.Run();

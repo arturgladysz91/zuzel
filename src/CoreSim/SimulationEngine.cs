@@ -65,17 +65,21 @@ public sealed class ResolvedSimulationStep
     private readonly ReadOnlyCollection<RiderStateChange> _changes;
     private readonly ReadOnlyCollection<SimulationStepEvent> _events;
     private readonly ReadOnlyCollection<RiderStepDiagnostics> _diagnostics;
+    private readonly ReadOnlyCollection<ResolvedRiderMotion> _motions;
 
     public SimulationSnapshot Snapshot { get; }
     public IReadOnlyList<RiderStateChange> Changes => _changes;
     public IReadOnlyList<SimulationStepEvent> Events => _events;
     public IReadOnlyList<RiderStepDiagnostics> Diagnostics => _diagnostics;
+    /// <summary>Exactly one segment-local, time-parametrized motion per active resolved rider.</summary>
+    public IReadOnlyList<ResolvedRiderMotion> Motions => _motions;
 
     internal ResolvedSimulationStep(
         SimulationSnapshot snapshot,
         IEnumerable<RiderStateChange> changes,
         IEnumerable<SimulationStepEvent> events,
-        IEnumerable<RiderStepDiagnostics> diagnostics)
+        IEnumerable<RiderStepDiagnostics> diagnostics,
+        IEnumerable<ResolvedRiderMotion> motions)
     {
         Snapshot = snapshot ?? throw new ArgumentNullException(nameof(snapshot));
         _changes = Array.AsReadOnly(changes.OrderBy(change => change.RiderId).ToArray());
@@ -89,12 +93,14 @@ public sealed class ResolvedSimulationStep
         _diagnostics = Array.AsReadOnly(diagnostics
             .OrderBy(item => item.RiderId)
             .ToArray());
+        _motions = Array.AsReadOnly(motions.OrderBy(item => item.RiderId).ToArray());
 
         if (!_changes.Select(item => item.RiderId)
-                .SequenceEqual(_diagnostics.Select(item => item.RiderId)))
+                .SequenceEqual(_diagnostics.Select(item => item.RiderId))
+            || !_changes.Select(item => item.RiderId).SequenceEqual(_motions.Select(item => item.RiderId)))
         {
             throw new ArgumentException(
-                "Diagnostics must contain exactly one item for every rider change.",
+                "Diagnostics and motions must contain exactly one item for every rider change.",
                 nameof(diagnostics));
         }
     }
@@ -128,7 +134,8 @@ public sealed class SimulationEngine
         CornerSpeedCorrectionProfile? CornerSpeedCorrectionProfile,
         CornerPhaseContext? CornerPhaseContext,
         ContinuousCornerTraversalProfile? ContinuousCornerProfile,
-        ExecutedSegmentPath? ExecutedPath = null);
+        ExecutedSegmentPath? ExecutedPath = null,
+        IReadOnlyList<LongitudinalMotionNode>? LongitudinalNodes = null);
 
     public SimulationEngine(IRiderDecisionModel decisionModel)
         => _decisionModel = decisionModel ?? throw new ArgumentNullException(nameof(decisionModel));
@@ -270,9 +277,15 @@ public sealed class SimulationEngine
                 resolution.CornerPhaseContext,
                 resolution.ContinuousCornerProfile,
                 resolution.ExecutedPath);
+        }).ToArray();
+        var motions = diagnostics.Select(d =>
+        {
+            var resolution = riderResolutions[d.RiderId];
+            return ResolvedRiderMotion.Create(snapshot, snapshot.Rider(d.RiderId), resolution.Change,
+                changes[d.RiderId], d, resolution.LongitudinalNodes);
         });
 
-        return new ResolvedSimulationStep(snapshot, changes.Values, events, diagnostics);
+        return new ResolvedSimulationStep(snapshot, changes.Values, events, diagnostics, motions);
     }
 
     private static float CalculateResolvedPeakSpeedMetersPerSecond(
@@ -477,6 +490,7 @@ public sealed class SimulationEngine
         CornerSpeedCorrectionProfile? cornerSpeedCorrectionProfile = null;
         StandingStartLaunchProfile? standingStartLaunchProfile = null;
         float? turnExitNetAcceleration = null;
+        var longitudinalNodes = new List<LongitudinalMotionNode>();
 
         ContinuousCornerTraversalProfile? continuousCornerProfile = null;
         if (cornerPhaseContext is { } phase && resolution.Outcome != SegmentOutcome.Crash)
@@ -518,7 +532,7 @@ public sealed class SimulationEngine
         {
             standingStartLaunchProfile = LongitudinalDynamics.CalculateStandingStartLaunchProfile(
                 rider.Profile.Skills, rider.ActiveSetup, surface, travelled,
-                ResolveImmediateNextTurnApproachSpeed(snapshot, rider));
+                ResolveImmediateNextTurnApproachSpeed(snapshot, rider), longitudinalNodes);
             speed = standingStartLaunchProfile.Value.ExitSpeedMetersPerSecond;
         }
         else if (!snapshot.Step.UseLegacyPhysics
@@ -529,24 +543,14 @@ public sealed class SimulationEngine
                     rider.Profile.Skills,
                     surface);
             var targetExitSpeed = ResolveImmediateNextTurnApproachSpeed(snapshot, rider);
-            straightProfile = options.StraightDriveEnvelopeAdjustment is { } adjustment
-                ? LongitudinalDynamics.CalculateForceBasedStraightSpeedProfile(
+            straightProfile = LongitudinalDynamics.CalculateForceBasedStraightSpeedProfile(
                     resolution.Speed,
                     rider.Profile.Skills,
                     rider.ActiveSetup,
                     surface,
                     cornerEntryDeceleration,
                     travelled,
-                    targetExitSpeed,
-                    adjustment)
-                : LongitudinalDynamics.CalculateForceBasedStraightSpeedProfile(
-                    resolution.Speed,
-                    rider.Profile.Skills,
-                    rider.ActiveSetup,
-                    surface,
-                    cornerEntryDeceleration,
-                    travelled,
-                    targetExitSpeed);
+                    targetExitSpeed, longitudinalNodes, options.StraightDriveEnvelopeAdjustment);
             speed = straightProfile.Value.ExitSpeedMetersPerSecond;
         }
         float segmentElapsedTimeSeconds;
@@ -622,7 +626,7 @@ public sealed class SimulationEngine
             standingStartLaunchProfile,
             cornerSpeedCorrectionProfile,
             cornerPhaseContext,
-            continuousCornerProfile);
+            continuousCornerProfile, LongitudinalNodes: longitudinalNodes);
     }
 
     private static ResolvedRider ResolveMovingRider(SimulationSnapshot snapshot, RiderSnapshot rider,
