@@ -122,14 +122,16 @@ public sealed class SteppedTurnExitSimulationTests
     }
 
     [Fact]
-    public void TurnExitSteppedTraversalUsesEntrySurface()
+    public void TurnExitSteppedTraversalSamplesActualSurface()
     {
         var track = SingleTrack(SegmentType.TurnExit);
         var state = new TrackState(1, LaneModel.LanesCount, (_, lane) =>
             lane == 1 ? new TrackSurfaceState(.2f, 0f, .35f) : PerfectSurface);
         var resolved = Resolve(track, state, new[] { Rider(1, 1, 1.25f, 12f) });
         Assert.Equal(resolved.Snapshot.TrackState.SampleSurface(0, 1.25f), resolved.Diagnostics[0].EntrySurface);
-        Assert.Equal(CornerTestSupport.Expected(resolved), resolved.Diagnostics[0].ContinuousCornerProfile);
+        var path = Assert.IsType<ExecutedSegmentPath>(resolved.Diagnostics[0].ExecutedPath);
+        Assert.Contains(path.Steps, s => s.SampledSurface != resolved.Diagnostics[0].EntrySurface);
+        Assert.Equal(path.ExitSpeedMetersPerSecond, resolved.Changes[0].Speed);
     }
 
     [Fact]

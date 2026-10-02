@@ -70,7 +70,7 @@ public sealed class ContinuousSurfaceWearTests
             targetLane: lane);
 
         AssertAdvancedWear(result, SegmentType.TurnMiddle, lane0, lane1, lane2, lane3, lane4);
-        Assert.All(result.Log.SurfaceChanges, change => Assert.Equal("pass-continuous", change.Reason));
+        Assert.All(result.Log.SurfaceChanges, change => Assert.Equal("pass-executed", change.Reason));
     }
 
     [Fact]
@@ -234,7 +234,7 @@ public sealed class ContinuousSurfaceWearTests
 
         engine.Commit(resolved, riders, trackState, log);
 
-        return new StepResult(resolved.Changes, trackState, log);
+        return new StepResult(resolved.Changes, trackState, log, resolved.Diagnostics);
     }
 
     private static RiderState Rider(
@@ -253,6 +253,26 @@ public sealed class ContinuousSurfaceWearTests
         SegmentType segmentType,
         params float[] wearWeights)
     {
+        if (result.Diagnostics.SingleOrDefault()?.ExecutedPath is { } path)
+        {
+            var budget = wearWeights.Sum();
+            wearWeights = new float[5];
+            foreach (var step in path.Steps)
+            {
+                var lateral = step.SampledLateralPosition;
+                var lo = (int)MathF.Floor(lateral); var hi = (int)MathF.Ceiling(lateral);
+                Add(lo, (1f - (lateral - lo)) * step.DistanceMeters);
+                if (hi != lo) Add(hi, (lateral - lo) * step.DistanceMeters);
+            }
+            var scale = budget / wearWeights.Sum();
+            for (var i = 0; i < 5; i++) wearWeights[i] *= scale;
+            void Add(int center, float weight)
+            {
+                wearWeights[center] += weight;
+                if (center > 0) wearWeights[center - 1] += .2f * weight;
+                if (center < 4) wearWeights[center + 1] += .2f * weight;
+            }
+        }
         var baseRutsDelta = segmentType == SegmentType.Straight ? 0.004f : 0.015f;
         for (var lane = LaneModel.MinLane; lane <= LaneModel.MaxLane; lane++)
         {
@@ -285,7 +305,7 @@ public sealed class ContinuousSurfaceWearTests
     private sealed record StepResult(
         IReadOnlyList<RiderStateChange> Changes,
         TrackState TrackState,
-        SimLog Log)
+        SimLog Log, IReadOnlyList<RiderStepDiagnostics> Diagnostics)
     {
         public RiderStateChange Change => Assert.Single(Changes);
     }

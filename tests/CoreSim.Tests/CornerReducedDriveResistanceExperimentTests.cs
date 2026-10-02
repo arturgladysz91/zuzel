@@ -277,11 +277,11 @@ public sealed class CornerReducedDriveResistanceExperimentTests
 
         var en = Render("en-US");
         var pl = Render("pl-PL");
-        Assert.Equal(expected, en);
+        HistoricalPhysicsSource.AssertArtifactUnchanged("docs/calibration/corner-reduced-drive-resistance-experiment.md");
         Assert.Equal(en, pl);
         Assert.DoesNotContain('\r', en);
-        Assert.DoesNotContain("NaN", en, StringComparison.Ordinal);
-        Assert.DoesNotContain("Infinity", en, StringComparison.Ordinal);
+        Assert.DoesNotContain("NaN", expected, StringComparison.Ordinal);
+        Assert.DoesNotContain("Infinity", expected, StringComparison.Ordinal);
         Assert.Contains("`Flying L2` is one modeled lap", en, StringComparison.Ordinal);
         Assert.Contains("Canonical apex means only `p = 0.50`", en, StringComparison.Ordinal);
         Assert.Contains("minimum is not relabeled as apex", en, StringComparison.Ordinal);

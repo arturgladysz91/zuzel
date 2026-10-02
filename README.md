@@ -473,7 +473,7 @@ physical displacement use metres derived from the current segment width. The
 surface remains five normalized bands with unchanged grip/wear formulas.
 Segment boundaries reinterpret the same normalized position against local width;
 there is no width-transition spline, artificial movement event or extra distance.
-Active lateral movement has no diagonal/spiral path-length correction, and the
+Executed lateral movement now contributes cartesian/polar path distance (see below), and the
 A/B/C/D physical bounds and neutral centers are now explicit; within-gate
 positioning and motorcycle footprint remain future work. The
 [physical-width impact report](docs/calibration/physical-width-impact.md) is
@@ -544,3 +544,7 @@ remain frozen, and Legacy retains its 16 m/s reference. The deterministic
 [impact report](docs/calibration/continuous-corner-envelope-impact.md) contains
 the A0/B17/B18/B19 screen, full-heat and geometry sweeps, telemetry context and
 known limitations.
+
+## Executed segment trajectory
+
+Advanced moving paths now integrate physical distance, elapsed time, lateral position, local radius and surface together. `ExecutedSegmentPath` is the shared production/telemetry/wear result; fixed lines retain their exact prior traversal. No coefficients or AI/contact rules changed. See the [method and compatibility evidence](docs/calibration/executed-trajectory-method.md) and the [21 controlled Motoarena trajectories](docs/calibration/single-rider-executed-trajectory.md). Historical #47–#51 reports remain immutable snapshots.

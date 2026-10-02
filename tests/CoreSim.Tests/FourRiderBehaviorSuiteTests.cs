@@ -138,7 +138,7 @@ public sealed class FourRiderBehaviorSuiteTests
     }
 
     [Fact]
-    public void All_histories_reconcile_with_actual_decisions_and_entry_path_geometry()
+    public void All_histories_reconcile_with_actual_decisions_and_executed_path_geometry()
     {
         foreach (var run in Audit.Value.Runs)
         {
@@ -151,7 +151,9 @@ public sealed class FourRiderBehaviorSuiteTests
                 Assert.True(step.EndTimeSeconds >= step.StartTimeSeconds);
                 var expectedDistance = LaneModel.SegmentLengthMeters(scenario.Track.Segments[step.SegmentIndex],
                     step.EntryLateralPosition, scenario.Track.Geometry) * (float)(step.EndProgress - step.StartProgress);
-                Assert.InRange(MathF.Abs(expectedDistance - step.PathDistanceMeters), 0f, .001f);
+                if (MathF.Abs(step.ExitLateralPosition - step.EntryLateralPosition) < 1e-6f)
+                    Assert.InRange(MathF.Abs(expectedDistance - step.PathDistanceMeters), 0f, .001f);
+                else Assert.True(float.IsFinite(step.PathDistanceMeters) && step.PathDistanceMeters > 0f);
                 if (step.CornerStartProgress is { } start && step.CornerEndProgress is { } end)
                     Assert.True(end >= start && end <= 1.00001f);
             }

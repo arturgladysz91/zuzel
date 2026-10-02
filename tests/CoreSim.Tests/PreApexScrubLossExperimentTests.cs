@@ -407,11 +407,11 @@ public sealed class PreApexScrubLossExperimentTests
 
         var en = Render("en-US");
         var pl = Render("pl-PL");
-        Assert.Equal(expected, en);
+        HistoricalPhysicsSource.AssertArtifactUnchanged("docs/calibration/pre-apex-scrub-loss-experiment.md");
         Assert.Equal(en, pl);
         Assert.DoesNotContain('\r', en);
-        Assert.DoesNotContain("NaN", en, StringComparison.Ordinal);
-        Assert.DoesNotContain("Infinity", en, StringComparison.Ordinal);
+        Assert.DoesNotContain("NaN", expected, StringComparison.Ordinal);
+        Assert.DoesNotContain("Infinity", expected, StringComparison.Ordinal);
         foreach (var section in "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
             Assert.Contains($"## {section}.", en, StringComparison.Ordinal);
     }

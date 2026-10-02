@@ -151,9 +151,12 @@ public sealed class StartingGateTests
             var change = step.Changes.Single(item => item.RiderId == rider.RiderId);
             Assert.Equal(0f, change.EntrySpeed);
             Assert.Equal(RiderRaceStatus.Racing, change.Status);
-            Assert.Equal(35f, change.Position.DistanceMeters);
-            Assert.Equal(LateralMovementModel.MoveTowards(rider.LateralPosition, change.Lane,
-                launch.MovementTimeSeconds, SegmentType.Straight, track.Geometry, sampled, rider.Profile.Skills), change.LateralPosition);
+            var path = Assert.IsType<ExecutedSegmentPath>(diagnostic.ExecutedPath);
+            Assert.True(change.Position.DistanceMeters > 35f);
+            Assert.Equal(path.DistanceMeters, change.Position.DistanceMeters);
+            Assert.Equal(path.Nodes[^1].LateralPosition, change.LateralPosition);
+            Assert.Equal(path.MovementTimeSeconds, launch.MovementTimeSeconds);
+            Assert.Contains(path.Steps, s => s.SampledSurface != sampled);
         }
         foreach (var gate in new[] { StartingGate.A, StartingGate.D })
         {

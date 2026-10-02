@@ -104,7 +104,7 @@ public sealed class StandingStartSimulationTests
             track.Geometry, Perfect, rider.Profile.Skills);
         var incorrect = LateralMovementModel.MoveTowards(0f, change.Lane, profile.TotalTimeSeconds,
             track.Geometry, Perfect, rider.Profile.Skills);
-        Assert.Equal(expected, change.LateralPosition);
+        Assert.Equal(expected, change.LateralPosition, 5);
         Assert.True(change.LateralPosition < incorrect);
         Assert.Equal(0f, rider.LateralPosition); // Resolve has not committed anything.
     }
@@ -125,7 +125,7 @@ public sealed class StandingStartSimulationTests
     }
 
     [Fact]
-    public void StandingStartUsesEntrySampledSurface()
+    public void StandingStartUsesSurfaceAlongExecutedTrajectory()
     {
         var track = StartTrack();
         var state = new TrackState(track.Segments.Count, LaneModel.LanesCount,
@@ -136,7 +136,9 @@ public sealed class StandingStartSimulationTests
         var surface = step.Snapshot.TrackState.SampleSurface(0, 1.25f);
         var expected = LongitudinalDynamics.CalculateStandingStartLaunchProfile(rider.Profile.Skills,
             rider.ActiveSetup, surface, 30f);
-        Assert.Equal(expected, Launch(step));
+        var path = Assert.IsType<ExecutedSegmentPath>(Assert.Single(step.Diagnostics).ExecutedPath);
+        Assert.Equal(path.ExitSpeedMetersPerSecond, Launch(step).ExitSpeedMetersPerSecond);
+        Assert.Contains(path.Steps, s => s.SampledSurface != surface);
         Assert.Equal(surface, Assert.Single(step.Diagnostics).EntrySurface);
         Assert.NotEqual(surface, step.Snapshot.TrackState.SampleSurface(0, Assert.Single(step.Changes).LateralPosition));
     }

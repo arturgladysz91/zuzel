@@ -78,6 +78,7 @@ public sealed record CalibrationStepSample(
     ContinuousCornerTraversalProfile? ContinuousCornerProfile = null,
     float? PeakCornerProgress = null)
 {
+    public ExecutedSegmentPath? ExecutedPath { get; init; }
     internal IReadOnlyList<StraightDriveStepObservation>? StraightDriveCalibrationSteps { get; init; }
 }
 
