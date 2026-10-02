@@ -234,15 +234,17 @@ public sealed class DynamicLineChoiceTrackEvolutionExperimentTests
     }
 
     [Fact]
-    public void WorseningPhysicalRegretIsNotMisclassifiedAsWeakPerception()
+    public void ArchivedWorseningPhysicalRegretIsNotMisclassifiedAsWeakPerception()
     {
-        var regret20 = Result.Value.TrackReadingMetrics.Where(item => item.TrackReading == 20f)
-            .Average(item => item.MeanRegretSeconds);
-        var regret80 = Result.Value.TrackReadingMetrics.Where(item => item.TrackReading == 80f)
-            .Average(item => item.MeanRegretSeconds);
-        Assert.True(regret20 - regret80 < 0d);
-        Assert.False(Result.Value.TrackReadingPerceptionSignalWeak);
-        Assert.True(Result.Value.TrackReadingPerceptionSignalHealthy);
+        // This reversal belongs to the archived static decision objective. Do not
+        // require today's production-replay planner to reproduce its blocker.
+        var report = CanonicalText("docs/calibration/dynamic-line-choice-track-evolution.md");
+        HistoricalPhysicsSource.AssertArtifactUnchanged(
+            "docs/calibration/dynamic-line-choice-track-evolution.md");
+        Assert.Contains("TR20 aggregate `0.101301` s to TR80 `0.132006` s", report,
+            StringComparison.Ordinal);
+        Assert.Contains("This is decision-objective mismatch evidence, not perception failure.",
+            report, StringComparison.Ordinal);
     }
 
     [Fact]
@@ -251,9 +253,20 @@ public sealed class DynamicLineChoiceTrackEvolutionExperimentTests
         var metric = Result.Value.TrackReadingMetrics.Single(item =>
             item.ProfileId == DynamicLineChoiceTrackEvolutionExperiment.OutsideProfile
             && item.Severity == .5f && item.TrackReading == 80f);
-        Assert.Equal(90.625d, metric.OracleAgreementPercent);
-        Assert.Equal(.321890d, metric.MeanRegretSeconds, precision: 6);
+        var sweep = Sweep(metric.ProfileId, metric.Severity);
+        var best = sweep.Lines.Single(item => item.Lane == sweep.BestLane).FlyingLapMedianSeconds;
+        var measuredRegret = sweep.Lines.Sum(item =>
+            (item.FlyingLapMedianSeconds - best) * metric.ChosenLaneHistogram[item.Lane])
+            / metric.SeedCount;
+        Assert.Equal(measuredRegret, metric.MeanRegretSeconds, precision: 10);
+        Assert.Equal(100d * metric.OracleDifferenceHistogram[LaneModel.MaxLane]
+            / metric.SeedCount, metric.OracleAgreementPercent, precision: 10);
         Assert.NotEqual(metric.OracleAgreementPercent, metric.MeanRegretSeconds);
+        // Preserve the old exact observation as historical evidence, without an
+        // old decision-model fallback in either production or this experiment.
+        Assert.Contains("| OutsideCushion | 0.500000 | 80 | 64 | 0.000000 | 0.000000 | 0.321890",
+            CanonicalText("docs/calibration/dynamic-line-choice-track-evolution.md"),
+            StringComparison.Ordinal);
     }
 
     [Fact]
@@ -707,17 +720,21 @@ public sealed class DynamicLineChoiceTrackEvolutionExperimentTests
     }
 
     [Fact]
-    public void ClassificationUsesMandatoryFailureLayerPriority()
+    public void ArchivedClassificationUsesMandatoryFailureLayerPriority()
     {
-        Assert.Equal(
+        var report = CanonicalText("docs/calibration/dynamic-line-choice-track-evolution.md");
+        HistoricalPhysicsSource.AssertArtifactUnchanged(
+            "docs/calibration/dynamic-line-choice-track-evolution.md");
+        Assert.Contains(
             "MixedDynamicLineGameplayDiagnostics: LineSwitchRequiresStrongSurfaceContrast, "
             + "DecisionObjectiveVsFastestLineMismatch, TrackReadingPerceptionSignalHealthy, "
             + "ExecutionPlannerBound, PlanningHorizonLimitsExecutionExpression, "
             + "TrackEvolutionTooStrong",
-            Result.Value.Classification);
-        Assert.True(Result.Value.DecisionObjectiveVsFastestLineMismatch);
-        Assert.Equal("decision objective alignment", Result.Value.FirstActualBottleneck);
-        Assert.Equal("AdaptiveDecisionModel route-cost alignment", Result.Value.RecommendedSubsystem);
+            report, StringComparison.Ordinal);
+        Assert.Contains("First actual bottleneck: **decision objective alignment**", report,
+            StringComparison.Ordinal);
+        Assert.Contains("Recommended single subsystem: **AdaptiveDecisionModel route-cost alignment**",
+            report, StringComparison.Ordinal);
     }
 
     private static LineSweepSummary Sweep(string profile, float severity) =>
@@ -752,6 +769,7 @@ public sealed class DynamicLineChoiceTrackEvolutionExperimentTests
     {
         foreach (var (relative, sha) in expected)
         {
+            if (relative == "src/CoreSim/Decisions/AdaptiveDecisionModel.cs") { HistoricalPhysicsSource.AssertRecordedDecisionProvenance(sha); continue; }
             if (relative == "src/CoreSim/SimulationEngine.cs") { HistoricalPhysicsSource.AssertRecordedEngineProvenance(sha); continue; }
             if (relative == "src/CoreSim/Track/LongitudinalDynamics.cs") { HistoricalPhysicsSource.AssertRecordedLongitudinalProvenance(sha); continue; }
             var text = HistoricalPhysicsSource.ForHash(relative, CanonicalText(relative));

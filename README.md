@@ -548,3 +548,7 @@ known limitations.
 ## Executed segment trajectory
 
 Advanced moving paths now integrate physical distance, elapsed time, lateral position, local radius and surface together. `ExecutedSegmentPath` is the shared production/telemetry/wear result; fixed lines retain their exact prior traversal. No coefficients or AI/contact rules changed. See the [method and compatibility evidence](docs/calibration/executed-trajectory-method.md) and the [21 controlled Motoarena trajectories](docs/calibration/single-rider-executed-trajectory.md). Historical #47–#51 reports remain immutable snapshots.
+
+## Production-backed trajectory decisions
+
+`AdaptiveDecisionModel` now replans bounded Entry/Apex/Exit intents from the exact current snapshot. Its physical time is measured by isolated solo production replay through the remaining corner and whole following logical straight. Five reference anchors produce at most 35/13/5 remaining candidates; style, behavioral reluctance, surface reading and provisional current-target occupancy remain separate costs. See [architecture, parity tests and current controls](docs/calibration/trajectory-intent-evaluation.md). Traffic feasibility and common-time contested space remain future work.

@@ -104,7 +104,7 @@ public sealed class TrackGeometryTests
             new[] { rider },
             new SimulationStepContext(1, 0, 0, 0, 17, 1));
 
-        Assert.NotSame(track, snapshot.Track);
+        Assert.Same(track, snapshot.Track); // Immutable geometry/topology is safe to share.
         Assert.Equal(geometry, snapshot.Track.Geometry);
         Assert.All(
             typeof(TrackGeometry).GetProperties(),

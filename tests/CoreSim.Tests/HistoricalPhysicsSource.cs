@@ -39,6 +39,15 @@ internal static class HistoricalPhysicsSource
         AssertArtifactUnchanged("docs/calibration/free-continuous-racing-trajectory-geometry.md");
     }
 
+    internal static void AssertRecordedDecisionProvenance(string expected)
+    {
+        // Static decision source identifies #39–#53 evidence. Current decisions
+        // intentionally use production replay and are tested separately.
+        Assert.Equal("A1FCBA7E068C09B69CF849492424C89083BAD69F965FC6D767415EA9F7478314", expected);
+        AssertArtifactUnchanged("docs/calibration/four-rider-race-behavior-audit.md");
+        AssertArtifactUnchanged("docs/calibration/four-rider-race-behavior-evidence.json");
+    }
+
     internal static void AssertArtifactUnchanged(string relative)
     {
         var root = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../../../"));

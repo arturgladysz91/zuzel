@@ -10,6 +10,12 @@ internal static class ExecutedPathTraversal
     internal const int PredictorCorrectorIterations = 16;
     internal const int BisectionIterations = 64;
     internal const double TimeToleranceSeconds = 1e-7;
+    internal const int TimeSolveSubdivisionLimit = 16;
+
+    private sealed class TimeSolveDiscontinuityException : InvalidOperationException
+    {
+        public TimeSolveDiscontinuityException() : base("Coupled time solve did not converge within its bound.") { }
+    }
 
     internal static bool IsFixedLine(float lateral, int target)
         // Preserve existing offset round-trip noise (not the 0.05 m arrival tolerance).
@@ -62,42 +68,60 @@ internal static class ExecutedPathTraversal
                     if (start < localKnot && finish > localKnot) finish = localKnot;
                 }
             }
-            var result = Solve(finish);
-            // Reuse the physical metre resolution, rather than introduce a second grid.
-            for (var split = 0; split < PredictorCorrectorIterations
-                && result.Distance > LongitudinalDynamics.ProvisionalLongitudinalIntegrationStepMeters; split++)
+            CoupledStep result;
+            var subdivisions = 0;
+            while (true)
             {
-                finish = start + (finish - start) * MathF.BitDecrement(LongitudinalDynamics.ProvisionalLongitudinalIntegrationStepMeters) / result.Distance;
-                result = Solve(finish);
-            }
-            if (result.Distance > LongitudinalDynamics.ProvisionalLongitudinalIntegrationStepMeters)
-            {
-                var lo = start; var hi = finish;
-                for (var i = 0; i < BisectionIterations; i++)
+                try
                 {
-                    var mid = (lo + hi) * .5d;
-                    if (mid == lo || mid == hi) break;
-                    if (Solve(mid).Distance > LongitudinalDynamics.ProvisionalLongitudinalIntegrationStepMeters) hi = mid;
-                    else lo = mid;
-                }
-                finish = lo; result = Solve(finish);
-            }
-            // The diagonal part ends at actual target arrival; the remainder holds the target.
-            if (lateral != resolution.Lane && result.Lateral == resolution.Lane)
-            {
-                var rate = LateralMovementModel.CalculateMaxLateralDistanceMeters(1f, segment.Type, geometry,
-                    nodes[^1].Surface, skills);
-                var arrivalTime = LateralSpaceModel.LateralDistanceMeters(lateral, resolution.Lane, segment.Type, geometry) / rate;
-                if (result.Time > arrivalTime + TimeToleranceSeconds)
-                {
-                    var lo = start; var hi = finish;
-                    for (var i = 0; i < BisectionIterations; i++)
+                    result = Solve(finish);
+                    // Reuse the physical metre resolution, rather than introduce a second grid.
+                    for (var split = 0; split < PredictorCorrectorIterations
+                        && result.Distance > LongitudinalDynamics.ProvisionalLongitudinalIntegrationStepMeters; split++)
                     {
-                        var mid = (lo + hi) * .5d;
-                        if (mid == lo || mid == hi) break;
-                        if (Solve(mid).Time < arrivalTime) lo = mid; else hi = mid;
+                        finish = start + (finish - start) * MathF.BitDecrement(LongitudinalDynamics.ProvisionalLongitudinalIntegrationStepMeters) / result.Distance;
+                        result = Solve(finish);
                     }
-                    finish = hi; result = Solve(finish);
+                    if (result.Distance > LongitudinalDynamics.ProvisionalLongitudinalIntegrationStepMeters)
+                    {
+                        var lo = start; var hi = finish;
+                        for (var i = 0; i < BisectionIterations; i++)
+                        {
+                            var mid = (lo + hi) * .5d;
+                            if (mid == lo || mid == hi) break;
+                            if (Solve(mid).Distance > LongitudinalDynamics.ProvisionalLongitudinalIntegrationStepMeters) hi = mid;
+                            else lo = mid;
+                        }
+                        finish = lo; result = Solve(finish);
+                    }
+                    // The diagonal part ends at actual target arrival; the remainder holds the target.
+                    if (lateral != resolution.Lane && result.Lateral == resolution.Lane)
+                    {
+                        var rate = LateralMovementModel.CalculateMaxLateralDistanceMeters(1f, segment.Type, geometry,
+                            nodes[^1].Surface, skills);
+                        var arrivalTime = LateralSpaceModel.LateralDistanceMeters(lateral, resolution.Lane, segment.Type, geometry) / rate;
+                        if (result.Time > arrivalTime + TimeToleranceSeconds)
+                        {
+                            var lo = start; var hi = finish;
+                            for (var i = 0; i < BisectionIterations; i++)
+                            {
+                                var mid = (lo + hi) * .5d;
+                                if (mid == lo || mid == hi) break;
+                                if (Solve(mid).Time < arrivalTime) lo = mid; else hi = mid;
+                            }
+                            finish = hi; result = Solve(finish);
+                        }
+                    }
+                    break;
+                }
+                catch (TimeSolveDiscontinuityException) when (subdivisions < TimeSolveSubdivisionLimit)
+                {
+                    // The unchanged correction/drive branch can have no time root
+                    // over a finite step at its switching boundary. Subdivide the
+                    // physical step and resolve again with the same primitives;
+                    // never accept a stale lateral endpoint or alter the physics.
+                    finish = start + (finish - start) * .5d;
+                    subdivisions++;
                 }
             }
             if (finish <= start || !double.IsFinite(result.Time) || result.Time <= 0d)
@@ -108,7 +132,7 @@ internal static class ExecutedPathTraversal
                 snapshot.TrackState.SampleSurface(snapshot.Step.SegmentIndex, sampledLateral),
                 result.CorrectionDistance, result.CarryDistance, result.DriveDistance,
                 result.CorrectionTime, result.CarryTime, result.DriveTime,
-                result.Force, result.Iterations, result.Fallback));
+                result.Force, result.Iterations, result.Fallback) { TimeSolveSubdivisions = subdivisions });
             lateral = result.Lateral; speed = result.Speed; start = finish;
             nodes.Add(Node(start, lateral, crash && start == end ? 0f : speed));
         }
@@ -172,7 +196,7 @@ internal static class ExecutedPathTraversal
                     return evaluated with { Iterations = PredictorCorrectorIterations + i, Fallback = true };
                 if (guess < evaluated.Time) lo = guess; else hi = guess;
             }
-            throw new InvalidOperationException("Coupled time solve did not converge within its bound.");
+            throw new TimeSolveDiscontinuityException();
         }
 
         CoupledStep Evaluate(double seconds, double finish)

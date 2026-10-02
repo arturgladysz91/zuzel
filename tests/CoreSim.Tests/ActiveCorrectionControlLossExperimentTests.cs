@@ -551,6 +551,7 @@ public sealed class ActiveCorrectionControlLossExperimentTests
     {
         foreach (var (relative, sha) in expected)
         {
+            if (relative == "src/CoreSim/Decisions/AdaptiveDecisionModel.cs") { HistoricalPhysicsSource.AssertRecordedDecisionProvenance(sha); continue; }
             var path = Path.Combine(Root,
                 relative.Replace('/', Path.DirectorySeparatorChar));
             var text = File.ReadAllText(path)

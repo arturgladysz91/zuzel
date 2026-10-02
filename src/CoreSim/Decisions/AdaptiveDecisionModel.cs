@@ -1,119 +1,79 @@
+using System.Globalization;
+
 namespace CoreSim.Decisions;
 
-/// <summary>
-/// Data-driven lane selection. It compares projected route time instead of raw
-/// lane speed, reads the surface imperfectly and respects rider style/traffic.
-/// </summary>
+/// <summary>Receding-horizon intent selection using isolated solo production traversal.</summary>
 public sealed class AdaptiveDecisionModel : IRiderDecisionModel
 {
     private readonly int _modelSeed;
-
     public AdaptiveDecisionModel(int seed = 1234) => _modelSeed = seed;
-
     public RiderDecision Decide(TrackSegment segment, RiderState rider)
         => new(rider.Lane, rider.Profile.Style.RiskTolerance * 0.05f, "no track context");
+    public RiderDecision Decide(RiderDecisionContext context) => Evaluate(context).Decision;
 
-    public RiderDecision Decide(RiderDecisionContext context)
+    /// <summary>Typed offline diagnostics; candidate ordering never breaks ties.</summary>
+    public TrajectoryDecisionDiagnostics Evaluate(RiderDecisionContext context,
+        IEnumerable<TrajectoryIntent>? candidates = null)
     {
         ArgumentNullException.ThrowIfNull(context);
-
-        var rider = context.Rider;
-        var style = rider.Profile.Style;
-        var reading = RiderSkills.Normalize(rider.Profile.Skills.TrackReading);
-        var (evaluationSegment, evaluationIndex) = ResolveEvaluationSegment(context);
-        var geometry = context.Track?.Geometry ?? TrackGeometry.Default;
-        var bestLane = rider.Lane;
-        var bestCost = float.PositiveInfinity;
-
-        for (var lane = LaneModel.MinLane; lane <= LaneModel.MaxLane; lane++)
+        var rider = context.Rider; var style = rider.Profile.Style; var geometry = context.Snapshot.Track.Geometry;
+        var evaluator = new TrajectoryEvaluator(context, PerceivedTrackState(context));
+        var evaluationIndex = evaluator.Horizon.FirstOrDefault(part =>
+            context.Snapshot.Track.Segments[part.SegmentIndex].Type != SegmentType.Straight)?.SegmentIndex
+            ?? context.SegmentIndex;
+        var evaluations = new List<TrajectoryIntentEvaluation>();
+        foreach (var intent in (candidates ?? TrajectoryCandidates.Generate(context.Segment.Type)).Distinct())
         {
-            var surface = context.TrackState.GetSurface(evaluationIndex, lane);
-            var effectiveGrip = surface.EffectiveGrip;
-
-            // Weak readers see a noisier and more conservative approximation.
-            var observationNoise = DeterministicRandom.SampleSigned(
-                    context.Seed,
-                    context.HeatId,
-                    context.StepNumber,
-                    rider.RiderId,
-                    RandomChannel.TrackObservation,
-                    lane,
-                    _modelSeed)
-                * (1f - reading)
-                * 0.09f;
-            var perceivedSurface = new TrackSurfaceState(
-                TrackSurfaceState.Clamp01(surface.Grip + observationNoise),
-                TrackSurfaceState.Clamp01(surface.Ruts - observationNoise * 0.5f),
-                surface.Moisture);
-
-            var distance = MathF.Abs(lane - rider.LateralPosition);
-            var movementCost = distance * (0.015f + (1f - style.LaneChangeTendency) * 0.025f);
-            var preferredLane = style.OutsidePreference * LaneModel.MaxLane;
-            var styleCost = MathF.Abs(lane - preferredLane) * 0.035f;
-            var occupancyCost = IsOccupied(context, lane, geometry) ? 0.30f : 0f;
-            var surfaceRiskCost = (1f - effectiveGrip)
-                                  * (0.06f + (1f - style.RiskTolerance) * 0.12f)
-                                  + surface.Ruts * 0.08f;
-            var projectedSpeed = SegmentPhysics.MaxSafeTurnSpeed(
-                lane,
-                geometry,
-                perceivedSurface,
-                rider.Profile.Skills,
-                rider.ActiveSetup);
-            var projectedTime = ProjectedRouteTime(evaluationSegment, lane, projectedSpeed, geometry);
-            var cost = projectedTime + movementCost + styleCost + occupancyCost + surfaceRiskCost;
-
-            if (cost < bestCost)
+            var target = intent.TargetFor(context.Segment.Type); var traversal = evaluator.Evaluate(intent);
+            var requestedChange = Math.Abs(target - (double)rider.LateralPosition); var previous = target;
+            foreach (var part in evaluator.Horizon)
             {
-                bestCost = cost;
-                bestLane = lane;
+                var next = TrajectoryEvaluator.Target(intent, part.Phase);
+                requestedChange += Math.Abs(next - previous); previous = next;
             }
+            // Physical displacement already costs elapsed time. Retain only behavioral reluctance.
+            var reluctance = (float)requestedChange * (1f - style.LaneChangeTendency) * 0.025f;
+            var styleCost = MathF.Abs(target - style.OutsidePreference * LaneModel.MaxLane) * 0.035f;
+            var occupancyCost = IsOccupied(context, target, geometry) ? 0.30f : 0f;
+            var surface = context.TrackState.GetSurface(evaluationIndex, target);
+            var riskCost = (1f - surface.EffectiveGrip) * (0.06f + (1f - style.RiskTolerance) * 0.12f) + surface.Ruts * 0.08f;
+            // Terminal deterministic crashes are measured, but cannot be a feasible short route.
+            var total = traversal.CompletedHorizon
+                ? traversal.PredictedTraversalTimeSeconds + styleCost + reluctance + occupancyCost + riskCost
+                : double.PositiveInfinity;
+            evaluations.Add(new(traversal, styleCost, reluctance, occupancyCost, riskCost, requestedChange, total));
         }
-
-        var baseRisk = style.RiskTolerance * 0.10f;
+        if (evaluations.Count == 0) throw new ArgumentException("At least one candidate is required.", nameof(candidates));
+        var winner = evaluations.OrderBy(e => e.TotalCost)
+            .ThenBy(e => e.PredictedTraversalTimeSeconds).ThenBy(e => e.RequestedLaneChange)
+            .ThenBy(e => e.Intent.EntryTarget).ThenBy(e => e.Intent.ApexTarget).ThenBy(e => e.Intent.ExitTarget).First();
+        var bestLane = winner.Intent.TargetFor(context.Segment.Type);
         var chosen = context.TrackState.GetSurface(context.SegmentIndex, bestLane);
         var surfaceRisk = (1f - chosen.EffectiveGrip) * (0.15f + style.RiskTolerance * 0.20f);
-
-        return new RiderDecision(
-            bestLane,
-            TrackSurfaceState.Clamp01(baseRisk + surfaceRisk),
-            $"projected cost={bestCost:F3}");
+        var decision = new RiderDecision(bestLane, TrackSurfaceState.Clamp01(style.RiskTolerance * 0.10f + surfaceRisk),
+            string.Create(CultureInfo.InvariantCulture,
+                $"intent {winner.Intent} time={winner.PredictedTraversalTimeSeconds:F3} total={winner.TotalCost:F3}"));
+        var canonical = evaluations.OrderBy(e => e.Intent.EntryTarget).ThenBy(e => e.Intent.ApexTarget)
+            .ThenBy(e => e.Intent.ExitTarget).Select(e => e with { Selected = e.Intent == winner.Intent }).ToArray();
+        return new(decision, Array.AsReadOnly(canonical), evaluator.CandidateTraversalCount, evaluator.ProductionResolutionCount);
     }
-
-    private static (TrackSegment Segment, int Index) ResolveEvaluationSegment(RiderDecisionContext context)
+    /// <summary>Immutable raw-cell observations; normal continuous interpolation follows in replay.</summary>
+    public TrackStateSnapshot PerceivedTrackState(RiderDecisionContext context)
     {
-        if (context.Segment.Type != SegmentType.Straight || context.Track is null)
-            return (context.Segment, context.SegmentIndex);
-
-        var nextIndex = (context.SegmentIndex + 1) % context.Track.Segments.Count;
-        return (context.Track.Segments[nextIndex], nextIndex);
+        ArgumentNullException.ThrowIfNull(context);
+        var reading = RiderSkills.Normalize(context.Rider.Profile.Skills.TrackReading);
+        return new TrackState(context.TrackState.SegmentCount, context.TrackState.LinesCount, (segment, lane) =>
+        {
+            var surface = context.TrackState.GetSurface(segment, lane);
+            var noise = DeterministicRandom.SampleSigned(context.Seed, context.HeatId, context.StepNumber,
+                context.Rider.RiderId, RandomChannel.TrackObservation, segment, lane, _modelSeed) * (1f - reading) * 0.09f;
+            return new TrackSurfaceState(TrackSurfaceState.Clamp01(surface.Grip + noise),
+                TrackSurfaceState.Clamp01(surface.Ruts - noise * 0.5f), surface.Moisture);
+        }).Snapshot();
     }
-
-    private static float ProjectedRouteTime(
-        TrackSegment segment,
-        int lane,
-        float speed,
-        TrackGeometry geometry)
-    {
-        // A lane is judged over a complete bend plus the following straight.
-        // This balances the shorter inside route against the higher exit speed
-        // available outside. A straight decision prepares the next bend.
-        var bendLength = LaneModel.TurnArcLengthMeters(lane, geometry) * 3f;
-        var routeLength = segment.Type == SegmentType.Straight
-            ? geometry.StraightLengthMeters
-            : bendLength + geometry.StraightLengthMeters;
-        return routeLength / MathF.Max(speed, 1f);
-    }
-
     private static bool IsOccupied(RiderDecisionContext context, int lane, TrackGeometry geometry)
-        => context.Riders.Any(other =>
-            other.RiderId != context.Rider.RiderId
-            && other.IsActive
+        => context.Riders.Any(other => other.RiderId != context.Rider.RiderId && other.IsActive
             && other.SegmentIndex == context.SegmentIndex
-            && LateralSpaceModel.IsWithinProvisionalOccupancyThreshold(
-                other.LateralPosition,
-                lane,
-                context.Segment.Type,
-                geometry)
+            && LateralSpaceModel.IsWithinProvisionalOccupancyThreshold(other.LateralPosition, lane, context.Segment.Type, geometry)
             && Math.Abs(other.ElapsedTimeSeconds - context.Rider.ElapsedTimeSeconds) < 0.30f);
 }

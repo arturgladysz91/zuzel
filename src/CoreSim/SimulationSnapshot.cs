@@ -151,7 +151,8 @@ public sealed class SimulationSnapshot
             throw new ArgumentOutOfRangeException(nameof(step), "Segment index is outside the track.");
 
         Step = step;
-        Track = new Track(track.Segments, track.Geometry);
+        // Track already owns immutable copied segments, geometry and topology.
+        Track = track;
         TrackState = trackState;
         _riders = Array.AsReadOnly(riders.OrderBy(rider => rider.RiderId).ToArray());
     }

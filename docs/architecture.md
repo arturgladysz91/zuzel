@@ -1,5 +1,11 @@
 # Architecture
 
+Current decision precedence: `AdaptiveDecisionModel` uses bounded production-backed
+Entry/Apex/Exit planning described in [current evidence](calibration/trajectory-intent-evaluation.md).
+Any earlier static route-time projection descriptions are historical. `TrajectoryEvaluator`
+replays the existing `SimulationEngine` with isolated state and scripted phase targets;
+it owns no alternative physics. Immutable Track/topology is shared by snapshots.
+
 ## Project boundaries
 
 - `CoreSim` contains deterministic simulation rules and domain state. It has no UI, file system or console dependencies.
