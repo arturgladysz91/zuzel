@@ -9,7 +9,7 @@ namespace CoreSim.Tests;
 
 public sealed class FourRiderBehaviorEvidenceTests
 {
-    private static readonly Lazy<BehaviorAuditResult> Audit = new(() => FourRiderBehaviorSuite.RunSuite());
+    private static readonly Lazy<BehaviorAuditResult> Audit = new(() => FourRiderAuditFixture.Result);
     private static readonly JsonSerializerOptions JsonOptions = new() { Converters = { new JsonStringEnumConverter() } };
 
     [Fact]
