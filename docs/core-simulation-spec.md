@@ -287,9 +287,10 @@ RiderSkills express capability; age/category does not apply a speed, start, or c
 - Physical time comes only from isolated solo production `SimulationEngine`
   replay, starting at the exact immutable rider snapshot and ending before the
   second logical corner or at race finish. Split straights cross lap wrap through
-  topology; there are no segment-id exceptions. Canonical resolved motions supply
-  actual time, distance, achieved endpoints, speeds and outcomes.
-- Projection owns fresh mutable rider/track copies, disabled logs and zero random
+  topology; there are no segment-id exceptions. Full normal resolution and Lean
+  projection call the same rider physics core and return bit-identical canonical
+  totals, achieved endpoints, speeds, outcomes and own-wear contributions.
+- Projection owns detached branch surface copies and compact rider state, no logs and zero random
   incident frequency. It retains deterministic correction, RunWide, missed anchors
   and terminal crash. Its own passage wear commits privately; future weather or
   other riders' wear is not forecast. A terminal crash cannot win as a short route.
@@ -303,9 +304,11 @@ RiderSkills express capability; age/category does not apply a speed, start, or c
   coefficient over remaining requested phase changes. No extra distance or speed
   bonus is applied. Tie-breaking is total cost, physical time, requested change,
   then canonical Entry/Apex/Exit tuple.
-- Equal scripted prefixes may share immutable resolved production results within
-  one evaluator; every candidate still commits to private copies. Cold/reversed
-  parity must remain exact. There is no global mutable cache or second physics model.
+- A typed target-history prefix graph executes each unique physical prefix once
+  and commits own wear to its private branch. Cold/reversed parity remains exact.
+  Rich motion/path/event materialization is explicit; normal Decide uses Lean capture.
+  Full race motion contracts remain unchanged. There is no global mutable cache
+  or second physics model.
 - Production time solve retains its original tolerance and one-metre maximum;
   nonconvergent correction/drive switching-boundary steps may be halved at most
   16 times using the same primitives, with typed subdivision diagnostics.

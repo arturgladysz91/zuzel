@@ -53,6 +53,7 @@ public sealed class ResolvedRiderMotion : IEquatable<ResolvedRiderMotion>
         IReadOnlyList<RiderMotionSample> nodes, IReadOnlyList<MotionStateTransition> transitions,
         float reaction, RiderStateChange finalChange)
     {
+        ProjectionCaptureAudit.Record(ProjectionMaterialization.RichMotion);
         RiderId = rider.RiderId;
         SegmentId = snapshot.Segment.Id;
         SegmentIndex = snapshot.Step.SegmentIndex;
@@ -204,6 +205,7 @@ public sealed class ResolvedRiderMotion : IEquatable<ResolvedRiderMotion>
         }
         RiderMotionSample Sample(float time, double fraction, float distance, float lateral, float speed)
         {
+            ProjectionCaptureAudit.Record(ProjectionMaterialization.MotionSample);
             var offset = LaneModel.PhysicalLateralOffsetFromInnerReferenceMeters(lateral, snapshot.Segment.Type, snapshot.Track.Geometry);
             var radius = snapshot.Segment.Type == SegmentType.Straight ? (float?)null : snapshot.Track.Geometry.InnerRadiusMeters + offset;
             return new(time, fraction == 1d ? traversalChange.Position.TotalSegmentProgress : rider.CanonicalProgress + advance * fraction,

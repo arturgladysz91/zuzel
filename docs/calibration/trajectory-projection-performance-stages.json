@@ -1,0 +1,518 @@
+{
+  "baseline": {
+    "Stage": "baseline",
+    "Runtime": ".NET 8.0.30",
+    "Rows": [
+      {
+        "Riders": 1,
+        "Scripted": false,
+        "Warmups": 5,
+        "Runs": 15,
+        "MedianMilliseconds": 561.2692,
+        "MeanMilliseconds": 570.0741266666666,
+        "AllocatedBytesPerRun": 221090374.4,
+        "CandidateTraversals": 844,
+        "ProductionResolutions": 2339,
+        "Gen0": 198,
+        "Gen1": 153,
+        "Gen2": 0
+      },
+      {
+        "Riders": 4,
+        "Scripted": false,
+        "Warmups": 5,
+        "Runs": 15,
+        "MedianMilliseconds": 2308.6965,
+        "MeanMilliseconds": 2353.963506666667,
+        "AllocatedBytesPerRun": 879586636.2666667,
+        "CandidateTraversals": 3248,
+        "ProductionResolutions": 9119,
+        "Gen0": 789,
+        "Gen1": 647,
+        "Gen2": 40
+      },
+      {
+        "Riders": 4,
+        "Scripted": true,
+        "Warmups": 5,
+        "Runs": 15,
+        "MedianMilliseconds": 2.4993,
+        "MeanMilliseconds": 2.5601399999999996,
+        "AllocatedBytesPerRun": 2877038.4,
+        "CandidateTraversals": 0,
+        "ProductionResolutions": 0,
+        "Gen0": 3,
+        "Gen1": 1,
+        "Gen2": 0
+      }
+    ],
+    "Phases": [
+      {
+        "Phase": "Straight",
+        "MedianMilliseconds": 26.509,
+        "AllocatedBytes": 10488565.333333334
+      },
+      {
+        "Phase": "TurnEntry",
+        "MedianMilliseconds": 28.1158,
+        "AllocatedBytes": 10859973.333333334
+      },
+      {
+        "Phase": "TurnMiddle",
+        "MedianMilliseconds": 10.6576,
+        "AllocatedBytes": 4037643.2
+      },
+      {
+        "Phase": "TurnExit",
+        "MedianMilliseconds": 4.2934,
+        "AllocatedBytes": 1502339.7333333334
+      }
+    ]
+  },
+  "stage-a": {
+    "Stage": "stage-a",
+    "Runtime": ".NET 8.0.30",
+    "Rows": [
+      {
+        "Riders": 1,
+        "Scripted": false,
+        "Warmups": 5,
+        "Runs": 15,
+        "MedianMilliseconds": 504.3773,
+        "MeanMilliseconds": 506.41802666666666,
+        "AllocatedBytesPerRun": 182520019.2,
+        "CandidateTraversals": 844,
+        "ProductionResolutions": 2339,
+        "Gen0": 164,
+        "Gen1": 1,
+        "Gen2": 1
+      },
+      {
+        "Riders": 4,
+        "Scripted": false,
+        "Warmups": 5,
+        "Runs": 15,
+        "MedianMilliseconds": 2032.0971,
+        "MeanMilliseconds": 2033.3510133333332,
+        "AllocatedBytesPerRun": 728747665.6,
+        "CandidateTraversals": 3248,
+        "ProductionResolutions": 9119,
+        "Gen0": 653,
+        "Gen1": 268,
+        "Gen2": 23
+      },
+      {
+        "Riders": 4,
+        "Scripted": true,
+        "Warmups": 5,
+        "Runs": 15,
+        "MedianMilliseconds": 2.4204,
+        "MeanMilliseconds": 2.4878266666666673,
+        "AllocatedBytesPerRun": 2877038.4,
+        "CandidateTraversals": 0,
+        "ProductionResolutions": 0,
+        "Gen0": 3,
+        "Gen1": 1,
+        "Gen2": 0
+      }
+    ],
+    "Phases": [
+      {
+        "Phase": "Straight",
+        "MedianMilliseconds": 23.761,
+        "AllocatedBytes": 8824304
+      },
+      {
+        "Phase": "TurnEntry",
+        "MedianMilliseconds": 26.0727,
+        "AllocatedBytes": 9355512
+      },
+      {
+        "Phase": "TurnMiddle",
+        "MedianMilliseconds": 10.1355,
+        "AllocatedBytes": 3534808
+      },
+      {
+        "Phase": "TurnExit",
+        "MedianMilliseconds": 4.0794,
+        "AllocatedBytes": 1346072
+      }
+    ]
+  },
+  "stage-b": {
+    "Stage": "stage-b",
+    "Runtime": ".NET 8.0.30",
+    "Rows": [
+      {
+        "Riders": 1,
+        "Scripted": false,
+        "Warmups": 5,
+        "Runs": 15,
+        "MedianMilliseconds": 434.6593,
+        "MeanMilliseconds": 436.19103333333334,
+        "AllocatedBytesPerRun": 136737598.4,
+        "CandidateTraversals": 844,
+        "ProductionResolutions": 2339,
+        "Gen0": 123,
+        "Gen1": 0,
+        "Gen2": 0
+      },
+      {
+        "Riders": 4,
+        "Scripted": false,
+        "Warmups": 5,
+        "Runs": 15,
+        "MedianMilliseconds": 1758.7183,
+        "MeanMilliseconds": 1764.0477333333336,
+        "AllocatedBytesPerRun": 549337872,
+        "CandidateTraversals": 3248,
+        "ProductionResolutions": 9119,
+        "Gen0": 493,
+        "Gen1": 200,
+        "Gen2": 10
+      },
+      {
+        "Riders": 4,
+        "Scripted": true,
+        "Warmups": 5,
+        "Runs": 15,
+        "MedianMilliseconds": 2.4647,
+        "MeanMilliseconds": 2.4917666666666674,
+        "AllocatedBytesPerRun": 2887313.6,
+        "CandidateTraversals": 0,
+        "ProductionResolutions": 0,
+        "Gen0": 2,
+        "Gen1": 0,
+        "Gen2": 0
+      }
+    ],
+    "Phases": [
+      {
+        "Phase": "Straight",
+        "MedianMilliseconds": 20.6596,
+        "AllocatedBytes": 6741632
+      },
+      {
+        "Phase": "TurnEntry",
+        "MedianMilliseconds": 22.5052,
+        "AllocatedBytes": 7195104
+      },
+      {
+        "Phase": "TurnMiddle",
+        "MedianMilliseconds": 8.6082,
+        "AllocatedBytes": 2687032
+      },
+      {
+        "Phase": "TurnExit",
+        "MedianMilliseconds": 3.6291,
+        "AllocatedBytes": 1081216
+      }
+    ]
+  },
+  "stage-c": {
+    "Stage": "stage-c",
+    "Runtime": ".NET 8.0.30",
+    "Rows": [
+      {
+        "Riders": 1,
+        "Scripted": false,
+        "Warmups": 5,
+        "Runs": 15,
+        "MedianMilliseconds": 436.4818,
+        "MeanMilliseconds": 438.7052733333333,
+        "AllocatedBytesPerRun": 136464918.4,
+        "CandidateTraversals": 844,
+        "ProductionResolutions": 2339,
+        "Gen0": 123,
+        "Gen1": 0,
+        "Gen2": 0
+      },
+      {
+        "Riders": 4,
+        "Scripted": false,
+        "Warmups": 5,
+        "Runs": 15,
+        "MedianMilliseconds": 1762.5433,
+        "MeanMilliseconds": 1763.2631733333333,
+        "AllocatedBytesPerRun": 548336463.4666667,
+        "CandidateTraversals": 3248,
+        "ProductionResolutions": 9119,
+        "Gen0": 491,
+        "Gen1": 186,
+        "Gen2": 7
+      },
+      {
+        "Riders": 4,
+        "Scripted": true,
+        "Warmups": 5,
+        "Runs": 15,
+        "MedianMilliseconds": 2.5058,
+        "MeanMilliseconds": 2.5696733333333337,
+        "AllocatedBytesPerRun": 2887406.4,
+        "CandidateTraversals": 0,
+        "ProductionResolutions": 0,
+        "Gen0": 3,
+        "Gen1": 1,
+        "Gen2": 0
+      }
+    ],
+    "Phases": [
+      {
+        "Phase": "Straight",
+        "MedianMilliseconds": 20.8118,
+        "AllocatedBytes": 6719152
+      },
+      {
+        "Phase": "TurnEntry",
+        "MedianMilliseconds": 22.5743,
+        "AllocatedBytes": 7183888
+      },
+      {
+        "Phase": "TurnMiddle",
+        "MedianMilliseconds": 8.6542,
+        "AllocatedBytes": 2685392
+      },
+      {
+        "Phase": "TurnExit",
+        "MedianMilliseconds": 3.6204,
+        "AllocatedBytes": 1080648
+      }
+    ]
+  },
+  "stage-d-idle": {
+    "Stage": "stage-d-idle",
+    "Runtime": ".NET 8.0.30",
+    "Rows": [
+      {
+        "Riders": 1,
+        "Scripted": false,
+        "Warmups": 5,
+        "Runs": 15,
+        "MedianMilliseconds": 348.7206,
+        "MeanMilliseconds": 349.67303333333336,
+        "AllocatedBytesPerRun": 129557996.8,
+        "CandidateTraversals": 844,
+        "ProductionResolutions": 2339,
+        "Gen0": 116,
+        "Gen1": 0,
+        "Gen2": 0
+      },
+      {
+        "Riders": 4,
+        "Scripted": false,
+        "Warmups": 5,
+        "Runs": 15,
+        "MedianMilliseconds": 1356.6387,
+        "MeanMilliseconds": 1357.2936,
+        "AllocatedBytesPerRun": 498015576.53333336,
+        "CandidateTraversals": 3248,
+        "ProductionResolutions": 9119,
+        "Gen0": 447,
+        "Gen1": 210,
+        "Gen2": 8
+      },
+      {
+        "Riders": 4,
+        "Scripted": true,
+        "Warmups": 5,
+        "Runs": 15,
+        "MedianMilliseconds": 2.3879,
+        "MeanMilliseconds": 2.4374200000000004,
+        "AllocatedBytesPerRun": 2738369.6,
+        "CandidateTraversals": 0,
+        "ProductionResolutions": 0,
+        "Gen0": 2,
+        "Gen1": 0,
+        "Gen2": 0
+      }
+    ],
+    "Phases": [
+      {
+        "Phase": "Straight",
+        "MedianMilliseconds": 15.0998,
+        "AllocatedBytes": 5427136
+      },
+      {
+        "Phase": "TurnEntry",
+        "MedianMilliseconds": 16.1439,
+        "AllocatedBytes": 5458528
+      },
+      {
+        "Phase": "TurnMiddle",
+        "MedianMilliseconds": 4.7112,
+        "AllocatedBytes": 1738712
+      },
+      {
+        "Phase": "TurnExit",
+        "MedianMilliseconds": 2.4983,
+        "AllocatedBytes": 803280
+      }
+    ]
+  },
+  "final": {
+    "Runtime": ".NET 8.0.30",
+    "Warmups": 5,
+    "Samples": 15,
+    "Laps": 4,
+    "Incidents": false,
+    "Logging": false,
+    "ExistingContact": true,
+    "Rows": [
+      {
+        "Riders": 1,
+        "Scripted": false,
+        "MedianMilliseconds": 342.6259,
+        "MeanMilliseconds": 342.7697333333334,
+        "AllocatedBytesPerRun": 129576708.8,
+        "CandidateTraversals": 844,
+        "ProductionResolutions": 2339,
+        "Gen0": 116,
+        "Gen1": 0,
+        "Gen2": 0
+      },
+      {
+        "Riders": 4,
+        "Scripted": false,
+        "MedianMilliseconds": 1322.3032,
+        "MeanMilliseconds": 1329.2487466666666,
+        "AllocatedBytesPerRun": 498088555.2,
+        "CandidateTraversals": 3248,
+        "ProductionResolutions": 9119,
+        "Gen0": 447,
+        "Gen1": 208,
+        "Gen2": 9
+      },
+      {
+        "Riders": 4,
+        "Scripted": true,
+        "MedianMilliseconds": 2.2837,
+        "MeanMilliseconds": 2.3089333333333335,
+        "AllocatedBytesPerRun": 2738369.6,
+        "CandidateTraversals": 0,
+        "ProductionResolutions": 0,
+        "Gen0": 2,
+        "Gen1": 1,
+        "Gen2": 0
+      }
+    ],
+    "Phases": [
+      {
+        "Phase": "Straight",
+        "MedianMilliseconds": 14.8879,
+        "AllocatedBytesPerDecision": 5427880
+      },
+      {
+        "Phase": "TurnEntry",
+        "MedianMilliseconds": 15.9296,
+        "AllocatedBytesPerDecision": 5459232
+      },
+      {
+        "Phase": "TurnMiddle",
+        "MedianMilliseconds": 4.6508,
+        "AllocatedBytesPerDecision": 1738960
+      },
+      {
+        "Phase": "TurnExit",
+        "MedianMilliseconds": 2.4785,
+        "AllocatedBytesPerDecision": 803360
+      }
+    ],
+    "ProjectionCounts": {
+      "PhysicalEvaluation": 9119,
+      "RichMotion": 0,
+      "MotionSample": 0,
+      "RiderDiagnostics": 0,
+      "Event": 0,
+      "FormattedLog": 0,
+      "ExecutedPath": 0,
+      "ExecutedNode": 0,
+      "ExecutedStep": 0,
+      "LongitudinalNode": 0,
+      "ResolvedStep": 0,
+      "CornerNode": 0,
+      "SimulationSnapshot": 9119,
+      "TrackStateSnapshot": 9257,
+      "RiderStateCopy": 0,
+      "TrackStateCopy": 9119,
+      "PrivateCommit": 9119,
+      "PrefixCacheHit": 5836
+    },
+    "CandidateTraversals": 3248,
+    "UniquePhysicalEvaluations": 9119
+  },
+  "baselineMaterialization": {
+    "TrackStateSnapshot": 9293,
+    "SimulationSnapshot": 9155,
+    "Candidates": 3248,
+    "Projection.Candidates": 3248,
+    "RiderStateCopies": 3248,
+    "Projection.RiderStateCopies": 3248,
+    "TrackStateCopies": 3248,
+    "Projection.TrackStateCopies": 3248,
+    "Projection.TrackStateSnapshot": 9119,
+    "Projection.SimulationSnapshot": 9119,
+    "ExecutedPathNode": 282399,
+    "Projection.ExecutedPathNode": 279348,
+    "ExecutedPathStep": 275887,
+    "Projection.ExecutedPathStep": 272912,
+    "ExecutedSegmentPath": 6512,
+    "Projection.ExecutedSegmentPath": 6436,
+    "FormattedSegmentStrings": 9257,
+    "Projection.FormattedSegmentStrings": 9119,
+    "RiderStepDiagnostics": 9257,
+    "Projection.RiderStepDiagnostics": 9119,
+    "LongitudinalMotionNode": 79803,
+    "Projection.LongitudinalMotionNode": 79041,
+    "SimulationStepEvent": 9258,
+    "Projection.SimulationStepEvent": 9119,
+    "ResolvedSimulationStep": 9155,
+    "Projection.ResolvedSimulationStep": 9119,
+    "RiderMotionSample": 425148,
+    "Projection.RiderMotionSample": 419335,
+    "ResolvedRiderMotion": 9257,
+    "Projection.ResolvedRiderMotion": 9119,
+    "PrivateCommits": 14955,
+    "Projection.PrivateCommits": 14955,
+    "Projection.PrefixCacheHits": 5836
+  },
+  "stageCProfile": {
+    "TrackStateSnapshot": 9293,
+    "SimulationSnapshot": 9155,
+    "Candidates": 3248,
+    "Projection.Candidates": 3248,
+    "TrackStateCopies": 9119,
+    "Projection.TrackStateCopies": 9119,
+    "Projection.TrackStateSnapshot": 9119,
+    "Projection.SimulationSnapshot": 9119,
+    "UniquePhysicalEvaluations": 9119,
+    "Projection.UniquePhysicalEvaluations": 9119,
+    "CoupledEvaluations": 1689373,
+    "Projection.CoupledEvaluations": 1666204,
+    "ContinuousCornerEnvelope": 1513111,
+    "Projection.ContinuousCornerEnvelope": 1488987,
+    "PrivateCommits": 9119,
+    "Projection.PrivateCommits": 9119,
+    "EnvelopeMetreIntegrations": 25980395,
+    "Projection.EnvelopeMetreIntegrations": 25819453
+  },
+  "finalProfile": {
+    "TrackStateSnapshot": 9293,
+    "SimulationSnapshot": 9155,
+    "Candidates": 3248,
+    "Projection.Candidates": 3248,
+    "TrackStateCopies": 9119,
+    "Projection.TrackStateCopies": 9119,
+    "Projection.TrackStateSnapshot": 9119,
+    "Projection.SimulationSnapshot": 9119,
+    "UniquePhysicalEvaluations": 9119,
+    "Projection.UniquePhysicalEvaluations": 9119,
+    "CoupledEvaluations": 1689373,
+    "Projection.CoupledEvaluations": 1666204,
+    "ContinuousCornerEnvelope": 943507,
+    "Projection.ContinuousCornerEnvelope": 929378,
+    "PrivateCommits": 9119,
+    "Projection.PrivateCommits": 9119,
+    "EnvelopeMetreIntegrations": 18607547,
+    "Projection.EnvelopeMetreIntegrations": 18494673
+  }
+}

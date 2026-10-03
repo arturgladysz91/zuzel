@@ -336,6 +336,7 @@ public sealed class TrajectoryEvaluatorTests
         var context = new RiderDecisionContext(snapshot, snapshot.Rider(2));
         var intent = new TrajectoryIntent(1, 1, 1);
         Parity(context, intent, new[] { 7, 0 });
+        LeanProjectionTests.Verify(context, intent);
         var replay = Independent(context, intent, new[] { 7, 0 });
         var steps = replay.SelectMany(r => r.Diagnostics.Single().ExecutedPath?.Steps ?? Array.Empty<ExecutedPathStep>()).ToArray();
         Assert.Contains(steps, s => s.TimeSolveSubdivisions > 0);

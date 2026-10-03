@@ -1,0 +1,91 @@
+{
+  "Runtime": ".NET 8.0.30",
+  "Warmups": 5,
+  "Samples": 15,
+  "Laps": 4,
+  "Incidents": false,
+  "Logging": false,
+  "ExistingContact": true,
+  "Rows": [
+    {
+      "Riders": 1,
+      "Scripted": false,
+      "MedianMilliseconds": 342.6259,
+      "MeanMilliseconds": 342.7697333333334,
+      "AllocatedBytesPerRun": 129576708.8,
+      "CandidateTraversals": 844,
+      "ProductionResolutions": 2339,
+      "Gen0": 116,
+      "Gen1": 0,
+      "Gen2": 0
+    },
+    {
+      "Riders": 4,
+      "Scripted": false,
+      "MedianMilliseconds": 1322.3032,
+      "MeanMilliseconds": 1329.2487466666666,
+      "AllocatedBytesPerRun": 498088555.2,
+      "CandidateTraversals": 3248,
+      "ProductionResolutions": 9119,
+      "Gen0": 447,
+      "Gen1": 208,
+      "Gen2": 9
+    },
+    {
+      "Riders": 4,
+      "Scripted": true,
+      "MedianMilliseconds": 2.2837,
+      "MeanMilliseconds": 2.3089333333333335,
+      "AllocatedBytesPerRun": 2738369.6,
+      "CandidateTraversals": 0,
+      "ProductionResolutions": 0,
+      "Gen0": 2,
+      "Gen1": 1,
+      "Gen2": 0
+    }
+  ],
+  "Phases": [
+    {
+      "Phase": "Straight",
+      "MedianMilliseconds": 14.8879,
+      "AllocatedBytesPerDecision": 5427880
+    },
+    {
+      "Phase": "TurnEntry",
+      "MedianMilliseconds": 15.9296,
+      "AllocatedBytesPerDecision": 5459232
+    },
+    {
+      "Phase": "TurnMiddle",
+      "MedianMilliseconds": 4.6508,
+      "AllocatedBytesPerDecision": 1738960
+    },
+    {
+      "Phase": "TurnExit",
+      "MedianMilliseconds": 2.4785,
+      "AllocatedBytesPerDecision": 803360
+    }
+  ],
+  "ProjectionCounts": {
+    "PhysicalEvaluation": 9119,
+    "RichMotion": 0,
+    "MotionSample": 0,
+    "RiderDiagnostics": 0,
+    "Event": 0,
+    "FormattedLog": 0,
+    "ExecutedPath": 0,
+    "ExecutedNode": 0,
+    "ExecutedStep": 0,
+    "LongitudinalNode": 0,
+    "ResolvedStep": 0,
+    "CornerNode": 0,
+    "SimulationSnapshot": 9119,
+    "TrackStateSnapshot": 9257,
+    "RiderStateCopy": 0,
+    "TrackStateCopy": 9119,
+    "PrivateCommit": 9119,
+    "PrefixCacheHit": 5836
+  },
+  "CandidateTraversals": 3248,
+  "UniquePhysicalEvaluations": 9119
+}

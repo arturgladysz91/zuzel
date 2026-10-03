@@ -37,13 +37,17 @@ internal static class ExecutedPathTraversal
         return (float)Math.Sqrt(tangent * tangent + dy * dy);
     }
 
-    internal static ExecutedSegmentPath Traverse(SimulationSnapshot snapshot, RiderSnapshot rider,
+    internal static ExecutedTraversalResult Traverse(SimulationSnapshot snapshot, RiderSnapshot rider,
         SegmentResolution resolution, float entrySpeed, float canonicalAdvance, bool launch,
-        Func<float, float?> nextCornerTarget)
+        Func<float, float?> nextCornerTarget, bool captureRich = true)
     {
         var segment = snapshot.Segment; var geometry = snapshot.Track.Geometry;
         var corner = snapshot.Track.CornerTopology.CornerForSegment(snapshot.Step.SegmentIndex);
         var skills = rider.Profile.Skills; var setup = rider.ActiveSetup;
+        // Exact, segment-local reuse of immutable envelope inputs. Every sample
+        // still uses the production surface interpolation and factory. The existing
+        // apex-anchored metre integrator remains the only speed implementation.
+        var envelopes = corner is null ? null : new Dictionary<EnvelopeKey, ContinuousCornerEnvelope>();
         var start = (double)rider.SegmentProgress;
         var end = start + canonicalAdvance;
         var lateral = rider.LateralPosition;
@@ -51,13 +55,21 @@ internal static class ExecutedPathTraversal
         double time = reaction, distance = 0d;
         var crash = resolution.Outcome == SegmentOutcome.Crash;
         var speed = crash ? MathF.Max(1f, entrySpeed * .5f) : resolution.Speed;
-        var nodes = new List<ExecutedPathNode> { Node(start, lateral, speed) };
-        var steps = new List<ExecutedPathStep>();
+        var nodeSurface = snapshot.TrackState.SampleSurface(snapshot.Step.SegmentIndex, lateral);
+        var initialEnvelope = corner is null ? (float?)null : LocalEnvelope(start, lateral, nodeSurface);
+        var nodes = captureRich ? new List<ExecutedPathNode> { Node(start, lateral, speed) } : null;
+        var steps = captureRich ? new List<ExecutedPathStep>() : null;
         var maxNodes = checked((int)Math.Ceiling(LaneModel.SegmentLengthMeters(segment, 4f, geometry)
             + LaneModel.UsableRacingWidthMeters(segment.Type, geometry)) * 4 + 16);
+        // Normalized wear must divide each distance by the final float total before
+        // adding its kernel. Keep only two value fields, preserving that exact order.
+        Span<ExecutedWearSample> wearSamples = captureRich ? Span<ExecutedWearSample>.Empty
+            : maxNodes <= 1024 ? stackalloc ExecutedWearSample[maxNodes] : new ExecutedWearSample[maxNodes];
+        var stepCount = 0; var subdivisionTotal = 0;
+        float? apexLateral = Progress(start) == ContinuousCornerEnvelope.ApexProgress ? lateral : null;
         while (start < end)
         {
-            if (steps.Count >= maxNodes) throw new InvalidOperationException("Coupled traversal exceeded its geometric node bound.");
+            if (stepCount >= maxNodes) throw new InvalidOperationException("Coupled traversal exceeded its geometric node bound.");
             var length = LaneModel.SegmentLengthMeters(segment, lateral, geometry);
             var finish = Math.Min(end, start + LongitudinalDynamics.ProvisionalLongitudinalIntegrationStepMeters / length);
             if (corner is not null)
@@ -98,7 +110,7 @@ internal static class ExecutedPathTraversal
                     if (lateral != resolution.Lane && result.Lateral == resolution.Lane)
                     {
                         var rate = LateralMovementModel.CalculateMaxLateralDistanceMeters(1f, segment.Type, geometry,
-                            nodes[^1].Surface, skills);
+                            nodeSurface, skills);
                         var arrivalTime = LateralSpaceModel.LateralDistanceMeters(lateral, resolution.Lane, segment.Type, geometry) / rate;
                         if (result.Time > arrivalTime + TimeToleranceSeconds)
                         {
@@ -128,21 +140,41 @@ internal static class ExecutedPathTraversal
                 throw new InvalidOperationException("Coupled traversal has no finite forward solution.");
             distance += result.Distance; time += result.Time;
             var sampledLateral = (lateral + result.Lateral) * .5f;
-            steps.Add(new(result.Distance, (float)result.Time, sampledLateral,
-                snapshot.TrackState.SampleSurface(snapshot.Step.SegmentIndex, sampledLateral),
-                result.CorrectionDistance, result.CarryDistance, result.DriveDistance,
-                result.CorrectionTime, result.CarryTime, result.DriveTime,
-                result.Force, result.Iterations, result.Fallback) { TimeSolveSubdivisions = subdivisions });
+            if (captureRich)
+            {
+                ProjectionCaptureAudit.Record(ProjectionMaterialization.ExecutedStep);
+                steps!.Add(new(result.Distance, (float)result.Time, sampledLateral,
+                    snapshot.TrackState.SampleSurface(snapshot.Step.SegmentIndex, sampledLateral),
+                    result.CorrectionDistance, result.CarryDistance, result.DriveDistance,
+                    result.CorrectionTime, result.CarryTime, result.DriveTime,
+                    result.Force, result.Iterations, result.Fallback) { TimeSolveSubdivisions = subdivisions });
+            }
+            else wearSamples[stepCount] = new(result.Distance, sampledLateral);
+            stepCount++; subdivisionTotal += subdivisions;
             lateral = result.Lateral; speed = result.Speed; start = finish;
-            nodes.Add(Node(start, lateral, crash && start == end ? 0f : speed));
+            nodeSurface = snapshot.TrackState.SampleSurface(snapshot.Step.SegmentIndex, lateral);
+            if (Progress(start) == ContinuousCornerEnvelope.ApexProgress) apexLateral ??= lateral;
+            if (captureRich) nodes!.Add(Node(start, lateral, crash && start == end ? 0f : speed));
         }
-        return new(nodes, steps, reaction, setup);
+        var finalDistance = (float)distance;
+        ProjectionWear wear = default;
+        if (!captureRich)
+        {
+            var weights = new float[LaneModel.LanesCount];
+            for (var i = 0; i < stepCount; i++)
+                SimulationEngine.AddInterpolatedWearKernel(weights, wearSamples[i].LateralPosition,
+                    wearSamples[i].DistanceMeters / finalDistance);
+            wear = SimulationEngine.FinishExecutedWear(weights, rider.LateralPosition);
+        }
+        return new(captureRich ? new ExecutedSegmentPath(nodes!, steps!, reaction, setup) : null,
+            finalDistance, (float)time, lateral, crash ? 0f : speed, apexLateral, wear, subdivisionTotal);
 
         float? Progress(double local) => corner is null ? null
             : (float)((snapshot.Step.SegmentIndex - corner.StartSegmentIndex + local) / corner.SegmentCount);
 
         ExecutedPathNode Node(double local, float atLateral, float atSpeed)
         {
+            ProjectionCaptureAudit.Record(ProjectionMaterialization.ExecutedNode);
             var surface = snapshot.TrackState.SampleSurface(snapshot.Step.SegmentIndex, atLateral);
             var radius = corner is null ? (float?)null : LaneModel.TurnArcRadiusMeters(atLateral, geometry);
             var safe = corner is null ? (float?)null : SegmentPhysics.MaxSafeTurnSpeed(atLateral, geometry, surface, skills, setup);
@@ -159,17 +191,23 @@ internal static class ExecutedPathTraversal
 
         float LocalEnvelope(double local, float atLateral, TrackSurfaceState atSurface)
         {
-            var phase = snapshot.Track.CornerTopology.Resolve(snapshot.Step.SegmentIndex, (float)local, atLateral, geometry)!.Value;
-            // Pointwise local continuation, never an entry/average radius for the executed path.
-            return ContinuousCornerEnvelope.Create(phase, atLateral, geometry, atSurface, skills, setup)
-                .SpeedMetersPerSecond(Progress(local)!.Value);
+            var key = new EnvelopeKey(BitConverter.SingleToInt32Bits(atLateral),
+                BitConverter.SingleToInt32Bits(atSurface.Grip), BitConverter.SingleToInt32Bits(atSurface.Ruts),
+                BitConverter.SingleToInt32Bits(atSurface.Moisture));
+            if (!envelopes!.TryGetValue(key, out var envelope))
+            {
+                var phase = snapshot.Track.CornerTopology.Resolve(snapshot.Step.SegmentIndex, (float)local, atLateral, geometry)!.Value;
+                envelope = ContinuousCornerEnvelope.Create(phase, atLateral, geometry, atSurface, skills, setup);
+                envelopes.Add(key, envelope);
+            }
+            return envelope.SpeedMetersPerSecond(Progress(local)!.Value);
         }
 
         CoupledStep Solve(double finish)
         {
             if (finish <= start) return default;
             var tangentDistance = LaneModel.SegmentLengthMeters(segment, lateral, geometry) * (finish - start);
-            var entryForce = LongitudinalDynamics.CalculateStandingStartAvailableDriveForceNewtons(skills, setup, nodes[^1].Surface);
+            var entryForce = LongitudinalDynamics.CalculateStandingStartAvailableDriveForceNewtons(skills, setup, nodeSurface);
             var guess = speed > 0f ? tangentDistance / speed : Math.Sqrt(2d * tangentDistance
                 / LongitudinalDynamics.CalculateNetDriveAccelerationMetersPerSecondSquared(0f, entryForce, setup));
             CoupledStep evaluated = default;
@@ -202,7 +240,7 @@ internal static class ExecutedPathTraversal
         CoupledStep Evaluate(double seconds, double finish)
         {
             var atLateral = LateralMovementModel.MoveTowards(lateral, resolution.Lane, (float)seconds,
-                segment.Type, geometry, nodes[^1].Surface, skills);
+                segment.Type, geometry, nodeSurface, skills);
             var ds = GeometricDistance(segment, geometry, lateral, atLateral, finish - start);
             var sample = snapshot.TrackState.SampleSurface(snapshot.Step.SegmentIndex, (lateral + atLateral) * .5f);
             var force = launch ? LongitudinalDynamics.CalculateStandingStartAvailableDriveForceNewtons(skills, setup, sample)
@@ -217,7 +255,7 @@ internal static class ExecutedPathTraversal
                 var allowCorrection = resolution.Outcome != SegmentOutcome.RunWide
                     || resolution.ContinuousCorrectionTargetSpeedMetersPerSecond.HasValue;
                 if (resolution.Outcome == SegmentOutcome.RunWide && resolution.ContinuousCorrectionTargetSpeedMetersPerSecond is { } retained)
-                    target += MathF.Max(0f, retained - nodes[0].EnvelopeSpeedMetersPerSecond!.Value);
+                    target += MathF.Max(0f, retained - initialEnvelope!.Value);
                 if (allowCorrection && speed > target)
                 {
                     var correction = LongitudinalDynamics.CalculateCornerSpeedCorrectionProfile(speed, target, correctionCapability, ds);
@@ -243,6 +281,8 @@ internal static class ExecutedPathTraversal
             return new(ds, elapsed, atLateral, endSpeed, 0f, 0f, ds, 0f, 0f, (float)elapsed, force, 0, false);
         }
     }
+
+    private readonly record struct EnvelopeKey(int LateralBits, int GripBits, int RutsBits, int MoistureBits);
 
     private readonly record struct CoupledStep(float Distance, double Time, float Lateral, float Speed,
         float CorrectionDistance, float CarryDistance, float DriveDistance,

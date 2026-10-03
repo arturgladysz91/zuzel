@@ -38,6 +38,14 @@ public sealed class TrackState
             _surface[segment, lane] = surfaceProfile(segment, lane);
     }
 
+    private TrackState(TrackSurfaceState[,] cells)
+    {
+        ProjectionCaptureAudit.Record(ProjectionMaterialization.TrackStateCopy);
+        _surface = cells; SegmentCount = cells.GetLength(0); LinesCount = cells.GetLength(1);
+    }
+    /// <summary>Detached exact-value copy for a hypothetical branch.</summary>
+    internal TrackState Clone() => new((TrackSurfaceState[,])_surface.Clone());
+
     public static TrackState CreateDefault(Track track, TrackSurfaceState? defaultSurface = null)
         => new(track.Segments.Count, TrackSegment.LanesCount, defaultSurface ?? TrackSurfaceState.Default);
 

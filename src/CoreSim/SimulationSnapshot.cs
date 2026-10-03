@@ -44,8 +44,17 @@ public sealed record RiderSnapshot(
     public StartingGateBounds? StartingPosition { get; init; }
     public StartingGate? StartingGate => StartingPosition?.Gate;
 
+    internal RiderSnapshot Apply(RiderStateChange change) => this with
+    {
+        Position = change.Position, LastResolvedSegmentId = change.LastResolvedSegmentId,
+        Lane = change.Lane, LateralPosition = change.LateralPosition, Speed = change.Speed,
+        Risk = change.Risk, Status = change.Status, ElapsedTimeSeconds = change.ElapsedTimeSeconds,
+        Morale = change.Morale,
+    };
+
     internal RiderState ToMutableCopy()
     {
+        ProjectionCaptureAudit.Record(ProjectionMaterialization.RiderStateCopy);
         var copy = new RiderState(Profile, Lane, Morale, ManagerTrust)
         {
             LateralPosition = LateralPosition,
@@ -72,6 +81,7 @@ public sealed class TrackStateSnapshot
 
     internal TrackStateSnapshot(TrackState source)
     {
+        ProjectionCaptureAudit.Record(ProjectionMaterialization.TrackStateSnapshot);
         ArgumentNullException.ThrowIfNull(source);
         SegmentCount = source.SegmentCount;
         LinesCount = source.LinesCount;
@@ -151,6 +161,7 @@ public sealed class SimulationSnapshot
             throw new ArgumentOutOfRangeException(nameof(step), "Segment index is outside the track.");
 
         Step = step;
+        ProjectionCaptureAudit.Record(ProjectionMaterialization.SimulationSnapshot);
         // Track already owns immutable copied segments, geometry and topology.
         Track = track;
         TrackState = trackState;

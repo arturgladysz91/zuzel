@@ -26,7 +26,15 @@ public sealed class TrajectoryEvaluator
 {
     private readonly RiderDecisionContext _context;
     private readonly TrackStateSnapshot _surface;
-    private readonly Dictionary<string, ResolvedSimulationStep>? _productionPrefixes;
+    private readonly bool _reusePrefixes;
+    private PrefixNode? _leanRoot, _richRoot;
+    private sealed class PrefixNode(RiderSnapshot rider, TrackState surface, TrajectoryTraversal metrics)
+    {
+        internal RiderSnapshot Rider { get; } = rider;
+        internal TrackState Surface { get; } = surface;
+        internal TrajectoryTraversal Metrics { get; } = metrics;
+        internal PrefixNode?[]? Children { get; set; }
+    }
     public IReadOnlyList<TrajectoryHorizonSegment> Horizon { get; }
     public int CandidateTraversalCount { get; private set; }
     public int ProductionResolutionCount { get; private set; }
@@ -35,7 +43,7 @@ public sealed class TrajectoryEvaluator
     {
         ArgumentNullException.ThrowIfNull(context);
         _context = context; _surface = perceivedSurface ?? context.TrackState;
-        _productionPrefixes = reuseProductionPrefixes ? new() : null;
+        _reusePrefixes = reuseProductionPrefixes;
         if (_surface.SegmentCount != context.Snapshot.Track.Segments.Count || _surface.LinesCount != LaneModel.LanesCount)
             throw new ArgumentException("Surface dimensions must match the decision track.", nameof(perceivedSurface));
         if (!context.Rider.IsActive || context.Rider.SegmentIndex != context.SegmentIndex)
@@ -45,81 +53,98 @@ public sealed class TrajectoryEvaluator
     public TrajectoryTraversal Evaluate(TrajectoryIntent intent, bool retainResolvedMotions = false)
     {
         CandidateTraversalCount++;
-        var track = _context.Snapshot.Track;
-        var rider = _context.Rider.ToMutableCopy();
-        var riders = new[] { rider };
-        var state = new TrackState(_surface.SegmentCount, _surface.LinesCount, _surface.GetSurface);
-        var engine = new SimulationEngine(new ScriptedTrajectory(intent, Horizon, _context.StepNumber));
-        var options = new HeatSimulationOptions
+        ref var root = ref (retainResolvedMotions ? ref _richRoot : ref _leanRoot);
+        if (!_reusePrefixes || root is null)
+            root = new(_context.Rider,
+                new TrackState(_surface.SegmentCount, _surface.LinesCount, _surface.GetSurface),
+                new(default, 0, 0, null, null, null, null, null, null, null, 0, 0,
+                    false, Array.Empty<TrajectoryPhaseEndpoint>(), Array.Empty<ResolvedRiderMotion>()));
+        var node = root;
+        for (var offset = 0; offset < Horizon.Count && node.Rider.IsActive; offset++)
         {
-            Laps = _context.Snapshot.Step.RequiredLaps, Seed = _context.Seed,
-            IncidentFrequency = 0f, EnableLogging = false,
-        };
-        var log = new SimLog(false);
-        var endpoints = new List<TrajectoryPhaseEndpoint>(Horizon.Count);
-        var motions = new List<ResolvedRiderMotion>();
-        double time = 0, distance = 0, straightTime = 0, straightDistance = 0;
-        float? entrySpeed = null, entryLateral = null, middleLateral = null, apexLateral = null;
-        float? exitLateral = null, exitSpeed = null, straightSpeed = null;
-        var prefix = string.Empty;
-        for (var offset = 0; offset < Horizon.Count
-            && rider.Status is RiderRaceStatus.NotStarted or RiderRaceStatus.Racing; offset++)
-        {
-            var part = Horizon[offset];
-            var step = _context.Snapshot.Step with
+            var part = Horizon[offset]; var requested = Target(intent, part.Phase);
+            node.Children ??= new PrefixNode?[LaneModel.LanesCount];
+            if (node.Children[requested] is not { } child)
             {
-                StepNumber = _context.StepNumber + offset,
-                SegmentIndex = part.SegmentIndex, LapIndex = part.LapIndex,
-            };
-            var requested = Target(intent, part.Phase);
-            prefix += (char)('0' + requested);
-            // Equal scripted prefixes have exactly the same production state and own wear.
-            // Retain immutable resolutions only within this one decision. Every candidate
-            // still commits them to its own fresh copies; no candidate's mutable state is reused.
-            if (_productionPrefixes is null || !_productionPrefixes.TryGetValue(prefix, out var resolved))
-            {
-                var input = engine.CaptureSnapshot(track, state, riders, step);
-                resolved = engine.Resolve(input, engine.Decide(input), options);
+                child = ResolvePrefix(node, part, offset, requested, retainResolvedMotions);
+                node.Children[requested] = child;
                 ProductionResolutionCount++;
-                _productionPrefixes?.Add(prefix, resolved);
             }
-            var snapshot = resolved.Snapshot;
-            var motion = resolved.Motions.Single(); var change = resolved.Changes.Single();
-            var reached = LateralSpaceModel.LateralDistanceMeters(motion.Final.LateralPosition,
-                requested, snapshot.Segment.Type, track.Geometry) <= LateralMovementModel.LaneArrivalToleranceMeters;
-            endpoints.Add(new(part.SegmentIndex, part.Phase, requested, motion.Final.LateralPosition,
-                motion.Final.SpeedMetersPerSecond, change.Outcome, reached));
-            time += motion.TotalTimeSeconds; distance += motion.TotalDistanceMeters;
-            if (retainResolvedMotions) motions.Add(motion);
-            if (snapshot.Segment.Type != SegmentType.Straight)
-            {
-                var corner = track.CornerTopology.CornerForSegment(part.SegmentIndex)!;
-                if (part.SegmentIndex == corner.StartSegmentIndex && motion.Initial.SegmentProgress == 0f)
-                    entrySpeed ??= motion.Initial.SpeedMetersPerSecond;
-                if (part.Phase == TrajectoryPhase.Entry) entryLateral = motion.Final.LateralPosition;
-                if (part.Phase == TrajectoryPhase.Middle) middleLateral = motion.Final.LateralPosition;
-                if (part.Phase == TrajectoryPhase.Exit) exitLateral = motion.Final.LateralPosition;
-                var apexProgress = (double)part.LapIndex * track.Segments.Count
-                    + corner.StartSegmentIndex + corner.SegmentCount * (double)ContinuousCornerEnvelope.ApexProgress;
-                if (motion.Initial.CanonicalProgress <= apexProgress && motion.Final.CanonicalProgress >= apexProgress)
-                    apexLateral = SampleAtProgress(motion, apexProgress).LateralPosition;
-                if (part.SegmentIndex == corner.EndSegmentIndex)
-                {
-                    exitLateral = motion.Final.LateralPosition; exitSpeed = motion.Final.SpeedMetersPerSecond;
-                }
-            }
-            if (part.Phase == TrajectoryPhase.FollowingStraight)
-            {
-                straightTime += motion.TotalTimeSeconds; straightDistance += motion.TotalDistanceMeters;
-                straightSpeed = motion.Final.SpeedMetersPerSecond;
-            }
-            engine.Commit(resolved, riders, state, log);
+            else ProjectionCaptureAudit.Record(ProjectionMaterialization.PrefixCacheHit);
+            node = child;
         }
-        var completed = endpoints.Count == Horizon.Count && rider.Status != RiderRaceStatus.Crashed;
-        return new(intent, time, distance, entrySpeed, entryLateral, middleLateral, apexLateral,
-            exitLateral, exitSpeed, straightSpeed, straightTime, straightDistance, completed,
-            endpoints.AsReadOnly(), motions.AsReadOnly());
+        return node.Metrics with { Intent = intent,
+            CompletedHorizon = node.Metrics.PhaseEndpoints.Count == Horizon.Count
+                && node.Rider.Status != RiderRaceStatus.Crashed };
     }
+
+    private PrefixNode ResolvePrefix(PrefixNode parent, TrajectoryHorizonSegment part,
+        int offset, int requested, bool rich)
+    {
+        var track = _context.Snapshot.Track;
+        var step = _context.Snapshot.Step with
+        {
+            StepNumber = _context.StepNumber + offset, SegmentIndex = part.SegmentIndex, LapIndex = part.LapIndex,
+        };
+        var state = parent.Surface.Clone();
+        var input = new SimulationSnapshot(step, track, parent.Surface.Snapshot(), new[] { parent.Rider });
+        var options = new HeatSimulationOptions { Laps = step.RequiredLaps, Seed = _context.Seed,
+            IncidentFrequency = 0f, EnableLogging = false };
+        SoloProjectionResult projection;
+        ResolvedRiderMotion? motion = null;
+        if (rich)
+        {
+            var engine = new SimulationEngine(new FixedTarget(requested));
+            var resolved = engine.Resolve(input, engine.Decide(input), options);
+            motion = resolved.Motions[0];
+            projection = new(input, resolved.Changes[0], motion.TotalTimeSeconds, motion.TotalDistanceMeters, null, default);
+            var rider = parent.Rider.ToMutableCopy();
+            engine.Commit(resolved, new[] { rider }, state, new SimLog(false));
+        }
+        else
+        {
+            projection = SimulationEngine.ResolveSoloProjection(input, parent.Rider, new(requested), options);
+            SimulationEngine.CommitProjectionWear(projection, state);
+        }
+        var change = projection.Change;
+        var previous = parent.Metrics;
+        var entrySpeed = previous.CornerEntrySpeedMetersPerSecond;
+        var entry = previous.EntryLateralPosition; var middle = previous.MiddleLateralPosition;
+        var apex = previous.ApexRegionLateralPosition; var exit = previous.ExitLateralPosition;
+        var exitSpeed = previous.CornerExitSpeedMetersPerSecond;
+        var straightSpeed = previous.FollowingStraightEndSpeedMetersPerSecond;
+        var straightTime = previous.FollowingStraightTimeSeconds; var straightDistance = previous.FollowingStraightDistanceMeters;
+        var reached = LateralSpaceModel.LateralDistanceMeters(change.LateralPosition, requested,
+            input.Segment.Type, track.Geometry) <= LateralMovementModel.LaneArrivalToleranceMeters;
+        var endpoint = new TrajectoryPhaseEndpoint(part.SegmentIndex, part.Phase, requested,
+            change.LateralPosition, change.Speed, change.Outcome, reached);
+        if (input.Segment.Type != SegmentType.Straight)
+        {
+            var corner = track.CornerTopology.CornerForSegment(part.SegmentIndex)!;
+            if (part.SegmentIndex == corner.StartSegmentIndex && parent.Rider.SegmentProgress == 0f)
+                entrySpeed ??= parent.Rider.Speed;
+            if (part.Phase == TrajectoryPhase.Entry) entry = change.LateralPosition;
+            if (part.Phase == TrajectoryPhase.Middle) middle = change.LateralPosition;
+            if (part.Phase == TrajectoryPhase.Exit) exit = change.LateralPosition;
+            var apexProgress = (double)part.LapIndex * track.Segments.Count
+                + corner.StartSegmentIndex + corner.SegmentCount * (double)ContinuousCornerEnvelope.ApexProgress;
+            if (parent.Rider.CanonicalProgress <= apexProgress && change.Position.TotalSegmentProgress >= apexProgress)
+                apex = motion is not null ? SampleAtProgress(motion, apexProgress).LateralPosition : projection.ApexLateralPosition;
+            if (part.SegmentIndex == corner.EndSegmentIndex)
+            { exit = change.LateralPosition; exitSpeed = change.Speed; }
+        }
+        if (part.Phase == TrajectoryPhase.FollowingStraight)
+        {
+            straightTime += projection.TravelTimeSeconds; straightDistance += projection.DistanceMeters; straightSpeed = change.Speed;
+        }
+        var endpoints = previous.PhaseEndpoints.Append(endpoint).ToArray();
+        var motions = motion is not null ? previous.ResolvedMotions.Append(motion).ToArray() : Array.Empty<ResolvedRiderMotion>();
+        var metrics = new TrajectoryTraversal(default, previous.PredictedTraversalTimeSeconds + projection.TravelTimeSeconds,
+            previous.PhysicalDistanceMeters + projection.DistanceMeters, entrySpeed, entry, middle, apex, exit, exitSpeed, straightSpeed,
+            straightTime, straightDistance, false, Array.AsReadOnly(endpoints), Array.AsReadOnly(motions));
+        return new(parent.Rider.Apply(change), state, metrics);
+    }
+
     public static int Target(TrajectoryIntent intent, TrajectoryPhase phase) => phase switch
     {
         TrajectoryPhase.Middle => intent.ApexTarget,
@@ -168,11 +193,8 @@ public sealed class TrajectoryEvaluator
         }
         return motion.Final;
     }
-    private sealed class ScriptedTrajectory(TrajectoryIntent intent,
-        IReadOnlyList<TrajectoryHorizonSegment> horizon, int firstStep) : IRiderDecisionModel
+    private sealed class FixedTarget(int target) : IRiderDecisionModel
     {
-        public RiderDecision Decide(TrackSegment segment, RiderState rider) => new(intent.TargetFor(segment.Type));
-        public RiderDecision Decide(RiderDecisionContext context)
-            => new(Target(intent, horizon[context.StepNumber - firstStep].Phase));
+        public RiderDecision Decide(TrackSegment segment, RiderState rider) => new(target);
     }
 }

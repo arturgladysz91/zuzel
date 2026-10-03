@@ -6,6 +6,18 @@ using CoreSim.Setup;
 
 if (args.Length > 0)
 {
+    if (args.Length == 2 && args[0] == "trajectory-projection-performance-report")
+    {
+        Directory.CreateDirectory(args[1]);
+        File.WriteAllText(Path.Combine(args[1], "trajectory-projection-performance.json"), TrajectoryProjectionBenchmark.RunJson());
+        return;
+    }
+    if (args.Length == 2 && args[0] == "trajectory-behavior-fingerprint")
+    {
+        Directory.CreateDirectory(args[1]);
+        File.WriteAllBytes(Path.Combine(args[1], "trajectory-behavior-fingerprint.json"), TrajectoryBehaviorFingerprint.Capture());
+        return;
+    }
     if (args.Length == 2 && args[0] == "trajectory-intent-evaluation-report")
     {
         var evidence = TrajectoryIntentEvidence.Run();

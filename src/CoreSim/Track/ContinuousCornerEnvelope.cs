@@ -94,6 +94,11 @@ public sealed class ContinuousCornerEnvelope
         => TraverseWithReducedDriveResistanceExposure(entrySpeedMetersPerSecond, startProgress,
             distanceMeters, 0f, allowDrive, allowCorrection, retainedOverspeedMetersPerSecond);
 
+    internal ContinuousCornerTraversalProfile TraverseProjection(float entrySpeedMetersPerSecond,
+        float startProgress, float distanceMeters, bool allowDrive, bool allowCorrection, float retainedOverspeedMetersPerSecond)
+        => TraverseCore(entrySpeedMetersPerSecond, startProgress, distanceMeters,
+            0f, null, null, 1f, 0f, allowDrive, allowCorrection, retainedOverspeedMetersPerSecond, captureNodes: false);
+
     internal ContinuousCornerTraversalProfile TraverseWithReducedDriveResistanceExposure(
         float entrySpeedMetersPerSecond,
         float startProgress,
@@ -176,7 +181,7 @@ public sealed class ContinuousCornerEnvelope
         float controlLossAdaptability,
         bool allowDrive,
         bool allowCorrection,
-        float retainedOverspeedMetersPerSecond)
+        float retainedOverspeedMetersPerSecond, bool captureNodes = true)
     {
         RequirePositive(entrySpeedMetersPerSecond, nameof(entrySpeedMetersPerSecond));
         ValidateProgress(startProgress);
@@ -216,10 +221,11 @@ public sealed class ContinuousCornerEnvelope
         var peakProgress = startProgress;
         var minimumProgress = startProgress;
         var startDistance = (double)startProgress * TotalLengthMeters;
-        var nodes = new List<ContinuousCornerNode>
+        var previousNodeSpeed = speed;
+        var nodes = captureNodes ? new List<ContinuousCornerNode>
         {
             Node(startProgress, speed, 0f, ContinuousCornerPhaseClassification.CarryPassive),
-        };
+        } : null;
         while (travelled < distanceMeters)
         {
             // Split at the apex: a metre may never straddle neutral/drive regions.
@@ -457,15 +463,16 @@ public sealed class ContinuousCornerEnvelope
             speed = nextSpeed;
             if (speed > peak) { peak = speed; peakProgress = nextProgress; }
             if (speed < minimum) { minimum = speed; minimumProgress = nextProgress; }
-            nodes.Add(Node(nextProgress, speed, (float)time, phaseClassification,
+            nodes?.Add(Node(nextProgress, speed, (float)time, phaseClassification,
                 appliedScrubWindow, appliedScrubAcceleration, appliedScrubDistance,
                 controlLossEligible, requiredCorrectionDistance, (float)step,
                 appliedCorrectionDistance, controlLoad, surfaceChallenge,
                 controlLossAdaptability, surfaceAdaptationPenalty, controlLossPressure,
                 stepCorrectionEnergyRemoved, stepControlLossEnergy,
-                controlLossEligible ? nodes[^1].SpeedMetersPerSecond : 0f,
+                controlLossEligible ? previousNodeSpeed : 0f,
                 controlLossEligible ? target : 0f,
                 productionCorrectionExit, finalCorrectionExit));
+            previousNodeSpeed = speed;
         }
         var endProgress = (float)Math.Clamp(startProgress + (double)distanceMeters / TotalLengthMeters, 0d, 1d);
         var endEnvelope = SpeedMetersPerSecond(endProgress);
@@ -476,7 +483,7 @@ public sealed class ContinuousCornerEnvelope
             (float)carryTime, (float)driveTime, SpeedMetersPerSecond(startProgress), endEnvelope,
             ApexSpeedMetersPerSecond, ApexProgress, residual, residual <= 1e-5f,
             LongitudinalDynamics.CalculateFullDriveEquilibriumSpeedMetersPerSecond(FullDriveReferenceForceNewtons, Setup),
-            new ContinuousCornerNodes(nodes))
+            nodes is null ? ContinuousCornerNodes.Empty : new ContinuousCornerNodes(nodes))
         {
             PassiveResistanceDistanceMeters = (float)passiveResistanceDistance,
             PositiveDriveDistanceMeters = (float)positiveDriveDistance,
@@ -533,6 +540,7 @@ public sealed class ContinuousCornerEnvelope
                 ? 0f
                 : PreApexScrubLossAdjustment.Window(p);
             var scrubApplied = appliedScrubAcceleration > 0f && appliedScrubDistance > 0f;
+            ProjectionCaptureAudit.Record(ProjectionMaterialization.CornerNode);
             return new ContinuousCornerNode(p, v, SpeedMetersPerSecond(p),
                 DriveAvailability(p), observation.NetAccelerationMetersPerSecondSquared)
             {
@@ -722,6 +730,7 @@ public sealed record ContinuousCornerNode(float CornerProgress, float SpeedMeter
 public sealed class ContinuousCornerNodes(IEnumerable<ContinuousCornerNode> nodes)
     : IReadOnlyList<ContinuousCornerNode>, IEquatable<ContinuousCornerNodes>
 {
+    internal static ContinuousCornerNodes Empty { get; } = new(Array.Empty<ContinuousCornerNode>());
     private readonly ContinuousCornerNode[] values = nodes.ToArray();
     public int Count => values.Length;
     public ContinuousCornerNode this[int index] => values[index];

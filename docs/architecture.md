@@ -3,8 +3,10 @@
 Current decision precedence: `AdaptiveDecisionModel` uses bounded production-backed
 Entry/Apex/Exit planning described in [current evidence](calibration/trajectory-intent-evaluation.md).
 Any earlier static route-time projection descriptions are historical. `TrajectoryEvaluator`
-replays the existing `SimulationEngine` with isolated state and scripted phase targets;
-it owns no alternative physics. Immutable Track/topology is shared by snapshots.
+uses the existing shared `SimulationEngine.ResolveRiderCore` with isolated state and scripted phase targets.
+Normal races retain Full motion/diagnostic/event materialization; hypothetical ranking uses Lean
+compact capture and a typed prefix state graph. Exact state, wear and behavioral fingerprints
+protect parity. It owns no alternative physics. Immutable Track/topology is shared by snapshots.
 
 ## Project boundaries
 
