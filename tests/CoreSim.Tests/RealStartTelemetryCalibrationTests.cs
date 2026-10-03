@@ -146,7 +146,8 @@ public sealed class RealStartTelemetryCalibrationTests
         {
             var text = File.ReadAllText(Path.Combine(Root, relative.Replace('/', Path.DirectorySeparatorChar)))
                 .Replace("\r\n", "\n", StringComparison.Ordinal).Replace('\r', '\n');
-            Assert.Equal(hash, Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(text))));
+            Assert.Equal(hash, Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(
+                HistoricalPhysicsSource.ForHash(relative, text)))));
         }
     }
 
