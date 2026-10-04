@@ -6,6 +6,18 @@ using CoreSim.Setup;
 
 if (args.Length > 0)
 {
+    if (args.Length == 2 && args[0] == "physical-occupancy-report")
+    {
+        Directory.CreateDirectory(args[1]);
+        File.WriteAllText(Path.Combine(args[1], "physical-occupancy-evidence.json"), PhysicalSpaceEvidence.DeterministicJson());
+        return;
+    }
+    if (args.Length == 2 && args[0] == "physical-occupancy-performance")
+    {
+        Directory.CreateDirectory(args[1]);
+        File.WriteAllText(Path.Combine(args[1], "physical-occupancy-performance.json"), PhysicalSpaceEvidence.BenchmarkJson());
+        return;
+    }
     if (args.Length is 2 or 3 && args[0] == "trajectory-projection-performance-report")
     {
         Directory.CreateDirectory(args[1]);

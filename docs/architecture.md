@@ -1,5 +1,12 @@
 # Architecture
 
+Current occupancy precedence (#55): [physical occupied-space and independent bike attitude](calibration/physical-occupancy-contested-space.md)
+adds explicit observation-only mechanical capsules and common-time conflict diagnostics.
+Older statements that motorcycle dimensions/contested space are absent describe their historical stage.
+Legacy contact consequences and #54 solo trajectory projection remain unchanged; rider-vs-rider
+behaviour remains #56. Boundary coordinate reinterpretations are never swept; unsupported
+frame joins remain explicit ambiguous coverage diagnostics.
+
 Current decision precedence: `AdaptiveDecisionModel` uses bounded production-backed
 Entry/Apex/Exit planning described in [current evidence](calibration/trajectory-intent-evaluation.md).
 Any earlier static route-time projection descriptions are historical. `TrajectoryEvaluator`

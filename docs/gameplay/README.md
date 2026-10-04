@@ -1,5 +1,12 @@
 # Gameplay — indeks specyfikacji
 
+Current occupancy precedence (#55): [physical occupied-space and independent bike attitude](../calibration/physical-occupancy-contested-space.md)
+adds explicit observation-only mechanical capsules and common-time conflict diagnostics.
+Older statements that motorcycle dimensions/contested space are absent describe their historical stage.
+Legacy contact consequences and #54 solo trajectory projection remain unchanged; rider-vs-rider
+behaviour remains #56. Boundary coordinate reinterpretations are never swept; unsupported
+frame joins remain explicit ambiguous coverage diagnostics.
+
 Ten katalog opisuje warstwę menedżerską meczu. Nie zastępuje `docs/core-simulation-spec.md`, który pozostaje źródłem prawdy dla Race Engine i fizycznych inwariantów.
 
 ## Status zapisów
