@@ -181,3 +181,13 @@ path. `ApexProgress = 0.5` is a provisional geometry assumption and
 telemetry-derived fit. The calibration changed no #36 longitudinal constants,
 standing-start constants, correction capability, outcome factors, incident,
 contact, lateral or surface rules.
+
+## Exact trajectory evaluation scheduling
+
+AdaptiveDecisionModel partitions candidates by their first phase target. Each worker
+owns an isolated TrajectoryEvaluator prefix graph and private rider/surface states;
+workers share only immutable root snapshots and one perceived surface. The default
+bound is min(4, available processors). Canonical cost/time/change/E-A-X reduction
+makes degree 1 and degree 4 equivalent. Normal Decide omits publication of candidate
+observations; explicit Evaluate retains them. Normal race Resolve/Commit remains
+unchanged. See [measurement and CI responsibility](calibration/trajectory-performance-ci.md).

@@ -7,6 +7,7 @@ using static CoreSim.Tests.StandingStartFixture;
 
 namespace CoreSim.Tests;
 
+[Trait("Shard", "core")]
 public sealed class SignedLongitudinalTraversalTests
 {
     private static float Force(bool exit = false) => exit

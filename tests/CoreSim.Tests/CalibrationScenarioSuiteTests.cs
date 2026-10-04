@@ -6,6 +6,7 @@ using Xunit;
 
 namespace CoreSim.Tests;
 
+[Trait("Shard", "historical-analysis")]
 public sealed class CalibrationScenarioSuiteTests
 {
     private static readonly IReadOnlyList<CalibrationScenario> Definitions = CalibrationScenarioCatalog.RequiredScenarios();

@@ -6,10 +6,11 @@ using CoreSim.Setup;
 
 if (args.Length > 0)
 {
-    if (args.Length == 2 && args[0] == "trajectory-projection-performance-report")
+    if (args.Length is 2 or 3 && args[0] == "trajectory-projection-performance-report")
     {
         Directory.CreateDirectory(args[1]);
-        File.WriteAllText(Path.Combine(args[1], "trajectory-projection-performance.json"), TrajectoryProjectionBenchmark.RunJson());
+        File.WriteAllText(Path.Combine(args[1], "trajectory-projection-performance.json"),
+            TrajectoryProjectionBenchmark.RunJson(args.Length == 3 ? int.Parse(args[2], System.Globalization.CultureInfo.InvariantCulture) : null));
         return;
     }
     if (args.Length == 2 && args[0] == "trajectory-behavior-fingerprint")

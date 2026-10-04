@@ -48,6 +48,7 @@ internal static class ExecutedPathTraversal
         // still uses the production surface interpolation and factory. The existing
         // apex-anchored metre integrator remains the only speed implementation.
         var envelopes = corner is null ? null : new Dictionary<EnvelopeKey, ContinuousCornerEnvelope>();
+        var scalarSpeeds = corner is null ? null : new Dictionary<EnvelopeQueryKey, float>();
         var start = (double)rider.SegmentProgress;
         var end = start + canonicalAdvance;
         var lateral = rider.LateralPosition;
@@ -194,22 +195,38 @@ internal static class ExecutedPathTraversal
             var key = new EnvelopeKey(BitConverter.SingleToInt32Bits(atLateral),
                 BitConverter.SingleToInt32Bits(atSurface.Grip), BitConverter.SingleToInt32Bits(atSurface.Ruts),
                 BitConverter.SingleToInt32Bits(atSurface.Moisture));
+            var progress = Progress(local)!.Value;
+            // Held target positions benefit from successive cached metre prefixes.
+            // Distinct moving samples usually need one value: store that exact query,
+            // without an envelope object, lock, list or expandable speed array.
+            if (!IsFixedLine(atLateral, resolution.Lane))
+            {
+                var query = new EnvelopeQueryKey(key, BitConverter.SingleToInt32Bits(progress));
+                if (!scalarSpeeds!.TryGetValue(query, out var value))
+                {
+                    var phase = snapshot.Track.CornerTopology.Resolve(snapshot.Step.SegmentIndex, (float)local, atLateral, geometry)!.Value;
+                    value = ContinuousCornerEnvelope.CreateParameters(phase, atLateral, geometry, atSurface, skills, setup)
+                        .SpeedMetersPerSecond(progress);
+                    scalarSpeeds.Add(query, value);
+                }
+                return value;
+            }
             if (!envelopes!.TryGetValue(key, out var envelope))
             {
                 var phase = snapshot.Track.CornerTopology.Resolve(snapshot.Step.SegmentIndex, (float)local, atLateral, geometry)!.Value;
                 envelope = ContinuousCornerEnvelope.Create(phase, atLateral, geometry, atSurface, skills, setup);
                 envelopes.Add(key, envelope);
             }
-            return envelope.SpeedMetersPerSecond(Progress(local)!.Value);
+            return envelope.SpeedMetersPerSecond(progress);
         }
 
         CoupledStep Solve(double finish)
         {
             if (finish <= start) return default;
             var tangentDistance = LaneModel.SegmentLengthMeters(segment, lateral, geometry) * (finish - start);
-            var entryForce = LongitudinalDynamics.CalculateStandingStartAvailableDriveForceNewtons(skills, setup, nodeSurface);
             var guess = speed > 0f ? tangentDistance / speed : Math.Sqrt(2d * tangentDistance
-                / LongitudinalDynamics.CalculateNetDriveAccelerationMetersPerSecondSquared(0f, entryForce, setup));
+                / LongitudinalDynamics.CalculateNetDriveAccelerationMetersPerSecondSquared(0f,
+                    LongitudinalDynamics.CalculateStandingStartAvailableDriveForceNewtons(skills, setup, nodeSurface), setup));
             CoupledStep evaluated = default;
             for (var i = 1; i <= PredictorCorrectorIterations; i++)
             {
@@ -239,14 +256,17 @@ internal static class ExecutedPathTraversal
 
         CoupledStep Evaluate(double seconds, double finish)
         {
+            ProjectionCaptureAudit.Record(ProjectionMaterialization.CoupledEvaluation);
             var atLateral = LateralMovementModel.MoveTowards(lateral, resolution.Lane, (float)seconds,
                 segment.Type, geometry, nodeSurface, skills);
             var ds = GeometricDistance(segment, geometry, lateral, atLateral, finish - start);
             var sample = snapshot.TrackState.SampleSurface(snapshot.Step.SegmentIndex, (lateral + atLateral) * .5f);
-            var force = launch ? LongitudinalDynamics.CalculateStandingStartAvailableDriveForceNewtons(skills, setup, sample)
+            // Force is physical input during drive, but only an observation during
+            // correction/carry/crash. Full still records it in every rich step.
+            float DriveForce() => launch ? LongitudinalDynamics.CalculateStandingStartAvailableDriveForceNewtons(skills, setup, sample)
                 : corner is null ? LongitudinalDynamics.CalculateStraightAvailableDriveForceNewtons(skills, setup, sample)
                 : LongitudinalDynamics.CalculateTurnExitAvailableDriveForceNewtons(skills, setup, sample);
-            var correctionCapability = LongitudinalDynamics.CalculateCornerCorrectionDecelerationMetersPerSecondSquared(skills, sample);
+            var force = captureRich ? DriveForce() : 0f;
             if (crash) return new(ds, ds / speed, atLateral, speed, 0f, ds, 0f, 0f, ds / speed, 0f, force, 0, false);
             if (corner is not null)
             {
@@ -258,6 +278,7 @@ internal static class ExecutedPathTraversal
                     target += MathF.Max(0f, retained - initialEnvelope!.Value);
                 if (allowCorrection && speed > target)
                 {
+                    var correctionCapability = LongitudinalDynamics.CalculateCornerCorrectionDecelerationMetersPerSecondSquared(skills, sample);
                     var correction = LongitudinalDynamics.CalculateCornerSpeedCorrectionProfile(speed, target, correctionCapability, ds);
                     var carry = MathF.Max(0f, ds - correction.CorrectionDistanceMeters);
                     var carryTime = carry / correction.ExitSpeedMetersPerSecond;
@@ -266,22 +287,26 @@ internal static class ExecutedPathTraversal
                 }
                 var availability = resolution.Outcome is SegmentOutcome.Ok or SegmentOutcome.Brake
                     ? ContinuousCornerEnvelope.DriveAvailability(Progress((start + finish) * .5d)!.Value) : 0f;
+                if (!captureRich) force = DriveForce();
                 var next = LongitudinalDynamics.CalculateMidpointDriveEndSpeedMetersPerSecond(speed, ds, force, setup, availability);
                 var dt = 2d * ds / ((double)speed + next);
                 return new(ds, dt, atLateral, next, 0f, availability == 0f ? ds : 0f,
                     availability == 0f ? 0f : ds, 0f, availability == 0f ? (float)dt : 0f,
                     availability == 0f ? 0f : (float)dt, force, 0, false);
             }
+            if (!captureRich) force = DriveForce();
             var candidate = LongitudinalDynamics.CalculateMidpointDriveEndSpeedMetersPerSecond(speed, ds, force, setup);
             var targetExit = nextCornerTarget(atLateral);
+            var preparationCapability = LongitudinalDynamics.CalculateCornerCorrectionDecelerationMetersPerSecondSquared(skills, sample);
             var boundary = targetExit is { } exit ? (float?)Math.Sqrt((double)exit * exit
-                + 2d * correctionCapability * (1d - finish) * LaneModel.SegmentLengthMeters(segment, atLateral, geometry)) : null;
-            var endSpeed = LongitudinalDynamics.ApplyPreparationBoundary(speed, candidate, ds, correctionCapability, boundary);
+                + 2d * preparationCapability * (1d - finish) * LaneModel.SegmentLengthMeters(segment, atLateral, geometry)) : null;
+            var endSpeed = LongitudinalDynamics.ApplyPreparationBoundary(speed, candidate, ds, preparationCapability, boundary);
             var elapsed = 2d * ds / ((double)speed + endSpeed);
             return new(ds, elapsed, atLateral, endSpeed, 0f, 0f, ds, 0f, 0f, (float)elapsed, force, 0, false);
         }
     }
 
+    private readonly record struct EnvelopeQueryKey(EnvelopeKey Inputs, int ProgressBits);
     private readonly record struct EnvelopeKey(int LateralBits, int GripBits, int RutsBits, int MoistureBits);
 
     private readonly record struct CoupledStep(float Distance, double Time, float Lateral, float Speed,

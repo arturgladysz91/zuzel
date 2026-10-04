@@ -4,6 +4,7 @@ using Xunit;
 
 namespace CoreSim.Tests;
 
+[Trait("Shard", "core")]
 public sealed class StandingStartDynamicsTests
 {
     private static readonly TrackSurfaceState Perfect = new(1f, 0f, 0.35f);

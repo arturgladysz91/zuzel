@@ -8,6 +8,7 @@ using static CoreSim.Tests.StandingStartFixture;
 
 namespace CoreSim.Tests;
 
+[Trait("Shard", "core")]
 public sealed class StartingGateTests
 {
     [Theory]

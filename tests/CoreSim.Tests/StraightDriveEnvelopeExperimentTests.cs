@@ -7,6 +7,7 @@ using Xunit;
 
 namespace CoreSim.Tests;
 
+[Trait("Shard", "historical-analysis")]
 public sealed class StraightDriveEnvelopeExperimentTests
 {
     private static readonly string Root = FindRepositoryRoot();

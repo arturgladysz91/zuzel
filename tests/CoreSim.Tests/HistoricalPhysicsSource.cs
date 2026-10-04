@@ -23,6 +23,15 @@ internal static class HistoricalPhysicsSource
         }
         if (relative == "src/CoreSim/Track/ContinuousCornerEnvelope.cs")
         {
+            // Strictly map this reviewed capture/performance extraction back to
+            // the protected source block. Both complete blocks are frozen; an
+            // arithmetic edit to the shared primitive fails the original digest.
+            var root = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../../../"));
+            using var extraction = JsonDocument.Parse(File.ReadAllText(Path.Combine(root,
+                "tests/fixtures/envelope-scalar-source-extraction.json")));
+            text = text.Replace(extraction.RootElement.GetProperty("Extracted").GetString()!,
+                extraction.RootElement.GetProperty("Original").GetString()!, StringComparison.Ordinal);
+            text = text.Replace("        ProjectionCaptureAudit.Record(ProjectionMaterialization.EnvelopeCreation);\n", "", StringComparison.Ordinal);
             // Normalize only the explicit capture/cloning support extraction;
             // every historical physical expression remains protected by its old digest.
             text = text.Replace("    internal ContinuousCornerTraversalProfile TraverseProjection(float entrySpeedMetersPerSecond,\n        float startProgress, float distanceMeters, bool allowDrive, bool allowCorrection, float retainedOverspeedMetersPerSecond)\n        => TraverseCore(entrySpeedMetersPerSecond, startProgress, distanceMeters,\n            0f, null, null, 1f, 0f, allowDrive, allowCorrection, retainedOverspeedMetersPerSecond, captureNodes: false);\n\n", "", StringComparison.Ordinal);

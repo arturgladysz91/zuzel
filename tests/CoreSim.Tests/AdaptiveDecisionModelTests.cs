@@ -5,6 +5,7 @@ using Xunit;
 
 namespace CoreSim.Tests;
 
+[Trait("Shard", "trajectory")]
 public sealed class AdaptiveDecisionModelTests
 {
     [Fact]

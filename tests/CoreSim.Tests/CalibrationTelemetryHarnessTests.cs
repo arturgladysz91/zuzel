@@ -8,6 +8,7 @@ using Xunit;
 
 namespace CoreSim.Tests;
 
+[Trait("Shard", "core")]
 public sealed class CalibrationTelemetryHarnessTests
 {
     private static readonly WeatherState NeutralWeather = new(WeatherCondition.Cloudy, 0f, 0f);

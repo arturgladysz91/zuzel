@@ -105,7 +105,7 @@ Stage C profiling found 1,488,987 corner-envelope creations and 25,819,453 repea
 | D: exact immutable envelope reuse | 348.721 | 129.558 | 1356.639 | 498.016 |
 | Final measured source | 342.626 | 129.577 | 1322.303 | 498.089 |
 
-Against the supplied baseline, final runtime improvement is 1.55× solo / 1.63× four-rider; cumulative allocations improve 1.71× / 1.77×. The required 4× objective is NOT achieved. The remaining hotspot is coupled solving over many distinct continuous lateral inputs and their production corner envelopes; final instrumentation still counts 929378 envelope creations and 18494673 apex-anchored metre integrations in projection. The performance pass stops here without approximation, pruning or changed behavior. PR remains Draft; restored CI budget is 30 minutes, and a timeout is a blocker rather than grounds to increase it again.
+The first performance pass reduced allocation and replay overhead but did not achieve its original 4x target. That target is now a stretch observation, not an acceptance gate. The subsequent exact scalar/parallel pass and cross-platform audit are documented in [performance and CI follow-up](trajectory-performance-ci.md). PR remains Draft; each CI job retains a 30-minute limit.
 
 Final scripted-only four-rider physical heat: 2.284 ms / 2.738 MB; Adaptive heat: 1322.303 ms / 498.089 MB. Per-decision Straight / Entry / Middle / Exit medians: 14.888 / 15.930 / 4.651 / 2.479 ms; allocations: 5.428 / 5.459 / 1.739 / 0.803 MB. Across fifteen measured runs, solo Gen0/1/2 collections: 116/0/0; four-rider: 447/208/9. These are cumulative allocations and collection observations, not peak RAM. No reliable peak/live-memory measurement is claimed.
 

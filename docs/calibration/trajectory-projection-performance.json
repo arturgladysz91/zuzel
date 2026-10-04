@@ -2,6 +2,9 @@
   "Runtime": ".NET 8.0.30",
   "Warmups": 5,
   "Samples": 15,
+  "AllocationMeasurement": "process-wide GC.GetTotalAllocatedBytes(precise: true), includes all branch workers",
+  "BranchDegree": 4,
+  "ProjectionCounterDegree": 1,
   "Laps": 4,
   "Incidents": false,
   "Logging": false,
@@ -10,60 +13,60 @@
     {
       "Riders": 1,
       "Scripted": false,
-      "MedianMilliseconds": 342.6259,
-      "MeanMilliseconds": 342.7697333333334,
-      "AllocatedBytesPerRun": 129576708.8,
+      "MedianMilliseconds": 99.2097,
+      "MeanMilliseconds": 100.74006,
+      "AllocatedBytesPerRun": 47023279.46666667,
       "CandidateTraversals": 844,
       "ProductionResolutions": 2339,
-      "Gen0": 116,
+      "Gen0": 45,
       "Gen1": 0,
       "Gen2": 0
     },
     {
       "Riders": 4,
       "Scripted": false,
-      "MedianMilliseconds": 1322.3032,
-      "MeanMilliseconds": 1329.2487466666666,
-      "AllocatedBytesPerRun": 498088555.2,
+      "MedianMilliseconds": 382.1435,
+      "MeanMilliseconds": 382.9664733333333,
+      "AllocatedBytesPerRun": 180205755.2,
       "CandidateTraversals": 3248,
       "ProductionResolutions": 9119,
-      "Gen0": 447,
-      "Gen1": 208,
-      "Gen2": 9
+      "Gen0": 173,
+      "Gen1": 0,
+      "Gen2": 0
     },
     {
       "Riders": 4,
       "Scripted": true,
-      "MedianMilliseconds": 2.2837,
-      "MeanMilliseconds": 2.3089333333333335,
-      "AllocatedBytesPerRun": 2738369.6,
+      "MedianMilliseconds": 2.3751,
+      "MeanMilliseconds": 2.4266199999999998,
+      "AllocatedBytesPerRun": 2738462.4,
       "CandidateTraversals": 0,
       "ProductionResolutions": 0,
-      "Gen0": 2,
-      "Gen1": 1,
+      "Gen0": 3,
+      "Gen1": 0,
       "Gen2": 0
     }
   ],
   "Phases": [
     {
       "Phase": "Straight",
-      "MedianMilliseconds": 14.8879,
-      "AllocatedBytesPerDecision": 5427880
+      "MedianMilliseconds": 4.3699,
+      "AllocatedBytesPerDecision": 1893712
     },
     {
       "Phase": "TurnEntry",
-      "MedianMilliseconds": 15.9296,
-      "AllocatedBytesPerDecision": 5459232
+      "MedianMilliseconds": 4.7409,
+      "AllocatedBytesPerDecision": 1694569.6
     },
     {
       "Phase": "TurnMiddle",
-      "MedianMilliseconds": 4.6508,
-      "AllocatedBytesPerDecision": 1738960
+      "MedianMilliseconds": 1.4747,
+      "AllocatedBytesPerDecision": 723860.2666666667
     },
     {
       "Phase": "TurnExit",
-      "MedianMilliseconds": 2.4785,
-      "AllocatedBytesPerDecision": 803360
+      "MedianMilliseconds": 0.7721,
+      "AllocatedBytesPerDecision": 220589.33333333334
     }
   ],
   "ProjectionCounts": {
@@ -84,8 +87,16 @@
     "RiderStateCopy": 0,
     "TrackStateCopy": 9119,
     "PrivateCommit": 9119,
-    "PrefixCacheHit": 5836
+    "PrefixCacheHit": 5836,
+    "CoupledEvaluation": 1666204,
+    "EnvelopeCreation": 218999,
+    "ApexMetreIntegration": 18803343,
+    "ScalarEnvelopeQuery": 728529,
+    "ApexRemainderIntegration": 736340
   },
   "CandidateTraversals": 3248,
-  "UniquePhysicalEvaluations": 9119
+  "UniquePhysicalEvaluations": 9119,
+  "PossiblePrefixVisits": 14955,
+  "ExecutedUniquePrefixes": 9119,
+  "DuplicateExecutionsAvoided": 5836
 }

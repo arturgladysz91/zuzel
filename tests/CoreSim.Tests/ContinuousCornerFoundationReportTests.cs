@@ -5,6 +5,7 @@ using Xunit;
 
 namespace CoreSim.Tests;
 
+[Trait("Shard", "historical-analysis")]
 public sealed class ContinuousCornerFoundationReportTests
 {
     private const string BaseSha = "0f6dfba7767b155a9c988687a95c5cc7e50a50bd";

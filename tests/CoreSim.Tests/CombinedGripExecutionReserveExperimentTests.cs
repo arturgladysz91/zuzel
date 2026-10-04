@@ -3,6 +3,7 @@ using Xunit;
 
 namespace CoreSim.Tests;
 
+[Trait("Shard", "historical-analysis")]
 public sealed class CombinedGripExecutionReserveExperimentTests
 {
     private static readonly Lazy<CombinedGripReserveResult> Result =

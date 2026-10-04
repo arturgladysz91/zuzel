@@ -8,6 +8,7 @@ using Xunit;
 
 namespace CoreSim.Tests;
 
+[Trait("Shard", "historical-analysis")]
 public sealed class ActiveCorrectionControlLossExperimentTests
 {
     private static readonly string Root = FindRepositoryRoot();

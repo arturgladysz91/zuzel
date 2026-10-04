@@ -4,6 +4,7 @@ using Xunit;
 
 namespace CoreSim.Tests;
 
+[Trait("Shard", "core")]
 public sealed class ContinuousCornerEnvelopeImpactReportTests
 {
     private const string AfterHash = "c06f632e04c72d119e5cf925f9f08a8e4ee6a9d6e2dde4c01491a462f8165417";

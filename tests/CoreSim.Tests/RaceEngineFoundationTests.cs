@@ -6,6 +6,7 @@ using Xunit;
 
 namespace CoreSim.Tests;
 
+[Trait("Shard", "trajectory")]
 public sealed class RaceEngineFoundationTests
 {
     private static readonly WeatherState NeutralWeather =

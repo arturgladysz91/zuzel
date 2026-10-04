@@ -93,6 +93,14 @@ def compare(left, right):
 
 if __name__ == "__main__":
     root = Path(sys.argv[1])
+    if len(sys.argv) == 4:
+        result = compare(root / sys.argv[2], root / sys.argv[3])
+        (root / "comparison.json").write_text(json.dumps(result, indent=2) + "\n")
+        print(json.dumps(result, indent=2))
+        assert result["NumericDifferences"] == 0 and not result["IEEEDifferences"]
+        assert not result["OtherDifferences"] and not result["BehaviorDifferences"]
+        assert (root / sys.argv[2] / "trace.json").read_bytes() == (root / sys.argv[3] / "trace.json").read_bytes()
+        sys.exit(0)
     hashes = {folder.name: hashlib.sha256((folder / "trace.json").read_bytes()).hexdigest().upper()
         for folder in root.iterdir() if folder.is_dir()}
     case = "A" if hashes["ubuntu-latest-audited"] == hashes["ubuntu-latest-current"] else "B"

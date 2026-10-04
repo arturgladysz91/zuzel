@@ -33,15 +33,32 @@ public sealed class ContinuousCornerEnvelope
         CorrectionCapabilityMetersPerSecondSquared = correctionCapabilityMetersPerSecondSquared;
         FullDriveReferenceForceNewtons = fullDriveReferenceForceNewtons;
         Setup = setup;
+        ProjectionCaptureAudit.Record(ProjectionMaterialization.EnvelopeCreation);
         postApexSpeeds = new List<float> { apexSpeedMetersPerSecond };
     }
 
+    private ContinuousCornerEnvelope(Parameters values)
+        : this(values.Apex, values.Length, values.Correction, values.Force, values.Setup) { }
+
     public static ContinuousCornerEnvelope Create(CornerPhaseContext phase, float lateralPosition,
+        TrackGeometry geometry, TrackSurfaceState surface, RiderSkills skills, BikeSetup setup)
+        => new(CreateParameters(phase, lateralPosition, geometry, surface, skills, setup));
+
+    internal static Parameters CreateParameters(CornerPhaseContext phase, float lateralPosition,
         TrackGeometry geometry, TrackSurfaceState surface, RiderSkills skills, BikeSetup setup)
         => new(SegmentPhysics.MaxSafeTurnSpeed(lateralPosition, geometry, surface, skills, setup),
             phase.TotalCornerLengthMeters,
             LongitudinalDynamics.CalculateCornerCorrectionDecelerationMetersPerSecondSquared(skills, surface),
             LongitudinalDynamics.CalculateTurnExitAvailableDriveForceNewtons(skills, setup, surface), setup);
+
+    internal readonly record struct Parameters(float Apex, float Length, float Correction, float Force, BikeSetup Setup)
+    {
+        internal float SpeedMetersPerSecond(float progress)
+        {
+            ProjectionCaptureAudit.Record(ProjectionMaterialization.ScalarEnvelopeQuery);
+            return SpeedCore(Apex, Length, Correction, Force, Setup, progress, null);
+        }
+    }
 
     public static float DriveAvailability(float progress)
     {
@@ -56,36 +73,43 @@ public sealed class ContinuousCornerEnvelope
 
     public float SpeedMetersPerSecond(float progress)
     {
+        lock (postApexSpeeds)
+            return SpeedCore(ApexSpeedMetersPerSecond, TotalLengthMeters,
+                CorrectionCapabilityMetersPerSecondSquared, FullDriveReferenceForceNewtons, Setup, progress, postApexSpeeds);
+    }
+
+    // Both the reusable object and one-query scalar call this numerical implementation.
+    // The optional cache stores only canonical full-metre endpoints, never the remainder.
+    private static float SpeedCore(float apex, float length, float correction, float force,
+        BikeSetup setup, float progress, List<float>? cache)
+    {
         ValidateProgress(progress);
         if (progress <= ApexProgress)
-            return (float)Math.Sqrt((double)ApexSpeedMetersPerSecond * ApexSpeedMetersPerSecond
-                + 2d * CorrectionCapabilityMetersPerSecondSquared * (ApexProgress - progress) * TotalLengthMeters);
+            return (float)Math.Sqrt((double)apex * apex
+                + 2d * correction * (ApexProgress - progress) * length);
 
-        // Post-apex reachability uses the same signed force, midpoint and 1 m
-        // distance resolution as production traversal, anchored to the apex.
-        double end = (progress - ApexProgress) * (double)TotalLengthMeters;
+        double end = (progress - ApexProgress) * (double)length;
         var resolution = LongitudinalDynamics.ProvisionalLongitudinalIntegrationStepMeters;
         var completeSteps = checked((int)Math.Floor(end / resolution));
-        // Memoize the canonical apex-anchored full metres. This is a cache of
-        // the same integration, not another physical model or a speed table fit.
-        lock (postApexSpeeds)
+        var integrated = cache is null ? 0 : Math.Min(completeSteps, cache.Count - 1);
+        var speed = cache is null ? apex : cache[integrated];
+        for (var index = integrated; index < completeSteps; index++)
         {
-            while (postApexSpeeds.Count <= completeSteps)
-            {
-                var midpoint = (float)(ApexProgress + (postApexSpeeds.Count - .5d) * resolution / TotalLengthMeters);
-                postApexSpeeds.Add(LongitudinalDynamics.CalculateMidpointDriveEndSpeedMetersPerSecond(
-                    postApexSpeeds[^1], resolution, FullDriveReferenceForceNewtons, Setup, DriveAvailability(midpoint)));
-            }
-            var speed = postApexSpeeds[completeSteps];
-            var remainder = end - completeSteps * (double)resolution;
-            if (remainder > 0d)
-            {
-                var midpoint = (float)(ApexProgress + (completeSteps * (double)resolution + remainder * .5d) / TotalLengthMeters);
-                speed = LongitudinalDynamics.CalculateMidpointDriveEndSpeedMetersPerSecond(
-                    speed, (float)remainder, FullDriveReferenceForceNewtons, Setup, DriveAvailability(midpoint));
-            }
-            return speed;
+            ProjectionCaptureAudit.Record(ProjectionMaterialization.ApexMetreIntegration);
+            var midpoint = (float)(ApexProgress + (index + 1 - .5d) * resolution / length);
+            speed = LongitudinalDynamics.CalculateMidpointDriveEndSpeedMetersPerSecond(
+                speed, resolution, force, setup, DriveAvailability(midpoint));
+            cache?.Add(speed);
         }
+        var remainder = end - completeSteps * (double)resolution;
+        if (remainder > 0d)
+        {
+            ProjectionCaptureAudit.Record(ProjectionMaterialization.ApexRemainderIntegration);
+            var midpoint = (float)(ApexProgress + (completeSteps * (double)resolution + remainder * .5d) / length);
+            speed = LongitudinalDynamics.CalculateMidpointDriveEndSpeedMetersPerSecond(
+                speed, (float)remainder, force, setup, DriveAvailability(midpoint));
+        }
+        return speed;
     }
 
     public ContinuousCornerTraversalProfile Traverse(float entrySpeedMetersPerSecond, float startProgress,

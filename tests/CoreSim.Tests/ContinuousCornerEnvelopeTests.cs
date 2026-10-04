@@ -4,6 +4,7 @@ using Xunit;
 
 namespace CoreSim.Tests;
 
+[Trait("Shard", "core")]
 public sealed class ContinuousCornerEnvelopeTests
 {
     private static ContinuousCornerEnvelope Model(float apex = 16f, float length = 100f,

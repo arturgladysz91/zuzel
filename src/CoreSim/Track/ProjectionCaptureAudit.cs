@@ -5,6 +5,7 @@ internal enum ProjectionMaterialization
     PhysicalEvaluation, RichMotion, MotionSample, RiderDiagnostics, Event, FormattedLog,
     ExecutedPath, ExecutedNode, ExecutedStep, LongitudinalNode, ResolvedStep, CornerNode,
     SimulationSnapshot, TrackStateSnapshot, RiderStateCopy, TrackStateCopy, PrivateCommit, PrefixCacheHit,
+    CoupledEvaluation, EnvelopeCreation, ApexMetreIntegration, ScalarEnvelopeQuery, ApexRemainderIntegration,
 }
 
 /// <summary>Optional synchronous test observer. Normal runs retain no counters or audit state.</summary>

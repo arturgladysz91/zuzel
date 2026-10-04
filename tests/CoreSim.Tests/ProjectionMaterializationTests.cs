@@ -5,6 +5,7 @@ using Xunit;
 
 namespace CoreSim.Tests;
 
+[Trait("Shard", "trajectory")]
 public sealed class ProjectionMaterializationTests
 {
     [Fact]
@@ -40,8 +41,11 @@ public sealed class ProjectionMaterializationTests
         var track = MatchedVenueProfiles.CreateMotoarenaStandingStartTrack();
         var context = TrajectoryEvaluatorTests.Context(track, TrajectoryEvaluatorTests.At(track,1,2,22f));
         var candidates = TrajectoryCandidates.Generate(SegmentType.TurnEntry);
-        var evaluator = new TrajectoryEvaluator(context); var physical = 0;
-        ProjectionCaptureAudit.Observer = (kind,n) => { if(kind == ProjectionMaterialization.PhysicalEvaluation) physical += n; };
+        var evaluator = new TrajectoryEvaluator(context); var physical = 0; var hits = 0;
+        ProjectionCaptureAudit.Observer = (kind,n) => {
+            if(kind == ProjectionMaterialization.PhysicalEvaluation) physical += n;
+            if(kind == ProjectionMaterialization.PrefixCacheHit) hits += n;
+        };
         try
         {
             foreach(var intent in candidates) evaluator.Evaluate(intent);
@@ -50,10 +54,14 @@ public sealed class ProjectionMaterializationTests
                 .Select(length => string.Join(",",evaluator.Horizon.Take(length)
                     .Select(part => TrajectoryEvaluator.Target(intent,part.Phase))))).Distinct().Count();
             Assert.Equal(unique,physical); Assert.Equal(prefixes,unique);
+            var possible = candidates.Count * evaluator.Horizon.Count;
+            Assert.Equal(possible - unique, hits);
+            Assert.True(hits > 0);
             foreach(var intent in candidates.Reverse()) evaluator.Evaluate(intent);
             foreach(var intent in candidates) evaluator.Evaluate(intent);
             Assert.Equal(unique,physical); Assert.Equal(unique,evaluator.ProductionResolutionCount);
             Assert.Equal(105,evaluator.CandidateTraversalCount);
+            Assert.Equal(3 * possible, physical + hits);
         }
         finally { ProjectionCaptureAudit.Observer = null; }
     }

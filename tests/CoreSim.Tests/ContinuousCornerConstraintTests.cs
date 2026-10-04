@@ -4,6 +4,7 @@ using Xunit;
 
 namespace CoreSim.Tests;
 
+[Trait("Shard", "core")]
 public sealed class ContinuousCornerConstraintTests
 {
     private static readonly TrackSegment Turn = new(1, SegmentType.TurnMiddle);

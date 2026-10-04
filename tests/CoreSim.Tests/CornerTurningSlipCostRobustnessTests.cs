@@ -4,6 +4,7 @@ using Xunit;
 
 namespace CoreSim.Tests;
 
+[Trait("Shard", "historical-analysis")]
 public sealed class CornerTurningSlipCostRobustnessTests
 {
     private static readonly Lazy<TurningCostRobustnessResult> Result =

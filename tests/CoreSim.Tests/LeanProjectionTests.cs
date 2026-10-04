@@ -7,6 +7,7 @@ using TrajectoryIntent = CoreSim.Decisions.TrajectoryIntent;
 
 namespace CoreSim.Tests;
 
+[Trait("Shard", "trajectory")]
 public sealed class LeanProjectionTests
 {
     public static IEnumerable<object[]> Matrix()

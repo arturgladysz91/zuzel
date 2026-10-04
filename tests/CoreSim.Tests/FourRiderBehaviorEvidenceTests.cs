@@ -7,6 +7,8 @@ using Xunit;
 
 namespace CoreSim.Tests;
 
+[Collection("FourRiderAudit")]
+[Trait("Shard", "four-rider")]
 public sealed class FourRiderBehaviorEvidenceTests
 {
     private static readonly Lazy<BehaviorAuditResult> Audit = new(() => FourRiderAuditFixture.Result);

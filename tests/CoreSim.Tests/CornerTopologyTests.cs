@@ -6,6 +6,7 @@ using Xunit;
 
 namespace CoreSim.Tests;
 
+[Trait("Shard", "core")]
 public sealed class CornerTopologyTests
 {
     private sealed class HoldLane : IRiderDecisionModel
