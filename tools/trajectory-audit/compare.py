@@ -75,7 +75,13 @@ def compare(left, right):
         if len(costs) > 1 and math.isfinite(costs[1]): margins.append(costs[1]-costs[0])
     sem_a, sem_b = semantic(a), semantic(b)
     encode = lambda value: json.dumps(value, sort_keys=True, separators=(",", ":")).encode()
-    stats = {"NumericDifferences": len(numeric), "OtherDifferences": other[:10], "First": first,
+    bit_differences = [path for path in abits if abits[path] != bbits.get(path)]
+    raw_a, raw_b = [(folder / "trace.json").read_bytes() for folder in (left, right)]
+    first_byte = next((i for i, (x, y) in enumerate(zip(raw_a, raw_b)) if x != y), None)
+    stats = {"NumericDifferences": len(numeric), "IEEEFields": len(abits), "IEEEDifferences": bit_differences[:20],
+        "FirstByteOffset": first_byte, "OnlyDocumentNewlinesDiffer": raw_a.replace(b"\r\n", b"\n") == raw_b.replace(b"\r\n", b"\n"),
+        "WindowsCRLF": raw_a.count(b"\r\n"), "LinuxCRLF": raw_b.count(b"\r\n"),
+        "OtherDifferences": other[:10], "First": first,
         "MaxULP": {kind: max((d["ULP"] for d in numeric if d["WindowsBits"]["Type"] == kind), default=0) for kind in ("float", "double")},
         "MaximumAbsoluteDelta": max((d["AbsoluteDelta"] for d in numeric), default=0),
         "MinimumWinnerMargin": min(margins), "BehaviorDifferences": list(differences(sem_a, sem_b))[:20],

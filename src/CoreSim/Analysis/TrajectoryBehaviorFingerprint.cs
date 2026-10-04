@@ -36,7 +36,13 @@ public static class TrajectoryBehaviorFingerprint
             new HeatSimulationOptions { Laps = 4, IncidentFrequency = 0, EnableLogging = false });
         var options = new JsonSerializerOptions { WriteIndented = true,
             Converters = { new JsonStringEnumConverter() }, NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals };
-        return Encoding.UTF8.GetBytes(JsonSerializer.Serialize(decisions, options) + "\n");
+        // .NET 8's indented writer uses the host newline. The audited Windows
+        // blob contains CRLF inside the document and a final LF. Freeze that
+        // byte format on every host; no numbers or production operations change.
+        var json = JsonSerializer.Serialize(decisions, options)
+            .Replace("\r\n", "\n", StringComparison.Ordinal)
+            .Replace("\n", "\r\n", StringComparison.Ordinal);
+        return Encoding.UTF8.GetBytes(json + "\n");
     }
 
     public static string Sha256() => Convert.ToHexString(SHA256.HashData(Capture()));

@@ -7,6 +7,20 @@ on:
 permissions:
   contents: read
 jobs:
+  canonical-fingerprint:
+    timeout-minutes: 30
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - run: dotnet test tests/CoreSim.Tests -c Release --filter FullyQualifiedName~TrajectoryBehaviorFingerprintTests.AllCandidate --verbosity normal
   capture:
     timeout-minutes: 30
     strategy:
@@ -26,7 +40,8 @@ jobs:
       - name: Prepare isolated diagnostic checkout
         shell: bash
         run: |
-          cp src/CoreSim/Analysis/TrajectoryBehaviorFingerprint.cs "$RUNNER_TEMP/fingerprint.cs"
+          # Freeze the original capture formatting for the before/after diagnosis.
+          git show c8dae079ca006c963e7469a854d138e0bb9a1f0a:src/CoreSim/Analysis/TrajectoryBehaviorFingerprint.cs > "$RUNNER_TEMP/fingerprint.cs"
           if [ '${{ matrix.source }}' = audited ]; then
             git worktree add --detach "$RUNNER_TEMP/audited" 9ff730c5b1b2cfca739c3ead2ccc2760be1b7c71
             mkdir -p "$RUNNER_TEMP/audited/tools"
