@@ -5,6 +5,7 @@ using static CoreSim.LongitudinalDynamics;
 
 namespace CoreSim.Tests;
 
+[Trait("Shard", "core")]
 public sealed class SignedLongitudinalForceTests
 {
     private static readonly TrackSurfaceState Perfect = new(1f, 0f, 0.35f);

@@ -5,6 +5,7 @@ using Xunit;
 
 namespace CoreSim.Tests;
 
+[Trait("Shard", "core")]
 public sealed class HeatSimulatorPhysicsTests
 {
     private sealed class FixedDecisionModel : IRiderDecisionModel

@@ -4,6 +4,7 @@ using Xunit;
 
 namespace CoreSim.Tests;
 
+[Trait("Shard", "historical-analysis")]
 public sealed class CombinedGripAvailabilityExperimentTests
 {
     private static readonly Lazy<CombinedGripExperimentResult> Result =

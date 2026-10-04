@@ -8,9 +8,11 @@ using Xunit;
 
 namespace CoreSim.Tests;
 
+[Collection("FourRiderAudit")]
+[Trait("Shard", "four-rider")]
 public sealed class FourRiderBehaviorSuiteTests
 {
-    private static readonly Lazy<BehaviorAuditResult> Audit = new(() => FourRiderBehaviorSuite.RunSuite());
+    private static readonly Lazy<BehaviorAuditResult> Audit = new(() => FourRiderAuditFixture.Result);
 
     public static IEnumerable<object[]> Cases() => FourRiderBehaviorSuite.CreateScenarios()
         .SelectMany(item => new[] { 0, 7, 31 }.Select(seed => new object[] { item.Id, seed }));

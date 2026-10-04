@@ -15,7 +15,11 @@ public sealed record ExecutedPathStep(float DistanceMeters, float TimeSeconds,
     float SampledLateralPosition, TrackSurfaceState SampledSurface,
     float CorrectionDistanceMeters, float CarryDistanceMeters, float DriveDistanceMeters,
     float CorrectionTimeSeconds, float CarryTimeSeconds, float DriveTimeSeconds,
-    float ReferenceDriveForceNewtons, int SolverIterations, bool UsedBisectionFallback);
+    float ReferenceDriveForceNewtons, int SolverIterations, bool UsedBisectionFallback)
+{
+    /// <summary>Bounded physical-step subdivisions at a correction/drive time discontinuity.</summary>
+    public int TimeSolveSubdivisions { get; init; }
+}
 
 /// <summary>Immutable production path; telemetry and wear consume these same steps.</summary>
 public sealed class ExecutedSegmentPath : IEquatable<ExecutedSegmentPath>
@@ -38,6 +42,7 @@ public sealed class ExecutedSegmentPath : IEquatable<ExecutedSegmentPath>
     internal ExecutedSegmentPath(IEnumerable<ExecutedPathNode> nodes, IEnumerable<ExecutedPathStep> steps,
         float reactionTimeSeconds, BikeSetup setup)
     {
+        ProjectionCaptureAudit.Record(ProjectionMaterialization.ExecutedPath);
         Nodes = Array.AsReadOnly(nodes.ToArray());
         Steps = Array.AsReadOnly(steps.ToArray());
         ReactionTimeSeconds = reactionTimeSeconds;

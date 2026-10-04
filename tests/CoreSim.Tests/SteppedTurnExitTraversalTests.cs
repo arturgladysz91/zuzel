@@ -4,6 +4,7 @@ using Xunit;
 
 namespace CoreSim.Tests;
 
+[Trait("Shard", "core")]
 public sealed class SteppedTurnExitTraversalTests
 {
     private static readonly TrackSurfaceState PerfectSurface = new(1f, 0f, 0.35f);

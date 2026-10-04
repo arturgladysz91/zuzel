@@ -1,5 +1,13 @@
 # Architecture
 
+Current decision precedence: `AdaptiveDecisionModel` uses bounded production-backed
+Entry/Apex/Exit planning described in [current evidence](calibration/trajectory-intent-evaluation.md).
+Any earlier static route-time projection descriptions are historical. `TrajectoryEvaluator`
+uses the existing shared `SimulationEngine.ResolveRiderCore` with isolated state and scripted phase targets.
+Normal races retain Full motion/diagnostic/event materialization; hypothetical ranking uses Lean
+compact capture and a typed prefix state graph. Exact state, wear and behavioral fingerprints
+protect parity. It owns no alternative physics. Immutable Track/topology is shared by snapshots.
+
 ## Project boundaries
 
 - `CoreSim` contains deterministic simulation rules and domain state. It has no UI, file system or console dependencies.
@@ -173,3 +181,13 @@ path. `ApexProgress = 0.5` is a provisional geometry assumption and
 telemetry-derived fit. The calibration changed no #36 longitudinal constants,
 standing-start constants, correction capability, outcome factors, incident,
 contact, lateral or surface rules.
+
+## Exact trajectory evaluation scheduling
+
+AdaptiveDecisionModel partitions candidates by their first phase target. Each worker
+owns an isolated TrajectoryEvaluator prefix graph and private rider/surface states;
+workers share only immutable root snapshots and one perceived surface. The default
+bound is min(4, available processors). Canonical cost/time/change/E-A-X reduction
+makes degree 1 and degree 4 equivalent. Normal Decide omits publication of candidate
+observations; explicit Evaluate retains them. Normal race Resolve/Commit remains
+unchanged. See [measurement and CI responsibility](calibration/trajectory-performance-ci.md).

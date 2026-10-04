@@ -14,6 +14,39 @@ internal static class HistoricalPhysicsSource
     /// </summary>
     internal static string ForHash(string relative, string text)
     {
+        if (relative == "src/CoreSim/Track/TrackState.cs")
+        {
+            // Normalize only the explicit capture/cloning support extraction;
+            // every historical physical expression remains protected by its old digest.
+            text = text.Replace("    private TrackState(TrackSurfaceState[,] cells)\n    {\n        ProjectionCaptureAudit.Record(ProjectionMaterialization.TrackStateCopy);\n        _surface = cells; SegmentCount = cells.GetLength(0); LinesCount = cells.GetLength(1);\n    }\n    /// <summary>Detached exact-value copy for a hypothetical branch.</summary>\n    internal TrackState Clone() => new((TrackSurfaceState[,])_surface.Clone());\n\n", "", StringComparison.Ordinal);
+            return text;
+        }
+        if (relative == "src/CoreSim/Track/ContinuousCornerEnvelope.cs")
+        {
+            // Strictly map this reviewed capture/performance extraction back to
+            // the protected source block. Both complete blocks are frozen; an
+            // arithmetic edit to the shared primitive fails the original digest.
+            var root = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../../../"));
+            using var extraction = JsonDocument.Parse(File.ReadAllText(Path.Combine(root,
+                "tests/fixtures/envelope-scalar-source-extraction.json")));
+            text = text.Replace(extraction.RootElement.GetProperty("Extracted").GetString()!,
+                extraction.RootElement.GetProperty("Original").GetString()!, StringComparison.Ordinal);
+            text = text.Replace("        ProjectionCaptureAudit.Record(ProjectionMaterialization.EnvelopeCreation);\n", "", StringComparison.Ordinal);
+            // Normalize only the explicit capture/cloning support extraction;
+            // every historical physical expression remains protected by its old digest.
+            text = text.Replace("    internal ContinuousCornerTraversalProfile TraverseProjection(float entrySpeedMetersPerSecond,\n        float startProgress, float distanceMeters, bool allowDrive, bool allowCorrection, float retainedOverspeedMetersPerSecond)\n        => TraverseCore(entrySpeedMetersPerSecond, startProgress, distanceMeters,\n            0f, null, null, 1f, 0f, allowDrive, allowCorrection, retainedOverspeedMetersPerSecond, captureNodes: false);\n\n", "", StringComparison.Ordinal);
+            text = text.Replace("float retainedOverspeedMetersPerSecond, bool captureNodes = true)", "float retainedOverspeedMetersPerSecond)", StringComparison.Ordinal);
+            text = text.Replace("        var previousNodeSpeed = speed;\n", "", StringComparison.Ordinal);
+            text = text.Replace("var nodes = captureNodes ? new List<ContinuousCornerNode>", "var nodes = new List<ContinuousCornerNode>", StringComparison.Ordinal);
+            text = text.Replace("        } : null;\n        while (travelled", "        };\n        while (travelled", StringComparison.Ordinal);
+            text = text.Replace("nodes?.Add(Node", "nodes.Add(Node", StringComparison.Ordinal);
+            text = text.Replace("controlLossEligible ? previousNodeSpeed : 0f", "controlLossEligible ? nodes[^1].SpeedMetersPerSecond : 0f", StringComparison.Ordinal);
+            text = text.Replace("            previousNodeSpeed = speed;\n", "", StringComparison.Ordinal);
+            text = text.Replace("nodes is null ? ContinuousCornerNodes.Empty : new ContinuousCornerNodes(nodes)", "new ContinuousCornerNodes(nodes)", StringComparison.Ordinal);
+            text = text.Replace("    internal static ContinuousCornerNodes Empty { get; } = new(Array.Empty<ContinuousCornerNode>());\n", "", StringComparison.Ordinal);
+            text = text.Replace("            ProjectionCaptureAudit.Record(ProjectionMaterialization.CornerNode);\n", "", StringComparison.Ordinal);
+            return text;
+        }
         if (relative == "src/CoreSim/Track/LongitudinalDynamics.cs")
             return text.Replace("internal static float ApplyPreparationBoundary(", "private static float ApplyPreparationBoundary(", StringComparison.Ordinal);
         return text;
@@ -37,6 +70,15 @@ internal static class HistoricalPhysicsSource
         AssertArtifactUnchanged("docs/calibration/dynamic-line-choice-track-evolution.md");
         AssertArtifactUnchanged("docs/calibration/dynamic-corner-trajectory-geometry.md");
         AssertArtifactUnchanged("docs/calibration/free-continuous-racing-trajectory-geometry.md");
+    }
+
+    internal static void AssertRecordedDecisionProvenance(string expected)
+    {
+        // Static decision source identifies #39–#53 evidence. Current decisions
+        // intentionally use production replay and are tested separately.
+        Assert.Equal("A1FCBA7E068C09B69CF849492424C89083BAD69F965FC6D767415EA9F7478314", expected);
+        AssertArtifactUnchanged("docs/calibration/four-rider-race-behavior-audit.md");
+        AssertArtifactUnchanged("docs/calibration/four-rider-race-behavior-evidence.json");
     }
 
     internal static void AssertArtifactUnchanged(string relative)

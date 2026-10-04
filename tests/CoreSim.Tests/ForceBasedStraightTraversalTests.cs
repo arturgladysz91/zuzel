@@ -4,6 +4,7 @@ using Xunit;
 
 namespace CoreSim.Tests;
 
+[Trait("Shard", "core")]
 public sealed class ForceBasedStraightTraversalTests
 {
     private static readonly RiderSkills NeutralSkills =

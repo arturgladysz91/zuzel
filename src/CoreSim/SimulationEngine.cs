@@ -82,6 +82,7 @@ public sealed class ResolvedSimulationStep
         IEnumerable<ResolvedRiderMotion> motions)
     {
         Snapshot = snapshot ?? throw new ArgumentNullException(nameof(snapshot));
+        ProjectionCaptureAudit.Record(ProjectionMaterialization.ResolvedStep);
         _changes = Array.AsReadOnly(changes.OrderBy(change => change.RiderId).ToArray());
         _events = Array.AsReadOnly(events
             .OrderBy(item => item.StepNumber)
@@ -135,7 +136,8 @@ public sealed class SimulationEngine
         CornerPhaseContext? CornerPhaseContext,
         ContinuousCornerTraversalProfile? ContinuousCornerProfile,
         ExecutedSegmentPath? ExecutedPath = null,
-        IReadOnlyList<LongitudinalMotionNode>? LongitudinalNodes = null);
+        IReadOnlyList<LongitudinalMotionNode>? LongitudinalNodes = null,
+        ExecutedTraversalResult? ProjectionPath = null);
 
     public SimulationEngine(IRiderDecisionModel decisionModel)
         => _decisionModel = decisionModel ?? throw new ArgumentNullException(nameof(decisionModel));
@@ -210,7 +212,7 @@ public sealed class SimulationEngine
 
         foreach (var rider in snapshot.Riders.Where(rider => rider.IsActive).OrderBy(rider => rider.RiderId))
         {
-            var riderResolution = ResolveRider(
+            var riderResolution = ResolveRiderCore(
                 snapshot,
                 rider,
                 intentByRider[rider.RiderId].Decision,
@@ -218,6 +220,7 @@ public sealed class SimulationEngine
             var change = riderResolution.Change;
             changes.Add(rider.RiderId, change);
             riderResolutions.Add(rider.RiderId, riderResolution);
+            ProjectionCaptureAudit.Record(ProjectionMaterialization.Event);
             events.Add(new SimulationStepEvent(
                 snapshot.Step.StepNumber,
                 10,
@@ -261,6 +264,7 @@ public sealed class SimulationEngine
                     "TurnExit physical phase time");
             }
 
+            ProjectionCaptureAudit.Record(ProjectionMaterialization.RiderDiagnostics);
             return new RiderStepDiagnostics(
                 finalChange.RiderId,
                 resolution.TravelledMeters,
@@ -339,15 +343,7 @@ public sealed class SimulationEngine
         foreach (var change in resolved.Changes.OrderBy(change => change.RiderId))
         {
             var rider = riderById[change.RiderId];
-            rider.Lane = change.Lane;
-            rider.LateralPosition = change.LateralPosition;
-            rider.Speed = change.Speed;
-            rider.Risk = change.Risk;
-            rider.ElapsedTimeSeconds = change.ElapsedTimeSeconds;
-            rider.Morale = change.Morale;
-            rider.CommitPosition(change.Position);
-            rider.SetLastResolvedSegmentId(change.LastResolvedSegmentId);
-            rider.SetStatus(change.Status);
+            CommitRiderChange(change, rider);
         }
 
         foreach (var simulationEvent in resolved.Events)
@@ -367,6 +363,58 @@ public sealed class SimulationEngine
                     trackState,
                     resolved.Snapshot.Rider(change.RiderId).LateralPosition,
                     log);
+        }
+    }
+
+    internal static void CommitRiderChange(RiderStateChange change, RiderState rider)
+    {
+        rider.Lane = change.Lane;
+        rider.LateralPosition = change.LateralPosition;
+        rider.Speed = change.Speed;
+        rider.Risk = change.Risk;
+        rider.ElapsedTimeSeconds = change.ElapsedTimeSeconds;
+        rider.Morale = change.Morale;
+        rider.CommitPosition(change.Position);
+        rider.SetLastResolvedSegmentId(change.LastResolvedSegmentId);
+        rider.SetStatus(change.Status);
+    }
+
+    /// <summary>Same rider physics, solo materialization without events, logs or rich motion.</summary>
+    internal static SoloProjectionResult ResolveSoloProjection(SimulationSnapshot snapshot,
+        RiderSnapshot rider, RiderDecision decision, HeatSimulationOptions options)
+    {
+        var resolved = ResolveRiderCore(snapshot, rider, decision, options, captureRich: false);
+        var change = resolved.Change;
+        var corner = snapshot.Track.CornerTopology.CornerForSegment(snapshot.Step.SegmentIndex);
+        float? apex = null;
+        if (corner is not null)
+        {
+            var progress = (double)snapshot.Step.LapIndex * snapshot.Track.Segments.Count
+                + corner.StartSegmentIndex + corner.SegmentCount * (double)ContinuousCornerEnvelope.ApexProgress;
+            if (rider.CanonicalProgress <= progress && change.Position.TotalSegmentProgress >= progress)
+                apex = progress == rider.CanonicalProgress ? rider.LateralPosition
+                    : progress == change.Position.TotalSegmentProgress ? change.LateralPosition
+                    : resolved.ProjectionPath?.ApexLateralPosition ?? rider.LateralPosition;
+        }
+        return new(snapshot, change, change.ElapsedTimeSeconds - rider.ElapsedTimeSeconds,
+            resolved.TravelledMeters, apex,
+            resolved.ProjectionPath?.Wear ?? FixedWear(rider.LateralPosition), resolved.ProjectionPath?.TimeSolveSubdivisions ?? 0);
+    }
+
+    internal static void CommitSoloProjection(SoloProjectionResult result, RiderState rider, TrackState state)
+    {
+        CommitRiderChange(result.Change, rider);
+        CommitProjectionWear(result, state);
+    }
+
+    internal static void CommitProjectionWear(SoloProjectionResult result, TrackState state)
+    {
+        ProjectionCaptureAudit.Record(ProjectionMaterialization.PrivateCommit);
+        if (result.Change.ApplySurfaceWear)
+        {
+            if (result.Snapshot.Step.UseLegacyPhysics)
+                ApplyLegacySurfaceWear(result.Snapshot, state, result.Change.Lane, new SimLog(false));
+            else ApplyWear(result.Snapshot, state, result.Wear, new SimLog(false));
         }
     }
 
@@ -403,12 +451,13 @@ public sealed class SimulationEngine
             throw new InvalidOperationException("The resolved rider changes do not match the snapshot.");
     }
 
-    private static ResolvedRider ResolveRider(
+    private static ResolvedRider ResolveRiderCore(
         SimulationSnapshot snapshot,
         RiderSnapshot rider,
         RiderDecision decision,
-        HeatSimulationOptions options)
+        HeatSimulationOptions options, bool captureRich = true)
     {
+        ProjectionCaptureAudit.Record(ProjectionMaterialization.PhysicalEvaluation);
         if (rider.SegmentIndex != snapshot.Step.SegmentIndex)
             throw new InvalidOperationException($"Rider {rider.RiderId} is not in segment {snapshot.Step.SegmentIndex}.");
 
@@ -483,14 +532,14 @@ public sealed class SimulationEngine
         var travelled = segmentLength * canonicalAdvance;
         if (!snapshot.Step.UseLegacyPhysics && !ExecutedPathTraversal.IsFixedLine(rider.LateralPosition, resolution.Lane))
             return ResolveMovingRider(snapshot, rider, decision, resolution, entrySpeed, plannedLane,
-                canonicalAdvance, standingStartEligible, risk, surface, cornerPhaseContext);
+                canonicalAdvance, standingStartEligible, risk, surface, cornerPhaseContext, captureRich);
         var speed = resolution.Speed;
         StraightSpeedProfile? straightProfile = null;
         TurnExitDriveProfile? turnExitDriveProfile = null;
         CornerSpeedCorrectionProfile? cornerSpeedCorrectionProfile = null;
         StandingStartLaunchProfile? standingStartLaunchProfile = null;
         float? turnExitNetAcceleration = null;
-        var longitudinalNodes = new List<LongitudinalMotionNode>();
+        var longitudinalNodes = captureRich ? new List<LongitudinalMotionNode>() : null;
 
         ContinuousCornerTraversalProfile? continuousCornerProfile = null;
         if (cornerPhaseContext is { } phase && resolution.Outcome != SegmentOutcome.Crash)
@@ -519,7 +568,9 @@ public sealed class SimulationEngine
                 ? envelope.TraverseWithReducedDriveResistanceExposure(
                     resolution.Speed, phase.CornerProgress, travelled, adjustment.Exposure,
                     allowDrive, allowCorrection, retainedOverspeed)
-                : envelope.Traverse(resolution.Speed, phase.CornerProgress, travelled,
+                : captureRich ? envelope.Traverse(resolution.Speed, phase.CornerProgress, travelled,
+                    allowDrive, allowCorrection, retainedOverspeed)
+                : envelope.TraverseProjection(resolution.Speed, phase.CornerProgress, travelled,
                     allowDrive, allowCorrection, retainedOverspeed);
             speed = continuousCornerProfile.ExitSpeedMetersPerSecond;
             ValidateDistanceComposition(travelled, "continuous corner",
@@ -595,6 +646,7 @@ public sealed class SimulationEngine
             ? Math.Clamp(rider.Morale - 0.04f, 0f, 1f)
             : rider.Morale;
 
+        ProjectionCaptureAudit.Record(ProjectionMaterialization.LongitudinalNode, longitudinalNodes?.Count ?? 0);
         return new ResolvedRider(
             new RiderStateChange(
                 rider.RiderId,
@@ -631,23 +683,33 @@ public sealed class SimulationEngine
 
     private static ResolvedRider ResolveMovingRider(SimulationSnapshot snapshot, RiderSnapshot rider,
         RiderDecision decision, SegmentResolution resolution, float entrySpeed, int plannedLane,
-        float canonicalAdvance, bool launch, float risk, TrackSurfaceState entrySurface, CornerPhaseContext? phase)
+        float canonicalAdvance, bool launch, float risk, TrackSurfaceState entrySurface, CornerPhaseContext? phase,
+        bool captureRich)
     {
-        var path = ExecutedPathTraversal.Traverse(snapshot, rider, resolution, entrySpeed, canonicalAdvance,
-            launch, lateral => ResolveImmediateNextTurnApproachSpeed(snapshot, rider, lateral));
-        var position = rider.Position.Advance(canonicalAdvance, path.DistanceMeters);
+        Dictionary<int, float?>? approachTargets = snapshot.Segment.Type == SegmentType.Straight ? new() : null;
+        float? NextCorner(float lateral)
+        {
+            var key = BitConverter.SingleToInt32Bits(lateral);
+            if (approachTargets!.TryGetValue(key, out var target)) return target;
+            target = ResolveImmediateNextTurnApproachSpeed(snapshot, rider, lateral);
+            approachTargets.Add(key, target); return target;
+        }
+        var traversal = ExecutedPathTraversal.Traverse(snapshot, rider, resolution, entrySpeed, canonicalAdvance,
+            launch, NextCorner, captureRich);
+        var path = traversal.RichPath;
+        var position = rider.Position.Advance(canonicalAdvance, traversal.DistanceMeters);
         var status = resolution.Outcome == SegmentOutcome.Crash ? RiderRaceStatus.Crashed
             : position.LapsCompleted >= snapshot.Step.RequiredLaps ? RiderRaceStatus.Finished : RiderRaceStatus.Racing;
-        StandingStartLaunchProfile? launchProfile = launch ? path.LaunchProfile(rider.ActiveSetup) : null;
-        StraightSpeedProfile? straightProfile = !launch && snapshot.Segment.Type == SegmentType.Straight ? path.StraightProfile() : null;
-        ContinuousCornerTraversalProfile? cornerProfile = phase.HasValue && resolution.Outcome != SegmentOutcome.Crash ? path.CornerProfile() : null;
+        StandingStartLaunchProfile? launchProfile = path is not null && launch ? path.LaunchProfile(rider.ActiveSetup) : null;
+        StraightSpeedProfile? straightProfile = path is not null && !launch && snapshot.Segment.Type == SegmentType.Straight ? path.StraightProfile() : null;
+        ContinuousCornerTraversalProfile? cornerProfile = path is not null && phase.HasValue && resolution.Outcome != SegmentOutcome.Crash ? path.CornerProfile() : null;
         return new(new RiderStateChange(rider.RiderId, rider.Lane, plannedLane, decision.TargetLane, resolution.Lane,
-            path.Nodes[^1].LateralPosition, path.ExitSpeedMetersPerSecond, risk, status,
-            rider.ElapsedTimeSeconds + path.TravelTimeSeconds, position, snapshot.Segment.Id,
+            traversal.FinalLateralPosition, traversal.ExitSpeedMetersPerSecond, risk, status,
+            rider.ElapsedTimeSeconds + traversal.TravelTimeSeconds, position, snapshot.Segment.Id,
             resolution.Outcome == SegmentOutcome.Crash ? Math.Clamp(rider.Morale - .04f, 0f, 1f) : rider.Morale,
             resolution.Outcome, entrySpeed, resolution.Speed, resolution.Outcome != SegmentOutcome.Crash),
-            path.DistanceMeters, path.FullDriveEquilibriumSpeedMetersPerSecond, null, null, straightProfile,
-            null, entrySurface, launchProfile, null, phase, cornerProfile, path);
+            traversal.DistanceMeters, path?.FullDriveEquilibriumSpeedMetersPerSecond, null, null, straightProfile,
+            null, entrySurface, launchProfile, null, phase, cornerProfile, path, ProjectionPath: traversal);
     }
 
     private static float? ResolveImmediateNextTurnApproachSpeed(
@@ -794,7 +856,8 @@ public sealed class SimulationEngine
                     Morale = Math.Clamp(trailing.Morale - 0.04f, 0f, 1f),
                 };
                 changes[trailing.RiderId] = trailing;
-                events.Add(new SimulationStepEvent(
+                ProjectionCaptureAudit.Record(ProjectionMaterialization.Event);
+            events.Add(new SimulationStepEvent(
                     snapshot.Step.StepNumber,
                     20,
                     trailing.RiderId,
@@ -825,7 +888,8 @@ public sealed class SimulationEngine
                     LateralPosition = lateral,
                 };
                 changes[trailing.RiderId] = trailing;
-                events.Add(new SimulationStepEvent(
+                ProjectionCaptureAudit.Record(ProjectionMaterialization.Event);
+            events.Add(new SimulationStepEvent(
                     snapshot.Step.StepNumber,
                     20,
                     trailing.RiderId,
@@ -943,69 +1007,60 @@ public sealed class SimulationEngine
             log);
     }
 
-    private static void ApplyAdvancedSurfaceWear(
-        SimulationSnapshot snapshot,
-        TrackState trackState,
-        float lateralPosition,
-        SimLog log)
+    private static void ApplyAdvancedSurfaceWear(SimulationSnapshot snapshot, TrackState state,
+        float lateralPosition, SimLog log) => ApplyWear(snapshot, state, FixedWear(lateralPosition), log);
+
+    private static ProjectionWear FixedWear(float lateralPosition)
     {
         LateralMovementModel.ValidateLateralPosition(lateralPosition, nameof(lateralPosition));
-
-        var rutsDelta = snapshot.Segment.Type == SegmentType.Straight ? 0.004f : 0.015f;
-        var gripDelta = -0.25f * rutsDelta;
-        var innerLane = (int)MathF.Floor(lateralPosition);
-        var outerLane = (int)MathF.Ceiling(lateralPosition);
-        var outerWeight = lateralPosition - innerLane;
-        var wearWeights = new float[LaneModel.LanesCount];
-
-        AddAdvancedSurfaceWearKernel(wearWeights, innerLane, 1f - outerWeight);
-        if (outerLane != innerLane)
-            AddAdvancedSurfaceWearKernel(wearWeights, outerLane, outerWeight);
-
-        for (var lane = LaneModel.MinLane; lane <= LaneModel.MaxLane; lane++)
-        {
-            var wearWeight = wearWeights[lane];
-            if (wearWeight <= 0f)
-                continue;
-
-            var reason = innerLane == outerLane
-                ? lane == innerLane ? "pass" : "pass-adjacent"
-                : "pass-continuous";
-            trackState.ApplySurfaceDelta(
-                snapshot.Step.SegmentIndex,
-                lane,
-                gripDelta * wearWeight,
-                rutsDelta * wearWeight,
-                0f,
-                reason,
-                snapshot.Step.HeatId,
-                snapshot.Step.StepNumber,
-                log);
-        }
+        var inner = (int)MathF.Floor(lateralPosition); var outer = (int)MathF.Ceiling(lateralPosition);
+        var outerWeight = lateralPosition - inner;
+        var weights = new float[LaneModel.LanesCount];
+        AddAdvancedSurfaceWearKernel(weights, inner, 1f - outerWeight);
+        if (outer != inner) AddAdvancedSurfaceWearKernel(weights, outer, outerWeight);
+        return new(weights, 1f, false, inner, outer);
     }
 
     private static void ApplyExecutedSurfaceWear(SimulationSnapshot snapshot, TrackState state,
-        ExecutedSegmentPath path, SimLog log)
+        ExecutedSegmentPath path, SimLog log) => ApplyWear(snapshot, state, ExecutedWear(path), log);
+
+    private static ProjectionWear ExecutedWear(ExecutedSegmentPath path)
     {
         var weights = new float[LaneModel.LanesCount];
         foreach (var step in path.Steps)
-            AddInterpolatedKernel(weights, step.SampledLateralPosition, step.DistanceMeters / path.DistanceMeters);
-        var entryWeights = new float[LaneModel.LanesCount];
-        AddInterpolatedKernel(entryWeights, path.Nodes[0].LateralPosition, 1f);
-        // Edge kernels have less adjacent exposure. Preserve this traversal's exact
-        // old entry budget while moving its distribution to actual visited regions.
-        var scale = entryWeights.Sum() / weights.Sum();
-        var ruts = snapshot.Segment.Type == SegmentType.Straight ? .004f : .015f;
-        for (var lane = 0; lane < weights.Length; lane++)
-            if (weights[lane] > 0f)
-                state.ApplySurfaceDelta(snapshot.Step.SegmentIndex, lane, -.25f * ruts * weights[lane] * scale,
-                    ruts * weights[lane] * scale, 0f, "pass-executed", snapshot.Step.HeatId, snapshot.Step.StepNumber, log);
+            AddInterpolatedWearKernel(weights, step.SampledLateralPosition, step.DistanceMeters / path.DistanceMeters);
+        return FinishExecutedWear(weights, path.Nodes[0].LateralPosition);
+    }
 
-        static void AddInterpolatedKernel(float[] values, float lateral, float weight)
+    internal static ProjectionWear FinishExecutedWear(float[] weights, float entryLateral)
+    {
+        var entryWeights = new float[LaneModel.LanesCount];
+        AddInterpolatedWearKernel(entryWeights, entryLateral, 1f);
+        return new(weights, entryWeights.Sum() / weights.Sum(), true, 0, 0);
+    }
+
+    internal static void AddInterpolatedWearKernel(float[] values, float lateral, float weight)
+    {
+        var inner = (int)MathF.Floor(lateral); var outer = (int)MathF.Ceiling(lateral);
+        AddAdvancedSurfaceWearKernel(values, inner, weight * (1f - (lateral - inner)));
+        if (outer != inner) AddAdvancedSurfaceWearKernel(values, outer, weight * (lateral - inner));
+    }
+
+    private static void ApplyWear(SimulationSnapshot snapshot, TrackState state, ProjectionWear wear, SimLog log)
+    {
+        var ruts = snapshot.Segment.Type == SegmentType.Straight ? .004f : .015f;
+        var gripDelta = -.25f * ruts;
+        for (var lane = 0; lane < wear.Weights.Length; lane++)
         {
-            var inner = (int)MathF.Floor(lateral); var outer = (int)MathF.Ceiling(lateral);
-            AddAdvancedSurfaceWearKernel(values, inner, weight * (1f - (lateral - inner)));
-            if (outer != inner) AddAdvancedSurfaceWearKernel(values, outer, weight * (lateral - inner));
+            var weight = wear.Weights[lane];
+            if (weight <= 0f) continue;
+            if (wear.Executed)
+                state.ApplySurfaceDelta(snapshot.Step.SegmentIndex, lane, -.25f * ruts * weight * wear.Scale,
+                    ruts * weight * wear.Scale, 0f, "pass-executed", snapshot.Step.HeatId, snapshot.Step.StepNumber, log);
+            else
+                state.ApplySurfaceDelta(snapshot.Step.SegmentIndex, lane, gripDelta * weight, ruts * weight, 0f,
+                    wear.Inner == wear.Outer ? lane == wear.Inner ? "pass" : "pass-adjacent" : "pass-continuous",
+                    snapshot.Step.HeatId, snapshot.Step.StepNumber, log);
         }
     }
 
@@ -1020,6 +1075,7 @@ public sealed class SimulationEngine
 
     private static string FormatSegmentLog(SimulationSnapshot snapshot, RiderStateChange change)
     {
+        ProjectionCaptureAudit.Record(ProjectionMaterialization.FormattedLog);
         var prefix = snapshot.Step.UseLegacyPhysics ? string.Empty : $"LAP={snapshot.Step.LapIndex + 1} ";
         var beforeLateralPosition = snapshot.Rider(change.RiderId).LateralPosition;
         return $"{prefix}SEG={snapshot.Segment.Id} {snapshot.Segment.Type} rider={change.RiderId} "

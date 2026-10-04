@@ -9,9 +9,8 @@ permissions:
   contents: read
 
 jobs:
-  test:
+  coverage:
     runs-on: ubuntu-latest
-    # Includes both analysis sweeps and the independent zero-path optimizer replay.
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
@@ -26,11 +25,119 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
-      - name: Restore
-        run: dotnet restore SpeedwayManager.sln
-      - name: Build
-        run: dotnet build SpeedwayManager.sln --configuration Release --no-restore
-      - name: Test deterministic dataset preparation rules
-        run: python -m unittest discover -s tests/calibration -p 'test_*.py'
-      - name: Test
-        run: dotnet test SpeedwayManager.sln --configuration Release --no-build --verbosity normal
+      - run: dotnet restore SpeedwayManager.sln
+      - run: dotnet build SpeedwayManager.sln -c Release --no-restore --warnaserror
+      - name: Prove exactly one responsibility for every discovered test case
+        run: python tools/ci/check-shards.py results/discovery
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dotnet-discovery
+          path: results/discovery
+
+  dotnet:
+    needs: coverage
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [core, trajectory, historical-analysis, four-rider]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 2
+      - name: Record exact tested commit
+        run: |
+          git rev-parse HEAD
+          git rev-parse HEAD^{tree}
+          git log -1 --format=%P
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - uses: actions/download-artifact@v4
+        with:
+          name: dotnet-discovery
+          path: results/discovery
+      - run: dotnet restore SpeedwayManager.sln
+      - run: dotnet build SpeedwayManager.sln -c Release --no-restore --warnaserror
+      - name: Execute complete shard
+        run: dotnet test tests/CoreSim.Tests -c Release --no-build --filter "Shard=${{ matrix.shard }}" --logger "trx;LogFileName=shard.trx" --results-directory results --verbosity normal
+      - name: Check executed cases and publish top 20 duration profile
+        if: always()
+        run: python tools/ci/profile-results.py results ${{ matrix.shard }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dotnet-${{ matrix.shard }}
+          path: results
+
+  determinism:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 2
+      - name: Record exact tested commit
+        shell: bash
+        run: |
+          git rev-parse HEAD
+          git rev-parse HEAD^{tree}
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - run: dotnet restore SpeedwayManager.sln
+      - run: dotnet build SpeedwayManager.sln -c Release --no-restore --warnaserror
+      - name: Exact candidate trace, evidence bytes, Full/Lean and branch degree parity
+        run: dotnet test tests/CoreSim.Tests -c Release --no-build --filter "FullyQualifiedName~TrajectoryBehaviorFingerprintTests|FullyQualifiedName~LeanProjectionTests|FullyQualifiedName~ScalarEnvelopeParityTests|FullyQualifiedName~AdaptiveParallelTests" --logger "trx;LogFileName=determinism.trx" --results-directory results --verbosity normal
+      - name: Capture typed IEEE values and final rider/raw surface states
+        shell: bash
+        run: |
+          python tools/trajectory-audit/prepare.py . src/CoreSim/Analysis/TrajectoryBehaviorFingerprint.cs
+          dotnet run --project tools/trajectory-audit -c Release -- results/capture
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: determinism-${{ matrix.os }}
+          path: results
+
+  compare-platforms:
+    needs: determinism
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: determinism-*
+          path: captures
+      - name: Require exact structured values, IEEE bits and complete behavior
+        run: |
+          mv captures/determinism-windows-latest/capture captures/windows
+          mv captures/determinism-ubuntu-latest/capture captures/ubuntu
+          python tools/trajectory-audit/compare.py captures windows ubuntu
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: platform-comparison
+          path: captures/comparison.json
+
+  python:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m unittest discover -s tests/calibration -p 'test_*.py'

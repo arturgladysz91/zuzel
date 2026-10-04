@@ -6,6 +6,7 @@ using Xunit;
 
 namespace CoreSim.Tests;
 
+[Trait("Shard", "core")]
 public sealed class CalibrationSkillSweepTests
 {
     [Fact]

@@ -6,6 +6,27 @@ using CoreSim.Setup;
 
 if (args.Length > 0)
 {
+    if (args.Length is 2 or 3 && args[0] == "trajectory-projection-performance-report")
+    {
+        Directory.CreateDirectory(args[1]);
+        File.WriteAllText(Path.Combine(args[1], "trajectory-projection-performance.json"),
+            TrajectoryProjectionBenchmark.RunJson(args.Length == 3 ? int.Parse(args[2], System.Globalization.CultureInfo.InvariantCulture) : null));
+        return;
+    }
+    if (args.Length == 2 && args[0] == "trajectory-behavior-fingerprint")
+    {
+        Directory.CreateDirectory(args[1]);
+        File.WriteAllBytes(Path.Combine(args[1], "trajectory-behavior-fingerprint.json"), TrajectoryBehaviorFingerprint.Capture());
+        return;
+    }
+    if (args.Length == 2 && args[0] == "trajectory-intent-evaluation-report")
+    {
+        var evidence = TrajectoryIntentEvidence.Run();
+        Directory.CreateDirectory(args[1]);
+        File.WriteAllText(Path.Combine(args[1], "trajectory-intent-evaluation.md"), TrajectoryIntentEvidence.Markdown(evidence));
+        File.WriteAllText(Path.Combine(args[1], "trajectory-intent-evaluation.json"), TrajectoryIntentEvidence.Json(evidence));
+        return;
+    }
     if (args.Length == 2 && args[0] == "resolved-rider-motion-report")
     {
         Directory.CreateDirectory(args[1]);

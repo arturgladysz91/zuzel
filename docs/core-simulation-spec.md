@@ -1,5 +1,8 @@
 # Core simulation specification
 
+Current decision precedence: [Production-backed trajectory decisions](#production-backed-trajectory-decisions)
+supersedes prior static `AdaptiveDecisionModel` route-time scoring descriptions.
+
 This document defines the binding invariants of the speedway manager simulation.
 
 Version precedence: [Continuous corner envelope calibration (#38)](#continuous-corner-envelope-calibration-38)
@@ -271,3 +274,47 @@ RiderSkills express capability; age/category does not apply a speed, start, or c
 - All #36 longitudinal constants and standing-start constants remain frozen, as
   do correction/outcome factors, contact, lateral, surface and RNG behavior.
   The dataset and historical calibration reports are unchanged.
+
+## Production-backed trajectory decisions
+
+- `TrajectoryIntent` requests Entry/Apex/Exit anchors in `0..4`. Entry applies
+  during remaining pre-corner straight preparation and TurnEntry, middle/apex
+  intent during TurnMiddle, exit during TurnExit and the entire following logical
+  straight. These are requested manager-scale targets, never guaranteed waypoints.
+- Receding-horizon decisions evaluate at most 35 full, 13 middle/exit, or 5 exit
+  candidates. Entry is any anchor; subsequent targets are deduplicated adjacent
+  anchors. Only the current phase target executes; RiderState stores no persistent plan.
+- Physical time comes only from isolated solo production `SimulationEngine`
+  replay, starting at the exact immutable rider snapshot and ending before the
+  second logical corner or at race finish. Split straights cross lap wrap through
+  topology; there are no segment-id exceptions. Full normal resolution and Lean
+  projection call the same rider physics core and return bit-identical canonical
+  totals, achieved endpoints, speeds, outcomes and own-wear contributions.
+- Projection owns detached branch surface copies and compact rider state, no logs and zero random
+  incident frequency. It retains deterministic correction, RunWide, missed anchors
+  and terminal crash. Its own passage wear commits privately; future weather or
+  other riders' wear is not forecast. A terminal crash cannot win as a short route.
+- Raw perceived surface cells use unchanged observation-noise amplitude/mapping,
+  addressed by race seed, heat, decision step, rider, segment index, lane and model
+  seed. Segment index extends the old addressing. Perfect reading removes noise;
+  existing continuous raw-cell interpolation remains the physical consumer.
+- Total cost decomposes into production time, existing style/risk/occupancy costs
+  and behavioral lane-change reluctance. The independent physical movement
+  surcharge is removed. Reluctance uses the existing `0.025*(1-LaneChangeTendency)`
+  coefficient over remaining requested phase changes. No extra distance or speed
+  bonus is applied. Tie-breaking is total cost, physical time, requested change,
+  then canonical Entry/Apex/Exit tuple.
+- A typed target-history prefix graph executes each unique physical prefix once
+  and commits own wear to its private branch. Cold/reversed parity remains exact.
+  Rich motion/path/event materialization is explicit; normal Decide uses Lean capture.
+  Full race motion contracts remain unchanged. There is no global mutable cache
+  or second physics model.
+- Production time solve retains its original tolerance and one-metre maximum;
+  nonconvergent correction/drive switching-boundary steps may be halved at most
+  16 times using the same primitives, with typed subdivision diagnostics.
+- Occupancy remains an external provisional current-target cost. Solo replay
+  implements no traffic feasibility, contested space, collision avoidance, footprint
+  or tactical interaction. Width transitions remain segment-local coordinate
+  reinterpretations; combined grip/slip and provisional physical calibration are unchanged.
+
+See [current controls and exact production parity](calibration/trajectory-intent-evaluation.md).

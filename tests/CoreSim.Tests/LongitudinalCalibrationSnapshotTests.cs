@@ -5,6 +5,7 @@ using Xunit;
 
 namespace CoreSim.Tests;
 
+[Trait("Shard", "core")]
 public sealed class LongitudinalCalibrationSnapshotTests
 {
     private const string BaseSha = "842e0ce861466cdf5a67287c155f81d879cf6666";

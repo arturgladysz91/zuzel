@@ -7,6 +7,7 @@ using Xunit;
 
 namespace CoreSim.Tests;
 
+[Trait("Shard", "core")]
 public sealed class ContinuousSurfaceWearTests
 {
     private static readonly TrackSurfaceState NeutralSurface = new(0.80f, 0.20f, 0.35f);

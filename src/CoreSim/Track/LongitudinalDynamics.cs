@@ -1224,7 +1224,7 @@ public static class LongitudinalDynamics
         float initialSpeedMetersPerSecond, RiderSkills skills, BikeSetup setup,
         TrackSurfaceState surface, float cornerEntryDecelerationMetersPerSecondSquared,
         float distanceMeters, float? targetExitSpeedMetersPerSecond,
-        ICollection<LongitudinalMotionNode> motionNodes, StraightDriveEnvelopeAdjustment? adjustment = null)
+        ICollection<LongitudinalMotionNode>? motionNodes, StraightDriveEnvelopeAdjustment? adjustment = null)
         => CalculateForceBasedStraightSpeedProfileCore(initialSpeedMetersPerSecond, skills, setup,
             surface, cornerEntryDecelerationMetersPerSecondSquared, distanceMeters,
             targetExitSpeedMetersPerSecond, adjustment, motionNodes);

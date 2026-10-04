@@ -1,0 +1,102 @@
+{
+  "Runtime": ".NET 8.0.30",
+  "Warmups": 5,
+  "Samples": 15,
+  "AllocationMeasurement": "process-wide GC.GetTotalAllocatedBytes(precise: true), includes all branch workers",
+  "BranchDegree": 4,
+  "ProjectionCounterDegree": 1,
+  "Laps": 4,
+  "Incidents": false,
+  "Logging": false,
+  "ExistingContact": true,
+  "Rows": [
+    {
+      "Riders": 1,
+      "Scripted": false,
+      "MedianMilliseconds": 99.2097,
+      "MeanMilliseconds": 100.74006,
+      "AllocatedBytesPerRun": 47023279.46666667,
+      "CandidateTraversals": 844,
+      "ProductionResolutions": 2339,
+      "Gen0": 45,
+      "Gen1": 0,
+      "Gen2": 0
+    },
+    {
+      "Riders": 4,
+      "Scripted": false,
+      "MedianMilliseconds": 382.1435,
+      "MeanMilliseconds": 382.9664733333333,
+      "AllocatedBytesPerRun": 180205755.2,
+      "CandidateTraversals": 3248,
+      "ProductionResolutions": 9119,
+      "Gen0": 173,
+      "Gen1": 0,
+      "Gen2": 0
+    },
+    {
+      "Riders": 4,
+      "Scripted": true,
+      "MedianMilliseconds": 2.3751,
+      "MeanMilliseconds": 2.4266199999999998,
+      "AllocatedBytesPerRun": 2738462.4,
+      "CandidateTraversals": 0,
+      "ProductionResolutions": 0,
+      "Gen0": 3,
+      "Gen1": 0,
+      "Gen2": 0
+    }
+  ],
+  "Phases": [
+    {
+      "Phase": "Straight",
+      "MedianMilliseconds": 4.3699,
+      "AllocatedBytesPerDecision": 1893712
+    },
+    {
+      "Phase": "TurnEntry",
+      "MedianMilliseconds": 4.7409,
+      "AllocatedBytesPerDecision": 1694569.6
+    },
+    {
+      "Phase": "TurnMiddle",
+      "MedianMilliseconds": 1.4747,
+      "AllocatedBytesPerDecision": 723860.2666666667
+    },
+    {
+      "Phase": "TurnExit",
+      "MedianMilliseconds": 0.7721,
+      "AllocatedBytesPerDecision": 220589.33333333334
+    }
+  ],
+  "ProjectionCounts": {
+    "PhysicalEvaluation": 9119,
+    "RichMotion": 0,
+    "MotionSample": 0,
+    "RiderDiagnostics": 0,
+    "Event": 0,
+    "FormattedLog": 0,
+    "ExecutedPath": 0,
+    "ExecutedNode": 0,
+    "ExecutedStep": 0,
+    "LongitudinalNode": 0,
+    "ResolvedStep": 0,
+    "CornerNode": 0,
+    "SimulationSnapshot": 9119,
+    "TrackStateSnapshot": 9257,
+    "RiderStateCopy": 0,
+    "TrackStateCopy": 9119,
+    "PrivateCommit": 9119,
+    "PrefixCacheHit": 5836,
+    "CoupledEvaluation": 1666204,
+    "EnvelopeCreation": 218999,
+    "ApexMetreIntegration": 18803343,
+    "ScalarEnvelopeQuery": 728529,
+    "ApexRemainderIntegration": 736340
+  },
+  "CandidateTraversals": 3248,
+  "UniquePhysicalEvaluations": 9119,
+  "PossiblePrefixVisits": 14955,
+  "ExecutedUniquePrefixes": 9119,
+  "DuplicateExecutionsAvoided": 5836
+}

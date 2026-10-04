@@ -3,6 +3,7 @@ using Xunit;
 
 namespace CoreSim.Tests;
 
+[Trait("Shard", "core")]
 public sealed class RealWorldCalibrationEvaluatorTests
 {
     private static RealWorldCalibrationDataset Snapshot()

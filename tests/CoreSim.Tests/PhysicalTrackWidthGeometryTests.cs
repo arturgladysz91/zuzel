@@ -3,6 +3,7 @@ using Xunit;
 
 namespace CoreSim.Tests;
 
+[Trait("Shard", "core")]
 public sealed class PhysicalTrackWidthGeometryTests
 {
     private static readonly TrackSurfaceState IdealSurface = new(1f, 0f, 0.35f);
