@@ -101,7 +101,8 @@ public sealed class AdaptiveDecisionModel : IRiderDecisionModel
         var surfaceRisk = (1f - chosen.EffectiveGrip) * (0.15f + style.RiskTolerance * 0.20f);
         var decision = new RiderDecision(bestLane, TrackSurfaceState.Clamp01(style.RiskTolerance * 0.10f + surfaceRisk),
             string.Create(CultureInfo.InvariantCulture,
-                $"intent {winner.Intent} time={winner.PredictedTraversalTimeSeconds:F3} total={winner.TotalCost:F3}"));
+                $"intent {winner.Intent} time={winner.PredictedTraversalTimeSeconds:F3} total={winner.TotalCost:F3}"))
+            { Trajectory = winner.Intent };
         var canonical = captureCandidates ? evaluations.OrderBy(e => e.Intent.EntryTarget).ThenBy(e => e.Intent.ApexTarget)
             .ThenBy(e => e.Intent.ExitTarget).Select(e => e with { Selected = e.Intent == winner.Intent }).ToArray()
             : Array.Empty<TrajectoryIntentEvaluation>();

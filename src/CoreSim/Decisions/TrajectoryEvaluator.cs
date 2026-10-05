@@ -27,6 +27,8 @@ public sealed class TrajectoryEvaluator
     private readonly RiderDecisionContext _context;
     private readonly TrackStateSnapshot _surface;
     private readonly bool _reusePrefixes;
+    private readonly RiderDriveControl? _driveControl;
+    private readonly bool _holdLateralPosition;
     private PrefixNode? _leanRoot, _richRoot;
     private sealed class PrefixNode(RiderSnapshot rider, TrackState surface, TrajectoryTraversal metrics)
     {
@@ -39,11 +41,13 @@ public sealed class TrajectoryEvaluator
     public int CandidateTraversalCount { get; private set; }
     public int ProductionResolutionCount { get; private set; }
     public TrajectoryEvaluator(RiderDecisionContext context, TrackStateSnapshot? perceivedSurface = null,
-        bool reuseProductionPrefixes = true)
+        bool reuseProductionPrefixes = true, RiderDriveControl? driveControl = null, bool holdLateralPosition = false)
     {
         ArgumentNullException.ThrowIfNull(context);
         _context = context; _surface = perceivedSurface ?? context.TrackState;
         _reusePrefixes = reuseProductionPrefixes;
+        _driveControl = driveControl;
+        _holdLateralPosition = holdLateralPosition;
         if (_surface.SegmentCount != context.Snapshot.Track.Segments.Count || _surface.LinesCount != LaneModel.LanesCount)
             throw new ArgumentException("Surface dimensions must match the decision track.", nameof(perceivedSurface));
         if (!context.Rider.IsActive || context.Rider.SegmentIndex != context.SegmentIndex)
@@ -52,6 +56,8 @@ public sealed class TrajectoryEvaluator
     }
     public TrajectoryTraversal Evaluate(TrajectoryIntent intent, bool retainResolvedMotions = false)
     {
+        if ((_driveControl.HasValue || _holdLateralPosition) && !retainResolvedMotions)
+            throw new InvalidOperationException("Controlled traffic projection requires production motion capture.");
         CandidateTraversalCount++;
         ref var root = ref (retainResolvedMotions ? ref _richRoot : ref _leanRoot);
         if (!_reusePrefixes || root is null)
@@ -89,13 +95,17 @@ public sealed class TrajectoryEvaluator
         var state = parent.Surface.Clone();
         var input = new SimulationSnapshot(step, track, parent.Surface.Snapshot(), new[] { parent.Rider });
         var options = new HeatSimulationOptions { Laps = step.RequiredLaps, Seed = _context.Seed,
-            IncidentFrequency = 0f, EnableLogging = false };
+            IncidentFrequency = 0f, EnableLogging = false,
+            EnableContestedSpaceResponses = _driveControl.HasValue || _holdLateralPosition };
         SoloProjectionResult projection;
         ResolvedRiderMotion? motion = null;
         if (rich)
         {
             var engine = new SimulationEngine(new FixedTarget(requested));
-            var resolved = engine.Resolve(input, engine.Decide(input), options);
+            var resolved = _driveControl.HasValue || _holdLateralPosition
+                ? engine.ResolveProduction(input, new[] { new RiderIntent(parent.Rider.RiderId,
+                    new RiderDecision(requested) { DriveControl = _driveControl, HoldLateralPosition = _holdLateralPosition }) }, options, legacyContacts: false)
+                : engine.Resolve(input, engine.Decide(input), options);
             motion = resolved.Motions[0];
             projection = new(input, resolved.Changes[0], motion.TotalTimeSeconds, motion.TotalDistanceMeters, null, default);
             var rider = parent.Rider.ToMutableCopy();

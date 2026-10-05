@@ -8,6 +8,7 @@ public enum RandomChannel
     IncidentSeverity = 210,
     ContactOccurrence = 300,
     ContactSeverity = 310,
+    InteractionTacticalTie = 400,
 }
 
 /// <summary>

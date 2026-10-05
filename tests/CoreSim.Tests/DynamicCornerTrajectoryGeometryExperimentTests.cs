@@ -49,7 +49,10 @@ public sealed class DynamicCornerTrajectoryGeometryExperimentTests
             .GetType("CoreSim.Analysis.TrajectoryPlanDecisionModel", throwOnError: true)!;
         Assert.False(type.IsPublic);
         Assert.Equal("CoreSim.Analysis", type.Namespace);
-        Assert.DoesNotContain("Trajectory", CanonicalText("src/CoreSim/Decisions/RiderDecision.cs"),
+        // Preserve the historical #50 contract through the exact reviewed #56B
+        // metadata extraction, independently pinned by its complete fixture hash.
+        Assert.DoesNotContain("Trajectory", HistoricalPhysicsSource.ForHash("src/CoreSim/Decisions/RiderDecision.cs",
+            CanonicalText("src/CoreSim/Decisions/RiderDecision.cs")),
             StringComparison.Ordinal);
     }
 

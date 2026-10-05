@@ -6,6 +6,19 @@ using CoreSim.Setup;
 
 if (args.Length > 0)
 {
+    if (args.Length >= 2 && args[0] == "contested-space-response-report")
+    {
+        Directory.CreateDirectory(args[1]);
+        File.WriteAllText(Path.Combine(args[1], "contested-space-racing-response.json"),
+            ContestedSpaceResponseEvidence.DeterministicJson(!args.Contains("--scenarios-only"), Console.Error.WriteLine));
+        return;
+    }
+    if (args.Length == 2 && args[0] == "contested-space-response-performance")
+    {
+        Directory.CreateDirectory(args[1]);
+        File.WriteAllText(Path.Combine(args[1], "contested-space-response-performance.json"), ContestedSpaceResponseEvidence.BenchmarkJson());
+        return;
+    }
     if (args.Length == 2 && args[0] == "physical-occupancy-report")
     {
         Directory.CreateDirectory(args[1]);

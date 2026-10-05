@@ -6,6 +6,18 @@ Ten dokument opisuje docelowy model zawodnika dla warstwy gameplayowej Speedway 
 
 Nie jest zgodą na natychmiastową zmianę istniejącego `RiderSkills`, `RiderStyle` ani fizyki produkcyjnej. Obecny kod może nadal używać starszych nazw i uproszczeń do czasu osobnych, wąskich PR-ów implementacyjnych.
 
+### Implementacja #56B — odpowiedź przed kontaktem
+
+**BINDING, zakres #56B:** opcja `EnableContestedSpaceResponses` domyślnie jest
+wyłączona. Po jej włączeniu `Attack`, `Defense` i `Combativeness` oceniają lokalne
+alternatywy taktyczne; `Technique` i `Condition` zmieniają wyłącznie mały margines
+planowania. `PreferredLine` jest słabą preferencją wyboru. Żadne z tych pól nie
+zwiększa mocy, gripu ani Vmax. Konsumenci legacy nadal wykonują produkcyjną fizykę.
+`Strength`, `MassKg` i kanoniczne `PairRiding` nie mają efektu w walce przed kontaktem.
+Siła, masa, kontakt ciała i skutki uderzenia należą do #56C, a jazda parą do współpracy
+z partnerem. Poniższy opis braku konsumentów jest historycznym stanem #56A.
+Zobacz [architekturę i dowody #56B](../calibration/contested-space-racing-response.md).
+
 ### Implementacja #56A — model kanoniczny i most kompatybilności
 
 **BINDING, zakres #56A:** `RiderGameplayProfile` składa się z niezmiennych
@@ -23,8 +35,8 @@ oryginalne `RiderProfile.Skills` i `RiderProfile.Style`; ich skale i wartości p
 | Attack — Atak | neutralne 50 | int 1–99, bez konsumenta | #56B: jakość ofensywnego manewru, nie ryzyko ani częstotliwość walki |
 | Defense — Obrona | neutralne 50 | int 1–99, bez konsumenta | #56B: jakość obrony, niezależna od Ataku |
 | PairRiding — Jazda parą | PairRiding | int 1–99, bez konsumenta | późniejsza współpraca z partnerem; nigdy kontakt z rywalem |
-| Strength — Siła | neutralne 50 | int 1–99, bez konsumenta | #56B: kontrola pod obciążeniem / w kontakcie; bez mocy silnika, Vmax ani traction bonus |
-| MassKg — masa | LegacyCompatibilityMassKg = 70 kg | float, dodatnia skończona liczba kg; bez konsumenta | #56B: fizyczny parametr; obecna nominalna masa układu 142 kg nadal bez zmian |
+| Strength — Siła | neutralne 50 | int 1–99, bez konsumenta | #56C: kontrola pod obciążeniem / w kontakcie; bez mocy silnika, Vmax ani traction bonus |
+| MassKg — masa | LegacyCompatibilityMassKg = 70 kg | float, dodatnia skończona liczba kg; bez konsumenta | #56C: fizyczny parametr; obecna nominalna masa układu 142 kg nadal bez zmian |
 | Condition — Kondycja | nowy stan = 1 | float 0–1; bez konsumenta | #56B: stan przy odpowiedzi na walkę; później obciążenie i odbudowa w osobnym etapie |
 | Combativeness — Waleczność | neutralne 0.5 | float 0–1, skończony; bez konsumenta | #56B: chęć walki, niezależna od jakości Ataku; więcej nie zawsze znaczy lepiej |
 

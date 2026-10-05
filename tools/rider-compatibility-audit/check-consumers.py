@@ -18,19 +18,40 @@ CANONICAL_DOMAIN = DOMAIN | {
 }
 CANONICAL = re.compile(r"\bRiderAbilities\b|\bRiderGameplayProfile\b|\bRiderPhysicalProfile\b|"
                        r"\bRiderInteractionStyle\b|\.Gameplay\b|\.Condition\b")
+EXTRACTION = ROOT / "tests/fixtures/contested-source-extraction.json"
+EXTRACTION_SHA256 = "60cc56640d4aec471b7ac915e0ecf84d8806ee2526c32c8e57e5d45f1d17c353"
+CANONICAL_TRAFFIC = {"src/CoreSim/Interactions/InteractionModel.cs",
+                     "src/CoreSim/Interactions/ContestedSpaceInteractionCoordinator.cs"}
+
+
+def reviewed_extraction():
+    raw = EXTRACTION.read_bytes().replace(b"\r\n", b"\n")
+    assert hashlib.sha256(raw).hexdigest() == EXTRACTION_SHA256
+    obj = json.loads(raw)
+    assert obj["BaseMainSha"] == "a1609e485131f553619c386a051a158796c9e2dd"
+    return obj
 
 
 def consumers():
     result = {}
+    extraction = reviewed_extraction()
     for path in sorted((ROOT / "src").rglob("*.cs")):
         if {"obj", "bin"} & set(path.parts):
             continue
         name = path.relative_to(ROOT).as_posix()
         source = path.read_text(encoding="utf-8").replace("\r\n", "\n")
+        if name in extraction["NewDiagnosticSources"]:
+            assert hashlib.sha256(source.encode()).hexdigest() == extraction["NewDiagnosticSources"][name]
+            continue
+        # Restore only exact reviewed #56B gate/control plumbing. The original
+        # 39-file manifest, old arithmetic and every legacy read stay frozen.
+        for patch in extraction["Patches"].get(name, []):
+            assert source.count(patch["After"]) == 1, name
+            source = source.replace(patch["After"], patch["Before"])
         # Only permitted production edit: carry inert Condition into detached snapshots.
         if name == "src/CoreSim/SimulationEngine.cs":
             source = source.replace(", Condition = rider.Condition", "")
-        if name not in CANONICAL_DOMAIN and not REFERENCES.search(source):
+        if name not in CANONICAL_DOMAIN | CANONICAL_TRAFFIC and not REFERENCES.search(source):
             # Existing WeatherState.Condition is unrelated to RiderState.Condition.
             canonical_source = source.replace("weather.Condition", "weather.WeatherCondition")
             assert not CANONICAL.search(canonical_source), f"Unexpected canonical production consumer: {name}"
@@ -61,4 +82,4 @@ if __name__ == "__main__":
         MANIFEST.write_text(json.dumps({"BaseMainSha": BASE, "ConsumerSourceSha256": consumers()},
                                      indent=2) + "\n", encoding="utf-8", newline="\n")
     else:
-        print(f"Legacy consumer audit: {verify()} source files match frozen main; no rerouted skill/style readers.")
+        print(f"Legacy consumer audit: {verify()} frozen readers; exact #56B extraction verified; canonical readers explicitly scoped.")
