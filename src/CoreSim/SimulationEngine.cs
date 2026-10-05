@@ -172,7 +172,7 @@ public sealed class SimulationEngine
             rider.ElapsedTimeSeconds,
             rider.ActiveSetup,
             rider.Morale,
-            rider.ManagerTrust) { StartingPosition = rider.StartingPosition });
+            rider.ManagerTrust) { StartingPosition = rider.StartingPosition, Condition = rider.Condition });
 
         return new SimulationSnapshot(step, track, trackState.Snapshot(), snapshots);
     }

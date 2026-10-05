@@ -14,6 +14,17 @@ internal static class HistoricalPhysicsSource
     /// </summary>
     internal static string ForHash(string relative, string text)
     {
+        if (relative == "src/CoreSim/Rider.cs")
+        {
+            // #56A adds canonical API in a separate partial file. Normalize only
+            // the partial declaration and these two documentation updates; the
+            // original six/four fields, validation, constructors and defaults
+            // must still match the unchanged historical digest exactly.
+            return text.Replace("public sealed partial record RiderProfile(", "public sealed record RiderProfile(", StringComparison.Ordinal)
+                .Replace("Legacy engine compatibility skills. Values use", "Stable rider abilities. Values use", StringComparison.Ordinal)
+                .Replace("Legacy engine compatibility preferences. They shape decisions but never replace skills.",
+                    "Behavioural preferences. They shape decisions but never replace abilities.", StringComparison.Ordinal);
+        }
         if (relative == "src/CoreSim/Track/TrackState.cs")
         {
             // Normalize only the explicit capture/cloning support extraction;

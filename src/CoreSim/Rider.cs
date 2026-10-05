@@ -1,7 +1,7 @@
 namespace CoreSim;
 
 /// <summary>
-/// Stable rider abilities. Values use a 0..100 scale; the simulation converts
+/// Legacy engine compatibility skills. Values use a 0..100 scale; the simulation converts
 /// them to 0..1 only at the point where an ability is applied.
 /// </summary>
 public sealed record RiderSkills
@@ -42,7 +42,7 @@ public sealed record RiderSkills
 }
 
 /// <summary>
-/// Behavioural preferences. They shape decisions but never replace abilities.
+/// Legacy engine compatibility preferences. They shape decisions but never replace skills.
 /// Every value is normalized to 0..1.
 /// </summary>
 public sealed record RiderStyle
@@ -74,7 +74,7 @@ public sealed record RiderStyle
     }
 }
 
-public sealed record RiderProfile(
+public sealed partial record RiderProfile(
     int Id,
     string Name,
     RiderSkills Skills,

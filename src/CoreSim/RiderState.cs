@@ -1,5 +1,6 @@
 using CoreSim.Setup;
 using CoreSim.Race;
+using System.Text.Json.Serialization;
 
 namespace CoreSim;
 
@@ -7,6 +8,7 @@ namespace CoreSim;
 public sealed class RiderState
 {
     private float _morale;
+    private float _condition = 1f;
     private float _managerTrust;
     private RiderPosition _position;
     private RiderRaceStatus _status;
@@ -64,6 +66,19 @@ public sealed class RiderState
         set => _morale = Math.Clamp(value, 0f, 1f);
     }
 
+    /// <summary>Dynamic physical condition (Kondycja). Preserved between heats; inert in #56A.</summary>
+    [JsonIgnore] // Keep the historical simulation/evidence JSON contract unchanged.
+    public float Condition
+    {
+        get => _condition;
+        set
+        {
+            if (!float.IsFinite(value))
+                throw new ArgumentOutOfRangeException(nameof(Condition), value, "Condition must be finite.");
+            _condition = Math.Clamp(value, 0f, 1f);
+        }
+    }
+
     public float ManagerTrust
     {
         get => _managerTrust;
@@ -86,6 +101,7 @@ public sealed class RiderState
     }
 
     public void ApplyMoraleDelta(float delta) => Morale += delta;
+    public void ApplyConditionDelta(float delta) => Condition += delta;
 
     public RiderState(RiderProfile profile, StartingGate gate, Track track,
         float morale = 0.5f, float managerTrust = 0.5f)
