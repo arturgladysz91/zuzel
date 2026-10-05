@@ -11,6 +11,8 @@ internal static class CommonTimePoseHistory
 {
     internal static ContestedSpaceReport Observe(IEnumerable<PhysicalPoseInterval> source)
         => ContestedSpaceResolver.Observe(Stitch(source));
+    internal static SpaceCompatibilityResult Compatibility(IEnumerable<PhysicalPoseInterval> source, double ready)
+        => ContestedSpaceResolver.ObserveCompatibility(Stitch(source), ready);
     internal static IReadOnlyList<PhysicalPoseInterval> Stitch(IEnumerable<PhysicalPoseInterval> source)
     {
         var result = new List<PhysicalPoseInterval>();
@@ -39,6 +41,8 @@ internal static class CommonTimePoseHistory
         source.FrameId, source.StartTimeSeconds, end, source.Dimensions, source.StartsAtDiscontinuity, source.Source, source.SupportsLapWrap)
     {
         public override PhysicalBikePose Sample(double time) { Fraction(time); return source.Sample(time); }
+        internal override BikePoseValue SampleValue(double time) { Fraction(time); return source.SampleValue(time); }
+        internal override BikeFootprint SampleFootprint(double time) { Fraction(time); return source.SampleFootprint(time); }
         public override PoseRateBounds RateBounds(double start, double finish)
         { Fraction(start); Fraction(finish); return source.RateBounds(start, finish); }
     }

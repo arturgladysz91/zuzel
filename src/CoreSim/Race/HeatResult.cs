@@ -82,6 +82,7 @@ public sealed record HeatSimulationOptions
     public float IncidentFrequency { get; init; } = 1f;
     public bool EnableLogging { get; init; } = true;
     public bool EnableContestedSpaceResponses { get; init; } = false;
+    public Interactions.InteractionDiagnosticsLevel InteractionDiagnostics { get; init; } = Interactions.InteractionDiagnosticsLevel.Summary;
     public Interactions.ContestedSpaceParameters ContestedSpaceParameters { get; init; } = new();
 
     // Calibration-only; deliberately unavailable to gameplay callers outside

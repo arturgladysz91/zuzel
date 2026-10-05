@@ -24,7 +24,14 @@ public sealed record ContestedHeatEvidence(string Scenario, int Seed, string Wea
     int Overtakes, int OrderSnapshots, InteractionWork Work, IReadOnlyDictionary<string, int> Contexts,
     IReadOnlyDictionary<string, int> Responses, int MaximumResponseChangesPerEpisode, int MaximumFallbacksPerEpisode,
     int ResponseOscillations, int UnexplainedCommitmentChanges, ContestedPhaseStatistics FirstBend,
-    ContestedPhaseStatistics OrdinaryRacing, IReadOnlyList<string> StormWarnings);
+    ContestedPhaseStatistics OrdinaryRacing, IReadOnlyList<string> StormWarnings)
+{
+    public IReadOnlyList<ContestedEpisodeHistory> LongestEpisodes { get; init; } = Array.Empty<ContestedEpisodeHistory>();
+}
+public sealed record ContestedEpisodeHistory(long EpisodeId, IReadOnlyList<int> RiderSet, double StartTimeSeconds,
+    double EndTimeSeconds, IReadOnlyList<InteractionContext> ContextsSeen, double MinimumObservedSeparationMeters,
+    double MaximumObservedSeparationMeters, int SeparationObservations, int ResponseChanges,
+    bool ContinuouslyWithinCompetitiveReach, bool CompetitiveReachCoverageCertified, bool MergedOtherRiders);
 public sealed record ContestedPhaseStatistics(int Episodes, int ResolvedObservations, int UnresolvedObservations,
     int LegacyFallbackInvocations, int ResponseSelections, int JointCombinations, int ResponsePasses);
 
@@ -70,7 +77,8 @@ public static class ContestedSpaceResponseEvidence
             reverse ? riders.Reverse() : riders);
     }
     public static ResolvedSimulationStep Resolve(ContestedScenario scenario, bool enabled = true, bool reverse = false,
-        ContestedSpaceParameters? parameters = null, InteractionEpisodeTracker? tracker = null)
+        ContestedSpaceParameters? parameters = null, InteractionEpisodeTracker? tracker = null,
+        InteractionDiagnosticsLevel diagnostics = InteractionDiagnosticsLevel.FullAudit)
     {
         var snapshot = Snapshot(scenario, reverse);
         var intents = scenario.Riders.Select(i => new RiderIntent(i.Id,
@@ -78,7 +86,7 @@ public static class ContestedSpaceResponseEvidence
         var engine = new SimulationEngine(new FixedDecision());
         return engine.Resolve(snapshot, reverse ? intents.Reverse().ToArray() : intents,
             new() { EnableContestedSpaceResponses = enabled, IncidentFrequency = 0,
-                ContestedSpaceParameters = parameters ?? new() }, tracker);
+                InteractionDiagnostics = diagnostics, ContestedSpaceParameters = parameters ?? new() }, tracker);
     }
     public static string DeterministicJson(bool includeHeats = true, Action<string>? progress = null)
     {
@@ -122,7 +130,7 @@ public static class ContestedSpaceResponseEvidence
         var observer = new Collector();
         var result = new HeatSimulator(new AdaptiveDecisionModel()).SimulateHeat(scenario.Track, scenario.CreateSurface(),
             scenario.Riders.Select(r => CanonicalState(r, scenario.Track, archetype)).ToList(),
-            new() { Seed = seed, Weather = weather, EnableContestedSpaceResponses = true }, 57, observer);
+            new() { Seed = seed, Weather = weather, EnableContestedSpaceResponses = true, InteractionDiagnostics = InteractionDiagnosticsLevel.FullAudit }, 57, observer);
         var episodes = observer.Episodes.GroupBy(e => e.EpisodeId).Select(g => g.Last()).ToArray();
         var reachedMechanical = observer.Episodes.Where(e => e.LegacyFallbackUsed).Select(e => e.EpisodeId).ToHashSet();
         var pairCounts = new Dictionary<string, int>();
@@ -147,7 +155,7 @@ public static class ContestedSpaceResponseEvidence
                 if (previous?.Context == row.Context && priorChoice is not null && choice.Response != priorChoice.Response)
                 {
                     if (beforePrior?.Response == choice.Response) oscillations++;
-                    if (!row.Geometry.Any(g => g.Space.HasConflict && g.TimeToConflictSeconds <= new ContestedSpaceParameters().EmergencyTimeSeconds)
+                    if (!row.Pass1ActualMechanicalContact && !row.Geometry.Any(g => g.Space.HasConflict && g.TimeToConflictSeconds <= new ContestedSpaceParameters().EmergencyTimeSeconds)
                         && row.Candidates.Any(c => c.Feasible && c.Responses.All(a => previous.SelectedResponses.Any(old => old.RiderId == a.RiderId
                             && a.Response == old.Response && a.Intent == old.Intent
                             && a.DriveControl == old.DriveControl && a.HoldLateralPosition == old.HoldLateralPosition)))) unexplained++;
@@ -177,12 +185,22 @@ public static class ContestedSpaceResponseEvidence
             observer.Episodes.Count(e => e.LegacyFallbackUsed), episodes.Sum(e => e.ResponseChanges),
             episodes.Select(e => e.ActiveDurationSeconds).DefaultIfEmpty(0).Max(), pairCounts.Values.DefaultIfEmpty(0).Max(),
             result.Log.Overtakes.Count, result.Log.OrderSnapshots.Count,
-            new(observer.Work.Sum(w => w.JointCombinations), observer.Work.Sum(w => w.ProductionResolutions),
-                observer.Work.Sum(w => w.NarrowPhaseEvaluations), observer.Work.Sum(w => w.ResponsePasses), observer.Work.Sum(w => w.Clusters)),
+            SumWork(observer.Work),
             episodes.GroupBy(e => e.Context.ToString()).OrderBy(g => g.Key).ToDictionary(g => g.Key,g => g.Count()),
             observer.Episodes.SelectMany(e => e.SelectedResponses).GroupBy(r => r.Response.ToString()).OrderBy(g => g.Key)
                 .ToDictionary(g => g.Key,g => g.Count()), maximumChanges, maximumFallbacks, oscillations, unexplained,
-            Phase(true),Phase(false),warnings);
+            Phase(true),Phase(false),warnings)
+        {
+            LongestEpisodes = observer.Episodes.GroupBy(e => e.EpisodeId).Select(g =>
+            {
+                var last = g.Last();
+                return new ContestedEpisodeHistory(g.Key, last.RiderIds, last.StartTimeSeconds,
+                    last.EndTimeSeconds ?? last.StartTimeSeconds + last.ActiveDurationSeconds,
+                    g.Select(e => e.Context).Distinct().ToArray(), g.Min(e => e.FinalMinimumSeparationMeters),
+                    g.Max(e => e.FinalMinimumSeparationMeters), g.Count(), last.ResponseChanges,
+                    g.All(e => e.WithinCompetitiveReach), g.All(e => e.CompetitiveReachCoverageCertified), g.Any(e => e.MergedOtherRiders));
+            }).OrderByDescending(e => e.EndTimeSeconds-e.StartTimeSeconds).ThenBy(e => e.EpisodeId).Take(10).ToArray(),
+        };
     }
     public static string BenchmarkJson()
     {
@@ -190,18 +208,64 @@ public static class ContestedSpaceResponseEvidence
         foreach (var scenario in new[] { Scenarios().Single(s => s.Name == "K-far-apart"), Scenarios().Single(s => s.Name == "H-three-squeeze") })
         foreach (var enabled in new[] { false, true })
         {
-            Resolve(scenario, enabled);
+            Resolve(scenario, enabled, diagnostics:InteractionDiagnosticsLevel.Summary);
             var times = new List<double>(); var allocated = new List<long>();
             for (var repeat = 0; repeat < 5; repeat++)
             {
                 var before = GC.GetTotalAllocatedBytes(true); var watch = Stopwatch.StartNew();
-                Resolve(scenario, enabled); watch.Stop(); times.Add(watch.Elapsed.TotalMilliseconds);
+                Resolve(scenario, enabled, diagnostics:InteractionDiagnosticsLevel.Summary); watch.Stop(); times.Add(watch.Elapsed.TotalMilliseconds);
                 allocated.Add(GC.GetTotalAllocatedBytes(true) - before);
             }
             samples.Add(new { scenario.Name, Enabled = enabled, MedianMilliseconds = times.Order().ElementAt(2),
                 MedianAllocatedBytes = allocated.Order().ElementAt(2) });
         }
-        return JsonSerializer.Serialize(samples, new JsonSerializerOptions { WriteIndented = true }) + "\n";
+        var fullHeats = new List<object>();
+        var fixture = FourRiderBehaviorSuite.CreateScenarios().Single(s => s.Id == "I");
+        foreach (var enabled in new[] { false, true })
+        {
+            (HeatResult Result, Collector Observer) Run()
+            {
+                var observer = new Collector();
+                var result = new HeatSimulator(new AdaptiveDecisionModel()).SimulateHeat(fixture.Track, fixture.CreateSurface(),
+                    fixture.Riders.Select(r => r.Create(fixture.Track)).ToList(),
+                    new() { Seed = 7, EnableContestedSpaceResponses = enabled, InteractionDiagnostics = InteractionDiagnosticsLevel.Summary },57,observer);
+                return (result,observer);
+            }
+            Run();
+            var measurements = new List<(double Wall, double Cpu, long Bytes, Collector Observer)>();
+            using var process = Process.GetCurrentProcess();
+            for (var repeat = 0; repeat < 3; repeat++)
+            {
+                var before = GC.GetTotalAllocatedBytes(true); var cpu = process.TotalProcessorTime;
+                var watch = Stopwatch.StartNew(); var result = Run(); watch.Stop();
+                measurements.Add((watch.Elapsed.TotalMilliseconds,(process.TotalProcessorTime-cpu).TotalMilliseconds,
+                    GC.GetTotalAllocatedBytes(true)-before,result.Observer));
+            }
+            var median = measurements.OrderBy(m => m.Wall).ElementAt(1);
+            fullHeats.Add(new { Scenario = fixture.Id, Enabled = enabled, Riders = 4, Laps = 4,
+                TotalWallMilliseconds = median.Wall, TotalCpuMilliseconds = measurements.Select(m=>m.Cpu).Order().ElementAt(1),
+                TotalAllocatedBytes = measurements.Select(m=>m.Bytes).Order().ElementAt(1),
+                InteractionEpisodes = median.Observer.Episodes.Select(e=>e.EpisodeId).Distinct().Count(),
+                Work = enabled ? SumWork(median.Observer.Work) : new InteractionWork(0,median.Observer.ProductionSteps,0,0,0),
+                DescriptiveCpuProjection100HeatsSeconds = measurements.Select(m=>m.Cpu).Order().ElementAt(1)*100/1000,
+                DescriptiveCpuProjection1000HeatsSeconds = measurements.Select(m=>m.Cpu).Order().ElementAt(1)*1000/1000 });
+        }
+        return JsonSerializer.Serialize(new { Schema = "56B-performance-v2", ReviewedHead = "3684efd743421812b75794c730f1db1b90f58b2d",
+            BeforeReviewFixes = new { DenseThreeRiderMedianMilliseconds = 244.5898, DenseThreeRiderMedianAllocatedBytes = 82216464 },
+            Protocol = "Release; current process; one warmup, five resolutions or three full heats; medians; Summary diagnostics; CPU projections are descriptive, not CI guarantees",
+            Machine = new { Environment.OSVersion, Environment.ProcessorCount, Runtime = Environment.Version.ToString() },
+            Resolutions = samples, FullHeats = fullHeats }, new JsonSerializerOptions { WriteIndented = true }) + "\n";
+    }
+    private static InteractionWork SumWork(IEnumerable<InteractionWork> work)
+    {
+        var rows = work.ToArray();
+        return new(rows.Sum(w=>w.JointCombinations), rows.Sum(w=>w.ProductionResolutions), rows.Sum(w=>w.NarrowPhaseEvaluations),
+            rows.Sum(w=>w.ResponsePasses), rows.Sum(w=>w.Clusters))
+        {
+            UniqueRiderAlternativeProjections = rows.Sum(w=>w.UniqueRiderAlternativeProjections),
+            PairAlternativeChecks = rows.Sum(w=>w.PairAlternativeChecks), ActualProductionVerifications = rows.Sum(w=>w.ActualProductionVerifications),
+            SafetyPasses = rows.Sum(w=>w.SafetyPasses), LegacyFallbackAttempts = rows.Sum(w=>w.LegacyFallbackAttempts),
+        };
     }
     private sealed class FixedDecision : IRiderDecisionModel
     {
@@ -237,8 +301,10 @@ public static class ContestedSpaceResponseEvidence
     {
         internal readonly List<InteractionEpisodeDiagnostic> Episodes = new();
         internal readonly List<InteractionWork> Work = new();
+        internal int ProductionSteps;
         public void OnStepResolved(ResolvedSimulationStep step)
         {
+            ProductionSteps++;
             if (step.Interaction is { } interaction) { Episodes.AddRange(interaction.Episodes); Work.Add(interaction.Work); }
         }
     }

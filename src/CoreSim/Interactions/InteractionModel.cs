@@ -7,6 +7,9 @@ public enum InteractionContext { FirstBendCluster, CornerEntryClosing, InsideOve
     MidCornerPressure, CornerExitCross, StraightReattack, MechanicalConflict }
 public enum OverlapState { Behind, Approaching, PartialOverlap, SideBySide, Ahead }
 public enum InteractionResponse { KeepIntent, Hold, CoverInside, YieldOutward, ContinueOutside, CutInside, BackOut, EmergencyAvoid }
+public enum InteractionDiagnosticsLevel { None, Summary, FullAudit }
+public enum InteractionSkillDomain { Offensive, Defensive, Safety, Neutral }
+public enum InteractionTacticalRole { Attacker, Defender, Neutral }
 
 /// <summary>Provisional synthetic controls; clearance does not inflate the mechanical motorcycle.</summary>
 public sealed record ContestedSpaceParameters
@@ -61,9 +64,25 @@ public sealed record InteractionEpisodeDiagnostic(long EpisodeId, IReadOnlyList<
     IReadOnlyList<InteractionCandidateDiagnostic> Candidates, int PassCount,
     double FinalMinimumSeparationMeters, bool ResolvedWithoutMechanicalContact,
     IReadOnlyList<UnresolvedMechanicalContact> UnresolvedMechanicalContacts, bool LegacyFallbackUsed,
-    int ResponseChanges, double ActiveDurationSeconds);
+    int ResponseChanges, double ActiveDurationSeconds)
+{
+    public bool Pass1ActualMechanicalContact { get; init; }
+    public bool ActualClearanceCertifiedByReplay { get; init; }
+    public IReadOnlyList<InteractionAlternative> Pass1SelectedResponses { get; init; } = Array.Empty<InteractionAlternative>();
+    public bool WithinCompetitiveReach { get; init; }
+    public bool CompetitiveReachCoverageCertified { get; init; }
+    public bool MergedOtherRiders { get; init; }
+}
 public sealed record InteractionWork(int JointCombinations, int ProductionResolutions,
-    int NarrowPhaseEvaluations, int ResponsePasses, int Clusters);
+    int NarrowPhaseEvaluations, int ResponsePasses, int Clusters)
+{
+    public int UniqueRiderAlternativeProjections { get; init; }
+    public int PairAlternativeChecks { get; init; }
+    public int JointCombinationsScored => JointCombinations;
+    public int ActualProductionVerifications { get; init; }
+    public int SafetyPasses { get; init; }
+    public int LegacyFallbackAttempts { get; init; }
+}
 public sealed record InteractionResolution(IReadOnlyList<InteractionEpisodeDiagnostic> Episodes, InteractionWork Work);
 
 internal sealed class InteractionEpisode(long id, int[] riders, double start)
@@ -76,7 +95,7 @@ internal sealed class InteractionEpisode(long id, int[] riders, double start)
     internal int[] ObservedRiders = riders;
     internal double? ClearSince, End;
     internal InteractionContext Context;
-    internal bool PredictedMechanical, FallbackAttempted;
+    internal bool PredictedMechanical, FallbackAttempted, MergedOtherRiders;
     internal int ResponseChanges;
     internal Dictionary<int, InteractionAlternative> Commitments = new();
     internal InteractionEpisodeDiagnostic? LastDiagnostic;
@@ -101,7 +120,7 @@ public sealed class InteractionEpisodeTracker
         {
             LastActive = e.LastActive, ObservedUntil = e.ObservedUntil, ReleaseNotBefore=e.ReleaseNotBefore, ObservedRiders = e.ObservedRiders.ToArray(),
             ClearSince = e.ClearSince, End = e.End, Context = e.Context,
-            PredictedMechanical = e.PredictedMechanical, FallbackAttempted = e.FallbackAttempted,
+            PredictedMechanical = e.PredictedMechanical, FallbackAttempted = e.FallbackAttempted, MergedOtherRiders = e.MergedOtherRiders,
             ResponseChanges = e.ResponseChanges, Commitments = new(e.Commitments), LastDiagnostic = e.LastDiagnostic,
         });
         return clone;
@@ -134,13 +153,14 @@ public sealed class InteractionEpisodeTracker
         }
         foreach (var merged in matches.Where(e => e != episode))
         {
+            episode.MergedOtherRiders = true;
             episode.FallbackAttempted |= merged.FallbackAttempted;
             foreach (var commitment in merged.Commitments) episode.Commitments.TryAdd(commitment.Key, commitment.Value);
             merged.End = time;
         }
         var participants = episode.Riders.Union(riders).Order().ToArray();
         if (!participants.SequenceEqual(episode.Riders))
-        { episode.ClearSince = null; episode.ObservedUntil = Math.Min(episode.ObservedUntil,time); }
+        { episode.ClearSince = null; episode.ObservedUntil = Math.Min(episode.ObservedUntil,time); episode.MergedOtherRiders = true; }
         episode.Riders = participants;
         episode.LastActive = Math.Max(time, episode.LastActive);
         // Forecast threats must not reset certified clearance of the selected
@@ -165,7 +185,16 @@ public sealed class InteractionEpisodeTracker
                     e.ObservedUntil = Math.Max(e.ObservedUntil,removed.Max(id => snapshot.Rider(id).ElapsedTimeSeconds));
                 e.ObservedRiders = riders;
             }
-            if (riders.Length < 2) continue; // No post-impact/body model for inactive riders in #56B.
+            if (riders.Length < 2)
+            {
+                // No competitive episode remains with fewer than two active riders.
+                // Closing ownership adds no consequence or post-impact model.
+                e.End = Math.Max(e.LastActive, riders.Length == 0 || snapshot is null ? time
+                    : snapshot.Rider(riders[0]).ElapsedTimeSeconds);
+                if (e.LastDiagnostic is { } last) Closed.Add(last with
+                    { EndTimeSeconds = e.End, ActiveDurationSeconds = Math.Max(0,e.End.Value-e.Start), LegacyFallbackUsed = false });
+                continue;
+            }
             var relevant = rows.Where(r => riders.Contains(r.RiderA) && riders.Contains(r.RiderB)).ToArray();
             var pairs = (from a in riders from b in riders where a < b select (a,b)).ToArray();
             var byPair = relevant.GroupBy(r => (r.RiderA,r.RiderB))
@@ -175,13 +204,25 @@ public sealed class InteractionEpisodeTracker
             e.LastActive=Math.Max(e.LastActive,sharedEnd);
             // #55 certifies a pair-wide minimum. Its local lower bound is required for release clearance.
             var lastPressureEnd = relevant.Where(r => r.IntervalEndSeconds>e.ObservedUntil
-                && (!r.NumericallyResolved || r.Kind.HasFlag(SpaceConflictKind.BoundaryAmbiguous)
+                && ((!r.NumericallyResolved && r.MinimumSeparationLowerBoundMeters <= p.CompetitiveReachMeters)
+                    || r.Kind.HasFlag(SpaceConflictKind.BoundaryAmbiguous)
                     || r.MinimumSeparationMeters<=p.ReleaseClearanceMeters
                     || r.MinimumSeparationLowerBoundMeters<=p.ReleaseClearanceMeters))
                 .Select(r => r.IntervalEndSeconds).DefaultIfEmpty(e.ObservedUntil).Max();
             if (lastPressureEnd>e.ObservedUntil) {e.ClearSince=null;e.ObservedUntil=lastPressureEnd;}
             if (sharedEnd<=e.ObservedUntil) continue;
-            e.ObservedUntil=Math.Max(e.ObservedUntil,e.ReleaseNotBefore);
+            // Actual sustained, certified distance beyond competitive reach can end
+            // an old forecast commitment. Unknown/boundary rows still fail closed.
+            var outsideReach = relevant.Where(r => r.IntervalEndSeconds > e.ObservedUntil).ToArray();
+            var certifiedOutsideReach = outsideReach.Length > 0 && outsideReach.All(r => !r.Kind.HasFlag(SpaceConflictKind.BoundaryAmbiguous)
+                && r.MinimumSeparationLowerBoundMeters > p.CompetitiveReachMeters);
+            if (!certifiedOutsideReach && sharedEnd <= e.ReleaseNotBefore)
+            {
+                // Do not turn a future forecast deadline into an observed clock:
+                // a later actual clear interval must still be examined for reach.
+                e.ClearSince = null; e.ObservedUntil = sharedEnd; continue;
+            }
+            if (!certifiedOutsideReach) e.ObservedUntil=Math.Max(e.ObservedUntil,e.ReleaseNotBefore);
             if (sharedEnd<=e.ObservedUntil) continue;
             var boundaries = relevant.SelectMany(r => new[]{r.IntervalStartSeconds,r.IntervalEndSeconds})
                 .Where(t => t > e.ObservedUntil && t<=sharedEnd).Append(e.ObservedUntil).Append(sharedEnd).Distinct().Order().ToArray();
@@ -198,7 +239,8 @@ public sealed class InteractionEpisodeTracker
                     if (index==intervals.Length || intervals[index].IntervalStartSeconds>start || intervals[index].IntervalEndSeconds<end)
                     {clear=false;break;}
                     var row=intervals[index];
-                    if (!row.NumericallyResolved || row.Kind.HasFlag(SpaceConflictKind.BoundaryAmbiguous)
+                    if ((!row.NumericallyResolved && row.MinimumSeparationLowerBoundMeters <= p.CompetitiveReachMeters)
+                        || row.Kind.HasFlag(SpaceConflictKind.BoundaryAmbiguous)
                         || row.MinimumSeparationMeters<=p.ReleaseClearanceMeters
                         || row.MinimumSeparationLowerBoundMeters<=p.ReleaseClearanceMeters) {clear=false;break;}
                 }
@@ -246,6 +288,32 @@ public sealed class InteractionEpisodeTracker
 
 public static class InteractionGeometryModel
 {
+    public static InteractionTacticalRole Role(int riderId, InteractionGeometry geometry)
+    {
+        var direction = geometry.RiderA == riderId ? 1 : -1;
+        var ahead = direction * geometry.ForwardBFromAMeters;
+        var outside = direction * geometry.OutwardBFromAMeters;
+        var closing = direction * geometry.ForwardClosingMetersPerSecond;
+        if (geometry.ForwardFootprintOverlapMeters > 0 && outside < 0)
+            return InteractionTacticalRole.Defender;
+        if (ahead > 0 && closing < 0 || geometry.ForwardFootprintOverlapMeters > 0 && outside > 0 && closing <= 0)
+            return InteractionTacticalRole.Attacker;
+        return ahead < 0 ? InteractionTacticalRole.Defender : InteractionTacticalRole.Neutral;
+    }
+    public static InteractionSkillDomain SkillDomain(InteractionResponse response, InteractionTacticalRole role)
+        => response switch
+        {
+            InteractionResponse.BackOut or InteractionResponse.EmergencyAvoid => InteractionSkillDomain.Safety,
+            InteractionResponse.CoverInside or InteractionResponse.YieldOutward => InteractionSkillDomain.Defensive,
+            InteractionResponse.CutInside => InteractionSkillDomain.Offensive,
+            InteractionResponse.Hold or InteractionResponse.ContinueOutside => role switch
+            {
+                InteractionTacticalRole.Attacker => InteractionSkillDomain.Offensive,
+                InteractionTacticalRole.Defender => InteractionSkillDomain.Defensive,
+                _ => InteractionSkillDomain.Neutral,
+            },
+            _ => InteractionSkillDomain.Neutral,
+        };
     /// <summary>Actual rotated #55 capsules projected onto the common reference tangent.</summary>
     public static InteractionGeometry Describe(ContestedSpaceEvent space, PhysicalBikePose a, PhysicalBikePose b,
         PoseRateBounds rateA, PoseRateBounds rateB)
@@ -271,8 +339,9 @@ public static class InteractionGeometryModel
     public static (double Min, double Max) Project(BikeFootprint footprint, MeterPoint axis)
     {
         var min = double.PositiveInfinity; var max = double.NegativeInfinity;
-        foreach (var capsule in new[] { footprint.Chassis, footprint.Handlebar })
+        for (var component = 0; component < 2; component++)
         {
+            var capsule = footprint.Component((BikeComponent)component);
             min = Math.Min(min, Math.Min(MeterPoint.Dot(capsule.Start, axis), MeterPoint.Dot(capsule.End, axis)) - capsule.RadiusMeters);
             max = Math.Max(max, Math.Max(MeterPoint.Dot(capsule.Start, axis), MeterPoint.Dot(capsule.End, axis)) + capsule.RadiusMeters);
         }

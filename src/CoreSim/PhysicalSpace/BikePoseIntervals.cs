@@ -42,6 +42,12 @@ public readonly record struct PoseRateBounds(MeterPoint CenterVelocityMetersPerS
 /// Immutable continuous resolved-pose input. New attitude sources may implement this contract;
 /// RateBounds must conservatively bound every time in the requested subinterval.
 /// </summary>
+internal readonly record struct BikePoseValue(MeterPoint Position, double TravelHeadingRadians,
+    double BikeHeadingRadians, SpeedwayBikeDimensions Dimensions, double ReferenceTangentHeadingRadians)
+{
+    internal BikeFootprint Footprint => BikeFootprint.Create(Position, BikeHeadingRadians, Dimensions);
+}
+
 public abstract class PhysicalPoseInterval
 {
     public int RiderId { get; }
@@ -69,6 +75,13 @@ public abstract class PhysicalPoseInterval
         return (time - StartTimeSeconds) / (EndTimeSeconds - StartTimeSeconds);
     }
     public abstract PhysicalBikePose Sample(double commonTimeSeconds);
+    // Exact footprint arithmetic, without retaining sample/attitude objects in root searches.
+    internal virtual BikePoseValue SampleValue(double commonTimeSeconds)
+    {
+        var pose = Sample(commonTimeSeconds);
+        return new(pose.Position, pose.Attitude.TravelHeadingRadians, pose.Attitude.BikeHeadingRadians, pose.Dimensions, pose.ReferenceTangentHeadingRadians);
+    }
+    internal virtual BikeFootprint SampleFootprint(double commonTimeSeconds) => SampleValue(commonTimeSeconds).Footprint;
     public abstract PoseRateBounds RateBounds(double startTimeSeconds, double endTimeSeconds);
 }
 
@@ -179,6 +192,12 @@ public static class ResolvedBikePoses
             var g = Geometry(time);
             var beta = _straight ? 0 : _profile.RelativeSlideAngle(g.Phase);
             return new(RiderId, FrameId, g.Position, new(time, g.Heading, g.Heading + beta), Dimensions, g.Tangent, Source);
+        }
+        internal override BikePoseValue SampleValue(double time)
+        {
+            var g = Geometry(time);
+            var beta = _straight ? 0 : _profile.RelativeSlideAngle(g.Phase);
+            return new(g.Position, BikeAngles.Wrap(g.Heading), BikeAngles.Wrap(g.Heading + beta), Dimensions, BikeAngles.Wrap(g.Tangent));
         }
         public override PoseRateBounds RateBounds(double start, double end)
         {

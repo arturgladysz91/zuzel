@@ -2,6 +2,20 @@ using System.Collections;
 using System.Reflection;
 using System.Text.Json;
 using CoreSim.Analysis;
+using CoreSim.Interactions;
+
+if (args.Length == 2 && args[0] == "--resolution-work")
+{
+    var rows = new List<object>();
+    foreach (var scenario in ContestedSpaceResponseEvidence.Scenarios().Where(s => s.Name is "H-three-squeeze" or "K-far-apart"))
+    foreach (var enabled in new[] { false, true })
+    {
+        var step = ContestedSpaceResponseEvidence.Resolve(scenario, enabled, diagnostics: InteractionDiagnosticsLevel.Summary);
+        rows.Add(new { scenario.Name, Enabled = enabled, Work = step.Interaction?.Work ?? new InteractionWork(0, 1, 0, 0, 0) });
+    }
+    File.WriteAllText(args[1], JsonSerializer.Serialize(rows, new JsonSerializerOptions { WriteIndented = true }) + "\n");
+    return;
+}
 
 Directory.CreateDirectory(args[0]);
 File.WriteAllText(Path.Combine(args[0],"contested-space-racing-response.json"),

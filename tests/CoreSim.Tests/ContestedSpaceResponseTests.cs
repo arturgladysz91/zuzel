@@ -31,7 +31,7 @@ public sealed class ContestedSpaceResponseTests
         {
             Assert.InRange(episode.RiderIds.Count, 2, 4);
             Assert.InRange(episode.Geometry.Count, 1, 6);
-            Assert.InRange(episode.Candidates.Count, 1, 81);
+            Assert.InRange(episode.Candidates.Count, 1, 81 * episode.PassCount);
             Assert.InRange(episode.PassCount, 1, 2);
             foreach (var alternatives in episode.ResponseAlternatives.GroupBy(a => a.RiderId)) Assert.InRange(alternatives.Count(),1,3);
             foreach (var candidate in episode.Candidates.Where(c => c.Feasible))
@@ -57,7 +57,7 @@ public sealed class ContestedSpaceResponseTests
         Assert.True(episode.Geometry[0].ForwardFootprintOverlapMeters > 0);
         Assert.DoesNotContain(episode.ResponseAlternatives, a => a.RiderId == 1 && a.Response == InteractionResponse.CoverInside);
         Assert.True(episode.ResolvedWithoutMechanicalContact);
-        Assert.Contains(episode.SelectedResponses, a => a.RiderId == 1 && a.Response is InteractionResponse.YieldOutward or InteractionResponse.Hold);
+        Assert.Contains(episode.SelectedResponses, a => a.RiderId == 1 && a.Response is InteractionResponse.YieldOutward or InteractionResponse.Hold or InteractionResponse.BackOut);
         Assert.Contains(episode.Candidates, c => !c.Feasible && c.Rejection == "Mechanical overlap (#55)");
     }
     [Fact]
@@ -319,6 +319,9 @@ public sealed class ContestedSpaceResponseTests
     public void UnresolvedEpisodeCallsLegacyOnlyOnceEvenIfOccurrenceRollDoesNothing()
     {
         var tracker = new InteractionEpisodeTracker(); var input = Scenario("imminent-overlap");
+        // Stop near the boundary so this actual step cannot already integrate the
+        // release delay; the later coverage gap must preserve fallback ownership.
+        input = input with { Riders = input.Riders.Select(r => r with { Progress = .98f }).ToArray() };
         var first = ContestedSpaceResponseEvidence.Resolve(input,tracker:tracker);
         Assert.True(first.Interaction!.Episodes.Single().LegacyFallbackUsed);
         Commit(first);
@@ -389,6 +392,160 @@ public sealed class ContestedSpaceResponseTests
         }
         var expected = new[]{Run(57),Run(58)};
         Assert.Equal(expected,await Task.WhenAll(Task.Run(() => Run(57)),Task.Run(() => Run(58))));
+    }
+    [Fact]
+    public void BackOutProjectionExpiresAfterCurrentTurnStepAndMatchesActualExecutionExactly()
+    {
+        var scenario = Scenario("D-inside-overlap") with
+        { Riders = new[] { new ContestedRiderInput(1, 2.3f, 0, 21, new(2,2,2)) } };
+        var snapshot = ContestedSpaceResponseEvidence.Snapshot(scenario);
+        var control = new InteractionProjectionControl(RiderDriveControl.LiftThrottle, true);
+        Assert.Equal(0, control.Decision(2,0).DriveControl!.Value.PositiveDriveFraction);
+        Assert.True(control.Decision(2,0).HoldLateralPosition);
+        Assert.Null(control.Decision(2,1).DriveControl); Assert.False(control.Decision(2,1).HoldLateralPosition);
+        var evaluator = new TrajectoryEvaluator(new RiderDecisionContext(snapshot,snapshot.Riders[0]),
+            driveControl:RiderDriveControl.LiftThrottle,holdLateralPosition:true);
+        Assert.Equal(new[]{TrajectoryPhase.Middle,TrajectoryPhase.Exit,TrajectoryPhase.FollowingStraight},evaluator.Horizon.Select(h=>h.Phase));
+        var replay = evaluator.Evaluate(new(2,2,2),retainResolvedMotions:true);
+        var engine = new SimulationEngine(new Hold());
+        var options = new HeatSimulationOptions {EnableContestedSpaceResponses=true,IncidentFrequency=0,EnableLogging=false};
+        var rider = snapshot.Riders[0].ToMutableCopy();
+        var state = new TrackState(snapshot.Track.Segments.Count,5,snapshot.TrackState.GetSurface);
+        for(var prefix=0;prefix<evaluator.Horizon.Count;prefix++)
+        {
+            var part=evaluator.Horizon[prefix];
+            var input=engine.CaptureSnapshot(snapshot.Track,state,new[]{rider},snapshot.Step with {StepNumber=snapshot.Step.StepNumber+prefix,
+                SegmentIndex=part.SegmentIndex,LapIndex=part.LapIndex});
+            var actual=engine.ResolveProduction(input,new[]{new RiderIntent(1,control.Decision(2,prefix))},options,legacyContacts:false);
+            Assert.Equal(JsonSerializer.Serialize(actual.Motions[0]),JsonSerializer.Serialize(replay.ResolvedMotions[prefix]));
+            if(prefix==0) Assert.Equal(2.3f,actual.Changes[0].LateralPosition);
+            else if(prefix==1)
+            {
+                Assert.NotEqual(2.3f,actual.Changes[0].LateralPosition);
+                var reissued=engine.ResolveProduction(input,new[]{new RiderIntent(1,control.Decision(2,0))},options,legacyContacts:false);
+                Assert.Equal(2.3f,reissued.Changes[0].LateralPosition);
+                Assert.True(reissued.Changes[0].Speed<actual.Changes[0].Speed);
+            }
+            engine.Commit(actual,new[]{rider},state,new SimLog(false));
+        }
+    }
+    [Fact]
+    public void RealIncidentConflictAfterClearFirstPassGetsOneJointSafetyPassBeforeFallback()
+    {
+        var scenario=Scenario("B-close-too-late");
+        var basis=ContestedSpaceResponseEvidence.Snapshot(scenario);
+        var snapshot=new SimulationSnapshot(basis.Step with {Seed=276},basis.Track,basis.TrackState,basis.Riders);
+        var engine=new SimulationEngine(new Hold());
+        var options=new HeatSimulationOptions {EnableContestedSpaceResponses=true,IncidentFrequency=2,
+            InteractionDiagnostics=InteractionDiagnosticsLevel.FullAudit};
+        var intents=scenario.Riders.Select(r=>new RiderIntent(r.Id,new RiderDecision(r.Intent.TargetFor(snapshot.Segment.Type)){Trajectory=r.Intent})).ToArray();
+        var step=engine.Resolve(snapshot,intents,options);
+        var episode=Assert.Single(step.Interaction!.Episodes);
+        Assert.Equal(2,episode.PassCount);Assert.True(episode.Pass1ActualMechanicalContact);
+        Assert.Contains(episode.Candidates,c=>c.Feasible && c.Responses.SequenceEqual(episode.Pass1SelectedResponses));
+        var pass1=engine.ResolveProduction(snapshot,episode.Pass1SelectedResponses.Select(a=>new RiderIntent(a.RiderId,
+            new RiderDecision(a.Intent.TargetFor(snapshot.Segment.Type)){Trajectory=a.Intent,DriveControl=a.DriveControl,
+                HoldLateralPosition=a.HoldLateralPosition})).ToArray(),options,legacyContacts:false);
+        var conflict=ContestedSpaceResolver.Observe(pass1.Motions.SelectMany(m=>ResolvedBikePoses.FromMotion(m,snapshot.Track)));
+        Assert.Contains(conflict.Intervals,r=>r.EligibleForFutureInteraction);
+        Assert.True(episode.ResolvedWithoutMechanicalContact);Assert.False(episode.LegacyFallbackUsed);
+        Assert.Empty(episode.UnresolvedMechanicalContacts);
+        Assert.All(episode.SelectedResponses,a=>Assert.Contains(a.Response,new[]{InteractionResponse.KeepIntent,InteractionResponse.BackOut,InteractionResponse.EmergencyAvoid}));
+        Assert.Equal(1,step.Interaction.Work.SafetyPasses);Assert.Equal(0,step.Interaction.Work.LegacyFallbackAttempts);
+        Assert.Equal(3,step.Interaction.Work.ActualProductionVerifications);
+    }
+    [Fact]
+    public void UnclearSecondSafetyPassAuthorizesExactlyOneLegacyAttempt()
+    {
+        var step=ContestedSpaceResponseEvidence.Resolve(Scenario("imminent-overlap"));
+        var episode=Assert.Single(step.Interaction!.Episodes);
+        Assert.Equal(2,episode.PassCount);Assert.NotEmpty(episode.UnresolvedMechanicalContacts);
+        Assert.True(episode.LegacyFallbackUsed);Assert.Equal(1,step.Interaction.Work.LegacyFallbackAttempts);
+        Assert.Equal(1,step.Interaction.Work.SafetyPasses);
+    }
+    [Theory]
+    [InlineData("A-entry-close",InteractionResponse.CoverInside,1,true)]
+    [InlineData("D-inside-overlap",InteractionResponse.YieldOutward,2,true)]
+    [InlineData("C-cutback-clean",InteractionResponse.CutInside,2,false)]
+    public void IdenticalGeometryAssignsQualityToTheResponsibleAbility(string name,InteractionResponse response,int riderId,bool defensive)
+    {
+        InteractionAlternative Alternative(int attack,int defense)
+        {
+            var input=Scenario(name) with {Riders=Scenario(name).Riders.Select(r=>r with {Attack=attack,Defense=defense}).ToArray()};
+            return ContestedSpaceResponseEvidence.Resolve(input).Interaction!.Episodes.SelectMany(e=>e.ResponseAlternatives)
+                .Single(a=>a.RiderId==riderId && a.Response==response);
+        }
+        var attacking=Alternative(90,20);var defending=Alternative(20,90);
+        Assert.True(defensive ? defending.TacticalPreference<attacking.TacticalPreference : attacking.TacticalPreference<defending.TacticalPreference);
+        Assert.Equal(Alternative(20,20).TacticalPreference,(defensive?attacking:defending).TacticalPreference);
+    }
+    [Fact]
+    public void AttackAndDefenseCannotChangeHardEmergencyWhenTechniqueAndConditionAreFixed()
+    {
+        ResolvedSimulationStep Run(int attack,int defense)=>ContestedSpaceResponseEvidence.Resolve(Scenario("imminent-overlap") with
+        {Riders=Scenario("imminent-overlap").Riders.Select(r=>r with {Attack=attack,Defense=defense}).ToArray()});
+        var a=Run(90,20);var b=Run(20,90);
+        Assert.Equal(a.Changes,b.Changes);Assert.Equal(a.Motions,b.Motions);Assert.Equal(a.Events,b.Events);
+        Assert.Equal(JsonSerializer.Serialize(a.Interaction!.Episodes[0].SelectedResponses),JsonSerializer.Serialize(b.Interaction!.Episodes[0].SelectedResponses));
+    }
+    [Fact]
+    public void ProjectionAndPairWorkAreBoundedAndSummaryDoesNotRetainCandidateAudit()
+    {
+        var scenario=Scenario("G-four-first-bend");var snapshot=ContestedSpaceResponseEvidence.Snapshot(scenario);
+        var intents=scenario.Riders.Select(r=>new RiderIntent(r.Id,new RiderDecision(r.Intent.TargetFor(snapshot.Segment.Type)){Trajectory=r.Intent})).ToArray();
+        var engine=new SimulationEngine(new Hold());
+        var summary=engine.Resolve(snapshot,intents,new(){EnableContestedSpaceResponses=true,IncidentFrequency=0});
+        var audit=engine.Resolve(snapshot,intents,new(){EnableContestedSpaceResponses=true,IncidentFrequency=0,InteractionDiagnostics=InteractionDiagnosticsLevel.FullAudit});
+        Assert.Equal(summary.Changes,audit.Changes);Assert.Equal(summary.Motions,audit.Motions);
+        var unique=Assert.Single(audit.Interaction!.Episodes).ResponseAlternatives
+            .Select(a=>(a.RiderId,a.Intent,a.DriveControl?.PositiveDriveFraction??1f,a.HoldLateralPosition)).Distinct().Count();
+        Assert.Equal(unique,summary.Interaction!.Work.UniqueRiderAlternativeProjections);
+        Assert.InRange(unique,1,12);
+        Assert.InRange(summary.Interaction.Work.PairAlternativeChecks,1,54);
+        Assert.Equal(81,summary.Interaction.Work.JointCombinationsScored);
+        Assert.Empty(Assert.Single(summary.Interaction.Episodes).Candidates);
+        Assert.Equal(81,Assert.Single(audit.Interaction!.Episodes).Candidates.Count);
+    }
+    [Fact]
+    public void CertifiedLongClearIntervalOutsideCompetitiveReachEndsStaleForecastOwnership()
+    {
+        var prior=ContestedSpaceResponseEvidence.Resolve(Scenario("D-inside-overlap")).Interaction!.Episodes.Single();
+        var tracker=new InteractionEpisodeTracker();var episode=tracker.Engage(new[]{1,2},0,prior.Context);
+        episode.LastDiagnostic=prior;episode.ReleaseNotBefore=100;
+        var row=prior.Geometry[0].Space with {IntervalStartSeconds=1,IntervalEndSeconds=2,
+            MinimumSeparationMeters=4,MinimumSeparationLowerBoundMeters=4,NumericallyResolved=true,Kind=SpaceConflictKind.None,FirstTouchCommonTimeSeconds=null};
+        tracker.ObserveClearance(1,new[]{row},new());Assert.Equal(1.45,episode.End);
+        var pending=new InteractionEpisodeTracker();
+        var pendingEpisode=pending.Engage(new[]{1,2},0,prior.Context);pendingEpisode.ReleaseNotBefore=100;
+        pending.ObserveClearance(0,new[]{row with {IntervalStartSeconds=0,IntervalEndSeconds=1,
+            MinimumSeparationMeters=2,MinimumSeparationLowerBoundMeters=2}},new());
+        Assert.Null(pendingEpisode.End);Assert.Equal(1,pendingEpisode.ObservedUntil);
+        pending.ObserveClearance(1,new[]{row},new());Assert.Equal(1.45,pendingEpisode.End);
+        var preciseBounds=new InteractionEpisodeTracker();
+        var far=preciseBounds.Engage(new[]{1,2},0,prior.Context);far.ReleaseNotBefore=100;
+        preciseBounds.ObserveClearance(1,new[]{row with {NumericallyResolved=false}},new());
+        Assert.Equal(1.45,far.End); // Local #55 bound proves distance despite unresolved minimum precision.
+        var ambiguous=new InteractionEpisodeTracker();
+        var quarantined=ambiguous.Engage(new[]{1,2},0,prior.Context);quarantined.ReleaseNotBefore=100;
+        ambiguous.ObserveClearance(1,new[]{row with {Kind=SpaceConflictKind.BoundaryAmbiguous}},new());
+        Assert.Null(quarantined.End);
+    }
+    [Fact]
+    public void BoundaryAmbiguityCannotAuthorizeAnUnownedLegacyContact()
+    {
+        var basis=ContestedSpaceResponseEvidence.Snapshot(Scenario("imminent-overlap"));
+        var track=new Track(basis.Track.Segments,new TrackGeometry(60,24,10,14,MathF.PI/3));
+        var riders=basis.Riders.Select(r=>r with {Position=RiderPosition.Create(1,1,0,track.Segments.Count),LateralPosition=2,Lane=2}).ToArray();
+        var snapshot=new SimulationSnapshot(basis.Step with {SegmentIndex=1},track,basis.TrackState,riders);
+        var intents=riders.Select(r=>new RiderIntent(r.RiderId,new RiderDecision(2){Trajectory=new(2,2,2)})).ToArray();
+        var engine=new SimulationEngine(new Hold());var options=new HeatSimulationOptions {EnableContestedSpaceResponses=true,IncidentFrequency=0};
+        var independent=engine.ResolveProduction(snapshot,intents,options,legacyContacts:false);
+        var observed=ContestedSpaceResolver.Observe(independent.Motions.SelectMany(m=>ResolvedBikePoses.FromMotion(m,track)));
+        Assert.Contains(observed.Intervals,r=>r.Kind.HasFlag(SpaceConflictKind.BoundaryAmbiguous));
+        Assert.DoesNotContain(observed.Intervals,r=>r.EligibleForFutureInteraction);
+        var resolved=engine.Resolve(snapshot,intents,options);
+        Assert.DoesNotContain(resolved.Events,e=>e.Type!=SimulationEventType.SegmentResolved);
+        Assert.Equal(0,resolved.Interaction!.Work.LegacyFallbackAttempts);
     }
     private static void Commit(ResolvedSimulationStep step)
         => new SimulationEngine(new Hold()).Commit(step,step.Snapshot.Riders.Select(r => r.ToMutableCopy()).ToArray(),

@@ -4,6 +4,17 @@ using CoreSim.Race;
 namespace CoreSim.Decisions;
 
 public enum TrajectoryPhase { Entry, Middle, Exit, FollowingStraight }
+/// <summary>Temporary traffic execution controls expire at the next production snapshot.</summary>
+public sealed record InteractionProjectionControl(RiderDriveControl? CurrentStepDriveControl,
+    bool CurrentStepHoldLateralPosition)
+{
+    internal bool IsControlled => CurrentStepDriveControl.HasValue || CurrentStepHoldLateralPosition;
+    internal RiderDecision Decision(int target, int prefix) => new(target)
+    {
+        DriveControl = prefix == 0 ? CurrentStepDriveControl : null,
+        HoldLateralPosition = prefix == 0 && CurrentStepHoldLateralPosition,
+    };
+}
 public sealed record TrajectoryHorizonSegment(int SegmentIndex, int LapIndex, TrajectoryPhase Phase);
 public sealed record TrajectoryPhaseEndpoint(int SegmentIndex, TrajectoryPhase Phase,
     int RequestedAnchor, float LateralPosition, float SpeedMetersPerSecond, SegmentOutcome Outcome, bool AnchorReached);
@@ -27,8 +38,7 @@ public sealed class TrajectoryEvaluator
     private readonly RiderDecisionContext _context;
     private readonly TrackStateSnapshot _surface;
     private readonly bool _reusePrefixes;
-    private readonly RiderDriveControl? _driveControl;
-    private readonly bool _holdLateralPosition;
+    private readonly InteractionProjectionControl _control;
     private PrefixNode? _leanRoot, _richRoot;
     private sealed class PrefixNode(RiderSnapshot rider, TrackState surface, TrajectoryTraversal metrics)
     {
@@ -46,8 +56,7 @@ public sealed class TrajectoryEvaluator
         ArgumentNullException.ThrowIfNull(context);
         _context = context; _surface = perceivedSurface ?? context.TrackState;
         _reusePrefixes = reuseProductionPrefixes;
-        _driveControl = driveControl;
-        _holdLateralPosition = holdLateralPosition;
+        _control = new(driveControl, holdLateralPosition);
         if (_surface.SegmentCount != context.Snapshot.Track.Segments.Count || _surface.LinesCount != LaneModel.LanesCount)
             throw new ArgumentException("Surface dimensions must match the decision track.", nameof(perceivedSurface));
         if (!context.Rider.IsActive || context.Rider.SegmentIndex != context.SegmentIndex)
@@ -56,7 +65,7 @@ public sealed class TrajectoryEvaluator
     }
     public TrajectoryTraversal Evaluate(TrajectoryIntent intent, bool retainResolvedMotions = false)
     {
-        if ((_driveControl.HasValue || _holdLateralPosition) && !retainResolvedMotions)
+        if (_control.IsControlled && !retainResolvedMotions)
             throw new InvalidOperationException("Controlled traffic projection requires production motion capture.");
         CandidateTraversalCount++;
         ref var root = ref (retainResolvedMotions ? ref _richRoot : ref _leanRoot);
@@ -96,15 +105,15 @@ public sealed class TrajectoryEvaluator
         var input = new SimulationSnapshot(step, track, parent.Surface.Snapshot(), new[] { parent.Rider });
         var options = new HeatSimulationOptions { Laps = step.RequiredLaps, Seed = _context.Seed,
             IncidentFrequency = 0f, EnableLogging = false,
-            EnableContestedSpaceResponses = _driveControl.HasValue || _holdLateralPosition };
+            EnableContestedSpaceResponses = _control.IsControlled && offset == 0 };
         SoloProjectionResult projection;
         ResolvedRiderMotion? motion = null;
         if (rich)
         {
             var engine = new SimulationEngine(new FixedTarget(requested));
-            var resolved = _driveControl.HasValue || _holdLateralPosition
+            var resolved = _control.IsControlled && offset == 0
                 ? engine.ResolveProduction(input, new[] { new RiderIntent(parent.Rider.RiderId,
-                    new RiderDecision(requested) { DriveControl = _driveControl, HoldLateralPosition = _holdLateralPosition }) }, options, legacyContacts: false)
+                    _control.Decision(requested, offset)) }, options, legacyContacts: false)
                 : engine.Resolve(input, engine.Decide(input), options);
             motion = resolved.Motions[0];
             projection = new(input, resolved.Changes[0], motion.TotalTimeSeconds, motion.TotalDistanceMeters, null, default);

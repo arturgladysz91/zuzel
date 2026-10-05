@@ -133,6 +133,10 @@ public static class MechanicalSeparation
         if (Math.Abs(a.CommonTimeSeconds - b.CommonTimeSeconds) > GeometryNumerics.TimeToleranceSeconds)
             throw new ArgumentException("Physical poses must share heat time.");
         var fa = a.Footprint; var fb = b.Footprint;
+        return Between(fa, fb);
+    }
+    internal static FootprintSeparation Between(BikeFootprint fa, BikeFootprint fb)
+    {
         var best = new FootprintSeparation(double.PositiveInfinity, BikeComponent.Chassis, BikeComponent.Chassis);
         for (var i = 0; i < 2; i++) for (var j = 0; j < 2; j++)
         {

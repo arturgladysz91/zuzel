@@ -23,6 +23,6 @@ for scenario in report["Scenarios"]:
     for episode in scenario["Interaction"]["Episodes"]:
         assert 2 <= len(episode["RiderIds"]) <= 4
         assert len(episode["Geometry"]) <= 6
-        assert len(episode["Candidates"]) <= 81
+        assert len(episode["Candidates"]) <= 81 * episode["PassCount"]
         assert episode["PassCount"] <= 2
 print("#56B report bytes and complete production IEEE captures match Windows/Ubuntu; storm audit clear.")
