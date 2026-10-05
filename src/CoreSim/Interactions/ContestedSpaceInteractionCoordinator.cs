@@ -25,12 +25,17 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
         if (snapshot.Riders.Count > 4) throw new ArgumentException("Contested space supports at most four riders per heat.");
         tracker.Bind(snapshot);
         var p = options.ContestedSpaceParameters;
+        // Pair eligibility follows either member's current request, never an unrelated heat clock.
+        var requestTimes = snapshot.Riders.ToDictionary(r => r.RiderId,r => (double)r.ElapsedTimeSeconds);
+        double Ready(int a,int b) => Math.Min(requestTimes[a],requestTimes[b]);
+        bool Future(ContestedSpaceEvent row) => snapshot.Rider(row.RiderA).IsActive && snapshot.Rider(row.RiderB).IsActive
+            && row.IntervalEndSeconds>Ready(row.RiderA,row.RiderB);
+        bool FutureGap(FrameCoverageGap gap) => gap.EndCommonTimeSeconds>Ready(gap.RiderA,gap.RiderB);
         var independent = engine.ResolveProduction(snapshot, intents, options, legacyContacts: false);
         var currentPoses = Poses(independent, snapshot.Track);
         var direct = CommonTimePoseHistory.Observe(tracker.History.Concat(currentPoses));
         var now = snapshot.Riders.Where(r => r.IsActive).Select(r => (double)r.ElapsedTimeSeconds).DefaultIfEmpty(0).Min();
-        var directRows = direct.Intervals.Where(r => r.IntervalEndSeconds > now).ToArray();
-        tracker.ObserveClearance(now, directRows, p);
+        var directRows = direct.Intervals.Where(Future).ToArray();
         // No planning or extra production replay for spatially unrelated riders.
         if (!directRows.Any(r => Eligible(r) && r.MinimumSeparationMeters <= p.CompetitiveReachMeters)
             && !tracker.Active.Any())
@@ -85,8 +90,7 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
         }
         var baseline = original.Values.Select(Project).ToDictionary(x => x.Alternative.RiderId);
         var forecast = Verify(baseline.Values);
-        tracker.ObserveClearance(now, forecast.Intervals.Where(r => r.IntervalEndSeconds > now).ToArray(), p);
-        var edges = Threats(forecast, baseline.Values.SelectMany(x => x.Poses).ToArray(), now, p);
+        var edges = Threats(forecast, tracker.History.Concat(baseline.Values.SelectMany(x => x.Poses)).ToArray(), now, p,requestTimes);
         var clusters = Clusters(edges, snapshot, p);
         foreach (var episode in tracker.Active.Where(e => e.LastDiagnostic is not null))
         {
@@ -100,8 +104,11 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
         foreach (var cluster in clusters)
         {
             var episode = cluster.Meaningful
-                ? tracker.Engage(cluster.Riders, Math.Max(now, cluster.Edges.Min(g => g.CommonTimeSeconds)), cluster.Context)
+                ? tracker.Engage(cluster.Riders, cluster.Riders.Min(id=>requestTimes[id]), cluster.Context)
                 : tracker.Active.First(e => e.Riders.Intersect(cluster.Riders).Count() >= 2);
+            if(cluster.Meaningful && episode.Commitments.Count==0)
+                // Preserve the initial forecast window without postponing release on every reforecast.
+                episode.ReleaseNotBefore=cluster.Edges.Max(g=>g.Space.FirstTouchCommonTimeSeconds??g.Space.MinimumSeparationCommonTimeSeconds);
             episode.PredictedMechanical |= cluster.Edges.Any(e => e.Space.HasConflict);
             var alternatives = cluster.Riders.ToDictionary(id => id,
                 id => Alternatives(snapshot, snapshot.Rider(id), original[id], cluster, episode, p).ToArray());
@@ -130,12 +137,12 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
                             new(0, 0, 0, 0), joint)); continue;
                     }
                     var space = Verify(projections);
-                    var affected = space.Intervals.Where(r => r.IntervalEndSeconds > now
+                    var affected = space.Intervals.Where(r => Future(r)
                         && (cluster.Riders.Contains(r.RiderA) || cluster.Riders.Contains(r.RiderB))).ToArray();
                     var minimum = affected.Where(Eligible).Select(r => r.MinimumSeparationMeters).DefaultIfEmpty(p.CompetitiveReachMeters).Min();
                     var mechanical = affected.Any(r => Eligible(r) && r.HasConflict);
-                    var ambiguous = affected.Any(r => !r.NumericallyResolved) || !affected.Any(Eligible) || space.FrameCoverageGaps.Any(g =>
-                        g.EndCommonTimeSeconds > now && (cluster.Riders.Contains(g.RiderA) || cluster.Riders.Contains(g.RiderB)));
+                    var ambiguous = affected.Any(r => !Eligible(r)) || !affected.Any(Eligible) || space.FrameCoverageGaps.Any(g =>
+                        FutureGap(g) && (cluster.Riders.Contains(g.RiderA) || cluster.Riders.Contains(g.RiderB)));
                     var bounds = projections.Any(x => cluster.Riders.Contains(x.Alternative.RiderId) && !x.WithinTrack);
                     var failed = projections.Any(x => cluster.Riders.Contains(x.Alternative.RiderId) && !x.Traversal.CompletedHorizon);
                     var cost = new InteractionCost(joint.Sum(a => Project(a).Traversal.PredictedTraversalTimeSeconds
@@ -172,9 +179,9 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
                 var attempted = new Dictionary<int, InteractionAlternative>(selected);
                 foreach (var a in chosen) attempted[a.RiderId] = a;
                 var projected = attempted.Values.Select(Project).ToArray();
-                var originalConflicts = forecast.Intervals.Where(r => r.EligibleForFutureInteraction).Select(r => Pair(r.RiderA,r.RiderB)).ToHashSet();
+                var originalConflicts = forecast.Intervals.Where(r => Future(r) && r.EligibleForFutureInteraction).Select(r => Pair(r.RiderA,r.RiderB)).ToHashSet();
                 if (projected.Any(x => !x.WithinTrack || !x.Traversal.CompletedHorizon)
-                    || Verify(projected).Intervals.Any(r => r.EligibleForFutureInteraction && !originalConflicts.Contains(Pair(r.RiderA,r.RiderB))))
+                    || Verify(projected).Intervals.Any(r => Future(r) && r.EligibleForFutureInteraction && !originalConflicts.Contains(Pair(r.RiderA,r.RiderB))))
                     chosen = cluster.Riders.Select(id => selected[id]).ToArray();
             }
             foreach (var choice in chosen)
@@ -187,7 +194,7 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
             episode.Context = cluster.Context;
             var unresolved = new List<UnresolvedMechanicalContact>();
             var projectedFinal = Verify(selected.Values.Select(Project));
-            foreach (var conflict in projectedFinal.Intervals.Where(r => r.IntervalEndSeconds > now && r.EligibleForFutureInteraction
+            foreach (var conflict in projectedFinal.Intervals.Where(r => Future(r) && r.EligibleForFutureInteraction
                 && (cluster.Riders.Contains(r.RiderA) || cluster.Riders.Contains(r.RiderB)))
                 .GroupBy(r => Pair(r.RiderA, r.RiderB)).Select(g => g.OrderBy(r => r.FirstTouchCommonTimeSeconds).First()))
                 unresolved.Add(Unresolved(episode, conflict, chosen, "No clear bounded joint alternative"));
@@ -195,7 +202,7 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
                 cluster.Edges.Min(g => g.Space.MinimumSeparationMeters), cluster.Edges.Aggregate(SpaceConflictKind.None, (k, g) => k | g.Space.Kind),
                 cluster.Edges, cluster.Riders.Select(id => original[id]).ToArray(), alternatives.Values.SelectMany(a => a).ToArray(), chosen,
                 candidates, clusterPasses, winner?.Minimum ?? cluster.Edges.Min(g => g.Space.MinimumSeparationMeters),
-                unresolved.Count == 0, unresolved, false, episode.ResponseChanges, Math.Max(0, episode.LastActive - episode.Start)));
+                winner is not null && unresolved.Count == 0, unresolved, false, episode.ResponseChanges, Math.Max(0, episode.LastActive - episode.Start)));
         }
         var finalIntents = intents.Select(i => new RiderIntent(i.RiderId, i.Decision with
         {
@@ -208,7 +215,7 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
         production++;
         var verification = CommonTimePoseHistory.Observe(tracker.History.Concat(Poses(actual, snapshot.Track)));
         narrow += verification.Work.NarrowPhaseEvaluations;
-        foreach (var conflict in verification.Intervals.Where(r => r.IntervalEndSeconds > now && r.EligibleForFutureInteraction))
+        foreach (var conflict in verification.Intervals.Where(r => Future(r) && r.EligibleForFutureInteraction))
         {
             var episode = tracker.Active.FirstOrDefault(e => e.Riders.Contains(conflict.RiderA) && e.Riders.Contains(conflict.RiderB));
             if (episode is null) continue;
@@ -235,11 +242,27 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
         foreach (var episode in tracker.Active)
             episode.LastDiagnostic = diagnostics.LastOrDefault(d => d.EpisodeId == episode.Id) ?? episode.LastDiagnostic;
         var final = engine.ResolveProduction(snapshot, finalIntents, options, contactFilter: (a, b) =>
-            !tracker.Owns(a, b) || fallbackPairs.Contains(Pair(a, b)), unresolvedPairs: fallbackPairs.Select(pair =>
+            (!tracker.Owns(a, b) && !diagnostics.Any(d => d.RiderIds.Contains(a) && d.RiderIds.Contains(b)))
+                || fallbackPairs.Contains(Pair(a, b)), unresolvedPairs: fallbackPairs.Select(pair =>
                 actual.Changes.Single(c => c.RiderId == pair.Item1).ElapsedTimeSeconds
                     <= actual.Changes.Single(c => c.RiderId == pair.Item2).ElapsedTimeSeconds
                     ? (pair.Item1, pair.Item2) : (pair.Item2, pair.Item1)).ToArray());
         production++;
+        var executedVerification=CommonTimePoseHistory.Observe(tracker.History.Concat(Poses(final,snapshot.Track)));
+        narrow+=executedVerification.Work.NarrowPhaseEvaluations;
+        tracker.ObserveClearance(now,executedVerification.Intervals,p,snapshot);
+        foreach(var closed in tracker.Closed)
+        {
+            var index=diagnostics.FindIndex(d=>d.EpisodeId==closed.EpisodeId);
+            if(index>=0) diagnostics[index]=diagnostics[index] with {EndTimeSeconds=closed.EndTimeSeconds,ActiveDurationSeconds=closed.ActiveDurationSeconds};
+            else diagnostics.Add(closed);
+        }
+        foreach(var episode in tracker.Active)
+        {
+            var index=diagnostics.FindIndex(d=>d.EpisodeId==episode.Id);
+            if(index>=0) diagnostics[index]=diagnostics[index] with {ActiveDurationSeconds=Math.Max(0,episode.LastActive-episode.Start)};
+            episode.LastDiagnostic=diagnostics.LastOrDefault(d=>d.EpisodeId==episode.Id)??episode.LastDiagnostic;
+        }
         narrow += tracker.Retain(final);
         return final.withInteraction(new(diagnostics, new(combinations, production, narrow, passes, clusters.Count)), owner, tracker);
     }
@@ -317,19 +340,24 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
                 span + TrackGeometry.ProvisionalOuterReferenceOffsetFromTrackEdgeMeters - offset - projected.Max + center - radialBulge);
         }
     }
-    private static InteractionGeometry[] Threats(ContestedSpaceReport report, PhysicalPoseInterval[] poses,
-        double now, ContestedSpaceParameters p)
+    internal static InteractionGeometry[] Threats(ContestedSpaceReport report, PhysicalPoseInterval[] poses,
+        double now, ContestedSpaceParameters p,IReadOnlyDictionary<int,double>? requestTimes=null)
     {
         var edges = new List<InteractionGeometry>();
         foreach (var pair in report.Intervals.Where(r => r.IntervalEndSeconds > now && Eligible(r)
             && r.MinimumSeparationMeters <= p.CompetitiveReachMeters).GroupBy(r => Pair(r.RiderA, r.RiderB)))
         {
-            var row = pair.OrderBy(r => r.MinimumSeparationMeters).First();
-            var common = report.Intervals.Where(r => Pair(r.RiderA, r.RiderB) == pair.Key && r.IntervalEndSeconds > now && Eligible(r))
+            var pairNow=requestTimes is null?now:Math.Min(requestTimes[pair.Key.Item1],requestTimes[pair.Key.Item2]);
+            var future=pair.Where(r=>r.IntervalEndSeconds>pairNow).ToArray();
+            if (future.Length==0) continue;
+            var row = future.OrderBy(r => r.MinimumSeparationMeters).First();
+            var common = report.Intervals.Where(r => Pair(r.RiderA, r.RiderB) == pair.Key && r.IntervalEndSeconds > pairNow && Eligible(r))
                 .OrderBy(r => r.IntervalStartSeconds).First();
-            var time = Math.Max(now, common.IntervalStartSeconds);
-            var a = poses.FirstOrDefault(i => i.RiderId == row.RiderA && i.StartTimeSeconds <= time && i.EndTimeSeconds >= time);
-            var b = poses.FirstOrDefault(i => i.RiderId == row.RiderB && i.StartTimeSeconds <= time && i.EndTimeSeconds >= time);
+            var time = Math.Max(pairNow, common.IntervalStartSeconds);
+            var a = poses.Where(i => i.RiderId == row.RiderA && i.StartTimeSeconds <= time && i.EndTimeSeconds > time)
+                .OrderByDescending(i => i.StartTimeSeconds).FirstOrDefault();
+            var b = poses.Where(i => i.RiderId == row.RiderB && i.StartTimeSeconds <= time && i.EndTimeSeconds > time)
+                .OrderByDescending(i => i.StartTimeSeconds).FirstOrDefault();
             if (a is null || b is null) continue;
             var geometry = InteractionGeometryModel.Describe(row, a.Sample(time), b.Sample(time), a.RateBounds(time, time), b.RateBounds(time, time));
             if (row.HasConflict || row.MinimumSeparationMeters <= p.PressureClearanceMeters

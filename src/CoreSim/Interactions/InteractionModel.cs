@@ -71,6 +71,9 @@ internal sealed class InteractionEpisode(long id, int[] riders, double start)
     internal long Id = id;
     internal int[] Riders = riders;
     internal double Start = start, LastActive = start;
+    internal double ObservedUntil = start;
+    internal double ReleaseNotBefore = start;
+    internal int[] ObservedRiders = riders;
     internal double? ClearSince, End;
     internal InteractionContext Context;
     internal bool PredictedMechanical, FallbackAttempted;
@@ -89,13 +92,15 @@ public sealed class InteractionEpisodeTracker
     internal readonly List<PhysicalPoseInterval> History = new();
     internal TrackMetricEmbedding? Embedding;
     internal IEnumerable<InteractionEpisode> Active => _episodes.Where(e => !e.End.HasValue);
+    internal int EpisodeCount => _episodes.Count;
     internal InteractionEpisodeTracker Clone()
     {
         var clone = new InteractionEpisodeTracker { _nextId = _nextId, _heat = _heat, Embedding = Embedding };
         clone.History.AddRange(History);
         foreach (var e in _episodes) clone._episodes.Add(new(e.Id, e.Riders.ToArray(), e.Start)
         {
-            LastActive = e.LastActive, ClearSince = e.ClearSince, End = e.End, Context = e.Context,
+            LastActive = e.LastActive, ObservedUntil = e.ObservedUntil, ReleaseNotBefore=e.ReleaseNotBefore, ObservedRiders = e.ObservedRiders.ToArray(),
+            ClearSince = e.ClearSince, End = e.End, Context = e.Context,
             PredictedMechanical = e.PredictedMechanical, FallbackAttempted = e.FallbackAttempted,
             ResponseChanges = e.ResponseChanges, Commitments = new(e.Commitments), LastDiagnostic = e.LastDiagnostic,
         });
@@ -133,29 +138,83 @@ public sealed class InteractionEpisodeTracker
             foreach (var commitment in merged.Commitments) episode.Commitments.TryAdd(commitment.Key, commitment.Value);
             merged.End = time;
         }
-        episode.Riders = episode.Riders.Union(riders).Order().ToArray();
+        var participants = episode.Riders.Union(riders).Order().ToArray();
+        if (!participants.SequenceEqual(episode.Riders))
+        { episode.ClearSince = null; episode.ObservedUntil = Math.Min(episode.ObservedUntil,time); }
+        episode.Riders = participants;
         episode.LastActive = Math.Max(time, episode.LastActive);
-        episode.ClearSince = null;
+        // Forecast threats must not reset certified clearance of the selected
+        // executed response. ObserveClearance alone owns this physical clock.
         if (episode.Commitments.Count == 0) episode.Context = context;
         return episode;
     }
     internal bool Owns(int a, int b) => Active.Any(e => e.Riders.Contains(a) && e.Riders.Contains(b));
-    internal void ObserveClearance(double time, IReadOnlyList<ContestedSpaceEvent> rows, ContestedSpaceParameters p)
+    internal void ObserveClearance(double time, IReadOnlyList<ContestedSpaceEvent> rows, ContestedSpaceParameters p,
+        SimulationSnapshot? snapshot = null)
     {
         foreach (var e in Active.ToArray())
         {
-            var relevant = rows.Where(r => e.Riders.Contains(r.RiderA) && e.Riders.Contains(r.RiderB)).ToArray();
-            // Missing/ambiguous coverage is not evidence of clearance.
-            if (relevant.Length == 0 || relevant.Any(r => !r.NumericallyResolved
-                || r.Kind.HasFlag(SpaceConflictKind.BoundaryAmbiguous)
-                || r.MinimumSeparationMeters <= p.ReleaseClearanceMeters))
-            { e.ClearSince = null; continue; }
-            e.ClearSince ??= time;
-            if (time - e.ClearSince.Value >= p.ReleaseDelaySeconds)
+            var riders = e.Riders.Where(id => snapshot is null || snapshot.Rider(id).IsActive).ToArray();
+            if (snapshot is not null && riders.Length>=2)
+                e.LastActive=Math.Max(e.LastActive,riders.Min(id=>snapshot.Rider(id).ElapsedTimeSeconds));
+            if (!riders.SequenceEqual(e.ObservedRiders))
             {
-                e.End = time;
-                if (e.LastDiagnostic is { } diagnostic) Closed.Add(diagnostic with
-                    { EndTimeSeconds = time, ActiveDurationSeconds = Math.Max(0, time - e.Start), LegacyFallbackUsed = false });
+                var removed = e.ObservedRiders.Except(riders).ToArray();
+                e.ClearSince = null;
+                if (snapshot is not null && removed.Length > 0)
+                    e.ObservedUntil = Math.Max(e.ObservedUntil,removed.Max(id => snapshot.Rider(id).ElapsedTimeSeconds));
+                e.ObservedRiders = riders;
+            }
+            if (riders.Length < 2) continue; // No post-impact/body model for inactive riders in #56B.
+            var relevant = rows.Where(r => riders.Contains(r.RiderA) && riders.Contains(r.RiderB)).ToArray();
+            var pairs = (from a in riders from b in riders where a < b select (a,b)).ToArray();
+            var byPair = relevant.GroupBy(r => (r.RiderA,r.RiderB))
+                .ToDictionary(g => g.Key,g => g.OrderBy(r => r.IntervalStartSeconds).ToArray());
+            if (pairs.Any(pair => !byPair.ContainsKey(pair))) {e.ClearSince=null;continue;}
+            var sharedEnd = pairs.Min(pair => byPair[pair].Max(r => r.IntervalEndSeconds));
+            e.LastActive=Math.Max(e.LastActive,sharedEnd);
+            // #55 certifies a pair-wide minimum. Its local lower bound is required for release clearance.
+            var lastPressureEnd = relevant.Where(r => r.IntervalEndSeconds>e.ObservedUntil
+                && (!r.NumericallyResolved || r.Kind.HasFlag(SpaceConflictKind.BoundaryAmbiguous)
+                    || r.MinimumSeparationMeters<=p.ReleaseClearanceMeters
+                    || r.MinimumSeparationLowerBoundMeters<=p.ReleaseClearanceMeters))
+                .Select(r => r.IntervalEndSeconds).DefaultIfEmpty(e.ObservedUntil).Max();
+            if (lastPressureEnd>e.ObservedUntil) {e.ClearSince=null;e.ObservedUntil=lastPressureEnd;}
+            if (sharedEnd<=e.ObservedUntil) continue;
+            e.ObservedUntil=Math.Max(e.ObservedUntil,e.ReleaseNotBefore);
+            if (sharedEnd<=e.ObservedUntil) continue;
+            var boundaries = relevant.SelectMany(r => new[]{r.IntervalStartSeconds,r.IntervalEndSeconds})
+                .Where(t => t > e.ObservedUntil && t<=sharedEnd).Append(e.ObservedUntil).Append(sharedEnd).Distinct().Order().ToArray();
+            var indices = pairs.ToDictionary(pair => pair,_ => 0);
+            for (var i=0;i+1<boundaries.Length;i++)
+            {
+                var start = boundaries[i]; var end = boundaries[i+1]; var clear = true;
+                foreach (var pair in pairs)
+                {
+                    if (!byPair.TryGetValue(pair,out var intervals)) {clear=false;break;}
+                    var index=indices[pair];
+                    while (index<intervals.Length && intervals[index].IntervalEndSeconds<=start) index++;
+                    indices[pair]=index;
+                    if (index==intervals.Length || intervals[index].IntervalStartSeconds>start || intervals[index].IntervalEndSeconds<end)
+                    {clear=false;break;}
+                    var row=intervals[index];
+                    if (!row.NumericallyResolved || row.Kind.HasFlag(SpaceConflictKind.BoundaryAmbiguous)
+                        || row.MinimumSeparationMeters<=p.ReleaseClearanceMeters
+                        || row.MinimumSeparationLowerBoundMeters<=p.ReleaseClearanceMeters) {clear=false;break;}
+                }
+                if (!clear) e.ClearSince=null;
+                else
+                {
+                    e.ClearSince ??= start;
+                    if (end-e.ClearSince.Value>=p.ReleaseDelaySeconds)
+                    {
+                        e.End=e.ClearSince.Value+p.ReleaseDelaySeconds;
+                        if (e.LastDiagnostic is { } diagnostic) Closed.Add(diagnostic with
+                            {EndTimeSeconds=e.End,ActiveDurationSeconds=Math.Max(0,e.End.Value-e.Start),LegacyFallbackUsed=false});
+                        break;
+                    }
+                }
+                e.ObservedUntil=end;
             }
         }
     }

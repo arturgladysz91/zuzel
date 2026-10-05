@@ -76,10 +76,22 @@ geometry safe or adds a new crash model.
 
 An episode stores rider set, common start/last-active time, context, commitments,
 predicted mechanical conflict, clearance clock and legacy-attempt ownership. Meaningful
-threats refresh it; observing a retained episode without a fresh threat does not reset its
-release clock. Release requires certified separation above the release threshold for the
-release delay. Missing/ambiguous coverage is not evidence of release. A later cleanly
-separated battle can create a new episode. Merged episodes retain prior fallback ownership.
+threats refresh it. Its initial forecast conflict window must pass before clearance can
+release the commitment; later forecasts do not continually move that deadline. Clearance
+is integrated over the final executed common-time intervals, including any authorized
+legacy consequence, rather than over independent requests or a single segment-boundary
+sample. Every participating active pair needs continuous coverage and a #55 separation
+lower bound above the release threshold for the release delay. Missing/ambiguous coverage
+is not evidence of release. A later cleanly separated battle can create a new episode.
+Merged episodes retain prior fallback ownership.
+
+Each pair uses its own earliest current request time. An unrelated rider's earlier clock
+cannot reopen that pair's committed past. At asynchronous boundaries, threat geometry
+samples the opponent's retained executed motion when its next request begins later; the
+newest continuous interval owns an exact shared endpoint. No pose is fabricated to fill
+missing coverage. Focused regressions cover both this clock ordering and release before
+a forecast contested window, including a sampled minimum whose local lower bound cannot
+certify clearance.
 
 Within an unchanged context, a feasible joint commitment remains selected unless emergency
 avoidance is required. The report distinguishes response changes/ABA oscillations from
@@ -149,23 +161,26 @@ range is observation guidance only and is never encoded in the engine.
 
 ### Recorded batch
 
-The 76 sampled heats produce 92 episodes: 30 first-bend and 62 ordinary-racing
-phase groups. Their final observations contain 72 clear episodes (78.26%) and
-20 unresolved episodes, with 10 legacy fallback attempts. First-bend observations
-have zero legacy attempts; ordinary-racing observations have 10. Counts of clear
-observations within a phase differ from final episode counts because one commitment
-can be checked at several segment boundaries.
+The controlled fixtures produce 10 interaction episodes; 8 resolve without mechanical
+contact (80%). The 76 complete sampled heats produce 315 episodes, with
+40 first-bend and 275 ordinary-racing phase groups. Final observations
+contain 206 pre-contact resolved episodes and 109 unresolved episodes, including
+eligible mechanical contacts or the absence of a certified feasible joint alternative.
+There are 8 legacy fallback attempts: 0 in first-bend observations and
+8 in ordinary racing. Phase observation counts can differ from final episode counts
+because a commitment can be checked at several segment boundaries. Boundary uncertainty
+is never counted as a certified pre-contact resolution.
 
-Maximum episodes per pair per heat is 2; maximum active duration is 5.7358650193 s;
-maximum response changes inside one episode is 4; maximum legacy attempts per episode
-is 1. Across the batch, 20 ABA changes occur where the previous joint commitment is
+Maximum episodes per pair per heat is 10; maximum active duration is 15.6595627785 s;
+maximum response changes inside one episode is 9; maximum legacy attempts per episode
+is 1. Across the batch, 10 ABA changes occur where the previous joint commitment is
 infeasible or context/emergency permits a change. Unexplained commitment changes and
 storm warnings are zero. These are synthetic observations, not empirical race claims.
 
 | Resolution case | OFF median | ON median | OFF allocation | ON allocation |
 |---|---:|---:|---:|---:|
-| Separated pair | 0.6725 ms | 5.3507 ms | 68,648 B | 414,864 B |
-| Dense three-rider squeeze | 0.8977 ms | 228.1623 ms | 93,464 B | 71,786,312 B |
+| Separated pair | 0.6708 ms | 5.4973 ms | 68,648 B | 419,352 B |
+| Dense three-rider squeeze | 0.8877 ms | 244.5898 ms | 93,464 B | 82,216,464 B |
 
 These desktop measurements were taken alongside validation work; they are representative
 cost observations, not stable hardware-independent thresholds. Feature OFF introduces

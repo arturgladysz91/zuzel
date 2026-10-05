@@ -35,7 +35,10 @@ public sealed class ContestedSpaceResponseTests
             Assert.InRange(episode.PassCount, 1, 2);
             foreach (var alternatives in episode.ResponseAlternatives.GroupBy(a => a.RiderId)) Assert.InRange(alternatives.Count(),1,3);
             foreach (var candidate in episode.Candidates.Where(c => c.Feasible))
+            {
                 Assert.True(candidate.MinimumSeparationMeters > GeometryNumerics.ContactDistanceMeters);
+                Assert.Equal(0,candidate.IneligibleIntervals);
+            }
         }
         foreach (var change in step.Changes)
         {
@@ -213,7 +216,7 @@ public sealed class ContestedSpaceResponseTests
         var riders = a.Snapshot.Riders.Select(r => r.ToMutableCopy()).ToArray();
         var surface = new TrackState(a.Snapshot.Track.Segments.Count,5,a.Snapshot.TrackState.GetSurface);
         new SimulationEngine(new Hold()).Commit(a,riders,surface,new SimLog(false));
-        Assert.Single(tracker.Active);
+        Assert.Equal(1,tracker.EpisodeCount);
         Assert.Throws<InvalidOperationException>(() => tracker.Bind(new(a.Snapshot.Step with {HeatId=999},a.Snapshot.Track,a.Snapshot.TrackState,a.Snapshot.Riders)));
     }
     [Fact]
@@ -225,10 +228,14 @@ public sealed class ContestedSpaceResponseTests
         var first = tracker.Engage(new[]{1,2},0,InteractionContext.InsideOverlap);
         Assert.Same(first,tracker.Engage(new[]{2,1},.4,InteractionContext.InsideOverlap));
         Assert.Same(first,tracker.Engage(new[]{1,2},.8,InteractionContext.InsideOverlap));
-        var clear = row with { MinimumSeparationMeters = 2, Kind = SpaceConflictKind.None, NumericallyResolved = true, FirstTouchCommonTimeSeconds = null };
+        var clear = row with { MinimumSeparationMeters = 2, Kind = SpaceConflictKind.None, NumericallyResolved = true,
+            FirstTouchCommonTimeSeconds = null,IntervalStartSeconds=1,IntervalEndSeconds=1.3,MinimumSeparationLowerBoundMeters=2 };
+        tracker.ObserveClearance(0,new[]{clear with {IntervalStartSeconds=0,IntervalEndSeconds=1,MinimumSeparationLowerBoundMeters=.2}},new());
+        Assert.Null(first.End); // #55's sampled pair minimum cannot certify this local interval.
         tracker.ObserveClearance(1,new[]{clear},new()); Assert.Null(first.End);
-        tracker.ObserveClearance(1.3,new[]{clear with {MinimumSeparationMeters=.3}},new()); Assert.Null(first.End);
-        tracker.ObserveClearance(1.5,new[]{clear},new()); tracker.ObserveClearance(2,new[]{clear},new()); Assert.Equal(2,first.End);
+        tracker.ObserveClearance(1.3,new[]{clear with {MinimumSeparationMeters=.3,IntervalStartSeconds=1.3,IntervalEndSeconds=1.5}},new()); Assert.Null(first.End);
+        tracker.ObserveClearance(1.5,new[]{clear with {IntervalStartSeconds=1.5,IntervalEndSeconds=1.8}},new());
+        tracker.ObserveClearance(2,new[]{clear with {IntervalStartSeconds=1.8,IntervalEndSeconds=2.1}},new()); Assert.Equal(1.95,first.End);
         Assert.NotEqual(first.Id,tracker.Engage(new[]{1,2},3,InteractionContext.StraightReattack).Id);
     }
     [Fact]
@@ -279,6 +286,36 @@ public sealed class ContestedSpaceResponseTests
         Assert.Equal(JsonSerializer.Serialize(first),JsonSerializer.Serialize(reversed));
     }
     [Fact]
+    public void AsynchronousThreatSamplesCommittedOpponentMotionAtTheSameHeatTime()
+    {
+        PhysicalBikePose Pose(int id,double time,double x,double y) => new(id,"clock",new(x,y),new(time,0,0),SpeedwayBikeDimensions.Reference);
+        var committed = new LinearBikePoseInterval(Pose(1,0,0,0),Pose(1,2,20,0));
+        var future = new LinearBikePoseInterval(Pose(1,2,20,0),Pose(1,3,30,0));
+        var requested = new LinearBikePoseInterval(Pose(2,1,10,.5),Pose(2,3,30,.5));
+        var report = ContestedSpaceResolver.Observe(new[]{committed,future,requested});
+        var edge = Assert.Single(ContestedSpaceInteractionCoordinator.Threats(report,new PhysicalPoseInterval[]{future,requested,committed},1,new()));
+        Assert.Equal(1,edge.CommonTimeSeconds);
+        Assert.True(edge.Space.EligibleForFutureInteraction);
+        Assert.True(edge.ForwardFootprintOverlapMeters>0);
+        Assert.Empty(ContestedSpaceInteractionCoordinator.Threats(report,new PhysicalPoseInterval[]{future,requested,committed},0,new(),
+            new Dictionary<int,double>{{1,3},{2,3}}));
+    }
+    [Fact]
+    public void ForecastCommitmentCannotExpireBeforeItsContestedWindow()
+    {
+        var step=ContestedSpaceResponseEvidence.Resolve(Scenario("D-inside-overlap"));
+        var row=step.Interaction!.Episodes[0].Geometry[0].Space;
+        var tracker=new InteractionEpisodeTracker(); tracker.Bind(step.Snapshot);
+        var episode=tracker.Engage(new[]{1,2},0,InteractionContext.InsideOverlap);
+        episode.ReleaseNotBefore=2;
+        var clear=row with {MinimumSeparationMeters=2,Kind=SpaceConflictKind.None,NumericallyResolved=true,
+            FirstTouchCommonTimeSeconds=null,IntervalStartSeconds=0,IntervalEndSeconds=1,MinimumSeparationLowerBoundMeters=2};
+        tracker.ObserveClearance(0,new[]{clear},new()); Assert.Null(episode.End);
+        tracker.ObserveClearance(1,new[]{clear with {IntervalStartSeconds=1,IntervalEndSeconds=2.3}},new()); Assert.Null(episode.End);
+        tracker.ObserveClearance(2.3,new[]{clear with {IntervalStartSeconds=2.3,IntervalEndSeconds=2.6}},new());
+        Assert.Equal(2.45,episode.End);
+    }
+    [Fact]
     public void UnresolvedEpisodeCallsLegacyOnlyOnceEvenIfOccurrenceRollDoesNothing()
     {
         var tracker = new InteractionEpisodeTracker(); var input = Scenario("imminent-overlap");
@@ -308,10 +345,10 @@ public sealed class ContestedSpaceResponseTests
                 snapshot.Riders.Select(r => r with {ElapsedTimeSeconds=time})),
             input.Riders.Select(r => new RiderIntent(r.Id,new RiderDecision(r.Intent.TargetFor(snapshot.Segment.Type)) {Trajectory=r.Intent})).ToArray(),
             new() {EnableContestedSpaceResponses=true,IncidentFrequency=0},tracker);
-        var first = Run(1); Commit(first); Assert.Single(tracker.Active);
-        Assert.Equal(1,tracker.Active.Single().ClearSince);
+        var first = Run(1); Commit(first); Assert.Empty(tracker.Active);
+        Assert.Contains(first.Interaction!.Episodes,e => e.EndTimeSeconds==1.45);
         var clear = Run(5); Commit(clear); Assert.Empty(tracker.Active);
-        Assert.Contains(clear.Interaction!.Episodes,e => e.EndTimeSeconds == 5);
+        Assert.Empty(clear.Interaction!.Episodes);
     }
     [Fact]
     public void PruningCannotPromoteDiscontinuityOverlapToEligibleContact()
