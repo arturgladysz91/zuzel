@@ -1,0 +1,2370 @@
+{
+  "BaseMainSha": "12cce6f9709f34ea1617d21399d2a615b3f689af",
+  "Scenarios": [
+    {
+      "Scenario": "A",
+      "Pairs": [
+        {
+          "RiderA": 1,
+          "RiderB": 2,
+          "FirstTouchSeconds": null,
+          "MinimumSeparationMeters": 2.2,
+          "MinimumTimeSeconds": 0,
+          "Classifications": "No observed eligible conflict",
+          "FirstClosing": null,
+          "ConflictingIntervals": 0,
+          "BoundaryAmbiguousIntervals": 0,
+          "FrameCoverageGaps": 0,
+          "UnresolvedIntervals": 0
+        }
+      ],
+      "Work": {
+        "RiderPairs": 1,
+        "CandidateIntervals": 1,
+        "BroadPhaseRejects": 1,
+        "NarrowPhaseEvaluations": 2,
+        "AdaptiveSubdivisions": 0,
+        "RootIterations": 0,
+        "DetectedConflicts": 0,
+        "UnresolvedIntervals": 0
+      }
+    },
+    {
+      "Scenario": "B",
+      "Pairs": [
+        {
+          "RiderA": 1,
+          "RiderB": 2,
+          "FirstTouchSeconds": null,
+          "MinimumSeparationMeters": 2.9,
+          "MinimumTimeSeconds": 0,
+          "Classifications": "No observed eligible conflict",
+          "FirstClosing": null,
+          "ConflictingIntervals": 0,
+          "BoundaryAmbiguousIntervals": 0,
+          "FrameCoverageGaps": 0,
+          "UnresolvedIntervals": 0
+        }
+      ],
+      "Work": {
+        "RiderPairs": 1,
+        "CandidateIntervals": 1,
+        "BroadPhaseRejects": 1,
+        "NarrowPhaseEvaluations": 2,
+        "AdaptiveSubdivisions": 0,
+        "RootIterations": 0,
+        "DetectedConflicts": 0,
+        "UnresolvedIntervals": 0
+      }
+    },
+    {
+      "Scenario": "C",
+      "Pairs": [
+        {
+          "RiderA": 1,
+          "RiderB": 2,
+          "FirstTouchSeconds": 0,
+          "MinimumSeparationMeters": -0.17,
+          "MinimumTimeSeconds": 0,
+          "Classifications": "ParallelOverlap",
+          "FirstClosing": {
+            "ATranslationMeters": 0,
+            "ARotationMeters": 0,
+            "BTranslationMeters": 0,
+            "BRotationMeters": 0,
+            "ActualClosingMeters": 0,
+            "NonadditiveResidualMeters": 0
+          },
+          "ConflictingIntervals": 1,
+          "BoundaryAmbiguousIntervals": 0,
+          "FrameCoverageGaps": 0,
+          "UnresolvedIntervals": 0
+        }
+      ],
+      "Work": {
+        "RiderPairs": 1,
+        "CandidateIntervals": 1,
+        "BroadPhaseRejects": 0,
+        "NarrowPhaseEvaluations": 2,
+        "AdaptiveSubdivisions": 0,
+        "RootIterations": 0,
+        "DetectedConflicts": 1,
+        "UnresolvedIntervals": 0
+      }
+    },
+    {
+      "Scenario": "D",
+      "Pairs": [
+        {
+          "RiderA": 1,
+          "RiderB": 2,
+          "FirstTouchSeconds": 0.2899999022,
+          "MinimumSeparationMeters": -0.3,
+          "MinimumTimeSeconds": 0.5,
+          "Classifications": "RearClosing, AEncroachesByTranslation",
+          "FirstClosing": {
+            "ATranslationMeters": 2.8999990225,
+            "ARotationMeters": 0,
+            "BTranslationMeters": 0,
+            "BRotationMeters": 0,
+            "ActualClosingMeters": 2.8999990225,
+            "NonadditiveResidualMeters": 0
+          },
+          "ConflictingIntervals": 1,
+          "BoundaryAmbiguousIntervals": 0,
+          "FrameCoverageGaps": 0,
+          "UnresolvedIntervals": 0
+        }
+      ],
+      "Work": {
+        "RiderPairs": 1,
+        "CandidateIntervals": 1,
+        "BroadPhaseRejects": 0,
+        "NarrowPhaseEvaluations": 36,
+        "AdaptiveSubdivisions": 34,
+        "RootIterations": 34,
+        "DetectedConflicts": 1,
+        "UnresolvedIntervals": 0
+      }
+    },
+    {
+      "Scenario": "E",
+      "Pairs": [
+        {
+          "RiderA": 1,
+          "RiderB": 2,
+          "FirstTouchSeconds": 0.599999547,
+          "MinimumSeparationMeters": -0.3,
+          "MinimumTimeSeconds": 1,
+          "Classifications": "AEncroachesByTranslation",
+          "FirstClosing": {
+            "ATranslationMeters": 1.199999094,
+            "ARotationMeters": 0,
+            "BTranslationMeters": 0,
+            "BRotationMeters": 0,
+            "ActualClosingMeters": 1.199999094,
+            "NonadditiveResidualMeters": 0
+          },
+          "ConflictingIntervals": 1,
+          "BoundaryAmbiguousIntervals": 0,
+          "FrameCoverageGaps": 0,
+          "UnresolvedIntervals": 0
+        }
+      ],
+      "Work": {
+        "RiderPairs": 1,
+        "CandidateIntervals": 1,
+        "BroadPhaseRejects": 0,
+        "NarrowPhaseEvaluations": 39,
+        "AdaptiveSubdivisions": 37,
+        "RootIterations": 37,
+        "DetectedConflicts": 1,
+        "UnresolvedIntervals": 0
+      }
+    },
+    {
+      "Scenario": "F",
+      "Pairs": [
+        {
+          "RiderA": 1,
+          "RiderB": 2,
+          "FirstTouchSeconds": 0.599999547,
+          "MinimumSeparationMeters": -0.3,
+          "MinimumTimeSeconds": 1,
+          "Classifications": "BEncroachesByTranslation",
+          "FirstClosing": {
+            "ATranslationMeters": 0,
+            "ARotationMeters": 0,
+            "BTranslationMeters": 1.199999094,
+            "BRotationMeters": 0,
+            "ActualClosingMeters": 1.199999094,
+            "NonadditiveResidualMeters": 0
+          },
+          "ConflictingIntervals": 1,
+          "BoundaryAmbiguousIntervals": 0,
+          "FrameCoverageGaps": 0,
+          "UnresolvedIntervals": 0
+        }
+      ],
+      "Work": {
+        "RiderPairs": 1,
+        "CandidateIntervals": 1,
+        "BroadPhaseRejects": 0,
+        "NarrowPhaseEvaluations": 39,
+        "AdaptiveSubdivisions": 37,
+        "RootIterations": 37,
+        "DetectedConflicts": 1,
+        "UnresolvedIntervals": 0
+      }
+    },
+    {
+      "Scenario": "G",
+      "Pairs": [
+        {
+          "RiderA": 1,
+          "RiderB": 2,
+          "FirstTouchSeconds": 0.7333330512,
+          "MinimumSeparationMeters": -0.3,
+          "MinimumTimeSeconds": 1,
+          "Classifications": "AEncroachesByTranslation, BEncroachesByTranslation, MutualConvergence",
+          "FirstClosing": {
+            "ATranslationMeters": 1.0999995768,
+            "ARotationMeters": 0,
+            "BTranslationMeters": 1.0999995768,
+            "BRotationMeters": 0,
+            "ActualClosingMeters": 2.1999991536,
+            "NonadditiveResidualMeters": 0
+          },
+          "ConflictingIntervals": 1,
+          "BoundaryAmbiguousIntervals": 0,
+          "FrameCoverageGaps": 0,
+          "UnresolvedIntervals": 0
+        }
+      ],
+      "Work": {
+        "RiderPairs": 1,
+        "CandidateIntervals": 1,
+        "BroadPhaseRejects": 0,
+        "NarrowPhaseEvaluations": 33,
+        "AdaptiveSubdivisions": 31,
+        "RootIterations": 31,
+        "DetectedConflicts": 1,
+        "UnresolvedIntervals": 0
+      }
+    },
+    {
+      "Scenario": "H",
+      "Pairs": [
+        {
+          "RiderA": 1,
+          "RiderB": 2,
+          "FirstTouchSeconds": 0.3999999166,
+          "MinimumSeparationMeters": -0.3,
+          "MinimumTimeSeconds": 0.5,
+          "Classifications": "AEncroachesByTranslation, BEncroachesByTranslation, MutualConvergence, CrossingPaths",
+          "FirstClosing": {
+            "ATranslationMeters": 1.5999996662,
+            "ARotationMeters": 0,
+            "BTranslationMeters": 1.5999996662,
+            "BRotationMeters": 0,
+            "ActualClosingMeters": 3.1999993324,
+            "NonadditiveResidualMeters": 0
+          },
+          "ConflictingIntervals": 1,
+          "BoundaryAmbiguousIntervals": 0,
+          "FrameCoverageGaps": 0,
+          "UnresolvedIntervals": 0
+        }
+      ],
+      "Work": {
+        "RiderPairs": 1,
+        "CandidateIntervals": 1,
+        "BroadPhaseRejects": 0,
+        "NarrowPhaseEvaluations": 38,
+        "AdaptiveSubdivisions": 36,
+        "RootIterations": 36,
+        "DetectedConflicts": 1,
+        "UnresolvedIntervals": 0
+      }
+    },
+    {
+      "Scenario": "I",
+      "Pairs": [
+        {
+          "RiderA": 1,
+          "RiderB": 2,
+          "FirstTouchSeconds": 0.1047091484,
+          "MinimumSeparationMeters": -0.3,
+          "MinimumTimeSeconds": 0.515625,
+          "Classifications": "AEncroachesByRotation",
+          "FirstClosing": {
+            "ATranslationMeters": 0,
+            "ARotationMeters": 0.0999990415,
+            "BTranslationMeters": 0,
+            "BRotationMeters": 0,
+            "ActualClosingMeters": 0.0999990415,
+            "NonadditiveResidualMeters": 0
+          },
+          "ConflictingIntervals": 1,
+          "BoundaryAmbiguousIntervals": 0,
+          "FrameCoverageGaps": 0,
+          "UnresolvedIntervals": 0
+        }
+      ],
+      "Work": {
+        "RiderPairs": 1,
+        "CandidateIntervals": 1,
+        "BroadPhaseRejects": 0,
+        "NarrowPhaseEvaluations": 63,
+        "AdaptiveSubdivisions": 61,
+        "RootIterations": 44,
+        "DetectedConflicts": 1,
+        "UnresolvedIntervals": 0
+      }
+    },
+    {
+      "Scenario": "J",
+      "Pairs": [
+        {
+          "RiderA": 1,
+          "RiderB": 2,
+          "FirstTouchSeconds": 0.4006875753,
+          "MinimumSeparationMeters": -0.2201244417,
+          "MinimumTimeSeconds": 0.5877685547,
+          "Classifications": "AEncroachesByTranslation, AEncroachesByRotation, AEncroachesMixed",
+          "FirstClosing": {
+            "ATranslationMeters": 0.1202062726,
+            "ARotationMeters": 0.2797928126,
+            "BTranslationMeters": 0,
+            "BRotationMeters": 0,
+            "ActualClosingMeters": 0.3999990852,
+            "NonadditiveResidualMeters": -0
+          },
+          "ConflictingIntervals": 1,
+          "BoundaryAmbiguousIntervals": 0,
+          "FrameCoverageGaps": 0,
+          "UnresolvedIntervals": 0
+        }
+      ],
+      "Work": {
+        "RiderPairs": 1,
+        "CandidateIntervals": 1,
+        "BroadPhaseRejects": 0,
+        "NarrowPhaseEvaluations": 195,
+        "AdaptiveSubdivisions": 193,
+        "RootIterations": 41,
+        "DetectedConflicts": 1,
+        "UnresolvedIntervals": 0
+      }
+    },
+    {
+      "Scenario": "K-zero",
+      "Pairs": [
+        {
+          "RiderA": 1,
+          "RiderB": 2,
+          "FirstTouchSeconds": null,
+          "MinimumSeparationMeters": 0.1,
+          "MinimumTimeSeconds": 0,
+          "Classifications": "No observed eligible conflict",
+          "FirstClosing": null,
+          "ConflictingIntervals": 0,
+          "BoundaryAmbiguousIntervals": 0,
+          "FrameCoverageGaps": 0,
+          "UnresolvedIntervals": 0
+        }
+      ],
+      "Work": {
+        "RiderPairs": 1,
+        "CandidateIntervals": 1,
+        "BroadPhaseRejects": 0,
+        "NarrowPhaseEvaluations": 2,
+        "AdaptiveSubdivisions": 0,
+        "RootIterations": 0,
+        "DetectedConflicts": 0,
+        "UnresolvedIntervals": 0
+      }
+    },
+    {
+      "Scenario": "K-yaw",
+      "Pairs": [
+        {
+          "RiderA": 1,
+          "RiderB": 2,
+          "FirstTouchSeconds": 0,
+          "MinimumSeparationMeters": -0.2863961031,
+          "MinimumTimeSeconds": 0,
+          "Classifications": "ParallelOverlap",
+          "FirstClosing": {
+            "ATranslationMeters": 0,
+            "ARotationMeters": 0,
+            "BTranslationMeters": 0,
+            "BRotationMeters": 0,
+            "ActualClosingMeters": 0,
+            "NonadditiveResidualMeters": 0
+          },
+          "ConflictingIntervals": 1,
+          "BoundaryAmbiguousIntervals": 0,
+          "FrameCoverageGaps": 0,
+          "UnresolvedIntervals": 0
+        }
+      ],
+      "Work": {
+        "RiderPairs": 1,
+        "CandidateIntervals": 1,
+        "BroadPhaseRejects": 0,
+        "NarrowPhaseEvaluations": 2,
+        "AdaptiveSubdivisions": 0,
+        "RootIterations": 0,
+        "DetectedConflicts": 1,
+        "UnresolvedIntervals": 0
+      }
+    }
+  ],
+  "ProductionCrossing": [
+    {
+      "RiderA": 1,
+      "RiderB": 2,
+      "FirstTouchSeconds": 0.5816524014,
+      "MinimumSeparationMeters": -0.3,
+      "MinimumTimeSeconds": 0.9988820553,
+      "Classifications": "AEncroachesByTranslation, BEncroachesByTranslation, MutualConvergence",
+      "FirstClosing": {
+        "ATranslationMeters": 0.0418353098,
+        "ARotationMeters": 0,
+        "BTranslationMeters": 0.0418353098,
+        "BRotationMeters": 0,
+        "ActualClosingMeters": 0.0836706196,
+        "NonadditiveResidualMeters": 0
+      },
+      "ConflictingIntervals": 18,
+      "BoundaryAmbiguousIntervals": 0,
+      "FrameCoverageGaps": 0,
+      "UnresolvedIntervals": 0
+    }
+  ],
+  "MetricEmbedding": {
+    "Frame": "One deterministic metric model-space track frame across all closed laps",
+    "Closure": {
+      "PositionResidualMeters": {
+        "X": 5.4202E-06,
+        "Y": -6.994E-07,
+        "Length": 5.4651E-06
+      },
+      "HeadingResidualRadians": 1.748E-07,
+      "PositionErrorMeters": 5.4651E-06,
+      "SupportsLapWrap": true
+    },
+    "HomeStraightMeters": 62,
+    "Origin": {
+      "X": 0,
+      "Y": 0,
+      "Length": 0
+    },
+    "InitialHeadingRadians": 0
+  },
+  "AttitudeProfiles": [
+    {
+      "Profile": "neutral",
+      "Samples": [
+        {
+          "CornerProgress": 0,
+          "BetaRadians": 0
+        },
+        {
+          "CornerProgress": 0.1,
+          "BetaRadians": 0.0387850945
+        },
+        {
+          "CornerProgress": 0.3333333333,
+          "BetaRadians": 0.5189301994
+        },
+        {
+          "CornerProgress": 0.5,
+          "BetaRadians": 0.5235987756
+        },
+        {
+          "CornerProgress": 0.6666666667,
+          "BetaRadians": 0.415954988
+        },
+        {
+          "CornerProgress": 0.9,
+          "BetaRadians": 0.0224983849
+        },
+        {
+          "CornerProgress": 1,
+          "BetaRadians": 0
+        }
+      ]
+    },
+    {
+      "Profile": "early",
+      "Samples": [
+        {
+          "CornerProgress": 0,
+          "BetaRadians": 0
+        },
+        {
+          "CornerProgress": 0.1,
+          "BetaRadians": 0.3703703704
+        },
+        {
+          "CornerProgress": 0.3333333333,
+          "BetaRadians": 0.4284634489
+        },
+        {
+          "CornerProgress": 0.5,
+          "BetaRadians": 0.0991253644
+        },
+        {
+          "CornerProgress": 0.6666666667,
+          "BetaRadians": 0
+        },
+        {
+          "CornerProgress": 0.9,
+          "BetaRadians": 0
+        },
+        {
+          "CornerProgress": 1,
+          "BetaRadians": 0
+        }
+      ]
+    },
+    {
+      "Profile": "late",
+      "Samples": [
+        {
+          "CornerProgress": 0,
+          "BetaRadians": 0
+        },
+        {
+          "CornerProgress": 0.1,
+          "BetaRadians": 0
+        },
+        {
+          "CornerProgress": 0.3333333333,
+          "BetaRadians": 0.4368998628
+        },
+        {
+          "CornerProgress": 0.5,
+          "BetaRadians": 0.5
+        },
+        {
+          "CornerProgress": 0.6666666667,
+          "BetaRadians": 0.5
+        },
+        {
+          "CornerProgress": 0.9,
+          "BetaRadians": 0.1296296296
+        },
+        {
+          "CornerProgress": 1,
+          "BetaRadians": 0
+        }
+      ]
+    }
+  ],
+  "FourRiderStartAndFirstBend": {
+    "Pairs": [
+      {
+        "RiderA": 1,
+        "RiderB": 2,
+        "FirstTouchSeconds": 1.3345103541,
+        "MinimumSeparationMeters": -0.3,
+        "MinimumTimeSeconds": 1.7940948009,
+        "Classifications": "AEncroachesByTranslation",
+        "FirstClosing": {
+          "ATranslationMeters": 0.0109309467,
+          "ARotationMeters": 0,
+          "BTranslationMeters": -0.0190137016,
+          "BRotationMeters": 0,
+          "ActualClosingMeters": 0.0081338737,
+          "NonadditiveResidualMeters": 0.0162166285
+        },
+        "ConflictingIntervals": 61,
+        "BoundaryAmbiguousIntervals": 7,
+        "FrameCoverageGaps": 0,
+        "UnresolvedIntervals": 0
+      },
+      {
+        "RiderA": 1,
+        "RiderB": 3,
+        "FirstTouchSeconds": null,
+        "MinimumSeparationMeters": 0.3069719905,
+        "MinimumTimeSeconds": 7.1556736231,
+        "Classifications": "No observed eligible conflict",
+        "FirstClosing": null,
+        "ConflictingIntervals": 0,
+        "BoundaryAmbiguousIntervals": 0,
+        "FrameCoverageGaps": 0,
+        "UnresolvedIntervals": 0
+      },
+      {
+        "RiderA": 1,
+        "RiderB": 4,
+        "FirstTouchSeconds": null,
+        "MinimumSeparationMeters": 4.0982967152,
+        "MinimumTimeSeconds": 1.8416817188,
+        "Classifications": "No observed eligible conflict",
+        "FirstClosing": null,
+        "ConflictingIntervals": 0,
+        "BoundaryAmbiguousIntervals": 0,
+        "FrameCoverageGaps": 0,
+        "UnresolvedIntervals": 0
+      },
+      {
+        "RiderA": 2,
+        "RiderB": 3,
+        "FirstTouchSeconds": null,
+        "MinimumSeparationMeters": 0.6011304028,
+        "MinimumTimeSeconds": 2.9329557419,
+        "Classifications": "No observed eligible conflict",
+        "FirstClosing": null,
+        "ConflictingIntervals": 0,
+        "BoundaryAmbiguousIntervals": 0,
+        "FrameCoverageGaps": 0,
+        "UnresolvedIntervals": 0
+      },
+      {
+        "RiderA": 2,
+        "RiderB": 4,
+        "FirstTouchSeconds": null,
+        "MinimumSeparationMeters": 3.0995332864,
+        "MinimumTimeSeconds": 2.9329557419,
+        "Classifications": "No observed eligible conflict",
+        "FirstClosing": null,
+        "ConflictingIntervals": 0,
+        "BoundaryAmbiguousIntervals": 0,
+        "FrameCoverageGaps": 0,
+        "UnresolvedIntervals": 0
+      },
+      {
+        "RiderA": 3,
+        "RiderB": 4,
+        "FirstTouchSeconds": null,
+        "MinimumSeparationMeters": -0.17,
+        "MinimumTimeSeconds": 2.9342362881,
+        "Classifications": "No observed eligible conflict",
+        "FirstClosing": null,
+        "ConflictingIntervals": 0,
+        "BoundaryAmbiguousIntervals": 1,
+        "FrameCoverageGaps": 0,
+        "UnresolvedIntervals": 0
+      }
+    ],
+    "Work": {
+      "RiderPairs": 6,
+      "CandidateIntervals": 1827,
+      "BroadPhaseRejects": 1721,
+      "NarrowPhaseEvaluations": 10353,
+      "AdaptiveSubdivisions": 6683,
+      "RootIterations": 105,
+      "DetectedConflicts": 61,
+      "UnresolvedIntervals": 0
+    },
+    "IncompatibleFrameIntervals": 0
+  },
+  "FourRiderCompleteHeat": {
+    "CapturedPoseIntervals": 5964,
+    "Pairs": [
+      {
+        "RiderA": 1,
+        "RiderB": 2,
+        "FirstTouchSeconds": 1.3345103541,
+        "MinimumSeparationMeters": -0.3,
+        "MinimumTimeSeconds": 1.7940948009,
+        "Classifications": "AEncroachesByTranslation",
+        "FirstClosing": {
+          "ATranslationMeters": 0.0109309467,
+          "ARotationMeters": 0,
+          "BTranslationMeters": -0.0190137016,
+          "BRotationMeters": 0,
+          "ActualClosingMeters": 0.0081338737,
+          "NonadditiveResidualMeters": 0.0162166285
+        },
+        "ConflictingIntervals": 61,
+        "BoundaryAmbiguousIntervals": 7,
+        "FrameCoverageGaps": 0,
+        "UnresolvedIntervals": 0
+      },
+      {
+        "RiderA": 1,
+        "RiderB": 3,
+        "FirstTouchSeconds": null,
+        "MinimumSeparationMeters": 0.3019259704,
+        "MinimumTimeSeconds": 14.1981313229,
+        "Classifications": "No observed eligible conflict",
+        "FirstClosing": null,
+        "ConflictingIntervals": 0,
+        "BoundaryAmbiguousIntervals": 0,
+        "FrameCoverageGaps": 0,
+        "UnresolvedIntervals": 0
+      },
+      {
+        "RiderA": 1,
+        "RiderB": 4,
+        "FirstTouchSeconds": null,
+        "MinimumSeparationMeters": 4.0982967152,
+        "MinimumTimeSeconds": 1.8416817188,
+        "Classifications": "No observed eligible conflict",
+        "FirstClosing": null,
+        "ConflictingIntervals": 0,
+        "BoundaryAmbiguousIntervals": 0,
+        "FrameCoverageGaps": 0,
+        "UnresolvedIntervals": 0
+      },
+      {
+        "RiderA": 2,
+        "RiderB": 3,
+        "FirstTouchSeconds": null,
+        "MinimumSeparationMeters": 0.6011304028,
+        "MinimumTimeSeconds": 2.9329557419,
+        "Classifications": "No observed eligible conflict",
+        "FirstClosing": null,
+        "ConflictingIntervals": 0,
+        "BoundaryAmbiguousIntervals": 0,
+        "FrameCoverageGaps": 0,
+        "UnresolvedIntervals": 0
+      },
+      {
+        "RiderA": 2,
+        "RiderB": 4,
+        "FirstTouchSeconds": null,
+        "MinimumSeparationMeters": 3.0995332864,
+        "MinimumTimeSeconds": 2.9329557419,
+        "Classifications": "No observed eligible conflict",
+        "FirstClosing": null,
+        "ConflictingIntervals": 0,
+        "BoundaryAmbiguousIntervals": 0,
+        "FrameCoverageGaps": 0,
+        "UnresolvedIntervals": 0
+      },
+      {
+        "RiderA": 3,
+        "RiderB": 4,
+        "FirstTouchSeconds": null,
+        "MinimumSeparationMeters": -0.17,
+        "MinimumTimeSeconds": 2.9342362881,
+        "Classifications": "No observed eligible conflict",
+        "FirstClosing": null,
+        "ConflictingIntervals": 0,
+        "BoundaryAmbiguousIntervals": 1,
+        "FrameCoverageGaps": 0,
+        "UnresolvedIntervals": 0
+      }
+    ],
+    "Work": {
+      "RiderPairs": 6,
+      "CandidateIntervals": 17481,
+      "BroadPhaseRejects": 17374,
+      "NarrowPhaseEvaluations": 44282,
+      "AdaptiveSubdivisions": 9304,
+      "RootIterations": 106,
+      "DetectedConflicts": 61,
+      "UnresolvedIntervals": 0
+    },
+    "IncompatibleFrameIntervals": 0
+  },
+  "Sensitivity": [
+    {
+      "Scenario": "A",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.3
+    },
+    {
+      "Scenario": "A",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.3
+    },
+    {
+      "Scenario": "A",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.3
+    },
+    {
+      "Scenario": "A",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.2
+    },
+    {
+      "Scenario": "A",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.2
+    },
+    {
+      "Scenario": "A",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.2
+    },
+    {
+      "Scenario": "A",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.1
+    },
+    {
+      "Scenario": "A",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.1
+    },
+    {
+      "Scenario": "A",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.1
+    },
+    {
+      "Scenario": "A",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.3
+    },
+    {
+      "Scenario": "A",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.3
+    },
+    {
+      "Scenario": "A",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.3
+    },
+    {
+      "Scenario": "A",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.2
+    },
+    {
+      "Scenario": "A",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.2
+    },
+    {
+      "Scenario": "A",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.2
+    },
+    {
+      "Scenario": "A",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.1
+    },
+    {
+      "Scenario": "A",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.1
+    },
+    {
+      "Scenario": "A",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.1
+    },
+    {
+      "Scenario": "A",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.3
+    },
+    {
+      "Scenario": "A",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.3
+    },
+    {
+      "Scenario": "A",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.3
+    },
+    {
+      "Scenario": "A",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.2
+    },
+    {
+      "Scenario": "A",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.2
+    },
+    {
+      "Scenario": "A",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.2
+    },
+    {
+      "Scenario": "A",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.1
+    },
+    {
+      "Scenario": "A",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.1
+    },
+    {
+      "Scenario": "A",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.1
+    },
+    {
+      "Scenario": "B",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 3.1
+    },
+    {
+      "Scenario": "B",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": false,
+      "MinimumSeparationMeters": 3.1
+    },
+    {
+      "Scenario": "B",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": false,
+      "MinimumSeparationMeters": 3.1
+    },
+    {
+      "Scenario": "B",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 3.1
+    },
+    {
+      "Scenario": "B",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": false,
+      "MinimumSeparationMeters": 3.1
+    },
+    {
+      "Scenario": "B",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": false,
+      "MinimumSeparationMeters": 3.1
+    },
+    {
+      "Scenario": "B",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 3.1
+    },
+    {
+      "Scenario": "B",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": false,
+      "MinimumSeparationMeters": 3.1
+    },
+    {
+      "Scenario": "B",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": false,
+      "MinimumSeparationMeters": 3.1
+    },
+    {
+      "Scenario": "B",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.9
+    },
+    {
+      "Scenario": "B",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.9
+    },
+    {
+      "Scenario": "B",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.9
+    },
+    {
+      "Scenario": "B",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.9
+    },
+    {
+      "Scenario": "B",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.9
+    },
+    {
+      "Scenario": "B",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.9
+    },
+    {
+      "Scenario": "B",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.9
+    },
+    {
+      "Scenario": "B",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.9
+    },
+    {
+      "Scenario": "B",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.9
+    },
+    {
+      "Scenario": "B",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.7
+    },
+    {
+      "Scenario": "B",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.7
+    },
+    {
+      "Scenario": "B",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.7
+    },
+    {
+      "Scenario": "B",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.7
+    },
+    {
+      "Scenario": "B",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.7
+    },
+    {
+      "Scenario": "B",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.7
+    },
+    {
+      "Scenario": "B",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.7
+    },
+    {
+      "Scenario": "B",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.7
+    },
+    {
+      "Scenario": "B",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": false,
+      "MinimumSeparationMeters": 2.7
+    },
+    {
+      "Scenario": "C",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 0,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.14
+    },
+    {
+      "Scenario": "C",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.14
+    },
+    {
+      "Scenario": "C",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.14
+    },
+    {
+      "Scenario": "C",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 0,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.14
+    },
+    {
+      "Scenario": "C",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.14
+    },
+    {
+      "Scenario": "C",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.14
+    },
+    {
+      "Scenario": "C",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 0,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.14
+    },
+    {
+      "Scenario": "C",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.14
+    },
+    {
+      "Scenario": "C",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.14
+    },
+    {
+      "Scenario": "C",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 0,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.17
+    },
+    {
+      "Scenario": "C",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.17
+    },
+    {
+      "Scenario": "C",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.17
+    },
+    {
+      "Scenario": "C",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 0,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.17
+    },
+    {
+      "Scenario": "C",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.17
+    },
+    {
+      "Scenario": "C",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.17
+    },
+    {
+      "Scenario": "C",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 0,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.17
+    },
+    {
+      "Scenario": "C",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.17
+    },
+    {
+      "Scenario": "C",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.17
+    },
+    {
+      "Scenario": "C",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 0,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.2
+    },
+    {
+      "Scenario": "C",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.2
+    },
+    {
+      "Scenario": "C",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.2
+    },
+    {
+      "Scenario": "C",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 0,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.2
+    },
+    {
+      "Scenario": "C",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.2
+    },
+    {
+      "Scenario": "C",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.2
+    },
+    {
+      "Scenario": "C",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 0,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.2
+    },
+    {
+      "Scenario": "C",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.2
+    },
+    {
+      "Scenario": "C",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.2
+    },
+    {
+      "Scenario": "I",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.1988952641
+    },
+    {
+      "Scenario": "I",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.0125
+    },
+    {
+      "Scenario": "I",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.1379167495
+    },
+    {
+      "Scenario": "I",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.1530017065
+    },
+    {
+      "Scenario": "I",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.0125
+    },
+    {
+      "Scenario": "I",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.1379167495
+    },
+    {
+      "Scenario": "I",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.1086966023
+    },
+    {
+      "Scenario": "I",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.0125
+    },
+    {
+      "Scenario": "I",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.1379167495
+    },
+    {
+      "Scenario": "I",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.15
+    },
+    {
+      "Scenario": "I",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.1
+    },
+    {
+      "Scenario": "I",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.3
+    },
+    {
+      "Scenario": "I",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.1
+    },
+    {
+      "Scenario": "I",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.1
+    },
+    {
+      "Scenario": "I",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.3
+    },
+    {
+      "Scenario": "I",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.05
+    },
+    {
+      "Scenario": "I",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.1
+    },
+    {
+      "Scenario": "I",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.3
+    },
+    {
+      "Scenario": "I",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.125
+    },
+    {
+      "Scenario": "I",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.1875
+    },
+    {
+      "Scenario": "I",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.35
+    },
+    {
+      "Scenario": "I",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.075
+    },
+    {
+      "Scenario": "I",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.2
+    },
+    {
+      "Scenario": "I",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.35
+    },
+    {
+      "Scenario": "I",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.025
+    },
+    {
+      "Scenario": "I",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.2
+    },
+    {
+      "Scenario": "I",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.35
+    },
+    {
+      "Scenario": "J",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.1988952641
+    },
+    {
+      "Scenario": "J",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.0125
+    },
+    {
+      "Scenario": "J",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.0935292979
+    },
+    {
+      "Scenario": "J",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.1530017065
+    },
+    {
+      "Scenario": "J",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.0125
+    },
+    {
+      "Scenario": "J",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.0935292979
+    },
+    {
+      "Scenario": "J",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.1086966023
+    },
+    {
+      "Scenario": "J",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.0125
+    },
+    {
+      "Scenario": "J",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.0935292979
+    },
+    {
+      "Scenario": "J",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.15
+    },
+    {
+      "Scenario": "J",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.1
+    },
+    {
+      "Scenario": "J",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.27660281
+    },
+    {
+      "Scenario": "J",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.1
+    },
+    {
+      "Scenario": "J",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.1
+    },
+    {
+      "Scenario": "J",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.27660281
+    },
+    {
+      "Scenario": "J",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.05
+    },
+    {
+      "Scenario": "J",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.1
+    },
+    {
+      "Scenario": "J",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.27660281
+    },
+    {
+      "Scenario": "J",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.125
+    },
+    {
+      "Scenario": "J",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.1875
+    },
+    {
+      "Scenario": "J",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.35
+    },
+    {
+      "Scenario": "J",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.075
+    },
+    {
+      "Scenario": "J",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.1875
+    },
+    {
+      "Scenario": "J",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.35
+    },
+    {
+      "Scenario": "J",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.025
+    },
+    {
+      "Scenario": "J",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.1875
+    },
+    {
+      "Scenario": "J",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": true,
+      "MinimumSeparationMeters": -0.35
+    },
+    {
+      "Scenario": "production-first-bend-1/3",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.4001374191
+    },
+    {
+      "Scenario": "production-first-bend-1/3",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.503928174
+    },
+    {
+      "Scenario": "production-first-bend-1/3",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.5146717593
+    },
+    {
+      "Scenario": "production-first-bend-1/3",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.4001374191
+    },
+    {
+      "Scenario": "production-first-bend-1/3",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.503928174
+    },
+    {
+      "Scenario": "production-first-bend-1/3",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.5146717593
+    },
+    {
+      "Scenario": "production-first-bend-1/3",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.4001374191
+    },
+    {
+      "Scenario": "production-first-bend-1/3",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.503928174
+    },
+    {
+      "Scenario": "production-first-bend-1/3",
+      "LengthMeters": 1.9,
+      "BodyWidthMeters": 0.25,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.55,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.5146717593
+    },
+    {
+      "Scenario": "production-first-bend-1/3",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.2002050162
+    },
+    {
+      "Scenario": "production-first-bend-1/3",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.3069719905
+    },
+    {
+      "Scenario": "production-first-bend-1/3",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.3164127679
+    },
+    {
+      "Scenario": "production-first-bend-1/3",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.2002050162
+    },
+    {
+      "Scenario": "production-first-bend-1/3",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.3069719905
+    },
+    {
+      "Scenario": "production-first-bend-1/3",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.3164127679
+    },
+    {
+      "Scenario": "production-first-bend-1/3",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.2002050162
+    },
+    {
+      "Scenario": "production-first-bend-1/3",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.3069719905
+    },
+    {
+      "Scenario": "production-first-bend-1/3",
+      "LengthMeters": 2.1,
+      "BodyWidthMeters": 0.3,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.65,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.3164127679
+    },
+    {
+      "Scenario": "production-first-bend-1/3",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.0002726133
+    },
+    {
+      "Scenario": "production-first-bend-1/3",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.1101341324
+    },
+    {
+      "Scenario": "production-first-bend-1/3",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.7,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.1184156143
+    },
+    {
+      "Scenario": "production-first-bend-1/3",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.0002726133
+    },
+    {
+      "Scenario": "production-first-bend-1/3",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.1101341324
+    },
+    {
+      "Scenario": "production-first-bend-1/3",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.8,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.1184156143
+    },
+    {
+      "Scenario": "production-first-bend-1/3",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 0,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.0002726133
+    },
+    {
+      "Scenario": "production-first-bend-1/3",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 0.5235987756,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.1101341324
+    },
+    {
+      "Scenario": "production-first-bend-1/3",
+      "LengthMeters": 2.3,
+      "BodyWidthMeters": 0.35,
+      "BarWidthMeters": 0.9,
+      "BarOffsetMeters": 0.75,
+      "PeakYawRadians": 1.0471975512,
+      "Conflict": false,
+      "MinimumSeparationMeters": 0.1184156143
+    }
+  ]
+}

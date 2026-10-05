@@ -1,5 +1,13 @@
 # Core simulation specification
 
+Current occupancy precedence (#55): [physical occupied-space and independent bike attitude](calibration/physical-occupancy-contested-space.md)
+adds explicit observation-only mechanical capsules and common-time conflict diagnostics.
+Older statements that motorcycle dimensions/contested space are absent describe their historical stage.
+Legacy contact consequences and #54 solo trajectory projection remain unchanged; rider-vs-rider
+behaviour remains #56. Straight, corner and start/finish poses share one metric model-space
+track frame across closed laps. Width coordinate reinterpretations remain zero-time, unswept
+state transitions; genuine unrelated/nonclosing frame inputs retain explicit diagnostics.
+
 Current decision precedence: [Production-backed trajectory decisions](#production-backed-trajectory-decisions)
 supersedes prior static `AdaptiveDecisionModel` route-time scoring descriptions.
 
