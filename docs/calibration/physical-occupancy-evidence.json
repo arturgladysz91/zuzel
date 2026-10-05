@@ -423,6 +423,26 @@
       "UnresolvedIntervals": 0
     }
   ],
+  "MetricEmbedding": {
+    "Frame": "One deterministic metric model-space track frame across all closed laps",
+    "Closure": {
+      "PositionResidualMeters": {
+        "X": 5.4202E-06,
+        "Y": -6.994E-07,
+        "Length": 5.4651E-06
+      },
+      "HeadingResidualRadians": 1.748E-07,
+      "PositionErrorMeters": 5.4651E-06,
+      "SupportsLapWrap": true
+    },
+    "HomeStraightMeters": 62,
+    "Origin": {
+      "X": 0,
+      "Y": 0,
+      "Length": 0
+    },
+    "InitialHeadingRadians": 0
+  },
   "AttitudeProfiles": [
     {
       "Profile": "neutral",
@@ -541,9 +561,9 @@
           "ActualClosingMeters": 0.0081338737,
           "NonadditiveResidualMeters": 0.0162166285
         },
-        "ConflictingIntervals": 68,
+        "ConflictingIntervals": 61,
         "BoundaryAmbiguousIntervals": 7,
-        "FrameCoverageGaps": 1,
+        "FrameCoverageGaps": 0,
         "UnresolvedIntervals": 0
       },
       {
@@ -556,7 +576,7 @@
         "FirstClosing": null,
         "ConflictingIntervals": 0,
         "BoundaryAmbiguousIntervals": 0,
-        "FrameCoverageGaps": 1,
+        "FrameCoverageGaps": 0,
         "UnresolvedIntervals": 0
       },
       {
@@ -576,53 +596,154 @@
         "RiderA": 2,
         "RiderB": 3,
         "FirstTouchSeconds": null,
-        "MinimumSeparationMeters": 1.6353340021,
-        "MinimumTimeSeconds": 1.4412615299,
+        "MinimumSeparationMeters": 0.6011304028,
+        "MinimumTimeSeconds": 2.9329557419,
         "Classifications": "No observed eligible conflict",
         "FirstClosing": null,
         "ConflictingIntervals": 0,
         "BoundaryAmbiguousIntervals": 0,
-        "FrameCoverageGaps": 1,
+        "FrameCoverageGaps": 0,
         "UnresolvedIntervals": 0
       },
       {
         "RiderA": 2,
         "RiderB": 4,
         "FirstTouchSeconds": null,
-        "MinimumSeparationMeters": 4.1501554424,
-        "MinimumTimeSeconds": 1.8416827917,
+        "MinimumSeparationMeters": 3.0995332864,
+        "MinimumTimeSeconds": 2.9329557419,
         "Classifications": "No observed eligible conflict",
         "FirstClosing": null,
         "ConflictingIntervals": 0,
         "BoundaryAmbiguousIntervals": 0,
-        "FrameCoverageGaps": 1,
+        "FrameCoverageGaps": 0,
         "UnresolvedIntervals": 0
       },
       {
         "RiderA": 3,
         "RiderB": 4,
         "FirstTouchSeconds": null,
-        "MinimumSeparationMeters": 1.6502126699,
-        "MinimumTimeSeconds": 1.8416827917,
+        "MinimumSeparationMeters": -0.17,
+        "MinimumTimeSeconds": 2.9342362881,
         "Classifications": "No observed eligible conflict",
         "FirstClosing": null,
         "ConflictingIntervals": 0,
-        "BoundaryAmbiguousIntervals": 0,
-        "FrameCoverageGaps": 1,
+        "BoundaryAmbiguousIntervals": 1,
+        "FrameCoverageGaps": 0,
         "UnresolvedIntervals": 0
       }
     ],
     "Work": {
       "RiderPairs": 6,
-      "CandidateIntervals": 1821,
-      "BroadPhaseRejects": 1719,
-      "NarrowPhaseEvaluations": 10228,
-      "AdaptiveSubdivisions": 6586,
-      "RootIterations": 73,
-      "DetectedConflicts": 68,
+      "CandidateIntervals": 1827,
+      "BroadPhaseRejects": 1721,
+      "NarrowPhaseEvaluations": 10353,
+      "AdaptiveSubdivisions": 6683,
+      "RootIterations": 105,
+      "DetectedConflicts": 61,
       "UnresolvedIntervals": 0
     },
-    "IncompatibleFrameIntervals": 5
+    "IncompatibleFrameIntervals": 0
+  },
+  "FourRiderCompleteHeat": {
+    "CapturedPoseIntervals": 5964,
+    "Pairs": [
+      {
+        "RiderA": 1,
+        "RiderB": 2,
+        "FirstTouchSeconds": 1.3345103541,
+        "MinimumSeparationMeters": -0.3,
+        "MinimumTimeSeconds": 1.7940948009,
+        "Classifications": "AEncroachesByTranslation",
+        "FirstClosing": {
+          "ATranslationMeters": 0.0109309467,
+          "ARotationMeters": 0,
+          "BTranslationMeters": -0.0190137016,
+          "BRotationMeters": 0,
+          "ActualClosingMeters": 0.0081338737,
+          "NonadditiveResidualMeters": 0.0162166285
+        },
+        "ConflictingIntervals": 61,
+        "BoundaryAmbiguousIntervals": 7,
+        "FrameCoverageGaps": 0,
+        "UnresolvedIntervals": 0
+      },
+      {
+        "RiderA": 1,
+        "RiderB": 3,
+        "FirstTouchSeconds": null,
+        "MinimumSeparationMeters": 0.3019259704,
+        "MinimumTimeSeconds": 14.1981313229,
+        "Classifications": "No observed eligible conflict",
+        "FirstClosing": null,
+        "ConflictingIntervals": 0,
+        "BoundaryAmbiguousIntervals": 0,
+        "FrameCoverageGaps": 0,
+        "UnresolvedIntervals": 0
+      },
+      {
+        "RiderA": 1,
+        "RiderB": 4,
+        "FirstTouchSeconds": null,
+        "MinimumSeparationMeters": 4.0982967152,
+        "MinimumTimeSeconds": 1.8416817188,
+        "Classifications": "No observed eligible conflict",
+        "FirstClosing": null,
+        "ConflictingIntervals": 0,
+        "BoundaryAmbiguousIntervals": 0,
+        "FrameCoverageGaps": 0,
+        "UnresolvedIntervals": 0
+      },
+      {
+        "RiderA": 2,
+        "RiderB": 3,
+        "FirstTouchSeconds": null,
+        "MinimumSeparationMeters": 0.6011304028,
+        "MinimumTimeSeconds": 2.9329557419,
+        "Classifications": "No observed eligible conflict",
+        "FirstClosing": null,
+        "ConflictingIntervals": 0,
+        "BoundaryAmbiguousIntervals": 0,
+        "FrameCoverageGaps": 0,
+        "UnresolvedIntervals": 0
+      },
+      {
+        "RiderA": 2,
+        "RiderB": 4,
+        "FirstTouchSeconds": null,
+        "MinimumSeparationMeters": 3.0995332864,
+        "MinimumTimeSeconds": 2.9329557419,
+        "Classifications": "No observed eligible conflict",
+        "FirstClosing": null,
+        "ConflictingIntervals": 0,
+        "BoundaryAmbiguousIntervals": 0,
+        "FrameCoverageGaps": 0,
+        "UnresolvedIntervals": 0
+      },
+      {
+        "RiderA": 3,
+        "RiderB": 4,
+        "FirstTouchSeconds": null,
+        "MinimumSeparationMeters": -0.17,
+        "MinimumTimeSeconds": 2.9342362881,
+        "Classifications": "No observed eligible conflict",
+        "FirstClosing": null,
+        "ConflictingIntervals": 0,
+        "BoundaryAmbiguousIntervals": 1,
+        "FrameCoverageGaps": 0,
+        "UnresolvedIntervals": 0
+      }
+    ],
+    "Work": {
+      "RiderPairs": 6,
+      "CandidateIntervals": 17481,
+      "BroadPhaseRejects": 17374,
+      "NarrowPhaseEvaluations": 44282,
+      "AdaptiveSubdivisions": 9304,
+      "RootIterations": 106,
+      "DetectedConflicts": 61,
+      "UnresolvedIntervals": 0
+    },
+    "IncompatibleFrameIntervals": 0
   },
   "Sensitivity": [
     {

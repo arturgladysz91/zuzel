@@ -12,4 +12,8 @@ data = json.loads(windows)
 assert len(data["Scenarios"]) == 12
 assert data["FourRiderStartAndFirstBend"]["Work"]["RiderPairs"] == 6
 assert data["FourRiderStartAndFirstBend"]["Work"]["UnresolvedIntervals"] == 0
+assert data["FourRiderStartAndFirstBend"]["IncompatibleFrameIntervals"] == 0
+assert data["FourRiderCompleteHeat"]["IncompatibleFrameIntervals"] == 0
+assert data["FourRiderCompleteHeat"]["Work"]["UnresolvedIntervals"] == 0
+assert data["MetricEmbedding"]["Closure"]["SupportsLapWrap"]
 print("Physical-space canonical evidence: byte-identical Windows/Ubuntu (10 decimal presentation precision).")

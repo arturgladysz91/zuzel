@@ -4,8 +4,9 @@ Current occupancy precedence (#55): [physical occupied-space and independent bik
 adds explicit observation-only mechanical capsules and common-time conflict diagnostics.
 Older statements that motorcycle dimensions/contested space are absent describe their historical stage.
 Legacy contact consequences and #54 solo trajectory projection remain unchanged; rider-vs-rider
-behaviour remains #56. Boundary coordinate reinterpretations are never swept; unsupported
-frame joins remain explicit ambiguous coverage diagnostics.
+behaviour remains #56. Straight, corner and start/finish poses share one metric model-space
+track frame across closed laps. Width coordinate reinterpretations remain zero-time, unswept
+state transitions; genuine unrelated/nonclosing frame inputs retain explicit diagnostics.
 
 ## Cel projektu
 Celem projektu jest stworzenie gry typu **manager żużlowy**, w której kluczowe są:

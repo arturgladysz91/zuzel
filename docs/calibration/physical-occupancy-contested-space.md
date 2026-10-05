@@ -14,7 +14,7 @@ The new dependency is:
 
 ```mermaid
 flowchart LR
-    R[Production Resolve / immutable #53 motions] --> A[Local metric pose adapter]
+    R[Production Resolve / immutable #53 motions] --> A[Shared metric track embedding]
     P[Shared provisional attitude profile] --> A
     D[Explicit mechanical dimensions] --> A
     A --> C[Pose-only continuous space observer]
@@ -72,13 +72,55 @@ Mechanical occupancy contains no rider shoulder, leg, personal space or tactical
 
 ## Coordinates, travel and motorcycle direction
 
-All distances are metres; all times are seconds of the heat; internal angles are radians. Counterclockwise yaw is positive; headings normalize to `[-π, π)`. The half-turn interpolation tie deterministically takes the negative shortest arc. `BikeAttitudeSample` independently carries common time, χ, ψ and `β = wrap(ψ−χ)`. `PhysicalBikePose` adds rider id, identified Euclidean frame, position, dimensions and derived footprint.
+All positions are metres in one deterministic Euclidean model-space frame. Times are seconds of the heat; angles are radians, counterclockwise positive, wrapped to [-pi, pi). The origin at segment 0 is (0,0), initial reference heading 0. These choices have no physical significance: a common rigid translation/rotation preserves separation, first-touch time and classification (AG).
 
-On a straight, `(x,y) = (straightLength * consumedSegmentProgress, −physicalOffset)`. Positive y is left/inside; offset grows outward. The velocity derivative includes actual lateral change, so diagonal χ is `atan2(−offsetRate, longitudinalRate)`. A stationary straight reaction uses χ=ψ=β=0 at the exact existing gate centre. Inner-edge centres 1.5/4.5/7.5/10.5 m map to reference offsets 0.5/3.5/6.5/9.5 m; no lane rounding is introduced.
+`TrackMetricEmbedding` composes the **model-space track implied by existing TrackGeometry**, not surveyed Motoarena coordinates. An observer constructs one immutable embedding lazily, reuses it throughout the heat and rejects incompatible later geometry/topology. No process-global cache, physics replay, altered travelled distance or production state is introduced.
 
-Within a complete logical corner, the local centre of curvature is the origin: `r = innerReferenceRadius + physicalOffset`, `θ = (memberOffset + segmentProgress) * segmentAngle`, position `(r cosθ, r sinθ)`. χ comes from the derivative `r' radial + r θ' tangent`, including actual radial movement. All current turn segments use the track's one angular span; therefore `CornerProgress = (memberOffset + segmentProgress)/memberCount` is the algebraic angular/arc projection of existing topology. It stays continuous at Entry/Middle/Exit boundaries; labels do not select angle states. Coordinates are never reconstructed from target lanes, final position alone or mean segment velocity.
+```text
+                    back straight
+          .-------------------------------.
+        /                                   \
+       /                                     \
+       |          modeled circular arcs      |
+       \                                     /
+        \                                   /
+          '-----------|-------------------'
+                 27 m | 35 m home straight
+                   start/finish (0,0), heading 0 ->
+```
 
-Frame ids identify a straight segment or whole logical corner and lap. Positions in unrelated frames cannot be subtracted. There is deliberately no synthetic global stadium, connecting chord or width spline. A separate reference-track tangent is exposed only to remove common forward transport in the contribution diagnostic; it does not orient the footprint or replace actual χ.
+Walking the ordered segments stores every inner-reference entry position P0 and heading h. Let F=(cos h,sin h), N_left=(-sin h,cos h), N_out=-N_left. On a straight of L=override ?? StraightLengthMeters:
+
+```text
+P(p,o) = P0 + F*L*p + N_out*o
+V = F*L*dp/dt + N_out*do/dt
+```
+
+On a left turn, R=InnerRadiusMeters, alpha=TurnSegmentAngleRadians, C=P0+N_left*R, delta=alpha*p, O=Rotate(N_out,delta), T=Rotate(F,delta):
+
+```text
+P(p,o) = C + O*(R+o)
+V = T*(R+o)*alpha*dp/dt + O*do/dt
+```
+
+Travel heading chi is atan2(V.y,V.x) when moving, the reference tangent when stationary. Bike heading psi=chi+the unchanged independent beta profile. Actual progress and physical offset derivatives come from stored #53 nodes, never requested lanes. A segment endpoint gives the next P0; a turn adds exactly alpha to h. Internal Entry/Middle/Exit labels are ordinary continuous portions of the same arc.
+
+`FrameId` identifies coordinates that may be subtracted directly. Its deterministic identity contains exact track geometry/topology and the chosen rigid transform, **no lap or corner number**. `PoseSource` separately stores LapIndex, SegmentIndex, SegmentId, SegmentType and CornerId on intervals, samples and evidence events. Diagnostics never parse frame strings. All valid closed-track laps share one frame, including lapped riders. The reference tangent only removes shared forward transport in contribution diagnostics; it does not replace chi or orient the bike.
+
+For the same physical offset o at straight -> turn:
+
+```text
+P_straight_end(o) = P0 + F*L + N_out*o
+P_turn_start(o)   = (P0+F*L+N_left*R) + N_out*(R+o)
+                  = P0 + F*L + N_out*o
+T_straight_end    = T_turn_start = F
+```
+
+The same cancellation at turn exit gives the following straight's point and tangent. U/V/W test both corners and all internal arc joins to 1e-12 m/rad. This continuity uses **equal physical metres**, independently from normalized lateral coordinates.
+
+At normalized position 2, Motoarena usable straight width is 10 m and modeled turn width is 14.6 m: offsetStraight=5 m, offsetTurn=7.3 m (2.3 m difference). P/Q/X preserve that one-sided width reinterpretation. It is a zero-time state discontinuity, with no extra metres/time and no interpolated path between its two positions.
+
+The endpoint of segment 8 (27 m) and start of segment 0 (35 m) represent one physical start/finish on the modeled 62 m home straight. Exact float input angles leave a measured closure residual, never snapped or distributed: position 5.4651e-6 m, heading 1.748e-7 rad. Closure tolerances are 2e-5 m and 5e-7 rad, explicit micrometre-scale allowances for the existing float geometry. AD/AF retain the nonzero residual, exact original angle and 35+27 split. Malformed/open tracks expose their residual; within-lap embedding works, but cross-lap comparisons report `NonClosingLapWrap` coverage gaps. Unsupported geometry is never forced closed.
 
 ## Independent provisional attitude
 
@@ -125,15 +167,15 @@ Flags distinguish RearClosing, A/B translation, A/B rotation, A/B mixed, MutualC
 
 ## Boundaries and incomplete frame coverage
 
-**NEVER sweep FromPhysicalOffsetMeters to ToPhysicalOffsetMeters.** The adapter only traverses positive-time adjacent stored nodes inside a consumed frame. Entry/Exit width reinterpretations create different straight/corner frames at the same heat time, not displacement. Duplicate-time legacy position changes are also not swept.
+**NEVER sweep FromPhysicalOffsetMeters to ToPhysicalOffsetMeters.** Every positive-time stored node span stays continuous; duplicate-time events and width transitions remain explicit temporal cuts. CCD terminates at the pre-boundary pose and restarts at the post-boundary pose in the **same metric frame**. Translation contributions use only traversed spans.
 
-Overlap already present at the start of a discontinuous span is conservatively BoundaryAmbiguous and quarantined through subsequent continuously overlapping knots until a clear start is observed. It is not accepted as real translation, rotation or contact. At a frame mismatch, return typed `FrameCoverageGap` with both frame ids and common-time interval; its kind is BoundaryAmbiguous and it is ineligible for #56. There is no invented distance or contact point for such a gap.
+Clear -> jump-created overlap becomes `BoundaryAmbiguous`, with no physical first-touch root and `EligibleForFutureInteraction=false`. Quarantine persists through continuously overlapping spans. A bounded Lipschitz clearance search ends it once a physically clear pose outside the root-time uncertainty band is observed, including clearance inside one supplied span; subsequent continuous contact is eligible. Search exhaustion remains unresolved and ineligible. Genuine pre-boundary contact stays eligible in history and an already established overlapping contact is not reclassified merely for crossing a boundary (AA/AB/AC).
 
-Consequently “no observed eligible conflict” with coverage gaps is **not proof of complete all-time clearance**. Straight/corner straddling riders need a future physically supported boundary chart/transition model for that interval. This limitation is inherited from #53's coarse segment-local width geometry and stays visible rather than being replaced with a fake world map. Continuous intervals within a shared corner include riders in different turn subsegments and use their actual independent arrival times.
+Ordinary production Straight/Corner, Corner/Straight, internal corner and start/finish changes produce **zero metric frame gaps**. Boundary-discontinuity ambiguities are a separate concept, not missing geometric coverage. Injected unrelated frames retain defensive typed `FrameCoverageGap` diagnostics; malformed nonclosing tracks retain explicit unsupported cross-lap gaps. #56 receives complete ordinary production metric geometry.
 
 ## Deterministic scenarios and acceptance evidence
 
-`PhysicalSpaceTests` contains focused A–T controls, executed again in Windows/Ubuntu determinism CI. The generated appendix below records scenario numbers, all six production start/first-bend pairs, sensitivity and work. Different-lane C uses physical overlap irrespective of lane identity; same-lane B stays safe due to longitudinal distance. Geometry intentionally accepts no Lane parameter.
+`PhysicalSpaceTests` contains focused A–AK controls, executed again in Windows/Ubuntu determinism CI. The generated appendix below records scenario numbers, all six production start/first-bend pairs, sensitivity and work. Different-lane C uses physical overlap irrespective of lane identity; same-lane B stays safe due to longitudinal distance. Geometry intentionally accepts no Lane parameter.
 
 | Case | First touch s | Pair minimum m | Geometric conclusion |
 | --- | ---: | ---: | --- |
@@ -158,23 +200,25 @@ All controlled cases are numerically resolved. D touches at approximately `(5−
 | M | Four stationary production gate centres; six pairs clear throughout common reaction |
 | N | Genuine production launch convergence, first-bend capture and unchanged consequences |
 | O | 0.75 m separation maps through different normalized straight/turn widths with identical mechanical gap |
-| P/Q | Both actual width-boundary directions split unswept frames; ambiguity quarantines subsequent overlapping knots |
+| P/Q | Both width-boundary directions share one metric frame while one-sided offsets remain unswept |
 | R | Controlled and actual four-rider/four-lap reversed collections return exactly equal diagnostics |
 | S | D/G/H/I/J at an added equivalent 0.37 s node preserve labels, first touch within 2e−7 s and min within 1e−4 m |
 | T | π−0.01 → −π+0.01 interpolates through −π with 0.02 rad sweep, no spurious revolution |
 
 Production K-crossing has first physical touch at 0.5816524 s, before centreline intersection. It still produces its unchanged legacy events.
 
-| Start/first-bend pair | First eligible time s | Min gap m | Min time s | A translation / rotation m | B translation / rotation m | First classification | Boundary intervals / coverage gaps |
+| Start/first-bend pair | First eligible time s | Min gap m | Min time s | A translation / rotation m | B translation / rotation m | First classification | Boundary ambiguities / metric gaps |
 | --- | ---: | ---: | ---: | ---: | ---: | --- | --- |
-| 1–2 | 1.3345104 | -0.3000000 | 1.7940948 | 0.0109309 / 0.0000000 | -0.0190137 / 0.0000000 | AEncroachesByTranslation | 7 / 1 |
-| 1–3 | none observed | 0.3069720 | 7.1556736 | - | - | No observed eligible conflict | 0 / 1 |
-| 1–4 | none observed | 4.0982967 | 1.8416817 | - | - | No observed eligible conflict | 0 / 0 |
-| 2–3 | none observed | 1.6353340 | 1.4412615 | - | - | No observed eligible conflict | 0 / 1 |
-| 2–4 | none observed | 4.1501554 | 1.8416828 | - | - | No observed eligible conflict | 0 / 1 |
-| 3–4 | none observed | 1.6502127 | 1.8416828 | - | - | No observed eligible conflict | 0 / 1 |
+| 1-2 | 1.3345104 | -0.3000000 | 1.7940948 | 0.0109309 / 0.0000000 | -0.0190137 / 0.0000000 | AEncroachesByTranslation | 7 / 0 |
+| 1-3 | none eligible | 0.3069720 | 7.1556736 | - | - | No observed eligible conflict | 0 / 0 |
+| 1-4 | none eligible | 4.0982967 | 1.8416817 | - | - | No observed eligible conflict | 0 / 0 |
+| 2-3 | none eligible | 0.6011304 | 2.9329557 | - | - | No observed eligible conflict | 0 / 0 |
+| 2-4 | none eligible | 3.0995333 | 2.9329557 | - | - | No observed eligible conflict | 0 / 0 |
+| 3-4 | none eligible | -0.1700000 | 2.9342363 | - | - | No observed eligible conflict | 1 / 0 |
 
-This real fixture includes all four physical gates, first straight and the complete first logical corner. Negative B contribution means that the one-factor frozen-pose counterfactual opens space; the actual joint motion has its own positive closure and nonadditive residual. A missing eligible time with a coverage gap is not an all-time clearance certificate.
+All six pairs now have complete metric coverage through launch and the entire first bend. The first eligible contact remains 1-2 at 1.3345104 s; geometry was not tuned to preserve it. Newly evaluated straddling spans reduce minima for 2-3 (1.6353340 -> 0.6011304 m) and 2-4 (4.1501554 -> 3.0995333 m). Pair 3-4 now has a -0.17 m width-jump-only overlap at 2.9342363 s, quarantined without an eligible physical root. Pair 1-2 has seven discontinuity-ambiguity spans; 3-4 has one. These eight spans are not eight physical collisions. Previously these regions were missing behind frame mismatches.
+
+The complete four-rider/four-lap audit also has zero metric frame gaps, eight boundary ambiguity spans and zero unresolved intervals. JSON includes all pair minima, times, classifications and raw first-contact translation/rotation contributions for both audits. Negative contributions mean opening space in a frozen-pose counterfactual; the joint closure retains its separate residual.
 
 | Sensitivity group | Cases | Conflicting / clear | Conclusion |
 | --- | ---: | ---: | --- |
@@ -187,37 +231,53 @@ This real fixture includes all four physical gates, first straight and the compl
 
 The 135 controlled combinations vary three independent bar widths, three body/length/location bundles and three yaw sweeps. The 27 production first-bend 1/3 combinations vary the same dimensions/bar widths with the actual smooth neutral profile peak 0/30/60°. Zero yaw removes the rotation mechanism. These observations neither fit telemetry nor imply empirical contact probabilities.
 
-| Acceptance question | Answer and evidence |
+| Acceptance gate | Evidence |
 | --- | --- |
-| 1 | YES — typed χ and ψ are independent; K and injected interval tests |
-| 2 | YES — cubic smooth profile spans whole logical corner |
-| 3 | YES — continuity checks include both 1/3 and 2/3 labels |
-| 4 | YES — K-zero versus K-yaw at identical centres |
-| 5 | YES — I, clear endpoints and interior rotation contribution |
-| 6 | YES — D/E/F with fixed ψ |
-| 7 | YES — J typed mixed flag and four raw contributions/residual |
-| 8 | YES — C mechanical overlap independent from discrete lanes |
-| 9 | YES — B separated by physical longitudinal distance |
-| 10 | YES — H/I interior contact and genuine production K-crossing |
-| 11 | YES — shifted domains and whole-heat interval intersection; frame gaps are explicit |
-| 12 | YES — M exact stationary four-gate centres |
-| 13 | YES — P/Q actual production boundaries plus quarantine regression |
-| 14 | YES — R and real four-rider/four-lap diagnostics equality |
-| 15 | YES — resolver consumes only immutable poses/bounds/dimensions; no RiderProfile/skills input |
-| 16 | YES — source dependency audit and exact enabled/disabled heat comparison; no RNG entry point |
-| 17 | YES — #54 production/projection source unchanged, complete fingerprint and Full/Lean CI retained |
-| 18 | YES — exact heat/classification/state/morale/wear/log comparisons and unchanged historical guards |
-| 19 | YES — bounded four-lap benchmark below; no dense global grid |
-| 20 | YES — L and public named profile/immutable interval extension contract |
+| 1 | Straight/adjacent Corner comparable: YES — Y/Z, genuine eligible straddling contact. |
+| 2 | Corner/following Straight comparable: YES — Y covers both exits. |
+| 3 | Segment 8/0 comparable: YES — AE clear and genuine contact across laps. |
+| 4 | Motoarena ordinary frame gaps zero: YES — AI and regenerated first-bend JSON. |
+| 5 | Four-lap frame gaps zero: YES — AJ and complete-heat JSON. |
+| 6 | Equal physical offset continuous: YES — U/V/W, both corners at 1e-12 tolerance. |
+| 7 | Unequal width reinterpretation unswept: YES — P/Q/X, unchanged #53 boundary offsets/metres/time. |
+| 8 | Jump-only overlap ineligible: YES — AA, null first-touch and zero jump contribution. |
+| 9 | Later continuous re-contact eligible: YES — AB after certified clearance. |
+| 10 | Chi/psi/beta independent: YES — unchanged neutral profile and original diagonal/polar/attitude controls. |
+| 11 | Translation/rotation preserved: YES — original I/J plus Z and AG. |
+| 12 | Between-node CCD preserved: YES — original H/I clear endpoints with interior contact. |
+| 13 | Rider order invariant: YES — R/AH exact reports and full reversed heat. |
+| 14 | Race outcomes unchanged: YES — AK existing enabled/disabled fixed and Adaptive exact state/log/surface tests. |
+| 15 | #54 projection unchanged: YES — no changes in TrajectoryEvaluator or production replay; frozen/Full-Lean guards. |
+| 16 | Observer RNG-free: YES — immutable pose-only dependency audit and enabled/disabled equality. |
+| 17 | Motoarena closes: YES — AF, residual retained, no geometry tuning. |
+| 18 | Start/finish one physical location: YES — AD/AE, 35+27 m split. |
+| 19 | Remaining gaps unsupported only: YES — unrelated injected frames and explicit NonClosingLapWrap tests. |
+| 20 | #56 needs no ordinary coordinate-transition repair: YES — shared metric pose, separate topology/discontinuity validity. |
 
 ## Performance protocol
 
 `physical-occupancy-performance` captures an actual four-rider/four-lap Motoarena heat once with shared fixed convergence intents, then observes the same immutable spans after one warmup over five repeats. It reports heat+capture time/allocations separately from resolver time/allocations. Main-thread `GC.GetAllocatedBytesForCurrentThread` is valid because this geometry fixture has no parallel decision workers. No wall-clock CI assertion is added. Algorithmic counters are deterministic; runtime and allocation observations are not checked-in deterministic evidence.
 
-Measured desktop Release run (.NET 8 runtime; timing may vary under concurrent validation): 5964 captured pose intervals, six pairs, 11183 compatible candidate intervals and 6297 explicit frame-gap intervals. 11080 intervals reject contact broadly; 31575 narrow evaluations, 9209 subdivisions and 74 first-touch/root iterations. 68 overlapping/contact intervals include continuing overlap and boundary diagnostics; they are not 68 distinct collisions. Unresolved intervals: 0.
+Measured on this same Windows desktop in Release, old reviewed HEAD 4151a4646123d483d15fbcedfa3590a09be5ef4c versus the corrected embedding. No wall-clock CI gate is added.
 
-Resolver repeats: 68.163, 65.618, 62.596, 63.293, 51.148 ms; median 63.293 ms. Mean resolver allocations: 26.510 MB. Heat plus rich capture: 113.859 ms / 5.798 MB. This is approximately 2.82 evaluations per compatible **meaningful production interval**, not thousands of artificial fixed-time samples per interval. Exact independent #54 projection remains outside this observer cost.
+| Metric | Before | After |
+| --- | ---: | ---: |
+| Captured pose intervals | 5964 | 5964 |
+| Pairs | 6 | 6 |
+| Metric candidate intervals | 11183 | 17481 |
+| Broad-phase rejects | 11080 | 17374 |
+| Narrow-phase evaluations | 31575 | 44282 |
+| Subdivisions | 9209 | 9304 |
+| Root iterations | 74 | 106 |
+| Eligible/continuous contact spans | 68 | 61 |
+| Unresolved intervals | 0 | 0 |
+| Boundary ambiguity spans | 7 (prior report; separate from frame gaps) | 8 |
+| Genuine metric frame gaps | 6297 | 0 |
+| Resolver median ms | 70.5590 | 95.6452 |
+| Mean resolver allocation MB | 26.510 | 32.252 |
+| Heat + capture ms / allocation MB | 149.746 / 5.809 | 124.091 / 5.849 |
 
+The 6297 previously missing spans are now evaluated geometrically; candidate count grows about 56%. Distant track regions are broadly rejected. Embedding reuse, avoiding redundant initial clear-pose samples and reusing endpoint poses in narrow evaluation limit allocation growth. The measured resolver cost increases about 36% and allocations about 22%, while preserving all coverage. Timing depends on machine/load. #54 candidate projection remains outside this observer cost.
 
 ## Reproduction, historical freeze and limitations
 
@@ -240,6 +300,8 @@ Not implemented: tyre forces/slip/lean integration; rider-specific attitude skil
 
 Consume `PhysicalBikePose` (common-time metric position, χ, ψ, β and reference tangent), `BikeFootprint`/dimensions, `ContestedSpaceEvent`, signed separation/components, translation/rotation contributions including their residual, relative position/speed and numerical/frame validity. Supply rider-specific immutable attitude intervals with meaningful knots and conservative rate bounds through `PhysicalPoseInterval`, or vary named `ReferenceBikeAttitude` phases. The collision engine consumes those poses without knowing their cause.
 
-Only numerically resolved events with `EligibleForFutureInteraction=true` may enter a consequence layer. BoundaryAmbiguous and coverage gaps need explicit treatment and must never silently become physical collisions. #56 can then decide hold, yield, force wider, fight for space, body versus mechanical contact, lose rhythm, recover or fall from rider characteristics. It owns deliberate replacement of the legacy consequence layer and any validated boundary geometry adapter; it need not rewrite capsule separation or continuous detection.
+Ordinary production segment changes no longer create interaction coverage gaps. Straight, corner and start/finish poses share one metric model-space frame. Existing straight/turn width reinterpretation remains an explicit zero-time discontinuity and is never swept as physical movement.
+
+Only numerically resolved events with `EligibleForFutureInteraction=true` may enter a consequence layer. BoundaryAmbiguous and coverage gaps need explicit treatment and must never silently become physical collisions. #56 can then decide hold, yield, force wider, fight for space, body versus mechanical contact, lose rhythm, recover or fall from rider characteristics. It owns deliberate replacement of the legacy consequence layer while consuming the complete metric embedding; it need not repair ordinary track coordinate transitions or rewrite capsule separation/continuous detection.
 
 **PR #55 establishes physical occupied-space and bike-attitude geometry only. Rider-vs-rider tactical/skill resolution remains PR #56.**

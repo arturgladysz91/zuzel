@@ -50,14 +50,17 @@ public abstract class PhysicalPoseInterval
     public double EndTimeSeconds { get; }
     public SpeedwayBikeDimensions Dimensions { get; }
     public bool StartsAtDiscontinuity { get; }
+    public PoseSource? Source { get; }
+    public bool SupportsLapWrap { get; }
     protected PhysicalPoseInterval(int riderId, string frameId, double start, double end,
-        SpeedwayBikeDimensions dimensions, bool startsAtDiscontinuity)
+        SpeedwayBikeDimensions dimensions, bool startsAtDiscontinuity, PoseSource? source = null, bool supportsLapWrap = true)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(frameId); ArgumentNullException.ThrowIfNull(dimensions);
         GeometryValidation.Nonnegative(start, nameof(start)); GeometryValidation.Nonnegative(end, nameof(end));
         if (end <= start) throw new ArgumentException("A continuous interval requires positive duration.");
         RiderId = riderId; FrameId = frameId; StartTimeSeconds = start; EndTimeSeconds = end;
         Dimensions = dimensions; StartsAtDiscontinuity = startsAtDiscontinuity;
+        Source = source; SupportsLapWrap = supportsLapWrap;
     }
     protected double Fraction(double time)
     {
@@ -75,7 +78,7 @@ public sealed class LinearBikePoseInterval : PhysicalPoseInterval
     private readonly PhysicalBikePose _start;
     private readonly PhysicalBikePose _end;
     public LinearBikePoseInterval(PhysicalBikePose start, PhysicalBikePose end, bool startsAtDiscontinuity = false)
-        : base(start.RiderId, start.FrameId, start.CommonTimeSeconds, end.CommonTimeSeconds, start.Dimensions, startsAtDiscontinuity)
+        : base(start.RiderId, start.FrameId, start.CommonTimeSeconds, end.CommonTimeSeconds, start.Dimensions, startsAtDiscontinuity, start.Source)
     {
         if (end.RiderId != start.RiderId || end.FrameId != start.FrameId || end.Dimensions != start.Dimensions)
             throw new ArgumentException("Pose interval identity and dimensions must be constant.");
@@ -87,7 +90,7 @@ public sealed class LinearBikePoseInterval : PhysicalPoseInterval
         return new(RiderId, FrameId, _start.Position + (_end.Position - _start.Position) * f,
             new(time, BikeAngles.Interpolate(_start.Attitude.TravelHeadingRadians, _end.Attitude.TravelHeadingRadians, f),
                 BikeAngles.Interpolate(_start.Attitude.BikeHeadingRadians, _end.Attitude.BikeHeadingRadians, f)), Dimensions,
-            BikeAngles.Interpolate(_start.ReferenceTangentHeadingRadians, _end.ReferenceTangentHeadingRadians, f));
+            BikeAngles.Interpolate(_start.ReferenceTangentHeadingRadians, _end.ReferenceTangentHeadingRadians, f), Source);
     }
     public override PoseRateBounds RateBounds(double start, double end)
     {
@@ -102,15 +105,17 @@ public sealed class LinearBikePoseInterval : PhysicalPoseInterval
 public static class ResolvedBikePoses
 {
     public static IReadOnlyList<PhysicalPoseInterval> FromMotion(ResolvedRiderMotion motion, Track track,
-        SpeedwayBikeDimensions? dimensions = null, ReferenceBikeAttitude? attitude = null)
+        SpeedwayBikeDimensions? dimensions = null, ReferenceBikeAttitude? attitude = null, TrackMetricEmbedding? embedding = null)
     {
         ArgumentNullException.ThrowIfNull(motion); ArgumentNullException.ThrowIfNull(track);
         if (motion.SegmentIndex >= track.Segments.Count || track.Segments[motion.SegmentIndex].Id != motion.SegmentId)
             throw new ArgumentException("Motion does not belong to this track segment.");
+        embedding ??= new TrackMetricEmbedding(track);
+        embedding.ValidateCompatible(track);
         var result = new List<PhysicalPoseInterval>();
         var lap = (int)Math.Floor(motion.Initial.CanonicalProgress / track.Segments.Count);
         var corner = track.CornerTopology.CornerForSegment(motion.SegmentIndex);
-        var frame = corner is null ? $"lap:{lap}/straight:{motion.SegmentIndex}" : $"lap:{lap}/corner:{corner.CornerId}";
+        var source = new PoseSource(lap, motion.SegmentIndex, motion.SegmentId, track.Segments[motion.SegmentIndex].Type, corner?.CornerId);
         var profile = attitude ?? ReferenceBikeAttitude.Neutral;
         for (var index = 1; index < motion.Nodes.Count; index++)
         {
@@ -131,7 +136,7 @@ public static class ResolvedBikePoses
             }
             cuts.Sort();
             for (var cut = 1; cut < cuts.Count; cut++) result.Add(new ProductionPoseInterval(motion, track,
-                a, b, frame, cuts[cut - 1], cuts[cut], dimensions ?? SpeedwayBikeDimensions.Reference, profile,
+                a, b, embedding, source, cuts[cut - 1], cuts[cut], dimensions ?? SpeedwayBikeDimensions.Reference, profile,
                 cut == 1 && discontinuity));
         }
         return result.AsReadOnly();
@@ -140,23 +145,23 @@ public static class ResolvedBikePoses
     private sealed class ProductionPoseInterval : PhysicalPoseInterval
     {
         private readonly RiderMotionSample _a, _b;
-        private readonly double _nodeStart, _duration, _length, _radius, _angle, _phaseStart, _phaseSpan;
+        private readonly double _nodeStart, _duration, _angle, _phaseStart, _phaseSpan;
+        private readonly MetricTrackSegment _segment;
         private readonly ReferenceBikeAttitude _profile;
         private readonly bool _straight;
         public ProductionPoseInterval(ResolvedRiderMotion motion, Track track, RiderMotionSample a, RiderMotionSample b,
-            string frame, double start, double end, SpeedwayBikeDimensions dimensions, ReferenceBikeAttitude profile, bool discontinuity)
-            : base(motion.RiderId, frame, start, end, dimensions, discontinuity)
+            TrackMetricEmbedding embedding, PoseSource source, double start, double end, SpeedwayBikeDimensions dimensions, ReferenceBikeAttitude profile, bool discontinuity)
+            : base(motion.RiderId, embedding.FrameId, start, end, dimensions, discontinuity, source, embedding.Closure.SupportsLapWrap)
         {
             _a = a; _b = b; _nodeStart = (double)motion.StartElapsedTimeSeconds + a.LocalTimeSeconds;
             _duration = (double)b.LocalTimeSeconds - a.LocalTimeSeconds; _profile = profile;
             var segment = track.Segments[motion.SegmentIndex]; _straight = segment.Type == SegmentType.Straight;
-            _length = segment.StraightLengthMetersOverride ?? track.Geometry.StraightLengthMeters;
-            _radius = track.Geometry.InnerRadiusMeters; _angle = track.Geometry.TurnSegmentAngleRadians;
+            _segment = embedding.Segments[motion.SegmentIndex]; _angle = track.Geometry.TurnSegmentAngleRadians;
             var corner = track.CornerTopology.CornerForSegment(motion.SegmentIndex);
             _phaseStart = corner is null ? 0 : motion.SegmentIndex - corner.StartSegmentIndex;
             _phaseSpan = corner?.SegmentCount ?? 1;
         }
-        private (MeterPoint Position, MeterPoint Velocity, double Heading, double Radius, double Phase) Geometry(double time)
+        private (MeterPoint Position, MeterPoint Velocity, double Heading, double Radius, double Phase, double Tangent) Geometry(double time)
         {
             Fraction(time);
             var f = (time - _nodeStart) / _duration;
@@ -164,24 +169,16 @@ public static class ResolvedBikePoses
             var offset = _a.PhysicalOffsetMeters + ((double)_b.PhysicalOffsetMeters - _a.PhysicalOffsetMeters) * f;
             var dp = ((double)_b.SegmentProgress - _a.SegmentProgress) / _duration;
             var dr = ((double)_b.PhysicalOffsetMeters - _a.PhysicalOffsetMeters) / _duration;
-            if (_straight)
-            {
-                var velocity = new MeterPoint(_length * dp, -dr);
-                return (new(_length * progress, -offset), velocity, velocity.Length == 0 ? 0 : Math.Atan2(velocity.Y, velocity.X), 0, 0);
-            }
-            var theta = (_phaseStart + progress) * _angle; var r = _radius + offset;
-            var radial = new MeterPoint(Math.Cos(theta), Math.Sin(theta)); var tangent = new MeterPoint(-radial.Y, radial.X);
-            var v = radial * dr + tangent * (r * _angle * dp);
-            return (radial * r, v, v.Length == 0 ? theta + Math.PI / 2 : Math.Atan2(v.Y, v.X), r,
-                Math.Clamp((_phaseStart + progress) / _phaseSpan, 0, 1));
+            var mapped = _segment.Map(progress, offset, dp, dr);
+            return (mapped.Position, mapped.VelocityMetersPerSecond, mapped.TravelHeadingRadians,
+                _straight ? 0 : _segment.InnerRadiusMeters + offset,
+                _straight ? 0 : Math.Clamp((_phaseStart + progress) / _phaseSpan, 0, 1), mapped.TangentHeadingRadians);
         }
         public override PhysicalBikePose Sample(double time)
         {
             var g = Geometry(time);
             var beta = _straight ? 0 : _profile.RelativeSlideAngle(g.Phase);
-            var referenceTangent = _straight ? 0 : (_phaseStart + _a.SegmentProgress
-                + ((double)_b.SegmentProgress - _a.SegmentProgress) * ((time - _nodeStart) / _duration)) * _angle + Math.PI / 2;
-            return new(RiderId, FrameId, g.Position, new(time, g.Heading, g.Heading + beta), Dimensions, referenceTangent);
+            return new(RiderId, FrameId, g.Position, new(time, g.Heading, g.Heading + beta), Dimensions, g.Tangent, Source);
         }
         public override PoseRateBounds RateBounds(double start, double end)
         {

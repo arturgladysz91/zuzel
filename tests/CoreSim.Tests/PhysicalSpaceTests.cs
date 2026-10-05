@@ -7,7 +7,7 @@ using Xunit;
 namespace CoreSim.Tests;
 
 [Trait("Shard", "core")]
-public sealed class PhysicalSpaceTests
+public sealed partial class PhysicalSpaceTests
 {
     [Theory]
     [InlineData("A", false)] [InlineData("B", false)] [InlineData("C", true)]
@@ -127,8 +127,9 @@ public sealed class PhysicalSpaceTests
     public void N_RealFourRiderLaunchAndFirstBendObserveSixPairsAndGenuineConflict()
     {
         var heat = PhysicalSpaceEvidence.FourRiderHeat(1);
-        var r = ContestedSpaceResolver.Observe(heat.Observer.CapturedIntervals.Where(i => i.FrameId is "lap:0/straight:0" or "lap:0/corner:1"));
-        Assert.Contains(r.Intervals, i => i.FrameId == "lap:0/corner:1");
+        var r = ContestedSpaceResolver.Observe(heat.Observer.CapturedIntervals.Where(PhysicalSpaceEvidence.IsFirstBend));
+        Assert.Contains(r.Intervals, i => i.SourceA?.CornerId == 1);
+        Assert.Empty(r.FrameCoverageGaps);
         Assert.Equal(6, r.Work.RiderPairs); Assert.Equal(6, PhysicalSpaceEvidence.Summarize(r).Count);
         Assert.Contains(r.Intervals, i => i.EligibleForFutureInteraction && i.FirstTouchCommonTimeSeconds > .28);
         Assert.Equal(0, r.Work.UnresolvedIntervals);
@@ -149,7 +150,7 @@ public sealed class PhysicalSpaceTests
     }
     [Theory]
     [InlineData(0, 1)] [InlineData(3, 4)]
-    public void P_Q_ProductionWidthBoundariesHaveSeparateUnsweptFrames(int from, int to)
+    public void P_Q_X_ProductionWidthBoundariesShareMetricFrameButRemainUnswept(int from, int to)
     {
         var track = MatchedVenueProfiles.CreateMotoarenaStandingStartTrack();
         var rider = new RiderState(RiderProfile.CreateDefault(1), 2) { Speed = 18 };
@@ -161,7 +162,17 @@ public sealed class PhysicalSpaceTests
         var next = Resolve(track, new[] { rider }, to, 2);
         var before = ResolvedBikePoses.FromMotion(step.Motions[0], track);
         var after = ResolvedBikePoses.FromMotion(next.Motions[0], track);
-        Assert.NotEqual(before[^1].FrameId, after[0].FrameId);
+        Assert.Equal(before[^1].FrameId, after[0].FrameId);
+        Assert.NotEqual(before[^1].Source, after[0].Source);
+        var boundary = step.Motions[0].ExitBoundary!;
+        Assert.Equal(2f, boundary.LateralPosition);
+        Assert.InRange(Math.Abs(boundary.FromPhysicalOffsetMeters - boundary.ToPhysicalOffsetMeters), 2.299999, 2.300001);
+        var distance = step.Motions[0].TotalDistanceMeters;
+        var duration = step.Motions[0].TotalTimeSeconds;
+        Assert.InRange((before[^1].Sample(before[^1].EndTimeSeconds).Position - after[0].Sample(after[0].StartTimeSeconds).Position).Length,
+            2.299999, 2.300001);
+        Assert.Equal(distance, step.Motions[0].Final.TravelledMeters);
+        Assert.InRange(Math.Abs(before.Sum(i => i.EndTimeSeconds - i.StartTimeSeconds) - duration), 0, 1e-12);
         Assert.True(after[0].StartsAtDiscontinuity);
         Assert.Equal(before[^1].EndTimeSeconds, after[0].StartTimeSeconds);
         Assert.DoesNotContain(before.Concat(after), i => i.StartTimeSeconds < after[0].StartTimeSeconds && i.EndTimeSeconds > after[0].StartTimeSeconds);

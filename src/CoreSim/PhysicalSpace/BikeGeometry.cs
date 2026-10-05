@@ -1,6 +1,6 @@
 namespace CoreSim.PhysicalSpace;
 
-/// <summary>Euclidean metres; x/y are axes of the explicitly identified local frame.</summary>
+/// <summary>Euclidean metres; x/y are axes of the explicitly identified metric frame.</summary>
 public readonly record struct MeterPoint
 {
     public double X { get; }
@@ -101,20 +101,22 @@ public sealed record PhysicalBikePose
     public MeterPoint Position { get; }
     public BikeAttitudeSample Attitude { get; }
     public SpeedwayBikeDimensions Dimensions { get; }
+    public PoseSource? Source { get; }
     /// <summary>Local reference-track tangent, solely for removing shared forward transport in diagnostics.</summary>
     public double ReferenceTangentHeadingRadians { get; }
     public double CommonTimeSeconds => Attitude.CommonTimeSeconds;
     public BikeFootprint Footprint => BikeFootprint.Create(Position, Attitude.BikeHeadingRadians, Dimensions);
     public PhysicalBikePose(int riderId, string frameId, MeterPoint position, BikeAttitudeSample attitude, SpeedwayBikeDimensions dimensions,
-        double? referenceTangentHeadingRadians = null)
+        double? referenceTangentHeadingRadians = null, PoseSource? source = null)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(frameId); ArgumentNullException.ThrowIfNull(attitude);
         ArgumentNullException.ThrowIfNull(dimensions);
         RiderId = riderId; FrameId = frameId; Position = position; Attitude = attitude; Dimensions = dimensions;
+        Source = source;
         ReferenceTangentHeadingRadians = BikeAngles.Wrap(referenceTangentHeadingRadians ?? attitude.TravelHeadingRadians);
     }
     public PhysicalBikePose Repose(MeterPoint position, double heading, double time) => new(RiderId, FrameId, position,
-        new(time, Attitude.TravelHeadingRadians, heading), Dimensions, ReferenceTangentHeadingRadians);
+        new(time, Attitude.TravelHeadingRadians, heading), Dimensions, ReferenceTangentHeadingRadians, Source);
 }
 
 public readonly record struct FootprintSeparation(double SignedMeters, BikeComponent ComponentA, BikeComponent ComponentB)

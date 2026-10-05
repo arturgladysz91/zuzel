@@ -18,6 +18,8 @@ public sealed record SpaceSensitivityRow(string Scenario, double LengthMeters, d
 public static class PhysicalSpaceEvidence
 {
     public const string BaseMainSha = "12cce6f9709f34ea1617d21399d2a615b3f689af";
+    public static bool IsFirstBend(PhysicalPoseInterval interval) => interval.Source is { LapIndex: 0 } source
+        && (source.SegmentIndex == 0 || source.CornerId == 1);
     public static LinearBikePoseInterval Linear(int id, MeterPoint start, MeterPoint end, double startHeading = 0,
         double endHeading = 0, double startTime = 0, double endTime = 1, SpeedwayBikeDimensions? dimensions = null,
         string frame = "controlled-metres", bool discontinuity = false)
@@ -86,17 +88,23 @@ public static class PhysicalSpaceEvidence
         var scenarios = new[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K-zero", "K-yaw" }
             .Select(id => { var r = ContestedSpaceResolver.Observe(Controlled(id)); return new SpaceScenarioSummary(id, Summarize(r), r.Work); }).ToArray();
         var four = FourRiderHeat(1).Observer;
-        var firstBend = ContestedSpaceResolver.Observe(four.CapturedIntervals.Where(i => i.FrameId is "lap:0/straight:0" or "lap:0/corner:1"));
+        var firstBend = ContestedSpaceResolver.Observe(four.CapturedIntervals.Where(IsFirstBend));
+        var complete = FourRiderHeat().Observer;
+        var fullHeat = complete.Complete();
         var k = MotionFoundationDiagnostics.CrossingStep();
         var crossing = ContestedSpaceResolver.Observe(k.Motions.SelectMany(m => ResolvedBikePoses.FromMotion(m, k.Snapshot.Track)));
         return JsonSerializer.Serialize(new
         {
             BaseMainSha, Scenarios = scenarios, ProductionCrossing = Summarize(crossing),
+            MetricEmbedding = new { Frame = "One deterministic metric model-space track frame across all closed laps",
+                complete.Embedding!.Closure, HomeStraightMeters = 35 + 27, Origin = new MeterPoint(0, 0), InitialHeadingRadians = 0 },
             AttitudeProfiles = new[] { ReferenceBikeAttitude.Neutral, new ReferenceBikeAttitude(0, .5, .15, .25, .6),
                 new ReferenceBikeAttitude(.1, .5, .4, .7, 1) }.Select((profile, index) => new
                 { Profile = new[] { "neutral", "early", "late" }[index], Samples = new[] { 0d, .1, 1d / 3, .5, 2d / 3, .9, 1d }
                     .Select(p => new { CornerProgress = p, BetaRadians = profile.RelativeSlideAngle(p) }).ToArray() }),
             FourRiderStartAndFirstBend = new { Pairs = Summarize(firstBend), firstBend.Work, firstBend.IncompatibleFrameIntervals },
+            FourRiderCompleteHeat = new { CapturedPoseIntervals = complete.CapturedIntervals.Count,
+                Pairs = Summarize(fullHeat), fullHeat.Work, fullHeat.IncompatibleFrameIntervals },
             Sensitivity = Sensitivity()
         }, JsonOptions).Replace("\r\n", "\n", StringComparison.Ordinal) + "\n";
     }
@@ -129,7 +137,7 @@ public static class PhysicalSpaceEvidence
                 dims.HandlebarLongitudinalOffsetMeters, dims.HandlebarTubeDiameterMeters);
             var profile = new ReferenceBikeAttitude(.05, peak, .35, .55, .95);
             var captured = FourRiderHeat(1, dimensions: d, attitude: profile).Observer.CapturedIntervals;
-            var result = ContestedSpaceResolver.Observe(captured.Where(i => i.FrameId == "lap:0/corner:1" && i.RiderId is 1 or 3));
+            var result = ContestedSpaceResolver.Observe(captured.Where(i => IsFirstBend(i) && i.RiderId is 1 or 3));
             rows.Add(new("production-first-bend-1/3", d.OverallMechanicalLengthMeters, d.ChassisBodyWidthMeters, bar,
                 d.HandlebarLongitudinalOffsetMeters, peak, result.Intervals.Any(r => r.EligibleForFutureInteraction),
                 result.Intervals.Min(r => r.MinimumSeparationMeters)));
@@ -152,7 +160,9 @@ public static class PhysicalSpaceEvidence
         }
         return JsonSerializer.Serialize(new { Fixture = "Motoarena four riders, four laps, fixed convergence intents",
             CapturedPoseIntervals = input.Count, CaptureHeatMilliseconds = captureWatch.Elapsed.TotalMilliseconds, CaptureHeatAllocatedBytes = captureBytes,
-            ResolverMilliseconds = timings, ResolverAllocatedBytes = allocations, report!.Work, report.IncompatibleFrameIntervals }, JsonOptions)
+            ResolverMilliseconds = timings, ResolverAllocatedBytes = allocations, report!.Work,
+            BoundaryAmbiguousIntervals = report.Intervals.Count(i => i.Kind == SpaceConflictKind.BoundaryAmbiguous),
+            report.IncompatibleFrameIntervals }, JsonOptions)
             .Replace("\r\n", "\n", StringComparison.Ordinal) + "\n";
     }
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true,
