@@ -1,4 +1,4 @@
-# #56B â€” contested-space racing responses
+# #56B — contested-space racing responses
 
 **BINDING architecture; PROVISIONAL synthetic balance.** Base is merged #56A,
 `a1609e485131f553619c386a051a158796c9e2dd`. The public heat option
@@ -174,7 +174,7 @@ Historical track fixtures are unchanged.
 
 The accompanying [deterministic JSON](contested-space-racing-response.json) contains
 13 controlled scenarios, nine clearance/window sensitivities, nine Technique/Condition
-combinations, 44 existing four-rider scenario heats (11 cases Ă— seeds 7/19 Ă— dry/light rain)
+combinations, 44 existing four-rider scenario heats (11 cases × seeds 7/19 × dry/light rain)
 and 32 canonical-archetype heats. Technical attacker, aggressive mediocre attacker,
 strong defender and cautious defender are contrasted without promising an archetype winner.
 Outside-useful and outside-poor cases measure ordinary production traversal; separated
@@ -187,10 +187,10 @@ legacy attempts, joint/pass/production/narrow-phase work, overtakes/order snapsh
 maximum episodes per pair, active duration, response changes, ABA oscillations and
 unexplained commitment changes. Phase observations describe their phase; final episode
 counts describe the last observation and are not independent collision rolls.
-Storm warnings flag â‰Ą12 episodes for one pair, â‰Ą20 seconds continuously active,
-â‰Ą12 response changes, repeated legacy attempts or an unexplained feasible commitment
+Storm warnings flag ≥12 episodes for one pair, ≥20 seconds continuously active,
+≥12 response changes, repeated legacy attempts or an unexplained feasible commitment
 change. These are evidence-review alarms, not runtime percentages or crash probabilities.
-The supplied batch must have no warnings. The requested 70â€“90% synthetic clear-response
+The supplied batch must have no warnings. The requested 70–90% synthetic clear-response
 range is observation guidance only and is never encoded in the engine.
 
 ### Recorded batch after review fixes
