@@ -1,6 +1,7 @@
 using CoreSim.Race;
 using CoreSim.Setup;
 using System.Collections.ObjectModel;
+using System.Text.Json.Serialization;
 
 namespace CoreSim;
 
@@ -43,6 +44,8 @@ public sealed record RiderSnapshot(
     public bool IsActive => Status is RiderRaceStatus.NotStarted or RiderRaceStatus.Racing;
     public StartingGateBounds? StartingPosition { get; init; }
     public StartingGate? StartingGate => StartingPosition?.Gate;
+    [JsonIgnore]
+    public float Condition { get; init; } = 1f;
 
     internal RiderSnapshot Apply(RiderStateChange change) => this with
     {
@@ -62,6 +65,7 @@ public sealed record RiderSnapshot(
             Risk = Risk,
             ElapsedTimeSeconds = ElapsedTimeSeconds,
             ActiveSetup = ActiveSetup,
+            Condition = Condition,
         };
         copy.RestorePosition(Position);
         copy.SetLastResolvedSegmentId(LastResolvedSegmentId);

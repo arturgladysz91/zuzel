@@ -27,6 +27,8 @@ jobs:
           dotnet-version: 8.0.x
       - run: dotnet restore SpeedwayManager.sln
       - run: dotnet build SpeedwayManager.sln -c Release --no-restore --warnaserror
+      - name: Require unchanged legacy production skill and style consumers
+        run: python tools/rider-compatibility-audit/check-consumers.py
       - name: Prove exactly one responsibility for every discovered test case
         run: python tools/ci/check-shards.py results/discovery
       - uses: actions/upload-artifact@v4
@@ -95,13 +97,14 @@ jobs:
       - run: dotnet restore SpeedwayManager.sln
       - run: dotnet build SpeedwayManager.sln -c Release --no-restore --warnaserror
       - name: Exact candidate trace, evidence bytes, Full/Lean and branch degree parity
-        run: dotnet test tests/CoreSim.Tests -c Release --no-build --filter "FullyQualifiedName~TrajectoryBehaviorFingerprintTests|FullyQualifiedName~LeanProjectionTests|FullyQualifiedName~ScalarEnvelopeParityTests|FullyQualifiedName~AdaptiveParallelTests|FullyQualifiedName~PhysicalSpaceTests" --logger "trx;LogFileName=determinism.trx" --results-directory results --verbosity normal
+        run: dotnet test tests/CoreSim.Tests -c Release --no-build --filter "FullyQualifiedName~TrajectoryBehaviorFingerprintTests|FullyQualifiedName~LeanProjectionTests|FullyQualifiedName~ScalarEnvelopeParityTests|FullyQualifiedName~AdaptiveParallelTests|FullyQualifiedName~PhysicalSpaceTests|FullyQualifiedName~RiderGameplayProfileTests" --logger "trx;LogFileName=determinism.trx" --results-directory results --verbosity normal
       - name: Capture typed IEEE values and final rider/raw surface states
         shell: bash
         run: |
           python tools/trajectory-audit/prepare.py . src/CoreSim/Analysis/TrajectoryBehaviorFingerprint.cs
           dotnet run --project tools/trajectory-audit -c Release -- results/capture
           dotnet run --project src/Sandbox -c Release --no-build -- physical-occupancy-report results/physical-space
+          dotnet run --project tools/rider-compatibility-audit -c Release -- results/rider-compatibility
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -126,6 +129,7 @@ jobs:
           mv captures/determinism-ubuntu-latest/capture captures/ubuntu
           python tools/trajectory-audit/compare.py captures windows ubuntu
           python tools/physical-space-audit/compare.py captures
+          python tools/rider-compatibility-audit/compare.py captures
       - uses: actions/upload-artifact@v4
         if: always()
         with:

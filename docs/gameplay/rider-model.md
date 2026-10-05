@@ -6,6 +6,125 @@ Ten dokument opisuje docelowy model zawodnika dla warstwy gameplayowej Speedway 
 
 Nie jest zgodą na natychmiastową zmianę istniejącego `RiderSkills`, `RiderStyle` ani fizyki produkcyjnej. Obecny kod może nadal używać starszych nazw i uproszczeń do czasu osobnych, wąskich PR-ów implementacyjnych.
 
+### Implementacja #56A — model kanoniczny i most kompatybilności
+
+**BINDING, zakres #56A:** `RiderGameplayProfile` składa się z niezmiennych
+`RiderAbilities`, `RiderPhysicalProfile` i `RiderInteractionStyle`.
+`RiderState.Condition` jest osobnym stanem dynamicznym. Wszystkie te dane są
+w #56A bez konsumentów zmieniających zachowanie biegu. Produkcja nadal czyta
+oryginalne `RiderProfile.Skills` i `RiderProfile.Style`; ich skale i wartości pozostają bez zmian.
+
+| Pole kanoniczne | Źródło fallbacku legacy | Status #56A | Przyszły właściciel / granica |
+|---|---|---|---|
+| Reaction — Reakcja | Start | int 1–99, bez konsumenta | oddzielna migracja startu: wyłącznie czas reakcji na taśmę |
+| Start — Start | Start | int 1–99, bez konsumenta | oddzielna migracja startu: techniczne wykonanie po reakcji, bez bonusu do dalszej jazdy |
+| Technique — Technika | SlideControl | int 1–99, bez konsumenta | #56B i późniejsze migracje kontroli / SlideControl / Adaptability osobno dla każdego subsystemu; balans, uślizg, gaz, precyzja, ratowanie, nie wybór ścieżki |
+| TrackReading — Czytanie toru | TrackReading | int 1–99, bez konsumenta | percepcja nawierzchni; późniejsza migracja, bez obecnej zmiany szumu ani bonusu fizycznego grip/speed |
+| Attack — Atak | neutralne 50 | int 1–99, bez konsumenta | #56B: jakość ofensywnego manewru, nie ryzyko ani częstotliwość walki |
+| Defense — Obrona | neutralne 50 | int 1–99, bez konsumenta | #56B: jakość obrony, niezależna od Ataku |
+| PairRiding — Jazda parą | PairRiding | int 1–99, bez konsumenta | późniejsza współpraca z partnerem; nigdy kontakt z rywalem |
+| Strength — Siła | neutralne 50 | int 1–99, bez konsumenta | #56B: kontrola pod obciążeniem / w kontakcie; bez mocy silnika, Vmax ani traction bonus |
+| MassKg — masa | LegacyCompatibilityMassKg = 70 kg | float, dodatnia skończona liczba kg; bez konsumenta | #56B: fizyczny parametr; obecna nominalna masa układu 142 kg nadal bez zmian |
+| Condition — Kondycja | nowy stan = 1 | float 0–1; bez konsumenta | #56B: stan przy odpowiedzi na walkę; później obciążenie i odbudowa w osobnym etapie |
+| Combativeness — Waleczność | neutralne 0.5 | float 0–1, skończony; bez konsumenta | #56B: chęć walki, niezależna od jakości Ataku; więcej nie zawsze znaczy lepiej |
+
+`RiderAbilities.Balanced` ma dokładnie osiem wartości 50. Nie posiada Speed ani
+uniwersalnego Overall. Typ int wyklucza NaN / infinity. Konstruktor odrzuca 0 i 100;
+1 i 99 są poprawnymi końcami skali. Nie dodano nieużywanego frameworka normalizacji.
+
+`RiderAbilityCompatibility` to jednokierunkowy **punkt wyjścia migracji, nie
+empiryczna równoważność**. Mapowane wartości float zaokrąglamy do najbliższej liczby
+całkowitej (`MidpointRounding.AwayFromZero`), następnie clampujemy do 1–99:
+0→1, 20→20, 49.5→50, 50→50, 50.5→51, 80→80, 100→99.
+Mapowany NaN / infinity jest odrzucany przez adapter; walidacja starych klas nie zmienia się.
+
+Legacy Speed i Adaptability pozostają **bez mapowania**. Nie produkują Techniki,
+Startu, Siły, Ataku ani Obrony. Speed można usunąć dopiero po zastąpieniu wszystkich
+konsumentów longitudinal odpowiednimi modelami sprzętu, setupu i fizyki.
+Legacy PairRiding pozostaje w obecnym kontakcie tylko dla kompatybilności silnika;
+kanoniczne PairRiding ma wyłącznie przyszłą odpowiedzialność współpracy z partnerem.
+
+`RiderInteractionStyle` przechowuje Combativeness, `PreferredLine` (Inside / Neutral /
+Outside) i SetupIndependence. RiskTolerance i LaneChangeTendency pozostają bez mapowania;
+RiskTolerance nie wyznacza Combativeness ani Attack. Fallback Combativeness zawsze
+wynosi 0.5. Legacy OutsidePreference < `1f/3f` daje Inside, > `2f/3f` daje Outside;
+oba progi i przedział między nimi dają Neutral. SetupIndependence jest kopiowane
+dokładnie. Preferowana linia nie daje bonusu speed. Nowy styl odrzuca nieskończone
+wartości i wartości spoza 0–1.
+
+Masa w nowym profilu jest obowiązkowa, dodatnia i skończona, bez arbitralnego wąskiego
+przedziału. `LegacyCompatibilityMassKg = 70f` jest **niekalibrowanym fixturem
+kompatybilności**, tylko dla starych/default profili; nie zmienia fizyki.
+Condition clampuje skończone wartości tak jak Morale, odrzuca NaN / infinity;
+`ApplyConditionDelta` używa tej samej granicy. Oba `ResetForHeat` zachowują np. 0.72.
+Snapshot i jego mutable copy zachowują Condition bez resetu. #56A nie implementuje
+zmęczenia, regeneracji, dodatkowych pasków kondycji ani osobowości.
+
+#### API, równość i serializacja
+
+Stary konstruktor `RiderProfile(Id, Name, Skills, Style)`, deconstruction, `with`
+i `CreateDefault` pozostają dostępne. `Gameplay` wylicza fallback ze aktualnych
+Skills/Style, więc `with { Skills = ... }` na starym profilu nie zatrzymuje starych
+wartości kanonicznych. Jawny profil używa `CreateCanonical` i zachowuje przekazany
+niezmienny obiekt Gameplay, także po zmianie payloadu legacy przez `with`:
+
+```csharp
+var gameplay = new RiderGameplayProfile(
+    new RiderAbilities(91, 84, 88, 76, 93, 67, 55, 72),
+    new RiderPhysicalProfile(68f),
+    new RiderInteractionStyle(.82f, PreferredLine.Inside, .60f));
+var rider = RiderProfile.CreateCanonical(7, "Modern", gameplay,
+    legacySkills: new RiderSkills(80, 95, 70, 60, 40, 20),
+    legacyStyle: new RiderStyle(.1f, .2f, .3f, .4f));
+```
+
+Nowy API wymaga **jawnego payloadu legacy**; nie wylicza Speed ani innych starych
+skills z danych kanonicznych. `HasExplicitGameplay` rozróżnia oba źródła.
+Równość starych rekordów pozostaje taka sama. Jawne dane kanoniczne są częścią
+równości nowego rekordu: dwa jawne profile z innym Atakiem nie są równe.
+
+`Gameplay`, `HasExplicitGameplay` oraz Condition w state/snapshot mają `[JsonIgnore]`,
+aby zachować historyczny JSON i evidence. Stary JSON nadal deserializuje się do
+starego profilu. Ten historyczny format nie zapisuje jawnego Gameplay ani Condition;
+nie należy używać go jako nowego formatu save game. Gameplay samodzielnie ma typed
+JSON round-trip; przyszła wersja persistence musi jawnie zapisać canonical data
+i stan, a odtworzenie modern profilu użyć `CreateCanonical` z legacy payloadem.
+
+#### Audyt zależności i dowód zgodności
+
+[`rider-legacy-consumers.json`](rider-legacy-consumers.json) zamraża hash pełnej treści
+39 plików używających lub przekazujących Skills/Style z main
+`ffa7196027f031f947c844da04f5706cb2655f41` (normalizacja wyłącznie CRLF→LF).
+`python tools/rider-compatibility-audit/check-consumers.py` sprawdza kompletny zbiór,
+brak nowych konsumentów canonical oraz identyczne pliki. Jedyny wyjątek to dokładna
+mechaniczna kopia `Condition = rider.Condition` w CaptureSnapshot; reszta
+SimulationEngine musi mieć ten sam hash co main.
+
+| Kategoria | Obecni konsumenci / legacy wejścia |
+|---|---|
+| Start i longitudinal | SimulationEngine, LongitudinalDynamics: Start; Speed nadal napędza obecne longitudinal primitives |
+| Ograniczenia łuku i execution | SegmentPhysics, ContinuousCornerEnvelope, ExecutedPathTraversal: Speed / SlideControl; LateralMovementModel i korekty: SlideControl / Adaptability |
+| Percepcja i decyzje | AdaptiveDecisionModel: TrackReading, RiskTolerance, LaneChangeTendency, OutsidePreference |
+| Legacy kontakty | SimulationEngine: SlideControl, PairRiding; bez kanonicznych Atak / Obrona / Siła |
+| Setup | SetupResolver: SetupIndependence, TrackReading |
+| Diagnostyka i fixtures | Analysis i Sandbox nadal przekazują / raportują oryginalne sześć skills i cztery style |
+
+`RiderGameplayProfileTests` porównuje dokładne bajty pełnych czterookrążeniowych
+heatów (Adaptive i convergence z czterema legacy kontaktami) z capture wykonanym
+na **niezmienionym main**. Chronione są classification, czas, pozycja, speed,
+morale, wszystkie logi i surface changes oraz końcowy raw rider/surface state.
+Jawny modern przykład i niezależna zmiana każdego canonical field / masy / stylu /
+Condition dają te same bajty. Osobny [artifact #56A](../calibration/rider-abilities-compatibility-evidence.json)
+nie zastępuje historycznych artifactów #54/#55. CI porównuje nowe captures byte-for-byte
+na Windows/Ubuntu, obok niezmienionych istniejących audytów.
+
+**Granica kolejnego etapu:** #56B wykorzysta Attack, Defense, Technique, Strength,
+Combativeness, MassKg i Condition do odpowiedzi na contested physical space z #55.
+Ewentualne przyszłe Opanowanie pozostaje poza #56A. Osobna migracja standing startu
+rozdzieli Reaction timing i Start technical launch; nie wolno zmieniać obu przez
+przypadkową podmianę obecnego StartNorm. Nie dodano impulsów kontaktowych, ataku,
+obrony, zmian geometrycznych, RNG, morale, wear ani jakiegokolwiek strojenia biegu.
+
 ## Zasada nadrzędna
 
 Zawodnik nie jest głównym źródłem prędkości motocykla. Tempo biegu ma wynikać przede wszystkim z fizycznych możliwości motocykla, silnika, setupu, lokalnych warunków toru i wybranej trajektorii, a umiejętności zawodnika określają jakość decyzji i wykonania.

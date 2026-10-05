@@ -1,0 +1,64 @@
+"""Verify the complete legacy skill/style source dependency audit against main."""
+import hashlib
+import json
+from pathlib import Path
+import re
+import subprocess
+import sys
+
+ROOT = Path(__file__).resolve().parents[2]
+BASE = "ffa7196027f031f947c844da04f5706cb2655f41"
+MANIFEST = ROOT / "docs/gameplay/rider-legacy-consumers.json"
+REFERENCES = re.compile(r"\bRiderSkills\b|\bRiderStyle\b|\.Skills\b|\.Style\b")
+# Domain declarations and the one-way adapter are deliberately outside consumers.
+DOMAIN = {"src/CoreSim/Rider.cs", "src/CoreSim/RiderProfile.Gameplay.cs", "src/CoreSim/RiderAbilityCompatibility.cs"}
+CANONICAL_DOMAIN = DOMAIN | {
+    "src/CoreSim/RiderAbilities.cs", "src/CoreSim/RiderGameplayProfile.cs",
+    "src/CoreSim/RiderState.cs", "src/CoreSim/SimulationSnapshot.cs",
+}
+CANONICAL = re.compile(r"\bRiderAbilities\b|\bRiderGameplayProfile\b|\bRiderPhysicalProfile\b|"
+                       r"\bRiderInteractionStyle\b|\.Gameplay\b|\.Condition\b")
+
+
+def consumers():
+    result = {}
+    for path in sorted((ROOT / "src").rglob("*.cs")):
+        if {"obj", "bin"} & set(path.parts):
+            continue
+        name = path.relative_to(ROOT).as_posix()
+        source = path.read_text(encoding="utf-8").replace("\r\n", "\n")
+        # Only permitted production edit: carry inert Condition into detached snapshots.
+        if name == "src/CoreSim/SimulationEngine.cs":
+            source = source.replace(", Condition = rider.Condition", "")
+        if name not in CANONICAL_DOMAIN and not REFERENCES.search(source):
+            # Existing WeatherState.Condition is unrelated to RiderState.Condition.
+            canonical_source = source.replace("weather.Condition", "weather.WeatherCondition")
+            assert not CANONICAL.search(canonical_source), f"Unexpected canonical production consumer: {name}"
+        if name in DOMAIN or not REFERENCES.search(source):
+            continue
+        result[name] = hashlib.sha256(source.encode("utf-8")).hexdigest()
+    return result
+
+
+def verify():
+    expected = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    assert expected["BaseMainSha"] == BASE
+    actual = consumers()
+    assert actual == expected["ConsumerSourceSha256"], {
+        "added": sorted(actual.keys() - expected["ConsumerSourceSha256"].keys()),
+        "removed": sorted(expected["ConsumerSourceSha256"].keys() - actual.keys()),
+        "changed": [k for k in actual.keys() & expected["ConsumerSourceSha256"].keys()
+                    if actual[k] != expected["ConsumerSourceSha256"][k]],
+    }
+    return len(actual)
+
+
+if __name__ == "__main__":
+    if sys.argv[1:] == ["--record-baseline"]:
+        assert subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip() == BASE
+        # Also require every source file to match the actual Git tree at this base.
+        assert not subprocess.check_output(["git", "diff", "HEAD", "--", "src"], cwd=ROOT)
+        MANIFEST.write_text(json.dumps({"BaseMainSha": BASE, "ConsumerSourceSha256": consumers()},
+                                     indent=2) + "\n", encoding="utf-8", newline="\n")
+    else:
+        print(f"Legacy consumer audit: {verify()} source files match frozen main; no rerouted skill/style readers.")
