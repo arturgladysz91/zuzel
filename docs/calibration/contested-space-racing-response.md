@@ -165,11 +165,12 @@ Pass 2 selects EmergencyAvoid/BackOut and clears it: PassCount 2, resolved true,
 false. The imminent-overlap fixture remains in mechanical contact after pass 2 and authorizes
 one legacy attempt; the episode persistence regression proves that the attempt cannot repeat.
 
-Only after pass-2 actual-path verification, an eligible unresolved mechanical episode authorizes
-exactly one attempt in the visibly separate legacy consequence routine, even if its
-occurrence roll has no effect. The coordinator supplies that physical pair to the legacy
+Only after pass-2 actual-path verification, an eligible unresolved mechanical contact can
+consume one preserved originating episode allowance in the visibly separate legacy
+consequence routine, even if its occurrence roll has no effect. The coordinator supplies
+each explicitly authorized physical pair to the legacy
 candidate boundary, preserving its original addressed occurrence/severity formulas and
-consequences. Other contacts for that owned episode are filtered out. Clear pre-contact
+consequences. Unauthorized contacts are filtered out. Clear pre-contact
 responses cannot independently receive fabricated legacy side-by-side consequences.
 #56B adds no consequence calculation; existing production incidents and the authorized
 legacy fallback can still produce their existing events.
