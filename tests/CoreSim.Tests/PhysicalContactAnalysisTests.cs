@@ -207,8 +207,9 @@ public sealed class PhysicalContactAnalysisTests
     public void RenamingRidersChangesOnlyIdentifiersAndDuplicateRowsAreNotDoubleCounted()
     {
         var original=F("M-three-squeeze");
-        var unequal=original.Inputs.Select(i=>i with{RiderA=i.RiderA with{Profile=PhysicalContactEvidence.Physiology(i.RiderA.RiderId,mass:60+7.5f*(i.RiderA.RiderId-1)).Profile},
-            RiderB=i.RiderB with{Profile=PhysicalContactEvidence.Physiology(i.RiderB.RiderId,mass:60+7.5f*(i.RiderB.RiderId-1)).Profile}}).ToArray();
+        // These valid binary-exact masses expose the one-ULP asymmetry in mA*(mB/(mA+mB)).
+        var unequal=original.Inputs.Select(i=>i with{RiderA=i.RiderA with{Profile=PhysicalContactEvidence.Physiology(i.RiderA.RiderId,mass:60+.125f*(i.RiderA.RiderId-1)).Profile},
+            RiderB=i.RiderB with{Profile=PhysicalContactEvidence.Physiology(i.RiderB.RiderId,mass:60+.125f*(i.RiderB.RiderId-1)).Profile}}).ToArray();
         var f=original with{Inputs=unequal,Analysis=PhysicalContactAnalyzer.Analyze(unequal)};int Id(int id)=>id switch{1=>90,2=>20,_=>10};
         PhysicalBikePose? Pose(PhysicalBikePose? p)=>p is null?null:new(Id(p.RiderId),p.FrameId,p.Position,p.Attitude,p.Dimensions,p.ReferenceTangentHeadingRadians,p.Source);
         var renamed=f.Inputs.Select(i=>i with {Contact=i.Contact with{RiderA=Id(i.Contact.RiderA),RiderB=Id(i.Contact.RiderB)},
