@@ -2,6 +2,7 @@ using CoreSim.Decisions;
 using CoreSim.Interactions;
 using CoreSim.PhysicalSpace;
 using CoreSim.Race;
+using CoreSim.Logging;
 using CoreSim.Setup;
 using System.Diagnostics;
 using System.Text.Json;
@@ -14,7 +15,7 @@ public sealed record ContestedRiderInput(int Id, float Lateral, float Progress, 
     RacingTrajectoryIntent Intent, int Attack = 70, int Defense = 70, int Technique = 70,
     float Combativeness = .5f, float Condition = 1f, int Strength = 50, float MassKg = 70f, int PairRiding = 50);
 public sealed record ContestedScenario(string Name, int SegmentIndex, IReadOnlyList<ContestedRiderInput> Riders,
-    float OuterGrip = 1f, bool Standing = false);
+    float OuterGrip = 1f, bool Standing = false, int Seed = 57, float IncidentFrequency = 0);
 public sealed record ContestedScenarioEvidence(string Name, IReadOnlyList<ContestedRiderInput> Inputs, IReadOnlyList<RiderStateChange> Changes,
     IReadOnlyList<RiderStepDiagnostics> Physics, InteractionResolution Interaction);
 public sealed record ContestedHeatEvidence(string Scenario, int Seed, string Weather, string Archetype,
@@ -27,6 +28,7 @@ public sealed record ContestedHeatEvidence(string Scenario, int Seed, string Wea
     ContestedPhaseStatistics OrdinaryRacing, IReadOnlyList<string> StormWarnings)
 {
     public IReadOnlyList<ContestedEpisodeHistory> LongestEpisodes { get; init; } = Array.Empty<ContestedEpisodeHistory>();
+    public int MaximumFallbacksPerOrigin { get; init; }
 }
 public sealed record ContestedEpisodeHistory(long EpisodeId, IReadOnlyList<int> RiderSet, double StartTimeSeconds,
     double EndTimeSeconds, IReadOnlyList<InteractionContext> ContextsSeen, double MinimumObservedSeparationMeters,
@@ -38,6 +40,29 @@ public sealed record ContestedPhaseStatistics(int Episodes, int ResolvedObservat
 /// <summary>Offline evidence through the production engine. No alternate motion or collision solver.</summary>
 public static class ContestedSpaceResponseEvidence
 {
+    public static IReadOnlyList<ContestedScenario> OwnershipScenarios() => new ContestedScenario[]
+    {
+        new("two-disjoint-unresolved",2,new[]
+        {
+            R(1,.7f,.98f,21,new(1,1,1)), R(2,.825f,.98f,21,new(1,1,1)),
+            R(3,3f,.98f,21,new(3,3,3)), R(4,3.125f,.98f,21,new(3,3,3)),
+        }),
+        new("one-disjoint-clears",1,new[]
+        {
+            R(1,2,.125f,21,new(0,0,0)), R(2,1.6f,.125f,21,new(1,1,1)),
+            R(3,3f,.75f,21,new(3,3,3)), R(4,3.125f,.75f,21,new(3,3,3)),
+        },Seed:20,IncidentFrequency:2),
+        new("real-bridge",2,new[]
+        {
+            R(1,1,.98f,21,new(1,1,1)), R(2,1.125f,.98f,21,new(1,1,1)),
+            R(3,1.25f,.98f,21,new(1,1,1)), R(4,1.375f,.98f,21,new(1,1,1)),
+        }),
+        new("unrelated-riders",2,new[]
+        {
+            R(1,.7f,.98f,21,new(1,1,1)), R(2,.825f,.98f,21,new(1,1,1)),
+            R(3,3f,.5f,21,new(3,3,3)), R(4,3.8f,.125f,21,new(4,4,4)),
+        }),
+    };
     public static IReadOnlyList<ContestedScenario> Scenarios() => new ContestedScenario[]
     {
         new("A-entry-close", 1, new[] { R(1, 2, .125f, 22, new(2,2,2)), R(2, 1.1f, 0, 28, new(1,1,1)) }),
@@ -73,7 +98,7 @@ public static class ContestedSpaceResponseEvidence
             RiderPosition.Create(1, scenario.SegmentIndex, i.Progress, track.Segments.Count), -1,
             (int)MathF.Round(i.Lateral), i.Lateral, i.Speed, 0, RiderRaceStatus.Racing, 0,
             BikeSetup.Neutral, .5f, .5f) { Condition = i.Condition });
-        return new(new(57,scenario.SegmentIndex,0,scenario.SegmentIndex,7,4), track, surface.Snapshot(),
+        return new(new(scenario.Seed,scenario.SegmentIndex,0,scenario.SegmentIndex,7,4), track, surface.Snapshot(),
             reverse ? riders.Reverse() : riders);
     }
     public static ResolvedSimulationStep Resolve(ContestedScenario scenario, bool enabled = true, bool reverse = false,
@@ -85,7 +110,7 @@ public static class ContestedSpaceResponseEvidence
             new RiderDecision(i.Intent.TargetFor(snapshot.Segment.Type)) { Trajectory = i.Intent })).ToArray();
         var engine = new SimulationEngine(new FixedDecision());
         return engine.Resolve(snapshot, reverse ? intents.Reverse().ToArray() : intents,
-            new() { EnableContestedSpaceResponses = enabled, IncidentFrequency = 0,
+            new() { EnableContestedSpaceResponses = enabled, IncidentFrequency = scenario.IncidentFrequency,
                 InteractionDiagnostics = diagnostics, ContestedSpaceParameters = parameters ?? new() }, tracker);
     }
     public static string DeterministicJson(bool includeHeats = true, Action<string>? progress = null)
@@ -115,8 +140,9 @@ public static class ContestedSpaceResponseEvidence
                 { Riders = sweepScenario.Riders.Select(r => r with { Technique = technique, Condition = condition }).ToArray() }).Riders[0], new()),
                 Evidence = Capture(sweepScenario with { Riders = sweepScenario.Riders.Select(r => r with
                     { Technique = technique, Condition = condition }).ToArray() }) })).ToArray();
-        return JsonSerializer.Serialize(new { Schema = "56B-v1", Base = "a1609e485131f553619c386a051a158796c9e2dd",
+        return JsonSerializer.Serialize(new { Schema = "56B-v2", Base = "a1609e485131f553619c386a051a158796c9e2dd",
             Status = "PROVISIONAL synthetic behavior; not real-world calibrated", Scenarios = scenarios,
+            IndependentOwnership = OwnershipEvidence(),
             Sensitivity = sensitivity, TechniqueCondition = margins, Heats = heats, Archetypes = archetypes }, new JsonSerializerOptions
             { WriteIndented = true, Converters = { new JsonStringEnumConverter(), new PresentationDouble() } }) + "\n";
     }
@@ -124,6 +150,67 @@ public static class ContestedSpaceResponseEvidence
     {
         var resolved = Resolve(scenario, parameters:parameters);
         return new(scenario.Name, scenario.Riders, resolved.Changes, resolved.Diagnostics, resolved.Interaction!);
+    }
+    public static IReadOnlyList<object> OwnershipEvidence()
+    {
+        var evidence = new List<object>();
+        void Add(string name, ContestedScenario scenario, bool priorFallback = false, bool seedEpisodes = false)
+        {
+            var tracker = new InteractionEpisodeTracker();
+            if (seedEpisodes || priorFallback)
+            {
+                tracker.Engage(new[]{1,2},0,InteractionContext.InsideOverlap).FallbackAttempted = priorFallback;
+                tracker.Engage(new[]{3,4},0,InteractionContext.InsideOverlap);
+            }
+            var step = Resolve(scenario,tracker:tracker);
+            var rows = step.Interaction!.Episodes;
+            evidence.Add(new
+            {
+                Name = name, Inputs = scenario, EpisodeCount = rows.Count,
+                EpisodeMemberships = rows.Select(e => new {e.EpisodeId,e.RiderIds}).ToArray(),
+                ActualConnectedComponents = step.Interaction.Work.SafetyContactComponents,
+                FinalConnectedComponents = step.Interaction.Work.FinalContactComponents,
+                GlobalSafetySearches = step.Interaction.Work.SafetyPasses,
+                SafetyJointCombinations = step.Interaction.Work.SafetyJointCombinations,
+                AttemptedFallbacksByEpisode = rows.Select(e => new {e.EpisodeId, AuthorizedContacts = e.UnresolvedMechanicalContacts.Where(c => c.LegacyFallbackAuthorized),e.FallbackProvenance}).ToArray(),
+                GenuinelyMergedEpisodes = rows.Count(e => e.MergedEpisodeIds.Count > 0),
+                UnexpectedEpisodeMerges = rows.Count(e => e.MergedOtherRiders && !Connected(e.Geometry)),
+                Interaction = step.Interaction,
+            });
+        }
+        foreach (var scenario in OwnershipScenarios()) Add(scenario.Name,scenario,seedEpisodes:scenario.Name == "real-bridge");
+        Add("one-previously-attempted",OwnershipScenarios()[0],priorFallback:true);
+        Add("bridge-with-previously-attempted",OwnershipScenarios()[2],priorFallback:true);
+        // Actual production geometry observes release; no response or collision
+        // probability is changed to manufacture an ownership statistic.
+        var source = Resolve(OwnershipScenarios()[0]);
+        var separated = OwnershipScenarios()[0] with {Riders=OwnershipScenarios()[0].Riders.Select(r => r with
+            {Progress = r.Id == 2 ? .5f : .125f}).ToArray()};
+        var snapshot = Snapshot(separated); var releaseTracker = new InteractionEpisodeTracker(); releaseTracker.Bind(snapshot);
+        foreach (var diagnostic in source.Interaction!.Episodes)
+            releaseTracker.Engage(diagnostic.RiderIds.ToArray(),0,diagnostic.Context).LastDiagnostic = diagnostic;
+        var actual = new SimulationEngine(new FixedDecision()).ResolveProduction(snapshot,separated.Riders.Select(r =>
+            new RiderIntent(r.Id,new RiderDecision(r.Intent.TargetFor(snapshot.Segment.Type)){Trajectory=r.Intent})).ToArray(),
+            new(){EnableContestedSpaceResponses=true,IncidentFrequency=0},legacyContacts:false);
+        var poses = actual.Motions.SelectMany(m => ResolvedBikePoses.FromMotion(m,snapshot.Track)).ToArray();
+        var verified = CommonTimePoseHistory.Observe(poses);
+        releaseTracker.ObserveClearance(0,verified.Intervals,new());
+        var contacts = ContestedSpaceInteractionCoordinator.Contacts(verified,poses,snapshot.Riders.ToDictionary(r => r.RiderId,r => (double)r.ElapsedTimeSeconds));
+        evidence.Add(new {Name="independent-episode-release",EpisodeCount=releaseTracker.EpisodeCount,
+            ActiveEpisodes=releaseTracker.Active.Select(e => new {EpisodeId=e.Id,RiderIds=e.Riders}).ToArray(),
+            ReleasedEpisodes=releaseTracker.Closed.Select(e => new {e.EpisodeId,e.RiderIds,e.EndTimeSeconds}).ToArray(),
+            ActualConnectedComponents=ContestedSpaceInteractionCoordinator.Clusters(contacts,snapshot,new()).Count,
+            GlobalSafetySearches=0,UnexpectedEpisodeMerges=0,ProductionVerification=verified});
+        return evidence;
+
+        static bool Connected(IReadOnlyList<InteractionGeometry> edges)
+        {
+            if (edges.Count == 0) return false;
+            var reached = new HashSet<int>{edges[0].RiderA};
+            for (var pass=0;pass<4;pass++) foreach (var edge in edges)
+                if (reached.Contains(edge.RiderA) || reached.Contains(edge.RiderB)) {reached.Add(edge.RiderA);reached.Add(edge.RiderB);}
+            return edges.All(e => reached.Contains(e.RiderA) && reached.Contains(e.RiderB));
+        }
     }
     public static ContestedHeatEvidence Heat(BehaviorScenario scenario, int seed, WeatherState weather, string archetype = "legacy-fallback")
     {
@@ -142,6 +229,8 @@ public static class ContestedSpaceResponseEvidence
         }
         var maximumChanges = episodes.Select(e => e.ResponseChanges).DefaultIfEmpty(0).Max();
         var maximumFallbacks = observer.Episodes.GroupBy(e => e.EpisodeId).Select(g => g.Count(e => e.LegacyFallbackUsed)).DefaultIfEmpty(0).Max();
+        var maximumOriginFallbacks = observer.Episodes.SelectMany(e => e.FallbackProvenance).Where(p => p.Attempted)
+            .GroupBy(p => p.OriginEpisodeId).Select(g => g.Select(p => (p.RiderA,p.RiderB,p.CommonTimeSeconds)).Distinct().Count()).DefaultIfEmpty(0).Max();
         var oscillations = 0; var unexplained = 0;
         foreach (var group in observer.Episodes.GroupBy(e => e.EpisodeId))
         foreach (var id in group.SelectMany(e => e.RiderIds).Distinct())
@@ -167,14 +256,14 @@ public static class ContestedSpaceResponseEvidence
         {
             var rows = observer.Episodes.Where(e => (e.Context == InteractionContext.FirstBendCluster) == first).ToArray();
             return new(rows.Select(e => e.EpisodeId).Distinct().Count(),rows.Count(e => e.ResolvedWithoutMechanicalContact),
-                rows.Count(e => !e.ResolvedWithoutMechanicalContact),rows.Count(e => e.LegacyFallbackUsed),
+                rows.Count(e => !e.ResolvedWithoutMechanicalContact),rows.Sum(e => e.UnresolvedMechanicalContacts.Count(c => c.LegacyFallbackAuthorized)),
                 rows.Sum(e => e.SelectedResponses.Count),rows.Sum(e => e.Candidates.Count),rows.Sum(e => e.PassCount));
         }
         var warnings = new List<string>();
         if (pairCounts.Values.DefaultIfEmpty(0).Max() >= 12) warnings.Add("Repeated episodes for the same pair");
         if (episodes.Any(e => e.ActiveDurationSeconds >= 20)) warnings.Add("Prolonged active episode: inspect sustained proximity");
         if (maximumChanges >= 12) warnings.Add("Many response changes inside one episode");
-        if (maximumFallbacks > 1) warnings.Add("Repeated legacy fallback inside one episode");
+        if (maximumOriginFallbacks > 1) warnings.Add("Repeated legacy fallback for one originating continuous battle");
         if (unexplained > 0) warnings.Add("Feasible commitment changed without context/emergency justification");
         return new(scenario.Id, seed, weather.Condition.ToString(), archetype, result.Classification, episodes.Length,
             observer.Episodes.Where(e => e.Context == InteractionContext.FirstBendCluster).Select(e => e.EpisodeId).Distinct().Count(),
@@ -182,7 +271,7 @@ public static class ContestedSpaceResponseEvidence
             episodes.Select(e => (double)e.RiderIds.Count).DefaultIfEmpty(0).Average(),
             episodes.Count(e => e.ResolvedWithoutMechanicalContact && !reachedMechanical.Contains(e.EpisodeId)),
             episodes.Count(e => !e.ResolvedWithoutMechanicalContact || reachedMechanical.Contains(e.EpisodeId)),
-            observer.Episodes.Count(e => e.LegacyFallbackUsed), episodes.Sum(e => e.ResponseChanges),
+            observer.Work.Sum(w => w.LegacyFallbackAttempts), episodes.Sum(e => e.ResponseChanges),
             episodes.Select(e => e.ActiveDurationSeconds).DefaultIfEmpty(0).Max(), pairCounts.Values.DefaultIfEmpty(0).Max(),
             result.Log.Overtakes.Count, result.Log.OrderSnapshots.Count,
             SumWork(observer.Work),
@@ -191,6 +280,7 @@ public static class ContestedSpaceResponseEvidence
                 .ToDictionary(g => g.Key,g => g.Count()), maximumChanges, maximumFallbacks, oscillations, unexplained,
             Phase(true),Phase(false),warnings)
         {
+            MaximumFallbacksPerOrigin = maximumOriginFallbacks,
             LongestEpisodes = observer.Episodes.GroupBy(e => e.EpisodeId).Select(g =>
             {
                 var last = g.Last();
@@ -265,6 +355,8 @@ public static class ContestedSpaceResponseEvidence
             UniqueRiderAlternativeProjections = rows.Sum(w=>w.UniqueRiderAlternativeProjections),
             PairAlternativeChecks = rows.Sum(w=>w.PairAlternativeChecks), ActualProductionVerifications = rows.Sum(w=>w.ActualProductionVerifications),
             SafetyPasses = rows.Sum(w=>w.SafetyPasses), LegacyFallbackAttempts = rows.Sum(w=>w.LegacyFallbackAttempts),
+            SafetyContactComponents = rows.Sum(w=>w.SafetyContactComponents), FinalContactComponents = rows.Sum(w=>w.FinalContactComponents),
+            SafetyJointCombinations = rows.Sum(w=>w.SafetyJointCombinations),
         };
     }
     private sealed class FixedDecision : IRiderDecisionModel

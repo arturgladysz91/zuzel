@@ -6,14 +6,17 @@ import sys
 before_path, after_path, counters_path, output_path = map(Path, sys.argv[1:])
 before = json.loads(before_path.read_text(encoding="utf-8-sig"))
 after = json.loads(after_path.read_text(encoding="utf-8-sig"))
+after["Schema"] = "56B-performance-v3"
+after["OriginalPerformanceReviewHead"] = after["ReviewedHead"]
+after["ReviewedHead"] = "c4f8d3a4853ddfe77541bd81f0a3d517b2f279cd"
 assert before["Machine"] == after["Machine"], "Use the same machine and runtime"
 counters = json.loads(counters_path.read_text(encoding="utf-8-sig"))
 for sample in after["Resolutions"]:
     sample["Work"] = next(row["Work"] for row in counters
                           if row["Name"] == sample["Name"] and row["Enabled"] == sample["Enabled"])
 after["SameMachineReviewedBaseline"] = {
-    "Head": before["ReviewedHead"],
-    "MeasurementNote": "Only the observational full-heat stopwatch/allocation harness was copied to the reviewed checkout; production engine unchanged. Reviewed production retained full diagnostics; current production uses Summary. The original recorded dense result is separately preserved in BeforeReviewFixes.",
+    "Head": "c4f8d3a4853ddfe77541bd81f0a3d517b2f279cd",
+    "MeasurementNote": "Exact reviewed HEAD measured in a detached checkout on the same machine/runtime. Both versions use Summary and the existing unchanged measurement harness. The earlier pre-optimization recording is preserved separately in BeforeReviewFixes.",
     "Resolutions": before["Resolutions"],
     "FullHeats": before["FullHeats"],
 }

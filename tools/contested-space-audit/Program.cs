@@ -21,7 +21,7 @@ Directory.CreateDirectory(args[0]);
 File.WriteAllText(Path.Combine(args[0],"contested-space-racing-response.json"),
     ContestedSpaceResponseEvidence.DeterministicJson(progress:Console.Error.WriteLine).Replace("\r\n","\n",StringComparison.Ordinal));
 var bits = new SortedDictionary<string,object>(StringComparer.Ordinal);
-foreach (var scenario in ContestedSpaceResponseEvidence.Scenarios())
+foreach (var scenario in ContestedSpaceResponseEvidence.Scenarios().Concat(ContestedSpaceResponseEvidence.OwnershipScenarios()))
 {
     var step = ContestedSpaceResponseEvidence.Resolve(scenario);
     // Raw production values remain separate from rounded #55 geometry evidence.

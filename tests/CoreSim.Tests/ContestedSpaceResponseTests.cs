@@ -547,6 +547,206 @@ public sealed class ContestedSpaceResponseTests
         Assert.DoesNotContain(resolved.Events,e=>e.Type!=SimulationEventType.SegmentResolved);
         Assert.Equal(0,resolved.Interaction!.Work.LegacyFallbackAttempts);
     }
+    private static ContestedScenario Ownership(string name) => ContestedSpaceResponseEvidence.OwnershipScenarios().Single(s => s.Name == name);
+    [Fact]
+    public void TwoDisjointActualConflictsShareOneSafetySearchAndKeepIndependentFallbacks()
+    {
+        var tracker = new InteractionEpisodeTracker();
+        var step = ContestedSpaceResponseEvidence.Resolve(Ownership("two-disjoint-unresolved"),tracker:tracker);
+        var episodes = step.Interaction!.Episodes;
+        Assert.Equal(2,episodes.Count); Assert.Equal(new[]{1,2},episodes[0].RiderIds); Assert.Equal(new[]{3,4},episodes[1].RiderIds);
+        Assert.Equal(2,episodes.Select(e => e.EpisodeId).Distinct().Count());
+        Assert.All(episodes,e => { Assert.True(e.LegacyFallbackUsed); Assert.Equal(2,e.PassCount);
+            Assert.Single(e.UnresolvedMechanicalContacts); Assert.Single(e.FallbackProvenance.Where(p => p.Attempted));
+            Assert.False(e.MergedOtherRiders); Assert.All(e.SelectedResponses,a => Assert.Contains(a.RiderId,e.RiderIds)); });
+        Assert.Equal(1,step.Interaction.Work.SafetyPasses); Assert.Equal(81,step.Interaction.Work.SafetyJointCombinations);
+        Assert.Equal(2,step.Interaction.Work.SafetyContactComponents); Assert.Equal(2,step.Interaction.Work.FinalContactComponents);
+        Assert.Equal(2,step.Interaction.Work.LegacyFallbackAttempts);
+        Commit(step); Assert.Equal(2,tracker.Active.Count());
+        var repeated = Repeat(step,tracker,5);
+        Assert.Equal(0,repeated.Interaction!.Work.LegacyFallbackAttempts);
+        Assert.Equal(episodes.Select(e => e.EpisodeId),repeated.Interaction.Episodes.Select(e => e.EpisodeId));
+        Assert.All(repeated.Interaction.Episodes,e => Assert.False(e.LegacyFallbackUsed));
+    }
+    [Fact]
+    public void OneDisjointConflictClearsWhileOnlyTheOtherAuthorizesFallback()
+    {
+        var step = ContestedSpaceResponseEvidence.Resolve(Ownership("one-disjoint-clears"));
+        Assert.Equal(2,step.Interaction!.Episodes.Count);
+        var clear = step.Interaction.Episodes.Single(e => e.RiderIds.SequenceEqual(new[]{1,2}));
+        var unresolved = step.Interaction.Episodes.Single(e => e.RiderIds.SequenceEqual(new[]{3,4}));
+        Assert.Equal(2,step.Interaction.Work.SafetyContactComponents); Assert.Equal(1,step.Interaction.Work.FinalContactComponents);
+        Assert.True(clear.ResolvedWithoutMechanicalContact); Assert.Empty(clear.UnresolvedMechanicalContacts); Assert.False(clear.LegacyFallbackUsed);
+        Assert.False(unresolved.ResolvedWithoutMechanicalContact); Assert.True(unresolved.LegacyFallbackUsed);
+        Assert.Equal(1,step.Interaction.Work.LegacyFallbackAttempts);
+        Assert.All(step.Interaction.Episodes,e => Assert.False(e.MergedOtherRiders));
+    }
+    [Fact]
+    public void UsedFallbackCannotSuppressAnIndependentBattleAndNeitherCanRepeat()
+    {
+        var tracker = new InteractionEpisodeTracker();
+        var first = tracker.Engage(new[]{1,2},0,InteractionContext.InsideOverlap); first.FallbackAttempted = true;
+        var second = tracker.Engage(new[]{3,4},0,InteractionContext.InsideOverlap);
+        var step = ContestedSpaceResponseEvidence.Resolve(Ownership("two-disjoint-unresolved"),tracker:tracker);
+        Assert.False(step.Interaction!.Episodes.Single(e => e.EpisodeId == first.Id).LegacyFallbackUsed);
+        Assert.True(step.Interaction.Episodes.Single(e => e.EpisodeId == second.Id).LegacyFallbackUsed);
+        Assert.Equal(1,step.Interaction.Work.LegacyFallbackAttempts); Commit(step);
+        var next = Repeat(step,tracker,5); Assert.Equal(0,next.Interaction!.Work.LegacyFallbackAttempts); Commit(next);
+        Assert.Equal(2,tracker.Active.Count());
+    }
+    [Fact]
+    public void VerifiedBridgeReconcilesExistingBattlesAndRetainsCommitmentsAndFallbackOrigins()
+    {
+        var scenario = Ownership("real-bridge"); var tracker = new InteractionEpisodeTracker();
+        var a = tracker.Engage(new[]{1,2},0,InteractionContext.InsideOverlap); a.FallbackAttempted = true;
+        var b = tracker.Engage(new[]{3,4},0,InteractionContext.InsideOverlap);
+        foreach (var rider in scenario.Riders)
+            (rider.Id <= 2 ? a : b).Commitments[rider.Id] = new(rider.Id,InteractionResponse.Hold,rider.Intent,null,0,"Existing commitment",true);
+        var snapshot = ContestedSpaceResponseEvidence.Snapshot(scenario);
+        var engine = new SimulationEngine(new Hold());
+        var raw = engine.ResolveProduction(snapshot,scenario.Riders.Select(r => new RiderIntent(r.Id,new RiderDecision(1){Trajectory=r.Intent})).ToArray(),
+            new(){EnableContestedSpaceResponses=true,IncidentFrequency=0},legacyContacts:false);
+        var poses = raw.Motions.SelectMany(m => ResolvedBikePoses.FromMotion(m,snapshot.Track)).ToArray();
+        var report = CommonTimePoseHistory.Observe(poses);
+        var edges = ContestedSpaceInteractionCoordinator.Contacts(report,poses,snapshot.Riders.ToDictionary(r => r.RiderId,r => (double)r.ElapsedTimeSeconds));
+        var component = Assert.Single(ContestedSpaceInteractionCoordinator.Clusters(edges,snapshot,new()));
+        Assert.Contains(component.Edges,g => g.RiderA == 2 && g.RiderB == 3);
+        var merged = tracker.Reconcile(component,0); Assert.Same(a,merged);
+        Assert.Single(tracker.Active); Assert.Equal(new[]{1,2,3,4},merged.Riders);
+        Assert.Equal(4,merged.Commitments.Count); Assert.Equal(2,merged.FallbackOrigins.Count);
+        Assert.True(merged.FallbackOrigins[a.Id].Attempted); Assert.False(merged.FallbackOrigins[b.Id].Attempted);
+        var step = ContestedSpaceResponseEvidence.Resolve(scenario,tracker:tracker);
+        var diagnostic = Assert.Single(step.Interaction!.Episodes);
+        Assert.Equal(a.Id,diagnostic.EpisodeId); Assert.Contains(b.Id,diagnostic.MergedEpisodeIds);
+        Assert.Equal(1,step.Interaction.Work.LegacyFallbackAttempts);
+        Assert.Contains(diagnostic.FallbackProvenance,p => p.OriginEpisodeId == b.Id && p.RiderA == 3 && p.RiderB == 4 && p.Attempted);
+        Assert.DoesNotContain(diagnostic.UnresolvedMechanicalContacts,c => c.RiderA == 1 && c.RiderB == 2 && c.Reason.StartsWith("Authorized"));
+        Commit(step); Assert.Equal(0,Repeat(step,tracker,5).Interaction!.Work.LegacyFallbackAttempts);
+        // A sparser observation preserves the established battle until certified release.
+        var sparse = ContestedSpaceInteractionCoordinator.Clusters(edges.Where(g => g.RiderA == 1 && g.RiderB == 2).ToArray(),snapshot,new());
+        Assert.Equal(a.Id,tracker.Reconcile(Assert.Single(sparse),.1).Id); Assert.Single(tracker.Active);
+    }
+    [Theory]
+    [InlineData("two-disjoint-unresolved")]
+    [InlineData("one-disjoint-clears")]
+    [InlineData("real-bridge")]
+    [InlineData("unrelated-riders")]
+    public void IndependentOwnershipAndVerifiedComponentsAreInvariantToRiderPairAndEdgeOrder(string name)
+    {
+        var scenario = Ownership(name);
+        Assert.Equal(Capture(ContestedSpaceResponseEvidence.Resolve(scenario)),Capture(ContestedSpaceResponseEvidence.Resolve(scenario,reverse:true)));
+        var snapshot = ContestedSpaceResponseEvidence.Snapshot(scenario); var engine = new SimulationEngine(new Hold());
+        var raw = engine.ResolveProduction(snapshot,scenario.Riders.Select(r => new RiderIntent(r.Id,new RiderDecision(r.Intent.TargetFor(snapshot.Segment.Type)){Trajectory=r.Intent})).ToArray(),
+            new(){EnableContestedSpaceResponses=true,IncidentFrequency=scenario.IncidentFrequency},legacyContacts:false);
+        var poses = raw.Motions.SelectMany(m => ResolvedBikePoses.FromMotion(m,snapshot.Track)).ToArray();
+        var times = snapshot.Riders.ToDictionary(r => r.RiderId,r => (double)r.ElapsedTimeSeconds);
+        var forward = ContestedSpaceInteractionCoordinator.Contacts(CommonTimePoseHistory.Observe(poses),poses,times);
+        var reversedReport = CommonTimePoseHistory.Observe(poses.Reverse());
+        var reversed = ContestedSpaceInteractionCoordinator.Contacts(reversedReport with {Intervals=reversedReport.Intervals.Reverse().ToArray()},poses.Reverse().ToArray(),times);
+        Assert.Equal(JsonSerializer.Serialize(forward),JsonSerializer.Serialize(reversed));
+        Assert.Equal(JsonSerializer.Serialize(ContestedSpaceInteractionCoordinator.Clusters(forward,snapshot,new())),
+            JsonSerializer.Serialize(ContestedSpaceInteractionCoordinator.Clusters(reversed.Reverse().ToArray(),snapshot,new())));
+    }
+    [Fact]
+    public void GlobalSafetyDoesNotLiftOrRedirectUnrelatedRiders()
+    {
+        var scenario = Ownership("unrelated-riders");
+        var step = ContestedSpaceResponseEvidence.Resolve(scenario);
+        var snapshot = step.Snapshot;
+        var raw = new SimulationEngine(new Hold()).ResolveProduction(snapshot,scenario.Riders.Select(r =>
+            new RiderIntent(r.Id,new RiderDecision(r.Intent.TargetFor(snapshot.Segment.Type)){Trajectory=r.Intent})).ToArray(),
+            new(){EnableContestedSpaceResponses=true,IncidentFrequency=0},legacyContacts:false);
+        Assert.Equal(new[]{1,2},Assert.Single(step.Interaction!.Episodes).RiderIds);
+        Assert.Equal(1,step.Interaction.Work.SafetyPasses);
+        foreach (var id in new[]{3,4})
+        {
+            Assert.Equal(raw.Changes.Single(c => c.RiderId == id),step.Changes.Single(c => c.RiderId == id));
+            Assert.Equal(raw.Motions.Single(c => c.RiderId == id),step.Motions.Single(c => c.RiderId == id));
+            Assert.Equal(raw.Diagnostics.Single(c => c.RiderId == id),step.Diagnostics.Single(c => c.RiderId == id));
+        }
+    }
+    [Theory]
+    [InlineData("two-disjoint-unresolved")]
+    [InlineData("real-bridge")]
+    public void PriorIndependentFallbackProvenanceAndBridgeReconciliationAreOrderInvariant(string name)
+    {
+        string Run(bool reverse)
+        {
+            var tracker = new InteractionEpisodeTracker();
+            tracker.Engage(reverse ? new[]{2,1} : new[]{1,2},0,InteractionContext.InsideOverlap).FallbackAttempted = true;
+            tracker.Engage(reverse ? new[]{4,3} : new[]{3,4},0,InteractionContext.InsideOverlap);
+            return Capture(ContestedSpaceResponseEvidence.Resolve(Ownership(name),reverse:reverse,tracker:tracker));
+        }
+        Assert.Equal(Run(false),Run(true));
+    }
+    [Fact]
+    public void OptimizationParticipantSetCannotBeRegisteredAsAConnectedEpisode()
+    {
+        var source = ContestedSpaceResponseEvidence.Resolve(Ownership("two-disjoint-unresolved"));
+        var tracker = new InteractionEpisodeTracker();
+        tracker.Engage(new[]{1,2},0,InteractionContext.InsideOverlap);
+        tracker.Engage(new[]{3,4},0,InteractionContext.InsideOverlap);
+        var scope = new ContestedSpaceInteractionCoordinator.Cluster(new[]{1,2,3,4},
+            source.Interaction!.Episodes.SelectMany(e => e.Geometry).ToArray(),InteractionContext.InsideOverlap);
+        Assert.Throws<ArgumentException>(() => tracker.Reconcile(scope,0)); Assert.Equal(2,tracker.Active.Count());
+    }
+    [Fact]
+    public void ContestWillingnessChangesPreferenceAndMarginWithoutChangingManeuverPhysics()
+    {
+        ResolvedSimulationStep Run(float combat) => ContestedSpaceResponseEvidence.Resolve(Scenario("C-cutback-clean") with
+        {Riders=Scenario("C-cutback-clean").Riders.Select(r => r with {Attack=90,Defense=90,Combativeness=combat}).ToArray()});
+        var cautious = Run(0); var combative = Run(1);
+        var a = cautious.Interaction!.Episodes.Single(); var b = combative.Interaction!.Episodes.Single();
+        var choiceA = a.ResponseAlternatives.Single(r => r.RiderId == 2 && r.Response == InteractionResponse.CutInside);
+        var choiceB = b.ResponseAlternatives.Single(r => r.RiderId == 2 && r.Response == InteractionResponse.CutInside);
+        Assert.InRange(choiceA.TacticalPreference-choiceB.TacticalPreference,.08999,.09001);
+        Assert.Equal(choiceA.Intent,choiceB.Intent); Assert.Equal(choiceA.DriveControl,choiceB.DriveControl);
+        Assert.Equal(cautious.Changes,combative.Changes); Assert.Equal(cautious.Motions,combative.Motions);
+        var emergencyA = ContestedSpaceResponseEvidence.Resolve(Scenario("imminent-overlap") with
+            {Riders=Scenario("imminent-overlap").Riders.Select(r => r with {Attack=20,Defense=90,Combativeness=0}).ToArray()});
+        var emergencyB = ContestedSpaceResponseEvidence.Resolve(Scenario("imminent-overlap") with
+            {Riders=Scenario("imminent-overlap").Riders.Select(r => r with {Attack=90,Defense=20,Combativeness=1}).ToArray()});
+        Assert.Equal(emergencyA.Changes,emergencyB.Changes); Assert.Equal(emergencyA.Motions,emergencyB.Motions);
+    }
+    [Fact]
+    public void DisconnectedEpisodesDoNotInheritEachOthersReleaseDelayOrCoverageGaps()
+    {
+        var step = ContestedSpaceResponseEvidence.Resolve(Ownership("two-disjoint-unresolved"));
+        var tracker = new InteractionEpisodeTracker();
+        var first = tracker.Engage(new[]{1,2},0,InteractionContext.InsideOverlap);
+        var second = tracker.Engage(new[]{3,4},0,InteractionContext.InsideOverlap); second.ReleaseNotBefore = 100;
+        var row = step.Interaction!.Episodes[0].Geometry[0].Space with {NumericallyResolved=true,Kind=SpaceConflictKind.None,
+            FirstTouchCommonTimeSeconds=null,MinimumSeparationMeters=1,MinimumSeparationLowerBoundMeters=1,IntervalStartSeconds=1,IntervalEndSeconds=1.3};
+        tracker.ObserveClearance(1,new[]{row,row with {RiderA=3,RiderB=4}},new()); Assert.Equal(1,first.ClearSince); Assert.Null(second.ClearSince);
+        tracker.ObserveClearance(1.3,new[]{row with {IntervalStartSeconds=1.3,IntervalEndSeconds=1.6}},new());
+        Assert.Equal(1.45,first.End); Assert.Null(second.End); Assert.Null(second.ClearSince);
+    }
+    [Theory]
+    [InlineData("C-cutback-clean",InteractionResponse.CutInside,2,false,0f)]
+    [InlineData("C-cutback-clean",InteractionResponse.CutInside,2,false,1f)]
+    [InlineData("A-entry-close",InteractionResponse.CoverInside,1,true,0f)]
+    [InlineData("A-entry-close",InteractionResponse.CoverInside,1,true,1f)]
+    public void ManeuverQualityRemainsRelevantForCautiousAndCombativeRiders(string name,InteractionResponse response,int id,bool defensive,float combat)
+    {
+        ResolvedSimulationStep Run(int quality) => ContestedSpaceResponseEvidence.Resolve(Scenario(name) with
+        {Riders=Scenario(name).Riders.Select(r => r with {Attack=defensive?50:quality,Defense=defensive?quality:50,Combativeness=combat}).ToArray()});
+        InteractionAlternative Alternative(ResolvedSimulationStep s) => s.Interaction!.Episodes.SelectMany(e => e.ResponseAlternatives)
+            .Single(a => a.RiderId == id && a.Response == response);
+        var low = Run(20); var high = Run(90);
+        Assert.True(Alternative(high).TacticalPreference < Alternative(low).TacticalPreference);
+        Assert.InRange(Alternative(low).TacticalPreference-Alternative(high).TacticalPreference,.063,.064);
+        Assert.Equal(Alternative(low).Intent,Alternative(high).Intent);
+        Assert.All(high.Interaction!.Episodes,e => Assert.True(e.ResolvedWithoutMechanicalContact));
+        if (!defensive && combat == 0) Assert.Contains(high.Interaction.Episodes.SelectMany(e => e.SelectedResponses),a => a.RiderId == id && a.Response == response);
+    }
+    private static ResolvedSimulationStep Repeat(ResolvedSimulationStep prior,InteractionEpisodeTracker tracker,float time)
+    {
+        var snapshot = new SimulationSnapshot(prior.Snapshot.Step with {StepNumber=10},prior.Snapshot.Track,prior.Snapshot.TrackState,
+            prior.Snapshot.Riders.Select(r => r with {ElapsedTimeSeconds=time}));
+        var intents = prior.Interaction!.Episodes.SelectMany(e => e.OriginalIntents).DistinctBy(a => a.RiderId).Select(a =>
+            new RiderIntent(a.RiderId,new RiderDecision(a.Intent.TargetFor(snapshot.Segment.Type)){Trajectory=a.Intent})).ToArray();
+        return new SimulationEngine(new Hold()).Resolve(snapshot,intents,new(){EnableContestedSpaceResponses=true,IncidentFrequency=0},tracker);
+    }
     private static void Commit(ResolvedSimulationStep step)
         => new SimulationEngine(new Hold()).Commit(step,step.Snapshot.Riders.Select(r => r.ToMutableCopy()).ToArray(),
             new TrackState(step.Snapshot.Track.Segments.Count,5,step.Snapshot.TrackState.GetSurface),new SimLog(false));

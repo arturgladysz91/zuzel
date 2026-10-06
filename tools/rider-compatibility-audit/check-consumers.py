@@ -19,7 +19,7 @@ CANONICAL_DOMAIN = DOMAIN | {
 CANONICAL = re.compile(r"\bRiderAbilities\b|\bRiderGameplayProfile\b|\bRiderPhysicalProfile\b|"
                        r"\bRiderInteractionStyle\b|\.Gameplay\b|\.Condition\b")
 EXTRACTION = ROOT / "tests/fixtures/contested-source-extraction.json"
-EXTRACTION_SHA256 = "c3c95d1879fd7c65aad9076f507ee9f9ce03aa5579280eea71382d1246ea6e3a"
+EXTRACTION_SHA256 = "46a8f58c1cbd84dcb2697247e294b60474f7ee67712a49aa15f4f1337acd5d89"
 CANONICAL_TRAFFIC = {"src/CoreSim/Interactions/InteractionModel.cs",
                      "src/CoreSim/Interactions/ContestedSpaceInteractionCoordinator.cs"}
 

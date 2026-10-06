@@ -55,7 +55,13 @@ public sealed record InteractionCandidateDiagnostic(int Combination, bool Feasib
 public sealed record UnresolvedMechanicalContact(long EpisodeId, int RiderA, int RiderB,
     double CommonTimeSeconds, BikeComponent ComponentA, BikeComponent ComponentB,
     double MinimumSeparationMeters, InteractionContext Context,
-    IReadOnlyList<InteractionAlternative> AttemptedResponses, string Reason);
+    IReadOnlyList<InteractionAlternative> AttemptedResponses, string Reason)
+{
+    public bool LegacyFallbackAuthorized { get; init; }
+}
+public sealed record InteractionFallbackProvenance(long OriginEpisodeId, IReadOnlyList<int> RiderIds,
+    bool Attempted = false, int? RiderA = null, int? RiderB = null, double? CommonTimeSeconds = null);
+internal sealed record FallbackDecision(ContestedSpaceEvent Contact, bool Authorized, string Reason);
 public sealed record InteractionEpisodeDiagnostic(long EpisodeId, IReadOnlyList<int> RiderIds,
     InteractionContext Context, double StartTimeSeconds, double? EndTimeSeconds,
     double InitialMinimumSeparationMeters, SpaceConflictKind InitialConflictKind,
@@ -72,6 +78,8 @@ public sealed record InteractionEpisodeDiagnostic(long EpisodeId, IReadOnlyList<
     public bool WithinCompetitiveReach { get; init; }
     public bool CompetitiveReachCoverageCertified { get; init; }
     public bool MergedOtherRiders { get; init; }
+    public IReadOnlyList<long> MergedEpisodeIds { get; init; } = Array.Empty<long>();
+    public IReadOnlyList<InteractionFallbackProvenance> FallbackProvenance { get; init; } = Array.Empty<InteractionFallbackProvenance>();
 }
 public sealed record InteractionWork(int JointCombinations, int ProductionResolutions,
     int NarrowPhaseEvaluations, int ResponsePasses, int Clusters)
@@ -82,6 +90,9 @@ public sealed record InteractionWork(int JointCombinations, int ProductionResolu
     public int ActualProductionVerifications { get; init; }
     public int SafetyPasses { get; init; }
     public int LegacyFallbackAttempts { get; init; }
+    public int SafetyContactComponents { get; init; }
+    public int FinalContactComponents { get; init; }
+    public int SafetyJointCombinations { get; init; }
 }
 public sealed record InteractionResolution(IReadOnlyList<InteractionEpisodeDiagnostic> Episodes, InteractionWork Work);
 
@@ -95,7 +106,19 @@ internal sealed class InteractionEpisode(long id, int[] riders, double start)
     internal int[] ObservedRiders = riders;
     internal double? ClearSince, End;
     internal InteractionContext Context;
-    internal bool PredictedMechanical, FallbackAttempted, MergedOtherRiders;
+    internal bool PredictedMechanical, MergedOtherRiders;
+    internal Dictionary<long, InteractionFallbackProvenance> FallbackOrigins = new()
+        { [id] = new(id, riders.Order().ToArray()) };
+    internal SortedSet<long> MergedEpisodeIds = new();
+    internal bool FallbackAttempted
+    {
+        get => FallbackOrigins.Values.Any(p => p.Attempted);
+        set
+        {
+            foreach (var key in FallbackOrigins.Keys.ToArray())
+                FallbackOrigins[key] = FallbackOrigins[key] with { Attempted = value };
+        }
+    }
     internal int ResponseChanges;
     internal Dictionary<int, InteractionAlternative> Commitments = new();
     internal InteractionEpisodeDiagnostic? LastDiagnostic;
@@ -120,7 +143,8 @@ public sealed class InteractionEpisodeTracker
         {
             LastActive = e.LastActive, ObservedUntil = e.ObservedUntil, ReleaseNotBefore=e.ReleaseNotBefore, ObservedRiders = e.ObservedRiders.ToArray(),
             ClearSince = e.ClearSince, End = e.End, Context = e.Context,
-            PredictedMechanical = e.PredictedMechanical, FallbackAttempted = e.FallbackAttempted, MergedOtherRiders = e.MergedOtherRiders,
+            PredictedMechanical = e.PredictedMechanical, FallbackOrigins = new(e.FallbackOrigins),
+            MergedEpisodeIds = new(e.MergedEpisodeIds), MergedOtherRiders = e.MergedOtherRiders,
             ResponseChanges = e.ResponseChanges, Commitments = new(e.Commitments), LastDiagnostic = e.LastDiagnostic,
         });
         return clone;
@@ -145,6 +169,28 @@ public sealed class InteractionEpisodeTracker
     internal InteractionEpisode Engage(int[] riders, double time, InteractionContext context)
     {
         var matches = Active.Where(e => e.Riders.Intersect(riders).Count() >= 2).ToArray();
+        return Engage(riders, time, context, matches);
+    }
+    // Only a connected component built from eligible #55 interaction edges may
+    // reconcile an edge touching one member of each previously active battle.
+    // A temporary optimization scope never reaches this entry point.
+    internal InteractionEpisode Reconcile(ContestedSpaceInteractionCoordinator.Cluster component, double time)
+    {
+        if (!component.Meaningful || component.Edges.Length == 0
+            || component.Edges.Any(g => !g.Space.NumericallyResolved
+                || g.Space.Kind.HasFlag(SpaceConflictKind.BoundaryAmbiguous)))
+            throw new ArgumentException("Episode reconciliation requires certified interaction geometry.");
+        var reached = new HashSet<int> { component.Edges[0].RiderA };
+        for (var pass=0;pass<4;pass++) foreach (var edge in component.Edges)
+            if (reached.Contains(edge.RiderA) || reached.Contains(edge.RiderB))
+            { reached.Add(edge.RiderA); reached.Add(edge.RiderB); }
+        if (!reached.SetEquals(component.Riders))
+            throw new ArgumentException("An optimization scope is not a connected interaction component.");
+        var matches = Active.Where(e => e.Riders.Intersect(component.Riders).Any()).ToArray();
+        return Engage(component.Riders, time, component.Context, matches);
+    }
+    private InteractionEpisode Engage(int[] riders, double time, InteractionContext context, InteractionEpisode[] matches)
+    {
         var episode = matches.OrderBy(e => e.Start).ThenBy(e => e.Id).FirstOrDefault();
         if (episode is null)
         {
@@ -154,11 +200,19 @@ public sealed class InteractionEpisodeTracker
         foreach (var merged in matches.Where(e => e != episode))
         {
             episode.MergedOtherRiders = true;
-            episode.FallbackAttempted |= merged.FallbackAttempted;
+            episode.MergedEpisodeIds.Add(merged.Id);
+            episode.MergedEpisodeIds.UnionWith(merged.MergedEpisodeIds);
+            foreach (var origin in merged.FallbackOrigins) episode.FallbackOrigins.TryAdd(origin.Key, origin.Value);
             foreach (var commitment in merged.Commitments) episode.Commitments.TryAdd(commitment.Key, commitment.Value);
+            episode.ResponseChanges += merged.ResponseChanges;
+            episode.PredictedMechanical |= merged.PredictedMechanical;
+            episode.LastActive = Math.Max(episode.LastActive, merged.LastActive);
+            episode.ReleaseNotBefore = Math.Max(episode.ReleaseNotBefore, merged.ReleaseNotBefore);
+            episode.ClearSince = null;
+            episode.ObservedUntil = Math.Min(episode.ObservedUntil, merged.ObservedUntil);
             merged.End = time;
         }
-        var participants = episode.Riders.Union(riders).Order().ToArray();
+        var participants = episode.Riders.Union(riders).Union(matches.SelectMany(e => e.Riders)).Order().ToArray();
         if (!participants.SequenceEqual(episode.Riders))
         { episode.ClearSince = null; episode.ObservedUntil = Math.Min(episode.ObservedUntil,time); episode.MergedOtherRiders = true; }
         episode.Riders = participants;
@@ -167,6 +221,35 @@ public sealed class InteractionEpisodeTracker
         // executed response. ObserveClearance alone owns this physical clock.
         if (episode.Commitments.Count == 0) episode.Context = context;
         return episode;
+    }
+    internal IReadOnlyList<FallbackDecision> AuthorizeFallbacks(
+        InteractionEpisode episode, IReadOnlyList<ContestedSpaceEvent> contacts, bool safetyEvaluated)
+    {
+        var result = new List<FallbackDecision>();
+        foreach (var contact in contacts.OrderByDescending(c => episode.FallbackOrigins.Values.Any(p =>
+                p.RiderIds.Contains(c.RiderA) && p.RiderIds.Contains(c.RiderB)))
+            .ThenBy(c => c.FirstTouchCommonTimeSeconds)
+            .ThenBy(c => Math.Min(c.RiderA,c.RiderB)).ThenBy(c => Math.Max(c.RiderA,c.RiderB)))
+        {
+            var a = Math.Min(contact.RiderA,contact.RiderB); var b = Math.Max(contact.RiderA,contact.RiderB);
+            if (episode.FallbackOrigins.Values.Any(p => p.Attempted && p.RiderA == a && p.RiderB == b))
+            { result.Add(new(contact,false,"This contact already consumed a source episode's fallback allowance")); continue; }
+            if (!safetyEvaluated)
+            { result.Add(new(contact,false,"New final contact was not evaluated by the bounded safety pass; no fallback authorized")); continue; }
+            // Preserve one allowance per originating continuous battle. A bridge
+            // creates no allowance. Prefer the contact's original battle; a new
+            // bridge may spend an unused adjacent origin, but never reroll a pair.
+            var origin = episode.FallbackOrigins.Values.Where(p => !p.Attempted
+                    && (p.RiderIds.Contains(a) || p.RiderIds.Contains(b)))
+                .OrderByDescending(p => p.RiderIds.Contains(a) && p.RiderIds.Contains(b))
+                .ThenBy(p => p.OriginEpisodeId).FirstOrDefault();
+            if (origin is null)
+            { result.Add(new(contact,false,"Continuous episode has no unused originating fallback allowance")); continue; }
+            episode.FallbackOrigins[origin.OriginEpisodeId] = origin with
+                { Attempted = true, RiderA = a, RiderB = b, CommonTimeSeconds = contact.FirstTouchCommonTimeSeconds };
+            result.Add(new(contact,true,"Authorized one legacy fallback from an unused originating episode allowance"));
+        }
+        return result;
     }
     internal bool Owns(int a, int b) => Active.Any(e => e.Riders.Contains(a) && e.Riders.Contains(b));
     internal void ObserveClearance(double time, IReadOnlyList<ContestedSpaceEvent> rows, ContestedSpaceParameters p,

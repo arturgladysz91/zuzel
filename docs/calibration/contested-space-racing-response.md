@@ -101,6 +101,43 @@ lower bound above the release threshold for the release delay. Missing/ambiguous
 is not evidence of release. A later cleanly separated battle can create a new episode.
 Merged episodes retain prior fallback ownership.
 
+### Independent episode ownership fix
+
+The temporary `SafetyEvaluationScope` contains all active riders for one global
+simultaneous safety search. It is never registered with the episode tracker.
+Eligible actual #55 contacts are canonicalized and passed through the existing
+common-time `Clusters()` graph before the search and again after the selected
+requests are executed. Two disconnected pairs retain separate identities,
+commitments, diagnostics, final separations and release clocks. Every active pair,
+including all four cross-group pairs, is still verified. Safety choice prefers
+preserving an unrelated rider's frozen request whenever a valid joint response
+can do so. Work records one search and at most 81 combinations; each participating
+episode records pass 2 without duplicating the global work counter.
+
+Only certified connected geometry can call tracker reconciliation. A verified
+B–C bridge can join active A–B and C–D battles even when each prior episode shares
+only one rider with that edge. The oldest episode (then lowest ID) survives;
+membership, commitments, response history, forecast deadlines and originating
+fallback provenance are retained. A disconnected optimization group is rejected.
+An established episode is not split by a sparse subsequent observation; the
+existing certified-clearance and hysteresis model still governs release.
+
+**Merged fallback policy:** each originating continuous battle retains exactly
+one allowance. Merging mints no new allowance and resets none. Existing local
+contacts receive their own unused origin first; only then may a newly verified
+bridge spend an unused adjacent origin. An already handled canonical pair cannot
+be rerolled through another origin. Thus a genuine merge can carry more than one
+historically independent allowance, while an ordinary continuous episode still
+has one. Every final eligible contact is recorded with its authorization or an
+explicit exhausted-allowance/safety-not-evaluated reason. Ambiguous geometry never
+creates an authorization. Diagnostics expose source episode IDs and the actual
+pair/time that consumed each allowance; storm auditing checks attempts per origin.
+
+The dedicated `IndependentOwnership` JSON evidence covers two unresolved pairs,
+one pair cleared by pass 2, prior independent fallback history, a real bridge,
+a bridge with prior fallback, unrelated riders and independent production-observed
+release. The report also retains all 13 original fixtures and the 76-heat batch.
+
 Each pair uses its own earliest current request time. An unrelated rider's earlier clock
 cannot reopen that pair's committed past. At asynchronous boundaries, threat geometry
 samples the opponent's retained executed motion when its next request begins later; the
@@ -144,7 +181,12 @@ CoverInside, defensive YieldOutward and defending ContinueOutside/Hold. Roles co
 longitudinal/inside-outside relation, closing speed and established footprint overlap,
 never RiderId. BackOut/EmergencyAvoid use neither Attack nor Defense as superiority terms.
 Profiles Attack 90/Defense 20 and Attack 20/Defense 90 prove cover, overlap/yield and cutback
-ownership separately; swapping them leaves the hard emergency result unchanged. Combativeness affects contest preference and conservative planning margin.
+ownership separately; swapping them leaves the hard emergency result unchanged.
+Competitive preference is `-0.09 * quality - 0.09 * Combativeness`, with quality
+supplied by Attack/99 or Defense/99 according to the maneuver's domain. The bounded
+quality term remains present at Combativeness zero; the maximum combined preference
+is the former 0.18 scale. Safety-domain alternatives receive no skill or contest
+superiority term. Combativeness also affects conservative planning margin.
 All remain below hard safety filters; Combativeness 1 still attempts EmergencyAvoid.
 Technique and Condition change a small planning margin only. PreferredLine is a small tie
 preference. They never change power, Vmax, grip, bike dimensions or the production execution
@@ -195,15 +237,27 @@ range is observation guidance only and is never encoded in the engine.
 
 ### Recorded batch after review fixes
 
-The 76 complete sampled heats produce 229 episodes: 208
-pre-contact resolved, 21 unresolved, and 3 legacy attempts.
+The 76 complete sampled heats produce 262 episodes: 236
+pre-contact resolved, 26 unresolved, and 0 legacy attempts.
 Maximum episodes per pair is 9; maximum duration is
-9.5660539985 s; maximum response changes is 7.
-There are 18 ABA changes, zero unexplained commitment changes and zero
-storm warnings. Resolved means certified clear actual current production motion; it does
-not promise future throttle lift. Future interaction steps independently decide/reissue.
-The reviewed batch had 315 episodes, 8 fallback attempts and a 15.6595627785 s maximum.
-No contact percentage is targeted; these are provisional synthetic observations.
+8.9550539970 s; maximum response changes is 5.
+There are 20 ABA changes, zero unexplained commitment changes and zero
+storm warnings. The prior reviewed batch had 229 episodes, 208 resolved, 21 unresolved,
+3 attempts and a 9.5660539985 s maximum. No count or percentage is preserved artificially.
+Resolved means certified actual current-step clearance; future steps reissue controls.
+The dedicated two-disjoint-unresolved fixture authorizes two distinct source episodes;
+one-disjoint-clears authorizes only C–D. Prior A–B fallback cannot suppress C–D.
+
+| Dedicated evidence | Episodes | Memberships | Actual contact components before → after safety | Global searches | Authorized attempts | Genuine merges | Unexpected merges |
+|---|---:|---|---|---:|---:|---:|---:|
+| two-disjoint-unresolved | 2 | 1,2; 3,4 | 2 → 2 | 1 | 2 | 0 | 0 |
+| one-disjoint-clears | 2 | 1,2; 3,4 | 2 → 1 | 1 | 1 | 0 | 0 |
+| real-bridge | 1 | 1,2,3,4 | 1 → 1 | 1 | 2 | 1 | 0 |
+| unrelated-riders | 1 | 1,2 | 1 → 1 | 1 | 1 | 0 | 0 |
+| one-previously-attempted | 2 | 1,2; 3,4 | 2 → 2 | 1 | 1 | 0 | 0 |
+| bridge-with-previously-attempted | 1 | 1,2,3,4 | 1 → 1 | 1 | 1 | 1 | 0 |
+
+Production-observed independent release closes A–B at 0.45 s while C–D stays active.
 
 ### Top ten longest episodes
 
@@ -217,57 +271,50 @@ they cannot all be described as one continuously certified side-by-side pair bat
 
 | Fixture / episode | Riders | Start → end (s) | Contexts seen | Separation min…max (m), observations | Changes | Continuous reach / coverage certified | Merged riders |
 |---|---|---|---|---|---:|---|---|
-| I / seed 7 / Dry / aggressive-mediocre / #4 | 1,2,3,4 | 6.666 → 16.232 | StraightReattack, CornerEntryClosing, MidCornerPressure, CornerExitCross | -0.300…1.492, 8 | 1 | No / No | No |
-| I / seed 7 / Dry / cautious-defender / #4 | 1,2,3,4 | 6.666 → 16.232 | StraightReattack, CornerEntryClosing, MidCornerPressure, CornerExitCross | -0.300…1.492, 8 | 1 | No / No | No |
-| I / seed 7 / Dry / legacy-fallback / #4 | 1,2,3,4 | 6.666 → 16.232 | StraightReattack, CornerEntryClosing, MidCornerPressure, CornerExitCross | -0.300…1.492, 8 | 1 | No / No | No |
-| I / seed 7 / Dry / strong-defender / #4 | 1,2,3,4 | 6.666 → 16.232 | StraightReattack, CornerEntryClosing, MidCornerPressure, CornerExitCross | -0.300…1.492, 8 | 1 | No / No | No |
-| I / seed 7 / Dry / technical-attacker / #4 | 1,2,3,4 | 6.666 → 16.232 | StraightReattack, CornerEntryClosing, MidCornerPressure, CornerExitCross | -0.300…1.492, 8 | 1 | No / No | No |
-| I / seed 7 / LightRain / aggressive-mediocre / #4 | 1,2,3,4 | 6.665 → 16.225 | StraightReattack, CornerEntryClosing, MidCornerPressure, CornerExitCross | -0.300…1.493, 8 | 1 | No / No | No |
-| I / seed 7 / LightRain / cautious-defender / #4 | 1,2,3,4 | 6.665 → 16.225 | StraightReattack, CornerEntryClosing, MidCornerPressure, CornerExitCross | -0.300…1.493, 8 | 1 | No / No | No |
-| I / seed 7 / LightRain / legacy-fallback / #4 | 1,2,3,4 | 6.665 → 16.225 | StraightReattack, CornerEntryClosing, MidCornerPressure, CornerExitCross | -0.300…1.493, 8 | 1 | No / No | No |
-| I / seed 7 / LightRain / strong-defender / #4 | 1,2,3,4 | 6.665 → 16.225 | StraightReattack, CornerEntryClosing, MidCornerPressure, CornerExitCross | -0.300…1.493, 8 | 1 | No / No | No |
-| I / seed 7 / LightRain / technical-attacker / #4 | 1,2,3,4 | 6.665 → 16.225 | StraightReattack, CornerEntryClosing, MidCornerPressure, CornerExitCross | -0.300…1.493, 8 | 1 | No / No | No |
+| I / seed 19 / Dry / legacy-fallback / #2 | 1,2,3,4 | 6.666 → 15.621 | StraightReattack, CornerEntryClosing, MidCornerPressure, CornerExitCross | 0.120…0.654, 7 | 0 | No / No | No |
+| I / seed 19 / Dry / technical-attacker / #2 | 1,2,3,4 | 6.666 → 15.621 | StraightReattack, CornerEntryClosing, MidCornerPressure, CornerExitCross | 0.120…0.654, 7 | 0 | No / No | No |
+| I / seed 19 / Dry / aggressive-mediocre / #2 | 1,2,3,4 | 6.666 → 15.621 | StraightReattack, CornerEntryClosing, MidCornerPressure, CornerExitCross | 0.120…0.654, 7 | 0 | No / No | No |
+| I / seed 19 / Dry / strong-defender / #2 | 1,2,3,4 | 6.666 → 15.621 | StraightReattack, CornerEntryClosing, MidCornerPressure, CornerExitCross | 0.120…0.654, 7 | 0 | No / No | No |
+| I / seed 19 / Dry / cautious-defender / #2 | 1,2,3,4 | 6.666 → 15.621 | StraightReattack, CornerEntryClosing, MidCornerPressure, CornerExitCross | 0.120…0.654, 7 | 0 | No / No | No |
+| I / seed 19 / LightRain / legacy-fallback / #2 | 1,2,3,4 | 6.665 → 15.617 | StraightReattack, CornerEntryClosing, MidCornerPressure, CornerExitCross | 0.127…0.662, 7 | 0 | No / No | No |
+| I / seed 19 / LightRain / technical-attacker / #2 | 1,2,3,4 | 6.665 → 15.617 | StraightReattack, CornerEntryClosing, MidCornerPressure, CornerExitCross | 0.127…0.662, 7 | 0 | No / No | No |
+| I / seed 19 / LightRain / aggressive-mediocre / #2 | 1,2,3,4 | 6.665 → 15.617 | StraightReattack, CornerEntryClosing, MidCornerPressure, CornerExitCross | 0.127…0.662, 7 | 0 | No / No | No |
+| I / seed 19 / LightRain / strong-defender / #2 | 1,2,3,4 | 6.665 → 15.617 | StraightReattack, CornerEntryClosing, MidCornerPressure, CornerExitCross | 0.127…0.662, 7 | 0 | No / No | No |
+| I / seed 19 / LightRain / cautious-defender / #2 | 1,2,3,4 | 6.665 → 15.617 | StraightReattack, CornerEntryClosing, MidCornerPressure, CornerExitCross | 0.127…0.662, 7 | 0 | No / No | No |
 
 ### Performance before / after
 
-Windows 10.0.19045, 16 logical processors, .NET 8.0.30, Release. One warmup then five
-resolutions or three complete four-rider/four-lap scenario-I seed-7 heats; medians.
-The reviewed engine was measured on the same machine with only the observational
-full-heat stopwatch/allocation harness copied into its checkout. Its old production
-retained full diagnostics; current production uses Summary. Benchmarks ran before
-the final complete suite. CPU projections are descriptive, with no CI time guarantee.
+Fresh same-machine comparison: Windows 10.0.19045, 6 logical
+processors exposed to this process, .NET 8.0.26, Release. Exact reviewed
+HEAD `c4f8d3a` and the corrected engine use the unchanged harness and Summary diagnostics.
+One warmup followed by five resolutions or three complete four-rider/four-lap scenario-I
+seed-7 heats; medians. The earlier 76.07 ms / 6.4 MB / 2.61 s recording used 16 exposed
+processors and .NET 8.0.30; the fresh measurements below provide the comparable baseline.
 
-| Case | Reviewed wall median | Current wall median | Reviewed allocations | Current allocations |
+| Case | Reviewed wall | Corrected wall | Reviewed allocations | Corrected allocations |
 |---|---:|---:|---:|---:|
-| K-far-apart OFF | 0.5601 ms | 0.5575 ms | 68,648 B | 68,648 B |
-| K-far-apart ON | 4.9694 ms | 4.8707 ms | 419,352 B | 236,640 B |
-| H-three-squeeze OFF | 0.7410 ms | 0.7430 ms | 93,464 B | 93,464 B |
-| H-three-squeeze ON | 142.4216 ms | 76.0732 ms | 82,319,848 B | 6,408,488 B |
-| Full heat OFF | 346.1958 ms | 296.2269 ms | 149,610,384 B | 149,637,808 B |
-| Full heat ON | 4308.7752 ms | 2612.2400 ms | 3,171,698,616 B | 301,016,040 B |
+| K-far-apart OFF | 0.6803 ms | 0.7252 ms | 68,648 B | 68,648 B |
+| K-far-apart ON | 5.1800 ms | 5.1000 ms | 236,640 B | 236,680 B |
+| H-three-squeeze OFF | 0.9029 ms | 0.9320 ms | 93,464 B | 93,464 B |
+| H-three-squeeze ON | 107.0673 ms | 115.3875 ms | 6,283,000 B | 6,361,568 B |
+| Full heat OFF | 408.0048 ms | 405.8549 ms | 149,652,536 B | 149,652,272 B |
+| Full heat ON | 4574.0316 ms | 4818.1609 ms | 301,024,496 B | 267,254,296 B |
 
-The original reviewed dense recording was **244.5898 ms / 82,216,464 B**. The new
-dense result is **76.0732 ms / 6,408,488 B**, a 92.2% allocation reduction versus that
-recording (92.2% versus the fresh same-machine baseline). The mandatory <10 MB allocation
-target is met. The preferred <50 ms median is **not met**: exact curved-edge certificates,
-rich production trajectory prefixes and #55 rate-bound subdivision remain expensive.
-No candidates or pair verification were skipped to improve the time. Full-heat allocations
-fall 90.5%; ON is still about 8.8 times OFF wall time and 2 times OFF allocation. Keep
-the feature opt-in while evaluating manager-scale throughput. OFF full-heat allocation
-rose by 27,424 B (0.018%); OFF captures remain exact. Wall timings are observational.
+Dense allocation is 6,361,568 B, below 10 MB. Fresh dense wall time
+changes by 7.8%; full-heat ON changes by 5.3%. The preferred 50 ms target remains unmet.
+All six active pairs, cached alternatives and cached pair compatibility remain verified;
+there is no CI wall-clock gate. Full-heat allocation falls 11.2%.
 
 | Current case | Episodes | Unique alternatives | Pair checks | Joint combinations | Production resolutions | Actual verifications | Safety passes | Legacy attempts |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
 | Full heat OFF | 0 | 0 | 0 | 0 | 36 | 0 | 0 | 0 |
-| Full heat ON | 6 | 215 | 660 | 648 | 963 | 73 | 1 | 1 |
-| Dense ON | 1 | 14 | 35 | 54 | 60 | 3 | 1 | 1 |
+| Full heat ON | 9 | 165 | 427 | 333 | 704 | 73 | 1 | 0 |
 
-Dense counts include two distinct immutable evaluations; the per-evaluation four-rider
-limits remain 12 projections / 54 pair checks. Summary retains no full candidate audit.
+Full heat OFF CPU median: 1484.375 ms; descriptive 100/1000-heat
+CPU projections: 148.438/1484.375 seconds.
 
-Current OFF full-heat CPU median: 968.750 ms; 100 heats: 96.875 CPU seconds; 1000 heats: 968.750 CPU seconds.
-
-Current ON full-heat CPU median: 3328.125 ms; 100 heats: 332.812 CPU seconds; 1000 heats: 3328.125 CPU seconds.
+Full heat ON CPU median: 5843.750 ms; descriptive 100/1000-heat
+CPU projections: 584.375/5843.750 seconds.
 
 ```sh
 dotnet restore SpeedwayManager.sln
