@@ -153,6 +153,27 @@ public sealed class PhysicalContactAnalysisTests
             Assert.Equal(expected,Json(PhysicalContactAnalyzer.Analyze(new[]{input with{RiderA=input.RiderA with{Profile=profile}}})));
         }
     }
+    [Fact]
+    public void FrozenSurfaceLookupAcceptsValidReferenceEdgesAndRejectsMateriallyOutsidePositions()
+    {
+        var scenario=ContestedSpaceResponseEvidence.OwnershipScenarios()[0] with{OuterGrip=.4f};
+        var snapshot=ContestedSpaceResponseEvidence.Snapshot(scenario);var embedding=new TrackMetricEmbedding(snapshot.Track);
+        PhysicalBikePose Pose(MetricTrackSegment segment,double progress,double offset)
+        {
+            var sample=segment.Map(progress,offset);
+            return new(1,embedding.FrameId,sample.Position,new(0,sample.TravelHeadingRadians,sample.TravelHeadingRadians),
+                SpeedwayBikeDimensions.Reference,sample.TangentHeadingRadians,new(0,segment.SegmentIndex,segment.SegmentId,segment.SegmentType,null));
+        }
+        foreach(var segment in embedding.Segments) foreach(var progress in new[]{0d,.1,.3,.5,.7,.9,1}) foreach(var lane in new[]{0,2,4})
+        {
+            var width=LaneModel.UsableRacingWidthMeters(segment.SegmentType,snapshot.Track.Geometry);
+            var pose=Pose(segment,progress,width*lane/4d);
+            Assert.Equal((double)snapshot.TrackState.GetSurface(segment.SegmentIndex,lane).EffectiveGrip,
+                PhysicalContactSnapshotAdapter.Grip(pose,snapshot,embedding),6);
+        }
+        var outside=Pose(embedding.Segments[0],.5,100);
+        Assert.Throws<ArgumentOutOfRangeException>(()=>PhysicalContactSnapshotAdapter.Grip(outside,snapshot,embedding));
+    }
     [Theory,InlineData(-.1),InlineData(1.1),InlineData(double.NaN)]
     public void InvalidPhysicalParametersFailExplicitly(double restitution)
         => Assert.Throws<ArgumentOutOfRangeException>(()=>PhysicalContactAnalyzer.Analyze(F("B-moderate-side").Inputs,new(){Restitution=restitution}));
