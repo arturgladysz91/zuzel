@@ -76,25 +76,21 @@ public static class PhysicalContactAnalyzer
             .OrderByDescending(i => i.Contact.EligibleForFutureInteraction).ThenBy(i => i.Contact.FirstTouchCommonTimeSeconds ?? double.MaxValue)
             .ThenBy(i => i.Contact.IntervalStartSeconds).ThenBy(i => i.Contact.IntervalEndSeconds)
             .ThenBy(i => i.Contact.FrameId,StringComparer.Ordinal).First()).OrderBy(i => i.Contact.RiderA).ThenBy(i => i.Contact.RiderB).ToArray();
-        var eligible = inputs.Where(i => i.Contact.EligibleForFutureInteraction).ToArray();
-        // Connected components of this frozen step, including later contacts. No impact-modified path or iterative solve.
-        var earliest = new Dictionary<int,double>(); var groups = 0;
-        foreach (var id in eligible.SelectMany(i => new[] {i.Contact.RiderA,i.Contact.RiderB}).Distinct().Order())
+        var deferred = new bool[inputs.Length];
+        var pairs = new PhysicalContactPairAnalysis[inputs.Length];
+        var groups = 0;
+        foreach (var frontier in BuildCausalFrontiers(inputs,p.ContactSimultaneityWindowSeconds,deferred))
         {
-            if (earliest.ContainsKey(id)) continue;
-            var members = new HashSet<int> {id}; bool changed;
-            do { changed = false; foreach (var i in eligible)
-                if (members.Contains(i.Contact.RiderA) || members.Contains(i.Contact.RiderB))
-                { changed |= members.Add(i.Contact.RiderA); changed |= members.Add(i.Contact.RiderB); }
-            } while (changed);
-            var time = eligible.Where(i => members.Contains(i.Contact.RiderA)).Min(i => i.Contact.FirstTouchCommonTimeSeconds!.Value);
-            foreach (var member in members) earliest[member] = time;
             groups++;
+            // Complete membership first, then analyze every pair from the frozen state.
+            // Resuming the frontier iterator invalidates these riders before the next seed.
+            foreach (var index in frontier.ContactIndices) pairs[index] = AnalyzePair(inputs[index],p);
         }
-        var pairs = inputs.Select(i => i.Contact.EligibleForFutureInteraction
-            && i.Contact.FirstTouchCommonTimeSeconds!.Value > earliest[i.Contact.RiderA] + p.ContactSimultaneityWindowSeconds
-                ? Rejected(i,PhysicalContactStatus.DeferredByEarlierContact,"Outside this component's earliest contact frontier")
-                : AnalyzePair(i,p)).ToArray();
+        for (var index = 0; index < inputs.Length; index++)
+            if (pairs[index] is null)
+                pairs[index] = deferred[index]
+                    ? Rejected(inputs[index],PhysicalContactStatus.DeferredByEarlierContact,"Frozen trajectory invalidated by an earlier contact frontier")
+                    : AnalyzePair(inputs[index],p);
         // All pair calculations finish before aggregation. Numeric summation order does not depend on rider identity.
         static double Sum(IEnumerable<double> values) => values.OrderBy(Math.Abs).ThenBy(v => v).Sum();
         var contributions = pairs.Zip(inputs).Where(x => x.First.Status == PhysicalContactStatus.Analyzed).SelectMany(x => new[]
@@ -129,6 +125,63 @@ public static class PhysicalContactAnalyzer
                 pairs.Count(r => r.Status == PhysicalContactStatus.Analyzed),pairs.Count(r => r.DeferredByEarlierContact),
                 pairs.Count(r => r.Status is PhysicalContactStatus.IneligibleContact or PhysicalContactStatus.GeometryUnresolved)));
     }
+    private sealed record PhysicalContactFrontier(double StartTimeSeconds, IReadOnlyList<int> RiderIds, IReadOnlyList<int> ContactIndices);
+
+    private static IEnumerable<PhysicalContactFrontier> BuildCausalFrontiers(PhysicalContactInput[] inputs,
+        double windowSeconds, bool[] deferred)
+    {
+        var ordered = Enumerable.Range(0,inputs.Length).Where(index => inputs[index].Contact.EligibleForFutureInteraction)
+            .OrderBy(index => inputs[index].Contact.FirstTouchCommonTimeSeconds!.Value)
+            .ThenBy(index => inputs[index].Contact.RiderA).ThenBy(index => inputs[index].Contact.RiderB)
+            .ThenBy(index => inputs[index].Contact.IntervalStartSeconds).ThenBy(index => inputs[index].Contact.IntervalEndSeconds)
+            .ThenBy(index => inputs[index].Contact.FrameId,StringComparer.Ordinal).ToArray();
+        var assigned = new bool[inputs.Length];
+        var invalidatedAt = new Dictionary<int,double>();
+        bool InvalidTrajectory(ContestedSpaceEvent contact)
+        {
+            var time = contact.FirstTouchCommonTimeSeconds!.Value;
+            return invalidatedAt.TryGetValue(contact.RiderA,out var a) && time > a + GeometryNumerics.TimeToleranceSeconds
+                || invalidatedAt.TryGetValue(contact.RiderB,out var b) && time > b + GeometryNumerics.TimeToleranceSeconds;
+        }
+        foreach (var seed in ordered)
+        {
+            if (assigned[seed]) continue;
+            if (InvalidTrajectory(inputs[seed].Contact))
+            {
+                assigned[seed] = deferred[seed] = true;
+                continue;
+            }
+            var start = inputs[seed].Contact.FirstTouchCommonTimeSeconds!.Value;
+            var end = start + windowSeconds;
+            var members = new HashSet<int> {inputs[seed].Contact.RiderA,inputs[seed].Contact.RiderB};
+            var contacts = new List<int>();
+            bool changed;
+            do
+            {
+                changed = false;
+                foreach (var index in ordered)
+                {
+                    var contact = inputs[index].Contact;
+                    if (contact.FirstTouchCommonTimeSeconds!.Value > end + GeometryNumerics.TimeToleranceSeconds) break;
+                    if (assigned[index] || InvalidTrajectory(contact)
+                        || !(members.Contains(contact.RiderA) || members.Contains(contact.RiderB))) continue;
+                    assigned[index] = true;
+                    contacts.Add(index);
+                    members.Add(contact.RiderA); members.Add(contact.RiderB);
+                    changed = true;
+                }
+            } while (changed);
+            // Raw time sorting selects the physical minimum, never an ID-selected approximate time.
+            // Fixed-point membership and the window boundary use #55's time tolerance, so
+            // effectively simultaneous connected rows are discovered before any invalidation.
+            var frontier = new PhysicalContactFrontier(start,members.Order().ToArray(),contacts.ToArray());
+            yield return frontier;
+            // #55 establishes contact even when its manifold cannot be oriented. Fail closed
+            // on severity, but never regain authority for an impacted rider's future path.
+            foreach (var rider in frontier.RiderIds) invalidatedAt[rider] = frontier.StartTimeSeconds;
+        }
+    }
+
     private static RiderContactDemand Demand(PhysicalBikePose pose, MeterPoint delta, MeterPoint lever, MeterPoint normal,
         double rotation, PhysicalContactParameters p)
     {

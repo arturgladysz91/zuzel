@@ -10,7 +10,7 @@ The independent contact model reads final unresolved #55 mechanical contacts aft
 
 The event's components refer to its minimum separation, which can occur after onset. At the verified first-touch time, the geometry helper samples the existing chassis/handlebar capsules and calls unchanged `MechanicalSeparation.Between` to locate the touching component pair. It presents poses in physical position order projected onto the shared reference tangent and lateral direction, so equal-minimum chassis/bar ties preserve the same attached components after an A/B or ID swap. Opposing reference tangents use a fixed basis of the supplied metric frame for that ordering. Closest capsule-axis points yield two surface contact points, their midpoint, the normal from A to B, each center-to-contact lever, and signed separation. Equally close parallel axis solutions are averaged symmetrically. For intersecting axes, the helper finds the actual capsule boundary along the fallback normal, so a nominal radius shift cannot leave the contact point inside the capsule.
 
-The normal uses closest component-axis separation, then bike-center separation, then relative center velocity. A deterministic shared reference lateral axis is the final candidate. Perfect coincidence with no physical A-to-B orientation is reported as `GeometryUnresolved`; the axis cannot invent a signed collision. Ambiguous #55 rows and missing first-touch pose coverage produce no rider severity. Coverage-gap fixtures preserve #55's gap report and contain no fabricated contact. No rider ID selects a physical normal.
+The normal uses closest component-axis separation, then first-touch bike-center separation, then `ContestedSpaceEvent.RelativePositionAtOnsetMeters` from the same verified #55 interval. #55 records this as B's minus A's interval-start position; canonicalization negates it on A/B swap. `MeterPoint` validates finite coordinates, and the fallback additionally requires finite length greater than the 1 nm direction tolerance. It supplies orientation only. Relative velocity and a reference lateral axis never invent an A-to-B sign. If every physical direction is degenerate, the result is `GeometryUnresolved`, with no manifold, impulse or severity. The old relative-velocity/reference-axis enum values remain for API compatibility but are never produced. Ambiguous #55 rows and missing first-touch pose coverage produce no rider severity. Coverage-gap fixtures preserve #55's gap report and contain no fabricated contact. No rider ID selects a physical normal.
 
 ## Effective mass and impulse model
 
@@ -58,9 +58,25 @@ Reaction, Start, TrackReading, Attack, Defense, PairRiding, Combativeness, Prefe
 
 All unique pair analyses finish before any rider aggregation. Net analytical impulses are vector sums. Combined stability demand is `sqrt(sum(pairDemand²))`, so opposite impulses cannot erase the rider's control burden. Numeric summands are sorted by magnitude/value rather than rider identity. Collection order and renamed rider IDs do not choose a physical result.
 
-Connected components are formed from the supplied frozen step's eligible contacts. Each component has its own earliest first touch. Contacts within **0.04 seconds** of that time are included; later ones are `DeferredByEarlierContact`, with no manifold, impulse, or severity. Disconnected components keep independent frontiers. No impact is iterated and no trajectory is recomputed.
+Canonical, deduplicated eligible contacts are processed in chronological order. A seed whose participants have authoritative frozen paths starts a frontier. Fixed-point expansion includes only unassigned eligible contacts connected to its riders and within **0.04 seconds of the seed's earliest touch**, using the existing #55 time tolerance of `1e-7 s`. The window never chains from edge to edge. Physical minimum time anchors the window; rider IDs only serialize exact ties. Effectively simultaneous connected contacts are discovered before any invalidation, including edges encountered before their connecting edge in the sorted scan.
+
+After complete membership and frozen pair analysis, every participating rider's original future path becomes invalid in analysis-local state. A later contact involving either such rider is `DeferredByEarlierContact`, with no manifold, impulse or severity. Unaffected riders can still start independent frontiers, even within another frontier's time window. A future bridge cannot retroactively connect completed earlier frontiers. An unresolved manifold still corresponds to a verified #55 contact, so it also invalidates that rider's future frozen path while producing no severity. `PhysicalContactWork.ContactGroups` counts causal eligible frontiers submitted to analysis, including those with unresolved manifolds. No gameplay path is changed, no impact is iterated and no trajectory is recomputed.
 
 The three-rider squeeze has two analyzed pairs and one component. The middle rider's net impulse is zero within tolerance while combined demand is approximately 1.5592 m/s and ratio approximately 1.4278. The four-rider chain has three analyzed pairs. The disjoint fixture has two components. The later fixture analyzes one pair and defers the second; widening the experimental window to 0.12 seconds includes both.
+
+The regenerated evidence adds these causal schedules, each composed of individually verified #55 pair onsets shifted in common time. Their combined verification manifest has zero observer-work counters because it performs no additional joint observation.
+
+| Regression | Contacts in seconds | Frontiers | Analyzed | Deferred |
+| --- | --- | ---: | ---: | ---: |
+| F1 late bridge | A-B 0; C-D .060; B-C 1.000 | 2 | 2 | 1 |
+| F2 simultaneous chain | A-B 0; B-C .020; C-D .035 | 1 | 3 | 0 |
+| F3 start-anchored window | A-B 0; B-C .035; C-D .065 | 1 | 2 | 1 |
+| F4 simultaneous disconnected | A-B 0; C-D .020 | 2 | 2 | 0 |
+| F5 distant untouched | A-B 0; C-D .500 | 2 | 2 | 0 |
+| F6 later mixed | A-B 0; B-C .200 | 1 | 1 | 1 |
+| F7 two earlier frontiers | A-B 0; C-D .100; B-C .300 | 2 | 2 | 1 |
+
+F8 runs each with reversed collections, swapped A/B and renamed IDs, comparing pair assignments and scalar/vector results modulo identifiers. Separate tests cover fixed-point backtracking, equivalent same-time order, the tolerance boundary, ineligible bridges and unresolved contact invalidation. N1 uses a genuinely verified overlapping #55 onset and coincident poses sampled within its allowed time uncertainty: its nonzero onset position yields a unit normal and positive approaching impulse. N2/N3 fail closed for degenerate incoming/separating motion. N4 checks all three produced normal sources under A/B swap.
 
 ## Provisional SeverityRatio labels
 
@@ -116,13 +132,25 @@ The ordinary grid's upper side-contact settings and weakest reserves can enter t
 
 ## Legacy comparison
 
-Fifteen production-resolved cases use fixed seeds 7/19/57 and existing ownership plus unresolved scenarios, at IncidentFrequency 2. All observed legacy events and state changes are retained beside the shadow analysis. Across these cases the contact observations include 27 `NoLegacyOccurrence`, two `LegacyLostRhythm`, one `LegacyCrash`, and 12 `NotAuthorized` rider observations. Each row retains both actual legacy outcome and physical ratio/label; agreement is not required. Identical physical inputs can have different addressed legacy outcomes. No legacy formula or random draw enters shadow severity.
+Twelve production-resolved cases use fixed seeds 7/19/57 and existing ownership plus unresolved scenarios, at IncidentFrequency 2. All observed legacy events and state changes are retained beside the shadow analysis. Across these cases the contact observations include 27 `NoLegacyOccurrence`, two `LegacyLostRhythm`, one `LegacyCrash`, and 12 `NotAuthorized` rider observations. Each row retains both actual legacy outcome and physical ratio/label; agreement is not required. Identical physical inputs can have different addressed legacy outcomes. No legacy formula or random draw enters shadow severity. The previous prose said fifteen cases; the actual unchanged JSON sample contains twelve.
+
+## Review-fix calibration comparison
+
+Compared with reviewed HEAD `4cfc3f6595d684d32b17df364b85d8ce9adda78d`, controlled fixture count increases from **31 to 38** solely through F1–F7. All existing physical values and work counts remain equal: 30 frontiers, 33 analyzed pairs and one deferred contact. The seven new schedules add 11 frontiers, 14 analyzed pairs and four deferred contacts, yielding totals of 41/47/5. The complete 4,374-row grid, both severity distributions and all twelve legacy comparison rows remain exactly equal as structured values. The only existing pair-row text change describes causal deferral. There are no physical warnings. The 0.35/0.70/1.05/1.55 thresholds remain explicitly provisional and unchanged. Updated validation and performance evidence accompanies the PR review-fix section.
 
 ## Diagnostics and performance
 
 The default is `None`, which bypasses the production analyzer. Explicit `Summary` retains only pair IDs/status/authorization, ratios/labels and rider demand/reserve. `FullAudit` also retains manifolds, vectors, decomposed pair demand and aggregate net impulse. Full geometry is transient during Summary calculation and is not retained in normal results. The optional metadata and options are ignored by the historical JSON serializers, preserving the meaning and bytes of existing captures.
 
-Measured locally in Release on Windows with 2,000 repeated frozen analyses: one/two/three analyzed pairs took roughly 28–52 microseconds and allocated approximately 13/20/28 KB per enabled analysis. None returns the cached empty result without enumerating inputs or allocating model objects. These are observations, not CI timing gates. On scenario I, seed 7, four laps, interleaved None/Summary runs with two warmups per level followed by three samples, median heat time was 7,006.0 ms with None and 6,993.1 ms with Summary. Total allocation across all threads was 327,196,416 and 327,277,240 bytes, respectively (80,824 extra bytes, about 0.025%). This does not establish a speedup; it shows no material regression in that run. `--performance` reproduces measurements separately so nondeterministic timing does not enter the golden JSON.
+Measured on October 6, 2026, in Release on Windows with 2,000 repeated frozen FullAudit analyses:
+
+| Analyzed pairs | Reviewed HEAD time µs | Fixed time µs | Reviewed allocation bytes | Fixed allocation bytes |
+| --- | ---: | ---: | ---: | ---: |
+| One | 27.03 | 31.59 | 13,448 | 14,632 |
+| Two, squeeze | 40.58 | 18.88 | 20,448 | 21,136 |
+| Three, chain | 23.45 | 20.78 | 27,257 | 28,241 |
+
+None returns the cached empty result without enumerating inputs or allocating model objects. On scenario I, seed 7, four laps, interleaved None/Summary runs with two warmups per level followed by three samples, fixed-code median heat time was **4,228.9/4,248.0 ms** and allocation **327,167,520/327,247,144 bytes**. Summary added **79,624 bytes (0.0243%)**. Reviewed-code None/Summary medians were 4,606.4/4,507.1 ms and 327,168,560/327,245,968 bytes. The full .NET suite was running concurrently during these observations; timing variation cannot establish a speedup or regression. The causal helper adds about 0.7–1.2 KB per enabled frozen analysis in these cases. `--performance` reproduces measurements separately so nondeterministic timing does not enter golden JSON. These remain observations, not CI timing gates.
 
 ## Reproduction and compatibility
 

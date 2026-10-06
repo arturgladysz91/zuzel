@@ -24,14 +24,12 @@ public static class PhysicalContactGeometry
         var (pa,pb) = ClosestAxisPoints(ca,cb);
         var delta = pb-pa; var source = ContactNormalSource.ClosestComponentAxes;
         if (delta.Length <= DirectionToleranceMeters) { delta = b.Position-a.Position; source = ContactNormalSource.BikeCenters; }
-        if (delta.Length <= DirectionToleranceMeters) { delta = input.VelocityB-input.VelocityA; source = ContactNormalSource.RelativeVelocity; }
-        if (delta.Length <= DirectionToleranceMeters)
+        // #55 records B-A at the start of this same verified onset interval.
+        // Canonicalization negates it on A/B swap; velocity alone establishes no spatial sign.
+        if (delta.Length <= DirectionToleranceMeters) { delta = c.RelativePositionAtOnsetMeters; source = ContactNormalSource.RelativePositionAtOnset; }
+        if (!double.IsFinite(delta.Length) || delta.Length <= DirectionToleranceMeters)
         {
-            // The shared reference lateral axis is deterministic, but coincident
-            // identical bikes provide no A->B orientation. Do not invent an impact.
-            var h = BikeAngles.Interpolate(a.ReferenceTangentHeadingRadians,b.ReferenceTangentHeadingRadians,.5);
-            var referenceLateral = new MeterPoint(-Math.Sin(h),Math.Cos(h));
-            reason = FormattableString.Invariant($"GeometryUnresolved: reference lateral axis ({referenceLateral.X:R},{referenceLateral.Y:R}) has no physical A-to-B sign");
+            reason = "GeometryUnresolved: no physical A-to-B direction in component axes, bike centers or #55 onset position";
             return null;
         }
         var normal = delta * (1/delta.Length);

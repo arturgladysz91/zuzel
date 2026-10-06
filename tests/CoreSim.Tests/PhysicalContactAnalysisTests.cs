@@ -120,6 +120,160 @@ public sealed class PhysicalContactAnalysisTests
         Assert.Contains(f.Analysis.AuditPairs,p=>p.DeferredByEarlierContact&&p.Impulse is null);
         Assert.Equal(2,PhysicalContactAnalyzer.Analyze(f.Inputs,new(){ContactSimultaneityWindowSeconds=.12}).Work.AnalyzedPairs);
     }
+    [Theory]
+    [InlineData("frontier-F1-late-bridge",2,2,1,4)]
+    [InlineData("frontier-F2-simultaneous-chain",1,3,0,4)]
+    [InlineData("frontier-F3-start-anchored-window",1,2,1,3)]
+    [InlineData("frontier-F4-simultaneous-disconnected",2,2,0,4)]
+    [InlineData("frontier-F5-distant-untouched",2,2,0,4)]
+    [InlineData("frontier-F6-later-mixed",1,1,1,2)]
+    [InlineData("frontier-F7-two-frontiers-then-bridge",2,2,1,4)]
+    public void CausalFrontiersNeverUseFutureBridgesOrChainedWindows(string name,int groups,int analyzed,int deferred,int riders)
+    {
+        var fixture=F(name);var result=fixture.Analysis;
+        Assert.Equal(groups,result.Work.ContactGroups);Assert.Equal(analyzed,result.Work.AnalyzedPairs);
+        Assert.Equal(deferred,result.Work.DeferredContacts);Assert.Equal(riders,result.AuditRiders.Count);
+        foreach(var input in fixture.Inputs)
+        {
+            var pair=result.AuditPairs.Single(p=>p.RiderA==input.Contact.RiderA&&p.RiderB==input.Contact.RiderB);
+            var shouldDefer=deferred>0&&input==fixture.Inputs[^1];
+            Assert.Equal(shouldDefer?PhysicalContactStatus.DeferredByEarlierContact:PhysicalContactStatus.Analyzed,pair.Status);
+            if(shouldDefer){Assert.Null(pair.Manifold);Assert.Null(pair.Impulse);Assert.Null(pair.DemandA);Assert.Null(pair.DemandB);}
+            else Assert.Equal(Json(PhysicalContactAnalyzer.AnalyzePair(input)),Json(pair));
+        }
+        // F8: input order, A/B order and ID order may only change serialization identifiers.
+        Assert.Equal(Json(result),Json(PhysicalContactAnalyzer.Analyze(fixture.Inputs.Reverse())));
+        Assert.Equal(Json(result),Json(PhysicalContactAnalyzer.Analyze(fixture.Inputs.Reverse().Select(Swap))));
+        int Id(int id)=>id switch{1=>90,2=>30,3=>70,_=>10};
+        AssertRenamedAnalysis(result,PhysicalContactAnalyzer.Analyze(fixture.Inputs.Reverse().Select(i=>Rename(i,Id))),Id);
+    }
+    [Fact]
+    public void FixedPointFindsAnEarlierDisconnectedEdgeAfterItsWithinWindowBridge()
+    {
+        var inputs=new[]{PhysicalContactEvidence.TimedContact(1,2,0),PhysicalContactEvidence.TimedContact(3,4,.01),
+            PhysicalContactEvidence.TimedContact(2,3,.035)};
+        var result=PhysicalContactAnalyzer.Analyze(inputs);
+        Assert.Equal(1,result.Work.ContactGroups);Assert.Equal(3,result.Work.AnalyzedPairs);Assert.Equal(4,result.Riders.Count);
+    }
+    [Theory,InlineData(0),InlineData(.5),InlineData(1),InlineData(2)]
+    public void FrontierWindowUsesExistingTimeToleranceWithoutIdOrEnumerationPriority(double toleranceMultiple)
+    {
+        var inputs=new[]{PhysicalContactEvidence.TimedContact(1,2,0),
+            PhysicalContactEvidence.TimedContact(3,4,GeometryNumerics.TimeToleranceSeconds*.5),
+            PhysicalContactEvidence.TimedContact(2,3,.04+GeometryNumerics.TimeToleranceSeconds*toleranceMultiple)};
+        var result=PhysicalContactAnalyzer.Analyze(inputs);
+        Assert.Equal(toleranceMultiple<=1?1:2,result.Work.ContactGroups);
+        Assert.Equal(toleranceMultiple<=1?3:2,result.Work.AnalyzedPairs);
+        Assert.Equal(toleranceMultiple<=1?0:1,result.Work.DeferredContacts);
+        Assert.Equal(Json(result),Json(PhysicalContactAnalyzer.Analyze(inputs.Reverse().Select(Swap))));
+        int Id(int id)=>5-id;
+        AssertRenamedAnalysis(result,PhysicalContactAnalyzer.Analyze(inputs.Select(i=>Rename(i,Id))),Id);
+    }
+    [Fact]
+    public void AnIneligibleBridgeCannotJoinFrontiersOrInvalidateUntouchedRiders()
+    {
+        var bridge=PhysicalContactEvidence.TimedContact(2,3,.01);
+        var result=PhysicalContactAnalyzer.Analyze(new[]{PhysicalContactEvidence.TimedContact(1,2,0),
+            bridge with{Contact=bridge.Contact with{NumericallyResolved=false}},PhysicalContactEvidence.TimedContact(3,4,.02)});
+        Assert.Equal(2,result.Work.ContactGroups);Assert.Equal(2,result.Work.AnalyzedPairs);Assert.Equal(0,result.Work.DeferredContacts);
+        Assert.Equal(1,result.Work.RejectedContacts);
+    }
+    [Fact]
+    public void UnresolvedVerifiedContactStillInvalidatesItsLaterFrozenTrajectory()
+    {
+        var first=PhysicalContactEvidence.TimedContact(1,2,0);
+        var result=PhysicalContactAnalyzer.Analyze(new[]{first with{PoseA=null},PhysicalContactEvidence.TimedContact(2,3,.2)});
+        Assert.Equal(PhysicalContactStatus.GeometryUnresolved,result.AuditPairs[0].Status);
+        Assert.Equal(PhysicalContactStatus.DeferredByEarlierContact,result.AuditPairs[1].Status);
+        Assert.Empty(result.Riders);Assert.Equal(1,result.Work.ContactGroups);
+    }
+    [Fact]
+    public void OnsetPositionOrientsDegenerateTouchAndPreservesPairSwapSymmetry()
+    {
+        var input=OnsetFallbackContact();
+        Assert.True(input.Contact.EligibleForFutureInteraction);
+        Assert.True(input.Contact.RelativePositionAtOnsetMeters.Length>PhysicalContactGeometry.DirectionToleranceMeters);
+        var a=PhysicalContactAnalyzer.AnalyzePair(input);var b=PhysicalContactAnalyzer.AnalyzePair(Swap(input));
+        Assert.Equal(ContactNormalSource.RelativePositionAtOnset,a.Manifold!.NormalSource);
+        Assert.Equal(1,a.Manifold.NormalAtoB.Length,12);Assert.Equal(a.Manifold.NormalAtoB*-1,b.Manifold!.NormalAtoB);
+        Assert.True(a.Impulse!.NormalClosingSpeedMetersPerSecond>0);Assert.True(a.Impulse.ImpulseMagnitudeNewtonSeconds>0);
+        Assert.Equal(a.Impulse.ImpulseMagnitudeNewtonSeconds,b.Impulse!.ImpulseMagnitudeNewtonSeconds);
+        Assert.Equal(a.DemandA!.PairDemand,b.DemandB!.PairDemand);Assert.Equal(a.DemandB!.PairDemand,b.DemandA!.PairDemand);
+        Assert.Equal(a.Manifold.ContactPointA,b.Manifold.ContactPointB);Assert.Equal(a.Manifold.ContactPointB,b.Manifold.ContactPointA);
+        Assert.Equal(Json(PhysicalContactAnalyzer.Analyze(new[]{input})),Json(PhysicalContactAnalyzer.Analyze(new[]{Swap(input)})));
+    }
+    [Theory,InlineData(-1,0),InlineData(1,0),InlineData(-1,.5),InlineData(1,1)]
+    public void NoPhysicalOrientationFailsClosedDespiteRelativeMotion(double relativeLateral,double onsetToleranceMultiple)
+    {
+        var f=PhysicalContactEvidence.FromPoses("orientation-degenerate",new[]{
+            PhysicalContactEvidence.Linear(1,new(0,0),new(20,-relativeLateral*.5)),
+            PhysicalContactEvidence.Linear(2,new(0,0),new(20,relativeLateral*.5))});
+        var input=f.Inputs.Single();
+        input=input with{Contact=input.Contact with{RelativePositionAtOnsetMeters=new(0,
+            PhysicalContactGeometry.DirectionToleranceMeters*onsetToleranceMultiple)}};
+        foreach(var row in new[]{input,Swap(input)})
+        {
+            var result=PhysicalContactAnalyzer.Analyze(new[]{row});var pair=result.AuditPairs.Single();
+            Assert.Equal(PhysicalContactStatus.GeometryUnresolved,pair.Status);
+            Assert.Null(pair.Manifold);Assert.Null(pair.Impulse);Assert.Null(pair.DemandA);Assert.Null(pair.DemandB);
+            Assert.Null(result.Pairs.Single().SeverityRatioA);Assert.Null(result.Pairs.Single().SeverityA);Assert.Empty(result.Riders);
+        }
+    }
+    [Theory,InlineData(ContactNormalSource.ClosestComponentAxes),InlineData(ContactNormalSource.BikeCenters),
+        InlineData(ContactNormalSource.RelativePositionAtOnset)]
+    public void EveryProducedNormalSourcePreservesScalarsAndReversesVectors(ContactNormalSource source)
+    {
+        var input=source switch
+        {
+            ContactNormalSource.RelativePositionAtOnset=>OnsetFallbackContact(),
+            ContactNormalSource.BikeCenters=>PhysicalContactEvidence.FromPoses("intersecting-axes",new[]{
+                PhysicalContactEvidence.Linear(1,new(0,0),new(22,0)),PhysicalContactEvidence.Linear(2,new(.5,0),new(20,0))}).Inputs.Single(),
+            _=>F("B-moderate-side").Inputs.Single()
+        };
+        var a=PhysicalContactAnalyzer.AnalyzePair(input);var b=PhysicalContactAnalyzer.AnalyzePair(Swap(input));
+        Assert.Equal(source,a.Manifold!.NormalSource);Assert.Equal(source,b.Manifold!.NormalSource);
+        Assert.Equal(a.Manifold.NormalAtoB*-1,b.Manifold.NormalAtoB);
+        Assert.Equal(a.Impulse!.ImpulseMagnitudeNewtonSeconds,b.Impulse!.ImpulseMagnitudeNewtonSeconds);
+        Assert.Equal(a.Impulse.NormalClosingSpeedMetersPerSecond,b.Impulse.NormalClosingSpeedMetersPerSecond);
+        Assert.Equal(a.Impulse.ImpulseOnANewtonSeconds,b.Impulse.ImpulseOnBNewtonSeconds);
+        Assert.Equal(a.DemandA!.PairDemand,b.DemandB!.PairDemand);Assert.Equal(a.DemandB!.PairDemand,b.DemandA!.PairDemand);
+    }
+    private static PhysicalContactInput OnsetFallbackContact()
+    {
+        // #55 certifies an initially overlapping interval with a nonzero B-A onset position.
+        // Within its accepted time uncertainty, both supplied sampled centers/axes coincide.
+        var time=GeometryNumerics.TimeToleranceSeconds*.5;
+        var poses=new[]{PhysicalContactEvidence.Linear(1,new(0,0),new(20,.5)),
+            PhysicalContactEvidence.Linear(2,new(0,time),new(20,-.5))};
+        var input=PhysicalContactEvidence.FromPoses("onset-fallback",poses).Inputs.Single();
+        return input with{PoseA=poses[0].Sample(time),PoseB=poses[1].Sample(time)};
+    }
+    private static PhysicalContactInput Rename(PhysicalContactInput input,Func<int,int> id)
+    {
+        PhysicalBikePose? Pose(PhysicalBikePose? p)=>p is null?null:new(id(p.RiderId),p.FrameId,p.Position,p.Attitude,p.Dimensions,
+            p.ReferenceTangentHeadingRadians,p.Source);
+        return input with{Contact=input.Contact with{RiderA=id(input.Contact.RiderA),RiderB=id(input.Contact.RiderB)},
+            PoseA=Pose(input.PoseA),PoseB=Pose(input.PoseB),RiderA=input.RiderA with{RiderId=id(input.RiderA.RiderId)},
+            RiderB=input.RiderB with{RiderId=id(input.RiderB.RiderId)}};
+    }
+    private static void AssertRenamedAnalysis(PhysicalContactAnalysis original,PhysicalContactAnalysis renamed,Func<int,int> id)
+    {
+        Assert.Equal(original.Work,renamed.Work);
+        foreach(var pair in original.AuditPairs)
+        {
+            var other=renamed.AuditPairs.Single(p=>p.RiderA==Math.Min(id(pair.RiderA),id(pair.RiderB))
+                &&p.RiderB==Math.Max(id(pair.RiderA),id(pair.RiderB)));
+            Assert.Equal(pair.Status,other.Status);Assert.Equal(pair.FirstTouchCommonTimeSeconds,other.FirstTouchCommonTimeSeconds);
+            Assert.Equal(pair.Impulse?.ImpulseMagnitudeNewtonSeconds,other.Impulse?.ImpulseMagnitudeNewtonSeconds);
+            Assert.Equal(pair.DemandA?.PairDemand,id(pair.RiderA)<id(pair.RiderB)?other.DemandA?.PairDemand:other.DemandB?.PairDemand);
+        }
+        foreach(var rider in original.AuditRiders)
+        {
+            var other=renamed.AuditRiders.Single(r=>r.RiderId==id(rider.RiderId));
+            Assert.Equal(rider.CombinedStabilityDemand,other.CombinedStabilityDemand);Assert.Equal(rider.SeverityRatio,other.SeverityRatio);
+            Assert.Equal(rider.NetImpulseNewtonSeconds,other.NetImpulseNewtonSeconds);
+        }
+    }
     [Fact]
     public void LaterDisconnectedContactStartsItsOwnFrontierAndInvalidEarlierDuplicateCannotHideVerifiedContact()
     {

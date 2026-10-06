@@ -5,7 +5,7 @@ namespace CoreSim.Interactions;
 public enum PhysicalContactDiagnosticsLevel { None, Summary, FullAudit }
 public enum PhysicalContactSeverity { Brush, Disturbed, LostRhythm, MajorSave, Crash }
 public enum PhysicalContactStatus { Analyzed, IneligibleContact, GeometryUnresolved, DeferredByEarlierContact }
-public enum ContactNormalSource { ClosestComponentAxes, BikeCenters, RelativeVelocity, ReferenceLateralAxisUnresolved }
+public enum ContactNormalSource { ClosestComponentAxes, BikeCenters, RelativeVelocity, ReferenceLateralAxisUnresolved, RelativePositionAtOnset }
 public enum LegacyContactOutcome { NotAuthorized, NoLegacyOccurrence, LegacyLostRhythm, LegacyCrash }
 
 /// <summary>PROVISIONAL analytical calibration. No coefficient controls production motion.</summary>
@@ -100,6 +100,7 @@ public sealed record PhysicalContactPairSummary(int RiderA, int RiderB, long? Ep
     IReadOnlyList<RiderLegacyContactObservation> LegacyResults);
 public sealed record RiderContactSummary(int RiderId, double CombinedStabilityDemand, double StabilityReserve,
     double SeverityRatio, PhysicalContactSeverity ProvisionalSeverity);
+/// <summary>ContactGroups counts causal eligible frontiers submitted to analysis, including unresolved manifolds.</summary>
 public sealed record PhysicalContactWork(int InputContacts, int UniquePairs, int ContactGroups,
     int ManifoldCalculations, int AnalyzedPairs, int DeferredContacts, int RejectedContacts);
 public sealed record PhysicalContactAnalysis(PhysicalContactDiagnosticsLevel Level,

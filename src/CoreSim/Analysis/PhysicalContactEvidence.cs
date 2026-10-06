@@ -81,7 +81,36 @@ public static class PhysicalContactEvidence
         fixtures.Add(FromPoses("Q-boundary-ambiguous",new[]{Linear(1,new(0,0),new(20,.5),discontinuity:true),Linear(2,new(0,.7),new(20,-.5))}));
         fixtures.Add(FromPoses("R-coverage-gap",new[]{Linear(1,new(0,0),new(20,0),frame:"gap-A"),Linear(2,new(0,0),new(20,0),frame:"gap-B")}));
         fixtures.Add(FromPoses("rotation-onset",PhysicalSpaceEvidence.Controlled("I")));
+        fixtures.AddRange(CausalFrontierFixtures());
         return fixtures;
+    }
+    /// <summary>Each row reuses a verified #55 pair onset, translated in common time; no future bridge supplies geometry.</summary>
+    public static PhysicalContactInput TimedContact(int riderA, int riderB, double time)
+    {
+        var basis = Side("verified-onset").Inputs.Single();
+        PhysicalBikePose Pose(PhysicalBikePose pose, int id) => new(id,pose.FrameId,pose.Position,
+            new(time,pose.Attitude.TravelHeadingRadians,pose.Attitude.BikeHeadingRadians),pose.Dimensions,
+            pose.ReferenceTangentHeadingRadians,pose.Source);
+        return basis with {Contact=basis.Contact with {RiderA=riderA,RiderB=riderB,
+            IntervalStartSeconds=basis.Contact.IntervalStartSeconds+time,IntervalEndSeconds=basis.Contact.IntervalEndSeconds+time,
+            FirstTouchCommonTimeSeconds=basis.Contact.FirstTouchCommonTimeSeconds+time,
+            MinimumSeparationCommonTimeSeconds=basis.Contact.MinimumSeparationCommonTimeSeconds+time},
+            PoseA=Pose(basis.PoseA!,riderA),PoseB=Pose(basis.PoseB!,riderB),RiderA=Physiology(riderA),RiderB=Physiology(riderB)};
+    }
+    public static IReadOnlyList<PhysicalContactFixture> CausalFrontierFixtures()
+    {
+        PhysicalContactFixture Case(string name, params PhysicalContactInput[] inputs) => new(name,
+            new(inputs.Select(i=>i.Contact).ToArray(),new(0,0,0,0,0,0,0,0),Array.Empty<FrameCoverageGap>()),inputs,PhysicalContactAnalyzer.Analyze(inputs));
+        return new[]
+        {
+            Case("frontier-F1-late-bridge",TimedContact(1,2,0),TimedContact(3,4,.06),TimedContact(2,3,1)),
+            Case("frontier-F2-simultaneous-chain",TimedContact(1,2,0),TimedContact(2,3,.02),TimedContact(3,4,.035)),
+            Case("frontier-F3-start-anchored-window",TimedContact(1,2,0),TimedContact(2,3,.035),TimedContact(3,4,.065)),
+            Case("frontier-F4-simultaneous-disconnected",TimedContact(1,2,0),TimedContact(3,4,.02)),
+            Case("frontier-F5-distant-untouched",TimedContact(1,2,0),TimedContact(3,4,.5)),
+            Case("frontier-F6-later-mixed",TimedContact(1,2,0),TimedContact(2,3,.2)),
+            Case("frontier-F7-two-frontiers-then-bridge",TimedContact(1,2,0),TimedContact(3,4,.1),TimedContact(2,3,.3))
+        };
     }
     public static IReadOnlyList<PhysicalContactGridRow> Grid()
     {
