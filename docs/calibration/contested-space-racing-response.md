@@ -125,7 +125,8 @@ existing certified-clearance and hysteresis model still governs release.
 **Merged fallback policy:** each originating continuous battle retains exactly
 one allowance. Merging mints no new allowance and resets none. Existing local
 contacts receive their own unused origin first; only then may a newly verified
-bridge spend an unused adjacent origin. An already handled canonical pair cannot
+bridge/new participant contact spend an unused origin of that verified connected
+battle (preferring an adjacent origin). An already handled canonical pair cannot
 be rerolled through another origin. Thus a genuine merge can carry more than one
 historically independent allowance, while an ordinary continuous episode still
 has one. Every final eligible contact is recorded with its authorization or an

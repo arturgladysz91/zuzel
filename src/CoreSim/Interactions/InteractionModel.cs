@@ -238,10 +238,11 @@ public sealed class InteractionEpisodeTracker
             { result.Add(new(contact,false,"New final contact was not evaluated by the bounded safety pass; no fallback authorized")); continue; }
             // Preserve one allowance per originating continuous battle. A bridge
             // creates no allowance. Prefer the contact's original battle; a new
-            // bridge may spend an unused adjacent origin, but never reroll a pair.
-            var origin = episode.FallbackOrigins.Values.Where(p => !p.Attempted
-                    && (p.RiderIds.Contains(a) || p.RiderIds.Contains(b)))
+            // bridge/new participant contact may spend another unused origin
+            // in this verified connected battle, but never reroll a handled pair.
+            var origin = episode.FallbackOrigins.Values.Where(p => !p.Attempted)
                 .OrderByDescending(p => p.RiderIds.Contains(a) && p.RiderIds.Contains(b))
+                .ThenByDescending(p => p.RiderIds.Contains(a) || p.RiderIds.Contains(b))
                 .ThenBy(p => p.OriginEpisodeId).FirstOrDefault();
             if (origin is null)
             { result.Add(new(contact,false,"Continuous episode has no unused originating fallback allowance")); continue; }

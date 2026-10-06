@@ -691,6 +691,29 @@ public sealed class ContestedSpaceResponseTests
         Assert.Throws<ArgumentException>(() => tracker.Reconcile(scope,0)); Assert.Equal(2,tracker.Active.Count());
     }
     [Fact]
+    public void VerifiedNewParticipantContactCanSpendAnUnusedContinuousBattleAllowance()
+    {
+        var bridge = ContestedSpaceResponseEvidence.Resolve(Ownership("real-bridge"));
+        var tracker = new InteractionEpisodeTracker();
+        var original = tracker.Engage(new[]{1,2},0,InteractionContext.InsideOverlap);
+        var component = Assert.Single(ContestedSpaceInteractionCoordinator.Clusters(
+            bridge.Interaction!.Episodes.Single().Geometry.ToArray(),bridge.Snapshot,new()));
+        Assert.Same(original,tracker.Reconcile(component,0));
+        Assert.Equal(new[]{1,2,3,4},original.Riders); Assert.Single(original.FallbackOrigins);
+        var final = Ownership("two-disjoint-unresolved") with {Riders=Ownership("two-disjoint-unresolved").Riders.Select(r => r with
+            {Progress = r.Id == 2 ? .5f : .125f}).ToArray()};
+        var snapshot = ContestedSpaceResponseEvidence.Snapshot(final);
+        var actual = new SimulationEngine(new Hold()).ResolveProduction(snapshot,final.Riders.Select(r =>
+            new RiderIntent(r.Id,new RiderDecision(r.Intent.TargetFor(snapshot.Segment.Type)){Trajectory=r.Intent})).ToArray(),
+            new(){EnableContestedSpaceResponses=true,IncidentFrequency=0},legacyContacts:false);
+        var verified = CommonTimePoseHistory.Observe(actual.Motions.SelectMany(m => ResolvedBikePoses.FromMotion(m,snapshot.Track)));
+        var contacts = verified.Intervals.Where(r => r.EligibleForFutureInteraction).GroupBy(r => (r.RiderA,r.RiderB))
+            .Select(g => g.OrderBy(r => r.FirstTouchCommonTimeSeconds).First()).ToArray();
+        Assert.All(contacts,c => {Assert.Equal(3,c.RiderA);Assert.Equal(4,c.RiderB);}); Assert.NotEmpty(contacts);
+        var decisions = tracker.AuthorizeFallbacks(original,contacts,true); Assert.Single(decisions.Where(d => d.Authorized));
+        Assert.All(tracker.AuthorizeFallbacks(original,contacts,true),d => Assert.False(d.Authorized));
+    }
+    [Fact]
     public void ContestWillingnessChangesPreferenceAndMarginWithoutChangingManeuverPhysics()
     {
         ResolvedSimulationStep Run(float combat) => ContestedSpaceResponseEvidence.Resolve(Scenario("C-cutback-clean") with
