@@ -294,15 +294,16 @@ processors and .NET 8.0.30; the fresh measurements below provide the comparable 
 
 | Case | Reviewed wall | Corrected wall | Reviewed allocations | Corrected allocations |
 |---|---:|---:|---:|---:|
-| K-far-apart OFF | 0.6803 ms | 0.7252 ms | 68,648 B | 68,648 B |
-| K-far-apart ON | 5.1800 ms | 5.1000 ms | 236,640 B | 236,680 B |
-| H-three-squeeze OFF | 0.9029 ms | 0.9320 ms | 93,464 B | 93,464 B |
-| H-three-squeeze ON | 107.0673 ms | 115.3875 ms | 6,283,000 B | 6,361,568 B |
-| Full heat OFF | 408.0048 ms | 405.8549 ms | 149,652,536 B | 149,652,272 B |
-| Full heat ON | 4574.0316 ms | 4818.1609 ms | 301,024,496 B | 267,254,296 B |
+| K-far-apart OFF | 0.6803 ms | 0.6789 ms | 68,648 B | 68,648 B |
+| K-far-apart ON | 5.1800 ms | 5.1865 ms | 236,640 B | 236,680 B |
+| H-three-squeeze OFF | 0.9029 ms | 0.8942 ms | 93,464 B | 93,464 B |
+| H-three-squeeze ON | 107.0673 ms | 114.2024 ms | 6,283,000 B | 6,362,288 B |
+| Full heat OFF | 408.0048 ms | 403.5876 ms | 149,652,536 B | 149,651,584 B |
+| Full heat ON | 4574.0316 ms | 4596.8361 ms | 301,024,496 B | 267,257,776 B |
 
-Dense allocation is 6,361,568 B, below 10 MB. Fresh dense wall time
-changes by 7.8%; full-heat ON changes by 5.3%. The preferred 50 ms target remains unmet.
+These measurements use final engine commit `9e77f40` after all fallback-lineage guards.
+Dense allocation is 6,362,288 B, below 10 MB. Fresh dense wall time
+changes by 6.7%; full-heat ON changes by 0.5%. The preferred 50 ms target remains unmet.
 All six active pairs, cached alternatives and cached pair compatibility remain verified;
 there is no CI wall-clock gate. Full-heat allocation falls 11.2%.
 
@@ -311,11 +312,11 @@ there is no CI wall-clock gate. Full-heat allocation falls 11.2%.
 | Full heat OFF | 0 | 0 | 0 | 0 | 36 | 0 | 0 | 0 |
 | Full heat ON | 9 | 165 | 427 | 333 | 704 | 73 | 1 | 0 |
 
-Full heat OFF CPU median: 1484.375 ms; descriptive 100/1000-heat
-CPU projections: 148.438/1484.375 seconds.
+Full heat OFF CPU median: 1281.250 ms; descriptive 100/1000-heat
+CPU projections: 128.125/1281.250 seconds.
 
-Full heat ON CPU median: 5843.750 ms; descriptive 100/1000-heat
-CPU projections: 584.375/5843.750 seconds.
+Full heat ON CPU median: 5531.250 ms; descriptive 100/1000-heat
+CPU projections: 553.125/5531.250 seconds.
 
 ```sh
 dotnet restore SpeedwayManager.sln
