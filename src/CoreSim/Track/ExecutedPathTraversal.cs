@@ -39,7 +39,8 @@ internal static class ExecutedPathTraversal
 
     internal static ExecutedTraversalResult Traverse(SimulationSnapshot snapshot, RiderSnapshot rider,
         SegmentResolution resolution, float entrySpeed, float canonicalAdvance, bool launch,
-        Func<float, float?> nextCornerTarget, bool captureRich = true)
+        Func<float, float?> nextCornerTarget, bool captureRich = true, float positiveDriveFraction = 1f,
+        bool holdLateralPosition = false)
     {
         var segment = snapshot.Segment; var geometry = snapshot.Track.Geometry;
         var corner = snapshot.Track.CornerTopology.CornerForSegment(snapshot.Step.SegmentIndex);
@@ -55,6 +56,9 @@ internal static class ExecutedPathTraversal
         var reaction = launch ? LongitudinalDynamics.CalculateStandingStartReactionTimeSeconds(skills) : 0f;
         double time = reaction, distance = 0d;
         var crash = resolution.Outcome == SegmentOutcome.Crash;
+        // Zero requested lateral delta is a local control, not extra grip or a
+        // displacement. Forced RunWide keeps its existing production movement.
+        var hold = holdLateralPosition && resolution.Outcome is SegmentOutcome.Ok or SegmentOutcome.Brake;
         var speed = crash ? MathF.Max(1f, entrySpeed * .5f) : resolution.Speed;
         var nodeSurface = snapshot.TrackState.SampleSurface(snapshot.Step.SegmentIndex, lateral);
         var initialEnvelope = corner is null ? (float?)null : LocalEnvelope(start, lateral, nodeSurface);
@@ -108,7 +112,7 @@ internal static class ExecutedPathTraversal
                         finish = lo; result = Solve(finish);
                     }
                     // The diagonal part ends at actual target arrival; the remainder holds the target.
-                    if (lateral != resolution.Lane && result.Lateral == resolution.Lane)
+                    if (!hold && lateral != resolution.Lane && result.Lateral == resolution.Lane)
                     {
                         var rate = LateralMovementModel.CalculateMaxLateralDistanceMeters(1f, segment.Type, geometry,
                             nodeSurface, skills);
@@ -187,7 +191,9 @@ internal static class ExecutedPathTraversal
             return new((float)local, Progress(local), (float)time, (float)distance, atLateral,
                 LaneModel.PhysicalLateralOffsetFromInnerReferenceMeters(atLateral, segment.Type, geometry),
                 radius, radius.HasValue ? 1f / radius.Value : 0f, surface, atSpeed, safe, envelope,
-                availability * LongitudinalDynamics.CalculateNetDriveAccelerationMetersPerSecondSquared(atSpeed, force, setup));
+                positiveDriveFraction < 1f
+                    ? LongitudinalDynamics.CalculateNetDriveAccelerationMetersPerSecondSquared(atSpeed, force * positiveDriveFraction * availability, setup)
+                    : availability * LongitudinalDynamics.CalculateNetDriveAccelerationMetersPerSecondSquared(atSpeed, force, setup));
         }
 
         float LocalEnvelope(double local, float atLateral, TrackSurfaceState atSurface)
@@ -257,7 +263,7 @@ internal static class ExecutedPathTraversal
         CoupledStep Evaluate(double seconds, double finish)
         {
             ProjectionCaptureAudit.Record(ProjectionMaterialization.CoupledEvaluation);
-            var atLateral = LateralMovementModel.MoveTowards(lateral, resolution.Lane, (float)seconds,
+            var atLateral = hold ? lateral : LateralMovementModel.MoveTowards(lateral, resolution.Lane, (float)seconds,
                 segment.Type, geometry, nodeSurface, skills);
             var ds = GeometricDistance(segment, geometry, lateral, atLateral, finish - start);
             var sample = snapshot.TrackState.SampleSurface(snapshot.Step.SegmentIndex, (lateral + atLateral) * .5f);
@@ -288,14 +294,14 @@ internal static class ExecutedPathTraversal
                 var availability = resolution.Outcome is SegmentOutcome.Ok or SegmentOutcome.Brake
                     ? ContinuousCornerEnvelope.DriveAvailability(Progress((start + finish) * .5d)!.Value) : 0f;
                 if (!captureRich) force = DriveForce();
-                var next = LongitudinalDynamics.CalculateMidpointDriveEndSpeedMetersPerSecond(speed, ds, force, setup, availability);
+                var next = LongitudinalDynamics.CalculateMidpointDriveEndSpeedMetersPerSecond(speed, ds, force * positiveDriveFraction, setup, availability);
                 var dt = 2d * ds / ((double)speed + next);
                 return new(ds, dt, atLateral, next, 0f, availability == 0f ? ds : 0f,
                     availability == 0f ? 0f : ds, 0f, availability == 0f ? (float)dt : 0f,
                     availability == 0f ? 0f : (float)dt, force, 0, false);
             }
             if (!captureRich) force = DriveForce();
-            var candidate = LongitudinalDynamics.CalculateMidpointDriveEndSpeedMetersPerSecond(speed, ds, force, setup);
+            var candidate = LongitudinalDynamics.CalculateMidpointDriveEndSpeedMetersPerSecond(speed, ds, force * positiveDriveFraction, setup);
             var targetExit = nextCornerTarget(atLateral);
             var preparationCapability = LongitudinalDynamics.CalculateCornerCorrectionDecelerationMetersPerSecondSquared(skills, sample);
             var boundary = targetExit is { } exit ? (float?)Math.Sqrt((double)exit * exit

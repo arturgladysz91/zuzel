@@ -62,6 +62,9 @@ public sealed record RiderStepDiagnostics(
 
 public sealed class ResolvedSimulationStep
 {
+    [System.Text.Json.Serialization.JsonIgnore]
+    public Interactions.InteractionResolution? Interaction { get; internal init; }
+    internal Action? CommitInteractionState { get; init; }
     private readonly ReadOnlyCollection<RiderStateChange> _changes;
     private readonly ReadOnlyCollection<SimulationStepEvent> _events;
     private readonly ReadOnlyCollection<RiderStepDiagnostics> _diagnostics;
@@ -194,6 +197,27 @@ public sealed class SimulationEngine
         SimulationSnapshot snapshot,
         IReadOnlyList<RiderIntent> intents,
         HeatSimulationOptions options)
+        => Resolve(snapshot, intents, options, null);
+
+    public ResolvedSimulationStep Resolve(SimulationSnapshot snapshot,
+        IReadOnlyList<RiderIntent> intents, HeatSimulationOptions options,
+        Interactions.InteractionEpisodeTracker? interactions)
+    {
+        ArgumentNullException.ThrowIfNull(snapshot);
+        ArgumentNullException.ThrowIfNull(options);
+        if (options.EnableContestedSpaceResponses && !snapshot.Step.UseLegacyPhysics)
+        {
+            var owner = interactions ?? new();
+            return new Interactions.ContestedSpaceInteractionCoordinator(owner.Clone())
+                .Resolve(this, snapshot, intents, options, owner);
+        }
+        return ResolveProduction(snapshot, intents, options);
+    }
+
+    internal ResolvedSimulationStep ResolveProduction(SimulationSnapshot snapshot,
+        IReadOnlyList<RiderIntent> intents, HeatSimulationOptions options,
+        bool legacyContacts = true, Func<int, int, bool>? contactFilter = null,
+        IReadOnlyList<(int LeaderRiderId, int TrailingRiderId)>? unresolvedPairs = null)
     {
         ArgumentNullException.ThrowIfNull(snapshot);
         ArgumentNullException.ThrowIfNull(intents);
@@ -229,8 +253,8 @@ public sealed class SimulationEngine
                 FormatSegmentLog(snapshot, change)));
         }
 
-        if (!snapshot.Step.UseLegacyPhysics)
-            ResolveExistingInteractions(snapshot, changes, events);
+        if (!snapshot.Step.UseLegacyPhysics && legacyContacts)
+            ResolveExistingInteractions(snapshot, changes, events, contactFilter, unresolvedPairs);
 
         var diagnostics = riderResolutions.Values.Select(resolution =>
         {
@@ -364,6 +388,7 @@ public sealed class SimulationEngine
                     resolved.Snapshot.Rider(change.RiderId).LateralPosition,
                     log);
         }
+        resolved.CommitInteractionState?.Invoke();
     }
 
     internal static void CommitRiderChange(RiderStateChange change, RiderState rider)
@@ -530,9 +555,13 @@ public sealed class SimulationEngine
                 rider.LateralPosition,
                 snapshot.Track.Geometry);
         var travelled = segmentLength * canonicalAdvance;
-        if (!snapshot.Step.UseLegacyPhysics && !ExecutedPathTraversal.IsFixedLine(rider.LateralPosition, resolution.Lane))
+        if (!snapshot.Step.UseLegacyPhysics && (!ExecutedPathTraversal.IsFixedLine(rider.LateralPosition, resolution.Lane)
+            || (options.EnableContestedSpaceResponses && (decision.DriveControl is { PositiveDriveFraction: < 1f }
+                || decision.HoldLateralPosition))))
             return ResolveMovingRider(snapshot, rider, decision, resolution, entrySpeed, plannedLane,
-                canonicalAdvance, standingStartEligible, risk, surface, cornerPhaseContext, captureRich);
+                canonicalAdvance, standingStartEligible, risk, surface, cornerPhaseContext, captureRich,
+                options.EnableContestedSpaceResponses ? decision.DriveControl?.PositiveDriveFraction ?? 1f : 1f,
+                options.EnableContestedSpaceResponses && decision.HoldLateralPosition);
         var speed = resolution.Speed;
         StraightSpeedProfile? straightProfile = null;
         TurnExitDriveProfile? turnExitDriveProfile = null;
@@ -684,7 +713,7 @@ public sealed class SimulationEngine
     private static ResolvedRider ResolveMovingRider(SimulationSnapshot snapshot, RiderSnapshot rider,
         RiderDecision decision, SegmentResolution resolution, float entrySpeed, int plannedLane,
         float canonicalAdvance, bool launch, float risk, TrackSurfaceState entrySurface, CornerPhaseContext? phase,
-        bool captureRich)
+        bool captureRich, float positiveDriveFraction = 1f, bool holdLateralPosition = false)
     {
         Dictionary<int, float?>? approachTargets = snapshot.Segment.Type == SegmentType.Straight ? new() : null;
         float? NextCorner(float lateral)
@@ -695,7 +724,7 @@ public sealed class SimulationEngine
             approachTargets.Add(key, target); return target;
         }
         var traversal = ExecutedPathTraversal.Traverse(snapshot, rider, resolution, entrySpeed, canonicalAdvance,
-            launch, NextCorner, captureRich);
+            launch, NextCorner, captureRich, positiveDriveFraction, holdLateralPosition);
         var path = traversal.RichPath;
         var position = rider.Position.Advance(canonicalAdvance, traversal.DistanceMeters);
         var status = resolution.Outcome == SegmentOutcome.Crash ? RiderRaceStatus.Crashed
@@ -773,7 +802,8 @@ public sealed class SimulationEngine
     private static void ResolveExistingInteractions(
         SimulationSnapshot snapshot,
         IDictionary<int, RiderStateChange> changes,
-        ICollection<SimulationStepEvent> events)
+        ICollection<SimulationStepEvent> events, Func<int, int, bool>? contactFilter = null,
+        IReadOnlyList<(int LeaderRiderId, int TrailingRiderId)>? unresolvedPairs = null)
     {
         var ordered = changes.Values
             .Where(change => change.Status is RiderRaceStatus.Racing or RiderRaceStatus.Finished)
@@ -803,12 +833,17 @@ public sealed class SimulationEngine
             }
         }
 
+        if (unresolvedPairs is not null)
+            foreach (var pair in unresolvedPairs)
+                if (!candidates.Contains(pair)) candidates.Add(pair);
         foreach (var candidate in candidates)
         {
+            if (contactFilter is not null && !contactFilter(candidate.LeaderRiderId, candidate.TrailingRiderId))
+                continue;
             var leader = changes[candidate.LeaderRiderId];
             var trailing = changes[candidate.TrailingRiderId];
             var gap = trailing.ElapsedTimeSeconds - leader.ElapsedTimeSeconds;
-            if (gap > 0.12f)
+            if (gap > 0.12f && unresolvedPairs?.Contains(candidate) != true)
                 continue;
 
             var trailingSnapshot = snapshot.Rider(trailing.RiderId);

@@ -1,0 +1,255 @@
+{
+  "Schema": "56B-performance-v3",
+  "ReviewedHead": "c4f8d3a4853ddfe77541bd81f0a3d517b2f279cd",
+  "BeforeReviewFixes": {
+    "DenseThreeRiderMedianMilliseconds": 244.5898,
+    "DenseThreeRiderMedianAllocatedBytes": 82216464
+  },
+  "Protocol": "Release; current process; one warmup, five resolutions or three full heats; medians; Summary diagnostics; CPU projections are descriptive, not CI guarantees",
+  "Machine": {
+    "OSVersion": {
+      "Platform": 2,
+      "ServicePack": "",
+      "Version": "10.0.19045.0",
+      "VersionString": "Microsoft Windows NT 10.0.19045.0"
+    },
+    "ProcessorCount": 6,
+    "Runtime": "8.0.26"
+  },
+  "Resolutions": [
+    {
+      "Name": "K-far-apart",
+      "Enabled": false,
+      "MedianMilliseconds": 0.6789,
+      "MedianAllocatedBytes": 68648,
+      "Work": {
+        "JointCombinations": 0,
+        "ProductionResolutions": 1,
+        "NarrowPhaseEvaluations": 0,
+        "ResponsePasses": 0,
+        "Clusters": 0,
+        "UniqueRiderAlternativeProjections": 0,
+        "PairAlternativeChecks": 0,
+        "JointCombinationsScored": 0,
+        "ActualProductionVerifications": 0,
+        "SafetyPasses": 0,
+        "LegacyFallbackAttempts": 0,
+        "SafetyContactComponents": 0,
+        "FinalContactComponents": 0,
+        "SafetyJointCombinations": 0
+      }
+    },
+    {
+      "Name": "K-far-apart",
+      "Enabled": true,
+      "MedianMilliseconds": 5.1865,
+      "MedianAllocatedBytes": 236680,
+      "Work": {
+        "JointCombinations": 0,
+        "ProductionResolutions": 2,
+        "NarrowPhaseEvaluations": 598,
+        "ResponsePasses": 0,
+        "Clusters": 0,
+        "UniqueRiderAlternativeProjections": 0,
+        "PairAlternativeChecks": 0,
+        "JointCombinationsScored": 0,
+        "ActualProductionVerifications": 2,
+        "SafetyPasses": 0,
+        "LegacyFallbackAttempts": 0,
+        "SafetyContactComponents": 0,
+        "FinalContactComponents": 0,
+        "SafetyJointCombinations": 0
+      }
+    },
+    {
+      "Name": "H-three-squeeze",
+      "Enabled": false,
+      "MedianMilliseconds": 0.8942,
+      "MedianAllocatedBytes": 93464,
+      "Work": {
+        "JointCombinations": 0,
+        "ProductionResolutions": 1,
+        "NarrowPhaseEvaluations": 0,
+        "ResponsePasses": 0,
+        "Clusters": 0,
+        "UniqueRiderAlternativeProjections": 0,
+        "PairAlternativeChecks": 0,
+        "JointCombinationsScored": 0,
+        "ActualProductionVerifications": 0,
+        "SafetyPasses": 0,
+        "LegacyFallbackAttempts": 0,
+        "SafetyContactComponents": 0,
+        "FinalContactComponents": 0,
+        "SafetyJointCombinations": 0
+      }
+    },
+    {
+      "Name": "H-three-squeeze",
+      "Enabled": true,
+      "MedianMilliseconds": 114.2024,
+      "MedianAllocatedBytes": 6362288,
+      "Work": {
+        "JointCombinations": 54,
+        "ProductionResolutions": 60,
+        "NarrowPhaseEvaluations": 89984,
+        "ResponsePasses": 2,
+        "Clusters": 1,
+        "UniqueRiderAlternativeProjections": 14,
+        "PairAlternativeChecks": 35,
+        "JointCombinationsScored": 54,
+        "ActualProductionVerifications": 3,
+        "SafetyPasses": 1,
+        "LegacyFallbackAttempts": 1,
+        "SafetyContactComponents": 1,
+        "FinalContactComponents": 1,
+        "SafetyJointCombinations": 27
+      }
+    }
+  ],
+  "FullHeats": [
+    {
+      "Scenario": "I",
+      "Enabled": false,
+      "Riders": 4,
+      "Laps": 4,
+      "TotalWallMilliseconds": 403.5876,
+      "TotalCpuMilliseconds": 1281.25,
+      "TotalAllocatedBytes": 149651584,
+      "InteractionEpisodes": 0,
+      "Work": {
+        "JointCombinations": 0,
+        "ProductionResolutions": 36,
+        "NarrowPhaseEvaluations": 0,
+        "ResponsePasses": 0,
+        "Clusters": 0,
+        "UniqueRiderAlternativeProjections": 0,
+        "PairAlternativeChecks": 0,
+        "JointCombinationsScored": 0,
+        "ActualProductionVerifications": 0,
+        "SafetyPasses": 0,
+        "LegacyFallbackAttempts": 0,
+        "SafetyContactComponents": 0,
+        "FinalContactComponents": 0,
+        "SafetyJointCombinations": 0
+      },
+      "DescriptiveCpuProjection100HeatsSeconds": 128.125,
+      "DescriptiveCpuProjection1000HeatsSeconds": 1281.25
+    },
+    {
+      "Scenario": "I",
+      "Enabled": true,
+      "Riders": 4,
+      "Laps": 4,
+      "TotalWallMilliseconds": 4596.8361,
+      "TotalCpuMilliseconds": 5531.25,
+      "TotalAllocatedBytes": 267257776,
+      "InteractionEpisodes": 9,
+      "Work": {
+        "JointCombinations": 333,
+        "ProductionResolutions": 704,
+        "NarrowPhaseEvaluations": 5705489,
+        "ResponsePasses": 25,
+        "Clusters": 24,
+        "UniqueRiderAlternativeProjections": 165,
+        "PairAlternativeChecks": 427,
+        "JointCombinationsScored": 333,
+        "ActualProductionVerifications": 73,
+        "SafetyPasses": 1,
+        "LegacyFallbackAttempts": 0,
+        "SafetyContactComponents": 1,
+        "FinalContactComponents": 0,
+        "SafetyJointCombinations": 81
+      },
+      "DescriptiveCpuProjection100HeatsSeconds": 553.125,
+      "DescriptiveCpuProjection1000HeatsSeconds": 5531.25
+    }
+  ],
+  "OriginalPerformanceReviewHead": "3684efd743421812b75794c730f1db1b90f58b2d",
+  "SameMachineReviewedBaseline": {
+    "Head": "c4f8d3a4853ddfe77541bd81f0a3d517b2f279cd",
+    "MeasurementNote": "Exact reviewed HEAD measured in a detached checkout on the same machine/runtime. Both versions use Summary and the existing unchanged measurement harness. The earlier pre-optimization recording is preserved separately in BeforeReviewFixes.",
+    "Resolutions": [
+      {
+        "Name": "K-far-apart",
+        "Enabled": false,
+        "MedianMilliseconds": 0.6803,
+        "MedianAllocatedBytes": 68648
+      },
+      {
+        "Name": "K-far-apart",
+        "Enabled": true,
+        "MedianMilliseconds": 5.18,
+        "MedianAllocatedBytes": 236640
+      },
+      {
+        "Name": "H-three-squeeze",
+        "Enabled": false,
+        "MedianMilliseconds": 0.9029,
+        "MedianAllocatedBytes": 93464
+      },
+      {
+        "Name": "H-three-squeeze",
+        "Enabled": true,
+        "MedianMilliseconds": 107.0673,
+        "MedianAllocatedBytes": 6283000
+      }
+    ],
+    "FullHeats": [
+      {
+        "Scenario": "I",
+        "Enabled": false,
+        "Riders": 4,
+        "Laps": 4,
+        "TotalWallMilliseconds": 408.0048,
+        "TotalCpuMilliseconds": 1359.375,
+        "TotalAllocatedBytes": 149652536,
+        "InteractionEpisodes": 0,
+        "Work": {
+          "JointCombinations": 0,
+          "ProductionResolutions": 36,
+          "NarrowPhaseEvaluations": 0,
+          "ResponsePasses": 0,
+          "Clusters": 0,
+          "UniqueRiderAlternativeProjections": 0,
+          "PairAlternativeChecks": 0,
+          "JointCombinationsScored": 0,
+          "ActualProductionVerifications": 0,
+          "SafetyPasses": 0,
+          "LegacyFallbackAttempts": 0
+        },
+        "DescriptiveCpuProjection100HeatsSeconds": 135.9375,
+        "DescriptiveCpuProjection1000HeatsSeconds": 1359.375
+      },
+      {
+        "Scenario": "I",
+        "Enabled": true,
+        "Riders": 4,
+        "Laps": 4,
+        "TotalWallMilliseconds": 4574.0316,
+        "TotalCpuMilliseconds": 5468.75,
+        "TotalAllocatedBytes": 301024496,
+        "InteractionEpisodes": 6,
+        "Work": {
+          "JointCombinations": 648,
+          "ProductionResolutions": 963,
+          "NarrowPhaseEvaluations": 5334134,
+          "ResponsePasses": 28,
+          "Clusters": 27,
+          "UniqueRiderAlternativeProjections": 215,
+          "PairAlternativeChecks": 660,
+          "JointCombinationsScored": 648,
+          "ActualProductionVerifications": 73,
+          "SafetyPasses": 1,
+          "LegacyFallbackAttempts": 1
+        },
+        "DescriptiveCpuProjection100HeatsSeconds": 546.875,
+        "DescriptiveCpuProjection1000HeatsSeconds": 5468.75
+      }
+    ]
+  },
+  "EngineeringTargets": {
+    "DenseAllocationBytes": 10000000,
+    "PreferredDenseMedianMilliseconds": 50,
+    "Note": "Descriptive engineering targets, never simulation rules or CI wall-clock thresholds. All pairs still run the exact #55 algorithm; actual real-incident verification and the bounded safety pass remain enabled."
+  }
+}

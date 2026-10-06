@@ -81,6 +81,9 @@ public sealed record HeatSimulationOptions
     public WeatherState Weather { get; init; } = WeatherState.Dry;
     public float IncidentFrequency { get; init; } = 1f;
     public bool EnableLogging { get; init; } = true;
+    public bool EnableContestedSpaceResponses { get; init; } = false;
+    public Interactions.InteractionDiagnosticsLevel InteractionDiagnostics { get; init; } = Interactions.InteractionDiagnosticsLevel.Summary;
+    public Interactions.ContestedSpaceParameters ContestedSpaceParameters { get; init; } = new();
 
     // Calibration-only; deliberately unavailable to gameplay callers outside
     // CoreSim. Null preserves the reviewed production path exactly.
@@ -100,6 +103,8 @@ public sealed record HeatSimulationOptions
 
     public void Validate()
     {
+        ArgumentNullException.ThrowIfNull(ContestedSpaceParameters);
+        ContestedSpaceParameters.Validate();
         if (Laps <= 0)
             throw new ArgumentOutOfRangeException(nameof(Laps));
         if (IncidentFrequency is < 0f or > 2f)

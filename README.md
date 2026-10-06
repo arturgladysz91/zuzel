@@ -1,10 +1,18 @@
 # Speedway Manager (Żużlowy) – Core Simulation
 
+Current racing-response precedence (#56B): [bounded pre-contact contested-space responses](docs/calibration/contested-space-racing-response.md)
+adds an opt-in heat-scoped coordinator after independent #54 planning. Joint alternatives
+execute production motion and are verified by #55; legacy consequences are authorized once
+for an unresolved eligible episode. Feature OFF retains the merged #56A behavior. Strength,
+MassKg, canonical PairRiding, impact severity and body-contact response remain outside #56B.
+Earlier statements that traffic behavior is future work describe the historical feature-OFF stage.
+
 Current occupancy precedence (#55): [physical occupied-space and independent bike attitude](docs/calibration/physical-occupancy-contested-space.md)
 adds explicit observation-only mechanical capsules and common-time conflict diagnostics.
 Older statements that motorcycle dimensions/contested space are absent describe their historical stage.
-Legacy contact consequences and #54 solo trajectory projection remain unchanged; rider-vs-rider
-behaviour remains #56. Straight, corner and start/finish poses share one metric model-space
+Legacy contact formulas and #54 solo projection remain unchanged. The opt-in #56B
+coordinator now supplies pre-contact responses and episode-owned legacy eligibility.
+Straight, corner and start/finish poses share one metric model-space
 track frame across closed laps. Width coordinate reinterpretations remain zero-time, unswept
 state transitions; genuine unrelated/nonclosing frame inputs retain explicit diagnostics.
 
@@ -559,4 +567,4 @@ Advanced moving paths now integrate physical distance, elapsed time, lateral pos
 
 ## Production-backed trajectory decisions
 
-`AdaptiveDecisionModel` now replans bounded Entry/Apex/Exit intents from the exact current snapshot. Its physical time is measured by isolated solo production replay through the remaining corner and whole following logical straight. Five reference anchors produce at most 35/13/5 remaining candidates; style, behavioral reluctance, surface reading and provisional current-target occupancy remain separate costs. See [architecture, parity tests and current controls](docs/calibration/trajectory-intent-evaluation.md). Traffic feasibility and common-time contested space remain future work. Full race materialization and Lean projection share one physical core; exact behavior/wear parity protects a typed prefix state graph. The subsequent shared scalar envelope and isolated root-branch evaluation reduce four-rider runtime to 382.144 ms and cumulative allocations to 180.206 MB on the documented desktop protocol. The original 4× goal is a stretch observation; [the performance and CI follow-up](docs/calibration/trajectory-performance-ci.md) records measurements, exact cross-platform parity and complete shard responsibility.
+`AdaptiveDecisionModel` now replans bounded Entry/Apex/Exit intents from the exact current snapshot. Its physical time is measured by isolated solo production replay through the remaining corner and whole following logical straight. Five reference anchors produce at most 35/13/5 remaining candidates; style, behavioral reluctance, surface reading and provisional current-target occupancy remain separate costs. See [architecture, parity tests and current controls](docs/calibration/trajectory-intent-evaluation.md). The opt-in #56B coordinator adds traffic feasibility and common-time responses after solo planning. Full race materialization and Lean projection share one physical core; exact behavior/wear parity protects a typed prefix state graph. The subsequent shared scalar envelope and isolated root-branch evaluation reduce four-rider runtime to 382.144 ms and cumulative allocations to 180.206 MB on the documented desktop protocol. The original 4× goal is a stretch observation; [the performance and CI follow-up](docs/calibration/trajectory-performance-ci.md) records measurements, exact cross-platform parity and complete shard responsibility.

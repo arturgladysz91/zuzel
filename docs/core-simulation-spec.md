@@ -1,10 +1,18 @@
 # Core simulation specification
 
+Current racing-response precedence (#56B): [bounded pre-contact contested-space responses](calibration/contested-space-racing-response.md)
+adds an opt-in heat-scoped coordinator after independent #54 planning. Joint alternatives
+execute production motion and are verified by #55; legacy consequences are authorized once
+for an unresolved eligible episode. Feature OFF retains the merged #56A behavior. Strength,
+MassKg, canonical PairRiding, impact severity and body-contact response remain outside #56B.
+Earlier statements that traffic behavior is future work describe the historical feature-OFF stage.
+
 Current occupancy precedence (#55): [physical occupied-space and independent bike attitude](calibration/physical-occupancy-contested-space.md)
 adds explicit observation-only mechanical capsules and common-time conflict diagnostics.
 Older statements that motorcycle dimensions/contested space are absent describe their historical stage.
-Legacy contact consequences and #54 solo trajectory projection remain unchanged; rider-vs-rider
-behaviour remains #56. Straight, corner and start/finish poses share one metric model-space
+Legacy contact formulas and #54 solo projection remain unchanged. The opt-in #56B
+coordinator now supplies pre-contact responses and episode-owned legacy eligibility.
+Straight, corner and start/finish poses share one metric model-space
 track frame across closed laps. Width coordinate reinterpretations remain zero-time, unswept
 state transitions; genuine unrelated/nonclosing frame inputs retain explicit diagnostics.
 

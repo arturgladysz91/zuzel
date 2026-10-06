@@ -22,6 +22,42 @@ public sealed record ContestedSpaceEvent(int RiderA, int RiderB, string FrameId,
     public double PenetrationMeters => Math.Max(0, -MinimumSeparationMeters);
     public bool EligibleForFutureInteraction => HasConflict && NumericallyResolved && !Kind.HasFlag(SpaceConflictKind.BoundaryAmbiguous);
 }
+internal readonly record struct SpaceIntervalValue(int RiderA, int RiderB, string FrameId, double IntervalStartSeconds,
+    double IntervalEndSeconds, double? FirstTouchCommonTimeSeconds, double MinimumSeparationMeters,
+    double MinimumSeparationCommonTimeSeconds, BikeComponent ComponentA, BikeComponent ComponentB,
+    SpaceConflictKind Kind, ClosingContributions Contributions, MeterPoint RelativePositionAtOnsetMeters,
+    MeterPoint RelativeVelocityAtOnsetMetersPerSecond, bool NumericallyResolved, double MinimumSeparationLowerBoundMeters,
+    PoseSource? SourceA = null, PoseSource? SourceB = null)
+{
+    public bool HasConflict => FirstTouchCommonTimeSeconds.HasValue;
+    public double PenetrationMeters => Math.Max(0, -MinimumSeparationMeters);
+    public bool EligibleForFutureInteraction => HasConflict && NumericallyResolved && !Kind.HasFlag(SpaceConflictKind.BoundaryAmbiguous);
+    internal ContestedSpaceEvent ToEvent() => new(RiderA, RiderB, FrameId, IntervalStartSeconds, IntervalEndSeconds,
+        FirstTouchCommonTimeSeconds, MinimumSeparationMeters, MinimumSeparationCommonTimeSeconds, ComponentA, ComponentB,
+        Kind, Contributions, RelativePositionAtOnsetMeters, RelativeVelocityAtOnsetMetersPerSecond, NumericallyResolved,
+        MinimumSeparationLowerBoundMeters, SourceA, SourceB);
+}
+internal sealed class SpaceCompatibilityResult(double ready)
+{
+    internal double MinimumSeparation = double.PositiveInfinity;
+    internal bool HasBoundaryAmbiguity, HasCoverageGap;
+    internal int IneligibleIntervals, EligibleIntervals;
+    internal readonly List<ContestedSpaceEvent> Contacts = new();
+    internal SpaceWorkCounters Work = new(0,0,0,0,0,0,0,0);
+    internal void Add(SpaceIntervalValue row)
+    {
+        if (row.IntervalEndSeconds <= ready) return;
+        if (!row.NumericallyResolved || row.Kind.HasFlag(SpaceConflictKind.BoundaryAmbiguous))
+        { HasBoundaryAmbiguity = true; IneligibleIntervals++; return; }
+        EligibleIntervals++; MinimumSeparation = Math.Min(MinimumSeparation, row.MinimumSeparationMeters);
+        if (!row.EligibleForFutureInteraction) return;
+        foreach (var contact in Contacts)
+            if (contact.RiderA == row.RiderA && contact.RiderB == row.RiderB) return;
+        Contacts.Add(row.ToEvent());
+    }
+    internal void Gap(FrameCoverageGap gap) { HasCoverageGap |= gap.EndCommonTimeSeconds > ready; }
+}
+
 public sealed record SpaceWorkCounters(int RiderPairs, int CandidateIntervals, int BroadPhaseRejects,
     int NarrowPhaseEvaluations, int AdaptiveSubdivisions, int RootIterations, int DetectedConflicts, int UnresolvedIntervals);
 public sealed record FrameCoverageGap(int RiderA, int RiderB, double StartCommonTimeSeconds,
@@ -39,7 +75,16 @@ public sealed record ContestedSpaceReport(IReadOnlyList<ContestedSpaceEvent> Int
 /// <summary>Deterministic pose-only observer. Owns no riders, surface, decision or RNG.</summary>
 public static class ContestedSpaceResolver
 {
-    public static ContestedSpaceReport Observe(IEnumerable<PhysicalPoseInterval> intervals)
+    private static readonly ClosingContributions EmptyContributions = new(0, 0, 0, 0, 0, 0);
+    public static ContestedSpaceReport Observe(IEnumerable<PhysicalPoseInterval> intervals) => Observe(intervals, true);
+    // Compatibility uses identical #55 certification, without unused attribution poses.
+    internal static SpaceCompatibilityResult ObserveCompatibility(IEnumerable<PhysicalPoseInterval> intervals, double ready)
+    {
+        var summary = new SpaceCompatibilityResult(ready);
+        summary.Work = Observe(intervals, false, summary).Work;
+        return summary;
+    }
+    private static ContestedSpaceReport Observe(IEnumerable<PhysicalPoseInterval> intervals, bool attribution, SpaceCompatibilityResult? summary = null)
     {
         ArgumentNullException.ThrowIfNull(intervals);
         var groups = intervals.GroupBy(i => i.RiderId).OrderBy(g => g.Key)
@@ -49,6 +94,7 @@ public static class ContestedSpaceResolver
                 if (group[i].StartTimeSeconds < group[i - 1].EndTimeSeconds)
                     throw new ArgumentException("A rider's continuous pose intervals cannot overlap in heat time.");
         var rows = new List<ContestedSpaceEvent>(); var work = new Work(); var gaps = new List<FrameCoverageGap>();
+        void Add(SpaceIntervalValue row) { if (summary is null) rows.Add(row.ToEvent()); else summary.Add(row); }
         for (var a = 0; a < groups.Length; a++) for (var b = a + 1; b < groups.Length; b++)
         {
             work.Pairs++;
@@ -74,7 +120,7 @@ public static class ContestedSpaceResolver
                             || (pb.StartsAtDiscontinuity && start == pb.StartTimeSeconds);
                         if (quarantined || jump)
                         {
-                            var startGap = MechanicalSeparation.Between(pa.Sample(start), pb.Sample(start)).SignedMeters;
+                            var startGap = MechanicalSeparation.Between(pa.SampleFootprint(start), pb.SampleFootprint(start)).SignedMeters;
                             if (startGap > GeometryNumerics.ContactDistanceMeters) quarantined = false;
                             else if (jump && !previousEligibleOverlap) quarantined = true;
                         }
@@ -82,25 +128,26 @@ public static class ContestedSpaceResolver
                         if (quarantined)
                         {
                             var escape = FindClear(pa, pb, start, end, work);
-                            var ambiguous = Evaluate(pa, pb, start, escape.Time ?? end, work, pairMinimum);
+                            var ambiguous = Evaluate(pa, pb, start, escape.Time ?? end, work, pairMinimum, attribution);
                             if (ambiguous.HasConflict) work.Conflicts--;
                             if (!escape.Resolved && ambiguous.NumericallyResolved) work.Unresolved++;
-                            rows.Add(ambiguous with { Kind = SpaceConflictKind.BoundaryAmbiguous,
+                            Add(ambiguous with { Kind = SpaceConflictKind.BoundaryAmbiguous,
                                 FirstTouchCommonTimeSeconds = null, NumericallyResolved = ambiguous.NumericallyResolved && escape.Resolved });
                             continuousStart = escape.Time ?? end;
                             quarantined = !escape.Time.HasValue;
                         }
-                        ContestedSpaceEvent? row = null;
+                        SpaceIntervalValue? row = null;
                         if (continuousStart < end)
-                        { row = Evaluate(pa, pb, continuousStart, end, work, pairMinimum); rows.Add(row); }
+                        { row = Evaluate(pa, pb, continuousStart, end, work, pairMinimum, attribution); Add(row.Value); }
                         previousEligibleOverlap = !quarantined && row?.EligibleForFutureInteraction == true
-                            && MechanicalSeparation.Between(pa.Sample(end), pb.Sample(end)).SignedMeters <= GeometryNumerics.ContactDistanceMeters;
+                            && MechanicalSeparation.Between(pa.SampleFootprint(end), pb.SampleFootprint(end)).SignedMeters <= GeometryNumerics.ContactDistanceMeters;
                         previousFrame = pa.FrameId; previousEnd = end;
                     }
                     else
                     {
-                        gaps.Add(new(pa.RiderId, pb.RiderId, start, end, pa.FrameId, pb.FrameId,
-                            pa.FrameId == pb.FrameId ? "NonClosingLapWrap" : "UnrelatedMetricFrames"));
+                        var gap = new FrameCoverageGap(pa.RiderId, pb.RiderId, start, end, pa.FrameId, pb.FrameId,
+                            pa.FrameId == pb.FrameId ? "NonClosingLapWrap" : "UnrelatedMetricFrames");
+                        if (summary is null) gaps.Add(gap); else summary.Gap(gap);
                         previousFrame = null; quarantined = false; previousEligibleOverlap = false;
                     }
                 }
@@ -111,32 +158,52 @@ public static class ContestedSpaceResolver
         return new(rows.AsReadOnly(), work.Freeze(), gaps.AsReadOnly());
     }
 
-    private static ContestedSpaceEvent Evaluate(PhysicalPoseInterval a, PhysicalPoseInterval b, double start, double end, Work work, PairMinimum pairMinimum)
+    private static SpaceIntervalValue Evaluate(PhysicalPoseInterval a, PhysicalPoseInterval b, double start, double end,
+        Work work, PairMinimum pairMinimum, bool attribution)
+        => new IntervalSearch(a, b, start, end, work, pairMinimum).Evaluate(attribution);
+
+    // Root-search state lives on the stack. No change to #55 bounds, roots, order or tolerances.
+    private struct IntervalSearch
     {
-        work.Intervals++; var count = 0; var resolved = true; double? first = null;
-        var minimum = double.PositiveInfinity; var minimumTime = start; FootprintSeparation minimumPair = default;
-        var uncertainFirst = double.PositiveInfinity;
-        var boundsA = a.RateBounds(start, end); var boundsB = b.RateBounds(start, end);
-        void Validate(PoseRateBounds bounds)
+        private readonly PhysicalPoseInterval a, b;
+        private readonly double start, end, lipschitz;
+        private readonly Work work;
+        private readonly PairMinimum pairMinimum;
+        private readonly PoseRateBounds boundsA, boundsB;
+        private readonly BikePoseValue sa, sb, ea, eb;
+        private readonly bool broadClear;
+        private int count;
+        private bool resolved;
+        private double? first;
+        private double minimum, minimumTime, uncertainFirst;
+        private FootprintSeparation minimumPair;
+        internal IntervalSearch(PhysicalPoseInterval a, PhysicalPoseInterval b, double start, double end, Work work, PairMinimum pairMinimum)
+        {
+            this.a = a; this.b = b; this.start = start; this.end = end; this.work = work; this.pairMinimum = pairMinimum;
+            count = 0; resolved = true; first = null; minimum = double.PositiveInfinity; minimumTime = start;
+            uncertainFirst = double.PositiveInfinity; minimumPair = default; work.Intervals++;
+            boundsA = a.RateBounds(start, end); boundsB = b.RateBounds(start, end);
+            Validate(boundsA); Validate(boundsB);
+            var relativeRate = (boundsA.CenterVelocityMetersPerSecond - boundsB.CenterVelocityMetersPerSecond).Length
+                + (boundsA.CenterAccelerationBoundMetersPerSecondSquared + boundsB.CenterAccelerationBoundMetersPerSecondSquared) * (end - start) / 2;
+            lipschitz = relativeRate + a.Dimensions.BoundingRadiusMeters * boundsA.AngularSpeedBoundRadiansPerSecond
+                + b.Dimensions.BoundingRadiusMeters * boundsB.AngularSpeedBoundRadiansPerSecond;
+            sa = a.SampleValue(start); sb = b.SampleValue(start); ea = a.SampleValue(end); eb = b.SampleValue(end);
+            var sphereLower = Math.Min((sa.Position - sb.Position).Length, (ea.Position - eb.Position).Length)
+                - relativeRate * (end - start) / 2 - a.Dimensions.BoundingRadiusMeters - b.Dimensions.BoundingRadiusMeters;
+            broadClear = sphereLower > GeometryNumerics.BroadPhasePaddingMeters;
+            if (broadClear) work.Broad++;
+        }
+        private static void Validate(PoseRateBounds bounds)
         {
             GeometryValidation.Nonnegative(bounds.CenterAccelerationBoundMetersPerSecondSquared, nameof(bounds.CenterAccelerationBoundMetersPerSecondSquared));
             GeometryValidation.Nonnegative(bounds.AngularSpeedBoundRadiansPerSecond, nameof(bounds.AngularSpeedBoundRadiansPerSecond));
         }
-        Validate(boundsA); Validate(boundsB);
-        var relativeRate = (boundsA.CenterVelocityMetersPerSecond - boundsB.CenterVelocityMetersPerSecond).Length
-            + (boundsA.CenterAccelerationBoundMetersPerSecondSquared + boundsB.CenterAccelerationBoundMetersPerSecondSquared) * (end - start) / 2;
-        var lipschitz = relativeRate + a.Dimensions.BoundingRadiusMeters * boundsA.AngularSpeedBoundRadiansPerSecond
-            + b.Dimensions.BoundingRadiusMeters * boundsB.AngularSpeedBoundRadiansPerSecond;
-        var sa = a.Sample(start); var sb = b.Sample(start); var ea = a.Sample(end); var eb = b.Sample(end);
-        var sphereLower = Math.Min((sa.Position - sb.Position).Length, (ea.Position - eb.Position).Length)
-            - relativeRate * (end - start) / 2 - a.Dimensions.BoundingRadiusMeters - b.Dimensions.BoundingRadiusMeters;
-        var broadClear = sphereLower > GeometryNumerics.BroadPhasePaddingMeters;
-        if (broadClear) work.Broad++;
-        double Gap(double time)
+        private double Gap(double time)
         {
             count++; work.Narrow++;
-            var separation = MechanicalSeparation.Between(time == start ? sa : time == end ? ea : a.Sample(time),
-                time == start ? sb : time == end ? eb : b.Sample(time));
+            var separation = MechanicalSeparation.Between(time == start ? sa.Footprint : time == end ? ea.Footprint : a.SampleFootprint(time),
+                time == start ? sb.Footprint : time == end ? eb.Footprint : b.SampleFootprint(time));
             if (separation.SignedMeters < minimum)
             { minimum = separation.SignedMeters; minimumTime = time; minimumPair = separation; }
             pairMinimum.Value = Math.Min(pairMinimum.Value, separation.SignedMeters);
@@ -144,7 +211,7 @@ public static class ContestedSpaceResolver
                 && (!first.HasValue || time < first)) first = time;
             return separation.SignedMeters;
         }
-        void Search(double lo, double hi, double gl, double gh, int depth)
+        private void Search(double lo, double hi, double gl, double gh, int depth)
         {
             var lower = Math.Max(-Math.Max(a.Dimensions.ChassisBodyWidthMeters, a.Dimensions.HandlebarTubeDiameterMeters) / 2
                 - Math.Max(b.Dimensions.ChassisBodyWidthMeters, b.Dimensions.HandlebarTubeDiameterMeters) / 2,
@@ -170,20 +237,22 @@ public static class ContestedSpaceResolver
             if (needsFirst) work.Roots++;
             Search(lo, mid, gl, gm, depth + 1); Search(mid, hi, gm, gh, depth + 1);
         }
-        var gStart = Gap(start); var gEnd = Gap(end);
-        Search(start, end, gStart, gEnd, 0);
-        if (uncertainFirst < (first ?? double.PositiveInfinity) - 2 * GeometryNumerics.TimeToleranceSeconds) resolved = false;
-        if (first.HasValue) work.Conflicts++;
-        if (!resolved) work.Unresolved++;
-        var onsetEnd = first ?? end;
-        // Use the whole onset knot interval, rather than tiny root brackets whose effects vanish.
-        var onsetA = a.Sample(onsetEnd); var onsetB = b.Sample(onsetEnd);
-        var contributions = Closing(sa, sb, onsetA, onsetB);
-        var kind = first.HasValue ? Classify(sa, sb, ea, eb, contributions, boundsA, boundsB) : SpaceConflictKind.None;
-        return new(a.RiderId, b.RiderId, a.FrameId, start, end, first, minimum, minimumTime,
-            minimumPair.ComponentA, minimumPair.ComponentB, kind, contributions, sb.Position - sa.Position,
-            boundsB.CenterVelocityMetersPerSecond - boundsA.CenterVelocityMetersPerSecond, resolved,
-            Math.Min(gStart, gEnd) - lipschitz * (end - start) / 2, a.Source, b.Source);
+        internal SpaceIntervalValue Evaluate(bool attribution)
+        {
+            var gStart = Gap(start); var gEnd = Gap(end);
+            Search(start, end, gStart, gEnd, 0);
+            if (uncertainFirst < (first ?? double.PositiveInfinity) - 2 * GeometryNumerics.TimeToleranceSeconds) resolved = false;
+            if (first.HasValue) work.Conflicts++;
+            if (!resolved) work.Unresolved++;
+            var onsetEnd = first ?? end;
+            // Use the whole onset knot interval, rather than tiny root brackets whose effects vanish.
+            var contributions = attribution ? Closing(sa, sb, a.SampleValue(onsetEnd), b.SampleValue(onsetEnd)) : EmptyContributions;
+            var kind = first.HasValue && attribution ? Classify(sa, sb, ea, eb, contributions, boundsA, boundsB) : SpaceConflictKind.None;
+            return new(a.RiderId, b.RiderId, a.FrameId, start, end, first, minimum, minimumTime,
+                minimumPair.ComponentA, minimumPair.ComponentB, kind, contributions, sb.Position - sa.Position,
+                boundsB.CenterVelocityMetersPerSecond - boundsA.CenterVelocityMetersPerSecond, resolved,
+                Math.Min(gStart, gEnd) - lipschitz * (end - start) / 2, a.Source, b.Source);
+        }
     }
 
     // Find the end of unsupported jump overlap even when clearance and re-contact occur
@@ -200,7 +269,7 @@ public static class ContestedSpaceResolver
         // Restart outside the root-time uncertainty band; contact tolerance itself is unchanged.
         var clearThreshold = GeometryNumerics.ContactDistanceMeters + 2 * rate * GeometryNumerics.TimeToleranceSeconds;
         double Gap(double time)
-        { count++; work.Narrow++; return MechanicalSeparation.Between(a.Sample(time), b.Sample(time)).SignedMeters; }
+        { count++; work.Narrow++; return MechanicalSeparation.Between(a.SampleFootprint(time), b.SampleFootprint(time)).SignedMeters; }
         double? Search(double lo, double hi, double gl, double gh, int depth)
         {
             if (gl > clearThreshold) return lo;
@@ -221,9 +290,8 @@ public static class ContestedSpaceResolver
         return (time, resolved);
     }
 
-    private static ClosingContributions Closing(PhysicalBikePose a0, PhysicalBikePose b0, PhysicalBikePose a1, PhysicalBikePose b1)
+    private static ClosingContributions Closing(BikePoseValue a0, BikePoseValue b0, BikePoseValue a1, BikePoseValue b1)
     {
-        var time = a1.CommonTimeSeconds;
         var da = a1.Position - a0.Position; var db = b1.Position - b0.Position;
         // Remove only shared forward transport for nearly parallel travel. This prevents
         // two bikes moving at 20 m/s together from receiving fictitious opposing closure.
@@ -231,21 +299,20 @@ public static class ContestedSpaceResolver
         var forward = new MeterPoint(Math.Cos(referenceHeading), Math.Sin(referenceHeading));
         var common = Math.Abs(BikeAngles.Wrap(a0.ReferenceTangentHeadingRadians - b0.ReferenceTangentHeadingRadians)) < ParallelClassificationAngleRadians
             ? forward * Math.Max(0, Math.Min(MeterPoint.Dot(da, forward), MeterPoint.Dot(db, forward))) : new MeterPoint(0, 0);
-        var af = a0.Repose(a0.Position, a0.Attitude.BikeHeadingRadians, time);
-        var bf = b0.Repose(b0.Position, b0.Attitude.BikeHeadingRadians, time);
-        var at = af.Repose(af.Position + da - common, af.Attitude.BikeHeadingRadians, time);
-        var bt = bf.Repose(bf.Position + db - common, bf.Attitude.BikeHeadingRadians, time);
-        var ar = af.Repose(af.Position, a1.Attitude.BikeHeadingRadians, time);
-        var br = bf.Repose(bf.Position, b1.Attitude.BikeHeadingRadians, time);
+        var af = a0.Footprint; var bf = b0.Footprint;
+        var at = BikeFootprint.Create(a0.Position + da - common, a0.BikeHeadingRadians, a0.Dimensions);
+        var bt = BikeFootprint.Create(b0.Position + db - common, b0.BikeHeadingRadians, b0.Dimensions);
+        var ar = BikeFootprint.Create(a0.Position, a1.BikeHeadingRadians, a0.Dimensions);
+        var br = BikeFootprint.Create(b0.Position, b1.BikeHeadingRadians, b0.Dimensions);
         var baseline = MechanicalSeparation.Between(af, bf).SignedMeters;
         var cat = baseline - MechanicalSeparation.Between(at, bf).SignedMeters;
         var car = baseline - MechanicalSeparation.Between(ar, bf).SignedMeters;
         var cbt = baseline - MechanicalSeparation.Between(af, bt).SignedMeters;
         var cbr = baseline - MechanicalSeparation.Between(af, br).SignedMeters;
-        var actual = baseline - MechanicalSeparation.Between(a1, b1).SignedMeters;
+        var actual = baseline - MechanicalSeparation.Between(a1.Footprint, b1.Footprint).SignedMeters;
         return new(cat, car, cbt, cbr, actual, actual - cat - car - cbt - cbr);
     }
-    private static SpaceConflictKind Classify(PhysicalBikePose a, PhysicalBikePose b, PhysicalBikePose ea, PhysicalBikePose eb,
+    private static SpaceConflictKind Classify(BikePoseValue a, BikePoseValue b, BikePoseValue ea, BikePoseValue eb,
         ClosingContributions c, PoseRateBounds ra, PoseRateBounds rb)
     {
         var epsilon = GeometryNumerics.ContactDistanceMeters;
@@ -259,10 +326,10 @@ public static class ContestedSpaceResolver
         if (at && ar) result |= SpaceConflictKind.AEncroachesMixed;
         if (bt && br) result |= SpaceConflictKind.BEncroachesMixed;
         if ((at || ar) && (bt || br)) result |= SpaceConflictKind.MutualConvergence;
-        var heading = new MeterPoint(Math.Cos(a.Attitude.TravelHeadingRadians), Math.Sin(a.Attitude.TravelHeadingRadians));
+        var heading = new MeterPoint(Math.Cos(a.TravelHeadingRadians), Math.Sin(a.TravelHeadingRadians));
         var relative = b.Position - a.Position;
         var lateral = Math.Abs(MeterPoint.Cross(heading, relative));
-        var parallel = Math.Abs(BikeAngles.Wrap(a.Attitude.TravelHeadingRadians - b.Attitude.TravelHeadingRadians)) < ParallelClassificationAngleRadians;
+        var parallel = Math.Abs(BikeAngles.Wrap(a.TravelHeadingRadians - b.TravelHeadingRadians)) < ParallelClassificationAngleRadians;
         if (parallel && lateral <= (a.Dimensions.ChassisBodyWidthMeters + b.Dimensions.ChassisBodyWidthMeters) / 2
             && Math.Abs(MeterPoint.Dot(relative, heading)) > lateral
             && MeterPoint.Dot(relative, heading) * MeterPoint.Dot(rb.CenterVelocityMetersPerSecond - ra.CenterVelocityMetersPerSecond, heading) < 0)

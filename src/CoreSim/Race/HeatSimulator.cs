@@ -62,6 +62,8 @@ public sealed class HeatSimulator
         var progress = options.EnableLogging ? new RaceProgressTracker() : null;
         progress?.InitializeStartingGrid(riders);
         var stepNumber = 0;
+        var interactions = options.EnableContestedSpaceResponses
+            ? new Interactions.InteractionEpisodeTracker() : null;
 
         for (var lapIndex = 0; lapIndex < options.Laps; lapIndex++)
         {
@@ -84,7 +86,7 @@ public sealed class HeatSimulator
                     options.Laps);
                 var snapshot = _engine.CaptureSnapshot(track, trackState, riders, step);
                 var intents = _engine.Decide(snapshot);
-                var resolved = _engine.Resolve(snapshot, intents, options);
+                var resolved = _engine.Resolve(snapshot, intents, options, interactions);
                 observer?.OnStepResolved(resolved);
                 _engine.Commit(resolved, riders, trackState, log);
 
