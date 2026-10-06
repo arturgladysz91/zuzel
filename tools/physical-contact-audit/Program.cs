@@ -47,7 +47,8 @@ File.WriteAllText(Path.Combine(args[0],"physical-contact-analysis.json"),json);
 var bits=new SortedDictionary<string,object>(StringComparer.Ordinal);
 Walk(PhysicalContactEvidence.Fixtures(),"Controlled",bits);
 Walk(PhysicalContactEvidence.Grid(),"Grid",bits);
-File.WriteAllText(Path.Combine(args[0],"physical-contact-bits.json"),JsonSerializer.Serialize(bits,PhysicalContactEvidence.JsonOptions)+"\n");
+File.WriteAllText(Path.Combine(args[0],"physical-contact-bits.json"),
+    JsonSerializer.Serialize(bits,PhysicalContactEvidence.JsonOptions).Replace("\r\n","\n",StringComparison.Ordinal)+"\n");
 Console.WriteLine("#56C1 controlled fixtures, 4,374 raw grid rows, legacy comparison and typed IEEE bits written.");
 static void Walk(object? value,string path,IDictionary<string,object> bits)
 {
