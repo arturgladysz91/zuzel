@@ -22,6 +22,13 @@ EXTRACTION = ROOT / "tests/fixtures/contested-source-extraction.json"
 EXTRACTION_SHA256 = "46a8f58c1cbd84dcb2697247e294b60474f7ee67712a49aa15f4f1337acd5d89"
 CANONICAL_TRAFFIC = {"src/CoreSim/Interactions/InteractionModel.cs",
                      "src/CoreSim/Interactions/ContestedSpaceInteractionCoordinator.cs"}
+CANONICAL_CONTACT_SHADOW = {
+    "src/CoreSim/Interactions/PhysicalContactModel.cs",
+    "src/CoreSim/Interactions/PhysicalContactAnalyzer.cs",
+    "src/CoreSim/Interactions/PhysicalContactGeometry.cs",
+    "src/CoreSim/Interactions/PhysicalContactSnapshotAdapter.cs",
+    "src/CoreSim/Analysis/PhysicalContactEvidence.cs",
+}
 
 
 def reviewed_extraction():
@@ -40,6 +47,9 @@ def consumers():
             continue
         name = path.relative_to(ROOT).as_posix()
         source = path.read_text(encoding="utf-8").replace("\r\n", "\n")
+        if name in CANONICAL_CONTACT_SHADOW:
+            assert not REFERENCES.search(source), f"Legacy execution data in #56C1 shadow module: {name}"
+            continue
         if name in extraction["NewDiagnosticSources"]:
             assert hashlib.sha256(source.encode()).hexdigest() == extraction["NewDiagnosticSources"][name]
             continue

@@ -94,7 +94,11 @@ public sealed record InteractionWork(int JointCombinations, int ProductionResolu
     public int FinalContactComponents { get; init; }
     public int SafetyJointCombinations { get; init; }
 }
-public sealed record InteractionResolution(IReadOnlyList<InteractionEpisodeDiagnostic> Episodes, InteractionWork Work);
+public sealed record InteractionResolution(IReadOnlyList<InteractionEpisodeDiagnostic> Episodes, InteractionWork Work)
+{
+    [System.Text.Json.Serialization.JsonIgnore]
+    public PhysicalContactAnalysis? PhysicalContactAnalysis { get; init; }
+}
 
 internal sealed class InteractionEpisode(long id, int[] riders, double start)
 {

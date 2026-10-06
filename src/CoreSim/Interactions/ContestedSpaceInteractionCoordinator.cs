@@ -429,7 +429,8 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
             verification = CommonTimePoseHistory.Observe(tracker.History.Concat(Poses(actual, snapshot.Track)));
             narrow += verification.Work.NarrowPhaseEvaluations;
         }
-        var finalEdges = Contacts(verification, tracker.History.Concat(Poses(actual, snapshot.Track)).ToArray(), requestTimes);
+        var finalContactPoses = tracker.History.Concat(Poses(actual, snapshot.Track)).ToArray();
+        var finalEdges = Contacts(verification, finalContactPoses, requestTimes);
         var finalComponents = Clusters(finalEdges, snapshot, p);
         ReconcileComponents(finalComponents);
         if (safetyPasses > 0)
@@ -491,6 +492,9 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
                     ? (pair.Item1, pair.Item2) : (pair.Item2, pair.Item1)).ToArray());
         production++;
         var executedVerification=CommonTimePoseHistory.Observe(tracker.History.Concat(Poses(final,snapshot.Track)));
+        var physicalContact = options.PhysicalContactDiagnostics == PhysicalContactDiagnosticsLevel.None ? null
+            : PhysicalContactSnapshotAdapter.Analyze(verification,finalContactPoses,snapshot,tracker.Embedding!,diagnostics,
+                final.Events,options.PhysicalContactParameters,options.PhysicalContactDiagnostics);
         narrow+=executedVerification.Work.NarrowPhaseEvaluations;
         tracker.ObserveClearance(now,executedVerification.Intervals,p,snapshot);
         foreach(var closed in tracker.Closed)
@@ -514,7 +518,7 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
                 ActualProductionVerifications = actualVerifications + 1, SafetyPasses = safetyPasses, LegacyFallbackAttempts = fallbackPairs.Count,
                 SafetyContactComponents = safetyComponents.Count, FinalContactComponents = finalComponents.Count,
                 SafetyJointCombinations = safetyJointCombinations,
-            }), owner, tracker);
+            }) { PhysicalContactAnalysis = physicalContact }, owner, tracker);
     }
 
     private IReadOnlyList<PhysicalPoseInterval> Poses(ResolvedSimulationStep step, Track track)
