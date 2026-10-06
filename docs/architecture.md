@@ -31,6 +31,12 @@ protect parity. It owns no alternative physics. Immutable Track/topology is shar
 - `CoreSim.Tests` protects physical constraints, determinism and manager-facing decisions.
 - `docs` is the source of truth for terminology and simulation invariants.
 
+The [shared physical interaction contract](gameplay/physical-interaction-contract.md)
+is a design proposal for review: four shared channels connect future equipment,
+four-control setup, rider execution, local track response and trajectory evidence.
+It explicitly separates compatibility code from planned state-only track work and
+symptom-based feedback. It does not activate new physics or promote #47/#48 analysis.
+
 ## Core flow
 
 Version precedence: the older longitudinal paragraphs below describe the #24–#37

@@ -162,9 +162,9 @@ No interaction resolver or dimensions are added. See the full
 
 ## Riders and decisions
 
-- Skills use a `0..100` scale: start, speed, slide control, track reading, pair riding and adaptability.
+- Current production skills use a `0..100` scale: start, speed, slide control, track reading, pair riding and adaptability. The approved target in `gameplay/rider-model.md` uses eight `1..99` skills and no Speed rating; migration requires a separate implementation PR, not additional parallel ratings.
 - Style uses normalized preferences: risk, lane changes, outside line and setup independence.
-- Morale is mutable and separate from physical form. It changes stability and follows results or incidents.
+- Morale is mutable and separate from physical form. It follows results or incidents and currently affects incident risk, not canonical corner capability, longitudinal forces or physical lateral speed. Any small future riding influence described by `gameplay/design-decisions-2026-09-30.md` requires separate calibration.
 - A decision model evaluates local lanes from their exact discrete stored surface cells. Track reading controls observation quality; style controls preferences; occupied space is penalized. `AdaptiveDecisionModel` converts continuous lateral separation through the current segment's physical width; its current `0.55 m` occupancy threshold is provisional and preserves compatibility behavior, not a final rider/motorcycle dimension.
 - The movement distance evaluated by `AdaptiveDecisionModel` starts at continuous `LateralPosition`, while style still changes the preference cost of choosing a lane.
 - Lane evaluation uses projected route time (bend plus following straight), not raw maximum speed. This lets a clean outside route beat a worn inside route without making the outside universally superior.
