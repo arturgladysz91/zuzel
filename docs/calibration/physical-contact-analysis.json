@@ -93487,10 +93487,10 @@
             "Status": "Analyzed",
             "Reason": "Verified first-touch shadow reference",
             "LegacyFallbackAuthorized": true,
-            "PairDemandA": 1.2774468376607705E-15,
-            "PairDemandB": 1.2774468376607697E-15,
-            "SeverityRatioA": 1.0165436477555597E-15,
-            "SeverityRatioB": 1.016543647755559E-15,
+            "PairDemandA": 1.3726361716570268E-15,
+            "PairDemandB": 1.372636171657027E-15,
+            "SeverityRatioA": 1.0922917023557565E-15,
+            "SeverityRatioB": 1.0922917023557567E-15,
             "SeverityA": "Brush",
             "SeverityB": "Brush",
             "LegacyResults": [
@@ -93537,10 +93537,10 @@
             "Status": "Analyzed",
             "Reason": "Verified first-touch shadow reference",
             "LegacyFallbackAuthorized": false,
-            "PairDemandA": 1.7238726932014885,
-            "PairDemandB": 1.727435060305193,
-            "SeverityRatioA": 1.3717923784775101,
-            "SeverityRatioB": 1.3746271748412282,
+            "PairDemandA": 1.8344350458898593,
+            "PairDemandB": 1.8377831109232614,
+            "SeverityRatioA": 1.4597736971459891,
+            "SeverityRatioB": 1.4624379600660882,
             "SeverityA": "MajorSave",
             "SeverityB": "MajorSave",
             "LegacyResults": [
@@ -93558,30 +93558,30 @@
         "Riders": [
           {
             "RiderId": 1,
-            "CombinedStabilityDemand": 1.2774468376607705E-15,
+            "CombinedStabilityDemand": 1.3726361716570268E-15,
             "StabilityReserve": 1.256657144512449,
-            "SeverityRatio": 1.0165436477555597E-15,
+            "SeverityRatio": 1.0922917023557565E-15,
             "ProvisionalSeverity": "Brush"
           },
           {
             "RiderId": 2,
-            "CombinedStabilityDemand": 1.2774468376607697E-15,
+            "CombinedStabilityDemand": 1.372636171657027E-15,
             "StabilityReserve": 1.256657144512449,
-            "SeverityRatio": 1.016543647755559E-15,
+            "SeverityRatio": 1.0922917023557567E-15,
             "ProvisionalSeverity": "Brush"
           },
           {
             "RiderId": 3,
-            "CombinedStabilityDemand": 1.7238726932014885,
+            "CombinedStabilityDemand": 1.8344350458898593,
             "StabilityReserve": 1.256657144512449,
-            "SeverityRatio": 1.3717923784775101,
+            "SeverityRatio": 1.4597736971459891,
             "ProvisionalSeverity": "MajorSave"
           },
           {
             "RiderId": 4,
-            "CombinedStabilityDemand": 1.727435060305193,
+            "CombinedStabilityDemand": 1.8377831109232614,
             "StabilityReserve": 1.256657144512449,
-            "SeverityRatio": 1.3746271748412282,
+            "SeverityRatio": 1.4624379600660882,
             "ProvisionalSeverity": "MajorSave"
           }
         ],
@@ -93610,22 +93610,22 @@
             "Manifold": {
               "RiderA": 1,
               "RiderB": 2,
-              "ComponentA": "Chassis",
-              "ComponentB": "Handlebar",
+              "ComponentA": "Handlebar",
+              "ComponentB": "Chassis",
               "ContactPointA": {
-                "X": 53.4082172393002,
-                "Y": 37.3828597205035,
-                "Length": 65.19137879783742
+                "X": 53.38517141587083,
+                "Y": 37.692581483634804,
+                "Length": 65.35064824469886
               },
               "ContactPointB": {
-                "X": 53.222486822703964,
-                "Y": 37.28075354113979,
-                "Length": 64.98067165079246
+                "X": 53.199440999274586,
+                "Y": 37.590475304271095,
+                "Length": 65.14003650779075
               },
               "MidContactPoint": {
-                "X": 53.31535203100208,
-                "Y": 37.331806630821646,
-                "Length": 65.08602421803575
+                "X": 53.29230620757271,
+                "Y": 37.64152839395295,
+                "Length": 65.24534129540943
               },
               "NormalAtoB": {
                 "X": 0.8763066426247286,
@@ -93633,14 +93633,14 @@
                 "Length": 0.9999999999999999
               },
               "LeverArmA": {
-                "X": -0.25206211156754676,
-                "Y": 0.3755086819983333,
-                "Length": 0.4522632843201134
+                "X": -0.27510793499691744,
+                "Y": 0.6852304451296405,
+                "Length": 0.738393620524198
               },
               "LeverArmB": {
-                "X": -0.7664075191480535,
-                "Y": 0.0927448493220524,
-                "Length": 0.7719987645601799
+                "X": -0.7894533425774313,
+                "Y": 0.4024666124533596,
+                "Length": 0.8861241189846724
               },
               "SignedSeparationMeters": -0.16999999999999998,
               "NormalSource": "BikeCenters"
@@ -93689,27 +93689,27 @@
               "RiderId": 1,
               "ForwardDeltaVelocityMetersPerSecond": -3.4512664603419266E-30,
               "LateralDeltaVelocityMetersPerSecond": 6.080205783298708E-16,
-              "NormalizedYawLever": 0.42904058848051735,
-              "YawEquivalentMetersPerSecond": 2.608655067349123E-16,
+              "NormalizedYawLever": 0.6981012076003491,
+              "YawEquivalentMetersPerSecond": 4.2445989997794554E-16,
               "ForwardDemand": 3.4512664603419266E-30,
               "LateralDemand": 1.2160411566597416E-15,
-              "YawDemand": 3.912982601023685E-16,
+              "YawDemand": 6.366898499669183E-16,
               "RotationDemand": 0,
-              "PairDemandSquared": 1.6318704230495028E-30,
-              "PairDemand": 1.2774468376607705E-15
+              "PairDemandSquared": 1.8841300597412588E-30,
+              "PairDemand": 1.3726361716570268E-15
             },
             "DemandB": {
               "RiderId": 2,
               "ForwardDeltaVelocityMetersPerSecond": 3.4512664603419266E-30,
               "LateralDeltaVelocityMetersPerSecond": -6.080205783298708E-16,
-              "NormalizedYawLever": 0.4290405884805147,
-              "YawEquivalentMetersPerSecond": 2.608655067349107E-16,
+              "NormalizedYawLever": 0.6981012076003495,
+              "YawEquivalentMetersPerSecond": 4.244598999779458E-16,
               "ForwardDemand": 3.4512664603419266E-30,
               "LateralDemand": 1.2160411566597416E-15,
-              "YawDemand": 3.9129826010236603E-16,
+              "YawDemand": 6.3668984996691865E-16,
               "RotationDemand": 0,
-              "PairDemandSquared": 1.631870423049501E-30,
-              "PairDemand": 1.2774468376607697E-15
+              "PairDemandSquared": 1.8841300597412595E-30,
+              "PairDemand": 1.372636171657027E-15
             },
             "DeferredByEarlierContact": false
           },
@@ -93769,7 +93769,7 @@
                 "Y": 0.12671414697532413,
                 "Length": 0.7618544908481365
               },
-              "SignedSeparationMeters": -0.15666272124700628,
+              "SignedSeparationMeters": -0.1566627212470063,
               "NormalSource": "ClosestComponentAxes"
             },
             "Impulse": {
@@ -93864,22 +93864,22 @@
             "Manifold": {
               "RiderA": 3,
               "RiderB": 4,
-              "ComponentA": "Chassis",
-              "ComponentB": "Handlebar",
+              "ComponentA": "Handlebar",
+              "ComponentB": "Chassis",
               "ContactPointA": {
-                "X": 54.08411554681052,
-                "Y": 37.77274791906635,
-                "Length": 65.96872016219568
+                "X": 54.07223339230966,
+                "Y": 38.044573506194396,
+                "Length": 66.115020965743
               },
               "ContactPointB": {
-                "X": 53.90191080852497,
-                "Y": 37.672579998112695,
-                "Length": 65.76198957242993
+                "X": 53.87650839824331,
+                "Y": 37.93697276035887,
+                "Length": 65.8930349840269
               },
               "MidContactPoint": {
-                "X": 53.99301317766775,
-                "Y": 37.72266395858952,
-                "Length": 65.86535392857516
+                "X": 53.974370895276486,
+                "Y": 37.99077313327663,
+                "Length": 66.00402682264895
               },
               "NormalAtoB": {
                 "X": 0.8763066426247411,
@@ -93887,14 +93887,14 @@
                 "Length": 1
               },
               "LeverArmA": {
-                "X": -0.233393786025772,
-                "Y": 0.4040815739360397,
-                "Length": 0.4666418088320752
+                "X": -0.24527594052663204,
+                "Y": 0.6759071610640888,
+                "Length": 0.7190346148683942
               },
               "LeverArmB": {
-                "X": -0.7442135152956055,
-                "Y": 0.12325599966982281,
-                "Length": 0.7543512429917842
+                "X": -0.7696159255772628,
+                "Y": 0.3876487619159974,
+                "Length": 0.8617309530921774
               },
               "SignedSeparationMeters": -0.16999999999999998,
               "NormalSource": "BikeCenters"
@@ -93943,27 +93943,27 @@
               "RiderId": 3,
               "ForwardDeltaVelocityMetersPerSecond": -0.06401777150617227,
               "LateralDeltaVelocityMetersPerSecond": 0.8169124842917558,
-              "NormalizedYawLever": 0.4443216163988709,
-              "YawEquivalentMetersPerSecond": 0.3640847028006439,
+              "NormalizedYawLever": 0.676632892619322,
+              "YawEquivalentMetersPerSecond": 0.5544445206404139,
               "ForwardDemand": 0.06401777150617227,
               "LateralDemand": 1.6338249685835116,
-              "YawDemand": 0.5461270542009659,
+              "YawDemand": 0.8316667809606209,
               "RotationDemand": 0,
-              "PairDemandSquared": 2.9717370623657535,
-              "PairDemand": 1.7238726932014885
+              "PairDemandSquared": 3.36515193758893,
+              "PairDemand": 1.8344350458898593
             },
             "DemandB": {
               "RiderId": 4,
               "ForwardDeltaVelocityMetersPerSecond": -1.6431300764452317E-14,
               "LateralDeltaVelocityMetersPerSecond": -0.8194170379363275,
-              "NormalizedYawLever": 0.444321616398872,
-              "YawEquivalentMetersPerSecond": 0.36408470280064487,
+              "NormalizedYawLever": 0.6766328926193219,
+              "YawEquivalentMetersPerSecond": 0.5544445206404139,
               "ForwardDemand": 1.6431300764452317E-14,
               "LateralDemand": 1.638834075872655,
-              "YawDemand": 0.5461270542009673,
+              "YawDemand": 0.8316667809606209,
               "RotationDemand": 0,
-              "PairDemandSquared": 2.9840318875716054,
-              "PairDemand": 1.727435060305193
+              "PairDemandSquared": 3.3774467627947806,
+              "PairDemand": 1.8377831109232614
             },
             "DeferredByEarlierContact": false
           }
@@ -93982,7 +93982,7 @@
               "Y": -2.929161889248754E-16,
               "Length": 6.080205783298709E-16
             },
-            "CombinedStabilityDemand": 1.2774468376607705E-15,
+            "CombinedStabilityDemand": 1.3726361716570268E-15,
             "Reserve": {
               "TechniqueFactor": 1.1020408163265305,
               "StrengthFactor": 1,
@@ -93990,7 +93990,7 @@
               "GripFactor": 1.0860000014305116,
               "StabilityReserveMetersPerSecond": 1.256657144512449
             },
-            "SeverityRatio": 1.0165436477555597E-15,
+            "SeverityRatio": 1.0922917023557565E-15,
             "ProvisionalSeverity": "Brush"
           },
           {
@@ -94006,7 +94006,7 @@
               "Y": 2.929161889248754E-16,
               "Length": 6.080205783298709E-16
             },
-            "CombinedStabilityDemand": 1.2774468376607697E-15,
+            "CombinedStabilityDemand": 1.372636171657027E-15,
             "Reserve": {
               "TechniqueFactor": 1.1020408163265305,
               "StrengthFactor": 1,
@@ -94014,7 +94014,7 @@
               "GripFactor": 1.0860000014305116,
               "StabilityReserveMetersPerSecond": 1.256657144512449
             },
-            "SeverityRatio": 1.016543647755559E-15,
+            "SeverityRatio": 1.0922917023557567E-15,
             "ProvisionalSeverity": "Brush"
           },
           {
@@ -94030,7 +94030,7 @@
               "Y": -0.39475722442109346,
               "Length": 0.8194170379363275
             },
-            "CombinedStabilityDemand": 1.7238726932014885,
+            "CombinedStabilityDemand": 1.8344350458898593,
             "Reserve": {
               "TechniqueFactor": 1.1020408163265305,
               "StrengthFactor": 1,
@@ -94038,7 +94038,7 @@
               "GripFactor": 1.0860000014305116,
               "StabilityReserveMetersPerSecond": 1.256657144512449
             },
-            "SeverityRatio": 1.3717923784775101,
+            "SeverityRatio": 1.4597736971459891,
             "ProvisionalSeverity": "MajorSave"
           },
           {
@@ -94054,7 +94054,7 @@
               "Y": 0.39475722442109346,
               "Length": 0.8194170379363275
             },
-            "CombinedStabilityDemand": 1.727435060305193,
+            "CombinedStabilityDemand": 1.8377831109232614,
             "Reserve": {
               "TechniqueFactor": 1.1020408163265305,
               "StrengthFactor": 1,
@@ -94062,7 +94062,7 @@
               "GripFactor": 1.0860000014305116,
               "StabilityReserveMetersPerSecond": 1.256657144512449
             },
-            "SeverityRatio": 1.3746271748412282,
+            "SeverityRatio": 1.4624379600660882,
             "ProvisionalSeverity": "MajorSave"
           }
         ],
@@ -94232,10 +94232,10 @@
             "Status": "Analyzed",
             "Reason": "Verified first-touch shadow reference",
             "LegacyFallbackAuthorized": true,
-            "PairDemandA": 1.2774468376607705E-15,
-            "PairDemandB": 1.2774468376607697E-15,
-            "SeverityRatioA": 1.0165436477555597E-15,
-            "SeverityRatioB": 1.016543647755559E-15,
+            "PairDemandA": 1.3726361716570268E-15,
+            "PairDemandB": 1.372636171657027E-15,
+            "SeverityRatioA": 1.0922917023557565E-15,
+            "SeverityRatioB": 1.0922917023557567E-15,
             "SeverityA": "Brush",
             "SeverityB": "Brush",
             "LegacyResults": [
@@ -94282,10 +94282,10 @@
             "Status": "Analyzed",
             "Reason": "Verified first-touch shadow reference",
             "LegacyFallbackAuthorized": false,
-            "PairDemandA": 1.7238726932014885,
-            "PairDemandB": 1.727435060305193,
-            "SeverityRatioA": 1.3717923784775101,
-            "SeverityRatioB": 1.3746271748412282,
+            "PairDemandA": 1.8344350458898593,
+            "PairDemandB": 1.8377831109232614,
+            "SeverityRatioA": 1.4597736971459891,
+            "SeverityRatioB": 1.4624379600660882,
             "SeverityA": "MajorSave",
             "SeverityB": "MajorSave",
             "LegacyResults": [
@@ -94303,30 +94303,30 @@
         "Riders": [
           {
             "RiderId": 1,
-            "CombinedStabilityDemand": 1.2774468376607705E-15,
+            "CombinedStabilityDemand": 1.3726361716570268E-15,
             "StabilityReserve": 1.256657144512449,
-            "SeverityRatio": 1.0165436477555597E-15,
+            "SeverityRatio": 1.0922917023557565E-15,
             "ProvisionalSeverity": "Brush"
           },
           {
             "RiderId": 2,
-            "CombinedStabilityDemand": 1.2774468376607697E-15,
+            "CombinedStabilityDemand": 1.372636171657027E-15,
             "StabilityReserve": 1.256657144512449,
-            "SeverityRatio": 1.016543647755559E-15,
+            "SeverityRatio": 1.0922917023557567E-15,
             "ProvisionalSeverity": "Brush"
           },
           {
             "RiderId": 3,
-            "CombinedStabilityDemand": 1.7238726932014885,
+            "CombinedStabilityDemand": 1.8344350458898593,
             "StabilityReserve": 1.256657144512449,
-            "SeverityRatio": 1.3717923784775101,
+            "SeverityRatio": 1.4597736971459891,
             "ProvisionalSeverity": "MajorSave"
           },
           {
             "RiderId": 4,
-            "CombinedStabilityDemand": 1.727435060305193,
+            "CombinedStabilityDemand": 1.8377831109232614,
             "StabilityReserve": 1.256657144512449,
-            "SeverityRatio": 1.3746271748412282,
+            "SeverityRatio": 1.4624379600660882,
             "ProvisionalSeverity": "MajorSave"
           }
         ],
@@ -94355,22 +94355,22 @@
             "Manifold": {
               "RiderA": 1,
               "RiderB": 2,
-              "ComponentA": "Chassis",
-              "ComponentB": "Handlebar",
+              "ComponentA": "Handlebar",
+              "ComponentB": "Chassis",
               "ContactPointA": {
-                "X": 53.4082172393002,
-                "Y": 37.3828597205035,
-                "Length": 65.19137879783742
+                "X": 53.38517141587083,
+                "Y": 37.692581483634804,
+                "Length": 65.35064824469886
               },
               "ContactPointB": {
-                "X": 53.222486822703964,
-                "Y": 37.28075354113979,
-                "Length": 64.98067165079246
+                "X": 53.199440999274586,
+                "Y": 37.590475304271095,
+                "Length": 65.14003650779075
               },
               "MidContactPoint": {
-                "X": 53.31535203100208,
-                "Y": 37.331806630821646,
-                "Length": 65.08602421803575
+                "X": 53.29230620757271,
+                "Y": 37.64152839395295,
+                "Length": 65.24534129540943
               },
               "NormalAtoB": {
                 "X": 0.8763066426247286,
@@ -94378,14 +94378,14 @@
                 "Length": 0.9999999999999999
               },
               "LeverArmA": {
-                "X": -0.25206211156754676,
-                "Y": 0.3755086819983333,
-                "Length": 0.4522632843201134
+                "X": -0.27510793499691744,
+                "Y": 0.6852304451296405,
+                "Length": 0.738393620524198
               },
               "LeverArmB": {
-                "X": -0.7664075191480535,
-                "Y": 0.0927448493220524,
-                "Length": 0.7719987645601799
+                "X": -0.7894533425774313,
+                "Y": 0.4024666124533596,
+                "Length": 0.8861241189846724
               },
               "SignedSeparationMeters": -0.16999999999999998,
               "NormalSource": "BikeCenters"
@@ -94434,27 +94434,27 @@
               "RiderId": 1,
               "ForwardDeltaVelocityMetersPerSecond": -3.4512664603419266E-30,
               "LateralDeltaVelocityMetersPerSecond": 6.080205783298708E-16,
-              "NormalizedYawLever": 0.42904058848051735,
-              "YawEquivalentMetersPerSecond": 2.608655067349123E-16,
+              "NormalizedYawLever": 0.6981012076003491,
+              "YawEquivalentMetersPerSecond": 4.2445989997794554E-16,
               "ForwardDemand": 3.4512664603419266E-30,
               "LateralDemand": 1.2160411566597416E-15,
-              "YawDemand": 3.912982601023685E-16,
+              "YawDemand": 6.366898499669183E-16,
               "RotationDemand": 0,
-              "PairDemandSquared": 1.6318704230495028E-30,
-              "PairDemand": 1.2774468376607705E-15
+              "PairDemandSquared": 1.8841300597412588E-30,
+              "PairDemand": 1.3726361716570268E-15
             },
             "DemandB": {
               "RiderId": 2,
               "ForwardDeltaVelocityMetersPerSecond": 3.4512664603419266E-30,
               "LateralDeltaVelocityMetersPerSecond": -6.080205783298708E-16,
-              "NormalizedYawLever": 0.4290405884805147,
-              "YawEquivalentMetersPerSecond": 2.608655067349107E-16,
+              "NormalizedYawLever": 0.6981012076003495,
+              "YawEquivalentMetersPerSecond": 4.244598999779458E-16,
               "ForwardDemand": 3.4512664603419266E-30,
               "LateralDemand": 1.2160411566597416E-15,
-              "YawDemand": 3.9129826010236603E-16,
+              "YawDemand": 6.3668984996691865E-16,
               "RotationDemand": 0,
-              "PairDemandSquared": 1.631870423049501E-30,
-              "PairDemand": 1.2774468376607697E-15
+              "PairDemandSquared": 1.8841300597412595E-30,
+              "PairDemand": 1.372636171657027E-15
             },
             "DeferredByEarlierContact": false
           },
@@ -94514,7 +94514,7 @@
                 "Y": 0.12671414697532413,
                 "Length": 0.7618544908481365
               },
-              "SignedSeparationMeters": -0.15666272124700628,
+              "SignedSeparationMeters": -0.1566627212470063,
               "NormalSource": "ClosestComponentAxes"
             },
             "Impulse": {
@@ -94609,22 +94609,22 @@
             "Manifold": {
               "RiderA": 3,
               "RiderB": 4,
-              "ComponentA": "Chassis",
-              "ComponentB": "Handlebar",
+              "ComponentA": "Handlebar",
+              "ComponentB": "Chassis",
               "ContactPointA": {
-                "X": 54.08411554681052,
-                "Y": 37.77274791906635,
-                "Length": 65.96872016219568
+                "X": 54.07223339230966,
+                "Y": 38.044573506194396,
+                "Length": 66.115020965743
               },
               "ContactPointB": {
-                "X": 53.90191080852497,
-                "Y": 37.672579998112695,
-                "Length": 65.76198957242993
+                "X": 53.87650839824331,
+                "Y": 37.93697276035887,
+                "Length": 65.8930349840269
               },
               "MidContactPoint": {
-                "X": 53.99301317766775,
-                "Y": 37.72266395858952,
-                "Length": 65.86535392857516
+                "X": 53.974370895276486,
+                "Y": 37.99077313327663,
+                "Length": 66.00402682264895
               },
               "NormalAtoB": {
                 "X": 0.8763066426247411,
@@ -94632,14 +94632,14 @@
                 "Length": 1
               },
               "LeverArmA": {
-                "X": -0.233393786025772,
-                "Y": 0.4040815739360397,
-                "Length": 0.4666418088320752
+                "X": -0.24527594052663204,
+                "Y": 0.6759071610640888,
+                "Length": 0.7190346148683942
               },
               "LeverArmB": {
-                "X": -0.7442135152956055,
-                "Y": 0.12325599966982281,
-                "Length": 0.7543512429917842
+                "X": -0.7696159255772628,
+                "Y": 0.3876487619159974,
+                "Length": 0.8617309530921774
               },
               "SignedSeparationMeters": -0.16999999999999998,
               "NormalSource": "BikeCenters"
@@ -94688,27 +94688,27 @@
               "RiderId": 3,
               "ForwardDeltaVelocityMetersPerSecond": -0.06401777150617227,
               "LateralDeltaVelocityMetersPerSecond": 0.8169124842917558,
-              "NormalizedYawLever": 0.4443216163988709,
-              "YawEquivalentMetersPerSecond": 0.3640847028006439,
+              "NormalizedYawLever": 0.676632892619322,
+              "YawEquivalentMetersPerSecond": 0.5544445206404139,
               "ForwardDemand": 0.06401777150617227,
               "LateralDemand": 1.6338249685835116,
-              "YawDemand": 0.5461270542009659,
+              "YawDemand": 0.8316667809606209,
               "RotationDemand": 0,
-              "PairDemandSquared": 2.9717370623657535,
-              "PairDemand": 1.7238726932014885
+              "PairDemandSquared": 3.36515193758893,
+              "PairDemand": 1.8344350458898593
             },
             "DemandB": {
               "RiderId": 4,
               "ForwardDeltaVelocityMetersPerSecond": -1.6431300764452317E-14,
               "LateralDeltaVelocityMetersPerSecond": -0.8194170379363275,
-              "NormalizedYawLever": 0.444321616398872,
-              "YawEquivalentMetersPerSecond": 0.36408470280064487,
+              "NormalizedYawLever": 0.6766328926193219,
+              "YawEquivalentMetersPerSecond": 0.5544445206404139,
               "ForwardDemand": 1.6431300764452317E-14,
               "LateralDemand": 1.638834075872655,
-              "YawDemand": 0.5461270542009673,
+              "YawDemand": 0.8316667809606209,
               "RotationDemand": 0,
-              "PairDemandSquared": 2.9840318875716054,
-              "PairDemand": 1.727435060305193
+              "PairDemandSquared": 3.3774467627947806,
+              "PairDemand": 1.8377831109232614
             },
             "DeferredByEarlierContact": false
           }
@@ -94727,7 +94727,7 @@
               "Y": -2.929161889248754E-16,
               "Length": 6.080205783298709E-16
             },
-            "CombinedStabilityDemand": 1.2774468376607705E-15,
+            "CombinedStabilityDemand": 1.3726361716570268E-15,
             "Reserve": {
               "TechniqueFactor": 1.1020408163265305,
               "StrengthFactor": 1,
@@ -94735,7 +94735,7 @@
               "GripFactor": 1.0860000014305116,
               "StabilityReserveMetersPerSecond": 1.256657144512449
             },
-            "SeverityRatio": 1.0165436477555597E-15,
+            "SeverityRatio": 1.0922917023557565E-15,
             "ProvisionalSeverity": "Brush"
           },
           {
@@ -94751,7 +94751,7 @@
               "Y": 2.929161889248754E-16,
               "Length": 6.080205783298709E-16
             },
-            "CombinedStabilityDemand": 1.2774468376607697E-15,
+            "CombinedStabilityDemand": 1.372636171657027E-15,
             "Reserve": {
               "TechniqueFactor": 1.1020408163265305,
               "StrengthFactor": 1,
@@ -94759,7 +94759,7 @@
               "GripFactor": 1.0860000014305116,
               "StabilityReserveMetersPerSecond": 1.256657144512449
             },
-            "SeverityRatio": 1.016543647755559E-15,
+            "SeverityRatio": 1.0922917023557567E-15,
             "ProvisionalSeverity": "Brush"
           },
           {
@@ -94775,7 +94775,7 @@
               "Y": -0.39475722442109346,
               "Length": 0.8194170379363275
             },
-            "CombinedStabilityDemand": 1.7238726932014885,
+            "CombinedStabilityDemand": 1.8344350458898593,
             "Reserve": {
               "TechniqueFactor": 1.1020408163265305,
               "StrengthFactor": 1,
@@ -94783,7 +94783,7 @@
               "GripFactor": 1.0860000014305116,
               "StabilityReserveMetersPerSecond": 1.256657144512449
             },
-            "SeverityRatio": 1.3717923784775101,
+            "SeverityRatio": 1.4597736971459891,
             "ProvisionalSeverity": "MajorSave"
           },
           {
@@ -94799,7 +94799,7 @@
               "Y": 0.39475722442109346,
               "Length": 0.8194170379363275
             },
-            "CombinedStabilityDemand": 1.727435060305193,
+            "CombinedStabilityDemand": 1.8377831109232614,
             "Reserve": {
               "TechniqueFactor": 1.1020408163265305,
               "StrengthFactor": 1,
@@ -94807,7 +94807,7 @@
               "GripFactor": 1.0860000014305116,
               "StabilityReserveMetersPerSecond": 1.256657144512449
             },
-            "SeverityRatio": 1.3746271748412282,
+            "SeverityRatio": 1.4624379600660882,
             "ProvisionalSeverity": "MajorSave"
           }
         ],
@@ -94977,10 +94977,10 @@
             "Status": "Analyzed",
             "Reason": "Verified first-touch shadow reference",
             "LegacyFallbackAuthorized": true,
-            "PairDemandA": 1.2774468376607705E-15,
-            "PairDemandB": 1.2774468376607697E-15,
-            "SeverityRatioA": 1.0165436477555597E-15,
-            "SeverityRatioB": 1.016543647755559E-15,
+            "PairDemandA": 1.3726361716570268E-15,
+            "PairDemandB": 1.372636171657027E-15,
+            "SeverityRatioA": 1.0922917023557565E-15,
+            "SeverityRatioB": 1.0922917023557567E-15,
             "SeverityA": "Brush",
             "SeverityB": "Brush",
             "LegacyResults": [
@@ -95027,10 +95027,10 @@
             "Status": "Analyzed",
             "Reason": "Verified first-touch shadow reference",
             "LegacyFallbackAuthorized": false,
-            "PairDemandA": 1.7238726932014885,
-            "PairDemandB": 1.727435060305193,
-            "SeverityRatioA": 1.3717923784775101,
-            "SeverityRatioB": 1.3746271748412282,
+            "PairDemandA": 1.8344350458898593,
+            "PairDemandB": 1.8377831109232614,
+            "SeverityRatioA": 1.4597736971459891,
+            "SeverityRatioB": 1.4624379600660882,
             "SeverityA": "MajorSave",
             "SeverityB": "MajorSave",
             "LegacyResults": [
@@ -95048,30 +95048,30 @@
         "Riders": [
           {
             "RiderId": 1,
-            "CombinedStabilityDemand": 1.2774468376607705E-15,
+            "CombinedStabilityDemand": 1.3726361716570268E-15,
             "StabilityReserve": 1.256657144512449,
-            "SeverityRatio": 1.0165436477555597E-15,
+            "SeverityRatio": 1.0922917023557565E-15,
             "ProvisionalSeverity": "Brush"
           },
           {
             "RiderId": 2,
-            "CombinedStabilityDemand": 1.2774468376607697E-15,
+            "CombinedStabilityDemand": 1.372636171657027E-15,
             "StabilityReserve": 1.256657144512449,
-            "SeverityRatio": 1.016543647755559E-15,
+            "SeverityRatio": 1.0922917023557567E-15,
             "ProvisionalSeverity": "Brush"
           },
           {
             "RiderId": 3,
-            "CombinedStabilityDemand": 1.7238726932014885,
+            "CombinedStabilityDemand": 1.8344350458898593,
             "StabilityReserve": 1.256657144512449,
-            "SeverityRatio": 1.3717923784775101,
+            "SeverityRatio": 1.4597736971459891,
             "ProvisionalSeverity": "MajorSave"
           },
           {
             "RiderId": 4,
-            "CombinedStabilityDemand": 1.727435060305193,
+            "CombinedStabilityDemand": 1.8377831109232614,
             "StabilityReserve": 1.256657144512449,
-            "SeverityRatio": 1.3746271748412282,
+            "SeverityRatio": 1.4624379600660882,
             "ProvisionalSeverity": "MajorSave"
           }
         ],
@@ -95100,22 +95100,22 @@
             "Manifold": {
               "RiderA": 1,
               "RiderB": 2,
-              "ComponentA": "Chassis",
-              "ComponentB": "Handlebar",
+              "ComponentA": "Handlebar",
+              "ComponentB": "Chassis",
               "ContactPointA": {
-                "X": 53.4082172393002,
-                "Y": 37.3828597205035,
-                "Length": 65.19137879783742
+                "X": 53.38517141587083,
+                "Y": 37.692581483634804,
+                "Length": 65.35064824469886
               },
               "ContactPointB": {
-                "X": 53.222486822703964,
-                "Y": 37.28075354113979,
-                "Length": 64.98067165079246
+                "X": 53.199440999274586,
+                "Y": 37.590475304271095,
+                "Length": 65.14003650779075
               },
               "MidContactPoint": {
-                "X": 53.31535203100208,
-                "Y": 37.331806630821646,
-                "Length": 65.08602421803575
+                "X": 53.29230620757271,
+                "Y": 37.64152839395295,
+                "Length": 65.24534129540943
               },
               "NormalAtoB": {
                 "X": 0.8763066426247286,
@@ -95123,14 +95123,14 @@
                 "Length": 0.9999999999999999
               },
               "LeverArmA": {
-                "X": -0.25206211156754676,
-                "Y": 0.3755086819983333,
-                "Length": 0.4522632843201134
+                "X": -0.27510793499691744,
+                "Y": 0.6852304451296405,
+                "Length": 0.738393620524198
               },
               "LeverArmB": {
-                "X": -0.7664075191480535,
-                "Y": 0.0927448493220524,
-                "Length": 0.7719987645601799
+                "X": -0.7894533425774313,
+                "Y": 0.4024666124533596,
+                "Length": 0.8861241189846724
               },
               "SignedSeparationMeters": -0.16999999999999998,
               "NormalSource": "BikeCenters"
@@ -95179,27 +95179,27 @@
               "RiderId": 1,
               "ForwardDeltaVelocityMetersPerSecond": -3.4512664603419266E-30,
               "LateralDeltaVelocityMetersPerSecond": 6.080205783298708E-16,
-              "NormalizedYawLever": 0.42904058848051735,
-              "YawEquivalentMetersPerSecond": 2.608655067349123E-16,
+              "NormalizedYawLever": 0.6981012076003491,
+              "YawEquivalentMetersPerSecond": 4.2445989997794554E-16,
               "ForwardDemand": 3.4512664603419266E-30,
               "LateralDemand": 1.2160411566597416E-15,
-              "YawDemand": 3.912982601023685E-16,
+              "YawDemand": 6.366898499669183E-16,
               "RotationDemand": 0,
-              "PairDemandSquared": 1.6318704230495028E-30,
-              "PairDemand": 1.2774468376607705E-15
+              "PairDemandSquared": 1.8841300597412588E-30,
+              "PairDemand": 1.3726361716570268E-15
             },
             "DemandB": {
               "RiderId": 2,
               "ForwardDeltaVelocityMetersPerSecond": 3.4512664603419266E-30,
               "LateralDeltaVelocityMetersPerSecond": -6.080205783298708E-16,
-              "NormalizedYawLever": 0.4290405884805147,
-              "YawEquivalentMetersPerSecond": 2.608655067349107E-16,
+              "NormalizedYawLever": 0.6981012076003495,
+              "YawEquivalentMetersPerSecond": 4.244598999779458E-16,
               "ForwardDemand": 3.4512664603419266E-30,
               "LateralDemand": 1.2160411566597416E-15,
-              "YawDemand": 3.9129826010236603E-16,
+              "YawDemand": 6.3668984996691865E-16,
               "RotationDemand": 0,
-              "PairDemandSquared": 1.631870423049501E-30,
-              "PairDemand": 1.2774468376607697E-15
+              "PairDemandSquared": 1.8841300597412595E-30,
+              "PairDemand": 1.372636171657027E-15
             },
             "DeferredByEarlierContact": false
           },
@@ -95259,7 +95259,7 @@
                 "Y": 0.12671414697532413,
                 "Length": 0.7618544908481365
               },
-              "SignedSeparationMeters": -0.15666272124700628,
+              "SignedSeparationMeters": -0.1566627212470063,
               "NormalSource": "ClosestComponentAxes"
             },
             "Impulse": {
@@ -95354,22 +95354,22 @@
             "Manifold": {
               "RiderA": 3,
               "RiderB": 4,
-              "ComponentA": "Chassis",
-              "ComponentB": "Handlebar",
+              "ComponentA": "Handlebar",
+              "ComponentB": "Chassis",
               "ContactPointA": {
-                "X": 54.08411554681052,
-                "Y": 37.77274791906635,
-                "Length": 65.96872016219568
+                "X": 54.07223339230966,
+                "Y": 38.044573506194396,
+                "Length": 66.115020965743
               },
               "ContactPointB": {
-                "X": 53.90191080852497,
-                "Y": 37.672579998112695,
-                "Length": 65.76198957242993
+                "X": 53.87650839824331,
+                "Y": 37.93697276035887,
+                "Length": 65.8930349840269
               },
               "MidContactPoint": {
-                "X": 53.99301317766775,
-                "Y": 37.72266395858952,
-                "Length": 65.86535392857516
+                "X": 53.974370895276486,
+                "Y": 37.99077313327663,
+                "Length": 66.00402682264895
               },
               "NormalAtoB": {
                 "X": 0.8763066426247411,
@@ -95377,14 +95377,14 @@
                 "Length": 1
               },
               "LeverArmA": {
-                "X": -0.233393786025772,
-                "Y": 0.4040815739360397,
-                "Length": 0.4666418088320752
+                "X": -0.24527594052663204,
+                "Y": 0.6759071610640888,
+                "Length": 0.7190346148683942
               },
               "LeverArmB": {
-                "X": -0.7442135152956055,
-                "Y": 0.12325599966982281,
-                "Length": 0.7543512429917842
+                "X": -0.7696159255772628,
+                "Y": 0.3876487619159974,
+                "Length": 0.8617309530921774
               },
               "SignedSeparationMeters": -0.16999999999999998,
               "NormalSource": "BikeCenters"
@@ -95433,27 +95433,27 @@
               "RiderId": 3,
               "ForwardDeltaVelocityMetersPerSecond": -0.06401777150617227,
               "LateralDeltaVelocityMetersPerSecond": 0.8169124842917558,
-              "NormalizedYawLever": 0.4443216163988709,
-              "YawEquivalentMetersPerSecond": 0.3640847028006439,
+              "NormalizedYawLever": 0.676632892619322,
+              "YawEquivalentMetersPerSecond": 0.5544445206404139,
               "ForwardDemand": 0.06401777150617227,
               "LateralDemand": 1.6338249685835116,
-              "YawDemand": 0.5461270542009659,
+              "YawDemand": 0.8316667809606209,
               "RotationDemand": 0,
-              "PairDemandSquared": 2.9717370623657535,
-              "PairDemand": 1.7238726932014885
+              "PairDemandSquared": 3.36515193758893,
+              "PairDemand": 1.8344350458898593
             },
             "DemandB": {
               "RiderId": 4,
               "ForwardDeltaVelocityMetersPerSecond": -1.6431300764452317E-14,
               "LateralDeltaVelocityMetersPerSecond": -0.8194170379363275,
-              "NormalizedYawLever": 0.444321616398872,
-              "YawEquivalentMetersPerSecond": 0.36408470280064487,
+              "NormalizedYawLever": 0.6766328926193219,
+              "YawEquivalentMetersPerSecond": 0.5544445206404139,
               "ForwardDemand": 1.6431300764452317E-14,
               "LateralDemand": 1.638834075872655,
-              "YawDemand": 0.5461270542009673,
+              "YawDemand": 0.8316667809606209,
               "RotationDemand": 0,
-              "PairDemandSquared": 2.9840318875716054,
-              "PairDemand": 1.727435060305193
+              "PairDemandSquared": 3.3774467627947806,
+              "PairDemand": 1.8377831109232614
             },
             "DeferredByEarlierContact": false
           }
@@ -95472,7 +95472,7 @@
               "Y": -2.929161889248754E-16,
               "Length": 6.080205783298709E-16
             },
-            "CombinedStabilityDemand": 1.2774468376607705E-15,
+            "CombinedStabilityDemand": 1.3726361716570268E-15,
             "Reserve": {
               "TechniqueFactor": 1.1020408163265305,
               "StrengthFactor": 1,
@@ -95480,7 +95480,7 @@
               "GripFactor": 1.0860000014305116,
               "StabilityReserveMetersPerSecond": 1.256657144512449
             },
-            "SeverityRatio": 1.0165436477555597E-15,
+            "SeverityRatio": 1.0922917023557565E-15,
             "ProvisionalSeverity": "Brush"
           },
           {
@@ -95496,7 +95496,7 @@
               "Y": 2.929161889248754E-16,
               "Length": 6.080205783298709E-16
             },
-            "CombinedStabilityDemand": 1.2774468376607697E-15,
+            "CombinedStabilityDemand": 1.372636171657027E-15,
             "Reserve": {
               "TechniqueFactor": 1.1020408163265305,
               "StrengthFactor": 1,
@@ -95504,7 +95504,7 @@
               "GripFactor": 1.0860000014305116,
               "StabilityReserveMetersPerSecond": 1.256657144512449
             },
-            "SeverityRatio": 1.016543647755559E-15,
+            "SeverityRatio": 1.0922917023557567E-15,
             "ProvisionalSeverity": "Brush"
           },
           {
@@ -95520,7 +95520,7 @@
               "Y": -0.39475722442109346,
               "Length": 0.8194170379363275
             },
-            "CombinedStabilityDemand": 1.7238726932014885,
+            "CombinedStabilityDemand": 1.8344350458898593,
             "Reserve": {
               "TechniqueFactor": 1.1020408163265305,
               "StrengthFactor": 1,
@@ -95528,7 +95528,7 @@
               "GripFactor": 1.0860000014305116,
               "StabilityReserveMetersPerSecond": 1.256657144512449
             },
-            "SeverityRatio": 1.3717923784775101,
+            "SeverityRatio": 1.4597736971459891,
             "ProvisionalSeverity": "MajorSave"
           },
           {
@@ -95544,7 +95544,7 @@
               "Y": 0.39475722442109346,
               "Length": 0.8194170379363275
             },
-            "CombinedStabilityDemand": 1.727435060305193,
+            "CombinedStabilityDemand": 1.8377831109232614,
             "Reserve": {
               "TechniqueFactor": 1.1020408163265305,
               "StrengthFactor": 1,
@@ -95552,7 +95552,7 @@
               "GripFactor": 1.0860000014305116,
               "StabilityReserveMetersPerSecond": 1.256657144512449
             },
-            "SeverityRatio": 1.3746271748412282,
+            "SeverityRatio": 1.4624379600660882,
             "ProvisionalSeverity": "MajorSave"
           }
         ],

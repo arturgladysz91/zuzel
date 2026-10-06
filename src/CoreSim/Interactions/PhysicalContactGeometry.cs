@@ -17,7 +17,7 @@ public static class PhysicalContactGeometry
         { reason = "Missing matching first-touch pose coverage in the verified metric frame"; return null; }
         // Event components describe the minimum later in the interval. Select the
         // touching components at onset with #55's existing, unchanged separation.
-        var separation = MechanicalSeparation.Between(a,b);
+        var separation = SeparationInPhysicalOrder(a,b);
         if (separation.SignedMeters > GeometryNumerics.MinimumSeparationToleranceMeters)
         { reason = "Supplied first-touch poses do not support the verified contact"; return null; }
         var ca = a.Footprint.Component(separation.ComponentA); var cb = b.Footprint.Component(separation.ComponentB);
@@ -38,6 +38,20 @@ public static class PhysicalContactGeometry
         var pointA = SurfaceAlongRay(ca,pa,normal); var pointB = SurfaceAlongRay(cb,pb,normal*-1);
         return new(a.RiderId,b.RiderId,separation.ComponentA,separation.ComponentB,pointA,pointB,
             (pointA+pointB)*.5,normal,pointA-a.Position,pointB-b.Position,separation.SignedMeters,source);
+    }
+    private static FootprintSeparation SeparationInPhysicalOrder(PhysicalBikePose a, PhysicalBikePose b)
+    {
+        // #55's equal-minimum component priority is intentionally unchanged.
+        // Present poses to it in geometric track-frame order, so simultaneous
+        // chassis/bar ties cannot attach a different manifold after an ID swap.
+        var forward=new MeterPoint(Math.Cos(a.ReferenceTangentHeadingRadians)+Math.Cos(b.ReferenceTangentHeadingRadians),
+            Math.Sin(a.ReferenceTangentHeadingRadians)+Math.Sin(b.ReferenceTangentHeadingRadians));
+        if(forward.Length<=DirectionToleranceMeters) forward=new(1,0); // fixed basis of the supplied metric frame
+        var delta=b.Position-a.Position;var along=MeterPoint.Dot(delta,forward);var lateral=MeterPoint.Dot(delta,new(-forward.Y,forward.X));
+        var reverse=along < -DirectionToleranceMeters || Math.Abs(along)<=DirectionToleranceMeters&&lateral<0;
+        if(!reverse) return MechanicalSeparation.Between(a,b);
+        var result=MechanicalSeparation.Between(b,a);
+        return new(result.SignedMeters,result.ComponentB,result.ComponentA);
     }
     private static MeterPoint SurfaceAlongRay(MechanicalCapsule capsule, MeterPoint origin, MeterPoint direction)
     {

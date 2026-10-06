@@ -183,6 +183,16 @@ public sealed class PhysicalContactAnalysisTests
         Surface(input.PoseA!,pair.Manifold.ComponentA,pair.Manifold.ContactPointA);Surface(input.PoseB!,pair.Manifold.ComponentB,pair.Manifold.ContactPointB);
     }
     [Fact]
+    public void SimultaneousMixedComponentTiesUseGeometryRatherThanRiderIdentity()
+    {
+        var f=PhysicalContactEvidence.FromPoses("mixed-component-tie",new[]{PhysicalContactEvidence.Linear(1,default,new(20,.5)),
+            PhysicalContactEvidence.Linear(2,new(.1,.2),new(20,-.5))});
+        var input=f.Inputs.Single();var a=PhysicalContactAnalyzer.AnalyzePair(input);var b=PhysicalContactAnalyzer.AnalyzePair(Swap(input));
+        Assert.Equal(a.Manifold!.ComponentA,b.Manifold!.ComponentB);Assert.Equal(a.Manifold.ComponentB,b.Manifold.ComponentA);
+        Assert.Equal(a.DemandA!.PairDemand,b.DemandB!.PairDemand);Assert.Equal(a.DemandB!.PairDemand,b.DemandA!.PairDemand);
+        Assert.Equal(a.Manifold.ContactPointA,b.Manifold.ContactPointB);Assert.Equal(a.Manifold.ContactPointB,b.Manifold.ContactPointA);
+    }
+    [Fact]
     public void RotationUsesOnlyPositiveRotationalAttributionAndHasNoInventedZeroTimeOnset()
     {
         var pair=Pair("rotation-onset"); var input=F("rotation-onset").Inputs.First(i=>i.Contact.EligibleForFutureInteraction);
