@@ -16,7 +16,7 @@ public static class PhysicalContactAnalyzer
         if (manifold is null) return row with { Status = PhysicalContactStatus.GeometryUnresolved, Reason = reason };
         var ma = input.RiderA.Profile.Physical.MassKg + p.ReferenceBikeMassKg;
         var mb = input.RiderB.Profile.Physical.MassKg + p.ReferenceBikeMassKg;
-        var reduced = ma * (mb / (ma + mb));
+        var reduced = (ma * mb) / (ma + mb);
         var relative = input.VelocityB - input.VelocityA;
         var closing = Math.Max(0, -MeterPoint.Dot(relative, manifold.NormalAtoB));
         var referenceClosing = Math.Min(closing, p.MaximumReferenceClosingSpeedMetersPerSecond);

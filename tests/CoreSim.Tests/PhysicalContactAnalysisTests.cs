@@ -44,7 +44,7 @@ public sealed class PhysicalContactAnalysisTests
             Assert.InRange(Math.Abs(i.PreNormalMomentumKgMetersPerSecond-i.PostNormalMomentumKgMetersPerSecond),0,1e-9);
             Assert.True(i.PostNormalKineticEnergyJoules<=i.PreNormalKineticEnergyJoules+1e-7);
             var swapped=PhysicalContactAnalyzer.AnalyzePair(Swap(input),new(){Restitution=restitution});
-            Assert.Equal(i.ImpulseMagnitudeNewtonSeconds,swapped.Impulse!.ImpulseMagnitudeNewtonSeconds,10);
+            Assert.Equal(i.ImpulseMagnitudeNewtonSeconds,swapped.Impulse!.ImpulseMagnitudeNewtonSeconds);
             Assert.Equal(pair.DemandA!.PairDemand,swapped.DemandB!.PairDemand,10);
             Assert.Equal(i.ImpulseOnANewtonSeconds,swapped.Impulse.ImpulseOnBNewtonSeconds);
         }
@@ -206,13 +206,17 @@ public sealed class PhysicalContactAnalysisTests
     [Fact]
     public void RenamingRidersChangesOnlyIdentifiersAndDuplicateRowsAreNotDoubleCounted()
     {
-        var f=F("M-three-squeeze"); int Id(int id)=>id switch{1=>90,2=>20,_=>10};
+        var original=F("M-three-squeeze");
+        var unequal=original.Inputs.Select(i=>i with{RiderA=i.RiderA with{Profile=PhysicalContactEvidence.Physiology(i.RiderA.RiderId,mass:60+7.5f*(i.RiderA.RiderId-1)).Profile},
+            RiderB=i.RiderB with{Profile=PhysicalContactEvidence.Physiology(i.RiderB.RiderId,mass:60+7.5f*(i.RiderB.RiderId-1)).Profile}}).ToArray();
+        var f=original with{Inputs=unequal,Analysis=PhysicalContactAnalyzer.Analyze(unequal)};int Id(int id)=>id switch{1=>90,2=>20,_=>10};
         PhysicalBikePose? Pose(PhysicalBikePose? p)=>p is null?null:new(Id(p.RiderId),p.FrameId,p.Position,p.Attitude,p.Dimensions,p.ReferenceTangentHeadingRadians,p.Source);
         var renamed=f.Inputs.Select(i=>i with {Contact=i.Contact with{RiderA=Id(i.Contact.RiderA),RiderB=Id(i.Contact.RiderB)},
             PoseA=Pose(i.PoseA),PoseB=Pose(i.PoseB),RiderA=i.RiderA with{RiderId=Id(i.RiderA.RiderId)},RiderB=i.RiderB with{RiderId=Id(i.RiderB.RiderId)}});
         var result=PhysicalContactAnalyzer.Analyze(renamed);
         foreach(var r in f.Analysis.AuditRiders){var other=result.AuditRiders.Single(o=>o.RiderId==Id(r.RiderId));
-            Assert.Equal(r.CombinedStabilityDemand,other.CombinedStabilityDemand,10); Assert.Equal(r.NetImpulseNewtonSeconds,other.NetImpulseNewtonSeconds);}
+            Assert.Equal(r.CombinedStabilityDemand,other.CombinedStabilityDemand); Assert.Equal(r.SeverityRatio,other.SeverityRatio);
+            Assert.Equal(r.NetImpulseNewtonSeconds,other.NetImpulseNewtonSeconds);}
         var duplicate=PhysicalContactAnalyzer.Analyze(f.Inputs.Concat(f.Inputs));
         Assert.Equal(Json(f.Analysis.Riders),Json(duplicate.Riders)); Assert.Equal(2,duplicate.Work.AnalyzedPairs);
     }
