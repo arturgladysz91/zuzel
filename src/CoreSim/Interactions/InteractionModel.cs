@@ -232,7 +232,8 @@ public sealed class InteractionEpisodeTracker
             .ThenBy(c => Math.Min(c.RiderA,c.RiderB)).ThenBy(c => Math.Max(c.RiderA,c.RiderB)))
         {
             var a = Math.Min(contact.RiderA,contact.RiderB); var b = Math.Max(contact.RiderA,contact.RiderB);
-            if (episode.FallbackOrigins.Values.Any(p => p.Attempted && p.RiderA == a && p.RiderB == b))
+            if (episode.FallbackOrigins.Values.Any(p => p.Attempted && (p.RiderA == a && p.RiderB == b
+                    || p.RiderA is null && p.RiderIds.Contains(a) && p.RiderIds.Contains(b))))
             { result.Add(new(contact,false,"This contact already consumed a source episode's fallback allowance")); continue; }
             if (!safetyEvaluated)
             { result.Add(new(contact,false,"New final contact was not evaluated by the bounded safety pass; no fallback authorized")); continue; }
