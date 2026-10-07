@@ -25,13 +25,14 @@ public sealed record MetricTrackSegment(int SegmentIndex, int SegmentId, Segment
     MeterPoint StartReferencePosition, double StartTangentHeadingRadians, double StraightLengthMeters,
     double InnerRadiusMeters, double TurnAngleRadians)
 {
+    internal bool DeterministicArithmetic { get; init; }
     public MetricTrackSample Map(double progress, double physicalOffsetMeters, double progressRate = 0, double offsetRate = 0)
     {
         GeometryValidation.Unit(progress, nameof(progress));
         GeometryValidation.Nonnegative(physicalOffsetMeters, nameof(physicalOffsetMeters));
         GeometryValidation.Finite(progressRate, nameof(progressRate)); GeometryValidation.Finite(offsetRate, nameof(offsetRate));
         var heading = StartTangentHeadingRadians + (SegmentType == SegmentType.Straight ? 0 : TurnAngleRadians * progress);
-        var tangent = new MeterPoint(Math.Cos(heading), Math.Sin(heading));
+        var tangent = ContactFrameArithmetic.Direction(heading, DeterministicArithmetic);
         var outward = new MeterPoint(tangent.Y, -tangent.X);
         MeterPoint position, velocity;
         if (SegmentType == SegmentType.Straight)
@@ -41,12 +42,14 @@ public sealed record MetricTrackSegment(int SegmentIndex, int SegmentId, Segment
         }
         else
         {
-            var entryLeft = new MeterPoint(-Math.Sin(StartTangentHeadingRadians), Math.Cos(StartTangentHeadingRadians));
+            var entry = ContactFrameArithmetic.Direction(StartTangentHeadingRadians, DeterministicArithmetic);
+            var entryLeft = new MeterPoint(-entry.Y, entry.X);
             var centre = StartReferencePosition + entryLeft * InnerRadiusMeters;
             position = centre + outward * (InnerRadiusMeters + physicalOffsetMeters);
             velocity = tangent * ((InnerRadiusMeters + physicalOffsetMeters) * TurnAngleRadians * progressRate) + outward * offsetRate;
         }
-        return new(position, velocity, BikeAngles.Wrap(heading), velocity.Length == 0 ? BikeAngles.Wrap(heading) : Math.Atan2(velocity.Y, velocity.X));
+        return new(position, velocity, BikeAngles.Wrap(heading), velocity.Length == 0 ? BikeAngles.Wrap(heading)
+            : ContactFrameArithmetic.Heading(velocity.Y, velocity.X, DeterministicArithmetic));
     }
 }
 
@@ -60,17 +63,24 @@ public sealed class TrackMetricEmbedding
     public IReadOnlyList<MetricTrackSegment> Segments { get; }
     public string FrameId { get; }
     public TrackClosure Closure { get; }
+    internal bool DeterministicArithmetic { get; }
     public TrackMetricEmbedding(Track track, MeterPoint origin = default, double initialHeadingRadians = 0)
+        : this(track,origin,initialHeadingRadians,false) { }
+    internal TrackMetricEmbedding(Track track, bool deterministicArithmetic)
+        : this(track,default,0,deterministicArithmetic) { }
+    private TrackMetricEmbedding(Track track, MeterPoint origin, double initialHeadingRadians, bool deterministicArithmetic)
     {
         ArgumentNullException.ThrowIfNull(track); GeometryValidation.Finite(initialHeadingRadians, nameof(initialHeadingRadians));
         _track = track;
+        DeterministicArithmetic = deterministicArithmetic;
         var segments = new List<MetricTrackSegment>(track.Segments.Count);
         var position = origin; var heading = initialHeadingRadians;
         foreach (var segment in track.Segments)
         {
             var mapped = new MetricTrackSegment(segments.Count, segment.Id, segment.Type, position, heading,
                 segment.StraightLengthMetersOverride ?? track.Geometry.StraightLengthMeters,
-                track.Geometry.InnerRadiusMeters, track.Geometry.TurnSegmentAngleRadians);
+                track.Geometry.InnerRadiusMeters, track.Geometry.TurnSegmentAngleRadians)
+                { DeterministicArithmetic = deterministicArithmetic };
             segments.Add(mapped); position = mapped.Map(1, 0).Position;
             if (segment.Type != SegmentType.Straight) heading += track.Geometry.TurnSegmentAngleRadians;
         }

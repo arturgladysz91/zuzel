@@ -19,6 +19,26 @@ public sealed class PhysicalContactConsequenceTests
     private sealed class Target(int lane) : IRiderDecisionModel
     {public RiderDecision Decide(TrackSegment segment,RiderState rider)=>new(lane);}
 
+    [Fact]
+    public void EnabledContactFrameArithmeticIsAccurateAcrossQuadrantsAndLegacyCallsStayExact()
+    {
+        for(var i=-4096;i<=4096;i++)
+        {
+            var angle=Math.PI*i/4096;
+            var direction=ContactFrameArithmetic.Direction(angle,true);
+            Assert.InRange(Math.Abs(direction.X-Math.Cos(angle)),0,2e-15);
+            Assert.InRange(Math.Abs(direction.Y-Math.Sin(angle)),0,2e-15);
+            Assert.InRange(Math.Abs(direction.Length-1),0,2e-15);
+            var native=ContactFrameArithmetic.Direction(angle,false);
+            Assert.Equal(Math.Cos(angle),native.X);Assert.Equal(Math.Sin(angle),native.Y);
+            var heading=ContactFrameArithmetic.Heading(direction.Y,direction.X,true);
+            Assert.InRange(Math.Abs(BikeAngles.Wrap(heading-angle)),0,2e-15);
+        }
+        foreach(var x in new[]{-100d,-1,-.001,0,.001,1,100})
+        foreach(var y in new[]{-100d,-1,-.001,0,.001,1,100})
+            Assert.InRange(Math.Abs(ContactFrameArithmetic.Heading(y,x,true)-Math.Atan2(y,x)),0,2e-15);
+    }
+
     [Theory,InlineData(.05,PhysicalContactSeverity.Brush),InlineData(.5,PhysicalContactSeverity.Disturbed),
         InlineData(.9,PhysicalContactSeverity.LostRhythm),InlineData(1.3,PhysicalContactSeverity.MajorSave),InlineData(2,PhysicalContactSeverity.Crash)]
     public void FiveClassesHavePhysicalVelocityAndBoundedRecovery(double ratio,PhysicalContactSeverity expected)
@@ -341,9 +361,16 @@ public sealed class PhysicalContactConsequenceTests
     [Theory,InlineData("M-three-squeeze"),InlineData("N-four-frontier"),InlineData("frontier-F1-late-bridge")]
     public void EquivalentIdRelabelingAndPairReversalPreservePhysicalOutcomes(string name)
     {
-        var fixture=Fixtures.Value.Single(f=>f.Name==name);var expected=PhysicalContactConsequenceEvidence.Plan(fixture);
+        foreach(var deterministic in new[]{false,true})
+        {
+        var original=Fixtures.Value.Single(f=>f.Name==name);
+        var inputs=original.Inputs.Select(i=>i with{PoseA=i.PoseA is null?null:i.PoseA with{DeterministicArithmetic=deterministic},
+            PoseB=i.PoseB is null?null:i.PoseB with{DeterministicArithmetic=deterministic}}).ToArray();
+        var fixture=original with{Inputs=inputs,Analysis=PhysicalContactAnalyzer.Analyze(inputs)};
+        var expected=PhysicalContactConsequenceEvidence.Plan(fixture);
         int Id(int id)=>101-id;
-        PhysicalBikePose? Pose(PhysicalBikePose? p)=>p is null?null:new(Id(p.RiderId),p.FrameId,p.Position,p.Attitude,p.Dimensions,p.ReferenceTangentHeadingRadians,p.Source);
+        PhysicalBikePose? Pose(PhysicalBikePose? p)=>p is null?null:new(Id(p.RiderId),p.FrameId,p.Position,p.Attitude,p.Dimensions,p.ReferenceTangentHeadingRadians,p.Source)
+            {DeterministicArithmetic=deterministic};
         var renamed=fixture.Inputs.Select(i=>i with{Contact=i.Contact with{RiderA=Id(i.Contact.RiderA),RiderB=Id(i.Contact.RiderB)},
             RiderA=i.RiderA with{RiderId=Id(i.RiderA.RiderId)},RiderB=i.RiderB with{RiderId=Id(i.RiderB.RiderId)},PoseA=Pose(i.PoseA),PoseB=Pose(i.PoseB)}).Reverse().ToArray();
         var actual=PhysicalContactConsequenceEvidence.Plan(fixture with{Inputs=renamed,Analysis=PhysicalContactAnalyzer.Analyze(renamed)});
@@ -363,5 +390,6 @@ public sealed class PhysicalContactConsequenceTests
                 PoseA=i.PoseB,PoseB=i.PoseA,VelocityA=i.VelocityB,VelocityB=i.VelocityA,RiderA=i.RiderB,RiderB=i.RiderA};
         }).Reverse().ToArray();
         Assert.Equal(Json(expected),Json(PhysicalContactConsequenceEvidence.Plan(fixture with{Inputs=reversed,Analysis=PhysicalContactAnalyzer.Analyze(reversed)})));
+        }
     }
 }

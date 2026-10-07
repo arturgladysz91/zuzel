@@ -38,7 +38,8 @@ public static class PhysicalContactConsequenceEvidence
             var input = inputs.Where(i=>i.RiderA.RiderId==id||i.RiderB.RiderId==id)
                 .OrderBy(i=>i.Contact.FirstTouchCommonTimeSeconds).First();
             var heading = (input.RiderA.RiderId==id?input.PoseA:input.PoseB)?.Attitude.TravelHeadingRadians ?? 0;
-            return new MeterPoint(Math.Cos(heading),Math.Sin(heading));
+            var pose=input.RiderA.RiderId==id?input.PoseA:input.PoseB;
+            return ContactFrameArithmetic.Direction(heading,pose?.DeterministicArithmetic??false);
         });
         var riders = analysis.AuditRiders.Select(r=>controlledRatio.HasValue?r with{SeverityRatio=controlledRatio.Value}:r).ToArray();
         return PhysicalContactConsequenceResolver.Build(analysis,riders,
@@ -117,6 +118,19 @@ public static class PhysicalContactConsequenceEvidence
     public static object Performance()
     {
         var rows=new List<object>();
+        // Isolate the cross-platform geometry kernel from the existing search.
+        // This is observational evidence, never a wall-clock assertion.
+        foreach(var deterministic in new[]{false,true})
+        {
+            var segment=new MetricTrackSegment(0,0,SegmentType.TurnEntry,new(1,2),.3,40,25,Math.PI/3)
+                {DeterministicArithmetic=deterministic};
+            var phase=0;
+            Measure("contact-frame-map-"+deterministic,
+                ()=>GC.KeepAlive(segment.Map((++phase%1024)/1024d,3,.2,.1)),100000,10000);
+            Measure("contact-footprint-"+deterministic,
+                ()=>GC.KeepAlive(BikeFootprint.Create(new(1,2),(++phase%1024)/1024d*Math.PI,
+                    SpeedwayBikeDimensions.Reference,deterministic)),100000,10000);
+        }
         foreach(var name in new[]{"B-moderate-side","M-three-squeeze","N-four-frontier"})
         {
             var fixture=PhysicalContactEvidence.Fixtures().Single(f=>f.Name==name);

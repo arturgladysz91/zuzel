@@ -26,7 +26,7 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
         ArgumentNullException.ThrowIfNull(engine); ArgumentNullException.ThrowIfNull(snapshot);
         ArgumentNullException.ThrowIfNull(intents); options.Validate();
         if (snapshot.Riders.Count > 4) throw new ArgumentException("Contested space supports at most four riders per heat.");
-        tracker.Bind(snapshot);
+        tracker.Bind(snapshot, options.EnablePhysicalContactConsequences);
         var p = options.ContestedSpaceParameters;
         // Pair eligibility follows either member's current request, never an unrelated heat clock.
         var ridersById = snapshot.Riders.ToDictionary(r => r.RiderId);
@@ -504,7 +504,7 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
                 var first = pairs.Where(p => p.RiderA == rider.RiderId || p.RiderB == rider.RiderId).Min(p => p.FirstTouchCommonTimeSeconds);
                 var pose = CommonTimePoseHistory.Stitch(finalContactPoses).Where(i => i.RiderId == rider.RiderId
                     && i.StartTimeSeconds <= first && i.EndTimeSeconds >= first).OrderByDescending(i => i.StartTimeSeconds).First().Sample(first);
-                directions[rider.RiderId] = new(Math.Cos(pose.Attitude.TravelHeadingRadians), Math.Sin(pose.Attitude.TravelHeadingRadians));
+                directions[rider.RiderId] = ContactFrameArithmetic.Direction(pose.Attitude.TravelHeadingRadians, pose.DeterministicArithmetic);
             }
             consequencePlan = PhysicalContactConsequenceResolver.Build(physicalContact, physicalContact.ApplicationRiders,
                 pairs, snapshot, actual.Changes, directions, options.PhysicalContactParameters,

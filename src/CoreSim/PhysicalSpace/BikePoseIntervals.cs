@@ -43,9 +43,9 @@ public readonly record struct PoseRateBounds(MeterPoint CenterVelocityMetersPerS
 /// RateBounds must conservatively bound every time in the requested subinterval.
 /// </summary>
 internal readonly record struct BikePoseValue(MeterPoint Position, double TravelHeadingRadians,
-    double BikeHeadingRadians, SpeedwayBikeDimensions Dimensions, double ReferenceTangentHeadingRadians)
+    double BikeHeadingRadians, SpeedwayBikeDimensions Dimensions, double ReferenceTangentHeadingRadians, bool DeterministicArithmetic=false)
 {
-    internal BikeFootprint Footprint => BikeFootprint.Create(Position, BikeHeadingRadians, Dimensions);
+    internal BikeFootprint Footprint => BikeFootprint.Create(Position, BikeHeadingRadians, Dimensions, DeterministicArithmetic);
 }
 
 public abstract class PhysicalPoseInterval
@@ -79,7 +79,8 @@ public abstract class PhysicalPoseInterval
     internal virtual BikePoseValue SampleValue(double commonTimeSeconds)
     {
         var pose = Sample(commonTimeSeconds);
-        return new(pose.Position, pose.Attitude.TravelHeadingRadians, pose.Attitude.BikeHeadingRadians, pose.Dimensions, pose.ReferenceTangentHeadingRadians);
+        return new(pose.Position, pose.Attitude.TravelHeadingRadians, pose.Attitude.BikeHeadingRadians, pose.Dimensions,
+            pose.ReferenceTangentHeadingRadians, pose.DeterministicArithmetic);
     }
     internal virtual BikeFootprint SampleFootprint(double commonTimeSeconds) => SampleValue(commonTimeSeconds).Footprint;
     public abstract PoseRateBounds RateBounds(double startTimeSeconds, double endTimeSeconds);
@@ -103,7 +104,8 @@ public sealed class LinearBikePoseInterval : PhysicalPoseInterval
         return new(RiderId, FrameId, _start.Position + (_end.Position - _start.Position) * f,
             new(time, BikeAngles.Interpolate(_start.Attitude.TravelHeadingRadians, _end.Attitude.TravelHeadingRadians, f),
                 BikeAngles.Interpolate(_start.Attitude.BikeHeadingRadians, _end.Attitude.BikeHeadingRadians, f)), Dimensions,
-            BikeAngles.Interpolate(_start.ReferenceTangentHeadingRadians, _end.ReferenceTangentHeadingRadians, f), Source);
+            BikeAngles.Interpolate(_start.ReferenceTangentHeadingRadians, _end.ReferenceTangentHeadingRadians, f), Source)
+            { DeterministicArithmetic = _start.DeterministicArithmetic };
     }
     public override PoseRateBounds RateBounds(double start, double end)
     {
@@ -191,13 +193,15 @@ public static class ResolvedBikePoses
         {
             var g = Geometry(time);
             var beta = _straight ? 0 : _profile.RelativeSlideAngle(g.Phase);
-            return new(RiderId, FrameId, g.Position, new(time, g.Heading, g.Heading + beta), Dimensions, g.Tangent, Source);
+            return new(RiderId, FrameId, g.Position, new(time, g.Heading, g.Heading + beta), Dimensions, g.Tangent, Source)
+                { DeterministicArithmetic = _segment.DeterministicArithmetic };
         }
         internal override BikePoseValue SampleValue(double time)
         {
             var g = Geometry(time);
             var beta = _straight ? 0 : _profile.RelativeSlideAngle(g.Phase);
-            return new(g.Position, BikeAngles.Wrap(g.Heading), BikeAngles.Wrap(g.Heading + beta), Dimensions, BikeAngles.Wrap(g.Tangent));
+            return new(g.Position, BikeAngles.Wrap(g.Heading), BikeAngles.Wrap(g.Heading + beta), Dimensions,
+                BikeAngles.Wrap(g.Tangent), _segment.DeterministicArithmetic);
         }
         public override PoseRateBounds RateBounds(double start, double end)
         {

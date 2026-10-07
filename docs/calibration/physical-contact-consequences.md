@@ -26,6 +26,8 @@ The separate `PhysicalContactConsequenceResolver` builds an immutable plan from 
 
 The cloned #56B tracker records consumed canonical pairs per continuous episode. Only Commit publishes that ownership. Verified episode merges union consumption; unrelated pairs remain independent. Certified clearance closes the old episode, allowing a fresh episode to apply another impact. Deferred, GeometryUnresolved and ineligible pairs produce no applied outcome. Unresolved geometry remains diagnostic; the resolver does not guess a physical consequence.
 
+Enabled contact frames use fixed, range-reduced sine/cosine and arctangent polynomial arithmetic in the existing metric embedding, footprint, #55 diagnostics and #56C1 projection. The first cross-platform audit exposed native libm variation in one rain contact's track coordinates, propagating to five applied double fields while final race states stayed equal. This is fixed at the geometric arithmetic source, without rounding output, adding comparison tolerance, changing the detector, impulse/reserve formulas or severity boundaries. A dense quadrant/heading accuracy regression bounds error against the native functions by 2e-15. The separate raw-input/manifold/impulse regression capture is compared byte-for-byte and by typed IEEE bits on both platforms. Feature-OFF frames retain their original native calls and frozen captures; arithmetic mode remains fixed within a heat.
+
 With the flag ON, legacy contact fallback authorization and its occurrence/crash rolls are bypassed. `SlideControl`, `PairRiding` and segment crash multipliers do not enter applied contact physics. Solo incident logic and heat-result morale remain unchanged. With the flag OFF, the original legacy ownership, event stream and race behavior remain exact, and #56C1 shadow diagnostics remain available.
 
 ## Controlled outcomes and boundaries
@@ -71,44 +73,52 @@ Run 96 feature-ON four-lap heats and 96 matched legacy heats: all eleven standar
 
 | Population | Heats | Verified pair observations | Newly applied pairs | Applied riders | Brush | Disturbed | LostRhythm | MajorSave | Contact Crash |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Standard scenarios | 88 | 6 | 5 | 8 | 4 | 0 | 0 | 2 | 2 |
+| Standard scenarios | 88 | 13 | 8 | 13 | 4 | 0 | 2 | 4 | 3 |
 | Deliberate overlap stress | 8 | 48 | 24 | 32 | 0 | 0 | 0 | 16 | 16 |
-| Total | 96 | 54 | 29 | 40 | 4 | 0 | 0 | 18 | 18 |
+| Total | 96 | 61 | 32 | 45 | 4 | 0 | 2 | 20 | 19 |
 
-Verified contacts per heat are 0.0682 standard, 6.0 stress and 0.5625 overall; newly applied pairs overall are 0.3021 per heat. One repeated overlap is suppressed in standard scenarios. The stress control defers 24 later pairs rather than applying invalid trajectories. GeometryUnresolved is zero in this batch; direct unresolved tests prove refusal instead. Terminal solo outcomes can prevent an already-crashed participant receiving another physical consequence, so rider outcomes need not be exactly twice applied pairs.
+Verified contacts per heat are 0.1477 standard, 6.0 stress and 0.6354 overall; newly applied pairs overall are 0.3333 per heat. Three repeated overlaps are suppressed in standard scenarios. Two standard contacts and 24 stress contacts are deferred rather than applying invalid trajectories. GeometryUnresolved is zero in this batch; direct unresolved tests prove refusal instead. Terminal solo outcomes can prevent an already-crashed participant receiving another physical consequence, so rider outcomes need not be exactly twice applied pairs.
 
-Standard scenario F / seed 83 crashes one active rider in each weather state at ratios 4.5632/4.5691 with analytical forward delta approximately -5.74 m/s: these are high-demand contacts, not moderate contacts mislabeled Crash. Scenario G / seed 7 gives four zero-closing Brushes across two weathers. Scenario I / seed 83 / LightRain gives two MajorSave outcomes at ratios 1.3975/1.2942 and opposite forward deltas approximately +/-1.1094 m/s. Standard final order/classification state changes in 3 of 88 matched heats. All eight stress heats change order/classification; their middle riders accumulate simultaneous demand near ratio 1.837 and crash while the outer riders save near ratio 1.299.
+Standard scenario F / seed 83 crashes one active rider in each weather state at ratios 4.5632/4.5691 with analytical forward delta approximately -5.74 m/s: these are high-demand contacts, not moderate contacts mislabeled Crash. Scenario G / seed 7 gives four zero-closing Brushes across two weathers. G / seed 19 / LightRain has two MajorSave outcomes (ratios 1.3001/1.5104), two LostRhythm outcomes (.9659/1.0058) and one Crash (2.0069), across fresh causal frontiers. Scenario I / seed 83 / LightRain gives two MajorSave outcomes at ratios 1.3975/1.2942 and opposite forward deltas approximately +/-1.1094 m/s. Standard final order changes in 6 of 88 matched heats; classification status/time changes in 9 of 88. All eight stress heats change order/classification; their middle riders accumulate simultaneous demand near ratio 1.837 and crash while the outer riders save near ratio 1.299.
 
-The sample is sparse after #56B avoidance: no Disturbed or LostRhythm happens in these standard heats, so it cannot establish their racing frequency. Investigating the missing middle classes shows the actual contacts are either zero-closing, MajorSave or strongly above Crash; unmodified controlled moderate side/rear cases do produce LostRhythm, boundary controls produce Disturbed, and measured recovery separates all three recoverable classes. MajorSave appears in real full heats and is distinct from Crash. The aggregate stress-dominated 18/40 Crash count must not be interpreted as an ordinary crash rate. These observations support the retained physical mapping without tuning it to the legacy distribution, while broader observed contact populations remain an independent-review need.
+The sample is sparse after #56B avoidance: Disturbed does not occur in these standard heats, so it cannot establish its racing frequency. The contacts span zero-closing Brush, moderate LostRhythm/MajorSave and strongly above-boundary Crash; unmodified controlled moderate side/rear cases also produce LostRhythm, boundary controls produce Disturbed, and measured recovery separates all three recoverable classes. MajorSave appears in real full heats and is distinct from Crash. The aggregate stress-dominated 19/45 Crash count must not be interpreted as an ordinary crash rate. These observations support the retained physical mapping without tuning it to the legacy distribution, while broader observed contact populations remain an independent-review need.
+
+The enabled deterministic arithmetic also changes one avoidance branch at a geometry tie (G / seed 19 / LightRain), adding its contact sequence relative to the initial native-arithmetic capture. Matched ON/OFF heat differences therefore include this numerical-mode effect as well as physical consequences. This is not a change to the contact detector or its tolerances; feature OFF retains its original arithmetic and exact captures.
 
 Matched full-heat legacy runs use diagnostics None, which preserves the same legacy gameplay. An existing #56C1-only FullAudit replay at heat ID 59 can retain a closed episode's contact diagnostic and reject its stale provenance. The new path supplies only current verified diagnostics; feature OFF deliberately preserves the merged behavior. The frozen #56C1 standalone audit is unchanged and reproducible, and the performance baselines use stable #56B+#56C1 FullAudit heats (scenario I and contact-heavy, heat ID 58).
 
 ## Observational performance
 
-Windows, Release/net8.0, after warmup. Plan/application loops use 2,000 iterations; solo recovery uses 500. The full contact coordinator uses the same frozen ownership scenarios for 30 resolutions after five warmups per mode, resetting episode ownership for each sample. Full heats interleave OFF/ON, discard two warmup pairs and report three-sample medians. Both full-heat modes enable #56B and #56C1 FullAudit.
+Windows, Release/net8.0, after warmup. Plan/application loops use 2,000 iterations; solo recovery uses 500. The full contact coordinator uses the same frozen ownership scenarios for 30 resolutions after five warmups per mode, resetting episode ownership for each sample. Full heats interleave OFF/ON, discard two warmup pairs and report three-sample medians. Both full-heat modes enable #56B and #56C1 FullAudit. Isolated map/footprint calls use 100,000 iterations after 10,000 warmups; reported allocations include the benchmark boxing the returned value.
 
 | Operation | Time per call | Allocated bytes per call |
 | --- | ---: | ---: |
-| Moderate-side plan / apply | 7.629 / 0.316 microseconds | 4792 / 504 |
-| Three-squeeze plan / apply | 9.588 / 0.513 microseconds | 6824 / 736 |
-| Four-frontier plan / apply | 13.567 / 0.702 microseconds | 9640 / 968 |
-| Solo production, no recovery | 95.379 microseconds | 10392 |
-| Solo production, Disturbed | 93.427 microseconds | 10392 |
-| Solo production, LostRhythm | 69.015 microseconds | 5608 |
-| Solo production, MajorSave | 62.190 microseconds | 5608 |
+| Moderate-side plan / apply | 5.964 / 0.335 microseconds | 4792 / 504 |
+| Three-squeeze plan / apply | 9.172 / 0.513 microseconds | 6824 / 736 |
+| Four-frontier plan / apply | 15.770 / 1.221 microseconds | 9640 / 968 |
+| Solo production, no recovery | 110.752 microseconds | 10392 |
+| Solo production, Disturbed | 110.314 microseconds | 10392 |
+| Solo production, LostRhythm | 82.166 microseconds | 5608 |
+| Solo production, MajorSave | 63.917 microseconds | 5608 |
+| Track-frame map, native | 0.380 microseconds | 64 |
+| Track-frame map, deterministic | 0.463 microseconds | 64 |
+| Footprint, native | 0.362 microseconds | 96 |
+| Footprint, deterministic | 0.341 microseconds | 96 |
 
 Reduced lateral authority can avoid the existing target-arrival subdivision, so stronger recovery can take fewer numerical substeps. These timings measure computation cost, not sporting benefit; the recovery table above shows worse speed/time.
 
 | Complete contact step / heat | #56B+#56C1 OFF baseline (ms) | #56C2 ON (ms) | Observed change |
 | --- | ---: | ---: | ---: |
-| Two disjoint unresolved pairs | 80.745 | 75.745 | -6.19% |
-| One disjoint pair clears | 132.130 | 128.694 | -2.60% |
-| Real four-rider bridge | 184.919 | 186.169 | +0.68% |
-| Contact with unrelated riders | 59.490 | 59.044 | -0.75% |
-| Scenario I full heat | 3885.816 | 3447.747 | -11.27% |
-| Deliberate contact-heavy full heat | 1445.000 | 391.895 | -72.88% |
+| Two disjoint unresolved pairs | 76.816 | 97.830 | +27.36% |
+| One disjoint pair clears | 130.192 | 180.594 | +38.71% |
+| Real four-rider bridge | 188.082 | 245.241 | +30.39% |
+| Contact with unrelated riders | 59.766 | 76.912 | +28.69% |
+| Scenario I full heat | 3774.239 | 4371.249 | +15.82% |
+| Deliberate contact-heavy full heat | 1413.630 | 462.435 | -67.29% |
 
-Full-heat median allocation is 327,727,168 versus 301,553,168 bytes (I) and 174,940,888 versus 83,513,568 bytes (stress). Different physical outcomes, particularly stress crashes removing active riders, change subsequent search work. The full-heat decreases are therefore not evidence that consequence code itself optimizes the engine. Frozen-step comparisons isolate the added path more closely: none exceeds the 10% investigation threshold, and plan/apply work is small compared with the unchanged #56B search. Timings remain observational, without a wall-clock CI gate.
+Full-heat median allocation is 327,730,144 versus 300,239,192 bytes (I) and 174,941,784 versus 83,512,720 bytes (stress). Different physical outcomes, particularly stress crashes removing active riders, change subsequent search work. The stress decrease therefore does not show an isolated engine speedup.
+
+The contact-step overhead exceeds the requested 10% investigation threshold. Before the cross-platform geometry correction, these same benchmarks ranged from -6.19% to +0.68%. The investigation isolates plan/apply work above and adds 100,000-call native/deterministic map and footprint measurements after 10,000 warmups. The frequently sampled map is about 22% slower; footprint cost is comparable. Fixed polynomial heading evaluation adds work throughout existing #55/#56B sampling, rather than adding a second search or detector. Unrolling the heading polynomial preserves all trace bits and reduces its loop overhead. Remaining overhead is explicit and requires review; exact platform equality takes priority over the original native arithmetic's speed. The I heat is about 16% slower, while terminal outcomes make the stress heat shorter. These timings are observational, with no wall-clock CI gate.
 
 ## Explicit approximation and scope
 
@@ -134,4 +144,4 @@ git diff --check
 
 The deterministic audit emits structured JSON plus typed float/double IEEE bits. CI captures both on Windows and Ubuntu and requires byte equality across platforms and equality with this checked-in consequence JSON. Performance is a separate observational report, never a timing gate. All nine existing CI jobs remain, with the complete .NET suite partitioned exactly once and all five older platform comparisons retained.
 
-Local validation includes the full 2,101-case suite before the extra stress-fixture regression, all 53 final consequence cases, 182 existing #56B/#56C1 regression cases, 21 Python tests and warnings-as-errors builds. Eleven historical capture files remain byte-exact against reviewed #56C1, including 50,262 #56C1 IEEE fields; eight historical calibration document blobs remain unchanged. The frozen 39-consumer audit verifies exact reviewed source extraction rather than widening its legacy allowlist. Final-head CI is recorded in the PR after completion.
+Local validation includes the full 2,102-case suite before the extra arithmetic regression, all 54 final consequence cases, 308 geometry/avoidance/analysis/consequence regressions, 21 Python tests and warnings-as-errors builds. Eleven historical capture files remain byte-exact against reviewed #56C1, including 50,262 #56C1 IEEE fields; eight historical calibration document blobs remain unchanged. The frozen 39-consumer audit verifies exact reviewed source extraction rather than widening its legacy allowlist. Final-head CI is recorded in the PR after completion.

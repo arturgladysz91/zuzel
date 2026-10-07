@@ -54,9 +54,10 @@ internal static class PhysicalContactSnapshotAdapter
     {
         if (pose.Source is null) throw new ArgumentException("Production poses require their sampled segment source.");
         var segment = embedding.Segments[pose.Source.SegmentIndex]; var heading = segment.StartTangentHeadingRadians;
+        var tangent=ContactFrameArithmetic.Direction(heading,segment.DeterministicArithmetic);
         var offset = segment.SegmentType == SegmentType.Straight
-            ? MeterPoint.Dot(pose.Position-segment.StartReferencePosition,new(Math.Sin(heading),-Math.Cos(heading)))
-            : (pose.Position-(segment.StartReferencePosition+new MeterPoint(-Math.Sin(heading),Math.Cos(heading))*segment.InnerRadiusMeters)).Length
+            ? MeterPoint.Dot(pose.Position-segment.StartReferencePosition,new(tangent.Y,-tangent.X))
+            : (pose.Position-(segment.StartReferencePosition+new MeterPoint(-tangent.Y,tangent.X)*segment.InnerRadiusMeters)).Length
                 - segment.InnerRadiusMeters;
         // No displacement or new surface read location: inverse of the existing #55 metric mapping at first touch.
         var width=LaneModel.UsableRacingWidthMeters(segment.SegmentType,snapshot.Track.Geometry);

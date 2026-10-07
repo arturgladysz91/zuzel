@@ -196,7 +196,7 @@ public static class PhysicalContactAnalyzer
     private static RiderContactDemand Demand(PhysicalBikePose pose, MeterPoint delta, MeterPoint lever, MeterPoint normal,
         double rotation, PhysicalContactParameters p)
     {
-        var h = pose.Attitude.TravelHeadingRadians; var forward = new MeterPoint(Math.Cos(h),Math.Sin(h));
+        var h = pose.Attitude.TravelHeadingRadians; var forward = ContactFrameArithmetic.Direction(h,pose.DeterministicArithmetic);
         var df = MeterPoint.Dot(delta,forward); var dl = MeterPoint.Dot(delta,new(-forward.Y,forward.X));
         var yawLever = Math.Abs(MeterPoint.Cross(lever,normal)) / pose.Dimensions.BoundingRadiusMeters;
         var yaw = delta.Length * yawLever;

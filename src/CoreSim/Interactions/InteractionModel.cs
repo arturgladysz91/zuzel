@@ -164,14 +164,19 @@ public sealed class InteractionEpisodeTracker
         History.Clear(); History.AddRange(resolved.History);
         Closed.Clear();
     }
-    internal void Bind(SimulationSnapshot snapshot)
+    internal void Bind(SimulationSnapshot snapshot, bool deterministicArithmetic=false)
     {
         Closed.Clear();
         var identity = (snapshot.Step.Seed, snapshot.Step.HeatId);
         if (_heat.HasValue && _heat.Value != identity)
             throw new InvalidOperationException("An interaction tracker belongs to exactly one heat.");
         _heat = identity;
-        Embedding ??= new(snapshot.Track);
+        Embedding ??= new(snapshot.Track, deterministicArithmetic);
+        if(Embedding.DeterministicArithmetic!=deterministicArithmetic)
+        {
+            if(History.Count!=0)throw new InvalidOperationException("Contact arithmetic mode must remain fixed within a heat.");
+            Embedding=new(snapshot.Track,deterministicArithmetic);
+        }
         Embedding.ValidateCompatible(snapshot.Track);
     }
     internal InteractionEpisode Engage(int[] riders, double time, InteractionContext context)

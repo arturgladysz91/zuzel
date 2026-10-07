@@ -5,7 +5,8 @@ import sys
 
 root = Path(sys.argv[1])
 repo = Path(__file__).resolve().parents[2]
-for name in ('physical-contact-consequences.json', 'physical-contact-consequence-bits.json'):
+for name in ('physical-contact-consequences.json', 'physical-contact-consequence-bits.json',
+             'physical-contact-arithmetic.json', 'physical-contact-arithmetic-bits.json'):
     a = (root/'determinism-windows-latest'/'physical-contact-consequences'/name).read_bytes()
     b = (root/'determinism-ubuntu-latest'/'physical-contact-consequences'/name).read_bytes()
     assert a == b, f'#56C2 cross-platform drift: {name}'

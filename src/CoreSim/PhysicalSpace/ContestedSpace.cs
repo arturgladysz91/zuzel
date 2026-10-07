@@ -296,14 +296,14 @@ public static class ContestedSpaceResolver
         // Remove only shared forward transport for nearly parallel travel. This prevents
         // two bikes moving at 20 m/s together from receiving fictitious opposing closure.
         var referenceHeading = BikeAngles.Interpolate(a0.ReferenceTangentHeadingRadians, b0.ReferenceTangentHeadingRadians, .5);
-        var forward = new MeterPoint(Math.Cos(referenceHeading), Math.Sin(referenceHeading));
+        var forward = ContactFrameArithmetic.Direction(referenceHeading,a0.DeterministicArithmetic);
         var common = Math.Abs(BikeAngles.Wrap(a0.ReferenceTangentHeadingRadians - b0.ReferenceTangentHeadingRadians)) < ParallelClassificationAngleRadians
             ? forward * Math.Max(0, Math.Min(MeterPoint.Dot(da, forward), MeterPoint.Dot(db, forward))) : new MeterPoint(0, 0);
         var af = a0.Footprint; var bf = b0.Footprint;
-        var at = BikeFootprint.Create(a0.Position + da - common, a0.BikeHeadingRadians, a0.Dimensions);
-        var bt = BikeFootprint.Create(b0.Position + db - common, b0.BikeHeadingRadians, b0.Dimensions);
-        var ar = BikeFootprint.Create(a0.Position, a1.BikeHeadingRadians, a0.Dimensions);
-        var br = BikeFootprint.Create(b0.Position, b1.BikeHeadingRadians, b0.Dimensions);
+        var at = BikeFootprint.Create(a0.Position + da - common, a0.BikeHeadingRadians, a0.Dimensions,a0.DeterministicArithmetic);
+        var bt = BikeFootprint.Create(b0.Position + db - common, b0.BikeHeadingRadians, b0.Dimensions,b0.DeterministicArithmetic);
+        var ar = BikeFootprint.Create(a0.Position, a1.BikeHeadingRadians, a0.Dimensions,a0.DeterministicArithmetic);
+        var br = BikeFootprint.Create(b0.Position, b1.BikeHeadingRadians, b0.Dimensions,b0.DeterministicArithmetic);
         var baseline = MechanicalSeparation.Between(af, bf).SignedMeters;
         var cat = baseline - MechanicalSeparation.Between(at, bf).SignedMeters;
         var car = baseline - MechanicalSeparation.Between(ar, bf).SignedMeters;
@@ -326,7 +326,7 @@ public static class ContestedSpaceResolver
         if (at && ar) result |= SpaceConflictKind.AEncroachesMixed;
         if (bt && br) result |= SpaceConflictKind.BEncroachesMixed;
         if ((at || ar) && (bt || br)) result |= SpaceConflictKind.MutualConvergence;
-        var heading = new MeterPoint(Math.Cos(a.TravelHeadingRadians), Math.Sin(a.TravelHeadingRadians));
+        var heading = ContactFrameArithmetic.Direction(a.TravelHeadingRadians,a.DeterministicArithmetic);
         var relative = b.Position - a.Position;
         var lateral = Math.Abs(MeterPoint.Cross(heading, relative));
         var parallel = Math.Abs(BikeAngles.Wrap(a.TravelHeadingRadians - b.TravelHeadingRadians)) < ParallelClassificationAngleRadians;
