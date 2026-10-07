@@ -96,6 +96,12 @@ jobs:
           dotnet-version: 8.0.x
       - run: dotnet restore SpeedwayManager.sln
       - run: dotnet build SpeedwayManager.sln -c Release --no-restore --warnaserror
+      - name: Capture physical contact arithmetic regression
+        run: dotnet run --project tools/physical-contact-consequence-audit -c Release -- results/physical-contact-consequences --trace
+      - uses: actions/upload-artifact@v4
+        with:
+          name: contact-arithmetic-${{ matrix.os }}
+          path: results/physical-contact-consequences
       - name: Exact candidate trace, evidence bytes, Full/Lean and branch degree parity
         run: dotnet test tests/CoreSim.Tests -c Release --no-build --filter "FullyQualifiedName~TrajectoryBehaviorFingerprintTests|FullyQualifiedName~LeanProjectionTests|FullyQualifiedName~ScalarEnvelopeParityTests|FullyQualifiedName~AdaptiveParallelTests|FullyQualifiedName~PhysicalSpaceTests|FullyQualifiedName~RiderGameplayProfileTests|FullyQualifiedName~ContestedSpaceResponseTests|FullyQualifiedName~PhysicalContactAnalysisTests|FullyQualifiedName~PhysicalContactConsequenceTests" --logger "trx;LogFileName=determinism.trx" --results-directory results --verbosity normal
       - name: Capture typed IEEE values and final rider/raw surface states

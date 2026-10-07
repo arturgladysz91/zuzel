@@ -134,7 +134,7 @@ public static class PhysicalContactAnalyzer
             new(all.Length,inputs.Length,groups,pairs.Count(r => r.Status is PhysicalContactStatus.Analyzed or PhysicalContactStatus.GeometryUnresolved),
                 pairs.Count(r => r.Status == PhysicalContactStatus.Analyzed),pairs.Count(r => r.DeferredByEarlierContact),
                 pairs.Count(r => r.Status is PhysicalContactStatus.IneligibleContact or PhysicalContactStatus.GeometryUnresolved)))
-            { ApplicationRiders = applicationRiders };
+            { ApplicationRiders = applicationRiders, SourceInputs = applicable is null ? Array.Empty<PhysicalContactInput>() : inputs };
     }
     private sealed record PhysicalContactFrontier(double StartTimeSeconds, IReadOnlyList<int> RiderIds, IReadOnlyList<int> ContactIndices);
 

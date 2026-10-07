@@ -10,11 +10,13 @@ if(args.Contains("--performance",StringComparer.Ordinal))
         JsonSerializer.Serialize(PhysicalContactConsequenceEvidence.Performance(),PhysicalContactEvidence.JsonOptions)+"\n");
     return;
 }
-var report=PhysicalContactConsequenceEvidence.Report(!args.Contains("--controlled",StringComparer.Ordinal),Console.WriteLine);
+var trace=args.Contains("--trace",StringComparer.Ordinal);
+var report=trace?PhysicalContactConsequenceEvidence.Trace()
+    :PhysicalContactConsequenceEvidence.Report(!args.Contains("--controlled",StringComparer.Ordinal),Console.WriteLine);
 var json=JsonSerializer.Serialize(report,PhysicalContactEvidence.JsonOptions).Replace("\r\n","\n",StringComparison.Ordinal)+"\n";
-File.WriteAllText(Path.Combine(args[0],"physical-contact-consequences.json"),json);
+File.WriteAllText(Path.Combine(args[0],trace?"physical-contact-arithmetic.json":"physical-contact-consequences.json"),json);
 var bits=new SortedDictionary<string,object>(StringComparer.Ordinal);Walk(report,"Report",bits);
-File.WriteAllText(Path.Combine(args[0],"physical-contact-consequence-bits.json"),
+File.WriteAllText(Path.Combine(args[0],trace?"physical-contact-arithmetic-bits.json":"physical-contact-consequence-bits.json"),
     JsonSerializer.Serialize(bits,PhysicalContactEvidence.JsonOptions).Replace("\r\n","\n",StringComparison.Ordinal)+"\n");
 Console.WriteLine("#56C2 consequence evidence and typed IEEE bits written.");
 static void Walk(object? value,string path,IDictionary<string,object> bits)

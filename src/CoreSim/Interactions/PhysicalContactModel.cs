@@ -112,6 +112,8 @@ public sealed record PhysicalContactAnalysis(PhysicalContactDiagnosticsLevel Lev
 {
     [System.Text.Json.Serialization.JsonIgnore]
     internal IReadOnlyList<RiderContactAnalysis> ApplicationRiders { get; init; } = Array.Empty<RiderContactAnalysis>();
+    [System.Text.Json.Serialization.JsonIgnore]
+    internal IReadOnlyList<PhysicalContactInput> SourceInputs { get; init; } = Array.Empty<PhysicalContactInput>();
 
     internal static PhysicalContactAnalysis Empty(PhysicalContactDiagnosticsLevel level) => level switch
     { PhysicalContactDiagnosticsLevel.FullAudit => EmptyAudit, PhysicalContactDiagnosticsLevel.Summary => EmptySummary, _ => EmptyNone };

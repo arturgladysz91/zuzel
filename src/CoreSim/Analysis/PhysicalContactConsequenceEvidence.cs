@@ -104,6 +104,16 @@ public static class PhysicalContactConsequenceEvidence
         return scenarios.Append(contactHeavy).ToArray();
     }
 
+    public static object Trace()
+    {
+        var scenario=HeatScenarios().Single(s=>s.Id=="F");
+        var observer=new ContactObserver(captureInputs:true);
+        new HeatSimulator(new AdaptiveDecisionModel()).SimulateHeat(scenario.Track,scenario.CreateSurface(),
+            scenario.Riders.Select(r=>r.Create(scenario.Track)).ToList(),
+            Options with{Seed=83,Weather=WeatherState.LightRain,IncidentFrequency=1},59,observer);
+        return observer.Trace;
+    }
+
     public static object Performance()
     {
         var rows=new List<object>();
@@ -184,13 +194,17 @@ public static class PhysicalContactConsequenceEvidence
             Enum.GetValues<PhysicalContactSeverity>().ToDictionary(c=>c.ToString(),c=>observer.Applied.Count(a=>a.Severity==c)),
             result.Classification,legacy.Classification,observer.Applied);
     }
-    private sealed class ContactObserver : ISimulationStepObserver
+    private sealed class ContactObserver(bool captureInputs=false) : ISimulationStepObserver
     {
         public int Verified,AppliedContacts,Suppressed,Deferred,Unresolved;
         public List<RiderContactConsequence> Applied {get;}=new();
+        public List<object> Trace {get;}=new();
         public void OnStepResolved(ResolvedSimulationStep step)
         {
             var analysis=step.Interaction?.PhysicalContactAnalysis;
+            if(captureInputs&&analysis is{AuditPairs.Count:>0})
+                Trace.Add(new{step.Snapshot.Step,analysis.SourceInputs,Analysis=analysis,
+                    Applied=step.Interaction?.PhysicalContactConsequences});
             Verified+=analysis?.Pairs.Count??0;
             Deferred+=analysis?.Work.DeferredContacts??0;
             Unresolved+=analysis?.Pairs.Count(p=>p.Status==PhysicalContactStatus.GeometryUnresolved)??0;
