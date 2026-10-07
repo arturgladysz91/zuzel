@@ -40,7 +40,7 @@ internal static class ExecutedPathTraversal
     internal static ExecutedTraversalResult Traverse(SimulationSnapshot snapshot, RiderSnapshot rider,
         SegmentResolution resolution, float entrySpeed, float canonicalAdvance, bool launch,
         Func<float, float?> nextCornerTarget, bool captureRich = true, float positiveDriveFraction = 1f,
-        bool holdLateralPosition = false)
+        bool holdLateralPosition = false, float lateralAuthority01 = 1f, bool contactRecovery = false)
     {
         var segment = snapshot.Segment; var geometry = snapshot.Track.Geometry;
         var corner = snapshot.Track.CornerTopology.CornerForSegment(snapshot.Step.SegmentIndex);
@@ -58,6 +58,7 @@ internal static class ExecutedPathTraversal
         var crash = resolution.Outcome == SegmentOutcome.Crash;
         // Zero requested lateral delta is a local control, not extra grip or a
         // displacement. Forced RunWide keeps its existing production movement.
+        var voluntaryLateralAuthority = resolution.Outcome == SegmentOutcome.RunWide ? 1f : lateralAuthority01;
         var hold = holdLateralPosition && resolution.Outcome is SegmentOutcome.Ok or SegmentOutcome.Brake;
         var speed = crash ? MathF.Max(1f, entrySpeed * .5f) : resolution.Speed;
         var nodeSurface = snapshot.TrackState.SampleSurface(snapshot.Step.SegmentIndex, lateral);
@@ -115,7 +116,7 @@ internal static class ExecutedPathTraversal
                     if (!hold && lateral != resolution.Lane && result.Lateral == resolution.Lane)
                     {
                         var rate = LateralMovementModel.CalculateMaxLateralDistanceMeters(1f, segment.Type, geometry,
-                            nodeSurface, skills);
+                            nodeSurface, skills) * voluntaryLateralAuthority;
                         var arrivalTime = LateralSpaceModel.LateralDistanceMeters(lateral, resolution.Lane, segment.Type, geometry) / rate;
                         if (result.Time > arrivalTime + TimeToleranceSeconds)
                         {
@@ -191,9 +192,11 @@ internal static class ExecutedPathTraversal
             return new((float)local, Progress(local), (float)time, (float)distance, atLateral,
                 LaneModel.PhysicalLateralOffsetFromInnerReferenceMeters(atLateral, segment.Type, geometry),
                 radius, radius.HasValue ? 1f / radius.Value : 0f, surface, atSpeed, safe, envelope,
-                positiveDriveFraction < 1f
-                    ? LongitudinalDynamics.CalculateNetDriveAccelerationMetersPerSecondSquared(atSpeed, force * positiveDriveFraction * availability, setup)
-                    : availability * LongitudinalDynamics.CalculateNetDriveAccelerationMetersPerSecondSquared(atSpeed, force, setup));
+                contactRecovery
+                    ? availability * LongitudinalDynamics.CalculateNetDriveAccelerationMetersPerSecondSquared(atSpeed, force * positiveDriveFraction, setup)
+                    : positiveDriveFraction < 1f
+                        ? LongitudinalDynamics.CalculateNetDriveAccelerationMetersPerSecondSquared(atSpeed, force * positiveDriveFraction * availability, setup)
+                        : availability * LongitudinalDynamics.CalculateNetDriveAccelerationMetersPerSecondSquared(atSpeed, force, setup));
         }
 
         float LocalEnvelope(double local, float atLateral, TrackSurfaceState atSurface)
@@ -263,7 +266,7 @@ internal static class ExecutedPathTraversal
         CoupledStep Evaluate(double seconds, double finish)
         {
             ProjectionCaptureAudit.Record(ProjectionMaterialization.CoupledEvaluation);
-            var atLateral = hold ? lateral : LateralMovementModel.MoveTowards(lateral, resolution.Lane, (float)seconds,
+            var atLateral = hold ? lateral : LateralMovementModel.MoveTowards(lateral, resolution.Lane, (float)seconds * voluntaryLateralAuthority,
                 segment.Type, geometry, nodeSurface, skills);
             var ds = GeometricDistance(segment, geometry, lateral, atLateral, finish - start);
             var sample = snapshot.TrackState.SampleSurface(snapshot.Step.SegmentIndex, (lateral + atLateral) * .5f);

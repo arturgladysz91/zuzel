@@ -47,12 +47,15 @@ public sealed record RiderSnapshot(
     [JsonIgnore]
     public float Condition { get; init; } = 1f;
 
+    [JsonIgnore]
+    public Interactions.ContactRecoveryState? ContactRecovery { get; init; }
+
     internal RiderSnapshot Apply(RiderStateChange change) => this with
     {
         Position = change.Position, LastResolvedSegmentId = change.LastResolvedSegmentId,
         Lane = change.Lane, LateralPosition = change.LateralPosition, Speed = change.Speed,
         Risk = change.Risk, Status = change.Status, ElapsedTimeSeconds = change.ElapsedTimeSeconds,
-        Morale = change.Morale,
+        Morale = change.Morale, ContactRecovery = change.ContactRecovery,
     };
 
     internal RiderState ToMutableCopy()
@@ -65,7 +68,7 @@ public sealed record RiderSnapshot(
             Risk = Risk,
             ElapsedTimeSeconds = ElapsedTimeSeconds,
             ActiveSetup = ActiveSetup,
-            Condition = Condition,
+            Condition = Condition, ContactRecovery = ContactRecovery,
         };
         copy.RestorePosition(Position);
         copy.SetLastResolvedSegmentId(LastResolvedSegmentId);

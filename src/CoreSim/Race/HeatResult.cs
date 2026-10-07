@@ -89,6 +89,11 @@ public sealed record HeatSimulationOptions
     [System.Text.Json.Serialization.JsonIgnore]
     public Interactions.PhysicalContactParameters PhysicalContactParameters { get; init; } = new();
 
+    [System.Text.Json.Serialization.JsonIgnore]
+    public bool EnablePhysicalContactConsequences { get; init; } = false;
+    [System.Text.Json.Serialization.JsonIgnore]
+    public Interactions.PhysicalContactConsequenceParameters PhysicalContactConsequenceParameters { get; init; } = new();
+
     // Calibration-only; deliberately unavailable to gameplay callers outside
     // CoreSim. Null preserves the reviewed production path exactly.
     internal StraightDriveEnvelopeAdjustment? StraightDriveEnvelopeAdjustment { get; init; }
@@ -110,10 +115,16 @@ public sealed record HeatSimulationOptions
         ArgumentNullException.ThrowIfNull(ContestedSpaceParameters);
         ContestedSpaceParameters.Validate();
         if (!Enum.IsDefined(PhysicalContactDiagnostics)) throw new ArgumentOutOfRangeException(nameof(PhysicalContactDiagnostics));
-        if (PhysicalContactDiagnostics != Interactions.PhysicalContactDiagnosticsLevel.None)
+        if (EnablePhysicalContactConsequences || PhysicalContactDiagnostics != Interactions.PhysicalContactDiagnosticsLevel.None)
         {
             ArgumentNullException.ThrowIfNull(PhysicalContactParameters);
             PhysicalContactParameters.Validate();
+        }
+        if (EnablePhysicalContactConsequences)
+        {
+            if (!EnableContestedSpaceResponses) throw new InvalidOperationException("Physical consequences require contested-space responses.");
+            ArgumentNullException.ThrowIfNull(PhysicalContactConsequenceParameters);
+            PhysicalContactConsequenceParameters.Validate();
         }
         if (Laps <= 0)
             throw new ArgumentOutOfRangeException(nameof(Laps));

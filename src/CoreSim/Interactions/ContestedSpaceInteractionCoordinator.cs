@@ -443,6 +443,7 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
             }
         // Only final actual #55 contact, after the single safety correction, can
         // authorize an episode's one legacy fallback attempt.
+        var currentContactDiagnostics = options.EnablePhysicalContactConsequences ? new List<InteractionEpisodeDiagnostic>() : null;
         foreach (var episode in tracker.Active)
         {
             var index = diagnostics.FindIndex(d => d.EpisodeId == episode.Id);
@@ -459,7 +460,9 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
             var certifiedReplayPrefix = d.PassCount == 1 && d.ResolvedWithoutMechanicalContact && !boundaryOrGap
                 && episode.Riders.Where(id => selected.ContainsKey(id)).All(id =>
                     Project(selected[id]).Traversal.ResolvedMotions[0].Equals(actual.Motions.Single(m => m.RiderId == id)));
-            var authorized = tracker.AuthorizeFallbacks(episode, contacts, safetyPasses == 1);
+            var authorized = options.EnablePhysicalContactConsequences
+                ? contacts.Select(c => new FallbackDecision(c, false, "Physical consequence ownership; legacy fallback disabled")).ToArray()
+                : tracker.AuthorizeFallbacks(episode, contacts, safetyPasses == 1);
             foreach (var decision in authorized.Where(a => a.Authorized))
                 fallbackPairs.Add(Pair(decision.Contact.RiderA,decision.Contact.RiderB));
             diagnostics[index] = d with
@@ -477,6 +480,7 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
                 UnresolvedMechanicalContacts = authorized.Select(c => Unresolved(episode,c.Contact,d.SelectedResponses,c.Reason)
                     with { LegacyFallbackAuthorized = c.Authorized }).ToArray(),
             };
+            currentContactDiagnostics?.Add(diagnostics[index]);
         }
         foreach (var pair in fallbackPairs)
         {
@@ -485,14 +489,38 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
         }
         foreach (var episode in tracker.Active)
             episode.LastDiagnostic = diagnostics.LastOrDefault(d => d.EpisodeId == episode.Id) ?? episode.LastDiagnostic;
-        var final = engine.ResolveProduction(snapshot, finalIntents, options, contactFilter: (a, b) =>
+        PhysicalContactAnalysis? physicalContact = null;
+        PhysicalContactConsequencePlan? consequencePlan = null;
+        if (options.EnablePhysicalContactConsequences)
+        {
+            bool Applicable(PhysicalContactPairAnalysis pair) => safetyPasses == 1 && tracker.CanApplyPhysical(pair);
+            physicalContact = PhysicalContactSnapshotAdapter.Analyze(verification, finalContactPoses, snapshot,
+                tracker.Embedding!, currentContactDiagnostics!, Array.Empty<SimulationStepEvent>(), options.PhysicalContactParameters,
+                PhysicalContactDiagnosticsLevel.FullAudit, Applicable);
+            var pairs = physicalContact.AuditPairs.Where(Applicable).ToArray();
+            var directions = new Dictionary<int, MeterPoint>();
+            foreach (var rider in physicalContact.ApplicationRiders)
+            {
+                var first = pairs.Where(p => p.RiderA == rider.RiderId || p.RiderB == rider.RiderId).Min(p => p.FirstTouchCommonTimeSeconds);
+                var pose = CommonTimePoseHistory.Stitch(finalContactPoses).Where(i => i.RiderId == rider.RiderId
+                    && i.StartTimeSeconds <= first && i.EndTimeSeconds >= first).OrderByDescending(i => i.StartTimeSeconds).First().Sample(first);
+                directions[rider.RiderId] = new(Math.Cos(pose.Attitude.TravelHeadingRadians), Math.Sin(pose.Attitude.TravelHeadingRadians));
+            }
+            consequencePlan = PhysicalContactConsequenceResolver.Build(physicalContact, physicalContact.ApplicationRiders,
+                pairs, snapshot, actual.Changes, directions, options.PhysicalContactParameters,
+                options.PhysicalContactConsequenceParameters,
+                physicalContact.AuditPairs.Count(p => p.Status == PhysicalContactStatus.Analyzed && !tracker.CanApplyPhysical(p)));
+            tracker.ConsumePhysical(consequencePlan);
+        }
+        var final = engine.ResolveProduction(snapshot, finalIntents, options, legacyContacts: !options.EnablePhysicalContactConsequences,
+            consequencePlan: consequencePlan, contactFilter: (a, b) =>
             fallbackPairs.Contains(Pair(a, b)), unresolvedPairs: fallbackPairs.Select(pair =>
                 actual.Changes.Single(c => c.RiderId == pair.Item1).ElapsedTimeSeconds
                     <= actual.Changes.Single(c => c.RiderId == pair.Item2).ElapsedTimeSeconds
                     ? (pair.Item1, pair.Item2) : (pair.Item2, pair.Item1)).ToArray());
         production++;
         var executedVerification=CommonTimePoseHistory.Observe(tracker.History.Concat(Poses(final,snapshot.Track)));
-        var physicalContact = options.PhysicalContactDiagnostics == PhysicalContactDiagnosticsLevel.None ? null
+        physicalContact ??= options.PhysicalContactDiagnostics == PhysicalContactDiagnosticsLevel.None ? null
             : PhysicalContactSnapshotAdapter.Analyze(verification,finalContactPoses,snapshot,tracker.Embedding!,diagnostics,
                 final.Events,options.PhysicalContactParameters,options.PhysicalContactDiagnostics);
         narrow+=executedVerification.Work.NarrowPhaseEvaluations;
@@ -518,7 +546,10 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
                 ActualProductionVerifications = actualVerifications + 1, SafetyPasses = safetyPasses, LegacyFallbackAttempts = fallbackPairs.Count,
                 SafetyContactComponents = safetyComponents.Count, FinalContactComponents = finalComponents.Count,
                 SafetyJointCombinations = safetyJointCombinations,
-            }) { PhysicalContactAnalysis = physicalContact }, owner, tracker);
+            }) { PhysicalContactAnalysis = options.PhysicalContactDiagnostics == PhysicalContactDiagnosticsLevel.None ? null
+                : options.PhysicalContactDiagnostics == PhysicalContactDiagnosticsLevel.Summary && physicalContact is not null
+                    ? physicalContact with { Level = PhysicalContactDiagnosticsLevel.Summary, AuditPairs = Array.Empty<PhysicalContactPairAnalysis>(), AuditRiders = Array.Empty<RiderContactAnalysis>() }
+                    : physicalContact, PhysicalContactConsequences = consequencePlan }, owner, tracker);
     }
 
     private IReadOnlyList<PhysicalPoseInterval> Poses(ResolvedSimulationStep step, Track track)

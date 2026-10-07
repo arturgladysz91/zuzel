@@ -19,6 +19,8 @@ CANONICAL_DOMAIN = DOMAIN | {
 CANONICAL = re.compile(r"\bRiderAbilities\b|\bRiderGameplayProfile\b|\bRiderPhysicalProfile\b|"
                        r"\bRiderInteractionStyle\b|\.Gameplay\b|\.Condition\b")
 EXTRACTION = ROOT / "tests/fixtures/contested-source-extraction.json"
+CONSEQUENCE_EXTRACTION = ROOT / "tests/fixtures/physical-consequence-source-extraction.json"
+CONSEQUENCE_EXTRACTION_SHA256 = "298667d5d50cee7f64c08861bf049f5d524e51fdc01cfab9767ee951e6591ba5"
 EXTRACTION_SHA256 = "46a8f58c1cbd84dcb2697247e294b60474f7ee67712a49aa15f4f1337acd5d89"
 CANONICAL_TRAFFIC = {"src/CoreSim/Interactions/InteractionModel.cs",
                      "src/CoreSim/Interactions/ContestedSpaceInteractionCoordinator.cs"}
@@ -42,11 +44,22 @@ def reviewed_extraction():
 def consumers():
     result = {}
     extraction = reviewed_extraction()
+    consequence_raw = CONSEQUENCE_EXTRACTION.read_bytes().replace(b"\r\n", b"\n")
+    assert hashlib.sha256(consequence_raw).hexdigest() == CONSEQUENCE_EXTRACTION_SHA256
+    consequences = json.loads(consequence_raw)
+    assert consequences["BaseMainSha"] == "5989301192565f6a265d53a2db12c7d00c94fedc"
     for path in sorted((ROOT / "src").rglob("*.cs")):
         if {"obj", "bin"} & set(path.parts):
             continue
         name = path.relative_to(ROOT).as_posix()
         source = path.read_text(encoding="utf-8").replace("\r\n", "\n")
+        if name in consequences["NewDiagnosticSources"]:
+            assert not REFERENCES.search(source), f"Legacy execution data in #56C2 module: {name}"
+            assert hashlib.sha256(source.encode()).hexdigest() == consequences["NewDiagnosticSources"][name]
+            continue
+        for patch in consequences["Patches"].get(name, []):
+            assert source.count(patch["After"]) == 1, name
+            source = source.replace(patch["After"], patch["Before"])
         if name in CANONICAL_CONTACT_SHADOW:
             assert not REFERENCES.search(source), f"Legacy execution data in #56C1 shadow module: {name}"
             continue
@@ -92,4 +105,4 @@ if __name__ == "__main__":
         MANIFEST.write_text(json.dumps({"BaseMainSha": BASE, "ConsumerSourceSha256": consumers()},
                                      indent=2) + "\n", encoding="utf-8", newline="\n")
     else:
-        print(f"Legacy consumer audit: {verify()} frozen readers; exact #56B extraction verified; canonical readers explicitly scoped.")
+        print(f"Legacy consumer audit: {verify()} frozen readers; exact #56B and #56C2 extraction verified; canonical readers explicitly scoped.")

@@ -98,6 +98,8 @@ public sealed record InteractionResolution(IReadOnlyList<InteractionEpisodeDiagn
 {
     [System.Text.Json.Serialization.JsonIgnore]
     public PhysicalContactAnalysis? PhysicalContactAnalysis { get; init; }
+    [System.Text.Json.Serialization.JsonIgnore]
+    public PhysicalContactConsequencePlan? PhysicalContactConsequences { get; init; }
 }
 
 internal sealed class InteractionEpisode(long id, int[] riders, double start)
@@ -123,6 +125,7 @@ internal sealed class InteractionEpisode(long id, int[] riders, double start)
                 FallbackOrigins[key] = FallbackOrigins[key] with { Attempted = value };
         }
     }
+    internal HashSet<(int A, int B)> ConsumedPhysicalPairs = new();
     internal int ResponseChanges;
     internal Dictionary<int, InteractionAlternative> Commitments = new();
     internal InteractionEpisodeDiagnostic? LastDiagnostic;
@@ -146,6 +149,7 @@ public sealed class InteractionEpisodeTracker
         foreach (var e in _episodes) clone._episodes.Add(new(e.Id, e.Riders.ToArray(), e.Start)
         {
             LastActive = e.LastActive, ObservedUntil = e.ObservedUntil, ReleaseNotBefore=e.ReleaseNotBefore, ObservedRiders = e.ObservedRiders.ToArray(),
+            ConsumedPhysicalPairs = new(e.ConsumedPhysicalPairs),
             ClearSince = e.ClearSince, End = e.End, Context = e.Context,
             PredictedMechanical = e.PredictedMechanical, FallbackOrigins = new(e.FallbackOrigins),
             MergedEpisodeIds = new(e.MergedEpisodeIds), MergedOtherRiders = e.MergedOtherRiders,
@@ -203,6 +207,7 @@ public sealed class InteractionEpisodeTracker
         }
         foreach (var merged in matches.Where(e => e != episode))
         {
+            episode.ConsumedPhysicalPairs.UnionWith(merged.ConsumedPhysicalPairs);
             episode.MergedOtherRiders = true;
             episode.MergedEpisodeIds.Add(merged.Id);
             episode.MergedEpisodeIds.UnionWith(merged.MergedEpisodeIds);
@@ -257,6 +262,19 @@ public sealed class InteractionEpisodeTracker
         }
         return result;
     }
+    internal bool CanApplyPhysical(PhysicalContactPairAnalysis pair)
+        => pair.Status == PhysicalContactStatus.Analyzed && Active.Any(e => e.Id == pair.EpisodeId
+            && !e.ConsumedPhysicalPairs.Contains((Math.Min(pair.RiderA, pair.RiderB), Math.Max(pair.RiderA, pair.RiderB))));
+
+    internal void ConsumePhysical(PhysicalContactConsequencePlan plan)
+    {
+        foreach (var pair in plan.AppliedPairs)
+        {
+            var episode = Active.Single(e => e.Id == pair.EpisodeId);
+            episode.ConsumedPhysicalPairs.Add((Math.Min(pair.RiderA, pair.RiderB), Math.Max(pair.RiderA, pair.RiderB)));
+        }
+    }
+
     internal bool Owns(int a, int b) => Active.Any(e => e.Riders.Contains(a) && e.Riders.Contains(b));
     internal void ObserveClearance(double time, IReadOnlyList<ContestedSpaceEvent> rows, ContestedSpaceParameters p,
         SimulationSnapshot? snapshot = null)

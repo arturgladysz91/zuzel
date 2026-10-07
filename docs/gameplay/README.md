@@ -1,5 +1,10 @@
 # Gameplay — indeks specyfikacji
 
+Current physical consequence precedence (#56C2): [physical contact consequences and recovery](../calibration/physical-contact-consequences.md)
+defines the opt-in applied severity categories and bounded recovery. Brush has no stored impairment;
+Disturbed, LostRhythm and MajorSave affect one next active production step; Crash is terminal.
+No abilities or morale are rewritten. Body contact, injuries and long-term fatigue remain outside this stage.
+
 Current racing-response precedence (#56B): [bounded pre-contact contested-space responses](../calibration/contested-space-racing-response.md)
 adds an opt-in heat-scoped coordinator after independent #54 planning. Joint alternatives
 execute production motion and are verified by #55; legacy consequences are authorized once

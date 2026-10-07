@@ -41,6 +41,8 @@ public sealed class RiderState
             _lateralPosition = value;
         }
     }
+    [JsonIgnore]
+    public Interactions.ContactRecoveryState? ContactRecovery { get; internal set; }
     public float Speed { get; set; }
     public float Risk { get; set; }
     public RiderRaceStatus Status => _status;
@@ -50,7 +52,10 @@ public sealed class RiderState
         set
         {
             if (value)
+            {
                 _status = RiderRaceStatus.Crashed;
+                ContactRecovery = null;
+            }
             else if (_status == RiderRaceStatus.Crashed)
                 _status = RiderRaceStatus.Racing;
         }
@@ -128,6 +133,7 @@ public sealed class RiderState
         if (_status is RiderRaceStatus.Finished or RiderRaceStatus.Crashed)
             throw new InvalidOperationException($"A rider with status {_status} cannot retire.");
 
+        ContactRecovery = null;
         _status = RiderRaceStatus.Retired;
         Speed = 0f;
     }
@@ -153,12 +159,17 @@ public sealed class RiderState
 
     internal void SetLastResolvedSegmentId(int segmentId) => _lastResolvedSegmentId = segmentId;
 
-    internal void SetStatus(RiderRaceStatus status) => _status = status;
+    internal void SetStatus(RiderRaceStatus status)
+    {
+        _status = status;
+        if (status is RiderRaceStatus.Crashed or RiderRaceStatus.Finished or RiderRaceStatus.Retired) ContactRecovery = null;
+    }
     internal void RestoreStartingPosition(StartingGateBounds? position) => StartingPosition = position;
 
     public void ResetForHeat(int lane)
     {
         LaneModel.ValidateLane(lane);
+        ContactRecovery = null;
         StartingPosition = null;
         _position = _position.SegmentCount == 0
             ? default

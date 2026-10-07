@@ -1,5 +1,14 @@
 # Core simulation specification
 
+Current physical consequence precedence (#56C2): [physical contact consequences and recovery](calibration/physical-contact-consequences.md)
+supersedes legacy contact outcomes only with default-OFF `EnablePhysicalContactConsequences` and #56B enabled.
+Only analyzed causal-frontier contacts after exhausted safety responses apply. Frozen aggregate delta velocity
+changes final scalar speed; calibrated severity supplies terminal Crash or at most one active recovery step.
+Recovery scales positive drive and voluntary lateral authority, never resistance, correction, abilities or morale.
+There is no occurrence/severity RNG, contact time penalty or lateral displacement in this path.
+Already-traversed distance/time and passage wear remain unchanged; no post-impact reintegration is claimed.
+Feature OFF and #56C1 shadow evidence retain their historical contracts.
+
 Current racing-response precedence (#56B): [bounded pre-contact contested-space responses](calibration/contested-space-racing-response.md)
 adds an opt-in heat-scoped coordinator after independent #54 planning. Joint alternatives
 execute production motion and are verified by #55; legacy consequences are authorized once

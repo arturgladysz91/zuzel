@@ -90,6 +90,9 @@ public sealed record PhysicalContactPairAnalysis(int RiderA, int RiderB, long? E
     PhysicalContactImpulse? Impulse = null, RiderContactDemand? DemandA = null, RiderContactDemand? DemandB = null)
 {
     public bool DeferredByEarlierContact => Status == PhysicalContactStatus.DeferredByEarlierContact;
+    // Internal frontier provenance does not extend frozen #56C1 JSON/IEEE contracts.
+    internal double? FrontierStartTimeSeconds { get; init; }
+    internal IReadOnlyList<int> FrontierRiderIds { get; init; } = Array.Empty<int>();
 }
 public sealed record RiderContactAnalysis(int RiderId, double TotalMassKg, MeterPoint NetImpulseNewtonSeconds,
     MeterPoint NetDeltaVelocityMetersPerSecond, double CombinedStabilityDemand, RiderStabilityReserve Reserve,
@@ -107,6 +110,9 @@ public sealed record PhysicalContactAnalysis(PhysicalContactDiagnosticsLevel Lev
     IReadOnlyList<PhysicalContactPairSummary> Pairs, IReadOnlyList<RiderContactSummary> Riders,
     IReadOnlyList<PhysicalContactPairAnalysis> AuditPairs, IReadOnlyList<RiderContactAnalysis> AuditRiders, PhysicalContactWork Work)
 {
+    [System.Text.Json.Serialization.JsonIgnore]
+    internal IReadOnlyList<RiderContactAnalysis> ApplicationRiders { get; init; } = Array.Empty<RiderContactAnalysis>();
+
     internal static PhysicalContactAnalysis Empty(PhysicalContactDiagnosticsLevel level) => level switch
     { PhysicalContactDiagnosticsLevel.FullAudit => EmptyAudit, PhysicalContactDiagnosticsLevel.Summary => EmptySummary, _ => EmptyNone };
     private static readonly PhysicalContactAnalysis EmptyNone = CreateEmpty(PhysicalContactDiagnosticsLevel.None);

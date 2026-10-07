@@ -66,8 +66,12 @@ public static class PhysicalContactAnalyzer
         if (!Enum.IsDefined(level)) throw new ArgumentOutOfRangeException(nameof(level));
         return AnalyzeEnabled(source,parameters,level);
     }
+    internal static PhysicalContactAnalysis AnalyzeForConsequences(IEnumerable<PhysicalContactInput> source,
+        PhysicalContactParameters parameters, Func<PhysicalContactPairAnalysis, bool> applicable)
+        => AnalyzeEnabled(source, parameters, PhysicalContactDiagnosticsLevel.FullAudit, applicable);
+
     private static PhysicalContactAnalysis AnalyzeEnabled(IEnumerable<PhysicalContactInput> source, PhysicalContactParameters? parameters,
-        PhysicalContactDiagnosticsLevel level)
+        PhysicalContactDiagnosticsLevel level, Func<PhysicalContactPairAnalysis, bool>? applicable = null)
     {
         var p = parameters ?? new(); p.Validate();
         var all = source.Select(Canonical).ToArray();
@@ -84,7 +88,8 @@ public static class PhysicalContactAnalyzer
             groups++;
             // Complete membership first, then analyze every pair from the frozen state.
             // Resuming the frontier iterator invalidates these riders before the next seed.
-            foreach (var index in frontier.ContactIndices) pairs[index] = AnalyzePair(inputs[index],p);
+            foreach (var index in frontier.ContactIndices) pairs[index] = AnalyzePair(inputs[index],p) with
+                { FrontierStartTimeSeconds = frontier.StartTimeSeconds, FrontierRiderIds = frontier.RiderIds };
         }
         for (var index = 0; index < inputs.Length; index++)
             if (pairs[index] is null)
@@ -93,12 +98,14 @@ public static class PhysicalContactAnalyzer
                     : AnalyzePair(inputs[index],p);
         // All pair calculations finish before aggregation. Numeric summation order does not depend on rider identity.
         static double Sum(IEnumerable<double> values) => values.OrderBy(Math.Abs).ThenBy(v => v).Sum();
-        var contributions = pairs.Zip(inputs).Where(x => x.First.Status == PhysicalContactStatus.Analyzed).SelectMany(x => new[]
+        RiderContactAnalysis[] Aggregate(Func<PhysicalContactPairAnalysis, bool> include)
+        {
+        var contributions = pairs.Zip(inputs).Where(x => x.First.Status == PhysicalContactStatus.Analyzed && include(x.First)).SelectMany(x => new[]
         {
             (Rider:x.Second.RiderA, Mass:x.First.Impulse!.MassAKg, Impulse:x.First.Impulse.ImpulseOnANewtonSeconds, Demand:x.First.DemandA!),
             (Rider:x.Second.RiderB, Mass:x.First.Impulse!.MassBKg, Impulse:x.First.Impulse.ImpulseOnBNewtonSeconds, Demand:x.First.DemandB!)
         });
-        var riders = contributions.GroupBy(c => c.Rider.RiderId).OrderBy(g => g.Key).Select(g =>
+        return contributions.GroupBy(c => c.Rider.RiderId).OrderBy(g => g.Key).Select(g =>
         {
             if (g.Any(c => c.Rider.Profile != g.First().Rider.Profile || c.Rider.Condition != g.First().Rider.Condition))
                 throw new ArgumentException("A frozen contact group requires one canonical physiology per rider.");
@@ -109,6 +116,9 @@ public static class PhysicalContactAnalyzer
             var ratio = demand / reserve.StabilityReserveMetersPerSecond;
             return new RiderContactAnalysis(g.Key,g.First().Mass,net,net*(1/g.First().Mass),demand,reserve,ratio,Classify(ratio,p));
         }).ToArray();
+        }
+        var riders = Aggregate(_ => true);
+        var applicationRiders = applicable is null ? Array.Empty<RiderContactAnalysis>() : Aggregate(applicable);
         var summaries = pairs.Zip(inputs).Select(x =>
         {
             var a = x.First.DemandA?.PairDemand / Reserve(x.Second.RiderA,p).StabilityReserveMetersPerSecond;
@@ -123,7 +133,8 @@ public static class PhysicalContactAnalyzer
             level == PhysicalContactDiagnosticsLevel.FullAudit ? riders : Array.Empty<RiderContactAnalysis>(),
             new(all.Length,inputs.Length,groups,pairs.Count(r => r.Status is PhysicalContactStatus.Analyzed or PhysicalContactStatus.GeometryUnresolved),
                 pairs.Count(r => r.Status == PhysicalContactStatus.Analyzed),pairs.Count(r => r.DeferredByEarlierContact),
-                pairs.Count(r => r.Status is PhysicalContactStatus.IneligibleContact or PhysicalContactStatus.GeometryUnresolved)));
+                pairs.Count(r => r.Status is PhysicalContactStatus.IneligibleContact or PhysicalContactStatus.GeometryUnresolved)))
+            { ApplicationRiders = applicationRiders };
     }
     private sealed record PhysicalContactFrontier(double StartTimeSeconds, IReadOnlyList<int> RiderIds, IReadOnlyList<int> ContactIndices);
 

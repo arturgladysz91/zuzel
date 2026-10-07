@@ -7,7 +7,8 @@ internal static class PhysicalContactSnapshotAdapter
 {
     internal static PhysicalContactAnalysis Analyze(ContestedSpaceReport verified, IReadOnlyList<PhysicalPoseInterval> poses,
         SimulationSnapshot snapshot, TrackMetricEmbedding embedding, IReadOnlyList<InteractionEpisodeDiagnostic> episodes,
-        IReadOnlyList<SimulationStepEvent> legacyEvents, PhysicalContactParameters parameters, PhysicalContactDiagnosticsLevel level)
+        IReadOnlyList<SimulationStepEvent> legacyEvents, PhysicalContactParameters parameters, PhysicalContactDiagnosticsLevel level,
+        Func<PhysicalContactPairAnalysis, bool>? applicable = null)
     {
         var contacts = episodes.SelectMany(e => e.UnresolvedMechanicalContacts
             .Select(c => (Episode:e,Contact:c))).ToArray();
@@ -45,7 +46,8 @@ internal static class PhysicalContactSnapshotAdapter
                 b?.RateBounds(time,time).CenterVelocityMetersPerSecond ?? default,Rider(c.RiderA,pa),Rider(c.RiderB,pb),
                 item.Episode.EpisodeId,item.Episode.FallbackProvenance.Select(p => p.OriginEpisodeId).ToArray(),item.Contact.LegacyFallbackAuthorized,observations));
         }
-        return PhysicalContactAnalyzer.Analyze(inputs,parameters,level);
+        return applicable is null ? PhysicalContactAnalyzer.Analyze(inputs,parameters,level)
+            : PhysicalContactAnalyzer.AnalyzeForConsequences(inputs,parameters,applicable);
     }
     internal const double SurfaceMappingRoundoffToleranceMeters = 1e-9;
     internal static double Grip(PhysicalBikePose pose, SimulationSnapshot snapshot, TrackMetricEmbedding embedding)

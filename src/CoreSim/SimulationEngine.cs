@@ -11,6 +11,9 @@ public enum SimulationEventType
     SegmentResolved,
     ContactCrash,
     ContactLostRhythm,
+    ContactBrush,
+    ContactDisturbed,
+    ContactMajorSave,
 }
 
 public sealed record RiderIntent(int RiderId, RiderDecision Decision);
@@ -32,7 +35,11 @@ public sealed record RiderStateChange(
     SegmentOutcome Outcome,
     float EntrySpeed,
     float PhysicsSpeed,
-    bool ApplySurfaceWear);
+    bool ApplySurfaceWear)
+{
+    [System.Text.Json.Serialization.JsonIgnore]
+    public Interactions.ContactRecoveryState? ContactRecovery { get; init; }
+}
 
 public sealed record SimulationStepEvent(
     int StepNumber,
@@ -40,7 +47,11 @@ public sealed record SimulationStepEvent(
     int RiderId,
     SimulationEventType Type,
     string Text,
-    int? OtherRiderId = null);
+    int? OtherRiderId = null)
+{
+    [System.Text.Json.Serialization.JsonIgnore]
+    public Interactions.RiderContactConsequence? PhysicalContactConsequence { get; init; }
+}
 
 /// <summary>Typed values captured from the production resolution path for one rider.</summary>
 public sealed record RiderStepDiagnostics(
@@ -58,7 +69,15 @@ public sealed record RiderStepDiagnostics(
     CornerSpeedCorrectionProfile? CornerSpeedCorrectionProfile = null,
     CornerPhaseContext? CornerPhaseContext = null,
     ContinuousCornerTraversalProfile? ContinuousCornerProfile = null,
-    ExecutedSegmentPath? ExecutedPath = null);
+    ExecutedSegmentPath? ExecutedPath = null)
+{
+    [System.Text.Json.Serialization.JsonIgnore]
+    public Interactions.RiderContactConsequence? PhysicalContactConsequence { get; init; }
+    [System.Text.Json.Serialization.JsonIgnore]
+    public float? FinalSpeedMetersPerSecond { get; init; }
+    [System.Text.Json.Serialization.JsonIgnore]
+    public RiderRaceStatus? FinalStatus { get; init; }
+}
 
 public sealed class ResolvedSimulationStep
 {
@@ -106,6 +125,14 @@ public sealed class ResolvedSimulationStep
             throw new ArgumentException(
                 "Diagnostics and motions must contain exactly one item for every rider change.",
                 nameof(diagnostics));
+        }
+        foreach (var diagnostic in _diagnostics.Where(d => d.PhysicalContactConsequence is not null))
+        {
+            var change = _changes.Single(c => c.RiderId == diagnostic.RiderId);
+            var motion = _motions.Single(m => m.RiderId == diagnostic.RiderId);
+            if (diagnostic.FinalSpeedMetersPerSecond != change.Speed || diagnostic.FinalStatus != change.Status
+                || motion.Final.SpeedMetersPerSecond != change.Speed || motion.Final.LateralPosition != change.LateralPosition)
+                throw new InvalidOperationException("Applied contact, final state, diagnostics and motion must agree.");
         }
     }
 }
@@ -175,7 +202,7 @@ public sealed class SimulationEngine
             rider.ElapsedTimeSeconds,
             rider.ActiveSetup,
             rider.Morale,
-            rider.ManagerTrust) { StartingPosition = rider.StartingPosition, Condition = rider.Condition });
+            rider.ManagerTrust) { StartingPosition = rider.StartingPosition, Condition = rider.Condition, ContactRecovery = rider.ContactRecovery });
 
         return new SimulationSnapshot(step, track, trackState.Snapshot(), snapshots);
     }
@@ -217,7 +244,8 @@ public sealed class SimulationEngine
     internal ResolvedSimulationStep ResolveProduction(SimulationSnapshot snapshot,
         IReadOnlyList<RiderIntent> intents, HeatSimulationOptions options,
         bool legacyContacts = true, Func<int, int, bool>? contactFilter = null,
-        IReadOnlyList<(int LeaderRiderId, int TrailingRiderId)>? unresolvedPairs = null)
+        IReadOnlyList<(int LeaderRiderId, int TrailingRiderId)>? unresolvedPairs = null,
+        Interactions.PhysicalContactConsequencePlan? consequencePlan = null)
     {
         ArgumentNullException.ThrowIfNull(snapshot);
         ArgumentNullException.ThrowIfNull(intents);
@@ -255,6 +283,28 @@ public sealed class SimulationEngine
 
         if (!snapshot.Step.UseLegacyPhysics && legacyContacts)
             ResolveExistingInteractions(snapshot, changes, events, contactFilter, unresolvedPairs);
+
+        if (consequencePlan is not null)
+        {
+            foreach (var consequence in consequencePlan.Riders)
+            {
+                changes[consequence.RiderId] = Interactions.PhysicalContactConsequenceResolver.Apply(changes[consequence.RiderId], consequence);
+                var type = consequence.Severity switch
+                {
+                    Interactions.PhysicalContactSeverity.Brush => SimulationEventType.ContactBrush,
+                    Interactions.PhysicalContactSeverity.Disturbed => SimulationEventType.ContactDisturbed,
+                    Interactions.PhysicalContactSeverity.LostRhythm => SimulationEventType.ContactLostRhythm,
+                    Interactions.PhysicalContactSeverity.MajorSave => SimulationEventType.ContactMajorSave,
+                    _ => SimulationEventType.ContactCrash,
+                };
+                events.Add(new(snapshot.Step.StepNumber, 20, consequence.RiderId, type,
+                    FormattableString.Invariant($"R{consequence.RiderId} physical {consequence.Severity} ratio={consequence.SeverityRatio:F4} deltaForward={consequence.DeltaForwardMetersPerSecond:F4} m/s"))
+                    { PhysicalContactConsequence = consequence });
+            }
+            for (var i = 0; i < events.Count; i++)
+                if (events[i].Type == SimulationEventType.SegmentResolved)
+                    events[i] = events[i] with { Text = FormatSegmentLog(snapshot, changes[events[i].RiderId]) };
+        }
 
         var diagnostics = riderResolutions.Values.Select(resolution =>
         {
@@ -304,7 +354,12 @@ public sealed class SimulationEngine
                 resolution.CornerSpeedCorrectionProfile,
                 resolution.CornerPhaseContext,
                 resolution.ContinuousCornerProfile,
-                resolution.ExecutedPath);
+                resolution.ExecutedPath)
+            {
+                PhysicalContactConsequence = consequencePlan?.Riders.SingleOrDefault(c => c.RiderId == finalChange.RiderId),
+                FinalSpeedMetersPerSecond = options.EnablePhysicalContactConsequences ? finalChange.Speed : null,
+                FinalStatus = options.EnablePhysicalContactConsequences ? finalChange.Status : null,
+            };
         }).ToArray();
         var motions = diagnostics.Select(d =>
         {
@@ -402,6 +457,7 @@ public sealed class SimulationEngine
         rider.CommitPosition(change.Position);
         rider.SetLastResolvedSegmentId(change.LastResolvedSegmentId);
         rider.SetStatus(change.Status);
+        rider.ContactRecovery = change.Status == RiderRaceStatus.Racing ? change.ContactRecovery : null;
     }
 
     /// <summary>Same rider physics, solo materialization without events, logs or rich motion.</summary>
@@ -555,13 +611,16 @@ public sealed class SimulationEngine
                 rider.LateralPosition,
                 snapshot.Track.Geometry);
         var travelled = segmentLength * canonicalAdvance;
+        var recovery = options.EnablePhysicalContactConsequences ? rider.ContactRecovery : null;
         if (!snapshot.Step.UseLegacyPhysics && (!ExecutedPathTraversal.IsFixedLine(rider.LateralPosition, resolution.Lane)
             || (options.EnableContestedSpaceResponses && (decision.DriveControl is { PositiveDriveFraction: < 1f }
-                || decision.HoldLateralPosition))))
+                || decision.HoldLateralPosition)) || recovery is not null))
             return ResolveMovingRider(snapshot, rider, decision, resolution, entrySpeed, plannedLane,
                 canonicalAdvance, standingStartEligible, risk, surface, cornerPhaseContext, captureRich,
-                options.EnableContestedSpaceResponses ? decision.DriveControl?.PositiveDriveFraction ?? 1f : 1f,
-                options.EnableContestedSpaceResponses && decision.HoldLateralPosition);
+                (options.EnableContestedSpaceResponses ? decision.DriveControl?.PositiveDriveFraction ?? 1f : 1f)
+                    * (float)(recovery?.DriveAvailability01 ?? 1),
+                options.EnableContestedSpaceResponses && decision.HoldLateralPosition,
+                (float)(recovery?.LateralAuthority01 ?? 1), recovery is not null);
         var speed = resolution.Speed;
         StraightSpeedProfile? straightProfile = null;
         TurnExitDriveProfile? turnExitDriveProfile = null;
@@ -713,7 +772,7 @@ public sealed class SimulationEngine
     private static ResolvedRider ResolveMovingRider(SimulationSnapshot snapshot, RiderSnapshot rider,
         RiderDecision decision, SegmentResolution resolution, float entrySpeed, int plannedLane,
         float canonicalAdvance, bool launch, float risk, TrackSurfaceState entrySurface, CornerPhaseContext? phase,
-        bool captureRich, float positiveDriveFraction = 1f, bool holdLateralPosition = false)
+        bool captureRich, float positiveDriveFraction = 1f, bool holdLateralPosition = false, float lateralAuthority01 = 1f, bool contactRecovery = false)
     {
         Dictionary<int, float?>? approachTargets = snapshot.Segment.Type == SegmentType.Straight ? new() : null;
         float? NextCorner(float lateral)
@@ -724,7 +783,7 @@ public sealed class SimulationEngine
             approachTargets.Add(key, target); return target;
         }
         var traversal = ExecutedPathTraversal.Traverse(snapshot, rider, resolution, entrySpeed, canonicalAdvance,
-            launch, NextCorner, captureRich, positiveDriveFraction, holdLateralPosition);
+            launch, NextCorner, captureRich, positiveDriveFraction, holdLateralPosition, lateralAuthority01, contactRecovery);
         var path = traversal.RichPath;
         var position = rider.Position.Advance(canonicalAdvance, traversal.DistanceMeters);
         var status = resolution.Outcome == SegmentOutcome.Crash ? RiderRaceStatus.Crashed
