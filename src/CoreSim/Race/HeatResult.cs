@@ -84,6 +84,10 @@ public sealed record HeatSimulationOptions
     public bool EnableContestedSpaceResponses { get; init; } = false;
     public Interactions.InteractionDiagnosticsLevel InteractionDiagnostics { get; init; } = Interactions.InteractionDiagnosticsLevel.Summary;
     public Interactions.ContestedSpaceParameters ContestedSpaceParameters { get; init; } = new();
+    [System.Text.Json.Serialization.JsonIgnore]
+    public Interactions.PhysicalContactDiagnosticsLevel PhysicalContactDiagnostics { get; init; } = Interactions.PhysicalContactDiagnosticsLevel.None;
+    [System.Text.Json.Serialization.JsonIgnore]
+    public Interactions.PhysicalContactParameters PhysicalContactParameters { get; init; } = new();
 
     // Calibration-only; deliberately unavailable to gameplay callers outside
     // CoreSim. Null preserves the reviewed production path exactly.
@@ -105,6 +109,12 @@ public sealed record HeatSimulationOptions
     {
         ArgumentNullException.ThrowIfNull(ContestedSpaceParameters);
         ContestedSpaceParameters.Validate();
+        if (!Enum.IsDefined(PhysicalContactDiagnostics)) throw new ArgumentOutOfRangeException(nameof(PhysicalContactDiagnostics));
+        if (PhysicalContactDiagnostics != Interactions.PhysicalContactDiagnosticsLevel.None)
+        {
+            ArgumentNullException.ThrowIfNull(PhysicalContactParameters);
+            PhysicalContactParameters.Validate();
+        }
         if (Laps <= 0)
             throw new ArgumentOutOfRangeException(nameof(Laps));
         if (IncidentFrequency is < 0f or > 2f)
