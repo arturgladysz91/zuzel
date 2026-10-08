@@ -137,30 +137,47 @@ public static class MechanicalSeparation
     }
     internal static FootprintSeparation Between(BikeFootprint fa, BikeFootprint fb)
     {
+        // Each capsule is used twice, and each point-to-segment distance used
+        // to rebuild its direction and squared length. Preserve the exact
+        // endpoint arithmetic once per capsule for all four component pairs.
+        var a0 = new SegmentGeometry(fa.Chassis); var a1 = new SegmentGeometry(fa.Handlebar);
+        var b0 = new SegmentGeometry(fb.Chassis); var b1 = new SegmentGeometry(fb.Handlebar);
         var best = new FootprintSeparation(double.PositiveInfinity, BikeComponent.Chassis, BikeComponent.Chassis);
         for (var i = 0; i < 2; i++) for (var j = 0; j < 2; j++)
         {
-            var ca = fa.Component((BikeComponent)i); var cb = fb.Component((BikeComponent)j);
-            var gap = SegmentDistance(ca.Start, ca.End, cb.Start, cb.End) - ca.RadiusMeters - cb.RadiusMeters;
+            ref readonly var ca = ref (i == 0 ? ref a0 : ref a1);
+            ref readonly var cb = ref (j == 0 ? ref b0 : ref b1);
+            var gap = SegmentDistance(in ca, in cb) - ca.Capsule.RadiusMeters - cb.Capsule.RadiusMeters;
             if (gap < best.SignedMeters) best = new(gap, (BikeComponent)i, (BikeComponent)j);
         }
         return best;
     }
-    private static double SegmentDistance(MeterPoint a, MeterPoint b, MeterPoint c, MeterPoint d)
+    private readonly struct SegmentGeometry
     {
-        var u = b - a; var v = d - c; var w = c - a;
+        internal readonly MechanicalCapsule Capsule;
+        internal readonly MeterPoint Direction;
+        internal readonly double Square;
+        internal SegmentGeometry(MechanicalCapsule capsule)
+        {
+            Capsule = capsule; Direction = capsule.End - capsule.Start;
+            Square = MeterPoint.Dot(Direction, Direction);
+        }
+    }
+    private static double SegmentDistance(in SegmentGeometry a, in SegmentGeometry b)
+    {
+        var u = a.Direction; var v = b.Direction; var w = b.Capsule.Start - a.Capsule.Start;
         var cross = MeterPoint.Cross(u, v);
         if (cross != 0)
         {
             var s = MeterPoint.Cross(w, v) / cross; var t = MeterPoint.Cross(w, u) / cross;
             if (s >= 0 && s <= 1 && t >= 0 && t <= 1) return 0;
         }
-        return Math.Min(Math.Min(PointDistance(a, c, d), PointDistance(b, c, d)),
-            Math.Min(PointDistance(c, a, b), PointDistance(d, a, b)));
+        return Math.Min(Math.Min(PointDistance(a.Capsule.Start, in b), PointDistance(a.Capsule.End, in b)),
+            Math.Min(PointDistance(b.Capsule.Start, in a), PointDistance(b.Capsule.End, in a)));
     }
-    private static double PointDistance(MeterPoint p, MeterPoint a, MeterPoint b)
+    private static double PointDistance(MeterPoint p, in SegmentGeometry segment)
     {
-        var line = b - a; var square = MeterPoint.Dot(line, line);
+        var a = segment.Capsule.Start; var line = segment.Direction; var square = segment.Square;
         return (p - (a + line * (square == 0 ? 0 : Math.Clamp(MeterPoint.Dot(p - a, line) / square, 0, 1)))).Length;
     }
 }
