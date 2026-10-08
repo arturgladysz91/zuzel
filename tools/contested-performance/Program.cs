@@ -27,9 +27,9 @@ if (mode == "type-probe")
         ["decimal"] = 1.0m, ["decimal_text"] = "1.0",
         ["float"] = 1f, ["double"] = 1d, ["null"] = null,
     };
-    var probe = new SortedDictionary<string, object?>(StringComparer.Ordinal);
-    foreach (var item in input) Walk(item.Value, item.Key, probe);
-    Write(output, probe);
+    var typeProbeValues = new SortedDictionary<string, object?>(StringComparer.Ordinal);
+    foreach (var item in input) Walk(item.Value, item.Key, typeProbeValues);
+    Write(output, typeProbeValues);
     return;
 }
 var scenarios = ContestedSpaceResponseEvidence.Scenarios().Concat(ContestedSpaceResponseEvidence.OwnershipScenarios()).ToList();
