@@ -3,6 +3,7 @@ import hashlib
 import json
 from pathlib import Path
 import sys
+import runpy
 
 root = Path(sys.argv[1])
 repo = Path(__file__).resolve().parents[2]
@@ -20,4 +21,5 @@ for name in ("physical-contact-analysis.json", "physical-contact-bits.json"):
     print(name, hashlib.sha256(a).hexdigest(), "exact across Windows/Ubuntu")
 for platform in ("windows", "ubuntu"):
     old = root / f"determinism-{platform}-latest" / "contested-space/contested-space-racing-response.json"
-    assert old.read_bytes() == (repo / "docs/calibration/contested-space-racing-response.json").read_bytes().replace(b"\r\n", b"\n"), "#56B evidence changed"
+    frozen = runpy.run_path(str(repo / "tools/contested-performance/compare-frozen.py"))
+    frozen["compare"](frozen["read"](repo / "docs/calibration/contested-space-racing-response.json"), frozen["read"](old))

@@ -29,24 +29,57 @@ public sealed record MetricTrackSegment(int SegmentIndex, int SegmentId, Segment
     {
         GeometryValidation.Unit(progress, nameof(progress));
         GeometryValidation.Nonnegative(physicalOffsetMeters, nameof(physicalOffsetMeters));
+        return Prepare(progressRate, offsetRate).MapValidated(progress, physicalOffsetMeters);
+    }
+    internal PreparedMetricTrackSegment Prepare(double progressRate, double offsetRate) => new(this, progressRate, offsetRate);
+}
+
+/// <summary>Exact constant geometry of one immutable segment and node's fixed rates.</summary>
+internal readonly struct PreparedMetricTrackSegment
+{
+    private readonly MetricTrackSegment segment;
+    private readonly double progressRate, offsetRate, straightHeading, straightTravelHeading;
+    private readonly MeterPoint centre, straightTangent, straightOutward, straightVelocity;
+    internal PreparedMetricTrackSegment(MetricTrackSegment segment, double progressRate, double offsetRate)
+    {
         GeometryValidation.Finite(progressRate, nameof(progressRate)); GeometryValidation.Finite(offsetRate, nameof(offsetRate));
-        var heading = StartTangentHeadingRadians + (SegmentType == SegmentType.Straight ? 0 : TurnAngleRadians * progress);
-        var tangent = new MeterPoint(Math.Cos(heading), Math.Sin(heading));
-        var outward = new MeterPoint(tangent.Y, -tangent.X);
-        MeterPoint position, velocity;
-        if (SegmentType == SegmentType.Straight)
+        this = default;
+        this.segment = segment; this.progressRate = progressRate; this.offsetRate = offsetRate;
+        if (segment.SegmentType == SegmentType.Straight)
         {
-            position = StartReferencePosition + tangent * (StraightLengthMeters * progress) + outward * physicalOffsetMeters;
-            velocity = tangent * (StraightLengthMeters * progressRate) + outward * offsetRate;
+            // Retain the original + 0, including its signed-zero behavior.
+            var heading = segment.StartTangentHeadingRadians + 0;
+            straightTangent = new(Math.Cos(heading), Math.Sin(heading));
+            straightOutward = new(straightTangent.Y, -straightTangent.X);
+            straightVelocity = straightTangent * (segment.StraightLengthMeters * progressRate) + straightOutward * offsetRate;
+            straightHeading = BikeAngles.Wrap(heading);
+            straightTravelHeading = straightVelocity.Length == 0 ? BikeAngles.Wrap(heading) : Math.Atan2(straightVelocity.Y, straightVelocity.X);
         }
         else
         {
-            var entryLeft = new MeterPoint(-Math.Sin(StartTangentHeadingRadians), Math.Cos(StartTangentHeadingRadians));
-            var centre = StartReferencePosition + entryLeft * InnerRadiusMeters;
-            position = centre + outward * (InnerRadiusMeters + physicalOffsetMeters);
-            velocity = tangent * ((InnerRadiusMeters + physicalOffsetMeters) * TurnAngleRadians * progressRate) + outward * offsetRate;
+            var entryLeft = new MeterPoint(-Math.Sin(segment.StartTangentHeadingRadians), Math.Cos(segment.StartTangentHeadingRadians));
+            centre = segment.StartReferencePosition + entryLeft * segment.InnerRadiusMeters;
         }
-        return new(position, velocity, BikeAngles.Wrap(heading), velocity.Length == 0 ? BikeAngles.Wrap(heading) : Math.Atan2(velocity.Y, velocity.X));
+    }
+    internal MetricTrackSample Map(double progress, double physicalOffsetMeters)
+    {
+        GeometryValidation.Unit(progress, nameof(progress));
+        GeometryValidation.Nonnegative(physicalOffsetMeters, nameof(physicalOffsetMeters));
+        return MapValidated(progress, physicalOffsetMeters);
+    }
+    internal MetricTrackSample MapValidated(double progress, double physicalOffsetMeters)
+    {
+        if (segment.SegmentType == SegmentType.Straight)
+        {
+            var position = segment.StartReferencePosition + straightTangent * (segment.StraightLengthMeters * progress) + straightOutward * physicalOffsetMeters;
+            return new(position, straightVelocity, straightHeading, straightTravelHeading);
+        }
+        var heading = segment.StartTangentHeadingRadians + segment.TurnAngleRadians * progress;
+        var tangent = new MeterPoint(Math.Cos(heading), Math.Sin(heading));
+        var outward = new MeterPoint(tangent.Y, -tangent.X);
+        var cornerPosition = centre + outward * (segment.InnerRadiusMeters + physicalOffsetMeters);
+        var velocity = tangent * ((segment.InnerRadiusMeters + physicalOffsetMeters) * segment.TurnAngleRadians * progressRate) + outward * offsetRate;
+        return new(cornerPosition, velocity, BikeAngles.Wrap(heading), velocity.Length == 0 ? BikeAngles.Wrap(heading) : Math.Atan2(velocity.Y, velocity.X));
     }
 }
 

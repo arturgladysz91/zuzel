@@ -107,6 +107,17 @@ jobs:
           dotnet run --project tools/rider-compatibility-audit -c Release -- results/rider-compatibility
           dotnet run --project tools/contested-space-audit -c Release -- results/contested-space
           dotnet run --project tools/physical-contact-audit -c Release -- results/physical-contact
+      - name: Compare optimized engine with original merged main using exact typed behavior
+        shell: bash
+        run: |
+          git fetch origin 5989301192565f6a265d53a2db12c7d00c94fedc
+          git worktree add --detach ../contested-baseline 5989301192565f6a265d53a2db12c7d00c94fedc
+          baseline="$(cd ../contested-baseline && pwd)"
+          dotnet build tools/contested-performance -c Release --warnaserror -p:CoreSimRoot="$baseline" -o ../contested-before-bin
+          dotnet build tools/contested-performance -c Release --warnaserror -o ../contested-after-bin
+          dotnet ../contested-before-bin/CoreSim.Tests.dll capture results/contested-performance/before.json
+          dotnet ../contested-after-bin/CoreSim.Tests.dll capture results/contested-performance/after.json
+          python tools/contested-performance/compare.py results/contested-performance
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -134,6 +145,7 @@ jobs:
           python tools/rider-compatibility-audit/compare.py captures
           python tools/contested-space-audit/compare.py captures
           python tools/physical-contact-audit/compare.py captures
+          python tools/contested-performance/compare.py captures --platforms
       - uses: actions/upload-artifact@v4
         if: always()
         with:
