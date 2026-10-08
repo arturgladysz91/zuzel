@@ -356,7 +356,7 @@ existing assertions changed only the documented redundant-call counts.
 - Release solution build with warnings as errors: passed, zero warnings/errors.
 - Complete local .NET suite: 2,055 passed, zero failures/skips (17 min 46 s).
 - Focused geometry/interaction/contact suite: 261 passed.
-- Complete Python calibration suite: 23 passed.
+- Complete Python calibration suite: 24 passed.
 - All existing trajectory, #55, #56A, #56B and #56C1 frozen checks: passed on CI;
   only the explicitly allowed redundant-work fields decrease. No golden was
   regenerated.

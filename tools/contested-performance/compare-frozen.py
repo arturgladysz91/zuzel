@@ -9,6 +9,9 @@ WORK_SHAPE = {"JointCombinations", "ProductionResolutions", "NarrowPhaseEvaluati
               "ActualProductionVerifications", "SafetyPasses", "LegacyFallbackAttempts", "SafetyContactComponents",
               "FinalContactComponents", "SafetyJointCombinations"}
 
+class ExactJsonFloat(str):
+    """Preserve the numeric token and its JSON number type, distinct from text."""
+
 def compare(before, after, path="root"):
     changes = []
     if isinstance(before, dict):
@@ -32,7 +35,7 @@ def compare(before, after, path="root"):
 
 def read(path):
     # Floats retain their exact emitted text. Work counters remain integer typed.
-    return json.loads(Path(path).read_text(encoding="utf-8"), parse_float=str)
+    return json.loads(Path(path).read_text(encoding="utf-8"), parse_float=ExactJsonFloat)
 
 if __name__ == "__main__":
     changes=compare(read(sys.argv[1]),read(sys.argv[2]))

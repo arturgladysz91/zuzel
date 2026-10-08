@@ -1,6 +1,7 @@
 import copy
 from pathlib import Path
 import runpy
+import tempfile
 import unittest
 
 helper = runpy.run_path(str(Path(__file__).resolve().parents[2] / "tools/contested-performance/compare-frozen.py"))
@@ -23,3 +24,12 @@ class FrozenPerformanceComparisonTests(unittest.TestCase):
             with self.assertRaises(AssertionError): helper["compare"](self.before,after)
         after=copy.deepcopy(self.before); del after["Work"]["SafetyPasses"]
         with self.assertRaises(AssertionError): helper["compare"](self.before,after)
+
+    def test_raw_numeric_tokens_remain_distinct_from_json_strings(self):
+        with tempfile.TemporaryDirectory() as directory:
+            numeric=Path(directory)/"number.json"
+            text=Path(directory)/"text.json"
+            numeric.write_text('{"Speed":22.0}',encoding="utf-8")
+            text.write_text('{"Speed":"22.0"}',encoding="utf-8")
+            with self.assertRaises(AssertionError):
+                helper["compare"](helper["read"](numeric),helper["read"](text))
