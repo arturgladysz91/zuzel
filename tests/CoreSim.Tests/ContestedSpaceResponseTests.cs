@@ -155,7 +155,7 @@ public sealed class ContestedSpaceResponseTests
         var on = ContestedSpaceResponseEvidence.Resolve(Scenario("K-far-apart"));
         Assert.Equal(off.Changes, on.Changes); Assert.Equal(off.Events, on.Events);
         Assert.Equal(off.Diagnostics, on.Diagnostics); Assert.Equal(off.Motions, on.Motions);
-        Assert.Empty(on.Interaction!.Episodes); Assert.Equal(2,on.Interaction.Work.ProductionResolutions);
+        Assert.Empty(on.Interaction!.Episodes); Assert.Equal(1,on.Interaction.Work.ProductionResolutions);
     }
     [Theory]
     [InlineData(20, 55, 1)]
@@ -452,7 +452,8 @@ public sealed class ContestedSpaceResponseTests
         Assert.Empty(episode.UnresolvedMechanicalContacts);
         Assert.All(episode.SelectedResponses,a=>Assert.Contains(a.Response,new[]{InteractionResponse.KeepIntent,InteractionResponse.BackOut,InteractionResponse.EmergencyAvoid}));
         Assert.Equal(1,step.Interaction.Work.SafetyPasses);Assert.Equal(0,step.Interaction.Work.LegacyFallbackAttempts);
-        Assert.Equal(3,step.Interaction.Work.ActualProductionVerifications);
+        // No fallback is authorized: the already verified actual result is final.
+        Assert.Equal(2,step.Interaction.Work.ActualProductionVerifications);
     }
     [Fact]
     public void UnclearSecondSafetyPassAuthorizesExactlyOneLegacyAttempt()

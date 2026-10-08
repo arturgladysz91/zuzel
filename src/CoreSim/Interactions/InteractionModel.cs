@@ -379,12 +379,23 @@ public sealed class InteractionEpisodeTracker
         var floor = resolved.Changes.Count == 0 ? 0 : resolved.Changes.Min(c => c.ElapsedTimeSeconds);
         return PruneHistory(floor);
     }
+    // Caller has just observed exactly the unchanged History followed by poses.
+    // Retaining those same immutable intervals permits reuse of that full report;
+    // future steps still construct and observe their own complete inputs.
+    internal void RetainVerified(ResolvedSimulationStep resolved, IReadOnlyList<PhysicalPoseInterval> poses,
+        ContestedSpaceReport verified)
+    {
+        History.AddRange(poses);
+        var floor = resolved.Changes.Count == 0 ? 0 : resolved.Changes.Min(c => c.ElapsedTimeSeconds);
+        PruneHistory(floor, verified);
+    }
     internal int PruneHistory(double floor)
+        => PruneHistory(floor, CommonTimePoseHistory.Observe(History));
+    private int PruneHistory(double floor, ContestedSpaceReport observed)
     {
         // #55 quarantine starts at a discontinuity and persists until physical
         // separation. Retain its causal history even when it exceeds the usual
         // two-second asynchronous overlap window; never promote it by pruning.
-        var observed = CommonTimePoseHistory.Observe(History);
         var unresolvedPairs = observed.Intervals.GroupBy(r => (r.RiderA,r.RiderB))
             .Where(g => g.OrderBy(r => r.IntervalEndSeconds).Last() is var last
                 && (!last.NumericallyResolved || last.Kind.HasFlag(SpaceConflictKind.BoundaryAmbiguous)))

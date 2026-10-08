@@ -2,6 +2,7 @@
 import json
 from pathlib import Path
 import sys
+import runpy
 
 root = Path(sys.argv[1])
 windows = root / "determinism-windows-latest/contested-space"
@@ -12,7 +13,9 @@ for name in sorted(names):
     assert (windows / name).read_bytes() == (ubuntu / name).read_bytes(), name
 report = json.loads((windows / "contested-space-racing-response.json").read_text())
 golden = Path(__file__).resolve().parents[2] / "docs/calibration/contested-space-racing-response.json"
-assert (windows / "contested-space-racing-response.json").read_bytes() == golden.read_bytes().replace(b"\r\n", b"\n"), "Recorded #56B report is stale"
+frozen = runpy.run_path(str(Path(__file__).resolve().parents[1] / "contested-performance/compare-frozen.py"))
+changes = frozen["compare"](frozen["read"](golden), frozen["read"](windows / "contested-space-racing-response.json"))
+(root / "contested-work-savings.json").write_text(json.dumps(changes,indent=2)+"\n")
 assert len(report["Scenarios"]) == 13
 assert len(report["Sensitivity"]) == len(report["TechniqueCondition"]) == 9
 assert len(report["Heats"]) == 44 and len(report["Archetypes"]) == 32
