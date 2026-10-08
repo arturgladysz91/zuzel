@@ -2,6 +2,12 @@
 
 Status: implemented behind a default-OFF flag; Draft, independent review required. Calibration decision recorded before consequence code in commit `2cb8acc10ac6e1f7e585324b3604438bb73e4637` and the initial PR #59 body.
 
+The first P1 correction from review `5452627332` integrates #61's merged performance changes and
+closes native trigonometry in enabled track-clearance and tactical decision gates. Its arithmetic
+contract, complete native-call audit, exact changed fields and measured pre/post performance are
+documented in [contact-decision-geometry.md](contact-decision-geometry.md). The two separate
+pair-recontact/recovery review findings remain outstanding.
+
 ## Prerequisite
 
 PR #58 merged on 2026-10-07 at 20:45:15 UTC as `5989301192565f6a265d53a2db12c7d00c94fedc`. Its tree is exactly `400eee32bc10d4df001fc2c8d7243052bdd81ab2`, equal to reviewed head `51d07b8762a7925aeb9f8a31ea8018a29d2dc853`. Final-head Actions run 187 (`37534295406`) passed all nine jobs, including Windows/Ubuntu determinism and cross-platform comparison. This branch starts at that merged main.

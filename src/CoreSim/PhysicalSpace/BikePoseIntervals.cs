@@ -58,6 +58,7 @@ public abstract class PhysicalPoseInterval
     public bool StartsAtDiscontinuity { get; }
     public PoseSource? Source { get; }
     public bool SupportsLapWrap { get; }
+    internal virtual bool DeterministicArithmetic => false;
     protected PhysicalPoseInterval(int riderId, string frameId, double start, double end,
         SpeedwayBikeDimensions dimensions, bool startsAtDiscontinuity, PoseSource? source = null, bool supportsLapWrap = true)
     {
@@ -94,10 +95,12 @@ public sealed class LinearBikePoseInterval : PhysicalPoseInterval
     public LinearBikePoseInterval(PhysicalBikePose start, PhysicalBikePose end, bool startsAtDiscontinuity = false)
         : base(start.RiderId, start.FrameId, start.CommonTimeSeconds, end.CommonTimeSeconds, start.Dimensions, startsAtDiscontinuity, start.Source)
     {
-        if (end.RiderId != start.RiderId || end.FrameId != start.FrameId || end.Dimensions != start.Dimensions)
-            throw new ArgumentException("Pose interval identity and dimensions must be constant.");
+        if (end.RiderId != start.RiderId || end.FrameId != start.FrameId || end.Dimensions != start.Dimensions
+            || end.DeterministicArithmetic != start.DeterministicArithmetic)
+            throw new ArgumentException("Pose interval identity, dimensions and arithmetic mode must be constant.");
         _start = start; _end = end;
     }
+    internal override bool DeterministicArithmetic => _start.DeterministicArithmetic;
     public override PhysicalBikePose Sample(double time)
     {
         var f = Fraction(time);
@@ -167,6 +170,7 @@ public static class ResolvedBikePoses
         private readonly PreparedMetricTrackSegment _map;
         private readonly ReferenceBikeAttitude _profile;
         private readonly bool _straight;
+        internal override bool DeterministicArithmetic => _segment.DeterministicArithmetic;
         public ProductionPoseInterval(ResolvedRiderMotion motion, Track track, RiderMotionSample a, RiderMotionSample b,
             TrackMetricEmbedding embedding, PoseSource source, double start, double end, SpeedwayBikeDimensions dimensions, ReferenceBikeAttitude profile, bool discontinuity)
             : base(motion.RiderId, embedding.FrameId, start, end, dimensions, discontinuity, source, embedding.Closure.SupportsLapWrap)

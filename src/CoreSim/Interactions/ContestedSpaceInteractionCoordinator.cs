@@ -607,7 +607,12 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
     internal static bool WithinTrack(IEnumerable<PhysicalPoseInterval> poses, Track track, TrackMetricEmbedding embedding)
     {
         foreach (var interval in poses)
+        {
+            if (interval.DeterministicArithmetic != embedding.DeterministicArithmetic
+                || embedding.DeterministicArithmetic && interval.FrameId != embedding.FrameId)
+                throw new ArgumentException("Clearance poses must use the embedding's arithmetic mode and geometry frame.");
             if (!Certified(interval, interval.StartTimeSeconds, interval.EndTimeSeconds, 0)) return false;
+        }
         return true;
 
         bool Certified(PhysicalPoseInterval interval, double start, double end, int depth)
@@ -631,7 +636,13 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
         {
             var source = interval.Source!;
             var tangent = pose.ReferenceTangentHeadingRadians;
-            var outward = new MeterPoint(Math.Sin(tangent), -Math.Cos(tangent));
+            MeterPoint outward;
+            if (embedding.DeterministicArithmetic)
+            {
+                var forward = ContactFrameArithmetic.Direction(tangent, true);
+                outward = new(forward.Y, -forward.X);
+            }
+            else outward = new(Math.Sin(tangent), -Math.Cos(tangent));
             var projected = InteractionGeometryModel.Project(pose.Footprint, outward);
             var center = MeterPoint.Dot(pose.Position, outward);
             var span = LaneModel.UsableRacingWidthMeters(source.SegmentType, track.Geometry);
@@ -639,8 +650,10 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
             var segment = embedding.Segments[source.SegmentIndex];
             var offset = source.SegmentType == SegmentType.Straight
                 ? MeterPoint.Dot(pose.Position - segment.StartReferencePosition, outward)
-                : (pose.Position - (segment.StartReferencePosition + new MeterPoint(-Math.Sin(segment.StartTangentHeadingRadians),
-                    Math.Cos(segment.StartTangentHeadingRadians)) * segment.InnerRadiusMeters)).Length - track.Geometry.InnerRadiusMeters;
+                : (pose.Position - (embedding.DeterministicArithmetic
+                    ? embedding.DeterministicCornerCentre(source.SegmentIndex)
+                    : segment.StartReferencePosition + new MeterPoint(-Math.Sin(segment.StartTangentHeadingRadians),
+                        Math.Cos(segment.StartTangentHeadingRadians)) * segment.InnerRadiusMeters)).Length - track.Geometry.InnerRadiusMeters;
             var radialBulge = source.SegmentType == SegmentType.Straight ? 0
                 : pose.Dimensions.BoundingRadiusMeters * pose.Dimensions.BoundingRadiusMeters
                     / (2 * Math.Max(1, track.Geometry.InnerRadiusMeters - pose.Dimensions.BoundingRadiusMeters));

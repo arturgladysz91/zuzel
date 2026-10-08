@@ -40,6 +40,7 @@ internal static class CommonTimePoseHistory
     private sealed class Trimmed(PhysicalPoseInterval source, double end) : PhysicalPoseInterval(source.RiderId,
         source.FrameId, source.StartTimeSeconds, end, source.Dimensions, source.StartsAtDiscontinuity, source.Source, source.SupportsLapWrap)
     {
+        internal override bool DeterministicArithmetic => source.DeterministicArithmetic;
         public override PhysicalBikePose Sample(double time) { Fraction(time); return source.Sample(time); }
         internal override BikePoseValue SampleValue(double time) { Fraction(time); return source.SampleValue(time); }
         internal override BikeFootprint SampleFootprint(double time) { Fraction(time); return source.SampleFootprint(time); }

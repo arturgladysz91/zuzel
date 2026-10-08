@@ -173,10 +173,7 @@ public sealed class InteractionEpisodeTracker
         _heat = identity;
         Embedding ??= new(snapshot.Track, deterministicArithmetic);
         if(Embedding.DeterministicArithmetic!=deterministicArithmetic)
-        {
-            if(History.Count!=0)throw new InvalidOperationException("Contact arithmetic mode must remain fixed within a heat.");
-            Embedding=new(snapshot.Track,deterministicArithmetic);
-        }
+            throw new InvalidOperationException("Contact arithmetic mode must remain fixed within a heat.");
         Embedding.ValidateCompatible(snapshot.Track);
     }
     internal InteractionEpisode Engage(int[] riders, double time, InteractionContext context)
@@ -441,8 +438,10 @@ public static class InteractionGeometryModel
     public static InteractionGeometry Describe(ContestedSpaceEvent space, PhysicalBikePose a, PhysicalBikePose b,
         PoseRateBounds rateA, PoseRateBounds rateB)
     {
+        if (a.FrameId != b.FrameId || space.FrameId != a.FrameId || a.DeterministicArithmetic != b.DeterministicArithmetic)
+            throw new ArgumentException("Tactical poses must share their contact geometry frame and arithmetic mode.");
         var heading = BikeAngles.Interpolate(a.ReferenceTangentHeadingRadians, b.ReferenceTangentHeadingRadians, .5);
-        var forward = new MeterPoint(Math.Cos(heading), Math.Sin(heading));
+        var forward = ContactFrameArithmetic.Direction(heading, a.DeterministicArithmetic);
         var outward = new MeterPoint(forward.Y, -forward.X);
         var delta = b.Position - a.Position;
         var longitudinal = MeterPoint.Dot(delta, forward);

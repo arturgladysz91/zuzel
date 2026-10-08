@@ -76,7 +76,7 @@ jobs:
 
   determinism:
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 30
+    timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
@@ -103,7 +103,7 @@ jobs:
           name: contact-arithmetic-${{ matrix.os }}
           path: results/physical-contact-consequences
       - name: Exact candidate trace, evidence bytes, Full/Lean and branch degree parity
-        run: dotnet test tests/CoreSim.Tests -c Release --no-build --filter "FullyQualifiedName~TrajectoryBehaviorFingerprintTests|FullyQualifiedName~LeanProjectionTests|FullyQualifiedName~ScalarEnvelopeParityTests|FullyQualifiedName~AdaptiveParallelTests|FullyQualifiedName~PhysicalSpaceTests|FullyQualifiedName~RiderGameplayProfileTests|FullyQualifiedName~ContestedSpaceResponseTests|FullyQualifiedName~PhysicalContactAnalysisTests|FullyQualifiedName~PhysicalContactConsequenceTests" --logger "trx;LogFileName=determinism.trx" --results-directory results --verbosity normal
+        run: dotnet test tests/CoreSim.Tests -c Release --no-build --filter "FullyQualifiedName~TrajectoryBehaviorFingerprintTests|FullyQualifiedName~LeanProjectionTests|FullyQualifiedName~ScalarEnvelopeParityTests|FullyQualifiedName~AdaptiveParallelTests|FullyQualifiedName~PhysicalSpaceTests|FullyQualifiedName~RiderGameplayProfileTests|FullyQualifiedName~ContestedSpaceResponseTests|FullyQualifiedName~PhysicalContactAnalysisTests|FullyQualifiedName~PhysicalContactConsequenceTests|FullyQualifiedName~ContactDecisionGeometryTests" --logger "trx;LogFileName=determinism.trx" --results-directory results --verbosity normal
       - name: Capture typed IEEE values and final rider/raw surface states
         shell: bash
         run: |
@@ -127,6 +127,16 @@ jobs:
           python tools/contested-performance/compare.py results/contested-performance
           dotnet ../contested-after-bin/CoreSim.Tests.dll type-probe results/contested-performance/types.json
           python tools/contested-performance/verify-types.py results/contested-performance/types.json
+      - name: Capture complete enabled contact decisions before and after the P1 geometry correction
+        shell: bash
+        run: |
+          git fetch origin 96f8f1bb05c8bbe2a35c992b6e92a0025c10427e
+          git worktree add --detach ../contact-decision-baseline 96f8f1bb05c8bbe2a35c992b6e92a0025c10427e
+          baseline="$(cd ../contact-decision-baseline && pwd)"
+          dotnet build tools/contact-decision-audit -c Release --warnaserror -p:CoreSimRoot="$baseline" -o ../contact-decision-before-bin
+          dotnet build tools/contact-decision-audit -c Release --warnaserror -o ../contact-decision-after-bin
+          dotnet ../contact-decision-before-bin/CoreSim.Tests.dll capture results/contact-decision/before.json
+          dotnet ../contact-decision-after-bin/CoreSim.Tests.dll capture results/contact-decision/after.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -156,6 +166,7 @@ jobs:
           python tools/physical-contact-audit/compare.py captures
           python tools/physical-contact-consequence-audit/compare.py captures
           python tools/contested-performance/compare.py captures --platforms
+          python tools/contact-decision-audit/compare.py captures
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -163,6 +174,7 @@ jobs:
           path: |
             captures/comparison.json
             captures/contested-performance-comparison.json
+            captures/contact-decision-*.json*
 
   python:
     runs-on: ubuntu-latest

@@ -41,6 +41,7 @@ internal readonly struct PreparedMetricTrackSegment
     private readonly MetricTrackSegment segment;
     private readonly double progressRate, offsetRate, straightHeading, straightTravelHeading;
     private readonly MeterPoint centre, straightTangent, straightOutward, straightVelocity;
+    internal MeterPoint CornerCentre => centre;
     internal PreparedMetricTrackSegment(MetricTrackSegment segment, double progressRate, double offsetRate)
     {
         GeometryValidation.Finite(progressRate, nameof(progressRate)); GeometryValidation.Finite(offsetRate, nameof(offsetRate));
@@ -97,6 +98,7 @@ internal readonly struct PreparedMetricTrackSegment
 public sealed class TrackMetricEmbedding
 {
     private readonly Track _track;
+    private readonly MeterPoint[]? _deterministicCornerCentres;
     public IReadOnlyList<MetricTrackSegment> Segments { get; }
     public string FrameId { get; }
     public TrackClosure Closure { get; }
@@ -110,6 +112,7 @@ public sealed class TrackMetricEmbedding
         ArgumentNullException.ThrowIfNull(track); GeometryValidation.Finite(initialHeadingRadians, nameof(initialHeadingRadians));
         _track = track;
         DeterministicArithmetic = deterministicArithmetic;
+        if (deterministicArithmetic) _deterministicCornerCentres = new MeterPoint[track.Segments.Count];
         var segments = new List<MetricTrackSegment>(track.Segments.Count);
         var position = origin; var heading = initialHeadingRadians;
         foreach (var segment in track.Segments)
@@ -118,7 +121,16 @@ public sealed class TrackMetricEmbedding
                 segment.StraightLengthMetersOverride ?? track.Geometry.StraightLengthMeters,
                 track.Geometry.InnerRadiusMeters, track.Geometry.TurnSegmentAngleRadians)
                 { DeterministicArithmetic = deterministicArithmetic };
-            segments.Add(mapped); position = mapped.Map(1, 0).Position;
+            segments.Add(mapped);
+            if (deterministicArithmetic)
+            {
+                // Reuse the exact prepared centre in clearance certification, too.
+                // This cache belongs to the immutable embedding for this heat.
+                var prepared = mapped.Prepare(0, 0);
+                _deterministicCornerCentres![mapped.SegmentIndex] = prepared.CornerCentre;
+                position = prepared.Map(1, 0).Position;
+            }
+            else position = mapped.Map(1, 0).Position;
             if (segment.Type != SegmentType.Straight) heading += track.Geometry.TurnSegmentAngleRadians;
         }
         Segments = segments.AsReadOnly();
@@ -133,6 +145,7 @@ public sealed class TrackMetricEmbedding
         { Bits(segment.Id); Bits((int)segment.Type); Bits(segment.StraightLengthMetersOverride ?? 0); Bits(segment.IsStandingStartSegment ? 1 : 0); }
         FrameId = "track-metric:" + Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(identity.ToString())));
     }
+    internal MeterPoint DeterministicCornerCentre(int segmentIndex) => _deterministicCornerCentres![segmentIndex];
     public void ValidateCompatible(Track track)
     {
         ArgumentNullException.ThrowIfNull(track);
