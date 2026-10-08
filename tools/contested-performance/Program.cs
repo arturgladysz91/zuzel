@@ -15,6 +15,23 @@ CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
 var mode = args[0];
 var output = args[1];
 Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(output))!);
+if (mode == "type-probe")
+{
+    // Exercise the actual C# capture serializer, not synthetic Python-only values.
+    var input = new Dictionary<string, object?>
+    {
+        ["integer"] = 1, ["integer_text"] = "1",
+        ["boolean"] = true, ["boolean_text"] = "True",
+        ["enum"] = InteractionResponse.Hold, ["enum_text"] = "Hold",
+        ["character"] = '1', ["character_text"] = "1",
+        ["decimal"] = 1.0m, ["decimal_text"] = "1.0",
+        ["float"] = 1f, ["double"] = 1d, ["null"] = null,
+    };
+    var probe = new SortedDictionary<string, object?>(StringComparer.Ordinal);
+    foreach (var item in input) Walk(item.Value, item.Key, probe);
+    Write(output, probe);
+    return;
+}
 var scenarios = ContestedSpaceResponseEvidence.Scenarios().Concat(ContestedSpaceResponseEvidence.OwnershipScenarios()).ToList();
 scenarios.Add(new("four-separated", 4, new[] {
     new ContestedRiderInput(1, 1, .05f, 22, new(1,1,1)),
@@ -170,8 +187,24 @@ static void Walk(object? value, string path, IDictionary<string,object?> values)
 {
     if (value is float single) {values[path] = $"float:{BitConverter.SingleToInt32Bits(single):X8}"; return;}
     if (value is double number) {values[path] = $"double:{BitConverter.DoubleToInt64Bits(number):X16}"; return;}
-    if (value is null || value is string || value.GetType().IsPrimitive || value.GetType().IsEnum || value is decimal)
-    { values[path] = value?.ToString(); return; }
+    if (value is null) {values[path] = null; return;}
+    if (value is string text) {values[path] = "string:" + text; return;}
+    if (value is char character) {values[path] = $"char:{(int)character:X4}"; return;}
+    if (value is decimal dec)
+    {
+        // Preserve decimal sign and scale, not just its human-readable value.
+        var bits = decimal.GetBits(dec);
+        values[path] = $"decimal:{bits[0]:X8}:{bits[1]:X8}:{bits[2]:X8}:{bits[3]:X8}";
+        return;
+    }
+    var type = value.GetType();
+    if (type.IsEnum)
+    {
+        values[path] = $"enum:{type.FullName}:{Enum.Format(type, value, "D")}";
+        return;
+    }
+    // Preserve integer and boolean JSON primitive types.
+    if (type.IsPrimitive) {values[path] = value; return;}
     if (value is InteractionWork) return; // Only explicitly instrumentation-only work is excluded.
     if (value is TrackStateSnapshot surface)
     {

@@ -137,6 +137,15 @@ class ContestedPlatformComparisonTests(unittest.TestCase):
         with self.assertRaisesRegex(AssertionError, "Capture case coverage changed"):
             helper["compare"](self.ubuntu)
 
+    def test_real_capture_scalar_tags_have_distinct_type_identity(self):
+        cases = [("string:1", 1), ("string:True", True),
+                 ("string:Hold", "enum:CoreSim.Interactions.InteractionResponse:4"),
+                 ("string:1", "char:0031"),
+                 ("string:1.0", "decimal:0000000A:00000000:00000000:00010000")]
+        for text, typed in cases:
+            with self.subTest(text=text, typed=typed):
+                self.assertNotEqual(helper["typed_leaf"](text), helper["typed_leaf"](typed))
+
     def test_json_types_remain_distinct_and_untyped_floats_fail(self):
         self.assertNotEqual(helper["typed_leaf"](True), helper["typed_leaf"](1))
         self.assertNotEqual(helper["typed_leaf"](1), helper["typed_leaf"]("1"))

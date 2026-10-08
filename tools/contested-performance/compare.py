@@ -38,7 +38,15 @@ def typed_leaf(value):
         if re.fullmatch(r"float:[0-9A-F]{8}|double:[0-9A-F]{16}", value):
             kind, bits = value.split(":")
             return {"Type": kind, "Bits": bits}
-        return {"Type": "string", "Value": value}
+        if value.startswith("string:"):
+            return {"Type": "string", "Value": value.removeprefix("string:")}
+        if value.startswith("enum:"):
+            return {"Type": "enum", "Value": value.removeprefix("enum:")}
+        if value.startswith("char:"):
+            return {"Type": "char", "Codepoint": value.removeprefix("char:")}
+        if value.startswith("decimal:"):
+            return {"Type": "decimal", "Bits": value.removeprefix("decimal:")}
+        return {"Type": "untyped-string", "Value": value}
     kinds = {type(None): "null", bool: "boolean", int: "integer"}
     assert type(value) in kinds, f"Unsupported/untyped capture leaf: {value!r}"
     return {"Type": kinds[type(value)], "Value": value}
