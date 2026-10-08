@@ -98,16 +98,30 @@ Commit consumes generation 1, and repeated overlap adds no third impact. These
 controlled snapshots are an ownership integration fixture, not a claim that the
 synthetic path between snapshots is a natural full-heat trajectory.
 
+An additional production regression establishes every ownership transition through
+`SimulationEngine.Resolve` and `Commit`, without manually engaging episodes or
+advancing clearance. The first step consumes A-B and C-D in separate episodes.
+A real B-C contact then merges those episodes while executed A-B motion certifies
+clearance from 5.0 through 5.45 seconds. Resolve leaves live ownership unchanged;
+Commit publishes the armed A-B generation. At the later A-B recontact, B-C is still
+physically overlapping and consumed in generation 0, as is C-D. Only A-B applies
+a nonzero impulse in generation 1; repeated overlap applies nothing. Retained
+executed #55 intervals and all lifecycle fields are asserted in both input orders,
+seeds 7/19 and Dry/LightRain. These frozen production phases contain explicit
+unobserved time gaps; none contributes clearance, and they are not presented as
+a natural full-heat trajectory.
+
 The existing simultaneous-frontier, aggregate momentum/demand, consumed-contact
 deferral, continuous-overlap, physical ID relabeling, recovery and historical
 golden tests remain in place. One old direct release fixture now explicitly
 clears its synthetic first-touch field and uses a later frontier timestamp;
 a row still claiming a touch is not a valid separation certificate.
 
-The complete enabled capture now includes 12 production recontact traces
+The complete enabled capture now includes 24 production recontact traces
 (seeds 7/19/83, Dry/LightRain, both input orders), including intermediate lifecycle
-states, changes, diagnostics, motions, events, analysis and plans. The same
-harness runs against the reviewed baseline and this correction. Windows/Ubuntu
+states, changes, diagnostics, motions, events, analysis and plans. Twelve include
+the complete production release/bridge/recontact sequence and executed history.
+The same harness runs against the reviewed baseline and this correction. Windows/Ubuntu
 comparison remains exact over every typed leaf and IEEE bit. All older strict
 cross-platform golden comparators remain unchanged, as does the original-main
 OFF audit and its preserved numerical portability divergence map.
@@ -116,19 +130,19 @@ OFF audit and its preserved numerical portability divergence map.
 
 The Release solution build passes with warnings treated as errors. The local
 full-suite run passed 2,132 tests before the last additional boundary/production
-regressions; all 26 final pair-generation tests pass, and all 40 Python tests pass.
-The final targeted geometry/avoidance/analysis/consequence run passes all 269 tests.
-Final discovery contains **2,142 tests exactly once**: core 1,492, trajectory 129,
+regressions; all 30 final pair-generation tests pass, and all 40 Python tests pass.
+The final targeted geometry/avoidance/analysis/consequence run passes all 352 tests.
+Final discovery contains **2,146 tests exactly once**: core 1,496, trajectory 129,
 historical-analysis 473 and four-rider 48. Final-head CI executes all four shards
 and the strict Windows/Ubuntu audits; the PR body records its exact SHA and run.
 
-The fresh local enabled audit contains **742 cases / 6,958,262 typed leaves /
-5,297,822 IEEE leaves** with exact reversed-input equality. All 730 previous
+The local enabled audit contains **754 cases / 7,357,550 typed leaves /
+5,540,150 IEEE leaves** with exact reversed-input equality. All 730 previous
 captures are byte/typed-bit unchanged against the accepted `fe3f8c6` baseline,
 including every retained full-heat classification, event, consequence and raw
 surface value. **No existing race output or golden is regenerated.**
 
-Only the 12 newly introduced ownership traces differ: **7,224 changed leaves**,
+Only the 24 newly introduced ownership traces differ: **15,144 changed leaves**,
 including the newly observable internal lifecycle. The complete case/path/type/
 IEEE before/after map is retained in
 [physical-contact-pair-generation-changes.json.gz](physical-contact-pair-generation-changes.json.gz).

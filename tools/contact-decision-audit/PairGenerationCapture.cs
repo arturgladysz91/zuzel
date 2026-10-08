@@ -56,6 +56,39 @@ internal static class PairGenerationCapture
         => new { step.Changes, step.Motions, step.Diagnostics, step.Events, step.Interaction,
             Analysis = step.Interaction!.PhysicalContactAnalysis, Applied = step.Interaction.PhysicalContactConsequences };
 
+    internal static object RunProduction(int seed, WeatherState weather, bool reverse)
+    {
+        var basis = ContestedSpaceResponseEvidence.OwnershipScenarios().Single(s => s.Name == "two-disjoint-unresolved") with { Seed = seed };
+        basis = basis with { Riders = basis.Riders.Select(r => r.Id == 1 ? r with { Speed = 22 }
+            : r.Id == 2 ? r with { Lateral = .9f } : r).ToArray() };
+        var tracker = new InteractionEpisodeTracker(); var engine = new SimulationEngine(new FrozenTarget());
+        var options = PhysicalContactConsequenceEvidence.Options with { Seed = seed, Weather = weather };
+        var phases = new List<object>();
+        for (var phase = 0; phase < 4; phase++)
+        {
+            var scenario = phase == 1 ? basis with { Riders = basis.Riders.Select(r => r with
+            {
+                Lateral = r.Id == 1 ? .7f : r.Id == 2 ? 3 : r.Id == 3 ? 3.125f : 3.25f,
+                Progress = 0, Intent = r.Id == 1 ? new(1, 1, 1) : new(3, 3, 3)
+            }).ToArray() } : phase >= 2 ? basis with { Riders = basis.Riders.Select(r => r.Id >= 3
+                ? r with { Lateral = r.Id == 3 ? 1.1f : 1.225f, Intent = new(1, 1, 1) } : r).ToArray() } : basis;
+            var raw = ContestedSpaceResponseEvidence.Snapshot(scenario, reverse);
+            var surface = new TrackState(raw.Track.Segments.Count, 5, raw.TrackState.GetSurface);
+            TrackEvolution.ApplyWeather(raw.Track, surface, weather, raw.Step.HeatId, phase, new SimLog(false));
+            var snapshot = new SimulationSnapshot(raw.Step with { StepNumber = phase }, raw.Track, surface.Snapshot(),
+                raw.Riders.Select(r => r with { ElapsedTimeSeconds = phase * 5 }));
+            var intents = scenario.Riders.Select(r => new RiderIntent(r.Id,
+                new(r.Intent.TargetFor(snapshot.Segment.Type)) { Trajectory = r.Intent })).ToArray();
+            if (reverse) Array.Reverse(intents);
+            var resolved = engine.Resolve(snapshot, intents, options, tracker);
+            var uncommitted = States(tracker);
+            engine.Commit(resolved, snapshot.Riders.Select(r => r.ToMutableCopy()).ToArray(), surface, new SimLog(false));
+            phases.Add(new { Phase = phase, Step = Capture(resolved), UncommittedStates = uncommitted,
+                CommittedStates = States(tracker), ExecutedHistory = CommonTimePoseHistory.Observe(tracker.History) });
+        }
+        return phases;
+    }
+
     private static object? States(InteractionEpisodeTracker tracker)
     {
         var dictionary = typeof(InteractionEpisodeTracker).GetProperty("PhysicalPairs", BindingFlags.Instance | BindingFlags.NonPublic)

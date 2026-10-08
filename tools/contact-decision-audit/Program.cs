@@ -88,6 +88,10 @@ if (mode == "capture")
     foreach (var weather in new[] { WeatherState.Dry, WeatherState.LightRain })
     foreach (var reverse in new[] { false, true })
         Capture($"pair-recontact/{seed}/{weather.Condition}/{reverse}", PairGenerationCapture.Run(seed, weather, reverse));
+    foreach (var seed in new[] { 7, 19, 83 })
+    foreach (var weather in new[] { WeatherState.Dry, WeatherState.LightRain })
+    foreach (var reverse in new[] { false, true })
+        Capture($"pair-production-release/{seed}/{weather.Condition}/{reverse}", PairGenerationCapture.RunProduction(seed, weather, reverse));
     Write(output,manifests);
     Console.WriteLine($"Captured {manifests.Count} exact behavior manifests.");
     return;

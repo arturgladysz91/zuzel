@@ -284,6 +284,95 @@ public sealed class PhysicalContactPairGenerationTests
         }
     }
 
+    [Theory]
+    [InlineData(7, false)] [InlineData(19, false)] [InlineData(7, true)] [InlineData(19, true)]
+    public void ProductionCommitAloneCertifiesReleaseAcrossAnActualBridgeAndConsumesRecontact(int seed, bool rain)
+    {
+        object Run(bool reverse)
+        {
+            var basis = ContestedSpaceResponseEvidence.OwnershipScenarios().Single(s => s.Name == "two-disjoint-unresolved") with { Seed = seed };
+            basis = basis with { Riders = basis.Riders.Select(r => r.Id == 1 ? r with { Speed = 22 }
+                : r.Id == 2 ? r with { Lateral = .9f } : r).ToArray() };
+            var tracker = new InteractionEpisodeTracker(); var engine = new SimulationEngine(new FrozenTarget());
+            var options = PhysicalContactConsequenceEvidence.Options with { Seed = seed, Weather = rain ? WeatherState.LightRain : WeatherState.Dry };
+            var phases = new List<object>(); long parent = 0, other = 0;
+            for (var phase = 0; phase < 4; phase++)
+            {
+                // Frozen production phases contain explicit unobserved time gaps.
+                // Those gaps cannot release ownership; only the executed clear step can.
+                var scenario = phase == 1 ? basis with { Riders = basis.Riders.Select(r => r with
+                {
+                    Lateral = r.Id == 1 ? .7f : r.Id == 2 ? 3 : r.Id == 3 ? 3.125f : 3.25f,
+                    Progress = 0, Intent = r.Id == 1 ? new(1, 1, 1) : new(3, 3, 3)
+                }).ToArray() } : phase >= 2 ? basis with { Riders = basis.Riders.Select(r => r.Id >= 3
+                    ? r with { Lateral = r.Id == 3 ? 1.1f : 1.225f, Intent = new(1, 1, 1) } : r).ToArray() } : basis;
+                var raw = ContestedSpaceResponseEvidence.Snapshot(scenario, reverse);
+                var surface = new TrackState(raw.Track.Segments.Count, 5, raw.TrackState.GetSurface);
+                TrackEvolution.ApplyWeather(raw.Track, surface, options.Weather, raw.Step.HeatId, phase, new SimLog(false));
+                var snapshot = new SimulationSnapshot(raw.Step with { StepNumber = phase }, raw.Track, surface.Snapshot(),
+                    raw.Riders.Select(r => r with { ElapsedTimeSeconds = phase * 5 }));
+                var intents = scenario.Riders.Select(r => new RiderIntent(r.Id,
+                    new(r.Intent.TargetFor(snapshot.Segment.Type)) { Trajectory = r.Intent })).ToArray();
+                if (reverse) Array.Reverse(intents);
+                var prior = tracker.PhysicalPairs.GetValueOrDefault((1, 2));
+                var resolved = engine.Resolve(snapshot, intents, options, tracker);
+                Assert.Equal(prior, tracker.PhysicalPairs.GetValueOrDefault((1, 2)));
+                var plan = resolved.Interaction!.PhysicalContactConsequences!;
+                if (phase == 0) Assert.Equal(2, plan.AppliedPairs.Count);
+                if (phase == 1)
+                {
+                    Assert.Contains(resolved.Interaction.Episodes, e => e.MergedEpisodeIds.Contains(other));
+                    Assert.Contains(plan.AppliedPairs, p => p.RiderA == 2 && p.RiderB == 3);
+                }
+                if (phase == 2)
+                {
+                    var contact = Assert.Single(plan.AppliedPairs);
+                    Assert.Equal((1, 2), (contact.RiderA, contact.RiderB));
+                    Assert.Equal(parent, contact.EpisodeId);
+                    Assert.True(contact.Impulse!.ImpulseMagnitudeNewtonSeconds > 0);
+                }
+                if (phase == 3) Assert.Empty(plan.AppliedPairs);
+                engine.Commit(resolved, snapshot.Riders.Select(r => r.ToMutableCopy()).ToArray(), surface, new SimLog(false));
+                var state = tracker.PhysicalPairs[(1, 2)];
+                if (phase == 0)
+                {
+                    Assert.Equal(0, state.Generation); Assert.True(state.Consumed);
+                    parent = tracker.Active.Single(e => e.Riders.Contains(1)).Id;
+                    other = tracker.Active.Single(e => e.Riders.Contains(3)).Id;
+                }
+                else
+                {
+                    Assert.Equal(parent, Assert.Single(tracker.Active).Id);
+                    Assert.Equal(new[] { 1, 2, 3, 4 }, Assert.Single(tracker.Active).Riders);
+                    Assert.Equal(1, state.Generation); Assert.Equal(phase != 1, state.Consumed);
+                    Assert.Equal(0, tracker.PhysicalPairs[(3, 4)].Generation);
+                    Assert.True(tracker.PhysicalPairs[(3, 4)].Consumed);
+                }
+                if (phase == 1)
+                {
+                    Assert.Equal(5, state.ClearSinceSeconds); Assert.Equal(5.45, state.ArmedAtSeconds);
+                    var clear = CommonTimePoseHistory.Observe(tracker.History).Intervals.Where(r => r.RiderA == 1 && r.RiderB == 2
+                        && r.IntervalStartSeconds >= 5 && r.IntervalEndSeconds <= state.ObservedUntilSeconds).ToArray();
+                    Assert.NotEmpty(clear);
+                    Assert.All(clear, r => { Assert.True(r.NumericallyResolved); Assert.False(r.HasConflict);
+                        Assert.True(r.MinimumSeparationLowerBoundMeters > .65); });
+                }
+                if (phase >= 2)
+                {
+                    var bridge = tracker.PhysicalPairs[(2, 3)];
+                    Assert.Equal(0, bridge.Generation); Assert.True(bridge.Consumed);
+                    Assert.Null(bridge.ClearSinceSeconds);
+                    Assert.Contains(CommonTimePoseHistory.Observe(tracker.History).Intervals, r => r.RiderA == 2 && r.RiderB == 3
+                        && r.IntervalStartSeconds >= phase * 5 && r.NumericallyResolved && r.HasConflict);
+                }
+                phases.Add(new { resolved.Changes, resolved.Motions, resolved.Events, Plan = plan,
+                    States = tracker.PhysicalPairs.OrderBy(p => p.Key).Select(p => new { p.Key.A, p.Key.B, p.Value }).ToArray() });
+            }
+            return phases;
+        }
+        Assert.Equal(JsonSerializer.Serialize(Run(false)), JsonSerializer.Serialize(Run(true)));
+    }
+
     [Fact]
     public void AsynchronousCoverageAndDiscontinuityMustHaveACompleteNewReleaseInterval()
     {
