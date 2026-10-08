@@ -6,7 +6,7 @@
   "FinalToolSourceSHA256_UTF8_LF": {
     "Program.cs": "a4af03bf9e745dd2680f07027d6da49924e8d789286842eb409ab223924175e4",
     "instrument.py": "74ec02a6be82843ded22c667e0f6e1d89563a65846fbe57543baf75ba8b8fea4",
-    "compare.py": "6a5f7ce349b11577acae4d45975586ddc263089cf0b8693c59ab70952a94c5f1",
+    "compare.py": "95301992fa3fb8d3ea587d1f128ddbefad29028c59dc5f779abff6d02bd62dd2",
     "compare-frozen.py": "4353a463643d5fc780d622da5f420cbd626b8bec86bac1b767152d691fc1e61e"
   },
   "Machine": {
@@ -28121,7 +28121,7 @@
       "Passed": 261
     },
     "Python": {
-      "Passed": 24
+      "Passed": 36
     },
     "HistoricalFrozenBehaviorExact": true,
     "OptimizationCodeCI": {
@@ -28130,9 +28130,9 @@
       "FailedJobs": [
         "compare-platforms"
       ],
-      "Failure": "Original-main raw geometry already differs between Windows and Ubuntu; strict new check retained"
+      "Failure": "Historical run before review correction: the added unconditional Windows/Ubuntu equality check failed on original-main divergences; superseded by exact per-OS and complete divergence-map preservation"
     },
-    "FinalHeadCI": "See Draft PR #61 description for final evidence-only commit and exact final CI job results"
+    "FinalHeadCI": "See Draft PR #61 description for the review-correction commit and all nine final-head CI job results"
   },
   "ExactEquivalence": {
     "Cases": 108,
@@ -28707,6 +28707,22 @@
       "real-bridge/True/False",
       "real-bridge/True/True",
       "shadow/real-bridge"
-    ]
+    ],
+    "CrossPlatformContract": {
+      "PerOS": "Exact original-main vs optimized typed captures, including every IEEE bit pattern",
+      "Platforms": "Complete before/after divergence maps must be equal for every case/path/type/value/IEEE bit pair",
+      "Reject": [
+        "Introduced divergence",
+        "Removed divergence",
+        "Changed divergence",
+        "Missing raw capture",
+        "Raw capture hash/coverage mismatch"
+      ],
+      "CompleteMapArtifact": "platform-comparison/contested-performance-comparison.json",
+      "PortabilityIssue": "https://github.com/arturgladysz91/zuzel/issues/62",
+      "ExistingStrictPlatformGoldensUnchangedByReviewCorrection": true,
+      "RoundingOrTolerances": false,
+      "ProductionPhysicsChangedByReviewCorrection": false
+    }
   }
 }

@@ -335,6 +335,24 @@ riders and classification. Case hashes are hashes of exact typed leaves; use
 `capture OUTPUT --raw` or `--raw-case=NAME` to inspect raw leaves. No numeric
 rounding, tolerance or normalization is used.
 
+CI captures **all** raw leaves with `--raw` on both platforms, before and after
+optimization. Each raw file must match its manifest SHA256 and leaf/IEEE counts.
+`tools/contested-performance/compare.py` requires exact original-main preservation
+independently on Windows and Ubuntu, including rider-order equality. It then
+compares the complete Windows/Ubuntu divergence map before optimization with the
+map after optimization: every case, field path, capture type and exact IEEE bit
+pattern on both platforms must be unchanged. Introduced, removed or changed
+divergences fail. This is computed from every case without a case whitelist;
+missing raw captures fail, and missing field paths are explicit map entries.
+
+The `platform-comparison` CI artifact retains both complete maps in
+`contested-performance-comparison.json`, alongside the existing comparison
+report. The previously existing trajectory, physical-space, rider-compatibility,
+contested-space and physical-contact cross-platform tests and golden files remain
+unchanged by this review correction. Original main's platform differences are
+tracked separately in [numerical portability issue #62](https://github.com/arturgladysz91/zuzel/issues/62)
+and [the portability investigation note](contested-space-numerical-portability.md).
+
 There are 108 cases and 3,860,491 leaves, including 3,121,627 IEEE leaves. Coverage
 includes all 13 original response fixtures, four independent-ownership fixtures,
 four-separated, an actual safety correction, equal/adjacent tactical preferences,
@@ -356,7 +374,12 @@ existing assertions changed only the documented redundant-call counts.
 - Release solution build with warnings as errors: passed, zero warnings/errors.
 - Complete local .NET suite: 2,055 passed, zero failures/skips (17 min 46 s).
 - Focused geometry/interaction/contact suite: 261 passed.
-- Complete Python calibration suite: 24 passed.
+- Complete Python calibration suite: 36 passed, including 12 new platform
+  comparison tests. They reject new divergences in previously equal cases and
+  already divergent cases, removed divergences, changed paths/types/bits (including
+  signed zero and NaN payloads), missing/corrupt raw captures, and case coverage
+  changes. A common per-OS behavior change fails even if the divergence map stays
+  unchanged. Map coverage beyond the first 20 fields is tested explicitly.
 - All existing trajectory, #55, #56A, #56B and #56C1 frozen checks: passed on CI;
   only the explicitly allowed redundant-work fields decrease. No golden was
   regenerated.
@@ -371,7 +394,7 @@ existing assertions changed only the documented redundant-call counts.
   [Run 193](https://github.com/arturgladysz91/zuzel/actions/runs/37742878121).
 - Exact final PR HEAD and all nine final-job outcomes are recorded in the
   [Draft PR description](https://github.com/arturgladysz91/zuzel/pull/61), after
-  the evidence-only commit. The new platform assertion is intentionally retained.
+  the review correction. Final-head acceptance requires all nine jobs green.
 
 ## Remaining bottlenecks and review status
 
@@ -391,11 +414,16 @@ stitching/search buffers, then prove complete cache identity and arithmetic pari
 before introducing reuse. This report does not claim that 30% is mathematically
 impossible; it reports the safe changes measured here.
 
-**Concrete blocker to review readiness: original-main platform IEEE divergence.**
-The initial exhaustive comparison fails for 22 of 106 case manifests on original
-main and the same 22 after optimization. Both per-OS original-main comparisons
-pass every case. Raw sidecars independently confirm unchanged before/after bytes
-on each OS for C-cutback-clean and scenario I / Dry / seed 7.
+**Separate numerical portability issue: 22 pre-existing platform-divergent cases.**
+The initial exhaustive comparison found 22 differing case manifests on original
+main and the same 22 after optimization; the expanded 108-case run confirms this
+case set. Both per-OS original-main comparisons pass every case. The original
+failure came from demanding byte equality between optimized platforms despite
+different original-main values. [Review #5453855563](https://github.com/arturgladysz91/zuzel/pull/61#pullrequestreview-5453855563)
+corrects that acceptance condition to exact per-OS preservation plus complete
+before/after divergence-map equality. The 22 cases are documented and tracked in
+[issue #62](https://github.com/arturgladysz91/zuzel/issues/62); they are not an
+allowlist of ignored differences.
 
 For example, `C-cutback-clean/True/False`,
 `root[0].Interaction.Episodes[0].Candidates[7].MinimumSeparationMeters`, is
@@ -413,11 +441,11 @@ attributed conclusively to libm, JIT or hardware from these observations alone.
 The structured report retains the differing paths and raw bit patterns.
 
 For a baseline field with Windows value W and Ubuntu value U where W != U,
-requiring optimized Windows == W, optimized Ubuntu == U, and optimized Windows ==
-optimized Ubuntu is inconsistent. Resolving this baseline numerical portability
-issue needs a separately reviewed numerical contract; it cannot be fixed here
-while preserving the requested original IEEE values on both platforms. No
-rounding, tolerance, normalization, new platform golden or approximate
-trigonometry was introduced. The new CI comparison remains strict and failing.
-The Draft PR presents the implemented optimization and this evidence for review;
-it is **not declared ready**, and the requirement for nine passing jobs is not met.
+optimized Windows must still equal W and optimized Ubuntu must still equal U.
+The full divergence map records both values and rejects any change to that pair.
+Resolving baseline numerical portability needs a separately reviewed numerical
+contract; this performance PR preserves the original IEEE values on both
+platforms. No rounding, tolerance, normalization, new platform golden, approximate
+trigonometry or production physics change was introduced by this correction.
+The PR remains **Draft pending independent full code review**, even after all nine
+final-head CI jobs pass. No merge is authorized, and PR #59 remains untouched.

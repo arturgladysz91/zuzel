@@ -115,8 +115,8 @@ jobs:
           baseline="$(cd ../contested-baseline && pwd)"
           dotnet build tools/contested-performance -c Release --warnaserror -p:CoreSimRoot="$baseline" -o ../contested-before-bin
           dotnet build tools/contested-performance -c Release --warnaserror -o ../contested-after-bin
-          dotnet ../contested-before-bin/CoreSim.Tests.dll capture results/contested-performance/before.json --raw-case=C-cutback-clean/True/False --raw-case=heat/I/Dry/7/False
-          dotnet ../contested-after-bin/CoreSim.Tests.dll capture results/contested-performance/after.json --raw-case=C-cutback-clean/True/False --raw-case=heat/I/Dry/7/False
+          dotnet ../contested-before-bin/CoreSim.Tests.dll capture results/contested-performance/before.json --raw
+          dotnet ../contested-after-bin/CoreSim.Tests.dll capture results/contested-performance/after.json --raw
           python tools/contested-performance/compare.py results/contested-performance
       - uses: actions/upload-artifact@v4
         if: always()
@@ -150,7 +150,9 @@ jobs:
         if: always()
         with:
           name: platform-comparison
-          path: captures/comparison.json
+          path: |
+            captures/comparison.json
+            captures/contested-performance-comparison.json
 
   python:
     runs-on: ubuntu-latest
