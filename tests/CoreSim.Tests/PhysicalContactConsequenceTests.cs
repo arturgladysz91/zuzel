@@ -211,12 +211,13 @@ public sealed class PhysicalContactConsequenceTests
         var other=tracker.Engage(new[]{3,4},0,InteractionContext.MechanicalConflict);
         var second=pair with{RiderA=3,RiderB=4,EpisodeId=other.Id};Assert.True(tracker.CanApplyPhysical(second));
         var contact=PhysicalContactEvidence.TimedContact(1,2,0).Contact with{Kind=SpaceConflictKind.None,IntervalStartSeconds=1,
-            IntervalEndSeconds=2,MinimumSeparationMeters=3,MinimumSeparationLowerBoundMeters=3};
+            IntervalEndSeconds=2,FirstTouchCommonTimeSeconds=null,MinimumSeparationMeters=3,MinimumSeparationLowerBoundMeters=3};
         var release=new InteractionEpisodeTracker();var old=release.Engage(new[]{1,2},0,InteractionContext.MechanicalConflict);
         release.ConsumePhysical(plan with{AppliedPairs=new[]{pair with{EpisodeId=old.Id}}});
         release.ObserveClearance(2,new[]{contact},new());Assert.Empty(release.Active);
         var fresh=release.Engage(new[]{1,2},3,InteractionContext.MechanicalConflict);
-        Assert.NotEqual(old.Id,fresh.Id);Assert.True(release.CanApplyPhysical(pair with{EpisodeId=fresh.Id}));
+        Assert.NotEqual(old.Id,fresh.Id);Assert.True(release.CanApplyPhysical(pair with{EpisodeId=fresh.Id,
+            FirstTouchCommonTimeSeconds=3,FrontierStartTimeSeconds=3}));
     }
 
     [Fact]

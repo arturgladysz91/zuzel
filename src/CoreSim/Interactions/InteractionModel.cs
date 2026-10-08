@@ -125,7 +125,6 @@ internal sealed class InteractionEpisode(long id, int[] riders, double start)
                 FallbackOrigins[key] = FallbackOrigins[key] with { Attempted = value };
         }
     }
-    internal HashSet<(int A, int B)> ConsumedPhysicalPairs = new();
     internal int ResponseChanges;
     internal Dictionary<int, InteractionAlternative> Commitments = new();
     internal InteractionEpisodeDiagnostic? LastDiagnostic;
@@ -137,6 +136,10 @@ public sealed class InteractionEpisodeTracker
     private readonly List<InteractionEpisode> _episodes = new();
     private long _nextId;
     private (int Seed, int Heat)? _heat;
+    // One causal state per canonical pair in this heat (at most six pairs).
+    // Episode reconciliation cannot create, copy or discard physical ownership.
+    private readonly Dictionary<(int A, int B), PhysicalPairGeneration> _physicalPairs = new();
+    internal IReadOnlyDictionary<(int A, int B), PhysicalPairGeneration> PhysicalPairs => _physicalPairs;
     internal readonly List<InteractionEpisodeDiagnostic> Closed = new();
     internal readonly List<PhysicalPoseInterval> History = new();
     internal TrackMetricEmbedding? Embedding;
@@ -146,10 +149,10 @@ public sealed class InteractionEpisodeTracker
     {
         var clone = new InteractionEpisodeTracker { _nextId = _nextId, _heat = _heat, Embedding = Embedding };
         clone.History.AddRange(History);
+        foreach (var pair in _physicalPairs) clone._physicalPairs.Add(pair.Key, pair.Value);
         foreach (var e in _episodes) clone._episodes.Add(new(e.Id, e.Riders.ToArray(), e.Start)
         {
             LastActive = e.LastActive, ObservedUntil = e.ObservedUntil, ReleaseNotBefore=e.ReleaseNotBefore, ObservedRiders = e.ObservedRiders.ToArray(),
-            ConsumedPhysicalPairs = new(e.ConsumedPhysicalPairs),
             ClearSince = e.ClearSince, End = e.End, Context = e.Context,
             PredictedMechanical = e.PredictedMechanical, FallbackOrigins = new(e.FallbackOrigins),
             MergedEpisodeIds = new(e.MergedEpisodeIds), MergedOtherRiders = e.MergedOtherRiders,
@@ -162,6 +165,8 @@ public sealed class InteractionEpisodeTracker
         _nextId = resolved._nextId; _heat = resolved._heat; Embedding = resolved.Embedding;
         _episodes.Clear(); _episodes.AddRange(resolved._episodes);
         History.Clear(); History.AddRange(resolved.History);
+        _physicalPairs.Clear();
+        foreach (var pair in resolved._physicalPairs) _physicalPairs.Add(pair.Key, pair.Value);
         Closed.Clear();
     }
     internal void Bind(SimulationSnapshot snapshot, bool deterministicArithmetic=false)
@@ -209,7 +214,6 @@ public sealed class InteractionEpisodeTracker
         }
         foreach (var merged in matches.Where(e => e != episode))
         {
-            episode.ConsumedPhysicalPairs.UnionWith(merged.ConsumedPhysicalPairs);
             episode.MergedOtherRiders = true;
             episode.MergedEpisodeIds.Add(merged.Id);
             episode.MergedEpisodeIds.UnionWith(merged.MergedEpisodeIds);
@@ -266,21 +270,52 @@ public sealed class InteractionEpisodeTracker
     }
     internal bool CanApplyPhysical(PhysicalContactPairAnalysis pair)
         => pair.Status == PhysicalContactStatus.Analyzed && Active.Any(e => e.Id == pair.EpisodeId
-            && !e.ConsumedPhysicalPairs.Contains((Math.Min(pair.RiderA, pair.RiderB), Math.Max(pair.RiderA, pair.RiderB))));
+            && (!_physicalPairs.TryGetValue(PhysicalPairKey(pair.RiderA, pair.RiderB), out var state)
+                || state.CanApply(pair.FirstTouchCommonTimeSeconds, pair.FrontierStartTimeSeconds)));
 
-    internal void ConsumePhysical(PhysicalContactConsequencePlan plan)
+    internal bool CanApplyPhysical(PhysicalContactPairAnalysis pair, PhysicalPairObservation observation)
+        => pair.Status == PhysicalContactStatus.Analyzed && Active.Any(e => e.Id == pair.EpisodeId)
+            && EligiblePhysicalState(pair, observation).CanApply(pair.FirstTouchCommonTimeSeconds, pair.FrontierStartTimeSeconds);
+
+    private PhysicalPairGeneration EligiblePhysicalState(PhysicalContactPairAnalysis pair, PhysicalPairObservation observation)
+    {
+        var key = PhysicalPairKey(pair.RiderA, pair.RiderB);
+        var state = _physicalPairs.GetValueOrDefault(key, PhysicalPairGeneration.NeverApplied);
+        // The frontier is frozen before any of its impulses. No member can use
+        // separation later in that same frontier to acquire another generation.
+        return observation.Advance(key, state, pair.FrontierStartTimeSeconds ?? pair.FirstTouchCommonTimeSeconds);
+    }
+
+    internal void ConsumePhysical(PhysicalContactConsequencePlan plan, PhysicalPairObservation? observation = null)
     {
         foreach (var pair in plan.AppliedPairs)
         {
-            var episode = Active.Single(e => e.Id == pair.EpisodeId);
-            episode.ConsumedPhysicalPairs.Add((Math.Min(pair.RiderA, pair.RiderB), Math.Max(pair.RiderA, pair.RiderB)));
+            if (!(observation is null ? CanApplyPhysical(pair) : CanApplyPhysical(pair, observation)))
+                throw new InvalidOperationException("A physical pair generation can be consumed only once.");
+            var key = PhysicalPairKey(pair.RiderA, pair.RiderB);
+            var state = observation is null ? _physicalPairs.GetValueOrDefault(key, PhysicalPairGeneration.NeverApplied)
+                : EligiblePhysicalState(pair, observation);
+            _physicalPairs[key] = state.Consume(pair.FirstTouchCommonTimeSeconds);
         }
+    }
+
+    internal static (int A, int B) PhysicalPairKey(int a, int b) => (Math.Min(a, b), Math.Max(a, b));
+
+    internal void ObservePhysicalClearance(ContestedSpaceReport report, ContestedSpaceParameters parameters)
+    {
+        if (_physicalPairs.Count == 0) return;
+        var observation = new PhysicalPairObservation(report, parameters);
+        foreach (var key in _physicalPairs.Keys.ToArray())
+            _physicalPairs[key] = observation.Advance(key, _physicalPairs[key]);
     }
 
     internal bool Owns(int a, int b) => Active.Any(e => e.Riders.Contains(a) && e.Riders.Contains(b));
     internal void ObserveClearance(double time, IReadOnlyList<ContestedSpaceEvent> rows, ContestedSpaceParameters p,
-        SimulationSnapshot? snapshot = null)
+        SimulationSnapshot? snapshot = null, ContestedSpaceReport? physicalReport = null)
     {
+        // Kept for direct callers; production supplies the complete report,
+        // including explicit frame gaps, separately below.
+        ObservePhysicalClearance(physicalReport ?? new(rows, new(0,0,0,0,0,0,0,0), Array.Empty<FrameCoverageGap>()), p);
         foreach (var e in Active.ToArray())
         {
             var riders = e.Riders.Where(id => snapshot is null || snapshot.Rider(id).IsActive).ToArray();

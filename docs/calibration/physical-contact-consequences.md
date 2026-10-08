@@ -5,8 +5,9 @@ Status: implemented behind a default-OFF flag; Draft, independent review require
 The first P1 correction from review `5452627332` integrates #61's merged performance changes and
 closes native trigonometry in enabled track-clearance and tactical decision gates. Its arithmetic
 contract, complete native-call audit, exact changed fields and measured pre/post performance are
-documented in [contact-decision-geometry.md](contact-decision-geometry.md). The two separate
-pair-recontact/recovery review findings remain outstanding.
+documented in [contact-decision-geometry.md](contact-decision-geometry.md). The pair-level
+recontact correction is documented in [physical-contact-pair-generations.md](physical-contact-pair-generations.md).
+The separate sequential strong-to-weak recovery finding remains **OPEN**.
 
 ## Prerequisite
 
@@ -30,7 +31,7 @@ Legacy comparison remains diagnostic. The unchanged #56C1 twelve-case sample con
 
 The separate `PhysicalContactConsequenceResolver` builds an immutable plan from that aggregate, episode provenance, frozen snapshot, normal production endpoints and first-touch travel directions. It projects `NetDeltaVelocityMetersPerSecond` onto each rider's own unit travel direction, then sets final scalar speed to `max(0, normal endpoint speed + deltaForward)`. Crash instead sets speed zero and status Crashed. The plan is applied before final diagnostics, motions and events are constructed. Runtime assertions and tests require the final state, diagnostic speed/status, motion endpoint and typed consequence to agree. Existing solo terminal outcomes remain authoritative.
 
-The cloned #56B tracker records consumed canonical pairs per continuous episode. Only Commit publishes that ownership. Verified episode merges union consumption; unrelated pairs remain independent. Certified clearance closes the old episode, allowing a fresh episode to apply another impact. Deferred, GeometryUnresolved and ineligible pairs produce no applied outcome. Unresolved geometry remains diagnostic; the resolver does not guess a physical consequence.
+The cloned heat tracker records bounded canonical pair generations independently of tactical episode lifetime. Only Commit publishes ownership. Certified continuous pair separation rearms that pair after the unchanged release clearance and delay, even while another pair keeps its parent episode active. Episode merges preserve the single heat-owned pair state and separate legacy fallback origins. Deferred, GeometryUnresolved and ineligible pairs produce no applied outcome. Unresolved geometry remains diagnostic; the resolver does not guess a physical consequence. See [pair-generation semantics and evidence](physical-contact-pair-generations.md).
 
 Enabled contact frames use fixed, range-reduced sine/cosine and arctangent polynomial arithmetic in the existing metric embedding, footprint, #55 diagnostics and #56C1 projection. The first cross-platform audit exposed native libm variation in one rain contact's track coordinates, propagating to five applied double fields while final race states stayed equal. This is fixed at the geometric arithmetic source, without rounding output, adding comparison tolerance, changing the detector, impulse/reserve formulas or severity boundaries. A dense quadrant/heading accuracy regression bounds error against the native functions by 2e-15. The separate raw-input/manifold/impulse regression capture is compared byte-for-byte and by typed IEEE bits on both platforms. Feature-OFF frames retain their original native calls and frozen captures; arithmetic mode remains fixed within a heat.
 

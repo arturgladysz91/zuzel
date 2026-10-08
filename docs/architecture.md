@@ -3,7 +3,8 @@
 Current physical consequence precedence (#56C2): [physical contact consequences and recovery](calibration/physical-contact-consequences.md)
 adds a separate `PhysicalContactConsequenceResolver`. #55 detects; #56C1 analyzes frozen pairs and aggregates;
 the resolver builds a simultaneous plan before final `RiderStateChange`, diagnostics, motion and events are constructed.
-Heat-scoped episode state owns consumed physical pairs and carries them across verified episode merges until certified release.
+The heat tracker owns bounded physical pair generations independently of tactical episodes.
+Certified continuous pair separation rearms only that pair; episode merges preserve its causal state.
 Transient immutable recovery passes through snapshot/projection/commit and expires after the next active production step.
 The existing production traversal scales positive drive and voluntary lateral budget. No parallel solver is added.
 Default OFF preserves the legacy path; ON requires #56B and replaces its legacy contact consequence.

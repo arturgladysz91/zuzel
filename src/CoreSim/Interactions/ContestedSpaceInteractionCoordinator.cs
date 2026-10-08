@@ -58,6 +58,7 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
         {
             // Same snapshot, intents, options and disabled legacy contacts. The
             // direct observation also covers exactly History + these poses.
+            if (options.EnablePhysicalContactConsequences) tracker.ObservePhysicalClearance(direct, p);
             tracker.RetainVerified(independent, currentPoses, direct);
             return independent.withInteraction(new(tracker.Closed.ToArray(),
                 new(0, 1, direct.Work.NarrowPhaseEvaluations, 0, 0) { ActualProductionVerifications = 1 }), owner, tracker);
@@ -508,7 +509,9 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
         PhysicalContactConsequencePlan? consequencePlan = null;
         if (options.EnablePhysicalContactConsequences)
         {
-            bool Applicable(PhysicalContactPairAnalysis pair) => safetyPasses == 1 && tracker.CanApplyPhysical(pair);
+            var physicalObservation = new PhysicalPairObservation(verification, p);
+            bool Fresh(PhysicalContactPairAnalysis pair) => tracker.CanApplyPhysical(pair, physicalObservation);
+            bool Applicable(PhysicalContactPairAnalysis pair) => safetyPasses == 1 && Fresh(pair);
             physicalContact = PhysicalContactSnapshotAdapter.Analyze(verification, finalContactPoses, snapshot,
                 tracker.Embedding!, currentContactDiagnostics!, Array.Empty<SimulationStepEvent>(), options.PhysicalContactParameters,
                 PhysicalContactDiagnosticsLevel.FullAudit, Applicable);
@@ -524,8 +527,8 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
             consequencePlan = PhysicalContactConsequenceResolver.Build(physicalContact, physicalContact.ApplicationRiders,
                 pairs, snapshot, actual.Changes, directions, options.PhysicalContactParameters,
                 options.PhysicalContactConsequenceParameters,
-                physicalContact.AuditPairs.Count(p => p.Status == PhysicalContactStatus.Analyzed && !tracker.CanApplyPhysical(p)));
-            tracker.ConsumePhysical(consequencePlan);
+                physicalContact.AuditPairs.Count(p => p.Status == PhysicalContactStatus.Analyzed && !Fresh(p)));
+            tracker.ConsumePhysical(consequencePlan, physicalObservation);
         }
         // Reuse the verified step unless fallback or an applied consequence changes its output.
         var reuseActual = fallbackPairs.Count == 0 && (consequencePlan is null || consequencePlan.Riders.Count == 0);
@@ -543,7 +546,7 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
             : PhysicalContactSnapshotAdapter.Analyze(verification,finalContactPoses,snapshot,tracker.Embedding!,diagnostics,
                 final.Events,options.PhysicalContactParameters,options.PhysicalContactDiagnostics);
         if (!ReferenceEquals(final, actual)) narrow+=executedVerification.Work.NarrowPhaseEvaluations;
-        tracker.ObserveClearance(now,executedVerification.Intervals,p,snapshot);
+        tracker.ObserveClearance(now,executedVerification.Intervals,p,snapshot,executedVerification);
         foreach(var closed in tracker.Closed)
         {
             var index=diagnostics.FindIndex(d=>d.EpisodeId==closed.EpisodeId);

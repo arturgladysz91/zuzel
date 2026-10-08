@@ -54,6 +54,8 @@ if (mode == "capture")
         compressed.Write(bytes);
         if (name.StartsWith("heat/",StringComparison.Ordinal)) Console.WriteLine("Captured "+name);
     }
+    if (!args.Contains("--pairs-only"))
+    {
     foreach (var scenario in scenarios)
     foreach (var enabled in new[] {true})
     foreach (var reverse in new[] {false, true})
@@ -81,6 +83,11 @@ if (mode == "capture")
         for(var repeat=0;repeat<8;repeat++) Resolve(scenarios.Single(s=>s.Name=="imminent-overlap"),true,reverse,repeated,tracker,repeat*5);
         Capture("continuous-overlap/"+reverse,repeated.Values);
     }
+    }
+    foreach (var seed in new[] { 7, 19, 83 })
+    foreach (var weather in new[] { WeatherState.Dry, WeatherState.LightRain })
+    foreach (var reverse in new[] { false, true })
+        Capture($"pair-recontact/{seed}/{weather.Condition}/{reverse}", PairGenerationCapture.Run(seed, weather, reverse));
     Write(output,manifests);
     Console.WriteLine($"Captured {manifests.Count} exact behavior manifests.");
     return;
