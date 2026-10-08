@@ -72,6 +72,12 @@ if (mode == "capture")
         RunHeat(fixture, true, reverse, seed, weather, collector);
         Capture($"heat/{fixture.Id}/{weather.Condition}/{seed}/{reverse}",collector.Values);
     }
+    foreach (var reverse in new[] {false,true})
+    {
+        var collector = new Collector(true);
+        RunHeat(heat, false, reverse, 7, WeatherState.Dry, collector);
+        Capture($"heat/I/interactions-OFF/Dry/7/{reverse}",collector.Values);
+    }
     Capture("ownership",ContestedSpaceResponseEvidence.OwnershipEvidence());
     foreach(var s in ContestedSpaceResponseEvidence.OwnershipScenarios())
         Capture("shadow/"+s.Name,PhysicalContactEvidence.Resolve(s,PhysicalContactDiagnosticsLevel.FullAudit));

@@ -28,7 +28,11 @@ edit(coordinator, "                foreach (var joint in Joint(choices))\n      
 edit(coordinator, "            foreach (var joint in Joint(choices))\n            {", '            foreach (var joint in Joint(choices))\n            {\n                using var profileScore = CoreSim.PerformanceProbe.Section("safety-joint-scoring");')
 edit(coordinator, "var independent = engine.ResolveProduction(snapshot, intents, options, legacyContacts: false);", 'var independent = CoreSim.PerformanceProbe.Run("initial-production", () => engine.ResolveProduction(snapshot, intents, options, legacyContacts: false));')
 edit(coordinator, "var clusters = Clusters(edges, snapshot, p);", 'var clusters = CoreSim.PerformanceProbe.Run("cluster-construction", () => Clusters(edges, snapshot, p));')
+edit(coordinator, "var safetyComponents = Clusters(safetyEdges, snapshot, p);", 'var safetyComponents = CoreSim.PerformanceProbe.Run("cluster-construction", () => Clusters(safetyEdges, snapshot, p));')
+edit(coordinator, "var finalComponents = Clusters(finalEdges, snapshot, p);", 'var finalComponents = CoreSim.PerformanceProbe.Run("cluster-construction", () => Clusters(finalEdges, snapshot, p));')
 text = (root / coordinator).read_text(encoding="utf-8")
+if "var quiet = engine.ResolveProduction" in text:
+    edit(coordinator, "var quiet = engine.ResolveProduction(snapshot, intents, options, legacyContacts:false);", 'var quiet = CoreSim.PerformanceProbe.Run("final-materialization", () => engine.ResolveProduction(snapshot, intents, options, legacyContacts:false));')
 if "var final = fallbackPairs.Count == 0 ? actual" in text:
     edit(coordinator, "        var final = fallbackPairs.Count == 0 ? actual : engine.ResolveProduction(snapshot, finalIntents, options, contactFilter: (a, b) =>", '        var final = CoreSim.PerformanceProbe.Run("final-materialization", () => fallbackPairs.Count == 0 ? actual : engine.ResolveProduction(snapshot, finalIntents, options, contactFilter: (a, b) =>')
 else:
