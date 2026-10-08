@@ -40,6 +40,8 @@ cases.Add(new("repeated-contact", capture => {
     for (var repeat = 0; repeat < 8; repeat++) Resolve(scenarios.Single(s => s.Name == "imminent-overlap"), true, false, capture, tracker, repeat*5);
 }));
 cases.Add(new("solo-heat", capture => RunHeat(heat with {Riders = heat.Riders.Take(1).ToArray()}, false, false, 7, WeatherState.Dry, capture)));
+cases.Add(new("contact-diagnostics", capture => Resolve(scenarios.Single(s => s.Name == "imminent-overlap"), true, false, capture,
+    physicalDiagnostics: true)));
 if (mode == "capture")
 {
     var manifests = new SortedDictionary<string, object>(StringComparer.Ordinal);
@@ -50,7 +52,8 @@ if (mode == "capture")
         var bytes = JsonSerializer.SerializeToUtf8Bytes(values);
         manifests.Add(name,new {Leaves=values.Count, IEEELeaves=values.Values.Count(v=>v is string s && (s.StartsWith("float:",StringComparison.Ordinal)||s.StartsWith("double:",StringComparison.Ordinal))),
             SHA256=Convert.ToHexString(SHA256.HashData(bytes))});
-        if (args.Contains("--raw")) File.WriteAllBytes(output+"."+name.Replace('/','_')+".json",bytes);
+        if (args.Contains("--raw") || args.Contains("--raw-case="+name))
+            File.WriteAllBytes(output+"."+name.Replace('/','_')+".json",bytes);
     }
     foreach (var scenario in scenarios)
     foreach (var enabled in new[] {false, true})
@@ -84,7 +87,10 @@ using var process = Process.GetCurrentProcess();
 var probe = typeof(SimulationEngine).Assembly.GetType("CoreSim.PerformanceProbe");
 foreach (var test in selected)
 {
-    for (var i = 0; i < 5; i++) test.Run(new(false));
+    var warmupStart = Stopwatch.GetTimestamp();
+    var warmups = 0;
+    do { test.Run(new(false)); warmups++; }
+    while (warmups < 8 || Stopwatch.GetElapsedTime(warmupStart).TotalSeconds < 3);
     var rows = new List<object>();
     for (var i = 0; i < samples; i++)
     {
@@ -102,16 +108,17 @@ foreach (var test in selected)
             GC = Enumerable.Range(0,3).Select(g => GC.CollectionCount(g) - gc[g]).ToArray(), Work = collector.Work,
             Stages = ReadProbe(probe) });
     }
-    measurements.Add(new {test.Name, Samples = rows});
+    measurements.Add(new {test.Name, Warmups = warmups, Samples = rows});
     Write(output, new {Schema = "contested-performance-v1", Measurements = measurements});
     Console.WriteLine($"Measured {test.Name} ({samples} samples).");
 }
 Write(output, new {Schema = "contested-performance-v1", Environment = new {
     OS = RuntimeInformation.OSDescription, Runtime = RuntimeInformation.FrameworkDescription,
     Environment.ProcessorCount, Architecture = RuntimeInformation.ProcessArchitecture.ToString(),
-    Stopwatch.Frequency }, Warmups = 5, Samples = samples, Measurements = measurements});
+    Stopwatch.Frequency }, WarmupProtocol = "At least eight complete runs and at least three seconds per case", Samples = samples, Measurements = measurements});
 
-static void Resolve(ContestedScenario scenario, bool enabled, bool reverse, Collector collector, InteractionEpisodeTracker? tracker=null,float time=0)
+static void Resolve(ContestedScenario scenario, bool enabled, bool reverse, Collector collector, InteractionEpisodeTracker? tracker=null,float time=0,
+    bool physicalDiagnostics=false)
 {
     var basis = ContestedSpaceResponseEvidence.Snapshot(scenario.Name=="safety-correction" ? scenario with {Seed=57} : scenario,reverse);
     var snapshot = new SimulationSnapshot(scenario.Name=="safety-correction" ? basis.Step with {Seed=276} : basis.Step,
@@ -120,7 +127,8 @@ static void Resolve(ContestedScenario scenario, bool enabled, bool reverse, Coll
     var engine = new SimulationEngine(new FixedDecision());
     var step = engine.Resolve(snapshot,reverse ? intents.Reverse().ToArray() : intents,new() {
         EnableContestedSpaceResponses=enabled,IncidentFrequency=scenario.IncidentFrequency,
-        InteractionDiagnostics=collector.Capture ? InteractionDiagnosticsLevel.FullAudit : InteractionDiagnosticsLevel.Summary},tracker);
+        InteractionDiagnostics=collector.Capture ? InteractionDiagnosticsLevel.FullAudit : InteractionDiagnosticsLevel.Summary,
+        PhysicalContactDiagnostics=physicalDiagnostics ? PhysicalContactDiagnosticsLevel.FullAudit : PhysicalContactDiagnosticsLevel.None},tracker);
     collector.OnStepResolved(step);
     if(tracker is not null) engine.Commit(step,snapshot.Riders.Select(r=>r.ToMutableCopy()).ToArray(),
         new TrackState(snapshot.Track.Segments.Count,5,snapshot.TrackState.GetSurface),new CoreSim.Logging.SimLog(false));

@@ -39,9 +39,7 @@ history = "src/CoreSim/Interactions/CommonTimePoseHistory.cs"
 edit(history, "=> ContestedSpaceResolver.Observe(Stitch(source));", '=> CoreSim.PerformanceProbe.Run("contact-detection", () => ContestedSpaceResolver.Observe(Stitch(source)));')
 edit(history, "=> ContestedSpaceResolver.ObserveCompatibility(Stitch(source), ready);", '=> CoreSim.PerformanceProbe.Run("compatibility-geometry", () => ContestedSpaceResolver.ObserveCompatibility(Stitch(source), ready));')
 adapter = "src/CoreSim/Interactions/PhysicalContactSnapshotAdapter.cs"
-if (root / adapter).exists():
-    # The optional diagnostics stage is zero in Summary / physical diagnostics None.
-    pass
+edit(adapter, "        var contacts = episodes.SelectMany", '        using var profileDiagnostics = CoreSim.PerformanceProbe.Section("contact-analysis-diagnostics");\n        var contacts = episodes.SelectMany')
 trajectory = "src/CoreSim/Decisions/TrajectoryEvaluator.cs"
 edit(trajectory, "        CandidateTraversalCount++;", '        CoreSim.PerformanceProbe.Count("trajectory-evaluations");\n        CandidateTraversalCount++;')
 edit(trajectory, "                ProductionResolutionCount++;", '                CoreSim.PerformanceProbe.Count("prefix-executions");\n                ProductionResolutionCount++;')
