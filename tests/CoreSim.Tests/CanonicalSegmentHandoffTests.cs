@@ -137,6 +137,8 @@ public sealed class CanonicalSegmentHandoffTests
     [Theory]
     [InlineData(.1f, false)] [InlineData(.4f, false)] [InlineData(.9f, false)]
     [InlineData(.1f, true)] [InlineData(.4f, true)] [InlineData(.9f, true)]
+    [InlineData(.99999994f, false)] [InlineData(.99999994f, true)]
+    [InlineData(1e-8f, false)] [InlineData(1e-8f, true)]
     public void CrashKeepsActualHalfRemainderWithoutLapOrWear(float progress, bool moving)
     {
         var track = Track.CreateStandingStartExample();
@@ -166,6 +168,7 @@ public sealed class CanonicalSegmentHandoffTests
         var completed = start.AdvanceToSegmentEnd(12f);
         Assert.Equal(1d, completed.TotalSegmentProgress); Assert.Equal(22f, completed.DistanceMeters);
         Assert.Equal(.10000000149011612d, start.TotalSegmentProgress);
+        Assert.Equal(5d, RiderPosition.Create(1, 4, .1f, 8).AdvanceToSegmentEnd(12f).TotalSegmentProgress);
         Assert.Throws<InvalidOperationException>(() => default(RiderPosition).AdvanceToSegmentEnd(1f));
         foreach (var invalid in new[] { -1f, float.NaN, float.PositiveInfinity, float.NegativeInfinity })
             Assert.Throws<ArgumentOutOfRangeException>(() => start.AdvanceToSegmentEnd(invalid));
@@ -175,6 +178,28 @@ public sealed class CanonicalSegmentHandoffTests
         Assert.Throws<ArgumentOutOfRangeException>(() => RiderPosition.Create(1, 0, .1f, 8, -1f));
         Assert.Throws<ArgumentOutOfRangeException>(() => RiderPosition.Create(1, 0, .1f, 8, float.MaxValue).AdvanceToSegmentEnd(float.MaxValue));
         Assert.Throws<InvalidOperationException>(() => RiderPosition.Create(1, 0, float.NaN, 8).AdvanceToSegmentEnd(1f));
+    }
+
+    [Fact]
+    public void DecimalBrakeAndRunWideFinishTheActualRequestedSegment()
+    {
+        var track = new Track(new[] { new TrackSegment(0, SegmentType.TurnEntry) });
+        var results = Enumerable.Range(18, 28).Select(speed =>
+        {
+            var rider = TrajectoryEvaluatorTests.At(track, 0, 1, speed, .1f);
+            var context = TrajectoryEvaluatorTests.Context(track, rider);
+            var engine = new SimulationEngine(new Hold());
+            return engine.Resolve(context.Snapshot, [new(rider.RiderId, new(1))],
+                new() { IncidentFrequency = 0f });
+        }).ToArray();
+        Assert.Contains(results, r => r.Changes[0].Outcome == SegmentOutcome.Brake);
+        Assert.Contains(results, r => r.Changes[0].Outcome == SegmentOutcome.RunWide);
+        foreach (var resolved in results.Where(r => r.Changes[0].Outcome is SegmentOutcome.Brake or SegmentOutcome.RunWide))
+        {
+            Assert.Equal(1d, resolved.Changes[0].Position.TotalSegmentProgress);
+            Assert.Equal(1d, resolved.Motions[0].Final.CanonicalProgress);
+            Assert.True(resolved.Changes[0].ApplySurfaceWear);
+        }
     }
 
     [Theory]

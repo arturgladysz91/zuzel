@@ -66,9 +66,9 @@ foreach (var name in new[] { "balanced-motoarena", "contact-heavy", "three-squee
             var allocated = GC.GetTotalAllocatedBytes(true); var start = Stopwatch.GetTimestamp();
             var work = Run(name);
             rows.Add(new { Milliseconds = Stopwatch.GetElapsedTime(start).TotalMilliseconds,
-                AllocatedBytes = GC.GetTotalAllocatedBytes(true) - allocated, Work = work });
+                AllocatedBytes = GC.GetTotalAllocatedBytes(true) - allocated });
         }
-        measurements.Add(new { Name = name, Failed = false, Warmups = warmups, Samples = rows });
+        measurements.Add(new { Name = name, Failed = false, Warmups = warmups, CountedWork = Run(name, count: true), Samples = rows });
     }
     catch (InvalidOperationException exception)
     { measurements.Add(new { Name = name, Failed = true, exception.Message }); }
@@ -77,11 +77,11 @@ foreach (var name in new[] { "balanced-motoarena", "contact-heavy", "three-squee
 }
 Save();
 
-Work Run(string name)
+Work Run(string name, bool count = false)
 {
     var work = new Work();
     var previous = ProjectionCaptureAudit.Observer;
-    ProjectionCaptureAudit.Observer = (kind, n) =>
+    if (count) ProjectionCaptureAudit.Observer = (kind, n) =>
     {
         if (kind == ProjectionMaterialization.PhysicalEvaluation) work.SynchronousResolutions += n;
         if (kind == ProjectionMaterialization.PrefixCacheHit) work.PrefixCacheHits += n;
@@ -128,6 +128,8 @@ Work Run(string name)
 void Save() => Write(new { Schema = "rea009-benchmark-v1", Samples = samples,
     Environment = new { OS = RuntimeInformation.OSDescription, Runtime = RuntimeInformation.FrameworkDescription, Environment.ProcessorCount },
     Warmup = "At least five runs and two seconds; nine samples by default; process-wide allocations include workers",
+    TimedDecisionDegree = Math.Min(4, Environment.ProcessorCount), ProjectionCounterDegree = 1,
+    CounterProtocol = "One separate untimed run uses the existing synchronous capture hook; timings retain default parallel scheduling",
     Measurements = measurements });
 void Write(object value) => File.WriteAllText(output, JsonSerializer.Serialize(value, new JsonSerializerOptions { WriteIndented = true }) + "\n");
 sealed class Hold : IRiderDecisionModel { public RiderDecision Decide(TrackSegment segment, RiderState rider) => new(rider.Lane); }
