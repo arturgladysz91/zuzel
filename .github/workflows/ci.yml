@@ -214,7 +214,7 @@ jobs:
           python tools/race-engine-readiness/compare.py captures/determinism-windows-latest/readiness
           python tools/race-engine-readiness/compare.py captures/determinism-ubuntu-latest/readiness
           python tools/rea001-safety-audit/compare.py captures/determinism-windows-latest/rea001 captures/determinism-ubuntu-latest/rea001 --report captures/rea001-platform-comparison.json
-          python tools/rea009-handoff-audit/compare.py captures/determinism-windows-latest/rea009 captures/determinism-ubuntu-latest/rea009 --platforms
+          python tools/rea009-handoff-audit/compare.py captures/determinism-windows-latest/rea009 captures/determinism-ubuntu-latest/rea009 --platforms --report captures/rea009-platform-comparison.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -224,6 +224,7 @@ jobs:
             captures/contested-performance-comparison.json
             captures/contact-decision-*.json*
             captures/rea001-platform-comparison.json
+            captures/rea009-platform-comparison.json
 
   python:
     runs-on: ubuntu-latest

@@ -1,5 +1,8 @@
 """REA-009 exact physical preservation and semantic completion evidence; no tolerances."""
 import argparse
+import gzip
+import hashlib
+import importlib.util
 import json
 import struct
 from pathlib import Path
@@ -65,6 +68,54 @@ def require_repro(directory):
     return case
 
 
+def compare_platforms(windows, ubuntu, expected=None, report_path=None):
+    # Reuse the established exact type/missing/null/IEEE map representation.
+    source = Path(__file__).resolve().parents[1] / 'rea001-safety-audit/compare.py'
+    spec = importlib.util.spec_from_file_location('rea001_exact_maps', source)
+    exact_maps = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(exact_maps)
+    if expected is None:
+        raw = (Path(__file__).resolve().parents[2] / 'tests/fixtures/rea009-native-b-portability.json').read_bytes().replace(b'\r\n', b'\n')
+        if hashlib.sha256(raw).hexdigest() != '7f8f48637dceafbef2e33cb90e821c8df86e6a1e6809b4e2ab20d5006e044099':
+            raise ValueError('REA-009 native-B evidence changed')
+        expected = json.loads(raw)
+    if expected.get('Schema') != 'rea009-native-b-portability-v1':
+        raise ValueError('Unknown native-B evidence schema')
+    cases, observed = {}, {}
+    for scenario in ('three-squeeze', 'four-close-regain'):
+        for configuration in 'ABC':
+            name = f'after-{scenario}-19-{configuration}'
+            left = require_repro(Path(windows) / name)
+            right = require_repro(Path(ubuntu) / name)
+            if any((row['Id'], row['Seed'], row['Configuration']) != (scenario, 19, configuration) for row in (left, right)):
+                raise ValueError('Wrong original decimal reproduction case')
+            if left['FinalHash'] != right['FinalHash']:
+                raise ValueError(f'Exact repaired final production state differs: {name}')
+            traces = []
+            for root in (windows, ubuntu):
+                with gzip.open(Path(root) / name / f'trace-{scenario}-19-{configuration}.json.gz') as stream:
+                    traces.append(json.load(stream))
+            differences = exact_maps.divergence_map(*traces)
+            if configuration != 'B' and (left['BehaviorHash'] != right['BehaviorHash'] or differences):
+                raise ValueError(f'Strict A/C behavior or complete trace differs: {name}')
+            hashes = {'Windows': left['BehaviorHash'], 'Ubuntu': right['BehaviorHash']}
+            if configuration == 'B' and hashes != expected['SummaryBehaviorHashes'][name]:
+                raise ValueError(f'Exact per-OS native-B behavior changed: {name}')
+            if differences:
+                observed[name] = differences
+            cases[name] = {'FinalStateExact': True, 'BehaviorHashes': hashes,
+                           'CompleteTraceExact': not differences, 'DivergentLeaves': len(differences),
+                           'TraceLeaves': {'Windows': len(traces[0]), 'Ubuntu': len(traces[1])}}
+    if observed != expected['Divergences']:
+        raise ValueError('Native-B divergence map changed (case/path/type/value/IEEE bits)')
+    result = {'Schema': 'rea009-platform-comparison-v1', 'Cases': cases,
+              'ObservedDivergences': observed,
+              'Interpretation': 'Exact final production states and strict A/C full traces; separate exact native-B diagnostic map. Existing historical and REA-001 maps remain independent.'}
+    if report_path is not None:
+        Path(report_path).write_text(json.dumps(result, indent=2) + '\n', encoding='utf-8')
+    return result
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('before', type=Path)
@@ -73,17 +124,8 @@ if __name__ == '__main__':
     parser.add_argument('--platforms', action='store_true')
     args = parser.parse_args()
     if args.platforms:
-        # Newly repaired cases have independent exact captures. Existing native-B
-        # portability pins remain under their existing dedicated audit.
-        for scenario in ('three-squeeze', 'four-close-regain'):
-            for configuration in 'ABC':
-                name = f'after-{scenario}-19-{configuration}'
-                left = require_repro(args.before / name)
-                right = require_repro(args.after / name)
-                for key in ('FinalHash', 'BehaviorHash'):
-                    if left[key] != right[key]:
-                        raise ValueError(f'Exact repaired-case platform divergence: {name}/{key}: {left[key]} != {right[key]}')
-        print('Six repaired production cases: exact Windows/Ubuntu final and complete behavior hashes.')
+        compare_platforms(args.before, args.after, report_path=args.report)
+        print('Six repaired final production states exact; strict A/C full traces exact; two native-B diagnostic maps exactly pinned (212 leaves).')
     else:
         result = compare_physical(json.loads(args.before.read_text()), json.loads(args.after.read_text()))
         if args.report:

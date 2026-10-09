@@ -1,0 +1,967 @@
+{
+  "BaseCommit": "cd19c399dfc97d7abbd2aca03d50aa2c94a76262",
+  "ProductionCommit": "7285430c8f1a563e6984c0e22cd74dfcdd8d7c78",
+  "Before": {
+    "Schema": "rea009-benchmark-v1",
+    "Samples": 9,
+    "Environment": {
+      "OS": "Microsoft Windows 10.0.19045",
+      "Runtime": ".NET 8.0.30",
+      "ProcessorCount": 16
+    },
+    "Warmup": "At least five runs and two seconds; nine samples by default; process-wide allocations include workers",
+    "TimedDecisionDegree": 4,
+    "ProjectionCounterDegree": 1,
+    "CounterProtocol": "One separate untimed run uses the existing synchronous capture hook; timings retain default parallel scheduling",
+    "Measurements": [
+      {
+        "Name": "balanced-motoarena",
+        "Failed": false,
+        "Warmups": 5,
+        "CountedWork": {
+          "SynchronousResolutions": 9500,
+          "ProjectionResolutions": 9356,
+          "CandidateTraversals": 3376,
+          "PrefixCacheHits": 6008,
+          "MotionNodes": 5624,
+          "CommittedSegments": 144,
+          "ContactEvaluations": 0
+        },
+        "Samples": [
+          {
+            "Milliseconds": 427.2824,
+            "AllocatedBytes": 187958768
+          },
+          {
+            "Milliseconds": 428.1212,
+            "AllocatedBytes": 187959024
+          },
+          {
+            "Milliseconds": 427.1187,
+            "AllocatedBytes": 187959952
+          },
+          {
+            "Milliseconds": 425.908,
+            "AllocatedBytes": 187957936
+          },
+          {
+            "Milliseconds": 426.5229,
+            "AllocatedBytes": 187958832
+          },
+          {
+            "Milliseconds": 425.9195,
+            "AllocatedBytes": 187958064
+          },
+          {
+            "Milliseconds": 424.0089,
+            "AllocatedBytes": 187958320
+          },
+          {
+            "Milliseconds": 422.0862,
+            "AllocatedBytes": 187958896
+          },
+          {
+            "Milliseconds": 424.1866,
+            "AllocatedBytes": 187958256
+          }
+        ]
+      },
+      {
+        "Name": "contact-heavy",
+        "Failed": false,
+        "Warmups": 5,
+        "CountedWork": {
+          "SynchronousResolutions": 3704,
+          "ProjectionResolutions": 3562,
+          "CandidateTraversals": 1478,
+          "PrefixCacheHits": 2436,
+          "MotionNodes": 2465,
+          "CommittedSegments": 66,
+          "ContactEvaluations": 347505
+        },
+        "Samples": [
+          {
+            "Milliseconds": 336.8196,
+            "AllocatedBytes": 78429160
+          },
+          {
+            "Milliseconds": 337.8767,
+            "AllocatedBytes": 78429416
+          },
+          {
+            "Milliseconds": 343.6677,
+            "AllocatedBytes": 78430568
+          },
+          {
+            "Milliseconds": 346.3342,
+            "AllocatedBytes": 78429800
+          },
+          {
+            "Milliseconds": 353.3054,
+            "AllocatedBytes": 78428296
+          },
+          {
+            "Milliseconds": 344.9412,
+            "AllocatedBytes": 78429496
+          },
+          {
+            "Milliseconds": 340.036,
+            "AllocatedBytes": 78429752
+          },
+          {
+            "Milliseconds": 342.1281,
+            "AllocatedBytes": 78428728
+          },
+          {
+            "Milliseconds": 341.7027,
+            "AllocatedBytes": 78428920
+          }
+        ]
+      },
+      {
+        "Name": "three-squeeze",
+        "Failed": true,
+        "Message": "Rider 1 is not in segment 1."
+      },
+      {
+        "Name": "three-squeeze-binary",
+        "Failed": false,
+        "Warmups": 8,
+        "CountedWork": {
+          "SynchronousResolutions": 6880,
+          "ProjectionResolutions": 6752,
+          "CandidateTraversals": 2816,
+          "PrefixCacheHits": 4544,
+          "MotionNodes": 4689,
+          "CommittedSegments": 128,
+          "ContactEvaluations": 0
+        },
+        "Samples": [
+          {
+            "Milliseconds": 265.0123,
+            "AllocatedBytes": 122414960
+          },
+          {
+            "Milliseconds": 263.7159,
+            "AllocatedBytes": 122415856
+          },
+          {
+            "Milliseconds": 262.0561,
+            "AllocatedBytes": 122415344
+          },
+          {
+            "Milliseconds": 269.0056,
+            "AllocatedBytes": 122415088
+          },
+          {
+            "Milliseconds": 265.561,
+            "AllocatedBytes": 122415448
+          },
+          {
+            "Milliseconds": 265.3299,
+            "AllocatedBytes": 122415728
+          },
+          {
+            "Milliseconds": 264.2765,
+            "AllocatedBytes": 122415344
+          },
+          {
+            "Milliseconds": 267.1216,
+            "AllocatedBytes": 122415024
+          },
+          {
+            "Milliseconds": 264.439,
+            "AllocatedBytes": 122415088
+          }
+        ]
+      },
+      {
+        "Name": "fixed-line",
+        "Failed": false,
+        "Warmups": 610,
+        "CountedWork": {
+          "SynchronousResolutions": 115,
+          "ProjectionResolutions": 0,
+          "CandidateTraversals": 0,
+          "PrefixCacheHits": 0,
+          "MotionNodes": 5040,
+          "CommittedSegments": 115,
+          "ContactEvaluations": 0
+        },
+        "Samples": [
+          {
+            "Milliseconds": 3.3833,
+            "AllocatedBytes": 2461064
+          },
+          {
+            "Milliseconds": 3.8431,
+            "AllocatedBytes": 2462696
+          },
+          {
+            "Milliseconds": 3.188,
+            "AllocatedBytes": 2461304
+          },
+          {
+            "Milliseconds": 3.1465,
+            "AllocatedBytes": 2461064
+          },
+          {
+            "Milliseconds": 3.0552,
+            "AllocatedBytes": 2461064
+          },
+          {
+            "Milliseconds": 3.0291,
+            "AllocatedBytes": 2461064
+          },
+          {
+            "Milliseconds": 3.1559,
+            "AllocatedBytes": 2461064
+          },
+          {
+            "Milliseconds": 3.4651,
+            "AllocatedBytes": 2461064
+          },
+          {
+            "Milliseconds": 3.635,
+            "AllocatedBytes": 2462696
+          }
+        ]
+      },
+      {
+        "Name": "rich-trajectory",
+        "Failed": false,
+        "Warmups": 172,
+        "CountedWork": {
+          "SynchronousResolutions": 93,
+          "ProjectionResolutions": 93,
+          "CandidateTraversals": 35,
+          "PrefixCacheHits": 82,
+          "MotionNodes": 6847,
+          "CommittedSegments": 0,
+          "ContactEvaluations": 0
+        },
+        "Samples": [
+          {
+            "Milliseconds": 11.8596,
+            "AllocatedBytes": 4057112
+          },
+          {
+            "Milliseconds": 11.4601,
+            "AllocatedBytes": 4055976
+          },
+          {
+            "Milliseconds": 11.31,
+            "AllocatedBytes": 4055976
+          },
+          {
+            "Milliseconds": 11.431,
+            "AllocatedBytes": 4055976
+          },
+          {
+            "Milliseconds": 12.1036,
+            "AllocatedBytes": 4057112
+          },
+          {
+            "Milliseconds": 11.2646,
+            "AllocatedBytes": 4055976
+          },
+          {
+            "Milliseconds": 11.2508,
+            "AllocatedBytes": 4055976
+          },
+          {
+            "Milliseconds": 11.3794,
+            "AllocatedBytes": 4055976
+          },
+          {
+            "Milliseconds": 12.0609,
+            "AllocatedBytes": 4057112
+          }
+        ]
+      },
+      {
+        "Name": "lean-cached-trajectory",
+        "Failed": false,
+        "Warmups": 204,
+        "CountedWork": {
+          "SynchronousResolutions": 93,
+          "ProjectionResolutions": 93,
+          "CandidateTraversals": 70,
+          "PrefixCacheHits": 257,
+          "MotionNodes": 0,
+          "CommittedSegments": 0,
+          "ContactEvaluations": 0
+        },
+        "Samples": [
+          {
+            "Milliseconds": 9.635,
+            "AllocatedBytes": 1494792
+          },
+          {
+            "Milliseconds": 9.889,
+            "AllocatedBytes": 1494792
+          },
+          {
+            "Milliseconds": 9.9739,
+            "AllocatedBytes": 1494792
+          },
+          {
+            "Milliseconds": 9.6187,
+            "AllocatedBytes": 1494792
+          },
+          {
+            "Milliseconds": 10.3465,
+            "AllocatedBytes": 1494792
+          },
+          {
+            "Milliseconds": 9.5038,
+            "AllocatedBytes": 1494792
+          },
+          {
+            "Milliseconds": 9.6636,
+            "AllocatedBytes": 1494792
+          },
+          {
+            "Milliseconds": 10.1118,
+            "AllocatedBytes": 1494792
+          },
+          {
+            "Milliseconds": 9.5841,
+            "AllocatedBytes": 1494792
+          }
+        ]
+      },
+      {
+        "Name": "decimal-single-segment",
+        "Failed": false,
+        "Warmups": 41329,
+        "CountedWork": {
+          "SynchronousResolutions": 1,
+          "ProjectionResolutions": 0,
+          "CandidateTraversals": 0,
+          "PrefixCacheHits": 0,
+          "MotionNodes": 33,
+          "CommittedSegments": 1,
+          "ContactEvaluations": 0
+        },
+        "Samples": [
+          {
+            "Milliseconds": 0.0446,
+            "AllocatedBytes": 35824
+          },
+          {
+            "Milliseconds": 0.0443,
+            "AllocatedBytes": 35824
+          },
+          {
+            "Milliseconds": 0.0451,
+            "AllocatedBytes": 35824
+          },
+          {
+            "Milliseconds": 0.0466,
+            "AllocatedBytes": 35824
+          },
+          {
+            "Milliseconds": 0.0447,
+            "AllocatedBytes": 35824
+          },
+          {
+            "Milliseconds": 0.0444,
+            "AllocatedBytes": 35824
+          },
+          {
+            "Milliseconds": 0.0441,
+            "AllocatedBytes": 35824
+          },
+          {
+            "Milliseconds": 0.0448,
+            "AllocatedBytes": 35824
+          },
+          {
+            "Milliseconds": 0.0452,
+            "AllocatedBytes": 35824
+          }
+        ]
+      }
+    ]
+  },
+  "After": {
+    "Schema": "rea009-benchmark-v1",
+    "Samples": 9,
+    "Environment": {
+      "OS": "Microsoft Windows 10.0.19045",
+      "Runtime": ".NET 8.0.30",
+      "ProcessorCount": 16
+    },
+    "Warmup": "At least five runs and two seconds; nine samples by default; process-wide allocations include workers",
+    "TimedDecisionDegree": 4,
+    "ProjectionCounterDegree": 1,
+    "CounterProtocol": "One separate untimed run uses the existing synchronous capture hook; timings retain default parallel scheduling",
+    "Measurements": [
+      {
+        "Name": "balanced-motoarena",
+        "Failed": false,
+        "Warmups": 5,
+        "CountedWork": {
+          "SynchronousResolutions": 9500,
+          "ProjectionResolutions": 9356,
+          "CandidateTraversals": 3376,
+          "PrefixCacheHits": 6008,
+          "MotionNodes": 5624,
+          "CommittedSegments": 144,
+          "ContactEvaluations": 0
+        },
+        "Samples": [
+          {
+            "Milliseconds": 427.9857,
+            "AllocatedBytes": 187958984
+          },
+          {
+            "Milliseconds": 425.9097,
+            "AllocatedBytes": 187958896
+          },
+          {
+            "Milliseconds": 429.0708,
+            "AllocatedBytes": 187960144
+          },
+          {
+            "Milliseconds": 424.9334,
+            "AllocatedBytes": 187957552
+          },
+          {
+            "Milliseconds": 427.1035,
+            "AllocatedBytes": 187957656
+          },
+          {
+            "Milliseconds": 425.4343,
+            "AllocatedBytes": 187958000
+          },
+          {
+            "Milliseconds": 422.2933,
+            "AllocatedBytes": 187957936
+          },
+          {
+            "Milliseconds": 426.3307,
+            "AllocatedBytes": 187958256
+          },
+          {
+            "Milliseconds": 426.1486,
+            "AllocatedBytes": 187957616
+          }
+        ]
+      },
+      {
+        "Name": "contact-heavy",
+        "Failed": false,
+        "Warmups": 5,
+        "CountedWork": {
+          "SynchronousResolutions": 3704,
+          "ProjectionResolutions": 3562,
+          "CandidateTraversals": 1478,
+          "PrefixCacheHits": 2436,
+          "MotionNodes": 2465,
+          "CommittedSegments": 66,
+          "ContactEvaluations": 347505
+        },
+        "Samples": [
+          {
+            "Milliseconds": 338.6868,
+            "AllocatedBytes": 78429288
+          },
+          {
+            "Milliseconds": 345.091,
+            "AllocatedBytes": 78429480
+          },
+          {
+            "Milliseconds": 344.3833,
+            "AllocatedBytes": 78430440
+          },
+          {
+            "Milliseconds": 336.1173,
+            "AllocatedBytes": 78429608
+          },
+          {
+            "Milliseconds": 351.5812,
+            "AllocatedBytes": 78428120
+          },
+          {
+            "Milliseconds": 343.5645,
+            "AllocatedBytes": 78430104
+          },
+          {
+            "Milliseconds": 345.1164,
+            "AllocatedBytes": 78429880
+          },
+          {
+            "Milliseconds": 343.7371,
+            "AllocatedBytes": 78428216
+          },
+          {
+            "Milliseconds": 338.1014,
+            "AllocatedBytes": 78428728
+          }
+        ]
+      },
+      {
+        "Name": "three-squeeze",
+        "Failed": false,
+        "Warmups": 8,
+        "CountedWork": {
+          "SynchronousResolutions": 6880,
+          "ProjectionResolutions": 6752,
+          "CandidateTraversals": 2816,
+          "PrefixCacheHits": 4544,
+          "MotionNodes": 4701,
+          "CommittedSegments": 128,
+          "ContactEvaluations": 0
+        },
+        "Samples": [
+          {
+            "Milliseconds": 262.0034,
+            "AllocatedBytes": 122554440
+          },
+          {
+            "Milliseconds": 261.1063,
+            "AllocatedBytes": 122553608
+          },
+          {
+            "Milliseconds": 264.5701,
+            "AllocatedBytes": 122553736
+          },
+          {
+            "Milliseconds": 259.3131,
+            "AllocatedBytes": 122554248
+          },
+          {
+            "Milliseconds": 260.4531,
+            "AllocatedBytes": 122553928
+          },
+          {
+            "Milliseconds": 267.7352,
+            "AllocatedBytes": 122554888
+          },
+          {
+            "Milliseconds": 263.1964,
+            "AllocatedBytes": 122554056
+          },
+          {
+            "Milliseconds": 269.558,
+            "AllocatedBytes": 122554544
+          },
+          {
+            "Milliseconds": 279.7492,
+            "AllocatedBytes": 122554632
+          }
+        ]
+      },
+      {
+        "Name": "three-squeeze-binary",
+        "Failed": false,
+        "Warmups": 8,
+        "CountedWork": {
+          "SynchronousResolutions": 6880,
+          "ProjectionResolutions": 6752,
+          "CandidateTraversals": 2816,
+          "PrefixCacheHits": 4544,
+          "MotionNodes": 4689,
+          "CommittedSegments": 128,
+          "ContactEvaluations": 0
+        },
+        "Samples": [
+          {
+            "Milliseconds": 265.3175,
+            "AllocatedBytes": 122415280
+          },
+          {
+            "Milliseconds": 264.4356,
+            "AllocatedBytes": 122414488
+          },
+          {
+            "Milliseconds": 264.3609,
+            "AllocatedBytes": 122414448
+          },
+          {
+            "Milliseconds": 261.5594,
+            "AllocatedBytes": 122415024
+          },
+          {
+            "Milliseconds": 261.9846,
+            "AllocatedBytes": 122414960
+          },
+          {
+            "Milliseconds": 263.8258,
+            "AllocatedBytes": 122415280
+          },
+          {
+            "Milliseconds": 267.1068,
+            "AllocatedBytes": 122414256
+          },
+          {
+            "Milliseconds": 266.2013,
+            "AllocatedBytes": 122413744
+          },
+          {
+            "Milliseconds": 261.5676,
+            "AllocatedBytes": 122414512
+          }
+        ]
+      },
+      {
+        "Name": "fixed-line",
+        "Failed": false,
+        "Warmups": 604,
+        "CountedWork": {
+          "SynchronousResolutions": 115,
+          "ProjectionResolutions": 0,
+          "CandidateTraversals": 0,
+          "PrefixCacheHits": 0,
+          "MotionNodes": 5040,
+          "CommittedSegments": 115,
+          "ContactEvaluations": 0
+        },
+        "Samples": [
+          {
+            "Milliseconds": 3.5142,
+            "AllocatedBytes": 2461304
+          },
+          {
+            "Milliseconds": 3.1298,
+            "AllocatedBytes": 2461064
+          },
+          {
+            "Milliseconds": 3.0963,
+            "AllocatedBytes": 2461064
+          },
+          {
+            "Milliseconds": 3.2063,
+            "AllocatedBytes": 2461064
+          },
+          {
+            "Milliseconds": 3.4883,
+            "AllocatedBytes": 2461064
+          },
+          {
+            "Milliseconds": 3.232,
+            "AllocatedBytes": 2461064
+          },
+          {
+            "Milliseconds": 3.2951,
+            "AllocatedBytes": 2462696
+          },
+          {
+            "Milliseconds": 3.086,
+            "AllocatedBytes": 2461304
+          },
+          {
+            "Milliseconds": 3.1793,
+            "AllocatedBytes": 2461064
+          }
+        ]
+      },
+      {
+        "Name": "rich-trajectory",
+        "Failed": false,
+        "Warmups": 172,
+        "CountedWork": {
+          "SynchronousResolutions": 93,
+          "ProjectionResolutions": 93,
+          "CandidateTraversals": 35,
+          "PrefixCacheHits": 82,
+          "MotionNodes": 6847,
+          "CommittedSegments": 0,
+          "ContactEvaluations": 0
+        },
+        "Samples": [
+          {
+            "Milliseconds": 11.2894,
+            "AllocatedBytes": 4055976
+          },
+          {
+            "Milliseconds": 11.3926,
+            "AllocatedBytes": 4055976
+          },
+          {
+            "Milliseconds": 11.6145,
+            "AllocatedBytes": 4055976
+          },
+          {
+            "Milliseconds": 11.4267,
+            "AllocatedBytes": 4057112
+          },
+          {
+            "Milliseconds": 11.7604,
+            "AllocatedBytes": 4055976
+          },
+          {
+            "Milliseconds": 11.5426,
+            "AllocatedBytes": 4055976
+          },
+          {
+            "Milliseconds": 11.4313,
+            "AllocatedBytes": 4055976
+          },
+          {
+            "Milliseconds": 12.9722,
+            "AllocatedBytes": 4057112
+          },
+          {
+            "Milliseconds": 11.4899,
+            "AllocatedBytes": 4055976
+          }
+        ]
+      },
+      {
+        "Name": "lean-cached-trajectory",
+        "Failed": false,
+        "Warmups": 203,
+        "CountedWork": {
+          "SynchronousResolutions": 93,
+          "ProjectionResolutions": 93,
+          "CandidateTraversals": 70,
+          "PrefixCacheHits": 257,
+          "MotionNodes": 0,
+          "CommittedSegments": 0,
+          "ContactEvaluations": 0
+        },
+        "Samples": [
+          {
+            "Milliseconds": 9.753,
+            "AllocatedBytes": 1494792
+          },
+          {
+            "Milliseconds": 9.483,
+            "AllocatedBytes": 1494792
+          },
+          {
+            "Milliseconds": 10.464,
+            "AllocatedBytes": 1494792
+          },
+          {
+            "Milliseconds": 9.6301,
+            "AllocatedBytes": 1494792
+          },
+          {
+            "Milliseconds": 9.5544,
+            "AllocatedBytes": 1494792
+          },
+          {
+            "Milliseconds": 9.7521,
+            "AllocatedBytes": 1494792
+          },
+          {
+            "Milliseconds": 9.4592,
+            "AllocatedBytes": 1494792
+          },
+          {
+            "Milliseconds": 10.0708,
+            "AllocatedBytes": 1494792
+          },
+          {
+            "Milliseconds": 9.468,
+            "AllocatedBytes": 1494792
+          }
+        ]
+      },
+      {
+        "Name": "decimal-single-segment",
+        "Failed": false,
+        "Warmups": 41710,
+        "CountedWork": {
+          "SynchronousResolutions": 1,
+          "ProjectionResolutions": 0,
+          "CandidateTraversals": 0,
+          "PrefixCacheHits": 0,
+          "MotionNodes": 33,
+          "CommittedSegments": 1,
+          "ContactEvaluations": 0
+        },
+        "Samples": [
+          {
+            "Milliseconds": 0.0448,
+            "AllocatedBytes": 35872
+          },
+          {
+            "Milliseconds": 0.0445,
+            "AllocatedBytes": 35872
+          },
+          {
+            "Milliseconds": 0.0451,
+            "AllocatedBytes": 35872
+          },
+          {
+            "Milliseconds": 0.044,
+            "AllocatedBytes": 35872
+          },
+          {
+            "Milliseconds": 0.0439,
+            "AllocatedBytes": 35872
+          },
+          {
+            "Milliseconds": 0.0446,
+            "AllocatedBytes": 35872
+          },
+          {
+            "Milliseconds": 0.0442,
+            "AllocatedBytes": 35872
+          },
+          {
+            "Milliseconds": 0.0436,
+            "AllocatedBytes": 35872
+          },
+          {
+            "Milliseconds": 0.0444,
+            "AllocatedBytes": 35872
+          }
+        ]
+      }
+    ]
+  },
+  "Comparison": {
+    "Schema": "rea009-benchmark-comparison-v1",
+    "Rows": [
+      {
+        "Name": "balanced-motoarena",
+        "BeforeMedianMs": 425.9195,
+        "AfterMedianMs": 426.1486,
+        "Percent": 0.0537895071721195,
+        "BeforeMedianBytes": 187958768,
+        "AfterMedianBytes": 187958000,
+        "WorkExact": true,
+        "Work": {
+          "SynchronousResolutions": 9500,
+          "ProjectionResolutions": 9356,
+          "CandidateTraversals": 3376,
+          "PrefixCacheHits": 6008,
+          "MotionNodes": 5624,
+          "CommittedSegments": 144,
+          "ContactEvaluations": 0
+        }
+      },
+      {
+        "Name": "contact-heavy",
+        "BeforeMedianMs": 342.1281,
+        "AfterMedianMs": 343.7371,
+        "Percent": 0.47029168314440817,
+        "BeforeMedianBytes": 78429416,
+        "AfterMedianBytes": 78429480,
+        "WorkExact": true,
+        "Work": {
+          "SynchronousResolutions": 3704,
+          "ProjectionResolutions": 3562,
+          "CandidateTraversals": 1478,
+          "PrefixCacheHits": 2436,
+          "MotionNodes": 2465,
+          "CommittedSegments": 66,
+          "ContactEvaluations": 347505
+        }
+      },
+      {
+        "Name": "three-squeeze",
+        "BeforeFailed": true,
+        "AfterFailed": false,
+        "BeforeMessage": "Rider 1 is not in segment 1.",
+        "AfterMedianMs": 263.1964,
+        "AfterMedianBytes": 122554248,
+        "Work": {
+          "SynchronousResolutions": 6880,
+          "ProjectionResolutions": 6752,
+          "CandidateTraversals": 2816,
+          "PrefixCacheHits": 4544,
+          "MotionNodes": 4701,
+          "CommittedSegments": 128,
+          "ContactEvaluations": 0
+        }
+      },
+      {
+        "Name": "three-squeeze-binary",
+        "BeforeMedianMs": 265.0123,
+        "AfterMedianMs": 264.3609,
+        "Percent": -0.2457999119286014,
+        "BeforeMedianBytes": 122415344,
+        "AfterMedianBytes": 122414512,
+        "WorkExact": true,
+        "Work": {
+          "SynchronousResolutions": 6880,
+          "ProjectionResolutions": 6752,
+          "CandidateTraversals": 2816,
+          "PrefixCacheHits": 4544,
+          "MotionNodes": 4689,
+          "CommittedSegments": 128,
+          "ContactEvaluations": 0
+        }
+      },
+      {
+        "Name": "fixed-line",
+        "BeforeMedianMs": 3.188,
+        "AfterMedianMs": 3.2063,
+        "Percent": 0.574027603513172,
+        "BeforeMedianBytes": 2461064,
+        "AfterMedianBytes": 2461064,
+        "WorkExact": true,
+        "Work": {
+          "SynchronousResolutions": 115,
+          "ProjectionResolutions": 0,
+          "CandidateTraversals": 0,
+          "PrefixCacheHits": 0,
+          "MotionNodes": 5040,
+          "CommittedSegments": 115,
+          "ContactEvaluations": 0
+        }
+      },
+      {
+        "Name": "rich-trajectory",
+        "BeforeMedianMs": 11.431,
+        "AfterMedianMs": 11.4899,
+        "Percent": 0.5152655060799649,
+        "BeforeMedianBytes": 4055976,
+        "AfterMedianBytes": 4055976,
+        "WorkExact": true,
+        "Work": {
+          "SynchronousResolutions": 93,
+          "ProjectionResolutions": 93,
+          "CandidateTraversals": 35,
+          "PrefixCacheHits": 82,
+          "MotionNodes": 6847,
+          "CommittedSegments": 0,
+          "ContactEvaluations": 0
+        }
+      },
+      {
+        "Name": "lean-cached-trajectory",
+        "BeforeMedianMs": 9.6636,
+        "AfterMedianMs": 9.6301,
+        "Percent": -0.3466616995736582,
+        "BeforeMedianBytes": 1494792,
+        "AfterMedianBytes": 1494792,
+        "WorkExact": true,
+        "Work": {
+          "SynchronousResolutions": 93,
+          "ProjectionResolutions": 93,
+          "CandidateTraversals": 70,
+          "PrefixCacheHits": 257,
+          "MotionNodes": 0,
+          "CommittedSegments": 0,
+          "ContactEvaluations": 0
+        }
+      },
+      {
+        "Name": "decimal-single-segment",
+        "BeforeMedianMs": 0.0447,
+        "AfterMedianMs": 0.0444,
+        "Percent": -0.6711409395973034,
+        "BeforeMedianBytes": 35824,
+        "AfterMedianBytes": 35872,
+        "WorkExact": true,
+        "Work": {
+          "SynchronousResolutions": 1,
+          "ProjectionResolutions": 0,
+          "CandidateTraversals": 0,
+          "PrefixCacheHits": 0,
+          "MotionNodes": 33,
+          "CommittedSegments": 1,
+          "ContactEvaluations": 0
+        }
+      }
+    ]
+  }
+}
