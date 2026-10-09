@@ -137,6 +137,12 @@ input-order parity. Complete Python tests additionally reject new corrected
 platform bit/type divergences. Release builds use warnings as errors.
 
 CI keeps nine jobs and every older strict platform/golden comparison. The old
+legacy-source extraction fixtures and 39-reader manifest are unchanged. A new
+hash-pinned REA-001 fixture reverses only the exact exception declarations,
+finite-root exception classification and solver-generated non-finite-time guard
+before the existing historical extractions/hash checks. Tampering with that guard
+still fails; no source allowlist or legacy arithmetic is widened.
+The old
 readiness `src`-unchanged guard belonged to an observation-only PR; it is replaced
 by a frozen-data/audit-evidence guard for this authorized production correction.
 Its six-case exact baseline comparison remains. New fresh per-OS before/after
