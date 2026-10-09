@@ -147,8 +147,21 @@ readiness `src`-unchanged guard belonged to an observation-only PR; it is replac
 by a frozen-data/audit-evidence guard for this authorized production correction.
 Its six-case exact baseline comparison remains. New fresh per-OS before/after
 outside A/B/C captures verify original failures, A preservation and B/C completed
-reversal/observer parity. Corrected B/C additionally require complete Windows/Ubuntu
-typed FullAudit trace equality. The unchanged contested-performance comparator
+reversal/observer parity. Corrected B/C require identical complete final riders,
+classification, log and surface state across Windows/Ubuntu. C additionally requires
+exact Summary behavior and complete typed FullAudit trace equality. B retains the
+existing native geometry because physical consequences are OFF. Its completed
+trace exposes **121 double diagnostic leaves** with different platform bits; no
+decisions, actual motions, final state or nonnumeric fields differ. Original main
+aborted before this completed trace existed, so these are newly observable
+portability evidence, not a completed original-main baseline. The new separate
+[native B evidence](../../tests/fixtures/rea001-native-b-portability.json) records
+every case/path/type and both IEEE patterns, plus each platform's exact Summary
+behavior hash. CI rejects any introduced, removed or changed divergence and saves
+the complete expected/observed maps. Geometry arithmetic remains unchanged; no
+rounding, tolerance or diagnostic-field exclusion is used. This remains a numerical
+portability limitation, separate from REA-001 and without editing issue #62.
+The unchanged contested-performance comparator
 still requires the original **22 cases / 1,088 leaves** divergence map to remain
 identical, with no rounding, tolerance or excluded cases. Final-head 9/9 results
 are linked from the Draft PR after the run completes.

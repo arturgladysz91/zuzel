@@ -7,8 +7,16 @@ All comparisons use typed IEEE values or hashes over those complete values.
 
 CI uses new `results/rea001/before-A` through `after-C` directories. Neither the
 342-case offline matrix nor frozen historical evidence is rewritten. The two new
-enabled cases receive strict Windows/Ubuntu comparison independently of the older
-22-case portability map, whose existing comparator remains unchanged.
+enabled cases require identical complete final rider/classification/log/surface
+states. C additionally requires strict complete Summary/FullAudit trace equality.
+B retains native geometry with physical consequences OFF: its complete diagnostic
+divergence map and each OS's exact Summary behavior hash are pinned in the new
+`tests/fixtures/rea001-native-b-portability.json`. Main aborted before these 121
+double diagnostic leaves became observable; they are new evidence, not a claimed
+completed baseline. Every introduced, removed or changed case/path/type/bit pattern
+fails. No rounding or tolerance is used. The older 22-case portability map and all
+existing strict golden tests remain unchanged. CI uploads the entire observed and
+expected new map as `rea001-platform-comparison.json`.
 
 The benchmark runs normal Motoarena C, contact-heavy C and outside/7 B/C, with one
 unmeasured warmup and five measured fresh heats. It counts materializations only
