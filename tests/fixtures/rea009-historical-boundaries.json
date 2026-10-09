@@ -1,0 +1,1814 @@
+{
+  "Schema": "rea009-historical-topology-v1",
+  "BaseMainSha": "cd19c399dfc97d7abbd2aca03d50aa2c94a76262",
+  "Changes": {
+    "four-separated/False/False": {
+      "root[0].Changes[0].Position.SegmentIndex": {
+        "BeforePresent": true,
+        "Before": 4,
+        "AfterPresent": true,
+        "After": 5
+      },
+      "root[0].Changes[0].Position.SegmentProgress": {
+        "BeforePresent": true,
+        "Before": "float:3F800000",
+        "AfterPresent": true,
+        "After": "float:00000000"
+      },
+      "root[0].Changes[0].Position.TotalSegmentProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013FFFFFF400000",
+        "AfterPresent": true,
+        "After": "double:4014000000000000"
+      },
+      "root[0].Motions[0].ExitBoundary": {
+        "BeforePresent": true,
+        "Before": null,
+        "AfterPresent": false,
+        "After": null
+      },
+      "root[0].Motions[0].ExitBoundary.CanonicalProgress": {
+        "BeforePresent": false,
+        "Before": null,
+        "AfterPresent": true,
+        "After": "double:4014000000000000"
+      },
+      "root[0].Motions[0].ExitBoundary.FromPhysicalOffsetMeters": {
+        "BeforePresent": false,
+        "Before": null,
+        "AfterPresent": true,
+        "After": "float:40400000"
+      },
+      "root[0].Motions[0].ExitBoundary.FromSegmentId": {
+        "BeforePresent": false,
+        "Before": null,
+        "AfterPresent": true,
+        "After": 4
+      },
+      "root[0].Motions[0].ExitBoundary.HasPhysicalOffsetDiscontinuity": {
+        "BeforePresent": false,
+        "Before": null,
+        "AfterPresent": true,
+        "After": false
+      },
+      "root[0].Motions[0].ExitBoundary.LateralPosition": {
+        "BeforePresent": false,
+        "Before": null,
+        "AfterPresent": true,
+        "After": "float:3F800000"
+      },
+      "root[0].Motions[0].ExitBoundary.ToPhysicalOffsetMeters": {
+        "BeforePresent": false,
+        "Before": null,
+        "AfterPresent": true,
+        "After": "float:40400000"
+      },
+      "root[0].Motions[0].ExitBoundary.ToSegmentId": {
+        "BeforePresent": false,
+        "Before": null,
+        "AfterPresent": true,
+        "After": 5
+      },
+      "root[0].Motions[0].Final.CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013FFFFFF400000",
+        "AfterPresent": true,
+        "After": "double:4014000000000000"
+      },
+      "root[0].Motions[0].Nodes[10].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4010DDDDDDC6BCA2",
+        "AfterPresent": true,
+        "After": "double:4010DDDDDDE86BCA"
+      },
+      "root[0].Motions[0].Nodes[11].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4010EEEEEED435E5",
+        "AfterPresent": true,
+        "After": "double:4010EEEEEEF9435E"
+      },
+      "root[0].Motions[0].Nodes[12].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4010FFFFFFE1AF28",
+        "AfterPresent": true,
+        "After": "double:40110000000A1AF2"
+      },
+      "root[0].Motions[0].Nodes[13].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011111110EF286C",
+        "AfterPresent": true,
+        "After": "double:40111111111AF287"
+      },
+      "root[0].Motions[0].Nodes[13].SegmentProgress": {
+        "BeforePresent": true,
+        "Before": "float:3E888888",
+        "AfterPresent": true,
+        "After": "float:3E888889"
+      },
+      "root[0].Motions[0].Nodes[14].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011222221FCA1AF",
+        "AfterPresent": true,
+        "After": "double:40112222222BCA1B"
+      },
+      "root[0].Motions[0].Nodes[15].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:40113333330A1AF2",
+        "AfterPresent": true,
+        "After": "double:40113333333CA1AF"
+      },
+      "root[0].Motions[0].Nodes[16].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011444444179436",
+        "AfterPresent": true,
+        "After": "double:40114444444D7943"
+      },
+      "root[0].Motions[0].Nodes[17].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011555555250D79",
+        "AfterPresent": true,
+        "After": "double:40115555555E50D8"
+      },
+      "root[0].Motions[0].Nodes[18].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:40116666663286BD",
+        "AfterPresent": true,
+        "After": "double:40116666666F286C"
+      },
+      "root[0].Motions[0].Nodes[19].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011777777400000",
+        "AfterPresent": true,
+        "After": "double:4011777777800000"
+      },
+      "root[0].Motions[0].Nodes[1].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:40104444444D7943",
+        "AfterPresent": true,
+        "After": "double:401044444450D794"
+      },
+      "root[0].Motions[0].Nodes[20].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:40118888884D7943",
+        "AfterPresent": true,
+        "After": "double:401188888890D794"
+      },
+      "root[0].Motions[0].Nodes[21].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:40119999995AF287",
+        "AfterPresent": true,
+        "After": "double:4011999999A1AF28"
+      },
+      "root[0].Motions[0].Nodes[22].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011AAAAAA686BCA",
+        "AfterPresent": true,
+        "After": "double:4011AAAAAAB286BD"
+      },
+      "root[0].Motions[0].Nodes[23].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011BBBBBB75E50D",
+        "AfterPresent": true,
+        "After": "double:4011BBBBBBC35E51"
+      },
+      "root[0].Motions[0].Nodes[24].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011CCCCCC835E51",
+        "AfterPresent": true,
+        "After": "double:4011CCCCCCD435E5"
+      },
+      "root[0].Motions[0].Nodes[25].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011DDDDDD90D794",
+        "AfterPresent": true,
+        "After": "double:4011DDDDDDE50D79"
+      },
+      "root[0].Motions[0].Nodes[26].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011EEEEEE9E50D8",
+        "AfterPresent": true,
+        "After": "double:4011EEEEEEF5E50D"
+      },
+      "root[0].Motions[0].Nodes[27].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011FFFFFFABCA1B",
+        "AfterPresent": true,
+        "After": "double:401200000006BCA2"
+      },
+      "root[0].Motions[0].Nodes[28].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012111110B9435E",
+        "AfterPresent": true,
+        "After": "double:4012111111179436"
+      },
+      "root[0].Motions[0].Nodes[29].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012222221C6BCA2",
+        "AfterPresent": true,
+        "After": "double:4012222222286BCA"
+      },
+      "root[0].Motions[0].Nodes[29].SegmentProgress": {
+        "BeforePresent": true,
+        "Before": "float:3F088888",
+        "AfterPresent": true,
+        "After": "float:3F088889"
+      },
+      "root[0].Motions[0].Nodes[2].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:40105555555AF287",
+        "AfterPresent": true,
+        "After": "double:401055555561AF28"
+      },
+      "root[0].Motions[0].Nodes[30].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012333332D435E5",
+        "AfterPresent": true,
+        "After": "double:401233333339435E"
+      },
+      "root[0].Motions[0].Nodes[31].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012444443E1AF28",
+        "AfterPresent": true,
+        "After": "double:40124444444A1AF2"
+      },
+      "root[0].Motions[0].Nodes[32].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012555554EF286C",
+        "AfterPresent": true,
+        "After": "double:40125555555AF287"
+      },
+      "root[0].Motions[0].Nodes[33].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012666665FCA1AF",
+        "AfterPresent": true,
+        "After": "double:40126666666BCA1B"
+      },
+      "root[0].Motions[0].Nodes[33].SegmentProgress": {
+        "BeforePresent": true,
+        "Before": "float:3F199999",
+        "AfterPresent": true,
+        "After": "float:3F19999A"
+      },
+      "root[0].Motions[0].Nodes[34].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:40127777770A1AF2",
+        "AfterPresent": true,
+        "After": "double:40127777777CA1AF"
+      },
+      "root[0].Motions[0].Nodes[35].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012888888179436",
+        "AfterPresent": true,
+        "After": "double:40128888888D7943"
+      },
+      "root[0].Motions[0].Nodes[36].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012999999250D79",
+        "AfterPresent": true,
+        "After": "double:40129999999E50D8"
+      },
+      "root[0].Motions[0].Nodes[37].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012AAAAAA3286BD",
+        "AfterPresent": true,
+        "After": "double:4012AAAAAAAF286C"
+      },
+      "root[0].Motions[0].Nodes[38].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012BBBBBB400000",
+        "AfterPresent": true,
+        "After": "double:4012BBBBBBC00000"
+      },
+      "root[0].Motions[0].Nodes[39].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012CCCCCC4D7943",
+        "AfterPresent": true,
+        "After": "double:4012CCCCCCD0D794"
+      },
+      "root[0].Motions[0].Nodes[3].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4010666666686BCA",
+        "AfterPresent": true,
+        "After": "double:40106666667286BD"
+      },
+      "root[0].Motions[0].Nodes[40].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012DDDDDD5AF287",
+        "AfterPresent": true,
+        "After": "double:4012DDDDDDE1AF28"
+      },
+      "root[0].Motions[0].Nodes[41].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012EEEEEE686BCA",
+        "AfterPresent": true,
+        "After": "double:4012EEEEEEF286BD"
+      },
+      "root[0].Motions[0].Nodes[42].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012FFFFFF75E50D",
+        "AfterPresent": true,
+        "After": "double:4013000000035E51"
+      },
+      "root[0].Motions[0].Nodes[43].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013111110835E51",
+        "AfterPresent": true,
+        "After": "double:40131111111435E5"
+      },
+      "root[0].Motions[0].Nodes[44].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:401322222190D794",
+        "AfterPresent": true,
+        "After": "double:4013222222250D79"
+      },
+      "root[0].Motions[0].Nodes[44].SegmentProgress": {
+        "BeforePresent": true,
+        "Before": "float:3F488888",
+        "AfterPresent": true,
+        "After": "float:3F488889"
+      },
+      "root[0].Motions[0].Nodes[45].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:40133333329E50D8",
+        "AfterPresent": true,
+        "After": "double:401333333335E50E"
+      },
+      "root[0].Motions[0].Nodes[46].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013444443ABCA1B",
+        "AfterPresent": true,
+        "After": "double:401344444446BCA2"
+      },
+      "root[0].Motions[0].Nodes[47].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013555554B9435E",
+        "AfterPresent": true,
+        "After": "double:4013555555579436"
+      },
+      "root[0].Motions[0].Nodes[48].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013666665C6BCA2",
+        "AfterPresent": true,
+        "After": "double:4013666666686BCA"
+      },
+      "root[0].Motions[0].Nodes[48].SegmentProgress": {
+        "BeforePresent": true,
+        "Before": "float:3F599999",
+        "AfterPresent": true,
+        "After": "float:3F59999A"
+      },
+      "root[0].Motions[0].Nodes[49].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013777776D435E5",
+        "AfterPresent": true,
+        "After": "double:401377777779435E"
+      },
+      "root[0].Motions[0].Nodes[4].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:401077777775E50D",
+        "AfterPresent": true,
+        "After": "double:4010777777835E51"
+      },
+      "root[0].Motions[0].Nodes[50].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013888887E1AF28",
+        "AfterPresent": true,
+        "After": "double:40138888888A1AF2"
+      },
+      "root[0].Motions[0].Nodes[51].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013999998EF286C",
+        "AfterPresent": true,
+        "After": "double:40139999999AF287"
+      },
+      "root[0].Motions[0].Nodes[52].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013AAAAA9FCA1AF",
+        "AfterPresent": true,
+        "After": "double:4013AAAAAAABCA1B"
+      },
+      "root[0].Motions[0].Nodes[52].SegmentProgress": {
+        "BeforePresent": true,
+        "Before": "float:3F6AAAAA",
+        "AfterPresent": true,
+        "After": "float:3F6AAAAB"
+      },
+      "root[0].Motions[0].Nodes[53].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013BBBBBB0A1AF2",
+        "AfterPresent": true,
+        "After": "double:4013BBBBBBBCA1AF"
+      },
+      "root[0].Motions[0].Nodes[54].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013CCCCCC179436",
+        "AfterPresent": true,
+        "After": "double:4013CCCCCCCD7943"
+      },
+      "root[0].Motions[0].Nodes[55].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013DDDDDD250D79",
+        "AfterPresent": true,
+        "After": "double:4013DDDDDDDE50D8"
+      },
+      "root[0].Motions[0].Nodes[56].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013EEEEEE3286BD",
+        "AfterPresent": true,
+        "After": "double:4013EEEEEEEF286C"
+      },
+      "root[0].Motions[0].Nodes[57].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013FFFFFF400000",
+        "AfterPresent": true,
+        "After": "double:4014000000000000"
+      },
+      "root[0].Motions[0].Nodes[5].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4010888888835E51",
+        "AfterPresent": true,
+        "After": "double:40108888889435E5"
+      },
+      "root[0].Motions[0].Nodes[6].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:401099999990D794",
+        "AfterPresent": true,
+        "After": "double:4010999999A50D79"
+      },
+      "root[0].Motions[0].Nodes[7].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4010AAAAAA9E50D8",
+        "AfterPresent": true,
+        "After": "double:4010AAAAAAB5E50D"
+      },
+      "root[0].Motions[0].Nodes[8].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4010BBBBBBABCA1B",
+        "AfterPresent": true,
+        "After": "double:4010BBBBBBC6BCA2"
+      },
+      "root[0].Motions[0].Nodes[9].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4010CCCCCCB9435E",
+        "AfterPresent": true,
+        "After": "double:4010CCCCCCD79436"
+      }
+    },
+    "four-separated/False/True": {
+      "root[0].Changes[0].Position.SegmentIndex": {
+        "BeforePresent": true,
+        "Before": 4,
+        "AfterPresent": true,
+        "After": 5
+      },
+      "root[0].Changes[0].Position.SegmentProgress": {
+        "BeforePresent": true,
+        "Before": "float:3F800000",
+        "AfterPresent": true,
+        "After": "float:00000000"
+      },
+      "root[0].Changes[0].Position.TotalSegmentProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013FFFFFF400000",
+        "AfterPresent": true,
+        "After": "double:4014000000000000"
+      },
+      "root[0].Motions[0].ExitBoundary": {
+        "BeforePresent": true,
+        "Before": null,
+        "AfterPresent": false,
+        "After": null
+      },
+      "root[0].Motions[0].ExitBoundary.CanonicalProgress": {
+        "BeforePresent": false,
+        "Before": null,
+        "AfterPresent": true,
+        "After": "double:4014000000000000"
+      },
+      "root[0].Motions[0].ExitBoundary.FromPhysicalOffsetMeters": {
+        "BeforePresent": false,
+        "Before": null,
+        "AfterPresent": true,
+        "After": "float:40400000"
+      },
+      "root[0].Motions[0].ExitBoundary.FromSegmentId": {
+        "BeforePresent": false,
+        "Before": null,
+        "AfterPresent": true,
+        "After": 4
+      },
+      "root[0].Motions[0].ExitBoundary.HasPhysicalOffsetDiscontinuity": {
+        "BeforePresent": false,
+        "Before": null,
+        "AfterPresent": true,
+        "After": false
+      },
+      "root[0].Motions[0].ExitBoundary.LateralPosition": {
+        "BeforePresent": false,
+        "Before": null,
+        "AfterPresent": true,
+        "After": "float:3F800000"
+      },
+      "root[0].Motions[0].ExitBoundary.ToPhysicalOffsetMeters": {
+        "BeforePresent": false,
+        "Before": null,
+        "AfterPresent": true,
+        "After": "float:40400000"
+      },
+      "root[0].Motions[0].ExitBoundary.ToSegmentId": {
+        "BeforePresent": false,
+        "Before": null,
+        "AfterPresent": true,
+        "After": 5
+      },
+      "root[0].Motions[0].Final.CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013FFFFFF400000",
+        "AfterPresent": true,
+        "After": "double:4014000000000000"
+      },
+      "root[0].Motions[0].Nodes[10].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4010DDDDDDC6BCA2",
+        "AfterPresent": true,
+        "After": "double:4010DDDDDDE86BCA"
+      },
+      "root[0].Motions[0].Nodes[11].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4010EEEEEED435E5",
+        "AfterPresent": true,
+        "After": "double:4010EEEEEEF9435E"
+      },
+      "root[0].Motions[0].Nodes[12].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4010FFFFFFE1AF28",
+        "AfterPresent": true,
+        "After": "double:40110000000A1AF2"
+      },
+      "root[0].Motions[0].Nodes[13].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011111110EF286C",
+        "AfterPresent": true,
+        "After": "double:40111111111AF287"
+      },
+      "root[0].Motions[0].Nodes[13].SegmentProgress": {
+        "BeforePresent": true,
+        "Before": "float:3E888888",
+        "AfterPresent": true,
+        "After": "float:3E888889"
+      },
+      "root[0].Motions[0].Nodes[14].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011222221FCA1AF",
+        "AfterPresent": true,
+        "After": "double:40112222222BCA1B"
+      },
+      "root[0].Motions[0].Nodes[15].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:40113333330A1AF2",
+        "AfterPresent": true,
+        "After": "double:40113333333CA1AF"
+      },
+      "root[0].Motions[0].Nodes[16].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011444444179436",
+        "AfterPresent": true,
+        "After": "double:40114444444D7943"
+      },
+      "root[0].Motions[0].Nodes[17].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011555555250D79",
+        "AfterPresent": true,
+        "After": "double:40115555555E50D8"
+      },
+      "root[0].Motions[0].Nodes[18].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:40116666663286BD",
+        "AfterPresent": true,
+        "After": "double:40116666666F286C"
+      },
+      "root[0].Motions[0].Nodes[19].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011777777400000",
+        "AfterPresent": true,
+        "After": "double:4011777777800000"
+      },
+      "root[0].Motions[0].Nodes[1].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:40104444444D7943",
+        "AfterPresent": true,
+        "After": "double:401044444450D794"
+      },
+      "root[0].Motions[0].Nodes[20].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:40118888884D7943",
+        "AfterPresent": true,
+        "After": "double:401188888890D794"
+      },
+      "root[0].Motions[0].Nodes[21].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:40119999995AF287",
+        "AfterPresent": true,
+        "After": "double:4011999999A1AF28"
+      },
+      "root[0].Motions[0].Nodes[22].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011AAAAAA686BCA",
+        "AfterPresent": true,
+        "After": "double:4011AAAAAAB286BD"
+      },
+      "root[0].Motions[0].Nodes[23].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011BBBBBB75E50D",
+        "AfterPresent": true,
+        "After": "double:4011BBBBBBC35E51"
+      },
+      "root[0].Motions[0].Nodes[24].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011CCCCCC835E51",
+        "AfterPresent": true,
+        "After": "double:4011CCCCCCD435E5"
+      },
+      "root[0].Motions[0].Nodes[25].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011DDDDDD90D794",
+        "AfterPresent": true,
+        "After": "double:4011DDDDDDE50D79"
+      },
+      "root[0].Motions[0].Nodes[26].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011EEEEEE9E50D8",
+        "AfterPresent": true,
+        "After": "double:4011EEEEEEF5E50D"
+      },
+      "root[0].Motions[0].Nodes[27].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011FFFFFFABCA1B",
+        "AfterPresent": true,
+        "After": "double:401200000006BCA2"
+      },
+      "root[0].Motions[0].Nodes[28].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012111110B9435E",
+        "AfterPresent": true,
+        "After": "double:4012111111179436"
+      },
+      "root[0].Motions[0].Nodes[29].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012222221C6BCA2",
+        "AfterPresent": true,
+        "After": "double:4012222222286BCA"
+      },
+      "root[0].Motions[0].Nodes[29].SegmentProgress": {
+        "BeforePresent": true,
+        "Before": "float:3F088888",
+        "AfterPresent": true,
+        "After": "float:3F088889"
+      },
+      "root[0].Motions[0].Nodes[2].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:40105555555AF287",
+        "AfterPresent": true,
+        "After": "double:401055555561AF28"
+      },
+      "root[0].Motions[0].Nodes[30].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012333332D435E5",
+        "AfterPresent": true,
+        "After": "double:401233333339435E"
+      },
+      "root[0].Motions[0].Nodes[31].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012444443E1AF28",
+        "AfterPresent": true,
+        "After": "double:40124444444A1AF2"
+      },
+      "root[0].Motions[0].Nodes[32].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012555554EF286C",
+        "AfterPresent": true,
+        "After": "double:40125555555AF287"
+      },
+      "root[0].Motions[0].Nodes[33].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012666665FCA1AF",
+        "AfterPresent": true,
+        "After": "double:40126666666BCA1B"
+      },
+      "root[0].Motions[0].Nodes[33].SegmentProgress": {
+        "BeforePresent": true,
+        "Before": "float:3F199999",
+        "AfterPresent": true,
+        "After": "float:3F19999A"
+      },
+      "root[0].Motions[0].Nodes[34].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:40127777770A1AF2",
+        "AfterPresent": true,
+        "After": "double:40127777777CA1AF"
+      },
+      "root[0].Motions[0].Nodes[35].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012888888179436",
+        "AfterPresent": true,
+        "After": "double:40128888888D7943"
+      },
+      "root[0].Motions[0].Nodes[36].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012999999250D79",
+        "AfterPresent": true,
+        "After": "double:40129999999E50D8"
+      },
+      "root[0].Motions[0].Nodes[37].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012AAAAAA3286BD",
+        "AfterPresent": true,
+        "After": "double:4012AAAAAAAF286C"
+      },
+      "root[0].Motions[0].Nodes[38].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012BBBBBB400000",
+        "AfterPresent": true,
+        "After": "double:4012BBBBBBC00000"
+      },
+      "root[0].Motions[0].Nodes[39].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012CCCCCC4D7943",
+        "AfterPresent": true,
+        "After": "double:4012CCCCCCD0D794"
+      },
+      "root[0].Motions[0].Nodes[3].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4010666666686BCA",
+        "AfterPresent": true,
+        "After": "double:40106666667286BD"
+      },
+      "root[0].Motions[0].Nodes[40].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012DDDDDD5AF287",
+        "AfterPresent": true,
+        "After": "double:4012DDDDDDE1AF28"
+      },
+      "root[0].Motions[0].Nodes[41].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012EEEEEE686BCA",
+        "AfterPresent": true,
+        "After": "double:4012EEEEEEF286BD"
+      },
+      "root[0].Motions[0].Nodes[42].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012FFFFFF75E50D",
+        "AfterPresent": true,
+        "After": "double:4013000000035E51"
+      },
+      "root[0].Motions[0].Nodes[43].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013111110835E51",
+        "AfterPresent": true,
+        "After": "double:40131111111435E5"
+      },
+      "root[0].Motions[0].Nodes[44].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:401322222190D794",
+        "AfterPresent": true,
+        "After": "double:4013222222250D79"
+      },
+      "root[0].Motions[0].Nodes[44].SegmentProgress": {
+        "BeforePresent": true,
+        "Before": "float:3F488888",
+        "AfterPresent": true,
+        "After": "float:3F488889"
+      },
+      "root[0].Motions[0].Nodes[45].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:40133333329E50D8",
+        "AfterPresent": true,
+        "After": "double:401333333335E50E"
+      },
+      "root[0].Motions[0].Nodes[46].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013444443ABCA1B",
+        "AfterPresent": true,
+        "After": "double:401344444446BCA2"
+      },
+      "root[0].Motions[0].Nodes[47].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013555554B9435E",
+        "AfterPresent": true,
+        "After": "double:4013555555579436"
+      },
+      "root[0].Motions[0].Nodes[48].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013666665C6BCA2",
+        "AfterPresent": true,
+        "After": "double:4013666666686BCA"
+      },
+      "root[0].Motions[0].Nodes[48].SegmentProgress": {
+        "BeforePresent": true,
+        "Before": "float:3F599999",
+        "AfterPresent": true,
+        "After": "float:3F59999A"
+      },
+      "root[0].Motions[0].Nodes[49].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013777776D435E5",
+        "AfterPresent": true,
+        "After": "double:401377777779435E"
+      },
+      "root[0].Motions[0].Nodes[4].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:401077777775E50D",
+        "AfterPresent": true,
+        "After": "double:4010777777835E51"
+      },
+      "root[0].Motions[0].Nodes[50].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013888887E1AF28",
+        "AfterPresent": true,
+        "After": "double:40138888888A1AF2"
+      },
+      "root[0].Motions[0].Nodes[51].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013999998EF286C",
+        "AfterPresent": true,
+        "After": "double:40139999999AF287"
+      },
+      "root[0].Motions[0].Nodes[52].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013AAAAA9FCA1AF",
+        "AfterPresent": true,
+        "After": "double:4013AAAAAAABCA1B"
+      },
+      "root[0].Motions[0].Nodes[52].SegmentProgress": {
+        "BeforePresent": true,
+        "Before": "float:3F6AAAAA",
+        "AfterPresent": true,
+        "After": "float:3F6AAAAB"
+      },
+      "root[0].Motions[0].Nodes[53].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013BBBBBB0A1AF2",
+        "AfterPresent": true,
+        "After": "double:4013BBBBBBBCA1AF"
+      },
+      "root[0].Motions[0].Nodes[54].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013CCCCCC179436",
+        "AfterPresent": true,
+        "After": "double:4013CCCCCCCD7943"
+      },
+      "root[0].Motions[0].Nodes[55].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013DDDDDD250D79",
+        "AfterPresent": true,
+        "After": "double:4013DDDDDDDE50D8"
+      },
+      "root[0].Motions[0].Nodes[56].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013EEEEEE3286BD",
+        "AfterPresent": true,
+        "After": "double:4013EEEEEEEF286C"
+      },
+      "root[0].Motions[0].Nodes[57].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013FFFFFF400000",
+        "AfterPresent": true,
+        "After": "double:4014000000000000"
+      },
+      "root[0].Motions[0].Nodes[5].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4010888888835E51",
+        "AfterPresent": true,
+        "After": "double:40108888889435E5"
+      },
+      "root[0].Motions[0].Nodes[6].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:401099999990D794",
+        "AfterPresent": true,
+        "After": "double:4010999999A50D79"
+      },
+      "root[0].Motions[0].Nodes[7].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4010AAAAAA9E50D8",
+        "AfterPresent": true,
+        "After": "double:4010AAAAAAB5E50D"
+      },
+      "root[0].Motions[0].Nodes[8].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4010BBBBBBABCA1B",
+        "AfterPresent": true,
+        "After": "double:4010BBBBBBC6BCA2"
+      },
+      "root[0].Motions[0].Nodes[9].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4010CCCCCCB9435E",
+        "AfterPresent": true,
+        "After": "double:4010CCCCCCD79436"
+      }
+    },
+    "four-separated/True/False": {
+      "root[0].Changes[0].Position.SegmentIndex": {
+        "BeforePresent": true,
+        "Before": 4,
+        "AfterPresent": true,
+        "After": 5
+      },
+      "root[0].Changes[0].Position.SegmentProgress": {
+        "BeforePresent": true,
+        "Before": "float:3F800000",
+        "AfterPresent": true,
+        "After": "float:00000000"
+      },
+      "root[0].Changes[0].Position.TotalSegmentProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013FFFFFF400000",
+        "AfterPresent": true,
+        "After": "double:4014000000000000"
+      },
+      "root[0].Motions[0].ExitBoundary": {
+        "BeforePresent": true,
+        "Before": null,
+        "AfterPresent": false,
+        "After": null
+      },
+      "root[0].Motions[0].ExitBoundary.CanonicalProgress": {
+        "BeforePresent": false,
+        "Before": null,
+        "AfterPresent": true,
+        "After": "double:4014000000000000"
+      },
+      "root[0].Motions[0].ExitBoundary.FromPhysicalOffsetMeters": {
+        "BeforePresent": false,
+        "Before": null,
+        "AfterPresent": true,
+        "After": "float:40400000"
+      },
+      "root[0].Motions[0].ExitBoundary.FromSegmentId": {
+        "BeforePresent": false,
+        "Before": null,
+        "AfterPresent": true,
+        "After": 4
+      },
+      "root[0].Motions[0].ExitBoundary.HasPhysicalOffsetDiscontinuity": {
+        "BeforePresent": false,
+        "Before": null,
+        "AfterPresent": true,
+        "After": false
+      },
+      "root[0].Motions[0].ExitBoundary.LateralPosition": {
+        "BeforePresent": false,
+        "Before": null,
+        "AfterPresent": true,
+        "After": "float:3F800000"
+      },
+      "root[0].Motions[0].ExitBoundary.ToPhysicalOffsetMeters": {
+        "BeforePresent": false,
+        "Before": null,
+        "AfterPresent": true,
+        "After": "float:40400000"
+      },
+      "root[0].Motions[0].ExitBoundary.ToSegmentId": {
+        "BeforePresent": false,
+        "Before": null,
+        "AfterPresent": true,
+        "After": 5
+      },
+      "root[0].Motions[0].Final.CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013FFFFFF400000",
+        "AfterPresent": true,
+        "After": "double:4014000000000000"
+      },
+      "root[0].Motions[0].Nodes[10].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4010DDDDDDC6BCA2",
+        "AfterPresent": true,
+        "After": "double:4010DDDDDDE86BCA"
+      },
+      "root[0].Motions[0].Nodes[11].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4010EEEEEED435E5",
+        "AfterPresent": true,
+        "After": "double:4010EEEEEEF9435E"
+      },
+      "root[0].Motions[0].Nodes[12].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4010FFFFFFE1AF28",
+        "AfterPresent": true,
+        "After": "double:40110000000A1AF2"
+      },
+      "root[0].Motions[0].Nodes[13].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011111110EF286C",
+        "AfterPresent": true,
+        "After": "double:40111111111AF287"
+      },
+      "root[0].Motions[0].Nodes[13].SegmentProgress": {
+        "BeforePresent": true,
+        "Before": "float:3E888888",
+        "AfterPresent": true,
+        "After": "float:3E888889"
+      },
+      "root[0].Motions[0].Nodes[14].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011222221FCA1AF",
+        "AfterPresent": true,
+        "After": "double:40112222222BCA1B"
+      },
+      "root[0].Motions[0].Nodes[15].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:40113333330A1AF2",
+        "AfterPresent": true,
+        "After": "double:40113333333CA1AF"
+      },
+      "root[0].Motions[0].Nodes[16].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011444444179436",
+        "AfterPresent": true,
+        "After": "double:40114444444D7943"
+      },
+      "root[0].Motions[0].Nodes[17].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011555555250D79",
+        "AfterPresent": true,
+        "After": "double:40115555555E50D8"
+      },
+      "root[0].Motions[0].Nodes[18].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:40116666663286BD",
+        "AfterPresent": true,
+        "After": "double:40116666666F286C"
+      },
+      "root[0].Motions[0].Nodes[19].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011777777400000",
+        "AfterPresent": true,
+        "After": "double:4011777777800000"
+      },
+      "root[0].Motions[0].Nodes[1].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:40104444444D7943",
+        "AfterPresent": true,
+        "After": "double:401044444450D794"
+      },
+      "root[0].Motions[0].Nodes[20].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:40118888884D7943",
+        "AfterPresent": true,
+        "After": "double:401188888890D794"
+      },
+      "root[0].Motions[0].Nodes[21].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:40119999995AF287",
+        "AfterPresent": true,
+        "After": "double:4011999999A1AF28"
+      },
+      "root[0].Motions[0].Nodes[22].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011AAAAAA686BCA",
+        "AfterPresent": true,
+        "After": "double:4011AAAAAAB286BD"
+      },
+      "root[0].Motions[0].Nodes[23].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011BBBBBB75E50D",
+        "AfterPresent": true,
+        "After": "double:4011BBBBBBC35E51"
+      },
+      "root[0].Motions[0].Nodes[24].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011CCCCCC835E51",
+        "AfterPresent": true,
+        "After": "double:4011CCCCCCD435E5"
+      },
+      "root[0].Motions[0].Nodes[25].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011DDDDDD90D794",
+        "AfterPresent": true,
+        "After": "double:4011DDDDDDE50D79"
+      },
+      "root[0].Motions[0].Nodes[26].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011EEEEEE9E50D8",
+        "AfterPresent": true,
+        "After": "double:4011EEEEEEF5E50D"
+      },
+      "root[0].Motions[0].Nodes[27].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011FFFFFFABCA1B",
+        "AfterPresent": true,
+        "After": "double:401200000006BCA2"
+      },
+      "root[0].Motions[0].Nodes[28].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012111110B9435E",
+        "AfterPresent": true,
+        "After": "double:4012111111179436"
+      },
+      "root[0].Motions[0].Nodes[29].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012222221C6BCA2",
+        "AfterPresent": true,
+        "After": "double:4012222222286BCA"
+      },
+      "root[0].Motions[0].Nodes[29].SegmentProgress": {
+        "BeforePresent": true,
+        "Before": "float:3F088888",
+        "AfterPresent": true,
+        "After": "float:3F088889"
+      },
+      "root[0].Motions[0].Nodes[2].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:40105555555AF287",
+        "AfterPresent": true,
+        "After": "double:401055555561AF28"
+      },
+      "root[0].Motions[0].Nodes[30].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012333332D435E5",
+        "AfterPresent": true,
+        "After": "double:401233333339435E"
+      },
+      "root[0].Motions[0].Nodes[31].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012444443E1AF28",
+        "AfterPresent": true,
+        "After": "double:40124444444A1AF2"
+      },
+      "root[0].Motions[0].Nodes[32].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012555554EF286C",
+        "AfterPresent": true,
+        "After": "double:40125555555AF287"
+      },
+      "root[0].Motions[0].Nodes[33].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012666665FCA1AF",
+        "AfterPresent": true,
+        "After": "double:40126666666BCA1B"
+      },
+      "root[0].Motions[0].Nodes[33].SegmentProgress": {
+        "BeforePresent": true,
+        "Before": "float:3F199999",
+        "AfterPresent": true,
+        "After": "float:3F19999A"
+      },
+      "root[0].Motions[0].Nodes[34].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:40127777770A1AF2",
+        "AfterPresent": true,
+        "After": "double:40127777777CA1AF"
+      },
+      "root[0].Motions[0].Nodes[35].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012888888179436",
+        "AfterPresent": true,
+        "After": "double:40128888888D7943"
+      },
+      "root[0].Motions[0].Nodes[36].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012999999250D79",
+        "AfterPresent": true,
+        "After": "double:40129999999E50D8"
+      },
+      "root[0].Motions[0].Nodes[37].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012AAAAAA3286BD",
+        "AfterPresent": true,
+        "After": "double:4012AAAAAAAF286C"
+      },
+      "root[0].Motions[0].Nodes[38].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012BBBBBB400000",
+        "AfterPresent": true,
+        "After": "double:4012BBBBBBC00000"
+      },
+      "root[0].Motions[0].Nodes[39].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012CCCCCC4D7943",
+        "AfterPresent": true,
+        "After": "double:4012CCCCCCD0D794"
+      },
+      "root[0].Motions[0].Nodes[3].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4010666666686BCA",
+        "AfterPresent": true,
+        "After": "double:40106666667286BD"
+      },
+      "root[0].Motions[0].Nodes[40].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012DDDDDD5AF287",
+        "AfterPresent": true,
+        "After": "double:4012DDDDDDE1AF28"
+      },
+      "root[0].Motions[0].Nodes[41].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012EEEEEE686BCA",
+        "AfterPresent": true,
+        "After": "double:4012EEEEEEF286BD"
+      },
+      "root[0].Motions[0].Nodes[42].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012FFFFFF75E50D",
+        "AfterPresent": true,
+        "After": "double:4013000000035E51"
+      },
+      "root[0].Motions[0].Nodes[43].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013111110835E51",
+        "AfterPresent": true,
+        "After": "double:40131111111435E5"
+      },
+      "root[0].Motions[0].Nodes[44].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:401322222190D794",
+        "AfterPresent": true,
+        "After": "double:4013222222250D79"
+      },
+      "root[0].Motions[0].Nodes[44].SegmentProgress": {
+        "BeforePresent": true,
+        "Before": "float:3F488888",
+        "AfterPresent": true,
+        "After": "float:3F488889"
+      },
+      "root[0].Motions[0].Nodes[45].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:40133333329E50D8",
+        "AfterPresent": true,
+        "After": "double:401333333335E50E"
+      },
+      "root[0].Motions[0].Nodes[46].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013444443ABCA1B",
+        "AfterPresent": true,
+        "After": "double:401344444446BCA2"
+      },
+      "root[0].Motions[0].Nodes[47].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013555554B9435E",
+        "AfterPresent": true,
+        "After": "double:4013555555579436"
+      },
+      "root[0].Motions[0].Nodes[48].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013666665C6BCA2",
+        "AfterPresent": true,
+        "After": "double:4013666666686BCA"
+      },
+      "root[0].Motions[0].Nodes[48].SegmentProgress": {
+        "BeforePresent": true,
+        "Before": "float:3F599999",
+        "AfterPresent": true,
+        "After": "float:3F59999A"
+      },
+      "root[0].Motions[0].Nodes[49].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013777776D435E5",
+        "AfterPresent": true,
+        "After": "double:401377777779435E"
+      },
+      "root[0].Motions[0].Nodes[4].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:401077777775E50D",
+        "AfterPresent": true,
+        "After": "double:4010777777835E51"
+      },
+      "root[0].Motions[0].Nodes[50].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013888887E1AF28",
+        "AfterPresent": true,
+        "After": "double:40138888888A1AF2"
+      },
+      "root[0].Motions[0].Nodes[51].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013999998EF286C",
+        "AfterPresent": true,
+        "After": "double:40139999999AF287"
+      },
+      "root[0].Motions[0].Nodes[52].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013AAAAA9FCA1AF",
+        "AfterPresent": true,
+        "After": "double:4013AAAAAAABCA1B"
+      },
+      "root[0].Motions[0].Nodes[52].SegmentProgress": {
+        "BeforePresent": true,
+        "Before": "float:3F6AAAAA",
+        "AfterPresent": true,
+        "After": "float:3F6AAAAB"
+      },
+      "root[0].Motions[0].Nodes[53].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013BBBBBB0A1AF2",
+        "AfterPresent": true,
+        "After": "double:4013BBBBBBBCA1AF"
+      },
+      "root[0].Motions[0].Nodes[54].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013CCCCCC179436",
+        "AfterPresent": true,
+        "After": "double:4013CCCCCCCD7943"
+      },
+      "root[0].Motions[0].Nodes[55].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013DDDDDD250D79",
+        "AfterPresent": true,
+        "After": "double:4013DDDDDDDE50D8"
+      },
+      "root[0].Motions[0].Nodes[56].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013EEEEEE3286BD",
+        "AfterPresent": true,
+        "After": "double:4013EEEEEEEF286C"
+      },
+      "root[0].Motions[0].Nodes[57].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013FFFFFF400000",
+        "AfterPresent": true,
+        "After": "double:4014000000000000"
+      },
+      "root[0].Motions[0].Nodes[5].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4010888888835E51",
+        "AfterPresent": true,
+        "After": "double:40108888889435E5"
+      },
+      "root[0].Motions[0].Nodes[6].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:401099999990D794",
+        "AfterPresent": true,
+        "After": "double:4010999999A50D79"
+      },
+      "root[0].Motions[0].Nodes[7].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4010AAAAAA9E50D8",
+        "AfterPresent": true,
+        "After": "double:4010AAAAAAB5E50D"
+      },
+      "root[0].Motions[0].Nodes[8].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4010BBBBBBABCA1B",
+        "AfterPresent": true,
+        "After": "double:4010BBBBBBC6BCA2"
+      },
+      "root[0].Motions[0].Nodes[9].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4010CCCCCCB9435E",
+        "AfterPresent": true,
+        "After": "double:4010CCCCCCD79436"
+      }
+    },
+    "four-separated/True/True": {
+      "root[0].Changes[0].Position.SegmentIndex": {
+        "BeforePresent": true,
+        "Before": 4,
+        "AfterPresent": true,
+        "After": 5
+      },
+      "root[0].Changes[0].Position.SegmentProgress": {
+        "BeforePresent": true,
+        "Before": "float:3F800000",
+        "AfterPresent": true,
+        "After": "float:00000000"
+      },
+      "root[0].Changes[0].Position.TotalSegmentProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013FFFFFF400000",
+        "AfterPresent": true,
+        "After": "double:4014000000000000"
+      },
+      "root[0].Motions[0].ExitBoundary": {
+        "BeforePresent": true,
+        "Before": null,
+        "AfterPresent": false,
+        "After": null
+      },
+      "root[0].Motions[0].ExitBoundary.CanonicalProgress": {
+        "BeforePresent": false,
+        "Before": null,
+        "AfterPresent": true,
+        "After": "double:4014000000000000"
+      },
+      "root[0].Motions[0].ExitBoundary.FromPhysicalOffsetMeters": {
+        "BeforePresent": false,
+        "Before": null,
+        "AfterPresent": true,
+        "After": "float:40400000"
+      },
+      "root[0].Motions[0].ExitBoundary.FromSegmentId": {
+        "BeforePresent": false,
+        "Before": null,
+        "AfterPresent": true,
+        "After": 4
+      },
+      "root[0].Motions[0].ExitBoundary.HasPhysicalOffsetDiscontinuity": {
+        "BeforePresent": false,
+        "Before": null,
+        "AfterPresent": true,
+        "After": false
+      },
+      "root[0].Motions[0].ExitBoundary.LateralPosition": {
+        "BeforePresent": false,
+        "Before": null,
+        "AfterPresent": true,
+        "After": "float:3F800000"
+      },
+      "root[0].Motions[0].ExitBoundary.ToPhysicalOffsetMeters": {
+        "BeforePresent": false,
+        "Before": null,
+        "AfterPresent": true,
+        "After": "float:40400000"
+      },
+      "root[0].Motions[0].ExitBoundary.ToSegmentId": {
+        "BeforePresent": false,
+        "Before": null,
+        "AfterPresent": true,
+        "After": 5
+      },
+      "root[0].Motions[0].Final.CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013FFFFFF400000",
+        "AfterPresent": true,
+        "After": "double:4014000000000000"
+      },
+      "root[0].Motions[0].Nodes[10].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4010DDDDDDC6BCA2",
+        "AfterPresent": true,
+        "After": "double:4010DDDDDDE86BCA"
+      },
+      "root[0].Motions[0].Nodes[11].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4010EEEEEED435E5",
+        "AfterPresent": true,
+        "After": "double:4010EEEEEEF9435E"
+      },
+      "root[0].Motions[0].Nodes[12].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4010FFFFFFE1AF28",
+        "AfterPresent": true,
+        "After": "double:40110000000A1AF2"
+      },
+      "root[0].Motions[0].Nodes[13].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011111110EF286C",
+        "AfterPresent": true,
+        "After": "double:40111111111AF287"
+      },
+      "root[0].Motions[0].Nodes[13].SegmentProgress": {
+        "BeforePresent": true,
+        "Before": "float:3E888888",
+        "AfterPresent": true,
+        "After": "float:3E888889"
+      },
+      "root[0].Motions[0].Nodes[14].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011222221FCA1AF",
+        "AfterPresent": true,
+        "After": "double:40112222222BCA1B"
+      },
+      "root[0].Motions[0].Nodes[15].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:40113333330A1AF2",
+        "AfterPresent": true,
+        "After": "double:40113333333CA1AF"
+      },
+      "root[0].Motions[0].Nodes[16].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011444444179436",
+        "AfterPresent": true,
+        "After": "double:40114444444D7943"
+      },
+      "root[0].Motions[0].Nodes[17].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011555555250D79",
+        "AfterPresent": true,
+        "After": "double:40115555555E50D8"
+      },
+      "root[0].Motions[0].Nodes[18].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:40116666663286BD",
+        "AfterPresent": true,
+        "After": "double:40116666666F286C"
+      },
+      "root[0].Motions[0].Nodes[19].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011777777400000",
+        "AfterPresent": true,
+        "After": "double:4011777777800000"
+      },
+      "root[0].Motions[0].Nodes[1].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:40104444444D7943",
+        "AfterPresent": true,
+        "After": "double:401044444450D794"
+      },
+      "root[0].Motions[0].Nodes[20].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:40118888884D7943",
+        "AfterPresent": true,
+        "After": "double:401188888890D794"
+      },
+      "root[0].Motions[0].Nodes[21].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:40119999995AF287",
+        "AfterPresent": true,
+        "After": "double:4011999999A1AF28"
+      },
+      "root[0].Motions[0].Nodes[22].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011AAAAAA686BCA",
+        "AfterPresent": true,
+        "After": "double:4011AAAAAAB286BD"
+      },
+      "root[0].Motions[0].Nodes[23].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011BBBBBB75E50D",
+        "AfterPresent": true,
+        "After": "double:4011BBBBBBC35E51"
+      },
+      "root[0].Motions[0].Nodes[24].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011CCCCCC835E51",
+        "AfterPresent": true,
+        "After": "double:4011CCCCCCD435E5"
+      },
+      "root[0].Motions[0].Nodes[25].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011DDDDDD90D794",
+        "AfterPresent": true,
+        "After": "double:4011DDDDDDE50D79"
+      },
+      "root[0].Motions[0].Nodes[26].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011EEEEEE9E50D8",
+        "AfterPresent": true,
+        "After": "double:4011EEEEEEF5E50D"
+      },
+      "root[0].Motions[0].Nodes[27].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4011FFFFFFABCA1B",
+        "AfterPresent": true,
+        "After": "double:401200000006BCA2"
+      },
+      "root[0].Motions[0].Nodes[28].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012111110B9435E",
+        "AfterPresent": true,
+        "After": "double:4012111111179436"
+      },
+      "root[0].Motions[0].Nodes[29].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012222221C6BCA2",
+        "AfterPresent": true,
+        "After": "double:4012222222286BCA"
+      },
+      "root[0].Motions[0].Nodes[29].SegmentProgress": {
+        "BeforePresent": true,
+        "Before": "float:3F088888",
+        "AfterPresent": true,
+        "After": "float:3F088889"
+      },
+      "root[0].Motions[0].Nodes[2].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:40105555555AF287",
+        "AfterPresent": true,
+        "After": "double:401055555561AF28"
+      },
+      "root[0].Motions[0].Nodes[30].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012333332D435E5",
+        "AfterPresent": true,
+        "After": "double:401233333339435E"
+      },
+      "root[0].Motions[0].Nodes[31].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012444443E1AF28",
+        "AfterPresent": true,
+        "After": "double:40124444444A1AF2"
+      },
+      "root[0].Motions[0].Nodes[32].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012555554EF286C",
+        "AfterPresent": true,
+        "After": "double:40125555555AF287"
+      },
+      "root[0].Motions[0].Nodes[33].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012666665FCA1AF",
+        "AfterPresent": true,
+        "After": "double:40126666666BCA1B"
+      },
+      "root[0].Motions[0].Nodes[33].SegmentProgress": {
+        "BeforePresent": true,
+        "Before": "float:3F199999",
+        "AfterPresent": true,
+        "After": "float:3F19999A"
+      },
+      "root[0].Motions[0].Nodes[34].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:40127777770A1AF2",
+        "AfterPresent": true,
+        "After": "double:40127777777CA1AF"
+      },
+      "root[0].Motions[0].Nodes[35].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012888888179436",
+        "AfterPresent": true,
+        "After": "double:40128888888D7943"
+      },
+      "root[0].Motions[0].Nodes[36].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012999999250D79",
+        "AfterPresent": true,
+        "After": "double:40129999999E50D8"
+      },
+      "root[0].Motions[0].Nodes[37].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012AAAAAA3286BD",
+        "AfterPresent": true,
+        "After": "double:4012AAAAAAAF286C"
+      },
+      "root[0].Motions[0].Nodes[38].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012BBBBBB400000",
+        "AfterPresent": true,
+        "After": "double:4012BBBBBBC00000"
+      },
+      "root[0].Motions[0].Nodes[39].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012CCCCCC4D7943",
+        "AfterPresent": true,
+        "After": "double:4012CCCCCCD0D794"
+      },
+      "root[0].Motions[0].Nodes[3].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4010666666686BCA",
+        "AfterPresent": true,
+        "After": "double:40106666667286BD"
+      },
+      "root[0].Motions[0].Nodes[40].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012DDDDDD5AF287",
+        "AfterPresent": true,
+        "After": "double:4012DDDDDDE1AF28"
+      },
+      "root[0].Motions[0].Nodes[41].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012EEEEEE686BCA",
+        "AfterPresent": true,
+        "After": "double:4012EEEEEEF286BD"
+      },
+      "root[0].Motions[0].Nodes[42].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4012FFFFFF75E50D",
+        "AfterPresent": true,
+        "After": "double:4013000000035E51"
+      },
+      "root[0].Motions[0].Nodes[43].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013111110835E51",
+        "AfterPresent": true,
+        "After": "double:40131111111435E5"
+      },
+      "root[0].Motions[0].Nodes[44].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:401322222190D794",
+        "AfterPresent": true,
+        "After": "double:4013222222250D79"
+      },
+      "root[0].Motions[0].Nodes[44].SegmentProgress": {
+        "BeforePresent": true,
+        "Before": "float:3F488888",
+        "AfterPresent": true,
+        "After": "float:3F488889"
+      },
+      "root[0].Motions[0].Nodes[45].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:40133333329E50D8",
+        "AfterPresent": true,
+        "After": "double:401333333335E50E"
+      },
+      "root[0].Motions[0].Nodes[46].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013444443ABCA1B",
+        "AfterPresent": true,
+        "After": "double:401344444446BCA2"
+      },
+      "root[0].Motions[0].Nodes[47].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013555554B9435E",
+        "AfterPresent": true,
+        "After": "double:4013555555579436"
+      },
+      "root[0].Motions[0].Nodes[48].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013666665C6BCA2",
+        "AfterPresent": true,
+        "After": "double:4013666666686BCA"
+      },
+      "root[0].Motions[0].Nodes[48].SegmentProgress": {
+        "BeforePresent": true,
+        "Before": "float:3F599999",
+        "AfterPresent": true,
+        "After": "float:3F59999A"
+      },
+      "root[0].Motions[0].Nodes[49].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013777776D435E5",
+        "AfterPresent": true,
+        "After": "double:401377777779435E"
+      },
+      "root[0].Motions[0].Nodes[4].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:401077777775E50D",
+        "AfterPresent": true,
+        "After": "double:4010777777835E51"
+      },
+      "root[0].Motions[0].Nodes[50].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013888887E1AF28",
+        "AfterPresent": true,
+        "After": "double:40138888888A1AF2"
+      },
+      "root[0].Motions[0].Nodes[51].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013999998EF286C",
+        "AfterPresent": true,
+        "After": "double:40139999999AF287"
+      },
+      "root[0].Motions[0].Nodes[52].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013AAAAA9FCA1AF",
+        "AfterPresent": true,
+        "After": "double:4013AAAAAAABCA1B"
+      },
+      "root[0].Motions[0].Nodes[52].SegmentProgress": {
+        "BeforePresent": true,
+        "Before": "float:3F6AAAAA",
+        "AfterPresent": true,
+        "After": "float:3F6AAAAB"
+      },
+      "root[0].Motions[0].Nodes[53].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013BBBBBB0A1AF2",
+        "AfterPresent": true,
+        "After": "double:4013BBBBBBBCA1AF"
+      },
+      "root[0].Motions[0].Nodes[54].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013CCCCCC179436",
+        "AfterPresent": true,
+        "After": "double:4013CCCCCCCD7943"
+      },
+      "root[0].Motions[0].Nodes[55].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013DDDDDD250D79",
+        "AfterPresent": true,
+        "After": "double:4013DDDDDDDE50D8"
+      },
+      "root[0].Motions[0].Nodes[56].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013EEEEEE3286BD",
+        "AfterPresent": true,
+        "After": "double:4013EEEEEEEF286C"
+      },
+      "root[0].Motions[0].Nodes[57].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4013FFFFFF400000",
+        "AfterPresent": true,
+        "After": "double:4014000000000000"
+      },
+      "root[0].Motions[0].Nodes[5].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4010888888835E51",
+        "AfterPresent": true,
+        "After": "double:40108888889435E5"
+      },
+      "root[0].Motions[0].Nodes[6].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:401099999990D794",
+        "AfterPresent": true,
+        "After": "double:4010999999A50D79"
+      },
+      "root[0].Motions[0].Nodes[7].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4010AAAAAA9E50D8",
+        "AfterPresent": true,
+        "After": "double:4010AAAAAAB5E50D"
+      },
+      "root[0].Motions[0].Nodes[8].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4010BBBBBBABCA1B",
+        "AfterPresent": true,
+        "After": "double:4010BBBBBBC6BCA2"
+      },
+      "root[0].Motions[0].Nodes[9].CanonicalProgress": {
+        "BeforePresent": true,
+        "Before": "double:4010CCCCCCB9435E",
+        "AfterPresent": true,
+        "After": "double:4010CCCCCCD79436"
+      }
+    }
+  }
+}

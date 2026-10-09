@@ -21,15 +21,31 @@ def compare(directory):
     before = read_manifest(directory, "before")
     after = read_manifest(directory, "after")
     assert before.keys() == after.keys(), "Capture case coverage changed"
+    raw = (Path(__file__).resolve().parents[2] / "tests/fixtures/rea009-historical-boundaries.json").read_bytes().replace(b"\r\n", b"\n")
+    assert hashlib.sha256(raw).hexdigest() == "dd254d60d06b2ac97498aaf745aedfd65f3fda67f6d4318686b46ca36e631ed1"
+    expected = json.loads(raw)
+    assert expected["Schema"] == "rea009-historical-topology-v1"
+    assert expected["BaseMainSha"] == "cd19c399dfc97d7abbd2aca03d50aa2c94a76262"
+    observed = {}
     for case in before:
-        # SHA256 covers every serialized leaf, including the float/double tag and raw bits.
-        assert before[case] == after[case], f"Exact original-main behavior changed: {case}"
+        # Entire typed captures stay exact, except the complete separately recorded
+        # REA-009 topology-only delta. No physical leaf or historical golden is replaced.
+        if before[case] != after[case]:
+            left = read_leaves(directory, "before", case, before[case])
+            right = read_leaves(directory, "after", case, after[case])
+            observed[case] = {p: {"BeforePresent": p in left, "Before": left.get(p),
+                                  "AfterPresent": p in right, "After": right.get(p)}
+                              for p in sorted(left.keys() | right.keys())
+                              if p not in left or p not in right or left[p] != right[p]}
         if case.endswith("/False"):
             reversed_case = case.removesuffix("/False") + "/True"
             assert after[case] == after[reversed_case], f"Rider-order dependence: {case}"
+    required = {case: delta for case, delta in expected["Changes"].items() if case in before}
+    assert observed == required, "Exact original-main behavior changed outside recorded REA-009 topology delta"
     return {"Cases": len(after), "Leaves": sum(row["Leaves"] for row in after.values()),
             "IEEELeaves": sum(row["IEEELeaves"] for row in after.values()),
-            "OriginalMainExact": True, "RiderOrderExact": True}
+            "OriginalMainExactOutsideRea009": True, "Rea009ChangedCases": len(observed),
+            "Rea009ChangedLeaves": sum(len(d) for d in observed.values()), "RiderOrderExact": True}
 
 
 def typed_leaf(value):

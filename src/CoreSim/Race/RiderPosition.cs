@@ -86,6 +86,28 @@ public readonly record struct RiderPosition
             DistanceMeters + physicalDistanceMeters);
     }
 
+    /// <summary>
+    /// Completes the currently owned segment after production traversal succeeded.
+    /// Canonical ownership advances discretely; distance is only the actual traversal result.
+    /// Partial/terminal traversal must use Advance instead.
+    /// </summary>
+    internal RiderPosition AdvanceToSegmentEnd(float physicalDistanceMeters)
+    {
+        if (SegmentCount <= 0 || !double.IsFinite(TotalSegmentProgress)
+            || !float.IsFinite(DistanceMeters))
+            throw new InvalidOperationException("Segment completion requires an initialized finite position.");
+        if (!float.IsFinite(physicalDistanceMeters) || physicalDistanceMeters < 0f)
+            throw new ArgumentOutOfRangeException(nameof(physicalDistanceMeters));
+
+        // Use the same discrete ownership as SegmentIndex, never the float remainder.
+        var boundary = Math.Floor(TotalSegmentProgress + BoundaryTolerance) + 1d;
+        if (!double.IsFinite(boundary) || boundary <= TotalSegmentProgress)
+            throw new InvalidOperationException("The next segment boundary must be representable and forward.");
+        var distance = DistanceMeters + physicalDistanceMeters;
+        if (!float.IsFinite(distance))
+            throw new ArgumentOutOfRangeException(nameof(physicalDistanceMeters));
+        return new RiderPosition(SegmentCount, boundary, distance);
+    }
     private static double NormalizeBoundary(double value)
     {
         var boundary = Math.Round(value);

@@ -22,6 +22,8 @@ EXTRACTION = ROOT / "tests/fixtures/contested-source-extraction.json"
 CONSEQUENCE_EXTRACTION = ROOT / "tests/fixtures/physical-consequence-source-extraction.json"
 CONSEQUENCE_EXTRACTION_SHA256 = "10a5a5892ef2fbfb34944d03dc42468ca5b60645888d87b9ece18cffcc624ace"
 EXTRACTION_SHA256 = "46a8f58c1cbd84dcb2697247e294b60474f7ee67712a49aa15f4f1337acd5d89"
+REA009_EXTRACTION = ROOT / "tests/fixtures/rea009-source-extraction.json"
+REA009_EXTRACTION_SHA256 = "58876cb85d065bf716073061c2f2baadcab783cc98d453148f63cd8d30177f6f"
 REA001_EXTRACTION = ROOT / "tests/fixtures/rea001-source-extraction.json"
 REA001_EXTRACTION_SHA256 = "2c369eace9249fc226a2eb522799a6b473b281b1cc18ce3cadb05469f1c6048c"
 CANONICAL_TRAFFIC = {"src/CoreSim/Interactions/InteractionModel.cs",
@@ -55,6 +57,7 @@ def consumers():
             continue
         name = path.relative_to(ROOT).as_posix()
         source = path.read_text(encoding="utf-8").replace("\r\n", "\n")
+        source = restore_segment_completion(source, name)
         source = restore_optional_safety_contract(source, name)
         if name in consequences["NewDiagnosticSources"]:
             assert not REFERENCES.search(source), f"Legacy execution data in #56C2 module: {name}"
@@ -85,6 +88,21 @@ def consumers():
             continue
         result[name] = hashlib.sha256(source.encode("utf-8")).hexdigest()
     return result
+
+
+def restore_segment_completion(source, name):
+    # Restore exactly the two semantic handoffs before older frozen extractions.
+    # Physics expressions and legacy skill/style consumer hashes stay pinned.
+    raw = REA009_EXTRACTION.read_bytes().replace(b"\r\n", b"\n")
+    assert hashlib.sha256(raw).hexdigest() == REA009_EXTRACTION_SHA256
+    extraction = json.loads(raw)
+    assert extraction["BaseMainSha"] == "cd19c399dfc97d7abbd2aca03d50aa2c94a76262"
+    assert set(extraction["Patches"]) == {"src/CoreSim/SimulationEngine.cs"}
+    assert len(extraction["Patches"]["src/CoreSim/SimulationEngine.cs"]) == 2
+    for patch in extraction["Patches"].get(name, []):
+        assert source.count(patch["After"]) == 1, name
+        source = source.replace(patch["After"], patch["Before"])
+    return source
 
 
 def restore_optional_safety_contract(source, name):

@@ -78,6 +78,12 @@ foreach (var configuration in mode == "repro" ? new[] { args.ElementAtOrDefault(
     {
         var bare = Run(scenario, options, false, false, false);
         if (bare.FinalHash != first.FinalHash) throw new InvalidOperationException("Observer changed exact final state.");
+        if (mode == "repro")
+        {
+            var reverseBare = Run(scenario, options, true, false, false);
+            if (reverseBare.FinalHash != first.FinalHash)
+                throw new InvalidOperationException("Reversed unobserved heat changed exact final state.");
+        }
     }
     first.ReversedExact = true; first.ObserverExact = checkObserver ? true : null;
     observations.Add(first);

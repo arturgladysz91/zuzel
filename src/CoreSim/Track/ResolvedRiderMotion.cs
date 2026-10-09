@@ -172,7 +172,11 @@ public sealed class ResolvedRiderMotion : IEquatable<ResolvedRiderMotion>
         }
 
         var endpoint = Sample(duration, 1d, totalDistance, nodes[^1].LateralPosition, nodes[^1].SpeedMetersPerSecond);
-        nodes[^1] = endpoint; // Exact canonical endpoints override observation rounding only.
+        // A sub-float-clock traversal can leave only the origin (e.g. corner knots
+        // round together). Preserve it and expose the endpoint at the same time;
+        // this representation adds neither integration nor elapsed time/distance.
+        if (nodes.Count == 1 && endpoint != nodes[0]) nodes.Add(endpoint);
+        else nodes[^1] = endpoint; // Exact canonical endpoints override observation rounding only.
         if (endpoint.SpeedMetersPerSecond != traversalChange.Speed || endpoint.LateralPosition != traversalChange.LateralPosition)
         {
             var terminal = Sample(duration, 1d, totalDistance, traversalChange.LateralPosition, traversalChange.Speed);

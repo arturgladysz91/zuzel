@@ -1,0 +1,125 @@
+{
+  "Schema": "rea009-validation-v1",
+  "BaseMain": "cd19c399dfc97d7abbd2aca03d50aa2c94a76262",
+  "ValidatedCodeCommit": "66fccfd6df65c8b71a52099def3068e2d14ddd37",
+  "ProductionSourceTree": "4d6ced758d082af8950e24afc1301ae685baf64c",
+  "BeforeProductionChange": {
+    "File": "rea009-before.trx",
+    "SHA256": "0be78b24f17166d1e9c45681a97cf9450cf8f5c3fdc71314b11e7e8f9d4792cc",
+    "Counters": {
+      "total": "4",
+      "executed": "4",
+      "passed": "0",
+      "failed": "4",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    },
+    "Times": {
+      "creation": "2026-10-09T22:02:54.4470458+02:00",
+      "queuing": "2026-10-09T22:02:54.4470466+02:00",
+      "start": "2026-10-09T22:02:51.8351973+02:00",
+      "finish": "2026-10-09T22:02:54.5210809+02:00"
+    },
+    "FailedResults": [
+      {
+        "TestName": "CoreSim.Tests.CanonicalSegmentHandoffTests.DecimalFractionCanContinueAcrossProductionTrajectoryHorizon(progress: 0,400000006, moving: False)",
+        "Outcome": "Failed",
+        "Message": "Assert.Equal() Failure: Values differ\r\nExpected: 1\r\nActual:   1,0000000298023224"
+      },
+      {
+        "TestName": "CoreSim.Tests.CanonicalSegmentHandoffTests.DecimalFractionCanContinueAcrossProductionTrajectoryHorizon(progress: 0,100000001, moving: True)",
+        "Outcome": "Failed",
+        "Message": "System.InvalidOperationException : Rider 17 is not in segment 1."
+      },
+      {
+        "TestName": "CoreSim.Tests.CanonicalSegmentHandoffTests.DecimalFractionCanContinueAcrossProductionTrajectoryHorizon(progress: 0,400000006, moving: True)",
+        "Outcome": "Failed",
+        "Message": "Assert.Equal() Failure: Values differ\r\nExpected: 1\r\nActual:   1,0000000298023224"
+      },
+      {
+        "TestName": "CoreSim.Tests.CanonicalSegmentHandoffTests.DecimalFractionCanContinueAcrossProductionTrajectoryHorizon(progress: 0,100000001, moving: False)",
+        "Outcome": "Failed",
+        "Message": "System.InvalidOperationException : Rider 17 is not in segment 1."
+      }
+    ]
+  },
+  "FinalFocused": {
+    "File": "final-focused.trx",
+    "SHA256": "8254b80bd7634d0ff6b0f9832fa17ce9f8901400d2eec6548df9a825c27bd3db",
+    "Counters": {
+      "total": "267",
+      "executed": "267",
+      "passed": "267",
+      "failed": "0",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    },
+    "Times": {
+      "creation": "2026-10-09T22:31:59.2820623+02:00",
+      "queuing": "2026-10-09T22:31:59.2820634+02:00",
+      "start": "2026-10-09T22:31:58.1178371+02:00",
+      "finish": "2026-10-09T22:32:35.9656622+02:00"
+    },
+    "FailedResults": []
+  },
+  "FinalCompleteLocal": {
+    "File": "final-full.trx",
+    "SHA256": "5170d1fb8b714ff77575e1d633edf02339ff7d44b2faacabbffcbb50f8405527",
+    "Counters": {
+      "total": "2480",
+      "executed": "2480",
+      "passed": "2480",
+      "failed": "0",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    },
+    "Times": {
+      "creation": "2026-10-09T22:49:48.5512414+02:00",
+      "queuing": "2026-10-09T22:49:48.5512415+02:00",
+      "start": "2026-10-09T22:49:47.3696788+02:00",
+      "finish": "2026-10-09T23:03:04.9837522+02:00"
+    },
+    "FailedResults": []
+  },
+  "CIWorkflowRun": "https://github.com/arturgladysz91/zuzel/actions/runs/37987846338",
+  "CIShards": {
+    "core": 1564,
+    "trajectory": 395,
+    "historical-analysis": 473,
+    "four-rider": 48
+  },
+  "PythonTests": 78,
+  "PlatformCaptureCommit": "66fccfd6df65c8b71a52099def3068e2d14ddd37",
+  "PlatformComparison": "Original all-hash assertion failed on newly observable native-B diagnostics. Complete typed inspection found only 212 Interaction.Episodes double leaves in two cases; all six final states and A/C full traces exact. Final strict comparator verifies immutable per-OS hashes and entire separate map; old historical and REA-001 maps unchanged.",
+  "NativeBFixtureCanonicalLF_SHA256": "7f8f48637dceafbef2e33cb90e821c8df86e6a1e6809b4e2ab20d5006e044099"
+}

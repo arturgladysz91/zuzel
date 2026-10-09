@@ -1,0 +1,15 @@
+{
+  "BaseMainSha": "cd19c399dfc97d7abbd2aca03d50aa2c94a76262",
+  "Patches": {
+    "src/CoreSim/SimulationEngine.cs": [
+      {
+        "Before": "        var position = rider.Position.Advance(canonicalAdvance, travelled);",
+        "After": "        var position = resolution.Outcome == SegmentOutcome.Crash\n            ? rider.Position.Advance(canonicalAdvance, travelled)\n            : rider.Position.AdvanceToSegmentEnd(travelled);"
+      },
+      {
+        "Before": "        var position = rider.Position.Advance(canonicalAdvance, traversal.DistanceMeters);",
+        "After": "        var position = resolution.Outcome == SegmentOutcome.Crash\n            ? rider.Position.Advance(canonicalAdvance, traversal.DistanceMeters)\n            : rider.Position.AdvanceToSegmentEnd(traversal.DistanceMeters);"
+      }
+    ]
+  }
+}

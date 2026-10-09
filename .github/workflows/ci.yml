@@ -103,7 +103,7 @@ jobs:
           name: contact-arithmetic-${{ matrix.os }}
           path: results/physical-contact-consequences
       - name: Exact candidate trace, evidence bytes, Full/Lean and branch degree parity
-        run: dotnet test tests/CoreSim.Tests -c Release --no-build --filter "FullyQualifiedName~TrajectoryBehaviorFingerprintTests|FullyQualifiedName~LeanProjectionTests|FullyQualifiedName~ScalarEnvelopeParityTests|FullyQualifiedName~AdaptiveParallelTests|FullyQualifiedName~PhysicalSpaceTests|FullyQualifiedName~RiderGameplayProfileTests|FullyQualifiedName~ContestedSpaceResponseTests|FullyQualifiedName~PhysicalContactAnalysisTests|FullyQualifiedName~PhysicalContactConsequenceTests|FullyQualifiedName~ContactDecisionGeometryTests|FullyQualifiedName~PhysicalContactPairGenerationTests|FullyQualifiedName~OptionalSafetyProjectionTests" --logger "trx;LogFileName=determinism.trx" --results-directory results --verbosity normal
+        run: dotnet test tests/CoreSim.Tests -c Release --no-build --filter "FullyQualifiedName~TrajectoryBehaviorFingerprintTests|FullyQualifiedName~LeanProjectionTests|FullyQualifiedName~ScalarEnvelopeParityTests|FullyQualifiedName~AdaptiveParallelTests|FullyQualifiedName~PhysicalSpaceTests|FullyQualifiedName~RiderGameplayProfileTests|FullyQualifiedName~ContestedSpaceResponseTests|FullyQualifiedName~PhysicalContactAnalysisTests|FullyQualifiedName~PhysicalContactConsequenceTests|FullyQualifiedName~ContactDecisionGeometryTests|FullyQualifiedName~PhysicalContactPairGenerationTests|FullyQualifiedName~OptionalSafetyProjectionTests|FullyQualifiedName~CanonicalSegmentHandoffTests" --logger "trx;LogFileName=determinism.trx" --results-directory results --verbosity normal
       - name: Capture typed IEEE values and final rider/raw surface states
         shell: bash
         run: |
@@ -164,6 +164,23 @@ jobs:
             dotnet ../rea001-after-bin/CoreSim.Tests.dll repro "results/rea001/after-$configuration" "$(git rev-parse HEAD)" outside 7 "$configuration"
           done
           python tools/rea001-safety-audit/compare.py results/rea001
+      - name: Exact REA-009 physical traversal preservation and bounded original decimal regressions
+        shell: bash
+        run: |
+          git fetch origin cd19c399dfc97d7abbd2aca03d50aa2c94a76262
+          git worktree add --detach ../rea009-baseline cd19c399dfc97d7abbd2aca03d50aa2c94a76262
+          baseline="$(cd ../rea009-baseline && pwd)"
+          dotnet build tools/rea009-handoff-audit -c Release --warnaserror -p:CoreSimRoot="$baseline" -o ../rea009-physical-before-bin
+          dotnet build tools/rea009-handoff-audit -c Release --warnaserror -o ../rea009-physical-after-bin
+          dotnet ../rea009-physical-before-bin/CoreSim.Tests.dll capture results/rea009/physical-before.json
+          dotnet ../rea009-physical-after-bin/CoreSim.Tests.dll capture results/rea009/physical-after.json
+          python tools/rea009-handoff-audit/compare.py results/rea009/physical-before.json results/rea009/physical-after.json --report results/rea009/physical-comparison.json
+          dotnet build tools/race-engine-readiness -c Release --warnaserror -o ../rea009-readiness-after-bin
+          for scenario in three-squeeze four-close-regain; do
+            for configuration in A B C; do
+              dotnet ../rea009-readiness-after-bin/CoreSim.Tests.dll repro "results/rea009/after-$scenario-19-$configuration" "$(git rev-parse HEAD)" "$scenario" 19 "$configuration"
+            done
+          done
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -197,6 +214,7 @@ jobs:
           python tools/race-engine-readiness/compare.py captures/determinism-windows-latest/readiness
           python tools/race-engine-readiness/compare.py captures/determinism-ubuntu-latest/readiness
           python tools/rea001-safety-audit/compare.py captures/determinism-windows-latest/rea001 captures/determinism-ubuntu-latest/rea001 --report captures/rea001-platform-comparison.json
+          python tools/rea009-handoff-audit/compare.py captures/determinism-windows-latest/rea009 captures/determinism-ubuntu-latest/rea009 --platforms --report captures/rea009-platform-comparison.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -206,6 +224,7 @@ jobs:
             captures/contested-performance-comparison.json
             captures/contact-decision-*.json*
             captures/rea001-platform-comparison.json
+            captures/rea009-platform-comparison.json
 
   python:
     runs-on: ubuntu-latest

@@ -1,0 +1,2141 @@
+{
+  "Schema": "rea009-native-b-portability-v1",
+  "EvidenceCommit": "66fccfd6df65c8b71a52099def3068e2d14ddd37",
+  "Interpretation": "Newly observable complete native-B diagnostics after repairing the early handoff abort; unchanged native geometry arithmetic. Exact final production state and A/C complete traces are required. This separate map does not replace historical goldens, the 22-case/1088-leaf map, REA-001 native-B pins or issue #62.",
+  "SummaryBehaviorHashes": {
+    "after-three-squeeze-19-B": {
+      "Windows": "32CE020FE866EA7B9246C973EC8EE3097040580CC69F4742AF954ED86BCB3BD0",
+      "Ubuntu": "1BEDD09CE4189938A464C83808EBFC45C468B63F48F7AC51FD17F6F69176976B"
+    },
+    "after-four-close-regain-19-B": {
+      "Windows": "3B3083D96D072CE302B5FBE80FE0AF4B18CB2D72804B3C7E4829CFEA3C79CFE5",
+      "Ubuntu": "B0516C50EA056A08C3F31BA024B6E956677E259BA06F1DA14944C6AE3F32F0DD"
+    }
+  },
+  "Divergences": {
+    "after-three-squeeze-19-B": {
+      "root.Steps[12].Interaction.Episodes[0].Geometry[0].ForwardBFromAMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "C01C87DC04E9DD7F"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "C01C87DC04E9DD80"
+        }
+      },
+      "root.Steps[12].Interaction.Episodes[0].Geometry[0].OutwardBFromAMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "4017CA2ADA8D4A12"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "4017CA2ADA8D4A0A"
+        }
+      },
+      "root.Steps[16].Interaction.Episodes[0].Geometry[0].ForwardBFromAMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "C01CCE66BA21008D"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "C01CCE66BA21008E"
+        }
+      },
+      "root.Steps[16].Interaction.Episodes[0].Geometry[0].ForwardFootprintOverlapMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "C014771F26D5C5D3"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "C014771F26D5C5D4"
+        }
+      },
+      "root.Steps[16].Interaction.Episodes[0].Geometry[0].OutwardBFromAMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "4017C91F859C0455"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "4017C91F859C044D"
+        }
+      },
+      "root.Steps[24].Interaction.Episodes[0].Geometry[0].ForwardBFromAMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "C01A0F5933DDCDF2"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "C01A0F5933DDCDF3"
+        }
+      },
+      "root.Steps[24].Interaction.Episodes[0].Geometry[0].ForwardFootprintOverlapMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "C011B5AC8F575F69"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "C011B5AC8F575F6A"
+        }
+      },
+      "root.Steps[24].Interaction.Episodes[0].Geometry[0].OutwardBFromAMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "4017D32027B3C19B"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "4017D32027B3C193"
+        }
+      },
+      "root.Steps[24].Interaction.Episodes[0].Geometry[0].TimeToConflictSeconds": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF972038AFB9C14"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF972038AFB9C15"
+        }
+      },
+      "root.Steps[25].Interaction.Episodes[0].Geometry[0].ForwardBFromAMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "C01A0F5933DDCDF2"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "C01A0F5933DDCDF3"
+        }
+      },
+      "root.Steps[25].Interaction.Episodes[0].Geometry[0].ForwardFootprintOverlapMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "C011B5AC8F575F69"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "C011B5AC8F575F6A"
+        }
+      },
+      "root.Steps[25].Interaction.Episodes[0].Geometry[0].OutwardBFromAMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "4017D32027B3C19B"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "4017D32027B3C193"
+        }
+      },
+      "root.Steps[25].Interaction.Episodes[0].Geometry[0].TimeToConflictSeconds": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF972038AFB9C14"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF972038AFB9C15"
+        }
+      },
+      "root.Steps[26].Interaction.Episodes[0].Candidates[6].Cost.ClearanceShortfallMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FE70DD9AF2B09AC"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FE70DD9AF2B0A01"
+        }
+      },
+      "root.Steps[26].Interaction.Episodes[0].Candidates[6].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "BFAED533DFBEB3C8"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "BFAED533DFBEB670"
+        }
+      },
+      "root.Steps[26].Interaction.Episodes[0].Candidates[7].Cost.ClearanceShortfallMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FE70DD9AF2B09AC"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FE70DD9AF2B0A01"
+        }
+      },
+      "root.Steps[26].Interaction.Episodes[0].Candidates[7].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "BFAED533DFBEB3C8"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "BFAED533DFBEB670"
+        }
+      },
+      "root.Steps[26].Interaction.Episodes[0].Geometry[0].ForwardBFromAMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "C01A0F5933DDCDF2"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "C01A0F5933DDCDF3"
+        }
+      },
+      "root.Steps[26].Interaction.Episodes[0].Geometry[0].ForwardFootprintOverlapMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "C011B5AC8F575F69"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "C011B5AC8F575F6A"
+        }
+      },
+      "root.Steps[26].Interaction.Episodes[0].Geometry[0].OutwardBFromAMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "4017D32027B3C19B"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "4017D32027B3C193"
+        }
+      },
+      "root.Steps[26].Interaction.Episodes[0].Geometry[0].TimeToConflictSeconds": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF972038AFB9C14"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF972038AFB9C15"
+        }
+      },
+      "root.Steps[27].Interaction.Episodes[0].Candidates[0].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FDE534349ECD3AE"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FDE534349ECD42E"
+        }
+      },
+      "root.Steps[27].Interaction.Episodes[0].Candidates[1].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FDE534349ECD3AE"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FDE534349ECD42E"
+        }
+      },
+      "root.Steps[27].Interaction.Episodes[0].Candidates[2].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FDE534349ECD3AE"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FDE534349ECD42E"
+        }
+      },
+      "root.Steps[27].Interaction.Episodes[0].Candidates[3].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FDD8F7CF738DF32"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FDD8F7CF738DFAE"
+        }
+      },
+      "root.Steps[27].Interaction.Episodes[0].Candidates[4].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FE0D5AA86C7BEB0"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FE0D5AA86C7BEF0"
+        }
+      },
+      "root.Steps[27].Interaction.Episodes[0].Candidates[5].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FE0D5AA86C7BEB0"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FE0D5AA86C7BEF0"
+        }
+      },
+      "root.Steps[27].Interaction.Episodes[0].Candidates[8].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FE0D5AA86C7BEB0"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FE0D5AA86C7BEF0"
+        }
+      },
+      "root.Steps[27].Interaction.Episodes[0].FinalMinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FDE534349ECD3AE"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FDE534349ECD42E"
+        }
+      },
+      "root.Steps[27].Interaction.Episodes[0].Geometry[0].ForwardBFromAMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "C01A0F5933DDCDF2"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "C01A0F5933DDCDF3"
+        }
+      },
+      "root.Steps[27].Interaction.Episodes[0].Geometry[0].ForwardFootprintOverlapMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "C011B5AC8F575F69"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "C011B5AC8F575F6A"
+        }
+      },
+      "root.Steps[27].Interaction.Episodes[0].Geometry[0].OutwardBFromAMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "4017D32027B3C19B"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "4017D32027B3C193"
+        }
+      },
+      "root.Steps[27].Interaction.Episodes[0].Geometry[0].TimeToConflictSeconds": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF972038AFB9C14"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF972038AFB9C15"
+        }
+      },
+      "root.Steps[4].Interaction.Episodes[0].Candidates[0].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FDCAF37FDB257E8"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FDCAF37FDB25868"
+        }
+      },
+      "root.Steps[4].Interaction.Episodes[0].Candidates[1].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FDCAF36CBEFF90A"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FDCAF36CBEFF88A"
+        }
+      },
+      "root.Steps[4].Interaction.Episodes[0].Candidates[2].Cost.ClearanceShortfallMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FD39B5E2E2A4C6E"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FD39B5E2E2A4D1A"
+        }
+      },
+      "root.Steps[4].Interaction.Episodes[0].Candidates[2].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FC2CB08383C19F8"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FC2CB08383C194C"
+        }
+      },
+      "root.Steps[4].Interaction.Episodes[0].Candidates[5].Cost.ClearanceShortfallMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FD39B5E2E2A4C6E"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FD39B5E2E2A4D1A"
+        }
+      },
+      "root.Steps[4].Interaction.Episodes[0].Candidates[5].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FC2CB08383C19F8"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FC2CB08383C194C"
+        }
+      },
+      "root.Steps[4].Interaction.Episodes[0].Candidates[8].Cost.ClearanceShortfallMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FD39B5E2E2A4C6E"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FD39B5E2E2A4D1A"
+        }
+      },
+      "root.Steps[4].Interaction.Episodes[0].Candidates[8].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FC2CB08383C19F8"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FC2CB08383C194C"
+        }
+      },
+      "root.Steps[4].Interaction.Episodes[0].Geometry[0].ForwardBFromAMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "BFBF2BD1C7770F79"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "BFBF2BD1C7770F7A"
+        }
+      },
+      "root.Steps[4].Interaction.Episodes[0].Geometry[0].OutwardBFromAMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "400FFFFB0AEA5157"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "400FFFFB0AEA5147"
+        }
+      },
+      "root.Steps[4].Interaction.Episodes[0].Geometry[0].Space.Contributions.ARotationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3F876834B7A3EB80"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3F876834B7A3EB40"
+        }
+      },
+      "root.Steps[4].Interaction.Episodes[0].Geometry[0].Space.Contributions.ATranslationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "BF90D57667352800"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "BF90D57667353020"
+        }
+      },
+      "root.Steps[4].Interaction.Episodes[0].Geometry[0].Space.Contributions.ActualClosingMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "BF7802DDB4186C00"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "BF7802DDB4188C80"
+        }
+      },
+      "root.Steps[4].Interaction.Episodes[0].Geometry[0].Space.Contributions.BTranslationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "BCFF800000000000"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "BD00400000000000"
+        }
+      },
+      "root.Steps[4].Interaction.Episodes[0].Geometry[0].Space.Contributions.NonadditiveResidualMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "BF4BEB6C345C1C00"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "BF4BEB6C345C1000"
+        }
+      },
+      "root.Steps[4].Interaction.Episodes[0].Geometry[0].Space.MinimumSeparationLowerBoundMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FD800D44370B8D7"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FD800D44370B855"
+        }
+      },
+      "root.Steps[4].Interaction.Episodes[0].Geometry[0].Space.MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FDCAF37FDB257E8"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FDCAF37FDB25868"
+        }
+      },
+      "root.Steps[4].Interaction.Episodes[0].Geometry[0].Space.RelativePositionAtOnsetMeters.Length": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF64124194CF966"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF64124194CF94F"
+        }
+      },
+      "root.Steps[4].Interaction.Episodes[0].Geometry[0].Space.RelativePositionAtOnsetMeters.Y": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF0000016AFEA60"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF0000016AFEA40"
+        }
+      },
+      "root.Steps[4].Interaction.Episodes[0].InitialMinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FDCAF37FDB257E8"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FDCAF37FDB25868"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Candidates[0].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FDB8C755EA58728"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FDB8C755EA586A8"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Candidates[3].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FDB8C755EA58728"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FDB8C755EA586A8"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Candidates[4].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FDCAF36C60D4EC2"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FDCAF36C60D4F40"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Candidates[5].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FDCAF36C60D4EC2"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FDCAF36C60D4F40"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Candidates[6].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FDB8C755EA58728"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FDB8C755EA586A8"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Candidates[7].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FDCAF36C60D4EC2"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FDCAF36C60D4F40"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Candidates[8].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FDCAF36C60D4EC2"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FDCAF36C60D4F40"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].FinalMinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FDB8C755EA58728"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FDB8C755EA586A8"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Geometry[0].OutwardBFromAMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF0000000000005"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FEFFFFFFFFFFFC9"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Geometry[0].Space.Contributions.ATranslationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "BFB2431194647B40"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "BFB2431194647F48"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Geometry[0].Space.Contributions.ActualClosingMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "BFAF39917ECDC680"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "BFAF39917ECDCE90"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Geometry[0].Space.MinimumSeparationLowerBoundMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FD531DF81CBA1B6"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FD531DF81CBA136"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Geometry[0].Space.MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FDB8C755EA58728"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FDB8C755EA586A8"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Geometry[0].Space.RelativePositionAtOnsetMeters.Length": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF64136493B8BF6"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF64136493B8BDF"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Geometry[0].Space.RelativePositionAtOnsetMeters.Y": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF0000016B010C0"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF0000016B010A0"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].InitialMinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FDB8C755EA58728"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FDB8C755EA586A8"
+        }
+      },
+      "root.Steps[6].Interaction.Episodes[0].Candidates[0].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "4001D813EE5E589A"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "4001D813EE5E58A9"
+        }
+      },
+      "root.Steps[6].Interaction.Episodes[0].Candidates[3].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "4001D813EE5E589A"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "4001D813EE5E58A9"
+        }
+      },
+      "root.Steps[6].Interaction.Episodes[0].Candidates[6].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "4001D813EE5E589A"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "4001D813EE5E58A9"
+        }
+      },
+      "root.Steps[6].Interaction.Episodes[0].Geometry[0].ForwardBFromAMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "C0078DE8D48DDE41"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "C0078DE8D48DDE4E"
+        }
+      },
+      "root.Steps[6].Interaction.Episodes[0].Geometry[0].ForwardFootprintOverlapMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "BFF20F4A9C9A9570"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "BFF20F4A9C9A95A0"
+        }
+      },
+      "root.Steps[6].Interaction.Episodes[0].Geometry[0].OutwardBFromAMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "4008675D4FBF94BE"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "4008675D4FBF94C7"
+        }
+      },
+      "root.Steps[6].Interaction.Episodes[0].Geometry[0].Space.Contributions.ATranslationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "BFDA5D03645D9040"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "BFDA5D03645D9048"
+        }
+      },
+      "root.Steps[6].Interaction.Episodes[0].Geometry[0].Space.Contributions.BTranslationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FD29EC7A3156468"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FD29EC7A3156478"
+        }
+      },
+      "root.Steps[6].Interaction.Episodes[0].Geometry[0].Space.Contributions.NonadditiveResidualMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FB556BE8B4CB500"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FB556BE8B4CB4E0"
+        }
+      },
+      "root.Steps[6].Interaction.Episodes[0].Geometry[0].Space.MinimumSeparationLowerBoundMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "4000FEDD4904E8D0"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "4000FEDD4904E8DF"
+        }
+      },
+      "root.Steps[6].Interaction.Episodes[0].Geometry[0].Space.MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "4001D813EE5E589A"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "4001D813EE5E58A9"
+        }
+      },
+      "root.Steps[6].Interaction.Episodes[0].Geometry[0].Space.RelativePositionAtOnsetMeters.Length": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "4010F55A47EB0A46"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "4010F55A47EB0A4E"
+        }
+      },
+      "root.Steps[6].Interaction.Episodes[0].Geometry[0].Space.RelativePositionAtOnsetMeters.Y": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "4010884D80711D50"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "4010884D80711D58"
+        }
+      },
+      "root.Steps[6].Interaction.Episodes[0].Geometry[0].Space.RelativeVelocityAtOnsetMetersPerSecond.Length": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "4005D453762C9BBF"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "4005D453762C9BBB"
+        }
+      },
+      "root.Steps[6].Interaction.Episodes[0].Geometry[0].Space.RelativeVelocityAtOnsetMetersPerSecond.X": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "C00571DD22593718"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "C00571DD22593714"
+        }
+      },
+      "root.Steps[6].Interaction.Episodes[0].Geometry[0].TimeToConflictSeconds": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF1E6D467A17841"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF1E6D467A17871"
+        }
+      },
+      "root.Steps[6].Interaction.Episodes[0].InitialMinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "4001D813EE5E589A"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "4001D813EE5E58A9"
+        }
+      },
+      "root.Steps[8].Interaction.Episodes[0].Geometry[0].ForwardBFromAMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "C01C59AFF44A757C"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "C01C59AFF44A757D"
+        }
+      },
+      "root.Steps[8].Interaction.Episodes[0].Geometry[0].ForwardFootprintOverlapMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "C0140200F040D24D"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "C0140200F040D24E"
+        }
+      },
+      "root.Steps[8].Interaction.Episodes[0].Geometry[0].OutwardBFromAMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "4017CADAA8C9FE26"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "4017CADAA8C9FE1E"
+        }
+      },
+      "root.Steps[8].Interaction.Episodes[0].Geometry[0].Space.RelativePositionAtOnsetMeters.Length": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FFDA3872FEF7AD8"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FFDA3872FEF7ACB"
+        }
+      },
+      "root.Steps[8].Interaction.Episodes[0].Geometry[0].Space.RelativePositionAtOnsetMeters.Y": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FE8749E50577B80"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FE8749E50577B40"
+        }
+      }
+    },
+    "after-four-close-regain-19-B": {
+      "root.Steps[12].Interaction.Episodes[0].Candidates[0].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB184DF0BA0"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB184DF0BC0"
+        }
+      },
+      "root.Steps[12].Interaction.Episodes[0].Candidates[1].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB184DF0BA0"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB184DF0BC0"
+        }
+      },
+      "root.Steps[12].Interaction.Episodes[0].Geometry[0].ForwardBFromAMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "C00DF7AC9C1F9C3F"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "C00DF7AC9C1F9C40"
+        }
+      },
+      "root.Steps[12].Interaction.Episodes[0].Geometry[0].OutwardBFromAMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "4017F1330FEF042F"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "4017F1330FEF0427"
+        }
+      },
+      "root.Steps[12].Interaction.Episodes[0].Geometry[0].Space.MinimumSeparationLowerBoundMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF55DF145242F4C"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF55DF145242F6C"
+        }
+      },
+      "root.Steps[12].Interaction.Episodes[0].Geometry[0].Space.MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB184DF0BA0"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB184DF0BC0"
+        }
+      },
+      "root.Steps[12].Interaction.Episodes[0].Geometry[0].Space.RelativePositionAtOnsetMeters.Length": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "4001F050E653E7AA"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "4001F050E653E7B8"
+        }
+      },
+      "root.Steps[12].Interaction.Episodes[0].Geometry[0].Space.RelativePositionAtOnsetMeters.Y": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "C000287B35ABC2C0"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "C000287B35ABC2D0"
+        }
+      },
+      "root.Steps[12].Interaction.Episodes[0].InitialMinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB184DF0BA0"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB184DF0BC0"
+        }
+      },
+      "root.Steps[13].Interaction.Episodes[0].Candidates[3].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB184E7834C"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB184E7836C"
+        }
+      },
+      "root.Steps[13].Interaction.Episodes[0].Candidates[4].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB184E7834C"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB184E7836C"
+        }
+      },
+      "root.Steps[13].Interaction.Episodes[0].Candidates[5].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB184E7834C"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB184E7836C"
+        }
+      },
+      "root.Steps[13].Interaction.Episodes[0].Candidates[6].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB184E7834C"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB184E7836C"
+        }
+      },
+      "root.Steps[13].Interaction.Episodes[0].Candidates[7].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB184E7834C"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB184E7836C"
+        }
+      },
+      "root.Steps[13].Interaction.Episodes[0].Candidates[8].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB184E7834C"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB184E7836C"
+        }
+      },
+      "root.Steps[13].Interaction.Episodes[0].FinalMinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "4006D60C55E21646"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "4006D60C55E21645"
+        }
+      },
+      "root.Steps[13].Interaction.Episodes[0].Geometry[0].ForwardBFromAMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "C00DF7AC9C1F9C3F"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "C00DF7AC9C1F9C40"
+        }
+      },
+      "root.Steps[13].Interaction.Episodes[0].Geometry[0].OutwardBFromAMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "4017F1330FEF042F"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "4017F1330FEF0427"
+        }
+      },
+      "root.Steps[13].Interaction.Episodes[0].Geometry[0].Space.MinimumSeparationLowerBoundMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF55DF145242F4C"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF55DF145242F6C"
+        }
+      },
+      "root.Steps[13].Interaction.Episodes[0].Geometry[0].Space.MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB184DF0BA0"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB184DF0BC0"
+        }
+      },
+      "root.Steps[13].Interaction.Episodes[0].Geometry[0].Space.RelativePositionAtOnsetMeters.Length": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "4001F050E653E7AA"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "4001F050E653E7B8"
+        }
+      },
+      "root.Steps[13].Interaction.Episodes[0].Geometry[0].Space.RelativePositionAtOnsetMeters.Y": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "C000287B35ABC2C0"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "C000287B35ABC2D0"
+        }
+      },
+      "root.Steps[13].Interaction.Episodes[0].InitialMinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB184DF0BA0"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB184DF0BC0"
+        }
+      },
+      "root.Steps[15].Interaction.Episodes[0].Candidates[0].Cost.ClearanceShortfallMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FE1DB37EFE9CEA8"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FE1DB37EFE9CE8B"
+        }
+      },
+      "root.Steps[15].Interaction.Episodes[0].Candidates[0].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3F957FB4349648B0"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3F957FB434964A80"
+        }
+      },
+      "root.Steps[15].Interaction.Episodes[0].Candidates[2].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FFAD7D1516DC4AE"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FFAD7D1516DC4CB"
+        }
+      },
+      "root.Steps[15].Interaction.Episodes[0].Candidates[3].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FE8AE291BB8B437"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FE8AE291BB8B478"
+        }
+      },
+      "root.Steps[15].Interaction.Episodes[0].Candidates[8].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF653B33DB126D4"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF653B33DB126EF"
+        }
+      },
+      "root.Steps[15].Interaction.Episodes[0].Geometry[0].Space.Contributions.ARotationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "BF6937400C2F1A00"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "BF6937400C2F1E80"
+        }
+      },
+      "root.Steps[15].Interaction.Episodes[0].Geometry[0].Space.Contributions.ATranslationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3F75F5C1FAD3C440"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3F75F5C1FAD3CB80"
+        }
+      },
+      "root.Steps[15].Interaction.Episodes[0].Geometry[0].Space.Contributions.ActualClosingMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "BFB35A019F0E3290"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "BFB35A019F0E3214"
+        }
+      },
+      "root.Steps[15].Interaction.Episodes[0].Geometry[0].Space.Contributions.BTranslationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "BFB41BD1D36E7934"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "BFB41BD1D36E78F4"
+        }
+      },
+      "root.Steps[15].Interaction.Episodes[0].Geometry[0].Space.Contributions.NonadditiveResidualMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3F46170A8A419800"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3F46170A8A418E00"
+        }
+      },
+      "root.Steps[15].Interaction.Episodes[0].Geometry[0].Space.MinimumSeparationLowerBoundMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "BFB7A3E6C2F3ADBE"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "BFB7A3E6C2F3AD4A"
+        }
+      },
+      "root.Steps[15].Interaction.Episodes[0].Geometry[0].Space.MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3F957FB4349648B0"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3F957FB434964A80"
+        }
+      },
+      "root.Steps[15].Interaction.Episodes[0].Geometry[0].Space.RelativePositionAtOnsetMeters.Length": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "4000E6538ADECB71"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "4000E6538ADECB73"
+        }
+      },
+      "root.Steps[15].Interaction.Episodes[0].Geometry[0].Space.RelativePositionAtOnsetMeters.Y": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "BFCB2F6B795A0D80"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "BFCB2F6B795A0E80"
+        }
+      },
+      "root.Steps[15].Interaction.Episodes[0].InitialMinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3F957FB4349648B0"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3F957FB434964A80"
+        }
+      },
+      "root.Steps[16].Interaction.Episodes[0].Candidates[0].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB18574FDA6"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB18574FDC6"
+        }
+      },
+      "root.Steps[16].Interaction.Episodes[0].Candidates[1].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB18574FDA6"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB18574FDC6"
+        }
+      },
+      "root.Steps[16].Interaction.Episodes[0].Candidates[2].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB18574FDA6"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB18574FDC6"
+        }
+      },
+      "root.Steps[16].Interaction.Episodes[0].Candidates[3].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB18574FDA6"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB18574FDC6"
+        }
+      },
+      "root.Steps[16].Interaction.Episodes[0].Candidates[4].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB18574FDA6"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB18574FDC6"
+        }
+      },
+      "root.Steps[16].Interaction.Episodes[0].Candidates[5].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB18574FDA6"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB18574FDC6"
+        }
+      },
+      "root.Steps[16].Interaction.Episodes[0].Candidates[8].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB18574FDA6"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB18574FDC6"
+        }
+      },
+      "root.Steps[16].Interaction.Episodes[0].FinalMinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB18574FDA6"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB18574FDC6"
+        }
+      },
+      "root.Steps[16].Interaction.Episodes[0].Geometry[0].Space.Contributions.ARotationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "BF6937400C2F1A00"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "BF6937400C2F1E80"
+        }
+      },
+      "root.Steps[16].Interaction.Episodes[0].Geometry[0].Space.Contributions.ATranslationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3F75F5C1FAD3C440"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3F75F5C1FAD3CB80"
+        }
+      },
+      "root.Steps[16].Interaction.Episodes[0].Geometry[0].Space.Contributions.ActualClosingMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "BFB35A019F0E3290"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "BFB35A019F0E3214"
+        }
+      },
+      "root.Steps[16].Interaction.Episodes[0].Geometry[0].Space.Contributions.BTranslationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "BFB41BD1D36E7934"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "BFB41BD1D36E78F4"
+        }
+      },
+      "root.Steps[16].Interaction.Episodes[0].Geometry[0].Space.Contributions.NonadditiveResidualMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3F46170A8A419800"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3F46170A8A418E00"
+        }
+      },
+      "root.Steps[16].Interaction.Episodes[0].Geometry[0].Space.MinimumSeparationLowerBoundMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "BFB7A3E6C2F3ADBE"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "BFB7A3E6C2F3AD4A"
+        }
+      },
+      "root.Steps[16].Interaction.Episodes[0].Geometry[0].Space.MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3F957FB4349648B0"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3F957FB434964A80"
+        }
+      },
+      "root.Steps[16].Interaction.Episodes[0].Geometry[0].Space.RelativePositionAtOnsetMeters.Length": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "4000E6538ADECB71"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "4000E6538ADECB73"
+        }
+      },
+      "root.Steps[16].Interaction.Episodes[0].Geometry[0].Space.RelativePositionAtOnsetMeters.Y": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "BFCB2F6B795A0D80"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "BFCB2F6B795A0E80"
+        }
+      },
+      "root.Steps[16].Interaction.Episodes[0].InitialMinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3F957FB4349648B0"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3F957FB434964A80"
+        }
+      },
+      "root.Steps[1].Interaction.Episodes[0].Candidates[3].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF33B4159B27D20"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF33B4159B27D40"
+        }
+      },
+      "root.Steps[1].Interaction.Episodes[0].Candidates[6].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF33B4159B27D20"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF33B4159B27D40"
+        }
+      },
+      "root.Steps[2].Interaction.Episodes[0].Geometry[0].Space.Contributions.ActualClosingMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3F131975748B8000"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3F131975748D0000"
+        }
+      },
+      "root.Steps[2].Interaction.Episodes[0].Geometry[0].Space.Contributions.BTranslationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "BF85DBA61654C300"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "BF85DBA61654C000"
+        }
+      },
+      "root.Steps[2].Interaction.Episodes[0].Geometry[0].Space.MinimumSeparationLowerBoundMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FFC230B8A73B6EC"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FFC230B8A73B6E6"
+        }
+      },
+      "root.Steps[2].Interaction.Episodes[0].Geometry[0].Space.MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FFD8CA98958DB66"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FFD8CA98958DB60"
+        }
+      },
+      "root.Steps[3].Interaction.Episodes[0].Geometry[0].ForwardClosingMetersPerSecond": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FEED080D8D2D518"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FEED080D8D2D510"
+        }
+      },
+      "root.Steps[4].Interaction.Episodes[0].Geometry[0].Space.Contributions.ARotationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "BF765AF4F4958200"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "BF765AF4F4958000"
+        }
+      },
+      "root.Steps[4].Interaction.Episodes[0].Geometry[0].Space.Contributions.ATranslationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FD0D0A713A3ED6C"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FD0D0A713A3ED68"
+        }
+      },
+      "root.Steps[4].Interaction.Episodes[0].Geometry[0].Space.Contributions.ActualClosingMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3F50115949550000"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3F50115949550800"
+        }
+      },
+      "root.Steps[4].Interaction.Episodes[0].Geometry[0].Space.Contributions.BTranslationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "BFD3472F7F501A58"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "BFD3472F7F501A50"
+        }
+      },
+      "root.Steps[4].Interaction.Episodes[0].Geometry[0].Space.Contributions.NonadditiveResidualMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FA7002CC63EBFA0"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FA7002CC63EBF80"
+        }
+      },
+      "root.Steps[4].Interaction.Episodes[0].Geometry[0].Space.MinimumSeparationLowerBoundMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FFC82D3F1F1ED8F"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FFC82D3F1F1EDA9"
+        }
+      },
+      "root.Steps[4].Interaction.Episodes[0].Geometry[0].Space.MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FFDA163603D80CA"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FFDA163603D80E4"
+        }
+      },
+      "root.Steps[4].Interaction.Episodes[0].Geometry[0].Space.RelativePositionAtOnsetMeters.Length": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "400B0661444478AB"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "400B0661444478B5"
+        }
+      },
+      "root.Steps[4].Interaction.Episodes[0].Geometry[0].Space.RelativePositionAtOnsetMeters.Y": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "C00123E546FB0D18"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "C00123E546FB0D28"
+        }
+      },
+      "root.Steps[4].Interaction.Episodes[0].Geometry[1].Space.MinimumSeparationLowerBoundMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF56CAEDD0CC07C"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF56CAEDD0CC09C"
+        }
+      },
+      "root.Steps[4].Interaction.Episodes[0].Geometry[1].Space.MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB18507F709"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB18507F729"
+        }
+      },
+      "root.Steps[4].Interaction.Episodes[0].Geometry[1].Space.RelativePositionAtOnsetMeters.Length": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "4001D8930721672C"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "4001D8930721673A"
+        }
+      },
+      "root.Steps[4].Interaction.Episodes[0].Geometry[1].Space.RelativePositionAtOnsetMeters.Y": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "C000267062929820"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "C000267062929830"
+        }
+      },
+      "root.Steps[4].Interaction.Episodes[0].Geometry[2].ForwardBFromAMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "C0062CA6E3691753"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "C0062CA6E3691754"
+        }
+      },
+      "root.Steps[4].Interaction.Episodes[0].Geometry[2].OutwardBFromAMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "4007F206D2405DE0"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "4007F206D2405DD0"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Candidates[0].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB1850E71A5"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB1850E71C5"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Candidates[10].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB1850E71A5"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB1850E71C5"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Candidates[11].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB1850E71A5"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB1850E71C5"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Candidates[12].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB1850E71A5"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB1850E71C5"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Candidates[13].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB1850E71A5"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB1850E71C5"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Candidates[14].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB1850E71A5"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB1850E71C5"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Candidates[15].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB1850E71A5"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB1850E71C5"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Candidates[16].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB1850E71A5"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB1850E71C5"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Candidates[17].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB1850E71A5"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB1850E71C5"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Candidates[1].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB1850E71A5"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB1850E71C5"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Candidates[2].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB1850E71A5"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB1850E71C5"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Candidates[3].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB1850E71A5"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB1850E71C5"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Candidates[4].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB1850E71A5"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB1850E71C5"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Candidates[5].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB1850E71A5"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB1850E71C5"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Candidates[6].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB1850E71A5"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB1850E71C5"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Candidates[7].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB1850E71A5"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB1850E71C5"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Candidates[8].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB1850E71A5"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB1850E71C5"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Candidates[9].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB1850E71A5"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB1850E71C5"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Geometry[0].Space.Contributions.ARotationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "BF765AF4F4958200"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "BF765AF4F4958000"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Geometry[0].Space.Contributions.ATranslationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FD0D0A713A3ED6C"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FD0D0A713A3ED68"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Geometry[0].Space.Contributions.ActualClosingMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3F50115949550000"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3F50115949550800"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Geometry[0].Space.Contributions.BTranslationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "BFD3472F7F501A58"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "BFD3472F7F501A50"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Geometry[0].Space.Contributions.NonadditiveResidualMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FA7002CC63EBFA0"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FA7002CC63EBF80"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Geometry[0].Space.MinimumSeparationLowerBoundMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FFC82D3F1F1ED8F"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FFC82D3F1F1EDA9"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Geometry[0].Space.MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FFDA163603D80CA"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FFDA163603D80E4"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Geometry[0].Space.RelativePositionAtOnsetMeters.Length": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "400B0661444478AB"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "400B0661444478B5"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Geometry[0].Space.RelativePositionAtOnsetMeters.Y": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "C00123E546FB0D18"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "C00123E546FB0D28"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Geometry[1].Space.MinimumSeparationLowerBoundMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF56CAEDD0CC07C"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF56CAEDD0CC09C"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Geometry[1].Space.MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB18507F709"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB18507F729"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Geometry[1].Space.RelativePositionAtOnsetMeters.Length": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "4001D8930721672C"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "4001D8930721673A"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Geometry[1].Space.RelativePositionAtOnsetMeters.Y": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "C000267062929820"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "C000267062929830"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Geometry[2].ForwardBFromAMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "C0062CA6E3691753"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "C0062CA6E3691754"
+        }
+      },
+      "root.Steps[5].Interaction.Episodes[0].Geometry[2].OutwardBFromAMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "4007F206D2405DE0"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "4007F206D2405DD0"
+        }
+      },
+      "root.Steps[8].Interaction.Episodes[0].Candidates[0].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB184E01BA8"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB184E01BC8"
+        }
+      },
+      "root.Steps[8].Interaction.Episodes[0].Candidates[1].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB184E01BA8"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB184E01BC8"
+        }
+      },
+      "root.Steps[8].Interaction.Episodes[0].Candidates[2].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB184E01BA8"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB184E01BC8"
+        }
+      },
+      "root.Steps[8].Interaction.Episodes[0].Candidates[3].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB184E01BA8"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB184E01BC8"
+        }
+      },
+      "root.Steps[8].Interaction.Episodes[0].Candidates[4].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB184E01BA8"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB184E01BC8"
+        }
+      },
+      "root.Steps[8].Interaction.Episodes[0].Candidates[5].MinimumSeparationMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "3FF70FB184E01BA8"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "3FF70FB184E01BC8"
+        }
+      },
+      "root.Steps[8].Interaction.Episodes[0].Geometry[0].ForwardBFromAMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "40153334837D98AE"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "40153334837D98AF"
+        }
+      },
+      "root.Steps[8].Interaction.Episodes[0].Geometry[0].ForwardFootprintOverlapMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "C009A9FA7AC2188C"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "C009A9FA7AC2188E"
+        }
+      },
+      "root.Steps[8].Interaction.Episodes[0].Geometry[0].OutwardBFromAMeters": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "C00FDB3D364CB265"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "C00FDB3D364CB255"
+        }
+      },
+      "root.Steps[8].Interaction.Episodes[0].Geometry[0].TimeToConflictSeconds": {
+        "Windows": {
+          "Type": "double",
+          "Bits": "4012595D015BE3BF"
+        },
+        "Ubuntu": {
+          "Type": "double",
+          "Bits": "4012595D015BE3C1"
+        }
+      }
+    }
+  }
+}

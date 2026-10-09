@@ -724,7 +724,9 @@ public sealed class SimulationEngine
                 snapshot.Track.Geometry,
                 surface,
                 rider.Profile.Skills);
-        var position = rider.Position.Advance(canonicalAdvance, travelled);
+        var position = resolution.Outcome == SegmentOutcome.Crash
+            ? rider.Position.Advance(canonicalAdvance, travelled)
+            : rider.Position.AdvanceToSegmentEnd(travelled);
         var status = resolution.Outcome == SegmentOutcome.Crash
             ? RiderRaceStatus.Crashed
             : position.LapsCompleted >= snapshot.Step.RequiredLaps
@@ -785,7 +787,9 @@ public sealed class SimulationEngine
         var traversal = ExecutedPathTraversal.Traverse(snapshot, rider, resolution, entrySpeed, canonicalAdvance,
             launch, NextCorner, captureRich, positiveDriveFraction, holdLateralPosition, lateralAuthority01, contactRecovery);
         var path = traversal.RichPath;
-        var position = rider.Position.Advance(canonicalAdvance, traversal.DistanceMeters);
+        var position = resolution.Outcome == SegmentOutcome.Crash
+            ? rider.Position.Advance(canonicalAdvance, traversal.DistanceMeters)
+            : rider.Position.AdvanceToSegmentEnd(traversal.DistanceMeters);
         var status = resolution.Outcome == SegmentOutcome.Crash ? RiderRaceStatus.Crashed
             : position.LapsCompleted >= snapshot.Step.RequiredLaps ? RiderRaceStatus.Finished : RiderRaceStatus.Racing;
         StandingStartLaunchProfile? launchProfile = path is not null && launch ? path.LaunchProfile(rider.ActiveSetup) : null;
