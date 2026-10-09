@@ -10,15 +10,15 @@ namespace CoreSim.Tests;
 public sealed class AdaptiveParallelTests
 {
     [Fact]
-    public void ExistingFractionalProgressDomainFailureKeepsItsTypeAndMessage()
+    public void FractionalProgressCompletesWithExactSerialParallelDecisions()
     {
         var source = FourRiderBehaviorSuite.CreateScenarios().Single(s => s.Id == "B");
         var rider = (source.Riders[0] with { SegmentProgress = .05f }).Create(source.Track);
         var context = TrajectoryEvaluatorTests.Context(source.Track, rider, source.CreateSurface());
-        var serial = Record.Exception(() => new AdaptiveDecisionModel { MaxDegreeOfParallelism = 1 }.Evaluate(context));
-        var parallel = Record.Exception(() => new AdaptiveDecisionModel { MaxDegreeOfParallelism = 4 }.Evaluate(context));
-        Assert.NotNull(serial); Assert.NotNull(parallel);
-        Assert.Equal(serial.GetType(), parallel.GetType()); Assert.Equal(serial.Message, parallel.Message);
+        var serial = new AdaptiveDecisionModel { MaxDegreeOfParallelism = 1 }.Evaluate(context);
+        var parallel = new AdaptiveDecisionModel { MaxDegreeOfParallelism = 4 }.Evaluate(context);
+        Assert.Equal(JsonSerializer.Serialize(serial), JsonSerializer.Serialize(parallel));
+        Assert.True(serial.ProductionResolutions > 0);
     }
     [Fact]
     public void AllAuditedCandidatesAndUniquePrefixCountsMatchDegreeOneExactly()
