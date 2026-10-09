@@ -31,10 +31,24 @@ def compare_physical(before, after):
             raise ValueError('Lost motion origin')
         if right['root.Motion.Final.CanonicalProgress'] != right['root.Final.TotalSegmentProgress']:
             raise ValueError('Unreconciled final motion')
-        differences = [{'Path': p, 'Before': left.get(p), 'After': right.get(p)}
-                       for p in sorted(left.keys() | right.keys()) if left.get(p) != right.get(p)]
+        differences = [{'Path': p, 'BeforePresent': p in left, 'Before': left.get(p),
+                        'AfterPresent': p in right, 'After': right.get(p)}
+                       for p in sorted(left.keys() | right.keys())
+                       if p not in left or p not in right or left[p] != right[p]]
         if crash and differences:
             raise ValueError('Partial crash changed')
+        origin_preserved = left.get('root.Motion.Nodes.Count') == 1 and right.get('root.Motion.Nodes.Count') == 2
+        allowed_state = {'root.Final.TotalSegmentProgress', 'root.Final.SegmentProgress',
+                         'root.Final.SegmentIndex', 'root.Final.LapsCompleted', 'root.Status'}
+        for delta in differences:
+            path = delta['Path']
+            if path in allowed_state or path.startswith('root.Motion.ExitBoundary.') or path in ('root.Motion.ExitBoundary',):
+                continue
+            if path.startswith('root.Motion.') and path.endswith(('.CanonicalProgress', '.SegmentProgress')):
+                continue
+            if origin_preserved and (path.startswith('root.Motion.Initial.') or path.startswith('root.Motion.Nodes')):
+                continue
+            raise ValueError(f'Unexpected representation change: {name}/{path}')
         if differences:
             changes.append({'Case': name, 'FirstDifference': differences[0], 'Differences': differences})
     return {'Schema': 'rea009-physical-comparison-v1', 'Traversals': 104,
