@@ -137,6 +137,18 @@ jobs:
           dotnet build tools/contact-decision-audit -c Release --warnaserror -o ../contact-decision-after-bin
           dotnet ../contact-decision-before-bin/CoreSim.Tests.dll capture results/contact-decision/before.json
           dotnet ../contact-decision-after-bin/CoreSim.Tests.dll capture results/contact-decision/after.json
+      - name: Bounded readiness smoke and exact original-main observation parity
+        shell: bash
+        run: |
+          git fetch origin c13af7b8a16fe4e58e9d404c849cdf323649b0ed
+          git diff --exit-code c13af7b8a16fe4e58e9d404c849cdf323649b0ed HEAD -- src data
+          git worktree add --detach ../readiness-baseline c13af7b8a16fe4e58e9d404c849cdf323649b0ed
+          baseline="$(cd ../readiness-baseline && pwd)"
+          dotnet build tools/race-engine-readiness -c Release --warnaserror -p:CoreSimRoot="$baseline" -o ../readiness-before-bin
+          dotnet build tools/race-engine-readiness -c Release --warnaserror -o ../readiness-after-bin
+          dotnet ../readiness-before-bin/CoreSim.Tests.dll smoke results/readiness/before c13af7b8a16fe4e58e9d404c849cdf323649b0ed
+          dotnet ../readiness-after-bin/CoreSim.Tests.dll smoke results/readiness/after "$(git rev-parse HEAD)"
+          python tools/race-engine-readiness/compare.py results/readiness
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -167,6 +179,8 @@ jobs:
           python tools/physical-contact-consequence-audit/compare.py captures
           python tools/contested-performance/compare.py captures --platforms
           python tools/contact-decision-audit/compare.py captures
+          python tools/race-engine-readiness/compare.py captures/determinism-windows-latest/readiness
+          python tools/race-engine-readiness/compare.py captures/determinism-ubuntu-latest/readiness
       - uses: actions/upload-artifact@v4
         if: always()
         with:
