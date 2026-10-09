@@ -1,0 +1,30 @@
+diff --git a/src/CoreSim/Interactions/ContestedSpaceInteractionCoordinator.cs b/src/CoreSim/Interactions/ContestedSpaceInteractionCoordinator.cs
+index 3110217..71b98bb 100644
+--- a/src/CoreSim/Interactions/ContestedSpaceInteractionCoordinator.cs
++++ b/src/CoreSim/Interactions/ContestedSpaceInteractionCoordinator.cs
+@@ -309 +309,3 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
+-                if (safetyCache.TryGetValue(key, out var cached)) return cached with { Alternative = alternative };
++                if (safetyCache.TryGetValue(key, out var cached))
++                { ProjectionCaptureAudit.Record(ProjectionMaterialization.SafetyProjectionCacheHit); return cached with { Alternative = alternative }; }
++                ProjectionCaptureAudit.Record(ProjectionMaterialization.SafetyProjectionRequest);
+@@ -317,0 +320 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
++                    ProjectionCaptureAudit.Record(ProjectionMaterialization.SafetyFrozenReuse);
+@@ -323 +326,10 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
+-                    var step = engine.ResolveProduction(solo, new[] { new RiderIntent(rider.RiderId, decision) }, options, legacyContacts: false);
++                    ProjectionCaptureAudit.Record(ProjectionMaterialization.SafetyProductionAttempt);
++                    ResolvedSimulationStep step;
++                    try { step = engine.ResolveProduction(solo, new[] { new RiderIntent(rider.RiderId, decision) }, options, legacyContacts: false); }
++                    catch (Exception)
++                    {
++                        ProjectionCaptureAudit.Record(ProjectionMaterialization.SafetyProjectionFailure);
++                        ProjectionCaptureAudit.Record(ProjectionMaterialization.ProductionResolutionAtFailure, production + 1);
++                        ProjectionCaptureAudit.Record(ProjectionMaterialization.NarrowPhaseAtFailure, narrow);
++                        throw;
++                    }
+diff --git a/src/CoreSim/Track/ProjectionCaptureAudit.cs b/src/CoreSim/Track/ProjectionCaptureAudit.cs
+index ed9b4a2..1503857 100644
+--- a/src/CoreSim/Track/ProjectionCaptureAudit.cs
++++ b/src/CoreSim/Track/ProjectionCaptureAudit.cs
+@@ -8,0 +9,2 @@ internal enum ProjectionMaterialization
++    SafetyProjectionRequest, SafetyProjectionCacheHit, SafetyProjectionFailure, SafetyProductionAttempt, SafetyFrozenReuse,
++    ProductionResolutionAtFailure, NarrowPhaseAtFailure,

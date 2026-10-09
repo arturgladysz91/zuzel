@@ -73,7 +73,7 @@ foreach (var configuration in mode == "repro" ? new[] { args.ElementAtOrDefault(
     if (first.BehaviorHash != reverse.BehaviorHash || first.FinalHash != reverse.FinalHash)
         throw new InvalidOperationException($"Exact input-order regression: {scenario.Id}/{seed}/{configuration}");
     // Representative no-observer and repeat runs cover observer parity and cross-heat isolation.
-    var checkObserver = first.Failed || mode is "pilot" or "smoke" || (scenario.Id == "balanced-motoarena" && seed == 19);
+    var checkObserver = first.Failed || mode is "pilot" or "smoke" or "repro" || (scenario.Id == "balanced-motoarena" && seed == 19);
     if (checkObserver)
     {
         var bare = Run(scenario, options, false, false, false);

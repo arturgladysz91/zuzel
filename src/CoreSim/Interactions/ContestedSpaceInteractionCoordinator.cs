@@ -8,7 +8,8 @@ namespace CoreSim.Interactions;
 /// Bounded simultaneous traffic layer. #54 executes every alternative; #55 alone
 /// determines mechanical overlap. This class changes requests, never rider state.
 /// </summary>
-internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTracker tracker, bool reusePairResults = true)
+internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTracker tracker, bool reusePairResults = true,
+    Func<SimulationSnapshot, RiderIntent, HeatSimulationOptions, ResolvedSimulationStep>? resolveOptionalSafety = null)
 {
     private sealed record PairAlternativeResult(double MinimumSeparation, bool HasBoundaryAmbiguityOrCoverageGap,
         int IneligibleIntervals, IReadOnlyList<ContestedSpaceEvent> Intervals);
@@ -16,9 +17,8 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
         IReadOnlyList<PhysicalPoseInterval> Poses, bool WithinTrack);
     internal sealed record Cluster(int[] Riders, InteractionGeometry[] Edges, InteractionContext Context, bool Meaningful = true);
     private sealed record SafetyEvaluationScope(int[] Riders, InteractionGeometry[] Contacts);
-    private readonly record struct ProjectionKey(int RiderId, TrajectoryIntent Intent, float Drive, bool Hold);
     private static ProjectionKey Key(InteractionAlternative a)
-        => new(a.RiderId, a.Intent, a.DriveControl?.PositiveDriveFraction ?? 1f, a.HoldLateralPosition);
+        => ProjectionKey.From(a);
 
     public ResolvedSimulationStep Resolve(SimulationEngine engine, SimulationSnapshot snapshot,
         IReadOnlyList<RiderIntent> intents, HeatSimulationOptions options, InteractionEpisodeTracker? owner = null)
@@ -273,6 +273,7 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
                 winner is not null && unresolved.Count == 0, unresolved, false, episode.ResponseChanges, Math.Max(0, episode.LastActive - episode.Start)));
         }
         var safetyProjectionCount = 0;
+        var retainFailedSafetyActual = false;
         RiderIntent[] SelectedIntents() => intents.Select(i => new RiderIntent(i.RiderId, i.Decision with
         {
             TargetLane = CurrentTarget(selected[i.RiderId].Intent, snapshot),
@@ -301,12 +302,10 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
             var scope = new SafetyEvaluationScope(snapshot.Riders.Where(r => r.IsActive).Select(r => r.RiderId).Order().ToArray(), safetyEdges);
             var ids = scope.Riders;
             var frozen = new Dictionary<int, InteractionAlternative>(selected);
-            var safetyCache = new Dictionary<ProjectionKey, Projection>();
             var safetyPairs = new Dictionary<(ProjectionKey, ProjectionKey), PairAlternativeResult>();
-            Projection SafetyProject(InteractionAlternative alternative)
+            Projection ResolveSafetyProjection(InteractionAlternative alternative)
             {
                 var key = Key(alternative);
-                if (safetyCache.TryGetValue(key, out var cached)) return cached with { Alternative = alternative };
                 var rider = snapshot.Rider(alternative.RiderId);
                 var solo = new SimulationSnapshot(snapshot.Step, snapshot.Track, snapshot.TrackState, new[] { rider });
                 var decision = new RiderDecision(CurrentTarget(alternative.Intent, snapshot))
@@ -315,21 +314,30 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
                 RiderStateChange change;
                 if (key == Key(frozen[rider.RiderId]))
                 {
+                    ProjectionCaptureAudit.Record(ProjectionMaterialization.SafetyFrozenReuse);
                     motion = actual.Motions.Single(m => m.RiderId == rider.RiderId);
                     change = actual.Changes.Single(c => c.RiderId == rider.RiderId);
                 }
                 else
                 {
-                    var step = engine.ResolveProduction(solo, new[] { new RiderIntent(rider.RiderId, decision) }, options, legacyContacts: false);
-                    production++; motion = step.Motions[0]; change = step.Changes[0];
+                    // Count attempts even when the optional solver cannot materialize a motion.
+                    production++;
+                    ProjectionCaptureAudit.Record(ProjectionMaterialization.SafetyProductionAttempt);
+                    var intent = new RiderIntent(rider.RiderId, decision);
+                    var step = resolveOptionalSafety is null
+                        ? engine.ResolveProduction(solo, new[] { intent }, options, legacyContacts: false)
+                        : resolveOptionalSafety(solo, intent, options);
+                    motion = step.Motions[0]; change = step.Changes[0];
                 }
                 var poses = MotionPoses(motion);
                 var traversal = new TrajectoryTraversal(alternative.Intent, motion.TotalTimeSeconds,
                     motion.TotalDistanceMeters, null, null, null, null, null, null, null, 0, 0,
                     change.Status != RiderRaceStatus.Crashed, Array.Empty<TrajectoryPhaseEndpoint>(), new[] { motion });
                 var projected = new Projection(alternative, traversal, poses, WithinTrack(poses, snapshot.Track, tracker.Embedding!));
-                safetyCache.Add(key, projected); return projected;
+                return projected;
             }
+            var safetyCache = new OptionalSafetyProjectionCache<Projection>(ResolveSafetyProjection);
+            SafetyProjectionResult<Projection> SafetyProject(InteractionAlternative alternative) => safetyCache.Get(alternative);
             PairAlternativeResult SafetyPair(Projection left, Projection right)
             {
                 var key = (Key(left.Alternative), Key(right.Alternative));
@@ -364,7 +372,8 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
             var buffers = allIds.Select(id => ids.Contains(id) ? choices[Array.IndexOf(ids,id)] : new[] { frozen[id] }).ToArray();
             for (var a = 0; a < buffers.Length; a++) for (var b = a + 1; b < buffers.Length; b++)
                 if (ids.Contains(allIds[a]) || ids.Contains(allIds[b]))
-                    foreach (var left in buffers[a]) foreach (var right in buffers[b]) SafetyPair(SafetyProject(left), SafetyProject(right));
+                    foreach (var left in buffers[a]) foreach (var right in buffers[b])
+                        if (SafetyProject(left).Value is { } lp && SafetyProject(right).Value is { } rp) SafetyPair(lp, rp);
             InteractionAlternative[]? safetyWinner = null, emergencyAttempt = null;
             InteractionCost? bestCost = null, emergencyCost = null;
             var safetyCandidates = new List<InteractionCandidateDiagnostic>();
@@ -381,22 +390,36 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
             {
                 combinations++; number++;
                 var jointById = allIds.Select(id => ids.Contains(id) ? joint[Array.IndexOf(ids,id)] : frozen[id]).ToArray();
+                var outcomes = jointById.Select(SafetyProject).ToArray();
+                if (outcomes.Any(result => result.Outcome == SafetyProjectionOutcome.InfeasibleProductionProjection))
+                {
+                    if (options.InteractionDiagnostics == InteractionDiagnosticsLevel.FullAudit)
+                        safetyCandidates.Add(new(number - 1, false,
+                            "Infeasible optional production safety projection: " + string.Join(", ",
+                                outcomes.Select((result, index) => (result, index)).Where(x => x.result.Value is null)
+                                    .Select(x => $"rider {jointById[x.index].RiderId} ({x.result.FailureType})")),
+                            null, null, joint));
+                    continue;
+                }
+                var projected = outcomes.Select((result, index) => result.Value! with { Alternative = jointById[index] }).ToArray();
                 var minimum = p.CompetitiveReachMeters; var mechanical = false; var ambiguous = false; var newMechanicalPair = false;
                 for (var a = 0; a < jointById.Length; a++) for (var b = a + 1; b < jointById.Length; b++)
                     if (ids.Contains(allIds[a]) || ids.Contains(allIds[b]))
                     {
-                        var pair = SafetyPair(SafetyProject(jointById[a]), SafetyProject(jointById[b]));
+                        var pair = SafetyPair(projected[a], projected[b]);
                         minimum = Math.Min(minimum, pair.MinimumSeparation); mechanical |= pair.Intervals.Count > 0;
                         newMechanicalPair |= pair.Intervals.Count > 0 && !existingMechanicalPairs.Contains(Pair(allIds[a],allIds[b]));
                         ambiguous |= pair.HasBoundaryAmbiguityOrCoverageGap;
                     }
-                var physical = joint.All(a => SafetyProject(a).WithinTrack && SafetyProject(a).Traversal.CompletedHorizon);
+                var outside = projected.Any(a => !a.WithinTrack);
+                var incomplete = projected.Any(a => !a.Traversal.CompletedHorizon);
+                var physical = !outside && !incomplete;
                 var feasible = physical && !mechanical && !ambiguous;
-                var cost = new InteractionCost(joint.Sum(a => SafetyProject(a).Traversal.PredictedTraversalTimeSeconds), 0, 0,
+                var cost = new InteractionCost(projected.Where(a => ids.Contains(a.Alternative.RiderId)).Sum(a => a.Traversal.PredictedTraversalTimeSeconds), 0, 0,
                     joint.Sum(a => Math.Max(0, InteractionGeometryModel.ExecutionMarginMeters(snapshot.Rider(a.RiderId), p) - minimum)));
                 if (options.InteractionDiagnostics == InteractionDiagnosticsLevel.FullAudit)
                     safetyCandidates.Add(new(number - 1, feasible, mechanical ? "Mechanical overlap (#55)" : ambiguous ? "Ineligible boundary/coverage"
-                        : !physical ? "Incomplete/edge-violating production safety step" : "", minimum, cost, joint));
+                        : outside ? "Mechanical footprint outside usable track" : incomplete ? "Incomplete/crashed production horizon" : "", minimum, cost, joint));
                 if (feasible && (bestCost is null || SafetyBetter(cost, joint, bestCost, safetyWinner!)))
                 { safetyWinner = joint; bestCost = cost; }
                 if (physical && !ambiguous && !newMechanicalPair
@@ -407,6 +430,11 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
                 { emergencyAttempt = joint; emergencyCost = cost; }
             }
             var chosen = safetyWinner ?? emergencyAttempt ?? ids.Select(id => frozen[id]).ToArray();
+            // No Commit has occurred. Exact frozen requests already have successful actual motions,
+            // addressed incidents and #55 verification; retain those when failed optional corrections
+            // leave no replacement. This preserves contacts, wear and consequence ownership.
+            retainFailedSafetyActual = safetyCache.FailedCount > 0 && safetyWinner is null && emergencyAttempt is null
+                && chosen.All(a => Key(a) == Key(frozen[a.RiderId]));
             foreach (var choice in chosen)
             {
                 selected[choice.RiderId] = choice;
@@ -436,9 +464,10 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
             safetyJointCombinations = number;
             safetyProjectionCount += safetyCache.Count;
         }
-        if (safetyPasses > 0)
+        if (safetyPasses > 0 && !retainFailedSafetyActual)
         {
             finalIntents = SelectedIntents();
+            // This is required execution, not an optional projection. Any failure remains fatal.
             actual = engine.ResolveProduction(snapshot, finalIntents, options, legacyContacts: false);
             production++; actualVerifications++;
             actualPoses = Poses(actual);
@@ -493,7 +522,8 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
                 ResolvedWithoutMechanicalContact = contacts.Length == 0 && !boundaryOrGap
                     && (rows.Any(Eligible) && rows.All(Eligible) || certifiedReplayPrefix),
                 ActualClearanceCertifiedByReplay = certifiedReplayPrefix,
-                UnresolvedMechanicalContacts = authorized.Select(c => Unresolved(episode,c.Contact,d.SelectedResponses,c.Reason)
+                UnresolvedMechanicalContacts = authorized.Select(c => Unresolved(episode,c.Contact,d.SelectedResponses,
+                    retainFailedSafetyActual ? "No feasible production safety correction; retaining previously executed actual motion. " + c.Reason : c.Reason)
                     with { LegacyFallbackAuthorized = c.Authorized }).ToArray(),
             };
             currentContactDiagnostics?.Add(diagnostics[index]);

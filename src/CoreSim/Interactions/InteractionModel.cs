@@ -50,7 +50,7 @@ public sealed record InteractionCost(double AdditionalTraversalTimeSeconds, doub
     public double Total => AdditionalTraversalTimeSeconds + IntentDeviation + TacticalPreference;
 }
 public sealed record InteractionCandidateDiagnostic(int Combination, bool Feasible, string Rejection,
-    double MinimumSeparationMeters, InteractionCost Cost, IReadOnlyList<InteractionAlternative> Responses,
+    double? MinimumSeparationMeters, InteractionCost? Cost, IReadOnlyList<InteractionAlternative> Responses,
     int IneligibleIntervals = 0);
 public sealed record UnresolvedMechanicalContact(long EpisodeId, int RiderA, int RiderB,
     double CommonTimeSeconds, BikeComponent ComponentA, BikeComponent ComponentB,
