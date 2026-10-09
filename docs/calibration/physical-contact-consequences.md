@@ -7,7 +7,9 @@ closes native trigonometry in enabled track-clearance and tactical decision gate
 contract, complete native-call audit, exact changed fields and measured pre/post performance are
 documented in [contact-decision-geometry.md](contact-decision-geometry.md). The pair-level
 recontact correction is documented in [physical-contact-pair-generations.md](physical-contact-pair-generations.md).
-The separate sequential strong-to-weak recovery finding remains **OPEN**.
+The sequential strong-to-weak recovery correction below addresses the final finding from review
+`5452627332`, inline `4215729547`, against accepted starting head
+`a420fac248019e4ec7b852689c6d6a818adfa49e`. Independent review of this correction remains pending.
 
 ## Prerequisite
 
@@ -55,7 +57,13 @@ The squeeze demonstrates why canceled net velocity is not zero disturbance: #56C
 
 ## One-step production recovery
 
-`ContactRecoveryState` carries source episode/frontier, ratio/class, control loss, drive availability, lateral authority and one remaining step. Brush stores none; Disturbed, LostRhythm and MajorSave store one. A new genuine impact still applies its own immediate deltaV; the stronger of existing and new recoverable impairment is retained, without multiplicative stacking. Crash, finish, retirement, heat reset and the next active production commit clear recovery.
+`ContactRecoveryState` represents temporary motorcycle control disruption. It carries source episode/frontier, ratio/class, control loss, drive availability, lateral authority and one remaining step. Brush stores none; Disturbed, LostRhythm and MajorSave store one. Recovery is a pending physical state, with slower travel emerging through the existing production dynamics.
+
+Contact A-B in step N applies its immediate velocity change and Commit publishes its pending recovery. Snapshot N+1 freezes that recovery. `ResolveRiderCore` passes its separate drive and lateral availability values into the shared production traversal, which consumes it once. Normal production changes contain no pending recovery. If a fresh A-C contact occurs at the verified N+1 frontier, its own deltaV changes the endpoint immediately and its own recoverable loss becomes the pending state for N+2. `CommitRiderChange` publishes only that new state. A weaker contact replaces the consumed stronger state; a stronger contact replaces the consumed weaker state. The resolver does not compare their magnitudes or multiply effects.
+
+Drive availability is the ability to deliver positive drive; lateral authority is the ability to execute voluntary lateral corrections. They remain separate channels, both retaining the reviewed mapping `1 - ControlLoss01`. No new channel coefficients or handling calibration are introduced. The incoming impairment is distinct from the new event's diagnostic: `RiderContactConsequence.ControlLoss01` exactly equals `Recovery.ControlLoss01` whenever recovery exists, and pending source episode, frontier time, ratio and class all identify the new event. No old provenance is attached to the new event.
+
+A new Brush applies its own impulse but stores no recovery. Crash, finish, retirement and heat reset clear recovery. No new contact clears the consumed state. Persistent overlap produces neither another impulse nor refreshed recovery. Simultaneous fresh contacts retain the existing #56C1 RSS aggregate and produce one recovery for the rider. Inspection of rich and lean production, moving-rider resolution, projections, snapshot copying and Commit found no legitimate enabled production path in which this incoming state remains unconsumed and requires a maximum-of-two rule.
 
 Positive drive is scaled before the existing longitudinal resistance calculation. Drag, rolling/track resistance, braking and preparation corrections retain their existing formulas. Voluntary lateral movement uses the existing movement budget multiplied by authority; forced RunWide movement is unchanged. Rich and lean trajectory projections consume the same state through production traversal. Permanent ratings, tactical attributes and morale are not rewritten.
 
@@ -69,6 +77,34 @@ The matched next-step test starts at 15 m/s in lane 2, requests lane 3 on a 20 m
 | 1.3 / MajorSave | 0.562747 | 15.897952 | 1.294355 | 2.276047 |
 
 Every resulting recovery is cleared. Drive, voluntary lateral progress and traversal time change monotonically. Lost time emerges from normal physics, with no direct time penalty.
+
+## Committed sequential recovery regression
+
+`ContactRecoverySequenceFixtures` is shared unchanged by the tests and the audit built against both engines. A's state always comes from actual Commit. Two genuine contacts pass through full `SimulationEngine.Resolve` and Commit with the same heat-owned tracker, unmodified #55 geometry and #56C1 analysis. B retains its committed state; C has explicit frozen entry conditions ahead of A in the second exposure. This is a controlled sequence of exposures, rather than a natural complete heat. The receiver-only third step uses the same production core with no traffic-history reconciliation. Its matched control starts with exactly the same post-contact rider/surface state and precisely the recovery independently reconstructed from the new event.
+
+The regression covers MajorSave to Disturbed, Disturbed to MajorSave, MajorSave to Brush, MajorSave to no contact, simultaneous A-B/A-C aggregation, persistent overlap, contact Crash and finish. Each runs seeds 7/19/83, Dry/LightRain and both input orders. Captures explicitly retain incoming recovery, new pending recovery, frozen snapshots, all resolved motions/diagnostics/events, committed states, pair ownership and the matched third step. Abandoned Resolve leaves live rider and tracker state exact. Separate matched solo controls prove that incoming recovery reduces positive drive and voluntary lateral motion and increases travel time, while the new contact still applies only its own deltaV.
+
+Before changing production, all 48 sequence cases ran against the accepted starting resolver: **12 failed and 36 passed**. The failures were all six strong-to-weak and six finish sequences, exposing old MajorSave loss copied into a new Disturbed event. After removing only the stale-state replacement, **48/48 pass**, including exact third-step motion and committed-state equality to the new-recovery control. The old test asserting retention of the stronger state is replaced; unrelated tests are preserved. The 39-consumer audit updates only the edited consequence module's source fingerprint and its enclosing extraction hash; its frozen legacy manifest and extraction rules remain unchanged.
+
+The complete local audit contains **850 cases / 8,614,526 typed leaves / 6,418,286 IEEE leaves**, with exact rider-order equality before and after. **All original 754 cases remain unchanged**, including the accepted geometry and pair-generation captures, full heats, events, classifications and raw surface state. Only 24 new strong-to-weak/finish traces change, across seeds, weather and both orders: **13,404 fields**. The complete [case/path/type/IEEE before-and-after map](contact-recovery-sequence-changes.json.gz) retains every change without truncation. CI regenerates the complete raw captures on both platforms. No existing physical golden is regenerated.
+
+In `recovery-sequence/StrongWeak/7/Dry/False`, the first changed causal field is
+`root.Phases[1].Step.Interaction.PhysicalContactConsequences.Riders[0].Recovery.ControlLoss01`:
+double bits `3FE26E7F07FE07C7` become `3FACE411BD1B0A6F`. The new event's own
+`ControlLoss01` already has `3FACE411BD1B0A6F` in both engines. Pending severity changes
+from enum MajorSave (3) to Disturbed (1), ratio from double `3FF50B14ACBFFF96` to
+`3FDA5889923B13B1`, and source frontier time from double `0000000000000000` to
+`3FF231A720000000`. The same episode ID (1) legitimately owns both connected impacts;
+the new time, ratio, class and loss establish which event created recovery.
+
+All first-step fields remain exact. All second-step changes are recovery state/provenance;
+its motion, new impulse, new severity and new computed loss remain exact. Only the following
+traversal changes physically: third-step speed float `4185CF34` becomes `4193057E`,
+elapsed time `40669FD6` becomes `4062CC95`, and lateral position `40102DCB` becomes
+`40223E3E`. The corrected traversal and final committed state match the independently
+constructed Disturbed control exactly. The finish sequence likewise consumes the new state
+before finishing and then clears it. This establishes the causal transition rather than
+changing a detector, impulse or calibration to obtain a preferred race result.
 
 ## Matched legacy comparison
 
@@ -94,7 +130,38 @@ The enabled deterministic arithmetic also changes one avoidance branch at a geom
 
 Matched full-heat legacy runs use diagnostics None, which preserves the same legacy gameplay. An existing #56C1-only FullAudit replay at heat ID 59 can retain a closed episode's contact diagnostic and reject its stale provenance. The new path supplies only current verified diagnostics; feature OFF deliberately preserves the merged behavior. The frozen #56C1 standalone audit is unchanged and reproducible, and the performance baselines use stable #56B+#56C1 FullAudit heats (scenario I and contact-heavy, heat ID 58).
 
-## Observational performance
+## Sequential correction performance and verification
+
+Matched Windows Release/net8.0 measurements compare accepted head `a420fac248019e4ec7b852689c6d6a818adfa49e`
+with this correction on the same machine/runtime and unchanged audit harness. Each workload has at least
+eight complete warmups and three seconds of warmup, then nine samples per engine. No heavy tests or
+captures ran during timing. [Complete raw wall/CPU/allocation/GC/work measurements](contact-recovery-sequence-performance.json)
+retain every sample and the environment.
+
+| Workload | Before median (ms) | After median (ms) | Wall change | Allocation change |
+| --- | ---: | ---: | ---: | ---: |
+| Separated four-rider step | 0.5960 | 0.5859 | -1.69% | 0.000% |
+| Three-rider squeeze | 78.5269 | 79.0030 | +0.61% | 0.000% |
+| Real bridge | 383.4000 | 387.4307 | +1.05% | -0.006% |
+| Scenario I full heat ON | 6237.9876 | 6165.1012 | -1.17% | +0.007% |
+| Scenario I full heat OFF | 3758.5006 | 3776.4466 | +0.48% | -0.003% |
+| Dense-contact full heat ON | 463.3872 | 464.9219 | +0.33% | -0.001% |
+
+All work counters are identical across all 18 samples per workload. No workload exceeds the 10%
+investigation threshold. The correction adds no geometry evaluation, production materialization or
+new state object beyond the already-created recovery; #61 caches and reuse remain unchanged.
+Timings are observations, without a wall-clock CI gate.
+
+Release warnings-as-errors builds, the 48 sequential tests, all 40 Python tests and the 39 frozen
+consumer checks pass locally. Discovery assigns **2,193 .NET cases exactly once**: 1,543 core,
+129 trajectory, 473 historical-analysis and 48 four-rider. All 30 frozen historical artifact hashes
+and all eight comparison scripts remain unchanged. Final complete-suite and 9/9 CI results, exact
+head SHA and cross-platform artifact verification are recorded in PR #59 after completion.
+CI retains exact original-main OFF comparisons per OS and the unchanged 22-case / 1,088-field
+portability map tracked separately in [issue #62](https://github.com/arturgladysz91/zuzel/issues/62).
+All older strict goldens remain enforced; enabled equality must be exact across Windows/Ubuntu.
+
+## Historical initial performance study
 
 Windows, Release/net8.0, after warmup. Plan/application loops use 2,000 iterations; solo recovery uses 500. The full contact coordinator uses the same frozen ownership scenarios for 30 resolutions after five warmups per mode, resetting episode ownership for each sample. Full heats interleave OFF/ON, discard two warmup pairs and report three-sample medians. Both full-heat modes enable #56B and #56C1 FullAudit. Isolated map/footprint calls use 100,000 iterations after 10,000 warmups; reported allocations include the benchmark boxing the returned value.
 

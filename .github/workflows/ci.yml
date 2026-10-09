@@ -127,11 +127,11 @@ jobs:
           python tools/contested-performance/compare.py results/contested-performance
           dotnet ../contested-after-bin/CoreSim.Tests.dll type-probe results/contested-performance/types.json
           python tools/contested-performance/verify-types.py results/contested-performance/types.json
-      - name: Capture complete enabled contact decisions before and after pair recontact correction
+      - name: Capture complete enabled contact decisions before and after sequential recovery correction
         shell: bash
         run: |
-          git fetch origin fe3f8c6794a24bb9bf4d18ed0c2e46acda847521
-          git worktree add --detach ../contact-decision-baseline fe3f8c6794a24bb9bf4d18ed0c2e46acda847521
+          git fetch origin a420fac248019e4ec7b852689c6d6a818adfa49e
+          git worktree add --detach ../contact-decision-baseline a420fac248019e4ec7b852689c6d6a818adfa49e
           baseline="$(cd ../contact-decision-baseline && pwd)"
           dotnet build tools/contact-decision-audit -c Release --warnaserror -p:CoreSimRoot="$baseline" -o ../contact-decision-before-bin
           dotnet build tools/contact-decision-audit -c Release --warnaserror -o ../contact-decision-after-bin

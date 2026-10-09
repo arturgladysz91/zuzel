@@ -20,7 +20,7 @@ CANONICAL = re.compile(r"\bRiderAbilities\b|\bRiderGameplayProfile\b|\bRiderPhys
                        r"\bRiderInteractionStyle\b|\.Gameplay\b|\.Condition\b")
 EXTRACTION = ROOT / "tests/fixtures/contested-source-extraction.json"
 CONSEQUENCE_EXTRACTION = ROOT / "tests/fixtures/physical-consequence-source-extraction.json"
-CONSEQUENCE_EXTRACTION_SHA256 = "7b8fa2ecac97831672ee3f6e0675ef77aef546cd8c540426075ee069dc3ee701"
+CONSEQUENCE_EXTRACTION_SHA256 = "10a5a5892ef2fbfb34944d03dc42468ca5b60645888d87b9ece18cffcc624ace"
 EXTRACTION_SHA256 = "46a8f58c1cbd84dcb2697247e294b60474f7ee67712a49aa15f4f1337acd5d89"
 CANONICAL_TRAFFIC = {"src/CoreSim/Interactions/InteractionModel.cs",
                      "src/CoreSim/Interactions/ContestedSpaceInteractionCoordinator.cs"}

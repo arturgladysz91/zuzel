@@ -10,5 +10,6 @@
   <ItemGroup>
     <ProjectReference Include="$(CoreSimRoot)/src/CoreSim/CoreSim.csproj" />
     <Compile Include="../../tests/CoreSim.Tests/ContactDecisionGeometryFixtures.cs" Link="ContactDecisionGeometryFixtures.cs" />
+    <Compile Include="../../tests/CoreSim.Tests/ContactRecoverySequenceFixtures.cs" Link="ContactRecoverySequenceFixtures.cs" />
   </ItemGroup>
 </Project>

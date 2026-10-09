@@ -2,8 +2,9 @@
 
 Review `5452627332`, same-pair recontact finding; baseline
 `fe3f8c6794a24bb9bf4d18ed0c2e46acda847521`. PR #59 remains Draft.
-The first deterministic geometry correction is retained. The separate sequential
-strong-to-weak recovery finding remains **OPEN**; its resolver and tests are unchanged.
+The first deterministic geometry correction is retained. At this pair correction's
+accepted head, sequential strong-to-weak recovery remained open. Its later correction
+and pending independent review are recorded in [physical-contact-consequences.md](physical-contact-consequences.md).
 
 ## Previous failure and ownership
 

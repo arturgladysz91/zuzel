@@ -54,7 +54,7 @@ if (mode == "capture")
         compressed.Write(bytes);
         if (name.StartsWith("heat/",StringComparison.Ordinal)) Console.WriteLine("Captured "+name);
     }
-    if (!args.Contains("--pairs-only"))
+    if (!args.Contains("--pairs-only") && !args.Contains("--sequences-only"))
     {
     foreach (var scenario in scenarios)
     foreach (var enabled in new[] {true})
@@ -84,6 +84,8 @@ if (mode == "capture")
         Capture("continuous-overlap/"+reverse,repeated.Values);
     }
     }
+    if (!args.Contains("--sequences-only"))
+    {
     foreach (var seed in new[] { 7, 19, 83 })
     foreach (var weather in new[] { WeatherState.Dry, WeatherState.LightRain })
     foreach (var reverse in new[] { false, true })
@@ -92,6 +94,13 @@ if (mode == "capture")
     foreach (var weather in new[] { WeatherState.Dry, WeatherState.LightRain })
     foreach (var reverse in new[] { false, true })
         Capture($"pair-production-release/{seed}/{weather.Condition}/{reverse}", PairGenerationCapture.RunProduction(seed, weather, reverse));
+    }
+    if (!args.Contains("--pairs-only"))
+    foreach (var sequence in Enum.GetValues<ContactRecoverySequenceFixtures.Sequence>())
+    foreach (var seed in new[] { 7, 19, 83 })
+    foreach (var weather in new[] { WeatherState.Dry, WeatherState.LightRain })
+    foreach (var reverse in new[] { false, true })
+        Capture($"recovery-sequence/{sequence}/{seed}/{weather.Condition}/{reverse}", ContactRecoverySequenceFixtures.Run(sequence, seed, weather, reverse));
     Write(output,manifests);
     Console.WriteLine($"Captured {manifests.Count} exact behavior manifests.");
     return;

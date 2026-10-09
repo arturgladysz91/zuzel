@@ -51,7 +51,15 @@ public sealed class PhysicalContactConsequenceTests
             {
                 Assert.Equal((float)Math.Max(0,c.PreContactSpeed+c.DeltaForwardMetersPerSecond),c.PostContactSpeed);
                 if(expected==PhysicalContactSeverity.Brush)Assert.Null(c.Recovery);
-                else{Assert.Equal(1,c.Recovery!.RemainingSteps);Assert.Equal(1-c.ControlLoss01,c.Recovery.DriveAvailability01);}
+                else
+                {
+                    Assert.Equal(1,c.Recovery!.RemainingSteps);
+                    Assert.Equal(c.ControlLoss01,c.Recovery.ControlLoss01);
+                    Assert.Equal(c.Severity,c.Recovery.Severity);Assert.Equal(c.SeverityRatio,c.Recovery.SeverityRatio);
+                    Assert.Equal(c.FrontierTimeSeconds,c.Recovery.SourceFrontierTime);
+                    Assert.Equal(1-c.ControlLoss01,c.Recovery.DriveAvailability01);
+                    Assert.Equal(1-c.ControlLoss01,c.Recovery.LateralAuthority01);
+                }
             }
         }
     }
@@ -321,18 +329,78 @@ public sealed class PhysicalContactConsequenceTests
         Assert.True(tracker.CanApplyPhysical(pair with{RiderA=2,RiderB=3,EpisodeId=merged.Id}));
     }
 
-    [Fact]
-    public void ANewGenuineContactKeepsTheStrongerBoundedRecoveryRatherThanMultiplyingPenalties()
+    public static IEnumerable<object[]> RecoverySequences => Enum.GetNames<ContactRecoverySequenceFixtures.Sequence>()
+        .SelectMany(sequence => new[] { 7,19,83 }.SelectMany(seed => new[] { false,true }.Select(rain => new object[] { sequence,seed,rain })));
+
+    [Theory,MemberData(nameof(RecoverySequences))]
+    public void CommittedSequentialContactRecoveryUsesOnlyTheNewPhysicalEvent(string name,int seed,bool rain)
     {
-        var recovery=PhysicalContactConsequenceEvidence.Plan(Side,1.3).Riders[0].Recovery!;
-        var snapshot=PhysicalContactConsequenceEvidence.RecoverySnapshot(recovery);var engine=new SimulationEngine(new Target(2));
-        var normal=engine.ResolveProduction(snapshot,engine.Decide(snapshot),Options,legacyContacts:false);
-        var analysis=Side.Analysis;
-        var plan=PhysicalContactConsequenceResolver.Build(analysis,analysis.AuditRiders.Select(r=>r with{SeverityRatio=.5}).ToArray(),
-            analysis.AuditPairs,snapshot,normal.Changes,new Dictionary<int,MeterPoint>{{1,new(1,0)}},new(),new());
-        var next=Assert.Single(plan.Riders);Assert.Equal(recovery,next.Recovery);
-        Assert.Equal((float)Math.Max(0,next.PreContactSpeed+next.DeltaForwardMetersPerSecond),next.PostContactSpeed);
-        Assert.InRange(next.Recovery!.ControlLoss01,0,.8);
+        var sequence=Enum.Parse<ContactRecoverySequenceFixtures.Sequence>(name);
+        var weather=rain ? WeatherState.LightRain : WeatherState.Dry;
+        var trace=ContactRecoverySequenceFixtures.Run(sequence,seed,weather,false);
+        Assert.Equal(Json(trace),Json(ContactRecoverySequenceFixtures.Run(sequence,seed,weather,true)));
+        foreach(var phase in trace.Phases)
+        {
+            Assert.Equal(phase.Incoming,phase.AfterResolve);
+            Assert.Equal(phase.BeforePairs,phase.AfterResolvePairs);
+        }
+        var first=trace.Phases[0];var second=trace.Phases[1];var third=trace.Phases[2];
+        var original=first.Step.Interaction!.PhysicalContactConsequences!.Riders.Single(c=>c.RiderId==1);
+        Assert.Equal(sequence==ContactRecoverySequenceFixtures.Sequence.WeakStrong ? PhysicalContactSeverity.Disturbed : PhysicalContactSeverity.MajorSave,original.Severity);
+        Assert.Equal(original.Recovery,first.Committed.Single(r=>r.Rider.RiderId==1).Recovery);
+        Assert.Equal(original.Recovery,second.Incoming.Single(r=>r.Rider.RiderId==1).Recovery);
+        Assert.Equal((float)Math.Max(0,original.PreContactSpeed+original.DeltaForwardMetersPerSecond),original.PostContactSpeed);
+        Assert.True(trace.IncomingSolo.Changes.Single().Speed<trace.UnimpairedSolo.Changes.Single().Speed);
+        Assert.True(trace.IncomingSolo.Changes.Single().LateralPosition<trace.UnimpairedSolo.Changes.Single().LateralPosition);
+        Assert.True(trace.IncomingSolo.Changes.Single().ElapsedTimeSeconds>trace.UnimpairedSolo.Changes.Single().ElapsedTimeSeconds);
+        Assert.Null(trace.IncomingSolo.Changes.Single().ContactRecovery);
+        var applied=second.Step.Interaction?.PhysicalContactConsequences ?? PhysicalContactConsequencePlan.Empty;
+        var next=applied.Riders.SingleOrDefault(c=>c.RiderId==1);
+        if(sequence is ContactRecoverySequenceFixtures.Sequence.StrongNone or ContactRecoverySequenceFixtures.Sequence.PersistentOverlap or ContactRecoverySequenceFixtures.Sequence.Simultaneous)
+        {
+            Assert.Empty(applied.AppliedPairs);Assert.Null(next);Assert.Null(trace.ExpectedPending);
+            if(sequence==ContactRecoverySequenceFixtures.Sequence.PersistentOverlap)Assert.True(applied.RepeatedOverlapSuppressions>0);
+        }
+        else
+        {
+            Assert.NotNull(next);
+            var expected=sequence==ContactRecoverySequenceFixtures.Sequence.WeakStrong ? PhysicalContactSeverity.MajorSave
+                : sequence==ContactRecoverySequenceFixtures.Sequence.StrongBrush ? PhysicalContactSeverity.Brush
+                : sequence==ContactRecoverySequenceFixtures.Sequence.StrongCrash ? PhysicalContactSeverity.Crash : PhysicalContactSeverity.Disturbed;
+            Assert.Equal(expected,next.Severity);
+            Assert.Contains(applied.AppliedPairs,p=>p.RiderA==1&&p.RiderB==3&&p.Impulse!.ImpulseMagnitudeNewtonSeconds>0);
+            Assert.True(next.FrontierTimeSeconds>original.FrontierTimeSeconds);
+            if(expected is PhysicalContactSeverity.Brush or PhysicalContactSeverity.Crash)Assert.Null(next.Recovery);
+            else
+            {
+                Assert.Equal(next.ControlLoss01,next.Recovery!.ControlLoss01);
+                Assert.Equal(next.Severity,next.Recovery.Severity);Assert.Equal(next.SeverityRatio,next.Recovery.SeverityRatio);
+                Assert.Equal(next.FrontierTimeSeconds,next.Recovery.SourceFrontierTime);
+                Assert.Equal(next.SourceEpisodeIds[0],next.Recovery.SourceEpisodeId);
+                Assert.Equal(trace.ExpectedPending,next.Recovery);
+            }
+            Assert.Equal(expected==PhysicalContactSeverity.Crash ? 0 : (float)Math.Max(0,next.PreContactSpeed+next.DeltaForwardMetersPerSecond),next.PostContactSpeed);
+            var diagnostic=second.Step.Diagnostics.Single(d=>d.RiderId==1);
+            Assert.Equal(next,diagnostic.PhysicalContactConsequence);
+            Assert.Equal(next.PostContactSpeed,second.Step.Motions.Single(m=>m.RiderId==1).Final.SpeedMetersPerSecond);
+            Assert.Equal(next.Recovery,second.Committed.Single(r=>r.Rider.RiderId==1).Recovery);
+        }
+        Assert.Equal(trace.ExpectedPending,second.Committed.Single(r=>r.Rider.RiderId==1).Recovery);
+        Assert.Equal(Json(trace.MatchedThird.Changes),Json(third.Step.Changes));
+        Assert.Equal(Json(trace.MatchedThird.Motions),Json(third.Step.Motions));
+        Assert.Equal(trace.MatchedCommitted,third.Committed.Single());
+        Assert.Null(third.Committed.Single().Recovery);
+        if(sequence==ContactRecoverySequenceFixtures.Sequence.Finish)Assert.Equal(RiderRaceStatus.Finished,third.Committed.Single().Rider.Status);
+        if(sequence==ContactRecoverySequenceFixtures.Sequence.StrongCrash)Assert.Equal(RiderRaceStatus.Crashed,third.Committed.Single().Rider.Status);
+        if(sequence==ContactRecoverySequenceFixtures.Sequence.Simultaneous)
+        {
+            var analysis=first.Step.Interaction.PhysicalContactAnalysis!;
+            var aggregate=analysis.ApplicationRiders.Single(r=>r.RiderId==1);
+            Assert.Contains(first.Step.Interaction.PhysicalContactConsequences!.AppliedPairs,p=>p.RiderA==1&&p.RiderB==2);
+            Assert.Contains(first.Step.Interaction.PhysicalContactConsequences.AppliedPairs,p=>p.RiderA==1&&p.RiderB==3);
+            Assert.Equal(aggregate.NetDeltaVelocityMetersPerSecond,original.NetDeltaVelocityMetersPerSecond);
+            Assert.Equal(new PhysicalContactConsequenceParameters().ControlLoss(aggregate.SeverityRatio,new()),original.Recovery!.ControlLoss01);
+        }
     }
 
     [Theory,InlineData(.5),InlineData(.9),InlineData(1.3)]

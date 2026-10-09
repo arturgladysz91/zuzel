@@ -6,6 +6,8 @@ the resolver builds a simultaneous plan before final `RiderStateChange`, diagnos
 The heat tracker owns bounded physical pair generations independently of tactical episodes.
 Certified continuous pair separation rearms only that pair; episode merges preserve its causal state.
 Transient immutable recovery passes through snapshot/projection/commit and expires after the next active production step.
+The resolver stores only recovery created by the new frontier; it cannot retain an incoming state already consumed
+by production traversal. New consequence and pending recovery carry identical control loss and event provenance.
 The existing production traversal scales positive drive and voluntary lateral budget. No parallel solver is added.
 Default OFF preserves the legacy path; ON requires #56B and replaces its legacy contact consequence.
 

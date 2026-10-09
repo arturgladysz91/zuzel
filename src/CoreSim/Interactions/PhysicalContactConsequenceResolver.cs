@@ -91,8 +91,8 @@ public static class PhysicalContactConsequenceResolver
             ContactRecoveryState? recovery = severity is PhysicalContactSeverity.Brush or PhysicalContactSeverity.Crash
                 || change.Status == RiderRaceStatus.Finished ? null
                 : new(episodes.Length == 0 ? null : episodes[0], time, rider.SeverityRatio, severity, loss);
-            if (recovery is not null && snapshot.Rider(rider.RiderId).ContactRecovery is { } prior && prior.ControlLoss01 > recovery.ControlLoss01)
-                recovery = prior; // Bounded maximum; never multiply impairment factors.
+            // The incoming snapshot recovery was consumed by this production
+            // traversal. Only this new frontier can create next-step recovery.
             result.Add(new(rider.RiderId, pairs.SelectMany(p => p.FrontierRiderIds.Count == 0
                     ? new[] { p.RiderA, p.RiderB } : p.FrontierRiderIds).Distinct().Order().ToArray(),
                 episodes, pairs.SelectMany(p => p.OriginEpisodeIds).Distinct().Order().ToArray(), time,
