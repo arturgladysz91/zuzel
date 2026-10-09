@@ -1,0 +1,289 @@
+{
+  "SourceCommit": "c13af7b8a16fe4e58e9d404c849cdf323649b0ed",
+  "Configurations": {
+    "A": {
+      "EnableContestedSpaceResponses": false,
+      "EnablePhysicalContactConsequences": false
+    },
+    "B": {
+      "EnableContestedSpaceResponses": true,
+      "EnablePhysicalContactConsequences": false
+    },
+    "C": {
+      "EnableContestedSpaceResponses": true,
+      "EnablePhysicalContactConsequences": true
+    }
+  },
+  "Decision": "REQUIRES SPECIFIC FIXES",
+  "NextRecommendedPR": "Race Engine — reject infeasible safety projections without aborting heats",
+  "Findings": [
+    {
+      "Id": "REA-001",
+      "Priority": "P1",
+      "Title": "Infeasible optional safety projection aborts an ordinary heat",
+      "Scenario": "outside",
+      "Seeds": [
+        7
+      ],
+      "Configurations": [
+        "B",
+        "C"
+      ],
+      "Expectation": "A supported four-gate ordinary heat either completes through safe verified requests or handles infeasible alternatives explicitly; optional projection failure does not abort the heat.",
+      "Observation": "Coupled time solve failure escapes SafetyProject before the first segment commits, in both forward and reversed input order and without an observer.",
+      "Evidence": [
+        "case-outside-7-B",
+        "case-outside-7-C",
+        "failure-outside-7-C-False.json.gz"
+      ],
+      "NumericalOrTraceEvidence": "All pre-failure riders retain zero elapsed time/speed/progress. TimeSolveDiscontinuityException: Coupled time solve did not converge within its bound. Stack: SafetyProject -> ResolveProduction -> ResolveMovingRider -> ExecutedPathTraversal.Solve.",
+      "Subsystem": "ContestedSpaceInteractionCoordinator safety feasibility boundary; ExecutedPathTraversal bounded solve",
+      "Confidence": "High for the escaping failure and reproduction; specific failed alternative/root discontinuity needs the focused future investigation.",
+      "FuturePRScope": "Explicit infeasible optional projection result, safe frozen-request handling and selected-execution failure contract. Preserve #61 caches and bounds; no substitute physics or raised tolerance.",
+      "Complexity": "Medium",
+      "Dependencies": []
+    },
+    {
+      "Id": "REA-009",
+      "Priority": "P1",
+      "Title": "Partial canonical position fails the next segment handoff",
+      "Scenario": "three-squeeze / four-close-regain (original decimal cases)",
+      "Seeds": [
+        7,
+        19,
+        83
+      ],
+      "Configurations": [
+        "A",
+        "B",
+        "C"
+      ],
+      "Expectation": "Valid partial positions accepted by the existing fixture factory advance to the intended next segment in both projection and execution.",
+      "Observation": "Adaptive production horizon aborts with Rider 1 is not in segment 1 before first Commit. The first projected remainder leaves canonical progress just below 1.",
+      "Evidence": [
+        "case-three-squeeze-19-A",
+        "case-four-close-regain-19-C",
+        "binary companion cases retain separate IDs"
+      ],
+      "NumericalOrTraceEvidence": "float:3DCCCCCD = 0.10000000149011612; float:3F666666 = 0.8999999761581421. Sum = 0.9999999776482582, residual 2.2351741790771484e-8; existing BoundaryTolerance is 1e-9. Next horizon asks segment 1 while rider remains in 0.",
+      "Subsystem": "RiderPosition.Advance / whole-segment remainder; TrajectoryEvaluator.ResolvePrefix",
+      "Confidence": "High; exact operands and all seed/configuration reproductions agree.",
+      "FuturePRScope": "Explicit exact intended boundary ownership for whole-segment completion, preserving path distance/time and projection parity. Keep original failing inputs; do not round them or enlarge a tolerance.",
+      "Complexity": "Small/medium",
+      "Dependencies": []
+    },
+    {
+      "Id": "REA-002",
+      "Priority": "P2",
+      "Title": "Default contact consequences remain coarse compatibility rules",
+      "Scenario": "balanced-example / balanced-motoarena",
+      "Seeds": [
+        19
+      ],
+      "Configurations": [
+        "A",
+        "B",
+        "C"
+      ],
+      "Expectation": "Completion-grade contact consequences should follow verified physical exposure and calibrated severity while keeping legacy compatibility explicit.",
+      "Observation": "A retains coarse contact eligibility/random occurrence. B supplies physical avoidance/eligibility with old authorized fallback. C supplies the impulse/recovery structure but is gated.",
+      "Evidence": [
+        "pilot.json",
+        "SimulationEngine.ResolveExistingInteractions",
+        "physical-contact-consequences.md"
+      ],
+      "NumericalOrTraceEvidence": "Default eligibility 0.55 m lateral and 0.12 s boundary gap; lost rhythm multiplies speed by 0.82, adds 0.20 s and may displace outward. Pilot A records two contact events; B/C record none in the same two seed-19 cases.",
+      "Subsystem": "Legacy consequences / feature migration boundary",
+      "Confidence": "High for current consumers; real-world suitability of replacement scale remains unverified.",
+      "FuturePRScope": "Choose the default migration policy after correctness/calibration review; do not apply both consequence models.",
+      "Complexity": "Small integration scope with substantial evidence dependency",
+      "Dependencies": [
+        "REA-001",
+        "REA-009",
+        "REA-004"
+      ]
+    },
+    {
+      "Id": "REA-003",
+      "Priority": "P3",
+      "Title": "Neutral cohort speed/time amplitude needs matched calibration evidence",
+      "Scenario": "Motoarena standing-start matrix; balanced-motoarena pilot",
+      "Seeds": [
+        7,
+        19,
+        83
+      ],
+      "Configurations": [
+        "A",
+        "B",
+        "C"
+      ],
+      "Expectation": "Compare compatible populations and geometry before attributing maximum-speed, average-speed, L1 or spread discrepancies to production constants.",
+      "Observation": "Current neutral pilot has substantially lower peak speeds than real professional Motoarena distributions while some flying laps are faster; the audit population has no professional ability mapping.",
+      "Evidence": [
+        "pgee-evaluation in race-engine-readiness.json",
+        "real-reference",
+        "RiderRelativeEvidence",
+        "case-balanced-motoarena-19-A"
+      ],
+      "NumericalOrTraceEvidence": "Pilot rider 1: max 26.501541 m/s, average 22.963825 m/s, L2 13.494101 s. Existing matched real Vmax median 113.7 km/h. Full N/P10/P25/P50/P75/P90 component comparisons and within-heat spreads are retained; no realism score.",
+      "Subsystem": "Provisional drive/envelope calibration and geometry/population interpretation",
+      "Confidence": "High for descriptive discrepancy; low for attribution to a specific force/envelope term.",
+      "FuturePRScope": "Matched cohort/venue calibration protocol and measured context; separately select any justified parameter change after review.",
+      "Complexity": "Medium/large evidence task",
+      "Dependencies": [
+        "REA-005"
+      ]
+    },
+    {
+      "Id": "REA-004",
+      "Priority": "P3",
+      "Title": "Endpoint impact abstraction, severity scale and one-step recovery need validation",
+      "Scenario": "ordinary contacts, contact-heavy stress, controlled physiology fixtures",
+      "Seeds": [
+        7,
+        19,
+        83
+      ],
+      "Configurations": [
+        "C"
+      ],
+      "Expectation": "Reserve/severity and disturbance duration should have compatible speedway evidence before default enablement; stress incidence must not estimate ordinary crash rate.",
+      "Observation": "Impulse/ownership/recovery contracts have technical evidence. Severity boundaries, reserve factors and recovery loss map remain synthetic; recovery duration varies with the next active segment. First-touch impulse is applied to the normal segment endpoint; the traversed remainder is not reintegrated. This follows the existing documented contract and is a realism limitation, not a new contract violation.",
+      "Evidence": [
+        "Applied, Pairs, Generations and Recoveries in cases.json.gz",
+        "controlled-contact.json",
+        "physical-contact-consequences.md"
+      ],
+      "NumericalOrTraceEvidence": "Thresholds 0.35/0.70/1.05/1.55; maximum recoverable control loss 0.8 via a quadratic map; RemainingSteps = 1. Ordinary/stress severity counts and actual next-step seconds are reported separately. PGEE provides no numeric impact/recovery target. overall/19/C step 27, riders 3/4: verified touch 41.068336266334654 s; rider 3 endpoint 42.579429626464844 s, speed 18.603743 -> 19.074354 m/s, deltaV 0.47061145106830615 m/s. Impulse 69.17988330704101 N.s on each 147 kg system. Full delay/recovery distributions are in ImpactTiming/Configurations.",
+      "Subsystem": "PhysicalContactAnalyzer reserve and PhysicalContactConsequenceResolver recovery mapping",
+      "Confidence": "High that calibration is missing; empirical acceptable scale/duration remains unknown.",
+      "FuturePRScope": "Controlled compatible impact/outcome evidence and recovery-duration assessment, preserving impulse and generation invariants. Explicitly assess the endpoint timing approximation and whether production remainder reintegration is necessary, as a separately reviewed model change.",
+      "Complexity": "Large evidence/calibration scope",
+      "Dependencies": [
+        "REA-001",
+        "REA-009"
+      ]
+    },
+    {
+      "Id": "REA-005",
+      "Priority": "P3",
+      "Title": "Venue and footprint boundary interpretation remain provisional",
+      "Scenario": "balanced-motoarena and matched grip/weather matrix",
+      "Seeds": [
+        19
+      ],
+      "Configurations": [
+        "A",
+        "B",
+        "C"
+      ],
+      "Expectation": "Legal executed footprints, physical gate advantages and absolute lap targets need measured/local geometry and certified coverage.",
+      "Observation": "Pilot has uncertified footprints without reference-point edge witnesses. Width reinterpretations are zero-time unswept transitions. Symmetric modeled widths/radius/start split remain approximations.",
+      "Evidence": [
+        "case-balanced-motoarena-19-A/B/C",
+        "motoarena-matched-venue.md",
+        "TrackMetricEmbedding and WithinTrack"
+      ],
+      "NumericalOrTraceEvidence": "Three uncertified motion footprints per pilot Motoarena configuration, zero reference-point edge witnesses. Modeled mean turn width 16.6 m derives from 17.0/16.2 m; radius convention 31 m and start split 35/27 m are provisional.",
+      "Subsystem": "Track geometry/reference transitions and full-footprint certification",
+      "Confidence": "High for approximation/certification status; an uncertified interval alone does not prove illegal track departure.",
+      "FuturePRScope": "Measure geometry/start split and inspect exact footprint boundary evidence, then review local transitions separately.",
+      "Complexity": "Medium/large",
+      "Dependencies": [
+        "Track Engine measured geometry/surface inputs"
+      ]
+    },
+    {
+      "Id": "REA-006",
+      "Priority": "P2",
+      "Title": "Canonical gameplay launch contract is not yet migrated",
+      "Scenario": "Start/Speed/Technique/Strength/mass/Condition one-variable sweeps",
+      "Seeds": [
+        19
+      ],
+      "Configurations": [
+        "A",
+        "B",
+        "C"
+      ],
+      "Expectation": "Gameplay integration must know the actual consumers; independent canonical Reaction/Start must not be assumed active when only legacy Start drives launch.",
+      "Observation": "Launch uses legacy Start for reaction and force. Canonical Technique/Strength/mass/Condition have B/C consumers. Age has no direct physics multiplier; strength has no arbitrary speed bonus.",
+      "Evidence": [
+        "Sensitivity in race-engine-readiness.json",
+        "LongitudinalDynamics",
+        "RiderAbilityCompatibility",
+        "PhysicalContactAnalyzer"
+      ],
+      "NumericalOrTraceEvidence": "Reaction formula 0.28 + (0.20 - 0.28) * Start/100 s. Start 20/50/80 gives 0.264/0.24/0.216 s before IEEE representation. Compatibility Attack/Defense/Strength are 50; legacy compatibility mass is 70 kg. Longitudinal reference system mass remains 142 kg.",
+      "Subsystem": "Canonical/legacy ability boundary",
+      "Confidence": "High; specified future migration is not classified as a current launch implementation bug.",
+      "FuturePRScope": "Explicit gameplay consumer/migration contract, controlled regressions and compatible rating evidence; preserve behavior until deliberately changed.",
+      "Complexity": "Medium",
+      "Dependencies": [
+        "Gameplay rating design",
+        "REA-003"
+      ]
+    },
+    {
+      "Id": "REA-007",
+      "Priority": "P4",
+      "Title": "Longer-horizon opponent strategy remains a future extension",
+      "Scenario": "rolling-C / rolling-E / four-close-regain-binary",
+      "Seeds": [
+        7,
+        19,
+        83
+      ],
+      "Configurations": [
+        "B",
+        "C"
+      ],
+      "Expectation": "Assess strategic reattack/defense from actual common-time motion before adding opponent forecasts or pass bonuses.",
+      "Observation": "Physical alternatives and bounded traffic responses are present. Adaptive base ranking uses a production solo horizon plus current occupancy/style/perception costs; it does not solve a complete future opponent strategy.",
+      "Evidence": [
+        "AdaptiveDecisionModel.EvaluateCore",
+        "per-case Order and Episodes",
+        "named FullAudit traces"
+      ],
+      "NumericalOrTraceEvidence": "Existing response search bounds: maximum three alternatives per rider, 81 joint combinations and two response passes. Completed passes require strict executed lead transitions, never response selection alone.",
+      "Subsystem": "Adaptive tactical horizon / objective design",
+      "Confidence": "High for present scope; whether extra strategy is necessary requires product/trace review.",
+      "FuturePRScope": "Evidence-led opponent-aware planning only if recorded races justify it; preserve physical pass proof and #61 bounds/performance.",
+      "Complexity": "Large",
+      "Dependencies": [
+        "REA-001",
+        "REA-009",
+        "REA-003",
+        "Measured workload/product tactical goals"
+      ]
+    },
+    {
+      "Id": "REA-008",
+      "Priority": "P4",
+      "Title": "Exposure and intent attribution need richer passive telemetry",
+      "Scenario": "balanced-motoarena and named FullAudit reruns",
+      "Seeds": [
+        19
+      ],
+      "Configurations": [
+        "A",
+        "B",
+        "C"
+      ],
+      "Expectation": "Differentiate proximity, side-by-side fighting, failed requests and completed overtakes without invented exact timings.",
+      "Observation": "Strict native-node lead transitions and near-interval brackets exist; precise below-threshold occupancy and causal intent-success attribution are unavailable. Summary omits full rejection matrices.",
+      "Evidence": [
+        "Exposure and Order in cases.json.gz",
+        "full typed diagnostic traces",
+        "RaceReadinessObservationTests"
+      ],
+      "NumericalOrTraceEvidence": "Pilot Motoarena C has 1051 native near-interval observations; their union is an upper bracket, not exact threshold occupancy. Competitive reach is the existing 2.5 m; ties/gaps are retained, no rider-ID ordering or epsilon is introduced.",
+      "Subsystem": "Passive audit telemetry / common-time attribution",
+      "Confidence": "High for the measurement limit.",
+      "FuturePRScope": "Passive continuous exposure/intent attribution where it supports a meaningful decision; no physics changes or replacement pass rule.",
+      "Complexity": "Small/medium",
+      "Dependencies": []
+    }
+  ]
+}
