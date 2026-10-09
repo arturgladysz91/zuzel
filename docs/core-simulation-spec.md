@@ -1,5 +1,19 @@
 # Core simulation specification
 
+Current physical consequence precedence (#56C2): [physical contact consequences and recovery](calibration/physical-contact-consequences.md)
+supersedes legacy contact outcomes only with default-OFF `EnablePhysicalContactConsequences` and #56B enabled.
+Only analyzed causal-frontier contacts after exhausted safety responses apply. Frozen aggregate delta velocity
+changes final scalar speed; calibrated severity supplies terminal Crash or at most one active recovery step.
+Recovery scales positive drive and voluntary lateral authority, never resistance, correction, abilities or morale.
+Incoming recovery is consumed by the current traversal. Only a new recoverable contact at its verified
+frontier creates pending recovery for the following step, with that new event's loss and provenance.
+There is no occurrence/severity RNG, contact time penalty or lateral displacement in this path.
+Already-traversed distance/time and passage wear remain unchanged; no post-impact reintegration is claimed.
+Feature OFF and #56C1 shadow evidence retain their historical contracts.
+Physical ownership uses canonical heat-scoped pair generations, independent of tactical episode lifetime.
+A consumed pair rearms only after continuous resolved, nonambiguous #55 lower-bound clearance above
+0.65 m for 0.45 s; forecasts, incomplete coverage and duplicate observations cannot establish release.
+
 Current racing-response precedence (#56B): [bounded pre-contact contested-space responses](calibration/contested-space-racing-response.md)
 adds an opt-in heat-scoped coordinator after independent #54 planning. Joint alternatives
 execute production motion and are verified by #55; legacy consequences are authorized once

@@ -98,6 +98,8 @@ public sealed record InteractionResolution(IReadOnlyList<InteractionEpisodeDiagn
 {
     [System.Text.Json.Serialization.JsonIgnore]
     public PhysicalContactAnalysis? PhysicalContactAnalysis { get; init; }
+    [System.Text.Json.Serialization.JsonIgnore]
+    public PhysicalContactConsequencePlan? PhysicalContactConsequences { get; init; }
 }
 
 internal sealed class InteractionEpisode(long id, int[] riders, double start)
@@ -134,6 +136,10 @@ public sealed class InteractionEpisodeTracker
     private readonly List<InteractionEpisode> _episodes = new();
     private long _nextId;
     private (int Seed, int Heat)? _heat;
+    // One causal state per canonical pair in this heat (at most six pairs).
+    // Episode reconciliation cannot create, copy or discard physical ownership.
+    private readonly Dictionary<(int A, int B), PhysicalPairGeneration> _physicalPairs = new();
+    internal IReadOnlyDictionary<(int A, int B), PhysicalPairGeneration> PhysicalPairs => _physicalPairs;
     internal readonly List<InteractionEpisodeDiagnostic> Closed = new();
     internal readonly List<PhysicalPoseInterval> History = new();
     internal TrackMetricEmbedding? Embedding;
@@ -143,6 +149,7 @@ public sealed class InteractionEpisodeTracker
     {
         var clone = new InteractionEpisodeTracker { _nextId = _nextId, _heat = _heat, Embedding = Embedding };
         clone.History.AddRange(History);
+        foreach (var pair in _physicalPairs) clone._physicalPairs.Add(pair.Key, pair.Value);
         foreach (var e in _episodes) clone._episodes.Add(new(e.Id, e.Riders.ToArray(), e.Start)
         {
             LastActive = e.LastActive, ObservedUntil = e.ObservedUntil, ReleaseNotBefore=e.ReleaseNotBefore, ObservedRiders = e.ObservedRiders.ToArray(),
@@ -158,16 +165,20 @@ public sealed class InteractionEpisodeTracker
         _nextId = resolved._nextId; _heat = resolved._heat; Embedding = resolved.Embedding;
         _episodes.Clear(); _episodes.AddRange(resolved._episodes);
         History.Clear(); History.AddRange(resolved.History);
+        _physicalPairs.Clear();
+        foreach (var pair in resolved._physicalPairs) _physicalPairs.Add(pair.Key, pair.Value);
         Closed.Clear();
     }
-    internal void Bind(SimulationSnapshot snapshot)
+    internal void Bind(SimulationSnapshot snapshot, bool deterministicArithmetic=false)
     {
         Closed.Clear();
         var identity = (snapshot.Step.Seed, snapshot.Step.HeatId);
         if (_heat.HasValue && _heat.Value != identity)
             throw new InvalidOperationException("An interaction tracker belongs to exactly one heat.");
         _heat = identity;
-        Embedding ??= new(snapshot.Track);
+        Embedding ??= new(snapshot.Track, deterministicArithmetic);
+        if(Embedding.DeterministicArithmetic!=deterministicArithmetic)
+            throw new InvalidOperationException("Contact arithmetic mode must remain fixed within a heat.");
         Embedding.ValidateCompatible(snapshot.Track);
     }
     internal InteractionEpisode Engage(int[] riders, double time, InteractionContext context)
@@ -257,10 +268,54 @@ public sealed class InteractionEpisodeTracker
         }
         return result;
     }
+    internal bool CanApplyPhysical(PhysicalContactPairAnalysis pair)
+        => pair.Status == PhysicalContactStatus.Analyzed && Active.Any(e => e.Id == pair.EpisodeId
+            && (!_physicalPairs.TryGetValue(PhysicalPairKey(pair.RiderA, pair.RiderB), out var state)
+                || state.CanApply(pair.FirstTouchCommonTimeSeconds, pair.FrontierStartTimeSeconds)));
+
+    internal bool CanApplyPhysical(PhysicalContactPairAnalysis pair, PhysicalPairObservation observation)
+        => pair.Status == PhysicalContactStatus.Analyzed && Active.Any(e => e.Id == pair.EpisodeId)
+            && EligiblePhysicalState(pair, observation).CanApply(pair.FirstTouchCommonTimeSeconds, pair.FrontierStartTimeSeconds);
+
+    private PhysicalPairGeneration EligiblePhysicalState(PhysicalContactPairAnalysis pair, PhysicalPairObservation observation)
+    {
+        var key = PhysicalPairKey(pair.RiderA, pair.RiderB);
+        var state = _physicalPairs.GetValueOrDefault(key, PhysicalPairGeneration.NeverApplied);
+        // The frontier is frozen before any of its impulses. No member can use
+        // separation later in that same frontier to acquire another generation.
+        return observation.Advance(key, state, pair.FrontierStartTimeSeconds ?? pair.FirstTouchCommonTimeSeconds);
+    }
+
+    internal void ConsumePhysical(PhysicalContactConsequencePlan plan, PhysicalPairObservation? observation = null)
+    {
+        foreach (var pair in plan.AppliedPairs)
+        {
+            if (!(observation is null ? CanApplyPhysical(pair) : CanApplyPhysical(pair, observation)))
+                throw new InvalidOperationException("A physical pair generation can be consumed only once.");
+            var key = PhysicalPairKey(pair.RiderA, pair.RiderB);
+            var state = observation is null ? _physicalPairs.GetValueOrDefault(key, PhysicalPairGeneration.NeverApplied)
+                : EligiblePhysicalState(pair, observation);
+            _physicalPairs[key] = state.Consume(pair.FirstTouchCommonTimeSeconds);
+        }
+    }
+
+    internal static (int A, int B) PhysicalPairKey(int a, int b) => (Math.Min(a, b), Math.Max(a, b));
+
+    internal void ObservePhysicalClearance(ContestedSpaceReport report, ContestedSpaceParameters parameters)
+    {
+        if (_physicalPairs.Count == 0) return;
+        var observation = new PhysicalPairObservation(report, parameters);
+        foreach (var key in _physicalPairs.Keys.ToArray())
+            _physicalPairs[key] = observation.Advance(key, _physicalPairs[key]);
+    }
+
     internal bool Owns(int a, int b) => Active.Any(e => e.Riders.Contains(a) && e.Riders.Contains(b));
     internal void ObserveClearance(double time, IReadOnlyList<ContestedSpaceEvent> rows, ContestedSpaceParameters p,
-        SimulationSnapshot? snapshot = null)
+        SimulationSnapshot? snapshot = null, ContestedSpaceReport? physicalReport = null)
     {
+        // Kept for direct callers; production supplies the complete report,
+        // including explicit frame gaps, separately below.
+        ObservePhysicalClearance(physicalReport ?? new(rows, new(0,0,0,0,0,0,0,0), Array.Empty<FrameCoverageGap>()), p);
         foreach (var e in Active.ToArray())
         {
             var riders = e.Riders.Where(id => snapshot is null || snapshot.Rider(id).IsActive).ToArray();
@@ -418,8 +473,10 @@ public static class InteractionGeometryModel
     public static InteractionGeometry Describe(ContestedSpaceEvent space, PhysicalBikePose a, PhysicalBikePose b,
         PoseRateBounds rateA, PoseRateBounds rateB)
     {
+        if (a.FrameId != b.FrameId || space.FrameId != a.FrameId || a.DeterministicArithmetic != b.DeterministicArithmetic)
+            throw new ArgumentException("Tactical poses must share their contact geometry frame and arithmetic mode.");
         var heading = BikeAngles.Interpolate(a.ReferenceTangentHeadingRadians, b.ReferenceTangentHeadingRadians, .5);
-        var forward = new MeterPoint(Math.Cos(heading), Math.Sin(heading));
+        var forward = ContactFrameArithmetic.Direction(heading, a.DeterministicArithmetic);
         var outward = new MeterPoint(forward.Y, -forward.X);
         var delta = b.Position - a.Position;
         var longitudinal = MeterPoint.Dot(delta, forward);

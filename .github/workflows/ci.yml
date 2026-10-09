@@ -76,7 +76,7 @@ jobs:
 
   determinism:
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 30
+    timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
@@ -96,8 +96,14 @@ jobs:
           dotnet-version: 8.0.x
       - run: dotnet restore SpeedwayManager.sln
       - run: dotnet build SpeedwayManager.sln -c Release --no-restore --warnaserror
+      - name: Capture physical contact arithmetic regression
+        run: dotnet run --project tools/physical-contact-consequence-audit -c Release -- results/physical-contact-consequences --trace
+      - uses: actions/upload-artifact@v4
+        with:
+          name: contact-arithmetic-${{ matrix.os }}
+          path: results/physical-contact-consequences
       - name: Exact candidate trace, evidence bytes, Full/Lean and branch degree parity
-        run: dotnet test tests/CoreSim.Tests -c Release --no-build --filter "FullyQualifiedName~TrajectoryBehaviorFingerprintTests|FullyQualifiedName~LeanProjectionTests|FullyQualifiedName~ScalarEnvelopeParityTests|FullyQualifiedName~AdaptiveParallelTests|FullyQualifiedName~PhysicalSpaceTests|FullyQualifiedName~RiderGameplayProfileTests|FullyQualifiedName~ContestedSpaceResponseTests|FullyQualifiedName~PhysicalContactAnalysisTests" --logger "trx;LogFileName=determinism.trx" --results-directory results --verbosity normal
+        run: dotnet test tests/CoreSim.Tests -c Release --no-build --filter "FullyQualifiedName~TrajectoryBehaviorFingerprintTests|FullyQualifiedName~LeanProjectionTests|FullyQualifiedName~ScalarEnvelopeParityTests|FullyQualifiedName~AdaptiveParallelTests|FullyQualifiedName~PhysicalSpaceTests|FullyQualifiedName~RiderGameplayProfileTests|FullyQualifiedName~ContestedSpaceResponseTests|FullyQualifiedName~PhysicalContactAnalysisTests|FullyQualifiedName~PhysicalContactConsequenceTests|FullyQualifiedName~ContactDecisionGeometryTests|FullyQualifiedName~PhysicalContactPairGenerationTests" --logger "trx;LogFileName=determinism.trx" --results-directory results --verbosity normal
       - name: Capture typed IEEE values and final rider/raw surface states
         shell: bash
         run: |
@@ -107,6 +113,7 @@ jobs:
           dotnet run --project tools/rider-compatibility-audit -c Release -- results/rider-compatibility
           dotnet run --project tools/contested-space-audit -c Release -- results/contested-space
           dotnet run --project tools/physical-contact-audit -c Release -- results/physical-contact
+          dotnet run --project tools/physical-contact-consequence-audit -c Release -- results/physical-contact-consequences
       - name: Compare optimized engine with original merged main using exact typed behavior
         shell: bash
         run: |
@@ -120,6 +127,16 @@ jobs:
           python tools/contested-performance/compare.py results/contested-performance
           dotnet ../contested-after-bin/CoreSim.Tests.dll type-probe results/contested-performance/types.json
           python tools/contested-performance/verify-types.py results/contested-performance/types.json
+      - name: Capture complete enabled contact decisions before and after sequential recovery correction
+        shell: bash
+        run: |
+          git fetch origin a420fac248019e4ec7b852689c6d6a818adfa49e
+          git worktree add --detach ../contact-decision-baseline a420fac248019e4ec7b852689c6d6a818adfa49e
+          baseline="$(cd ../contact-decision-baseline && pwd)"
+          dotnet build tools/contact-decision-audit -c Release --warnaserror -p:CoreSimRoot="$baseline" -o ../contact-decision-before-bin
+          dotnet build tools/contact-decision-audit -c Release --warnaserror -o ../contact-decision-after-bin
+          dotnet ../contact-decision-before-bin/CoreSim.Tests.dll capture results/contact-decision/before.json
+          dotnet ../contact-decision-after-bin/CoreSim.Tests.dll capture results/contact-decision/after.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -147,7 +164,9 @@ jobs:
           python tools/rider-compatibility-audit/compare.py captures
           python tools/contested-space-audit/compare.py captures
           python tools/physical-contact-audit/compare.py captures
+          python tools/physical-contact-consequence-audit/compare.py captures
           python tools/contested-performance/compare.py captures --platforms
+          python tools/contact-decision-audit/compare.py captures
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -155,6 +174,7 @@ jobs:
           path: |
             captures/comparison.json
             captures/contested-performance-comparison.json
+            captures/contact-decision-*.json*
 
   python:
     runs-on: ubuntu-latest

@@ -26,7 +26,7 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
         ArgumentNullException.ThrowIfNull(engine); ArgumentNullException.ThrowIfNull(snapshot);
         ArgumentNullException.ThrowIfNull(intents); options.Validate();
         if (snapshot.Riders.Count > 4) throw new ArgumentException("Contested space supports at most four riders per heat.");
-        tracker.Bind(snapshot);
+        tracker.Bind(snapshot, options.EnablePhysicalContactConsequences);
         var p = options.ContestedSpaceParameters;
         // These adapters belong only to this immutable Resolve. Prefix sharing can
         // return the very same motion in several alternative horizons.
@@ -58,6 +58,7 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
         {
             // Same snapshot, intents, options and disabled legacy contacts. The
             // direct observation also covers exactly History + these poses.
+            if (options.EnablePhysicalContactConsequences) tracker.ObservePhysicalClearance(direct, p);
             tracker.RetainVerified(independent, currentPoses, direct);
             return independent.withInteraction(new(tracker.Closed.ToArray(),
                 new(0, 1, direct.Work.NarrowPhaseEvaluations, 0, 0) { ActualProductionVerifications = 1 }), owner, tracker);
@@ -458,6 +459,7 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
             }
         // Only final actual #55 contact, after the single safety correction, can
         // authorize an episode's one legacy fallback attempt.
+        var currentContactDiagnostics = options.EnablePhysicalContactConsequences ? new List<InteractionEpisodeDiagnostic>() : null;
         foreach (var episode in tracker.Active)
         {
             var index = diagnostics.FindIndex(d => d.EpisodeId == episode.Id);
@@ -474,7 +476,9 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
             var certifiedReplayPrefix = d.PassCount == 1 && d.ResolvedWithoutMechanicalContact && !boundaryOrGap
                 && episode.Riders.Where(id => selected.ContainsKey(id)).All(id =>
                     Project(selected[id]).Traversal.ResolvedMotions[0].Equals(actual.Motions.Single(m => m.RiderId == id)));
-            var authorized = tracker.AuthorizeFallbacks(episode, contacts, safetyPasses == 1);
+            var authorized = options.EnablePhysicalContactConsequences
+                ? contacts.Select(c => new FallbackDecision(c, false, "Physical consequence ownership; legacy fallback disabled")).ToArray()
+                : tracker.AuthorizeFallbacks(episode, contacts, safetyPasses == 1);
             foreach (var decision in authorized.Where(a => a.Authorized))
                 fallbackPairs.Add(Pair(decision.Contact.RiderA,decision.Contact.RiderB));
             diagnostics[index] = d with
@@ -492,6 +496,7 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
                 UnresolvedMechanicalContacts = authorized.Select(c => Unresolved(episode,c.Contact,d.SelectedResponses,c.Reason)
                     with { LegacyFallbackAuthorized = c.Authorized }).ToArray(),
             };
+            currentContactDiagnostics?.Add(diagnostics[index]);
         }
         foreach (var pair in fallbackPairs)
         {
@@ -500,22 +505,48 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
         }
         foreach (var episode in tracker.Active)
             episode.LastDiagnostic = diagnostics.LastOrDefault(d => d.EpisodeId == episode.Id) ?? episode.LastDiagnostic;
-        // With no authorized fallback the legacy filter rejects every pair before
-        // any contact RNG/consequence. That replay equals the verified actual step.
-        var final = fallbackPairs.Count == 0 ? actual : engine.ResolveProduction(snapshot, finalIntents, options, contactFilter: (a, b) =>
+        PhysicalContactAnalysis? physicalContact = null;
+        PhysicalContactConsequencePlan? consequencePlan = null;
+        if (options.EnablePhysicalContactConsequences)
+        {
+            var physicalObservation = new PhysicalPairObservation(verification, p);
+            bool Fresh(PhysicalContactPairAnalysis pair) => tracker.CanApplyPhysical(pair, physicalObservation);
+            bool Applicable(PhysicalContactPairAnalysis pair) => safetyPasses == 1 && Fresh(pair);
+            physicalContact = PhysicalContactSnapshotAdapter.Analyze(verification, finalContactPoses, snapshot,
+                tracker.Embedding!, currentContactDiagnostics!, Array.Empty<SimulationStepEvent>(), options.PhysicalContactParameters,
+                PhysicalContactDiagnosticsLevel.FullAudit, Applicable);
+            var pairs = physicalContact.AuditPairs.Where(Applicable).ToArray();
+            var directions = new Dictionary<int, MeterPoint>();
+            foreach (var rider in physicalContact.ApplicationRiders)
+            {
+                var first = pairs.Where(p => p.RiderA == rider.RiderId || p.RiderB == rider.RiderId).Min(p => p.FirstTouchCommonTimeSeconds);
+                var pose = CommonTimePoseHistory.Stitch(finalContactPoses).Where(i => i.RiderId == rider.RiderId
+                    && i.StartTimeSeconds <= first && i.EndTimeSeconds >= first).OrderByDescending(i => i.StartTimeSeconds).First().Sample(first);
+                directions[rider.RiderId] = ContactFrameArithmetic.Direction(pose.Attitude.TravelHeadingRadians, pose.DeterministicArithmetic);
+            }
+            consequencePlan = PhysicalContactConsequenceResolver.Build(physicalContact, physicalContact.ApplicationRiders,
+                pairs, snapshot, actual.Changes, directions, options.PhysicalContactParameters,
+                options.PhysicalContactConsequenceParameters,
+                physicalContact.AuditPairs.Count(p => p.Status == PhysicalContactStatus.Analyzed && !Fresh(p)));
+            tracker.ConsumePhysical(consequencePlan, physicalObservation);
+        }
+        // Reuse the verified step unless fallback or an applied consequence changes its output.
+        var reuseActual = fallbackPairs.Count == 0 && (consequencePlan is null || consequencePlan.Riders.Count == 0);
+        var final = reuseActual ? actual : engine.ResolveProduction(snapshot, finalIntents, options, legacyContacts: !options.EnablePhysicalContactConsequences,
+            consequencePlan: consequencePlan, contactFilter: (a, b) =>
             fallbackPairs.Contains(Pair(a, b)), unresolvedPairs: fallbackPairs.Select(pair =>
                 actual.Changes.Single(c => c.RiderId == pair.Item1).ElapsedTimeSeconds
                     <= actual.Changes.Single(c => c.RiderId == pair.Item2).ElapsedTimeSeconds
                     ? (pair.Item1, pair.Item2) : (pair.Item2, pair.Item1)).ToArray());
-        if (fallbackPairs.Count > 0) production++;
+        if (!ReferenceEquals(final, actual)) production++;
         var finalPoses = ReferenceEquals(final, actual) ? actualPoses : Poses(final);
         var executedVerification = ReferenceEquals(final, actual) ? verification
             : CommonTimePoseHistory.Observe(tracker.History.Concat(finalPoses));
-        var physicalContact = options.PhysicalContactDiagnostics == PhysicalContactDiagnosticsLevel.None ? null
+        physicalContact ??= options.PhysicalContactDiagnostics == PhysicalContactDiagnosticsLevel.None ? null
             : PhysicalContactSnapshotAdapter.Analyze(verification,finalContactPoses,snapshot,tracker.Embedding!,diagnostics,
                 final.Events,options.PhysicalContactParameters,options.PhysicalContactDiagnostics);
         if (!ReferenceEquals(final, actual)) narrow+=executedVerification.Work.NarrowPhaseEvaluations;
-        tracker.ObserveClearance(now,executedVerification.Intervals,p,snapshot);
+        tracker.ObserveClearance(now,executedVerification.Intervals,p,snapshot,executedVerification);
         foreach(var closed in tracker.Closed)
         {
             var index=diagnostics.FindIndex(d=>d.EpisodeId==closed.EpisodeId);
@@ -537,7 +568,10 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
                 ActualProductionVerifications = actualVerifications + (ReferenceEquals(final, actual) ? 0 : 1), SafetyPasses = safetyPasses, LegacyFallbackAttempts = fallbackPairs.Count,
                 SafetyContactComponents = safetyComponents.Count, FinalContactComponents = finalComponents.Count,
                 SafetyJointCombinations = safetyJointCombinations,
-            }) { PhysicalContactAnalysis = physicalContact }, owner, tracker);
+            }) { PhysicalContactAnalysis = options.PhysicalContactDiagnostics == PhysicalContactDiagnosticsLevel.None ? null
+                : options.PhysicalContactDiagnostics == PhysicalContactDiagnosticsLevel.Summary && physicalContact is not null
+                    ? physicalContact with { Level = PhysicalContactDiagnosticsLevel.Summary, AuditPairs = Array.Empty<PhysicalContactPairAnalysis>(), AuditRiders = Array.Empty<RiderContactAnalysis>() }
+                    : physicalContact, PhysicalContactConsequences = consequencePlan }, owner, tracker);
     }
 
     private static bool Eligible(ContestedSpaceEvent r) => r.NumericallyResolved && !r.Kind.HasFlag(SpaceConflictKind.BoundaryAmbiguous);
@@ -576,7 +610,12 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
     internal static bool WithinTrack(IEnumerable<PhysicalPoseInterval> poses, Track track, TrackMetricEmbedding embedding)
     {
         foreach (var interval in poses)
+        {
+            if (interval.DeterministicArithmetic != embedding.DeterministicArithmetic
+                || embedding.DeterministicArithmetic && interval.FrameId != embedding.FrameId)
+                throw new ArgumentException("Clearance poses must use the embedding's arithmetic mode and geometry frame.");
             if (!Certified(interval, interval.StartTimeSeconds, interval.EndTimeSeconds, 0)) return false;
+        }
         return true;
 
         bool Certified(PhysicalPoseInterval interval, double start, double end, int depth)
@@ -600,7 +639,13 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
         {
             var source = interval.Source!;
             var tangent = pose.ReferenceTangentHeadingRadians;
-            var outward = new MeterPoint(Math.Sin(tangent), -Math.Cos(tangent));
+            MeterPoint outward;
+            if (embedding.DeterministicArithmetic)
+            {
+                var forward = ContactFrameArithmetic.Direction(tangent, true);
+                outward = new(forward.Y, -forward.X);
+            }
+            else outward = new(Math.Sin(tangent), -Math.Cos(tangent));
             var projected = InteractionGeometryModel.Project(pose.Footprint, outward);
             var center = MeterPoint.Dot(pose.Position, outward);
             var span = LaneModel.UsableRacingWidthMeters(source.SegmentType, track.Geometry);
@@ -608,8 +653,10 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
             var segment = embedding.Segments[source.SegmentIndex];
             var offset = source.SegmentType == SegmentType.Straight
                 ? MeterPoint.Dot(pose.Position - segment.StartReferencePosition, outward)
-                : (pose.Position - (segment.StartReferencePosition + new MeterPoint(-Math.Sin(segment.StartTangentHeadingRadians),
-                    Math.Cos(segment.StartTangentHeadingRadians)) * segment.InnerRadiusMeters)).Length - track.Geometry.InnerRadiusMeters;
+                : (pose.Position - (embedding.DeterministicArithmetic
+                    ? embedding.DeterministicCornerCentre(source.SegmentIndex)
+                    : segment.StartReferencePosition + new MeterPoint(-Math.Sin(segment.StartTangentHeadingRadians),
+                        Math.Cos(segment.StartTangentHeadingRadians)) * segment.InnerRadiusMeters)).Length - track.Geometry.InnerRadiusMeters;
             var radialBulge = source.SegmentType == SegmentType.Straight ? 0
                 : pose.Dimensions.BoundingRadiusMeters * pose.Dimensions.BoundingRadiusMeters
                     / (2 * Math.Max(1, track.Geometry.InnerRadiusMeters - pose.Dimensions.BoundingRadiusMeters));

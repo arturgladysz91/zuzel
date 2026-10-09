@@ -7,7 +7,8 @@ internal static class PhysicalContactSnapshotAdapter
 {
     internal static PhysicalContactAnalysis Analyze(ContestedSpaceReport verified, IReadOnlyList<PhysicalPoseInterval> poses,
         SimulationSnapshot snapshot, TrackMetricEmbedding embedding, IReadOnlyList<InteractionEpisodeDiagnostic> episodes,
-        IReadOnlyList<SimulationStepEvent> legacyEvents, PhysicalContactParameters parameters, PhysicalContactDiagnosticsLevel level)
+        IReadOnlyList<SimulationStepEvent> legacyEvents, PhysicalContactParameters parameters, PhysicalContactDiagnosticsLevel level,
+        Func<PhysicalContactPairAnalysis, bool>? applicable = null)
     {
         var contacts = episodes.SelectMany(e => e.UnresolvedMechanicalContacts
             .Select(c => (Episode:e,Contact:c))).ToArray();
@@ -45,16 +46,18 @@ internal static class PhysicalContactSnapshotAdapter
                 b?.RateBounds(time,time).CenterVelocityMetersPerSecond ?? default,Rider(c.RiderA,pa),Rider(c.RiderB,pb),
                 item.Episode.EpisodeId,item.Episode.FallbackProvenance.Select(p => p.OriginEpisodeId).ToArray(),item.Contact.LegacyFallbackAuthorized,observations));
         }
-        return PhysicalContactAnalyzer.Analyze(inputs,parameters,level);
+        return applicable is null ? PhysicalContactAnalyzer.Analyze(inputs,parameters,level)
+            : PhysicalContactAnalyzer.AnalyzeForConsequences(inputs,parameters,applicable);
     }
     internal const double SurfaceMappingRoundoffToleranceMeters = 1e-9;
     internal static double Grip(PhysicalBikePose pose, SimulationSnapshot snapshot, TrackMetricEmbedding embedding)
     {
         if (pose.Source is null) throw new ArgumentException("Production poses require their sampled segment source.");
         var segment = embedding.Segments[pose.Source.SegmentIndex]; var heading = segment.StartTangentHeadingRadians;
+        var tangent=ContactFrameArithmetic.Direction(heading,segment.DeterministicArithmetic);
         var offset = segment.SegmentType == SegmentType.Straight
-            ? MeterPoint.Dot(pose.Position-segment.StartReferencePosition,new(Math.Sin(heading),-Math.Cos(heading)))
-            : (pose.Position-(segment.StartReferencePosition+new MeterPoint(-Math.Sin(heading),Math.Cos(heading))*segment.InnerRadiusMeters)).Length
+            ? MeterPoint.Dot(pose.Position-segment.StartReferencePosition,new(tangent.Y,-tangent.X))
+            : (pose.Position-(segment.StartReferencePosition+new MeterPoint(-tangent.Y,tangent.X)*segment.InnerRadiusMeters)).Length
                 - segment.InnerRadiusMeters;
         // No displacement or new surface read location: inverse of the existing #55 metric mapping at first touch.
         var width=LaneModel.UsableRacingWidthMeters(segment.SegmentType,snapshot.Track.Geometry);

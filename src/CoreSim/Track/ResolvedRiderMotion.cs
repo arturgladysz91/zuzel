@@ -23,7 +23,7 @@ public sealed record MotionBoundaryTransition(int FromSegmentId, int ToSegmentId
     public bool HasPhysicalOffsetDiscontinuity => FromPhysicalOffsetMeters != ToPhysicalOffsetMeters;
 }
 
-public enum MotionStateTransitionKind { EntryResolution, EndpointResolution, LegacyAlignment, TerminalCrash, ExistingContact }
+public enum MotionStateTransitionKind { EntryResolution, EndpointResolution, LegacyAlignment, TerminalCrash, ExistingContact, PhysicalContact }
 
 /// <summary>An existing coarse state event, not a traversed trajectory.</summary>
 public sealed record MotionStateTransition(MotionStateTransitionKind Kind,
@@ -186,7 +186,8 @@ public sealed class ResolvedRiderMotion : IEquatable<ResolvedRiderMotion>
         {
             var before = nodes[^1];
             var after = Sample(duration, 1d, totalDistance, finalChange.LateralPosition, finalChange.Speed);
-            transitions.Add(new(MotionStateTransitionKind.ExistingContact, before, after));
+            transitions.Add(new(diagnostics.PhysicalContactConsequence is null ? MotionStateTransitionKind.ExistingContact
+                : MotionStateTransitionKind.PhysicalContact, before, after));
             nodes.Add(after);
         }
         if (diagnostics.TravelTimeSeconds > duration)

@@ -43,9 +43,9 @@ public readonly record struct PoseRateBounds(MeterPoint CenterVelocityMetersPerS
 /// RateBounds must conservatively bound every time in the requested subinterval.
 /// </summary>
 internal readonly record struct BikePoseValue(MeterPoint Position, double TravelHeadingRadians,
-    double BikeHeadingRadians, SpeedwayBikeDimensions Dimensions, double ReferenceTangentHeadingRadians)
+    double BikeHeadingRadians, SpeedwayBikeDimensions Dimensions, double ReferenceTangentHeadingRadians, bool DeterministicArithmetic=false)
 {
-    internal BikeFootprint Footprint => BikeFootprint.Create(Position, BikeHeadingRadians, Dimensions);
+    internal BikeFootprint Footprint => BikeFootprint.Create(Position, BikeHeadingRadians, Dimensions, DeterministicArithmetic);
 }
 
 public abstract class PhysicalPoseInterval
@@ -58,6 +58,7 @@ public abstract class PhysicalPoseInterval
     public bool StartsAtDiscontinuity { get; }
     public PoseSource? Source { get; }
     public bool SupportsLapWrap { get; }
+    internal virtual bool DeterministicArithmetic => false;
     protected PhysicalPoseInterval(int riderId, string frameId, double start, double end,
         SpeedwayBikeDimensions dimensions, bool startsAtDiscontinuity, PoseSource? source = null, bool supportsLapWrap = true)
     {
@@ -79,7 +80,8 @@ public abstract class PhysicalPoseInterval
     internal virtual BikePoseValue SampleValue(double commonTimeSeconds)
     {
         var pose = Sample(commonTimeSeconds);
-        return new(pose.Position, pose.Attitude.TravelHeadingRadians, pose.Attitude.BikeHeadingRadians, pose.Dimensions, pose.ReferenceTangentHeadingRadians);
+        return new(pose.Position, pose.Attitude.TravelHeadingRadians, pose.Attitude.BikeHeadingRadians, pose.Dimensions,
+            pose.ReferenceTangentHeadingRadians, pose.DeterministicArithmetic);
     }
     internal virtual BikeFootprint SampleFootprint(double commonTimeSeconds) => SampleValue(commonTimeSeconds).Footprint;
     public abstract PoseRateBounds RateBounds(double startTimeSeconds, double endTimeSeconds);
@@ -93,17 +95,20 @@ public sealed class LinearBikePoseInterval : PhysicalPoseInterval
     public LinearBikePoseInterval(PhysicalBikePose start, PhysicalBikePose end, bool startsAtDiscontinuity = false)
         : base(start.RiderId, start.FrameId, start.CommonTimeSeconds, end.CommonTimeSeconds, start.Dimensions, startsAtDiscontinuity, start.Source)
     {
-        if (end.RiderId != start.RiderId || end.FrameId != start.FrameId || end.Dimensions != start.Dimensions)
-            throw new ArgumentException("Pose interval identity and dimensions must be constant.");
+        if (end.RiderId != start.RiderId || end.FrameId != start.FrameId || end.Dimensions != start.Dimensions
+            || end.DeterministicArithmetic != start.DeterministicArithmetic)
+            throw new ArgumentException("Pose interval identity, dimensions and arithmetic mode must be constant.");
         _start = start; _end = end;
     }
+    internal override bool DeterministicArithmetic => _start.DeterministicArithmetic;
     public override PhysicalBikePose Sample(double time)
     {
         var f = Fraction(time);
         return new(RiderId, FrameId, _start.Position + (_end.Position - _start.Position) * f,
             new(time, BikeAngles.Interpolate(_start.Attitude.TravelHeadingRadians, _end.Attitude.TravelHeadingRadians, f),
                 BikeAngles.Interpolate(_start.Attitude.BikeHeadingRadians, _end.Attitude.BikeHeadingRadians, f)), Dimensions,
-            BikeAngles.Interpolate(_start.ReferenceTangentHeadingRadians, _end.ReferenceTangentHeadingRadians, f), Source);
+            BikeAngles.Interpolate(_start.ReferenceTangentHeadingRadians, _end.ReferenceTangentHeadingRadians, f), Source)
+            { DeterministicArithmetic = _start.DeterministicArithmetic };
     }
     public override PoseRateBounds RateBounds(double start, double end)
     {
@@ -165,6 +170,7 @@ public static class ResolvedBikePoses
         private readonly PreparedMetricTrackSegment _map;
         private readonly ReferenceBikeAttitude _profile;
         private readonly bool _straight;
+        internal override bool DeterministicArithmetic => _segment.DeterministicArithmetic;
         public ProductionPoseInterval(ResolvedRiderMotion motion, Track track, RiderMotionSample a, RiderMotionSample b,
             TrackMetricEmbedding embedding, PoseSource source, double start, double end, SpeedwayBikeDimensions dimensions, ReferenceBikeAttitude profile, bool discontinuity)
             : base(motion.RiderId, embedding.FrameId, start, end, dimensions, discontinuity, source, embedding.Closure.SupportsLapWrap)
@@ -194,13 +200,15 @@ public static class ResolvedBikePoses
         {
             var g = Geometry(time);
             var beta = _straight ? 0 : _profile.RelativeSlideAngle(g.Phase);
-            return new(RiderId, FrameId, g.Position, new(time, g.Heading, g.Heading + beta), Dimensions, g.Tangent, Source);
+            return new(RiderId, FrameId, g.Position, new(time, g.Heading, g.Heading + beta), Dimensions, g.Tangent, Source)
+                { DeterministicArithmetic = _segment.DeterministicArithmetic };
         }
         internal override BikePoseValue SampleValue(double time)
         {
             var g = Geometry(time);
             var beta = _straight ? 0 : _profile.RelativeSlideAngle(g.Phase);
-            return new(g.Position, BikeAngles.Wrap(g.Heading), BikeAngles.Wrap(g.Heading + beta), Dimensions, BikeAngles.Wrap(g.Tangent));
+            return new(g.Position, BikeAngles.Wrap(g.Heading), BikeAngles.Wrap(g.Heading + beta), Dimensions,
+                BikeAngles.Wrap(g.Tangent), _segment.DeterministicArithmetic);
         }
         public override PoseRateBounds RateBounds(double start, double end)
         {

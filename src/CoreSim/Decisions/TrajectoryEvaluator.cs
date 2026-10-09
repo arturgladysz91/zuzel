@@ -105,13 +105,14 @@ public sealed class TrajectoryEvaluator
         var input = new SimulationSnapshot(step, track, parent.Surface.Snapshot(), new[] { parent.Rider });
         var options = new HeatSimulationOptions { Laps = step.RequiredLaps, Seed = _context.Seed,
             IncidentFrequency = 0f, EnableLogging = false,
-            EnableContestedSpaceResponses = _control.IsControlled && offset == 0 };
+            EnableContestedSpaceResponses = (_control.IsControlled && offset == 0) || parent.Rider.ContactRecovery is not null,
+            EnablePhysicalContactConsequences = parent.Rider.ContactRecovery is not null };
         SoloProjectionResult projection;
         ResolvedRiderMotion? motion = null;
         if (rich)
         {
             var engine = new SimulationEngine(new FixedTarget(requested));
-            var resolved = _control.IsControlled && offset == 0
+            var resolved = (_control.IsControlled && offset == 0) || parent.Rider.ContactRecovery is not null
                 ? engine.ResolveProduction(input, new[] { new RiderIntent(parent.Rider.RiderId,
                     _control.Decision(requested, offset)) }, options, legacyContacts: false)
                 : engine.Resolve(input, engine.Decide(input), options);

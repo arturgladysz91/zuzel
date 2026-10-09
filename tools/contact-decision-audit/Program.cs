@@ -9,29 +9,15 @@ using CoreSim;
 using CoreSim.Analysis;
 using CoreSim.Decisions;
 using CoreSim.Interactions;
+using CoreSim.PhysicalSpace;
+using CoreSim.Tests;
+using System.IO.Compression;
 using CoreSim.Race;
 
 CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
 var mode = args[0];
 var output = args[1];
 Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(output))!);
-if (mode == "type-probe")
-{
-    // Exercise the actual C# capture serializer, not synthetic Python-only values.
-    var input = new Dictionary<string, object?>
-    {
-        ["integer"] = 1, ["integer_text"] = "1",
-        ["boolean"] = true, ["boolean_text"] = "True",
-        ["enum"] = InteractionResponse.Hold, ["enum_text"] = "Hold",
-        ["character"] = '1', ["character_text"] = "1",
-        ["decimal"] = 1.0m, ["decimal_text"] = "1.0",
-        ["float"] = 1f, ["double"] = 1d, ["null"] = null,
-    };
-    var typeProbeValues = new SortedDictionary<string, object?>(StringComparer.Ordinal);
-    foreach (var item in input) Walk(item.Value, item.Key, typeProbeValues);
-    Write(output, typeProbeValues);
-    return;
-}
 var scenarios = ContestedSpaceResponseEvidence.Scenarios().Concat(ContestedSpaceResponseEvidence.OwnershipScenarios()).ToList();
 scenarios.Add(new("four-separated", 4, new[] {
     new ContestedRiderInput(1, 1, .05f, 22, new(1,1,1)),
@@ -43,22 +29,16 @@ var tied = scenarios.Single(s => s.Name == "H-three-squeeze");
 scenarios.Add(tied with {Name = "equal-tactical-costs", Riders = tied.Riders.Select(r=>r with {Combativeness = 0}).ToArray()});
 scenarios.Add(tied with {Name = "adjacent-tactical-costs", Riders = tied.Riders.Select(r=>r with {Combativeness = MathF.BitIncrement(.5f)}).ToArray()});
 var heat = FourRiderBehaviorSuite.CreateScenarios().Single(s => s.Id == "I");
-var stress = FourRiderBehaviorSuite.CreateScenarios().Single(s => s.Id == "H");
+var contactHeavy = PhysicalContactConsequenceEvidence.HeatScenarios().Single(s => s.Id == "contact-heavy");
 var cases = new List<Case>();
-foreach (var name in new[] {"four-separated", "H-three-squeeze", "G-four-first-bend", "real-bridge", "safety-correction"})
+foreach (var name in new[] {"four-separated", "H-three-squeeze", "real-bridge"})
 {
     var scenario = scenarios.Single(s => s.Name == name);
     cases.Add(new(name, capture => Resolve(scenario, true, false, capture)));
 }
 cases.Add(new("I-heat-ON", capture => RunHeat(heat, true, false, 7, WeatherState.Dry, capture)));
 cases.Add(new("I-heat-OFF", capture => RunHeat(heat, false, false, 7, WeatherState.Dry, capture)));
-cases.Add(new("repeated-contact", capture => {
-    var tracker = new InteractionEpisodeTracker();
-    for (var repeat = 0; repeat < 8; repeat++) Resolve(scenarios.Single(s => s.Name == "imminent-overlap"), true, false, capture, tracker, repeat*5);
-}));
-cases.Add(new("solo-heat", capture => RunHeat(heat with {Riders = heat.Riders.Take(1).ToArray()}, false, false, 7, WeatherState.Dry, capture)));
-cases.Add(new("contact-diagnostics", capture => Resolve(scenarios.Single(s => s.Name == "imminent-overlap"), true, false, capture,
-    physicalDiagnostics: true)));
+cases.Add(new("contact-heavy-heat-ON", capture => RunHeat(contactHeavy, true, false, 19, WeatherState.LightRain, capture)));
 if (mode == "capture")
 {
     var manifests = new SortedDictionary<string, object>(StringComparer.Ordinal);
@@ -69,36 +49,58 @@ if (mode == "capture")
         var bytes = JsonSerializer.SerializeToUtf8Bytes(values);
         manifests.Add(name,new {Leaves=values.Count, IEEELeaves=values.Values.Count(v=>v is string s && (s.StartsWith("float:",StringComparison.Ordinal)||s.StartsWith("double:",StringComparison.Ordinal))),
             SHA256=Convert.ToHexString(SHA256.HashData(bytes))});
-        if (args.Contains("--raw") || args.Contains("--raw-case="+name))
-            File.WriteAllBytes(output+"."+name.Replace('/','_')+".json",bytes);
+        using var raw = File.Create(output+"."+name.Replace('/','_')+".json.gz");
+        using var compressed = new GZipStream(raw, CompressionLevel.SmallestSize);
+        compressed.Write(bytes);
+        if (name.StartsWith("heat/",StringComparison.Ordinal)) Console.WriteLine("Captured "+name);
     }
+    if (!args.Contains("--pairs-only") && !args.Contains("--sequences-only"))
+    {
     foreach (var scenario in scenarios)
-    foreach (var enabled in new[] {false, true})
+    foreach (var enabled in new[] {true})
     foreach (var reverse in new[] {false, true})
     {
         var collector = new Collector(true);
         Resolve(scenario, enabled, reverse, collector);
         Capture($"{scenario.Name}/{enabled}/{reverse}",collector.Values);
     }
-    foreach (var fixture in new[] {heat, stress})
+    foreach (var fixture in new[] {heat, FourRiderBehaviorSuite.CreateScenarios().Single(s=>s.Id=="G"), contactHeavy})
     foreach (var weather in new[] {WeatherState.Dry, WeatherState.LightRain})
-    foreach (var seed in new[] {7,19})
+    foreach (var seed in new[] {7,19,83})
     foreach (var reverse in new[] {false,true})
     {
         var collector = new Collector(true);
-        RunHeat(fixture, true, reverse, seed, weather, collector);
+        RunHeat(fixture,true,reverse,seed,weather,collector);
         Capture($"heat/{fixture.Id}/{weather.Condition}/{seed}/{reverse}",collector.Values);
     }
-    foreach (var reverse in new[] {false,true})
+    foreach(var edge in ContactDecisionGeometryFixtures.Edges())
+        Capture("edge/"+edge.Name,ContactDecisionGeometryFixtures.EdgeResult(edge));
+    foreach(var tactical in ContactDecisionGeometryFixtures.Tactics())
+        Capture("tactical/"+tactical.Name,ContactDecisionGeometryFixtures.TacticalResult(tactical));
+    foreach(var reverse in new[]{false,true})
     {
-        var collector = new Collector(true);
-        RunHeat(heat, false, reverse, 7, WeatherState.Dry, collector);
-        Capture($"heat/I/interactions-OFF/Dry/7/{reverse}",collector.Values);
+        var repeated=new Collector(true); var tracker=new InteractionEpisodeTracker();
+        for(var repeat=0;repeat<8;repeat++) Resolve(scenarios.Single(s=>s.Name=="imminent-overlap"),true,reverse,repeated,tracker,repeat*5);
+        Capture("continuous-overlap/"+reverse,repeated.Values);
     }
-    Capture("ownership",ContestedSpaceResponseEvidence.OwnershipEvidence());
-    foreach(var s in ContestedSpaceResponseEvidence.OwnershipScenarios())
-        Capture("shadow/"+s.Name,PhysicalContactEvidence.Resolve(s,PhysicalContactDiagnosticsLevel.FullAudit));
-    var repeated = new Collector(true); cases.Single(c=>c.Name=="repeated-contact").Run(repeated); Capture("persistent-overlap",repeated.Values);
+    }
+    if (!args.Contains("--sequences-only"))
+    {
+    foreach (var seed in new[] { 7, 19, 83 })
+    foreach (var weather in new[] { WeatherState.Dry, WeatherState.LightRain })
+    foreach (var reverse in new[] { false, true })
+        Capture($"pair-recontact/{seed}/{weather.Condition}/{reverse}", PairGenerationCapture.Run(seed, weather, reverse));
+    foreach (var seed in new[] { 7, 19, 83 })
+    foreach (var weather in new[] { WeatherState.Dry, WeatherState.LightRain })
+    foreach (var reverse in new[] { false, true })
+        Capture($"pair-production-release/{seed}/{weather.Condition}/{reverse}", PairGenerationCapture.RunProduction(seed, weather, reverse));
+    }
+    if (!args.Contains("--pairs-only"))
+    foreach (var sequence in Enum.GetValues<ContactRecoverySequenceFixtures.Sequence>())
+    foreach (var seed in new[] { 7, 19, 83 })
+    foreach (var weather in new[] { WeatherState.Dry, WeatherState.LightRain })
+    foreach (var reverse in new[] { false, true })
+        Capture($"recovery-sequence/{sequence}/{seed}/{weather.Condition}/{reverse}", ContactRecoverySequenceFixtures.Run(sequence, seed, weather, reverse));
     Write(output,manifests);
     Console.WriteLine($"Captured {manifests.Count} exact behavior manifests.");
     return;
@@ -132,16 +134,15 @@ foreach (var test in selected)
             Stages = ReadProbe(probe) });
     }
     measurements.Add(new {test.Name, Warmups = warmups, Samples = rows});
-    Write(output, new {Schema = "contested-performance-v1", Measurements = measurements});
+    Write(output, new {Schema = "contact-decision-performance-v1", Measurements = measurements});
     Console.WriteLine($"Measured {test.Name} ({samples} samples).");
 }
-Write(output, new {Schema = "contested-performance-v1", Environment = new {
+Write(output, new {Schema = "contact-decision-performance-v1", Environment = new {
     OS = RuntimeInformation.OSDescription, Runtime = RuntimeInformation.FrameworkDescription,
     Environment.ProcessorCount, Architecture = RuntimeInformation.ProcessArchitecture.ToString(),
     Stopwatch.Frequency }, WarmupProtocol = "At least eight complete runs and at least three seconds per case", Samples = samples, Measurements = measurements});
 
-static void Resolve(ContestedScenario scenario, bool enabled, bool reverse, Collector collector, InteractionEpisodeTracker? tracker=null,float time=0,
-    bool physicalDiagnostics=false)
+static void Resolve(ContestedScenario scenario, bool enabled, bool reverse, Collector collector, InteractionEpisodeTracker? tracker=null,float time=0)
 {
     var basis = ContestedSpaceResponseEvidence.Snapshot(scenario.Name=="safety-correction" ? scenario with {Seed=57} : scenario,reverse);
     var snapshot = new SimulationSnapshot(scenario.Name=="safety-correction" ? basis.Step with {Seed=276} : basis.Step,
@@ -149,9 +150,9 @@ static void Resolve(ContestedScenario scenario, bool enabled, bool reverse, Coll
     var intents = scenario.Riders.Select(r=>new RiderIntent(r.Id,new RiderDecision(r.Intent.TargetFor(snapshot.Segment.Type)){Trajectory=r.Intent})).ToArray();
     var engine = new SimulationEngine(new FixedDecision());
     var step = engine.Resolve(snapshot,reverse ? intents.Reverse().ToArray() : intents,new() {
-        EnableContestedSpaceResponses=enabled,IncidentFrequency=scenario.IncidentFrequency,
+        EnableContestedSpaceResponses=enabled,EnablePhysicalContactConsequences=enabled,IncidentFrequency=scenario.IncidentFrequency,
         InteractionDiagnostics=collector.Capture ? InteractionDiagnosticsLevel.FullAudit : InteractionDiagnosticsLevel.Summary,
-        PhysicalContactDiagnostics=physicalDiagnostics ? PhysicalContactDiagnosticsLevel.FullAudit : PhysicalContactDiagnosticsLevel.None},tracker);
+        PhysicalContactDiagnostics=collector.Capture && enabled ? PhysicalContactDiagnosticsLevel.FullAudit : PhysicalContactDiagnosticsLevel.None},tracker);
     collector.OnStepResolved(step);
     if(tracker is not null) engine.Commit(step,snapshot.Riders.Select(r=>r.ToMutableCopy()).ToArray(),
         new TrackState(snapshot.Track.Segments.Count,5,snapshot.TrackState.GetSurface),new CoreSim.Logging.SimLog(false));
@@ -162,8 +163,10 @@ static void RunHeat(BehaviorScenario scenario, bool enabled, bool reverse, int s
     var surface = scenario.CreateSurface();
     var result = new HeatSimulator(new AdaptiveDecisionModel()).SimulateHeat(scenario.Track, surface,
         (reverse ? riders.AsEnumerable().Reverse() : riders).ToList(), new() { Seed = seed, Weather = weather,
-            EnableContestedSpaceResponses = enabled, InteractionDiagnostics = InteractionDiagnosticsLevel.Summary,
-            EnableLogging = collector.Capture }, 57, collector);
+            EnableContestedSpaceResponses = true, EnablePhysicalContactConsequences = enabled,
+            InteractionDiagnostics = collector.Capture ? InteractionDiagnosticsLevel.FullAudit : InteractionDiagnosticsLevel.Summary,
+            PhysicalContactDiagnostics = collector.Capture && enabled ? PhysicalContactDiagnosticsLevel.FullAudit : PhysicalContactDiagnosticsLevel.None,
+            EnableLogging = collector.Capture }, collector.Capture ? 59 : 57, collector);
     if (collector.Capture) collector.Values.Add(new {result.Classification, result.Log, Riders=riders.ToArray(), Surface = surface.Snapshot()});
 }
 static void Write(string path, object value) => File.WriteAllText(path,
@@ -205,7 +208,7 @@ static void Walk(object? value, string path, IDictionary<string,object?> values)
     }
     // Preserve integer and boolean JSON primitive types.
     if (type.IsPrimitive) {values[path] = value; return;}
-    if (value is InteractionWork) return; // Only explicitly instrumentation-only work is excluded.
+    // Include all work counters as well as physics, decisions and final state.
     if (value is TrackStateSnapshot surface)
     {
         for (var s = 0; s < surface.SegmentCount; s++) for (var lane = 0; lane < surface.LinesCount; lane++)
@@ -216,24 +219,6 @@ static void Walk(object? value, string path, IDictionary<string,object?> values)
     {var i=0; foreach(var item in sequence) Walk(item, $"{path}[{i++}]", values); values[path+".Count"] = i; return;}
     foreach (var property in value.GetType().GetProperties(BindingFlags.Public|BindingFlags.Instance).Where(p => p.GetIndexParameters().Length == 0))
         Walk(property.GetValue(value), path+"."+property.Name, values);
-    // #56C2 adds nullable state/diagnostics absent from original main. Materialize
-    // absence as null only in the old assembly; never omit a current value. Thus
-    // OFF captures retain every historical leaf and reject any non-null new state.
-    if (FeatureOffSchema.AddedNullableMembers.TryGetValue(type.FullName!, out var members))
-        foreach (var name in members)
-            if (type.GetProperty(name) is null) Walk(null, path+"."+name, values);
-}
-static class FeatureOffSchema
-{
-    internal static readonly IReadOnlyDictionary<string,string[]> AddedNullableMembers = new Dictionary<string,string[]>
-    {
-        ["CoreSim.RiderState"] = new[]{"ContactRecovery"},
-        ["CoreSim.RiderSnapshot"] = new[]{"ContactRecovery"},
-        ["CoreSim.RiderStateChange"] = new[]{"ContactRecovery"},
-        ["CoreSim.SimulationStepEvent"] = new[]{"PhysicalContactConsequence"},
-        ["CoreSim.RiderStepDiagnostics"] = new[]{"PhysicalContactConsequence","FinalSpeedMetersPerSecond","FinalStatus"},
-        ["CoreSim.Interactions.InteractionResolution"] = new[]{"PhysicalContactConsequences"},
-    };
 }
 sealed record Case(string Name, Action<Collector> Run);
 sealed class FixedDecision : IRiderDecisionModel

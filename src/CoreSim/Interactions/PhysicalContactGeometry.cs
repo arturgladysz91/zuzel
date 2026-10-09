@@ -42,8 +42,8 @@ public static class PhysicalContactGeometry
         // #55's equal-minimum component priority is intentionally unchanged.
         // Present poses to it in geometric track-frame order, so simultaneous
         // chassis/bar ties cannot attach a different manifold after an ID swap.
-        var forward=new MeterPoint(Math.Cos(a.ReferenceTangentHeadingRadians)+Math.Cos(b.ReferenceTangentHeadingRadians),
-            Math.Sin(a.ReferenceTangentHeadingRadians)+Math.Sin(b.ReferenceTangentHeadingRadians));
+        var forward=ContactFrameArithmetic.Direction(a.ReferenceTangentHeadingRadians,a.DeterministicArithmetic)
+            +ContactFrameArithmetic.Direction(b.ReferenceTangentHeadingRadians,b.DeterministicArithmetic);
         if(forward.Length<=DirectionToleranceMeters) forward=new(1,0); // fixed basis of the supplied metric frame
         var delta=b.Position-a.Position;var along=MeterPoint.Dot(delta,forward);var lateral=MeterPoint.Dot(delta,new(-forward.Y,forward.X));
         var reverse=along < -DirectionToleranceMeters || Math.Abs(along)<=DirectionToleranceMeters&&lateral<0;

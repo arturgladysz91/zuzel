@@ -1,0 +1,870 @@
+{
+  "root[21].Interaction.Episodes[0].SelectedResponses[0].Intent.ApexTarget": {
+    "Before": {
+      "Type": "integer",
+      "Value": 1
+    },
+    "After": {
+      "Type": "integer",
+      "Value": 0
+    }
+  },
+  "root[21].Interaction.Episodes[0].SelectedResponses[0].Intent.ExitTarget": {
+    "Before": {
+      "Type": "integer",
+      "Value": 1
+    },
+    "After": {
+      "Type": "integer",
+      "Value": 0
+    }
+  },
+  "root[21].Interaction.Episodes[0].SelectedResponses[0].Reason": {
+    "Before": {
+      "Type": "string",
+      "Value": "Local phase response; production feasibility required"
+    },
+    "After": {
+      "Type": "string",
+      "Value": "Independent #54 intent"
+    }
+  },
+  "root[21].Interaction.Episodes[0].SelectedResponses[0].Response": {
+    "Before": {
+      "Type": "enum",
+      "Value": "CoreSim.Interactions.InteractionResponse:4"
+    },
+    "After": {
+      "Type": "enum",
+      "Value": "CoreSim.Interactions.InteractionResponse:0"
+    }
+  },
+  "root[21].Interaction.Episodes[0].SelectedResponses[0].TacticalPreference": {
+    "Before": {
+      "Type": "double",
+      "Bits": "BFB6A4F503E8E9D8"
+    },
+    "After": {
+      "Type": "double",
+      "Bits": "0000000000000000"
+    }
+  },
+  "root[21].Interaction.Episodes[0].SelectedResponses[1].HoldLateralPosition": {
+    "Before": {
+      "Type": "boolean",
+      "Value": true
+    },
+    "After": {
+      "Type": "boolean",
+      "Value": false
+    }
+  },
+  "root[21].Interaction.Episodes[0].SelectedResponses[1].Intent.ApexTarget": {
+    "Before": {
+      "Type": "integer",
+      "Value": 0
+    },
+    "After": {
+      "Type": "integer",
+      "Value": 1
+    }
+  },
+  "root[21].Interaction.Episodes[0].SelectedResponses[1].Intent.EntryTarget": {
+    "Before": {
+      "Type": "integer",
+      "Value": 0
+    },
+    "After": {
+      "Type": "integer",
+      "Value": 1
+    }
+  },
+  "root[21].Interaction.Episodes[0].SelectedResponses[1].Intent.ExitTarget": {
+    "Before": {
+      "Type": "integer",
+      "Value": 0
+    },
+    "After": {
+      "Type": "integer",
+      "Value": 1
+    }
+  },
+  "root[21].Interaction.Episodes[0].SelectedResponses[1].Response": {
+    "Before": {
+      "Type": "enum",
+      "Value": "CoreSim.Interactions.InteractionResponse:1"
+    },
+    "After": {
+      "Type": "enum",
+      "Value": "CoreSim.Interactions.InteractionResponse:4"
+    }
+  },
+  "root[21].Interaction.Episodes[0].SelectedResponses[1].TacticalPreference": {
+    "Before": {
+      "Type": "double",
+      "Bits": "BFB51BBDB82241E8"
+    },
+    "After": {
+      "Type": "double",
+      "Bits": "BFB59ED026B9CF38"
+    }
+  },
+  "root[22].Interaction.Episodes[0].SelectedResponses[0].Intent.ApexTarget": {
+    "Before": {
+      "Type": "integer",
+      "Value": 1
+    },
+    "After": {
+      "Type": "integer",
+      "Value": 0
+    }
+  },
+  "root[22].Interaction.Episodes[0].SelectedResponses[0].Intent.EntryTarget": {
+    "Before": {
+      "Type": "integer",
+      "Value": 1
+    },
+    "After": {
+      "Type": "integer",
+      "Value": 0
+    }
+  },
+  "root[22].Interaction.Episodes[0].SelectedResponses[0].Intent.ExitTarget": {
+    "Before": {
+      "Type": "integer",
+      "Value": 1
+    },
+    "After": {
+      "Type": "integer",
+      "Value": 0
+    }
+  },
+  "root[22].Interaction.Episodes[0].SelectedResponses[1].Intent.ApexTarget": {
+    "Before": {
+      "Type": "integer",
+      "Value": 0
+    },
+    "After": {
+      "Type": "integer",
+      "Value": 1
+    }
+  },
+  "root[22].Interaction.Episodes[0].SelectedResponses[1].Intent.EntryTarget": {
+    "Before": {
+      "Type": "integer",
+      "Value": 0
+    },
+    "After": {
+      "Type": "integer",
+      "Value": 1
+    }
+  },
+  "root[23].Interaction.Episodes[0].SelectedResponses[0].DriveControl": {
+    "Before": {
+      "Type": "missing"
+    },
+    "After": {
+      "Type": "null",
+      "Value": null
+    }
+  },
+  "root[23].Interaction.Episodes[0].SelectedResponses[0].DriveControl.PositiveDriveFraction": {
+    "Before": {
+      "Type": "float",
+      "Bits": "00000000"
+    },
+    "After": {
+      "Type": "missing"
+    }
+  },
+  "root[23].Interaction.Episodes[0].SelectedResponses[0].Intent.ApexTarget": {
+    "Before": {
+      "Type": "integer",
+      "Value": 1
+    },
+    "After": {
+      "Type": "integer",
+      "Value": 0
+    }
+  },
+  "root[23].Interaction.Episodes[0].SelectedResponses[0].Intent.EntryTarget": {
+    "Before": {
+      "Type": "integer",
+      "Value": 1
+    },
+    "After": {
+      "Type": "integer",
+      "Value": 0
+    }
+  },
+  "root[23].Interaction.Episodes[0].SelectedResponses[0].Intent.ExitTarget": {
+    "Before": {
+      "Type": "integer",
+      "Value": 1
+    },
+    "After": {
+      "Type": "integer",
+      "Value": 0
+    }
+  },
+  "root[23].Interaction.Episodes[0].SelectedResponses[0].Reason": {
+    "Before": {
+      "Type": "string",
+      "Value": "Hold available lateral position and lift positive drive; no direct speed change"
+    },
+    "After": {
+      "Type": "string",
+      "Value": "Local phase response; production feasibility required"
+    }
+  },
+  "root[23].Interaction.Episodes[0].SelectedResponses[0].Response": {
+    "Before": {
+      "Type": "enum",
+      "Value": "CoreSim.Interactions.InteractionResponse:6"
+    },
+    "After": {
+      "Type": "enum",
+      "Value": "CoreSim.Interactions.InteractionResponse:1"
+    }
+  },
+  "root[23].Interaction.Episodes[0].SelectedResponses[0].TacticalPreference": {
+    "Before": {
+      "Type": "double",
+      "Bits": "3F947AE147AE147B"
+    },
+    "After": {
+      "Type": "double",
+      "Bits": "BFB7280772807728"
+    }
+  },
+  "root[23].Interaction.Episodes[0].SelectedResponses[1].HoldLateralPosition": {
+    "Before": {
+      "Type": "boolean",
+      "Value": true
+    },
+    "After": {
+      "Type": "boolean",
+      "Value": false
+    }
+  },
+  "root[23].Interaction.Episodes[0].SelectedResponses[1].Intent.ApexTarget": {
+    "Before": {
+      "Type": "integer",
+      "Value": 0
+    },
+    "After": {
+      "Type": "integer",
+      "Value": 1
+    }
+  },
+  "root[23].Interaction.Episodes[0].SelectedResponses[1].Intent.EntryTarget": {
+    "Before": {
+      "Type": "integer",
+      "Value": 0
+    },
+    "After": {
+      "Type": "integer",
+      "Value": 1
+    }
+  },
+  "root[23].Interaction.Episodes[0].SelectedResponses[1].Response": {
+    "Before": {
+      "Type": "enum",
+      "Value": "CoreSim.Interactions.InteractionResponse:1"
+    },
+    "After": {
+      "Type": "enum",
+      "Value": "CoreSim.Interactions.InteractionResponse:5"
+    }
+  },
+  "root[24].Interaction.Episodes[0].SelectedResponses[0].DriveControl": {
+    "Before": {
+      "Type": "missing"
+    },
+    "After": {
+      "Type": "null",
+      "Value": null
+    }
+  },
+  "root[24].Interaction.Episodes[0].SelectedResponses[0].DriveControl.PositiveDriveFraction": {
+    "Before": {
+      "Type": "float",
+      "Bits": "00000000"
+    },
+    "After": {
+      "Type": "missing"
+    }
+  },
+  "root[24].Interaction.Episodes[0].SelectedResponses[0].Intent.ApexTarget": {
+    "Before": {
+      "Type": "integer",
+      "Value": 1
+    },
+    "After": {
+      "Type": "integer",
+      "Value": 0
+    }
+  },
+  "root[24].Interaction.Episodes[0].SelectedResponses[0].Intent.EntryTarget": {
+    "Before": {
+      "Type": "integer",
+      "Value": 1
+    },
+    "After": {
+      "Type": "integer",
+      "Value": 0
+    }
+  },
+  "root[24].Interaction.Episodes[0].SelectedResponses[0].Intent.ExitTarget": {
+    "Before": {
+      "Type": "integer",
+      "Value": 1
+    },
+    "After": {
+      "Type": "integer",
+      "Value": 0
+    }
+  },
+  "root[24].Interaction.Episodes[0].SelectedResponses[0].Reason": {
+    "Before": {
+      "Type": "string",
+      "Value": "Hold available lateral position and lift positive drive; no direct speed change"
+    },
+    "After": {
+      "Type": "string",
+      "Value": "Local phase response; production feasibility required"
+    }
+  },
+  "root[24].Interaction.Episodes[0].SelectedResponses[0].Response": {
+    "Before": {
+      "Type": "enum",
+      "Value": "CoreSim.Interactions.InteractionResponse:6"
+    },
+    "After": {
+      "Type": "enum",
+      "Value": "CoreSim.Interactions.InteractionResponse:1"
+    }
+  },
+  "root[24].Interaction.Episodes[0].SelectedResponses[0].TacticalPreference": {
+    "Before": {
+      "Type": "double",
+      "Bits": "3F947AE147AE147B"
+    },
+    "After": {
+      "Type": "double",
+      "Bits": "BFB7280772807728"
+    }
+  },
+  "root[24].Interaction.Episodes[0].SelectedResponses[1].HoldLateralPosition": {
+    "Before": {
+      "Type": "boolean",
+      "Value": true
+    },
+    "After": {
+      "Type": "boolean",
+      "Value": false
+    }
+  },
+  "root[24].Interaction.Episodes[0].SelectedResponses[1].Intent.ApexTarget": {
+    "Before": {
+      "Type": "integer",
+      "Value": 0
+    },
+    "After": {
+      "Type": "integer",
+      "Value": 1
+    }
+  },
+  "root[24].Interaction.Episodes[0].SelectedResponses[1].Intent.EntryTarget": {
+    "Before": {
+      "Type": "integer",
+      "Value": 0
+    },
+    "After": {
+      "Type": "integer",
+      "Value": 1
+    }
+  },
+  "root[24].Interaction.Episodes[0].SelectedResponses[1].Intent.ExitTarget": {
+    "Before": {
+      "Type": "integer",
+      "Value": 0
+    },
+    "After": {
+      "Type": "integer",
+      "Value": 1
+    }
+  },
+  "root[24].Interaction.Episodes[0].SelectedResponses[1].Response": {
+    "Before": {
+      "Type": "enum",
+      "Value": "CoreSim.Interactions.InteractionResponse:1"
+    },
+    "After": {
+      "Type": "enum",
+      "Value": "CoreSim.Interactions.InteractionResponse:4"
+    }
+  },
+  "root[24].Interaction.Episodes[0].SelectedResponses[1].TacticalPreference": {
+    "Before": {
+      "Type": "double",
+      "Bits": "BFB51BBDB82241E8"
+    },
+    "After": {
+      "Type": "double",
+      "Bits": "BFB59ED026B9CF38"
+    }
+  },
+  "root[25].Interaction.Episodes[0].SelectedResponses[0].HoldLateralPosition": {
+    "Before": {
+      "Type": "boolean",
+      "Value": false
+    },
+    "After": {
+      "Type": "boolean",
+      "Value": true
+    }
+  },
+  "root[25].Interaction.Episodes[0].SelectedResponses[0].Intent.EntryTarget": {
+    "Before": {
+      "Type": "integer",
+      "Value": 1
+    },
+    "After": {
+      "Type": "integer",
+      "Value": 0
+    }
+  },
+  "root[25].Interaction.Episodes[0].SelectedResponses[0].Reason": {
+    "Before": {
+      "Type": "string",
+      "Value": "Independent #54 intent"
+    },
+    "After": {
+      "Type": "string",
+      "Value": "Local phase response; production feasibility required"
+    }
+  },
+  "root[25].Interaction.Episodes[0].SelectedResponses[0].Response": {
+    "Before": {
+      "Type": "enum",
+      "Value": "CoreSim.Interactions.InteractionResponse:0"
+    },
+    "After": {
+      "Type": "enum",
+      "Value": "CoreSim.Interactions.InteractionResponse:1"
+    }
+  },
+  "root[25].Interaction.Episodes[0].SelectedResponses[0].TacticalPreference": {
+    "Before": {
+      "Type": "double",
+      "Bits": "0000000000000000"
+    },
+    "After": {
+      "Type": "double",
+      "Bits": "BFB7280772807728"
+    }
+  },
+  "root[25].Interaction.Episodes[0].SelectedResponses[1].DriveControl": {
+    "Before": {
+      "Type": "null",
+      "Value": null
+    },
+    "After": {
+      "Type": "missing"
+    }
+  },
+  "root[25].Interaction.Episodes[0].SelectedResponses[1].DriveControl.PositiveDriveFraction": {
+    "Before": {
+      "Type": "missing"
+    },
+    "After": {
+      "Type": "float",
+      "Bits": "00000000"
+    }
+  },
+  "root[25].Interaction.Episodes[0].SelectedResponses[1].HoldLateralPosition": {
+    "Before": {
+      "Type": "boolean",
+      "Value": false
+    },
+    "After": {
+      "Type": "boolean",
+      "Value": true
+    }
+  },
+  "root[25].Interaction.Episodes[0].SelectedResponses[1].Intent.EntryTarget": {
+    "Before": {
+      "Type": "integer",
+      "Value": 2
+    },
+    "After": {
+      "Type": "integer",
+      "Value": 1
+    }
+  },
+  "root[25].Interaction.Episodes[0].SelectedResponses[1].Reason": {
+    "Before": {
+      "Type": "string",
+      "Value": "Independent #54 intent"
+    },
+    "After": {
+      "Type": "string",
+      "Value": "Hold available lateral position and lift positive drive; no direct speed change"
+    }
+  },
+  "root[25].Interaction.Episodes[0].SelectedResponses[1].Response": {
+    "Before": {
+      "Type": "enum",
+      "Value": "CoreSim.Interactions.InteractionResponse:0"
+    },
+    "After": {
+      "Type": "enum",
+      "Value": "CoreSim.Interactions.InteractionResponse:6"
+    }
+  },
+  "root[25].Interaction.Episodes[0].SelectedResponses[1].RiderId": {
+    "Before": {
+      "Type": "integer",
+      "Value": 2
+    },
+    "After": {
+      "Type": "integer",
+      "Value": 3
+    }
+  },
+  "root[25].Interaction.Episodes[0].SelectedResponses[1].TacticalPreference": {
+    "Before": {
+      "Type": "double",
+      "Bits": "0000000000000000"
+    },
+    "After": {
+      "Type": "double",
+      "Bits": "3F947AE147AE147B"
+    }
+  },
+  "root[26].Interaction.Episodes[0].SelectedResponses[0].DriveControl": {
+    "Before": {
+      "Type": "missing"
+    },
+    "After": {
+      "Type": "null",
+      "Value": null
+    }
+  },
+  "root[26].Interaction.Episodes[0].SelectedResponses[0].HoldLateralPosition": {
+    "Before": {
+      "Type": "missing"
+    },
+    "After": {
+      "Type": "boolean",
+      "Value": true
+    }
+  },
+  "root[26].Interaction.Episodes[0].SelectedResponses[0].Intent.ApexTarget": {
+    "Before": {
+      "Type": "missing"
+    },
+    "After": {
+      "Type": "integer",
+      "Value": 0
+    }
+  },
+  "root[26].Interaction.Episodes[0].SelectedResponses[0].Intent.EntryTarget": {
+    "Before": {
+      "Type": "missing"
+    },
+    "After": {
+      "Type": "integer",
+      "Value": 0
+    }
+  },
+  "root[26].Interaction.Episodes[0].SelectedResponses[0].Intent.ExitTarget": {
+    "Before": {
+      "Type": "missing"
+    },
+    "After": {
+      "Type": "integer",
+      "Value": 0
+    }
+  },
+  "root[26].Interaction.Episodes[0].SelectedResponses[0].Reason": {
+    "Before": {
+      "Type": "missing"
+    },
+    "After": {
+      "Type": "string",
+      "Value": "Local phase response; production feasibility required"
+    }
+  },
+  "root[26].Interaction.Episodes[0].SelectedResponses[0].Response": {
+    "Before": {
+      "Type": "missing"
+    },
+    "After": {
+      "Type": "enum",
+      "Value": "CoreSim.Interactions.InteractionResponse:1"
+    }
+  },
+  "root[26].Interaction.Episodes[0].SelectedResponses[0].RiderId": {
+    "Before": {
+      "Type": "missing"
+    },
+    "After": {
+      "Type": "integer",
+      "Value": 1
+    }
+  },
+  "root[26].Interaction.Episodes[0].SelectedResponses[0].TacticalPreference": {
+    "Before": {
+      "Type": "missing"
+    },
+    "After": {
+      "Type": "double",
+      "Bits": "BFB7280772807728"
+    }
+  },
+  "root[26].Interaction.Episodes[0].SelectedResponses[1].DriveControl": {
+    "Before": {
+      "Type": "missing"
+    },
+    "After": {
+      "Type": "null",
+      "Value": null
+    }
+  },
+  "root[26].Interaction.Episodes[0].SelectedResponses[1].HoldLateralPosition": {
+    "Before": {
+      "Type": "missing"
+    },
+    "After": {
+      "Type": "boolean",
+      "Value": false
+    }
+  },
+  "root[26].Interaction.Episodes[0].SelectedResponses[1].Intent.ApexTarget": {
+    "Before": {
+      "Type": "missing"
+    },
+    "After": {
+      "Type": "integer",
+      "Value": 1
+    }
+  },
+  "root[26].Interaction.Episodes[0].SelectedResponses[1].Intent.EntryTarget": {
+    "Before": {
+      "Type": "missing"
+    },
+    "After": {
+      "Type": "integer",
+      "Value": 1
+    }
+  },
+  "root[26].Interaction.Episodes[0].SelectedResponses[1].Intent.ExitTarget": {
+    "Before": {
+      "Type": "missing"
+    },
+    "After": {
+      "Type": "integer",
+      "Value": 0
+    }
+  },
+  "root[26].Interaction.Episodes[0].SelectedResponses[1].Reason": {
+    "Before": {
+      "Type": "missing"
+    },
+    "After": {
+      "Type": "string",
+      "Value": "Local phase response; production feasibility required"
+    }
+  },
+  "root[26].Interaction.Episodes[0].SelectedResponses[1].Response": {
+    "Before": {
+      "Type": "missing"
+    },
+    "After": {
+      "Type": "enum",
+      "Value": "CoreSim.Interactions.InteractionResponse:5"
+    }
+  },
+  "root[26].Interaction.Episodes[0].SelectedResponses[1].RiderId": {
+    "Before": {
+      "Type": "missing"
+    },
+    "After": {
+      "Type": "integer",
+      "Value": 3
+    }
+  },
+  "root[26].Interaction.Episodes[0].SelectedResponses[1].TacticalPreference": {
+    "Before": {
+      "Type": "missing"
+    },
+    "After": {
+      "Type": "double",
+      "Bits": "BFB51BBDB82241E8"
+    }
+  },
+  "root[27].Interaction.Episodes[0].SelectedResponses[0].DriveControl": {
+    "Before": {
+      "Type": "missing"
+    },
+    "After": {
+      "Type": "null",
+      "Value": null
+    }
+  },
+  "root[27].Interaction.Episodes[0].SelectedResponses[0].HoldLateralPosition": {
+    "Before": {
+      "Type": "missing"
+    },
+    "After": {
+      "Type": "boolean",
+      "Value": true
+    }
+  },
+  "root[27].Interaction.Episodes[0].SelectedResponses[0].Intent.ApexTarget": {
+    "Before": {
+      "Type": "missing"
+    },
+    "After": {
+      "Type": "integer",
+      "Value": 0
+    }
+  },
+  "root[27].Interaction.Episodes[0].SelectedResponses[0].Intent.EntryTarget": {
+    "Before": {
+      "Type": "missing"
+    },
+    "After": {
+      "Type": "integer",
+      "Value": 0
+    }
+  },
+  "root[27].Interaction.Episodes[0].SelectedResponses[0].Intent.ExitTarget": {
+    "Before": {
+      "Type": "missing"
+    },
+    "After": {
+      "Type": "integer",
+      "Value": 0
+    }
+  },
+  "root[27].Interaction.Episodes[0].SelectedResponses[0].Reason": {
+    "Before": {
+      "Type": "missing"
+    },
+    "After": {
+      "Type": "string",
+      "Value": "Local phase response; production feasibility required"
+    }
+  },
+  "root[27].Interaction.Episodes[0].SelectedResponses[0].Response": {
+    "Before": {
+      "Type": "missing"
+    },
+    "After": {
+      "Type": "enum",
+      "Value": "CoreSim.Interactions.InteractionResponse:1"
+    }
+  },
+  "root[27].Interaction.Episodes[0].SelectedResponses[0].RiderId": {
+    "Before": {
+      "Type": "missing"
+    },
+    "After": {
+      "Type": "integer",
+      "Value": 1
+    }
+  },
+  "root[27].Interaction.Episodes[0].SelectedResponses[0].TacticalPreference": {
+    "Before": {
+      "Type": "missing"
+    },
+    "After": {
+      "Type": "double",
+      "Bits": "BFB7280772807728"
+    }
+  },
+  "root[27].Interaction.Episodes[0].SelectedResponses[1].DriveControl": {
+    "Before": {
+      "Type": "missing"
+    },
+    "After": {
+      "Type": "null",
+      "Value": null
+    }
+  },
+  "root[27].Interaction.Episodes[0].SelectedResponses[1].HoldLateralPosition": {
+    "Before": {
+      "Type": "missing"
+    },
+    "After": {
+      "Type": "boolean",
+      "Value": false
+    }
+  },
+  "root[27].Interaction.Episodes[0].SelectedResponses[1].Intent.ApexTarget": {
+    "Before": {
+      "Type": "missing"
+    },
+    "After": {
+      "Type": "integer",
+      "Value": 1
+    }
+  },
+  "root[27].Interaction.Episodes[0].SelectedResponses[1].Intent.EntryTarget": {
+    "Before": {
+      "Type": "missing"
+    },
+    "After": {
+      "Type": "integer",
+      "Value": 1
+    }
+  },
+  "root[27].Interaction.Episodes[0].SelectedResponses[1].Intent.ExitTarget": {
+    "Before": {
+      "Type": "missing"
+    },
+    "After": {
+      "Type": "integer",
+      "Value": 0
+    }
+  },
+  "root[27].Interaction.Episodes[0].SelectedResponses[1].Reason": {
+    "Before": {
+      "Type": "missing"
+    },
+    "After": {
+      "Type": "string",
+      "Value": "Local phase response; production feasibility required"
+    }
+  },
+  "root[27].Interaction.Episodes[0].SelectedResponses[1].Response": {
+    "Before": {
+      "Type": "missing"
+    },
+    "After": {
+      "Type": "enum",
+      "Value": "CoreSim.Interactions.InteractionResponse:5"
+    }
+  },
+  "root[27].Interaction.Episodes[0].SelectedResponses[1].RiderId": {
+    "Before": {
+      "Type": "missing"
+    },
+    "After": {
+      "Type": "integer",
+      "Value": 3
+    }
+  },
+  "root[27].Interaction.Episodes[0].SelectedResponses[1].TacticalPreference": {
+    "Before": {
+      "Type": "missing"
+    },
+    "After": {
+      "Type": "double",
+      "Bits": "BFB51BBDB82241E8"
+    }
+  }
+}

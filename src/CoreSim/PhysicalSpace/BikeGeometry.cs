@@ -81,10 +81,12 @@ public readonly record struct BikeFootprint(MechanicalCapsule Chassis, Mechanica
 {
     public MechanicalCapsule Component(BikeComponent component) => component == BikeComponent.Chassis ? Chassis : Handlebar;
     public static BikeFootprint Create(MeterPoint position, double bikeHeadingRadians, SpeedwayBikeDimensions dimensions)
+        => Create(position,bikeHeadingRadians,dimensions,false);
+    internal static BikeFootprint Create(MeterPoint position, double bikeHeadingRadians, SpeedwayBikeDimensions dimensions, bool deterministicArithmetic)
     {
         ArgumentNullException.ThrowIfNull(dimensions);
         var heading = BikeAngles.Wrap(bikeHeadingRadians);
-        var forward = new MeterPoint(Math.Cos(heading), Math.Sin(heading));
+        var forward = ContactFrameArithmetic.Direction(heading,deterministicArithmetic);
         var left = new MeterPoint(-forward.Y, forward.X);
         var bodyHalf = (dimensions.OverallMechanicalLengthMeters - dimensions.ChassisBodyWidthMeters) / 2;
         var barHalf = (dimensions.HandlebarWidthMeters - dimensions.HandlebarTubeDiameterMeters) / 2;
@@ -96,6 +98,7 @@ public readonly record struct BikeFootprint(MechanicalCapsule Chassis, Mechanica
 
 public sealed record PhysicalBikePose
 {
+    internal bool DeterministicArithmetic { get; init; }
     public int RiderId { get; }
     public string FrameId { get; }
     public MeterPoint Position { get; }
@@ -105,7 +108,7 @@ public sealed record PhysicalBikePose
     /// <summary>Local reference-track tangent, solely for removing shared forward transport in diagnostics.</summary>
     public double ReferenceTangentHeadingRadians { get; }
     public double CommonTimeSeconds => Attitude.CommonTimeSeconds;
-    public BikeFootprint Footprint => BikeFootprint.Create(Position, Attitude.BikeHeadingRadians, Dimensions);
+    public BikeFootprint Footprint => BikeFootprint.Create(Position, Attitude.BikeHeadingRadians, Dimensions, DeterministicArithmetic);
     public PhysicalBikePose(int riderId, string frameId, MeterPoint position, BikeAttitudeSample attitude, SpeedwayBikeDimensions dimensions,
         double? referenceTangentHeadingRadians = null, PoseSource? source = null)
     {
@@ -116,7 +119,8 @@ public sealed record PhysicalBikePose
         ReferenceTangentHeadingRadians = BikeAngles.Wrap(referenceTangentHeadingRadians ?? attitude.TravelHeadingRadians);
     }
     public PhysicalBikePose Repose(MeterPoint position, double heading, double time) => new(RiderId, FrameId, position,
-        new(time, Attitude.TravelHeadingRadians, heading), Dimensions, ReferenceTangentHeadingRadians, Source);
+        new(time, Attitude.TravelHeadingRadians, heading), Dimensions, ReferenceTangentHeadingRadians, Source)
+        { DeterministicArithmetic = DeterministicArithmetic };
 }
 
 public readonly record struct FootprintSeparation(double SignedMeters, BikeComponent ComponentA, BikeComponent ComponentB)
