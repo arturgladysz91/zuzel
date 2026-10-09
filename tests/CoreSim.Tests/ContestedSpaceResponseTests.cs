@@ -69,7 +69,7 @@ public sealed class ContestedSpaceResponseTests
         Assert.True(episode.Geometry[0].ForwardFootprintOverlapMeters < 0);
         Assert.Contains(episode.ResponseAlternatives, a => a.RiderId == 1 && a.Response == InteractionResponse.CoverInside
             && a.Intent.EntryTarget < 2 && a.Intent.ApexTarget < 2);
-        Assert.Contains(episode.Candidates, c => c.Cost.AdditionalTraversalTimeSeconds != 0);
+        Assert.Contains(episode.Candidates, c => c.Cost is { AdditionalTraversalTimeSeconds: not 0 });
         Assert.Contains(episode.SelectedResponses, a => a.RiderId == 1 && a.Response == InteractionResponse.CoverInside);
         Assert.True(episode.ResolvedWithoutMechanicalContact);
     }

@@ -1,0 +1,3030 @@
+{
+  "Baseline": "350f59cc53184399066bdf93b18341e4628ec8ef",
+  "Cases": {
+    "B": {
+      "BeforeFailed": true,
+      "AfterFailed": false,
+      "BeforeFailure": {
+        "Type": "CoreSim.ExecutedPathTraversal+TimeSolveDiscontinuityException",
+        "Message": "Coupled time solve did not converge within its bound.",
+        "StackTrace": "   at CoreSim.ExecutedPathTraversal.<Traverse>g__Solve|7_3(Double finish, <>c__DisplayClass7_0&) in C:\\Users\\artur\\Documents\\Codex\\2026-10-08\\files-pasted-by-the-user-pr\\work\\zuzel\\src\\CoreSim\\Track\\ExecutedPathTraversal.cs:line 263\r\n   at CoreSim.ExecutedPathTraversal.Traverse(SimulationSnapshot snapshot, RiderSnapshot rider, SegmentResolution resolution, Single entrySpeed, Single canonicalAdvance, Boolean launch, Func`2 nextCornerTarget, Boolean captureRich, Single positiveDriveFraction, Boolean holdLateralPosition, Single lateralAuthority01, Boolean contactRecovery) in C:\\Users\\artur\\Documents\\Codex\\2026-10-08\\files-pasted-by-the-user-pr\\work\\zuzel\\src\\CoreSim\\Track\\ExecutedPathTraversal.cs:line 95\r\n   at CoreSim.SimulationEngine.ResolveMovingRider(SimulationSnapshot snapshot, RiderSnapshot rider, RiderDecision decision, SegmentResolution resolution, Single entrySpeed, Int32 plannedLane, Single canonicalAdvance, Boolean launch, Single risk, TrackSurfaceState entrySurface, Nullable`1 phase, Boolean captureRich, Single positiveDriveFraction, Boolean holdLateralPosition, Single lateralAuthority01, Boolean contactRecovery) in C:\\Users\\artur\\Documents\\Codex\\2026-10-08\\files-pasted-by-the-user-pr\\work\\zuzel\\src\\CoreSim\\SimulationEngine.cs:line 785\r\n   at CoreSim.SimulationEngine.ResolveRiderCore(SimulationSnapshot snapshot, RiderSnapshot rider, RiderDecision decision, HeatSimulationOptions options, Boolean captureRich) in C:\\Users\\artur\\Documents\\Codex\\2026-10-08\\files-pasted-by-the-user-pr\\work\\zuzel\\src\\CoreSim\\SimulationEngine.cs:line 618\r\n   at CoreSim.SimulationEngine.ResolveProduction(SimulationSnapshot snapshot, IReadOnlyList`1 intents, HeatSimulationOptions options, Boolean legacyContacts, Func`3 contactFilter, IReadOnlyList`1 unresolvedPairs, PhysicalContactConsequencePlan consequencePlan) in C:\\Users\\artur\\Documents\\Codex\\2026-10-08\\files-pasted-by-the-user-pr\\work\\zuzel\\src\\CoreSim\\SimulationEngine.cs:line 267\r\n   at CoreSim.Interactions.ContestedSpaceInteractionCoordinator.<>c__DisplayClass9_9.<Resolve>g__SafetyProject|93(InteractionAlternative alternative) in C:\\Users\\artur\\Documents\\Codex\\2026-10-08\\files-pasted-by-the-user-pr\\work\\zuzel\\src\\CoreSim\\Interactions\\ContestedSpaceInteractionCoordinator.cs:line 323\r\n   at CoreSim.Interactions.ContestedSpaceInteractionCoordinator.Resolve(SimulationEngine engine, SimulationSnapshot snapshot, IReadOnlyList`1 intents, HeatSimulationOptions options, InteractionEpisodeTracker owner) in C:\\Users\\artur\\Documents\\Codex\\2026-10-08\\files-pasted-by-the-user-pr\\work\\zuzel\\src\\CoreSim\\Interactions\\ContestedSpaceInteractionCoordinator.cs:line 363\r\n   at CoreSim.SimulationEngine.Resolve(SimulationSnapshot snapshot, IReadOnlyList`1 intents, HeatSimulationOptions options, InteractionEpisodeTracker interactions) in C:\\Users\\artur\\Documents\\Codex\\2026-10-08\\files-pasted-by-the-user-pr\\work\\zuzel\\src\\CoreSim\\SimulationEngine.cs:line 238\r\n   at CoreSim.Race.HeatSimulator.SimulateHeat(Track track, TrackState trackState, List`1 riders, HeatSimulationOptions options, Int32 heatId, ISimulationStepObserver observer) in C:\\Users\\artur\\Documents\\Codex\\2026-10-08\\files-pasted-by-the-user-pr\\work\\zuzel\\src\\CoreSim\\Race\\HeatSimulator.cs:line 89\r\n   at Program.<>c__DisplayClass0_0.<<Main>$>g__Run|4(Experiment scenario, HeatSimulationOptions options, Boolean reverse, Boolean observe, Boolean fullTrace) in C:\\Users\\artur\\Documents\\Codex\\2026-10-08\\files-pasted-by-the-user-pr\\work\\zuzel\\tools\\race-engine-readiness\\Program.cs:line 161"
+      },
+      "Classification": [
+        {
+          "RiderId": 2,
+          "Position": 1,
+          "Points": 3,
+          "Status": "Finished",
+          "TimeSeconds": 60.89192,
+          "DistanceMeters": 1347.4501,
+          "LapsCompleted": 4,
+          "Finished": true,
+          "Crashed": false,
+          "Retired": false,
+          "Dnf": false
+        },
+        {
+          "RiderId": 4,
+          "Position": 2,
+          "Points": 2,
+          "Status": "Finished",
+          "TimeSeconds": 61.35127,
+          "DistanceMeters": 1465.4159,
+          "LapsCompleted": 4,
+          "Finished": true,
+          "Crashed": false,
+          "Retired": false,
+          "Dnf": false
+        },
+        {
+          "RiderId": 1,
+          "Position": 3,
+          "Points": 1,
+          "Status": "Finished",
+          "TimeSeconds": 61.47685,
+          "DistanceMeters": 1374.3596,
+          "LapsCompleted": 4,
+          "Finished": true,
+          "Crashed": false,
+          "Retired": false,
+          "Dnf": false
+        },
+        {
+          "RiderId": 3,
+          "Position": 4,
+          "Points": 0,
+          "Status": "Finished",
+          "TimeSeconds": 61.59118,
+          "DistanceMeters": 1524.3123,
+          "LapsCompleted": 4,
+          "Finished": true,
+          "Crashed": false,
+          "Retired": false,
+          "Dnf": false
+        }
+      ],
+      "FinalHash": "1452A36E0DF7F4705E1A47960989A5FD090B8647B145E6C23397FE78C66B8C93",
+      "BehaviorHash": "4C12774D618B116510EF793356293995618418978FB7462C02F6D56151887283",
+      "Applied": [],
+      "ExactChangedStateLeaves": {
+        "root.Riders[0].CanonicalProgress": {
+          "Before": "double:0000000000000000",
+          "After": "double:4042000000000000"
+        },
+        "root.Riders[0].CurrentSegmentId": {
+          "Before": "System.Int32:0",
+          "After": "System.Int32:8"
+        },
+        "root.Riders[0].DistanceMeters": {
+          "Before": "float:00000000",
+          "After": "float:44ABCB82"
+        },
+        "root.Riders[0].ElapsedTimeSeconds": {
+          "Before": "float:00000000",
+          "After": "float:4275E84B"
+        },
+        "root.Riders[0].Lane": {
+          "Before": "System.Int32:0",
+          "After": "System.Int32:2"
+        },
+        "root.Riders[0].LapNumber": {
+          "Before": "System.Int32:1",
+          "After": "System.Int32:4"
+        },
+        "root.Riders[0].LapsCompleted": {
+          "Before": "System.Int32:0",
+          "After": "System.Int32:4"
+        },
+        "root.Riders[0].LastResolvedSegmentId": {
+          "Before": "System.Int32:0",
+          "After": "System.Int32:8"
+        },
+        "root.Riders[0].LateralPosition": {
+          "Before": "float:3E4CCCCD",
+          "After": "float:40000000"
+        },
+        "root.Riders[0].Morale": {
+          "Before": "float:3F000000",
+          "After": "float:3EFAE148"
+        },
+        "root.Riders[0].Position.DistanceMeters": {
+          "Before": "float:00000000",
+          "After": "float:44ABCB82"
+        },
+        "root.Riders[0].Position.LapsCompleted": {
+          "Before": "System.Int32:0",
+          "After": "System.Int32:4"
+        },
+        "root.Riders[0].Position.TotalSegmentProgress": {
+          "Before": "double:0000000000000000",
+          "After": "double:4042000000000000"
+        },
+        "root.Riders[0].Risk": {
+          "Before": "float:00000000",
+          "After": "float:3DCCEBF0"
+        },
+        "root.Riders[0].Speed": {
+          "Before": "float:00000000",
+          "After": "float:41CA74EA"
+        },
+        "root.Riders[0].Status": {
+          "Before": "enum:CoreSim.Race.RiderRaceStatus:0",
+          "After": "enum:CoreSim.Race.RiderRaceStatus:2"
+        },
+        "root.Riders[1].CanonicalProgress": {
+          "Before": "double:0000000000000000",
+          "After": "double:4042000000000000"
+        },
+        "root.Riders[1].CurrentSegmentId": {
+          "Before": "System.Int32:0",
+          "After": "System.Int32:8"
+        },
+        "root.Riders[1].DistanceMeters": {
+          "Before": "float:00000000",
+          "After": "float:44A86E67"
+        },
+        "root.Riders[1].ElapsedTimeSeconds": {
+          "Before": "float:00000000",
+          "After": "float:42739153"
+        },
+        "root.Riders[1].Lane": {
+          "Before": "System.Int32:1",
+          "After": "System.Int32:2"
+        },
+        "root.Riders[1].LapNumber": {
+          "Before": "System.Int32:1",
+          "After": "System.Int32:4"
+        },
+        "root.Riders[1].LapsCompleted": {
+          "Before": "System.Int32:0",
+          "After": "System.Int32:4"
+        },
+        "root.Riders[1].LastResolvedSegmentId": {
+          "Before": "System.Int32:0",
+          "After": "System.Int32:8"
+        },
+        "root.Riders[1].LateralPosition": {
+          "Before": "float:3FB33333",
+          "After": "float:3FBFA8C5"
+        },
+        "root.Riders[1].Morale": {
+          "Before": "float:3F000000",
+          "After": "float:3F0A3D71"
+        },
+        "root.Riders[1].Position.DistanceMeters": {
+          "Before": "float:00000000",
+          "After": "float:44A86E67"
+        },
+        "root.Riders[1].Position.LapsCompleted": {
+          "Before": "System.Int32:0",
+          "After": "System.Int32:4"
+        },
+        "root.Riders[1].Position.TotalSegmentProgress": {
+          "Before": "double:0000000000000000",
+          "After": "double:4042000000000000"
+        },
+        "root.Riders[1].Risk": {
+          "Before": "float:00000000",
+          "After": "float:3E04C5AB"
+        },
+        "root.Riders[1].Speed": {
+          "Before": "float:00000000",
+          "After": "float:41C0C79B"
+        },
+        "root.Riders[1].Status": {
+          "Before": "enum:CoreSim.Race.RiderRaceStatus:0",
+          "After": "enum:CoreSim.Race.RiderRaceStatus:2"
+        },
+        "root.Riders[2].CanonicalProgress": {
+          "Before": "double:0000000000000000",
+          "After": "double:4042000000000000"
+        },
+        "root.Riders[2].CurrentSegmentId": {
+          "Before": "System.Int32:0",
+          "After": "System.Int32:8"
+        },
+        "root.Riders[2].DistanceMeters": {
+          "Before": "float:00000000",
+          "After": "float:44BE89FE"
+        },
+        "root.Riders[2].ElapsedTimeSeconds": {
+          "Before": "float:00000000",
+          "After": "float:42765D5E"
+        },
+        "root.Riders[2].Lane": {
+          "Before": "System.Int32:3",
+          "After": "System.Int32:2"
+        },
+        "root.Riders[2].LapNumber": {
+          "Before": "System.Int32:1",
+          "After": "System.Int32:4"
+        },
+        "root.Riders[2].LapsCompleted": {
+          "Before": "System.Int32:0",
+          "After": "System.Int32:4"
+        },
+        "root.Riders[2].LastResolvedSegmentId": {
+          "Before": "System.Int32:0",
+          "After": "System.Int32:8"
+        },
+        "root.Riders[2].LateralPosition": {
+          "Before": "float:40266666",
+          "After": "float:40000000"
+        },
+        "root.Riders[2].Morale": {
+          "Before": "float:3F000000",
+          "After": "float:3EF33333"
+        },
+        "root.Riders[2].Position.DistanceMeters": {
+          "Before": "float:00000000",
+          "After": "float:44BE89FE"
+        },
+        "root.Riders[2].Position.LapsCompleted": {
+          "Before": "System.Int32:0",
+          "After": "System.Int32:4"
+        },
+        "root.Riders[2].Position.TotalSegmentProgress": {
+          "Before": "double:0000000000000000",
+          "After": "double:4042000000000000"
+        },
+        "root.Riders[2].Risk": {
+          "Before": "float:00000000",
+          "After": "float:3DCCEBF0"
+        },
+        "root.Riders[2].Speed": {
+          "Before": "float:00000000",
+          "After": "float:41CA74EA"
+        },
+        "root.Riders[2].Status": {
+          "Before": "enum:CoreSim.Race.RiderRaceStatus:0",
+          "After": "enum:CoreSim.Race.RiderRaceStatus:2"
+        },
+        "root.Riders[3].CanonicalProgress": {
+          "Before": "double:0000000000000000",
+          "After": "double:4042000000000000"
+        },
+        "root.Riders[3].CurrentSegmentId": {
+          "Before": "System.Int32:0",
+          "After": "System.Int32:8"
+        },
+        "root.Riders[3].DistanceMeters": {
+          "Before": "float:00000000",
+          "After": "float:44B72D4F"
+        },
+        "root.Riders[3].ElapsedTimeSeconds": {
+          "Before": "float:00000000",
+          "After": "float:427567B3"
+        },
+        "root.Riders[3].Lane": {
+          "Before": "System.Int32:4",
+          "After": "System.Int32:1"
+        },
+        "root.Riders[3].LapNumber": {
+          "Before": "System.Int32:1",
+          "After": "System.Int32:4"
+        },
+        "root.Riders[3].LapsCompleted": {
+          "Before": "System.Int32:0",
+          "After": "System.Int32:4"
+        },
+        "root.Riders[3].LastResolvedSegmentId": {
+          "Before": "System.Int32:0",
+          "After": "System.Int32:8"
+        },
+        "root.Riders[3].LateralPosition": {
+          "Before": "float:40733333",
+          "After": "float:3F800000"
+        },
+        "root.Riders[3].Morale": {
+          "Before": "float:3F000000",
+          "After": "float:3F03D70A"
+        },
+        "root.Riders[3].Position.DistanceMeters": {
+          "Before": "float:00000000",
+          "After": "float:44B72D4F"
+        },
+        "root.Riders[3].Position.LapsCompleted": {
+          "Before": "System.Int32:0",
+          "After": "System.Int32:4"
+        },
+        "root.Riders[3].Position.TotalSegmentProgress": {
+          "Before": "double:0000000000000000",
+          "After": "double:4042000000000000"
+        },
+        "root.Riders[3].Risk": {
+          "Before": "float:00000000",
+          "After": "float:3DCCEBF0"
+        },
+        "root.Riders[3].Speed": {
+          "Before": "float:00000000",
+          "After": "float:41B80868"
+        },
+        "root.Riders[3].Status": {
+          "Before": "enum:CoreSim.Race.RiderRaceStatus:0",
+          "After": "enum:CoreSim.Race.RiderRaceStatus:2"
+        },
+        "root.Surface[0,0].EffectiveGrip": {
+          "Before": "float:3EF9A6B6",
+          "After": "float:3EF75CF8"
+        },
+        "root.Surface[0,0].Grip": {
+          "Before": "float:3F2E147B",
+          "After": "float:3F2D84EC"
+        },
+        "root.Surface[0,0].Ruts": {
+          "Before": "float:3ECCCCCD",
+          "After": "float:3ED14948"
+        },
+        "root.Surface[0,1].EffectiveGrip": {
+          "Before": "float:3F165FD9",
+          "After": "float:3F11E46A"
+        },
+        "root.Surface[0,1].Grip": {
+          "Before": "float:3F428F5C",
+          "After": "float:3F408A39"
+        },
+        "root.Surface[0,1].Ruts": {
+          "Before": "float:3E99999A",
+          "After": "float:3EA9C2BF"
+        },
+        "root.Surface[0,2].EffectiveGrip": {
+          "Before": "float:3F31C434",
+          "After": "float:3F2DDB80"
+        },
+        "root.Surface[0,2].Grip": {
+          "Before": "float:3F570A3E",
+          "After": "float:3F556B20"
+        },
+        "root.Surface[0,2].Ruts": {
+          "Before": "float:3E4CCCCD",
+          "After": "float:3E66BEDE"
+        },
+        "root.Surface[0,3].EffectiveGrip": {
+          "Before": "float:3F4F0069",
+          "After": "float:3F4C5F04"
+        },
+        "root.Surface[0,3].Grip": {
+          "Before": "float:3F6B851F",
+          "After": "float:3F6A8284"
+        },
+        "root.Surface[0,3].Ruts": {
+          "Before": "float:3DCCCCCC",
+          "After": "float:3DED2074"
+        },
+        "root.Surface[0,4].EffectiveGrip": {
+          "Before": "float:3F6E147B",
+          "After": "float:3F6D021B"
+        },
+        "root.Surface[0,4].Grip": {
+          "Before": "float:3F800000",
+          "After": "float:3F7F9DEA"
+        },
+        "root.Surface[0,4].Ruts": {
+          "Before": "float:00000000",
+          "After": "float:3BC42C2A"
+        },
+        "root.Surface[1,0].EffectiveGrip": {
+          "Before": "float:3EF9A6B6",
+          "After": "float:3EEAC654"
+        },
+        "root.Surface[1,0].Grip": {
+          "Before": "float:3F2E147B",
+          "After": "float:3F2A64EB"
+        },
+        "root.Surface[1,0].Ruts": {
+          "Before": "float:3ECCCCCD",
+          "After": "float:3EEA4951"
+        },
+        "root.Surface[1,1].EffectiveGrip": {
+          "Before": "float:3F165FD9",
+          "After": "float:3F08E00F"
+        },
+        "root.Surface[1,1].Grip": {
+          "Before": "float:3F428F5C",
+          "After": "float:3F3C651F"
+        },
+        "root.Surface[1,1].Ruts": {
+          "Before": "float:3E99999A",
+          "After": "float:3ECAEB77"
+        },
+        "root.Surface[1,2].EffectiveGrip": {
+          "Before": "float:3F31C434",
+          "After": "float:3F256BA6"
+        },
+        "root.Surface[1,2].Grip": {
+          "Before": "float:3F570A3E",
+          "After": "float:3F51DD67"
+        },
+        "root.Surface[1,2].Ruts": {
+          "Before": "float:3E4CCCCD",
+          "After": "float:3E8FCD1B"
+        },
+        "root.Surface[1,3].EffectiveGrip": {
+          "Before": "float:3F4F0069",
+          "After": "float:3F438D20"
+        },
+        "root.Surface[1,3].Grip": {
+          "Before": "float:3F6B851F",
+          "After": "float:3F6714DE"
+        },
+        "root.Surface[1,3].Ruts": {
+          "Before": "float:3DCCCCCC",
+          "After": "float:3E2D6A57"
+        },
+        "root.Surface[1,4].EffectiveGrip": {
+          "Before": "float:3F6E147B",
+          "After": "float:3F696C5A"
+        },
+        "root.Surface[1,4].Grip": {
+          "Before": "float:3F800000",
+          "After": "float:3F7E5472"
+        },
+        "root.Surface[1,4].Ruts": {
+          "Before": "float:00000000",
+          "After": "float:3CD5C6A2"
+        },
+        "root.Surface[2,0].EffectiveGrip": {
+          "Before": "float:3EF9A6B6",
+          "After": "float:3EEAE30E"
+        },
+        "root.Surface[2,0].Grip": {
+          "Before": "float:3F2E147B",
+          "After": "float:3F2A6C20"
+        },
+        "root.Surface[2,0].Ruts": {
+          "Before": "float:3ECCCCCD",
+          "After": "float:3EEA0FA0"
+        },
+        "root.Surface[2,1].EffectiveGrip": {
+          "Before": "float:3F165FD9",
+          "After": "float:3F0B6DD1"
+        },
+        "root.Surface[2,1].Grip": {
+          "Before": "float:3F428F5C",
+          "After": "float:3F3D948B"
+        },
+        "root.Surface[2,1].Ruts": {
+          "Before": "float:3E99999A",
+          "After": "float:3EC17022"
+        },
+        "root.Surface[2,2].EffectiveGrip": {
+          "Before": "float:3F31C434",
+          "After": "float:3F25AF4D"
+        },
+        "root.Surface[2,2].Grip": {
+          "Before": "float:3F570A3E",
+          "After": "float:3F51FA30"
+        },
+        "root.Surface[2,2].Ruts": {
+          "Before": "float:3E4CCCCD",
+          "After": "float:3E8EE6CD"
+        },
+        "root.Surface[2,3].EffectiveGrip": {
+          "Before": "float:3F4F0069",
+          "After": "float:3F422525"
+        },
+        "root.Surface[2,3].Grip": {
+          "Before": "float:3F6B851F",
+          "After": "float:3F668768"
+        },
+        "root.Surface[2,3].Ruts": {
+          "Before": "float:3DCCCCCC",
+          "After": "float:3E3641C6"
+        },
+        "root.Surface[2,4].EffectiveGrip": {
+          "Before": "float:3F6E147B",
+          "After": "float:3F691E86"
+        },
+        "root.Surface[2,4].Grip": {
+          "Before": "float:3F800000",
+          "After": "float:3F7E3868"
+        },
+        "root.Surface[2,4].Ruts": {
+          "Before": "float:00000000",
+          "After": "float:3CE3CBA6"
+        },
+        "root.Surface[3,0].EffectiveGrip": {
+          "Before": "float:3EF9A6B6",
+          "After": "float:3EEF3620"
+        },
+        "root.Surface[3,0].Grip": {
+          "Before": "float:3F2E147B",
+          "After": "float:3F2B80DF"
+        },
+        "root.Surface[3,0].Ruts": {
+          "Before": "float:3ECCCCCD",
+          "After": "float:3EE169AE"
+        },
+        "root.Surface[3,1].EffectiveGrip": {
+          "Before": "float:3F165FD9",
+          "After": "float:3F087C1F"
+        },
+        "root.Surface[3,1].Grip": {
+          "Before": "float:3F428F5C",
+          "After": "float:3F3C3687"
+        },
+        "root.Surface[3,1].Ruts": {
+          "Before": "float:3E99999A",
+          "After": "float:3ECC6030"
+        },
+        "root.Surface[3,2].EffectiveGrip": {
+          "Before": "float:3F31C434",
+          "After": "float:3F22E869"
+        },
+        "root.Surface[3,2].Grip": {
+          "Before": "float:3F570A3E",
+          "After": "float:3F50CAB5"
+        },
+        "root.Surface[3,2].Ruts": {
+          "Before": "float:3E4CCCCD",
+          "After": "float:3E9862A0"
+        },
+        "root.Surface[3,3].EffectiveGrip": {
+          "Before": "float:3F4F0069",
+          "After": "float:3F44342C"
+        },
+        "root.Surface[3,3].Grip": {
+          "Before": "float:3F6B851F",
+          "After": "float:3F67565E"
+        },
+        "root.Surface[3,3].Ruts": {
+          "Before": "float:3DCCCCCC",
+          "After": "float:3E295264"
+        },
+        "root.Surface[3,4].EffectiveGrip": {
+          "Before": "float:3F6E147B",
+          "After": "float:3F69B0F1"
+        },
+        "root.Surface[3,4].Grip": {
+          "Before": "float:3F800000",
+          "After": "float:3F7E6D25"
+        },
+        "root.Surface[3,4].Ruts": {
+          "Before": "float:00000000",
+          "After": "float:3CC96D7C"
+        },
+        "root.Surface[4,0].EffectiveGrip": {
+          "Before": "float:3EF9A6B6",
+          "After": "float:3EF6336C"
+        },
+        "root.Surface[4,0].Grip": {
+          "Before": "float:3F2E147B",
+          "After": "float:3F2D3BC9"
+        },
+        "root.Surface[4,0].Ruts": {
+          "Before": "float:3ECCCCCD",
+          "After": "float:3ED3926A"
+        },
+        "root.Surface[4,1].EffectiveGrip": {
+          "Before": "float:3F165FD9",
+          "After": "float:3F128CCE"
+        },
+        "root.Surface[4,1].Grip": {
+          "Before": "float:3F428F5C",
+          "After": "float:3F40D689"
+        },
+        "root.Surface[4,1].Ruts": {
+          "Before": "float:3E99999A",
+          "After": "float:3EA7604A"
+        },
+        "root.Surface[4,2].EffectiveGrip": {
+          "Before": "float:3F31C434",
+          "After": "float:3F2E1DDB"
+        },
+        "root.Surface[4,2].Grip": {
+          "Before": "float:3F570A3E",
+          "After": "float:3F5586C6"
+        },
+        "root.Surface[4,2].Ruts": {
+          "Before": "float:3E4CCCCD",
+          "After": "float:3E650483"
+        },
+        "root.Surface[4,3].EffectiveGrip": {
+          "Before": "float:3F4F0069",
+          "After": "float:3F4C2173"
+        },
+        "root.Surface[4,3].Grip": {
+          "Before": "float:3F6B851F",
+          "After": "float:3F6A6ACC"
+        },
+        "root.Surface[4,3].Ruts": {
+          "Before": "float:3DCCCCCC",
+          "After": "float:3DF0172E"
+        },
+        "root.Surface[4,4].EffectiveGrip": {
+          "Before": "float:3F6E147B",
+          "After": "float:3F6CE0E3"
+        },
+        "root.Surface[4,4].Grip": {
+          "Before": "float:3F800000",
+          "After": "float:3F7F9207"
+        },
+        "root.Surface[4,4].Ruts": {
+          "Before": "float:00000000",
+          "After": "float:3BDBF23A"
+        },
+        "root.Surface[5,0].EffectiveGrip": {
+          "Before": "float:3EF9A6B6",
+          "After": "float:3EE922A2"
+        },
+        "root.Surface[5,0].Grip": {
+          "Before": "float:3F2E147B",
+          "After": "float:3F29FB6C"
+        },
+        "root.Surface[5,0].Ruts": {
+          "Before": "float:3ECCCCCD",
+          "After": "float:3EED9534"
+        },
+        "root.Surface[5,1].EffectiveGrip": {
+          "Before": "float:3F165FD9",
+          "After": "float:3F0961BB"
+        },
+        "root.Surface[5,1].Grip": {
+          "Before": "float:3F428F5C",
+          "After": "float:3F3CA17E"
+        },
+        "root.Surface[5,1].Ruts": {
+          "Before": "float:3E99999A",
+          "After": "float:3EC90889"
+        },
+        "root.Surface[5,2].EffectiveGrip": {
+          "Before": "float:3F31C434",
+          "After": "float:3F256865"
+        },
+        "root.Surface[5,2].Grip": {
+          "Before": "float:3F570A3E",
+          "After": "float:3F51DC03"
+        },
+        "root.Surface[5,2].Ruts": {
+          "Before": "float:3E4CCCCD",
+          "After": "float:3E8FD82C"
+        },
+        "root.Surface[5,3].EffectiveGrip": {
+          "Before": "float:3F4F0069",
+          "After": "float:3F43CDF8"
+        },
+        "root.Surface[5,3].Grip": {
+          "Before": "float:3F6B851F",
+          "After": "float:3F672E4F"
+        },
+        "root.Surface[5,3].Ruts": {
+          "Before": "float:3DCCCCCC",
+          "After": "float:3E2BD365"
+        },
+        "root.Surface[5,4].EffectiveGrip": {
+          "Before": "float:3F6E147B",
+          "After": "float:3F6A9C18"
+        },
+        "root.Surface[5,4].Grip": {
+          "Before": "float:3F800000",
+          "After": "float:3F7EC1BA"
+        },
+        "root.Surface[5,4].Ruts": {
+          "Before": "float:00000000",
+          "After": "float:3C9F2309"
+        },
+        "root.Surface[6,0].EffectiveGrip": {
+          "Before": "float:3EF9A6B6",
+          "After": "float:3EE74E82"
+        },
+        "root.Surface[6,0].Grip": {
+          "Before": "float:3F2E147B",
+          "After": "float:3F298566"
+        },
+        "root.Surface[6,0].Ruts": {
+          "Before": "float:3ECCCCCD",
+          "After": "float:3EF1456A"
+        },
+        "root.Surface[6,1].EffectiveGrip": {
+          "Before": "float:3F165FD9",
+          "After": "float:3F0B5D17"
+        },
+        "root.Surface[6,1].Grip": {
+          "Before": "float:3F428F5C",
+          "After": "float:3F3D8CCF"
+        },
+        "root.Surface[6,1].Ruts": {
+          "Before": "float:3E99999A",
+          "After": "float:3EC1AE02"
+        },
+        "root.Surface[6,2].EffectiveGrip": {
+          "Before": "float:3F31C434",
+          "After": "float:3F224435"
+        },
+        "root.Surface[6,2].Grip": {
+          "Before": "float:3F570A3E",
+          "After": "float:3F50844D"
+        },
+        "root.Surface[6,2].Ruts": {
+          "Before": "float:3E4CCCCD",
+          "After": "float:3E9A95DE"
+        },
+        "root.Surface[6,3].EffectiveGrip": {
+          "Before": "float:3F4F0069",
+          "After": "float:3F44A744"
+        },
+        "root.Surface[6,3].Grip": {
+          "Before": "float:3F6B851F",
+          "After": "float:3F678372"
+        },
+        "root.Surface[6,3].Ruts": {
+          "Before": "float:3DCCCCCC",
+          "After": "float:3E268133"
+        },
+        "root.Surface[6,4].EffectiveGrip": {
+          "Before": "float:3F6E147B",
+          "After": "float:3F6C5E08"
+        },
+        "root.Surface[6,4].Grip": {
+          "Before": "float:3F800000",
+          "After": "float:3F7F632B"
+        },
+        "root.Surface[6,4].Ruts": {
+          "Before": "float:00000000",
+          "After": "float:3C1CD490"
+        },
+        "root.Surface[7,0].EffectiveGrip": {
+          "Before": "float:3EF9A6B6",
+          "After": "float:3EECC25E"
+        },
+        "root.Surface[7,0].Grip": {
+          "Before": "float:3F2E147B",
+          "After": "float:3F2AE434"
+        },
+        "root.Surface[7,0].Ruts": {
+          "Before": "float:3ECCCCCD",
+          "After": "float:3EE64F03"
+        },
+        "root.Surface[7,1].EffectiveGrip": {
+          "Before": "float:3F165FD9",
+          "After": "float:3F09BDD2"
+        },
+        "root.Surface[7,1].Grip": {
+          "Before": "float:3F428F5C",
+          "After": "float:3F3CCC4F"
+        },
+        "root.Surface[7,1].Ruts": {
+          "Before": "float:3E99999A",
+          "After": "float:3EC7B1FF"
+        },
+        "root.Surface[7,2].EffectiveGrip": {
+          "Before": "float:3F31C434",
+          "After": "float:3F20C013"
+        },
+        "root.Surface[7,2].Grip": {
+          "Before": "float:3F570A3E",
+          "After": "float:3F4FDD69"
+        },
+        "root.Surface[7,2].Ruts": {
+          "Before": "float:3E4CCCCD",
+          "After": "float:3E9FCCFD"
+        },
+        "root.Surface[7,3].EffectiveGrip": {
+          "Before": "float:3F4F0069",
+          "After": "float:3F44950A"
+        },
+        "root.Surface[7,3].Grip": {
+          "Before": "float:3F6B851F",
+          "After": "float:3F677C4E"
+        },
+        "root.Surface[7,3].Ruts": {
+          "Before": "float:3DCCCCCC",
+          "After": "float:3E26F35A"
+        },
+        "root.Surface[7,4].EffectiveGrip": {
+          "Before": "float:3F6E147B",
+          "After": "float:3F6C7833"
+        },
+        "root.Surface[7,4].Grip": {
+          "Before": "float:3F800000",
+          "After": "float:3F7F6C8B"
+        },
+        "root.Surface[7,4].Ruts": {
+          "Before": "float:00000000",
+          "After": "float:3C1374C6"
+        },
+        "root.Surface[8,0].EffectiveGrip": {
+          "Before": "float:3EF9A6B6",
+          "After": "float:3EF78994"
+        },
+        "root.Surface[8,0].Grip": {
+          "Before": "float:3F2E147B",
+          "After": "float:3F2D8FE0"
+        },
+        "root.Surface[8,0].Ruts": {
+          "Before": "float:3ECCCCCD",
+          "After": "float:3ED0F1A8"
+        },
+        "root.Surface[8,1].EffectiveGrip": {
+          "Before": "float:3F165FD9",
+          "After": "float:3F1216E7"
+        },
+        "root.Surface[8,1].Grip": {
+          "Before": "float:3F428F5C",
+          "After": "float:3F40A11E"
+        },
+        "root.Surface[8,1].Ruts": {
+          "Before": "float:3E99999A",
+          "After": "float:3EA90B99"
+        },
+        "root.Surface[8,2].EffectiveGrip": {
+          "Before": "float:3F31C434",
+          "After": "float:3F2CD8AC"
+        },
+        "root.Surface[8,2].Grip": {
+          "Before": "float:3F570A3E",
+          "After": "float:3F54FF1B"
+        },
+        "root.Surface[8,2].Ruts": {
+          "Before": "float:3E4CCCCD",
+          "After": "float:3E6D7F15"
+        },
+        "root.Surface[8,3].EffectiveGrip": {
+          "Before": "float:3F4F0069",
+          "After": "float:3F4C709B"
+        },
+        "root.Surface[8,3].Grip": {
+          "Before": "float:3F6B851F",
+          "After": "float:3F6A894A"
+        },
+        "root.Surface[8,3].Ruts": {
+          "Before": "float:3DCCCCCC",
+          "After": "float:3DEC47B9"
+        },
+        "root.Surface[8,4].EffectiveGrip": {
+          "Before": "float:3F6E147B",
+          "After": "float:3F6D88D0"
+        },
+        "root.Surface[8,4].Grip": {
+          "Before": "float:3F800000",
+          "After": "float:3F7FCE18"
+        },
+        "root.Surface[8,4].Ruts": {
+          "Before": "float:00000000",
+          "After": "float:3B47A079"
+        }
+      },
+      "ChangedStateLeafCount": 199,
+      "ExactCompletedFinalStateLeaves": {
+        "root.Final.Classification.Count": 4,
+        "root.Final.Classification[0].Crashed": "System.Boolean:False",
+        "root.Final.Classification[0].DistanceMeters": "float:44A86E67",
+        "root.Final.Classification[0].Dnf": "System.Boolean:False",
+        "root.Final.Classification[0].Finished": "System.Boolean:True",
+        "root.Final.Classification[0].LapsCompleted": "System.Int32:4",
+        "root.Final.Classification[0].Points": "System.Int32:3",
+        "root.Final.Classification[0].Position": "System.Int32:1",
+        "root.Final.Classification[0].Retired": "System.Boolean:False",
+        "root.Final.Classification[0].RiderId": "System.Int32:2",
+        "root.Final.Classification[0].Status": "enum:CoreSim.Race.RiderRaceStatus:2",
+        "root.Final.Classification[0].TimeSeconds": "float:42739153",
+        "root.Final.Classification[1].Crashed": "System.Boolean:False",
+        "root.Final.Classification[1].DistanceMeters": "float:44B72D4F",
+        "root.Final.Classification[1].Dnf": "System.Boolean:False",
+        "root.Final.Classification[1].Finished": "System.Boolean:True",
+        "root.Final.Classification[1].LapsCompleted": "System.Int32:4",
+        "root.Final.Classification[1].Points": "System.Int32:2",
+        "root.Final.Classification[1].Position": "System.Int32:2",
+        "root.Final.Classification[1].Retired": "System.Boolean:False",
+        "root.Final.Classification[1].RiderId": "System.Int32:4",
+        "root.Final.Classification[1].Status": "enum:CoreSim.Race.RiderRaceStatus:2",
+        "root.Final.Classification[1].TimeSeconds": "float:427567B3",
+        "root.Final.Classification[2].Crashed": "System.Boolean:False",
+        "root.Final.Classification[2].DistanceMeters": "float:44ABCB82",
+        "root.Final.Classification[2].Dnf": "System.Boolean:False",
+        "root.Final.Classification[2].Finished": "System.Boolean:True",
+        "root.Final.Classification[2].LapsCompleted": "System.Int32:4",
+        "root.Final.Classification[2].Points": "System.Int32:1",
+        "root.Final.Classification[2].Position": "System.Int32:3",
+        "root.Final.Classification[2].Retired": "System.Boolean:False",
+        "root.Final.Classification[2].RiderId": "System.Int32:1",
+        "root.Final.Classification[2].Status": "enum:CoreSim.Race.RiderRaceStatus:2",
+        "root.Final.Classification[2].TimeSeconds": "float:4275E84B",
+        "root.Final.Classification[3].Crashed": "System.Boolean:False",
+        "root.Final.Classification[3].DistanceMeters": "float:44BE89FE",
+        "root.Final.Classification[3].Dnf": "System.Boolean:False",
+        "root.Final.Classification[3].Finished": "System.Boolean:True",
+        "root.Final.Classification[3].LapsCompleted": "System.Int32:4",
+        "root.Final.Classification[3].Points": "System.Int32:0",
+        "root.Final.Classification[3].Position": "System.Int32:4",
+        "root.Final.Classification[3].Retired": "System.Boolean:False",
+        "root.Final.Classification[3].RiderId": "System.Int32:3",
+        "root.Final.Classification[3].Status": "enum:CoreSim.Race.RiderRaceStatus:2",
+        "root.Final.Classification[3].TimeSeconds": "float:42765D5E",
+        "root.Final.Riders.Count": 4,
+        "root.Final.Riders[0].ActiveSetup.Gearing": "float:3F000000",
+        "root.Final.Riders[0].ActiveSetup.TractionBias": "float:3F000000",
+        "root.Final.Riders[0].CanonicalProgress": "double:4042000000000000",
+        "root.Final.Riders[0].Condition": "float:3F800000",
+        "root.Final.Riders[0].ContactRecovery": null,
+        "root.Final.Riders[0].CurrentSegmentId": "System.Int32:8",
+        "root.Final.Riders[0].DistanceMeters": "float:44ABCB82",
+        "root.Final.Riders[0].ElapsedTimeSeconds": "float:4275E84B",
+        "root.Final.Riders[0].IsCrashed": "System.Boolean:False",
+        "root.Final.Riders[0].Lane": "System.Int32:2",
+        "root.Final.Riders[0].LapNumber": "System.Int32:4",
+        "root.Final.Riders[0].LapsCompleted": "System.Int32:4",
+        "root.Final.Riders[0].LastResolvedSegmentId": "System.Int32:8",
+        "root.Final.Riders[0].LateralPosition": "float:40000000",
+        "root.Final.Riders[0].ManagerTrust": "float:3F000000",
+        "root.Final.Riders[0].Morale": "float:3EFAE148",
+        "root.Final.Riders[0].Position.DistanceMeters": "float:44ABCB82",
+        "root.Final.Riders[0].Position.LapsCompleted": "System.Int32:4",
+        "root.Final.Riders[0].Position.SegmentCount": "System.Int32:9",
+        "root.Final.Riders[0].Position.SegmentIndex": "System.Int32:0",
+        "root.Final.Riders[0].Position.SegmentProgress": "float:00000000",
+        "root.Final.Riders[0].Position.TotalSegmentProgress": "double:4042000000000000",
+        "root.Final.Riders[0].Profile.Gameplay.Abilities.Attack": "System.Int32:50",
+        "root.Final.Riders[0].Profile.Gameplay.Abilities.Defense": "System.Int32:50",
+        "root.Final.Riders[0].Profile.Gameplay.Abilities.PairRiding": "System.Int32:50",
+        "root.Final.Riders[0].Profile.Gameplay.Abilities.Reaction": "System.Int32:50",
+        "root.Final.Riders[0].Profile.Gameplay.Abilities.Start": "System.Int32:50",
+        "root.Final.Riders[0].Profile.Gameplay.Abilities.Strength": "System.Int32:50",
+        "root.Final.Riders[0].Profile.Gameplay.Abilities.Technique": "System.Int32:50",
+        "root.Final.Riders[0].Profile.Gameplay.Abilities.TrackReading": "System.Int32:50",
+        "root.Final.Riders[0].Profile.Gameplay.InteractionStyle.Combativeness": "float:3F000000",
+        "root.Final.Riders[0].Profile.Gameplay.InteractionStyle.PreferredLine": "enum:CoreSim.PreferredLine:1",
+        "root.Final.Riders[0].Profile.Gameplay.InteractionStyle.SetupIndependence": "float:3F000000",
+        "root.Final.Riders[0].Profile.Gameplay.Physical.MassKg": "float:428C0000",
+        "root.Final.Riders[0].Profile.HasExplicitGameplay": "System.Boolean:False",
+        "root.Final.Riders[0].Profile.Id": "System.Int32:1",
+        "root.Final.Riders[0].Profile.Name": "string:Audit 1",
+        "root.Final.Riders[0].Profile.Skills.Adaptability": "float:42480000",
+        "root.Final.Riders[0].Profile.Skills.PairRiding": "float:42480000",
+        "root.Final.Riders[0].Profile.Skills.SlideControl": "float:42480000",
+        "root.Final.Riders[0].Profile.Skills.Speed": "float:42480000",
+        "root.Final.Riders[0].Profile.Skills.Start": "float:42480000",
+        "root.Final.Riders[0].Profile.Skills.TrackReading": "float:42480000",
+        "root.Final.Riders[0].Profile.Style.LaneChangeTendency": "float:3F000000",
+        "root.Final.Riders[0].Profile.Style.OutsidePreference": "float:3F000000",
+        "root.Final.Riders[0].Profile.Style.RiskTolerance": "float:3F000000",
+        "root.Final.Riders[0].Profile.Style.SetupIndependence": "float:3F000000",
+        "root.Final.Riders[0].RiderId": "System.Int32:1",
+        "root.Final.Riders[0].Risk": "float:3DCCEBF0",
+        "root.Final.Riders[0].SegmentIndex": "System.Int32:0",
+        "root.Final.Riders[0].SegmentProgress": "float:00000000",
+        "root.Final.Riders[0].Speed": "float:41CA74EA",
+        "root.Final.Riders[0].StartingGate": "enum:CoreSim.StartingGate:0",
+        "root.Final.Riders[0].StartingPosition.CenterPhysicalOffsetMeters": "float:3FC00000",
+        "root.Final.Riders[0].StartingPosition.Gate": "enum:CoreSim.StartingGate:0",
+        "root.Final.Riders[0].StartingPosition.LowerPhysicalOffsetMeters": "float:00000000",
+        "root.Final.Riders[0].StartingPosition.NominalWidthMeters": "float:40400000",
+        "root.Final.Riders[0].StartingPosition.UpperPhysicalOffsetMeters": "float:40400000",
+        "root.Final.Riders[0].Status": "enum:CoreSim.Race.RiderRaceStatus:2",
+        "root.Final.Riders[1].ActiveSetup.Gearing": "float:3F000000",
+        "root.Final.Riders[1].ActiveSetup.TractionBias": "float:3F000000",
+        "root.Final.Riders[1].CanonicalProgress": "double:4042000000000000",
+        "root.Final.Riders[1].Condition": "float:3F800000",
+        "root.Final.Riders[1].ContactRecovery": null,
+        "root.Final.Riders[1].CurrentSegmentId": "System.Int32:8",
+        "root.Final.Riders[1].DistanceMeters": "float:44A86E67",
+        "root.Final.Riders[1].ElapsedTimeSeconds": "float:42739153",
+        "root.Final.Riders[1].IsCrashed": "System.Boolean:False",
+        "root.Final.Riders[1].Lane": "System.Int32:2",
+        "root.Final.Riders[1].LapNumber": "System.Int32:4",
+        "root.Final.Riders[1].LapsCompleted": "System.Int32:4",
+        "root.Final.Riders[1].LastResolvedSegmentId": "System.Int32:8",
+        "root.Final.Riders[1].LateralPosition": "float:3FBFA8C5",
+        "root.Final.Riders[1].ManagerTrust": "float:3F000000",
+        "root.Final.Riders[1].Morale": "float:3F0A3D71",
+        "root.Final.Riders[1].Position.DistanceMeters": "float:44A86E67",
+        "root.Final.Riders[1].Position.LapsCompleted": "System.Int32:4",
+        "root.Final.Riders[1].Position.SegmentCount": "System.Int32:9",
+        "root.Final.Riders[1].Position.SegmentIndex": "System.Int32:0",
+        "root.Final.Riders[1].Position.SegmentProgress": "float:00000000",
+        "root.Final.Riders[1].Position.TotalSegmentProgress": "double:4042000000000000",
+        "root.Final.Riders[1].Profile.Gameplay.Abilities.Attack": "System.Int32:50",
+        "root.Final.Riders[1].Profile.Gameplay.Abilities.Defense": "System.Int32:50",
+        "root.Final.Riders[1].Profile.Gameplay.Abilities.PairRiding": "System.Int32:50",
+        "root.Final.Riders[1].Profile.Gameplay.Abilities.Reaction": "System.Int32:50",
+        "root.Final.Riders[1].Profile.Gameplay.Abilities.Start": "System.Int32:50",
+        "root.Final.Riders[1].Profile.Gameplay.Abilities.Strength": "System.Int32:50",
+        "root.Final.Riders[1].Profile.Gameplay.Abilities.Technique": "System.Int32:50",
+        "root.Final.Riders[1].Profile.Gameplay.Abilities.TrackReading": "System.Int32:50",
+        "root.Final.Riders[1].Profile.Gameplay.InteractionStyle.Combativeness": "float:3F000000",
+        "root.Final.Riders[1].Profile.Gameplay.InteractionStyle.PreferredLine": "enum:CoreSim.PreferredLine:1",
+        "root.Final.Riders[1].Profile.Gameplay.InteractionStyle.SetupIndependence": "float:3F000000",
+        "root.Final.Riders[1].Profile.Gameplay.Physical.MassKg": "float:428C0000",
+        "root.Final.Riders[1].Profile.HasExplicitGameplay": "System.Boolean:False",
+        "root.Final.Riders[1].Profile.Id": "System.Int32:2",
+        "root.Final.Riders[1].Profile.Name": "string:Audit 2",
+        "root.Final.Riders[1].Profile.Skills.Adaptability": "float:42480000",
+        "root.Final.Riders[1].Profile.Skills.PairRiding": "float:42480000",
+        "root.Final.Riders[1].Profile.Skills.SlideControl": "float:42480000",
+        "root.Final.Riders[1].Profile.Skills.Speed": "float:42480000",
+        "root.Final.Riders[1].Profile.Skills.Start": "float:42480000",
+        "root.Final.Riders[1].Profile.Skills.TrackReading": "float:42480000",
+        "root.Final.Riders[1].Profile.Style.LaneChangeTendency": "float:3F000000",
+        "root.Final.Riders[1].Profile.Style.OutsidePreference": "float:3F000000",
+        "root.Final.Riders[1].Profile.Style.RiskTolerance": "float:3F000000",
+        "root.Final.Riders[1].Profile.Style.SetupIndependence": "float:3F000000",
+        "root.Final.Riders[1].RiderId": "System.Int32:2",
+        "root.Final.Riders[1].Risk": "float:3E04C5AB",
+        "root.Final.Riders[1].SegmentIndex": "System.Int32:0",
+        "root.Final.Riders[1].SegmentProgress": "float:00000000",
+        "root.Final.Riders[1].Speed": "float:41C0C79B",
+        "root.Final.Riders[1].StartingGate": "enum:CoreSim.StartingGate:1",
+        "root.Final.Riders[1].StartingPosition.CenterPhysicalOffsetMeters": "float:40900000",
+        "root.Final.Riders[1].StartingPosition.Gate": "enum:CoreSim.StartingGate:1",
+        "root.Final.Riders[1].StartingPosition.LowerPhysicalOffsetMeters": "float:40400000",
+        "root.Final.Riders[1].StartingPosition.NominalWidthMeters": "float:40400000",
+        "root.Final.Riders[1].StartingPosition.UpperPhysicalOffsetMeters": "float:40C00000",
+        "root.Final.Riders[1].Status": "enum:CoreSim.Race.RiderRaceStatus:2",
+        "root.Final.Riders[2].ActiveSetup.Gearing": "float:3F000000",
+        "root.Final.Riders[2].ActiveSetup.TractionBias": "float:3F000000",
+        "root.Final.Riders[2].CanonicalProgress": "double:4042000000000000",
+        "root.Final.Riders[2].Condition": "float:3F800000",
+        "root.Final.Riders[2].ContactRecovery": null,
+        "root.Final.Riders[2].CurrentSegmentId": "System.Int32:8",
+        "root.Final.Riders[2].DistanceMeters": "float:44BE89FE",
+        "root.Final.Riders[2].ElapsedTimeSeconds": "float:42765D5E",
+        "root.Final.Riders[2].IsCrashed": "System.Boolean:False",
+        "root.Final.Riders[2].Lane": "System.Int32:2",
+        "root.Final.Riders[2].LapNumber": "System.Int32:4",
+        "root.Final.Riders[2].LapsCompleted": "System.Int32:4",
+        "root.Final.Riders[2].LastResolvedSegmentId": "System.Int32:8",
+        "root.Final.Riders[2].LateralPosition": "float:40000000",
+        "root.Final.Riders[2].ManagerTrust": "float:3F000000",
+        "root.Final.Riders[2].Morale": "float:3EF33333",
+        "root.Final.Riders[2].Position.DistanceMeters": "float:44BE89FE",
+        "root.Final.Riders[2].Position.LapsCompleted": "System.Int32:4",
+        "root.Final.Riders[2].Position.SegmentCount": "System.Int32:9",
+        "root.Final.Riders[2].Position.SegmentIndex": "System.Int32:0",
+        "root.Final.Riders[2].Position.SegmentProgress": "float:00000000",
+        "root.Final.Riders[2].Position.TotalSegmentProgress": "double:4042000000000000",
+        "root.Final.Riders[2].Profile.Gameplay.Abilities.Attack": "System.Int32:50",
+        "root.Final.Riders[2].Profile.Gameplay.Abilities.Defense": "System.Int32:50",
+        "root.Final.Riders[2].Profile.Gameplay.Abilities.PairRiding": "System.Int32:50",
+        "root.Final.Riders[2].Profile.Gameplay.Abilities.Reaction": "System.Int32:50",
+        "root.Final.Riders[2].Profile.Gameplay.Abilities.Start": "System.Int32:50",
+        "root.Final.Riders[2].Profile.Gameplay.Abilities.Strength": "System.Int32:50",
+        "root.Final.Riders[2].Profile.Gameplay.Abilities.Technique": "System.Int32:50",
+        "root.Final.Riders[2].Profile.Gameplay.Abilities.TrackReading": "System.Int32:50",
+        "root.Final.Riders[2].Profile.Gameplay.InteractionStyle.Combativeness": "float:3F000000",
+        "root.Final.Riders[2].Profile.Gameplay.InteractionStyle.PreferredLine": "enum:CoreSim.PreferredLine:1",
+        "root.Final.Riders[2].Profile.Gameplay.InteractionStyle.SetupIndependence": "float:3F000000",
+        "root.Final.Riders[2].Profile.Gameplay.Physical.MassKg": "float:428C0000",
+        "root.Final.Riders[2].Profile.HasExplicitGameplay": "System.Boolean:False",
+        "root.Final.Riders[2].Profile.Id": "System.Int32:3",
+        "root.Final.Riders[2].Profile.Name": "string:Audit 3",
+        "root.Final.Riders[2].Profile.Skills.Adaptability": "float:42480000",
+        "root.Final.Riders[2].Profile.Skills.PairRiding": "float:42480000",
+        "root.Final.Riders[2].Profile.Skills.SlideControl": "float:42480000",
+        "root.Final.Riders[2].Profile.Skills.Speed": "float:42480000",
+        "root.Final.Riders[2].Profile.Skills.Start": "float:42480000",
+        "root.Final.Riders[2].Profile.Skills.TrackReading": "float:42480000",
+        "root.Final.Riders[2].Profile.Style.LaneChangeTendency": "float:3F000000",
+        "root.Final.Riders[2].Profile.Style.OutsidePreference": "float:3F000000",
+        "root.Final.Riders[2].Profile.Style.RiskTolerance": "float:3F000000",
+        "root.Final.Riders[2].Profile.Style.SetupIndependence": "float:3F000000",
+        "root.Final.Riders[2].RiderId": "System.Int32:3",
+        "root.Final.Riders[2].Risk": "float:3DCCEBF0",
+        "root.Final.Riders[2].SegmentIndex": "System.Int32:0",
+        "root.Final.Riders[2].SegmentProgress": "float:00000000",
+        "root.Final.Riders[2].Speed": "float:41CA74EA",
+        "root.Final.Riders[2].StartingGate": "enum:CoreSim.StartingGate:2",
+        "root.Final.Riders[2].StartingPosition.CenterPhysicalOffsetMeters": "float:40F00000",
+        "root.Final.Riders[2].StartingPosition.Gate": "enum:CoreSim.StartingGate:2",
+        "root.Final.Riders[2].StartingPosition.LowerPhysicalOffsetMeters": "float:40C00000",
+        "root.Final.Riders[2].StartingPosition.NominalWidthMeters": "float:40400000",
+        "root.Final.Riders[2].StartingPosition.UpperPhysicalOffsetMeters": "float:41100000",
+        "root.Final.Riders[2].Status": "enum:CoreSim.Race.RiderRaceStatus:2",
+        "root.Final.Riders[3].ActiveSetup.Gearing": "float:3F000000",
+        "root.Final.Riders[3].ActiveSetup.TractionBias": "float:3F000000",
+        "root.Final.Riders[3].CanonicalProgress": "double:4042000000000000",
+        "root.Final.Riders[3].Condition": "float:3F800000",
+        "root.Final.Riders[3].ContactRecovery": null,
+        "root.Final.Riders[3].CurrentSegmentId": "System.Int32:8",
+        "root.Final.Riders[3].DistanceMeters": "float:44B72D4F",
+        "root.Final.Riders[3].ElapsedTimeSeconds": "float:427567B3",
+        "root.Final.Riders[3].IsCrashed": "System.Boolean:False",
+        "root.Final.Riders[3].Lane": "System.Int32:1",
+        "root.Final.Riders[3].LapNumber": "System.Int32:4",
+        "root.Final.Riders[3].LapsCompleted": "System.Int32:4",
+        "root.Final.Riders[3].LastResolvedSegmentId": "System.Int32:8",
+        "root.Final.Riders[3].LateralPosition": "float:3F800000",
+        "root.Final.Riders[3].ManagerTrust": "float:3F000000",
+        "root.Final.Riders[3].Morale": "float:3F03D70A",
+        "root.Final.Riders[3].Position.DistanceMeters": "float:44B72D4F",
+        "root.Final.Riders[3].Position.LapsCompleted": "System.Int32:4",
+        "root.Final.Riders[3].Position.SegmentCount": "System.Int32:9",
+        "root.Final.Riders[3].Position.SegmentIndex": "System.Int32:0",
+        "root.Final.Riders[3].Position.SegmentProgress": "float:00000000",
+        "root.Final.Riders[3].Position.TotalSegmentProgress": "double:4042000000000000",
+        "root.Final.Riders[3].Profile.Gameplay.Abilities.Attack": "System.Int32:50",
+        "root.Final.Riders[3].Profile.Gameplay.Abilities.Defense": "System.Int32:50",
+        "root.Final.Riders[3].Profile.Gameplay.Abilities.PairRiding": "System.Int32:50",
+        "root.Final.Riders[3].Profile.Gameplay.Abilities.Reaction": "System.Int32:50",
+        "root.Final.Riders[3].Profile.Gameplay.Abilities.Start": "System.Int32:50",
+        "root.Final.Riders[3].Profile.Gameplay.Abilities.Strength": "System.Int32:50",
+        "root.Final.Riders[3].Profile.Gameplay.Abilities.Technique": "System.Int32:50",
+        "root.Final.Riders[3].Profile.Gameplay.Abilities.TrackReading": "System.Int32:50",
+        "root.Final.Riders[3].Profile.Gameplay.InteractionStyle.Combativeness": "float:3F000000",
+        "root.Final.Riders[3].Profile.Gameplay.InteractionStyle.PreferredLine": "enum:CoreSim.PreferredLine:1",
+        "root.Final.Riders[3].Profile.Gameplay.InteractionStyle.SetupIndependence": "float:3F000000",
+        "root.Final.Riders[3].Profile.Gameplay.Physical.MassKg": "float:428C0000",
+        "root.Final.Riders[3].Profile.HasExplicitGameplay": "System.Boolean:False",
+        "root.Final.Riders[3].Profile.Id": "System.Int32:4",
+        "root.Final.Riders[3].Profile.Name": "string:Audit 4",
+        "root.Final.Riders[3].Profile.Skills.Adaptability": "float:42480000",
+        "root.Final.Riders[3].Profile.Skills.PairRiding": "float:42480000",
+        "root.Final.Riders[3].Profile.Skills.SlideControl": "float:42480000",
+        "root.Final.Riders[3].Profile.Skills.Speed": "float:42480000",
+        "root.Final.Riders[3].Profile.Skills.Start": "float:42480000",
+        "root.Final.Riders[3].Profile.Skills.TrackReading": "float:42480000",
+        "root.Final.Riders[3].Profile.Style.LaneChangeTendency": "float:3F000000",
+        "root.Final.Riders[3].Profile.Style.OutsidePreference": "float:3F000000",
+        "root.Final.Riders[3].Profile.Style.RiskTolerance": "float:3F000000",
+        "root.Final.Riders[3].Profile.Style.SetupIndependence": "float:3F000000",
+        "root.Final.Riders[3].RiderId": "System.Int32:4",
+        "root.Final.Riders[3].Risk": "float:3DCCEBF0",
+        "root.Final.Riders[3].SegmentIndex": "System.Int32:0",
+        "root.Final.Riders[3].SegmentProgress": "float:00000000",
+        "root.Final.Riders[3].Speed": "float:41B80868",
+        "root.Final.Riders[3].StartingGate": "enum:CoreSim.StartingGate:3",
+        "root.Final.Riders[3].StartingPosition.CenterPhysicalOffsetMeters": "float:41280000",
+        "root.Final.Riders[3].StartingPosition.Gate": "enum:CoreSim.StartingGate:3",
+        "root.Final.Riders[3].StartingPosition.LowerPhysicalOffsetMeters": "float:41100000",
+        "root.Final.Riders[3].StartingPosition.NominalWidthMeters": "float:40400000",
+        "root.Final.Riders[3].StartingPosition.UpperPhysicalOffsetMeters": "float:41400000",
+        "root.Final.Riders[3].Status": "enum:CoreSim.Race.RiderRaceStatus:2",
+        "root.Final.Surface.Lanes": 5,
+        "root.Final.Surface.Segments": 9,
+        "root.Final.Surface[0,0].EffectiveGrip": "float:3EF75CF8",
+        "root.Final.Surface[0,0].Grip": "float:3F2D84EC",
+        "root.Final.Surface[0,0].Moisture": "float:00000000",
+        "root.Final.Surface[0,0].Ruts": "float:3ED14948",
+        "root.Final.Surface[0,1].EffectiveGrip": "float:3F11E46A",
+        "root.Final.Surface[0,1].Grip": "float:3F408A39",
+        "root.Final.Surface[0,1].Moisture": "float:00000000",
+        "root.Final.Surface[0,1].Ruts": "float:3EA9C2BF",
+        "root.Final.Surface[0,2].EffectiveGrip": "float:3F2DDB80",
+        "root.Final.Surface[0,2].Grip": "float:3F556B20",
+        "root.Final.Surface[0,2].Moisture": "float:00000000",
+        "root.Final.Surface[0,2].Ruts": "float:3E66BEDE",
+        "root.Final.Surface[0,3].EffectiveGrip": "float:3F4C5F04",
+        "root.Final.Surface[0,3].Grip": "float:3F6A8284",
+        "root.Final.Surface[0,3].Moisture": "float:00000000",
+        "root.Final.Surface[0,3].Ruts": "float:3DED2074",
+        "root.Final.Surface[0,4].EffectiveGrip": "float:3F6D021B",
+        "root.Final.Surface[0,4].Grip": "float:3F7F9DEA",
+        "root.Final.Surface[0,4].Moisture": "float:00000000",
+        "root.Final.Surface[0,4].Ruts": "float:3BC42C2A",
+        "root.Final.Surface[1,0].EffectiveGrip": "float:3EEAC654",
+        "root.Final.Surface[1,0].Grip": "float:3F2A64EB",
+        "root.Final.Surface[1,0].Moisture": "float:00000000",
+        "root.Final.Surface[1,0].Ruts": "float:3EEA4951",
+        "root.Final.Surface[1,1].EffectiveGrip": "float:3F08E00F",
+        "root.Final.Surface[1,1].Grip": "float:3F3C651F",
+        "root.Final.Surface[1,1].Moisture": "float:00000000",
+        "root.Final.Surface[1,1].Ruts": "float:3ECAEB77",
+        "root.Final.Surface[1,2].EffectiveGrip": "float:3F256BA6",
+        "root.Final.Surface[1,2].Grip": "float:3F51DD67",
+        "root.Final.Surface[1,2].Moisture": "float:00000000",
+        "root.Final.Surface[1,2].Ruts": "float:3E8FCD1B",
+        "root.Final.Surface[1,3].EffectiveGrip": "float:3F438D20",
+        "root.Final.Surface[1,3].Grip": "float:3F6714DE",
+        "root.Final.Surface[1,3].Moisture": "float:00000000",
+        "root.Final.Surface[1,3].Ruts": "float:3E2D6A57",
+        "root.Final.Surface[1,4].EffectiveGrip": "float:3F696C5A",
+        "root.Final.Surface[1,4].Grip": "float:3F7E5472",
+        "root.Final.Surface[1,4].Moisture": "float:00000000",
+        "root.Final.Surface[1,4].Ruts": "float:3CD5C6A2",
+        "root.Final.Surface[2,0].EffectiveGrip": "float:3EEAE30E",
+        "root.Final.Surface[2,0].Grip": "float:3F2A6C20",
+        "root.Final.Surface[2,0].Moisture": "float:00000000",
+        "root.Final.Surface[2,0].Ruts": "float:3EEA0FA0",
+        "root.Final.Surface[2,1].EffectiveGrip": "float:3F0B6DD1",
+        "root.Final.Surface[2,1].Grip": "float:3F3D948B",
+        "root.Final.Surface[2,1].Moisture": "float:00000000",
+        "root.Final.Surface[2,1].Ruts": "float:3EC17022",
+        "root.Final.Surface[2,2].EffectiveGrip": "float:3F25AF4D",
+        "root.Final.Surface[2,2].Grip": "float:3F51FA30",
+        "root.Final.Surface[2,2].Moisture": "float:00000000",
+        "root.Final.Surface[2,2].Ruts": "float:3E8EE6CD",
+        "root.Final.Surface[2,3].EffectiveGrip": "float:3F422525",
+        "root.Final.Surface[2,3].Grip": "float:3F668768",
+        "root.Final.Surface[2,3].Moisture": "float:00000000",
+        "root.Final.Surface[2,3].Ruts": "float:3E3641C6",
+        "root.Final.Surface[2,4].EffectiveGrip": "float:3F691E86",
+        "root.Final.Surface[2,4].Grip": "float:3F7E3868",
+        "root.Final.Surface[2,4].Moisture": "float:00000000",
+        "root.Final.Surface[2,4].Ruts": "float:3CE3CBA6",
+        "root.Final.Surface[3,0].EffectiveGrip": "float:3EEF3620",
+        "root.Final.Surface[3,0].Grip": "float:3F2B80DF",
+        "root.Final.Surface[3,0].Moisture": "float:00000000",
+        "root.Final.Surface[3,0].Ruts": "float:3EE169AE",
+        "root.Final.Surface[3,1].EffectiveGrip": "float:3F087C1F",
+        "root.Final.Surface[3,1].Grip": "float:3F3C3687",
+        "root.Final.Surface[3,1].Moisture": "float:00000000",
+        "root.Final.Surface[3,1].Ruts": "float:3ECC6030",
+        "root.Final.Surface[3,2].EffectiveGrip": "float:3F22E869",
+        "root.Final.Surface[3,2].Grip": "float:3F50CAB5",
+        "root.Final.Surface[3,2].Moisture": "float:00000000",
+        "root.Final.Surface[3,2].Ruts": "float:3E9862A0",
+        "root.Final.Surface[3,3].EffectiveGrip": "float:3F44342C",
+        "root.Final.Surface[3,3].Grip": "float:3F67565E",
+        "root.Final.Surface[3,3].Moisture": "float:00000000",
+        "root.Final.Surface[3,3].Ruts": "float:3E295264",
+        "root.Final.Surface[3,4].EffectiveGrip": "float:3F69B0F1",
+        "root.Final.Surface[3,4].Grip": "float:3F7E6D25",
+        "root.Final.Surface[3,4].Moisture": "float:00000000",
+        "root.Final.Surface[3,4].Ruts": "float:3CC96D7C",
+        "root.Final.Surface[4,0].EffectiveGrip": "float:3EF6336C",
+        "root.Final.Surface[4,0].Grip": "float:3F2D3BC9",
+        "root.Final.Surface[4,0].Moisture": "float:00000000",
+        "root.Final.Surface[4,0].Ruts": "float:3ED3926A",
+        "root.Final.Surface[4,1].EffectiveGrip": "float:3F128CCE",
+        "root.Final.Surface[4,1].Grip": "float:3F40D689",
+        "root.Final.Surface[4,1].Moisture": "float:00000000",
+        "root.Final.Surface[4,1].Ruts": "float:3EA7604A",
+        "root.Final.Surface[4,2].EffectiveGrip": "float:3F2E1DDB",
+        "root.Final.Surface[4,2].Grip": "float:3F5586C6",
+        "root.Final.Surface[4,2].Moisture": "float:00000000",
+        "root.Final.Surface[4,2].Ruts": "float:3E650483",
+        "root.Final.Surface[4,3].EffectiveGrip": "float:3F4C2173",
+        "root.Final.Surface[4,3].Grip": "float:3F6A6ACC",
+        "root.Final.Surface[4,3].Moisture": "float:00000000",
+        "root.Final.Surface[4,3].Ruts": "float:3DF0172E",
+        "root.Final.Surface[4,4].EffectiveGrip": "float:3F6CE0E3",
+        "root.Final.Surface[4,4].Grip": "float:3F7F9207",
+        "root.Final.Surface[4,4].Moisture": "float:00000000",
+        "root.Final.Surface[4,4].Ruts": "float:3BDBF23A",
+        "root.Final.Surface[5,0].EffectiveGrip": "float:3EE922A2",
+        "root.Final.Surface[5,0].Grip": "float:3F29FB6C",
+        "root.Final.Surface[5,0].Moisture": "float:00000000",
+        "root.Final.Surface[5,0].Ruts": "float:3EED9534",
+        "root.Final.Surface[5,1].EffectiveGrip": "float:3F0961BB",
+        "root.Final.Surface[5,1].Grip": "float:3F3CA17E",
+        "root.Final.Surface[5,1].Moisture": "float:00000000",
+        "root.Final.Surface[5,1].Ruts": "float:3EC90889",
+        "root.Final.Surface[5,2].EffectiveGrip": "float:3F256865",
+        "root.Final.Surface[5,2].Grip": "float:3F51DC03",
+        "root.Final.Surface[5,2].Moisture": "float:00000000",
+        "root.Final.Surface[5,2].Ruts": "float:3E8FD82C",
+        "root.Final.Surface[5,3].EffectiveGrip": "float:3F43CDF8",
+        "root.Final.Surface[5,3].Grip": "float:3F672E4F",
+        "root.Final.Surface[5,3].Moisture": "float:00000000",
+        "root.Final.Surface[5,3].Ruts": "float:3E2BD365",
+        "root.Final.Surface[5,4].EffectiveGrip": "float:3F6A9C18",
+        "root.Final.Surface[5,4].Grip": "float:3F7EC1BA",
+        "root.Final.Surface[5,4].Moisture": "float:00000000",
+        "root.Final.Surface[5,4].Ruts": "float:3C9F2309",
+        "root.Final.Surface[6,0].EffectiveGrip": "float:3EE74E82",
+        "root.Final.Surface[6,0].Grip": "float:3F298566",
+        "root.Final.Surface[6,0].Moisture": "float:00000000",
+        "root.Final.Surface[6,0].Ruts": "float:3EF1456A",
+        "root.Final.Surface[6,1].EffectiveGrip": "float:3F0B5D17",
+        "root.Final.Surface[6,1].Grip": "float:3F3D8CCF",
+        "root.Final.Surface[6,1].Moisture": "float:00000000",
+        "root.Final.Surface[6,1].Ruts": "float:3EC1AE02",
+        "root.Final.Surface[6,2].EffectiveGrip": "float:3F224435",
+        "root.Final.Surface[6,2].Grip": "float:3F50844D",
+        "root.Final.Surface[6,2].Moisture": "float:00000000",
+        "root.Final.Surface[6,2].Ruts": "float:3E9A95DE",
+        "root.Final.Surface[6,3].EffectiveGrip": "float:3F44A744",
+        "root.Final.Surface[6,3].Grip": "float:3F678372",
+        "root.Final.Surface[6,3].Moisture": "float:00000000",
+        "root.Final.Surface[6,3].Ruts": "float:3E268133",
+        "root.Final.Surface[6,4].EffectiveGrip": "float:3F6C5E08",
+        "root.Final.Surface[6,4].Grip": "float:3F7F632B",
+        "root.Final.Surface[6,4].Moisture": "float:00000000",
+        "root.Final.Surface[6,4].Ruts": "float:3C1CD490",
+        "root.Final.Surface[7,0].EffectiveGrip": "float:3EECC25E",
+        "root.Final.Surface[7,0].Grip": "float:3F2AE434",
+        "root.Final.Surface[7,0].Moisture": "float:00000000",
+        "root.Final.Surface[7,0].Ruts": "float:3EE64F03",
+        "root.Final.Surface[7,1].EffectiveGrip": "float:3F09BDD2",
+        "root.Final.Surface[7,1].Grip": "float:3F3CCC4F",
+        "root.Final.Surface[7,1].Moisture": "float:00000000",
+        "root.Final.Surface[7,1].Ruts": "float:3EC7B1FF",
+        "root.Final.Surface[7,2].EffectiveGrip": "float:3F20C013",
+        "root.Final.Surface[7,2].Grip": "float:3F4FDD69",
+        "root.Final.Surface[7,2].Moisture": "float:00000000",
+        "root.Final.Surface[7,2].Ruts": "float:3E9FCCFD",
+        "root.Final.Surface[7,3].EffectiveGrip": "float:3F44950A",
+        "root.Final.Surface[7,3].Grip": "float:3F677C4E",
+        "root.Final.Surface[7,3].Moisture": "float:00000000",
+        "root.Final.Surface[7,3].Ruts": "float:3E26F35A",
+        "root.Final.Surface[7,4].EffectiveGrip": "float:3F6C7833",
+        "root.Final.Surface[7,4].Grip": "float:3F7F6C8B",
+        "root.Final.Surface[7,4].Moisture": "float:00000000",
+        "root.Final.Surface[7,4].Ruts": "float:3C1374C6",
+        "root.Final.Surface[8,0].EffectiveGrip": "float:3EF78994",
+        "root.Final.Surface[8,0].Grip": "float:3F2D8FE0",
+        "root.Final.Surface[8,0].Moisture": "float:00000000",
+        "root.Final.Surface[8,0].Ruts": "float:3ED0F1A8",
+        "root.Final.Surface[8,1].EffectiveGrip": "float:3F1216E7",
+        "root.Final.Surface[8,1].Grip": "float:3F40A11E",
+        "root.Final.Surface[8,1].Moisture": "float:00000000",
+        "root.Final.Surface[8,1].Ruts": "float:3EA90B99",
+        "root.Final.Surface[8,2].EffectiveGrip": "float:3F2CD8AC",
+        "root.Final.Surface[8,2].Grip": "float:3F54FF1B",
+        "root.Final.Surface[8,2].Moisture": "float:00000000",
+        "root.Final.Surface[8,2].Ruts": "float:3E6D7F15",
+        "root.Final.Surface[8,3].EffectiveGrip": "float:3F4C709B",
+        "root.Final.Surface[8,3].Grip": "float:3F6A894A",
+        "root.Final.Surface[8,3].Moisture": "float:00000000",
+        "root.Final.Surface[8,3].Ruts": "float:3DEC47B9",
+        "root.Final.Surface[8,4].EffectiveGrip": "float:3F6D88D0",
+        "root.Final.Surface[8,4].Grip": "float:3F7FCE18",
+        "root.Final.Surface[8,4].Moisture": "float:00000000",
+        "root.Final.Surface[8,4].Ruts": "float:3B47A079"
+      },
+      "FinalLogCoveredByFinalHash": true
+    },
+    "C": {
+      "BeforeFailed": true,
+      "AfterFailed": false,
+      "BeforeFailure": {
+        "Type": "CoreSim.ExecutedPathTraversal+TimeSolveDiscontinuityException",
+        "Message": "Coupled time solve did not converge within its bound.",
+        "StackTrace": "   at CoreSim.ExecutedPathTraversal.<Traverse>g__Solve|7_3(Double finish, <>c__DisplayClass7_0&) in C:\\Users\\artur\\Documents\\Codex\\2026-10-08\\files-pasted-by-the-user-pr\\work\\zuzel\\src\\CoreSim\\Track\\ExecutedPathTraversal.cs:line 263\r\n   at CoreSim.ExecutedPathTraversal.Traverse(SimulationSnapshot snapshot, RiderSnapshot rider, SegmentResolution resolution, Single entrySpeed, Single canonicalAdvance, Boolean launch, Func`2 nextCornerTarget, Boolean captureRich, Single positiveDriveFraction, Boolean holdLateralPosition, Single lateralAuthority01, Boolean contactRecovery) in C:\\Users\\artur\\Documents\\Codex\\2026-10-08\\files-pasted-by-the-user-pr\\work\\zuzel\\src\\CoreSim\\Track\\ExecutedPathTraversal.cs:line 95\r\n   at CoreSim.SimulationEngine.ResolveMovingRider(SimulationSnapshot snapshot, RiderSnapshot rider, RiderDecision decision, SegmentResolution resolution, Single entrySpeed, Int32 plannedLane, Single canonicalAdvance, Boolean launch, Single risk, TrackSurfaceState entrySurface, Nullable`1 phase, Boolean captureRich, Single positiveDriveFraction, Boolean holdLateralPosition, Single lateralAuthority01, Boolean contactRecovery) in C:\\Users\\artur\\Documents\\Codex\\2026-10-08\\files-pasted-by-the-user-pr\\work\\zuzel\\src\\CoreSim\\SimulationEngine.cs:line 785\r\n   at CoreSim.SimulationEngine.ResolveRiderCore(SimulationSnapshot snapshot, RiderSnapshot rider, RiderDecision decision, HeatSimulationOptions options, Boolean captureRich) in C:\\Users\\artur\\Documents\\Codex\\2026-10-08\\files-pasted-by-the-user-pr\\work\\zuzel\\src\\CoreSim\\SimulationEngine.cs:line 618\r\n   at CoreSim.SimulationEngine.ResolveProduction(SimulationSnapshot snapshot, IReadOnlyList`1 intents, HeatSimulationOptions options, Boolean legacyContacts, Func`3 contactFilter, IReadOnlyList`1 unresolvedPairs, PhysicalContactConsequencePlan consequencePlan) in C:\\Users\\artur\\Documents\\Codex\\2026-10-08\\files-pasted-by-the-user-pr\\work\\zuzel\\src\\CoreSim\\SimulationEngine.cs:line 267\r\n   at CoreSim.Interactions.ContestedSpaceInteractionCoordinator.<>c__DisplayClass9_9.<Resolve>g__SafetyProject|93(InteractionAlternative alternative) in C:\\Users\\artur\\Documents\\Codex\\2026-10-08\\files-pasted-by-the-user-pr\\work\\zuzel\\src\\CoreSim\\Interactions\\ContestedSpaceInteractionCoordinator.cs:line 323\r\n   at CoreSim.Interactions.ContestedSpaceInteractionCoordinator.Resolve(SimulationEngine engine, SimulationSnapshot snapshot, IReadOnlyList`1 intents, HeatSimulationOptions options, InteractionEpisodeTracker owner) in C:\\Users\\artur\\Documents\\Codex\\2026-10-08\\files-pasted-by-the-user-pr\\work\\zuzel\\src\\CoreSim\\Interactions\\ContestedSpaceInteractionCoordinator.cs:line 363\r\n   at CoreSim.SimulationEngine.Resolve(SimulationSnapshot snapshot, IReadOnlyList`1 intents, HeatSimulationOptions options, InteractionEpisodeTracker interactions) in C:\\Users\\artur\\Documents\\Codex\\2026-10-08\\files-pasted-by-the-user-pr\\work\\zuzel\\src\\CoreSim\\SimulationEngine.cs:line 238\r\n   at CoreSim.Race.HeatSimulator.SimulateHeat(Track track, TrackState trackState, List`1 riders, HeatSimulationOptions options, Int32 heatId, ISimulationStepObserver observer) in C:\\Users\\artur\\Documents\\Codex\\2026-10-08\\files-pasted-by-the-user-pr\\work\\zuzel\\src\\CoreSim\\Race\\HeatSimulator.cs:line 89\r\n   at Program.<>c__DisplayClass0_0.<<Main>$>g__Run|4(Experiment scenario, HeatSimulationOptions options, Boolean reverse, Boolean observe, Boolean fullTrace) in C:\\Users\\artur\\Documents\\Codex\\2026-10-08\\files-pasted-by-the-user-pr\\work\\zuzel\\tools\\race-engine-readiness\\Program.cs:line 161"
+      },
+      "Classification": [
+        {
+          "RiderId": 1,
+          "Position": 1,
+          "Points": 3,
+          "Status": "Finished",
+          "TimeSeconds": 61.60596,
+          "DistanceMeters": 1332.0682,
+          "LapsCompleted": 4,
+          "Finished": true,
+          "Crashed": false,
+          "Retired": false,
+          "Dnf": false
+        },
+        {
+          "RiderId": 4,
+          "Position": 2,
+          "Points": 2,
+          "Status": "Finished",
+          "TimeSeconds": 61.86267,
+          "DistanceMeters": 1447.7229,
+          "LapsCompleted": 4,
+          "Finished": true,
+          "Crashed": false,
+          "Retired": false,
+          "Dnf": false
+        },
+        {
+          "RiderId": 3,
+          "Position": 3,
+          "Points": 1,
+          "Status": "Finished",
+          "TimeSeconds": 61.864933,
+          "DistanceMeters": 1433.3757,
+          "LapsCompleted": 4,
+          "Finished": true,
+          "Crashed": false,
+          "Retired": false,
+          "Dnf": false
+        },
+        {
+          "RiderId": 2,
+          "Position": 4,
+          "Points": 0,
+          "Status": "Finished",
+          "TimeSeconds": 62.03843,
+          "DistanceMeters": 1413.6385,
+          "LapsCompleted": 4,
+          "Finished": true,
+          "Crashed": false,
+          "Retired": false,
+          "Dnf": false
+        }
+      ],
+      "FinalHash": "D8FF6D820DF65C71791AB0FA089E5A26EE50AC6B29DC1C550FE3DE8E99E17033",
+      "BehaviorHash": "9134DDE98198DF899B9AC0ACD26D6C5566780191A7E0AECD28BE2DDED44481BC",
+      "Applied": [
+        {
+          "Step": 0,
+          "Consequence": {
+            "RiderId": 1,
+            "ContactRiderIds": [
+              1,
+              2
+            ],
+            "SourceEpisodeIds": [
+              1
+            ],
+            "OriginEpisodeIds": [
+              1
+            ],
+            "FrontierTimeSeconds": 1.5544269525721575,
+            "SeverityRatio": 1.1619992977007865,
+            "Severity": "MajorSave",
+            "NetDeltaVelocityMetersPerSecond": {
+              "X": 0.04865396823346031,
+              "Y": 0.5251091695022096,
+              "Length": 0.5273583682090983
+            },
+            "DeltaForwardMetersPerSecond": 2.3175905639050143e-15,
+            "PreContactSpeed": 23.736961,
+            "PostContactSpeed": 23.736961,
+            "ControlLoss01": 0.4496124429909248,
+            "Recovery": {
+              "SourceEpisodeId": 1,
+              "SourceFrontierTime": 1.5544269525721575,
+              "SeverityRatio": 1.1619992977007865,
+              "Severity": "MajorSave",
+              "ControlLoss01": 0.4496124429909248,
+              "DriveAvailability01": 0.5503875570090753,
+              "LateralAuthority01": 0.5503875570090753,
+              "RemainingSteps": 1
+            }
+          }
+        },
+        {
+          "Step": 0,
+          "Consequence": {
+            "RiderId": 2,
+            "ContactRiderIds": [
+              1,
+              2
+            ],
+            "SourceEpisodeIds": [
+              1
+            ],
+            "OriginEpisodeIds": [
+              1
+            ],
+            "FrontierTimeSeconds": 1.5544269525721575,
+            "SeverityRatio": 1.0745979956771399,
+            "Severity": "MajorSave",
+            "NetDeltaVelocityMetersPerSecond": {
+              "X": -0.04865396823346031,
+              "Y": -0.5251091695022096,
+              "Length": 0.5273583682090983
+            },
+            "DeltaForwardMetersPerSecond": -0.04865396823346031,
+            "PreContactSpeed": 23.766573,
+            "PostContactSpeed": 23.717918,
+            "ControlLoss01": 0.38451974270579026,
+            "Recovery": {
+              "SourceEpisodeId": 1,
+              "SourceFrontierTime": 1.5544269525721575,
+              "SeverityRatio": 1.0745979956771399,
+              "Severity": "MajorSave",
+              "ControlLoss01": 0.38451974270579026,
+              "DriveAvailability01": 0.6154802572942097,
+              "LateralAuthority01": 0.6154802572942097,
+              "RemainingSteps": 1
+            }
+          }
+        },
+        {
+          "Step": 7,
+          "Consequence": {
+            "RiderId": 3,
+            "ContactRiderIds": [
+              3,
+              4
+            ],
+            "SourceEpisodeIds": [
+              1
+            ],
+            "OriginEpisodeIds": [
+              1
+            ],
+            "FrontierTimeSeconds": 14.435613423585892,
+            "SeverityRatio": 0.045432943098452104,
+            "Severity": "Brush",
+            "NetDeltaVelocityMetersPerSecond": {
+              "X": 0.031975692987065575,
+              "Y": -0.03391395277305068,
+              "Length": 0.04661116963449627
+            },
+            "DeltaForwardMetersPerSecond": 0.046473258032692116,
+            "PreContactSpeed": 21.588781,
+            "PostContactSpeed": 21.635254,
+            "ControlLoss01": 0.0006873347991133191,
+            "Recovery": null
+          }
+        },
+        {
+          "Step": 7,
+          "Consequence": {
+            "RiderId": 4,
+            "ContactRiderIds": [
+              3,
+              4
+            ],
+            "SourceEpisodeIds": [
+              1
+            ],
+            "OriginEpisodeIds": [
+              1
+            ],
+            "FrontierTimeSeconds": 14.435613423585892,
+            "SeverityRatio": 0.043369637341446735,
+            "Severity": "Brush",
+            "NetDeltaVelocityMetersPerSecond": {
+              "X": -0.031975692987065575,
+              "Y": 0.03391395277305068,
+              "Length": 0.04661116963449627
+            },
+            "DeltaForwardMetersPerSecond": -0.04658372101298626,
+            "PreContactSpeed": 21.588781,
+            "PostContactSpeed": 21.542198,
+            "ControlLoss01": 0.0006263227282009943,
+            "Recovery": null
+          }
+        }
+      ],
+      "ExactChangedStateLeaves": {
+        "root.Riders[0].CanonicalProgress": {
+          "Before": "double:0000000000000000",
+          "After": "double:4042000000000000"
+        },
+        "root.Riders[0].CurrentSegmentId": {
+          "Before": "System.Int32:0",
+          "After": "System.Int32:8"
+        },
+        "root.Riders[0].DistanceMeters": {
+          "Before": "float:00000000",
+          "After": "float:44A6822F"
+        },
+        "root.Riders[0].ElapsedTimeSeconds": {
+          "Before": "float:00000000",
+          "After": "float:42766C81"
+        },
+        "root.Riders[0].Lane": {
+          "Before": "System.Int32:0",
+          "After": "System.Int32:1"
+        },
+        "root.Riders[0].LapNumber": {
+          "Before": "System.Int32:1",
+          "After": "System.Int32:4"
+        },
+        "root.Riders[0].LapsCompleted": {
+          "Before": "System.Int32:0",
+          "After": "System.Int32:4"
+        },
+        "root.Riders[0].LastResolvedSegmentId": {
+          "Before": "System.Int32:0",
+          "After": "System.Int32:8"
+        },
+        "root.Riders[0].LateralPosition": {
+          "Before": "float:3E4CCCCD",
+          "After": "float:3F800000"
+        },
+        "root.Riders[0].Morale": {
+          "Before": "float:3F000000",
+          "After": "float:3F0A3D71"
+        },
+        "root.Riders[0].Position.DistanceMeters": {
+          "Before": "float:00000000",
+          "After": "float:44A6822F"
+        },
+        "root.Riders[0].Position.LapsCompleted": {
+          "Before": "System.Int32:0",
+          "After": "System.Int32:4"
+        },
+        "root.Riders[0].Position.TotalSegmentProgress": {
+          "Before": "double:0000000000000000",
+          "After": "double:4042000000000000"
+        },
+        "root.Riders[0].Risk": {
+          "Before": "float:00000000",
+          "After": "float:3E050521"
+        },
+        "root.Riders[0].Speed": {
+          "Before": "float:00000000",
+          "After": "float:41B8336E"
+        },
+        "root.Riders[0].Status": {
+          "Before": "enum:CoreSim.Race.RiderRaceStatus:0",
+          "After": "enum:CoreSim.Race.RiderRaceStatus:2"
+        },
+        "root.Riders[1].CanonicalProgress": {
+          "Before": "double:0000000000000000",
+          "After": "double:4042000000000000"
+        },
+        "root.Riders[1].CurrentSegmentId": {
+          "Before": "System.Int32:0",
+          "After": "System.Int32:8"
+        },
+        "root.Riders[1].DistanceMeters": {
+          "Before": "float:00000000",
+          "After": "float:44B0B46F"
+        },
+        "root.Riders[1].ElapsedTimeSeconds": {
+          "Before": "float:00000000",
+          "After": "float:4278275A"
+        },
+        "root.Riders[1].LapNumber": {
+          "Before": "System.Int32:1",
+          "After": "System.Int32:4"
+        },
+        "root.Riders[1].LapsCompleted": {
+          "Before": "System.Int32:0",
+          "After": "System.Int32:4"
+        },
+        "root.Riders[1].LastResolvedSegmentId": {
+          "Before": "System.Int32:0",
+          "After": "System.Int32:8"
+        },
+        "root.Riders[1].LateralPosition": {
+          "Before": "float:3FB33333",
+          "After": "float:3F019A8C"
+        },
+        "root.Riders[1].Morale": {
+          "Before": "float:3F000000",
+          "After": "float:3EF33333"
+        },
+        "root.Riders[1].Position.DistanceMeters": {
+          "Before": "float:00000000",
+          "After": "float:44B0B46F"
+        },
+        "root.Riders[1].Position.LapsCompleted": {
+          "Before": "System.Int32:0",
+          "After": "System.Int32:4"
+        },
+        "root.Riders[1].Position.TotalSegmentProgress": {
+          "Before": "double:0000000000000000",
+          "After": "double:4042000000000000"
+        },
+        "root.Riders[1].Risk": {
+          "Before": "float:00000000",
+          "After": "float:3DCCD120"
+        },
+        "root.Riders[1].Speed": {
+          "Before": "float:00000000",
+          "After": "float:41B7552C"
+        },
+        "root.Riders[1].Status": {
+          "Before": "enum:CoreSim.Race.RiderRaceStatus:0",
+          "After": "enum:CoreSim.Race.RiderRaceStatus:2"
+        },
+        "root.Riders[2].CanonicalProgress": {
+          "Before": "double:0000000000000000",
+          "After": "double:4042000000000000"
+        },
+        "root.Riders[2].CurrentSegmentId": {
+          "Before": "System.Int32:0",
+          "After": "System.Int32:8"
+        },
+        "root.Riders[2].DistanceMeters": {
+          "Before": "float:00000000",
+          "After": "float:44B32C06"
+        },
+        "root.Riders[2].ElapsedTimeSeconds": {
+          "Before": "float:00000000",
+          "After": "float:427775B1"
+        },
+        "root.Riders[2].Lane": {
+          "Before": "System.Int32:3",
+          "After": "System.Int32:2"
+        },
+        "root.Riders[2].LapNumber": {
+          "Before": "System.Int32:1",
+          "After": "System.Int32:4"
+        },
+        "root.Riders[2].LapsCompleted": {
+          "Before": "System.Int32:0",
+          "After": "System.Int32:4"
+        },
+        "root.Riders[2].LastResolvedSegmentId": {
+          "Before": "System.Int32:0",
+          "After": "System.Int32:8"
+        },
+        "root.Riders[2].LateralPosition": {
+          "Before": "float:40266666",
+          "After": "float:40000000"
+        },
+        "root.Riders[2].Morale": {
+          "Before": "float:3F000000",
+          "After": "float:3EFAE148"
+        },
+        "root.Riders[2].Position.DistanceMeters": {
+          "Before": "float:00000000",
+          "After": "float:44B32C06"
+        },
+        "root.Riders[2].Position.LapsCompleted": {
+          "Before": "System.Int32:0",
+          "After": "System.Int32:4"
+        },
+        "root.Riders[2].Position.TotalSegmentProgress": {
+          "Before": "double:0000000000000000",
+          "After": "double:4042000000000000"
+        },
+        "root.Riders[2].Risk": {
+          "Before": "float:00000000",
+          "After": "float:3E050521"
+        },
+        "root.Riders[2].Speed": {
+          "Before": "float:00000000",
+          "After": "float:41CA31CC"
+        },
+        "root.Riders[2].Status": {
+          "Before": "enum:CoreSim.Race.RiderRaceStatus:0",
+          "After": "enum:CoreSim.Race.RiderRaceStatus:2"
+        },
+        "root.Riders[3].CanonicalProgress": {
+          "Before": "double:0000000000000000",
+          "After": "double:4042000000000000"
+        },
+        "root.Riders[3].CurrentSegmentId": {
+          "Before": "System.Int32:0",
+          "After": "System.Int32:8"
+        },
+        "root.Riders[3].DistanceMeters": {
+          "Before": "float:00000000",
+          "After": "float:44B4F722"
+        },
+        "root.Riders[3].ElapsedTimeSeconds": {
+          "Before": "float:00000000",
+          "After": "float:42777360"
+        },
+        "root.Riders[3].Lane": {
+          "Before": "System.Int32:4",
+          "After": "System.Int32:1"
+        },
+        "root.Riders[3].LapNumber": {
+          "Before": "System.Int32:1",
+          "After": "System.Int32:4"
+        },
+        "root.Riders[3].LapsCompleted": {
+          "Before": "System.Int32:0",
+          "After": "System.Int32:4"
+        },
+        "root.Riders[3].LastResolvedSegmentId": {
+          "Before": "System.Int32:0",
+          "After": "System.Int32:8"
+        },
+        "root.Riders[3].LateralPosition": {
+          "Before": "float:40733333",
+          "After": "float:3F800000"
+        },
+        "root.Riders[3].Morale": {
+          "Before": "float:3F000000",
+          "After": "float:3F03D70A"
+        },
+        "root.Riders[3].Position.DistanceMeters": {
+          "Before": "float:00000000",
+          "After": "float:44B4F722"
+        },
+        "root.Riders[3].Position.LapsCompleted": {
+          "Before": "System.Int32:0",
+          "After": "System.Int32:4"
+        },
+        "root.Riders[3].Position.TotalSegmentProgress": {
+          "Before": "double:0000000000000000",
+          "After": "double:4042000000000000"
+        },
+        "root.Riders[3].Risk": {
+          "Before": "float:00000000",
+          "After": "float:3DCCD120"
+        },
+        "root.Riders[3].Speed": {
+          "Before": "float:00000000",
+          "After": "float:41C07C93"
+        },
+        "root.Riders[3].Status": {
+          "Before": "enum:CoreSim.Race.RiderRaceStatus:0",
+          "After": "enum:CoreSim.Race.RiderRaceStatus:2"
+        },
+        "root.Surface[0,0].EffectiveGrip": {
+          "Before": "float:3EF9A6B6",
+          "After": "float:3EF6E7B8"
+        },
+        "root.Surface[0,0].Grip": {
+          "Before": "float:3F2E147B",
+          "After": "float:3F2D681F"
+        },
+        "root.Surface[0,0].Ruts": {
+          "Before": "float:3ECCCCCD",
+          "After": "float:3ED22FBB"
+        },
+        "root.Surface[0,1].EffectiveGrip": {
+          "Before": "float:3F165FD9",
+          "After": "float:3F119585"
+        },
+        "root.Surface[0,1].Grip": {
+          "Before": "float:3F428F5C",
+          "After": "float:3F406669"
+        },
+        "root.Surface[0,1].Ruts": {
+          "Before": "float:3E99999A",
+          "After": "float:3EAAE11E"
+        },
+        "root.Surface[0,2].EffectiveGrip": {
+          "Before": "float:3F31C434",
+          "After": "float:3F2CE286"
+        },
+        "root.Surface[0,2].Grip": {
+          "Before": "float:3F570A3E",
+          "After": "float:3F550338"
+        },
+        "root.Surface[0,2].Ruts": {
+          "Before": "float:3E4CCCCD",
+          "After": "float:3E6D3D35"
+        },
+        "root.Surface[0,3].EffectiveGrip": {
+          "Before": "float:3F4F0069",
+          "After": "float:3F4D4815"
+        },
+        "root.Surface[0,3].Grip": {
+          "Before": "float:3F6B851F",
+          "After": "float:3F6ADC2E"
+        },
+        "root.Surface[0,3].Ruts": {
+          "Before": "float:3DCCCCCC",
+          "After": "float:3DE1EB19"
+        },
+        "root.Surface[0,4].EffectiveGrip": {
+          "Before": "float:3F6E147B",
+          "After": "float:3F6DD389"
+        },
+        "root.Surface[0,4].Grip": {
+          "Before": "float:3F800000",
+          "After": "float:3F7FE8CC"
+        },
+        "root.Surface[0,4].Ruts": {
+          "Before": "float:00000000",
+          "After": "float:3AB997F5"
+        },
+        "root.Surface[1,0].EffectiveGrip": {
+          "Before": "float:3EF9A6B6",
+          "After": "float:3EE8F27A"
+        },
+        "root.Surface[1,0].Grip": {
+          "Before": "float:3F2E147B",
+          "After": "float:3F29EF4E"
+        },
+        "root.Surface[1,0].Ruts": {
+          "Before": "float:3ECCCCCD",
+          "After": "float:3EEDF639"
+        },
+        "root.Surface[1,1].EffectiveGrip": {
+          "Before": "float:3F165FD9",
+          "After": "float:3F0620A0"
+        },
+        "root.Surface[1,1].Grip": {
+          "Before": "float:3F428F5C",
+          "After": "float:3F3B1C00"
+        },
+        "root.Surface[1,1].Ruts": {
+          "Before": "float:3E99999A",
+          "After": "float:3ED53485"
+        },
+        "root.Surface[1,2].EffectiveGrip": {
+          "Before": "float:3F31C434",
+          "After": "float:3F214FB7"
+        },
+        "root.Surface[1,2].Grip": {
+          "Before": "float:3F570A3E",
+          "After": "float:3F501B42"
+        },
+        "root.Surface[1,2].Ruts": {
+          "Before": "float:3E4CCCCD",
+          "After": "float:3E9DDE4F"
+        },
+        "root.Surface[1,3].EffectiveGrip": {
+          "Before": "float:3F4F0069",
+          "After": "float:3F48B878"
+        },
+        "root.Surface[1,3].Grip": {
+          "Before": "float:3F6B851F",
+          "After": "float:3F69193E"
+        },
+        "root.Surface[1,3].Ruts": {
+          "Before": "float:3DCCCCCC",
+          "After": "float:3E0D2465"
+        },
+        "root.Surface[1,4].EffectiveGrip": {
+          "Before": "float:3F6E147B",
+          "After": "float:3F6D57C3"
+        },
+        "root.Surface[1,4].Grip": {
+          "Before": "float:3F800000",
+          "After": "float:3F7FBC8E"
+        },
+        "root.Surface[1,4].Ruts": {
+          "Before": "float:00000000",
+          "After": "float:3B86E338"
+        },
+        "root.Surface[2,0].EffectiveGrip": {
+          "Before": "float:3EF9A6B6",
+          "After": "float:3EE9F3E4"
+        },
+        "root.Surface[2,0].Grip": {
+          "Before": "float:3F2E147B",
+          "After": "float:3F2A3010"
+        },
+        "root.Surface[2,0].Ruts": {
+          "Before": "float:3ECCCCCD",
+          "After": "float:3EEBF029"
+        },
+        "root.Surface[2,1].EffectiveGrip": {
+          "Before": "float:3F165FD9",
+          "After": "float:3F079D9A"
+        },
+        "root.Surface[2,1].Grip": {
+          "Before": "float:3F428F5C",
+          "After": "float:3F3BCE98"
+        },
+        "root.Surface[2,1].Ruts": {
+          "Before": "float:3E99999A",
+          "After": "float:3ECF9FB3"
+        },
+        "root.Surface[2,2].EffectiveGrip": {
+          "Before": "float:3F31C434",
+          "After": "float:3F21D19F"
+        },
+        "root.Surface[2,2].Grip": {
+          "Before": "float:3F570A3E",
+          "After": "float:3F50531A"
+        },
+        "root.Surface[2,2].Ruts": {
+          "Before": "float:3E4CCCCD",
+          "After": "float:3E9C1F7F"
+        },
+        "root.Surface[2,3].EffectiveGrip": {
+          "Before": "float:3F4F0069",
+          "After": "float:3F475F4E"
+        },
+        "root.Surface[2,3].Grip": {
+          "Before": "float:3F6B851F",
+          "After": "float:3F68931C"
+        },
+        "root.Surface[2,3].Ruts": {
+          "Before": "float:3DCCCCCC",
+          "After": "float:3E158695"
+        },
+        "root.Surface[2,4].EffectiveGrip": {
+          "Before": "float:3F6E147B",
+          "After": "float:3F6D06E6"
+        },
+        "root.Surface[2,4].Grip": {
+          "Before": "float:3F800000",
+          "After": "float:3F7F9FA1"
+        },
+        "root.Surface[2,4].Ruts": {
+          "Before": "float:00000000",
+          "After": "float:3BC0BD12"
+        },
+        "root.Surface[3,0].EffectiveGrip": {
+          "Before": "float:3EF9A6B6",
+          "After": "float:3EEEC490"
+        },
+        "root.Surface[3,0].Grip": {
+          "Before": "float:3F2E147B",
+          "After": "float:3F2B6494"
+        },
+        "root.Surface[3,0].Ruts": {
+          "Before": "float:3ECCCCCD",
+          "After": "float:3EE24C05"
+        },
+        "root.Surface[3,1].EffectiveGrip": {
+          "Before": "float:3F165FD9",
+          "After": "float:3F07D964"
+        },
+        "root.Surface[3,1].Grip": {
+          "Before": "float:3F428F5C",
+          "After": "float:3F3BEA8C"
+        },
+        "root.Surface[3,1].Ruts": {
+          "Before": "float:3E99999A",
+          "After": "float:3ECEC011"
+        },
+        "root.Surface[3,2].EffectiveGrip": {
+          "Before": "float:3F31C434",
+          "After": "float:3F2134BB"
+        },
+        "root.Surface[3,2].Grip": {
+          "Before": "float:3F570A3E",
+          "After": "float:3F500FA3"
+        },
+        "root.Surface[3,2].Ruts": {
+          "Before": "float:3E4CCCCD",
+          "After": "float:3E9E3B23"
+        },
+        "root.Surface[3,3].EffectiveGrip": {
+          "Before": "float:3F4F0069",
+          "After": "float:3F444334"
+        },
+        "root.Surface[3,3].Grip": {
+          "Before": "float:3F6B851F",
+          "After": "float:3F675C42"
+        },
+        "root.Surface[3,3].Ruts": {
+          "Before": "float:3DCCCCCC",
+          "After": "float:3E28F426"
+        },
+        "root.Surface[3,4].EffectiveGrip": {
+          "Before": "float:3F6E147B",
+          "After": "float:3F6C590C"
+        },
+        "root.Surface[3,4].Grip": {
+          "Before": "float:3F800000",
+          "After": "float:3F7F6162"
+        },
+        "root.Surface[3,4].Ruts": {
+          "Before": "float:00000000",
+          "After": "float:3C1E9D66"
+        },
+        "root.Surface[4,0].EffectiveGrip": {
+          "Before": "float:3EF9A6B6",
+          "After": "float:3EF615A4"
+        },
+        "root.Surface[4,0].Grip": {
+          "Before": "float:3F2E147B",
+          "After": "float:3F2D3474"
+        },
+        "root.Surface[4,0].Ruts": {
+          "Before": "float:3ECCCCCD",
+          "After": "float:3ED3CD05"
+        },
+        "root.Surface[4,1].EffectiveGrip": {
+          "Before": "float:3F165FD9",
+          "After": "float:3F128325"
+        },
+        "root.Surface[4,1].Grip": {
+          "Before": "float:3F428F5C",
+          "After": "float:3F40D229"
+        },
+        "root.Surface[4,1].Ruts": {
+          "Before": "float:3E99999A",
+          "After": "float:3EA78349"
+        },
+        "root.Surface[4,2].EffectiveGrip": {
+          "Before": "float:3F31C434",
+          "After": "float:3F2D613D"
+        },
+        "root.Surface[4,2].Grip": {
+          "Before": "float:3F570A3E",
+          "After": "float:3F553821"
+        },
+        "root.Surface[4,2].Ruts": {
+          "Before": "float:3E4CCCCD",
+          "After": "float:3E69EEA2"
+        },
+        "root.Surface[4,3].EffectiveGrip": {
+          "Before": "float:3F4F0069",
+          "After": "float:3F4C3DE6"
+        },
+        "root.Surface[4,3].Grip": {
+          "Before": "float:3F6B851F",
+          "After": "float:3F6A75C1"
+        },
+        "root.Surface[4,3].Ruts": {
+          "Before": "float:3DCCCCCC",
+          "After": "float:3DEEB87F"
+        },
+        "root.Surface[4,4].EffectiveGrip": {
+          "Before": "float:3F6E147B",
+          "After": "float:3F6DA49D"
+        },
+        "root.Surface[4,4].Grip": {
+          "Before": "float:3F800000",
+          "After": "float:3F7FD808"
+        },
+        "root.Surface[4,4].Ruts": {
+          "Before": "float:00000000",
+          "After": "float:3B1FDF22"
+        },
+        "root.Surface[5,0].EffectiveGrip": {
+          "Before": "float:3EF9A6B6",
+          "After": "float:3EE6E7A4"
+        },
+        "root.Surface[5,0].Grip": {
+          "Before": "float:3F2E147B",
+          "After": "float:3F296B69"
+        },
+        "root.Surface[5,0].Ruts": {
+          "Before": "float:3ECCCCCD",
+          "After": "float:3EF21555"
+        },
+        "root.Surface[5,1].EffectiveGrip": {
+          "Before": "float:3F165FD9",
+          "After": "float:3F083341"
+        },
+        "root.Surface[5,1].Grip": {
+          "Before": "float:3F428F5C",
+          "After": "float:3F3C1485"
+        },
+        "root.Surface[5,1].Ruts": {
+          "Before": "float:3E99999A",
+          "After": "float:3ECD703B"
+        },
+        "root.Surface[5,2].EffectiveGrip": {
+          "Before": "float:3F31C434",
+          "After": "float:3F225B48"
+        },
+        "root.Surface[5,2].Grip": {
+          "Before": "float:3F570A3E",
+          "After": "float:3F508E35"
+        },
+        "root.Surface[5,2].Ruts": {
+          "Before": "float:3E4CCCCD",
+          "After": "float:3E9A46B4"
+        },
+        "root.Surface[5,3].EffectiveGrip": {
+          "Before": "float:3F4F0069",
+          "After": "float:3F476CEC"
+        },
+        "root.Surface[5,3].Grip": {
+          "Before": "float:3F6B851F",
+          "After": "float:3F689869"
+        },
+        "root.Surface[5,3].Ruts": {
+          "Before": "float:3DCCCCCC",
+          "After": "float:3E1531CB"
+        },
+        "root.Surface[5,4].EffectiveGrip": {
+          "Before": "float:3F6E147B",
+          "After": "float:3F6D0591"
+        },
+        "root.Surface[5,4].Grip": {
+          "Before": "float:3F800000",
+          "After": "float:3F7F9F27"
+        },
+        "root.Surface[5,4].Ruts": {
+          "Before": "float:00000000",
+          "After": "float:3BC1B112"
+        },
+        "root.Surface[6,0].EffectiveGrip": {
+          "Before": "float:3EF9A6B6",
+          "After": "float:3EE5FEE4"
+        },
+        "root.Surface[6,0].Grip": {
+          "Before": "float:3F2E147B",
+          "After": "float:3F29308B"
+        },
+        "root.Surface[6,0].Ruts": {
+          "Before": "float:3ECCCCCD",
+          "After": "float:3EF3EC44"
+        },
+        "root.Surface[6,1].EffectiveGrip": {
+          "Before": "float:3F165FD9",
+          "After": "float:3F095367"
+        },
+        "root.Surface[6,1].Grip": {
+          "Before": "float:3F428F5C",
+          "After": "float:3F3C9AD3"
+        },
+        "root.Surface[6,1].Ruts": {
+          "Before": "float:3E99999A",
+          "After": "float:3EC93DDC"
+        },
+        "root.Surface[6,2].EffectiveGrip": {
+          "Before": "float:3F31C434",
+          "After": "float:3F2181A1"
+        },
+        "root.Surface[6,2].Grip": {
+          "Before": "float:3F570A3E",
+          "After": "float:3F5030BA"
+        },
+        "root.Surface[6,2].Ruts": {
+          "Before": "float:3E4CCCCD",
+          "After": "float:3E9D3298"
+        },
+        "root.Surface[6,3].EffectiveGrip": {
+          "Before": "float:3F4F0069",
+          "After": "float:3F4826E3"
+        },
+        "root.Surface[6,3].Grip": {
+          "Before": "float:3F6B851F",
+          "After": "float:3F68E0B8"
+        },
+        "root.Surface[6,3].Ruts": {
+          "Before": "float:3DCCCCCC",
+          "After": "float:3E10ACE5"
+        },
+        "root.Surface[6,4].EffectiveGrip": {
+          "Before": "float:3F6E147B",
+          "After": "float:3F6D3ED7"
+        },
+        "root.Surface[6,4].Grip": {
+          "Before": "float:3F800000",
+          "After": "float:3F7FB3A4"
+        },
+        "root.Surface[6,4].Ruts": {
+          "Before": "float:00000000",
+          "After": "float:3B98B6E7"
+        },
+        "root.Surface[7,0].EffectiveGrip": {
+          "Before": "float:3EF9A6B6",
+          "After": "float:3EE9EF90"
+        },
+        "root.Surface[7,0].Grip": {
+          "Before": "float:3F2E147B",
+          "After": "float:3F2A2EF8"
+        },
+        "root.Surface[7,0].Ruts": {
+          "Before": "float:3ECCCCCD",
+          "After": "float:3EEBF8D1"
+        },
+        "root.Surface[7,1].EffectiveGrip": {
+          "Before": "float:3F165FD9",
+          "After": "float:3F09BB29"
+        },
+        "root.Surface[7,1].Grip": {
+          "Before": "float:3F428F5C",
+          "After": "float:3F3CCB12"
+        },
+        "root.Surface[7,1].Ruts": {
+          "Before": "float:3E99999A",
+          "After": "float:3EC7BBDF"
+        },
+        "root.Surface[7,2].EffectiveGrip": {
+          "Before": "float:3F31C434",
+          "After": "float:3F20E5C7"
+        },
+        "root.Surface[7,2].Grip": {
+          "Before": "float:3F570A3E",
+          "After": "float:3F4FEDA7"
+        },
+        "root.Surface[7,2].Ruts": {
+          "Before": "float:3E4CCCCD",
+          "After": "float:3E9F4B11"
+        },
+        "root.Surface[7,3].EffectiveGrip": {
+          "Before": "float:3F4F0069",
+          "After": "float:3F45F5A7"
+        },
+        "root.Surface[7,3].Grip": {
+          "Before": "float:3F6B851F",
+          "After": "float:3F680628"
+        },
+        "root.Surface[7,3].Ruts": {
+          "Before": "float:3DCCCCCC",
+          "After": "float:3E1E55E1"
+        },
+        "root.Surface[7,4].EffectiveGrip": {
+          "Before": "float:3F6E147B",
+          "After": "float:3F6CC775"
+        },
+        "root.Surface[7,4].Grip": {
+          "Before": "float:3F800000",
+          "After": "float:3F7F88EC"
+        },
+        "root.Surface[7,4].Ruts": {
+          "Before": "float:00000000",
+          "After": "float:3BEE272E"
+        },
+        "root.Surface[8,0].EffectiveGrip": {
+          "Before": "float:3EF9A6B6",
+          "After": "float:3EF6771E"
+        },
+        "root.Surface[8,0].Grip": {
+          "Before": "float:3F2E147B",
+          "After": "float:3F2D4C70"
+        },
+        "root.Surface[8,0].Ruts": {
+          "Before": "float:3ECCCCCD",
+          "After": "float:3ED30D32"
+        },
+        "root.Surface[8,1].EffectiveGrip": {
+          "Before": "float:3F165FD9",
+          "After": "float:3F120F73"
+        },
+        "root.Surface[8,1].Grip": {
+          "Before": "float:3F428F5C",
+          "After": "float:3F409DBD"
+        },
+        "root.Surface[8,1].Ruts": {
+          "Before": "float:3E99999A",
+          "After": "float:3EA926A3"
+        },
+        "root.Surface[8,2].EffectiveGrip": {
+          "Before": "float:3F31C434",
+          "After": "float:3F2D4E17"
+        },
+        "root.Surface[8,2].Grip": {
+          "Before": "float:3F570A3E",
+          "After": "float:3F553024"
+        },
+        "root.Surface[8,2].Ruts": {
+          "Before": "float:3E4CCCCD",
+          "After": "float:3E6A6E89"
+        },
+        "root.Surface[8,3].EffectiveGrip": {
+          "Before": "float:3F4F0069",
+          "After": "float:3F4CA894"
+        },
+        "root.Surface[8,3].Grip": {
+          "Before": "float:3F6B851F",
+          "After": "float:3F6A9ED6"
+        },
+        "root.Surface[8,3].Ruts": {
+          "Before": "float:3DCCCCCC",
+          "After": "float:3DE9963B"
+        },
+        "root.Surface[8,4].EffectiveGrip": {
+          "Before": "float:3F6E147B",
+          "After": "float:3F6DBC20"
+        },
+        "root.Surface[8,4].Grip": {
+          "Before": "float:3F800000",
+          "After": "float:3F7FE070"
+        },
+        "root.Surface[8,4].Ruts": {
+          "Before": "float:00000000",
+          "After": "float:3AFC890B"
+        }
+      },
+      "ChangedStateLeafCount": 198,
+      "ExactCompletedFinalStateLeaves": {
+        "root.Final.Classification.Count": 4,
+        "root.Final.Classification[0].Crashed": "System.Boolean:False",
+        "root.Final.Classification[0].DistanceMeters": "float:44A6822F",
+        "root.Final.Classification[0].Dnf": "System.Boolean:False",
+        "root.Final.Classification[0].Finished": "System.Boolean:True",
+        "root.Final.Classification[0].LapsCompleted": "System.Int32:4",
+        "root.Final.Classification[0].Points": "System.Int32:3",
+        "root.Final.Classification[0].Position": "System.Int32:1",
+        "root.Final.Classification[0].Retired": "System.Boolean:False",
+        "root.Final.Classification[0].RiderId": "System.Int32:1",
+        "root.Final.Classification[0].Status": "enum:CoreSim.Race.RiderRaceStatus:2",
+        "root.Final.Classification[0].TimeSeconds": "float:42766C81",
+        "root.Final.Classification[1].Crashed": "System.Boolean:False",
+        "root.Final.Classification[1].DistanceMeters": "float:44B4F722",
+        "root.Final.Classification[1].Dnf": "System.Boolean:False",
+        "root.Final.Classification[1].Finished": "System.Boolean:True",
+        "root.Final.Classification[1].LapsCompleted": "System.Int32:4",
+        "root.Final.Classification[1].Points": "System.Int32:2",
+        "root.Final.Classification[1].Position": "System.Int32:2",
+        "root.Final.Classification[1].Retired": "System.Boolean:False",
+        "root.Final.Classification[1].RiderId": "System.Int32:4",
+        "root.Final.Classification[1].Status": "enum:CoreSim.Race.RiderRaceStatus:2",
+        "root.Final.Classification[1].TimeSeconds": "float:42777360",
+        "root.Final.Classification[2].Crashed": "System.Boolean:False",
+        "root.Final.Classification[2].DistanceMeters": "float:44B32C06",
+        "root.Final.Classification[2].Dnf": "System.Boolean:False",
+        "root.Final.Classification[2].Finished": "System.Boolean:True",
+        "root.Final.Classification[2].LapsCompleted": "System.Int32:4",
+        "root.Final.Classification[2].Points": "System.Int32:1",
+        "root.Final.Classification[2].Position": "System.Int32:3",
+        "root.Final.Classification[2].Retired": "System.Boolean:False",
+        "root.Final.Classification[2].RiderId": "System.Int32:3",
+        "root.Final.Classification[2].Status": "enum:CoreSim.Race.RiderRaceStatus:2",
+        "root.Final.Classification[2].TimeSeconds": "float:427775B1",
+        "root.Final.Classification[3].Crashed": "System.Boolean:False",
+        "root.Final.Classification[3].DistanceMeters": "float:44B0B46F",
+        "root.Final.Classification[3].Dnf": "System.Boolean:False",
+        "root.Final.Classification[3].Finished": "System.Boolean:True",
+        "root.Final.Classification[3].LapsCompleted": "System.Int32:4",
+        "root.Final.Classification[3].Points": "System.Int32:0",
+        "root.Final.Classification[3].Position": "System.Int32:4",
+        "root.Final.Classification[3].Retired": "System.Boolean:False",
+        "root.Final.Classification[3].RiderId": "System.Int32:2",
+        "root.Final.Classification[3].Status": "enum:CoreSim.Race.RiderRaceStatus:2",
+        "root.Final.Classification[3].TimeSeconds": "float:4278275A",
+        "root.Final.Riders.Count": 4,
+        "root.Final.Riders[0].ActiveSetup.Gearing": "float:3F000000",
+        "root.Final.Riders[0].ActiveSetup.TractionBias": "float:3F000000",
+        "root.Final.Riders[0].CanonicalProgress": "double:4042000000000000",
+        "root.Final.Riders[0].Condition": "float:3F800000",
+        "root.Final.Riders[0].ContactRecovery": null,
+        "root.Final.Riders[0].CurrentSegmentId": "System.Int32:8",
+        "root.Final.Riders[0].DistanceMeters": "float:44A6822F",
+        "root.Final.Riders[0].ElapsedTimeSeconds": "float:42766C81",
+        "root.Final.Riders[0].IsCrashed": "System.Boolean:False",
+        "root.Final.Riders[0].Lane": "System.Int32:1",
+        "root.Final.Riders[0].LapNumber": "System.Int32:4",
+        "root.Final.Riders[0].LapsCompleted": "System.Int32:4",
+        "root.Final.Riders[0].LastResolvedSegmentId": "System.Int32:8",
+        "root.Final.Riders[0].LateralPosition": "float:3F800000",
+        "root.Final.Riders[0].ManagerTrust": "float:3F000000",
+        "root.Final.Riders[0].Morale": "float:3F0A3D71",
+        "root.Final.Riders[0].Position.DistanceMeters": "float:44A6822F",
+        "root.Final.Riders[0].Position.LapsCompleted": "System.Int32:4",
+        "root.Final.Riders[0].Position.SegmentCount": "System.Int32:9",
+        "root.Final.Riders[0].Position.SegmentIndex": "System.Int32:0",
+        "root.Final.Riders[0].Position.SegmentProgress": "float:00000000",
+        "root.Final.Riders[0].Position.TotalSegmentProgress": "double:4042000000000000",
+        "root.Final.Riders[0].Profile.Gameplay.Abilities.Attack": "System.Int32:50",
+        "root.Final.Riders[0].Profile.Gameplay.Abilities.Defense": "System.Int32:50",
+        "root.Final.Riders[0].Profile.Gameplay.Abilities.PairRiding": "System.Int32:50",
+        "root.Final.Riders[0].Profile.Gameplay.Abilities.Reaction": "System.Int32:50",
+        "root.Final.Riders[0].Profile.Gameplay.Abilities.Start": "System.Int32:50",
+        "root.Final.Riders[0].Profile.Gameplay.Abilities.Strength": "System.Int32:50",
+        "root.Final.Riders[0].Profile.Gameplay.Abilities.Technique": "System.Int32:50",
+        "root.Final.Riders[0].Profile.Gameplay.Abilities.TrackReading": "System.Int32:50",
+        "root.Final.Riders[0].Profile.Gameplay.InteractionStyle.Combativeness": "float:3F000000",
+        "root.Final.Riders[0].Profile.Gameplay.InteractionStyle.PreferredLine": "enum:CoreSim.PreferredLine:1",
+        "root.Final.Riders[0].Profile.Gameplay.InteractionStyle.SetupIndependence": "float:3F000000",
+        "root.Final.Riders[0].Profile.Gameplay.Physical.MassKg": "float:428C0000",
+        "root.Final.Riders[0].Profile.HasExplicitGameplay": "System.Boolean:False",
+        "root.Final.Riders[0].Profile.Id": "System.Int32:1",
+        "root.Final.Riders[0].Profile.Name": "string:Audit 1",
+        "root.Final.Riders[0].Profile.Skills.Adaptability": "float:42480000",
+        "root.Final.Riders[0].Profile.Skills.PairRiding": "float:42480000",
+        "root.Final.Riders[0].Profile.Skills.SlideControl": "float:42480000",
+        "root.Final.Riders[0].Profile.Skills.Speed": "float:42480000",
+        "root.Final.Riders[0].Profile.Skills.Start": "float:42480000",
+        "root.Final.Riders[0].Profile.Skills.TrackReading": "float:42480000",
+        "root.Final.Riders[0].Profile.Style.LaneChangeTendency": "float:3F000000",
+        "root.Final.Riders[0].Profile.Style.OutsidePreference": "float:3F000000",
+        "root.Final.Riders[0].Profile.Style.RiskTolerance": "float:3F000000",
+        "root.Final.Riders[0].Profile.Style.SetupIndependence": "float:3F000000",
+        "root.Final.Riders[0].RiderId": "System.Int32:1",
+        "root.Final.Riders[0].Risk": "float:3E050521",
+        "root.Final.Riders[0].SegmentIndex": "System.Int32:0",
+        "root.Final.Riders[0].SegmentProgress": "float:00000000",
+        "root.Final.Riders[0].Speed": "float:41B8336E",
+        "root.Final.Riders[0].StartingGate": "enum:CoreSim.StartingGate:0",
+        "root.Final.Riders[0].StartingPosition.CenterPhysicalOffsetMeters": "float:3FC00000",
+        "root.Final.Riders[0].StartingPosition.Gate": "enum:CoreSim.StartingGate:0",
+        "root.Final.Riders[0].StartingPosition.LowerPhysicalOffsetMeters": "float:00000000",
+        "root.Final.Riders[0].StartingPosition.NominalWidthMeters": "float:40400000",
+        "root.Final.Riders[0].StartingPosition.UpperPhysicalOffsetMeters": "float:40400000",
+        "root.Final.Riders[0].Status": "enum:CoreSim.Race.RiderRaceStatus:2",
+        "root.Final.Riders[1].ActiveSetup.Gearing": "float:3F000000",
+        "root.Final.Riders[1].ActiveSetup.TractionBias": "float:3F000000",
+        "root.Final.Riders[1].CanonicalProgress": "double:4042000000000000",
+        "root.Final.Riders[1].Condition": "float:3F800000",
+        "root.Final.Riders[1].ContactRecovery": null,
+        "root.Final.Riders[1].CurrentSegmentId": "System.Int32:8",
+        "root.Final.Riders[1].DistanceMeters": "float:44B0B46F",
+        "root.Final.Riders[1].ElapsedTimeSeconds": "float:4278275A",
+        "root.Final.Riders[1].IsCrashed": "System.Boolean:False",
+        "root.Final.Riders[1].Lane": "System.Int32:1",
+        "root.Final.Riders[1].LapNumber": "System.Int32:4",
+        "root.Final.Riders[1].LapsCompleted": "System.Int32:4",
+        "root.Final.Riders[1].LastResolvedSegmentId": "System.Int32:8",
+        "root.Final.Riders[1].LateralPosition": "float:3F019A8C",
+        "root.Final.Riders[1].ManagerTrust": "float:3F000000",
+        "root.Final.Riders[1].Morale": "float:3EF33333",
+        "root.Final.Riders[1].Position.DistanceMeters": "float:44B0B46F",
+        "root.Final.Riders[1].Position.LapsCompleted": "System.Int32:4",
+        "root.Final.Riders[1].Position.SegmentCount": "System.Int32:9",
+        "root.Final.Riders[1].Position.SegmentIndex": "System.Int32:0",
+        "root.Final.Riders[1].Position.SegmentProgress": "float:00000000",
+        "root.Final.Riders[1].Position.TotalSegmentProgress": "double:4042000000000000",
+        "root.Final.Riders[1].Profile.Gameplay.Abilities.Attack": "System.Int32:50",
+        "root.Final.Riders[1].Profile.Gameplay.Abilities.Defense": "System.Int32:50",
+        "root.Final.Riders[1].Profile.Gameplay.Abilities.PairRiding": "System.Int32:50",
+        "root.Final.Riders[1].Profile.Gameplay.Abilities.Reaction": "System.Int32:50",
+        "root.Final.Riders[1].Profile.Gameplay.Abilities.Start": "System.Int32:50",
+        "root.Final.Riders[1].Profile.Gameplay.Abilities.Strength": "System.Int32:50",
+        "root.Final.Riders[1].Profile.Gameplay.Abilities.Technique": "System.Int32:50",
+        "root.Final.Riders[1].Profile.Gameplay.Abilities.TrackReading": "System.Int32:50",
+        "root.Final.Riders[1].Profile.Gameplay.InteractionStyle.Combativeness": "float:3F000000",
+        "root.Final.Riders[1].Profile.Gameplay.InteractionStyle.PreferredLine": "enum:CoreSim.PreferredLine:1",
+        "root.Final.Riders[1].Profile.Gameplay.InteractionStyle.SetupIndependence": "float:3F000000",
+        "root.Final.Riders[1].Profile.Gameplay.Physical.MassKg": "float:428C0000",
+        "root.Final.Riders[1].Profile.HasExplicitGameplay": "System.Boolean:False",
+        "root.Final.Riders[1].Profile.Id": "System.Int32:2",
+        "root.Final.Riders[1].Profile.Name": "string:Audit 2",
+        "root.Final.Riders[1].Profile.Skills.Adaptability": "float:42480000",
+        "root.Final.Riders[1].Profile.Skills.PairRiding": "float:42480000",
+        "root.Final.Riders[1].Profile.Skills.SlideControl": "float:42480000",
+        "root.Final.Riders[1].Profile.Skills.Speed": "float:42480000",
+        "root.Final.Riders[1].Profile.Skills.Start": "float:42480000",
+        "root.Final.Riders[1].Profile.Skills.TrackReading": "float:42480000",
+        "root.Final.Riders[1].Profile.Style.LaneChangeTendency": "float:3F000000",
+        "root.Final.Riders[1].Profile.Style.OutsidePreference": "float:3F000000",
+        "root.Final.Riders[1].Profile.Style.RiskTolerance": "float:3F000000",
+        "root.Final.Riders[1].Profile.Style.SetupIndependence": "float:3F000000",
+        "root.Final.Riders[1].RiderId": "System.Int32:2",
+        "root.Final.Riders[1].Risk": "float:3DCCD120",
+        "root.Final.Riders[1].SegmentIndex": "System.Int32:0",
+        "root.Final.Riders[1].SegmentProgress": "float:00000000",
+        "root.Final.Riders[1].Speed": "float:41B7552C",
+        "root.Final.Riders[1].StartingGate": "enum:CoreSim.StartingGate:1",
+        "root.Final.Riders[1].StartingPosition.CenterPhysicalOffsetMeters": "float:40900000",
+        "root.Final.Riders[1].StartingPosition.Gate": "enum:CoreSim.StartingGate:1",
+        "root.Final.Riders[1].StartingPosition.LowerPhysicalOffsetMeters": "float:40400000",
+        "root.Final.Riders[1].StartingPosition.NominalWidthMeters": "float:40400000",
+        "root.Final.Riders[1].StartingPosition.UpperPhysicalOffsetMeters": "float:40C00000",
+        "root.Final.Riders[1].Status": "enum:CoreSim.Race.RiderRaceStatus:2",
+        "root.Final.Riders[2].ActiveSetup.Gearing": "float:3F000000",
+        "root.Final.Riders[2].ActiveSetup.TractionBias": "float:3F000000",
+        "root.Final.Riders[2].CanonicalProgress": "double:4042000000000000",
+        "root.Final.Riders[2].Condition": "float:3F800000",
+        "root.Final.Riders[2].ContactRecovery": null,
+        "root.Final.Riders[2].CurrentSegmentId": "System.Int32:8",
+        "root.Final.Riders[2].DistanceMeters": "float:44B32C06",
+        "root.Final.Riders[2].ElapsedTimeSeconds": "float:427775B1",
+        "root.Final.Riders[2].IsCrashed": "System.Boolean:False",
+        "root.Final.Riders[2].Lane": "System.Int32:2",
+        "root.Final.Riders[2].LapNumber": "System.Int32:4",
+        "root.Final.Riders[2].LapsCompleted": "System.Int32:4",
+        "root.Final.Riders[2].LastResolvedSegmentId": "System.Int32:8",
+        "root.Final.Riders[2].LateralPosition": "float:40000000",
+        "root.Final.Riders[2].ManagerTrust": "float:3F000000",
+        "root.Final.Riders[2].Morale": "float:3EFAE148",
+        "root.Final.Riders[2].Position.DistanceMeters": "float:44B32C06",
+        "root.Final.Riders[2].Position.LapsCompleted": "System.Int32:4",
+        "root.Final.Riders[2].Position.SegmentCount": "System.Int32:9",
+        "root.Final.Riders[2].Position.SegmentIndex": "System.Int32:0",
+        "root.Final.Riders[2].Position.SegmentProgress": "float:00000000",
+        "root.Final.Riders[2].Position.TotalSegmentProgress": "double:4042000000000000",
+        "root.Final.Riders[2].Profile.Gameplay.Abilities.Attack": "System.Int32:50",
+        "root.Final.Riders[2].Profile.Gameplay.Abilities.Defense": "System.Int32:50",
+        "root.Final.Riders[2].Profile.Gameplay.Abilities.PairRiding": "System.Int32:50",
+        "root.Final.Riders[2].Profile.Gameplay.Abilities.Reaction": "System.Int32:50",
+        "root.Final.Riders[2].Profile.Gameplay.Abilities.Start": "System.Int32:50",
+        "root.Final.Riders[2].Profile.Gameplay.Abilities.Strength": "System.Int32:50",
+        "root.Final.Riders[2].Profile.Gameplay.Abilities.Technique": "System.Int32:50",
+        "root.Final.Riders[2].Profile.Gameplay.Abilities.TrackReading": "System.Int32:50",
+        "root.Final.Riders[2].Profile.Gameplay.InteractionStyle.Combativeness": "float:3F000000",
+        "root.Final.Riders[2].Profile.Gameplay.InteractionStyle.PreferredLine": "enum:CoreSim.PreferredLine:1",
+        "root.Final.Riders[2].Profile.Gameplay.InteractionStyle.SetupIndependence": "float:3F000000",
+        "root.Final.Riders[2].Profile.Gameplay.Physical.MassKg": "float:428C0000",
+        "root.Final.Riders[2].Profile.HasExplicitGameplay": "System.Boolean:False",
+        "root.Final.Riders[2].Profile.Id": "System.Int32:3",
+        "root.Final.Riders[2].Profile.Name": "string:Audit 3",
+        "root.Final.Riders[2].Profile.Skills.Adaptability": "float:42480000",
+        "root.Final.Riders[2].Profile.Skills.PairRiding": "float:42480000",
+        "root.Final.Riders[2].Profile.Skills.SlideControl": "float:42480000",
+        "root.Final.Riders[2].Profile.Skills.Speed": "float:42480000",
+        "root.Final.Riders[2].Profile.Skills.Start": "float:42480000",
+        "root.Final.Riders[2].Profile.Skills.TrackReading": "float:42480000",
+        "root.Final.Riders[2].Profile.Style.LaneChangeTendency": "float:3F000000",
+        "root.Final.Riders[2].Profile.Style.OutsidePreference": "float:3F000000",
+        "root.Final.Riders[2].Profile.Style.RiskTolerance": "float:3F000000",
+        "root.Final.Riders[2].Profile.Style.SetupIndependence": "float:3F000000",
+        "root.Final.Riders[2].RiderId": "System.Int32:3",
+        "root.Final.Riders[2].Risk": "float:3E050521",
+        "root.Final.Riders[2].SegmentIndex": "System.Int32:0",
+        "root.Final.Riders[2].SegmentProgress": "float:00000000",
+        "root.Final.Riders[2].Speed": "float:41CA31CC",
+        "root.Final.Riders[2].StartingGate": "enum:CoreSim.StartingGate:2",
+        "root.Final.Riders[2].StartingPosition.CenterPhysicalOffsetMeters": "float:40F00000",
+        "root.Final.Riders[2].StartingPosition.Gate": "enum:CoreSim.StartingGate:2",
+        "root.Final.Riders[2].StartingPosition.LowerPhysicalOffsetMeters": "float:40C00000",
+        "root.Final.Riders[2].StartingPosition.NominalWidthMeters": "float:40400000",
+        "root.Final.Riders[2].StartingPosition.UpperPhysicalOffsetMeters": "float:41100000",
+        "root.Final.Riders[2].Status": "enum:CoreSim.Race.RiderRaceStatus:2",
+        "root.Final.Riders[3].ActiveSetup.Gearing": "float:3F000000",
+        "root.Final.Riders[3].ActiveSetup.TractionBias": "float:3F000000",
+        "root.Final.Riders[3].CanonicalProgress": "double:4042000000000000",
+        "root.Final.Riders[3].Condition": "float:3F800000",
+        "root.Final.Riders[3].ContactRecovery": null,
+        "root.Final.Riders[3].CurrentSegmentId": "System.Int32:8",
+        "root.Final.Riders[3].DistanceMeters": "float:44B4F722",
+        "root.Final.Riders[3].ElapsedTimeSeconds": "float:42777360",
+        "root.Final.Riders[3].IsCrashed": "System.Boolean:False",
+        "root.Final.Riders[3].Lane": "System.Int32:1",
+        "root.Final.Riders[3].LapNumber": "System.Int32:4",
+        "root.Final.Riders[3].LapsCompleted": "System.Int32:4",
+        "root.Final.Riders[3].LastResolvedSegmentId": "System.Int32:8",
+        "root.Final.Riders[3].LateralPosition": "float:3F800000",
+        "root.Final.Riders[3].ManagerTrust": "float:3F000000",
+        "root.Final.Riders[3].Morale": "float:3F03D70A",
+        "root.Final.Riders[3].Position.DistanceMeters": "float:44B4F722",
+        "root.Final.Riders[3].Position.LapsCompleted": "System.Int32:4",
+        "root.Final.Riders[3].Position.SegmentCount": "System.Int32:9",
+        "root.Final.Riders[3].Position.SegmentIndex": "System.Int32:0",
+        "root.Final.Riders[3].Position.SegmentProgress": "float:00000000",
+        "root.Final.Riders[3].Position.TotalSegmentProgress": "double:4042000000000000",
+        "root.Final.Riders[3].Profile.Gameplay.Abilities.Attack": "System.Int32:50",
+        "root.Final.Riders[3].Profile.Gameplay.Abilities.Defense": "System.Int32:50",
+        "root.Final.Riders[3].Profile.Gameplay.Abilities.PairRiding": "System.Int32:50",
+        "root.Final.Riders[3].Profile.Gameplay.Abilities.Reaction": "System.Int32:50",
+        "root.Final.Riders[3].Profile.Gameplay.Abilities.Start": "System.Int32:50",
+        "root.Final.Riders[3].Profile.Gameplay.Abilities.Strength": "System.Int32:50",
+        "root.Final.Riders[3].Profile.Gameplay.Abilities.Technique": "System.Int32:50",
+        "root.Final.Riders[3].Profile.Gameplay.Abilities.TrackReading": "System.Int32:50",
+        "root.Final.Riders[3].Profile.Gameplay.InteractionStyle.Combativeness": "float:3F000000",
+        "root.Final.Riders[3].Profile.Gameplay.InteractionStyle.PreferredLine": "enum:CoreSim.PreferredLine:1",
+        "root.Final.Riders[3].Profile.Gameplay.InteractionStyle.SetupIndependence": "float:3F000000",
+        "root.Final.Riders[3].Profile.Gameplay.Physical.MassKg": "float:428C0000",
+        "root.Final.Riders[3].Profile.HasExplicitGameplay": "System.Boolean:False",
+        "root.Final.Riders[3].Profile.Id": "System.Int32:4",
+        "root.Final.Riders[3].Profile.Name": "string:Audit 4",
+        "root.Final.Riders[3].Profile.Skills.Adaptability": "float:42480000",
+        "root.Final.Riders[3].Profile.Skills.PairRiding": "float:42480000",
+        "root.Final.Riders[3].Profile.Skills.SlideControl": "float:42480000",
+        "root.Final.Riders[3].Profile.Skills.Speed": "float:42480000",
+        "root.Final.Riders[3].Profile.Skills.Start": "float:42480000",
+        "root.Final.Riders[3].Profile.Skills.TrackReading": "float:42480000",
+        "root.Final.Riders[3].Profile.Style.LaneChangeTendency": "float:3F000000",
+        "root.Final.Riders[3].Profile.Style.OutsidePreference": "float:3F000000",
+        "root.Final.Riders[3].Profile.Style.RiskTolerance": "float:3F000000",
+        "root.Final.Riders[3].Profile.Style.SetupIndependence": "float:3F000000",
+        "root.Final.Riders[3].RiderId": "System.Int32:4",
+        "root.Final.Riders[3].Risk": "float:3DCCD120",
+        "root.Final.Riders[3].SegmentIndex": "System.Int32:0",
+        "root.Final.Riders[3].SegmentProgress": "float:00000000",
+        "root.Final.Riders[3].Speed": "float:41C07C93",
+        "root.Final.Riders[3].StartingGate": "enum:CoreSim.StartingGate:3",
+        "root.Final.Riders[3].StartingPosition.CenterPhysicalOffsetMeters": "float:41280000",
+        "root.Final.Riders[3].StartingPosition.Gate": "enum:CoreSim.StartingGate:3",
+        "root.Final.Riders[3].StartingPosition.LowerPhysicalOffsetMeters": "float:41100000",
+        "root.Final.Riders[3].StartingPosition.NominalWidthMeters": "float:40400000",
+        "root.Final.Riders[3].StartingPosition.UpperPhysicalOffsetMeters": "float:41400000",
+        "root.Final.Riders[3].Status": "enum:CoreSim.Race.RiderRaceStatus:2",
+        "root.Final.Surface.Lanes": 5,
+        "root.Final.Surface.Segments": 9,
+        "root.Final.Surface[0,0].EffectiveGrip": "float:3EF6E7B8",
+        "root.Final.Surface[0,0].Grip": "float:3F2D681F",
+        "root.Final.Surface[0,0].Moisture": "float:00000000",
+        "root.Final.Surface[0,0].Ruts": "float:3ED22FBB",
+        "root.Final.Surface[0,1].EffectiveGrip": "float:3F119585",
+        "root.Final.Surface[0,1].Grip": "float:3F406669",
+        "root.Final.Surface[0,1].Moisture": "float:00000000",
+        "root.Final.Surface[0,1].Ruts": "float:3EAAE11E",
+        "root.Final.Surface[0,2].EffectiveGrip": "float:3F2CE286",
+        "root.Final.Surface[0,2].Grip": "float:3F550338",
+        "root.Final.Surface[0,2].Moisture": "float:00000000",
+        "root.Final.Surface[0,2].Ruts": "float:3E6D3D35",
+        "root.Final.Surface[0,3].EffectiveGrip": "float:3F4D4815",
+        "root.Final.Surface[0,3].Grip": "float:3F6ADC2E",
+        "root.Final.Surface[0,3].Moisture": "float:00000000",
+        "root.Final.Surface[0,3].Ruts": "float:3DE1EB19",
+        "root.Final.Surface[0,4].EffectiveGrip": "float:3F6DD389",
+        "root.Final.Surface[0,4].Grip": "float:3F7FE8CC",
+        "root.Final.Surface[0,4].Moisture": "float:00000000",
+        "root.Final.Surface[0,4].Ruts": "float:3AB997F5",
+        "root.Final.Surface[1,0].EffectiveGrip": "float:3EE8F27A",
+        "root.Final.Surface[1,0].Grip": "float:3F29EF4E",
+        "root.Final.Surface[1,0].Moisture": "float:00000000",
+        "root.Final.Surface[1,0].Ruts": "float:3EEDF639",
+        "root.Final.Surface[1,1].EffectiveGrip": "float:3F0620A0",
+        "root.Final.Surface[1,1].Grip": "float:3F3B1C00",
+        "root.Final.Surface[1,1].Moisture": "float:00000000",
+        "root.Final.Surface[1,1].Ruts": "float:3ED53485",
+        "root.Final.Surface[1,2].EffectiveGrip": "float:3F214FB7",
+        "root.Final.Surface[1,2].Grip": "float:3F501B42",
+        "root.Final.Surface[1,2].Moisture": "float:00000000",
+        "root.Final.Surface[1,2].Ruts": "float:3E9DDE4F",
+        "root.Final.Surface[1,3].EffectiveGrip": "float:3F48B878",
+        "root.Final.Surface[1,3].Grip": "float:3F69193E",
+        "root.Final.Surface[1,3].Moisture": "float:00000000",
+        "root.Final.Surface[1,3].Ruts": "float:3E0D2465",
+        "root.Final.Surface[1,4].EffectiveGrip": "float:3F6D57C3",
+        "root.Final.Surface[1,4].Grip": "float:3F7FBC8E",
+        "root.Final.Surface[1,4].Moisture": "float:00000000",
+        "root.Final.Surface[1,4].Ruts": "float:3B86E338",
+        "root.Final.Surface[2,0].EffectiveGrip": "float:3EE9F3E4",
+        "root.Final.Surface[2,0].Grip": "float:3F2A3010",
+        "root.Final.Surface[2,0].Moisture": "float:00000000",
+        "root.Final.Surface[2,0].Ruts": "float:3EEBF029",
+        "root.Final.Surface[2,1].EffectiveGrip": "float:3F079D9A",
+        "root.Final.Surface[2,1].Grip": "float:3F3BCE98",
+        "root.Final.Surface[2,1].Moisture": "float:00000000",
+        "root.Final.Surface[2,1].Ruts": "float:3ECF9FB3",
+        "root.Final.Surface[2,2].EffectiveGrip": "float:3F21D19F",
+        "root.Final.Surface[2,2].Grip": "float:3F50531A",
+        "root.Final.Surface[2,2].Moisture": "float:00000000",
+        "root.Final.Surface[2,2].Ruts": "float:3E9C1F7F",
+        "root.Final.Surface[2,3].EffectiveGrip": "float:3F475F4E",
+        "root.Final.Surface[2,3].Grip": "float:3F68931C",
+        "root.Final.Surface[2,3].Moisture": "float:00000000",
+        "root.Final.Surface[2,3].Ruts": "float:3E158695",
+        "root.Final.Surface[2,4].EffectiveGrip": "float:3F6D06E6",
+        "root.Final.Surface[2,4].Grip": "float:3F7F9FA1",
+        "root.Final.Surface[2,4].Moisture": "float:00000000",
+        "root.Final.Surface[2,4].Ruts": "float:3BC0BD12",
+        "root.Final.Surface[3,0].EffectiveGrip": "float:3EEEC490",
+        "root.Final.Surface[3,0].Grip": "float:3F2B6494",
+        "root.Final.Surface[3,0].Moisture": "float:00000000",
+        "root.Final.Surface[3,0].Ruts": "float:3EE24C05",
+        "root.Final.Surface[3,1].EffectiveGrip": "float:3F07D964",
+        "root.Final.Surface[3,1].Grip": "float:3F3BEA8C",
+        "root.Final.Surface[3,1].Moisture": "float:00000000",
+        "root.Final.Surface[3,1].Ruts": "float:3ECEC011",
+        "root.Final.Surface[3,2].EffectiveGrip": "float:3F2134BB",
+        "root.Final.Surface[3,2].Grip": "float:3F500FA3",
+        "root.Final.Surface[3,2].Moisture": "float:00000000",
+        "root.Final.Surface[3,2].Ruts": "float:3E9E3B23",
+        "root.Final.Surface[3,3].EffectiveGrip": "float:3F444334",
+        "root.Final.Surface[3,3].Grip": "float:3F675C42",
+        "root.Final.Surface[3,3].Moisture": "float:00000000",
+        "root.Final.Surface[3,3].Ruts": "float:3E28F426",
+        "root.Final.Surface[3,4].EffectiveGrip": "float:3F6C590C",
+        "root.Final.Surface[3,4].Grip": "float:3F7F6162",
+        "root.Final.Surface[3,4].Moisture": "float:00000000",
+        "root.Final.Surface[3,4].Ruts": "float:3C1E9D66",
+        "root.Final.Surface[4,0].EffectiveGrip": "float:3EF615A4",
+        "root.Final.Surface[4,0].Grip": "float:3F2D3474",
+        "root.Final.Surface[4,0].Moisture": "float:00000000",
+        "root.Final.Surface[4,0].Ruts": "float:3ED3CD05",
+        "root.Final.Surface[4,1].EffectiveGrip": "float:3F128325",
+        "root.Final.Surface[4,1].Grip": "float:3F40D229",
+        "root.Final.Surface[4,1].Moisture": "float:00000000",
+        "root.Final.Surface[4,1].Ruts": "float:3EA78349",
+        "root.Final.Surface[4,2].EffectiveGrip": "float:3F2D613D",
+        "root.Final.Surface[4,2].Grip": "float:3F553821",
+        "root.Final.Surface[4,2].Moisture": "float:00000000",
+        "root.Final.Surface[4,2].Ruts": "float:3E69EEA2",
+        "root.Final.Surface[4,3].EffectiveGrip": "float:3F4C3DE6",
+        "root.Final.Surface[4,3].Grip": "float:3F6A75C1",
+        "root.Final.Surface[4,3].Moisture": "float:00000000",
+        "root.Final.Surface[4,3].Ruts": "float:3DEEB87F",
+        "root.Final.Surface[4,4].EffectiveGrip": "float:3F6DA49D",
+        "root.Final.Surface[4,4].Grip": "float:3F7FD808",
+        "root.Final.Surface[4,4].Moisture": "float:00000000",
+        "root.Final.Surface[4,4].Ruts": "float:3B1FDF22",
+        "root.Final.Surface[5,0].EffectiveGrip": "float:3EE6E7A4",
+        "root.Final.Surface[5,0].Grip": "float:3F296B69",
+        "root.Final.Surface[5,0].Moisture": "float:00000000",
+        "root.Final.Surface[5,0].Ruts": "float:3EF21555",
+        "root.Final.Surface[5,1].EffectiveGrip": "float:3F083341",
+        "root.Final.Surface[5,1].Grip": "float:3F3C1485",
+        "root.Final.Surface[5,1].Moisture": "float:00000000",
+        "root.Final.Surface[5,1].Ruts": "float:3ECD703B",
+        "root.Final.Surface[5,2].EffectiveGrip": "float:3F225B48",
+        "root.Final.Surface[5,2].Grip": "float:3F508E35",
+        "root.Final.Surface[5,2].Moisture": "float:00000000",
+        "root.Final.Surface[5,2].Ruts": "float:3E9A46B4",
+        "root.Final.Surface[5,3].EffectiveGrip": "float:3F476CEC",
+        "root.Final.Surface[5,3].Grip": "float:3F689869",
+        "root.Final.Surface[5,3].Moisture": "float:00000000",
+        "root.Final.Surface[5,3].Ruts": "float:3E1531CB",
+        "root.Final.Surface[5,4].EffectiveGrip": "float:3F6D0591",
+        "root.Final.Surface[5,4].Grip": "float:3F7F9F27",
+        "root.Final.Surface[5,4].Moisture": "float:00000000",
+        "root.Final.Surface[5,4].Ruts": "float:3BC1B112",
+        "root.Final.Surface[6,0].EffectiveGrip": "float:3EE5FEE4",
+        "root.Final.Surface[6,0].Grip": "float:3F29308B",
+        "root.Final.Surface[6,0].Moisture": "float:00000000",
+        "root.Final.Surface[6,0].Ruts": "float:3EF3EC44",
+        "root.Final.Surface[6,1].EffectiveGrip": "float:3F095367",
+        "root.Final.Surface[6,1].Grip": "float:3F3C9AD3",
+        "root.Final.Surface[6,1].Moisture": "float:00000000",
+        "root.Final.Surface[6,1].Ruts": "float:3EC93DDC",
+        "root.Final.Surface[6,2].EffectiveGrip": "float:3F2181A1",
+        "root.Final.Surface[6,2].Grip": "float:3F5030BA",
+        "root.Final.Surface[6,2].Moisture": "float:00000000",
+        "root.Final.Surface[6,2].Ruts": "float:3E9D3298",
+        "root.Final.Surface[6,3].EffectiveGrip": "float:3F4826E3",
+        "root.Final.Surface[6,3].Grip": "float:3F68E0B8",
+        "root.Final.Surface[6,3].Moisture": "float:00000000",
+        "root.Final.Surface[6,3].Ruts": "float:3E10ACE5",
+        "root.Final.Surface[6,4].EffectiveGrip": "float:3F6D3ED7",
+        "root.Final.Surface[6,4].Grip": "float:3F7FB3A4",
+        "root.Final.Surface[6,4].Moisture": "float:00000000",
+        "root.Final.Surface[6,4].Ruts": "float:3B98B6E7",
+        "root.Final.Surface[7,0].EffectiveGrip": "float:3EE9EF90",
+        "root.Final.Surface[7,0].Grip": "float:3F2A2EF8",
+        "root.Final.Surface[7,0].Moisture": "float:00000000",
+        "root.Final.Surface[7,0].Ruts": "float:3EEBF8D1",
+        "root.Final.Surface[7,1].EffectiveGrip": "float:3F09BB29",
+        "root.Final.Surface[7,1].Grip": "float:3F3CCB12",
+        "root.Final.Surface[7,1].Moisture": "float:00000000",
+        "root.Final.Surface[7,1].Ruts": "float:3EC7BBDF",
+        "root.Final.Surface[7,2].EffectiveGrip": "float:3F20E5C7",
+        "root.Final.Surface[7,2].Grip": "float:3F4FEDA7",
+        "root.Final.Surface[7,2].Moisture": "float:00000000",
+        "root.Final.Surface[7,2].Ruts": "float:3E9F4B11",
+        "root.Final.Surface[7,3].EffectiveGrip": "float:3F45F5A7",
+        "root.Final.Surface[7,3].Grip": "float:3F680628",
+        "root.Final.Surface[7,3].Moisture": "float:00000000",
+        "root.Final.Surface[7,3].Ruts": "float:3E1E55E1",
+        "root.Final.Surface[7,4].EffectiveGrip": "float:3F6CC775",
+        "root.Final.Surface[7,4].Grip": "float:3F7F88EC",
+        "root.Final.Surface[7,4].Moisture": "float:00000000",
+        "root.Final.Surface[7,4].Ruts": "float:3BEE272E",
+        "root.Final.Surface[8,0].EffectiveGrip": "float:3EF6771E",
+        "root.Final.Surface[8,0].Grip": "float:3F2D4C70",
+        "root.Final.Surface[8,0].Moisture": "float:00000000",
+        "root.Final.Surface[8,0].Ruts": "float:3ED30D32",
+        "root.Final.Surface[8,1].EffectiveGrip": "float:3F120F73",
+        "root.Final.Surface[8,1].Grip": "float:3F409DBD",
+        "root.Final.Surface[8,1].Moisture": "float:00000000",
+        "root.Final.Surface[8,1].Ruts": "float:3EA926A3",
+        "root.Final.Surface[8,2].EffectiveGrip": "float:3F2D4E17",
+        "root.Final.Surface[8,2].Grip": "float:3F553024",
+        "root.Final.Surface[8,2].Moisture": "float:00000000",
+        "root.Final.Surface[8,2].Ruts": "float:3E6A6E89",
+        "root.Final.Surface[8,3].EffectiveGrip": "float:3F4CA894",
+        "root.Final.Surface[8,3].Grip": "float:3F6A9ED6",
+        "root.Final.Surface[8,3].Moisture": "float:00000000",
+        "root.Final.Surface[8,3].Ruts": "float:3DE9963B",
+        "root.Final.Surface[8,4].EffectiveGrip": "float:3F6DBC20",
+        "root.Final.Surface[8,4].Grip": "float:3F7FE070",
+        "root.Final.Surface[8,4].Moisture": "float:00000000",
+        "root.Final.Surface[8,4].Ruts": "float:3AFC890B"
+      },
+      "FinalLogCoveredByFinalHash": true
+    }
+  },
+  "Performance": {
+    "Environment": {
+      "OS": "Microsoft Windows NT 10.0.19045.0",
+      "Runtime": "8.0.26",
+      "Frequency": 10000000
+    },
+    "Warmups": 1,
+    "Repeats": 5,
+    "CountersSeparateWarmup": true,
+    "Cases": [
+      {
+        "Id": "balanced-motoarena",
+        "Seed": 19,
+        "Configuration": "C",
+        "Before": {
+          "MedianMilliseconds": 4062.4999,
+          "MedianAllocatedBytes": 283301528,
+          "Failed": false,
+          "Work": {
+            "ActualProductionVerifications": 36,
+            "Clusters": 16,
+            "FinalContactComponents": 0,
+            "JointCombinations": 162,
+            "JointCombinationsScored": 162,
+            "LegacyFallbackAttempts": 0,
+            "NarrowPhaseEvaluations": 3858880,
+            "PairAlternativeChecks": 323,
+            "ProductionResolutions": 626,
+            "ResponsePasses": 16,
+            "SafetyContactComponents": 0,
+            "SafetyJointCombinations": 0,
+            "SafetyPasses": 0,
+            "UniqueRiderAlternativeProjections": 135
+          },
+          "Operations": {},
+          "FinalHash": "FCF2628B428DB3CF9182BEE8FDA46C7272D3302E94C6663706172168FFE0B70C"
+        },
+        "After": {
+          "MedianMilliseconds": 3899.6408,
+          "MedianAllocatedBytes": 283316640,
+          "Failed": false,
+          "Work": {
+            "ActualProductionVerifications": 36,
+            "Clusters": 16,
+            "FinalContactComponents": 0,
+            "JointCombinations": 162,
+            "JointCombinationsScored": 162,
+            "LegacyFallbackAttempts": 0,
+            "NarrowPhaseEvaluations": 3858880,
+            "PairAlternativeChecks": 323,
+            "ProductionResolutions": 626,
+            "ResponsePasses": 16,
+            "SafetyContactComponents": 0,
+            "SafetyJointCombinations": 0,
+            "SafetyPasses": 0,
+            "UniqueRiderAlternativeProjections": 135
+          },
+          "Operations": {},
+          "FinalHash": "FCF2628B428DB3CF9182BEE8FDA46C7272D3302E94C6663706172168FFE0B70C"
+        },
+        "TimeChangePercent": -4.008839483294501,
+        "AllocationChangePercent": 0.0053342458498750744
+      },
+      {
+        "Id": "contact-heavy",
+        "Seed": 19,
+        "Configuration": "C",
+        "Before": {
+          "MedianMilliseconds": 700.6711,
+          "MedianAllocatedBytes": 78826840,
+          "Failed": false,
+          "Work": {
+            "ActualProductionVerifications": 34,
+            "Clusters": 1,
+            "FinalContactComponents": 1,
+            "JointCombinations": 162,
+            "JointCombinationsScored": 162,
+            "LegacyFallbackAttempts": 0,
+            "NarrowPhaseEvaluations": 347505,
+            "PairAlternativeChecks": 78,
+            "ProductionResolutions": 99,
+            "ResponsePasses": 2,
+            "SafetyContactComponents": 1,
+            "SafetyJointCombinations": 81,
+            "SafetyPasses": 1,
+            "UniqueRiderAlternativeProjections": 20
+          },
+          "Operations": {
+            "SafetyFrozenReuse": 4,
+            "SafetyProductionAttempt": 4,
+            "SafetyProjectionCacheHit": 2056,
+            "SafetyProjectionRequest": 8
+          },
+          "FinalHash": "D3B6EC0E3932AD574863D1BFA16A1AF3D0FDA3E54F9BE1427767B5E2A0320085"
+        },
+        "After": {
+          "MedianMilliseconds": 615.2683,
+          "MedianAllocatedBytes": 78743368,
+          "Failed": false,
+          "Work": {
+            "ActualProductionVerifications": 34,
+            "Clusters": 1,
+            "FinalContactComponents": 1,
+            "JointCombinations": 162,
+            "JointCombinationsScored": 162,
+            "LegacyFallbackAttempts": 0,
+            "NarrowPhaseEvaluations": 347505,
+            "PairAlternativeChecks": 78,
+            "ProductionResolutions": 99,
+            "ResponsePasses": 2,
+            "SafetyContactComponents": 1,
+            "SafetyJointCombinations": 81,
+            "SafetyPasses": 1,
+            "UniqueRiderAlternativeProjections": 20
+          },
+          "Operations": {
+            "SafetyFrozenReuse": 4,
+            "SafetyProductionAttempt": 4,
+            "SafetyProjectionCacheHit": 436,
+            "SafetyProjectionRequest": 8
+          },
+          "FinalHash": "D3B6EC0E3932AD574863D1BFA16A1AF3D0FDA3E54F9BE1427767B5E2A0320085"
+        },
+        "TimeChangePercent": -12.188714505279307,
+        "AllocationChangePercent": -0.1058928659324665
+      },
+      {
+        "Id": "outside",
+        "Seed": 7,
+        "Configuration": "B",
+        "Before": {
+          "MedianMilliseconds": 140.8246,
+          "MedianAllocatedBytes": 13486344,
+          "Failed": true,
+          "Work": {},
+          "Operations": {
+            "NarrowPhaseAtFailure": 112906,
+            "ProductionResolutionAtFailure": 43,
+            "SafetyFrozenReuse": 1,
+            "SafetyProductionAttempt": 1,
+            "SafetyProjectionFailure": 1,
+            "SafetyProjectionRequest": 2
+          },
+          "FinalHash": null
+        },
+        "After": {
+          "MedianMilliseconds": 5227.172,
+          "MedianAllocatedBytes": 352263896,
+          "Failed": false,
+          "Work": {
+            "ActualProductionVerifications": 37,
+            "Clusters": 30,
+            "FinalContactComponents": 1,
+            "JointCombinations": 891,
+            "JointCombinationsScored": 891,
+            "LegacyFallbackAttempts": 1,
+            "NarrowPhaseEvaluations": 6098677,
+            "PairAlternativeChecks": 790,
+            "ProductionResolutions": 1114,
+            "ResponsePasses": 31,
+            "SafetyContactComponents": 1,
+            "SafetyJointCombinations": 81,
+            "SafetyPasses": 1,
+            "UniqueRiderAlternativeProjections": 257
+          },
+          "Operations": {
+            "SafetyFrozenReuse": 4,
+            "SafetyProductionAttempt": 8,
+            "SafetyProjectionCacheHit": 396,
+            "SafetyProjectionFailure": 8,
+            "SafetyProjectionRequest": 12
+          },
+          "FinalHash": "1452A36E0DF7F4705E1A47960989A5FD090B8647B145E6C23397FE78C66B8C93"
+        },
+        "TimeChangePercent": null,
+        "AllocationChangePercent": null
+      },
+      {
+        "Id": "outside",
+        "Seed": 7,
+        "Configuration": "C",
+        "Before": {
+          "MedianMilliseconds": 151.2054,
+          "MedianAllocatedBytes": 13487616,
+          "Failed": true,
+          "Work": {},
+          "Operations": {
+            "NarrowPhaseAtFailure": 112906,
+            "ProductionResolutionAtFailure": 43,
+            "SafetyFrozenReuse": 1,
+            "SafetyProductionAttempt": 1,
+            "SafetyProjectionFailure": 1,
+            "SafetyProjectionRequest": 2
+          },
+          "FinalHash": null
+        },
+        "After": {
+          "MedianMilliseconds": 5909.8496,
+          "MedianAllocatedBytes": 399504016,
+          "Failed": false,
+          "Work": {
+            "ActualProductionVerifications": 39,
+            "Clusters": 27,
+            "FinalContactComponents": 2,
+            "JointCombinations": 1269,
+            "JointCombinationsScored": 1269,
+            "LegacyFallbackAttempts": 0,
+            "NarrowPhaseEvaluations": 5993626,
+            "PairAlternativeChecks": 832,
+            "ProductionResolutions": 1054,
+            "ResponsePasses": 29,
+            "SafetyContactComponents": 2,
+            "SafetyJointCombinations": 162,
+            "SafetyPasses": 2,
+            "UniqueRiderAlternativeProjections": 253
+          },
+          "Operations": {
+            "SafetyFrozenReuse": 8,
+            "SafetyProductionAttempt": 10,
+            "SafetyProjectionCacheHit": 834,
+            "SafetyProjectionFailure": 8,
+            "SafetyProjectionRequest": 18
+          },
+          "FinalHash": "D8FF6D820DF65C71791AB0FA089E5A26EE50AC6B29DC1C550FE3DE8E99E17033"
+        },
+        "TimeChangePercent": null,
+        "AllocationChangePercent": null
+      }
+    ]
+  }
+}

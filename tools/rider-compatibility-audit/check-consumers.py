@@ -22,6 +22,8 @@ EXTRACTION = ROOT / "tests/fixtures/contested-source-extraction.json"
 CONSEQUENCE_EXTRACTION = ROOT / "tests/fixtures/physical-consequence-source-extraction.json"
 CONSEQUENCE_EXTRACTION_SHA256 = "10a5a5892ef2fbfb34944d03dc42468ca5b60645888d87b9ece18cffcc624ace"
 EXTRACTION_SHA256 = "46a8f58c1cbd84dcb2697247e294b60474f7ee67712a49aa15f4f1337acd5d89"
+REA001_EXTRACTION = ROOT / "tests/fixtures/rea001-source-extraction.json"
+REA001_EXTRACTION_SHA256 = "2c369eace9249fc226a2eb522799a6b473b281b1cc18ce3cadb05469f1c6048c"
 CANONICAL_TRAFFIC = {"src/CoreSim/Interactions/InteractionModel.cs",
                      "src/CoreSim/Interactions/ContestedSpaceInteractionCoordinator.cs"}
 CANONICAL_CONTACT_SHADOW = {
@@ -53,6 +55,7 @@ def consumers():
             continue
         name = path.relative_to(ROOT).as_posix()
         source = path.read_text(encoding="utf-8").replace("\r\n", "\n")
+        source = restore_optional_safety_contract(source, name)
         if name in consequences["NewDiagnosticSources"]:
             assert not REFERENCES.search(source), f"Legacy execution data in #56C2 module: {name}"
             assert hashlib.sha256(source.encode()).hexdigest() == consequences["NewDiagnosticSources"][name]
@@ -82,6 +85,20 @@ def consumers():
             continue
         result[name] = hashlib.sha256(source.encode("utf-8")).hexdigest()
     return result
+
+
+def restore_optional_safety_contract(source, name):
+    # Restore only the exact REA-001 failure contract before applying older frozen
+    # extractions. No arithmetic, legacy-reader manifest or allowlist is relaxed.
+    raw = REA001_EXTRACTION.read_bytes().replace(b"\r\n", b"\n")
+    assert hashlib.sha256(raw).hexdigest() == REA001_EXTRACTION_SHA256
+    extraction = json.loads(raw)
+    assert extraction["BaseMainSha"] == "350f59cc53184399066bdf93b18341e4628ec8ef"
+    assert set(extraction["Patches"]) == {"src/CoreSim/Track/ExecutedPathTraversal.cs"}
+    for patch in extraction["Patches"].get(name, []):
+        assert source.count(patch["After"]) == 1, name
+        source = source.replace(patch["After"], patch["Before"])
+    return source
 
 
 def verify():

@@ -103,7 +103,7 @@ jobs:
           name: contact-arithmetic-${{ matrix.os }}
           path: results/physical-contact-consequences
       - name: Exact candidate trace, evidence bytes, Full/Lean and branch degree parity
-        run: dotnet test tests/CoreSim.Tests -c Release --no-build --filter "FullyQualifiedName~TrajectoryBehaviorFingerprintTests|FullyQualifiedName~LeanProjectionTests|FullyQualifiedName~ScalarEnvelopeParityTests|FullyQualifiedName~AdaptiveParallelTests|FullyQualifiedName~PhysicalSpaceTests|FullyQualifiedName~RiderGameplayProfileTests|FullyQualifiedName~ContestedSpaceResponseTests|FullyQualifiedName~PhysicalContactAnalysisTests|FullyQualifiedName~PhysicalContactConsequenceTests|FullyQualifiedName~ContactDecisionGeometryTests|FullyQualifiedName~PhysicalContactPairGenerationTests" --logger "trx;LogFileName=determinism.trx" --results-directory results --verbosity normal
+        run: dotnet test tests/CoreSim.Tests -c Release --no-build --filter "FullyQualifiedName~TrajectoryBehaviorFingerprintTests|FullyQualifiedName~LeanProjectionTests|FullyQualifiedName~ScalarEnvelopeParityTests|FullyQualifiedName~AdaptiveParallelTests|FullyQualifiedName~PhysicalSpaceTests|FullyQualifiedName~RiderGameplayProfileTests|FullyQualifiedName~ContestedSpaceResponseTests|FullyQualifiedName~PhysicalContactAnalysisTests|FullyQualifiedName~PhysicalContactConsequenceTests|FullyQualifiedName~ContactDecisionGeometryTests|FullyQualifiedName~PhysicalContactPairGenerationTests|FullyQualifiedName~OptionalSafetyProjectionTests" --logger "trx;LogFileName=determinism.trx" --results-directory results --verbosity normal
       - name: Capture typed IEEE values and final rider/raw surface states
         shell: bash
         run: |
@@ -141,7 +141,9 @@ jobs:
         shell: bash
         run: |
           git fetch origin c13af7b8a16fe4e58e9d404c849cdf323649b0ed
-          git diff --exit-code c13af7b8a16fe4e58e9d404c849cdf323649b0ed HEAD -- src data
+          git fetch origin 350f59cc53184399066bdf93b18341e4628ec8ef
+          # REA-001 authorizes a production correction. Frozen audit evidence and data stay unchanged.
+          git diff --exit-code 350f59cc53184399066bdf93b18341e4628ec8ef HEAD -- data docs/calibration/race-engine-readiness
           git worktree add --detach ../readiness-baseline c13af7b8a16fe4e58e9d404c849cdf323649b0ed
           baseline="$(cd ../readiness-baseline && pwd)"
           dotnet build tools/race-engine-readiness -c Release --warnaserror -p:CoreSimRoot="$baseline" -o ../readiness-before-bin
@@ -149,6 +151,19 @@ jobs:
           dotnet ../readiness-before-bin/CoreSim.Tests.dll smoke results/readiness/before c13af7b8a16fe4e58e9d404c849cdf323649b0ed
           dotnet ../readiness-after-bin/CoreSim.Tests.dll smoke results/readiness/after "$(git rev-parse HEAD)"
           python tools/race-engine-readiness/compare.py results/readiness
+      - name: Reproduce original REA-001 and verify the corrected production heats
+        shell: bash
+        run: |
+          git fetch origin 350f59cc53184399066bdf93b18341e4628ec8ef
+          git worktree add --detach ../rea001-baseline 350f59cc53184399066bdf93b18341e4628ec8ef
+          baseline="$(cd ../rea001-baseline && pwd)"
+          dotnet build tools/race-engine-readiness -c Release --warnaserror -p:CoreSimRoot="$baseline" -o ../rea001-before-bin
+          dotnet build tools/race-engine-readiness -c Release --warnaserror -o ../rea001-after-bin
+          for configuration in A B C; do
+            dotnet ../rea001-before-bin/CoreSim.Tests.dll repro "results/rea001/before-$configuration" 350f59cc53184399066bdf93b18341e4628ec8ef outside 7 "$configuration"
+            dotnet ../rea001-after-bin/CoreSim.Tests.dll repro "results/rea001/after-$configuration" "$(git rev-parse HEAD)" outside 7 "$configuration"
+          done
+          python tools/rea001-safety-audit/compare.py results/rea001
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -181,6 +196,7 @@ jobs:
           python tools/contact-decision-audit/compare.py captures
           python tools/race-engine-readiness/compare.py captures/determinism-windows-latest/readiness
           python tools/race-engine-readiness/compare.py captures/determinism-ubuntu-latest/readiness
+          python tools/rea001-safety-audit/compare.py captures/determinism-windows-latest/rea001 captures/determinism-ubuntu-latest/rea001 --report captures/rea001-platform-comparison.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -189,6 +205,7 @@ jobs:
             captures/comparison.json
             captures/contested-performance-comparison.json
             captures/contact-decision-*.json*
+            captures/rea001-platform-comparison.json
 
   python:
     runs-on: ubuntu-latest

@@ -6,6 +6,7 @@ internal enum ProjectionMaterialization
     ExecutedPath, ExecutedNode, ExecutedStep, LongitudinalNode, ResolvedStep, CornerNode,
     SimulationSnapshot, TrackStateSnapshot, RiderStateCopy, TrackStateCopy, PrivateCommit, PrefixCacheHit,
     CoupledEvaluation, EnvelopeCreation, ApexMetreIntegration, ScalarEnvelopeQuery, ApexRemainderIntegration,
+    SafetyProjectionRequest, SafetyProjectionCacheHit, SafetyProjectionFailure, SafetyProductionAttempt, SafetyFrozenReuse,
 }
 
 /// <summary>Optional synchronous test observer. Normal runs retain no counters or audit state.</summary>
