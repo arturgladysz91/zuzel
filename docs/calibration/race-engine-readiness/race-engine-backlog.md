@@ -89,7 +89,7 @@ reproducible blocker in the final matrix is listed in the machine-readable repor
 ## Optional realism improvements
 
 7. **REA-007 / P4 — extend opponent-aware planning evidence.**
-   Current physical inside/outside/cutback/cover/yield and bounded safety responses are
+   Current CoverInside/CutInside/ContinueOutside/YieldOutward/Hold and bounded safety responses are
    implemented. Adaptive candidate ranking still forecasts a solo production horizon
    with current occupancy, rather than a complete future opponent strategy. Evaluate
    longer-horizon reattack/defense needs from the recorded complete races before adding

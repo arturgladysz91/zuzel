@@ -50,7 +50,7 @@ The apex is the canonical halfway point of the existing corner topology; its sur
 | Outside attack | rolling-C | 1 | [(2, 1, 0.9175395369529724, 0.9526123404502869)] | Verified rider 2 over 1 before the bend; compare subsequent physical corner costs. No general outside-pass impossibility. |
 | Defensive line occupation/widening | rolling-E | 0 | [] | Blocked-inner opportunity; no pass in this seed. A selected response or lane change alone does not prove successful defense or forced opponent widening. |
 | Side-by-side corner entry | rolling-D | 0 | [] | Positive alongside exposure; no strict pass in this seed. |
-| Three-rider squeeze | three-squeeze-binary | 6 | [(1, 3, 2.9142893254756927, 2.942701071500778)] | Completed companion records repeated lead changes and contact. Original decimal scenario is P1 REA-009 in every seed/configuration. |
+| Three-rider squeeze | three-squeeze-binary | 6 | [(1, 3, 2.9142893254756927, 2.942701071500778)] | Completed companion records repeated lead changes with no applied contact consequences. Original decimal scenario is P1 REA-009 in every seed/configuration. |
 | Four-rider close racing | four-close-regain-binary | 12 | [(2, 3, 2.750092715024948, 2.7546857595443726)] | Multiple strict pair lead changes in a completed four-rider heat. Original decimal scenario is P1 REA-009. |
 | Regaining a position | four-close-regain-binary | 12 | [(2, 3, 2.750092715024948, 2.7546857595443726)] | Rider 1 passes 3, loses to 3, and passes 3 again; brackets are in trace-evidence.json. This proves re-passing, not attribution to a specific tactical intent. |
 

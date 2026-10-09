@@ -66,7 +66,7 @@ def main():
                     ("Outside attack", "rolling-C", "Verified rider 2 over 1 before the bend; compare subsequent physical corner costs. No general outside-pass impossibility."),
                     ("Defensive line occupation/widening", "rolling-E", "Blocked-inner opportunity; no pass in this seed. A selected response or lane change alone does not prove successful defense or forced opponent widening."),
                     ("Side-by-side corner entry", "rolling-D", "Positive alongside exposure; no strict pass in this seed."),
-                    ("Three-rider squeeze", "three-squeeze-binary", "Completed companion records repeated lead changes and contact. Original decimal scenario is P1 REA-009 in every seed/configuration."),
+                    ("Three-rider squeeze", "three-squeeze-binary", "Completed companion records repeated lead changes with no applied contact consequences. Original decimal scenario is P1 REA-009 in every seed/configuration."),
                     ("Four-rider close racing", "four-close-regain-binary", "Multiple strict pair lead changes in a completed four-rider heat. Original decimal scenario is P1 REA-009."),
                     ("Regaining a position", "four-close-regain-binary", "Rider 1 passes 3, loses to 3, and passes 3 again; brackets are in trace-evidence.json. This proves re-passing, not attribution to a specific tactical intent.")]
     rows = []
