@@ -82,6 +82,32 @@ strict C cross-platform traces and final states, and records every intentional B
 typed leaf delta. Native B double-geometry differences are recorded separately;
 float/domain divergence is rejected.
 
+Continuous-target pair and track-bound checks use the existing deterministic #55
+arithmetic in B as well as C. Canonical production intervals are re-mapped with the
+same nodes, time cuts, attitude and geometry; no path is interpolated or altered.
+The native B geometry for requests without a continuous target remains unchanged.
+This prevents platform-native trigonometric differences from selecting different
+continuous destinations. Actual production execution and contact checks still
+retain their existing arithmetic modes.
+
+The #56C1/#56C2 historical reports also include production scenarios. Their explicit
+`--minimal-yield` CI gate preserves controlled fixtures, sensitivity, raw grid,
+threshold boundaries and recovery kernels exactly. Each changed production row
+must have an independently observed positive `OutwardTargetTrials` count; unchanged
+rows without target work stay exact. Complete leaf deltas are exported separately,
+and aggregate consequence totals must equal their heat rows. The full report and
+typed-bit files still match exactly across Windows/Ubuntu. The default historical
+golden gates and the golden files remain unchanged.
+
+The 96-heat #56C2 production matrix intentionally changes aggregate outcomes:
+verified contacts **61 -> 53**, applied contacts **32 -> 29**, applied rider
+consequences **45 -> 40**, and contact crashes **19 -> 24**. Major-save rider
+consequences change **20 -> 16**, repeated-overlap suppressions **3 -> 0**, and
+deferred contacts **26 -> 24**; geometry-unresolved remains zero. Fewer contacts
+do not imply fewer crashes. These are resulting C behavior changes from changed
+paths and encounters, not a retuning of severity thresholds or recovery. Fresh
+base-main reports reproduce the untouched historical #56C1/#56C2 goldens exactly.
+
 Reproduce measurements with the same harness compiled against base main and head:
 
 ```sh
@@ -99,7 +125,8 @@ against main/head without concurrent test work. Raw wall/CPU/allocation/work sam
 and the median comparison are retained. Dense/contact-heavy cases are explicitly
 included; no wall-clock threshold is added to CI.
 
-Sequential Windows benchmark medians (milliseconds; nine samples):
+Sequential Windows benchmark medians from the initial target implementation
+(milliseconds; nine samples). The deterministic B target check is being re-measured:
 
 | Case | Main | PR | Wall change | Allocation change |
 | --- | ---: | ---: | ---: | ---: |
@@ -123,7 +150,7 @@ actual C contact batch costs 155.3% more, and the complete C four-rider heat cos
 Additional bounded production/collision certification and longer genuine failed-avoidance
 contact paths both contribute. Raw CPU, allocations and deterministic work counters
 are retained; no joint cap increased. The separated/OFF/solo wall differences are
--2.6%, +1.1%, and -1.0%. These sequential final-code samples supersede earlier samples.
+-2.6%, +1.1%, and -1.0%. A fresh final-code comparison will replace these samples.
 Treat the dense/contact-heavy costs as a review consideration for this Draft PR.
 
 The original ten-case protocol uses B/shadow diagnostics. The separate

@@ -99,6 +99,60 @@ def presentation(before_path, after_path, output):
     return {"ChangedRows": len(changes), "ChangedLeaves": sum(map(len, changes.values())), "UnrelatedRowsExact": True}
 
 
+def consequence_totals(heats):
+    summed = ("VerifiedContacts", "AppliedRiders", "AppliedContacts", "ContactCrashes",
+              "RepeatedOverlapSuppressions", "Deferred", "GeometryUnresolved")
+    totals = {key: sum(row[key] for row in heats) for key in summed}
+    totals.update(Heats=len(heats), ContactsPerHeat=totals["VerifiedContacts"] / len(heats) if heats else 0,
+                  Classes={key: sum(row["Classes"].get(key, 0) for row in heats)
+                           for key in ("Brush", "Disturbed", "LostRhythm", "MajorSave", "Crash")})
+    return totals
+
+
+def contact_production_changes(before, after, trials, sections, consequences=False):
+    """Keep physical kernels exact; require observed target work for each changed production row."""
+    assert before.keys() == after.keys()
+    changes, expected = {}, set()
+    for section in before:
+        if section not in sections:
+            if consequences and section == "Totals":
+                continue
+            assert before[section] == after[section], (section, "Physical contact kernel changed")
+            continue
+        old, new = before[section], after[section]
+        assert len(old) == len(new), section
+        identity = ("Scenario", "Seed", "Weather") if section == "Heats" else ("Name", "Seed")
+        for left, right in zip(old, new):
+            assert tuple(left[k] for k in identity) == tuple(right[k] for k in identity), section
+            case = section + "/" + "/".join(str(right[k]) for k in identity)
+            assert case not in expected, case
+            expected.add(case)
+            assert type(trials[case]) is int and trials[case] >= 0, case
+            row = delta(flatten(left), flatten(right))
+            if row:
+                assert trials[case] > 0, (case, "Unrelated production contact change")
+                changes[case] = row
+    assert trials.keys() == expected
+    if consequences:
+        for report in (before, after):
+            assert report["Totals"] == consequence_totals(report["Heats"]), "Contact totals do not match heat rows"
+        row = delta(flatten(before["Totals"]), flatten(after["Totals"]))
+        if row:
+            assert any(case.startswith("Heats/") for case in changes), "Unexplained contact totals change"
+            changes["Totals"] = row
+    return changes
+
+
+def contact_presentation(golden, capture, trials_path, output, consequences=False):
+    before, after, trials = [json.loads(Path(p).read_text(encoding="utf-8-sig"))
+                            for p in (golden, capture, trials_path)]
+    sections = ("LegacyComparison", "Heats") if consequences else ("LegacyComparisons",)
+    changes = contact_production_changes(before, after, trials, sections, consequences)
+    write(output, changes)
+    return {"ChangedRows": len(changes), "ChangedLeaves": sum(map(len, changes.values())),
+            "UnrelatedRowsExact": True, "PhysicalContactKernelsExact": True}
+
+
 def contested_platforms(root):
     exact = module("tools/contested-performance/compare.py")
     root = Path(root)
@@ -172,7 +226,35 @@ def rea001(windows, ubuntu, report_path):
     return {cfg: {"FinalStateExact": True, "DivergentLeaves": len(row["ObservedNativeGeometryDifferences"])} for cfg, row in report.items()}
 
 
+def rea009(windows, ubuntu, report_path):
+    old = module("tools/rea009-handoff-audit/compare.py")
+    exact = module("tools/rea001-safety-audit/compare.py")
+    report = {}
+    for scenario in ("three-squeeze", "four-close-regain"):
+        for cfg in "ABC":
+            name = f"after-{scenario}-19-{cfg}"
+            left, right = [old.require_repro(Path(root) / name) for root in (windows, ubuntu)]
+            assert all((r["Id"], r["Seed"], r["Configuration"]) == (scenario, 19, cfg) for r in (left, right))
+            assert left["FinalHash"] == right["FinalHash"], name
+            traces = []
+            for root in (windows, ubuntu):
+                with gzip.open(Path(root) / name / f"trace-{scenario}-19-{cfg}.json.gz") as stream:
+                    traces.append(json.load(stream))
+            changes = exact.divergence_map(*traces)
+            if cfg in "AC":
+                assert not changes and left["BehaviorHash"] == right["BehaviorHash"], name
+            else:
+                assert has_target(traces[0]), name
+                assert all(row["Windows"]["Type"] == row["Ubuntu"]["Type"] == "double" for row in changes.values()), name
+            report[name] = {"FinalStateExact": True, "ObservedNativeGeometryDifferences": changes,
+                            "SummaryHashes": [left["BehaviorHash"], right["BehaviorHash"]]}
+    frozen = json.loads((ROOT / "tests/fixtures/rea009-native-b-portability.json").read_text())
+    write(report_path, {"HistoricalNativeB": frozen, "MinimalYield": report})
+    return {name: {"FinalStateExact": True, "DivergentLeaves": len(row["ObservedNativeGeometryDifferences"])}
+            for name, row in report.items()}
+
+
 if __name__ == "__main__":
     mode, *args = sys.argv[1:]
     print(json.dumps({"contested": contested, "platforms": contested_platforms, "readiness": readiness,
-                      "rea001": rea001, "presentation": presentation}[mode](*args), indent=2))
+                      "rea001": rea001, "rea009": rea009, "presentation": presentation}[mode](*args), indent=2))

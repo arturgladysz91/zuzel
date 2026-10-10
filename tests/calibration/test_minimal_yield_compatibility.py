@@ -1,6 +1,7 @@
 import importlib.util
 from pathlib import Path
 import unittest
+import copy
 
 ROOT = Path(__file__).resolve().parents[2]
 spec = importlib.util.spec_from_file_location("yield_compatibility", ROOT / "tools/minimal-yield-audit/compatibility.py")
@@ -26,3 +27,33 @@ class MinimalYieldCompatibilityTests(unittest.TestCase):
         self.assertEqual(set(changes), {"Speed", "old", "root.PhysicalTarget.OffsetFromInnerReferenceMeters"})
         self.assertEqual(changes["Speed"]["Before"], "float:40000000")
         self.assertFalse(changes["old"]["AfterPresent"])
+
+    def test_contact_production_requires_observed_target_work_and_exact_kernel(self):
+        before = {"Controlled": [1], "RawGrid": [2], "LegacyComparisons": [{"Name": "attack", "Seed": 7, "Speed": 20}]}
+        after = copy.deepcopy(before)
+        after["LegacyComparisons"][0]["Speed"] = 21
+        trials = {"LegacyComparisons/attack/7": 0}
+        with self.assertRaises(AssertionError):
+            audit.contact_production_changes(before, after, trials, ("LegacyComparisons",))
+        trials["LegacyComparisons/attack/7"] = 1
+        changes = audit.contact_production_changes(before, after, trials, ("LegacyComparisons",))
+        self.assertEqual(changes["LegacyComparisons/attack/7"]["root.Speed"]["After"], 21)
+        after["RawGrid"] = [3]
+        with self.assertRaises(AssertionError):
+            audit.contact_production_changes(before, after, trials, ("LegacyComparisons",))
+
+    def test_contact_totals_are_derived_and_row_identity_cannot_change(self):
+        row = {"Scenario": "I", "Seed": 7, "Weather": "Dry", "VerifiedContacts": 1,
+               "AppliedRiders": 1, "AppliedContacts": 1, "ContactCrashes": 0,
+               "RepeatedOverlapSuppressions": 0, "Deferred": 0, "GeometryUnresolved": 0,
+               "Classes": {"Brush": 1}}
+        before = {"Heats": [row], "Totals": audit.consequence_totals([row]), "Controlled": [1]}
+        after = copy.deepcopy(before)
+        trials = {"Heats/I/7/Dry": 1}
+        after["Totals"]["VerifiedContacts"] = 2
+        with self.assertRaises(AssertionError):
+            audit.contact_production_changes(before, after, trials, ("Heats",), True)
+        after = copy.deepcopy(before)
+        after["Heats"][0]["Seed"] = 19
+        with self.assertRaises(AssertionError):
+            audit.contact_production_changes(before, after, trials, ("Heats",), True)

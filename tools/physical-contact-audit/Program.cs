@@ -50,6 +50,16 @@ Walk(PhysicalContactEvidence.Grid(),"Grid",bits);
 File.WriteAllText(Path.Combine(args[0],"physical-contact-bits.json"),
     JsonSerializer.Serialize(bits,PhysicalContactEvidence.JsonOptions).Replace("\r\n","\n",StringComparison.Ordinal)+"\n");
 Console.WriteLine("#56C1 controlled fixtures, 4,374 raw grid rows, legacy comparison and typed IEEE bits written.");
+if(args.Contains("--minimal-yield",StringComparer.Ordinal))
+{
+    var trials=ContestedSpaceResponseEvidence.OwnershipScenarios()
+        .Concat(ContestedSpaceResponseEvidence.Scenarios().Where(s=>s.Name.StartsWith("I-",StringComparison.Ordinal)))
+        .SelectMany(s=>new[]{7,19,57}.Select(seed=>s with{Seed=seed,IncidentFrequency=2}))
+        .ToDictionary(s=>$"LegacyComparisons/{s.Name}/{s.Seed}",
+            s=>PhysicalContactEvidence.Resolve(s,PhysicalContactDiagnosticsLevel.FullAudit).Interaction?.Work.OutwardTargetTrials??0);
+    File.WriteAllText(Path.Combine(args[0],"minimal-yield-target-work.json"),
+        JsonSerializer.Serialize(trials,PhysicalContactEvidence.JsonOptions)+"\n");
+}
 static void Walk(object? value,string path,IDictionary<string,object> bits)
 {
     if(value is float single){bits[path]=new{Type="float",Bits=$"0x{BitConverter.SingleToInt32Bits(single):X8}"};return;}

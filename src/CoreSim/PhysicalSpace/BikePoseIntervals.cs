@@ -122,6 +122,16 @@ public sealed class LinearBikePoseInterval : PhysicalPoseInterval
 /// <summary>Read-only geometry adapter of canonical #53 nodes; no alternate physical traversal.</summary>
 public static class ResolvedBikePoses
 {
+    // Continuous target search must use the existing deterministic #55 arithmetic
+    // even in shadow/B mode. Re-map canonical nodes; never interpolate a new path.
+    internal static PhysicalPoseInterval InEmbedding(PhysicalPoseInterval interval, TrackMetricEmbedding embedding)
+    {
+        if (interval.FrameId != embedding.FrameId)
+            throw new ArgumentException("Interaction pose belongs to another geometry frame.");
+        if (interval.DeterministicArithmetic == embedding.DeterministicArithmetic) return interval;
+        return interval is ProductionPoseInterval production ? new ProductionPoseInterval(production, embedding)
+            : throw new ArgumentException("Only canonical production intervals can be re-mapped.");
+    }
     public static IReadOnlyList<PhysicalPoseInterval> FromMotion(ResolvedRiderMotion motion, Track track,
         SpeedwayBikeDimensions? dimensions = null, ReferenceBikeAttitude? attitude = null, TrackMetricEmbedding? embedding = null)
     {
@@ -177,6 +187,17 @@ public static class ResolvedBikePoses
         private readonly ReferenceBikeAttitude _profile;
         private readonly bool _straight;
         internal override bool DeterministicArithmetic => _segment.DeterministicArithmetic;
+        internal ProductionPoseInterval(ProductionPoseInterval source, TrackMetricEmbedding embedding)
+            : base(source.RiderId, embedding.FrameId, source.StartTimeSeconds, source.EndTimeSeconds,
+                source.Dimensions, source.StartsAtDiscontinuity, source.Source, embedding.Closure.SupportsLapWrap)
+        {
+            _a=source._a;_b=source._b;_nodeStart=source._nodeStart;_duration=source._duration;
+            _profile=source._profile;_angle=source._angle;_phaseStart=source._phaseStart;
+            _phaseSpan=source._phaseSpan;_straight=source._straight;
+            _segment=embedding.Segments[source._segment.SegmentIndex];
+            _map=_segment.Prepare(((double)_b.SegmentProgress-_a.SegmentProgress)/_duration,
+                ((double)_b.PhysicalOffsetMeters-_a.PhysicalOffsetMeters)/_duration);
+        }
         public ProductionPoseInterval(ResolvedRiderMotion motion, Track track, RiderMotionSample a, RiderMotionSample b,
             TrackMetricEmbedding embedding, PoseSource source, double start, double end, SpeedwayBikeDimensions dimensions, ReferenceBikeAttitude profile, bool discontinuity)
             : base(motion.RiderId, embedding.FrameId, start, end, dimensions, discontinuity, source, embedding.Closure.SupportsLapWrap)

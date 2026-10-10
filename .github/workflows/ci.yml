@@ -97,7 +97,9 @@ jobs:
       - run: dotnet restore SpeedwayManager.sln
       - run: dotnet build SpeedwayManager.sln -c Release --no-restore --warnaserror
       - name: Capture physical contact arithmetic regression
-        run: dotnet run --project tools/physical-contact-consequence-audit -c Release -- results/physical-contact-consequences --trace
+        run: |
+          dotnet run --project tools/physical-contact-consequence-audit -c Release -- results/physical-contact-consequences --trace
+          dotnet run --project tools/physical-contact-consequence-audit -c Release -- results/physical-contact-consequences --yield-probe
       - uses: actions/upload-artifact@v4
         with:
           name: contact-arithmetic-${{ matrix.os }}
@@ -112,8 +114,8 @@ jobs:
           dotnet run --project src/Sandbox -c Release --no-build -- physical-occupancy-report results/physical-space
           dotnet run --project tools/rider-compatibility-audit -c Release -- results/rider-compatibility
           dotnet run --project tools/contested-space-audit -c Release -- results/contested-space
-          dotnet run --project tools/physical-contact-audit -c Release -- results/physical-contact
-          dotnet run --project tools/physical-contact-consequence-audit -c Release -- results/physical-contact-consequences
+          dotnet run --project tools/physical-contact-audit -c Release -- results/physical-contact --minimal-yield
+          dotnet run --project tools/physical-contact-consequence-audit -c Release -- results/physical-contact-consequences --minimal-yield
       - name: Compare metre targets with base main; require unrelated behavior and rider order exact
         shell: bash
         run: |
@@ -214,14 +216,14 @@ jobs:
           python tools/physical-space-audit/compare.py captures
           python tools/rider-compatibility-audit/compare.py captures
           python tools/contested-space-audit/compare.py captures --minimal-yield
-          python tools/physical-contact-audit/compare.py captures
-          python tools/physical-contact-consequence-audit/compare.py captures
+          python tools/physical-contact-audit/compare.py captures --minimal-yield
+          python tools/physical-contact-consequence-audit/compare.py captures --minimal-yield
           python tools/minimal-yield-audit/compatibility.py platforms captures
           python tools/contact-decision-audit/compare.py captures
           python tools/minimal-yield-audit/compatibility.py readiness captures/determinism-windows-latest/readiness
           python tools/minimal-yield-audit/compatibility.py readiness captures/determinism-ubuntu-latest/readiness
           python tools/minimal-yield-audit/compatibility.py rea001 captures/determinism-windows-latest/rea001 captures/determinism-ubuntu-latest/rea001 captures/rea001-platform-comparison.json
-          python tools/rea009-handoff-audit/compare.py captures/determinism-windows-latest/rea009 captures/determinism-ubuntu-latest/rea009 --platforms --report captures/rea009-platform-comparison.json
+          python tools/minimal-yield-audit/compatibility.py rea009 captures/determinism-windows-latest/rea009 captures/determinism-ubuntu-latest/rea009 captures/rea009-platform-comparison.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:

@@ -75,6 +75,21 @@ public sealed class MinimalOutwardYieldTests
             }
             var offset=LaneModel.PhysicalLateralOffsetFromInnerReferenceMeters(motion.Final.LateralPosition,type,track.Geometry);
             Assert.InRange(offset,4.99f,5.01f);
+            var embedding=new TrackMetricEmbedding(track,true);
+            var native=ResolvedBikePoses.FromMotion(motion,track);
+            var deterministic=ResolvedBikePoses.FromMotion(motion,track,embedding:embedding);
+            Assert.Equal(native.Count,deterministic.Count);
+            for(var i=0;i<native.Count;i++)
+            {
+                var mapped=ResolvedBikePoses.InEmbedding(native[i],embedding);
+                var expected=deterministic[i];
+                Assert.Equal(expected.StartsAtDiscontinuity,mapped.StartsAtDiscontinuity);
+                foreach(var time in new[]{expected.StartTimeSeconds,
+                    (expected.StartTimeSeconds+expected.EndTimeSeconds)/2,expected.EndTimeSeconds})
+                    Assert.Equal(expected.SampleValue(time),mapped.SampleValue(time));
+                Assert.Equal(expected.RateBounds(expected.StartTimeSeconds,expected.EndTimeSeconds),
+                    mapped.RateBounds(mapped.StartTimeSeconds,mapped.EndTimeSeconds));
+            }
         }
     }
 

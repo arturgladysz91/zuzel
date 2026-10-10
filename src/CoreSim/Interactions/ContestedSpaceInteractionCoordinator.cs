@@ -28,6 +28,18 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
         if (snapshot.Riders.Count > 4) throw new ArgumentException("Contested space supports at most four riders per heat.");
         tracker.Bind(snapshot, options.EnablePhysicalContactConsequences);
         var p = options.ContestedSpaceParameters;
+        TrackMetricEmbedding? targetEmbedding = null;
+        Dictionary<PhysicalPoseInterval,PhysicalPoseInterval>? targetPoseCache = null;
+        TrackMetricEmbedding TargetEmbedding() => targetEmbedding ??= tracker.Embedding!.DeterministicArithmetic
+            ? tracker.Embedding : new(snapshot.Track,true);
+        PhysicalPoseInterval TargetPose(PhysicalPoseInterval pose)
+        {
+            if(pose.DeterministicArithmetic) return pose;
+            targetPoseCache??=new(ReferenceEqualityComparer.Instance);
+            if (targetPoseCache.TryGetValue(pose,out var found)) return found;
+            var result=ResolvedBikePoses.InEmbedding(pose,TargetEmbedding());
+            targetPoseCache.Add(pose,result);return result;
+        }
         // These adapters belong only to this immutable Resolve. Prefix sharing can
         // return the very same motion in several alternative horizons.
         var poseCache = new Dictionary<ResolvedRiderMotion, IReadOnlyList<PhysicalPoseInterval>>(ReferenceEqualityComparer.Instance);
@@ -77,8 +89,10 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
         {
             var key = (Key(a.Alternative), Key(b.Alternative));
             if (reusePairResults && pairReports.TryGetValue(key, out var found)) return found;
-            var report = CommonTimePoseHistory.Compatibility(tracker.History.Where(i => i.RiderId == key.Item1.RiderId || i.RiderId == key.Item2.RiderId)
-                .Concat(a.Poses).Concat(b.Poses), Ready(key.Item1.RiderId, key.Item2.RiderId));
+            var poses=tracker.History.Where(i => i.RiderId == key.Item1.RiderId || i.RiderId == key.Item2.RiderId)
+                .Concat(a.Poses).Concat(b.Poses);
+            if(a.Alternative.PhysicalTarget.HasValue||b.Alternative.PhysicalTarget.HasValue) poses=poses.Select(TargetPose);
+            var report = CommonTimePoseHistory.Compatibility(poses, Ready(key.Item1.RiderId, key.Item2.RiderId));
             pairChecks++; narrow += report.Work.NarrowPhaseEvaluations;
             var result = new PairAlternativeResult(report.EligibleIntervals == 0 ? p.CompetitiveReachMeters : report.MinimumSeparation,
                 report.EligibleIntervals == 0 || report.HasBoundaryAmbiguity || report.HasCoverageGap,
@@ -117,8 +131,9 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
             catch (InvalidOperationException) { failedProjections.Add(key); production += evaluator.ProductionResolutionCount - before; throw; }
             production += evaluator.ProductionResolutionCount - before;
             var projectedPoses = traversal.ResolvedMotions.SelectMany(MotionPoses).ToArray();
+            var boundsPoses=alternative.PhysicalTarget.HasValue?projectedPoses.Select(TargetPose):projectedPoses;
             var projection = new Projection(alternative, traversal, projectedPoses,
-                WithinTrack(projectedPoses, snapshot.Track, tracker.Embedding!));
+                WithinTrack(boundsPoses, snapshot.Track, alternative.PhysicalTarget.HasValue?TargetEmbedding():tracker.Embedding!));
             cache.Add(key, projection); return projection;
         }
         var baseline = original.Values.Select(Project).ToDictionary(x => x.Alternative.RiderId);
@@ -414,7 +429,9 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
                 var traversal = new TrajectoryTraversal(alternative.Intent, motion.TotalTimeSeconds,
                     motion.TotalDistanceMeters, null, null, null, null, null, null, null, 0, 0,
                     change.Status != RiderRaceStatus.Crashed, Array.Empty<TrajectoryPhaseEndpoint>(), new[] { motion });
-                var projected = new Projection(alternative, traversal, poses, WithinTrack(poses, snapshot.Track, tracker.Embedding!));
+                var boundsPoses=alternative.PhysicalTarget.HasValue?poses.Select(TargetPose):poses;
+                var projected = new Projection(alternative, traversal, poses,
+                    WithinTrack(boundsPoses, snapshot.Track, alternative.PhysicalTarget.HasValue?TargetEmbedding():tracker.Embedding!));
                 return projected;
             }
             var safetyCache = new OptionalSafetyProjectionCache<Projection>(ResolveSafetyProjection);
@@ -423,8 +440,10 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
             {
                 var key = (Key(left.Alternative), Key(right.Alternative));
                 if (safetyPairs.TryGetValue(key, out var cached)) return cached;
-                var report = CommonTimePoseHistory.Compatibility(tracker.History.Where(i => i.RiderId == key.Item1.RiderId || i.RiderId == key.Item2.RiderId)
-                    .Concat(left.Poses).Concat(right.Poses), Ready(key.Item1.RiderId, key.Item2.RiderId));
+                var poses=tracker.History.Where(i => i.RiderId == key.Item1.RiderId || i.RiderId == key.Item2.RiderId)
+                    .Concat(left.Poses).Concat(right.Poses);
+                if(left.Alternative.PhysicalTarget.HasValue||right.Alternative.PhysicalTarget.HasValue) poses=poses.Select(TargetPose);
+                var report = CommonTimePoseHistory.Compatibility(poses, Ready(key.Item1.RiderId, key.Item2.RiderId));
                 pairChecks++; narrow += report.Work.NarrowPhaseEvaluations;
                 var result = new PairAlternativeResult(report.EligibleIntervals == 0 ? p.CompetitiveReachMeters : report.MinimumSeparation,
                     report.EligibleIntervals == 0 || report.HasBoundaryAmbiguity || report.HasCoverageGap,

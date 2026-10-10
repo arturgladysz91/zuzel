@@ -17,7 +17,7 @@ internal static class HistoricalPhysicsSource
         var targetRoot = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../../../"));
         var targetRaw = File.ReadAllText(Path.Combine(targetRoot,"tests/fixtures/minimal-yield-source-extraction.json"))
             .Replace("\r\n","\n",StringComparison.Ordinal);
-        Assert.Equal("155452c6ccba9b48aed79b67757bc12ac8c464bd425fa3b99f621cec414e831e",
+        Assert.Equal("ece2d993b84d02642bd29d0351885f2cb74a6faa27158326b91d4ce59fc808c7",
             Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(targetRaw))).ToLowerInvariant());
         using var targetExtraction = JsonDocument.Parse(targetRaw);
         if (targetExtraction.RootElement.GetProperty("Patches").TryGetProperty(relative,out var targetPatches))
