@@ -25,9 +25,9 @@ if(args.Contains("--yield-probe",StringComparer.Ordinal))
         diagnostics.Add(new{scenario.Id,Seed=seed,Weather=weather.Condition,Steps=observer.Diagnostics});
     }
     File.WriteAllText(Path.Combine(args[0],"minimal-yield-native-b-probe.json"),
-        JsonSerializer.Serialize(rows,PhysicalContactEvidence.JsonOptions)+"\n");
+        JsonSerializer.Serialize(rows,PhysicalContactEvidence.JsonOptions).Replace("\r\n","\n",StringComparison.Ordinal)+"\n");
     File.WriteAllText(Path.Combine(args[0],"minimal-yield-native-b-probe-diagnostics.json"),
-        JsonSerializer.Serialize(diagnostics,PhysicalContactEvidence.JsonOptions)+"\n");
+        JsonSerializer.Serialize(diagnostics,PhysicalContactEvidence.JsonOptions).Replace("\r\n","\n",StringComparison.Ordinal)+"\n");
     Console.WriteLine("Three native-B target heat probes written.");
     return;
 }
