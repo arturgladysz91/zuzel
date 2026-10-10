@@ -85,7 +85,8 @@ float/domain divergence is rejected.
 Continuous-target pair and track-bound checks use the existing deterministic #55
 arithmetic in B as well as C. Canonical production intervals are re-mapped with the
 same nodes, time cuts, attitude and geometry; no path is interpolated or altered.
-The native B geometry for requests without a continuous target remains unchanged.
+Native B collision observations retain their original arithmetic. Searches that
+neither construct nor retain a continuous target also retain their pair arithmetic.
 This prevents platform-native trigonometric differences from selecting different
 continuous destinations. Actual production execution and contact checks still
 retain their existing arithmetic modes.
@@ -131,32 +132,33 @@ against main/head without concurrent test work. Raw wall/CPU/allocation/work sam
 and the median comparison are retained. Dense/contact-heavy cases are explicitly
 included; no wall-clock threshold is added to CI.
 
-Sequential Windows benchmark medians from the initial target implementation
-(milliseconds; nine samples). The deterministic B target check is being re-measured:
+Sequential Windows benchmark medians (milliseconds; nine samples), measured
+against the final runtime source `be8da06`:
 
 | Case | Main | PR | Wall change | Allocation change |
 | --- | ---: | ---: | ---: | ---: |
-| four-separated | 0.368 | 0.359 | -2.6% | +0.0% |
-| H-three-squeeze | 48.362 | 193.443 | +300.0% | +130.2% |
-| G-four-first-bend | 241.751 | 370.470 | +53.2% | +193.4% |
-| real-bridge | 232.694 | 237.925 | +2.2% | +11.1% |
-| safety-correction | 32.028 | 48.083 | +50.1% | +12.2% |
-| I-heat-ON | 2467.880 | 4351.231 | +76.3% | +38.0% |
-| I-heat-OFF | 316.356 | 319.921 | +1.1% | +0.1% |
-| repeated-contact | 1016.365 | 5243.930 | +415.9% | +17.4% |
-| solo-heat | 79.541 | 78.756 | -1.0% | +0.1% |
-| contact-diagnostics | 123.999 | 310.969 | +150.8% | +23.3% |
-| eight-contact-resolutions-C | 958.506 | 2447.087 | +155.3% | +22.4% |
-| I-heat-C | 3767.399 | 5265.204 | +39.8% | +25.2% |
+| four-separated | 0.359 | 0.359 | +0.0% | +0.1% |
+| H-three-squeeze | 45.396 | 227.722 | +401.6% | +167.0% |
+| G-four-first-bend | 225.694 | 427.702 | +89.5% | +233.0% |
+| real-bridge | 232.720 | 269.913 | +16.0% | +21.5% |
+| safety-correction | 30.243 | 54.599 | +80.5% | +28.7% |
+| I-heat-ON | 2281.229 | 5478.076 | +140.1% | +50.0% |
+| I-heat-OFF | 286.593 | 288.267 | +0.6% | -0.1% |
+| repeated-contact | 992.710 | 5877.597 | +492.1% | +35.4% |
+| solo-heat | 70.195 | 73.228 | +4.3% | +0.2% |
+| contact-diagnostics | 119.043 | 349.348 | +193.5% | +42.8% |
+| eight-contact-resolutions-C | 914.542 | 2416.147 | +164.2% | +22.6% |
+| I-heat-C | 3645.289 | 5186.417 | +42.3% | +25.2% |
 
-The dense B squeeze and persistent B contact cases cost approximately four and five
-times main respectively. The complete four-rider B heat costs 76.3% more. The
-actual C contact batch costs 155.3% more, and the complete C four-rider heat costs
-39.8% more. This is a material performance regression, not a performance improvement.
-Additional bounded production/collision certification and longer genuine failed-avoidance
-contact paths both contribute. Raw CPU, allocations and deterministic work counters
-are retained; no joint cap increased. The separated/OFF/solo wall differences are
--2.6%, +1.1%, and -1.0%. A fresh final-code comparison will replace these samples.
+The dense B squeeze and persistent B contact cases cost approximately five and six
+times main respectively. The complete four-rider B heat costs 140.1% more. The
+actual C contact batch costs 164.2% more, and the complete C four-rider heat costs
+42.3% more. This is a material performance regression, not a performance improvement.
+Additional bounded production/collision certification, consistent deterministic
+geometry for target searches, and longer genuine failed-avoidance contact paths
+contribute. Raw CPU, allocations and deterministic work counters are retained;
+no joint cap increased. Separated/OFF/solo wall differences are +0.0%, +0.6%, and
++4.3%. These sequential final-source samples supersede the initial measurements.
 Treat the dense/contact-heavy costs as a review consideration for this Draft PR.
 
 The original ten-case protocol uses B/shadow diagnostics. The separate
