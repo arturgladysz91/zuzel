@@ -358,6 +358,7 @@ public static class ContestedSpaceResponseEvidence
             SafetyPasses = rows.Sum(w=>w.SafetyPasses), LegacyFallbackAttempts = rows.Sum(w=>w.LegacyFallbackAttempts),
             SafetyContactComponents = rows.Sum(w=>w.SafetyContactComponents), FinalContactComponents = rows.Sum(w=>w.FinalContactComponents),
             SafetyJointCombinations = rows.Sum(w=>w.SafetyJointCombinations),
+            OutwardTargetTrials = rows.Sum(w=>w.OutwardTargetTrials),
         };
     }
     private sealed class FixedDecision : IRiderDecisionModel

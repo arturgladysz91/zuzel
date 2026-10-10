@@ -98,3 +98,28 @@ warm-ups and at least three seconds per case, then nine samples, run sequentiall
 against main/head without concurrent test work. Raw wall/CPU/allocation/work samples
 and the median comparison are retained. Dense/contact-heavy cases are explicitly
 included; no wall-clock threshold is added to CI.
+
+Sequential Windows benchmark medians (milliseconds; nine samples):
+
+| Case | Main | Change | Wall change | Allocation change |
+| --- | ---: | ---: | ---: | ---: |
+| four-separated | 0.380 | 0.358 | -5.8% | +0.0% |
+| H-three-squeeze | 46.904 | 191.133 | +307.5% | +130.5% |
+| G-four-first-bend | 230.746 | 364.802 | +58.1% | +193.7% |
+| real-bridge | 229.181 | 234.002 | +2.1% | +11.1% |
+| safety-correction | 31.110 | 47.019 | +51.1% | +12.2% |
+| I-heat-ON | 2357.970 | 4234.258 | +79.6% | +38.0% |
+| I-heat-OFF | 304.240 | 310.842 | +2.2% | +0.1% |
+| repeated-contact | 1009.797 | 5121.557 | +407.2% | +17.4% |
+| solo-heat | 77.356 | 76.439 | -1.2% | -0.0% |
+| contact-diagnostics | 122.780 | 308.200 | +151.0% | +23.3% |
+
+The dense squeeze and repeated-contact cases cost approximately four and five times
+main respectively. The complete four-rider enabled heat costs 79.6% more; the
+separated/OFF/solo cases show -5.8%, +2.2%, and -1.2% wall differences. This is a
+material performance regression, not a performance improvement. Additional bounded
+production/collision certification and the longer genuine failed-avoidance contact
+paths both contribute. The raw deterministic work counters distinguish target-search
+work from the unchanged joint cap. No cap was increased, and no performance claim
+is based on the earlier concurrent measurements. Treat these costs as a review
+consideration for this Draft PR.

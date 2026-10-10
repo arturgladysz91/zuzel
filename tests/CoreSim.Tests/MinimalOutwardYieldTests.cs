@@ -162,7 +162,9 @@ public sealed class MinimalOutwardYieldTests
             driveControl:a.DriveControl,holdLateralPosition:a.HoldLateralPosition,physicalTarget:a.PhysicalTarget)
             .Evaluate(a.Intent,true).ResolvedMotions.SelectMany(m=>ResolvedBikePoses.FromMotion(m,snapshot.Track))).ToArray();
         var report=CommonTimePoseHistory.Observe(poses);
+        Assert.Empty(report.FrameCoverageGaps);
         Assert.DoesNotContain(report.Intervals,r=>r.EligibleForFutureInteraction);
+        Assert.DoesNotContain(report.Intervals,r=>r.Kind.HasFlag(SpaceConflictKind.BoundaryAmbiguous));
         Assert.DoesNotContain(report.Intervals,r=>!r.NumericallyResolved);
     }
     private sealed class Hold : IRiderDecisionModel {public RiderDecision Decide(TrackSegment segment,RiderState rider)=>new(rider.Lane);}
