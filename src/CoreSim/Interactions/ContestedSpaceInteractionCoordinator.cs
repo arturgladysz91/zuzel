@@ -84,6 +84,7 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
         var production = 1; var narrow = direct.Work.NarrowPhaseEvaluations; var combinations = 0; var passes = 0;
         var pairChecks = 0;
         var outwardTargetTrials = 0;
+        var continuousTargetSearch = tracker.Active.Any(e=>e.Commitments.Values.Any(a=>a.PhysicalTarget.HasValue));
         var pairReports = new Dictionary<(ProjectionKey A, ProjectionKey B), PairAlternativeResult>();
         PairAlternativeResult PairCheck(Projection a, Projection b)
         {
@@ -91,7 +92,7 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
             if (reusePairResults && pairReports.TryGetValue(key, out var found)) return found;
             var poses=tracker.History.Where(i => i.RiderId == key.Item1.RiderId || i.RiderId == key.Item2.RiderId)
                 .Concat(a.Poses).Concat(b.Poses);
-            if(a.Alternative.PhysicalTarget.HasValue||b.Alternative.PhysicalTarget.HasValue) poses=poses.Select(TargetPose);
+            if(continuousTargetSearch) poses=poses.Select(TargetPose);
             var report = CommonTimePoseHistory.Compatibility(poses, Ready(key.Item1.RiderId, key.Item2.RiderId));
             pairChecks++; narrow += report.Work.NarrowPhaseEvaluations;
             var result = new PairAlternativeResult(report.EligibleIntervals == 0 ? p.CompetitiveReachMeters : report.MinimumSeparation,
@@ -139,6 +140,7 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
         var baseline = original.Values.Select(Project).ToDictionary(x => x.Alternative.RiderId);
         InteractionAlternative MinimalOutward(InteractionAlternative response, InteractionGeometry[] related)
         {
+            if(!continuousTargetSearch) { continuousTargetSearch=true;pairReports.Clear(); }
             var rider = snapshot.Rider(response.RiderId);
             var lower = LaneModel.PhysicalLateralOffsetFromInnerReferenceMeters(rider.LateralPosition,
                 snapshot.Segment.Type, snapshot.Track.Geometry);
@@ -442,7 +444,7 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
                 if (safetyPairs.TryGetValue(key, out var cached)) return cached;
                 var poses=tracker.History.Where(i => i.RiderId == key.Item1.RiderId || i.RiderId == key.Item2.RiderId)
                     .Concat(left.Poses).Concat(right.Poses);
-                if(left.Alternative.PhysicalTarget.HasValue||right.Alternative.PhysicalTarget.HasValue) poses=poses.Select(TargetPose);
+                if(continuousTargetSearch) poses=poses.Select(TargetPose);
                 var report = CommonTimePoseHistory.Compatibility(poses, Ready(key.Item1.RiderId, key.Item2.RiderId));
                 pairChecks++; narrow += report.Work.NarrowPhaseEvaluations;
                 var result = new PairAlternativeResult(report.EligibleIntervals == 0 ? p.CompetitiveReachMeters : report.MinimumSeparation,

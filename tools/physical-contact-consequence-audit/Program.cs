@@ -11,6 +11,7 @@ Directory.CreateDirectory(args[0]);
 if(args.Contains("--yield-probe",StringComparer.Ordinal))
 {
     var rows=new List<object>();
+    var diagnostics=new List<object>();
     foreach(var (scenarioId,seed,weather) in new[]{("B",83,WeatherState.Dry),("B",83,WeatherState.LightRain),("G",7,WeatherState.Dry)})
     {
         var scenario=PhysicalContactConsequenceEvidence.HeatScenarios().Single(s=>s.Id==scenarioId);
@@ -21,9 +22,12 @@ if(args.Contains("--yield-probe",StringComparer.Ordinal))
                 EnablePhysicalContactConsequences=false,PhysicalContactDiagnostics=PhysicalContactDiagnosticsLevel.None,
                 InteractionDiagnostics=InteractionDiagnosticsLevel.FullAudit},59,observer);
         rows.Add(new{scenario.Id,Seed=seed,Weather=weather.Condition,result.Classification,Steps=observer.Steps});
+        diagnostics.Add(new{scenario.Id,Seed=seed,Weather=weather.Condition,Steps=observer.Diagnostics});
     }
     File.WriteAllText(Path.Combine(args[0],"minimal-yield-native-b-probe.json"),
         JsonSerializer.Serialize(rows,PhysicalContactEvidence.JsonOptions)+"\n");
+    File.WriteAllText(Path.Combine(args[0],"minimal-yield-native-b-probe-diagnostics.json"),
+        JsonSerializer.Serialize(diagnostics,PhysicalContactEvidence.JsonOptions)+"\n");
     Console.WriteLine("Three native-B target heat probes written.");
     return;
 }
@@ -61,7 +65,11 @@ static void Walk(object? value,string path,IDictionary<string,object> bits)
 sealed class YieldProbeObserver : ISimulationStepObserver
 {
     public List<object> Steps {get;}=new();
+    public List<object> Diagnostics {get;}=new();
     public void OnStepResolved(ResolvedSimulationStep step)
-        => Steps.Add(new{step.Changes,step.Motions,step.Events,
+    {
+        Steps.Add(new{step.Changes,step.Motions,step.Events,
             Targets=step.Interaction?.Episodes.SelectMany(e=>e.SelectedResponses).ToArray()});
+        Diagnostics.Add(new{step.Snapshot.Step,step.Interaction});
+    }
 }
