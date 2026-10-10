@@ -124,7 +124,7 @@ public sealed class OptionalSafetyProjectionTests
         {
             attempts++;
             Assert.True(keys.Add(ProjectionKey.From(new(intent.RiderId, InteractionResponse.BackOut,
-                intent.Decision.Trajectory!.Value, intent.Decision.DriveControl, 0, "", intent.Decision.HoldLateralPosition))));
+                intent.Decision.Trajectory!.Value, intent.Decision.DriveControl, 0, "", intent.Decision.HoldLateralPosition, intent.Decision.InteractionTarget))));
             throw new ExecutedPathTraversal.TimeSolveDiscontinuityException();
         }).Resolve(engine, snapshot, intents, options, owner);
         Assert.True(attempts > 0); Assert.Equal(before, Exact.Hash(new { snapshot, owner.PhysicalPairs, owner.History }));
@@ -138,7 +138,7 @@ public sealed class OptionalSafetyProjectionTests
         var frozen = step.Interaction.Episodes.SelectMany(e => e.Pass1SelectedResponses).DistinctBy(a => a.RiderId).ToDictionary(a => a.RiderId);
         var actual = engine.ResolveProduction(snapshot, intents.Select(i => new RiderIntent(i.RiderId, i.Decision with
             { Trajectory = frozen[i.RiderId].Intent, TargetLane = frozen[i.RiderId].Intent.TargetFor(snapshot.Segment.Type),
-                DriveControl = frozen[i.RiderId].DriveControl, HoldLateralPosition = frozen[i.RiderId].HoldLateralPosition })).ToArray(), options, legacyContacts: false);
+                DriveControl = frozen[i.RiderId].DriveControl, HoldLateralPosition = frozen[i.RiderId].HoldLateralPosition, InteractionTarget = frozen[i.RiderId].PhysicalTarget })).ToArray(), options, legacyContacts: false);
         Assert.Equal(Exact.Hash(actual.Diagnostics.Select(d => d.ExecutedPath).ToArray()),
             Exact.Hash(step.Diagnostics.Select(d => d.ExecutedPath).ToArray()));
         foreach (var change in step.Changes)
@@ -183,8 +183,8 @@ public sealed class OptionalSafetyProjectionTests
             var step = new ContestedSpaceInteractionCoordinator(new(), resolveOptionalSafety: (solo, intent, options) =>
             {
                 var key = new ProjectionKey(intent.RiderId, intent.Decision.Trajectory!.Value,
-                    intent.Decision.DriveControl?.PositiveDriveFraction ?? 1f, intent.Decision.HoldLateralPosition);
-                if (!selectedKeys.Contains(key)) { rejected++; throw new ExecutedPathTraversal.TimeSolveDiscontinuityException(); }
+                    intent.Decision.DriveControl?.PositiveDriveFraction ?? 1f, intent.Decision.HoldLateralPosition, intent.Decision.InteractionTarget);
+                if (!selectedKeys.Contains(key) && !(key.PhysicalTarget.HasValue && key.Drive == 0)) { rejected++; throw new ExecutedPathTraversal.TimeSolveDiscontinuityException(); }
                 return engine.ResolveProduction(solo, new[] { intent }, options, legacyContacts: false);
             }).Resolve(engine, snapshot, intents, new() { Seed = 276, IncidentFrequency = 2,
                 EnableContestedSpaceResponses = true, InteractionDiagnostics = InteractionDiagnosticsLevel.FullAudit });

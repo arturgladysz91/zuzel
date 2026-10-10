@@ -156,9 +156,14 @@ public static class LateralMovementModel
         TrackGeometry geometry,
         TrackSurfaceState surface,
         RiderSkills skills)
+        => MoveTowardsContinuous(currentLateralPosition, resolvedLane, segmentTravelTimeSeconds, segmentType, geometry, surface, skills);
+
+    internal static float MoveTowardsContinuous(float currentLateralPosition, float targetPosition,
+        float segmentTravelTimeSeconds, SegmentType segmentType, TrackGeometry geometry,
+        TrackSurfaceState surface, RiderSkills skills)
     {
         ValidateLateralPosition(currentLateralPosition, nameof(currentLateralPosition));
-        LaneModel.ValidateLane(resolvedLane);
+        ValidateLateralPosition(targetPosition, nameof(targetPosition));
 
         if (segmentTravelTimeSeconds == 0f)
             return currentLateralPosition;
@@ -174,7 +179,7 @@ public static class LateralMovementModel
             segmentType,
             geometry);
         var targetOffset = LaneModel.PhysicalLateralOffsetFromInnerReferenceMeters(
-            resolvedLane,
+            targetPosition,
             segmentType,
             geometry);
         var difference = targetOffset - currentOffset;

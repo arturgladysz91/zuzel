@@ -445,7 +445,7 @@ public sealed class ContestedSpaceResponseTests
         Assert.Contains(episode.Candidates,c=>c.Feasible && c.Responses.SequenceEqual(episode.Pass1SelectedResponses));
         var pass1=engine.ResolveProduction(snapshot,episode.Pass1SelectedResponses.Select(a=>new RiderIntent(a.RiderId,
             new RiderDecision(a.Intent.TargetFor(snapshot.Segment.Type)){Trajectory=a.Intent,DriveControl=a.DriveControl,
-                HoldLateralPosition=a.HoldLateralPosition})).ToArray(),options,legacyContacts:false);
+                HoldLateralPosition=a.HoldLateralPosition,InteractionTarget=a.PhysicalTarget})).ToArray(),options,legacyContacts:false);
         var conflict=ContestedSpaceResolver.Observe(pass1.Motions.SelectMany(m=>ResolvedBikePoses.FromMotion(m,snapshot.Track)));
         Assert.Contains(conflict.Intervals,r=>r.EligibleForFutureInteraction);
         Assert.True(episode.ResolvedWithoutMechanicalContact);Assert.False(episode.LegacyFallbackUsed);
@@ -499,10 +499,10 @@ public sealed class ContestedSpaceResponseTests
         var audit=engine.Resolve(snapshot,intents,new(){EnableContestedSpaceResponses=true,IncidentFrequency=0,InteractionDiagnostics=InteractionDiagnosticsLevel.FullAudit});
         Assert.Equal(summary.Changes,audit.Changes);Assert.Equal(summary.Motions,audit.Motions);
         var unique=Assert.Single(audit.Interaction!.Episodes).ResponseAlternatives
-            .Select(a=>(a.RiderId,a.Intent,a.DriveControl?.PositiveDriveFraction??1f,a.HoldLateralPosition)).Distinct().Count();
-        Assert.Equal(unique,summary.Interaction!.Work.UniqueRiderAlternativeProjections);
+            .Select(a=>(a.RiderId,a.Intent,a.DriveControl?.PositiveDriveFraction??1f,a.HoldLateralPosition,a.PhysicalTarget)).Distinct().Count();
+        Assert.InRange(summary.Interaction!.Work.UniqueRiderAlternativeProjections,unique,unique+summary.Interaction.Work.OutwardTargetTrials);
         Assert.InRange(unique,1,12);
-        Assert.InRange(summary.Interaction.Work.PairAlternativeChecks,1,54);
+        Assert.InRange(summary.Interaction.Work.PairAlternativeChecks,1,54+3*summary.Interaction.Work.OutwardTargetTrials);
         Assert.Equal(81,summary.Interaction.Work.JointCombinationsScored);
         Assert.Empty(Assert.Single(summary.Interaction.Episodes).Candidates);
         Assert.Equal(81,Assert.Single(audit.Interaction!.Episodes).Candidates.Count);

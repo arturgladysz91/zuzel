@@ -4,6 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <AssemblyName>CoreSim.Tests</AssemblyName>
     <CoreSimRoot Condition="'$(CoreSimRoot)' == ''">../..</CoreSimRoot>
   </PropertyGroup>
   <ItemGroup><ProjectReference Include="$(CoreSimRoot)/src/CoreSim/CoreSim.csproj" /></ItemGroup>

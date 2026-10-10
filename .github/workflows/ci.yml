@@ -97,13 +97,15 @@ jobs:
       - run: dotnet restore SpeedwayManager.sln
       - run: dotnet build SpeedwayManager.sln -c Release --no-restore --warnaserror
       - name: Capture physical contact arithmetic regression
-        run: dotnet run --project tools/physical-contact-consequence-audit -c Release -- results/physical-contact-consequences --trace
+        run: |
+          dotnet run --project tools/physical-contact-consequence-audit -c Release -- results/physical-contact-consequences --trace
+          dotnet run --project tools/physical-contact-consequence-audit -c Release -- results/physical-contact-consequences --yield-probe
       - uses: actions/upload-artifact@v4
         with:
           name: contact-arithmetic-${{ matrix.os }}
           path: results/physical-contact-consequences
       - name: Exact candidate trace, evidence bytes, Full/Lean and branch degree parity
-        run: dotnet test tests/CoreSim.Tests -c Release --no-build --filter "FullyQualifiedName~TrajectoryBehaviorFingerprintTests|FullyQualifiedName~LeanProjectionTests|FullyQualifiedName~ScalarEnvelopeParityTests|FullyQualifiedName~AdaptiveParallelTests|FullyQualifiedName~PhysicalSpaceTests|FullyQualifiedName~RiderGameplayProfileTests|FullyQualifiedName~ContestedSpaceResponseTests|FullyQualifiedName~PhysicalContactAnalysisTests|FullyQualifiedName~PhysicalContactConsequenceTests|FullyQualifiedName~ContactDecisionGeometryTests|FullyQualifiedName~PhysicalContactPairGenerationTests|FullyQualifiedName~OptionalSafetyProjectionTests|FullyQualifiedName~CanonicalSegmentHandoffTests" --logger "trx;LogFileName=determinism.trx" --results-directory results --verbosity normal
+        run: dotnet test tests/CoreSim.Tests -c Release --no-build --filter "FullyQualifiedName~TrajectoryBehaviorFingerprintTests|FullyQualifiedName~LeanProjectionTests|FullyQualifiedName~ScalarEnvelopeParityTests|FullyQualifiedName~AdaptiveParallelTests|FullyQualifiedName~PhysicalSpaceTests|FullyQualifiedName~RiderGameplayProfileTests|FullyQualifiedName~ContestedSpaceResponseTests|FullyQualifiedName~MinimalOutwardYieldTests|FullyQualifiedName~PhysicalContactAnalysisTests|FullyQualifiedName~PhysicalContactConsequenceTests|FullyQualifiedName~ContactDecisionGeometryTests|FullyQualifiedName~PhysicalContactPairGenerationTests|FullyQualifiedName~OptionalSafetyProjectionTests|FullyQualifiedName~CanonicalSegmentHandoffTests" --logger "trx;LogFileName=determinism.trx" --results-directory results --verbosity normal
       - name: Capture typed IEEE values and final rider/raw surface states
         shell: bash
         run: |
@@ -112,19 +114,26 @@ jobs:
           dotnet run --project src/Sandbox -c Release --no-build -- physical-occupancy-report results/physical-space
           dotnet run --project tools/rider-compatibility-audit -c Release -- results/rider-compatibility
           dotnet run --project tools/contested-space-audit -c Release -- results/contested-space
-          dotnet run --project tools/physical-contact-audit -c Release -- results/physical-contact
-          dotnet run --project tools/physical-contact-consequence-audit -c Release -- results/physical-contact-consequences
-      - name: Compare optimized engine with original merged main using exact typed behavior
+          dotnet run --project tools/physical-contact-audit -c Release -- results/physical-contact --minimal-yield
+          dotnet run --project tools/physical-contact-consequence-audit -c Release -- results/physical-contact-consequences --minimal-yield
+      - name: Compare metre targets with base main; require unrelated behavior and rider order exact
         shell: bash
         run: |
-          git fetch origin 5989301192565f6a265d53a2db12c7d00c94fedc
-          git worktree add --detach ../contested-baseline 5989301192565f6a265d53a2db12c7d00c94fedc
+          git fetch origin f40b2fd129124d969fd22cfe7767e2fb00bd651f
+          git worktree add --detach ../contested-baseline f40b2fd129124d969fd22cfe7767e2fb00bd651f
           baseline="$(cd ../contested-baseline && pwd)"
           dotnet build tools/contested-performance -c Release --warnaserror -p:CoreSimRoot="$baseline" -o ../contested-before-bin
           dotnet build tools/contested-performance -c Release --warnaserror -o ../contested-after-bin
           dotnet ../contested-before-bin/CoreSim.Tests.dll capture results/contested-performance/before.json --raw
           dotnet ../contested-after-bin/CoreSim.Tests.dll capture results/contested-performance/after.json --raw
-          python tools/contested-performance/compare.py results/contested-performance
+          python tools/minimal-yield-audit/compatibility.py contested results/contested-performance
+          dotnet build tools/contested-space-audit -c Release --warnaserror -p:CoreSimRoot="$baseline" -o ../contested-presentation-before-bin
+          dotnet ../contested-presentation-before-bin/contested-space-audit.dll results/contested-space-before
+          dotnet build tools/minimal-yield-audit -c Release --warnaserror -p:CoreSimRoot="$baseline" -o ../yield-before-bin
+          dotnet build tools/minimal-yield-audit -c Release --warnaserror -o ../yield-after-bin
+          dotnet ../yield-before-bin/CoreSim.Tests.dll results/yield-before.json
+          dotnet ../yield-after-bin/CoreSim.Tests.dll results/yield-after.json
+          python tools/minimal-yield-audit/measure.py results/yield-before.json results/yield-after.json results/yield-measurements.json
           dotnet ../contested-after-bin/CoreSim.Tests.dll type-probe results/contested-performance/types.json
           python tools/contested-performance/verify-types.py results/contested-performance/types.json
       - name: Capture complete enabled contact decisions before and after sequential recovery correction
@@ -150,7 +159,7 @@ jobs:
           dotnet build tools/race-engine-readiness -c Release --warnaserror -o ../readiness-after-bin
           dotnet ../readiness-before-bin/CoreSim.Tests.dll smoke results/readiness/before c13af7b8a16fe4e58e9d404c849cdf323649b0ed
           dotnet ../readiness-after-bin/CoreSim.Tests.dll smoke results/readiness/after "$(git rev-parse HEAD)"
-          python tools/race-engine-readiness/compare.py results/readiness
+          python tools/minimal-yield-audit/compatibility.py readiness results/readiness
       - name: Reproduce original REA-001 and verify the corrected production heats
         shell: bash
         run: |
@@ -206,22 +215,23 @@ jobs:
           python tools/trajectory-audit/compare.py captures windows ubuntu
           python tools/physical-space-audit/compare.py captures
           python tools/rider-compatibility-audit/compare.py captures
-          python tools/contested-space-audit/compare.py captures
-          python tools/physical-contact-audit/compare.py captures
-          python tools/physical-contact-consequence-audit/compare.py captures
-          python tools/contested-performance/compare.py captures --platforms
+          python tools/contested-space-audit/compare.py captures --minimal-yield
+          python tools/physical-contact-audit/compare.py captures --minimal-yield
+          python tools/physical-contact-consequence-audit/compare.py captures --minimal-yield
+          python tools/minimal-yield-audit/compatibility.py platforms captures
           python tools/contact-decision-audit/compare.py captures
-          python tools/race-engine-readiness/compare.py captures/determinism-windows-latest/readiness
-          python tools/race-engine-readiness/compare.py captures/determinism-ubuntu-latest/readiness
-          python tools/rea001-safety-audit/compare.py captures/determinism-windows-latest/rea001 captures/determinism-ubuntu-latest/rea001 --report captures/rea001-platform-comparison.json
-          python tools/rea009-handoff-audit/compare.py captures/determinism-windows-latest/rea009 captures/determinism-ubuntu-latest/rea009 --platforms --report captures/rea009-platform-comparison.json
+          python tools/minimal-yield-audit/compatibility.py readiness captures/determinism-windows-latest/readiness
+          python tools/minimal-yield-audit/compatibility.py readiness captures/determinism-ubuntu-latest/readiness
+          python tools/minimal-yield-audit/compatibility.py rea001 captures/determinism-windows-latest/rea001 captures/determinism-ubuntu-latest/rea001 captures/rea001-platform-comparison.json
+          python tools/minimal-yield-audit/compatibility.py rea009 captures/determinism-windows-latest/rea009 captures/determinism-ubuntu-latest/rea009 captures/rea009-platform-comparison.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: platform-comparison
           path: |
             captures/comparison.json
-            captures/contested-performance-comparison.json
+            captures/minimal-yield*.json*
+            captures/determinism-*/minimal-yield*.json*
             captures/contact-decision-*.json*
             captures/rea001-platform-comparison.json
             captures/rea009-platform-comparison.json

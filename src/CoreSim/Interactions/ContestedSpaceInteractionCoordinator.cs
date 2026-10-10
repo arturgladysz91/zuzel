@@ -28,6 +28,18 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
         if (snapshot.Riders.Count > 4) throw new ArgumentException("Contested space supports at most four riders per heat.");
         tracker.Bind(snapshot, options.EnablePhysicalContactConsequences);
         var p = options.ContestedSpaceParameters;
+        TrackMetricEmbedding? targetEmbedding = null;
+        Dictionary<PhysicalPoseInterval,PhysicalPoseInterval>? targetPoseCache = null;
+        TrackMetricEmbedding TargetEmbedding() => targetEmbedding ??= tracker.Embedding!.DeterministicArithmetic
+            ? tracker.Embedding : new(snapshot.Track,true);
+        PhysicalPoseInterval TargetPose(PhysicalPoseInterval pose)
+        {
+            if(pose.DeterministicArithmetic) return pose;
+            targetPoseCache??=new(ReferenceEqualityComparer.Instance);
+            if (targetPoseCache.TryGetValue(pose,out var found)) return found;
+            var result=ResolvedBikePoses.InEmbedding(pose,TargetEmbedding());
+            targetPoseCache.Add(pose,result);return result;
+        }
         // These adapters belong only to this immutable Resolve. Prefix sharing can
         // return the very same motion in several alternative horizons.
         var poseCache = new Dictionary<ResolvedRiderMotion, IReadOnlyList<PhysicalPoseInterval>>(ReferenceEqualityComparer.Instance);
@@ -40,6 +52,23 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
         }
         PhysicalPoseInterval[] Poses(ResolvedSimulationStep step)
             => step.Motions.SelectMany(MotionPoses).ToArray();
+        InteractionGeometry[] StableSides(InteractionGeometry[] rows, PhysicalPoseInterval[] poses)
+        {
+            if(tracker.Embedding!.DeterministicArithmetic) return rows;
+            return rows.Select(row=>
+            {
+                if(Math.Abs(row.OutwardBFromAMeters)>GeometryNumerics.MinimumSeparationToleranceMeters) return row;
+                var time=row.CommonTimeSeconds;
+                PhysicalPoseInterval At(int id)=>TargetPose(poses.Where(i=>i.RiderId==id
+                    &&i.StartTimeSeconds<=time&&i.EndTimeSeconds>=time).OrderByDescending(i=>i.StartTimeSeconds).First());
+                var a=At(row.RiderA);var b=At(row.RiderB);
+                var stable=InteractionGeometryModel.Describe(row.Space,a.Sample(time),b.Sample(time),
+                    a.RateBounds(time,time),b.RateBounds(time,time));
+                // Resolve only the role's signed metre measurement. Do not relax
+                // or replace the original common-time collision certificate.
+                return row with{OutwardBFromAMeters=stable.OutwardBFromAMeters};
+            }).ToArray();
+        }
         // Pair eligibility follows either member's current request, never an unrelated heat clock.
         var ridersById = snapshot.Riders.ToDictionary(r => r.RiderId);
         var requestTimes = snapshot.Riders.ToDictionary(r => r.RiderId,r => (double)r.ElapsedTimeSeconds);
@@ -67,17 +96,21 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
         var original = intents.ToDictionary(i => i.RiderId, i => Original(i));
         var evaluators = snapshot.Riders.Where(r => r.IsActive).ToDictionary(r => r.RiderId,
             r => new TrajectoryEvaluator(new RiderDecisionContext(snapshot, r)));
-        var cache = new Dictionary<(int, TrajectoryIntent, float, bool), Projection>();
-        var failedProjections = new HashSet<(int, TrajectoryIntent, float, bool)>();
+        var cache = new Dictionary<ProjectionKey, Projection>();
+        var failedProjections = new HashSet<ProjectionKey>();
         var production = 1; var narrow = direct.Work.NarrowPhaseEvaluations; var combinations = 0; var passes = 0;
         var pairChecks = 0;
+        var outwardTargetTrials = 0;
+        var continuousTargetSearch = tracker.Active.Any(e=>e.Commitments.Values.Any(a=>a.PhysicalTarget.HasValue));
         var pairReports = new Dictionary<(ProjectionKey A, ProjectionKey B), PairAlternativeResult>();
         PairAlternativeResult PairCheck(Projection a, Projection b)
         {
             var key = (Key(a.Alternative), Key(b.Alternative));
             if (reusePairResults && pairReports.TryGetValue(key, out var found)) return found;
-            var report = CommonTimePoseHistory.Compatibility(tracker.History.Where(i => i.RiderId == key.Item1.RiderId || i.RiderId == key.Item2.RiderId)
-                .Concat(a.Poses).Concat(b.Poses), Ready(key.Item1.RiderId, key.Item2.RiderId));
+            var poses=tracker.History.Where(i => i.RiderId == key.Item1.RiderId || i.RiderId == key.Item2.RiderId)
+                .Concat(a.Poses).Concat(b.Poses);
+            if(continuousTargetSearch) poses=poses.Select(TargetPose);
+            var report = CommonTimePoseHistory.Compatibility(poses, Ready(key.Item1.RiderId, key.Item2.RiderId));
             pairChecks++; narrow += report.Work.NarrowPhaseEvaluations;
             var result = new PairAlternativeResult(report.EligibleIntervals == 0 ? p.CompetitiveReachMeters : report.MinimumSeparation,
                 report.EligibleIntervals == 0 || report.HasBoundaryAmbiguity || report.HasCoverageGap,
@@ -103,11 +136,12 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
         }
         Projection Project(InteractionAlternative alternative)
         {
-            var key = (alternative.RiderId, alternative.Intent, alternative.DriveControl?.PositiveDriveFraction ?? 1f, alternative.HoldLateralPosition);
+            var key = Key(alternative);
             if (cache.TryGetValue(key, out var existing)) return existing.Alternative == alternative ? existing : existing with { Alternative = alternative };
-            var evaluator = alternative.DriveControl.HasValue || alternative.HoldLateralPosition
+            var evaluator = alternative.DriveControl.HasValue || alternative.HoldLateralPosition || alternative.PhysicalTarget.HasValue
                 ? new TrajectoryEvaluator(new RiderDecisionContext(snapshot, snapshot.Rider(alternative.RiderId)),
-                    driveControl: alternative.DriveControl, holdLateralPosition: alternative.HoldLateralPosition) : evaluators[alternative.RiderId];
+                    driveControl: alternative.DriveControl, holdLateralPosition: alternative.HoldLateralPosition,
+                    physicalTarget: alternative.PhysicalTarget) : evaluators[alternative.RiderId];
             var before = evaluator.ProductionResolutionCount;
             if (failedProjections.Contains(key)) throw new InvalidOperationException("No finite production traversal");
             TrajectoryTraversal traversal;
@@ -115,14 +149,89 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
             catch (InvalidOperationException) { failedProjections.Add(key); production += evaluator.ProductionResolutionCount - before; throw; }
             production += evaluator.ProductionResolutionCount - before;
             var projectedPoses = traversal.ResolvedMotions.SelectMany(MotionPoses).ToArray();
+            var boundsPoses=alternative.PhysicalTarget.HasValue?projectedPoses.Select(TargetPose):projectedPoses;
             var projection = new Projection(alternative, traversal, projectedPoses,
-                WithinTrack(projectedPoses, snapshot.Track, tracker.Embedding!));
+                WithinTrack(boundsPoses, snapshot.Track, alternative.PhysicalTarget.HasValue?TargetEmbedding():tracker.Embedding!));
             cache.Add(key, projection); return projection;
         }
         var baseline = original.Values.Select(Project).ToDictionary(x => x.Alternative.RiderId);
+        InteractionAlternative MinimalOutward(InteractionAlternative response, InteractionGeometry[] related)
+        {
+            if(!continuousTargetSearch) { continuousTargetSearch=true;pairReports.Clear(); }
+            var rider = snapshot.Rider(response.RiderId);
+            var lower = LaneModel.PhysicalLateralOffsetFromInnerReferenceMeters(rider.LateralPosition,
+                snapshot.Segment.Type, snapshot.Track.Geometry);
+            var upper = evaluators[rider.RiderId].Horizon.Min(part => LaneModel.UsableRacingWidthMeters(
+                snapshot.Track.Segments[part.SegmentIndex].Type, snapshot.Track.Geometry));
+            // Inner opponents' entire executed requests constrain the destination, not
+            // just their initial lateral gap. Every final joint pair is certified again.
+            var inside = related.Where(g => (g.RiderA == rider.RiderId ? g.OutwardBFromAMeters : -g.OutwardBFromAMeters) < 0)
+                .Select(g => g.RiderA == rider.RiderId ? g.RiderB : g.RiderA).Distinct().Order().ToArray();
+            var margin = InteractionGeometryModel.ExecutionMarginMeters(rider, p)
+                + .10 * (1 - rider.Profile.Gameplay.InteractionStyle.Combativeness);
+            var certifiedMargins = new Dictionary<ProjectionKey, double>();
+            InteractionAlternative At(float offset) => response with { PhysicalTarget = new(offset) };
+            bool Clear(InteractionAlternative candidate)
+            {
+                outwardTargetTrials++;
+                Projection projection;
+                try { projection = Project(candidate); } catch (InvalidOperationException) { return false; }
+                if (!projection.WithinTrack || !projection.Traversal.CompletedHorizon) return false;
+                var achievedMargin = double.PositiveInfinity;
+                foreach (var id in inside)
+                {
+                    var pair = rider.RiderId < id ? PairCheck(projection, baseline[id]) : PairCheck(baseline[id], projection);
+                    if (pair.HasBoundaryAmbiguityOrCoverageGap || pair.Intervals.Count > 0) return false;
+                    achievedMargin = Math.Min(achievedMargin, pair.MinimumSeparation);
+                }
+                certifiedMargins[Key(candidate)] = achievedMargin;
+                return achievedMargin >= margin;
+            }
+            if (lower > upper) return response with { HoldLateralPosition = true };
+            var held = At(lower);
+            if (Clear(held)) return held;
+            var high = upper;
+            if (cache.TryGetValue(Key(held), out var heldProjection))
+            {
+                var shortfall = inside.Max(id => Math.Max(0, margin - (rider.RiderId < id
+                    ? PairCheck(heldProjection, baseline[id]) : PairCheck(baseline[id], heldProjection)).MinimumSeparation));
+                high = Math.Min(upper, lower + (float)shortfall + OutwardTargetToleranceMeters);
+            }
+            var best = At(high);
+            var seeded = best;
+            var seededHigh = high;
+            // Failure remains a physical attempt, with no certificate. Joint filters,
+            // actual replay and existing safety/contact consequences retain authority.
+            var clear = Clear(best);
+            if (!clear && high < upper) { high = upper; best = At(high); clear = Clear(best); }
+            if (!clear)
+            {
+                if (!certifiedMargins.TryGetValue(Key(best), out var attainableMargin))
+                {
+                    // A physical outer endpoint can fail the footprint bound even
+                    // though the seed was mechanically clear. Keep that certificate.
+                    if (!certifiedMargins.TryGetValue(Key(seeded), out attainableMargin)) return held;
+                    best = seeded; high = seededHigh;
+                }
+                // A tight initial gap may make the preferred buffer unattainable
+                // even with ample later room. Mechanical certification still holds;
+                // never discard a genuinely clear outward response for that reason.
+                margin = attainableMargin;
+                if (certifiedMargins.TryGetValue(Key(held), out var heldMargin) && heldMargin >= margin) return held;
+            }
+            upper = high;
+            for (var trial = 0; trial < OutwardTargetRefinements && upper - lower > OutwardTargetToleranceMeters; trial++)
+            {
+                var middle = (lower + upper) * .5f;
+                var candidate = At(middle);
+                if (Clear(candidate)) { upper = middle; best = candidate; } else lower = middle;
+            }
+            return best;
+        }
         var forecast = CommonTimePoseHistory.Observe(tracker.History.Concat(baseline.Values.SelectMany(x => x.Poses)));
         narrow += forecast.Work.NarrowPhaseEvaluations;
-        var edges = Threats(forecast, tracker.History.Concat(baseline.Values.SelectMany(x => x.Poses)).ToArray(), now, p,requestTimes);
+        var forecastPoses=tracker.History.Concat(baseline.Values.SelectMany(x=>x.Poses)).ToArray();
+        var edges = StableSides(Threats(forecast, forecastPoses, now, p,requestTimes),forecastPoses);
         var clusters = Clusters(edges, snapshot, p);
         foreach (var episode in tracker.Active.Where(e => e.LastDiagnostic is not null))
         {
@@ -175,15 +284,20 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
                 episode.ReleaseNotBefore=cluster.Edges.Max(g=>g.Space.FirstTouchCommonTimeSeconds??g.Space.MinimumSeparationCommonTimeSeconds);
             episode.PredictedMechanical |= cluster.Edges.Any(e => e.Space.HasConflict);
             var alternatives = cluster.Riders.ToDictionary(id => id,
-                id => Alternatives(snapshot, snapshot.Rider(id), original[id], cluster, episode, p).ToArray());
+                id => Alternatives(snapshot, snapshot.Rider(id), original[id], cluster, episode, p, MinimalOutward).ToArray());
             var candidates = new List<InteractionCandidateDiagnostic>();
             (InteractionAlternative[] Responses, InteractionCost Cost, double Minimum)? winner = null, retained = null, unresolvedSafety = null;
             var searched = 0;
-            double TacticalTie(InteractionAlternative[] joint) => joint.Sum(a => DeterministicRandom.Sample01(
-                snapshot.Step.Seed, snapshot.Step.HeatId, (int)episode.Id, a.RiderId,
-                RandomChannel.InteractionTacticalTie, (int)cluster.Context, (int)a.Response,
-                a.Intent.EntryTarget, a.Intent.ApexTarget, a.Intent.ExitTarget,
-                BitConverter.SingleToInt32Bits(a.DriveControl?.PositiveDriveFraction ?? 1f), a.HoldLateralPosition ? 1 : 0));
+            double TacticalTie(InteractionAlternative[] joint) => joint.Sum(a =>
+            {
+                var address = new[] { (int)cluster.Context, (int)a.Response,
+                    a.Intent.EntryTarget, a.Intent.ApexTarget, a.Intent.ExitTarget,
+                    BitConverter.SingleToInt32Bits(a.DriveControl?.PositiveDriveFraction ?? 1f), a.HoldLateralPosition ? 1 : 0 };
+                if (a.PhysicalTarget is { } physical)
+                    address = address.Append(BitConverter.SingleToInt32Bits(physical.OffsetFromInnerReferenceMeters)).ToArray();
+                return DeterministicRandom.Sample01(snapshot.Step.Seed, snapshot.Step.HeatId, (int)episode.Id,
+                    a.RiderId, RandomChannel.InteractionTacticalTie, address);
+            });
             void Search()
             {
                 var choices = cluster.Riders.Select(id => alternatives[id]).ToArray();
@@ -216,7 +330,7 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
                     var failed = projections.Any(x => cluster.Riders.Contains(x.Alternative.RiderId) && !x.Traversal.CompletedHorizon);
                     var cost = new InteractionCost(joint.Sum(a => Project(a).Traversal.PredictedTraversalTimeSeconds
                             - baseline[a.RiderId].Traversal.PredictedTraversalTimeSeconds),
-                        joint.Sum(a => Deviation(a.Intent, original[a.RiderId].Intent) * .025),
+                        joint.Sum(a => ResponseDeviation(a, original[a.RiderId].Intent, snapshot) * .025),
                         joint.Sum(a => a.TacticalPreference),
                         joint.Sum(a => Math.Max(0, InteractionGeometryModel.ExecutionMarginMeters(snapshot.Rider(a.RiderId), p)
                             + .10 * (1 - snapshot.Rider(a.RiderId).Profile.Gameplay.InteractionStyle.Combativeness) - minimum)));
@@ -226,7 +340,7 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
                         space.IneligibleIntervals));
                     if (feasible && joint.All(a => episode.Commitments.TryGetValue(a.RiderId, out var previous)
                         && previous.Response == a.Response && previous.Intent == a.Intent && previous.DriveControl == a.DriveControl
-                        && previous.HoldLateralPosition == a.HoldLateralPosition)) retained = (joint, cost, minimum);
+                        && previous.HoldLateralPosition == a.HoldLateralPosition && previous.PhysicalTarget == a.PhysicalTarget)) retained = (joint, cost, minimum);
                     if (unresolvedSafety is null && !feasible && mechanical && joint.All(a => a.Response is InteractionResponse.BackOut or InteractionResponse.EmergencyAvoid)
                         && minimum >= cluster.Edges.Min(g => g.Space.MinimumSeparationMeters) - GeometryNumerics.MinimumSeparationToleranceMeters)
                         unresolvedSafety = (joint, cost, minimum);
@@ -279,6 +393,7 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
             TargetLane = CurrentTarget(selected[i.RiderId].Intent, snapshot),
             Trajectory = selected[i.RiderId].Intent, DriveControl = selected[i.RiderId].DriveControl,
             HoldLateralPosition = selected[i.RiderId].HoldLateralPosition,
+            InteractionTarget = selected[i.RiderId].PhysicalTarget,
         })).ToArray();
         var finalIntents = SelectedIntents();
         // Re-resolve actual current paths with the real addressed incident options.
@@ -291,7 +406,8 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
         var actualVerifications = 1;
         // Freeze the actual verified motions once. Every safety alternative starts at
         // the same original request boundary; never commit or advance a rider twice.
-        var safetyEdges = Contacts(verification, tracker.History.Concat(actualPoses).ToArray(), requestTimes);
+        var safetyPoses=tracker.History.Concat(actualPoses).ToArray();
+        var safetyEdges = StableSides(Contacts(verification, safetyPoses, requestTimes),safetyPoses);
         // A single joint safety correction also protects against a new conflict
         // between two independently corrected subclusters in this production step.
         var safetyComponents = Clusters(safetyEdges, snapshot, p);
@@ -309,7 +425,8 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
                 var rider = snapshot.Rider(alternative.RiderId);
                 var solo = new SimulationSnapshot(snapshot.Step, snapshot.Track, snapshot.TrackState, new[] { rider });
                 var decision = new RiderDecision(CurrentTarget(alternative.Intent, snapshot))
-                { Trajectory = alternative.Intent, DriveControl = alternative.DriveControl, HoldLateralPosition = alternative.HoldLateralPosition };
+                { Trajectory = alternative.Intent, DriveControl = alternative.DriveControl, HoldLateralPosition = alternative.HoldLateralPosition,
+                    InteractionTarget = alternative.PhysicalTarget };
                 ResolvedRiderMotion motion;
                 RiderStateChange change;
                 if (key == Key(frozen[rider.RiderId]))
@@ -333,7 +450,9 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
                 var traversal = new TrajectoryTraversal(alternative.Intent, motion.TotalTimeSeconds,
                     motion.TotalDistanceMeters, null, null, null, null, null, null, null, 0, 0,
                     change.Status != RiderRaceStatus.Crashed, Array.Empty<TrajectoryPhaseEndpoint>(), new[] { motion });
-                var projected = new Projection(alternative, traversal, poses, WithinTrack(poses, snapshot.Track, tracker.Embedding!));
+                var boundsPoses=alternative.PhysicalTarget.HasValue?poses.Select(TargetPose):poses;
+                var projected = new Projection(alternative, traversal, poses,
+                    WithinTrack(boundsPoses, snapshot.Track, alternative.PhysicalTarget.HasValue?TargetEmbedding():tracker.Embedding!));
                 return projected;
             }
             var safetyCache = new OptionalSafetyProjectionCache<Projection>(ResolveSafetyProjection);
@@ -342,8 +461,10 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
             {
                 var key = (Key(left.Alternative), Key(right.Alternative));
                 if (safetyPairs.TryGetValue(key, out var cached)) return cached;
-                var report = CommonTimePoseHistory.Compatibility(tracker.History.Where(i => i.RiderId == key.Item1.RiderId || i.RiderId == key.Item2.RiderId)
-                    .Concat(left.Poses).Concat(right.Poses), Ready(key.Item1.RiderId, key.Item2.RiderId));
+                var poses=tracker.History.Where(i => i.RiderId == key.Item1.RiderId || i.RiderId == key.Item2.RiderId)
+                    .Concat(left.Poses).Concat(right.Poses);
+                if(continuousTargetSearch) poses=poses.Select(TargetPose);
+                var report = CommonTimePoseHistory.Compatibility(poses, Ready(key.Item1.RiderId, key.Item2.RiderId));
                 pairChecks++; narrow += report.Work.NarrowPhaseEvaluations;
                 var result = new PairAlternativeResult(report.EligibleIntervals == 0 ? p.CompetitiveReachMeters : report.MinimumSeparation,
                     report.EligibleIntervals == 0 || report.HasBoundaryAmbiguity || report.HasCoverageGap,
@@ -362,6 +483,50 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
                 var emergency = yield is null ? back with { Response = InteractionResponse.EmergencyAvoid }
                     : yield with { Response = InteractionResponse.EmergencyAvoid, DriveControl = RiderDriveControl.LiftThrottle,
                         TacticalPreference = 0, Reason = "Safety pass: already available lateral yield with current-step lift" };
+                if (emergency.PhysicalTarget is { } physical)
+                {
+                    var lower = physical.OffsetFromInnerReferenceMeters;
+                    var upper = LaneModel.UsableRacingWidthMeters(snapshot.Segment.Type, snapshot.Track.Geometry);
+                    var inside = scope.Contacts.Where(g => (g.RiderA == id || g.RiderB == id)
+                        && (g.RiderA == id ? g.OutwardBFromAMeters : -g.OutwardBFromAMeters) < 0)
+                        .Select(g => g.RiderA == id ? g.RiderB : g.RiderA).Distinct().Order().ToArray();
+                    bool Clear(InteractionAlternative alternative)
+                    {
+                        outwardTargetTrials++;
+                        var result = SafetyProject(alternative);
+                        if (result.Value is not { WithinTrack: true } projection || !projection.Traversal.CompletedHorizon) return false;
+                        foreach (var other in inside)
+                        {
+                            var opponent = SafetyProject(frozen[other]);
+                            if (opponent.Value is null) return false;
+                            var pair = id < other ? SafetyPair(projection, opponent.Value) : SafetyPair(opponent.Value, projection);
+                            if (pair.Intervals.Count > 0 || pair.HasBoundaryAmbiguityOrCoverageGap) return false;
+                        }
+                        return true;
+                    }
+                    // Actual incidents can require more room than the incident-free
+                    // forecast. Derive a metre bracket from actual #55 shortfall;
+                    // retain one safety choice, never enlarge the joint product.
+                    if (inside.Length > 0 && !Clear(emergency))
+                    {
+                        var shortfall = scope.Contacts.Where(g => g.RiderA == id || g.RiderB == id)
+                            .Max(g => Math.Max(0, p.PressureClearanceMeters - g.Space.MinimumSeparationMeters));
+                        var high = Math.Min(upper, lower + (float)shortfall);
+                        var best = emergency with { PhysicalTarget = new(high) };
+                        var clear = Clear(best);
+                        if (!clear && high < upper) { high = upper; best = emergency with { PhysicalTarget = new(high) }; clear = Clear(best); }
+                        if (clear)
+                        {
+                            for (var trial = 0; trial < OutwardTargetRefinements && high - lower > OutwardTargetToleranceMeters; trial++)
+                            {
+                                var middle = (lower + high) * .5f;
+                                var candidate = emergency with { PhysicalTarget = new(middle) };
+                                if (Clear(candidate)) { high = middle; best = candidate; } else lower = middle;
+                            }
+                            emergency = best;
+                        }
+                    }
+                }
                 return new[] { keep, back, emergency };
             }
             var choices = ids.Select(SafetyChoices).ToArray();
@@ -598,6 +763,7 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
                 ActualProductionVerifications = actualVerifications + (ReferenceEquals(final, actual) ? 0 : 1), SafetyPasses = safetyPasses, LegacyFallbackAttempts = fallbackPairs.Count,
                 SafetyContactComponents = safetyComponents.Count, FinalContactComponents = finalComponents.Count,
                 SafetyJointCombinations = safetyJointCombinations,
+                OutwardTargetTrials = outwardTargetTrials,
             }) { PhysicalContactAnalysis = options.PhysicalContactDiagnostics == PhysicalContactDiagnosticsLevel.None ? null
                 : options.PhysicalContactDiagnostics == PhysicalContactDiagnosticsLevel.Summary && physicalContact is not null
                     ? physicalContact with { Level = PhysicalContactDiagnosticsLevel.Summary, AuditPairs = Array.Empty<PhysicalContactPairAnalysis>(), AuditRiders = Array.Empty<RiderContactAnalysis>() }
@@ -612,6 +778,14 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
         => intent.TargetFor(snapshot.Segment.Type);
     private static double Deviation(TrajectoryIntent a, TrajectoryIntent b)
         => Math.Abs(a.EntryTarget - b.EntryTarget) + Math.Abs(a.ApexTarget - b.ApexTarget) + Math.Abs(a.ExitTarget - b.ExitTarget);
+    private static double ResponseDeviation(InteractionAlternative a, TrajectoryIntent b, SimulationSnapshot snapshot)
+    {
+        if (a.PhysicalTarget is not { } target) return Deviation(a.Intent, b);
+        var position = target.Position(snapshot.Segment.Type, snapshot.Track.Geometry);
+        return Math.Abs(position - b.EntryTarget) + Math.Abs(position - b.ApexTarget) + Math.Abs(position - b.ExitTarget);
+    }
+    internal const int OutwardTargetRefinements = 8;
+    internal const float OutwardTargetToleranceMeters = .02f;
     private static bool Better(InteractionCost a, InteractionAlternative[] ar, InteractionCost b, InteractionAlternative[] br,
         Func<InteractionAlternative[],double> tacticalTie)
     {
@@ -777,7 +951,8 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
         return result;
     }
     private static IEnumerable<InteractionAlternative> Alternatives(SimulationSnapshot snapshot, RiderSnapshot rider,
-        InteractionAlternative original, Cluster cluster, InteractionEpisode episode, ContestedSpaceParameters p)
+        InteractionAlternative original, Cluster cluster, InteractionEpisode episode, ContestedSpaceParameters p,
+        Func<InteractionAlternative, InteractionGeometry[], InteractionAlternative> minimalOutward)
     {
         yield return original;
         var related = cluster.Edges.Where(g => g.RiderA == rider.RiderId || g.RiderB == rider.RiderId).ToArray();
@@ -803,7 +978,7 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
         { response = InteractionResponse.CutInside; plan = new(original.Intent.EntryTarget, original.Intent.ApexTarget, Math.Max(0, current - 1)); }
         else if (otherOutward < 0)
         { response = establishedInside ? InteractionResponse.YieldOutward : InteractionResponse.ContinueOutside;
-            target = Math.Min(4, current + 1); plan = new(target, target, target); }
+            plan = new(current, current, current); }
         else { plan = new(current, current, original.Intent.ExitTarget); }
         var domain = InteractionGeometryModel.SkillDomain(response, InteractionGeometryModel.Role(rider.RiderId, nearest));
         var quality = domain switch
@@ -819,9 +994,11 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
         // PreferredLine is a small tie preference, not a physical bonus.
         tactical += style.PreferredLine == PreferredLine.Inside ? .002 * plan.ExitTarget
             : style.PreferredLine == PreferredLine.Outside ? .002 * (4 - plan.ExitTarget) : 0;
-        yield return retainedCommitment ?? new(rider.RiderId, response, plan, null, tactical, establishedInside
+        var local = new InteractionAlternative(rider.RiderId, response, plan, null, tactical, establishedInside
             ? "Established footprint overlap forbids covering through the inside rider" : "Local phase response; production feasibility required",
             response == InteractionResponse.Hold);
+        yield return retainedCommitment ?? (response is InteractionResponse.YieldOutward or InteractionResponse.ContinueOutside
+            ? minimalOutward(local, related) : local);
         yield return new(rider.RiderId, imminent ? InteractionResponse.EmergencyAvoid : InteractionResponse.BackOut,
             new(current, current, current), RiderDriveControl.LiftThrottle, .04 * style.Combativeness,
             "Hold available lateral position and lift positive drive; no direct speed change", true);

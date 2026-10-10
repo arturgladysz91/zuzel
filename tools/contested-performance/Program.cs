@@ -59,6 +59,16 @@ cases.Add(new("repeated-contact", capture => {
 cases.Add(new("solo-heat", capture => RunHeat(heat with {Riders = heat.Riders.Take(1).ToArray()}, false, false, 7, WeatherState.Dry, capture)));
 cases.Add(new("contact-diagnostics", capture => Resolve(scenarios.Single(s => s.Name == "imminent-overlap"), true, false, capture,
     physicalDiagnostics: true)));
+if (mode == "benchmark-contact")
+{
+    cases.Clear();
+    cases.Add(new("eight-contact-resolutions-C", capture =>
+    {
+        for (var repeat = 0; repeat < 8; repeat++)
+            Resolve(scenarios.Single(s => s.Name == "imminent-overlap"), true, false, capture, physicalConsequences: true);
+    }));
+    cases.Add(new("I-heat-C", capture => RunHeat(heat, true, false, 7, WeatherState.Dry, capture, physicalConsequences: true)));
+}
 if (mode == "capture")
 {
     var manifests = new SortedDictionary<string, object>(StringComparer.Ordinal);
@@ -141,7 +151,7 @@ Write(output, new {Schema = "contested-performance-v1", Environment = new {
     Stopwatch.Frequency }, WarmupProtocol = "At least eight complete runs and at least three seconds per case", Samples = samples, Measurements = measurements});
 
 static void Resolve(ContestedScenario scenario, bool enabled, bool reverse, Collector collector, InteractionEpisodeTracker? tracker=null,float time=0,
-    bool physicalDiagnostics=false)
+    bool physicalDiagnostics=false, bool physicalConsequences=false)
 {
     var basis = ContestedSpaceResponseEvidence.Snapshot(scenario.Name=="safety-correction" ? scenario with {Seed=57} : scenario,reverse);
     var snapshot = new SimulationSnapshot(scenario.Name=="safety-correction" ? basis.Step with {Seed=276} : basis.Step,
@@ -149,20 +159,25 @@ static void Resolve(ContestedScenario scenario, bool enabled, bool reverse, Coll
     var intents = scenario.Riders.Select(r=>new RiderIntent(r.Id,new RiderDecision(r.Intent.TargetFor(snapshot.Segment.Type)){Trajectory=r.Intent})).ToArray();
     var engine = new SimulationEngine(new FixedDecision());
     var step = engine.Resolve(snapshot,reverse ? intents.Reverse().ToArray() : intents,new() {
-        EnableContestedSpaceResponses=enabled,IncidentFrequency=scenario.IncidentFrequency,
+        EnableContestedSpaceResponses=enabled,EnablePhysicalContactConsequences=physicalConsequences,IncidentFrequency=scenario.IncidentFrequency,
         InteractionDiagnostics=collector.Capture ? InteractionDiagnosticsLevel.FullAudit : InteractionDiagnosticsLevel.Summary,
         PhysicalContactDiagnostics=physicalDiagnostics ? PhysicalContactDiagnosticsLevel.FullAudit : PhysicalContactDiagnosticsLevel.None},tracker);
     collector.OnStepResolved(step);
+    if (physicalConsequences && scenario.Name == "imminent-overlap"
+        && step.Interaction?.PhysicalContactConsequences?.AppliedPairs.Count is not > 0)
+        throw new InvalidOperationException("Contact-heavy C benchmark requires genuine applied contact consequences.");
     if(tracker is not null) engine.Commit(step,snapshot.Riders.Select(r=>r.ToMutableCopy()).ToArray(),
         new TrackState(snapshot.Track.Segments.Count,5,snapshot.TrackState.GetSurface),new CoreSim.Logging.SimLog(false));
 }
-static void RunHeat(BehaviorScenario scenario, bool enabled, bool reverse, int seed, WeatherState weather, Collector collector)
+static void RunHeat(BehaviorScenario scenario, bool enabled, bool reverse, int seed, WeatherState weather, Collector collector,
+    bool physicalConsequences=false)
 {
     var riders = scenario.Riders.Select(r => r.Create(scenario.Track)).ToList();
     var surface = scenario.CreateSurface();
     var result = new HeatSimulator(new AdaptiveDecisionModel()).SimulateHeat(scenario.Track, surface,
         (reverse ? riders.AsEnumerable().Reverse() : riders).ToList(), new() { Seed = seed, Weather = weather,
-            EnableContestedSpaceResponses = enabled, InteractionDiagnostics = InteractionDiagnosticsLevel.Summary,
+            EnableContestedSpaceResponses = enabled, EnablePhysicalContactConsequences = physicalConsequences,
+            InteractionDiagnostics = InteractionDiagnosticsLevel.Summary,
             EnableLogging = collector.Capture }, 57, collector);
     if (collector.Capture) collector.Values.Add(new {result.Classification, result.Log, Riders=riders.ToArray(), Surface = surface.Snapshot()});
 }
@@ -233,6 +248,7 @@ static class FeatureOffSchema
         ["CoreSim.SimulationStepEvent"] = new[]{"PhysicalContactConsequence"},
         ["CoreSim.RiderStepDiagnostics"] = new[]{"PhysicalContactConsequence","FinalSpeedMetersPerSecond","FinalStatus"},
         ["CoreSim.Interactions.InteractionResolution"] = new[]{"PhysicalContactConsequences"},
+        ["CoreSim.Interactions.InteractionAlternative"] = new[]{"PhysicalTarget"},
     };
 }
 sealed record Case(string Name, Action<Collector> Run);

@@ -14,8 +14,17 @@ for name in sorted(names):
 report = json.loads((windows / "contested-space-racing-response.json").read_text())
 golden = Path(__file__).resolve().parents[2] / "docs/calibration/contested-space-racing-response.json"
 frozen = runpy.run_path(str(Path(__file__).resolve().parents[1] / "contested-performance/compare-frozen.py"))
-changes = frozen["compare"](frozen["read"](golden), frozen["read"](windows / "contested-space-racing-response.json"))
-(root / "contested-work-savings.json").write_text(json.dumps(changes,indent=2)+"\n")
+if len(sys.argv) == 3 and sys.argv[2] == "--minimal-yield":
+    target = runpy.run_path(str(Path(__file__).resolve().parents[1] / "minimal-yield-audit/compatibility.py"))
+    for platform in ("windows-latest", "ubuntu-latest"):
+        directory = root / f"determinism-{platform}"
+        target["presentation"](directory / "contested-space-before/contested-space-racing-response.json",
+            directory / "contested-space/contested-space-racing-response.json",
+            directory / "minimal-yield-presentation-changes.json.gz")
+else:
+    assert len(sys.argv) == 2
+    changes = frozen["compare"](frozen["read"](golden), frozen["read"](windows / "contested-space-racing-response.json"))
+    (root / "contested-work-savings.json").write_text(json.dumps(changes,indent=2)+"\n")
 assert len(report["Scenarios"]) == 13
 assert len(report["Sensitivity"]) == len(report["TechniqueCondition"]) == 9
 assert len(report["Heats"]) == 44 and len(report["Archetypes"]) == 32

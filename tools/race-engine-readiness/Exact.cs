@@ -34,5 +34,8 @@ internal static class Exact
         { var i = 0; foreach (var item in sequence) Walk(item, $"{path}[{i++}]", rows); rows[path + ".Count"] = i; return; }
         foreach (var p in type.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(p => p.GetIndexParameters().Length == 0))
             Walk(p.GetValue(value), path + "." + p.Name, rows);
+        // Align absence in historical assemblies with the current inert null API.
+        if (type.FullName == "CoreSim.Interactions.InteractionAlternative" && type.GetProperty("PhysicalTarget") is null)
+            Walk(null, path + ".PhysicalTarget", rows);
     }
 }
