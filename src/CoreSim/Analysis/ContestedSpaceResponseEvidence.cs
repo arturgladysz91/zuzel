@@ -247,7 +247,8 @@ public static class ContestedSpaceResponseEvidence
                     if (!row.Pass1ActualMechanicalContact && !row.Geometry.Any(g => g.Space.HasConflict && g.TimeToConflictSeconds <= new ContestedSpaceParameters().EmergencyTimeSeconds)
                         && row.Candidates.Any(c => c.Feasible && c.Responses.All(a => previous.SelectedResponses.Any(old => old.RiderId == a.RiderId
                             && a.Response == old.Response && a.Intent == old.Intent
-                            && a.DriveControl == old.DriveControl && a.HoldLateralPosition == old.HoldLateralPosition)))) unexplained++;
+                            && a.DriveControl == old.DriveControl && a.HoldLateralPosition == old.HoldLateralPosition
+                            && a.PhysicalTarget == old.PhysicalTarget)))) unexplained++;
                 }
                 beforePrior = priorChoice; priorChoice = choice; previous = row;
             }

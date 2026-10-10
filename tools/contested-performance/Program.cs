@@ -233,6 +233,7 @@ static class FeatureOffSchema
         ["CoreSim.SimulationStepEvent"] = new[]{"PhysicalContactConsequence"},
         ["CoreSim.RiderStepDiagnostics"] = new[]{"PhysicalContactConsequence","FinalSpeedMetersPerSecond","FinalStatus"},
         ["CoreSim.Interactions.InteractionResolution"] = new[]{"PhysicalContactConsequences"},
+        ["CoreSim.Interactions.InteractionAlternative"] = new[]{"PhysicalTarget"},
     };
 }
 sealed record Case(string Name, Action<Collector> Run);

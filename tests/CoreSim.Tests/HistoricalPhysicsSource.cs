@@ -14,6 +14,18 @@ internal static class HistoricalPhysicsSource
     /// </summary>
     internal static string ForHash(string relative, string text)
     {
+        var targetRoot = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../../../"));
+        var targetRaw = File.ReadAllText(Path.Combine(targetRoot,"tests/fixtures/minimal-yield-source-extraction.json"))
+            .Replace("\r\n","\n",StringComparison.Ordinal);
+        Assert.Equal("cf79e8d0a6979ad64560a1fafd378ea8814369896dadcb5d8d87c259a0103924",
+            Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(targetRaw))).ToLowerInvariant());
+        using var targetExtraction = JsonDocument.Parse(targetRaw);
+        if (targetExtraction.RootElement.GetProperty("Patches").TryGetProperty(relative,out var targetPatches))
+            foreach (var patch in targetPatches.EnumerateArray())
+            {
+                Assert.Contains(patch.GetProperty("After").GetString()!,text,StringComparison.Ordinal);
+                text=text.Replace(patch.GetProperty("After").GetString()!,patch.GetProperty("Before").GetString()!,StringComparison.Ordinal);
+            }
         if (relative is "src/CoreSim/Decisions/RiderDecision.cs" or "src/CoreSim/DeterministicRandom.cs")
         {
             var root = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../../../"));

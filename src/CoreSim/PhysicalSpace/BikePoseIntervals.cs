@@ -155,9 +155,15 @@ public static class ResolvedBikePoses
                     if (p > p0 && p < p1) cuts.Add(start + (end - start) * (p - p0) / (p1 - p0));
             }
             cuts.Sort();
-            for (var cut = 1; cut < cuts.Count; cut++) result.Add(new ProductionPoseInterval(motion, track,
-                a, b, embedding, source, cuts[cut - 1], cuts[cut], dimensions ?? SpeedwayBikeDimensions.Reference, profile,
-                cut == 1 && discontinuity));
+            for (var cut = 1; cut < cuts.Count; cut++)
+            {
+                // A progress knot can round to an existing common-time endpoint.
+                // It adds no duration; the neighboring positive interval still covers it.
+                if (cuts[cut] <= cuts[cut - 1]) continue;
+                result.Add(new ProductionPoseInterval(motion, track,
+                    a, b, embedding, source, cuts[cut - 1], cuts[cut], dimensions ?? SpeedwayBikeDimensions.Reference, profile,
+                    cuts[cut - 1] == start && discontinuity));
+            }
         }
         return result.AsReadOnly();
     }

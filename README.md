@@ -7,6 +7,8 @@ legacy contact occurrence and consequence routines do not run. #55 remains the s
 The segment is not reintegrated after impact. Historical contact descriptions below apply with this flag OFF.
 
 Current racing-response precedence (#56B): [bounded pre-contact contested-space responses](docs/calibration/contested-space-racing-response.md)
+
+Current outward-target precedence: [geometry-based minimal outward yielding](docs/calibration/minimal-outward-yield.md)
 adds an opt-in heat-scoped coordinator after independent #54 planning. Joint alternatives
 execute production motion and are verified by #55; legacy consequences are authorized once
 for an unresolved eligible episode. Feature OFF retains the merged #56A behavior. Strength,
