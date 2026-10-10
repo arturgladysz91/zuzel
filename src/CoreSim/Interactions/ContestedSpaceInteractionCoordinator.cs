@@ -52,6 +52,23 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
         }
         PhysicalPoseInterval[] Poses(ResolvedSimulationStep step)
             => step.Motions.SelectMany(MotionPoses).ToArray();
+        InteractionGeometry[] StableSides(InteractionGeometry[] rows, PhysicalPoseInterval[] poses)
+        {
+            if(tracker.Embedding!.DeterministicArithmetic) return rows;
+            return rows.Select(row=>
+            {
+                if(Math.Abs(row.OutwardBFromAMeters)>GeometryNumerics.MinimumSeparationToleranceMeters) return row;
+                var time=row.CommonTimeSeconds;
+                PhysicalPoseInterval At(int id)=>TargetPose(poses.Where(i=>i.RiderId==id
+                    &&i.StartTimeSeconds<=time&&i.EndTimeSeconds>=time).OrderByDescending(i=>i.StartTimeSeconds).First());
+                var a=At(row.RiderA);var b=At(row.RiderB);
+                var stable=InteractionGeometryModel.Describe(row.Space,a.Sample(time),b.Sample(time),
+                    a.RateBounds(time,time),b.RateBounds(time,time));
+                // Resolve only the role's signed metre measurement. Do not relax
+                // or replace the original common-time collision certificate.
+                return row with{OutwardBFromAMeters=stable.OutwardBFromAMeters};
+            }).ToArray();
+        }
         // Pair eligibility follows either member's current request, never an unrelated heat clock.
         var ridersById = snapshot.Riders.ToDictionary(r => r.RiderId);
         var requestTimes = snapshot.Riders.ToDictionary(r => r.RiderId,r => (double)r.ElapsedTimeSeconds);
@@ -213,7 +230,8 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
         }
         var forecast = CommonTimePoseHistory.Observe(tracker.History.Concat(baseline.Values.SelectMany(x => x.Poses)));
         narrow += forecast.Work.NarrowPhaseEvaluations;
-        var edges = Threats(forecast, tracker.History.Concat(baseline.Values.SelectMany(x => x.Poses)).ToArray(), now, p,requestTimes);
+        var forecastPoses=tracker.History.Concat(baseline.Values.SelectMany(x=>x.Poses)).ToArray();
+        var edges = StableSides(Threats(forecast, forecastPoses, now, p,requestTimes),forecastPoses);
         var clusters = Clusters(edges, snapshot, p);
         foreach (var episode in tracker.Active.Where(e => e.LastDiagnostic is not null))
         {
@@ -388,7 +406,8 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
         var actualVerifications = 1;
         // Freeze the actual verified motions once. Every safety alternative starts at
         // the same original request boundary; never commit or advance a rider twice.
-        var safetyEdges = Contacts(verification, tracker.History.Concat(actualPoses).ToArray(), requestTimes);
+        var safetyPoses=tracker.History.Concat(actualPoses).ToArray();
+        var safetyEdges = StableSides(Contacts(verification, safetyPoses, requestTimes),safetyPoses);
         // A single joint safety correction also protects against a new conflict
         // between two independently corrected subclusters in this production step.
         var safetyComponents = Clusters(safetyEdges, snapshot, p);

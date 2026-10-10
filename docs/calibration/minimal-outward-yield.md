@@ -89,6 +89,12 @@ The native B geometry for requests without a continuous target remains unchanged
 This prevents platform-native trigonometric differences from selecting different
 continuous destinations. Actual production execution and contact checks still
 retain their existing arithmetic modes.
+Every competing pair in a search that constructs or retains a continuous target
+uses that same arithmetic mode. Near-zero signed outward measurements, within
+the existing #55 minimum-separation tolerance, also establish the inside/outside
+role with deterministic geometry before building responses. Only that signed
+metre measurement is replaced; the original collision certificate is retained.
+No clearance or numerical tolerance is relaxed.
 
 The #56C1/#56C2 historical reports also include production scenarios. Their explicit
 `--minimal-yield` CI gate preserves controlled fixtures, sensitivity, raw grid,

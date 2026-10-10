@@ -2,6 +2,7 @@ using CoreSim.Analysis;
 using CoreSim.Decisions;
 using CoreSim.Interactions;
 using CoreSim.PhysicalSpace;
+using CoreSim.Race;
 using Xunit;
 
 namespace CoreSim.Tests;
@@ -10,6 +11,23 @@ namespace CoreSim.Tests;
 public sealed class MinimalOutwardYieldTests
 {
     private static ContestedScenario Scenario(string name) => ContestedSpaceResponseEvidence.Scenarios().Single(s => s.Name == name);
+
+    [Fact]
+    public void NearZeroSideRolesAndMetreRequestsUseTheSameGeometryInBandC()
+    {
+        var scenario=new ContestedScenario("near-zero-side",4,new[]{
+            new ContestedRiderInput(1,0,.30f,22,new(0,0,0)),
+            new ContestedRiderInput(2,0,.28f,22,new(0,0,0))});
+        var snapshot=ContestedSpaceResponseEvidence.Snapshot(scenario);
+        var intents=scenario.Riders.Select(r=>new RiderIntent(r.Id,new RiderDecision(0){Trajectory=r.Intent})).ToArray();
+        var options=new HeatSimulationOptions{EnableContestedSpaceResponses=true,IncidentFrequency=0,
+            InteractionDiagnostics=InteractionDiagnosticsLevel.FullAudit};
+        var b=new SimulationEngine(new Hold()).Resolve(snapshot,intents,options);
+        var c=new SimulationEngine(new Hold()).Resolve(snapshot,intents,options with{EnablePhysicalContactConsequences=true});
+        var alternatives=b.Interaction!.Episodes.SelectMany(e=>e.ResponseAlternatives).ToArray();
+        Assert.NotEmpty(alternatives);
+        Assert.Equal(alternatives,c.Interaction!.Episodes.SelectMany(e=>e.ResponseAlternatives).ToArray());
+    }
 
     [Fact]
     public void EstablishedInsideAttackNeedsMuchLessThanTheOldFullReferenceResponse()
