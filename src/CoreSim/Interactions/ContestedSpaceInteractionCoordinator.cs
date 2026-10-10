@@ -164,13 +164,21 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
                 high = Math.Min(upper, lower + (float)shortfall + OutwardTargetToleranceMeters);
             }
             var best = At(high);
+            var seeded = best;
+            var seededHigh = high;
             // Failure remains a physical attempt, with no certificate. Joint filters,
             // actual replay and existing safety/contact consequences retain authority.
             var clear = Clear(best);
             if (!clear && high < upper) { high = upper; best = At(high); clear = Clear(best); }
             if (!clear)
             {
-                if (!certifiedMargins.TryGetValue(Key(best), out var attainableMargin)) return held;
+                if (!certifiedMargins.TryGetValue(Key(best), out var attainableMargin))
+                {
+                    // A physical outer endpoint can fail the footprint bound even
+                    // though the seed was mechanically clear. Keep that certificate.
+                    if (!certifiedMargins.TryGetValue(Key(seeded), out attainableMargin)) return held;
+                    best = seeded; high = seededHigh;
+                }
                 // A tight initial gap may make the preferred buffer unattainable
                 // even with ample later room. Mechanical certification still holds;
                 // never discard a genuinely clear outward response for that reason.

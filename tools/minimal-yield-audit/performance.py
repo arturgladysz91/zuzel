@@ -24,7 +24,7 @@ def compare(before_path, after_path, output):
                               "ChangePercent": 100 * (new / old - 1) if old else None}
         rows.append({"Name": a["Name"], **values,
                      "BeforeWork": a["Samples"][0]["Work"], "AfterWork": b["Samples"][0]["Work"]})
-    assert len(rows) == 10
+    assert len(rows) == len(before["Measurements"]) == len(after["Measurements"]) and len(rows) in (2, 10)
     report = {"BaseMainSha": "f40b2fd129124d969fd22cfe7767e2fb00bd651f", "Environment": before["Environment"],
               "Protocol": before["WarmupProtocol"], "Samples": 9, "Cases": rows}
     Path(output).write_text(json.dumps(report, indent=2) + "\n")

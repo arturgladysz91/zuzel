@@ -40,7 +40,7 @@ separately in `OutwardTargetTrials` and counted in production/pair/narrow-phase 
 
 The preferred clearance buffer uses the existing execution-margin/style formula. If
 the initial gap prevents attaining that buffer, a mechanically certified endpoint
-can bound the attainable margin. This never relaxes mechanical collision certification.
+can bound the attainable margin. This never relaxes mechanical collision certification. A smaller certified seed is retained if the outer probe is uncertified.
 If no endpoint is certified, the ordinary held/back-out/intent choices and actual
 contact handling decide the outcome. No movement, time, gap or collision state is
 invented. Actual incident options are replayed, and the existing safety pass can
@@ -101,25 +101,33 @@ included; no wall-clock threshold is added to CI.
 
 Sequential Windows benchmark medians (milliseconds; nine samples):
 
-| Case | Main | Change | Wall change | Allocation change |
+| Case | Main | PR | Wall change | Allocation change |
 | --- | ---: | ---: | ---: | ---: |
-| four-separated | 0.380 | 0.358 | -5.8% | +0.0% |
-| H-three-squeeze | 46.904 | 191.133 | +307.5% | +130.5% |
-| G-four-first-bend | 230.746 | 364.802 | +58.1% | +193.7% |
-| real-bridge | 229.181 | 234.002 | +2.1% | +11.1% |
-| safety-correction | 31.110 | 47.019 | +51.1% | +12.2% |
-| I-heat-ON | 2357.970 | 4234.258 | +79.6% | +38.0% |
-| I-heat-OFF | 304.240 | 310.842 | +2.2% | +0.1% |
-| repeated-contact | 1009.797 | 5121.557 | +407.2% | +17.4% |
-| solo-heat | 77.356 | 76.439 | -1.2% | -0.0% |
-| contact-diagnostics | 122.780 | 308.200 | +151.0% | +23.3% |
+| four-separated | 0.368 | 0.359 | -2.6% | +0.0% |
+| H-three-squeeze | 48.362 | 193.443 | +300.0% | +130.2% |
+| G-four-first-bend | 241.751 | 370.470 | +53.2% | +193.4% |
+| real-bridge | 232.694 | 237.925 | +2.2% | +11.1% |
+| safety-correction | 32.028 | 48.083 | +50.1% | +12.2% |
+| I-heat-ON | 2467.880 | 4351.231 | +76.3% | +38.0% |
+| I-heat-OFF | 316.356 | 319.921 | +1.1% | +0.1% |
+| repeated-contact | 1016.365 | 5243.930 | +415.9% | +17.4% |
+| solo-heat | 79.541 | 78.756 | -1.0% | +0.1% |
+| contact-diagnostics | 123.999 | 310.969 | +150.8% | +23.3% |
+| eight-contact-resolutions-C | 958.506 | 2447.087 | +155.3% | +22.4% |
+| I-heat-C | 3767.399 | 5265.204 | +39.8% | +25.2% |
 
-The dense squeeze and repeated-contact cases cost approximately four and five times
-main respectively. The complete four-rider enabled heat costs 79.6% more; the
-separated/OFF/solo cases show -5.8%, +2.2%, and -1.2% wall differences. This is a
-material performance regression, not a performance improvement. Additional bounded
-production/collision certification and the longer genuine failed-avoidance contact
-paths both contribute. The raw deterministic work counters distinguish target-search
-work from the unchanged joint cap. No cap was increased, and no performance claim
-is based on the earlier concurrent measurements. Treat these costs as a review
-consideration for this Draft PR.
+The dense B squeeze and persistent B contact cases cost approximately four and five
+times main respectively. The complete four-rider B heat costs 76.3% more. The
+actual C contact batch costs 155.3% more, and the complete C four-rider heat costs
+39.8% more. This is a material performance regression, not a performance improvement.
+Additional bounded production/collision certification and longer genuine failed-avoidance
+contact paths both contribute. Raw CPU, allocations and deterministic work counters
+are retained; no joint cap increased. The separated/OFF/solo wall differences are
+-2.6%, +1.1%, and -1.0%. These sequential final-code samples supersede earlier samples.
+Treat the dense/contact-heavy costs as a review consideration for this Draft PR.
+
+The original ten-case protocol uses B/shadow diagnostics. The separate
+`benchmark-contact` mode uses actual C consequences: eight fresh imminent-contact
+resolutions (each asserts genuine applied contact consequences) and a complete
+four-rider I/7 heat. Both binaries use the same harness, warm-up and sample protocol.
+No claim about #66 replay or causal timing follows from these benchmarks.
