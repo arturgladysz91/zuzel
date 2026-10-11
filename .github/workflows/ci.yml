@@ -105,7 +105,7 @@ jobs:
           name: contact-arithmetic-${{ matrix.os }}
           path: results/physical-contact-consequences
       - name: Exact candidate trace, evidence bytes, Full/Lean and branch degree parity
-        run: dotnet test tests/CoreSim.Tests -c Release --no-build --filter "FullyQualifiedName~TrajectoryBehaviorFingerprintTests|FullyQualifiedName~LeanProjectionTests|FullyQualifiedName~ScalarEnvelopeParityTests|FullyQualifiedName~AdaptiveParallelTests|FullyQualifiedName~PhysicalSpaceTests|FullyQualifiedName~RiderGameplayProfileTests|FullyQualifiedName~ContestedSpaceResponseTests|FullyQualifiedName~MinimalOutwardYieldTests|FullyQualifiedName~PhysicalContactAnalysisTests|FullyQualifiedName~PhysicalContactConsequenceTests|FullyQualifiedName~ContactDecisionGeometryTests|FullyQualifiedName~PhysicalContactPairGenerationTests|FullyQualifiedName~OptionalSafetyProjectionTests|FullyQualifiedName~CanonicalSegmentHandoffTests" --logger "trx;LogFileName=determinism.trx" --results-directory results --verbosity normal
+        run: dotnet test tests/CoreSim.Tests -c Release --no-build --filter "FullyQualifiedName~TrajectoryBehaviorFingerprintTests|FullyQualifiedName~LeanProjectionTests|FullyQualifiedName~ScalarEnvelopeParityTests|FullyQualifiedName~AdaptiveParallelTests|FullyQualifiedName~PhysicalSpaceTests|FullyQualifiedName~RiderGameplayProfileTests|FullyQualifiedName~ContestedSpaceResponseTests|FullyQualifiedName~MinimalOutwardYieldTests|FullyQualifiedName~CommonTimeCertificationCacheTests|FullyQualifiedName~PhysicalContactAnalysisTests|FullyQualifiedName~PhysicalContactConsequenceTests|FullyQualifiedName~ContactDecisionGeometryTests|FullyQualifiedName~PhysicalContactPairGenerationTests|FullyQualifiedName~OptionalSafetyProjectionTests|FullyQualifiedName~CanonicalSegmentHandoffTests" --logger "trx;LogFileName=determinism.trx" --results-directory results --verbosity normal
       - name: Capture typed IEEE values and final rider/raw surface states
         shell: bash
         run: |
@@ -136,6 +136,16 @@ jobs:
           python tools/minimal-yield-audit/measure.py results/yield-before.json results/yield-after.json results/yield-measurements.json
           dotnet ../contested-after-bin/CoreSim.Tests.dll type-probe results/contested-performance/types.json
           python tools/contested-performance/verify-types.py results/contested-performance/types.json
+      - name: Require exact current-PR behavior and activity after certificate reuse
+        shell: bash
+        run: |
+          git fetch origin 5373d594172985f4d5cfb692374e1f05cc7f18f2
+          git worktree add --detach ../contested-optimization-baseline 5373d594172985f4d5cfb692374e1f05cc7f18f2
+          baseline="$(cd ../contested-optimization-baseline && pwd)"
+          dotnet build tools/contested-performance -c Release --warnaserror -p:CoreSimRoot="$baseline" -o ../contested-optimization-before-bin
+          dotnet ../contested-optimization-before-bin/CoreSim.Tests.dll capture results/contested-performance/optimization-before.json --raw --with-contact
+          dotnet ../contested-after-bin/CoreSim.Tests.dll capture results/contested-performance/optimization-after.json --raw --with-contact
+          python tools/contested-performance/compare.py results/contested-performance --optimization
       - name: Capture complete enabled contact decisions before and after sequential recovery correction
         shell: bash
         run: |

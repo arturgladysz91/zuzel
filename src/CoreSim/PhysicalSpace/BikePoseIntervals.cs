@@ -122,6 +122,26 @@ public sealed class LinearBikePoseInterval : PhysicalPoseInterval
 /// <summary>Read-only geometry adapter of canonical #53 nodes; no alternate physical traversal.</summary>
 public static class ResolvedBikePoses
 {
+    // Resolve-local interning of identical immutable sampler inputs. Different
+    // physical requests still project and certify their complete executed paths.
+    internal sealed class IntervalPool
+    {
+        private const int MaximumInternedIntervals = 4000;
+        private readonly Dictionary<ProductionPoseInterval, ProductionPoseInterval> intervals = new(new SamplerComparer());
+        internal PhysicalPoseInterval Get(PhysicalPoseInterval interval)
+        {
+            if (interval is not ProductionPoseInterval production) return interval;
+            if (intervals.TryGetValue(production, out var existing)) return existing;
+            if (intervals.Count < MaximumInternedIntervals) intervals.Add(production, production);
+            return production;
+        }
+    }
+    private sealed class SamplerComparer : IEqualityComparer<ProductionPoseInterval>
+    {
+        public bool Equals(ProductionPoseInterval? a, ProductionPoseInterval? b)
+            => ReferenceEquals(a, b) || (a is not null && b is not null && a.SameSampler(b));
+        public int GetHashCode(ProductionPoseInterval interval) => interval.SamplerHash;
+    }
     // Continuous target search must use the existing deterministic #55 arithmetic
     // even in shadow/B mode. Re-map canonical nodes; never interpolate a new path.
     internal static PhysicalPoseInterval InEmbedding(PhysicalPoseInterval interval, TrackMetricEmbedding embedding)
@@ -186,6 +206,29 @@ public static class ResolvedBikePoses
         private readonly PreparedMetricTrackSegment _map;
         private readonly ReferenceBikeAttitude _profile;
         private readonly bool _straight;
+        // Include every input read by Sample/RateBounds and every provenance flag.
+        // Reference identity fixes geometry, attitude and dimensions; floating
+        // inputs compare their bits, including signed zero. The prepared map is
+        // derived solely from the segment, node rates and duration below.
+        internal bool SameSampler(ProductionPoseInterval other)
+            => RiderId == other.RiderId && StringComparer.Ordinal.Equals(FrameId, other.FrameId)
+                && Source == other.Source && StartsAtDiscontinuity == other.StartsAtDiscontinuity
+                && SupportsLapWrap == other.SupportsLapWrap && _straight == other._straight
+                && ReferenceEquals(Dimensions, other.Dimensions) && ReferenceEquals(_profile, other._profile)
+                && ReferenceEquals(_segment, other._segment)
+                && Bits(StartTimeSeconds) == Bits(other.StartTimeSeconds) && Bits(EndTimeSeconds) == Bits(other.EndTimeSeconds)
+                && Bits(_nodeStart) == Bits(other._nodeStart) && Bits(_duration) == Bits(other._duration)
+                && Bits(_angle) == Bits(other._angle) && Bits(_phaseStart) == Bits(other._phaseStart)
+                && Bits(_phaseSpan) == Bits(other._phaseSpan)
+                && FloatBits(_a.SegmentProgress) == FloatBits(other._a.SegmentProgress)
+                && FloatBits(_b.SegmentProgress) == FloatBits(other._b.SegmentProgress)
+                && FloatBits(_a.PhysicalOffsetMeters) == FloatBits(other._a.PhysicalOffsetMeters)
+                && FloatBits(_b.PhysicalOffsetMeters) == FloatBits(other._b.PhysicalOffsetMeters);
+        internal int SamplerHash => HashCode.Combine(RiderId, Bits(StartTimeSeconds), Bits(EndTimeSeconds),
+            Bits(_nodeStart), Bits(_duration), FloatBits(_a.SegmentProgress), FloatBits(_b.SegmentProgress),
+            HashCode.Combine(FloatBits(_a.PhysicalOffsetMeters), FloatBits(_b.PhysicalOffsetMeters)));
+        private static long Bits(double value) => BitConverter.DoubleToInt64Bits(value);
+        private static int FloatBits(float value) => BitConverter.SingleToInt32Bits(value);
         internal override bool DeterministicArithmetic => _segment.DeterministicArithmetic;
         internal ProductionPoseInterval(ProductionPoseInterval source, TrackMetricEmbedding embedding)
             : base(source.RiderId, embedding.FrameId, source.StartTimeSeconds, source.EndTimeSeconds,

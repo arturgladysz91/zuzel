@@ -9,7 +9,8 @@ namespace CoreSim.Interactions;
 /// determines mechanical overlap. This class changes requests, never rider state.
 /// </summary>
 internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTracker tracker, bool reusePairResults = true,
-    Func<SimulationSnapshot, RiderIntent, HeatSimulationOptions, ResolvedSimulationStep>? resolveOptionalSafety = null)
+    Func<SimulationSnapshot, RiderIntent, HeatSimulationOptions, ResolvedSimulationStep>? resolveOptionalSafety = null,
+    bool reuseCertificationResults = true)
 {
     private sealed record PairAlternativeResult(double MinimumSeparation, bool HasBoundaryAmbiguityOrCoverageGap,
         int IneligibleIntervals, IReadOnlyList<ContestedSpaceEvent> Intervals);
@@ -93,6 +94,7 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
                 new(0, 1, direct.Work.NarrowPhaseEvaluations, 0, 0) { ActualProductionVerifications = 1 }), owner, tracker);
         }
 
+        var certification = reuseCertificationResults ? new CommonTimePoseHistory.CertificationContext() : null;
         var original = intents.ToDictionary(i => i.RiderId, i => Original(i));
         var evaluators = snapshot.Riders.Where(r => r.IsActive).ToDictionary(r => r.RiderId,
             r => new TrajectoryEvaluator(new RiderDecisionContext(snapshot, r)));
@@ -110,7 +112,7 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
             var poses=tracker.History.Where(i => i.RiderId == key.Item1.RiderId || i.RiderId == key.Item2.RiderId)
                 .Concat(a.Poses).Concat(b.Poses);
             if(continuousTargetSearch) poses=poses.Select(TargetPose);
-            var report = CommonTimePoseHistory.Compatibility(poses, Ready(key.Item1.RiderId, key.Item2.RiderId));
+            var report = CommonTimePoseHistory.Compatibility(poses, Ready(key.Item1.RiderId, key.Item2.RiderId), certification);
             pairChecks++; narrow += report.Work.NarrowPhaseEvaluations;
             var result = new PairAlternativeResult(report.EligibleIntervals == 0 ? p.CompetitiveReachMeters : report.MinimumSeparation,
                 report.EligibleIntervals == 0 || report.HasBoundaryAmbiguity || report.HasCoverageGap,
@@ -228,7 +230,7 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
             }
             return best;
         }
-        var forecast = CommonTimePoseHistory.Observe(tracker.History.Concat(baseline.Values.SelectMany(x => x.Poses)));
+        var forecast = CommonTimePoseHistory.Observe(tracker.History.Concat(baseline.Values.SelectMany(x => x.Poses)), certification);
         narrow += forecast.Work.NarrowPhaseEvaluations;
         var forecastPoses=tracker.History.Concat(baseline.Values.SelectMany(x=>x.Poses)).ToArray();
         var edges = StableSides(Threats(forecast, forecastPoses, now, p,requestTimes),forecastPoses);
@@ -400,7 +402,7 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
         var actual = engine.ResolveProduction(snapshot, finalIntents, options, legacyContacts: false);
         production++;
         var actualPoses = Poses(actual);
-        var verification = CommonTimePoseHistory.Observe(tracker.History.Concat(actualPoses));
+        var verification = CommonTimePoseHistory.Observe(tracker.History.Concat(actualPoses), certification);
         narrow += verification.Work.NarrowPhaseEvaluations;
         var safetyPasses = 0;
         var actualVerifications = 1;
@@ -464,7 +466,7 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
                 var poses=tracker.History.Where(i => i.RiderId == key.Item1.RiderId || i.RiderId == key.Item2.RiderId)
                     .Concat(left.Poses).Concat(right.Poses);
                 if(continuousTargetSearch) poses=poses.Select(TargetPose);
-                var report = CommonTimePoseHistory.Compatibility(poses, Ready(key.Item1.RiderId, key.Item2.RiderId));
+                var report = CommonTimePoseHistory.Compatibility(poses, Ready(key.Item1.RiderId, key.Item2.RiderId), certification);
                 pairChecks++; narrow += report.Work.NarrowPhaseEvaluations;
                 var result = new PairAlternativeResult(report.EligibleIntervals == 0 ? p.CompetitiveReachMeters : report.MinimumSeparation,
                     report.EligibleIntervals == 0 || report.HasBoundaryAmbiguity || report.HasCoverageGap,
@@ -636,7 +638,7 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
             actual = engine.ResolveProduction(snapshot, finalIntents, options, legacyContacts: false);
             production++; actualVerifications++;
             actualPoses = Poses(actual);
-            verification = CommonTimePoseHistory.Observe(tracker.History.Concat(actualPoses));
+            verification = CommonTimePoseHistory.Observe(tracker.History.Concat(actualPoses), certification);
             narrow += verification.Work.NarrowPhaseEvaluations;
         }
         var finalContactPoses = tracker.History.Concat(actualPoses).ToArray();
@@ -736,7 +738,7 @@ internal sealed class ContestedSpaceInteractionCoordinator(InteractionEpisodeTra
         if (!ReferenceEquals(final, actual)) production++;
         var finalPoses = ReferenceEquals(final, actual) ? actualPoses : Poses(final);
         var executedVerification = ReferenceEquals(final, actual) ? verification
-            : CommonTimePoseHistory.Observe(tracker.History.Concat(finalPoses));
+            : CommonTimePoseHistory.Observe(tracker.History.Concat(finalPoses), certification);
         physicalContact ??= options.PhysicalContactDiagnostics == PhysicalContactDiagnosticsLevel.None ? null
             : PhysicalContactSnapshotAdapter.Analyze(verification,finalContactPoses,snapshot,tracker.Embedding!,diagnostics,
                 final.Events,options.PhysicalContactParameters,options.PhysicalContactDiagnostics);

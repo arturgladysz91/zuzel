@@ -72,8 +72,10 @@ if (mode == "benchmark-contact")
 if (mode == "capture")
 {
     var manifests = new SortedDictionary<string, object>(StringComparer.Ordinal);
-    void Capture(string name, object value)
+    var workCaptures = new SortedDictionary<string, object>(StringComparer.Ordinal);
+    void Capture(string name, object value, Dictionary<string,long>? work = null)
     {
+        if (work is not null) workCaptures.Add(name, work);
         var values = new SortedDictionary<string, object?>(StringComparer.Ordinal);
         Walk(value,"root",values);
         var bytes = JsonSerializer.SerializeToUtf8Bytes(values);
@@ -88,7 +90,7 @@ if (mode == "capture")
     {
         var collector = new Collector(true);
         Resolve(scenario, enabled, reverse, collector);
-        Capture($"{scenario.Name}/{enabled}/{reverse}",collector.Values);
+        Capture($"{scenario.Name}/{enabled}/{reverse}",collector.Values,collector.Work);
     }
     foreach (var fixture in new[] {heat, stress})
     foreach (var weather in new[] {WeatherState.Dry, WeatherState.LightRain})
@@ -97,19 +99,38 @@ if (mode == "capture")
     {
         var collector = new Collector(true);
         RunHeat(fixture, true, reverse, seed, weather, collector);
-        Capture($"heat/{fixture.Id}/{weather.Condition}/{seed}/{reverse}",collector.Values);
+        Capture($"heat/{fixture.Id}/{weather.Condition}/{seed}/{reverse}",collector.Values,collector.Work);
     }
     foreach (var reverse in new[] {false,true})
     {
         var collector = new Collector(true);
         RunHeat(heat, false, reverse, 7, WeatherState.Dry, collector);
-        Capture($"heat/I/interactions-OFF/Dry/7/{reverse}",collector.Values);
+        Capture($"heat/I/interactions-OFF/Dry/7/{reverse}",collector.Values,collector.Work);
     }
     Capture("ownership",ContestedSpaceResponseEvidence.OwnershipEvidence());
     foreach(var s in ContestedSpaceResponseEvidence.OwnershipScenarios())
         Capture("shadow/"+s.Name,PhysicalContactEvidence.Resolve(s,PhysicalContactDiagnosticsLevel.FullAudit));
-    var repeated = new Collector(true); cases.Single(c=>c.Name=="repeated-contact").Run(repeated); Capture("persistent-overlap",repeated.Values);
+    var repeated = new Collector(true); cases.Single(c=>c.Name=="repeated-contact").Run(repeated); Capture("persistent-overlap",repeated.Values,repeated.Work);
+    if (args.Contains("--with-contact"))
+    {
+        foreach (var name in new[] { "D-inside-overlap", "H-three-squeeze", "G-four-first-bend", "edge-trapped",
+            "B-close-too-late", "imminent-overlap" })
+        foreach (var reverse in new[] { false, true })
+        {
+            var collector = new Collector(true);
+            Resolve(scenarios.Single(s => s.Name == name), true, reverse, collector,
+                physicalDiagnostics: true, physicalConsequences: true);
+            Capture($"configuration-C/{name}/{reverse}", collector.Values, collector.Work);
+        }
+        foreach (var reverse in new[] { false, true })
+        {
+            var collector = new Collector(true);
+            RunHeat(heat, true, reverse, 7, WeatherState.Dry, collector, physicalConsequences: true);
+            Capture($"configuration-C/heat-I/{reverse}", collector.Values, collector.Work);
+        }
+    }
     Write(output,manifests);
+    Write(output + ".work.json",workCaptures);
     Console.WriteLine($"Captured {manifests.Count} exact behavior manifests.");
     return;
 }
@@ -256,6 +277,7 @@ sealed class FixedDecision : IRiderDecisionModel
 {public RiderDecision Decide(TrackSegment segment,RiderState rider)=>new(rider.Lane);}
 sealed class Collector(bool capture) : ISimulationStepObserver
 {
+    private readonly HashSet<long> episodes = new();
     public bool Capture => capture;
     public List<object> Values {get;} = new();
     public Dictionary<string,long> Work {get;} = new();
@@ -264,6 +286,12 @@ sealed class Collector(bool capture) : ISimulationStepObserver
         var work = step.Interaction?.Work ?? new InteractionWork(0,1,0,0,0);
         foreach (var p in typeof(InteractionWork).GetProperties())
             if (p.GetValue(work) is int count) Work[p.Name] = Work.GetValueOrDefault(p.Name) + count;
+        if (step.Interaction is { } interaction)
+        {
+            Work["EpisodeObservations"] = Work.GetValueOrDefault("EpisodeObservations") + interaction.Episodes.Count;
+            foreach (var episode in interaction.Episodes) episodes.Add(episode.EpisodeId);
+            Work["DistinctEpisodeIds"] = episodes.Count;
+        }
         if (capture) Values.Add(new {Snapshot = new {step.Snapshot.Step, step.Snapshot.Riders, step.Snapshot.TrackState},
             step.Changes, step.Diagnostics, step.Motions, step.Events, step.Interaction});
     }

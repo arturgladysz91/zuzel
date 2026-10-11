@@ -18,10 +18,12 @@ def edit(name, before, after, count=1):
     path.write_text(text.replace(before, after), encoding="utf-8", newline="\n")
 
 coordinator = "src/CoreSim/Interactions/ContestedSpaceInteractionCoordinator.cs"
-edit(coordinator, "        tracker.Bind(snapshot);", '        using var profileResolve = CoreSim.PerformanceProbe.Section("coordinator");\n        tracker.Bind(snapshot);')
+edit(coordinator, "        tracker.Bind(snapshot, options.EnablePhysicalContactConsequences);", '        using var profileResolve = CoreSim.PerformanceProbe.Section("coordinator");\n        tracker.Bind(snapshot, options.EnablePhysicalContactConsequences);')
 edit(coordinator, "        PairAlternativeResult PairCheck(Projection a, Projection b)\n        {", '        PairAlternativeResult PairCheck(Projection a, Projection b)\n        {\n            using var profilePair = CoreSim.PerformanceProbe.Section("pair-compatibility");')
 edit(coordinator, "        Projection Project(InteractionAlternative alternative)\n        {", '        Projection Project(InteractionAlternative alternative)\n        {\n            using var profileCandidate = CoreSim.PerformanceProbe.Section("candidate-trajectory");')
-edit(coordinator, "            Projection SafetyProject(InteractionAlternative alternative)\n            {", '            Projection SafetyProject(InteractionAlternative alternative)\n            {\n                using var profileCandidate = CoreSim.PerformanceProbe.Section("safety-trajectory");')
+edit(coordinator, "            Projection ResolveSafetyProjection(InteractionAlternative alternative)\n            {", '            Projection ResolveSafetyProjection(InteractionAlternative alternative)\n            {\n                using var profileCandidate = CoreSim.PerformanceProbe.Section("safety-trajectory");')
+if "        InteractionAlternative MinimalOutward(" in (root / coordinator).read_text(encoding="utf-8"):
+    edit(coordinator, "        InteractionAlternative MinimalOutward(InteractionAlternative response, InteractionGeometry[] related)\n        {", '        InteractionAlternative MinimalOutward(InteractionAlternative response, InteractionGeometry[] related)\n        {\n            using var profileTarget = CoreSim.PerformanceProbe.Section("minimal-outward-search");')
 edit(coordinator, "            PairAlternativeResult SafetyPair(Projection left, Projection right)\n            {", '            PairAlternativeResult SafetyPair(Projection left, Projection right)\n            {\n                using var profilePair = CoreSim.PerformanceProbe.Section("safety-pair-compatibility");')
 edit(coordinator, "        if (safetyEdges.Length > 0)\n        {", '        if (safetyEdges.Length > 0)\n        {\n            using var profileSafety = CoreSim.PerformanceProbe.Section("safety-pass");')
 edit(coordinator, "                foreach (var joint in Joint(choices))\n                {", '                foreach (var joint in Joint(choices))\n                {\n                    using var profileScore = CoreSim.PerformanceProbe.Section("joint-scoring");')
@@ -33,15 +35,23 @@ edit(coordinator, "var finalComponents = Clusters(finalEdges, snapshot, p);", 'v
 text = (root / coordinator).read_text(encoding="utf-8")
 if "var quiet = engine.ResolveProduction" in text:
     edit(coordinator, "var quiet = engine.ResolveProduction(snapshot, intents, options, legacyContacts:false);", 'var quiet = CoreSim.PerformanceProbe.Run("final-materialization", () => engine.ResolveProduction(snapshot, intents, options, legacyContacts:false));')
-if "var final = fallbackPairs.Count == 0 ? actual" in text:
+if "var final = reuseActual ? actual" in text:
+    edit(coordinator, "        var final = reuseActual ? actual : engine.ResolveProduction(snapshot, finalIntents, options, legacyContacts: !options.EnablePhysicalContactConsequences,", '        var final = CoreSim.PerformanceProbe.Run("final-materialization", () => reuseActual ? actual : engine.ResolveProduction(snapshot, finalIntents, options, legacyContacts: !options.EnablePhysicalContactConsequences,')
+elif "var final = fallbackPairs.Count == 0 ? actual" in text:
     edit(coordinator, "        var final = fallbackPairs.Count == 0 ? actual : engine.ResolveProduction(snapshot, finalIntents, options, contactFilter: (a, b) =>", '        var final = CoreSim.PerformanceProbe.Run("final-materialization", () => fallbackPairs.Count == 0 ? actual : engine.ResolveProduction(snapshot, finalIntents, options, contactFilter: (a, b) =>')
 else:
     edit(coordinator, "        var final = engine.ResolveProduction(snapshot, finalIntents, options, contactFilter: (a, b) =>", '        var final = CoreSim.PerformanceProbe.Run("final-materialization", () => engine.ResolveProduction(snapshot, finalIntents, options, contactFilter: (a, b) =>')
 edit(coordinator, "? (pair.Item1, pair.Item2) : (pair.Item2, pair.Item1)).ToArray());", "? (pair.Item1, pair.Item2) : (pair.Item2, pair.Item1)).ToArray()));")
 edit("src/CoreSim/PhysicalSpace/BikePoseIntervals.cs", "        ArgumentNullException.ThrowIfNull(motion); ArgumentNullException.ThrowIfNull(track);", '        using var profilePoses = CoreSim.PerformanceProbe.Section("common-time-pose-construction");\n        ArgumentNullException.ThrowIfNull(motion); ArgumentNullException.ThrowIfNull(track);')
 history = "src/CoreSim/Interactions/CommonTimePoseHistory.cs"
-edit(history, "=> ContestedSpaceResolver.Observe(Stitch(source));", '=> CoreSim.PerformanceProbe.Run("contact-detection", () => ContestedSpaceResolver.Observe(Stitch(source)));')
-edit(history, "=> ContestedSpaceResolver.ObserveCompatibility(Stitch(source), ready);", '=> CoreSim.PerformanceProbe.Run("compatibility-geometry", () => ContestedSpaceResolver.ObserveCompatibility(Stitch(source), ready));')
+if "CertificationContext" in (root / history).read_text(encoding="utf-8"):
+    edit(history, "=> context is null ? ContestedSpaceResolver.Observe(Stitch(source))\n            : ContestedSpaceResolver.Observe(Stitch(source, context), context.Cache);",
+         '=> CoreSim.PerformanceProbe.Run("contact-detection", () => context is null ? ContestedSpaceResolver.Observe(Stitch(source))\n            : ContestedSpaceResolver.Observe(Stitch(source, context), context.Cache));')
+    edit(history, "=> ContestedSpaceResolver.ObserveCompatibility(Stitch(source, context), ready, context?.Cache);",
+         '=> CoreSim.PerformanceProbe.Run("compatibility-geometry", () => ContestedSpaceResolver.ObserveCompatibility(Stitch(source, context), ready, context?.Cache));')
+else:
+    edit(history, "=> ContestedSpaceResolver.Observe(Stitch(source));", '=> CoreSim.PerformanceProbe.Run("contact-detection", () => ContestedSpaceResolver.Observe(Stitch(source)));')
+    edit(history, "=> ContestedSpaceResolver.ObserveCompatibility(Stitch(source), ready);", '=> CoreSim.PerformanceProbe.Run("compatibility-geometry", () => ContestedSpaceResolver.ObserveCompatibility(Stitch(source), ready));')
 adapter = "src/CoreSim/Interactions/PhysicalContactSnapshotAdapter.cs"
 edit(adapter, "        var contacts = episodes.SelectMany", '        using var profileDiagnostics = CoreSim.PerformanceProbe.Section("contact-analysis-diagnostics");\n        var contacts = episodes.SelectMany')
 trajectory = "src/CoreSim/Decisions/TrajectoryEvaluator.cs"

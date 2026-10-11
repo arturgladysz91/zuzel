@@ -93,7 +93,7 @@ def consumers():
 
 def restore_minimal_yield(source, name):
     raw = (ROOT / "tests/fixtures/minimal-yield-source-extraction.json").read_bytes().replace(b"\r\n", b"\n")
-    assert hashlib.sha256(raw).hexdigest() == "3b445dff07e6128c8aac52b533d6ae250d4a9933b1c3724d42d0257d196793a6"
+    assert hashlib.sha256(raw).hexdigest() == "4816c93c0a48c711fa507f903a4f60c2c154111a0f0bb5264b0acec823864ed1"
     extraction = json.loads(raw)
     assert extraction["BaseMainSha"] == "f40b2fd129124d969fd22cfe7767e2fb00bd651f"
     for patch in extraction["Patches"].get(name, []):

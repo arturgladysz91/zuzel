@@ -135,6 +135,9 @@ included; no wall-clock threshold is added to CI.
 Sequential Windows benchmark medians (milliseconds; nine samples), measured
 against the final runtime source `be8da06`:
 
+These are the original, unoptimized #67 measurements. The certificate-reuse
+measurements below describe the current implementation.
+
 | Case | Main | PR | Wall change | Allocation change |
 | --- | ---: | ---: | ---: | ---: |
 | four-separated | 0.359 | 0.359 | +0.0% | +0.1% |
@@ -166,3 +169,106 @@ The original ten-case protocol uses B/shadow diagnostics. The separate
 resolutions (each asserts genuine applied contact consequences) and a complete
 four-rider I/7 heat. Both binaries use the same harness, warm-up and sample protocol.
 No claim about #66 replay or causal timing follows from these benchmarks.
+
+## Behavior-preserving certificate reuse
+
+The primary optimization baseline is #67 at `5373d594`, not main. Observation-only
+profiling of that baseline attributed 82% of repeated-contact wall time to pair
+compatibility and 17% to contact observation; trajectory integration was below 1%.
+In the complete B heat, those geometry stages cost 63% and 26%, versus 2.8% for
+candidate trajectories. MinimalOutward itself included about 15% of repeated-contact
+time and 3.9% of full-heat time, predominantly nested geometry work. These nested
+timings must not be summed with their children. Existing prefix and request caches
+already remove repeated production inputs; reducing target iterations would change
+the requested destinations and would miss the principal bottleneck.
+
+One Resolve now owns a bounded exact-certificate cache shared by planning, safety
+and executed-path observation. Its identity includes immutable interval references,
+exact start/end bits, the incoming pair-wide minimum bits, and attribution mode.
+The incoming minimum is essential: it determines #55's adaptive subdivision. Hits
+restore the exact row and outgoing minimum, retain logical conflict/ambiguity work,
+and count only mechanical evaluations actually performed. Jump-escape searches have
+their own exact interval/time identity. Every caller still traverses the complete
+common-time history and all executed intervals; quarantine, gaps, eligibility and
+ready-time filtering are recomputed in their original order.
+
+Canonical production intervals are interned only when all sampler and provenance
+inputs match: geometry/attitude/dimension references, node progress and physical
+offset bits, node time/duration, interval time cuts, corner phase/angle, frame, rider,
+source, discontinuity and lap-wrap flags. This shares identical executed prefixes
+without merging request identities, targets, production resolutions or later paths.
+Trimmed history wrappers also retain exact source/end identity. The scope ends with
+Resolve; nothing survives changes in snapshot, controls, incidents or time. Limits
+are 4,000 sampler entries, 4,000 expensive interval certificates and 256 jump searches.
+Endpoint-only searches are not stored (at most eight evaluations). Full caches simply
+recompute through unchanged #55. No physics/calibration, search tolerance or 81-joint
+limit changes.
+
+The final 122-case baseline/head comparison contains **4,553,155 typed leaves** and
+**3,650,054 IEEE leaves**, all identical. It includes OFF, reversal, B heats, C contact
+fixtures and a complete C heat. All activity counters are identical; the only changed
+InteractionWork field is reduced NarrowPhaseEvaluations. The new cached/uncached tests
+also compare exact roots, minima, attribution, jump escape/recontact, time cuts and
+complete production decisions/consequences. Local validation passed a zero-warning
+Release build, 210 focused .NET tests and all 87 Python tests. CI runs the complete
+.NET shards and the exact original-#67 comparison on both supported platforms.
+The reverse source extraction was extended for the new helpers; all 39 original
+skill/style reader hashes and all historical physical/calibration goldens stay frozen.
+
+Fresh sequential Windows/.NET 8.0.30 medians follow; each case uses at least eight
+complete warmups and three seconds, then nine samples. Triples are **main / original
+#67 / optimized #67**, MB means 1,000,000 bytes. CPU is process CPU across threads.
+All samples, counters and the guard confirmation are retained in the compact
+[performance evidence](minimal-outward-yield-evidence/performance-optimization.json).
+
+| Case | Wall ms: main / before / after | CPU ms: main / before / after | MB: main / before / after | Wall reduction vs before |
+| --- | ---: | ---: | ---: | ---: |
+| four-separated | 0.362 / 0.367 / 0.412 | 0.000 / 0.000 / 0.000 | 0.179 / 0.179 / 0.179 | -12.2% |
+| H-three-squeeze | 47.554 / 232.887 / 233.333 | 46.875 / 250.000 / 234.375 | 5.779 / 15.430 / 16.489 | -0.2% |
+| G-four-first-bend | 231.615 / 429.246 / 411.188 | 234.375 / 437.500 / 406.250 | 5.239 / 17.446 / 19.436 | 4.2% |
+| real-bridge | 229.846 / 270.927 / 165.058 | 234.375 / 265.625 / 171.875 | 4.148 / 5.041 / 5.558 | 39.1% |
+| safety-correction | 31.046 / 54.939 / 37.183 | 31.250 / 62.500 / 31.250 | 2.503 / 3.223 / 3.509 | 32.3% |
+| I-heat-ON | 2424.371 / 5594.566 / 4198.806 | 3140.625 / 6312.500 / 4953.125 | 244.256 / 366.208 / 413.799 | 24.9% |
+| I-heat-OFF | 306.062 / 305.412 / 298.628 | 1015.625 / 984.375 / 1062.500 | 151.760 / 151.844 / 151.844 | 2.2% |
+| repeated-contact | 1020.667 / 5926.523 / 2346.125 | 1015.625 / 5921.875 / 2343.750 | 18.495 / 25.031 / 28.933 | 60.4% |
+| solo-heat | 75.474 / 76.837 / 74.066 | 250.000 / 265.625 / 250.000 | 38.964 / 38.989 / 38.950 | 3.6% |
+| contact-diagnostics | 123.771 / 350.377 / 178.950 | 125.000 / 343.750 / 171.875 | 2.057 / 2.938 / 3.425 | 48.9% |
+| eight-contact-resolutions-C | 916.196 / 2319.978 / 1181.644 | 921.875 / 2312.500 / 1187.500 | 17.030 / 20.863 / 24.787 | 49.1% |
+| I-heat-C | 3590.634 / 5131.896 / 3833.369 | 4328.125 / 5828.125 / 4484.375 | 276.424 / 346.193 / 390.215 | 25.3% |
+
+| Case | Production | Narrow phase | Target trials | Episode IDs | Clusters | Joint combinations |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| H-three-squeeze | 60 / 180 / 180 | 89624 / 411859 / 411226 | 0 / 24 / 24 | 1 / 1 / 1 | 1 / 1 / 1 | 54 / 54 / 54 |
+| I-heat-ON | 668 / 1546 / 1546 | 4330040 / 10338094 / 7104556 | 0 / 65 / 65 | 9 / 11 / 11 | 24 / 40 / 40 | 333 / 837 / 837 |
+| repeated-contact | 184 / 241 / 241 | 2333520 / 12578347 / 4933417 | 0 / 48 / 48 | 8 / 1 / 1 | 8 / 8 / 8 | 144 / 144 / 144 |
+| eight-contact-resolutions-C | 184 / 248 / 248 | 2303600 / 5975784 / 2924840 | 0 / 48 / 48 | 1 / 1 / 1 | 8 / 8 / 8 | 144 / 144 / 144 |
+| I-heat-C | 916 / 1478 / 1478 | 7226535 / 10196565 / 6870073 | 0 / 59 / 59 | 8 / 11 / 11 | 29 / 36 / 36 | 495 / 837 / 837 |
+
+Episode IDs are tracker-local. The persistent B case retains one #67 episode through
+eight observations (main had eight episodes). The C batch starts eight fresh trackers:
+ID 1 is reused, representing eight independent episodes in every version.
+The first separated sample set showed a 0.045 ms increase; a paired confirmation with
+the same warmup/nine-sample protocol measured **0.3580 -> 0.3583 ms** (+0.08%), with
+264 mechanical evaluations and eight extra allocated bytes. OFF/solo wall medians
+decrease 2.2%/3.6%; their allocations are effectively unchanged. The primary OFF
+CPU median rises 7.9%; a separate paired OFF confirmation measured 291.148 ->
+298.705 ms wall (+2.6%) with identical 1,015.625 ms CPU and essentially identical
+allocations. No OFF CPU improvement or material guard regression was established.
+
+The largest repeated-contact reduction is **60.4% wall / 60.4% CPU**; the C contact
+batch improves **49.1% wall / 48.6% CPU**. Complete B/C heats improve **24.9%/25.3%**
+wall and **21.5%/23.1%** CPU. Dense-case allocations increase roughly **7–19%** because
+bounded certificates are retained. The squeeze is effectively unchanged and remains
+about five times main: its costly post-reaction targets mostly produce distinct
+samplers that require distinct certification. This optimization stops short of
+changing those decisions or relaxing collision bounds.
+
+Interaction activity also remains a cost: full B has 11 episodes/40 clusters instead
+of main's 9/24, with 837 joint combinations instead of 333. Whole-heat narrow work
+normalized by clusters falls from 258,452 before optimization to 177,614 after
+(main: 180,418); this is a workload proxy, not a per-episode timing measurement.
+The added activity and genuine failed-avoidance histories explain remaining costs
+that cannot be removed while reproducing current #67 outcomes. No B/C behavior or
+calibration change is introduced by this optimization. The original intentional
+main-to-#67 C changes above remain separate; #66 is untouched and no causal-timing
+or general-replay fix is claimed.
