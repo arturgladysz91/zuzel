@@ -263,7 +263,7 @@ jobs:
 
   required:
     # Draft work never emits a skipped/successful Full Windows CI check.
-    name: ${{ needs.coverage.outputs.full == 'true' && 'Full Windows CI' || 'Draft Windows CI' }}
+    name: ${{ (github.event_name != 'pull_request' || !github.event.pull_request.draft || contains(github.event.pull_request.labels.*.name, 'ci:historical-audit')) && 'Full Windows CI' || 'Draft Windows CI' }}
     needs: [coverage, dotnet, python, historical-audits]
     if: always()
     runs-on: windows-latest
