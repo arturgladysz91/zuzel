@@ -19,7 +19,8 @@ permissions:
   pull-requests: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  # A description/title edit must not cancel validation of the same source.
+  group: ${{ github.workflow }}-${{ (github.event_name == 'pull_request' && github.event.action == 'edited' && !github.event.changes.base) && github.run_id || github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 env:
@@ -33,6 +34,7 @@ defaults:
 jobs:
   coverage:
     # One Windows compilation and complete discovery for every run, including Drafts.
+    if: github.event_name != 'pull_request' || github.event.action != 'edited' || github.event.changes.base
     runs-on: windows-latest
     timeout-minutes: 15
     outputs:
@@ -93,7 +95,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        shard: ${{ fromJSON(needs.coverage.outputs.shards) }}
+        shard: ${{ fromJSON(needs.coverage.outputs.shards || '["core", "trajectory", "historical-analysis", "four-rider"]') }}
     steps:
       - name: Keep frozen Git blob bytes on Windows
         run: git config --global core.autocrlf false
@@ -247,6 +249,7 @@ jobs:
 
   python:
     # Calibration comparators remain tested even in Draft mode.
+    if: github.event_name != 'pull_request' || github.event.action != 'edited' || github.event.changes.base
     runs-on: windows-latest
     timeout-minutes: 10
     steps:
@@ -263,9 +266,10 @@ jobs:
 
   required:
     # Draft work never emits a skipped/successful Full Windows CI check.
-    name: ${{ (github.event_name != 'pull_request' || !github.event.pull_request.draft || contains(github.event.pull_request.labels.*.name, 'ci:historical-audit')) && 'Full Windows CI' || 'Draft Windows CI' }}
+    # Manual/weekly runs cannot replace the PR's required check at the same SHA.
+    name: ${{ github.event_name == 'workflow_dispatch' && 'Manual Windows CI' || github.event_name == 'schedule' && 'Scheduled Windows CI' || (github.event_name == 'pull_request' && github.event.action == 'edited' && !github.event.changes.base) && 'PR metadata' || (github.event_name != 'pull_request' || !github.event.pull_request.draft || contains(github.event.pull_request.labels.*.name, 'ci:historical-audit')) && 'Full Windows CI' || 'Draft Windows CI' }}
     needs: [coverage, dotnet, python, historical-audits]
-    if: always()
+    if: always() && (github.event_name != 'pull_request' || github.event.action != 'edited' || github.event.changes.base)
     runs-on: windows-latest
     timeout-minutes: 5
     steps:

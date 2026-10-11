@@ -15,7 +15,8 @@ evidence. No physics, test expectations, seeds or simulation options change.
 | `dotnet (four-rider)` (full) | Complete 48-case suite, shared 352-run aggregate, all skill controls, real repeats, reversal, culture and observer parity. |
 | `python` (every update) | All calibration/comparator tests and CI routing regression tests. |
 | `historical-audits` (audit mode) | Current typed captures, unchanged Windows goldens and shape/storm/order guards, pinned-commit contested/contact/readiness/REA-001/REA-009 comparisons, plus fresh-process Windows trajectory replay. |
-| `Draft Windows CI` / `Full Windows CI` | Verify all selected jobs succeeded; fail on missing, failed, cancelled or unexpectedly skipped work and on stale PR head/base/status. |
+| `Draft Windows CI` / `Full Windows CI` | Verify all selected PR/main jobs succeeded; fail on missing, failed, cancelled or unexpectedly skipped work and on stale PR head/base/status. |
+| `Manual Windows CI` / `Scheduled Windows CI` | Verify explicitly selected/weekly work; these statuses cannot replace a PR's required check. |
 
 All jobs run on Windows. There is no Ubuntu simulation, mandatory cross-OS bit
 comparison, platform-comparison job or platform artifact. Historical comparison
@@ -47,12 +48,16 @@ push to main. Direct engine pushes therefore require the normal PR process.
 ## Merge gate and status transitions
 
 `opened`, `synchronize`, `reopened`, `ready_for_review`, `converted_to_draft` and
-`edited` events all trigger CI. `labeled`/`unlabeled` support the explicit audit
-mode. One concurrency group per PR cancels obsolete runs, including Draft/Ready
+`edited` events changing the base all trigger CI. Description/title edits publish
+only skipped `PR metadata` work in a separate group, preserving the active source
+validation and its required check. `labeled`/`unlabeled` support the explicit audit
+mode. One concurrency group per PR cancels obsolete source runs, including Draft/Ready
 transitions at the same SHA. The final job checks live PR head, base and mode.
 A fast Draft run emits **only `Draft Windows CI`**, never a skipped or green
 `Full Windows CI` check. Marking it Ready starts full validation even without
 a new commit. Reopening, retargeting or updating a ready PR also starts full CI.
+Manual/weekly runs use distinct check names: a manual run with audits disabled
+cannot overwrite the result of required risky-PR audits at the same commit.
 
 Repository inspection on 2026-10-11 found `main.protected=false`, status-check
 enforcement `off`, zero required contexts/checks and no rulesets. There are
