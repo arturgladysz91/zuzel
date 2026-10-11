@@ -1,5 +1,8 @@
 # Speedway Manager (Żużlowy) – Core Simulation
 
+Release platform: **Windows only**. See the current [Windows CI policy](docs/ci.md)
+for Draft/full validation, the merge gate and optional historical audits.
+
 Current physical consequence precedence (#56C2): [physical contact consequences and one-step recovery](docs/calibration/physical-contact-consequences.md)
 adds default-OFF `EnablePhysicalContactConsequences`, requiring #56B responses. When enabled,
 reviewed #56C1 analysis supplies deterministic final velocity/status and next-step recovery;
