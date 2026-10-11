@@ -210,10 +210,18 @@ fixtures and a complete C heat. All activity counters are identical; the only ch
 InteractionWork field is reduced NarrowPhaseEvaluations. The new cached/uncached tests
 also compare exact roots, minima, attribution, jump escape/recontact, time cuts and
 complete production decisions/consequences. Local validation passed a zero-warning
-Release build, 210 focused .NET tests and all 87 Python tests. CI runs the complete
+Release build, 210 focused .NET tests and all 89 Python tests. CI runs the complete
 .NET shards and the exact original-#67 comparison on both supported platforms.
 The reverse source extraction was extended for the new helpers; all 39 original
 skill/style reader hashes and all historical physical/calibration goldens stay frozen.
+
+The presentation gate separately records a nonnegative integer decrease of
+`Work.NarrowPhaseEvaluations` when it is the only changed value in an untargeted row.
+This fixes the first CI comparison's rejection of saved work (37,224 -> 26,550 in
+A-entry-close). All 15 such untargeted rows retain every behavioral value. Missing
+fields, invalid or increased counts and any accompanying behavior change are rejected;
+no golden is rewritten. The exact original-#67 comparison still checks every racing
+value and all other activity counters.
 
 Fresh sequential Windows/.NET 8.0.30 medians follow; each case uses at least eight
 complete warmups and three seconds, then nine samples. Triples are **main / original

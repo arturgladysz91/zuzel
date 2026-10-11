@@ -2,6 +2,8 @@ import importlib.util
 from pathlib import Path
 import unittest
 import copy
+import json
+import tempfile
 
 ROOT = Path(__file__).resolve().parents[2]
 spec = importlib.util.spec_from_file_location("yield_compatibility", ROOT / "tools/minimal-yield-audit/compatibility.py")
@@ -10,6 +12,40 @@ spec.loader.exec_module(audit)
 
 
 class MinimalYieldCompatibilityTests(unittest.TestCase):
+    def presentation_result(self, before, after):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for name, value in (("before", before), ("after", after)):
+                (root / (name + ".json")).write_text(json.dumps({"Scenarios": [value]}))
+            result = audit.presentation(root / "before.json", root / "after.json", root / "changes.json")
+            return result, json.loads((root / "changes.json").read_text())
+
+    def test_presentation_records_exact_work_reduction_without_a_target(self):
+        before = {"Speed": 20, "Interaction": {"Work": {"NarrowPhaseEvaluations": 100}}}
+        after = copy.deepcopy(before)
+        after["Interaction"]["Work"]["NarrowPhaseEvaluations"] = 0
+        result, changes = self.presentation_result(before, after)
+        self.assertEqual(result["ReducedWorkOnlyRows"], 1)
+        self.assertEqual(changes["Scenarios/0"], {
+            "root.Interaction.Work.NarrowPhaseEvaluations": {
+                "BeforePresent": True, "Before": 100, "AfterPresent": True, "After": 0}})
+
+    def test_presentation_work_exception_cannot_hide_behavior_or_invalid_counts(self):
+        before = {"Speed": 20, "Interaction": {"Work": {"NarrowPhaseEvaluations": 100}}}
+        mutations = [
+            {"Speed": 21, "Interaction": {"Work": {"NarrowPhaseEvaluations": 50}}},
+            {"Speed": 20, "Interaction": {"Work": {"NarrowPhaseEvaluations": 101}}},
+            {"Speed": 20, "Interaction": {"Work": {"NarrowPhaseEvaluations": -1}}},
+            {"Speed": 20, "Interaction": {"Work": {"NarrowPhaseEvaluations": 50.0}}},
+            {"Speed": 20, "Interaction": {"Work": {"NarrowPhaseEvaluations": False}}},
+            {"Speed": 20, "Interaction": {"Work": {"OtherEvaluations": 50}}},
+            {"Speed": 20, "Interaction": {"NarrowPhaseEvaluations": 50}},
+            {"Speed": 20, "Interaction": {"Work": {}}},
+        ]
+        for after in mutations:
+            with self.subTest(after=after), self.assertRaises(AssertionError):
+                self.presentation_result(before, after)
+
     def test_disabled_behavior_cannot_be_changed_even_with_a_target_marker(self):
         for case in ("attack/False/False", "heat/I/interactions-OFF/Dry/7/False"):
             with self.assertRaises(ValueError):

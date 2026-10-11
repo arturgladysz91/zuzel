@@ -77,6 +77,7 @@ def presentation(before_path, after_path, output):
     before, after = [json.loads(Path(p).read_text()) for p in (before_path, after_path)]
     assert before.keys() == after.keys()
     changes = {}
+    reduced_work_only_rows = 0
     for section, old in before.items():
         new = after[section]
         if not isinstance(old, list):
@@ -93,10 +94,20 @@ def presentation(before_path, after_path, output):
             row = delta(left, right)
             if row:
                 has_trials = any(p.endswith(".OutwardTargetTrials") and v > 0 for p, v in right.items())
-                assert has_target(right) or has_trials, (section, index, "Unrelated presentation change")
+                # Exact certificate reuse can save work in a response with no
+                # outward target. Accept only a nonnegative integer reduction
+                # of this diagnostic; every other untargeted value stays exact.
+                reduced_work_only = all(p.endswith(".Work.NarrowPhaseEvaluations")
+                    and change["BeforePresent"] and change["AfterPresent"]
+                    and type(change["Before"]) is int and type(change["After"]) is int
+                    and 0 <= change["After"] < change["Before"]
+                    for p, change in row.items())
+                assert has_target(right) or has_trials or reduced_work_only, (section, index, "Unrelated presentation change")
+                reduced_work_only_rows += int(reduced_work_only)
                 changes[f"{section}/{index}"] = row
     write(output, changes)
-    return {"ChangedRows": len(changes), "ChangedLeaves": sum(map(len, changes.values())), "UnrelatedRowsExact": True}
+    return {"ChangedRows": len(changes), "ChangedLeaves": sum(map(len, changes.values())),
+            "ReducedWorkOnlyRows": reduced_work_only_rows, "UnrelatedRowsExact": True}
 
 
 def consequence_totals(heats):
