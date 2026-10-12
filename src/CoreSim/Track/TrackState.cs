@@ -46,6 +46,14 @@ public sealed class TrackState
     /// <summary>Detached exact-value copy for a hypothetical branch.</summary>
     internal TrackState Clone() => new((TrackSurfaceState[,])_surface.Clone());
 
+    /// <summary>Publish a preflighted same-dimension world version without reapplying deltas.</summary>
+    internal void CopyCellsFrom(TrackState source)
+    {
+        if (source.SegmentCount != SegmentCount || source.LinesCount != LinesCount)
+            throw new ArgumentException("Surface dimensions must match.", nameof(source));
+        Array.Copy(source._surface, _surface, _surface.Length);
+    }
+
     public static TrackState CreateDefault(Track track, TrackSurfaceState? defaultSurface = null)
         => new(track.Segments.Count, TrackSegment.LanesCount, defaultSurface ?? TrackSurfaceState.Default);
 
