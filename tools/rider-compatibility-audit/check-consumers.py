@@ -57,6 +57,7 @@ def consumers():
             continue
         name = path.relative_to(ROOT).as_posix()
         source = path.read_text(encoding="utf-8").replace("\r\n", "\n")
+        source = restore_integrator_cursor(source, name)
         source = restore_minimal_yield(source, name)
         source = restore_segment_completion(source, name)
         source = restore_optional_safety_contract(source, name)
@@ -89,6 +90,22 @@ def consumers():
             continue
         result[name] = hashlib.sha256(source.encode("utf-8")).hexdigest()
     return result
+
+
+def restore_integrator_cursor(source, name):
+    # Reverse only this PR's exact execution plumbing before the unchanged older
+    # extractions. Neither the historical manifests nor their hashes are updated.
+    raw = (ROOT / "tests/fixtures/rea004a3-source-extraction.json").read_bytes().replace(b"\r\n", b"\n")
+    assert hashlib.sha256(raw).hexdigest() == "c5305645fa883478812af48b088360d40073032d76e804d0a4a99e2507aaf971"
+    extraction = json.loads(raw)
+    assert extraction["BaseSha"] == "ba945c613502a03c28b80819af9e3b8afdc1ad83"
+    assert set(extraction["Patches"]) == {"src/CoreSim/SimulationEngine.cs", "src/CoreSim/Track/ExecutedPathTraversal.cs"}
+    for patch in extraction["Patches"].get(name, []):
+        assert source.count(patch["After"]) == 1, name
+        source = source.replace(patch["After"], patch["Before"])
+    if name in extraction["BaseSourceSha256"]:
+        assert hashlib.sha256(source.encode()).hexdigest() == extraction["BaseSourceSha256"][name], name
+    return source
 
 
 def restore_minimal_yield(source, name):

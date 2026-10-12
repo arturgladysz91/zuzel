@@ -64,6 +64,11 @@ execution exactly: no accepted prefix, classification, event or motion is replay
 No wall-clock performance benchmark was run. Each pause copies its retained
 prefix; token allocation and copying are additional experimental costs.
 
+The legacy source audit reverses only the exact A3 plumbing via a new pinned
+source extraction before applying older extractions. Both restored source hashes
+must match #71. All historical manifests, extraction fixtures and their hashes
+remain unchanged; tests reject changes to new plumbing and unchanged physics.
+
 ## Explicit remaining boundary
 
 Fixed-line longitudinal paths, corners, standing launches, reduced drive/hold
