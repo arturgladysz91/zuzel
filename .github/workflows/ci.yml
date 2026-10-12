@@ -4,27 +4,69 @@ on:
   push:
     branches: [main]
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review, converted_to_draft, edited, labeled, unlabeled]
+  workflow_dispatch:
+    inputs:
+      historical_audits:
+        description: Also run historical Windows captures and pinned-commit comparisons
+        type: boolean
+        default: true
+  schedule:
+    - cron: '17 2 * * 1'
 
 permissions:
   contents: read
+  pull-requests: read
+
+concurrency:
+  # A description/title edit must not cancel validation of the same source.
+  group: ${{ github.workflow }}-${{ (github.event_name == 'pull_request' && github.event.action == 'edited' && !github.event.changes.base) && github.run_id || github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+  DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+
+defaults:
+  run:
+    shell: pwsh
 
 jobs:
   coverage:
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
+    # One Windows compilation and complete discovery for every run, including Drafts.
+    if: github.event_name != 'pull_request' || github.event.action != 'edited' || github.event.changes.base
+    runs-on: windows-latest
+    timeout-minutes: 15
+    outputs:
+      full: ${{ steps.policy.outputs.full }}
+      historical: ${{ steps.policy.outputs.historical }}
+      shards: ${{ steps.policy.outputs.shards }}
     steps:
+      - name: Keep frozen Git blob bytes on Windows
+        run: git config --global core.autocrlf false
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
-          fetch-depth: 2
-      - name: Record exact tested commit
-        run: |
-          git rev-parse HEAD
-          git rev-parse HEAD^{tree}
-          git log -1 --format=%P
+          fetch-depth: 0
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Record exact tested commit
+        run: |
+          git rev-parse HEAD
+          git rev-parse 'HEAD^{tree}'
+          git log -1 --format=%P
+      - name: Select Draft, full and historical responsibilities
+        id: policy
+        run: python tools/ci/policy.py
+      - uses: actions/cache@v4
+        with:
+          path: ${{ env.NUGET_PACKAGES }}
+          key: nuget-${{ runner.os }}-net8-${{ hashFiles('**/*.csproj', '**/packages.lock.json', '**/NuGet.Config', '**/nuget.config', '**/*.props', '**/*.targets', 'global.json') }}
+          restore-keys: nuget-${{ runner.os }}-net8-
       - run: dotnet restore SpeedwayManager.sln
       - run: dotnet build SpeedwayManager.sln -c Release --no-restore --warnaserror
       - name: Require unchanged legacy production skill and style consumers
@@ -33,38 +75,49 @@ jobs:
         run: python tools/ci/check-shards.py results/discovery
       - uses: actions/upload-artifact@v4
         with:
+          name: windows-build
+          path: |
+            tests/CoreSim.Tests/bin/Release
+            src/Sandbox/bin/Release
+          if-no-files-found: error
+          retention-days: 3
+      - uses: actions/upload-artifact@v4
+        with:
           name: dotnet-discovery
           path: results/discovery
+          if-no-files-found: error
 
   dotnet:
+    # Draft: all core + trajectory cases. Full: all four original shards, once.
     needs: coverage
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
-        shard: [core, trajectory, historical-analysis, four-rider]
+        shard: ${{ fromJSON(needs.coverage.outputs.shards || '["core", "trajectory", "historical-analysis", "four-rider"]') }}
     steps:
+      - name: Keep frozen Git blob bytes on Windows
+        run: git config --global core.autocrlf false
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
-          fetch-depth: 2
-      - name: Record exact tested commit
-        run: |
-          git rev-parse HEAD
-          git rev-parse HEAD^{tree}
-          git log -1 --format=%P
+          fetch-depth: 0
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/download-artifact@v4
+        with:
+          name: windows-build
       - uses: actions/download-artifact@v4
         with:
           name: dotnet-discovery
           path: results/discovery
-      - run: dotnet restore SpeedwayManager.sln
-      - run: dotnet build SpeedwayManager.sln -c Release --no-restore --warnaserror
-      - name: Execute complete shard
-        run: dotnet test tests/CoreSim.Tests -c Release --no-build --filter "Shard=${{ matrix.shard }}" --logger "trx;LogFileName=shard.trx" --results-directory results --verbosity normal
+      - name: Execute complete shard from the shared Windows build
+        run: dotnet vstest tests/CoreSim.Tests/bin/Release/net8.0/CoreSim.Tests.dll --TestCaseFilter:"Shard=${{ matrix.shard }}" --Logger:"trx;LogFileName=shard.trx" --ResultsDirectory:results
       - name: Check executed cases and publish top 20 duration profile
         if: always()
         run: python tools/ci/profile-results.py results ${{ matrix.shard }}
@@ -73,43 +126,43 @@ jobs:
         with:
           name: dotnet-${{ matrix.shard }}
           path: results
+          if-no-files-found: error
 
-  determinism:
-    runs-on: ${{ matrix.os }}
+  historical-audits:
+    # Explicit/weekly mode, also compulsory for ready PRs changing the engine or its evidence.
+    needs: coverage
+    if: needs.coverage.outputs.historical == 'true'
+    runs-on: windows-latest
     timeout-minutes: 45
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, windows-latest]
     steps:
+      - name: Keep frozen Git blob bytes on Windows
+        run: git config --global core.autocrlf false
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
-          fetch-depth: 2
-      - name: Record exact tested commit
-        shell: bash
-        run: |
-          git rev-parse HEAD
-          git rev-parse HEAD^{tree}
+          fetch-depth: 0
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
-      - run: dotnet restore SpeedwayManager.sln
-      - run: dotnet build SpeedwayManager.sln -c Release --no-restore --warnaserror
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/cache@v4
+        with:
+          path: ${{ env.NUGET_PACKAGES }}
+          key: nuget-${{ runner.os }}-net8-${{ hashFiles('**/*.csproj', '**/packages.lock.json', '**/NuGet.Config', '**/nuget.config', '**/*.props', '**/*.targets', 'global.json') }}
+          restore-keys: nuget-${{ runner.os }}-net8-
+      - uses: actions/download-artifact@v4
+        with:
+          name: windows-build
       - name: Capture physical contact arithmetic regression
         run: dotnet run --project tools/physical-contact-consequence-audit -c Release -- results/physical-contact-consequences --trace
-      - uses: actions/upload-artifact@v4
-        with:
-          name: contact-arithmetic-${{ matrix.os }}
-          path: results/physical-contact-consequences
-      - name: Exact candidate trace, evidence bytes, Full/Lean and branch degree parity
-        run: dotnet test tests/CoreSim.Tests -c Release --no-build --filter "FullyQualifiedName~TrajectoryBehaviorFingerprintTests|FullyQualifiedName~LeanProjectionTests|FullyQualifiedName~ScalarEnvelopeParityTests|FullyQualifiedName~AdaptiveParallelTests|FullyQualifiedName~PhysicalSpaceTests|FullyQualifiedName~RiderGameplayProfileTests|FullyQualifiedName~ContestedSpaceResponseTests|FullyQualifiedName~PhysicalContactAnalysisTests|FullyQualifiedName~PhysicalContactConsequenceTests|FullyQualifiedName~ContactDecisionGeometryTests|FullyQualifiedName~PhysicalContactPairGenerationTests|FullyQualifiedName~OptionalSafetyProjectionTests|FullyQualifiedName~CanonicalSegmentHandoffTests" --logger "trx;LogFileName=determinism.trx" --results-directory results --verbosity normal
       - name: Capture typed IEEE values and final rider/raw surface states
         shell: bash
         run: |
           python tools/trajectory-audit/prepare.py . src/CoreSim/Analysis/TrajectoryBehaviorFingerprint.cs
           dotnet run --project tools/trajectory-audit -c Release -- results/capture
-          dotnet run --project src/Sandbox -c Release --no-build -- physical-occupancy-report results/physical-space
+          dotnet src/Sandbox/bin/Release/net8.0/Sandbox.dll physical-occupancy-report results/physical-space
           dotnet run --project tools/rider-compatibility-audit -c Release -- results/rider-compatibility
           dotnet run --project tools/contested-space-audit -c Release -- results/contested-space
           dotnet run --project tools/physical-contact-audit -c Release -- results/physical-contact
@@ -158,10 +211,9 @@ jobs:
           git worktree add --detach ../rea001-baseline 350f59cc53184399066bdf93b18341e4628ec8ef
           baseline="$(cd ../rea001-baseline && pwd)"
           dotnet build tools/race-engine-readiness -c Release --warnaserror -p:CoreSimRoot="$baseline" -o ../rea001-before-bin
-          dotnet build tools/race-engine-readiness -c Release --warnaserror -o ../rea001-after-bin
           for configuration in A B C; do
             dotnet ../rea001-before-bin/CoreSim.Tests.dll repro "results/rea001/before-$configuration" 350f59cc53184399066bdf93b18341e4628ec8ef outside 7 "$configuration"
-            dotnet ../rea001-after-bin/CoreSim.Tests.dll repro "results/rea001/after-$configuration" "$(git rev-parse HEAD)" outside 7 "$configuration"
+            dotnet ../readiness-after-bin/CoreSim.Tests.dll repro "results/rea001/after-$configuration" "$(git rev-parse HEAD)" outside 7 "$configuration"
           done
           python tools/rea001-safety-audit/compare.py results/rea001
       - name: Exact REA-009 physical traversal preservation and bounded original decimal regressions
@@ -175,61 +227,34 @@ jobs:
           dotnet ../rea009-physical-before-bin/CoreSim.Tests.dll capture results/rea009/physical-before.json
           dotnet ../rea009-physical-after-bin/CoreSim.Tests.dll capture results/rea009/physical-after.json
           python tools/rea009-handoff-audit/compare.py results/rea009/physical-before.json results/rea009/physical-after.json --report results/rea009/physical-comparison.json
-          dotnet build tools/race-engine-readiness -c Release --warnaserror -o ../rea009-readiness-after-bin
           for scenario in three-squeeze four-close-regain; do
             for configuration in A B C; do
-              dotnet ../rea009-readiness-after-bin/CoreSim.Tests.dll repro "results/rea009/after-$scenario-19-$configuration" "$(git rev-parse HEAD)" "$scenario" 19 "$configuration"
+              dotnet ../readiness-after-bin/CoreSim.Tests.dll repro "results/rea009/after-$scenario-19-$configuration" "$(git rev-parse HEAD)" "$scenario" 19 "$configuration"
             done
           done
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: determinism-${{ matrix.os }}
-          path: results
-
-  compare-platforms:
-    needs: determinism
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
-      - uses: actions/download-artifact@v4
-        with:
-          pattern: determinism-*
-          path: captures
-      - name: Require exact structured values, IEEE bits and complete behavior
+      - name: Retain Windows golden, shape, storm and contact-order assertions
+        run: python tools/ci/check-windows-captures.py results
+      - name: Repeat the exact Windows candidate capture in a fresh process
+        shell: bash
         run: |
-          mv captures/determinism-windows-latest/capture captures/windows
-          mv captures/determinism-ubuntu-latest/capture captures/ubuntu
-          python tools/trajectory-audit/compare.py captures windows ubuntu
-          python tools/physical-space-audit/compare.py captures
-          python tools/rider-compatibility-audit/compare.py captures
-          python tools/contested-space-audit/compare.py captures
-          python tools/physical-contact-audit/compare.py captures
-          python tools/physical-contact-consequence-audit/compare.py captures
-          python tools/contested-performance/compare.py captures --platforms
-          python tools/contact-decision-audit/compare.py captures
-          python tools/race-engine-readiness/compare.py captures/determinism-windows-latest/readiness
-          python tools/race-engine-readiness/compare.py captures/determinism-ubuntu-latest/readiness
-          python tools/rea001-safety-audit/compare.py captures/determinism-windows-latest/rea001 captures/determinism-ubuntu-latest/rea001 --report captures/rea001-platform-comparison.json
-          python tools/rea009-handoff-audit/compare.py captures/determinism-windows-latest/rea009 captures/determinism-ubuntu-latest/rea009 --platforms --report captures/rea009-platform-comparison.json
+          dotnet run --project tools/trajectory-audit -c Release --no-build -- results/replay
+          python tools/trajectory-audit/compare.py results capture replay
+          python tools/rea001-safety-audit/compare.py results/rea001
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: platform-comparison
-          path: |
-            captures/comparison.json
-            captures/contested-performance-comparison.json
-            captures/contact-decision-*.json*
-            captures/rea001-platform-comparison.json
-            captures/rea009-platform-comparison.json
+          name: historical-windows
+          path: results
+          if-no-files-found: error
 
   python:
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
+    # Calibration comparators remain tested even in Draft mode.
+    if: github.event_name != 'pull_request' || github.event.action != 'edited' || github.event.changes.base
+    runs-on: windows-latest
+    timeout-minutes: 10
     steps:
+      - name: Keep frozen Git blob bytes on Windows
+        run: git config --global core.autocrlf false
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -237,3 +262,42 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m unittest discover -s tests/calibration -p 'test_*.py'
+      - run: python -m unittest discover -s tools/ci -p 'test_*.py'
+
+  required:
+    # Draft work never emits a skipped/successful Full Windows CI check.
+    # Manual/weekly runs cannot replace the PR's required check at the same SHA.
+    name: ${{ github.event_name == 'workflow_dispatch' && 'Manual Windows CI' || github.event_name == 'schedule' && 'Scheduled Windows CI' || (github.event_name == 'pull_request' && github.event.action == 'edited' && !github.event.changes.base) && 'PR metadata' || (github.event_name != 'pull_request' || !github.event.pull_request.draft || contains(github.event.pull_request.labels.*.name, 'ci:historical-audit')) && 'Full Windows CI' || 'Draft Windows CI' }}
+    needs: [coverage, dotnet, python, historical-audits]
+    if: always() && (github.event_name != 'pull_request' || github.event.action != 'edited' || github.event.changes.base)
+    runs-on: windows-latest
+    timeout-minutes: 5
+    steps:
+      - name: Require every selected responsibility and the current PR state
+        uses: actions/github-script@v7
+        env:
+          NEEDS: ${{ toJSON(needs) }}
+        with:
+          script: |
+            const jobs = JSON.parse(process.env.NEEDS);
+            for (const name of ['coverage', 'dotnet', 'python']) {
+              if (jobs[name].result !== 'success') {
+                core.setFailed(`${name}: ${jobs[name].result}`);
+              }
+            }
+            const audit = jobs.coverage.outputs.historical === 'true';
+            if (jobs['historical-audits'].result !== (audit ? 'success' : 'skipped')) {
+              core.setFailed(`historical-audits: ${jobs['historical-audits'].result}`);
+            }
+            if (context.payload.pull_request) {
+              const {data: current} = await github.rest.pulls.get({
+                ...context.repo, pull_number: context.payload.pull_request.number
+              });
+              const tested = context.payload.pull_request;
+              const full = !current.draft || current.labels.some(l => l.name === 'ci:historical-audit');
+              if (current.state !== 'open' || current.head.sha !== tested.head.sha ||
+                  current.base.sha !== tested.base.sha ||
+                  full !== (jobs.coverage.outputs.full === 'true')) {
+                core.setFailed('PR head, base or Draft/Ready state changed; the new CI run must pass.');
+              }
+            }
