@@ -169,6 +169,36 @@ internal static class ExecutedPathTraversal
             }
             if (finish <= start || !double.IsFinite(result.Time) || result.Time <= 0d)
                 throw new InvalidOperationException("Coupled traversal has no finite forward solution.");
+            ExecutedPartialStep? partial = null;
+            if (pause?.PartialStep is { } search)
+            {
+                // Trial evaluations never append a node/step or advance any accumulator.
+                // Every endpoint uses the existing coupled equations from this exact boundary.
+                var unsplitEnd = finish; var unsplitTime = time + result.Time;
+                var lo = start; var hi = finish; var loTime = time; var hiTime = unsplitTime;
+                var trials = 1;
+                ExecutedStepEndpoint Endpoint(double progress, CoupledStep step) =>
+                    new(progress, time + step.Time, distance + step.Distance, step.Speed, step.Lateral);
+                if (search.Reached(new(start, time, distance, speed, lateral)))
+                    throw new RiderIntegrationRefusalException("Partial-step event is already reached at the accepted boundary.");
+                if (!search.Reached(Endpoint(hi, result)))
+                    throw new RiderIntegrationRefusalException("Requested event is not bracketed inside the next numerical step.");
+                for (var i = 0; i < BisectionIterations && hiTime - loTime > TimeToleranceSeconds; i++)
+                {
+                    var mid = (lo + hi) * .5d;
+                    if (mid == lo || mid == hi) break;
+                    var trial = Solve(mid); trials++;
+                    if (!(time + trial.Time > loTime && time + trial.Time < hiTime))
+                        throw new RiderIntegrationRefusalException("Partial-step time is not strictly monotonic inside its bracket.");
+                    if (search.Reached(Endpoint(mid, trial)))
+                    { hi = mid; hiTime = time + trial.Time; result = trial; }
+                    else { lo = mid; loTime = time + trial.Time; }
+                }
+                if (hiTime - loTime > TimeToleranceSeconds || hi <= start || hi >= unsplitEnd)
+                    throw new RiderIntegrationRefusalException("No resolved interior partial-step endpoint within the numerical bound.");
+                finish = hi;
+                partial = new(start, unsplitEnd, time, unsplitTime, lo, loTime, trials);
+            }
             distance += result.Distance; time += result.Time;
             var sampledLateral = (lateral + result.Lateral) * .5f;
             if (captureRich)
@@ -188,12 +218,12 @@ internal static class ExecutedPathTraversal
             if (captureRich) nodes!.Add(Node(start, lateral, crash && start == end ? 0f : speed));
             // Only accepted steps can pause: all subdivisions, arrival splits and accumulator
             // updates above have finished. No final path, wear normalization or event exists yet.
-            if (start < end && pause?.AdditionalSteps is { } limit && stepCount - resumeStepCount == limit)
+            if (partial is not null || start < end && pause?.AdditionalSteps is { } limit && stepCount - resumeStepCount == limit)
                 throw new TraversalPausedException(new(start, end, time, distance, speed, lateral,
                     nodeSurface, stepCount, subdivisionTotal, Array.AsReadOnly(nodes!.ToArray()),
                     Array.AsReadOnly(steps!.ToArray()), corner is null ? null : new(initialEnvelope!.Value,
                         apexLateral, Progress(start)!.Value,
-                        retainedCorner?.Cache ?? new CornerExecutionCache(envelopes!, scalarSpeeds!))));
+                        retainedCorner?.Cache ?? new CornerExecutionCache(envelopes!, scalarSpeeds!)), partial));
         }
         var finalDistance = (float)distance;
         ProjectionWear wear = default;

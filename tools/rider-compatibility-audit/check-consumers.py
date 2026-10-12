@@ -57,6 +57,7 @@ def consumers():
             continue
         name = path.relative_to(ROOT).as_posix()
         source = path.read_text(encoding="utf-8").replace("\r\n", "\n")
+        source = restore_partial_step(source, name)
         source = restore_turnexit_cursor(source, name)
         source = restore_integrator_cursor(source, name)
         source = restore_minimal_yield(source, name)
@@ -91,6 +92,26 @@ def consumers():
             continue
         result[name] = hashlib.sha256(source.encode("utf-8")).hexdigest()
     return result
+
+
+def restore_partial_step(source, name):
+    # Undo only the pinned A5 execution/pose adapter plumbing. Every older
+    # extraction, consumer manifest and accepted historical value stays frozen.
+    raw = (ROOT / "tests/fixtures/rea004a5-source-extraction.json").read_bytes().replace(b"\r\n", b"\n")
+    assert hashlib.sha256(raw).hexdigest() == "e2d59068fded9fdf6066e0b6a2486e925b4237e034ab74fa1520c5d672be2ed7"
+    extraction = json.loads(raw)
+    assert extraction["BaseSha"] == "ffe5be37c1402706252835d5a6145004290c2699"
+    assert set(extraction["Patches"]) == {
+        "src/CoreSim/Track/ExecutedPathTraversal.cs", "src/CoreSim/Track/RiderIntegrationCursor.cs",
+        "src/CoreSim/PhysicalSpace/BikePoseIntervals.cs", "src/CoreSim/Race/CommonTimeMotionWindow.cs"}
+    for patch in extraction["Patches"].get(name, []):
+        assert source.count(patch["After"]) == 1, name
+        source = source.replace(patch["After"], patch["Before"])
+    if name in extraction["BaseSourceSha256"]:
+        assert hashlib.sha256(source.encode()).hexdigest() == extraction["BaseSourceSha256"][name], name
+    if name in extraction["NewSourceSha256"]:
+        assert hashlib.sha256(source.encode()).hexdigest() == extraction["NewSourceSha256"][name], name
+    return source
 
 
 def restore_turnexit_cursor(source, name):
