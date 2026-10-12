@@ -9,14 +9,23 @@ namespace CoreSim.Interactions;
 /// </summary>
 internal static class CommonTimePoseHistory
 {
-    internal static ContestedSpaceReport Observe(IEnumerable<PhysicalPoseInterval> source)
-        => ContestedSpaceResolver.Observe(Stitch(source));
-    internal static SpaceCompatibilityResult Compatibility(IEnumerable<PhysicalPoseInterval> source, double ready)
-        => ContestedSpaceResolver.ObserveCompatibility(Stitch(source), ready);
-    internal static IReadOnlyList<PhysicalPoseInterval> Stitch(IEnumerable<PhysicalPoseInterval> source)
+    internal sealed class CertificationContext
+    {
+        internal readonly ContestedSpaceResolver.CertificationCache Cache = new();
+        internal readonly ResolvedBikePoses.IntervalPool Pool = new();
+        internal readonly Dictionary<(PhysicalPoseInterval Source, long End), PhysicalPoseInterval> Trimmed = new();
+    }
+    internal static ContestedSpaceReport Observe(IEnumerable<PhysicalPoseInterval> source, CertificationContext? context = null)
+        => context is null ? ContestedSpaceResolver.Observe(Stitch(source))
+            : ContestedSpaceResolver.Observe(Stitch(source, context), context.Cache);
+    internal static SpaceCompatibilityResult Compatibility(IEnumerable<PhysicalPoseInterval> source, double ready,
+        CertificationContext? context = null)
+        => ContestedSpaceResolver.ObserveCompatibility(Stitch(source, context), ready, context?.Cache);
+    internal static IReadOnlyList<PhysicalPoseInterval> Stitch(IEnumerable<PhysicalPoseInterval> source, CertificationContext? context = null)
     {
         var result = new List<PhysicalPoseInterval>();
-        foreach (var group in source.GroupBy(i => i.RiderId).OrderBy(g => g.Key))
+        var canonical = context is null ? source : source.Select(context.Pool.Get);
+        foreach (var group in canonical.GroupBy(i => i.RiderId).OrderBy(g => g.Key))
         {
             var intervals = group.OrderBy(i => i.StartTimeSeconds).ToArray();
             for (var index = 0; index < intervals.Length; index++)
@@ -30,7 +39,17 @@ internal static class CommonTimePoseHistory
                     var ulp = Math.Abs((double)MathF.BitIncrement(boundary) - boundary);
                     if (interval.EndTimeSeconds - end > ulp)
                         throw new ArgumentException("Pose history overlaps by more than one float heat-clock ULP.");
-                    if (end > interval.StartTimeSeconds) result.Add(new Trimmed(interval, end));
+                    if (end > interval.StartTimeSeconds)
+                    {
+                        var key = (interval, BitConverter.DoubleToInt64Bits(end));
+                        if (context is null) result.Add(new Trimmed(interval, end));
+                        else
+                        {
+                            if (!context.Trimmed.TryGetValue(key, out var trimmed))
+                                context.Trimmed.Add(key, trimmed = new Trimmed(interval, end));
+                            result.Add(trimmed);
+                        }
+                    }
                 }
                 else result.Add(interval);
             }

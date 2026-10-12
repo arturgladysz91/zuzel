@@ -62,7 +62,8 @@ public static class PhysicalContactConsequenceEvidence
             Motion=step.Motions[0],Diagnostics=step.Diagnostics[0],RecoveryAfter=step.Changes[0].ContactRecovery};
     }).ToArray();
 
-    public static object Report(bool includeHeats = true, Action<string>? progress = null)
+    public static object Report(bool includeHeats = true, Action<string>? progress = null,
+        Action<string,int>? targetWork = null)
     {
         var fixtures=PhysicalContactEvidence.Fixtures();
         var controlled=fixtures.Select(f=>new {f.Name,Analysis=f.Analysis,Applied=Plan(f)}).ToArray();
@@ -74,6 +75,8 @@ public static class PhysicalContactConsequenceEvidence
             var intents=s.Riders.Select(r=>new RiderIntent(r.Id,new(r.Intent.TargetFor(snapshot.Segment.Type)){Trajectory=r.Intent})).ToArray();
             var applied=engine.Resolve(snapshot,intents,Options with{Seed=s.Seed,IncidentFrequency=s.IncidentFrequency});
             var legacy=ContestedSpaceResponseEvidence.Resolve(s);
+            targetWork?.Invoke($"LegacyComparison/{s.Name}/{s.Seed}",
+                (applied.Interaction?.Work.OutwardTargetTrials??0)+(legacy.Interaction?.Work.OutwardTargetTrials??0));
             return new{s.Name,s.Seed,LegacyChanges=legacy.Changes,LegacyEvents=legacy.Events,AppliedChanges=applied.Changes,
                 AppliedEvents=applied.Events.Select(e=>new{e.Type,e.RiderId,e.PhysicalContactConsequence}),
                 Analysis=applied.Interaction?.PhysicalContactAnalysis,Plan=applied.Interaction?.PhysicalContactConsequences};
@@ -82,7 +85,7 @@ public static class PhysicalContactConsequenceEvidence
         if(includeHeats) foreach(var scenario in HeatScenarios())
             foreach(var seed in new[]{7,19,57,83}) foreach(var weather in new[]{WeatherState.Dry,WeatherState.LightRain})
             {
-                var heat=Heat(scenario,seed,weather);heats.Add(heat);
+                var heat=Heat(scenario,seed,weather,targetWork);heats.Add(heat);
                 progress?.Invoke($"#56C2 {scenario.Id} seed={seed} weather={weather.Condition}: contacts={heat.VerifiedContacts} applied={heat.AppliedRiders}");
             }
         return new{Schema="56C2-v1",Thresholds=new PhysicalContactParameters(),
@@ -194,15 +197,19 @@ public static class PhysicalContactConsequenceEvidence
         }
     }
 
-    private static ContactConsequenceHeatEvidence Heat(BehaviorScenario scenario,int seed,WeatherState weather)
+    private static ContactConsequenceHeatEvidence Heat(BehaviorScenario scenario,int seed,WeatherState weather,
+        Action<string,int>? targetWork = null)
     {
         var observer=new ContactObserver();var riders=scenario.Riders.Select(r=>r.Create(scenario.Track)).ToList();
         var result=new HeatSimulator(new AdaptiveDecisionModel()).SimulateHeat(scenario.Track,scenario.CreateSurface(),riders,
             Options with{Seed=seed,Laps=4,Weather=weather,IncidentFrequency=1},59,observer);
         var legacyRiders=scenario.Riders.Select(r=>r.Create(scenario.Track)).ToList();
+        var legacyObserver=targetWork is null?null:new ContactObserver();
         var legacy=new HeatSimulator(new AdaptiveDecisionModel()).SimulateHeat(scenario.Track,scenario.CreateSurface(),legacyRiders,
             Options with{Seed=seed,Laps=4,Weather=weather,IncidentFrequency=1,EnablePhysicalContactConsequences=false,
-                PhysicalContactDiagnostics=PhysicalContactDiagnosticsLevel.None},59);
+                PhysicalContactDiagnostics=PhysicalContactDiagnosticsLevel.None},59,legacyObserver);
+        targetWork?.Invoke($"Heats/{scenario.Id}/{seed}/{weather.Condition}",
+            observer.OutwardTargetTrials+(legacyObserver?.OutwardTargetTrials??0));
         return new(scenario.Id,seed,weather.Condition.ToString(),observer.Verified,observer.AppliedContacts,observer.Applied.Count,
             observer.Applied.Count(c=>c.Severity==PhysicalContactSeverity.Crash),observer.Suppressed,observer.Deferred,observer.Unresolved,
             Enum.GetValues<PhysicalContactSeverity>().ToDictionary(c=>c.ToString(),c=>observer.Applied.Count(a=>a.Severity==c)),
@@ -210,11 +217,12 @@ public static class PhysicalContactConsequenceEvidence
     }
     private sealed class ContactObserver(bool captureInputs=false) : ISimulationStepObserver
     {
-        public int Verified,AppliedContacts,Suppressed,Deferred,Unresolved;
+        public int Verified,AppliedContacts,Suppressed,Deferred,Unresolved,OutwardTargetTrials;
         public List<RiderContactConsequence> Applied {get;}=new();
         public List<object> Trace {get;}=new();
         public void OnStepResolved(ResolvedSimulationStep step)
         {
+            OutwardTargetTrials+=step.Interaction?.Work.OutwardTargetTrials??0;
             var analysis=step.Interaction?.PhysicalContactAnalysis;
             if(captureInputs&&analysis is{AuditPairs.Count:>0})
                 Trace.Add(new{step.Snapshot.Step,analysis.SourceInputs,Analysis=analysis,

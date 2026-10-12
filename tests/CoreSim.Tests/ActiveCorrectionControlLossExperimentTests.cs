@@ -558,7 +558,7 @@ public sealed class ActiveCorrectionControlLossExperimentTests
             var text = File.ReadAllText(path)
                 .Replace("\r\n", "\n", StringComparison.Ordinal).Replace('\r', '\n');
             Assert.Equal(sha, Convert.ToHexString(SHA256.HashData(
-                Encoding.UTF8.GetBytes(text))));
+                Encoding.UTF8.GetBytes(HistoricalPhysicsSource.ForHash(relative,text)))));
         }
     }
 

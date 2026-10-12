@@ -1,5 +1,7 @@
 # #56B — contested-space racing responses
 
+Current outward destinations follow [geometry-based minimal outward yielding](minimal-outward-yield.md). The evidence below remains the original historical #56B capture.
+
 **BINDING architecture; PROVISIONAL synthetic balance.** Base is merged #56A,
 `a1609e485131f553619c386a051a158796c9e2dd`. The public heat option
 `EnableContestedSpaceResponses` defaults to false. No physics calibration, legal

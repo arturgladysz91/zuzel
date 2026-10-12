@@ -12,6 +12,8 @@ The existing production traversal scales positive drive and voluntary lateral bu
 Default OFF preserves the legacy path; ON requires #56B and replaces its legacy contact consequence.
 
 Current racing-response precedence (#56B): [bounded pre-contact contested-space responses](calibration/contested-space-racing-response.md)
+
+Current outward-target precedence: [geometry-based minimal outward yielding](calibration/minimal-outward-yield.md)
 adds an opt-in heat-scoped coordinator after independent #54 planning. Joint alternatives
 execute production motion and are verified by #55; legacy consequences are authorized once
 for an unresolved eligible episode. Feature OFF retains the merged #56A behavior. Strength,

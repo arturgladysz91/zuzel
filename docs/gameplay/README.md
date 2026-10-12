@@ -6,6 +6,8 @@ Disturbed, LostRhythm and MajorSave affect one next active production step; Cras
 No abilities or morale are rewritten. Body contact, injuries and long-term fatigue remain outside this stage.
 
 Current racing-response precedence (#56B): [bounded pre-contact contested-space responses](../calibration/contested-space-racing-response.md)
+
+Current outward-target precedence: [geometry-based minimal outward yielding](../calibration/minimal-outward-yield.md)
 adds an opt-in heat-scoped coordinator after independent #54 planning. Joint alternatives
 execute production motion and are verified by #55; legacy consequences are authorized once
 for an unresolved eligible episode. Feature OFF retains the merged #56A behavior. Strength,

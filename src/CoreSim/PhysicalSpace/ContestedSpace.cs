@@ -1,4 +1,5 @@
 using CoreSim.Race;
+using System.Runtime.CompilerServices;
 
 namespace CoreSim.PhysicalSpace;
 
@@ -75,16 +76,49 @@ public sealed record ContestedSpaceReport(IReadOnlyList<ContestedSpaceEvent> Int
 /// <summary>Deterministic pose-only observer. Owns no riders, surface, decision or RNG.</summary>
 public static class ContestedSpaceResolver
 {
+    // One coordinator resolution owns this cache. Interval references identify immutable
+    // canonical adapters (including arithmetic, frame, source and discontinuities).
+    // The incoming pair minimum is part of the key: it controls #55's adaptive search.
+    internal sealed class CertificationCache
+    {
+        // Retain expensive certificates only; endpoint-only intervals cost less
+        // than storing them. Limits affect reuse, never certification or decisions.
+        internal const int MinimumCachedEvaluations = 8;
+        internal const int MaximumCachedIntervals = 4000;
+        internal const int MaximumCachedClearSearches = 256;
+        internal readonly Dictionary<IntervalKey, CertifiedInterval> Intervals = new();
+        internal readonly Dictionary<ClearKey, (double? Time, bool Resolved)> Clear = new();
+    }
+    internal readonly record struct IntervalKey(PhysicalPoseInterval A, PhysicalPoseInterval B,
+        long Start, long End, long PairMinimum, bool Attribution)
+    {
+        public bool Equals(IntervalKey other) => ReferenceEquals(A, other.A) && ReferenceEquals(B, other.B)
+            && Start == other.Start && End == other.End && PairMinimum == other.PairMinimum && Attribution == other.Attribution;
+        public override int GetHashCode() => HashCode.Combine(RuntimeHelpers.GetHashCode(A), RuntimeHelpers.GetHashCode(B),
+            Start, End, PairMinimum, Attribution);
+    }
+    internal readonly record struct ClearKey(PhysicalPoseInterval A, PhysicalPoseInterval B, long Start, long End)
+    {
+        public bool Equals(ClearKey other) => ReferenceEquals(A, other.A) && ReferenceEquals(B, other.B)
+            && Start == other.Start && End == other.End;
+        public override int GetHashCode() => HashCode.Combine(RuntimeHelpers.GetHashCode(A), RuntimeHelpers.GetHashCode(B), Start, End);
+    }
+    internal readonly record struct CertifiedInterval(SpaceIntervalValue Value, double PairMinimum,
+        int Intervals, int Broad, int Conflicts, int Unresolved);
     private static readonly ClosingContributions EmptyContributions = new(0, 0, 0, 0, 0, 0);
     public static ContestedSpaceReport Observe(IEnumerable<PhysicalPoseInterval> intervals) => Observe(intervals, true);
+    internal static ContestedSpaceReport Observe(IEnumerable<PhysicalPoseInterval> intervals, CertificationCache cache)
+        => Observe(intervals, true, cache: cache);
     // Compatibility uses identical #55 certification, without unused attribution poses.
-    internal static SpaceCompatibilityResult ObserveCompatibility(IEnumerable<PhysicalPoseInterval> intervals, double ready)
+    internal static SpaceCompatibilityResult ObserveCompatibility(IEnumerable<PhysicalPoseInterval> intervals, double ready,
+        CertificationCache? cache = null)
     {
         var summary = new SpaceCompatibilityResult(ready);
-        summary.Work = Observe(intervals, false, summary).Work;
+        summary.Work = Observe(intervals, false, summary, cache).Work;
         return summary;
     }
-    private static ContestedSpaceReport Observe(IEnumerable<PhysicalPoseInterval> intervals, bool attribution, SpaceCompatibilityResult? summary = null)
+    private static ContestedSpaceReport Observe(IEnumerable<PhysicalPoseInterval> intervals, bool attribution,
+        SpaceCompatibilityResult? summary = null, CertificationCache? cache = null)
     {
         ArgumentNullException.ThrowIfNull(intervals);
         var groups = intervals.GroupBy(i => i.RiderId).OrderBy(g => g.Key)
@@ -127,8 +161,8 @@ public static class ContestedSpaceResolver
                         var continuousStart = start;
                         if (quarantined)
                         {
-                            var escape = FindClear(pa, pb, start, end, work);
-                            var ambiguous = Evaluate(pa, pb, start, escape.Time ?? end, work, pairMinimum, attribution);
+                            var escape = FindClear(pa, pb, start, end, work, cache);
+                            var ambiguous = Evaluate(pa, pb, start, escape.Time ?? end, work, pairMinimum, attribution, cache);
                             if (ambiguous.HasConflict) work.Conflicts--;
                             if (!escape.Resolved && ambiguous.NumericallyResolved) work.Unresolved++;
                             Add(ambiguous with { Kind = SpaceConflictKind.BoundaryAmbiguous,
@@ -138,7 +172,7 @@ public static class ContestedSpaceResolver
                         }
                         SpaceIntervalValue? row = null;
                         if (continuousStart < end)
-                        { row = Evaluate(pa, pb, continuousStart, end, work, pairMinimum, attribution); Add(row.Value); }
+                        { row = Evaluate(pa, pb, continuousStart, end, work, pairMinimum, attribution, cache); Add(row.Value); }
                         previousEligibleOverlap = !quarantined && row?.EligibleForFutureInteraction == true
                             && MechanicalSeparation.Between(pa.SampleFootprint(end), pb.SampleFootprint(end)).SignedMeters <= GeometryNumerics.ContactDistanceMeters;
                         previousFrame = pa.FrameId; previousEnd = end;
@@ -159,8 +193,27 @@ public static class ContestedSpaceResolver
     }
 
     private static SpaceIntervalValue Evaluate(PhysicalPoseInterval a, PhysicalPoseInterval b, double start, double end,
-        Work work, PairMinimum pairMinimum, bool attribution)
-        => new IntervalSearch(a, b, start, end, work, pairMinimum).Evaluate(attribution);
+        Work work, PairMinimum pairMinimum, bool attribution, CertificationCache? cache)
+    {
+        if (cache is null) return new IntervalSearch(a, b, start, end, work, pairMinimum).Evaluate(attribution);
+        var key = new IntervalKey(a, b, BitConverter.DoubleToInt64Bits(start), BitConverter.DoubleToInt64Bits(end),
+            BitConverter.DoubleToInt64Bits(pairMinimum.Value), attribution);
+        if (cache.Intervals.TryGetValue(key, out var certified))
+        {
+            pairMinimum.Value = certified.PairMinimum;
+            work.Intervals += certified.Intervals; work.Broad += certified.Broad;
+            work.Conflicts += certified.Conflicts; work.Unresolved += certified.Unresolved;
+            return certified.Value;
+        }
+        var intervals = work.Intervals; var broad = work.Broad; var narrow = work.Narrow;
+        var conflicts = work.Conflicts; var unresolved = work.Unresolved;
+        var value = new IntervalSearch(a, b, start, end, work, pairMinimum).Evaluate(attribution);
+        if (work.Narrow - narrow > CertificationCache.MinimumCachedEvaluations
+            && cache.Intervals.Count < CertificationCache.MaximumCachedIntervals)
+            cache.Intervals.Add(key, new(value, pairMinimum.Value, work.Intervals - intervals, work.Broad - broad,
+                work.Conflicts - conflicts, work.Unresolved - unresolved));
+        return value;
+    }
 
     // Root-search state lives on the stack. No change to #55 bounds, roots, order or tolerances.
     private struct IntervalSearch
@@ -258,8 +311,10 @@ public static class ContestedSpaceResolver
     // Find the end of unsupported jump overlap even when clearance and re-contact occur
     // inside one supplied span. A Lipschitz upper bound prunes continuously overlapping regions.
     private static (double? Time, bool Resolved) FindClear(PhysicalPoseInterval a, PhysicalPoseInterval b,
-        double start, double end, Work work)
+        double start, double end, Work work, CertificationCache? cache)
     {
+        var key = new ClearKey(a, b, BitConverter.DoubleToInt64Bits(start), BitConverter.DoubleToInt64Bits(end));
+        if (cache is not null && cache.Clear.TryGetValue(key, out var certified)) return certified;
         var ra = a.RateBounds(start, end); var rb = b.RateBounds(start, end);
         var rate = (ra.CenterVelocityMetersPerSecond - rb.CenterVelocityMetersPerSecond).Length
             + (ra.CenterAccelerationBoundMetersPerSecondSquared + rb.CenterAccelerationBoundMetersPerSecondSquared) * (end - start) / 2
@@ -287,6 +342,8 @@ public static class ContestedSpaceResolver
             return Search(mid, hi, gm, gh, depth + 1);
         }
         var time = Search(start, end, Gap(start), Gap(end), 0);
+        if (cache is not null && count > CertificationCache.MinimumCachedEvaluations
+            && cache.Clear.Count < CertificationCache.MaximumCachedClearSearches) cache.Clear.Add(key, (time, resolved));
         return (time, resolved);
     }
 

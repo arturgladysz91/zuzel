@@ -1,0 +1,524 @@
+{
+  "BaseMainSha": "f40b2fd129124d969fd22cfe7767e2fb00bd651f",
+  "Environment": {
+    "OS": "Microsoft Windows 10.0.19045",
+    "Runtime": ".NET 8.0.30",
+    "ProcessorCount": 16,
+    "Architecture": "X64",
+    "Frequency": 10000000
+  },
+  "Protocol": "At least eight complete runs and at least three seconds per case",
+  "Samples": 9,
+  "Cases": [
+    {
+      "Name": "four-separated",
+      "WallMilliseconds": {
+        "BeforeMedian": 0.3592,
+        "AfterMedian": 0.3593,
+        "ChangePercent": 0.027839643652560753
+      },
+      "CpuMilliseconds": {
+        "BeforeMedian": 0,
+        "AfterMedian": 0,
+        "ChangePercent": null
+      },
+      "AllocatedBytes": {
+        "BeforeMedian": 178952,
+        "AfterMedian": 179048,
+        "ChangePercent": 0.053645670347357566
+      },
+      "BeforeWork": {
+        "JointCombinations": 0,
+        "ProductionResolutions": 1,
+        "NarrowPhaseEvaluations": 264,
+        "ResponsePasses": 0,
+        "Clusters": 0,
+        "UniqueRiderAlternativeProjections": 0,
+        "PairAlternativeChecks": 0,
+        "JointCombinationsScored": 0,
+        "ActualProductionVerifications": 1,
+        "SafetyPasses": 0,
+        "LegacyFallbackAttempts": 0,
+        "SafetyContactComponents": 0,
+        "FinalContactComponents": 0,
+        "SafetyJointCombinations": 0
+      },
+      "AfterWork": {
+        "JointCombinations": 0,
+        "ProductionResolutions": 1,
+        "NarrowPhaseEvaluations": 264,
+        "ResponsePasses": 0,
+        "Clusters": 0,
+        "UniqueRiderAlternativeProjections": 0,
+        "PairAlternativeChecks": 0,
+        "JointCombinationsScored": 0,
+        "ActualProductionVerifications": 1,
+        "SafetyPasses": 0,
+        "LegacyFallbackAttempts": 0,
+        "SafetyContactComponents": 0,
+        "FinalContactComponents": 0,
+        "SafetyJointCombinations": 0,
+        "OutwardTargetTrials": 0
+      }
+    },
+    {
+      "Name": "H-three-squeeze",
+      "WallMilliseconds": {
+        "BeforeMedian": 45.3962,
+        "AfterMedian": 227.7223,
+        "ChangePercent": 401.63295606240166
+      },
+      "CpuMilliseconds": {
+        "BeforeMedian": 46.875,
+        "AfterMedian": 234.375,
+        "ChangePercent": 400.0
+      },
+      "AllocatedBytes": {
+        "BeforeMedian": 5778872,
+        "AfterMedian": 15430264,
+        "ChangePercent": 167.01169363155995
+      },
+      "BeforeWork": {
+        "JointCombinations": 54,
+        "ProductionResolutions": 60,
+        "NarrowPhaseEvaluations": 89624,
+        "ResponsePasses": 2,
+        "Clusters": 1,
+        "UniqueRiderAlternativeProjections": 14,
+        "PairAlternativeChecks": 35,
+        "JointCombinationsScored": 54,
+        "ActualProductionVerifications": 3,
+        "SafetyPasses": 1,
+        "LegacyFallbackAttempts": 1,
+        "SafetyContactComponents": 1,
+        "FinalContactComponents": 1,
+        "SafetyJointCombinations": 27
+      },
+      "AfterWork": {
+        "JointCombinations": 54,
+        "ProductionResolutions": 180,
+        "NarrowPhaseEvaluations": 411859,
+        "ResponsePasses": 2,
+        "Clusters": 1,
+        "UniqueRiderAlternativeProjections": 34,
+        "PairAlternativeChecks": 62,
+        "JointCombinationsScored": 54,
+        "ActualProductionVerifications": 3,
+        "SafetyPasses": 1,
+        "LegacyFallbackAttempts": 1,
+        "SafetyContactComponents": 1,
+        "FinalContactComponents": 1,
+        "SafetyJointCombinations": 27,
+        "OutwardTargetTrials": 24
+      }
+    },
+    {
+      "Name": "G-four-first-bend",
+      "WallMilliseconds": {
+        "BeforeMedian": 225.6935,
+        "AfterMedian": 427.7019,
+        "ChangePercent": 89.50563485434895
+      },
+      "CpuMilliseconds": {
+        "BeforeMedian": 218.75,
+        "AfterMedian": 421.875,
+        "ChangePercent": 92.85714285714286
+      },
+      "AllocatedBytes": {
+        "BeforeMedian": 5238424,
+        "AfterMedian": 17445928,
+        "ChangePercent": 233.03772279601654
+      },
+      "BeforeWork": {
+        "JointCombinations": 81,
+        "ProductionResolutions": 42,
+        "NarrowPhaseEvaluations": 518264,
+        "ResponsePasses": 1,
+        "Clusters": 1,
+        "UniqueRiderAlternativeProjections": 10,
+        "PairAlternativeChecks": 37,
+        "JointCombinationsScored": 81,
+        "ActualProductionVerifications": 1,
+        "SafetyPasses": 0,
+        "LegacyFallbackAttempts": 0,
+        "SafetyContactComponents": 0,
+        "FinalContactComponents": 0,
+        "SafetyJointCombinations": 0
+      },
+      "AfterWork": {
+        "JointCombinations": 81,
+        "ProductionResolutions": 170,
+        "NarrowPhaseEvaluations": 799529,
+        "ResponsePasses": 1,
+        "Clusters": 1,
+        "UniqueRiderAlternativeProjections": 42,
+        "PairAlternativeChecks": 100,
+        "JointCombinationsScored": 81,
+        "ActualProductionVerifications": 1,
+        "SafetyPasses": 0,
+        "LegacyFallbackAttempts": 0,
+        "SafetyContactComponents": 0,
+        "FinalContactComponents": 0,
+        "SafetyJointCombinations": 0,
+        "OutwardTargetTrials": 33
+      }
+    },
+    {
+      "Name": "real-bridge",
+      "WallMilliseconds": {
+        "BeforeMedian": 232.72,
+        "AfterMedian": 269.913,
+        "ChangePercent": 15.981866620831898
+      },
+      "CpuMilliseconds": {
+        "BeforeMedian": 234.375,
+        "AfterMedian": 265.625,
+        "ChangePercent": 13.33333333333333
+      },
+      "AllocatedBytes": {
+        "BeforeMedian": 4147680,
+        "AfterMedian": 5040976,
+        "ChangePercent": 21.537244917640706
+      },
+      "BeforeWork": {
+        "JointCombinations": 162,
+        "ProductionResolutions": 40,
+        "NarrowPhaseEvaluations": 533242,
+        "ResponsePasses": 2,
+        "Clusters": 1,
+        "UniqueRiderAlternativeProjections": 17,
+        "PairAlternativeChecks": 63,
+        "JointCombinationsScored": 162,
+        "ActualProductionVerifications": 3,
+        "SafetyPasses": 1,
+        "LegacyFallbackAttempts": 1,
+        "SafetyContactComponents": 1,
+        "FinalContactComponents": 1,
+        "SafetyJointCombinations": 81
+      },
+      "AfterWork": {
+        "JointCombinations": 162,
+        "ProductionResolutions": 48,
+        "NarrowPhaseEvaluations": 557515,
+        "ResponsePasses": 2,
+        "Clusters": 1,
+        "UniqueRiderAlternativeProjections": 21,
+        "PairAlternativeChecks": 69,
+        "JointCombinationsScored": 162,
+        "ActualProductionVerifications": 3,
+        "SafetyPasses": 1,
+        "LegacyFallbackAttempts": 1,
+        "SafetyContactComponents": 1,
+        "FinalContactComponents": 1,
+        "SafetyJointCombinations": 81,
+        "OutwardTargetTrials": 6
+      }
+    },
+    {
+      "Name": "safety-correction",
+      "WallMilliseconds": {
+        "BeforeMedian": 30.2428,
+        "AfterMedian": 54.5992,
+        "ChangePercent": 80.536193738675
+      },
+      "CpuMilliseconds": {
+        "BeforeMedian": 31.25,
+        "AfterMedian": 62.5,
+        "ChangePercent": 100.0
+      },
+      "AllocatedBytes": {
+        "BeforeMedian": 2502992,
+        "AfterMedian": 3222464,
+        "ChangePercent": 28.744478608001934
+      },
+      "BeforeWork": {
+        "JointCombinations": 18,
+        "ProductionResolutions": 30,
+        "NarrowPhaseEvaluations": 61322,
+        "ResponsePasses": 2,
+        "Clusters": 1,
+        "UniqueRiderAlternativeProjections": 11,
+        "PairAlternativeChecks": 15,
+        "JointCombinationsScored": 18,
+        "ActualProductionVerifications": 2,
+        "SafetyPasses": 1,
+        "LegacyFallbackAttempts": 0,
+        "SafetyContactComponents": 1,
+        "FinalContactComponents": 0,
+        "SafetyJointCombinations": 9
+      },
+      "AfterWork": {
+        "JointCombinations": 18,
+        "ProductionResolutions": 36,
+        "NarrowPhaseEvaluations": 100185,
+        "ResponsePasses": 2,
+        "Clusters": 1,
+        "UniqueRiderAlternativeProjections": 17,
+        "PairAlternativeChecks": 23,
+        "JointCombinationsScored": 18,
+        "ActualProductionVerifications": 2,
+        "SafetyPasses": 1,
+        "LegacyFallbackAttempts": 0,
+        "SafetyContactComponents": 1,
+        "FinalContactComponents": 0,
+        "SafetyJointCombinations": 9,
+        "OutwardTargetTrials": 7
+      }
+    },
+    {
+      "Name": "I-heat-ON",
+      "WallMilliseconds": {
+        "BeforeMedian": 2281.2295,
+        "AfterMedian": 5478.0762,
+        "ChangePercent": 140.1370050667853
+      },
+      "CpuMilliseconds": {
+        "BeforeMedian": 2937.5,
+        "AfterMedian": 6187.5,
+        "ChangePercent": 110.6382978723404
+      },
+      "AllocatedBytes": {
+        "BeforeMedian": 244255640,
+        "AfterMedian": 366272352,
+        "ChangePercent": 49.95451159285411
+      },
+      "BeforeWork": {
+        "JointCombinations": 333,
+        "ProductionResolutions": 668,
+        "NarrowPhaseEvaluations": 4330040,
+        "ResponsePasses": 25,
+        "Clusters": 24,
+        "UniqueRiderAlternativeProjections": 165,
+        "PairAlternativeChecks": 427,
+        "JointCombinationsScored": 333,
+        "ActualProductionVerifications": 37,
+        "SafetyPasses": 1,
+        "LegacyFallbackAttempts": 0,
+        "SafetyContactComponents": 1,
+        "FinalContactComponents": 0,
+        "SafetyJointCombinations": 81
+      },
+      "AfterWork": {
+        "JointCombinations": 837,
+        "ProductionResolutions": 1546,
+        "NarrowPhaseEvaluations": 10338094,
+        "ResponsePasses": 41,
+        "Clusters": 40,
+        "UniqueRiderAlternativeProjections": 373,
+        "PairAlternativeChecks": 1106,
+        "JointCombinationsScored": 837,
+        "ActualProductionVerifications": 37,
+        "SafetyPasses": 1,
+        "LegacyFallbackAttempts": 0,
+        "SafetyContactComponents": 1,
+        "FinalContactComponents": 0,
+        "SafetyJointCombinations": 81,
+        "OutwardTargetTrials": 65
+      }
+    },
+    {
+      "Name": "I-heat-OFF",
+      "WallMilliseconds": {
+        "BeforeMedian": 286.5934,
+        "AfterMedian": 288.2675,
+        "ChangePercent": 0.5841376668129783
+      },
+      "CpuMilliseconds": {
+        "BeforeMedian": 937.5,
+        "AfterMedian": 1000,
+        "ChangePercent": 6.666666666666665
+      },
+      "AllocatedBytes": {
+        "BeforeMedian": 151939640,
+        "AfterMedian": 151844968,
+        "ChangePercent": -0.062308953739786954
+      },
+      "BeforeWork": {
+        "JointCombinations": 0,
+        "ProductionResolutions": 36,
+        "NarrowPhaseEvaluations": 0,
+        "ResponsePasses": 0,
+        "Clusters": 0,
+        "UniqueRiderAlternativeProjections": 0,
+        "PairAlternativeChecks": 0,
+        "JointCombinationsScored": 0,
+        "ActualProductionVerifications": 0,
+        "SafetyPasses": 0,
+        "LegacyFallbackAttempts": 0,
+        "SafetyContactComponents": 0,
+        "FinalContactComponents": 0,
+        "SafetyJointCombinations": 0
+      },
+      "AfterWork": {
+        "JointCombinations": 0,
+        "ProductionResolutions": 36,
+        "NarrowPhaseEvaluations": 0,
+        "ResponsePasses": 0,
+        "Clusters": 0,
+        "UniqueRiderAlternativeProjections": 0,
+        "PairAlternativeChecks": 0,
+        "JointCombinationsScored": 0,
+        "ActualProductionVerifications": 0,
+        "SafetyPasses": 0,
+        "LegacyFallbackAttempts": 0,
+        "SafetyContactComponents": 0,
+        "FinalContactComponents": 0,
+        "SafetyJointCombinations": 0,
+        "OutwardTargetTrials": 0
+      }
+    },
+    {
+      "Name": "repeated-contact",
+      "WallMilliseconds": {
+        "BeforeMedian": 992.7099,
+        "AfterMedian": 5877.5966,
+        "ChangePercent": 492.0759529042674
+      },
+      "CpuMilliseconds": {
+        "BeforeMedian": 1000,
+        "AfterMedian": 5875,
+        "ChangePercent": 487.5
+      },
+      "AllocatedBytes": {
+        "BeforeMedian": 18470936,
+        "AfterMedian": 25015584,
+        "ChangePercent": 35.432140526067556
+      },
+      "BeforeWork": {
+        "JointCombinations": 144,
+        "ProductionResolutions": 184,
+        "NarrowPhaseEvaluations": 2333520,
+        "ResponsePasses": 16,
+        "Clusters": 8,
+        "UniqueRiderAlternativeProjections": 72,
+        "PairAlternativeChecks": 88,
+        "JointCombinationsScored": 144,
+        "ActualProductionVerifications": 24,
+        "SafetyPasses": 8,
+        "LegacyFallbackAttempts": 8,
+        "SafetyContactComponents": 8,
+        "FinalContactComponents": 8,
+        "SafetyJointCombinations": 72
+      },
+      "AfterWork": {
+        "JointCombinations": 144,
+        "ProductionResolutions": 241,
+        "NarrowPhaseEvaluations": 12578347,
+        "ResponsePasses": 16,
+        "Clusters": 8,
+        "UniqueRiderAlternativeProjections": 104,
+        "PairAlternativeChecks": 120,
+        "JointCombinationsScored": 144,
+        "ActualProductionVerifications": 17,
+        "SafetyPasses": 8,
+        "LegacyFallbackAttempts": 1,
+        "SafetyContactComponents": 8,
+        "FinalContactComponents": 8,
+        "SafetyJointCombinations": 72,
+        "OutwardTargetTrials": 48
+      }
+    },
+    {
+      "Name": "solo-heat",
+      "WallMilliseconds": {
+        "BeforeMedian": 70.1945,
+        "AfterMedian": 73.2279,
+        "ChangePercent": 4.321421193968189
+      },
+      "CpuMilliseconds": {
+        "BeforeMedian": 218.75,
+        "AfterMedian": 234.375,
+        "ChangePercent": 7.14285714285714
+      },
+      "AllocatedBytes": {
+        "BeforeMedian": 38926816,
+        "AfterMedian": 38989192,
+        "ChangePercent": 0.1602391523622071
+      },
+      "BeforeWork": {
+        "JointCombinations": 0,
+        "ProductionResolutions": 36,
+        "NarrowPhaseEvaluations": 0,
+        "ResponsePasses": 0,
+        "Clusters": 0,
+        "UniqueRiderAlternativeProjections": 0,
+        "PairAlternativeChecks": 0,
+        "JointCombinationsScored": 0,
+        "ActualProductionVerifications": 0,
+        "SafetyPasses": 0,
+        "LegacyFallbackAttempts": 0,
+        "SafetyContactComponents": 0,
+        "FinalContactComponents": 0,
+        "SafetyJointCombinations": 0
+      },
+      "AfterWork": {
+        "JointCombinations": 0,
+        "ProductionResolutions": 36,
+        "NarrowPhaseEvaluations": 0,
+        "ResponsePasses": 0,
+        "Clusters": 0,
+        "UniqueRiderAlternativeProjections": 0,
+        "PairAlternativeChecks": 0,
+        "JointCombinationsScored": 0,
+        "ActualProductionVerifications": 0,
+        "SafetyPasses": 0,
+        "LegacyFallbackAttempts": 0,
+        "SafetyContactComponents": 0,
+        "FinalContactComponents": 0,
+        "SafetyJointCombinations": 0,
+        "OutwardTargetTrials": 0
+      }
+    },
+    {
+      "Name": "contact-diagnostics",
+      "WallMilliseconds": {
+        "BeforeMedian": 119.0435,
+        "AfterMedian": 349.348,
+        "ChangePercent": 193.46247380159357
+      },
+      "CpuMilliseconds": {
+        "BeforeMedian": 125,
+        "AfterMedian": 343.75,
+        "ChangePercent": 175.0
+      },
+      "AllocatedBytes": {
+        "BeforeMedian": 2056672,
+        "AfterMedian": 2937440,
+        "ChangePercent": 42.824913257923484
+      },
+      "BeforeWork": {
+        "JointCombinations": 18,
+        "ProductionResolutions": 23,
+        "NarrowPhaseEvaluations": 287950,
+        "ResponsePasses": 2,
+        "Clusters": 1,
+        "UniqueRiderAlternativeProjections": 9,
+        "PairAlternativeChecks": 11,
+        "JointCombinationsScored": 18,
+        "ActualProductionVerifications": 3,
+        "SafetyPasses": 1,
+        "LegacyFallbackAttempts": 1,
+        "SafetyContactComponents": 1,
+        "FinalContactComponents": 1,
+        "SafetyJointCombinations": 9
+      },
+      "AfterWork": {
+        "JointCombinations": 18,
+        "ProductionResolutions": 31,
+        "NarrowPhaseEvaluations": 746973,
+        "ResponsePasses": 2,
+        "Clusters": 1,
+        "UniqueRiderAlternativeProjections": 13,
+        "PairAlternativeChecks": 15,
+        "JointCombinationsScored": 18,
+        "ActualProductionVerifications": 3,
+        "SafetyPasses": 1,
+        "LegacyFallbackAttempts": 1,
+        "SafetyContactComponents": 1,
+        "FinalContactComponents": 1,
+        "SafetyJointCombinations": 9,
+        "OutwardTargetTrials": 6
+      }
+    }
+  ]
+}

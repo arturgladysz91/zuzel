@@ -48,6 +48,41 @@ def compare(directory):
             "Rea009ChangedLeaves": sum(len(d) for d in observed.values()), "RiderOrderExact": True}
 
 
+def compare_optimization(directory):
+    """Current #67 is the behavior baseline; permit only less measured geometry work."""
+    phases = ("optimization-before", "optimization-after")
+    manifests = [read_manifest(directory, phase) for phase in phases]
+    assert manifests[0].keys() == manifests[1].keys(), "Optimization case coverage changed"
+    for case in manifests[0]:
+        leaves = [read_leaves(directory, phase, case, manifest[case])
+                  for phase, manifest in zip(phases, manifests)]
+        assert leaves[0] == leaves[1], f"Optimization changed behavior or IEEE bits: {case}"
+        if case.endswith("/False"):
+            reverse = case.removesuffix("/False") + "/True"
+            assert manifests[1][case] == manifests[1][reverse], f"Rider-order dependence: {case}"
+    work = [json.loads((Path(directory) / (phase + ".json.work.json")).read_text()) for phase in phases]
+    assert work[0].keys() == work[1].keys(), "Work case coverage changed"
+    saved = 0
+    for case in work[0]:
+        before, after = work[0][case], work[1][case]
+        assert before.keys() == after.keys(), f"Work schema changed: {case}"
+        for key in before:
+            assert type(before[key]) is int and type(after[key]) is int, (case, key)
+            if key == "NarrowPhaseEvaluations":
+                assert 0 <= after[key] <= before[key], f"Geometry work increased: {case}"
+                saved += before[key] - after[key]
+            else:
+                assert before[key] == after[key], f"Optimization changed activity: {case}/{key}"
+    assert saved > 0, "Optimization did not save geometry work"
+    report = {"BehaviorBaselineSha": "5373d594172985f4d5cfb692374e1f05cc7f18f2",
+              "Cases": len(manifests[1]), "Leaves": sum(r["Leaves"] for r in manifests[1].values()),
+              "IEEELeaves": sum(r["IEEELeaves"] for r in manifests[1].values()),
+              "BehaviorAndIEEEExact": True, "RiderOrderExact": True, "ActivityExact": True,
+              "SavedNarrowPhaseEvaluations": saved}
+    (Path(directory) / "optimization-comparison.json").write_text(json.dumps(report, indent=2) + "\n")
+    return report
+
+
 def typed_leaf(value):
     """Keep capture types explicit; never parse IEEE values as Python floats."""
     if type(value) is str:
@@ -125,6 +160,8 @@ def compare_platforms(directory):
 if __name__ == "__main__":
     if len(sys.argv) == 2:
         evidence = compare(sys.argv[1])
+    elif len(sys.argv) == 3 and sys.argv[2] == "--optimization":
+        evidence = compare_optimization(sys.argv[1])
     else:
         assert len(sys.argv) == 3 and sys.argv[2] == "--platforms", "Usage: compare.py DIRECTORY [--platforms]"
         evidence = compare_platforms(sys.argv[1])

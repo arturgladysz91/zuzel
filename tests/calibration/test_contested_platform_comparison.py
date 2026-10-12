@@ -38,6 +38,30 @@ class ContestedPlatformComparisonTests(unittest.TestCase):
                               "SHA256": hashlib.sha256(raw).hexdigest().upper()}
         (directory / f"{phase}.json").write_text(json.dumps(manifest), encoding="utf-8")
 
+    def optimization_capture(self, phase, cases=None, narrow=100, trials=11):
+        self.capture(self.windows, phase, cases or self.w)
+        work = {case: {"NarrowPhaseEvaluations": narrow, "OutwardTargetTrials": trials,
+                       "DistinctEpisodeIds": 2, "JointCombinations": 81} for case in (cases or self.w)}
+        (self.windows / f"{phase}.json.work.json").write_text(json.dumps(work), encoding="utf-8")
+
+    def test_optimization_preserves_all_behavior_and_activity_with_less_geometry_work(self):
+        self.optimization_capture("optimization-before")
+        self.optimization_capture("optimization-after", narrow=40)
+        result = helper["compare_optimization"](self.windows)
+        self.assertTrue(result["BehaviorAndIEEEExact"])
+        self.assertTrue(result["ActivityExact"])
+        self.assertEqual(120, result["SavedNarrowPhaseEvaluations"])
+
+    def test_optimization_rejects_changed_bits_activity_and_increased_work(self):
+        self.optimization_capture("optimization-before")
+        changed = copy.deepcopy(self.w)
+        changed["previously-equal"]["root.Speed"] = "float:3F800001"
+        for cases, narrow, trials in [(changed, 40, 11), (self.w, 40, 10), (self.w, 101, 11)]:
+            with self.subTest(narrow=narrow, trials=trials):
+                self.optimization_capture("optimization-after", cases, narrow, trials)
+                with self.assertRaises(AssertionError):
+                    helper["compare_optimization"](self.windows)
+
     def assert_map_change_rejected(self):
         before = helper["divergence_map"](self.windows, self.ubuntu, "before")
         after = helper["divergence_map"](self.windows, self.ubuntu, "after")
