@@ -3,7 +3,10 @@
 REA-004A2 adds an internal [common-time publication foundation](calibration/rea-004a2-common-time-foundation.md):
 one frozen world version, per-rider exact segment continuations, all-rider forecast
 coverage and a strict unresolved-contact publication barrier. A/B/C remain unchanged;
-general causal execution and interior integration cursors are still unavailable.
+general causal heat execution remains unavailable. [REA-004A3](calibration/rea-004a3-integrator-cursor.md)
+adds an internal accepted-step cursor for rolling moving Straight traversal, with
+exact accumulator retention and no partial publication. Contacts inside a step
+and other production integration paths still require further execution support.
 
 Current physical consequence precedence (#56C2): [physical contact consequences and recovery](calibration/physical-contact-consequences.md)
 supersedes legacy contact outcomes only with default-OFF `EnablePhysicalContactConsequences` and #56B enabled.

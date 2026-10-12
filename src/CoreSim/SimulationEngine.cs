@@ -246,6 +246,14 @@ public sealed class SimulationEngine
         bool legacyContacts = true, Func<int, int, bool>? contactFilter = null,
         IReadOnlyList<(int LeaderRiderId, int TrailingRiderId)>? unresolvedPairs = null,
         Interactions.PhysicalContactConsequencePlan? consequencePlan = null)
+        => ResolveProductionCore(snapshot, intents, options, legacyContacts, contactFilter, unresolvedPairs, consequencePlan);
+
+    private static ResolvedSimulationStep ResolveProductionCore(SimulationSnapshot snapshot,
+        IReadOnlyList<RiderIntent> intents, HeatSimulationOptions options, bool legacyContacts,
+        Func<int, int, bool>? contactFilter = null,
+        IReadOnlyList<(int LeaderRiderId, int TrailingRiderId)>? unresolvedPairs = null,
+        Interactions.PhysicalContactConsequencePlan? consequencePlan = null,
+        RiderIntegrationSession? execution = null, ResolvedRider? completedRider = null)
     {
         ArgumentNullException.ThrowIfNull(snapshot);
         ArgumentNullException.ThrowIfNull(intents);
@@ -264,11 +272,11 @@ public sealed class SimulationEngine
 
         foreach (var rider in snapshot.Riders.Where(rider => rider.IsActive).OrderBy(rider => rider.RiderId))
         {
-            var riderResolution = ResolveRiderCore(
+            var riderResolution = completedRider ?? ResolveRiderCore(
                 snapshot,
                 rider,
                 intentByRider[rider.RiderId].Decision,
-                options);
+                options, execution: execution);
             var change = riderResolution.Change;
             changes.Add(rider.RiderId, change);
             riderResolutions.Add(rider.RiderId, riderResolution);
@@ -369,6 +377,22 @@ public sealed class SimulationEngine
         });
 
         return new ResolvedSimulationStep(snapshot, changes.Values, events, diagnostics, motions);
+    }
+
+    /// <summary>Explicit experimental entry; ordinary A/B/C resolution never requests a cursor.</summary>
+    internal RiderIntegrationProgress BeginRiderIntegration(SimulationSnapshot snapshot, RiderIntent intent,
+        HeatSimulationOptions options, int pauseAfterSteps)
+    {
+        if (pauseAfterSteps <= 0) throw new ArgumentOutOfRangeException(nameof(pauseAfterSteps));
+        options.Validate();
+        if (snapshot.Riders.Count != 1 || snapshot.Riders[0].RiderId != intent.RiderId
+            || snapshot.Step.UseLegacyPhysics || snapshot.Segment.Type != SegmentType.Straight
+            || snapshot.Riders[0].Status != RiderRaceStatus.Racing || snapshot.Riders[0].Speed <= 0f
+            || snapshot.Riders[0].ContactRecovery is not null || options.IncidentFrequency != 0f)
+            throw new RiderIntegrationRefusalException("Cursor requires one rolling rider on a Straight and disabled random incidents, without contact recovery.");
+        var execution = new RiderIntegrationSession(snapshot, intent) { Request = new(pauseAfterSteps) };
+        try { return new(ResolveProductionCore(snapshot, new[] { intent }, options, false, execution: execution), null); }
+        catch (TraversalPausedException pause) { return new(null, new(execution, pause.Boundary)); }
     }
 
     private static float CalculateResolvedPeakSpeedMetersPerSecond(
@@ -536,7 +560,7 @@ public sealed class SimulationEngine
         SimulationSnapshot snapshot,
         RiderSnapshot rider,
         RiderDecision decision,
-        HeatSimulationOptions options, bool captureRich = true)
+        HeatSimulationOptions options, bool captureRich = true, RiderIntegrationSession? execution = null)
     {
         ProjectionCaptureAudit.Record(ProjectionMaterialization.PhysicalEvaluation);
         if (rider.SegmentIndex != snapshot.Step.SegmentIndex)
@@ -626,7 +650,9 @@ public sealed class SimulationEngine
                 (options.EnableContestedSpaceResponses ? decision.DriveControl?.PositiveDriveFraction ?? 1f : 1f)
                     * (float)(recovery?.DriveAvailability01 ?? 1),
                 options.EnableContestedSpaceResponses && decision.HoldLateralPosition,
-                (float)(recovery?.LateralAuthority01 ?? 1), recovery is not null, interactionTarget);
+                (float)(recovery?.LateralAuthority01 ?? 1), recovery is not null, interactionTarget, execution, options);
+        if (execution is not null)
+            throw new RiderIntegrationRefusalException("Fixed-line production integration has no execution cursor yet.");
         var speed = resolution.Speed;
         StraightSpeedProfile? straightProfile = null;
         TurnExitDriveProfile? turnExitDriveProfile = null;
@@ -781,7 +807,8 @@ public sealed class SimulationEngine
         RiderDecision decision, SegmentResolution resolution, float entrySpeed, int plannedLane,
         float canonicalAdvance, bool launch, float risk, TrackSurfaceState entrySurface, CornerPhaseContext? phase,
         bool captureRich, float positiveDriveFraction = 1f, bool holdLateralPosition = false, float lateralAuthority01 = 1f, bool contactRecovery = false,
-        float? interactionTargetPosition = null)
+        float? interactionTargetPosition = null, RiderIntegrationSession? execution = null,
+        HeatSimulationOptions? options = null)
     {
         Dictionary<int, float?>? approachTargets = snapshot.Segment.Type == SegmentType.Straight ? new() : null;
         float? NextCorner(float lateral)
@@ -791,8 +818,29 @@ public sealed class SimulationEngine
             target = ResolveImmediateNextTurnApproachSpeed(snapshot, rider, lateral);
             approachTargets.Add(key, target); return target;
         }
+        if (execution is not null)
+        {
+            execution.Context = new(resolution, entrySpeed, plannedLane, canonicalAdvance, risk,
+                entrySurface, phase, positiveDriveFraction, holdLateralPosition, lateralAuthority01, interactionTargetPosition);
+            execution.Continue = request => ExecutedPathTraversal.Traverse(snapshot, rider, resolution, entrySpeed,
+                canonicalAdvance, launch, NextCorner, captureRich, positiveDriveFraction, holdLateralPosition,
+                lateralAuthority01, contactRecovery, interactionTargetPosition, request);
+            execution.Complete = result => ResolveProductionCore(snapshot, new[] { execution.Intent }, options!, false,
+                completedRider: FinishMovingRider(snapshot, rider, decision, resolution, entrySpeed, plannedLane,
+                    canonicalAdvance, launch, risk, entrySurface, phase, result));
+        }
         var traversal = ExecutedPathTraversal.Traverse(snapshot, rider, resolution, entrySpeed, canonicalAdvance,
-            launch, NextCorner, captureRich, positiveDriveFraction, holdLateralPosition, lateralAuthority01, contactRecovery, interactionTargetPosition);
+            launch, NextCorner, captureRich, positiveDriveFraction, holdLateralPosition, lateralAuthority01,
+            contactRecovery, interactionTargetPosition, execution?.Request);
+        return FinishMovingRider(snapshot, rider, decision, resolution, entrySpeed, plannedLane,
+            canonicalAdvance, launch, risk, entrySurface, phase, traversal);
+    }
+
+    private static ResolvedRider FinishMovingRider(SimulationSnapshot snapshot, RiderSnapshot rider,
+        RiderDecision decision, SegmentResolution resolution, float entrySpeed, int plannedLane,
+        float canonicalAdvance, bool launch, float risk, TrackSurfaceState entrySurface,
+        CornerPhaseContext? phase, ExecutedTraversalResult traversal)
+    {
         var path = traversal.RichPath;
         var position = resolution.Outcome == SegmentOutcome.Crash
             ? rider.Position.Advance(canonicalAdvance, traversal.DistanceMeters)

@@ -1,6 +1,9 @@
 # REA-004A2 — common physical time and guarded publication
 
 Status: **internal experimental foundation; general D remains unavailable**.
+This document describes A2. The subsequent [A3 production cursor](rea-004a3-integrator-cursor.md)
+implements accepted-step pause/resume for a restricted Straight path; the
+within-step contact and general publication gaps below still remain.
 Based on Draft #70 (`cd5e372`), including #66's offline prototype and current
 Windows-only CI. No historical evidence or calibration parameters change.
 

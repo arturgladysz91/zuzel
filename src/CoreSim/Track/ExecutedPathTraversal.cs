@@ -45,8 +45,14 @@ internal static class ExecutedPathTraversal
         SegmentResolution resolution, float entrySpeed, float canonicalAdvance, bool launch,
         Func<float, float?> nextCornerTarget, bool captureRich = true, float positiveDriveFraction = 1f,
         bool holdLateralPosition = false, float lateralAuthority01 = 1f, bool contactRecovery = false,
-        float? interactionTargetPosition = null)
+        float? interactionTargetPosition = null, TraversalPauseRequest? pause = null)
     {
+        if (pause is not null && (!captureRich || launch || contactRecovery
+            || snapshot.Step.UseLegacyPhysics || snapshot.Segment.Type != SegmentType.Straight
+            || resolution.Outcome != SegmentOutcome.Ok || entrySpeed <= 0f
+            || positiveDriveFraction != 1f || holdLateralPosition || lateralAuthority01 != 1f
+            || interactionTargetPosition.HasValue))
+            throw new RiderIntegrationRefusalException("Cursor supports only rich rolling Straight traversal with ordinary controls and no incidents or recovery.");
         var segment = snapshot.Segment; var geometry = snapshot.Track.Geometry;
         var corner = snapshot.Track.CornerTopology.CornerForSegment(snapshot.Step.SegmentIndex);
         var skills = rider.Profile.Skills; var setup = rider.ActiveSetup;
@@ -70,8 +76,10 @@ internal static class ExecutedPathTraversal
         var speed = crash ? MathF.Max(1f, entrySpeed * .5f) : resolution.Speed;
         var nodeSurface = snapshot.TrackState.SampleSurface(snapshot.Step.SegmentIndex, lateral);
         var initialEnvelope = corner is null ? (float?)null : LocalEnvelope(start, lateral, nodeSurface);
-        var nodes = captureRich ? new List<ExecutedPathNode> { Node(start, lateral, speed) } : null;
-        var steps = captureRich ? new List<ExecutedPathStep>() : null;
+        var nodes = captureRich ? pause?.Boundary is { } savedNodes ? new List<ExecutedPathNode>(savedNodes.Nodes)
+            : new List<ExecutedPathNode> { Node(start, lateral, speed) } : null;
+        var steps = captureRich ? pause?.Boundary is { } savedSteps ? new List<ExecutedPathStep>(savedSteps.Steps)
+            : new List<ExecutedPathStep>() : null;
         var maxNodes = checked((int)Math.Ceiling(LaneModel.SegmentLengthMeters(segment, 4f, geometry)
             + LaneModel.UsableRacingWidthMeters(segment.Type, geometry)) * 4 + 16);
         // Normalized wear must divide each distance by the final float total before
@@ -80,6 +88,14 @@ internal static class ExecutedPathTraversal
             : maxNodes <= 1024 ? stackalloc ExecutedWearSample[maxNodes] : new ExecutedWearSample[maxNodes];
         var stepCount = 0; var subdivisionTotal = 0;
         float? apexLateral = Progress(start) == ContinuousCornerEnvelope.ApexProgress ? lateral : null;
+        if (pause?.Boundary is { } boundary)
+        {
+            start = boundary.CanonicalProgress; end = boundary.EndCanonicalProgress;
+            time = boundary.TimeSeconds; distance = boundary.DistanceMeters;
+            speed = boundary.Speed; lateral = boundary.LateralPosition; nodeSurface = boundary.NodeSurface;
+            stepCount = boundary.CompletedSteps; subdivisionTotal = boundary.TimeSolveSubdivisions;
+        }
+        var resumeStepCount = stepCount;
         while (start < end)
         {
             if (stepCount >= maxNodes) throw new InvalidOperationException("Coupled traversal exceeded its geometric node bound.");
@@ -168,6 +184,12 @@ internal static class ExecutedPathTraversal
             nodeSurface = snapshot.TrackState.SampleSurface(snapshot.Step.SegmentIndex, lateral);
             if (Progress(start) == ContinuousCornerEnvelope.ApexProgress) apexLateral ??= lateral;
             if (captureRich) nodes!.Add(Node(start, lateral, crash && start == end ? 0f : speed));
+            // Only accepted steps can pause: all subdivisions, arrival splits and accumulator
+            // updates above have finished. No final path, wear normalization or event exists yet.
+            if (start < end && pause?.AdditionalSteps is { } limit && stepCount - resumeStepCount == limit)
+                throw new TraversalPausedException(new(start, end, time, distance, speed, lateral,
+                    nodeSurface, stepCount, subdivisionTotal, Array.AsReadOnly(nodes!.ToArray()),
+                    Array.AsReadOnly(steps!.ToArray())));
         }
         var finalDistance = (float)distance;
         ProjectionWear wear = default;
