@@ -16,6 +16,12 @@ partial TurnExit step with that same coupled solver and recertifies its first
 touch through #55 against one frozen production opponent history. The event
 cursor retains the accepted prefix and refuses ordinary resume; partial motion
 and wear remain unpublished. Four-rider post-contact execution is still pending.
+[REA-004A6](calibration/rea-004a6-two-rider-contact.md) demonstrates a real
+two-rider rear contact and six subsequent production Straight steps per rider.
+Both event states are executed and recertified; #56C1/#56C2 supply the simultaneous
+speed/recovery changes. Failed continuation certification seals the tokens and
+retains history only to contact. This bounded experiment publishes no partial
+wear or live heat state and does not enable general D.
 
 The target architecture uses one physical clock, event-driven synchronization
 and the existing distance integrator. The engine computes the entire four-rider
