@@ -11,6 +11,18 @@ segments; production motion/events/wear materialize only after completion.
 [REA-004A4](calibration/rea-004a4-turnexit-cursor.md) retains the TurnExit corner
 boundary and transfers its envelope caches under the same single-use token.
 This reuses the existing traversal and leaves within-step event execution pending.
+[REA-004A5](calibration/rea-004a5-partial-contact-step.md) now executes a real
+partial TurnExit step with that same coupled solver and recertifies its first
+touch through #55 against one frozen production opponent history. The event
+cursor retains the accepted prefix and refuses ordinary resume; partial motion
+and wear remain unpublished. Four-rider post-contact execution is still pending.
+
+The target architecture uses one physical clock, event-driven synchronization
+and the existing distance integrator. The engine computes the entire four-rider
+heat, consequences and result before animation starts, then supplies recorded
+time trajectories, bike orientations and events. Animation only reads that
+recording and cannot change the result. No playback or rendering is implemented
+by these experimental execution changes.
 
 Current physical consequence precedence (#56C2): [physical contact consequences and recovery](calibration/physical-contact-consequences.md)
 adds a separate `PhysicalContactConsequenceResolver`. #55 detects; #56C1 analyzes frozen pairs and aggregates;

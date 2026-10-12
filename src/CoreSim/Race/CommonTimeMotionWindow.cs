@@ -121,6 +121,14 @@ internal sealed class CommonTimeMotionWindow
         return progress;
     }
 
+    internal RiderContactStepStop SplitSelectedMotionAtFirstTouch(int riderId, TrackStateSnapshot surfaceVersion,
+        IReadOnlyList<PhysicalPoseInterval> opponentHistory)
+    {
+        var stopped = _paused[riderId].SplitNextStepAtFirstTouch(surfaceVersion, opponentHistory);
+        _paused[riderId] = stopped.Cursor;
+        return stopped;
+    }
+
     private void RetainProgress(RiderIntent intent, RiderIntegrationProgress progress)
     {
         if (progress.Cursor is { } cursor) _paused.Add(intent.RiderId, cursor);

@@ -10,6 +10,18 @@ and other production integration paths still require further execution support.
 [REA-004A4](calibration/rea-004a4-turnexit-cursor.md) extends the same accepted-step
 cursor to moving TurnExit, retaining initial envelope, apex state and envelope
 computations. It still refuses publication through unresolved within-step contact.
+[REA-004A5](calibration/rea-004a5-partial-contact-step.md) adds bounded actual
+partial-step execution on that TurnExit path. Each trial uses the current coupled
+equations from the last accepted boundary; only one shortened step is accepted.
+#55 must certify its final first-touch geometry. The old complete-step endpoint
+is a discarded forecast, and ordinary resume from an event cursor refuses until
+explicit post-event state/controls exist. No partial publication is authorized.
+
+The target heat engine shares physical time and synchronizes at events while
+retaining the distance integrator. It finishes the complete four-rider race and
+records trajectories, bike orientations, events and the result before animation
+starts. Animation is a reader of this completed result, never a physics caller.
+REA-004A5 does not yet supply that complete causal execution or a playback API.
 
 Current physical consequence precedence (#56C2): [physical contact consequences and recovery](calibration/physical-contact-consequences.md)
 supersedes legacy contact outcomes only with default-OFF `EnablePhysicalContactConsequences` and #56B enabled.

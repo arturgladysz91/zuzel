@@ -7,13 +7,23 @@ internal sealed record ExecutedTraversalBoundary(double CanonicalProgress, doubl
     double TimeSeconds, double DistanceMeters, float Speed, float LateralPosition,
     TrackSurfaceState NodeSurface, int CompletedSteps, int TimeSolveSubdivisions,
     IReadOnlyList<ExecutedPathNode> Nodes, IReadOnlyList<ExecutedPathStep> Steps,
-    ExecutedCornerBoundary? Corner = null);
+    ExecutedCornerBoundary? Corner = null, ExecutedPartialStep? PartialStep = null);
+
+/// <summary>The old step end is a discarded forecast, not an executable post-event remainder.</summary>
+internal sealed record ExecutedPartialStep(double StartCanonicalProgress, double UnsplitEndCanonicalProgress,
+    double StartTimeSeconds, double UnsplitEndTimeSeconds, double LowerCanonicalProgress,
+    double LowerTimeSeconds, int EndpointTrials);
+
+internal readonly record struct ExecutedStepEndpoint(double CanonicalProgress, double TimeSeconds,
+    double DistanceMeters, float Speed, float LateralPosition);
+internal sealed record PartialStepSearch(Func<ExecutedStepEndpoint, bool> Reached);
 
 /// <summary>Immutable accepted corner values plus exclusively owned reusable envelope computations.</summary>
 internal sealed record ExecutedCornerBoundary(float InitialEnvelopeSpeed, float? ApexLateralPosition,
     float CornerProgress, ExecutedPathTraversal.CornerExecutionCache Cache);
 
-internal sealed record TraversalPauseRequest(int? AdditionalSteps, ExecutedTraversalBoundary? Boundary = null);
+internal sealed record TraversalPauseRequest(int? AdditionalSteps, ExecutedTraversalBoundary? Boundary = null,
+    PartialStepSearch? PartialStep = null);
 internal sealed class TraversalPausedException(ExecutedTraversalBoundary boundary) : Exception
 {
     internal ExecutedTraversalBoundary Boundary { get; } = boundary;
@@ -52,11 +62,38 @@ internal sealed class RiderIntegrationCursor(RiderIntegrationSession session, Ex
     internal RiderIntegrationProgress Resume(TrackStateSnapshot surfaceVersion, int? pauseAfterSteps = null)
     {
         if (_consumed) throw new RiderIntegrationRefusalException("Execution token already consumed.");
+        if (Boundary.PartialStep is not null)
+            throw new RiderIntegrationRefusalException("A partial event boundary requires explicit post-event controls/state; ordinary resume is unavailable.");
         if (!ReferenceEquals(surfaceVersion, SurfaceVersion))
             throw new RiderIntegrationRefusalException("Resume requires the same frozen surface version.");
         if (pauseAfterSteps is <= 0) throw new ArgumentOutOfRangeException(nameof(pauseAfterSteps));
         _consumed = true;
         try { return new(session.Complete(session.Continue(new(pauseAfterSteps, Boundary))), null); }
         catch (TraversalPausedException pause) { return new(null, new(session, pause.Boundary)); }
+    }
+
+    internal RiderIntegrationCursor SplitNextStepAtTime(TrackStateSnapshot surfaceVersion, double elapsedTimeSeconds)
+    {
+        if (!double.IsFinite(elapsedTimeSeconds) || elapsedTimeSeconds <= Snapshot.Riders[0].ElapsedTimeSeconds + Boundary.TimeSeconds)
+            throw new ArgumentOutOfRangeException(nameof(elapsedTimeSeconds));
+        var localTime = elapsedTimeSeconds - Snapshot.Riders[0].ElapsedTimeSeconds;
+        return SplitNextStep(surfaceVersion, new(e => e.TimeSeconds >= localTime));
+    }
+
+    internal RiderIntegrationCursor SplitNextStep(TrackStateSnapshot surfaceVersion, PartialStepSearch search)
+    {
+        ArgumentNullException.ThrowIfNull(search);
+        if (_consumed) throw new RiderIntegrationRefusalException("Execution token already consumed.");
+        if (!ReferenceEquals(surfaceVersion, SurfaceVersion))
+            throw new RiderIntegrationRefusalException("Partial execution requires the same frozen surface version.");
+        if (Snapshot.Segment.Type != SegmentType.TurnExit || Boundary.PartialStep is not null)
+            throw new RiderIntegrationRefusalException("Partial execution requires a completed-step TurnExit cursor before an event.");
+        _consumed = true;
+        try
+        {
+            session.Continue(new(null, Boundary, search));
+            throw new InvalidOperationException("Partial execution must stop before segment completion.");
+        }
+        catch (TraversalPausedException pause) { return new(session, pause.Boundary); }
     }
 }
