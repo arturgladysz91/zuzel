@@ -8,6 +8,9 @@ The subsequent [REA-004A3 cursor](calibration/rea-004a3-integrator-cursor.md) re
 accepted numerical boundaries inside the existing moving Straight traversal and
 resumes the same loop. Paused prefixes remain separate from complete pending
 segments; production motion/events/wear materialize only after completion.
+[REA-004A4](calibration/rea-004a4-turnexit-cursor.md) retains the TurnExit corner
+boundary and transfers its envelope caches under the same single-use token.
+This reuses the existing traversal and leaves within-step event execution pending.
 
 Current physical consequence precedence (#56C2): [physical contact consequences and recovery](calibration/physical-contact-consequences.md)
 adds a separate `PhysicalContactConsequenceResolver`. #55 detects; #56C1 analyzes frozen pairs and aggregates;

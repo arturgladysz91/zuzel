@@ -48,19 +48,20 @@ internal static class ExecutedPathTraversal
         float? interactionTargetPosition = null, TraversalPauseRequest? pause = null)
     {
         if (pause is not null && (!captureRich || launch || contactRecovery
-            || snapshot.Step.UseLegacyPhysics || snapshot.Segment.Type != SegmentType.Straight
+            || snapshot.Step.UseLegacyPhysics || snapshot.Segment.Type is not (SegmentType.Straight or SegmentType.TurnExit)
             || resolution.Outcome != SegmentOutcome.Ok || entrySpeed <= 0f
             || positiveDriveFraction != 1f || holdLateralPosition || lateralAuthority01 != 1f
             || interactionTargetPosition.HasValue))
-            throw new RiderIntegrationRefusalException("Cursor supports only rich rolling Straight traversal with ordinary controls and no incidents or recovery.");
+            throw new RiderIntegrationRefusalException("Cursor supports only rich rolling Straight/TurnExit traversal with Ok resolution, ordinary controls and no recovery.");
         var segment = snapshot.Segment; var geometry = snapshot.Track.Geometry;
         var corner = snapshot.Track.CornerTopology.CornerForSegment(snapshot.Step.SegmentIndex);
         var skills = rider.Profile.Skills; var setup = rider.ActiveSetup;
         // Exact, segment-local reuse of immutable envelope inputs. Every sample
         // still uses the production surface interpolation and factory. The existing
         // apex-anchored metre integrator remains the only speed implementation.
-        var envelopes = corner is null ? null : new Dictionary<EnvelopeKey, ContinuousCornerEnvelope>();
-        var scalarSpeeds = corner is null ? null : new Dictionary<EnvelopeQueryKey, float>();
+        var retainedCorner = pause?.Boundary?.Corner;
+        var envelopes = corner is null ? null : retainedCorner?.Cache.Envelopes ?? new Dictionary<EnvelopeKey, ContinuousCornerEnvelope>();
+        var scalarSpeeds = corner is null ? null : retainedCorner?.Cache.ScalarSpeeds ?? new Dictionary<EnvelopeQueryKey, float>();
         var start = (double)rider.SegmentProgress;
         var end = start + canonicalAdvance;
         var lateral = rider.LateralPosition;
@@ -75,7 +76,7 @@ internal static class ExecutedPathTraversal
             ? interactionTargetPosition.Value : resolution.Lane;
         var speed = crash ? MathF.Max(1f, entrySpeed * .5f) : resolution.Speed;
         var nodeSurface = snapshot.TrackState.SampleSurface(snapshot.Step.SegmentIndex, lateral);
-        var initialEnvelope = corner is null ? (float?)null : LocalEnvelope(start, lateral, nodeSurface);
+        var initialEnvelope = corner is null ? (float?)null : retainedCorner?.InitialEnvelopeSpeed ?? LocalEnvelope(start, lateral, nodeSurface);
         var nodes = captureRich ? pause?.Boundary is { } savedNodes ? new List<ExecutedPathNode>(savedNodes.Nodes)
             : new List<ExecutedPathNode> { Node(start, lateral, speed) } : null;
         var steps = captureRich ? pause?.Boundary is { } savedSteps ? new List<ExecutedPathStep>(savedSteps.Steps)
@@ -87,7 +88,8 @@ internal static class ExecutedPathTraversal
         Span<ExecutedWearSample> wearSamples = captureRich ? Span<ExecutedWearSample>.Empty
             : maxNodes <= 1024 ? stackalloc ExecutedWearSample[maxNodes] : new ExecutedWearSample[maxNodes];
         var stepCount = 0; var subdivisionTotal = 0;
-        float? apexLateral = Progress(start) == ContinuousCornerEnvelope.ApexProgress ? lateral : null;
+        float? apexLateral = retainedCorner is not null ? retainedCorner.ApexLateralPosition
+            : Progress(start) == ContinuousCornerEnvelope.ApexProgress ? lateral : null;
         if (pause?.Boundary is { } boundary)
         {
             start = boundary.CanonicalProgress; end = boundary.EndCanonicalProgress;
@@ -189,7 +191,9 @@ internal static class ExecutedPathTraversal
             if (start < end && pause?.AdditionalSteps is { } limit && stepCount - resumeStepCount == limit)
                 throw new TraversalPausedException(new(start, end, time, distance, speed, lateral,
                     nodeSurface, stepCount, subdivisionTotal, Array.AsReadOnly(nodes!.ToArray()),
-                    Array.AsReadOnly(steps!.ToArray())));
+                    Array.AsReadOnly(steps!.ToArray()), corner is null ? null : new(initialEnvelope!.Value,
+                        apexLateral, Progress(start)!.Value,
+                        retainedCorner?.Cache ?? new CornerExecutionCache(envelopes!, scalarSpeeds!))));
         }
         var finalDistance = (float)distance;
         ProjectionWear wear = default;
@@ -348,8 +352,16 @@ internal static class ExecutedPathTraversal
         }
     }
 
-    private readonly record struct EnvelopeQueryKey(EnvelopeKey Inputs, int ProgressBits);
-    private readonly record struct EnvelopeKey(int LateralBits, int GripBits, int RutsBits, int MoistureBits);
+    // One consumed token transfers these caches to the next traversal; rebuilding them
+    // would repeat apex metre integration even though the rider prefix was retained.
+    internal sealed class CornerExecutionCache(Dictionary<EnvelopeKey, ContinuousCornerEnvelope> envelopes,
+        Dictionary<EnvelopeQueryKey, float> scalarSpeeds)
+    {
+        internal Dictionary<EnvelopeKey, ContinuousCornerEnvelope> Envelopes { get; } = envelopes;
+        internal Dictionary<EnvelopeQueryKey, float> ScalarSpeeds { get; } = scalarSpeeds;
+    }
+    internal readonly record struct EnvelopeQueryKey(EnvelopeKey Inputs, int ProgressBits);
+    internal readonly record struct EnvelopeKey(int LateralBits, int GripBits, int RutsBits, int MoistureBits);
 
     private readonly record struct CoupledStep(float Distance, double Time, float Lateral, float Speed,
         float CorrectionDistance, float CarryDistance, float DriveDistance,
