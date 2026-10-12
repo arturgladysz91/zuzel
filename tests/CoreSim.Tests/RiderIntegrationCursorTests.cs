@@ -150,7 +150,7 @@ public sealed class RiderIntegrationCursorTests
     public void UnsupportedProductionPathsRefuseExplicitly()
     {
         var origin = Origin(); var engine = Engine();
-        Assert.Throws<RiderIntegrationRefusalException>(() => engine.BeginRiderIntegration(Origin(6), Intent(), Options, 5));
+        Assert.Throws<RiderIntegrationRefusalException>(() => engine.BeginRiderIntegration(Origin(5), Intent(), Options, 5));
         Assert.Throws<RiderIntegrationRefusalException>(() => engine.BeginRiderIntegration(origin, Intent(), Options with { IncidentFrequency = 1 }, 5));
         var fixedLine = new SimulationSnapshot(origin.Step, origin.Track, origin.TrackState,
             origin.Riders.Select(r => r with { LateralPosition = 1 }));

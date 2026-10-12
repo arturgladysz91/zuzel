@@ -6,7 +6,12 @@ namespace CoreSim;
 internal sealed record ExecutedTraversalBoundary(double CanonicalProgress, double EndCanonicalProgress,
     double TimeSeconds, double DistanceMeters, float Speed, float LateralPosition,
     TrackSurfaceState NodeSurface, int CompletedSteps, int TimeSolveSubdivisions,
-    IReadOnlyList<ExecutedPathNode> Nodes, IReadOnlyList<ExecutedPathStep> Steps);
+    IReadOnlyList<ExecutedPathNode> Nodes, IReadOnlyList<ExecutedPathStep> Steps,
+    ExecutedCornerBoundary? Corner = null);
+
+/// <summary>Immutable accepted corner values plus exclusively owned reusable envelope computations.</summary>
+internal sealed record ExecutedCornerBoundary(float InitialEnvelopeSpeed, float? ApexLateralPosition,
+    float CornerProgress, ExecutedPathTraversal.CornerExecutionCache Cache);
 
 internal sealed record TraversalPauseRequest(int? AdditionalSteps, ExecutedTraversalBoundary? Boundary = null);
 internal sealed class TraversalPausedException(ExecutedTraversalBoundary boundary) : Exception

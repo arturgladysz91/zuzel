@@ -1,5 +1,9 @@
 # REA-004A3 — production integration cursor
 
+This document describes A3. [A4](rea-004a4-turnexit-cursor.md) subsequently extends
+the same cursor to a restricted moving TurnExit path and retains its envelope work.
+Contact execution inside a numerical step remains unsupported.
+
 Status: **internal experimental execution mechanism**, based on Draft #71 at
 `ba945c6`. General D remains unavailable. The normal A/B/C callers do not request
 a pause. No equations, calibration constants or accepted historical data change.

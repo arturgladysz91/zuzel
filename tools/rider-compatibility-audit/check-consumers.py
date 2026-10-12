@@ -57,6 +57,7 @@ def consumers():
             continue
         name = path.relative_to(ROOT).as_posix()
         source = path.read_text(encoding="utf-8").replace("\r\n", "\n")
+        source = restore_turnexit_cursor(source, name)
         source = restore_integrator_cursor(source, name)
         source = restore_minimal_yield(source, name)
         source = restore_segment_completion(source, name)
@@ -90,6 +91,22 @@ def consumers():
             continue
         result[name] = hashlib.sha256(source.encode("utf-8")).hexdigest()
     return result
+
+
+def restore_turnexit_cursor(source, name):
+    # Preserve every historical extraction/hash. This exact A4 inverse includes
+    # only cursor admission and retained completed-corner execution state.
+    raw = (ROOT / "tests/fixtures/rea004a4-source-extraction.json").read_bytes().replace(b"\r\n", b"\n")
+    assert hashlib.sha256(raw).hexdigest() == "965141de995e6066c32f836c0ef0798d772f309945b4656800f1c155b04608a7"
+    extraction = json.loads(raw)
+    assert extraction["BaseSha"] == "0d2653fc13c55ee83d5d2d92cf6537a60d634eb6"
+    assert set(extraction["Patches"]) == {"src/CoreSim/SimulationEngine.cs", "src/CoreSim/Track/ExecutedPathTraversal.cs"}
+    for patch in extraction["Patches"].get(name, []):
+        assert source.count(patch["After"]) == 1, name
+        source = source.replace(patch["After"], patch["Before"])
+    if name in extraction["BaseSourceSha256"]:
+        assert hashlib.sha256(source.encode()).hexdigest() == extraction["BaseSourceSha256"][name], name
+    return source
 
 
 def restore_integrator_cursor(source, name):

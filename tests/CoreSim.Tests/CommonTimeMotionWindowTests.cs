@@ -169,12 +169,8 @@ public sealed class CommonTimeMotionWindowTests
         var touchLocalTime = pair.FirstTouchCommonTimeSeconds - motion.StartElapsedTimeSeconds;
         Assert.Contains(motion.Nodes.Zip(motion.Nodes.Skip(1)), n =>
             n.First.LocalTimeSeconds < touchLocalTime && touchLocalTime < n.Second.LocalTimeSeconds);
-        // A3 pauses accepted Straight steps only. This historical TurnExit contact lies
-        // strictly inside a numerical step: neither sampling nor the new cursor resolves it.
-        var rider1Snapshot = new SimulationSnapshot(step7.Snapshot.Step, track, step7.Snapshot.TrackState,
-            step7.Snapshot.Riders.Where(r => r.RiderId == 1));
-        Assert.Throws<RiderIntegrationRefusalException>(() => Engine().BeginRiderIntegration(rider1Snapshot,
-            new(1, new RiderDecision(step7.Changes.Single(c => c.RiderId == 1).Lane)), Options, 1));
+        // A4 retains the real TurnExit boundary before touch (tested separately),
+        // but still cannot execute to touch inside the next accepted numerical step.
         // The production observer stops BEFORE Commit(step8). Step7's publication is already
         // too far ahead for riders 1,3,4. A forward window must first buffer that step.
         Assert.Equal(new[] { 1, 3, 4 }, step7.Changes.Where(c => c.ElapsedTimeSeconds > pair.FirstTouchCommonTimeSeconds).Select(c => c.RiderId));

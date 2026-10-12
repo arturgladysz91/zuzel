@@ -7,6 +7,9 @@ general causal heat execution remains unavailable. [REA-004A3](calibration/rea-0
 adds an internal accepted-step cursor for rolling moving Straight traversal, with
 exact accumulator retention and no partial publication. Contacts inside a step
 and other production integration paths still require further execution support.
+[REA-004A4](calibration/rea-004a4-turnexit-cursor.md) extends the same accepted-step
+cursor to moving TurnExit, retaining initial envelope, apex state and envelope
+computations. It still refuses publication through unresolved within-step contact.
 
 Current physical consequence precedence (#56C2): [physical contact consequences and recovery](calibration/physical-contact-consequences.md)
 supersedes legacy contact outcomes only with default-OFF `EnablePhysicalContactConsequences` and #56B enabled.

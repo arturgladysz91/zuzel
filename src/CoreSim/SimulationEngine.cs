@@ -386,10 +386,11 @@ public sealed class SimulationEngine
         if (pauseAfterSteps <= 0) throw new ArgumentOutOfRangeException(nameof(pauseAfterSteps));
         options.Validate();
         if (snapshot.Riders.Count != 1 || snapshot.Riders[0].RiderId != intent.RiderId
-            || snapshot.Step.UseLegacyPhysics || snapshot.Segment.Type != SegmentType.Straight
+            || snapshot.Step.UseLegacyPhysics || snapshot.Segment.Type is not (SegmentType.Straight or SegmentType.TurnExit)
             || snapshot.Riders[0].Status != RiderRaceStatus.Racing || snapshot.Riders[0].Speed <= 0f
-            || snapshot.Riders[0].ContactRecovery is not null || options.IncidentFrequency != 0f)
-            throw new RiderIntegrationRefusalException("Cursor requires one rolling rider on a Straight and disabled random incidents, without contact recovery.");
+            || snapshot.Riders[0].ContactRecovery is not null
+            || snapshot.Segment.Type == SegmentType.Straight && options.IncidentFrequency != 0f)
+            throw new RiderIntegrationRefusalException("Cursor requires one rolling rider on Straight/TurnExit without contact recovery; Straight requires disabled random incidents.");
         var execution = new RiderIntegrationSession(snapshot, intent) { Request = new(pauseAfterSteps) };
         try { return new(ResolveProductionCore(snapshot, new[] { intent }, options, false, execution: execution), null); }
         catch (TraversalPausedException pause) { return new(null, new(execution, pause.Boundary)); }
