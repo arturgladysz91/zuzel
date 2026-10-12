@@ -57,6 +57,7 @@ def consumers():
             continue
         name = path.relative_to(ROOT).as_posix()
         source = path.read_text(encoding="utf-8").replace("\r\n", "\n")
+        source = restore_causal_pair(source, name)
         source = restore_partial_step(source, name)
         source = restore_turnexit_cursor(source, name)
         source = restore_integrator_cursor(source, name)
@@ -92,6 +93,28 @@ def consumers():
             continue
         result[name] = hashlib.sha256(source.encode("utf-8")).hexdigest()
     return result
+
+
+def restore_causal_pair(source, name):
+    raw = (ROOT / "tests/fixtures/rea004a6-source-extraction.json").read_bytes().replace(b"\r\n", b"\n")
+    assert hashlib.sha256(raw).hexdigest() == "c23a67789fba7ab5de5c8a160ac801cfede6e7504766a95d5572fa86ef747841"
+    extraction = json.loads(raw)
+    assert extraction["BaseSha"] == "5aafc1dad2936242b64035ec4ddfe51cd9ea338e"
+    assert set(extraction["Patches"]) == {"src/CoreSim/Track/ExecutedPathTraversal.cs",
+        "src/CoreSim/Track/RiderIntegrationCursor.cs", "src/CoreSim/PhysicalSpace/BikePoseIntervals.cs",
+        "src/CoreSim/SimulationEngine.cs", "src/CoreSim/Race/RiderPosition.cs"}
+    for patch in extraction["Patches"].get(name, []):
+        assert source.count(patch["After"]) == 1, name
+        source = source.replace(patch["After"], patch["Before"])
+    if name in extraction["BaseSourceSha256"]:
+        assert hashlib.sha256(source.encode()).hexdigest() == extraction["BaseSourceSha256"][name], name
+    if name in extraction["NewSourceSha256"]:
+        assert not REFERENCES.search(source), name
+        assert hashlib.sha256(source.encode()).hexdigest() == extraction["NewSourceSha256"][name], name
+        # The pinned two-rider adapter explicitly supplies canonical #56 physiology.
+        # It adds no legacy skill/style consumer; all older extraction rules remain exact.
+        return ""
+    return source
 
 
 def restore_partial_step(source, name):

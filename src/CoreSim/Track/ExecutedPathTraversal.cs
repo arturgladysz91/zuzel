@@ -47,10 +47,11 @@ internal static class ExecutedPathTraversal
         bool holdLateralPosition = false, float lateralAuthority01 = 1f, bool contactRecovery = false,
         float? interactionTargetPosition = null, TraversalPauseRequest? pause = null)
     {
-        if (pause is not null && (!captureRich || launch || contactRecovery
+        if (pause is not null && (!captureRich || launch
             || snapshot.Step.UseLegacyPhysics || snapshot.Segment.Type is not (SegmentType.Straight or SegmentType.TurnExit)
             || resolution.Outcome != SegmentOutcome.Ok || entrySpeed <= 0f
-            || positiveDriveFraction != 1f || holdLateralPosition || lateralAuthority01 != 1f
+            || !pause.AfterContact && (positiveDriveFraction != 1f || contactRecovery || lateralAuthority01 != 1f)
+            || holdLateralPosition
             || interactionTargetPosition.HasValue))
             throw new RiderIntegrationRefusalException("Cursor supports only rich rolling Straight/TurnExit traversal with Ok resolution, ordinary controls and no recovery.");
         var segment = snapshot.Segment; var geometry = snapshot.Track.Geometry;
@@ -98,6 +99,9 @@ internal static class ExecutedPathTraversal
             stepCount = boundary.CompletedSteps; subdivisionTotal = boundary.TimeSolveSubdivisions;
         }
         var resumeStepCount = stepCount;
+        var executionEndpoints = pause is null ? null : pause.Boundary?.ExecutionEndpoints is { } savedEndpoints
+            ? new List<ExecutedStepEndpoint>(savedEndpoints)
+            : new List<ExecutedStepEndpoint> { new(start, time, distance, speed, lateral) };
         while (start < end)
         {
             if (stepCount >= maxNodes) throw new InvalidOperationException("Coupled traversal exceeded its geometric node bound.");
@@ -181,23 +185,27 @@ internal static class ExecutedPathTraversal
                     new(progress, time + step.Time, distance + step.Distance, step.Speed, step.Lateral);
                 if (search.Reached(new(start, time, distance, speed, lateral)))
                     throw new RiderIntegrationRefusalException("Partial-step event is already reached at the accepted boundary.");
-                if (!search.Reached(Endpoint(hi, result)))
+                var reached = search.Reached(Endpoint(hi, result));
+                if (!reached && !search.ContinueBeforeBracket)
                     throw new RiderIntegrationRefusalException("Requested event is not bracketed inside the next numerical step.");
-                for (var i = 0; i < BisectionIterations && hiTime - loTime > TimeToleranceSeconds; i++)
+                if (reached)
                 {
-                    var mid = (lo + hi) * .5d;
-                    if (mid == lo || mid == hi) break;
-                    var trial = Solve(mid); trials++;
-                    if (!(time + trial.Time > loTime && time + trial.Time < hiTime))
-                        throw new RiderIntegrationRefusalException("Partial-step time is not strictly monotonic inside its bracket.");
-                    if (search.Reached(Endpoint(mid, trial)))
-                    { hi = mid; hiTime = time + trial.Time; result = trial; }
-                    else { lo = mid; loTime = time + trial.Time; }
+                    for (var i = 0; i < BisectionIterations && hiTime - loTime > TimeToleranceSeconds; i++)
+                    {
+                        var mid = (lo + hi) * .5d;
+                        if (mid == lo || mid == hi) break;
+                        var trial = Solve(mid); trials++;
+                        if (!(time + trial.Time > loTime && time + trial.Time < hiTime))
+                            throw new RiderIntegrationRefusalException("Partial-step time is not strictly monotonic inside its bracket.");
+                        if (search.Reached(Endpoint(mid, trial)))
+                        { hi = mid; hiTime = time + trial.Time; result = trial; }
+                        else { lo = mid; loTime = time + trial.Time; }
+                    }
+                    if (hiTime - loTime > TimeToleranceSeconds || hi <= start || hi >= unsplitEnd)
+                        throw new RiderIntegrationRefusalException("No resolved interior partial-step endpoint within the numerical bound.");
+                    finish = hi;
+                    partial = new(start, unsplitEnd, time, unsplitTime, lo, loTime, trials);
                 }
-                if (hiTime - loTime > TimeToleranceSeconds || hi <= start || hi >= unsplitEnd)
-                    throw new RiderIntegrationRefusalException("No resolved interior partial-step endpoint within the numerical bound.");
-                finish = hi;
-                partial = new(start, unsplitEnd, time, unsplitTime, lo, loTime, trials);
             }
             distance += result.Distance; time += result.Time;
             var sampledLateral = (lateral + result.Lateral) * .5f;
@@ -216,6 +224,7 @@ internal static class ExecutedPathTraversal
             nodeSurface = snapshot.TrackState.SampleSurface(snapshot.Step.SegmentIndex, lateral);
             if (Progress(start) == ContinuousCornerEnvelope.ApexProgress) apexLateral ??= lateral;
             if (captureRich) nodes!.Add(Node(start, lateral, crash && start == end ? 0f : speed));
+            executionEndpoints?.Add(new(start, time, distance, speed, lateral));
             // Only accepted steps can pause: all subdivisions, arrival splits and accumulator
             // updates above have finished. No final path, wear normalization or event exists yet.
             if (partial is not null || start < end && pause?.AdditionalSteps is { } limit && stepCount - resumeStepCount == limit)
@@ -223,7 +232,8 @@ internal static class ExecutedPathTraversal
                     nodeSurface, stepCount, subdivisionTotal, Array.AsReadOnly(nodes!.ToArray()),
                     Array.AsReadOnly(steps!.ToArray()), corner is null ? null : new(initialEnvelope!.Value,
                         apexLateral, Progress(start)!.Value,
-                        retainedCorner?.Cache ?? new CornerExecutionCache(envelopes!, scalarSpeeds!)), partial));
+                        retainedCorner?.Cache ?? new CornerExecutionCache(envelopes!, scalarSpeeds!)), partial,
+                    Array.AsReadOnly(executionEndpoints!.ToArray())));
         }
         var finalDistance = (float)distance;
         ProjectionWear wear = default;

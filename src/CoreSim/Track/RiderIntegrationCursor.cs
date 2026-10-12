@@ -7,7 +7,8 @@ internal sealed record ExecutedTraversalBoundary(double CanonicalProgress, doubl
     double TimeSeconds, double DistanceMeters, float Speed, float LateralPosition,
     TrackSurfaceState NodeSurface, int CompletedSteps, int TimeSolveSubdivisions,
     IReadOnlyList<ExecutedPathNode> Nodes, IReadOnlyList<ExecutedPathStep> Steps,
-    ExecutedCornerBoundary? Corner = null, ExecutedPartialStep? PartialStep = null);
+    ExecutedCornerBoundary? Corner = null, ExecutedPartialStep? PartialStep = null,
+    IReadOnlyList<ExecutedStepEndpoint>? ExecutionEndpoints = null);
 
 /// <summary>The old step end is a discarded forecast, not an executable post-event remainder.</summary>
 internal sealed record ExecutedPartialStep(double StartCanonicalProgress, double UnsplitEndCanonicalProgress,
@@ -16,14 +17,14 @@ internal sealed record ExecutedPartialStep(double StartCanonicalProgress, double
 
 internal readonly record struct ExecutedStepEndpoint(double CanonicalProgress, double TimeSeconds,
     double DistanceMeters, float Speed, float LateralPosition);
-internal sealed record PartialStepSearch(Func<ExecutedStepEndpoint, bool> Reached);
+internal sealed record PartialStepSearch(Func<ExecutedStepEndpoint, bool> Reached, bool ContinueBeforeBracket = false);
 
 /// <summary>Immutable accepted corner values plus exclusively owned reusable envelope computations.</summary>
 internal sealed record ExecutedCornerBoundary(float InitialEnvelopeSpeed, float? ApexLateralPosition,
     float CornerProgress, ExecutedPathTraversal.CornerExecutionCache Cache);
 
 internal sealed record TraversalPauseRequest(int? AdditionalSteps, ExecutedTraversalBoundary? Boundary = null,
-    PartialStepSearch? PartialStep = null);
+    PartialStepSearch? PartialStep = null, bool AfterContact = false);
 internal sealed class TraversalPausedException(ExecutedTraversalBoundary boundary) : Exception
 {
     internal ExecutedTraversalBoundary Boundary { get; } = boundary;
@@ -45,6 +46,7 @@ internal sealed class RiderIntegrationSession(SimulationSnapshot snapshot, Rider
     internal Func<TraversalPauseRequest, ExecutedTraversalResult> Continue { get; set; } = null!;
     internal Func<ExecutedTraversalResult, ResolvedSimulationStep> Complete { get; set; } = null!;
     internal TraversalPauseRequest Request { get; set; } = null!;
+    internal CoreSim.Interactions.RiderContactConsequence? Contact { get; set; }
 }
 
 internal sealed record RiderIntegrationProgress(ResolvedSimulationStep? Completed, RiderIntegrationCursor? Cursor);
@@ -53,11 +55,65 @@ internal sealed record RiderIntegrationProgress(ResolvedSimulationStep? Complete
 internal sealed class RiderIntegrationCursor(RiderIntegrationSession session, ExecutedTraversalBoundary boundary)
 {
     private bool _consumed;
+    private readonly HashSet<ExecutedTraversalBoundary> _trials = new(ReferenceEqualityComparer.Instance);
     internal ExecutedTraversalBoundary Boundary { get; } = boundary;
     internal SimulationSnapshot Snapshot => session.Snapshot;
     internal RiderIntent Intent => session.Intent;
     internal RiderIntegrationContext Context => session.Context;
     internal TrackStateSnapshot SurfaceVersion => Snapshot.TrackState;
+
+    internal ExecutedTraversalBoundary PreviewToTime(double elapsedTimeSeconds)
+    {
+        if (_consumed || Boundary.PartialStep is not null)
+            throw new RiderIntegrationRefusalException("Time trial requires an unused ordinary cursor.");
+        var local = elapsedTimeSeconds - Snapshot.Riders[0].ElapsedTimeSeconds;
+        if (!double.IsFinite(local) || local <= Boundary.TimeSeconds)
+            throw new RiderIntegrationRefusalException("Time trial must advance beyond the accepted prefix.");
+        try { session.Continue(new(null, Boundary, new(e => e.TimeSeconds >= local, true))); }
+        catch (TraversalPausedException paused) { _trials.Add(paused.Boundary); return paused.Boundary; }
+        throw new RiderIntegrationRefusalException("Requested time is outside this segment.");
+    }
+
+    internal RiderIntegrationCursor AcceptTimeTrial(TrackStateSnapshot surfaceVersion, ExecutedTraversalBoundary trial)
+    {
+        if (_consumed || !ReferenceEquals(surfaceVersion, SurfaceVersion) || !_trials.Contains(trial) || trial.PartialStep is null
+            || !Boundary.Steps.SequenceEqual(trial.Steps.Take(Boundary.Steps.Count)))
+            throw new RiderIntegrationRefusalException("A time trial must retain this unused cursor and frozen surface.");
+        _consumed = true; _trials.Clear();
+        return new(session, trial);
+    }
+
+    internal RiderIntegrationProgress ResumeAfterContact(CoreSim.Interactions.RiderContactConsequence consequence,
+        int pauseAfterSteps)
+        => ResumeEvent(consequence, pauseAfterSteps);
+
+    // Counterfactual comparison only: same executed partition, no impulse/recovery and no publication.
+    internal RiderIntegrationProgress ResumeEventWithoutConsequence(int pauseAfterSteps)
+        => ResumeEvent(null, pauseAfterSteps);
+
+    internal void Seal() { _consumed = true; _trials.Clear(); }
+
+    private RiderIntegrationProgress ResumeEvent(CoreSim.Interactions.RiderContactConsequence? consequence,
+        int pauseAfterSteps)
+    {
+        if (_consumed || Boundary.PartialStep is null || session.Contact is not null
+            || consequence is not null && (consequence.RiderId != Snapshot.Riders[0].RiderId || consequence.PreContactSpeed != Boundary.Speed
+            || Math.Abs(consequence.FrontierTimeSeconds - (Snapshot.Riders[0].ElapsedTimeSeconds + Boundary.TimeSeconds)) > ExecutedPathTraversal.TimeToleranceSeconds))
+            throw new RiderIntegrationRefusalException("Post-event continuation requires this exact unconsumed contact state.");
+        if (consequence is not null && (consequence.Severity == CoreSim.Interactions.PhysicalContactSeverity.Crash || consequence.PostContactSpeed <= 0))
+            throw new RiderIntegrationRefusalException("Terminal contact ends motion at the event; it cannot resume.");
+        if (pauseAfterSteps <= 0) throw new ArgumentOutOfRangeException(nameof(pauseAfterSteps));
+        _consumed = true; session.Contact = consequence;
+        var speed = consequence?.PostContactSpeed ?? Boundary.Speed;
+        var nodes = Boundary.Nodes.ToArray();
+        nodes[^1] = nodes[^1] with { SpeedMetersPerSecond = speed };
+        var endpoints = Boundary.ExecutionEndpoints!.ToArray();
+        endpoints[^1] = endpoints[^1] with { Speed = speed };
+        var after = Boundary with { Speed = speed, Nodes = Array.AsReadOnly(nodes), PartialStep = null,
+            ExecutionEndpoints = Array.AsReadOnly(endpoints) };
+        try { return new(session.Complete(session.Continue(new(pauseAfterSteps, after))), null); }
+        catch (TraversalPausedException paused) { return new(null, new(session, paused.Boundary)); }
+    }
 
     internal RiderIntegrationProgress Resume(TrackStateSnapshot surfaceVersion, int? pauseAfterSteps = null)
     {

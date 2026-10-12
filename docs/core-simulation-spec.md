@@ -16,6 +16,12 @@ equations from the last accepted boundary; only one shortened step is accepted.
 #55 must certify its final first-touch geometry. The old complete-step endpoint
 is a discarded forecast, and ordinary resume from an event cursor refuses until
 explicit post-event state/controls exist. No partial publication is authorized.
+[REA-004A6](calibration/rea-004a6-two-rider-contact.md) supplies actual two-rider
+event states, applies the existing consequence plan once and continues the
+same integrator with its speed and recovery controls. Double execution endpoints
+are retained only for requested cursors. #55 certification, not impulse
+suppression, gates recorded continuation. The demonstrated path is rolling
+moving Straight with incidents disabled; no live partial publication is added.
 
 The target heat engine shares physical time and synchronizes at events while
 retaining the distance integrator. It finishes the complete four-rider race and

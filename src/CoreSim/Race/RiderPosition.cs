@@ -86,6 +86,13 @@ public readonly record struct RiderPosition
             DistanceMeters + physicalDistanceMeters);
     }
 
+    internal RiderPosition AdvanceExecuted(double canonicalProgress, float physicalDistanceMeters)
+    {
+        if (!double.IsFinite(canonicalProgress) || canonicalProgress < 0 || !float.IsFinite(physicalDistanceMeters) || physicalDistanceMeters < 0)
+            throw new ArgumentOutOfRangeException(nameof(canonicalProgress));
+        return new(SegmentCount, TotalSegmentProgress + canonicalProgress, DistanceMeters + physicalDistanceMeters);
+    }
+
     /// <summary>
     /// Completes the currently owned segment after production traversal succeeded.
     /// Canonical ownership advances discretely; distance is only the actual traversal result.

@@ -200,11 +200,11 @@ public static class ResolvedBikePoses
 
     /// <summary>Observe two actually solved endpoints. Double execution clocks are not remapped to a segment endpoint.</summary>
     internal static IReadOnlyList<PhysicalPoseInterval> FromExecutedStep(SimulationSnapshot snapshot,
-        ExecutedTraversalBoundary start, ExecutedStepEndpoint end, TrackMetricEmbedding embedding)
+        ExecutedTraversalBoundary start, ExecutedStepEndpoint end, TrackMetricEmbedding embedding, bool exactProgress = false)
     {
         embedding.ValidateCompatible(snapshot.Track);
-        if (snapshot.Segment.Type != SegmentType.TurnExit || end.TimeSeconds <= start.TimeSeconds)
-            throw new RiderIntegrationRefusalException("Executed-step observation requires a positive-duration TurnExit partial step.");
+        if (snapshot.Segment.Type is not (SegmentType.TurnExit or SegmentType.Straight) || end.TimeSeconds <= start.TimeSeconds)
+            throw new RiderIntegrationRefusalException("Executed-step observation requires a positive-duration Straight/TurnExit partial step.");
         var rider = snapshot.Riders.Single(); var segment = snapshot.Step.SegmentIndex;
         var track = snapshot.Track; var corner = track.CornerTopology.CornerForSegment(segment);
         var source = new PoseSource(rider.LapsCompleted, segment, snapshot.Segment.Id, snapshot.Segment.Type, corner?.CornerId);
@@ -224,21 +224,23 @@ public static class ResolvedBikePoses
         for (var i = 1; i < cuts.Count; i++)
             if (cuts[i] > cuts[i - 1]) result.Add(new ProductionPoseInterval(rider.RiderId, segment, track,
                 a, b, embedding, source, first, last - first, cuts[i - 1], cuts[i],
-                SpeedwayBikeDimensions.Reference, ReferenceBikeAttitude.Neutral, false));
+                SpeedwayBikeDimensions.Reference, ReferenceBikeAttitude.Neutral, false,
+                exactProgress ? start.CanonicalProgress : null, exactProgress ? end.CanonicalProgress : null));
         return result.AsReadOnly();
 
         RiderMotionSample Sample(double progress, double time, double distance, float speed, float lateral)
         {
-            var radius = LaneModel.TurnArcRadiusMeters(lateral, track.Geometry);
+            var radius = snapshot.Segment.Type == SegmentType.Straight ? (float?)null : LaneModel.TurnArcRadiusMeters(lateral, track.Geometry);
             return new((float)time, rider.CanonicalProgress + progress - rider.SegmentProgress,
                 (float)progress, (float)distance, lateral,
                 LaneModel.PhysicalLateralOffsetFromInnerReferenceMeters(lateral, snapshot.Segment.Type, track.Geometry),
-                speed, radius, 1f / radius);
+                speed, radius, radius.HasValue ? 1f / radius.Value : 0f);
         }
     }
 
     private sealed class ProductionPoseInterval : PhysicalPoseInterval
     {
+        private readonly double _progressA, _progressB;
         private readonly RiderMotionSample _a, _b;
         private readonly double _nodeStart, _duration, _angle, _phaseStart, _phaseSpan;
         private readonly MetricTrackSegment _segment;
@@ -259,6 +261,7 @@ public static class ResolvedBikePoses
                 && Bits(_nodeStart) == Bits(other._nodeStart) && Bits(_duration) == Bits(other._duration)
                 && Bits(_angle) == Bits(other._angle) && Bits(_phaseStart) == Bits(other._phaseStart)
                 && Bits(_phaseSpan) == Bits(other._phaseSpan)
+                && Bits(_progressA) == Bits(other._progressA) && Bits(_progressB) == Bits(other._progressB)
                 && FloatBits(_a.SegmentProgress) == FloatBits(other._a.SegmentProgress)
                 && FloatBits(_b.SegmentProgress) == FloatBits(other._b.SegmentProgress)
                 && FloatBits(_a.PhysicalOffsetMeters) == FloatBits(other._a.PhysicalOffsetMeters)
@@ -274,10 +277,11 @@ public static class ResolvedBikePoses
                 source.Dimensions, source.StartsAtDiscontinuity, source.Source, embedding.Closure.SupportsLapWrap)
         {
             _a=source._a;_b=source._b;_nodeStart=source._nodeStart;_duration=source._duration;
+            _progressA=source._progressA;_progressB=source._progressB;
             _profile=source._profile;_angle=source._angle;_phaseStart=source._phaseStart;
             _phaseSpan=source._phaseSpan;_straight=source._straight;
             _segment=embedding.Segments[source._segment.SegmentIndex];
-            _map=_segment.Prepare(((double)_b.SegmentProgress-_a.SegmentProgress)/_duration,
+            _map=_segment.Prepare((_progressB-_progressA)/_duration,
                 ((double)_b.PhysicalOffsetMeters-_a.PhysicalOffsetMeters)/_duration);
         }
         public ProductionPoseInterval(ResolvedRiderMotion motion, Track track, RiderMotionSample a, RiderMotionSample b,
@@ -288,14 +292,16 @@ public static class ResolvedBikePoses
 
         internal ProductionPoseInterval(int riderId, int segmentIndex, Track track, RiderMotionSample a, RiderMotionSample b,
             TrackMetricEmbedding embedding, PoseSource source, double nodeStart, double duration,
-            double start, double end, SpeedwayBikeDimensions dimensions, ReferenceBikeAttitude profile, bool discontinuity)
+            double start, double end, SpeedwayBikeDimensions dimensions, ReferenceBikeAttitude profile, bool discontinuity,
+            double? exactStartProgress = null, double? exactEndProgress = null)
             : base(riderId, embedding.FrameId, start, end, dimensions, discontinuity, source, embedding.Closure.SupportsLapWrap)
         {
             _a = a; _b = b; _nodeStart = nodeStart;
+            _progressA = exactStartProgress ?? a.SegmentProgress; _progressB = exactEndProgress ?? b.SegmentProgress;
             _duration = duration; _profile = profile;
             var segment = track.Segments[segmentIndex]; _straight = segment.Type == SegmentType.Straight;
             _segment = embedding.Segments[segmentIndex]; _angle = track.Geometry.TurnSegmentAngleRadians;
-            _map = _segment.Prepare(((double)_b.SegmentProgress - _a.SegmentProgress) / _duration,
+            _map = _segment.Prepare((_progressB - _progressA) / _duration,
                 ((double)_b.PhysicalOffsetMeters - _a.PhysicalOffsetMeters) / _duration);
             var corner = track.CornerTopology.CornerForSegment(segmentIndex);
             _phaseStart = corner is null ? 0 : segmentIndex - corner.StartSegmentIndex;
@@ -305,7 +311,7 @@ public static class ResolvedBikePoses
         {
             Fraction(time);
             var f = (time - _nodeStart) / _duration;
-            var progress = _a.SegmentProgress + ((double)_b.SegmentProgress - _a.SegmentProgress) * f;
+            var progress = _progressA + (_progressB - _progressA) * f;
             var offset = _a.PhysicalOffsetMeters + ((double)_b.PhysicalOffsetMeters - _a.PhysicalOffsetMeters) * f;
             var mapped = _map.Map(progress, offset);
             return (mapped.Position, mapped.VelocityMetersPerSecond, mapped.TravelHeadingRadians,
@@ -336,7 +342,7 @@ public static class ResolvedBikePoses
                 return new(Geometry((start + end) / 2).Velocity, 0, 0);
             }
             var g0 = Geometry(start); var g1 = Geometry(end); var mid = Geometry((start + end) / 2);
-            var dp = Math.Abs(((double)_b.SegmentProgress - _a.SegmentProgress) / _duration);
+            var dp = Math.Abs((_progressB - _progressA) / _duration);
             var dr = Math.Abs(((double)_b.PhysicalOffsetMeters - _a.PhysicalOffsetMeters) / _duration);
             var thetaRate = _angle * dp;
             // Linear radius/angle nodes: |p''| <= r*theta'^2 + 2*|r'*theta'|.
