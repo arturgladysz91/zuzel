@@ -1,0 +1,48 @@
+{
+  "Schema": "rea004a-files-v1",
+  "Files": {
+    "baseline-manifest.json": {
+      "Bytes": 110770,
+      "SHA256": "09731b0b0159e4a0cca780e985b4fb6b8cd28140512fde7f6c57e5dc48ec00c6"
+    },
+    "cases.json.gz": {
+      "Bytes": 8843268,
+      "SHA256": "b4ec0782dab01b76fa24b0023384bf4c8d309fa7fba2ade53e30d21100b33396"
+    },
+    "contacts.json.gz": {
+      "Bytes": 288832,
+      "SHA256": "1ab878d34291349097e4e5e9deca27d1b5c7886b01ba595d39ab75f69cec18e5"
+    },
+    "controlled-contact.json.gz": {
+      "Bytes": 12456,
+      "SHA256": "122e999728ce86456a78d748c31b7da1f1bde2d223e337183a6b940269a34142"
+    },
+    "expected-failure.json.gz": {
+      "Bytes": 12574,
+      "SHA256": "5a0741f8a6a4045e78e565bb249035b158c6b599e108f2c7c7fe3c66f50320a5"
+    },
+    "local-comparison.json": {
+      "Bytes": 134,
+      "SHA256": "fed2a9cfc52dc58ed94f05b3ebd622b60f60760bfb296f66b0d128ff735beaa2"
+    },
+    "performance.json": {
+      "Bytes": 47888,
+      "SHA256": "dffd0d84978065dd2beb04b01408fdfb23d448a0f006434ca0a0a39f9394b9b8"
+    },
+    "probe.json.gz": {
+      "Bytes": 293116,
+      "SHA256": "1f95a423de6f3a3151b490de4eb3dd3f770cfe7fc58986bf787a4d71c4ec6bb4"
+    },
+    "summary.json": {
+      "Bytes": 140652,
+      "SHA256": "9b425d6bfb81b285dc328f2e7cd6e0548d5331c2e60c85df6d567439899db529"
+    },
+    "witness.json.gz": {
+      "Bytes": 12572,
+      "SHA256": "9775caaafb11721e0cf27b0a8ec6e2a087480b1e323e4d111921c52770473b77"
+    }
+  },
+  "StartingMain": "f40b2fd129124d969fd22cfe7767e2fb00bd651f",
+  "REA004AAchieved": false,
+  "RawBatch": "Reproduce runs.json.gz using the documented batch command. cases.json.gz uses the existing readiness compact() function; exact accumulation/ownership records are retained."
+}
