@@ -1,0 +1,5038 @@
+{
+  "Schema": "rea004a-summary-v1",
+  "StartingMain": "f40b2fd129124d969fd22cfe7767e2fb00bd651f",
+  "ProductionTree": "462d15a656f986bf01519c1a5dddaf8ff5f4649c",
+  "ProductionChanged": false,
+  "REA004AAchieved": false,
+  "GeneralReplayEnabled": false,
+  "Baseline": {
+    "Cases": 342,
+    "Completed": 342,
+    "Failures": 0,
+    "FreshReverseChecks": 342,
+    "FreshObserverChecks": 3,
+    "OriginalREA009FinalAndBehaviorHashesExact": 342,
+    "ConfigurationCounts": {
+      "A": 114,
+      "B": 114,
+      "C": 114
+    },
+    "Violations": 0,
+    "ExactAccumulationAndOwnership": {
+      "Checks": 46277,
+      "AccumulationResiduals": [],
+      "DuplicatedAppliedPairGenerations": [],
+      "Interpretation": "Exact float accumulation checks; residuals retain values and need diagnosis, never tolerance suppression."
+    },
+    "AppliedPairs": 32,
+    "AppliedRiderConsequences": 57,
+    "Frontiers": [
+      {
+        "Id": "balanced-example",
+        "Seed": 7,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "balanced-example",
+        "Seed": 7,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "balanced-example",
+        "Seed": 7,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "balanced-example",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "balanced-example",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "balanced-example",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "balanced-example",
+        "Seed": 83,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "balanced-example",
+        "Seed": 83,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "balanced-example",
+        "Seed": 83,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "balanced-motoarena",
+        "Seed": 7,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "balanced-motoarena",
+        "Seed": 7,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "balanced-motoarena",
+        "Seed": 7,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "balanced-motoarena",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "balanced-motoarena",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "balanced-motoarena",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "balanced-motoarena",
+        "Seed": 83,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "balanced-motoarena",
+        "Seed": 83,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "balanced-motoarena",
+        "Seed": 83,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "overall",
+        "Seed": 7,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "overall",
+        "Seed": 7,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "overall",
+        "Seed": 7,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "overall",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "overall",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "overall",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 1,
+        "Pairs": 1,
+        "MaxPairsPerFrontier": 1,
+        "MaxRiders": 2
+      },
+      {
+        "Id": "overall",
+        "Seed": 83,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "overall",
+        "Seed": 83,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "overall",
+        "Seed": 83,
+        "Configuration": "C",
+        "Count": 2,
+        "Pairs": 2,
+        "MaxPairsPerFrontier": 1,
+        "MaxRiders": 2
+      },
+      {
+        "Id": "starter-distance",
+        "Seed": 7,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "starter-distance",
+        "Seed": 7,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "starter-distance",
+        "Seed": 7,
+        "Configuration": "C",
+        "Count": 1,
+        "Pairs": 1,
+        "MaxPairsPerFrontier": 1,
+        "MaxRiders": 2
+      },
+      {
+        "Id": "starter-distance",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "starter-distance",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "starter-distance",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 1,
+        "Pairs": 1,
+        "MaxPairsPerFrontier": 1,
+        "MaxRiders": 2
+      },
+      {
+        "Id": "starter-distance",
+        "Seed": 83,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "starter-distance",
+        "Seed": 83,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "starter-distance",
+        "Seed": 83,
+        "Configuration": "C",
+        "Count": 1,
+        "Pairs": 1,
+        "MaxPairsPerFrontier": 1,
+        "MaxRiders": 2
+      },
+      {
+        "Id": "corner-straight",
+        "Seed": 7,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "corner-straight",
+        "Seed": 7,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "corner-straight",
+        "Seed": 7,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "corner-straight",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "corner-straight",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "corner-straight",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 2,
+        "Pairs": 2,
+        "MaxPairsPerFrontier": 1,
+        "MaxRiders": 2
+      },
+      {
+        "Id": "corner-straight",
+        "Seed": 83,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "corner-straight",
+        "Seed": 83,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "corner-straight",
+        "Seed": 83,
+        "Configuration": "C",
+        "Count": 1,
+        "Pairs": 1,
+        "MaxPairsPerFrontier": 1,
+        "MaxRiders": 2
+      },
+      {
+        "Id": "style",
+        "Seed": 7,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "style",
+        "Seed": 7,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "style",
+        "Seed": 7,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "style",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "style",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "style",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "style",
+        "Seed": 83,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "style",
+        "Seed": 83,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "style",
+        "Seed": 83,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "reading",
+        "Seed": 7,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "reading",
+        "Seed": 7,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "reading",
+        "Seed": 7,
+        "Configuration": "C",
+        "Count": 1,
+        "Pairs": 1,
+        "MaxPairsPerFrontier": 1,
+        "MaxRiders": 2
+      },
+      {
+        "Id": "reading",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "reading",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "reading",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "reading",
+        "Seed": 83,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "reading",
+        "Seed": 83,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "reading",
+        "Seed": 83,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "control",
+        "Seed": 7,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "control",
+        "Seed": 7,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "control",
+        "Seed": 7,
+        "Configuration": "C",
+        "Count": 1,
+        "Pairs": 1,
+        "MaxPairsPerFrontier": 1,
+        "MaxRiders": 2
+      },
+      {
+        "Id": "control",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "control",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "control",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 1,
+        "Pairs": 1,
+        "MaxPairsPerFrontier": 1,
+        "MaxRiders": 2
+      },
+      {
+        "Id": "control",
+        "Seed": 83,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "control",
+        "Seed": 83,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "control",
+        "Seed": 83,
+        "Configuration": "C",
+        "Count": 1,
+        "Pairs": 1,
+        "MaxPairsPerFrontier": 1,
+        "MaxRiders": 2
+      },
+      {
+        "Id": "same-line",
+        "Seed": 7,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "same-line",
+        "Seed": 7,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "same-line",
+        "Seed": 7,
+        "Configuration": "C",
+        "Count": 1,
+        "Pairs": 1,
+        "MaxPairsPerFrontier": 1,
+        "MaxRiders": 2
+      },
+      {
+        "Id": "same-line",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "same-line",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "same-line",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 1,
+        "Pairs": 1,
+        "MaxPairsPerFrontier": 1,
+        "MaxRiders": 2
+      },
+      {
+        "Id": "same-line",
+        "Seed": 83,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "same-line",
+        "Seed": 83,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "same-line",
+        "Seed": 83,
+        "Configuration": "C",
+        "Count": 1,
+        "Pairs": 1,
+        "MaxPairsPerFrontier": 1,
+        "MaxRiders": 2
+      },
+      {
+        "Id": "rain-example",
+        "Seed": 7,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rain-example",
+        "Seed": 7,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rain-example",
+        "Seed": 7,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rain-example",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rain-example",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rain-example",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 1,
+        "Pairs": 1,
+        "MaxPairsPerFrontier": 1,
+        "MaxRiders": 2
+      },
+      {
+        "Id": "rain-example",
+        "Seed": 83,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rain-example",
+        "Seed": 83,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rain-example",
+        "Seed": 83,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rain-motoarena",
+        "Seed": 7,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rain-motoarena",
+        "Seed": 7,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rain-motoarena",
+        "Seed": 7,
+        "Configuration": "C",
+        "Count": 1,
+        "Pairs": 1,
+        "MaxPairsPerFrontier": 1,
+        "MaxRiders": 2
+      },
+      {
+        "Id": "rain-motoarena",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rain-motoarena",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rain-motoarena",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rain-motoarena",
+        "Seed": 83,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rain-motoarena",
+        "Seed": 83,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rain-motoarena",
+        "Seed": 83,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "inside",
+        "Seed": 7,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "inside",
+        "Seed": 7,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "inside",
+        "Seed": 7,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "inside",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "inside",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "inside",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "inside",
+        "Seed": 83,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "inside",
+        "Seed": 83,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "inside",
+        "Seed": 83,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "outside",
+        "Seed": 7,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "outside",
+        "Seed": 7,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "outside",
+        "Seed": 7,
+        "Configuration": "C",
+        "Count": 2,
+        "Pairs": 2,
+        "MaxPairsPerFrontier": 1,
+        "MaxRiders": 2
+      },
+      {
+        "Id": "outside",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "outside",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "outside",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "outside",
+        "Seed": 83,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "outside",
+        "Seed": 83,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "outside",
+        "Seed": 83,
+        "Configuration": "C",
+        "Count": 1,
+        "Pairs": 1,
+        "MaxPairsPerFrontier": 1,
+        "MaxRiders": 2
+      },
+      {
+        "Id": "low-grip",
+        "Seed": 7,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "low-grip",
+        "Seed": 7,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "low-grip",
+        "Seed": 7,
+        "Configuration": "C",
+        "Count": 2,
+        "Pairs": 2,
+        "MaxPairsPerFrontier": 1,
+        "MaxRiders": 2
+      },
+      {
+        "Id": "low-grip",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "low-grip",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "low-grip",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "low-grip",
+        "Seed": 83,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "low-grip",
+        "Seed": 83,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "low-grip",
+        "Seed": 83,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "worn",
+        "Seed": 7,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "worn",
+        "Seed": 7,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "worn",
+        "Seed": 7,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "worn",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "worn",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "worn",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "worn",
+        "Seed": 83,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "worn",
+        "Seed": 83,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "worn",
+        "Seed": 83,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-A",
+        "Seed": 7,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-A",
+        "Seed": 7,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-A",
+        "Seed": 7,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-A",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-A",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-A",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-A",
+        "Seed": 83,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-A",
+        "Seed": 83,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-A",
+        "Seed": 83,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-B",
+        "Seed": 7,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-B",
+        "Seed": 7,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-B",
+        "Seed": 7,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-B",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-B",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-B",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-B",
+        "Seed": 83,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-B",
+        "Seed": 83,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-B",
+        "Seed": 83,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-C",
+        "Seed": 7,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-C",
+        "Seed": 7,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-C",
+        "Seed": 7,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-C",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-C",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-C",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-C",
+        "Seed": 83,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-C",
+        "Seed": 83,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-C",
+        "Seed": 83,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-D",
+        "Seed": 7,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-D",
+        "Seed": 7,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-D",
+        "Seed": 7,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-D",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-D",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-D",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-D",
+        "Seed": 83,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-D",
+        "Seed": 83,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-D",
+        "Seed": 83,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-E",
+        "Seed": 7,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-E",
+        "Seed": 7,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-E",
+        "Seed": 7,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-E",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-E",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-E",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-E",
+        "Seed": 83,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-E",
+        "Seed": 83,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-E",
+        "Seed": 83,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-H",
+        "Seed": 7,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-H",
+        "Seed": 7,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-H",
+        "Seed": 7,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-H",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-H",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-H",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-H",
+        "Seed": 83,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-H",
+        "Seed": 83,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "rolling-H",
+        "Seed": 83,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "bend-catch",
+        "Seed": 7,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "bend-catch",
+        "Seed": 7,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "bend-catch",
+        "Seed": 7,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "bend-catch",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "bend-catch",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "bend-catch",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "bend-catch",
+        "Seed": 83,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "bend-catch",
+        "Seed": 83,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "bend-catch",
+        "Seed": 83,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "contact-heavy",
+        "Seed": 7,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "contact-heavy",
+        "Seed": 7,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "contact-heavy",
+        "Seed": 7,
+        "Configuration": "C",
+        "Count": 1,
+        "Pairs": 3,
+        "MaxPairsPerFrontier": 3,
+        "MaxRiders": 4
+      },
+      {
+        "Id": "contact-heavy",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "contact-heavy",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "contact-heavy",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 1,
+        "Pairs": 3,
+        "MaxPairsPerFrontier": 3,
+        "MaxRiders": 4
+      },
+      {
+        "Id": "contact-heavy",
+        "Seed": 83,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "contact-heavy",
+        "Seed": 83,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "contact-heavy",
+        "Seed": 83,
+        "Configuration": "C",
+        "Count": 1,
+        "Pairs": 3,
+        "MaxPairsPerFrontier": 3,
+        "MaxRiders": 4
+      },
+      {
+        "Id": "three-squeeze",
+        "Seed": 7,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "three-squeeze",
+        "Seed": 7,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "three-squeeze",
+        "Seed": 7,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "three-squeeze",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "three-squeeze",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "three-squeeze",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "three-squeeze",
+        "Seed": 83,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "three-squeeze",
+        "Seed": 83,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "three-squeeze",
+        "Seed": 83,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "four-close-regain",
+        "Seed": 7,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "four-close-regain",
+        "Seed": 7,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "four-close-regain",
+        "Seed": 7,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "four-close-regain",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "four-close-regain",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "four-close-regain",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "four-close-regain",
+        "Seed": 83,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "four-close-regain",
+        "Seed": 83,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "four-close-regain",
+        "Seed": 83,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "three-squeeze-binary",
+        "Seed": 7,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "three-squeeze-binary",
+        "Seed": 7,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "three-squeeze-binary",
+        "Seed": 7,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "three-squeeze-binary",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "three-squeeze-binary",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "three-squeeze-binary",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "three-squeeze-binary",
+        "Seed": 83,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "three-squeeze-binary",
+        "Seed": 83,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "three-squeeze-binary",
+        "Seed": 83,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "four-close-regain-binary",
+        "Seed": 7,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "four-close-regain-binary",
+        "Seed": 7,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "four-close-regain-binary",
+        "Seed": 7,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "four-close-regain-binary",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "four-close-regain-binary",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "four-close-regain-binary",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "four-close-regain-binary",
+        "Seed": 83,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "four-close-regain-binary",
+        "Seed": 83,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "four-close-regain-binary",
+        "Seed": 83,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Start-20",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Start-20",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Start-20",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Start-50",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Start-50",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Start-50",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Start-80",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Start-80",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Start-80",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Speed-20",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Speed-20",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Speed-20",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Speed-50",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Speed-50",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Speed-50",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Speed-80",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Speed-80",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Speed-80",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-SlideControl-20",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-SlideControl-20",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-SlideControl-20",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-SlideControl-50",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-SlideControl-50",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-SlideControl-50",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-SlideControl-80",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-SlideControl-80",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-SlideControl-80",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-TrackReading-20",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-TrackReading-20",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-TrackReading-20",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-TrackReading-50",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-TrackReading-50",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-TrackReading-50",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-TrackReading-80",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-TrackReading-80",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-TrackReading-80",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-PairRiding-20",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-PairRiding-20",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-PairRiding-20",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-PairRiding-50",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-PairRiding-50",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-PairRiding-50",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-PairRiding-80",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-PairRiding-80",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-PairRiding-80",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Adaptability-20",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Adaptability-20",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Adaptability-20",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Adaptability-50",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Adaptability-50",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Adaptability-50",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Adaptability-80",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Adaptability-80",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Adaptability-80",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Technique-20",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Technique-20",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Technique-20",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Technique-50",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Technique-50",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Technique-50",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Technique-80",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Technique-80",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Technique-80",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Strength-20",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Strength-20",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Strength-20",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Strength-50",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Strength-50",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Strength-50",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Strength-80",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Strength-80",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Strength-80",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Mass-60",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Mass-60",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Mass-60",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Mass-67.5",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Mass-67.5",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Mass-67.5",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Mass-75",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Mass-75",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Mass-75",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Condition-0.4",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Condition-0.4",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Condition-0.4",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Condition-0.7",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Condition-0.7",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Condition-0.7",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Condition-1",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Condition-1",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Condition-1",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Style-0.2",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Style-0.2",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Style-0.2",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Style-0.5",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Style-0.5",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Style-0.5",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Style-0.8",
+        "Seed": 19,
+        "Configuration": "A",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Style-0.8",
+        "Seed": 19,
+        "Configuration": "B",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      },
+      {
+        "Id": "sweep-Style-0.8",
+        "Seed": 19,
+        "Configuration": "C",
+        "Count": 0,
+        "Pairs": 0,
+        "MaxPairsPerFrontier": 0,
+        "MaxRiders": 0
+      }
+    ],
+    "TotalFrontiers": 26,
+    "MaxFrontiersPerHeat": 2,
+    "MaxPairsPerFrontier": 3,
+    "MaxFrontierRiders": 4,
+    "EndpointFrontierDelaySeconds": {
+      "N": 57,
+      "P10": 0.39315116642465003,
+      "P25": 0.5508249797844655,
+      "P50": 1.5013887049018138,
+      "P75": 1.7417995631694794,
+      "P90": 2.675366401672363,
+      "Min": 0.14789264505270694,
+      "Max": 3.222980499267578
+    },
+    "EndpointTimingRows": [
+      {
+        "Step": 27,
+        "RiderId": 3,
+        "Severity": "Disturbed",
+        "FrontierSeconds": 41.068336266334654,
+        "CommittedEndpointSeconds": 42.579429626464844,
+        "DelaySeconds": 1.5110933601301895,
+        "PreEndpointSpeedMetersPerSecond": 18.603743,
+        "PostEndpointSpeedMetersPerSecond": 19.074354
+      },
+      {
+        "Step": 27,
+        "RiderId": 4,
+        "Severity": "Disturbed",
+        "FrontierSeconds": 41.068336266334654,
+        "CommittedEndpointSeconds": 42.616966247558594,
+        "DelaySeconds": 1.5486299812239395,
+        "PreEndpointSpeedMetersPerSecond": 19.442493,
+        "PostEndpointSpeedMetersPerSecond": 18.971882
+      },
+      {
+        "Step": 10,
+        "RiderId": 2,
+        "Severity": "Brush",
+        "FrontierSeconds": 16.816700633615255,
+        "CommittedEndpointSeconds": 17.979887008666992,
+        "DelaySeconds": 1.1631863750517368,
+        "PreEndpointSpeedMetersPerSecond": 21.407393,
+        "PostEndpointSpeedMetersPerSecond": 21.407393
+      },
+      {
+        "Step": 10,
+        "RiderId": 4,
+        "Severity": "Brush",
+        "FrontierSeconds": 16.816700633615255,
+        "CommittedEndpointSeconds": 17.96306800842285,
+        "DelaySeconds": 1.1463673748075962,
+        "PreEndpointSpeedMetersPerSecond": 23.279217,
+        "PostEndpointSpeedMetersPerSecond": 23.279217
+      },
+      {
+        "Step": 27,
+        "RiderId": 3,
+        "Severity": "Disturbed",
+        "FrontierSeconds": 41.0788763402642,
+        "CommittedEndpointSeconds": 42.580265045166016,
+        "DelaySeconds": 1.5013887049018138,
+        "PreEndpointSpeedMetersPerSecond": 18.603735,
+        "PostEndpointSpeedMetersPerSecond": 19.074013
+      },
+      {
+        "Step": 27,
+        "RiderId": 4,
+        "Severity": "Disturbed",
+        "FrontierSeconds": 41.0788763402642,
+        "CommittedEndpointSeconds": 42.61825180053711,
+        "DelaySeconds": 1.5393754602729075,
+        "PreEndpointSpeedMetersPerSecond": 19.442493,
+        "PostEndpointSpeedMetersPerSecond": 18.972216
+      },
+      {
+        "Step": 20,
+        "RiderId": 2,
+        "Severity": "LostRhythm",
+        "FrontierSeconds": 33.14259886741638,
+        "CommittedEndpointSeconds": 33.673484802246094,
+        "DelaySeconds": 0.5308859348297119,
+        "PreEndpointSpeedMetersPerSecond": 19.159698,
+        "PostEndpointSpeedMetersPerSecond": 18.91203
+      },
+      {
+        "Step": 20,
+        "RiderId": 4,
+        "Severity": "LostRhythm",
+        "FrontierSeconds": 33.14259886741638,
+        "CommittedEndpointSeconds": 33.68640899658203,
+        "DelaySeconds": 0.5438101291656494,
+        "PreEndpointSpeedMetersPerSecond": 15.776829,
+        "PostEndpointSpeedMetersPerSecond": 16.038834
+      },
+      {
+        "Step": 22,
+        "RiderId": 1,
+        "Severity": "LostRhythm",
+        "FrontierSeconds": 36.73031926641124,
+        "CommittedEndpointSeconds": 38.39023208618164,
+        "DelaySeconds": 1.6599128197703976,
+        "PreEndpointSpeedMetersPerSecond": 16.921202,
+        "PostEndpointSpeedMetersPerSecond": 17.275528
+      },
+      {
+        "Step": 22,
+        "RiderId": 3,
+        "Severity": "LostRhythm",
+        "FrontierSeconds": 36.73031926641124,
+        "CommittedEndpointSeconds": 38.34539794921875,
+        "DelaySeconds": 1.615078682807507,
+        "PreEndpointSpeedMetersPerSecond": 18.392311,
+        "PostEndpointSpeedMetersPerSecond": 18.037985
+      },
+      {
+        "Step": 25,
+        "RiderId": 2,
+        "Severity": "Disturbed",
+        "FrontierSeconds": 41.212178349494934,
+        "CommittedEndpointSeconds": 41.498931884765625,
+        "DelaySeconds": 0.2867535352706909,
+        "PreEndpointSpeedMetersPerSecond": 18.854445,
+        "PostEndpointSpeedMetersPerSecond": 18.365257
+      },
+      {
+        "Step": 25,
+        "RiderId": 4,
+        "Severity": "Disturbed",
+        "FrontierSeconds": 41.212178349494934,
+        "CommittedEndpointSeconds": 41.39594650268555,
+        "DelaySeconds": 0.1837681531906128,
+        "PreEndpointSpeedMetersPerSecond": 18.188583,
+        "PostEndpointSpeedMetersPerSecond": 18.671251
+      },
+      {
+        "Step": 8,
+        "RiderId": 1,
+        "Severity": "LostRhythm",
+        "FrontierSeconds": 14.246757918632284,
+        "CommittedEndpointSeconds": 14.594228744506836,
+        "DelaySeconds": 0.34747082587455225,
+        "PreEndpointSpeedMetersPerSecond": 19.729053,
+        "PostEndpointSpeedMetersPerSecond": 20.606249
+      },
+      {
+        "Step": 8,
+        "RiderId": 2,
+        "Severity": "LostRhythm",
+        "FrontierSeconds": 14.246757918632284,
+        "CommittedEndpointSeconds": 14.56794261932373,
+        "DelaySeconds": 0.3211847006914468,
+        "PreEndpointSpeedMetersPerSecond": 21.474855,
+        "PostEndpointSpeedMetersPerSecond": 20.59766
+      },
+      {
+        "Step": 18,
+        "RiderId": 3,
+        "Severity": "Disturbed",
+        "FrontierSeconds": 28.996538724551044,
+        "CommittedEndpointSeconds": 30.30495834350586,
+        "DelaySeconds": 1.3084196189548152,
+        "PreEndpointSpeedMetersPerSecond": 18.894184,
+        "PostEndpointSpeedMetersPerSecond": 18.415884
+      },
+      {
+        "Step": 18,
+        "RiderId": 4,
+        "Severity": "Disturbed",
+        "FrontierSeconds": 28.996538724551044,
+        "CommittedEndpointSeconds": 30.370073318481445,
+        "DelaySeconds": 1.3735345939304011,
+        "PreEndpointSpeedMetersPerSecond": 17.952662,
+        "PostEndpointSpeedMetersPerSecond": 18.430962
+      },
+      {
+        "Step": 27,
+        "RiderId": 1,
+        "Severity": "Crash",
+        "FrontierSeconds": 42.19381579277797,
+        "CommittedEndpointSeconds": 42.766178131103516,
+        "DelaySeconds": 0.5723623383255472,
+        "PreEndpointSpeedMetersPerSecond": 20.806704,
+        "PostEndpointSpeedMetersPerSecond": 0
+      },
+      {
+        "Step": 27,
+        "RiderId": 3,
+        "Severity": "Crash",
+        "FrontierSeconds": 42.19381579277797,
+        "CommittedEndpointSeconds": 42.769588470458984,
+        "DelaySeconds": 0.5757726776810159,
+        "PreEndpointSpeedMetersPerSecond": 23.077068,
+        "PostEndpointSpeedMetersPerSecond": 0
+      },
+      {
+        "Step": 20,
+        "RiderId": 3,
+        "Severity": "Brush",
+        "FrontierSeconds": 31.83631730079651,
+        "CommittedEndpointSeconds": 32.293941497802734,
+        "DelaySeconds": 0.4576241970062256,
+        "PreEndpointSpeedMetersPerSecond": 20.077042,
+        "PostEndpointSpeedMetersPerSecond": 20.119984
+      },
+      {
+        "Step": 20,
+        "RiderId": 4,
+        "Severity": "Brush",
+        "FrontierSeconds": 31.83631730079651,
+        "CommittedEndpointSeconds": 32.25992202758789,
+        "DelaySeconds": 0.42360472679138184,
+        "PreEndpointSpeedMetersPerSecond": 18.826172,
+        "PostEndpointSpeedMetersPerSecond": 18.779709
+      },
+      {
+        "Step": 8,
+        "RiderId": 1,
+        "Severity": "Crash",
+        "FrontierSeconds": 13.194765569204264,
+        "CommittedEndpointSeconds": 14.867661476135254,
+        "DelaySeconds": 1.6728959069309894,
+        "PreEndpointSpeedMetersPerSecond": 23.314014,
+        "PostEndpointSpeedMetersPerSecond": 0
+      },
+      {
+        "Step": 8,
+        "RiderId": 2,
+        "Severity": "Crash",
+        "FrontierSeconds": 13.194765569204264,
+        "CommittedEndpointSeconds": 14.684834480285645,
+        "DelaySeconds": 1.49006891108138,
+        "PreEndpointSpeedMetersPerSecond": 24.468987,
+        "PostEndpointSpeedMetersPerSecond": 0
+      },
+      {
+        "Step": 8,
+        "RiderId": 1,
+        "Severity": "Crash",
+        "FrontierSeconds": 13.194772190598087,
+        "CommittedEndpointSeconds": 14.867663383483887,
+        "DelaySeconds": 1.6728911928857997,
+        "PreEndpointSpeedMetersPerSecond": 23.314014,
+        "PostEndpointSpeedMetersPerSecond": 0
+      },
+      {
+        "Step": 8,
+        "RiderId": 2,
+        "Severity": "Crash",
+        "FrontierSeconds": 13.194772190598087,
+        "CommittedEndpointSeconds": 14.684834480285645,
+        "DelaySeconds": 1.4900622896875575,
+        "PreEndpointSpeedMetersPerSecond": 24.468987,
+        "PostEndpointSpeedMetersPerSecond": 0
+      },
+      {
+        "Step": 8,
+        "RiderId": 1,
+        "Severity": "Crash",
+        "FrontierSeconds": 13.194765569204264,
+        "CommittedEndpointSeconds": 14.867661476135254,
+        "DelaySeconds": 1.6728959069309894,
+        "PreEndpointSpeedMetersPerSecond": 23.314014,
+        "PostEndpointSpeedMetersPerSecond": 0
+      },
+      {
+        "Step": 8,
+        "RiderId": 2,
+        "Severity": "Crash",
+        "FrontierSeconds": 13.194765569204264,
+        "CommittedEndpointSeconds": 14.684834480285645,
+        "DelaySeconds": 1.49006891108138,
+        "PreEndpointSpeedMetersPerSecond": 24.468987,
+        "PostEndpointSpeedMetersPerSecond": 0
+      },
+      {
+        "Step": 9,
+        "RiderId": 2,
+        "Severity": "LostRhythm",
+        "FrontierSeconds": 16.203476091382527,
+        "CommittedEndpointSeconds": 16.667245864868164,
+        "DelaySeconds": 0.4637697734856374,
+        "PreEndpointSpeedMetersPerSecond": 23.160492,
+        "PostEndpointSpeedMetersPerSecond": 23.160492
+      },
+      {
+        "Step": 9,
+        "RiderId": 3,
+        "Severity": "LostRhythm",
+        "FrontierSeconds": 16.203476091382527,
+        "CommittedEndpointSeconds": 16.754301071166992,
+        "DelaySeconds": 0.5508249797844655,
+        "PreEndpointSpeedMetersPerSecond": 22.452728,
+        "PostEndpointSpeedMetersPerSecond": 22.431433
+      },
+      {
+        "Step": 9,
+        "RiderId": 2,
+        "Severity": "LostRhythm",
+        "FrontierSeconds": 16.203476091382527,
+        "CommittedEndpointSeconds": 16.667245864868164,
+        "DelaySeconds": 0.4637697734856374,
+        "PreEndpointSpeedMetersPerSecond": 23.160492,
+        "PostEndpointSpeedMetersPerSecond": 23.160492
+      },
+      {
+        "Step": 9,
+        "RiderId": 3,
+        "Severity": "LostRhythm",
+        "FrontierSeconds": 16.203476091382527,
+        "CommittedEndpointSeconds": 16.754301071166992,
+        "DelaySeconds": 0.5508249797844655,
+        "PreEndpointSpeedMetersPerSecond": 22.452728,
+        "PostEndpointSpeedMetersPerSecond": 22.431433
+      },
+      {
+        "Step": 9,
+        "RiderId": 2,
+        "Severity": "LostRhythm",
+        "FrontierSeconds": 16.203476091382527,
+        "CommittedEndpointSeconds": 16.667245864868164,
+        "DelaySeconds": 0.4637697734856374,
+        "PreEndpointSpeedMetersPerSecond": 23.160492,
+        "PostEndpointSpeedMetersPerSecond": 23.160492
+      },
+      {
+        "Step": 9,
+        "RiderId": 3,
+        "Severity": "LostRhythm",
+        "FrontierSeconds": 16.203476091382527,
+        "CommittedEndpointSeconds": 16.754301071166992,
+        "DelaySeconds": 0.5508249797844655,
+        "PreEndpointSpeedMetersPerSecond": 22.452728,
+        "PostEndpointSpeedMetersPerSecond": 22.431433
+      },
+      {
+        "Step": 27,
+        "RiderId": 1,
+        "Severity": "Crash",
+        "FrontierSeconds": 44.393504449673856,
+        "CommittedEndpointSeconds": 44.57490158081055,
+        "DelaySeconds": 0.18139713113669131,
+        "PreEndpointSpeedMetersPerSecond": 18.433855,
+        "PostEndpointSpeedMetersPerSecond": 0
+      },
+      {
+        "Step": 27,
+        "RiderId": 2,
+        "Severity": "Crash",
+        "FrontierSeconds": 44.393504449673856,
+        "CommittedEndpointSeconds": 44.54139709472656,
+        "DelaySeconds": 0.14789264505270694,
+        "PreEndpointSpeedMetersPerSecond": 22.88979,
+        "PostEndpointSpeedMetersPerSecond": 0
+      },
+      {
+        "Step": 29,
+        "RiderId": 1,
+        "Severity": "Brush",
+        "FrontierSeconds": 46.5363655090332,
+        "CommittedEndpointSeconds": 48.22881317138672,
+        "DelaySeconds": 1.6924476623535156,
+        "PreEndpointSpeedMetersPerSecond": 21.721169,
+        "PostEndpointSpeedMetersPerSecond": 21.721169
+      },
+      {
+        "Step": 29,
+        "RiderId": 3,
+        "Severity": "Brush",
+        "FrontierSeconds": 46.5363655090332,
+        "CommittedEndpointSeconds": 48.140419006347656,
+        "DelaySeconds": 1.6040534973144531,
+        "PreEndpointSpeedMetersPerSecond": 21.352648,
+        "PostEndpointSpeedMetersPerSecond": 21.352648
+      },
+      {
+        "Step": 0,
+        "RiderId": 1,
+        "Severity": "MajorSave",
+        "FrontierSeconds": 1.5544269525721575,
+        "CommittedEndpointSeconds": 3.0944278240203857,
+        "DelaySeconds": 1.5400008714482283,
+        "PreEndpointSpeedMetersPerSecond": 23.736961,
+        "PostEndpointSpeedMetersPerSecond": 23.736961
+      },
+      {
+        "Step": 0,
+        "RiderId": 2,
+        "Severity": "MajorSave",
+        "FrontierSeconds": 1.5544269525721575,
+        "CommittedEndpointSeconds": 3.0717175006866455,
+        "DelaySeconds": 1.517290548114488,
+        "PreEndpointSpeedMetersPerSecond": 23.766573,
+        "PostEndpointSpeedMetersPerSecond": 23.717918
+      },
+      {
+        "Step": 7,
+        "RiderId": 3,
+        "Severity": "Brush",
+        "FrontierSeconds": 14.435613423585892,
+        "CommittedEndpointSeconds": 15.803461074829102,
+        "DelaySeconds": 1.3678476512432098,
+        "PreEndpointSpeedMetersPerSecond": 21.588781,
+        "PostEndpointSpeedMetersPerSecond": 21.635254
+      },
+      {
+        "Step": 7,
+        "RiderId": 4,
+        "Severity": "Brush",
+        "FrontierSeconds": 14.435613423585892,
+        "CommittedEndpointSeconds": 15.880075454711914,
+        "DelaySeconds": 1.4444620311260223,
+        "PreEndpointSpeedMetersPerSecond": 21.588781,
+        "PostEndpointSpeedMetersPerSecond": 21.542198
+      },
+      {
+        "Step": 2,
+        "RiderId": 2,
+        "Severity": "Brush",
+        "FrontierSeconds": 4.698433667421341,
+        "CommittedEndpointSeconds": 6.38930082321167,
+        "DelaySeconds": 1.690867155790329,
+        "PreEndpointSpeedMetersPerSecond": 21.833292,
+        "PostEndpointSpeedMetersPerSecond": 21.833292
+      },
+      {
+        "Step": 2,
+        "RiderId": 3,
+        "Severity": "Brush",
+        "FrontierSeconds": 4.698433667421341,
+        "CommittedEndpointSeconds": 6.44023323059082,
+        "DelaySeconds": 1.7417995631694794,
+        "PreEndpointSpeedMetersPerSecond": 22.334124,
+        "PostEndpointSpeedMetersPerSecond": 22.334124
+      },
+      {
+        "Step": 3,
+        "RiderId": 1,
+        "Severity": "Brush",
+        "FrontierSeconds": 6.326289176940918,
+        "CommittedEndpointSeconds": 8.273114204406738,
+        "DelaySeconds": 1.9468250274658203,
+        "PreEndpointSpeedMetersPerSecond": 17.463938,
+        "PostEndpointSpeedMetersPerSecond": 17.463938
+      },
+      {
+        "Step": 3,
+        "RiderId": 2,
+        "Severity": "Brush",
+        "FrontierSeconds": 6.326289176940918,
+        "CommittedEndpointSeconds": 8.158252716064453,
+        "DelaySeconds": 1.8319635391235352,
+        "PreEndpointSpeedMetersPerSecond": 19.43238,
+        "PostEndpointSpeedMetersPerSecond": 19.43238
+      },
+      {
+        "Step": 20,
+        "RiderId": 2,
+        "Severity": "Crash",
+        "FrontierSeconds": 34.76237871054366,
+        "CommittedEndpointSeconds": 36.202884674072266,
+        "DelaySeconds": 1.440505963528608,
+        "PreEndpointSpeedMetersPerSecond": 19.460577,
+        "PostEndpointSpeedMetersPerSecond": 0
+      },
+      {
+        "Step": 0,
+        "RiderId": 1,
+        "Severity": "MajorSave",
+        "FrontierSeconds": 0,
+        "CommittedEndpointSeconds": 3.222980499267578,
+        "DelaySeconds": 3.222980499267578,
+        "PreEndpointSpeedMetersPerSecond": 15.798242,
+        "PostEndpointSpeedMetersPerSecond": 17.297747
+      },
+      {
+        "Step": 0,
+        "RiderId": 2,
+        "Severity": "Crash",
+        "FrontierSeconds": 0,
+        "CommittedEndpointSeconds": 2.8432576656341553,
+        "DelaySeconds": 2.8432576656341553,
+        "PreEndpointSpeedMetersPerSecond": 18.629854,
+        "PostEndpointSpeedMetersPerSecond": 0
+      },
+      {
+        "Step": 0,
+        "RiderId": 3,
+        "Severity": "Crash",
+        "FrontierSeconds": 0,
+        "CommittedEndpointSeconds": 2.563438892364502,
+        "DelaySeconds": 2.563438892364502,
+        "PreEndpointSpeedMetersPerSecond": 21.419624,
+        "PostEndpointSpeedMetersPerSecond": 0
+      },
+      {
+        "Step": 0,
+        "RiderId": 4,
+        "Severity": "MajorSave",
+        "FrontierSeconds": 0,
+        "CommittedEndpointSeconds": 2.348440647125244,
+        "DelaySeconds": 2.348440647125244,
+        "PreEndpointSpeedMetersPerSecond": 24.17722,
+        "PostEndpointSpeedMetersPerSecond": 22.677948
+      },
+      {
+        "Step": 0,
+        "RiderId": 1,
+        "Severity": "MajorSave",
+        "FrontierSeconds": 0,
+        "CommittedEndpointSeconds": 3.222980499267578,
+        "DelaySeconds": 3.222980499267578,
+        "PreEndpointSpeedMetersPerSecond": 15.798242,
+        "PostEndpointSpeedMetersPerSecond": 17.297747
+      },
+      {
+        "Step": 0,
+        "RiderId": 2,
+        "Severity": "Crash",
+        "FrontierSeconds": 0,
+        "CommittedEndpointSeconds": 2.8432576656341553,
+        "DelaySeconds": 2.8432576656341553,
+        "PreEndpointSpeedMetersPerSecond": 18.629854,
+        "PostEndpointSpeedMetersPerSecond": 0
+      },
+      {
+        "Step": 0,
+        "RiderId": 3,
+        "Severity": "Crash",
+        "FrontierSeconds": 0,
+        "CommittedEndpointSeconds": 2.563438892364502,
+        "DelaySeconds": 2.563438892364502,
+        "PreEndpointSpeedMetersPerSecond": 21.419624,
+        "PostEndpointSpeedMetersPerSecond": 0
+      },
+      {
+        "Step": 0,
+        "RiderId": 4,
+        "Severity": "MajorSave",
+        "FrontierSeconds": 0,
+        "CommittedEndpointSeconds": 2.348440647125244,
+        "DelaySeconds": 2.348440647125244,
+        "PreEndpointSpeedMetersPerSecond": 24.17722,
+        "PostEndpointSpeedMetersPerSecond": 22.677948
+      },
+      {
+        "Step": 0,
+        "RiderId": 1,
+        "Severity": "MajorSave",
+        "FrontierSeconds": 0,
+        "CommittedEndpointSeconds": 3.222980499267578,
+        "DelaySeconds": 3.222980499267578,
+        "PreEndpointSpeedMetersPerSecond": 15.798242,
+        "PostEndpointSpeedMetersPerSecond": 17.297747
+      },
+      {
+        "Step": 0,
+        "RiderId": 2,
+        "Severity": "Crash",
+        "FrontierSeconds": 0,
+        "CommittedEndpointSeconds": 2.8432576656341553,
+        "DelaySeconds": 2.8432576656341553,
+        "PreEndpointSpeedMetersPerSecond": 18.629854,
+        "PostEndpointSpeedMetersPerSecond": 0
+      },
+      {
+        "Step": 0,
+        "RiderId": 3,
+        "Severity": "Crash",
+        "FrontierSeconds": 0,
+        "CommittedEndpointSeconds": 2.563438892364502,
+        "DelaySeconds": 2.563438892364502,
+        "PreEndpointSpeedMetersPerSecond": 21.419624,
+        "PostEndpointSpeedMetersPerSecond": 0
+      },
+      {
+        "Step": 0,
+        "RiderId": 4,
+        "Severity": "MajorSave",
+        "FrontierSeconds": 0,
+        "CommittedEndpointSeconds": 2.348440647125244,
+        "DelaySeconds": 2.348440647125244,
+        "PreEndpointSpeedMetersPerSecond": 24.17722,
+        "PostEndpointSpeedMetersPerSecond": 22.677948
+      }
+    ],
+    "RecoveryDurationSeconds": {
+      "N": 28,
+      "P10": 1.2944183349609375,
+      "P25": 1.3802545070648193,
+      "P50": 1.459259033203125,
+      "P75": 1.610727071762085,
+      "P90": 1.7803543090820313
+    },
+    "Environment": {
+      "OS": "Microsoft Windows 10.0.19045",
+      "Runtime": ".NET 8.0.30",
+      "Architecture": "X64",
+      "ProcessorCount": 16,
+      "DecisionModelSeed": 1234,
+      "Frequency": 10000000
+    },
+    "WallSeconds": 1421.622699
+  },
+  "ContactReruns": {
+    "Heats": 22,
+    "ReverseChecks": 22,
+    "FinalHashesMatchBaseline": 22,
+    "PairParticipantRecords": 64,
+    "HistoricalParticipants": [
+      {
+        "Id": "control",
+        "Seed": 7,
+        "Contact": {
+          "Step": 8,
+          "RiderId": 1,
+          "OtherRiderId": 2,
+          "FirstTouchSeconds": 13.194765569204264,
+          "FrontierSeconds": 13.194765569204264,
+          "CurrentSegmentStartSeconds": 13.278688,
+          "CurrentEndpointSeconds": 14.867661,
+          "AppliedAtSeconds": 14.867661,
+          "ApplicationDelaySeconds": 1.6728959069309894,
+          "HistoricalParticipant": true,
+          "EventSegmentIndex": 7,
+          "EventSegmentType": "TurnExit",
+          "EventSample": {
+            "LocalTimeSeconds": 1.2446265,
+            "CanonicalProgress": 7.935964604658225,
+            "SegmentProgress": 0.9359646,
+            "TravelledMeters": 24.413668,
+            "LateralPosition": 0.56303465,
+            "PhysicalOffsetMeters": 1.689104,
+            "SpeedMetersPerSecond": 20.556026,
+            "RadiusMeters": 25.689104,
+            "CurvaturePerMeter": 0.03892701,
+            "PhysicalOffsetFromInnerEdgeMeters": 2.689104
+          },
+          "EventPose": {
+            "RiderId": 1,
+            "FrameId": "track-metric:13626B39E9A420759E3925D52CE563D74EB025DBFF29240FBE29F7ED12115278",
+            "Position": {
+              "X": -26.72135723839274,
+              "Y": -1.6313725903515675,
+              "Length": 26.771109599535738
+            },
+            "Attitude": {
+              "CommonTimeSeconds": 13.194765569204264,
+              "TravelHeadingRadians": -0.1331310153736719,
+              "BikeHeadingRadians": -0.1331310153736719,
+              "RelativeSlideAngleRadians": 0
+            },
+            "Dimensions": {
+              "OverallMechanicalLengthMeters": 2.1,
+              "ChassisBodyWidthMeters": 0.3,
+              "HandlebarWidthMeters": 0.8,
+              "HandlebarLongitudinalOffsetMeters": 0.65,
+              "HandlebarTubeDiameterMeters": 0.04,
+              "BoundingRadiusMeters": 1.05
+            },
+            "Source": {
+              "LapIndex": 0,
+              "SegmentIndex": 7,
+              "SegmentId": 7,
+              "SegmentType": "TurnExit",
+              "CornerId": 2
+            },
+            "ReferenceTangentHeadingRadians": -0.06705753507483347,
+            "CommonTimeSeconds": 13.194765569204264,
+            "Footprint": {
+              "Chassis": {
+                "Start": {
+                  "X": -27.613393271250974,
+                  "Y": -1.5119083024553766,
+                  "Length": 27.654752840475762
+                },
+                "End": {
+                  "X": -25.82932120553451,
+                  "Y": -1.7508368782477584,
+                  "Length": 25.8885933127489
+                },
+                "RadiusMeters": 0.15
+              },
+              "Handlebar": {
+                "Start": {
+                  "X": -26.127549469551298,
+                  "Y": -2.0942897899278483,
+                  "Length": 26.21135042320495
+                },
+                "End": {
+                  "X": -26.02666851532785,
+                  "Y": -1.341014917736451,
+                  "Length": 26.0611932769079
+                },
+                "RadiusMeters": 0.02
+              }
+            }
+          },
+          "DetectorVelocityMetersPerSecond": {
+            "X": 20.372616639841073,
+            "Y": -2.7283652787683894,
+            "Length": 20.554500379438032
+          },
+          "EventSegmentStartSeconds": 11.950139045715332,
+          "EventSegmentEndSeconds": 13.278688430786133,
+          "RemainingTimeSeconds": 0.08392286158186835,
+          "RemainingDistanceMeters": 1.7299137115478516,
+          "Pair": {
+            "RiderA": 1,
+            "RiderB": 2,
+            "EpisodeId": 3,
+            "OriginEpisodeIds": [
+              3
+            ],
+            "FirstTouchCommonTimeSeconds": 13.194765569204264,
+            "Status": "Analyzed",
+            "Reason": "Verified first-touch shadow reference",
+            "LegacyFallbackAuthorized": false,
+            "LegacyResults": [
+              {
+                "RiderId": 1,
+                "Outcome": "NotAuthorized"
+              },
+              {
+                "RiderId": 2,
+                "Outcome": "NotAuthorized"
+              }
+            ],
+            "Manifold": {
+              "RiderA": 1,
+              "RiderB": 2,
+              "ComponentA": "Chassis",
+              "ComponentB": "Chassis",
+              "ContactPointA": {
+                "X": -25.782621797877272,
+                "Y": -1.893382187972292,
+                "Length": 25.85204987775838
+              },
+              "ContactPointB": {
+                "X": -25.782621498044676,
+                "Y": -1.8933831031815505,
+                "Length": 25.85204964576018
+              },
+              "MidContactPoint": {
+                "X": -25.782621647960973,
+                "Y": -1.8933826455769212,
+                "Length": 25.85204976175927
+              },
+              "NormalAtoB": {
+                "X": 0.3113293843815756,
+                "Y": -0.9503020648302251,
+                "Length": 1
+              },
+              "LeverArmA": {
+                "X": 0.9387354405154689,
+                "Y": -0.2620095976207246,
+                "Length": 0.9746144142814354
+              },
+              "LeverArmB": {
+                "X": -0.9456290782723187,
+                "Y": 0.09866539076537695,
+                "Length": 0.9507624377356519
+              },
+              "SignedSeparationMeters": 9.63071945414562e-07,
+              "NormalSource": "ClosestComponentAxes"
+            },
+            "Impulse": {
+              "MassAKg": 147,
+              "MassBKg": 147,
+              "ReducedMassKg": 73.5,
+              "RelativeVelocityMetersPerSecond": {
+                "X": 1.892873670994021,
+                "Y": 3.815222173542849,
+                "Length": 4.25897769045993
+              },
+              "NormalClosingSpeedMetersPerSecond": 3.036306314601167,
+              "ReferenceClosingSpeedMetersPerSecond": 3.036306314601167,
+              "RotationalClosureEquivalentMetersPerSecond": 0,
+              "RotationOnsetIntervalSeconds": 0.0073208823146160285,
+              "RotationOnsetAvailable": true,
+              "ImpulseMagnitudeNewtonSeconds": 223.1685141231858,
+              "ImpulseOnANewtonSeconds": {
+                "X": -69.47891611532239,
+                "Y": 212.0774997763567,
+                "Length": 223.16851412318582
+              },
+              "ImpulseOnBNewtonSeconds": {
+                "X": 69.47891611532239,
+                "Y": -212.0774997763567,
+                "Length": 223.16851412318582
+              },
+              "DeltaVAMetersPerSecond": {
+                "X": -0.472645687859336,
+                "Y": 1.4427040801112698,
+                "Length": 1.5181531573005835
+              },
+              "DeltaVBMetersPerSecond": {
+                "X": 0.472645687859336,
+                "Y": -1.4427040801112698,
+                "Length": 1.5181531573005835
+              },
+              "PreNormalKineticEnergyJoules": 8426.01439127528,
+              "PostNormalKineticEnergyJoules": 8087.210406949086,
+              "PreNormalMomentumKgMetersPerSecond": 2180.6603860496166,
+              "PostNormalMomentumKgMetersPerSecond": 2180.6603860496166
+            },
+            "DemandA": {
+              "RiderId": 1,
+              "ForwardDeltaVelocityMetersPerSecond": -0.6599651110233502,
+              "LateralDeltaVelocityMetersPerSecond": 1.3671997152039153,
+              "NormalizedYawLever": 0.7719151816398442,
+              "YawEquivalentMetersPerSecond": 1.171885470174783,
+              "ForwardDemand": 0.6599651110233502,
+              "LateralDemand": 2.7343994304078305,
+              "YawDemand": 1.7578282052621743,
+              "RotationDemand": 0,
+              "PairDemandSquared": 11.002454191997968,
+              "PairDemand": 3.3169947530856856
+            },
+            "DemandB": {
+              "RiderId": 2,
+              "ForwardDeltaVelocityMetersPerSecond": 0.4017438826530043,
+              "LateralDeltaVelocityMetersPerSecond": -1.4640323977879108,
+              "NormalizedYawLever": 0.8265865050275566,
+              "YawEquivalentMetersPerSecond": 1.2548849123896397,
+              "ForwardDemand": 0.4017438826530043,
+              "LateralDemand": 2.9280647955758217,
+              "YawDemand": 1.8823273685844595,
+              "RotationDemand": 0,
+              "PairDemandSquared": 12.278117916861685,
+              "PairDemand": 3.5040145429009972
+            },
+            "DeferredByEarlierContact": false
+          },
+          "Consequence": {
+            "RiderId": 1,
+            "ContactRiderIds": [
+              1,
+              2
+            ],
+            "SourceEpisodeIds": [
+              3
+            ],
+            "OriginEpisodeIds": [
+              3
+            ],
+            "FrontierTimeSeconds": 13.194765569204264,
+            "SeverityRatio": 3.4087117499024493,
+            "Severity": "Crash",
+            "NetDeltaVelocityMetersPerSecond": {
+              "X": -0.472645687859336,
+              "Y": 1.4427040801112698,
+              "Length": 1.5181531573005835
+            },
+            "DeltaForwardMetersPerSecond": -0.6599651110233502,
+            "PreContactSpeed": 23.314014,
+            "PostContactSpeed": 0,
+            "ControlLoss01": 0.8,
+            "Recovery": null
+          },
+          "NextRecoveryDurationSeconds": null
+        }
+      },
+      {
+        "Id": "control",
+        "Seed": 19,
+        "Contact": {
+          "Step": 8,
+          "RiderId": 1,
+          "OtherRiderId": 2,
+          "FirstTouchSeconds": 13.194772190598087,
+          "FrontierSeconds": 13.194772190598087,
+          "CurrentSegmentStartSeconds": 13.27869,
+          "CurrentEndpointSeconds": 14.867663,
+          "AppliedAtSeconds": 14.867663,
+          "ApplicationDelaySeconds": 1.6728911928857997,
+          "HistoricalParticipant": true,
+          "EventSegmentIndex": 7,
+          "EventSegmentType": "TurnExit",
+          "EventSample": {
+            "LocalTimeSeconds": 1.2446313,
+            "CanonicalProgress": 7.935968240045963,
+            "SegmentProgress": 0.9359682,
+            "TravelledMeters": 24.413767,
+            "LateralPosition": 0.5630368,
+            "PhysicalOffsetMeters": 1.6891104,
+            "SpeedMetersPerSecond": 20.556032,
+            "RadiusMeters": 25.68911,
+            "CurvaturePerMeter": 0.038927,
+            "PhysicalOffsetFromInnerEdgeMeters": 2.6891103
+          },
+          "EventPose": {
+            "RiderId": 1,
+            "FrameId": "track-metric:13626B39E9A420759E3925D52CE563D74EB025DBFF29240FBE29F7ED12115278",
+            "Position": {
+              "X": -26.72126120092105,
+              "Y": -1.631385451808871,
+              "Length": 26.77101452429889
+            },
+            "Attitude": {
+              "CommonTimeSeconds": 13.194772190598087,
+              "TravelHeadingRadians": -0.1331272353706476,
+              "BikeHeadingRadians": -0.1331272353706476,
+              "RelativeSlideAngleRadians": 0
+            },
+            "Dimensions": {
+              "OverallMechanicalLengthMeters": 2.1,
+              "ChassisBodyWidthMeters": 0.3,
+              "HandlebarWidthMeters": 0.8,
+              "HandlebarLongitudinalOffsetMeters": 0.65,
+              "HandlebarTubeDiameterMeters": 0.04,
+              "BoundingRadiusMeters": 1.05
+            },
+            "Source": {
+              "LapIndex": 0,
+              "SegmentIndex": 7,
+              "SegmentId": 7,
+              "SegmentType": "TurnExit",
+              "CornerId": 2
+            },
+            "ReferenceTangentHeadingRadians": -0.06705377147865832,
+            "CommonTimeSeconds": 13.194772190598087,
+            "Footprint": {
+              "Chassis": {
+                "Start": {
+                  "X": -27.61329768534828,
+                  "Y": -1.5119245358124356,
+                  "Length": 27.654658285027722
+                },
+                "End": {
+                  "X": -25.82922471649382,
+                  "Y": -1.7508463678053066,
+                  "Length": 25.888497686401042
+                },
+                "RadiusMeters": 0.15
+              },
+              "Handlebar": {
+                "Start": {
+                  "X": -26.127451682255433,
+                  "Y": -2.094300406786683,
+                  "Length": 26.211253796841905
+                },
+                "End": {
+                  "X": -26.026573575413998,
+                  "Y": -1.341025153270355,
+                  "Length": 26.061098989454415
+                },
+                "RadiusMeters": 0.02
+              }
+            }
+          },
+          "DetectorVelocityMetersPerSecond": {
+            "X": 20.37263200433311,
+            "Y": -2.7282889466775684,
+            "Length": 20.554505475942268
+          },
+          "EventSegmentStartSeconds": 11.950140953063965,
+          "EventSegmentEndSeconds": 13.278690338134766,
+          "RemainingTimeSeconds": 0.08391814753667859,
+          "RemainingDistanceMeters": 1.7298145294189453,
+          "Pair": {
+            "RiderA": 1,
+            "RiderB": 2,
+            "EpisodeId": 2,
+            "OriginEpisodeIds": [
+              2,
+              3
+            ],
+            "FirstTouchCommonTimeSeconds": 13.194772190598087,
+            "Status": "Analyzed",
+            "Reason": "Verified first-touch shadow reference",
+            "LegacyFallbackAuthorized": false,
+            "LegacyResults": [
+              {
+                "RiderId": 1,
+                "Outcome": "NotAuthorized"
+              },
+              {
+                "RiderId": 2,
+                "Outcome": "NotAuthorized"
+              }
+            ],
+            "Manifold": {
+              "RiderA": 1,
+              "RiderB": 2,
+              "ComponentA": "Chassis",
+              "ComponentB": "Chassis",
+              "ContactPointA": {
+                "X": -25.78249984023303,
+                "Y": -1.8933833312162545,
+                "Length": 25.85192833137489
+              },
+              "ContactPointB": {
+                "X": -25.782499538068233,
+                "Y": -1.8933842529876077,
+                "Length": 25.851928097531722
+              },
+              "MidContactPoint": {
+                "X": -25.782499689150633,
+                "Y": -1.8933837921019312,
+                "Length": 25.851928214453306
+              },
+              "NormalAtoB": {
+                "X": 0.31149917507193187,
+                "Y": -0.9502464227396523,
+                "Length": 1
+              },
+              "LeverArmA": {
+                "X": 0.9387613606880194,
+                "Y": -0.2619978794073834,
+                "Length": 0.9746362301570712
+              },
+              "LeverArmB": {
+                "X": -0.9456545468758719,
+                "Y": 0.09865704445179091,
+                "Length": 0.9507869027531738
+              },
+              "SignedSeparationMeters": 9.700340157237086e-07,
+              "NormalSource": "ClosestComponentAxes"
+            },
+            "Impulse": {
+              "MassAKg": 147,
+              "MassBKg": 147,
+              "ReducedMassKg": 73.5,
+              "RelativeVelocityMetersPerSecond": {
+                "X": 1.892858306501985,
+                "Y": 3.815145841452028,
+                "Length": 4.258902483039764
+              },
+              "NormalClosingSpeedMetersPerSecond": 3.035704887066428,
+              "ReferenceClosingSpeedMetersPerSecond": 3.035704887066428,
+              "RotationalClosureEquivalentMetersPerSecond": 0,
+              "RotationOnsetIntervalSeconds": 0.0073275037084385986,
+              "RotationOnsetAvailable": true,
+              "ImpulseMagnitudeNewtonSeconds": 223.12430919938245,
+              "ImpulseOnANewtonSeconds": {
+                "X": -69.5030382541023,
+                "Y": 212.02307664296927,
+                "Length": 223.12430919938245
+              },
+              "ImpulseOnBNewtonSeconds": {
+                "X": 69.5030382541023,
+                "Y": -212.02307664296927,
+                "Length": 223.12430919938245
+              },
+              "DeltaVAMetersPerSecond": {
+                "X": -0.4728097840415122,
+                "Y": 1.4423338547140767,
+                "Length": 1.5178524435332141
+              },
+              "DeltaVBMetersPerSecond": {
+                "X": 0.4728097840415122,
+                "Y": -1.4423338547140767,
+                "Length": 1.5178524435332141
+              },
+              "PreNormalKineticEnergyJoules": 8433.602075730876,
+              "PostNormalKineticEnergyJoules": 8094.932297800933,
+              "PreNormalMomentumKgMetersPerSecond": 2181.701214902478,
+              "PostNormalMomentumKgMetersPerSecond": 2181.701214902478
+            },
+            "DemandA": {
+              "RiderId": 1,
+              "ForwardDeltaVelocityMetersPerSecond": -0.6600734455733354,
+              "LateralDeltaVelocityMetersPerSecond": 1.366813479150939,
+              "NormalizedYawLever": 0.7718500014228604,
+              "YawEquivalentMetersPerSecond": 1.1715544107008036,
+              "ForwardDemand": 0.6600734455733354,
+              "LateralDemand": 2.733626958301878,
+              "YawDemand": 1.7573316160512054,
+              "RotationDemand": 0,
+              "PairDemandSquared": 10.996627709478974,
+              "PairDemand": 3.31611635946011
+            },
+            "DemandB": {
+              "RiderId": 2,
+              "ForwardDeltaVelocityMetersPerSecond": 0.4019258341945803,
+              "LateralDeltaVelocityMetersPerSecond": -1.4636706132688255,
+              "NormalizedYawLever": 0.8265459641471584,
+              "YawEquivalentMetersPerSecond": 1.2545748113732809,
+              "ForwardDemand": 0.4019258341945803,
+              "LateralDemand": 2.927341226537651,
+              "YawDemand": 1.8818622170599213,
+              "RotationDemand": 0,
+              "PairDemandSquared": 12.27227643677765,
+              "PairDemand": 3.503180902662272
+            },
+            "DeferredByEarlierContact": false
+          },
+          "Consequence": {
+            "RiderId": 1,
+            "ContactRiderIds": [
+              1,
+              2
+            ],
+            "SourceEpisodeIds": [
+              2
+            ],
+            "OriginEpisodeIds": [
+              2,
+              3
+            ],
+            "FrontierTimeSeconds": 13.194772190598087,
+            "SeverityRatio": 3.407809105264647,
+            "Severity": "Crash",
+            "NetDeltaVelocityMetersPerSecond": {
+              "X": -0.4728097840415122,
+              "Y": 1.4423338547140767,
+              "Length": 1.5178524435332141
+            },
+            "DeltaForwardMetersPerSecond": -0.6600734455733354,
+            "PreContactSpeed": 23.314014,
+            "PostContactSpeed": 0,
+            "ControlLoss01": 0.8,
+            "Recovery": null
+          },
+          "NextRecoveryDurationSeconds": null
+        }
+      },
+      {
+        "Id": "control",
+        "Seed": 83,
+        "Contact": {
+          "Step": 8,
+          "RiderId": 1,
+          "OtherRiderId": 2,
+          "FirstTouchSeconds": 13.194765569204264,
+          "FrontierSeconds": 13.194765569204264,
+          "CurrentSegmentStartSeconds": 13.278688,
+          "CurrentEndpointSeconds": 14.867661,
+          "AppliedAtSeconds": 14.867661,
+          "ApplicationDelaySeconds": 1.6728959069309894,
+          "HistoricalParticipant": true,
+          "EventSegmentIndex": 7,
+          "EventSegmentType": "TurnExit",
+          "EventSample": {
+            "LocalTimeSeconds": 1.2446265,
+            "CanonicalProgress": 7.935964604658225,
+            "SegmentProgress": 0.9359646,
+            "TravelledMeters": 24.413668,
+            "LateralPosition": 0.56303465,
+            "PhysicalOffsetMeters": 1.689104,
+            "SpeedMetersPerSecond": 20.556026,
+            "RadiusMeters": 25.689104,
+            "CurvaturePerMeter": 0.03892701,
+            "PhysicalOffsetFromInnerEdgeMeters": 2.689104
+          },
+          "EventPose": {
+            "RiderId": 1,
+            "FrameId": "track-metric:13626B39E9A420759E3925D52CE563D74EB025DBFF29240FBE29F7ED12115278",
+            "Position": {
+              "X": -26.72135723839274,
+              "Y": -1.6313725903515675,
+              "Length": 26.771109599535738
+            },
+            "Attitude": {
+              "CommonTimeSeconds": 13.194765569204264,
+              "TravelHeadingRadians": -0.1331310153736719,
+              "BikeHeadingRadians": -0.1331310153736719,
+              "RelativeSlideAngleRadians": 0
+            },
+            "Dimensions": {
+              "OverallMechanicalLengthMeters": 2.1,
+              "ChassisBodyWidthMeters": 0.3,
+              "HandlebarWidthMeters": 0.8,
+              "HandlebarLongitudinalOffsetMeters": 0.65,
+              "HandlebarTubeDiameterMeters": 0.04,
+              "BoundingRadiusMeters": 1.05
+            },
+            "Source": {
+              "LapIndex": 0,
+              "SegmentIndex": 7,
+              "SegmentId": 7,
+              "SegmentType": "TurnExit",
+              "CornerId": 2
+            },
+            "ReferenceTangentHeadingRadians": -0.06705753507483347,
+            "CommonTimeSeconds": 13.194765569204264,
+            "Footprint": {
+              "Chassis": {
+                "Start": {
+                  "X": -27.613393271250974,
+                  "Y": -1.5119083024553766,
+                  "Length": 27.654752840475762
+                },
+                "End": {
+                  "X": -25.82932120553451,
+                  "Y": -1.7508368782477584,
+                  "Length": 25.8885933127489
+                },
+                "RadiusMeters": 0.15
+              },
+              "Handlebar": {
+                "Start": {
+                  "X": -26.127549469551298,
+                  "Y": -2.0942897899278483,
+                  "Length": 26.21135042320495
+                },
+                "End": {
+                  "X": -26.02666851532785,
+                  "Y": -1.341014917736451,
+                  "Length": 26.0611932769079
+                },
+                "RadiusMeters": 0.02
+              }
+            }
+          },
+          "DetectorVelocityMetersPerSecond": {
+            "X": 20.372616639841073,
+            "Y": -2.7283652787683894,
+            "Length": 20.554500379438032
+          },
+          "EventSegmentStartSeconds": 11.950139045715332,
+          "EventSegmentEndSeconds": 13.278688430786133,
+          "RemainingTimeSeconds": 0.08392286158186835,
+          "RemainingDistanceMeters": 1.7299137115478516,
+          "Pair": {
+            "RiderA": 1,
+            "RiderB": 2,
+            "EpisodeId": 2,
+            "OriginEpisodeIds": [
+              2
+            ],
+            "FirstTouchCommonTimeSeconds": 13.194765569204264,
+            "Status": "Analyzed",
+            "Reason": "Verified first-touch shadow reference",
+            "LegacyFallbackAuthorized": false,
+            "LegacyResults": [
+              {
+                "RiderId": 1,
+                "Outcome": "NotAuthorized"
+              },
+              {
+                "RiderId": 2,
+                "Outcome": "NotAuthorized"
+              }
+            ],
+            "Manifold": {
+              "RiderA": 1,
+              "RiderB": 2,
+              "ComponentA": "Chassis",
+              "ComponentB": "Chassis",
+              "ContactPointA": {
+                "X": -25.782621797877272,
+                "Y": -1.893382187972292,
+                "Length": 25.85204987775838
+              },
+              "ContactPointB": {
+                "X": -25.782621498044676,
+                "Y": -1.8933831031815505,
+                "Length": 25.85204964576018
+              },
+              "MidContactPoint": {
+                "X": -25.782621647960973,
+                "Y": -1.8933826455769212,
+                "Length": 25.85204976175927
+              },
+              "NormalAtoB": {
+                "X": 0.3113293843815756,
+                "Y": -0.9503020648302251,
+                "Length": 1
+              },
+              "LeverArmA": {
+                "X": 0.9387354405154689,
+                "Y": -0.2620095976207246,
+                "Length": 0.9746144142814354
+              },
+              "LeverArmB": {
+                "X": -0.9456290782723187,
+                "Y": 0.09866539076537695,
+                "Length": 0.9507624377356519
+              },
+              "SignedSeparationMeters": 9.63071945414562e-07,
+              "NormalSource": "ClosestComponentAxes"
+            },
+            "Impulse": {
+              "MassAKg": 147,
+              "MassBKg": 147,
+              "ReducedMassKg": 73.5,
+              "RelativeVelocityMetersPerSecond": {
+                "X": 1.892873670994021,
+                "Y": 3.815222173542849,
+                "Length": 4.25897769045993
+              },
+              "NormalClosingSpeedMetersPerSecond": 3.036306314601167,
+              "ReferenceClosingSpeedMetersPerSecond": 3.036306314601167,
+              "RotationalClosureEquivalentMetersPerSecond": 0,
+              "RotationOnsetIntervalSeconds": 0.0073208823146160285,
+              "RotationOnsetAvailable": true,
+              "ImpulseMagnitudeNewtonSeconds": 223.1685141231858,
+              "ImpulseOnANewtonSeconds": {
+                "X": -69.47891611532239,
+                "Y": 212.0774997763567,
+                "Length": 223.16851412318582
+              },
+              "ImpulseOnBNewtonSeconds": {
+                "X": 69.47891611532239,
+                "Y": -212.0774997763567,
+                "Length": 223.16851412318582
+              },
+              "DeltaVAMetersPerSecond": {
+                "X": -0.472645687859336,
+                "Y": 1.4427040801112698,
+                "Length": 1.5181531573005835
+              },
+              "DeltaVBMetersPerSecond": {
+                "X": 0.472645687859336,
+                "Y": -1.4427040801112698,
+                "Length": 1.5181531573005835
+              },
+              "PreNormalKineticEnergyJoules": 8426.01439127528,
+              "PostNormalKineticEnergyJoules": 8087.210406949086,
+              "PreNormalMomentumKgMetersPerSecond": 2180.6603860496166,
+              "PostNormalMomentumKgMetersPerSecond": 2180.6603860496166
+            },
+            "DemandA": {
+              "RiderId": 1,
+              "ForwardDeltaVelocityMetersPerSecond": -0.6599651110233502,
+              "LateralDeltaVelocityMetersPerSecond": 1.3671997152039153,
+              "NormalizedYawLever": 0.7719151816398442,
+              "YawEquivalentMetersPerSecond": 1.171885470174783,
+              "ForwardDemand": 0.6599651110233502,
+              "LateralDemand": 2.7343994304078305,
+              "YawDemand": 1.7578282052621743,
+              "RotationDemand": 0,
+              "PairDemandSquared": 11.002454191997968,
+              "PairDemand": 3.3169947530856856
+            },
+            "DemandB": {
+              "RiderId": 2,
+              "ForwardDeltaVelocityMetersPerSecond": 0.4017438826530043,
+              "LateralDeltaVelocityMetersPerSecond": -1.4640323977879108,
+              "NormalizedYawLever": 0.8265865050275566,
+              "YawEquivalentMetersPerSecond": 1.2548849123896397,
+              "ForwardDemand": 0.4017438826530043,
+              "LateralDemand": 2.9280647955758217,
+              "YawDemand": 1.8823273685844595,
+              "RotationDemand": 0,
+              "PairDemandSquared": 12.278117916861685,
+              "PairDemand": 3.5040145429009972
+            },
+            "DeferredByEarlierContact": false
+          },
+          "Consequence": {
+            "RiderId": 1,
+            "ContactRiderIds": [
+              1,
+              2
+            ],
+            "SourceEpisodeIds": [
+              2
+            ],
+            "OriginEpisodeIds": [
+              2
+            ],
+            "FrontierTimeSeconds": 13.194765569204264,
+            "SeverityRatio": 3.4087117499024493,
+            "Severity": "Crash",
+            "NetDeltaVelocityMetersPerSecond": {
+              "X": -0.472645687859336,
+              "Y": 1.4427040801112698,
+              "Length": 1.5181531573005835
+            },
+            "DeltaForwardMetersPerSecond": -0.6599651110233502,
+            "PreContactSpeed": 23.314014,
+            "PostContactSpeed": 0,
+            "ControlLoss01": 0.8,
+            "Recovery": null
+          },
+          "NextRecoveryDurationSeconds": null
+        }
+      },
+      {
+        "Id": "rain-motoarena",
+        "Seed": 7,
+        "Contact": {
+          "Step": 29,
+          "RiderId": 1,
+          "OtherRiderId": 3,
+          "FirstTouchSeconds": 46.5363655090332,
+          "FrontierSeconds": 46.5363655090332,
+          "CurrentSegmentStartSeconds": 46.605225,
+          "CurrentEndpointSeconds": 48.228813,
+          "AppliedAtSeconds": 48.228813,
+          "ApplicationDelaySeconds": 1.6924476623535156,
+          "HistoricalParticipant": true,
+          "EventSegmentIndex": 1,
+          "EventSegmentType": "TurnEntry",
+          "EventSample": {
+            "LocalTimeSeconds": 1.3474998,
+            "CanonicalProgress": 28.954527279788433,
+            "SegmentProgress": 0.95452726,
+            "TravelledMeters": 34.6354,
+            "LateralPosition": 1,
+            "PhysicalOffsetMeters": 3.65,
+            "SpeedMetersPerSecond": 24.039816,
+            "RadiusMeters": 34.65,
+            "CurvaturePerMeter": 0.028860027,
+            "PhysicalOffsetFromInnerEdgeMeters": 4.65
+          },
+          "EventPose": {
+            "RiderId": 1,
+            "FrameId": "track-metric:01AA1CC2761B8B2FC9CAE0D6FFCDF24F039F9223A232E9C5D77A044F58DBFC82",
+            "Position": {
+              "X": 64.14907896778786,
+              "Y": 12.266241649401195,
+              "Length": 65.31129317826273
+            },
+            "Attitude": {
+              "CommonTimeSeconds": 46.5363655090332,
+              "TravelHeadingRadians": 0.9995786577606045,
+              "BikeHeadingRadians": 1.5067511317603168,
+              "RelativeSlideAngleRadians": 0.5071724739997123
+            },
+            "Dimensions": {
+              "OverallMechanicalLengthMeters": 2.1,
+              "ChassisBodyWidthMeters": 0.3,
+              "HandlebarWidthMeters": 0.8,
+              "HandlebarLongitudinalOffsetMeters": 0.65,
+              "HandlebarTubeDiameterMeters": 0.04,
+              "BoundingRadiusMeters": 1.05
+            },
+            "Source": {
+              "LapIndex": 3,
+              "SegmentIndex": 1,
+              "SegmentId": 1,
+              "SegmentType": "TurnEntry",
+              "CornerId": 1
+            },
+            "ReferenceTangentHeadingRadians": 0.9995786577606046,
+            "CommonTimeSeconds": 46.5363655090332,
+            "Footprint": {
+              "Chassis": {
+                "Start": {
+                  "X": 64.09147768913832,
+                  "Y": 11.368086822715986,
+                  "Length": 65.09186516290744
+                },
+                "End": {
+                  "X": 64.2066802464374,
+                  "Y": 13.164396476086404,
+                  "Length": 65.54234602795243
+                },
+                "RadiusMeters": 0.15
+              },
+              "Handlebar": {
+                "Start": {
+                  "X": 64.56990081807962,
+                  "Y": 12.89058848435515,
+                  "Length": 65.84405336193716
+                },
+                "End": {
+                  "X": 63.81145896443433,
+                  "Y": 12.939229564103654,
+                  "Length": 65.11010641123436
+                },
+                "RadiusMeters": 0.02
+              }
+            }
+          },
+          "DetectorVelocityMetersPerSecond": {
+            "X": 13.004752238282432,
+            "Y": 20.234943936815203,
+            "Length": 24.05361795874305
+          },
+          "EventSegmentStartSeconds": 45.188865661621094,
+          "EventSegmentEndSeconds": 46.605224609375,
+          "RemainingTimeSeconds": 0.06885910034179688,
+          "RemainingDistanceMeters": 1.6499977111816406,
+          "Pair": {
+            "RiderA": 1,
+            "RiderB": 3,
+            "EpisodeId": 8,
+            "OriginEpisodeIds": [
+              8
+            ],
+            "FirstTouchCommonTimeSeconds": 46.5363655090332,
+            "Status": "Analyzed",
+            "Reason": "Verified first-touch shadow reference",
+            "LegacyFallbackAuthorized": false,
+            "LegacyResults": [
+              {
+                "RiderId": 1,
+                "Outcome": "NotAuthorized"
+              },
+              {
+                "RiderId": 3,
+                "Outcome": "NotAuthorized"
+              }
+            ],
+            "Manifold": {
+              "RiderA": 1,
+              "RiderB": 3,
+              "ComponentA": "Chassis",
+              "ComponentB": "Chassis",
+              "ContactPointA": {
+                "X": 64.09880783102169,
+                "Y": 13.268624792739699,
+                "Length": 65.45772352632464
+              },
+              "ContactPointB": {
+                "X": 64.13273289954952,
+                "Y": 13.235845766040633,
+                "Length": 65.48431142118987
+              },
+              "MidContactPoint": {
+                "X": 64.11577036528561,
+                "Y": 13.252235279390167,
+                "Length": 65.47101457465243
+              },
+              "NormalAtoB": {
+                "X": -0.7191494361047659,
+                "Y": 0.694855444355297,
+                "Length": 1
+              },
+              "LeverArmA": {
+                "X": -0.05027113676617034,
+                "Y": 1.0023831433385038,
+                "Length": 1.003642941110504
+              },
+              "LeverArmB": {
+                "X": 0.10367073833579354,
+                "Y": -1.0042185087719169,
+                "Length": 1.009555563278803
+              },
+              "SignedSeparationMeters": -0.04717387906412479,
+              "NormalSource": "ClosestComponentAxes"
+            },
+            "Impulse": {
+              "MassAKg": 147,
+              "MassBKg": 147,
+              "ReducedMassKg": 73.5,
+              "RelativeVelocityMetersPerSecond": {
+                "X": -1.6507487636883287,
+                "Y": -0.569231726039849,
+                "Length": 1.7461375199991698
+              },
+              "NormalClosingSpeedMetersPerSecond": 0,
+              "ReferenceClosingSpeedMetersPerSecond": 0,
+              "RotationalClosureEquivalentMetersPerSecond": 0,
+              "RotationOnsetIntervalSeconds": 0,
+              "RotationOnsetAvailable": false,
+              "ImpulseMagnitudeNewtonSeconds": 0,
+              "ImpulseOnANewtonSeconds": {
+                "X": 0,
+                "Y": 0,
+                "Length": 0
+              },
+              "ImpulseOnBNewtonSeconds": {
+                "X": 0,
+                "Y": 0,
+                "Length": 0
+              },
+              "DeltaVAMetersPerSecond": {
+                "X": 0,
+                "Y": 0,
+                "Length": 0
+              },
+              "DeltaVBMetersPerSecond": {
+                "X": 0,
+                "Y": 0,
+                "Length": 0
+              },
+              "PreNormalKineticEnergyJoules": 3852.200632637473,
+              "PostNormalKineticEnergyJoules": 3852.200632637473,
+              "PreNormalMomentumKgMetersPerSecond": 1500.5176001888376,
+              "PostNormalMomentumKgMetersPerSecond": 1500.5176001888376
+            },
+            "DemandA": {
+              "RiderId": 1,
+              "ForwardDeltaVelocityMetersPerSecond": 0,
+              "LateralDeltaVelocityMetersPerSecond": 0,
+              "NormalizedYawLever": 0.6532686659208614,
+              "YawEquivalentMetersPerSecond": 0,
+              "ForwardDemand": 0,
+              "LateralDemand": 0,
+              "YawDemand": 0,
+              "RotationDemand": 0,
+              "PairDemandSquared": 0,
+              "PairDemand": 0
+            },
+            "DemandB": {
+              "RiderId": 3,
+              "ForwardDeltaVelocityMetersPerSecond": 0,
+              "LateralDeltaVelocityMetersPerSecond": 0,
+              "NormalizedYawLever": 0.6191876165298413,
+              "YawEquivalentMetersPerSecond": 0,
+              "ForwardDemand": 0,
+              "LateralDemand": 0,
+              "YawDemand": 0,
+              "RotationDemand": 0,
+              "PairDemandSquared": 0,
+              "PairDemand": 0
+            },
+            "DeferredByEarlierContact": false
+          },
+          "Consequence": {
+            "RiderId": 1,
+            "ContactRiderIds": [
+              1,
+              3
+            ],
+            "SourceEpisodeIds": [
+              8
+            ],
+            "OriginEpisodeIds": [
+              8
+            ],
+            "FrontierTimeSeconds": 46.5363655090332,
+            "SeverityRatio": 0,
+            "Severity": "Brush",
+            "NetDeltaVelocityMetersPerSecond": {
+              "X": 0,
+              "Y": 0,
+              "Length": 0
+            },
+            "DeltaForwardMetersPerSecond": 0,
+            "PreContactSpeed": 21.721169,
+            "PostContactSpeed": 21.721169,
+            "ControlLoss01": 0,
+            "Recovery": null
+          },
+          "NextRecoveryDurationSeconds": null
+        }
+      },
+      {
+        "Id": "low-grip",
+        "Seed": 7,
+        "Contact": {
+          "Step": 3,
+          "RiderId": 2,
+          "OtherRiderId": 1,
+          "FirstTouchSeconds": 6.326289176940918,
+          "FrontierSeconds": 6.326289176940918,
+          "CurrentSegmentStartSeconds": 6.359292,
+          "CurrentEndpointSeconds": 8.158253,
+          "AppliedAtSeconds": 8.158253,
+          "ApplicationDelaySeconds": 1.8319635391235352,
+          "HistoricalParticipant": true,
+          "EventSegmentIndex": 2,
+          "EventSegmentType": "TurnMiddle",
+          "EventSample": {
+            "LocalTimeSeconds": 1.684617,
+            "CanonicalProgress": 2.9810727171297637,
+            "SegmentProgress": 0.9810727,
+            "TravelledMeters": 35.598614,
+            "LateralPosition": 1,
+            "PhysicalOffsetMeters": 3.65,
+            "SpeedMetersPerSecond": 20.805185,
+            "RadiusMeters": 34.65,
+            "CurvaturePerMeter": 0.028860027,
+            "PhysicalOffsetFromInnerEdgeMeters": 4.65
+          },
+          "EventPose": {
+            "RiderId": 2,
+            "FrameId": "track-metric:01AA1CC2761B8B2FC9CAE0D6FFCDF24F039F9223A232E9C5D77A044F58DBFC82",
+            "Position": {
+              "X": 65.34525467379734,
+              "Y": 47.72686537852637,
+              "Length": 80.91882344203611
+            },
+            "Attitude": {
+              "CommonTimeSeconds": 6.326289176940918,
+              "TravelHeadingRadians": 2.0745745552602735,
+              "BikeHeadingRadians": 2.5005998132545675,
+              "RelativeSlideAngleRadians": 0.426025257994294
+            },
+            "Dimensions": {
+              "OverallMechanicalLengthMeters": 2.1,
+              "ChassisBodyWidthMeters": 0.3,
+              "HandlebarWidthMeters": 0.8,
+              "HandlebarLongitudinalOffsetMeters": 0.65,
+              "HandlebarTubeDiameterMeters": 0.04,
+              "BoundingRadiusMeters": 1.05
+            },
+            "Source": {
+              "LapIndex": 0,
+              "SegmentIndex": 2,
+              "SegmentId": 2,
+              "SegmentType": "TurnMiddle",
+              "CornerId": 1
+            },
+            "ReferenceTangentHeadingRadians": 2.0745745552602735,
+            "CommonTimeSeconds": 6.326289176940918,
+            "Footprint": {
+              "Chassis": {
+                "Start": {
+                  "X": 66.0666068724378,
+                  "Y": 47.188673028602494,
+                  "Length": 81.18846842894379
+                },
+                "End": {
+                  "X": 64.62390247515688,
+                  "Y": 48.265057728450245,
+                  "Length": 80.65831989726306
+                },
+                "RadiusMeters": 0.15
+              },
+              "Handlebar": {
+                "Start": {
+                  "X": 65.0515148558582,
+                  "Y": 48.42013078178625,
+                  "Length": 81.09382621363493
+                },
+                "End": {
+                  "X": 64.59704131592248,
+                  "Y": 47.81098892515653,
+                  "Length": 80.36584105683481
+                },
+                "RadiusMeters": 0.02
+              }
+            }
+          },
+          "DetectorVelocityMetersPerSecond": {
+            "X": -10.044062055380762,
+            "Y": 18.221562386771915,
+            "Length": 20.80645376769815
+          },
+          "EventSegmentStartSeconds": 4.641672134399414,
+          "EventSegmentEndSeconds": 6.359292030334473,
+          "RemainingTimeSeconds": 0.03300285339355469,
+          "RemainingDistanceMeters": 0.6867828369140625,
+          "Pair": {
+            "RiderA": 1,
+            "RiderB": 2,
+            "EpisodeId": 2,
+            "OriginEpisodeIds": [
+              2
+            ],
+            "FirstTouchCommonTimeSeconds": 6.326289176940918,
+            "Status": "Analyzed",
+            "Reason": "Verified first-touch shadow reference",
+            "LegacyFallbackAuthorized": false,
+            "LegacyResults": [
+              {
+                "RiderId": 1,
+                "Outcome": "NotAuthorized"
+              },
+              {
+                "RiderId": 2,
+                "Outcome": "NotAuthorized"
+              }
+            ],
+            "Manifold": {
+              "RiderA": 1,
+              "RiderB": 2,
+              "ComponentA": "Chassis",
+              "ComponentB": "Handlebar",
+              "ContactPointA": {
+                "X": 64.59498366927095,
+                "Y": 47.80817416209064,
+                "Length": 80.36251260349052
+              },
+              "ContactPointB": {
+                "X": 64.58523835030054,
+                "Y": 47.79484302776656,
+                "Length": 80.34674873829044
+              },
+              "MidContactPoint": {
+                "X": 64.59011100978574,
+                "Y": 47.8015085949286,
+                "Length": 80.35463063325895
+              },
+              "NormalAtoB": {
+                "X": 0.590148281096727,
+                "Y": 0.8072948694984866,
+                "Length": 1
+              },
+              "LeverArmA": {
+                "X": 0.35487339157693043,
+                "Y": -0.07361365009418108,
+                "Length": 0.36242805290085084
+              },
+              "LeverArmB": {
+                "X": -0.7600163234967994,
+                "Y": 0.06797764924019134,
+                "Length": 0.7630503081565554
+              },
+              "SignedSeparationMeters": -0.016513339583538428,
+              "NormalSource": "ClosestComponentAxes"
+            },
+            "Impulse": {
+              "MassAKg": 147,
+              "MassBKg": 147,
+              "ReducedMassKg": 73.5,
+              "RelativeVelocityMetersPerSecond": {
+                "X": -0.6594094709828084,
+                "Y": 1.9668694870316514,
+                "Length": 2.074462925539519
+              },
+              "NormalClosingSpeedMetersPerSecond": 0,
+              "ReferenceClosingSpeedMetersPerSecond": 0,
+              "RotationalClosureEquivalentMetersPerSecond": 0,
+              "RotationOnsetIntervalSeconds": 0,
+              "RotationOnsetAvailable": false,
+              "ImpulseMagnitudeNewtonSeconds": 0,
+              "ImpulseOnANewtonSeconds": {
+                "X": 0,
+                "Y": 0,
+                "Length": 0
+              },
+              "ImpulseOnBNewtonSeconds": {
+                "X": 0,
+                "Y": 0,
+                "Length": 0
+              },
+              "DeltaVAMetersPerSecond": {
+                "X": 0,
+                "Y": 0,
+                "Length": 0
+              },
+              "DeltaVBMetersPerSecond": {
+                "X": 0,
+                "Y": 0,
+                "Length": 0
+              },
+              "PreNormalKineticEnergyJoules": 9896.963531629808,
+              "PostNormalKineticEnergyJoules": 9896.963531629808,
+              "PreNormalMomentumKgMetersPerSecond": 2405.902175169358,
+              "PostNormalMomentumKgMetersPerSecond": 2405.902175169358
+            },
+            "DemandA": {
+              "RiderId": 1,
+              "ForwardDeltaVelocityMetersPerSecond": 0,
+              "LateralDeltaVelocityMetersPerSecond": 0,
+              "NormalizedYawLever": 0.3142194641999241,
+              "YawEquivalentMetersPerSecond": 0,
+              "ForwardDemand": 0,
+              "LateralDemand": 0,
+              "YawDemand": 0,
+              "RotationDemand": 0,
+              "PairDemandSquared": 0,
+              "PairDemand": 0
+            },
+            "DemandB": {
+              "RiderId": 2,
+              "ForwardDeltaVelocityMetersPerSecond": 0,
+              "LateralDeltaVelocityMetersPerSecond": 0,
+              "NormalizedYawLever": 0.6225468300439652,
+              "YawEquivalentMetersPerSecond": 0,
+              "ForwardDemand": 0,
+              "LateralDemand": 0,
+              "YawDemand": 0,
+              "RotationDemand": 0,
+              "PairDemandSquared": 0,
+              "PairDemand": 0
+            },
+            "DeferredByEarlierContact": false
+          },
+          "Consequence": {
+            "RiderId": 2,
+            "ContactRiderIds": [
+              1,
+              2
+            ],
+            "SourceEpisodeIds": [
+              2
+            ],
+            "OriginEpisodeIds": [
+              2
+            ],
+            "FrontierTimeSeconds": 6.326289176940918,
+            "SeverityRatio": 0,
+            "Severity": "Brush",
+            "NetDeltaVelocityMetersPerSecond": {
+              "X": 0,
+              "Y": 0,
+              "Length": 0
+            },
+            "DeltaForwardMetersPerSecond": 0,
+            "PreContactSpeed": 19.43238,
+            "PostContactSpeed": 19.43238,
+            "ControlLoss01": 0,
+            "Recovery": null
+          },
+          "NextRecoveryDurationSeconds": null
+        }
+      }
+    ],
+    "UnavailableFrontiersByReason": {
+      "CommittedBeyondFirstTouch: 1,2": 2,
+      "CommittedBeyondFirstTouch: 1": 2,
+      "PartialProductionCursorRequired": 12,
+      "CommittedBeyondFirstTouch: 1,3,4": 3,
+      "CommittedBeyondFirstTouch: 1,4": 2,
+      "CommittedBeyondFirstTouch: 4": 1,
+      "CommittedBeyondFirstTouch: 2,3,4": 1,
+      "null": 3
+    },
+    "EventSegmentTypes": {
+      "Straight": 43,
+      "TurnEntry": 3,
+      "TurnMiddle": 10,
+      "TurnExit": 8
+    }
+  },
+  "Prototype": {
+    "Cases": 12,
+    "ReversedCaptures": 12,
+    "SupportedInitialExposures": [
+      "start-rear-brush",
+      "start-rear-moderate",
+      "start-rear-lost-rhythm",
+      "start-rear-major-save",
+      "start-rear-crash",
+      "three-start-frontier",
+      "four-start-frontier",
+      "four-start-crash-stress",
+      "no-contact"
+    ],
+    "Unsupported": [
+      {
+        "Name": "interior-rear",
+        "Reason": "PartialProductionCursorRequired"
+      },
+      {
+        "Name": "near-end-rear",
+        "Reason": "PartialProductionCursorRequired"
+      },
+      {
+        "Name": "side-overlap-unsupported",
+        "Reason": "ScalarLongitudinalTouchOnly"
+      }
+    ],
+    "PartialTraversals": 0,
+    "GeneralHeatBudget": null,
+    "SupportedDomainBound": "One initial exact common-time frontier, at most four production riders / six possible pairs; later fresh event is explicitly unsupported.",
+    "ReplayCalls": 8
+  },
+  "Interpretation": "A/B/C remain endpoint modes. D is an isolated initial-frontier prototype, not a causal heat. Node samples and detector chord velocities are observations, not resumable production state."
+}

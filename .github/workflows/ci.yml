@@ -155,6 +155,12 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: windows-build
+      - name: Verify bounded REA-004A replay prototype and committed-history blocker
+        shell: bash
+        run: |
+          dotnet run --project tools/rea004a-causal-audit -c Release -- probe results/rea004a/probe
+          dotnet run --project tools/rea004a-causal-audit -c Release -- witness results/rea004a/witness
+          python tools/rea004a-causal-audit/compare.py results/rea004a
       - name: Capture physical contact arithmetic regression
         run: |
           dotnet run --project tools/physical-contact-consequence-audit -c Release -- results/physical-contact-consequences --trace
