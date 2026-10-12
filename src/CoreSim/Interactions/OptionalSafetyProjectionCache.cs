@@ -3,10 +3,10 @@ using CoreSim.Decisions;
 namespace CoreSim.Interactions;
 
 // Physical identity deliberately excludes response labels and diagnostic reasons.
-internal readonly record struct ProjectionKey(int RiderId, TrajectoryIntent Intent, float Drive, bool Hold)
+internal readonly record struct ProjectionKey(int RiderId, TrajectoryIntent Intent, float Drive, bool Hold, InteractionLateralTarget? PhysicalTarget = null)
 {
     internal static ProjectionKey From(InteractionAlternative a)
-        => new(a.RiderId, a.Intent, a.DriveControl?.PositiveDriveFraction ?? 1f, a.HoldLateralPosition);
+        => new(a.RiderId, a.Intent, a.DriveControl?.PositiveDriveFraction ?? 1f, a.HoldLateralPosition, a.PhysicalTarget);
 }
 
 internal enum SafetyProjectionOutcome { Resolved, InfeasibleProductionProjection }

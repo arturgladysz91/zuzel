@@ -6,13 +6,14 @@ namespace CoreSim.Decisions;
 public enum TrajectoryPhase { Entry, Middle, Exit, FollowingStraight }
 /// <summary>Temporary traffic execution controls expire at the next production snapshot.</summary>
 public sealed record InteractionProjectionControl(RiderDriveControl? CurrentStepDriveControl,
-    bool CurrentStepHoldLateralPosition)
+    bool CurrentStepHoldLateralPosition, InteractionLateralTarget? PhysicalTarget = null)
 {
-    internal bool IsControlled => CurrentStepDriveControl.HasValue || CurrentStepHoldLateralPosition;
+    internal bool IsControlled => CurrentStepDriveControl.HasValue || CurrentStepHoldLateralPosition || PhysicalTarget.HasValue;
     internal RiderDecision Decision(int target, int prefix) => new(target)
     {
         DriveControl = prefix == 0 ? CurrentStepDriveControl : null,
         HoldLateralPosition = prefix == 0 && CurrentStepHoldLateralPosition,
+        InteractionTarget = PhysicalTarget,
     };
 }
 public sealed record TrajectoryHorizonSegment(int SegmentIndex, int LapIndex, TrajectoryPhase Phase);
@@ -51,12 +52,13 @@ public sealed class TrajectoryEvaluator
     public int CandidateTraversalCount { get; private set; }
     public int ProductionResolutionCount { get; private set; }
     public TrajectoryEvaluator(RiderDecisionContext context, TrackStateSnapshot? perceivedSurface = null,
-        bool reuseProductionPrefixes = true, RiderDriveControl? driveControl = null, bool holdLateralPosition = false)
+        bool reuseProductionPrefixes = true, RiderDriveControl? driveControl = null, bool holdLateralPosition = false,
+        InteractionLateralTarget? physicalTarget = null)
     {
         ArgumentNullException.ThrowIfNull(context);
         _context = context; _surface = perceivedSurface ?? context.TrackState;
         _reusePrefixes = reuseProductionPrefixes;
-        _control = new(driveControl, holdLateralPosition);
+        _control = new(driveControl, holdLateralPosition, physicalTarget);
         if (_surface.SegmentCount != context.Snapshot.Track.Segments.Count || _surface.LinesCount != LaneModel.LanesCount)
             throw new ArgumentException("Surface dimensions must match the decision track.", nameof(perceivedSurface));
         if (!context.Rider.IsActive || context.Rider.SegmentIndex != context.SegmentIndex)
@@ -105,14 +107,14 @@ public sealed class TrajectoryEvaluator
         var input = new SimulationSnapshot(step, track, parent.Surface.Snapshot(), new[] { parent.Rider });
         var options = new HeatSimulationOptions { Laps = step.RequiredLaps, Seed = _context.Seed,
             IncidentFrequency = 0f, EnableLogging = false,
-            EnableContestedSpaceResponses = (_control.IsControlled && offset == 0) || parent.Rider.ContactRecovery is not null,
+            EnableContestedSpaceResponses = (_control.IsControlled && offset == 0) || _control.PhysicalTarget.HasValue || parent.Rider.ContactRecovery is not null,
             EnablePhysicalContactConsequences = parent.Rider.ContactRecovery is not null };
         SoloProjectionResult projection;
         ResolvedRiderMotion? motion = null;
         if (rich)
         {
             var engine = new SimulationEngine(new FixedTarget(requested));
-            var resolved = (_control.IsControlled && offset == 0) || parent.Rider.ContactRecovery is not null
+            var resolved = (_control.IsControlled && offset == 0) || _control.PhysicalTarget.HasValue || parent.Rider.ContactRecovery is not null
                 ? engine.ResolveProduction(input, new[] { new RiderIntent(parent.Rider.RiderId,
                     _control.Decision(requested, offset)) }, options, legacyContacts: false)
                 : engine.Resolve(input, engine.Decide(input), options);

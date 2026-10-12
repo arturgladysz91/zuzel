@@ -43,7 +43,7 @@ public sealed record InteractionGeometry(int RiderA, int RiderB, double CommonTi
     double TimeToConflictSeconds, ContestedSpaceEvent Space);
 public sealed record InteractionAlternative(int RiderId, InteractionResponse Response,
     TrajectoryIntent Intent, RiderDriveControl? DriveControl, double TacticalPreference,
-    string Reason, bool HoldLateralPosition = false);
+    string Reason, bool HoldLateralPosition = false, InteractionLateralTarget? PhysicalTarget = null);
 public sealed record InteractionCost(double AdditionalTraversalTimeSeconds, double IntentDeviation,
     double TacticalPreference, double ClearanceShortfallMeters)
 {
@@ -93,6 +93,7 @@ public sealed record InteractionWork(int JointCombinations, int ProductionResolu
     public int SafetyContactComponents { get; init; }
     public int FinalContactComponents { get; init; }
     public int SafetyJointCombinations { get; init; }
+    public int OutwardTargetTrials { get; init; }
 }
 public sealed record InteractionResolution(IReadOnlyList<InteractionEpisodeDiagnostic> Episodes, InteractionWork Work)
 {

@@ -1,0 +1,3240 @@
+[
+  {
+    "Name": "A-entry-close",
+    "Configuration": "B",
+    "RiderOrderExact": true,
+    "ClearanceCertified": true,
+    "MinimumMechanicalSeparationMeters": 0.3022227985118384,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 1.3384209,
+        "DisplacementMeters": -1.9847374
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 1.1,
+        "DisplacementMeters": 0
+      }
+    ],
+    "Responses": [
+      {
+        "RiderId": 1,
+        "Response": 2,
+        "Intent": {
+          "EntryTarget": 1,
+          "ApexTarget": 1,
+          "ExitTarget": 2
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.10863636363636363,
+        "Reason": "Local phase response; production feasibility required",
+        "HoldLateralPosition": false,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 2,
+        "Response": 1,
+        "Intent": {
+          "EntryTarget": 1,
+          "ApexTarget": 1,
+          "ExitTarget": 1
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.10863636363636363,
+        "Reason": "Local phase response; production feasibility required",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      }
+    ],
+    "MechanicalContacts": 0,
+    "Work": {
+      "JointCombinations": 9,
+      "ProductionResolutions": 26,
+      "NarrowPhaseEvaluations": 37224,
+      "ResponsePasses": 1,
+      "Clusters": 1,
+      "UniqueRiderAlternativeProjections": 6,
+      "PairAlternativeChecks": 9,
+      "JointCombinationsScored": 9,
+      "ActualProductionVerifications": 1,
+      "SafetyPasses": 0,
+      "LegacyFallbackAttempts": 0,
+      "SafetyContactComponents": 0,
+      "FinalContactComponents": 0,
+      "SafetyJointCombinations": 0,
+      "OutwardTargetTrials": 0
+    }
+  },
+  {
+    "Name": "B-close-too-late",
+    "Configuration": "B",
+    "RiderOrderExact": true,
+    "ClearanceCertified": true,
+    "MinimumMechanicalSeparationMeters": 0.4525893453873914,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 2,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 1,
+        "DisplacementMeters": -1.8000002
+      }
+    ],
+    "Responses": [
+      {
+        "RiderId": 1,
+        "Response": 3,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.10863636363636363,
+        "Reason": "Established footprint overlap forbids covering through the inside rider",
+        "HoldLateralPosition": false,
+        "PhysicalTarget": {
+          "OffsetFromInnerReferenceMeters": 6
+        }
+      },
+      {
+        "RiderId": 2,
+        "Response": 0,
+        "Intent": {
+          "EntryTarget": 1,
+          "ApexTarget": 1,
+          "ExitTarget": 1
+        },
+        "DriveControl": null,
+        "TacticalPreference": 0,
+        "Reason": "Independent #54 intent",
+        "HoldLateralPosition": false,
+        "PhysicalTarget": null
+      }
+    ],
+    "MechanicalContacts": 0,
+    "Work": {
+      "JointCombinations": 9,
+      "ProductionResolutions": 26,
+      "NarrowPhaseEvaluations": 57829,
+      "ResponsePasses": 1,
+      "Clusters": 1,
+      "UniqueRiderAlternativeProjections": 6,
+      "PairAlternativeChecks": 9,
+      "JointCombinationsScored": 9,
+      "ActualProductionVerifications": 1,
+      "SafetyPasses": 0,
+      "LegacyFallbackAttempts": 0,
+      "SafetyContactComponents": 0,
+      "FinalContactComponents": 0,
+      "SafetyJointCombinations": 0,
+      "OutwardTargetTrials": 1
+    }
+  },
+  {
+    "Name": "C-cutback-clean",
+    "Configuration": "B",
+    "RiderOrderExact": true,
+    "ClearanceCertified": true,
+    "MinimumMechanicalSeparationMeters": 1.249666793423166,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 1,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 1.2651528,
+        "DisplacementMeters": -2.2045417
+      }
+    ],
+    "Responses": [
+      {
+        "RiderId": 1,
+        "Response": 1,
+        "Intent": {
+          "EntryTarget": 1,
+          "ApexTarget": 1,
+          "ExitTarget": 3
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.10863636363636363,
+        "Reason": "Local phase response; production feasibility required",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 2,
+        "Response": 5,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 1
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.10863636363636363,
+        "Reason": "Established footprint overlap forbids covering through the inside rider",
+        "HoldLateralPosition": false,
+        "PhysicalTarget": null
+      }
+    ],
+    "MechanicalContacts": 0,
+    "Work": {
+      "JointCombinations": 9,
+      "ProductionResolutions": 12,
+      "NarrowPhaseEvaluations": 19652,
+      "ResponsePasses": 1,
+      "Clusters": 1,
+      "UniqueRiderAlternativeProjections": 5,
+      "PairAlternativeChecks": 6,
+      "JointCombinationsScored": 9,
+      "ActualProductionVerifications": 1,
+      "SafetyPasses": 0,
+      "LegacyFallbackAttempts": 0,
+      "SafetyContactComponents": 0,
+      "FinalContactComponents": 0,
+      "SafetyJointCombinations": 0,
+      "OutwardTargetTrials": 0
+    }
+  },
+  {
+    "Name": "C-cutback-poor",
+    "Configuration": "B",
+    "RiderOrderExact": true,
+    "ClearanceCertified": true,
+    "MinimumMechanicalSeparationMeters": 1.4691455059113159,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 1,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 1.2992932,
+        "DisplacementMeters": -2.1021204
+      }
+    ],
+    "Responses": [
+      {
+        "RiderId": 1,
+        "Response": 1,
+        "Intent": {
+          "EntryTarget": 1,
+          "ApexTarget": 1,
+          "ExitTarget": 3
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.10863636363636363,
+        "Reason": "Local phase response; production feasibility required",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 2,
+        "Response": 5,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 1
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.10863636363636363,
+        "Reason": "Established footprint overlap forbids covering through the inside rider",
+        "HoldLateralPosition": false,
+        "PhysicalTarget": null
+      }
+    ],
+    "MechanicalContacts": 0,
+    "Work": {
+      "JointCombinations": 9,
+      "ProductionResolutions": 12,
+      "NarrowPhaseEvaluations": 20571,
+      "ResponsePasses": 1,
+      "Clusters": 1,
+      "UniqueRiderAlternativeProjections": 5,
+      "PairAlternativeChecks": 6,
+      "JointCombinationsScored": 9,
+      "ActualProductionVerifications": 1,
+      "SafetyPasses": 0,
+      "LegacyFallbackAttempts": 0,
+      "SafetyContactComponents": 0,
+      "FinalContactComponents": 0,
+      "SafetyJointCombinations": 0,
+      "OutwardTargetTrials": 0
+    }
+  },
+  {
+    "Name": "D-inside-overlap",
+    "Configuration": "B",
+    "RiderOrderExact": true,
+    "ClearanceCertified": true,
+    "MinimumMechanicalSeparationMeters": 0.2916092889769062,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 1,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 1.4609375,
+        "DisplacementMeters": 0.18281269
+      }
+    ],
+    "Responses": [
+      {
+        "RiderId": 1,
+        "Response": 1,
+        "Intent": {
+          "EntryTarget": 1,
+          "ApexTarget": 1,
+          "ExitTarget": 1
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.10863636363636363,
+        "Reason": "Local phase response; production feasibility required",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 2,
+        "Response": 3,
+        "Intent": {
+          "EntryTarget": 1,
+          "ApexTarget": 1,
+          "ExitTarget": 1
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.10863636363636363,
+        "Reason": "Established footprint overlap forbids covering through the inside rider",
+        "HoldLateralPosition": false,
+        "PhysicalTarget": {
+          "OffsetFromInnerReferenceMeters": 4.3828125
+        }
+      }
+    ],
+    "MechanicalContacts": 0,
+    "Work": {
+      "JointCombinations": 9,
+      "ProductionResolutions": 50,
+      "NarrowPhaseEvaluations": 115168,
+      "ResponsePasses": 1,
+      "Clusters": 1,
+      "UniqueRiderAlternativeProjections": 16,
+      "PairAlternativeChecks": 19,
+      "JointCombinationsScored": 9,
+      "ActualProductionVerifications": 1,
+      "SafetyPasses": 0,
+      "LegacyFallbackAttempts": 0,
+      "SafetyContactComponents": 0,
+      "FinalContactComponents": 0,
+      "SafetyJointCombinations": 0,
+      "OutwardTargetTrials": 11
+    }
+  },
+  {
+    "Name": "E-outside-useful",
+    "Configuration": "B",
+    "RiderOrderExact": true,
+    "ClearanceCertified": true,
+    "MinimumMechanicalSeparationMeters": 1.9208588312332555,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 1,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 2,
+        "DisplacementMeters": 0
+      }
+    ],
+    "Responses": [],
+    "MechanicalContacts": 0,
+    "Work": {
+      "JointCombinations": 0,
+      "ProductionResolutions": 8,
+      "NarrowPhaseEvaluations": 19173,
+      "ResponsePasses": 0,
+      "Clusters": 0,
+      "UniqueRiderAlternativeProjections": 2,
+      "PairAlternativeChecks": 0,
+      "JointCombinationsScored": 0,
+      "ActualProductionVerifications": 1,
+      "SafetyPasses": 0,
+      "LegacyFallbackAttempts": 0,
+      "SafetyContactComponents": 0,
+      "FinalContactComponents": 0,
+      "SafetyJointCombinations": 0,
+      "OutwardTargetTrials": 0
+    }
+  },
+  {
+    "Name": "E-outside-poor",
+    "Configuration": "B",
+    "RiderOrderExact": true,
+    "ClearanceCertified": true,
+    "MinimumMechanicalSeparationMeters": 1.7310500169524037,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 1,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 2,
+        "DisplacementMeters": 0
+      }
+    ],
+    "Responses": [],
+    "MechanicalContacts": 0,
+    "Work": {
+      "JointCombinations": 0,
+      "ProductionResolutions": 8,
+      "NarrowPhaseEvaluations": 10077,
+      "ResponsePasses": 0,
+      "Clusters": 0,
+      "UniqueRiderAlternativeProjections": 2,
+      "PairAlternativeChecks": 0,
+      "JointCombinationsScored": 0,
+      "ActualProductionVerifications": 1,
+      "SafetyPasses": 0,
+      "LegacyFallbackAttempts": 0,
+      "SafetyContactComponents": 0,
+      "FinalContactComponents": 0,
+      "SafetyJointCombinations": 0,
+      "OutwardTargetTrials": 0
+    }
+  },
+  {
+    "Name": "F-exit-cross",
+    "Configuration": "B",
+    "RiderOrderExact": true,
+    "ClearanceCertified": true,
+    "MinimumMechanicalSeparationMeters": 2.284900031783048,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 1,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 2.3515625,
+        "DisplacementMeters": 1.0546875
+      }
+    ],
+    "Responses": [
+      {
+        "RiderId": 1,
+        "Response": 1,
+        "Intent": {
+          "EntryTarget": 1,
+          "ApexTarget": 1,
+          "ExitTarget": 3
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.045,
+        "Reason": "Local phase response; production feasibility required",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 2,
+        "Response": 3,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.10863636363636363,
+        "Reason": "Established footprint overlap forbids covering through the inside rider",
+        "HoldLateralPosition": false,
+        "PhysicalTarget": {
+          "OffsetFromInnerReferenceMeters": 7.0546875
+        }
+      }
+    ],
+    "MechanicalContacts": 0,
+    "Work": {
+      "JointCombinations": 9,
+      "ProductionResolutions": 34,
+      "NarrowPhaseEvaluations": 89811,
+      "ResponsePasses": 1,
+      "Clusters": 1,
+      "UniqueRiderAlternativeProjections": 16,
+      "PairAlternativeChecks": 19,
+      "JointCombinationsScored": 9,
+      "ActualProductionVerifications": 1,
+      "SafetyPasses": 0,
+      "LegacyFallbackAttempts": 0,
+      "SafetyContactComponents": 0,
+      "FinalContactComponents": 0,
+      "SafetyJointCombinations": 0,
+      "OutwardTargetTrials": 11
+    }
+  },
+  {
+    "Name": "G-four-first-bend",
+    "Configuration": "B",
+    "RiderOrderExact": true,
+    "ClearanceCertified": true,
+    "MinimumMechanicalSeparationMeters": 0.368702213969612,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 0.8,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 1.1,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 3,
+        "LateralPosition": 1.4,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 4,
+        "LateralPosition": 1.7,
+        "DisplacementMeters": 0
+      }
+    ],
+    "Responses": [
+      {
+        "RiderId": 1,
+        "Response": 6,
+        "Intent": {
+          "EntryTarget": 1,
+          "ApexTarget": 1,
+          "ExitTarget": 1
+        },
+        "DriveControl": {
+          "PositiveDriveFraction": 0
+        },
+        "TacticalPreference": 0.02,
+        "Reason": "Hold available lateral position and lift positive drive; no direct speed change",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 2,
+        "Response": 6,
+        "Intent": {
+          "EntryTarget": 1,
+          "ApexTarget": 1,
+          "ExitTarget": 1
+        },
+        "DriveControl": {
+          "PositiveDriveFraction": 0
+        },
+        "TacticalPreference": 0.02,
+        "Reason": "Hold available lateral position and lift positive drive; no direct speed change",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 3,
+        "Response": 6,
+        "Intent": {
+          "EntryTarget": 1,
+          "ApexTarget": 1,
+          "ExitTarget": 1
+        },
+        "DriveControl": {
+          "PositiveDriveFraction": 0
+        },
+        "TacticalPreference": 0.02,
+        "Reason": "Hold available lateral position and lift positive drive; no direct speed change",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 4,
+        "Response": 6,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": {
+          "PositiveDriveFraction": 0
+        },
+        "TacticalPreference": 0.02,
+        "Reason": "Hold available lateral position and lift positive drive; no direct speed change",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      }
+    ],
+    "MechanicalContacts": 0,
+    "Work": {
+      "JointCombinations": 81,
+      "ProductionResolutions": 170,
+      "NarrowPhaseEvaluations": 799529,
+      "ResponsePasses": 1,
+      "Clusters": 1,
+      "UniqueRiderAlternativeProjections": 42,
+      "PairAlternativeChecks": 100,
+      "JointCombinationsScored": 81,
+      "ActualProductionVerifications": 1,
+      "SafetyPasses": 0,
+      "LegacyFallbackAttempts": 0,
+      "SafetyContactComponents": 0,
+      "FinalContactComponents": 0,
+      "SafetyJointCombinations": 0,
+      "OutwardTargetTrials": 33
+    }
+  },
+  {
+    "Name": "H-three-squeeze",
+    "Configuration": "B",
+    "RiderOrderExact": true,
+    "ClearanceCertified": false,
+    "MinimumMechanicalSeparationMeters": -0.04,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 1.75,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 2,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 3,
+        "LateralPosition": 2.25,
+        "DisplacementMeters": 0
+      }
+    ],
+    "Responses": [
+      {
+        "RiderId": 1,
+        "Response": 6,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": {
+          "PositiveDriveFraction": 0
+        },
+        "TacticalPreference": 0.02,
+        "Reason": "Hold available lateral position and lift positive drive; no direct speed change",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 2,
+        "Response": 6,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": {
+          "PositiveDriveFraction": 0
+        },
+        "TacticalPreference": 0.02,
+        "Reason": "Hold available lateral position and lift positive drive; no direct speed change",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 3,
+        "Response": 6,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": {
+          "PositiveDriveFraction": 0
+        },
+        "TacticalPreference": 0.02,
+        "Reason": "Hold available lateral position and lift positive drive; no direct speed change",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      }
+    ],
+    "MechanicalContacts": 120,
+    "Work": {
+      "JointCombinations": 54,
+      "ProductionResolutions": 180,
+      "NarrowPhaseEvaluations": 411859,
+      "ResponsePasses": 2,
+      "Clusters": 1,
+      "UniqueRiderAlternativeProjections": 34,
+      "PairAlternativeChecks": 62,
+      "JointCombinationsScored": 54,
+      "ActualProductionVerifications": 3,
+      "SafetyPasses": 1,
+      "LegacyFallbackAttempts": 1,
+      "SafetyContactComponents": 1,
+      "FinalContactComponents": 1,
+      "SafetyJointCombinations": 27,
+      "OutwardTargetTrials": 24
+    }
+  },
+  {
+    "Name": "K-far-apart",
+    "Configuration": "B",
+    "RiderOrderExact": true,
+    "ClearanceCertified": true,
+    "MinimumMechanicalSeparationMeters": 43.31446315499112,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 1,
+        "DisplacementMeters": 0.5999999
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 3,
+        "DisplacementMeters": -0.6000004
+      }
+    ],
+    "Responses": [],
+    "MechanicalContacts": 0,
+    "Work": {
+      "JointCombinations": 0,
+      "ProductionResolutions": 1,
+      "NarrowPhaseEvaluations": 299,
+      "ResponsePasses": 0,
+      "Clusters": 0,
+      "UniqueRiderAlternativeProjections": 0,
+      "PairAlternativeChecks": 0,
+      "JointCombinationsScored": 0,
+      "ActualProductionVerifications": 1,
+      "SafetyPasses": 0,
+      "LegacyFallbackAttempts": 0,
+      "SafetyContactComponents": 0,
+      "FinalContactComponents": 0,
+      "SafetyJointCombinations": 0,
+      "OutwardTargetTrials": 0
+    }
+  },
+  {
+    "Name": "edge-trapped",
+    "Configuration": "B",
+    "RiderOrderExact": true,
+    "ClearanceCertified": true,
+    "MinimumMechanicalSeparationMeters": 1.5999996185302745,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 3.2,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 4,
+        "DisplacementMeters": 0
+      }
+    ],
+    "Responses": [
+      {
+        "RiderId": 1,
+        "Response": 1,
+        "Intent": {
+          "EntryTarget": 3,
+          "ApexTarget": 3,
+          "ExitTarget": 4
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.045,
+        "Reason": "Local phase response; production feasibility required",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 2,
+        "Response": 3,
+        "Intent": {
+          "EntryTarget": 4,
+          "ApexTarget": 4,
+          "ExitTarget": 4
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.10863636363636363,
+        "Reason": "Established footprint overlap forbids covering through the inside rider",
+        "HoldLateralPosition": false,
+        "PhysicalTarget": {
+          "OffsetFromInnerReferenceMeters": 12
+        }
+      }
+    ],
+    "MechanicalContacts": 0,
+    "Work": {
+      "JointCombinations": 9,
+      "ProductionResolutions": 38,
+      "NarrowPhaseEvaluations": 18758,
+      "ResponsePasses": 1,
+      "Clusters": 1,
+      "UniqueRiderAlternativeProjections": 6,
+      "PairAlternativeChecks": 9,
+      "JointCombinationsScored": 9,
+      "ActualProductionVerifications": 1,
+      "SafetyPasses": 0,
+      "LegacyFallbackAttempts": 0,
+      "SafetyContactComponents": 0,
+      "FinalContactComponents": 0,
+      "SafetyJointCombinations": 0,
+      "OutwardTargetTrials": 2
+    }
+  },
+  {
+    "Name": "imminent-overlap",
+    "Configuration": "B",
+    "RiderOrderExact": true,
+    "ClearanceCertified": false,
+    "MinimumMechanicalSeparationMeters": -0.16999999999999998,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 2,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 2.125,
+        "DisplacementMeters": 0
+      }
+    ],
+    "Responses": [
+      {
+        "RiderId": 1,
+        "Response": 7,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": {
+          "PositiveDriveFraction": 0
+        },
+        "TacticalPreference": 0,
+        "Reason": "Safety pass: already available lateral yield with current-step lift",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 2,
+        "Response": 7,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": {
+          "PositiveDriveFraction": 0
+        },
+        "TacticalPreference": 0,
+        "Reason": "Safety pass: already available lateral yield with current-step lift",
+        "HoldLateralPosition": false,
+        "PhysicalTarget": {
+          "OffsetFromInnerReferenceMeters": 6.375
+        }
+      }
+    ],
+    "MechanicalContacts": 67,
+    "Work": {
+      "JointCombinations": 18,
+      "ProductionResolutions": 31,
+      "NarrowPhaseEvaluations": 746973,
+      "ResponsePasses": 2,
+      "Clusters": 1,
+      "UniqueRiderAlternativeProjections": 13,
+      "PairAlternativeChecks": 15,
+      "JointCombinationsScored": 18,
+      "ActualProductionVerifications": 3,
+      "SafetyPasses": 1,
+      "LegacyFallbackAttempts": 1,
+      "SafetyContactComponents": 1,
+      "FinalContactComponents": 1,
+      "SafetyJointCombinations": 9,
+      "OutwardTargetTrials": 6
+    }
+  },
+  {
+    "Name": "attack-2-1",
+    "Configuration": "B",
+    "RiderOrderExact": true,
+    "ClearanceCertified": true,
+    "MinimumMechanicalSeparationMeters": 0.6548932352138813,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 1,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 1.6,
+        "DisplacementMeters": 0
+      }
+    ],
+    "Responses": [
+      {
+        "RiderId": 1,
+        "Response": 1,
+        "Intent": {
+          "EntryTarget": 1,
+          "ApexTarget": 1,
+          "ExitTarget": 2
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.045,
+        "Reason": "Local phase response; production feasibility required",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 2,
+        "Response": 6,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": {
+          "PositiveDriveFraction": 0
+        },
+        "TacticalPreference": 0.02,
+        "Reason": "Hold available lateral position and lift positive drive; no direct speed change",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      }
+    ],
+    "MechanicalContacts": 0,
+    "Work": {
+      "JointCombinations": 9,
+      "ProductionResolutions": 66,
+      "NarrowPhaseEvaluations": 64484,
+      "ResponsePasses": 1,
+      "Clusters": 1,
+      "UniqueRiderAlternativeProjections": 16,
+      "PairAlternativeChecks": 19,
+      "JointCombinationsScored": 9,
+      "ActualProductionVerifications": 1,
+      "SafetyPasses": 0,
+      "LegacyFallbackAttempts": 0,
+      "SafetyContactComponents": 0,
+      "FinalContactComponents": 0,
+      "SafetyJointCombinations": 0,
+      "OutwardTargetTrials": 11
+    }
+  },
+  {
+    "Name": "attack-2-2",
+    "Configuration": "B",
+    "RiderOrderExact": true,
+    "ClearanceCertified": true,
+    "MinimumMechanicalSeparationMeters": 1.0649870352321251,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 1,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 2,
+        "DisplacementMeters": 1.1999998
+      }
+    ],
+    "Responses": [
+      {
+        "RiderId": 1,
+        "Response": 1,
+        "Intent": {
+          "EntryTarget": 1,
+          "ApexTarget": 1,
+          "ExitTarget": 2
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.10863636363636363,
+        "Reason": "Local phase response; production feasibility required",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 2,
+        "Response": 5,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 1
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.10863636363636363,
+        "Reason": "Established footprint overlap forbids covering through the inside rider",
+        "HoldLateralPosition": false,
+        "PhysicalTarget": null
+      }
+    ],
+    "MechanicalContacts": 0,
+    "Work": {
+      "JointCombinations": 9,
+      "ProductionResolutions": 19,
+      "NarrowPhaseEvaluations": 23207,
+      "ResponsePasses": 1,
+      "Clusters": 1,
+      "UniqueRiderAlternativeProjections": 6,
+      "PairAlternativeChecks": 9,
+      "JointCombinationsScored": 9,
+      "ActualProductionVerifications": 1,
+      "SafetyPasses": 0,
+      "LegacyFallbackAttempts": 0,
+      "SafetyContactComponents": 0,
+      "FinalContactComponents": 0,
+      "SafetyJointCombinations": 0,
+      "OutwardTargetTrials": 0
+    }
+  },
+  {
+    "Name": "attack-2-4",
+    "Configuration": "B",
+    "RiderOrderExact": true,
+    "ClearanceCertified": true,
+    "MinimumMechanicalSeparationMeters": 1.05211248310199,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 1,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 2,
+        "DisplacementMeters": 1.1999998
+      }
+    ],
+    "Responses": [
+      {
+        "RiderId": 1,
+        "Response": 1,
+        "Intent": {
+          "EntryTarget": 1,
+          "ApexTarget": 1,
+          "ExitTarget": 2
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.045,
+        "Reason": "Local phase response; production feasibility required",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 2,
+        "Response": 0,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": null,
+        "TacticalPreference": 0,
+        "Reason": "Independent #54 intent",
+        "HoldLateralPosition": false,
+        "PhysicalTarget": null
+      }
+    ],
+    "MechanicalContacts": 0,
+    "Work": {
+      "JointCombinations": 9,
+      "ProductionResolutions": 98,
+      "NarrowPhaseEvaluations": 123054,
+      "ResponsePasses": 1,
+      "Clusters": 1,
+      "UniqueRiderAlternativeProjections": 16,
+      "PairAlternativeChecks": 19,
+      "JointCombinationsScored": 9,
+      "ActualProductionVerifications": 1,
+      "SafetyPasses": 0,
+      "LegacyFallbackAttempts": 0,
+      "SafetyContactComponents": 0,
+      "FinalContactComponents": 0,
+      "SafetyJointCombinations": 0,
+      "OutwardTargetTrials": 11
+    }
+  },
+  {
+    "Name": "attack-3-1",
+    "Configuration": "B",
+    "RiderOrderExact": true,
+    "ClearanceCertified": true,
+    "MinimumMechanicalSeparationMeters": 0.6548932352138813,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 1,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 1.6,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 3,
+        "LateralPosition": 2.4882815,
+        "DisplacementMeters": 0.8648443
+      }
+    ],
+    "Responses": [
+      {
+        "RiderId": 1,
+        "Response": 1,
+        "Intent": {
+          "EntryTarget": 1,
+          "ApexTarget": 1,
+          "ExitTarget": 2
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.045,
+        "Reason": "Local phase response; production feasibility required",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 2,
+        "Response": 6,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": {
+          "PositiveDriveFraction": 0
+        },
+        "TacticalPreference": 0.02,
+        "Reason": "Hold available lateral position and lift positive drive; no direct speed change",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 3,
+        "Response": 3,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.10863636363636363,
+        "Reason": "Established footprint overlap forbids covering through the inside rider",
+        "HoldLateralPosition": false,
+        "PhysicalTarget": {
+          "OffsetFromInnerReferenceMeters": 7.464844
+        }
+      }
+    ],
+    "MechanicalContacts": 0,
+    "Work": {
+      "JointCombinations": 27,
+      "ProductionResolutions": 118,
+      "NarrowPhaseEvaluations": 215025,
+      "ResponsePasses": 1,
+      "Clusters": 1,
+      "UniqueRiderAlternativeProjections": 29,
+      "PairAlternativeChecks": 57,
+      "JointCombinationsScored": 27,
+      "ActualProductionVerifications": 1,
+      "SafetyPasses": 0,
+      "LegacyFallbackAttempts": 0,
+      "SafetyContactComponents": 0,
+      "FinalContactComponents": 0,
+      "SafetyJointCombinations": 0,
+      "OutwardTargetTrials": 22
+    }
+  },
+  {
+    "Name": "attack-3-2",
+    "Configuration": "B",
+    "RiderOrderExact": true,
+    "ClearanceCertified": true,
+    "MinimumMechanicalSeparationMeters": 0.519519241316951,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 1,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 1.6,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 3,
+        "LateralPosition": 2.5234375,
+        "DisplacementMeters": 0.9703121
+      }
+    ],
+    "Responses": [
+      {
+        "RiderId": 1,
+        "Response": 1,
+        "Intent": {
+          "EntryTarget": 1,
+          "ApexTarget": 1,
+          "ExitTarget": 2
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.10863636363636363,
+        "Reason": "Local phase response; production feasibility required",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 2,
+        "Response": 1,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.045,
+        "Reason": "Established footprint overlap forbids covering through the inside rider",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 3,
+        "Response": 3,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.10863636363636363,
+        "Reason": "Established footprint overlap forbids covering through the inside rider",
+        "HoldLateralPosition": false,
+        "PhysicalTarget": {
+          "OffsetFromInnerReferenceMeters": 7.5703125
+        }
+      }
+    ],
+    "MechanicalContacts": 0,
+    "Work": {
+      "JointCombinations": 27,
+      "ProductionResolutions": 59,
+      "NarrowPhaseEvaluations": 241613,
+      "ResponsePasses": 1,
+      "Clusters": 1,
+      "UniqueRiderAlternativeProjections": 19,
+      "PairAlternativeChecks": 47,
+      "JointCombinationsScored": 27,
+      "ActualProductionVerifications": 1,
+      "SafetyPasses": 0,
+      "LegacyFallbackAttempts": 0,
+      "SafetyContactComponents": 0,
+      "FinalContactComponents": 0,
+      "SafetyJointCombinations": 0,
+      "OutwardTargetTrials": 11
+    }
+  },
+  {
+    "Name": "attack-3-4",
+    "Configuration": "B",
+    "RiderOrderExact": true,
+    "ClearanceCertified": true,
+    "MinimumMechanicalSeparationMeters": 0.7246985971531749,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 1,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 2,
+        "DisplacementMeters": 1.1999998
+      },
+      {
+        "RiderId": 3,
+        "LateralPosition": 2.5234375,
+        "DisplacementMeters": 0.9703121
+      }
+    ],
+    "Responses": [
+      {
+        "RiderId": 1,
+        "Response": 1,
+        "Intent": {
+          "EntryTarget": 1,
+          "ApexTarget": 1,
+          "ExitTarget": 2
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.045,
+        "Reason": "Local phase response; production feasibility required",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 2,
+        "Response": 0,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": null,
+        "TacticalPreference": 0,
+        "Reason": "Independent #54 intent",
+        "HoldLateralPosition": false,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 3,
+        "Response": 3,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.10863636363636363,
+        "Reason": "Established footprint overlap forbids covering through the inside rider",
+        "HoldLateralPosition": false,
+        "PhysicalTarget": {
+          "OffsetFromInnerReferenceMeters": 7.5703125
+        }
+      }
+    ],
+    "MechanicalContacts": 0,
+    "Work": {
+      "JointCombinations": 27,
+      "ProductionResolutions": 176,
+      "NarrowPhaseEvaluations": 399073,
+      "ResponsePasses": 1,
+      "Clusters": 1,
+      "UniqueRiderAlternativeProjections": 29,
+      "PairAlternativeChecks": 55,
+      "JointCombinationsScored": 27,
+      "ActualProductionVerifications": 1,
+      "SafetyPasses": 0,
+      "LegacyFallbackAttempts": 0,
+      "SafetyContactComponents": 0,
+      "FinalContactComponents": 0,
+      "SafetyJointCombinations": 0,
+      "OutwardTargetTrials": 22
+    }
+  },
+  {
+    "Name": "attack-4-1",
+    "Configuration": "B",
+    "RiderOrderExact": true,
+    "ClearanceCertified": true,
+    "MinimumMechanicalSeparationMeters": 0.3566401579387205,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 1,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 1.6,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 3,
+        "LateralPosition": 2.4882815,
+        "DisplacementMeters": 0.8648443
+      },
+      {
+        "RiderId": 4,
+        "LateralPosition": 3,
+        "DisplacementMeters": 0.5999994
+      }
+    ],
+    "Responses": [
+      {
+        "RiderId": 1,
+        "Response": 1,
+        "Intent": {
+          "EntryTarget": 1,
+          "ApexTarget": 1,
+          "ExitTarget": 2
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.045,
+        "Reason": "Local phase response; production feasibility required",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 2,
+        "Response": 6,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": {
+          "PositiveDriveFraction": 0
+        },
+        "TacticalPreference": 0.02,
+        "Reason": "Hold available lateral position and lift positive drive; no direct speed change",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 3,
+        "Response": 3,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.10863636363636363,
+        "Reason": "Established footprint overlap forbids covering through the inside rider",
+        "HoldLateralPosition": false,
+        "PhysicalTarget": {
+          "OffsetFromInnerReferenceMeters": 7.464844
+        }
+      }
+    ],
+    "MechanicalContacts": 0,
+    "Work": {
+      "JointCombinations": 27,
+      "ProductionResolutions": 122,
+      "NarrowPhaseEvaluations": 244468,
+      "ResponsePasses": 1,
+      "Clusters": 1,
+      "UniqueRiderAlternativeProjections": 30,
+      "PairAlternativeChecks": 66,
+      "JointCombinationsScored": 27,
+      "ActualProductionVerifications": 1,
+      "SafetyPasses": 0,
+      "LegacyFallbackAttempts": 0,
+      "SafetyContactComponents": 0,
+      "FinalContactComponents": 0,
+      "SafetyJointCombinations": 0,
+      "OutwardTargetTrials": 22
+    }
+  },
+  {
+    "Name": "attack-4-2",
+    "Configuration": "B",
+    "RiderOrderExact": true,
+    "ClearanceCertified": true,
+    "MinimumMechanicalSeparationMeters": 0.5178496400431865,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 1,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 1.6,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 3,
+        "LateralPosition": 2.2,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 4,
+        "LateralPosition": 3,
+        "DisplacementMeters": 0.5999994
+      }
+    ],
+    "Responses": [
+      {
+        "RiderId": 1,
+        "Response": 1,
+        "Intent": {
+          "EntryTarget": 1,
+          "ApexTarget": 1,
+          "ExitTarget": 2
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.10863636363636363,
+        "Reason": "Local phase response; production feasibility required",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 2,
+        "Response": 1,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.045,
+        "Reason": "Established footprint overlap forbids covering through the inside rider",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 3,
+        "Response": 6,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": {
+          "PositiveDriveFraction": 0
+        },
+        "TacticalPreference": 0.02,
+        "Reason": "Hold available lateral position and lift positive drive; no direct speed change",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      }
+    ],
+    "MechanicalContacts": 0,
+    "Work": {
+      "JointCombinations": 27,
+      "ProductionResolutions": 62,
+      "NarrowPhaseEvaluations": 265488,
+      "ResponsePasses": 1,
+      "Clusters": 1,
+      "UniqueRiderAlternativeProjections": 20,
+      "PairAlternativeChecks": 56,
+      "JointCombinationsScored": 27,
+      "ActualProductionVerifications": 1,
+      "SafetyPasses": 0,
+      "LegacyFallbackAttempts": 0,
+      "SafetyContactComponents": 0,
+      "FinalContactComponents": 0,
+      "SafetyJointCombinations": 0,
+      "OutwardTargetTrials": 11
+    }
+  },
+  {
+    "Name": "attack-4-4",
+    "Configuration": "B",
+    "RiderOrderExact": true,
+    "ClearanceCertified": true,
+    "MinimumMechanicalSeparationMeters": 0.37660465544964006,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 1,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 1.6,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 3,
+        "LateralPosition": 2,
+        "DisplacementMeters": -0.6000004
+      },
+      {
+        "RiderId": 4,
+        "LateralPosition": 3,
+        "DisplacementMeters": 0.5999994
+      }
+    ],
+    "Responses": [
+      {
+        "RiderId": 1,
+        "Response": 1,
+        "Intent": {
+          "EntryTarget": 1,
+          "ApexTarget": 1,
+          "ExitTarget": 2
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.045,
+        "Reason": "Local phase response; production feasibility required",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 2,
+        "Response": 6,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": {
+          "PositiveDriveFraction": 0
+        },
+        "TacticalPreference": 0.02,
+        "Reason": "Hold available lateral position and lift positive drive; no direct speed change",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 3,
+        "Response": 0,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": null,
+        "TacticalPreference": 0,
+        "Reason": "Independent #54 intent",
+        "HoldLateralPosition": false,
+        "PhysicalTarget": null
+      }
+    ],
+    "MechanicalContacts": 0,
+    "Work": {
+      "JointCombinations": 27,
+      "ProductionResolutions": 182,
+      "NarrowPhaseEvaluations": 435790,
+      "ResponsePasses": 1,
+      "Clusters": 1,
+      "UniqueRiderAlternativeProjections": 30,
+      "PairAlternativeChecks": 64,
+      "JointCombinationsScored": 27,
+      "ActualProductionVerifications": 1,
+      "SafetyPasses": 0,
+      "LegacyFallbackAttempts": 0,
+      "SafetyContactComponents": 0,
+      "FinalContactComponents": 0,
+      "SafetyJointCombinations": 0,
+      "OutwardTargetTrials": 22
+    }
+  },
+  {
+    "Name": "A-entry-close",
+    "Configuration": "C",
+    "RiderOrderExact": true,
+    "ClearanceCertified": true,
+    "MinimumMechanicalSeparationMeters": 0.30222279851184075,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 1.3384209,
+        "DisplacementMeters": -1.9847374
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 1.1,
+        "DisplacementMeters": 0
+      }
+    ],
+    "Responses": [
+      {
+        "RiderId": 1,
+        "Response": 2,
+        "Intent": {
+          "EntryTarget": 1,
+          "ApexTarget": 1,
+          "ExitTarget": 2
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.10863636363636363,
+        "Reason": "Local phase response; production feasibility required",
+        "HoldLateralPosition": false,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 2,
+        "Response": 1,
+        "Intent": {
+          "EntryTarget": 1,
+          "ApexTarget": 1,
+          "ExitTarget": 1
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.10863636363636363,
+        "Reason": "Local phase response; production feasibility required",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      }
+    ],
+    "MechanicalContacts": 0,
+    "Work": {
+      "JointCombinations": 9,
+      "ProductionResolutions": 26,
+      "NarrowPhaseEvaluations": 37224,
+      "ResponsePasses": 1,
+      "Clusters": 1,
+      "UniqueRiderAlternativeProjections": 6,
+      "PairAlternativeChecks": 9,
+      "JointCombinationsScored": 9,
+      "ActualProductionVerifications": 1,
+      "SafetyPasses": 0,
+      "LegacyFallbackAttempts": 0,
+      "SafetyContactComponents": 0,
+      "FinalContactComponents": 0,
+      "SafetyJointCombinations": 0,
+      "OutwardTargetTrials": 0
+    }
+  },
+  {
+    "Name": "B-close-too-late",
+    "Configuration": "C",
+    "RiderOrderExact": true,
+    "ClearanceCertified": true,
+    "MinimumMechanicalSeparationMeters": 0.4525893453873914,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 2,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 1,
+        "DisplacementMeters": -1.8000002
+      }
+    ],
+    "Responses": [
+      {
+        "RiderId": 1,
+        "Response": 3,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.10863636363636363,
+        "Reason": "Established footprint overlap forbids covering through the inside rider",
+        "HoldLateralPosition": false,
+        "PhysicalTarget": {
+          "OffsetFromInnerReferenceMeters": 6
+        }
+      },
+      {
+        "RiderId": 2,
+        "Response": 0,
+        "Intent": {
+          "EntryTarget": 1,
+          "ApexTarget": 1,
+          "ExitTarget": 1
+        },
+        "DriveControl": null,
+        "TacticalPreference": 0,
+        "Reason": "Independent #54 intent",
+        "HoldLateralPosition": false,
+        "PhysicalTarget": null
+      }
+    ],
+    "MechanicalContacts": 0,
+    "Work": {
+      "JointCombinations": 9,
+      "ProductionResolutions": 26,
+      "NarrowPhaseEvaluations": 57829,
+      "ResponsePasses": 1,
+      "Clusters": 1,
+      "UniqueRiderAlternativeProjections": 6,
+      "PairAlternativeChecks": 9,
+      "JointCombinationsScored": 9,
+      "ActualProductionVerifications": 1,
+      "SafetyPasses": 0,
+      "LegacyFallbackAttempts": 0,
+      "SafetyContactComponents": 0,
+      "FinalContactComponents": 0,
+      "SafetyJointCombinations": 0,
+      "OutwardTargetTrials": 1
+    }
+  },
+  {
+    "Name": "C-cutback-clean",
+    "Configuration": "C",
+    "RiderOrderExact": true,
+    "ClearanceCertified": true,
+    "MinimumMechanicalSeparationMeters": 1.2496667934231689,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 1,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 1.2651528,
+        "DisplacementMeters": -2.2045417
+      }
+    ],
+    "Responses": [
+      {
+        "RiderId": 1,
+        "Response": 1,
+        "Intent": {
+          "EntryTarget": 1,
+          "ApexTarget": 1,
+          "ExitTarget": 3
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.10863636363636363,
+        "Reason": "Local phase response; production feasibility required",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 2,
+        "Response": 5,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 1
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.10863636363636363,
+        "Reason": "Established footprint overlap forbids covering through the inside rider",
+        "HoldLateralPosition": false,
+        "PhysicalTarget": null
+      }
+    ],
+    "MechanicalContacts": 0,
+    "Work": {
+      "JointCombinations": 9,
+      "ProductionResolutions": 12,
+      "NarrowPhaseEvaluations": 19652,
+      "ResponsePasses": 1,
+      "Clusters": 1,
+      "UniqueRiderAlternativeProjections": 5,
+      "PairAlternativeChecks": 6,
+      "JointCombinationsScored": 9,
+      "ActualProductionVerifications": 1,
+      "SafetyPasses": 0,
+      "LegacyFallbackAttempts": 0,
+      "SafetyContactComponents": 0,
+      "FinalContactComponents": 0,
+      "SafetyJointCombinations": 0,
+      "OutwardTargetTrials": 0
+    }
+  },
+  {
+    "Name": "C-cutback-poor",
+    "Configuration": "C",
+    "RiderOrderExact": true,
+    "ClearanceCertified": true,
+    "MinimumMechanicalSeparationMeters": 1.469145505911317,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 1,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 1.2992932,
+        "DisplacementMeters": -2.1021204
+      }
+    ],
+    "Responses": [
+      {
+        "RiderId": 1,
+        "Response": 1,
+        "Intent": {
+          "EntryTarget": 1,
+          "ApexTarget": 1,
+          "ExitTarget": 3
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.10863636363636363,
+        "Reason": "Local phase response; production feasibility required",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 2,
+        "Response": 5,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 1
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.10863636363636363,
+        "Reason": "Established footprint overlap forbids covering through the inside rider",
+        "HoldLateralPosition": false,
+        "PhysicalTarget": null
+      }
+    ],
+    "MechanicalContacts": 0,
+    "Work": {
+      "JointCombinations": 9,
+      "ProductionResolutions": 12,
+      "NarrowPhaseEvaluations": 20571,
+      "ResponsePasses": 1,
+      "Clusters": 1,
+      "UniqueRiderAlternativeProjections": 5,
+      "PairAlternativeChecks": 6,
+      "JointCombinationsScored": 9,
+      "ActualProductionVerifications": 1,
+      "SafetyPasses": 0,
+      "LegacyFallbackAttempts": 0,
+      "SafetyContactComponents": 0,
+      "FinalContactComponents": 0,
+      "SafetyJointCombinations": 0,
+      "OutwardTargetTrials": 0
+    }
+  },
+  {
+    "Name": "D-inside-overlap",
+    "Configuration": "C",
+    "RiderOrderExact": true,
+    "ClearanceCertified": true,
+    "MinimumMechanicalSeparationMeters": 0.2916092889769015,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 1,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 1.4609375,
+        "DisplacementMeters": 0.18281269
+      }
+    ],
+    "Responses": [
+      {
+        "RiderId": 1,
+        "Response": 1,
+        "Intent": {
+          "EntryTarget": 1,
+          "ApexTarget": 1,
+          "ExitTarget": 1
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.10863636363636363,
+        "Reason": "Local phase response; production feasibility required",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 2,
+        "Response": 3,
+        "Intent": {
+          "EntryTarget": 1,
+          "ApexTarget": 1,
+          "ExitTarget": 1
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.10863636363636363,
+        "Reason": "Established footprint overlap forbids covering through the inside rider",
+        "HoldLateralPosition": false,
+        "PhysicalTarget": {
+          "OffsetFromInnerReferenceMeters": 4.3828125
+        }
+      }
+    ],
+    "MechanicalContacts": 0,
+    "Work": {
+      "JointCombinations": 9,
+      "ProductionResolutions": 50,
+      "NarrowPhaseEvaluations": 115168,
+      "ResponsePasses": 1,
+      "Clusters": 1,
+      "UniqueRiderAlternativeProjections": 16,
+      "PairAlternativeChecks": 19,
+      "JointCombinationsScored": 9,
+      "ActualProductionVerifications": 1,
+      "SafetyPasses": 0,
+      "LegacyFallbackAttempts": 0,
+      "SafetyContactComponents": 0,
+      "FinalContactComponents": 0,
+      "SafetyJointCombinations": 0,
+      "OutwardTargetTrials": 11
+    }
+  },
+  {
+    "Name": "E-outside-useful",
+    "Configuration": "C",
+    "RiderOrderExact": true,
+    "ClearanceCertified": true,
+    "MinimumMechanicalSeparationMeters": 1.9208588312332577,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 1,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 2,
+        "DisplacementMeters": 0
+      }
+    ],
+    "Responses": [],
+    "MechanicalContacts": 0,
+    "Work": {
+      "JointCombinations": 0,
+      "ProductionResolutions": 8,
+      "NarrowPhaseEvaluations": 19173,
+      "ResponsePasses": 0,
+      "Clusters": 0,
+      "UniqueRiderAlternativeProjections": 2,
+      "PairAlternativeChecks": 0,
+      "JointCombinationsScored": 0,
+      "ActualProductionVerifications": 1,
+      "SafetyPasses": 0,
+      "LegacyFallbackAttempts": 0,
+      "SafetyContactComponents": 0,
+      "FinalContactComponents": 0,
+      "SafetyJointCombinations": 0,
+      "OutwardTargetTrials": 0
+    }
+  },
+  {
+    "Name": "E-outside-poor",
+    "Configuration": "C",
+    "RiderOrderExact": true,
+    "ClearanceCertified": true,
+    "MinimumMechanicalSeparationMeters": 1.7310500169524048,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 1,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 2,
+        "DisplacementMeters": 0
+      }
+    ],
+    "Responses": [],
+    "MechanicalContacts": 0,
+    "Work": {
+      "JointCombinations": 0,
+      "ProductionResolutions": 8,
+      "NarrowPhaseEvaluations": 10077,
+      "ResponsePasses": 0,
+      "Clusters": 0,
+      "UniqueRiderAlternativeProjections": 2,
+      "PairAlternativeChecks": 0,
+      "JointCombinationsScored": 0,
+      "ActualProductionVerifications": 1,
+      "SafetyPasses": 0,
+      "LegacyFallbackAttempts": 0,
+      "SafetyContactComponents": 0,
+      "FinalContactComponents": 0,
+      "SafetyJointCombinations": 0,
+      "OutwardTargetTrials": 0
+    }
+  },
+  {
+    "Name": "F-exit-cross",
+    "Configuration": "C",
+    "RiderOrderExact": true,
+    "ClearanceCertified": true,
+    "MinimumMechanicalSeparationMeters": 2.284900031783032,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 1,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 2.3515625,
+        "DisplacementMeters": 1.0546875
+      }
+    ],
+    "Responses": [
+      {
+        "RiderId": 1,
+        "Response": 1,
+        "Intent": {
+          "EntryTarget": 1,
+          "ApexTarget": 1,
+          "ExitTarget": 3
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.045,
+        "Reason": "Local phase response; production feasibility required",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 2,
+        "Response": 3,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.10863636363636363,
+        "Reason": "Established footprint overlap forbids covering through the inside rider",
+        "HoldLateralPosition": false,
+        "PhysicalTarget": {
+          "OffsetFromInnerReferenceMeters": 7.0546875
+        }
+      }
+    ],
+    "MechanicalContacts": 0,
+    "Work": {
+      "JointCombinations": 9,
+      "ProductionResolutions": 34,
+      "NarrowPhaseEvaluations": 89811,
+      "ResponsePasses": 1,
+      "Clusters": 1,
+      "UniqueRiderAlternativeProjections": 16,
+      "PairAlternativeChecks": 19,
+      "JointCombinationsScored": 9,
+      "ActualProductionVerifications": 1,
+      "SafetyPasses": 0,
+      "LegacyFallbackAttempts": 0,
+      "SafetyContactComponents": 0,
+      "FinalContactComponents": 0,
+      "SafetyJointCombinations": 0,
+      "OutwardTargetTrials": 11
+    }
+  },
+  {
+    "Name": "G-four-first-bend",
+    "Configuration": "C",
+    "RiderOrderExact": true,
+    "ClearanceCertified": true,
+    "MinimumMechanicalSeparationMeters": 0.368702213969612,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 0.8,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 1.1,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 3,
+        "LateralPosition": 1.4,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 4,
+        "LateralPosition": 1.7,
+        "DisplacementMeters": 0
+      }
+    ],
+    "Responses": [
+      {
+        "RiderId": 1,
+        "Response": 6,
+        "Intent": {
+          "EntryTarget": 1,
+          "ApexTarget": 1,
+          "ExitTarget": 1
+        },
+        "DriveControl": {
+          "PositiveDriveFraction": 0
+        },
+        "TacticalPreference": 0.02,
+        "Reason": "Hold available lateral position and lift positive drive; no direct speed change",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 2,
+        "Response": 6,
+        "Intent": {
+          "EntryTarget": 1,
+          "ApexTarget": 1,
+          "ExitTarget": 1
+        },
+        "DriveControl": {
+          "PositiveDriveFraction": 0
+        },
+        "TacticalPreference": 0.02,
+        "Reason": "Hold available lateral position and lift positive drive; no direct speed change",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 3,
+        "Response": 6,
+        "Intent": {
+          "EntryTarget": 1,
+          "ApexTarget": 1,
+          "ExitTarget": 1
+        },
+        "DriveControl": {
+          "PositiveDriveFraction": 0
+        },
+        "TacticalPreference": 0.02,
+        "Reason": "Hold available lateral position and lift positive drive; no direct speed change",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 4,
+        "Response": 6,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": {
+          "PositiveDriveFraction": 0
+        },
+        "TacticalPreference": 0.02,
+        "Reason": "Hold available lateral position and lift positive drive; no direct speed change",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      }
+    ],
+    "MechanicalContacts": 0,
+    "Work": {
+      "JointCombinations": 81,
+      "ProductionResolutions": 170,
+      "NarrowPhaseEvaluations": 799529,
+      "ResponsePasses": 1,
+      "Clusters": 1,
+      "UniqueRiderAlternativeProjections": 42,
+      "PairAlternativeChecks": 100,
+      "JointCombinationsScored": 81,
+      "ActualProductionVerifications": 1,
+      "SafetyPasses": 0,
+      "LegacyFallbackAttempts": 0,
+      "SafetyContactComponents": 0,
+      "FinalContactComponents": 0,
+      "SafetyJointCombinations": 0,
+      "OutwardTargetTrials": 33
+    }
+  },
+  {
+    "Name": "H-three-squeeze",
+    "Configuration": "C",
+    "RiderOrderExact": true,
+    "ClearanceCertified": false,
+    "MinimumMechanicalSeparationMeters": -0.04,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 1.75,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 2,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 3,
+        "LateralPosition": 2.25,
+        "DisplacementMeters": 0
+      }
+    ],
+    "Responses": [
+      {
+        "RiderId": 1,
+        "Response": 6,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": {
+          "PositiveDriveFraction": 0
+        },
+        "TacticalPreference": 0.02,
+        "Reason": "Hold available lateral position and lift positive drive; no direct speed change",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 2,
+        "Response": 6,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": {
+          "PositiveDriveFraction": 0
+        },
+        "TacticalPreference": 0.02,
+        "Reason": "Hold available lateral position and lift positive drive; no direct speed change",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 3,
+        "Response": 6,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": {
+          "PositiveDriveFraction": 0
+        },
+        "TacticalPreference": 0.02,
+        "Reason": "Hold available lateral position and lift positive drive; no direct speed change",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      }
+    ],
+    "MechanicalContacts": 120,
+    "Work": {
+      "JointCombinations": 54,
+      "ProductionResolutions": 180,
+      "NarrowPhaseEvaluations": 411859,
+      "ResponsePasses": 2,
+      "Clusters": 1,
+      "UniqueRiderAlternativeProjections": 34,
+      "PairAlternativeChecks": 62,
+      "JointCombinationsScored": 54,
+      "ActualProductionVerifications": 3,
+      "SafetyPasses": 1,
+      "LegacyFallbackAttempts": 0,
+      "SafetyContactComponents": 1,
+      "FinalContactComponents": 1,
+      "SafetyJointCombinations": 27,
+      "OutwardTargetTrials": 24
+    }
+  },
+  {
+    "Name": "K-far-apart",
+    "Configuration": "C",
+    "RiderOrderExact": true,
+    "ClearanceCertified": true,
+    "MinimumMechanicalSeparationMeters": 43.31446315499112,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 1,
+        "DisplacementMeters": 0.5999999
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 3,
+        "DisplacementMeters": -0.6000004
+      }
+    ],
+    "Responses": [],
+    "MechanicalContacts": 0,
+    "Work": {
+      "JointCombinations": 0,
+      "ProductionResolutions": 1,
+      "NarrowPhaseEvaluations": 299,
+      "ResponsePasses": 0,
+      "Clusters": 0,
+      "UniqueRiderAlternativeProjections": 0,
+      "PairAlternativeChecks": 0,
+      "JointCombinationsScored": 0,
+      "ActualProductionVerifications": 1,
+      "SafetyPasses": 0,
+      "LegacyFallbackAttempts": 0,
+      "SafetyContactComponents": 0,
+      "FinalContactComponents": 0,
+      "SafetyJointCombinations": 0,
+      "OutwardTargetTrials": 0
+    }
+  },
+  {
+    "Name": "edge-trapped",
+    "Configuration": "C",
+    "RiderOrderExact": true,
+    "ClearanceCertified": true,
+    "MinimumMechanicalSeparationMeters": 1.5999996185302745,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 3.2,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 4,
+        "DisplacementMeters": 0
+      }
+    ],
+    "Responses": [
+      {
+        "RiderId": 1,
+        "Response": 1,
+        "Intent": {
+          "EntryTarget": 3,
+          "ApexTarget": 3,
+          "ExitTarget": 4
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.045,
+        "Reason": "Local phase response; production feasibility required",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 2,
+        "Response": 3,
+        "Intent": {
+          "EntryTarget": 4,
+          "ApexTarget": 4,
+          "ExitTarget": 4
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.10863636363636363,
+        "Reason": "Established footprint overlap forbids covering through the inside rider",
+        "HoldLateralPosition": false,
+        "PhysicalTarget": {
+          "OffsetFromInnerReferenceMeters": 12
+        }
+      }
+    ],
+    "MechanicalContacts": 0,
+    "Work": {
+      "JointCombinations": 9,
+      "ProductionResolutions": 38,
+      "NarrowPhaseEvaluations": 18758,
+      "ResponsePasses": 1,
+      "Clusters": 1,
+      "UniqueRiderAlternativeProjections": 6,
+      "PairAlternativeChecks": 9,
+      "JointCombinationsScored": 9,
+      "ActualProductionVerifications": 1,
+      "SafetyPasses": 0,
+      "LegacyFallbackAttempts": 0,
+      "SafetyContactComponents": 0,
+      "FinalContactComponents": 0,
+      "SafetyJointCombinations": 0,
+      "OutwardTargetTrials": 2
+    }
+  },
+  {
+    "Name": "imminent-overlap",
+    "Configuration": "C",
+    "RiderOrderExact": true,
+    "ClearanceCertified": false,
+    "MinimumMechanicalSeparationMeters": -0.16999999999999998,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 2,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 2.125,
+        "DisplacementMeters": 0
+      }
+    ],
+    "Responses": [
+      {
+        "RiderId": 1,
+        "Response": 7,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": {
+          "PositiveDriveFraction": 0
+        },
+        "TacticalPreference": 0,
+        "Reason": "Safety pass: already available lateral yield with current-step lift",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 2,
+        "Response": 7,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": {
+          "PositiveDriveFraction": 0
+        },
+        "TacticalPreference": 0,
+        "Reason": "Safety pass: already available lateral yield with current-step lift",
+        "HoldLateralPosition": false,
+        "PhysicalTarget": {
+          "OffsetFromInnerReferenceMeters": 6.375
+        }
+      }
+    ],
+    "MechanicalContacts": 67,
+    "Work": {
+      "JointCombinations": 18,
+      "ProductionResolutions": 31,
+      "NarrowPhaseEvaluations": 746973,
+      "ResponsePasses": 2,
+      "Clusters": 1,
+      "UniqueRiderAlternativeProjections": 13,
+      "PairAlternativeChecks": 15,
+      "JointCombinationsScored": 18,
+      "ActualProductionVerifications": 3,
+      "SafetyPasses": 1,
+      "LegacyFallbackAttempts": 0,
+      "SafetyContactComponents": 1,
+      "FinalContactComponents": 1,
+      "SafetyJointCombinations": 9,
+      "OutwardTargetTrials": 6
+    }
+  },
+  {
+    "Name": "attack-2-1",
+    "Configuration": "C",
+    "RiderOrderExact": true,
+    "ClearanceCertified": true,
+    "MinimumMechanicalSeparationMeters": 0.6548932352138813,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 1,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 1.6,
+        "DisplacementMeters": 0
+      }
+    ],
+    "Responses": [
+      {
+        "RiderId": 1,
+        "Response": 1,
+        "Intent": {
+          "EntryTarget": 1,
+          "ApexTarget": 1,
+          "ExitTarget": 2
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.045,
+        "Reason": "Local phase response; production feasibility required",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 2,
+        "Response": 6,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": {
+          "PositiveDriveFraction": 0
+        },
+        "TacticalPreference": 0.02,
+        "Reason": "Hold available lateral position and lift positive drive; no direct speed change",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      }
+    ],
+    "MechanicalContacts": 0,
+    "Work": {
+      "JointCombinations": 9,
+      "ProductionResolutions": 66,
+      "NarrowPhaseEvaluations": 64484,
+      "ResponsePasses": 1,
+      "Clusters": 1,
+      "UniqueRiderAlternativeProjections": 16,
+      "PairAlternativeChecks": 19,
+      "JointCombinationsScored": 9,
+      "ActualProductionVerifications": 1,
+      "SafetyPasses": 0,
+      "LegacyFallbackAttempts": 0,
+      "SafetyContactComponents": 0,
+      "FinalContactComponents": 0,
+      "SafetyJointCombinations": 0,
+      "OutwardTargetTrials": 11
+    }
+  },
+  {
+    "Name": "attack-2-2",
+    "Configuration": "C",
+    "RiderOrderExact": true,
+    "ClearanceCertified": true,
+    "MinimumMechanicalSeparationMeters": 1.0649870352321251,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 1,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 2,
+        "DisplacementMeters": 1.1999998
+      }
+    ],
+    "Responses": [
+      {
+        "RiderId": 1,
+        "Response": 1,
+        "Intent": {
+          "EntryTarget": 1,
+          "ApexTarget": 1,
+          "ExitTarget": 2
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.10863636363636363,
+        "Reason": "Local phase response; production feasibility required",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 2,
+        "Response": 5,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 1
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.10863636363636363,
+        "Reason": "Established footprint overlap forbids covering through the inside rider",
+        "HoldLateralPosition": false,
+        "PhysicalTarget": null
+      }
+    ],
+    "MechanicalContacts": 0,
+    "Work": {
+      "JointCombinations": 9,
+      "ProductionResolutions": 19,
+      "NarrowPhaseEvaluations": 23207,
+      "ResponsePasses": 1,
+      "Clusters": 1,
+      "UniqueRiderAlternativeProjections": 6,
+      "PairAlternativeChecks": 9,
+      "JointCombinationsScored": 9,
+      "ActualProductionVerifications": 1,
+      "SafetyPasses": 0,
+      "LegacyFallbackAttempts": 0,
+      "SafetyContactComponents": 0,
+      "FinalContactComponents": 0,
+      "SafetyJointCombinations": 0,
+      "OutwardTargetTrials": 0
+    }
+  },
+  {
+    "Name": "attack-2-4",
+    "Configuration": "C",
+    "RiderOrderExact": true,
+    "ClearanceCertified": true,
+    "MinimumMechanicalSeparationMeters": 1.052112483101997,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 1,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 2,
+        "DisplacementMeters": 1.1999998
+      }
+    ],
+    "Responses": [
+      {
+        "RiderId": 1,
+        "Response": 1,
+        "Intent": {
+          "EntryTarget": 1,
+          "ApexTarget": 1,
+          "ExitTarget": 2
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.045,
+        "Reason": "Local phase response; production feasibility required",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 2,
+        "Response": 0,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": null,
+        "TacticalPreference": 0,
+        "Reason": "Independent #54 intent",
+        "HoldLateralPosition": false,
+        "PhysicalTarget": null
+      }
+    ],
+    "MechanicalContacts": 0,
+    "Work": {
+      "JointCombinations": 9,
+      "ProductionResolutions": 98,
+      "NarrowPhaseEvaluations": 123054,
+      "ResponsePasses": 1,
+      "Clusters": 1,
+      "UniqueRiderAlternativeProjections": 16,
+      "PairAlternativeChecks": 19,
+      "JointCombinationsScored": 9,
+      "ActualProductionVerifications": 1,
+      "SafetyPasses": 0,
+      "LegacyFallbackAttempts": 0,
+      "SafetyContactComponents": 0,
+      "FinalContactComponents": 0,
+      "SafetyJointCombinations": 0,
+      "OutwardTargetTrials": 11
+    }
+  },
+  {
+    "Name": "attack-3-1",
+    "Configuration": "C",
+    "RiderOrderExact": true,
+    "ClearanceCertified": true,
+    "MinimumMechanicalSeparationMeters": 0.6548932352138813,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 1,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 1.6,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 3,
+        "LateralPosition": 2.4882815,
+        "DisplacementMeters": 0.8648443
+      }
+    ],
+    "Responses": [
+      {
+        "RiderId": 1,
+        "Response": 1,
+        "Intent": {
+          "EntryTarget": 1,
+          "ApexTarget": 1,
+          "ExitTarget": 2
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.045,
+        "Reason": "Local phase response; production feasibility required",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 2,
+        "Response": 6,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": {
+          "PositiveDriveFraction": 0
+        },
+        "TacticalPreference": 0.02,
+        "Reason": "Hold available lateral position and lift positive drive; no direct speed change",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 3,
+        "Response": 3,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.10863636363636363,
+        "Reason": "Established footprint overlap forbids covering through the inside rider",
+        "HoldLateralPosition": false,
+        "PhysicalTarget": {
+          "OffsetFromInnerReferenceMeters": 7.464844
+        }
+      }
+    ],
+    "MechanicalContacts": 0,
+    "Work": {
+      "JointCombinations": 27,
+      "ProductionResolutions": 118,
+      "NarrowPhaseEvaluations": 215025,
+      "ResponsePasses": 1,
+      "Clusters": 1,
+      "UniqueRiderAlternativeProjections": 29,
+      "PairAlternativeChecks": 57,
+      "JointCombinationsScored": 27,
+      "ActualProductionVerifications": 1,
+      "SafetyPasses": 0,
+      "LegacyFallbackAttempts": 0,
+      "SafetyContactComponents": 0,
+      "FinalContactComponents": 0,
+      "SafetyJointCombinations": 0,
+      "OutwardTargetTrials": 22
+    }
+  },
+  {
+    "Name": "attack-3-2",
+    "Configuration": "C",
+    "RiderOrderExact": true,
+    "ClearanceCertified": true,
+    "MinimumMechanicalSeparationMeters": 0.5195192413169518,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 1,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 1.6,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 3,
+        "LateralPosition": 2.5234375,
+        "DisplacementMeters": 0.9703121
+      }
+    ],
+    "Responses": [
+      {
+        "RiderId": 1,
+        "Response": 1,
+        "Intent": {
+          "EntryTarget": 1,
+          "ApexTarget": 1,
+          "ExitTarget": 2
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.10863636363636363,
+        "Reason": "Local phase response; production feasibility required",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 2,
+        "Response": 1,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.045,
+        "Reason": "Established footprint overlap forbids covering through the inside rider",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 3,
+        "Response": 3,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.10863636363636363,
+        "Reason": "Established footprint overlap forbids covering through the inside rider",
+        "HoldLateralPosition": false,
+        "PhysicalTarget": {
+          "OffsetFromInnerReferenceMeters": 7.5703125
+        }
+      }
+    ],
+    "MechanicalContacts": 0,
+    "Work": {
+      "JointCombinations": 27,
+      "ProductionResolutions": 59,
+      "NarrowPhaseEvaluations": 241613,
+      "ResponsePasses": 1,
+      "Clusters": 1,
+      "UniqueRiderAlternativeProjections": 19,
+      "PairAlternativeChecks": 47,
+      "JointCombinationsScored": 27,
+      "ActualProductionVerifications": 1,
+      "SafetyPasses": 0,
+      "LegacyFallbackAttempts": 0,
+      "SafetyContactComponents": 0,
+      "FinalContactComponents": 0,
+      "SafetyJointCombinations": 0,
+      "OutwardTargetTrials": 11
+    }
+  },
+  {
+    "Name": "attack-3-4",
+    "Configuration": "C",
+    "RiderOrderExact": true,
+    "ClearanceCertified": true,
+    "MinimumMechanicalSeparationMeters": 0.7246985971531749,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 1,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 2,
+        "DisplacementMeters": 1.1999998
+      },
+      {
+        "RiderId": 3,
+        "LateralPosition": 2.5234375,
+        "DisplacementMeters": 0.9703121
+      }
+    ],
+    "Responses": [
+      {
+        "RiderId": 1,
+        "Response": 1,
+        "Intent": {
+          "EntryTarget": 1,
+          "ApexTarget": 1,
+          "ExitTarget": 2
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.045,
+        "Reason": "Local phase response; production feasibility required",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 2,
+        "Response": 0,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": null,
+        "TacticalPreference": 0,
+        "Reason": "Independent #54 intent",
+        "HoldLateralPosition": false,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 3,
+        "Response": 3,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.10863636363636363,
+        "Reason": "Established footprint overlap forbids covering through the inside rider",
+        "HoldLateralPosition": false,
+        "PhysicalTarget": {
+          "OffsetFromInnerReferenceMeters": 7.5703125
+        }
+      }
+    ],
+    "MechanicalContacts": 0,
+    "Work": {
+      "JointCombinations": 27,
+      "ProductionResolutions": 176,
+      "NarrowPhaseEvaluations": 399073,
+      "ResponsePasses": 1,
+      "Clusters": 1,
+      "UniqueRiderAlternativeProjections": 29,
+      "PairAlternativeChecks": 55,
+      "JointCombinationsScored": 27,
+      "ActualProductionVerifications": 1,
+      "SafetyPasses": 0,
+      "LegacyFallbackAttempts": 0,
+      "SafetyContactComponents": 0,
+      "FinalContactComponents": 0,
+      "SafetyJointCombinations": 0,
+      "OutwardTargetTrials": 22
+    }
+  },
+  {
+    "Name": "attack-4-1",
+    "Configuration": "C",
+    "RiderOrderExact": true,
+    "ClearanceCertified": true,
+    "MinimumMechanicalSeparationMeters": 0.3566401579387205,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 1,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 1.6,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 3,
+        "LateralPosition": 2.4882815,
+        "DisplacementMeters": 0.8648443
+      },
+      {
+        "RiderId": 4,
+        "LateralPosition": 3,
+        "DisplacementMeters": 0.5999994
+      }
+    ],
+    "Responses": [
+      {
+        "RiderId": 1,
+        "Response": 1,
+        "Intent": {
+          "EntryTarget": 1,
+          "ApexTarget": 1,
+          "ExitTarget": 2
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.045,
+        "Reason": "Local phase response; production feasibility required",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 2,
+        "Response": 6,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": {
+          "PositiveDriveFraction": 0
+        },
+        "TacticalPreference": 0.02,
+        "Reason": "Hold available lateral position and lift positive drive; no direct speed change",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 3,
+        "Response": 3,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.10863636363636363,
+        "Reason": "Established footprint overlap forbids covering through the inside rider",
+        "HoldLateralPosition": false,
+        "PhysicalTarget": {
+          "OffsetFromInnerReferenceMeters": 7.464844
+        }
+      }
+    ],
+    "MechanicalContacts": 0,
+    "Work": {
+      "JointCombinations": 27,
+      "ProductionResolutions": 122,
+      "NarrowPhaseEvaluations": 244468,
+      "ResponsePasses": 1,
+      "Clusters": 1,
+      "UniqueRiderAlternativeProjections": 30,
+      "PairAlternativeChecks": 66,
+      "JointCombinationsScored": 27,
+      "ActualProductionVerifications": 1,
+      "SafetyPasses": 0,
+      "LegacyFallbackAttempts": 0,
+      "SafetyContactComponents": 0,
+      "FinalContactComponents": 0,
+      "SafetyJointCombinations": 0,
+      "OutwardTargetTrials": 22
+    }
+  },
+  {
+    "Name": "attack-4-2",
+    "Configuration": "C",
+    "RiderOrderExact": true,
+    "ClearanceCertified": true,
+    "MinimumMechanicalSeparationMeters": 0.5178496400431865,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 1,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 1.6,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 3,
+        "LateralPosition": 2.2,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 4,
+        "LateralPosition": 3,
+        "DisplacementMeters": 0.5999994
+      }
+    ],
+    "Responses": [
+      {
+        "RiderId": 1,
+        "Response": 1,
+        "Intent": {
+          "EntryTarget": 1,
+          "ApexTarget": 1,
+          "ExitTarget": 2
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.10863636363636363,
+        "Reason": "Local phase response; production feasibility required",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 2,
+        "Response": 1,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.045,
+        "Reason": "Established footprint overlap forbids covering through the inside rider",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 3,
+        "Response": 6,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": {
+          "PositiveDriveFraction": 0
+        },
+        "TacticalPreference": 0.02,
+        "Reason": "Hold available lateral position and lift positive drive; no direct speed change",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      }
+    ],
+    "MechanicalContacts": 0,
+    "Work": {
+      "JointCombinations": 27,
+      "ProductionResolutions": 62,
+      "NarrowPhaseEvaluations": 265488,
+      "ResponsePasses": 1,
+      "Clusters": 1,
+      "UniqueRiderAlternativeProjections": 20,
+      "PairAlternativeChecks": 56,
+      "JointCombinationsScored": 27,
+      "ActualProductionVerifications": 1,
+      "SafetyPasses": 0,
+      "LegacyFallbackAttempts": 0,
+      "SafetyContactComponents": 0,
+      "FinalContactComponents": 0,
+      "SafetyJointCombinations": 0,
+      "OutwardTargetTrials": 11
+    }
+  },
+  {
+    "Name": "attack-4-4",
+    "Configuration": "C",
+    "RiderOrderExact": true,
+    "ClearanceCertified": true,
+    "MinimumMechanicalSeparationMeters": 0.3766046554496467,
+    "Riders": [
+      {
+        "RiderId": 1,
+        "LateralPosition": 1,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 2,
+        "LateralPosition": 1.6,
+        "DisplacementMeters": 0
+      },
+      {
+        "RiderId": 3,
+        "LateralPosition": 2,
+        "DisplacementMeters": -0.6000004
+      },
+      {
+        "RiderId": 4,
+        "LateralPosition": 3,
+        "DisplacementMeters": 0.5999994
+      }
+    ],
+    "Responses": [
+      {
+        "RiderId": 1,
+        "Response": 1,
+        "Intent": {
+          "EntryTarget": 1,
+          "ApexTarget": 1,
+          "ExitTarget": 2
+        },
+        "DriveControl": null,
+        "TacticalPreference": -0.045,
+        "Reason": "Local phase response; production feasibility required",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 2,
+        "Response": 6,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": {
+          "PositiveDriveFraction": 0
+        },
+        "TacticalPreference": 0.02,
+        "Reason": "Hold available lateral position and lift positive drive; no direct speed change",
+        "HoldLateralPosition": true,
+        "PhysicalTarget": null
+      },
+      {
+        "RiderId": 3,
+        "Response": 0,
+        "Intent": {
+          "EntryTarget": 2,
+          "ApexTarget": 2,
+          "ExitTarget": 2
+        },
+        "DriveControl": null,
+        "TacticalPreference": 0,
+        "Reason": "Independent #54 intent",
+        "HoldLateralPosition": false,
+        "PhysicalTarget": null
+      }
+    ],
+    "MechanicalContacts": 0,
+    "Work": {
+      "JointCombinations": 27,
+      "ProductionResolutions": 182,
+      "NarrowPhaseEvaluations": 435790,
+      "ResponsePasses": 1,
+      "Clusters": 1,
+      "UniqueRiderAlternativeProjections": 30,
+      "PairAlternativeChecks": 64,
+      "JointCombinationsScored": 27,
+      "ActualProductionVerifications": 1,
+      "SafetyPasses": 0,
+      "LegacyFallbackAttempts": 0,
+      "SafetyContactComponents": 0,
+      "FinalContactComponents": 0,
+      "SafetyJointCombinations": 0,
+      "OutwardTargetTrials": 22
+    }
+  }
+]

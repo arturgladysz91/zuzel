@@ -15,6 +15,8 @@ A consumed pair rearms only after continuous resolved, nonambiguous #55 lower-bo
 0.65 m for 0.45 s; forecasts, incomplete coverage and duplicate observations cannot establish release.
 
 Current racing-response precedence (#56B): [bounded pre-contact contested-space responses](calibration/contested-space-racing-response.md)
+
+Current outward-target precedence: [geometry-based minimal outward yielding](calibration/minimal-outward-yield.md)
 adds an opt-in heat-scoped coordinator after independent #54 planning. Joint alternatives
 execute production motion and are verified by #55; legacy consequences are authorized once
 for an unresolved eligible episode. Feature OFF retains the merged #56A behavior. Strength,

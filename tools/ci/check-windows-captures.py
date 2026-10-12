@@ -8,9 +8,17 @@ root = Path(sys.argv[1])
 repo = Path(__file__).resolve().parents[2]
 goldens = repo / "docs/calibration"
 
-for directory, name in (("physical-contact", "physical-contact-analysis.json"),
-                        ("physical-contact-consequences", "physical-contact-consequences.json")):
-    assert (root / directory / name).read_bytes() == (goldens / name).read_bytes().replace(b"\r\n", b"\n"), name
+# The physical calibration kernels remain frozen. Only target-driven production
+# rows may differ from their historical goldens, and only with actual target work.
+target = runpy.run_path(str(repo / "tools/minimal-yield-audit/compatibility.py"))
+for directory, name, consequences in (("physical-contact", "physical-contact-analysis.json", False),
+                                      ("physical-contact-consequences", "physical-contact-consequences.json", True)):
+    summary = target["contact_presentation"](
+        goldens / name, root / directory / name,
+        root / directory / "minimal-yield-target-work.json",
+        root / ("minimal-yield-" + directory + "-changes.json.gz"),
+        consequences=consequences)
+    print(name, summary)
 
 physical = json.loads((root / "physical-space/physical-occupancy-evidence.json").read_text(encoding="utf-8"))
 assert len(physical["Scenarios"]) == 12
@@ -24,10 +32,13 @@ assert {p.name for p in (root / "rider-compatibility").iterdir()} == {
 assert {p.name for p in (root / "contested-space").iterdir()} == {
     "contested-space-racing-response.json", "production-motion-bits.json"}
 
-frozen = runpy.run_path(str(repo / "tools/contested-performance/compare-frozen.py"))
-changes = frozen["compare"](frozen["read"](goldens / "contested-space-racing-response.json"),
-                            frozen["read"](root / "contested-space/contested-space-racing-response.json"))
-(root / "contested-work-savings.json").write_text(json.dumps(changes, indent=2) + "\n", encoding="utf-8")
+# The base report and optimized report are compared row by row. Every
+# unexpected untargeted change still fails the historical audit.
+presentation = target["presentation"](
+    root / "contested-space-before/contested-space-racing-response.json",
+    root / "contested-space/contested-space-racing-response.json",
+    root / "minimal-yield-presentation-changes.json.gz")
+print("Minimal outward presentation:", presentation)
 report = json.loads((root / "contested-space/contested-space-racing-response.json").read_text(encoding="utf-8"))
 assert len(report["Scenarios"]) == 13
 assert len(report["Sensitivity"]) == len(report["TechniqueCondition"]) == 9

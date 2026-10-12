@@ -122,6 +122,36 @@ public sealed class LinearBikePoseInterval : PhysicalPoseInterval
 /// <summary>Read-only geometry adapter of canonical #53 nodes; no alternate physical traversal.</summary>
 public static class ResolvedBikePoses
 {
+    // Resolve-local interning of identical immutable sampler inputs. Different
+    // physical requests still project and certify their complete executed paths.
+    internal sealed class IntervalPool
+    {
+        private const int MaximumInternedIntervals = 4000;
+        private readonly Dictionary<ProductionPoseInterval, ProductionPoseInterval> intervals = new(new SamplerComparer());
+        internal PhysicalPoseInterval Get(PhysicalPoseInterval interval)
+        {
+            if (interval is not ProductionPoseInterval production) return interval;
+            if (intervals.TryGetValue(production, out var existing)) return existing;
+            if (intervals.Count < MaximumInternedIntervals) intervals.Add(production, production);
+            return production;
+        }
+    }
+    private sealed class SamplerComparer : IEqualityComparer<ProductionPoseInterval>
+    {
+        public bool Equals(ProductionPoseInterval? a, ProductionPoseInterval? b)
+            => ReferenceEquals(a, b) || (a is not null && b is not null && a.SameSampler(b));
+        public int GetHashCode(ProductionPoseInterval interval) => interval.SamplerHash;
+    }
+    // Continuous target search must use the existing deterministic #55 arithmetic
+    // even in shadow/B mode. Re-map canonical nodes; never interpolate a new path.
+    internal static PhysicalPoseInterval InEmbedding(PhysicalPoseInterval interval, TrackMetricEmbedding embedding)
+    {
+        if (interval.FrameId != embedding.FrameId)
+            throw new ArgumentException("Interaction pose belongs to another geometry frame.");
+        if (interval.DeterministicArithmetic == embedding.DeterministicArithmetic) return interval;
+        return interval is ProductionPoseInterval production ? new ProductionPoseInterval(production, embedding)
+            : throw new ArgumentException("Only canonical production intervals can be re-mapped.");
+    }
     public static IReadOnlyList<PhysicalPoseInterval> FromMotion(ResolvedRiderMotion motion, Track track,
         SpeedwayBikeDimensions? dimensions = null, ReferenceBikeAttitude? attitude = null, TrackMetricEmbedding? embedding = null)
     {
@@ -155,9 +185,15 @@ public static class ResolvedBikePoses
                     if (p > p0 && p < p1) cuts.Add(start + (end - start) * (p - p0) / (p1 - p0));
             }
             cuts.Sort();
-            for (var cut = 1; cut < cuts.Count; cut++) result.Add(new ProductionPoseInterval(motion, track,
-                a, b, embedding, source, cuts[cut - 1], cuts[cut], dimensions ?? SpeedwayBikeDimensions.Reference, profile,
-                cut == 1 && discontinuity));
+            for (var cut = 1; cut < cuts.Count; cut++)
+            {
+                // A progress knot can round to an existing common-time endpoint.
+                // It adds no duration; the neighboring positive interval still covers it.
+                if (cuts[cut] <= cuts[cut - 1]) continue;
+                result.Add(new ProductionPoseInterval(motion, track,
+                    a, b, embedding, source, cuts[cut - 1], cuts[cut], dimensions ?? SpeedwayBikeDimensions.Reference, profile,
+                    cuts[cut - 1] == start && discontinuity));
+            }
         }
         return result.AsReadOnly();
     }
@@ -170,7 +206,41 @@ public static class ResolvedBikePoses
         private readonly PreparedMetricTrackSegment _map;
         private readonly ReferenceBikeAttitude _profile;
         private readonly bool _straight;
+        // Include every input read by Sample/RateBounds and every provenance flag.
+        // Reference identity fixes geometry, attitude and dimensions; floating
+        // inputs compare their bits, including signed zero. The prepared map is
+        // derived solely from the segment, node rates and duration below.
+        internal bool SameSampler(ProductionPoseInterval other)
+            => RiderId == other.RiderId && StringComparer.Ordinal.Equals(FrameId, other.FrameId)
+                && Source == other.Source && StartsAtDiscontinuity == other.StartsAtDiscontinuity
+                && SupportsLapWrap == other.SupportsLapWrap && _straight == other._straight
+                && ReferenceEquals(Dimensions, other.Dimensions) && ReferenceEquals(_profile, other._profile)
+                && ReferenceEquals(_segment, other._segment)
+                && Bits(StartTimeSeconds) == Bits(other.StartTimeSeconds) && Bits(EndTimeSeconds) == Bits(other.EndTimeSeconds)
+                && Bits(_nodeStart) == Bits(other._nodeStart) && Bits(_duration) == Bits(other._duration)
+                && Bits(_angle) == Bits(other._angle) && Bits(_phaseStart) == Bits(other._phaseStart)
+                && Bits(_phaseSpan) == Bits(other._phaseSpan)
+                && FloatBits(_a.SegmentProgress) == FloatBits(other._a.SegmentProgress)
+                && FloatBits(_b.SegmentProgress) == FloatBits(other._b.SegmentProgress)
+                && FloatBits(_a.PhysicalOffsetMeters) == FloatBits(other._a.PhysicalOffsetMeters)
+                && FloatBits(_b.PhysicalOffsetMeters) == FloatBits(other._b.PhysicalOffsetMeters);
+        internal int SamplerHash => HashCode.Combine(RiderId, Bits(StartTimeSeconds), Bits(EndTimeSeconds),
+            Bits(_nodeStart), Bits(_duration), FloatBits(_a.SegmentProgress), FloatBits(_b.SegmentProgress),
+            HashCode.Combine(FloatBits(_a.PhysicalOffsetMeters), FloatBits(_b.PhysicalOffsetMeters)));
+        private static long Bits(double value) => BitConverter.DoubleToInt64Bits(value);
+        private static int FloatBits(float value) => BitConverter.SingleToInt32Bits(value);
         internal override bool DeterministicArithmetic => _segment.DeterministicArithmetic;
+        internal ProductionPoseInterval(ProductionPoseInterval source, TrackMetricEmbedding embedding)
+            : base(source.RiderId, embedding.FrameId, source.StartTimeSeconds, source.EndTimeSeconds,
+                source.Dimensions, source.StartsAtDiscontinuity, source.Source, embedding.Closure.SupportsLapWrap)
+        {
+            _a=source._a;_b=source._b;_nodeStart=source._nodeStart;_duration=source._duration;
+            _profile=source._profile;_angle=source._angle;_phaseStart=source._phaseStart;
+            _phaseSpan=source._phaseSpan;_straight=source._straight;
+            _segment=embedding.Segments[source._segment.SegmentIndex];
+            _map=_segment.Prepare(((double)_b.SegmentProgress-_a.SegmentProgress)/_duration,
+                ((double)_b.PhysicalOffsetMeters-_a.PhysicalOffsetMeters)/_duration);
+        }
         public ProductionPoseInterval(ResolvedRiderMotion motion, Track track, RiderMotionSample a, RiderMotionSample b,
             TrackMetricEmbedding embedding, PoseSource source, double start, double end, SpeedwayBikeDimensions dimensions, ReferenceBikeAttitude profile, bool discontinuity)
             : base(motion.RiderId, embedding.FrameId, start, end, dimensions, discontinuity, source, embedding.Closure.SupportsLapWrap)

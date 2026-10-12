@@ -156,7 +156,9 @@ jobs:
         with:
           name: windows-build
       - name: Capture physical contact arithmetic regression
-        run: dotnet run --project tools/physical-contact-consequence-audit -c Release -- results/physical-contact-consequences --trace
+        run: |
+          dotnet run --project tools/physical-contact-consequence-audit -c Release -- results/physical-contact-consequences --trace
+          dotnet run --project tools/physical-contact-consequence-audit -c Release -- results/physical-contact-consequences --yield-probe
       - name: Capture typed IEEE values and final rider/raw surface states
         shell: bash
         run: |
@@ -165,21 +167,35 @@ jobs:
           dotnet src/Sandbox/bin/Release/net8.0/Sandbox.dll physical-occupancy-report results/physical-space
           dotnet run --project tools/rider-compatibility-audit -c Release -- results/rider-compatibility
           dotnet run --project tools/contested-space-audit -c Release -- results/contested-space
-          dotnet run --project tools/physical-contact-audit -c Release -- results/physical-contact
-          dotnet run --project tools/physical-contact-consequence-audit -c Release -- results/physical-contact-consequences
-      - name: Compare optimized engine with original merged main using exact typed behavior
+          dotnet run --project tools/physical-contact-audit -c Release -- results/physical-contact --minimal-yield
+          dotnet run --project tools/physical-contact-consequence-audit -c Release -- results/physical-contact-consequences --minimal-yield
+      - name: Compare intended #67 behavior with main and prove exact certificate reuse
         shell: bash
         run: |
-          git fetch origin 5989301192565f6a265d53a2db12c7d00c94fedc
-          git worktree add --detach ../contested-baseline 5989301192565f6a265d53a2db12c7d00c94fedc
+          git fetch origin f40b2fd129124d969fd22cfe7767e2fb00bd651f
+          git worktree add --detach ../contested-baseline f40b2fd129124d969fd22cfe7767e2fb00bd651f
           baseline="$(cd ../contested-baseline && pwd)"
           dotnet build tools/contested-performance -c Release --warnaserror -p:CoreSimRoot="$baseline" -o ../contested-before-bin
           dotnet build tools/contested-performance -c Release --warnaserror -o ../contested-after-bin
           dotnet ../contested-before-bin/CoreSim.Tests.dll capture results/contested-performance/before.json --raw
           dotnet ../contested-after-bin/CoreSim.Tests.dll capture results/contested-performance/after.json --raw
-          python tools/contested-performance/compare.py results/contested-performance
+          python tools/minimal-yield-audit/compatibility.py contested results/contested-performance
           dotnet ../contested-after-bin/CoreSim.Tests.dll type-probe results/contested-performance/types.json
           python tools/contested-performance/verify-types.py results/contested-performance/types.json
+          dotnet build tools/contested-space-audit -c Release --warnaserror -p:CoreSimRoot="$baseline" -o ../contested-presentation-before-bin
+          dotnet ../contested-presentation-before-bin/contested-space-audit.dll results/contested-space-before
+          dotnet build tools/minimal-yield-audit -c Release --warnaserror -p:CoreSimRoot="$baseline" -o ../yield-before-bin
+          dotnet build tools/minimal-yield-audit -c Release --warnaserror -o ../yield-after-bin
+          dotnet ../yield-before-bin/CoreSim.Tests.dll results/yield-before.json
+          dotnet ../yield-after-bin/CoreSim.Tests.dll results/yield-after.json
+          python tools/minimal-yield-audit/measure.py results/yield-before.json results/yield-after.json results/yield-measurements.json
+          git fetch origin 5373d594172985f4d5cfb692374e1f05cc7f18f2
+          git worktree add --detach ../contested-optimization-baseline 5373d594172985f4d5cfb692374e1f05cc7f18f2
+          baseline="$(cd ../contested-optimization-baseline && pwd)"
+          dotnet build tools/contested-performance -c Release --warnaserror -p:CoreSimRoot="$baseline" -o ../contested-optimization-before-bin
+          dotnet ../contested-optimization-before-bin/CoreSim.Tests.dll capture results/contested-performance/optimization-before.json --raw --with-contact
+          dotnet ../contested-after-bin/CoreSim.Tests.dll capture results/contested-performance/optimization-after.json --raw --with-contact
+          python tools/contested-performance/compare.py results/contested-performance --optimization
       - name: Capture complete enabled contact decisions before and after sequential recovery correction
         shell: bash
         run: |
@@ -203,7 +219,7 @@ jobs:
           dotnet build tools/race-engine-readiness -c Release --warnaserror -o ../readiness-after-bin
           dotnet ../readiness-before-bin/CoreSim.Tests.dll smoke results/readiness/before c13af7b8a16fe4e58e9d404c849cdf323649b0ed
           dotnet ../readiness-after-bin/CoreSim.Tests.dll smoke results/readiness/after "$(git rev-parse HEAD)"
-          python tools/race-engine-readiness/compare.py results/readiness
+          python tools/minimal-yield-audit/compatibility.py readiness results/readiness
       - name: Reproduce original REA-001 and verify the corrected production heats
         shell: bash
         run: |
