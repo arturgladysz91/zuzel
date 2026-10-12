@@ -44,7 +44,7 @@ internal static class CommonTimeCommitGuard
 /// </summary>
 internal sealed record PendingRiderSegment(RiderIntent Intent, ResolvedSimulationStep Resolution);
 internal sealed record RiderMotionContinuation(RiderSnapshot Committed, RiderSnapshot Speculative,
-    IReadOnlyList<PendingRiderSegment> Pending);
+    IReadOnlyList<PendingRiderSegment> Pending, RiderIntegrationCursor? ExecutionCursor = null);
 
 /// <summary>
 /// Internal, explicitly invoked REA-004A2 foundation. Executes selected controls with production
@@ -58,6 +58,7 @@ internal sealed class CommonTimeMotionWindow
     private readonly HeatSimulationOptions _options;
     private readonly Dictionary<int, List<PendingRiderSegment>> _pending;
     private readonly Dictionary<int, RiderSnapshot> _forecast;
+    private readonly Dictionary<int, RiderIntegrationCursor> _paused = new();
     private readonly TrackMetricEmbedding _embedding;
     private bool _committed;
     private IReadOnlyList<ResolvedRiderMotion> _committedHistory = Array.Empty<ResolvedRiderMotion>();
@@ -69,7 +70,8 @@ internal sealed class CommonTimeMotionWindow
     internal IReadOnlyList<ResolvedRiderMotion> CommittedHistory => _committedHistory;
     internal IReadOnlyList<RiderMotionContinuation> Continuations => _origin.Riders.Select(r =>
         new RiderMotionContinuation(_committed ? r.Apply(_pending[r.RiderId][0].Resolution.Changes.Single()) : r,
-            _forecast[r.RiderId], Array.AsReadOnly(_pending[r.RiderId].Skip(_committed ? 1 : 0).ToArray()))).ToArray();
+            _forecast[r.RiderId], Array.AsReadOnly(_pending[r.RiderId].Skip(_committed ? 1 : 0).ToArray()),
+            _paused.GetValueOrDefault(r.RiderId))).ToArray();
 
     internal CommonTimeMotionWindow(SimulationEngine engine, SimulationSnapshot origin, HeatSimulationOptions options)
     {
@@ -92,7 +94,44 @@ internal sealed class CommonTimeMotionWindow
     /// <summary>Each rider owns its own segment/lap and RNG step address. Resolve mutates no live state.</summary>
     internal ResolvedSimulationStep StageSelectedMotion(RiderIntent intent, int decisionStepNumber)
     {
+        var snapshot = PrepareSelectedMotion(intent, decisionStepNumber);
+        // The caller selects controls before staging. Coordinator endpoint consequences are
+        // deliberately unavailable here; #55 certifies the actual staged movement below.
+        var resolved = _engine.ResolveProduction(snapshot, new[] { intent }, _options, legacyContacts: false);
+        AcceptCompleted(intent, resolved);
+        return resolved;
+    }
+
+    internal RiderIntegrationProgress StageSelectedMotionWithPause(RiderIntent intent, int decisionStepNumber,
+        int pauseAfterSteps)
+    {
+        var snapshot = PrepareSelectedMotion(intent, decisionStepNumber);
+        var progress = _engine.BeginRiderIntegration(snapshot, intent, _options, pauseAfterSteps);
+        RetainProgress(intent, progress);
+        return progress;
+    }
+
+    internal RiderIntegrationProgress ResumeSelectedMotion(int riderId, TrackStateSnapshot surfaceVersion,
+        int? pauseAfterSteps = null)
+    {
+        var cursor = _paused[riderId];
+        var progress = cursor.Resume(surfaceVersion, pauseAfterSteps);
+        _paused.Remove(riderId);
+        RetainProgress(cursor.Intent, progress);
+        return progress;
+    }
+
+    private void RetainProgress(RiderIntent intent, RiderIntegrationProgress progress)
+    {
+        if (progress.Cursor is { } cursor) _paused.Add(intent.RiderId, cursor);
+        else AcceptCompleted(intent, progress.Completed!);
+    }
+
+    private SimulationSnapshot PrepareSelectedMotion(RiderIntent intent, int decisionStepNumber)
+    {
         if (_committed) throw new InvalidOperationException("A published window is sealed; its retained suffix needs a new reviewed world version.");
+        if (_paused.ContainsKey(intent.RiderId))
+            throw new RiderIntegrationRefusalException("Resume the pending numerical cursor before selecting another segment.");
         var rider = _forecast[intent.RiderId];
         var queue = _pending[intent.RiderId];
         if (!rider.IsActive || decisionStepNumber < _origin.Step.StepNumber
@@ -100,16 +139,17 @@ internal sealed class CommonTimeMotionWindow
             throw new ArgumentException("A continuation needs an active rider and a fresh addressed decision step.");
         var step = _origin.Step with { StepNumber = decisionStepNumber,
             LapIndex = rider.LapsCompleted, SegmentIndex = rider.SegmentIndex };
-        var snapshot = new SimulationSnapshot(step, _origin.Track, _origin.TrackState, new[] { rider });
-        // The caller selects controls before staging. Coordinator endpoint consequences are
-        // deliberately unavailable here; #55 certifies the actual staged movement below.
-        var resolved = _engine.ResolveProduction(snapshot, new[] { intent }, _options, legacyContacts: false);
+        return new SimulationSnapshot(step, _origin.Track, _origin.TrackState, new[] { rider });
+    }
+
+    private void AcceptCompleted(RiderIntent intent, ResolvedSimulationStep resolved)
+    {
+        var rider = _forecast[intent.RiderId];
         var change = resolved.Changes.Single();
         if (change.ElapsedTimeSeconds <= rider.ElapsedTimeSeconds)
             throw new InvalidOperationException("A staged segment requires positive executed time.");
-        queue.Add(new(intent, resolved));
+        _pending[intent.RiderId].Add(new(intent, resolved));
         _forecast[intent.RiderId] = rider.Apply(change);
-        return resolved;
     }
 
     internal void CommitFirstSegments(IReadOnlyList<RiderState> riders, TrackState surface, SimLog log)
@@ -117,6 +157,9 @@ internal sealed class CommonTimeMotionWindow
         ArgumentNullException.ThrowIfNull(riders); ArgumentNullException.ThrowIfNull(surface); ArgumentNullException.ThrowIfNull(log);
         if (_committed) throw new InvalidOperationException("Window already published.");
         RequireOriginalWorld(riders, surface);
+        if (_paused.Count != 0)
+            throw new CommonTimeCommitException(CommonTimeCommitRefusal.InsufficientCoverage,
+                "A paused speculative prefix has no publishable segment or certified contact state.");
         if (_pending.Values.Any(q => q.Count == 0))
             throw new CommonTimeCommitException(CommonTimeCommitRefusal.InsufficientCoverage, "Every rider requires executed forecast coverage.");
 
