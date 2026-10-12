@@ -1,5 +1,10 @@
 # Architecture
 
+REA-004A2's internal `CommonTimeMotionWindow` separates retained speculative production
+segments from one guarded publication. It supports independent per-rider segment contexts
+and uses #55 for coverage/contact certification. It is not called by the normal heat loop.
+See [scope, atomic publication and missing integrator cursor](calibration/rea-004a2-common-time-foundation.md).
+
 Current physical consequence precedence (#56C2): [physical contact consequences and recovery](calibration/physical-contact-consequences.md)
 adds a separate `PhysicalContactConsequenceResolver`. #55 detects; #56C1 analyzes frozen pairs and aggregates;
 the resolver builds a simultaneous plan before final `RiderStateChange`, diagnostics, motion and events are constructed.

@@ -1,5 +1,10 @@
 # Core simulation specification
 
+REA-004A2 adds an internal [common-time publication foundation](calibration/rea-004a2-common-time-foundation.md):
+one frozen world version, per-rider exact segment continuations, all-rider forecast
+coverage and a strict unresolved-contact publication barrier. A/B/C remain unchanged;
+general causal execution and interior integration cursors are still unavailable.
+
 Current physical consequence precedence (#56C2): [physical contact consequences and recovery](calibration/physical-contact-consequences.md)
 supersedes legacy contact outcomes only with default-OFF `EnablePhysicalContactConsequences` and #56B enabled.
 Only analyzed causal-frontier contacts after exhausted safety responses apply. Frozen aggregate delta velocity
