@@ -134,6 +134,13 @@ This is demonstrated by I: A and B both translate 20 m parallel with unchanged c
 
 ## Common-time continuous algorithm
 
+[REA-004A9](rea-004a9-first-contact-certification.md) adds explicit experimental
+first-contact certification. Clear-endpoint leaves whose lower bound still admits
+touch may subdivide below the existing root-time tolerance, within the same depth
+and evaluation budgets. Sampling, bounds, discontinuity/frame rules and ordinary
+observation are unchanged. This certificate does not authorize a rider state from
+an earlier witness on a different partial-step trajectory.
+
 The adapter creates continuous spans between **existing motion nodes**, plus exact attitude-phase crossings. Common time is `double(StartElapsedTimeSeconds) + LocalTimeSeconds`; travelled metres are never used as a shared longitudinal origin. Reaction endpoints, duplicate-time state events and segment boundaries are temporal cuts. Pair evaluation intersects actual domains using two sorted interval streams across the entire captured heat. A maximum of six unordered four-rider pairs is independent of input collection order; A/B mean ascending rider ids.
 
 Bounding circles conservatively reject contact where centre separation cannot close enough over the interval. Narrow phase evaluates only immutable poses and four capsule pairs. For linear centre/shortest-angle histories, centre velocity is exact and angular speed is bounded by the normalized angle advance. For production polar nodes, radius and angular progress are linear: `|position''| <= rMax*θRate² + 2*|rRate*θRate|`; χ rate is at most `2*|θRate|`. Smoothstep contributes at most `1.5*peak/phaseSpan * progressRate` to ψ rate.

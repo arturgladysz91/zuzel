@@ -120,7 +120,7 @@ public sealed class FrozenHeatContextTests(ITestOutputHelper output)
     }
 
     [Fact]
-    public void FrozenControl19FourRiderForecastFindsEarliestUnresolvedPairBeforePublication()
+    public void FrozenControl19CertifiesGeometryButRefusesUnalignedQuantizedEventStates()
     {
         var (track, surface, live) = Catalog.All().Single(s => s.Id == "control").Create();
         var options = new HeatSimulationOptions { Seed = 19, EnableContestedSpaceResponses = true,
@@ -187,6 +187,8 @@ public sealed class FrozenHeatContextTests(ITestOutputHelper output)
                 foreach (var id in reverse ? new[] { 2, 1 } : new[] { 1, 2 })
                     window.StageSelectedMotion(selectedIntents[(step, id)], step);
             var secondSegment = window.StageSelectedMotion(selectedIntents[(7, 2)], 7);
+            var priorSecondPoses = ResolvedBikePoses.FromMotion(secondSegment.Motions.Single(), track, embedding: embedding);
+            var entryJump = forecasts[8].Motions.Single(m => m.RiderId == 2).EntryBoundary?.HasPhysicalOffsetDiscontinuity == true;
             Assert.Equal(forecasts[7].Diagnostics.Single(d => d.RiderId == 2).ExecutedPath, secondSegment.Diagnostics.Single().ExecutedPath);
             var startR2 = secondSegment.Changes.Single().ElapsedTimeSeconds;
             var originalR1 = forecasts[7].Snapshot.Rider(1);
@@ -202,12 +204,78 @@ public sealed class FrozenHeatContextTests(ITestOutputHelper output)
             Assert.NotEqual(r1.Snapshot.Riders[0].ElapsedTimeSeconds, r2.Snapshot.Riders[0].ElapsedTimeSeconds);
             Assert.Throws<CommonTimeCommitException>(() => window.CommitFirstSegments(live, surface, new SimLog()));
             var prefixHash = Exact.Hash(r1.Boundary);
+            // Reproduce #77 exactly with its existing partial-step accuracy and detector.
+            // This diagnostic comparison is outside the measured new pair search.
+            if (!reverse)
+            {
+                var costObserver = ProjectionCaptureAudit.Observer;
+                ProjectionCaptureAudit.Observer = null;
+                try
+                {
+                var old = new[] { r1, r2 }.Select(c => c.PreviewToTime(13.265295613064154)).ToArray();
+                var oldPoses = old.SelectMany((b, i) => TwoRiderContactExecution.Poses(i == 0 ? r1.Snapshot : r2.Snapshot, b, embedding)).ToArray();
+                var legacyDiagnostics = new List<SpaceSearchDiagnostic>();
+                ContestedSpaceReport legacy;
+                try { SpaceSearchDiagnostics.Observer = legacyDiagnostics.Add; legacy = ContestedSpaceResolver.Observe(oldPoses); }
+                finally { SpaceSearchDiagnostics.Observer = null; }
+                var failed = Assert.Single(legacyDiagnostics.Where(d => d.Refusal != SpaceSearchRefusal.None));
+                Assert.Equal(SpaceSearchRefusal.UncertainFirst, failed.Refusal);
+                Assert.Equal(17, failed.MaximumDepth); Assert.Equal(52, failed.Evaluations);
+                Assert.InRange(failed.FirstTouchSeconds!.Value - failed.UncertainFirstSeconds, 2.53e-7, 2.54e-7);
+                var refined = ContestedSpaceResolver.ObserveFirstContact(oldPoses);
+                Assert.All(refined.Intervals, r => Assert.True(r.NumericallyResolved));
+                Assert.Equal(legacy.Intervals.Single().FirstTouchCommonTimeSeconds, refined.Intervals.Single().FirstTouchCommonTimeSeconds);
+                output.WriteLine($"legacyDiagnostic={failed}; refinedNarrow={refined.Work.NarrowPhaseEvaluations}; refinedSplits={refined.Work.AdaptiveSubdivisions}");
+                output.WriteLine($"limits: time={failed.TimeToleranceSeconds:R}; contact={failed.ContactToleranceMeters:R}; minimum={failed.MinimumToleranceMeters:R}; depth={failed.DepthLimit}; evaluations={failed.EvaluationLimit}");
+                // Actually rerun at the earlier certified witness; its changed
+                // endpoint defines another sampler and loses the old contact.
+                var earlierRequest = refined.Intervals.Single().FirstTouchCommonTimeSeconds!.Value + ExecutedPathTraversal.TimeToleranceSeconds * .5;
+                var earlier = new[] { r1, r2 }.Select(c => c.PreviewToTime(earlierRequest, ExecutedPathTraversal.TimeToleranceSeconds / 16)).ToArray();
+                var earlierGeometry = ContestedSpaceResolver.ObserveFirstContact(earlier.SelectMany((b, i) => TwoRiderContactExecution.Poses(i == 0 ? r1.Snapshot : r2.Snapshot, b, embedding)));
+                Assert.All(earlierGeometry.Intervals, r => { Assert.True(r.NumericallyResolved); Assert.False(r.HasConflict); });
+                output.WriteLine($"earlierWitnessReexecutionRequest={earlierRequest:R}; clearMin={earlierGeometry.Intervals.Min(r => r.MinimumSeparationMeters):R}");
+                // Exact #77 time-search reference, no consequence/publication and no
+                // new four-rider setup. Count its geometry work before local refinement.
+                var origins = new[] { r1.Snapshot, r2.Snapshot };
+                var full = origins.Select((s, i) => engine.ResolveProduction(s, new[] { (i == 0 ? r1 : r2).Intent }, options, legacyContacts: false)).ToArray();
+                var bracketGeometry = ContestedSpaceResolver.Observe(full.SelectMany(f => f.Motions)
+                    .SelectMany(m => ResolvedBikePoses.FromMotion(m, track, embedding: embedding)));
+                var bracketTouch = bracketGeometry.Intervals.Where(r => r.HasConflict).Min(r => r.FirstTouchCommonTimeSeconds)!.Value;
+                var lowerTime = new[] { r1, r2 }.Max(c => c.Snapshot.Riders[0].ElapsedTimeSeconds + c.Boundary.TimeSeconds);
+                var upperTime = full.Select(f => f.Motions.Single()).Min(m => m.StartElapsedTimeSeconds
+                    + m.Nodes.Where(n => m.StartElapsedTimeSeconds + n.LocalTimeSeconds > bracketTouch).Take(2).Average(n => (double)n.LocalTimeSeconds));
+                var trials = 0; var narrow = bracketGeometry.Work.NarrowPhaseEvaluations; var splits = bracketGeometry.Work.AdaptiveSubdivisions;
+                ContestedSpaceReport LegacyTrial(double requested)
+                {
+                    trials++;
+                    var bounds = new[] { r1, r2 }.Select(c => c.PreviewToTime(requested)).ToArray();
+                    var observed = ContestedSpaceResolver.Observe(bounds.SelectMany((b, i) => TwoRiderContactExecution.Poses(origins[i], b, embedding)));
+                    narrow += observed.Work.NarrowPhaseEvaluations; splits += observed.Work.AdaptiveSubdivisions;
+                    return observed;
+                }
+                Assert.Contains(LegacyTrial(upperTime).Intervals, r => r.HasConflict);
+                Assert.DoesNotContain(LegacyTrial(Math.BitIncrement(lowerTime)).Intervals, r => r.HasConflict || !r.NumericallyResolved);
+                for (var iteration = 0; iteration < ExecutedPathTraversal.BisectionIterations
+                    && upperTime - lowerTime > ExecutedPathTraversal.TimeToleranceSeconds * .25; iteration++)
+                {
+                    var mid = (lowerTime + upperTime) * .5; var observed = LegacyTrial(mid);
+                    if (observed.Intervals.Any(r => r.HasConflict)) upperTime = mid;
+                    else if (observed.Intervals.Any(r => !r.NumericallyResolved)) break;
+                    else lowerTime = mid;
+                }
+                Assert.Equal(21, trials); Assert.Equal(13.265295613064154, upperTime);
+                output.WriteLine($"legacySearchTrials={trials}; legacySearchNarrow={narrow}; legacySearchSplits={splits}; reusedCertificates=0; prefixReplays=0");
+                }
+                finally { ProjectionCaptureAudit.Observer = costObserver; }
+            }
             bool CertifyOthers(IReadOnlyList<PhysicalPoseInterval> actual, double through, bool continuation)
             {
-                var from = continuation ? actual.GroupBy(p => p.RiderId).Max(g => g.Min(p => p.StartTimeSeconds)) : (double)startR2;
+                var from = continuation ? actual.GroupBy(p => p.RiderId).Max(g => g.Min(p => p.StartTimeSeconds)) : windowStart;
                 var to = actual.GroupBy(p => p.RiderId).Min(g => g.Max(p => p.EndTimeSeconds));
-                var clipped = backgrounds.Concat(actual).Where(p => p.StartTimeSeconds < to && p.EndTimeSeconds > from)
-                    .Select(p => new Clip(p, Math.Max(from, p.StartTimeSeconds), Math.Min(to, p.EndTimeSeconds))).ToArray();
+                var clipped = backgrounds.Concat(actual).Concat(continuation ? Array.Empty<PhysicalPoseInterval>() : priorSecondPoses)
+                    .Where(p => p.StartTimeSeconds < to && p.EndTimeSeconds > from)
+                    .Select(p => new Clip(p, Math.Max(from, p.StartTimeSeconds), Math.Min(to, p.EndTimeSeconds),
+                        entryJump && p.RiderId == 2 && p.StartTimeSeconds == startR2)).ToArray();
                 foreach (var id in Enumerable.Range(1, 4))
                 {
                     var covered = from;
@@ -215,7 +283,9 @@ public sealed class FrozenHeatContextTests(ITestOutputHelper output)
                     { if (pose.StartTimeSeconds > covered) return false; covered = pose.EndTimeSeconds; }
                     if (covered < to) return false;
                 }
-                var all = CommonTimePoseHistory.Observe(clipped); syncEvaluations += all.Work.NarrowPhaseEvaluations;
+                var all = ContestedSpaceResolver.ObserveFirstContact(CommonTimePoseHistory.Stitch(clipped));
+                Assert.Equal(6, all.Work.RiderPairs); syncEvaluations += all.Work.NarrowPhaseEvaluations;
+                output.WriteLine($"allSix continuation={continuation}; work={all.Work}; resolved={all.Intervals.All(r => r.NumericallyResolved)}");
                 if (all.FrameCoverageGaps.Count != 0 || all.Intervals.Any(r => !r.NumericallyResolved || r.Kind.HasFlag(SpaceConflictKind.BoundaryAmbiguous)))
                     return false;
                 if (continuation) return all.Intervals.All(r => r.MinimumSeparationLowerBoundMeters >= -GeometryNumerics.MinimumSeparationToleranceMeters
@@ -225,7 +295,28 @@ public sealed class FrozenHeatContextTests(ITestOutputHelper output)
                     && Math.Abs(earliest.FirstTouchCommonTimeSeconds!.Value - through) <= ExecutedPathTraversal.TimeToleranceSeconds;
             }
             var cursors = reverse ? new[] { r2, r1 } : new[] { r1, r2 };
-            var result = Assert.Throws<PairContactCertificationRefusal>(() => TwoRiderContactExecution.Execute(engine, cursors, options, 1, CertifyOthers));
+            var diagnostics = new List<SpaceSearchDiagnostic>();
+            PairContactCertificationRefusal result;
+            try
+            {
+                SpaceSearchDiagnostics.Observer = diagnostics.Add;
+                result = Assert.Throws<PairContactCertificationRefusal>(() => TwoRiderContactExecution.Execute(engine, cursors, options, 1, CertifyOthers));
+            }
+            finally { SpaceSearchDiagnostics.Observer = null; }
+            foreach (var diagnostic in diagnostics.Where(d => d.Refusal != SpaceSearchRefusal.None))
+                output.WriteLine($"#55 diagnostic={diagnostic}");
+            output.WriteLine($"newSearchNarrow={diagnostics.Sum(d => d.Evaluations)}; newSearchSplits={diagnostics.Sum(d => d.Evaluations - 2)}; newSearchMaxDepth={diagnostics.Max(d => d.MaximumDepth)}; refusal={result.Message}");
+            var candidatePoses = result.Candidates.SelectMany((b, i) => TwoRiderContactExecution.Poses(i == 0 ? r1.Snapshot : r2.Snapshot, b, embedding)).ToArray();
+            Assert.True(CertifyOthers(candidatePoses, result.Report.Intervals.Where(r => r.HasConflict).Min(r => r.FirstTouchCommonTimeSeconds)!.Value, false));
+            Assert.NotNull(result.Alignment);
+            // A <1 ns requested-time bracket crosses one float lateral quantum;
+            // its clear certificate belongs to another geometry, not this contact.
+            Assert.InRange(result.RequestedTimeSeconds - result.Alignment.ClearRequestedTimeSeconds, 0, 1e-9);
+            Assert.Equal(MathF.BitIncrement(result.Alignment.ClearCandidates[0].LateralPosition), result.Candidates[0].LateralPosition);
+            Assert.InRange(result.Alignment.ClearGeometry.Intervals.Min(r => r.MinimumSeparationMeters), 1.11e-6, 1.12e-6);
+            var touch = result.Report.Intervals.Single().FirstTouchCommonTimeSeconds!.Value;
+            Assert.All(result.Candidates.Select((b, i) => (i == 0 ? r1 : r2).Snapshot.Riders[0].ElapsedTimeSeconds + b.TimeSeconds),
+                t => Assert.InRange(t - touch, 3.1e-7, 3.3e-7));
             Assert.Equal(prefixHash, Exact.Hash(r1.Boundary));
             Assert.Equal(r1.Boundary.Steps, result.Candidates[0].Steps.Take(count));
             Assert.All(cursors, c => Assert.Throws<RiderIntegrationRefusalException>(() => c.Resume(heat.Surface)));
@@ -241,25 +332,35 @@ public sealed class FrozenHeatContextTests(ITestOutputHelper output)
             causal = Execute(false);
         }
         finally { ProjectionCaptureAudit.Observer = null; }
-        Assert.Contains(causal.Failure.Report.Intervals, r => !r.NumericallyResolved);
+        Assert.All(causal.Failure.Report.Intervals, r => Assert.True(r.NumericallyResolved));
+        Assert.Contains("Actual event states", causal.Failure.Message);
+        Assert.NotNull(causal.Failure.Alignment);
+        Assert.All(causal.Failure.Alignment.ClearGeometry.Intervals, r => { Assert.True(r.NumericallyResolved); Assert.False(r.HasConflict); });
+        for (var i = 0; i < 2; i++)
+        {
+            var b = causal.Failure.Alignment.ClearCandidates[i];
+            var origin = i == 0 ? causal.R1.Snapshot : causal.R2.Snapshot;
+            output.WriteLine($"clear R{i + 1}: request={causal.Failure.Alignment.ClearRequestedTimeSeconds:R}; time={origin.Riders[0].ElapsedTimeSeconds + b.TimeSeconds:R}; progress={b.CanonicalProgress:R}; distance={b.DistanceMeters:R}; lateral={b.LateralPosition:R}; speed={b.Speed:R}; physicalOffset={b.Nodes[^1].PhysicalOffsetMeters:R}");
+        }
+        output.WriteLine($"clearMin={causal.Failure.Alignment.ClearGeometry.Intervals.Min(r => r.MinimumSeparationMeters):R}");
         Assert.Equal(0, heat.PassageCount); // No attempted boundary has been accepted or charged.
         heat.AcceptPrefix(causal.R1, causal.Failure.RequestedTimeSeconds, first.FirstTouchCommonTimeSeconds);
         heat.AcceptPrefix(causal.R2, causal.Failure.RequestedTimeSeconds, first.FirstTouchCommonTimeSeconds);
         Assert.Equal(causal.R1.Boundary.CompletedSteps, heat.AcceptedNumericalSteps);
-        object Evidence(PairContactCertificationRefusal r) => new { r.RequestedTimeSeconds, r.Candidates, r.Report, r.PairTimeTrials };
+        object Evidence(PairContactCertificationRefusal r) => new { r.RequestedTimeSeconds, r.Candidates, r.Report, r.PairTimeTrials, r.Alignment };
         var firstSyncCost = syncEvaluations;
         Assert.Equal(Exact.Hash(Evidence(causal.Failure)), Exact.Hash(Evidence(Execute(true).Failure)));
         foreach (var i in new[] { 0, 1 })
         {
             var b = causal.Failure.Candidates[i]; var origin = i == 0 ? causal.R1.Snapshot : causal.R2.Snapshot;
             Assert.InRange(origin.Riders[0].ElapsedTimeSeconds + b.TimeSeconds - causal.Failure.RequestedTimeSeconds, 0, ExecutedPathTraversal.TimeToleranceSeconds);
-            output.WriteLine($"unaccepted R{i + 1}: time={origin.Riders[0].ElapsedTimeSeconds + b.TimeSeconds:R}; progress={b.CanonicalProgress:R}; distance={b.DistanceMeters:R}; lateral={b.LateralPosition:R}; speed={b.Speed:R}");
+            output.WriteLine($"unaccepted R{i + 1}: time={origin.Riders[0].ElapsedTimeSeconds + b.TimeSeconds:R}; progress={b.CanonicalProgress:R}; distance={b.DistanceMeters:R}; lateral={b.LateralPosition:R}; speed={b.Speed:R}; physicalOffset={b.Nodes[^1].PhysicalOffsetMeters:R}");
         }
         output.WriteLine($"refusedAt={causal.Failure.RequestedTimeSeconds:R}; observedTouch={causal.Failure.Report.Intervals.Where(r => r.HasConflict).Min(r => r.FirstTouchCommonTimeSeconds):R}; pairTrials={causal.Failure.PairTimeTrials}; physicalEvaluations={counts.GetValueOrDefault(ProjectionMaterialization.PhysicalEvaluation)}; coupledEvaluations={counts.GetValueOrDefault(ProjectionMaterialization.CoupledEvaluation)}; capturePhysicalEvaluations={captureCounts.GetValueOrDefault(ProjectionMaterialization.PhysicalEvaluation)}; captureCoupledEvaluations={captureCounts.GetValueOrDefault(ProjectionMaterialization.CoupledEvaluation)}; syncEvaluations={firstSyncCost}; pairNarrowPhase={causal.Failure.Report.Work.NarrowPhaseEvaluations}; unacceptedCaptureSegments=36; discardedPairForecasts=2; discardedPairTimeTrials={causal.Failure.PairTimeTrials}; acceptedSteps={heat.AcceptedNumericalSteps}");
     }
 
-    private sealed class Clip(PhysicalPoseInterval source, double start, double end) : PhysicalPoseInterval(source.RiderId,
-        source.FrameId, start, end, source.Dimensions, source.StartsAtDiscontinuity && start == source.StartTimeSeconds, source.Source, source.SupportsLapWrap)
+    private sealed class Clip(PhysicalPoseInterval source, double start, double end, bool entryDiscontinuity = false) : PhysicalPoseInterval(source.RiderId,
+        source.FrameId, start, end, source.Dimensions, (source.StartsAtDiscontinuity || entryDiscontinuity) && start == source.StartTimeSeconds, source.Source, source.SupportsLapWrap)
     {
         internal override bool DeterministicArithmetic => source.DeterministicArithmetic;
         public override PhysicalBikePose Sample(double time) { Fraction(time); return source.Sample(time); }

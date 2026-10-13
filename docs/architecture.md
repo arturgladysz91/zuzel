@@ -40,6 +40,12 @@ candidate but final #55 uncertainty seals the tokens before consequences.
 Historical A/B/C retains its existing per-segment commits; no new heat mode is
 enabled and no temporal weather/wear ledger is needed.
 
+[REA-004A9](calibration/rea-004a9-first-contact-certification.md) certifies the
+mixed pair's first geometric touch through local refinement with unchanged
+limits. Shorter actual partial steps expose a discontinuous float lateral quantum
+between trajectory versions; the existing event-state time guard refuses before
+consequences. No rider is constructed by sampling the certified geometry.
+
 The target architecture uses one physical clock, event-driven synchronization
 and the existing distance integrator. The engine computes the entire four-rider
 heat, consequences and result before animation starts, then supplies recorded

@@ -3,6 +3,12 @@
 Release platform: **Windows only**. See the current [Windows CI policy](docs/ci.md)
 for Draft/full validation, the merge gate and optional historical audits.
 
+[REA-004A9](docs/calibration/rea-004a9-first-contact-certification.md) resolves the
+mixed pair's #55 first-contact uncertainty through local geometric refinement.
+Real partial-step re-execution then exposes a float lateral quantum: the certified
+touch precedes both trial states beyond the existing time bound. The experiment
+refuses before consequences; no real contact state or continuation is accepted.
+
 [REA-004A8](docs/calibration/rea-004a8-frozen-heat-common-time.md) implements the
 new binding heat-lifetime decision in an explicit experiment: one frozen surface,
 accepted-distance wear and one weather update after the heat. Independent cursors

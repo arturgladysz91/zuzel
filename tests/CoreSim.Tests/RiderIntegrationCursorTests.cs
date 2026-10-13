@@ -26,6 +26,14 @@ public sealed class RiderIntegrationCursorTests
         snapshot.TrackState.LinesCount, snapshot.TrackState.GetSurface);
 
     [Theory]
+    [InlineData(0)] [InlineData(-1)] [InlineData(double.NaN)] [InlineData(double.PositiveInfinity)] [InlineData(1e-6)]
+    public void LocalTimeBracketAccuracyCannotRelaxExistingAcceptanceBound(double tolerance)
+    {
+        var origin = Origin(); var cursor = Engine().BeginRiderIntegration(origin, Intent(), Options, 1).Cursor!;
+        Assert.Throws<ArgumentOutOfRangeException>(() => cursor.PreviewToTime(origin.Riders[0].ElapsedTimeSeconds + cursor.Boundary.TimeSeconds + .01, tolerance));
+    }
+
+    [Theory]
     [InlineData(7, .137f, 5)]
     [InlineData(3, 0f, 32)]
     public void ProductionTraversalResumesExactlyWithoutReevaluatingAcceptedSteps(int segment, float progress, int stop)
