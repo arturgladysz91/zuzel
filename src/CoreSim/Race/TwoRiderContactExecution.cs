@@ -17,14 +17,34 @@ internal static class TwoRiderContactExecution
     internal static TwoRiderContactResult Execute(SimulationEngine engine, SimulationSnapshot snapshot,
         IReadOnlyList<RiderIntent> intents, HeatSimulationOptions options, int continuationSteps = 6)
     {
-        if (snapshot.Riders.Count != 2 || intents.Count != 2 || continuationSteps < 3
-            || !options.EnablePhysicalContactConsequences || !options.EnableContestedSpaceResponses
-            || snapshot.Riders.Select(r => r.ElapsedTimeSeconds).Distinct().Count() != 1)
+        if (snapshot.Riders.Count != 2)
             throw new RiderIntegrationRefusalException("The contact demonstration requires exactly two riders and multiple continuation steps.");
+        return Execute(engine, snapshot.Riders.Select(r => new SimulationSnapshot(snapshot.Step with { SegmentIndex = r.SegmentIndex },
+            snapshot.Track, snapshot.TrackState, new[] { r })).ToArray(), intents, options, continuationSteps);
+    }
+
+    // Preserve each captured decision address and surface identity before any forecasts or trials.
+    internal static TwoRiderContactResult Execute(SimulationEngine engine, IReadOnlyList<SimulationSnapshot> capturedOrigins,
+        IReadOnlyList<RiderIntent> intents, HeatSimulationOptions options, int continuationSteps = 6)
+    {
+        options.Validate();
+        if (capturedOrigins.Count != 2 || capturedOrigins.Any(s => s.Riders.Count != 1) || intents.Count != 2
+            || continuationSteps < 3 || !options.EnablePhysicalContactConsequences || !options.EnableContestedSpaceResponses)
+            throw new RiderIntegrationRefusalException("The contact demonstration requires two separate rider origins and multiple continuation steps.");
+        var origins = capturedOrigins.OrderBy(s => s.Riders[0].RiderId).ToArray();
+        var riders = origins.Select(s => s.Riders[0]).ToArray();
+        if (riders.Select(r => r.RiderId).Distinct().Count() != 2
+            || !intents.Select(i => i.RiderId).Order().SequenceEqual(riders.Select(r => r.RiderId))
+            || origins.Any(s => !ReferenceEquals(s.Track, origins[0].Track) || s.Step.UseLegacyPhysics
+                || s.Step.HeatId != origins[0].Step.HeatId || s.Step.Seed != options.Seed || s.Step.RequiredLaps != options.Laps
+                || s.Step.SegmentIndex != s.Riders[0].SegmentIndex || s.Step.LapIndex != s.Riders[0].LapsCompleted))
+            throw new RiderIntegrationRefusalException("Captured pair origins must preserve their track, heat, seed, lap and segment contexts.");
+        if (!ReferenceEquals(origins[0].TrackState, origins[1].TrackState))
+            throw new RiderIntegrationRefusalException($"Captured steps {origins[0].Step.StepNumber}/{origins[1].Step.StepNumber} have different surface versions; causal surface synchronization is required before pair execution.");
+        if (riders.Select(r => r.ElapsedTimeSeconds).Distinct().Count() != 1)
+            throw new RiderIntegrationRefusalException("Different start clocks require retained executed prefixes and a cursor before the later rider's first step; missing time coverage cannot be interpolated.");
+        var snapshot = new SimulationSnapshot(origins[0].Step, origins[0].Track, origins[0].TrackState, riders);
         var embedding = new TrackMetricEmbedding(snapshot.Track, deterministicArithmetic: true);
-        var riders = snapshot.Riders.OrderBy(r => r.RiderId).ToArray();
-        var origins = riders.Select(r => new SimulationSnapshot(snapshot.Step with { SegmentIndex = r.SegmentIndex },
-            snapshot.Track, snapshot.TrackState, new[] { r })).ToArray();
         var selected = riders.Select(r => intents.Single(i => i.RiderId == r.RiderId)).ToArray();
         var forecasts = origins.Select((s, i) => engine.ResolveProduction(s, new[] { selected[i] }, options, legacyContacts: false)).ToArray();
         var forecastPoses = forecasts.SelectMany(f => f.Motions.SelectMany(m => ResolvedBikePoses.FromMotion(m, snapshot.Track, embedding: embedding))).ToArray();

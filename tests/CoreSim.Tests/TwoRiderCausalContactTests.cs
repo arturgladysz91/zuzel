@@ -115,7 +115,26 @@ public sealed class TwoRiderCausalContactTests(ITestOutputHelper output)
     }
 
     [Fact]
-    public void RealControl19CStillRequiresStraightCursorWithOriginalIncidentOptions()
+    public void SeparateCapturedContextsPreserveAddressesAndRefuseMissingCoverageOrWorldVersion()
+    {
+        var snapshot = Origin();
+        var origins = snapshot.Riders.Select((r, i) => new SimulationSnapshot(snapshot.Step with { StepNumber = 37 + i },
+            snapshot.Track, snapshot.TrackState, new[] { r })).ToArray();
+        var result = TwoRiderContactExecution.Execute(Engine(), origins.Reverse().ToArray(), Intents.Reverse().ToArray(), Options);
+        Assert.Equal(new[] { 37, 38 }, result.Before.Select(c => c.Snapshot.Step.StepNumber));
+        Assert.Equal(origins, result.Before.Select(c => c.Snapshot));
+        var later = new SimulationSnapshot(origins[1].Step, snapshot.Track, snapshot.TrackState,
+            new[] { origins[1].Riders[0] with { ElapsedTimeSeconds = .01f } });
+        Assert.Contains("missing time coverage", Assert.Throws<RiderIntegrationRefusalException>(() =>
+            TwoRiderContactExecution.Execute(Engine(), new[] { origins[0], later }, Intents, Options)).Message);
+        var detached = new SimulationSnapshot(origins[1].Step, snapshot.Track, TrackState.CreateDefault(snapshot.Track).Snapshot(),
+            origins[1].Riders);
+        Assert.Contains("surface versions", Assert.Throws<RiderIntegrationRefusalException>(() =>
+            TwoRiderContactExecution.Execute(Engine(), new[] { origins[0], detached }, Intents, Options)).Message);
+    }
+
+    [Fact]
+    public void RealControl19CAcceptsStraightCursorWithOriginalIncidentOptions()
     {
         var (track, surface, riders) = Catalog.All().Single(s => s.Id == "control").Create(); var capture = new Capture();
         var options = Options with { IncidentFrequency = 1, PhysicalContactDiagnostics = PhysicalContactDiagnosticsLevel.FullAudit };
@@ -124,7 +143,7 @@ public sealed class TwoRiderCausalContactTests(ITestOutputHelper output)
         Assert.Equal(SegmentType.Straight, track.Segments[peer.SegmentIndex].Type); Assert.Equal(8, peer.SegmentIndex);
         Assert.Null(peer.ContactRecovery);
         var one = new SimulationSnapshot(capture.Step.Snapshot.Step, track, capture.Step.Snapshot.TrackState, new[] { peer });
-        Assert.Throws<RiderIntegrationRefusalException>(() => Engine().BeginRiderIntegration(one, new(2, new RiderDecision(0)), options, 1));
+        Assert.NotNull(Engine().BeginRiderIntegration(one, new(2, new RiderDecision(0)), options, 1).Cursor);
     }
     private sealed class Done : Exception;
     private sealed class Capture : ISimulationStepObserver

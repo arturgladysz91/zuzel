@@ -3,6 +3,12 @@
 Release platform: **Windows only**. See the current [Windows CI policy](docs/ci.md)
 for Draft/full validation, the merge gate and optional historical audits.
 
+[REA-004A7](docs/calibration/rea-004a7-real-pair-admission.md) removes the redundant
+moving-Straight cursor incident restriction. The captured real control/19/C
+TurnExit/Straight pair explicitly refuses incompatible surface versions before
+contact execution. It requires causal surface/publication accounting and an
+initial later-rider cursor; no real causal pair or synchronized heat is claimed.
+
 Current physical consequence precedence (#56C2): [physical contact consequences and one-step recovery](docs/calibration/physical-contact-consequences.md)
 adds default-OFF `EnablePhysicalContactConsequences`, requiring #56B responses. When enabled,
 reviewed #56C1 analysis supplies deterministic final velocity/status and next-step recovery;

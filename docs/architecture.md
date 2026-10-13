@@ -23,6 +23,14 @@ speed/recovery changes. Failed continuation certification seals the tokens and
 retains history only to contact. This bounded experiment publishes no partial
 wear or live heat state and does not enable general D.
 
+[REA-004A7](calibration/rea-004a7-real-pair-admission.md) admits the real moving
+Straight with original incident options and preserves separate pair-step origins.
+The real TurnExit/Straight case refuses before execution: its captured surface
+versions include different weather ticks and already committed future passage
+wear. Causal surface accounting/publication and a zero-step later-rider cursor
+are required before asynchronous contact can be executed. A6's same-world
+demonstration remains supported; no real causal pair result is claimed.
+
 The target architecture uses one physical clock, event-driven synchronization
 and the existing distance integrator. The engine computes the entire four-rider
 heat, consequences and result before animation starts, then supplies recorded

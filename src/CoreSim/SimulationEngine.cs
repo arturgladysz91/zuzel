@@ -388,9 +388,10 @@ public sealed class SimulationEngine
         if (snapshot.Riders.Count != 1 || snapshot.Riders[0].RiderId != intent.RiderId
             || snapshot.Step.UseLegacyPhysics || snapshot.Segment.Type is not (SegmentType.Straight or SegmentType.TurnExit)
             || snapshot.Riders[0].Status != RiderRaceStatus.Racing || snapshot.Riders[0].Speed <= 0f
-            || snapshot.Riders[0].ContactRecovery is not null
-            || snapshot.Segment.Type == SegmentType.Straight && options.IncidentFrequency != 0f)
-            throw new RiderIntegrationRefusalException("Cursor requires one rolling rider on Straight/TurnExit without contact recovery; Straight requires disabled random incidents.");
+            || snapshot.Riders[0].ContactRecovery is not null)
+            throw new RiderIntegrationRefusalException("Cursor requires one rolling rider on Straight/TurnExit without contact recovery.");
+        // ResolveRandomIncident returns unchanged on Straight before either RNG channel.
+        // Keep the captured options and the production classification path for both segment types.
         var execution = new RiderIntegrationSession(snapshot, intent) { Request = new(pauseAfterSteps) };
         try { return new(ResolveProductionCore(snapshot, new[] { intent }, options, false, execution: execution), null); }
         catch (TraversalPausedException pause) { return new(null, new(execution, pause.Boundary)); }
