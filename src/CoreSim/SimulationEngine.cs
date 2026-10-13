@@ -189,7 +189,13 @@ public sealed class SimulationEngine
         if (riders.Select(rider => rider.RiderId).Distinct().Count() != riders.Count)
             throw new ArgumentException("Every rider in a heat must have a unique id.", nameof(riders));
 
-        var snapshots = riders.Select(rider => new RiderSnapshot(
+        var snapshots = CaptureRiders(track, riders);
+
+        return new SimulationSnapshot(step, track, trackState.Snapshot(), snapshots);
+    }
+
+    internal static IEnumerable<RiderSnapshot> CaptureRiders(Track track, IEnumerable<RiderState> riders)
+        => riders.Select(rider => new RiderSnapshot(
             rider.RiderId,
             rider.Profile,
             rider.PositionForTrack(track.Segments.Count),
@@ -203,9 +209,6 @@ public sealed class SimulationEngine
             rider.ActiveSetup,
             rider.Morale,
             rider.ManagerTrust) { StartingPosition = rider.StartingPosition, Condition = rider.Condition, ContactRecovery = rider.ContactRecovery });
-
-        return new SimulationSnapshot(step, track, trackState.Snapshot(), snapshots);
-    }
 
     public IReadOnlyList<RiderIntent> Decide(SimulationSnapshot snapshot)
     {
@@ -383,7 +386,7 @@ public sealed class SimulationEngine
     internal RiderIntegrationProgress BeginRiderIntegration(SimulationSnapshot snapshot, RiderIntent intent,
         HeatSimulationOptions options, int pauseAfterSteps)
     {
-        if (pauseAfterSteps <= 0) throw new ArgumentOutOfRangeException(nameof(pauseAfterSteps));
+        if (pauseAfterSteps < 0) throw new ArgumentOutOfRangeException(nameof(pauseAfterSteps));
         options.Validate();
         if (snapshot.Riders.Count != 1 || snapshot.Riders[0].RiderId != intent.RiderId
             || snapshot.Step.UseLegacyPhysics || snapshot.Segment.Type is not (SegmentType.Straight or SegmentType.TurnExit)
@@ -1220,6 +1223,26 @@ public sealed class SimulationEngine
                     wear.Inner == wear.Outer ? lane == wear.Inner ? "pass" : "pass-adjacent" : "pass-continuous",
                     snapshot.Step.HeatId, snapshot.Step.StepNumber, log);
         }
+    }
+
+    // Experimental post-heat accounting: the unchanged segment budget becomes a density
+    // over the entry-reference segment length, scaled by actual accepted physical metres.
+    internal static void ApplyDeferredPassageWear(SimulationSnapshot origin, int riderId,
+        IReadOnlyList<ExecutedPathStep> steps, double distanceMeters, TrackState state, SimLog log)
+    {
+        if (distanceMeters <= 0) return;
+        var rider = origin.Rider(riderId);
+        var reference = LaneModel.SegmentLengthMeters(origin.Segment, rider.LateralPosition, origin.Track.Geometry);
+        ProjectionWear wear;
+        if (steps.Count == 0) wear = FixedWear(rider.LateralPosition);
+        else
+        {
+            var weights = new float[LaneModel.LanesCount];
+            foreach (var step in steps)
+                AddInterpolatedWearKernel(weights, step.SampledLateralPosition, (float)(step.DistanceMeters / distanceMeters));
+            wear = FinishExecutedWear(weights, rider.LateralPosition);
+        }
+        ApplyWear(origin, state, wear with { Executed = true, Scale = wear.Scale * (float)(distanceMeters / reference) }, log);
     }
 
     private static void AddAdvancedSurfaceWearKernel(float[] wearWeights, int centerLane, float weight)

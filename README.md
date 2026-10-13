@@ -3,6 +3,12 @@
 Release platform: **Windows only**. See the current [Windows CI policy](docs/ci.md)
 for Draft/full validation, the merge gate and optional historical audits.
 
+[REA-004A8](docs/calibration/rea-004a8-frozen-heat-common-time.md) implements the
+new binding heat-lifetime decision in an explicit experiment: one frozen surface,
+accepted-distance wear and one weather update after the heat. Independent cursors
+reach the real mixed contact candidate; #55 uncertainty explicitly prevents its
+application. Ordinary A/B/C remains the historical compatibility path.
+
 [REA-004A7](docs/calibration/rea-004a7-real-pair-admission.md) removes the redundant
 moving-Straight cursor incident restriction. The captured real control/19/C
 TurnExit/Straight pair explicitly refuses incompatible surface versions before

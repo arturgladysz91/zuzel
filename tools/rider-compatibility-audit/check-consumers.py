@@ -57,6 +57,7 @@ def consumers():
             continue
         name = path.relative_to(ROOT).as_posix()
         source = path.read_text(encoding="utf-8").replace("\r\n", "\n")
+        source = restore_frozen_heat(source, name)
         source = restore_real_pair_admission(source, name)
         source = restore_causal_pair(source, name)
         source = restore_partial_step(source, name)
@@ -94,6 +95,26 @@ def consumers():
             continue
         result[name] = hashlib.sha256(source.encode("utf-8")).hexdigest()
     return result
+
+
+def restore_frozen_heat(source, name):
+    raw = (ROOT / "tests/fixtures/rea004a8-source-extraction.json").read_bytes().replace(b"\r\n", b"\n")
+    assert hashlib.sha256(raw).hexdigest() == "2a72bf5b4767955c8db253fff569bee68554dcc3a462edc13aa8255cff27dc9d"
+    extraction = json.loads(raw)
+    assert extraction["BaseSha"] == "3fe36abb01bb0367a2d2f716b838863c09d5f81d"
+    assert set(extraction["Patches"]) == {"src/CoreSim/SimulationEngine.cs", "src/CoreSim/Track/ExecutedPathTraversal.cs",
+        "src/CoreSim/Track/RiderIntegrationCursor.cs", "src/CoreSim/Race/TwoRiderContactExecution.cs", "src/CoreSim/Race/CommonTimeMotionWindow.cs",
+        "src/CoreSim/SimulationSnapshot.cs", "src/CoreSim/Decisions/TrajectoryEvaluator.cs"}
+    for patch in extraction["Patches"].get(name, []):
+        assert source.count(patch["After"]) == 1, name
+        source = source.replace(patch["After"], patch["Before"])
+    if name in extraction["BaseSourceSha256"]:
+        assert hashlib.sha256(source.encode()).hexdigest() == extraction["BaseSourceSha256"][name], name
+    if name in extraction["NewSourceSha256"]:
+        assert not REFERENCES.search(source), name
+        assert hashlib.sha256(source.encode()).hexdigest() == extraction["NewSourceSha256"][name], name
+        return ""
+    return source
 
 
 def restore_real_pair_admission(source, name):
