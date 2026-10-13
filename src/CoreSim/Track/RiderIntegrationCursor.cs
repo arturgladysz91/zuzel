@@ -17,7 +17,8 @@ internal sealed record ExecutedPartialStep(double StartCanonicalProgress, double
 
 internal readonly record struct ExecutedStepEndpoint(double CanonicalProgress, double TimeSeconds,
     double DistanceMeters, float Speed, float LateralPosition);
-internal sealed record PartialStepSearch(Func<ExecutedStepEndpoint, bool> Reached, bool ContinueBeforeBracket = false);
+internal sealed record PartialStepSearch(Func<ExecutedStepEndpoint, bool> Reached, bool ContinueBeforeBracket = false,
+    double TimeBracketToleranceSeconds = ExecutedPathTraversal.TimeToleranceSeconds);
 
 /// <summary>Immutable accepted corner values plus exclusively owned reusable envelope computations.</summary>
 internal sealed record ExecutedCornerBoundary(float InitialEnvelopeSpeed, float? ApexLateralPosition,
@@ -62,14 +63,18 @@ internal sealed class RiderIntegrationCursor(RiderIntegrationSession session, Ex
     internal RiderIntegrationContext Context => session.Context;
     internal TrackStateSnapshot SurfaceVersion => Snapshot.TrackState;
 
-    internal ExecutedTraversalBoundary PreviewToTime(double elapsedTimeSeconds)
+    internal ExecutedTraversalBoundary PreviewToTime(double elapsedTimeSeconds,
+        double timeBracketToleranceSeconds = ExecutedPathTraversal.TimeToleranceSeconds)
     {
         if (_consumed || Boundary.PartialStep is not null)
             throw new RiderIntegrationRefusalException("Time trial requires an unused ordinary cursor.");
         var local = elapsedTimeSeconds - Snapshot.Riders[0].ElapsedTimeSeconds;
         if (!double.IsFinite(local) || local <= Boundary.TimeSeconds)
             throw new RiderIntegrationRefusalException("Time trial must advance beyond the accepted prefix.");
-        try { session.Continue(new(null, Boundary, new(e => e.TimeSeconds >= local, true))); }
+        if (!double.IsFinite(timeBracketToleranceSeconds) || timeBracketToleranceSeconds <= 0
+            || timeBracketToleranceSeconds > ExecutedPathTraversal.TimeToleranceSeconds)
+            throw new ArgumentOutOfRangeException(nameof(timeBracketToleranceSeconds));
+        try { session.Continue(new(null, Boundary, new(e => e.TimeSeconds >= local, true, timeBracketToleranceSeconds))); }
         catch (TraversalPausedException paused) { _trials.Add(paused.Boundary); return paused.Boundary; }
         throw new RiderIntegrationRefusalException("Requested time is outside this segment.");
     }

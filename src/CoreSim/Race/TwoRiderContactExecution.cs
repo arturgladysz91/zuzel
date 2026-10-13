@@ -12,14 +12,19 @@ internal sealed record TwoRiderContactResult(double ContactTimeSeconds, IReadOnl
     double RequestedEventTimeSeconds, int PairTimeTrials);
 
 internal sealed class PairContactCertificationRefusal(string detail, double requestedTime,
-    IReadOnlyList<ExecutedTraversalBoundary> candidates, ContestedSpaceReport report, int trials)
+    IReadOnlyList<ExecutedTraversalBoundary> candidates, ContestedSpaceReport report, int trials,
+    PairContactAlignmentBracket? alignment = null)
     : RiderIntegrationRefusalException(detail)
 {
     internal double RequestedTimeSeconds { get; } = requestedTime;
     internal IReadOnlyList<ExecutedTraversalBoundary> Candidates { get; } = candidates;
     internal ContestedSpaceReport Report { get; } = report;
     internal int PairTimeTrials { get; } = trials;
+    internal PairContactAlignmentBracket? Alignment { get; } = alignment;
 }
+
+internal sealed record PairContactAlignmentBracket(double ClearRequestedTimeSeconds,
+    IReadOnlyList<ExecutedTraversalBoundary> ClearCandidates, ContestedSpaceReport ClearGeometry);
 
 /// <summary>Bounded two-rider experiment. No live publication or normal heat-loop caller.</summary>
 internal static class TwoRiderContactExecution
@@ -80,12 +85,14 @@ internal static class TwoRiderContactExecution
         var hi = forecasts.Select(f => f.Motions.Single()).Min(m => m.StartElapsedTimeSeconds
             + m.Nodes.Where(n => m.StartElapsedTimeSeconds + n.LocalTimeSeconds > oldTouch).Take(2).Average(n => (double)n.LocalTimeSeconds));
         var timeTrials = 0;
+        var refineFirstContact = origins.All(s => s.Step.FreezeSurfaceForHeat);
         (ExecutedTraversalBoundary[] Boundaries, ContestedSpaceReport Report) Trial(double time)
         {
             timeTrials++;
-            var boundaries = cursors.Select(c => c.PreviewToTime(time)).ToArray();
+            var boundaries = cursors.Select(c => c.PreviewToTime(time, refineFirstContact
+                ? ExecutedPathTraversal.TimeToleranceSeconds / 16 : ExecutedPathTraversal.TimeToleranceSeconds)).ToArray();
             var poses = boundaries.SelectMany((b, i) => Poses(origins[i], b, embedding)).ToArray();
-            return (boundaries, ContestedSpaceResolver.Observe(poses));
+            return (boundaries, refineFirstContact ? ContestedSpaceResolver.ObserveFirstContact(poses) : ContestedSpaceResolver.Observe(poses));
         }
         bool? Contact(ContestedSpaceReport report, bool final = false)
         {
@@ -107,8 +114,30 @@ internal static class TwoRiderContactExecution
             var mid = (lo + hi) * .5; var trial = Trial(mid);
             var conflict = Contact(trial.Report);
             if (!conflict.HasValue) break; // Keep both certified bounds; an unknown trial is never declared clear.
-            if (conflict.Value) { hi = mid; upper = trial; } else lo = mid;
+            if (conflict.Value) { hi = mid; upper = trial; } else { lo = mid; lower = trial; }
         }
+        // Re-execute shorter real partial steps when the certified witness predates
+        // the trial endpoint. Every changed endpoint has its own #55 certificate;
+        // the clear proof for a different sampled trajectory cannot authorize it.
+        if (refineFirstContact)
+        {
+            for (var iteration = 0; iteration < ExecutedPathTraversal.BisectionIterations; iteration++)
+            {
+                if (upper.Report.Intervals.Any(r => !r.NumericallyResolved)) break;
+                var witness = upper.Report.Intervals.Where(r => r.HasConflict).Min(r => r.FirstTouchCommonTimeSeconds)!.Value;
+                if (Aligned(upper.Boundaries, witness)) break;
+                var target = witness + ExecutedPathTraversal.TimeToleranceSeconds * .5;
+                if (target <= lo) target = (lo + hi) * .5;
+                if (target >= hi || hi - lo <= ExecutedPathTraversal.TimeToleranceSeconds / 64) break;
+                var trial = Trial(target);
+                var conflict = Contact(trial.Report);
+                if (!conflict.HasValue) break;
+                if (conflict.Value) { hi = target; upper = trial; } else { lo = target; lower = trial; }
+            }
+        }
+        bool Aligned(IReadOnlyList<ExecutedTraversalBoundary> boundaries, double witness)
+            => boundaries.Select((b, i) => origins[i].Riders[0].ElapsedTimeSeconds + b.TimeSeconds)
+                .All(t => t >= witness && t - witness <= ExecutedPathTraversal.TimeToleranceSeconds);
         try { Contact(upper.Report, final: true); }
         catch (RiderIntegrationRefusalException refusal)
         {
@@ -117,9 +146,12 @@ internal static class TwoRiderContactExecution
         }
         var contact = upper.Report.Intervals.Where(r => r.HasConflict).OrderBy(r => r.FirstTouchCommonTimeSeconds).First();
         var time = contact.FirstTouchCommonTimeSeconds!.Value;
-        if (upper.Boundaries.Select((b, i) => origins[i].Riders[0].ElapsedTimeSeconds + b.TimeSeconds)
-            .Any(t => t < time || t - time > ExecutedPathTraversal.TimeToleranceSeconds))
-            throw new RiderIntegrationRefusalException(FormattableString.Invariant($"Actual event states do not share touch={time:R}; A={upper.Boundaries[0].TimeSeconds:R}; B={upper.Boundaries[1].TimeSeconds:R}; lo={lo:R}; hi={hi:R} within the solver bound."));
+        if (!Aligned(upper.Boundaries, time))
+        {
+            foreach (var cursor in cursors) cursor.Seal();
+            throw new PairContactCertificationRefusal(FormattableString.Invariant($"Actual event states do not share touch={time:R}; A={origins[0].Riders[0].ElapsedTimeSeconds + upper.Boundaries[0].TimeSeconds:R}; B={origins[1].Riders[0].ElapsedTimeSeconds + upper.Boundaries[1].TimeSeconds:R}; lo={lo:R}; hi={hi:R} within the solver bound."),
+                hi, upper.Boundaries, upper.Report, timeTrials, new(lo, lower.Boundaries, lower.Report));
+        }
         var actualPoses = upper.Boundaries.SelectMany((b, i) => Poses(origins[i], b, embedding)).ToArray();
         if (certifyOtherRiders is not null && !certifyOtherRiders(actualPoses, time, false))
         {

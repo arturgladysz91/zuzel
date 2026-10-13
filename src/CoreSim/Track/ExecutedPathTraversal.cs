@@ -183,6 +183,9 @@ internal static class ExecutedPathTraversal
             ExecutedPartialStep? partial = null;
             if (pause?.PartialStep is { } search)
             {
+                if (!double.IsFinite(search.TimeBracketToleranceSeconds) || search.TimeBracketToleranceSeconds <= 0
+                    || search.TimeBracketToleranceSeconds > TimeToleranceSeconds)
+                    throw new ArgumentOutOfRangeException(nameof(search.TimeBracketToleranceSeconds));
                 // Trial evaluations never append a node/step or advance any accumulator.
                 // Every endpoint uses the existing coupled equations from this exact boundary.
                 var unsplitEnd = finish; var unsplitTime = time + result.Time;
@@ -197,7 +200,7 @@ internal static class ExecutedPathTraversal
                     throw new RiderIntegrationRefusalException("Requested event is not bracketed inside the next numerical step.");
                 if (reached)
                 {
-                    for (var i = 0; i < BisectionIterations && hiTime - loTime > TimeToleranceSeconds; i++)
+                    for (var i = 0; i < BisectionIterations && hiTime - loTime > search.TimeBracketToleranceSeconds; i++)
                     {
                         var mid = (lo + hi) * .5d;
                         if (mid == lo || mid == hi) break;
@@ -208,7 +211,7 @@ internal static class ExecutedPathTraversal
                         { hi = mid; hiTime = time + trial.Time; result = trial; }
                         else { lo = mid; loTime = time + trial.Time; }
                     }
-                    if (hiTime - loTime > TimeToleranceSeconds || hi <= start || hi >= unsplitEnd)
+                    if (hiTime - loTime > search.TimeBracketToleranceSeconds || hi <= start || hi >= unsplitEnd)
                         throw new RiderIntegrationRefusalException("No resolved interior partial-step endpoint within the numerical bound.");
                     finish = hi;
                     partial = new(start, unsplitEnd, time, unsplitTime, lo, loTime, trials);

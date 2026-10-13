@@ -41,6 +41,11 @@ i obowiązują od następnego. [Eksperyment A8](../calibration/rea-004a8-frozen-
 wdraża ten kontrakt poza zwykłym `HeatSimulator`; historyczna ścieżka A/B/C nadal
 zachowuje dotychczasowe naliczanie po segmentach.
 
+[Eksperyment A9](../calibration/rea-004a9-first-contact-certification.md) rozstrzyga
+pierwsze zetknięcie geometryczne pary TurnExit/Straight. Skok pozycji bocznej
+`float` między rzeczywistymi próbami nadal blokuje zgodność stanu z czasem
+zdarzenia; skutki i kontynuacja rzeczywistej pary pozostają niezaakceptowane.
+
 PR #8 ukończył fundament Race Engine v2: niezmienny snapshot, fazy `Decide` / `Resolve` / `Commit`, deterministyczność, kanoniczną pozycję na torze i statusy zawodnika. Nie oznacza to ukończenia całego Race Engine.
 
 Przed rozpoczęciem Track Engine pozostają:

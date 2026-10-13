@@ -78,6 +78,11 @@ weather update are published after the heat for the next heat. The
 without enabling it in ordinary `HeatSimulator`. Earlier per-segment weather/wear
 paragraphs below describe explicitly preserved historical A/B/C compatibility.
 
+[A9 first-contact certification](calibration/rea-004a9-first-contact-certification.md)
+resolves the mixed pair's geometric uncertainty while retaining a separate strict
+event-state guard. A geometric witness cannot substitute for a solved rider state;
+the observed float lateral quantum still prevents this real contact's acceptance.
+
 This document defines the binding invariants of the speedway manager simulation.
 
 Version precedence: [Continuous corner envelope calibration (#38)](#continuous-corner-envelope-calibration-38)

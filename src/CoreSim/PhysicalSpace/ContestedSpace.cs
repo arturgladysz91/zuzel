@@ -79,8 +79,10 @@ public static class ContestedSpaceResolver
     // One coordinator resolution owns this cache. Interval references identify immutable
     // canonical adapters (including arithmetic, frame, source and discontinuities).
     // The incoming pair minimum is part of the key: it controls #55's adaptive search.
-    internal sealed class CertificationCache
+    internal sealed class CertificationCache(bool refineFirstContact = false)
     {
+        internal bool RefineFirstContact { get; } = refineFirstContact;
+        internal int ReusedIntervals;
         // Retain expensive certificates only; endpoint-only intervals cost less
         // than storing them. Limits affect reuse, never certification or decisions.
         internal const int MinimumCachedEvaluations = 8;
@@ -108,17 +110,21 @@ public static class ContestedSpaceResolver
     private static readonly ClosingContributions EmptyContributions = new(0, 0, 0, 0, 0, 0);
     public static ContestedSpaceReport Observe(IEnumerable<PhysicalPoseInterval> intervals) => Observe(intervals, true);
     internal static ContestedSpaceReport Observe(IEnumerable<PhysicalPoseInterval> intervals, CertificationCache cache)
-        => Observe(intervals, true, cache: cache);
+        => Observe(intervals, true, cache: cache, refineFirstContact: cache.RefineFirstContact);
+    // Explicit experiment only. Continue unresolved clear-endpoint leaves below the
+    // root-time tolerance; that tolerance describes the event, not a proof of clearance.
+    internal static ContestedSpaceReport ObserveFirstContact(IEnumerable<PhysicalPoseInterval> intervals)
+        => Observe(intervals, true, refineFirstContact: true);
     // Compatibility uses identical #55 certification, without unused attribution poses.
     internal static SpaceCompatibilityResult ObserveCompatibility(IEnumerable<PhysicalPoseInterval> intervals, double ready,
         CertificationCache? cache = null)
     {
         var summary = new SpaceCompatibilityResult(ready);
-        summary.Work = Observe(intervals, false, summary, cache).Work;
+        summary.Work = Observe(intervals, false, summary, cache, cache?.RefineFirstContact ?? false).Work;
         return summary;
     }
     private static ContestedSpaceReport Observe(IEnumerable<PhysicalPoseInterval> intervals, bool attribution,
-        SpaceCompatibilityResult? summary = null, CertificationCache? cache = null)
+        SpaceCompatibilityResult? summary = null, CertificationCache? cache = null, bool refineFirstContact = false)
     {
         ArgumentNullException.ThrowIfNull(intervals);
         var groups = intervals.GroupBy(i => i.RiderId).OrderBy(g => g.Key)
@@ -127,7 +133,7 @@ public static class ContestedSpaceResolver
             for (var i = 1; i < group.Length; i++)
                 if (group[i].StartTimeSeconds < group[i - 1].EndTimeSeconds)
                     throw new ArgumentException("A rider's continuous pose intervals cannot overlap in heat time.");
-        var rows = new List<ContestedSpaceEvent>(); var work = new Work(); var gaps = new List<FrameCoverageGap>();
+        var rows = new List<ContestedSpaceEvent>(); var work = new Work(refineFirstContact); var gaps = new List<FrameCoverageGap>();
         void Add(SpaceIntervalValue row) { if (summary is null) rows.Add(row.ToEvent()); else summary.Add(row); }
         for (var a = 0; a < groups.Length; a++) for (var b = a + 1; b < groups.Length; b++)
         {
@@ -200,6 +206,7 @@ public static class ContestedSpaceResolver
             BitConverter.DoubleToInt64Bits(pairMinimum.Value), attribution);
         if (cache.Intervals.TryGetValue(key, out var certified))
         {
+            cache.ReusedIntervals++;
             pairMinimum.Value = certified.PairMinimum;
             work.Intervals += certified.Intervals; work.Broad += certified.Broad;
             work.Conflicts += certified.Conflicts; work.Unresolved += certified.Unresolved;
@@ -215,7 +222,8 @@ public static class ContestedSpaceResolver
         return value;
     }
 
-    // Root-search state lives on the stack. No change to #55 bounds, roots, order or tolerances.
+    // Root-search state lives on the stack. The historical search remains the default;
+    // explicit first-contact certification may refine clear-endpoint leaves further.
     private struct IntervalSearch
     {
         private readonly PhysicalPoseInterval a, b;
@@ -226,6 +234,9 @@ public static class ContestedSpaceResolver
         private readonly BikePoseValue sa, sb, ea, eb;
         private readonly bool broadClear;
         private int count;
+        private int maximumDepth;
+        private SpaceSearchRefusal refusal;
+        private double firstUncertainLower, firstUncertainWidth;
         private bool resolved;
         private double? first;
         private double minimum, minimumTime, uncertainFirst;
@@ -234,6 +245,8 @@ public static class ContestedSpaceResolver
         {
             this.a = a; this.b = b; this.start = start; this.end = end; this.work = work; this.pairMinimum = pairMinimum;
             count = 0; resolved = true; first = null; minimum = double.PositiveInfinity; minimumTime = start;
+            maximumDepth = 0; refusal = SpaceSearchRefusal.None;
+            firstUncertainLower = double.NaN; firstUncertainWidth = double.NaN;
             uncertainFirst = double.PositiveInfinity; minimumPair = default; work.Intervals++;
             boundsA = a.RateBounds(start, end); boundsB = b.RateBounds(start, end);
             Validate(boundsA); Validate(boundsB);
@@ -266,6 +279,7 @@ public static class ContestedSpaceResolver
         }
         private void Search(double lo, double hi, double gl, double gh, int depth)
         {
+            maximumDepth = Math.Max(maximumDepth, depth);
             var lower = Math.Max(-Math.Max(a.Dimensions.ChassisBodyWidthMeters, a.Dimensions.HandlebarTubeDiameterMeters) / 2
                 - Math.Max(b.Dimensions.ChassisBodyWidthMeters, b.Dimensions.HandlebarTubeDiameterMeters) / 2,
                 Math.Min(gl, gh) - lipschitz * (hi - lo) / 2);
@@ -276,13 +290,23 @@ public static class ContestedSpaceResolver
             var needsMinimum = lower < pairMinimum.Value - GeometryNumerics.MinimumSeparationToleranceMeters;
             if (!needsFirst && !needsMinimum) return;
             if (depth >= GeometryNumerics.MaximumSubdivisionDepth || count >= GeometryNumerics.MaximumEvaluationsPerInterval)
-            { resolved = false; return; }
-            if (hi - lo <= GeometryNumerics.TimeToleranceSeconds)
             {
-                if (needsMinimum && lipschitz * (hi - lo) / 2 > GeometryNumerics.MinimumSeparationToleranceMeters) resolved = false;
+                if (depth >= GeometryNumerics.MaximumSubdivisionDepth) refusal |= SpaceSearchRefusal.SubdivisionDepth;
+                if (count >= GeometryNumerics.MaximumEvaluationsPerInterval) refusal |= SpaceSearchRefusal.EvaluationLimit;
+                resolved = false; return;
+            }
+            if (hi - lo <= GeometryNumerics.TimeToleranceSeconds
+                && !(work.RefineFirstContact && needsFirst
+                    && gl > GeometryNumerics.ContactDistanceMeters && gh > GeometryNumerics.ContactDistanceMeters))
+            {
+                if (needsMinimum && lipschitz * (hi - lo) / 2 > GeometryNumerics.MinimumSeparationToleranceMeters)
+                { refusal |= SpaceSearchRefusal.MinimumBound; resolved = false; }
                 // A near-tangent uncertainty remains explicit; never silently claim a clear pair.
                 if (needsFirst && gl > GeometryNumerics.ContactDistanceMeters && gh > GeometryNumerics.ContactDistanceMeters)
+                {
+                    if (lo < uncertainFirst) { firstUncertainLower = lower; firstUncertainWidth = hi - lo; }
                     uncertainFirst = Math.Min(uncertainFirst, lo);
+                }
                 return;
             }
             var mid = (lo + hi) / 2; var gm = Gap(mid);
@@ -294,7 +318,10 @@ public static class ContestedSpaceResolver
         {
             var gStart = Gap(start); var gEnd = Gap(end);
             Search(start, end, gStart, gEnd, 0);
-            if (uncertainFirst < (first ?? double.PositiveInfinity) - 2 * GeometryNumerics.TimeToleranceSeconds) resolved = false;
+            if (uncertainFirst < (first ?? double.PositiveInfinity) - 2 * GeometryNumerics.TimeToleranceSeconds)
+            { refusal |= SpaceSearchRefusal.UncertainFirst; resolved = false; }
+            SpaceSearchDiagnostics.Observer?.Invoke(new(a.RiderId, b.RiderId, start, end, refusal,
+                uncertainFirst, first, minimum, lipschitz, count, maximumDepth, firstUncertainLower, firstUncertainWidth));
             if (first.HasValue) work.Conflicts++;
             if (!resolved) work.Unresolved++;
             var onsetEnd = first ?? end;
@@ -396,8 +423,9 @@ public static class ContestedSpaceResolver
         if (result == SpaceConflictKind.None) result = SpaceConflictKind.ParallelOverlap;
         return result;
     }
-    private sealed class Work
+    private sealed class Work(bool refineFirstContact = false)
     {
+        internal bool RefineFirstContact { get; } = refineFirstContact;
         public int Pairs, Intervals, Broad, Narrow, Subdivisions, Roots, Conflicts, Unresolved;
         public SpaceWorkCounters Freeze() => new(Pairs, Intervals, Broad, Narrow, Subdivisions, Roots, Conflicts, Unresolved);
     }
