@@ -57,6 +57,7 @@ def consumers():
             continue
         name = path.relative_to(ROOT).as_posix()
         source = path.read_text(encoding="utf-8").replace("\r\n", "\n")
+        source = restore_real_pair_admission(source, name)
         source = restore_causal_pair(source, name)
         source = restore_partial_step(source, name)
         source = restore_turnexit_cursor(source, name)
@@ -93,6 +94,21 @@ def consumers():
             continue
         result[name] = hashlib.sha256(source.encode("utf-8")).hexdigest()
     return result
+
+
+def restore_real_pair_admission(source, name):
+    # Restore only A7 admission/provenance plumbing before every unchanged older extraction.
+    raw = (ROOT / "tests/fixtures/rea004a7-source-extraction.json").read_bytes().replace(b"\r\n", b"\n")
+    assert hashlib.sha256(raw).hexdigest() == "b6a12d835382169c1cf55d561e11b5186d66c0329965f408b62cb734c701b624"
+    extraction = json.loads(raw)
+    assert extraction["BaseSha"] == "229685c2aeaf2c0d79ec826efa1640e8b5a82ac0"
+    assert set(extraction["Patches"]) == {"src/CoreSim/SimulationEngine.cs", "src/CoreSim/Race/TwoRiderContactExecution.cs"}
+    for patch in extraction["Patches"].get(name, []):
+        assert source.count(patch["After"]) == 1, name
+        source = source.replace(patch["After"], patch["Before"])
+    if name in extraction["BaseSourceSha256"]:
+        assert hashlib.sha256(source.encode()).hexdigest() == extraction["BaseSourceSha256"][name], name
+    return source
 
 
 def restore_causal_pair(source, name):

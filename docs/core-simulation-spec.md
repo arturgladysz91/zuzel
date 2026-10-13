@@ -64,6 +64,13 @@ state transitions; genuine unrelated/nonclosing frame inputs retain explicit dia
 Current decision precedence: [Production-backed trajectory decisions](#production-backed-trajectory-decisions)
 supersedes prior static `AdaptiveDecisionModel` route-time scoring descriptions.
 
+[REA-004A7 experimental admission](calibration/rea-004a7-real-pair-admission.md)
+allows moving Straight cursors with original incident frequency because production
+skips Straight incidents before RNG. Separately captured pair origins must retain
+their decision addresses and identical frozen surface provenance. The real
+control/19/C pair has incompatible world versions and refuses before execution;
+different start clocks remain unsupported. Normal A/B/C is unchanged.
+
 This document defines the binding invariants of the speedway manager simulation.
 
 Version precedence: [Continuous corner envelope calibration (#38)](#continuous-corner-envelope-calibration-38)
