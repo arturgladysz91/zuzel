@@ -50,10 +50,11 @@ internal static class ExecutedPathTraversal
         if (pause is not null && (!captureRich || launch
             || snapshot.Step.UseLegacyPhysics || snapshot.Segment.Type is not (SegmentType.Straight or SegmentType.TurnExit)
             || resolution.Outcome != SegmentOutcome.Ok || entrySpeed <= 0f
-            || !pause.AfterContact && (positiveDriveFraction != 1f || contactRecovery || lateralAuthority01 != 1f)
-            || holdLateralPosition
+            || !pause.AfterContact && (contactRecovery || lateralAuthority01 != 1f
+                || snapshot.Segment.Type != SegmentType.Straight && positiveDriveFraction != 1f)
+            || holdLateralPosition && snapshot.Segment.Type != SegmentType.Straight
             || interactionTargetPosition.HasValue))
-            throw new RiderIntegrationRefusalException("Cursor supports only rich rolling Straight/TurnExit traversal with Ok resolution, ordinary controls and no recovery.");
+            throw new RiderIntegrationRefusalException("Cursor requires rich rolling Ok traversal; captured Straight drive/hold controls are supported, corner controls and incoming recovery are not.");
         var segment = snapshot.Segment; var geometry = snapshot.Track.Geometry;
         var corner = snapshot.Track.CornerTopology.CornerForSegment(snapshot.Step.SegmentIndex);
         var skills = rider.Profile.Skills; var setup = rider.ActiveSetup;
@@ -102,6 +103,12 @@ internal static class ExecutedPathTraversal
         var executionEndpoints = pause is null ? null : pause.Boundary?.ExecutionEndpoints is { } savedEndpoints
             ? new List<ExecutedStepEndpoint>(savedEndpoints)
             : new List<ExecutedStepEndpoint> { new(start, time, distance, speed, lateral) };
+        if (pause?.AdditionalSteps == 0 && pause.Boundary is null)
+            throw new TraversalPausedException(new(start, end, time, distance, speed, lateral,
+                nodeSurface, 0, subdivisionTotal, Array.AsReadOnly(nodes!.ToArray()), Array.AsReadOnly(steps!.ToArray()),
+                corner is null ? null : new(initialEnvelope!.Value, apexLateral, Progress(start)!.Value,
+                    new CornerExecutionCache(envelopes!, scalarSpeeds!)),
+                ExecutionEndpoints: Array.AsReadOnly(executionEndpoints!.ToArray())));
         while (start < end)
         {
             if (stepCount >= maxNodes) throw new InvalidOperationException("Coupled traversal exceeded its geometric node bound.");

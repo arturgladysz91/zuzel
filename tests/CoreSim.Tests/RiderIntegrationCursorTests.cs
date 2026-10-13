@@ -147,6 +147,21 @@ public sealed class RiderIntegrationCursorTests
     }
 
     [Fact]
+    public void CapturedStraightHoldAndZeroDriveResumeFromInitialCursorWithoutReclassification()
+    {
+        var origin = Origin(); var engine = Engine();
+        var options = Options with { IncidentFrequency = 1, EnableContestedSpaceResponses = true };
+        var intent = new RiderIntent(1, new RiderDecision(1) { HoldLateralPosition = true, DriveControl = new(0) });
+        var expected = engine.ResolveProduction(origin, new[] { intent }, options, legacyContacts: false);
+        var zero = engine.BeginRiderIntegration(origin, intent, options, 0).Cursor!;
+        Assert.Equal(0, zero.Boundary.TimeSeconds); Assert.Equal(0, zero.Boundary.CompletedSteps);
+        var first = zero.Resume(origin.TrackState, 1).Cursor!;
+        Assert.Same(zero.Context, first.Context); Assert.Equal(0, first.Context.PositiveDriveFraction);
+        Assert.True(first.Context.HoldLateralPosition);
+        Assert.Equal(Exact.Hash(expected), Exact.Hash(first.Resume(origin.TrackState).Completed));
+    }
+
+    [Fact]
     public void UnsupportedProductionPathsRefuseExplicitly()
     {
         var origin = Origin(); var engine = Engine();
@@ -155,9 +170,9 @@ public sealed class RiderIntegrationCursorTests
             origin.Riders.Select(r => r with { LateralPosition = 1 }));
         Assert.Throws<RiderIntegrationRefusalException>(() => engine.BeginRiderIntegration(fixedLine,
             new(1, new RiderDecision(1)), Options, 5));
-        Assert.Throws<RiderIntegrationRefusalException>(() => engine.BeginRiderIntegration(origin,
+        Assert.NotNull(engine.BeginRiderIntegration(origin,
             new(1, new RiderDecision(2) { HoldLateralPosition = true }), Options with { EnableContestedSpaceResponses = true }, 5));
-        Assert.Throws<RiderIntegrationRefusalException>(() => engine.BeginRiderIntegration(origin,
+        Assert.NotNull(engine.BeginRiderIntegration(origin,
             new(1, new RiderDecision(2) { DriveControl = RiderDriveControl.LiftThrottle }), Options with { EnableContestedSpaceResponses = true }, 5));
         var standing = new SimulationSnapshot(origin.Step, origin.Track, origin.TrackState,
             origin.Riders.Select(r => r with { Speed = 0, Status = RiderRaceStatus.NotStarted }));

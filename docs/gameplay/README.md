@@ -35,6 +35,12 @@ Status dotyczy najbliższej sekcji. Jeśli status nie jest podany, zapis jest wy
 
 ## Stan realizacji
 
+**BINDING:** nawierzchnia i pogoda są stałe podczas pojedynczego biegu. Zużycie
+zaakceptowanych przejazdów oraz jedna aktualizacja pogody są rozliczane po biegu
+i obowiązują od następnego. [Eksperyment A8](../calibration/rea-004a8-frozen-heat-common-time.md)
+wdraża ten kontrakt poza zwykłym `HeatSimulator`; historyczna ścieżka A/B/C nadal
+zachowuje dotychczasowe naliczanie po segmentach.
+
 PR #8 ukończył fundament Race Engine v2: niezmienny snapshot, fazy `Decide` / `Resolve` / `Commit`, deterministyczność, kanoniczną pozycję na torze i statusy zawodnika. Nie oznacza to ukończenia całego Race Engine.
 
 Przed rozpoczęciem Track Engine pozostają:

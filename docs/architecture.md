@@ -31,6 +31,15 @@ wear. Causal surface accounting/publication and a zero-step later-rider cursor
 are required before asynchronous contact can be executed. A6's same-world
 demonstration remains supported; no real causal pair result is claimed.
 
+[REA-004A8](calibration/rea-004a8-frozen-heat-common-time.md) replaces the target's
+within-heat surface evolution with one frozen heat snapshot. Planning branches
+honor that lifetime too; accepted-distance wear and one weather update settle
+after the heat. Initial cursors and captured Straight drive/hold controls support
+different start clocks. The real mixed pair reaches an integrator-generated
+candidate but final #55 uncertainty seals the tokens before consequences.
+Historical A/B/C retains its existing per-segment commits; no new heat mode is
+enabled and no temporal weather/wear ledger is needed.
+
 The target architecture uses one physical clock, event-driven synchronization
 and the existing distance integrator. The engine computes the entire four-rider
 heat, consequences and result before animation starts, then supplies recorded

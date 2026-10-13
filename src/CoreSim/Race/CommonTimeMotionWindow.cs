@@ -21,6 +21,21 @@ internal sealed class CommonTimeCommitException(CommonTimeCommitRefusal reason, 
 /// <summary>The coverage bound is a safety certificate, not an executed rider position.</summary>
 internal static class CommonTimeCommitGuard
 {
+    internal static void RequireExecutedTime(double executedThroughSeconds, double coveredThroughSeconds,
+        double? firstUnresolvedContactSeconds)
+    {
+        if (!double.IsFinite(executedThroughSeconds) || !double.IsFinite(coveredThroughSeconds)
+            || executedThroughSeconds < 0 || coveredThroughSeconds < 0
+            || firstUnresolvedContactSeconds is { } invalid && (!double.IsFinite(invalid) || invalid < 0))
+            throw new ArgumentOutOfRangeException(nameof(executedThroughSeconds));
+        if (firstUnresolvedContactSeconds is { } contact && executedThroughSeconds >= contact)
+            throw new CommonTimeCommitException(CommonTimeCommitRefusal.PartialProductionCursorRequired,
+                "Actual double execution reaches unresolved contact.");
+        if (executedThroughSeconds > coveredThroughSeconds)
+            throw new CommonTimeCommitException(CommonTimeCommitRefusal.InsufficientCoverage,
+                "Actual double execution exceeds certified coverage.");
+    }
+
     internal static void Require(IReadOnlyList<RiderStateChange> candidates, double coveredThroughSeconds,
         double? firstUnresolvedContactSeconds)
     {

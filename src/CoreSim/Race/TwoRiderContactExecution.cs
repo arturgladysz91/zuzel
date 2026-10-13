@@ -11,6 +11,16 @@ internal sealed record TwoRiderContactResult(double ContactTimeSeconds, IReadOnl
     double CertifiedThroughSeconds, IReadOnlyList<PhysicalPoseInterval> CertifiedHistory,
     double RequestedEventTimeSeconds, int PairTimeTrials);
 
+internal sealed class PairContactCertificationRefusal(string detail, double requestedTime,
+    IReadOnlyList<ExecutedTraversalBoundary> candidates, ContestedSpaceReport report, int trials)
+    : RiderIntegrationRefusalException(detail)
+{
+    internal double RequestedTimeSeconds { get; } = requestedTime;
+    internal IReadOnlyList<ExecutedTraversalBoundary> Candidates { get; } = candidates;
+    internal ContestedSpaceReport Report { get; } = report;
+    internal int PairTimeTrials { get; } = trials;
+}
+
 /// <summary>Bounded two-rider experiment. No live publication or normal heat-loop caller.</summary>
 internal static class TwoRiderContactExecution
 {
@@ -26,10 +36,22 @@ internal static class TwoRiderContactExecution
     // Preserve each captured decision address and surface identity before any forecasts or trials.
     internal static TwoRiderContactResult Execute(SimulationEngine engine, IReadOnlyList<SimulationSnapshot> capturedOrigins,
         IReadOnlyList<RiderIntent> intents, HeatSimulationOptions options, int continuationSteps = 6)
+        => ExecuteCore(engine, capturedOrigins, intents, options, continuationSteps, null, null);
+
+    internal static TwoRiderContactResult Execute(SimulationEngine engine, IReadOnlyList<RiderIntegrationCursor> retained,
+        HeatSimulationOptions options, int continuationSteps,
+        Func<IReadOnlyList<PhysicalPoseInterval>, double, bool, bool>? certifyOtherRiders = null)
+        => ExecuteCore(engine, retained.Select(c => c.Snapshot).ToArray(), retained.Select(c => c.Intent).ToArray(),
+            options, continuationSteps, retained, certifyOtherRiders);
+
+    private static TwoRiderContactResult ExecuteCore(SimulationEngine engine, IReadOnlyList<SimulationSnapshot> capturedOrigins,
+        IReadOnlyList<RiderIntent> intents, HeatSimulationOptions options, int continuationSteps,
+        IReadOnlyList<RiderIntegrationCursor>? retained,
+        Func<IReadOnlyList<PhysicalPoseInterval>, double, bool, bool>? certifyOtherRiders)
     {
         options.Validate();
         if (capturedOrigins.Count != 2 || capturedOrigins.Any(s => s.Riders.Count != 1) || intents.Count != 2
-            || continuationSteps < 3 || !options.EnablePhysicalContactConsequences || !options.EnableContestedSpaceResponses)
+            || continuationSteps < 1 || !options.EnablePhysicalContactConsequences || !options.EnableContestedSpaceResponses)
             throw new RiderIntegrationRefusalException("The contact demonstration requires two separate rider origins and multiple continuation steps.");
         var origins = capturedOrigins.OrderBy(s => s.Riders[0].RiderId).ToArray();
         var riders = origins.Select(s => s.Riders[0]).ToArray();
@@ -41,7 +63,7 @@ internal static class TwoRiderContactExecution
             throw new RiderIntegrationRefusalException("Captured pair origins must preserve their track, heat, seed, lap and segment contexts.");
         if (!ReferenceEquals(origins[0].TrackState, origins[1].TrackState))
             throw new RiderIntegrationRefusalException($"Captured steps {origins[0].Step.StepNumber}/{origins[1].Step.StepNumber} have different surface versions; causal surface synchronization is required before pair execution.");
-        if (riders.Select(r => r.ElapsedTimeSeconds).Distinct().Count() != 1)
+        if (retained is null && riders.Select(r => r.ElapsedTimeSeconds).Distinct().Count() != 1)
             throw new RiderIntegrationRefusalException("Different start clocks require retained executed prefixes and a cursor before the later rider's first step; missing time coverage cannot be interpolated.");
         var snapshot = new SimulationSnapshot(origins[0].Step, origins[0].Track, origins[0].TrackState, riders);
         var embedding = new TrackMetricEmbedding(snapshot.Track, deterministicArithmetic: true);
@@ -51,8 +73,9 @@ internal static class TwoRiderContactExecution
         var forecastReport = ContestedSpaceResolver.Observe(forecastPoses);
         var oldTouch = forecastReport.Intervals.Where(r => r.HasConflict).Min(r => r.FirstTouchCommonTimeSeconds)
             ?? throw new RiderIntegrationRefusalException("No forecast contact to bracket.");
-        var cursors = origins.Select((s, i) => engine.BeginRiderIntegration(s, selected[i], options, 1).Cursor
-            ?? throw new RiderIntegrationRefusalException("Cursor completed before the contact bracket.")).ToArray();
+        var cursors = retained?.OrderBy(c => c.Snapshot.Riders[0].RiderId).ToArray()
+            ?? origins.Select((s, i) => engine.BeginRiderIntegration(s, selected[i], options, 1).Cursor
+                ?? throw new RiderIntegrationRefusalException("Cursor completed before the contact bracket.")).ToArray();
         var lo = cursors.Max(c => c.Snapshot.Riders[0].ElapsedTimeSeconds + c.Boundary.TimeSeconds);
         var hi = forecasts.Select(f => f.Motions.Single()).Min(m => m.StartElapsedTimeSeconds
             + m.Nodes.Where(n => m.StartElapsedTimeSeconds + n.LocalTimeSeconds > oldTouch).Take(2).Average(n => (double)n.LocalTimeSeconds));
@@ -86,14 +109,25 @@ internal static class TwoRiderContactExecution
             if (!conflict.HasValue) break; // Keep both certified bounds; an unknown trial is never declared clear.
             if (conflict.Value) { hi = mid; upper = trial; } else lo = mid;
         }
-        Contact(upper.Report, final: true);
+        try { Contact(upper.Report, final: true); }
+        catch (RiderIntegrationRefusalException refusal)
+        {
+            foreach (var cursor in cursors) cursor.Seal();
+            throw new PairContactCertificationRefusal(refusal.Message, hi, upper.Boundaries, upper.Report, timeTrials);
+        }
         var contact = upper.Report.Intervals.Where(r => r.HasConflict).OrderBy(r => r.FirstTouchCommonTimeSeconds).First();
         var time = contact.FirstTouchCommonTimeSeconds!.Value;
         if (upper.Boundaries.Select((b, i) => origins[i].Riders[0].ElapsedTimeSeconds + b.TimeSeconds)
             .Any(t => t < time || t - time > ExecutedPathTraversal.TimeToleranceSeconds))
             throw new RiderIntegrationRefusalException(FormattableString.Invariant($"Actual event states do not share touch={time:R}; A={upper.Boundaries[0].TimeSeconds:R}; B={upper.Boundaries[1].TimeSeconds:R}; lo={lo:R}; hi={hi:R} within the solver bound."));
-        var before = cursors.Select((c, i) => c.AcceptTimeTrial(snapshot.TrackState, upper.Boundaries[i])).ToArray();
         var actualPoses = upper.Boundaries.SelectMany((b, i) => Poses(origins[i], b, embedding)).ToArray();
+        if (certifyOtherRiders is not null && !certifyOtherRiders(actualPoses, time, false))
+        {
+            foreach (var cursor in cursors) cursor.Seal();
+            throw new PairContactCertificationRefusal("Another rider's earlier contact, uncertain geometry or missing coverage blocks this pair.",
+                hi, upper.Boundaries, upper.Report, timeTrials);
+        }
+        var before = cursors.Select((c, i) => c.AcceptTimeTrial(snapshot.TrackState, upper.Boundaries[i])).ToArray();
         var eventPoses = riders.Select(r => actualPoses.Where(p => p.RiderId == r.RiderId && p.StartTimeSeconds <= time && p.EndTimeSeconds >= time)
             .OrderByDescending(p => p.StartTimeSeconds).First().Sample(time)).ToArray();
         var tracker = new InteractionEpisodeTracker(); tracker.Bind(snapshot, deterministicArithmetic: true);
@@ -123,6 +157,8 @@ internal static class TwoRiderContactExecution
             && verified.Intervals.All(r => r.NumericallyResolved && !r.Kind.HasFlag(SpaceConflictKind.BoundaryAmbiguous)
                 && r.MinimumSeparationLowerBoundMeters >= -GeometryNumerics.MinimumSeparationToleranceMeters);
         safe &= verified.Intervals.All(r => r.MinimumSeparationMeters >= -GeometryNumerics.ContactDistanceMeters);
+        if (certifyOtherRiders is not null)
+            safe &= certifyOtherRiders(postPoses, after.Min(c => c.Snapshot.Riders[0].ElapsedTimeSeconds + c.Boundary.TimeSeconds), true);
         if (safe) tracker.ObservePhysicalClearance(verified, options.ContestedSpaceParameters);
         var through = safe ? after.Min(c => c.Snapshot.Riders[0].ElapsedTimeSeconds + c.Boundary.TimeSeconds) : time;
         var history = actualPoses.Concat(safe ? postPoses : Array.Empty<PhysicalPoseInterval>())

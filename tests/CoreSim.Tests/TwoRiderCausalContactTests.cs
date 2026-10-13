@@ -134,6 +134,20 @@ public sealed class TwoRiderCausalContactTests(ITestOutputHelper output)
     }
 
     [Fact]
+    public void OtherRiderCertificateCanBlockPairBeforeTrialAcceptanceOrConsequences()
+    {
+        var snapshot = Origin(); var engine = Engine();
+        var cursors = snapshot.Riders.Select((r, i) => engine.BeginRiderIntegration(
+            new SimulationSnapshot(snapshot.Step, snapshot.Track, snapshot.TrackState, new[] { r }), Intents[i], Options, 1).Cursor!).ToArray();
+        var prefix = Exact.Hash(cursors.Select(c => c.Boundary)); var validations = 0;
+        var failure = Assert.Throws<PairContactCertificationRefusal>(() => TwoRiderContactExecution.Execute(engine, cursors, Options, 6,
+            (_, _, continuation) => { Assert.False(continuation); validations++; return false; }));
+        Assert.Equal(1, validations); Assert.Contains("Another rider", failure.Message);
+        Assert.Equal(prefix, Exact.Hash(cursors.Select(c => c.Boundary)));
+        Assert.All(cursors, c => Assert.Throws<RiderIntegrationRefusalException>(() => c.Resume(snapshot.TrackState)));
+    }
+
+    [Fact]
     public void RealControl19CAcceptsStraightCursorWithOriginalIncidentOptions()
     {
         var (track, surface, riders) = Catalog.All().Single(s => s.Id == "control").Create(); var capture = new Capture();

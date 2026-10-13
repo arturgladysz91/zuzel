@@ -71,6 +71,13 @@ their decision addresses and identical frozen surface provenance. The real
 control/19/C pair has incompatible world versions and refuses before execution;
 different start clocks remain unsupported. Normal A/B/C is unchanged.
 
+**New BINDING heat-lifetime contract:** weather and surface remain fixed within a
+heat; all riders use one initial version. Accepted actual passage wear and one
+weather update are published after the heat for the next heat. The
+[A8 experiment](calibration/rea-004a8-frozen-heat-common-time.md) implements this
+without enabling it in ordinary `HeatSimulator`. Earlier per-segment weather/wear
+paragraphs below describe explicitly preserved historical A/B/C compatibility.
+
 This document defines the binding invariants of the speedway manager simulation.
 
 Version precedence: [Continuous corner envelope calibration (#38)](#continuous-corner-envelope-calibration-38)

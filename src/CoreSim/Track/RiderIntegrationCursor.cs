@@ -30,7 +30,7 @@ internal sealed class TraversalPausedException(ExecutedTraversalBoundary boundar
     internal ExecutedTraversalBoundary Boundary { get; } = boundary;
 }
 
-internal sealed class RiderIntegrationRefusalException(string detail) : InvalidOperationException(detail);
+internal class RiderIntegrationRefusalException(string detail) : InvalidOperationException(detail);
 
 internal sealed record RiderIntegrationContext(SegmentResolution Resolution, float EntrySpeed,
     int PlannedLane, float CanonicalAdvance, float Risk, TrackSurfaceState EntrySurface,

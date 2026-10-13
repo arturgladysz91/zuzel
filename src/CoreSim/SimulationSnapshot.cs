@@ -12,7 +12,11 @@ public sealed record SimulationStepContext(
     int SegmentIndex,
     int Seed,
     int RequiredLaps,
-    bool UseLegacyPhysics = false);
+    bool UseLegacyPhysics = false)
+{
+    // Experimental lifetime policy; addressed RNG fields and ordinary A/B/C stay unchanged.
+    internal bool FreezeSurfaceForHeat { get; init; }
+}
 
 /// <summary>Immutable rider value captured at the beginning of one simulation step.</summary>
 public sealed record RiderSnapshot(

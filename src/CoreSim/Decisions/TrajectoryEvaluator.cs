@@ -103,8 +103,9 @@ public sealed class TrajectoryEvaluator
         {
             StepNumber = _context.StepNumber + offset, SegmentIndex = part.SegmentIndex, LapIndex = part.LapIndex,
         };
-        var state = parent.Surface.Clone();
-        var input = new SimulationSnapshot(step, track, parent.Surface.Snapshot(), new[] { parent.Rider });
+        var frozen = step.FreezeSurfaceForHeat;
+        var state = frozen ? parent.Surface : parent.Surface.Clone();
+        var input = new SimulationSnapshot(step, track, frozen ? _surface : parent.Surface.Snapshot(), new[] { parent.Rider });
         var options = new HeatSimulationOptions { Laps = step.RequiredLaps, Seed = _context.Seed,
             IncidentFrequency = 0f, EnableLogging = false,
             EnableContestedSpaceResponses = (_control.IsControlled && offset == 0) || _control.PhysicalTarget.HasValue || parent.Rider.ContactRecovery is not null,
@@ -120,13 +121,16 @@ public sealed class TrajectoryEvaluator
                 : engine.Resolve(input, engine.Decide(input), options);
             motion = resolved.Motions[0];
             projection = new(input, resolved.Changes[0], motion.TotalTimeSeconds, motion.TotalDistanceMeters, null, default);
-            var rider = parent.Rider.ToMutableCopy();
-            engine.Commit(resolved, new[] { rider }, state, new SimLog(false));
+            if (!frozen)
+            {
+                var rider = parent.Rider.ToMutableCopy();
+                engine.Commit(resolved, new[] { rider }, state, new SimLog(false));
+            }
         }
         else
         {
             projection = SimulationEngine.ResolveSoloProjection(input, parent.Rider, new(requested), options);
-            SimulationEngine.CommitProjectionWear(projection, state);
+            if (!frozen) SimulationEngine.CommitProjectionWear(projection, state);
         }
         var change = projection.Change;
         var previous = parent.Metrics;
