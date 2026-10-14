@@ -48,6 +48,12 @@ zdarzenia; skutki i kontynuacja rzeczywistej pary pozostają niezaakceptowane.
 
 PR #8 ukończył fundament Race Engine v2: niezmienny snapshot, fazy `Decide` / `Resolve` / `Commit`, deterministyczność, kanoniczną pozycję na torze i statusy zawodnika. Nie oznacza to ukończenia całego Race Engine.
 
+[Eksperyment A10](../calibration/rea-004a10-practical-contact-time.md) akceptuje
+rzeczywisty kontakt przy jawnej tolerancji zgodności stanu 10 µs, z niezmienionymi
+granicami geometrii #55. Dotychczasowe skutki zatrzymują R1 (Crash), a R2 wykonuje
+zweryfikowany metr jazdy po MajorSave. To ograniczony eksperyment; pełny bieg
+czterech zawodników i domyślne D pozostają niewłączone.
+
 Przed rozpoczęciem Track Engine pozostają:
 
 - start i pierwszy łuk,

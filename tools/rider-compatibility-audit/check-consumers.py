@@ -57,6 +57,7 @@ def consumers():
             continue
         name = path.relative_to(ROOT).as_posix()
         source = path.read_text(encoding="utf-8").replace("\r\n", "\n")
+        source = restore_practical_contact_time(source, name)
         source = restore_first_contact(source, name)
         source = restore_frozen_heat(source, name)
         source = restore_real_pair_admission(source, name)
@@ -96,6 +97,23 @@ def consumers():
             continue
         result[name] = hashlib.sha256(source.encode("utf-8")).hexdigest()
     return result
+
+
+def restore_practical_contact_time(source, name):
+    raw = (ROOT / "tests/fixtures/rea004a10-source-extraction.json").read_bytes().replace(b"\r\n", b"\n")
+    assert hashlib.sha256(raw).hexdigest() == "69526eec8de2b20ecd13b5f6168b3295fc5ff3ddc7ffde2d966a38c32072a172"
+    extraction = json.loads(raw)
+    assert extraction["BaseSha"] == "b4b510f42c6d805ca286313fa441c6b3cba71829"
+    assert set(extraction["Patches"]) == {"src/CoreSim/SimulationEngine.cs", "src/CoreSim/PhysicalSpace/ContestedSpace.cs",
+        "src/CoreSim/PhysicalSpace/SpaceSearchDiagnostics.cs", "src/CoreSim/Track/RiderIntegrationCursor.cs",
+        "src/CoreSim/Race/TwoRiderContactExecution.cs"}
+    assert extraction["NewSourceSha256"] == {}
+    for patch in extraction["Patches"].get(name, []):
+        assert source.count(patch["After"]) == 1, name
+        source = source.replace(patch["After"], patch["Before"])
+    if name in extraction["BaseSourceSha256"]:
+        assert hashlib.sha256(source.encode()).hexdigest() == extraction["BaseSourceSha256"][name], name
+    return source
 
 
 def restore_first_contact(source, name):

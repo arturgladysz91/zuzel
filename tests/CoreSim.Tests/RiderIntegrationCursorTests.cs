@@ -26,6 +26,58 @@ public sealed class RiderIntegrationCursorTests
         snapshot.TrackState.LinesCount, snapshot.TrackState.GetSurface);
 
     [Theory]
+    [InlineData(0)] [InlineData(1e-8)] [InlineData(double.NaN)] [InlineData(double.PositiveInfinity)] [InlineData(1.1e-5)]
+    public void ExperimentalEventToleranceHasAnExplicitFiniteTenMicrosecondLimit(double tolerance)
+    {
+        Assert.Throws<ArgumentOutOfRangeException>(() => TwoRiderContactExecution.Execute(Engine(), Array.Empty<RiderIntegrationCursor>(),
+            Options, 1, eventTimeToleranceSeconds: tolerance));
+    }
+
+    [Fact]
+    public void PracticalAgreementCannotBeEnabledOnAnOrdinaryWorld()
+    {
+        var origin = Origin(); var engine = Engine();
+        var cursor = engine.BeginRiderIntegration(origin, Intent(), Options, 1).Cursor!;
+        var options = Options with { EnableContestedSpaceResponses = true, EnablePhysicalContactConsequences = true };
+        Assert.Contains("frozen-heat", Assert.Throws<RiderIntegrationRefusalException>(() =>
+            TwoRiderContactExecution.ExecutePractical(engine, new[] { cursor }, options, 1, (_, _, _) => true)).Message);
+    }
+
+    [Fact]
+    public void PracticalAgreementRequiresOtherRiderCertificationBeforeAnyTrial()
+    {
+        var origin = Origin(); var engine = Engine();
+        var frozen = new SimulationSnapshot(origin.Step with { FreezeSurfaceForHeat = true }, origin.Track, origin.TrackState, origin.Riders);
+        var cursor = engine.BeginRiderIntegration(frozen, Intent(), Options, 1).Cursor!;
+        var options = Options with { EnableContestedSpaceResponses = true, EnablePhysicalContactConsequences = true };
+        Assert.Throws<ArgumentNullException>(() => TwoRiderContactExecution.Execute(engine, new[] { cursor }, options, 1,
+            eventTimeToleranceSeconds: TwoRiderContactExecution.MaximumEventTimeToleranceSeconds));
+        Assert.NotNull(cursor.Resume(frozen.TrackState).Completed);
+    }
+
+    [Fact]
+    public void FrozenExperimentForkSharesExactPrefixButNotTrialOwnershipOrConsumption()
+    {
+        var origin = Origin(); var engine = Engine();
+        var frozen = new SimulationSnapshot(origin.Step with { FreezeSurfaceForHeat = true }, origin.Track, origin.TrackState, origin.Riders);
+        var parent = engine.BeginRiderIntegration(frozen, Intent(), Options, 1).Cursor!;
+        var counts = new Dictionary<ProjectionMaterialization, int>();
+        RiderIntegrationCursor first, second;
+        try
+        {
+            ProjectionCaptureAudit.Observer = (kind, n) => counts[kind] = counts.GetValueOrDefault(kind) + n;
+            first = parent.ForkFrozenExperiment(); second = parent.ForkFrozenExperiment();
+        }
+        finally { ProjectionCaptureAudit.Observer = null; }
+        Assert.Empty(counts); Assert.Same(parent.Boundary, first.Boundary); Assert.Same(parent.Boundary, second.Boundary);
+        var trial = first.PreviewToTime(frozen.Riders[0].ElapsedTimeSeconds + first.Boundary.TimeSeconds + .01);
+        Assert.Throws<RiderIntegrationRefusalException>(() => second.AcceptTimeTrial(frozen.TrackState, trial));
+        var admitted = first.AcceptTimeTrial(frozen.TrackState, trial); admitted.Seal();
+        Assert.Throws<RiderIntegrationRefusalException>(() => first.ForkFrozenExperiment());
+        Assert.Equal(Exact.Hash(parent.Resume(frozen.TrackState).Completed), Exact.Hash(second.Resume(frozen.TrackState).Completed));
+    }
+
+    [Theory]
     [InlineData(0)] [InlineData(-1)] [InlineData(double.NaN)] [InlineData(double.PositiveInfinity)] [InlineData(1e-6)]
     public void LocalTimeBracketAccuracyCannotRelaxExistingAcceptanceBound(double tolerance)
     {

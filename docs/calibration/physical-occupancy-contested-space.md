@@ -134,6 +134,12 @@ This is demonstrated by I: A and B both translate 20 m parallel with unchanged c
 
 ## Common-time continuous algorithm
 
+[REA-004A10](rea-004a10-practical-contact-time.md) adds an explicit executed-window
+admission certificate. It proves the existing `-ContactDistanceMeters` penetration
+floor with conservative terminal-leaf bounds, within the unchanged 30/4096 budgets.
+Its event-state agreement can be 10 µs; #55's geometry/root-time tolerance stays
+100 ns. Ordinary observation and historical evidence retain their original bounds.
+
 [REA-004A9](rea-004a9-first-contact-certification.md) adds explicit experimental
 first-contact certification. Clear-endpoint leaves whose lower bound still admits
 touch may subdivide below the existing root-time tolerance, within the same depth

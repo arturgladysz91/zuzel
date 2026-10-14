@@ -46,6 +46,15 @@ limits. Shorter actual partial steps expose a discontinuous float lateral quantu
 between trajectory versions; the existing event-state time guard refuses before
 consequences. No rider is constructed by sampling the certified geometry.
 
+[REA-004A10](calibration/rea-004a10-practical-contact-time.md) supplies an explicit
+10-microsecond experimental event-state agreement policy. Each accepted path must
+also satisfy a strict #55 penetration-floor proof and other-rider event ordering.
+Isolated experimental tokens share the retained immutable prefix, classification
+and exact-input caches; their contact controls and trial ownership remain separate.
+A terminal speed-zero state retains its last stationary footprint in the bounded
+continuation window. No standing-start/segment-handoff or general heat scheduler
+is added, and no ordinary A/B/C call selects this policy.
+
 The target architecture uses one physical clock, event-driven synchronization
 and the existing distance integrator. The engine computes the entire four-rider
 heat, consequences and result before animation starts, then supplies recorded

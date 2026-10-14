@@ -45,6 +45,7 @@ internal sealed class RiderIntegrationSession(SimulationSnapshot snapshot, Rider
     internal RiderIntent Intent { get; } = intent;
     internal RiderIntegrationContext Context { get; set; } = null!;
     internal Func<TraversalPauseRequest, ExecutedTraversalResult> Continue { get; set; } = null!;
+    internal Func<TraversalPauseRequest, CoreSim.Interactions.RiderContactConsequence?, ExecutedTraversalResult> ContinueWithContact { get; set; } = null!;
     internal Func<ExecutedTraversalResult, ResolvedSimulationStep> Complete { get; set; } = null!;
     internal TraversalPauseRequest Request { get; set; } = null!;
     internal CoreSim.Interactions.RiderContactConsequence? Contact { get; set; }
@@ -62,6 +63,18 @@ internal sealed class RiderIntegrationCursor(RiderIntegrationSession session, Ex
     internal RiderIntent Intent => session.Intent;
     internal RiderIntegrationContext Context => session.Context;
     internal TrackStateSnapshot SurfaceVersion => Snapshot.TrackState;
+
+    // Isolated counterfactual token on the same accepted immutable prefix. No
+    // classification, RNG or integration; only exact-input memoized queries are shared.
+    internal RiderIntegrationCursor ForkFrozenExperiment()
+    {
+        if (_consumed || Boundary.PartialStep is not null || session.Contact is not null || !Snapshot.Step.FreezeSurfaceForHeat)
+            throw new RiderIntegrationRefusalException("Experiment fork requires an unused ordinary frozen-heat prefix.");
+        var fork = new RiderIntegrationSession(Snapshot, Intent)
+        { Context = Context, Request = session.Request, Complete = session.Complete, ContinueWithContact = session.ContinueWithContact };
+        fork.Continue = request => fork.ContinueWithContact(request, fork.Contact);
+        return new(fork, Boundary);
+    }
 
     internal ExecutedTraversalBoundary PreviewToTime(double elapsedTimeSeconds,
         double timeBracketToleranceSeconds = ExecutedPathTraversal.TimeToleranceSeconds)
@@ -89,8 +102,8 @@ internal sealed class RiderIntegrationCursor(RiderIntegrationSession session, Ex
     }
 
     internal RiderIntegrationProgress ResumeAfterContact(CoreSim.Interactions.RiderContactConsequence consequence,
-        int pauseAfterSteps)
-        => ResumeEvent(consequence, pauseAfterSteps);
+        int pauseAfterSteps, double eventTimeToleranceSeconds = ExecutedPathTraversal.TimeToleranceSeconds)
+        => ResumeEvent(consequence, pauseAfterSteps, eventTimeToleranceSeconds);
 
     // Counterfactual comparison only: same executed partition, no impulse/recovery and no publication.
     internal RiderIntegrationProgress ResumeEventWithoutConsequence(int pauseAfterSteps)
@@ -99,11 +112,15 @@ internal sealed class RiderIntegrationCursor(RiderIntegrationSession session, Ex
     internal void Seal() { _consumed = true; _trials.Clear(); }
 
     private RiderIntegrationProgress ResumeEvent(CoreSim.Interactions.RiderContactConsequence? consequence,
-        int pauseAfterSteps)
+        int pauseAfterSteps, double eventTimeToleranceSeconds = ExecutedPathTraversal.TimeToleranceSeconds)
     {
+        if (!double.IsFinite(eventTimeToleranceSeconds) || eventTimeToleranceSeconds < ExecutedPathTraversal.TimeToleranceSeconds
+            || eventTimeToleranceSeconds > CoreSim.Race.TwoRiderContactExecution.MaximumEventTimeToleranceSeconds
+            || eventTimeToleranceSeconds > ExecutedPathTraversal.TimeToleranceSeconds && !Snapshot.Step.FreezeSurfaceForHeat)
+            throw new ArgumentOutOfRangeException(nameof(eventTimeToleranceSeconds));
         if (_consumed || Boundary.PartialStep is null || session.Contact is not null
             || consequence is not null && (consequence.RiderId != Snapshot.Riders[0].RiderId || consequence.PreContactSpeed != Boundary.Speed
-            || Math.Abs(consequence.FrontierTimeSeconds - (Snapshot.Riders[0].ElapsedTimeSeconds + Boundary.TimeSeconds)) > ExecutedPathTraversal.TimeToleranceSeconds))
+            || Math.Abs(consequence.FrontierTimeSeconds - (Snapshot.Riders[0].ElapsedTimeSeconds + Boundary.TimeSeconds)) > eventTimeToleranceSeconds))
             throw new RiderIntegrationRefusalException("Post-event continuation requires this exact unconsumed contact state.");
         if (consequence is not null && (consequence.Severity == CoreSim.Interactions.PhysicalContactSeverity.Crash || consequence.PostContactSpeed <= 0))
             throw new RiderIntegrationRefusalException("Terminal contact ends motion at the event; it cannot resume.");
