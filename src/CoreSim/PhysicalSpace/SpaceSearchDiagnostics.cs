@@ -3,7 +3,7 @@ namespace CoreSim.PhysicalSpace;
 [Flags]
 internal enum SpaceSearchRefusal
 {
-    None = 0, UncertainFirst = 1, MinimumBound = 2, SubdivisionDepth = 4, EvaluationLimit = 8
+    None = 0, UncertainFirst = 1, MinimumBound = 2, SubdivisionDepth = 4, EvaluationLimit = 8, Penetration = 16
 }
 
 internal readonly record struct SpaceSearchDiagnostic(int RiderA, int RiderB, double StartSeconds, double EndSeconds,

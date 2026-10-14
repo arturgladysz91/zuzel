@@ -3,6 +3,12 @@
 Release platform: **Windows only**. See the current [Windows CI policy](docs/ci.md)
 for Draft/full validation, the merge gate and optional historical audits.
 
+[REA-004A10](docs/calibration/rea-004a10-practical-contact-time.md) admits the real
+mixed contact with explicit experimental 10 microsecond event-state agreement,
+unchanged #55 tolerances and a whole-window penetration proof. Existing effects
+stop R1 (Crash); R2 executes a certified one-metre continuation against all six
+pairs and the stationary last footprint of R1. No general heat mode is enabled.
+
 [REA-004A9](docs/calibration/rea-004a9-first-contact-certification.md) resolves the
 mixed pair's #55 first-contact uncertainty through local geometric refinement.
 Real partial-step re-execution then exposes a float lateral quantum: the certified

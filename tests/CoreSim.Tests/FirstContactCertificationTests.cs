@@ -10,6 +10,35 @@ public sealed class FirstContactCertificationTests
     private static PhysicalPoseInterval Fixed(int id, double x) => PhysicalSpaceEvidence.Linear(id, new(x, 0), new(x, 0));
 
     [Fact]
+    public void ExecutedWindowProvesItsPenetrationFloorBetweenSamples()
+    {
+        var input = new[] { Fixed(1, 0), PhysicalSpaceEvidence.Linear(2, new(2.101, 0), new(2.1000005, 0)) };
+        var report = ContestedSpaceResolver.ObserveExecutedContactWindow(input);
+        var row = Assert.Single(report.Intervals); Assert.True(row.NumericallyResolved, $"{row}; {report.Work}"); Assert.True(row.HasConflict);
+        Assert.True(row.MinimumSeparationLowerBoundMeters >= -GeometryNumerics.ContactDistanceMeters);
+        foreach (var t in Enumerable.Range(0, 129).Select(i => i / 128d))
+            Assert.True(MechanicalSeparation.Between(input[0].Sample(t), input[1].Sample(t)).SignedMeters >= row.MinimumSeparationLowerBoundMeters);
+        Assert.Equal(1e-7, GeometryNumerics.TimeToleranceSeconds); Assert.Equal(1e-6, GeometryNumerics.ContactDistanceMeters);
+    }
+
+    [Fact]
+    public void ExecutedWindowRefusesHiddenPenetrationDespiteClearEndpoints()
+    {
+        var report = ContestedSpaceResolver.ObserveExecutedContactWindow(new[] { Fixed(1, 0), new Curve(2, 2.05, .3, 4) });
+        var row = Assert.Single(report.Intervals);
+        Assert.False(row.NumericallyResolved); Assert.False(row.EligibleForFutureInteraction);
+        Assert.True(row.MinimumSeparationMeters < -GeometryNumerics.ContactDistanceMeters);
+    }
+
+    [Fact]
+    public void ExecutedWindowCannotConvertUncertainTangencyIntoClearance()
+    {
+        var row = Assert.Single(ContestedSpaceResolver.ObserveExecutedContactWindow(new[]
+            { Fixed(1, 0), new Curve(2, 2.100001, .3141592653589793, .01) }).Intervals);
+        Assert.False(row.NumericallyResolved);
+    }
+
+    [Fact]
     public void HiddenEarlierContactInsideClearEndpointsIsFound()
     {
         var input = new[] { Fixed(1, 0), new Curve(2, 2.05, .3, 4) };

@@ -827,12 +827,13 @@ public sealed class SimulationEngine
         {
             execution.Context = new(resolution, entrySpeed, plannedLane, canonicalAdvance, risk,
                 entrySurface, phase, positiveDriveFraction, holdLateralPosition, lateralAuthority01, interactionTargetPosition);
-            execution.Continue = request => ExecutedPathTraversal.Traverse(snapshot, rider, resolution, entrySpeed,
+            execution.ContinueWithContact = (request, contact) => ExecutedPathTraversal.Traverse(snapshot, rider, resolution, entrySpeed,
                 canonicalAdvance, launch, NextCorner, captureRich,
-                positiveDriveFraction * (float)(execution.Contact?.Recovery?.DriveAvailability01 ?? 1), holdLateralPosition,
-                lateralAuthority01 * (float)(execution.Contact?.Recovery?.LateralAuthority01 ?? 1),
-                contactRecovery || execution.Contact?.Recovery is not null, interactionTargetPosition,
-                request with { AfterContact = execution.Contact is not null });
+                positiveDriveFraction * (float)(contact?.Recovery?.DriveAvailability01 ?? 1), holdLateralPosition,
+                lateralAuthority01 * (float)(contact?.Recovery?.LateralAuthority01 ?? 1),
+                contactRecovery || contact?.Recovery is not null, interactionTargetPosition,
+                request with { AfterContact = contact is not null });
+            execution.Continue = request => execution.ContinueWithContact(request, execution.Contact);
             execution.Complete = result => ResolveProductionCore(snapshot, new[] { execution.Intent }, options!, false,
                 completedRider: FinishMovingRider(snapshot, rider, decision, resolution, entrySpeed, plannedLane,
                     canonicalAdvance, launch, risk, entrySurface, phase, result));

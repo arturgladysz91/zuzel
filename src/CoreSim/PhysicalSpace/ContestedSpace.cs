@@ -115,6 +115,10 @@ public static class ContestedSpaceResolver
     // root-time tolerance; that tolerance describes the event, not a proof of clearance.
     internal static ContestedSpaceReport ObserveFirstContact(IEnumerable<PhysicalPoseInterval> intervals)
         => Observe(intervals, true, refineFirstContact: true);
+    // Stronger, explicit admission proof; no change to any #55 tolerance or default.
+    // Covers the whole executed window, including hidden penetration between samples.
+    internal static ContestedSpaceReport ObserveExecutedContactWindow(IEnumerable<PhysicalPoseInterval> intervals)
+        => Observe(intervals, true, refineFirstContact: true, minimumAllowedSeparation: -GeometryNumerics.ContactDistanceMeters);
     // Compatibility uses identical #55 certification, without unused attribution poses.
     internal static SpaceCompatibilityResult ObserveCompatibility(IEnumerable<PhysicalPoseInterval> intervals, double ready,
         CertificationCache? cache = null)
@@ -124,7 +128,8 @@ public static class ContestedSpaceResolver
         return summary;
     }
     private static ContestedSpaceReport Observe(IEnumerable<PhysicalPoseInterval> intervals, bool attribution,
-        SpaceCompatibilityResult? summary = null, CertificationCache? cache = null, bool refineFirstContact = false)
+        SpaceCompatibilityResult? summary = null, CertificationCache? cache = null, bool refineFirstContact = false,
+        double? minimumAllowedSeparation = null)
     {
         ArgumentNullException.ThrowIfNull(intervals);
         var groups = intervals.GroupBy(i => i.RiderId).OrderBy(g => g.Key)
@@ -133,7 +138,7 @@ public static class ContestedSpaceResolver
             for (var i = 1; i < group.Length; i++)
                 if (group[i].StartTimeSeconds < group[i - 1].EndTimeSeconds)
                     throw new ArgumentException("A rider's continuous pose intervals cannot overlap in heat time.");
-        var rows = new List<ContestedSpaceEvent>(); var work = new Work(refineFirstContact); var gaps = new List<FrameCoverageGap>();
+        var rows = new List<ContestedSpaceEvent>(); var work = new Work(refineFirstContact, minimumAllowedSeparation); var gaps = new List<FrameCoverageGap>();
         void Add(SpaceIntervalValue row) { if (summary is null) rows.Add(row.ToEvent()); else summary.Add(row); }
         for (var a = 0; a < groups.Length; a++) for (var b = a + 1; b < groups.Length; b++)
         {
@@ -227,7 +232,7 @@ public static class ContestedSpaceResolver
     private struct IntervalSearch
     {
         private readonly PhysicalPoseInterval a, b;
-        private readonly double start, end, lipschitz;
+        private readonly double start, end, lipschitz, sphereLower;
         private readonly Work work;
         private readonly PairMinimum pairMinimum;
         private readonly PoseRateBounds boundsA, boundsB;
@@ -237,6 +242,7 @@ public static class ContestedSpaceResolver
         private int maximumDepth;
         private SpaceSearchRefusal refusal;
         private double firstUncertainLower, firstUncertainWidth;
+        private double leafLower;
         private bool resolved;
         private double? first;
         private double minimum, minimumTime, uncertainFirst;
@@ -247,6 +253,7 @@ public static class ContestedSpaceResolver
             count = 0; resolved = true; first = null; minimum = double.PositiveInfinity; minimumTime = start;
             maximumDepth = 0; refusal = SpaceSearchRefusal.None;
             firstUncertainLower = double.NaN; firstUncertainWidth = double.NaN;
+            leafLower = double.PositiveInfinity;
             uncertainFirst = double.PositiveInfinity; minimumPair = default; work.Intervals++;
             boundsA = a.RateBounds(start, end); boundsB = b.RateBounds(start, end);
             Validate(boundsA); Validate(boundsB);
@@ -255,7 +262,7 @@ public static class ContestedSpaceResolver
             lipschitz = relativeRate + a.Dimensions.BoundingRadiusMeters * boundsA.AngularSpeedBoundRadiansPerSecond
                 + b.Dimensions.BoundingRadiusMeters * boundsB.AngularSpeedBoundRadiansPerSecond;
             sa = a.SampleValue(start); sb = b.SampleValue(start); ea = a.SampleValue(end); eb = b.SampleValue(end);
-            var sphereLower = Math.Min((sa.Position - sb.Position).Length, (ea.Position - eb.Position).Length)
+            sphereLower = Math.Min((sa.Position - sb.Position).Length, (ea.Position - eb.Position).Length)
                 - relativeRate * (end - start) / 2 - a.Dimensions.BoundingRadiusMeters - b.Dimensions.BoundingRadiusMeters;
             broadClear = sphereLower > GeometryNumerics.BroadPhasePaddingMeters;
             if (broadClear) work.Broad++;
@@ -273,6 +280,8 @@ public static class ContestedSpaceResolver
             if (separation.SignedMeters < minimum)
             { minimum = separation.SignedMeters; minimumTime = time; minimumPair = separation; }
             pairMinimum.Value = Math.Min(pairMinimum.Value, separation.SignedMeters);
+            if (work.MinimumAllowedSeparation is { } floor && separation.SignedMeters < floor)
+            { resolved = false; refusal |= SpaceSearchRefusal.Penetration; }
             if (!broadClear && separation.SignedMeters <= GeometryNumerics.ContactDistanceMeters
                 && (!first.HasValue || time < first)) first = time;
             return separation.SignedMeters;
@@ -283,20 +292,24 @@ public static class ContestedSpaceResolver
             var lower = Math.Max(-Math.Max(a.Dimensions.ChassisBodyWidthMeters, a.Dimensions.HandlebarTubeDiameterMeters) / 2
                 - Math.Max(b.Dimensions.ChassisBodyWidthMeters, b.Dimensions.HandlebarTubeDiameterMeters) / 2,
                 Math.Min(gl, gh) - lipschitz * (hi - lo) / 2);
+            if (work.MinimumAllowedSeparation.HasValue) lower = Math.Max(lower, sphereLower);
             var needsFirst = !broadClear && (!first.HasValue || lo < first.Value - GeometryNumerics.TimeToleranceSeconds)
                 && lower <= GeometryNumerics.ContactDistanceMeters;
             // Certify the pair-wide minimum, not every far-away knot's local minimum.
             // This lets broad separated intervals contribute two endpoint samples only.
             var needsMinimum = lower < pairMinimum.Value - GeometryNumerics.MinimumSeparationToleranceMeters;
-            if (!needsFirst && !needsMinimum) return;
+            var needsSafety = work.MinimumAllowedSeparation is { } floor && minimum >= floor && lower < floor;
+            if (!needsFirst && !needsMinimum && !needsSafety)
+            { leafLower = Math.Min(leafLower, lower); return; }
             if (depth >= GeometryNumerics.MaximumSubdivisionDepth || count >= GeometryNumerics.MaximumEvaluationsPerInterval)
             {
                 if (depth >= GeometryNumerics.MaximumSubdivisionDepth) refusal |= SpaceSearchRefusal.SubdivisionDepth;
                 if (count >= GeometryNumerics.MaximumEvaluationsPerInterval) refusal |= SpaceSearchRefusal.EvaluationLimit;
+                leafLower = Math.Min(leafLower, lower);
                 resolved = false; return;
             }
             if (hi - lo <= GeometryNumerics.TimeToleranceSeconds
-                && !(work.RefineFirstContact && needsFirst
+                && !needsSafety && !(work.RefineFirstContact && needsFirst
                     && gl > GeometryNumerics.ContactDistanceMeters && gh > GeometryNumerics.ContactDistanceMeters))
             {
                 if (needsMinimum && lipschitz * (hi - lo) / 2 > GeometryNumerics.MinimumSeparationToleranceMeters)
@@ -307,6 +320,7 @@ public static class ContestedSpaceResolver
                     if (lo < uncertainFirst) { firstUncertainLower = lower; firstUncertainWidth = hi - lo; }
                     uncertainFirst = Math.Min(uncertainFirst, lo);
                 }
+                leafLower = Math.Min(leafLower, lower);
                 return;
             }
             var mid = (lo + hi) / 2; var gm = Gap(mid);
@@ -331,7 +345,7 @@ public static class ContestedSpaceResolver
             return new(a.RiderId, b.RiderId, a.FrameId, start, end, first, minimum, minimumTime,
                 minimumPair.ComponentA, minimumPair.ComponentB, kind, contributions, sb.Position - sa.Position,
                 boundsB.CenterVelocityMetersPerSecond - boundsA.CenterVelocityMetersPerSecond, resolved,
-                Math.Min(gStart, gEnd) - lipschitz * (end - start) / 2, a.Source, b.Source);
+                work.MinimumAllowedSeparation.HasValue ? leafLower : Math.Min(gStart, gEnd) - lipschitz * (end - start) / 2, a.Source, b.Source);
         }
     }
 
@@ -423,9 +437,10 @@ public static class ContestedSpaceResolver
         if (result == SpaceConflictKind.None) result = SpaceConflictKind.ParallelOverlap;
         return result;
     }
-    private sealed class Work(bool refineFirstContact = false)
+    private sealed class Work(bool refineFirstContact = false, double? minimumAllowedSeparation = null)
     {
         internal bool RefineFirstContact { get; } = refineFirstContact;
+        internal double? MinimumAllowedSeparation { get; } = minimumAllowedSeparation;
         public int Pairs, Intervals, Broad, Narrow, Subdivisions, Roots, Conflicts, Unresolved;
         public SpaceWorkCounters Freeze() => new(Pairs, Intervals, Broad, Narrow, Subdivisions, Roots, Conflicts, Unresolved);
     }

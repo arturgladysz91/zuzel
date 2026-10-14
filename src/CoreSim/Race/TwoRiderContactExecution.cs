@@ -9,7 +9,16 @@ internal sealed record TwoRiderContactResult(double ContactTimeSeconds, IReadOnl
     IReadOnlyList<RiderStateChange> AfterEvent, ContestedSpaceReport ContactGeometry,
     ContestedSpaceReport ContinuationGeometry, bool ContinuationCertified, PhysicalPairGeneration Ownership,
     double CertifiedThroughSeconds, IReadOnlyList<PhysicalPoseInterval> CertifiedHistory,
-    double RequestedEventTimeSeconds, int PairTimeTrials);
+    double RequestedEventTimeSeconds, int PairTimeTrials)
+{
+    internal ContestedSpaceReport? ExecutedWindowGeometry { get; init; }
+    internal ContactTimeAgreement? TimeAgreement { get; init; }
+    internal string? ContinuationRefusal { get; init; }
+}
+
+internal sealed record ContactTimeAgreement(double ToleranceSeconds, double MaximumTimeErrorSeconds,
+    double IntegratorClockSkewSeconds, double MaximumCenterDisplacementMeters,
+    double MaximumFootprintDisplacementBoundMeters, double ActualEndpointSeparationMeters);
 
 internal sealed class PairContactCertificationRefusal(string detail, double requestedTime,
     IReadOnlyList<ExecutedTraversalBoundary> candidates, ContestedSpaceReport report, int trials,
@@ -29,6 +38,11 @@ internal sealed record PairContactAlignmentBracket(double ClearRequestedTimeSeco
 /// <summary>Bounded two-rider experiment. No live publication or normal heat-loop caller.</summary>
 internal static class TwoRiderContactExecution
 {
+    internal const double MaximumEventTimeToleranceSeconds = 1e-5;
+    internal static TwoRiderContactResult ExecutePractical(SimulationEngine engine,
+        IReadOnlyList<RiderIntegrationCursor> retained, HeatSimulationOptions options, int continuationSteps,
+        Func<IReadOnlyList<PhysicalPoseInterval>, double, bool, bool> certifyOtherRiders)
+        => Execute(engine, retained, options, continuationSteps, certifyOtherRiders, MaximumEventTimeToleranceSeconds);
     internal static TwoRiderContactResult Execute(SimulationEngine engine, SimulationSnapshot snapshot,
         IReadOnlyList<RiderIntent> intents, HeatSimulationOptions options, int continuationSteps = 6)
     {
@@ -41,20 +55,29 @@ internal static class TwoRiderContactExecution
     // Preserve each captured decision address and surface identity before any forecasts or trials.
     internal static TwoRiderContactResult Execute(SimulationEngine engine, IReadOnlyList<SimulationSnapshot> capturedOrigins,
         IReadOnlyList<RiderIntent> intents, HeatSimulationOptions options, int continuationSteps = 6)
-        => ExecuteCore(engine, capturedOrigins, intents, options, continuationSteps, null, null);
+        => ExecuteCore(engine, capturedOrigins, intents, options, continuationSteps, null, null, ExecutedPathTraversal.TimeToleranceSeconds);
 
     internal static TwoRiderContactResult Execute(SimulationEngine engine, IReadOnlyList<RiderIntegrationCursor> retained,
         HeatSimulationOptions options, int continuationSteps,
-        Func<IReadOnlyList<PhysicalPoseInterval>, double, bool, bool>? certifyOtherRiders = null)
+        Func<IReadOnlyList<PhysicalPoseInterval>, double, bool, bool>? certifyOtherRiders = null,
+        double eventTimeToleranceSeconds = ExecutedPathTraversal.TimeToleranceSeconds)
         => ExecuteCore(engine, retained.Select(c => c.Snapshot).ToArray(), retained.Select(c => c.Intent).ToArray(),
-            options, continuationSteps, retained, certifyOtherRiders);
+            options, continuationSteps, retained, certifyOtherRiders, eventTimeToleranceSeconds);
 
     private static TwoRiderContactResult ExecuteCore(SimulationEngine engine, IReadOnlyList<SimulationSnapshot> capturedOrigins,
         IReadOnlyList<RiderIntent> intents, HeatSimulationOptions options, int continuationSteps,
         IReadOnlyList<RiderIntegrationCursor>? retained,
-        Func<IReadOnlyList<PhysicalPoseInterval>, double, bool, bool>? certifyOtherRiders)
+        Func<IReadOnlyList<PhysicalPoseInterval>, double, bool, bool>? certifyOtherRiders, double eventTimeToleranceSeconds)
     {
         options.Validate();
+        if (!double.IsFinite(eventTimeToleranceSeconds) || eventTimeToleranceSeconds < ExecutedPathTraversal.TimeToleranceSeconds
+            || eventTimeToleranceSeconds > MaximumEventTimeToleranceSeconds)
+            throw new ArgumentOutOfRangeException(nameof(eventTimeToleranceSeconds));
+        var practicalTime = eventTimeToleranceSeconds > ExecutedPathTraversal.TimeToleranceSeconds;
+        if (practicalTime && (retained is null || capturedOrigins.Any(s => !s.Step.FreezeSurfaceForHeat)))
+            throw new RiderIntegrationRefusalException("Practical event-time agreement requires retained frozen-heat experimental cursors.");
+        if (practicalTime && certifyOtherRiders is null)
+            throw new ArgumentNullException(nameof(certifyOtherRiders), "Practical agreement requires the other-rider event-order and geometry certificate.");
         if (capturedOrigins.Count != 2 || capturedOrigins.Any(s => s.Riders.Count != 1) || intents.Count != 2
             || continuationSteps < 1 || !options.EnablePhysicalContactConsequences || !options.EnableContestedSpaceResponses)
             throw new RiderIntegrationRefusalException("The contact demonstration requires two separate rider origins and multiple continuation steps.");
@@ -89,7 +112,7 @@ internal static class TwoRiderContactExecution
         (ExecutedTraversalBoundary[] Boundaries, ContestedSpaceReport Report) Trial(double time)
         {
             timeTrials++;
-            var boundaries = cursors.Select(c => c.PreviewToTime(time, refineFirstContact
+            var boundaries = cursors.Select(c => c.PreviewToTime(time, refineFirstContact && !practicalTime
                 ? ExecutedPathTraversal.TimeToleranceSeconds / 16 : ExecutedPathTraversal.TimeToleranceSeconds)).ToArray();
             var poses = boundaries.SelectMany((b, i) => Poses(origins[i], b, embedding)).ToArray();
             return (boundaries, refineFirstContact ? ContestedSpaceResolver.ObserveFirstContact(poses) : ContestedSpaceResolver.Observe(poses));
@@ -109,7 +132,7 @@ internal static class TwoRiderContactExecution
         var lower = Trial(Math.BitIncrement(lo));
         if (Contact(lower.Report) != false) throw new RiderIntegrationRefusalException("No certified clear retained pair prefix.");
         for (var iteration = 0; iteration < ExecutedPathTraversal.BisectionIterations
-            && hi - lo > ExecutedPathTraversal.TimeToleranceSeconds * .25; iteration++)
+            && hi - lo > eventTimeToleranceSeconds * .25; iteration++)
         {
             var mid = (lo + hi) * .5; var trial = Trial(mid);
             var conflict = Contact(trial.Report);
@@ -125,8 +148,9 @@ internal static class TwoRiderContactExecution
             {
                 if (upper.Report.Intervals.Any(r => !r.NumericallyResolved)) break;
                 var witness = upper.Report.Intervals.Where(r => r.HasConflict).Min(r => r.FirstTouchCommonTimeSeconds)!.Value;
-                if (Aligned(upper.Boundaries, witness)) break;
-                var target = witness + ExecutedPathTraversal.TimeToleranceSeconds * .5;
+                if (Aligned(upper.Boundaries, witness)
+                    && (!practicalTime || upper.Report.Intervals.All(r => r.MinimumSeparationMeters >= -GeometryNumerics.ContactDistanceMeters))) break;
+                var target = practicalTime ? (lo + hi) * .5 : witness + eventTimeToleranceSeconds * .5;
                 if (target <= lo) target = (lo + hi) * .5;
                 if (target >= hi || hi - lo <= ExecutedPathTraversal.TimeToleranceSeconds / 64) break;
                 var trial = Trial(target);
@@ -137,7 +161,7 @@ internal static class TwoRiderContactExecution
         }
         bool Aligned(IReadOnlyList<ExecutedTraversalBoundary> boundaries, double witness)
             => boundaries.Select((b, i) => origins[i].Riders[0].ElapsedTimeSeconds + b.TimeSeconds)
-                .All(t => t >= witness && t - witness <= ExecutedPathTraversal.TimeToleranceSeconds);
+                .All(t => t >= witness && t - witness <= eventTimeToleranceSeconds);
         try { Contact(upper.Report, final: true); }
         catch (RiderIntegrationRefusalException refusal)
         {
@@ -153,6 +177,50 @@ internal static class TwoRiderContactExecution
                 hi, upper.Boundaries, upper.Report, timeTrials, new(lo, lower.Boundaries, lower.Report));
         }
         var actualPoses = upper.Boundaries.SelectMany((b, i) => Poses(origins[i], b, embedding)).ToArray();
+        var actualEnds = upper.Boundaries.Select((b, i) => origins[i].Riders[0].ElapsedTimeSeconds + b.TimeSeconds).ToArray();
+        var endPoses = riders.Select((r, i) => actualPoses.Last(p => p.RiderId == r.RiderId).Sample(actualEnds[i])).ToArray();
+        var displacements = riders.Select((r, i) =>
+        {
+            var span = actualPoses.Last(p => p.RiderId == r.RiderId && p.StartTimeSeconds <= time && p.EndTimeSeconds >= time);
+            var firstPose = span.Sample(time);
+            var distance = (endPoses[i].Position - firstPose.Position).Length;
+            var angle = Math.Abs(BikeAngles.Wrap(endPoses[i].Attitude.BikeHeadingRadians - firstPose.Attitude.BikeHeadingRadians));
+            return (Center: distance, Footprint: distance + span.Dimensions.BoundingRadiusMeters * angle);
+        }).ToArray();
+        ContactTimeAgreement? agreement = null;
+        if (practicalTime)
+        {
+            if (actualEnds.Max() - actualEnds.Min() > GeometryNumerics.TimeToleranceSeconds)
+            {
+                foreach (var cursor in cursors) cursor.Seal();
+                throw new PairContactCertificationRefusal("Actual endpoint clock skew exceeds the unchanged geometry time tolerance.", hi, upper.Boundaries, upper.Report, timeTrials);
+            }
+            var endpointGap = MechanicalSeparation.Between(endPoses[0], endPoses[1]).SignedMeters;
+            agreement = new(eventTimeToleranceSeconds, actualEnds.Max() - time, actualEnds.Max() - actualEnds.Min(),
+                displacements.Max(d => d.Center), displacements.Max(d => d.Footprint), endpointGap);
+            if (endpointGap < -GeometryNumerics.ContactDistanceMeters)
+            {
+                foreach (var cursor in cursors) cursor.Seal();
+                throw new PairContactCertificationRefusal("Actual endpoint footprints penetrate beyond the existing geometry tolerance.", hi, upper.Boundaries, upper.Report, timeTrials);
+            }
+        }
+        var executedWindow = practicalTime ? ContestedSpaceResolver.ObserveExecutedContactWindow(actualPoses) : null;
+        if (executedWindow is not null && (executedWindow.FrameCoverageGaps.Count != 0
+            || executedWindow.Intervals.Any(r => !r.NumericallyResolved || r.Kind.HasFlag(SpaceConflictKind.BoundaryAmbiguous)
+                || r.MinimumSeparationLowerBoundMeters < -GeometryNumerics.ContactDistanceMeters)))
+        {
+            foreach (var cursor in cursors) cursor.Seal();
+            throw new PairContactCertificationRefusal(FormattableString.Invariant($"#55 cannot certify the executed contact window: unresolved={executedWindow.Work.UnresolvedIntervals}; gaps={executedWindow.FrameCoverageGaps.Count}; minimum={executedWindow.Intervals.Min(r => (double?)r.MinimumSeparationMeters):R}; lower={executedWindow.Intervals.Min(r => (double?)r.MinimumSeparationLowerBoundMeters):R}; floor={-GeometryNumerics.ContactDistanceMeters:R}."),
+                hi, upper.Boundaries, executedWindow, timeTrials);
+        }
+        var executedTouch = executedWindow?.Intervals.Where(r => r.HasConflict).Min(r => r.FirstTouchCommonTimeSeconds);
+        if (executedWindow is not null && (!executedTouch.HasValue
+            || Math.Abs(executedTouch.Value - time) > GeometryNumerics.TimeToleranceSeconds))
+        {
+            foreach (var cursor in cursors) cursor.Seal();
+            throw new PairContactCertificationRefusal("Executed-window proof finds a different first event outside the unchanged geometry bound.",
+                hi, upper.Boundaries, executedWindow, timeTrials);
+        }
         if (certifyOtherRiders is not null && !certifyOtherRiders(actualPoses, time, false))
         {
             foreach (var cursor in cursors) cursor.Seal();
@@ -181,10 +249,50 @@ internal static class TwoRiderContactExecution
             throw new RiderIntegrationRefusalException("The verified pair did not produce one simultaneous consequence plan.");
         tracker.ConsumePhysical(plan, observation);
         var afterEvent = states.Select(s => PhysicalContactConsequenceResolver.Apply(s, plan.Riders.Single(p => p.RiderId == s.RiderId))).ToArray();
-        var after = before.Select(c => c.ResumeAfterContact(plan.Riders.Single(r => r.RiderId == c.Snapshot.Riders[0].RiderId), continuationSteps).Cursor
+        if (practicalTime && plan.Riders.Any(r => r.Severity == PhysicalContactSeverity.Crash || r.PostContactSpeed <= 0))
+        {
+            var survivors = new List<RiderIntegrationCursor>();
+            var stopped = new List<PhysicalBikePose>();
+            foreach (var cursor in before)
+            {
+                var effect = plan.Riders.Single(r => r.RiderId == cursor.Snapshot.Riders[0].RiderId);
+                if (effect.Severity == PhysicalContactSeverity.Crash || effect.PostContactSpeed <= 0)
+                { cursor.Seal(); stopped.Add(endPoses.Single(p => p.RiderId == effect.RiderId)); }
+                else survivors.Add(cursor.ResumeAfterContact(effect, continuationSteps, eventTimeToleranceSeconds).Cursor
+                    ?? throw new RiderIntegrationRefusalException("Bounded survivor continuation reaches an unsupported segment boundary."));
+            }
+            var terminalThrough = survivors.Count == 0 ? actualEnds.Min()
+                : survivors.Min(c => c.Snapshot.Riders[0].ElapsedTimeSeconds + c.Boundary.TimeSeconds);
+            var survivorPoses = survivors.SelectMany(c => Poses(c.Snapshot, c.Boundary, embedding,
+                before.Single(b => b.Snapshot.Riders[0].RiderId == c.Snapshot.Riders[0].RiderId).Boundary.CompletedSteps));
+            // Existing terminal speed zero means no further ridden movement.
+            // Retain the same occupied footprint during this bounded window;
+            // no fallen-bike orientation or removal trajectory is invented.
+            var terminalPoses = stopped.Where(p => p.CommonTimeSeconds < terminalThrough)
+                .Select(p => new StationaryTerminalPose(p, terminalThrough, embedding.Closure.SupportsLapWrap));
+            var post = survivorPoses.Concat(terminalPoses).ToArray();
+            var postGeometry = ContestedSpaceResolver.ObserveExecutedContactWindow(post);
+            var safeTerminal = survivors.Count > 0 && postGeometry.Intervals.Count > 0 && postGeometry.FrameCoverageGaps.Count == 0
+                && postGeometry.Intervals.All(r => r.NumericallyResolved && !r.Kind.HasFlag(SpaceConflictKind.BoundaryAmbiguous)
+                    && r.MinimumSeparationLowerBoundMeters >= -GeometryNumerics.ContactDistanceMeters);
+            if (certifyOtherRiders is not null && survivors.Count > 0)
+                safeTerminal &= certifyOtherRiders(post, terminalThrough, true);
+            if (safeTerminal) tracker.ObservePhysicalClearance(postGeometry, options.ContestedSpaceParameters);
+            if (!safeTerminal) terminalThrough = actualEnds.Min();
+            foreach (var cursor in survivors) cursor.Seal();
+            var terminalHistory = actualPoses.Where(p => p.StartTimeSeconds < terminalThrough)
+                .Concat(safeTerminal ? post : Array.Empty<PhysicalPoseInterval>())
+                .Select(p => p.EndTimeSeconds <= terminalThrough ? p : new ClippedPose(p, terminalThrough)).ToArray();
+            return new(time, before, plan, survivors.ToArray(), afterEvent, upper.Report, postGeometry, safeTerminal,
+                tracker.PhysicalPairs[InteractionEpisodeTracker.PhysicalPairKey(riders[0].RiderId, riders[1].RiderId)],
+                terminalThrough, terminalHistory, hi, timeTrials)
+                { ExecutedWindowGeometry = executedWindow, TimeAgreement = agreement,
+                    ContinuationRefusal = safeTerminal ? null : "Terminal rider cannot resume; survivor continuation has no safe geometry certificate." };
+        }
+        var after = before.Select(c => c.ResumeAfterContact(plan.Riders.Single(r => r.RiderId == c.Snapshot.Riders[0].RiderId), continuationSteps, eventTimeToleranceSeconds).Cursor
             ?? throw new RiderIntegrationRefusalException("Demonstration needs multiple steps before a segment boundary.")).ToArray();
         var postPoses = after.SelectMany((c, i) => Poses(origins[i], c.Boundary, embedding, before[i].Boundary.CompletedSteps)).ToArray();
-        var verified = ContestedSpaceResolver.Observe(postPoses);
+        var verified = practicalTime ? ContestedSpaceResolver.ObserveExecutedContactWindow(postPoses) : ContestedSpaceResolver.Observe(postPoses);
         var safe = verified.Intervals.Count > 0 && verified.FrameCoverageGaps.Count == 0
             && verified.Intervals.All(r => r.NumericallyResolved && !r.Kind.HasFlag(SpaceConflictKind.BoundaryAmbiguous)
                 && r.MinimumSeparationLowerBoundMeters >= -GeometryNumerics.MinimumSeparationToleranceMeters);
@@ -198,7 +306,8 @@ internal static class TwoRiderContactExecution
         foreach (var c in after) c.Seal(); // A bounded demo ends here; an unsafe candidate cannot be resumed or published.
         // Suppressed impulse ownership alone never authorizes an unsafe continuation.
         return new(time, before, plan, after, afterEvent, upper.Report, verified, safe,
-            tracker.PhysicalPairs[InteractionEpisodeTracker.PhysicalPairKey(riders[0].RiderId, riders[1].RiderId)], through, history, hi, timeTrials);
+            tracker.PhysicalPairs[InteractionEpisodeTracker.PhysicalPairKey(riders[0].RiderId, riders[1].RiderId)], through, history, hi, timeTrials)
+            { ExecutedWindowGeometry = executedWindow, TimeAgreement = agreement };
     }
 
     internal static RiderStateChange State(RiderIntegrationCursor cursor)
@@ -231,5 +340,19 @@ internal static class TwoRiderContactExecution
         internal override bool DeterministicArithmetic => source.DeterministicArithmetic;
         public override PhysicalBikePose Sample(double time) { Fraction(time); return source.Sample(time); }
         public override PoseRateBounds RateBounds(double start, double finish) { Fraction(start); Fraction(finish); return source.RateBounds(start, finish); }
+    }
+
+    private sealed class StationaryTerminalPose(PhysicalBikePose pose, double end, bool supportsLapWrap) : PhysicalPoseInterval(pose.RiderId,
+        pose.FrameId, pose.CommonTimeSeconds, end, pose.Dimensions, false, pose.Source, supportsLapWrap)
+    {
+        internal override bool DeterministicArithmetic => pose.DeterministicArithmetic;
+        public override PhysicalBikePose Sample(double time)
+        {
+            Fraction(time);
+            return new(RiderId, FrameId, pose.Position, new(time, pose.Attitude.TravelHeadingRadians, pose.Attitude.BikeHeadingRadians),
+                Dimensions, pose.ReferenceTangentHeadingRadians, Source) { DeterministicArithmetic = pose.DeterministicArithmetic };
+        }
+        public override PoseRateBounds RateBounds(double start, double finish)
+        { Fraction(start); Fraction(finish); return new(new(0, 0), 0, 0); }
     }
 }

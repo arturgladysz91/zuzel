@@ -85,6 +85,13 @@ the observed float lateral quantum still prevents this real contact's acceptance
 
 This document defines the binding invariants of the speedway manager simulation.
 
+[A10 practical contact time](calibration/rea-004a10-practical-contact-time.md)
+explicitly permits up to 10 microseconds between a certified first touch and
+real event states in the frozen pair experiment. It requires whole-window
+penetration and other-rider certificates; #55 root-time/geometry tolerances,
+ordinary A/B/C and physical equations remain unchanged. This supersedes A9's
+strict event-state refusal only when the practical experiment is invoked.
+
 Version precedence: [Continuous corner envelope calibration (#38)](#continuous-corner-envelope-calibration-38)
 supersedes earlier #24–#37 descriptions of segment-gated TurnEntry scrub,
 TurnMiddle carry and TurnExit drive in advanced production. Current advanced
