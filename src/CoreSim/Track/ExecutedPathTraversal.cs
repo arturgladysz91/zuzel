@@ -114,6 +114,8 @@ internal static class ExecutedPathTraversal
                 ExecutionEndpoints: Array.AsReadOnly(executionEndpoints!.ToArray())));
         while (start < end)
         {
+            if (pause?.CausalHeat == true) ProjectionCaptureAudit.CausalStepStarting?.Invoke(snapshot,
+                new(start, time, distance, speed, lateral), positiveDriveFraction, lateralAuthority01, contactRecovery);
             if (stepCount >= maxNodes) throw new InvalidOperationException("Coupled traversal exceeded its geometric node bound.");
             var length = LaneModel.SegmentLengthMeters(segment, lateral, geometry);
             var finish = Math.Min(end, start + LongitudinalDynamics.ProvisionalLongitudinalIntegrationStepMeters / length);

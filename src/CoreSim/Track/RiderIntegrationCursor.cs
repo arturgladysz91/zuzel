@@ -66,6 +66,8 @@ internal sealed class RiderIntegrationCursor(RiderIntegrationSession session, Ex
     internal SimulationSnapshot Snapshot => session.Snapshot;
     internal RiderIntent Intent => session.Intent;
     internal RiderIntegrationContext Context => session.Context;
+    internal CoreSim.Interactions.ContactRecoveryState? ActiveContactRecovery =>
+        Boundary.CanonicalProgress < Boundary.EndCanonicalProgress ? session.Contact?.Recovery : null;
     internal TrackStateSnapshot SurfaceVersion => Snapshot.TrackState;
     internal double OriginTimeSeconds => Snapshot.Step.ExecutionOriginTimeSeconds ?? Snapshot.Riders[0].ElapsedTimeSeconds;
     internal double ExecutedThroughSeconds => OriginTimeSeconds + Boundary.TimeSeconds;
@@ -74,11 +76,11 @@ internal sealed class RiderIntegrationCursor(RiderIntegrationSession session, Ex
     // classification, RNG or integration; only exact-input memoized queries are shared.
     internal RiderIntegrationCursor ForkFrozenExperiment()
     {
-        if (_consumed || Boundary.PartialStep is not null || session.Contact is not null || !Snapshot.Step.FreezeSurfaceForHeat)
-            throw new RiderIntegrationRefusalException("Experiment fork requires an unused ordinary frozen-heat prefix.");
+        if (_consumed || Boundary.PartialStep is not null || session.Contact is not null && !session.CausalHeat || !Snapshot.Step.FreezeSurfaceForHeat)
+            throw new RiderIntegrationRefusalException("Experiment fork requires an unused frozen prefix with authorized post-event state.");
         var fork = new RiderIntegrationSession(Snapshot, Intent)
         { Context = Context, Request = session.Request, Complete = session.Complete, ContinueWithContact = session.ContinueWithContact,
-            CausalHeat = session.CausalHeat };
+            CausalHeat = session.CausalHeat, Contact = session.Contact };
         fork.Continue = request => fork.ContinueWithContact(request, fork.Contact);
         return new(fork, Boundary);
     }
@@ -112,7 +114,8 @@ internal sealed class RiderIntegrationCursor(RiderIntegrationSession session, Ex
         int pauseAfterSteps, double eventTimeToleranceSeconds = ExecutedPathTraversal.TimeToleranceSeconds)
         => ResumeEvent(consequence, pauseAfterSteps, eventTimeToleranceSeconds);
 
-    // Counterfactual comparison only: same executed partition, no impulse/recovery and no publication.
+    // Same partition without an impulse: a causal nonparticipant, or the strict
+    // pair experiment's unpublished counterfactual comparison.
     internal RiderIntegrationProgress ResumeEventWithoutConsequence(int pauseAfterSteps)
         => ResumeEvent(null, pauseAfterSteps);
 
@@ -131,7 +134,8 @@ internal sealed class RiderIntegrationCursor(RiderIntegrationSession session, Ex
             throw new RiderIntegrationRefusalException("Post-event continuation requires this exact unconsumed contact state.");
         if (consequence is not null && (consequence.Severity == CoreSim.Interactions.PhysicalContactSeverity.Crash || consequence.PostContactSpeed <= 0))
             throw new RiderIntegrationRefusalException("Terminal contact ends motion at the event; it cannot resume.");
-        if (pauseAfterSteps <= 0) throw new ArgumentOutOfRangeException(nameof(pauseAfterSteps));
+        if (pauseAfterSteps < 0 || pauseAfterSteps == 0 && !session.CausalHeat)
+            throw new ArgumentOutOfRangeException(nameof(pauseAfterSteps));
         _consumed = true; session.Contact = consequence;
         var speed = consequence?.PostContactSpeed ?? Boundary.Speed;
         var nodes = Boundary.Nodes.ToArray();
@@ -140,6 +144,9 @@ internal sealed class RiderIntegrationCursor(RiderIntegrationSession session, Ex
         endpoints[^1] = endpoints[^1] with { Speed = speed };
         var after = Boundary with { Speed = speed, Nodes = Array.AsReadOnly(nodes), PartialStep = null,
             ExecutionEndpoints = Array.AsReadOnly(endpoints) };
+        // Causal ownership may reopen the accepted event boundary without
+        // executing anything. Its next disposable fork performs the first step.
+        if (pauseAfterSteps == 0) return new(null, new(session, after));
         try { return new(session.Complete(session.Continue(new(pauseAfterSteps, after))), null); }
         catch (TraversalPausedException paused) { return new(null, new(session, paused.Boundary)); }
     }

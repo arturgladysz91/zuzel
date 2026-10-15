@@ -57,6 +57,7 @@ def consumers():
             continue
         name = path.relative_to(ROOT).as_posix()
         source = path.read_text(encoding="utf-8").replace("\r\n", "\n")
+        source = restore_four_rider_continuation(source, name)
         source = restore_four_rider_causal(source, name)
         source = restore_practical_contact_time(source, name)
         source = restore_first_contact(source, name)
@@ -98,6 +99,23 @@ def consumers():
             continue
         result[name] = hashlib.sha256(source.encode("utf-8")).hexdigest()
     return result
+
+
+def restore_four_rider_continuation(source, name):
+    raw = (ROOT / "tests/fixtures/rea004a12-source-extraction.json").read_bytes().replace(b"\r\n", b"\n")
+    assert hashlib.sha256(raw).hexdigest() == "2c99af19eb426b29856876a1ad54761dd8716c1f7215f9d60e934434414de2d6"
+    extraction = json.loads(raw)
+    assert extraction["BaseSha"] == "387d660f2f8b84b350f2f889161daaa2223c3996"
+    assert set(extraction["Patches"]) == {"src/CoreSim/Race/FourRiderCausalCoordinator.cs",
+        "src/CoreSim/Track/RiderIntegrationCursor.cs", "src/CoreSim/Track/ExecutedPathTraversal.cs",
+        "src/CoreSim/Track/ProjectionCaptureAudit.cs"}
+    assert extraction["NewSourceSha256"] == {}
+    for patch in extraction["Patches"].get(name, []):
+        assert source.count(patch["After"]) == 1, name
+        source = source.replace(patch["After"], patch["Before"])
+    if name in extraction["BaseSourceSha256"]:
+        assert hashlib.sha256(source.encode()).hexdigest() == extraction["BaseSourceSha256"][name], name
+    return source
 
 
 def restore_four_rider_causal(source, name):

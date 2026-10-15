@@ -108,6 +108,21 @@ path, geometry, dimensions, force equations and historical results stay unchange
 Discrete reference-attitude changes retain #55's discontinuity quarantine.
 No public/default D option or four-lap completion is enabled.
 
+[A12 bounded continuation](calibration/rea-004a12-four-rider-continuation.md)
+reopens those exact nonterminal event boundaries through the existing
+`ResumeAfterContact` mechanism. The preserved native clocks do not rewind to
+the geometric touch. Already certified tails bridge their submicrosecond skew;
+history resumes at its previous coverage end, and wear extends each prefix once.
+Impacted riders retain their impulse and recovery controls for the remainder of
+the current production traversal; its completion consumes recovery. Other riders
+receive no consequence. Decisions change only at existing segment boundaries.
+Only certified actual coverage advances consumed-pair separation ownership;
+duplicate-impact suppression never authorizes penetration or ambiguous geometry.
+The next fresh contact stops before a second consequence transaction. The real
+control/19 continuation refuses at 4.183647618 s because the unchanged controls
+would produce 3.6 cm penetration. The 1–2 second real-run goal is not achieved.
+This explicit experiment changes neither ordinary A/B/C nor #55's tolerances.
+
 Version precedence: [Continuous corner envelope calibration (#38)](#continuous-corner-envelope-calibration-38)
 supersedes earlier #24–#37 descriptions of segment-gated TurnEntry scrub,
 TurnMiddle carry and TurnExit drive in advanced production. Current advanced

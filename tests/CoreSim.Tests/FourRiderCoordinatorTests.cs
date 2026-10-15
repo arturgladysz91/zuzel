@@ -17,6 +17,98 @@ public sealed class FourRiderCoordinatorTests(ITestOutputHelper output)
         PhysicalContactDiagnostics = PhysicalContactDiagnosticsLevel.FullAudit };
 
     [Fact]
+    public void RealDisturbedResumeRefusesTheUnchangedInwardPathBeforePenetration()
+    {
+        var run = Real(); WriteEvidence(run); var reverse = Real(reverse: true);
+        var first = run.Result.Publication;
+        var after = Continue(run, 2); var reversed = Continue(reverse, 2);
+        Assert.Equal(CausalRunStatus.Refused, after.Result.Status);
+        Assert.Contains("cannot certify nonpenetration", after.Result.Refusal);
+        Assert.Equal(Exact.Hash(ContinuationDigest(after.Result)), Exact.Hash(ContinuationDigest(reversed.Result)));
+        var barrier = Assert.IsType<CausalGeometryBarrier>(after.Result.GeometryBarrier);
+        var row = Assert.Single(barrier.Certificate.Intervals.Where(r => r.RiderA == 3 && r.RiderB == 4));
+        Assert.InRange(row.MinimumSeparationMeters, -.037, -.035);
+        Assert.InRange(after.Result.Publication.CommittedFrontier, first.Contact!.TimeSeconds, first.Contact.TimeSeconds + .01);
+        Assert.Null(after.Result.NextContact); Assert.True(after.Result.Publication.ContactOwnership!.Consumed);
+        VerifyContinuation(run, first, after.Result);
+        // Every rider has executed a new disposable step from its real post-event
+        // boundary. The rejected common window publishes none of those futures.
+        Assert.All(Enumerable.Range(1, 4), id => Assert.Contains(after.Starts, s => s.Id == id));
+        VerifyRecoveryStarts(first, after.Starts);
+        WriteContinuationEvidence(after);
+    }
+
+    [Fact]
+    public void SeparatingContactContinuesAllFourRidersForOneSecond()
+    {
+        var run = Rolling(); var reverse = Rolling(reverse: true);
+        Assert.True(run.Result.Refusal is null, run.Result.Refusal);
+        Assert.Equal(CausalRunStatus.ContactResolved, run.Result.Status);
+        var first = run.Result.Publication; var contact = first.Contact!;
+        var after = Continue(run, 1.1); var reversed = Continue(reverse, 1.1);
+        Assert.Null(after.Result.Refusal); Assert.Equal(CausalRunStatus.HorizonReached, after.Result.Status);
+        Assert.Equal(Exact.Hash(ContinuationDigest(after.Result)), Exact.Hash(ContinuationDigest(reversed.Result)));
+        Assert.All(after.Result.Publication.Riders, s =>
+            Assert.True(s.ExecutedThroughSeconds >= first.Riders.Single(r => r.Rider.RiderId == s.Rider.RiderId).ExecutedThroughSeconds + 1));
+        Assert.All(contact.Plan.Riders, e => Assert.Equal(PhysicalContactSeverity.Disturbed, e.Severity));
+        VerifyRecoveryStarts(first, after.Starts); VerifyContinuation(run, first, after.Result);
+        Assert.Contains(History(after.Result.Publication).SelectMany(h => h.Certificate.Intervals), r =>
+            r.IntervalStartSeconds > contact.TimeSeconds && r.RiderA == 3 && r.RiderB == 4
+                && r.MinimumSeparationMeters < Options.ContestedSpaceParameters.ReleaseClearanceMeters);
+        Assert.True(after.Result.Publication.ContactOwnership!.Consumed);
+        Assert.All(after.Result.Publication.Riders.Where(s => s.Rider.RiderId >= 3), s => Assert.NotNull(s.Rider.ContactRecovery));
+        foreach (var old in first.Riders.Where(s => s.Rider.RiderId >= 3))
+        {
+            var current = after.Result.Publication.Riders.Single(s => s.Rider.RiderId == old.Rider.RiderId);
+            Assert.Same(old.Origin, current.Origin);
+            var step = current.Execution!.Steps[old.Execution!.CompletedSteps];
+            var drive = step.ReferenceDriveForceNewtons * old.Integration!.PositiveDriveFraction;
+            Assert.True(drive > 0); // isolate recovery, keeping the real impulse
+            var withoutRecovery = LongitudinalDynamics.CalculateMidpointDriveEndSpeedMetersPerSecond(
+                old.Rider.Speed, step.DistanceMeters, drive, old.Rider.ActiveSetup);
+            var withRecovery = LongitudinalDynamics.CalculateMidpointDriveEndSpeedMetersPerSecond(
+                old.Rider.Speed, step.DistanceMeters, drive * (float)old.Rider.ContactRecovery!.DriveAvailability01, old.Rider.ActiveSetup);
+            Assert.Equal(withRecovery, current.Execution.ExecutionEndpoints![old.Execution.CompletedSteps + 1].Speed);
+            Assert.True(withRecovery < withoutRecovery);
+            output.WriteLine(FormattableString.Invariant($"recovery R{old.Rider.RiderId}: first step {withRecovery:R} m/s; same impulse without recovery {withoutRecovery:R} m/s"));
+        }
+        WriteContinuationEvidence(after);
+    }
+
+    [Fact]
+    public void SecondContactStopsBeforeItsEffectsAndNativeReplayCounterMeasuresActualStarts()
+    {
+        var run = Rolling(nextContact: true); var first = run.Result.Publication;
+        var after = Continue(run, 4); var reverse = Continue(Rolling(reverse: true, nextContact: true), 4);
+        Assert.True(after.Result.Refusal is null, after.Result.Refusal); Assert.Equal(CausalRunStatus.NextContactPending, after.Result.Status);
+        Assert.Equal(Exact.Hash(ContinuationDigest(after.Result)), Exact.Hash(ContinuationDigest(reverse.Result)));
+        var next = Assert.IsType<CausalNextContact>(after.Result.NextContact);
+        Assert.Equal((1, 2), (next.RiderA, next.RiderB));
+        Assert.True(next.TimeSeconds > first.Contact!.TimeSeconds);
+        Assert.True(after.Result.Publication.CommittedFrontier < next.TimeSeconds);
+        Assert.All(next.Certificate.Intervals, r => Assert.True(r.NumericallyResolved));
+        // Both impacted riders completed their original production traversals;
+        // the consumed recovery is absent from their next-segment states.
+        Assert.All(after.Result.Publication.Riders, s => Assert.Null(s.Rider.ContactRecovery));
+        VerifyContinuation(run, first, after.Result); WriteContinuationEvidence(after);
+
+        // Positive control: deliberately execute an older independent token.
+        // The real coordinator phases above must remain zero, but the meter
+        // must detect this actual native reintegration instead of returning 0.
+        var accepted = first.Riders[0]; var engine = new SimulationEngine(new Hold());
+        var initial = engine.BeginCausalRiderIntegration(accepted.Origin!, accepted.Intent!, Options).Cursor!;
+        var old = initial.ForkFrozenExperiment(); var advanced = initial.Resume(run.Heat.Surface, 1).Cursor!;
+        var meter = new CausalCoordinatorWork(); meter.Accepted(advanced);
+        try
+        {
+            ProjectionCaptureAudit.CausalStepStarting = (snapshot, step, _, _, _) => meter.Starting(snapshot, step.CanonicalProgress);
+            old.Resume(run.Heat.Surface, 1);
+        }
+        finally { ProjectionCaptureAudit.CausalStepStarting = null; }
+        Assert.Equal(1, meter.ObservedNativeStepStarts); Assert.Equal(1, meter.ReexecutedAcceptedSteps);
+    }
+
+    [Fact]
     public void RealControl19StartsAtTheTapesWithFourActualCausalStates()
     {
         var forward = Real(); var reverse = Real(reverse: true);
@@ -212,6 +304,128 @@ public sealed class FourRiderCoordinatorTests(ITestOutputHelper output)
                 track, surface, new[] { rider }), intent, Options with { IncidentFrequency = 0 })).Message);
     }
 
+    private Run Rolling(bool reverse = false, bool nextContact = false)
+    {
+        var track = new Track(new[] { new TrackSegment(0, SegmentType.Straight, 40),
+            new TrackSegment(1, SegmentType.Straight, nextContact ? 40 : 120),
+            new TrackSegment(2, SegmentType.Straight, nextContact ? 40 : 120) }, TrackGeometry.Default);
+        var live = Enumerable.Range(1, 4).Select(id => new RiderState(RiderProfile.CreateDefault(id), id <= 2 ? (nextContact ? 0 : (id - 1) * 4) : 2)
+            { Speed = id <= 2 ? (nextContact && id == 2 ? 17 : 18) : id == 3 ? 16 : 15 }).ToArray();
+        var progress = nextContact ? new[] { .5f, .625f, .125f, .203125f } : new[] { .5f, .75f, .9375f, 0f };
+        foreach (var r in live)
+        {
+            r.RestorePosition(RiderPosition.Create(1, nextContact || r.RiderId == 3 ? 0 : 1, progress[r.RiderId - 1], 3));
+            r.SetStatus(RiderRaceStatus.Racing);
+        }
+        var heat = new FrozenHeatContext(track, TrackState.CreateDefault(track), Options with { IncidentFrequency = 0 }, 91);
+        var origin = heat.Capture((reverse ? live.Reverse() : live).ToArray(), new(91, 0, 0, 0, 19, Options.Laps));
+        var coordinator = new FourRiderCausalCoordinator(new(new Hold()), heat, origin, reverse);
+        return new(coordinator, heat, coordinator.Advance(), new(), 0);
+    }
+
+    private sealed record NativeStart(SimulationSnapshot Origin, ExecutedStepEndpoint Boundary,
+        float Drive, float Lateral, bool Recovery)
+    { public int Id => Origin.Riders[0].RiderId; }
+    private sealed record Continuation(CausalRunResult Result, IReadOnlyList<NativeStart> Starts,
+        Dictionary<string, int> Work, Dictionary<ProjectionMaterialization, int> Counts, int TotalNarrow, double Seconds);
+    private static Dictionary<string, int> MeasuredWork(CausalCoordinatorWork w) => new()
+    {
+        [nameof(w.Windows)] = w.Windows, [nameof(w.AllRiderCertificates)] = w.AllRiderCertificates,
+        [nameof(w.PairCertificates)] = w.PairCertificates, [nameof(w.NarrowEvaluations)] = w.NarrowEvaluations,
+        [nameof(w.GeometrySubdivisions)] = w.GeometrySubdivisions, [nameof(w.Decisions)] = w.Decisions,
+        [nameof(w.SegmentHandoffs)] = w.SegmentHandoffs, [nameof(w.PairTimeTrials)] = w.PairTimeTrials,
+        [nameof(w.RiderTimeTrials)] = w.RiderTimeTrials, [nameof(w.ObservedNativeStepStarts)] = w.ObservedNativeStepStarts,
+        [nameof(w.ReexecutedAcceptedSteps)] = w.ReexecutedAcceptedSteps
+    };
+    private static Continuation Continue(Run run, double duration)
+    {
+        var before = MeasuredWork(run.Coordinator.Work); var starts = new List<NativeStart>();
+        var counts = new Dictionary<ProjectionMaterialization, int>(); var totalNarrow = 0;
+        CausalRunResult result; var watch = Stopwatch.StartNew();
+        try
+        {
+            ProjectionCaptureAudit.Observer = (kind, n) => counts[kind] = counts.GetValueOrDefault(kind) + n;
+            ProjectionCaptureAudit.CausalStepStarting = (origin, boundary, drive, lateral, recovery) =>
+                starts.Add(new(origin, boundary, drive, lateral, recovery));
+            SpaceSearchDiagnostics.Observer = diagnostic => totalNarrow += diagnostic.Evaluations;
+            result = run.Coordinator.ContinueAfterFirstContact(run.Result.Publication.Contact!.TimeSeconds + duration);
+        }
+        finally
+        {
+            ProjectionCaptureAudit.Observer = null; ProjectionCaptureAudit.CausalStepStarting = null;
+            SpaceSearchDiagnostics.Observer = null; watch.Stop();
+        }
+        return new(result, starts, MeasuredWork(run.Coordinator.Work).ToDictionary(p => p.Key, p => p.Value - before[p.Key]),
+            counts, totalNarrow, watch.Elapsed.TotalSeconds);
+    }
+    private static object ContinuationDigest(CausalRunResult result) => new
+    { result.Status, result.Publication, result.Refusal, result.NextContact, result.GeometryBarrier, result.Publication.ContactOwnership };
+    private static void VerifyRecoveryStarts(CausalPublication first, IReadOnlyList<NativeStart> starts)
+    {
+        foreach (var s in first.Riders)
+        {
+            var start = Assert.Single(starts.Where(a => ReferenceEquals(a.Origin, s.Origin)
+                && a.Boundary.CanonicalProgress == s.Execution!.CanonicalProgress));
+            Assert.Equal(s.Execution!.TimeSeconds, start.Boundary.TimeSeconds);
+            Assert.Equal(s.Execution.DistanceMeters, start.Boundary.DistanceMeters);
+            Assert.Equal(s.Rider.Speed, start.Boundary.Speed); // actual impulse, no old forecast speed
+            var recovery = s.Rider.ContactRecovery;
+            Assert.Equal(s.Integration!.PositiveDriveFraction * (float)(recovery?.DriveAvailability01 ?? 1), start.Drive);
+            Assert.Equal(s.Integration.LateralAuthority01 * (float)(recovery?.LateralAuthority01 ?? 1), start.Lateral);
+            Assert.Equal(recovery is not null, start.Recovery);
+        }
+    }
+    private static void VerifyContinuation(Run run, CausalPublication first, CausalRunResult result)
+    {
+        var after = result.Publication;
+        Assert.Same(first.Contact, after.Contact); Assert.Single(after.Contact!.Plan.AppliedPairs);
+        Assert.Equal(0, after.ContactOwnership!.Generation);
+        Assert.Equal(run.Heat.AcceptedNumericalSteps, after.AcceptedSteps);
+        Assert.InRange(Math.Abs(run.Heat.AcceptedDistanceMeters - after.AcceptedDistanceMeters), 0, 1e-9);
+        Assert.Equal(0, run.Heat.WeatherUpdates); Assert.Equal(0, run.Coordinator.Work.ReexecutedAcceptedSteps);
+        Assert.True(run.Coordinator.Work.ObservedNativeStepStarts > 0);
+        Assert.All(after.Riders, s =>
+        {
+            var old = first.Riders.Single(r => r.Rider.RiderId == s.Rider.RiderId);
+            Assert.True(s.ExecutedThroughSeconds >= old.ExecutedThroughSeconds);
+            Assert.True(s.Rider.Position.DistanceMeters >= old.Rider.Position.DistanceMeters);
+            if (ReferenceEquals(s.Origin, old.Origin)) Assert.Equal(old.Execution!.Steps, s.Execution!.Steps.Take(old.Execution.CompletedSteps));
+            if (s.Rider.RiderId <= 2) Assert.Null(s.Rider.ContactRecovery);
+        });
+        var history = History(after).TakeWhile(h => !ReferenceEquals(h, first.History)).Reverse().ToArray();
+        var through = first.History!.ThroughSeconds;
+        foreach (var h in history)
+        {
+            Assert.Equal(through, h.FromSeconds); through = h.ThroughSeconds;
+            Assert.Equal(6, h.Certificate.Work.RiderPairs); Assert.Empty(h.Certificate.FrameCoverageGaps);
+            Assert.All(h.Certificate.Intervals, r =>
+            {
+                Assert.True(r.NumericallyResolved);
+                Assert.True(r.MinimumSeparationLowerBoundMeters >= -GeometryNumerics.ContactDistanceMeters);
+            });
+            foreach (var id in Enumerable.Range(1, 4))
+            {
+                var covered = h.FromSeconds;
+                foreach (var p in h.Poses.Where(p => p.RiderId == id).OrderBy(p => p.StartTimeSeconds))
+                { Assert.Equal(covered, p.StartTimeSeconds); covered = p.EndTimeSeconds; }
+                Assert.Equal(h.ThroughSeconds, covered);
+            }
+        }
+        if (result.Status != CausalRunStatus.HorizonReached) Assert.Same(result, run.Coordinator.Advance());
+    }
+    private void WriteContinuationEvidence(Continuation after) => output.WriteLine(System.Text.Json.JsonSerializer.Serialize(new
+    {
+        Phase = "continuation", after.Result.Status, after.Result.Refusal, after.Result.Publication.CommittedFrontier,
+        Next = after.Result.NextContact is { } next ? new { next.TimeSeconds, next.RiderA, next.RiderB } : null,
+        Barrier = after.Result.GeometryBarrier is { } barrier ? new { barrier.FromSeconds, barrier.ThroughSeconds,
+            SampledMinimum = barrier.Certificate.Intervals.Min(r => r.MinimumSeparationMeters),
+            LowerBound = barrier.Certificate.Intervals.Min(r => r.MinimumSeparationLowerBoundMeters) } : null,
+        States = after.Result.Publication.Riders.Select(s => new { s.Rider.RiderId, s.ExecutedThroughSeconds,
+            s.Rider.Speed, s.Rider.ContactRecovery, s.Rider.CanonicalProgress }),
+        after.Work, Counts = after.Counts.ToDictionary(p => p.Key.ToString(), p => p.Value), after.TotalNarrow, after.Seconds,
+        after.Result.Publication.AcceptedSteps, after.Result.Publication.AcceptedDistanceMeters
+    }));
+
     private Run Real(bool reverse = false, Func<CausalPublication, bool>? admit = null,
         Action<FourRiderCausalCoordinator, FrozenHeatContext>? capture = null)
     {
@@ -238,7 +452,7 @@ public sealed class FourRiderCoordinatorTests(ITestOutputHelper output)
 
     private static object Counters(CausalCoordinatorWork work) => new { work.Windows, work.PairTimeTrials, work.RiderTimeTrials,
         work.AllRiderCertificates, work.PairCertificates, work.NarrowEvaluations, work.GeometrySubdivisions,
-        work.Decisions, work.ReadyGroupPlans, work.SegmentHandoffs, work.WorldCopies, work.ReexecutedAcceptedSteps };
+        work.Decisions, work.ReadyGroupPlans, work.SegmentHandoffs, work.WorldCopies, work.ObservedNativeStepStarts, work.ReexecutedAcceptedSteps };
 
     private static IEnumerable<CausalHistory> History(CausalPublication publication)
     { for (var h = publication.History; h is not null; h = h.Previous) yield return h; }

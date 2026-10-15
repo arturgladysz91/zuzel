@@ -35,6 +35,13 @@ Status dotyczy najbliższej sekcji. Jeśli status nie jest podany, zapis jest wy
 
 ## Stan realizacji
 
+[Eksperyment A12](../calibration/rea-004a12-four-rider-continuation.md) wznawia
+zaakceptowane kursory po Disturbed i sprawdza sześć par. Prosty przypadek przejeżdża
+ponad sekundę; następny kontakt zatrzymuje się przed skutkami. Rzeczywisty control/19
+odmawia przy 4,183647618 s: zachowane sterowanie R4 prowadziłoby do przenikania
+obrysów o około 3,6 cm. Cel dojścia do 6,18 s nie został osiągnięty. Nie dodano
+nowego sterowania, domyślnego D, pełnego biegu ani reguł powtórek.
+
 [Eksperyment A11](../calibration/rea-004a11-four-rider-causal-coordinator.md) prowadzi
 cztery rzeczywiste kursory od startu do pierwszego certyfikowanego kontaktu,
 atomowo zapisuje cztery stany, skutki i odroczone zużycie. Przy upadku zwraca
