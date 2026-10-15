@@ -4,7 +4,7 @@ using CoreSim.PhysicalSpace;
 
 namespace CoreSim.Race;
 
-internal enum CausalRunStatus { HorizonReached, ContactResolved, InterruptedByCrash, Refused }
+internal enum CausalRunStatus { HorizonReached, ContactResolved, InterruptedByCrash, Refused, NextContactPending }
 
 /// <summary>The boundary is a solved accumulator, never a sampled position.</summary>
 internal sealed record CausalRiderState(RiderSnapshot Rider, double ExecutedThroughSeconds,
@@ -16,14 +16,31 @@ internal sealed record CausalContact(double TimeSeconds, int RiderA, int RiderB,
     ContestedSpaceReport Certificate, double MaximumStateTimeErrorSeconds, double IntegratorClockSkewSeconds,
     double MaximumCenterDisplacementMeters, double MaximumFootprintDisplacementBoundMeters);
 internal sealed record CausalPublication(double CommittedFrontier, IReadOnlyList<CausalRiderState> Riders,
-    CausalHistory? History, CausalContact? Contact, int Generation, int AcceptedSteps, double AcceptedDistanceMeters);
-internal sealed record CausalRunResult(CausalRunStatus Status, CausalPublication Publication, string? Refusal);
+    CausalHistory? History, CausalContact? Contact, int Generation, int AcceptedSteps, double AcceptedDistanceMeters)
+{
+    internal PhysicalPairGeneration? ContactOwnership { get; init; }
+}
+internal sealed record CausalNextContact(double TimeSeconds, int RiderA, int RiderB, ContestedSpaceReport Certificate);
+internal sealed record CausalGeometryBarrier(double FromSeconds, double ThroughSeconds,
+    IReadOnlyList<PhysicalPoseInterval> UnacceptedPoses, ContestedSpaceReport Certificate);
+internal sealed record CausalRunResult(CausalRunStatus Status, CausalPublication Publication, string? Refusal)
+{
+    internal CausalNextContact? NextContact { get; init; }
+    internal CausalGeometryBarrier? GeometryBarrier { get; init; }
+}
 internal sealed class CausalCoordinatorWork
 {
     internal int Windows, PairTimeTrials, RiderTimeTrials, PairCertificates, AllRiderCertificates, NarrowEvaluations, GeometrySubdivisions;
     internal int InvalidatedForecasts, Decisions, SegmentHandoffs, ReadyGroupPlans;
     internal int WorldCopies => 0;
-    internal int ReexecutedAcceptedSteps => 0;
+    internal int ObservedNativeStepStarts, ReexecutedAcceptedSteps;
+    private readonly Dictionary<SimulationSnapshot, double> _accepted = new(ReferenceEqualityComparer.Instance);
+    internal void Accepted(RiderIntegrationCursor cursor) => _accepted[cursor.Snapshot] = cursor.Boundary.CanonicalProgress;
+    internal void Starting(SimulationSnapshot snapshot, double progress)
+    {
+        ObservedNativeStepStarts++;
+        if (_accepted.TryGetValue(snapshot, out var accepted) && progress < accepted) ReexecutedAcceptedSteps++;
+    }
 }
 
 /// <summary>
@@ -48,6 +65,8 @@ internal sealed class FourRiderCausalCoordinator
     private readonly bool _reverse;
     private readonly Func<CausalPublication, bool>? _admit;
     private CausalRunResult? _terminal;
+    private bool _continuing;
+    private IReadOnlyList<PhysicalPoseInterval> _eventTails = Array.Empty<PhysicalPoseInterval>();
     private readonly CausalPublication _initialPublication;
     internal CausalPublication Published => _heat.CausalPublication ?? _initialPublication;
     internal CausalCoordinatorWork Work { get; } = new();
@@ -71,12 +90,35 @@ internal sealed class FourRiderCausalCoordinator
         heat.BeginCausalOwnership();
     }
 
-    // Bounded caller-driven execution. A12 owns complete laps, restart rules and
-    // nonterminal replanning; A11 returns immediately after the first event.
-    internal CausalRunResult Advance(int maximumWindows = 10000)
+    // The first event remains an explicit pause. A caller may then request a
+    // bounded continuation; the next new contact stops before any second effects.
+    internal CausalRunResult ContinueAfterFirstContact(double throughSeconds, int maximumWindows = 10000)
+    {
+        if (maximumWindows <= 0) throw new ArgumentOutOfRangeException(nameof(maximumWindows));
+        if (!double.IsFinite(throughSeconds) || throughSeconds <= Published.CommittedFrontier)
+            throw new ArgumentOutOfRangeException(nameof(throughSeconds));
+        if (!_continuing)
+        {
+            if (_terminal?.Status != CausalRunStatus.ContactResolved)
+                throw new RiderIntegrationRefusalException("Continuation requires an accepted nonterminal first contact.");
+            foreach (var slot in Processing())
+            {
+                var effect = Published.Contact!.Plan.Riders.SingleOrDefault(r => r.RiderId == slot.State.Rider.RiderId);
+                slot.Cursor = (effect is null ? slot.Cursor!.ResumeEventWithoutConsequence(0)
+                    : slot.Cursor!.ResumeAfterContact(effect, 0, EventToleranceSeconds)).Cursor!;
+            }
+            _continuing = true; _terminal = null;
+        }
+        return Advance(maximumWindows, throughSeconds);
+    }
+
+    internal CausalRunResult Advance(int maximumWindows = 10000, double stopAtSeconds = double.PositiveInfinity)
     {
         if (maximumWindows <= 0) throw new ArgumentOutOfRangeException(nameof(maximumWindows));
         if (_terminal is not null) return _terminal;
+        var priorObserver = ProjectionCaptureAudit.CausalStepStarting;
+        ProjectionCaptureAudit.CausalStepStarting = (snapshot, start, drive, lateral, recovery) =>
+        { priorObserver?.Invoke(snapshot, start, drive, lateral, recovery); Work.Starting(snapshot, start.CanonicalProgress); };
         try
         {
             for (var window = 0; window < maximumWindows; window++)
@@ -85,25 +127,44 @@ internal sealed class FourRiderCausalCoordinator
                 var through = _slots.Min(s => s.Pending!.Cursor.ExecutedThroughSeconds);
                 if (through <= Published.CommittedFrontier)
                     throw new RiderIntegrationRefusalException("Numerical horizon makes no forward progress.");
-                var poses = Window(_slots.SelectMany(s => s.Pending!.Poses), Published.CommittedFrontier, through);
-                var report = Observe(poses, allRiders: true, penetrationProof: false);
-                var touch = SelectFirstEvent(report);
+                var from = Published.History?.ThroughSeconds ?? Published.CommittedFrontier;
+                var poses = Window(_eventTails.Concat(_slots.SelectMany(s => s.Pending!.Poses)), from, through);
+                var report = Observe(poses, allRiders: true, penetrationProof: _continuing);
+                var eventReport = EventCandidates(report);
+                var ownership = Published.ContactOwnership;
+                if (_continuing && ownership is not null && Published.Contact is { } contact)
+                {
+                    // Only actual certified coverage can release the consumed
+                    // generation. Impulse suppression never bypasses penetration.
+                    ownership = new PhysicalPairObservation(report, _heat.Options.ContestedSpaceParameters)
+                        .Advance((contact.RiderA, contact.RiderB), ownership);
+                }
+                var touch = SelectFirstEvent(eventReport);
                 Work.Windows++;
-                if (touch is not null) return ResolveFirstContact(touch, report, through);
+                if (touch is not null) return ResolveFirstContact(touch, eventReport, through);
+                if (_continuing && report.Intervals.Any(r => r.MinimumSeparationLowerBoundMeters < -GeometryNumerics.ContactDistanceMeters))
+                    return Refuse(FormattableString.Invariant($"Post-contact executed window [{from:R},{through:R}] cannot certify nonpenetration: ")
+                        + string.Join("; ", report.Intervals.Where(r => r.MinimumSeparationLowerBoundMeters < -GeometryNumerics.ContactDistanceMeters)
+                            .Select(r => FormattableString.Invariant($"R{r.RiderA}-R{r.RiderB} sampled={r.MinimumSeparationMeters:R}, lower={r.MinimumSeparationLowerBoundMeters:R}"))),
+                        new(from, through, poses, report));
+                if (_continuing) RequireResolved(report);
                 var closing = _slots.Where(s => s.Pending!.Cursor.ExecutedThroughSeconds == through).ToArray();
                 var states = _slots.Select(s => closing.Contains(s) ? State(s.Pending!.Cursor) : s.State).ToArray();
-                var history = new CausalHistory(Published.History, Published.CommittedFrontier, through, poses, report);
-                Publish(states, history, null, closing.Select(s => s.Pending!.Cursor).ToArray());
+                var history = new CausalHistory(Published.History, from, through, poses, report);
+                Publish(states, history, null, closing.Select(s => s.Pending!.Cursor).ToArray(), ownership);
                 foreach (var s in closing)
                 {
                     s.Cursor?.Seal(); s.Cursor = s.Pending!.Cursor; s.Pending = null;
                     s.State = states.Single(r => r.Rider.RiderId == s.State.Rider.RiderId);
                 }
+                if (through >= _slots.Max(s => s.Cursor!.ExecutedThroughSeconds)) _eventTails = Array.Empty<PhysicalPoseInterval>();
+                if (Published.CommittedFrontier >= stopAtSeconds) return new(CausalRunStatus.HorizonReached, Published, null);
             }
             return new(CausalRunStatus.HorizonReached, Published, null);
         }
         catch (RiderIntegrationRefusalException refusal) { return Refuse(refusal.Message); }
         catch (ExecutedPathTraversal.TimeSolveFeasibilityException refusal) { return Refuse(refusal.Message); }
+        finally { ProjectionCaptureAudit.CausalStepStarting = priorObserver; }
     }
 
     private IEnumerable<Slot> Processing() => _reverse ? _slots.Reverse() : _slots;
@@ -269,15 +330,24 @@ internal sealed class FourRiderCausalCoordinator
         RequireResolved(report);
         if (report.Intervals.Any(r => r.MinimumSeparationLowerBoundMeters < -GeometryNumerics.ContactDistanceMeters))
             throw new RiderIntegrationRefusalException("Executed four-rider event window has inadmissible penetration.");
-        var actualFirst = report.Intervals.Where(r => r.HasConflict).OrderBy(r => r.FirstTouchCommonTimeSeconds).FirstOrDefault()
+        var actualFirst = EventCandidates(report).Intervals.Where(r => r.HasConflict).OrderBy(r => r.FirstTouchCommonTimeSeconds).FirstOrDefault()
             ?? throw new RiderIntegrationRefusalException("Executed four-rider states do not certify any contact.");
         if ((actualFirst.RiderA, actualFirst.RiderB) != (candidate.RiderA, candidate.RiderB)
             || Math.Abs(actualFirst.FirstTouchCommonTimeSeconds!.Value - touch) > GeometryNumerics.TimeToleranceSeconds)
             throw new RiderIntegrationRefusalException("Actual all-six certificate changes the first event; no stale pair may be accepted.");
-        RequireSingleEvent(report, touch);
+        RequireSingleEvent(EventCandidates(report), touch);
         RequireSingleEvent(horizon, touch);
         if (through < touch + EventToleranceSeconds)
             throw new RiderIntegrationRefusalException("Final event lacks the full simultaneous-contact lookahead window.");
+        if (_continuing)
+        {
+            // Four freshly solved paths certify the next common-time event.
+            // Their slightly later, differently clocked endpoints are not being
+            // accepted: preserve the preceding publication and apply no effects.
+            foreach (var slot in _slots) { slot.Cursor!.Seal(); slot.Pending!.Cursor.Seal(); }
+            return _terminal = new(CausalRunStatus.NextContactPending, Published, null)
+            { NextContact = new(touch, actualFirst.RiderA, actualFirst.RiderB, report) };
+        }
         var endpointPoses = _slots.Select((s, i) => actual.Last(p => p.RiderId == s.State.Rider.RiderId).Sample(ends[i])).ToArray();
         for (var a = 0; a < 4; a++) for (var b = a + 1; b < 4; b++)
             if (MechanicalSeparation.Between(endpointPoses[a], endpointPoses[b]).SignedMeters < -GeometryNumerics.ContactDistanceMeters)
@@ -326,13 +396,17 @@ internal sealed class FourRiderCausalCoordinator
             ends.Max() - ends.Min(), displacementBounds.Max(d => d.Center), displacementBounds.Max(d => d.Footprint));
         Publish(after, new(Published.History, Published.CommittedFrontier, ends.Min(), eventWindow, report), contact, accepted);
         foreach (var s in _slots) { s.Pending!.Cursor.Seal(); s.Pending = null; s.Cursor?.Seal(); }
-        foreach (var c in accepted) c.Seal(); Work.InvalidatedForecasts += 4;
+        _eventTails = actual.Where(p => p.EndTimeSeconds > ends.Min()).Select(p =>
+            (PhysicalPoseInterval)new Clip(p, Math.Max(p.StartTimeSeconds, ends.Min()), p.EndTimeSeconds)).ToArray();
+        for (var i = 0; i < _slots.Length; i++) { _slots[i].Cursor = accepted[i]; _slots[i].State = after[i]; }
+        if (plan.Riders.Any(r => r.Severity == PhysicalContactSeverity.Crash)) foreach (var c in accepted) c.Seal();
+        Work.InvalidatedForecasts += 4;
         return _terminal = new(plan.Riders.Any(r => r.Severity == PhysicalContactSeverity.Crash)
             ? CausalRunStatus.InterruptedByCrash : CausalRunStatus.ContactResolved, Published, null);
     }
 
     private void Publish(CausalRiderState[] states, CausalHistory history, CausalContact? contact,
-        RiderIntegrationCursor[] newlyAccepted)
+        RiderIntegrationCursor[] newlyAccepted, PhysicalPairGeneration? ownership = null)
     {
         var frontier = contact?.TimeSeconds ?? history.ThroughSeconds;
         var transaction = _heat.PrepareCausalPrefixes(newlyAccepted, frontier, contact is not null);
@@ -346,16 +420,18 @@ internal sealed class FourRiderCausalCoordinator
             steps += c.Boundary.CompletedSteps - (same ? old.Execution!.CompletedSteps : 0);
             distance += c.Boundary.DistanceMeters - (same ? old.Execution!.DistanceMeters : 0);
         }
-        var next = new CausalPublication(frontier, Array.AsReadOnly(states), history, contact, Published.Generation + 1, steps, distance);
+        var next = new CausalPublication(frontier, Array.AsReadOnly(states), history, contact ?? Published.Contact, Published.Generation + 1, steps, distance)
+        { ContactOwnership = ownership ?? contact?.Generation ?? Published.ContactOwnership };
         if (_admit is not null && !_admit(next))
             throw new RiderIntegrationRefusalException("Atomic four-rider admission veto: no states, event generation or wear published.");
         transaction(next); // One CAS publishes the four states, history, event and passage journal together.
+        foreach (var cursor in newlyAccepted) Work.Accepted(cursor);
     }
 
     private CausalRiderState State(RiderIntegrationCursor c)
     {
         var change = TwoRiderContactExecution.State(c) with { ElapsedTimeSeconds = (float)c.ExecutedThroughSeconds,
-            Status = RiderRaceStatus.Racing };
+            Status = RiderRaceStatus.Racing, ContactRecovery = c.ActiveContactRecovery };
         return new(c.Snapshot.Riders[0].Apply(change), c.ExecutedThroughSeconds, c.Snapshot, c.Intent, c.Boundary, c.Context);
     }
 
@@ -388,6 +464,11 @@ internal sealed class FourRiderCausalCoordinator
         Work.NarrowEvaluations += report.Work.NarrowPhaseEvaluations; Work.GeometrySubdivisions += report.Work.AdaptiveSubdivisions;
         return report;
     }
+
+    private ContestedSpaceReport EventCandidates(ContestedSpaceReport report)
+        => Published.ContactOwnership?.Consumed == true && Published.Contact is { } contact
+            ? report with { Intervals = report.Intervals.Where(r =>
+                (r.RiderA, r.RiderB) != (contact.RiderA, contact.RiderB)).ToArray() } : report;
 
     internal static void RequireSingleEvent(ContestedSpaceReport report, double first)
     {
@@ -446,10 +527,10 @@ internal sealed class FourRiderCausalCoordinator
         }
         return Array.AsReadOnly(poses);
     }
-    private CausalRunResult Refuse(string reason)
+    private CausalRunResult Refuse(string reason, CausalGeometryBarrier? barrier = null)
     {
         foreach (var s in _slots) { s.Cursor?.Seal(); s.Pending?.Cursor.Seal(); }
-        return _terminal = new(CausalRunStatus.Refused, Published, reason);
+        return _terminal = new(CausalRunStatus.Refused, Published, reason) { GeometryBarrier = barrier };
     }
     private sealed class Clip(PhysicalPoseInterval source, double from, double through, bool discontinuity = false) : PhysicalPoseInterval(source.RiderId,
         source.FrameId, from, through, source.Dimensions, discontinuity || source.StartsAtDiscontinuity && from == source.StartTimeSeconds,

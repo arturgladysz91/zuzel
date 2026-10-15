@@ -3,11 +3,18 @@
 Release platform: **Windows only**. See the current [Windows CI policy](docs/ci.md)
 for Draft/full validation, the merge gate and optional historical audits.
 
+[REA-004A12](docs/calibration/rea-004a12-four-rider-continuation.md) reopens the four
+accepted nonterminal event cursors, preserves their segment controls and certifies
+subsequent six-pair windows. A simple actual Disturbed pair continues over one
+second; a further contact stops before its effects. **The real control/19 case
+does not reach 6.18 s:** its retained inward R4 path would penetrate R3 by 3.6 cm.
+It refuses at the last safe frontier, 4.183647618 s, without accepting that path.
+
 [REA-004A11](docs/calibration/rea-004a11-four-rider-causal-coordinator.md) executes
 four independent riders from the tapes to their first certified common-time event.
 One atomic experimental publication owns all actual states, history, pair generation
 and deferred wear. The causal control/19 run first contacts R3–R4; Crash returns
-a controlled interruption. A12 continuation and complete heats remain pending.
+a controlled interruption. A11 stops at that event; complete heats remain pending.
 
 [REA-004A10](docs/calibration/rea-004a10-practical-contact-time.md) admits the real
 mixed contact with explicit experimental 10 microsecond event-state agreement,

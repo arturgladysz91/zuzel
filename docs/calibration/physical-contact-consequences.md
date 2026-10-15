@@ -57,6 +57,14 @@ The squeeze demonstrates why canceled net velocity is not zero disturbance: #56C
 
 ## One-step production recovery
 
+The explicit [A12 causal continuation](rea-004a12-four-rider-continuation.md)
+retains #79's `ResumeAfterContact` semantics: the remaining current traversal is
+the active post-event production step. Its native numerical pauses do not consume
+or renew recovery. Recovery remains visible while that traversal is active and
+is cleared at its completion, before the next segment decision. The impulse is
+applied once at each rider's accepted native event clock. Ordinary whole-segment
+#56C2 below retains its original following-step semantics.
+
 `ContactRecoveryState` represents temporary motorcycle control disruption. It carries source episode/frontier, ratio/class, control loss, drive availability, lateral authority and one remaining step. Brush stores none; Disturbed, LostRhythm and MajorSave store one. Recovery is a pending physical state, with slower travel emerging through the existing production dynamics.
 
 Contact A-B in step N applies its immediate velocity change and Commit publishes its pending recovery. Snapshot N+1 freezes that recovery. `ResolveRiderCore` passes its separate drive and lateral availability values into the shared production traversal, which consumes it once. Normal production changes contain no pending recovery. If a fresh A-C contact occurs at the verified N+1 frontier, its own deltaV changes the endpoint immediately and its own recoverable loss becomes the pending state for N+2. `CommitRiderChange` publishes only that new state. A weaker contact replaces the consumed stronger state; a stronger contact replaces the consumed weaker state. The resolver does not compare their magnitudes or multiply effects.

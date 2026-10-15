@@ -13,5 +13,6 @@ internal enum ProjectionMaterialization
 internal static class ProjectionCaptureAudit
 {
     [ThreadStatic] internal static Action<ProjectionMaterialization, int>? Observer;
+    [ThreadStatic] internal static Action<SimulationSnapshot, ExecutedStepEndpoint, float, float, bool>? CausalStepStarting;
     internal static void Record(ProjectionMaterialization kind, int count = 1) => Observer?.Invoke(kind, count);
 }

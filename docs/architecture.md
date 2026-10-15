@@ -71,7 +71,20 @@ are explicitly marked for #55 ambiguity quarantine, without inventing a swept pa
 The same existing coupled traversal supports frozen causal launch, fixed lines and
 all corner phases; ordinary production routing remains unchanged. Joint #56B
 planning is reused for riders ready on the same segment, while executing riders
-retain their captured controls. General cross-segment tactical replanning is A12.
+retain their captured controls. General cross-segment tactical replanning remains future work.
+
+[REA-004A12](calibration/rea-004a12-four-rider-continuation.md) adds bounded
+resumption of these exact cursors, with causal-only zero-step event reopening and
+post-event forecast forks retaining their contact controls. Certified pre-event
+tails cover the tiny native-clock skew without reintegration or duplicate wear.
+The original event remains in the atomic publication alongside the current pair
+ownership. Only accepted actual certificates advance its existing release logic.
+A next contact is freshly solved/certified but remains unpublished and unapplied.
+Native step-entry instrumentation compares actual execution starts against each
+origin's accepted progress, with a deliberate replay positive control in tests.
+The real run's retained controls fail the post-contact nonpenetration guard;
+general cross-segment responses and full heat completion remain future work,
+beyond this bounded A12 resumption.
 
 The target architecture uses one physical clock, event-driven synchronization
 and the existing distance integrator. The engine computes the entire four-rider
