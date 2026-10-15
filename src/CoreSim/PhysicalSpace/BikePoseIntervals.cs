@@ -203,14 +203,17 @@ public static class ResolvedBikePoses
         ExecutedTraversalBoundary start, ExecutedStepEndpoint end, TrackMetricEmbedding embedding, bool exactProgress = false)
     {
         embedding.ValidateCompatible(snapshot.Track);
-        if (snapshot.Segment.Type is not (SegmentType.TurnExit or SegmentType.Straight) || end.TimeSeconds <= start.TimeSeconds)
-            throw new RiderIntegrationRefusalException("Executed-step observation requires a positive-duration Straight/TurnExit partial step.");
+        var causal = snapshot.Step.FreezeSurfaceForHeat && snapshot.Step.ExecutionOriginTimeSeconds.HasValue;
+        if ((!causal && snapshot.Segment.Type is not (SegmentType.TurnExit or SegmentType.Straight))
+            || end.TimeSeconds <= start.TimeSeconds)
+            throw new RiderIntegrationRefusalException(FormattableString.Invariant($"Executed-step R{snapshot.Riders.Single().RiderId}: {start.CanonicalProgress:R}/{start.TimeSeconds:R}/{start.DistanceMeters:R}/{start.Speed:R}/{start.LateralPosition:R} -> {end.CanonicalProgress:R}/{end.TimeSeconds:R}/{end.DistanceMeters:R}/{end.Speed:R}/{end.LateralPosition:R} requires positive duration."));
         var rider = snapshot.Riders.Single(); var segment = snapshot.Step.SegmentIndex;
         var track = snapshot.Track; var corner = track.CornerTopology.CornerForSegment(segment);
         var source = new PoseSource(rider.LapsCompleted, segment, snapshot.Segment.Id, snapshot.Segment.Type, corner?.CornerId);
         var a = Sample(start.CanonicalProgress, start.TimeSeconds, start.DistanceMeters, start.Speed, start.LateralPosition);
         var b = Sample(end.CanonicalProgress, end.TimeSeconds, end.DistanceMeters, end.Speed, end.LateralPosition);
-        var first = rider.ElapsedTimeSeconds + start.TimeSeconds; var last = rider.ElapsedTimeSeconds + end.TimeSeconds;
+        var originTime = causal ? snapshot.Step.ExecutionOriginTimeSeconds!.Value : rider.ElapsedTimeSeconds;
+        var first = originTime + start.TimeSeconds; var last = originTime + end.TimeSeconds;
         var cuts = new List<double> { first, last };
         if (corner is not null && b.SegmentProgress > a.SegmentProgress)
         {

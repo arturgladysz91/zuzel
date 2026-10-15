@@ -3,6 +3,12 @@
 Release platform: **Windows only**. See the current [Windows CI policy](docs/ci.md)
 for Draft/full validation, the merge gate and optional historical audits.
 
+[REA-004A11](docs/calibration/rea-004a11-four-rider-causal-coordinator.md) executes
+four independent riders from the tapes to their first certified common-time event.
+One atomic experimental publication owns all actual states, history, pair generation
+and deferred wear. The causal control/19 run first contacts R3–R4; Crash returns
+a controlled interruption. A12 continuation and complete heats remain pending.
+
 [REA-004A10](docs/calibration/rea-004a10-practical-contact-time.md) admits the real
 mixed contact with explicit experimental 10 microsecond event-state agreement,
 unchanged #55 tolerances and a whole-window penetration proof. Existing effects

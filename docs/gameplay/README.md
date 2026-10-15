@@ -35,6 +35,13 @@ Status dotyczy najbliższej sekcji. Jeśli status nie jest podany, zapis jest wy
 
 ## Stan realizacji
 
+[Eksperyment A11](../calibration/rea-004a11-four-rider-causal-coordinator.md) prowadzi
+cztery rzeczywiste kursory od startu do pierwszego certyfikowanego kontaktu,
+atomowo zapisuje cztery stany, skutki i odroczone zużycie. Przy upadku zwraca
+`InterruptedByCrash`. Przejście między szerokościami zachowuje fizyczny offset;
+nieobsługiwane przejścia odmawiają. To fundament A12, bez pełnego biegu i reguł
+powtórek. Dotychczasowe opisy A8–A10 poniżej zachowują swój historyczny zakres.
+
 **BINDING:** nawierzchnia i pogoda są stałe podczas pojedynczego biegu. Zużycie
 zaakceptowanych przejazdów oraz jedna aktualizacja pogody są rozliczane po biegu
 i obowiązują od następnego. [Eksperyment A8](../calibration/rea-004a8-frozen-heat-common-time.md)

@@ -92,6 +92,22 @@ penetration and other-rider certificates; #55 root-time/geometry tolerances,
 ordinary A/B/C and physical equations remain unchanged. This supersedes A9's
 strict event-state refusal only when the practical experiment is invoked.
 
+[A11 four-rider coordination](calibration/rea-004a11-four-rider-causal-coordinator.md)
+now supplies causal execution from the actual start to the first event. One
+experimental immutable publication includes four solved states and exact clocks,
+the certified history, one consequence plan/pair generation and accepted wear.
+Uncertainty, simultaneous groups and unsupported transitions refuse atomically.
+Crash returns `InterruptedByCrash`; no stationary-bike race continuation is added.
+
+**A11-only coordinate handoff:** preserve the accepted physical lateral offset
+using the existing normalized-coordinate conversion at a change of segment width.
+An offset outside the next segment refuses; it is never clamped or assigned an
+invented transition path. This supersedes the historical normalized-width
+reinterpretation only for the explicit causal coordinator. The ordinary A/B/C
+path, geometry, dimensions, force equations and historical results stay unchanged.
+Discrete reference-attitude changes retain #55's discontinuity quarantine.
+No public/default D option or four-lap completion is enabled.
+
 Version precedence: [Continuous corner envelope calibration (#38)](#continuous-corner-envelope-calibration-38)
 supersedes earlier #24–#37 descriptions of segment-gated TurnEntry scrub,
 TurnMiddle carry and TurnExit drive in advanced production. Current advanced
