@@ -223,6 +223,25 @@ public sealed class SimulationEngine
         return Array.AsReadOnly(intents);
     }
 
+    internal RiderIntent DecideCausalRider(SimulationSnapshot snapshot, int riderId)
+        => new(riderId, _decisionModel.Decide(new RiderDecisionContext(snapshot, snapshot.Rider(riderId))));
+
+    internal RiderIntegrationProgress BeginCausalRiderIntegration(SimulationSnapshot snapshot, RiderIntent intent,
+        HeatSimulationOptions options)
+    {
+        options.Validate();
+        if (!snapshot.Step.FreezeSurfaceForHeat || snapshot.Step.UseLegacyPhysics || snapshot.Riders.Count != 1
+            || snapshot.Riders[0].RiderId != intent.RiderId || !snapshot.Riders[0].IsActive
+            || snapshot.Step.ExecutionOriginTimeSeconds is not { } origin || !double.IsFinite(origin) || origin < 0
+            || snapshot.Step.Seed != options.Seed || snapshot.Step.RequiredLaps != options.Laps
+            || snapshot.Riders[0].ContactRecovery is not null)
+            throw new RiderIntegrationRefusalException("Causal cursor requires one active frozen-heat rider with an exact origin and no incoming recovery.");
+        var execution = new RiderIntegrationSession(snapshot, intent)
+            { CausalHeat = true, Request = new(0) { CausalHeat = true } };
+        try { return new(ResolveProductionCore(snapshot, new[] { intent }, options, false, execution: execution), null); }
+        catch (TraversalPausedException pause) { return new(null, new(execution, pause.Boundary)); }
+    }
+
     public ResolvedSimulationStep Resolve(
         SimulationSnapshot snapshot,
         IReadOnlyList<RiderIntent> intents,
@@ -649,7 +668,7 @@ public sealed class SimulationEngine
         var recovery = options.EnablePhysicalContactConsequences ? rider.ContactRecovery : null;
         if (!snapshot.Step.UseLegacyPhysics && (!ExecutedPathTraversal.IsFixedLine(rider.LateralPosition, resolution.Lane)
             || (options.EnableContestedSpaceResponses && (decision.DriveControl is { PositiveDriveFraction: < 1f }
-                || decision.HoldLateralPosition || interactionTarget.HasValue)) || recovery is not null))
+                || decision.HoldLateralPosition || interactionTarget.HasValue)) || recovery is not null || execution?.CausalHeat == true))
             return ResolveMovingRider(snapshot, rider, decision, resolution, entrySpeed, plannedLane,
                 canonicalAdvance, standingStartEligible, risk, surface, cornerPhaseContext, captureRich,
                 (options.EnableContestedSpaceResponses ? decision.DriveControl?.PositiveDriveFraction ?? 1f : 1f)
@@ -832,7 +851,7 @@ public sealed class SimulationEngine
                 positiveDriveFraction * (float)(contact?.Recovery?.DriveAvailability01 ?? 1), holdLateralPosition,
                 lateralAuthority01 * (float)(contact?.Recovery?.LateralAuthority01 ?? 1),
                 contactRecovery || contact?.Recovery is not null, interactionTargetPosition,
-                request with { AfterContact = contact is not null });
+                request with { AfterContact = contact is not null, CausalHeat = execution.CausalHeat });
             execution.Continue = request => execution.ContinueWithContact(request, execution.Contact);
             execution.Complete = result => ResolveProductionCore(snapshot, new[] { execution.Intent }, options!, false,
                 completedRider: FinishMovingRider(snapshot, rider, decision, resolution, entrySpeed, plannedLane,

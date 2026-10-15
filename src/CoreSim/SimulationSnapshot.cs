@@ -16,6 +16,9 @@ public sealed record SimulationStepContext(
 {
     // Experimental lifetime policy; addressed RNG fields and ordinary A/B/C stay unchanged.
     internal bool FreezeSurfaceForHeat { get; init; }
+    // Causal experiments retain the double clock across segment handoffs. The
+    // public float clock remains a projection; it never seeds this accumulator.
+    internal double? ExecutionOriginTimeSeconds { get; init; }
 }
 
 /// <summary>Immutable rider value captured at the beginning of one simulation step.</summary>

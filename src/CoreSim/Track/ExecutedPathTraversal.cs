@@ -47,7 +47,10 @@ internal static class ExecutedPathTraversal
         bool holdLateralPosition = false, float lateralAuthority01 = 1f, bool contactRecovery = false,
         float? interactionTargetPosition = null, TraversalPauseRequest? pause = null)
     {
-        if (pause is not null && (!captureRich || launch
+        if (pause?.CausalHeat == true && (!snapshot.Step.FreezeSurfaceForHeat || !captureRich
+            || snapshot.Step.UseLegacyPhysics || resolution.Outcome == SegmentOutcome.Crash))
+            throw new RiderIntegrationRefusalException($"Causal cursor R{rider.RiderId}: unsupported terminal entry physics {resolution.Outcome} in {snapshot.Segment.Type}.");
+        if (pause is not null && !pause.CausalHeat && (!captureRich || launch
             || snapshot.Step.UseLegacyPhysics || snapshot.Segment.Type is not (SegmentType.Straight or SegmentType.TurnExit)
             || resolution.Outcome != SegmentOutcome.Ok || entrySpeed <= 0f
             || !pause.AfterContact && (contactRecovery || lateralAuthority01 != 1f
@@ -237,7 +240,8 @@ internal static class ExecutedPathTraversal
             executionEndpoints?.Add(new(start, time, distance, speed, lateral));
             // Only accepted steps can pause: all subdivisions, arrival splits and accumulator
             // updates above have finished. No final path, wear normalization or event exists yet.
-            if (partial is not null || start < end && pause?.AdditionalSteps is { } limit && stepCount - resumeStepCount == limit)
+            if (partial is not null || (start < end || pause?.CausalHeat == true)
+                && pause?.AdditionalSteps is { } limit && stepCount - resumeStepCount == limit)
                 throw new TraversalPausedException(new(start, end, time, distance, speed, lateral,
                     nodeSurface, stepCount, subdivisionTotal, Array.AsReadOnly(nodes!.ToArray()),
                     Array.AsReadOnly(steps!.ToArray()), corner is null ? null : new(initialEnvelope!.Value,

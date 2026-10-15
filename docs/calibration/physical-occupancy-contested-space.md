@@ -27,6 +27,14 @@ This is **not a complete tyre/slip motorcycle dynamics model**. Legacy `0.55 m` 
 
 ## Physical provenance and assumptions
 
+[A11's explicit causal coordinator](rea-004a11-four-rider-causal-coordinator.md)
+retains the physical offset at segment handoff, converting only its normalized
+coordinate through existing LaneModel methods. It rejects an offset outside the
+next segment. Historical normalized width reinterpretations described below stay
+unchanged in ordinary A/B/C and old evidence. Reference-attitude jumps at fresh
+controls remain explicit zero-time discontinuities: #55 quarantines overlap at
+such a boundary rather than inventing a swept rotation or a first-touch time.
+
 Source audit performed against the FIM 2026 Track Racing Technical Regulations, version 1 updated 10 June 2026. [Official publication page](https://www.fim-moto.com/en/documents/view/2026-1-track-racing-technical-regulations-10062026) and [official PDF](https://www.fim-moto.com/fileadmin/2026_1_TRACK_RACING_Technical_Regulations_10.06.2026.pdf), §01.33 / 33.01, printed p.16: 250/500 cc Track Racing handlebar width is 700–900 mm. The June revision changes §01.67, not this range.
 
 | Quantity | Source/status | Use in #55 |

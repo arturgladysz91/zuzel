@@ -55,6 +55,24 @@ A terminal speed-zero state retains its last stationary footprint in the bounded
 continuation window. No standing-start/segment-handoff or general heat scheduler
 is added, and no ordinary A/B/C call selects this policy.
 
+[REA-004A11](calibration/rea-004a11-four-rider-causal-coordinator.md) adds the internal
+`FourRiderCausalCoordinator`: one-step speculative forks, six-pair horizon
+certificates and one immutable publication reference. Four exact execution clocks
+survive independent segment handoffs. Only the affected pair is searched at root
+trials; the final four actual endpoints receive a fresh all-six certificate.
+The shared heat ledger preflights the entire admission before state publication.
+Existing #56C1/#56C2 consumes one physical pair generation. Crash interrupts; the
+nonterminal result also stops at the first event pending A12 replanning.
+History is an append-only chain of certified chunks, without world copies per trial.
+
+Causal handoff reexpresses the same physical offset in the next segment's existing
+coordinate system. Out-of-width offsets refuse. Reference-attitude state changes
+are explicitly marked for #55 ambiguity quarantine, without inventing a swept path.
+The same existing coupled traversal supports frozen causal launch, fixed lines and
+all corner phases; ordinary production routing remains unchanged. Joint #56B
+planning is reused for riders ready on the same segment, while executing riders
+retain their captured controls. General cross-segment tactical replanning is A12.
+
 The target architecture uses one physical clock, event-driven synchronization
 and the existing distance integrator. The engine computes the entire four-rider
 heat, consequences and result before animation starts, then supplies recorded
