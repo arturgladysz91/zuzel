@@ -3,6 +3,10 @@
 Release platform: **Windows only**. See the current [Windows CI policy](docs/ci.md)
 for Draft/full validation, the merge gate and optional historical audits.
 
+[Pre-contact decision timing](docs/experiments/pre-contact-racing-decisions.md)
+audits existing #56B on two riders. Responses execute physically, but delayed
+recognition needs an in-segment control deadline; the isolated audit changes no engine code.
+
 Current physical consequence precedence (#56C2): [physical contact consequences and one-step recovery](docs/calibration/physical-contact-consequences.md)
 adds default-OFF `EnablePhysicalContactConsequences`, requiring #56B responses. When enabled,
 reviewed #56C1 analysis supplies deterministic final velocity/status and next-step recovery;
