@@ -3,6 +3,10 @@
 Release platform: **Windows only**. See the current [Windows CI policy](docs/ci.md)
 for Draft/full validation, the merge gate and optional historical audits.
 
+An isolated [fixed-time 2D PoC](docs/experiments/time-step-physics-poc.md) compares
+5/10/20 ms steps outside production. It demonstrates swept vector impacts, but
+fails the real two-second continuation and does not justify replacing #81.
+
 [REA-004A12](docs/calibration/rea-004a12-four-rider-continuation.md) reopens the four
 accepted nonterminal event cursors, preserves their segment controls and certifies
 subsequent six-pair windows. A simple actual Disturbed pair continues over one
