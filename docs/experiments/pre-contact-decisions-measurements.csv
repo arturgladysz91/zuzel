@@ -1,0 +1,9 @@
+scenario,policy,wall_median_ms,allocated_median_bytes,exact_separation_evaluations,alternative_trajectory_evaluations,physical_rider_evaluations,coupled_evaluations,additional_response_selections,cheap_cues,route_planner_calls,contact_pairs_with_overlap_witness,first_potential_interval_start_s,collision_witness_time_s,collision_witness_separation_m,unresolved_audit_intervals,next_ordinary_boundary_r1_s,next_ordinary_boundary_r2_s,time_delta_r1_s,time_delta_r2_s,speed_delta_r1_mps,speed_delta_r2_mps,lateral_delta_r1_m,lateral_delta_r2_m
+A-yield,main-56B,26.3292,2083816,44992,6,22,2649,1,0,0,0,,,,0,1.1960925,1.2545877,0,0.031138062,0,0.41342354,-0.60000014,0
+A-yield,next-real-boundary,3.1304,157624,7048,0,2,614,0,1,0,1,0.523872435092926,0.5320680737495422,-0.008704591720377585,0,1.1960925,1.2234496,0,0,0,0,-0.60000014,-1.8000002
+B-no-room,main-56B,28.11,2048736,51472,6,16,1983,2,0,0,0,,,,0,1.5336328,1.6388651,-0.060471773,1.1920929e-07,-0.076099396,-3.8146973e-06,0,0
+B-no-room,next-real-boundary,3.4729,169120,6639,0,2,350,0,1,0,1,1.104230523109436,1.1459105014801025,-0.021108005377325306,1,1.5941045,1.638865,0,0,0,0,2.3999996,0
+C-aggressive,main-56B,29.1154,1382096,66002,6,21,1521,2,0,0,0,,,,0,0.3412413,0.3489644,0.00087729096,0.002361387,-0.20130157,-0.06053734,0,0
+C-aggressive,next-real-boundary,1.9032,69512,4556,0,2,66,0,1,0,1,0.0958484411239624,0.14319553971290588,-0.01916891013862033,1,0.340364,0.346603,0,0,0,0,0,-0.568027
+D-close-parallel,main-56B,1.7399,580264,852,2,10,699,0,0,0,0,,,,0,1.1910475,1.3041924,0,0,0,0,0,0.6000004
+D-close-parallel,next-real-boundary,0.3076,115904,187,0,2,233,0,1,0,0,,,,0,1.1910475,1.3041924,0,0,0,0,0,0.6000004
