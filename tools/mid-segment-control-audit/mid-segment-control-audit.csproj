@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net8.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><AssemblyName>CoreSim.Tests</AssemblyName></PropertyGroup>
+  <PropertyGroup Condition="'$(BaselineCoreSimPath)' != ''"><DefineConstants>$(DefineConstants);BASELINE</DefineConstants></PropertyGroup>
+  <ItemGroup Condition="'$(BaselineCoreSimPath)' == ''"><ProjectReference Include="../../src/CoreSim/CoreSim.csproj" /></ItemGroup>
+  <ItemGroup Condition="'$(BaselineCoreSimPath)' != ''"><Reference Include="CoreSim"><HintPath>$(BaselineCoreSimPath)</HintPath></Reference></ItemGroup>
+</Project>

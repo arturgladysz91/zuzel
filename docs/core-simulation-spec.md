@@ -1,5 +1,14 @@
 # Core simulation specification
 
+Experimental internal [scheduled control contract](experiments/mid-segment-control-activation.md):
+one predeclared command per rider traversal may change existing drive/hold/physical
+target controls only between accepted coupled-integration steps. The deadline is
+absolute heat time; actual activation is recorded at the first existing point at/after
+it. Consumed nodes/steps are immutable. Entry classification, forced RunWide, Crash,
+mandatory correction and contact-recovery authority remain authoritative. Production
+and rich trajectory forecasts execute the same schedule; commands expire at this
+segment's end. Ordinary fixed-line paths reject active schedules; defaults create none.
+
 Current physical consequence precedence (#56C2): [physical contact consequences and recovery](calibration/physical-contact-consequences.md)
 supersedes legacy contact outcomes only with default-OFF `EnablePhysicalContactConsequences` and #56B enabled.
 Only analyzed causal-frontier contacts after exhausted safety responses apply. Frozen aggregate delta velocity

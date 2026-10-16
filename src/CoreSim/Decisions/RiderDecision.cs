@@ -13,6 +13,7 @@ public sealed record RiderDecision(
     public bool HoldLateralPosition { get; init; }
     [System.Text.Json.Serialization.JsonIgnore]
     public InteractionLateralTarget? InteractionTarget { get; init; }
+    internal ScheduledControlChange? ScheduledControl { get; init; }
 }
 
 /// <summary>Interaction-only physical destination; manager trajectory anchors stay discrete.</summary>

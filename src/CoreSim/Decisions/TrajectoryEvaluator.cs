@@ -8,12 +8,15 @@ public enum TrajectoryPhase { Entry, Middle, Exit, FollowingStraight }
 public sealed record InteractionProjectionControl(RiderDriveControl? CurrentStepDriveControl,
     bool CurrentStepHoldLateralPosition, InteractionLateralTarget? PhysicalTarget = null)
 {
-    internal bool IsControlled => CurrentStepDriveControl.HasValue || CurrentStepHoldLateralPosition || PhysicalTarget.HasValue;
+    internal ScheduledControlChange? ScheduledControl { get; init; }
+    internal bool IsControlled => CurrentStepDriveControl.HasValue || CurrentStepHoldLateralPosition || PhysicalTarget.HasValue
+        || ScheduledControl is { Enabled: true };
     internal RiderDecision Decision(int target, int prefix) => new(target)
     {
         DriveControl = prefix == 0 ? CurrentStepDriveControl : null,
         HoldLateralPosition = prefix == 0 && CurrentStepHoldLateralPosition,
         InteractionTarget = PhysicalTarget,
+        ScheduledControl = prefix == 0 ? ScheduledControl : null,
     };
 }
 public sealed record TrajectoryHorizonSegment(int SegmentIndex, int LapIndex, TrajectoryPhase Phase);
@@ -27,7 +30,10 @@ public sealed record TrajectoryTraversal(TrajectoryIntent Intent,
     float? CornerExitSpeedMetersPerSecond, float? FollowingStraightEndSpeedMetersPerSecond,
     double FollowingStraightTimeSeconds, double FollowingStraightDistanceMeters,
     bool CompletedHorizon, IReadOnlyList<TrajectoryPhaseEndpoint> PhaseEndpoints,
-    IReadOnlyList<ResolvedRiderMotion> ResolvedMotions);
+    IReadOnlyList<ResolvedRiderMotion> ResolvedMotions)
+{
+    internal ScheduledControlActivation? ControlActivation { get; init; }
+}
 
 /// <summary>
 /// Isolated solo CaptureSnapshot -> Decide -> Resolve -> Commit, with scripted targets.
@@ -65,6 +71,12 @@ public sealed class TrajectoryEvaluator
             throw new ArgumentException("Trajectory evaluation requires an active rider in the current segment.", nameof(context));
         Horizon = BuildHorizon(context);
     }
+    private TrajectoryEvaluator(RiderDecisionContext context, InteractionProjectionControl control)
+        : this(context, driveControl: control.CurrentStepDriveControl,
+            holdLateralPosition: control.CurrentStepHoldLateralPosition, physicalTarget: control.PhysicalTarget)
+        => _control = control;
+    internal static TrajectoryEvaluator ForScheduledControl(RiderDecisionContext context, InteractionProjectionControl control)
+        => new(context, control);
     public TrajectoryTraversal Evaluate(TrajectoryIntent intent, bool retainResolvedMotions = false)
     {
         if (_control.IsControlled && !retainResolvedMotions)
@@ -111,6 +123,7 @@ public sealed class TrajectoryEvaluator
             EnablePhysicalContactConsequences = parent.Rider.ContactRecovery is not null };
         SoloProjectionResult projection;
         ResolvedRiderMotion? motion = null;
+        ScheduledControlActivation? activation = null;
         if (rich)
         {
             var engine = new SimulationEngine(new FixedTarget(requested));
@@ -119,6 +132,7 @@ public sealed class TrajectoryEvaluator
                     _control.Decision(requested, offset)) }, options, legacyContacts: false)
                 : engine.Resolve(input, engine.Decide(input), options);
             motion = resolved.Motions[0];
+            activation = resolved.Diagnostics[0].ControlActivation;
             projection = new(input, resolved.Changes[0], motion.TotalTimeSeconds, motion.TotalDistanceMeters, null, default);
             var rider = parent.Rider.ToMutableCopy();
             engine.Commit(resolved, new[] { rider }, state, new SimLog(false));
@@ -163,7 +177,8 @@ public sealed class TrajectoryEvaluator
         var motions = motion is not null ? previous.ResolvedMotions.Append(motion).ToArray() : Array.Empty<ResolvedRiderMotion>();
         var metrics = new TrajectoryTraversal(default, previous.PredictedTraversalTimeSeconds + projection.TravelTimeSeconds,
             previous.PhysicalDistanceMeters + projection.DistanceMeters, entrySpeed, entry, middle, apex, exit, exitSpeed, straightSpeed,
-            straightTime, straightDistance, false, Array.AsReadOnly(endpoints), Array.AsReadOnly(motions));
+            straightTime, straightDistance, false, Array.AsReadOnly(endpoints), Array.AsReadOnly(motions))
+            { ControlActivation = activation ?? previous.ControlActivation };
         return new(parent.Rider.Apply(change), state, metrics);
     }
 

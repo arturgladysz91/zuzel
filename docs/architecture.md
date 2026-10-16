@@ -1,5 +1,12 @@
 # Architecture
 
+Experimental [mid-segment control activation](experiments/mid-segment-control-activation.md)
+passes at most one predeclared internal command through production and rich trajectory
+projection into the existing coupled traversal. It activates only at an accepted point
+at/after an absolute heat-clock deadline, preserving the consumed prefix and entry
+classification. It does not enable live mid-segment decisions. Ordinary fixed-line
+integrators reject active schedules; normal heats create none.
+
 Current physical consequence precedence (#56C2): [physical contact consequences and recovery](calibration/physical-contact-consequences.md)
 adds a separate `PhysicalContactConsequenceResolver`. #55 detects; #56C1 analyzes frozen pairs and aggregates;
 the resolver builds a simultaneous plan before final `RiderStateChange`, diagnostics, motion and events are constructed.

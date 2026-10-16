@@ -71,6 +71,7 @@ public sealed record RiderStepDiagnostics(
     ContinuousCornerTraversalProfile? ContinuousCornerProfile = null,
     ExecutedSegmentPath? ExecutedPath = null)
 {
+    internal ScheduledControlActivation? ControlActivation { get; init; }
     [System.Text.Json.Serialization.JsonIgnore]
     public Interactions.RiderContactConsequence? PhysicalContactConsequence { get; init; }
     [System.Text.Json.Serialization.JsonIgnore]
@@ -234,6 +235,8 @@ public sealed class SimulationEngine
         ArgumentNullException.ThrowIfNull(options);
         if (options.EnableContestedSpaceResponses && !snapshot.Step.UseLegacyPhysics)
         {
+            if (intents.Any(i => i.Decision.ScheduledControl is { Enabled: true }))
+                throw new NotSupportedException("Predeclared experimental commands require ResolveProduction, not live #56B selection.");
             var owner = interactions ?? new();
             return new Interactions.ContestedSpaceInteractionCoordinator(owner.Clone())
                 .Resolve(this, snapshot, intents, options, owner);
@@ -356,6 +359,7 @@ public sealed class SimulationEngine
                 resolution.ContinuousCornerProfile,
                 resolution.ExecutedPath)
             {
+                ControlActivation = resolution.ProjectionPath?.ControlActivation,
                 PhysicalContactConsequence = consequencePlan?.Riders.SingleOrDefault(c => c.RiderId == finalChange.RiderId),
                 FinalSpeedMetersPerSecond = options.EnablePhysicalContactConsequences ? finalChange.Speed : null,
                 FinalStatus = options.EnablePhysicalContactConsequences ? finalChange.Status : null,
@@ -550,6 +554,14 @@ public sealed class SimulationEngine
                 rider.LateralPosition,
                 snapshot.Track.Geometry);
         var targetLane = LaneModel.ClampLane(decision.TargetLane);
+        var scheduled = decision.ScheduledControl is { Enabled: true } command ? command : null;
+        if (scheduled is not null)
+        {
+            if (scheduled.RiderId != rider.RiderId) throw new ArgumentException("Scheduled command rider does not match the intent.");
+            if (snapshot.Step.UseLegacyPhysics || !options.EnableContestedSpaceResponses)
+                throw new NotSupportedException("Scheduled controls require advanced interaction execution.");
+            _ = scheduled.PhysicalTarget?.Position(snapshot.Segment.Type, snapshot.Track.Geometry);
+        }
         var interactionTarget = !snapshot.Step.UseLegacyPhysics && options.EnableContestedSpaceResponses
             ? decision.InteractionTarget?.Position(snapshot.Segment.Type, snapshot.Track.Geometry) : null;
         var plannedLane = LateralMovementModel.CalculatePlannedLane(
@@ -618,15 +630,19 @@ public sealed class SimulationEngine
                 snapshot.Track.Geometry);
         var travelled = segmentLength * canonicalAdvance;
         var recovery = options.EnablePhysicalContactConsequences ? rider.ContactRecovery : null;
-        if (!snapshot.Step.UseLegacyPhysics && (!ExecutedPathTraversal.IsFixedLine(rider.LateralPosition, resolution.Lane)
+        var coupled = !snapshot.Step.UseLegacyPhysics && (!ExecutedPathTraversal.IsFixedLine(rider.LateralPosition, resolution.Lane)
             || (options.EnableContestedSpaceResponses && (decision.DriveControl is { PositiveDriveFraction: < 1f }
-                || decision.HoldLateralPosition || interactionTarget.HasValue)) || recovery is not null))
+                || decision.HoldLateralPosition || interactionTarget.HasValue)) || recovery is not null);
+        if (scheduled is not null && !coupled)
+            throw new NotSupportedException("This PoC requires an already coupled traversal; switching a fixed-line integrator would change its prefix.");
+        if (coupled)
             return ResolveMovingRider(snapshot, rider, decision, resolution, entrySpeed, plannedLane,
                 canonicalAdvance, standingStartEligible, risk, surface, cornerPhaseContext, captureRich,
                 (options.EnableContestedSpaceResponses ? decision.DriveControl?.PositiveDriveFraction ?? 1f : 1f)
                     * (float)(recovery?.DriveAvailability01 ?? 1),
                 options.EnableContestedSpaceResponses && decision.HoldLateralPosition,
-                (float)(recovery?.LateralAuthority01 ?? 1), recovery is not null, interactionTarget);
+                (float)(recovery?.LateralAuthority01 ?? 1), recovery is not null, interactionTarget,
+                scheduled, (float)(recovery?.DriveAvailability01 ?? 1));
         var speed = resolution.Speed;
         StraightSpeedProfile? straightProfile = null;
         TurnExitDriveProfile? turnExitDriveProfile = null;
@@ -781,7 +797,8 @@ public sealed class SimulationEngine
         RiderDecision decision, SegmentResolution resolution, float entrySpeed, int plannedLane,
         float canonicalAdvance, bool launch, float risk, TrackSurfaceState entrySurface, CornerPhaseContext? phase,
         bool captureRich, float positiveDriveFraction = 1f, bool holdLateralPosition = false, float lateralAuthority01 = 1f, bool contactRecovery = false,
-        float? interactionTargetPosition = null)
+        float? interactionTargetPosition = null, ScheduledControlChange? scheduledControl = null,
+        float scheduledDriveAvailability01 = 1f)
     {
         Dictionary<int, float?>? approachTargets = snapshot.Segment.Type == SegmentType.Straight ? new() : null;
         float? NextCorner(float lateral)
@@ -792,7 +809,8 @@ public sealed class SimulationEngine
             approachTargets.Add(key, target); return target;
         }
         var traversal = ExecutedPathTraversal.Traverse(snapshot, rider, resolution, entrySpeed, canonicalAdvance,
-            launch, NextCorner, captureRich, positiveDriveFraction, holdLateralPosition, lateralAuthority01, contactRecovery, interactionTargetPosition);
+            launch, NextCorner, captureRich, positiveDriveFraction, holdLateralPosition, lateralAuthority01, contactRecovery,
+            interactionTargetPosition, scheduledControl, scheduledDriveAvailability01);
         var path = traversal.RichPath;
         var position = resolution.Outcome == SegmentOutcome.Crash
             ? rider.Position.Advance(canonicalAdvance, traversal.DistanceMeters)
