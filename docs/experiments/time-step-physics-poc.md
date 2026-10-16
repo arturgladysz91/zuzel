@@ -1,5 +1,8 @@
 # Fixed-time 2D race PoC — decision report
 
+Historical #82 report; measurements below remain unchanged. The current tool and
+CLI are described by [REA-004A13](simple-rider-contact-recovery.md).
+
 Base: Draft #81, `5008f5f8e3fad997b5bc2eff3d8066b14e5d04d5`. Date: 2026-10-16.
 **Recommendation C — retain the current engine rather than replace it with this
 PoC.** The simpler scheduling works, but neither the real two-second target,

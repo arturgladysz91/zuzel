@@ -1,112 +1,117 @@
 using System.Diagnostics;
+using System.Reflection;
+using System.Runtime.Loader;
 using System.Text.Json;
 using CoreSim;
-using CoreSim.Decisions;
-using CoreSim.Race;
 using TimeStepPhysics;
 
-if (args is ["--probe"])
+if (args is ["--baseline-smoke", var assembly])
 {
-    var actual = Scenarios.CaptureReal();
-    foreach (var step in new[] { .005, .01, .02 })
+    var old = new Baseline82(Path.GetFullPath(assembly)); var input = Scenarios.Create("straight");
+    var race = old.Create(input, false); old.Run(race, .01, .01);
+    Console.WriteLine(old.Get<double>(race, "Time")); return;
+}
+if (args is ["--probe"] or ["--simple"])
+{
+    var actual = args[0] == "--probe" ? Scenarios.CaptureReal() : null;
+    foreach (var name in actual is null ? new[] { "light-straight", "bend-contact", "strong-no-room" } : new[] { "real-R3-R4" })
+    foreach (var step in new[] { .005, .01 })
     {
-        var race = Scenarios.Import(actual); race.Run(2, step);
-        Console.WriteLine(JsonSerializer.Serialize(new { step, race.Time, race.StopReason, race.LastRejectedWindow,
-            Contacts = race.Contacts.Count, race.Work.SupportImpulses, race.Work.NarrowTests }));
+        var race = Scenarios.Create(name, actual); race.Run(2, step);
+        Console.WriteLine(JsonSerializer.Serialize(new { name, step, race.Time, race.TerminalCrash, race.StopReason,
+            race.LastRejectedWindow, race.Contacts, race.Work }, JsonOptions()));
     }
     return;
 }
-if (args.Length != 1) throw new ArgumentException("Supply an output JSON path, or --probe for the actual origin.");
-var origin = Scenarios.CaptureReal(); // Capture/planning is outside every continuation measurement.
-using var process = Process.GetCurrentProcess();
+if (args.Length != 2) throw new ArgumentException("Supply output.json and the preserved #82 Release CoreSim.Tests.dll (or --probe / --simple).");
+var origin = Scenarios.CaptureReal(); // Capture/planning is outside every timer.
+var baseline = new Baseline82(Path.GetFullPath(args[1]));
+var rows = new List<object>(); var convergence = new List<object>();
+var reached = new Dictionary<(string, double), double>();
 double Median(IEnumerable<double> values) => values.Order().ElementAt(1);
-object States(TimeStepRace race) => race.Bikes.Select(b => new { Id = b.Rider.RiderId, b.Position, b.Velocity,
-    b.Speed, b.LongitudinalSpeed, b.LateralSpeed, b.Heading, b.AngularVelocity, b.Status, b.Distance }).ToArray();
-var rows = new List<object>(); var checkpoints = new Dictionary<(string, double), DynamicBike[]>();
-foreach (var step in new[] { .005, .01, .02 }) foreach (var scenario in Scenarios.Names)
-{
-    TimeStepRace Create() => Scenarios.Create(scenario, origin);
-    var checkpoint = scenario == "real-R3-R4" ? .02 : scenario == "encroach" ? .2 : 1;
-    var warm = Create(); warm.Run(2, step);
-    var samples = new List<(double Elapsed, double Cpu, long Bytes)>(); TimeStepRace? final = null;
-    for (var sample = 0; sample < 3; sample++)
-    {
-        var race = Create(); var allocated = GC.GetAllocatedBytesForCurrentThread();
-        var cpu = process.TotalProcessorTime; var watch = Stopwatch.StartNew();
-        race.Run(2, step);
-        watch.Stop(); var usedCpu = (process.TotalProcessorTime - cpu).TotalMilliseconds;
-        samples.Add((watch.Elapsed.TotalMilliseconds, usedCpu, GC.GetAllocatedBytesForCurrentThread() - allocated));
-        final = race;
-    }
-    var comparison = Create(); comparison.Run(checkpoint, step);
-    checkpoints[(scenario, step)] = comparison.Bikes.ToArray(); // outside the timed section
-    var r = final!;
-    rows.Add(new { Scenario = scenario, StepMilliseconds = step * 1000,
-        SimulatedSeconds = r.Time - (scenario == "real-R3-R4" ? origin.First.Riders.Max(s => s.ExecutedThroughSeconds) : 0),
-        ElapsedMedianMilliseconds = Median(samples.Select(s => s.Elapsed)), CpuMedianMilliseconds = Median(samples.Select(s => s.Cpu)),
-        AllocatedMedianBytes = Median(samples.Select(s => (double)s.Bytes)), r.Work, r.MaximumPenetration,
-        r.MaximumContactRefinementSeconds, r.StopReason, r.LastRejectedWindow, Contacts = r.Contacts.ToArray(), States = States(r) });
-    Console.WriteLine($"measured {scenario} / {step * 1000} ms");
-}
-var convergence = Scenarios.Names.SelectMany(name => new[] { .01, .02 }.Select(step =>
-{
-    var reference = checkpoints[(name, .005)]; var candidate = checkpoints[(name, step)];
-    return new { Scenario = name, StepMilliseconds = step * 1000,
-        CommonHorizonSeconds = name == "real-R3-R4" ? .02 : name == "encroach" ? .2 : 1,
-        MaximumPositionDifferenceMeters = candidate.Select((b, i) => (b.Position - reference[i].Position).Length).Max(),
-        MaximumSpeedDifference = candidate.Select((b, i) => Math.Abs(b.Speed - reference[i].Speed)).Max() };
-})).ToArray();
+foreach (var name in Scenarios.Names)
+foreach (var step in new[] { .005, .01 })
+foreach (var version in new[] { "82", "A13" }) Measure(name, step, version, 2);
 
-// Same imported scenario and common-end horizon; new tyre dynamics differ.
-// No comparison of a rejected 3 ms old run with a completed 2 s new run.
-var commonEnd = 4.1836476179597195;
-var oldSamples = new List<(double Ms, double Cpu, long Bytes)>();
-var newSamples = new List<(double Ms, double Cpu, long Bytes)>();
-for (var iteration = -1; iteration < 3; iteration++)
-{
-    var old = Scenarios.CaptureReal(); var fresh = Scenarios.Import(old);
-    var cpu = process.TotalProcessorTime; var bytes = GC.GetAllocatedBytesForCurrentThread(); var watch = Stopwatch.StartNew();
-    var result = old.Coordinator.ContinueAfterFirstContact(commonEnd - 1e-10);
-    watch.Stop();
-    if (result.Status != CausalRunStatus.HorizonReached) throw new InvalidOperationException("Comparable old horizon changed.");
-    var oldSample = (watch.Elapsed.TotalMilliseconds, (process.TotalProcessorTime - cpu).TotalMilliseconds, GC.GetAllocatedBytesForCurrentThread() - bytes);
-    cpu = process.TotalProcessorTime; bytes = GC.GetAllocatedBytesForCurrentThread(); watch.Restart();
-    fresh.Run(commonEnd - fresh.Time, .01); watch.Stop();
-    var newSample = (watch.Elapsed.TotalMilliseconds, (process.TotalProcessorTime - cpu).TotalMilliseconds, GC.GetAllocatedBytesForCurrentThread() - bytes);
-    if (iteration >= 0) { oldSamples.Add(oldSample); newSamples.Add(newSample); }
-}
-var counted = Scenarios.CaptureReal(); var counts = new Dictionary<ProjectionMaterialization, int>();
-var before = counted.Coordinator.Work.ObservedNativeStepStarts;
-var narrowBefore = counted.Coordinator.Work.NarrowEvaluations;
-var certificatesBefore = counted.Coordinator.Work.AllRiderCertificates + counted.Coordinator.Work.PairCertificates;
-try
-{
-    ProjectionCaptureAudit.Observer = (kind, n) => counts[kind] = counts.GetValueOrDefault(kind) + n;
-    counted.Coordinator.ContinueAfterFirstContact(commonEnd - 1e-10);
-}
-finally { ProjectionCaptureAudit.Observer = null; }
-var comparableNew = Scenarios.Import(origin); comparableNew.Run(commonEnd - comparableNew.Time);
-object Summary(List<(double Ms, double Cpu, long Bytes)> samples) => new
-{ ElapsedMedianMilliseconds = Median(samples.Select(s => s.Ms)), CpuMedianMilliseconds = Median(samples.Select(s => s.Cpu)),
-    AllocatedMedianBytes = Median(samples.Select(s => (double)s.Bytes)) };
+// Equal requested AND reached short horizon; unlike the full attempts, both
+// engines can execute it. Same preserved real poses/effects, no capture.
+foreach (var step in new[] { .005, .01 }) foreach (var version in new[] { "82", "A13" })
+    Measure("real-R3-R4", step, version, .02);
 
-// An isolated existing #54 planning probe, not part of the PoC controller or its timings.
-var planner = new AdaptiveDecisionModel(); var rider = origin.First.Riders[2];
-var planningSnapshot = new SimulationSnapshot(rider.Origin!.Step, origin.Heat.Track, origin.Heat.Surface, origin.First.Riders.Select(s => s.Rider));
-var context = new RiderDecisionContext(planningSnapshot, rider.Rider);
-planner.Decide(context); var planning = new List<double>();
-for (var i = 0; i < 3; i++) { var watch = Stopwatch.StartNew(); planner.Decide(context); watch.Stop(); planning.Add(watch.Elapsed.TotalMilliseconds); }
-
-var report = new { BaseSha = "5008f5f8e3fad997b5bc2eff3d8066b14e5d04d5", Warmups = 1, Repetitions = 3,
-    Timer = "Stopwatch elapsed; process TotalProcessorTime (coarse CPU resolution); current-thread allocation",
-    PocRoutePlannerCalls = 0, SeparateExistingPlannerMedianMilliseconds = Median(planning), Matrix = rows, Convergence = convergence,
-    Comparable = new { CommonEndSeconds = commonEnd, NewOriginSeconds = origin.First.Riders.Max(s => s.ExecutedThroughSeconds),
-        Old = Summary(oldSamples), New = Summary(newSamples),
-        OldUntimedCounts = counts.ToDictionary(p => p.Key.ToString(), p => p.Value),
-        OldNativeStepStarts = counted.Coordinator.Work.ObservedNativeStepStarts - before,
-        OldNarrowTests = counted.Coordinator.Work.NarrowEvaluations - narrowBefore,
-        OldGeometryCalls = counted.Coordinator.Work.AllRiderCertificates + counted.Coordinator.Work.PairCertificates - certificatesBefore,
-        NewWork = comparableNew.Work } };
+foreach (var name in Scenarios.Names)
+{
+    var horizon = Math.Min(reached[(name, .005)], reached[(name, .01)]);
+    if (name == "real-R3-R4") horizon = Math.Min(horizon, .8);
+    var a = Scenarios.Create(name, origin); var b = Scenarios.Create(name, origin);
+    a.Run(horizon, .005); b.Run(horizon, .01);
+    convergence.Add(new { Scenario = name, CommonHorizonSeconds = horizon,
+        ReachedA = a.Time, ReachedB = b.Time, Comparable = Math.Abs(a.Time - b.Time) < 1e-10,
+        MaximumPositionDifferenceMeters = a.Bikes.Zip(b.Bikes).Max(p => (p.First.Position - p.Second.Position).Length),
+        MaximumSpeedDifference = a.Bikes.Zip(b.Bikes).Max(p => Math.Abs(p.First.Speed - p.Second.Speed)),
+        FirstContactTimeDifferenceSeconds = a.Contacts.Count > 0 && b.Contacts.Count > 0 ? Math.Abs(a.Contacts[0].Time - b.Contacts[0].Time) : (double?)null });
+}
 var path = Path.GetFullPath(args[0]); Directory.CreateDirectory(Path.GetDirectoryName(path)!);
-File.WriteAllText(path, JsonSerializer.Serialize(report, new JsonSerializerOptions { WriteIndented = true, IncludeFields = true }));
+File.WriteAllText(path, JsonSerializer.Serialize(new { BaseSha = "67f1f7ab61df401de38e7335398c7eec14628b90",
+    BaselineAssemblySha256 = Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(args[1]))),
+    Warmups = 1, Repetitions = 3, Matrix = rows, Convergence = convergence }, JsonOptions()));
 Console.WriteLine(path);
+
+void Measure(string name, double step, string version, double horizon)
+{
+    var samples = new List<double>(); var allocations = new List<double>(); object? last = null;
+    for (var repetition = -1; repetition < 3; repetition++)
+    {
+        var input = Scenarios.Create(name, origin);
+        var old = version == "82" ? baseline.Create(input, name == "real-R3-R4") : null;
+        var start = input.Time; var bytes = GC.GetAllocatedBytesForCurrentThread(); var watch = Stopwatch.StartNew();
+        if (old is null) input.Run(horizon, step); else baseline.Run(old, horizon, step);
+        watch.Stop(); var allocated = GC.GetAllocatedBytesForCurrentThread() - bytes;
+        if (repetition >= 0) { samples.Add(watch.Elapsed.TotalMilliseconds); allocations.Add(allocated); }
+        var time = old is null ? input.Time : baseline.Get<double>(old, "Time");
+        if (version == "A13" && horizon == 2) reached[(name, step)] = time - start;
+        last = old is null ? new { input.TerminalCrash, input.StopReason, input.LastRejectedWindow,
+            input.Work, input.MaximumPenetration, Contacts = (object)input.Contacts,
+            States = (object)input.Bikes.Select(b => new { Id = b.Rider.RiderId, b.Position, b.Velocity, b.Status }).ToArray(), SimulatedSeconds = time - start }
+            : (object)new { StopReason = baseline.Get<object?>(old, "StopReason"),
+                LastRejectedWindow = baseline.Get<object?>(old, "LastRejectedWindow"),
+                Work = baseline.Get<object>(old, "Work"), Contacts = baseline.Get<object>(old, "Contacts"),
+                MaximumPenetration = baseline.Get<double>(old, "MaximumPenetration"), SimulatedSeconds = time - start };
+    }
+    rows.Add(new { Scenario = name, Context = Scenarios.ContextFor(name).ToString(), StepMilliseconds = step * 1000,
+        Version = version, RequestedSeconds = horizon, ElapsedMedianMilliseconds = Median(samples), AllocatedMedianBytes = Median(allocations), Result = last });
+    Console.WriteLine($"{name} {step * 1000} ms / {version} / requested {horizon}s");
+}
+static JsonSerializerOptions JsonOptions() => new() { WriteIndented = true, IncludeFields = true };
+
+// Read-only adapter to the exact preserved #82 binary. It shares unchanged CoreSim,
+// constructs identical physical inputs, and adds no diagnostics inside Run.
+sealed class Baseline82
+{
+    private readonly Assembly _assembly;
+    private readonly Type _race, _bike, _control;
+    private const BindingFlags Members = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+    internal Baseline82(string path)
+    {
+        var context = new AssemblyLoadContext("baseline82");
+        context.Resolving += (_, name) => name.Name == "CoreSim" ? typeof(Track).Assembly : null;
+        _assembly = context.LoadFromAssemblyPath(path);
+        _race = Type("TimeStepRace"); _bike = Type("DynamicBike"); _control = Type("DriverControl");
+    }
+    private Type Type(string name) => _assembly.GetType("TimeStepPhysics." + name, true)!;
+    internal object Create(TimeStepRace input, bool consumed)
+    {
+        var array = Array.CreateInstance(_bike, 4);
+        for (var i = 0; i < 4; i++)
+        {
+            var b = input.Bikes[i]; var c = b.Control;
+            object Make(Type type, params object?[] values) => Activator.CreateInstance(type, Members, null, values, null)!;
+            array.SetValue(Make(_bike, b.Rider, b.Position, b.Velocity, b.Heading, b.AngularVelocity,
+                Make(_control, c.TargetOffset, c.Throttle, c.SteeringRate, c.PendingOffset, c.ReactAt),
+                b.ControlLoss, b.RecoveryUntil, b.Status, b.Distance), i);
+        }
+        return Activator.CreateInstance(_race, Members, null, new object?[] { input.Track, input.SurfaceSnapshot,
+            array, input.Time, false, null, consumed ? (3, 4) : null }, null)!;
+    }
+    internal void Run(object race, double horizon, double step) => _race.GetMethod("Run")!.Invoke(race, new object[] { horizon, step });
+    internal T Get<T>(object race, string name) => (T)_race.GetProperty(name)!.GetValue(race)!;
+}

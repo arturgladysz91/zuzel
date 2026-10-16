@@ -25,9 +25,12 @@ internal sealed record PocParameters(double LaneResponseSeconds = .8, double Sli
 }
 internal sealed record DriverControl(double TargetOffset, double Throttle = 1, double SteeringRate = 0,
     double? PendingOffset = null, double ReactAt = double.PositiveInfinity);
+internal sealed record RiderContactRecovery(double StartedAt, double ReactAt, double Until,
+    double TargetOffset, double Throttle, double OriginalThrottle);
 internal sealed record DynamicBike(RiderSnapshot Rider, MeterPoint Position, MeterPoint Velocity,
     double Heading, double AngularVelocity, DriverControl Control, double ControlLoss = 0,
-    double RecoveryUntil = 0, RiderRaceStatus Status = RiderRaceStatus.Racing, double Distance = 0)
+    double RecoveryUntil = 0, RiderRaceStatus Status = RiderRaceStatus.Racing, double Distance = 0,
+    RiderContactRecovery? Reaction = null)
 {
     public double Speed => Velocity.Length;
     public double LongitudinalSpeed => MeterPoint.Dot(Velocity, TimeStepRace.Direction(Heading));
@@ -38,7 +41,7 @@ internal sealed record PocContact(double Time, int A, int B, string Kind, double
 internal sealed class PocWork
 {
     public int MovementUpdates, PhysicsEvaluations, GeometryCalls, NarrowTests, BroadRejects,
-        Decisions, LocalRetries, SupportImpulses;
+        Decisions, LocalRetries, SupportImpulses, BoundsEvaluations, ObserverNarrowTests, Impacts, Episodes, ConsequenceApplications, RiderReactions;
     public double MaximumGripFraction;
     public double MaximumContactEnergyGain;
 }
@@ -47,6 +50,10 @@ internal sealed record RoadSample(int Segment, double Progress, double Offset, d
 /// <summary>Isolated 2D experiment. One clock, four values, six contact flags. No production callers.</summary>
 internal sealed class TimeStepRace
 {
+    private const int GeometryProofBudget = 128;
+    private const double ProjectionRoundingGuardMeters = 1e-10;
+    private const double RecoveryEdgeMarginMeters = .1;
+    private const double RecoveryHoldRollOff = .15, RecoveryYieldRollOff = .05;
     private readonly Track _track;
     private readonly TrackStateSnapshot _surface;
     private readonly TrackMetricEmbedding _map;
@@ -64,7 +71,10 @@ internal sealed class TimeStepRace
     public string? LastRejectedWindow { get; private set; }
     public double MaximumPenetration { get; private set; }
     public double MaximumContactRefinementSeconds { get; private set; }
+    public bool TerminalCrash => Bikes.Any(b => b.Status == RiderRaceStatus.Crashed);
     internal TrackMetricEmbedding Map => _map;
+    internal Track Track => _track;
+    internal TrackStateSnapshot SurfaceSnapshot => _surface;
 
     internal TimeStepRace(Track track, TrackStateSnapshot surface, IEnumerable<DynamicBike> bikes,
         double time = 0, bool reverse = false, PocParameters? parameters = null, (int, int)? consumed = null)
@@ -82,6 +92,11 @@ internal sealed class TimeStepRace
             var a = Array.FindIndex(Bikes, b => b.Rider.RiderId == pair.Item1); var b = Array.FindIndex(Bikes, b => b.Rider.RiderId == pair.Item2);
             if (a < 0 || b < 0 || a == b) throw new ArgumentException("Consumed contact must name two present riders.");
             _active[Math.Min(a, b), Math.Max(a, b)] = true;
+            // Import owns an already applied impact. Only its driver's delayed
+            // response is initialized here; velocity, loss and deadlines survive.
+            var m = Manifold(Math.Min(a, b), Math.Max(a, b));
+            if (m is not null) BeginRecovery(Math.Min(a, b), Math.Max(a, b), m);
+            Work.Episodes = 1;
         }
         if (!CheckEndpoints(Bikes)) throw new ArgumentException("Initial footprints penetrate beyond #55 tolerance.");
     }
@@ -91,7 +106,7 @@ internal sealed class TimeStepRace
         if (!double.IsFinite(duration) || duration < 0 || stepSeconds is < .005 or > .02 || !double.IsFinite(stepSeconds))
             throw new ArgumentOutOfRangeException(nameof(duration));
         var end = Time + duration;
-        while (Time < end && StopReason is null)
+        while (Time < end && StopReason is null && !TerminalCrash)
         {
             // Close representational clock residue before scheduling the next
             // 100 ms command. It must not create an extra end-of-run decision.
@@ -166,9 +181,18 @@ internal sealed class TimeStepRace
         foreach (var i in Order)
         {
             var b = Bikes[i]; var road = Road(b.Position); var control = b.Control;
+            var recovery = b.Reaction;
+            if (recovery is not null && Time >= recovery.Until)
+            { control = control with { Throttle = recovery.OriginalThrottle }; recovery = null; }
+            if (recovery is not null && Time >= recovery.ReactAt)
+            {
+                control = control with { TargetOffset = recovery.TargetOffset, Throttle = recovery.Throttle,
+                    PendingOffset = null, ReactAt = double.PositiveInfinity };
+                if (b.Control.TargetOffset != control.TargetOffset || b.Control.Throttle != control.Throttle) Work.RiderReactions++;
+            }
             if (control.PendingOffset is { } pending && Time >= control.ReactAt)
                 control = control with { TargetOffset = pending, PendingOffset = null, ReactAt = double.PositiveInfinity };
-            if (_p.VisualResponse && b.Status == RiderRaceStatus.Racing && control.PendingOffset is null)
+            if (_p.VisualResponse && recovery is null && b.Status == RiderRaceStatus.Racing && control.PendingOffset is null)
             {
                 foreach (var other in Bikes.Where(o => o.Rider.RiderId != b.Rider.RiderId).OrderBy(o => o.Rider.RiderId))
                 {
@@ -186,13 +210,13 @@ internal sealed class TimeStepRace
             var feedforward = double.IsFinite(road.Radius) ? b.Speed / road.Radius : 0;
             var rate = feedforward + BikeAngles.Wrap(desiredHeading - b.Heading) / _p.YawResponseSeconds;
             var limit = Grip(b, road) / Math.Max(1, b.Speed);
-            next[i] = b with { Control = control with { SteeringRate = Math.Clamp(rate, -limit, limit) } };
+            next[i] = b with { Reaction = recovery, Control = control with { SteeringRate = Math.Clamp(rate, -limit, limit) } };
             Work.Decisions++;
         }
         Bikes = next;
     }
 
-    private readonly record struct Force(MeterPoint Acceleration, double AngularAcceleration);
+    internal readonly record struct Force(MeterPoint Acceleration, double AngularAcceleration);
     private Force[] Forces()
     {
         var result = new Force[4];
@@ -202,6 +226,8 @@ internal sealed class TimeStepRace
             var mass = Mass(b); var grip = Grip(b, road); var speed = b.Speed;
             var direction = speed > 0 ? b.Velocity * (1 / speed) : Direction(b.Heading - Beta(road));
             var loss = Time < b.RecoveryUntil ? b.ControlLoss : 0;
+            if (b.Reaction is { } recovery && b.RecoveryUntil > recovery.StartedAt)
+                loss *= Math.Clamp((b.RecoveryUntil - Time) / (b.RecoveryUntil - recovery.StartedAt), 0, 1);
             var force = _track.Segments[road.Segment].Type == SegmentType.Straight
                 ? LongitudinalDynamics.CalculateStraightAvailableDriveForceNewtons(b.Rider.Profile.Skills, b.Rider.ActiveSetup, surface)
                 : LongitudinalDynamics.CalculateTurnExitAvailableDriveForceNewtons(b.Rider.Profile.Skills, b.Rider.ActiveSetup, surface);
@@ -233,6 +259,7 @@ internal sealed class TimeStepRace
     {
         var start = (DynamicBike[])Bikes.Clone(); var active = (bool[,])_active.Clone();
         var released = (double[,])_released.Clone(); var count = Contacts.Count;
+        var effects = (Work.Impacts, Work.Episodes, Work.ConsequenceApplications);
         var time = Time; var remaining = h;
         for (var events = 0; events < 32 && remaining > 1e-12; events++)
         {
@@ -243,6 +270,7 @@ internal sealed class TimeStepRace
             for (var pass = 0; pass < _p.ConstraintIterations; pass++)
             for (var a = 0; a < 4; a++) for (var b = a + 1; b < 4; b++) if (_active[a, b])
             {
+                Work.NarrowTests++;
                 var gap = MechanicalSeparation.Between(Pose(Bikes[a], Time), Pose(Bikes[b], Time)).SignedMeters;
                 if (gap > GeometryNumerics.MinimumSeparationToleranceMeters)
                 { _active[a, b] = false; _released[a, b] = gap; continue; }
@@ -251,9 +279,11 @@ internal sealed class TimeStepRace
                 if (manifold is not null) Impulse(a, b, manifold, support: true);
             }
             var forces = Forces();
+            Force[]? unconstrained = null;
             for (var pass = 0; pass < _p.ConstraintIterations; pass++)
             for (var a = 0; a < 4; a++) for (var b = a + 1; b < 4; b++) if (_active[a, b])
             {
+                Work.NarrowTests++;
                 if (MechanicalSeparation.Between(Pose(Bikes[a], Time), Pose(Bikes[b], Time)).SignedMeters
                     > GeometryNumerics.ContactDistanceMeters) continue;
                 var manifold = Manifold(a, b);
@@ -267,6 +297,7 @@ internal sealed class TimeStepRace
                         + Left(rb) * forces[b].AngularAcceleration - Left(ra) * forces[a].AngularAcceleration
                         - rb * (Bikes[b].AngularVelocity * Bikes[b].AngularVelocity) + ra * (Bikes[a].AngularVelocity * Bikes[a].AngularVelocity);
                     var reaction = Math.Max(0, -MeterPoint.Dot(relativeA, n)) / EffectiveInverseMass(a, b, manifold);
+                    if (reaction > 0) unconstrained ??= (Force[])forces.Clone();
                     forces[a] = new(forces[a].Acceleration - n * (reaction / Mass(Bikes[a])),
                         forces[a].AngularAcceleration - reaction * MeterPoint.Cross(ra, n) / Inertia(Bikes[a]));
                     forces[b] = new(forces[b].Acceleration + n * (reaction / Mass(Bikes[b])),
@@ -274,28 +305,59 @@ internal sealed class TimeStepRace
                 }
             }
             var motions = Enumerable.Range(0, 4).Select(i => new Motion(this, Bikes[i], forces[i], Time, Time + remaining)).ToArray();
-            var report = Observe(motions, false);
+            // Preserve a release witnessed inside this proposed step before a
+            // return to touch; that return must get a fresh episode, not support.
+            for (var a = 0; a < 4; a++) for (var b = a + 1; b < 4; b++)
+                if (_active[a, b] && Gap(motions[a], motions[b], Time + remaining * .5) > GeometryNumerics.MinimumSeparationToleranceMeters
+                    && Gap(motions[a], motions[b], Time + remaining) <= GeometryNumerics.MinimumSeparationToleranceMeters)
+                {
+                    remaining *= .5;
+                    motions = Enumerable.Range(0, 4).Select(i => new Motion(this, Bikes[i], forces[i], Time, Time + remaining)).ToArray();
+                }
+            // A touching, owned pair has no new onset. Search only unowned or
+            // currently separated pairs; the executed-window guard below still
+            // covers every component of every pair, including continuous touch.
+            var candidates = new List<ContestedSpaceEvent>();
+            var safePairs = new bool[4, 4];
+            var unresolved = false;
+            for (var a = 0; a < 4; a++) for (var b = a + 1; b < 4; b++)
+            {
+                if (_active[a, b] && Gap(motions[a], motions[b], Time) <= GeometryNumerics.ContactDistanceMeters) continue;
+                if (SeparationBound(motions[a], motions[b], Time, Time + remaining) > GeometryNumerics.ContactDistanceMeters)
+                { safePairs[a, b] = true; continue; }
+                var budget = GeometryProofBudget;
+                if (_active[a, b] && ProveWindow(motions[a], motions[b], Time, Time + remaining, ref budget))
+                { safePairs[a, b] = true; continue; }
+                var observed = Observe(new[] { motions[a], motions[b] });
+                candidates.AddRange(observed.Intervals);
+                if (!_active[a, b] && observed.Intervals.Any(r => !r.NumericallyResolved))
+                { unresolved = true;
+                    var row = observed.Intervals.First(r => !r.NumericallyResolved);
+                    LastRejectedWindow = FormattableString.Invariant($"[{Time:R},{Time + remaining:R}] R{row.RiderA}-R{row.RiderB}: Uncertain first contact, sampled={row.MinimumSeparationMeters:R} m"); }
+            }
+            if (unresolved) break;
             // A consumed pair can leave the contact skin and touch it again
             // without establishing the wider release witness. Split that motion
             // at its actual touch too; apply support, not another consequence.
-            var first = report.Intervals.Where(r => r.HasConflict && (!_active[Index(r.RiderA), Index(r.RiderB)]
+            var first = candidates.Where(r => r.HasConflict && (!_active[Index(r.RiderA), Index(r.RiderB)]
                     || r.FirstTouchCommonTimeSeconds > Time))
                 .OrderBy(r => r.FirstTouchCommonTimeSeconds).ThenBy(r => r.RiderA).ThenBy(r => r.RiderB).FirstOrDefault();
             var end = first is null ? Time + remaining : RefineTouch(first, motions);
             var dt = end - Time;
             if (dt > 0)
             {
-                var proof = Observe(motions.Select(m => new Motion(this, m.Bike, m.Force, Time, end)), true);
-                if (proof.FrameCoverageGaps.Count > 0 || proof.Intervals.Any(r =>
-                    r.Kind.HasFlag(SpaceConflictKind.BoundaryAmbiguous)
-                    || !r.NumericallyResolved && !_active[Index(r.RiderA), Index(r.RiderB)]
-                    || r.MinimumSeparationLowerBoundMeters < -GeometryNumerics.ContactDistanceMeters))
-                {
-                    var worst = proof.Intervals.OrderBy(r => r.MinimumSeparationLowerBoundMeters).First();
-                    LastRejectedWindow = FormattableString.Invariant($"[{Time:R},{end:R}] R{worst.RiderA}-R{worst.RiderB}, sampled={worst.MinimumSeparationMeters:R} m, lower={worst.MinimumSeparationLowerBoundMeters:R} m, resolved={worst.NumericallyResolved}");
-                    break;
-                }
+                var safe = true;
+                for (var a = 0; a < 4 && safe; a++) for (var b = a + 1; b < 4 && safe; b++)
+                { if (safePairs[a, b]) continue;
+                    var budget = GeometryProofBudget; safe = ProveWindow(motions[a], motions[b], Time, end, ref budget); }
+                if (!safe) break;
                 var next = Enumerable.Range(0, 4).Select(i => Evolve(Bikes[i], forces[i], dt)).ToArray();
+                if (unconstrained is not null)
+                {
+                    var freeEnergy = Enumerable.Range(0, 4).Sum(i => Energy(Evolve(Bikes[i], unconstrained[i], dt)));
+                    if (next.Sum(Energy) > freeEnergy + 1e-8 * Math.Max(1, freeEnergy))
+                    { LastRejectedWindow = "Passive support would increase kinetic energy relative to the same free forces."; break; }
+                }
                 if (!CheckEndpoints(next)) break;
                 Bikes = next.Select(b => { var road = Road(b.Position); return road.Offset < -1 || road.Offset > road.Width + 1
                     ? b with { Status = RiderRaceStatus.Retired } : b; }).ToArray();
@@ -303,17 +365,83 @@ internal sealed class TimeStepRace
             }
             if (first is null) return true;
             if (!first.NumericallyResolved && !_active[Index(first.RiderA), Index(first.RiderB)]
-                || report.Intervals.Count(r => r.HasConflict && !_active[Index(r.RiderA), Index(r.RiderB)]
+                || candidates.Count(r => r.HasConflict && !_active[Index(r.RiderA), Index(r.RiderB)]
                 && r.FirstTouchCommonTimeSeconds <= end + GeometryNumerics.TimeToleranceSeconds) > 1)
             { LastRejectedWindow = "Unresolved or simultaneous fresh contact group."; break; }
             var ia = Index(first.RiderA); var ib = Index(first.RiderB); var m = Manifold(ia, ib);
             if (m is null) break;
             Impulse(ia, ib, m, support: _active[ia, ib]); _active[ia, ib] = true;
+            // A physically classified fall ends this experiment at its solved
+            // impact state. No invented fallen-body trajectory or numerical Crash.
+            if (TerminalCrash) return true;
         }
         // One small transaction retry; no retained forecasts, cursor graph or replay history.
         Bikes = start; Time = time; Array.Copy(active, _active, active.Length);
         Array.Copy(released, _released, released.Length);
+        (Work.Impacts, Work.Episodes, Work.ConsequenceApplications) = effects;
         Contacts.RemoveRange(count, Contacts.Count - count); return false;
+    }
+    private double Gap(Motion a, Motion b, double t)
+    { Work.NarrowTests++; return MechanicalSeparation.Between(a.SampleFootprint(t), b.SampleFootprint(t)).SignedMeters; }
+
+    // Fixed separating axes bound all four capsule combinations over the whole
+    // quadratic motion. Linear common transport cancels; interpolation error is
+    // <= sup|projection''| * h²/8, rather than the observer's O(|omega|*h).
+    // This is specific to this PoC's exact motion, not a change to #55.
+    internal double SeparationBound(Motion a, Motion b, double lo, double hi)
+    {
+        Work.BoundsEvaluations++;
+        var duration = hi - lo; var mid = (lo + hi) * .5;
+        var relativeVelocity = b.Bike.Velocity + b.Force.Acceleration * (mid - b.StartTimeSeconds)
+            - a.Bike.Velocity - a.Force.Acceleration * (mid - a.StartTimeSeconds);
+        var speedBound = relativeVelocity.Length + (b.Force.Acceleration - a.Force.Acceleration).Length * duration / 2;
+        var sphere = Math.Min((b.SampleValue(lo).Position - a.SampleValue(lo).Position).Length,
+            (b.SampleValue(hi).Position - a.SampleValue(hi).Position).Length) - speedBound * duration / 2
+            - a.Dimensions.BoundingRadiusMeters - b.Dimensions.BoundingRadiusMeters - ProjectionRoundingGuardMeters;
+        if (sphere > GeometryNumerics.ContactDistanceMeters) return sphere;
+        var am = a.SampleValue((lo + hi) * .5); var bm = b.SampleValue((lo + hi) * .5);
+        var af = am.Footprint; var bf = bm.Footprint;
+        var al = a.SampleFootprint(lo); var bl = b.SampleFootprint(lo);
+        var ah = a.SampleFootprint(hi); var bh = b.SampleFootprint(hi);
+        var rateA = a.RateBounds(lo, hi).AngularSpeedBoundRadiansPerSecond;
+        var rateB = b.RateBounds(lo, hi).AngularSpeedBoundRadiansPerSecond;
+        var rotationBound = a.Dimensions.BoundingRadiusMeters * (Math.Abs(a.Force.AngularAcceleration) + rateA * rateA)
+            + b.Dimensions.BoundingRadiusMeters * (Math.Abs(b.Force.AngularAcceleration) + rateB * rateB);
+        var lower = double.PositiveInfinity;
+        static MeterPoint Project(MeterPoint p, MechanicalCapsule c)
+        { var d = c.End - c.Start; var square = MeterPoint.Dot(d, d);
+            return c.Start + d * (square == 0 ? 0 : Math.Clamp(MeterPoint.Dot(p - c.Start, d) / square, 0, 1)); }
+        for (var i = 0; i < 2; i++) for (var j = 0; j < 2; j++)
+        {
+            var ca = af.Component((BikeComponent)i); var cb = bf.Component((BikeComponent)j);
+            var n = Project(ca.Start, cb) - ca.Start;
+            void Candidate(MeterPoint axis) { if (axis.Length < n.Length) n = axis; }
+            Candidate(Project(ca.End, cb) - ca.End); Candidate(cb.Start - Project(cb.Start, ca)); Candidate(cb.End - Project(cb.End, ca));
+            if (n.Length < 1e-12) return double.NegativeInfinity;
+            n *= 1 / n.Length;
+            double ProjectionGap(BikeFootprint fa, BikeFootprint fb)
+            {
+                var x = fa.Component((BikeComponent)i); var y = fb.Component((BikeComponent)j);
+                return Math.Min(MeterPoint.Dot(y.Start - x.Start, n), Math.Min(MeterPoint.Dot(y.Start - x.End, n),
+                    Math.Min(MeterPoint.Dot(y.End - x.Start, n), MeterPoint.Dot(y.End - x.End, n)))) - x.RadiusMeters - y.RadiusMeters;
+            }
+            var curvature = Math.Abs(MeterPoint.Dot(b.Force.Acceleration - a.Force.Acceleration, n)) + rotationBound;
+            lower = Math.Min(lower, Math.Min(ProjectionGap(al, bl), ProjectionGap(ah, bh)) - curvature * (hi - lo) * (hi - lo) / 8 - ProjectionRoundingGuardMeters);
+        }
+        return lower;
+    }
+    private bool ProveWindow(Motion a, Motion b, double lo, double hi, ref int budget)
+    {
+        var lower = SeparationBound(a, b, lo, hi);
+        if (lower >= -GeometryNumerics.ContactDistanceMeters) return true;
+        var mid = (lo + hi) * .5;
+        var sample = Math.Min(Gap(a, b, lo), Math.Min(Gap(a, b, mid), Gap(a, b, hi)));
+        if (sample < -GeometryNumerics.ContactDistanceMeters || --budget <= 0 || mid == lo || mid == hi)
+        {
+            LastRejectedWindow = FormattableString.Invariant($"[{lo:R},{hi:R}] R{a.RiderId}-R{b.RiderId}: {(sample < -GeometryNumerics.ContactDistanceMeters ? "Penetration" : "Uncertain")}, sampled={sample:R} m, lower={lower:R} m");
+            return false;
+        }
+        return ProveWindow(a, b, lo, mid, ref budget) && ProveWindow(a, b, mid, hi, ref budget);
     }
     private int Index(int id) => Array.FindIndex(Bikes, b => b.Rider.RiderId == id);
     private double RefineTouch(ContestedSpaceEvent hit, Motion[] motions)
@@ -333,10 +461,11 @@ internal sealed class TimeStepRace
         MaximumContactRefinementSeconds = Math.Max(MaximumContactRefinementSeconds, original - hi);
         return hi;
     }
-    private ContestedSpaceReport Observe(IEnumerable<PhysicalPoseInterval> motions, bool floor)
+    private ContestedSpaceReport Observe(IEnumerable<PhysicalPoseInterval> motions)
     {
-        var report = floor ? ContestedSpaceResolver.ObserveExecutedContactWindow(motions) : ContestedSpaceResolver.ObserveFirstContact(motions);
+        var report = ContestedSpaceResolver.ObserveFirstContact(motions);
         Work.GeometryCalls++; Work.NarrowTests += report.Work.NarrowPhaseEvaluations; Work.BroadRejects += report.Work.BroadPhaseRejects;
+        Work.ObserverNarrowTests += report.Work.NarrowPhaseEvaluations;
         return report;
     }
     private DynamicBike Evolve(DynamicBike b, Force f, double dt)
@@ -351,6 +480,7 @@ internal sealed class TimeStepRace
     {
         for (var a = 0; a < 4; a++) for (var b = a + 1; b < 4; b++)
         {
+            Work.NarrowTests++;
             var gap = MechanicalSeparation.Between(Pose(bikes[a], Time), Pose(bikes[b], Time)).SignedMeters;
             if (gap < -GeometryNumerics.ContactDistanceMeters) return false;
             MaximumPenetration = Math.Max(MaximumPenetration, -gap);
@@ -359,6 +489,7 @@ internal sealed class TimeStepRace
     }
     private MechanicalContactManifold? Manifold(int a, int b)
     {
+        Work.NarrowTests += 2; // supplied gap and #56's own component selection
         var pa = Pose(Bikes[a], Time); var pb = Pose(Bikes[b], Time); var gap = MechanicalSeparation.Between(pa, pb);
         var row = new ContestedSpaceEvent(pa.RiderId, pb.RiderId, _map.FrameId, Time, Time, Time, gap.SignedMeters,
             Time, gap.ComponentA, gap.ComponentB, SpaceConflictKind.MutualConvergence, new(0, 0, 0, 0, 0, 0),
@@ -401,11 +532,45 @@ internal sealed class TimeStepRace
                 Status = severity == PhysicalContactSeverity.Crash ? RiderRaceStatus.Crashed : old.Status }, severity);
         }
         var ca = Consequence(ba, afterA); var cb = Consequence(bb, afterB); Bikes[a] = ca.Bike; Bikes[b] = cb.Bike;
+        BeginRecovery(a, b, m);
+        Work.Impacts++; Work.Episodes++; Work.ConsequenceApplications++;
         var angle = Math.Abs(MeterPoint.Dot(n, Direction(ba.Heading)));
         Contacts.Add(new(Time, ba.Rider.RiderId, bb.Rider.RiderId, angle > .8 ? "rear" : angle < .3 ? "side" : "oblique",
             j, before, after, ca.Severity, cb.Severity, _released[a, b]));
     }
-    private sealed class Motion(TimeStepRace race, DynamicBike bike, Force force, double start, double end)
+    private void BeginRecovery(int a, int b, MechanicalContactManifold m)
+    {
+        // The outer rider can use free track; the inner rider holds the current
+        // line and rolls off. Neither is assigned a new position or heading.
+        foreach (var i in new[] { a, b })
+        {
+            var bike = Bikes[i]; if (bike.Status != RiderRaceStatus.Racing) continue;
+            var road = Road(bike.Position); var outward = Left(Direction(road.Tangent)) * -1;
+            var away = m.NormalAtoB * (i == a ? -1 : 1);
+            var reserve = PhysicalContactAnalyzer.Reserve(new(bike.Rider.RiderId, bike.Rider.Profile.Gameplay,
+                bike.Rider.Condition, Surface(road).EffectiveGrip), _contact);
+            var authority = Math.Clamp(reserve.TechniqueFactor * reserve.ConditionFactor * (1 - bike.ControlLoss), 0, 1);
+            var room = Math.Max(0, road.Width - RecoveryEdgeMarginMeters - road.Offset);
+            foreach (var other in Bikes.Where(o => o.Rider.RiderId != bike.Rider.RiderId))
+            {
+                var delta = other.Position - bike.Position; var side = MeterPoint.Dot(delta, outward);
+                if (side > 0 && Math.Abs(MeterPoint.Dot(delta, Direction(road.Tangent))) < SpeedwayBikeDimensions.Reference.OverallMechanicalLengthMeters)
+                    room = Math.Min(room, Math.Max(0, side - 2 * SpeedwayBikeDimensions.Reference.BoundingRadiusMeters));
+            }
+            authority *= Math.Max(0, Math.Cos(BikeAngles.Wrap(bike.Heading - Beta(road) - road.Tangent)));
+            var yawBudget = Math.Min(_p.MaximumYawAcceleration * _p.RecoverySeconds * _p.RecoverySeconds / 2,
+                Grip(bike, road) / Math.Max(1, bike.Speed) * _p.RecoverySeconds);
+            var reachable = .5 * bike.Speed * _p.RecoverySeconds * Math.Sin(Math.Min(Math.PI / 4, yawBudget)) * authority;
+            var desiredOffset = MeterPoint.Dot(away, outward) > .2
+                ? Math.Min(room, reachable) : 0;
+            var throttle = bike.Control.Throttle * Math.Clamp(1 - bike.ControlLoss - (desiredOffset > 0 ? RecoveryYieldRollOff : RecoveryHoldRollOff), 0, 1);
+            var delay = LongitudinalDynamics.CalculateStandingStartReactionTimeSeconds(bike.Rider.Profile.Skills);
+            Bikes[i] = bike with { Reaction = new(Time, Time + delay, Time + _p.RecoverySeconds,
+                road.Offset + desiredOffset, throttle, bike.Control.Throttle),
+                Control = bike.Control with { PendingOffset = null, ReactAt = double.PositiveInfinity } };
+        }
+    }
+    internal sealed class Motion(TimeStepRace race, DynamicBike bike, Force force, double start, double end)
         : PhysicalPoseInterval(bike.Rider.RiderId, race._map.FrameId, start, end, SpeedwayBikeDimensions.Reference, false)
     {
         internal readonly DynamicBike Bike = bike;
