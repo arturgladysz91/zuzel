@@ -57,6 +57,7 @@ def consumers():
             continue
         name = path.relative_to(ROOT).as_posix()
         source = path.read_text(encoding="utf-8").replace("\r\n", "\n")
+        source = restore_scheduled_control(source, name)
         source = restore_minimal_yield(source, name)
         source = restore_segment_completion(source, name)
         source = restore_optional_safety_contract(source, name)
@@ -89,6 +90,26 @@ def consumers():
             continue
         result[name] = hashlib.sha256(source.encode("utf-8")).hexdigest()
     return result
+
+
+def restore_scheduled_control(source, name):
+    # Undo only reviewed opt-in plumbing before the unchanged historical proofs.
+    # Legacy manifests, formula hashes and canonical-reader scopes stay frozen.
+    raw = (ROOT / "tests/fixtures/scheduled-control-source-extraction.json").read_bytes().replace(b"\r\n", b"\n")
+    assert hashlib.sha256(raw).hexdigest() == "b28f99f7fcc8da6645611fd69741240e8f922ed256587e323ef6a6636f5d4047"
+    extraction = json.loads(raw)
+    assert extraction["BaseMainSha"] == "561c06b6e486b4cbb61db66a3a2ad1fab33a0227"
+    assert set(extraction["Patches"]) == {
+        "src/CoreSim/Decisions/RiderDecision.cs", "src/CoreSim/Decisions/TrajectoryEvaluator.cs",
+        "src/CoreSim/SimulationEngine.cs", "src/CoreSim/Track/ExecutedPathTraversal.cs", "src/CoreSim/Track/SoloProjectionResult.cs"}
+    assert set(extraction["NewDiagnosticSources"]) == {"src/CoreSim/Decisions/ScheduledControlChange.cs"}
+    if name in extraction["NewDiagnosticSources"]:
+        assert not REFERENCES.search(source) and not CANONICAL.search(source), name
+        assert hashlib.sha256(source.encode()).hexdigest() == extraction["NewDiagnosticSources"][name], name
+    for patch in extraction["Patches"].get(name, []):
+        assert source.count(patch["After"]) == 1, name
+        source = source.replace(patch["After"], patch["Before"])
+    return source
 
 
 def restore_minimal_yield(source, name):

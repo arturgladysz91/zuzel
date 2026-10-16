@@ -1,0 +1,106 @@
+{
+  "BaseMainSha": "561c06b6e486b4cbb61db66a3a2ad1fab33a0227",
+  "Patches": {
+    "src/CoreSim/Decisions/RiderDecision.cs": [
+      {
+        "Before": "    [System.Text.Json.Serialization.JsonIgnore]\n    public InteractionLateralTarget? InteractionTarget { get; init; }\n}\n\n",
+        "After": "    [System.Text.Json.Serialization.JsonIgnore]\n    public InteractionLateralTarget? InteractionTarget { get; init; }\n    internal ScheduledControlChange? ScheduledControl { get; init; }\n}\n\n"
+      }
+    ],
+    "src/CoreSim/Decisions/TrajectoryEvaluator.cs": [
+      {
+        "Before": "    bool CurrentStepHoldLateralPosition, InteractionLateralTarget? PhysicalTarget = null)\n{\n    internal bool IsControlled => CurrentStepDriveControl.HasValue || CurrentStepHoldLateralPosition || PhysicalTarget.HasValue;\n    internal RiderDecision Decision(int target, int prefix) => new(target)\n    {\n",
+        "After": "    bool CurrentStepHoldLateralPosition, InteractionLateralTarget? PhysicalTarget = null)\n{\n    internal ScheduledControlChange? ScheduledControl { get; init; }\n    internal bool IsControlled => CurrentStepDriveControl.HasValue || CurrentStepHoldLateralPosition || PhysicalTarget.HasValue\n        || ScheduledControl is { Enabled: true };\n    internal RiderDecision Decision(int target, int prefix) => new(target)\n    {\n"
+      },
+      {
+        "Before": "        HoldLateralPosition = prefix == 0 && CurrentStepHoldLateralPosition,\n        InteractionTarget = PhysicalTarget,\n    };\n}\n",
+        "After": "        HoldLateralPosition = prefix == 0 && CurrentStepHoldLateralPosition,\n        InteractionTarget = PhysicalTarget,\n        ScheduledControl = prefix == 0 ? ScheduledControl : null,\n    };\n}\n"
+      },
+      {
+        "Before": "    double FollowingStraightTimeSeconds, double FollowingStraightDistanceMeters,\n    bool CompletedHorizon, IReadOnlyList<TrajectoryPhaseEndpoint> PhaseEndpoints,\n    IReadOnlyList<ResolvedRiderMotion> ResolvedMotions);\n\n/// <summary>\n",
+        "After": "    double FollowingStraightTimeSeconds, double FollowingStraightDistanceMeters,\n    bool CompletedHorizon, IReadOnlyList<TrajectoryPhaseEndpoint> PhaseEndpoints,\n    IReadOnlyList<ResolvedRiderMotion> ResolvedMotions)\n{\n    internal ScheduledControlActivation? ControlActivation { get; init; }\n}\n\n/// <summary>\n"
+      },
+      {
+        "Before": "        Horizon = BuildHorizon(context);\n    }\n    public TrajectoryTraversal Evaluate(TrajectoryIntent intent, bool retainResolvedMotions = false)\n    {\n",
+        "After": "        Horizon = BuildHorizon(context);\n    }\n    private TrajectoryEvaluator(RiderDecisionContext context, InteractionProjectionControl control)\n        : this(context, driveControl: control.CurrentStepDriveControl,\n            holdLateralPosition: control.CurrentStepHoldLateralPosition, physicalTarget: control.PhysicalTarget)\n        => _control = control;\n    internal static TrajectoryEvaluator ForScheduledControl(RiderDecisionContext context, InteractionProjectionControl control)\n        => new(context, control);\n    public TrajectoryTraversal Evaluate(TrajectoryIntent intent, bool retainResolvedMotions = false)\n    {\n"
+      },
+      {
+        "Before": "        SoloProjectionResult projection;\n        ResolvedRiderMotion? motion = null;\n        if (rich)\n        {\n",
+        "After": "        SoloProjectionResult projection;\n        ResolvedRiderMotion? motion = null;\n        ScheduledControlActivation? activation = null;\n        if (rich)\n        {\n"
+      },
+      {
+        "Before": "                : engine.Resolve(input, engine.Decide(input), options);\n            motion = resolved.Motions[0];\n            projection = new(input, resolved.Changes[0], motion.TotalTimeSeconds, motion.TotalDistanceMeters, null, default);\n            var rider = parent.Rider.ToMutableCopy();\n",
+        "After": "                : engine.Resolve(input, engine.Decide(input), options);\n            motion = resolved.Motions[0];\n            activation = resolved.Diagnostics[0].ControlActivation;\n            projection = new(input, resolved.Changes[0], motion.TotalTimeSeconds, motion.TotalDistanceMeters, null, default);\n            var rider = parent.Rider.ToMutableCopy();\n"
+      },
+      {
+        "Before": "        var metrics = new TrajectoryTraversal(default, previous.PredictedTraversalTimeSeconds + projection.TravelTimeSeconds,\n            previous.PhysicalDistanceMeters + projection.DistanceMeters, entrySpeed, entry, middle, apex, exit, exitSpeed, straightSpeed,\n            straightTime, straightDistance, false, Array.AsReadOnly(endpoints), Array.AsReadOnly(motions));\n        return new(parent.Rider.Apply(change), state, metrics);\n    }\n",
+        "After": "        var metrics = new TrajectoryTraversal(default, previous.PredictedTraversalTimeSeconds + projection.TravelTimeSeconds,\n            previous.PhysicalDistanceMeters + projection.DistanceMeters, entrySpeed, entry, middle, apex, exit, exitSpeed, straightSpeed,\n            straightTime, straightDistance, false, Array.AsReadOnly(endpoints), Array.AsReadOnly(motions))\n            { ControlActivation = activation ?? previous.ControlActivation };\n        return new(parent.Rider.Apply(change), state, metrics);\n    }\n"
+      }
+    ],
+    "src/CoreSim/SimulationEngine.cs": [
+      {
+        "Before": "    ExecutedSegmentPath? ExecutedPath = null)\n{\n    [System.Text.Json.Serialization.JsonIgnore]\n    public Interactions.RiderContactConsequence? PhysicalContactConsequence { get; init; }\n",
+        "After": "    ExecutedSegmentPath? ExecutedPath = null)\n{\n    internal ScheduledControlActivation? ControlActivation { get; init; }\n    [System.Text.Json.Serialization.JsonIgnore]\n    public Interactions.RiderContactConsequence? PhysicalContactConsequence { get; init; }\n"
+      },
+      {
+        "Before": "        if (options.EnableContestedSpaceResponses && !snapshot.Step.UseLegacyPhysics)\n        {\n            var owner = interactions ?? new();\n            return new Interactions.ContestedSpaceInteractionCoordinator(owner.Clone())\n",
+        "After": "        if (options.EnableContestedSpaceResponses && !snapshot.Step.UseLegacyPhysics)\n        {\n            if (intents.Any(i => i.Decision.ScheduledControl is { Enabled: true }))\n                throw new NotSupportedException(\"Predeclared experimental commands require ResolveProduction, not live #56B selection.\");\n            var owner = interactions ?? new();\n            return new Interactions.ContestedSpaceInteractionCoordinator(owner.Clone())\n"
+      },
+      {
+        "Before": "                resolution.ExecutedPath)\n            {\n                PhysicalContactConsequence = consequencePlan?.Riders.SingleOrDefault(c => c.RiderId == finalChange.RiderId),\n                FinalSpeedMetersPerSecond = options.EnablePhysicalContactConsequences ? finalChange.Speed : null,\n",
+        "After": "                resolution.ExecutedPath)\n            {\n                ControlActivation = resolution.ProjectionPath?.ControlActivation,\n                PhysicalContactConsequence = consequencePlan?.Riders.SingleOrDefault(c => c.RiderId == finalChange.RiderId),\n                FinalSpeedMetersPerSecond = options.EnablePhysicalContactConsequences ? finalChange.Speed : null,\n"
+      },
+      {
+        "Before": "                snapshot.Track.Geometry);\n        var targetLane = LaneModel.ClampLane(decision.TargetLane);\n        var interactionTarget = !snapshot.Step.UseLegacyPhysics && options.EnableContestedSpaceResponses\n            ? decision.InteractionTarget?.Position(snapshot.Segment.Type, snapshot.Track.Geometry) : null;\n",
+        "After": "                snapshot.Track.Geometry);\n        var targetLane = LaneModel.ClampLane(decision.TargetLane);\n        var scheduled = decision.ScheduledControl is { Enabled: true } command ? command : null;\n        if (scheduled is not null)\n        {\n            if (scheduled.RiderId != rider.RiderId) throw new ArgumentException(\"Scheduled command rider does not match the intent.\");\n            if (snapshot.Step.UseLegacyPhysics || !options.EnableContestedSpaceResponses)\n                throw new NotSupportedException(\"Scheduled controls require advanced interaction execution.\");\n            _ = scheduled.PhysicalTarget?.Position(snapshot.Segment.Type, snapshot.Track.Geometry);\n        }\n        var interactionTarget = !snapshot.Step.UseLegacyPhysics && options.EnableContestedSpaceResponses\n            ? decision.InteractionTarget?.Position(snapshot.Segment.Type, snapshot.Track.Geometry) : null;\n"
+      },
+      {
+        "Before": "        var travelled = segmentLength * canonicalAdvance;\n        var recovery = options.EnablePhysicalContactConsequences ? rider.ContactRecovery : null;\n        if (!snapshot.Step.UseLegacyPhysics && (!ExecutedPathTraversal.IsFixedLine(rider.LateralPosition, resolution.Lane)\n            || (options.EnableContestedSpaceResponses && (decision.DriveControl is { PositiveDriveFraction: < 1f }\n                || decision.HoldLateralPosition || interactionTarget.HasValue)) || recovery is not null))\n            return ResolveMovingRider(snapshot, rider, decision, resolution, entrySpeed, plannedLane,\n                canonicalAdvance, standingStartEligible, risk, surface, cornerPhaseContext, captureRich,\n",
+        "After": "        var travelled = segmentLength * canonicalAdvance;\n        var recovery = options.EnablePhysicalContactConsequences ? rider.ContactRecovery : null;\n        var coupled = !snapshot.Step.UseLegacyPhysics && (!ExecutedPathTraversal.IsFixedLine(rider.LateralPosition, resolution.Lane)\n            || (options.EnableContestedSpaceResponses && (decision.DriveControl is { PositiveDriveFraction: < 1f }\n                || decision.HoldLateralPosition || interactionTarget.HasValue)) || recovery is not null);\n        if (scheduled is not null && !coupled)\n            throw new NotSupportedException(\"This PoC requires an already coupled traversal; switching a fixed-line integrator would change its prefix.\");\n        if (coupled)\n            return ResolveMovingRider(snapshot, rider, decision, resolution, entrySpeed, plannedLane,\n                canonicalAdvance, standingStartEligible, risk, surface, cornerPhaseContext, captureRich,\n"
+      },
+      {
+        "Before": "                    * (float)(recovery?.DriveAvailability01 ?? 1),\n                options.EnableContestedSpaceResponses && decision.HoldLateralPosition,\n                (float)(recovery?.LateralAuthority01 ?? 1), recovery is not null, interactionTarget);\n        var speed = resolution.Speed;\n        StraightSpeedProfile? straightProfile = null;\n",
+        "After": "                    * (float)(recovery?.DriveAvailability01 ?? 1),\n                options.EnableContestedSpaceResponses && decision.HoldLateralPosition,\n                (float)(recovery?.LateralAuthority01 ?? 1), recovery is not null, interactionTarget,\n                scheduled, (float)(recovery?.DriveAvailability01 ?? 1));\n        var speed = resolution.Speed;\n        StraightSpeedProfile? straightProfile = null;\n"
+      },
+      {
+        "Before": "        float canonicalAdvance, bool launch, float risk, TrackSurfaceState entrySurface, CornerPhaseContext? phase,\n        bool captureRich, float positiveDriveFraction = 1f, bool holdLateralPosition = false, float lateralAuthority01 = 1f, bool contactRecovery = false,\n        float? interactionTargetPosition = null)\n    {\n        Dictionary<int, float?>? approachTargets = snapshot.Segment.Type == SegmentType.Straight ? new() : null;\n",
+        "After": "        float canonicalAdvance, bool launch, float risk, TrackSurfaceState entrySurface, CornerPhaseContext? phase,\n        bool captureRich, float positiveDriveFraction = 1f, bool holdLateralPosition = false, float lateralAuthority01 = 1f, bool contactRecovery = false,\n        float? interactionTargetPosition = null, ScheduledControlChange? scheduledControl = null,\n        float scheduledDriveAvailability01 = 1f)\n    {\n        Dictionary<int, float?>? approachTargets = snapshot.Segment.Type == SegmentType.Straight ? new() : null;\n"
+      },
+      {
+        "Before": "        }\n        var traversal = ExecutedPathTraversal.Traverse(snapshot, rider, resolution, entrySpeed, canonicalAdvance,\n            launch, NextCorner, captureRich, positiveDriveFraction, holdLateralPosition, lateralAuthority01, contactRecovery, interactionTargetPosition);\n        var path = traversal.RichPath;\n        var position = resolution.Outcome == SegmentOutcome.Crash\n",
+        "After": "        }\n        var traversal = ExecutedPathTraversal.Traverse(snapshot, rider, resolution, entrySpeed, canonicalAdvance,\n            launch, NextCorner, captureRich, positiveDriveFraction, holdLateralPosition, lateralAuthority01, contactRecovery,\n            interactionTargetPosition, scheduledControl, scheduledDriveAvailability01);\n        var path = traversal.RichPath;\n        var position = resolution.Outcome == SegmentOutcome.Crash\n"
+      }
+    ],
+    "src/CoreSim/Track/ExecutedPathTraversal.cs": [
+      {
+        "Before": "        Func<float, float?> nextCornerTarget, bool captureRich = true, float positiveDriveFraction = 1f,\n        bool holdLateralPosition = false, float lateralAuthority01 = 1f, bool contactRecovery = false,\n        float? interactionTargetPosition = null)\n    {\n        var segment = snapshot.Segment; var geometry = snapshot.Track.Geometry;\n",
+        "After": "        Func<float, float?> nextCornerTarget, bool captureRich = true, float positiveDriveFraction = 1f,\n        bool holdLateralPosition = false, float lateralAuthority01 = 1f, bool contactRecovery = false,\n        float? interactionTargetPosition = null, Decisions.ScheduledControlChange? scheduledControl = null,\n        float scheduledDriveAvailability01 = 1f)\n    {\n        var segment = snapshot.Segment; var geometry = snapshot.Track.Geometry;\n"
+      },
+      {
+        "Before": "        var lateralTarget = interactionTargetPosition.HasValue && resolution.Outcome is SegmentOutcome.Ok or SegmentOutcome.Brake\n            ? interactionTargetPosition.Value : resolution.Lane;\n        var speed = crash ? MathF.Max(1f, entrySpeed * .5f) : resolution.Speed;\n        var nodeSurface = snapshot.TrackState.SampleSurface(snapshot.Step.SegmentIndex, lateral);\n",
+        "After": "        var lateralTarget = interactionTargetPosition.HasValue && resolution.Outcome is SegmentOutcome.Ok or SegmentOutcome.Brake\n            ? interactionTargetPosition.Value : resolution.Lane;\n        var pending = scheduledControl is { Enabled: true } ? scheduledControl : null;\n        Decisions.ScheduledControlActivation? activation = null;\n        var stepCount = 0; var subdivisionTotal = 0;\n        if (pending is not null) ActivateAtAcceptedPoint();\n        var speed = crash ? MathF.Max(1f, entrySpeed * .5f) : resolution.Speed;\n        var nodeSurface = snapshot.TrackState.SampleSurface(snapshot.Step.SegmentIndex, lateral);\n"
+      },
+      {
+        "Before": "        Span<ExecutedWearSample> wearSamples = captureRich ? Span<ExecutedWearSample>.Empty\n            : maxNodes <= 1024 ? stackalloc ExecutedWearSample[maxNodes] : new ExecutedWearSample[maxNodes];\n        var stepCount = 0; var subdivisionTotal = 0;\n        float? apexLateral = Progress(start) == ContinuousCornerEnvelope.ApexProgress ? lateral : null;\n        while (start < end)\n",
+        "After": "        Span<ExecutedWearSample> wearSamples = captureRich ? Span<ExecutedWearSample>.Empty\n            : maxNodes <= 1024 ? stackalloc ExecutedWearSample[maxNodes] : new ExecutedWearSample[maxNodes];\n        float? apexLateral = Progress(start) == ContinuousCornerEnvelope.ApexProgress ? lateral : null;\n        while (start < end)\n"
+      },
+      {
+        "Before": "            if (Progress(start) == ContinuousCornerEnvelope.ApexProgress) apexLateral ??= lateral;\n            if (captureRich) nodes!.Add(Node(start, lateral, crash && start == end ? 0f : speed));\n        }\n        var finalDistance = (float)distance;\n",
+        "After": "            if (Progress(start) == ContinuousCornerEnvelope.ApexProgress) apexLateral ??= lateral;\n            if (captureRich) nodes!.Add(Node(start, lateral, crash && start == end ? 0f : speed));\n            // No deadline split or replay. Only an existing, accepted point can activate.\n            if (pending is not null) ActivateAtAcceptedPoint();\n        }\n        var finalDistance = (float)distance;\n"
+      },
+      {
+        "Before": "        }\n        return new(captureRich ? new ExecutedSegmentPath(nodes!, steps!, reaction, setup) : null,\n            finalDistance, (float)time, lateral, crash ? 0f : speed, apexLateral, wear, subdivisionTotal);\n\n        float? Progress(double local) => corner is null ? null\n",
+        "After": "        }\n        return new(captureRich ? new ExecutedSegmentPath(nodes!, steps!, reaction, setup) : null,\n            finalDistance, (float)time, lateral, crash ? 0f : speed, apexLateral, wear, subdivisionTotal, activation);\n\n        void ActivateAtAcceptedPoint()\n        {\n            // Canonical rich/lean endpoint time has the existing float precision.\n            var localTime = (float)time;\n            var physicalTime = (double)rider.ElapsedTimeSeconds + localTime;\n            if (pending is null || physicalTime < pending.ActivationElapsedTimeSeconds) return;\n            activation = new(rider.RiderId, pending.ActivationElapsedTimeSeconds, physicalTime, localTime, stepCount);\n            positiveDriveFraction = pending.DriveControl.PositiveDriveFraction * scheduledDriveAvailability01;\n            if (resolution.Outcome is SegmentOutcome.Ok or SegmentOutcome.Brake)\n            {\n                hold = pending.HoldLateralPosition ?? hold;\n                if (pending.PhysicalTarget is { } target) lateralTarget = target.Position(segment.Type, geometry);\n            }\n            pending = null;\n        }\n\n        float? Progress(double local) => corner is null ? null\n"
+      }
+    ],
+    "src/CoreSim/Track/SoloProjectionResult.cs": [
+      {
+        "Before": "internal readonly record struct ExecutedTraversalResult(ExecutedSegmentPath? RichPath,\n    float DistanceMeters, float TravelTimeSeconds, float FinalLateralPosition, float ExitSpeedMetersPerSecond,\n    float? ApexLateralPosition, ProjectionWear Wear, int TimeSolveSubdivisions);\n",
+        "After": "internal readonly record struct ExecutedTraversalResult(ExecutedSegmentPath? RichPath,\n    float DistanceMeters, float TravelTimeSeconds, float FinalLateralPosition, float ExitSpeedMetersPerSecond,\n    float? ApexLateralPosition, ProjectionWear Wear, int TimeSolveSubdivisions,\n    Decisions.ScheduledControlActivation? ControlActivation = null);\n"
+      }
+    ]
+  },
+  "NewDiagnosticSources": {
+    "src/CoreSim/Decisions/ScheduledControlChange.cs": "383b0ac4e30eb06d3fc6a67e4116d20cdd4356030179780f0c89a540719ec4ed"
+  }
+}

@@ -120,6 +120,10 @@ Walidacja: 20 nowych przypadków + 5 istniejących kontroli ruchu, nawierzchni i
 metadanych NuGetAudit (źródło sieciowe niedostępne); standardowe Windows CI bez zmiany
 workflow. Historyczne testy/dane/kalibracje, podstawowe wzory, #55/#56C i domyślne A/B/C
 bez modyfikacji. #81–#84 pozostają Draft. Nie wdrażano reaktywnego wykrywania ani całej czwórki.
+Audyt źródeł otrzymuje osobną, przypiętą ekstrakcję zmian sterowania przed dotychczasowymi
+ekstrakcjami; nadal weryfikuje wszystkie 39 oryginalnych hashy. Nowe testy sprawdzają,
+że wcześniejsza aktywacja i zmiana wzoru drogi nadal są odrzucane. Stare manifesty/testy
+pozostają niezmienione.
 
 Odtworzenie: build Release; filtr `MidSegmentControlTests`; uruchom
 `tools/mid-segment-control-audit/bin/Release/net8.0/CoreSim.Tests.dll output.json`
