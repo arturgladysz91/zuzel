@@ -9,7 +9,11 @@ namespace TimeStepPhysics;
 
 internal static class Scenarios
 {
-    internal static readonly string[] Names = { "straight", "corner", "side", "encroach", "rear", "near-miss", "real-R3-R4" };
+    internal static readonly string[] Names = { "straight", "corner", "side", "encroach", "rear", "near-miss",
+        "light-straight", "bend-contact", "strong-no-room", "real-R3-R4" };
+    internal enum Context { START_STRAIGHT, FIRST_BEND, NORMAL_RACING }
+    internal static Context ContextFor(string name) => name == "light-straight" ? Context.START_STRAIGHT
+        : name == "bend-contact" ? Context.FIRST_BEND : Context.NORMAL_RACING;
     internal sealed record RealOrigin(FourRiderCausalCoordinator Coordinator, FrozenHeatContext Heat, CausalPublication First);
     internal static RealOrigin CaptureReal()
     {
@@ -51,6 +55,7 @@ internal static class Scenarios
     internal static TimeStepRace Create(string name, RealOrigin? real = null, bool reverse = false)
     {
         if (name == "real-R3-R4") return Import(real ?? CaptureReal(), reverse);
+        if (name == "bend-contact") return BendContact(reverse);
         var track = name == "corner" ? Track.CreateStandingStartExample()
             : new Track(new[] { new TrackSegment(0, SegmentType.Straight, 1000), new TrackSegment(1, SegmentType.Straight, 1000) }, TrackGeometry.Default);
         var map = new TrackMetricEmbedding(track, true); var surface = TrackState.CreateDefault(track).Snapshot();
@@ -68,11 +73,21 @@ internal static class Scenarios
                 heading, name == "corner" ? speed / (track.Geometry.InnerRadiusMeters + offset) : 0, new(offset));
         }).ToArray();
         if (name == "straight") bikes[1] = bikes[1] with { Position = bikes[1].Position + new MeterPoint(6, 0) };
-        if (name is "side" or "encroach")
+        if (name is "side" or "encroach" or "light-straight" or "strong-no-room")
         {
-            bikes[0] = bikes[0] with { Velocity = new(18, -.8) };
-            bikes[1] = bikes[1] with { Velocity = new(18, .8) };
+            var closure = name == "light-straight" ? .08 : name == "strong-no-room" ? 3 : .8;
+            bikes[0] = bikes[0] with { Velocity = new(18, -closure) };
+            bikes[1] = bikes[1] with { Velocity = new(18, closure) };
+            if (name == "light-straight") bikes[1] = bikes[1] with
+            { Position = bikes[1].Position + new MeterPoint(0, .025), Control = new(2.805) };
             if (name == "encroach") bikes[0] = bikes[0] with { Position = bikes[0].Position + new MeterPoint(-.5, 0), Control = new(4) };
+            if (name == "strong-no-room")
+            {
+                foreach (var i in new[] { 0, 1 }) bikes[i] = bikes[i] with
+                { Position = bikes[i].Position + new MeterPoint(0, -1), Control = new(bikes[i].Control.TargetOffset + 1) };
+                var slippery = new TrackState(track.Segments.Count, 5, (_, _) => new(.4f, .2f, .1f)).Snapshot();
+                return new(track, slippery, reverse ? bikes.Reverse() : bikes, reverse: reverse);
+            }
         }
         if (name == "rear")
         {
@@ -82,5 +97,28 @@ internal static class Scenarios
         if (name == "near-miss") bikes[1] = bikes[1] with
         { Position = bikes[0].Position + new MeterPoint(3, -.801), Velocity = new(15, 0), Control = new(2.801) };
         return new(track, surface, reverse ? bikes.Reverse() : bikes, reverse: reverse);
+    }
+    private static TimeStepRace BendContact(bool reverse)
+    {
+        var track = Track.CreateStandingStartExample(); var map = new TrackMetricEmbedding(track, true);
+        var template = Create("corner").Bikes;
+        var inner = map.Segments[1].Map(.4, 3); var outward = new MeterPoint(Math.Sin(inner.TangentHeadingRadians), -Math.Cos(inner.TangentHeadingRadians));
+        var heading = inner.TangentHeadingRadians + ReferenceBikeAttitude.Neutral.RelativeSlideAngle(.4 / 3);
+        // Only fixture construction varies initial offset to get a 3 mm gap
+        // between actual #55 capsules, independent of their corner slide angle.
+        double Gap(double offset) => MechanicalSeparation.Between(
+            BikeFootprint.Create(inner.Position, heading, SpeedwayBikeDimensions.Reference),
+            BikeFootprint.Create(inner.Position + outward * offset, heading, SpeedwayBikeDimensions.Reference)).SignedMeters;
+        var lo = 0d; var hi = 3d;
+        for (var n = 0; n < 40; n++) { var mid = (lo + hi) * .5; if (Gap(mid) < .003) lo = mid; else hi = mid; }
+        for (var i = 0; i < 2; i++)
+        {
+            var offset = i == 0 ? 3 : 3 + hi;
+            var p = map.Segments[1].Map(.4, offset);
+            template[i] = template[i] with { Position = p.Position, Heading = heading,
+                Velocity = TimeStepRace.Direction(p.TangentHeadingRadians) * 12 + outward * (i == 0 ? .4 : -.4),
+                AngularVelocity = 12 / (track.Geometry.InnerRadiusMeters + offset), Control = new(offset) };
+        }
+        return new(track, TrackState.CreateDefault(track).Snapshot(), reverse ? template.Reverse() : template, reverse: reverse);
     }
 }

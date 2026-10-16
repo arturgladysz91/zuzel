@@ -3,9 +3,14 @@
 Release platform: **Windows only**. See the current [Windows CI policy](docs/ci.md)
 for Draft/full validation, the merge gate and optional historical audits.
 
-An isolated [fixed-time 2D PoC](docs/experiments/time-step-physics-poc.md) compares
-5/10/20 ms steps outside production. It demonstrates swept vector impacts, but
-fails the real two-second continuation and does not justify replacing #81.
+[REA-004A13](docs/experiments/simple-rider-contact-recovery.md) separates impact from
+delayed driver recovery in the isolated PoC. Required simple fixtures work, but
+real continuous-contact cost and an oblique refusal still warrant recommendation C.
+The real continuation ends at a subsequent physical R1–R3 Crash, not a 2 s finish.
+
+The historical [#82 fixed-time 2D baseline](docs/experiments/time-step-physics-poc.md)
+records the 5/10/20 ms comparison outside production. Its swept vector impacts
+failed the real two-second continuation and did not justify replacing #81.
 
 [REA-004A12](docs/calibration/rea-004a12-four-rider-continuation.md) reopens the four
 accepted nonterminal event cursors, preserves their segment controls and certifies
