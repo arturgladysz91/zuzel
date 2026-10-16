@@ -45,7 +45,8 @@ internal static class ExecutedPathTraversal
         SegmentResolution resolution, float entrySpeed, float canonicalAdvance, bool launch,
         Func<float, float?> nextCornerTarget, bool captureRich = true, float positiveDriveFraction = 1f,
         bool holdLateralPosition = false, float lateralAuthority01 = 1f, bool contactRecovery = false,
-        float? interactionTargetPosition = null)
+        float? interactionTargetPosition = null, Decisions.ScheduledControlChange? scheduledControl = null,
+        float scheduledDriveAvailability01 = 1f)
     {
         var segment = snapshot.Segment; var geometry = snapshot.Track.Geometry;
         var corner = snapshot.Track.CornerTopology.CornerForSegment(snapshot.Step.SegmentIndex);
@@ -67,6 +68,10 @@ internal static class ExecutedPathTraversal
         var hold = holdLateralPosition && resolution.Outcome is SegmentOutcome.Ok or SegmentOutcome.Brake;
         var lateralTarget = interactionTargetPosition.HasValue && resolution.Outcome is SegmentOutcome.Ok or SegmentOutcome.Brake
             ? interactionTargetPosition.Value : resolution.Lane;
+        var pending = scheduledControl is { Enabled: true } ? scheduledControl : null;
+        Decisions.ScheduledControlActivation? activation = null;
+        var stepCount = 0; var subdivisionTotal = 0;
+        if (pending is not null) ActivateAtAcceptedPoint();
         var speed = crash ? MathF.Max(1f, entrySpeed * .5f) : resolution.Speed;
         var nodeSurface = snapshot.TrackState.SampleSurface(snapshot.Step.SegmentIndex, lateral);
         var initialEnvelope = corner is null ? (float?)null : LocalEnvelope(start, lateral, nodeSurface);
@@ -78,7 +83,6 @@ internal static class ExecutedPathTraversal
         // adding its kernel. Keep only two value fields, preserving that exact order.
         Span<ExecutedWearSample> wearSamples = captureRich ? Span<ExecutedWearSample>.Empty
             : maxNodes <= 1024 ? stackalloc ExecutedWearSample[maxNodes] : new ExecutedWearSample[maxNodes];
-        var stepCount = 0; var subdivisionTotal = 0;
         float? apexLateral = Progress(start) == ContinuousCornerEnvelope.ApexProgress ? lateral : null;
         while (start < end)
         {
@@ -168,6 +172,8 @@ internal static class ExecutedPathTraversal
             nodeSurface = snapshot.TrackState.SampleSurface(snapshot.Step.SegmentIndex, lateral);
             if (Progress(start) == ContinuousCornerEnvelope.ApexProgress) apexLateral ??= lateral;
             if (captureRich) nodes!.Add(Node(start, lateral, crash && start == end ? 0f : speed));
+            // No deadline split or replay. Only an existing, accepted point can activate.
+            if (pending is not null) ActivateAtAcceptedPoint();
         }
         var finalDistance = (float)distance;
         ProjectionWear wear = default;
@@ -180,7 +186,23 @@ internal static class ExecutedPathTraversal
             wear = SimulationEngine.FinishExecutedWear(weights, rider.LateralPosition);
         }
         return new(captureRich ? new ExecutedSegmentPath(nodes!, steps!, reaction, setup) : null,
-            finalDistance, (float)time, lateral, crash ? 0f : speed, apexLateral, wear, subdivisionTotal);
+            finalDistance, (float)time, lateral, crash ? 0f : speed, apexLateral, wear, subdivisionTotal, activation);
+
+        void ActivateAtAcceptedPoint()
+        {
+            // Canonical rich/lean endpoint time has the existing float precision.
+            var localTime = (float)time;
+            var physicalTime = (double)rider.ElapsedTimeSeconds + localTime;
+            if (pending is null || physicalTime < pending.ActivationElapsedTimeSeconds) return;
+            activation = new(rider.RiderId, pending.ActivationElapsedTimeSeconds, physicalTime, localTime, stepCount);
+            positiveDriveFraction = pending.DriveControl.PositiveDriveFraction * scheduledDriveAvailability01;
+            if (resolution.Outcome is SegmentOutcome.Ok or SegmentOutcome.Brake)
+            {
+                hold = pending.HoldLateralPosition ?? hold;
+                if (pending.PhysicalTarget is { } target) lateralTarget = target.Position(segment.Type, geometry);
+            }
+            pending = null;
+        }
 
         float? Progress(double local) => corner is null ? null
             : (float)((snapshot.Step.SegmentIndex - corner.StartSegmentIndex + local) / corner.SegmentCount);

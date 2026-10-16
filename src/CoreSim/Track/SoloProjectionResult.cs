@@ -11,4 +11,5 @@ internal readonly record struct ExecutedWearSample(float DistanceMeters, float L
 
 internal readonly record struct ExecutedTraversalResult(ExecutedSegmentPath? RichPath,
     float DistanceMeters, float TravelTimeSeconds, float FinalLateralPosition, float ExitSpeedMetersPerSecond,
-    float? ApexLateralPosition, ProjectionWear Wear, int TimeSolveSubdivisions);
+    float? ApexLateralPosition, ProjectionWear Wear, int TimeSolveSubdivisions,
+    Decisions.ScheduledControlActivation? ControlActivation = null);
