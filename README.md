@@ -3,6 +3,11 @@
 Release platform: **Windows only**. See the current [Windows CI policy](docs/ci.md)
 for Draft/full validation, the merge gate and optional historical audits.
 
+Isolated research prototype: [Shared World Speedway Simulation](docs/experiments/shared-world-speedway.md)
+uses one Box2D.NET world and causal rider observations. Recommendation B: full
+contact-free heats work; crowded-contact sensitivity and post-crash boundaries
+still block adoption. Production CoreSim and defaults remain unchanged.
+
 Current physical consequence precedence (#56C2): [physical contact consequences and one-step recovery](docs/calibration/physical-contact-consequences.md)
 adds default-OFF `EnablePhysicalContactConsequences`, requiring #56B responses. When enabled,
 reviewed #56C1 analysis supplies deterministic final velocity/status and next-step recovery;
