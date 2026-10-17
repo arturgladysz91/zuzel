@@ -1,5 +1,11 @@
 # Architecture
 
+The experimental [in-progress command source](experiments/reactive-in-segment-decisions.md)
+can issue one new command from an accepted own point in the existing coupled traversal.
+It is not a live pair observer: segment-wide sequential resolution publishes no fresh
+same-time peer state. Pair trials stop at this missing contract; no four-rider
+coordinator, speculative observation or new tactical selector is introduced.
+
 Experimental [mid-segment control activation](experiments/mid-segment-control-activation.md)
 passes at most one predeclared internal command through production and rich trajectory
 projection into the existing coupled traversal. It activates only at an accepted point

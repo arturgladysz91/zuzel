@@ -7,6 +7,10 @@ for Draft/full validation, the merge gate and optional historical audits.
 is an internal opt-in PoC for existing coupled traversals; fixed-line integrators
 and normal heat behavior retain their current execution paths.
 
+[Reactive in-segment feasibility](docs/experiments/reactive-in-segment-decisions.md)
+adds own-point command delivery; causal pair decisions remain blocked by the lack
+of a shared accepted observation frontier. This is not enabled in normal heats.
+
 Current physical consequence precedence (#56C2): [physical contact consequences and one-step recovery](docs/calibration/physical-contact-consequences.md)
 adds default-OFF `EnablePhysicalContactConsequences`, requiring #56B responses. When enabled,
 reviewed #56C1 analysis supplies deterministic final velocity/status and next-step recovery;

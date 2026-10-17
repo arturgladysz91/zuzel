@@ -14,6 +14,8 @@ public sealed record RiderDecision(
     [System.Text.Json.Serialization.JsonIgnore]
     public InteractionLateralTarget? InteractionTarget { get; init; }
     internal ScheduledControlChange? ScheduledControl { get; init; }
+    // Experimental: called with the just accepted own point, never a future path.
+    internal Func<ExecutedPathNode, ScheduledControlChange?>? ControlSource { get; init; }
 }
 
 /// <summary>Interaction-only physical destination; manager trajectory anchors stay discrete.</summary>

@@ -57,6 +57,7 @@ def consumers():
             continue
         name = path.relative_to(ROOT).as_posix()
         source = path.read_text(encoding="utf-8").replace("\r\n", "\n")
+        source = restore_reactive_control(source, name)
         source = restore_scheduled_control(source, name)
         source = restore_minimal_yield(source, name)
         source = restore_segment_completion(source, name)
@@ -90,6 +91,20 @@ def consumers():
             continue
         result[name] = hashlib.sha256(source.encode("utf-8")).hexdigest()
     return result
+
+
+def restore_reactive_control(source, name):
+    # Remove only the reviewed own-point delivery hook, not any motion formula.
+    raw = (ROOT / "tests/fixtures/reactive-control-source-extraction.json").read_bytes().replace(b"\r\n", b"\n")
+    assert hashlib.sha256(raw).hexdigest() == "3fe63496815d498d32768b2f1425ad1cae30b9b7365153993a3bfebea17c47ae"
+    extraction = json.loads(raw)
+    assert extraction["BasePr85Sha"] == "d16df13cba27fb5f2aa270337d1d0f28fe1dc0a0"
+    assert set(extraction["Patches"]) == {"src/CoreSim/Decisions/RiderDecision.cs", "src/CoreSim/Decisions/TrajectoryEvaluator.cs",
+        "src/CoreSim/SimulationEngine.cs", "src/CoreSim/Track/ExecutedPathTraversal.cs"}
+    for change in extraction["Patches"].get(name, []):
+        assert source.count(change["After"]) == 1, name
+        source = source.replace(change["After"], change["Before"])
+    return source
 
 
 def restore_scheduled_control(source, name):
