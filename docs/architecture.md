@@ -1,5 +1,10 @@
 # Architecture
 
+Isolated PROVISIONAL experiment: [Shared World Speedway](experiments/shared-world-speedway.md)
+owns one world clock and uses Box2D.NET only in `tools/shared-world-speedway`.
+It reuses public force/geometry primitives, with no production scheduling change.
+The report records working full heats and the crowded-contact/post-crash limits.
+
 Current physical consequence precedence (#56C2): [physical contact consequences and recovery](calibration/physical-contact-consequences.md)
 adds a separate `PhysicalContactConsequenceResolver`. #55 detects; #56C1 analyzes frozen pairs and aggregates;
 the resolver builds a simultaneous plan before final `RiderStateChange`, diagnostics, motion and events are constructed.
