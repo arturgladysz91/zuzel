@@ -27,10 +27,13 @@ public sealed class WorldRunner : IDisposable
     private readonly Dictionary<int, double> finishTimes = new();
     private readonly IncrementalHash hash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
     private readonly PhysicalContactParameters severityScale = new();
+    private readonly WorldDiagnostics? diagnostics;
     private bool disposed;
     public WorldSnapshot Snapshot => new(TimeSeconds, Array.AsReadOnly((RiderView[])views.Clone()));
-    public WorldRunner(IEnumerable<RiderSpec> riders, Track? track = null, WorldParameters? parameters = null)
+    public WorldRunner(IEnumerable<RiderSpec> riders, Track? track = null, WorldParameters? parameters = null,
+        WorldDiagnostics? diagnostics = null)
     {
+        this.diagnostics = diagnostics;
         Parameters = parameters ?? new();
         Frame = new(track ?? CoreSim.Analysis.MatchedVenueProfiles.CreateMotoarenaStandingStartTrack());
         if (Parameters.AiIntervalSeconds != .1 || Parameters.SolverSubsteps is < 1 or > 8
@@ -81,7 +84,7 @@ public sealed class WorldRunner : IDisposable
                 for (var i = 0; i < specs.Length; i++)
                 {
                     var force = RiderController.Forces(views[i], specs[i], Frame, surface, Parameters,
-                        TimeSeconds, physics.Masses[i], physics.Inertias[i]);
+                        TimeSeconds, physics.Masses[i], physics.Inertias[i], diagnostics?.Force);
                     physics.Force(i, force.Force, force.Torque);
                 }
                 var watch = Stopwatch.GetTimestamp();
@@ -137,7 +140,8 @@ public sealed class WorldRunner : IDisposable
                     }
                 }
                 watch = Stopwatch.GetTimestamp();
-                physics.ReadContacts(views, Work, BeginContact, (a, b) => contacts.Add(new(views[a].Id, views[b].Id, TimeSeconds, "end", 0, 0, 0)));
+                physics.ReadContacts(views, Work, BeginContact, (a, b) => contacts.Add(new(views[a].Id, views[b].Id, TimeSeconds, "end", 0, 0, 0)),
+                    diagnostics, before, TimeSeconds, (float)(stepSeconds / subdivisions));
                 Work.ContactProcessingMilliseconds += Stopwatch.GetElapsedTime(watch).TotalMilliseconds;
                 if (specs.All(s => s.Passive)) Work.MaximumPassiveEnergyIncreaseJoules = Math.Max(
                     Work.MaximumPassiveEnergyIncreaseJoules, Energy(views) - passiveEnergy);
@@ -210,6 +214,8 @@ public sealed class WorldRunner : IDisposable
             var ratio = closingSpeed * physics.Masses[other] / (physics.Masses[i] + physics.Masses[other])
                 / reserve.StabilityReserveMetersPerSecond;
             var severity = PhysicalContactAnalyzer.Classify(ratio, severityScale);
+            diagnostics?.Consequence?.Invoke(new(TimeSeconds, v.Id, views[other].Id, closingSpeed, impulse,
+                reserve.StabilityReserveMetersPerSecond, ratio, severity));
             var loss = (float)new PhysicalContactConsequenceParameters().ControlLoss(ratio, severityScale);
             if (v.Activity == RiderActivity.Crashed) return ratio;
             if (severity == PhysicalContactSeverity.Crash)

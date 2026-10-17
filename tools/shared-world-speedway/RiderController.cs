@@ -17,11 +17,13 @@ public static class RiderController
              * (spec.Profile.Gameplay.Abilities.Reaction - 1) / 98d;
 
     public static (Vector2 Force, float Torque) Forces(RiderView v, RiderSpec spec, TrackFrame frame,
-        TrackStateSnapshot surface, WorldParameters p, double time, float mass, float inertia)
+        TrackStateSnapshot surface, WorldParameters p, double time, float mass, float inertia,
+        Action<ForceObservation>? observe = null)
     {
-        if (spec.Passive) return (Vector2.Zero, 0);
+        if (spec.Passive)
+        { observe?.Invoke(new(time, v, Vector2.Zero, 0, 0, 0, null, 0, "passive")); return (Vector2.Zero, 0); }
         if (spec.SpeedMetersPerSecond == 0 && v.TotalReferenceMeters < frame.Embedding.Segments[0].StraightLengthMeters && time < TapeReactionSeconds(spec))
-            return (Vector2.Zero, 0);
+        { observe?.Invoke(new(time, v, Vector2.Zero, 0, 0, 0, null, 0, "reaction")); return (Vector2.Zero, 0); }
         var road = v.Road; var skills = spec.Profile.Skills; var setup = spec.Setup;
         var lateral = Math.Clamp((float)road.OffsetMeters / LaneModel.UsableRacingWidthMeters(
             frame.Track.Segments[road.Segment].Type, frame.Track.Geometry) * 4, 0, 4);
@@ -30,8 +32,11 @@ public static class RiderController
         var tangent = speed > .01f ? v.Velocity / speed : road.Tangent;
         var left = new Vector2(-tangent.Y, tangent.X);
         if (v.Activity == RiderActivity.Crashed)
-            return (-tangent * Math.Min(mass * speed / .1f, LongitudinalDynamics.CalculateLongitudinalResistanceForceNewtons(speed)),
-                -inertia * v.AngularVelocity);
+        {
+            var drag = -tangent * Math.Min(mass * speed / .1f, LongitudinalDynamics.CalculateLongitudinalResistanceForceNewtons(speed));
+            observe?.Invoke(new(time, v, drag, -inertia * v.AngularVelocity, 0, 0, null, 0, "crashed"));
+            return (drag, -inertia * v.AngularVelocity);
+        }
         var launch = spec.SpeedMetersPerSecond == 0 && v.TotalReferenceMeters < frame.Embedding.Segments[0].StraightLengthMeters && !road.IsTurn;
         var reference = launch ? LongitudinalDynamics.CalculateStandingStartAvailableDriveForceNewtons(skills, setup, grip)
             : road.IsTurn ? LongitudinalDynamics.CalculateTurnExitAvailableDriveForceNewtons(skills, setup, grip)
@@ -72,6 +77,7 @@ public static class RiderController
         var inwardAcceleration = (road.IsTurn ? speed * speed / (float)Math.Max(1, road.RadiusMeters) : 0)
             + ((float)road.OffsetMeters - v.TargetOffsetMeters) / (response * response)
             + 2 * outwardVelocity / response;
+        var requestedInward = mass * inwardAcceleration;
         var maxLateral = safe * safe / radius;
         if (road.IsTurn && inwardAcceleration > maxLateral)
         {
@@ -88,6 +94,8 @@ public static class RiderController
         var error = (float)BikeAngles.Wrap(desiredHeading - v.Heading);
         var yawAcceleration = error / (p.YawResponseSeconds * p.YawResponseSeconds) - 2 * v.AngularVelocity / p.YawResponseSeconds;
         var torque = Math.Clamp(inertia * yawAcceleration, -mass * maxLateral / 2, mass * maxLateral / 2);
+        observe?.Invoke(new(time, v, force, torque * skillAuthority * (1 - v.Impairment),
+            requestedInward, mass * inwardAcceleration * (1 - v.Impairment), mass * maxLateral, along, "racing"));
         return (force, torque * skillAuthority * (1 - v.Impairment));
     }
 }

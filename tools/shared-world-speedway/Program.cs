@@ -3,6 +3,7 @@ using SharedWorldSpeedway;
 
 var scenario = args.FirstOrDefault() ?? "A";
 if (scenario == "audit") { Audit.Run(args.Length > 1 ? args[1] : "shared-world-results"); return; }
+if (scenario == "diagnose") { StabilityAudit.Diagnose(args.Length > 1 ? args[1] : "stability-diagnosis"); return; }
 if (scenario == "ccd") { Console.WriteLine(JsonSerializer.Serialize(Audit.CcdProbe(), Audit.Json)); return; }
 var step = args.Length > 1 ? double.Parse(args[1], System.Globalization.CultureInfo.InvariantCulture) : .02;
 var selected = scenario switch { "A" => Scenarios.A(), "heat" => Scenarios.A(4), "B" => Scenarios.B(),

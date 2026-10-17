@@ -18,6 +18,7 @@ public sealed class ContactAdapter : IDisposable
     public float[] Masses { get; }
     public float[] Inertias { get; }
     private readonly Dictionary<B2ShapeId, int> owners = new();
+    private readonly Dictionary<B2ShapeId, BikeComponent> components = new();
     private readonly B2ContactData[] contactBuffer = new B2ContactData[64];
     private readonly double[,] impulses;
     private readonly double[,] closingSpeeds;
@@ -44,12 +45,14 @@ public sealed class ContactAdapter : IDisposable
             sd.enableContactEvents = true; sd.enableHitEvents = true;
             var d = SpeedwayBikeDimensions.Reference;
             var half = (float)((d.OverallMechanicalLengthMeters - d.ChassisBodyWidthMeters) / 2);
-            owners.Add(b2CreateCapsuleShape(Bodies[i], sd,
-                new(new(-half, 0), new(half, 0), (float)d.ChassisBodyWidthMeters / 2)), i);
+            var chassis = b2CreateCapsuleShape(Bodies[i], sd,
+                new(new(-half, 0), new(half, 0), (float)d.ChassisBodyWidthMeters / 2));
+            owners.Add(chassis, i); components.Add(chassis, BikeComponent.Chassis);
             var barHalf = (float)((d.HandlebarWidthMeters - d.HandlebarTubeDiameterMeters) / 2);
             var x = (float)d.HandlebarLongitudinalOffsetMeters;
-            owners.Add(b2CreateCapsuleShape(Bodies[i], sd,
-                new(new(x, -barHalf), new(x, barHalf), (float)d.HandlebarTubeDiameterMeters / 2)), i);
+            var handlebar = b2CreateCapsuleShape(Bodies[i], sd,
+                new(new(x, -barHalf), new(x, barHalf), (float)d.HandlebarTubeDiameterMeters / 2));
+            owners.Add(handlebar, i); components.Add(handlebar, BikeComponent.Handlebar);
             Masses[i] = spec.Profile.Gameplay.Physical.MassKg + (float)new PhysicalContactParameters().ReferenceBikeMassKg;
             // Same mass distributed over the existing geometry. Explicit symmetric body origin avoids a bar-driven COM shift.
             var natural = b2Body_GetMassData(Bodies[i]);
@@ -70,7 +73,8 @@ public sealed class ContactAdapter : IDisposable
     }
     public void Step(float seconds, int substeps) => b2World_Step(World, seconds, substeps);
     public void ReadContacts(RiderView[] views, WorldWork work, Action<int, int, double, double> onEpisode,
-        Action<int, int> onEnd)
+        Action<int, int> onEnd, WorldDiagnostics? diagnostics = null, RiderView[]? before = null,
+        double time = 0, float step = 0)
     {
         Array.Clear(impulses); Array.Clear(closingSpeeds); Array.Clear(interacting);
         var events = b2World_GetContactEvents(World);
@@ -89,6 +93,20 @@ public sealed class ContactAdapter : IDisposable
                 for (var n = 0; n < c.manifold.pointCount; n++)
                 {
                     var point = c.manifold.points[n];
+                    if (diagnostics?.ContactPoint is { } observe)
+                    {
+                        var indexA = owners[c.shapeIdA]; var indexB = owners[c.shapeIdB];
+                        var p = From(point.point); var normal = From(c.manifold.normal);
+                        Vector2 PointVelocity(int index)
+                        {
+                            var v = before![index]; var arm = p - v.Position;
+                            return v.Velocity + v.AngularVelocity * new Vector2(-arm.Y, arm.X);
+                        }
+                        var actual = Vector2.Dot(PointVelocity(indexB) - PointVelocity(indexA), normal);
+                        observe(new(time, step, views[indexA].Id, views[indexB].Id,
+                            components[c.shapeIdA], components[c.shapeIdB], p, normal, point.separation,
+                            point.normalVelocity, point.normalImpulse, point.totalNormalImpulse, point.tangentImpulse, point.persisted, actual));
+                    }
                     if (point.totalNormalImpulse > 0)
                     {
                         work.SolvedPoints++;
