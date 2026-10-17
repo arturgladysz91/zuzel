@@ -23,3 +23,11 @@ Pierwszy kontakt R1/R2 występuje dopiero w 0,915/0,7975/0,7375 s. Prędkość z
 Dodano opcjonalną obserwację sił, punktów styku i rezerw. Dla wszystkich trzech kroków pełny hash zaakceptowanych stanów z obserwacją jest dokładnie równy zachowanemu DLL z ca5339b. Krótkie okna: 0,24–0,42 s dla pierwszej rozbieżności i 0,70–1,08 s dla pierwszych styków. Dane: `shared-world-stability-before-*.csv`. Nie zapisujemy całej historii wewnętrznych kroków biegu.
 
 Odtworzenie samej diagnozy: `dotnet run --project tools/shared-world-speedway -c Debug -- diagnose stability-diagnosis`. Powyższe liczby odnoszą się do wersji przed naprawą; kolejne sekcje opiszą sprawdzone zmiany i wynik.
+
+## Minimalna naprawa sterowania
+
+Napęd, regulator boczny i cel yaw używają teraz wspólnej bazy toru. Składnik dośrodkowy używa prędkości wzdłużnej w tej bazie. Impuls kontaktu nadal zmienia rzeczywistą prędkość i obrót w Box2D; regulator tłumi błąd względem toru, zamiast obracać cel za kopnięciem. Dotychczasowy kąt poślizgu 12°, czasy odpowiedzi, siły CoreSim i przyczepność pozostają bez retuningu. Ograniczenie kołowe obejmuje cały żądany wektor siły translacyjnej; nie stanowi jeszcze skalibrowanego modelu pełnego klucza sił opony i momentu yaw. Dotychczasowy opór po upadku pozostaje w kierunku rzeczywistego ruchu; nie rozwijamy fizyki upadku.
+
+Wspólny krok kończy się na deadline reakcji, aktywacji polecenia lub odzyskania kontroli. Przed deadline nie wykonuje się przyszłego polecenia. Wszystkie ciała przechodzą ten sam odcinek czasu. Eksperymentalne deadline są kanonizowane do 1 µs, zamiast tworzyć podkroki nanosekundowe z reprezentacji stałych float. Nie zmieniono produkcyjnych czasów reakcji. Zachowano bazowe 5/10/20 ms, cztery wewnętrzne substeps i dotychczasowe lokalne dzielenie przy zbliżeniu; brak replay i nadpisywania transformacji.
+
+Testy sprawdzają siłę przy rozruchu, wspólny budżet, deadline poza siatką, wczesny ruch bez kontaktu, malejący błąd przy zmniejszaniu kroku, odwrócenie wejścia, rzeczywiste rozdzielenie przed ponownym epizodem i kontekst wyznaczany przez postęp na torze. Dwa zestawy testów Box2D należą do jednej nieparalelnej kolekcji: przypięty port ma globalny rejestr światów, którego tworzenie i niszczenie przez różne klasy xUnit nie może się ścigać.

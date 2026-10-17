@@ -8,6 +8,7 @@ using Xunit;
 namespace CoreSim.Tests;
 
 [Trait("Shard", "core")]
+[Collection("Box2D worlds")]
 public sealed class SharedWorldSpeedwayTests
 {
     [Theory]

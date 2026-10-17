@@ -75,10 +75,13 @@ public sealed class WorldRunner : IDisposable
             TimeSeconds = tick * stepSeconds;
             if (tick > 0 && tick % aiEvery == 0) Decide();
             var subdivisions = NearbySubdivisions(stepSeconds);
-            for (var sub = 0; sub < subdivisions; sub++)
+            var end = (tick + 1) * stepSeconds;
+            var nextTime = TimeSeconds;
+            while (nextTime < end - 1e-12)
             {
-                TimeSeconds = tick * stepSeconds + sub * stepSeconds / subdivisions;
+                TimeSeconds = nextTime;
                 Activate();
+                var duration = UntilControlDeadline(Math.Min(stepSeconds / subdivisions, end - TimeSeconds));
                 var before = views;
                 var passiveEnergy = Energy(before);
                 for (var i = 0; i < specs.Length; i++)
@@ -88,7 +91,7 @@ public sealed class WorldRunner : IDisposable
                     physics.Force(i, force.Force, force.Torque);
                 }
                 var watch = Stopwatch.GetTimestamp();
-                physics.Step((float)(stepSeconds / subdivisions), Parameters.SolverSubsteps);
+                physics.Step((float)duration, Parameters.SolverSubsteps);
                 Work.SolverElapsedMilliseconds += Stopwatch.GetElapsedTime(watch).TotalMilliseconds;
                 Work.SolverCalls++;
                 Work.SolverSubsteps += Parameters.SolverSubsteps;
@@ -100,7 +103,7 @@ public sealed class WorldRunner : IDisposable
                 Work.BroadPhaseProfileMilliseconds += profile.pairs;
                 Work.NarrowPhaseProfileMilliseconds += profile.collide;
                 Work.ConstraintProfileMilliseconds += profile.solveConstraints;
-                TimeSeconds = tick * stepSeconds + (sub + 1) * stepSeconds / subdivisions;
+                TimeSeconds = nextTime += duration;
                 views = new RiderView[specs.Length];
                 for (var i = 0; i < specs.Length; i++)
                 {
@@ -109,7 +112,7 @@ public sealed class WorldRunner : IDisposable
                     var distance = System.Numerics.Vector2.Distance(before[i].Position, b.Position);
                     if (!float.IsFinite(b.Position.X) || !float.IsFinite(b.Position.Y) || !float.IsFinite(b.Velocity.Length())
                         || !float.IsFinite(b.Heading) || !float.IsFinite(b.Spin)) throw new InvalidOperationException("Non-finite solver state.");
-                    if (distance > (before[i].Speed + 5) * stepSeconds / subdivisions + .1)
+                    if (distance > (before[i].Speed + 5) * duration + .1)
                         throw new InvalidOperationException("Unexpected transform discontinuity.");
                     var total = before[i].TotalReferenceMeters + delta;
                     views[i] = before[i] with { Position = b.Position, Velocity = b.Velocity, Heading = b.Heading,
@@ -135,13 +138,13 @@ public sealed class WorldRunner : IDisposable
                         && !finishTimes.ContainsKey(views[i].Id) && total >= requiredLaps * Frame.LapMeters)
                     {
                         var fraction = (requiredLaps * Frame.LapMeters - before[i].TotalReferenceMeters) / delta;
-                        finishTimes.Add(views[i].Id, TimeSeconds - stepSeconds / subdivisions * (1 - fraction));
+                        finishTimes.Add(views[i].Id, TimeSeconds - duration * (1 - fraction));
                         views[i] = views[i] with { Activity = RiderActivity.Finished };
                     }
                 }
                 watch = Stopwatch.GetTimestamp();
                 physics.ReadContacts(views, Work, BeginContact, (a, b) => contacts.Add(new(views[a].Id, views[b].Id, TimeSeconds, "end", 0, 0, 0)),
-                    diagnostics, before, TimeSeconds, (float)(stepSeconds / subdivisions));
+                    diagnostics, before, TimeSeconds, (float)duration);
                 Work.ContactProcessingMilliseconds += Stopwatch.GetElapsedTime(watch).TotalMilliseconds;
                 if (specs.All(s => s.Passive)) Work.MaximumPassiveEnergyIncreaseJoules = Math.Max(
                     Work.MaximumPassiveEnergyIncreaseJoules, Energy(views) - passiveEnergy);
@@ -176,7 +179,7 @@ public sealed class WorldRunner : IDisposable
     {
         for (var i = 0; i < specs.Length; i++)
         {
-            if (views[i].Activity == RiderActivity.Disturbed && TimeSeconds >= recoveryUntil[i])
+            if (views[i].Activity == RiderActivity.Disturbed && TimeSeconds + 1e-12 >= recoveryUntil[i])
                 views[i] = views[i] with { Activity = RiderActivity.Racing, Impairment = 0 };
             if (pending[i] is not { } command || TimeSeconds + 1e-12 < command.RequestedActivation) continue;
             views[i] = views[i] with { Drive = command.Drive, TargetOffsetMeters = command.TargetOffsetMeters };
@@ -199,6 +202,18 @@ public sealed class WorldRunner : IDisposable
         var count = Math.Max(1, (int)Math.Ceiling(travel / Parameters.NearbyMaximumTravelMeters));
         if (count > 128) throw new InvalidOperationException("Motion exceeds the tested local substep budget.");
         return count;
+    }
+    private double UntilControlDeadline(double duration)
+    {
+        void Before(double deadline)
+        { if (deadline > TimeSeconds + 1e-12) duration = Math.Min(duration, deadline - TimeSeconds); }
+        for (var i = 0; i < specs.Length; i++)
+        {
+            if (specs[i].SpeedMetersPerSecond == 0) Before(RiderController.TapeReactionSeconds(specs[i]));
+            if (pending[i] is { } command) Before(command.RequestedActivation);
+            if (views[i].Activity == RiderActivity.Disturbed) Before(recoveryUntil[i]);
+        }
+        return duration;
     }
     private void BeginContact(int a, int b, double impulse, double closingSpeed)
     {
