@@ -9,14 +9,16 @@ public sealed record InteractionProjectionControl(RiderDriveControl? CurrentStep
     bool CurrentStepHoldLateralPosition, InteractionLateralTarget? PhysicalTarget = null)
 {
     internal ScheduledControlChange? ScheduledControl { get; init; }
+    internal Func<ExecutedPathNode, ScheduledControlChange?>? ControlSource { get; init; }
     internal bool IsControlled => CurrentStepDriveControl.HasValue || CurrentStepHoldLateralPosition || PhysicalTarget.HasValue
-        || ScheduledControl is { Enabled: true };
+        || ScheduledControl is { Enabled: true } || ControlSource is not null;
     internal RiderDecision Decision(int target, int prefix) => new(target)
     {
         DriveControl = prefix == 0 ? CurrentStepDriveControl : null,
         HoldLateralPosition = prefix == 0 && CurrentStepHoldLateralPosition,
         InteractionTarget = PhysicalTarget,
         ScheduledControl = prefix == 0 ? ScheduledControl : null,
+        ControlSource = prefix == 0 ? ControlSource : null,
     };
 }
 public sealed record TrajectoryHorizonSegment(int SegmentIndex, int LapIndex, TrajectoryPhase Phase);

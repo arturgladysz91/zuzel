@@ -235,7 +235,7 @@ public sealed class SimulationEngine
         ArgumentNullException.ThrowIfNull(options);
         if (options.EnableContestedSpaceResponses && !snapshot.Step.UseLegacyPhysics)
         {
-            if (intents.Any(i => i.Decision.ScheduledControl is { Enabled: true }))
+            if (intents.Any(i => i.Decision.ScheduledControl is { Enabled: true } || i.Decision.ControlSource is not null))
                 throw new NotSupportedException("Predeclared experimental commands require ResolveProduction, not live #56B selection.");
             var owner = interactions ?? new();
             return new Interactions.ContestedSpaceInteractionCoordinator(owner.Clone())
@@ -555,12 +555,14 @@ public sealed class SimulationEngine
                 snapshot.Track.Geometry);
         var targetLane = LaneModel.ClampLane(decision.TargetLane);
         var scheduled = decision.ScheduledControl is { Enabled: true } command ? command : null;
-        if (scheduled is not null)
+        if (scheduled is not null || decision.ControlSource is not null)
         {
-            if (scheduled.RiderId != rider.RiderId) throw new ArgumentException("Scheduled command rider does not match the intent.");
+            if (scheduled is not null && decision.ControlSource is not null)
+                throw new ArgumentException("Choose a predeclared command or an in-progress source, not both.");
+            if (scheduled is not null && scheduled.RiderId != rider.RiderId) throw new ArgumentException("Scheduled command rider does not match the intent.");
             if (snapshot.Step.UseLegacyPhysics || !options.EnableContestedSpaceResponses)
                 throw new NotSupportedException("Scheduled controls require advanced interaction execution.");
-            _ = scheduled.PhysicalTarget?.Position(snapshot.Segment.Type, snapshot.Track.Geometry);
+            _ = scheduled?.PhysicalTarget?.Position(snapshot.Segment.Type, snapshot.Track.Geometry);
         }
         var interactionTarget = !snapshot.Step.UseLegacyPhysics && options.EnableContestedSpaceResponses
             ? decision.InteractionTarget?.Position(snapshot.Segment.Type, snapshot.Track.Geometry) : null;
@@ -633,7 +635,7 @@ public sealed class SimulationEngine
         var coupled = !snapshot.Step.UseLegacyPhysics && (!ExecutedPathTraversal.IsFixedLine(rider.LateralPosition, resolution.Lane)
             || (options.EnableContestedSpaceResponses && (decision.DriveControl is { PositiveDriveFraction: < 1f }
                 || decision.HoldLateralPosition || interactionTarget.HasValue)) || recovery is not null);
-        if (scheduled is not null && !coupled)
+        if ((scheduled is not null || decision.ControlSource is not null) && !coupled)
             throw new NotSupportedException("This PoC requires an already coupled traversal; switching a fixed-line integrator would change its prefix.");
         if (coupled)
             return ResolveMovingRider(snapshot, rider, decision, resolution, entrySpeed, plannedLane,
@@ -810,7 +812,7 @@ public sealed class SimulationEngine
         }
         var traversal = ExecutedPathTraversal.Traverse(snapshot, rider, resolution, entrySpeed, canonicalAdvance,
             launch, NextCorner, captureRich, positiveDriveFraction, holdLateralPosition, lateralAuthority01, contactRecovery,
-            interactionTargetPosition, scheduledControl, scheduledDriveAvailability01);
+            interactionTargetPosition, scheduledControl, scheduledDriveAvailability01, decision.ControlSource);
         var path = traversal.RichPath;
         var position = resolution.Outcome == SegmentOutcome.Crash
             ? rider.Position.Advance(canonicalAdvance, traversal.DistanceMeters)

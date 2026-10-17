@@ -1,0 +1,53 @@
+{
+  "BasePr85Sha": "d16df13cba27fb5f2aa270337d1d0f28fe1dc0a0",
+  "Patches": {
+    "src/CoreSim/Decisions/RiderDecision.cs": [
+      {
+        "Before": "    public InteractionLateralTarget? InteractionTarget { get; init; }\n    internal ScheduledControlChange? ScheduledControl { get; init; }\n}\n\n",
+        "After": "    public InteractionLateralTarget? InteractionTarget { get; init; }\n    internal ScheduledControlChange? ScheduledControl { get; init; }\n    // Experimental: called with the just accepted own point, never a future path.\n    internal Func<ExecutedPathNode, ScheduledControlChange?>? ControlSource { get; init; }\n}\n\n"
+      }
+    ],
+    "src/CoreSim/Decisions/TrajectoryEvaluator.cs": [
+      {
+        "Before": "{\n    internal ScheduledControlChange? ScheduledControl { get; init; }\n    internal bool IsControlled => CurrentStepDriveControl.HasValue || CurrentStepHoldLateralPosition || PhysicalTarget.HasValue\n        || ScheduledControl is { Enabled: true };\n    internal RiderDecision Decision(int target, int prefix) => new(target)\n    {\n",
+        "After": "{\n    internal ScheduledControlChange? ScheduledControl { get; init; }\n    internal Func<ExecutedPathNode, ScheduledControlChange?>? ControlSource { get; init; }\n    internal bool IsControlled => CurrentStepDriveControl.HasValue || CurrentStepHoldLateralPosition || PhysicalTarget.HasValue\n        || ScheduledControl is { Enabled: true } || ControlSource is not null;\n    internal RiderDecision Decision(int target, int prefix) => new(target)\n    {\n"
+      },
+      {
+        "Before": "        InteractionTarget = PhysicalTarget,\n        ScheduledControl = prefix == 0 ? ScheduledControl : null,\n    };\n}\n",
+        "After": "        InteractionTarget = PhysicalTarget,\n        ScheduledControl = prefix == 0 ? ScheduledControl : null,\n        ControlSource = prefix == 0 ? ControlSource : null,\n    };\n}\n"
+      }
+    ],
+    "src/CoreSim/SimulationEngine.cs": [
+      {
+        "Before": "        if (options.EnableContestedSpaceResponses && !snapshot.Step.UseLegacyPhysics)\n        {\n            if (intents.Any(i => i.Decision.ScheduledControl is { Enabled: true }))\n                throw new NotSupportedException(\"Predeclared experimental commands require ResolveProduction, not live #56B selection.\");\n            var owner = interactions ?? new();\n",
+        "After": "        if (options.EnableContestedSpaceResponses && !snapshot.Step.UseLegacyPhysics)\n        {\n            if (intents.Any(i => i.Decision.ScheduledControl is { Enabled: true } || i.Decision.ControlSource is not null))\n                throw new NotSupportedException(\"Predeclared experimental commands require ResolveProduction, not live #56B selection.\");\n            var owner = interactions ?? new();\n"
+      },
+      {
+        "Before": "        var targetLane = LaneModel.ClampLane(decision.TargetLane);\n        var scheduled = decision.ScheduledControl is { Enabled: true } command ? command : null;\n        if (scheduled is not null)\n        {\n            if (scheduled.RiderId != rider.RiderId) throw new ArgumentException(\"Scheduled command rider does not match the intent.\");\n            if (snapshot.Step.UseLegacyPhysics || !options.EnableContestedSpaceResponses)\n                throw new NotSupportedException(\"Scheduled controls require advanced interaction execution.\");\n            _ = scheduled.PhysicalTarget?.Position(snapshot.Segment.Type, snapshot.Track.Geometry);\n        }\n        var interactionTarget = !snapshot.Step.UseLegacyPhysics && options.EnableContestedSpaceResponses\n",
+        "After": "        var targetLane = LaneModel.ClampLane(decision.TargetLane);\n        var scheduled = decision.ScheduledControl is { Enabled: true } command ? command : null;\n        if (scheduled is not null || decision.ControlSource is not null)\n        {\n            if (scheduled is not null && decision.ControlSource is not null)\n                throw new ArgumentException(\"Choose a predeclared command or an in-progress source, not both.\");\n            if (scheduled is not null && scheduled.RiderId != rider.RiderId) throw new ArgumentException(\"Scheduled command rider does not match the intent.\");\n            if (snapshot.Step.UseLegacyPhysics || !options.EnableContestedSpaceResponses)\n                throw new NotSupportedException(\"Scheduled controls require advanced interaction execution.\");\n            _ = scheduled?.PhysicalTarget?.Position(snapshot.Segment.Type, snapshot.Track.Geometry);\n        }\n        var interactionTarget = !snapshot.Step.UseLegacyPhysics && options.EnableContestedSpaceResponses\n"
+      },
+      {
+        "Before": "            || (options.EnableContestedSpaceResponses && (decision.DriveControl is { PositiveDriveFraction: < 1f }\n                || decision.HoldLateralPosition || interactionTarget.HasValue)) || recovery is not null);\n        if (scheduled is not null && !coupled)\n            throw new NotSupportedException(\"This PoC requires an already coupled traversal; switching a fixed-line integrator would change its prefix.\");\n        if (coupled)\n",
+        "After": "            || (options.EnableContestedSpaceResponses && (decision.DriveControl is { PositiveDriveFraction: < 1f }\n                || decision.HoldLateralPosition || interactionTarget.HasValue)) || recovery is not null);\n        if ((scheduled is not null || decision.ControlSource is not null) && !coupled)\n            throw new NotSupportedException(\"This PoC requires an already coupled traversal; switching a fixed-line integrator would change its prefix.\");\n        if (coupled)\n"
+      },
+      {
+        "Before": "        var traversal = ExecutedPathTraversal.Traverse(snapshot, rider, resolution, entrySpeed, canonicalAdvance,\n            launch, NextCorner, captureRich, positiveDriveFraction, holdLateralPosition, lateralAuthority01, contactRecovery,\n            interactionTargetPosition, scheduledControl, scheduledDriveAvailability01);\n        var path = traversal.RichPath;\n        var position = resolution.Outcome == SegmentOutcome.Crash\n",
+        "After": "        var traversal = ExecutedPathTraversal.Traverse(snapshot, rider, resolution, entrySpeed, canonicalAdvance,\n            launch, NextCorner, captureRich, positiveDriveFraction, holdLateralPosition, lateralAuthority01, contactRecovery,\n            interactionTargetPosition, scheduledControl, scheduledDriveAvailability01, decision.ControlSource);\n        var path = traversal.RichPath;\n        var position = resolution.Outcome == SegmentOutcome.Crash\n"
+      }
+    ],
+    "src/CoreSim/Track/ExecutedPathTraversal.cs": [
+      {
+        "Before": "        bool holdLateralPosition = false, float lateralAuthority01 = 1f, bool contactRecovery = false,\n        float? interactionTargetPosition = null, Decisions.ScheduledControlChange? scheduledControl = null,\n        float scheduledDriveAvailability01 = 1f)\n    {\n        var segment = snapshot.Segment; var geometry = snapshot.Track.Geometry;\n",
+        "After": "        bool holdLateralPosition = false, float lateralAuthority01 = 1f, bool contactRecovery = false,\n        float? interactionTargetPosition = null, Decisions.ScheduledControlChange? scheduledControl = null,\n        float scheduledDriveAvailability01 = 1f,\n        Func<ExecutedPathNode, Decisions.ScheduledControlChange?>? controlSource = null)\n    {\n        var segment = snapshot.Segment; var geometry = snapshot.Track.Geometry;\n"
+      },
+      {
+        "Before": "            ? interactionTargetPosition.Value : resolution.Lane;\n        var pending = scheduledControl is { Enabled: true } ? scheduledControl : null;\n        Decisions.ScheduledControlActivation? activation = null;\n        var stepCount = 0; var subdivisionTotal = 0;\n",
+        "After": "            ? interactionTargetPosition.Value : resolution.Lane;\n        var pending = scheduledControl is { Enabled: true } ? scheduledControl : null;\n        if (controlSource is not null && !captureRich)\n            throw new NotSupportedException(\"In-progress command delivery requires accepted point capture.\");\n        if (controlSource is not null && pending is not null)\n            throw new ArgumentException(\"A traversal can accept only one command source.\");\n        Decisions.ScheduledControlActivation? activation = null;\n        var stepCount = 0; var subdivisionTotal = 0;\n"
+      },
+      {
+        "Before": "            if (Progress(start) == ContinuousCornerEnvelope.ApexProgress) apexLateral ??= lateral;\n            if (captureRich) nodes!.Add(Node(start, lateral, crash && start == end ? 0f : speed));\n            // No deadline split or replay. Only an existing, accepted point can activate.\n            if (pending is not null) ActivateAtAcceptedPoint();\n",
+        "After": "            if (Progress(start) == ContinuousCornerEnvelope.ApexProgress) apexLateral ??= lateral;\n            if (captureRich) nodes!.Add(Node(start, lateral, crash && start == end ? 0f : speed));\n            if (controlSource is not null)\n            {\n                var issued = controlSource(nodes![^1]);\n                if (issued is { Enabled: true })\n                {\n                    var observedAt = (double)rider.ElapsedTimeSeconds + nodes[^1].ElapsedTimeSeconds;\n                    if (issued.RiderId != rider.RiderId || issued.ActivationElapsedTimeSeconds < observedAt)\n                        throw new ArgumentException(\"A new command must match its rider and cannot predate its observation.\");\n                    _ = issued.PhysicalTarget?.Position(segment.Type, geometry);\n                    pending = issued;\n                    controlSource = null; // one issued command, never a per-step refresh\n                }\n            }\n            // No deadline split or replay. Only an existing, accepted point can activate.\n            if (pending is not null) ActivateAtAcceptedPoint();\n"
+      }
+    ]
+  }
+}

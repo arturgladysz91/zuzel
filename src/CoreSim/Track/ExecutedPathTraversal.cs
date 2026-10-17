@@ -46,7 +46,8 @@ internal static class ExecutedPathTraversal
         Func<float, float?> nextCornerTarget, bool captureRich = true, float positiveDriveFraction = 1f,
         bool holdLateralPosition = false, float lateralAuthority01 = 1f, bool contactRecovery = false,
         float? interactionTargetPosition = null, Decisions.ScheduledControlChange? scheduledControl = null,
-        float scheduledDriveAvailability01 = 1f)
+        float scheduledDriveAvailability01 = 1f,
+        Func<ExecutedPathNode, Decisions.ScheduledControlChange?>? controlSource = null)
     {
         var segment = snapshot.Segment; var geometry = snapshot.Track.Geometry;
         var corner = snapshot.Track.CornerTopology.CornerForSegment(snapshot.Step.SegmentIndex);
@@ -69,6 +70,10 @@ internal static class ExecutedPathTraversal
         var lateralTarget = interactionTargetPosition.HasValue && resolution.Outcome is SegmentOutcome.Ok or SegmentOutcome.Brake
             ? interactionTargetPosition.Value : resolution.Lane;
         var pending = scheduledControl is { Enabled: true } ? scheduledControl : null;
+        if (controlSource is not null && !captureRich)
+            throw new NotSupportedException("In-progress command delivery requires accepted point capture.");
+        if (controlSource is not null && pending is not null)
+            throw new ArgumentException("A traversal can accept only one command source.");
         Decisions.ScheduledControlActivation? activation = null;
         var stepCount = 0; var subdivisionTotal = 0;
         if (pending is not null) ActivateAtAcceptedPoint();
@@ -172,6 +177,19 @@ internal static class ExecutedPathTraversal
             nodeSurface = snapshot.TrackState.SampleSurface(snapshot.Step.SegmentIndex, lateral);
             if (Progress(start) == ContinuousCornerEnvelope.ApexProgress) apexLateral ??= lateral;
             if (captureRich) nodes!.Add(Node(start, lateral, crash && start == end ? 0f : speed));
+            if (controlSource is not null)
+            {
+                var issued = controlSource(nodes![^1]);
+                if (issued is { Enabled: true })
+                {
+                    var observedAt = (double)rider.ElapsedTimeSeconds + nodes[^1].ElapsedTimeSeconds;
+                    if (issued.RiderId != rider.RiderId || issued.ActivationElapsedTimeSeconds < observedAt)
+                        throw new ArgumentException("A new command must match its rider and cannot predate its observation.");
+                    _ = issued.PhysicalTarget?.Position(segment.Type, geometry);
+                    pending = issued;
+                    controlSource = null; // one issued command, never a per-step refresh
+                }
+            }
             // No deadline split or replay. Only an existing, accepted point can activate.
             if (pending is not null) ActivateAtAcceptedPoint();
         }

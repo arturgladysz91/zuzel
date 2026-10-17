@@ -1,5 +1,11 @@
 # Core simulation specification
 
+Experimental feasibility extension: an internal own-point `ControlSource` may create
+one command during an already coupled traversal, as an alternative to the predeclared
+command below. It cannot backdate activation or provide a second command. This is
+command delivery only; no same-time peer observation or reactive #56B is enabled.
+See [scope and blocking contract](experiments/reactive-in-segment-decisions.md).
+
 Experimental internal [scheduled control contract](experiments/mid-segment-control-activation.md):
 one predeclared command per rider traversal may change existing drive/hold/physical
 target controls only between accepted coupled-integration steps. The deadline is
