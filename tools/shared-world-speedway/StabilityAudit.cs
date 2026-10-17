@@ -5,6 +5,95 @@ namespace SharedWorldSpeedway;
 
 public static class StabilityAudit
 {
+    public static IReadOnlyList<Scenario> Cases()
+    {
+        var dense = Scenarios.DenseStart(); var bend = Scenarios.D();
+        return new[] { Scenarios.A(4), Scenarios.C(), Scenarios.Support(), bend, dense,
+            dense with { Name = "dense-no-traffic-response", Riders = dense.Riders.Select(r => r with { TrafficEnabled = false }).ToArray() },
+            Density(.98f), Density(1.02f), CrossSpeed(-.05f), CrossSpeed(.05f), BendSpeed(.95f), BendSpeed(1.05f) };
+        Scenario Density(float factor) => dense with { Name = "dense-spacing-" + factor.ToString("F2", CultureInfo.InvariantCulture),
+            Riders = dense.Riders.Select(r => r with { OffsetMeters = 4 + (r.OffsetMeters - 4) * factor }).ToArray() };
+        Scenario CrossSpeed(float delta) => dense with { Name = "dense-cross-speed-" + delta.ToString("F2", CultureInfo.InvariantCulture),
+            Riders = dense.Riders.Select(r => r with { InitialOutwardSpeed = r.Profile.Id % 2 == 1 ? delta : -delta }).ToArray() };
+        Scenario BendSpeed(float factor) => bend with { Name = "bend-closing-" + factor.ToString("F2", CultureInfo.InvariantCulture),
+            Riders = bend.Riders.Select((r, i) => i == 0 ? r with { InitialOutwardSpeed = r.InitialOutwardSpeed * factor } : r).ToArray() };
+    }
+    public static void Validate(string directory)
+    {
+        Directory.CreateDirectory(directory);
+        using var comparison = File.CreateText(Path.Combine(directory, "comparison.csv"));
+        using var force = File.CreateText(Path.Combine(directory, "force-budgets.csv"));
+        using var context = File.CreateText(Path.Combine(directory, "contexts.csv"));
+        using var point = File.CreateText(Path.Combine(directory, "first-impact-points.csv"));
+        comparison.WriteLine("scenario,step_s,reference_step_s,aligned_samples,max_position_difference_m,max_velocity_difference_mps,max_heading_difference_rad,pre_contact_position_difference_m,pre_contact_velocity_difference_mps,max_finish_difference_s,first_contact_s,reference_first_contact_s,first_ratio_a,reference_first_ratio_a");
+        force.WriteLine("scenario,step_s,max_force_to_grip_ratio");
+        context.WriteLine("scenario,step_s,time_s,rider,context,segment,reference_progress_m");
+        point.WriteLine("scenario,step_s,time_s,rider_a,rider_b,closing_mps,impulse_ns,persisted");
+        var results = new List<RunResult>();
+        foreach (var scenario in Cases())
+        {
+            var runs = new List<(RunResult Result, SortedDictionary<long, WorldSnapshot> Samples)>();
+            foreach (var step in new[] { .02, .01, .005 })
+            {
+                var samples = new SortedDictionary<long, WorldSnapshot>();
+                var phases = new Dictionary<int, RacingContext>();
+                double maxForceRatio = 0; double? firstImpact = null;
+                var diagnostics = new WorldDiagnostics {
+                    Force = o => { if (o.GripBudgetNewtons is > 0)
+                        maxForceRatio = Math.Max(maxForceRatio, o.ForceNewtons.Length() / o.GripBudgetNewtons.Value); },
+                    ContactPoint = o => {
+                        if (o.TotalNormalImpulseNewtonSeconds <= 0) return;
+                        firstImpact ??= o.TimeSeconds;
+                        if (o.TimeSeconds <= firstImpact + .04)
+                            Row(point, scenario.Name, step, o.TimeSeconds, o.RiderA, o.RiderB,
+                                -o.NormalVelocityMetersPerSecond, o.TotalNormalImpulseNewtonSeconds, o.Persisted);
+                    }
+                };
+                using var world = new WorldRunner(scenario.Riders, diagnostics: diagnostics);
+                var result = world.Run(scenario.Name, step, scenario.DurationSeconds, scenario.Laps, s => {
+                    if (CommonTime(s.TimeSeconds)) samples[(long)Math.Round(s.TimeSeconds * 1e6)] = s;
+                    foreach (var v in s.Riders)
+                    {
+                        if (!phases.TryGetValue(v.Id, out var last) || last != v.Context)
+                            Row(context, scenario.Name, step, s.TimeSeconds, v.Id, v.Context, v.Road.Segment, v.TotalReferenceMeters);
+                        phases[v.Id] = v.Context;
+                    }
+                });
+                results.Add(result); runs.Add((result, samples));
+                Row(force, scenario.Name, step, maxForceRatio);
+            }
+            var reference = runs[^1];
+            foreach (var run in runs.Take(2))
+            {
+                var touch = run.Result.Contacts.FirstOrDefault(c => c.Kind == "begin");
+                var refTouch = reference.Result.Contacts.FirstOrDefault(c => c.Kind == "begin");
+                var before = Math.Min(touch?.TimeSeconds ?? double.PositiveInfinity, refTouch?.TimeSeconds ?? double.PositiveInfinity);
+                double pos = 0, vel = 0, heading = 0, prePos = 0, preVel = 0;
+                var count = 0;
+                foreach (var (key, sample) in run.Samples)
+                {
+                    if (!reference.Samples.TryGetValue(key, out var other)) continue;
+                    count++;
+                    for (var i = 0; i < sample.Riders.Count; i++)
+                    {
+                        var a = sample.Riders[i]; var b = other.Riders[i];
+                        var dp = System.Numerics.Vector2.Distance(a.Position, b.Position);
+                        var dv = System.Numerics.Vector2.Distance(a.Velocity, b.Velocity);
+                        pos = Math.Max(pos, dp); vel = Math.Max(vel, dv);
+                        heading = Math.Max(heading, Math.Abs(CoreSim.PhysicalSpace.BikeAngles.Wrap(a.Heading - b.Heading)));
+                        if (sample.TimeSeconds < before) { prePos = Math.Max(prePos, dp); preVel = Math.Max(preVel, dv); }
+                    }
+                }
+                var finishDifference = run.Result.FinishTimes.Count == 0 ? (double?)null : run.Result.FinishTimes
+                    .Max(pair => Math.Abs(pair.Value - reference.Result.FinishTimes[pair.Key]));
+                Row(comparison, scenario.Name, run.Result.StepSeconds, reference.Result.StepSeconds, count,
+                    pos, vel, heading, prePos, preVel, finishDifference, touch?.TimeSeconds, refTouch?.TimeSeconds,
+                    touch?.SeverityRatioA, refTouch?.SeverityRatioA);
+            }
+        }
+        File.WriteAllText(Path.Combine(directory, "scenarios.json"), JsonSerializer.Serialize(results, Audit.Json));
+        Console.WriteLine("Saved 36 targeted executions and aligned physical-time comparisons to " + Path.GetFullPath(directory));
+    }
     // Deliberately bounded evidence: first control divergence and first impact only.
     public static void Diagnose(string directory)
     {

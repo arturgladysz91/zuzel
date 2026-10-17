@@ -1,5 +1,7 @@
 # Shared World Speedway Simulation — wynik prototypu
 
+Aktualizacja po `ca5339b`: [stabilizacja regulatora i kontaktów](shared-world-stability.md). Poniższe pomiary i niezaliczony dense opisują pierwotną wersję #87; zachowano je jako punkt odniesienia.
+
 Baza: `main` **561c06b6e486b4cbb61db66a3a2ad1fab33a0227**, zweryfikowany przez GitHub przed rozpoczęciem prac. Pomiar: 2026-10-17.
 **B — architektura jest obiecująca, ale model sterowania i skutków w gęstym kontakcie wymaga poprawki.**
 
