@@ -28,11 +28,12 @@ public static class TacticalAudit
     }
     public static double ClearGap(RiderView own, RiderView other)
         => Extent(own, own.Road.Tangent).Rear - Extent(other, own.Road.Tangent).Front;
-    public static TacticalEvidence Execute(Scenario scenario, double step, bool enabled, bool reverse = false)
+    public static TacticalEvidence Execute(Scenario scenario, double step, bool enabled, bool reverse = false, bool side = false,
+        Action<ContestObservation>? contestObserver = null)
     {
         double grip = 0;
         using var world = new WorldRunner(reverse ? scenario.Riders.Reverse() : scenario.Riders,
-            parameters: new() {EnableTacticalRacing = enabled}, diagnostics: new() {Force = f => {
+            parameters: new() {EnableTacticalRacing = enabled, EnableSideBySideContests = side}, diagnostics: new() {Contest = contestObserver, Force = f => {
                 if (f.GripBudgetNewtons is > 0) grip = Math.Max(grip, f.ForceNewtons.Length() / f.GripBudgetNewtons.Value);
             }});
         var samples = new List<WorldSnapshot> {world.Snapshot};

@@ -2,6 +2,12 @@ using System.Text.Json;
 using SharedWorldSpeedway;
 
 var scenario = args.FirstOrDefault() ?? "A";
+if (scenario == "side-diagnose") { SideBySideAudit.Diagnose(args.Length > 1 ? args[1] : "side-results"); return; }
+if (scenario == "side-pairs") { SideBySideAudit.Run(args.Length > 1 ? args[1] : "side-results",
+    SideBySideScenarios.PairCases().Where(s => args.Length < 3 || s.Name == args[2]).ToArray()); return; }
+if (scenario == "side-fields") { SideBySideAudit.Run(args.Length > 1 ? args[1] : "side-results", SideBySideScenarios.FieldCases()); return; }
+if (scenario == "side") { SideBySideAudit.Run(args.Length > 1 ? args[1] : "side-results", SideBySideScenarios.Cases()); return; }
+if (scenario == "side-benchmark") { SideBySideAudit.Benchmark(args.Length > 1 ? args[1] : "side-results"); return; }
 if (scenario == "audit") { Audit.Run(args.Length > 1 ? args[1] : "shared-world-results"); return; }
 if (scenario == "diagnose") { StabilityAudit.Diagnose(args.Length > 1 ? args[1] : "stability-diagnosis"); return; }
 if (scenario == "stability") { StabilityAudit.Validate(args.Length > 1 ? args[1] : "stability-results"); return; }
@@ -15,14 +21,16 @@ var step = args.Length > 1 ? double.Parse(args[1], System.Globalization.CultureI
 var selected = scenario switch { "A" => Scenarios.A(), "heat" => Scenarios.A(4), "B" => Scenarios.B(),
     "B0" => Scenarios.B(false), "C" => Scenarios.C(), "D" => Scenarios.D(), "E" => Scenarios.E(),
     "F" => Scenarios.F(), "G" => Scenarios.G(), "stress" => Scenarios.DenseStart(), "support" => Scenarios.Support(),
-    "TA" => TacticalScenarios.A(),
+    "TA" => TacticalScenarios.A(), "SA" => SideBySideScenarios.A(), "SE" => SideBySideScenarios.E(), "SF" => SideBySideScenarios.F(),
     _ => throw new ArgumentException("Use A/B/B0/C/D/E/F/G/heat/stress [0.005|0.01|0.02]") };
-using var world = new WorldRunner(selected.Riders, parameters: new() {EnableTacticalRacing = args.Contains("--tactics")});
+using var world = new WorldRunner(selected.Riders, parameters: new() {
+    EnableTacticalRacing = args.Contains("--tactics") || args.Contains("--side-by-side"),
+    EnableSideBySideContests = args.Contains("--side-by-side")});
 var result = world.Run(selected.Name, step, selected.DurationSeconds, selected.Laps,
     args.Contains("--trace") ? s => {
         if (Math.Abs(s.TimeSeconds * 2 - Math.Round(s.TimeSeconds * 2)) < 1e-8)
             foreach (var v in s.Riders) Console.Error.WriteLine(FormattableString.Invariant(
                 $"{s.TimeSeconds:F3},{v.Id},{v.Position.X:F3},{v.Position.Y:F3},{v.Speed:F3},{v.Road.Segment},{v.Road.OffsetMeters:F3},{v.TotalReferenceMeters:F3}"));
-    } : null, stopOnCrash: args.Contains("--tactics") || args.Contains("--stop-on-crash"));
+    } : null, stopOnCrash: args.Contains("--tactics") || args.Contains("--side-by-side") || args.Contains("--stop-on-crash"));
 Console.WriteLine(JsonSerializer.Serialize(result, new JsonSerializerOptions { WriteIndented = true,
     IncludeFields = true, NumberHandling = System.Text.Json.Serialization.JsonNumberHandling.AllowNamedFloatingPointLiterals }));

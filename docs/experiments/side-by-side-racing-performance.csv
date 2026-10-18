@@ -1,0 +1,13 @@
+scenario,side,duration_s,clipped,elapsed_ms,cpu_ms,allocated_bytes,tactical_ms,samples,batch,pair_observations,rider_observations,side_observations,side_candidates,blocked_side_candidates,all_corridor_checks,decisions,actual_control_changes,solver_calls
+solo-heat,False,60.48,False,33.9233,40.625,12643424,0.16472000000000014,5,2,0,604,0,0,0,0,0,0,6064
+solo-heat,True,60.48,False,34.6168,46.875,12642918,0.21503999999999937,5,2,0,604,0,0,0,0,0,0,6064
+four-distant,False,0.8,False,1.22715,1.5625,752499,0.003920000000000001,5,2,42,28,0,0,0,0,0,0,80
+four-distant,True,0.8,False,1.24395,0,752062,0.0040999999999999995,5,2,42,28,0,0,0,0,0,0,80
+SA-entry-parallel,False,4,False,3.2802,3.125,1421504,0.023520000000000006,5,2,39,78,0,0,0,2,1,1,402
+SA-entry-parallel,True,4,False,3.35105,3.125,1457686,0.08808999999999999,5,2,39,78,2,4,0,60,2,2,402
+SE-original-Motoarena,False,12,False,21.7338,21.875,4704364,0.27618000000000015,5,2,714,476,0,0,0,0,0,0,1584
+SE-original-Motoarena,True,12,False,19.3652,28.125,4374772,0.5684700000000003,5,2,714,476,20,43,6,113,11,3,1404
+SF-varied-Motoarena,False,12,False,22.8486,29.6875,5279363,0.22438999999999992,5,2,714,476,0,0,0,6,6,6,1784
+SF-varied-Motoarena,True,12,False,17.88765,18.75,4357139,0.33022000000000007,5,2,714,476,21,45,6,125,15,5,1405
+G-dense-stress,False,12,False,18.6145,18.75,4527508,0.15495000000000017,5,2,714,476,0,0,0,4,11,11,1505
+G-dense-stress,True,12,False,18.8477,18.75,4729156,0.29292,5,2,714,476,40,80,61,80,13,3,1463

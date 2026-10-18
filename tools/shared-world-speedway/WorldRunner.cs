@@ -39,6 +39,8 @@ public sealed class WorldRunner : IDisposable
     {
         this.diagnostics = diagnostics;
         Parameters = parameters ?? new();
+        if (Parameters.EnableSideBySideContests && !Parameters.EnableTacticalRacing)
+            throw new ArgumentException("Side-by-side contests require experimental tactical racing.", nameof(parameters));
         Frame = new(track ?? CoreSim.Analysis.MatchedVenueProfiles.CreateMotoarenaStandingStartTrack());
         if (Parameters.AiIntervalSeconds != .1 || Parameters.SolverSubsteps is < 1 or > 8
             || new[] { Parameters.LateralResponseSeconds, Parameters.YawResponseSeconds, Parameters.SlideAngleRadians,
@@ -178,7 +180,10 @@ public sealed class WorldRunner : IDisposable
     private void Decide()
     {
         var snapshot = Snapshot; // ALL observers see this same immutable accepted state
-        if (Parameters.EnableTacticalRacing) { DecideTactics(snapshot); return; }
+        if (Parameters.EnableTacticalRacing) {
+            var started = Stopwatch.GetTimestamp(); DecideTactics(snapshot);
+            Work.TacticalElapsedMilliseconds += Stopwatch.GetElapsedTime(started).TotalMilliseconds; return;
+        }
         for (var i = 0; i < specs.Length; i++)
         {
             Work.AiUpdates++;
@@ -200,7 +205,7 @@ public sealed class WorldRunner : IDisposable
         {
             Work.AiUpdates++;
             var decision = TrafficDecision.Observe(snapshot, snapshot.Riders[i], specs[i], Parameters, Work,
-                tactics[i], pairs, Frame, surface, pending[i] is not null);
+                tactics[i], pairs, Frame, surface, pending[i] is not null, diagnostics?.Contest);
             if (decision is null) continue;
             if (pending[i] is { } waiting)
             {
@@ -265,7 +270,12 @@ public sealed class WorldRunner : IDisposable
         for (var i = 0; i < specs.Length; i++)
         {
             if (specs[i].SpeedMetersPerSecond == 0) Before(RiderController.TapeReactionSeconds(specs[i]));
-            if (pending[i] is { } command) Before(command.RequestedActivation);
+            // A logical Hold that leaves both actuators unchanged does not
+            // justify repartitioning Box2D time. Acknowledge it at the first
+            // existing accepted boundary AFTER its complete reaction delay.
+            if (pending[i] is { } command && (!Parameters.EnableSideBySideContests
+                || command.Drive != views[i].Drive || command.TargetOffsetMeters != views[i].TargetOffsetMeters))
+                Before(command.RequestedActivation);
             if (views[i].Activity == RiderActivity.Disturbed) Before(recoveryUntil[i]);
         }
         return duration;
