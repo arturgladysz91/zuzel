@@ -12,6 +12,7 @@ namespace SharedWorldSpeedway;
 /// <summary>One accepted world, one clock. Never runs or rewinds a segment traversal.</summary>
 public sealed class WorldRunner : IDisposable
 {
+    private const double CurvatureEventResolutionSeconds = .000001;
     public TrackFrame Frame { get; }
     public WorldParameters Parameters { get; }
     public WorldWork Work { get; } = new();
@@ -99,6 +100,7 @@ public sealed class WorldRunner : IDisposable
                     var force = RiderController.Forces(views[i], specs[i], Frame, surface, Parameters,
                         TimeSeconds, physics.Masses[i], physics.Inertias[i], diagnostics?.Force);
                     physics.Force(i, force.Force, force.Torque);
+                    duration = UntilCurvatureChange(i, force.Force, duration);
                 }
                 var watch = Stopwatch.GetTimestamp();
                 physics.Step((float)duration, Parameters.SolverSubsteps);
@@ -231,6 +233,27 @@ public sealed class WorldRunner : IDisposable
             if (views[i].Activity == RiderActivity.Disturbed) Before(recoveryUntil[i]);
         }
         return duration;
+    }
+    private double UntilCurvatureChange(int i, System.Numerics.Vector2 force, double duration)
+    {
+        // Estimate only the next force discontinuity from the current accepted
+        // state and held force. No body is predicted/committed or replayed.
+        var beta = (Parameters.SolverSubsteps + 1d) / (2 * Parameters.SolverSubsteps);
+        if (specs[i].Passive || views[i].Activity == RiderActivity.Crashed) return duration;
+        var tangent = views[i].Road.Tangent;
+        var v = System.Numerics.Vector2.Dot(views[i].Velocity, tangent);
+        if (v <= 0) return duration;
+        var acceleration = System.Numerics.Vector2.Dot(force, tangent) / physics.Masses[i];
+        var distance = Frame.DistanceToCurvatureChange(views[i].Road);
+        if (distance > v * duration + beta * acceleration * duration * duration) return duration;
+        var discriminant = v * v + 4 * beta * acceleration * distance;
+        if (discriminant < 0) return duration;
+        var time = 2 * distance / (v + Math.Sqrt(discriminant));
+        // One microsecond resolution avoids chasing float coordinate ulps.
+        // Rounding upward crosses the boundary before observing its new force.
+        time = Math.Max(CurvatureEventResolutionSeconds,
+            Math.Ceiling(time / CurvatureEventResolutionSeconds) * CurvatureEventResolutionSeconds);
+        return Math.Min(duration, time);
     }
     private void BeginContact(int a, int b, double impulse, double closingSpeed)
     {
