@@ -39,6 +39,8 @@ public sealed class WorldRunner : IDisposable
     {
         this.diagnostics = diagnostics;
         Parameters = parameters ?? new();
+        if (Parameters.EnableTacticalQualityScoring && (!Parameters.EnableTacticalRacing || !Parameters.EnableSideBySideContests))
+            throw new ArgumentException("Quality scoring requires tactical racing and side-by-side contests.", nameof(parameters));
         if (Parameters.EnableSideBySideContests && !Parameters.EnableTacticalRacing)
             throw new ArgumentException("Side-by-side contests require experimental tactical racing.", nameof(parameters));
         Frame = new(track ?? CoreSim.Analysis.MatchedVenueProfiles.CreateMotoarenaStandingStartTrack());

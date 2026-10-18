@@ -9,6 +9,7 @@ public sealed record WorldParameters
 {
     public bool EnableTacticalRacing { get; init; }
     public bool EnableSideBySideContests { get; init; }
+    public bool EnableTacticalQualityScoring { get; init; }
     public double AiIntervalSeconds { get; init; } = .1;
     public float LateralResponseSeconds { get; init; } = .65f;
     public float YawResponseSeconds { get; init; } = .35f;
@@ -65,6 +66,7 @@ public sealed class WorldWork
     public long TacticalPairObservations, TacticalObservations, TacticalCandidates, TacticalDecisions,
         ControlChanges, CancelledCommands, MaximumTacticalPairs;
     public long SideObservations, SideCandidates, SideBlockedCandidates, SideHoldChoices;
+    public long QualitySamples;
     public double TacticalElapsedMilliseconds;
 }
 public sealed record RunResult(string Name, double StepSeconds, double TimeSeconds, WorldWork Work,

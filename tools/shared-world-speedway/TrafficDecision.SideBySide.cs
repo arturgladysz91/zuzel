@@ -59,36 +59,16 @@ public static partial class TrafficDecision
         if (opponent.Id == 0) return null;
         work.SideObservations++;
         var road = own.Road;
-        var along = Vector2.Dot(own.Velocity, road.Tangent);
-        var outward = Vector2.Dot(own.Velocity, road.Outward);
         var defending = own.TotalReferenceMeters >= opponent.TotalReferenceMeters;
         var quality = ((defending ? spec.Profile.Gameplay.Abilities.Defense : spec.Profile.Gameplay.Abilities.Attack) - 1) / 98d;
         horizon = reaction + ContestResponseTimeConstants * p.LateralResponseSeconds
             * (ContestMinimumHorizonFraction + ContestQualityHorizonFraction * quality);
         var movement = horizon - reaction;
-        var q = movement / p.LateralResponseSeconds;
-        // Own accepted command remains in force throughout reaction. Estimate
-        // that delay before comparing the three bounded PD responses.
-        var delay = reaction / p.LateralResponseSeconds; var damping = Math.Exp(-delay);
-        var error = road.OffsetMeters - own.TargetOffsetMeters;
-        var atActivation = own.TargetOffsetMeters + (error * (1 + delay) + outward * reaction) * damping;
-        var outwardAtActivation = (outward * (1 - delay) - error * reaction
-            / (p.LateralResponseSeconds * p.LateralResponseSeconds)) * damping;
-        double Rate(float target)
-        {
-            var offset = target + ((atActivation - target) * (1 + q) + outwardAtActivation * movement) * Math.Exp(-q);
-            var radius = frame.Track.Geometry.InnerRadiusMeters + offset;
-            var width = LaneModel.UsableRacingWidthMeters(frame.Track.Segments[road.Segment].Type, frame.Track.Geometry);
-            var grip = surface.SampleSurface(road.Segment, Math.Clamp((float)offset / width * 4, 0, 4));
-            var safe = SegmentPhysics.MaxSafeTurnSpeedForRadius((float)radius, grip, spec.Profile.Skills, spec.Setup);
-            var outwardAtEnd = (outwardAtActivation * (1 - q) - (atActivation - target) * movement
-                / (p.LateralResponseSeconds * p.LateralResponseSeconds)) * Math.Exp(-q);
-            // Mean voluntary acceleration over the bounded response, not an
-            // instantaneous jump to the peak cap held for the entire horizon.
-            var recovery = (outwardAtActivation - outwardAtEnd) / movement;
-            var possible = Math.Min(along, Math.Sqrt(Math.Max(0, (safe * safe / radius - Math.Max(0, recovery)) * radius)));
-            return frame.ReferenceSpeed(road, possible, offset);
-        }
+        var scoringSeconds = p.EnableTacticalQualityScoring
+            ? ContestScoring.HorizonSeconds(own, spec, p, frame, defending) : movement;
+        double Rate(float target) => p.EnableTacticalQualityScoring
+            ? ContestScoring.Progress(own, spec, p, frame, surface, target, scoringSeconds, work) / scoringSeconds
+            : ContestScoring.LegacyRate(own, spec, p, frame, surface, target, movement);
         var baseline = Rate(own.TargetOffsetMeters); var best = baseline;
         var targetLine = own.TargetOffsetMeters; var gainNeeded = ContestBaseGainMetersPerSecond + ContestQualityMarginMetersPerSecond * (1 - quality);
         var alternative = false;

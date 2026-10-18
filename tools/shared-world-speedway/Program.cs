@@ -2,6 +2,12 @@ using System.Text.Json;
 using SharedWorldSpeedway;
 
 var scenario = args.FirstOrDefault() ?? "A";
+if (scenario == "quality-freeze") { TacticalQualityAudit.Freeze(args[1]); return; }
+if (scenario == "quality-evaluate") { TacticalQualityAudit.Evaluate(args[1], args[2]); return; }
+if (scenario == "quality-races") { TacticalQualityAudit.Races(args[1]); return; }
+if (scenario == "quality-benchmark") { SideBySideAudit.Benchmark(args[1], qualityComparison: true); TacticalQualityAudit.ScoringCost(args[2], args[1]); return; }
+if (scenario == "quality-score-cost") { TacticalQualityAudit.ScoringCost(args[1], args[2]); return; }
+if (scenario == "quality-reaction") { TacticalQualityAudit.ReactionProbe(args[1], args[2]); return; }
 if (scenario == "side-diagnose") { SideBySideAudit.Diagnose(args.Length > 1 ? args[1] : "side-results"); return; }
 if (scenario == "side-pairs") { SideBySideAudit.Run(args.Length > 1 ? args[1] : "side-results",
     SideBySideScenarios.PairCases().Where(s => args.Length < 3 || s.Name == args[2]).ToArray()); return; }
@@ -24,8 +30,9 @@ var selected = scenario switch { "A" => Scenarios.A(), "heat" => Scenarios.A(4),
     "TA" => TacticalScenarios.A(), "SA" => SideBySideScenarios.A(), "SE" => SideBySideScenarios.E(), "SF" => SideBySideScenarios.F(),
     _ => throw new ArgumentException("Use A/B/B0/C/D/E/F/G/heat/stress [0.005|0.01|0.02]") };
 using var world = new WorldRunner(selected.Riders, parameters: new() {
-    EnableTacticalRacing = args.Contains("--tactics") || args.Contains("--side-by-side"),
-    EnableSideBySideContests = args.Contains("--side-by-side")});
+    EnableTacticalRacing = args.Contains("--tactics") || args.Contains("--side-by-side") || args.Contains("--quality"),
+    EnableSideBySideContests = args.Contains("--side-by-side") || args.Contains("--quality"),
+    EnableTacticalQualityScoring = args.Contains("--quality")});
 var result = world.Run(selected.Name, step, selected.DurationSeconds, selected.Laps,
     args.Contains("--trace") ? s => {
         if (Math.Abs(s.TimeSeconds * 2 - Math.Round(s.TimeSeconds * 2)) < 1e-8)
