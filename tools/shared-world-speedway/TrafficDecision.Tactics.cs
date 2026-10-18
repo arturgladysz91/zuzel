@@ -49,7 +49,7 @@ public static partial class TrafficDecision
     }
     public static DecisionEvent? Observe(WorldSnapshot snapshot, RiderView own, RiderSpec spec,
         WorldParameters p, WorldWork work, TacticalMemory memory, IReadOnlyList<RacingPair> pairs,
-        TrackFrame frame, TrackStateSnapshot surface, bool safetyOnly = false)
+        TrackFrame frame, TrackStateSnapshot surface, bool safetyOnly = false, Action<ContestObservation>? observeContest = null)
     {
         if (!spec.TrafficEnabled || own.Activity is RiderActivity.Crashed or RiderActivity.Finished) return null;
         work.TacticalObservations++;
@@ -76,6 +76,17 @@ public static partial class TrafficDecision
             var lateral = Vector2.Dot(delta, road.Outward);
             if (along > 0 && along < bestGap) { opponent = other; bestGap = along; }
             if (along < 0 && -along < rearGap) { pursuer = other; rearGap = -along; }
+            if (p.EnableSideBySideContests && Math.Abs(along) <= Bike.OverallMechanicalLengthMeters + margin
+                && Math.Abs(other.TotalReferenceMeters - own.TotalReferenceMeters) <= Bike.OverallMechanicalLengthMeters + margin
+                && (own.TargetOffsetMeters - road.OffsetMeters) * lateral > CrossingProjectionSquareMeters
+                && (Math.Abs(own.TargetOffsetMeters - other.Road.OffsetMeters)
+                    < HalfWidth(own, road.Heading) + HalfWidth(other, road.Heading) + margin
+                    || (other.Road.OffsetMeters - road.OffsetMeters) * (other.Road.OffsetMeters - own.TargetOffsetMeters) <= 0))
+            {
+                work.Threats++; memory.ClearSince = 0;
+                return Command(other, TrafficAction.HoldLine, (float)road.OffsetMeters, own.Drive,
+                    RacingIntent.ContestHold, "OccupiedAlongsideCut", true);
+            }
             var closing = -Vector2.Dot(delta, relative);
             if (closing <= .01f || relative.LengthSquared() < .01f) continue;
             var t = Math.Clamp(closing / relative.LengthSquared(), 0, (float)SafetyHorizonSeconds);
@@ -101,7 +112,7 @@ public static partial class TrafficDecision
             if ((target - road.OffsetMeters) * lateral > 0) target = (float)road.OffsetMeters;
             if (!safetyOnly && own.Drive == 0 && Math.Abs(target - own.TargetOffsetMeters) < TargetChangeMeters) return null;
             var stoppedCrossing = Math.Abs(target - own.TargetOffsetMeters) > TargetChangeMeters
-                && memory.Intent is RacingIntent.AttackInside or RacingIntent.AttackOutside;
+                && memory.Intent is RacingIntent.AttackInside or RacingIntent.AttackOutside or RacingIntent.ContestInside or RacingIntent.ContestOutside;
             return Command(other, TrafficAction.BackOut, target, 0, stoppedCrossing ? RacingIntent.None : memory.Intent,
                 stoppedCrossing ? "AbortThreatenedCrossing" : "ImmediateThreat", true);
         }
@@ -117,17 +128,21 @@ public static partial class TrafficDecision
                 var a = snapshot.Riders[pair.A]; var b = snapshot.Riders[pair.B];
                 if (a.Id != own.Id && b.Id != own.Id) continue;
                 var other = a.Id == own.Id ? b : a; var delta = other.Position - own.Position;
-                var longitudinal = Vector2.Dot(delta, road.Tangent);
-                var relativeLong = Vector2.Dot(other.Velocity - own.Velocity, road.Tangent);
+                var physicalAlong = Vector2.Dot(delta, road.Tangent);
+                var longitudinal = p.EnableSideBySideContests ? other.TotalReferenceMeters - own.TotalReferenceMeters : physicalAlong;
+                var relativeLong = p.EnableSideBySideContests ? frame.ReferenceSpeed(other) - frame.ReferenceSpeed(own)
+                    : Vector2.Dot(other.Velocity - own.Velocity, road.Tangent);
                 var nearLong = Math.Abs(longitudinal) <= Bike.OverallMechanicalLengthMeters + margin
                     || longitudinal * (longitudinal + relativeLong * horizon) <= 0;
                 if (!nearLong && Math.Abs(longitudinal + relativeLong * horizon) > Bike.OverallMechanicalLengthMeters + margin) continue;
-                var across = (float)road.OffsetMeters + Vector2.Dot(delta, road.Outward);
-                var endAcross = across + Vector2.Dot(other.Velocity, road.Outward) * (float)horizon;
+                var across = p.EnableSideBySideContests ? (float)other.Road.OffsetMeters
+                    : (float)road.OffsetMeters + Vector2.Dot(delta, road.Outward);
+                var endAcross = across + Vector2.Dot(other.Velocity, p.EnableSideBySideContests ? other.Road.Outward : road.Outward)
+                    * (float)(p.EnableSideBySideContests ? Math.Min(horizon, SafetyHorizonSeconds) : horizon);
                 var separation = HalfWidth(own, road.Heading) + HalfWidth(other, road.Heading) + margin;
                 // Current alongside occupancy cannot be erased by extrapolating
                 // the peer out of the corridor at the end of the horizon.
-                if (Math.Abs(longitudinal) <= Bike.OverallMechanicalLengthMeters + margin
+                if (Math.Abs(physicalAlong) <= Bike.OverallMechanicalLengthMeters + margin
                     && (target - road.OffsetMeters) * (across - road.OffsetMeters) > 0
                     && across >= Math.Min((float)road.OffsetMeters, target) - separation
                     && across <= Math.Max((float)road.OffsetMeters, target) + separation) return false;
@@ -166,15 +181,22 @@ public static partial class TrafficDecision
                 return Command(default, TrafficAction.KeepIntent, memory.HomeOffsetMeters, 1, RacingIntent.ReturnLine, "ReturnCorridorClear");
             return null;
         }
+        if (p.EnableSideBySideContests && (pairs.Count > 0
+            || memory.Intent is RacingIntent.ContestInside or RacingIntent.ContestOutside or RacingIntent.ContestHold))
+        {
+            var side = ObserveContest(snapshot, own, spec, p, work, memory, pairs, frame, surface, Corridor, observeContest);
+            if (side is not null || memory.Intent is RacingIntent.ContestInside or RacingIntent.ContestOutside or RacingIntent.ContestHold) return side;
+        }
         if (now < memory.NextTacticAt || now < memory.SafetyUntil) return null;
 
         if (opponent is { } front)
         {
             var ownAlong = Vector2.Dot(own.Velocity, road.Tangent);
             var otherAlong = Vector2.Dot(front.Velocity, front.Road.Tangent);
-            var closing = ownAlong - otherAlong;
-            var encounter = closing > MinimumClosingMetersPerSecond ? bestGap / closing : double.PositiveInfinity;
-            if (bestGap > Bike.OverallMechanicalLengthMeters && encounter <= AttackBaseHorizonSeconds + AbilityHorizonSeconds * attack)
+            var closing = p.EnableSideBySideContests ? frame.ReferenceSpeed(own) - frame.ReferenceSpeed(front) : ownAlong - otherAlong;
+            var chaseGap = p.EnableSideBySideContests ? front.TotalReferenceMeters - own.TotalReferenceMeters : bestGap;
+            var encounter = closing > MinimumClosingMetersPerSecond ? chaseGap / closing : double.PositiveInfinity;
+            if (chaseGap > Bike.OverallMechanicalLengthMeters && encounter <= AttackBaseHorizonSeconds + AbilityHorizonSeconds * attack)
             {
                 var movement = Math.Max(MinimumMovementSeconds, encounter - reaction);
                 var q = movement / p.LateralResponseSeconds;
@@ -193,10 +215,13 @@ public static partial class TrafficDecision
                     var safe = SegmentPhysics.MaxSafeTurnSpeedForRadius(radius, grip, spec.Profile.Skills, spec.Setup);
                     var recovery = Math.Abs(target - road.OffsetMeters) / (p.LateralResponseSeconds * p.LateralResponseSeconds);
                     var speed = road.IsTurn ? Math.Min(ownAlong, Math.Sqrt(Math.Max(0, (safe * safe / radius - recovery) * radius))) : ownAlong;
-                    var gain = road.IsTurn ? speed / radius - otherAlong / front.Road.RadiusMeters : speed - otherAlong;
+                    // One reference metre means the same thing on either side of
+                    // a curvature boundary. Never divide by a straight's zero radius.
+                    var gain = frame.ReferenceSpeed(road, speed, target) - frame.ReferenceSpeed(front);
                     if (gain <= 0) continue;
                     var preference = spec.Profile.Gameplay.InteractionStyle.PreferredLine;
-                    var score = 1 / gain + LineScoreWeight * Math.Abs(target - memory.HomeOffsetMeters)
+                    var score = (road.IsTurn ? frame.Embedding.Segments[road.Segment].InnerRadiusMeters : 1) / gain
+                        + LineScoreWeight * Math.Abs(target - memory.HomeOffsetMeters)
                         + (preference == PreferredLine.Inside && side > 0 || preference == PreferredLine.Outside && side < 0 ? LineScoreWeight : 0);
                     if (score < bestScore) { bestScore = score; bestTarget = target;
                         bestAction = side < 0 ? TrafficAction.AttackInside : TrafficAction.AttackOutside; }

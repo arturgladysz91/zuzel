@@ -95,6 +95,20 @@ public sealed class TrackFrame
         if (delta > LapMeters / 2) delta -= LapMeters;
         return delta;
     }
+    /// <summary>Instantaneous metres along the existing INNER reference per second.
+    /// Straight and arc rates share units, including when riders straddle a boundary.</summary>
+    public double ReferenceSpeed(RoadPoint road, double tangentSpeed, double? candidateOffsetMeters = null)
+    {
+        if (!double.IsFinite(tangentSpeed)) throw new ArgumentOutOfRangeException(nameof(tangentSpeed));
+        if (!road.IsTurn) return tangentSpeed;
+        var inner = Embedding.Segments[road.Segment].InnerRadiusMeters;
+        var radius = inner + (candidateOffsetMeters ?? road.OffsetMeters);
+        if (radius <= 0 || !double.IsFinite(radius) || !double.IsFinite(tangentSpeed))
+            throw new ArgumentOutOfRangeException(nameof(candidateOffsetMeters));
+        return tangentSpeed * inner / radius;
+    }
+    public double ReferenceSpeed(RiderView rider)
+        => ReferenceSpeed(rider.Road, Vector2.Dot(rider.Velocity, rider.Road.Tangent));
     public double DistanceToCurvatureChange(RoadPoint road)
     {
         var length = starts[road.Segment + 1] - starts[road.Segment];

@@ -8,6 +8,7 @@ namespace SharedWorldSpeedway;
 public sealed record WorldParameters
 {
     public bool EnableTacticalRacing { get; init; }
+    public bool EnableSideBySideContests { get; init; }
     public double AiIntervalSeconds { get; init; } = .1;
     public float LateralResponseSeconds { get; init; } = .65f;
     public float YawResponseSeconds { get; init; } = .35f;
@@ -21,7 +22,7 @@ public sealed record WorldParameters
 public enum RiderActivity { Racing, Disturbed, Crashed, Finished }
 public enum RacingContext { StartStraight, FirstBend, NormalRacing }
 public enum TrafficAction { KeepIntent, HoldLine, YieldOutward, BackOut, AttackInside, AttackOutside }
-public enum RacingIntent { None, AttackInside, AttackOutside, DefendLine, ReturnLine }
+public enum RacingIntent { None, AttackInside, AttackOutside, DefendLine, ReturnLine, ContestInside, ContestOutside, ContestHold }
 public sealed class TacticalMemory
 {
     public RacingIntent Intent;
@@ -63,6 +64,8 @@ public sealed class WorldWork
         MinimumTrackClearanceMeters = double.PositiveInfinity, MaximumPassiveEnergyIncreaseJoules;
     public long TacticalPairObservations, TacticalObservations, TacticalCandidates, TacticalDecisions,
         ControlChanges, CancelledCommands, MaximumTacticalPairs;
+    public long SideObservations, SideCandidates, SideBlockedCandidates, SideHoldChoices;
+    public double TacticalElapsedMilliseconds;
 }
 public sealed record RunResult(string Name, double StepSeconds, double TimeSeconds, WorldWork Work,
     IReadOnlyList<RiderView> Riders, IReadOnlyDictionary<int, double> FinishTimes,
