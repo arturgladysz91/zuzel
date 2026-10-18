@@ -1,0 +1,11 @@
+scenario,tactics,step_s,duration_s,elapsed_ms,cpu_ms,allocated_bytes,samples,batch,ai_updates,pair_observations,rider_observations,candidate_checks,decisions,actual_control_changes,solver_calls
+A-heat,False,0.01,63.24,82.1897,92.1875,15766416,5,2,2528,0,0,0,0,0,6395
+solo-full-heat,False,0.01,60.48,34.0123,35.9375,12434979,5,2,604,0,0,0,0,0,6064
+solo-full-heat,True,0.01,60.48,34.38045,40.625,12633651,5,2,604,0,604,0,0,0,6064
+four-distant-straight,False,0.01,0.8,1.187,1.5625,744651,5,2,28,0,0,0,0,0,80
+four-distant-straight,True,0.01,0.8,1.16555,3.125,751574,5,2,28,42,28,0,0,0,80
+TA-straight-pass,True,0.01,7.5,7.86685,7.8125,2551432,5,2,148,74,148,28,5,4,908
+TE-no-corridor,False,0.01,4,8.79685,7.8125,2123512,5,2,156,0,0,0,8,7,540
+TE-no-corridor,True,0.01,4,7.6628,7.8125,1954547,5,2,156,234,156,2,4,4,474
+G-dense-stress,False,0.01,12,16.51605,26.5625,3779572,5,2,476,0,0,0,6,6,1288
+G-dense-stress,True,0.01,12,18.56835,17.1875,4520268,5,2,476,714,476,4,11,11,1505

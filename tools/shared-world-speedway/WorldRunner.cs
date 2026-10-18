@@ -23,6 +23,7 @@ public sealed class WorldRunner : IDisposable
     private RiderView[] views;
     private readonly DecisionEvent?[] pending;
     private readonly double[] nextDecision, recoveryUntil;
+    private readonly TacticalMemory[] tactics;
     private readonly List<DecisionEvent> decisions = new();
     private readonly List<ContactEvent> contacts = new();
     private readonly Dictionary<int, double> finishTimes = new();
@@ -66,6 +67,8 @@ public sealed class WorldRunner : IDisposable
         surface = TrackState.CreateDefault(Frame.Track).Snapshot(); // frozen surface; no duplicate wear or RNG
         physics = new(specs, Frame, Parameters);
         pending = new DecisionEvent?[specs.Length]; nextDecision = new double[specs.Length]; recoveryUntil = new double[specs.Length];
+        tactics = Parameters.EnableTacticalRacing ? specs.Select(s => new TacticalMemory { HomeOffsetMeters = s.TargetOffsetMeters }).ToArray()
+            : Array.Empty<TacticalMemory>();
         views = specs.Select((s, i) =>
         {
             var b = physics.Read(i); var road = Frame.Project(b.Position);
@@ -75,7 +78,7 @@ public sealed class WorldRunner : IDisposable
         Record();
     }
     public RunResult Run(string name, double stepSeconds, double maximumSeconds, int requiredLaps = 0,
-        Action<WorldSnapshot>? acceptedObserver = null)
+        Action<WorldSnapshot>? acceptedObserver = null, bool stopOnCrash = false)
     {
         if (TimeSeconds != 0 || stepSeconds is not (.005 or .01 or .02) || !double.IsFinite(maximumSeconds)
             || maximumSeconds <= 0 || requiredLaps < 0) throw new ArgumentException("Run once at 5/10/20 ms.");
@@ -162,8 +165,10 @@ public sealed class WorldRunner : IDisposable
                     Work.MaximumPassiveEnergyIncreaseJoules, Energy(views) - passiveEnergy);
                 Record();
                 acceptedObserver?.Invoke(Snapshot);
+                if (stopOnCrash && views.Any(v => v.Activity == RiderActivity.Crashed)) break;
             }
             Work.PhysicsUpdates++;
+            if (stopOnCrash && views.Any(v => v.Activity == RiderActivity.Crashed)) break;
             if (requiredLaps > 0 && finishTimes.Count == specs.Length) break;
         }
         return new(name, stepSeconds, TimeSeconds, Work, Array.AsReadOnly(views), new Dictionary<int, double>(finishTimes),
@@ -173,6 +178,7 @@ public sealed class WorldRunner : IDisposable
     private void Decide()
     {
         var snapshot = Snapshot; // ALL observers see this same immutable accepted state
+        if (Parameters.EnableTacticalRacing) { DecideTactics(snapshot); return; }
         for (var i = 0; i < specs.Length; i++)
         {
             Work.AiUpdates++;
@@ -185,6 +191,26 @@ public sealed class WorldRunner : IDisposable
                     TimeSeconds + RiderController.ReactionSeconds(specs[i]), null, snapshot.Riders[i].TargetOffsetMeters, 1);
             if (decision is null) continue;
             pending[i] = decision; decisions.Add(decision); nextDecision[i] = TimeSeconds + 1;
+        }
+    }
+    private void DecideTactics(WorldSnapshot snapshot)
+    {
+        var pairs = TrafficDecision.ObservePairs(snapshot, Work);
+        for (var i = 0; i < specs.Length; i++)
+        {
+            Work.AiUpdates++;
+            var decision = TrafficDecision.Observe(snapshot, snapshot.Riders[i], specs[i], Parameters, Work,
+                tactics[i], pairs, Frame, surface, pending[i] is not null);
+            if (decision is null) continue;
+            if (pending[i] is { } waiting)
+            {
+                // Only a newly observed immediate threat may cancel an unexecuted
+                // tactical command. The replacement starts its OWN reaction delay.
+                if (!decision.SafetyReaction || waiting.SafetyReaction) continue;
+                decisions[decisions.IndexOf(waiting)] = waiting with { CancelledAt = TimeSeconds };
+                pending[i] = null; Work.CancelledCommands++;
+            }
+            pending[i] = decision; decisions.Add(decision); Work.TacticalDecisions++;
         }
     }
     private void Activate()
@@ -200,6 +226,16 @@ public sealed class WorldRunner : IDisposable
             if (views[i].Activity == RiderActivity.Disturbed && TimeSeconds + 1e-12 >= recoveryUntil[i])
                 views[i] = views[i] with { Activity = RiderActivity.Racing, Impairment = 0 };
             if (pending[i] is not { } command || TimeSeconds + 1e-12 < command.RequestedActivation) continue;
+            if (Parameters.EnableTacticalRacing)
+            {
+                if (views[i].Drive != command.Drive || views[i].TargetOffsetMeters != command.TargetOffsetMeters) Work.ControlChanges++;
+                var memory = tactics[i];
+                if (memory.Intent != command.Intent) memory.ActivatedAt = TimeSeconds;
+                memory.Intent = command.Intent;
+                if (command.OpponentId != 0) memory.OpponentId = command.OpponentId;
+                memory.NextTacticAt = TimeSeconds + TrafficDecision.IntentMinimumSeconds;
+                if (command.Drive == 0) memory.SafetyUntil = TimeSeconds + TrafficDecision.IntentMinimumSeconds;
+            }
             views[i] = views[i] with { Drive = command.Drive, TargetOffsetMeters = command.TargetOffsetMeters };
             var index = decisions.IndexOf(command); decisions[index] = command with { ActualActivation = TimeSeconds };
             pending[i] = null;
