@@ -1,0 +1,80 @@
+[
+  {
+    "horizon_s": 1,
+    "model": "old_gain_m",
+    "sign_correct": 23,
+    "sign_total": 27,
+    "ranking_correct": 10,
+    "cases": 14,
+    "mae_m": 0.29570166063975994,
+    "median_absolute_error_m": 0.20617724528355907,
+    "max_error_m": 0.9518821823863526,
+    "worst_case": "H-original-F",
+    "worst_candidate": "inside"
+  },
+  {
+    "horizon_s": 1,
+    "model": "new_gain_m",
+    "sign_correct": 25,
+    "sign_total": 27,
+    "ranking_correct": 13,
+    "cases": 14,
+    "mae_m": 0.15330107605855858,
+    "median_absolute_error_m": 0.10917861102651472,
+    "max_error_m": 0.4859094514577613,
+    "worst_case": "C-loaded-tighten",
+    "worst_candidate": "inside"
+  },
+  {
+    "horizon_s": 2,
+    "model": "old_gain_m",
+    "sign_correct": 24,
+    "sign_total": 27,
+    "ranking_correct": 11,
+    "cases": 14,
+    "mae_m": 0.29684189045513604,
+    "median_absolute_error_m": 0.08570372407660898,
+    "max_error_m": 1.4577324441395163,
+    "worst_case": "H-original-F",
+    "worst_candidate": "inside"
+  },
+  {
+    "horizon_s": 2,
+    "model": "new_gain_m",
+    "sign_correct": 24,
+    "sign_total": 27,
+    "ranking_correct": 12,
+    "cases": 14,
+    "mae_m": 0.5724479181057464,
+    "median_absolute_error_m": 0.45419497712595813,
+    "max_error_m": 1.5242822619566851,
+    "worst_case": "H-original-F",
+    "worst_candidate": "inside"
+  },
+  {
+    "horizon_s": 3,
+    "model": "old_gain_m",
+    "sign_correct": 24,
+    "sign_total": 27,
+    "ranking_correct": 12,
+    "cases": 14,
+    "mae_m": 0.7798502661269574,
+    "median_absolute_error_m": 0.6397811065983348,
+    "max_error_m": 1.976561469161613,
+    "worst_case": "J-existing-response",
+    "worst_candidate": "outside"
+  },
+  {
+    "horizon_s": 3,
+    "model": "new_gain_m",
+    "sign_correct": 24,
+    "sign_total": 27,
+    "ranking_correct": 13,
+    "cases": 14,
+    "mae_m": 1.0021825244658418,
+    "median_absolute_error_m": 0.9443852281990601,
+    "max_error_m": 2.8999916582571785,
+    "worst_case": "J-existing-response",
+    "worst_candidate": "outside"
+  }
+]

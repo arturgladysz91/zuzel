@@ -142,7 +142,7 @@ public static class SideBySideAudit
     }
     private static PhysicalBikePose Pose(RiderView v) => new(v.Id, "shared-world", new(v.Position.X, v.Position.Y),
         new(0, v.Speed > .01f ? Math.Atan2(v.Velocity.Y, v.Velocity.X) : v.Heading, v.Heading), Bike);
-    public static void Benchmark(string directory)
+    public static void Benchmark(string directory, bool qualityComparison = false)
     {
         Directory.CreateDirectory(directory); var rows = new List<object>();
         var heat = Scenarios.A(4);
@@ -153,7 +153,8 @@ public static class SideBySideAudit
         foreach (var original in new[] {solo, distant, SideBySideScenarios.A(), SideBySideScenarios.E(), SideBySideScenarios.F(), Scenarios.DenseStart()})
         {
             RunResult Execute(Scenario s, bool side) {
-                using var world = new WorldRunner(s.Riders, parameters: new() {EnableTacticalRacing = true, EnableSideBySideContests = side});
+                using var world = new WorldRunner(s.Riders, parameters: new() {EnableTacticalRacing = true,
+                    EnableSideBySideContests = qualityComparison || side, EnableTacticalQualityScoring = qualityComparison && side});
                 return world.Run(s.Name, .01, s.DurationSeconds, s.Laps, stopOnCrash: true);
             }
             var off = Execute(original, false); var on = Execute(original, true);
@@ -182,7 +183,8 @@ public static class SideBySideAudit
                         target = d.TargetOffsetMeters; drive = d.Drive;
                     }
                 }
-                elapsed[index].Sort(); rows.Add(new {scenario.Name, Side = index == 1, r.TimeSeconds, ClippedToCommonHorizon = clipped,
+                elapsed[index].Sort(); rows.Add(new {scenario.Name, Side = qualityComparison || index == 1,
+                    Quality = qualityComparison && index == 1, r.TimeSeconds, ClippedToCommonHorizon = clipped,
                     ElapsedMilliseconds = elapsed[index][samples / 2], CpuMilliseconds = cpu[index] / (samples * batch),
                     AllocatedBytes = allocated[index] / (samples * batch), TacticalMilliseconds = tactical[index] / (samples * batch),
                     Samples = samples, Batch = batch, r.Work, Decisions = r.Decisions.Count, ActualControlChanges = changes, r.Fingerprint});

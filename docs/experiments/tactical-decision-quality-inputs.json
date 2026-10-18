@@ -1,0 +1,1862 @@
+[
+  {
+    "Name": "A-inner-hold",
+    "ObserveAt": 0.1,
+    "RiderId": 1,
+    "Defending": false,
+    "Scenario": {
+      "Name": "A-inner-hold",
+      "Riders": [
+        {
+          "Profile": {
+            "Id": 1,
+            "Name": "R1",
+            "Skills": {
+              "Start": 50,
+              "Speed": 50,
+              "SlideControl": 50,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 45,
+          "OffsetMeters": 0.6,
+          "SpeedMetersPerSecond": 20,
+          "TargetOffsetMeters": 0.6,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": false,
+          "Passive": false,
+          "Bullet": false
+        },
+        {
+          "Profile": {
+            "Id": 2,
+            "Name": "R2",
+            "Skills": {
+              "Start": 50,
+              "Speed": 50,
+              "SlideControl": 70,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 80,
+          "OffsetMeters": 8,
+          "SpeedMetersPerSecond": 20,
+          "TargetOffsetMeters": 8,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": false,
+          "Passive": false,
+          "Bullet": false
+        }
+      ],
+      "DurationSeconds": 4,
+      "Laps": 0
+    },
+    "Gameplay": [
+      {
+        "Id": 1,
+        "Gameplay": {
+          "Abilities": {
+            "Reaction": 50,
+            "Start": 50,
+            "Technique": 70,
+            "TrackReading": 65,
+            "Attack": 80,
+            "Defense": 75,
+            "PairRiding": 50,
+            "Strength": 60
+          },
+          "Physical": {
+            "MassKg": 65
+          },
+          "InteractionStyle": {
+            "Combativeness": 0.5,
+            "PreferredLine": 1,
+            "SetupIndependence": 0.5
+          }
+        }
+      },
+      {
+        "Id": 2,
+        "Gameplay": {
+          "Abilities": {
+            "Reaction": 50,
+            "Start": 50,
+            "Technique": 70,
+            "TrackReading": 65,
+            "Attack": 80,
+            "Defense": 75,
+            "PairRiding": 50,
+            "Strength": 60
+          },
+          "Physical": {
+            "MassKg": 65
+          },
+          "InteractionStyle": {
+            "Combativeness": 0.5,
+            "PreferredLine": 1,
+            "SetupIndependence": 0.5
+          }
+        }
+      }
+    ]
+  },
+  {
+    "Name": "B-small-tighten",
+    "ObserveAt": 0.1,
+    "RiderId": 1,
+    "Defending": false,
+    "Scenario": {
+      "Name": "B-small-tighten",
+      "Riders": [
+        {
+          "Profile": {
+            "Id": 1,
+            "Name": "R1",
+            "Skills": {
+              "Start": 50,
+              "Speed": 50,
+              "SlideControl": 70,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 45,
+          "OffsetMeters": 3,
+          "SpeedMetersPerSecond": 17,
+          "TargetOffsetMeters": 3,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": false,
+          "Passive": false,
+          "Bullet": false
+        },
+        {
+          "Profile": {
+            "Id": 2,
+            "Name": "R2",
+            "Skills": {
+              "Start": 50,
+              "Speed": 50,
+              "SlideControl": 70,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 80,
+          "OffsetMeters": 8,
+          "SpeedMetersPerSecond": 20,
+          "TargetOffsetMeters": 8,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": false,
+          "Passive": false,
+          "Bullet": false
+        }
+      ],
+      "DurationSeconds": 4,
+      "Laps": 0
+    },
+    "Gameplay": [
+      {
+        "Id": 1,
+        "Gameplay": {
+          "Abilities": {
+            "Reaction": 50,
+            "Start": 50,
+            "Technique": 70,
+            "TrackReading": 65,
+            "Attack": 80,
+            "Defense": 75,
+            "PairRiding": 50,
+            "Strength": 60
+          },
+          "Physical": {
+            "MassKg": 65
+          },
+          "InteractionStyle": {
+            "Combativeness": 0.5,
+            "PreferredLine": 1,
+            "SetupIndependence": 0.5
+          }
+        }
+      },
+      {
+        "Id": 2,
+        "Gameplay": {
+          "Abilities": {
+            "Reaction": 50,
+            "Start": 50,
+            "Technique": 70,
+            "TrackReading": 65,
+            "Attack": 80,
+            "Defense": 75,
+            "PairRiding": 50,
+            "Strength": 60
+          },
+          "Physical": {
+            "MassKg": 65
+          },
+          "InteractionStyle": {
+            "Combativeness": 0.5,
+            "PreferredLine": 1,
+            "SetupIndependence": 0.5
+          }
+        }
+      }
+    ]
+  },
+  {
+    "Name": "C-loaded-tighten",
+    "ObserveAt": 0.1,
+    "RiderId": 1,
+    "Defending": false,
+    "Scenario": {
+      "Name": "C-loaded-tighten",
+      "Riders": [
+        {
+          "Profile": {
+            "Id": 1,
+            "Name": "R1",
+            "Skills": {
+              "Start": 50,
+              "Speed": 50,
+              "SlideControl": 70,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 45,
+          "OffsetMeters": 3,
+          "SpeedMetersPerSecond": 22,
+          "TargetOffsetMeters": 3,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": false,
+          "Passive": false,
+          "Bullet": false
+        },
+        {
+          "Profile": {
+            "Id": 2,
+            "Name": "R2",
+            "Skills": {
+              "Start": 50,
+              "Speed": 50,
+              "SlideControl": 70,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 80,
+          "OffsetMeters": 8,
+          "SpeedMetersPerSecond": 20,
+          "TargetOffsetMeters": 8,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": false,
+          "Passive": false,
+          "Bullet": false
+        }
+      ],
+      "DurationSeconds": 4,
+      "Laps": 0
+    },
+    "Gameplay": [
+      {
+        "Id": 1,
+        "Gameplay": {
+          "Abilities": {
+            "Reaction": 50,
+            "Start": 50,
+            "Technique": 70,
+            "TrackReading": 65,
+            "Attack": 80,
+            "Defense": 75,
+            "PairRiding": 50,
+            "Strength": 60
+          },
+          "Physical": {
+            "MassKg": 65
+          },
+          "InteractionStyle": {
+            "Combativeness": 0.5,
+            "PreferredLine": 1,
+            "SetupIndependence": 0.5
+          }
+        }
+      },
+      {
+        "Id": 2,
+        "Gameplay": {
+          "Abilities": {
+            "Reaction": 50,
+            "Start": 50,
+            "Technique": 70,
+            "TrackReading": 65,
+            "Attack": 80,
+            "Defense": 75,
+            "PairRiding": 50,
+            "Strength": 60
+          },
+          "Physical": {
+            "MassKg": 65
+          },
+          "InteractionStyle": {
+            "Combativeness": 0.5,
+            "PreferredLine": 1,
+            "SetupIndependence": 0.5
+          }
+        }
+      }
+    ]
+  },
+  {
+    "Name": "D-fast-outer",
+    "ObserveAt": 0.1,
+    "RiderId": 1,
+    "Defending": false,
+    "Scenario": {
+      "Name": "D-fast-outer",
+      "Riders": [
+        {
+          "Profile": {
+            "Id": 1,
+            "Name": "R1",
+            "Skills": {
+              "Start": 50,
+              "Speed": 50,
+              "SlideControl": 50,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 45,
+          "OffsetMeters": 6,
+          "SpeedMetersPerSecond": 22,
+          "TargetOffsetMeters": 6,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": false,
+          "Passive": false,
+          "Bullet": false
+        },
+        {
+          "Profile": {
+            "Id": 2,
+            "Name": "R2",
+            "Skills": {
+              "Start": 50,
+              "Speed": 50,
+              "SlideControl": 70,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 80,
+          "OffsetMeters": 8,
+          "SpeedMetersPerSecond": 20,
+          "TargetOffsetMeters": 8,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": false,
+          "Passive": false,
+          "Bullet": false
+        }
+      ],
+      "DurationSeconds": 4,
+      "Laps": 0
+    },
+    "Gameplay": [
+      {
+        "Id": 1,
+        "Gameplay": {
+          "Abilities": {
+            "Reaction": 50,
+            "Start": 50,
+            "Technique": 70,
+            "TrackReading": 65,
+            "Attack": 80,
+            "Defense": 75,
+            "PairRiding": 50,
+            "Strength": 60
+          },
+          "Physical": {
+            "MassKg": 65
+          },
+          "InteractionStyle": {
+            "Combativeness": 0.5,
+            "PreferredLine": 1,
+            "SetupIndependence": 0.5
+          }
+        }
+      },
+      {
+        "Id": 2,
+        "Gameplay": {
+          "Abilities": {
+            "Reaction": 50,
+            "Start": 50,
+            "Technique": 70,
+            "TrackReading": 65,
+            "Attack": 80,
+            "Defense": 75,
+            "PairRiding": 50,
+            "Strength": 60
+          },
+          "Physical": {
+            "MassKg": 65
+          },
+          "InteractionStyle": {
+            "Combativeness": 0.5,
+            "PreferredLine": 1,
+            "SetupIndependence": 0.5
+          }
+        }
+      }
+    ]
+  },
+  {
+    "Name": "E-slow-outer",
+    "ObserveAt": 0.1,
+    "RiderId": 1,
+    "Defending": false,
+    "Scenario": {
+      "Name": "E-slow-outer",
+      "Riders": [
+        {
+          "Profile": {
+            "Id": 1,
+            "Name": "R1",
+            "Skills": {
+              "Start": 50,
+              "Speed": 50,
+              "SlideControl": 70,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 45,
+          "OffsetMeters": 5,
+          "SpeedMetersPerSecond": 17,
+          "TargetOffsetMeters": 5,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": false,
+          "Passive": false,
+          "Bullet": false
+        },
+        {
+          "Profile": {
+            "Id": 2,
+            "Name": "R2",
+            "Skills": {
+              "Start": 50,
+              "Speed": 50,
+              "SlideControl": 70,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 80,
+          "OffsetMeters": 8,
+          "SpeedMetersPerSecond": 20,
+          "TargetOffsetMeters": 8,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": false,
+          "Passive": false,
+          "Bullet": false
+        }
+      ],
+      "DurationSeconds": 4,
+      "Laps": 0
+    },
+    "Gameplay": [
+      {
+        "Id": 1,
+        "Gameplay": {
+          "Abilities": {
+            "Reaction": 50,
+            "Start": 50,
+            "Technique": 70,
+            "TrackReading": 65,
+            "Attack": 80,
+            "Defense": 75,
+            "PairRiding": 50,
+            "Strength": 60
+          },
+          "Physical": {
+            "MassKg": 65
+          },
+          "InteractionStyle": {
+            "Combativeness": 0.5,
+            "PreferredLine": 1,
+            "SetupIndependence": 0.5
+          }
+        }
+      },
+      {
+        "Id": 2,
+        "Gameplay": {
+          "Abilities": {
+            "Reaction": 50,
+            "Start": 50,
+            "Technique": 70,
+            "TrackReading": 65,
+            "Attack": 80,
+            "Defense": 75,
+            "PairRiding": 50,
+            "Strength": 60
+          },
+          "Physical": {
+            "MassKg": 65
+          },
+          "InteractionStyle": {
+            "Combativeness": 0.5,
+            "PreferredLine": 1,
+            "SetupIndependence": 0.5
+          }
+        }
+      }
+    ]
+  },
+  {
+    "Name": "F-entry-16",
+    "ObserveAt": 0.1,
+    "RiderId": 1,
+    "Defending": false,
+    "Scenario": {
+      "Name": "F-entry-16",
+      "Riders": [
+        {
+          "Profile": {
+            "Id": 1,
+            "Name": "R1",
+            "Skills": {
+              "Start": 50,
+              "Speed": 50,
+              "SlideControl": 70,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 36,
+          "OffsetMeters": 3,
+          "SpeedMetersPerSecond": 16,
+          "TargetOffsetMeters": 3,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": false,
+          "Passive": false,
+          "Bullet": false
+        },
+        {
+          "Profile": {
+            "Id": 2,
+            "Name": "R2",
+            "Skills": {
+              "Start": 50,
+              "Speed": 50,
+              "SlideControl": 70,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 71,
+          "OffsetMeters": 8,
+          "SpeedMetersPerSecond": 20,
+          "TargetOffsetMeters": 8,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": false,
+          "Passive": false,
+          "Bullet": false
+        }
+      ],
+      "DurationSeconds": 4,
+      "Laps": 0
+    },
+    "Gameplay": [
+      {
+        "Id": 1,
+        "Gameplay": {
+          "Abilities": {
+            "Reaction": 50,
+            "Start": 50,
+            "Technique": 70,
+            "TrackReading": 65,
+            "Attack": 80,
+            "Defense": 75,
+            "PairRiding": 50,
+            "Strength": 60
+          },
+          "Physical": {
+            "MassKg": 65
+          },
+          "InteractionStyle": {
+            "Combativeness": 0.5,
+            "PreferredLine": 1,
+            "SetupIndependence": 0.5
+          }
+        }
+      },
+      {
+        "Id": 2,
+        "Gameplay": {
+          "Abilities": {
+            "Reaction": 50,
+            "Start": 50,
+            "Technique": 70,
+            "TrackReading": 65,
+            "Attack": 80,
+            "Defense": 75,
+            "PairRiding": 50,
+            "Strength": 60
+          },
+          "Physical": {
+            "MassKg": 65
+          },
+          "InteractionStyle": {
+            "Combativeness": 0.5,
+            "PreferredLine": 1,
+            "SetupIndependence": 0.5
+          }
+        }
+      }
+    ]
+  },
+  {
+    "Name": "F-entry-19",
+    "ObserveAt": 0.1,
+    "RiderId": 1,
+    "Defending": false,
+    "Scenario": {
+      "Name": "F-entry-19",
+      "Riders": [
+        {
+          "Profile": {
+            "Id": 1,
+            "Name": "R1",
+            "Skills": {
+              "Start": 50,
+              "Speed": 50,
+              "SlideControl": 70,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 36,
+          "OffsetMeters": 3,
+          "SpeedMetersPerSecond": 19,
+          "TargetOffsetMeters": 3,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": false,
+          "Passive": false,
+          "Bullet": false
+        },
+        {
+          "Profile": {
+            "Id": 2,
+            "Name": "R2",
+            "Skills": {
+              "Start": 50,
+              "Speed": 50,
+              "SlideControl": 70,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 71,
+          "OffsetMeters": 8,
+          "SpeedMetersPerSecond": 20,
+          "TargetOffsetMeters": 8,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": false,
+          "Passive": false,
+          "Bullet": false
+        }
+      ],
+      "DurationSeconds": 4,
+      "Laps": 0
+    },
+    "Gameplay": [
+      {
+        "Id": 1,
+        "Gameplay": {
+          "Abilities": {
+            "Reaction": 50,
+            "Start": 50,
+            "Technique": 70,
+            "TrackReading": 65,
+            "Attack": 80,
+            "Defense": 75,
+            "PairRiding": 50,
+            "Strength": 60
+          },
+          "Physical": {
+            "MassKg": 65
+          },
+          "InteractionStyle": {
+            "Combativeness": 0.5,
+            "PreferredLine": 1,
+            "SetupIndependence": 0.5
+          }
+        }
+      },
+      {
+        "Id": 2,
+        "Gameplay": {
+          "Abilities": {
+            "Reaction": 50,
+            "Start": 50,
+            "Technique": 70,
+            "TrackReading": 65,
+            "Attack": 80,
+            "Defense": 75,
+            "PairRiding": 50,
+            "Strength": 60
+          },
+          "Physical": {
+            "MassKg": 65
+          },
+          "InteractionStyle": {
+            "Combativeness": 0.5,
+            "PreferredLine": 1,
+            "SetupIndependence": 0.5
+          }
+        }
+      }
+    ]
+  },
+  {
+    "Name": "F-entry-23",
+    "ObserveAt": 0.1,
+    "RiderId": 1,
+    "Defending": false,
+    "Scenario": {
+      "Name": "F-entry-23",
+      "Riders": [
+        {
+          "Profile": {
+            "Id": 1,
+            "Name": "R1",
+            "Skills": {
+              "Start": 50,
+              "Speed": 50,
+              "SlideControl": 70,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 36,
+          "OffsetMeters": 3,
+          "SpeedMetersPerSecond": 23,
+          "TargetOffsetMeters": 3,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": false,
+          "Passive": false,
+          "Bullet": false
+        },
+        {
+          "Profile": {
+            "Id": 2,
+            "Name": "R2",
+            "Skills": {
+              "Start": 50,
+              "Speed": 50,
+              "SlideControl": 70,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 71,
+          "OffsetMeters": 8,
+          "SpeedMetersPerSecond": 20,
+          "TargetOffsetMeters": 8,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": false,
+          "Passive": false,
+          "Bullet": false
+        }
+      ],
+      "DurationSeconds": 4,
+      "Laps": 0
+    },
+    "Gameplay": [
+      {
+        "Id": 1,
+        "Gameplay": {
+          "Abilities": {
+            "Reaction": 50,
+            "Start": 50,
+            "Technique": 70,
+            "TrackReading": 65,
+            "Attack": 80,
+            "Defense": 75,
+            "PairRiding": 50,
+            "Strength": 60
+          },
+          "Physical": {
+            "MassKg": 65
+          },
+          "InteractionStyle": {
+            "Combativeness": 0.5,
+            "PreferredLine": 1,
+            "SetupIndependence": 0.5
+          }
+        }
+      },
+      {
+        "Id": 2,
+        "Gameplay": {
+          "Abilities": {
+            "Reaction": 50,
+            "Start": 50,
+            "Technique": 70,
+            "TrackReading": 65,
+            "Attack": 80,
+            "Defense": 75,
+            "PairRiding": 50,
+            "Strength": 60
+          },
+          "Physical": {
+            "MassKg": 65
+          },
+          "InteractionStyle": {
+            "Combativeness": 0.5,
+            "PreferredLine": 1,
+            "SetupIndependence": 0.5
+          }
+        }
+      }
+    ]
+  },
+  {
+    "Name": "G-low-tech-attack",
+    "ObserveAt": 0.1,
+    "RiderId": 1,
+    "Defending": false,
+    "Scenario": {
+      "Name": "G-low-tech-attack",
+      "Riders": [
+        {
+          "Profile": {
+            "Id": 1,
+            "Name": "R1",
+            "Skills": {
+              "Start": 50,
+              "Speed": 50,
+              "SlideControl": 70,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 45,
+          "OffsetMeters": 3,
+          "SpeedMetersPerSecond": 20,
+          "TargetOffsetMeters": 3,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": false,
+          "Passive": false,
+          "Bullet": false
+        },
+        {
+          "Profile": {
+            "Id": 2,
+            "Name": "R2",
+            "Skills": {
+              "Start": 50,
+              "Speed": 50,
+              "SlideControl": 70,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 80,
+          "OffsetMeters": 8,
+          "SpeedMetersPerSecond": 20,
+          "TargetOffsetMeters": 8,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": false,
+          "Passive": false,
+          "Bullet": false
+        }
+      ],
+      "DurationSeconds": 4,
+      "Laps": 0
+    },
+    "Gameplay": [
+      {
+        "Id": 1,
+        "Gameplay": {
+          "Abilities": {
+            "Reaction": 50,
+            "Start": 50,
+            "Technique": 35,
+            "TrackReading": 65,
+            "Attack": 35,
+            "Defense": 70,
+            "PairRiding": 50,
+            "Strength": 60
+          },
+          "Physical": {
+            "MassKg": 65
+          },
+          "InteractionStyle": {
+            "Combativeness": 0.5,
+            "PreferredLine": 1,
+            "SetupIndependence": 0.5
+          }
+        }
+      },
+      {
+        "Id": 2,
+        "Gameplay": {
+          "Abilities": {
+            "Reaction": 50,
+            "Start": 50,
+            "Technique": 70,
+            "TrackReading": 65,
+            "Attack": 80,
+            "Defense": 75,
+            "PairRiding": 50,
+            "Strength": 60
+          },
+          "Physical": {
+            "MassKg": 65
+          },
+          "InteractionStyle": {
+            "Combativeness": 0.5,
+            "PreferredLine": 1,
+            "SetupIndependence": 0.5
+          }
+        }
+      }
+    ]
+  },
+  {
+    "Name": "G-high-tech-attack",
+    "ObserveAt": 0.1,
+    "RiderId": 1,
+    "Defending": false,
+    "Scenario": {
+      "Name": "G-high-tech-attack",
+      "Riders": [
+        {
+          "Profile": {
+            "Id": 1,
+            "Name": "R1",
+            "Skills": {
+              "Start": 50,
+              "Speed": 50,
+              "SlideControl": 70,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 45,
+          "OffsetMeters": 3,
+          "SpeedMetersPerSecond": 20,
+          "TargetOffsetMeters": 3,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": false,
+          "Passive": false,
+          "Bullet": false
+        },
+        {
+          "Profile": {
+            "Id": 2,
+            "Name": "R2",
+            "Skills": {
+              "Start": 50,
+              "Speed": 50,
+              "SlideControl": 70,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 80,
+          "OffsetMeters": 8,
+          "SpeedMetersPerSecond": 20,
+          "TargetOffsetMeters": 8,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": false,
+          "Passive": false,
+          "Bullet": false
+        }
+      ],
+      "DurationSeconds": 4,
+      "Laps": 0
+    },
+    "Gameplay": [
+      {
+        "Id": 1,
+        "Gameplay": {
+          "Abilities": {
+            "Reaction": 50,
+            "Start": 50,
+            "Technique": 90,
+            "TrackReading": 65,
+            "Attack": 90,
+            "Defense": 35,
+            "PairRiding": 50,
+            "Strength": 60
+          },
+          "Physical": {
+            "MassKg": 65
+          },
+          "InteractionStyle": {
+            "Combativeness": 0.5,
+            "PreferredLine": 1,
+            "SetupIndependence": 0.5
+          }
+        }
+      },
+      {
+        "Id": 2,
+        "Gameplay": {
+          "Abilities": {
+            "Reaction": 50,
+            "Start": 50,
+            "Technique": 70,
+            "TrackReading": 65,
+            "Attack": 80,
+            "Defense": 75,
+            "PairRiding": 50,
+            "Strength": 60
+          },
+          "Physical": {
+            "MassKg": 65
+          },
+          "InteractionStyle": {
+            "Combativeness": 0.5,
+            "PreferredLine": 1,
+            "SetupIndependence": 0.5
+          }
+        }
+      }
+    ]
+  },
+  {
+    "Name": "G-defense",
+    "ObserveAt": 0.1,
+    "RiderId": 1,
+    "Defending": true,
+    "Scenario": {
+      "Name": "G-defense",
+      "Riders": [
+        {
+          "Profile": {
+            "Id": 1,
+            "Name": "R1",
+            "Skills": {
+              "Start": 50,
+              "Speed": 50,
+              "SlideControl": 70,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 45,
+          "OffsetMeters": 3,
+          "SpeedMetersPerSecond": 20,
+          "TargetOffsetMeters": 3,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": false,
+          "Passive": false,
+          "Bullet": false
+        },
+        {
+          "Profile": {
+            "Id": 2,
+            "Name": "R2",
+            "Skills": {
+              "Start": 50,
+              "Speed": 50,
+              "SlideControl": 70,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 10,
+          "OffsetMeters": 8,
+          "SpeedMetersPerSecond": 20,
+          "TargetOffsetMeters": 8,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": false,
+          "Passive": false,
+          "Bullet": false
+        }
+      ],
+      "DurationSeconds": 4,
+      "Laps": 0
+    },
+    "Gameplay": [
+      {
+        "Id": 1,
+        "Gameplay": {
+          "Abilities": {
+            "Reaction": 50,
+            "Start": 50,
+            "Technique": 60,
+            "TrackReading": 65,
+            "Attack": 40,
+            "Defense": 90,
+            "PairRiding": 50,
+            "Strength": 60
+          },
+          "Physical": {
+            "MassKg": 65
+          },
+          "InteractionStyle": {
+            "Combativeness": 0.5,
+            "PreferredLine": 1,
+            "SetupIndependence": 0.5
+          }
+        }
+      },
+      {
+        "Id": 2,
+        "Gameplay": {
+          "Abilities": {
+            "Reaction": 50,
+            "Start": 50,
+            "Technique": 70,
+            "TrackReading": 65,
+            "Attack": 80,
+            "Defense": 75,
+            "PairRiding": 50,
+            "Strength": 60
+          },
+          "Physical": {
+            "MassKg": 65
+          },
+          "InteractionStyle": {
+            "Combativeness": 0.5,
+            "PreferredLine": 1,
+            "SetupIndependence": 0.5
+          }
+        }
+      }
+    ]
+  },
+  {
+    "Name": "H-original-F",
+    "ObserveAt": 4.1,
+    "RiderId": 1,
+    "Defending": false,
+    "Scenario": {
+      "Name": "SF-varied-Motoarena",
+      "Riders": [
+        {
+          "Profile": {
+            "Id": 1,
+            "Name": "R1",
+            "Skills": {
+              "Start": 45,
+              "Speed": 50,
+              "SlideControl": 60,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 0,
+          "OffsetMeters": 0.5,
+          "SpeedMetersPerSecond": 0,
+          "TargetOffsetMeters": 1.6,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": false,
+          "Passive": false,
+          "Bullet": false
+        },
+        {
+          "Profile": {
+            "Id": 2,
+            "Name": "R2",
+            "Skills": {
+              "Start": 60,
+              "Speed": 55,
+              "SlideControl": 65,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 0,
+          "OffsetMeters": 3.5,
+          "SpeedMetersPerSecond": 0,
+          "TargetOffsetMeters": 3.2,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": false,
+          "Passive": false,
+          "Bullet": false
+        },
+        {
+          "Profile": {
+            "Id": 3,
+            "Name": "R3",
+            "Skills": {
+              "Start": 50,
+              "Speed": 60,
+              "SlideControl": 70,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 0,
+          "OffsetMeters": 6.5,
+          "SpeedMetersPerSecond": 0,
+          "TargetOffsetMeters": 5.6,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": false,
+          "Passive": false,
+          "Bullet": false
+        },
+        {
+          "Profile": {
+            "Id": 4,
+            "Name": "R4",
+            "Skills": {
+              "Start": 55,
+              "Speed": 65,
+              "SlideControl": 65,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 0,
+          "OffsetMeters": 9.5,
+          "SpeedMetersPerSecond": 0,
+          "TargetOffsetMeters": 8.3,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": false,
+          "Passive": false,
+          "Bullet": false
+        }
+      ],
+      "DurationSeconds": 7.6,
+      "Laps": 0
+    },
+    "Gameplay": [
+      {
+        "Id": 1,
+        "Gameplay": {
+          "Abilities": {
+            "Reaction": 55,
+            "Start": 50,
+            "Technique": 70,
+            "TrackReading": 65,
+            "Attack": 70,
+            "Defense": 80,
+            "PairRiding": 50,
+            "Strength": 60
+          },
+          "Physical": {
+            "MassKg": 65
+          },
+          "InteractionStyle": {
+            "Combativeness": 0.45,
+            "PreferredLine": 1,
+            "SetupIndependence": 0.5
+          }
+        }
+      },
+      {
+        "Id": 2,
+        "Gameplay": {
+          "Abilities": {
+            "Reaction": 65,
+            "Start": 50,
+            "Technique": 60,
+            "TrackReading": 65,
+            "Attack": 85,
+            "Defense": 70,
+            "PairRiding": 50,
+            "Strength": 60
+          },
+          "Physical": {
+            "MassKg": 65
+          },
+          "InteractionStyle": {
+            "Combativeness": 0.8,
+            "PreferredLine": 1,
+            "SetupIndependence": 0.5
+          }
+        }
+      },
+      {
+        "Id": 3,
+        "Gameplay": {
+          "Abilities": {
+            "Reaction": 45,
+            "Start": 50,
+            "Technique": 75,
+            "TrackReading": 65,
+            "Attack": 80,
+            "Defense": 75,
+            "PairRiding": 50,
+            "Strength": 60
+          },
+          "Physical": {
+            "MassKg": 65
+          },
+          "InteractionStyle": {
+            "Combativeness": 0.55,
+            "PreferredLine": 1,
+            "SetupIndependence": 0.5
+          }
+        }
+      },
+      {
+        "Id": 4,
+        "Gameplay": {
+          "Abilities": {
+            "Reaction": 60,
+            "Start": 50,
+            "Technique": 65,
+            "TrackReading": 65,
+            "Attack": 75,
+            "Defense": 65,
+            "PairRiding": 50,
+            "Strength": 60
+          },
+          "Physical": {
+            "MassKg": 65
+          },
+          "InteractionStyle": {
+            "Combativeness": 0.6,
+            "PreferredLine": 1,
+            "SetupIndependence": 0.5
+          }
+        }
+      }
+    ]
+  },
+  {
+    "Name": "I-near-exit",
+    "ObserveAt": 0.1,
+    "RiderId": 1,
+    "Defending": false,
+    "Scenario": {
+      "Name": "I-near-exit",
+      "Riders": [
+        {
+          "Profile": {
+            "Id": 1,
+            "Name": "R1",
+            "Skills": {
+              "Start": 50,
+              "Speed": 50,
+              "SlideControl": 70,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 115,
+          "OffsetMeters": 3,
+          "SpeedMetersPerSecond": 20,
+          "TargetOffsetMeters": 3,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": false,
+          "Passive": false,
+          "Bullet": false
+        },
+        {
+          "Profile": {
+            "Id": 2,
+            "Name": "R2",
+            "Skills": {
+              "Start": 50,
+              "Speed": 50,
+              "SlideControl": 70,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 150,
+          "OffsetMeters": 8,
+          "SpeedMetersPerSecond": 20,
+          "TargetOffsetMeters": 8,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": false,
+          "Passive": false,
+          "Bullet": false
+        }
+      ],
+      "DurationSeconds": 4,
+      "Laps": 0
+    },
+    "Gameplay": [
+      {
+        "Id": 1,
+        "Gameplay": {
+          "Abilities": {
+            "Reaction": 50,
+            "Start": 50,
+            "Technique": 70,
+            "TrackReading": 65,
+            "Attack": 80,
+            "Defense": 75,
+            "PairRiding": 50,
+            "Strength": 60
+          },
+          "Physical": {
+            "MassKg": 65
+          },
+          "InteractionStyle": {
+            "Combativeness": 0.5,
+            "PreferredLine": 1,
+            "SetupIndependence": 0.5
+          }
+        }
+      },
+      {
+        "Id": 2,
+        "Gameplay": {
+          "Abilities": {
+            "Reaction": 50,
+            "Start": 50,
+            "Technique": 70,
+            "TrackReading": 65,
+            "Attack": 80,
+            "Defense": 75,
+            "PairRiding": 50,
+            "Strength": 60
+          },
+          "Physical": {
+            "MassKg": 65
+          },
+          "InteractionStyle": {
+            "Combativeness": 0.5,
+            "PreferredLine": 1,
+            "SetupIndependence": 0.5
+          }
+        }
+      }
+    ]
+  },
+  {
+    "Name": "J-existing-response",
+    "ObserveAt": 0.1,
+    "RiderId": 1,
+    "Defending": false,
+    "Scenario": {
+      "Name": "J-existing-response",
+      "Riders": [
+        {
+          "Profile": {
+            "Id": 1,
+            "Name": "R1",
+            "Skills": {
+              "Start": 50,
+              "Speed": 50,
+              "SlideControl": 70,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 45,
+          "OffsetMeters": 4,
+          "SpeedMetersPerSecond": 20,
+          "TargetOffsetMeters": 2,
+          "InitialOutwardSpeed": -1,
+          "TrafficEnabled": false,
+          "Passive": false,
+          "Bullet": false
+        },
+        {
+          "Profile": {
+            "Id": 2,
+            "Name": "R2",
+            "Skills": {
+              "Start": 50,
+              "Speed": 50,
+              "SlideControl": 70,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 80,
+          "OffsetMeters": 8,
+          "SpeedMetersPerSecond": 20,
+          "TargetOffsetMeters": 8,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": false,
+          "Passive": false,
+          "Bullet": false
+        }
+      ],
+      "DurationSeconds": 4,
+      "Laps": 0
+    },
+    "Gameplay": [
+      {
+        "Id": 1,
+        "Gameplay": {
+          "Abilities": {
+            "Reaction": 50,
+            "Start": 50,
+            "Technique": 70,
+            "TrackReading": 65,
+            "Attack": 80,
+            "Defense": 75,
+            "PairRiding": 50,
+            "Strength": 60
+          },
+          "Physical": {
+            "MassKg": 65
+          },
+          "InteractionStyle": {
+            "Combativeness": 0.5,
+            "PreferredLine": 1,
+            "SetupIndependence": 0.5
+          }
+        }
+      },
+      {
+        "Id": 2,
+        "Gameplay": {
+          "Abilities": {
+            "Reaction": 50,
+            "Start": 50,
+            "Technique": 70,
+            "TrackReading": 65,
+            "Attack": 80,
+            "Defense": 75,
+            "PairRiding": 50,
+            "Strength": 60
+          },
+          "Physical": {
+            "MassKg": 65
+          },
+          "InteractionStyle": {
+            "Combativeness": 0.5,
+            "PreferredLine": 1,
+            "SetupIndependence": 0.5
+          }
+        }
+      }
+    ]
+  }
+]

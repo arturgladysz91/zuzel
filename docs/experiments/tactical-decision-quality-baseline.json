@@ -1,0 +1,2498 @@
+[
+  {
+    "Name": "A-inner-hold",
+    "Spec": {
+      "Profile": {
+        "Id": 1,
+        "Name": "R1",
+        "Skills": {
+          "Start": 50,
+          "Speed": 50,
+          "SlideControl": 50,
+          "TrackReading": 50,
+          "PairRiding": 50,
+          "Adaptability": 50
+        },
+        "Style": {
+          "RiskTolerance": 0.5,
+          "LaneChangeTendency": 0.5,
+          "OutsidePreference": 0.5,
+          "SetupIndependence": 0.5
+        }
+      },
+      "Setup": {
+        "Gearing": 0.5,
+        "TractionBias": 0.5
+      },
+      "ReferenceMeters": 45,
+      "OffsetMeters": 0.6,
+      "SpeedMetersPerSecond": 20,
+      "TargetOffsetMeters": 0.6,
+      "InitialOutwardSpeed": 0,
+      "TrafficEnabled": false,
+      "Passive": false,
+      "Bullet": false
+    },
+    "Observation": {
+      "Id": 1,
+      "Position": {
+        "X": 46.892834,
+        "Y": 1.7250801
+      },
+      "Velocity": {
+        "X": 18.533129,
+        "Y": 7.5288196
+      },
+      "Heading": 0.33153978,
+      "AngularVelocity": 0.14186695,
+      "Road": {
+        "Segment": 1,
+        "Progress": 0.36848793006942665,
+        "ReferenceMeters": 46.96226973132088,
+        "OffsetMeters": 0.5984244346618652,
+        "Heading": 0.3858796687522865,
+        "RadiusMeters": 31.598424434661865,
+        "CornerProgress": 0.12282931002314222,
+        "Tangent": {
+          "X": 0.9264677,
+          "Y": 0.37637427
+        },
+        "Outward": {
+          "X": 0.37637427,
+          "Y": -0.9264677
+        },
+        "IsTurn": true
+      },
+      "TotalReferenceMeters": 46.962271098755586,
+      "DistanceMeters": 2.0001976788043976,
+      "Activity": 0,
+      "Drive": 1,
+      "TargetOffsetMeters": 0.6,
+      "Impairment": 0,
+      "Context": 1,
+      "Speed": 20.004,
+      "ForwardSpeed": 19.974483,
+      "SideSpeed": 1.0862966,
+      "SlideRadians": -0.054330662
+    },
+    "Activation": 0.33999999999999997,
+    "Horizons": [
+      1,
+      2,
+      3,
+      3
+    ],
+    "MovementHorizon": 1.8743876863499078,
+    "Trials": [
+      {
+        "Candidate": "current",
+        "Target": 0.6,
+        "Available": true,
+        "ActualGain": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "LegacyGain": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "Hash": "E8ADB542D7F40D9BDA8A3DABA1C400F4E317115A7102361017D7373E1BBDB79A",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.9557303786277771,
+        "MinimumSpeed": 20.013511657714844,
+        "TangentialImpulseNewtonSeconds": 117.84490010566331,
+        "Contacts": 0
+      },
+      {
+        "Candidate": "hold-position",
+        "Target": 0.59842443,
+        "Available": true,
+        "ActualGain": [
+          0.0003756754704937748,
+          0.0016748402134822982,
+          0.0034891206158391697,
+          0.0034891206158391697
+        ],
+        "LegacyGain": [
+          0.0007659782629616529,
+          0.0015319565259233059,
+          0.002297934788884959,
+          0.002297934788884959
+        ],
+        "Hash": "1E93610157E07D344066AD288F7FAD314896C36494F90264E4CE64BFB6C327C4",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.9558600783348083,
+        "MinimumSpeed": 20.013511657714844,
+        "TangentialImpulseNewtonSeconds": 117.86106009414829,
+        "Contacts": 0
+      },
+      {
+        "Candidate": "inside",
+        "Target": -0.40157557,
+        "Available": false,
+        "ActualGain": [],
+        "LegacyGain": [],
+        "Hash": "",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0,
+        "MinimumSpeed": 0,
+        "TangentialImpulseNewtonSeconds": 0,
+        "Contacts": 0
+      },
+      {
+        "Candidate": "outside",
+        "Target": 1.5984244,
+        "Available": true,
+        "ActualGain": [
+          -0.2413417993366238,
+          -1.0419517091856818,
+          -2.162161332132939,
+          -2.162161332132939
+        ],
+        "LegacyGain": [
+          -0.473653739812665,
+          -0.94730747962533,
+          -1.420961219437995,
+          -1.420961219437995
+        ],
+        "Hash": "753A026E3D7DA60771CF96E6B77C963726979443AB6FAEAEAD14CE7FBF0C6AE4",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.8757011294364929,
+        "MinimumSpeed": 19.59314727783203,
+        "TangentialImpulseNewtonSeconds": 107.38485281805994,
+        "Contacts": 0
+      }
+    ]
+  },
+  {
+    "Name": "B-small-tighten",
+    "Spec": {
+      "Profile": {
+        "Id": 1,
+        "Name": "R1",
+        "Skills": {
+          "Start": 50,
+          "Speed": 50,
+          "SlideControl": 70,
+          "TrackReading": 50,
+          "PairRiding": 50,
+          "Adaptability": 50
+        },
+        "Style": {
+          "RiskTolerance": 0.5,
+          "LaneChangeTendency": 0.5,
+          "OutsidePreference": 0.5,
+          "SetupIndependence": 0.5
+        }
+      },
+      "Setup": {
+        "Gearing": 0.5,
+        "TractionBias": 0.5
+      },
+      "ReferenceMeters": 45,
+      "OffsetMeters": 3,
+      "SpeedMetersPerSecond": 17,
+      "TargetOffsetMeters": 3,
+      "InitialOutwardSpeed": 0,
+      "TrafficEnabled": false,
+      "Passive": false,
+      "Bullet": false
+    },
+    "Observation": {
+      "Id": 1,
+      "Position": {
+        "X": 47.376427,
+        "Y": -0.6662614
+      },
+      "Velocity": {
+        "X": 15.835641,
+        "Y": 6.1890697
+      },
+      "Heading": 0.3314055,
+      "AngularVelocity": 0.13794613,
+      "Road": {
+        "Segment": 1,
+        "Progress": 0.3557920353194735,
+        "ReferenceMeters": 46.55012131318739,
+        "OffsetMeters": 2.9989418983459473,
+        "Heading": 0.3725845584899157,
+        "RadiusMeters": 33.99894189834595,
+        "CornerProgress": 0.11859734510649117,
+        "Tangent": {
+          "X": 0.93138963,
+          "Y": 0.36402386
+        },
+        "Outward": {
+          "X": 0.36402386,
+          "Y": -0.93138963
+        },
+        "IsTurn": true
+      },
+      "TotalReferenceMeters": 46.55012147645165,
+      "DistanceMeters": 1.700105458498001,
+      "Activity": 0,
+      "Drive": 1,
+      "TargetOffsetMeters": 3,
+      "Impairment": 0,
+      "Context": 1,
+      "Speed": 17.002121,
+      "ForwardSpeed": 16.987713,
+      "SideSpeed": 0.6998172,
+      "SlideRadians": -0.04117224
+    },
+    "Activation": 0.33999999999999997,
+    "Horizons": [
+      1,
+      2,
+      3,
+      3
+    ],
+    "MovementHorizon": 1.8743876863499078,
+    "Trials": [
+      {
+        "Candidate": "current",
+        "Target": 3,
+        "Available": true,
+        "ActualGain": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "LegacyGain": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "Hash": "49F6C34AE073BB40D097F43A4CC86E341349CACE404D29FD576F8E8173D07050",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.5888044834136963,
+        "MinimumSpeed": 17.007169723510742,
+        "TangentialImpulseNewtonSeconds": 28.837361126088283,
+        "Contacts": 0
+      },
+      {
+        "Candidate": "hold-position",
+        "Target": 2.998942,
+        "Available": true,
+        "ActualGain": [
+          0.00018982565457292822,
+          0.0008090554428150654,
+          0.0016766421630904915,
+          0.0016766421630904915
+        ],
+        "LegacyGain": [
+          0.0003776544167379825,
+          0.000755308833475965,
+          0.0011329632502139475,
+          0.0011329632502139475
+        ],
+        "Hash": "23431045BCC8E39BF331B5FBD00A64A73FD8E2399CBB1DDF11147872AA80B92D",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.5888499617576599,
+        "MinimumSpeed": 17.007169723510742,
+        "TangentialImpulseNewtonSeconds": 28.84495333904352,
+        "Contacts": 0
+      },
+      {
+        "Candidate": "inside",
+        "Target": 1.9989419,
+        "Available": true,
+        "ActualGain": [
+          0.18246521704533336,
+          0.8073348090103565,
+          1.6770690019469612,
+          1.6770690019469612
+        ],
+        "LegacyGain": [
+          0.36571479263367834,
+          0.7314295852673567,
+          1.097144377901035,
+          1.097144377901035
+        ],
+        "Hash": "565DF06293596DF29547B8AE30A6BFBFBD104EB40E7A896E616DDB2F97016498",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.7298146486282349,
+        "MinimumSpeed": 17.007169723510742,
+        "TangentialImpulseNewtonSeconds": 36.72470431381668,
+        "Contacts": 0
+      },
+      {
+        "Candidate": "outside",
+        "Target": 3.998942,
+        "Available": true,
+        "ActualGain": [
+          -0.17726861735100385,
+          -0.7645897314319399,
+          -1.5637396408131394,
+          -1.5637396408131394
+        ],
+        "LegacyGain": [
+          -0.34851511431151216,
+          -0.6970302286230243,
+          -1.0455453429345365,
+          -1.0455453429345365
+        ],
+        "Hash": "082D2E0D42D0627F9F6D43BEA2ACDEF12CC8E6800832387075CCEFADDEEEE2B2",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.5683726072311401,
+        "MinimumSpeed": 16.619037628173828,
+        "TangentialImpulseNewtonSeconds": 22.050555173809094,
+        "Contacts": 0
+      }
+    ]
+  },
+  {
+    "Name": "C-loaded-tighten",
+    "Spec": {
+      "Profile": {
+        "Id": 1,
+        "Name": "R1",
+        "Skills": {
+          "Start": 50,
+          "Speed": 50,
+          "SlideControl": 70,
+          "TrackReading": 50,
+          "PairRiding": 50,
+          "Adaptability": 50
+        },
+        "Style": {
+          "RiskTolerance": 0.5,
+          "LaneChangeTendency": 0.5,
+          "OutsidePreference": 0.5,
+          "SetupIndependence": 0.5
+        }
+      },
+      "Setup": {
+        "Gearing": 0.5,
+        "TractionBias": 0.5
+      },
+      "ReferenceMeters": 45,
+      "OffsetMeters": 3,
+      "SpeedMetersPerSecond": 22,
+      "TargetOffsetMeters": 3,
+      "InitialOutwardSpeed": 0,
+      "TrafficEnabled": false,
+      "Passive": false,
+      "Bullet": false
+    },
+    "Observation": {
+      "Id": 1,
+      "Position": {
+        "X": 47.84062,
+        "Y": -0.48011875
+      },
+      "Velocity": {
+        "X": 20.374886,
+        "Y": 8.310615
+      },
+      "Heading": 0.33155409,
+      "AngularVelocity": 0.14228424,
+      "Road": {
+        "Segment": 1,
+        "Progress": 0.3698392762814338,
+        "ReferenceMeters": 47.00613865230666,
+        "OffsetMeters": 2.9982259273529053,
+        "Heading": 0.38729479523569865,
+        "RadiusMeters": 33.998225927352905,
+        "CornerProgress": 0.12327975876047793,
+        "Tangent": {
+          "X": 0.92593414,
+          "Y": 0.37768495
+        },
+        "Outward": {
+          "X": 0.37768495,
+          "Y": -0.92593414
+        },
+        "IsTurn": true
+      },
+      "TotalReferenceMeters": 47.00613881557092,
+      "DistanceMeters": 2.2002202570438385,
+      "Activity": 0,
+      "Drive": 1,
+      "TargetOffsetMeters": 3,
+      "Impairment": 0,
+      "Context": 1,
+      "Speed": 22.004597,
+      "ForwardSpeed": 21.970432,
+      "SideSpeed": 1.2257118,
+      "SlideRadians": -0.055731356
+    },
+    "Activation": 0.33999999999999997,
+    "Horizons": [
+      1,
+      2,
+      3,
+      3
+    ],
+    "MovementHorizon": 1.8743876863499078,
+    "Trials": [
+      {
+        "Candidate": "current",
+        "Target": 3,
+        "Available": true,
+        "ActualGain": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "LegacyGain": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "Hash": "722849F6C1A2279BCC6628992138457B1BC9BFF93D0B2B1026DC8BB6300C9229",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 1.0004369020462036,
+        "MinimumSpeed": 22.015525817871094,
+        "TangentialImpulseNewtonSeconds": 51.995897132496694,
+        "Contacts": 0
+      },
+      {
+        "Candidate": "hold-position",
+        "Target": 2.998226,
+        "Available": true,
+        "ActualGain": [
+          0.0004309450096400269,
+          0.0018853322424092767,
+          0.00337929490568456,
+          0.00337929490568456
+        ],
+        "LegacyGain": [
+          0.0008195186943531496,
+          0.0016390373887062992,
+          0.002458556083059449,
+          0.002458556083059449
+        ],
+        "Hash": "73698050D9BD2E1D9A1014FD24AE64B0CF02CF34036917785C258F5B27D90161",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 1.0005831718444824,
+        "MinimumSpeed": 22.015525817871094,
+        "TangentialImpulseNewtonSeconds": 51.72693996194925,
+        "Contacts": 0
+      },
+      {
+        "Candidate": "inside",
+        "Target": 1.9982259,
+        "Available": true,
+        "ActualGain": [
+          -0.4041776213713888,
+          -0.34065659472149434,
+          0.012313348610035746,
+          0.012313348610035746
+        ],
+        "LegacyGain": [
+          0.4736674285895006,
+          0.9473348571790012,
+          1.4210022857685018,
+          1.4210022857685018
+        ],
+        "Hash": "71639020AD1B8FFF0C00214C8B20CF26273EEAC0FF9814FCEEE2A5878672A071",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 1.1156657934188843,
+        "MinimumSpeed": 21.335220336914062,
+        "TangentialImpulseNewtonSeconds": -69.73041052854705,
+        "Contacts": 0
+      },
+      {
+        "Candidate": "outside",
+        "Target": 3.998226,
+        "Available": true,
+        "ActualGain": [
+          -0.22952531357498174,
+          -0.992037614600747,
+          -1.9820933638004021,
+          -1.9820933638004021
+        ],
+        "LegacyGain": [
+          -0.4507443910382527,
+          -0.9014887820765054,
+          -1.352233173114758,
+          -1.352233173114758
+        ],
+        "Hash": "158713AA2C7A5807A9D4617FAC003F9BF22C0704247A2773254B4772BAC0405D",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.9579582214355469,
+        "MinimumSpeed": 21.59723663330078,
+        "TangentialImpulseNewtonSeconds": 103.04495797999247,
+        "Contacts": 0
+      }
+    ]
+  },
+  {
+    "Name": "D-fast-outer",
+    "Spec": {
+      "Profile": {
+        "Id": 1,
+        "Name": "R1",
+        "Skills": {
+          "Start": 50,
+          "Speed": 50,
+          "SlideControl": 50,
+          "TrackReading": 50,
+          "PairRiding": 50,
+          "Adaptability": 50
+        },
+        "Style": {
+          "RiskTolerance": 0.5,
+          "LaneChangeTendency": 0.5,
+          "OutsidePreference": 0.5,
+          "SetupIndependence": 0.5
+        }
+      },
+      "Setup": {
+        "Gearing": 0.5,
+        "TractionBias": 0.5
+      },
+      "ReferenceMeters": 45,
+      "OffsetMeters": 6,
+      "SpeedMetersPerSecond": 22,
+      "TargetOffsetMeters": 6,
+      "InitialOutwardSpeed": 0,
+      "TrafficEnabled": false,
+      "Passive": false,
+      "Bullet": false
+    },
+    "Observation": {
+      "Id": 1,
+      "Position": {
+        "X": 48.793747,
+        "Y": -3.3309205
+      },
+      "Velocity": {
+        "X": 20.417557,
+        "Y": 8.203322
+      },
+      "Heading": 0.3315011,
+      "AngularVelocity": 0.14073661,
+      "Road": {
+        "Segment": 1,
+        "Progress": 0.36482769059766257,
+        "ReferenceMeters": 46.843446919853974,
+        "OffsetMeters": 5.998373031616211,
+        "Heading": 0.38204667483399923,
+        "RadiusMeters": 36.99837303161621,
+        "CornerProgress": 0.12160923019922086,
+        "Tangent": {
+          "X": 0.92790353,
+          "Y": 0.37282038
+        },
+        "Outward": {
+          "X": 0.37282038,
+          "Y": -0.92790353
+        },
+        "IsTurn": true
+      },
+      "TotalReferenceMeters": 46.84344642874462,
+      "DistanceMeters": 2.2001919746398926,
+      "Activity": 0,
+      "Drive": 1,
+      "TargetOffsetMeters": 6,
+      "Impairment": 0,
+      "Context": 1,
+      "Speed": 22.00389,
+      "ForwardSpeed": 21.975796,
+      "SideSpeed": 1.111537,
+      "SlideRadians": -0.050536986
+    },
+    "Activation": 0.33999999999999997,
+    "Horizons": [
+      1,
+      2,
+      3,
+      3
+    ],
+    "MovementHorizon": 1.8743876863499078,
+    "Trials": [
+      {
+        "Candidate": "current",
+        "Target": 6,
+        "Available": true,
+        "ActualGain": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "LegacyGain": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "Hash": "CFCF4A82D463448AC0D3F9838269E3BF458C885CCC95F20DF090C4C4940FEEC4",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.9519290924072266,
+        "MinimumSpeed": 22.013118743896484,
+        "TangentialImpulseNewtonSeconds": 72.72057674083088,
+        "Contacts": 0
+      },
+      {
+        "Candidate": "hold-position",
+        "Target": 5.998373,
+        "Available": true,
+        "ActualGain": [
+          0.00032014489589471395,
+          0.0014348366822076741,
+          0.002949189970053112,
+          0.002949189970053112
+        ],
+        "LegacyGain": [
+          0.000634604380099546,
+          0.001269208760199092,
+          0.001903813140298638,
+          0.001903813140298638
+        ],
+        "Hash": "2F81642469E3BD979E602449F22B4FBCD1E4C3C41D472BECC906191982053284",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.9520491361618042,
+        "MinimumSpeed": 22.013118743896484,
+        "TangentialImpulseNewtonSeconds": 72.73126451386736,
+        "Contacts": 0
+      },
+      {
+        "Candidate": "inside",
+        "Target": 4.998373,
+        "Available": true,
+        "ActualGain": [
+          -0.039383750449999866,
+          0.3862649063563026,
+          1.0798631007080104,
+          1.0798631007080104
+        ],
+        "LegacyGain": [
+          0.39913249260566985,
+          0.7982649852113397,
+          1.1973974778170096,
+          1.1973974778170096
+        ],
+        "Hash": "43C48A2D512F50B357C5D7C7B7F19064C23F75F18443B2589FA2CBC37D83E141",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 1.0629299879074097,
+        "MinimumSpeed": 21.747982025146484,
+        "TangentialImpulseNewtonSeconds": 36.92122407978895,
+        "Contacts": 0
+      },
+      {
+        "Candidate": "outside",
+        "Target": 6.998373,
+        "Available": true,
+        "ActualGain": [
+          -0.193989713540077,
+          -0.8381698722196944,
+          -1.7242465572730055,
+          -1.7242465572730055
+        ],
+        "LegacyGain": [
+          -0.38135032268733937,
+          -0.7627006453746787,
+          -1.1440509680620181,
+          -1.1440509680620181
+        ],
+        "Hash": "23BF43041482E40469B09FF2FD877ED50572886615E22C17CAA8608F0183F829",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.8898345828056335,
+        "MinimumSpeed": 21.605005264282227,
+        "TangentialImpulseNewtonSeconds": 66.12356538828207,
+        "Contacts": 0
+      }
+    ]
+  },
+  {
+    "Name": "E-slow-outer",
+    "Spec": {
+      "Profile": {
+        "Id": 1,
+        "Name": "R1",
+        "Skills": {
+          "Start": 50,
+          "Speed": 50,
+          "SlideControl": 70,
+          "TrackReading": 50,
+          "PairRiding": 50,
+          "Adaptability": 50
+        },
+        "Style": {
+          "RiskTolerance": 0.5,
+          "LaneChangeTendency": 0.5,
+          "OutsidePreference": 0.5,
+          "SetupIndependence": 0.5
+        }
+      },
+      "Setup": {
+        "Gearing": 0.5,
+        "TractionBias": 0.5
+      },
+      "ReferenceMeters": 45,
+      "OffsetMeters": 5,
+      "SpeedMetersPerSecond": 17,
+      "TargetOffsetMeters": 5,
+      "InitialOutwardSpeed": 0,
+      "TrafficEnabled": false,
+      "Passive": false,
+      "Bullet": false
+    },
+    "Observation": {
+      "Id": 1,
+      "Position": {
+        "X": 48.01128,
+        "Y": -2.5653753
+      },
+      "Velocity": {
+        "X": 15.852554,
+        "Y": 6.14497
+      },
+      "Heading": 0.3313774,
+      "AngularVelocity": 0.13712671,
+      "Road": {
+        "Segment": 1,
+        "Progress": 0.3531386534641388,
+        "ReferenceMeters": 46.46398424637023,
+        "OffsetMeters": 4.998998165130615,
+        "Heading": 0.3698059434312977,
+        "RadiusMeters": 35.998998165130615,
+        "CornerProgress": 0.11771288448804627,
+        "Tangent": {
+          "X": 0.9323975,
+          "Y": 0.3614345
+        },
+        "Outward": {
+          "X": 0.3614345,
+          "Y": -0.9323975
+        },
+        "IsTurn": true
+      },
+      "TotalReferenceMeters": 46.463984652630614,
+      "DistanceMeters": 1.7000871300697327,
+      "Activity": 0,
+      "Drive": 1,
+      "TargetOffsetMeters": 5,
+      "Impairment": 0,
+      "Context": 1,
+      "Speed": 17.001886,
+      "ForwardSpeed": 16.989338,
+      "SideSpeed": 0.65309143,
+      "SlideRadians": -0.038422354
+    },
+    "Activation": 0.33999999999999997,
+    "Horizons": [
+      1,
+      2,
+      3,
+      3
+    ],
+    "MovementHorizon": 1.8743876863499078,
+    "Trials": [
+      {
+        "Candidate": "current",
+        "Target": 5,
+        "Available": true,
+        "ActualGain": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "LegacyGain": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "Hash": "69A3490C85980AAF26943D775E7BC1C97F6EA578B07AFDAD7EF6B010C016ED08",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.5494289398193359,
+        "MinimumSpeed": 17.006376266479492,
+        "TangentialImpulseNewtonSeconds": 15.28618620644641,
+        "Contacts": 0
+      },
+      {
+        "Candidate": "hold-position",
+        "Target": 4.998998,
+        "Available": true,
+        "ActualGain": [
+          0.00015473686485734106,
+          0.000680540679681485,
+          0.001449621806600021,
+          0.001449621806600021
+        ],
+        "LegacyGain": [
+          0.00031893971596730353,
+          0.0006378794319346071,
+          0.0009568191479019106,
+          0.0009568191479019106
+        ],
+        "Hash": "83FBFEC9924BB69C5BCDF23502FA73463EF8BA29884878290EB9C9E9A79E3091",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.5494727492332458,
+        "MinimumSpeed": 17.006376266479492,
+        "TangentialImpulseNewtonSeconds": 15.291027659741257,
+        "Contacts": 0
+      },
+      {
+        "Candidate": "inside",
+        "Target": 3.9989982,
+        "Available": true,
+        "ActualGain": [
+          0.16258355605073405,
+          0.7187227889844365,
+          1.4857914415067768,
+          1.4857914415067768
+        ],
+        "LegacyGain": [
+          0.3257580395487185,
+          0.651516079097437,
+          0.9772741186461555,
+          0.9772741186461555
+        ],
+        "Hash": "2772833BD5CB10E71C9A12E303AF687D80C1C05DACEEAF5996055833516DCDC9",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.698038637638092,
+        "MinimumSpeed": 17.006376266479492,
+        "TangentialImpulseNewtonSeconds": 20.604061245928477,
+        "Contacts": 0
+      },
+      {
+        "Candidate": "outside",
+        "Target": 5.998998,
+        "Available": true,
+        "ActualGain": [
+          -0.15821458952935075,
+          -0.6827759363834502,
+          -1.3913913632636792,
+          -1.3913913632636792
+        ],
+        "LegacyGain": [
+          -0.31126818866186134,
+          -0.6225363773237227,
+          -0.933804565985584,
+          -0.933804565985584
+        ],
+        "Hash": "1E5BBD66F0D76A0A2B516ED86B8C8EB7BF8682914E75655FA5A7F0450F61967C",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.5388456583023071,
+        "MinimumSpeed": 16.630353927612305,
+        "TangentialImpulseNewtonSeconds": 10.924937459864559,
+        "Contacts": 0
+      }
+    ]
+  },
+  {
+    "Name": "F-entry-16",
+    "Spec": {
+      "Profile": {
+        "Id": 1,
+        "Name": "R1",
+        "Skills": {
+          "Start": 50,
+          "Speed": 50,
+          "SlideControl": 70,
+          "TrackReading": 50,
+          "PairRiding": 50,
+          "Adaptability": 50
+        },
+        "Style": {
+          "RiskTolerance": 0.5,
+          "LaneChangeTendency": 0.5,
+          "OutsidePreference": 0.5,
+          "SetupIndependence": 0.5
+        }
+      },
+      "Setup": {
+        "Gearing": 0.5,
+        "TractionBias": 0.5
+      },
+      "ReferenceMeters": 36,
+      "OffsetMeters": 3,
+      "SpeedMetersPerSecond": 16,
+      "TargetOffsetMeters": 3,
+      "InitialOutwardSpeed": 0,
+      "TrafficEnabled": false,
+      "Passive": false,
+      "Bullet": false
+    },
+    "Observation": {
+      "Id": 1,
+      "Position": {
+        "X": 37.69398,
+        "Y": -2.8921626
+      },
+      "Velocity": {
+        "X": 15.951466,
+        "Y": 1.2678308
+      },
+      "Heading": 0.040202715,
+      "AngularVelocity": 0.13759969,
+      "Road": {
+        "Segment": 1,
+        "Progress": 0.07574509165598788,
+        "ReferenceMeters": 37.45892237784243,
+        "OffsetMeters": 2.9990618228912354,
+        "Heading": 0.07932007670459451,
+        "RadiusMeters": 33.999061822891235,
+        "CornerProgress": 0.025248363885329292,
+        "Tangent": {
+          "X": 0.9968558,
+          "Y": 0.079236925
+        },
+        "Outward": {
+          "X": 0.079236925,
+          "Y": -0.9968558
+        },
+        "IsTurn": true
+      },
+      "TotalReferenceMeters": 37.45892206536641,
+      "DistanceMeters": 1.600084736943245,
+      "Activity": 0,
+      "Drive": 1,
+      "TargetOffsetMeters": 3,
+      "Impairment": 0,
+      "Context": 1,
+      "Speed": 16.00177,
+      "ForwardSpeed": 15.989533,
+      "SideSpeed": 0.625687,
+      "SlideRadians": -0.039111078
+    },
+    "Activation": 0.33999999999999997,
+    "Horizons": [
+      1,
+      2,
+      3,
+      3
+    ],
+    "MovementHorizon": 1.8743876863499078,
+    "Trials": [
+      {
+        "Candidate": "current",
+        "Target": 3,
+        "Available": true,
+        "ActualGain": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "LegacyGain": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "Hash": "D12C6FFCBBD150985CA836594E99B820F817F0C9291507AB132AD5DEF085273C",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.5087623000144958,
+        "MinimumSpeed": 16.005971908569336,
+        "TangentialImpulseNewtonSeconds": 0.02039266138337531,
+        "Contacts": 0
+      },
+      {
+        "Candidate": "hold-position",
+        "Target": 2.9990618,
+        "Available": true,
+        "ActualGain": [
+          0.00016127161051571193,
+          0.0007011484306929106,
+          0.0014151499009074087,
+          0.0014151499009074087
+        ],
+        "LegacyGain": [
+          0.0003151485102108609,
+          0.0006302970204217218,
+          0.0009454455306325826,
+          0.0009454455306325826
+        ],
+        "Hash": "735520944DFCD75F043607D25708433F3E09D5B6FCF8889E17B5030984252E92",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.508796215057373,
+        "MinimumSpeed": 16.005971908569336,
+        "TangentialImpulseNewtonSeconds": 0.02047368817497023,
+        "Contacts": 0
+      },
+      {
+        "Candidate": "inside",
+        "Target": 1.9990618,
+        "Available": true,
+        "ActualGain": [
+          0.1716409541061381,
+          0.7593748530267845,
+          1.561349139339086,
+          1.561349139339086
+        ],
+        "LegacyGain": [
+          0.3441547073791682,
+          0.6883094147583364,
+          1.0324641221375046,
+          1.0324641221375046
+        ],
+        "Hash": "A29D367D4B874FBFA2C0FBC1607620E59044CE33EF5E7C0E9482F378DC697C6C",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.6645669341087341,
+        "MinimumSpeed": 16.005971908569336,
+        "TangentialImpulseNewtonSeconds": 0.2830148343369352,
+        "Contacts": 0
+      },
+      {
+        "Candidate": "outside",
+        "Target": 3.9990618,
+        "Available": true,
+        "ActualGain": [
+          -0.16680731787869973,
+          -0.7193796620174453,
+          -1.4589182077063185,
+          -1.4589182077063185
+        ],
+        "LegacyGain": [
+          -0.32804772897045886,
+          -0.6560954579409177,
+          -0.9841431869113766,
+          -0.9841431869113766
+        ],
+        "Hash": "0D07D7C16485F868AC72866453AA7AB9B0A6DD6105D87C89A7E758CB740B764C",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.5054709315299988,
+        "MinimumSpeed": 15.613973617553711,
+        "TangentialImpulseNewtonSeconds": 0,
+        "Contacts": 0
+      }
+    ]
+  },
+  {
+    "Name": "F-entry-19",
+    "Spec": {
+      "Profile": {
+        "Id": 1,
+        "Name": "R1",
+        "Skills": {
+          "Start": 50,
+          "Speed": 50,
+          "SlideControl": 70,
+          "TrackReading": 50,
+          "PairRiding": 50,
+          "Adaptability": 50
+        },
+        "Style": {
+          "RiskTolerance": 0.5,
+          "LaneChangeTendency": 0.5,
+          "OutsidePreference": 0.5,
+          "SetupIndependence": 0.5
+        }
+      },
+      "Setup": {
+        "Gearing": 0.5,
+        "TractionBias": 0.5
+      },
+      "ReferenceMeters": 36,
+      "OffsetMeters": 3,
+      "SpeedMetersPerSecond": 19,
+      "TargetOffsetMeters": 3,
+      "InitialOutwardSpeed": 0,
+      "TrafficEnabled": false,
+      "Passive": false,
+      "Bullet": false
+    },
+    "Observation": {
+      "Id": 1,
+      "Position": {
+        "X": 37.992966,
+        "Y": -2.8666842
+      },
+      "Velocity": {
+        "X": 18.929195,
+        "Y": 1.6727163
+      },
+      "Heading": 0.040291898,
+      "AngularVelocity": 0.14020252,
+      "Road": {
+        "Segment": 1,
+        "Progress": 0.08417315599753736,
+        "ReferenceMeters": 37.73252368398982,
+        "OffsetMeters": 2.998678684234619,
+        "Heading": 0.0881459252899941,
+        "RadiusMeters": 33.99867868423462,
+        "CornerProgress": 0.028057718665845787,
+        "Tangent": {
+          "X": 0.99611765,
+          "Y": 0.08803183
+        },
+        "Outward": {
+          "X": 0.08803183,
+          "Y": -0.99611765
+        },
+        "IsTurn": true
+      },
+      "TotalReferenceMeters": 37.7325233715138,
+      "DistanceMeters": 1.9001478999853134,
+      "Activity": 0,
+      "Drive": 1,
+      "TargetOffsetMeters": 3,
+      "Impairment": 0,
+      "Context": 1,
+      "Speed": 19.002958,
+      "ForwardSpeed": 18.98121,
+      "SideSpeed": 0.9088717,
+      "SlideRadians": -0.047846165
+    },
+    "Activation": 0.33999999999999997,
+    "Horizons": [
+      1,
+      2,
+      3,
+      3
+    ],
+    "MovementHorizon": 1.8743876863499078,
+    "Trials": [
+      {
+        "Candidate": "current",
+        "Target": 3,
+        "Available": true,
+        "ActualGain": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "LegacyGain": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "Hash": "48EB9D3E39C150C27F7B0EB68318E0A6B797A0E62270A9708C5657B4D62A23D2",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.7255987524986267,
+        "MinimumSpeed": 19.010000228881836,
+        "TangentialImpulseNewtonSeconds": 11.478043212748588,
+        "Contacts": 0
+      },
+      {
+        "Candidate": "hold-position",
+        "Target": 2.9986787,
+        "Available": true,
+        "ActualGain": [
+          0.0002675366167750326,
+          0.0011524428868625591,
+          0.002334683945520055,
+          0.002334683945520055
+        ],
+        "LegacyGain": [
+          0.000527103102598403,
+          0.001054206205196806,
+          0.001581309307795209,
+          0.001581309307795209
+        ],
+        "Hash": "49F1A7551B58AF864C747F2C38BDF8681CE2EE32936B3CAD2C06FC330B880FFF",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.7256702780723572,
+        "MinimumSpeed": 19.010000228881836,
+        "TangentialImpulseNewtonSeconds": 11.484084289139126,
+        "Contacts": 0
+      },
+      {
+        "Candidate": "inside",
+        "Target": 1.9986787,
+        "Available": true,
+        "ActualGain": [
+          0.20409309224986316,
+          0.9034311323976567,
+          1.8663722190799064,
+          1.8663722190799064
+        ],
+        "LegacyGain": [
+          0.40886370416052387,
+          0.8177274083210477,
+          1.2265911124815716,
+          1.2265911124815716
+        ],
+        "Hash": "610AADDB4E33BF05E32F3F359C72DBF3E27EE6B30A01EFAE812C689CEAB32D5B",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.8722246289253235,
+        "MinimumSpeed": 19.010000228881836,
+        "TangentialImpulseNewtonSeconds": 16.68198878189897,
+        "Contacts": 0
+      },
+      {
+        "Candidate": "outside",
+        "Target": 3.9986787,
+        "Available": true,
+        "ActualGain": [
+          -0.19815924338048774,
+          -0.8550359259575089,
+          -1.7401585326641964,
+          -1.7401585326641964
+        ],
+        "LegacyGain": [
+          -0.38942952821299315,
+          -0.7788590564259863,
+          -1.1682885846389794,
+          -1.1682885846389794
+        ],
+        "Hash": "821EF054BCDDC8C0C8D3B9DA9A49C9B64827335082E24809645183E4612D35C6",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.7059975862503052,
+        "MinimumSpeed": 18.57550811767578,
+        "TangentialImpulseNewtonSeconds": 7.4065023230298435,
+        "Contacts": 0
+      }
+    ]
+  },
+  {
+    "Name": "F-entry-23",
+    "Spec": {
+      "Profile": {
+        "Id": 1,
+        "Name": "R1",
+        "Skills": {
+          "Start": 50,
+          "Speed": 50,
+          "SlideControl": 70,
+          "TrackReading": 50,
+          "PairRiding": 50,
+          "Adaptability": 50
+        },
+        "Style": {
+          "RiskTolerance": 0.5,
+          "LaneChangeTendency": 0.5,
+          "OutsidePreference": 0.5,
+          "SetupIndependence": 0.5
+        }
+      },
+      "Setup": {
+        "Gearing": 0.5,
+        "TractionBias": 0.5
+      },
+      "ReferenceMeters": 36,
+      "OffsetMeters": 3,
+      "SpeedMetersPerSecond": 23,
+      "TargetOffsetMeters": 3,
+      "InitialOutwardSpeed": 0,
+      "TrafficEnabled": false,
+      "Passive": false,
+      "Bullet": false
+    },
+    "Observation": {
+      "Id": 1,
+      "Position": {
+        "X": 38.377514,
+        "Y": -2.8339138
+      },
+      "Velocity": {
+        "X": 22.623648,
+        "Y": 2.1860104
+      },
+      "Heading": 0.040408667,
+      "AngularVelocity": 0.14359096,
+      "Road": {
+        "Segment": 1,
+        "Progress": 0.09501229731021091,
+        "ReferenceMeters": 38.08439608321243,
+        "OffsetMeters": 3.002078056335449,
+        "Heading": 0.09949664784556234,
+        "RadiusMeters": 34.00207805633545,
+        "CornerProgress": 0.0316707657700703,
+        "Tangent": {
+          "X": 0.9950543,
+          "Y": 0.09933256
+        },
+        "Outward": {
+          "X": 0.09933256,
+          "Y": -0.9950543
+        },
+        "IsTurn": true
+      },
+      "TotalReferenceMeters": 38.084395770736414,
+      "DistanceMeters": 2.2861390113830566,
+      "Activity": 0,
+      "Drive": 1,
+      "TargetOffsetMeters": 3,
+      "Impairment": 0,
+      "Context": 1,
+      "Speed": 22.729013,
+      "ForwardSpeed": 22.69349,
+      "SideSpeed": 1.2702832,
+      "SlideRadians": -0.055917315
+    },
+    "Activation": 0.33999999999999997,
+    "Horizons": [
+      1,
+      2,
+      3,
+      3
+    ],
+    "MovementHorizon": 1.8743876863499078,
+    "Trials": [
+      {
+        "Candidate": "current",
+        "Target": 3,
+        "Available": true,
+        "ActualGain": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "LegacyGain": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "Hash": "7B20ECC95DDF6FFCDD345803979E48315DA07D6220E11C94F6ABFA45B942587B",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 1.001964807510376,
+        "MinimumSpeed": 22.294660568237305,
+        "TangentialImpulseNewtonSeconds": 9.824399140487508,
+        "Contacts": 0
+      },
+      {
+        "Candidate": "hold-position",
+        "Target": 3.002078,
+        "Available": true,
+        "ActualGain": [
+          0.0005163121605704646,
+          -0.00011381645660435424,
+          -0.0010893874638782108,
+          -0.0010893874638782108
+        ],
+        "LegacyGain": [
+          -0.0003008882032133897,
+          -0.0006017764064267794,
+          -0.0009026646096401691,
+          -0.0009026646096401691
+        ],
+        "Hash": "7F9A25B52122081887F76FF1355D19CF2BFE3AA42499F4C3411A281F4304968C",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 1.0016345977783203,
+        "MinimumSpeed": 22.295730590820312,
+        "TangentialImpulseNewtonSeconds": 10.09432006863993,
+        "Contacts": 0
+      },
+      {
+        "Candidate": "inside",
+        "Target": 2.002078,
+        "Available": true,
+        "ActualGain": [
+          -0.6835992859880946,
+          -1.0291952350526543,
+          -0.9826955687306906,
+          -0.9826955687306906
+        ],
+        "LegacyGain": [
+          0.1473411966507321,
+          0.2946823933014642,
+          0.44202358995219626,
+          0.44202358995219626
+        ],
+        "Hash": "7E17346473504F906ABEC707AA04F7F49BE94B60AC08F56C0681692148CE84EF",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 1.16051185131073,
+        "MinimumSpeed": 21.24554443359375,
+        "TangentialImpulseNewtonSeconds": -109.39853917089236,
+        "Contacts": 0
+      },
+      {
+        "Candidate": "outside",
+        "Target": 4.002078,
+        "Available": true,
+        "ActualGain": [
+          -0.22867675885763106,
+          -0.998193650169398,
+          -2.0103446957965048,
+          -2.0103446957965048
+        ],
+        "LegacyGain": [
+          -0.2520054989336522,
+          -0.5040109978673044,
+          -0.7560164968009566,
+          -0.7560164968009566
+        ],
+        "Hash": "813AA4C47AF15B370BC3956AFF0E54F5226036DD834A48BEBACC144616D0318F",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.9659867882728577,
+        "MinimumSpeed": 21.847253799438477,
+        "TangentialImpulseNewtonSeconds": 40.74871468750758,
+        "Contacts": 0
+      }
+    ]
+  },
+  {
+    "Name": "G-low-tech-attack",
+    "Spec": {
+      "Profile": {
+        "Id": 1,
+        "Name": "R1",
+        "Skills": {
+          "Start": 50,
+          "Speed": 50,
+          "SlideControl": 70,
+          "TrackReading": 50,
+          "PairRiding": 50,
+          "Adaptability": 50
+        },
+        "Style": {
+          "RiskTolerance": 0.5,
+          "LaneChangeTendency": 0.5,
+          "OutsidePreference": 0.5,
+          "SetupIndependence": 0.5
+        }
+      },
+      "Setup": {
+        "Gearing": 0.5,
+        "TractionBias": 0.5
+      },
+      "ReferenceMeters": 45,
+      "OffsetMeters": 3,
+      "SpeedMetersPerSecond": 20,
+      "TargetOffsetMeters": 3,
+      "InitialOutwardSpeed": 0,
+      "TrafficEnabled": false,
+      "Passive": false,
+      "Bullet": false
+    },
+    "Observation": {
+      "Id": 1,
+      "Position": {
+        "X": 47.655277,
+        "Y": -0.5554186
+      },
+      "Velocity": {
+        "X": 18.566088,
+        "Y": 7.4457335
+      },
+      "Heading": 0.33086824,
+      "AngularVelocity": 0.12980478,
+      "Road": {
+        "Segment": 1,
+        "Progress": 0.3642202742318114,
+        "ReferenceMeters": 46.8237282864481,
+        "OffsetMeters": 2.998537063598633,
+        "Heading": 0.3814105898854225,
+        "RadiusMeters": 33.99853706359863,
+        "CornerProgress": 0.12140675807727047,
+        "Tangent": {
+          "X": 0.9281405,
+          "Y": 0.37223005
+        },
+        "Outward": {
+          "X": 0.37223005,
+          "Y": -0.9281405
+        },
+        "IsTurn": true
+      },
+      "TotalReferenceMeters": 46.82372844971236,
+      "DistanceMeters": 2.0001726001501083,
+      "Activity": 0,
+      "Drive": 1,
+      "TargetOffsetMeters": 3,
+      "Impairment": 0,
+      "Context": 1,
+      "Speed": 20.003464,
+      "ForwardSpeed": 19.97793,
+      "SideSpeed": 1.0104232,
+      "SlideRadians": -0.050533887
+    },
+    "Activation": 0.33999999999999997,
+    "Horizons": [
+      1,
+      2,
+      3,
+      3
+    ],
+    "MovementHorizon": 1.6953060602655217,
+    "Trials": [
+      {
+        "Candidate": "current",
+        "Target": 3,
+        "Available": true,
+        "ActualGain": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "LegacyGain": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "Hash": "33A559F674C2680227E0E634063A193C406B643E7EC46C3A428A9BCBA877DBD2",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.84438556432724,
+        "MinimumSpeed": 20.011667251586914,
+        "TangentialImpulseNewtonSeconds": 80.93359302304444,
+        "Contacts": 0
+      },
+      {
+        "Candidate": "hold-position",
+        "Target": 2.998537,
+        "Available": true,
+        "ActualGain": [
+          0.0002800019565825096,
+          0.0012722191480492029,
+          0.0026840274970680866,
+          0.0026840274970680866
+        ],
+        "LegacyGain": [
+          0.0005761856112762587,
+          0.0011523712225525173,
+          0.001728556833828776,
+          0.001728556833828776
+        ],
+        "Hash": "B3649A1EBD070ADD607CCD435599048B5B217ED27876704E24F5D9EE0C6FB758",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.8444835543632507,
+        "MinimumSpeed": 20.011667251586914,
+        "TangentialImpulseNewtonSeconds": 80.94657156575263,
+        "Contacts": 0
+      },
+      {
+        "Candidate": "inside",
+        "Target": 1.9985371,
+        "Available": true,
+        "ActualGain": [
+          0.21489435132083656,
+          0.9517530498841467,
+          1.993521480843043,
+          1.993521480843043
+        ],
+        "LegacyGain": [
+          0.4031373231449322,
+          0.8062746462898644,
+          1.2094119694347967,
+          1.2094119694347967
+        ],
+        "Hash": "8A2998172798ABC94B83BA7B2F50ED68885A29C81D7F9ABE6C4F551D3A609D89",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.9493932127952576,
+        "MinimumSpeed": 20.011667251586914,
+        "TangentialImpulseNewtonSeconds": 90.23369771743154,
+        "Contacts": 0
+      },
+      {
+        "Candidate": "outside",
+        "Target": 3.998537,
+        "Available": true,
+        "ActualGain": [
+          -0.20865021285433727,
+          -0.9006158326818507,
+          -1.8591034325710751,
+          -1.8591034325710751
+        ],
+        "LegacyGain": [
+          -0.3849661627567329,
+          -0.7699323255134658,
+          -1.1548984882701987,
+          -1.1548984882701987
+        ],
+        "Hash": "685BFE8638A4EDC4CBAF6496B8A155C06BAB9F9FF7B2D5972FC6300EF844D61B",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.7807409763336182,
+        "MinimumSpeed": 19.60080909729004,
+        "TangentialImpulseNewtonSeconds": 71.57900198422007,
+        "Contacts": 0
+      }
+    ]
+  },
+  {
+    "Name": "G-high-tech-attack",
+    "Spec": {
+      "Profile": {
+        "Id": 1,
+        "Name": "R1",
+        "Skills": {
+          "Start": 50,
+          "Speed": 50,
+          "SlideControl": 70,
+          "TrackReading": 50,
+          "PairRiding": 50,
+          "Adaptability": 50
+        },
+        "Style": {
+          "RiskTolerance": 0.5,
+          "LaneChangeTendency": 0.5,
+          "OutsidePreference": 0.5,
+          "SetupIndependence": 0.5
+        }
+      },
+      "Setup": {
+        "Gearing": 0.5,
+        "TractionBias": 0.5
+      },
+      "ReferenceMeters": 45,
+      "OffsetMeters": 3,
+      "SpeedMetersPerSecond": 20,
+      "TargetOffsetMeters": 3,
+      "InitialOutwardSpeed": 0,
+      "TrafficEnabled": false,
+      "Passive": false,
+      "Bullet": false
+    },
+    "Observation": {
+      "Id": 1,
+      "Position": {
+        "X": 47.655277,
+        "Y": -0.5554186
+      },
+      "Velocity": {
+        "X": 18.566088,
+        "Y": 7.4457335
+      },
+      "Heading": 0.3318444,
+      "AngularVelocity": 0.14645907,
+      "Road": {
+        "Segment": 1,
+        "Progress": 0.3642202742318114,
+        "ReferenceMeters": 46.8237282864481,
+        "OffsetMeters": 2.998537063598633,
+        "Heading": 0.3814105898854225,
+        "RadiusMeters": 33.99853706359863,
+        "CornerProgress": 0.12140675807727047,
+        "Tangent": {
+          "X": 0.9281405,
+          "Y": 0.37223005
+        },
+        "Outward": {
+          "X": 0.37223005,
+          "Y": -0.9281405
+        },
+        "IsTurn": true
+      },
+      "TotalReferenceMeters": 46.82372844971236,
+      "DistanceMeters": 2.0001726001501083,
+      "Activity": 0,
+      "Drive": 1,
+      "TargetOffsetMeters": 3,
+      "Impairment": 0,
+      "Context": 1,
+      "Speed": 20.003464,
+      "ForwardSpeed": 19.978905,
+      "SideSpeed": 0.990921,
+      "SlideRadians": -0.04955774
+    },
+    "Activation": 0.33999999999999997,
+    "Horizons": [
+      1,
+      2,
+      3,
+      3
+    ],
+    "MovementHorizon": 1.914183603257549,
+    "Trials": [
+      {
+        "Candidate": "current",
+        "Target": 3,
+        "Available": true,
+        "ActualGain": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "LegacyGain": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "Hash": "204E84B7BFDA5406AC209E00F3A9487A3B88D2B39C9809060B5FE9C36ECB92C4",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.8443843722343445,
+        "MinimumSpeed": 20.011667251586914,
+        "TangentialImpulseNewtonSeconds": 80.93038365765005,
+        "Contacts": 0
+      },
+      {
+        "Candidate": "hold-position",
+        "Target": 2.998537,
+        "Available": true,
+        "ActualGain": [
+          0.0002800019565825096,
+          0.0012722191480492029,
+          0.002679113833238489,
+          0.002679113833238489
+        ],
+        "LegacyGain": [
+          0.0006219237794979904,
+          0.0012438475589959808,
+          0.0018657713384939711,
+          0.0018657713384939711
+        ],
+        "Hash": "DBEA456EEA5D8B4282D6FA9ED5E6101ED86C1DCC0C767920FDD24B02F777B333",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.8444824814796448,
+        "MinimumSpeed": 20.011667251586914,
+        "TangentialImpulseNewtonSeconds": 80.94329632678566,
+        "Contacts": 0
+      },
+      {
+        "Candidate": "inside",
+        "Target": 1.9985371,
+        "Available": true,
+        "ActualGain": [
+          0.21489435132083656,
+          0.9517530498841467,
+          1.9934910422221606,
+          1.9934910422221606
+        ],
+        "LegacyGain": [
+          0.435902487797005,
+          0.87180497559401,
+          1.307707463391015,
+          1.307707463391015
+        ],
+        "Hash": "DDFD4ED318B86F8B25D916B14E3D2907426A84CCED46E8B78B8792309D1A5F8B",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.9493932127952576,
+        "MinimumSpeed": 20.011667251586914,
+        "TangentialImpulseNewtonSeconds": 90.22445880686043,
+        "Contacts": 0
+      },
+      {
+        "Candidate": "outside",
+        "Target": 3.998537,
+        "Available": true,
+        "ActualGain": [
+          -0.20865021285433727,
+          -0.9006158326818507,
+          -1.8590959215537595,
+          -1.8590959215537595
+        ],
+        "LegacyGain": [
+          -0.4148290604292306,
+          -0.8296581208584612,
+          -1.2444871812876919,
+          -1.2444871812876919
+        ],
+        "Hash": "4E5644417DCC890C39D43A75BF51950954F9785D1A651133B6D96925BEE782B8",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.7807409763336182,
+        "MinimumSpeed": 19.60080909729004,
+        "TangentialImpulseNewtonSeconds": 71.57906052502993,
+        "Contacts": 0
+      }
+    ]
+  },
+  {
+    "Name": "G-defense",
+    "Spec": {
+      "Profile": {
+        "Id": 1,
+        "Name": "R1",
+        "Skills": {
+          "Start": 50,
+          "Speed": 50,
+          "SlideControl": 70,
+          "TrackReading": 50,
+          "PairRiding": 50,
+          "Adaptability": 50
+        },
+        "Style": {
+          "RiskTolerance": 0.5,
+          "LaneChangeTendency": 0.5,
+          "OutsidePreference": 0.5,
+          "SetupIndependence": 0.5
+        }
+      },
+      "Setup": {
+        "Gearing": 0.5,
+        "TractionBias": 0.5
+      },
+      "ReferenceMeters": 45,
+      "OffsetMeters": 3,
+      "SpeedMetersPerSecond": 20,
+      "TargetOffsetMeters": 3,
+      "InitialOutwardSpeed": 0,
+      "TrafficEnabled": false,
+      "Passive": false,
+      "Bullet": false
+    },
+    "Observation": {
+      "Id": 1,
+      "Position": {
+        "X": 47.655277,
+        "Y": -0.5554186
+      },
+      "Velocity": {
+        "X": 18.566088,
+        "Y": 7.4457335
+      },
+      "Heading": 0.33131757,
+      "AngularVelocity": 0.137532,
+      "Road": {
+        "Segment": 1,
+        "Progress": 0.3642202742318114,
+        "ReferenceMeters": 46.8237282864481,
+        "OffsetMeters": 2.998537063598633,
+        "Heading": 0.3814105898854225,
+        "RadiusMeters": 33.99853706359863,
+        "CornerProgress": 0.12140675807727047,
+        "Tangent": {
+          "X": 0.9281405,
+          "Y": 0.37223005
+        },
+        "Outward": {
+          "X": 0.37223005,
+          "Y": -0.9281405
+        },
+        "IsTurn": true
+      },
+      "TotalReferenceMeters": 46.82372844971236,
+      "DistanceMeters": 2.0001726001501083,
+      "Activity": 0,
+      "Drive": 1,
+      "TargetOffsetMeters": 3,
+      "Impairment": 0,
+      "Context": 1,
+      "Speed": 20.003464,
+      "ForwardSpeed": 19.97838,
+      "SideSpeed": 1.0014462,
+      "SlideRadians": -0.050084557
+    },
+    "Activation": 0.33999999999999997,
+    "Horizons": [
+      1,
+      2,
+      3,
+      3
+    ],
+    "MovementHorizon": 1.914183603257549,
+    "Trials": [
+      {
+        "Candidate": "current",
+        "Target": 3,
+        "Available": true,
+        "ActualGain": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "LegacyGain": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "Hash": "2C2C67B3B337762937192E4A486CB0CB195187A8371A6DFA0BBB60DD95FAB4C2",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.8443781733512878,
+        "MinimumSpeed": 20.011667251586914,
+        "TangentialImpulseNewtonSeconds": 80.928004742366,
+        "Contacts": 0
+      },
+      {
+        "Candidate": "hold-position",
+        "Target": 2.998537,
+        "Available": true,
+        "ActualGain": [
+          0.00028542334830206073,
+          0.0013043685594169574,
+          0.002693000280146407,
+          0.002693000280146407
+        ],
+        "LegacyGain": [
+          0.0006219237794979904,
+          0.0012438475589959808,
+          0.0018657713384939711,
+          0.0018657713384939711
+        ],
+        "Hash": "717DA071495424DF50C3FBA75958C9328748BBF50A58BEAD6CC034272EC8CA4B",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.8444762825965881,
+        "MinimumSpeed": 20.011667251586914,
+        "TangentialImpulseNewtonSeconds": 80.94125426196025,
+        "Contacts": 0
+      },
+      {
+        "Candidate": "inside",
+        "Target": 1.9985371,
+        "Available": true,
+        "ActualGain": [
+          0.21488805344306172,
+          0.9517469478642653,
+          1.9935053770282565,
+          1.9935053770282565
+        ],
+        "LegacyGain": [
+          0.435902487797005,
+          0.87180497559401,
+          1.307707463391015,
+          1.307707463391015
+        ],
+        "Hash": "619FBBF4E5ED3A8FC5A894EDB001E87E15B51FD310D5E1EE03A8255526ACA60B",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.9493932127952576,
+        "MinimumSpeed": 20.011667251586914,
+        "TangentialImpulseNewtonSeconds": 90.22535881530958,
+        "Contacts": 0
+      },
+      {
+        "Candidate": "outside",
+        "Target": 3.998537,
+        "Available": true,
+        "ActualGain": [
+          -0.20865181514567155,
+          -0.9005922435461855,
+          -1.8590915990417898,
+          -1.8590915990417898
+        ],
+        "LegacyGain": [
+          -0.4148290604292306,
+          -0.8296581208584612,
+          -1.2444871812876919,
+          -1.2444871812876919
+        ],
+        "Hash": "5B2B1EBE2B4EE83BEE258C15EA02299010CA0EF523B13D94DB033A0F984E6C10",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.7807339429855347,
+        "MinimumSpeed": 19.600656509399414,
+        "TangentialImpulseNewtonSeconds": 71.57502615882984,
+        "Contacts": 0
+      }
+    ]
+  },
+  {
+    "Name": "H-original-F",
+    "Spec": {
+      "Profile": {
+        "Id": 1,
+        "Name": "R1",
+        "Skills": {
+          "Start": 45,
+          "Speed": 50,
+          "SlideControl": 60,
+          "TrackReading": 50,
+          "PairRiding": 50,
+          "Adaptability": 50
+        },
+        "Style": {
+          "RiskTolerance": 0.5,
+          "LaneChangeTendency": 0.5,
+          "OutsidePreference": 0.5,
+          "SetupIndependence": 0.5
+        }
+      },
+      "Setup": {
+        "Gearing": 0.5,
+        "TractionBias": 0.5
+      },
+      "ReferenceMeters": 0,
+      "OffsetMeters": 0.5,
+      "SpeedMetersPerSecond": 0,
+      "TargetOffsetMeters": 1.6,
+      "InitialOutwardSpeed": 0,
+      "TrafficEnabled": false,
+      "Passive": false,
+      "Bullet": false
+    },
+    "Observation": {
+      "Id": 1,
+      "Position": {
+        "X": 57.26549,
+        "Y": 7.214829
+      },
+      "Velocity": {
+        "X": 15.894149,
+        "Y": 14.842367
+      },
+      "Heading": 0.5043871,
+      "AngularVelocity": 0.63539463,
+      "Road": {
+        "Segment": 1,
+        "Progress": 0.7184985642054345,
+        "ReferenceMeters": 58.32470869526941,
+        "OffsetMeters": 1.5804626941680908,
+        "Heading": 0.7524099579119163,
+        "RadiusMeters": 32.58046269416809,
+        "CornerProgress": 0.2394995214018115,
+        "Tangent": {
+          "X": 0.730044,
+          "Y": 0.6834001
+        },
+        "Outward": {
+          "X": 0.6834001,
+          "Y": -0.730044
+        },
+        "IsTurn": true
+      },
+      "TotalReferenceMeters": 58.324714417315306,
+      "DistanceMeters": 59.53363760827051,
+      "Activity": 0,
+      "Drive": 1,
+      "TargetOffsetMeters": 1.6,
+      "Impairment": 0,
+      "Context": 1,
+      "Speed": 21.74672,
+      "ForwardSpeed": 21.08775,
+      "SideSpeed": 5.312879,
+      "SlideRadians": -0.24680515
+    },
+    "Activation": 4.343999999999999,
+    "Horizons": [
+      1,
+      2,
+      3,
+      3
+    ],
+    "MovementHorizon": 1.8345917694422664,
+    "Trials": [
+      {
+        "Candidate": "current",
+        "Target": 1.6,
+        "Available": true,
+        "ActualGain": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "LegacyGain": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "Hash": "9D5D8FA2A1974775B304938B4B638EFD4E87BA782AE28568487FF1BF22A09E6C",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 1.0002505779266357,
+        "MinimumSpeed": 21.748912811279297,
+        "TangentialImpulseNewtonSeconds": 14.56750349381706,
+        "Contacts": 0
+      },
+      {
+        "Candidate": "hold-position",
+        "Target": 1.5804627,
+        "Available": true,
+        "ActualGain": [
+          0.004867300159375532,
+          0.017204455566329102,
+          0.0250956000723761,
+          0.0250956000723761
+        ],
+        "LegacyGain": [
+          0.00958155337762534,
+          0.01916310675525068,
+          0.02874466013287602,
+          0.02874466013287602
+        ],
+        "Hash": "953D522B566ADCBB2F43C143F0DDC2361A4BECB2F38413DC27D382CB2F44E62A",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 1.000483751296997,
+        "MinimumSpeed": 21.748912811279297,
+        "TangentialImpulseNewtonSeconds": 12.080813068684602,
+        "Contacts": 0
+      },
+      {
+        "Candidate": "inside",
+        "Target": 0.5804627,
+        "Available": true,
+        "ActualGain": [
+          -0.6533662693234135,
+          -0.8607006180136381,
+          -0.47660544587995446,
+          -0.47660544587995446
+        ],
+        "LegacyGain": [
+          0.2985159130629391,
+          0.5970318261258782,
+          0.8955477391888174,
+          0.8955477391888174
+        ],
+        "Hash": "3466BC45278CACD433D1ED5B8889E7CB26928DD3C84A23BC6459D6B25CEC6A86",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 1.1515246629714966,
+        "MinimumSpeed": 20.76329231262207,
+        "TangentialImpulseNewtonSeconds": -117.07080191217176,
+        "Contacts": 0
+      },
+      {
+        "Candidate": "outside",
+        "Target": 2.5804627,
+        "Available": true,
+        "ActualGain": [
+          -0.24006236927760938,
+          -0.9868447339714947,
+          -1.3236827936243856,
+          -1.3236827936243856
+        ],
+        "LegacyGain": [
+          -0.46970244622516333,
+          -0.9394048924503267,
+          -1.40910733867549,
+          -1.40910733867549
+        ],
+        "Hash": "0D5F30A9C0A619441ECD9DC432FC9EA36972654E7E17AC3FA49C9D272CDE1366",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 1.0007905960083008,
+        "MinimumSpeed": 21.39581871032715,
+        "TangentialImpulseNewtonSeconds": 148.03319664666458,
+        "Contacts": 1
+      }
+    ]
+  },
+  {
+    "Name": "I-near-exit",
+    "Spec": {
+      "Profile": {
+        "Id": 1,
+        "Name": "R1",
+        "Skills": {
+          "Start": 50,
+          "Speed": 50,
+          "SlideControl": 70,
+          "TrackReading": 50,
+          "PairRiding": 50,
+          "Adaptability": 50
+        },
+        "Style": {
+          "RiskTolerance": 0.5,
+          "LaneChangeTendency": 0.5,
+          "OutsidePreference": 0.5,
+          "SetupIndependence": 0.5
+        }
+      },
+      "Setup": {
+        "Gearing": 0.5,
+        "TractionBias": 0.5
+      },
+      "ReferenceMeters": 115,
+      "OffsetMeters": 3,
+      "SpeedMetersPerSecond": 20,
+      "TargetOffsetMeters": 3,
+      "InitialOutwardSpeed": 0,
+      "TrafficEnabled": false,
+      "Passive": false,
+      "Bullet": false
+    },
+    "Observation": {
+      "Id": 1,
+      "Position": {
+        "X": 51.35613,
+        "Y": 60.80572
+      },
+      "Velocity": {
+        "X": -17.668472,
+        "Y": 9.69735
+      },
+      "Heading": 2.5877676,
+      "AngularVelocity": 0.14169313,
+      "Road": {
+        "Segment": 3,
+        "Progress": 0.5207310943789336,
+        "ReferenceMeters": 116.83080858417055,
+        "OffsetMeters": 2.9985885620117188,
+        "Heading": 2.639703502715179,
+        "RadiusMeters": 33.99858856201172,
+        "CornerProgress": 0.8402436981263112,
+        "Tangent": {
+          "X": -0.8766753,
+          "Y": 0.48108256
+        },
+        "Outward": {
+          "X": 0.48108256,
+          "Y": 0.8766753
+        },
+        "IsTurn": true
+      },
+      "TotalReferenceMeters": 116.83080797758025,
+      "DistanceMeters": 2.0079382359981537,
+      "Activity": 0,
+      "Drive": 1,
+      "TargetOffsetMeters": 3,
+      "Impairment": 0,
+      "Context": 1,
+      "Speed": 20.15474,
+      "ForwardSpeed": 20.127638,
+      "SideSpeed": 1.0448532,
+      "SlideRadians": -0.051864818
+    },
+    "Activation": 0.33999999999999997,
+    "Horizons": [
+      1,
+      2,
+      3,
+      0.581296
+    ],
+    "MovementHorizon": 1.8743876863499078,
+    "Trials": [
+      {
+        "Candidate": "current",
+        "Target": 3,
+        "Available": true,
+        "ActualGain": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "LegacyGain": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "Hash": "71638D2A8928E1BB6E977B71A0CDDA563C253A3519765BF2CC2B8EF1075E397C",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.9024612903594971,
+        "MinimumSpeed": 20.520479202270508,
+        "TangentialImpulseNewtonSeconds": 354.98090570898444,
+        "Contacts": 0
+      },
+      {
+        "Candidate": "hold-position",
+        "Target": 2.9985886,
+        "Available": true,
+        "ActualGain": [
+          0.000164031982421875,
+          0.000347137451171875,
+          0.000102996826171875,
+          8.171550337010558E-05
+        ],
+        "LegacyGain": [
+          0.000597180103433459,
+          0.001194360206866918,
+          0.0017915403103003769,
+          0.000347138405405456
+        ],
+        "Hash": "D4A11698EE43B5E3EDFAC32B636B6AB8E58EC39FCCE4CEF3F852D07CA7C45C58",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.9024921655654907,
+        "MinimumSpeed": 20.520479202270508,
+        "TangentialImpulseNewtonSeconds": 354.88576144433586,
+        "Contacts": 0
+      },
+      {
+        "Candidate": "inside",
+        "Target": 1.9985886,
+        "Available": true,
+        "ActualGain": [
+          0.12257766723632812,
+          0.2509803771972656,
+          0.02133941650390625,
+          0.06407377466143771
+        ],
+        "LegacyGain": [
+          0.4336828127899608,
+          0.8673656255799216,
+          1.3010484383698824,
+          0.2520980843435531
+        ],
+        "Hash": "5E291DC616F03BD2DFE14BC2DBD8BA2DF69CCFB469604AC9B7521E9B8F48F259",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.9907844662666321,
+        "MinimumSpeed": 20.520479202270508,
+        "TangentialImpulseNewtonSeconds": 287.92822280718957,
+        "Contacts": 0
+      },
+      {
+        "Candidate": "outside",
+        "Target": 3.9985886,
+        "Available": true,
+        "ActualGain": [
+          -0.122650146484375,
+          -0.2518482208251953,
+          -0.0952606201171875,
+          -0.05796188270093694
+        ],
+        "LegacyGain": [
+          -0.41299449505120833,
+          -0.8259889901024167,
+          -1.238983485153625,
+          -0.24007204799528722
+        ],
+        "Hash": "2A226AD6687F89FC4CB2F35D48DEA57F3AA36B466535FA60703EDC1C167D0BFC",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.8794681429862976,
+        "MinimumSpeed": 20.520479202270508,
+        "TangentialImpulseNewtonSeconds": 421.78747178327967,
+        "Contacts": 0
+      }
+    ]
+  },
+  {
+    "Name": "J-existing-response",
+    "Spec": {
+      "Profile": {
+        "Id": 1,
+        "Name": "R1",
+        "Skills": {
+          "Start": 50,
+          "Speed": 50,
+          "SlideControl": 70,
+          "TrackReading": 50,
+          "PairRiding": 50,
+          "Adaptability": 50
+        },
+        "Style": {
+          "RiskTolerance": 0.5,
+          "LaneChangeTendency": 0.5,
+          "OutsidePreference": 0.5,
+          "SetupIndependence": 0.5
+        }
+      },
+      "Setup": {
+        "Gearing": 0.5,
+        "TractionBias": 0.5
+      },
+      "ReferenceMeters": 45,
+      "OffsetMeters": 4,
+      "SpeedMetersPerSecond": 20,
+      "TargetOffsetMeters": 2,
+      "InitialOutwardSpeed": -1,
+      "TrafficEnabled": false,
+      "Passive": false,
+      "Bullet": false
+    },
+    "Observation": {
+      "Id": 1,
+      "Position": {
+        "X": 47.93867,
+        "Y": -1.4034528
+      },
+      "Velocity": {
+        "X": 18.214153,
+        "Y": 8.4935
+      },
+      "Heading": 0.33147854,
+      "AngularVelocity": 0.14008644,
+      "Road": {
+        "Segment": 1,
+        "Progress": 0.36277971324846786,
+        "ReferenceMeters": 46.77696317518943,
+        "OffsetMeters": 3.891158103942871,
+        "Heading": 0.37990203790933647,
+        "RadiusMeters": 34.89115810394287,
+        "CornerProgress": 0.12092657108282262,
+        "Tangent": {
+          "X": 0.928701,
+          "Y": 0.3708295
+        },
+        "Outward": {
+          "X": 0.3708295,
+          "Y": -0.928701
+        },
+        "IsTurn": true
+      },
+      "TotalReferenceMeters": 46.776962396748495,
+      "DistanceMeters": 2.0061433762311935,
+      "Activity": 0,
+      "Drive": 1,
+      "TargetOffsetMeters": 2,
+      "Impairment": 0,
+      "Context": 1,
+      "Speed": 20.097137,
+      "ForwardSpeed": 19.986752,
+      "SideSpeed": 2.1034918,
+      "SlideRadians": -0.10485832
+    },
+    "Activation": 0.33999999999999997,
+    "Horizons": [
+      1,
+      2,
+      3,
+      3
+    ],
+    "MovementHorizon": 1.8743876863499078,
+    "Trials": [
+      {
+        "Candidate": "current",
+        "Target": 2,
+        "Available": true,
+        "ActualGain": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "LegacyGain": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "Hash": "BD1C94E6AE8FCC70AE8FBA27559BEF29AD4214C2135111BEDE03E85C37C172A9",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.9744266271591187,
+        "MinimumSpeed": 20.279380798339844,
+        "TangentialImpulseNewtonSeconds": 94.09969558933163,
+        "Contacts": 0
+      },
+      {
+        "Candidate": "hold-position",
+        "Target": 3.891158,
+        "Available": true,
+        "ActualGain": [
+          -0.40752765819782155,
+          -1.8004110892828749,
+          -3.7551416664309727,
+          -3.7551416664309727
+        ],
+        "LegacyGain": [
+          -0.7988903653613342,
+          -1.5977807307226684,
+          -2.3966710960840025,
+          -2.3966710960840025
+        ],
+        "Hash": "C686A2D500ECF19574B92896834ACF99DB57BF9FE52EA9BDA6B5AE9C42F291DC",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.8339196443557739,
+        "MinimumSpeed": 20.231449127197266,
+        "TangentialImpulseNewtonSeconds": 77.46700258061816,
+        "Contacts": 0
+      },
+      {
+        "Candidate": "inside",
+        "Target": 2.891158,
+        "Available": true,
+        "ActualGain": [
+          -0.1945998801448212,
+          -0.8707033402653792,
+          -1.8286501897249678,
+          -1.8286501897249678
+        ],
+        "LegacyGain": [
+          -0.3851446319664973,
+          -0.7702892639329946,
+          -1.1554338958994919,
+          -1.1554338958994919
+        ],
+        "Hash": "12A50629258FC7317B03BA91A98544DA6DBC19922614BBFB87AD91EDBE7247C9",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.9043190479278564,
+        "MinimumSpeed": 20.279380798339844,
+        "TangentialImpulseNewtonSeconds": 86.41501656534858,
+        "Contacts": 0
+      },
+      {
+        "Candidate": "outside",
+        "Target": 4.891158,
+        "Available": true,
+        "ActualGain": [
+          -0.6149306328974262,
+          -2.683579579757563,
+          -5.559701530285281,
+          -5.559701530285281
+        ],
+        "LegacyGain": [
+          -1.194380020374556,
+          -2.388760040749112,
+          -3.583140061123668,
+          -3.583140061123668
+        ],
+        "Hash": "15F90A3FE4663D6BD2C3F9EF5D1DB4FEC6FD2B30EF315DD0255015A638C312A8",
+        "PrefixExact": true,
+        "PeakLateralBudgetRatio": 0.7898264527320862,
+        "MinimumSpeed": 19.748722076416016,
+        "TangentialImpulseNewtonSeconds": 68.47262745857816,
+        "Contacts": 0
+      }
+    ]
+  }
+]
