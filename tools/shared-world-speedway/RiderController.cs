@@ -112,7 +112,7 @@ public static class RiderController
 }
 
 /// <summary>Short constant-velocity observation only. No opponent target, future path or #54 call.</summary>
-public static class TrafficDecision
+public static partial class TrafficDecision
 {
     public static DecisionEvent? Observe(WorldSnapshot snapshot, RiderView own, RiderSpec spec,
         WorldParameters p, WorldWork work, float maximumOffset)

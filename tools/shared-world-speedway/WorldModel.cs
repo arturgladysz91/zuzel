@@ -7,6 +7,7 @@ namespace SharedWorldSpeedway;
 // New 2D tyre/controller parameters are PROVISIONAL, not a telemetry calibration.
 public sealed record WorldParameters
 {
+    public bool EnableTacticalRacing { get; init; }
     public double AiIntervalSeconds { get; init; } = .1;
     public float LateralResponseSeconds { get; init; } = .65f;
     public float YawResponseSeconds { get; init; } = .35f;
@@ -19,7 +20,16 @@ public sealed record WorldParameters
 }
 public enum RiderActivity { Racing, Disturbed, Crashed, Finished }
 public enum RacingContext { StartStraight, FirstBend, NormalRacing }
-public enum TrafficAction { KeepIntent, HoldLine, YieldOutward, BackOut }
+public enum TrafficAction { KeepIntent, HoldLine, YieldOutward, BackOut, AttackInside, AttackOutside }
+public enum RacingIntent { None, AttackInside, AttackOutside, DefendLine, ReturnLine }
+public sealed class TacticalMemory
+{
+    public RacingIntent Intent;
+    public int OpponentId;
+    public float HomeOffsetMeters;
+    public double ActivatedAt, NextTacticAt, SafetyUntil, ClearSince;
+}
+public readonly record struct RacingPair(int A, int B);
 public sealed record RiderSpec(RiderProfile Profile, BikeSetup Setup, double ReferenceMeters,
     float OffsetMeters, float SpeedMetersPerSecond, float TargetOffsetMeters,
     float InitialOutwardSpeed = 0, bool TrafficEnabled = true, bool Passive = false, bool Bullet = false);
@@ -36,7 +46,8 @@ public readonly record struct RiderView(int Id, Vector2 Position, Vector2 Veloci
 public sealed record WorldSnapshot(double TimeSeconds, IReadOnlyList<RiderView> Riders);
 public sealed record DecisionEvent(int RiderId, int OpponentId, TrafficAction Action,
     double ObservedAt, double DecisionAt, double RequestedActivation, double? ActualActivation,
-    float TargetOffsetMeters, float Drive);
+    float TargetOffsetMeters, float Drive, RacingIntent Intent = RacingIntent.None,
+    string Reason = "", bool SafetyReaction = false, double? CancelledAt = null);
 /// <summary>Authored before the run, for controlled experiments; never a predicted state.</summary>
 public sealed record ControlCommand(int RiderId, double AtSeconds, float TargetOffsetMeters, float Drive);
 public sealed record ContactEvent(int RiderA, int RiderB, double TimeSeconds, string Kind,
@@ -50,6 +61,8 @@ public sealed class WorldWork
         BroadPhaseProfileMilliseconds, NarrowPhaseProfileMilliseconds, ConstraintProfileMilliseconds;
     public double MinimumGapMeters = double.PositiveInfinity, MaximumSpeed, MaximumStepDisplacementMeters,
         MinimumTrackClearanceMeters = double.PositiveInfinity, MaximumPassiveEnergyIncreaseJoules;
+    public long TacticalPairObservations, TacticalObservations, TacticalCandidates, TacticalDecisions,
+        ControlChanges, CancelledCommands, MaximumTacticalPairs;
 }
 public sealed record RunResult(string Name, double StepSeconds, double TimeSeconds, WorldWork Work,
     IReadOnlyList<RiderView> Riders, IReadOnlyDictionary<int, double> FinishTimes,
