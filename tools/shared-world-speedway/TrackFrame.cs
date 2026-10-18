@@ -79,7 +79,9 @@ public sealed class TrackFrame
             }
             var q = s.Map(p, 0);
             var delta = position - new Vector2((float)q.Position.X, (float)q.Position.Y);
-            var score = delta.LengthSquared();
+            // Accumulate in double: float squared distances hid millimetre-scale
+            // progress past a tangent boundary behind the much larger lane offset.
+            var score = (double)delta.X * delta.X + (double)delta.Y * delta.Y;
             if (score >= best) continue;
             var outward = new Vector2((float)Math.Sin(q.TangentHeadingRadians), -(float)Math.Cos(q.TangentHeadingRadians));
             best = score; result = Point(i, p, Vector2.Dot(delta, outward));
@@ -92,5 +94,19 @@ public sealed class TrackFrame
         if (delta < -LapMeters / 2) delta += LapMeters;
         if (delta > LapMeters / 2) delta -= LapMeters;
         return delta;
+    }
+    public double DistanceToCurvatureChange(RoadPoint road)
+    {
+        var length = starts[road.Segment + 1] - starts[road.Segment];
+        var remaining = (1 - road.Progress) * length;
+        var next = (road.Segment + 1) % Track.Segments.Count;
+        var visited = 0;
+        while ((Track.Segments[next].Type != SegmentType.Straight) == road.IsTurn)
+        {
+            if (++visited >= Track.Segments.Count) return double.PositiveInfinity;
+            remaining += starts[next + 1] - starts[next];
+            next = (next + 1) % Track.Segments.Count;
+        }
+        return road.IsTurn ? remaining * road.RadiusMeters / Embedding.Segments[road.Segment].InnerRadiusMeters : remaining;
     }
 }
