@@ -28,10 +28,12 @@ public sealed class WorldRunner : IDisposable
     private readonly IncrementalHash hash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
     private readonly PhysicalContactParameters severityScale = new();
     private readonly WorldDiagnostics? diagnostics;
+    private readonly ControlCommand[] controls;
+    private int nextControl;
     private bool disposed;
     public WorldSnapshot Snapshot => new(TimeSeconds, Array.AsReadOnly((RiderView[])views.Clone()));
     public WorldRunner(IEnumerable<RiderSpec> riders, Track? track = null, WorldParameters? parameters = null,
-        WorldDiagnostics? diagnostics = null)
+        WorldDiagnostics? diagnostics = null, IEnumerable<ControlCommand>? controls = null)
     {
         this.diagnostics = diagnostics;
         Parameters = parameters ?? new();
@@ -45,13 +47,21 @@ public sealed class WorldRunner : IDisposable
             || Parameters.YawResponseSeconds <= 0 || Parameters.PredictionSeconds <= 0
             || Parameters.RecoverySeconds <= 0) throw new ArgumentOutOfRangeException(nameof(parameters));
         specs = riders.OrderBy(r => r.Profile.Id).ToArray();
-        if (specs.Length is < 2 or > 4 || specs.Select(s => s.Profile.Id).Distinct().Count() != specs.Length)
-            throw new ArgumentException("Two to four distinct riders are required.");
+        if (specs.Length is < 1 or > 4 || specs.Select(s => s.Profile.Id).Distinct().Count() != specs.Length)
+            throw new ArgumentException("One to four distinct riders are required.");
         if (specs.Any(s => !float.IsFinite(s.SpeedMetersPerSecond) || s.SpeedMetersPerSecond < 0
             || !float.IsFinite(s.InitialOutwardSpeed) || !float.IsFinite(s.OffsetMeters)
             || s.OffsetMeters < 0 || s.OffsetMeters > Frame.MinimumUsableWidthMeters || !float.IsFinite(s.TargetOffsetMeters)
             || s.TargetOffsetMeters < .5 || s.TargetOffsetMeters > Frame.MinimumUsableWidthMeters - .5 || !double.IsFinite(s.ReferenceMeters)))
             throw new ArgumentException("Invalid physical rider inputs.");
+        this.controls = (controls ?? Array.Empty<ControlCommand>()).OrderBy(c => c.AtSeconds).ThenBy(c => c.RiderId).ToArray();
+        if (this.controls.Any(c => !double.IsFinite(c.AtSeconds) || c.AtSeconds < 0
+                || !float.IsFinite(c.Drive) || c.Drive is < 0 or > 1 || !float.IsFinite(c.TargetOffsetMeters)
+                || c.TargetOffsetMeters < .5 || c.TargetOffsetMeters > Frame.MinimumUsableWidthMeters - .5
+                || !specs.Any(s => s.Profile.Id == c.RiderId))
+            || this.controls.Select(c => (c.AtSeconds, c.RiderId)).Distinct().Count() != this.controls.Length
+            || this.controls.Length > 0 && specs.Any(s => s.TrafficEnabled))
+            throw new ArgumentException("Use finite, unique authored commands with reactive traffic disabled.", nameof(controls));
         surface = TrackState.CreateDefault(Frame.Track).Snapshot(); // frozen surface; no duplicate wear or RNG
         physics = new(specs, Frame, Parameters);
         pending = new DecisionEvent?[specs.Length]; nextDecision = new double[specs.Length]; recoveryUntil = new double[specs.Length];
@@ -177,6 +187,12 @@ public sealed class WorldRunner : IDisposable
     }
     private void Activate()
     {
+        while (nextControl < controls.Length && controls[nextControl].AtSeconds <= TimeSeconds + 1e-12)
+        {
+            var c = controls[nextControl++]; var i = Array.FindIndex(specs, s => s.Profile.Id == c.RiderId);
+            views[i] = views[i] with { Drive = c.Drive, TargetOffsetMeters = c.TargetOffsetMeters };
+            decisions.Add(new(c.RiderId, 0, TrafficAction.KeepIntent, 0, 0, c.AtSeconds, TimeSeconds, c.TargetOffsetMeters, c.Drive));
+        }
         for (var i = 0; i < specs.Length; i++)
         {
             if (views[i].Activity == RiderActivity.Disturbed && TimeSeconds + 1e-12 >= recoveryUntil[i])
@@ -207,6 +223,7 @@ public sealed class WorldRunner : IDisposable
     {
         void Before(double deadline)
         { if (deadline > TimeSeconds + 1e-12) duration = Math.Min(duration, deadline - TimeSeconds); }
+        if (nextControl < controls.Length) Before(controls[nextControl].AtSeconds);
         for (var i = 0; i < specs.Length; i++)
         {
             if (specs[i].SpeedMetersPerSecond == 0) Before(RiderController.TapeReactionSeconds(specs[i]));

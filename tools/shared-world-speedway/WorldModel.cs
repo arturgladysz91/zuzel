@@ -37,6 +37,8 @@ public sealed record WorldSnapshot(double TimeSeconds, IReadOnlyList<RiderView> 
 public sealed record DecisionEvent(int RiderId, int OpponentId, TrafficAction Action,
     double ObservedAt, double DecisionAt, double RequestedActivation, double? ActualActivation,
     float TargetOffsetMeters, float Drive);
+/// <summary>Authored before the run, for controlled experiments; never a predicted state.</summary>
+public sealed record ControlCommand(int RiderId, double AtSeconds, float TargetOffsetMeters, float Drive);
 public sealed record ContactEvent(int RiderA, int RiderB, double TimeSeconds, string Kind,
     double ImpulseNewtonSeconds, double SeverityRatioA, double SeverityRatioB, double NormalClosingSpeed = 0);
 public sealed class WorldWork
