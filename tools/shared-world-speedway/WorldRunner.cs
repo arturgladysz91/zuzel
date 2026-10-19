@@ -40,6 +40,8 @@ public sealed class WorldRunner : IDisposable
     {
         this.diagnostics = diagnostics;
         Parameters = parameters ?? new();
+        if (Parameters.EnableClosureAdaptiveFollowingGap && !Parameters.EnableProportionalTrafficThrottle)
+            throw new ArgumentException("Closure adaptive gap requires proportional traffic throttle.", nameof(parameters));
         if (Parameters.EnableProportionalTrafficThrottle && !Parameters.EnableTacticalRacing)
             throw new ArgumentException("Proportional traffic throttle requires experimental tactical racing.", nameof(parameters));
         if (Parameters.EnableTacticalQualityScoring && (!Parameters.EnableTacticalRacing || !Parameters.EnableSideBySideContests))
@@ -87,7 +89,7 @@ public sealed class WorldRunner : IDisposable
         Record();
     }
     public RunResult Run(string name, double stepSeconds, double maximumSeconds, int requiredLaps = 0,
-        Action<WorldSnapshot>? acceptedObserver = null, bool stopOnCrash = false)
+        Action<WorldSnapshot>? acceptedObserver = null, bool stopOnCrash = false, bool lapsFromInitialPosition = false)
     {
         if (TimeSeconds != 0 || stepSeconds is not (.005 or .01 or .02) || !double.IsFinite(maximumSeconds)
             || maximumSeconds <= 0 || requiredLaps < 0) throw new ArgumentException("Run once at 5/10/20 ms.");
@@ -98,13 +100,17 @@ public sealed class WorldRunner : IDisposable
             TimeSeconds = tick * stepSeconds;
             if (tick > 0 && tick % aiEvery == 0) Decide();
             var subdivisions = NearbySubdivisions(stepSeconds);
+            if (subdivisions > 1) { Work.ProximityTicks++; Work.ProximitySeconds += stepSeconds; }
+            Work.ProximityRequestedExtraCalls += subdivisions - 1;
             var end = (tick + 1) * stepSeconds;
             var nextTime = TimeSeconds;
             while (nextTime < end - 1e-12)
             {
                 TimeSeconds = nextTime;
                 Activate();
-                var duration = UntilControlDeadline(Math.Min(stepSeconds / subdivisions, end - TimeSeconds));
+                var nominalDuration = Math.Min(stepSeconds / subdivisions, end - TimeSeconds);
+                var duration = UntilControlDeadline(nominalDuration);
+                var controlDuration = duration;
                 var before = views;
                 var passiveEnergy = Energy(before);
                 for (var i = 0; i < specs.Length; i++)
@@ -113,6 +119,12 @@ public sealed class WorldRunner : IDisposable
                         TimeSeconds, physics.Masses[i], physics.Inertias[i], diagnostics?.Force);
                     physics.Force(i, force.Force, force.Torque);
                     duration = UntilCurvatureChange(i, force.Force, duration);
+                }
+                if (duration < controlDuration) Work.CurvatureLimitedCalls++;
+                else if (duration < nominalDuration) {
+                    Work.ControlDeadlineLimitedCalls++;
+                    if (pendingThrottle.Any(c => c is not null && Math.Abs(c.RequestedActivation - (TimeSeconds + duration)) < 1e-10))
+                        Work.ThrottleDeadlineLimitedCalls++;
                 }
                 var watch = Stopwatch.GetTimestamp();
                 physics.Step((float)duration, Parameters.SolverSubsteps);
@@ -158,10 +170,11 @@ public sealed class WorldRunner : IDisposable
                     }
                     Include(footprint.Chassis); Include(footprint.Handlebar);
                     Work.MinimumTrackClearanceMeters = Math.Min(Work.MinimumTrackClearanceMeters, Math.Min(min + 1, width + 1 - max));
+                    var finishMeters = requiredLaps * Frame.LapMeters + (lapsFromInitialPosition ? specs[i].ReferenceMeters : 0);
                     if (requiredLaps > 0 && views[i].Activity != RiderActivity.Crashed
-                        && !finishTimes.ContainsKey(views[i].Id) && total >= requiredLaps * Frame.LapMeters)
+                        && !finishTimes.ContainsKey(views[i].Id) && total >= finishMeters)
                     {
-                        var fraction = (requiredLaps * Frame.LapMeters - before[i].TotalReferenceMeters) / delta;
+                        var fraction = (finishMeters - before[i].TotalReferenceMeters) / delta;
                         finishTimes.Add(views[i].Id, TimeSeconds - duration * (1 - fraction));
                         views[i] = views[i] with { Activity = RiderActivity.Finished };
                     }
@@ -279,6 +292,7 @@ public sealed class WorldRunner : IDisposable
                     decisions[decisions.IndexOf(lateral)] = lateral with {ActualActivation = TimeSeconds}; pending[i] = null;
                 }
                 if (pendingThrottle[i] is { } throttle && TimeSeconds + 1e-12 >= throttle.RequestedActivation) {
+                    Work.ActivatedThrottleCommands++;
                     if (views[i].Drive != throttle.Drive) Work.ControlChanges++;
                     views[i] = views[i] with {Drive = throttle.Drive};
                     decisions[decisions.IndexOf(throttle)] = throttle with {ActualActivation = TimeSeconds}; pendingThrottle[i] = null;

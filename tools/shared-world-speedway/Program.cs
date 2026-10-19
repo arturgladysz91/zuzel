@@ -2,6 +2,7 @@ using System.Text.Json;
 using SharedWorldSpeedway;
 
 var scenario = args.FirstOrDefault() ?? "A";
+if (scenario == "close-racing") { CloseRacingAudit.Run(args[1], args[2]); return; }
 if (scenario == "throttle-diagnose") { ThrottleAudit.Diagnose(args[1]); return; }
 if (scenario == "throttle-audit") { ThrottleAudit.Run(args[1], args[2]); return; }
 if (scenario == "full-validation") { FullHeatSoloAudit.Run(args[1], args.Length > 2 ? args[2] : "smoke"); return; }

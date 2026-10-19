@@ -11,6 +11,9 @@ public sealed record WorldParameters
     public bool EnableSideBySideContests { get; init; }
     public bool EnableTacticalQualityScoring { get; init; }
     public bool EnableProportionalTrafficThrottle { get; init; }
+    public bool EnableClosureAdaptiveFollowingGap { get; init; }
+    // Audit-only variant 2; absent from the public experiment configuration.
+    internal (double BaseMeters, double HeadwaySeconds)? DiagnosticFollowingGap { get; init; }
     public double AiIntervalSeconds { get; init; } = .1;
     public float LateralResponseSeconds { get; init; } = .65f;
     public float YawResponseSeconds { get; init; } = .35f;
@@ -73,6 +76,10 @@ public sealed class WorldWork
     public long SideObservations, SideCandidates, SideBlockedCandidates, SideHoldChoices;
     public long QualitySamples;
     public long ThrottleObservations, ThrottleForceEvaluations;
+    // Observation only: existing partitions, no new solver boundaries.
+    public long ProximityTicks, ProximityRequestedExtraCalls, ControlDeadlineLimitedCalls,
+        ThrottleDeadlineLimitedCalls, CurvatureLimitedCalls, ActivatedThrottleCommands;
+    public double ProximitySeconds;
     public double TacticalElapsedMilliseconds;
 }
 public sealed record RunResult(string Name, double StepSeconds, double TimeSeconds, WorldWork Work,
