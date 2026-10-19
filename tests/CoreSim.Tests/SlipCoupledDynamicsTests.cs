@@ -32,7 +32,7 @@ public sealed class SlipCoupledDynamicsTests
     [InlineData(.1f)] [InlineData(-.1f)]
     public void ActualSlipGivesTheCorrectTurnSignAndOpposesSideVelocity(float heading) {
         using var w=new WorldRunner(new[]{SlipDynamicsAudit.Rider()});
-        var v=w.Snapshot.Riders[0] with{Velocity=new(20,0),Heading=heading};var tyre=SlipCoupledDynamics.Tyre(v,0,1000);
+        var v=w.Snapshot.Riders[0] with{Velocity=new(20,0),Heading=heading};var tyre=SlipCoupledDynamics.Tyre(v,0,1000,147);
         var f=new Vector2(-MathF.Sin(heading),MathF.Cos(heading))*tyre.LateralNewtons;
         Assert.Equal(Math.Sign(heading),Math.Sign(f.Y)); // CCW nose-in => left, mirrored CW => right
         Assert.True(Vector2.Dot(f,v.Velocity)<0);Assert.True(tyre.LateralNewtons*v.SideSpeed<0);
@@ -49,15 +49,15 @@ public sealed class SlipCoupledDynamicsTests
     [Fact]
     public void TyreIsContinuousAtZeroSlipAndSharesOneSaturatingCircleWithDrive() {
         using var w=new WorldRunner(new[]{SlipDynamicsAudit.Rider()});var state=w.Snapshot.Riders[0] with{Velocity=new(20,0),Heading=0};
-        Assert.Equal(0,SlipCoupledDynamics.Tyre(state,500,1000).LateralNewtons);
+        Assert.Equal(0,SlipCoupledDynamics.Tyre(state,500,1000,147).LateralNewtons);
         float previous=0;foreach(var angle in new[]{0f,.00001f,.03f,.1f,.3f,1f,1.5f}) {
-            var v=state with{Heading=angle};var tyre=SlipCoupledDynamics.Tyre(v,1000,1000);
+            var v=state with{Heading=angle};var tyre=SlipCoupledDynamics.Tyre(v,1000,1000,147);
             Assert.True(Math.Abs(tyre.LateralNewtons)>=previous);previous=Math.Abs(tyre.LateralNewtons);
             Assert.InRange(tyre.Utilization,0,1.000001f);Assert.InRange(tyre.LateralLossWatts,0,float.MaxValue);
             Assert.True(tyre.DriveNewtons*tyre.DriveNewtons+tyre.LateralNewtons*tyre.LateralNewtons<=1000001);
         }
         var wrapped=state with{Velocity=new(-20,-.2f),Heading=MathF.PI-.01f};
-        Assert.InRange(wrapped.SlideRadians,-.03f,-.01f);Assert.True(SlipCoupledDynamics.Tyre(wrapped,0,1000).LateralNewtons<0);
+        Assert.InRange(wrapped.SlideRadians,-.03f,-.01f);Assert.True(SlipCoupledDynamics.Tyre(wrapped,0,1000,147).LateralNewtons<0);
     }
     [Fact]
     public void ZeroDriveCannotGenerateMechanicalPowerAndForwardThrottlePowerIsMonotone() {
@@ -91,6 +91,18 @@ public sealed class SlipCoupledDynamicsTests
         using var w=new WorldRunner(new[]{SlipDynamicsAudit.Rider(speed:speed)},parameters:new(){EnableSlipCoupledDynamics=true});
         var r=w.Run("transition",step,30,1,s=>Assert.True(HeatMeasurements.Clearance(s.Riders[0],w.Frame)>0));
         Assert.True(r.Completed);Assert.Empty(r.Contacts);Assert.True(float.IsFinite(r.Riders[0].Speed));
+    }
+    [Theory]
+    [InlineData(.005)] [InlineData(.01)] [InlineData(.02)]
+    public void LowSpeedSideSlipCannotNumericallyCreateEnergyWithZeroDrive(double step)
+    {
+        var spec=SlipDynamicsAudit.Rider(speed:.01f) with{InitialOutwardSpeed=.05f};
+        using var w=new WorldRunner(new[]{spec},parameters:new(){EnableSlipCoupledDynamics=true},controls:new[]{new ControlCommand(1,0,5,0)});
+        var p=w.MechanicalProperties(1);
+        double Energy(RiderView v)=>.5*p.MassKg*v.Velocity.LengthSquared()+.5*p.InertiaKgMetersSquared*v.AngularVelocity*v.AngularVelocity;
+        var previous=Energy(w.Snapshot.Riders[0]);
+        var r=w.Run("low-side-slip",step,.2,acceptedObserver:s=>{var e=Energy(s.Riders[0]);Assert.True(e<=previous+.00001,$"Low-speed energy increased {e-previous}");previous=e;});
+        Assert.Equal((long)Math.Round(.2/step),r.Work.SolverCalls);
     }
     [Fact]
     public void DiagnosticsAndInputOrderCannotChangeTheWorldAndContactsRemainPhysical() {

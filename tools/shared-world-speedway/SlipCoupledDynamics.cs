@@ -14,16 +14,21 @@ public static class SlipCoupledDynamics
     public const float YawLeverArmMeters=.5f;
     public const float YawPowerRegularizationRadiansPerSecond=1;
     public const float OuterToYawResponseSeparation=4;
+    // Bound low-speed stiffness by m/T. T exceeds the largest existing 20 ms
+    // force-hold interval, so lateral damping cannot overshoot a stopped side velocity.
+    public const float MinimumLateralRelaxationSeconds=.03f;
     public readonly record struct TyreForces(float DriveNewtons,float LateralNewtons,float Utilization,float LateralLossWatts);
-    public static TyreForces Tyre(RiderView v,float requestedDriveNewtons,float budgetNewtons)
+    public static TyreForces Tyre(RiderView v,float requestedDriveNewtons,float budgetNewtons,float massKg)
     {
         if(!float.IsFinite(budgetNewtons)||budgetNewtons<=0||!float.IsFinite(requestedDriveNewtons)||requestedDriveNewtons<0
-            ||!float.IsFinite(v.ForwardSpeed)||!float.IsFinite(v.SideSpeed))throw new ArgumentOutOfRangeException(nameof(budgetNewtons));
-        return Tyre(v.ForwardSpeed,v.SideSpeed,requestedDriveNewtons,budgetNewtons);
+            ||!float.IsFinite(massKg)||massKg<=0||!float.IsFinite(v.ForwardSpeed)||!float.IsFinite(v.SideSpeed))throw new ArgumentOutOfRangeException(nameof(budgetNewtons));
+        return Tyre(v.SideSpeed,requestedDriveNewtons,budgetNewtons,VelocityScaleSquared(v.ForwardSpeed,budgetNewtons/massKg));
     }
-    private static TyreForces Tyre(float u,float w,float requestedDriveNewtons,float budgetNewtons)
+    private static float VelocityScaleSquared(float u,float accelerationBudget)
+        =>SlipStiffnessRatio*SlipStiffnessRatio*(u*u+LowSpeedMetersPerSecond*LowSpeedMetersPerSecond)
+            +accelerationBudget*accelerationBudget*MinimumLateralRelaxationSeconds*MinimumLateralRelaxationSeconds;
+    private static TyreForces Tyre(float w,float requestedDriveNewtons,float budgetNewtons,float scale)
     {
-        var scale=SlipStiffnessRatio*SlipStiffnessRatio*(u*u+LowSpeedMetersPerSecond*LowSpeedMetersPerSecond);
         var lateral=-budgetNewtons*w/MathF.Sqrt(w*w+scale);
         var longitudinal=Math.Min(Math.Max(0,requestedDriveNewtons),MathF.Sqrt(Math.Max(0,budgetNewtons*budgetNewtons-lateral*lateral)));
         return new(longitudinal,lateral,MathF.Sqrt(longitudinal*longitudinal+lateral*lateral)/budgetNewtons,-lateral*w);
@@ -50,7 +55,8 @@ public static class SlipCoupledDynamics
             :LongitudinalDynamics.CalculateStraightAvailableDriveForceNewtons(spec.Profile.Skills,spec.Setup,grip);
         var u=v.ForwardSpeed;var w=v.SideSpeed;
         var available=LongitudinalDynamics.CalculateAvailableDriveForceAtSpeedNewtons(reference,Math.Max(0,u),spec.Setup);
-        var tyre=Tyre(u,w,available*v.Drive*(1-v.Impairment),budget);
+        var scaleSquared=VelocityScaleSquared(u,budget/mass);
+        var tyre=Tyre(w,available*v.Drive*(1-v.Impairment),budget,scaleSquared);
         var forward=new Vector2(MathF.Cos(v.Heading),MathF.Sin(v.Heading));var side=new Vector2(-forward.Y,forward.X);
         var tyreForce=forward*tyre.DriveNewtons+side*tyre.LateralNewtons;
         // External rolling/aerodynamic resistance is separate from the tyre circle.
@@ -70,7 +76,7 @@ public static class SlipCoupledDynamics
         var demand=longitudinal*longitudinal*curvature+((float)road.OffsetMeters-v.TargetOffsetMeters)
             /(response*response)+2*Vector2.Dot(v.Velocity,road.Outward)/response;
         var ratio=Math.Clamp(mass*demand/budget,-MaximumSteeringDemandRatio,MaximumSteeringDemandRatio);
-        var targetSlip=(float)Math.Atan(SlipStiffnessRatio*Math.Sqrt(u*u+LowSpeedMetersPerSecond*LowSpeedMetersPerSecond)
+        var targetSlip=(float)Math.Atan(Math.Sqrt(scaleSquared)
             /Math.Max(speed,LowSpeedMetersPerSecond)*ratio/Math.Sqrt(1-ratio*ratio));
         var travelHeading=speed>=.01f?MathF.Atan2(v.Velocity.Y,v.Velocity.X):(float)road.Heading;
         var error=(float)BikeAngles.Wrap(targetSlip-v.SlideRadians);

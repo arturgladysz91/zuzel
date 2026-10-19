@@ -24,6 +24,19 @@ public static class SlipDynamicsAudit
     public static void Run(string directory,string stage)
     {
         Directory.CreateDirectory(directory);
+        if(stage=="low-speed") {
+            var trials=new List<object>();
+            foreach(var step in new[]{.005,.01,.02}) {
+                var rider=Rider(speed:.01f) with{InitialOutwardSpeed=.05f};
+                using var w=new WorldRunner(new[]{rider},parameters:new(){EnableSlipCoupledDynamics=true},controls:new[]{new ControlCommand(1,0,5,0)});
+                var properties=w.MechanicalProperties(1);var states=new List<object>();
+                void Accept(WorldSnapshot s) {var v=s.Riders[0];states.Add(new{s.TimeSeconds,State=v,
+                    KineticEnergyJoules=.5*properties.MassKg*v.Velocity.LengthSquared()+.5*properties.InertiaKgMetersSquared*v.AngularVelocity*v.AngularVelocity});}
+                Accept(w.Snapshot);var r=w.Run("low-side-slip",step,.2,acceptedObserver:Accept);
+                trials.Add(new{StepSeconds=step,Result=r,States=states});
+            }
+            File.WriteAllText(Path.Combine(directory,"low-speed-energy.json"),JsonSerializer.Serialize(trials,Audit.Json)+"\n");return;
+        }
         if(stage=="focus" || stage=="runs") {
             var cases=stage=="focus"?Cases().Where(s=>s.Name.StartsWith("A-",StringComparison.Ordinal)||s.Name=="B-middle")
                 :Cases().Where(s=>!s.Name.StartsWith("A-",StringComparison.Ordinal)&&s.Name!="B-middle");

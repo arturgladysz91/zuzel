@@ -1,0 +1,14 @@
+{
+  "SourceHeadBeforeCorrection": "859072dfab9b26d06460e852fc31a2f846da6fd7",
+  "Test": "LowSpeedSideSlipCannotNumericallyCreateEnergyWithZeroDrive",
+  "InitialForwardMetersPerSecond": 0.01,
+  "InitialOutwardMetersPerSecond": 0.05,
+  "Drive": 0,
+  "FirstFailingAcceptedStepEnergyIncreaseJoules": {
+    "0.01": 0.013427998870252977,
+    "0.02": 1.2087593887209318
+  },
+  "Step005Passed": true,
+  "Method": "Values from the first failing assertion in real Box2D accepted-state tests, not a search for the maximum.",
+  "Disposition": "Rejected. Continuous passivity was insufficient for a held explicit force near zero forward speed. Added continuous finite-stiffness regularization with minimum lateral response time 0.03 s; no velocity edits or added solver steps."
+}

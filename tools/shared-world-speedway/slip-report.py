@@ -25,6 +25,10 @@ for on in (False, True):
     fp = {x['Fingerprint'] for x in performance['Worlds'] if x['On'] == on}
     assert fp == {runs['D-pack-' + ('ON' if on else 'OFF')]['Run']['Result']['Fingerprint']}
 assert all(not any(x['AllocatedBytes']) for x in performance['Forces'])
+for trial in read('low-speed-energy.json'):
+    values = [x['KineticEnergyJoules'] for x in trial['States']]
+    assert all(b <= a + 1e-5 for a, b in zip(values, values[1:]))
+    assert trial['Result']['Work']['SolverCalls'] == round(.2 / trial['StepSeconds'])
 
 report = [r'''# Slip-Coupled Speedway Dynamics (#97)
 
@@ -56,7 +60,9 @@ Osie motocykla: `ef=(cosψ,sinψ)`, `el=(-sinψ,cosψ)`. `u=v·ef` to ForwardSpe
 ```text
 s0 = 0.12                          bezwymiarowa skala sztywności
 v0 = 0.5 m/s                       regularizacja małej prędkości
-Fy = -B*w / sqrt(w² + s0²*(u²+v0²))
+Trelax = 0.03 s                    minimalny czas tłumienia prędkości bocznej
+delta² = s0²*(u²+v0²) + (B*Trelax/m)²
+Fy = -B*w / sqrt(w² + delta²)
 Fx_request = availableDrive(max(0,u)) * Drive * (1-Impairment)
 Fx = min(Fx_request, sqrt(max(0, B²-Fy²)))
 F_res = -(40 + 0.20*|v|²) * v / sqrt(|v|²+v0²)
@@ -64,7 +70,7 @@ F_world = Fx*ef + Fy*el + F_res
 P_slip_loss = -Fy*w >= 0
 ```
 
-Fy ma pierwszeństwo w budżecie, a napęd otrzymuje pozostałą składową kręgu. Przy małym w reakcja jest w przybliżeniu liniowa; przy średnim narasta; przy dużym gładko dąży do ±B. Nie ma sztucznego optimum 12° ani mnożnika prędkości zależnego od kąta. Przy nadmiernym uślizgu wzrastają strata `-Fy*w` i wykorzystanie budżetu, a dostępny Fx maleje. Nie modelujemy osobno koła przedniego i tylnego.
+Fy ma pierwszeństwo w budżecie, a napęd otrzymuje pozostałą składową kręgu. Przy małym w reakcja jest w przybliżeniu liniowa; przy średnim narasta; przy dużym gładko dąży do ±B. Składnik Trelax ogranicza sztywność przy małym u: `|Fy|/m <= |w|/Trelax`. Czas 30 ms przekracza największy istniejący przedział przyłożenia siły 20 ms; regularizacja zapobiega numerycznemu przestrzeleniu tłumionej prędkości bocznej. To jedna gładka krzywa siły, bez edycji prędkości, drugiego limitu przyczepności lub nowego kroku solvera; nie dodaje osobnego stanu relaksacji opony. Nie ma sztucznego optimum 12° ani mnożnika prędkości zależnego od kąta. Przy nadmiernym uślizgu wzrastają strata `-Fy*w` i wykorzystanie budżetu, a dostępny Fx maleje. Nie modelujemy osobno koła przedniego i tylnego.
 
 Przykład lewego łuku: `v=(20,0)`, nos `ψ=+0,1 rad` daje `w<0`, więc `Fy>0` w osi el, a światowa składowa Y jest dodatnia — do wnętrza lewego łuku. `Fy*w<0`, więc opona odbiera energię. Po odbiciu `ψ=-0,1` kierunki się odwracają. Stary znak +12° nie został użyty jako założenie nowego modelu.
 
@@ -72,7 +78,7 @@ Przykład lewego łuku: `v=(20,0)`, nos `ψ=+0,1 rad` daje `w<0`, więc `Fy>0` w
 
 Regulator liczy żądane przyspieszenie `a_req = v_tangent²*κ_preview + (offset−target)/T² + 2*v_outward/T`. Podgląd dotyczy wyłącznie istniejącej statycznej geometrii TrackFrame: około `2*YawResponseSeconds=0,7 s` aktualnego postępu referencyjnego. Krzywizna uwzględnia długość fizyczną obecnego offsetu; błąd i tłumienie prowadzą do wybranej linii. RoadAt odczytuje tę samą natywną geometrię co At, bez alokującej lambdy i bez osobnej trajektorii dynamicznej.
 
-`r=clamp(m*a_req/B, -0.95, 0.95)`, `β_target=atan(s0*sqrt(u²+v0²)/max(|v|,v0) * r/sqrt(1−r²))`. To przybliżona odwrotność krzywej, a nie wykonana orientacja ani siła. Aktualny uślizg pozostaje wejściem opony. Błąd yaw to najkrótsza różnica β_target−α.
+`r=clamp(m*a_req/B, -0.95, 0.95)`, `β_target=atan(delta/max(|v|,v0) * r/sqrt(1−r²))`. To przybliżona odwrotność krzywej, a nie wykonana orientacja ani siła. Aktualny uślizg pozostaje wejściem opony. Błąd yaw to najkrótsza różnica β_target−α.
 
 Wewnętrzny czas yaw `SlipYawResponseSeconds=0,1 s`; zewnętrzny czas `T=LateralResponseSeconds+4*SlipYawResponseSeconds=1,05 s`. Krytycznie tłumiony regulator yaw otrzymuje feed-forward z rzeczywistej reakcji bocznej `cross(v,Fy*el)/(m*(|v|²+v0²))`. Napęd jest z tego feed-forward wyłączony, aby przy ustalonym stanie zmiana gazu nie zmieniała momentu. Moment jest ograniczony do `±0,5 m*B`, ze starą authority Technique i impairment. Nie ustawia heading bezpośrednio.
 
@@ -140,6 +146,7 @@ report.append('''
 
 - [Attempt 1](slip-coupled-dynamics/attempt-1/README.md): T_lateral=0,65 s / T_yaw=0,35 s. B-middle nie ukończył dwóch obiegów w 60 s, min prześwit −17,055 m. Pętla offsetu była za szybka względem nowego pośredniego aktuatora orientacji.
 - [Attempt 2](slip-coupled-dynamics/attempt-2/README.md): T_lateral=2,05 s / T_yaw=0,35 s. Ukończył, lecz opuścił tor, min prześwit −7,774 m. Samo spowolnienie zewnętrznej pętli nie wystarczyło. Obie próby i ich pełne zapisy są zachowane; nie zaliczono ich jako stabilnych.
+- [Odrzucona sztywność przy małej prędkości](slip-coupled-dynamics/low-speed-rejected.json): ciągła nierówność mocy nie wystarczyła przy sile utrzymywanej przez cały krok. Przy u=0,01 m/s, dryfie 0,05 m/s i Drive=0 pierwsze wykryte przyrosty energii wyniosły 0,013428 J przy 10 ms i 1,208759 J przy 20 ms. Dodano regularizację Trelax w tej samej krzywej Fy i jej odwrotności regulatora. [Końcowe zaakceptowane stany oraz energie dla 5/10/20 ms](slip-coupled-dynamics/low-speed-energy.json) pokazują brak wzrostu energii, również z obrotem. Nie poprawiano prędkości po kroku.
 - Końcowa korekta dotyczy pasma regulatora, nie krzywej sił, gripu czy pozycji: szybszy, nadal ograniczony yaw 0,1 s i zewnętrzny T=1,05 s. Domyślne ustawienia sprawdzono przy 5/10/20 ms, przy starcie od 0 i 0,1 m/s oraz w 35 m/s przeciążeniu. Przy niewykonalnej prędkości rzeczywisty motocykl odchodzi od targetu zamiast idealnie utrzymywać promień. Nie gwarantujemy stabilności dowolnych innych nastaw regulatora ani ekstremalnie gęstej walki.
 - Model bez stanu obrotów koła nie wyznacza slip ratio, wheelspin, sprzęgła ani strat mocy w napędzie. Fx oznacza dostępny efektywny napęd według istniejącej charakterystyki; yaw ma jawnie prowizoryczne ograniczenie pracy. Brak oddzielnej opony przedniej/tylnej, przenoszenia obciążenia, przechyłu i żyroskopu. Nasycenie jest monotoniczne, bez empirycznej gałęzi spadku bocznej siły po jej maksimum. Duży uślizg szkodzi przez pracę i wspólny budżet, nie arbitralny peak-angle.
 - Nawierzchnia jest niezmiennym snapshotem. Kontakty i proxy ich konsekwencji pozostają dotychczasowe; nie dodano krawędzi toru ani losowego upadku. Taktyczny/autonomiczny scoring jest jawnie niewspierany w ON.
@@ -158,6 +165,7 @@ Nie powtarzano całych historycznych audytów #87–#96. Przed modyfikacją Forc
 dotnet run --project tools/shared-world-speedway -c Release -- slip-dynamics NEW_DIRECTORY baseline
 dotnet run --project tools/shared-world-speedway -c Release -- slip-dynamics NEW_DIRECTORY focus
 dotnet run --project tools/shared-world-speedway -c Release -- slip-dynamics NEW_DIRECTORY runs
+dotnet run --project tools/shared-world-speedway -c Release -- slip-dynamics NEW_DIRECTORY low-speed
 $env:DOTNET_TieredCompilation='0'
 dotnet run --project tools/shared-world-speedway -c Release -- slip-dynamics NEW_DIRECTORY benchmark
 dotnet test tests/CoreSim.Tests/CoreSim.Tests.csproj -c Release --filter "FullyQualifiedName~SlipCoupledDynamicsTests|FullyQualifiedName~ReplayGeometryTests"
@@ -167,7 +175,7 @@ python tools/shared-world-speedway/slip-report.py
 Nie uruchamiaj eksportu do historycznych katalogów. Reprodukcja baseline wymaga źródłowej bazy #96; końcowe OFF jest z nią sprawdzane, a istniejący plik nie jest nadpisywany. A w tym etapie oznacza spójność i działanie na narzuconych liniach; nie uzasadnia włączenia produkcyjnego. Rekomendacja: zachować flagę OFF, osobno skalibrować siły/sterowanie i dopiero potem porównać analityczny scoring z nowym wykonaniem przed integracją AI.
 ''')
 
-text='\n'.join(report).replace('|α|', 'abs(α)').replace('18/18 celowanych Release: 16 nowych', '19/19 celowanych Release: 17 nowych')
+text='\n'.join(report).replace('|α|', 'abs(α)').replace('18/18 celowanych Release: 16 nowych', '22/22 celowanych Release: 20 nowych')
 text=text.replace('Błąd yaw to najkrótsza różnica β_target−α.', 'Błąd yaw to najkrótsza różnica β_target−α. Przy 0,01–0,5 m/s kierunek sterowania przechodzi smoothstep z kierunku drogi do tej różnicy; poniżej 0,01 m/s używa drogi, bez skoku przy progu definicji SlideRadians.')
 (root / 'docs/experiments/slip-coupled-dynamics.md').write_text(text.rstrip() + '\n', encoding='utf-8')
 manifest = {str(p.relative_to(folder)).replace('\\', '/'): hashlib.sha256(p.read_bytes()).hexdigest()
