@@ -49,7 +49,8 @@ public static partial class TrafficDecision
     }
     public static DecisionEvent? Observe(WorldSnapshot snapshot, RiderView own, RiderSpec spec,
         WorldParameters p, WorldWork work, TacticalMemory memory, IReadOnlyList<RacingPair> pairs,
-        TrackFrame frame, TrackStateSnapshot surface, bool safetyOnly = false, Action<ContestObservation>? observeContest = null)
+        TrackFrame frame, TrackStateSnapshot surface, bool safetyOnly = false, Action<ContestObservation>? observeContest = null,
+        Action<AutonomousLineObservation>? observeLine = null)
     {
         if (!spec.TrafficEnabled || own.Activity is RiderActivity.Crashed or RiderActivity.Finished) return null;
         work.TacticalObservations++;
@@ -61,6 +62,7 @@ public static partial class TrafficDecision
         var margin = BaseMarginMeters + CautiousMarginMeters * (1 - contest) + ExecutionMarginMeters * (1 - technique);
         var maximum = frame.MinimumUsableWidthMeters - TargetMarginMeters;
         var reaction = RiderController.ReactionSeconds(spec);
+        var homeOffset = p.EnableAutonomousRacingLine ? memory.AutonomousOffsetMeters : memory.HomeOffsetMeters;
         DecisionEvent Command(RiderView other, TrafficAction action, float target, float drive,
             RacingIntent intent, string reason, bool safety = false)
             => new(own.Id, other.Id, action, now, now, now + reaction, null, target, drive, intent, reason, safety);
@@ -166,8 +168,8 @@ public static partial class TrafficDecision
             var previous = snapshot.Riders.FirstOrDefault(v => v.Id == memory.OpponentId);
             var lead = previous.Id == 0 ? double.PositiveInfinity : Vector2.Dot(own.Position - previous.Position, road.Tangent);
             if (lead > Bike.OverallMechanicalLengthMeters + own.Speed * reaction
-                && Corridor(memory.HomeOffsetMeters, reaction + RecoveryLookaheadSeconds, 0))
-                return Command(previous, TrafficAction.KeepIntent, memory.HomeOffsetMeters, 1, RacingIntent.ReturnLine, "PassClearReturn");
+                && Corridor(homeOffset, reaction + RecoveryLookaheadSeconds, 0))
+                return Command(previous, TrafficAction.KeepIntent, homeOffset, 1, RacingIntent.ReturnLine, "PassClearReturn");
             if ((now - memory.ActivatedAt > AttackTimeoutSeconds && lead < Bike.OverallMechanicalLengthMeters)
                 || (now - memory.ActivatedAt > IntentMinimumSeconds && !Corridor(own.TargetOffsetMeters, RecoveryLookaheadSeconds, memory.OpponentId)))
                 return Command(previous, TrafficAction.BackOut, (float)road.OffsetMeters, 0, RacingIntent.None, "AttackNoLongerFeasible");
@@ -177,11 +179,11 @@ public static partial class TrafficDecision
         }
         if (memory.Intent == RacingIntent.ReturnLine)
         {
-            if (Math.Abs(road.OffsetMeters - memory.HomeOffsetMeters) < ReturnCompletionMeters)
-                return Command(default, TrafficAction.HoldLine, memory.HomeOffsetMeters, 1, RacingIntent.None, "ReturnCompleted");
-            if ((own.Drive == 0 || Math.Abs(own.TargetOffsetMeters - memory.HomeOffsetMeters) > TargetChangeMeters) && now >= memory.SafetyUntil
-                && now - memory.ClearSince >= ClearObservationSeconds && Corridor(memory.HomeOffsetMeters, reaction + RecoveryLookaheadSeconds, 0))
-                return Command(default, TrafficAction.KeepIntent, memory.HomeOffsetMeters, 1, RacingIntent.ReturnLine, "ReturnCorridorClear");
+            if (Math.Abs(road.OffsetMeters - homeOffset) < ReturnCompletionMeters)
+                return Command(default, TrafficAction.HoldLine, homeOffset, 1, RacingIntent.None, "ReturnCompleted");
+            if ((own.Drive == 0 || Math.Abs(own.TargetOffsetMeters - homeOffset) > TargetChangeMeters) && now >= memory.SafetyUntil
+                && now - memory.ClearSince >= ClearObservationSeconds && Corridor(homeOffset, reaction + RecoveryLookaheadSeconds, 0))
+                return Command(default, TrafficAction.KeepIntent, homeOffset, 1, RacingIntent.ReturnLine, "ReturnCorridorClear");
             return null;
         }
         if (p.EnableSideBySideContests && (pairs.Count > 0
@@ -227,7 +229,7 @@ public static partial class TrafficDecision
                     if (gain <= 0) continue;
                     var preference = spec.Profile.Gameplay.InteractionStyle.PreferredLine;
                     var score = (road.IsTurn ? frame.Embedding.Segments[road.Segment].InnerRadiusMeters : 1) / gain
-                        + LineScoreWeight * Math.Abs(target - memory.HomeOffsetMeters)
+                        + LineScoreWeight * Math.Abs(target - homeOffset)
                         + (preference == PreferredLine.Inside && side > 0 || preference == PreferredLine.Outside && side < 0 ? LineScoreWeight : 0);
                     if (score < bestScore) { bestScore = score; bestTarget = target;
                         bestAction = side < 0 ? TrafficAction.AttackInside : TrafficAction.AttackOutside; }
@@ -254,11 +256,12 @@ public static partial class TrafficDecision
             }
         }
         if (memory.Intent == RacingIntent.DefendLine && pursuer is null && now - memory.ActivatedAt > 1
-            && Corridor(memory.HomeOffsetMeters, reaction + RecoveryLookaheadSeconds, 0))
-            return Command(default, TrafficAction.KeepIntent, memory.HomeOffsetMeters, 1, RacingIntent.ReturnLine, "DefenseReleased");
+            && Corridor(homeOffset, reaction + RecoveryLookaheadSeconds, 0))
+            return Command(default, TrafficAction.KeepIntent, homeOffset, 1, RacingIntent.ReturnLine, "DefenseReleased");
         if (own.Drive == 0 && now - memory.ClearSince >= ClearObservationSeconds && (opponent is null || bestGap > ClearFrontGapMeters)
             && now >= memory.SafetyUntil)
             return Command(default, TrafficAction.KeepIntent, own.TargetOffsetMeters, 1, RacingIntent.None, "ClearResume");
-        return null;
+        return p.EnableAutonomousRacingLine ? AutonomousRacingLine.Observe(snapshot, own, spec, p, work, memory,
+            frame, surface, Corridor, observeLine) : null;
     }
 }

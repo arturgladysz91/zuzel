@@ -1,0 +1,1934 @@
+{
+  "Baseline": "f996cd1e2c1424659dd9d106f63c007e5aa1ea0f",
+  "Parameters": {
+    "EnableTacticalRacing": true,
+    "EnableSideBySideContests": true,
+    "EnableTacticalQualityScoring": false,
+    "EnableProportionalTrafficThrottle": true,
+    "EnableClosureAdaptiveFollowingGap": false,
+    "AiIntervalSeconds": 0.1,
+    "LateralResponseSeconds": 0.65,
+    "YawResponseSeconds": 0.35,
+    "SlideAngleRadians": 0.20943952,
+    "ContactFriction": 0.2,
+    "NearbyMaximumTravelMeters": 0.02,
+    "PredictionSeconds": 1.1,
+    "RecoverySeconds": 0.5,
+    "SolverSubsteps": 4
+  },
+  "StepSeconds": 0.01,
+  "Substeps": 4,
+  "Solos": [
+    {
+      "Name": "S1-inner",
+      "Riders": [
+        {
+          "Profile": {
+            "Id": 1,
+            "Name": "R1",
+            "Skills": {
+              "Start": 50,
+              "Speed": 50,
+              "SlideControl": 50,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 0,
+          "OffsetMeters": 0.5,
+          "SpeedMetersPerSecond": 0,
+          "TargetOffsetMeters": 0.5,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": true,
+          "Passive": false,
+          "Bullet": false
+        }
+      ],
+      "DurationSeconds": 90,
+      "Laps": 4
+    },
+    {
+      "Name": "S2-outer",
+      "Riders": [
+        {
+          "Profile": {
+            "Id": 1,
+            "Name": "R1",
+            "Skills": {
+              "Start": 50,
+              "Speed": 50,
+              "SlideControl": 50,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 0,
+          "OffsetMeters": 9.5,
+          "SpeedMetersPerSecond": 0,
+          "TargetOffsetMeters": 9.5,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": true,
+          "Passive": false,
+          "Bullet": false
+        }
+      ],
+      "DurationSeconds": 90,
+      "Laps": 4
+    },
+    {
+      "Name": "rolling-S3-entry",
+      "Riders": [
+        {
+          "Profile": {
+            "Id": 1,
+            "Name": "R1",
+            "Skills": {
+              "Start": 50,
+              "Speed": 50,
+              "SlideControl": 50,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 20,
+          "OffsetMeters": 7,
+          "SpeedMetersPerSecond": 22,
+          "TargetOffsetMeters": 7,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": true,
+          "Passive": false,
+          "Bullet": false
+        }
+      ],
+      "DurationSeconds": 90,
+      "Laps": 4
+    },
+    {
+      "Name": "rolling-S4-exit",
+      "Riders": [
+        {
+          "Profile": {
+            "Id": 1,
+            "Name": "R1",
+            "Skills": {
+              "Start": 50,
+              "Speed": 50,
+              "SlideControl": 50,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 110,
+          "OffsetMeters": 7,
+          "SpeedMetersPerSecond": 22,
+          "TargetOffsetMeters": 7,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": true,
+          "Passive": false,
+          "Bullet": false
+        }
+      ],
+      "DurationSeconds": 90,
+      "Laps": 4
+    },
+    {
+      "Name": "S5-low",
+      "Riders": [
+        {
+          "Profile": {
+            "Id": 1,
+            "Name": "R1",
+            "Skills": {
+              "Start": 50,
+              "Speed": 20,
+              "SlideControl": 20,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 0,
+          "OffsetMeters": 9.5,
+          "SpeedMetersPerSecond": 0,
+          "TargetOffsetMeters": 9.5,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": true,
+          "Passive": false,
+          "Bullet": false
+        }
+      ],
+      "DurationSeconds": 90,
+      "Laps": 4
+    },
+    {
+      "Name": "S5-high",
+      "Riders": [
+        {
+          "Profile": {
+            "Id": 1,
+            "Name": "R1",
+            "Skills": {
+              "Start": 50,
+              "Speed": 80,
+              "SlideControl": 80,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 0,
+          "OffsetMeters": 9.5,
+          "SpeedMetersPerSecond": 0,
+          "TargetOffsetMeters": 9.5,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": true,
+          "Passive": false,
+          "Bullet": false
+        }
+      ],
+      "DurationSeconds": 90,
+      "Laps": 4
+    }
+  ],
+  "Heats": [
+    {
+      "Name": "A1-rotation-0",
+      "Riders": [
+        {
+          "Profile": {
+            "Id": 1,
+            "Name": "R1",
+            "Skills": {
+              "Start": 50,
+              "Speed": 50,
+              "SlideControl": 50,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 0,
+          "OffsetMeters": 0.5,
+          "SpeedMetersPerSecond": 0,
+          "TargetOffsetMeters": 0.5,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": true,
+          "Passive": false,
+          "Bullet": false
+        },
+        {
+          "Profile": {
+            "Id": 2,
+            "Name": "R2",
+            "Skills": {
+              "Start": 50,
+              "Speed": 50,
+              "SlideControl": 50,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 0,
+          "OffsetMeters": 3.5,
+          "SpeedMetersPerSecond": 0,
+          "TargetOffsetMeters": 3.5,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": true,
+          "Passive": false,
+          "Bullet": false
+        },
+        {
+          "Profile": {
+            "Id": 3,
+            "Name": "R3",
+            "Skills": {
+              "Start": 50,
+              "Speed": 50,
+              "SlideControl": 50,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 0,
+          "OffsetMeters": 6.5,
+          "SpeedMetersPerSecond": 0,
+          "TargetOffsetMeters": 6.5,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": true,
+          "Passive": false,
+          "Bullet": false
+        },
+        {
+          "Profile": {
+            "Id": 4,
+            "Name": "R4",
+            "Skills": {
+              "Start": 50,
+              "Speed": 50,
+              "SlideControl": 50,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 0,
+          "OffsetMeters": 9.5,
+          "SpeedMetersPerSecond": 0,
+          "TargetOffsetMeters": 9.5,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": true,
+          "Passive": false,
+          "Bullet": false
+        }
+      ],
+      "DurationSeconds": 90,
+      "Laps": 4
+    },
+    {
+      "Name": "A2-rotation-1",
+      "Riders": [
+        {
+          "Profile": {
+            "Id": 1,
+            "Name": "R1",
+            "Skills": {
+              "Start": 80,
+              "Speed": 50,
+              "SlideControl": 50,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 0,
+          "OffsetMeters": 3.5,
+          "SpeedMetersPerSecond": 0,
+          "TargetOffsetMeters": 3.5,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": true,
+          "Passive": false,
+          "Bullet": false
+        },
+        {
+          "Profile": {
+            "Id": 2,
+            "Name": "R2",
+            "Skills": {
+              "Start": 50,
+              "Speed": 55,
+              "SlideControl": 80,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 0,
+          "OffsetMeters": 6.5,
+          "SpeedMetersPerSecond": 0,
+          "TargetOffsetMeters": 6.5,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": true,
+          "Passive": false,
+          "Bullet": false
+        },
+        {
+          "Profile": {
+            "Id": 3,
+            "Name": "R3",
+            "Skills": {
+              "Start": 55,
+              "Speed": 65,
+              "SlideControl": 60,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 0,
+          "OffsetMeters": 9.5,
+          "SpeedMetersPerSecond": 0,
+          "TargetOffsetMeters": 9.5,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": true,
+          "Passive": false,
+          "Bullet": false
+        },
+        {
+          "Profile": {
+            "Id": 4,
+            "Name": "R4",
+            "Skills": {
+              "Start": 55,
+              "Speed": 50,
+              "SlideControl": 70,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 0,
+          "OffsetMeters": 0.5,
+          "SpeedMetersPerSecond": 0,
+          "TargetOffsetMeters": 0.5,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": true,
+          "Passive": false,
+          "Bullet": false
+        }
+      ],
+      "DurationSeconds": 90,
+      "Laps": 4
+    },
+    {
+      "Name": "close-rotation-0",
+      "Riders": [
+        {
+          "Profile": {
+            "Id": 1,
+            "Name": "R1",
+            "Skills": {
+              "Start": 55,
+              "Speed": 55,
+              "SlideControl": 65,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 0,
+          "OffsetMeters": 0.5,
+          "SpeedMetersPerSecond": 0,
+          "TargetOffsetMeters": 0.5,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": true,
+          "Passive": false,
+          "Bullet": false
+        },
+        {
+          "Profile": {
+            "Id": 2,
+            "Name": "R2",
+            "Skills": {
+              "Start": 55,
+              "Speed": 55,
+              "SlideControl": 65,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 0,
+          "OffsetMeters": 3.5,
+          "SpeedMetersPerSecond": 0,
+          "TargetOffsetMeters": 3.5,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": true,
+          "Passive": false,
+          "Bullet": false
+        },
+        {
+          "Profile": {
+            "Id": 3,
+            "Name": "R3",
+            "Skills": {
+              "Start": 55,
+              "Speed": 55,
+              "SlideControl": 65,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 0,
+          "OffsetMeters": 6.5,
+          "SpeedMetersPerSecond": 0,
+          "TargetOffsetMeters": 6.5,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": true,
+          "Passive": false,
+          "Bullet": false
+        },
+        {
+          "Profile": {
+            "Id": 4,
+            "Name": "R4",
+            "Skills": {
+              "Start": 55,
+              "Speed": 55,
+              "SlideControl": 65,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 0,
+          "OffsetMeters": 9.5,
+          "SpeedMetersPerSecond": 0,
+          "TargetOffsetMeters": 9.5,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": true,
+          "Passive": false,
+          "Bullet": false
+        }
+      ],
+      "DurationSeconds": 90,
+      "Laps": 4
+    },
+    {
+      "Name": "rolling-straight",
+      "Riders": [
+        {
+          "Profile": {
+            "Id": 1,
+            "Name": "R1",
+            "Skills": {
+              "Start": 55,
+              "Speed": 55,
+              "SlideControl": 65,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 133.38937497138977,
+          "OffsetMeters": 4,
+          "SpeedMetersPerSecond": 19,
+          "TargetOffsetMeters": 4,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": true,
+          "Passive": false,
+          "Bullet": false
+        },
+        {
+          "Profile": {
+            "Id": 2,
+            "Name": "R2",
+            "Skills": {
+              "Start": 55,
+              "Speed": 55,
+              "SlideControl": 65,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 141.38937497138977,
+          "OffsetMeters": 4,
+          "SpeedMetersPerSecond": 18,
+          "TargetOffsetMeters": 4,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": true,
+          "Passive": false,
+          "Bullet": false
+        },
+        {
+          "Profile": {
+            "Id": 3,
+            "Name": "R3",
+            "Skills": {
+              "Start": 55,
+              "Speed": 55,
+              "SlideControl": 65,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 140.38937497138977,
+          "OffsetMeters": 2.6,
+          "SpeedMetersPerSecond": 19.5,
+          "TargetOffsetMeters": 2.6,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": true,
+          "Passive": false,
+          "Bullet": false
+        },
+        {
+          "Profile": {
+            "Id": 4,
+            "Name": "R4",
+            "Skills": {
+              "Start": 55,
+              "Speed": 55,
+              "SlideControl": 65,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 140.38937497138977,
+          "OffsetMeters": 5.4,
+          "SpeedMetersPerSecond": 18.5,
+          "TargetOffsetMeters": 5.4,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": true,
+          "Passive": false,
+          "Bullet": false
+        }
+      ],
+      "DurationSeconds": 90,
+      "Laps": 4
+    },
+    {
+      "Name": "rolling-bend",
+      "Riders": [
+        {
+          "Profile": {
+            "Id": 1,
+            "Name": "R1",
+            "Skills": {
+              "Start": 55,
+              "Speed": 55,
+              "SlideControl": 65,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 45,
+          "OffsetMeters": 4,
+          "SpeedMetersPerSecond": 19,
+          "TargetOffsetMeters": 4,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": true,
+          "Passive": false,
+          "Bullet": false
+        },
+        {
+          "Profile": {
+            "Id": 2,
+            "Name": "R2",
+            "Skills": {
+              "Start": 55,
+              "Speed": 55,
+              "SlideControl": 65,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 53,
+          "OffsetMeters": 4,
+          "SpeedMetersPerSecond": 18,
+          "TargetOffsetMeters": 4,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": true,
+          "Passive": false,
+          "Bullet": false
+        },
+        {
+          "Profile": {
+            "Id": 3,
+            "Name": "R3",
+            "Skills": {
+              "Start": 55,
+              "Speed": 55,
+              "SlideControl": 65,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 52,
+          "OffsetMeters": 2.6,
+          "SpeedMetersPerSecond": 19.5,
+          "TargetOffsetMeters": 2.6,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": true,
+          "Passive": false,
+          "Bullet": false
+        },
+        {
+          "Profile": {
+            "Id": 4,
+            "Name": "R4",
+            "Skills": {
+              "Start": 55,
+              "Speed": 55,
+              "SlideControl": 65,
+              "TrackReading": 50,
+              "PairRiding": 50,
+              "Adaptability": 50
+            },
+            "Style": {
+              "RiskTolerance": 0.5,
+              "LaneChangeTendency": 0.5,
+              "OutsidePreference": 0.5,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Setup": {
+            "Gearing": 0.5,
+            "TractionBias": 0.5
+          },
+          "ReferenceMeters": 52,
+          "OffsetMeters": 5.4,
+          "SpeedMetersPerSecond": 18.5,
+          "TargetOffsetMeters": 5.4,
+          "InitialOutwardSpeed": 0,
+          "TrafficEnabled": true,
+          "Passive": false,
+          "Bullet": false
+        }
+      ],
+      "DurationSeconds": 90,
+      "Laps": 4
+    }
+  ],
+  "Inputs": [
+    {
+      "Name": "S1-inner",
+      "Riders": [
+        {
+          "Id": 1,
+          "Canonical": {
+            "Abilities": {
+              "Reaction": 50,
+              "Start": 50,
+              "Technique": 50,
+              "TrackReading": 50,
+              "Attack": 50,
+              "Defense": 50,
+              "PairRiding": 50,
+              "Strength": 50
+            },
+            "Physical": {
+              "MassKg": 70
+            },
+            "InteractionStyle": {
+              "Combativeness": 0.5,
+              "PreferredLine": 1,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Legacy": {
+            "Start": 50,
+            "Speed": 50,
+            "SlideControl": 50,
+            "TrackReading": 50,
+            "PairRiding": 50,
+            "Adaptability": 50
+          },
+          "ReferenceMeters": 0,
+          "OffsetMeters": 0.5,
+          "SpeedMetersPerSecond": 0,
+          "TargetOffsetMeters": 0.5,
+          "TrafficEnabled": true
+        }
+      ]
+    },
+    {
+      "Name": "S2-outer",
+      "Riders": [
+        {
+          "Id": 1,
+          "Canonical": {
+            "Abilities": {
+              "Reaction": 50,
+              "Start": 50,
+              "Technique": 50,
+              "TrackReading": 50,
+              "Attack": 50,
+              "Defense": 50,
+              "PairRiding": 50,
+              "Strength": 50
+            },
+            "Physical": {
+              "MassKg": 70
+            },
+            "InteractionStyle": {
+              "Combativeness": 0.5,
+              "PreferredLine": 1,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Legacy": {
+            "Start": 50,
+            "Speed": 50,
+            "SlideControl": 50,
+            "TrackReading": 50,
+            "PairRiding": 50,
+            "Adaptability": 50
+          },
+          "ReferenceMeters": 0,
+          "OffsetMeters": 9.5,
+          "SpeedMetersPerSecond": 0,
+          "TargetOffsetMeters": 9.5,
+          "TrafficEnabled": true
+        }
+      ]
+    },
+    {
+      "Name": "rolling-S3-entry",
+      "Riders": [
+        {
+          "Id": 1,
+          "Canonical": {
+            "Abilities": {
+              "Reaction": 50,
+              "Start": 50,
+              "Technique": 50,
+              "TrackReading": 50,
+              "Attack": 50,
+              "Defense": 50,
+              "PairRiding": 50,
+              "Strength": 50
+            },
+            "Physical": {
+              "MassKg": 70
+            },
+            "InteractionStyle": {
+              "Combativeness": 0.5,
+              "PreferredLine": 1,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Legacy": {
+            "Start": 50,
+            "Speed": 50,
+            "SlideControl": 50,
+            "TrackReading": 50,
+            "PairRiding": 50,
+            "Adaptability": 50
+          },
+          "ReferenceMeters": 20,
+          "OffsetMeters": 7,
+          "SpeedMetersPerSecond": 22,
+          "TargetOffsetMeters": 7,
+          "TrafficEnabled": true
+        }
+      ]
+    },
+    {
+      "Name": "rolling-S4-exit",
+      "Riders": [
+        {
+          "Id": 1,
+          "Canonical": {
+            "Abilities": {
+              "Reaction": 50,
+              "Start": 50,
+              "Technique": 50,
+              "TrackReading": 50,
+              "Attack": 50,
+              "Defense": 50,
+              "PairRiding": 50,
+              "Strength": 50
+            },
+            "Physical": {
+              "MassKg": 70
+            },
+            "InteractionStyle": {
+              "Combativeness": 0.5,
+              "PreferredLine": 1,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Legacy": {
+            "Start": 50,
+            "Speed": 50,
+            "SlideControl": 50,
+            "TrackReading": 50,
+            "PairRiding": 50,
+            "Adaptability": 50
+          },
+          "ReferenceMeters": 110,
+          "OffsetMeters": 7,
+          "SpeedMetersPerSecond": 22,
+          "TargetOffsetMeters": 7,
+          "TrafficEnabled": true
+        }
+      ]
+    },
+    {
+      "Name": "S5-low",
+      "Riders": [
+        {
+          "Id": 1,
+          "Canonical": {
+            "Abilities": {
+              "Reaction": 50,
+              "Start": 50,
+              "Technique": 50,
+              "TrackReading": 50,
+              "Attack": 50,
+              "Defense": 50,
+              "PairRiding": 50,
+              "Strength": 50
+            },
+            "Physical": {
+              "MassKg": 70
+            },
+            "InteractionStyle": {
+              "Combativeness": 0.5,
+              "PreferredLine": 1,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Legacy": {
+            "Start": 50,
+            "Speed": 20,
+            "SlideControl": 20,
+            "TrackReading": 50,
+            "PairRiding": 50,
+            "Adaptability": 50
+          },
+          "ReferenceMeters": 0,
+          "OffsetMeters": 9.5,
+          "SpeedMetersPerSecond": 0,
+          "TargetOffsetMeters": 9.5,
+          "TrafficEnabled": true
+        }
+      ]
+    },
+    {
+      "Name": "S5-high",
+      "Riders": [
+        {
+          "Id": 1,
+          "Canonical": {
+            "Abilities": {
+              "Reaction": 50,
+              "Start": 50,
+              "Technique": 50,
+              "TrackReading": 50,
+              "Attack": 50,
+              "Defense": 50,
+              "PairRiding": 50,
+              "Strength": 50
+            },
+            "Physical": {
+              "MassKg": 70
+            },
+            "InteractionStyle": {
+              "Combativeness": 0.5,
+              "PreferredLine": 1,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Legacy": {
+            "Start": 50,
+            "Speed": 80,
+            "SlideControl": 80,
+            "TrackReading": 50,
+            "PairRiding": 50,
+            "Adaptability": 50
+          },
+          "ReferenceMeters": 0,
+          "OffsetMeters": 9.5,
+          "SpeedMetersPerSecond": 0,
+          "TargetOffsetMeters": 9.5,
+          "TrafficEnabled": true
+        }
+      ]
+    },
+    {
+      "Name": "A1-rotation-0",
+      "Riders": [
+        {
+          "Id": 1,
+          "Canonical": {
+            "Abilities": {
+              "Reaction": 50,
+              "Start": 50,
+              "Technique": 50,
+              "TrackReading": 50,
+              "Attack": 50,
+              "Defense": 50,
+              "PairRiding": 50,
+              "Strength": 50
+            },
+            "Physical": {
+              "MassKg": 70
+            },
+            "InteractionStyle": {
+              "Combativeness": 0.5,
+              "PreferredLine": 1,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Legacy": {
+            "Start": 50,
+            "Speed": 50,
+            "SlideControl": 50,
+            "TrackReading": 50,
+            "PairRiding": 50,
+            "Adaptability": 50
+          },
+          "ReferenceMeters": 0,
+          "OffsetMeters": 0.5,
+          "SpeedMetersPerSecond": 0,
+          "TargetOffsetMeters": 0.5,
+          "TrafficEnabled": true
+        },
+        {
+          "Id": 2,
+          "Canonical": {
+            "Abilities": {
+              "Reaction": 50,
+              "Start": 50,
+              "Technique": 50,
+              "TrackReading": 50,
+              "Attack": 50,
+              "Defense": 50,
+              "PairRiding": 50,
+              "Strength": 50
+            },
+            "Physical": {
+              "MassKg": 70
+            },
+            "InteractionStyle": {
+              "Combativeness": 0.5,
+              "PreferredLine": 1,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Legacy": {
+            "Start": 50,
+            "Speed": 50,
+            "SlideControl": 50,
+            "TrackReading": 50,
+            "PairRiding": 50,
+            "Adaptability": 50
+          },
+          "ReferenceMeters": 0,
+          "OffsetMeters": 3.5,
+          "SpeedMetersPerSecond": 0,
+          "TargetOffsetMeters": 3.5,
+          "TrafficEnabled": true
+        },
+        {
+          "Id": 3,
+          "Canonical": {
+            "Abilities": {
+              "Reaction": 50,
+              "Start": 50,
+              "Technique": 50,
+              "TrackReading": 50,
+              "Attack": 50,
+              "Defense": 50,
+              "PairRiding": 50,
+              "Strength": 50
+            },
+            "Physical": {
+              "MassKg": 70
+            },
+            "InteractionStyle": {
+              "Combativeness": 0.5,
+              "PreferredLine": 1,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Legacy": {
+            "Start": 50,
+            "Speed": 50,
+            "SlideControl": 50,
+            "TrackReading": 50,
+            "PairRiding": 50,
+            "Adaptability": 50
+          },
+          "ReferenceMeters": 0,
+          "OffsetMeters": 6.5,
+          "SpeedMetersPerSecond": 0,
+          "TargetOffsetMeters": 6.5,
+          "TrafficEnabled": true
+        },
+        {
+          "Id": 4,
+          "Canonical": {
+            "Abilities": {
+              "Reaction": 50,
+              "Start": 50,
+              "Technique": 50,
+              "TrackReading": 50,
+              "Attack": 50,
+              "Defense": 50,
+              "PairRiding": 50,
+              "Strength": 50
+            },
+            "Physical": {
+              "MassKg": 70
+            },
+            "InteractionStyle": {
+              "Combativeness": 0.5,
+              "PreferredLine": 1,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Legacy": {
+            "Start": 50,
+            "Speed": 50,
+            "SlideControl": 50,
+            "TrackReading": 50,
+            "PairRiding": 50,
+            "Adaptability": 50
+          },
+          "ReferenceMeters": 0,
+          "OffsetMeters": 9.5,
+          "SpeedMetersPerSecond": 0,
+          "TargetOffsetMeters": 9.5,
+          "TrafficEnabled": true
+        }
+      ]
+    },
+    {
+      "Name": "A2-rotation-1",
+      "Riders": [
+        {
+          "Id": 1,
+          "Canonical": {
+            "Abilities": {
+              "Reaction": 80,
+              "Start": 80,
+              "Technique": 50,
+              "TrackReading": 50,
+              "Attack": 50,
+              "Defense": 45,
+              "PairRiding": 50,
+              "Strength": 55
+            },
+            "Physical": {
+              "MassKg": 70
+            },
+            "InteractionStyle": {
+              "Combativeness": 0.5,
+              "PreferredLine": 1,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Legacy": {
+            "Start": 80,
+            "Speed": 50,
+            "SlideControl": 50,
+            "TrackReading": 50,
+            "PairRiding": 50,
+            "Adaptability": 50
+          },
+          "ReferenceMeters": 0,
+          "OffsetMeters": 3.5,
+          "SpeedMetersPerSecond": 0,
+          "TargetOffsetMeters": 3.5,
+          "TrafficEnabled": true
+        },
+        {
+          "Id": 2,
+          "Canonical": {
+            "Abilities": {
+              "Reaction": 50,
+              "Start": 50,
+              "Technique": 85,
+              "TrackReading": 70,
+              "Attack": 55,
+              "Defense": 55,
+              "PairRiding": 50,
+              "Strength": 60
+            },
+            "Physical": {
+              "MassKg": 70
+            },
+            "InteractionStyle": {
+              "Combativeness": 0.5,
+              "PreferredLine": 1,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Legacy": {
+            "Start": 50,
+            "Speed": 55,
+            "SlideControl": 80,
+            "TrackReading": 50,
+            "PairRiding": 50,
+            "Adaptability": 50
+          },
+          "ReferenceMeters": 0,
+          "OffsetMeters": 6.5,
+          "SpeedMetersPerSecond": 0,
+          "TargetOffsetMeters": 6.5,
+          "TrafficEnabled": true
+        },
+        {
+          "Id": 3,
+          "Canonical": {
+            "Abilities": {
+              "Reaction": 55,
+              "Start": 55,
+              "Technique": 60,
+              "TrackReading": 50,
+              "Attack": 85,
+              "Defense": 45,
+              "PairRiding": 50,
+              "Strength": 70
+            },
+            "Physical": {
+              "MassKg": 70
+            },
+            "InteractionStyle": {
+              "Combativeness": 0.8,
+              "PreferredLine": 1,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Legacy": {
+            "Start": 55,
+            "Speed": 65,
+            "SlideControl": 60,
+            "TrackReading": 50,
+            "PairRiding": 50,
+            "Adaptability": 50
+          },
+          "ReferenceMeters": 0,
+          "OffsetMeters": 9.5,
+          "SpeedMetersPerSecond": 0,
+          "TargetOffsetMeters": 9.5,
+          "TrafficEnabled": true
+        },
+        {
+          "Id": 4,
+          "Canonical": {
+            "Abilities": {
+              "Reaction": 60,
+              "Start": 55,
+              "Technique": 70,
+              "TrackReading": 65,
+              "Attack": 45,
+              "Defense": 85,
+              "PairRiding": 50,
+              "Strength": 65
+            },
+            "Physical": {
+              "MassKg": 70
+            },
+            "InteractionStyle": {
+              "Combativeness": 0.3,
+              "PreferredLine": 1,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Legacy": {
+            "Start": 55,
+            "Speed": 50,
+            "SlideControl": 70,
+            "TrackReading": 50,
+            "PairRiding": 50,
+            "Adaptability": 50
+          },
+          "ReferenceMeters": 0,
+          "OffsetMeters": 0.5,
+          "SpeedMetersPerSecond": 0,
+          "TargetOffsetMeters": 0.5,
+          "TrafficEnabled": true
+        }
+      ]
+    },
+    {
+      "Name": "close-rotation-0",
+      "Riders": [
+        {
+          "Id": 1,
+          "Canonical": {
+            "Abilities": {
+              "Reaction": 65,
+              "Start": 60,
+              "Technique": 65,
+              "TrackReading": 60,
+              "Attack": 80,
+              "Defense": 45,
+              "PairRiding": 50,
+              "Strength": 60
+            },
+            "Physical": {
+              "MassKg": 70
+            },
+            "InteractionStyle": {
+              "Combativeness": 0.7,
+              "PreferredLine": 1,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Legacy": {
+            "Start": 55,
+            "Speed": 55,
+            "SlideControl": 65,
+            "TrackReading": 50,
+            "PairRiding": 50,
+            "Adaptability": 50
+          },
+          "ReferenceMeters": 0,
+          "OffsetMeters": 0.5,
+          "SpeedMetersPerSecond": 0,
+          "TargetOffsetMeters": 0.5,
+          "TrafficEnabled": true
+        },
+        {
+          "Id": 2,
+          "Canonical": {
+            "Abilities": {
+              "Reaction": 55,
+              "Start": 65,
+              "Technique": 70,
+              "TrackReading": 65,
+              "Attack": 55,
+              "Defense": 75,
+              "PairRiding": 50,
+              "Strength": 65
+            },
+            "Physical": {
+              "MassKg": 70
+            },
+            "InteractionStyle": {
+              "Combativeness": 0.4,
+              "PreferredLine": 1,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Legacy": {
+            "Start": 55,
+            "Speed": 55,
+            "SlideControl": 65,
+            "TrackReading": 50,
+            "PairRiding": 50,
+            "Adaptability": 50
+          },
+          "ReferenceMeters": 0,
+          "OffsetMeters": 3.5,
+          "SpeedMetersPerSecond": 0,
+          "TargetOffsetMeters": 3.5,
+          "TrafficEnabled": true
+        },
+        {
+          "Id": 3,
+          "Canonical": {
+            "Abilities": {
+              "Reaction": 60,
+              "Start": 55,
+              "Technique": 60,
+              "TrackReading": 55,
+              "Attack": 75,
+              "Defense": 55,
+              "PairRiding": 50,
+              "Strength": 60
+            },
+            "Physical": {
+              "MassKg": 70
+            },
+            "InteractionStyle": {
+              "Combativeness": 0.6,
+              "PreferredLine": 1,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Legacy": {
+            "Start": 55,
+            "Speed": 55,
+            "SlideControl": 65,
+            "TrackReading": 50,
+            "PairRiding": 50,
+            "Adaptability": 50
+          },
+          "ReferenceMeters": 0,
+          "OffsetMeters": 6.5,
+          "SpeedMetersPerSecond": 0,
+          "TargetOffsetMeters": 6.5,
+          "TrafficEnabled": true
+        },
+        {
+          "Id": 4,
+          "Canonical": {
+            "Abilities": {
+              "Reaction": 70,
+              "Start": 60,
+              "Technique": 65,
+              "TrackReading": 70,
+              "Attack": 60,
+              "Defense": 65,
+              "PairRiding": 50,
+              "Strength": 55
+            },
+            "Physical": {
+              "MassKg": 70
+            },
+            "InteractionStyle": {
+              "Combativeness": 0.5,
+              "PreferredLine": 1,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Legacy": {
+            "Start": 55,
+            "Speed": 55,
+            "SlideControl": 65,
+            "TrackReading": 50,
+            "PairRiding": 50,
+            "Adaptability": 50
+          },
+          "ReferenceMeters": 0,
+          "OffsetMeters": 9.5,
+          "SpeedMetersPerSecond": 0,
+          "TargetOffsetMeters": 9.5,
+          "TrafficEnabled": true
+        }
+      ]
+    },
+    {
+      "Name": "rolling-straight",
+      "Riders": [
+        {
+          "Id": 1,
+          "Canonical": {
+            "Abilities": {
+              "Reaction": 65,
+              "Start": 60,
+              "Technique": 65,
+              "TrackReading": 60,
+              "Attack": 80,
+              "Defense": 45,
+              "PairRiding": 50,
+              "Strength": 60
+            },
+            "Physical": {
+              "MassKg": 70
+            },
+            "InteractionStyle": {
+              "Combativeness": 0.7,
+              "PreferredLine": 1,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Legacy": {
+            "Start": 55,
+            "Speed": 55,
+            "SlideControl": 65,
+            "TrackReading": 50,
+            "PairRiding": 50,
+            "Adaptability": 50
+          },
+          "ReferenceMeters": 133.38937497138977,
+          "OffsetMeters": 4,
+          "SpeedMetersPerSecond": 19,
+          "TargetOffsetMeters": 4,
+          "TrafficEnabled": true
+        },
+        {
+          "Id": 2,
+          "Canonical": {
+            "Abilities": {
+              "Reaction": 55,
+              "Start": 65,
+              "Technique": 70,
+              "TrackReading": 65,
+              "Attack": 55,
+              "Defense": 75,
+              "PairRiding": 50,
+              "Strength": 65
+            },
+            "Physical": {
+              "MassKg": 70
+            },
+            "InteractionStyle": {
+              "Combativeness": 0.4,
+              "PreferredLine": 1,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Legacy": {
+            "Start": 55,
+            "Speed": 55,
+            "SlideControl": 65,
+            "TrackReading": 50,
+            "PairRiding": 50,
+            "Adaptability": 50
+          },
+          "ReferenceMeters": 141.38937497138977,
+          "OffsetMeters": 4,
+          "SpeedMetersPerSecond": 18,
+          "TargetOffsetMeters": 4,
+          "TrafficEnabled": true
+        },
+        {
+          "Id": 3,
+          "Canonical": {
+            "Abilities": {
+              "Reaction": 60,
+              "Start": 55,
+              "Technique": 60,
+              "TrackReading": 55,
+              "Attack": 75,
+              "Defense": 55,
+              "PairRiding": 50,
+              "Strength": 60
+            },
+            "Physical": {
+              "MassKg": 70
+            },
+            "InteractionStyle": {
+              "Combativeness": 0.6,
+              "PreferredLine": 1,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Legacy": {
+            "Start": 55,
+            "Speed": 55,
+            "SlideControl": 65,
+            "TrackReading": 50,
+            "PairRiding": 50,
+            "Adaptability": 50
+          },
+          "ReferenceMeters": 140.38937497138977,
+          "OffsetMeters": 2.6,
+          "SpeedMetersPerSecond": 19.5,
+          "TargetOffsetMeters": 2.6,
+          "TrafficEnabled": true
+        },
+        {
+          "Id": 4,
+          "Canonical": {
+            "Abilities": {
+              "Reaction": 70,
+              "Start": 60,
+              "Technique": 65,
+              "TrackReading": 70,
+              "Attack": 60,
+              "Defense": 65,
+              "PairRiding": 50,
+              "Strength": 55
+            },
+            "Physical": {
+              "MassKg": 70
+            },
+            "InteractionStyle": {
+              "Combativeness": 0.5,
+              "PreferredLine": 1,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Legacy": {
+            "Start": 55,
+            "Speed": 55,
+            "SlideControl": 65,
+            "TrackReading": 50,
+            "PairRiding": 50,
+            "Adaptability": 50
+          },
+          "ReferenceMeters": 140.38937497138977,
+          "OffsetMeters": 5.4,
+          "SpeedMetersPerSecond": 18.5,
+          "TargetOffsetMeters": 5.4,
+          "TrafficEnabled": true
+        }
+      ]
+    },
+    {
+      "Name": "rolling-bend",
+      "Riders": [
+        {
+          "Id": 1,
+          "Canonical": {
+            "Abilities": {
+              "Reaction": 65,
+              "Start": 60,
+              "Technique": 65,
+              "TrackReading": 60,
+              "Attack": 80,
+              "Defense": 45,
+              "PairRiding": 50,
+              "Strength": 60
+            },
+            "Physical": {
+              "MassKg": 70
+            },
+            "InteractionStyle": {
+              "Combativeness": 0.7,
+              "PreferredLine": 1,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Legacy": {
+            "Start": 55,
+            "Speed": 55,
+            "SlideControl": 65,
+            "TrackReading": 50,
+            "PairRiding": 50,
+            "Adaptability": 50
+          },
+          "ReferenceMeters": 45,
+          "OffsetMeters": 4,
+          "SpeedMetersPerSecond": 19,
+          "TargetOffsetMeters": 4,
+          "TrafficEnabled": true
+        },
+        {
+          "Id": 2,
+          "Canonical": {
+            "Abilities": {
+              "Reaction": 55,
+              "Start": 65,
+              "Technique": 70,
+              "TrackReading": 65,
+              "Attack": 55,
+              "Defense": 75,
+              "PairRiding": 50,
+              "Strength": 65
+            },
+            "Physical": {
+              "MassKg": 70
+            },
+            "InteractionStyle": {
+              "Combativeness": 0.4,
+              "PreferredLine": 1,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Legacy": {
+            "Start": 55,
+            "Speed": 55,
+            "SlideControl": 65,
+            "TrackReading": 50,
+            "PairRiding": 50,
+            "Adaptability": 50
+          },
+          "ReferenceMeters": 53,
+          "OffsetMeters": 4,
+          "SpeedMetersPerSecond": 18,
+          "TargetOffsetMeters": 4,
+          "TrafficEnabled": true
+        },
+        {
+          "Id": 3,
+          "Canonical": {
+            "Abilities": {
+              "Reaction": 60,
+              "Start": 55,
+              "Technique": 60,
+              "TrackReading": 55,
+              "Attack": 75,
+              "Defense": 55,
+              "PairRiding": 50,
+              "Strength": 60
+            },
+            "Physical": {
+              "MassKg": 70
+            },
+            "InteractionStyle": {
+              "Combativeness": 0.6,
+              "PreferredLine": 1,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Legacy": {
+            "Start": 55,
+            "Speed": 55,
+            "SlideControl": 65,
+            "TrackReading": 50,
+            "PairRiding": 50,
+            "Adaptability": 50
+          },
+          "ReferenceMeters": 52,
+          "OffsetMeters": 2.6,
+          "SpeedMetersPerSecond": 19.5,
+          "TargetOffsetMeters": 2.6,
+          "TrafficEnabled": true
+        },
+        {
+          "Id": 4,
+          "Canonical": {
+            "Abilities": {
+              "Reaction": 70,
+              "Start": 60,
+              "Technique": 65,
+              "TrackReading": 70,
+              "Attack": 60,
+              "Defense": 65,
+              "PairRiding": 50,
+              "Strength": 55
+            },
+            "Physical": {
+              "MassKg": 70
+            },
+            "InteractionStyle": {
+              "Combativeness": 0.5,
+              "PreferredLine": 1,
+              "SetupIndependence": 0.5
+            }
+          },
+          "Legacy": {
+            "Start": 55,
+            "Speed": 55,
+            "SlideControl": 65,
+            "TrackReading": 50,
+            "PairRiding": 50,
+            "Adaptability": 50
+          },
+          "ReferenceMeters": 52,
+          "OffsetMeters": 5.4,
+          "SpeedMetersPerSecond": 18.5,
+          "TargetOffsetMeters": 5.4,
+          "TrafficEnabled": true
+        }
+      ]
+    }
+  ],
+  "Surface": {
+    "Grip": 1,
+    "Ruts": 0,
+    "Moisture": 0.5,
+    "EffectiveGrip": 0.9175
+  },
+  "Replay": "existing HeatMeasurements CSV accepted states at .1s, decisions and consequences in JSON"
+}

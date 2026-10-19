@@ -12,6 +12,7 @@ public sealed record WorldParameters
     public bool EnableTacticalQualityScoring { get; init; }
     public bool EnableProportionalTrafficThrottle { get; init; }
     public bool EnableClosureAdaptiveFollowingGap { get; init; }
+    public bool EnableAutonomousRacingLine { get; init; }
     // Audit-only variant 2; absent from the public experiment configuration.
     internal (double BaseMeters, double HeadwaySeconds)? DiagnosticFollowingGap { get; init; }
     public double AiIntervalSeconds { get; init; } = .1;
@@ -33,6 +34,9 @@ public sealed class TacticalMemory
     public RacingIntent Intent;
     public int OpponentId;
     public float HomeOffsetMeters;
+    public float AutonomousOffsetMeters;
+    public AutonomousLinePhase AutonomousPhase;
+    public double AutonomousReviewAt;
     public double ActivatedAt, NextTacticAt, SafetyUntil, ClearSince;
     public int FollowingOpponentId;
     public double ThrottleObservedAt, ObservedOpponentSpeed;
@@ -80,6 +84,9 @@ public sealed class WorldWork
     public long ProximityTicks, ProximityRequestedExtraCalls, ControlDeadlineLimitedCalls,
         ThrottleDeadlineLimitedCalls, CurvatureLimitedCalls, ActivatedThrottleCommands;
     public double ProximitySeconds;
+    public long AutonomousObservations, AutonomousEvaluations, AutonomousCandidates, AutonomousBlockedCandidates,
+        AutonomousCommands, AutonomousActivations;
+    public double AutonomousElapsedMilliseconds;
     public double TacticalElapsedMilliseconds;
 }
 public sealed record RunResult(string Name, double StepSeconds, double TimeSeconds, WorldWork Work,
