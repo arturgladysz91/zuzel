@@ -1,0 +1,14 @@
+{
+  "Configuration": "Release",
+  "Runtime": ".NET 8.0.26",
+  "DOTNET_TieredCompilation": "0",
+  "WarmupsPerMode": 1,
+  "MeasuredSamplesPerMode": 3,
+  "Scenario": "A1-rotation-0",
+  "TrajectoryFileOutput": false,
+  "ModeOrder": ["bare", "observed"],
+  "WallScope": "World construction, Run, disposal; observed additionally includes summary and input mapping. JSON serialization excluded.",
+  "CpuScope": "Process.TotalProcessorTime, including runtime and GC threads",
+  "AllocationScope": "GC.GetAllocatedBytesForCurrentThread; managed allocations only",
+  "Note": "Bounded diagnostic benchmark on one host; no hardware precision or native-allocation claim. Default-tiering exploratory attempt excluded after obvious JIT phase drift. All final hashes equal the main A1/0 run."
+}
