@@ -68,19 +68,23 @@ public static class CloseRacingAudit
         }
     }
     private static void Save(string directory,string name,object value) => File.WriteAllText(Path.Combine(directory,name+".json"),JsonSerializer.Serialize(value,Audit.Json)+"\n");
-    public static GapRun Execute(Scenario s, WorldParameters? parameters=null,bool reverse=false,bool trace=true)
+    public static GapRun Execute(Scenario s, WorldParameters? parameters=null,bool reverse=false,bool trace=true,
+        WorldDiagnostics? additionalDiagnostics=null,Action<WorldSnapshot>? acceptedObserver=null,string? trajectoryPath=null)
     {
         var p=parameters??ThrottleAudit.Parameters(true);
         HeatMeasurements? measurement=null; var observations=new List<ThrottleObservation>();
         var consequences=new List<ConsequenceObservation>();
         var zeroReasons=new Dictionary<string,int>();
         using var w=new WorldRunner(reverse?s.Riders.Reverse():s.Riders,parameters:p,diagnostics:new() {
-            Force=f=>measurement!.Force(f),Consequence=consequences.Add,
+            AutonomousLine=additionalDiagnostics?.AutonomousLine,
+            Force=f=>{measurement!.Force(f);additionalDiagnostics?.Force?.Invoke(f);},
+            Consequence=c=>{consequences.Add(c);additionalDiagnostics?.Consequence?.Invoke(c);},
             Throttle=o=>{if(o.DesiredDrive==0)zeroReasons[o.Reason]=zeroReasons.GetValueOrDefault(o.Reason)+1;
-                if(trace && (o.Emergency || Math.Abs(o.TimeSeconds*2-Math.Round(o.TimeSeconds*2))<1e-8))observations.Add(o);}});
+                if(trace && (o.Emergency || Math.Abs(o.TimeSeconds*2-Math.Round(o.TimeSeconds*2))<1e-8))observations.Add(o);
+                additionalDiagnostics?.Throttle?.Invoke(o);}});
         ValidateInitial(w);
         var initial=w.Snapshot;
-        using var collector=new HeatMeasurements(w.Frame,initial,lapsFromInitialPosition:IsRolling(s)); measurement=collector;
+        using var collector=new HeatMeasurements(w.Frame,initial,trajectoryPath,lapsFromInitialPosition:IsRolling(s)); measurement=collector;
         var data=s.Riders.ToDictionary(r=>r.Profile.Id,_=>new GapAccumulator());
         var samples=new List<GapSample>(); var previous=initial; var nextSample=0d;
         var watch=Stopwatch.GetTimestamp(); var bytes=GC.GetAllocatedBytesForCurrentThread();
@@ -126,7 +130,7 @@ public static class CloseRacingAudit
                 }
             }
             if(state.TimeSeconds+1e-8>=nextSample)nextSample=state.TimeSeconds+.5;
-            previous=state;
+            previous=state; acceptedObserver?.Invoke(state);
         },stopOnCrash:true,lapsFromInitialPosition:IsRolling(s));
         var elapsed=Stopwatch.GetElapsedTime(watch).TotalMilliseconds;var allocated=GC.GetAllocatedBytesForCurrentThread()-bytes;
         var metrics=collector.Finish(r);

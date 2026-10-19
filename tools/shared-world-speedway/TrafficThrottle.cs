@@ -158,7 +158,8 @@ public static partial class TrafficDecision
     public static TrafficControlPlan ObserveThrottle(WorldSnapshot snapshot, RiderView own, RiderSpec spec,
         WorldParameters p, WorldWork work, TacticalMemory memory, IReadOnlyList<RacingPair> pairs,
         TrackFrame frame, TrackStateSnapshot surface, DecisionEvent? waitingLine,
-        Action<ContestObservation>? contestObserver = null, Action<ThrottleObservation>? throttleObserver = null)
+        Action<ContestObservation>? contestObserver = null, Action<ThrottleObservation>? throttleObserver = null,
+        Action<AutonomousLineObservation>? lineObserver = null)
     {
         if (!spec.TrafficEnabled || own.Activity is RiderActivity.Crashed or RiderActivity.Finished) return default;
         var reaction = RiderController.ReactionSeconds(spec);
@@ -179,7 +180,7 @@ public static partial class TrafficDecision
                     snapshot.TimeSeconds + RiderController.ReactionSeconds(spec), null, (float)own.Road.OffsetMeters, own.Drive,
                     RacingIntent.None, "AbortThreatenedCrossing", true, Channels: ControlChannels.Line);
         } else if (line is null) {
-            line = Observe(snapshot, own, spec, p, work, memory, pairs, frame, surface, waitingLine is not null, contestObserver);
+            line = Observe(snapshot, own, spec, p, work, memory, pairs, frame, surface, waitingLine is not null, contestObserver, lineObserver);
         }
         var reason = line?.Reason ?? (evaluation.Gap is null ? "FreeRacing" : evaluation.Reason);
         if (line?.Reason is "NoAttackGain" or "AttackCorridorUnavailable" or "AttackUnreachable"

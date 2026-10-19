@@ -12,6 +12,7 @@ public sealed class WorldDiagnostics
     public Action<ConsequenceObservation>? Consequence { get; init; }
     public Action<ContestObservation>? Contest { get; init; }
     public Action<ThrottleObservation>? Throttle { get; init; }
+    public Action<AutonomousLineObservation>? AutonomousLine { get; init; }
 }
 public readonly record struct ContestObservation(double TimeSeconds, int RiderId, int OpponentId,
     float TargetMeters, bool Available, double BaselineReferenceSpeed, double? CandidateReferenceSpeed,

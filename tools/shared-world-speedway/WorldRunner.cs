@@ -40,6 +40,8 @@ public sealed class WorldRunner : IDisposable
     {
         this.diagnostics = diagnostics;
         Parameters = parameters ?? new();
+        if (Parameters.EnableAutonomousRacingLine && !Parameters.EnableTacticalRacing)
+            throw new ArgumentException("Autonomous racing lines require experimental tactical racing.", nameof(parameters));
         if (Parameters.EnableClosureAdaptiveFollowingGap && !Parameters.EnableProportionalTrafficThrottle)
             throw new ArgumentException("Closure adaptive gap requires proportional traffic throttle.", nameof(parameters));
         if (Parameters.EnableProportionalTrafficThrottle && !Parameters.EnableTacticalRacing)
@@ -78,7 +80,8 @@ public sealed class WorldRunner : IDisposable
         pending = new DecisionEvent?[specs.Length];
         pendingThrottle = Parameters.EnableProportionalTrafficThrottle ? new DecisionEvent?[specs.Length] : Array.Empty<DecisionEvent?>();
         nextDecision = new double[specs.Length]; recoveryUntil = new double[specs.Length];
-        tactics = Parameters.EnableTacticalRacing ? specs.Select(s => new TacticalMemory { HomeOffsetMeters = s.TargetOffsetMeters }).ToArray()
+        tactics = Parameters.EnableTacticalRacing ? specs.Select(s => new TacticalMemory {
+            HomeOffsetMeters = s.TargetOffsetMeters, AutonomousOffsetMeters = s.TargetOffsetMeters }).ToArray()
             : Array.Empty<TacticalMemory>();
         views = specs.Select((s, i) =>
         {
@@ -227,7 +230,7 @@ public sealed class WorldRunner : IDisposable
             if (Parameters.EnableProportionalTrafficThrottle)
             {
                 var plan = TrafficDecision.ObserveThrottle(snapshot, snapshot.Riders[i], specs[i], Parameters, Work,
-                    tactics[i], pairs, Frame, surface, pending[i], diagnostics?.Contest, diagnostics?.Throttle);
+                    tactics[i], pairs, Frame, surface, pending[i], diagnostics?.Contest, diagnostics?.Throttle, diagnostics?.AutonomousLine);
                 void Cancel(ref DecisionEvent? slot) {
                     if (slot is not { } old) return;
                     decisions[decisions.IndexOf(old)] = old with {CancelledAt = TimeSeconds};
@@ -248,7 +251,7 @@ public sealed class WorldRunner : IDisposable
                 continue;
             }
             var decision = TrafficDecision.Observe(snapshot, snapshot.Riders[i], specs[i], Parameters, Work,
-                tactics[i], pairs, Frame, surface, pending[i] is not null, diagnostics?.Contest);
+                tactics[i], pairs, Frame, surface, pending[i] is not null, diagnostics?.Contest, diagnostics?.AutonomousLine);
             if (decision is null) continue;
             if (pending[i] is { } waiting)
             {
@@ -284,6 +287,7 @@ public sealed class WorldRunner : IDisposable
                 }
                 if (pending[i] is { } lateral && TimeSeconds + 1e-12 >= lateral.RequestedActivation) {
                     var memory = tactics[i];
+                    ActivateAutonomous(memory, lateral);
                     if (views[i].TargetOffsetMeters != lateral.TargetOffsetMeters) Work.ControlChanges++;
                     if (memory.Intent != lateral.Intent) memory.ActivatedAt = TimeSeconds;
                     memory.Intent = lateral.Intent; if (lateral.OpponentId != 0) memory.OpponentId = lateral.OpponentId;
@@ -304,6 +308,7 @@ public sealed class WorldRunner : IDisposable
             {
                 if (views[i].Drive != command.Drive || views[i].TargetOffsetMeters != command.TargetOffsetMeters) Work.ControlChanges++;
                 var memory = tactics[i];
+                ActivateAutonomous(memory, command);
                 if (memory.Intent != command.Intent) memory.ActivatedAt = TimeSeconds;
                 memory.Intent = command.Intent;
                 if (command.OpponentId != 0) memory.OpponentId = command.OpponentId;
@@ -314,6 +319,12 @@ public sealed class WorldRunner : IDisposable
             var index = decisions.IndexOf(command); decisions[index] = command with { ActualActivation = TimeSeconds };
             pending[i] = null;
         }
+    }
+    private void ActivateAutonomous(TacticalMemory memory, DecisionEvent command)
+    {
+        if (!Parameters.EnableAutonomousRacingLine || !command.Reason.StartsWith("Autonomous", StringComparison.Ordinal)) return;
+        memory.AutonomousOffsetMeters = command.TargetOffsetMeters;
+        Work.AutonomousActivations++;
     }
     private int NearbySubdivisions(double step)
     {
