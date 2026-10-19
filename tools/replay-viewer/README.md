@@ -91,3 +91,13 @@ dotnet run --project tools/shared-world-speedway -c Release -- replay-geometry t
 ```
 
 Nie używaj tego do regenerowania historycznych zapisów. Test bajtowej zgodności wymusi świadome utrzymanie `geometry.json`, gdy zmieni się źródłowa geometria, footprint lub enumy.
+
+## Eksperymentalne kształty #101
+
+Lista zawiera zapisane `inner` i `wide-tighten` dla baseline oraz Egg Mild,
+Medium, Strong i Asymmetric. Każdy zestaw #101 wskazuje własny
+`GeometryFile` z `docs/experiments/track-geometry-variants/`; viewer odczytuje
+przekroje i nie rekonstruuje kołowego toru z promienia. Powrót do historycznego
+przejazdu przywraca dotychczasowe `geometry.json`. Czasy i pozycje odrzuconych
+planów są zachowane. Ich obecność w viewerze nie oznacza wykonalności planu.
+Raport #101 opisuje prześwity i wszystkie pięć planów; Node ma 9 testów.

@@ -36,6 +36,7 @@ public static class PhysicsDrivenRacingLine
         for(var i=0;i<frame.Embedding.Segments.Count;i++){
             starts[i]=start;var s=frame.Embedding.Segments[i];start+=s.SegmentType==SegmentType.Straight?s.StraightLengthMeters:s.InnerRadiusMeters*s.TurnAngleRadians;
         }starts[^1]=start;
+        if(frame.Shape is not null)for(var i=0;i<starts.Length;i++)starts[i]=frame.SegmentStartMeters(i);
         for(var lap=0;lap<laps;lap++)foreach(var corner in frame.Track.CornerTopology.Corners){
             var entry=lap*frame.LapMeters+starts[corner.StartSegmentIndex];
             var end=lap*frame.LapMeters+starts[corner.StartSegmentIndex+corner.SegmentCount];var length=end-entry;

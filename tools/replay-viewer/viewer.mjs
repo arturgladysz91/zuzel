@@ -7,10 +7,11 @@ const sources = { solo: 'rolling-S3-entry', pack: 'rolling-straight' };
 const dataRoot = '../../docs/experiments/autonomous-racing-line/';
 const lineRoot = '../../docs/experiments/physics-driven-racing-line/';
 const wheelRoot = '../../docs/experiments/rear-wheel-dynamics/';
+const shapeRoot = '../../docs/experiments/track-geometry-variants/';
 const format = (x, digits = 3) => Number(x).toFixed(digits);
 const kindLabels = { observed: 'Obserwacja', requested: 'Termin planu', activated: 'Aktywacja', cancelled: 'Anulowanie', pass: 'Potwierdzone minięcie', contact: 'Kontakt', consequence: 'Konsekwencja', finish: 'Meta' };
 const statusLabels = { future: 'Jeszcze nie zaobserwowano', active: 'Komenda aktywowana', cancelled: 'Anulowana, bez aktywacji', waiting: 'Termin planu minął — oczekuje', pending: 'Oczekuje na aktywację' };
-let geometry, replay, time = 0, selected = 1, playing = false, dirty = true, loadGeneration = 0;
+let geometry, nativeGeometry, replay, time = 0, selected = 1, playing = false, dirty = true, loadGeneration = 0;
 let width = 0, height = 0, dpr = 1, fitScale = 1, eventNodes = [], lastPanelTime = -1;
 const camera = { x: 0, y: 0, scale: 1 };
 const color = id => colors[[...replay.tracks.keys()].indexOf(id) % colors.length];
@@ -180,14 +181,23 @@ async function loadScenario(key) {
   $('load-state').textContent = 'Wczytywanie zaakceptowanych stanów…';
   try {
     const base = sources[key];
-    const line = key.startsWith('wheel-') ? key.slice(6) : key.startsWith('line-') ? key.slice(5) : null;
-    const selectedRoot = key.startsWith('wheel-') ? wheelRoot : lineRoot;
+    const line = key.startsWith('shape-') ? key.slice(6) : key.startsWith('wheel-') ? key.slice(6) : key.startsWith('line-') ? key.slice(5) : null;
+    const selectedRoot = key.startsWith('shape-') ? shapeRoot : key.startsWith('wheel-') ? wheelRoot : lineRoot;
     const [csvResponse, jsonResponse] = await Promise.all(line
       ? [fetch(`${selectedRoot}${line}-accepted.csv`), fetch(`${selectedRoot}${line}.json`)]
       : [fetch(`${dataRoot}${base}-accepted.csv`), fetch(`${dataRoot}${base}-ON.json`)]);
     if (!csvResponse.ok || !jsonResponse.ok) throw new Error('Nie znaleziono zapisów przejazdu. Uruchom serwer z katalogu repozytorium.');
     const [csv, json] = await Promise.all([csvResponse.text(), jsonResponse.json()]);
+    let nextGeometry = nativeGeometry;
+    if (key.startsWith('shape-')) {
+      if (!/^[a-z-]+-geometry\.json$/.test(json.GeometryFile)) throw new Error('Brak geometrii tego przejazdu.');
+      const response = await fetch(`${shapeRoot}${json.GeometryFile}`);
+      if (!response.ok) throw new Error('Nie znaleziono geometrii tego przejazdu.');
+      nextGeometry = await response.json();
+    }
     if (generation !== loadGeneration) return;
+    geometry = nextGeometry;
+    document.querySelector('.map-title small').textContent = key.startsWith('shape-') ? `#101 · ${json.Geometry} · metry` : 'Geometria modelu · metry';
     replay = new Replay(csv, json); selected = [...replay.tracks.keys()][0];
     const buttons = [...replay.tracks.keys()].map(id => { const button = document.createElement('button'); button.textContent = `R${id}`;
       button.dataset.id = String(id); button.style.setProperty('--rider', color(id)); button.addEventListener('click', () => chooseRider(id)); return button; });
@@ -243,5 +253,5 @@ function frame(now) {
 requestAnimationFrame(frame);
 try {
   const response = await fetch('./geometry.json'); if (!response.ok) throw new Error('Nie znaleziono geometrii modelu.');
-  geometry = await response.json(); await loadScenario($('scenario').value);
+  nativeGeometry = await response.json(); geometry = nativeGeometry; await loadScenario($('scenario').value);
 } catch (error) { $('load-state').classList.add('error'); $('load-state').textContent = `${error.message}\nUruchom statyczny serwer HTTP z katalogu repozytorium (instrukcja w README).`; }

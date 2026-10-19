@@ -54,7 +54,8 @@ public sealed class WorldRunner : IDisposable
     }
     public WorldRunner(IEnumerable<RiderSpec> riders, Track? track = null, WorldParameters? parameters = null,
         WorldDiagnostics? diagnostics = null, IEnumerable<ControlCommand>? controls = null,
-        TrackStateSnapshot? frozenSurface = null, IEnumerable<SpatialControlCommand>? spatialControls = null)
+        TrackStateSnapshot? frozenSurface = null, IEnumerable<SpatialControlCommand>? spatialControls = null,
+        TrackShapeVariant? trackShape = null)
     {
         this.diagnostics = diagnostics;
         Parameters = parameters ?? new();
@@ -76,7 +77,9 @@ public sealed class WorldRunner : IDisposable
             throw new ArgumentException("Quality scoring requires tactical racing and side-by-side contests.", nameof(parameters));
         if (Parameters.EnableSideBySideContests && !Parameters.EnableTacticalRacing)
             throw new ArgumentException("Side-by-side contests require experimental tactical racing.", nameof(parameters));
-        Frame = new(track ?? CoreSim.Analysis.MatchedVenueProfiles.CreateMotoarenaStandingStartTrack());
+        if(trackShape is not null && (!Parameters.EnableSlipCoupledDynamics || Parameters.EnableTacticalRacing))
+            throw new ArgumentException("Experimental geometry requires imposed-line slip dynamics.",nameof(trackShape));
+        Frame = new(track ?? CoreSim.Analysis.MatchedVenueProfiles.CreateMotoarenaStandingStartTrack(),trackShape);
         if (Parameters.AiIntervalSeconds != .1 || Parameters.SolverSubsteps is < 1 or > 8
             || new[] { Parameters.LateralResponseSeconds, Parameters.YawResponseSeconds, Parameters.SlideAngleRadians,
                 Parameters.ContactFriction, Parameters.NearbyMaximumTravelMeters }.Any(x => !float.IsFinite(x))
@@ -210,7 +213,8 @@ public sealed class WorldRunner : IDisposable
                         DistanceMeters = before[i].DistanceMeters + distance, Context = Frame.Context(road, total) };
                     Work.MaximumSpeed = Math.Max(Work.MaximumSpeed, views[i].Speed);
                     Work.MaximumStepDisplacementMeters = Math.Max(Work.MaximumStepDisplacementMeters, distance);
-                    var width = LaneModel.UsableRacingWidthMeters(Frame.Track.Segments[road.Segment].Type, Frame.Track.Geometry);
+                    var width = Frame.Shape is null?LaneModel.UsableRacingWidthMeters(Frame.Track.Segments[road.Segment].Type, Frame.Track.Geometry)
+                        :Frame.PhysicalWidthMeters(road)-2;
                     var footprint = BikeFootprint.Create(new(b.Position.X, b.Position.Y), b.Heading, SpeedwayBikeDimensions.Reference);
                     var min = double.PositiveInfinity; var max = double.NegativeInfinity;
                     void Include(MechanicalCapsule part)

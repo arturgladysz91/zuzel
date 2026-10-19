@@ -12,9 +12,11 @@ public sealed class RacingLineGeometry
     private sealed record Edge(MeterPoint A, MeterPoint B, MeterPoint Center, double Radius, double Sweep);
     private readonly List<Edge> inner = new(), outer = new();
     private readonly TrackFrame frame;
+    private readonly CurveBoundaryAudit? curve;
     public RacingLineGeometry(TrackFrame frame)
     {
         this.frame = frame;
+        if(frame.Shape is not null){curve=new(frame);return;}
         foreach (var s in frame.Embedding.Segments)
         {
             var start = s.Map(0,0); var end = s.Map(1,0);
@@ -34,6 +36,7 @@ public sealed class RacingLineGeometry
     }
     public (double Inner, double Outer) Clearance(RiderView v)
     {
+        if(curve is not null)return curve.Clearance(v);
         var bike=BikeFootprint.Create(new(v.Position.X,v.Position.Y),v.Heading,SpeedwayBikeDimensions.Reference);
         double Against(List<Edge> edges)
         {

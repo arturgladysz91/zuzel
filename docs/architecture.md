@@ -13,6 +13,15 @@ the single force applied to Box2D. The energy ledger includes the body and wheel
 The front/rear budget split is static and both forces act at the body center;
 there are no two-axle contact moments or changes to production CoreSim.
 
+[Track Geometry Variants (#101)](experiments/track-geometry-variants.md) supplies an
+optional immutable `ExperimentalTrackShape` to that same tools-only `TrackFrame`.
+Arc-length quintic pieces and a static nearest-point BVH provide position,
+heading, curvature and reference progress; surface topology keeps nine segments.
+It is restricted to Motoarena imposed-line slip execution, with uniform surface
+in the experiment. It does not add a production track selector or change tyre,
+wheel or yaw equations. Offline whole-capsule edge audits and replay exports use
+the selected geometry; the null/default path preserves native arithmetic.
+
 Current physical consequence precedence (#56C2): [physical contact consequences and recovery](calibration/physical-contact-consequences.md)
 adds a separate `PhysicalContactConsequenceResolver`. #55 detects; #56C1 analyzes frozen pairs and aggregates;
 the resolver builds a simultaneous plan before final `RiderStateChange`, diagnostics, motion and events are constructed.

@@ -11,6 +11,25 @@ const fixture = name => {
   return { csv, json, replay: new Replay(csv, json) };
 };
 const near = (a, b, epsilon = 1e-8) => assert.ok(Math.abs(a - b) < epsilon, `${a} != ${b}`);
+test('#101 recorded poses use dataset geometry and preserve rejected inner trajectories', () => {
+  const folder = new URL('../../docs/experiments/track-geometry-variants/', import.meta.url);
+  for (const shape of ['baseline','egg-mild','egg-medium','egg-strong','egg-asymmetric']) for (const plan of ['inner','wide-tighten']) {
+    const alias = `${shape}-${plan}`;
+    const csv = readFileSync(new URL(alias + '-accepted.csv', folder), 'utf8');
+    const json = JSON.parse(readFileSync(new URL(alias + '.json', folder), 'utf8'));
+    const track = JSON.parse(readFileSync(new URL(json.GeometryFile, folder), 'utf8'));
+    const replay = new Replay(csv, json);
+    assert.equal(track.segments.length, 9); assert.ok(Math.abs(track.lapMeters-318.77875)<.00001);
+    for (const row of parseCsv(csv)) {
+      const state = replay.state(1,row.t); near(state.x,row.x); near(state.y,row.y); near(angleDelta(state.heading,row.heading),0);
+      const section = crossSection(track,row.reference); assert.ok(Number.isFinite(section.point.x));
+      const parts = worldCapsules(track,state); assert.equal(parts.length,2);
+    }
+    assert.equal(json.Run.Initial.RearWheels.length,1);
+    assert.equal(replay.metrics.get(1).LapSeconds.length,3);
+    if (shape !== 'baseline') assert.ok(track.source.includes(shape));
+  }
+});
 test('#100 body replay remains compatible while independent wheel telemetry is retained', () => {
   const folder = new URL('../../docs/experiments/rear-wheel-dynamics/', import.meta.url);
   for (const name of ['old-A-neutral-inner', 'new-A-neutral-inner', 'new-A-neutral-wide-tighten', 'straight-launch-stress', 'launch-through-corner']) {
