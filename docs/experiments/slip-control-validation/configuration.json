@@ -1,0 +1,72 @@
+{
+  "BaseHead": "c0de934c8992cb902fbea8da24366482d5b7ae54",
+  "Parameters": {
+    "EnableTacticalRacing": false,
+    "EnableSideBySideContests": false,
+    "EnableTacticalQualityScoring": false,
+    "EnableProportionalTrafficThrottle": false,
+    "EnableClosureAdaptiveFollowingGap": false,
+    "EnableAutonomousRacingLine": false,
+    "EnableSlipCoupledDynamics": true,
+    "SlipYawResponseSeconds": 0.1,
+    "AiIntervalSeconds": 0.1,
+    "LateralResponseSeconds": 0.65,
+    "YawResponseSeconds": 0.35,
+    "SlideAngleRadians": 0.20943952,
+    "ContactFriction": 0.2,
+    "NearbyMaximumTravelMeters": 0.02,
+    "PredictionSeconds": 1.1,
+    "RecoverySeconds": 0.5,
+    "SolverSubsteps": 4
+  },
+  "StepSeconds": 0.01,
+  "CanonicalProfile": {
+    "Abilities": {
+      "Reaction": 50,
+      "Start": 50,
+      "Technique": 50,
+      "TrackReading": 50,
+      "Attack": 50,
+      "Defense": 50,
+      "PairRiding": 50,
+      "Strength": 50
+    },
+    "Physical": {
+      "MassKg": 70
+    },
+    "InteractionStyle": {
+      "Combativeness": 0.5,
+      "PreferredLine": 1,
+      "SetupIndependence": 0.5
+    }
+  },
+  "LegacyProfile": {
+    "Start": 50,
+    "Speed": 50,
+    "SlideControl": 50,
+    "TrackReading": 50,
+    "PairRiding": 50,
+    "Adaptability": 50
+  },
+  "Setup": {
+    "Gearing": 0.5,
+    "TractionBias": 0.5
+  },
+  "MassKg": 147,
+  "InertiaKgMetersSquared": 52.72097,
+  "Surface": {
+    "Grip": 1,
+    "Ruts": 0,
+    "Moisture": 0.5,
+    "EffectiveGrip": 0.9175
+  },
+  "Geometry": {
+    "StraightLengthMeters": 62,
+    "InnerRadiusMeters": 31,
+    "StraightWidthMeters": 12,
+    "TurnWidthMeters": 16.6,
+    "TurnSegmentAngleRadians": 1.0471976
+  },
+  "LapMeters": 318.77874994277954,
+  "MaximumTargetMeters": 9.5
+}

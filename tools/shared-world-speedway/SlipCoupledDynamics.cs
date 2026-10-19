@@ -35,7 +35,8 @@ public static class SlipCoupledDynamics
     }
     public static (Vector2 Force,float Torque) Forces(RiderView v,RiderSpec spec,TrackFrame frame,
         TrackStateSnapshot surface,WorldParameters p,double time,float mass,float inertia,
-        Action<ForceObservation>? observe=null,Action<SlipObservation>? observeSlip=null)
+        Action<ForceObservation>? observe=null,Action<SlipObservation>? observeSlip=null,
+        Action<YawLimitObservation>? observeYaw=null)
     {
         if(spec.Passive || spec.SpeedMetersPerSecond==0 && v.TotalReferenceMeters<frame.Embedding.Segments[0].StraightLengthMeters
             && time+1e-12<RiderController.TapeReactionSeconds(spec))return(Vector2.Zero,0);
@@ -104,6 +105,11 @@ public static class SlipCoupledDynamics
         var rate=(double)inertia/MaximumForceHoldSeconds;
         var root=Math.Sqrt((double)v.AngularVelocity*v.AngularVelocity+2*credit/rate);
         torque=Math.Clamp(torque,(float)(rate*(-v.AngularVelocity-root)),(float)(rate*(-v.AngularVelocity+root)));
+        // Re-evaluate diagnostic-only stages inside the optional branch. Keep the
+        // original force/torque arithmetic and disabled path unchanged.
+        if(observeYaw is { } yaw) yaw(new(time,v.Id,inertia*yawAcceleration,
+            Math.Clamp(inertia*yawAcceleration,-budget*YawLeverArmMeters,budget*YawLeverArmMeters)*authority,
+            torque,error,v.AngularVelocity,inertia,credit));
         observe?.Invoke(new(time,v,force,torque,(float)(mass*demand),Vector2.Dot(tyreForce,new(-tangent.Y,tangent.X)),
             null,Vector2.Dot(force,tangent),"slip-racing"));
         observeSlip?.Invoke(new(time,v.Id,speed,v.SlideRadians*180/MathF.PI,targetSlip*180/MathF.PI,v.Heading,travelHeading,

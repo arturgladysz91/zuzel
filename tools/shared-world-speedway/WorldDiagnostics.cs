@@ -14,7 +14,17 @@ public sealed class WorldDiagnostics
     public Action<ThrottleObservation>? Throttle { get; init; }
     public Action<AutonomousLineObservation>? AutonomousLine { get; init; }
     public Action<SlipObservation>? Slip { get; init; }
+    public Action<YawLimitObservation>? YawLimit { get; init; }
+    public Action<AppliedForceObservation>? AppliedForce { get; init; }
 }
+/// <summary>Read-only stages of the existing ON actuator; sampled at the pre-step accepted state.</summary>
+public readonly record struct YawLimitObservation(double TimeSeconds, int RiderId,
+    float RequestedNewtonMeters, float AfterAuthorityNewtonMeters, float AfterEnergyNewtonMeters,
+    float OrientationErrorRadians, float AngularVelocity, float InertiaKgMetersSquared,
+    double DissipationCreditWatts);
+/// <summary>Exact arguments just supplied to ContactAdapter.Force / Box2D, before stepping.</summary>
+public readonly record struct AppliedForceObservation(double TimeSeconds, int RiderId,
+    Vector2 ForceNewtons, float TorqueNewtonMeters);
 public readonly record struct SlipObservation(double TimeSeconds, int RiderId, float SpeedMetersPerSecond,
     float ActualSlipDegrees, float TargetSlipDegrees, float HeadingRadians, float TravelHeadingRadians,
     float DriveForceNewtons, float LateralForceNewtons, float GripBudgetNewtons, float GripUtilization,
