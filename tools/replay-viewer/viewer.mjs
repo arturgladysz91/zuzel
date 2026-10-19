@@ -6,6 +6,7 @@ const colors = ['#70e2e4', '#ffb36d', '#e5a5f5', '#b5d878'];
 const sources = { solo: 'rolling-S3-entry', pack: 'rolling-straight' };
 const dataRoot = '../../docs/experiments/autonomous-racing-line/';
 const lineRoot = '../../docs/experiments/physics-driven-racing-line/';
+const wheelRoot = '../../docs/experiments/rear-wheel-dynamics/';
 const format = (x, digits = 3) => Number(x).toFixed(digits);
 const kindLabels = { observed: 'Obserwacja', requested: 'Termin planu', activated: 'Aktywacja', cancelled: 'Anulowanie', pass: 'Potwierdzone minięcie', contact: 'Kontakt', consequence: 'Konsekwencja', finish: 'Meta' };
 const statusLabels = { future: 'Jeszcze nie zaobserwowano', active: 'Komenda aktywowana', cancelled: 'Anulowana, bez aktywacji', waiting: 'Termin planu minął — oczekuje', pending: 'Oczekuje na aktywację' };
@@ -179,9 +180,10 @@ async function loadScenario(key) {
   $('load-state').textContent = 'Wczytywanie zaakceptowanych stanów…';
   try {
     const base = sources[key];
-    const line = key.startsWith('line-') ? key.slice(5) : null;
+    const line = key.startsWith('wheel-') ? key.slice(6) : key.startsWith('line-') ? key.slice(5) : null;
+    const selectedRoot = key.startsWith('wheel-') ? wheelRoot : lineRoot;
     const [csvResponse, jsonResponse] = await Promise.all(line
-      ? [fetch(`${lineRoot}${line}-accepted.csv`), fetch(`${lineRoot}${line}.json`)]
+      ? [fetch(`${selectedRoot}${line}-accepted.csv`), fetch(`${selectedRoot}${line}.json`)]
       : [fetch(`${dataRoot}${base}-accepted.csv`), fetch(`${dataRoot}${base}-ON.json`)]);
     if (!csvResponse.ok || !jsonResponse.ok) throw new Error('Nie znaleziono zapisów przejazdu. Uruchom serwer z katalogu repozytorium.');
     const [csv, json] = await Promise.all([csvResponse.text(), jsonResponse.json()]);

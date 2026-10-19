@@ -5,6 +5,14 @@ owns one world clock and uses Box2D.NET only in `tools/shared-world-speedway`.
 It reuses public force/geometry primitives, with no production scheduling change.
 The report records working full heats and the crowded-contact/post-crash limits.
 
+[Rear Wheel Dynamics (#100)](experiments/rear-wheel-dynamics.md) is an optional
+extension of that same experimental world. Box2D exclusively integrates the body;
+one scalar rear-wheel angular velocity is committed once per actual accepted
+interval. A local dissipative contact equation couples its torque reaction to
+the single force applied to Box2D. The energy ledger includes the body and wheel.
+The front/rear budget split is static and both forces act at the body center;
+there are no two-axle contact moments or changes to production CoreSim.
+
 Current physical consequence precedence (#56C2): [physical contact consequences and recovery](calibration/physical-contact-consequences.md)
 adds a separate `PhysicalContactConsequenceResolver`. #55 detects; #56C1 analyzes frozen pairs and aggregates;
 the resolver builds a simultaneous plan before final `RiderStateChange`, diagnostics, motion and events are constructed.

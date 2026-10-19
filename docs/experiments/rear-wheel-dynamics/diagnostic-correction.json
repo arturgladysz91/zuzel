@@ -1,0 +1,41 @@
+{
+  "reason": "Absent yaw observation during tape wait has inertia0; aggregate is unavailable, now null. C# collector fixed. No simulation repeated or motion/force/work values changed.",
+  "files": [
+    {
+      "file": "stability.json",
+      "unavailableAggregates": 9,
+      "previousSha256": "a1f6b2ee2dc2438508ff4bb90e589810fb1580e6a870752247b042d745c73c78",
+      "currentSha256": "d250c45aeff3d7df5b87f2b85c955e5e404c7b79617276c8b6b56a5fc06b830e"
+    },
+    {
+      "file": "straight-comparison.json",
+      "unavailableAggregates": 4,
+      "previousSha256": "28f6f973b1ed4986ba255f56b6238e0d34e8c27b75e6c15a3f3b3710f1d39b8c",
+      "currentSha256": "1dbf0d146f70afc2dfded591f1389ba93cbcf07a35b827113a1686f397ebdae5"
+    },
+    {
+      "file": "straight-launch-cut.json",
+      "unavailableAggregates": 1,
+      "previousSha256": "f6c679f79dbf1ddfebc805f2660dff9e5beb68978f8d4ea67d069f7f6ea66f45",
+      "currentSha256": "3788ee565ae3d7d9bcc6215f08e94bf99af29bfe8c5f66eccce4d2e86161515e"
+    },
+    {
+      "file": "straight-launch-low.json",
+      "unavailableAggregates": 1,
+      "previousSha256": "25a4efe605e0bfbbf5b47ea1de0e908c6fab80c81931df5591b102a5f3fe06f4",
+      "currentSha256": "30f54cbd8933704eb68fade4faff6997f3624cffadc307f5e4e61479e70b8a6c"
+    },
+    {
+      "file": "straight-launch-stress.json",
+      "unavailableAggregates": 1,
+      "previousSha256": "e1e51c8cc10afc42b2e31666a29fd07c0d0fc0fd92c59b6285d790623fa16ba2",
+      "currentSha256": "dce2e49655a2fd46ea50af34bc6bb825a1db25c25dd3b606f907a23f7ee27844"
+    },
+    {
+      "file": "straight-launch.json",
+      "unavailableAggregates": 1,
+      "previousSha256": "f2af31c86bf9cbdd97af25b2092fbb6896c1daf137cdf0085bca57d8386066ce",
+      "currentSha256": "f41a33c8b9b9599546e07ddd261dca3b5e6a1c2528c33cfc9a0c6363a8aac568"
+    }
+  ]
+}

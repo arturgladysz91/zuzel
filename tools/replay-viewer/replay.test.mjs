@@ -11,6 +11,21 @@ const fixture = name => {
   return { csv, json, replay: new Replay(csv, json) };
 };
 const near = (a, b, epsilon = 1e-8) => assert.ok(Math.abs(a - b) < epsilon, `${a} != ${b}`);
+test('#100 body replay remains compatible while independent wheel telemetry is retained', () => {
+  const folder = new URL('../../docs/experiments/rear-wheel-dynamics/', import.meta.url);
+  for (const name of ['old-A-neutral-inner', 'new-A-neutral-inner', 'new-A-neutral-wide-tighten', 'straight-launch-stress', 'launch-through-corner']) {
+    const csv = readFileSync(new URL(name + '-accepted.csv', folder), 'utf8');
+    const json = JSON.parse(readFileSync(new URL(name + '.json', folder), 'utf8'));
+    const replay = new Replay(csv, json);
+    for (const row of parseCsv(csv)) {const s = replay.state(row.id, row.t); near(s.x, row.x); near(s.y, row.y); near(angleDelta(s.heading, row.heading), 0);}
+    if (name.startsWith('new-') || name.startsWith('straight-') || name === 'launch-through-corner') {
+      assert.equal(json.Run.Initial.RearWheels.length, 1);
+      assert.ok(json.Telemetry.some(t => t.SlipRatio > .2));
+      assert.ok(json.Telemetry.every(t => Number.isFinite(t.Omega)));
+    }
+    assert.ok(Array.isArray(json.Run.Passes));
+  }
+});
 test('#99 actual Box2D plans preserve every saved pose, spatial command and individual lap', () => {
   const folder = new URL('../../docs/experiments/physics-driven-racing-line/', import.meta.url);
   for (const alias of ['selected', 'inner', 'wide', 'rejected']) {

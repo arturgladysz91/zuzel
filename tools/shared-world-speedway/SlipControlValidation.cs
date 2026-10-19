@@ -35,7 +35,8 @@ public static class SlipControlValidation
     public static ControlCommand[] ContactControls()=>new[]{new ControlCommand(1,0,5,.4f),new ControlCommand(2,0,5,.4f)};
 
     public static Capture Execute(Scenario scenario,WorldParameters? parameters=null,ControlCommand[]? controls=null,
-        bool reverse=false,string? csvPath=null, SpatialControlCommand[]? spatialControls=null, TrackStateSnapshot? surface=null)
+        bool reverse=false,string? csvPath=null, SpatialControlCommand[]? spatialControls=null, TrackStateSnapshot? surface=null,
+        Action<RearWheelObservation>? wheelObserver=null,double stepSeconds=.01)
     {
         var forces=new Dictionary<int,ForceObservation>();var slips=new Dictionary<int,SlipObservation>();
         var yaws=new Dictionary<int,YawLimitObservation>();var applied=new Dictionary<int,AppliedForceObservation>();
@@ -43,12 +44,12 @@ public static class SlipControlValidation
         using var world=new WorldRunner(reverse?scenario.Riders.Reverse():scenario.Riders,parameters:parameters??Parameters(),
             controls:controls,spatialControls:spatialControls,frozenSurface:surface,diagnostics:new(){Force=f=>forces[f.Rider.Id]=f,Slip=s=>slips[s.RiderId]=s,
                 YawLimit=y=>yaws[y.RiderId]=y,AppliedForce=a=>applied[a.RiderId]=a,
-                ContactPoint=contacts.Add,Consequence=consequences.Add});
+                ContactPoint=contacts.Add,Consequence=consequences.Add,RearWheel=wheelObserver});
         CloseRacingAudit.ValidateInitial(world);
         var mechanical=scenario.Riders.ToDictionary(s=>s.Profile.Id,s=>world.MechanicalProperties(s.Profile.Id));
         var initial=world.Snapshot;var previous=initial;var ticks=new List<Tick>();
         using var csv=new HeatMeasurements(world.Frame,initial,csvPath,true);
-        var result=world.Run(scenario.Name,.01,scenario.DurationSeconds,scenario.Laps,snapshot=>{
+        var result=world.Run(scenario.Name,stepSeconds,scenario.DurationSeconds,scenario.Laps,snapshot=>{
             var dt=snapshot.TimeSeconds-previous.TimeSeconds;
             foreach(var after in snapshot.Riders) {
                 var old=previous.Riders.Single(v=>v.Id==after.Id);var id=after.Id;var f=forces.GetValueOrDefault(id);

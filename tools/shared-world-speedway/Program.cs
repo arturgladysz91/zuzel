@@ -2,6 +2,7 @@ using System.Text.Json;
 using SharedWorldSpeedway;
 
 var scenario = args.FirstOrDefault() ?? "A";
+if (scenario == "rear-wheel") { RearWheelAudit.Run(args[1], args[2]); return; }
 if (scenario == "physics-line") { PhysicsDrivenRacingLineAudit.Run(args[1], args[2]); return; }
 if (scenario == "slip-control-validation") { SlipControlValidation.Run(args[1], args[2]); return; }
 if (scenario == "slip-dynamics") { SlipDynamicsAudit.Run(args[1], args[2]); return; }
