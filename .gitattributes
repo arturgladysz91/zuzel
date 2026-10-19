@@ -1,2 +1,4 @@
 # Preserve the audited behavior evidence blob verbatim on every checkout.
 /docs/calibration/trajectory-intent-evaluation.json -text
+# Keep #92 evidence bytes and native Windows line endings identical to its SHA-256 manifest.
+/docs/experiments/full-heat-and-solo-validation/** -text whitespace=trailing-space,space-before-tab,cr-at-eol
