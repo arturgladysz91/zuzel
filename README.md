@@ -12,6 +12,12 @@ still block adoption. Production CoreSim and defaults remain unchanged.
 `EnableRearWheelDynamics`, requiring slip dynamics. Its independent wheel state,
 combined rear contact and whole-system energy ledger remain PROVISIONAL.
 
+[Track Geometry Variants (#101)](docs/experiments/track-geometry-variants.md) compares
+four compressed, smooth bend shapes with the unchanged stadium and two controls.
+Geometry is an optional tools-only input; tyre/wheel/yaw equations and production
+defaults stay unchanged. Egg Mild is promising, with retained unsafe inner plans
+for stronger shapes; empirical venue validation is still required.
+
 Current physical consequence precedence (#56C2): [physical contact consequences and one-step recovery](docs/calibration/physical-contact-consequences.md)
 adds default-OFF `EnablePhysicalContactConsequences`, requiring #56B responses. When enabled,
 reviewed #56C1 analysis supplies deterministic final velocity/status and next-step recovery;

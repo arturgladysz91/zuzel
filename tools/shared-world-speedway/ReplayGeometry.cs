@@ -39,6 +39,20 @@ public static class ReplayGeometry
             new(){["activity"]=Names<RiderActivity>(),["action"]=Names<TrafficAction>(),["intent"]=Names<RacingIntent>(),
                 ["channels"]=Names<ControlChannels>(),["severity"]=Names<CoreSim.Interactions.PhysicalContactSeverity>()},segments.ToArray());
     }
+    public static ReplayGeometryData Create(TrackFrame frame)
+    {
+        if(frame.Shape is null)return Create();
+        var source=Create();var segments=new List<ReplaySegment>();
+        for(var i=0;i<frame.Track.Segments.Count;i++){
+            var start=frame.SegmentStartMeters(i);var length=frame.SegmentLengthMeters(i);var count=(int)Math.Ceiling(length/MaximumReferenceSpacingMeters);
+            var sections=new ReplaySection[count+1];
+            for(var j=0;j<=count;j++){var s=start+(double)j/count*length;var q=frame.Shape.At(s);var n=new MeterPoint(Math.Sin(q.Heading),-Math.Cos(q.Heading));
+                sections[j]=new(s,Point(q.Position),Point(n),Point(q.Position-n),Point(q.Position+n*(frame.Shape.Width(s)-1)));}
+            var width=frame.Shape.Width(start+length/2);var segment=frame.Track.Segments[i];
+            segments.Add(new(i,segment.Id,segment.Type.ToString(),start,length,width,width-2,sections));
+        }
+        return source with{Source="ExperimentalTrackShape / "+frame.Shape.Variant.Name,FrameId="track-shape-101:"+frame.Shape.Variant.Name,LapMeters=frame.LapMeters,Segments=segments.ToArray()};
+    }
     private static ReplayPoint Point(MeterPoint p)=>new(p.X,p.Y);
     private static Dictionary<string,string> Names<T>() where T:struct,Enum=>Enum.GetValues<T>().ToDictionary(
         v=>Convert.ToInt32(v,CultureInfo.InvariantCulture).ToString(CultureInfo.InvariantCulture),v=>v.ToString());

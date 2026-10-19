@@ -17,6 +17,11 @@ public sealed class TrackFrame
 {
     public Track Track { get; }
     public TrackMetricEmbedding Embedding { get; }
+    public ExperimentalTrackShape? Shape { get; }
+    public double SegmentStartMeters(int index) => starts[index];
+    public double SegmentLengthMeters(int index) => starts[index+1]-starts[index];
+    public double PhysicalWidthMeters(RoadPoint road) => Shape?.Width(road.ReferenceMeters)
+        ?? LaneModel.PhysicalTrackWidthMeters(Track.Segments[road.Segment].Type,Track.Geometry);
     private readonly double[] starts;
     public double LapMeters { get; }
     public float MinimumUsableWidthMeters => Math.Min(LaneModel.UsableRacingWidthMeters(SegmentType.Straight, Track.Geometry),
@@ -27,7 +32,7 @@ public sealed class TrackFrame
         if (total < starts[first.StartSegmentIndex]) return RacingContext.StartStraight;
         return total < LapMeters && first.ContainsSegment(road.Segment) ? RacingContext.FirstBend : RacingContext.NormalRacing;
     }
-    public TrackFrame(Track track)
+    public TrackFrame(Track track, TrackShapeVariant? variant = null)
     {
         Track = track; Embedding = new(track);
         if (!Embedding.Closure.SupportsLapWrap) throw new ArgumentException("A closed metric track is required.");
@@ -39,9 +44,17 @@ public sealed class TrackFrame
                 ? s.StraightLengthMeters : s.InnerRadiusMeters * s.TurnAngleRadians);
         }
         LapMeters = starts[^1];
+        if(variant is not null){
+            if(track.Segments.Count!=9||Track.Geometry.StraightWidthMeters!=12||Math.Abs(Track.Geometry.TurnWidthMeters-16.6)>.00001
+                ||starts[1]!=35||Math.Abs(starts[5]-starts[4]-62)>.00001||Math.Abs(starts[9]-starts[8]-27)>.00001)
+                throw new ArgumentException("#101 shapes require the Motoarena nine-segment topology and physical widths.",nameof(track));
+            Shape=new(variant,LapMeters);starts=Shape.Starts.ToArray();LapMeters=starts[^1];}
     }
     public (Vector2 Position, RoadPoint Road) At(double referenceMeters, double offset)
     {
+        if(Shape is not null){var road=RoadAt(referenceMeters,offset);var shapeSample=Shape.At(road.ReferenceMeters);
+            var position=shapeSample.Position+new MeterPoint(Math.Sin(shapeSample.Heading),-Math.Cos(shapeSample.Heading))*offset;
+            return(new((float)position.X,(float)position.Y),road);}
         var s = ((referenceMeters % LapMeters) + LapMeters) % LapMeters;
         var i = Array.FindLastIndex(starts, x => x <= s);
         i = Math.Min(i, starts.Length - 2);
@@ -51,6 +64,10 @@ public sealed class TrackFrame
     }
     private RoadPoint Point(int i, double p, double offset)
     {
+        if(Shape is not null){var reference=starts[i]+p*(starts[i+1]-starts[i]);var q=Shape.At(reference);
+            var c=Track.CornerTopology.CornerForSegment(i);var isCurve=c is not null;
+            return new(i,p,reference,offset,q.Heading,isCurve?(q.Curvature>0?1/q.Curvature+offset:double.PositiveInfinity):0,
+                c is null?0:(i-c.StartSegmentIndex+p)/c.SegmentCount);}
         var s = Embedding.Segments[i];
         var turn = s.SegmentType != SegmentType.Straight;
         var corner = Track.CornerTopology.CornerForSegment(i);
@@ -62,12 +79,17 @@ public sealed class TrackFrame
     /// <summary>Allocation-free static-road preview for the slip controller; same chain as At, no body.</summary>
     public RoadPoint RoadAt(double referenceMeters,double offset)
     {
+        if(Shape is not null&&(!double.IsFinite(referenceMeters)||!double.IsFinite(offset)))throw new ArgumentOutOfRangeException(nameof(referenceMeters));
         var s=((referenceMeters%LapMeters)+LapMeters)%LapMeters;var i=0;
         while(i<starts.Length-2 && starts[i+1]<=s)i++;
         return Point(i,(s-starts[i])/(starts[i+1]-starts[i]),offset);
     }
     public RoadPoint Project(Vector2 position)
     {
+        if(Shape is not null){if(!float.IsFinite(position.X)||!float.IsFinite(position.Y))throw new ArgumentOutOfRangeException(nameof(position));
+            var reference=Shape.Project(new(position.X,position.Y));var q=Shape.At(reference);
+            var offset=(position.X-q.Position.X)*Math.Sin(q.Heading)-(position.Y-q.Position.Y)*Math.Cos(q.Heading);
+            return RoadAt(reference,offset);}
         var best = double.PositiveInfinity; RoadPoint result = default;
         for (var i = 0; i < Embedding.Segments.Count; i++)
         {
@@ -108,6 +130,8 @@ public sealed class TrackFrame
     {
         if (!double.IsFinite(tangentSpeed)) throw new ArgumentOutOfRangeException(nameof(tangentSpeed));
         if (!road.IsTurn) return tangentSpeed;
+        if(Shape is not null){var k=Shape.At(road.ReferenceMeters).Curvature;var scale=1+k*(candidateOffsetMeters??road.OffsetMeters);
+            if(scale<=0||!double.IsFinite(scale))throw new ArgumentOutOfRangeException(nameof(candidateOffsetMeters));return tangentSpeed/scale;}
         var inner = Embedding.Segments[road.Segment].InnerRadiusMeters;
         var radius = inner + (candidateOffsetMeters ?? road.OffsetMeters);
         if (radius <= 0 || !double.IsFinite(radius) || !double.IsFinite(tangentSpeed))
@@ -128,6 +152,8 @@ public sealed class TrackFrame
             remaining += starts[next + 1] - starts[next];
             next = (next + 1) % Track.Segments.Count;
         }
+        if(Shape is not null){var end=Shape.At(road.ReferenceMeters+remaining-1e-8);var here=Shape.At(road.ReferenceMeters);
+            var angle=(end.Heading-here.Heading+2*Math.PI)%(2*Math.PI);return remaining+(road.IsTurn?angle*road.OffsetMeters:0);}
         return road.IsTurn ? remaining * road.RadiusMeters / Embedding.Segments[road.Segment].InnerRadiusMeters : remaining;
     }
 }

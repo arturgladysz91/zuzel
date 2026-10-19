@@ -377,7 +377,8 @@ public sealed class HeatMeasurements : IDisposable
     {
         var extent = TacticalAudit.Extent(v, v.Road.Outward);
         var center = Vector2.Dot(v.Position, v.Road.Outward);
-        var width = LaneModel.UsableRacingWidthMeters(frame.Track.Segments[v.Road.Segment].Type, frame.Track.Geometry);
+        var width = frame.Shape is null?LaneModel.UsableRacingWidthMeters(frame.Track.Segments[v.Road.Segment].Type, frame.Track.Geometry)
+            :frame.PhysicalWidthMeters(v.Road)-2;
         return Math.Min(v.Road.OffsetMeters + extent.Rear - center + 1, width + 1 - (v.Road.OffsetMeters + extent.Front - center));
     }
     public RiderMeasurement[] Finish(RunResult result) => result.Riders.Select(v => {
