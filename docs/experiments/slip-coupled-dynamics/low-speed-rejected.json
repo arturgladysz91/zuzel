@@ -1,0 +1,18 @@
+{
+  "SourceHeadBeforeCorrection": "859072dfab9b26d06460e852fc31a2f846da6fd7",
+  "Test": "LowSpeedSideSlipCannotNumericallyCreateEnergyWithZeroDrive",
+  "InitialForwardMetersPerSecond": 0.01,
+  "InitialOutwardMetersPerSecond": 0.05,
+  "Drive": 0,
+  "FirstFailingAcceptedStepEnergyIncreaseJoules": {
+    "0.01": 0.013427998870252977,
+    "0.02": 1.2087593887209318
+  },
+  "Step005Passed": true,
+  "Method": "Values from the first failing assertion in real Box2D accepted-state tests, not a search for the maximum.",
+  "YawSourceHeadBeforeCorrection": "9d1fc4e388b15e457ad86a2570d08dc01cb36aa8",
+  "YawHeldStepCheck": "F*v + torque*omega + H/2*(|F|^2/m + torque^2/I) <= 0, H=0.02 s, Drive=0",
+  "FirstFailingHeldStepEnergyRatesWatts": [0.97267616, 165.06488],
+  "YawGrid": {"Speeds": [0, 0.01, 0.2, 18, 35], "Headings": [-3, -0.2, 0, 0.2, 3], "SpinsExpanded": [-3, -0.001, 0, 0.001, 3]},
+  "Disposition": "Rejected. Continuous passivity was insufficient for held force and braking torque. Added lateral stiffness regularization T=0.03 s and an exact finite-interval yaw-work bound including quadratic kinetic energy; no velocity edits or added solver steps."
+}

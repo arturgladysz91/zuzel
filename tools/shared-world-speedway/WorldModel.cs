@@ -13,6 +13,8 @@ public sealed record WorldParameters
     public bool EnableProportionalTrafficThrottle { get; init; }
     public bool EnableClosureAdaptiveFollowingGap { get; init; }
     public bool EnableAutonomousRacingLine { get; init; }
+    public bool EnableSlipCoupledDynamics { get; init; }
+    public float SlipYawResponseSeconds { get; init; } = .1f;
     // Audit-only variant 2; absent from the public experiment configuration.
     internal (double BaseMeters, double HeadwaySeconds)? DiagnosticFollowingGap { get; init; }
     public double AiIntervalSeconds { get; init; } = .1;

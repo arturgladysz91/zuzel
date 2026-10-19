@@ -2,6 +2,7 @@ using System.Text.Json;
 using SharedWorldSpeedway;
 
 var scenario = args.FirstOrDefault() ?? "A";
+if (scenario == "slip-dynamics") { SlipDynamicsAudit.Run(args[1], args[2]); return; }
 if (scenario == "replay-geometry") { ReplayGeometry.Save(args[1]); return; }
 if (scenario == "autonomous-line") { AutonomousLineAudit.Run(args[1], args[2]); return; }
 if (scenario == "close-racing") { CloseRacingAudit.Run(args[1], args[2]); return; }
