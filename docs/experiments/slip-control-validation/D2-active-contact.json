@@ -1,0 +1,5556 @@
+{
+  "BaseHead": "c0de934c8992cb902fbea8da24366482d5b7ae54",
+  "Parameters": {
+    "EnableTacticalRacing": false,
+    "EnableSideBySideContests": false,
+    "EnableTacticalQualityScoring": false,
+    "EnableProportionalTrafficThrottle": false,
+    "EnableClosureAdaptiveFollowingGap": false,
+    "EnableAutonomousRacingLine": false,
+    "EnableSlipCoupledDynamics": true,
+    "SlipYawResponseSeconds": 0.1,
+    "AiIntervalSeconds": 0.1,
+    "LateralResponseSeconds": 0.65,
+    "YawResponseSeconds": 0.35,
+    "SlideAngleRadians": 0.20943952,
+    "ContactFriction": 0.2,
+    "NearbyMaximumTravelMeters": 0.02,
+    "PredictionSeconds": 1.1,
+    "RecoverySeconds": 0.5,
+    "SolverSubsteps": 4
+  },
+  "Scenario": {
+    "Name": "D2-active-contact",
+    "Riders": [
+      {
+        "Profile": {
+          "Id": 1,
+          "Name": "R1",
+          "Skills": {
+            "Start": 50,
+            "Speed": 50,
+            "SlideControl": 50,
+            "TrackReading": 50,
+            "PairRiding": 50,
+            "Adaptability": 50
+          },
+          "Style": {
+            "RiskTolerance": 0.5,
+            "LaneChangeTendency": 0.5,
+            "OutsidePreference": 0.5,
+            "SetupIndependence": 0.5
+          }
+        },
+        "Setup": {
+          "Gearing": 0.5,
+          "TractionBias": 0.5
+        },
+        "ReferenceMeters": 0,
+        "OffsetMeters": 5,
+        "SpeedMetersPerSecond": 20,
+        "TargetOffsetMeters": 5,
+        "InitialOutwardSpeed": 0,
+        "TrafficEnabled": false,
+        "Passive": false,
+        "Bullet": false
+      },
+      {
+        "Profile": {
+          "Id": 2,
+          "Name": "R2",
+          "Skills": {
+            "Start": 50,
+            "Speed": 50,
+            "SlideControl": 50,
+            "TrackReading": 50,
+            "PairRiding": 50,
+            "Adaptability": 50
+          },
+          "Style": {
+            "RiskTolerance": 0.5,
+            "LaneChangeTendency": 0.5,
+            "OutsidePreference": 0.5,
+            "SetupIndependence": 0.5
+          }
+        },
+        "Setup": {
+          "Gearing": 0.5,
+          "TractionBias": 0.5
+        },
+        "ReferenceMeters": 3,
+        "OffsetMeters": 5,
+        "SpeedMetersPerSecond": 18,
+        "TargetOffsetMeters": 5,
+        "InitialOutwardSpeed": 0,
+        "TrafficEnabled": false,
+        "Passive": false,
+        "Bullet": false
+      }
+    ],
+    "DurationSeconds": 2,
+    "Laps": 0
+  },
+  "Controls": [
+    {
+      "RiderId": 1,
+      "AtSeconds": 0,
+      "TargetOffsetMeters": 5,
+      "Drive": 0.4
+    },
+    {
+      "RiderId": 2,
+      "AtSeconds": 0,
+      "TargetOffsetMeters": 5,
+      "Drive": 0.4
+    }
+  ],
+  "Run": {
+    "Name": "D2-active-contact",
+    "Initial": {
+      "TimeSeconds": 0,
+      "Riders": [
+        {
+          "Id": 1,
+          "Position": {
+            "X": 0,
+            "Y": -5
+          },
+          "Velocity": {
+            "X": 20,
+            "Y": 0
+          },
+          "Heading": 0,
+          "AngularVelocity": 0,
+          "Road": {
+            "Segment": 8,
+            "Progress": 0.9999997880723741,
+            "ReferenceMeters": 318.77874422073364,
+            "OffsetMeters": 4.999999523162842,
+            "Heading": 6.2831854820251465,
+            "RadiusMeters": 0,
+            "CornerProgress": 0,
+            "Tangent": {
+              "X": 1,
+              "Y": 1.7484555e-07
+            },
+            "Outward": {
+              "X": 1.7484555e-07,
+              "Y": -1
+            },
+            "IsTurn": false
+          },
+          "TotalReferenceMeters": 0,
+          "DistanceMeters": 0,
+          "Activity": 0,
+          "Drive": 1,
+          "TargetOffsetMeters": 5,
+          "Impairment": 0,
+          "Context": 0,
+          "Speed": 20,
+          "ForwardSpeed": 20,
+          "SideSpeed": 0,
+          "SlideRadians": 0
+        },
+        {
+          "Id": 2,
+          "Position": {
+            "X": 3,
+            "Y": -5
+          },
+          "Velocity": {
+            "X": 18,
+            "Y": 0
+          },
+          "Heading": 0,
+          "AngularVelocity": 0,
+          "Road": {
+            "Segment": 0,
+            "Progress": 0.08571428571428572,
+            "ReferenceMeters": 3,
+            "OffsetMeters": 5,
+            "Heading": 0,
+            "RadiusMeters": 0,
+            "CornerProgress": 0,
+            "Tangent": {
+              "X": 1,
+              "Y": 0
+            },
+            "Outward": {
+              "X": 0,
+              "Y": -1
+            },
+            "IsTurn": false
+          },
+          "TotalReferenceMeters": 3,
+          "DistanceMeters": 0,
+          "Activity": 0,
+          "Drive": 1,
+          "TargetOffsetMeters": 5,
+          "Impairment": 0,
+          "Context": 0,
+          "Speed": 18,
+          "ForwardSpeed": 18,
+          "SideSpeed": 0,
+          "SlideRadians": 0
+        }
+      ]
+    },
+    "Result": {
+      "Name": "D2-active-contact",
+      "StepSeconds": 0.01,
+      "TimeSeconds": 2,
+      "Work": {
+        "PhysicsUpdates": 200,
+        "SolverCalls": 202,
+        "AiUpdates": 38,
+        "PairChecks": 0,
+        "Threats": 0,
+        "ContactManifolds": 157,
+        "SolvedPoints": 56,
+        "BeginShapes": 1,
+        "EndShapes": 0,
+        "HitShapes": 1,
+        "Episodes": 1,
+        "Consequences": 1,
+        "GeometryChecks": 158,
+        "ProximityPairChecks": 200,
+        "SolverSubsteps": 808,
+        "ContactCandidateSamples": 161,
+        "MaximumContactCandidates": 1,
+        "SolverElapsedMilliseconds": 43.524499999999996,
+        "ContactProcessingMilliseconds": 6.898699999999976,
+        "SolverProfileMilliseconds": 43.493198855314404,
+        "BroadPhaseProfileMilliseconds": 0.3465999946783995,
+        "NarrowPhaseProfileMilliseconds": 14.23420036106836,
+        "ConstraintProfileMilliseconds": 28.26289927319158,
+        "MinimumGapMeters": -5.722045905431905e-07,
+        "MaximumSpeed": 20.10443878173828,
+        "MaximumStepDisplacementMeters": 0.2010354995727539,
+        "MinimumTrackClearanceMeters": 4.904339143753917,
+        "MaximumPassiveEnergyIncreaseJoules": 0,
+        "TacticalPairObservations": 0,
+        "TacticalObservations": 0,
+        "TacticalCandidates": 0,
+        "TacticalDecisions": 0,
+        "ControlChanges": 0,
+        "CancelledCommands": 0,
+        "MaximumTacticalPairs": 0,
+        "SideObservations": 0,
+        "SideCandidates": 0,
+        "SideBlockedCandidates": 0,
+        "SideHoldChoices": 0,
+        "QualitySamples": 0,
+        "ThrottleObservations": 0,
+        "ThrottleForceEvaluations": 0,
+        "ProximityTicks": 0,
+        "ProximityRequestedExtraCalls": 0,
+        "ControlDeadlineLimitedCalls": 0,
+        "ThrottleDeadlineLimitedCalls": 0,
+        "CurvatureLimitedCalls": 2,
+        "ActivatedThrottleCommands": 0,
+        "ProximitySeconds": 0,
+        "AutonomousObservations": 0,
+        "AutonomousEvaluations": 0,
+        "AutonomousCandidates": 0,
+        "AutonomousBlockedCandidates": 0,
+        "AutonomousCommands": 0,
+        "AutonomousActivations": 0,
+        "AutonomousElapsedMilliseconds": 0,
+        "TacticalElapsedMilliseconds": 0
+      },
+      "Riders": [
+        {
+          "Id": 1,
+          "Position": {
+            "X": 38.82761,
+            "Y": -4.225366
+          },
+          "Velocity": {
+            "X": 19.09929,
+            "Y": 2.8954444
+          },
+          "Heading": 0.21560374,
+          "AngularVelocity": 0.43586412,
+          "Road": {
+            "Segment": 1,
+            "Progress": 0.10335773405094453,
+            "ReferenceMeters": 38.35531503922687,
+            "OffsetMeters": 4.432711124420166,
+            "Heading": 0.10823596900731847,
+            "RadiusMeters": 35.432711124420166,
+            "CornerProgress": 0.03445257801698151,
+            "Tangent": {
+              "X": 0.9941482,
+              "Y": 0.10802476
+            },
+            "Outward": {
+              "X": 0.10802476,
+              "Y": -0.9941482
+            },
+            "IsTurn": true
+          },
+          "TotalReferenceMeters": 38.35532076127277,
+          "DistanceMeters": 38.863272917456925,
+          "Activity": 0,
+          "Drive": 0.4,
+          "TargetOffsetMeters": 5,
+          "Impairment": 0,
+          "Context": 1,
+          "Speed": 19.317518,
+          "ForwardSpeed": 19.276537,
+          "SideSpeed": -1.2576418,
+          "SlideRadians": 0.065149784
+        },
+        {
+          "Id": 2,
+          "Position": {
+            "X": 40.87795,
+            "Y": -3.8740697
+          },
+          "Velocity": {
+            "X": 18.90368,
+            "Y": 3.6484866
+          },
+          "Heading": 0.26472387,
+          "AngularVelocity": 0.4801673,
+          "Road": {
+            "Segment": 1,
+            "Progress": 0.15945266052273113,
+            "ReferenceMeters": 40.176331648611324,
+            "OffsetMeters": 4.3659586906433105,
+            "Heading": 0.16697844027778475,
+            "RadiusMeters": 35.36595869064331,
+            "CornerProgress": 0.05315088684091038,
+            "Tangent": {
+              "X": 0.98609143,
+              "Y": 0.16620357
+            },
+            "Outward": {
+              "X": 0.16620357,
+              "Y": -0.98609143
+            },
+            "IsTurn": true
+          },
+          "TotalReferenceMeters": 40.176331648611324,
+          "DistanceMeters": 37.9438202213496,
+          "Activity": 0,
+          "Drive": 0.4,
+          "TargetOffsetMeters": 5,
+          "Impairment": 0,
+          "Context": 1,
+          "Speed": 19.252548,
+          "ForwardSpeed": 19.199766,
+          "SideSpeed": -1.4246204,
+          "SlideRadians": 0.07406416
+        }
+      ],
+      "FinishTimes": {},
+      "Decisions": [
+        {
+          "RiderId": 1,
+          "OpponentId": 0,
+          "Action": 0,
+          "ObservedAt": 0,
+          "DecisionAt": 0,
+          "RequestedActivation": 0,
+          "ActualActivation": 0,
+          "TargetOffsetMeters": 5,
+          "Drive": 0.4,
+          "Intent": 0,
+          "Reason": "",
+          "SafetyReaction": false,
+          "CancelledAt": null,
+          "Channels": 0
+        },
+        {
+          "RiderId": 2,
+          "OpponentId": 0,
+          "Action": 0,
+          "ObservedAt": 0,
+          "DecisionAt": 0,
+          "RequestedActivation": 0,
+          "ActualActivation": 0,
+          "TargetOffsetMeters": 5,
+          "Drive": 0.4,
+          "Intent": 0,
+          "Reason": "",
+          "SafetyReaction": false,
+          "CancelledAt": null,
+          "Channels": 0
+        }
+      ],
+      "Contacts": [
+        {
+          "RiderA": 1,
+          "RiderB": 2,
+          "TimeSeconds": 0.46,
+          "Kind": "begin",
+          "ImpulseNewtonSeconds": 141.7943115234375,
+          "SeverityRatioA": 0.8486873598421806,
+          "SeverityRatioB": 0.8486873598421806,
+          "NormalClosingSpeed": 1.931060791015625
+        }
+      ],
+      "Fingerprint": "01C494F25D57B1F8EA0775A5689F02F72269EC4E0034E98C855A72E30D21AEAB",
+      "Completed": true,
+      "Classification": [
+        {
+          "Position": 1,
+          "RiderId": 2,
+          "FinishTimeSeconds": null,
+          "Status": "Racing"
+        },
+        {
+          "Position": 2,
+          "RiderId": 1,
+          "FinishTimeSeconds": null,
+          "Status": "Racing"
+        }
+      ]
+    },
+    "Riders": [
+      {
+        "Measurement": {
+          "RiderId": 1,
+          "CrossingSeconds": [],
+          "LapSeconds": [],
+          "DistanceMeters": 38.863272917456925,
+          "ProgressMeters": 38.35532076127277,
+          "MinimumClearanceMeters": 4.965244372773453,
+          "MaximumOffsetErrorMeters": 0.567288875579834,
+          "MeanOffsetErrorMeters": 0.07052997035837173,
+          "EntrySeconds": 1.8,
+          "EntrySpeed": 19.357199,
+          "MinimumCornerSpeed": 19.317518,
+          "ExitSpeed": 19.317518,
+          "NextStraightMaximumSpeed": 0,
+          "EntryOffset": 4.677769660949707,
+          "ExitOffset": 4.432711124420166,
+          "TargetFiveDegreesSeconds": null,
+          "ActualFiveDegreesSeconds": null,
+          "MeanAbsoluteSlipDegrees": 0.7423296173776675,
+          "MaximumAbsoluteSlipDegrees": 3.6866798,
+          "MeanDrive": 0.40000000596046514,
+          "MaximumUtilization": 0.47091517,
+          "NearGripSeconds": 0,
+          "SlipLossJoules": 361.05833390781913,
+          "AppliedWorkJoules": 815.8225546357376,
+          "InitialKineticJoules": 29400,
+          "FinalKineticJoules": 27432.74593699956,
+          "WorkResidualJoules": -2783.076617636178,
+          "MaximumZeroDriveEnergyIncreaseJoules": 0,
+          "YawObservedSeconds": 2,
+          "EnergyLimitedPercent": 0,
+          "AuthorityScalingPercent": 44.49999999999999,
+          "ForceSaturatedPercent": 0,
+          "MaximumRequestedToForceLimitRatio": 0.040680844,
+          "MeanRemovedTorqueNewtonMeters": 0,
+          "MaximumRemovedTorqueNewtonMeters": 0,
+          "RemovedTorqueFraction": 0,
+          "MeanAbsoluteOrientationErrorDegrees": 0.5086941814644866,
+          "MaximumAbsoluteOrientationErrorDegrees": 1.5292795069478364,
+          "LargeErrorSeconds": 0,
+          "LimitedAndLargeErrorSeconds": 0,
+          "LimitedMeanOrientationErrorDegrees": 0,
+          "UnlimitedMeanOrientationErrorDegrees": 0.5086941814644866,
+          "LimitedMeanOffsetErrorMeters": 0,
+          "UnlimitedMeanOffsetErrorMeters": 0.06772418360733985,
+          "MaximumAppliedTorqueMismatch": 0,
+          "MaximumHeldYawWorkExcessWatts": -2166.8895434737206,
+          "MaximumSpeed": 20.104439,
+          "FinalActivity": "Racing",
+          "DurationSeconds": 2
+        }
+      },
+      {
+        "Measurement": {
+          "RiderId": 2,
+          "CrossingSeconds": [],
+          "LapSeconds": [],
+          "DistanceMeters": 37.9438202213496,
+          "ProgressMeters": 37.176331648611324,
+          "MinimumClearanceMeters": 4.9043389635579775,
+          "MaximumOffsetErrorMeters": 0.6340413093566895,
+          "MeanOffsetErrorMeters": 0.1030680949048996,
+          "EntrySeconds": 1.69,
+          "EntrySpeed": 19.326805,
+          "MinimumCornerSpeed": 19.252548,
+          "ExitSpeed": 19.252548,
+          "NextStraightMaximumSpeed": 0,
+          "EntryOffset": 4.678964138031006,
+          "ExitOffset": 4.3659586906433105,
+          "TargetFiveDegreesSeconds": 1.9100000000000001,
+          "ActualFiveDegreesSeconds": null,
+          "MeanAbsoluteSlipDegrees": 0.9534340756063927,
+          "MaximumAbsoluteSlipDegrees": 4.1934605,
+          "MeanDrive": 0.40000000596046514,
+          "MaximumUtilization": 0.5185629,
+          "NearGripSeconds": 0,
+          "SlipLossJoules": 509.4111269091667,
+          "AppliedWorkJoules": 789.6261147374267,
+          "InitialKineticJoules": 23814,
+          "FinalKineticJoules": 27249.63282019677,
+          "WorkResidualJoules": 2646.0067054593433,
+          "MaximumZeroDriveEnergyIncreaseJoules": 0,
+          "YawObservedSeconds": 2,
+          "EnergyLimitedPercent": 0,
+          "AuthorityScalingPercent": 50,
+          "ForceSaturatedPercent": 0,
+          "MaximumRequestedToForceLimitRatio": 0.04056841,
+          "MeanRemovedTorqueNewtonMeters": 0,
+          "MaximumRemovedTorqueNewtonMeters": 0,
+          "RemovedTorqueFraction": 0,
+          "MeanAbsoluteOrientationErrorDegrees": 0.5749135084056458,
+          "MaximumAbsoluteOrientationErrorDegrees": 1.523964860863659,
+          "LargeErrorSeconds": 0,
+          "LimitedAndLargeErrorSeconds": 0,
+          "LimitedMeanOrientationErrorDegrees": 0,
+          "UnlimitedMeanOrientationErrorDegrees": 0.5749135084056458,
+          "LimitedMeanOffsetErrorMeters": 0,
+          "UnlimitedMeanOffsetErrorMeters": 0.0999353005285263,
+          "MaximumAppliedTorqueMismatch": 0,
+          "MaximumHeldYawWorkExcessWatts": -1884.9261599183083,
+          "MaximumSpeed": 19.326805,
+          "FinalActivity": "Racing",
+          "DurationSeconds": 2
+        }
+      }
+    ],
+    "Consequences": [
+      {
+        "TimeSeconds": 0.46,
+        "RiderId": 1,
+        "OpponentId": 2,
+        "ClosingSpeed": 1.931060791015625,
+        "ImpulseNewtonSeconds": 141.7943115234375,
+        "Reserve": 1.1376750040054322,
+        "SeverityRatio": 0.8486873598421806,
+        "Severity": 2
+      },
+      {
+        "TimeSeconds": 0.46,
+        "RiderId": 2,
+        "OpponentId": 1,
+        "ClosingSpeed": 1.931060791015625,
+        "ImpulseNewtonSeconds": 141.7943115234375,
+        "Reserve": 1.1376750040054322,
+        "SeverityRatio": 0.8486873598421806,
+        "Severity": 2
+      }
+    ]
+  },
+  "Summary": {
+    "Completed": true,
+    "TimeSeconds": 2,
+    "Fingerprint": "01C494F25D57B1F8EA0775A5689F02F72269EC4E0034E98C855A72E30D21AEAB",
+    "SolverCalls": 202,
+    "SolverSubsteps": 808,
+    "Episodes": 1,
+    "SolvedPoints": 56,
+    "MaximumStepDisplacementMeters": 0.2010354995727539,
+    "MinimumPairSeparationMeters": -5.722045905431905e-07,
+    "ContactPointCount": 157,
+    "MaximumContactImpulse": 141.79431,
+    "FinishTimes": {},
+    "Riders": [
+      {
+        "RiderId": 1,
+        "CrossingSeconds": [],
+        "LapSeconds": [],
+        "DistanceMeters": 38.863272917456925,
+        "ProgressMeters": 38.35532076127277,
+        "MinimumClearanceMeters": 4.965244372773453,
+        "MaximumOffsetErrorMeters": 0.567288875579834,
+        "MeanOffsetErrorMeters": 0.07052997035837173,
+        "EntrySeconds": 1.8,
+        "EntrySpeed": 19.357199,
+        "MinimumCornerSpeed": 19.317518,
+        "ExitSpeed": 19.317518,
+        "NextStraightMaximumSpeed": 0,
+        "EntryOffset": 4.677769660949707,
+        "ExitOffset": 4.432711124420166,
+        "TargetFiveDegreesSeconds": null,
+        "ActualFiveDegreesSeconds": null,
+        "MeanAbsoluteSlipDegrees": 0.7423296173776675,
+        "MaximumAbsoluteSlipDegrees": 3.6866798,
+        "MeanDrive": 0.40000000596046514,
+        "MaximumUtilization": 0.47091517,
+        "NearGripSeconds": 0,
+        "SlipLossJoules": 361.05833390781913,
+        "AppliedWorkJoules": 815.8225546357376,
+        "InitialKineticJoules": 29400,
+        "FinalKineticJoules": 27432.74593699956,
+        "WorkResidualJoules": -2783.076617636178,
+        "MaximumZeroDriveEnergyIncreaseJoules": 0,
+        "YawObservedSeconds": 2,
+        "EnergyLimitedPercent": 0,
+        "AuthorityScalingPercent": 44.49999999999999,
+        "ForceSaturatedPercent": 0,
+        "MaximumRequestedToForceLimitRatio": 0.040680844,
+        "MeanRemovedTorqueNewtonMeters": 0,
+        "MaximumRemovedTorqueNewtonMeters": 0,
+        "RemovedTorqueFraction": 0,
+        "MeanAbsoluteOrientationErrorDegrees": 0.5086941814644866,
+        "MaximumAbsoluteOrientationErrorDegrees": 1.5292795069478364,
+        "LargeErrorSeconds": 0,
+        "LimitedAndLargeErrorSeconds": 0,
+        "LimitedMeanOrientationErrorDegrees": 0,
+        "UnlimitedMeanOrientationErrorDegrees": 0.5086941814644866,
+        "LimitedMeanOffsetErrorMeters": 0,
+        "UnlimitedMeanOffsetErrorMeters": 0.06772418360733985,
+        "MaximumAppliedTorqueMismatch": 0,
+        "MaximumHeldYawWorkExcessWatts": -2166.8895434737206,
+        "MaximumSpeed": 20.104439,
+        "FinalActivity": "Racing",
+        "DurationSeconds": 2
+      },
+      {
+        "RiderId": 2,
+        "CrossingSeconds": [],
+        "LapSeconds": [],
+        "DistanceMeters": 37.9438202213496,
+        "ProgressMeters": 37.176331648611324,
+        "MinimumClearanceMeters": 4.9043389635579775,
+        "MaximumOffsetErrorMeters": 0.6340413093566895,
+        "MeanOffsetErrorMeters": 0.1030680949048996,
+        "EntrySeconds": 1.69,
+        "EntrySpeed": 19.326805,
+        "MinimumCornerSpeed": 19.252548,
+        "ExitSpeed": 19.252548,
+        "NextStraightMaximumSpeed": 0,
+        "EntryOffset": 4.678964138031006,
+        "ExitOffset": 4.3659586906433105,
+        "TargetFiveDegreesSeconds": 1.9100000000000001,
+        "ActualFiveDegreesSeconds": null,
+        "MeanAbsoluteSlipDegrees": 0.9534340756063927,
+        "MaximumAbsoluteSlipDegrees": 4.1934605,
+        "MeanDrive": 0.40000000596046514,
+        "MaximumUtilization": 0.5185629,
+        "NearGripSeconds": 0,
+        "SlipLossJoules": 509.4111269091667,
+        "AppliedWorkJoules": 789.6261147374267,
+        "InitialKineticJoules": 23814,
+        "FinalKineticJoules": 27249.63282019677,
+        "WorkResidualJoules": 2646.0067054593433,
+        "MaximumZeroDriveEnergyIncreaseJoules": 0,
+        "YawObservedSeconds": 2,
+        "EnergyLimitedPercent": 0,
+        "AuthorityScalingPercent": 50,
+        "ForceSaturatedPercent": 0,
+        "MaximumRequestedToForceLimitRatio": 0.04056841,
+        "MeanRemovedTorqueNewtonMeters": 0,
+        "MaximumRemovedTorqueNewtonMeters": 0,
+        "RemovedTorqueFraction": 0,
+        "MeanAbsoluteOrientationErrorDegrees": 0.5749135084056458,
+        "MaximumAbsoluteOrientationErrorDegrees": 1.523964860863659,
+        "LargeErrorSeconds": 0,
+        "LimitedAndLargeErrorSeconds": 0,
+        "LimitedMeanOrientationErrorDegrees": 0,
+        "UnlimitedMeanOrientationErrorDegrees": 0.5749135084056458,
+        "LimitedMeanOffsetErrorMeters": 0,
+        "UnlimitedMeanOffsetErrorMeters": 0.0999353005285263,
+        "MaximumAppliedTorqueMismatch": 0,
+        "MaximumHeldYawWorkExcessWatts": -1884.9261599183083,
+        "MaximumSpeed": 19.326805,
+        "FinalActivity": "Racing",
+        "DurationSeconds": 2
+      }
+    ]
+  },
+  "Telemetry": [
+    {
+      "TimeSeconds": 0,
+      "DurationSeconds": 0.01,
+      "RiderId": 1,
+      "ReferenceMeters": 0,
+      "Speed": 20,
+      "AngularVelocity": 0,
+      "OffsetMeters": 4.999999523162842,
+      "TargetOffsetMeters": 5,
+      "Drive": 0.4,
+      "ActualSlipDegrees": 0,
+      "TargetSlipDegrees": 5.9238164e-07,
+      "DriveForceNewtons": 154.68945,
+      "LateralForceNewtons": 0,
+      "GripBudgetNewtons": 2138.2979,
+      "GripUtilization": 0.07234233,
+      "DrivePowerWatts": 3093.789,
+      "LateralLossWatts": 0,
+      "ResistanceLossWatts": 2399.2505,
+      "RequestedNewtonMeters": 5.4508262e-05,
+      "AfterAuthorityNewtonMeters": 4.7694728e-05,
+      "AfterEnergyNewtonMeters": 4.7694728e-05,
+      "AppliedTorqueNewtonMeters": 4.7694728e-05,
+      "OrientationErrorRadians": 1.03390105e-08,
+      "DissipationCreditWatts": 2398.2715082764626,
+      "TranslationalPowerWatts": 694.5386,
+      "YawPowerWatts": 0,
+      "KineticChangeJoules": 6.95343017578125,
+      "WorkJoules": 6.945796508789065,
+      "ClearanceMeters": 5.599999999963249,
+      "PairSeparationMeters": 0.8800096005201342
+    },
+    {
+      "TimeSeconds": 0,
+      "DurationSeconds": 0.01,
+      "RiderId": 2,
+      "ReferenceMeters": 3,
+      "Speed": 18,
+      "AngularVelocity": 0,
+      "OffsetMeters": 5,
+      "TargetOffsetMeters": 5,
+      "Drive": 0.4,
+      "ActualSlipDegrees": 0,
+      "TargetSlipDegrees": 0,
+      "DriveForceNewtons": 162.33893,
+      "LateralForceNewtons": 0,
+      "GripBudgetNewtons": 2138.2979,
+      "GripUtilization": 0.075919695,
+      "DrivePowerWatts": 2922.1006,
+      "LateralLossWatts": 0,
+      "ResistanceLossWatts": 1885.6727,
+      "RequestedNewtonMeters": 0,
+      "AfterAuthorityNewtonMeters": 0,
+      "AfterEnergyNewtonMeters": 0,
+      "AppliedTorqueNewtonMeters": 0,
+      "OrientationErrorRadians": 0,
+      "DissipationCreditWatts": 1884.9261599183083,
+      "TranslationalPowerWatts": 1036.428,
+      "YawPowerWatts": 0,
+      "KineticChangeJoules": 10.358367919921875,
+      "WorkJoules": 10.365406494140625,
+      "ClearanceMeters": 5.600000000000001,
+      "PairSeparationMeters": 0.8800096005201342
+    },
+    {
+      "TimeSeconds": 0.09999999999999999,
+      "DurationSeconds": 0.010000000000000009,
+      "RiderId": 1,
+      "ReferenceMeters": 2.001213550567627,
+      "Speed": 20.023537,
+      "AngularVelocity": 1.7317485e-09,
+      "OffsetMeters": 5,
+      "TargetOffsetMeters": 5,
+      "Drive": 0.4,
+      "ActualSlipDegrees": 1.8094468e-08,
+      "TargetSlipDegrees": -2.3240112e-09,
+      "DriveForceNewtons": 154.59943,
+      "LateralForceNewtons": 5.535188e-06,
+      "GripBudgetNewtons": 2138.2979,
+      "GripUtilization": 0.07230023,
+      "DrivePowerWatts": 3095.6272,
+      "LateralLossWatts": 3.500228e-14,
+      "ResistanceLossWatts": 2405.8472,
+      "RequestedNewtonMeters": -1.7232005e-06,
+      "AfterAuthorityNewtonMeters": -1.5078004e-06,
+      "AfterEnergyNewtonMeters": -1.5078004e-06,
+      "AppliedTorqueNewtonMeters": -1.5078004e-06,
+      "OrientationErrorRadians": -3.5636968e-10,
+      "DissipationCreditWatts": 2404.8651099205017,
+      "TranslationalPowerWatts": 689.7801,
+      "YawPowerWatts": -2.611131e-15,
+      "KineticChangeJoules": 6.895111083984375,
+      "WorkJoules": 6.898204345703131,
+      "ClearanceMeters": 5.599999999702209,
+      "PairSeparationMeters": 0.6809598445892331
+    },
+    {
+      "TimeSeconds": 0.09999999999999999,
+      "DurationSeconds": 0.010000000000000009,
+      "RiderId": 2,
+      "ReferenceMeters": 4.802002906799316,
+      "Speed": 18.039032,
+      "AngularVelocity": 0,
+      "OffsetMeters": 5,
+      "TargetOffsetMeters": 5,
+      "Drive": 0.4,
+      "ActualSlipDegrees": 0,
+      "TargetSlipDegrees": 0,
+      "DriveForceNewtons": 162.18964,
+      "LateralForceNewtons": 0,
+      "GripBudgetNewtons": 2138.2979,
+      "GripUtilization": 0.07584988,
+      "DrivePowerWatts": 2925.7441,
+      "LateralLossWatts": 0,
+      "ResistanceLossWatts": 1894.838,
+      "RequestedNewtonMeters": 0,
+      "AfterAuthorityNewtonMeters": 0,
+      "AfterEnergyNewtonMeters": 0,
+      "AppliedTorqueNewtonMeters": 0,
+      "OrientationErrorRadians": 0,
+      "DissipationCreditWatts": 1894.0874269008636,
+      "TranslationalPowerWatts": 1030.9061,
+      "YawPowerWatts": 0,
+      "KineticChangeJoules": 10.3179931640625,
+      "WorkJoules": 10.310172119140635,
+      "ClearanceMeters": 5.600000000000001,
+      "PairSeparationMeters": 0.6809598445892331
+    },
+    {
+      "TimeSeconds": 0.2,
+      "DurationSeconds": 0.009999999999999981,
+      "RiderId": 1,
+      "ReferenceMeters": 4.004765510559082,
+      "Speed": 20.046883,
+      "AngularVelocity": 1.4993305e-10,
+      "OffsetMeters": 5,
+      "TargetOffsetMeters": 5,
+      "Drive": 0.4,
+      "ActualSlipDegrees": 1.2671859e-08,
+      "TargetSlipDegrees": -5.4198916e-09,
+      "DriveForceNewtons": 154.51013,
+      "LateralForceNewtons": 3.876531e-06,
+      "GripBudgetNewtons": 2138.2979,
+      "GripUtilization": 0.07225847,
+      "DrivePowerWatts": 3097.4465,
+      "LateralLossWatts": 1.7187305e-14,
+      "ResistanceLossWatts": 2412.4033,
+      "RequestedNewtonMeters": -4.3662396e-07,
+      "AfterAuthorityNewtonMeters": -3.8204598e-07,
+      "AfterEnergyNewtonMeters": -3.8204598e-07,
+      "AppliedTorqueNewtonMeters": -3.8204598e-07,
+      "OrientationErrorRadians": -3.1576064e-10,
+      "DissipationCreditWatts": 2411.41820114851,
+      "TranslationalPowerWatts": 685.0432,
+      "YawPowerWatts": -5.728132e-17,
+      "KineticChangeJoules": 6.8569793701171875,
+      "WorkJoules": 6.850830078124987,
+      "ClearanceMeters": 5.599999999663563,
+      "PairSeparationMeters": 0.48345270156860276
+    },
+    {
+      "TimeSeconds": 0.2,
+      "DurationSeconds": 0.009999999999999981,
+      "RiderId": 2,
+      "ReferenceMeters": 6.60789394378662,
+      "Speed": 18.077782,
+      "AngularVelocity": 0,
+      "OffsetMeters": 5,
+      "TargetOffsetMeters": 5,
+      "Drive": 0.4,
+      "ActualSlipDegrees": 0,
+      "TargetSlipDegrees": 0,
+      "DriveForceNewtons": 162.04143,
+      "LateralForceNewtons": 0,
+      "GripBudgetNewtons": 2138.2979,
+      "GripUtilization": 0.07578057,
+      "DrivePowerWatts": 2929.3496,
+      "LateralLossWatts": 0,
+      "ResistanceLossWatts": 1903.9695,
+      "RequestedNewtonMeters": 0,
+      "AfterAuthorityNewtonMeters": 0,
+      "AfterEnergyNewtonMeters": 0,
+      "AppliedTorqueNewtonMeters": 0,
+      "OrientationErrorRadians": 0,
+      "DissipationCreditWatts": 1903.2148901224136,
+      "TranslationalPowerWatts": 1025.3801,
+      "YawPowerWatts": 0,
+      "KineticChangeJoules": 10.259674072265625,
+      "WorkJoules": 10.254895019531231,
+      "ClearanceMeters": 5.600000000000001,
+      "PairSeparationMeters": 0.48345270156860276
+    },
+    {
+      "TimeSeconds": 0.3,
+      "DurationSeconds": 0.010000000000000009,
+      "RiderId": 1,
+      "ReferenceMeters": 6.010642051696777,
+      "Speed": 20.070038,
+      "AngularVelocity": -3.5208889e-10,
+      "OffsetMeters": 5,
+      "TargetOffsetMeters": 5,
+      "Drive": 0.4,
+      "ActualSlipDegrees": 6.095861e-09,
+      "TargetSlipDegrees": -7.2742568e-09,
+      "DriveForceNewtons": 154.42157,
+      "LateralForceNewtons": 1.8648948e-06,
+      "GripBudgetNewtons": 2138.2979,
+      "GripUtilization": 0.072217055,
+      "DrivePowerWatts": 3099.2468,
+      "LateralLossWatts": 3.9821263e-15,
+      "ResistanceLossWatts": 2418.919,
+      "RequestedNewtonMeters": -1.929184e-07,
+      "AfterAuthorityNewtonMeters": -1.6880361e-07,
+      "AfterEnergyNewtonMeters": -1.6880361e-07,
+      "AppliedTorqueNewtonMeters": -1.6880361e-07,
+      "OrientationErrorRadians": -2.333526e-10,
+      "DissipationCreditWatts": 2417.930781543255,
+      "TranslationalPowerWatts": 680.32776,
+      "YawPowerWatts": 5.943387e-17,
+      "KineticChangeJoules": 6.796417236328125,
+      "WorkJoules": 6.803668212890631,
+      "ClearanceMeters": 5.599999999675859,
+      "PairSeparationMeters": 0.28748025894164964
+    },
+    {
+      "TimeSeconds": 0.3,
+      "DurationSeconds": 0.010000000000000009,
+      "RiderId": 2,
+      "ReferenceMeters": 8.417644500732422,
+      "Speed": 18.116234,
+      "AngularVelocity": 0,
+      "OffsetMeters": 5,
+      "TargetOffsetMeters": 5,
+      "Drive": 0.4,
+      "ActualSlipDegrees": 0,
+      "TargetSlipDegrees": 0,
+      "DriveForceNewtons": 161.89436,
+      "LateralForceNewtons": 0,
+      "GripBudgetNewtons": 2138.2979,
+      "GripUtilization": 0.075711794,
+      "DrivePowerWatts": 2932.9163,
+      "LateralLossWatts": 0,
+      "ResistanceLossWatts": 1913.063,
+      "RequestedNewtonMeters": 0,
+      "AfterAuthorityNewtonMeters": 0,
+      "AfterEnergyNewtonMeters": 0,
+      "AppliedTorqueNewtonMeters": 0,
+      "OrientationErrorRadians": 0,
+      "DissipationCreditWatts": 1912.304401397705,
+      "TranslationalPowerWatts": 1019.8532,
+      "YawPowerWatts": 0,
+      "KineticChangeJoules": 10.199111938476562,
+      "WorkJoules": 10.199609985351572,
+      "ClearanceMeters": 5.600000000000001,
+      "PairSeparationMeters": 0.28748025894164964
+    },
+    {
+      "TimeSeconds": 0.4,
+      "DurationSeconds": 0.010000000000000009,
+      "RiderId": 1,
+      "ReferenceMeters": 8.01882553100586,
+      "Speed": 20.093018,
+      "AngularVelocity": -5.9081906e-10,
+      "OffsetMeters": 5,
+      "TargetOffsetMeters": 5,
+      "Drive": 0.4,
+      "ActualSlipDegrees": 1.0826974e-09,
+      "TargetSlipDegrees": -7.99353e-09,
+      "DriveForceNewtons": 154.33368,
+      "LateralForceNewtons": 3.3123942e-07,
+      "GripBudgetNewtons": 2138.2979,
+      "GripUtilization": 0.07217595,
+      "DrivePowerWatts": 3101.0293,
+      "LateralLossWatts": 1.2576831e-16,
+      "ResistanceLossWatts": 2425.3982,
+      "RequestedNewtonMeters": -9.4007554e-08,
+      "AfterAuthorityNewtonMeters": -8.225661e-08,
+      "AfterEnergyNewtonMeters": -8.225661e-08,
+      "AppliedTorqueNewtonMeters": -8.225661e-08,
+      "OrientationErrorRadians": -1.5841006e-10,
+      "DissipationCreditWatts": 2424.406999886036,
+      "TranslationalPowerWatts": 675.6311,
+      "YawPowerWatts": 4.8598773e-17,
+      "KineticChangeJoules": 6.760528564453125,
+      "WorkJoules": 6.756695556640631,
+      "ClearanceMeters": 5.599999999709079,
+      "PairSeparationMeters": 0.09303131103515555
+    },
+    {
+      "TimeSeconds": 0.4,
+      "DurationSeconds": 0.010000000000000009,
+      "RiderId": 2,
+      "ReferenceMeters": 10.23122787475586,
+      "Speed": 18.154404,
+      "AngularVelocity": 0,
+      "OffsetMeters": 5,
+      "TargetOffsetMeters": 5,
+      "Drive": 0.4,
+      "ActualSlipDegrees": 0,
+      "TargetSlipDegrees": 0,
+      "DriveForceNewtons": 161.74838,
+      "LateralForceNewtons": 0,
+      "GripBudgetNewtons": 2138.2979,
+      "GripUtilization": 0.075643525,
+      "DrivePowerWatts": 2936.4453,
+      "LateralLossWatts": 0,
+      "ResistanceLossWatts": 1922.1216,
+      "RequestedNewtonMeters": 0,
+      "AfterAuthorityNewtonMeters": 0,
+      "AfterEnergyNewtonMeters": 0,
+      "AppliedTorqueNewtonMeters": 0,
+      "OrientationErrorRadians": 0,
+      "DissipationCreditWatts": 1921.3590108156204,
+      "TranslationalPowerWatts": 1014.32385,
+      "YawPowerWatts": 0,
+      "KineticChangeJoules": 10.140792846679688,
+      "WorkJoules": 10.14429992675782,
+      "ClearanceMeters": 5.600000000000001,
+      "PairSeparationMeters": 0.09303131103515555
+    },
+    {
+      "TimeSeconds": 0.5,
+      "DurationSeconds": 0.010000000000000009,
+      "RiderId": 1,
+      "ReferenceMeters": 9.988739013671875,
+      "Speed": 19.1438,
+      "AngularVelocity": -2.4074682e-09,
+      "OffsetMeters": 5,
+      "TargetOffsetMeters": 5,
+      "Drive": 0.4,
+      "ActualSlipDegrees": -5.8818657e-09,
+      "TargetSlipDegrees": -6.89227e-09,
+      "DriveForceNewtons": 120.07801,
+      "LateralForceNewtons": -1.7965477e-06,
+      "GripBudgetNewtons": 2138.2979,
+      "GripUtilization": 0.056155887,
+      "DrivePowerWatts": 2298.7495,
+      "LateralLossWatts": 3.530688e-15,
+      "ResistanceLossWatts": 2168.196,
+      "RequestedNewtonMeters": 1.7728252e-06,
+      "AfterAuthorityNewtonMeters": 1.1791766e-06,
+      "AfterEnergyNewtonMeters": 1.1791766e-06,
+      "AppliedTorqueNewtonMeters": 1.1791766e-06,
+      "OrientationErrorRadians": -1.7634887e-11,
+      "DissipationCreditWatts": 2167.3234283328056,
+      "TranslationalPowerWatts": 130.5534,
+      "YawPowerWatts": -2.83883e-15,
+      "KineticChangeJoules": 1.3099365234375,
+      "WorkJoules": 1.3055499267578137,
+      "ClearanceMeters": 5.599999999826215,
+      "PairSeparationMeters": 3.814697258630595e-07
+    },
+    {
+      "TimeSeconds": 0.5,
+      "DurationSeconds": 0.010000000000000009,
+      "RiderId": 2,
+      "ReferenceMeters": 12.088733673095703,
+      "Speed": 19.1438,
+      "AngularVelocity": -1.8179014e-09,
+      "OffsetMeters": 5,
+      "TargetOffsetMeters": 5,
+      "Drive": 0.4,
+      "ActualSlipDegrees": -7.530113e-09,
+      "TargetSlipDegrees": -5.397512e-10,
+      "DriveForceNewtons": 120.07801,
+      "LateralForceNewtons": -2.2999866e-06,
+      "GripBudgetNewtons": 2138.2979,
+      "GripUtilization": 0.056155887,
+      "DrivePowerWatts": 2298.7495,
+      "LateralLossWatts": 5.786719e-15,
+      "ResistanceLossWatts": 2168.196,
+      "RequestedNewtonMeters": 1.6988656e-06,
+      "AfterAuthorityNewtonMeters": 1.1299832e-06,
+      "AfterEnergyNewtonMeters": 1.1299832e-06,
+      "AppliedTorqueNewtonMeters": 1.1299832e-06,
+      "OrientationErrorRadians": 1.2200484e-10,
+      "DissipationCreditWatts": 2167.3234283328056,
+      "TranslationalPowerWatts": 130.5534,
+      "YawPowerWatts": -2.054198e-15,
+      "KineticChangeJoules": 1.3099365234375,
+      "WorkJoules": 1.3055499267578137,
+      "ClearanceMeters": 5.599999999923595,
+      "PairSeparationMeters": 3.814697258630595e-07
+    },
+    {
+      "TimeSeconds": 0.6,
+      "DurationSeconds": 0.010000000000000009,
+      "RiderId": 1,
+      "ReferenceMeters": 11.903356552124023,
+      "Speed": 19.148432,
+      "AngularVelocity": -1.1282377e-09,
+      "OffsetMeters": 5,
+      "TargetOffsetMeters": 5,
+      "Drive": 0.4,
+      "ActualSlipDegrees": -9.839786e-09,
+      "TargetSlipDegrees": -5.2674594e-09,
+      "DriveForceNewtons": 120.064545,
+      "LateralForceNewtons": -3.0054748e-06,
+      "GripBudgetNewtons": 2138.2979,
+      "GripUtilization": 0.056149587,
+      "DrivePowerWatts": 2299.0479,
+      "LateralLossWatts": 9.883467e-15,
+      "ResistanceLossWatts": 2169.4,
+      "RequestedNewtonMeters": 4.8528955e-07,
+      "AfterAuthorityNewtonMeters": 3.2278538e-07,
+      "AfterEnergyNewtonMeters": 3.2278538e-07,
+      "AppliedTorqueNewtonMeters": 3.2278538e-07,
+      "OrientationErrorRadians": 7.980216e-11,
+      "DissipationCreditWatts": 2168.526739001274,
+      "TranslationalPowerWatts": 129.64783,
+      "YawPowerWatts": -3.6417864e-16,
+      "KineticChangeJoules": 1.287506103515625,
+      "WorkJoules": 1.2964936828613294,
+      "ClearanceMeters": 5.5999999999236625,
+      "PairSeparationMeters": 3.814697258630595e-07
+    },
+    {
+      "TimeSeconds": 0.6,
+      "DurationSeconds": 0.010000000000000009,
+      "RiderId": 2,
+      "ReferenceMeters": 14.003351211547852,
+      "Speed": 19.148432,
+      "AngularVelocity": -5.565876e-10,
+      "OffsetMeters": 5,
+      "TargetOffsetMeters": 5,
+      "Drive": 0.4,
+      "ActualSlipDegrees": -8.24316e-09,
+      "TargetSlipDegrees": 1.0794465e-09,
+      "DriveForceNewtons": 120.064545,
+      "LateralForceNewtons": -2.5177994e-06,
+      "GripBudgetNewtons": 2138.2979,
+      "GripUtilization": 0.056149587,
+      "DrivePowerWatts": 2299.0479,
+      "LateralLossWatts": 6.936261e-15,
+      "ResistanceLossWatts": 2169.4,
+      "RequestedNewtonMeters": 5.021862e-07,
+      "AfterAuthorityNewtonMeters": 3.3402404e-07,
+      "AfterEnergyNewtonMeters": 3.3402404e-07,
+      "AppliedTorqueNewtonMeters": 3.3402404e-07,
+      "OrientationErrorRadians": 1.6271018e-10,
+      "DissipationCreditWatts": 2168.526739001274,
+      "TranslationalPowerWatts": 129.64783,
+      "YawPowerWatts": -1.8591363e-16,
+      "KineticChangeJoules": 1.287506103515625,
+      "WorkJoules": 1.2964936828613294,
+      "ClearanceMeters": 5.599999999863153,
+      "PairSeparationMeters": 3.814697258630595e-07
+    },
+    {
+      "TimeSeconds": 0.7000000000000001,
+      "DurationSeconds": 0.009999999999999898,
+      "RiderId": 1,
+      "ReferenceMeters": 13.81843376159668,
+      "Speed": 19.15301,
+      "AngularVelocity": -7.0273987e-10,
+      "OffsetMeters": 5,
+      "TargetOffsetMeters": 5,
+      "Drive": 0.4,
+      "ActualSlipDegrees": -8.906117e-09,
+      "TargetSlipDegrees": -3.433269e-09,
+      "DriveForceNewtons": 120.05125,
+      "LateralForceNewtons": -2.720317e-06,
+      "GripBudgetNewtons": 2138.2979,
+      "GripUtilization": 0.05614337,
+      "DrivePowerWatts": 2299.3428,
+      "LateralLossWatts": 8.09883e-15,
+      "ResistanceLossWatts": 2170.5903,
+      "RequestedNewtonMeters": 2.2648717e-07,
+      "AfterAuthorityNewtonMeters": 1.5064563e-07,
+      "AfterEnergyNewtonMeters": 1.5064563e-07,
+      "AppliedTorqueNewtonMeters": 1.5064563e-07,
+      "OrientationErrorRadians": 9.551921e-11,
+      "DissipationCreditWatts": 2169.7166280150414,
+      "TranslationalPowerWatts": 128.75223,
+      "YawPowerWatts": -1.0586469e-16,
+      "KineticChangeJoules": 1.2897491455078125,
+      "WorkJoules": 1.2875376892089712,
+      "ClearanceMeters": 5.599999999978387,
+      "PairSeparationMeters": -5.722045905431905e-07
+    },
+    {
+      "TimeSeconds": 0.7000000000000001,
+      "DurationSeconds": 0.009999999999999898,
+      "RiderId": 2,
+      "ReferenceMeters": 15.918428421020508,
+      "Speed": 19.15301,
+      "AngularVelocity": -1.1721957e-10,
+      "OffsetMeters": 5,
+      "TargetOffsetMeters": 5,
+      "Drive": 0.4,
+      "ActualSlipDegrees": -5.536283e-09,
+      "TargetSlipDegrees": 2.4389437e-09,
+      "DriveForceNewtons": 120.05125,
+      "LateralForceNewtons": -1.6910225e-06,
+      "GripBudgetNewtons": 2138.2979,
+      "GripUtilization": 0.05614337,
+      "DrivePowerWatts": 2299.3428,
+      "LateralLossWatts": 3.129551e-15,
+      "ResistanceLossWatts": 2170.5903,
+      "RequestedNewtonMeters": 2.2457553e-07,
+      "AfterAuthorityNewtonMeters": 1.4937412e-07,
+      "AfterEnergyNewtonMeters": 1.4937412e-07,
+      "AppliedTorqueNewtonMeters": 1.4937412e-07,
+      "OrientationErrorRadians": 1.3919396e-10,
+      "DissipationCreditWatts": 2169.7166280150414,
+      "TranslationalPowerWatts": 128.75223,
+      "YawPowerWatts": -1.7509569e-17,
+      "KineticChangeJoules": 1.2897491455078125,
+      "WorkJoules": 1.2875376892089712,
+      "ClearanceMeters": 5.599999999846254,
+      "PairSeparationMeters": -5.722045905431905e-07
+    },
+    {
+      "TimeSeconds": 0.8,
+      "DurationSeconds": 0.010000000000000009,
+      "RiderId": 1,
+      "ReferenceMeters": 15.733968734741211,
+      "Speed": 19.157587,
+      "AngularVelocity": -2.0816293e-09,
+      "OffsetMeters": 5,
+      "TargetOffsetMeters": 5,
+      "Drive": 0.4,
+      "ActualSlipDegrees": -1.1800359e-08,
+      "TargetSlipDegrees": -4.6236753e-10,
+      "DriveForceNewtons": 120.03794,
+      "LateralForceNewtons": -3.604375e-06,
+      "GripBudgetNewtons": 2138.2979,
+      "GripUtilization": 0.05613715,
+      "DrivePowerWatts": 2299.6372,
+      "LateralLossWatts": 1.4221432e-14,
+      "ResistanceLossWatts": 2171.7812,
+      "RequestedNewtonMeters": 1.889561e-06,
+      "AfterAuthorityNewtonMeters": 1.2568222e-06,
+      "AfterEnergyNewtonMeters": 1.2568222e-06,
+      "AppliedTorqueNewtonMeters": 1.2568222e-06,
+      "OrientationErrorRadians": 1.9788528e-10,
+      "DissipationCreditWatts": 2170.9070049524307,
+      "TranslationalPowerWatts": 127.85605,
+      "YawPowerWatts": -2.6162379e-15,
+      "KineticChangeJoules": 1.287506103515625,
+      "WorkJoules": 1.2785758209228526,
+      "ClearanceMeters": 5.59999999986994,
+      "PairSeparationMeters": -5.722045869904768e-07
+    },
+    {
+      "TimeSeconds": 0.8,
+      "DurationSeconds": 0.010000000000000009,
+      "RiderId": 2,
+      "ReferenceMeters": 17.83396339416504,
+      "Speed": 19.157587,
+      "AngularVelocity": -1.6687975e-09,
+      "OffsetMeters": 5,
+      "TargetOffsetMeters": 5,
+      "Drive": 0.4,
+      "ActualSlipDegrees": -1.29049065e-08,
+      "TargetSlipDegrees": 3.1475174e-09,
+      "DriveForceNewtons": 120.03794,
+      "LateralForceNewtons": -3.941755e-06,
+      "GripBudgetNewtons": 2138.2979,
+      "GripUtilization": 0.05613715,
+      "DrivePowerWatts": 2299.6372,
+      "LateralLossWatts": 1.7008367e-14,
+      "ResistanceLossWatts": 2171.7812,
+      "RequestedNewtonMeters": 1.761829e-06,
+      "AfterAuthorityNewtonMeters": 1.1718626e-06,
+      "AfterEnergyNewtonMeters": 1.1718626e-06,
+      "AppliedTorqueNewtonMeters": 1.1718626e-06,
+      "OrientationErrorRadians": 2.8016764e-10,
+      "DissipationCreditWatts": 2170.9070049524307,
+      "TranslationalPowerWatts": 127.85605,
+      "YawPowerWatts": -1.9556013e-15,
+      "KineticChangeJoules": 1.287506103515625,
+      "WorkJoules": 1.2785758209228526,
+      "ClearanceMeters": 5.599999999726418,
+      "PairSeparationMeters": -5.722045869904768e-07
+    },
+    {
+      "TimeSeconds": 0.9,
+      "DurationSeconds": 0.010000000000000009,
+      "RiderId": 1,
+      "ReferenceMeters": 17.649959564208984,
+      "Speed": 19.162096,
+      "AngularVelocity": -1.5970087e-09,
+      "OffsetMeters": 5,
+      "TargetOffsetMeters": 5,
+      "Drive": 0.4,
+      "ActualSlipDegrees": -1.2674116e-08,
+      "TargetSlipDegrees": 2.4669755e-09,
+      "DriveForceNewtons": 120.02482,
+      "LateralForceNewtons": -3.8712933e-06,
+      "GripBudgetNewtons": 2138.2979,
+      "GripUtilization": 0.05613101,
+      "DrivePowerWatts": 2299.927,
+      "LateralLossWatts": 1.6409454e-14,
+      "ResistanceLossWatts": 2172.9546,
+      "RequestedNewtonMeters": 1.6289812e-06,
+      "AfterAuthorityNewtonMeters": 1.0835003e-06,
+      "AfterEnergyNewtonMeters": 1.0835003e-06,
+      "AppliedTorqueNewtonMeters": 1.0835003e-06,
+      "OrientationErrorRadians": 2.642619e-10,
+      "DissipationCreditWatts": 2172.079811692238,
+      "TranslationalPowerWatts": 126.97243,
+      "YawPowerWatts": -1.7303594e-15,
+      "KineticChangeJoules": 1.269561767578125,
+      "WorkJoules": 1.2697391510009777,
+      "ClearanceMeters": 5.599999999754715,
+      "PairSeparationMeters": 3.8146972941577317e-07
+    },
+    {
+      "TimeSeconds": 0.9,
+      "DurationSeconds": 0.010000000000000009,
+      "RiderId": 2,
+      "ReferenceMeters": 19.749954223632812,
+      "Speed": 19.162096,
+      "AngularVelocity": -1.3141029e-09,
+      "OffsetMeters": 5,
+      "TargetOffsetMeters": 5,
+      "Drive": 0.4,
+      "ActualSlipDegrees": -1.4461863e-08,
+      "TargetSlipDegrees": 5.2689733e-09,
+      "DriveForceNewtons": 120.02482,
+      "LateralForceNewtons": -4.417359e-06,
+      "GripBudgetNewtons": 2138.2979,
+      "GripUtilization": 0.05613101,
+      "DrivePowerWatts": 2299.927,
+      "LateralLossWatts": 2.1365219e-14,
+      "ResistanceLossWatts": 2172.9546,
+      "RequestedNewtonMeters": 1.5487385e-06,
+      "AfterAuthorityNewtonMeters": 1.0301276e-06,
+      "AfterEnergyNewtonMeters": 1.0301276e-06,
+      "AppliedTorqueNewtonMeters": 1.0301276e-06,
+      "OrientationErrorRadians": 3.4436806e-10,
+      "DissipationCreditWatts": 2172.079811692238,
+      "TranslationalPowerWatts": 126.97243,
+      "YawPowerWatts": -1.3536936e-15,
+      "KineticChangeJoules": 1.269561767578125,
+      "WorkJoules": 1.2697391510009777,
+      "ClearanceMeters": 5.599999999632544,
+      "PairSeparationMeters": 3.8146972941577317e-07
+    },
+    {
+      "TimeSeconds": 1,
+      "DurationSeconds": 0.010000000000000009,
+      "RiderId": 1,
+      "ReferenceMeters": 19.56661605834961,
+      "Speed": 19.176882,
+      "AngularVelocity": -1.1751746e-09,
+      "OffsetMeters": 5,
+      "TargetOffsetMeters": 5,
+      "Drive": 0.4,
+      "ActualSlipDegrees": -1.1174284e-08,
+      "TargetSlipDegrees": 5.3721743e-09,
+      "DriveForceNewtons": 157.83766,
+      "LateralForceNewtons": -3.4132647e-06,
+      "GripBudgetNewtons": 2138.2979,
+      "GripUtilization": 0.07381463,
+      "DrivePowerWatts": 3026.8342,
+      "LateralLossWatts": 1.2765712e-14,
+      "ResistanceLossWatts": 2176.806,
+      "RequestedNewtonMeters": 1.4858265e-06,
+      "AfterAuthorityNewtonMeters": 1.3000981e-06,
+      "AfterEnergyNewtonMeters": 1.3000981e-06,
+      "AppliedTorqueNewtonMeters": 1.3000981e-06,
+      "OrientationErrorRadians": 2.887902e-10,
+      "DissipationCreditWatts": 2175.9293797016144,
+      "TranslationalPowerWatts": 850.0284,
+      "YawPowerWatts": -1.5278423e-15,
+      "KineticChangeJoules": 8.494400024414062,
+      "WorkJoules": 8.500952148437507,
+      "ClearanceMeters": 5.599999999663378,
+      "PairSeparationMeters": 3.8149391551334233e-07
+    },
+    {
+      "TimeSeconds": 1,
+      "DurationSeconds": 0.010000000000000009,
+      "RiderId": 2,
+      "ReferenceMeters": 21.666610717773438,
+      "Speed": 19.176882,
+      "AngularVelocity": -9.916084e-10,
+      "OffsetMeters": 5,
+      "TargetOffsetMeters": 5,
+      "Drive": 0.4,
+      "ActualSlipDegrees": -1.396739e-08,
+      "TargetSlipDegrees": 0.038416866,
+      "DriveForceNewtons": 157.83766,
+      "LateralForceNewtons": -4.266439e-06,
+      "GripBudgetNewtons": 2138.2979,
+      "GripUtilization": 0.07381463,
+      "DrivePowerWatts": 3026.8342,
+      "LateralLossWatts": 1.9945098e-14,
+      "ResistanceLossWatts": 2176.806,
+      "RequestedNewtonMeters": 3.5349462,
+      "AfterAuthorityNewtonMeters": 3.093078,
+      "AfterEnergyNewtonMeters": 3.093078,
+      "AppliedTorqueNewtonMeters": 3.093078,
+      "OrientationErrorRadians": 0.0006705011,
+      "DissipationCreditWatts": 2175.9293797016144,
+      "TranslationalPowerWatts": 850.0284,
+      "YawPowerWatts": -3.067122e-09,
+      "KineticChangeJoules": 8.494409097711468,
+      "WorkJoules": 8.500961221753395,
+      "ClearanceMeters": 5.599997617026663,
+      "PairSeparationMeters": 3.8149391551334233e-07
+    },
+    {
+      "TimeSeconds": 1.1,
+      "DurationSeconds": 0.010000000000000009,
+      "RiderId": 1,
+      "ReferenceMeters": 21.48584747314453,
+      "Speed": 19.206926,
+      "AngularVelocity": -2.4572957e-11,
+      "OffsetMeters": 5,
+      "TargetOffsetMeters": 5,
+      "Drive": 0.4,
+      "ActualSlipDegrees": -8.4524165e-09,
+      "TargetSlipDegrees": 7.701817e-09,
+      "DriveForceNewtons": 157.72276,
+      "LateralForceNewtons": -2.5819943e-06,
+      "GripBudgetNewtons": 2138.2979,
+      "GripUtilization": 0.0737609,
+      "DrivePowerWatts": 3029.3694,
+      "LateralLossWatts": 7.315963e-15,
+      "ResistanceLossWatts": 2184.6472,
+      "RequestedNewtonMeters": 5.487438e-07,
+      "AfterAuthorityNewtonMeters": 4.8015085e-07,
+      "AfterEnergyNewtonMeters": 4.8015085e-07,
+      "AppliedTorqueNewtonMeters": 4.8015085e-07,
+      "OrientationErrorRadians": 2.8194458e-10,
+      "DissipationCreditWatts": 2183.7671217918396,
+      "TranslationalPowerWatts": 844.7223,
+      "YawPowerWatts": -1.1798726e-17,
+      "KineticChangeJoules": 8.445053100585938,
+      "WorkJoules": 8.447880859375008,
+      "ClearanceMeters": 5.599999999619964,
+      "PairSeparationMeters": 6.712872963887673e-06
+    },
+    {
+      "TimeSeconds": 1.1,
+      "DurationSeconds": 0.010000000000000009,
+      "RiderId": 2,
+      "ReferenceMeters": 23.58584213256836,
+      "Speed": 19.206926,
+      "AngularVelocity": 0.039685406,
+      "OffsetMeters": 4.99991512298584,
+      "TargetOffsetMeters": 5,
+      "Drive": 0.4,
+      "ActualSlipDegrees": 0.077370286,
+      "TargetSlipDegrees": 0.8469006,
+      "DriveForceNewtons": 157.72282,
+      "LateralForceNewtons": 23.633184,
+      "GripBudgetNewtons": 2138.298,
+      "GripUtilization": 0.07458436,
+      "DrivePowerWatts": 3029.368,
+      "LateralLossWatts": 0.61295927,
+      "ResistanceLossWatts": 2184.6472,
+      "RequestedNewtonMeters": 37.783554,
+      "AfterAuthorityNewtonMeters": 33.060608,
+      "AfterEnergyNewtonMeters": 33.060608,
+      "AppliedTorqueNewtonMeters": 33.060608,
+      "OrientationErrorRadians": 0.013430837,
+      "DissipationCreditWatts": 2184.34159219265,
+      "TranslationalPowerWatts": 844.108,
+      "YawPowerWatts": 1.3120236,
+      "KineticChangeJoules": 8.461452985833603,
+      "WorkJoules": 8.456087372303015,
+      "ClearanceMeters": 5.598577287189592,
+      "PairSeparationMeters": 6.712872963887673e-06
+    },
+    {
+      "TimeSeconds": 1.2,
+      "DurationSeconds": 0.010000000000000009,
+      "RiderId": 1,
+      "ReferenceMeters": 23.408069610595703,
+      "Speed": 19.236742,
+      "AngularVelocity": 0.03479224,
+      "OffsetMeters": 4.999943256378174,
+      "TargetOffsetMeters": 5,
+      "Drive": 0.4,
+      "ActualSlipDegrees": 0.06280021,
+      "TargetSlipDegrees": 0.7840188,
+      "DriveForceNewtons": 157.60875,
+      "LateralForceNewtons": 19.184113,
+      "GripBudgetNewtons": 2138.2974,
+      "GripUtilization": 0.0742516,
+      "DrivePowerWatts": 3031.877,
+      "LateralLossWatts": 0.40449357,
+      "ResistanceLossWatts": 2192.4495,
+      "RequestedNewtonMeters": 36.826107,
+      "AfterAuthorityNewtonMeters": 32.222843,
+      "AfterEnergyNewtonMeters": 32.222843,
+      "AppliedTorqueNewtonMeters": 32.222843,
+      "OrientationErrorRadians": 0.0125876395,
+      "DissipationCreditWatts": 2191.9449474215508,
+      "TranslationalPowerWatts": 839.0232,
+      "YawPowerWatts": 1.121105,
+      "KineticChangeJoules": 8.407901960541494,
+      "WorkJoules": 8.403202242851265,
+      "ClearanceMeters": 5.598850983196547,
+      "PairSeparationMeters": 0.00014354740603150784
+    },
+    {
+      "TimeSeconds": 1.2,
+      "DurationSeconds": 0.010000000000000009,
+      "RiderId": 2,
+      "ReferenceMeters": 25.508056640624996,
+      "Speed": 19.236582,
+      "AngularVelocity": 0.10788809,
+      "OffsetMeters": 4.997936725616455,
+      "TargetOffsetMeters": 5,
+      "Drive": 0.4,
+      "ActualSlipDegrees": 0.3784637,
+      "TargetSlipDegrees": 1.617158,
+      "DriveForceNewtons": 157.61093,
+      "LateralForceNewtons": 115.450035,
+      "GripBudgetNewtons": 2138.298,
+      "GripUtilization": 0.091367625,
+      "DrivePowerWatts": 3031.829,
+      "LateralLossWatts": 14.669669,
+      "ResistanceLossWatts": 2192.407,
+      "RequestedNewtonMeters": 43.238632,
+      "AfterAuthorityNewtonMeters": 37.8338,
+      "AfterEnergyNewtonMeters": 37.8338,
+      "AppliedTorqueNewtonMeters": 37.8338,
+      "OrientationErrorRadians": 0.021619296,
+      "DissipationCreditWatts": 2205.274484395981,
+      "TranslationalPowerWatts": 824.7528,
+      "YawPowerWatts": 4.0818167,
+      "KineticChangeJoules": 8.29657013522592,
+      "WorkJoules": 8.29494484901429,
+      "ClearanceMeters": 5.590920442004194,
+      "PairSeparationMeters": 0.00014354740603150784
+    },
+    {
+      "TimeSeconds": 1.3,
+      "DurationSeconds": 0.010000000000000009,
+      "RiderId": 1,
+      "ReferenceMeters": 25.3332576751709,
+      "Speed": 19.266193,
+      "AngularVelocity": 0.10230244,
+      "OffsetMeters": 4.998284816741943,
+      "TargetOffsetMeters": 5,
+      "Drive": 0.4,
+      "ActualSlipDegrees": 0.34732872,
+      "TargetSlipDegrees": 1.5610108,
+      "DriveForceNewtons": 157.49744,
+      "LateralForceNewtons": 105.98221,
+      "GripBudgetNewtons": 2138.2976,
+      "GripUtilization": 0.088778995,
+      "DrivePowerWatts": 3034.3198,
+      "LateralLossWatts": 12.377824,
+      "ResistanceLossWatts": 2200.176,
+      "RequestedNewtonMeters": 43.23836,
+      "AfterAuthorityNewtonMeters": 37.833565,
+      "AfterEnergyNewtonMeters": 37.833565,
+      "AppliedTorqueNewtonMeters": 37.833565,
+      "OrientationErrorRadians": 0.02118275,
+      "DissipationCreditWatts": 2210.892602443695,
+      "TranslationalPowerWatts": 821.76636,
+      "YawPowerWatts": 3.870466,
+      "KineticChangeJoules": 8.25408194830743,
+      "WorkJoules": 8.262233796119697,
+      "ClearanceMeters": 5.59191431112693,
+      "PairSeparationMeters": 0.0008274021668436271
+    },
+    {
+      "TimeSeconds": 1.3,
+      "DurationSeconds": 0.010000000000000009,
+      "RiderId": 2,
+      "ReferenceMeters": 27.43315315246582,
+      "Speed": 19.264923,
+      "AngularVelocity": 0.179378,
+      "OffsetMeters": 4.9880452156066895,
+      "TargetOffsetMeters": 5,
+      "Drive": 0.4,
+      "ActualSlipDegrees": 0.8473194,
+      "TargetSlipDegrees": 2.3206801,
+      "DriveForceNewtons": 157.50899,
+      "LateralForceNewtons": 257.0027,
+      "GripBudgetNewtons": 2138.2976,
+      "GripUtilization": 0.14096683,
+      "DrivePowerWatts": 3034.0667,
+      "LateralLossWatts": 73.21728,
+      "ResistanceLossWatts": 2199.8423,
+      "RequestedNewtonMeters": 42.047394,
+      "AfterAuthorityNewtonMeters": 36.79147,
+      "AfterEnergyNewtonMeters": 36.79147,
+      "AppliedTorqueNewtonMeters": 36.79147,
+      "OrientationErrorRadians": 0.025714995,
+      "DissipationCreditWatts": 2267.6202783584595,
+      "TranslationalPowerWatts": 761.0072,
+      "YawPowerWatts": 6.5995803,
+      "KineticChangeJoules": 7.693622182152467,
+      "WorkJoules": 7.70075184345246,
+      "ClearanceMeters": 5.569993703567107,
+      "PairSeparationMeters": 0.0008274021668436271
+    },
+    {
+      "TimeSeconds": 1.4000000000000001,
+      "DurationSeconds": 0.009999999999999787,
+      "RiderId": 1,
+      "ReferenceMeters": 27.261316299438477,
+      "Speed": 19.294437,
+      "AngularVelocity": 0.17409107,
+      "OffsetMeters": 4.989337921142578,
+      "TargetOffsetMeters": 5,
+      "Drive": 0.4,
+      "ActualSlipDegrees": 0.807335,
+      "TargetSlipDegrees": 2.2740023,
+      "DriveForceNewtons": 157.39537,
+      "LateralForceNewtons": 245.04948,
+      "GripBudgetNewtons": 2138.2976,
+      "GripUtilization": 0.13620327,
+      "DrivePowerWatts": 3036.5537,
+      "LateralLossWatts": 66.619705,
+      "ResistanceLossWatts": 2207.6047,
+      "RequestedNewtonMeters": 42.42074,
+      "AfterAuthorityNewtonMeters": 37.118145,
+      "AfterEnergyNewtonMeters": 37.118145,
+      "AppliedTorqueNewtonMeters": 37.118145,
+      "OrientationErrorRadians": 0.025598176,
+      "DissipationCreditWatts": 2269.195153236389,
+      "TranslationalPowerWatts": 762.329,
+      "YawPowerWatts": 6.4619374,
+      "KineticChangeJoules": 7.714699323078094,
+      "WorkJoules": 7.710539064407184,
+      "ClearanceMeters": 5.572351343435452,
+      "PairSeparationMeters": 0.0024279329162777974
+    },
+    {
+      "TimeSeconds": 1.4000000000000001,
+      "DurationSeconds": 0.009999999999999787,
+      "RiderId": 2,
+      "ReferenceMeters": 29.360763549804688,
+      "Speed": 19.290043,
+      "AngularVelocity": 0.24573079,
+      "OffsetMeters": 4.9607672691345215,
+      "TargetOffsetMeters": 5,
+      "Drive": 0.4,
+      "ActualSlipDegrees": 1.4015907,
+      "TargetSlipDegrees": 2.9214108,
+      "DriveForceNewtons": 157.42693,
+      "LateralForceNewtons": 419.95413,
+      "GripBudgetNewtons": 2138.2979,
+      "GripUtilization": 0.20974234,
+      "DrivePowerWatts": 3035.8638,
+      "LateralLossWatts": 198.1483,
+      "ResistanceLossWatts": 2206.448,
+      "RequestedNewtonMeters": 36.750263,
+      "AfterAuthorityNewtonMeters": 32.15648,
+      "AfterEnergyNewtonMeters": 32.15648,
+      "AppliedTorqueNewtonMeters": 32.15648,
+      "OrientationErrorRadians": 0.026525864,
+      "DissipationCreditWatts": 2391.5490350723267,
+      "TranslationalPowerWatts": 631.2674,
+      "YawPowerWatts": 7.901837,
+      "KineticChangeJoules": 6.456967048237857,
+      "WorkJoules": 6.454093275070053,
+      "ClearanceMeters": 5.526350763719588,
+      "PairSeparationMeters": 0.0024279329162777974
+    },
+    {
+      "TimeSeconds": 1.5,
+      "DurationSeconds": 0.010000000000000009,
+      "RiderId": 1,
+      "ReferenceMeters": 29.191905975341797,
+      "Speed": 19.319647,
+      "AngularVelocity": 0.24129203,
+      "OffsetMeters": 4.963809967041016,
+      "TargetOffsetMeters": 5,
+      "Drive": 0.4,
+      "ActualSlipDegrees": 1.3594581,
+      "TargetSlipDegrees": 2.8871944,
+      "DriveForceNewtons": 157.31242,
+      "LateralForceNewtons": 407.81265,
+      "GripBudgetNewtons": 2138.2976,
+      "GripUtilization": 0.20441599,
+      "DrivePowerWatts": 3038.365,
+      "LateralLossWatts": 186.92282,
+      "ResistanceLossWatts": 2214.2515,
+      "RequestedNewtonMeters": 37.41947,
+      "AfterAuthorityNewtonMeters": 32.74204,
+      "AfterEnergyNewtonMeters": 32.74204,
+      "AppliedTorqueNewtonMeters": 32.74204,
+      "OrientationErrorRadians": 0.02666403,
+      "DissipationCreditWatts": 2388.8161401748657,
+      "TranslationalPowerWatts": 637.1911,
+      "YawPowerWatts": 7.900393,
+      "KineticChangeJoules": 6.519794293108134,
+      "WorkJoules": 6.509877824783332,
+      "ClearanceMeters": 5.530833141740848,
+      "PairSeparationMeters": 0.004878557935862449
+    },
+    {
+      "TimeSeconds": 1.5,
+      "DurationSeconds": 0.010000000000000009,
+      "RiderId": 2,
+      "ReferenceMeters": 31.28999900817871,
+      "Speed": 19.309708,
+      "AngularVelocity": 0.3005953,
+      "OffsetMeters": 4.9050679206848145,
+      "TargetOffsetMeters": 5,
+      "Drive": 0.4,
+      "ActualSlipDegrees": 1.9727652,
+      "TargetSlipDegrees": 3.38179,
+      "DriveForceNewtons": 157.37341,
+      "LateralForceNewtons": 580.33575,
+      "GripBudgetNewtons": 2138.2983,
+      "GripUtilization": 0.2812027,
+      "DrivePowerWatts": 3037.0332,
+      "LateralLossWatts": 385.76428,
+      "ResistanceLossWatts": 2211.629,
+      "RequestedNewtonMeters": 28.002007,
+      "AfterAuthorityNewtonMeters": 24.501755,
+      "AfterEnergyNewtonMeters": 24.501755,
+      "AppliedTorqueNewtonMeters": 24.501755,
+      "OrientationErrorRadians": 0.02459212,
+      "DissipationCreditWatts": 2573.27862739563,
+      "TranslationalPowerWatts": 439.64005,
+      "YawPowerWatts": 7.365113,
+      "KineticChangeJoules": 4.582735741078068,
+      "WorkJoules": 4.587363185882572,
+      "ClearanceMeters": 5.449654413365174,
+      "PairSeparationMeters": 0.004878557935862449
+    },
+    {
+      "TimeSeconds": 1.6,
+      "DurationSeconds": 0.010000000000000009,
+      "RiderId": 1,
+      "ReferenceMeters": 31.124187469482422,
+      "Speed": 19.339527,
+      "AngularVelocity": 0.29743937,
+      "OffsetMeters": 4.91068696975708,
+      "TargetOffsetMeters": 5,
+      "Drive": 0.4,
+      "ActualSlipDegrees": 1.9338676,
+      "TargetSlipDegrees": 3.362479,
+      "DriveForceNewtons": 157.25772,
+      "LateralForceNewtons": 569.7336,
+      "GripBudgetNewtons": 2138.2976,
+      "GripUtilization": 0.27640605,
+      "DrivePowerWatts": 3039.5579,
+      "LateralLossWatts": 371.82565,
+      "ResistanceLossWatts": 2219.5034,
+      "RequestedNewtonMeters": 28.878017,
+      "AfterAuthorityNewtonMeters": 25.268265,
+      "AfterEnergyNewtonMeters": 25.268265,
+      "AppliedTorqueNewtonMeters": 25.268265,
+      "OrientationErrorRadians": 0.024933975,
+      "DissipationCreditWatts": 2568.0514965057373,
+      "TranslationalPowerWatts": 448.2288,
+      "YawPowerWatts": 7.5157766,
+      "KineticChangeJoules": 4.678485140175326,
+      "WorkJoules": 4.67058049678803,
+      "ClearanceMeters": 5.456997540316525,
+      "PairSeparationMeters": 0.007680237225339559
+    },
+    {
+      "TimeSeconds": 1.6,
+      "DurationSeconds": 0.010000000000000009,
+      "RiderId": 2,
+      "ReferenceMeters": 33.21928787231445,
+      "Speed": 19.322174,
+      "AngularVelocity": 0.33912733,
+      "OffsetMeters": 4.810028553009033,
+      "TargetOffsetMeters": 5,
+      "Drive": 0.4,
+      "ActualSlipDegrees": 2.5028052,
+      "TargetSlipDegrees": 3.6736507,
+      "DriveForceNewtons": 157.35246,
+      "LateralForceNewtons": 720.4279,
+      "GripBudgetNewtons": 2138.2979,
+      "GripUtilization": 0.34485924,
+      "DrivePowerWatts": 3037.4912,
+      "LateralLossWatts": 607.873,
+      "ResistanceLossWatts": 2214.9182,
+      "RequestedNewtonMeters": 17.162134,
+      "AfterAuthorityNewtonMeters": 15.016868,
+      "AfterEnergyNewtonMeters": 15.016868,
+      "AppliedTorqueNewtonMeters": 15.016868,
+      "OrientationErrorRadians": 0.020435113,
+      "DissipationCreditWatts": 2786.099422454834,
+      "TranslationalPowerWatts": 214.70032,
+      "YawPowerWatts": 5.0926304,
+      "KineticChangeJoules": 2.3771750709238404,
+      "WorkJoules": 2.377765536308291,
+      "ClearanceMeters": 5.330184503292065,
+      "PairSeparationMeters": 0.007680237225339559
+    },
+    {
+      "TimeSeconds": 1.7,
+      "DurationSeconds": 0.010000000000000009,
+      "RiderId": 1,
+      "ReferenceMeters": 33.05663871765137,
+      "Speed": 19.352228,
+      "AngularVelocity": 0.33745125,
+      "OffsetMeters": 4.818970203399658,
+      "TargetOffsetMeters": 5,
+      "Drive": 0.4,
+      "ActualSlipDegrees": 2.470955,
+      "TargetSlipDegrees": 3.6698372,
+      "DriveForceNewtons": 157.23582,
+      "LateralForceNewtons": 712.3075,
+      "GripBudgetNewtons": 2138.2976,
+      "GripUtilization": 0.34113836,
+      "DrivePowerWatts": 3040.0342,
+      "LateralLossWatts": 594.3004,
+      "ResistanceLossWatts": 2222.863,
+      "RequestedNewtonMeters": 18.09652,
+      "AfterAuthorityNewtonMeters": 15.834455,
+      "AfterEnergyNewtonMeters": 15.834455,
+      "AppliedTorqueNewtonMeters": 15.834455,
+      "OrientationErrorRadians": 0.020924442,
+      "DissipationCreditWatts": 2781.2702293395996,
+      "TranslationalPowerWatts": 222.87067,
+      "YawPowerWatts": 5.3433566,
+      "KineticChangeJoules": 2.462699043277098,
+      "WorkJoules": 2.4579779958724997,
+      "ClearanceMeters": 5.341016802111042,
+      "PairSeparationMeters": 0.010048356965396688
+    },
+    {
+      "TimeSeconds": 1.7,
+      "DurationSeconds": 0.010000000000000009,
+      "RiderId": 2,
+      "ReferenceMeters": 35.127229847067056,
+      "Speed": 19.325823,
+      "AngularVelocity": 0.35933188,
+      "OffsetMeters": 4.666438579559326,
+      "TargetOffsetMeters": 5,
+      "Drive": 0.4,
+      "ActualSlipDegrees": 2.94278,
+      "TargetSlipDegrees": 3.832648,
+      "DriveForceNewtons": 136.7664,
+      "LateralForceNewtons": 829.4303,
+      "GripBudgetNewtons": 2138.2979,
+      "GripUtilization": 0.39313072,
+      "DrivePowerWatts": 2639.638,
+      "LateralLossWatts": 822.92865,
+      "ResistanceLossWatts": 2215.8818,
+      "RequestedNewtonMeters": 10.232626,
+      "AfterAuthorityNewtonMeters": 8.9535475,
+      "AfterEnergyNewtonMeters": 8.9535475,
+      "AppliedTorqueNewtonMeters": 8.9535475,
+      "OrientationErrorRadians": 0.015531126,
+      "DissipationCreditWatts": 2990.4522438049316,
+      "TranslationalPowerWatts": -399.17236,
+      "YawPowerWatts": 3.217295,
+      "KineticChangeJoules": -3.7248470063277637,
+      "WorkJoules": -3.721973435878757,
+      "ClearanceMeters": 5.167112405623902,
+      "PairSeparationMeters": 0.010048356965396688
+    },
+    {
+      "TimeSeconds": 1.8,
+      "DurationSeconds": 0.0006729999999999237,
+      "RiderId": 1,
+      "ReferenceMeters": 34.987043380737305,
+      "Speed": 19.357199,
+      "AngularVelocity": 0.35915425,
+      "OffsetMeters": 4.678890228271484,
+      "TargetOffsetMeters": 5,
+      "Drive": 0.4,
+      "ActualSlipDegrees": 2.9220748,
+      "TargetSlipDegrees": 3.8011746,
+      "DriveForceNewtons": 157.24426,
+      "LateralForceNewtons": 824.4962,
+      "GripBudgetNewtons": 2138.298,
+      "GripUtilization": 0.39253497,
+      "DrivePowerWatts": 3039.8506,
+      "LateralLossWatts": 813.60126,
+      "ResistanceLossWatts": 2224.1792,
+      "RequestedNewtonMeters": 7.1126924,
+      "AfterAuthorityNewtonMeters": 6.2236056,
+      "AfterEnergyNewtonMeters": 6.2236056,
+      "AppliedTorqueNewtonMeters": 6.2236056,
+      "OrientationErrorRadians": 0.015343189,
+      "DissipationCreditWatts": 2989.9807777404785,
+      "TranslationalPowerWatts": 2.0703125,
+      "YawPowerWatts": 2.2352345,
+      "KineticChangeJoules": -0.0007395651737169828,
+      "WorkJoules": 0.003962752853631524,
+      "ClearanceMeters": 5.192416291499356,
+      "PairSeparationMeters": 0.010836430753456583
+    },
+    {
+      "TimeSeconds": 1.8,
+      "DurationSeconds": 0.0006729999999999237,
+      "RiderId": 2,
+      "ReferenceMeters": 36.805298620707504,
+      "Speed": 19.309568,
+      "AngularVelocity": 0.39321855,
+      "OffsetMeters": 4.52626371383667,
+      "TargetOffsetMeters": 5,
+      "Drive": 0.4,
+      "ActualSlipDegrees": 3.321627,
+      "TargetSlipDegrees": 4.4229813,
+      "DriveForceNewtons": 136.84355,
+      "LateralForceNewtons": 917.63367,
+      "GripBudgetNewtons": 2138.2976,
+      "GripUtilization": 0.43388772,
+      "DrivePowerWatts": 2637.951,
+      "LateralLossWatts": 1026.6605,
+      "ResistanceLossWatts": 2211.5928,
+      "RequestedNewtonMeters": 26.79691,
+      "AfterAuthorityNewtonMeters": 23.447296,
+      "AfterEnergyNewtonMeters": 23.447296,
+      "AppliedTorqueNewtonMeters": 23.447296,
+      "OrientationErrorRadians": 0.019222267,
+      "DissipationCreditWatts": 3179.249988555908,
+      "TranslationalPowerWatts": -600.30225,
+      "YawPowerWatts": 9.219912,
+      "KineticChangeJoules": -0.3863245235661452,
+      "WorkJoules": -0.3964792958049324,
+      "ClearanceMeters": 5.051177160458044,
+      "PairSeparationMeters": 0.010836430753456583
+    },
+    {
+      "TimeSeconds": 1.9000000000000001,
+      "DurationSeconds": 0.010000000000000009,
+      "RiderId": 1,
+      "ReferenceMeters": 36.66879883022767,
+      "Speed": 19.341145,
+      "AngularVelocity": 0.39043644,
+      "OffsetMeters": 4.534454822540283,
+      "TargetOffsetMeters": 5,
+      "Drive": 0.4,
+      "ActualSlipDegrees": 3.3015742,
+      "TargetSlipDegrees": 4.3919,
+      "DriveForceNewtons": 136.73746,
+      "LateralForceNewtons": 913.1395,
+      "GripBudgetNewtons": 2138.2976,
+      "GripUtilization": 0.43180174,
+      "DrivePowerWatts": 2640.2695,
+      "LateralLossWatts": 1017.13214,
+      "ResistanceLossWatts": 2219.931,
+      "RequestedNewtonMeters": 26.505156,
+      "AfterAuthorityNewtonMeters": 23.19201,
+      "AfterEnergyNewtonMeters": 23.19201,
+      "AppliedTorqueNewtonMeters": 23.19201,
+      "OrientationErrorRadians": 0.019029777,
+      "DissipationCreditWatts": 3178.6229248046875,
+      "TranslationalPowerWatts": -596.7937,
+      "YawPowerWatts": 9.055006,
+      "KineticChangeJoules": -5.583835016444937,
+      "WorkJoules": -5.588973999023442,
+      "ClearanceMeters": 5.048028976119372,
+      "PairSeparationMeters": 0.011217489876074183
+    },
+    {
+      "TimeSeconds": 1.9000000000000001,
+      "DurationSeconds": 0.010000000000000009,
+      "RiderId": 2,
+      "ReferenceMeters": 38.48951130513737,
+      "Speed": 19.285753,
+      "AngularVelocity": 0.43856445,
+      "OffsetMeters": 4.428187370300293,
+      "TargetOffsetMeters": 5,
+      "Drive": 0.4,
+      "ActualSlipDegrees": 3.756191,
+      "TargetSlipDegrees": 4.9925737,
+      "DriveForceNewtons": 136.95258,
+      "LateralForceNewtons": 1012.2319,
+      "GripBudgetNewtons": 2138.2979,
+      "GripUtilization": 0.47769517,
+      "DrivePowerWatts": 2635.56,
+      "LateralLossWatts": 1278.8823,
+      "ResistanceLossWatts": 2205.3188,
+      "RequestedNewtonMeters": 26.752256,
+      "AfterAuthorityNewtonMeters": 23.408224,
+      "AfterEnergyNewtonMeters": 23.408224,
+      "AppliedTorqueNewtonMeters": 23.408224,
+      "OrientationErrorRadians": 0.021578945,
+      "DissipationCreditWatts": 3412.5784072875977,
+      "TranslationalPowerWatts": -848.6411,
+      "YawPowerWatts": 10.266015,
+      "KineticChangeJoules": -8.03681846136169,
+      "WorkJoules": -8.0293641281128,
+      "ClearanceMeters": 4.954376348554696,
+      "PairSeparationMeters": 0.011217489876074183
+    }
+  ],
+  "ContactPoints": [
+    {
+      "TimeSeconds": 0.46,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 10.081609,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": -2.4073268e-09
+      },
+      "SeparationMeters": 0.015674531,
+      "NormalVelocityMetersPerSecond": -1.9310608,
+      "NormalImpulseNewtonSeconds": 35.145943,
+      "TotalNormalImpulseNewtonSeconds": 141.79431,
+      "TangentImpulseNewtonSeconds": -6.3938685e-08,
+      "Persisted": false,
+      "PreStepPointNormalVelocityMetersPerSecond": -1.931060791015625
+    },
+    {
+      "TimeSeconds": 0.47000000000000003,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 10.273016,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": -2.4191484e-09
+      },
+      "SeparationMeters": 8.940697e-07,
+      "NormalVelocityMetersPerSecond": -0.00038146973,
+      "NormalImpulseNewtonSeconds": 1.5291804e-09,
+      "TotalNormalImpulseNewtonSeconds": 0.02803803,
+      "TangentImpulseNewtonSeconds": -3.058361e-10,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": -0.0003814697265625
+    },
+    {
+      "TimeSeconds": 0.48,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 10.464438,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": -2.133868e-09
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": 1.2606704e-18,
+      "NormalImpulseNewtonSeconds": 1.0306607e-09,
+      "TotalNormalImpulseNewtonSeconds": 4.809129e-09,
+      "TangentImpulseNewtonSeconds": -2.0613214e-10,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 1.2606694722475406e-18
+    },
+    {
+      "TimeSeconds": 0.49,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 10.655866,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": -1.8764545e-09
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": 2.4600835e-18,
+      "NormalImpulseNewtonSeconds": 6.9465983e-10,
+      "TotalNormalImpulseNewtonSeconds": 3.2413288e-09,
+      "TangentImpulseNewtonSeconds": -1.3893196e-10,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 2.460082704617926e-18
+    },
+    {
+      "TimeSeconds": 0.5,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 10.847298,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": -1.6457721e-09
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": 3.1967681e-18,
+      "NormalImpulseNewtonSeconds": 4.681962e-10,
+      "TotalNormalImpulseNewtonSeconds": 2.1846362e-09,
+      "TangentImpulseNewtonSeconds": -9.363924e-11,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 3.1967681037964274e-18
+    },
+    {
+      "TimeSeconds": 0.51,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 11.0387335,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": -1.4384562e-09
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": 3.586095e-18,
+      "NormalImpulseNewtonSeconds": 3.1556052e-10,
+      "TotalNormalImpulseNewtonSeconds": 1.4724286e-09,
+      "TangentImpulseNewtonSeconds": -6.3112106e-11,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 3.5860951347552296e-18
+    },
+    {
+      "TimeSeconds": 0.52,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 11.230174,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": -1.2515309e-09
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": 3.718598e-18,
+      "NormalImpulseNewtonSeconds": 2.1268463e-10,
+      "TotalNormalImpulseNewtonSeconds": 9.924036e-10,
+      "TangentImpulseNewtonSeconds": -4.253693e-11,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 3.718597888357649e-18
+    },
+    {
+      "TimeSeconds": 0.53,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 11.421619,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": -1.0823907e-09
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": 3.6641607e-18,
+      "NormalImpulseNewtonSeconds": 1.4334674e-10,
+      "TotalNormalImpulseNewtonSeconds": 6.688687e-10,
+      "TangentImpulseNewtonSeconds": -2.8669348e-11,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 3.664161132245534e-18
+    },
+    {
+      "TimeSeconds": 0.54,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 11.61307,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": -9.2877084e-10
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": 3.476083e-18,
+      "NormalImpulseNewtonSeconds": 9.6613384e-11,
+      "TotalNormalImpulseNewtonSeconds": 4.508076e-10,
+      "TangentImpulseNewtonSeconds": -1.9322677e-11,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 3.476082181237208e-18
+    },
+    {
+      "TimeSeconds": 0.55,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 11.804524,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": -7.887152e-10
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": 3.1946513e-18,
+      "NormalImpulseNewtonSeconds": 6.511544e-11,
+      "TotalNormalImpulseNewtonSeconds": 3.0383593e-10,
+      "TangentImpulseNewtonSeconds": -1.3023089e-11,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 3.1946513486089042e-18
+    },
+    {
+      "TimeSeconds": 0.56,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 11.995984,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": -6.605395e-10
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": 2.8500965e-18,
+      "NormalImpulseNewtonSeconds": 4.3886124e-11,
+      "TotalNormalImpulseNewtonSeconds": 2.0477832e-10,
+      "TangentImpulseNewtonSeconds": -8.777225e-12,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 2.8500962954851473e-18
+    },
+    {
+      "TimeSeconds": 0.5700000000000001,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 12.1874485,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": -5.42799e-10
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": 2.4649624e-18,
+      "NormalImpulseNewtonSeconds": 2.957785e-11,
+      "TotalNormalImpulseNewtonSeconds": 1.380146e-10,
+      "TangentImpulseNewtonSeconds": -5.91557e-12,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 2.4649626566416827e-18
+    },
+    {
+      "TimeSeconds": 0.58,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 12.378918,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": -4.3425563e-10
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": 2.055972e-18,
+      "NormalImpulseNewtonSeconds": 1.9934337e-11,
+      "TotalNormalImpulseNewtonSeconds": 9.301694e-11,
+      "TangentImpulseNewtonSeconds": -3.9868677e-12,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 2.055972094956423e-18
+    },
+    {
+      "TimeSeconds": 0.59,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 12.570391,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": -3.338505e-10
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": 1.6354615e-18,
+      "NormalImpulseNewtonSeconds": 1.3434859e-11,
+      "TotalNormalImpulseNewtonSeconds": 6.2689534e-11,
+      "TangentImpulseNewtonSeconds": -2.686972e-12,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 1.635461492277714e-18
+    },
+    {
+      "TimeSeconds": 0.6,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 12.7618685,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": -2.4067895e-10
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": 1.2124823e-18,
+      "NormalImpulseNewtonSeconds": 9.054446e-12,
+      "TotalNormalImpulseNewtonSeconds": 4.224983e-11,
+      "TangentImpulseNewtonSeconds": -1.8108893e-12,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 1.212482272458417e-18
+    },
+    {
+      "TimeSeconds": 0.61,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 12.953351,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": -1.5396677e-10
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": 7.936255e-19,
+      "NormalImpulseNewtonSeconds": 6.102272e-12,
+      "TotalNormalImpulseNewtonSeconds": 2.8474376e-11,
+      "TangentImpulseNewtonSeconds": -1.2204544e-12,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 7.936256174145078e-19
+    },
+    {
+      "TimeSeconds": 0.62,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 13.144838,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": -7.305205e-11
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": 3.8365366e-19,
+      "NormalImpulseNewtonSeconds": 4.1127197e-12,
+      "TotalNormalImpulseNewtonSeconds": 1.919059e-11,
+      "TangentImpulseNewtonSeconds": -8.2254396e-13,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 3.8365360593245407e-19
+    },
+    {
+      "TimeSeconds": 0.63,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 13.33633,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": 2.6317074e-12
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": -1.4031896e-20,
+      "NormalImpulseNewtonSeconds": 2.7719645e-12,
+      "TotalNormalImpulseNewtonSeconds": 1.2934141e-11,
+      "TangentImpulseNewtonSeconds": -5.543929e-13,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": -1.4031896092501758e-20
+    },
+    {
+      "TimeSeconds": 0.64,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 13.527826,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": 7.357008e-11
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": -3.9703964e-19,
+      "NormalImpulseNewtonSeconds": 1.868488e-12,
+      "TotalNormalImpulseNewtonSeconds": 8.718082e-12,
+      "TangentImpulseNewtonSeconds": -3.736976e-13,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": -3.970396112914583e-19
+    },
+    {
+      "TimeSeconds": 0.65,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 13.719327,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": 1.4018021e-10
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": -7.6372847e-19,
+      "NormalImpulseNewtonSeconds": 1.259727e-12,
+      "TotalNormalImpulseNewtonSeconds": 5.8772e-12,
+      "TangentImpulseNewtonSeconds": -2.519454e-13,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": -7.637284149446975e-19
+    },
+    {
+      "TimeSeconds": 0.66,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 13.910832,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": 2.0282097e-10
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": -1.113012e-18,
+      "NormalImpulseNewtonSeconds": 8.4959443e-13,
+      "TotalNormalImpulseNewtonSeconds": 3.9631484e-12,
+      "TangentImpulseNewtonSeconds": -1.6991889e-13,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": -1.1130120460401138e-18
+    },
+    {
+      "TimeSeconds": 0.67,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 14.102343,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": 2.6180202e-10
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": -1.4442145e-18,
+      "NormalImpulseNewtonSeconds": 5.7332736e-13,
+      "TotalNormalImpulseNewtonSeconds": 2.6737414e-12,
+      "TangentImpulseNewtonSeconds": -1.1466548e-13,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": -1.4442144395233101e-18
+    },
+    {
+      "TimeSeconds": 0.68,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 14.293858,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": 3.1739167e-10
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": -1.7569672e-18,
+      "NormalImpulseNewtonSeconds": 3.8727582e-13,
+      "TotalNormalImpulseNewtonSeconds": 1.8053045e-12,
+      "TangentImpulseNewtonSeconds": -7.7455166e-14,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": -1.7569671898289706e-18
+    },
+    {
+      "TimeSeconds": 0.6900000000000001,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 14.485376,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": 3.6982273e-10
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": -2.0511269e-18,
+      "NormalImpulseNewtonSeconds": 2.6202014e-13,
+      "TotalNormalImpulseNewtonSeconds": 1.2205634e-12,
+      "TangentImpulseNewtonSeconds": -5.2404028e-14,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": -2.0511266777232406e-18
+    },
+    {
+      "TimeSeconds": 0.7000000000000001,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 14.6769,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": 4.1929854e-10
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": -2.326718e-18,
+      "NormalImpulseNewtonSeconds": 1.777314e-13,
+      "TotalNormalImpulseNewtonSeconds": 8.269955e-13,
+      "TangentImpulseNewtonSeconds": -3.5546283e-14,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": -2.3267178220220734e-18
+    },
+    {
+      "TimeSeconds": 0.71,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 14.868428,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": 4.6599724e-10
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": -2.5838918e-18,
+      "NormalImpulseNewtonSeconds": 1.2104518e-13,
+      "TotalNormalImpulseNewtonSeconds": 5.622413e-13,
+      "TangentImpulseNewtonSeconds": -2.4209037e-14,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": -2.583891789982413e-18
+    },
+    {
+      "TimeSeconds": 0.72,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 15.05996,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": 5.1007726e-10
+      },
+      "SeparationMeters": -1.013279e-06,
+      "NormalVelocityMetersPerSecond": -2.8229021e-18,
+      "NormalImpulseNewtonSeconds": 8.344557e-05,
+      "TotalNormalImpulseNewtonSeconds": 0.00021887379,
+      "TangentImpulseNewtonSeconds": 7.413119e-11,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": -2.822902112462007e-18
+    },
+    {
+      "TimeSeconds": 0.73,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 15.251498,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": 7.3030787e-10
+      },
+      "SeparationMeters": -1.013279e-06,
+      "NormalVelocityMetersPerSecond": 0,
+      "NormalImpulseNewtonSeconds": 0.00013968756,
+      "TotalNormalImpulseNewtonSeconds": 0.00048130238,
+      "TangentImpulseNewtonSeconds": -2.7516442e-09,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": -1.6216092240873795e-25
+    },
+    {
+      "TimeSeconds": 0.74,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 15.44304,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": 9.454152e-10
+      },
+      "SeparationMeters": -1.013279e-06,
+      "NormalVelocityMetersPerSecond": 0,
+      "NormalImpulseNewtonSeconds": 4.5824738e-05,
+      "TotalNormalImpulseNewtonSeconds": 0.00022047502,
+      "TangentImpulseNewtonSeconds": -2.6712226e-09,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0
+    },
+    {
+      "TimeSeconds": 0.75,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 15.634587,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": 1.1542866e-09
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": 2.0504248e-24,
+      "NormalImpulseNewtonSeconds": 3.08857e-05,
+      "TotalNormalImpulseNewtonSeconds": 0.00014411456,
+      "TangentImpulseNewtonSeconds": -2.598255e-09,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 2.306727894479391e-24
+    },
+    {
+      "TimeSeconds": 0.76,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 15.8261385,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": 1.357213e-09
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": -3.0136183e-25,
+      "NormalImpulseNewtonSeconds": 2.0816846e-05,
+      "TotalNormalImpulseNewtonSeconds": 9.713268e-05,
+      "TangentImpulseNewtonSeconds": -2.5321716e-09,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": -3.0136182630388876e-25
+    },
+    {
+      "TimeSeconds": 0.77,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 16.017694,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": 1.5544593e-09
+      },
+      "SeparationMeters": -1.013279e-06,
+      "NormalVelocityMetersPerSecond": -3.1064339e-24,
+      "NormalImpulseNewtonSeconds": 9.747606e-05,
+      "TotalNormalImpulseNewtonSeconds": 0.00028434087,
+      "TangentImpulseNewtonSeconds": -2.47225e-09,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": -2.7612744784483958e-24
+    },
+    {
+      "TimeSeconds": 0.78,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 16.209255,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": 1.7462588e-09
+      },
+      "SeparationMeters": -1.013279e-06,
+      "NormalVelocityMetersPerSecond": -3.8774735e-25,
+      "NormalImpulseNewtonSeconds": 0.00014914403,
+      "TotalNormalImpulseNewtonSeconds": 0.00052542693,
+      "TangentImpulseNewtonSeconds": -2.4181082e-09,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 3.8774734628098993e-25
+    },
+    {
+      "TimeSeconds": 0.79,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 16.40082,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": 1.9328383e-09
+      },
+      "SeparationMeters": -1.013279e-06,
+      "NormalVelocityMetersPerSecond": 0,
+      "NormalImpulseNewtonSeconds": 6.556208e-05,
+      "TotalNormalImpulseNewtonSeconds": 0.00013542821,
+      "TangentImpulseNewtonSeconds": -2.369505e-09,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 6.437644863285467e-25
+    },
+    {
+      "TimeSeconds": 0.8,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 16.592388,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": 2.1143984e-09
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": 3.521181e-24,
+      "NormalImpulseNewtonSeconds": 4.4188597e-05,
+      "TotalNormalImpulseNewtonSeconds": 0.0002061867,
+      "TangentImpulseNewtonSeconds": -2.3256204e-09,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 3.2864353547025804e-24
+    },
+    {
+      "TimeSeconds": 0.81,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 16.783962,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": 2.2911424e-09
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": 0,
+      "NormalImpulseNewtonSeconds": 2.9782945e-05,
+      "TotalNormalImpulseNewtonSeconds": 0.00013896906,
+      "TangentImpulseNewtonSeconds": -2.2861824e-09,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": -7.631037091970274e-25
+    },
+    {
+      "TimeSeconds": 0.8200000000000001,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 16.975542,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": 2.4632494e-09
+      },
+      "SeparationMeters": -1.013279e-06,
+      "NormalVelocityMetersPerSecond": -4.37561e-24,
+      "NormalImpulseNewtonSeconds": 0.00010351912,
+      "TotalNormalImpulseNewtonSeconds": 0.00031253824,
+      "TangentImpulseNewtonSeconds": -2.2506084e-09,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": -4.3756098872996685e-24
+    },
+    {
+      "TimeSeconds": 0.8300000000000001,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 17.167124,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": 2.6308618e-09
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": 4.0891804e-24,
+      "NormalImpulseNewtonSeconds": 6.97715e-05,
+      "TotalNormalImpulseNewtonSeconds": 0.0003255581,
+      "TangentImpulseNewtonSeconds": -2.2190019e-09,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 4.089180409070708e-24
+    },
+    {
+      "TimeSeconds": 0.84,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 17.358711,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": 2.7941554e-09
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": 0,
+      "NormalImpulseNewtonSeconds": 4.7025726e-05,
+      "TotalNormalImpulseNewtonSeconds": 0.00021942491,
+      "TangentImpulseNewtonSeconds": -2.1907922e-09,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": -1.2408542422626555e-24
+    },
+    {
+      "TimeSeconds": 0.85,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 17.550304,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": 2.9532654e-09
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": -6.5575665e-25,
+      "NormalImpulseNewtonSeconds": 3.1695163e-05,
+      "TotalNormalImpulseNewtonSeconds": 0.00014789157,
+      "TangentImpulseNewtonSeconds": -2.1656992e-09,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": -6.557566512021034e-25
+    },
+    {
+      "TimeSeconds": 0.86,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 17.741901,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": 3.1083252e-09
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": 0,
+      "NormalImpulseNewtonSeconds": 2.1362419e-05,
+      "TotalNormalImpulseNewtonSeconds": 9.967836e-05,
+      "TangentImpulseNewtonSeconds": -2.1434703e-09,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": -1.380373661074241e-24
+    },
+    {
+      "TimeSeconds": 0.87,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 17.933502,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": 3.25946e-09
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": 0,
+      "NormalImpulseNewtonSeconds": 1.4398191e-05,
+      "TotalNormalImpulseNewtonSeconds": 6.7182846e-05,
+      "TangentImpulseNewtonSeconds": -2.1238653e-09,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": -1.4474910315741893e-24
+    },
+    {
+      "TimeSeconds": 0.88,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 18.125109,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": 3.4067873e-09
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": 0,
+      "NormalImpulseNewtonSeconds": 9.704327e-06,
+      "TotalNormalImpulseNewtonSeconds": 4.528098e-05,
+      "TangentImpulseNewtonSeconds": -2.106676e-09,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": -7.564587393618982e-25
+    },
+    {
+      "TimeSeconds": 0.89,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 18.31672,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": 3.5504175e-09
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": 0,
+      "NormalImpulseNewtonSeconds": 6.540679e-06,
+      "TotalNormalImpulseNewtonSeconds": 3.0519208e-05,
+      "TangentImpulseNewtonSeconds": -2.091678e-09,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": -1.5767021091144123e-24
+    },
+    {
+      "TimeSeconds": 0.9,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 18.508333,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": 3.6904537e-09
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": 0,
+      "NormalImpulseNewtonSeconds": 4.4083927e-06,
+      "TotalNormalImpulseNewtonSeconds": 2.056983e-05,
+      "TangentImpulseNewtonSeconds": -2.0787148e-09,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": -1.6388906766785398e-24
+    },
+    {
+      "TimeSeconds": 0.91,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 18.699953,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": 3.8269947e-09
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": 0,
+      "NormalImpulseNewtonSeconds": 2.97124e-06,
+      "TotalNormalImpulseNewtonSeconds": 1.3863988e-05,
+      "TangentImpulseNewtonSeconds": -2.0676103e-09,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0
+    },
+    {
+      "TimeSeconds": 0.92,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 18.891577,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": 3.960133e-09
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": 0,
+      "NormalImpulseNewtonSeconds": 2.0026046e-06,
+      "TotalNormalImpulseNewtonSeconds": 9.344276e-06,
+      "TangentImpulseNewtonSeconds": -2.0582125e-09,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": -1.758652383865573e-24
+    },
+    {
+      "TimeSeconds": 0.93,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 19.083204,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": 4.0899577e-09
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": 0,
+      "NormalImpulseNewtonSeconds": 1.3497479e-06,
+      "TotalNormalImpulseNewtonSeconds": 6.298006e-06,
+      "TangentImpulseNewtonSeconds": -2.050385e-09,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0
+    },
+    {
+      "TimeSeconds": 0.9400000000000001,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 19.274837,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": 4.216552e-09
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": 0,
+      "NormalImpulseNewtonSeconds": 9.09725e-07,
+      "TotalNormalImpulseNewtonSeconds": 4.244832e-06,
+      "TangentImpulseNewtonSeconds": -2.0439836e-09,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0
+    },
+    {
+      "TimeSeconds": 0.9500000000000001,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 19.466475,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": 4.3399964e-09
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": -1.9273456e-24,
+      "NormalImpulseNewtonSeconds": 6.1315126e-07,
+      "TotalNormalImpulseNewtonSeconds": 2.861001e-06,
+      "TangentImpulseNewtonSeconds": -2.0389201e-09,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": -1.927345555281655e-24
+    },
+    {
+      "TimeSeconds": 0.96,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 19.658115,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": 4.4603676e-09
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": 0,
+      "NormalImpulseNewtonSeconds": 4.1326163e-07,
+      "TotalNormalImpulseNewtonSeconds": 1.928304e-06,
+      "TangentImpulseNewtonSeconds": -2.0350426e-09,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": -1.9808011368021464e-24
+    },
+    {
+      "TimeSeconds": 0.97,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 19.849762,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": 4.5777395e-09
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": 0,
+      "NormalImpulseNewtonSeconds": 2.785368e-07,
+      "TotalNormalImpulseNewtonSeconds": 1.2996696e-06,
+      "TangentImpulseNewtonSeconds": -2.6104097e-09,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": -2.032924726684172e-24
+    },
+    {
+      "TimeSeconds": 0.98,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 20.04143,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": 4.691327e-09
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": 2.0833676e-24,
+      "NormalImpulseNewtonSeconds": 1.8773274e-07,
+      "TotalNormalImpulseNewtonSeconds": 8.759724e-07,
+      "TangentImpulseNewtonSeconds": -2.5913096e-09,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 2.0833676484076245e-24
+    },
+    {
+      "TimeSeconds": 0.99,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 20.233126,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": 4.8007616e-09
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": 0,
+      "NormalImpulseNewtonSeconds": 1.2653116e-07,
+      "TotalNormalImpulseNewtonSeconds": 5.9040207e-07,
+      "TangentImpulseNewtonSeconds": -2.575326e-09,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0
+    },
+    {
+      "TimeSeconds": 1,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 20.424852,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": 4.9062248e-09
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": 0,
+      "NormalImpulseNewtonSeconds": 8.528153e-08,
+      "TotalNormalImpulseNewtonSeconds": 3.9792883e-07,
+      "TangentImpulseNewtonSeconds": -2.5621145e-09,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": -2.1788014769233205e-24
+    },
+    {
+      "TimeSeconds": 1.01,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 20.61661,
+        "Y": -5
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": 5.0078865e-09
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": 0,
+      "NormalImpulseNewtonSeconds": 5.8463105e-08,
+      "TotalNormalImpulseNewtonSeconds": 2.702169e-07,
+      "TangentImpulseNewtonSeconds": -1.1692621e-08,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": -2.2239483809595717e-24
+    },
+    {
+      "TimeSeconds": 1.02,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 20.808397,
+        "Y": -5.0000014
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": -1.0995245e-05
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": 6.773295e-09,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 6.773299254803078e-09
+    },
+    {
+      "TimeSeconds": 1.03,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 21.000216,
+        "Y": -5.000009
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": -6.120236e-05
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": 1.4918609e-07,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 1.4918619228865282e-07
+    },
+    {
+      "TimeSeconds": 1.04,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 21.192064,
+        "Y": -5.000027
+      },
+      "NormalAtoB": {
+        "X": 1,
+        "Y": -0.00018137063
+      },
+      "SeparationMeters": -5.9604645e-08,
+      "NormalVelocityMetersPerSecond": 9.495831e-07,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 9.495838071416074e-07
+    },
+    {
+      "TimeSeconds": 1.05,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 21.383942,
+        "Y": -5.000059
+      },
+      "NormalAtoB": {
+        "X": 0.9999999,
+        "Y": -0.00039368105
+      },
+      "SeparationMeters": -2.9802322e-08,
+      "NormalVelocityMetersPerSecond": 3.4680902e-06,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 3.4680927001318196e-06
+    },
+    {
+      "TimeSeconds": 1.06,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 21.57585,
+        "Y": -5.000108
+      },
+      "NormalAtoB": {
+        "X": 0.9999997,
+        "Y": -0.00071909826
+      },
+      "SeparationMeters": 2.9802322e-08,
+      "NormalVelocityMetersPerSecond": 1.1242615e-05,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 1.1242621440032963e-05
+    },
+    {
+      "TimeSeconds": 1.07,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 21.767788,
+        "Y": -5.0001755
+      },
+      "NormalAtoB": {
+        "X": 0.99999934,
+        "Y": -0.0011702304
+      },
+      "SeparationMeters": 3.874302e-07,
+      "NormalVelocityMetersPerSecond": 2.4405943e-05,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 2.4405959266005084e-05
+    },
+    {
+      "TimeSeconds": 1.08,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 21.959757,
+        "Y": -5.0002637
+      },
+      "NormalAtoB": {
+        "X": 0.9999985,
+        "Y": -0.0017567523
+      },
+      "SeparationMeters": 6.2584877e-07,
+      "NormalVelocityMetersPerSecond": 4.5267665e-05,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 4.526769771473482e-05
+    },
+    {
+      "TimeSeconds": 1.09,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 22.151756,
+        "Y": -5.000373
+      },
+      "NormalAtoB": {
+        "X": 0.9999969,
+        "Y": -0.0024843356
+      },
+      "SeparationMeters": 1.3411045e-06,
+      "NormalVelocityMetersPerSecond": 8.001033e-05,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 8.001026435522363e-05
+    },
+    {
+      "TimeSeconds": 1.1,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 22.343784,
+        "Y": -5.000503
+      },
+      "NormalAtoB": {
+        "X": 0.99999434,
+        "Y": -0.003353492
+      },
+      "SeparationMeters": 2.3543835e-06,
+      "NormalVelocityMetersPerSecond": 0.00012889189,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.00012889178469777107
+    },
+    {
+      "TimeSeconds": 1.11,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 22.535843,
+        "Y": -5.0006547
+      },
+      "NormalAtoB": {
+        "X": 0.99999046,
+        "Y": -0.0043646796
+      },
+      "SeparationMeters": 3.993511e-06,
+      "NormalVelocityMetersPerSecond": 0.00019381418,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.00019381407764740288
+    },
+    {
+      "TimeSeconds": 1.12,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 22.72793,
+        "Y": -5.000827
+      },
+      "NormalAtoB": {
+        "X": 0.9999848,
+        "Y": -0.005512223
+      },
+      "SeparationMeters": 6.4074993e-06,
+      "NormalVelocityMetersPerSecond": 0.00027985693,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.0002798568457365036
+    },
+    {
+      "TimeSeconds": 1.1300000000000001,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 22.920048,
+        "Y": -5.0010157
+      },
+      "NormalAtoB": {
+        "X": 0.99997693,
+        "Y": -0.006802248
+      },
+      "SeparationMeters": 9.745359e-06,
+      "NormalVelocityMetersPerSecond": 0.00038451335,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.0003845134633593261
+    },
+    {
+      "TimeSeconds": 1.1400000000000001,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 23.112198,
+        "Y": -5.001216
+      },
+      "NormalAtoB": {
+        "X": 0.99996597,
+        "Y": -0.008256894
+      },
+      "SeparationMeters": 1.4513731e-05,
+      "NormalVelocityMetersPerSecond": 0.0005234426,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.0005234420532360673
+    },
+    {
+      "TimeSeconds": 1.1500000000000001,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 23.304375,
+        "Y": -5.0014205
+      },
+      "NormalAtoB": {
+        "X": 0.999951,
+        "Y": -0.009893812
+      },
+      "SeparationMeters": 2.0802021e-05,
+      "NormalVelocityMetersPerSecond": 0.0007020988,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.0007020988268777728
+    },
+    {
+      "TimeSeconds": 1.16,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 23.496584,
+        "Y": -5.001623
+      },
+      "NormalAtoB": {
+        "X": 0.99993134,
+        "Y": -0.011722678
+      },
+      "SeparationMeters": 2.9176474e-05,
+      "NormalVelocityMetersPerSecond": 0.000917886,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.0009178854525089264
+    },
+    {
+      "TimeSeconds": 1.17,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 23.688822,
+        "Y": -5.0018187
+      },
+      "NormalAtoB": {
+        "X": 0.9999055,
+        "Y": -0.013750492
+      },
+      "SeparationMeters": 3.84748e-05,
+      "NormalVelocityMetersPerSecond": 0.0011774153,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.0011774153681471944
+    },
+    {
+      "TimeSeconds": 1.18,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 23.88109,
+        "Y": -5.0020003
+      },
+      "NormalAtoB": {
+        "X": 0.99987245,
+        "Y": -0.015976552
+      },
+      "SeparationMeters": 5.272031e-05,
+      "NormalVelocityMetersPerSecond": 0.0014940389,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.0014940390828996897
+    },
+    {
+      "TimeSeconds": 1.19,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 24.07339,
+        "Y": -5.002162
+      },
+      "NormalAtoB": {
+        "X": 0.9998307,
+        "Y": -0.018400667
+      },
+      "SeparationMeters": 6.890297e-05,
+      "NormalVelocityMetersPerSecond": 0.0018596724,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.0018596723675727844
+    },
+    {
+      "TimeSeconds": 1.2,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 24.265718,
+        "Y": -5.0022984
+      },
+      "NormalAtoB": {
+        "X": 0.99977916,
+        "Y": -0.021020483
+      },
+      "SeparationMeters": 8.952618e-05,
+      "NormalVelocityMetersPerSecond": 0.002276972,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.002276972634717822
+    },
+    {
+      "TimeSeconds": 1.21,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 24.458078,
+        "Y": -5.0024023
+      },
+      "NormalAtoB": {
+        "X": 0.9997161,
+        "Y": -0.023824738
+      },
+      "SeparationMeters": 0.00011473894,
+      "NormalVelocityMetersPerSecond": 0.0027509006,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.0027508996427059174
+    },
+    {
+      "TimeSeconds": 1.22,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 24.650467,
+        "Y": -5.0024676
+      },
+      "NormalAtoB": {
+        "X": 0.9996406,
+        "Y": -0.026811384
+      },
+      "SeparationMeters": 0.00014469028,
+      "NormalVelocityMetersPerSecond": 0.003277155,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.0032771567348390818
+    },
+    {
+      "TimeSeconds": 1.23,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 24.842886,
+        "Y": -5.0024867
+      },
+      "NormalAtoB": {
+        "X": 0.9995508,
+        "Y": -0.029969165
+      },
+      "SeparationMeters": 0.0001783967,
+      "NormalVelocityMetersPerSecond": 0.003861291,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.003861290169879794
+    },
+    {
+      "TimeSeconds": 1.24,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 25.035336,
+        "Y": -5.002453
+      },
+      "NormalAtoB": {
+        "X": 0.9994458,
+        "Y": -0.033288583
+      },
+      "SeparationMeters": 0.00021988153,
+      "NormalVelocityMetersPerSecond": 0.004493126,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.004493126180022955
+    },
+    {
+      "TimeSeconds": 1.25,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 25.227814,
+        "Y": -5.0023584
+      },
+      "NormalAtoB": {
+        "X": 0.9993243,
+        "Y": -0.03675847
+      },
+      "SeparationMeters": 0.0002681613,
+      "NormalVelocityMetersPerSecond": 0.005180758,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.005180757958441973
+    },
+    {
+      "TimeSeconds": 1.26,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 25.420322,
+        "Y": -5.0021954
+      },
+      "NormalAtoB": {
+        "X": 0.9991847,
+        "Y": -0.040372103
+      },
+      "SeparationMeters": 0.00032299757,
+      "NormalVelocityMetersPerSecond": 0.005909449,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.0059094512835145
+    },
+    {
+      "TimeSeconds": 1.27,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 25.612862,
+        "Y": -5.0019555
+      },
+      "NormalAtoB": {
+        "X": 0.9990264,
+        "Y": -0.044116214
+      },
+      "SeparationMeters": 0.00038576126,
+      "NormalVelocityMetersPerSecond": 0.0066897995,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.0066897994838654995
+    },
+    {
+      "TimeSeconds": 1.28,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 25.805431,
+        "Y": -5.001631
+      },
+      "NormalAtoB": {
+        "X": 0.99884826,
+        "Y": -0.047979318
+      },
+      "SeparationMeters": 0.00045728683,
+      "NormalVelocityMetersPerSecond": 0.007511171,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.007511171046644449
+    },
+    {
+      "TimeSeconds": 1.29,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 25.998028,
+        "Y": -5.0012116
+      },
+      "NormalAtoB": {
+        "X": 0.99864966,
+        "Y": -0.05195242
+      },
+      "SeparationMeters": 0.0005351901,
+      "NormalVelocityMetersPerSecond": 0.008370576,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.008370580151677132
+    },
+    {
+      "TimeSeconds": 1.3,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 26.190655,
+        "Y": -5.00069
+      },
+      "NormalAtoB": {
+        "X": 0.99842954,
+        "Y": -0.056022763
+      },
+      "SeparationMeters": 0.0006233454,
+      "NormalVelocityMetersPerSecond": 0.00926027,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.009260270744562149
+    },
+    {
+      "TimeSeconds": 1.31,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 26.383312,
+        "Y": -5.0000553
+      },
+      "NormalAtoB": {
+        "X": 0.9981877,
+        "Y": -0.060178652
+      },
+      "SeparationMeters": 0.0007225871,
+      "NormalVelocityMetersPerSecond": 0.010187586,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.010187582112848759
+    },
+    {
+      "TimeSeconds": 1.32,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 26.575996,
+        "Y": -4.9992986
+      },
+      "NormalAtoB": {
+        "X": 0.99792314,
+        "Y": -0.06441514
+      },
+      "SeparationMeters": 0.00082683563,
+      "NormalVelocityMetersPerSecond": 0.011135974,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.011135970242321491
+    },
+    {
+      "TimeSeconds": 1.33,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 26.76871,
+        "Y": -4.99841
+      },
+      "NormalAtoB": {
+        "X": 0.9976363,
+        "Y": -0.06871629
+      },
+      "SeparationMeters": 0.0009419918,
+      "NormalVelocityMetersPerSecond": 0.0121020805,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.012102079577744007
+    },
+    {
+      "TimeSeconds": 1.34,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 26.96145,
+        "Y": -4.9973803
+      },
+      "NormalAtoB": {
+        "X": 0.99732655,
+        "Y": -0.07307439
+      },
+      "SeparationMeters": 0.0010673702,
+      "NormalVelocityMetersPerSecond": 0.01308186,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.01308185700327158
+    },
+    {
+      "TimeSeconds": 1.35,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 27.154219,
+        "Y": -4.996197
+      },
+      "NormalAtoB": {
+        "X": 0.9969942,
+        "Y": -0.07747766
+      },
+      "SeparationMeters": 0.0012035668,
+      "NormalVelocityMetersPerSecond": 0.014076108,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.014076108112931252
+    },
+    {
+      "TimeSeconds": 1.36,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 27.347013,
+        "Y": -4.9948525
+      },
+      "NormalAtoB": {
+        "X": 0.99663883,
+        "Y": -0.08192071
+      },
+      "SeparationMeters": 0.0013479888,
+      "NormalVelocityMetersPerSecond": 0.015067652,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.015067653730511665
+    },
+    {
+      "TimeSeconds": 1.37,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 27.539837,
+        "Y": -4.993334
+      },
+      "NormalAtoB": {
+        "X": 0.99626124,
+        "Y": -0.086391434
+      },
+      "SeparationMeters": 0.001503259,
+      "NormalVelocityMetersPerSecond": 0.016060833,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.016060829162597656
+    },
+    {
+      "TimeSeconds": 1.3800000000000001,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 27.732685,
+        "Y": -4.991631
+      },
+      "NormalAtoB": {
+        "X": 0.9958616,
+        "Y": -0.09088291
+      },
+      "SeparationMeters": 0.0016677678,
+      "NormalVelocityMetersPerSecond": 0.017051402,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.017051396891474724
+    },
+    {
+      "TimeSeconds": 1.3900000000000001,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 27.925558,
+        "Y": -4.9897337
+      },
+      "NormalAtoB": {
+        "X": 0.9954407,
+        "Y": -0.09538306
+      },
+      "SeparationMeters": 0.001844585,
+      "NormalVelocityMetersPerSecond": 0.018030265,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.01803026907145977
+    },
+    {
+      "TimeSeconds": 1.4000000000000001,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 28.118458,
+        "Y": -4.98763
+      },
+      "NormalAtoB": {
+        "X": 0.99499893,
+        "Y": -0.0998857
+      },
+      "SeparationMeters": 0.0020308197,
+      "NormalVelocityMetersPerSecond": 0.01898754,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.018987534567713737
+    },
+    {
+      "TimeSeconds": 1.41,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 28.31138,
+        "Y": -4.9853086
+      },
+      "NormalAtoB": {
+        "X": 0.99453735,
+        "Y": -0.10438197
+      },
+      "SeparationMeters": 0.0022256374,
+      "NormalVelocityMetersPerSecond": 0.019927993,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.019927993416786194
+    },
+    {
+      "TimeSeconds": 1.42,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 28.504326,
+        "Y": -4.9827585
+      },
+      "NormalAtoB": {
+        "X": 0.9940567,
+        "Y": -0.108863845
+      },
+      "SeparationMeters": 0.002428621,
+      "NormalVelocityMetersPerSecond": 0.02084145,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.020841453224420547
+    },
+    {
+      "TimeSeconds": 1.43,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 28.697294,
+        "Y": -4.9799685
+      },
+      "NormalAtoB": {
+        "X": 0.9935582,
+        "Y": -0.11332278
+      },
+      "SeparationMeters": 0.0026395023,
+      "NormalVelocityMetersPerSecond": 0.021723334,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.02172333374619484
+    },
+    {
+      "TimeSeconds": 1.44,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 28.890285,
+        "Y": -4.9769278
+      },
+      "NormalAtoB": {
+        "X": 0.9930429,
+        "Y": -0.117753275
+      },
+      "SeparationMeters": 0.0028607845,
+      "NormalVelocityMetersPerSecond": 0.022573533,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.022573528811335564
+    },
+    {
+      "TimeSeconds": 1.45,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 29.083294,
+        "Y": -4.9736238
+      },
+      "NormalAtoB": {
+        "X": 0.99251175,
+        "Y": -0.12214996
+      },
+      "SeparationMeters": 0.0030890703,
+      "NormalVelocityMetersPerSecond": 0.023382528,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.023382527753710747
+    },
+    {
+      "TimeSeconds": 1.46,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 29.276321,
+        "Y": -4.9700456
+      },
+      "NormalAtoB": {
+        "X": 0.9919662,
+        "Y": -0.12650344
+      },
+      "SeparationMeters": 0.0033255816,
+      "NormalVelocityMetersPerSecond": 0.024149515,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.024149518460035324
+    },
+    {
+      "TimeSeconds": 1.47,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 29.469368,
+        "Y": -4.9661818
+      },
+      "NormalAtoB": {
+        "X": 0.9914077,
+        "Y": -0.13080846
+      },
+      "SeparationMeters": 0.00356856,
+      "NormalVelocityMetersPerSecond": 0.02486329,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.02486329711973667
+    },
+    {
+      "TimeSeconds": 1.48,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 29.662432,
+        "Y": -4.962021
+      },
+      "NormalAtoB": {
+        "X": 0.99083805,
+        "Y": -0.13505572
+      },
+      "SeparationMeters": 0.003820479,
+      "NormalVelocityMetersPerSecond": 0.025530864,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.025530876591801643
+    },
+    {
+      "TimeSeconds": 1.49,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 29.855513,
+        "Y": -4.957551
+      },
+      "NormalAtoB": {
+        "X": 0.9902585,
+        "Y": -0.13924089
+      },
+      "SeparationMeters": 0.004078299,
+      "NormalVelocityMetersPerSecond": 0.026135711,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.026135701686143875
+    },
+    {
+      "TimeSeconds": 1.5,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 30.048607,
+        "Y": -4.9527617
+      },
+      "NormalAtoB": {
+        "X": 0.9896706,
+        "Y": -0.14336011
+      },
+      "SeparationMeters": 0.0043408275,
+      "NormalVelocityMetersPerSecond": 0.026684262,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.02668425813317299
+    },
+    {
+      "TimeSeconds": 1.51,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 30.24171,
+        "Y": -4.9476414
+      },
+      "NormalAtoB": {
+        "X": 0.9890757,
+        "Y": -0.1474084
+      },
+      "SeparationMeters": 0.004608214,
+      "NormalVelocityMetersPerSecond": 0.027160235,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.027162130922079086
+    },
+    {
+      "TimeSeconds": 1.52,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 30.43483,
+        "Y": -4.9421782
+      },
+      "NormalAtoB": {
+        "X": 0.988476,
+        "Y": -0.15137775
+      },
+      "SeparationMeters": 0.004879445,
+      "NormalVelocityMetersPerSecond": 0.02757694,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.02757694013416767
+    },
+    {
+      "TimeSeconds": 1.53,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 30.627956,
+        "Y": -4.9363613
+      },
+      "NormalAtoB": {
+        "X": 0.9878731,
+        "Y": -0.15526366
+      },
+      "SeparationMeters": 0.0051547885,
+      "NormalVelocityMetersPerSecond": 0.027926112,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.02792610041797161
+    },
+    {
+      "TimeSeconds": 1.54,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 30.82109,
+        "Y": -4.93018
+      },
+      "NormalAtoB": {
+        "X": 0.9872686,
+        "Y": -0.15906145
+      },
+      "SeparationMeters": 0.005434513,
+      "NormalVelocityMetersPerSecond": 0.028203085,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.028203085064888
+    },
+    {
+      "TimeSeconds": 1.55,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 31.01423,
+        "Y": -4.923623
+      },
+      "NormalAtoB": {
+        "X": 0.9866646,
+        "Y": -0.1627669
+      },
+      "SeparationMeters": 0.0057137012,
+      "NormalVelocityMetersPerSecond": 0.028409345,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.02840934507548809
+    },
+    {
+      "TimeSeconds": 1.56,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 31.207375,
+        "Y": -4.91668
+      },
+      "NormalAtoB": {
+        "X": 0.9860624,
+        "Y": -0.1663759
+      },
+      "SeparationMeters": 0.0059962273,
+      "NormalVelocityMetersPerSecond": 0.028537108,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.02853710763156414
+    },
+    {
+      "TimeSeconds": 1.57,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 31.40052,
+        "Y": -4.90934
+      },
+      "NormalAtoB": {
+        "X": 0.98546386,
+        "Y": -0.1698857
+      },
+      "SeparationMeters": 0.0062788427,
+      "NormalVelocityMetersPerSecond": 0.028590325,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.028590325266122818
+    },
+    {
+      "TimeSeconds": 1.58,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 31.593666,
+        "Y": -4.901592
+      },
+      "NormalAtoB": {
+        "X": 0.98487085,
+        "Y": -0.17329028
+      },
+      "SeparationMeters": 0.0065615177,
+      "NormalVelocityMetersPerSecond": 0.02856499,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.028565000742673874
+    },
+    {
+      "TimeSeconds": 1.59,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 31.786812,
+        "Y": -4.893426
+      },
+      "NormalAtoB": {
+        "X": 0.9842854,
+        "Y": -0.1765849
+      },
+      "SeparationMeters": 0.0068466365,
+      "NormalVelocityMetersPerSecond": 0.02844819,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.028448201715946198
+    },
+    {
+      "TimeSeconds": 1.6,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 31.979952,
+        "Y": -4.884832
+      },
+      "NormalAtoB": {
+        "X": 0.98370856,
+        "Y": -0.17977025
+      },
+      "SeparationMeters": 0.0071267486,
+      "NormalVelocityMetersPerSecond": 0.028254362,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.02825436182320118
+    },
+    {
+      "TimeSeconds": 1.61,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 32.173084,
+        "Y": -4.8757997
+      },
+      "NormalAtoB": {
+        "X": 0.98314303,
+        "Y": -0.18283816
+      },
+      "SeparationMeters": 0.0074038208,
+      "NormalVelocityMetersPerSecond": 0.027981784,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.02798178419470787
+    },
+    {
+      "TimeSeconds": 1.62,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 32.366215,
+        "Y": -4.8663197
+      },
+      "NormalAtoB": {
+        "X": 0.98258996,
+        "Y": -0.18578762
+      },
+      "SeparationMeters": 0.0076802373,
+      "NormalVelocityMetersPerSecond": 0.027620718,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.027620695531368256
+    },
+    {
+      "TimeSeconds": 1.6300000000000001,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 32.559326,
+        "Y": -4.8563824
+      },
+      "NormalAtoB": {
+        "X": 0.9820503,
+        "Y": -0.18861902
+      },
+      "SeparationMeters": 0.007948339,
+      "NormalVelocityMetersPerSecond": 0.027174998,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.02717500925064087
+    },
+    {
+      "TimeSeconds": 1.6400000000000001,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 32.752426,
+        "Y": -4.845978
+      },
+      "NormalAtoB": {
+        "X": 0.98152685,
+        "Y": -0.19132438
+      },
+      "SeparationMeters": 0.008213699,
+      "NormalVelocityMetersPerSecond": 0.026647273,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.02664729580283165
+    },
+    {
+      "TimeSeconds": 1.6500000000000001,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 32.945515,
+        "Y": -4.835097
+      },
+      "NormalAtoB": {
+        "X": 0.9810209,
+        "Y": -0.19390242
+      },
+      "SeparationMeters": 0.008476108,
+      "NormalVelocityMetersPerSecond": 0.02603621,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.026036210358142853
+    },
+    {
+      "TimeSeconds": 1.6600000000000001,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 33.13858,
+        "Y": -4.823731
+      },
+      "NormalAtoB": {
+        "X": 0.98053324,
+        "Y": -0.19635361
+      },
+      "SeparationMeters": 0.008728772,
+      "NormalVelocityMetersPerSecond": 0.0253385,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.02533850073814392
+    },
+    {
+      "TimeSeconds": 1.67,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 33.331627,
+        "Y": -4.8118715
+      },
+      "NormalAtoB": {
+        "X": 0.98006576,
+        "Y": -0.19867319
+      },
+      "SeparationMeters": 0.008974493,
+      "NormalVelocityMetersPerSecond": 0.02456415,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.024564124643802643
+    },
+    {
+      "TimeSeconds": 1.68,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 33.52465,
+        "Y": -4.7995095
+      },
+      "NormalAtoB": {
+        "X": 0.97962004,
+        "Y": -0.20085993
+      },
+      "SeparationMeters": 0.009211928,
+      "NormalVelocityMetersPerSecond": 0.023706108,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.023706085979938507
+    },
+    {
+      "TimeSeconds": 1.69,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 33.717644,
+        "Y": -4.786637
+      },
+      "NormalAtoB": {
+        "X": 0.97919637,
+        "Y": -0.2029152
+      },
+      "SeparationMeters": 0.009438485,
+      "NormalVelocityMetersPerSecond": 0.022764616,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.02276461571455002
+    },
+    {
+      "TimeSeconds": 1.692397,
+      "StepSeconds": 0.002397,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 33.91061,
+        "Y": -4.7732453
+      },
+      "NormalAtoB": {
+        "X": 0.9787979,
+        "Y": -0.20482916
+      },
+      "SeparationMeters": 0.009658456,
+      "NormalVelocityMetersPerSecond": 0.021750813,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.021750813350081444
+    },
+    {
+      "TimeSeconds": 1.7,
+      "StepSeconds": 0.007603,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 33.95686,
+        "Y": -4.76997
+      },
+      "NormalAtoB": {
+        "X": 0.97870517,
+        "Y": -0.20527083
+      },
+      "SeparationMeters": 0.009710938,
+      "NormalVelocityMetersPerSecond": 0.021486262,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.02148626185953617
+    },
+    {
+      "TimeSeconds": 1.71,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 34.103546,
+        "Y": -4.759352
+      },
+      "NormalAtoB": {
+        "X": 0.9784219,
+        "Y": -0.2066167
+      },
+      "SeparationMeters": 0.009867132,
+      "NormalVelocityMetersPerSecond": 0.01963325,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.019633224233984947
+    },
+    {
+      "TimeSeconds": 1.72,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 34.296436,
+        "Y": -4.7449026
+      },
+      "NormalAtoB": {
+        "X": 0.97806776,
+        "Y": -0.20828721
+      },
+      "SeparationMeters": 0.01004824,
+      "NormalVelocityMetersPerSecond": 0.01735018,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.017350180074572563
+    },
+    {
+      "TimeSeconds": 1.73,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 34.489285,
+        "Y": -4.729918
+      },
+      "NormalAtoB": {
+        "X": 0.97773033,
+        "Y": -0.2098651
+      },
+      "SeparationMeters": 0.010206461,
+      "NormalVelocityMetersPerSecond": 0.015252506,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.015252480283379555
+    },
+    {
+      "TimeSeconds": 1.74,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 34.682087,
+        "Y": -4.7143936
+      },
+      "NormalAtoB": {
+        "X": 0.9774077,
+        "Y": -0.21136326
+      },
+      "SeparationMeters": 0.010344237,
+      "NormalVelocityMetersPerSecond": 0.013311598,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.01331159844994545
+    },
+    {
+      "TimeSeconds": 1.75,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 34.874844,
+        "Y": -4.6983266
+      },
+      "NormalAtoB": {
+        "X": 0.9770961,
+        "Y": -0.21279883
+      },
+      "SeparationMeters": 0.010463446,
+      "NormalVelocityMetersPerSecond": 0.011504626,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.011504599824547768
+    },
+    {
+      "TimeSeconds": 1.76,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 35.067543,
+        "Y": -4.681712
+      },
+      "NormalAtoB": {
+        "X": 0.97679317,
+        "Y": -0.21418533
+      },
+      "SeparationMeters": 0.010562301,
+      "NormalVelocityMetersPerSecond": 0.009798747,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.009796908125281334
+    },
+    {
+      "TimeSeconds": 1.77,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 35.260193,
+        "Y": -4.664544
+      },
+      "NormalAtoB": {
+        "X": 0.9764987,
+        "Y": -0.2155228
+      },
+      "SeparationMeters": 0.010648489,
+      "NormalVelocityMetersPerSecond": 0.00818342,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.008183419704437256
+    },
+    {
+      "TimeSeconds": 1.78,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 35.45278,
+        "Y": -4.64682
+      },
+      "NormalAtoB": {
+        "X": 0.97621006,
+        "Y": -0.21682695
+      },
+      "SeparationMeters": 0.010716438,
+      "NormalVelocityMetersPerSecond": 0.006632345,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.006632344797253609
+    },
+    {
+      "TimeSeconds": 1.79,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 35.645317,
+        "Y": -4.6285334
+      },
+      "NormalAtoB": {
+        "X": 0.9759272,
+        "Y": -0.21809661
+      },
+      "SeparationMeters": 0.0107708275,
+      "NormalVelocityMetersPerSecond": 0.005127663,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.005127636715769768
+    },
+    {
+      "TimeSeconds": 1.8,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 35.837784,
+        "Y": -4.6096807
+      },
+      "NormalAtoB": {
+        "X": 0.9756488,
+        "Y": -0.21933836
+      },
+      "SeparationMeters": 0.010808229,
+      "NormalVelocityMetersPerSecond": 0.003636321,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.0036363210529088974
+    },
+    {
+      "TimeSeconds": 1.800673,
+      "StepSeconds": 0.000673,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 36.030193,
+        "Y": -4.5902557
+      },
+      "NormalAtoB": {
+        "X": 0.9753759,
+        "Y": -0.22054969
+      },
+      "SeparationMeters": 0.010832489,
+      "NormalVelocityMetersPerSecond": 0.0021512657,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.0021512657403945923
+    },
+    {
+      "TimeSeconds": 1.81,
+      "StepSeconds": 0.009327,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 36.04314,
+        "Y": -4.588932
+      },
+      "NormalAtoB": {
+        "X": 0.97535765,
+        "Y": -0.22063027
+      },
+      "SeparationMeters": 0.010833204,
+      "NormalVelocityMetersPerSecond": 0.0020539574,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.0020539574325084686
+    },
+    {
+      "TimeSeconds": 1.82,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 36.222534,
+        "Y": -4.5702634
+      },
+      "NormalAtoB": {
+        "X": 0.9751096,
+        "Y": -0.22172366
+      },
+      "SeparationMeters": 0.010852158,
+      "NormalVelocityMetersPerSecond": 0.0018657893,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.0018657892942428589
+    },
+    {
+      "TimeSeconds": 1.83,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 36.41479,
+        "Y": -4.549679
+      },
+      "NormalAtoB": {
+        "X": 0.9748499,
+        "Y": -0.22286259
+      },
+      "SeparationMeters": 0.010868251,
+      "NormalVelocityMetersPerSecond": 0.0018914789,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.0018914788961410522
+    },
+    {
+      "TimeSeconds": 1.84,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 36.60697,
+        "Y": -4.528503
+      },
+      "NormalAtoB": {
+        "X": 0.9745917,
+        "Y": -0.22398922
+      },
+      "SeparationMeters": 0.010885239,
+      "NormalVelocityMetersPerSecond": 0.0021011122,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.0021011121571063995
+    },
+    {
+      "TimeSeconds": 1.85,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 36.799065,
+        "Y": -4.506728
+      },
+      "NormalAtoB": {
+        "X": 0.97433263,
+        "Y": -0.22511315
+      },
+      "SeparationMeters": 0.010906309,
+      "NormalVelocityMetersPerSecond": 0.0024657175,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.0024657174944877625
+    },
+    {
+      "TimeSeconds": 1.86,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 36.99107,
+        "Y": -4.484346
+      },
+      "NormalAtoB": {
+        "X": 0.97407067,
+        "Y": -0.22624439
+      },
+      "SeparationMeters": 0.01093027,
+      "NormalVelocityMetersPerSecond": 0.0029394552,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.0029413700103759766
+    },
+    {
+      "TimeSeconds": 1.87,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 37.182987,
+        "Y": -4.46135
+      },
+      "NormalAtoB": {
+        "X": 0.97380346,
+        "Y": -0.22739102
+      },
+      "SeparationMeters": 0.0109604,
+      "NormalVelocityMetersPerSecond": 0.0035146065,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.0035145506262779236
+    },
+    {
+      "TimeSeconds": 1.8800000000000001,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 37.37481,
+        "Y": -4.437732
+      },
+      "NormalAtoB": {
+        "X": 0.97353,
+        "Y": -0.22855936
+      },
+      "SeparationMeters": 0.010994196,
+      "NormalVelocityMetersPerSecond": 0.004161563,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.004159651696681976
+    },
+    {
+      "TimeSeconds": 1.8900000000000001,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 37.566532,
+        "Y": -4.413487
+      },
+      "NormalAtoB": {
+        "X": 0.97325015,
+        "Y": -0.22974803
+      },
+      "SeparationMeters": 0.011038572,
+      "NormalVelocityMetersPerSecond": 0.004854154,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.004854205995798111
+    },
+    {
+      "TimeSeconds": 1.9000000000000001,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 37.758152,
+        "Y": -4.3886065
+      },
+      "NormalAtoB": {
+        "X": 0.9729626,
+        "Y": -0.23096278
+      },
+      "SeparationMeters": 0.011091262,
+      "NormalVelocityMetersPerSecond": 0.0055727735,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.005572717636823654
+    },
+    {
+      "TimeSeconds": 1.9100000000000001,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 37.94966,
+        "Y": -4.363085
+      },
+      "NormalAtoB": {
+        "X": 0.9726662,
+        "Y": -0.2322077
+      },
+      "SeparationMeters": 0.011146128,
+      "NormalVelocityMetersPerSecond": 0.006313827,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.006313882768154144
+    },
+    {
+      "TimeSeconds": 1.92,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 38.141068,
+        "Y": -4.336915
+      },
+      "NormalAtoB": {
+        "X": 0.97236323,
+        "Y": -0.2334737
+      },
+      "SeparationMeters": 0.011213332,
+      "NormalVelocityMetersPerSecond": 0.007057227,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.007057171314954758
+    },
+    {
+      "TimeSeconds": 1.93,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 38.332355,
+        "Y": -4.310091
+      },
+      "NormalAtoB": {
+        "X": 0.97205216,
+        "Y": -0.23476507
+      },
+      "SeparationMeters": 0.0112861395,
+      "NormalVelocityMetersPerSecond": 0.007802818,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.007802873849868774
+    },
+    {
+      "TimeSeconds": 1.94,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 38.523525,
+        "Y": -4.282606
+      },
+      "NormalAtoB": {
+        "X": 0.9717322,
+        "Y": -0.23608576
+      },
+      "SeparationMeters": 0.011362314,
+      "NormalVelocityMetersPerSecond": 0.00853508,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.008535079658031464
+    },
+    {
+      "TimeSeconds": 1.95,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 38.714577,
+        "Y": -4.2544546
+      },
+      "NormalAtoB": {
+        "X": 0.97140604,
+        "Y": -0.23742466
+      },
+      "SeparationMeters": 0.011451036,
+      "NormalVelocityMetersPerSecond": 0.0092557855,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.009255785495042801
+    },
+    {
+      "TimeSeconds": 1.96,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 38.905495,
+        "Y": -4.2256293
+      },
+      "NormalAtoB": {
+        "X": 0.9710723,
+        "Y": -0.23878571
+      },
+      "SeparationMeters": 0.011542171,
+      "NormalVelocityMetersPerSecond": 0.009955831,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.009955830872058868
+    },
+    {
+      "TimeSeconds": 1.97,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 39.096287,
+        "Y": -4.196124
+      },
+      "NormalAtoB": {
+        "X": 0.97073305,
+        "Y": -0.24016151
+      },
+      "SeparationMeters": 0.011644125,
+      "NormalVelocityMetersPerSecond": 0.010631293,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.01063123345375061
+    },
+    {
+      "TimeSeconds": 1.98,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 39.286938,
+        "Y": -4.1659336
+      },
+      "NormalAtoB": {
+        "X": 0.9703867,
+        "Y": -0.24155709
+      },
+      "SeparationMeters": 0.011746764,
+      "NormalVelocityMetersPerSecond": 0.011267129,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.011267129331827164
+    },
+    {
+      "TimeSeconds": 1.99,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 39.47745,
+        "Y": -4.135051
+      },
+      "NormalAtoB": {
+        "X": 0.97003645,
+        "Y": -0.24295974
+      },
+      "SeparationMeters": 0.011859059,
+      "NormalVelocityMetersPerSecond": 0.011868551,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.011868610978126526
+    },
+    {
+      "TimeSeconds": 2,
+      "StepSeconds": 0.01,
+      "RiderA": 1,
+      "RiderB": 2,
+      "ComponentA": 0,
+      "ComponentB": 0,
+      "PointMeters": {
+        "X": 39.66782,
+        "Y": -4.10347
+      },
+      "NormalAtoB": {
+        "X": 0.96968156,
+        "Y": -0.24437249
+      },
+      "SeparationMeters": 0.011977762,
+      "NormalVelocityMetersPerSecond": 0.012430403,
+      "NormalImpulseNewtonSeconds": 0,
+      "TotalNormalImpulseNewtonSeconds": 0,
+      "TangentImpulseNewtonSeconds": 0,
+      "Persisted": true,
+      "PreStepPointNormalVelocityMetersPerSecond": 0.0124303437769413
+    }
+  ],
+  "TelemetryPeriodSeconds": 0.1
+}

@@ -20,10 +20,11 @@ public static class RiderController
 
     public static (Vector2 Force, float Torque) Forces(RiderView v, RiderSpec spec, TrackFrame frame,
         TrackStateSnapshot surface, WorldParameters p, double time, float mass, float inertia,
-        Action<ForceObservation>? observe = null, Action<SlipObservation>? observeSlip = null)
+        Action<ForceObservation>? observe = null, Action<SlipObservation>? observeSlip = null,
+        Action<YawLimitObservation>? observeYaw = null)
     {
         if (p.EnableSlipCoupledDynamics)
-            return SlipCoupledDynamics.Forces(v, spec, frame, surface, p, time, mass, inertia, observe, observeSlip);
+            return SlipCoupledDynamics.Forces(v, spec, frame, surface, p, time, mass, inertia, observe, observeSlip, observeYaw);
         if (spec.Passive)
         { observe?.Invoke(new(time, v, Vector2.Zero, 0, 0, 0, null, 0, "passive")); return (Vector2.Zero, 0); }
         if (spec.SpeedMetersPerSecond == 0 && v.TotalReferenceMeters < frame.Embedding.Segments[0].StraightLengthMeters && time + 1e-12 < TapeReactionSeconds(spec))

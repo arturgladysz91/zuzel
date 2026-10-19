@@ -138,8 +138,9 @@ public sealed class WorldRunner : IDisposable
                 for (var i = 0; i < specs.Length; i++)
                 {
                     var force = RiderController.Forces(views[i], specs[i], Frame, surface, Parameters,
-                        TimeSeconds, physics.Masses[i], physics.Inertias[i], diagnostics?.Force, diagnostics?.Slip);
+                        TimeSeconds, physics.Masses[i], physics.Inertias[i], diagnostics?.Force, diagnostics?.Slip, diagnostics?.YawLimit);
                     physics.Force(i, force.Force, force.Torque);
+                    diagnostics?.AppliedForce?.Invoke(new(TimeSeconds,views[i].Id,force.Force,force.Torque));
                     duration = UntilCurvatureChange(i, force.Force, duration);
                 }
                 if (duration < controlDuration) Work.CurvatureLimitedCalls++;
