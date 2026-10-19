@@ -115,9 +115,10 @@ def activations(r):
                 lap=sum(t<=d["ActualActivation"] for t in v["CrossingSeconds"])
                 if lap<4: counts[lap]+=1
     return "/".join(map(str,counts))
-parts.append(table(["Bieg", "Obserwacje AI/taktyki", "Decyzje/aktywacje/zmiany sterowania", "Aktywacje L1/L2/L3/L4", "Typowa m/s min–max", "Gaz=0 R1/R2/R3/R4 s", "Rewersy targetu R1–R4", "Największy spadek w 1 s, m/s"],
+parts.append(table(["Bieg", "Obserwacje AI/taktyki", "Decyzje/aktywacje/zmiany sterowania", "Aktywacje L1/L2/L3/L4", "Aktywacje po własnej mecie", "Typowa m/s min–max", "Gaz=0 R1/R2/R3/R4 s", "Rewersy targetu R1–R4", "Największy spadek w 1 s, m/s"],
     [[r["Name"],f"{r['Result']['Work']['AiUpdates']}/{r['Result']['Work']['TacticalObservations']}",
       f"{len(r['Result']['Decisions'])}/{sum(v['Activated'] for v in r['Riders'])}/{sum(v['ActualControlChanges'] for v in r['Riders'])}",activations(r),
+      sum(d["ActualActivation"] is not None and d["ActualActivation"] > r["Result"]["FinishTimes"][str(d["RiderId"])] for d in r["Result"]["Decisions"]),
       f"{f(min(v['TypicalSpeedMetersPerSecond'] for v in r['Riders']),3)}–{f(max(v['TypicalSpeedMetersPerSecond'] for v in r['Riders']),3)}",
       csv([v["DriveOffSeconds"] for v in r["Riders"]],2),"/".join(str(v["TargetReversals"]) for v in r["Riders"]),f(max(v["MaximumOneSecondSpeedLossMetersPerSecond"] for v in r["Riders"]),3)] for r in heats+controls]))
 parts.append("""
@@ -125,6 +126,7 @@ parts.append("""
 2. **Powtarzane lift/resume w późnym biegu.** A2/1 R2: 14.69 s gazu=0 łącznie, m.in. ImmediateThreat/ResumeContest 37.240→38.540, 42.640→44.240, 44.940→46.040, 50.440→52.040, 52.840→53.940 i 58.140→59.740 s. Widoczne na L3/L4 i dokładnie powtórzone w świeżym procesie. Maksymalna utrata prędkości w 1 s R2 =2.044 m/s, bez kontaktu. To konkretny kandydat do diagnozy nadmiernie ostrożnej taktyki, nie upadek ani błąd solvera; bez wyrzucania tej próby z raportu.
 3. **Brak wzbudzonej obrony.** W głównych próbach 0 aktywowanych DefendLine. Sam fakt istnienia konsumenta Defense nie dowodzi jego jakości w pełnym biegu. R4 nie jest dowodem skutecznej obrony, nawet gdy wygrywa z A.
 4. **Linie i ograniczenia.** Maksymalnie 2 rewersy znaczących zmian targetu (>0.05 m) u pojedynczego zawodnika, 0 w A1; brak szybkiego przełączania co obserwację. Nie jest to dowód braku wszystkich drobnych oscylacji: trajektorie zachowano tylko dla dwóch przypadków. Maksymalne spadki prędkości obejmują naturalne wejścia w łuk. Wszystkie końce i przesunięcia są zaakceptowanymi stanami solvera, bez teleportacji; maksimum zastosowanej siły/budżetu ≈1 (odchylenie float). Min. prześwit granic jest dodatni w każdej próbie. Zero kontaktów nie waliduje zachowania zatłoczonego wyścigu; może współwystępować z nadmierną ostrożnością.
+5. **Oczekująca komenda po własnej mecie.** W A2/1 R1 obserwuje ContestResolved w 61.300 s, kończy w 61.338553 s, a gotowa komenda aktywuje się dopiero w 61.520 s. Dlatego 49 aktywacji całego świata obejmuje 48 na L1–L4 i jedną po mecie. Drive=1 oraz target=3.5 są niezmienione: to logiczne wyczyszczenie intencji bez zmiany aktuatorów, nie dodatkowy manewr wyścigowy ani zmiana ukończonej klasyfikacji. WorldRunner.Activate nie odrzuca oczekującej komendy zawodnika Finished. Kolejny PR powinien jawnie zamknąć cykl intencji po ukończeniu; nie poprawiano tego podczas audytu.
 
 ## B. Próby indywidualne
 

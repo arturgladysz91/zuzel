@@ -129,24 +129,25 @@ W głównych próbach są 2 potwierdzone minięcia, oba R2 nad R1, w okrążenia
 Aktywacje L1–L4 przypisano według własnych przecięć mety. Obserwacje są wywoływane do ukończenia biegu; brak późnej komendy przy braku bliskich rywali nie oznacza zatrzymania AI. Typowa prędkość to mediana ważona czasem, histogram 0.25 m/s; zakres poniżej obejmuje czterech zawodników. Gaz=0 jest rzeczywistym wejściem sterowania, a scrub w łuku może zmniejszać siłę mimo gazu=1.
 
 
-| Bieg | Obserwacje AI/taktyki | Decyzje/aktywacje/zmiany sterowania | Aktywacje L1/L2/L3/L4 | Typowa m/s min–max | Gaz=0 R1/R2/R3/R4 s | Rewersy targetu R1–R4 | Największy spadek w 1 s, m/s |
-|---|---|---|---|---|---|---|---|
-| A1-rotation-0 | 2580/2498 | 16/16/6 | 16/0/0/0 | 21.375–24.375 | 0.00 / 3.20 / 4.90 / 6.10 | 0/0/0/0 | 1.280 |
-| A1-rotation-1 | 2580/2498 | 16/16/6 | 16/0/0/0 | 21.375–24.375 | 3.20 / 4.90 / 6.10 / 0.00 | 0/0/0/0 | 1.280 |
-| A1-rotation-2 | 2580/2498 | 16/16/6 | 16/0/0/0 | 21.375–24.375 | 4.90 / 6.10 / 0.00 / 3.20 | 0/0/0/0 | 1.280 |
-| A1-rotation-3 | 2580/2498 | 16/16/6 | 16/0/0/0 | 21.375–24.375 | 6.10 / 0.00 / 3.20 / 4.90 | 0/0/0/0 | 1.280 |
-| A2-rotation-0 | 2444/2425 | 37/37/16 | 22/6/1/8 | 21.375–23.375 | 0.00 / 5.80 / 4.30 / 3.60 | 0/0/2/1 | 2.279 |
-| A2-rotation-1 | 2488/2447 | 49/49/28 | 13/5/17/13 | 21.625–24.625 | 0.00 / 14.69 / 6.50 / 0.00 | 0/2/0/0 | 2.044 |
-| A2-rotation-2 | 2508/2439 | 12/12/4 | 9/3/0/0 | 21.875–24.625 | 3.70 / 0.00 / 0.00 / 0.00 | 0/0/0/0 | 1.503 |
-| A2-rotation-3 | 2548/2445 | 12/12/5 | 12/0/0/0 | 21.875–24.375 | 4.10 / 0.00 / 0.00 / 2.40 | 0/0/0/0 | 1.456 |
-| A1-control-OFF | 2528/0 | 0/0/0 | 0/0/0/0 | 21.375–24.375 | 0.00 / 0.00 / 0.00 / 0.00 | 0/0/0/0 | 1.280 |
-| A2-control-OFF | 2500/0 | 0/0/0 | 0/0/0/0 | 21.375–24.625 | 0.00 / 0.00 / 0.00 / 0.00 | 0/0/0/0 | 1.450 |
+| Bieg | Obserwacje AI/taktyki | Decyzje/aktywacje/zmiany sterowania | Aktywacje L1/L2/L3/L4 | Aktywacje po własnej mecie | Typowa m/s min–max | Gaz=0 R1/R2/R3/R4 s | Rewersy targetu R1–R4 | Największy spadek w 1 s, m/s |
+|---|---|---|---|---|---|---|---|---|
+| A1-rotation-0 | 2580/2498 | 16/16/6 | 16/0/0/0 | 0 | 21.375–24.375 | 0.00 / 3.20 / 4.90 / 6.10 | 0/0/0/0 | 1.280 |
+| A1-rotation-1 | 2580/2498 | 16/16/6 | 16/0/0/0 | 0 | 21.375–24.375 | 3.20 / 4.90 / 6.10 / 0.00 | 0/0/0/0 | 1.280 |
+| A1-rotation-2 | 2580/2498 | 16/16/6 | 16/0/0/0 | 0 | 21.375–24.375 | 4.90 / 6.10 / 0.00 / 3.20 | 0/0/0/0 | 1.280 |
+| A1-rotation-3 | 2580/2498 | 16/16/6 | 16/0/0/0 | 0 | 21.375–24.375 | 6.10 / 0.00 / 3.20 / 4.90 | 0/0/0/0 | 1.280 |
+| A2-rotation-0 | 2444/2425 | 37/37/16 | 22/6/1/8 | 0 | 21.375–23.375 | 0.00 / 5.80 / 4.30 / 3.60 | 0/0/2/1 | 2.279 |
+| A2-rotation-1 | 2488/2447 | 49/49/28 | 13/5/17/13 | 1 | 21.625–24.625 | 0.00 / 14.69 / 6.50 / 0.00 | 0/2/0/0 | 2.044 |
+| A2-rotation-2 | 2508/2439 | 12/12/4 | 9/3/0/0 | 0 | 21.875–24.625 | 3.70 / 0.00 / 0.00 / 0.00 | 0/0/0/0 | 1.503 |
+| A2-rotation-3 | 2548/2445 | 12/12/5 | 12/0/0/0 | 0 | 21.875–24.375 | 4.10 / 0.00 / 0.00 / 2.40 | 0/0/0/0 | 1.456 |
+| A1-control-OFF | 2528/0 | 0/0/0 | 0/0/0/0 | 0 | 21.375–24.375 | 0.00 / 0.00 / 0.00 / 0.00 | 0/0/0/0 | 1.280 |
+| A2-control-OFF | 2500/0 | 0/0/0 | 0/0/0/0 | 0 | 21.375–24.625 | 0.00 / 0.00 / 0.00 / 0.00 | 0/0/0/0 | 1.450 |
 
 
 1. **Utrata napędu przy odrzuceniu ataku, bez kontaktu.** A1/0: R2 NoPassingCorridor 10.640→13.840 s (3.2 s), R3 10.740→15.640 s (4.9 s), R4 10.840→16.940 s (6.1 s). Target praktycznie bez zmiany. Kod `TrafficDecision.Tactics` odrzuca kandydatów zarówno przez Corridor, jak i gain<=0, a następnie zwraca BackOut/Drive=0 z jedną etykietą NoPassingCorridor; powrót wymaga oddalenia przodu >8 m lub jego braku. To nie dowodzi, że każdy z tych epizodów był fizycznie niepotrzebny, ale odrzucenie korzyści ataku i wymóg bezpiecznej redukcji gazu nie są tutaj oddzielnie uzasadnione. Kontrola pokazuje spowolnienie mimo 0 kontaktów. Minimalny następny PR: rozdzielić powody odrzucenia i wykazać konieczność lift względem aktualnego korytarza; bez zmiany gripu lub mocy.
 2. **Powtarzane lift/resume w późnym biegu.** A2/1 R2: 14.69 s gazu=0 łącznie, m.in. ImmediateThreat/ResumeContest 37.240→38.540, 42.640→44.240, 44.940→46.040, 50.440→52.040, 52.840→53.940 i 58.140→59.740 s. Widoczne na L3/L4 i dokładnie powtórzone w świeżym procesie. Maksymalna utrata prędkości w 1 s R2 =2.044 m/s, bez kontaktu. To konkretny kandydat do diagnozy nadmiernie ostrożnej taktyki, nie upadek ani błąd solvera; bez wyrzucania tej próby z raportu.
 3. **Brak wzbudzonej obrony.** W głównych próbach 0 aktywowanych DefendLine. Sam fakt istnienia konsumenta Defense nie dowodzi jego jakości w pełnym biegu. R4 nie jest dowodem skutecznej obrony, nawet gdy wygrywa z A.
 4. **Linie i ograniczenia.** Maksymalnie 2 rewersy znaczących zmian targetu (>0.05 m) u pojedynczego zawodnika, 0 w A1; brak szybkiego przełączania co obserwację. Nie jest to dowód braku wszystkich drobnych oscylacji: trajektorie zachowano tylko dla dwóch przypadków. Maksymalne spadki prędkości obejmują naturalne wejścia w łuk. Wszystkie końce i przesunięcia są zaakceptowanymi stanami solvera, bez teleportacji; maksimum zastosowanej siły/budżetu ≈1 (odchylenie float). Min. prześwit granic jest dodatni w każdej próbie. Zero kontaktów nie waliduje zachowania zatłoczonego wyścigu; może współwystępować z nadmierną ostrożnością.
+5. **Oczekująca komenda po własnej mecie.** W A2/1 R1 obserwuje ContestResolved w 61.300 s, kończy w 61.338553 s, a gotowa komenda aktywuje się dopiero w 61.520 s. Dlatego 49 aktywacji całego świata obejmuje 48 na L1–L4 i jedną po mecie. Drive=1 oraz target=3.5 są niezmienione: to logiczne wyczyszczenie intencji bez zmiany aktuatorów, nie dodatkowy manewr wyścigowy ani zmiana ukończonej klasyfikacji. WorldRunner.Activate nie odrzuca oczekującej komendy zawodnika Finished. Kolejny PR powinien jawnie zamknąć cykl intencji po ukończeniu; nie poprawiano tego podczas audytu.
 
 ## B. Próby indywidualne
 
