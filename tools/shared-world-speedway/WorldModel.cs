@@ -10,6 +10,7 @@ public sealed record WorldParameters
     public bool EnableTacticalRacing { get; init; }
     public bool EnableSideBySideContests { get; init; }
     public bool EnableTacticalQualityScoring { get; init; }
+    public bool EnableProportionalTrafficThrottle { get; init; }
     public double AiIntervalSeconds { get; init; } = .1;
     public float LateralResponseSeconds { get; init; } = .65f;
     public float YawResponseSeconds { get; init; } = .35f;
@@ -30,6 +31,8 @@ public sealed class TacticalMemory
     public int OpponentId;
     public float HomeOffsetMeters;
     public double ActivatedAt, NextTacticAt, SafetyUntil, ClearSince;
+    public int FollowingOpponentId;
+    public double ThrottleObservedAt, ObservedOpponentSpeed;
 }
 public readonly record struct RacingPair(int A, int B);
 public sealed record RiderSpec(RiderProfile Profile, BikeSetup Setup, double ReferenceMeters,
@@ -46,10 +49,12 @@ public readonly record struct RiderView(int Id, Vector2 Position, Vector2 Veloci
     public float SlideRadians => Speed < .01f ? 0 : (float)CoreSim.PhysicalSpace.BikeAngles.Wrap(Heading - Math.Atan2(Velocity.Y, Velocity.X));
 }
 public sealed record WorldSnapshot(double TimeSeconds, IReadOnlyList<RiderView> Riders);
+public enum ControlChannels { Both, Line, Throttle }
 public sealed record DecisionEvent(int RiderId, int OpponentId, TrafficAction Action,
     double ObservedAt, double DecisionAt, double RequestedActivation, double? ActualActivation,
     float TargetOffsetMeters, float Drive, RacingIntent Intent = RacingIntent.None,
-    string Reason = "", bool SafetyReaction = false, double? CancelledAt = null);
+    string Reason = "", bool SafetyReaction = false, double? CancelledAt = null,
+    ControlChannels Channels = ControlChannels.Both);
 /// <summary>Authored before the run, for controlled experiments; never a predicted state.</summary>
 public sealed record ControlCommand(int RiderId, double AtSeconds, float TargetOffsetMeters, float Drive);
 public sealed record ContactEvent(int RiderA, int RiderB, double TimeSeconds, string Kind,
@@ -67,6 +72,7 @@ public sealed class WorldWork
         ControlChanges, CancelledCommands, MaximumTacticalPairs;
     public long SideObservations, SideCandidates, SideBlockedCandidates, SideHoldChoices;
     public long QualitySamples;
+    public long ThrottleObservations, ThrottleForceEvaluations;
     public double TacticalElapsedMilliseconds;
 }
 public sealed record RunResult(string Name, double StepSeconds, double TimeSeconds, WorldWork Work,

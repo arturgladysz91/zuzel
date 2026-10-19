@@ -1,0 +1,61 @@
+{
+  "Baseline": "8cd7dc67f66c798a1ba452f57dccad79fe6d5386",
+  "Off": {
+    "EnableTacticalRacing": true,
+    "EnableSideBySideContests": true,
+    "EnableTacticalQualityScoring": false,
+    "EnableProportionalTrafficThrottle": false,
+    "AiIntervalSeconds": 0.1,
+    "LateralResponseSeconds": 0.65,
+    "YawResponseSeconds": 0.35,
+    "SlideAngleRadians": 0.20943952,
+    "ContactFriction": 0.2,
+    "NearbyMaximumTravelMeters": 0.02,
+    "PredictionSeconds": 1.1,
+    "RecoverySeconds": 0.5,
+    "SolverSubsteps": 4
+  },
+  "On": {
+    "EnableTacticalRacing": true,
+    "EnableSideBySideContests": true,
+    "EnableTacticalQualityScoring": false,
+    "EnableProportionalTrafficThrottle": true,
+    "AiIntervalSeconds": 0.1,
+    "LateralResponseSeconds": 0.65,
+    "YawResponseSeconds": 0.35,
+    "SlideAngleRadians": 0.20943952,
+    "ContactFriction": 0.2,
+    "NearbyMaximumTravelMeters": 0.02,
+    "PredictionSeconds": 1.1,
+    "RecoverySeconds": 0.5,
+    "SolverSubsteps": 4
+  },
+  "StepSeconds": 0.01,
+  "Substeps": 4,
+  "Surface": {
+    "Grip": 1,
+    "Ruts": 0,
+    "Moisture": 0.5,
+    "EffectiveGrip": 0.9175
+  },
+  "Geometry": {
+    "StraightLengthMeters": 62,
+    "InnerRadiusMeters": 31,
+    "StraightWidthMeters": 12,
+    "TurnWidthMeters": 16.6,
+    "TurnSegmentAngleRadians": 1.0471976
+  },
+  "LapMeters": 318.77874994277954,
+  "StopOnCrash": true,
+  "SampleIntervalSeconds": 0.5,
+  "FullHeatMaximumSeconds": 90,
+  "FullHeatRequiredLaps": 4,
+  "ResponseSeconds": 1.2,
+  "ClearanceMeters": 0.15,
+  "DriveDeadband": 0.04,
+  "MaximumOrdinaryDriveChange": 0.25,
+  "DesiredGap": "0.6 m \u002B 0.1 s * ownSpeed",
+  "Runtime": ".NET 8.0.26",
+  "OS": "Microsoft Windows 10.0.19045",
+  "DiagnosticTrace": "accepted samples at 0.5 s; no per-step files; existing #92 profiles unchanged"
+}

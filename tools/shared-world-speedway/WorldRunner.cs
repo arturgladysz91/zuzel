@@ -22,6 +22,7 @@ public sealed class WorldRunner : IDisposable
     private readonly TrackStateSnapshot surface;
     private RiderView[] views;
     private readonly DecisionEvent?[] pending;
+    private readonly DecisionEvent?[] pendingThrottle;
     private readonly double[] nextDecision, recoveryUntil;
     private readonly TacticalMemory[] tactics;
     private readonly List<DecisionEvent> decisions = new();
@@ -39,6 +40,8 @@ public sealed class WorldRunner : IDisposable
     {
         this.diagnostics = diagnostics;
         Parameters = parameters ?? new();
+        if (Parameters.EnableProportionalTrafficThrottle && !Parameters.EnableTacticalRacing)
+            throw new ArgumentException("Proportional traffic throttle requires experimental tactical racing.", nameof(parameters));
         if (Parameters.EnableTacticalQualityScoring && (!Parameters.EnableTacticalRacing || !Parameters.EnableSideBySideContests))
             throw new ArgumentException("Quality scoring requires tactical racing and side-by-side contests.", nameof(parameters));
         if (Parameters.EnableSideBySideContests && !Parameters.EnableTacticalRacing)
@@ -70,7 +73,9 @@ public sealed class WorldRunner : IDisposable
             throw new ArgumentException("Use finite, unique authored commands with reactive traffic disabled.", nameof(controls));
         surface = TrackState.CreateDefault(Frame.Track).Snapshot(); // frozen surface; no duplicate wear or RNG
         physics = new(specs, Frame, Parameters);
-        pending = new DecisionEvent?[specs.Length]; nextDecision = new double[specs.Length]; recoveryUntil = new double[specs.Length];
+        pending = new DecisionEvent?[specs.Length];
+        pendingThrottle = Parameters.EnableProportionalTrafficThrottle ? new DecisionEvent?[specs.Length] : Array.Empty<DecisionEvent?>();
+        nextDecision = new double[specs.Length]; recoveryUntil = new double[specs.Length];
         tactics = Parameters.EnableTacticalRacing ? specs.Select(s => new TacticalMemory { HomeOffsetMeters = s.TargetOffsetMeters }).ToArray()
             : Array.Empty<TacticalMemory>();
         views = specs.Select((s, i) =>
@@ -206,6 +211,29 @@ public sealed class WorldRunner : IDisposable
         for (var i = 0; i < specs.Length; i++)
         {
             Work.AiUpdates++;
+            if (Parameters.EnableProportionalTrafficThrottle)
+            {
+                var plan = TrafficDecision.ObserveThrottle(snapshot, snapshot.Riders[i], specs[i], Parameters, Work,
+                    tactics[i], pairs, Frame, surface, pending[i], diagnostics?.Contest, diagnostics?.Throttle);
+                void Cancel(ref DecisionEvent? slot) {
+                    if (slot is not { } old) return;
+                    decisions[decisions.IndexOf(old)] = old with {CancelledAt = TimeSeconds};
+                    slot = null; Work.CancelledCommands++;
+                }
+                if (plan.CancelLine) Cancel(ref pending[i]);
+                if (plan.Emergency && pendingThrottle[i] is {SafetyReaction:false}) Cancel(ref pendingThrottle[i]);
+                if (plan.Line is { } line) {
+                    if (pending[i] is { } old && line.SafetyReaction && !old.SafetyReaction) Cancel(ref pending[i]);
+                    if (pending[i] is null) { pending[i] = line; decisions.Add(line); Work.TacticalDecisions++; }
+                }
+                if (plan.Throttle is { } throttle) {
+                    if (pendingThrottle[i] is { } old && throttle.SafetyReaction && !old.SafetyReaction) Cancel(ref pendingThrottle[i]);
+                    // Ordinary corrections are latched until activation. New observations
+                    // never move their deadline; only a fresh emergency replaces one.
+                    if (pendingThrottle[i] is null) { pendingThrottle[i] = throttle; decisions.Add(throttle); Work.TacticalDecisions++; }
+                }
+                continue;
+            }
             var decision = TrafficDecision.Observe(snapshot, snapshot.Riders[i], specs[i], Parameters, Work,
                 tactics[i], pairs, Frame, surface, pending[i] is not null, diagnostics?.Contest);
             if (decision is null) continue;
@@ -232,6 +260,31 @@ public sealed class WorldRunner : IDisposable
         {
             if (views[i].Activity == RiderActivity.Disturbed && TimeSeconds + 1e-12 >= recoveryUntil[i])
                 views[i] = views[i] with { Activity = RiderActivity.Racing, Impairment = 0 };
+            if (Parameters.EnableProportionalTrafficThrottle)
+            {
+                if (views[i].Activity is RiderActivity.Crashed or RiderActivity.Finished) {
+                    void CancelTerminal(DecisionEvent? slot) { if (slot is not null) {
+                        decisions[decisions.IndexOf(slot)] = slot with {CancelledAt = TimeSeconds}; Work.CancelledCommands++;
+                    } }
+                    CancelTerminal(pending[i]); CancelTerminal(pendingThrottle[i]);
+                    pending[i] = null; pendingThrottle[i] = null; continue;
+                }
+                if (pending[i] is { } lateral && TimeSeconds + 1e-12 >= lateral.RequestedActivation) {
+                    var memory = tactics[i];
+                    if (views[i].TargetOffsetMeters != lateral.TargetOffsetMeters) Work.ControlChanges++;
+                    if (memory.Intent != lateral.Intent) memory.ActivatedAt = TimeSeconds;
+                    memory.Intent = lateral.Intent; if (lateral.OpponentId != 0) memory.OpponentId = lateral.OpponentId;
+                    memory.NextTacticAt = TimeSeconds + TrafficDecision.IntentMinimumSeconds;
+                    views[i] = views[i] with {TargetOffsetMeters = lateral.TargetOffsetMeters};
+                    decisions[decisions.IndexOf(lateral)] = lateral with {ActualActivation = TimeSeconds}; pending[i] = null;
+                }
+                if (pendingThrottle[i] is { } throttle && TimeSeconds + 1e-12 >= throttle.RequestedActivation) {
+                    if (views[i].Drive != throttle.Drive) Work.ControlChanges++;
+                    views[i] = views[i] with {Drive = throttle.Drive};
+                    decisions[decisions.IndexOf(throttle)] = throttle with {ActualActivation = TimeSeconds}; pendingThrottle[i] = null;
+                }
+                continue;
+            }
             if (pending[i] is not { } command || TimeSeconds + 1e-12 < command.RequestedActivation) continue;
             if (Parameters.EnableTacticalRacing)
             {
@@ -275,9 +328,12 @@ public sealed class WorldRunner : IDisposable
             // A logical Hold that leaves both actuators unchanged does not
             // justify repartitioning Box2D time. Acknowledge it at the first
             // existing accepted boundary AFTER its complete reaction delay.
-            if (pending[i] is { } command && (!Parameters.EnableSideBySideContests
-                || command.Drive != views[i].Drive || command.TargetOffsetMeters != views[i].TargetOffsetMeters))
+            if (pending[i] is { } command && (Parameters.EnableProportionalTrafficThrottle
+                ? command.TargetOffsetMeters != views[i].TargetOffsetMeters
+                : !Parameters.EnableSideBySideContests || command.Drive != views[i].Drive || command.TargetOffsetMeters != views[i].TargetOffsetMeters))
                 Before(command.RequestedActivation);
+            if (Parameters.EnableProportionalTrafficThrottle && pendingThrottle[i] is { } throttle && throttle.Drive != views[i].Drive)
+                Before(throttle.RequestedActivation);
             if (views[i].Activity == RiderActivity.Disturbed) Before(recoveryUntil[i]);
         }
         return duration;

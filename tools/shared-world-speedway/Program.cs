@@ -2,6 +2,8 @@ using System.Text.Json;
 using SharedWorldSpeedway;
 
 var scenario = args.FirstOrDefault() ?? "A";
+if (scenario == "throttle-diagnose") { ThrottleAudit.Diagnose(args[1]); return; }
+if (scenario == "throttle-audit") { ThrottleAudit.Run(args[1], args[2]); return; }
 if (scenario == "full-validation") { FullHeatSoloAudit.Run(args[1], args.Length > 2 ? args[2] : "smoke"); return; }
 if (scenario == "quality-freeze") { TacticalQualityAudit.Freeze(args[1]); return; }
 if (scenario == "quality-evaluate") { TacticalQualityAudit.Evaluate(args[1], args[2]); return; }
