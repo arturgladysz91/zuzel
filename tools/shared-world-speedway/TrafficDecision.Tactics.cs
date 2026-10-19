@@ -88,6 +88,9 @@ public static partial class TrafficDecision
                     RacingIntent.ContestHold, "OccupiedAlongsideCut", true);
             }
             var closing = -Vector2.Dot(delta, relative);
+            // The opt-in controller evaluates complete mechanical occupancy and
+            // propulsion separately. The #92 constant-velocity safety path is retained OFF.
+            if (p.EnableProportionalTrafficThrottle) continue;
             if (closing <= .01f || relative.LengthSquared() < .01f) continue;
             var t = Math.Clamp(closing / relative.LengthSquared(), 0, (float)SafetyHorizonSeconds);
             var at = delta + relative * t;
@@ -205,10 +208,13 @@ public static partial class TrafficDecision
                 var separation = HalfWidth(own, road.Heading) + HalfWidth(front, road.Heading) + margin;
                 var bestScore = double.PositiveInfinity; float? bestTarget = null;
                 var bestAction = TrafficAction.AttackInside;
+                var reachableTarget = false; var availableCorridor = false;
                 foreach (var side in new[] {-1, 1})
                 {
                     var target = (float)(road.OffsetMeters + (targetCenter + side * separation - road.OffsetMeters) / Math.Max(MinimumReachFraction, reach));
+                    reachableTarget |= target >= TargetMarginMeters && target <= maximum;
                     if (!Corridor(target, encounter, front.Id)) continue;
+                    availableCorridor = true;
                     var width = LaneModel.UsableRacingWidthMeters(frame.Track.Segments[road.Segment].Type, frame.Track.Geometry);
                     var grip = surface.SampleSurface(road.Segment, Math.Clamp(target / width * 4, 0, 4));
                     var radius = frame.Track.Geometry.InnerRadiusMeters + target;
@@ -229,6 +235,9 @@ public static partial class TrafficDecision
                 if (bestTarget is { } selected)
                     return Command(front, bestAction, selected, 1,
                         bestAction == TrafficAction.AttackInside ? RacingIntent.AttackInside : RacingIntent.AttackOutside, "ClosingSlowerRider");
+                if (p.EnableProportionalTrafficThrottle)
+                    return Command(front, TrafficAction.KeepIntent, own.TargetOffsetMeters, own.Drive, memory.Intent,
+                        availableCorridor ? "NoAttackGain" : reachableTarget ? "AttackCorridorUnavailable" : "AttackUnreachable");
                 if (own.Drive > 0)
                     return Command(front, TrafficAction.BackOut, (float)road.OffsetMeters, 0, RacingIntent.None, "NoPassingCorridor");
             }

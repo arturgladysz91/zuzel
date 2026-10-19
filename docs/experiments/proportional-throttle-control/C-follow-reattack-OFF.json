@@ -1,0 +1,2286 @@
+{
+  "Name": "C-follow-reattack",
+  "Enabled": false,
+  "Status": "Completed",
+  "Inputs": [
+    {
+      "Id": 1,
+      "Canonical": {
+        "Abilities": {
+          "Reaction": 50,
+          "Start": 50,
+          "Technique": 70,
+          "TrackReading": 65,
+          "Attack": 85,
+          "Defense": 15,
+          "PairRiding": 50,
+          "Strength": 60
+        },
+        "Physical": {
+          "MassKg": 65
+        },
+        "InteractionStyle": {
+          "Combativeness": 0.35,
+          "PreferredLine": 1,
+          "SetupIndependence": 0.5
+        }
+      },
+      "Legacy": {
+        "Start": 50,
+        "Speed": 80,
+        "SlideControl": 60,
+        "TrackReading": 50,
+        "PairRiding": 50,
+        "Adaptability": 50
+      },
+      "Setup": {
+        "Gearing": 0.5,
+        "TractionBias": 0.5
+      },
+      "ReferenceMeters": 133.38937497138977,
+      "OffsetMeters": 4,
+      "TargetOffsetMeters": 4,
+      "SpeedMetersPerSecond": 18,
+      "InitialOutwardSpeed": 0,
+      "TrafficEnabled": true
+    },
+    {
+      "Id": 2,
+      "Canonical": {
+        "Abilities": {
+          "Reaction": 50,
+          "Start": 50,
+          "Technique": 70,
+          "TrackReading": 65,
+          "Attack": 50,
+          "Defense": 15,
+          "PairRiding": 50,
+          "Strength": 60
+        },
+        "Physical": {
+          "MassKg": 65
+        },
+        "InteractionStyle": {
+          "Combativeness": 0.35,
+          "PreferredLine": 1,
+          "SetupIndependence": 0.5
+        }
+      },
+      "Legacy": {
+        "Start": 50,
+        "Speed": 20,
+        "SlideControl": 50,
+        "TrackReading": 50,
+        "PairRiding": 50,
+        "Adaptability": 50
+      },
+      "Setup": {
+        "Gearing": 0.5,
+        "TractionBias": 0.5
+      },
+      "ReferenceMeters": 145.38937497138977,
+      "OffsetMeters": 4,
+      "TargetOffsetMeters": 4,
+      "SpeedMetersPerSecond": 16,
+      "InitialOutwardSpeed": 0,
+      "TrafficEnabled": false
+    },
+    {
+      "Id": 3,
+      "Canonical": {
+        "Abilities": {
+          "Reaction": 50,
+          "Start": 50,
+          "Technique": 70,
+          "TrackReading": 65,
+          "Attack": 80,
+          "Defense": 15,
+          "PairRiding": 50,
+          "Strength": 60
+        },
+        "Physical": {
+          "MassKg": 65
+        },
+        "InteractionStyle": {
+          "Combativeness": 0.35,
+          "PreferredLine": 1,
+          "SetupIndependence": 0.5
+        }
+      },
+      "Legacy": {
+        "Start": 50,
+        "Speed": 80,
+        "SlideControl": 60,
+        "TrackReading": 50,
+        "PairRiding": 50,
+        "Adaptability": 50
+      },
+      "Setup": {
+        "Gearing": 0.5,
+        "TractionBias": 0.5
+      },
+      "ReferenceMeters": 144.38937497138977,
+      "OffsetMeters": 2.6,
+      "TargetOffsetMeters": 2.6,
+      "SpeedMetersPerSecond": 23,
+      "InitialOutwardSpeed": 0,
+      "TrafficEnabled": false
+    },
+    {
+      "Id": 4,
+      "Canonical": {
+        "Abilities": {
+          "Reaction": 50,
+          "Start": 50,
+          "Technique": 70,
+          "TrackReading": 65,
+          "Attack": 80,
+          "Defense": 15,
+          "PairRiding": 50,
+          "Strength": 60
+        },
+        "Physical": {
+          "MassKg": 65
+        },
+        "InteractionStyle": {
+          "Combativeness": 0.35,
+          "PreferredLine": 1,
+          "SetupIndependence": 0.5
+        }
+      },
+      "Legacy": {
+        "Start": 50,
+        "Speed": 80,
+        "SlideControl": 60,
+        "TrackReading": 50,
+        "PairRiding": 50,
+        "Adaptability": 50
+      },
+      "Setup": {
+        "Gearing": 0.5,
+        "TractionBias": 0.5
+      },
+      "ReferenceMeters": 144.38937497138977,
+      "OffsetMeters": 5.4,
+      "TargetOffsetMeters": 5.4,
+      "SpeedMetersPerSecond": 23,
+      "InitialOutwardSpeed": 0,
+      "TrafficEnabled": false
+    }
+  ],
+  "Result": {
+    "Name": "C-follow-reattack",
+    "StepSeconds": 0.01,
+    "TimeSeconds": 10,
+    "Work": {
+      "PhysicsUpdates": 1000,
+      "SolverCalls": 1285,
+      "AiUpdates": 396,
+      "PairChecks": 0,
+      "Threats": 15,
+      "ContactManifolds": 0,
+      "SolvedPoints": 0,
+      "BeginShapes": 0,
+      "EndShapes": 0,
+      "HitShapes": 0,
+      "Episodes": 0,
+      "Consequences": 0,
+      "GeometryChecks": 585,
+      "ProximityPairChecks": 6000,
+      "SolverSubsteps": 5140,
+      "ContactCandidateSamples": 528,
+      "MaximumContactCandidates": 2,
+      "SolverElapsedMilliseconds": 31.08209999999988,
+      "ContactProcessingMilliseconds": 4.162899999999987,
+      "SolverProfileMilliseconds": 30.33430013805628,
+      "BroadPhaseProfileMilliseconds": 6.873699979558296,
+      "NarrowPhaseProfileMilliseconds": 6.060799996135756,
+      "ConstraintProfileMilliseconds": 5.870800018310547,
+      "MinimumGapMeters": 0.07546344499811775,
+      "MaximumSpeed": 25.80487632751465,
+      "MaximumStepDisplacementMeters": 0.2580435574054718,
+      "MinimumTrackClearanceMeters": 3.187997556304199,
+      "MaximumPassiveEnergyIncreaseJoules": 0,
+      "TacticalPairObservations": 594,
+      "TacticalObservations": 99,
+      "TacticalCandidates": 5,
+      "TacticalDecisions": 6,
+      "ControlChanges": 5,
+      "CancelledCommands": 0,
+      "MaximumTacticalPairs": 6,
+      "SideObservations": 0,
+      "SideCandidates": 0,
+      "SideBlockedCandidates": 0,
+      "SideHoldChoices": 0,
+      "QualitySamples": 0,
+      "ThrottleObservations": 0,
+      "ThrottleForceEvaluations": 0,
+      "TacticalElapsedMilliseconds": 0.6582999999999999
+    },
+    "Riders": [
+      {
+        "Id": 1,
+        "Position": {
+          "X": 26.150171,
+          "Y": -2.868548
+        },
+        "Velocity": {
+          "X": 23.771397,
+          "Y": -0.0016729569
+        },
+        "Heading": -7.642194E-05,
+        "AngularVelocity": 0.0005984328,
+        "Road": {
+          "Segment": 0,
+          "Progress": 0.7471477508544921,
+          "ReferenceMeters": 26.150171279907227,
+          "OffsetMeters": 2.8685479164123535,
+          "Heading": 0,
+          "RadiusMeters": 0,
+          "CornerProgress": 0,
+          "Tangent": {
+            "X": 1,
+            "Y": 0
+          },
+          "Outward": {
+            "X": 0,
+            "Y": -1
+          },
+          "IsTurn": false
+        },
+        "TotalReferenceMeters": 344.92892158031464,
+        "DistanceMeters": 220.76607262343168,
+        "Activity": 0,
+        "Drive": 1,
+        "TargetOffsetMeters": 2.8698266,
+        "Impairment": 0,
+        "Context": 2,
+        "Speed": 23.771397,
+        "ForwardSpeed": 23.771397,
+        "SideSpeed": 0.00014369935,
+        "SlideRadians": -6.045051E-06
+      },
+      {
+        "Id": 2,
+        "Position": {
+          "X": 18.923891,
+          "Y": -3.9980762
+        },
+        "Velocity": {
+          "X": 22.800552,
+          "Y": -0.0023922764
+        },
+        "Heading": -0.0001244549,
+        "AngularVelocity": 0.0009814093,
+        "Road": {
+          "Segment": 0,
+          "Progress": 0.540682601928711,
+          "ReferenceMeters": 18.923891067504883,
+          "OffsetMeters": 3.9980762004852295,
+          "Heading": 0,
+          "RadiusMeters": 0,
+          "CornerProgress": 0,
+          "Tangent": {
+            "X": 1,
+            "Y": 0
+          },
+          "Outward": {
+            "X": 0,
+            "Y": -1
+          },
+          "IsTurn": false
+        },
+        "TotalReferenceMeters": 337.7026410102844,
+        "DistanceMeters": 204.83948328718543,
+        "Activity": 0,
+        "Drive": 1,
+        "TargetOffsetMeters": 4,
+        "Impairment": 0,
+        "Context": 2,
+        "Speed": 22.800552,
+        "ForwardSpeed": 22.800552,
+        "SideSpeed": 0.00044536428,
+        "SlideRadians": -1.9533043E-05
+      },
+      {
+        "Id": 3,
+        "Position": {
+          "X": 51.630783,
+          "Y": 1.8125205
+        },
+        "Velocity": {
+          "X": 20.017767,
+          "Y": 11.398039
+        },
+        "Heading": 0.2825137,
+        "AngularVelocity": 0.58424985,
+        "Road": {
+          "Segment": 1,
+          "Progress": 0.4945688371513761,
+          "ReferenceMeters": 51.055249976833196,
+          "OffsetMeters": 2.5930328369140625,
+          "Heading": 0.5179112895752642,
+          "RadiusMeters": 33.59303283691406,
+          "CornerProgress": 0.16485627905045871,
+          "Tangent": {
+            "X": 0.8688551,
+            "Y": 0.49506643
+          },
+          "Outward": {
+            "X": 0.49506643,
+            "Y": -0.8688551
+          },
+          "IsTurn": true
+        },
+        "TotalReferenceMeters": 369.83399991961284,
+        "DistanceMeters": 234.91687919944525,
+        "Activity": 0,
+        "Drive": 1,
+        "TargetOffsetMeters": 2.6,
+        "Impairment": 0,
+        "Context": 2,
+        "Speed": 23.035326,
+        "ForwardSpeed": 22.401655,
+        "SideSpeed": 5.36583,
+        "SlideRadians": -0.23509891
+      },
+      {
+        "Id": 4,
+        "Position": {
+          "X": 51.076717,
+          "Y": -1.6499848
+        },
+        "Velocity": {
+          "X": 21.509892,
+          "Y": 10.583208
+        },
+        "Heading": 0.2426444,
+        "AngularVelocity": 0.5505012,
+        "Road": {
+          "Segment": 1,
+          "Progress": 0.4369240385094573,
+          "ReferenceMeters": 49.1839196734705,
+          "OffsetMeters": 5.39343786239624,
+          "Heading": 0.45754579591840305,
+          "RadiusMeters": 36.39343786239624,
+          "CornerProgress": 0.1456413461698191,
+          "Tangent": {
+            "X": 0.8971393,
+            "Y": 0.44174767
+          },
+          "Outward": {
+            "X": 0.44174767,
+            "Y": -0.8971393
+          },
+          "IsTurn": true
+        },
+        "TotalReferenceMeters": 367.96266961625014,
+        "DistanceMeters": 242.96441733837128,
+        "Activity": 0,
+        "Drive": 1,
+        "TargetOffsetMeters": 5.4,
+        "Impairment": 0,
+        "Context": 2,
+        "Speed": 23.972479,
+        "ForwardSpeed": 23.422611,
+        "SideSpeed": 5.104994,
+        "SlideRadians": -0.21459553
+      }
+    ],
+    "FinishTimes": {},
+    "Decisions": [
+      {
+        "RiderId": 1,
+        "OpponentId": 2,
+        "Action": 4,
+        "ObservedAt": 1.7,
+        "DecisionAt": 1.7,
+        "RequestedActivation": 1.94,
+        "ActualActivation": 1.94,
+        "TargetOffsetMeters": 2.7650237,
+        "Drive": 1,
+        "Intent": 1,
+        "Reason": "ClosingSlowerRider",
+        "SafetyReaction": false,
+        "CancelledAt": null,
+        "Channels": 0
+      },
+      {
+        "RiderId": 1,
+        "OpponentId": 2,
+        "Action": 3,
+        "ObservedAt": 3,
+        "DecisionAt": 3,
+        "RequestedActivation": 3.24,
+        "ActualActivation": 3.24,
+        "TargetOffsetMeters": 2.7650237,
+        "Drive": 0,
+        "Intent": 1,
+        "Reason": "ImmediateThreat",
+        "SafetyReaction": true,
+        "CancelledAt": null,
+        "Channels": 0
+      },
+      {
+        "RiderId": 1,
+        "OpponentId": 2,
+        "Action": 3,
+        "ObservedAt": 4.2,
+        "DecisionAt": 4.2,
+        "RequestedActivation": 4.44,
+        "ActualActivation": 4.44,
+        "TargetOffsetMeters": 2.9210162,
+        "Drive": 0,
+        "Intent": 0,
+        "Reason": "AttackNoLongerFeasible",
+        "SafetyReaction": false,
+        "CancelledAt": null,
+        "Channels": 0
+      },
+      {
+        "RiderId": 1,
+        "OpponentId": 2,
+        "Action": 1,
+        "ObservedAt": 4.5,
+        "DecisionAt": 4.5,
+        "RequestedActivation": 4.74,
+        "ActualActivation": 4.74,
+        "TargetOffsetMeters": 2.8698266,
+        "Drive": 0,
+        "Intent": 7,
+        "Reason": "OccupiedAlongsideCut",
+        "SafetyReaction": true,
+        "CancelledAt": null,
+        "Channels": 0
+      },
+      {
+        "RiderId": 1,
+        "OpponentId": 2,
+        "Action": 0,
+        "ObservedAt": 5.3,
+        "DecisionAt": 5.3,
+        "RequestedActivation": 5.54,
+        "ActualActivation": 5.54,
+        "TargetOffsetMeters": 2.8698266,
+        "Drive": 0,
+        "Intent": 0,
+        "Reason": "ContestResolved",
+        "SafetyReaction": false,
+        "CancelledAt": null,
+        "Channels": 0
+      },
+      {
+        "RiderId": 1,
+        "OpponentId": 0,
+        "Action": 0,
+        "ObservedAt": 6.4,
+        "DecisionAt": 6.4,
+        "RequestedActivation": 6.640000000000001,
+        "ActualActivation": 6.640000000000001,
+        "TargetOffsetMeters": 2.8698266,
+        "Drive": 1,
+        "Intent": 0,
+        "Reason": "ClearResume",
+        "SafetyReaction": false,
+        "CancelledAt": null,
+        "Channels": 0
+      }
+    ],
+    "Contacts": [],
+    "Fingerprint": "6FF93DFF00CB8CF164C086F264501C1F55334D1C894B1395A85A2EDD1C25D837",
+    "Completed": true,
+    "Classification": [
+      {
+        "Position": 1,
+        "RiderId": 3,
+        "FinishTimeSeconds": null,
+        "Status": "Racing"
+      },
+      {
+        "Position": 2,
+        "RiderId": 4,
+        "FinishTimeSeconds": null,
+        "Status": "Racing"
+      },
+      {
+        "Position": 3,
+        "RiderId": 1,
+        "FinishTimeSeconds": null,
+        "Status": "Racing"
+      },
+      {
+        "Position": 4,
+        "RiderId": 2,
+        "FinishTimeSeconds": null,
+        "Status": "Racing"
+      }
+    ]
+  },
+  "Riders": [
+    {
+      "Measurement": {
+        "RiderId": 1,
+        "CrossingSeconds": [
+          8.92802468804129
+        ],
+        "LapSeconds": [
+          8.92802468804129
+        ],
+        "BestFlyingSeconds": null,
+        "MovementSeconds": 0.0025,
+        "FirstDriveForceSeconds": 0,
+        "MaximumLaunchTangentialForceNewtons": 0,
+        "First35MetersSeconds": null,
+        "FirstBendExitSeconds": null,
+        "AverageSpeedMetersPerSecond": 22.075938884129865,
+        "TypicalSpeedMetersPerSecond": 22.125,
+        "MaximumSpeedMetersPerSecond": 24.813426971435547,
+        "StraightAverageSpeedMetersPerSecond": 22.387482490648882,
+        "CornerAverageSpeedMetersPerSecond": 21.751832027599015,
+        "MinimumTrackClearanceMeters": 3.468024820144749,
+        "MinimumPeerGapMeters": 0.07546344499811775,
+        "MinimumOffsetMeters": 2.8397390842437744,
+        "MaximumOffsetMeters": 4.000003814697266,
+        "MaximumYawErrorRadians": 0.46288528273066376,
+        "MaximumLateralDemandRatio": 0.9697160720825195,
+        "MaximumAppliedGripRatio": 0.9731879830360413,
+        "MinimumTangentialForceNewtons": -190.17819213867188,
+        "MaximumTangentialForceNewtons": 364.79754638671875,
+        "DriveOffSeconds": 3.4000000000000004,
+        "TargetTravelMeters": 1.4421584606170654,
+        "TargetReversals": 2,
+        "MaximumOneSecondSpeedLossMetersPerSecond": 0.9021797180175781,
+        "Decisions": 6,
+        "Activated": 6,
+        "Attacks": 2,
+        "Defenses": 0,
+        "SideManeuvers": 1,
+        "ActualControlChanges": 5,
+        "Passes": 1,
+        "Contacts": 0
+      },
+      "ZeroSeconds": 3.4000000000000004,
+      "PartialSeconds": 0,
+      "FullClosures": 1,
+      "FollowingEpisodes": 0,
+      "DangerousSeconds": 0.5249999999999999,
+      "DangerousEpisodes": 1,
+      "CloseFollowingSeconds": 1.5799999999999998,
+      "ThrottleReversals": 1,
+      "Reattacks": 0
+    },
+    {
+      "Measurement": {
+        "RiderId": 2,
+        "CrossingSeconds": [
+          9.183812204511934
+        ],
+        "LapSeconds": [
+          9.183812204511934
+        ],
+        "BestFlyingSeconds": null,
+        "MovementSeconds": 0.0025,
+        "FirstDriveForceSeconds": 0,
+        "MaximumLaunchTangentialForceNewtons": 0,
+        "First35MetersSeconds": null,
+        "FirstBendExitSeconds": null,
+        "AverageSpeedMetersPerSecond": 20.483205604281036,
+        "TypicalSpeedMetersPerSecond": 20.375,
+        "MaximumSpeedMetersPerSecond": 23.41068458557129,
+        "StraightAverageSpeedMetersPerSecond": 20.2142214065872,
+        "CornerAverageSpeedMetersPerSecond": 20.721317297066605,
+        "MinimumTrackClearanceMeters": 4.5975414047226675,
+        "MinimumPeerGapMeters": 0.07546344499811773,
+        "MinimumOffsetMeters": 3.9821202754974365,
+        "MaximumOffsetMeters": 4.000003814697266,
+        "MaximumYawErrorRadians": 0.43162968016348646,
+        "MaximumLateralDemandRatio": 1.0006589889526367,
+        "MaximumAppliedGripRatio": 1.0000001192092896,
+        "MinimumTangentialForceNewtons": -181.3080596923828,
+        "MaximumTangentialForceNewtons": 267.01678466796875,
+        "DriveOffSeconds": 0,
+        "TargetTravelMeters": 0,
+        "TargetReversals": 0,
+        "MaximumOneSecondSpeedLossMetersPerSecond": 0.14695358276367188,
+        "Decisions": 0,
+        "Activated": 0,
+        "Attacks": 0,
+        "Defenses": 0,
+        "SideManeuvers": 0,
+        "ActualControlChanges": 0,
+        "Passes": 0,
+        "Contacts": 0
+      },
+      "ZeroSeconds": 0,
+      "PartialSeconds": 0,
+      "FullClosures": 0,
+      "FollowingEpisodes": 0,
+      "DangerousSeconds": 0,
+      "DangerousEpisodes": 0,
+      "CloseFollowingSeconds": 0,
+      "ThrottleReversals": 0,
+      "Reattacks": 0
+    },
+    {
+      "Measurement": {
+        "RiderId": 3,
+        "CrossingSeconds": [
+          7.794725086857162
+        ],
+        "LapSeconds": [
+          7.794725086857162
+        ],
+        "BestFlyingSeconds": null,
+        "MovementSeconds": 0.0025,
+        "FirstDriveForceSeconds": 0,
+        "MaximumLaunchTangentialForceNewtons": 0,
+        "First35MetersSeconds": null,
+        "FirstBendExitSeconds": null,
+        "AverageSpeedMetersPerSecond": 23.49180112940388,
+        "TypicalSpeedMetersPerSecond": 23.125,
+        "MaximumSpeedMetersPerSecond": 24.99419403076172,
+        "StraightAverageSpeedMetersPerSecond": 24.009479745350745,
+        "CornerAverageSpeedMetersPerSecond": 23.03916521897757,
+        "MinimumTrackClearanceMeters": 3.1879975744452977,
+        "MinimumPeerGapMeters": 0.6000061531530145,
+        "MinimumOffsetMeters": 2.5787389278411865,
+        "MaximumOffsetMeters": 2.6000022888183594,
+        "MaximumYawErrorRadians": 0.4802384541522704,
+        "MaximumLateralDemandRatio": 1.0118114948272705,
+        "MaximumAppliedGripRatio": 1.0000001192092896,
+        "MinimumTangentialForceNewtons": -191.96075439453125,
+        "MaximumTangentialForceNewtons": 276.99603271484375,
+        "DriveOffSeconds": 0,
+        "TargetTravelMeters": 0,
+        "TargetReversals": 0,
+        "MaximumOneSecondSpeedLossMetersPerSecond": 1.3382396697998047,
+        "Decisions": 0,
+        "Activated": 0,
+        "Attacks": 0,
+        "Defenses": 0,
+        "SideManeuvers": 0,
+        "ActualControlChanges": 0,
+        "Passes": 0,
+        "Contacts": 0
+      },
+      "ZeroSeconds": 0,
+      "PartialSeconds": 0,
+      "FullClosures": 0,
+      "FollowingEpisodes": 0,
+      "DangerousSeconds": 0,
+      "DangerousEpisodes": 0,
+      "CloseFollowingSeconds": 0,
+      "ThrottleReversals": 0,
+      "Reattacks": 0
+    },
+    {
+      "Measurement": {
+        "RiderId": 4,
+        "CrossingSeconds": [
+          7.90761446227283
+        ],
+        "LapSeconds": [
+          7.90761446227283
+        ],
+        "BestFlyingSeconds": null,
+        "MovementSeconds": 0.0025,
+        "FirstDriveForceSeconds": 0,
+        "MaximumLaunchTangentialForceNewtons": 0,
+        "First35MetersSeconds": null,
+        "FirstBendExitSeconds": null,
+        "AverageSpeedMetersPerSecond": 24.296439323681845,
+        "TypicalSpeedMetersPerSecond": 23.875,
+        "MaximumSpeedMetersPerSecond": 25.80487632751465,
+        "StraightAverageSpeedMetersPerSecond": 24.6772337112452,
+        "CornerAverageSpeedMetersPerSecond": 23.97999185325984,
+        "MinimumTrackClearanceMeters": 5.071652216266074,
+        "MinimumPeerGapMeters": 0.6000061536583325,
+        "MinimumOffsetMeters": 5.3782782554626465,
+        "MaximumOffsetMeters": 5.400005340576172,
+        "MaximumYawErrorRadians": 0.4613920664980027,
+        "MaximumLateralDemandRatio": 1.01137113571167,
+        "MaximumAppliedGripRatio": 1.0000001192092896,
+        "MinimumTangentialForceNewtons": -192.36793518066406,
+        "MaximumTangentialForceNewtons": 268.47845458984375,
+        "DriveOffSeconds": 0,
+        "TargetTravelMeters": 0,
+        "TargetReversals": 0,
+        "MaximumOneSecondSpeedLossMetersPerSecond": 1.3361167907714844,
+        "Decisions": 0,
+        "Activated": 0,
+        "Attacks": 0,
+        "Defenses": 0,
+        "SideManeuvers": 0,
+        "ActualControlChanges": 0,
+        "Passes": 0,
+        "Contacts": 0
+      },
+      "ZeroSeconds": 0,
+      "PartialSeconds": 0,
+      "FullClosures": 0,
+      "FollowingEpisodes": 0,
+      "DangerousSeconds": 0,
+      "DangerousEpisodes": 0,
+      "CloseFollowingSeconds": 0,
+      "ThrottleReversals": 0,
+      "Reattacks": 0
+    }
+  ],
+  "Passes": [
+    {
+      "RiderId": 1,
+      "OpponentId": 2,
+      "ClearSinceSeconds": 5.1499999999999995,
+      "ConfirmedAtSeconds": 6.15,
+      "HeldDistanceMeters": 21.119843989610672,
+      "AfterFirstBend": true
+    }
+  ],
+  "Observations": [],
+  "Samples": [
+    {
+      "TimeSeconds": 0.0025,
+      "RiderId": 1,
+      "OpponentId": 2,
+      "OwnSpeed": 18.006424,
+      "OpponentSpeed": 16.0047,
+      "Drive": 1,
+      "OffsetMeters": 4,
+      "TargetMeters": 4,
+      "Gap": {
+        "OpponentId": 2,
+        "GapMeters": 9.894997024536128,
+        "ClosingMetersPerSecond": 2.0017242431640625,
+        "LateralGapMeters": -0.7999989513640458,
+        "GapAfterReactionMeters": 9.414583206176752,
+        "ContactSeconds": 4.943236841102258,
+        "CorridorOccupied": true
+      }
+    },
+    {
+      "TimeSeconds": 0.0025,
+      "RiderId": 2,
+      "OpponentId": 3,
+      "OwnSpeed": 16.0047,
+      "OpponentSpeed": 23.00473,
+      "Drive": 1,
+      "OffsetMeters": 4,
+      "TargetMeters": 4,
+      "Gap": {
+        "OpponentId": 3,
+        "GapMeters": -3.0824999539019267,
+        "ClosingMetersPerSecond": -7.000030517578125,
+        "LateralGapMeters": 0.6000016117718019,
+        "GapAfterReactionMeters": -3.0824999539019267,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 0.0025,
+      "RiderId": 3,
+      "OpponentId": 2,
+      "OwnSpeed": 23.00473,
+      "OpponentSpeed": 16.0047,
+      "Drive": 1,
+      "OffsetMeters": 2.5999984741210938,
+      "TargetMeters": 2.6,
+      "Gap": {
+        "OpponentId": 2,
+        "GapMeters": -1.1175000460980762,
+        "ClosingMetersPerSecond": 7.000030517578125,
+        "LateralGapMeters": 0.6000016117718019,
+        "GapAfterReactionMeters": -2.797507370316826,
+        "ContactSeconds": 0,
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 0.0025,
+      "RiderId": 4,
+      "OpponentId": 2,
+      "OwnSpeed": 23.00473,
+      "OpponentSpeed": 16.0047,
+      "Drive": 1,
+      "OffsetMeters": 5.400001525878906,
+      "TargetMeters": 5.4,
+      "Gap": {
+        "OpponentId": 2,
+        "GapMeters": -1.117499801314036,
+        "ClosingMetersPerSecond": 7.000030517578125,
+        "LateralGapMeters": 0.6000014399860305,
+        "GapAfterReactionMeters": -2.797507125532786,
+        "ContactSeconds": 0,
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 0.51,
+      "RiderId": 1,
+      "OpponentId": 2,
+      "OwnSpeed": 19.268097,
+      "OpponentSpeed": 16.93451,
+      "Drive": 1,
+      "OffsetMeters": 4,
+      "TargetMeters": 4,
+      "Gap": {
+        "OpponentId": 2,
+        "GapMeters": 8.793288612365718,
+        "ClosingMetersPerSecond": 2.333587646484375,
+        "LateralGapMeters": -0.7999990476784546,
+        "GapAfterReactionMeters": 8.233227577209467,
+        "ContactSeconds": 3.768141567604324,
+        "CorridorOccupied": true
+      }
+    },
+    {
+      "TimeSeconds": 0.51,
+      "RiderId": 2,
+      "OpponentId": 3,
+      "OwnSpeed": 16.93451,
+      "OpponentSpeed": 23.930069,
+      "Drive": 1,
+      "OffsetMeters": 4,
+      "TargetMeters": 4,
+      "Gap": {
+        "OpponentId": 3,
+        "GapMeters": 0.46965744813664045,
+        "ClosingMetersPerSecond": -6.9955596923828125,
+        "LateralGapMeters": 0.6000013012323393,
+        "GapAfterReactionMeters": 0.46965744813664045,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 0.51,
+      "RiderId": 3,
+      "OpponentId": 4,
+      "OwnSpeed": 23.930069,
+      "OpponentSpeed": 23.930069,
+      "Drive": 1,
+      "OffsetMeters": 2.6000022888183594,
+      "TargetMeters": 2.6,
+      "Gap": {
+        "OpponentId": 4,
+        "GapMeters": -2.1000002447840487,
+        "ClosingMetersPerSecond": -1.5274185995867162E-13,
+        "LateralGapMeters": 2.0000030517578296,
+        "GapAfterReactionMeters": -2.1000002447840487,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 0.51,
+      "RiderId": 4,
+      "OpponentId": 3,
+      "OwnSpeed": 23.930069,
+      "OpponentSpeed": 23.930069,
+      "Drive": 1,
+      "OffsetMeters": 5.400005340576172,
+      "TargetMeters": 5.4,
+      "Gap": {
+        "OpponentId": 3,
+        "GapMeters": -2.0999997552159684,
+        "ClosingMetersPerSecond": 1.5274185995867162E-13,
+        "LateralGapMeters": 2.0000030517578296,
+        "GapAfterReactionMeters": -2.0999997552160052,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 1.01,
+      "RiderId": 1,
+      "OpponentId": 2,
+      "OwnSpeed": 20.43148,
+      "OpponentSpeed": 17.803879,
+      "Drive": 1,
+      "OffsetMeters": 4,
+      "TargetMeters": 4,
+      "Gap": {
+        "OpponentId": 2,
+        "GapMeters": 7.551292800903312,
+        "ClosingMetersPerSecond": 2.6276016235351562,
+        "LateralGapMeters": -0.7999991562571864,
+        "GapAfterReactionMeters": 6.920668411254875,
+        "ContactSeconds": 2.873834729460951,
+        "CorridorOccupied": true
+      }
+    },
+    {
+      "TimeSeconds": 1.01,
+      "RiderId": 2,
+      "OpponentId": 3,
+      "OwnSpeed": 17.803879,
+      "OpponentSpeed": 24.579552,
+      "Drive": 1,
+      "OffsetMeters": 4.000003814697266,
+      "TargetMeters": 4,
+      "Gap": {
+        "OpponentId": 3,
+        "GapMeters": 3.9539609225629118,
+        "ClosingMetersPerSecond": -6.775672912597656,
+        "LateralGapMeters": 0.6000009966248427,
+        "GapAfterReactionMeters": 3.9539609225629118,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 1.01,
+      "RiderId": 3,
+      "OpponentId": 4,
+      "OwnSpeed": 24.579552,
+      "OpponentSpeed": 24.777733,
+      "Drive": 1,
+      "OffsetMeters": 2.6000022888183594,
+      "TargetMeters": 2.6,
+      "Gap": {
+        "OpponentId": 4,
+        "GapMeters": -2.0913040463206083,
+        "ClosingMetersPerSecond": -0.19818115234375,
+        "LateralGapMeters": 2.0000030525180676,
+        "GapAfterReactionMeters": -2.0913040463206083,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 1.01,
+      "RiderId": 4,
+      "OpponentId": 3,
+      "OwnSpeed": 24.777733,
+      "OpponentSpeed": 24.579552,
+      "Drive": 1,
+      "OffsetMeters": 5.400005340576172,
+      "TargetMeters": 5.4,
+      "Gap": {
+        "OpponentId": 3,
+        "GapMeters": -2.1086959536794057,
+        "ClosingMetersPerSecond": 0.19818115234375,
+        "LateralGapMeters": 2.0000030525180676,
+        "GapAfterReactionMeters": -2.1562594302419056,
+        "ContactSeconds": 0,
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 1.51,
+      "RiderId": 1,
+      "OpponentId": 2,
+      "OwnSpeed": 21.51867,
+      "OpponentSpeed": 18.62799,
+      "Drive": 1,
+      "OffsetMeters": 4.000003814697266,
+      "TargetMeters": 4,
+      "Gap": {
+        "OpponentId": 2,
+        "GapMeters": 6.1701468467712335,
+        "ClosingMetersPerSecond": 2.8906784057617188,
+        "LateralGapMeters": -0.7999992770007935,
+        "GapAfterReactionMeters": 5.476384029388421,
+        "ContactSeconds": 2.13449785160219,
+        "CorridorOccupied": true
+      }
+    },
+    {
+      "TimeSeconds": 1.51,
+      "RiderId": 2,
+      "OpponentId": 1,
+      "OwnSpeed": 18.62799,
+      "OpponentSpeed": 21.51867,
+      "Drive": 1,
+      "OffsetMeters": 4.000003814697266,
+      "TargetMeters": 4,
+      "Gap": {
+        "OpponentId": 1,
+        "GapMeters": -10.370146846771249,
+        "ClosingMetersPerSecond": -2.8906784057617188,
+        "LateralGapMeters": -0.7999992770007935,
+        "GapAfterReactionMeters": -10.370146846771249,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": true
+      }
+    },
+    {
+      "TimeSeconds": 1.51,
+      "RiderId": 3,
+      "OpponentId": 4,
+      "OwnSpeed": 23.954575,
+      "OpponentSpeed": 24.840942,
+      "Drive": 1,
+      "OffsetMeters": 2.6000022888183594,
+      "TargetMeters": 2.6,
+      "Gap": {
+        "OpponentId": 4,
+        "GapMeters": -1.7410381857630526,
+        "ClosingMetersPerSecond": -0.8863677978515625,
+        "LateralGapMeters": 2.0000030831392905,
+        "GapAfterReactionMeters": -1.7410381857630526,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 1.51,
+      "RiderId": 4,
+      "OpponentId": 3,
+      "OwnSpeed": 24.840942,
+      "OpponentSpeed": 23.954575,
+      "Drive": 1,
+      "OffsetMeters": 5.400005340576172,
+      "TargetMeters": 5.4,
+      "Gap": {
+        "OpponentId": 3,
+        "GapMeters": -2.4589618142369645,
+        "ClosingMetersPerSecond": 0.8863677978515625,
+        "LateralGapMeters": 2.0000030831392905,
+        "GapAfterReactionMeters": -2.6716900857213393,
+        "ContactSeconds": 0,
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 2.01,
+      "RiderId": 1,
+      "OpponentId": 2,
+      "OwnSpeed": 22.53386,
+      "OpponentSpeed": 19.40831,
+      "Drive": 1,
+      "OffsetMeters": 3.9930152893066406,
+      "TargetMeters": 2.7650237,
+      "Gap": {
+        "OpponentId": 2,
+        "GapMeters": 4.66482772766052,
+        "ClosingMetersPerSecond": 3.1247787475585938,
+        "LateralGapMeters": -0.7930108832093339,
+        "GapAfterReactionMeters": 3.9148808282464578,
+        "ContactSeconds": 1.492850567837859,
+        "CorridorOccupied": true
+      }
+    },
+    {
+      "TimeSeconds": 2.01,
+      "RiderId": 2,
+      "OpponentId": 1,
+      "OwnSpeed": 19.40831,
+      "OpponentSpeed": 22.53386,
+      "Drive": 1,
+      "OffsetMeters": 4.000003814697266,
+      "TargetMeters": 4,
+      "Gap": {
+        "OpponentId": 1,
+        "GapMeters": -8.864827727660536,
+        "ClosingMetersPerSecond": -3.1247787475585938,
+        "LateralGapMeters": -0.7930108832093339,
+        "GapAfterReactionMeters": -8.864827727660536,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": true
+      }
+    },
+    {
+      "TimeSeconds": 2.01,
+      "RiderId": 3,
+      "OpponentId": 4,
+      "OwnSpeed": 23.285095,
+      "OpponentSpeed": 24.177055,
+      "Drive": 1,
+      "OffsetMeters": 2.6000022888183594,
+      "TargetMeters": 2.6,
+      "Gap": {
+        "OpponentId": 4,
+        "GapMeters": -1.2955874029871666,
+        "ClosingMetersPerSecond": -0.8919601440429688,
+        "LateralGapMeters": 2.0000031220818215,
+        "GapAfterReactionMeters": -1.2955874029871666,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 2.01,
+      "RiderId": 4,
+      "OpponentId": 3,
+      "OwnSpeed": 24.177055,
+      "OpponentSpeed": 23.285095,
+      "Drive": 1,
+      "OffsetMeters": 5.400005340576172,
+      "TargetMeters": 5.4,
+      "Gap": {
+        "OpponentId": 3,
+        "GapMeters": -2.9044125970128363,
+        "ClosingMetersPerSecond": 0.8919601440429688,
+        "LateralGapMeters": 2.0000031220818215,
+        "GapAfterReactionMeters": -3.118483031583149,
+        "ContactSeconds": 0,
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 2.51,
+      "RiderId": 1,
+      "OpponentId": 2,
+      "OwnSpeed": 23.488392,
+      "OpponentSpeed": 20.146324,
+      "Drive": 1,
+      "OffsetMeters": 3.7261314392089844,
+      "TargetMeters": 2.7650237,
+      "Gap": {
+        "OpponentId": 2,
+        "GapMeters": 3.049354910749699,
+        "ClosingMetersPerSecond": 3.3317184448242188,
+        "LateralGapMeters": -0.5261271743408003,
+        "GapAfterReactionMeters": 2.2497424839918865,
+        "ContactSeconds": 0.9152498811797354,
+        "CorridorOccupied": true
+      }
+    },
+    {
+      "TimeSeconds": 2.51,
+      "RiderId": 2,
+      "OpponentId": 3,
+      "OwnSpeed": 20.146324,
+      "OpponentSpeed": 23.02071,
+      "Drive": 1,
+      "OffsetMeters": 4.000003814697266,
+      "TargetMeters": 4,
+      "Gap": {
+        "OpponentId": 3,
+        "GapMeters": 11.071937039030722,
+        "ClosingMetersPerSecond": -2.8464877605438232,
+        "LateralGapMeters": 0.17596682577831757,
+        "GapAfterReactionMeters": 11.071937039030722,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": true
+      }
+    },
+    {
+      "TimeSeconds": 2.51,
+      "RiderId": 3,
+      "OpponentId": 4,
+      "OwnSpeed": 23.02071,
+      "OpponentSpeed": 23.963078,
+      "Drive": 1,
+      "OffsetMeters": 2.5972626209259033,
+      "TargetMeters": 2.6,
+      "Gap": {
+        "OpponentId": 4,
+        "GapMeters": -1.62554367111467,
+        "ClosingMetersPerSecond": -0.9424822926521301,
+        "LateralGapMeters": 1.9813518504828096,
+        "GapAfterReactionMeters": -1.62554367111467,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 2.51,
+      "RiderId": 4,
+      "OpponentId": 3,
+      "OwnSpeed": 23.963078,
+      "OpponentSpeed": 23.02071,
+      "Drive": 1,
+      "OffsetMeters": 5.396839618682861,
+      "TargetMeters": 5.4,
+      "Gap": {
+        "OpponentId": 3,
+        "GapMeters": -2.5165858322195778,
+        "ClosingMetersPerSecond": 0.9424822926521301,
+        "LateralGapMeters": 1.9813518504828096,
+        "GapAfterReactionMeters": -2.742781582456089,
+        "ContactSeconds": 0,
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 3.01,
+      "RiderId": 1,
+      "OpponentId": 2,
+      "OwnSpeed": 23.163795,
+      "OpponentSpeed": 20.395739,
+      "Drive": 1,
+      "OffsetMeters": 3.3884758949279785,
+      "TargetMeters": 2.7650237,
+      "Gap": {
+        "OpponentId": 2,
+        "GapMeters": 1.4720859002294482,
+        "ClosingMetersPerSecond": 2.787447690963745,
+        "LateralGapMeters": -0.2249984307818238,
+        "GapAfterReactionMeters": 0.8030984543981494,
+        "ContactSeconds": 0.5281124754382323,
+        "CorridorOccupied": true
+      }
+    },
+    {
+      "TimeSeconds": 3.01,
+      "RiderId": 2,
+      "OpponentId": 1,
+      "OwnSpeed": 20.395739,
+      "OpponentSpeed": 23.163795,
+      "Drive": 1,
+      "OffsetMeters": 3.9953460693359375,
+      "TargetMeters": 4,
+      "Gap": {
+        "OpponentId": 1,
+        "GapMeters": -5.652219252108463,
+        "ClosingMetersPerSecond": -2.787447690963745,
+        "LateralGapMeters": -0.2249984307818238,
+        "GapAfterReactionMeters": -5.652219252108463,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": true
+      }
+    },
+    {
+      "TimeSeconds": 3.01,
+      "RiderId": 3,
+      "OpponentId": 4,
+      "OwnSpeed": 23.0414,
+      "OpponentSpeed": 23.982738,
+      "Drive": 1,
+      "OffsetMeters": 2.591315269470215,
+      "TargetMeters": 2.6,
+      "Gap": {
+        "OpponentId": 4,
+        "GapMeters": -2.0718528504452496,
+        "ClosingMetersPerSecond": -0.9413342475891113,
+        "LateralGapMeters": 1.8914195565197787,
+        "GapAfterReactionMeters": -2.0718528504452496,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 3.01,
+      "RiderId": 4,
+      "OpponentId": 3,
+      "OwnSpeed": 23.982738,
+      "OpponentSpeed": 23.0414,
+      "Drive": 1,
+      "OffsetMeters": 5.390651226043701,
+      "TargetMeters": 5.4,
+      "Gap": {
+        "OpponentId": 3,
+        "GapMeters": -2.0233249129659288,
+        "ClosingMetersPerSecond": 0.9413342475891113,
+        "LateralGapMeters": 1.8914195565197787,
+        "GapAfterReactionMeters": -2.2492451323873155,
+        "ContactSeconds": 0,
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 3.51,
+      "RiderId": 1,
+      "OpponentId": 2,
+      "OwnSpeed": 22.95645,
+      "OpponentSpeed": 20.411552,
+      "Drive": 0,
+      "OffsetMeters": 3.1276350021362305,
+      "TargetMeters": 2.7650237,
+      "Gap": {
+        "OpponentId": 2,
+        "GapMeters": -0.08582427202264853,
+        "ClosingMetersPerSecond": 2.551706075668335,
+        "LateralGapMeters": 0.02168488871866714,
+        "GapAfterReactionMeters": -0.6982337301830489,
+        "ContactSeconds": 0,
+        "CorridorOccupied": true
+      }
+    },
+    {
+      "TimeSeconds": 3.51,
+      "RiderId": 2,
+      "OpponentId": 1,
+      "OwnSpeed": 20.411552,
+      "OpponentSpeed": 22.95645,
+      "Drive": 1,
+      "OffsetMeters": 3.989827871322632,
+      "TargetMeters": 4,
+      "Gap": {
+        "OpponentId": 1,
+        "GapMeters": -4.03899531169219,
+        "ClosingMetersPerSecond": -2.551706075668335,
+        "LateralGapMeters": 0.02168488871866714,
+        "GapAfterReactionMeters": -4.03899531169219,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": true
+      }
+    },
+    {
+      "TimeSeconds": 3.51,
+      "RiderId": 3,
+      "OpponentId": 4,
+      "OwnSpeed": 23.040545,
+      "OpponentSpeed": 23.981192,
+      "Drive": 1,
+      "OffsetMeters": 2.5858190059661865,
+      "TargetMeters": 2.6,
+      "Gap": {
+        "OpponentId": 4,
+        "GapMeters": -2.5359500876275227,
+        "ClosingMetersPerSecond": -0.9404840469360352,
+        "LateralGapMeters": 1.8679156306298097,
+        "GapAfterReactionMeters": -2.5359500876275227,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 3.51,
+      "RiderId": 4,
+      "OpponentId": 3,
+      "OwnSpeed": 23.981192,
+      "OpponentSpeed": 23.040545,
+      "Drive": 1,
+      "OffsetMeters": 5.385149955749512,
+      "TargetMeters": 5.4,
+      "Gap": {
+        "OpponentId": 3,
+        "GapMeters": -1.5455354037744904,
+        "ClosingMetersPerSecond": 0.9404840469360352,
+        "LateralGapMeters": 1.8679156306298097,
+        "GapAfterReactionMeters": -1.7712515750391389,
+        "ContactSeconds": 0,
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 4.01,
+      "RiderId": 1,
+      "OpponentId": 3,
+      "OwnSpeed": 22.567085,
+      "OpponentSpeed": 23.037067,
+      "Drive": 0,
+      "OffsetMeters": 2.964022636413574,
+      "TargetMeters": 2.7650237,
+      "Gap": {
+        "OpponentId": 3,
+        "GapMeters": 16.46631585927846,
+        "ClosingMetersPerSecond": -0.3905811309814453,
+        "LateralGapMeters": -0.6342912403849681,
+        "GapAfterReactionMeters": 16.46631585927846,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": true
+      }
+    },
+    {
+      "TimeSeconds": 4.01,
+      "RiderId": 2,
+      "OpponentId": 1,
+      "OwnSpeed": 20.418308,
+      "OpponentSpeed": 22.567085,
+      "Drive": 1,
+      "OffsetMeters": 3.989457845687866,
+      "TargetMeters": 4,
+      "Gap": {
+        "OpponentId": 1,
+        "GapMeters": -2.5569235004716715,
+        "ClosingMetersPerSecond": -2.149135112762451,
+        "LateralGapMeters": 0.1530325134912971,
+        "GapAfterReactionMeters": -2.5569235004716715,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 4.01,
+      "RiderId": 3,
+      "OpponentId": 4,
+      "OwnSpeed": 23.037067,
+      "OpponentSpeed": 23.978947,
+      "Drive": 1,
+      "OffsetMeters": 2.586270570755005,
+      "TargetMeters": 2.6,
+      "Gap": {
+        "OpponentId": 4,
+        "GapMeters": -3.0051336191480047,
+        "ClosingMetersPerSecond": -0.9414762258529663,
+        "LateralGapMeters": 1.8608463533176405,
+        "GapAfterReactionMeters": -3.0051336191480047,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 4.01,
+      "RiderId": 4,
+      "OpponentId": 3,
+      "OwnSpeed": 23.978947,
+      "OpponentSpeed": 23.037067,
+      "Drive": 1,
+      "OffsetMeters": 5.385540008544922,
+      "TargetMeters": 5.4,
+      "Gap": {
+        "OpponentId": 3,
+        "GapMeters": -1.0732243868670182,
+        "ClosingMetersPerSecond": 0.9414762258529663,
+        "LateralGapMeters": 1.8608463533176405,
+        "GapAfterReactionMeters": -1.29917868107173,
+        "ContactSeconds": 0,
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 4.51,
+      "RiderId": 1,
+      "OpponentId": 2,
+      "OwnSpeed": 22.145014,
+      "OpponentSpeed": 20.424738,
+      "Drive": 0,
+      "OffsetMeters": 2.8686106204986572,
+      "TargetMeters": 2.9210162,
+      "Gap": {
+        "OpponentId": 2,
+        "GapMeters": -2.8538824752786542,
+        "ClosingMetersPerSecond": 1.7186886072158813,
+        "LateralGapMeters": 0.23834620213297342,
+        "GapAfterReactionMeters": -3.2663677410104657,
+        "ContactSeconds": 0,
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 4.51,
+      "RiderId": 2,
+      "OpponentId": 1,
+      "OwnSpeed": 20.424738,
+      "OpponentSpeed": 22.145014,
+      "Drive": 1,
+      "OffsetMeters": 3.989619255065918,
+      "TargetMeters": 4,
+      "Gap": {
+        "OpponentId": 1,
+        "GapMeters": -1.2541266481489721,
+        "ClosingMetersPerSecond": -1.7186886072158813,
+        "LateralGapMeters": 0.23834620213297342,
+        "GapAfterReactionMeters": -1.2541266481489721,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 4.51,
+      "RiderId": 3,
+      "OpponentId": 4,
+      "OwnSpeed": 23.035938,
+      "OpponentSpeed": 23.976822,
+      "Drive": 1,
+      "OffsetMeters": 2.5869932174682617,
+      "TargetMeters": 2.6,
+      "Gap": {
+        "OpponentId": 4,
+        "GapMeters": -3.475167528438412,
+        "ClosingMetersPerSecond": -0.9402188062667847,
+        "LateralGapMeters": 1.857626989499579,
+        "GapAfterReactionMeters": -3.475167528438412,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 4.51,
+      "RiderId": 4,
+      "OpponentId": 3,
+      "OwnSpeed": 23.976822,
+      "OpponentSpeed": 23.035938,
+      "Drive": 1,
+      "OffsetMeters": 5.38640022277832,
+      "TargetMeters": 5.4,
+      "Gap": {
+        "OpponentId": 3,
+        "GapMeters": -0.6024609243731263,
+        "ClosingMetersPerSecond": 0.9402188062667847,
+        "LateralGapMeters": 1.857626989499579,
+        "GapAfterReactionMeters": -0.8281134378771546,
+        "ContactSeconds": 0,
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 5.01,
+      "RiderId": 1,
+      "OpponentId": 2,
+      "OwnSpeed": 21.689463,
+      "OpponentSpeed": 20.431158,
+      "Drive": 0,
+      "OffsetMeters": 2.844705820083618,
+      "TargetMeters": 2.8698266,
+      "Gap": {
+        "OpponentId": 2,
+        "GapMeters": -3.949644203359277,
+        "ClosingMetersPerSecond": 1.2579344511032104,
+        "LateralGapMeters": 0.2596515246276283,
+        "GapAfterReactionMeters": -4.251548471624048,
+        "ContactSeconds": 0,
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 5.01,
+      "RiderId": 2,
+      "OpponentId": 1,
+      "OwnSpeed": 20.431158,
+      "OpponentSpeed": 21.689463,
+      "Drive": 1,
+      "OffsetMeters": 3.9898619651794434,
+      "TargetMeters": 4,
+      "Gap": {
+        "OpponentId": 1,
+        "GapMeters": -0.16087896149483782,
+        "ClosingMetersPerSecond": -1.2579344511032104,
+        "LateralGapMeters": 0.2596515246276283,
+        "GapAfterReactionMeters": -0.16087896149483782,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 5.01,
+      "RiderId": 3,
+      "OpponentId": 4,
+      "OwnSpeed": 23.03622,
+      "OpponentSpeed": 23.976847,
+      "Drive": 1,
+      "OffsetMeters": 2.5875065326690674,
+      "TargetMeters": 2.6,
+      "Gap": {
+        "OpponentId": 4,
+        "GapMeters": -3.945710136559356,
+        "ClosingMetersPerSecond": -0.9396840929985046,
+        "LateralGapMeters": 1.8551350854015638,
+        "GapAfterReactionMeters": -3.945710136559356,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 5.01,
+      "RiderId": 4,
+      "OpponentId": 3,
+      "OwnSpeed": 23.976847,
+      "OpponentSpeed": 23.03622,
+      "Drive": 1,
+      "OffsetMeters": 5.387108325958252,
+      "TargetMeters": 5.4,
+      "Gap": {
+        "OpponentId": 3,
+        "GapMeters": -0.1315568678607093,
+        "ClosingMetersPerSecond": 0.9396840929985046,
+        "LateralGapMeters": 1.8551350854015638,
+        "GapAfterReactionMeters": -0.3570810501803504,
+        "ContactSeconds": 0,
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 5.51,
+      "RiderId": 1,
+      "OpponentId": 2,
+      "OwnSpeed": 21.242878,
+      "OpponentSpeed": 20.44661,
+      "Drive": 0,
+      "OffsetMeters": 2.83990478515625,
+      "TargetMeters": 2.8698266,
+      "Gap": {
+        "OpponentId": 2,
+        "GapMeters": -4.812364162495513,
+        "ClosingMetersPerSecond": 0.7965623736381531,
+        "LateralGapMeters": 0.26133003657504617,
+        "GapAfterReactionMeters": -5.00353913216867,
+        "ContactSeconds": 0,
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 5.51,
+      "RiderId": 2,
+      "OpponentId": 1,
+      "OwnSpeed": 20.44661,
+      "OpponentSpeed": 21.242878,
+      "Drive": 1,
+      "OffsetMeters": 3.9866907596588135,
+      "TargetMeters": 4,
+      "Gap": {
+        "OpponentId": 1,
+        "GapMeters": 0.6992955883450094,
+        "ClosingMetersPerSecond": -0.7965623736381531,
+        "LateralGapMeters": 0.26133003657504617,
+        "GapAfterReactionMeters": 0.6992955883450094,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 5.51,
+      "RiderId": 3,
+      "OpponentId": 4,
+      "OwnSpeed": 23.039965,
+      "OpponentSpeed": 23.980928,
+      "Drive": 1,
+      "OffsetMeters": 2.5835633277893066,
+      "TargetMeters": 2.6,
+      "Gap": {
+        "OpponentId": 4,
+        "GapMeters": -4.416030806129129,
+        "ClosingMetersPerSecond": -0.9395464658737183,
+        "LateralGapMeters": 1.852418729319794,
+        "GapAfterReactionMeters": -4.416030806129129,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 5.51,
+      "RiderId": 4,
+      "OpponentId": 3,
+      "OwnSpeed": 23.980928,
+      "OpponentSpeed": 23.039965,
+      "Drive": 1,
+      "OffsetMeters": 5.383273124694824,
+      "TargetMeters": 5.4,
+      "Gap": {
+        "OpponentId": 3,
+        "GapMeters": 0.3393084322487425,
+        "ClosingMetersPerSecond": 0.9395464658737183,
+        "LateralGapMeters": 1.852418729319794,
+        "GapAfterReactionMeters": 0.11381728043905015,
+        "ContactSeconds": 0.3611406615565387,
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 6.01,
+      "RiderId": 1,
+      "OpponentId": 2,
+      "OwnSpeed": 20.805574,
+      "OpponentSpeed": 20.530188,
+      "Drive": 0,
+      "OffsetMeters": 2.8403377532958984,
+      "TargetMeters": 2.8698266,
+      "Gap": {
+        "OpponentId": 2,
+        "GapMeters": -5.431065052849483,
+        "ClosingMetersPerSecond": 0.27653688192367554,
+        "LateralGapMeters": 0.25990607597118753,
+        "GapAfterReactionMeters": -5.4974339045111655,
+        "ContactSeconds": 0,
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 6.01,
+      "RiderId": 2,
+      "OpponentId": 1,
+      "OwnSpeed": 20.530188,
+      "OpponentSpeed": 20.805574,
+      "Drive": 1,
+      "OffsetMeters": 3.984299659729004,
+      "TargetMeters": 4,
+      "Gap": {
+        "OpponentId": 1,
+        "GapMeters": 1.3160316745262364,
+        "ClosingMetersPerSecond": -0.27653688192367554,
+        "LateralGapMeters": 0.25990607597118753,
+        "GapAfterReactionMeters": 1.3160316745262364,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 6.01,
+      "RiderId": 3,
+      "OpponentId": 4,
+      "OwnSpeed": 23.037745,
+      "OpponentSpeed": 23.97887,
+      "Drive": 1,
+      "OffsetMeters": 2.5807931423187256,
+      "TargetMeters": 2.6,
+      "Gap": {
+        "OpponentId": 4,
+        "GapMeters": -4.886146799526095,
+        "ClosingMetersPerSecond": -0.9390859603881836,
+        "LateralGapMeters": 1.849592223337602,
+        "GapAfterReactionMeters": -4.886146799526095,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 6.01,
+      "RiderId": 4,
+      "OpponentId": 3,
+      "OwnSpeed": 23.97887,
+      "OpponentSpeed": 23.037745,
+      "Drive": 1,
+      "OffsetMeters": 5.380535125732422,
+      "TargetMeters": 5.4,
+      "Gap": {
+        "OpponentId": 3,
+        "GapMeters": 0.8100873429292434,
+        "ClosingMetersPerSecond": 0.9390859603881836,
+        "LateralGapMeters": 1.849592223337602,
+        "GapAfterReactionMeters": 0.5847067124360794,
+        "ContactSeconds": 0.8626338557914157,
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 6.51,
+      "RiderId": 1,
+      "OpponentId": 2,
+      "OwnSpeed": 20.379234,
+      "OpponentSpeed": 20.801943,
+      "Drive": 0,
+      "OffsetMeters": 2.842085599899292,
+      "TargetMeters": 2.8698266,
+      "Gap": {
+        "OpponentId": 2,
+        "GapMeters": -5.7441504975101125,
+        "ClosingMetersPerSecond": -0.42033839225769043,
+        "LateralGapMeters": 0.25828411783386684,
+        "GapAfterReactionMeters": -5.7441504975101125,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 6.51,
+      "RiderId": 2,
+      "OpponentId": 1,
+      "OwnSpeed": 20.801943,
+      "OpponentSpeed": 20.379234,
+      "Drive": 1,
+      "OffsetMeters": 3.983022451400757,
+      "TargetMeters": 4,
+      "Gap": {
+        "OpponentId": 1,
+        "GapMeters": 1.6280414562290488,
+        "ClosingMetersPerSecond": 0.42033839225769043,
+        "LateralGapMeters": 0.25828411783386684,
+        "GapAfterReactionMeters": 1.527160242087203,
+        "ContactSeconds": 3.8731685856355713,
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 6.51,
+      "RiderId": 3,
+      "OpponentId": 4,
+      "OwnSpeed": 23.035904,
+      "OpponentSpeed": 23.977018,
+      "Drive": 1,
+      "OffsetMeters": 2.5791165828704834,
+      "TargetMeters": 2.6,
+      "Gap": {
+        "OpponentId": 4,
+        "GapMeters": -5.3560824543166845,
+        "ClosingMetersPerSecond": -0.9384211301803589,
+        "LateralGapMeters": 1.846664048992622,
+        "GapAfterReactionMeters": -5.3560824543166845,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 6.51,
+      "RiderId": 4,
+      "OpponentId": 3,
+      "OwnSpeed": 23.977018,
+      "OpponentSpeed": 23.035904,
+      "Drive": 1,
+      "OffsetMeters": 5.37888240814209,
+      "TargetMeters": 5.4,
+      "Gap": {
+        "OpponentId": 3,
+        "GapMeters": 1.280844324392163,
+        "ClosingMetersPerSecond": 0.9384211301803589,
+        "LateralGapMeters": 1.846664048992622,
+        "GapAfterReactionMeters": 1.055623253148877,
+        "ContactSeconds": 1.3648928857196474,
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 7.01,
+      "RiderId": 1,
+      "OpponentId": 2,
+      "OwnSpeed": 20.964848,
+      "OpponentSpeed": 21.25116,
+      "Drive": 1,
+      "OffsetMeters": 2.8449602127075195,
+      "TargetMeters": 2.8698266,
+      "Gap": {
+        "OpponentId": 2,
+        "GapMeters": -5.849061700730061,
+        "ClosingMetersPerSecond": -0.2837151288986206,
+        "LateralGapMeters": 0.2517731630023867,
+        "GapAfterReactionMeters": -5.849061700730061,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 7.01,
+      "RiderId": 2,
+      "OpponentId": 1,
+      "OwnSpeed": 21.25116,
+      "OpponentSpeed": 20.964848,
+      "Drive": 1,
+      "OffsetMeters": 3.9826812744140625,
+      "TargetMeters": 4,
+      "Gap": {
+        "OpponentId": 1,
+        "GapMeters": 1.7347166328942905,
+        "ClosingMetersPerSecond": 0.2837151288986206,
+        "LateralGapMeters": 0.2517731630023867,
+        "GapAfterReactionMeters": 1.6666250019586215,
+        "ContactSeconds": 6.114290202388726,
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 7.01,
+      "RiderId": 3,
+      "OpponentId": 4,
+      "OwnSpeed": 23.66817,
+      "OpponentSpeed": 24.30659,
+      "Drive": 1,
+      "OffsetMeters": 2.5843448638916016,
+      "TargetMeters": 2.6,
+      "Gap": {
+        "OpponentId": 4,
+        "GapMeters": -5.454733280772107,
+        "ClosingMetersPerSecond": -0.6384181976318359,
+        "LateralGapMeters": 2.03055229511934,
+        "GapAfterReactionMeters": -5.454733280772107,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 7.01,
+      "RiderId": 4,
+      "OpponentId": 3,
+      "OwnSpeed": 24.30659,
+      "OpponentSpeed": 23.66817,
+      "Drive": 1,
+      "OffsetMeters": 5.38156795501709,
+      "TargetMeters": 5.4,
+      "Gap": {
+        "OpponentId": 3,
+        "GapMeters": 1.2871767244917898,
+        "ClosingMetersPerSecond": 0.6384181976318359,
+        "LateralGapMeters": 2.03055229511934,
+        "GapAfterReactionMeters": 1.1339563570601492,
+        "ContactSeconds": 2.0161967958721645,
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 7.51,
+      "RiderId": 1,
+      "OpponentId": 4,
+      "OwnSpeed": 21.881092,
+      "OpponentSpeed": 25.131216,
+      "Drive": 1,
+      "OffsetMeters": 2.8484435081481934,
+      "TargetMeters": 2.8698266,
+      "Gap": {
+        "OpponentId": 4,
+        "GapMeters": 20.8646172170022,
+        "ClosingMetersPerSecond": -3.240935802459717,
+        "LateralGapMeters": 0.050542992786365204,
+        "GapAfterReactionMeters": 20.8646172170022,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": true
+      }
+    },
+    {
+      "TimeSeconds": 7.51,
+      "RiderId": 2,
+      "OpponentId": 4,
+      "OwnSpeed": 21.744694,
+      "OpponentSpeed": 25.131216,
+      "Drive": 1,
+      "OffsetMeters": 3.9824774265289307,
+      "TargetMeters": 4,
+      "Gap": {
+        "OpponentId": 4,
+        "GapMeters": 25.099073503979675,
+        "ClosingMetersPerSecond": -3.3543591499328613,
+        "LateralGapMeters": 0.2802647171564665,
+        "GapAfterReactionMeters": 25.099073503979675,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": true
+      }
+    },
+    {
+      "TimeSeconds": 7.51,
+      "RiderId": 3,
+      "OpponentId": 4,
+      "OwnSpeed": 24.53621,
+      "OpponentSpeed": 25.131216,
+      "Drive": 1,
+      "OffsetMeters": 2.5906662940979004,
+      "TargetMeters": 2.6,
+      "Gap": {
+        "OpponentId": 4,
+        "GapMeters": -5.161588510974743,
+        "ClosingMetersPerSecond": -0.5950069427490234,
+        "LateralGapMeters": 2.004977584333455,
+        "GapAfterReactionMeters": -5.161588510974743,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 7.51,
+      "RiderId": 4,
+      "OpponentId": 3,
+      "OwnSpeed": 25.131216,
+      "OpponentSpeed": 24.53621,
+      "Drive": 1,
+      "OffsetMeters": 5.388772010803223,
+      "TargetMeters": 5.4,
+      "Gap": {
+        "OpponentId": 3,
+        "GapMeters": 0.9635488429253538,
+        "ClosingMetersPerSecond": 0.5950069427490234,
+        "LateralGapMeters": 2.004977584333455,
+        "GapAfterReactionMeters": 0.8207471766655882,
+        "ContactSeconds": 1.6193909242026827,
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 8.01,
+      "RiderId": 1,
+      "OpponentId": 3,
+      "OwnSpeed": 22.810123,
+      "OpponentSpeed": 24.815908,
+      "Drive": 1,
+      "OffsetMeters": 2.8545079231262207,
+      "TargetMeters": 2.8698266,
+      "Gap": {
+        "OpponentId": 3,
+        "GapMeters": 24.990766673743245,
+        "ClosingMetersPerSecond": -2.0057926177978516,
+        "LateralGapMeters": -0.4600685559031481,
+        "GapAfterReactionMeters": 24.990766673743245,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": true
+      }
+    },
+    {
+      "TimeSeconds": 8.01,
+      "RiderId": 2,
+      "OpponentId": 1,
+      "OwnSpeed": 21.78025,
+      "OpponentSpeed": 22.810123,
+      "Drive": 1,
+      "OffsetMeters": 3.9825665950775146,
+      "TargetMeters": 4,
+      "Gap": {
+        "OpponentId": 1,
+        "GapMeters": 2.599047450747044,
+        "ClosingMetersPerSecond": -1.0298709869384766,
+        "LateralGapMeters": 0.3161491862534671,
+        "GapAfterReactionMeters": 2.599047450747044,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 8.01,
+      "RiderId": 3,
+      "OpponentId": 4,
+      "OwnSpeed": 24.815908,
+      "OpponentSpeed": 25.7833,
+      "Drive": 1,
+      "OffsetMeters": 2.594705581665039,
+      "TargetMeters": 2.6,
+      "Gap": {
+        "OpponentId": 4,
+        "GapMeters": -4.824987515590113,
+        "ClosingMetersPerSecond": -0.9673900604248047,
+        "LateralGapMeters": 2.0002257903673306,
+        "GapAfterReactionMeters": -4.824987515590113,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 8.01,
+      "RiderId": 4,
+      "OpponentId": 3,
+      "OwnSpeed": 25.7833,
+      "OpponentSpeed": 24.815908,
+      "Drive": 1,
+      "OffsetMeters": 5.393547058105469,
+      "TargetMeters": 5.4,
+      "Gap": {
+        "OpponentId": 3,
+        "GapMeters": 0.6250785740400144,
+        "ClosingMetersPerSecond": 0.9673900604248047,
+        "LateralGapMeters": 2.0002257903673306,
+        "GapAfterReactionMeters": 0.3929049595380613,
+        "ContactSeconds": 0.6461494691867385,
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 8.51,
+      "RiderId": 1,
+      "OpponentId": 3,
+      "OwnSpeed": 23.738386,
+      "OpponentSpeed": 24.159178,
+      "Drive": 1,
+      "OffsetMeters": 2.8613758087158203,
+      "TargetMeters": 2.8698266,
+      "Gap": {
+        "OpponentId": 3,
+        "GapMeters": 25.58778638240647,
+        "ClosingMetersPerSecond": -0.4207935333251953,
+        "LateralGapMeters": -0.5170461999244602,
+        "GapAfterReactionMeters": 25.58778638240647,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": true
+      }
+    },
+    {
+      "TimeSeconds": 8.51,
+      "RiderId": 2,
+      "OpponentId": 1,
+      "OwnSpeed": 22.389126,
+      "OpponentSpeed": 23.738386,
+      "Drive": 1,
+      "OffsetMeters": 3.9891955852508545,
+      "TargetMeters": 4,
+      "Gap": {
+        "OpponentId": 1,
+        "GapMeters": 3.17073143172877,
+        "ClosingMetersPerSecond": -1.3492603302001953,
+        "LateralGapMeters": 0.3408024111896233,
+        "GapAfterReactionMeters": 3.17073143172877,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 8.51,
+      "RiderId": 3,
+      "OpponentId": 4,
+      "OwnSpeed": 24.159178,
+      "OpponentSpeed": 25.180866,
+      "Drive": 1,
+      "OffsetMeters": 2.5970914363861084,
+      "TargetMeters": 2.6,
+      "Gap": {
+        "OpponentId": 4,
+        "GapMeters": -4.319182489137832,
+        "ClosingMetersPerSecond": -1.021688461303711,
+        "LateralGapMeters": 1.9995661238199052,
+        "GapAfterReactionMeters": -4.319182489137832,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 8.51,
+      "RiderId": 4,
+      "OpponentId": 3,
+      "OwnSpeed": 25.180866,
+      "OpponentSpeed": 24.159178,
+      "Drive": 1,
+      "OffsetMeters": 5.39642333984375,
+      "TargetMeters": 5.4,
+      "Gap": {
+        "OpponentId": 3,
+        "GapMeters": 0.11918535449009937,
+        "ClosingMetersPerSecond": 1.021688461303711,
+        "LateralGapMeters": 1.9995661238199052,
+        "GapAfterReactionMeters": -0.12601987622279123,
+        "ContactSeconds": 0.11665528094348311,
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 9.01,
+      "RiderId": 1,
+      "OpponentId": 3,
+      "OwnSpeed": 24.599684,
+      "OpponentSpeed": 23.489561,
+      "Drive": 1,
+      "OffsetMeters": 2.8652737140655518,
+      "TargetMeters": 2.8698266,
+      "Gap": {
+        "OpponentId": 3,
+        "GapMeters": 25.410545760526034,
+        "ClosingMetersPerSecond": 1.1101207733154297,
+        "LateralGapMeters": -0.5293027948300972,
+        "GapAfterReactionMeters": 25.144116774930332,
+        "ContactSeconds": 22.889893038066663,
+        "CorridorOccupied": true
+      }
+    },
+    {
+      "TimeSeconds": 9.01,
+      "RiderId": 2,
+      "OpponentId": 1,
+      "OwnSpeed": 22.958553,
+      "OpponentSpeed": 24.599684,
+      "Drive": 1,
+      "OffsetMeters": 3.9937260150909424,
+      "TargetMeters": 4,
+      "Gap": {
+        "OpponentId": 1,
+        "GapMeters": 3.9184743778162012,
+        "ClosingMetersPerSecond": -1.6411304473876953,
+        "LateralGapMeters": 0.3310096927559658,
+        "GapAfterReactionMeters": 3.9184743778162012,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 9.01,
+      "RiderId": 3,
+      "OpponentId": 4,
+      "OwnSpeed": 23.489561,
+      "OpponentSpeed": 24.5117,
+      "Drive": 1,
+      "OffsetMeters": 2.598437547683716,
+      "TargetMeters": 2.6,
+      "Gap": {
+        "OpponentId": 4,
+        "GapMeters": -3.8081889930597264,
+        "ClosingMetersPerSecond": -1.0221385955810547,
+        "LateralGapMeters": 1.9996506598210209,
+        "GapAfterReactionMeters": -3.8081889930597264,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 9.01,
+      "RiderId": 4,
+      "OpponentId": 3,
+      "OwnSpeed": 24.5117,
+      "OpponentSpeed": 23.489561,
+      "Drive": 1,
+      "OffsetMeters": 5.398065567016602,
+      "TargetMeters": 5.4,
+      "Gap": {
+        "OpponentId": 3,
+        "GapMeters": -0.391810971819492,
+        "ClosingMetersPerSecond": 1.0221385955810547,
+        "LateralGapMeters": 1.9996506598210209,
+        "GapAfterReactionMeters": -0.6371242347589451,
+        "ContactSeconds": 0,
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 9.51,
+      "RiderId": 1,
+      "OpponentId": 2,
+      "OwnSpeed": 24.425358,
+      "OpponentSpeed": 23.37632,
+      "Drive": 1,
+      "OffsetMeters": 2.8674144744873047,
+      "TargetMeters": 2.8698266,
+      "Gap": {
+        "OpponentId": 2,
+        "GapMeters": -8.839010184962687,
+        "ClosingMetersPerSecond": 1.0490379333496094,
+        "LateralGapMeters": 0.32949343962355604,
+        "GapAfterReactionMeters": -9.090779288966592,
+        "ContactSeconds": 0,
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 9.51,
+      "RiderId": 2,
+      "OpponentId": 1,
+      "OwnSpeed": 23.37632,
+      "OpponentSpeed": 24.425358,
+      "Drive": 1,
+      "OffsetMeters": 3.9965009689331055,
+      "TargetMeters": 4,
+      "Gap": {
+        "OpponentId": 1,
+        "GapMeters": 4.639013344090047,
+        "ClosingMetersPerSecond": -1.0490379333496094,
+        "LateralGapMeters": 0.32949343962355604,
+        "GapAfterReactionMeters": 4.639013344090047,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 9.51,
+      "RiderId": 3,
+      "OpponentId": 4,
+      "OwnSpeed": 23.021595,
+      "OpponentSpeed": 23.972443,
+      "Drive": 1,
+      "OffsetMeters": 2.5975863933563232,
+      "TargetMeters": 2.6,
+      "Gap": {
+        "OpponentId": 4,
+        "GapMeters": -3.7378559898483843,
+        "ClosingMetersPerSecond": -0.9497864246368408,
+        "LateralGapMeters": 2.0163414956021413,
+        "GapAfterReactionMeters": -3.7378559898483843,
+        "ContactSeconds": "Infinity",
+        "CorridorOccupied": false
+      }
+    },
+    {
+      "TimeSeconds": 9.51,
+      "RiderId": 4,
+      "OpponentId": 3,
+      "OwnSpeed": 23.972443,
+      "OpponentSpeed": 23.021595,
+      "Drive": 1,
+      "OffsetMeters": 5.397441864013672,
+      "TargetMeters": 5.4,
+      "Gap": {
+        "OpponentId": 3,
+        "GapMeters": -0.43602703240646434,
+        "ClosingMetersPerSecond": 0.9497864246368408,
+        "LateralGapMeters": 2.0163414956021413,
+        "GapAfterReactionMeters": -0.6639757743193061,
+        "ContactSeconds": 0,
+        "CorridorOccupied": false
+      }
+    }
+  ],
+  "Responses": [
+    {
+      "ActivationBoundarySeconds": 3.2399999999999998,
+      "AcceptedAtSeconds": 3.25,
+      "RiderId": 1,
+      "OldDrive": 1,
+      "NewDrive": 0,
+      "BeforeSpeed": 23.140507,
+      "AfterSpeed": 23.134012,
+      "ActualAlongAcceleration": -1.0358400642871617
+    },
+    {
+      "ActivationBoundarySeconds": 6.64,
+      "AcceptedAtSeconds": 6.65,
+      "RiderId": 1,
+      "OldDrive": 0,
+      "NewDrive": 1,
+      "BeforeSpeed": 20.270237,
+      "AfterSpeed": 20.288244,
+      "ActualAlongAcceleration": 1.7756525427101844
+    }
+  ],
+  "ElapsedMilliseconds": 180.8945,
+  "AllocatedBytes": 13293264
+}

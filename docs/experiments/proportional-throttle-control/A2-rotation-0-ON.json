@@ -1,0 +1,1093 @@
+{
+  "Name": "A2-rotation-0",
+  "Enabled": true,
+  "Status": "Completed",
+  "Inputs": [
+    {
+      "Id": 1,
+      "Canonical": {
+        "Abilities": {
+          "Reaction": 80,
+          "Start": 80,
+          "Technique": 50,
+          "TrackReading": 50,
+          "Attack": 50,
+          "Defense": 45,
+          "PairRiding": 50,
+          "Strength": 55
+        },
+        "Physical": {
+          "MassKg": 70
+        },
+        "InteractionStyle": {
+          "Combativeness": 0.5,
+          "PreferredLine": 1,
+          "SetupIndependence": 0.5
+        }
+      },
+      "Legacy": {
+        "Start": 80,
+        "Speed": 50,
+        "SlideControl": 50,
+        "TrackReading": 50,
+        "PairRiding": 50,
+        "Adaptability": 50
+      },
+      "Setup": {
+        "Gearing": 0.5,
+        "TractionBias": 0.5
+      },
+      "ReferenceMeters": 0,
+      "OffsetMeters": 0.5,
+      "TargetOffsetMeters": 0.5,
+      "SpeedMetersPerSecond": 0,
+      "InitialOutwardSpeed": 0,
+      "TrafficEnabled": true
+    },
+    {
+      "Id": 2,
+      "Canonical": {
+        "Abilities": {
+          "Reaction": 50,
+          "Start": 50,
+          "Technique": 85,
+          "TrackReading": 70,
+          "Attack": 55,
+          "Defense": 55,
+          "PairRiding": 50,
+          "Strength": 60
+        },
+        "Physical": {
+          "MassKg": 70
+        },
+        "InteractionStyle": {
+          "Combativeness": 0.5,
+          "PreferredLine": 1,
+          "SetupIndependence": 0.5
+        }
+      },
+      "Legacy": {
+        "Start": 50,
+        "Speed": 55,
+        "SlideControl": 80,
+        "TrackReading": 50,
+        "PairRiding": 50,
+        "Adaptability": 50
+      },
+      "Setup": {
+        "Gearing": 0.5,
+        "TractionBias": 0.5
+      },
+      "ReferenceMeters": 0,
+      "OffsetMeters": 3.5,
+      "TargetOffsetMeters": 3.5,
+      "SpeedMetersPerSecond": 0,
+      "InitialOutwardSpeed": 0,
+      "TrafficEnabled": true
+    },
+    {
+      "Id": 3,
+      "Canonical": {
+        "Abilities": {
+          "Reaction": 55,
+          "Start": 55,
+          "Technique": 60,
+          "TrackReading": 50,
+          "Attack": 85,
+          "Defense": 45,
+          "PairRiding": 50,
+          "Strength": 70
+        },
+        "Physical": {
+          "MassKg": 70
+        },
+        "InteractionStyle": {
+          "Combativeness": 0.8,
+          "PreferredLine": 1,
+          "SetupIndependence": 0.5
+        }
+      },
+      "Legacy": {
+        "Start": 55,
+        "Speed": 65,
+        "SlideControl": 60,
+        "TrackReading": 50,
+        "PairRiding": 50,
+        "Adaptability": 50
+      },
+      "Setup": {
+        "Gearing": 0.5,
+        "TractionBias": 0.5
+      },
+      "ReferenceMeters": 0,
+      "OffsetMeters": 6.5,
+      "TargetOffsetMeters": 6.5,
+      "SpeedMetersPerSecond": 0,
+      "InitialOutwardSpeed": 0,
+      "TrafficEnabled": true
+    },
+    {
+      "Id": 4,
+      "Canonical": {
+        "Abilities": {
+          "Reaction": 60,
+          "Start": 55,
+          "Technique": 70,
+          "TrackReading": 65,
+          "Attack": 45,
+          "Defense": 85,
+          "PairRiding": 50,
+          "Strength": 65
+        },
+        "Physical": {
+          "MassKg": 70
+        },
+        "InteractionStyle": {
+          "Combativeness": 0.3,
+          "PreferredLine": 1,
+          "SetupIndependence": 0.5
+        }
+      },
+      "Legacy": {
+        "Start": 55,
+        "Speed": 50,
+        "SlideControl": 70,
+        "TrackReading": 50,
+        "PairRiding": 50,
+        "Adaptability": 50
+      },
+      "Setup": {
+        "Gearing": 0.5,
+        "TractionBias": 0.5
+      },
+      "ReferenceMeters": 0,
+      "OffsetMeters": 9.5,
+      "TargetOffsetMeters": 9.5,
+      "SpeedMetersPerSecond": 0,
+      "InitialOutwardSpeed": 0,
+      "TrafficEnabled": true
+    }
+  ],
+  "Result": {
+    "Name": "A2-rotation-0",
+    "StepSeconds": 0.01,
+    "TimeSeconds": 62.42,
+    "Work": {
+      "PhysicsUpdates": 6242,
+      "SolverCalls": 6322,
+      "AiUpdates": 2496,
+      "PairChecks": 0,
+      "Threats": 0,
+      "ContactManifolds": 0,
+      "SolvedPoints": 0,
+      "BeginShapes": 0,
+      "EndShapes": 0,
+      "HitShapes": 0,
+      "Episodes": 0,
+      "Consequences": 0,
+      "GeometryChecks": 0,
+      "ProximityPairChecks": 37452,
+      "SolverSubsteps": 25288,
+      "ContactCandidateSamples": 0,
+      "MaximumContactCandidates": 0,
+      "SolverElapsedMilliseconds": 48.82099999999899,
+      "ContactProcessingMilliseconds": 3.553700000000024,
+      "SolverProfileMilliseconds": 48.06490005902015,
+      "BroadPhaseProfileMilliseconds": 13.948899993520172,
+      "NarrowPhaseProfileMilliseconds": 7.448600212112069,
+      "ConstraintProfileMilliseconds": 7.613100043614395,
+      "MinimumGapMeters": "Infinity",
+      "MaximumSpeed": 25.84459686279297,
+      "MaximumStepDisplacementMeters": 0.25843560695648193,
+      "MinimumTrackClearanceMeters": 1.091626552517374,
+      "MaximumPassiveEnergyIncreaseJoules": 0,
+      "TacticalPairObservations": 3744,
+      "TacticalObservations": 2431,
+      "TacticalCandidates": 246,
+      "TacticalDecisions": 26,
+      "ControlChanges": 5,
+      "CancelledCommands": 0,
+      "MaximumTacticalPairs": 6,
+      "SideObservations": 40,
+      "SideCandidates": 80,
+      "SideBlockedCandidates": 19,
+      "SideHoldChoices": 10,
+      "QualitySamples": 0,
+      "ThrottleObservations": 2437,
+      "ThrottleForceEvaluations": 32,
+      "TacticalElapsedMilliseconds": 3.725800000000003
+    },
+    "Riders": [
+      {
+        "Id": 1,
+        "Position": {
+          "X": 43.981407,
+          "Y": 0.8104708
+        },
+        "Velocity": {
+          "X": 20.500084,
+          "Y": 6.087392
+        },
+        "Heading": 0.106482156,
+        "AngularVelocity": 0.43540442,
+        "Road": {
+          "Segment": 1,
+          "Progress": 0.2761296637498715,
+          "ReferenceMeters": 43.96403178788667,
+          "OffsetMeters": 0.49719637632369995,
+          "Heading": 0.28916231573827966,
+          "RadiusMeters": 31.4971963763237,
+          "CornerProgress": 0.09204322124995717,
+          "Tangent": {
+            "X": 0.9584831,
+            "Y": 0.28514943
+          },
+          "Outward": {
+            "X": 0.28514943,
+            "Y": -0.9584831
+          },
+          "IsTurn": true
+        },
+        "TotalReferenceMeters": 1319.0790372810525,
+        "DistanceMeters": 1331.3973677924369,
+        "Activity": 3,
+        "Drive": 1,
+        "TargetOffsetMeters": 0.5,
+        "Impairment": 0,
+        "Context": 2,
+        "Speed": 21.384802,
+        "ForwardSpeed": 21.030949,
+        "SideSpeed": 3.8741431,
+        "SlideRadians": -0.18216929
+      },
+      {
+        "Id": 2,
+        "Position": {
+          "X": 54.896313,
+          "Y": 2.825078
+        },
+        "Velocity": {
+          "X": 18.741377,
+          "Y": 13.227034
+        },
+        "Heading": 0.3804918,
+        "AngularVelocity": 0.6052566,
+        "Road": {
+          "Segment": 1,
+          "Progress": 0.587143794061733,
+          "ReferenceMeters": 54.060522374000854,
+          "OffsetMeters": 3.491875648498535,
+          "Heading": 0.6148555604516406,
+          "RadiusMeters": 34.491875648498535,
+          "CornerProgress": 0.19571459802057767,
+          "Tangent": {
+            "X": 0.8168568,
+            "Y": 0.5768405
+          },
+          "Outward": {
+            "X": 0.5768405,
+            "Y": -0.8168568
+          },
+          "IsTurn": true
+        },
+        "TotalReferenceMeters": 1329.175527867168,
+        "DistanceMeters": 1418.868945955719,
+        "Activity": 3,
+        "Drive": 1,
+        "TargetOffsetMeters": 3.5,
+        "Impairment": 0,
+        "Context": 2,
+        "Speed": 22.93891,
+        "ForwardSpeed": 22.313251,
+        "SideSpeed": 5.3209453,
+        "SlideRadians": -0.23409374
+      },
+      {
+        "Id": 3,
+        "Position": {
+          "X": 37.58167,
+          "Y": -6.2801147
+        },
+        "Velocity": {
+          "X": 23.851805,
+          "Y": 1.6361493
+        },
+        "Heading": 0.008708021,
+        "AngularVelocity": 0.14942615,
+        "Road": {
+          "Segment": 1,
+          "Progress": 0.0660240074330532,
+          "ReferenceMeters": 37.14334560567048,
+          "OffsetMeters": 6.369398593902588,
+          "Heading": 0.06914018082808003,
+          "RadiusMeters": 37.36939859390259,
+          "CornerProgress": 0.0220080024776844,
+          "Tangent": {
+            "X": 0.99761075,
+            "Y": 0.069085106
+          },
+          "Outward": {
+            "X": 0.069085106,
+            "Y": -0.99761075
+          },
+          "IsTurn": true
+        },
+        "TotalReferenceMeters": 1312.2583530061797,
+        "DistanceMeters": 1471.8416691715502,
+        "Activity": 3,
+        "Drive": 1,
+        "TargetOffsetMeters": 6.37167,
+        "Impairment": 0,
+        "Context": 2,
+        "Speed": 23.907856,
+        "ForwardSpeed": 23.865149,
+        "SideSpeed": 1.4283879,
+        "SlideRadians": -0.059781145
+      },
+      {
+        "Id": 4,
+        "Position": {
+          "X": 0.16729054,
+          "Y": -8.470278
+        },
+        "Velocity": {
+          "X": 25.553635,
+          "Y": -0.008455345
+        },
+        "Heading": -0.0077298693,
+        "AngularVelocity": 0.026907839,
+        "Road": {
+          "Segment": 0,
+          "Progress": 0.004779729672840663,
+          "ReferenceMeters": 0.16729053854942322,
+          "OffsetMeters": 8.470277786254883,
+          "Heading": 0,
+          "RadiusMeters": 0,
+          "CornerProgress": 0,
+          "Tangent": {
+            "X": 1,
+            "Y": 0
+          },
+          "Outward": {
+            "X": 0,
+            "Y": -1
+          },
+          "IsTurn": false
+        },
+        "TotalReferenceMeters": 1275.282297939063,
+        "DistanceMeters": 1488.884131644052,
+        "Activity": 3,
+        "Drive": 1,
+        "TargetOffsetMeters": 8.4777155,
+        "Impairment": 0,
+        "Context": 2,
+        "Speed": 25.553635,
+        "ForwardSpeed": 25.552937,
+        "SideSpeed": 0.1890692,
+        "SlideRadians": -0.007398983
+      }
+    ],
+    "FinishTimes": {
+      "2": 60.04212079512323,
+      "1": 60.44006961590871,
+      "3": 60.90734548425814,
+      "4": 62.41345216745508
+    },
+    "Decisions": [
+      {
+        "RiderId": 1,
+        "OpponentId": 2,
+        "Action": 1,
+        "ObservedAt": 3,
+        "DecisionAt": 3,
+        "RequestedActivation": 3.216,
+        "ActualActivation": 3.22,
+        "TargetOffsetMeters": 0.5,
+        "Drive": 1,
+        "Intent": 7,
+        "Reason": "ContestHoldAdvantage",
+        "SafetyReaction": false,
+        "CancelledAt": null,
+        "Channels": 1
+      },
+      {
+        "RiderId": 2,
+        "OpponentId": 3,
+        "Action": 1,
+        "ObservedAt": 3,
+        "DecisionAt": 3,
+        "RequestedActivation": 3.24,
+        "ActualActivation": 3.24,
+        "TargetOffsetMeters": 3.5,
+        "Drive": 1,
+        "Intent": 7,
+        "Reason": "ContestHoldAdvantage",
+        "SafetyReaction": false,
+        "CancelledAt": null,
+        "Channels": 1
+      },
+      {
+        "RiderId": 3,
+        "OpponentId": 4,
+        "Action": 1,
+        "ObservedAt": 3,
+        "DecisionAt": 3,
+        "RequestedActivation": 3.2359999999999998,
+        "ActualActivation": 3.2359999999999998,
+        "TargetOffsetMeters": 6.5,
+        "Drive": 1,
+        "Intent": 7,
+        "Reason": "ContestHoldAdvantage",
+        "SafetyReaction": false,
+        "CancelledAt": null,
+        "Channels": 1
+      },
+      {
+        "RiderId": 4,
+        "OpponentId": 3,
+        "Action": 4,
+        "ObservedAt": 3,
+        "DecisionAt": 3,
+        "RequestedActivation": 3.2359999999999998,
+        "ActualActivation": 3.2359999999999998,
+        "TargetOffsetMeters": 8.499638,
+        "Drive": 1,
+        "Intent": 5,
+        "Reason": "ContestInside",
+        "SafetyReaction": false,
+        "CancelledAt": null,
+        "Channels": 1
+      },
+      {
+        "RiderId": 1,
+        "OpponentId": 2,
+        "Action": 0,
+        "ObservedAt": 4.2,
+        "DecisionAt": 4.2,
+        "RequestedActivation": 4.416,
+        "ActualActivation": 4.42,
+        "TargetOffsetMeters": 0.5,
+        "Drive": 1,
+        "Intent": 0,
+        "Reason": "ContestResolved",
+        "SafetyReaction": false,
+        "CancelledAt": null,
+        "Channels": 1
+      },
+      {
+        "RiderId": 3,
+        "OpponentId": 4,
+        "Action": 0,
+        "ObservedAt": 4.4,
+        "DecisionAt": 4.4,
+        "RequestedActivation": 4.636,
+        "ActualActivation": 4.64,
+        "TargetOffsetMeters": 6.5,
+        "Drive": 1,
+        "Intent": 0,
+        "Reason": "ContestResolved",
+        "SafetyReaction": false,
+        "CancelledAt": null,
+        "Channels": 1
+      },
+      {
+        "RiderId": 3,
+        "OpponentId": 2,
+        "Action": 1,
+        "ObservedAt": 5.5,
+        "DecisionAt": 5.5,
+        "RequestedActivation": 5.736,
+        "ActualActivation": 5.74,
+        "TargetOffsetMeters": 6.5,
+        "Drive": 1,
+        "Intent": 7,
+        "Reason": "ContestHoldAdvantage",
+        "SafetyReaction": false,
+        "CancelledAt": null,
+        "Channels": 1
+      },
+      {
+        "RiderId": 2,
+        "OpponentId": 3,
+        "Action": 0,
+        "ObservedAt": 6,
+        "DecisionAt": 6,
+        "RequestedActivation": 6.24,
+        "ActualActivation": 6.24,
+        "TargetOffsetMeters": 3.5,
+        "Drive": 1,
+        "Intent": 0,
+        "Reason": "ContestResolved",
+        "SafetyReaction": false,
+        "CancelledAt": null,
+        "Channels": 1
+      },
+      {
+        "RiderId": 3,
+        "OpponentId": 2,
+        "Action": 0,
+        "ObservedAt": 6,
+        "DecisionAt": 6,
+        "RequestedActivation": 6.236,
+        "ActualActivation": 6.24,
+        "TargetOffsetMeters": 6.5,
+        "Drive": 1,
+        "Intent": 0,
+        "Reason": "ContestResolved",
+        "SafetyReaction": false,
+        "CancelledAt": null,
+        "Channels": 1
+      },
+      {
+        "RiderId": 4,
+        "OpponentId": 3,
+        "Action": 0,
+        "ObservedAt": 8.1,
+        "DecisionAt": 8.1,
+        "RequestedActivation": 8.336,
+        "ActualActivation": 8.34,
+        "TargetOffsetMeters": 8.499638,
+        "Drive": 1,
+        "Intent": 0,
+        "Reason": "ContestResolved",
+        "SafetyReaction": false,
+        "CancelledAt": null,
+        "Channels": 1
+      },
+      {
+        "RiderId": 3,
+        "OpponentId": 2,
+        "Action": 4,
+        "ObservedAt": 9.8,
+        "DecisionAt": 9.8,
+        "RequestedActivation": 10.036000000000001,
+        "ActualActivation": 10.036000000000001,
+        "TargetOffsetMeters": 1.9249034,
+        "Drive": 1,
+        "Intent": 1,
+        "Reason": "ClosingSlowerRider",
+        "SafetyReaction": false,
+        "CancelledAt": null,
+        "Channels": 1
+      },
+      {
+        "RiderId": 3,
+        "OpponentId": 0,
+        "Action": 1,
+        "ObservedAt": 10.200000000000001,
+        "DecisionAt": 10.200000000000001,
+        "RequestedActivation": 10.436000000000002,
+        "ActualActivation": 10.436000000000002,
+        "TargetOffsetMeters": 6.37167,
+        "Drive": 1,
+        "Intent": 0,
+        "Reason": "CorridorOccupied",
+        "SafetyReaction": true,
+        "CancelledAt": null,
+        "Channels": 1
+      },
+      {
+        "RiderId": 1,
+        "OpponentId": 2,
+        "Action": 1,
+        "ObservedAt": 10.4,
+        "DecisionAt": 10.4,
+        "RequestedActivation": 10.616,
+        "ActualActivation": 10.620000000000001,
+        "TargetOffsetMeters": 0.5,
+        "Drive": 1,
+        "Intent": 7,
+        "Reason": "ContestHoldAdvantage",
+        "SafetyReaction": false,
+        "CancelledAt": null,
+        "Channels": 1
+      },
+      {
+        "RiderId": 2,
+        "OpponentId": 1,
+        "Action": 1,
+        "ObservedAt": 10.4,
+        "DecisionAt": 10.4,
+        "RequestedActivation": 10.64,
+        "ActualActivation": 10.64,
+        "TargetOffsetMeters": 3.5,
+        "Drive": 1,
+        "Intent": 7,
+        "Reason": "ContestHoldAdvantage",
+        "SafetyReaction": false,
+        "CancelledAt": null,
+        "Channels": 1
+      },
+      {
+        "RiderId": 4,
+        "OpponentId": 3,
+        "Action": 4,
+        "ObservedAt": 10.4,
+        "DecisionAt": 10.4,
+        "RequestedActivation": 10.636000000000001,
+        "ActualActivation": 10.636000000000001,
+        "TargetOffsetMeters": 1.0385367,
+        "Drive": 1,
+        "Intent": 1,
+        "Reason": "ClosingSlowerRider",
+        "SafetyReaction": false,
+        "CancelledAt": null,
+        "Channels": 1
+      },
+      {
+        "RiderId": 4,
+        "OpponentId": 0,
+        "Action": 1,
+        "ObservedAt": 10.700000000000001,
+        "DecisionAt": 10.700000000000001,
+        "RequestedActivation": 10.936000000000002,
+        "ActualActivation": 10.936000000000002,
+        "TargetOffsetMeters": 8.4777155,
+        "Drive": 1,
+        "Intent": 0,
+        "Reason": "CorridorOccupied",
+        "SafetyReaction": true,
+        "CancelledAt": null,
+        "Channels": 1
+      },
+      {
+        "RiderId": 1,
+        "OpponentId": 2,
+        "Action": 0,
+        "ObservedAt": 14.9,
+        "DecisionAt": 14.9,
+        "RequestedActivation": 15.116,
+        "ActualActivation": 15.120000000000001,
+        "TargetOffsetMeters": 0.5,
+        "Drive": 1,
+        "Intent": 0,
+        "Reason": "ContestResolved",
+        "SafetyReaction": false,
+        "CancelledAt": null,
+        "Channels": 1
+      },
+      {
+        "RiderId": 2,
+        "OpponentId": 1,
+        "Action": 0,
+        "ObservedAt": 14.9,
+        "DecisionAt": 14.9,
+        "RequestedActivation": 15.14,
+        "ActualActivation": 15.14,
+        "TargetOffsetMeters": 3.5,
+        "Drive": 1,
+        "Intent": 0,
+        "Reason": "ContestResolved",
+        "SafetyReaction": false,
+        "CancelledAt": null,
+        "Channels": 1
+      },
+      {
+        "RiderId": 1,
+        "OpponentId": 2,
+        "Action": 1,
+        "ObservedAt": 17.7,
+        "DecisionAt": 17.7,
+        "RequestedActivation": 17.916,
+        "ActualActivation": 17.92,
+        "TargetOffsetMeters": 0.5,
+        "Drive": 1,
+        "Intent": 7,
+        "Reason": "ContestHoldAdvantage",
+        "SafetyReaction": false,
+        "CancelledAt": null,
+        "Channels": 1
+      },
+      {
+        "RiderId": 2,
+        "OpponentId": 1,
+        "Action": 1,
+        "ObservedAt": 17.7,
+        "DecisionAt": 17.7,
+        "RequestedActivation": 17.939999999999998,
+        "ActualActivation": 17.94,
+        "TargetOffsetMeters": 3.5,
+        "Drive": 1,
+        "Intent": 7,
+        "Reason": "ContestHoldAdvantage",
+        "SafetyReaction": false,
+        "CancelledAt": null,
+        "Channels": 1
+      },
+      {
+        "RiderId": 1,
+        "OpponentId": 2,
+        "Action": 0,
+        "ObservedAt": 24.3,
+        "DecisionAt": 24.3,
+        "RequestedActivation": 24.516000000000002,
+        "ActualActivation": 24.52,
+        "TargetOffsetMeters": 0.5,
+        "Drive": 1,
+        "Intent": 0,
+        "Reason": "ContestResolved",
+        "SafetyReaction": false,
+        "CancelledAt": null,
+        "Channels": 1
+      },
+      {
+        "RiderId": 2,
+        "OpponentId": 1,
+        "Action": 0,
+        "ObservedAt": 24.3,
+        "DecisionAt": 24.3,
+        "RequestedActivation": 24.54,
+        "ActualActivation": 24.54,
+        "TargetOffsetMeters": 3.5,
+        "Drive": 1,
+        "Intent": 0,
+        "Reason": "ContestResolved",
+        "SafetyReaction": false,
+        "CancelledAt": null,
+        "Channels": 1
+      },
+      {
+        "RiderId": 1,
+        "OpponentId": 2,
+        "Action": 1,
+        "ObservedAt": 26.900000000000002,
+        "DecisionAt": 26.900000000000002,
+        "RequestedActivation": 27.116000000000003,
+        "ActualActivation": 27.12,
+        "TargetOffsetMeters": 0.5,
+        "Drive": 1,
+        "Intent": 7,
+        "Reason": "ContestHoldAdvantage",
+        "SafetyReaction": false,
+        "CancelledAt": null,
+        "Channels": 1
+      },
+      {
+        "RiderId": 2,
+        "OpponentId": 1,
+        "Action": 1,
+        "ObservedAt": 26.900000000000002,
+        "DecisionAt": 26.900000000000002,
+        "RequestedActivation": 27.14,
+        "ActualActivation": 27.14,
+        "TargetOffsetMeters": 3.5,
+        "Drive": 1,
+        "Intent": 7,
+        "Reason": "ContestHoldAdvantage",
+        "SafetyReaction": false,
+        "CancelledAt": null,
+        "Channels": 1
+      },
+      {
+        "RiderId": 1,
+        "OpponentId": 2,
+        "Action": 0,
+        "ObservedAt": 30.5,
+        "DecisionAt": 30.5,
+        "RequestedActivation": 30.716,
+        "ActualActivation": 30.72,
+        "TargetOffsetMeters": 0.5,
+        "Drive": 1,
+        "Intent": 0,
+        "Reason": "ContestResolved",
+        "SafetyReaction": false,
+        "CancelledAt": null,
+        "Channels": 1
+      },
+      {
+        "RiderId": 2,
+        "OpponentId": 1,
+        "Action": 0,
+        "ObservedAt": 30.5,
+        "DecisionAt": 30.5,
+        "RequestedActivation": 30.74,
+        "ActualActivation": 30.740000000000002,
+        "TargetOffsetMeters": 3.5,
+        "Drive": 1,
+        "Intent": 0,
+        "Reason": "ContestResolved",
+        "SafetyReaction": false,
+        "CancelledAt": null,
+        "Channels": 1
+      }
+    ],
+    "Contacts": [],
+    "Fingerprint": "651DAC4E036B7B387CE8883C8C932059A3DF994945D919E76928E76411DB6B78",
+    "Completed": true,
+    "Classification": [
+      {
+        "Position": 1,
+        "RiderId": 2,
+        "FinishTimeSeconds": 60.04212079512323,
+        "Status": "Finished"
+      },
+      {
+        "Position": 2,
+        "RiderId": 1,
+        "FinishTimeSeconds": 60.44006961590871,
+        "Status": "Finished"
+      },
+      {
+        "Position": 3,
+        "RiderId": 3,
+        "FinishTimeSeconds": 60.90734548425814,
+        "Status": "Finished"
+      },
+      {
+        "Position": 4,
+        "RiderId": 4,
+        "FinishTimeSeconds": 62.41345216745508,
+        "Status": "Finished"
+      }
+    ]
+  },
+  "Riders": [
+    {
+      "Measurement": {
+        "RiderId": 1,
+        "CrossingSeconds": [
+          16.13608018882676,
+          30.904082943635135,
+          45.672056265475334,
+          60.44006961590871
+        ],
+        "LapSeconds": [
+          16.13608018882676,
+          14.768002754808375,
+          14.767973321840199,
+          14.768013350433378
+        ],
+        "BestFlyingSeconds": 14.767973321840199,
+        "MovementSeconds": 0.23,
+        "FirstDriveForceSeconds": 0.21551,
+        "MaximumLaunchTangentialForceNewtons": 1474.1552734375,
+        "First35MetersSeconds": 2.9227702113031278,
+        "FirstBendExitSeconds": 7.544234,
+        "AverageSpeedMetersPerSecond": 21.29819749920289,
+        "TypicalSpeedMetersPerSecond": 21.375,
+        "MaximumSpeedMetersPerSecond": 23.338951110839844,
+        "StraightAverageSpeedMetersPerSecond": 21.13385615777801,
+        "CornerAverageSpeedMetersPerSecond": 21.402513206760656,
+        "MinimumTrackClearanceMeters": 1.0916265402000898,
+        "MinimumPeerGapMeters": 2.0692050017277124,
+        "MinimumOffsetMeters": 0.47857993841171265,
+        "MaximumOffsetMeters": 0.5,
+        "MaximumYawErrorRadians": 0.4762909164021223,
+        "MaximumLateralDemandRatio": 1.0121325254440308,
+        "MaximumAppliedGripRatio": 1.0000001192092896,
+        "MinimumTangentialForceNewtons": -189.5643768310547,
+        "MaximumTangentialForceNewtons": 1474.1552734375,
+        "DriveOffSeconds": 0,
+        "TargetTravelMeters": 0,
+        "TargetReversals": 0,
+        "MaximumOneSecondSpeedLossMetersPerSecond": 1.2798233032226562,
+        "Decisions": 8,
+        "Activated": 8,
+        "Attacks": 0,
+        "Defenses": 0,
+        "SideManeuvers": 4,
+        "ActualControlChanges": 0,
+        "Passes": 0,
+        "Contacts": 0
+      },
+      "ZeroSeconds": 0,
+      "PartialSeconds": 0,
+      "FullClosures": 0,
+      "FollowingEpisodes": 0,
+      "DangerousSeconds": 0,
+      "DangerousEpisodes": 0,
+      "CloseFollowingSeconds": 0,
+      "ThrottleReversals": 0,
+      "Reattacks": 0
+    },
+    {
+      "Measurement": {
+        "RiderId": 2,
+        "CrossingSeconds": [
+          16.169015653667472,
+          30.793414185915076,
+          45.41774285065677,
+          60.04212079512324
+        ],
+        "LapSeconds": [
+          16.169015653667472,
+          14.624398532247604,
+          14.624328664741697,
+          14.624377944466467
+        ],
+        "BestFlyingSeconds": 14.624328664741697,
+        "MovementSeconds": 0.26,
+        "FirstDriveForceSeconds": 0.24,
+        "MaximumLaunchTangentialForceNewtons": 1390.7125244140625,
+        "First35MetersSeconds": 2.99802130621209,
+        "FirstBendExitSeconds": 7.720686,
+        "AverageSpeedMetersPerSecond": 22.69461082565826,
+        "TypicalSpeedMetersPerSecond": 22.875,
+        "MaximumSpeedMetersPerSecond": 24.797996520996094,
+        "StraightAverageSpeedMetersPerSecond": 22.281077002063835,
+        "CornerAverageSpeedMetersPerSecond": 22.938244614131246,
+        "MinimumTrackClearanceMeters": 4.097950305344831,
+        "MinimumPeerGapMeters": 1.8646502040393935,
+        "MinimumOffsetMeters": 3.477250337600708,
+        "MaximumOffsetMeters": 3.5,
+        "MaximumYawErrorRadians": 0.46569639338496227,
+        "MaximumLateralDemandRatio": 1.012915015220642,
+        "MaximumAppliedGripRatio": 1.000000238418579,
+        "MinimumTangentialForceNewtons": -216.0800018310547,
+        "MaximumTangentialForceNewtons": 1390.7125244140625,
+        "DriveOffSeconds": 0,
+        "TargetTravelMeters": 0,
+        "TargetReversals": 0,
+        "MaximumOneSecondSpeedLossMetersPerSecond": 1.4503402709960938,
+        "Decisions": 8,
+        "Activated": 8,
+        "Attacks": 0,
+        "Defenses": 0,
+        "SideManeuvers": 4,
+        "ActualControlChanges": 0,
+        "Passes": 1,
+        "Contacts": 0
+      },
+      "ZeroSeconds": 0,
+      "PartialSeconds": 0,
+      "FullClosures": 0,
+      "FollowingEpisodes": 0,
+      "DangerousSeconds": 0,
+      "DangerousEpisodes": 0,
+      "CloseFollowingSeconds": 0,
+      "ThrottleReversals": 0,
+      "Reattacks": 0
+    },
+    {
+      "Measurement": {
+        "RiderId": 3,
+        "CrossingSeconds": [
+          16.419240967598515,
+          31.248668360917417,
+          46.07800966760354,
+          60.90734548425814
+        ],
+        "LapSeconds": [
+          16.419240967598515,
+          14.829427393318902,
+          14.829341306686121,
+          14.829335816654599
+        ],
+        "BestFlyingSeconds": 14.829335816654599,
+        "MovementSeconds": 0.25,
+        "FirstDriveForceSeconds": 0.235918,
+        "MaximumLaunchTangentialForceNewtons": 1404.6197509765625,
+        "First35MetersSeconds": 2.977090024681133,
+        "FirstBendExitSeconds": 7.900754,
+        "AverageSpeedMetersPerSecond": 23.547744600862416,
+        "TypicalSpeedMetersPerSecond": 23.875,
+        "MaximumSpeedMetersPerSecond": 25.631732940673828,
+        "StraightAverageSpeedMetersPerSecond": 22.998285594653396,
+        "CornerAverageSpeedMetersPerSecond": 23.84894900334032,
+        "MinimumTrackClearanceMeters": 3.9806552195325935,
+        "MinimumPeerGapMeters": 1.8646502040393935,
+        "MinimumOffsetMeters": 5.466275215148926,
+        "MaximumOffsetMeters": 6.5,
+        "MaximumYawErrorRadians": 0.4505932932781356,
+        "MaximumLateralDemandRatio": 1.1574316024780273,
+        "MaximumAppliedGripRatio": 1.0000001192092896,
+        "MinimumTangentialForceNewtons": -391.59332275390625,
+        "MaximumTangentialForceNewtons": 1404.6197509765625,
+        "DriveOffSeconds": 0,
+        "TargetTravelMeters": 9.021862983703613,
+        "TargetReversals": 1,
+        "MaximumOneSecondSpeedLossMetersPerSecond": 1.705230712890625,
+        "Decisions": 6,
+        "Activated": 6,
+        "Attacks": 1,
+        "Defenses": 0,
+        "SideManeuvers": 2,
+        "ActualControlChanges": 2,
+        "Passes": 0,
+        "Contacts": 0
+      },
+      "ZeroSeconds": 0,
+      "PartialSeconds": 0,
+      "FullClosures": 0,
+      "FollowingEpisodes": 0,
+      "DangerousSeconds": 0,
+      "DangerousEpisodes": 0,
+      "CloseFollowingSeconds": 0.256000000000002,
+      "ThrottleReversals": 0,
+      "Reattacks": 0
+    },
+    {
+      "Measurement": {
+        "RiderId": 4,
+        "CrossingSeconds": [
+          16.92276268445275,
+          32.08630756951362,
+          47.24999969727689,
+          62.41345216745508
+        ],
+        "LapSeconds": [
+          16.92276268445275,
+          15.163544885060873,
+          15.16369212776327,
+          15.163452470178186
+        ],
+        "BestFlyingSeconds": 15.163452470178186,
+        "MovementSeconds": 0.25,
+        "FirstDriveForceSeconds": 0.231837,
+        "MaximumLaunchTangentialForceNewtons": 1404.6197509765625,
+        "First35MetersSeconds": 2.972546567289774,
+        "FirstBendExitSeconds": 8.195305999999999,
+        "AverageSpeedMetersPerSecond": 23.852058226169543,
+        "TypicalSpeedMetersPerSecond": 24.125,
+        "MaximumSpeedMetersPerSecond": 25.84459686279297,
+        "StraightAverageSpeedMetersPerSecond": 23.24241991542152,
+        "CornerAverageSpeedMetersPerSecond": 24.16877444443003,
+        "MinimumTrackClearanceMeters": 1.1000000000306116,
+        "MinimumPeerGapMeters": 2.1999999999999993,
+        "MinimumOffsetMeters": 8.29996109008789,
+        "MaximumOffsetMeters": 9.5,
+        "MaximumYawErrorRadians": 0.4302497221062722,
+        "MaximumLateralDemandRatio": 2.110605239868164,
+        "MaximumAppliedGripRatio": 1.0000001192092896,
+        "MinimumTangentialForceNewtons": -401.9242858886719,
+        "MaximumTangentialForceNewtons": 1404.6197509765625,
+        "DriveOffSeconds": 0,
+        "TargetTravelMeters": 15.900642395019531,
+        "TargetReversals": 1,
+        "MaximumOneSecondSpeedLossMetersPerSecond": 1.712594985961914,
+        "Decisions": 4,
+        "Activated": 4,
+        "Attacks": 1,
+        "Defenses": 0,
+        "SideManeuvers": 1,
+        "ActualControlChanges": 3,
+        "Passes": 0,
+        "Contacts": 0
+      },
+      "ZeroSeconds": 0,
+      "PartialSeconds": 0,
+      "FullClosures": 0,
+      "FollowingEpisodes": 0,
+      "DangerousSeconds": 0,
+      "DangerousEpisodes": 0,
+      "CloseFollowingSeconds": 0.3000000000000007,
+      "ThrottleReversals": 0,
+      "Reattacks": 0
+    }
+  ],
+  "Passes": [
+    {
+      "RiderId": 2,
+      "OpponentId": 1,
+      "ClearSinceSeconds": 24.39,
+      "ConfirmedAtSeconds": 25.39,
+      "HeldDistanceMeters": 23.239716429263353,
+      "AfterFirstBend": true
+    }
+  ],
+  "Observations": [],
+  "Samples": [],
+  "Responses": [],
+  "ElapsedMilliseconds": 185.6967,
+  "AllocatedBytes": 63521744
+}
