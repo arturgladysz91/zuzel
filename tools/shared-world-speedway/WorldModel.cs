@@ -66,6 +66,8 @@ public sealed record DecisionEvent(int RiderId, int OpponentId, TrafficAction Ac
     ControlChannels Channels = ControlChannels.Both);
 /// <summary>Authored before the run, for controlled experiments; never a predicted state.</summary>
 public sealed record ControlCommand(int RiderId, double AtSeconds, float TargetOffsetMeters, float Drive);
+/// <summary>Offline authored landmark, activated on its first accepted crossing; no future body state.</summary>
+public sealed record SpatialControlCommand(int RiderId, double ReferenceMeters, float TargetOffsetMeters, float Drive);
 public sealed record ContactEvent(int RiderA, int RiderB, double TimeSeconds, string Kind,
     double ImpulseNewtonSeconds, double SeverityRatioA, double SeverityRatioB, double NormalClosingSpeed = 0);
 public sealed class WorldWork

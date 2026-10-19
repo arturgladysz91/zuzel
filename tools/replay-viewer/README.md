@@ -1,5 +1,16 @@
 # Shared World Speedway — Diagnostic Replay Viewer 2D (#96)
 
+## Dane #99
+
+Lista przejazdów obejmuje dodatkowo wybrany plan, kontrolę wewnętrzną, szeroką
+i odrzuconą kontrolę z `docs/experiments/physics-driven-racing-line/`.
+To rzeczywiste stany trzech okrążeń Box2D; `selected` i `inner` celowo pokazują
+tego samego zwycięzcę. Odrzucony target 0,5 m przekracza obrysem krawędź i nie
+jest dopuszczony przez selektor, choć fizyka bez band pozwala mu ukończyć.
+Raport i CSV obok replayów podają kąty, energię i pełną ocenę wykonalności.
+UI i renderer pozostają te same; aktywacja dokładnie w czasie próbki (także t=0)
+jest nakładana na aktuatory sprzed Activate bez zmiany zapisanej pozycji.
+
 Lokalna diagnostyka dwóch zapisanych przejazdów #95. HTML, CSS, moduły JavaScript i Canvas 2D; bez pakietów npm, zewnętrznych zasobów i backendu aplikacji. Odtwarzacz wyłącznie odczytuje dane. Fizyka, AI, historyczne wyniki i fingerprinty pozostają bez zmian.
 
 ## Uruchomienie

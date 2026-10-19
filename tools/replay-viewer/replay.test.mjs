@@ -11,6 +11,24 @@ const fixture = name => {
   return { csv, json, replay: new Replay(csv, json) };
 };
 const near = (a, b, epsilon = 1e-8) => assert.ok(Math.abs(a - b) < epsilon, `${a} != ${b}`);
+test('#99 actual Box2D plans preserve every saved pose, spatial command and individual lap', () => {
+  const folder = new URL('../../docs/experiments/physics-driven-racing-line/', import.meta.url);
+  for (const alias of ['selected', 'inner', 'wide', 'rejected']) {
+    const csv = readFileSync(new URL(alias + '-accepted.csv', folder), 'utf8');
+    const json = JSON.parse(readFileSync(new URL(alias + '.json', folder), 'utf8'));
+    const replay = new Replay(csv, json);
+    assert.ok(Array.isArray(json.Run.Passes));
+    for (const row of parseCsv(csv)) {const state = replay.state(row.id, row.t); near(state.x, row.x); near(state.y, row.y); near(angleDelta(state.heading, row.heading), 0);}
+    for (const event of json.Run.Result.Decisions) {
+      const state = replay.state(1, event.ActualActivation);
+      assert.equal(state.target, event.TargetOffsetMeters); assert.equal(state.drive, event.Drive);
+      assert.equal(event.ActualActivation, event.ObservedAt);
+    }
+    assert.equal(json.Run.Riders[0].Measurement.LapSeconds.length, 3);
+    assert.equal(replay.state(1, replay.duration).completedLaps, 3);
+    assert.equal(json.Evaluation.Feasible, alias !== 'rejected');
+  }
+});
 test('Both unmodified CSV/JSON pairs load initial time zero and every recorded point', () => {
   for (const [name, riders] of [['rolling-S3-entry', 1], ['rolling-straight', 4]]) {
     const { csv, json, replay } = fixture(name), original = JSON.stringify(json);

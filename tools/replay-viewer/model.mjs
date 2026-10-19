@@ -80,7 +80,8 @@ export class Replay {
       const channel = d.Channels ?? 0;
       // Intent belongs to the line channel; a throttle carrying an old intent cannot replace it.
       if (channel === 0 || channel === 1) state.intent = d.Intent ?? 0;
-      if (d.ActualActivation <= left.t) continue; // CSV already records these actuator values.
+      // A sample exactly at activation can precede Activate(), including Initial at t=0.
+      if (d.ActualActivation < left.t) continue;
       if (channel === 0 || channel === 1) state.target = d.TargetOffsetMeters;
       if (channel === 0 || channel === 2) state.drive = d.Drive;
     }

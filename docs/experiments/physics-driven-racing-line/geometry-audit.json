@@ -1,0 +1,57 @@
+{
+  "base_head": "b01d819fddc9e81a30e961517c27f952bb96dad4",
+  "source": "Native ReplayGeometry export from #96, unchanged through #98",
+  "widths": [
+    {
+      "type": "Straight",
+      "physical_width_m": 12,
+      "inner_edge_offset_m": -1,
+      "outer_edge_offset_m": 11,
+      "usable_reference_span_m": 10,
+      "current_max_target_m": 9.5,
+      "aligned_capsule_outer_clearance_at_9_5_m": 1.1,
+      "blocked_reference_target_span_m": 0.0
+    },
+    {
+      "type": "Turn",
+      "physical_width_m": 16.6,
+      "inner_edge_offset_m": -1,
+      "outer_edge_offset_m": 15.600000000000001,
+      "usable_reference_span_m": 14.600000000000001,
+      "current_max_target_m": 9.5,
+      "aligned_capsule_outer_clearance_at_9_5_m": 5.700000000000001,
+      "blocked_reference_target_span_m": 4.600000000000001
+    }
+  ],
+  "width_transitions": [
+    {
+      "from": 0,
+      "to": 1,
+      "reference_m": 35,
+      "outer_endpoint_gap_m": 4.600000381469727,
+      "inner_endpoint_gap_m": 0.0
+    },
+    {
+      "from": 3,
+      "to": 4,
+      "reference_m": 132.38937497138977,
+      "outer_endpoint_gap_m": 4.60000038146973,
+      "inner_endpoint_gap_m": 0.0
+    },
+    {
+      "from": 4,
+      "to": 5,
+      "reference_m": 194.38937497138977,
+      "outer_endpoint_gap_m": 4.60000038146973,
+      "inner_endpoint_gap_m": 0.0
+    },
+    {
+      "from": 7,
+      "to": 8,
+      "reference_m": 291.77874994277954,
+      "outer_endpoint_gap_m": 4.600000381469726,
+      "inner_endpoint_gap_m": 0.0
+    }
+  ],
+  "conclusion": "Four outer boundary jumps of 4.6m. No width-transition curve exists. Retain original target range for a conservative bounded selector experiment; cannot certify a smooth real-world wall or optimize the additional turn width. Do not clip or move bodies; classify resulting scope as B."
+}
