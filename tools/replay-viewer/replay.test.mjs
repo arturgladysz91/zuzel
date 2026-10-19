@@ -1,0 +1,82 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { Replay, parseCsv, angleAt, angleDelta, worldCapsules, crossSection, decisionStatus } from './model.mjs';
+
+const geometry = JSON.parse(readFileSync(new URL('./geometry.json', import.meta.url), 'utf8'));
+const fixture = name => {
+  const folder = new URL('../../docs/experiments/autonomous-racing-line/', import.meta.url);
+  const csv = readFileSync(new URL(name + '-accepted.csv', folder), 'utf8');
+  const json = JSON.parse(readFileSync(new URL(name + '-ON.json', folder), 'utf8'));
+  return { csv, json, replay: new Replay(csv, json) };
+};
+const near = (a, b, epsilon = 1e-8) => assert.ok(Math.abs(a - b) < epsilon, `${a} != ${b}`);
+test('Both unmodified CSV/JSON pairs load initial time zero and every recorded point', () => {
+  for (const [name, riders] of [['rolling-S3-entry', 1], ['rolling-straight', 4]]) {
+    const { csv, json, replay } = fixture(name), original = JSON.stringify(json);
+    assert.equal(replay.tracks.size, riders);
+    for (const v of json.Run.Initial.Riders) { const s = replay.state(v.Id, 0); assert.equal(s.x, v.Position.X); assert.equal(s.y, v.Position.Y); }
+    for (const row of parseCsv(csv)) { const s = replay.state(row.id, row.t); near(s.x, row.x); near(s.y, row.y); near(angleDelta(s.heading, row.heading), 0); }
+    assert.equal(JSON.stringify(json), original);
+    assert.throws(() => parseCsv('time_s,rider\n0,1'), /wymaganych/);
+  }
+});
+test('Bike capsules keep real dimensions and CSV body heading, independently of velocity', () => {
+  const { replay } = fixture('rolling-S3-entry');
+  const s = [...replay.tracks.values()][0].find(x => Math.abs(angleDelta(Math.atan2(x.vy, x.vx), x.heading)) > .1);
+  assert.ok(s); const parts = worldCapsules(geometry, s), body = parts[0], bar = parts[1];
+  near(Math.hypot(body.end.x - body.start.x, body.end.y - body.start.y) + body.radiusMeters * 2, 2.10);
+  near(body.radiusMeters * 2, .30); near(Math.hypot(bar.end.x - bar.start.x, bar.end.y - bar.start.y) + bar.radiusMeters * 2, .80);
+  near(angleDelta(s.heading, Math.atan2(body.end.y - body.start.y, body.end.x - body.start.x)), 0);
+  const rotated = worldCapsules(geometry, { x: 4, y: 8, heading: Math.PI / 2 });
+  near(rotated[1].start.y, 8.65); near(rotated[1].end.y, 8.65);
+});
+test('Commands activate only at ActualActivation; cancelled plans and the other channel cannot execute', () => {
+  const { replay } = fixture('rolling-S3-entry');
+  near(replay.state(1, .339).target, 7); near(replay.state(1, .34).target, 5.5); near(replay.state(1, .34).offset, 7);
+  const { replay: pack } = fixture('rolling-straight');
+  const cancelled = pack.decisions.find(d => d.CancelledAt != null);
+  assert.equal(decisionStatus(cancelled, cancelled.CancelledAt), 'cancelled');
+  assert.equal(pack.events().filter(e => e.decision === cancelled && e.kind === 'activated').length, 0);
+  const { json, csv } = fixture('rolling-S3-entry');
+  json.Run.Result.Decisions = [
+    { RiderId: 1, ObservedAt: .01, RequestedActivation: .02, ActualActivation: .3, CancelledAt: null, TargetOffsetMeters: 9, Drive: .2, Channels: 2, Intent: 6 },
+    { RiderId: 1, ObservedAt: .01, RequestedActivation: .02, ActualActivation: null, CancelledAt: .1, TargetOffsetMeters: 2, Drive: 0, Channels: 1 },
+    { RiderId: 1, ObservedAt: .01, RequestedActivation: .02, ActualActivation: .305, CancelledAt: null, TargetOffsetMeters: 6, Drive: 1, Channels: 1, Intent: 1 }
+  ];
+  const synthetic = new Replay(csv, json);
+  assert.equal(decisionStatus(synthetic.decisions[0], .1), 'waiting');
+  near(synthetic.state(1, .299).drive, 1); near(synthetic.state(1, .3).drive, .2); near(synthetic.state(1, .3).target, 7);
+  near(synthetic.state(1, .305).drive, .2); near(synthetic.state(1, .305).target, 6); assert.equal(synthetic.state(1, .305).intent, 1);
+});
+test('Shortest-arc angles interpolate across pi while discrete controls and missing tails do not', () => {
+  near(Math.abs(angleAt(Math.PI - .1, -Math.PI + .1, .5)), Math.PI);
+  const { replay } = fixture('rolling-S3-entry'); const points = replay.tracks.get(1), a = points[12], b = points[13];
+  const s = replay.state(1, (a.t + b.t) / 2); near(s.x, (a.x + b.x) / 2); near(s.y, (a.y + b.y) / 2);
+  const last = points.at(-1), beyond = replay.state(1, replay.duration + 100);
+  near(beyond.x, last.x); near(beyond.y, last.y); near(angleDelta(beyond.heading, last.heading), 0); assert.ok(beyond.stale);
+  assert.equal(replay.step(0, -1), null); assert.equal(replay.step(0, 1), .01);
+});
+test('Individual rolling crossings and finish times never substitute final-world positions for missing poses', () => {
+  const { replay } = fixture('rolling-straight');
+  for (const [id, points] of replay.tracks) {
+    const finish = replay.result.FinishTimes[String(id)], crossings = replay.metrics.get(id).CrossingSeconds;
+    assert.equal(replay.state(id, crossings[0] - 1e-6).lap, 1); assert.equal(replay.state(id, crossings[0]).lap, 2);
+    assert.equal(replay.state(id, finish - 1e-6).finished, false);
+    const s = replay.state(id, finish), accepted = points.filter(p => p.t <= finish).at(-1);
+    assert.equal(s.finished, true); assert.equal(s.lap, 4); near(s.x, accepted.x); near(s.y, accepted.y);
+    near(replay.state(id, replay.duration).x, points.at(-1).x);
+  }
+  assert.equal(replay.events().filter(e => e.kind === 'pass').length, 2);
+  assert.equal(replay.events().filter(e => e.kind === 'contact').length, 0);
+});
+test('Target cross-sections read exported model positions/normals; offset zero is a metre outside the inner edge', () => {
+  assert.equal(geometry.innerReferenceOffsetMeters, 1);
+  for (const segment of geometry.segments) {
+    const sample = segment.sections[4], section = crossSection(geometry, sample.referenceMeters);
+    near(section.point.x, sample.reference.x); near(section.point.y, sample.reference.y);
+    near(Math.hypot(sample.inner.x - section.point.x, sample.inner.y - section.point.y), 1);
+    near(Math.hypot(sample.outer.x - sample.inner.x, sample.outer.y - sample.inner.y), segment.physicalWidthMeters);
+  }
+  assert.equal(geometry.enums.channels['1'], 'Line'); assert.equal(geometry.enums.channels['2'], 'Throttle');
+});
