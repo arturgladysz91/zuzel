@@ -29,12 +29,13 @@ public static class PhysicsDrivenRacingLineAudit
                 ThrottleLevels=new[]{1f,.7f,.4f},ThrottleSelection="Per condition: stage1 winner, inner and wide; reuse Drive1 results."},
             Geometry=frame.Track.Geometry,frame.LapMeters,Profiles=Conditions().Select(c=>new{c.Name,Rider=Rider(c),Gameplay=Rider(c).Profile.Gameplay})});
     }
-    public static (RacingLineEvaluation Evaluation,SlipControlValidation.Capture Capture) Evaluate(Condition condition,RacingLinePlan plan,string? csv=null)
+    public static (RacingLineEvaluation Evaluation,SlipControlValidation.Capture Capture) Evaluate(Condition condition,RacingLinePlan plan,string? csv=null,
+        WorldParameters? parameters=null,Action<RearWheelObservation>? wheelObserver=null)
     {
         var frame=Frame();var scenario=new Scenario(condition.Name+"/"+plan.Name,new[]{Rider(condition)},90,PhysicsDrivenRacingLine.Laps);
         var controls=PhysicsDrivenRacingLine.Compile(plan,frame);
         var watch=Stopwatch.GetTimestamp();
-        var capture=SlipControlValidation.Execute(scenario,spatialControls:controls,surface:Surface(condition,frame),csvPath:csv);
+        var capture=SlipControlValidation.Execute(scenario,parameters,spatialControls:controls,surface:Surface(condition,frame),csvPath:csv,wheelObserver:wheelObserver);
         var elapsed=Stopwatch.GetElapsedTime(watch).TotalMilliseconds;watch=Stopwatch.GetTimestamp();
         var geometry=new RacingLineGeometry(frame);
         var ticks=capture.Ticks.Select(t=>{var gap=geometry.Clearance(t.After);return(Tick:t,Inner:gap.Inner,Outer:gap.Outer);}).ToArray();

@@ -36,7 +36,16 @@ public sealed class WorldRunner : IDisposable
     private readonly int[] nextSpatialControl;
     private int nextControl;
     private bool disposed;
-    public WorldSnapshot Snapshot => new(TimeSeconds, Array.AsReadOnly((RiderView[])views.Clone()));
+    private readonly RearWheelState[] rearWheels;
+    public WorldSnapshot Snapshot => new(TimeSeconds, Array.AsReadOnly((RiderView[])views.Clone())) {
+        RearWheels=rearWheels.Length==0?null:rearWheels.Select((w,i)=>w.View(specs[i].Profile.Id)).ToArray() };
+    public RearWheelView RearWheel(int riderId)
+    {
+        if(rearWheels.Length==0)throw new InvalidOperationException("Rear wheel dynamics are OFF.");
+        var i=Array.FindIndex(specs,s=>s.Profile.Id==riderId);
+        if(i<0)throw new ArgumentOutOfRangeException(nameof(riderId));
+        return rearWheels[i].View(riderId);
+    }
     public (float MassKg,float InertiaKgMetersSquared) MechanicalProperties(int riderId)
     {
         var index=Array.FindIndex(specs,s=>s.Profile.Id==riderId);
@@ -49,6 +58,10 @@ public sealed class WorldRunner : IDisposable
     {
         this.diagnostics = diagnostics;
         Parameters = parameters ?? new();
+        if(Parameters.EnableRearWheelDynamics&&!Parameters.EnableSlipCoupledDynamics
+            ||Parameters.RearWheel is not null&&!Parameters.EnableRearWheelDynamics)
+            throw new ArgumentException("Rear wheel dynamics require experimental slip dynamics.",nameof(parameters));
+        Parameters.RearWheel?.Validate();
         if (!float.IsFinite(Parameters.SlipYawResponseSeconds) || Parameters.SlipYawResponseSeconds < .05f || Parameters.SlipYawResponseSeconds > .5f)
             throw new ArgumentOutOfRangeException(nameof(parameters));
         if (Parameters.EnableSlipCoupledDynamics && Parameters.EnableTacticalRacing)
@@ -121,6 +134,7 @@ public sealed class WorldRunner : IDisposable
             return new RiderView(s.Profile.Id, b.Position, b.Velocity, b.Heading, b.Spin, road,
                 s.ReferenceMeters, 0, RiderActivity.Racing, 1, s.TargetOffsetMeters, 0, Frame.Context(road, s.ReferenceMeters));
         }).ToArray();
+        rearWheels=Parameters.EnableRearWheelDynamics?views.Select(v=>new RearWheelState(v.ForwardSpeed,Parameters.RearWheel)).ToArray():Array.Empty<RearWheelState>();
         Record();
     }
     public RunResult Run(string name, double stepSeconds, double maximumSeconds, int requiredLaps = 0,
@@ -148,13 +162,16 @@ public sealed class WorldRunner : IDisposable
                 var controlDuration = duration;
                 var before = views;
                 var passiveEnergy = Energy(before);
+                if(rearWheels.Length>0)duration=RearWheelDuration(duration);
                 for (var i = 0; i < specs.Length; i++)
                 {
+                    if(rearWheels.Length>0)Work.RearWheelForceEvaluations++;
                     var force = RiderController.Forces(views[i], specs[i], Frame, surface, Parameters,
-                        TimeSeconds, physics.Masses[i], physics.Inertias[i], diagnostics?.Force, diagnostics?.Slip, diagnostics?.YawLimit);
+                        TimeSeconds, physics.Masses[i], physics.Inertias[i], diagnostics?.Force, diagnostics?.Slip, diagnostics?.YawLimit,
+                        rearWheels.Length==0?null:rearWheels[i],rearWheels.Length==0?0:(float)duration);
                     physics.Force(i, force.Force, force.Torque);
                     diagnostics?.AppliedForce?.Invoke(new(TimeSeconds,views[i].Id,force.Force,force.Torque));
-                    duration = UntilCurvatureChange(i, force.Force, duration);
+                    if(rearWheels.Length==0)duration = UntilCurvatureChange(i, force.Force, duration);
                 }
                 if (duration < controlDuration) Work.CurvatureLimitedCalls++;
                 else if (duration < nominalDuration) {
@@ -164,6 +181,7 @@ public sealed class WorldRunner : IDisposable
                 }
                 var watch = Stopwatch.GetTimestamp();
                 physics.Step((float)duration, Parameters.SolverSubsteps);
+                foreach(var wheel in rearWheels){wheel.Commit();Work.RearWheelCommits++;}
                 Work.SolverElapsedMilliseconds += Stopwatch.GetElapsedTime(watch).TotalMilliseconds;
                 Work.SolverCalls++;
                 Work.SolverSubsteps += Parameters.SolverSubsteps;
@@ -216,6 +234,8 @@ public sealed class WorldRunner : IDisposable
                     }
                 }
                 watch = Stopwatch.GetTimestamp();
+                if(diagnostics?.RearWheel is { } observeWheel)
+                    for(var i=0;i<rearWheels.Length;i++)observeWheel(new(TimeSeconds-duration,views[i].Id,before[i],views[i],rearWheels[i].Prepared));
                 physics.ReadContacts(views, Work, BeginContact, (a, b) => contacts.Add(new(views[a].Id, views[b].Id, TimeSeconds, "end", 0, 0, 0)),
                     diagnostics, before, TimeSeconds, (float)duration);
                 Work.ContactProcessingMilliseconds += Stopwatch.GetElapsedTime(watch).TotalMilliseconds;
@@ -431,6 +451,20 @@ public sealed class WorldRunner : IDisposable
             Math.Ceiling(time / CurvatureEventResolutionSeconds) * CurvatureEventResolutionSeconds);
         return Math.Min(duration, time);
     }
+    private double RearWheelDuration(double duration)
+    {
+        // Determine the held interval BEFORE preparing its wheel update. The
+        // same existing curvature estimator uses instantaneous contact forces;
+        // far from boundaries it needs no extra force evaluation or solver call.
+        for(var i=0;i<specs.Length;i++){
+            if(Frame.DistanceToCurvatureChange(views[i].Road)>(views[i].Speed+5)*duration+.001)continue;
+            Work.RearWheelBoundaryEvaluations++;
+            var f=RiderController.Forces(views[i],specs[i],Frame,surface,Parameters,TimeSeconds,physics.Masses[i],physics.Inertias[i],
+                rearWheel:rearWheels[i],stepSeconds:0);
+            duration=UntilCurvatureChange(i,f.Force,duration);
+        }
+        return duration;
+    }
     private void BeginContact(int a, int b, double impulse, double closingSpeed)
     {
         double Apply(int i)
@@ -467,6 +501,7 @@ public sealed class WorldRunner : IDisposable
     {
         // Binary accepted states, not rounded reports. Independent of input collection order.
         Span<double> data = stackalloc double[14];
+        Span<double> wheelData=stackalloc double[1];var wheelIndex=0;
         foreach (var v in views)
         {
             data[0] = TimeSeconds; data[1] = v.Id; data[2] = v.Position.X; data[3] = v.Position.Y;
@@ -474,6 +509,7 @@ public sealed class WorldRunner : IDisposable
             data[8] = v.TotalReferenceMeters; data[9] = (int)v.Activity; data[10] = v.Drive; data[11] = v.TargetOffsetMeters;
             data[12] = v.Impairment; data[13] = (int)v.Context;
             hash.AppendData(System.Runtime.InteropServices.MemoryMarshal.AsBytes(data));
+            if(rearWheels.Length>0){wheelData[0]=rearWheels[wheelIndex++].AngularVelocityRadPerSecond;hash.AppendData(System.Runtime.InteropServices.MemoryMarshal.AsBytes(wheelData));}
         }
     }
     public void Dispose()

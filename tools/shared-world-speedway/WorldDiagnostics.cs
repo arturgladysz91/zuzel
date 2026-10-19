@@ -16,7 +16,10 @@ public sealed class WorldDiagnostics
     public Action<SlipObservation>? Slip { get; init; }
     public Action<YawLimitObservation>? YawLimit { get; init; }
     public Action<AppliedForceObservation>? AppliedForce { get; init; }
+    public Action<RearWheelObservation>? RearWheel { get; init; }
 }
+/// <summary>One accepted wheel interval; Before/After are actual Box2D poses.</summary>
+public readonly record struct RearWheelObservation(double TimeSeconds,int RiderId,RiderView Before,RiderView After,RearWheelStep Step);
 /// <summary>Read-only stages of the existing ON actuator; sampled at the pre-step accepted state.</summary>
 public readonly record struct YawLimitObservation(double TimeSeconds, int RiderId,
     float RequestedNewtonMeters, float AfterAuthorityNewtonMeters, float AfterEnergyNewtonMeters,

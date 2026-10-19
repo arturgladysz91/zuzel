@@ -8,6 +8,10 @@ uses one Box2D.NET world and causal rider observations. Recommendation B: full
 contact-free heats work; crowded-contact sensitivity and post-crash boundaries
 still block adoption. Production CoreSim and defaults remain unchanged.
 
+[Rear Wheel Dynamics (#100)](docs/experiments/rear-wheel-dynamics.md) adds default-OFF
+`EnableRearWheelDynamics`, requiring slip dynamics. Its independent wheel state,
+combined rear contact and whole-system energy ledger remain PROVISIONAL.
+
 Current physical consequence precedence (#56C2): [physical contact consequences and one-step recovery](docs/calibration/physical-contact-consequences.md)
 adds default-OFF `EnablePhysicalContactConsequences`, requiring #56B responses. When enabled,
 reviewed #56C1 analysis supplies deterministic final velocity/status and next-step recovery;

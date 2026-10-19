@@ -36,8 +36,14 @@ public static class SlipCoupledDynamics
     public static (Vector2 Force,float Torque) Forces(RiderView v,RiderSpec spec,TrackFrame frame,
         TrackStateSnapshot surface,WorldParameters p,double time,float mass,float inertia,
         Action<ForceObservation>? observe=null,Action<SlipObservation>? observeSlip=null,
-        Action<YawLimitObservation>? observeYaw=null)
+        Action<YawLimitObservation>? observeYaw=null,RearWheelState? rearWheel=null,float stepSeconds=0)
     {
+        if(p.EnableRearWheelDynamics){
+            if(rearWheel is null||!float.IsFinite(stepSeconds)||stepSeconds is <0 or >.020001f)
+                throw new ArgumentException("Wheel dynamics require accepted state and an actual 0..20ms interval.");
+            rearWheel.PrepareFree(stepSeconds);
+            rearWheel.Prepared=rearWheel.Prepared with{InstantSlipRatio=RearWheelDynamics.SlipRatio(v.ForwardSpeed,rearWheel.AngularVelocityRadPerSecond,rearWheel.Parameters)};
+        }else if(rearWheel is not null)throw new ArgumentException("Wheel state supplied with feature OFF.");
         if(spec.Passive || spec.SpeedMetersPerSecond==0 && v.TotalReferenceMeters<frame.Embedding.Segments[0].StraightLengthMeters
             && time+1e-12<RiderController.TapeReactionSeconds(spec))return(Vector2.Zero,0);
         var road=v.Road;var speed=v.Speed;var tangent=road.Tangent;
@@ -65,6 +71,22 @@ public static class SlipCoupledDynamics
         var resistance=-v.Velocity*(LongitudinalDynamics.CalculateLongitudinalResistanceForceNewtons(speed)
             /MathF.Sqrt(speed*speed+LowSpeedMetersPerSecond*LowSpeedMetersPerSecond));
         var force=tyreForce+resistance;
+        if(rearWheel is not null){
+            var wp=rearWheel.Parameters;var wheelSpeed=Math.Max(0,wp.WheelRadiusMeters*rearWheel.AngularVelocityRadPerSecond);
+            // One gear: retain the inherited force envelope, sampled at wheel
+            // circumferential speed (the driven shaft), not body speed.
+            var wheelAvailable=LongitudinalDynamics.CalculateAvailableDriveForceAtSpeedNewtons(reference,(float)wheelSpeed,spec.Setup);
+            var throttle=v.Activity==RiderActivity.Finished?0:v.Drive*(1-v.Impairment);
+            rearWheel.Prepared=RearWheelDynamics.Evaluate(u,w,rearWheel.AngularVelocityRadPerSecond,budget,mass,scaleSquared,
+                reference*wp.WheelRadiusMeters*throttle,wheelAvailable*wp.WheelRadiusMeters,
+                wheelAvailable*wp.WheelRadiusMeters*throttle,Vector2.Dot(resistance,forward),stepSeconds,wp);
+            var contact=rearWheel.Prepared;
+            tyre=new(contact.LongitudinalNewtons,contact.LateralNewtons,
+                MathF.Sqrt(contact.LongitudinalNewtons*contact.LongitudinalNewtons+contact.LateralNewtons*contact.LateralNewtons)/budget,
+                -contact.LateralNewtons*w);
+            tyreForce=forward*tyre.DriveNewtons+side*tyre.LateralNewtons;
+            force=tyreForce+resistance; // replaces, never adds to historical propulsion
+        }
         // Static-geometry preview over two yaw response times; no hypothetical body or force solve.
         var ahead=Math.Max(.1,frame.ReferenceSpeed(road,speed)*2*p.YawResponseSeconds);
         var preview=frame.RoadAt(v.TotalReferenceMeters+ahead,v.TargetOffsetMeters);
@@ -103,6 +125,15 @@ public static class SlipCoupledDynamics
         var credit=Math.Max(0,(double)tyre.LateralLossWatts+resistanceLoss
             -passiveForce.LengthSquared()*MaximumForceHoldSeconds/(2*mass));
         var rate=(double)inertia/MaximumForceHoldSeconds;
+        if(rearWheel is not null&&stepSeconds>0){
+            // Engine work is T*omega_mid*h. Subtract the held translational
+            // kinetic increment and include wheel reaction/bearing work before
+            // authorizing yaw work; the historical guard remains exact OFF.
+            var ws=rearWheel.Prepared;
+            credit=Math.Max(0,ws.LongitudinalNewtons*rearWheel.Parameters.WheelRadiusMeters*ws.MidOmega
+                +ws.BearingLossJoules/stepSeconds-Vector2.Dot(force,v.Velocity)-stepSeconds*force.LengthSquared()/(2*mass));
+            rate=(double)inertia/stepSeconds;
+        }
         var root=Math.Sqrt((double)v.AngularVelocity*v.AngularVelocity+2*credit/rate);
         torque=Math.Clamp(torque,(float)(rate*(-v.AngularVelocity-root)),(float)(rate*(-v.AngularVelocity+root)));
         // Re-evaluate diagnostic-only stages inside the optional branch. Keep the

@@ -14,6 +14,8 @@ public sealed record WorldParameters
     public bool EnableClosureAdaptiveFollowingGap { get; init; }
     public bool EnableAutonomousRacingLine { get; init; }
     public bool EnableSlipCoupledDynamics { get; init; }
+    public bool EnableRearWheelDynamics { get; init; }
+    public RearWheelParameters? RearWheel { get; init; }
     public float SlipYawResponseSeconds { get; init; } = .1f;
     // Audit-only variant 2; absent from the public experiment configuration.
     internal (double BaseMeters, double HeadwaySeconds)? DiagnosticFollowingGap { get; init; }
@@ -57,7 +59,11 @@ public readonly record struct RiderView(int Id, Vector2 Position, Vector2 Veloci
     public float SideSpeed => Vector2.Dot(Velocity, new(-MathF.Sin(Heading), MathF.Cos(Heading)));
     public float SlideRadians => Speed < .01f ? 0 : (float)CoreSim.PhysicalSpace.BikeAngles.Wrap(Heading - Math.Atan2(Velocity.Y, Velocity.X));
 }
-public sealed record WorldSnapshot(double TimeSeconds, IReadOnlyList<RiderView> Riders);
+public sealed record WorldSnapshot(double TimeSeconds, IReadOnlyList<RiderView> Riders)
+{
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
+    public IReadOnlyList<RearWheelView>? RearWheels { get; init; }
+}
 public enum ControlChannels { Both, Line, Throttle }
 public sealed record DecisionEvent(int RiderId, int OpponentId, TrafficAction Action,
     double ObservedAt, double DecisionAt, double RequestedActivation, double? ActualActivation,
@@ -75,6 +81,7 @@ public sealed class WorldWork
     public long PhysicsUpdates, SolverCalls, AiUpdates, PairChecks, Threats, ContactManifolds, SolvedPoints,
         BeginShapes, EndShapes, HitShapes, Episodes, Consequences, GeometryChecks, ProximityPairChecks,
         SolverSubsteps, ContactCandidateSamples, MaximumContactCandidates;
+    public long RearWheelForceEvaluations,RearWheelBoundaryEvaluations,RearWheelCommits;
     public double SolverElapsedMilliseconds, ContactProcessingMilliseconds, SolverProfileMilliseconds,
         BroadPhaseProfileMilliseconds, NarrowPhaseProfileMilliseconds, ConstraintProfileMilliseconds;
     public double MinimumGapMeters = double.PositiveInfinity, MaximumSpeed, MaximumStepDisplacementMeters,
