@@ -277,6 +277,7 @@ public sealed class HeatMeasurements : IDisposable
         public int Reversals, LastDirection, Changes;
     }
     private readonly TrackFrame frame;
+    private readonly Dictionary<int, double> lapOrigins;
     private WorldSnapshot previous;
     private readonly Dictionary<int, Rider> riders;
     private readonly StreamWriter? trajectory;
@@ -288,9 +289,10 @@ public sealed class HeatMeasurements : IDisposable
     public List<OrderChange> OrderChanges { get; } = new();
     public List<ControlSample> ControlSamples { get; } = new();
     public List<AuditAnomaly> Anomalies { get; } = new();
-    public HeatMeasurements(TrackFrame frame, WorldSnapshot initial, string? trajectoryPath = null)
+    public HeatMeasurements(TrackFrame frame, WorldSnapshot initial, string? trajectoryPath = null, bool lapsFromInitialPosition = false)
     {
         this.frame = frame; previous = initial; riders = initial.Riders.ToDictionary(r => r.Id, _ => new Rider());
+        lapOrigins = initial.Riders.ToDictionary(r => r.Id, r => lapsFromInitialPosition ? r.TotalReferenceMeters : 0);
         lastOrder = initial.Riders.OrderByDescending(v => v.TotalReferenceMeters).ThenBy(v => v.Id).Select(v => v.Id).ToArray();
         if (trajectoryPath is not null) {
             trajectory = File.CreateText(trajectoryPath);
@@ -322,7 +324,8 @@ public sealed class HeatMeasurements : IDisposable
         {
             var v = s.Riders[i]; var old = previous.Riders[i]; var r = riders[v.Id];
             if (old.Activity == RiderActivity.Finished) continue;
-            r.Laps.Accept(previous.TimeSeconds, old.TotalReferenceMeters, s.TimeSeconds, v.TotalReferenceMeters, frame.LapMeters, FullHeatSoloAudit.Laps);
+            r.Laps.Accept(previous.TimeSeconds, old.TotalReferenceMeters - lapOrigins[v.Id], s.TimeSeconds,
+                v.TotalReferenceMeters - lapOrigins[v.Id], frame.LapMeters, FullHeatSoloAudit.Laps);
             var measuredDt = r.Laps.Times.Count == FullHeatSoloAudit.Laps ? Math.Max(0, r.Laps.Times[^1] - previous.TimeSeconds) : dt;
             var fraction = dt > 0 ? measuredDt / dt : 0;
             var endSpeed = old.Speed + (v.Speed - old.Speed) * fraction;

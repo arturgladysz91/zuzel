@@ -22,6 +22,15 @@ public static class TrafficThrottle
     private const int InverseIterations = 4;
     private static readonly double BikeMassKg = new CoreSim.Interactions.PhysicalContactParameters().ReferenceBikeMassKg;
 
+    /// <summary>Preferred spacing only; emergency feasibility is evaluated independently below.</summary>
+    public static double PreferredGap(double speed, double closing, double reaction, double zeroAcceleration, WorldParameters p)
+    {
+        if (p.DiagnosticFollowingGap is { } diagnostic) return diagnostic.BaseMeters + diagnostic.HeadwaySeconds * speed;
+        if (!p.EnableClosureAdaptiveFollowingGap) return DesiredStandstillGapMeters + TimeHeadwaySeconds * speed;
+        var approach = Math.Max(0, closing);
+        return DesiredStandstillGapMeters + approach * reaction + approach * approach / (2 * Math.Max(.1, -zeroAcceleration));
+    }
+
     private static (double Rear, double Front) Extent(RiderView v, Vector2 axis)
     {
         var bike = BikeFootprint.Create(new(v.Position.X, v.Position.Y), v.Heading, SpeedwayBikeDimensions.Reference);
@@ -111,7 +120,7 @@ public static class TrafficThrottle
         var feedForward = hasHistory ? Math.Clamp((peer.Speed - memory.ObservedOpponentSpeed) / elapsed,
             -MaximumObservedAcceleration, MaximumObservedAcceleration) : 0;
         memory.FollowingOpponentId = peer.Id; memory.ThrottleObservedAt = snapshot.TimeSeconds; memory.ObservedOpponentSpeed = peer.Speed;
-        var desiredGap = DesiredStandstillGapMeters + TimeHeadwaySeconds * own.Speed;
+        var desiredGap = PreferredGap(own.Speed, g.ClosingMetersPerSecond, RiderController.ReactionSeconds(spec), zero, p);
         var desired = feedForward + (g.GapAfterReactionMeters - desiredGap) / (ResponseSeconds * ResponseSeconds)
             - 2 * g.ClosingMetersPerSecond / ResponseSeconds;
         var closing = Math.Max(0, g.ClosingMetersPerSecond);
