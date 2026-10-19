@@ -64,11 +64,13 @@ public sealed class SlipCoupledDynamicsTests
         var spec=SlipDynamicsAudit.Rider();var frame=new TrackFrame(CoreSim.Analysis.MatchedVenueProfiles.CreateMotoarenaStandingStartTrack());
         var surface=TrackState.CreateDefault(frame.Track).Snapshot();using var w=new WorldRunner(new[]{spec});
         var start=w.Snapshot.Riders[0];var properties=w.MechanicalProperties(1);var p=new WorldParameters{EnableSlipCoupledDynamics=true};
-        foreach(var speed in new[]{0f,.01f,.2f,18f,35f})foreach(var heading in new[]{-3f,-.2f,0,.2f,3f})foreach(var spin in new[]{-3f,0,3f}) {
+        foreach(var speed in new[]{0f,.01f,.2f,18f,35f})foreach(var heading in new[]{-3f,-.2f,0,.2f,3f})foreach(var spin in new[]{-3f,-.001f,0,.001f,3f}) {
             var v=start with{Velocity=new(speed,0),Heading=heading,AngularVelocity=spin,Drive=0};
             var f=RiderController.Forces(v,spec,frame,surface,p,1,properties.MassKg,properties.InertiaKgMetersSquared);
             var power=Vector2.Dot(f.Force,v.Velocity)+f.Torque*v.AngularVelocity;
             Assert.True(power<=.05f,$"Generated zero-drive power {power}");
+            var heldStepEnergyRate=power+.01f*(f.Force.LengthSquared()/properties.MassKg+f.Torque*f.Torque/properties.InertiaKgMetersSquared);
+            Assert.True(heldStepEnergyRate<=.05f,$"Generated energy over a held 20 ms force: {heldStepEnergyRate}");
             if(v.ForwardSpeed>=0) {
                 var full=RiderController.Forces(v with{Drive=1},spec,frame,surface,p,1,properties.MassKg,properties.InertiaKgMetersSquared);
                 Assert.Equal(f.Torque,full.Torque);

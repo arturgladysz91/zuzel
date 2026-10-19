@@ -12,7 +12,7 @@ public static class SlipCoupledDynamics
     public const float LowSpeedMetersPerSecond=.5f;
     public const float MaximumSteeringDemandRatio=.95f;
     public const float YawLeverArmMeters=.5f;
-    public const float YawPowerRegularizationRadiansPerSecond=1;
+    public const float MaximumForceHoldSeconds=.02f;
     public const float OuterToYawResponseSeparation=4;
     // Bound low-speed stiffness by m/T. T exceeds the largest existing 20 ms
     // force-hold interval, so lateral damping cannot overshoot a stopped side velocity.
@@ -95,13 +95,15 @@ public static class SlipCoupledDynamics
         var yawAcceleration=error/(p.SlipYawResponseSeconds*p.SlipYawResponseSeconds)+2*(travelYaw-v.AngularVelocity)/p.SlipYawResponseSeconds;
         var torque=Math.Clamp(inertia*yawAcceleration,-budget*YawLeverArmMeters,budget*YawLeverArmMeters)*authority;
         var resistanceLoss=-Vector2.Dot(resistance,v.Velocity);
-        // Steering is an effective actuator, not a free source of kinetic energy.
-        // Positive yaw work may use at most the translational dissipation; at rest it is zero.
-        if(torque*v.AngularVelocity>=0) {
-            var limit=(tyre.LateralLossWatts+resistanceLoss)/MathF.Sqrt(v.AngularVelocity*v.AngularVelocity
-                +YawPowerRegularizationRadiansPerSecond*YawPowerRegularizationRadiansPerSecond);
-            torque=Math.Clamp(torque,-limit,limit);
-        }
+        // Bound WORK over the complete held-force interval, including the quadratic
+        // change of kinetic energy. Instantaneous tau*omega alone lets a braking
+        // moment overshoot zero spin and create rotational energy in a finite step.
+        var passiveForce=lateralForce+resistance;
+        var credit=Math.Max(0,(double)tyre.LateralLossWatts+resistanceLoss
+            -passiveForce.LengthSquared()*MaximumForceHoldSeconds/(2*mass));
+        var rate=(double)inertia/MaximumForceHoldSeconds;
+        var root=Math.Sqrt((double)v.AngularVelocity*v.AngularVelocity+2*credit/rate);
+        torque=Math.Clamp(torque,(float)(rate*(-v.AngularVelocity-root)),(float)(rate*(-v.AngularVelocity+root)));
         observe?.Invoke(new(time,v,force,torque,(float)(mass*demand),Vector2.Dot(tyreForce,new(-tangent.Y,tangent.X)),
             null,Vector2.Dot(force,tangent),"slip-racing"));
         observeSlip?.Invoke(new(time,v.Id,speed,v.SlideRadians*180/MathF.PI,targetSlip*180/MathF.PI,v.Heading,travelHeading,

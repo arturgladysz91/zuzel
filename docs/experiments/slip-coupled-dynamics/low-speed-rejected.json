@@ -10,5 +10,9 @@
   },
   "Step005Passed": true,
   "Method": "Values from the first failing assertion in real Box2D accepted-state tests, not a search for the maximum.",
-  "Disposition": "Rejected. Continuous passivity was insufficient for a held explicit force near zero forward speed. Added continuous finite-stiffness regularization with minimum lateral response time 0.03 s; no velocity edits or added solver steps."
+  "YawSourceHeadBeforeCorrection": "9d1fc4e388b15e457ad86a2570d08dc01cb36aa8",
+  "YawHeldStepCheck": "F*v + torque*omega + H/2*(|F|^2/m + torque^2/I) <= 0, H=0.02 s, Drive=0",
+  "FirstFailingHeldStepEnergyRatesWatts": [0.97267616, 165.06488],
+  "YawGrid": {"Speeds": [0, 0.01, 0.2, 18, 35], "Headings": [-3, -0.2, 0, 0.2, 3], "SpinsExpanded": [-3, -0.001, 0, 0.001, 3]},
+  "Disposition": "Rejected. Continuous passivity was insufficient for held force and braking torque. Added lateral stiffness regularization T=0.03 s and an exact finite-interval yaw-work bound including quadratic kinetic energy; no velocity edits or added solver steps."
 }
