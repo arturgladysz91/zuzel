@@ -1,0 +1,29 @@
+{
+  "TargetedRelease": {
+    "Passed": 33,
+    "Failed": 0
+  },
+  "NodeReplayTests": {
+    "Passed": 7,
+    "Failed": 0
+  },
+  "HistoricalManifestsUnchanged": {
+    "autonomous-racing-line": 34,
+    "slip-coupled-dynamics": 63,
+    "slip-control-validation": 42
+  },
+  "Stage1Runs": 48,
+  "Stage2Runs": 16,
+  "MaximumEnergyResidualJoules": 1.0766945291992014,
+  "MaximumActivationOvershootMeters": 0.24914360046409456,
+  "MinimumActivationOvershootMeters": 0,
+  "MaximumFlyingLapDifferenceSeconds": 0.002561300273107747,
+  "NormalReplay": {
+    "ElapsedMilliseconds": 27.6048,
+    "Fingerprint": "EC59324BB2CADBB33E8B0DD8937A8310A121D31257FC271FE29F1D1EAE2CF4DF",
+    "SolverCalls": 4729,
+    "OptimizerCallsDuringRun": 0
+  },
+  "ReplayFingerprintsExact": true,
+  "CI": "Standard Draft Windows CI; exact final HEAD and run link in PR/final delivery."
+}

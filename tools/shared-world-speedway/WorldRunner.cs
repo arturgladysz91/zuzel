@@ -32,6 +32,8 @@ public sealed class WorldRunner : IDisposable
     private readonly PhysicalContactParameters severityScale = new();
     private readonly WorldDiagnostics? diagnostics;
     private readonly ControlCommand[] controls;
+    private readonly SpatialControlCommand[][] spatialControls;
+    private readonly int[] nextSpatialControl;
     private int nextControl;
     private bool disposed;
     public WorldSnapshot Snapshot => new(TimeSeconds, Array.AsReadOnly((RiderView[])views.Clone()));
@@ -43,7 +45,7 @@ public sealed class WorldRunner : IDisposable
     }
     public WorldRunner(IEnumerable<RiderSpec> riders, Track? track = null, WorldParameters? parameters = null,
         WorldDiagnostics? diagnostics = null, IEnumerable<ControlCommand>? controls = null,
-        TrackStateSnapshot? frozenSurface = null)
+        TrackStateSnapshot? frozenSurface = null, IEnumerable<SpatialControlCommand>? spatialControls = null)
     {
         this.diagnostics = diagnostics;
         Parameters = parameters ?? new();
@@ -79,6 +81,17 @@ public sealed class WorldRunner : IDisposable
             || s.TargetOffsetMeters < .5 || s.TargetOffsetMeters > Frame.MinimumUsableWidthMeters - .5 || !double.IsFinite(s.ReferenceMeters)))
             throw new ArgumentException("Invalid physical rider inputs.");
         this.controls = (controls ?? Array.Empty<ControlCommand>()).OrderBy(c => c.AtSeconds).ThenBy(c => c.RiderId).ToArray();
+        var spatial = (spatialControls ?? Array.Empty<SpatialControlCommand>()).ToArray();
+        if (spatial.Length > 0 && (!Parameters.EnableSlipCoupledDynamics || this.controls.Length > 0 || specs.Any(s => s.TrafficEnabled))
+            || spatial.Any(c => !double.IsFinite(c.ReferenceMeters) || !float.IsFinite(c.TargetOffsetMeters)
+                || c.TargetOffsetMeters < .5 || c.TargetOffsetMeters > Frame.MinimumUsableWidthMeters - .5
+                || !float.IsFinite(c.Drive) || c.Drive is < 0 or > 1
+                || !specs.Any(s => s.Profile.Id == c.RiderId && c.ReferenceMeters >= s.ReferenceMeters))
+            || spatial.Select(c => (c.RiderId,c.ReferenceMeters)).Distinct().Count() != spatial.Length)
+            throw new ArgumentException("Use unique finite spatial landmarks with imposed-line slip dynamics and no timed commands.", nameof(spatialControls));
+        this.spatialControls = spatial.Length == 0 ? Array.Empty<SpatialControlCommand[]>()
+            : specs.Select(s => spatial.Where(c => c.RiderId == s.Profile.Id).OrderBy(c => c.ReferenceMeters).ToArray()).ToArray();
+        nextSpatialControl = spatial.Length == 0 ? Array.Empty<int>() : new int[specs.Length];
         if (this.controls.Any(c => !double.IsFinite(c.AtSeconds) || c.AtSeconds < 0
                 || !float.IsFinite(c.Drive) || c.Drive is < 0 or > 1 || !float.IsFinite(c.TargetOffsetMeters)
                 || c.TargetOffsetMeters < .5 || c.TargetOffsetMeters > Frame.MinimumUsableWidthMeters - .5
@@ -288,6 +301,18 @@ public sealed class WorldRunner : IDisposable
     }
     private void Activate()
     {
+        // Authored spatial plans share the accepted clock. Do not add a solver
+        // partition or predict the next crossing; quantization is reported offline.
+        for (var i = 0; i < spatialControls.Length; i++)
+            while (nextSpatialControl[i] < spatialControls[i].Length
+                && views[i].TotalReferenceMeters >= spatialControls[i][nextSpatialControl[i]].ReferenceMeters)
+            {
+                var c = spatialControls[i][nextSpatialControl[i]++];
+                if (views[i].TargetOffsetMeters != c.TargetOffsetMeters || views[i].Drive != c.Drive) Work.ControlChanges++;
+                views[i] = views[i] with {Drive = c.Drive, TargetOffsetMeters = c.TargetOffsetMeters};
+                decisions.Add(new(c.RiderId,0,TrafficAction.KeepIntent,TimeSeconds,TimeSeconds,TimeSeconds,TimeSeconds,
+                    c.TargetOffsetMeters,c.Drive,Reason:"SpatialPlan"));
+            }
         while (nextControl < controls.Length && controls[nextControl].AtSeconds <= TimeSeconds + 1e-12)
         {
             var c = controls[nextControl++]; var i = Array.FindIndex(specs, s => s.Profile.Id == c.RiderId);

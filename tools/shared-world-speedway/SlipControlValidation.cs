@@ -35,13 +35,13 @@ public static class SlipControlValidation
     public static ControlCommand[] ContactControls()=>new[]{new ControlCommand(1,0,5,.4f),new ControlCommand(2,0,5,.4f)};
 
     public static Capture Execute(Scenario scenario,WorldParameters? parameters=null,ControlCommand[]? controls=null,
-        bool reverse=false,string? csvPath=null)
+        bool reverse=false,string? csvPath=null, SpatialControlCommand[]? spatialControls=null, TrackStateSnapshot? surface=null)
     {
         var forces=new Dictionary<int,ForceObservation>();var slips=new Dictionary<int,SlipObservation>();
         var yaws=new Dictionary<int,YawLimitObservation>();var applied=new Dictionary<int,AppliedForceObservation>();
         var contacts=new List<ContactPointObservation>();var consequences=new List<ConsequenceObservation>();
         using var world=new WorldRunner(reverse?scenario.Riders.Reverse():scenario.Riders,parameters:parameters??Parameters(),
-            controls:controls,diagnostics:new(){Force=f=>forces[f.Rider.Id]=f,Slip=s=>slips[s.RiderId]=s,
+            controls:controls,spatialControls:spatialControls,frozenSurface:surface,diagnostics:new(){Force=f=>forces[f.Rider.Id]=f,Slip=s=>slips[s.RiderId]=s,
                 YawLimit=y=>yaws[y.RiderId]=y,AppliedForce=a=>applied[a.RiderId]=a,
                 ContactPoint=contacts.Add,Consequence=consequences.Add});
         CloseRacingAudit.ValidateInitial(world);
