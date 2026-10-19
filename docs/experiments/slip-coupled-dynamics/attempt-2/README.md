@@ -1,0 +1,1 @@
+Rejected second controller: outer lateral PD response = 2.05 s, inner yaw response = 0.35 s. B-middle completed but left the track (clearance -7.774 m). A slow orientation actuator still delayed the tyre response at transitions. Retained, not counted as successful.

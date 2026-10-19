@@ -13,7 +13,13 @@ public sealed class WorldDiagnostics
     public Action<ContestObservation>? Contest { get; init; }
     public Action<ThrottleObservation>? Throttle { get; init; }
     public Action<AutonomousLineObservation>? AutonomousLine { get; init; }
+    public Action<SlipObservation>? Slip { get; init; }
 }
+public readonly record struct SlipObservation(double TimeSeconds, int RiderId, float SpeedMetersPerSecond,
+    float ActualSlipDegrees, float TargetSlipDegrees, float HeadingRadians, float TravelHeadingRadians,
+    float DriveForceNewtons, float LateralForceNewtons, float GripBudgetNewtons, float GripUtilization,
+    float Drive, double OffsetMeters, float TargetOffsetMeters, float TorqueNewtonMeters,
+    float LateralLossWatts, float ResistanceLossWatts, float TranslationalPowerWatts, float YawPowerWatts);
 public readonly record struct ContestObservation(double TimeSeconds, int RiderId, int OpponentId,
     float TargetMeters, bool Available, double BaselineReferenceSpeed, double? CandidateReferenceSpeed,
     double OwnReferenceSpeed, double OpponentReferenceSpeed, double RequiredGain);

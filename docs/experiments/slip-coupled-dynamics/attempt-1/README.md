@@ -1,0 +1,1 @@
+Rejected first controller: outer lateral PD response = 0.65 s, inner yaw response = 0.35 s. B-middle ON did not complete in 60 s, clearance -17.055 m; retain all measurements. The force law and force budget were unchanged in the subsequent controller bandwidth correction.

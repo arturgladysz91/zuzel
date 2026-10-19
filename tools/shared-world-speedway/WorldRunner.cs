@@ -35,11 +35,22 @@ public sealed class WorldRunner : IDisposable
     private int nextControl;
     private bool disposed;
     public WorldSnapshot Snapshot => new(TimeSeconds, Array.AsReadOnly((RiderView[])views.Clone()));
+    public (float MassKg,float InertiaKgMetersSquared) MechanicalProperties(int riderId)
+    {
+        var index=Array.FindIndex(specs,s=>s.Profile.Id==riderId);
+        if(index<0)throw new ArgumentOutOfRangeException(nameof(riderId));
+        return(physics.Masses[index],physics.Inertias[index]);
+    }
     public WorldRunner(IEnumerable<RiderSpec> riders, Track? track = null, WorldParameters? parameters = null,
-        WorldDiagnostics? diagnostics = null, IEnumerable<ControlCommand>? controls = null)
+        WorldDiagnostics? diagnostics = null, IEnumerable<ControlCommand>? controls = null,
+        TrackStateSnapshot? frozenSurface = null)
     {
         this.diagnostics = diagnostics;
         Parameters = parameters ?? new();
+        if (!float.IsFinite(Parameters.SlipYawResponseSeconds) || Parameters.SlipYawResponseSeconds < .05f || Parameters.SlipYawResponseSeconds > .5f)
+            throw new ArgumentOutOfRangeException(nameof(parameters));
+        if (Parameters.EnableSlipCoupledDynamics && Parameters.EnableTacticalRacing)
+            throw new ArgumentException("Slip-coupled dynamics currently support imposed lines, not tactical/trajectory scoring.", nameof(parameters));
         if (Parameters.EnableAutonomousRacingLine && !Parameters.EnableTacticalRacing)
             throw new ArgumentException("Autonomous racing lines require experimental tactical racing.", nameof(parameters));
         if (Parameters.EnableClosureAdaptiveFollowingGap && !Parameters.EnableProportionalTrafficThrottle)
@@ -75,7 +86,15 @@ public sealed class WorldRunner : IDisposable
             || this.controls.Select(c => (c.AtSeconds, c.RiderId)).Distinct().Count() != this.controls.Length
             || this.controls.Length > 0 && specs.Any(s => s.TrafficEnabled))
             throw new ArgumentException("Use finite, unique authored commands with reactive traffic disabled.", nameof(controls));
-        surface = TrackState.CreateDefault(Frame.Track).Snapshot(); // frozen surface; no duplicate wear or RNG
+        surface = frozenSurface ?? TrackState.CreateDefault(Frame.Track).Snapshot(); // frozen; no duplicate wear or RNG
+        if (surface.SegmentCount != Frame.Track.Segments.Count || surface.LinesCount != TrackSegment.LanesCount)
+            throw new ArgumentException("Surface must match the actual track.", nameof(frozenSurface));
+        if (frozenSurface is not null)
+            for (var segment=0;segment<surface.SegmentCount;segment++) for (var lane=0;lane<surface.LinesCount;lane++) {
+                var cell=surface.GetSurface(segment,lane);
+                if (!float.IsFinite(cell.Grip)||!float.IsFinite(cell.Ruts)||!float.IsFinite(cell.Moisture))
+                    throw new ArgumentException("Surface values must be finite.", nameof(frozenSurface));
+            }
         physics = new(specs, Frame, Parameters);
         pending = new DecisionEvent?[specs.Length];
         pendingThrottle = Parameters.EnableProportionalTrafficThrottle ? new DecisionEvent?[specs.Length] : Array.Empty<DecisionEvent?>();
@@ -119,7 +138,7 @@ public sealed class WorldRunner : IDisposable
                 for (var i = 0; i < specs.Length; i++)
                 {
                     var force = RiderController.Forces(views[i], specs[i], Frame, surface, Parameters,
-                        TimeSeconds, physics.Masses[i], physics.Inertias[i], diagnostics?.Force);
+                        TimeSeconds, physics.Masses[i], physics.Inertias[i], diagnostics?.Force, diagnostics?.Slip);
                     physics.Force(i, force.Force, force.Torque);
                     duration = UntilCurvatureChange(i, force.Force, duration);
                 }
@@ -210,6 +229,8 @@ public sealed class WorldRunner : IDisposable
         for (var i = 0; i < specs.Length; i++)
         {
             Work.AiUpdates++;
+            // Imposed-line slip experiments must not silently reopen an authored zero throttle.
+            if (Parameters.EnableSlipCoupledDynamics && !specs[i].TrafficEnabled) continue;
             if (pending[i] is not null || TimeSeconds < nextDecision[i] || snapshot.Riders[i].Activity == RiderActivity.Finished) continue;
             var decision = TrafficDecision.Observe(snapshot, snapshot.Riders[i], specs[i], Parameters, Work, Frame.MinimumUsableWidthMeters - .5f);
             // Resume propulsion from a fresh observation, retaining the yielded/held line.

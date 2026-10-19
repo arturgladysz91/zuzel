@@ -59,6 +59,13 @@ public sealed class TrackFrame
             s.StartTangentHeadingRadians + (turn ? p * s.TurnAngleRadians : 0),
             turn ? s.InnerRadiusMeters + offset : 0, cp);
     }
+    /// <summary>Allocation-free static-road preview for the slip controller; same chain as At, no body.</summary>
+    public RoadPoint RoadAt(double referenceMeters,double offset)
+    {
+        var s=((referenceMeters%LapMeters)+LapMeters)%LapMeters;var i=0;
+        while(i<starts.Length-2 && starts[i+1]<=s)i++;
+        return Point(i,(s-starts[i])/(starts[i+1]-starts[i]),offset);
+    }
     public RoadPoint Project(Vector2 position)
     {
         var best = double.PositiveInfinity; RoadPoint result = default;
