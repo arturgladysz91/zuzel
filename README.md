@@ -57,6 +57,12 @@ full-drive INNER supports a safe periodic drifting orbit, while authored-path
 tracking still fails. Surface calibration and the causal share of controller
 error remain unresolved. Three initial-speed repeat/perturbation runs are added.
 
+[Coupled Slip Inverse (#108)](docs/experiments/coupled-slip-inverse.md) tests a
+default-OFF controller inverse using the original finite-step front/rear contact.
+Two full-drive native runs improve RMS slightly but worsen peak error and inner
+clearance. The variant fails acceptance and costs 5.3–7.9 times a force call;
+it remains a research control, with unchanged tyre/wheel/yaw laws and defaults.
+
 Current physical consequence precedence (#56C2): [physical contact consequences and one-step recovery](docs/calibration/physical-contact-consequences.md)
 adds default-OFF `EnablePhysicalContactConsequences`, requiring #56B responses. When enabled,
 reviewed #56C1 analysis supplies deterministic final velocity/status and next-step recovery;

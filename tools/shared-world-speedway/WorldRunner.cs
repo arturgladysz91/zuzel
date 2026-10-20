@@ -94,6 +94,9 @@ public sealed class WorldRunner : IDisposable
             || Parameters.YawResponseSeconds <= 0 || Parameters.PredictionSeconds <= 0
             || Parameters.RecoverySeconds <= 0) throw new ArgumentOutOfRangeException(nameof(parameters));
         specs = riders.OrderBy(r => r.Profile.Id).ToArray();
+        if(Parameters.EnableCoupledSlipInverse&&(!Parameters.EnableRearWheelDynamics||!diagnosticPathGuidance
+            ||authoredPath?.IsCrossover!=true||specs.Length!=1||specs.Any(s=>s.TrafficEnabled)))
+            throw new ArgumentException("Coupled inverse is restricted to one opt-in #106 C3 path with wheel physics and no traffic.");
         if(Parameters.ExperimentalDrive is { } engine){
             engine.Validate();
             if(!Parameters.EnableRearWheelDynamics||authoredPath?.IsCrossover!=true||specs.Length!=1||specs.Any(s=>s.TrafficEnabled))
@@ -205,7 +208,7 @@ public sealed class WorldRunner : IDisposable
                     if(rearWheels.Length>0)Work.RearWheelForceEvaluations++;
                     var force = diagnosticPathGuidance?SlipCoupledDynamics.Forces(views[i],specs[i],Frame,surface,Parameters,
                         TimeSeconds,physics.Masses[i],physics.Inertias[i],diagnostics?.Force,diagnostics?.Slip,diagnostics?.YawLimit,
-                        rearWheels[i],(float)duration,authoredPath!.Guidance(views[i],Parameters,diagnosticPathPreview)):
+                        rearWheels[i],(float)duration,authoredPath!.Guidance(views[i],Parameters,diagnosticPathPreview),diagnostics?.CoupledSlipInverse):
                         RiderController.Forces(views[i], specs[i], Frame, surface, Parameters,
                         TimeSeconds, physics.Masses[i], physics.Inertias[i], diagnostics?.Force, diagnostics?.Slip, diagnostics?.YawLimit,
                         rearWheels.Length==0?null:rearWheels[i],rearWheels.Length==0?0:(float)duration);
