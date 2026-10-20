@@ -13,6 +13,14 @@ the single force applied to Box2D. The energy ledger includes the body and wheel
 The front/rear budget split is static and both forces act at the body center;
 there are no two-axle contact moments or changes to production CoreSim.
 
+[Coupled Slip Inverse (#108)](experiments/coupled-slip-inverse.md) is a default-OFF
+tools-only intervention in target-slip selection for one C3 authored rider.
+Candidate headings query the original finite-step contact without committing
+wheel/body state. The inverse projects both Fx and Fy onto the velocity normal;
+unreachable/ambiguous requests retain the original bounded target. All force,
+yaw actuator and engine laws stay unchanged. Numerical envelope uncertainty and
+the failed safety/tracking/cost outcome are documented; this is not production.
+
 [Track Geometry Variants (#101)](experiments/track-geometry-variants.md) supplies an
 optional immutable `ExperimentalTrackShape` to that same tools-only `TrackFrame`.
 Arc-length quintic pieces and a static nearest-point BVH provide position,

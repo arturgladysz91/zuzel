@@ -37,7 +37,8 @@ public static class SlipControlValidation
     public static Capture Execute(Scenario scenario,WorldParameters? parameters=null,ControlCommand[]? controls=null,
         bool reverse=false,string? csvPath=null, SpatialControlCommand[]? spatialControls=null, TrackStateSnapshot? surface=null,
         Action<RearWheelObservation>? wheelObserver=null,double stepSeconds=.01,TrackShapeVariant? trackShape=null,
-        AuthoredRacingPath? authoredPath=null,bool diagnosticPathGuidance=false,bool diagnosticPathPreview=false,AuthoredSteadyStart? diagnosticSteadyStart=null,bool stopOnCrash=false)
+        AuthoredRacingPath? authoredPath=null,bool diagnosticPathGuidance=false,bool diagnosticPathPreview=false,AuthoredSteadyStart? diagnosticSteadyStart=null,bool stopOnCrash=false,
+        Action<CoupledSlipInverseObservation>? inverseObserver=null)
     {
         var forces=new Dictionary<int,ForceObservation>();var slips=new Dictionary<int,SlipObservation>();
         var yaws=new Dictionary<int,YawLimitObservation>();var applied=new Dictionary<int,AppliedForceObservation>();
@@ -45,7 +46,7 @@ public static class SlipControlValidation
         using var world=new WorldRunner(reverse?scenario.Riders.Reverse():scenario.Riders,parameters:parameters??Parameters(),
             controls:controls,spatialControls:spatialControls,frozenSurface:surface,trackShape:trackShape,authoredPath:authoredPath,diagnosticPathGuidance:diagnosticPathGuidance,diagnosticPathPreview:diagnosticPathPreview,diagnosticSteadyStart:diagnosticSteadyStart,diagnostics:new(){Force=f=>forces[f.Rider.Id]=f,Slip=s=>slips[s.RiderId]=s,
                 YawLimit=y=>yaws[y.RiderId]=y,AppliedForce=a=>applied[a.RiderId]=a,
-                ContactPoint=contacts.Add,Consequence=consequences.Add,RearWheel=wheelObserver});
+                ContactPoint=contacts.Add,Consequence=consequences.Add,RearWheel=wheelObserver,CoupledSlipInverse=inverseObserver});
         CloseRacingAudit.ValidateInitial(world);
         var mechanical=scenario.Riders.ToDictionary(s=>s.Profile.Id,s=>world.MechanicalProperties(s.Profile.Id));
         var initial=world.Snapshot;var previous=initial;var ticks=new List<Tick>();

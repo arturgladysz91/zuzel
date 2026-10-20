@@ -24,7 +24,7 @@ public static class SlipCoupledDynamics
             ||!float.IsFinite(massKg)||massKg<=0||!float.IsFinite(v.ForwardSpeed)||!float.IsFinite(v.SideSpeed))throw new ArgumentOutOfRangeException(nameof(budgetNewtons));
         return Tyre(v.SideSpeed,requestedDriveNewtons,budgetNewtons,VelocityScaleSquared(v.ForwardSpeed,budgetNewtons/massKg));
     }
-    private static float VelocityScaleSquared(float u,float accelerationBudget)
+    internal static float VelocityScaleSquared(float u,float accelerationBudget)
         =>SlipStiffnessRatio*SlipStiffnessRatio*(u*u+LowSpeedMetersPerSecond*LowSpeedMetersPerSecond)
             +accelerationBudget*accelerationBudget*MinimumLateralRelaxationSeconds*MinimumLateralRelaxationSeconds;
     private static TyreForces Tyre(float w,float requestedDriveNewtons,float budgetNewtons,float scale)
@@ -37,7 +37,7 @@ public static class SlipCoupledDynamics
         TrackStateSnapshot surface,WorldParameters p,double time,float mass,float inertia,
         Action<ForceObservation>? observe=null,Action<SlipObservation>? observeSlip=null,
         Action<YawLimitObservation>? observeYaw=null,RearWheelState? rearWheel=null,float stepSeconds=0,
-        PathGuidanceSample? diagnosticPath=null)
+        PathGuidanceSample? diagnosticPath=null,Action<CoupledSlipInverseObservation>? observeInverse=null)
     {
         if(p.EnableRearWheelDynamics){
             if(rearWheel is null||!float.IsFinite(stepSeconds)||stepSeconds is <0 or >.020001f)
@@ -112,6 +112,15 @@ public static class SlipCoupledDynamics
         var ratio=Math.Clamp(mass*demand/budget,-MaximumSteeringDemandRatio,MaximumSteeringDemandRatio);
         var targetSlip=(float)Math.Atan(Math.Sqrt(scaleSquared)
             /Math.Max(speed,LowSpeedMetersPerSecond)*ratio/Math.Sqrt(1-ratio*ratio));
+        if(p.EnableCoupledSlipInverse&&diagnosticPath is not null){
+            if(rearWheel is null)throw new ArgumentException("Coupled inverse requires original rear-wheel contact.");
+            var legacy=targetSlip;var wheel=rearWheel.Prepared;
+            var inverse=CoupledSlipInverse.Solve(new(v.Velocity,resistance,budget,mass,rearWheel.AngularVelocityRadPerSecond,
+                wheel.RequestedTorqueNewtonMeters,wheel.AvailableTorqueNewtonMeters,wheel.DriveTorqueNewtonMeters,stepSeconds,rearWheel.Parameters),mass*demand);
+            // Freeze fallback before results: the original bounded request, unchanged.
+            if(inverse.Status==SlipInverseStatus.Solved)targetSlip=inverse.BetaRadians;
+            observeInverse?.Invoke(new(time,v.Id,legacy,targetSlip,inverse));
+        }
         var travelHeading=speed>=.01f?MathF.Atan2(v.Velocity.Y,v.Velocity.X):(float)road.Heading;
         var error=(float)BikeAngles.Wrap(targetSlip-v.SlideRadians);
         if(speed<LowSpeedMetersPerSecond) {
