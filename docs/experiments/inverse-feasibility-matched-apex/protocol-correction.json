@@ -1,0 +1,70 @@
+{
+  "Reason": "Preflight caught reset still moving at initial reference20 for entry-start paths. Use common32m reset ending at entry-15 before any matched comparison. Recomputed matched geometry/inverse; no timing-based selection. Legacy inverse unchanged. Initial diagnostic metadata inferred suffixes incorrectly; corrected flag only, no body/force/timing/fingerprint edits.",
+  "ArchivedInitialProtocol": {
+    "freeze.json": "3c3e9757aec4fdea9b0db023480c0fd10b60ccb4b9a2ccb2916f764af64bb67b",
+    "geometry-summary.json": "9783ee630563b26324f23321a9d388287914d0a63ce02acaa6967b952bbede01",
+    "inner-inverse-15.csv": "0c6827e0fa0651e193f25d61e474ef5982f2418a61e00a4b039a2586e6ae2a72",
+    "inner-inverse-18.csv": "36bf5c145de57f22340bd532b48c04d020cabf5abddaa062e14854875c7ff570",
+    "knot-probes.json": "e35711e01b693cea30cf20e14b1cd08af9befd013756f4bff20078483249fb21",
+    "lower-speed-selection.json": "a8c742360dbaeaf3be283e913d4ffdbd06cc59ba8be6195d8215d04c820a8f61",
+    "matched-inner-entry-geometry.csv": "92ea6b9b05f53a6d66aea1f1e4e27ee2bda62394809b194b0f4237d2427b792e",
+    "matched-inner-entry-inverse-18.csv": "36bf5c145de57f22340bd532b48c04d020cabf5abddaa062e14854875c7ff570",
+    "matched-inner-entry-steady-18-accepted.csv": "d700c8a826c34a9eb8f3104e5e4fa68b7af0aba2e643d371034bf502ea4f868d",
+    "matched-inner-entry-steady-18-tracking.csv": "16020caf09be451fbe3429108dc4ec0de0e74d06401919ca4d2e2c3e1b1e21aa",
+    "matched-inner-entry-steady-18.json": "68962f483ae566602f8c8e14a1e342af415969448c282306d3f8740ee25b5573",
+    "matched-knot-probes.json": "1159fa28e4ecbd2e3a570f16a14a952834e9058ce79345f78417e6f80724e50f",
+    "matched-mid-early-geometry.csv": "efe2e20f918e9ee946462b3b1946786a19f05e7f663bc3364b8ad331466637de",
+    "matched-mid-early-inverse-18.csv": "60bb2a20542f5c8cfe9dfc084383ef12284f6a0cfd399528d065af337480f6a1",
+    "matched-mid-entry-geometry.csv": "f9172e6097ddfa8a8fdb06edd09d63e3afe4411a4d8558ab0770b5f60bcf5846",
+    "matched-mid-entry-inverse-18.csv": "d8496c4399d0a19200bce618cdf392ed3bb8b9729226dad86cb0e8f8409be630",
+    "matched-wide-early-geometry.csv": "fcd8f9facb97cb90ebd099e1e46634e7022cd4393ee6a3f1d690f37d66fe3ecd",
+    "matched-wide-early-inverse-18.csv": "441ab2bacfa0e9d2b78786012d12468b040f981a2f0a1569cb3e57bd68488039",
+    "matched-wide-entry-geometry.csv": "7c245035378e5462caf0dbe7c866640c3582b592c94b30b4c2f09cd549f5dd5e",
+    "matched-wide-entry-inverse-18.csv": "80ce43a774c9212e3bb85912573b748ec39b9b7551df859e77cfd64100d58c3c",
+    "outside-inside-outside-inverse-15.csv": "3f78ff382709def96a846999dbe4151d0354bfe15cb6c58fff18a32b0726b87a",
+    "outside-inside-outside-inverse-18.csv": "6c53e767632b0c9dca47958f3e63eaf1a6fe18defed167fcf297e7d0602fd67b",
+    "replay-freeze.json": "25a25b97a76ae7ea08b137cf70297580a73c0b243e92545dad44ddf7d170c73c"
+  },
+  "Metadata": [
+    {
+      "File": "inner-steady-15.json",
+      "Before": "61ca4841e650231d168fd3309d5851f928ae3bd09bb9c79eb61e213d714164de",
+      "After": "11b6101e2148eec103c3c0f1cbfe9eaab64a8e99bf35fa04e3013c25eaf4b8ba"
+    },
+    {
+      "File": "matched-inner-entry-steady-18.json",
+      "Before": "3dbde007ece27d9c18d66fb110b40ad320c2575e94500940dcfb64ca23bc9e5c",
+      "After": "3447da30c8903e5bfb12f661b50f4a1e566b4a9eaba5555c5c905f1040f5a732"
+    },
+    {
+      "File": "matched-mid-early-steady-18.json",
+      "Before": "e3aae785a2634455056243dbb78d501caa65016001d875a362c16370299fc9c4",
+      "After": "e721e0e3d926d48f914d5d2217bb6efb0c0561b911df58950e139695dbd2fd83"
+    },
+    {
+      "File": "matched-mid-entry-steady-18.json",
+      "Before": "cc6d15116916ce876d9112322c0cb36caba58779eb983ce6c92222e51482f333",
+      "After": "7b0f84c6f2ef78c144175552d713c8e009201c4575c1c9d50e3c943a98988340"
+    },
+    {
+      "File": "matched-wide-early-steady-18.json",
+      "Before": "d01c792605384fd5de948979a2f5f9fb4c28fc7a007b496d2920acaa9199b64c",
+      "After": "db9c21e0677aa4d0d215bdaaed634a58b9a007aa187c0f11e820cf3d578a7671"
+    },
+    {
+      "File": "matched-wide-entry-steady-18.json",
+      "Before": "dbded0b78060cea78430dc6a003a653cf013583b58a8e5835b0a43bde67f72f2",
+      "After": "b9cd7991ef8ec59c61b3495db444fe24d2f98a50e4183c7155b1ced4d45eb3ce"
+    },
+    {
+      "File": "outside-inside-outside-steady-15.json",
+      "Before": "279a38a33f68b03a9e4f88c6ac8c525cf712937519dff369d66235b714b39e60",
+      "After": "fdea5afdf0b8843110a264a36aeded843621874b485c470b66cd43825c424fe2"
+    },
+    {
+      "File": "runs.json",
+      "Before": "051425f987bce50ff9084dc30ae0f928b451364181652c4e7badcf853cebe201",
+      "After": "08e8224e2babd44205520ba890c5e7a5f033d35540228ecab53b011d89ee09be"
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-import { Replay, parseCsv, clamp, enumName, decisionStatus, crossSection, worldCapsules } from './model.mjs';
+import { Replay, parseCsv, clamp, enumName, decisionStatus, crossSection, worldCapsules, authoredReplayDocument } from './model.mjs';
 
 const $ = id => document.getElementById(id);
 const canvas = $('track'), context = canvas.getContext('2d');
@@ -10,6 +10,10 @@ const wheelRoot = '../../docs/experiments/rear-wheel-dynamics/';
 const shapeRoot = '../../docs/experiments/track-geometry-variants/';
 const localRoot = '../../docs/experiments/local-offset-limit/';
 const widthRoot = '../../docs/experiments/progressive-bend-width/';
+const inverseRoot = '../../docs/experiments/inverse-feasibility-matched-apex/';
+for (const name of ['matched-inner-entry-steady-18', 'matched-mid-entry-steady-18', 'matched-wide-entry-steady-18', 'matched-mid-early-steady-18', 'matched-wide-early-steady-18', 'inner-steady-15', 'outside-inside-outside-steady-15']) {
+  const option = document.createElement('option'); option.value = 'inverse-' + name; option.textContent = '#105 · ' + name; $('scenario').append(option);
+}
 const widthColors = ['#ffb36d', '#70e2e4', '#e5a5f5'];
 let widthGeometries = [];
 let comparisonTrails = [];
@@ -197,24 +201,36 @@ async function loadScenario(key) {
   $('load-state').textContent = 'Wczytywanie zaakceptowanych stanów…';
   try {
     const base = sources[key];
+    const inverse = key.startsWith('inverse-');
     const progressive = key.startsWith('width-');
     const widthA = key.startsWith('width-a-');
     const local = key.startsWith('local-') || progressive;
-    const line = progressive ? (widthA ? 'egg-mild-' + key.slice(8) : 'progressive-' + key.slice(6)) : local ? key.slice(6) : key.startsWith('shape-') ? key.slice(6) : key.startsWith('wheel-') ? key.slice(6) : key.startsWith('line-') ? key.slice(5) : null;
-    const selectedRoot = progressive && !widthA ? widthRoot : local ? localRoot : key.startsWith('shape-') ? shapeRoot : key.startsWith('wheel-') ? wheelRoot : lineRoot;
+    const line = inverse ? key.slice(8) : progressive ? (widthA ? 'egg-mild-' + key.slice(8) : 'progressive-' + key.slice(6)) : local ? key.slice(6) : key.startsWith('shape-') ? key.slice(6) : key.startsWith('wheel-') ? key.slice(6) : key.startsWith('line-') ? key.slice(5) : null;
+    const selectedRoot = inverse ? inverseRoot : progressive && !widthA ? widthRoot : local ? localRoot : key.startsWith('shape-') ? shapeRoot : key.startsWith('wheel-') ? wheelRoot : lineRoot;
     const [csvResponse, jsonResponse] = await Promise.all(line
       ? [fetch(`${selectedRoot}${line}-accepted.csv`), fetch(`${selectedRoot}${line}.json`)]
       : [fetch(`${dataRoot}${base}-accepted.csv`), fetch(`${dataRoot}${base}-ON.json`)]);
     if (!csvResponse.ok || !jsonResponse.ok) throw new Error('Nie znaleziono zapisów przejazdu. Uruchom serwer z katalogu repozytorium.');
-    const [csv, json] = await Promise.all([csvResponse.text(), jsonResponse.json()]);
+    const [csv, rawJson] = await Promise.all([csvResponse.text(), jsonResponse.json()]);
+    const json = inverse ? authoredReplayDocument(rawJson) : rawJson;
     let nextGeometry = nativeGeometry;
+    if (inverse) {
+      const response = await fetch(widthRoot + 'progressive-b-geometry.json');
+      if (!response.ok) throw new Error('Brak zamrożonej geometrii progressive-b.');
+      nextGeometry = await response.json();
+    }
     if (key.startsWith('shape-') || local) {
       if (!/^[a-z-]+-geometry\.json$/.test(json.GeometryFile)) throw new Error('Brak geometrii tego przejazdu.');
       const response = await fetch(`${selectedRoot}${json.GeometryFile}`);
       if (!response.ok) throw new Error('Nie znaleziono geometrii tego przejazdu.');
       nextGeometry = await response.json();
     }
-    const comparisons = local ? await Promise.all((progressive ? [
+    const comparisons = inverse ? await (async () => {
+      const response = await fetch(inverseRoot + 'viewer-paths.json'); if (!response.ok) throw new Error('Brak planowanych linii #105.');
+      const plans = await response.json(); const early = key.includes('-early-');
+      return plans.filter(p => p.name === 'matched-inner-entry' || p.name.endsWith(early ? '-early' : '-entry'))
+        .map((p, i) => ({ name: p.name + ' (plan C2)', color: ['#9be6a8', '#82bfff', '#f498c8'][i], rejected: false, points: p.points }));
+    })() : local ? await Promise.all((progressive ? [
       ['inner', '#9be6a8'], ['middle-to-outer', '#82bfff'], ['outer-max', '#f498c8']
     ] : [
       ['inner', '#9be6a8'], ['middle-tighten', '#82bfff'], ['outer-tighten', '#f498c8']
@@ -235,7 +251,7 @@ async function loadScenario(key) {
     $('width-controls').hidden = !progressive;
     $('width-comparison').hidden = !progressive;
     comparisonTrails = comparisons;
-    $('comparison-legend').hidden = !local;
+    $('comparison-legend').hidden = !(local || inverse);
     $('comparison-legend').replaceChildren();
     for (const line of comparisons) {
       const label = document.createElement('span'); label.style.color = line.color;
@@ -243,13 +259,13 @@ async function loadScenario(key) {
       $('comparison-legend').append(label);
     }
     if (local) $('comparison-legend').append(document.createTextNode('zapis okr. 2'));
-    $('safety-note').hidden = !local;
-    $('safety-note').textContent = local ? `${json.Plan.Name} · ${json.Evaluation.Feasible ? 'WYKONALNY' : 'ODRZUCONY'} · min banda ${format(json.Evaluation.MinimumOuterClearanceMeters, 3)} m · wymagane ≥0,5 m` : '';
+    $('safety-note').hidden = !(local || inverse);
+    $('safety-note').textContent = inverse ? `#105 · ${json.BoundarySafe ? 'prześwit PASS' : 'prześwit FAIL'} · czas diagnostyczny; brak konstruktywnego dowodu inverse. Kolorowe linie: plany, turkusowy ślad: Box2D.` : local ? `${json.Plan.Name} · ${json.Evaluation.Feasible ? 'WYKONALNY' : 'ODRZUCONY'} · min banda ${format(json.Evaluation.MinimumOuterClearanceMeters, 3)} m · wymagane ≥0,5 m` : '';
     $('safety-note').title = local ? json.Evaluation.Rejections.join(', ') : '';
     $('safety-note').classList.toggle('unsafe', local && !json.Evaluation.Feasible);
-    document.querySelector('.map-title span').textContent = (local || key.startsWith('shape-')) ? 'GEOMETRIA EKSPERYMENTALNA' : 'MOTOARENA · TORUŃ';
-    canvas.setAttribute('aria-label', (local || key.startsWith('shape-')) ? `Tor ${json.Geometry}; pozycje i yaw z zapisu przejazdu` : 'Motoarena w skali metrycznej. Wybierz zawodnika klikając motocykl.');
-    document.querySelector('.map-title small').textContent = progressive ? `#103 · ${widthA ? 'A' : key[6].toUpperCase()} · bandy: A pomarańczowa / B turkusowa / C fioletowa` : local ? `#102 · ${json.Geometry} · obrys + 0,5 m` : key.startsWith('shape-') ? `#101 · ${json.Geometry} · metry` : 'Geometria modelu · metry';
+    document.querySelector('.map-title span').textContent = (inverse || local || key.startsWith('shape-')) ? 'GEOMETRIA EKSPERYMENTALNA' : 'MOTOARENA · TORUŃ';
+    canvas.setAttribute('aria-label', inverse ? 'Tor progressive-b; pozycje i yaw #105 z zapisu przejazdu' : (local || key.startsWith('shape-')) ? `Tor ${json.Geometry}; pozycje i yaw z zapisu przejazdu` : 'Motoarena w skali metrycznej. Wybierz zawodnika klikając motocykl.');
+    document.querySelector('.map-title small').textContent = inverse ? '#105 · progressive-b · matched apex / legalne siły' : progressive ? `#103 · ${widthA ? 'A' : key[6].toUpperCase()} · bandy: A pomarańczowa / B turkusowa / C fioletowa` : local ? `#102 · ${json.Geometry} · obrys + 0,5 m` : key.startsWith('shape-') ? `#101 · ${json.Geometry} · metry` : 'Geometria modelu · metry';
     replay = new Replay(csv, json); selected = [...replay.tracks.keys()][0];
     const buttons = [...replay.tracks.keys()].map(id => { const button = document.createElement('button'); button.textContent = `R${id}`;
       button.dataset.id = String(id); button.style.setProperty('--rider', color(id)); button.addEventListener('click', () => chooseRider(id)); return button; });

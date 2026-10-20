@@ -37,6 +37,13 @@ outside-inside-outside as intended. Isolated path-frame/preview diagnostics reta
 failed outcomes; full feasibility and the tracking gate remain unresolved, with
 no tyre/engine/default change or wheelspin ablation.
 
+[Inverse Feasibility & Matched-Apex Validation (#105)](docs/experiments/inverse-feasibility-matched-apex.md)
+uses the original force/wheel equations to distinguish scalar grip from coupled
+feasibility. Exact C2 OIO exposes yaw-rate jumps and unavailable drive torque at
+18 m/s. Matched-apex wide entries add distance without improving worst curvature;
+slower legal native replays pass tracking, while constant-speed constructive
+feasibility and strategy times remain unresolved. Production defaults stay unchanged.
+
 Current physical consequence precedence (#56C2): [physical contact consequences and one-step recovery](docs/calibration/physical-contact-consequences.md)
 adds default-OFF `EnablePhysicalContactConsequences`, requiring #56B responses. When enabled,
 reviewed #56C1 analysis supplies deterministic final velocity/status and next-step recovery;

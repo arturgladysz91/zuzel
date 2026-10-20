@@ -1,0 +1,63 @@
+{
+  "Reason": "Use exact target-slide clamp queried from original Forces at candidate body state; invert yaw with actual finite-step lateral reaction. Diagnostic calculation only; no path, controller, tyre, force, pose or native replay change.",
+  "ChangedColumns": [
+    "required_target_slip",
+    "max_target_slip"
+  ],
+  "Files": [
+    {
+      "File": "inner-inverse-15.csv",
+      "Rows": 6377,
+      "Before": "0c6827e0fa0651e193f25d61e474ef5982f2418a61e00a4b039a2586e6ae2a72",
+      "After": "2d7495d43257a49465fbd577ab664f3eb3a25f36f0b59be3c59a38ffb62c3816"
+    },
+    {
+      "File": "inner-inverse-18.csv",
+      "Rows": 6377,
+      "Before": "36bf5c145de57f22340bd532b48c04d020cabf5abddaa062e14854875c7ff570",
+      "After": "b0f3c125b02723f8e10adf02dc65e5b59fd7ffcb7fecff0c137dc690619866c7"
+    },
+    {
+      "File": "matched-inner-entry-inverse-18.csv",
+      "Rows": 6377,
+      "Before": "36bf5c145de57f22340bd532b48c04d020cabf5abddaa062e14854875c7ff570",
+      "After": "b0f3c125b02723f8e10adf02dc65e5b59fd7ffcb7fecff0c137dc690619866c7"
+    },
+    {
+      "File": "matched-mid-early-inverse-18.csv",
+      "Rows": 6377,
+      "Before": "60bb2a20542f5c8cfe9dfc084383ef12284f6a0cfd399528d065af337480f6a1",
+      "After": "520cb27192a68608d5fea7710297ba354ad613620d9bab2b2add496998bdb1ce"
+    },
+    {
+      "File": "matched-mid-entry-inverse-18.csv",
+      "Rows": 6377,
+      "Before": "26e8599f7042cabf6c09c37f349b32b682683e431e3e2f464c387d838a8679e3",
+      "After": "b07d9833ad40d130130ae0cc076510c1ec247d6190d81b4ceec92f89a0ee4960"
+    },
+    {
+      "File": "matched-wide-early-inverse-18.csv",
+      "Rows": 6377,
+      "Before": "441ab2bacfa0e9d2b78786012d12468b040f981a2f0a1569cb3e57bd68488039",
+      "After": "41adb77fd9ad2f40912faa584737dafee6123929d0385f6aa10752bef028a6b0"
+    },
+    {
+      "File": "matched-wide-entry-inverse-18.csv",
+      "Rows": 6377,
+      "Before": "299f03de4225e19f5a8803e6d44af489456ed059b99b23ca5714d4ea29c3dee4",
+      "After": "3b5dd18ca17c8fd006b94ef94f8e840bd4f6ad6732a4b7280e1b4f7aa7e6ac7d"
+    },
+    {
+      "File": "outside-inside-outside-inverse-15.csv",
+      "Rows": 6377,
+      "Before": "3f78ff382709def96a846999dbe4151d0354bfe15cb6c58fff18a32b0726b87a",
+      "After": "4d7b22ef767968213d324d36a6e16fea5cb85c06902394d54103b0ef6fad6f7c"
+    },
+    {
+      "File": "outside-inside-outside-inverse-18.csv",
+      "Rows": 6377,
+      "Before": "6c53e767632b0c9dca47958f3e63eaf1a6fe18defed167fcf297e7d0602fd67b",
+      "After": "e05e6f46e7a6b6fc2934418c0ce8bc938d6f7d95e3f18f76f33658e93600f919"
+    }
+  ]
+}

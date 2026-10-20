@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { Replay, parseCsv, angleAt, angleDelta, worldCapsules, crossSection, decisionStatus } from './model.mjs';
+import { Replay, parseCsv, angleAt, angleDelta, worldCapsules, crossSection, decisionStatus, authoredReplayDocument } from './model.mjs';
 
 const geometry = JSON.parse(readFileSync(new URL('./geometry.json', import.meta.url), 'utf8'));
 const fixture = name => {
@@ -11,6 +11,20 @@ const fixture = name => {
   return { csv, json, replay: new Replay(csv, json) };
 };
 const near = (a, b, epsilon = 1e-8) => assert.ok(Math.abs(a - b) < epsilon, `${a} != ${b}`);
+test('#105 adapters preserve all seven accepted trajectories and their recorded gates', () => {
+  const folder = new URL('../../docs/experiments/inverse-feasibility-matched-apex/', import.meta.url);
+  const runs = JSON.parse(readFileSync(new URL('runs.json', folder), 'utf8'));
+  assert.equal(runs.length, 7);
+  for (const document of runs) {
+    const before = JSON.stringify(document);
+    const csv = readFileSync(new URL(document.Case + '-accepted.csv', folder), 'utf8');
+    const replay = new Replay(csv, authoredReplayDocument(document));
+    assert.equal(JSON.stringify(document), before); assert.equal(replay.result.Fingerprint, document.Result.Fingerprint);
+    assert.equal(document.DiagnosticPathFrame, true);
+    for (const p of parseCsv(csv)) { const state = replay.state(1, p.t); near(state.x, p.x); near(state.y, p.y); near(angleDelta(state.heading, p.heading), 0); }
+    assert.equal(replay.state(1, document.CrossingSeconds[1]).completedLaps, 2);
+  }
+});
 test('#103 twelve real replays retain yaw, own C2 boundaries, interval evidence and unsafe trajectories', () => {
   const folder = new URL('../../docs/experiments/progressive-bend-width/', import.meta.url);
   const evidence = JSON.parse(readFileSync(new URL('measurements.json', folder), 'utf8'));
