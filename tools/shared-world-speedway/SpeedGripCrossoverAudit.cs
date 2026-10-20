@@ -14,12 +14,13 @@ public static class SpeedGripCrossoverAudit
     public static WorldParameters Parameters(ExperimentalDriveEnvelope? engine)=>LocalOffsetAudit.Parameters() with{ExperimentalDrive=engine};
     public static (SlipControlValidation.Capture Body,RearWheelObservation[] Wheels) Execute(bool wide,ExperimentalDriveEnvelope? engine=null,float grip=1,float initialSpeed=18,
         float drive=1,double initialReference=32,double step=.01,int laps=Laps,double duration=240,string? csv=null,bool equilibrium=false,
-        bool coupled=false,Action<CoupledSlipInverseObservation>? inverseObserver=null)
+        bool coupled=false,Action<CoupledSlipInverseObservation>? inverseObserver=null,bool fullContactYaw=false)
     {
         var path=AuthoredRacingPath.Crossover(wide);var rider=RacingLineRootCauseAudit.Rider(path) with{ReferenceMeters=initialReference,OffsetMeters=(float)path.Offset(initialReference).D,
             TargetOffsetMeters=(float)path.Offset(initialReference).D,SpeedMetersPerSecond=initialSpeed};
         var start=equilibrium?InverseFeasibilityAudit.SteadyStart(initialSpeed):new AuthoredSteadyStart(initialSpeed/.33,drive);
         var parameters=coupled?Parameters(engine) with{EnableCoupledSlipInverse=true}:Parameters(engine);
+        if(fullContactYaw)parameters=parameters with{EnableFullContactYawFeedForward=true};
         var wheels=new List<RearWheelObservation>();var c=SlipControlValidation.Execute(new(path.Name,new[]{rider},duration,laps),parameters,
             csvPath:csv,surface:TrackState.CreateDefault(path.Frame.Track,new(grip,0,.5f)).Snapshot(),wheelObserver:wheels.Add,stepSeconds:step,
             trackShape:RacingLineRootCauseAudit.Variant(),authoredPath:path,diagnosticPathGuidance:true,diagnosticPathPreview:true,diagnosticSteadyStart:start,stopOnCrash:true,inverseObserver:inverseObserver);
@@ -28,10 +29,10 @@ public static class SpeedGripCrossoverAudit
     private static void Save(string dir,string name,object value)=>InverseFeasibilityAudit.Save(dir,name,value);
     public static object Capture(string dir,string name,bool wide,ExperimentalDriveEnvelope? engine=null,float grip=1,float initialSpeed=18,
         float drive=1,double initialReference=32,double step=.01,int laps=Laps,double duration=240,bool equilibrium=false,
-        bool coupled=false,Action<CoupledSlipInverseObservation>? inverseObserver=null)
+        bool coupled=false,Action<CoupledSlipInverseObservation>? inverseObserver=null,bool fullContactYaw=false)
     {
         foreach(var suffix in new[]{".json","-accepted.csv","-tracking.csv.gz","-forces.csv.gz"})if(File.Exists(Path.Combine(dir,name+suffix)))throw new IOException("Evidence exists: "+name+suffix);
-        var(c,wheels)=Execute(wide,engine,grip,initialSpeed,drive,initialReference,step,laps,duration,Path.Combine(dir,name+"-accepted.csv"),equilibrium,coupled,inverseObserver);
+        var(c,wheels)=Execute(wide,engine,grip,initialSpeed,drive,initialReference,step,laps,duration,Path.Combine(dir,name+"-accepted.csv"),equilibrium,coupled,inverseObserver,fullContactYaw);
         var result=RacingLineRootCauseAudit.ExportCapture(dir,name,c,wheels,AuthoredRacingPath.Crossover(wide),diagnosticPathFrame:true,requiredLaps:laps,compressTracking:true);
         var byTime=wheels.ToDictionary(x=>Math.Round(x.TimeSeconds,8));var mech=c.Mechanical[1];
         using var zip=new GZipStream(File.Create(Path.Combine(dir,name+"-forces.csv.gz")),CompressionLevel.SmallestSize);using var writer=new StreamWriter(zip);

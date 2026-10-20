@@ -94,6 +94,8 @@ public sealed class WorldRunner : IDisposable
             || Parameters.YawResponseSeconds <= 0 || Parameters.PredictionSeconds <= 0
             || Parameters.RecoverySeconds <= 0) throw new ArgumentOutOfRangeException(nameof(parameters));
         specs = riders.OrderBy(r => r.Profile.Id).ToArray();
+        if(Parameters.EnableFullContactYawFeedForward&&!Parameters.EnableCoupledSlipInverse)
+            throw new ArgumentException("Full-contact yaw experiment requires the frozen coupled inverse control.");
         if(Parameters.EnableCoupledSlipInverse&&(!Parameters.EnableRearWheelDynamics||!diagnosticPathGuidance
             ||authoredPath?.IsCrossover!=true||specs.Length!=1||specs.Any(s=>s.TrafficEnabled)))
             throw new ArgumentException("Coupled inverse is restricted to one opt-in #106 C3 path with wheel physics and no traffic.");

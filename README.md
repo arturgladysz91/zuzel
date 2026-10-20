@@ -57,6 +57,12 @@ full-drive INNER supports a safe periodic drifting orbit, while authored-path
 tracking still fails. Surface calibration and the causal share of controller
 error remain unresolved. Three initial-speed repeat/perturbation runs are added.
 
+[Full Contact Yaw Feed-Forward (#109)](docs/experiments/full-contact-yaw-feedforward.md)
+isolates the omitted drive-force contribution to yaw with the #108 inverse fixed.
+Native peaks and inner clearances worsen despite slightly lower RMS: **FAIL**,
+default OFF. The small controller correction series ends here; the next step is
+a physically feasible trajectory and speed/slip profile.
+
 [Coupled Slip Inverse (#108)](docs/experiments/coupled-slip-inverse.md) tests a
 default-OFF controller inverse using the original finite-step front/rear contact.
 Two full-drive native runs improve RMS slightly but worsen peak error and inner
