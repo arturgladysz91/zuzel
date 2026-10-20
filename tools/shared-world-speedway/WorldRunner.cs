@@ -34,6 +34,7 @@ public sealed class WorldRunner : IDisposable
     private readonly ControlCommand[] controls;
     private readonly SpatialControlCommand[][] spatialControls;
     private readonly int[] nextSpatialControl;
+    private readonly float?[] localOuterFractions;
     private int nextControl;
     private bool disposed;
     private readonly RearWheelState[] rearWheels;
@@ -91,16 +92,25 @@ public sealed class WorldRunner : IDisposable
         specs = riders.OrderBy(r => r.Profile.Id).ToArray();
         if (specs.Length is < 1 or > 4 || specs.Select(s => s.Profile.Id).Distinct().Count() != specs.Length)
             throw new ArgumentException("One to four distinct riders are required.");
+        if(Parameters.EnableLocalOffsetLimit&&(!Parameters.EnableSlipCoupledDynamics||Parameters.EnableTacticalRacing||specs.Any(s=>s.TrafficEnabled)))
+            throw new ArgumentException("Local offset limits require authored slip controls without reactive/tactical AI.",nameof(parameters));
+        bool ValidTarget(float target,double reference,float? fraction=null)
+        {
+            if(!float.IsFinite(target)||target<.5||!double.IsFinite(reference))return false;
+            if(fraction is { } f)return Parameters.EnableLocalOffsetLimit&&float.IsFinite(f)&&f is >=0 and <=1;
+            return target<=(Parameters.EnableLocalOffsetLimit?Frame.MaximumSafeTargetOffsetMeters(reference):Frame.MinimumUsableWidthMeters-.5);
+        }
         if (specs.Any(s => !float.IsFinite(s.SpeedMetersPerSecond) || s.SpeedMetersPerSecond < 0
             || !float.IsFinite(s.InitialOutwardSpeed) || !float.IsFinite(s.OffsetMeters)
-            || s.OffsetMeters < 0 || s.OffsetMeters > Frame.MinimumUsableWidthMeters || !float.IsFinite(s.TargetOffsetMeters)
-            || s.TargetOffsetMeters < .5 || s.TargetOffsetMeters > Frame.MinimumUsableWidthMeters - .5 || !double.IsFinite(s.ReferenceMeters)))
+            || !double.IsFinite(s.ReferenceMeters)||s.OffsetMeters < 0
+            ||s.OffsetMeters>(Parameters.EnableLocalOffsetLimit?Frame.PhysicalWidthMeters(Frame.RoadAt(s.ReferenceMeters,0))-1:Frame.MinimumUsableWidthMeters)
+            ||!ValidTarget(s.TargetOffsetMeters,s.ReferenceMeters)))
             throw new ArgumentException("Invalid physical rider inputs.");
         this.controls = (controls ?? Array.Empty<ControlCommand>()).OrderBy(c => c.AtSeconds).ThenBy(c => c.RiderId).ToArray();
         var spatial = (spatialControls ?? Array.Empty<SpatialControlCommand>()).ToArray();
         if (spatial.Length > 0 && (!Parameters.EnableSlipCoupledDynamics || this.controls.Length > 0 || specs.Any(s => s.TrafficEnabled))
             || spatial.Any(c => !double.IsFinite(c.ReferenceMeters) || !float.IsFinite(c.TargetOffsetMeters)
-                || c.TargetOffsetMeters < .5 || c.TargetOffsetMeters > Frame.MinimumUsableWidthMeters - .5
+                || !ValidTarget(c.TargetOffsetMeters,c.ReferenceMeters,c.LocalOuterFraction)
                 || !float.IsFinite(c.Drive) || c.Drive is < 0 or > 1
                 || !specs.Any(s => s.Profile.Id == c.RiderId && c.ReferenceMeters >= s.ReferenceMeters))
             || spatial.Select(c => (c.RiderId,c.ReferenceMeters)).Distinct().Count() != spatial.Length)
@@ -108,9 +118,10 @@ public sealed class WorldRunner : IDisposable
         this.spatialControls = spatial.Length == 0 ? Array.Empty<SpatialControlCommand[]>()
             : specs.Select(s => spatial.Where(c => c.RiderId == s.Profile.Id).OrderBy(c => c.ReferenceMeters).ToArray()).ToArray();
         nextSpatialControl = spatial.Length == 0 ? Array.Empty<int>() : new int[specs.Length];
+        localOuterFractions=Parameters.EnableLocalOffsetLimit?new float?[specs.Length]:Array.Empty<float?>();
         if (this.controls.Any(c => !double.IsFinite(c.AtSeconds) || c.AtSeconds < 0
                 || !float.IsFinite(c.Drive) || c.Drive is < 0 or > 1 || !float.IsFinite(c.TargetOffsetMeters)
-                || c.TargetOffsetMeters < .5 || c.TargetOffsetMeters > Frame.MinimumUsableWidthMeters - .5
+                || c.TargetOffsetMeters < .5 || c.TargetOffsetMeters >(Parameters.EnableLocalOffsetLimit?Frame.LocalOffsets.MaximumAcrossTrackMeters:Frame.MinimumUsableWidthMeters-.5)
                 || !specs.Any(s => s.Profile.Id == c.RiderId))
             || this.controls.Select(c => (c.AtSeconds, c.RiderId)).Distinct().Count() != this.controls.Length
             || this.controls.Length > 0 && specs.Any(s => s.TrafficEnabled))
@@ -332,19 +343,27 @@ public sealed class WorldRunner : IDisposable
                 && views[i].TotalReferenceMeters >= spatialControls[i][nextSpatialControl[i]].ReferenceMeters)
             {
                 var c = spatialControls[i][nextSpatialControl[i]++];
-                if (views[i].TargetOffsetMeters != c.TargetOffsetMeters || views[i].Drive != c.Drive) Work.ControlChanges++;
-                views[i] = views[i] with {Drive = c.Drive, TargetOffsetMeters = c.TargetOffsetMeters};
+                var target=ResolveTarget(i,c.TargetOffsetMeters,c.LocalOuterFraction);
+                if(Parameters.EnableLocalOffsetLimit)localOuterFractions[i]=c.LocalOuterFraction;
+                if (views[i].TargetOffsetMeters != target || views[i].Drive != c.Drive) Work.ControlChanges++;
+                views[i] = views[i] with {Drive = c.Drive, TargetOffsetMeters = target};
                 decisions.Add(new(c.RiderId,0,TrafficAction.KeepIntent,TimeSeconds,TimeSeconds,TimeSeconds,TimeSeconds,
-                    c.TargetOffsetMeters,c.Drive,Reason:"SpatialPlan"));
+                    target,c.Drive,Reason:c.LocalOuterFraction is { } f?FormattableString.Invariant($"SpatialPlan:LocalOuterFraction={f:R}"):"SpatialPlan"));
             }
         while (nextControl < controls.Length && controls[nextControl].AtSeconds <= TimeSeconds + 1e-12)
         {
             var c = controls[nextControl++]; var i = Array.FindIndex(specs, s => s.Profile.Id == c.RiderId);
-            views[i] = views[i] with { Drive = c.Drive, TargetOffsetMeters = c.TargetOffsetMeters };
+            var target=ResolveTarget(i,c.TargetOffsetMeters,null);
+            if(Parameters.EnableLocalOffsetLimit)localOuterFractions[i]=null;
+            views[i] = views[i] with { Drive = c.Drive, TargetOffsetMeters = target };
             decisions.Add(new(c.RiderId, 0, TrafficAction.KeepIntent, 0, 0, c.AtSeconds, TimeSeconds, c.TargetOffsetMeters, c.Drive));
         }
         for (var i = 0; i < specs.Length; i++)
         {
+            if(Parameters.EnableLocalOffsetLimit){
+                var target=ResolveTarget(i,views[i].TargetOffsetMeters,localOuterFractions[i]);
+                if(views[i].TargetOffsetMeters!=target){Work.ControlChanges++;views[i]=views[i] with{TargetOffsetMeters=target};}
+            }
             if (views[i].Activity == RiderActivity.Disturbed && TimeSeconds + 1e-12 >= recoveryUntil[i])
                 views[i] = views[i] with { Activity = RiderActivity.Racing, Impairment = 0 };
             if (Parameters.EnableProportionalTrafficThrottle)
@@ -390,6 +409,14 @@ public sealed class WorldRunner : IDisposable
             var index = decisions.IndexOf(command); decisions[index] = command with { ActualActivation = TimeSeconds };
             pending[i] = null;
         }
+    }
+    private float ResolveTarget(int riderIndex,float target,float? fraction)
+    {
+        if(!Parameters.EnableLocalOffsetLimit)return target;
+        var maximum=Frame.MaximumSafeTargetOffsetMeters(views[riderIndex].TotalReferenceMeters);
+        if(fraction is { } f)return Math.Min(maximum,.5f+f*(maximum-.5f));
+        if(target>maximum)throw new ArgumentException("Authored target exceeds the local full-footprint outer limit at activation.");
+        return target;
     }
     private void ActivateAutonomous(TacticalMemory memory, DecisionEvent command)
     {

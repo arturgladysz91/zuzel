@@ -23,9 +23,9 @@ public static class PhysicsDrivenRacingLine
         new("middle-open",5,7,4,8),new("inner-open",1,5,8,5),
         new("wide-late-apex",9.5f,9.5f,5,9.5f,15,0,.5,.85),new("middle-tighten",5,3,1,5,15,0,.45,.8)
     };
-    public static SpatialControlCommand[] Compile(RacingLinePlan plan,TrackFrame frame,int riderId=1,int laps=Laps)
+    public static SpatialControlCommand[] Compile(RacingLinePlan plan,TrackFrame frame,int riderId=1,int laps=Laps,bool localOuterLimit=false)
     {
-        if(laps<1||laps>4 || new[]{plan.Straight,plan.Entry,plan.Apex,plan.Exit}.Any(t=>!float.IsFinite(t)||t<.5||t>frame.MinimumUsableWidthMeters-.5)
+        if(laps<1||laps>4 || new[]{plan.Straight,plan.Entry,plan.Apex,plan.Exit}.Any(t=>!float.IsFinite(t)||t<.5||!localOuterLimit&&t>frame.MinimumUsableWidthMeters-.5)
             || !float.IsFinite(plan.PreparationDrive)||plan.PreparationDrive is <0 or >1
             || !double.IsFinite(plan.PreparationMeters)||plan.PreparationMeters<0||plan.PreparationMeters>20
             || !double.IsFinite(plan.EntryFraction)||!double.IsFinite(plan.ApexFraction)||!double.IsFinite(plan.ExitFraction)
@@ -48,6 +48,8 @@ public static class PhysicsDrivenRacingLine
             commands.Add(new(riderId,entry+plan.ExitFraction*length,plan.Exit,1));
             commands.Add(new(riderId,end,plan.Straight,1));
         }
+        if(localOuterLimit&&commands.Any(c=>c.TargetOffsetMeters>frame.MaximumSafeTargetOffsetMeters(c.ReferenceMeters)))
+            throw new ArgumentException("Plan target exceeds the local footprint envelope.",nameof(plan));
         return commands.OrderBy(c=>c.ReferenceMeters).ToArray();
     }
     public static RacingLineEvaluation? Select(IEnumerable<RacingLineEvaluation> evaluations)

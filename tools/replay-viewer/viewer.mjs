@@ -1,4 +1,4 @@
-import { Replay, clamp, enumName, decisionStatus, crossSection, worldCapsules } from './model.mjs';
+import { Replay, parseCsv, clamp, enumName, decisionStatus, crossSection, worldCapsules } from './model.mjs';
 
 const $ = id => document.getElementById(id);
 const canvas = $('track'), context = canvas.getContext('2d');
@@ -8,6 +8,8 @@ const dataRoot = '../../docs/experiments/autonomous-racing-line/';
 const lineRoot = '../../docs/experiments/physics-driven-racing-line/';
 const wheelRoot = '../../docs/experiments/rear-wheel-dynamics/';
 const shapeRoot = '../../docs/experiments/track-geometry-variants/';
+const localRoot = '../../docs/experiments/local-offset-limit/';
+let comparisonTrails = [];
 const format = (x, digits = 3) => Number(x).toFixed(digits);
 const kindLabels = { observed: 'Obserwacja', requested: 'Termin planu', activated: 'Aktywacja', cancelled: 'Anulowanie', pass: 'Potwierdzone minięcie', contact: 'Kontakt', consequence: 'Konsekwencja', finish: 'Meta' };
 const statusLabels = { future: 'Jeszcze nie zaobserwowano', active: 'Komenda aktywowana', cancelled: 'Anulowana, bez aktywacji', waiting: 'Termin planu minął — oczekuje', pending: 'Oczekuje na aktywację' };
@@ -27,7 +29,7 @@ function fit() {
   const minX = Math.min(...points.map(p => p.x)), maxX = Math.max(...points.map(p => p.x));
   const minY = Math.min(...points.map(p => p.y)), maxY = Math.max(...points.map(p => p.y));
   camera.x = (minX + maxX) / 2; camera.y = (minY + maxY) / 2;
-  fitScale = Math.min((width - 100) / (maxX - minX), (height - 95) / (maxY - minY));
+  fitScale = Math.min((width - 80) / (maxX - minX), (height - 230) / (maxY - minY));
   camera.scale = fitScale; $('follow').checked = false; dirty = true;
 }
 function zoom(factor, anchor = { x: width / 2, y: height / 2 }) {
@@ -132,7 +134,14 @@ function draw() {
     pointPath([...segment.sections.map(p => p.outer), ...segment.sections.map(p => p.inner).reverse()], true);
     context.fillStyle = '#8f795d'; context.fill();
   }
-  for (const edge of ['inner', 'outer']) { pointPath(allSections.map(p => p[edge]), true); context.strokeStyle = '#c3ac87'; context.lineWidth = 1.2; context.stroke(); }
+  for (const edge of ['inner', 'outer']) { pointPath(allSections.map(p => p[edge]), true); context.strokeStyle = edge === 'inner' ? '#e4e8de' : '#e8b67e'; context.lineWidth = edge === 'outer' ? 2 : 1.2; context.stroke(); }
+  if ($('outer-limit').checked && geometry.localOuterLimit) {
+    pointPath(geometry.localOuterLimit.sections.map(p => p.point), true);
+    context.strokeStyle = '#ffcf78'; context.lineWidth = 1; context.setLineDash([3, 4]); context.stroke(); context.setLineDash([]);
+  }
+  if ($('compare-lines').checked) for (const line of comparisonTrails) {
+    pointPath(line.points); context.strokeStyle = line.color; context.lineWidth = 1.8; context.globalAlpha = .8; context.stroke(); context.globalAlpha = 1;
+  }
   context.setLineDash([5, 5]); context.strokeStyle = '#b4e2ce9c'; context.lineWidth = .8;
   pointPath(allSections.map(p => p.reference), true); context.stroke(); context.setLineDash([]);
   if ($('segments').checked) for (const segment of geometry.segments) {
@@ -181,23 +190,49 @@ async function loadScenario(key) {
   $('load-state').textContent = 'Wczytywanie zaakceptowanych stanów…';
   try {
     const base = sources[key];
-    const line = key.startsWith('shape-') ? key.slice(6) : key.startsWith('wheel-') ? key.slice(6) : key.startsWith('line-') ? key.slice(5) : null;
-    const selectedRoot = key.startsWith('shape-') ? shapeRoot : key.startsWith('wheel-') ? wheelRoot : lineRoot;
+    const local = key.startsWith('local-');
+    const line = local ? key.slice(6) : key.startsWith('shape-') ? key.slice(6) : key.startsWith('wheel-') ? key.slice(6) : key.startsWith('line-') ? key.slice(5) : null;
+    const selectedRoot = local ? localRoot : key.startsWith('shape-') ? shapeRoot : key.startsWith('wheel-') ? wheelRoot : lineRoot;
     const [csvResponse, jsonResponse] = await Promise.all(line
       ? [fetch(`${selectedRoot}${line}-accepted.csv`), fetch(`${selectedRoot}${line}.json`)]
       : [fetch(`${dataRoot}${base}-accepted.csv`), fetch(`${dataRoot}${base}-ON.json`)]);
     if (!csvResponse.ok || !jsonResponse.ok) throw new Error('Nie znaleziono zapisów przejazdu. Uruchom serwer z katalogu repozytorium.');
     const [csv, json] = await Promise.all([csvResponse.text(), jsonResponse.json()]);
     let nextGeometry = nativeGeometry;
-    if (key.startsWith('shape-')) {
+    if (key.startsWith('shape-') || local) {
       if (!/^[a-z-]+-geometry\.json$/.test(json.GeometryFile)) throw new Error('Brak geometrii tego przejazdu.');
-      const response = await fetch(`${shapeRoot}${json.GeometryFile}`);
+      const response = await fetch(`${selectedRoot}${json.GeometryFile}`);
       if (!response.ok) throw new Error('Nie znaleziono geometrii tego przejazdu.');
       nextGeometry = await response.json();
     }
+    const comparisons = local ? await Promise.all([
+      ['inner', '#9be6a8'], ['middle-tighten', '#82bfff'], ['outer-tighten', '#f498c8']
+    ].map(async ([plan, color]) => {
+      const alias = json.Geometry + '-' + plan;
+      const responses = await Promise.all([fetch(localRoot + alias + '-accepted.csv'), fetch(localRoot + alias + '.json')]);
+      if (responses.some(r => !r.ok)) throw new Error('Brak zapisu do porównania linii.');
+      const [text, document] = await Promise.all([responses[0].text(), responses[1].json()]);
+      const crossings = document.Run.Riders[0].Measurement.CrossingSeconds;
+      return { name: plan, color, rejected: !document.Evaluation.Feasible, points: parseCsv(text).filter(p => p.t >= crossings[0] && p.t <= crossings[1]) };
+    })) : [];
     if (generation !== loadGeneration) return;
     geometry = nextGeometry;
-    document.querySelector('.map-title small').textContent = key.startsWith('shape-') ? `#101 · ${json.Geometry} · metry` : 'Geometria modelu · metry';
+    comparisonTrails = comparisons;
+    $('comparison-legend').hidden = !local;
+    $('comparison-legend').replaceChildren();
+    for (const line of comparisons) {
+      const label = document.createElement('span'); label.style.color = line.color;
+      label.textContent = `${line.name}${line.rejected ? ' (odrzucony)' : ''} · `;
+      $('comparison-legend').append(label);
+    }
+    if (local) $('comparison-legend').append(document.createTextNode('zapis okr. 2'));
+    $('safety-note').hidden = !local;
+    $('safety-note').textContent = local ? `${json.Plan.Name} · ${json.Evaluation.Feasible ? 'WYKONALNY' : 'ODRZUCONY'} · min banda ${format(json.Evaluation.MinimumOuterClearanceMeters, 3)} m · wymagane ≥0,5 m` : '';
+    $('safety-note').title = local ? json.Evaluation.Rejections.join(', ') : '';
+    $('safety-note').classList.toggle('unsafe', local && !json.Evaluation.Feasible);
+    document.querySelector('.map-title span').textContent = (local || key.startsWith('shape-')) ? 'GEOMETRIA EKSPERYMENTALNA' : 'MOTOARENA · TORUŃ';
+    canvas.setAttribute('aria-label', (local || key.startsWith('shape-')) ? `Tor ${json.Geometry}; pozycje i yaw z zapisu przejazdu` : 'Motoarena w skali metrycznej. Wybierz zawodnika klikając motocykl.');
+    document.querySelector('.map-title small').textContent = local ? `#102 · ${json.Geometry} · obrys + 0,5 m` : key.startsWith('shape-') ? `#101 · ${json.Geometry} · metry` : 'Geometria modelu · metry';
     replay = new Replay(csv, json); selected = [...replay.tracks.keys()][0];
     const buttons = [...replay.tracks.keys()].map(id => { const button = document.createElement('button'); button.textContent = `R${id}`;
       button.dataset.id = String(id); button.style.setProperty('--rider', color(id)); button.addEventListener('click', () => chooseRider(id)); return button; });
@@ -209,13 +244,16 @@ async function loadScenario(key) {
     $('load-state').textContent = `${error.message}\nZ katalogu repo: py -m http.server 8000 --bind 127.0.0.1\nOtwórz http://127.0.0.1:8000/tools/replay-viewer/`; dirty = true;
   }
 }
-$('scenario').addEventListener('change', e => loadScenario(e.target.value));
+$('scenario').addEventListener('change', e => {
+  const url = new URL(location.href); url.searchParams.set('case', e.target.value); history.replaceState(null, '', url);
+  loadScenario(e.target.value);
+});
 $('play').addEventListener('click', () => { if (replay && time >= replay.duration) setTime(0); setPlaying(!playing); });
 $('scrub').addEventListener('input', e => { setPlaying(false); setTime(e.target.value); });
 for (const [id, direction] of [['previous', -1], ['next', 1]]) $(id).addEventListener('click', () => { if (!replay) return; setPlaying(false); const t = replay.step(time, direction); if (t != null) setTime(t); });
 $('fit').addEventListener('click', fit); $('zoom-in').addEventListener('click', () => zoom(1.25)); $('zoom-out').addEventListener('click', () => zoom(.8));
 $('follow').addEventListener('change', () => { if ($('follow').checked) camera.scale = Math.max(camera.scale, fitScale * 3); dirty = true; });
-for (const id of ['trails', 'targets', 'segments']) $(id).addEventListener('change', () => { dirty = true; });
+for (const id of ['trails', 'targets', 'segments', 'outer-limit', 'compare-lines']) $(id).addEventListener('change', () => { dirty = true; });
 $('all-events').addEventListener('change', rebuildEvents);
 canvas.addEventListener('wheel', e => { e.preventDefault(); const r = canvas.getBoundingClientRect(); zoom(Math.exp(-e.deltaY * .0015), { x: e.clientX - r.left, y: e.clientY - r.top }); }, { passive: false });
 let drag = null;
@@ -253,5 +291,8 @@ function frame(now) {
 requestAnimationFrame(frame);
 try {
   const response = await fetch('./geometry.json'); if (!response.ok) throw new Error('Nie znaleziono geometrii modelu.');
-  nativeGeometry = await response.json(); geometry = nativeGeometry; await loadScenario($('scenario').value);
+  nativeGeometry = await response.json(); geometry = nativeGeometry;
+  const requested = new URL(location.href).searchParams.get('case');
+  if ([...$('scenario').options].some(o => o.value === requested)) $('scenario').value = requested;
+  await loadScenario($('scenario').value);
 } catch (error) { $('load-state').classList.add('error'); $('load-state').textContent = `${error.message}\nUruchom statyczny serwer HTTP z katalogu repozytorium (instrukcja w README).`; }

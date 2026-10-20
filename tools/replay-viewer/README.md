@@ -101,3 +101,17 @@ przekroje i nie rekonstruuje kołowego toru z promienia. Powrót do historyczneg
 przejazdu przywraca dotychczasowe `geometry.json`. Czasy i pozycje odrzuconych
 planów są zachowane. Ich obecność w viewerze nie oznacza wykonalności planu.
 Raport #101 opisuje prześwity i wszystkie pięć planów; Node ma 9 testów.
+
+
+## #102 — lokalny limit i porównanie Egg Mild
+
+Dropdown zawiera sześć planów na Egg Mild i sześć kontroli baseline z `docs/experiments/local-offset-limit/`. Każdy ładuje własny plik geometrii; stary replay przywraca jego oryginalny tor. Link startowy: `http://127.0.0.1:8000/tools/replay-viewer/?case=local-egg-mild-middle-to-outer`.
+
+- **Limit obrysu + 0,5 m** rysuje certyfikowaną konserwatywną granicę targetu, a nie przyszłą trasę i nie limit samego środka masy. Zapas obejmuje cały motocykl przy dowolnym yaw. To linia z eksportu C#, bez liczenia geometrii motocykla na nowo w viewerze.
+- **Porównaj #102** nakłada rzeczywiste zapisane drugie okrążenia trzech oddzielnych przejazdów: zielony inner, niebieski middle-tighten, różowy outer-tighten. Ich odrzucenie jest jawne; nie są wspólnym wyścigiem. R1 pozostaje zawodnikiem aktywnego replaya.
+- Biały obrys to kerb, złoty banda. Etykieta pod nazwą toru pokazuje pełny wynik audytu i minimum prześwitu do bandy. Odrzucony przejazd nadal jest dostępny w całości.
+- `outer-max` i `outer-tighten` są odrzucone na obu geometriach. Ich wyjazdów poza bandę nie koryguje renderer. W `middle-to-outer` przy 4,610 s zaakceptowany offset wynosi 9,994863 m; w `outer-max` przy 8,310 s widać wyjazd po zwężeniu.
+
+Cel lokalnej polityki zmienia się z reference; panel pokazuje go z zapisu, bez prognozy. Aktywacje faz mają czasy z Result.Decisions. Ocena bezpieczeństwa pochodzi z audytu wszystkich kroków i konserwatywnej kontroli między nimi, nie z interpolacji CSV co około 0,1 s. **Śledź R1** i zoom pozwalają obejrzeć rzeczywisty obrys w skali.
+
+Zrzuty i tabele: [raport #102](../../docs/experiments/local-offset-limit.md). Test: `node --test tools/replay-viewer/replay.test.mjs` (10 przypadków, w tym wszystkie nowe CSV/JSON i geometrie).

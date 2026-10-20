@@ -32,6 +32,8 @@ internal sealed class CurveBoundaryAudit
         }
         Capsule(bike.Chassis);Capsule(bike.Handlebar);return(inside,outside);
     }
+    internal double OuterPointDistance(MeterPoint p)
+        =>outer.Distance(p,p)-ChordAllowanceMeters-RacingLineGeometry.NumericalAllowanceMeters;
     private sealed class Boundary
     {
         private readonly MeterPoint[] points;

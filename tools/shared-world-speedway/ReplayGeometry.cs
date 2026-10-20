@@ -53,6 +53,16 @@ public static class ReplayGeometry
         }
         return source with{Source="ExperimentalTrackShape / "+frame.Shape.Variant.Name,FrameId="track-shape-101:"+frame.Shape.Variant.Name,LapMeters=frame.LapMeters,Segments=segments.ToArray()};
     }
+    public static ReplayGeometryData CreateWithLocalLimit(TrackFrame frame)
+    {
+        var source=Create(frame);var count=(int)Math.Ceiling(frame.LapMeters/MaximumReferenceSpacingMeters);
+        var sections=Enumerable.Range(0,count+1).Select(i=>{
+            var s=i*frame.LapMeters/count;var maximum=frame.MaximumSafeTargetOffsetMeters(s);
+            var p=frame.At(s,maximum).Position;
+            return new ReplayTargetLimitSection(s,maximum,new(p.X,p.Y));}).ToArray();
+        return source with{LocalOuterLimit=new(LocalOffsetLimit.RequiredOuterClearanceMeters,frame.LocalOffsets.FootprintRadiusMeters,
+            frame.LocalOffsets.ReferenceSpacingMeters,frame.LocalOffsets.CellMotionAllowanceMeters,sections)};
+    }
     private static ReplayPoint Point(MeterPoint p)=>new(p.X,p.Y);
     private static Dictionary<string,string> Names<T>() where T:struct,Enum=>Enum.GetValues<T>().ToDictionary(
         v=>Convert.ToInt32(v,CultureInfo.InvariantCulture).ToString(CultureInfo.InvariantCulture),v=>v.ToString());
@@ -65,5 +75,12 @@ public sealed record ReplaySegment(int Index,int Id,string Type,double StartRefe
     double PhysicalWidthMeters,double UsableWidthMeters,ReplaySection[] Sections);
 public sealed record ReplayGeometryData(int Version,string Source,string FrameId,double LapMeters,double MaximumReferenceSpacingMeters,
     double InnerReferenceOffsetMeters,TrackGeometry Track,SpeedwayBikeDimensions Dimensions,ReplayCapsule[] Capsules,
-    Dictionary<string,Dictionary<string,string>> Enums,ReplaySegment[] Segments);
+    Dictionary<string,Dictionary<string,string>> Enums,ReplaySegment[] Segments)
+{
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
+    public ReplayTargetLimit? LocalOuterLimit {get;init;}
+}
+public sealed record ReplayTargetLimit(double RequiredOuterClearanceMeters,double FootprintRadiusMeters,double ReferenceSpacingMeters,
+    double CellMotionAllowanceMeters,ReplayTargetLimitSection[] Sections);
+public sealed record ReplayTargetLimitSection(double ReferenceMeters,float MaximumSafeTargetOffsetMeters,ReplayPoint Point);
 public sealed record ReplayCapsule(string Component,ReplayPoint Start,ReplayPoint End,double RadiusMeters);

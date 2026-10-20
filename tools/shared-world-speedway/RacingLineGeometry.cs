@@ -56,6 +56,15 @@ public sealed class RacingLineGeometry
         }
         return(inside,outside);
     }
+    // Query used only while constructing the optional #102 target table. Native arcs
+    // include width-step connectors; shaped tracks use the same bounded edge BVH.
+    internal double OuterPointDistance(MeterPoint p)
+    {
+        if(curve is not null)return curve.OuterPointDistance(p);
+        var distance=double.PositiveInfinity;
+        foreach(var edge in outer)distance=Math.Min(distance,Distance(p,p,edge));
+        return distance-NumericalAllowanceMeters;
+    }
     private static double Length(MeterPoint p)=>Math.Sqrt(MeterPoint.Dot(p,p));
     private static double PointSegment(MeterPoint p,MeterPoint a,MeterPoint b)
     {
