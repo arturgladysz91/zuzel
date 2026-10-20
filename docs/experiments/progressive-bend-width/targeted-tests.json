@@ -1,0 +1,190 @@
+{
+  "Counters": {
+    "total": "42",
+    "executed": "42",
+    "passed": "42",
+    "failed": "0",
+    "error": "0",
+    "timeout": "0",
+    "aborted": "0",
+    "inconclusive": "0",
+    "passedButRunAborted": "0",
+    "notRunnable": "0",
+    "notExecuted": "0",
+    "disconnected": "0",
+    "warning": "0",
+    "completed": "0",
+    "inProgress": "0",
+    "pending": "0"
+  },
+  "Tests": [
+    {
+      "Name": "CoreSim.Tests.PhysicsDrivenRacingLineTests.OfflineSelectionUsesMeasuredTimeRejectsUnsafeAndReplaysDeterministically",
+      "Outcome": "Passed"
+    },
+    {
+      "Name": "CoreSim.Tests.PhysicsDrivenRacingLineTests.LandmarkCommandsUseAcceptedCrossingsWithoutTeleportOrAnExtraStep",
+      "Outcome": "Passed"
+    },
+    {
+      "Name": "CoreSim.Tests.PhysicsDrivenRacingLineTests.WidthStepMustBeCheckedAgainstTheWholeBikeBeforeItsCenterEntersTheStraight",
+      "Outcome": "Passed"
+    },
+    {
+      "Name": "CoreSim.Tests.RearWheelDynamicsTests.OneAcceptedClockAndZeroDriveEnergyRemainStable(step: 0,02)",
+      "Outcome": "Passed"
+    },
+    {
+      "Name": "CoreSim.Tests.RearWheelDynamicsTests.RearWheelForcesAllocateNothingAndTheirGuardAccountsForWheelEnergy",
+      "Outcome": "Passed"
+    },
+    {
+      "Name": "CoreSim.Tests.ProgressiveBendWidthTests.WholeXYBoundaryIsRegularContinuousAndDoesNotCrossItself",
+      "Outcome": "Passed"
+    },
+    {
+      "Name": "CoreSim.Tests.PhysicsDrivenRacingLineTests.SpatialSchedulingIsIndependentOfRiderOrderAndDoesNotBlockOtherRiders",
+      "Outcome": "Passed"
+    },
+    {
+      "Name": "CoreSim.Tests.SlipControlValidationTests.ReadOnlyStagesPreserve97ForcesAndExactlyAccountForBox2DTorque",
+      "Outcome": "Passed"
+    },
+    {
+      "Name": "CoreSim.Tests.TrackGeometryVariantTests.FrozenShapesCloseAndHaveConsistentArcLengthProjectionAndNormals",
+      "Outcome": "Passed"
+    },
+    {
+      "Name": "CoreSim.Tests.RearWheelDynamicsTests.ThrottleReplaysTheWholeBodyAndWheelPrefixAndActsThroughTorqueFirst",
+      "Outcome": "Passed"
+    },
+    {
+      "Name": "CoreSim.Tests.TrackGeometryVariantTests.WholeCapsuleAuditRejectsKerbCrossingAndRetainsSafePose",
+      "Outcome": "Passed"
+    },
+    {
+      "Name": "CoreSim.Tests.TrackGeometryVariantTests.GeometryHotPathDoesNotAllocateAndLookupDoesNotCreateSolverBoundaries",
+      "Outcome": "Passed"
+    },
+    {
+      "Name": "CoreSim.Tests.RearWheelDynamicsTests.ContactAndCrashNeverResetTheIndependentWheelOrAddASecondIntegration",
+      "Outcome": "Passed"
+    },
+    {
+      "Name": "CoreSim.Tests.TrackGeometryVariantTests.ProjectionIsGlobalAndStableForPointsAwayFromTheRacingTube",
+      "Outcome": "Passed"
+    },
+    {
+      "Name": "CoreSim.Tests.RearWheelDynamicsTests.CombinedContactIsDissipativeBoundedAndSeparatesFrontFromRear",
+      "Outcome": "Passed"
+    },
+    {
+      "Name": "CoreSim.Tests.RearWheelDynamicsTests.WheelRequiresSlipAndStartsAtTheActualLongitudinalRollingSpeed",
+      "Outcome": "Passed"
+    },
+    {
+      "Name": "CoreSim.Tests.LocalOffsetLimitTests.LocalRulesAreDeterministicAndLegacyBaselineIsUnchanged",
+      "Outcome": "Passed"
+    },
+    {
+      "Name": "CoreSim.Tests.ProgressiveBendWidthTests.RealDynamicsKeepRejectedMaximalTrajectoriesAndCertifyTightening",
+      "Outcome": "Passed"
+    },
+    {
+      "Name": "CoreSim.Tests.SlipControlValidationTests.FourIndividualLapsAreDeterministicAndRealActiveContactIsResolved",
+      "Outcome": "Passed"
+    },
+    {
+      "Name": "CoreSim.Tests.SlipControlValidationTests.AuthoredLineCommandChangesIntentAtItsDeadlineWithoutTeleporting",
+      "Outcome": "Passed"
+    },
+    {
+      "Name": "CoreSim.Tests.LocalOffsetLimitTests.LocalEnvelopeUsesTheCompleteFootprintAndAllFrozenGeometries",
+      "Outcome": "Passed"
+    },
+    {
+      "Name": "CoreSim.Tests.ProgressiveBendWidthTests.WidthOnlyVariantsKeepEveryReferenceSampleAndHaveC2WidthJoins",
+      "Outcome": "Passed"
+    },
+    {
+      "Name": "CoreSim.Tests.ProgressiveBendWidthTests.LocalEnvelopeCertifiesAllYawAndProjectionAcrossCellEdgesAndBends",
+      "Outcome": "Passed"
+    },
+    {
+      "Name": "CoreSim.Tests.PhysicsDrivenRacingLineTests.PhysicalEdgesAreNotTargetsAndCapsulesNeedOrientationDependentClearance",
+      "Outcome": "Passed"
+    },
+    {
+      "Name": "CoreSim.Tests.ReplayGeometryTests.CheckedInGeometryExactlyMatchesDeterministicExportAndNativeTrackFrame",
+      "Outcome": "Passed"
+    },
+    {
+      "Name": "CoreSim.Tests.RearWheelDynamicsTests.LaunchBuildsActualSpinAndTheChassisReceivesOnlyTheContactForce",
+      "Outcome": "Passed"
+    },
+    {
+      "Name": "CoreSim.Tests.TrackGeometryVariantTests.BaselineGeometryAndWheelScenarioStayExactlyAsIn100",
+      "Outcome": "Passed"
+    },
+    {
+      "Name": "CoreSim.Tests.RearWheelDynamicsTests.OneAcceptedClockAndZeroDriveEnergyRemainStable(step: 0,0050000000000000001)",
+      "Outcome": "Passed"
+    },
+    {
+      "Name": "CoreSim.Tests.RearWheelDynamicsTests.TheNewWorldRepeatsFlyingLapsAndRetainsActualOffTrackTrajectories",
+      "Outcome": "Passed"
+    },
+    {
+      "Name": "CoreSim.Tests.TrackGeometryVariantTests.NewWorldRepeatsAndReplayUsesItsOwnGeometry",
+      "Outcome": "Passed"
+    },
+    {
+      "Name": "CoreSim.Tests.LocalOffsetLimitTests.CachedLimitDoesNotAllocateAndReplayExportsTheSameLocalGeometry",
+      "Outcome": "Passed"
+    },
+    {
+      "Name": "CoreSim.Tests.ProgressiveBendWidthTests.ReplayOwnEdgesCapsAndHotPathRetainTheGeometryContract",
+      "Outcome": "Passed"
+    },
+    {
+      "Name": "CoreSim.Tests.SlipControlValidationTests.DiagnosticStagesExerciseBothLimitsWithoutChangingTheReturnedTorqueOrAllocating",
+      "Outcome": "Passed"
+    },
+    {
+      "Name": "CoreSim.Tests.LocalOffsetLimitTests.FullRunSafetyRejectsTheUnsafeOuterPlanWithoutRepairingItsPath",
+      "Outcome": "Passed"
+    },
+    {
+      "Name": "CoreSim.Tests.TrackGeometryVariantTests.UnsupportedInputsAreRejectedAtTheGeometryBoundary",
+      "Outcome": "Passed"
+    },
+    {
+      "Name": "CoreSim.Tests.RearWheelDynamicsTests.AShortenedCurvatureIntervalCannotAdvanceTheWheelByTheNominalTick",
+      "Outcome": "Passed"
+    },
+    {
+      "Name": "CoreSim.Tests.TrackGeometryVariantTests.CurveJoinsAreC2AndPhysicalEdgeSagBoundIsConservative",
+      "Outcome": "Passed"
+    },
+    {
+      "Name": "CoreSim.Tests.SlipControlValidationTests.ThrottleTrialsReplayExactlyTheSameAcceptedPrefixAndActivateCausally",
+      "Outcome": "Passed"
+    },
+    {
+      "Name": "CoreSim.Tests.RearWheelDynamicsTests.OneAcceptedClockAndZeroDriveEnergyRemainStable(step: 0,01)",
+      "Outcome": "Passed"
+    },
+    {
+      "Name": "CoreSim.Tests.ReplayGeometryTests.ExportedCapsulesAndEnumNamesAreTheNativeDefinitions",
+      "Outcome": "Passed"
+    },
+    {
+      "Name": "CoreSim.Tests.PhysicsDrivenRacingLineTests.SpatialPlansRequireIsolatedSlipExecutionAndValidFiniteUniqueLandmarks",
+      "Outcome": "Passed"
+    },
+    {
+      "Name": "CoreSim.Tests.LocalOffsetLimitTests.ExperimentalCommandsCanExceed95ButUnsafeTargetsAreRejected",
+      "Outcome": "Passed"
+    }
+  ]
+}

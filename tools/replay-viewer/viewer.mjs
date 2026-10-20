@@ -9,6 +9,9 @@ const lineRoot = '../../docs/experiments/physics-driven-racing-line/';
 const wheelRoot = '../../docs/experiments/rear-wheel-dynamics/';
 const shapeRoot = '../../docs/experiments/track-geometry-variants/';
 const localRoot = '../../docs/experiments/local-offset-limit/';
+const widthRoot = '../../docs/experiments/progressive-bend-width/';
+const widthColors = ['#ffb36d', '#70e2e4', '#e5a5f5'];
+let widthGeometries = [];
 let comparisonTrails = [];
 const format = (x, digits = 3) => Number(x).toFixed(digits);
 const kindLabels = { observed: 'Obserwacja', requested: 'Termin planu', activated: 'Aktywacja', cancelled: 'Anulowanie', pass: 'Potwierdzone minięcie', contact: 'Kontakt', consequence: 'Konsekwencja', finish: 'Meta' };
@@ -139,6 +142,10 @@ function draw() {
     pointPath(geometry.localOuterLimit.sections.map(p => p.point), true);
     context.strokeStyle = '#ffcf78'; context.lineWidth = 1; context.setLineDash([3, 4]); context.stroke(); context.setLineDash([]);
   }
+  if ($('compare-widths').checked) for (const [i, shape] of widthGeometries.entries()) {
+    pointPath(shape.segments.flatMap(s => s.sections.map(p => p.outer)), true);
+    context.strokeStyle = widthColors[i]; context.lineWidth = 1.5; context.stroke();
+  }
   if ($('compare-lines').checked) for (const line of comparisonTrails) {
     pointPath(line.points); context.strokeStyle = line.color; context.lineWidth = 1.8; context.globalAlpha = .8; context.stroke(); context.globalAlpha = 1;
   }
@@ -190,9 +197,11 @@ async function loadScenario(key) {
   $('load-state').textContent = 'Wczytywanie zaakceptowanych stanów…';
   try {
     const base = sources[key];
-    const local = key.startsWith('local-');
-    const line = local ? key.slice(6) : key.startsWith('shape-') ? key.slice(6) : key.startsWith('wheel-') ? key.slice(6) : key.startsWith('line-') ? key.slice(5) : null;
-    const selectedRoot = local ? localRoot : key.startsWith('shape-') ? shapeRoot : key.startsWith('wheel-') ? wheelRoot : lineRoot;
+    const progressive = key.startsWith('width-');
+    const widthA = key.startsWith('width-a-');
+    const local = key.startsWith('local-') || progressive;
+    const line = progressive ? (widthA ? 'egg-mild-' + key.slice(8) : 'progressive-' + key.slice(6)) : local ? key.slice(6) : key.startsWith('shape-') ? key.slice(6) : key.startsWith('wheel-') ? key.slice(6) : key.startsWith('line-') ? key.slice(5) : null;
+    const selectedRoot = progressive && !widthA ? widthRoot : local ? localRoot : key.startsWith('shape-') ? shapeRoot : key.startsWith('wheel-') ? wheelRoot : lineRoot;
     const [csvResponse, jsonResponse] = await Promise.all(line
       ? [fetch(`${selectedRoot}${line}-accepted.csv`), fetch(`${selectedRoot}${line}.json`)]
       : [fetch(`${dataRoot}${base}-accepted.csv`), fetch(`${dataRoot}${base}-ON.json`)]);
@@ -205,18 +214,26 @@ async function loadScenario(key) {
       if (!response.ok) throw new Error('Nie znaleziono geometrii tego przejazdu.');
       nextGeometry = await response.json();
     }
-    const comparisons = local ? await Promise.all([
+    const comparisons = local ? await Promise.all((progressive ? [
+      ['inner', '#9be6a8'], ['middle-to-outer', '#82bfff'], ['outer-max', '#f498c8']
+    ] : [
       ['inner', '#9be6a8'], ['middle-tighten', '#82bfff'], ['outer-tighten', '#f498c8']
-    ].map(async ([plan, color]) => {
+    ]).map(async ([plan, color]) => {
       const alias = json.Geometry + '-' + plan;
-      const responses = await Promise.all([fetch(localRoot + alias + '-accepted.csv'), fetch(localRoot + alias + '.json')]);
+      const responses = await Promise.all([fetch(selectedRoot + alias + '-accepted.csv'), fetch(selectedRoot + alias + '.json')]);
       if (responses.some(r => !r.ok)) throw new Error('Brak zapisu do porównania linii.');
       const [text, document] = await Promise.all([responses[0].text(), responses[1].json()]);
       const crossings = document.Run.Riders[0].Measurement.CrossingSeconds;
       return { name: plan, color, rejected: !document.Evaluation.Feasible, points: parseCsv(text).filter(p => p.t >= crossings[0] && p.t <= crossings[1]) };
     })) : [];
+    const nextWidthGeometries = progressive ? await Promise.all([
+      localRoot + 'egg-mild-geometry.json', widthRoot + 'progressive-b-geometry.json', widthRoot + 'progressive-c-geometry.json'
+    ].map(async url => { const response = await fetch(url); if (!response.ok) throw new Error('Brak geometrii porównawczej A/B/C.'); return response.json(); })) : [];
     if (generation !== loadGeneration) return;
     geometry = nextGeometry;
+    widthGeometries = nextWidthGeometries;
+    $('width-controls').hidden = !progressive;
+    $('width-comparison').hidden = !progressive;
     comparisonTrails = comparisons;
     $('comparison-legend').hidden = !local;
     $('comparison-legend').replaceChildren();
@@ -232,7 +249,7 @@ async function loadScenario(key) {
     $('safety-note').classList.toggle('unsafe', local && !json.Evaluation.Feasible);
     document.querySelector('.map-title span').textContent = (local || key.startsWith('shape-')) ? 'GEOMETRIA EKSPERYMENTALNA' : 'MOTOARENA · TORUŃ';
     canvas.setAttribute('aria-label', (local || key.startsWith('shape-')) ? `Tor ${json.Geometry}; pozycje i yaw z zapisu przejazdu` : 'Motoarena w skali metrycznej. Wybierz zawodnika klikając motocykl.');
-    document.querySelector('.map-title small').textContent = local ? `#102 · ${json.Geometry} · obrys + 0,5 m` : key.startsWith('shape-') ? `#101 · ${json.Geometry} · metry` : 'Geometria modelu · metry';
+    document.querySelector('.map-title small').textContent = progressive ? `#103 · ${widthA ? 'A' : key[6].toUpperCase()} · bandy: A pomarańczowa / B turkusowa / C fioletowa` : local ? `#102 · ${json.Geometry} · obrys + 0,5 m` : key.startsWith('shape-') ? `#101 · ${json.Geometry} · metry` : 'Geometria modelu · metry';
     replay = new Replay(csv, json); selected = [...replay.tracks.keys()][0];
     const buttons = [...replay.tracks.keys()].map(id => { const button = document.createElement('button'); button.textContent = `R${id}`;
       button.dataset.id = String(id); button.style.setProperty('--rider', color(id)); button.addEventListener('click', () => chooseRider(id)); return button; });
@@ -253,7 +270,7 @@ $('scrub').addEventListener('input', e => { setPlaying(false); setTime(e.target.
 for (const [id, direction] of [['previous', -1], ['next', 1]]) $(id).addEventListener('click', () => { if (!replay) return; setPlaying(false); const t = replay.step(time, direction); if (t != null) setTime(t); });
 $('fit').addEventListener('click', fit); $('zoom-in').addEventListener('click', () => zoom(1.25)); $('zoom-out').addEventListener('click', () => zoom(.8));
 $('follow').addEventListener('change', () => { if ($('follow').checked) camera.scale = Math.max(camera.scale, fitScale * 3); dirty = true; });
-for (const id of ['trails', 'targets', 'segments', 'outer-limit', 'compare-lines']) $(id).addEventListener('change', () => { dirty = true; });
+for (const id of ['trails', 'targets', 'segments', 'outer-limit', 'compare-lines', 'compare-widths']) $(id).addEventListener('change', () => { dirty = true; });
 $('all-events').addEventListener('change', rebuildEvents);
 canvas.addEventListener('wheel', e => { e.preventDefault(); const r = canvas.getBoundingClientRect(); zoom(Math.exp(-e.deltaY * .0015), { x: e.clientX - r.left, y: e.clientY - r.top }); }, { passive: false });
 let drag = null;

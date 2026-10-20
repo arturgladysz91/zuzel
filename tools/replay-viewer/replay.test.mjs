@@ -11,6 +11,34 @@ const fixture = name => {
   return { csv, json, replay: new Replay(csv, json) };
 };
 const near = (a, b, epsilon = 1e-8) => assert.ok(Math.abs(a - b) < epsilon, `${a} != ${b}`);
+test('#103 twelve real replays retain yaw, own C2 boundaries, interval evidence and unsafe trajectories', () => {
+  const folder = new URL('../../docs/experiments/progressive-bend-width/', import.meta.url);
+  const evidence = JSON.parse(readFileSync(new URL('measurements.json', folder), 'utf8'));
+  assert.equal(evidence.length, 12);
+  const old = JSON.parse(readFileSync(new URL('../../docs/experiments/local-offset-limit/egg-mild-geometry.json', import.meta.url), 'utf8'));
+  for (const row of evidence) {
+    const m = row.Measurement, alias = m.Geometry + '-' + m.Plan.Name;
+    const json = JSON.parse(readFileSync(new URL(alias + '.json', folder), 'utf8'));
+    const csv = readFileSync(new URL(alias + '-accepted.csv', folder), 'utf8');
+    const own = JSON.parse(readFileSync(new URL(json.GeometryFile, folder), 'utf8'));
+    const replay = new Replay(csv, json);
+    assert.equal(own.lapMeters, old.lapMeters); assert.equal(own.localOuterLimit.requiredOuterClearanceMeters, .5);
+    own.segments.forEach((segment, i) => segment.sections.forEach((s, j) => {
+      assert.deepEqual(s.reference, old.segments[i].sections[j].reference);
+      assert.deepEqual(s.inner, old.segments[i].sections[j].inner);
+    }));
+    for (const pose of parseCsv(csv)) {
+      const state = replay.state(1, pose.t); near(state.x, pose.x); near(state.y, pose.y); near(angleDelta(state.heading, pose.heading), 0);
+    }
+    if (m.Plan.Name === 'outer-max') {
+      assert.equal(json.Evaluation.Feasible, false); assert.ok(row.FirstOuterViolation); assert.ok(row.WorstOuterState.Outer < 0);
+      assert.ok(parseCsv(csv).some(p => p.offset > 11));
+    } else {
+      assert.equal(json.Evaluation.Feasible, true); assert.ok(m.ConservativeMinimumOuterClearanceMeters >= .5);
+      assert.ok(row.ConservativeMinimumInnerClearanceMeters >= 0);
+    }
+  }
+});
 test('#102 own geometry, local footprint limit and rejected poses remain recorded data', () => {
   const folder = new URL('../../docs/experiments/local-offset-limit/', import.meta.url);
   for (const shape of ['egg-mild', 'baseline']) for (const plan of ['inner', 'middle-tighten', 'wide-tighten', 'outer-max', 'outer-tighten', 'middle-to-outer']) {

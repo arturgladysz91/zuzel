@@ -2,6 +2,7 @@ using System.Text.Json;
 using SharedWorldSpeedway;
 
 var scenario = args.FirstOrDefault() ?? "A";
+if (scenario == "progressive-width") { ProgressiveWidthAudit.Run(args[1], args[2]); return; }
 if (scenario == "local-offset-limit") { LocalOffsetAudit.Run(args[1], args[2]); return; }
 if (scenario == "track-geometry") { TrackGeometryAudit.Run(args[1], args[2]); return; }
 if (scenario == "rear-wheel") { RearWheelAudit.Run(args[1], args[2]); return; }

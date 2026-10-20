@@ -36,7 +36,7 @@ public static class LocalOffsetAudit
         }
         return list.OrderBy(c=>c.ReferenceMeters).ToArray();
     }
-    private static readonly JsonSerializerOptions Json=CreateJson();
+    internal static readonly JsonSerializerOptions Json=CreateJson();
     private static JsonSerializerOptions CreateJson()
     {
         var resolver=new System.Text.Json.Serialization.Metadata.DefaultJsonTypeInfoResolver();
@@ -53,7 +53,7 @@ public static class LocalOffsetAudit
         double MaximumSlideDegrees,double MaximumWheelspin,double MaximumActualOffsetMeters,double MaximumTargetMeters,
         double AboveOldLimitSeconds,double TargetAboveOldLimitSeconds,double ConservativeMinimumOuterClearanceMeters,
         object[] Corners,object[] WorstStates);
-    public static Measurement Measure(TrackShapeVariant? variant,Plan p,string? directory=null)
+    public static Measurement Measure(TrackShapeVariant? variant,Plan p,string? directory=null,Action<SlipControlValidation.Capture>? capture=null)
     {
         var frame=TrackGeometryAudit.Frame(variant);var controls=Compile(p,frame);var name=TrackGeometryAudit.Name(variant)+"-"+p.Name;
         if(directory is not null&&(File.Exists(Path.Combine(directory,name+".json"))||File.Exists(Path.Combine(directory,name+"-accepted.csv"))))
@@ -61,6 +61,7 @@ public static class LocalOffsetAudit
         var wheels=new List<RearWheelObservation>();var proxy=p.Local?new RacingLinePlan(p.Name,5,5,5,5):Legacy(p);
         var (original,c)=PhysicsDrivenRacingLineAudit.Evaluate(PhysicsDrivenRacingLineAudit.Conditions()[0],proxy,
             directory is null?null:Path.Combine(directory,name+"-accepted.csv"),Parameters(p.Local),wheels.Add,variant,controls);
+        capture?.Invoke(c);
         var geometry=new RacingLineGeometry(frame);var previousGap=geometry.Clearance(c.Initial.Riders.Single()).Outer;
         var footprintRadius=CoreSim.PhysicalSpace.SpeedwayBikeDimensions.Reference.BoundingRadiusMeters;
         var scored=c.Ticks.Select(t=>{
