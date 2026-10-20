@@ -51,6 +51,12 @@ wins by 0.418 s/lap. Full-drive apparent wins fail safety/tracking, so crossover
 remains inconclusive. Initialized 160/200 km/h tests naturally run wide with
 convergent native forces. Three recorded cases are available in the replay viewer.
 
+[Full Throttle Slide & Grip Audit (#107)](docs/experiments/full-throttle-slide-grip-audit.md)
+reuses #106 native records without changing physics. Slip dissipates real work;
+full-drive INNER supports a safe periodic drifting orbit, while authored-path
+tracking still fails. Surface calibration and the causal share of controller
+error remain unresolved. Three initial-speed repeat/perturbation runs are added.
+
 Current physical consequence precedence (#56C2): [physical contact consequences and one-step recovery](docs/calibration/physical-contact-consequences.md)
 adds default-OFF `EnablePhysicalContactConsequences`, requiring #56B responses. When enabled,
 reviewed #56C1 analysis supplies deterministic final velocity/status and next-step recovery;
