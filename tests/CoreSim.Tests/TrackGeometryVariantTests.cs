@@ -78,15 +78,29 @@ public sealed class TrackGeometryVariantTests
     [Fact]
     public void GeometryHotPathDoesNotAllocateAndLookupDoesNotCreateSolverBoundaries()
     {
-        foreach(var variant in TrackShapeVariant.All()){
-            var f=TrackGeometryAudit.Frame(variant);var points=Enumerable.Range(0,100).Select(i=>f.At(i*3,5).Position).ToArray();
-            for(var i=0;i<1000;i++)f.Project(points[i%100]);
-            var bytes=GC.GetAllocatedBytesForCurrentThread();double sum=0;
+        // Measure the complete warmed path on a thread that never runs xUnit work.
+        // Keep the zero-byte contract: no tolerance or retry of the measured loop.
+        static double Sample(TrackFrame f,Vector2[] points){
+            double sum=0;
             for(var i=0;i<5000;i++){var road=f.Project(points[i%100]);sum+=f.RoadAt(road.ReferenceMeters+10,5).Heading;sum+=f.ReferenceSpeed(road,20);}
-            Assert.Equal(0,GC.GetAllocatedBytesForCurrentThread()-bytes);Assert.True(double.IsFinite(sum));
-            var start=f.SegmentStartMeters(1);var roadAt=f.RoadAt(start+5,0);
-            Assert.InRange(f.DistanceToCurvatureChange(roadAt),f.SegmentStartMeters(4)-start-5-1e-8,f.SegmentStartMeters(4)-start-5+1e-8);
+            return sum;
         }
+        Exception? failure=null;
+        var worker=new Thread(()=>{
+            try{
+                foreach(var variant in TrackShapeVariant.All()){
+                    var f=TrackGeometryAudit.Frame(variant);var points=Enumerable.Range(0,100).Select(i=>f.At(i*3,5).Position).ToArray();
+                    Assert.True(double.IsFinite(Sample(f,points)));
+                    var bytes=GC.GetAllocatedBytesForCurrentThread();var sum=Sample(f,points);
+                    var allocated=GC.GetAllocatedBytesForCurrentThread()-bytes;
+                    Assert.Equal(0,allocated);Assert.True(double.IsFinite(sum));
+                    var start=f.SegmentStartMeters(1);var roadAt=f.RoadAt(start+5,0);
+                    Assert.InRange(f.DistanceToCurvatureChange(roadAt),f.SegmentStartMeters(4)-start-5-1e-8,f.SegmentStartMeters(4)-start-5+1e-8);
+                }
+            }catch(Exception error){failure=error;}
+        });
+        worker.Start();worker.Join();
+        if(failure is not null)System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(failure).Throw();
     }
     [Fact]
     public void BaselineGeometryAndWheelScenarioStayExactlyAsIn100()
