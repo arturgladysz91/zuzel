@@ -1,0 +1,30 @@
+{
+  "Reason": "Preview export originally used current-only diagnostic name/flag. Corrected labels only to actual preview mode; all poses, forces, timings and fingerprints preserved. Original nine runs and their sealed hash unchanged. No simulation repeated.",
+  "Changes": [
+    {
+      "File": "inner-path-preview.json",
+      "BeforeSha256": "ac8292a1d60e47ce4eb5a2a609414aee103d79d76a38815ab17e3bc897d5155c",
+      "AfterSha256": "a81473cd94002f86067dde98101cd4decebe1a4728bda0185fd3fcf6f79822f3",
+      "Fingerprints": [
+        "E4C878DB1669AD1851403B03EF2B279D5EAD275C1FB52A5DDDE28C1F17B0D7D1"
+      ]
+    },
+    {
+      "File": "outside-inside-outside-path-preview.json",
+      "BeforeSha256": "ac26472513389a686c813141479b141856b4c5a0fb466d080ee49900d1572fdb",
+      "AfterSha256": "9af4c5be61398b699e53379c6295aed79c5b002c548d136332f447178acb34ff",
+      "Fingerprints": [
+        "5C612852667C07E40C4E0D05CF5A8E97009365C99A74D0A97F02AC59B324B49D"
+      ]
+    },
+    {
+      "File": "preview-runs.json",
+      "BeforeSha256": "0fcad2f517a62c1202cc0c24abb233fd6a6cb5a66662218f7bcfc9f8f6c1e493",
+      "AfterSha256": "4a4ca930c17de113e6372993c3136e58fe57d05093e98708e94b100844fd4ad6",
+      "Fingerprints": [
+        "E4C878DB1669AD1851403B03EF2B279D5EAD275C1FB52A5DDDE28C1F17B0D7D1",
+        "5C612852667C07E40C4E0D05CF5A8E97009365C99A74D0A97F02AC59B324B49D"
+      ]
+    }
+  ]
+}

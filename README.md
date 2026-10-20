@@ -30,6 +30,13 @@ the unchanged outer-tighten plan safe; outer-max still fails. Symmetric profile 
 is the working hypothesis, with no surveyed Motoarena realism claim or production
 default change. The existing replay viewer compares A/B/C boundaries and widths.
 
+[Racing Line Root-Cause Audit (#104)](docs/experiments/racing-line-root-cause.md)
+separates continuous-path geometry, actual tracking and force/yaw constraints on
+frozen progressive-b. The existing imposed-offset controller does not execute
+outside-inside-outside as intended. Isolated path-frame/preview diagnostics retain
+failed outcomes; full feasibility and the tracking gate remain unresolved, with
+no tyre/engine/default change or wheelspin ablation.
+
 Current physical consequence precedence (#56C2): [physical contact consequences and one-step recovery](docs/calibration/physical-contact-consequences.md)
 adds default-OFF `EnablePhysicalContactConsequences`, requiring #56B responses. When enabled,
 reviewed #56C1 analysis supplies deterministic final velocity/status and next-step recovery;

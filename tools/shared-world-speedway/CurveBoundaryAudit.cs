@@ -34,6 +34,8 @@ internal sealed class CurveBoundaryAudit
     }
     internal double OuterPointDistance(MeterPoint p)
         =>outer.Distance(p,p)-ChordAllowanceMeters-RacingLineGeometry.NumericalAllowanceMeters;
+    internal double InnerPointDistance(MeterPoint p)
+        =>inner.Distance(p,p)-ChordAllowanceMeters-RacingLineGeometry.NumericalAllowanceMeters;
     private sealed class Boundary
     {
         private readonly MeterPoint[] points;
