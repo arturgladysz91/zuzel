@@ -18,6 +18,8 @@ public sealed record WorldParameters
     // #102 tools-only authored controls. Historical worlds keep their original bounds.
     public bool EnableLocalOffsetLimit { get; init; }
     public RearWheelParameters? RearWheel { get; init; }
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
+    public ExperimentalDriveEnvelope? ExperimentalDrive {get;init;}
     public float SlipYawResponseSeconds { get; init; } = .1f;
     // Audit-only variant 2; absent from the public experiment configuration.
     internal (double BaseMeters, double HeadwaySeconds)? DiagnosticFollowingGap { get; init; }

@@ -137,3 +137,18 @@ The comparison overlay shows **planned C2 curves**; the selected rider and trail
 come from accepted Box2D poses. All times are diagnostic: these replays do not
 prove the prescribed constant-speed trajectory is feasible. Geometry, inverse,
 tracking and timing gates are separate in the experiment report.
+
+## #106 speed / Grip / crossover
+
+Three cases use frozen progressive-b and the existing accepted-pose adapter:
+
+- `?case=crossover-viewer-inner`: safe, tracked slower INNER control.
+- `?case=crossover-viewer-wide`: safe, tracked slower WIDE STRAIGHT control.
+- `?case=crossover-viewer-stress`: rejected 200 km/h initial-speed / Drive 0 test.
+
+The overlay contains the two planned C3 curves. The turquoise rider/trail is
+recorded Box2D motion. Rejection remains visible, including the full off-track
+tail: there is no wall or renderer correction. Stress CSV is sampled at about
+0.1 s; the report measures first crossing from the full 5 ms native record.
+The controls demonstrate feasibility, not performance at full drive. See the
+[audit and five plots](../../docs/experiments/speed-grip-line-crossover.md).

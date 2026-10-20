@@ -3,11 +3,11 @@ export const clamp = (x, lo, hi) => Math.max(lo, Math.min(hi, x));
 const finite = (x, label) => { if (!Number.isFinite(x)) throw new Error(`Nieprawidłowa liczba: ${label}`); return x; };
 export const angleDelta = (a, b) => Math.atan2(Math.sin(b - a), Math.cos(b - a));
 export const angleAt = (a, b, fraction) => Math.atan2(Math.sin(a + angleDelta(a, b) * fraction), Math.cos(a + angleDelta(a, b) * fraction));
-// Adapt #105 observation-only captures; accepted poses/commands are never changed.
-export function authoredReplayDocument(document) {
+// Adapt authored observation-only captures; accepted poses/commands are never changed.
+export function authoredReplayDocument(document, requiredLaps = null) {
   return { ...document, Run: { Initial: document.Initial, Result: document.Result,
     Riders: document.Initial.Riders.map(r => ({ Measurement: { RiderId: r.Id, CrossingSeconds: document.CrossingSeconds } })),
-    Passes: [], Consequences: [] } };
+    Passes: [], Consequences: [], RequiredLaps: requiredLaps } };
 }
 export const enumName = (geometry, type, value) => typeof value === 'string' && !/^\d+$/.test(value)
   ? value : geometry.enums[type]?.[String(value)] ?? `Unknown(${value})`;
@@ -95,7 +95,7 @@ export class Replay {
       (!state.lastDecision || d.ObservedAt >= state.lastDecision.ObservedAt)) state.lastDecision = d;
     const crossings = this.metrics.get(id)?.CrossingSeconds ?? [];
     state.completedLaps = upperBound(crossings, time, x => x);
-    state.totalLaps = crossings.length || 4;
+    state.totalLaps = this.run.RequiredLaps ?? (crossings.length || 4);
     state.lap = Math.min(state.completedLaps + 1, state.totalLaps);
     return state;
   }
