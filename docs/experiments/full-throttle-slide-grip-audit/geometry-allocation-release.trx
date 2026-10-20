@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="5193e608-00db-41c8-8d76-e463eacd5b17" name="Administrator@KOMPUTERARTURKA 2026-10-20 21:34:14" runUser="KomputerArturka\CodexSandboxOffline" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-20T21:34:14.2185917+02:00" queuing="2026-10-20T21:34:14.2185919+02:00" start="2026-10-20T21:34:12.6340592+02:00" finish="2026-10-20T21:34:14.2228791+02:00" />
+  <TestSettings name="default" id="4f152ce8-1fe6-4443-96bf-5e2ac6d98e27">
+    <Deployment runDeploymentRoot="Administrator_KOMPUTERARTURKA_2026-10-20_21_34_14" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="6011a72a-becf-4cb4-abb9-0da53d7eadf1" testId="b3ef42e9-fc3f-496f-671b-7f79493bc210" testName="CoreSim.Tests.TrackGeometryVariantTests.GeometryHotPathDoesNotAllocateAndLookupDoesNotCreateSolverBoundaries" computerName="KOMPUTERARTURKA" duration="00:00:00.5118087" startTime="2026-10-20T21:34:14.1218634+02:00" endTime="2026-10-20T21:34:14.1218787+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6011a72a-becf-4cb4-abb9-0da53d7eadf1" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="CoreSim.Tests.TrackGeometryVariantTests.GeometryHotPathDoesNotAllocateAndLookupDoesNotCreateSolverBoundaries" storage="c:\users\administrator\documents\codex\2026-10-13\files-pasted-by-the-user-rea\work\zuzel\tests\coresim.tests\bin\release\net8.0\coresim.tests.dll" id="b3ef42e9-fc3f-496f-671b-7f79493bc210">
+      <Execution id="6011a72a-becf-4cb4-abb9-0da53d7eadf1" />
+      <TestMethod codeBase="C:\Users\Administrator\Documents\Codex\2026-10-13\files-pasted-by-the-user-rea\work\zuzel\tests\CoreSim.Tests\bin\Release\net8.0\CoreSim.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CoreSim.Tests.TrackGeometryVariantTests" name="GeometryHotPathDoesNotAllocateAndLookupDoesNotCreateSolverBoundaries" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="b3ef42e9-fc3f-496f-671b-7f79493bc210" executionId="6011a72a-becf-4cb4-abb9-0da53d7eadf1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Wyniki, których nie ma na liście" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="Wszystkie załadowane wyniki" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="1" executed="1" passed="1" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.5.7+8f2703126a (64-bit .NET 8.0.30)&#xD;
+[xUnit.net 00:00:00.15]   Discovering: CoreSim.Tests&#xD;
+[xUnit.net 00:00:00.61]   Discovered:  CoreSim.Tests&#xD;
+[xUnit.net 00:00:00.62]   Starting:    CoreSim.Tests&#xD;
+[xUnit.net 00:00:01.16]   Finished:    CoreSim.Tests&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>
