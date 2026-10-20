@@ -27,10 +27,10 @@ public static class RacingLineRootCauseAudit
         var p=Path.Combine(dir,name);if(File.Exists(p))throw new IOException("Evidence exists: "+p);
         File.WriteAllText(p,JsonSerializer.Serialize(value,Json)+"\n");
     }
-    private static StreamWriter Csv(string dir,string name,string header)
+    private static StreamWriter Csv(string dir,string name,string header,bool compress=false)
     {
         var p=Path.Combine(dir,name);if(File.Exists(p))throw new IOException("Evidence exists: "+p);
-        var writer=new StreamWriter(p);writer.WriteLine(header);return writer;
+        var stream=File.Create(p);var writer=new StreamWriter(compress?new System.IO.Compression.GZipStream(stream,System.IO.Compression.CompressionLevel.SmallestSize):stream);writer.WriteLine(header);return writer;
     }
     private static void Write(StreamWriter writer,params double[] values)=>writer.WriteLine(string.Join(',',values.Select(v=>v.ToString("R",CultureInfo.InvariantCulture))));
     public static (double PreviewCurvature,double Geometry,double Offset,double Damping) ExistingDemand(RiderView v,TrackFrame f,WorldParameters p)
@@ -88,12 +88,12 @@ public static class RacingLineRootCauseAudit
         foreach(var suffix in new[]{"-accepted.csv","-tracking.csv",".json"})
             if(File.Exists(Path.Combine(directory,prefix+suffix)))throw new IOException("Evidence exists: "+prefix+suffix);
     }
-    public static object ExportCapture(string directory,string prefix,SlipControlValidation.Capture c,RearWheelObservation[] wheels,AuthoredRacingPath? path,bool? diagnosticPathFrame=null)
+    public static object ExportCapture(string directory,string prefix,SlipControlValidation.Capture c,RearWheelObservation[] wheels,AuthoredRacingPath? path,bool? diagnosticPathFrame=null,int requiredLaps=3,bool compressTracking=false)
     {
         var f=Frame();var g=new RacingLineGeometry(f);var previous=g.Clearance(c.Initial.Riders.Single());
         double minInner=previous.Inner,minOuter=previous.Outer,minIntervalInner=double.PositiveInfinity,minIntervalOuter=double.PositiveInfinity;
         var ws=wheels.ToDictionary(w=>Math.Round(w.TimeSeconds,8));
-        using var writer=Csv(directory,prefix+"-tracking.csv","t,dt,s,x,y,vx,vy,speed,offset,target,path_x,path_y,path_heading,path_curvature,lateral_error,longitudinal_error,body_heading,velocity_heading,velocity_heading_error,body_heading_error,actual_curvature,fx,fy,budget,utilization,wheelspin,yaw_requested,yaw_authority,yaw_energy,yaw_error,angular_velocity,steering_demand,old_preview_curvature,old_geometry_demand,old_offset_demand,old_damping_demand,required_path_accel,inner,outer,interval_inner,interval_outer");
+        using var writer=Csv(directory,prefix+"-tracking.csv"+(compressTracking?".gz":""),"t,dt,s,x,y,vx,vy,speed,offset,target,path_x,path_y,path_heading,path_curvature,lateral_error,longitudinal_error,body_heading,velocity_heading,velocity_heading_error,body_heading_error,actual_curvature,fx,fy,budget,utilization,wheelspin,yaw_requested,yaw_authority,yaw_energy,yaw_error,angular_velocity,steering_demand,old_preview_curvature,old_geometry_demand,old_offset_demand,old_damping_demand,required_path_accel,inner,outer,interval_inner,interval_outer",compressTracking);
         foreach(var tick in c.Ticks){var v=tick.Before;var q=path?.At(v.TotalReferenceMeters);var goal=q?.Position??new MeterPoint(v.Position.X,v.Position.Y);
             var heading=q?.Heading??v.Road.Heading;var tangent=new MeterPoint(Math.Cos(heading),Math.Sin(heading));var outward=new MeterPoint(tangent.Y,-tangent.X);
             var delta=new MeterPoint(v.Position.X,v.Position.Y)-goal;var travel=Math.Atan2(v.Velocity.Y,v.Velocity.X);
@@ -111,7 +111,7 @@ public static class RacingLineRootCauseAudit
                 v.Speed*v.Speed*(q?.Curvature??double.NaN),gap.Inner,gap.Outer,intervalInner,intervalOuter);
         }
         var crossing=new LapCrossings();var origin=c.Initial.Riders.Single().TotalReferenceMeters;
-        foreach(var t in c.Ticks)crossing.Accept(t.TimeSeconds,t.Before.TotalReferenceMeters-origin,t.TimeSeconds+t.DurationSeconds,t.After.TotalReferenceMeters-origin,f.LapMeters,3);
+        foreach(var t in c.Ticks)crossing.Accept(t.TimeSeconds,t.Before.TotalReferenceMeters-origin,t.TimeSeconds+t.DurationSeconds,t.After.TotalReferenceMeters-origin,f.LapMeters,requiredLaps);
         var times=crossing.Times.ToArray();
         var summary=new{Case=prefix,AuthoredPath=path?.Name,DiagnosticPathFrame=diagnosticPathFrame??(prefix.EndsWith("path-frame",StringComparison.Ordinal)||prefix.EndsWith("path-preview",StringComparison.Ordinal)),Origin=origin,
             c.Initial,Result=c.Result,CrossingSeconds=times,LapSeconds=times.Select((t,i)=>t-(i==0?0:times[i-1])).ToArray(),

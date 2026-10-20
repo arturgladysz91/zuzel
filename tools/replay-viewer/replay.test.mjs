@@ -11,6 +11,23 @@ const fixture = name => {
   return { csv, json, replay: new Replay(csv, json) };
 };
 const near = (a, b, epsilon = 1e-8) => assert.ok(Math.abs(a - b) < epsilon, `${a} != ${b}`);
+test('#106 valid A/B and rejected overspeed preserve native poses and classification', () => {
+  const folder = new URL('../../docs/experiments/speed-grip-line-crossover/', import.meta.url);
+  const plans = JSON.parse(readFileSync(new URL('viewer-paths.json', folder), 'utf8'));
+  assert.equal(plans.length, 2); assert.ok(plans.every(p => p.points.length > 300));
+  for (const name of ['inner', 'wide', 'stress']) {
+    const doc = JSON.parse(readFileSync(new URL(`viewer-${name}.json`, folder), 'utf8'));
+    const csv = readFileSync(new URL(`viewer-${name}-accepted.csv`, folder), 'utf8');
+    const before = JSON.stringify(doc), replay = new Replay(csv, authoredReplayDocument(doc, name === 'stress' ? 1 : 8));
+    assert.equal(replay.state(1, 0).totalLaps, name === 'stress' ? 1 : 8);
+    assert.equal(JSON.stringify(doc), before); assert.equal(replay.result.Fingerprint, doc.Result.Fingerprint);
+    for (const p of parseCsv(csv)) { const s = replay.state(1, p.t); near(s.x, p.x); near(s.y, p.y); near(angleDelta(s.heading, p.heading), 0); }
+    if (name === 'stress') {
+      assert.equal(doc.BoundarySafe, false); near(doc.Initial.Riders[0].Speed * 3.6, 200, .0001);
+      assert.equal(doc.Initial.Riders[0].Drive, 0); assert.ok(parseCsv(csv).some(p => p.offset > 100));
+    } else { assert.equal(doc.BoundarySafe, true); assert.equal(doc.CrossingSeconds.length, 8); }
+  }
+});
 test('#105 adapters preserve all seven accepted trajectories and their recorded gates', () => {
   const folder = new URL('../../docs/experiments/inverse-feasibility-matched-apex/', import.meta.url);
   const runs = JSON.parse(readFileSync(new URL('runs.json', folder), 'utf8'));

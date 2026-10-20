@@ -2,6 +2,7 @@ using System.Text.Json;
 using SharedWorldSpeedway;
 
 var scenario = args.FirstOrDefault() ?? "A";
+if (scenario == "speed-grip-crossover") { SpeedGripCrossoverAudit.Run(args[1], args[2]); return; }
 if (scenario == "inverse-feasibility") { InverseFeasibilityAudit.Run(args[1], args[2]); return; }
 if (scenario == "racing-line-root-cause") { RacingLineRootCauseAudit.Run(args[1], args[2]); return; }
 if (scenario == "progressive-width") { ProgressiveWidthAudit.Run(args[1], args[2]); return; }

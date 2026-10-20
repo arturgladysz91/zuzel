@@ -37,7 +37,7 @@ public static class SlipControlValidation
     public static Capture Execute(Scenario scenario,WorldParameters? parameters=null,ControlCommand[]? controls=null,
         bool reverse=false,string? csvPath=null, SpatialControlCommand[]? spatialControls=null, TrackStateSnapshot? surface=null,
         Action<RearWheelObservation>? wheelObserver=null,double stepSeconds=.01,TrackShapeVariant? trackShape=null,
-        AuthoredRacingPath? authoredPath=null,bool diagnosticPathGuidance=false,bool diagnosticPathPreview=false,AuthoredSteadyStart? diagnosticSteadyStart=null)
+        AuthoredRacingPath? authoredPath=null,bool diagnosticPathGuidance=false,bool diagnosticPathPreview=false,AuthoredSteadyStart? diagnosticSteadyStart=null,bool stopOnCrash=false)
     {
         var forces=new Dictionary<int,ForceObservation>();var slips=new Dictionary<int,SlipObservation>();
         var yaws=new Dictionary<int,YawLimitObservation>();var applied=new Dictionary<int,AppliedForceObservation>();
@@ -70,7 +70,7 @@ public static class SlipControlValidation
                     a,K(after)-K(before),work,HeatMeasurements.Clearance(after,world.Frame),gap));
             }
             csv.Accept(snapshot);previous=snapshot;
-        },lapsFromInitialPosition:true);
+        },lapsFromInitialPosition:true,stopOnCrash:stopOnCrash);
         return new(initial,result,ticks,contacts.ToArray(),consequences.ToArray(),mechanical);
     }
     public static string PrefixFingerprint(Capture capture,double throughSeconds)

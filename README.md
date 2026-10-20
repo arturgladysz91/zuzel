@@ -44,6 +44,13 @@ feasibility. Exact C2 OIO exposes yaw-rate jumps and unavailable drive torque at
 slower legal native replays pass tracking, while constant-speed constructive
 feasibility and strategy times remain unresolved. Production defaults stay unchanged.
 
+[Speed, Grip & Racing Line Crossover (#106)](docs/experiments/speed-grip-line-crossover.md)
+freezes full C3 XY paths and compares physical engine envelopes and Grip with
+unchanged tyre/wheel/yaw laws. Only the slower validation pair qualifies; INNER
+wins by 0.418 s/lap. Full-drive apparent wins fail safety/tracking, so crossover
+remains inconclusive. Initialized 160/200 km/h tests naturally run wide with
+convergent native forces. Three recorded cases are available in the replay viewer.
+
 Current physical consequence precedence (#56C2): [physical contact consequences and one-step recovery](docs/calibration/physical-contact-consequences.md)
 adds default-OFF `EnablePhysicalContactConsequences`, requiring #56B responses. When enabled,
 reviewed #56C1 analysis supplies deterministic final velocity/status and next-step recovery;

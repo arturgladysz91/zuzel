@@ -76,10 +76,11 @@ public static class SlipCoupledDynamics
             var wp=rearWheel.Parameters;var wheelSpeed=Math.Max(0,wp.WheelRadiusMeters*rearWheel.AngularVelocityRadPerSecond);
             // One gear: retain the inherited force envelope, sampled at wheel
             // circumferential speed (the driven shaft), not body speed.
-            var wheelAvailable=LongitudinalDynamics.CalculateAvailableDriveForceAtSpeedNewtons(reference,(float)wheelSpeed,spec.Setup);
+            var wheelAvailable=p.ExperimentalDrive is { } engine?engine.AvailableForce(reference,(float)wheelSpeed,spec.Setup):
+                LongitudinalDynamics.CalculateAvailableDriveForceAtSpeedNewtons(reference,(float)wheelSpeed,spec.Setup);
             var throttle=v.Activity==RiderActivity.Finished?0:v.Drive*(1-v.Impairment);
             rearWheel.Prepared=RearWheelDynamics.Evaluate(u,w,rearWheel.AngularVelocityRadPerSecond,budget,mass,scaleSquared,
-                reference*wp.WheelRadiusMeters*throttle,wheelAvailable*wp.WheelRadiusMeters,
+                (p.ExperimentalDrive?.ReferenceForce(reference)??reference)*wp.WheelRadiusMeters*throttle,wheelAvailable*wp.WheelRadiusMeters,
                 wheelAvailable*wp.WheelRadiusMeters*throttle,Vector2.Dot(resistance,forward),stepSeconds,wp);
             var contact=rearWheel.Prepared;
             tyre=new(contact.LongitudinalNewtons,contact.LateralNewtons,

@@ -94,6 +94,11 @@ public sealed class WorldRunner : IDisposable
             || Parameters.YawResponseSeconds <= 0 || Parameters.PredictionSeconds <= 0
             || Parameters.RecoverySeconds <= 0) throw new ArgumentOutOfRangeException(nameof(parameters));
         specs = riders.OrderBy(r => r.Profile.Id).ToArray();
+        if(Parameters.ExperimentalDrive is { } engine){
+            engine.Validate();
+            if(!Parameters.EnableRearWheelDynamics||authoredPath?.IsCrossover!=true||specs.Length!=1||specs.Any(s=>s.TrafficEnabled))
+                throw new ArgumentException("Experimental engine is restricted to one opt-in #106 C3 path with rear-wheel physics and no traffic.");
+        }
         this.authoredPath=authoredPath;this.diagnosticPathGuidance=diagnosticPathGuidance;
         this.diagnosticPathPreview=diagnosticPathPreview;
         if(diagnosticPathPreview&&!diagnosticPathGuidance)throw new ArgumentException("Path preview requires diagnostic path-frame guidance.");
