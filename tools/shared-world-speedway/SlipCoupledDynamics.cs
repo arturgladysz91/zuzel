@@ -130,10 +130,11 @@ public static class SlipCoupledDynamics
             var roadError=BikeAngles.Wrap(road.Heading-v.Heading);
             error=(float)BikeAngles.Wrap(roadError+blend*BikeAngles.Wrap(error-roadError));
         }
-        // Actual lateral reaction, not a requested trajectory. Keeping the motor
-        // out of this feed-forward keeps the yaw actuator independent of throttle.
+        // OFF retains the original lateral-only yaw feed-forward. The isolated
+        // ON variant reuses the already evaluated full tyre vector.
         var lateralForce=side*tyre.LateralNewtons;
-        var travelYaw=(v.Velocity.X*lateralForce.Y-v.Velocity.Y*lateralForce.X)/(mass*(speed*speed+LowSpeedMetersPerSecond*LowSpeedMetersPerSecond));
+        var yawForce=p.EnableFullContactYawFeedForward?tyreForce:lateralForce;
+        var travelYaw=(v.Velocity.X*yawForce.Y-v.Velocity.Y*yawForce.X)/(mass*(speed*speed+LowSpeedMetersPerSecond*LowSpeedMetersPerSecond));
         var authority=(.75f+.25f*(spec.Profile.Gameplay.Abilities.Technique-1)/98f)*(1-v.Impairment);
         var yawAcceleration=error/(p.SlipYawResponseSeconds*p.SlipYawResponseSeconds)+2*(travelYaw-v.AngularVelocity)/p.SlipYawResponseSeconds;
         var torque=Math.Clamp(inertia*yawAcceleration,-budget*YawLeverArmMeters,budget*YawLeverArmMeters)*authority;

@@ -13,6 +13,12 @@ the single force applied to Box2D. The energy ledger includes the body and wheel
 The front/rear budget split is static and both forces act at the body center;
 there are no two-axle contact moments or changes to production CoreSim.
 
+[Full Contact Yaw Feed-Forward (#109)](experiments/full-contact-yaw-feedforward.md)
+adds a default-OFF tools flag requiring the #108 coupled inverse. It selects the
+already evaluated full tyre vector for travelYaw; force, passive force, target,
+PD gains, authority and energy guard retain their equations. Two native trials
+fail the unchanged tracking/safety gates. This ends the small controller series.
+
 [Coupled Slip Inverse (#108)](experiments/coupled-slip-inverse.md) is a default-OFF
 tools-only intervention in target-slip selection for one C3 authored rider.
 Candidate headings query the original finite-step contact without committing
