@@ -128,3 +128,12 @@ Dropdown zawiera sześć planów na Egg Mild i sześć kontroli baseline z `docs
 Cel lokalnej polityki zmienia się z reference; panel pokazuje go z zapisu, bez prognozy. Aktywacje faz mają czasy z Result.Decisions. Ocena bezpieczeństwa pochodzi z audytu wszystkich kroków i konserwatywnej kontroli między nimi, nie z interpolacji CSV co około 0,1 s. **Śledź R1** i zoom pozwalają obejrzeć rzeczywisty obrys w skali.
 
 Zrzuty i tabele: [raport #102](../../docs/experiments/local-offset-limit.md). Test: `node --test tools/replay-viewer/replay.test.mjs` (10 przypadków, w tym wszystkie nowe CSV/JSON i geometrie).
+## #105 inverse feasibility / matched apex
+
+The existing viewer also loads seven recorded #105 cases, for example
+`?case=inverse-matched-wide-early-steady-18` and
+`?case=inverse-outside-inside-outside-steady-15`. They use frozen progressive-b.
+The comparison overlay shows **planned C2 curves**; the selected rider and trail
+come from accepted Box2D poses. All times are diagnostic: these replays do not
+prove the prescribed constant-speed trajectory is feasible. Geometry, inverse,
+tracking and timing gates are separate in the experiment report.

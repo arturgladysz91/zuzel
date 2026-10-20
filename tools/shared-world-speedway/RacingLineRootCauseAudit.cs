@@ -42,8 +42,10 @@ public static class RacingLineRootCauseAudit
         return(curvature,longitudinal*longitudinal*curvature,((float)road.OffsetMeters-v.TargetOffsetMeters)/(response*response),2*Vector2.Dot(v.Velocity,road.Outward)/response);
     }
     public static object ExportGeometry(string directory,string name)
+        =>ExportGeometry(directory,new AuthoredRacingPath(name));
+    public static object ExportGeometry(string directory,AuthoredRacingPath path)
     {
-        var path=new AuthoredRacingPath(name);var f=path.Frame;var g=new RacingLineGeometry(f);var n=(int)Math.Ceiling(f.LapMeters/GeometrySpacingMeters);
+        var name=path.Name;var f=path.Frame;var g=new RacingLineGeometry(f);var n=(int)Math.Ceiling(f.LapMeters/GeometrySpacingMeters);
         var ds=f.LapMeters/n;var maxMetric=0d;var minInner=double.PositiveInfinity;var minOuter=double.PositiveInfinity;var maxK=0d;double length=0;
         using var writer=Csv(directory,name+"-geometry.csv","s,x,y,offset,offset_first,offset_second,metric,heading,curvature,ay_at18,speed_cap,old_perfect_demand_at18,old_geometry_at18,old_damping_at18,inner_circle,outer_circle");
         var p=LocalOffsetAudit.Parameters();var accelerationBudget=AccelerationBudget();
@@ -86,7 +88,7 @@ public static class RacingLineRootCauseAudit
         foreach(var suffix in new[]{"-accepted.csv","-tracking.csv",".json"})
             if(File.Exists(Path.Combine(directory,prefix+suffix)))throw new IOException("Evidence exists: "+prefix+suffix);
     }
-    public static object ExportCapture(string directory,string prefix,SlipControlValidation.Capture c,RearWheelObservation[] wheels,AuthoredRacingPath? path)
+    public static object ExportCapture(string directory,string prefix,SlipControlValidation.Capture c,RearWheelObservation[] wheels,AuthoredRacingPath? path,bool? diagnosticPathFrame=null)
     {
         var f=Frame();var g=new RacingLineGeometry(f);var previous=g.Clearance(c.Initial.Riders.Single());
         double minInner=previous.Inner,minOuter=previous.Outer,minIntervalInner=double.PositiveInfinity,minIntervalOuter=double.PositiveInfinity;
@@ -111,7 +113,7 @@ public static class RacingLineRootCauseAudit
         var crossing=new LapCrossings();var origin=c.Initial.Riders.Single().TotalReferenceMeters;
         foreach(var t in c.Ticks)crossing.Accept(t.TimeSeconds,t.Before.TotalReferenceMeters-origin,t.TimeSeconds+t.DurationSeconds,t.After.TotalReferenceMeters-origin,f.LapMeters,3);
         var times=crossing.Times.ToArray();
-        var summary=new{Case=prefix,AuthoredPath=path?.Name,DiagnosticPathFrame=prefix.EndsWith("path-frame",StringComparison.Ordinal)||prefix.EndsWith("path-preview",StringComparison.Ordinal),Origin=origin,
+        var summary=new{Case=prefix,AuthoredPath=path?.Name,DiagnosticPathFrame=diagnosticPathFrame??(prefix.EndsWith("path-frame",StringComparison.Ordinal)||prefix.EndsWith("path-preview",StringComparison.Ordinal)),Origin=origin,
             c.Initial,Result=c.Result,CrossingSeconds=times,LapSeconds=times.Select((t,i)=>t-(i==0?0:times[i-1])).ToArray(),
             MinimumInner=minInner,MinimumOuter=minOuter,ConservativeInner=minIntervalInner,ConservativeOuter=minIntervalOuter,
             BoundarySafe=minInner>=.05&&minOuter>=.5&&minIntervalInner>=0&&minIntervalOuter>=.5,

@@ -59,7 +59,8 @@ public sealed class WorldRunner : IDisposable
     public WorldRunner(IEnumerable<RiderSpec> riders, Track? track = null, WorldParameters? parameters = null,
         WorldDiagnostics? diagnostics = null, IEnumerable<ControlCommand>? controls = null,
         TrackStateSnapshot? frozenSurface = null, IEnumerable<SpatialControlCommand>? spatialControls = null,
-        TrackShapeVariant? trackShape = null,AuthoredRacingPath? authoredPath=null,bool diagnosticPathGuidance=false,bool diagnosticPathPreview=false)
+        TrackShapeVariant? trackShape = null,AuthoredRacingPath? authoredPath=null,bool diagnosticPathGuidance=false,bool diagnosticPathPreview=false,
+        AuthoredSteadyStart? diagnosticSteadyStart=null)
     {
         this.diagnostics = diagnostics;
         Parameters = parameters ?? new();
@@ -96,6 +97,11 @@ public sealed class WorldRunner : IDisposable
         this.authoredPath=authoredPath;this.diagnosticPathGuidance=diagnosticPathGuidance;
         this.diagnosticPathPreview=diagnosticPathPreview;
         if(diagnosticPathPreview&&!diagnosticPathGuidance)throw new ArgumentException("Path preview requires diagnostic path-frame guidance.");
+        if(diagnosticSteadyStart is { } start && (authoredPath is null||!double.IsFinite(start.RearWheelOmega)||start.RearWheelOmega<0
+            ||!float.IsFinite(start.Drive)||start.Drive is <0 or >1||specs.Length!=1
+            ||specs.Any(s=>Frame.RoadAt(s.ReferenceMeters,s.OffsetMeters).IsTurn||s.InitialOutwardSpeed!=0
+                ||Math.Abs(authoredPath.At(s.ReferenceMeters).OffsetFirst)>1e-10||Math.Abs(authoredPath.At(s.ReferenceMeters).OffsetSecond)>1e-10)))
+            throw new ArgumentException("Diagnostic initial equilibrium requires an isolated authored straight and legal wheel/drive inputs.");
         if(diagnosticPathGuidance&&authoredPath is null||authoredPath is not null&&
             (specs.Length!=1||specs.Any(s=>s.TrafficEnabled)||!Parameters.EnableSlipCoupledDynamics||!Parameters.EnableRearWheelDynamics
                 ||!Parameters.EnableLocalOffsetLimit||trackShape!=TrackShapeVariant.ProgressiveWidths()[0]
@@ -157,9 +163,10 @@ public sealed class WorldRunner : IDisposable
         {
             var b = physics.Read(i); var road = Frame.Project(b.Position);
             return new RiderView(s.Profile.Id, b.Position, b.Velocity, b.Heading, b.Spin, road,
-                s.ReferenceMeters, 0, RiderActivity.Racing, 1, s.TargetOffsetMeters, 0, Frame.Context(road, s.ReferenceMeters));
+                s.ReferenceMeters, 0, RiderActivity.Racing, diagnosticSteadyStart?.Drive??1, s.TargetOffsetMeters, 0, Frame.Context(road, s.ReferenceMeters));
         }).ToArray();
-        rearWheels=Parameters.EnableRearWheelDynamics?views.Select(v=>new RearWheelState(v.ForwardSpeed,Parameters.RearWheel)).ToArray():Array.Empty<RearWheelState>();
+        rearWheels=Parameters.EnableRearWheelDynamics?views.Select(v=>new RearWheelState(diagnosticSteadyStart is { } initial?
+            initial.RearWheelOmega*(Parameters.RearWheel??RearWheelParameters.Default).WheelRadiusMeters:v.ForwardSpeed,Parameters.RearWheel)).ToArray():Array.Empty<RearWheelState>();
         Record();
     }
     public RunResult Run(string name, double stepSeconds, double maximumSeconds, int requiredLaps = 0,
