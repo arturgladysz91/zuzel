@@ -1,5 +1,18 @@
 # Shared World Speedway — Diagnostic Replay Viewer 2D (#96)
 
+## Progressive Bend Width #103
+
+`?case=width-b-outer-tighten` opens the new width-only Egg Mild experiment.
+The existing selector includes A/B/C × six unchanged #102 plans. A reads the
+frozen #102 files; B/C each load their own geometry, full-footprint +0.5m limit,
+and actual CSV poses/body headings. Rejected outer-max remains available.
+The A/B/C checkbox compares the three outer boundaries in one metric frame;
+the expandable comparison below the replay shows those boundaries and both
+bend-width plots. C's 17/16.2m midpoint maxima are assumptions, not surveyed apex
+widths. Comparison trails are independent second laps of inner, middle-to-outer
+and outer-max, never one shared race. Details and exports:
+[report](../../docs/experiments/progressive-bend-width.md).
+
 ## Dane #99
 
 Lista przejazdów obejmuje dodatkowo wybrany plan, kontrolę wewnętrzną, szeroką

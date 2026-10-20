@@ -3,11 +3,17 @@ using CoreSim.PhysicalSpace;
 namespace SharedWorldSpeedway;
 
 /// <summary>Frozen #101 inputs. No fitted racing results or production geometry changes.</summary>
-public sealed record TrackShapeVariant(string Name, double FirstCompression, double SecondCompression, bool Circular = false)
+public enum BendWidthProfile { Existing10Meters, ProgressiveSymmetric, ProgressiveMotoarena }
+public sealed record TrackShapeVariant(string Name, double FirstCompression, double SecondCompression, bool Circular = false,
+    [property: System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+    BendWidthProfile WidthProfile = BendWidthProfile.Existing10Meters)
 {
     public static TrackShapeVariant[] All() => new[] {
         new TrackShapeVariant("smooth-width-stadium",0,0,true), new("round-smooth",0,0),
         new("egg-mild",.2,.2), new("egg-medium",.35,.35), new("egg-strong",.5,.5), new("egg-asymmetric",.2,.4) };
+    public static TrackShapeVariant[] ProgressiveWidths()=>new[]{
+        new TrackShapeVariant("progressive-b",.2,.2,false,BendWidthProfile.ProgressiveSymmetric),
+        new("progressive-c",.2,.2,false,BendWidthProfile.ProgressiveMotoarena)};
 }
 
 /// <summary>Immutable C2 arc-length curve, bounded nearest-point search. Motoarena experiment only.
@@ -29,7 +35,7 @@ public sealed class ExperimentalTrackShape
     public readonly record struct Sample(MeterPoint Position, double Heading, double Curvature);
     public ExperimentalTrackShape(TrackShapeVariant variant, double baselineLapMeters)
     {
-        if (!TrackShapeVariant.All().Contains(variant) || !double.IsFinite(baselineLapMeters) || Math.Abs(baselineLapMeters-318.77875)>.001)
+        if (!TrackShapeVariant.All().Concat(TrackShapeVariant.ProgressiveWidths()).Contains(variant) || !double.IsFinite(baselineLapMeters) || Math.Abs(baselineLapMeters-318.77875)>.001)
             throw new ArgumentException("Use a frozen Motoarena geometry variant.");
         Variant=variant;
         var one=Nodes(variant.FirstCompression,variant.Circular);var two=Nodes(variant.SecondCompression,variant.Circular);
@@ -139,9 +145,27 @@ public sealed class ExperimentalTrackShape
     }
     public double Width(double s)
     {
+        if(Variant.WidthProfile!=BendWidthProfile.Existing10Meters)return ProgressiveWidth(s).Width;
         s=((s%LapMeters)+LapMeters)%LapMeters;double d;
         if(s>=Starts[1]&&s<=Starts[4])d=Math.Min(s-Starts[1],Starts[4]-s);
         else if(s>=Starts[5]&&s<=Starts[8])d=Math.Min(s-Starts[5],Starts[8]-s);else return 12;
         var t=Math.Clamp(d/WidthTransitionMeters,0,1);return 12+4.6*t*t*t*(10+t*(-15+6*t));
+    }
+    public double MaximumPhysicalWidthMeters=>Variant.WidthProfile==BendWidthProfile.ProgressiveMotoarena?17:16.6;
+    /// <summary>Two quintic smoothsteps. Derivatives are with respect to reference metres.
+    /// Width, first and second derivatives match at both joins and the midpoint.</summary>
+    public (double Width,double First,double Second) ProgressiveWidth(double s)
+    {
+        if(!double.IsFinite(s))throw new ArgumentOutOfRangeException(nameof(s));
+        s=((s%LapMeters)+LapMeters)%LapMeters;
+        var bend=s>=Starts[1]&&s<=Starts[4]?0:s>=Starts[5]&&s<=Starts[8]?1:-1;
+        if(bend<0)return(12,0,0);
+        var start=Starts[bend==0?1:5];var end=Starts[bend==0?4:8];var length=end-start;
+        var progress=(s-start)/length;var rising=progress<=.5;var u=2*(rising?progress:1-progress);
+        var amplitude=Variant.WidthProfile==BendWidthProfile.ProgressiveMotoarena?(bend==0?5:4.2):4.6;
+        var rate=2/length;
+        return(12+amplitude*u*u*u*(10+u*(-15+6*u)),
+            amplitude*30*u*u*(1-u)*(1-u)*rate*(rising?1:-1),
+            amplitude*60*u*(1-u)*(1-2*u)*rate*rate);
     }
 }

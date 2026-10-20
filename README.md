@@ -24,6 +24,12 @@ outer clearance. Egg Mild can request roughly 14 m instead of 9.5 m; maximal
 plans fail the unchanged dynamics at the narrowing exit and remain rejected in
 the data and replay viewer. The conservative middle-to-outer plan stays safe.
 
+[Progressive Bend Width (#103)](docs/experiments/progressive-bend-width.md) changes
+only the experimental outer edge of Egg Mild. Gradual widening/narrowing makes
+the unchanged outer-tighten plan safe; outer-max still fails. Symmetric profile B
+is the working hypothesis, with no surveyed Motoarena realism claim or production
+default change. The existing replay viewer compares A/B/C boundaries and widths.
+
 Current physical consequence precedence (#56C2): [physical contact consequences and one-step recovery](docs/calibration/physical-contact-consequences.md)
 adds default-OFF `EnablePhysicalContactConsequences`, requiring #56B responses. When enabled,
 reviewed #56C1 analysis supplies deterministic final velocity/status and next-step recovery;

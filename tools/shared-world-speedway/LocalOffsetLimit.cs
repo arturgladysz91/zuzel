@@ -24,6 +24,8 @@ public sealed class LocalOffsetLimit
         lapMeters=frame.LapMeters;caps=new float[(int)Math.Ceiling(lapMeters/MaximumReferenceSpacingMeters)];
         ReferenceSpacingMeters=lapMeters/caps.Length;
         var maximumWidth=Math.Max(frame.Track.Geometry.StraightWidthMeters,frame.Track.Geometry.TurnWidthMeters);
+        if(frame.Shape?.Variant.WidthProfile is BendWidthProfile.ProgressiveSymmetric or BendWidthProfile.ProgressiveMotoarena)
+            maximumWidth=(float)frame.Shape.MaximumPhysicalWidthMeters;
         // #101 accepts only the frozen shapes whose curvature is bounded by 0.1/m.
         // Native circular geometry uses its exact maximum curvature. For a constant
         // offset d, |dP/ds|=1+k*d. Distance to ANY boundary is 1-Lipschitz in XY.
