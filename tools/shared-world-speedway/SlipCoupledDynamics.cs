@@ -36,7 +36,8 @@ public static class SlipCoupledDynamics
     public static (Vector2 Force,float Torque) Forces(RiderView v,RiderSpec spec,TrackFrame frame,
         TrackStateSnapshot surface,WorldParameters p,double time,float mass,float inertia,
         Action<ForceObservation>? observe=null,Action<SlipObservation>? observeSlip=null,
-        Action<YawLimitObservation>? observeYaw=null,RearWheelState? rearWheel=null,float stepSeconds=0)
+        Action<YawLimitObservation>? observeYaw=null,RearWheelState? rearWheel=null,float stepSeconds=0,
+        PathGuidanceSample? diagnosticPath=null)
     {
         if(p.EnableRearWheelDynamics){
             if(rearWheel is null||!float.IsFinite(stepSeconds)||stepSeconds is <0 or >.020001f)
@@ -98,6 +99,15 @@ public static class SlipCoupledDynamics
         var response=p.LateralResponseSeconds+OuterToYawResponseSeparation*p.SlipYawResponseSeconds;
         var demand=longitudinal*longitudinal*curvature+((float)road.OffsetMeters-v.TargetOffsetMeters)
             /(response*response)+2*Vector2.Dot(v.Velocity,road.Outward)/response;
+        if(diagnosticPath is { } path){
+            // Isolated #104 intervention: the same gains, tyre and yaw actuator,
+            // expressed in the authored path frame with its full XY curvature.
+            var delta=new MeterPoint(v.Position.X,v.Position.Y)-path.Position;
+            var velocity=new MeterPoint(v.Velocity.X,v.Velocity.Y);
+            var along=MeterPoint.Dot(velocity,path.Tangent);
+            demand=(float)(along*along*path.FeedForwardCurvature+MeterPoint.Dot(delta,path.Outward)/(response*response)
+                +2*MeterPoint.Dot(velocity,path.Outward)/response);
+        }
         var ratio=Math.Clamp(mass*demand/budget,-MaximumSteeringDemandRatio,MaximumSteeringDemandRatio);
         var targetSlip=(float)Math.Atan(Math.Sqrt(scaleSquared)
             /Math.Max(speed,LowSpeedMetersPerSecond)*ratio/Math.Sqrt(1-ratio*ratio));

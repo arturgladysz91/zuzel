@@ -38,6 +38,9 @@ public sealed class WorldRunner : IDisposable
     private int nextControl;
     private bool disposed;
     private readonly RearWheelState[] rearWheels;
+    private readonly AuthoredRacingPath? authoredPath;
+    private readonly bool diagnosticPathGuidance;
+    private readonly bool diagnosticPathPreview;
     public WorldSnapshot Snapshot => new(TimeSeconds, Array.AsReadOnly((RiderView[])views.Clone())) {
         RearWheels=rearWheels.Length==0?null:rearWheels.Select((w,i)=>w.View(specs[i].Profile.Id)).ToArray() };
     public RearWheelView RearWheel(int riderId)
@@ -56,7 +59,7 @@ public sealed class WorldRunner : IDisposable
     public WorldRunner(IEnumerable<RiderSpec> riders, Track? track = null, WorldParameters? parameters = null,
         WorldDiagnostics? diagnostics = null, IEnumerable<ControlCommand>? controls = null,
         TrackStateSnapshot? frozenSurface = null, IEnumerable<SpatialControlCommand>? spatialControls = null,
-        TrackShapeVariant? trackShape = null)
+        TrackShapeVariant? trackShape = null,AuthoredRacingPath? authoredPath=null,bool diagnosticPathGuidance=false,bool diagnosticPathPreview=false)
     {
         this.diagnostics = diagnostics;
         Parameters = parameters ?? new();
@@ -90,6 +93,14 @@ public sealed class WorldRunner : IDisposable
             || Parameters.YawResponseSeconds <= 0 || Parameters.PredictionSeconds <= 0
             || Parameters.RecoverySeconds <= 0) throw new ArgumentOutOfRangeException(nameof(parameters));
         specs = riders.OrderBy(r => r.Profile.Id).ToArray();
+        this.authoredPath=authoredPath;this.diagnosticPathGuidance=diagnosticPathGuidance;
+        this.diagnosticPathPreview=diagnosticPathPreview;
+        if(diagnosticPathPreview&&!diagnosticPathGuidance)throw new ArgumentException("Path preview requires diagnostic path-frame guidance.");
+        if(diagnosticPathGuidance&&authoredPath is null||authoredPath is not null&&
+            (specs.Length!=1||specs.Any(s=>s.TrafficEnabled)||!Parameters.EnableSlipCoupledDynamics||!Parameters.EnableRearWheelDynamics
+                ||!Parameters.EnableLocalOffsetLimit||trackShape!=TrackShapeVariant.ProgressiveWidths()[0]
+                ||(controls?.Any()??false)||(spatialControls?.Any()??false)))
+            throw new ArgumentException("#104 authored paths require one isolated progressive-b rider, #100 physics, local limits and no other controls.");
         if (specs.Length is < 1 or > 4 || specs.Select(s => s.Profile.Id).Distinct().Count() != specs.Length)
             throw new ArgumentException("One to four distinct riders are required.");
         if(Parameters.EnableLocalOffsetLimit&&(!Parameters.EnableSlipCoupledDynamics||Parameters.EnableTacticalRacing||specs.Any(s=>s.TrafficEnabled)))
@@ -180,7 +191,10 @@ public sealed class WorldRunner : IDisposable
                 for (var i = 0; i < specs.Length; i++)
                 {
                     if(rearWheels.Length>0)Work.RearWheelForceEvaluations++;
-                    var force = RiderController.Forces(views[i], specs[i], Frame, surface, Parameters,
+                    var force = diagnosticPathGuidance?SlipCoupledDynamics.Forces(views[i],specs[i],Frame,surface,Parameters,
+                        TimeSeconds,physics.Masses[i],physics.Inertias[i],diagnostics?.Force,diagnostics?.Slip,diagnostics?.YawLimit,
+                        rearWheels[i],(float)duration,authoredPath!.Guidance(views[i],Parameters,diagnosticPathPreview)):
+                        RiderController.Forces(views[i], specs[i], Frame, surface, Parameters,
                         TimeSeconds, physics.Masses[i], physics.Inertias[i], diagnostics?.Force, diagnostics?.Slip, diagnostics?.YawLimit,
                         rearWheels.Length==0?null:rearWheels[i],rearWheels.Length==0?0:(float)duration);
                     physics.Force(i, force.Force, force.Torque);
@@ -360,6 +374,7 @@ public sealed class WorldRunner : IDisposable
         }
         for (var i = 0; i < specs.Length; i++)
         {
+            if(authoredPath is not null)views[i]=views[i] with{TargetOffsetMeters=(float)authoredPath.Offset(views[i].TotalReferenceMeters).D};
             if(Parameters.EnableLocalOffsetLimit){
                 var target=ResolveTarget(i,views[i].TargetOffsetMeters,localOuterFractions[i]);
                 if(views[i].TargetOffsetMeters!=target){Work.ControlChanges++;views[i]=views[i] with{TargetOffsetMeters=target};}

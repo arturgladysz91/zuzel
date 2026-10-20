@@ -65,6 +65,11 @@ public sealed class RacingLineGeometry
         foreach(var edge in outer)distance=Math.Min(distance,Distance(p,p,edge));
         return distance-NumericalAllowanceMeters;
     }
+    internal double InnerPointDistance(MeterPoint p)
+    {
+        if(curve is not null)return curve.InnerPointDistance(p);
+        return inner.Min(e=>Distance(p,p,e))-NumericalAllowanceMeters;
+    }
     private static double Length(MeterPoint p)=>Math.Sqrt(MeterPoint.Dot(p,p));
     private static double PointSegment(MeterPoint p,MeterPoint a,MeterPoint b)
     {
