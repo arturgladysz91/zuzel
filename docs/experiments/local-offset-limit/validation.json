@@ -1,0 +1,143 @@
+{
+  "TargetedTests": {
+    "total": "37",
+    "executed": "37",
+    "passed": "37",
+    "failed": "0",
+    "error": "0",
+    "timeout": "0",
+    "aborted": "0",
+    "inconclusive": "0",
+    "passedButRunAborted": "0",
+    "notRunnable": "0",
+    "notExecuted": "0",
+    "disconnected": "0",
+    "warning": "0",
+    "completed": "0",
+    "inProgress": "0",
+    "pending": "0",
+    "Cases": [
+      "CoreSim.Tests.LocalOffsetLimitTests.CachedLimitDoesNotAllocateAndReplayExportsTheSameLocalGeometry",
+      "CoreSim.Tests.LocalOffsetLimitTests.ExperimentalCommandsCanExceed95ButUnsafeTargetsAreRejected",
+      "CoreSim.Tests.LocalOffsetLimitTests.FullRunSafetyRejectsTheUnsafeOuterPlanWithoutRepairingItsPath",
+      "CoreSim.Tests.LocalOffsetLimitTests.LocalEnvelopeUsesTheCompleteFootprintAndAllFrozenGeometries",
+      "CoreSim.Tests.LocalOffsetLimitTests.LocalRulesAreDeterministicAndLegacyBaselineIsUnchanged",
+      "CoreSim.Tests.PhysicsDrivenRacingLineTests.LandmarkCommandsUseAcceptedCrossingsWithoutTeleportOrAnExtraStep",
+      "CoreSim.Tests.PhysicsDrivenRacingLineTests.OfflineSelectionUsesMeasuredTimeRejectsUnsafeAndReplaysDeterministically",
+      "CoreSim.Tests.PhysicsDrivenRacingLineTests.PhysicalEdgesAreNotTargetsAndCapsulesNeedOrientationDependentClearance",
+      "CoreSim.Tests.PhysicsDrivenRacingLineTests.SpatialPlansRequireIsolatedSlipExecutionAndValidFiniteUniqueLandmarks",
+      "CoreSim.Tests.PhysicsDrivenRacingLineTests.SpatialSchedulingIsIndependentOfRiderOrderAndDoesNotBlockOtherRiders",
+      "CoreSim.Tests.PhysicsDrivenRacingLineTests.WidthStepMustBeCheckedAgainstTheWholeBikeBeforeItsCenterEntersTheStraight",
+      "CoreSim.Tests.RearWheelDynamicsTests.AShortenedCurvatureIntervalCannotAdvanceTheWheelByTheNominalTick",
+      "CoreSim.Tests.RearWheelDynamicsTests.CombinedContactIsDissipativeBoundedAndSeparatesFrontFromRear",
+      "CoreSim.Tests.RearWheelDynamicsTests.ContactAndCrashNeverResetTheIndependentWheelOrAddASecondIntegration",
+      "CoreSim.Tests.RearWheelDynamicsTests.LaunchBuildsActualSpinAndTheChassisReceivesOnlyTheContactForce",
+      "CoreSim.Tests.RearWheelDynamicsTests.OneAcceptedClockAndZeroDriveEnergyRemainStable(step: 0,0050000000000000001)",
+      "CoreSim.Tests.RearWheelDynamicsTests.OneAcceptedClockAndZeroDriveEnergyRemainStable(step: 0,01)",
+      "CoreSim.Tests.RearWheelDynamicsTests.OneAcceptedClockAndZeroDriveEnergyRemainStable(step: 0,02)",
+      "CoreSim.Tests.RearWheelDynamicsTests.RearWheelForcesAllocateNothingAndTheirGuardAccountsForWheelEnergy",
+      "CoreSim.Tests.RearWheelDynamicsTests.TheNewWorldRepeatsFlyingLapsAndRetainsActualOffTrackTrajectories",
+      "CoreSim.Tests.RearWheelDynamicsTests.ThrottleReplaysTheWholeBodyAndWheelPrefixAndActsThroughTorqueFirst",
+      "CoreSim.Tests.RearWheelDynamicsTests.WheelRequiresSlipAndStartsAtTheActualLongitudinalRollingSpeed",
+      "CoreSim.Tests.ReplayGeometryTests.CheckedInGeometryExactlyMatchesDeterministicExportAndNativeTrackFrame",
+      "CoreSim.Tests.ReplayGeometryTests.ExportedCapsulesAndEnumNamesAreTheNativeDefinitions",
+      "CoreSim.Tests.SlipControlValidationTests.AuthoredLineCommandChangesIntentAtItsDeadlineWithoutTeleporting",
+      "CoreSim.Tests.SlipControlValidationTests.DiagnosticStagesExerciseBothLimitsWithoutChangingTheReturnedTorqueOrAllocating",
+      "CoreSim.Tests.SlipControlValidationTests.FourIndividualLapsAreDeterministicAndRealActiveContactIsResolved",
+      "CoreSim.Tests.SlipControlValidationTests.ReadOnlyStagesPreserve97ForcesAndExactlyAccountForBox2DTorque",
+      "CoreSim.Tests.SlipControlValidationTests.ThrottleTrialsReplayExactlyTheSameAcceptedPrefixAndActivateCausally",
+      "CoreSim.Tests.TrackGeometryVariantTests.BaselineGeometryAndWheelScenarioStayExactlyAsIn100",
+      "CoreSim.Tests.TrackGeometryVariantTests.CurveJoinsAreC2AndPhysicalEdgeSagBoundIsConservative",
+      "CoreSim.Tests.TrackGeometryVariantTests.FrozenShapesCloseAndHaveConsistentArcLengthProjectionAndNormals",
+      "CoreSim.Tests.TrackGeometryVariantTests.GeometryHotPathDoesNotAllocateAndLookupDoesNotCreateSolverBoundaries",
+      "CoreSim.Tests.TrackGeometryVariantTests.NewWorldRepeatsAndReplayUsesItsOwnGeometry",
+      "CoreSim.Tests.TrackGeometryVariantTests.ProjectionIsGlobalAndStableForPointsAwayFromTheRacingTube",
+      "CoreSim.Tests.TrackGeometryVariantTests.UnsupportedInputsAreRejectedAtTheGeometryBoundary",
+      "CoreSim.Tests.TrackGeometryVariantTests.WholeCapsuleAuditRejectsKerbCrossingAndRetainsSafePose"
+    ]
+  },
+  "NodeTests": {
+    "Passed": 10,
+    "Failed": 0
+  },
+  "Restore": "passed",
+  "ReleaseWarningsAsErrors": "passed",
+  "HistoricalManifests": {
+    "autonomous-racing-line": 34,
+    "slip-coupled-dynamics": 63,
+    "slip-control-validation": 42,
+    "physics-driven-racing-line": 21,
+    "rear-wheel-dynamics": 88,
+    "track-geometry-variants": 43
+  },
+  "ProtectedPaths": [
+    "src",
+    "tools/shared-world-speedway/RearWheelDynamics.cs",
+    "tools/shared-world-speedway/SlipCoupledDynamics.cs",
+    "tools/shared-world-speedway/RiderController.cs",
+    "tools/shared-world-speedway/ContactAdapter.cs",
+    "tools/shared-world-speedway/ExperimentalTrackShape.cs",
+    "tools/replay-viewer/geometry.json",
+    "docs/experiments/autonomous-racing-line",
+    "docs/experiments/slip-coupled-dynamics",
+    "docs/experiments/slip-control-validation",
+    "docs/experiments/physics-driven-racing-line",
+    "docs/experiments/rear-wheel-dynamics",
+    "docs/experiments/track-geometry-variants"
+  ],
+  "HistoricalComparisons": [
+    {
+      "Geometry": "egg-mild",
+      "Plan": "inner",
+      "Fingerprint": "2C93A288715B1DCC87F299E1646EE6FEF1C7BBBCAD799E4F06E852A8BE5A7497",
+      "FlyingSeconds": 32.176385746152974,
+      "IdenticalTo101": true
+    },
+    {
+      "Geometry": "egg-mild",
+      "Plan": "middle-tighten",
+      "Fingerprint": "1509B426EB098366CD4854EB5EC457B52E1012D576FF7E85A05B7BE31AFE8CC9",
+      "FlyingSeconds": 32.26761721097622,
+      "IdenticalTo101": true
+    },
+    {
+      "Geometry": "egg-mild",
+      "Plan": "wide-tighten",
+      "Fingerprint": "A9D859C3827210005DF91795450BDB91CECA34FC657972548B21E3C5113E5FFD",
+      "FlyingSeconds": 33.125615500266825,
+      "IdenticalTo101": true
+    },
+    {
+      "Geometry": "baseline",
+      "Plan": "inner",
+      "Fingerprint": "D233EC7F54B6FCB8070819A9E941E9BB68B0AA806DBDF712814D65E03B37A9CE",
+      "FlyingSeconds": 31.771572438930015,
+      "IdenticalTo101": true
+    },
+    {
+      "Geometry": "baseline",
+      "Plan": "middle-tighten",
+      "Fingerprint": "399700CF67101C6C4373B41175CE831822280961392B0E08DDDF01EDF2BB3AB1",
+      "FlyingSeconds": 32.08218063510715,
+      "IdenticalTo101": true
+    },
+    {
+      "Geometry": "baseline",
+      "Plan": "wide-tighten",
+      "Fingerprint": "05C084F108794C32434F5BF10CA9ED600C7A8452B8A55E31EF98EA22A40FFF8D",
+      "FlyingSeconds": 33.13787406148464,
+      "IdenticalTo101": true
+    }
+  ],
+  "ViewerChecks": [
+    "inner selector",
+    "middle-tighten selector",
+    "outer-max rejected badge",
+    "middle-to-outer safe badge",
+    "playback advances time",
+    "actual CSV pose at 4.61s, offset9.994863",
+    "unsafe pose at8.31s",
+    "dataset geometry and limit overlay",
+    "comparison of recorded lap2 traces"
+  ]
+}

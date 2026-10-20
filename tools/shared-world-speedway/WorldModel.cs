@@ -15,6 +15,8 @@ public sealed record WorldParameters
     public bool EnableAutonomousRacingLine { get; init; }
     public bool EnableSlipCoupledDynamics { get; init; }
     public bool EnableRearWheelDynamics { get; init; }
+    // #102 tools-only authored controls. Historical worlds keep their original bounds.
+    public bool EnableLocalOffsetLimit { get; init; }
     public RearWheelParameters? RearWheel { get; init; }
     public float SlipYawResponseSeconds { get; init; } = .1f;
     // Audit-only variant 2; absent from the public experiment configuration.
@@ -73,7 +75,8 @@ public sealed record DecisionEvent(int RiderId, int OpponentId, TrafficAction Ac
 /// <summary>Authored before the run, for controlled experiments; never a predicted state.</summary>
 public sealed record ControlCommand(int RiderId, double AtSeconds, float TargetOffsetMeters, float Drive);
 /// <summary>Offline authored landmark, activated on its first accepted crossing; no future body state.</summary>
-public sealed record SpatialControlCommand(int RiderId, double ReferenceMeters, float TargetOffsetMeters, float Drive);
+public sealed record SpatialControlCommand(int RiderId, double ReferenceMeters, float TargetOffsetMeters, float Drive,
+    float? LocalOuterFraction=null);
 public sealed record ContactEvent(int RiderA, int RiderB, double TimeSeconds, string Kind,
     double ImpulseNewtonSeconds, double SeverityRatioA, double SeverityRatioB, double NormalClosingSpeed = 0);
 public sealed class WorldWork

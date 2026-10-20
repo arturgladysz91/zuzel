@@ -18,6 +18,10 @@ public sealed class TrackFrame
     public Track Track { get; }
     public TrackMetricEmbedding Embedding { get; }
     public ExperimentalTrackShape? Shape { get; }
+    private LocalOffsetLimit? localOffsetLimit;
+    [System.Text.Json.Serialization.JsonIgnore]
+    public LocalOffsetLimit LocalOffsets=>localOffsetLimit??=new(this);
+    public float MaximumSafeTargetOffsetMeters(double referenceMeters)=>LocalOffsets.At(referenceMeters);
     public double SegmentStartMeters(int index) => starts[index];
     public double SegmentLengthMeters(int index) => starts[index+1]-starts[index];
     public double PhysicalWidthMeters(RoadPoint road) => Shape?.Width(road.ReferenceMeters)

@@ -18,6 +18,12 @@ Geometry is an optional tools-only input; tyre/wheel/yaw equations and productio
 defaults stay unchanged. Egg Mild is promising, with retained unsafe inner plans
 for stronger shapes; empirical venue validation is still required.
 
+[Local Outer Offset Limit (#102)](docs/experiments/local-offset-limit.md) adds a
+default-OFF, cached local target envelope for the complete footprint plus 0.5 m
+outer clearance. Egg Mild can request roughly 14 m instead of 9.5 m; maximal
+plans fail the unchanged dynamics at the narrowing exit and remain rejected in
+the data and replay viewer. The conservative middle-to-outer plan stays safe.
+
 Current physical consequence precedence (#56C2): [physical contact consequences and one-step recovery](docs/calibration/physical-contact-consequences.md)
 adds default-OFF `EnablePhysicalContactConsequences`, requiring #56B responses. When enabled,
 reviewed #56C1 analysis supplies deterministic final velocity/status and next-step recovery;

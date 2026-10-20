@@ -11,6 +11,32 @@ const fixture = name => {
   return { csv, json, replay: new Replay(csv, json) };
 };
 const near = (a, b, epsilon = 1e-8) => assert.ok(Math.abs(a - b) < epsilon, `${a} != ${b}`);
+test('#102 own geometry, local footprint limit and rejected poses remain recorded data', () => {
+  const folder = new URL('../../docs/experiments/local-offset-limit/', import.meta.url);
+  for (const shape of ['egg-mild', 'baseline']) for (const plan of ['inner', 'middle-tighten', 'wide-tighten', 'outer-max', 'outer-tighten', 'middle-to-outer']) {
+    const alias = `${shape}-${plan}`;
+    const csv = readFileSync(new URL(alias + '-accepted.csv', folder), 'utf8');
+    const json = JSON.parse(readFileSync(new URL(alias + '.json', folder), 'utf8'));
+    const replay = new Replay(csv, json);
+    const own = JSON.parse(readFileSync(new URL(json.GeometryFile, folder), 'utf8'));
+    assert.equal(own.localOuterLimit.requiredOuterClearanceMeters, .5);
+    assert.ok(Math.max(...own.localOuterLimit.sections.map(p => p.maximumSafeTargetOffsetMeters)) > 13.8);
+    for (const row of parseCsv(csv)) {
+      const state = replay.state(row.id, row.t); near(state.x, row.x); near(state.y, row.y); near(angleDelta(state.heading, row.heading), 0);
+    }
+    if (plan === 'outer-max' || plan === 'outer-tighten') {
+      assert.equal(json.Evaluation.Feasible, false);
+      assert.ok(json.Evaluation.MinimumOuterClearanceMeters < .5);
+      assert.ok(parseCsv(csv).some(p => p.offset > 9.5));
+    }
+    for (const limit of own.localOuterLimit.sections) {
+      const section = crossSection(own, limit.referenceMeters);
+      const point = { x: section.point.x + section.normal.x * limit.maximumSafeTargetOffsetMeters,
+        y: section.point.y + section.normal.y * limit.maximumSafeTargetOffsetMeters };
+      assert.ok(Math.hypot(point.x - limit.point.x, point.y - limit.point.y) < .001);
+    }
+  }
+});
 test('#101 recorded poses use dataset geometry and preserve rejected inner trajectories', () => {
   const folder = new URL('../../docs/experiments/track-geometry-variants/', import.meta.url);
   for (const shape of ['baseline','egg-mild','egg-medium','egg-strong','egg-asymmetric']) for (const plan of ['inner','wide-tighten']) {
