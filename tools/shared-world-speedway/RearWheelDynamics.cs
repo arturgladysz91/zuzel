@@ -63,6 +63,9 @@ public sealed class RearWheelState
 }
 public static class RearWheelDynamics
 {
+    // The unchanged front constitutive law, also usable at a separate steered contact.
+    public static float FrontLateralForce(double side,double frontBudget,double lateralScaleSquared)
+        =>(float)(-frontBudget*side/Math.Sqrt(side*side+lateralScaleSquared));
     public const int MaximumRootIterations=8;
     public const double RootToleranceMetersPerSecond=1e-10;
     public static double SlipRatio(double forward,double omega,RearWheelParameters p)

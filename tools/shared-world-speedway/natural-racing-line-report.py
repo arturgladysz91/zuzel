@@ -110,8 +110,11 @@ def analyse_case(engine,natural):
 
 def history():
     checks={}
-    for manifest in sorted((ROOT/'docs/experiments').glob('*/manifest.json')):
-        if manifest.parent.name=='natural-racing-line-vs-inner':continue
+    # This report certifies its frozen base, not experiments added AFTER #111.
+    # Retain the original manifest set when running its regression in later PRs.
+    frozen_names=load(ROOT/'docs/experiments/natural-racing-line-vs-inner/analysis.json')['HistoricalHashes']
+    for name in sorted(frozen_names):
+        manifest=ROOT/'docs/experiments'/name/'manifest.json'
         values=load(manifest)
         for file,digest in values.items():assert hashlib.sha256((manifest.parent/file).read_bytes()).hexdigest().lower()==digest.lower(),(manifest,file)
         checks[manifest.parent.name]=len(values)

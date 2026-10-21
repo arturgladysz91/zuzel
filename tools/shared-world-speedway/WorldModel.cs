@@ -19,6 +19,10 @@ public sealed record WorldParameters
     public bool EnableCoupledSlipInverse { get; init; }
     [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
     public bool EnableFullContactYawFeedForward { get; init; }
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+    public bool EnableTwoContactBikeDynamics { get; init; }
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
+    public TwoContactBikeParameters? TwoContactBike { get; init; }
     // #102 tools-only authored controls. Historical worlds keep their original bounds.
     public bool EnableLocalOffsetLimit { get; init; }
     public RearWheelParameters? RearWheel { get; init; }
@@ -71,6 +75,8 @@ public sealed record WorldSnapshot(double TimeSeconds, IReadOnlyList<RiderView> 
 {
     [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
     public IReadOnlyList<RearWheelView>? RearWheels { get; init; }
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
+    public IReadOnlyList<SteeringView>? Steering { get; init; }
 }
 public enum ControlChannels { Both, Line, Throttle }
 public sealed record DecisionEvent(int RiderId, int OpponentId, TrafficAction Action,
