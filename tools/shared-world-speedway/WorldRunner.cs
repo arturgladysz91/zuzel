@@ -45,7 +45,8 @@ public sealed class WorldRunner : IDisposable
     private readonly bool diagnosticPathPreview;
     public WorldSnapshot Snapshot => new(TimeSeconds, Array.AsReadOnly((RiderView[])views.Clone())) {
         RearWheels=rearWheels.Length==0?null:rearWheels.Select((w,i)=>w.View(specs[i].Profile.Id)).ToArray(),
-        Steering=twoContactStates.Length==0?null:twoContactStates.Select((s,i)=>new SteeringView(specs[i].Profile.Id,s.SteeringRadians)).ToArray() };
+        Steering=twoContactStates.Length==0?null:twoContactStates.Select((s,i)=>new SteeringView(specs[i].Profile.Id,s.SteeringRadians)).ToArray(),
+        AxleLoad=Parameters.EnableDynamicAxleLoad?twoContactStates[0].AxleLoad:null };
     public RearWheelView RearWheel(int riderId)
     {
         if(rearWheels.Length==0)throw new InvalidOperationException("Rear wheel dynamics are OFF.");
@@ -99,6 +100,9 @@ public sealed class WorldRunner : IDisposable
             || Parameters.RecoverySeconds <= 0) throw new ArgumentOutOfRangeException(nameof(parameters));
         specs = riders.OrderBy(r => r.Profile.Id).ToArray();
         this.steeringCommands=(steeringCommands??Array.Empty<TwoContactSteeringCommand>()).OrderBy(c=>c.AtSeconds).ToArray();
+        if(Parameters.EnableDynamicAxleLoad&&(!Parameters.EnableTwoContactBikeDynamics||!Parameters.EnablePhysicalSteeringControl
+            ||Parameters.AxleLoadHeightMeters is { } height&&(!double.IsFinite(height)||height<=0))||!Parameters.EnableDynamicAxleLoad&&Parameters.AxleLoadHeightMeters is not null)
+            throw new ArgumentException("Dynamic axle loads require both two-contact and physical steering, with positive finite provisional height.");
         if(Parameters.EnableTwoContactBikeDynamics){
             if(!Parameters.EnableSlipCoupledDynamics||!Parameters.EnableRearWheelDynamics||Parameters.EnableCoupledSlipInverse||Parameters.EnableFullContactYawFeedForward
                 ||specs.Length!=1||specs.Any(s=>s.TrafficEnabled||s.Passive))throw new ArgumentException("Two-contact Stage1 requires one active isolated rider, wheel physics and old yaw/inverse variants OFF.");
@@ -193,6 +197,7 @@ public sealed class WorldRunner : IDisposable
             initial.RearWheelOmega*(Parameters.RearWheel??RearWheelParameters.Default).WheelRadiusMeters:v.ForwardSpeed,Parameters.RearWheel)).ToArray():Array.Empty<RearWheelState>();
         if(twoContactInitial?.RearWheelOmega is { } initialOmega)rearWheels[0]=new(initialOmega*(Parameters.RearWheel??RearWheelParameters.Default).WheelRadiusMeters,Parameters.RearWheel);
         twoContactStates=Parameters.EnableTwoContactBikeDynamics?specs.Select(_=>new TwoContactBikeState(twoContactInitial?.SteeringRadians??0)).ToArray():Array.Empty<TwoContactBikeState>();
+        if(Parameters.EnableDynamicAxleLoad){twoContactStates[0].AxleLoad=DynamicAxleLoad.AtAcceleration(0,Parameters.TwoContactBike??TwoContactBikeParameters.Default,Parameters.AxleLoadHeightMeters??DynamicAxleLoad.ProvisionalHeightMeters);Work.AxleLoadUpdates++;}
         Record();
     }
     public RunResult Run(string name, double stepSeconds, double maximumSeconds, int requiredLaps = 0,
@@ -279,6 +284,10 @@ public sealed class WorldRunner : IDisposable
                     views[i] = before[i] with { Position = b.Position, Velocity = b.Velocity, Heading = b.Heading,
                         AngularVelocity = b.Spin, Road = road, TotalReferenceMeters = total,
                         DistanceMeters = before[i].DistanceMeters + distance, Context = Frame.Context(road, total) };
+                    if(Parameters.EnableDynamicAxleLoad){
+                        twoContactStates[i].AxleLoad=DynamicAxleLoad.Accepted(before[i],views[i],(float)duration,Parameters.TwoContactBike??TwoContactBikeParameters.Default,Parameters.AxleLoadHeightMeters??DynamicAxleLoad.ProvisionalHeightMeters);
+                        Work.AxleLoadUpdates++;
+                    }
                     Work.MaximumSpeed = Math.Max(Work.MaximumSpeed, views[i].Speed);
                     Work.MaximumStepDisplacementMeters = Math.Max(Work.MaximumStepDisplacementMeters, distance);
                     var width = Frame.Shape is null?LaneModel.UsableRacingWidthMeters(Frame.Track.Segments[road.Segment].Type, Frame.Track.Geometry)
@@ -612,6 +621,8 @@ public sealed class WorldRunner : IDisposable
             hash.AppendData(System.Runtime.InteropServices.MemoryMarshal.AsBytes(data));
             if(rearWheels.Length>0){wheelData[0]=rearWheels[wheelIndex++].AngularVelocityRadPerSecond;hash.AppendData(System.Runtime.InteropServices.MemoryMarshal.AsBytes(wheelData));}
             if(twoContactStates.Length>0){wheelData[0]=twoContactStates[0].SteeringRadians;hash.AppendData(System.Runtime.InteropServices.MemoryMarshal.AsBytes(wheelData));}
+            if(Parameters.EnableDynamicAxleLoad){wheelData[0]=twoContactStates[0].AxleLoad!.Value.LongitudinalAcceleration;hash.AppendData(System.Runtime.InteropServices.MemoryMarshal.AsBytes(wheelData));
+                wheelData[0]=twoContactStates[0].AxleLoad!.Value.RearFraction;hash.AppendData(System.Runtime.InteropServices.MemoryMarshal.AsBytes(wheelData));}
         }
     }
     public void Dispose()

@@ -8,6 +8,11 @@ uses one Box2D.NET world and causal rider observations. Recommendation B: full
 contact-free heats work; crowded-contact sensitivity and post-crash boundaries
 still block adoption. Production CoreSim and defaults remain unchanged.
 
+[Dynamic Axle Load LIGHT (#114)](docs/experiments/dynamic-axle-load-light.md)
+tests default-OFF load allocation cached from accepted velocity differences.
+One first bend stays safe, but the unchanged steering inverse uses 12.3% more
+queries. The LIGHT acceptance gate fails; no second bend or eight-lap repeat.
+
 [Physical Steering Control (#113)](docs/experiments/physical-steering-control.md)
 adds an opt-in local yaw-response inverse for the two-contact prototype. The same
 tyres, engine and C3 INNER complete the first two bends and eight laps safely.

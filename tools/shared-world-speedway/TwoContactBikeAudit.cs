@@ -46,6 +46,7 @@ public static class TwoContactBikeAudit
             var tolerance=.05+1e-6*Math.Max(BodyKinetic(t.Before,mechanical.MassKg,mechanical.InertiaKgMetersSquared),BodyKinetic(t.After,mechanical.MassKg,mechanical.InertiaKgMetersSquared));
             if(delta-t.Wheel.EngineWorkJoules>tolerance)stop="energy increase beyond engine work/float tolerance";
             if(stopUnsafe&&(t.Inner<0||t.Outer<0))stop=t.Inner<0?"observed inner footprint crossing":"observed outer footprint crossing";
+            if(snapshot.AxleLoad is {WithinAssumptions:false})stop="axle load outside flat-contact assumptions";
             return stop is not null||stopReference is { } end&&t.After.TotalReferenceMeters>=end;
         });
         return new(initial,result,ticks.ToArray(),mechanical.MassKg,mechanical.InertiaKgMetersSquared,yawCalls,stop);

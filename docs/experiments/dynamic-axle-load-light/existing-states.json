@@ -1,0 +1,49 @@
+{
+  "BaseHead": "fc5d184e95fa3d6d12c27abd59ab8de7e2630bee",
+  "NewBox2DWorlds": 0,
+  "HeightMeters": 0.55,
+  "Gravity": 9.81,
+  "StaticRearFraction": 0.5384615243539304,
+  "Rule": "At state i use (v_i-v_previous)/previous_native_dt projected on accepted current body axis. Initial ax=0. No filter, future state, speed derivative or same-step load solve. Means weighted by duration the cached load would be used.",
+  "All": {
+    "States": 13933,
+    "Minimum": 0.5229318622051786,
+    "Maximum": 0.6149886979318051,
+    "TimeWeightedMean": 0.5723250891703328
+  },
+  "Phases": {
+    "straight": {
+      "States": 4750,
+      "Minimum": 0.5229318622051786,
+      "Maximum": 0.6149886979318051,
+      "TimeWeightedMean": 0.6019098277737915
+    },
+    "entry": {
+      "States": 2521,
+      "Minimum": 0.5230733021585268,
+      "Maximum": 0.6101159119197448,
+      "TimeWeightedMean": 0.5390276420435259
+    },
+    "middle": {
+      "States": 3210,
+      "Minimum": 0.5344195820665686,
+      "Maximum": 0.5965825327983579,
+      "TimeWeightedMean": 0.5444116668198186
+    },
+    "exit": {
+      "States": 3452,
+      "Minimum": 0.5450897089065067,
+      "Maximum": 0.6026234056400358,
+      "TimeWeightedMean": 0.581975355094583
+    }
+  },
+  "OutsideNonnegativeLoads": 0,
+  "RunFirstBend": true,
+  "GateRule": "At least 2 percentage points difference in a bend phase justifies ONE short run, not a parameter sweep.",
+  "SourceHashes": {
+    "eight-laps.csv.gz": "02772CA5DBE181AC2BA5FF08E98A815BA7B47929C869D292CE984D2B5652B061",
+    "eight-laps.json": "1B0685D10AD18140413E77C98EEB508DD97326B270CCE936E8B01528E4B8B88D",
+    "first-bend.csv.gz": "532667AB2AFBCEC381C1033C865EC994F3F573703F27C87565C2A701DF04B995",
+    "first-bend.json": "E5C0731E3370E68464DD07C93EEAD70CA746D8BB7F0F5956E6325B2F98D8C4B7"
+  }
+}
