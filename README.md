@@ -8,6 +8,11 @@ uses one Box2D.NET world and causal rider observations. Recommendation B: full
 contact-free heats work; crowded-contact sensitivity and post-crash boundaries
 still block adoption. Production CoreSim and defaults remain unchanged.
 
+[500cc Motorcycle Performance](docs/experiments/motorcycle-performance-500cc.md)
+adds independent default-OFF engine-curve and load-based tyre variants. Combined,
+they reach112.22km/h after62m from18m/s; legacy reaches81.48km/h. The original
+steering loses stability in the first Egg Mild bend; longer trials stay gated.
+
 [Adaptive Rider Decisions](docs/experiments/adaptive-rider-decisions.md) adds a
 default-OFF single-rider choice of throttle and temporary turning intent over
 #113 physical steering, with #114 load transfer OFF. Eight laps complete with

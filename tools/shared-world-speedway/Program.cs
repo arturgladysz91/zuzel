@@ -2,6 +2,7 @@ using System.Text.Json;
 using SharedWorldSpeedway;
 
 var scenario = args.FirstOrDefault() ?? "A";
+if(scenario=="motorcycle-performance"){MotorcyclePerformanceAudit.Run(args[1],args[2]);return;}
 if(scenario=="adaptive-rider"){AdaptiveRiderAudit.Run(args[1],args[2]);return;}
 if (scenario == "dynamic-axle-load-light") { DynamicAxleLoadAudit.Run(args[1], args[2]); return; }
 if (scenario == "physical-steering") { PhysicalSteeringAudit.Run(args[1], args[2]); return; }

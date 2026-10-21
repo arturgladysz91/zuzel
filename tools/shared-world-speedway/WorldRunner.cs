@@ -100,6 +100,12 @@ public sealed class WorldRunner : IDisposable
             || Parameters.YawResponseSeconds <= 0 || Parameters.PredictionSeconds <= 0
             || Parameters.RecoverySeconds <= 0) throw new ArgumentOutOfRangeException(nameof(parameters));
         specs = riders.OrderBy(r => r.Profile.Id).ToArray();
+        if((Parameters.Enable500CcEngine||Parameters.EnableLoadBasedTyreGrip)&&(!Parameters.EnableTwoContactBikeDynamics||!Parameters.EnablePhysicalSteeringControl
+            ||Parameters.EnableDynamicAxleLoad||Parameters.ExperimentalDrive is not null)
+            ||Parameters.Engine500 is not null&&!Parameters.Enable500CcEngine||Parameters.LoadBasedTyres is not null&&!Parameters.EnableLoadBasedTyreGrip)
+            throw new ArgumentException("Performance variants require two contacts, physical steering, static loads and no legacy envelope override.");
+        Parameters.Engine500?.Validate();Parameters.LoadBasedTyres?.Validate();
+        if(Parameters.Enable500CcEngine&&specs.Any(s=>s.SpeedMetersPerSecond<=0))throw new ArgumentException("500cc Stage1 supports rolling starts only; no clutch model.");
         if(Parameters.EnableAdaptiveRiderControl&&(!Parameters.EnableTwoContactBikeDynamics||!Parameters.EnablePhysicalSteeringControl
             ||Parameters.EnableDynamicAxleLoad||Parameters.EnableLocalOffsetLimit||authoredPath is not null||diagnosticPathGuidance
             ||controls?.Any()==true||spatialControls?.Any()==true||steeringCommands?.Any()==true))
