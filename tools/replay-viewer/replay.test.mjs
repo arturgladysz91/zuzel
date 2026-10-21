@@ -1,7 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { Replay, parseCsv, angleAt, angleDelta, worldCapsules, crossSection, decisionStatus, authoredReplayDocument } from './model.mjs';
+import { gunzipSync } from 'node:zlib';
+import { Replay, parseCsv, parseNativeCsv, angleAt, angleDelta, worldCapsules, crossSection, decisionStatus, authoredReplayDocument, motionVectors, bendJumps, boundaryStatus } from './model.mjs';
+import { currentRecordings, readGzip } from './recordings.mjs';
 
 const geometry = JSON.parse(readFileSync(new URL('./geometry.json', import.meta.url), 'utf8'));
 const fixture = name => {
@@ -11,6 +13,78 @@ const fixture = name => {
   return { csv, json, replay: new Replay(csv, json) };
 };
 const near = (a, b, epsilon = 1e-8) => assert.ok(Math.abs(a - b) < epsilon, `${a} != ${b}`);
+const currentFixture = key => {
+  const config = currentRecordings[key], folder = new URL(config.root, import.meta.url);
+  const document = JSON.parse(readFileSync(new URL(config.name + '.json', folder), 'utf8'));
+  const csv = readFileSync(new URL(config.name + '-accepted.csv', folder), 'utf8');
+  const gzip = readFileSync(new URL(config.name + '-tracking.csv.gz', folder));
+  const native = gunzipSync(gzip).toString('utf8');
+  return { config, document, csv, gzip, native, replay: new Replay(csv, authoredReplayDocument(document, 8), native) };
+};
+test('Current four recordings retain every native XY/heading/velocity and constant actuator', () => {
+  assert.equal(Object.keys(currentRecordings).length, 4);
+  for (const key of Object.keys(currentRecordings)) {
+    const { csv, document, native, replay } = currentFixture(key);
+    assert.equal(replay.result.Fingerprint, document.Result.Fingerprint);
+    assert.ok(parseCsv(csv).every(p => p.drive === 1));
+    const lines = native.trim().split(/\r?\n/), header = lines.shift().split(',');
+    assert.ok(lines.length > 12000);
+    for (const line of lines) {
+      const cells = line.split(','), value = name => Number(cells[header.indexOf(name)]);
+      const state = replay.state(1, value('t'), false);
+      near(state.x, value('x'), 1e-6); near(state.y, value('y'), 1e-6);
+      near(state.heading, value('body_heading'), 1e-6); near(state.vx, value('vx'), 1e-6); near(state.vy, value('vy'), 1e-6);
+      near(state.speed, value('speed'), 1e-6); near(state.target, value('target'), 1e-6); assert.equal(state.drive, 1);
+    }
+  }
+});
+test('Exact snapshot playback never turns rendering interpolation into another physics state', () => {
+  const { replay, csv } = currentFixture('current-full-inner');
+  const points = replay.tracks.get(1), left = points[210], right = points[211], time = (left.t + right.t) / 2;
+  const exact = replay.state(1, time, false), smooth = replay.state(1, time, true);
+  assert.equal(exact.x, left.x); assert.equal(exact.heading, left.heading); assert.equal(exact.interpolated, false);
+  assert.equal(smooth.interpolated, true); near(smooth.x, (left.x + right.x) / 2);
+  near(smooth.renderVx, (left.vx + right.vx) / 2); assert.equal(smooth.vx, left.vx);
+  assert.equal(replay.step(left.t, 1), right.t);
+  assert.equal(replay.state(1, replay.duration).x, points.at(-1).x);
+  const changed = parseCsv(csv); changed[1].drive = .5;
+  assert.throws(() => parseNativeCsv('irrelevant', changed), /stałego gazu/);
+});
+test('Native body heading and velocity define distinct vectors, signed slip and physical capsules', () => {
+  const { replay } = currentFixture('current-baseline-inner'), state = replay.state(1, 1.5, false), motion = motionVectors(state);
+  near(motion.beta, state.heading - Math.atan2(state.vy, state.vx)); assert.ok(Math.abs(motion.beta) > .05);
+  near(Math.hypot(motion.heading.x, motion.heading.y), 1); near(motion.velocity.x, .2 * state.vx);
+  const parts = worldCapsules(geometry, state), chassis = parts.find(p => p.component === 'Chassis');
+  near(Math.hypot(chassis.end.x - chassis.start.x, chassis.end.y - chassis.start.y) + 2 * chassis.radiusMeters, 2.1);
+  near(angleDelta(state.heading, Math.atan2(chassis.end.y - chassis.start.y, chassis.end.x - chassis.start.x)), 0);
+  assert.equal(motionVectors({ heading: 0, vx: 0, vy: 0 }).beta, null);
+});
+test('WIDE incomplete certificates remain distinct from observed edge crossings', () => {
+  for (const key of Object.keys(currentRecordings)) {
+    const { config, document } = currentFixture(key);
+    assert.equal(boundaryStatus(document).level, config.wide ? 'caution' : 'safe');
+    assert.ok(document.MinimumInner > 0 && document.MinimumOuter > 0);
+  }
+  assert.equal(boundaryStatus({ MinimumInner: -.001, MinimumOuter: 1, BoundarySafe: false }).level, 'unsafe');
+});
+test('Both bend jumps land on recorded lead-in snapshots with native resolution', () => {
+  const shape = JSON.parse(readFileSync(new URL('../../docs/experiments/progressive-bend-width/progressive-b-geometry.json', import.meta.url)));
+  for (const key of Object.keys(currentRecordings)) {
+    const { replay } = currentFixture(key), track = replay.tracks.get(1), jumps = bendJumps(shape, track);
+    assert.equal(jumps.length, 2); assert.ok(jumps[0] < jumps[1]);
+    for (let bend = 0; bend < 2; bend++) {
+      const target = shape.segments.filter(s => s.type === 'TurnEntry')[bend].startReferenceMeters - 3;
+      const i = track.findIndex(p => p.t === jumps[bend]); assert.ok(i >= 0); assert.ok(track[i].reference >= target);
+      if (i) assert.ok(track[i - 1].reference < target);
+    }
+    assert.ok(track.slice(1).every((p, i) => p.t - track[i].t <= .01000001));
+  }
+});
+test('Browser gzip decompression reads the original native bytes without a simulator', async () => {
+  const { gzip, native } = currentFixture('current-full-wide');
+  assert.equal(await readGzip(new Response(gzip)), native);
+  await assert.rejects(() => readGzip(new Response('', { status: 404 })), /Brak natywnego/);
+});
 test('#106 valid A/B and rejected overspeed preserve native poses and classification', () => {
   const folder = new URL('../../docs/experiments/speed-grip-line-crossover/', import.meta.url);
   const plans = JSON.parse(readFileSync(new URL('viewer-paths.json', folder), 'utf8'));

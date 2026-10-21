@@ -1,4 +1,5 @@
-import { Replay, parseCsv, clamp, enumName, decisionStatus, crossSection, worldCapsules, authoredReplayDocument } from './model.mjs?audit=106';
+import { Replay, parseCsv, clamp, enumName, decisionStatus, crossSection, worldCapsules, authoredReplayDocument, motionVectors, bendJumps, boundaryStatus } from './model.mjs?view=110';
+import { currentRecordings, readGzip } from './recordings.mjs?view=110';
 
 const $ = id => document.getElementById(id);
 const canvas = $('track'), context = canvas.getContext('2d');
@@ -12,6 +13,11 @@ const localRoot = '../../docs/experiments/local-offset-limit/';
 const widthRoot = '../../docs/experiments/progressive-bend-width/';
 const inverseRoot = '../../docs/experiments/inverse-feasibility-matched-apex/';
 const crossoverRoot = '../../docs/experiments/speed-grip-line-crossover/';
+const currentGroup = document.createElement('optgroup'); currentGroup.label = 'Obecna fizyka · pełny gaz';
+for (const [key, recording] of Object.entries(currentRecordings)) {
+  const option = document.createElement('option'); option.value = key; option.textContent = recording.label; currentGroup.append(option);
+}
+$('scenario').prepend(currentGroup);
 for (const [name, label] of [['inner', 'INNER · bezpieczna kontrola'], ['wide', 'WIDE STRAIGHT · bezpieczna kontrola'], ['stress', '200 km/h · ODRZUCONY']]) {
   const option = document.createElement('option'); option.value = 'crossover-viewer-' + name; option.textContent = '#106 · ' + label; $('scenario').append(option);
 }
@@ -28,6 +34,7 @@ let geometry, nativeGeometry, replay, time = 0, selected = 1, playing = false, d
 let width = 0, height = 0, dpr = 1, fitScale = 1, eventNodes = [], lastPanelTime = -1;
 const camera = { x: 0, y: 0, scale: 1 };
 const color = id => colors[[...replay.tracks.keys()].indexOf(id) % colors.length];
+const displayState = (id = selected) => replay.state(id, time, $('smooth').checked);
 const worldToScreen = p => ({ x: width / 2 + (p.x - camera.x) * camera.scale, y: height / 2 - (p.y - camera.y) * camera.scale });
 const screenToWorld = p => ({ x: camera.x + (p.x - width / 2) / camera.scale, y: camera.y - (p.y - height / 2) / camera.scale });
 const pointPath = (points, close = false) => {
@@ -45,14 +52,27 @@ function fit() {
 }
 function zoom(factor, anchor = { x: width / 2, y: height / 2 }) {
   const before = screenToWorld(anchor);
-  camera.scale = clamp(camera.scale * factor, fitScale * .5, fitScale * 25);
+  camera.scale = clamp(camera.scale * factor, fitScale * .5, Math.max(fitScale * 25, 120));
   if (!$('follow').checked) { const after = screenToWorld(anchor); camera.x += before.x - after.x; camera.y += before.y - after.y; }
   dirty = true;
 }
 function resize() {
+  const previous = { ...camera }, following = $('follow').checked;
   const rect = $('canvas-wrap').getBoundingClientRect(); width = rect.width; height = rect.height;
   dpr = Math.min(devicePixelRatio || 1, 2); canvas.width = Math.round(width * dpr); canvas.height = Math.round(height * dpr);
   fit(); dirty = true;
+  if (following) { Object.assign(camera, previous); $('follow').checked = true; }
+}
+function closeup() {
+  if (!replay) return;
+  const state = displayState(); camera.x = state.x; camera.y = state.y;
+  camera.scale = Math.max(24, Math.min(38, Math.min(width, height) / 12));
+  $('follow').checked = true; dirty = true;
+}
+function jumpBend(index) {
+  if (!replay) return;
+  const at = bendJumps(geometry, replay.tracks.get(selected))[index];
+  if (at != null) { setPlaying(false); setTime(at); closeup(); }
 }
 function setTime(value, immediate = true) {
   if (!replay) return;
@@ -66,6 +86,8 @@ function chooseRider(id) {
   selected = id;
   for (const button of $('riders').children) { const current = Number(button.dataset.id) === id; button.classList.toggle('selected', current); button.setAttribute('aria-pressed', String(current)); }
   $('follow-id').textContent = `R${id}`; rebuildEvents(); lastPanelTime = -1; dirty = true;
+  const jumps = bendJumps(geometry, replay.tracks.get(id));
+  for (let i = 0; i < 2; i++) { $('bend-' + (i + 1)).disabled = jumps[i] == null; $('bend-' + (i + 1)).title = jumps[i] == null ? 'Brak zapisanego najazdu' : `Najazd 3 m przed łukiem · próbka ${format(jumps[i])} s`; }
 }
 function rebuildEvents() {
   if (!replay) return;
@@ -97,7 +119,7 @@ function rebuildEvents() {
   dirty = true; lastPanelTime = -1;
 }
 function updatePanel() {
-  const state = replay.state(selected, time), last = state.lastDecision;
+  const state = displayState(), last = state.lastDecision, motion = motionVectors(state);
   $('clock').textContent = `${format(time)} / ${format(replay.duration)} s`;
   $('rider-name').textContent = `R${selected}`; $('rider-name').style.color = color(selected);
   $('speed').textContent = format(state.speed * 3.6, 1); $('drive').textContent = `${format(state.drive * 100, 1)}%`;
@@ -108,6 +130,10 @@ function updatePanel() {
   $('lap').textContent = state.finished ? `${state.totalLaps}/${state.totalLaps} · meta ${format(state.finish)} s` : `${state.lap}/${state.totalLaps} · ukończono ${state.completedLaps}`;
   $('intent').textContent = enumName(geometry, 'intent', state.intent);
   $('sample-at').textContent = `${format(state.sampleTime)} s${state.stale ? ' · ostatni' : state.interpolated ? ' · pozycja interpolowana' : ' · zaakceptowany'}`;
+  $('slip-angle').textContent = motion.beta == null ? '—' : `${format(motion.beta * 180 / Math.PI, 1)}°`;
+  $('body-angle').textContent = `${format(state.heading * 180 / Math.PI, 1)}°`;
+  $('velocity-angle').textContent = motion.beta == null ? '—' : `${format(motion.travel * 180 / Math.PI, 1)}°`;
+  $('vector-note').textContent = state.interpolated ? 'XY, heading i wektory interpolowane do renderingu; bez nowych kroków fizyki.' : `Geometria, wektory i β z tego samego snapshotu ${format(state.sampleTime)} s.`;
   $('last-reason').textContent = last ? last.Reason || enumName(geometry, 'action', last.Action) : 'Brak obserwacji w tym czasie';
   $('last-state').textContent = last ? `${statusLabels[decisionStatus(last, time)]} · ${enumName(geometry, 'channels', last.Channels ?? 0)} · obserwacja ${format(last.ObservedAt)} s · plan ${format(last.RequestedActivation)} s${last.ActualActivation != null && last.ActualActivation <= time ? ` · aktywacja ${format(last.ActualActivation)} s` : ''}${last.CancelledAt != null && last.CancelledAt <= time ? ` · anulowanie ${format(last.CancelledAt)} s` : ''}` : 'Pozycje i sterowanie pochodzą z zapisu.';
   $('previous').disabled = replay.step(time, -1) == null; $('next').disabled = replay.step(time, 1) == null;
@@ -130,10 +156,53 @@ function updatePanel() {
   $('pose-note').hidden = absent.length === 0;
   $('pose-note').textContent = absent.map(s => `R${s.id}: ostatnia pozycja ${format(s.sampleTime)} s${s.finished ? ` · meta ${format(s.finish)} s` : ''}`).join(' | ') + ' · bez ekstrapolacji';
 }
+function drawMotion(state) {
+  const motion = motionVectors(state), start = worldToScreen(state);
+  const arrow = (dx, dy, shade, label) => {
+    const tip = worldToScreen({ x: state.x + dx, y: state.y + dy }), angle = Math.atan2(tip.y - start.y, tip.x - start.x);
+    context.strokeStyle = shade; context.fillStyle = shade; context.lineWidth = 2; context.setLineDash([]);
+    context.beginPath(); context.moveTo(start.x, start.y); context.lineTo(tip.x, tip.y); context.stroke();
+    context.beginPath(); context.moveTo(tip.x, tip.y);
+    context.lineTo(tip.x - 9 * Math.cos(angle - .4), tip.y - 9 * Math.sin(angle - .4));
+    context.lineTo(tip.x - 9 * Math.cos(angle + .4), tip.y - 9 * Math.sin(angle + .4)); context.closePath(); context.fill();
+    if (camera.scale >= 12) { context.font = '600 11px Segoe UI'; context.fillText(label, tip.x + 8, tip.y - 5); }
+  };
+  arrow(motion.heading.x * 3.4, motion.heading.y * 3.4, '#ffd27b', 'heading');
+  if (motion.beta != null) {
+    arrow(motion.velocity.x, motion.velocity.y, '#8eb8ff', 'v · 0,2 s');
+    const radius = 2.3, points = Array.from({ length: 25 }, (_, i) => {
+      const angle = motion.travel + motion.beta * i / 24;
+      return { x: state.x + radius * Math.cos(angle), y: state.y + radius * Math.sin(angle) };
+    });
+    pointPath(points); context.strokeStyle = '#edb1ec'; context.lineWidth = 2; context.stroke();
+    if (camera.scale >= 12) {
+      const angle = motion.travel + motion.beta / 2, at = worldToScreen({ x: state.x + 1.7 * Math.cos(angle), y: state.y + 1.7 * Math.sin(angle) });
+      context.font = '600 12px Segoe UI'; context.fillStyle = '#f3c4f3'; context.fillText(`β ${format(motion.beta * 180 / Math.PI, 1)}°`, at.x + 3, at.y + 16);
+    }
+  }
+}
+function drawOverview(sections, states) {
+  if (camera.scale < fitScale * 2 || width < 600) return;
+  const size = 172, left = width - size - 14, top = 14;
+  const outer = sections.map(p => p.outer), inner = sections.map(p => p.inner);
+  const minX = Math.min(...outer.map(p => p.x)), maxX = Math.max(...outer.map(p => p.x));
+  const minY = Math.min(...outer.map(p => p.y)), maxY = Math.max(...outer.map(p => p.y));
+  const scale = Math.min((size - 20) / (maxX - minX), 78 / (maxY - minY));
+  const at = p => ({ x: left + size / 2 + (p.x - (minX + maxX) / 2) * scale, y: top + 64 - (p.y - (minY + maxY) / 2) * scale });
+  context.save(); context.setLineDash([]); context.fillStyle = '#10202ded'; context.fillRect(left, top, size, 116);
+  context.strokeStyle = '#3d5565'; context.lineWidth = 1; context.strokeRect(left, top, size, 116);
+  context.font = '10px Segoe UI'; context.fillStyle = '#b6c8d5'; context.fillText('Cały tor · oba brzegi', left + 10, top + 15);
+  for (const [points, shade] of [[outer, '#e8b67e'], [inner, '#e4e8de']]) {
+    context.beginPath(); points.forEach((p, i) => { const s = at(p); i ? context.lineTo(s.x, s.y) : context.moveTo(s.x, s.y); });
+    context.closePath(); context.strokeStyle = shade; context.stroke();
+  }
+  for (const state of states) { const p = at(state); context.beginPath(); context.arc(p.x, p.y, 3, 0, Math.PI * 2); context.fillStyle = color(state.id); context.fill(); }
+  context.restore();
+}
 function draw() {
   context.setTransform(dpr, 0, 0, dpr, 0, 0); context.clearRect(0, 0, width, height);
   if (!geometry || !replay) return;
-  if ($('follow').checked) { const rider = replay.state(selected, time); camera.x = rider.x; camera.y = rider.y; }
+  if ($('follow').checked) { const rider = displayState(); camera.x = rider.x; camera.y = rider.y; }
   // An unobtrusive metric grid is an overlay, not track geometry.
   const lo = screenToWorld({ x: 0, y: height }), hi = screenToWorld({ x: width, y: 0 });
   context.strokeStyle = '#20333b'; context.lineWidth = .5; context.setLineDash([]);
@@ -155,7 +224,7 @@ function draw() {
     context.strokeStyle = widthColors[i]; context.lineWidth = 1.5; context.stroke();
   }
   if ($('compare-lines').checked) for (const line of comparisonTrails) {
-    pointPath(line.points); context.strokeStyle = line.color; context.lineWidth = 1.8; context.globalAlpha = .8; context.stroke(); context.globalAlpha = 1;
+    pointPath(line.points); context.strokeStyle = line.color; context.lineWidth = 1.8; context.globalAlpha = .8; context.setLineDash(line.planned ? [8, 5] : []); context.stroke(); context.globalAlpha = 1; context.setLineDash([]);
   }
   context.setLineDash([5, 5]); context.strokeStyle = '#b4e2ce9c'; context.lineWidth = .8;
   pointPath(allSections.map(p => p.reference), true); context.stroke(); context.setLineDash([]);
@@ -165,7 +234,7 @@ function draw() {
   }
   const origin = geometry.segments[0].sections[0]; pointPath([origin.inner, origin.outer]); context.strokeStyle = '#f1e7d1'; context.lineWidth = 2; context.stroke();
   const start = worldToScreen(origin.outer); context.font = '10px Segoe UI'; context.fillStyle = '#b7c9d1'; context.fillText('ref. 0', start.x + 5, start.y + 15);
-  const states = [...replay.tracks.keys()].map(id => replay.state(id, time));
+  const states = [...replay.tracks.keys()].map(id => displayState(id));
   for (const state of states) {
     if ($('trails').checked) {
       const points = replay.tracks.get(state.id).filter(p => p.t <= time);
@@ -191,10 +260,12 @@ function draw() {
       context.lineWidth = part.radiusMeters * 2 * camera.scale; context.stroke();
     }
     context.lineCap = 'butt'; context.globalAlpha = 1;
+    if (state.id === selected && $('vectors').checked) drawMotion(state);
     const labelX = pos.x + 11, labelY = pos.y - 12;
     context.font = '600 12px Segoe UI'; context.lineWidth = 4; context.strokeStyle = '#10202d'; context.strokeText(`R${state.id}`, labelX, labelY);
     context.fillStyle = color(state.id); context.fillText(`R${state.id}`, labelX, labelY);
   }
+  drawOverview(allSections, states);
   const rawMeters = 75 / camera.scale, unit = 10 ** Math.floor(Math.log10(rawMeters));
   const meters = unit * (rawMeters / unit >= 5 ? 5 : rawMeters / unit >= 2 ? 2 : 1), pixels = meters * camera.scale;
   context.strokeStyle = '#a4bac7'; context.lineWidth = 1; context.beginPath(); context.moveTo(width - 25 - pixels, height - 22); context.lineTo(width - 25, height - 22); context.stroke();
@@ -205,20 +276,21 @@ async function loadScenario(key) {
   $('load-state').textContent = 'Wczytywanie zaakceptowanych stanów…';
   try {
     const base = sources[key];
+    const recording = currentRecordings[key];
     const inverse = key.startsWith('inverse-');
     const crossover = key.startsWith('crossover-');
-    const authored = inverse || crossover;
+    const authored = inverse || crossover || !!recording;
     const progressive = key.startsWith('width-');
     const widthA = key.startsWith('width-a-');
     const local = key.startsWith('local-') || progressive;
-    const line = crossover ? key.slice(10) : inverse ? key.slice(8) : progressive ? (widthA ? 'egg-mild-' + key.slice(8) : 'progressive-' + key.slice(6)) : local ? key.slice(6) : key.startsWith('shape-') ? key.slice(6) : key.startsWith('wheel-') ? key.slice(6) : key.startsWith('line-') ? key.slice(5) : null;
-    const selectedRoot = crossover ? crossoverRoot : inverse ? inverseRoot : progressive && !widthA ? widthRoot : local ? localRoot : key.startsWith('shape-') ? shapeRoot : key.startsWith('wheel-') ? wheelRoot : lineRoot;
-    const [csvResponse, jsonResponse] = await Promise.all(line
-      ? [fetch(`${selectedRoot}${line}-accepted.csv`), fetch(`${selectedRoot}${line}.json`)]
+    const line = recording ? recording.name : crossover ? key.slice(10) : inverse ? key.slice(8) : progressive ? (widthA ? 'egg-mild-' + key.slice(8) : 'progressive-' + key.slice(6)) : local ? key.slice(6) : key.startsWith('shape-') ? key.slice(6) : key.startsWith('wheel-') ? key.slice(6) : key.startsWith('line-') ? key.slice(5) : null;
+    const selectedRoot = recording ? recording.root : crossover ? crossoverRoot : inverse ? inverseRoot : progressive && !widthA ? widthRoot : local ? localRoot : key.startsWith('shape-') ? shapeRoot : key.startsWith('wheel-') ? wheelRoot : lineRoot;
+    const [csvResponse, jsonResponse, nativeResponse] = await Promise.all(line
+      ? [fetch(`${selectedRoot}${line}-accepted.csv`), fetch(`${selectedRoot}${line}.json`), recording ? fetch(`${selectedRoot}${line}-tracking.csv.gz`) : null]
       : [fetch(`${dataRoot}${base}-accepted.csv`), fetch(`${dataRoot}${base}-ON.json`)]);
     if (!csvResponse.ok || !jsonResponse.ok) throw new Error('Nie znaleziono zapisów przejazdu. Uruchom serwer z katalogu repozytorium.');
-    const [csv, rawJson] = await Promise.all([csvResponse.text(), jsonResponse.json()]);
-    const json = authored ? authoredReplayDocument(rawJson, crossover ? (key.endsWith('-stress') ? 1 : 8) : null) : rawJson;
+    const [csv, rawJson, nativeCsv] = await Promise.all([csvResponse.text(), jsonResponse.json(), recording ? readGzip(nativeResponse) : null]);
+    const json = authored ? authoredReplayDocument(rawJson, recording ? 8 : crossover ? (key.endsWith('-stress') ? 1 : 8) : null) : rawJson;
     let nextGeometry = nativeGeometry;
     if (authored) {
       const response = await fetch(widthRoot + 'progressive-b-geometry.json');
@@ -231,7 +303,11 @@ async function loadScenario(key) {
       if (!response.ok) throw new Error('Nie znaleziono geometrii tego przejazdu.');
       nextGeometry = await response.json();
     }
-    const comparisons = crossover ? await (async () => {
+    const comparisons = recording ? await (async () => {
+      const response = await fetch(crossoverRoot + 'viewer-paths.json'); if (!response.ok) throw new Error('Brak zapisanej linii C3.');
+      return (await response.json()).filter(p => p.name === (recording.wide ? 'crossover-wide-straight' : 'crossover-inner'))
+        .map(p => ({ name: 'Plan C3 · ' + p.name, color: '#badd98', planned: true, points: p.points }));
+    })() : crossover ? await (async () => {
       const response = await fetch(crossoverRoot + 'viewer-paths.json'); if (!response.ok) throw new Error('Brak planowanych linii #106.');
       return (await response.json()).map((p, i) => ({ name: p.name + ' (plan C3)', color: ['#9be6a8', '#82bfff'][i], rejected: false, points: p.points }));
     })() : inverse ? await (async () => {
@@ -272,14 +348,30 @@ async function loadScenario(key) {
     $('safety-note').textContent = crossover ? `#106 · ${key.endsWith('-stress') ? 'ODRZUCONY: 200 km/h, wyjazd poza bandę; bez rankingu' : 'PASS: wolniejsza kontrola, bezpieczny tracking'} · kolorowe plany C3, turkusowy ślad Box2D. Obrys i pozycje bez korekt.` : inverse ? `#105 · ${json.BoundarySafe ? 'prześwit PASS' : 'prześwit FAIL'} · czas diagnostyczny; brak konstruktywnego dowodu inverse. Kolorowe linie: plany, turkusowy ślad: Box2D.` : local ? `${json.Plan.Name} · ${json.Evaluation.Feasible ? 'WYKONALNY' : 'ODRZUCONY'} · min banda ${format(json.Evaluation.MinimumOuterClearanceMeters, 3)} m · wymagane ≥0,5 m` : '';
     $('safety-note').title = local ? json.Evaluation.Rejections.join(', ') : '';
     $('safety-note').classList.toggle('unsafe', (crossover && key.endsWith('-stress')) || (local && !json.Evaluation.Feasible));
+    $('safety-note').classList.remove('caution');
+    $('recording-mode').hidden = !(recording || key === 'pack' || key === 'solo');
+    $('recording-mode').textContent = recording ? recording.mode + ' · pełny gaz 100%' : 'HISTORYCZNY #95 · starsza fizyka, sprzed niezależnego tylnego koła #100';
+    if (recording) {
+      const status = boundaryStatus(rawJson);
+      $('safety-note').textContent = `${status.text} · min kreda ${format(rawJson.MinimumInner, 3)} m / banda ${format(rawJson.MinimumOuter, 3)} m · tracking FAIL`;
+      $('safety-note').classList.toggle('unsafe', status.level === 'unsafe');
+      $('safety-note').classList.toggle('caution', status.level === 'caution');
+      $('safety-note').title = `Between-step bound kreda ${format(rawJson.ConservativeInner, 3)} m / banda ${format(rawJson.ConservativeOuter, 3)} m. Brak certyfikatu nie oznacza zaobserwowanego crossing.`;
+    }
     document.querySelector('.map-title span').textContent = (authored || local || key.startsWith('shape-')) ? 'GEOMETRIA EKSPERYMENTALNA' : 'MOTOARENA · TORUŃ';
     canvas.setAttribute('aria-label', authored ? 'Tor progressive-b; pozycje i yaw z zapisu przejazdu' : (local || key.startsWith('shape-')) ? `Tor ${json.Geometry}; pozycje i yaw z zapisu przejazdu` : 'Motoarena w skali metrycznej. Wybierz zawodnika klikając motocykl.');
     document.querySelector('.map-title small').textContent = crossover ? '#106 · progressive-b · INNER / WIDE STRAIGHT / overspeed' : inverse ? '#105 · progressive-b · matched apex / legalne siły' : progressive ? `#103 · ${widthA ? 'A' : key[6].toUpperCase()} · bandy: A pomarańczowa / B turkusowa / C fioletowa` : local ? `#102 · ${json.Geometry} · obrys + 0,5 m` : key.startsWith('shape-') ? `#101 · ${json.Geometry} · metry` : 'Geometria modelu · metry';
-    replay = new Replay(csv, json); selected = [...replay.tracks.keys()][0];
+    if (recording) document.querySelector('.map-title small').textContent = 'progressive-b · zapis Box2D · plan C3';
+    replay = new Replay(csv, json, nativeCsv); selected = [...replay.tracks.keys()][0];
+    $('smooth').checked = !recording;
+    if (recording) $('rate').value = '0.1';
+    const track = replay.tracks.get(selected), gap = track.slice(1).reduce((maximum, p, i) => Math.max(maximum, p.t - track[i].t), 0);
+    $('sampling-note').textContent = `${recording ? 'Native snapshoty' : 'Zapis CSV'} · max Δt ${format(gap * 1000, 1)} ms · interpolacja = rendering, nie symulacja`;
     const buttons = [...replay.tracks.keys()].map(id => { const button = document.createElement('button'); button.textContent = `R${id}`;
       button.dataset.id = String(id); button.style.setProperty('--rider', color(id)); button.addEventListener('click', () => chooseRider(id)); return button; });
     $('riders').replaceChildren(...buttons); $('source-count').textContent = `${replay.tracks.size} ${replay.tracks.size === 1 ? 'motocykl' : 'motocykle'}`;
     $('scrub').max = String(replay.duration); setTime(0); chooseRider(selected); fit(); $('load-state').hidden = true;
+    if (recording) jumpBend(0);
   } catch (error) {
     if (generation !== loadGeneration) return;
     replay = null; $('load-state').hidden = false; $('load-state').classList.add('error');
@@ -294,8 +386,10 @@ $('play').addEventListener('click', () => { if (replay && time >= replay.duratio
 $('scrub').addEventListener('input', e => { setPlaying(false); setTime(e.target.value); });
 for (const [id, direction] of [['previous', -1], ['next', 1]]) $(id).addEventListener('click', () => { if (!replay) return; setPlaying(false); const t = replay.step(time, direction); if (t != null) setTime(t); });
 $('fit').addEventListener('click', fit); $('zoom-in').addEventListener('click', () => zoom(1.25)); $('zoom-out').addEventListener('click', () => zoom(.8));
+$('closeup').addEventListener('click', closeup);
+for (let i = 0; i < 2; i++) $('bend-' + (i + 1)).addEventListener('click', () => jumpBend(i));
 $('follow').addEventListener('change', () => { if ($('follow').checked) camera.scale = Math.max(camera.scale, fitScale * 3); dirty = true; });
-for (const id of ['trails', 'targets', 'segments', 'outer-limit', 'compare-lines', 'compare-widths']) $(id).addEventListener('change', () => { dirty = true; });
+for (const id of ['trails', 'targets', 'segments', 'outer-limit', 'compare-lines', 'compare-widths', 'vectors', 'smooth']) $(id).addEventListener('change', () => { dirty = true; lastPanelTime = -1; });
 $('all-events').addEventListener('change', rebuildEvents);
 canvas.addEventListener('wheel', e => { e.preventDefault(); const r = canvas.getBoundingClientRect(); zoom(Math.exp(-e.deltaY * .0015), { x: e.clientX - r.left, y: e.clientY - r.top }); }, { passive: false });
 let drag = null;
@@ -310,7 +404,7 @@ canvas.addEventListener('pointermove', e => {
 canvas.addEventListener('pointerup', e => {
   if (drag && !drag.moved && replay) {
     const mouse = { x: e.clientX - drag.rect.left, y: e.clientY - drag.rect.top };
-    const riders = [...replay.tracks.keys()].map(id => ({ id, ...worldToScreen(replay.state(id, time)) }));
+    const riders = [...replay.tracks.keys()].map(id => ({ id, ...worldToScreen(displayState(id)) }));
     riders.sort((a, b) => Math.hypot(a.x - mouse.x, a.y - mouse.y) - Math.hypot(b.x - mouse.x, b.y - mouse.y));
     if (riders[0] && Math.hypot(riders[0].x - mouse.x, riders[0].y - mouse.y) < Math.max(20, camera.scale * 1.4)) chooseRider(riders[0].id);
   }
@@ -335,6 +429,6 @@ try {
   const response = await fetch('./geometry.json'); if (!response.ok) throw new Error('Nie znaleziono geometrii modelu.');
   nativeGeometry = await response.json(); geometry = nativeGeometry;
   const requested = new URL(location.href).searchParams.get('case');
-  if ([...$('scenario').options].some(o => o.value === requested)) $('scenario').value = requested;
+  $('scenario').value = [...$('scenario').options].some(o => o.value === requested) ? requested : 'current-baseline-inner';
   await loadScenario($('scenario').value);
 } catch (error) { $('load-state').classList.add('error'); $('load-state').textContent = `${error.message}\nUruchom statyczny serwer HTTP z katalogu repozytorium (instrukcja w README).`; }
