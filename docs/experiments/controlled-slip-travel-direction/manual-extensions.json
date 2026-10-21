@@ -1,0 +1,18 @@
+{
+  "InitialProtocolPreserved": true,
+  "DiagnosticWorlds": 5,
+  "FullLaps": 0,
+  "AutomaticParameterSearch": false,
+  "Extensions": [
+    {
+      "Stage": "rider-wide",
+      "Reason": "Partial Drive0.35 remained turn-deficient; test the same explicit throttle with a wider target7."
+    },
+    {
+      "Stage": "rider-coast",
+      "Reason": "Wider target with partial throttle still remained turn-deficient; explicit coast0 at0.2s at original target5."
+    }
+  ],
+  "DiagnosticCorrection": "BetaDot is derived in double from recorded PsiDot minus ChiDot. Only derived #117 diagnostics were normalized; accepted states, applied forces and fingerprints unchanged. No native prefix rerun.",
+  "CountsExclude": "Targeted regression/determinism unit-test replays, reported separately."
+}
