@@ -43,6 +43,7 @@ public sealed class WorldRunner : IDisposable
     private readonly AuthoredRacingPath? authoredPath;
     private readonly bool diagnosticPathGuidance;
     private readonly bool diagnosticPathPreview;
+    private readonly AdaptiveRiderControl? adaptiveRider;
     public WorldSnapshot Snapshot => new(TimeSeconds, Array.AsReadOnly((RiderView[])views.Clone())) {
         RearWheels=rearWheels.Length==0?null:rearWheels.Select((w,i)=>w.View(specs[i].Profile.Id)).ToArray(),
         Steering=twoContactStates.Length==0?null:twoContactStates.Select((s,i)=>new SteeringView(specs[i].Profile.Id,s.SteeringRadians)).ToArray(),
@@ -99,6 +100,11 @@ public sealed class WorldRunner : IDisposable
             || Parameters.YawResponseSeconds <= 0 || Parameters.PredictionSeconds <= 0
             || Parameters.RecoverySeconds <= 0) throw new ArgumentOutOfRangeException(nameof(parameters));
         specs = riders.OrderBy(r => r.Profile.Id).ToArray();
+        if(Parameters.EnableAdaptiveRiderControl&&(!Parameters.EnableTwoContactBikeDynamics||!Parameters.EnablePhysicalSteeringControl
+            ||Parameters.EnableDynamicAxleLoad||Parameters.EnableLocalOffsetLimit||authoredPath is not null||diagnosticPathGuidance
+            ||controls?.Any()==true||spatialControls?.Any()==true||steeringCommands?.Any()==true))
+            throw new ArgumentException("Adaptive rider needs isolated physical steering, static loads and no authored guidance/controls.");
+        adaptiveRider=Parameters.EnableAdaptiveRiderControl?new(Frame):null;
         this.steeringCommands=(steeringCommands??Array.Empty<TwoContactSteeringCommand>()).OrderBy(c=>c.AtSeconds).ToArray();
         if(Parameters.EnableDynamicAxleLoad&&(!Parameters.EnableTwoContactBikeDynamics||!Parameters.EnablePhysicalSteeringControl
             ||Parameters.AxleLoadHeightMeters is { } height&&(!double.IsFinite(height)||height<=0))||!Parameters.EnableDynamicAxleLoad&&Parameters.AxleLoadHeightMeters is not null)
@@ -222,6 +228,16 @@ public sealed class WorldRunner : IDisposable
             {
                 TimeSeconds = nextTime;
                 Activate();
+                if(adaptiveRider is not null&&TimeSeconds+1e-10>=adaptiveRider.NextReviewSeconds){
+                    var started=Stopwatch.GetTimestamp();
+                    var decision=adaptiveRider.Decide(views[0],specs[0],Frame,surface,Parameters,TimeSeconds,physics.Masses[0],physics.Inertias[0],rearWheels[0],twoContactStates[0]);
+                    Work.AdaptiveReviews++;Work.AdaptivePredictionForces+=decision.Candidates.Sum(c=>c.ForceEvaluations);
+                    Work.AdaptiveContactQueries+=decision.Candidates.Sum(c=>c.ContactQueries);
+                    Work.AdaptiveElapsedMilliseconds+=Stopwatch.GetElapsedTime(started).TotalMilliseconds;
+                    if(decision.Changed)Work.ControlChanges++;
+                    views[0]=views[0] with{Drive=decision.Chosen.Drive,TargetOffsetMeters=decision.Chosen.OffsetMeters};
+                    diagnostics?.AdaptiveRider?.Invoke(decision);
+                }
                 var nominalDuration = Math.Min(stepSeconds / subdivisions, end - TimeSeconds);
                 var duration = UntilControlDeadline(nominalDuration);
                 var controlDuration = duration;
@@ -612,6 +628,7 @@ public sealed class WorldRunner : IDisposable
         // Binary accepted states, not rounded reports. Independent of input collection order.
         Span<double> data = stackalloc double[14];
         Span<double> wheelData=stackalloc double[1];var wheelIndex=0;
+        if(adaptiveRider is not null){wheelData[0]=adaptiveRider.NextReviewSeconds;hash.AppendData(System.Runtime.InteropServices.MemoryMarshal.AsBytes(wheelData));}
         foreach (var v in views)
         {
             data[0] = TimeSeconds; data[1] = v.Id; data[2] = v.Position.X; data[3] = v.Position.Y;

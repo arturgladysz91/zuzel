@@ -1,0 +1,509 @@
+{
+  "BaseHead": "7f7ff47c926e2ecbd8a34f82abf27dbc0de14f77",
+  "InitialMatches": true,
+  "ShortNativePrefixMatches": true,
+  "OffFingerprint": "58BD07E50184FD2AD852FB2DE68529CBD9B6B2B0435072A790E959A0500870C0",
+  "HistoricalHashes": {
+    "autonomous-racing-line": 34,
+    "close-racing-following-gap": 41,
+    "coupled-slip-inverse": 40,
+    "full-contact-yaw-feedforward": 31,
+    "full-heat-and-solo-validation": 51,
+    "full-throttle-slide-grip-audit": 45,
+    "inverse-feasibility-matched-apex": 66,
+    "local-offset-limit": 35,
+    "natural-racing-line-vs-inner": 25,
+    "physics-driven-racing-line": 21,
+    "progressive-bend-width": 51,
+    "proportional-throttle-control": 36,
+    "racing-line-root-cause": 62,
+    "rear-wheel-dynamics": 88,
+    "slip-control-validation": 42,
+    "slip-coupled-dynamics": 63,
+    "speed-grip-line-crossover": 132,
+    "track-geometry-variants": 43,
+    "two-contact-bike-dynamics": 53,
+    "physical-steering-control": 26,
+    "dynamic-axle-load-light": 12
+  },
+  "Trials": {
+    "inner-first-bend": {
+      "TimeSeconds": 5.82,
+      "LapEndTimes": [],
+      "LapDurations": [],
+      "DistanceMeters": 105.46950680017471,
+      "MeanSpeedKph": 65.23792727238491,
+      "MinimumSpeedKph": 62.999979400634764,
+      "MaximumSpeedKph": 67.21987609863281,
+      "OffsetMinimum": 0.7845031335199549,
+      "OffsetMaximum": 1.7328978822909844,
+      "OffsetSpan": 0.9483947487710295,
+      "MeanAbsBetaDegrees": 4.7452401878575605,
+      "MaximumAbsBetaDegrees": 7.137819068846347,
+      "MeanWheelspin": 0.10279496458131172,
+      "MaximumWheelspin": 0.1264317631426327,
+      "DriveChanges": 0,
+      "MinimumThrottleDwellSeconds": 5.82,
+      "PartialDriveSeconds": 0,
+      "NativeSteps": 584,
+      "MinimumInner": 1.3489813977392817,
+      "MinimumOuter": 8.948020198495465,
+      "ConservativeInner": 1.241067115057808,
+      "ConservativeOuter": 8.84365530622948,
+      "Energy": {
+        "Engine": 39256.945643852494,
+        "FrontLoss": 14533.014951181618,
+        "RearLateralLoss": 8394.986969948108,
+        "RearLongitudinalLoss": 3597.2626878032834,
+        "Bearing": 423.77970463918376,
+        "ResistanceWork": -11150.177483232932,
+        "FrontWork": -14533.014951181618,
+        "RearWork": 26537.423903680145,
+        "BodyChange": 854.178432132041,
+        "WheelChange": 303.4923777816925,
+        "Residual": -0.053037133633552
+      },
+      "ImpulseAccounting": {
+        "MeasuredNativeImpulseErrorWorkJoules": -0.05303713354316757,
+        "AbsoluteWorkBoundJoules": 2.7868847283303646
+      },
+      "UnexplainedEnergyJoules": -9.038443604669766e-11
+    },
+    "adaptive-first-bend": {
+      "TimeSeconds": 5.82,
+      "LapEndTimes": [],
+      "LapDurations": [],
+      "DistanceMeters": 105.53329952061176,
+      "MeanSpeedKph": 65.27731959049244,
+      "MinimumSpeedKph": 63.06219635009766,
+      "MaximumSpeedKph": 67.22708587646484,
+      "OffsetMinimum": 0.7837257845079342,
+      "OffsetMaximum": 1.7071118586224334,
+      "OffsetSpan": 0.9233860741144992,
+      "MeanAbsBetaDegrees": 4.747548896513255,
+      "MaximumAbsBetaDegrees": 7.139674451788885,
+      "MeanWheelspin": 0.10269188928773129,
+      "MaximumWheelspin": 0.1264560911310263,
+      "DriveChanges": 0,
+      "MinimumThrottleDwellSeconds": 5.82,
+      "PartialDriveSeconds": 0,
+      "NativeSteps": 584,
+      "MinimumInner": 1.3478498848518974,
+      "MinimumOuter": 8.92540750607075,
+      "ConservativeInner": 1.2399212643330482,
+      "ConservativeOuter": 8.820964868625925,
+      "Energy": {
+        "Engine": 39266.41399889396,
+        "FrontLoss": 14478.821391465168,
+        "RearLateralLoss": 8402.292823494065,
+        "RearLongitudinalLoss": 3594.5946390666427,
+        "Bearing": 424.21368978822835,
+        "ResistanceWork": -11165.026737614224,
+        "FrontWork": -14478.821391465168,
+        "RearWork": 26539.584195813655,
+        "BodyChange": 895.9585823492234,
+        "WheelChange": 305.7286507312858,
+        "Residual": 0.22251561488337757
+      },
+      "ImpulseAccounting": {
+        "MeasuredNativeImpulseErrorWorkJoules": 0.222515614985357,
+        "AbsoluteWorkBoundJoules": 2.8641155883655705
+      },
+      "UnexplainedEnergyJoules": -1.0197942490464129e-10
+    },
+    "inner-eight-laps": {
+      "TimeSeconds": 139.01,
+      "LapEndTimes": [
+        17.268867713938263,
+        34.67017131693633,
+        52.059258708669844,
+        69.44791917555385,
+        86.8366313134686,
+        104.22535232909647,
+        121.61398597077226,
+        139.00265832720973
+      ],
+      "LapDurations": [
+        17.268867713938263,
+        17.40130360299807,
+        17.38908739173351,
+        17.388660466884005,
+        17.38871213791475,
+        17.388721015627866,
+        17.388633641675796,
+        17.388672356437468
+      ],
+      "DistanceMeters": 2778.8048339909874,
+      "MeanSpeedKph": 71.96325814234211,
+      "MinimumSpeedKph": 62.999979400634764,
+      "MaximumSpeedKph": 83.00808105468751,
+      "OffsetMinimum": 0.08563037692501844,
+      "OffsetMaximum": 8.694290378514047,
+      "OffsetSpan": 8.608660001589028,
+      "MeanAbsBetaDegrees": 3.8578346545027062,
+      "MaximumAbsBetaDegrees": 8.074447463189642,
+      "MeanWheelspin": 0.09141987989101341,
+      "MaximumWheelspin": 0.1264317631426327,
+      "DriveChanges": 0,
+      "MinimumThrottleDwellSeconds": 139.01,
+      "PartialDriveSeconds": 0,
+      "NativeSteps": 13933,
+      "MinimumInner": 0.6197326103174822,
+      "MinimumOuter": 5.296273764671649,
+      "ConservativeInner": 0.49157401960192315,
+      "ConservativeOuter": 5.192065822533214,
+      "Energy": {
+        "Engine": 1018896.9849333832,
+        "FrontLoss": 390415.2184773271,
+        "RearLateralLoss": 179217.3812986646,
+        "RearLongitudinalLoss": 83163.13493767827,
+        "Bearing": 12116.185044665266,
+        "ResistanceWork": -338193.72666602884,
+        "FrontWork": -390415.2184773271,
+        "RearWork": 743279.3642796304,
+        "BodyChange": 14668.850768888122,
+        "WheelChange": 1120.9193727428801,
+        "Residual": -1.5683673880412243
+      },
+      "ImpulseAccounting": {
+        "MeasuredNativeImpulseErrorWorkJoules": -1.5683673882879863,
+        "AbsoluteWorkBoundJoules": 78.51392399784335
+      },
+      "UnexplainedEnergyJoules": 2.46761944211471e-10
+    },
+    "adaptive-eight-laps": {
+      "TimeSeconds": 145.84,
+      "LapEndTimes": [
+        17.166014997059403,
+        35.38159478800413,
+        53.82199418609508,
+        72.2275987028105,
+        90.62959359462556,
+        109.03158578042259,
+        127.43410398377192,
+        145.83667994113773
+      ],
+      "LapDurations": [
+        17.166014997059403,
+        18.215579790944727,
+        18.440399398090953,
+        18.405604516715414,
+        18.401994891815065,
+        18.401992185797027,
+        18.40251820334933,
+        18.402575957365812
+      ],
+      "DistanceMeters": 3009.121071587142,
+      "MeanSpeedKph": 74.27830832053804,
+      "MinimumSpeedKph": 63.06219635009766,
+      "MaximumSpeedKph": 84.66689987182617,
+      "OffsetMinimum": 0.08103416632904488,
+      "OffsetMaximum": 11.75836759587659,
+      "OffsetSpan": 11.677333429547545,
+      "MeanAbsBetaDegrees": 3.7485952187454448,
+      "MaximumAbsBetaDegrees": 8.101337159042075,
+      "MeanWheelspin": 0.07841390634733529,
+      "MaximumWheelspin": 0.1264560911310263,
+      "DriveChanges": 28,
+      "MinimumThrottleDwellSeconds": 0.9999999999999964,
+      "PartialDriveSeconds": 22.799999495942757,
+      "NativeSteps": 14616,
+      "MinimumInner": 0.6129042855733687,
+      "MinimumOuter": 0.5795143988978659,
+      "ConservativeInner": 0.4847995128440488,
+      "ConservativeOuter": 0.47084472342853473,
+      "Energy": {
+        "Engine": 1004262.37174506,
+        "FrontLoss": 341970.70414393046,
+        "RearLateralLoss": 180522.93560668925,
+        "RearLongitudinalLoss": 73093.33158630933,
+        "Bearing": 13228.315690426925,
+        "ResistanceWork": -379389.89079315454,
+        "FrontWork": -341970.70414393046,
+        "RearWork": 736283.5213701916,
+        "BodyChange": 14923.053848009164,
+        "WheelChange": 1134.2674914468623,
+        "Residual": 0.1274149065138772
+      },
+      "ImpulseAccounting": {
+        "MeasuredNativeImpulseErrorWorkJoules": 0.12741490234220537,
+        "AbsoluteWorkBoundJoules": 87.57021210299055
+      },
+      "UnexplainedEnergyJoules": 4.1716718413020715e-09
+    }
+  },
+  "FullSafetyGate": {
+    "Passed": false,
+    "Reference": 2582.2299995422363,
+    "StopReason": null,
+    "Rule": "Executed whole footprint plus existing between-step travel/rotation bound; original energy and native impulse gates. Prediction alone cannot pass the gate."
+  },
+  "FirstWidening": {
+    "TimeSeconds": 9.6,
+    "Chosen": {
+      "Name": "open-full",
+      "Drive": 1,
+      "OffsetMeters": 2.2374465
+    },
+    "Changed": true,
+    "Emergency": false,
+    "Candidates": [
+      {
+        "Action": {
+          "Name": "hold-full",
+          "Drive": 1,
+          "OffsetMeters": 1
+        },
+        "ProgressMeters": 11.830290467650002,
+        "MinimumInner": 1.34252720248401,
+        "MinimumOuter": 10.926293246241361,
+        "MaximumDemandRatio": 1.4614150524139404,
+        "Score": 10.82906834902866,
+        "PredictedSafe": true,
+        "ContactQueries": 210,
+        "ForceEvaluations": 30
+      },
+      {
+        "Action": {
+          "Name": "open-full",
+          "Drive": 1,
+          "OffsetMeters": 2.2374465
+        },
+        "ProgressMeters": 11.830290467650002,
+        "MinimumInner": 1.34252720248401,
+        "MinimumOuter": 10.926293246241361,
+        "MaximumDemandRatio": 1.3842540979385376,
+        "Score": 10.983390257979465,
+        "PredictedSafe": true,
+        "ContactQueries": 210,
+        "ForceEvaluations": 30
+      },
+      {
+        "Action": {
+          "Name": "tighten-partial",
+          "Drive": 0.55,
+          "OffsetMeters": 1
+        },
+        "ProgressMeters": 11.718442212229775,
+        "MinimumInner": 1.34252720248401,
+        "MinimumOuter": 10.946478702075787,
+        "MaximumDemandRatio": 1.417206883430481,
+        "Score": 10.805653003966045,
+        "PredictedSafe": true,
+        "ContactQueries": 210,
+        "ForceEvaluations": 30
+      }
+    ]
+  },
+  "FirstPartialThrottle": {
+    "TimeSeconds": 22,
+    "Chosen": {
+      "Name": "tighten-partial",
+      "Drive": 0.55,
+      "OffsetMeters": 8.710266
+    },
+    "Changed": true,
+    "Emergency": true,
+    "Candidates": [
+      {
+        "Action": {
+          "Name": "open-full",
+          "Drive": 1,
+          "OffsetMeters": 10.222491
+        },
+        "ProgressMeters": 8.755889556257898,
+        "MinimumInner": 10.755536877940344,
+        "MinimumOuter": 0.7693508605046057,
+        "MaximumDemandRatio": 0.820522129535675,
+        "Score": 8.631649311639208,
+        "PredictedSafe": false,
+        "ContactQueries": 378,
+        "ForceEvaluations": 30
+      },
+      {
+        "Action": {
+          "Name": "hold-full",
+          "Drive": 1,
+          "OffsetMeters": 10.210266
+        },
+        "ProgressMeters": 8.755604686256106,
+        "MinimumInner": 10.755483519885606,
+        "MinimumOuter": 0.7702267239040531,
+        "MaximumDemandRatio": 0.821006178855896,
+        "Score": 8.631480169781176,
+        "PredictedSafe": false,
+        "ContactQueries": 378,
+        "ForceEvaluations": 30
+      },
+      {
+        "Action": {
+          "Name": "open-full",
+          "Drive": 1,
+          "OffsetMeters": 11.550273
+        },
+        "ProgressMeters": 8.780457056124305,
+        "MinimumInner": 10.757980463871416,
+        "MinimumOuter": 0.6760532594587431,
+        "MaximumDemandRatio": 0.769068717956543,
+        "Score": 8.642390104839249,
+        "PredictedSafe": false,
+        "ContactQueries": 364,
+        "ForceEvaluations": 30
+      },
+      {
+        "Action": {
+          "Name": "tighten-partial",
+          "Drive": 0.55,
+          "OffsetMeters": 8.710266
+        },
+        "ProgressMeters": 8.601453283828846,
+        "MinimumInner": 10.651551159544166,
+        "MinimumOuter": 0.910526399166537,
+        "MaximumDemandRatio": 0.8842442631721497,
+        "Score": 8.493193975154313,
+        "PredictedSafe": false,
+        "ContactQueries": 294,
+        "ForceEvaluations": 30
+      },
+      {
+        "Action": {
+          "Name": "hold-partial",
+          "Drive": 0.55,
+          "OffsetMeters": 10.210266
+        },
+        "ProgressMeters": 8.653626941530433,
+        "MinimumInner": 10.74474309708836,
+        "MinimumOuter": 0.8117251616339415,
+        "MaximumDemandRatio": 0.7957282662391663,
+        "Score": 8.53472370760739,
+        "PredictedSafe": false,
+        "ContactQueries": 378,
+        "ForceEvaluations": 30
+      }
+    ]
+  },
+  "EmergencyReviews": 110,
+  "FirstEmergency": {
+    "TimeSeconds": 22,
+    "Chosen": {
+      "Name": "tighten-partial",
+      "Drive": 0.55,
+      "OffsetMeters": 8.710266
+    },
+    "Changed": true,
+    "Emergency": true,
+    "Candidates": [
+      {
+        "Action": {
+          "Name": "open-full",
+          "Drive": 1,
+          "OffsetMeters": 10.222491
+        },
+        "ProgressMeters": 8.755889556257898,
+        "MinimumInner": 10.755536877940344,
+        "MinimumOuter": 0.7693508605046057,
+        "MaximumDemandRatio": 0.820522129535675,
+        "Score": 8.631649311639208,
+        "PredictedSafe": false,
+        "ContactQueries": 378,
+        "ForceEvaluations": 30
+      },
+      {
+        "Action": {
+          "Name": "hold-full",
+          "Drive": 1,
+          "OffsetMeters": 10.210266
+        },
+        "ProgressMeters": 8.755604686256106,
+        "MinimumInner": 10.755483519885606,
+        "MinimumOuter": 0.7702267239040531,
+        "MaximumDemandRatio": 0.821006178855896,
+        "Score": 8.631480169781176,
+        "PredictedSafe": false,
+        "ContactQueries": 378,
+        "ForceEvaluations": 30
+      },
+      {
+        "Action": {
+          "Name": "open-full",
+          "Drive": 1,
+          "OffsetMeters": 11.550273
+        },
+        "ProgressMeters": 8.780457056124305,
+        "MinimumInner": 10.757980463871416,
+        "MinimumOuter": 0.6760532594587431,
+        "MaximumDemandRatio": 0.769068717956543,
+        "Score": 8.642390104839249,
+        "PredictedSafe": false,
+        "ContactQueries": 364,
+        "ForceEvaluations": 30
+      },
+      {
+        "Action": {
+          "Name": "tighten-partial",
+          "Drive": 0.55,
+          "OffsetMeters": 8.710266
+        },
+        "ProgressMeters": 8.601453283828846,
+        "MinimumInner": 10.651551159544166,
+        "MinimumOuter": 0.910526399166537,
+        "MaximumDemandRatio": 0.8842442631721497,
+        "Score": 8.493193975154313,
+        "PredictedSafe": false,
+        "ContactQueries": 294,
+        "ForceEvaluations": 30
+      },
+      {
+        "Action": {
+          "Name": "hold-partial",
+          "Drive": 0.55,
+          "OffsetMeters": 10.210266
+        },
+        "ProgressMeters": 8.653626941530433,
+        "MinimumInner": 10.74474309708836,
+        "MinimumOuter": 0.8117251616339415,
+        "MaximumDemandRatio": 0.7957282662391663,
+        "Score": 8.53472370760739,
+        "PredictedSafe": false,
+        "ContactQueries": 378,
+        "ForceEvaluations": 30
+      }
+    ]
+  },
+  "MinimumOuterAt": 41.129999999999995,
+  "MinimumConservativeOuterNear": 41.129999999999995,
+  "FailedConditions": [
+    "ConservativeOuter=0.47084472342853473m < required 0.5m"
+  ],
+  "SourceHashesCanonicalLf": {
+    "tools/shared-world-speedway/AdaptiveRiderControl.cs": "6222601B5B59963D08B4929776EAFED2C8785CE7F0ACD89B4A7CFBACDEDC99FC",
+    "tools/shared-world-speedway/AdaptiveRiderAudit.cs": "51CED9188E9BEA9B2D0732AA5110BA87F29CD7CF7682B262127E0990D5B22129",
+    "tools/shared-world-speedway/WorldRunner.cs": "75B98ECD47ED320F27B89EE478F7ABB7E6DBE15CF109CFDA4DF48A1BE5112672",
+    "tools/shared-world-speedway/WorldModel.cs": "797420020E1F0B7AD45D0F2A239AFE3266DDF35F39302C9E9F64098549A5EEDE",
+    "tools/shared-world-speedway/TwoContactBikeDynamics.cs": "334FFBEEDBC7DB09BCDE611880F1946B09ABCD51786828A90428438FF85EC160",
+    "tools/shared-world-speedway/PhysicalSteeringControl.cs": "75DDD9CEAFB604D6977CD9977967B7AB68C112352F86EA7B7B6565CF95F916CA"
+  },
+  "Budget": {
+    "BaselineExecutedSteeringQueries": 613865.0,
+    "AdaptiveExecutedSteeringQueries": 705656,
+    "PredictionContactQueries": 1031688,
+    "PredictionForces": 106290,
+    "PredictionGeometryQueries": 109833,
+    "ExtraNativeWorldsInPrediction": 0,
+    "BoundaryQueriesNotIncluded": true,
+    "BoundaryForceEvaluations": 43,
+    "QueryRatio": 2.8301727578539255,
+    "OriginalContactEvaluationsRatio": 2.9599489007610726,
+    "PlanningMilliseconds": 3449.1999999999944,
+    "PlanningMillisecondsPerReview": 4.724931506849307,
+    "NativeStepsRatio": 1.0490203114907055,
+    "FirstBend": {
+      "InnerQueries": 28826,
+      "AdaptiveQueries": 28896,
+      "PredictionQueries": 41790,
+      "PredictionForces": 4200,
+      "NativeSteps": 584
+    }
+  },
+  "Rule": "No crossing observed; positive conservative crossing bounds. Full gate FAIL: conservative outer margin <0.5m. No promotion or further variant sweep. INNER 8-lap evidence reused, not rerun. Offset from <=0.2m frozen geometry samples; native exact extrema are in metrics JSON. Timings are diagnostic, not a matched benchmark."
+}

@@ -8,6 +8,11 @@ uses one Box2D.NET world and causal rider observations. Recommendation B: full
 contact-free heats work; crowded-contact sensitivity and post-crash boundaries
 still block adoption. Production CoreSim and defaults remain unchanged.
 
+[Adaptive Rider Decisions](docs/experiments/adaptive-rider-decisions.md) adds a
+default-OFF single-rider choice of throttle and temporary turning intent over
+#113 physical steering, with #114 load transfer OFF. Eight laps complete with
+real throttle changes, but the conservative outer safety-margin gate FAILS.
+
 [Dynamic Axle Load LIGHT (#114)](docs/experiments/dynamic-axle-load-light.md)
 tests default-OFF load allocation cached from accepted velocity differences.
 One first bend stays safe, but the unchanged steering inverse uses 12.3% more

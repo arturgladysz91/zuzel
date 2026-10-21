@@ -25,6 +25,16 @@ Stage1 excludes traffic, old yaw/inverse flags, lean and load transfer. Axle/ste
 inputs are provisional; energy-stable isolated tests do not certify track safety.
 Production CoreSim remains unchanged.
 
+[Adaptive Rider Decisions](experiments/adaptive-rider-decisions.md) is a
+PROVISIONAL, default-OFF single-rider controller requiring #113 physical steering
+and static #112 axle budgets. It rejects authored paths/controls, traffic and
+#114 dynamic loads. At accepted-state reviews it evaluates at most five temporary
+throttle/offset intents through disposable short contact predictions. Only the
+chosen controls enter the real world; Box2D still exclusively integrates accepted
+motion. Predictions do not commit real body/wheel/steering or surface state.
+They are estimates, not safety certificates: eight laps complete, but the unchanged
+executed outer-margin gate FAILS. No production scheduling change follows.
+
 [Dynamic Axle Load LIGHT (#114)](experiments/dynamic-axle-load-light.md) is a
 separate default-OFF hypothesis requiring two-contact physics and #113 steering.
 One cached allocation per accepted state uses the previous native velocity

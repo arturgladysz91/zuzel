@@ -19,6 +19,7 @@ public sealed class WorldDiagnostics
     public Action<RearWheelObservation>? RearWheel { get; init; }
     public Action<CoupledSlipInverseObservation>? CoupledSlipInverse { get; init; }
     public Action<TwoContactObservation>? TwoContact { get; init; }
+    public Action<AdaptiveRiderDecision>? AdaptiveRider {get;init;}
 }
 /// <summary>One accepted wheel interval; Before/After are actual Box2D poses.</summary>
 public readonly record struct RearWheelObservation(double TimeSeconds,int RiderId,RiderView Before,RiderView After,RearWheelStep Step);

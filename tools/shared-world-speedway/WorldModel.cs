@@ -25,6 +25,8 @@ public sealed record WorldParameters
     public bool EnablePhysicalSteeringControl { get; init; }
     [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
     public bool EnableDynamicAxleLoad { get; init; }
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+    public bool EnableAdaptiveRiderControl {get;init;}
     [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
     public double? AxleLoadHeightMeters {get;init;}
     [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
@@ -101,6 +103,14 @@ public sealed record ContactEvent(int RiderA, int RiderB, double TimeSeconds, st
     double ImpulseNewtonSeconds, double SeverityRatioA, double SeverityRatioB, double NormalClosingSpeed = 0);
 public sealed class WorldWork
 {
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+    public long AdaptiveReviews;
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+    public long AdaptivePredictionForces;
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+    public long AdaptiveContactQueries;
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+    public double AdaptiveElapsedMilliseconds;
     [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
     public long AxleLoadUpdates;
     public long PhysicsUpdates, SolverCalls, AiUpdates, PairChecks, Threats, ContactManifolds, SolvedPoints,
