@@ -2,6 +2,7 @@ using System.Text.Json;
 using SharedWorldSpeedway;
 
 var scenario = args.FirstOrDefault() ?? "A";
+if (scenario == "physical-steering") { PhysicalSteeringAudit.Run(args[1], args[2]); return; }
 if (scenario == "two-contact-bike") { TwoContactBikeAudit.Run(args[1], args[2]); return; }
 if (scenario == "natural-line") { NaturalRacingLineAudit.Run(args[1], args[2]); return; }
 if (scenario == "full-contact-yaw") { FullContactYawAudit.Run(args[1], args[2]); return; }

@@ -41,6 +41,8 @@ public readonly record struct TwoContactForces(Vector2 FrontPoint,Vector2 RearPo
     Vector2 BodyForward,Vector2 FrontLeft,Vector2 BodyLeft,float FrontLateral,float RearLateral,float RearLongitudinal,
     float Budget,float SteeringRequest,float SteeringBefore,float SteeringUsed,float SteeringAfter,float Demand)
 {
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
+    public PhysicalSteeringDecision? SteeringControl {get;init;}
     public Vector2 NetForce=>FrontForce+RearForce+Resistance;
     public float FrontTorque=>Cross(FrontArm,FrontForce);
     public float RearTorque=>Cross(RearArm,RearForce);
@@ -55,7 +57,7 @@ public static class TwoContactBikeDynamics
 {
     public static TwoContactForces Forces(RiderView v,RiderSpec spec,TrackFrame frame,TrackStateSnapshot surface,WorldParameters p,
         double time,float mass,RearWheelState wheel,TwoContactBikeState state,float seconds,PathGuidanceSample? path=null,
-        float? steeringOverride=null,Action<ForceObservation>? observe=null,Action<TwoContactObservation>? observeContacts=null)
+        float? steeringOverride=null,Action<ForceObservation>? observe=null,Action<TwoContactObservation>? observeContacts=null,float? inertia=null)
     {
         if(!p.EnableTwoContactBikeDynamics||!p.EnableSlipCoupledDynamics||!p.EnableRearWheelDynamics||p.EnableCoupledSlipInverse||p.EnableFullContactYawFeedForward
             ||!float.IsFinite(seconds)||seconds is <0 or >.020001f||!float.IsFinite(mass)||mass<=0||!float.IsFinite(v.Speed)||!float.IsFinite(v.Heading)
@@ -79,9 +81,20 @@ public static class TwoContactBikeDynamics
             demand=longitudinal*longitudinal*q.FeedForwardCurvature+MeterPoint.Dot(delta,q.Outward)/(response*response)+2*MeterPoint.Dot(velocity,q.Outward)/response;
         }
         // A direction/curvature request moves ONLY the front wheel. No beta target,
-        // heading write, yaw PD, counter-torque or ideal trajectory constraint.
+        // heading write, direct body-yaw actuator or ideal trajectory constraint.
         var headingError=BikeAngles.Wrap((path?.Heading??road.Heading)-v.Heading);
         var requested=steeringOverride??(float)BikeAngles.Wrap(headingError+Math.Atan((geometry.FrontAxleFromComMeters+geometry.RearAxleFromComMeters)*demand/Math.Max(speed*speed,.25f)));
+        PhysicalSteeringDecision? control=null;
+        if(p.EnablePhysicalSteeringControl&&steeringOverride is null){
+            if(inertia is not { } moment||!float.IsFinite(moment)||moment<=0)throw new ArgumentException("Physical steering requires actual body inertia.");
+            // Pure local contact queries: separate uncommitted wheel/steering wrappers,
+            // identical accepted rigid-body state, original tyre/engine equations.
+            var original=p with{EnablePhysicalSteeringControl=false};
+            TwoContactForces Response(float delta)=>Forces(v,spec,frame,surface,original,time,mass,
+                new RearWheelState(wheel.AngularVelocityRadPerSecond*wheel.Parameters.WheelRadiusMeters,wheel.Parameters),new(delta),seconds,path,delta);
+            control=PhysicalSteeringControl.Decide(v,(float)demand,mass,moment,p.SlipYawResponseSeconds,geometry,state.SteeringRadians,seconds,Response);
+            requested=control.AngleRequestRadians;
+        }
         var bounded=Math.Clamp(requested,-geometry.MaximumSteeringRadians,geometry.MaximumSteeringRadians);
         var after=state.SteeringRadians+Math.Clamp(bounded-state.SteeringRadians,-geometry.SteeringRateRadiansPerSecond*seconds,geometry.SteeringRateRadiansPerSecond*seconds);
         state.PreparedSteeringRadians=after;var used=(state.SteeringRadians+after)/2;
@@ -112,7 +125,7 @@ public static class TwoContactBikeDynamics
         wheel.Prepared=contact with{FrontLateralNewtons=0}; // front now has its OWN axes/velocity, recorded separately.
         var rearForce=forward*contact.LongitudinalNewtons+left*contact.RearLateralNewtons;
         var result=new TwoContactForces(frontPoint,rearPoint,frontArm,rearArm,vf,vr,frontForce,rearForce,resistance,forward,frontLeft,left,
-            fyFront,contact.RearLateralNewtons,contact.LongitudinalNewtons,budget,requested,state.SteeringRadians,used,after,(float)demand);
+            fyFront,contact.RearLateralNewtons,contact.LongitudinalNewtons,budget,requested,state.SteeringRadians,used,after,(float)demand){SteeringControl=control};
         observe?.Invoke(new(time,v,result.NetForce,result.NetTorque,(float)(mass*demand),Vector2.Dot(result.FrontForce+result.RearForce,new(-road.Tangent.Y,road.Tangent.X)),budget,
             Vector2.Dot(result.NetForce,road.Tangent),"two-contact"));
         observeContacts?.Invoke(new(time,v.Id,result));return result;
