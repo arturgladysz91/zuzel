@@ -1,0 +1,27 @@
+{
+  "Passed": true,
+  "Checks": {
+    "A-straight-coast": true,
+    "A-straight-drive": true,
+    "B-left": true,
+    "B-right": true,
+    "C-spin-ramp": true,
+    "C-coast": true,
+    "D-beta20": true,
+    "D-beta35": true,
+    "D-beta50": true,
+    "D-beta-minus35": true,
+    "D-front-minus": true,
+    "D-front-plus": true,
+    "E-rest": true,
+    "E-spin-only": true,
+    "E-low-speed": true,
+    "E-left-h20": true,
+    "E-left-h5": true,
+    "E-left-repeat": true,
+    "repeat": true,
+    "turn signs": true,
+    "convergence": true
+  },
+  "Rule": "Isolated completion/passivity/energy0.15J, zero old yaw, sign, exact repeat and native-step convergence. C# tests additionally audit impulses/budgets/low-speed endpoints."
+}

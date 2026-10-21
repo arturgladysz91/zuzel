@@ -8,6 +8,13 @@ uses one Box2D.NET world and causal rider observations. Recommendation B: full
 contact-free heats work; crowded-contact sensitivity and post-crash boundaries
 still block adoption. Production CoreSim and defaults remain unchanged.
 
+[Two Contact Bike Dynamics, Stage1](docs/experiments/two-contact-bike-dynamics.md)
+adds default-OFF `EnableTwoContactBikeDynamics` in that same experimental world.
+Front steering and local axle velocities generate moments through actual Box2D
+point forces, with the old yaw actuator excluded. Isolated tests preserve energy
+and turn signs; the first track trial runs wide and stops. Grade B: mechanical
+foundation with provisional steering/axle data, not a calibrated drifting model.
+
 [Rear Wheel Dynamics (#100)](docs/experiments/rear-wheel-dynamics.md) adds default-OFF
 `EnableRearWheelDynamics`, requiring slip dynamics. Its independent wheel state,
 combined rear contact and whole-system energy ledger remain PROVISIONAL.

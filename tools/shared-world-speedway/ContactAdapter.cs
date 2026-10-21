@@ -24,8 +24,11 @@ public sealed class ContactAdapter : IDisposable
     private readonly double[,] closingSpeeds;
     private readonly bool[,] interacting;
     private readonly bool[,] active;
-    public ContactAdapter(IReadOnlyList<RiderSpec> specs, TrackFrame frame, WorldParameters p)
+    private readonly bool twoContactsEnabled;
+    public ContactAdapter(IReadOnlyList<RiderSpec> specs, TrackFrame frame, WorldParameters p,TwoContactInitialState? twoContactInitial=null)
     {
+        if(twoContactInitial is not null&&!p.EnableTwoContactBikeDynamics)throw new ArgumentException("Controlled initial spin/heading require the opt-in variant.");
+        twoContactsEnabled=p.EnableTwoContactBikeDynamics;
         var wd = b2DefaultWorldDef(); wd.gravity = new(0, 0); wd.enableSleep = false;
         wd.hitEventThreshold = .01f; // event observation only; restitution remains zero
         World = b2CreateWorld(wd);
@@ -38,6 +41,9 @@ public sealed class ContactAdapter : IDisposable
             var bd = b2DefaultBodyDef(); bd.type = B2BodyType.b2_dynamicBody;
             bd.position = To(at.Position); bd.rotation = b2MakeRot((float)at.Road.Heading);
             bd.linearVelocity = To(at.Road.Tangent * spec.SpeedMetersPerSecond + at.Road.Outward * spec.InitialOutwardSpeed);
+            if(twoContactInitial is { } initial){
+                bd.rotation=b2MakeRot((float)at.Road.Heading+initial.BetaRadians);
+            }
             bd.enableSleep = false; bd.isBullet = spec.Bullet;
             Bodies[i] = b2CreateBody(World, bd);
             var sd = b2DefaultShapeDef(); sd.density = 1;
@@ -59,6 +65,10 @@ public sealed class ContactAdapter : IDisposable
             var inertia = natural.rotationalInertia / natural.mass * Masses[i];
             b2Body_SetMassData(Bodies[i], new() { mass = Masses[i], center = new(0, 0), rotationalInertia = inertia });
             Inertias[i] = inertia;
+            // Set the controlled initial spin AFTER the final CoM/mass. Box2D's
+            // mass updates transport linear velocity when CoM shifts; an earlier
+            // nonzero spin would therefore alter the requested initial v_CoM.
+            if(twoContactInitial is { } initialSpin)b2Body_SetAngularVelocity(Bodies[i],initialSpin.BodyAngularVelocity);
         }
     }
     public static B2Vec2 To(Vector2 v) => new(v.X, v.Y);
@@ -68,8 +78,17 @@ public sealed class ContactAdapter : IDisposable
             b2Rot_GetAngle(b2Body_GetRotation(Bodies[i])), b2Body_GetAngularVelocity(Bodies[i]));
     public void Force(int i, Vector2 force, float torque)
     {
+        if(twoContactsEnabled)throw new InvalidOperationException("Direct yaw torque is excluded in the two-contact variant.");
         b2Body_ApplyForceToCenter(Bodies[i], To(force), true);
         b2Body_ApplyTorque(Bodies[i], torque, true);
+    }
+    public void ForcesAtContacts(int i,TwoContactForces f)
+    {
+        if(!twoContactsEnabled)throw new InvalidOperationException("Point-force variant is OFF.");
+        b2Body_ApplyForce(Bodies[i],To(f.FrontForce),To(f.FrontPoint),true);
+        b2Body_ApplyForce(Bodies[i],To(f.RearForce),To(f.RearPoint),true);
+        b2Body_ApplyForceToCenter(Bodies[i],To(f.Resistance),true);
+        // NO ApplyTorque here: Box2D already computes both r x F moments.
     }
     public void Step(float seconds, int substeps) => b2World_Step(World, seconds, substeps);
     public void ReadContacts(RiderView[] views, WorldWork work, Action<int, int, double, double> onEpisode,

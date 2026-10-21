@@ -10,8 +10,20 @@ extension of that same experimental world. Box2D exclusively integrates the body
 one scalar rear-wheel angular velocity is committed once per actual accepted
 interval. A local dissipative contact equation couples its torque reaction to
 the single force applied to Box2D. The energy ledger includes the body and wheel.
-The front/rear budget split is static and both forces act at the body center;
-there are no two-axle contact moments or changes to production CoreSim.
+With the two-contact flag OFF, the front/rear budget split is static and both
+forces act at the body center; there are no two-axle contact moments.
+
+[Two Contact Bike Dynamics, Stage1](experiments/two-contact-bike-dynamics.md)
+adds a default-OFF tools-only branch in the same WorldRunner and ContactAdapter.
+The original rear contact is evaluated at its local point velocity; the original
+front lateral law uses its separate steered frame. Box2D receives two point forces
+and center resistance, never an additional yaw torque. The inherited scalar wheel
+midpoint includes the front force as an external longitudinal load. One body step,
+one wheel commit and one rate-limited steering commit share the accepted clock.
+The new ledger measures point-velocity work, including rotation exactly once.
+Stage1 excludes traffic, old yaw/inverse flags, lean and load transfer. Axle/steering
+inputs are provisional; energy-stable isolated tests do not certify track safety.
+Production CoreSim remains unchanged.
 
 [Full Contact Yaw Feed-Forward (#109)](experiments/full-contact-yaw-feedforward.md)
 adds a default-OFF tools flag requiring the #108 coupled inverse. It selects the

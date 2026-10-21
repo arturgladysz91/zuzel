@@ -38,11 +38,14 @@ public sealed class WorldRunner : IDisposable
     private int nextControl;
     private bool disposed;
     private readonly RearWheelState[] rearWheels;
+    private readonly TwoContactBikeState[] twoContactStates;
+    private readonly TwoContactSteeringCommand[] steeringCommands;
     private readonly AuthoredRacingPath? authoredPath;
     private readonly bool diagnosticPathGuidance;
     private readonly bool diagnosticPathPreview;
     public WorldSnapshot Snapshot => new(TimeSeconds, Array.AsReadOnly((RiderView[])views.Clone())) {
-        RearWheels=rearWheels.Length==0?null:rearWheels.Select((w,i)=>w.View(specs[i].Profile.Id)).ToArray() };
+        RearWheels=rearWheels.Length==0?null:rearWheels.Select((w,i)=>w.View(specs[i].Profile.Id)).ToArray(),
+        Steering=twoContactStates.Length==0?null:twoContactStates.Select((s,i)=>new SteeringView(specs[i].Profile.Id,s.SteeringRadians)).ToArray() };
     public RearWheelView RearWheel(int riderId)
     {
         if(rearWheels.Length==0)throw new InvalidOperationException("Rear wheel dynamics are OFF.");
@@ -60,7 +63,8 @@ public sealed class WorldRunner : IDisposable
         WorldDiagnostics? diagnostics = null, IEnumerable<ControlCommand>? controls = null,
         TrackStateSnapshot? frozenSurface = null, IEnumerable<SpatialControlCommand>? spatialControls = null,
         TrackShapeVariant? trackShape = null,AuthoredRacingPath? authoredPath=null,bool diagnosticPathGuidance=false,bool diagnosticPathPreview=false,
-        AuthoredSteadyStart? diagnosticSteadyStart=null)
+        AuthoredSteadyStart? diagnosticSteadyStart=null,TwoContactInitialState? twoContactInitial=null,
+        IEnumerable<TwoContactSteeringCommand>? steeringCommands=null)
     {
         this.diagnostics = diagnostics;
         Parameters = parameters ?? new();
@@ -94,6 +98,16 @@ public sealed class WorldRunner : IDisposable
             || Parameters.YawResponseSeconds <= 0 || Parameters.PredictionSeconds <= 0
             || Parameters.RecoverySeconds <= 0) throw new ArgumentOutOfRangeException(nameof(parameters));
         specs = riders.OrderBy(r => r.Profile.Id).ToArray();
+        this.steeringCommands=(steeringCommands??Array.Empty<TwoContactSteeringCommand>()).OrderBy(c=>c.AtSeconds).ToArray();
+        if(Parameters.EnableTwoContactBikeDynamics){
+            if(!Parameters.EnableSlipCoupledDynamics||!Parameters.EnableRearWheelDynamics||Parameters.EnableCoupledSlipInverse||Parameters.EnableFullContactYawFeedForward
+                ||specs.Length!=1||specs.Any(s=>s.TrafficEnabled||s.Passive))throw new ArgumentException("Two-contact Stage1 requires one active isolated rider, wheel physics and old yaw/inverse variants OFF.");
+            var bike=Parameters.TwoContactBike??TwoContactBikeParameters.Default;bike.Validate(Parameters.RearWheel??RearWheelParameters.Default);twoContactInitial?.Validate(bike);
+            if(this.steeringCommands.Any(c=>!double.IsFinite(c.AtSeconds)||c.AtSeconds<0||!float.IsFinite(c.AngleRadians)||!specs.Any(s=>s.Profile.Id==c.RiderId))
+                ||this.steeringCommands.Select(c=>(c.RiderId,c.AtSeconds)).Distinct().Count()!=this.steeringCommands.Length)
+                throw new ArgumentException("Unique finite accepted-time steering commands required.");
+        }else if(Parameters.TwoContactBike is not null||twoContactInitial is not null||this.steeringCommands.Length>0)
+            throw new ArgumentException("Two-contact settings/initial states/steering require the opt-in variant.");
         if(Parameters.EnableFullContactYawFeedForward&&!Parameters.EnableCoupledSlipInverse)
             throw new ArgumentException("Full-contact yaw experiment requires the frozen coupled inverse control.");
         if(Parameters.EnableCoupledSlipInverse&&(!Parameters.EnableRearWheelDynamics||!diagnosticPathGuidance
@@ -162,7 +176,7 @@ public sealed class WorldRunner : IDisposable
                 if (!float.IsFinite(cell.Grip)||!float.IsFinite(cell.Ruts)||!float.IsFinite(cell.Moisture))
                     throw new ArgumentException("Surface values must be finite.", nameof(frozenSurface));
             }
-        physics = new(specs, Frame, Parameters);
+        physics = new(specs, Frame, Parameters,twoContactInitial);
         pending = new DecisionEvent?[specs.Length];
         pendingThrottle = Parameters.EnableProportionalTrafficThrottle ? new DecisionEvent?[specs.Length] : Array.Empty<DecisionEvent?>();
         nextDecision = new double[specs.Length]; recoveryUntil = new double[specs.Length];
@@ -177,13 +191,17 @@ public sealed class WorldRunner : IDisposable
         }).ToArray();
         rearWheels=Parameters.EnableRearWheelDynamics?views.Select(v=>new RearWheelState(diagnosticSteadyStart is { } initial?
             initial.RearWheelOmega*(Parameters.RearWheel??RearWheelParameters.Default).WheelRadiusMeters:v.ForwardSpeed,Parameters.RearWheel)).ToArray():Array.Empty<RearWheelState>();
+        if(twoContactInitial?.RearWheelOmega is { } initialOmega)rearWheels[0]=new(initialOmega*(Parameters.RearWheel??RearWheelParameters.Default).WheelRadiusMeters,Parameters.RearWheel);
+        twoContactStates=Parameters.EnableTwoContactBikeDynamics?specs.Select(_=>new TwoContactBikeState(twoContactInitial?.SteeringRadians??0)).ToArray():Array.Empty<TwoContactBikeState>();
         Record();
     }
     public RunResult Run(string name, double stepSeconds, double maximumSeconds, int requiredLaps = 0,
-        Action<WorldSnapshot>? acceptedObserver = null, bool stopOnCrash = false, bool lapsFromInitialPosition = false)
+        Action<WorldSnapshot>? acceptedObserver = null, bool stopOnCrash = false, bool lapsFromInitialPosition = false,Func<WorldSnapshot,bool>? diagnosticStop=null)
     {
         if (TimeSeconds != 0 || stepSeconds is not (.005 or .01 or .02) || !double.IsFinite(maximumSeconds)
             || maximumSeconds <= 0 || requiredLaps < 0) throw new ArgumentException("Run once at 5/10/20 ms.");
+        if(diagnosticStop is not null&&!Parameters.EnableTwoContactBikeDynamics)throw new ArgumentException("Stage1 diagnostic stop is only available for the two-contact variant.");
+        var diagnosticHalted=false;
         var aiEvery = (int)Math.Round(Parameters.AiIntervalSeconds / stepSeconds);
         var ticks = checked((int)Math.Ceiling(maximumSeconds / stepSeconds));
         for (var tick = 0; tick < ticks; tick++)
@@ -208,13 +226,20 @@ public sealed class WorldRunner : IDisposable
                 for (var i = 0; i < specs.Length; i++)
                 {
                     if(rearWheels.Length>0)Work.RearWheelForceEvaluations++;
-                    var force = diagnosticPathGuidance?SlipCoupledDynamics.Forces(views[i],specs[i],Frame,surface,Parameters,
-                        TimeSeconds,physics.Masses[i],physics.Inertias[i],diagnostics?.Force,diagnostics?.Slip,diagnostics?.YawLimit,
-                        rearWheels[i],(float)duration,authoredPath!.Guidance(views[i],Parameters,diagnosticPathPreview),diagnostics?.CoupledSlipInverse):
-                        RiderController.Forces(views[i], specs[i], Frame, surface, Parameters,
-                        TimeSeconds, physics.Masses[i], physics.Inertias[i], diagnostics?.Force, diagnostics?.Slip, diagnostics?.YawLimit,
-                        rearWheels.Length==0?null:rearWheels[i],rearWheels.Length==0?0:(float)duration);
-                    physics.Force(i, force.Force, force.Torque);
+                    (System.Numerics.Vector2 Force,float Torque) force;
+                    if(Parameters.EnableTwoContactBikeDynamics){
+                        var contact=TwoContactBikeDynamics.Forces(views[i],specs[i],Frame,surface,Parameters,TimeSeconds,physics.Masses[i],rearWheels[i],twoContactStates[i],(float)duration,
+                            diagnosticPathGuidance?authoredPath!.Guidance(views[i],Parameters,diagnosticPathPreview):null,SteeringOverride(views[i].Id),diagnostics?.Force,diagnostics?.TwoContact);
+                        physics.ForcesAtContacts(i,contact);force=(contact.NetForce,contact.NetTorque);
+                    }else{
+                        force = diagnosticPathGuidance?SlipCoupledDynamics.Forces(views[i],specs[i],Frame,surface,Parameters,
+                            TimeSeconds,physics.Masses[i],physics.Inertias[i],diagnostics?.Force,diagnostics?.Slip,diagnostics?.YawLimit,
+                            rearWheels[i],(float)duration,authoredPath!.Guidance(views[i],Parameters,diagnosticPathPreview),diagnostics?.CoupledSlipInverse):
+                            RiderController.Forces(views[i], specs[i], Frame, surface, Parameters,
+                            TimeSeconds, physics.Masses[i], physics.Inertias[i], diagnostics?.Force, diagnostics?.Slip, diagnostics?.YawLimit,
+                            rearWheels.Length==0?null:rearWheels[i],rearWheels.Length==0?0:(float)duration);
+                        physics.Force(i, force.Force, force.Torque);
+                    }
                     diagnostics?.AppliedForce?.Invoke(new(TimeSeconds,views[i].Id,force.Force,force.Torque));
                     if(rearWheels.Length==0)duration = UntilCurvatureChange(i, force.Force, duration);
                 }
@@ -227,6 +252,7 @@ public sealed class WorldRunner : IDisposable
                 var watch = Stopwatch.GetTimestamp();
                 physics.Step((float)duration, Parameters.SolverSubsteps);
                 foreach(var wheel in rearWheels){wheel.Commit();Work.RearWheelCommits++;}
+                foreach(var state in twoContactStates)state.Commit();
                 Work.SolverElapsedMilliseconds += Stopwatch.GetElapsedTime(watch).TotalMilliseconds;
                 Work.SolverCalls++;
                 Work.SolverSubsteps += Parameters.SolverSubsteps;
@@ -289,15 +315,16 @@ public sealed class WorldRunner : IDisposable
                     Work.MaximumPassiveEnergyIncreaseJoules, Energy(views) - passiveEnergy);
                 Record();
                 acceptedObserver?.Invoke(Snapshot);
+                if(diagnosticStop?.Invoke(Snapshot)==true){diagnosticHalted=true;break;}
                 if (stopOnCrash && views.Any(v => v.Activity == RiderActivity.Crashed)) break;
             }
             Work.PhysicsUpdates++;
-            if (stopOnCrash && views.Any(v => v.Activity == RiderActivity.Crashed)) break;
+            if (diagnosticHalted||stopOnCrash && views.Any(v => v.Activity == RiderActivity.Crashed)) break;
             if (requiredLaps > 0 && finishTimes.Count == specs.Length) break;
         }
         return new(name, stepSeconds, TimeSeconds, Work, Array.AsReadOnly(views), new Dictionary<int, double>(finishTimes),
             decisions.AsReadOnly(), contacts.AsReadOnly(), Convert.ToHexString(hash.GetHashAndReset()),
-            requiredLaps == 0 || finishTimes.Count == specs.Length);
+            !diagnosticHalted&&(requiredLaps == 0 || finishTimes.Count == specs.Length));
     }
     private void Decide()
     {
@@ -522,11 +549,22 @@ public sealed class WorldRunner : IDisposable
         for(var i=0;i<specs.Length;i++){
             if(Frame.DistanceToCurvatureChange(views[i].Road)>(views[i].Speed+5)*duration+.001)continue;
             Work.RearWheelBoundaryEvaluations++;
-            var f=RiderController.Forces(views[i],specs[i],Frame,surface,Parameters,TimeSeconds,physics.Masses[i],physics.Inertias[i],
-                rearWheel:rearWheels[i],stepSeconds:0);
-            duration=UntilCurvatureChange(i,f.Force,duration);
+            if(Parameters.EnableTwoContactBikeDynamics){
+                var f=TwoContactBikeDynamics.Forces(views[i],specs[i],Frame,surface,Parameters,TimeSeconds,physics.Masses[i],rearWheels[i],twoContactStates[i],0,
+                    diagnosticPathGuidance?authoredPath!.Guidance(views[i],Parameters,diagnosticPathPreview):null,SteeringOverride(views[i].Id));
+                duration=UntilCurvatureChange(i,f.NetForce,duration);
+            }else{
+                var f=RiderController.Forces(views[i],specs[i],Frame,surface,Parameters,TimeSeconds,physics.Masses[i],physics.Inertias[i],
+                    rearWheel:rearWheels[i],stepSeconds:0);
+                duration=UntilCurvatureChange(i,f.Force,duration);
+            }
         }
         return duration;
+    }
+    private float? SteeringOverride(int riderId)
+    {
+        for(var i=steeringCommands.Length-1;i>=0;i--){var c=steeringCommands[i];if(c.RiderId==riderId&&c.AtSeconds<=TimeSeconds+1e-12)return c.AngleRadians;}
+        return null;
     }
     private void BeginContact(int a, int b, double impulse, double closingSpeed)
     {
@@ -573,6 +611,7 @@ public sealed class WorldRunner : IDisposable
             data[12] = v.Impairment; data[13] = (int)v.Context;
             hash.AppendData(System.Runtime.InteropServices.MemoryMarshal.AsBytes(data));
             if(rearWheels.Length>0){wheelData[0]=rearWheels[wheelIndex++].AngularVelocityRadPerSecond;hash.AppendData(System.Runtime.InteropServices.MemoryMarshal.AsBytes(wheelData));}
+            if(twoContactStates.Length>0){wheelData[0]=twoContactStates[0].SteeringRadians;hash.AppendData(System.Runtime.InteropServices.MemoryMarshal.AsBytes(wheelData));}
         }
     }
     public void Dispose()

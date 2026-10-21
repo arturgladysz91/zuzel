@@ -39,6 +39,7 @@ public static class SlipCoupledDynamics
         Action<YawLimitObservation>? observeYaw=null,RearWheelState? rearWheel=null,float stepSeconds=0,
         PathGuidanceSample? diagnosticPath=null,Action<CoupledSlipInverseObservation>? observeInverse=null)
     {
+        if(p.EnableTwoContactBikeDynamics)throw new ArgumentException("Two-contact physics uses point forces and excludes this direct yaw actuator.");
         if(p.EnableRearWheelDynamics){
             if(rearWheel is null||!float.IsFinite(stepSeconds)||stepSeconds is <0 or >.020001f)
                 throw new ArgumentException("Wheel dynamics require accepted state and an actual 0..20ms interval.");

@@ -18,6 +18,7 @@ public sealed class WorldDiagnostics
     public Action<AppliedForceObservation>? AppliedForce { get; init; }
     public Action<RearWheelObservation>? RearWheel { get; init; }
     public Action<CoupledSlipInverseObservation>? CoupledSlipInverse { get; init; }
+    public Action<TwoContactObservation>? TwoContact { get; init; }
 }
 /// <summary>One accepted wheel interval; Before/After are actual Box2D poses.</summary>
 public readonly record struct RearWheelObservation(double TimeSeconds,int RiderId,RiderView Before,RiderView After,RearWheelStep Step);
@@ -26,7 +27,8 @@ public readonly record struct YawLimitObservation(double TimeSeconds, int RiderI
     float RequestedNewtonMeters, float AfterAuthorityNewtonMeters, float AfterEnergyNewtonMeters,
     float OrientationErrorRadians, float AngularVelocity, float InertiaKgMetersSquared,
     double DissipationCreditWatts);
-/// <summary>Exact arguments just supplied to ContactAdapter.Force / Box2D, before stepping.</summary>
+/// <summary>Applied wrench: direct center force/torque OFF; summed point forces and their r×F ON.
+/// In the point variant this torque is observation only, never an additional ApplyTorque.</summary>
 public readonly record struct AppliedForceObservation(double TimeSeconds, int RiderId,
     Vector2 ForceNewtons, float TorqueNewtonMeters);
 public readonly record struct SlipObservation(double TimeSeconds, int RiderId, float SpeedMetersPerSecond,
