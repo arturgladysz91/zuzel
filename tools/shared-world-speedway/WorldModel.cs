@@ -24,6 +24,8 @@ public sealed record WorldParameters
     [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
     public bool EnablePhysicalSteeringControl { get; init; }
     [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+    public bool EnableTravelDirectionSteering {get;init;}
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
     public bool EnableDynamicAxleLoad { get; init; }
     [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
     public bool EnableAdaptiveRiderControl {get;init;}

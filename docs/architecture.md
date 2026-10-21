@@ -25,6 +25,11 @@ Stage1 excludes traffic, old yaw/inverse flags, lean and load transfer. Axle/ste
 inputs are provisional; energy-stable isolated tests do not certify track safety.
 Production CoreSim remains unchanged.
 
+[Controlled Slip / Travel-Direction Steering (#117)](experiments/controlled-slip-travel-direction.md) adds a
+default-OFF local contact-response controller distinguishing body yaw from velocity
+direction. Short feasible arcs and an explicit coast recovery pass; Egg Mild INNER
+with full gas still crosses the boundary and is not certified. No engine/tyre changes.
+
 [500cc Motorcycle Performance](experiments/motorcycle-performance-500cc.md)
 adds two independent default-OFF branches inside the existing two-contact force
 evaluation: one rigid single gear from rear-wheel RPM to a crank torque curve,

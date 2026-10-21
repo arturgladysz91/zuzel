@@ -8,6 +8,11 @@ uses one Box2D.NET world and causal rider observations. Recommendation B: full
 contact-free heats work; crowded-contact sensitivity and post-crash boundaries
 still block adoption. Production CoreSim and defaults remain unchanged.
 
+[Controlled Slip / Travel-Direction Steering (#117)](docs/experiments/controlled-slip-travel-direction.md) adds a
+default-OFF local contact-response controller distinguishing body yaw from velocity
+direction. Short feasible arcs and an explicit coast recovery pass; Egg Mild INNER
+with full gas still crosses the boundary and is not certified. No engine/tyre changes.
+
 [500cc Motorcycle Performance](docs/experiments/motorcycle-performance-500cc.md)
 adds independent default-OFF engine-curve and load-based tyre variants. Combined,
 they reach112.22km/h after62m from18m/s; legacy reaches81.48km/h. The original

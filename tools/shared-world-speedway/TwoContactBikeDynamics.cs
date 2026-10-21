@@ -45,6 +45,8 @@ public readonly record struct TwoContactForces(Vector2 FrontPoint,Vector2 RearPo
     [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
     public PhysicalSteeringDecision? SteeringControl {get;init;}
     [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
+    public TravelDirectionDecision? TravelSteering {get;init;}
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
     public AxleLoad? AxleLoad {get;init;}
     [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
     public Engine500Command? Engine {get;init;}
@@ -67,6 +69,7 @@ public static class TwoContactBikeDynamics
         float? steeringOverride=null,Action<ForceObservation>? observe=null,Action<TwoContactObservation>? observeContacts=null,float? inertia=null)
     {
         if(!p.EnableTwoContactBikeDynamics||!p.EnableSlipCoupledDynamics||!p.EnableRearWheelDynamics||p.EnableCoupledSlipInverse||p.EnableFullContactYawFeedForward
+            ||p.EnableTravelDirectionSteering&&(!p.EnablePhysicalSteeringControl||p.EnableDynamicAxleLoad)
             ||(p.Enable500CcEngine||p.EnableLoadBasedTyreGrip)&&(p.EnableDynamicAxleLoad||p.ExperimentalDrive is not null)
             ||!float.IsFinite(seconds)||seconds is <0 or >.020001f||!float.IsFinite(mass)||mass<=0||!float.IsFinite(v.Speed)||!float.IsFinite(v.Heading)
             ||!float.IsFinite(v.AngularVelocity)||steeringOverride is { } input&&!float.IsFinite(input))throw new ArgumentException("Finite isolated two-contact variant with original rear wheel required.");
@@ -98,16 +101,21 @@ public static class TwoContactBikeDynamics
         // heading write, direct body-yaw actuator or ideal trajectory constraint.
         var headingError=BikeAngles.Wrap((path?.Heading??road.Heading)-v.Heading);
         var requested=steeringOverride??(float)BikeAngles.Wrap(headingError+Math.Atan((geometry.FrontAxleFromComMeters+geometry.RearAxleFromComMeters)*demand/Math.Max(speed*speed,.25f)));
-        PhysicalSteeringDecision? control=null;
+        PhysicalSteeringDecision? control=null;TravelDirectionDecision? travel=null;
         if(p.EnablePhysicalSteeringControl&&steeringOverride is null){
             if(inertia is not { } moment||!float.IsFinite(moment)||moment<=0)throw new ArgumentException("Physical steering requires actual body inertia.");
             // Pure local contact queries: separate uncommitted wheel/steering wrappers,
             // identical accepted rigid-body state, original tyre/engine equations.
-            var original=p with{EnablePhysicalSteeringControl=false};
+            var original=p with{EnablePhysicalSteeringControl=false,EnableTravelDirectionSteering=false};
             TwoContactForces Response(float delta)=>Forces(v,spec,frame,surface,original,time,mass,
                 new RearWheelState(wheel.AngularVelocityRadPerSecond*wheel.Parameters.WheelRadiusMeters,wheel.Parameters),new(delta){AxleLoad=load},seconds,path,delta);
-            control=PhysicalSteeringControl.Decide(v,(float)demand,mass,moment,p.SlipYawResponseSeconds,geometry,state.SteeringRadians,seconds,Response);
-            requested=control.AngleRequestRadians;
+            if(p.EnableTravelDirectionSteering){
+                travel=TravelDirectionSteering.Decide(v,(float)demand,mass,moment,p.SlipYawResponseSeconds,geometry,state.SteeringRadians,seconds,Response);
+                requested=travel.AngleRequestRadians;
+            }else{
+                control=PhysicalSteeringControl.Decide(v,(float)demand,mass,moment,p.SlipYawResponseSeconds,geometry,state.SteeringRadians,seconds,Response);
+                requested=control.AngleRequestRadians;
+            }
         }
         var bounded=Math.Clamp(requested,-geometry.MaximumSteeringRadians,geometry.MaximumSteeringRadians);
         var after=state.SteeringRadians+Math.Clamp(bounded-state.SteeringRadians,-geometry.SteeringRateRadiansPerSecond*seconds,geometry.SteeringRateRadiansPerSecond*seconds);
@@ -148,7 +156,7 @@ public static class TwoContactBikeDynamics
         wheel.Prepared=contact with{FrontLateralNewtons=0}; // front now has its OWN axes/velocity, recorded separately.
         var rearForce=forward*contact.LongitudinalNewtons+left*contact.RearLateralNewtons;
         var result=new TwoContactForces(frontPoint,rearPoint,frontArm,rearArm,vf,vr,frontForce,rearForce,resistance,forward,frontLeft,left,
-            fyFront,contact.RearLateralNewtons,contact.LongitudinalNewtons,budget,requested,state.SteeringRadians,used,after,(float)demand){SteeringControl=control,AxleLoad=load,Engine=engineCommand,TyreLoads=tyreLoads};
+            fyFront,contact.RearLateralNewtons,contact.LongitudinalNewtons,budget,requested,state.SteeringRadians,used,after,(float)demand){SteeringControl=control,TravelSteering=travel,AxleLoad=load,Engine=engineCommand,TyreLoads=tyreLoads};
         observe?.Invoke(new(time,v,result.NetForce,result.NetTorque,(float)(mass*demand),Vector2.Dot(result.FrontForce+result.RearForce,new(-road.Tangent.Y,road.Tangent.X)),budget,
             Vector2.Dot(result.NetForce,road.Tangent),"two-contact"));
         observeContacts?.Invoke(new(time,v.Id,result));return result;
