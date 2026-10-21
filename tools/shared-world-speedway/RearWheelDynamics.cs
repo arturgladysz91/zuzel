@@ -71,12 +71,13 @@ public static class RearWheelDynamics
     public static double SlipRatio(double forward,double omega,RearWheelParameters p)
         =>(p.WheelRadiusMeters*omega-forward)/Math.Sqrt(forward*forward+p.LowSpeedMetersPerSecond*p.LowSpeedMetersPerSecond);
     public static RearWheelStep Evaluate(double forward,double side,double omega,float budget,float mass,double lateralScaleSquared,
-        double requestedTorque,double availableTorque,double driveTorque,double resistanceForward,float seconds,RearWheelParameters p)
+        double requestedTorque,double availableTorque,double driveTorque,double resistanceForward,float seconds,RearWheelParameters p,double? rearBudgetNewtons=null)
     {
         // The body is NOT integrated here. Freeze its accepted axes and use its
         // effective longitudinal inverse mass in this local contact equation.
         // Only Box2D applies the resulting force and advances its body.
-        var rear=p.RearBudgetFraction*budget;var front=budget-rear;var radius=p.WheelRadiusMeters;var inertia=p.WheelInertiaKgMetersSquared;
+        if(rearBudgetNewtons is { } input&&(!double.IsFinite(input)||input<0||input>budget))throw new ArgumentException("Rear contact budget must be within the unchanged total budget.");
+        var rear=rearBudgetNewtons??p.RearBudgetFraction*budget;var front=budget-rear;var radius=p.WheelRadiusMeters;var inertia=p.WheelInertiaKgMetersSquared;
         var mobility=radius*radius/inertia+1d/mass;
         var speedScaleSquared=forward*forward+p.LowSpeedMetersPerSecond*p.LowSpeedMetersPerSecond;
         var relaxation=rear*mobility*p.MinimumContactRelaxationSeconds;
@@ -108,6 +109,6 @@ public static class RearWheelDynamics
         return new(seconds,omega,after,requestedTorque,availableTorque,driveTorque,p.BearingResistanceNewtonMeterSeconds*midOmega,
             fx,fyFront,fyRear,SlipRatio(forward,omega,p),actualMidSlip,fx*actualMidSlip*seconds,
             seconds*p.BearingResistanceNewtonMeterSeconds*midOmega*midOmega,driveTorque*midOmega*seconds,
-            Math.Sqrt((double)fx*fx+(double)fyRear*fyRear)/rear,rootResidual,iterations);
+            rear==0?0:Math.Sqrt((double)fx*fx+(double)fyRear*fyRear)/rear,rootResidual,iterations);
     }
 }

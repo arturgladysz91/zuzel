@@ -23,6 +23,10 @@ public sealed record WorldParameters
     public bool EnableTwoContactBikeDynamics { get; init; }
     [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
     public bool EnablePhysicalSteeringControl { get; init; }
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+    public bool EnableDynamicAxleLoad { get; init; }
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
+    public double? AxleLoadHeightMeters {get;init;}
     [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
     public TwoContactBikeParameters? TwoContactBike { get; init; }
     // #102 tools-only authored controls. Historical worlds keep their original bounds.
@@ -79,6 +83,8 @@ public sealed record WorldSnapshot(double TimeSeconds, IReadOnlyList<RiderView> 
     public IReadOnlyList<RearWheelView>? RearWheels { get; init; }
     [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
     public IReadOnlyList<SteeringView>? Steering { get; init; }
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
+    public AxleLoad? AxleLoad {get;init;}
 }
 public enum ControlChannels { Both, Line, Throttle }
 public sealed record DecisionEvent(int RiderId, int OpponentId, TrafficAction Action,
@@ -95,6 +101,8 @@ public sealed record ContactEvent(int RiderA, int RiderB, double TimeSeconds, st
     double ImpulseNewtonSeconds, double SeverityRatioA, double SeverityRatioB, double NormalClosingSpeed = 0);
 public sealed class WorldWork
 {
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+    public long AxleLoadUpdates;
     public long PhysicsUpdates, SolverCalls, AiUpdates, PairChecks, Threats, ContactManifolds, SolvedPoints,
         BeginShapes, EndShapes, HitShapes, Episodes, Consequences, GeometryChecks, ProximityPairChecks,
         SolverSubsteps, ContactCandidateSamples, MaximumContactCandidates;

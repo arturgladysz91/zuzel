@@ -25,6 +25,14 @@ Stage1 excludes traffic, old yaw/inverse flags, lean and load transfer. Axle/ste
 inputs are provisional; energy-stable isolated tests do not certify track safety.
 Production CoreSim remains unchanged.
 
+[Dynamic Axle Load LIGHT (#114)](experiments/dynamic-axle-load-light.md) is a
+separate default-OFF hypothesis requiring two-contact physics and #113 steering.
+One cached allocation per accepted state uses the previous native velocity
+difference projected on the current body axis. It apportions the inherited B;
+it does not introduce vertical motion, a new integrator or a simultaneous load
+solve. Negative calculated normal loads are retained as out-of-model evidence
+and stop the audit. Original contact laws accept the explicit rear budget.
+
 [Full Contact Yaw Feed-Forward (#109)](experiments/full-contact-yaw-feedforward.md)
 adds a default-OFF tools flag requiring the #108 coupled inverse. It selects the
 already evaluated full tyre vector for travelYaw; force, passive force, target,

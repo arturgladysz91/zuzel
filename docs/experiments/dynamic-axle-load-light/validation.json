@@ -1,0 +1,16 @@
+{
+  "BaseHead": "fc5d184e95fa3d6d12c27abd59ab8de7e2630bee",
+  "Restore": "passed",
+  "ReleaseBuildWarnAsError": {"Warnings": 0, "Errors": 0},
+  "TargetedCSharp": {"Passed": 26, "Failed": 0, "Classes": ["DynamicAxleLoadTests", "PhysicalSteeringControlTests", "TwoContactBikeDynamicsTests"]},
+  "PythonCalibration": {"Passed": 129, "Failed": 0},
+  "CiPolicy": {"Passed": 7, "Failed": 0},
+  "NodeReplayRegression": {"Passed": 13, "Failed": 0},
+  "LegacyConsumerAudit": {"FrozenReaders": 39, "Passed": true},
+  "HistoricalEvidenceHashes": 985,
+  "ExistingEightLapAnalysisNewWorlds": 0,
+  "NewTrackTrials": 1,
+  "StageCRun": false,
+  "LightAcceptance": "FAIL: first bend safe but inverse query count +12.29%; no clear safety/control benefit. Remain OFF.",
+  "WindowsDraftCI": "Exact final source HEAD and CI result recorded in Draft PR description. No merge."
+}
