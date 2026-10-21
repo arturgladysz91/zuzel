@@ -14,11 +14,14 @@ public static class SpeedGripCrossoverAudit
     public static WorldParameters Parameters(ExperimentalDriveEnvelope? engine)=>LocalOffsetAudit.Parameters() with{ExperimentalDrive=engine};
     public static (SlipControlValidation.Capture Body,RearWheelObservation[] Wheels) Execute(bool wide,ExperimentalDriveEnvelope? engine=null,float grip=1,float initialSpeed=18,
         float drive=1,double initialReference=32,double step=.01,int laps=Laps,double duration=240,string? csv=null,bool equilibrium=false,
-        bool coupled=false,Action<CoupledSlipInverseObservation>? inverseObserver=null,bool fullContactYaw=false)
+        bool coupled=false,Action<CoupledSlipInverseObservation>? inverseObserver=null,bool fullContactYaw=false,AuthoredRacingPath? pathOverride=null)
     {
-        var path=AuthoredRacingPath.Crossover(wide);var rider=RacingLineRootCauseAudit.Rider(path) with{ReferenceMeters=initialReference,OffsetMeters=(float)path.Offset(initialReference).D,
+        if(pathOverride is not null&&(drive!=1||equilibrium||coupled||fullContactYaw))throw new ArgumentException("Natural-line comparison freezes Drive1 and the original controller.");
+        var path=pathOverride??AuthoredRacingPath.Crossover(wide);var rider=RacingLineRootCauseAudit.Rider(path) with{ReferenceMeters=initialReference,OffsetMeters=(float)path.Offset(initialReference).D,
             TargetOffsetMeters=(float)path.Offset(initialReference).D,SpeedMetersPerSecond=initialSpeed};
-        var start=equilibrium?InverseFeasibilityAudit.SteadyStart(initialSpeed):new AuthoredSteadyStart(initialSpeed/.33,drive);
+        // The ordinary rolling constructor supports a changing offset; the old steady-start
+        // guard intentionally accepts only a straight, flat authored line. Both yield v/r.
+        var start=pathOverride is not null?null:equilibrium?InverseFeasibilityAudit.SteadyStart(initialSpeed):new AuthoredSteadyStart(initialSpeed/.33,drive);
         var parameters=coupled?Parameters(engine) with{EnableCoupledSlipInverse=true}:Parameters(engine);
         if(fullContactYaw)parameters=parameters with{EnableFullContactYawFeedForward=true};
         var wheels=new List<RearWheelObservation>();var c=SlipControlValidation.Execute(new(path.Name,new[]{rider},duration,laps),parameters,
@@ -29,15 +32,15 @@ public static class SpeedGripCrossoverAudit
     private static void Save(string dir,string name,object value)=>InverseFeasibilityAudit.Save(dir,name,value);
     public static object Capture(string dir,string name,bool wide,ExperimentalDriveEnvelope? engine=null,float grip=1,float initialSpeed=18,
         float drive=1,double initialReference=32,double step=.01,int laps=Laps,double duration=240,bool equilibrium=false,
-        bool coupled=false,Action<CoupledSlipInverseObservation>? inverseObserver=null,bool fullContactYaw=false)
+        bool coupled=false,Action<CoupledSlipInverseObservation>? inverseObserver=null,bool fullContactYaw=false,AuthoredRacingPath? pathOverride=null)
     {
         foreach(var suffix in new[]{".json","-accepted.csv","-tracking.csv.gz","-forces.csv.gz"})if(File.Exists(Path.Combine(dir,name+suffix)))throw new IOException("Evidence exists: "+name+suffix);
-        var(c,wheels)=Execute(wide,engine,grip,initialSpeed,drive,initialReference,step,laps,duration,Path.Combine(dir,name+"-accepted.csv"),equilibrium,coupled,inverseObserver,fullContactYaw);
-        var result=RacingLineRootCauseAudit.ExportCapture(dir,name,c,wheels,AuthoredRacingPath.Crossover(wide),diagnosticPathFrame:true,requiredLaps:laps,compressTracking:true);
+        var(c,wheels)=Execute(wide,engine,grip,initialSpeed,drive,initialReference,step,laps,duration,Path.Combine(dir,name+"-accepted.csv"),equilibrium,coupled,inverseObserver,fullContactYaw,pathOverride);
+        var result=RacingLineRootCauseAudit.ExportCapture(dir,name,c,wheels,pathOverride??AuthoredRacingPath.Crossover(wide),diagnosticPathFrame:true,requiredLaps:laps,compressTracking:true);
         var byTime=wheels.ToDictionary(x=>Math.Round(x.TimeSeconds,8));var mech=c.Mechanical[1];
         using var zip=new GZipStream(File.Create(Path.Combine(dir,name+"-forces.csv.gz")),CompressionLevel.SmallestSize);using var writer=new StreamWriter(zip);
         writer.WriteLine("t,dt,s,mass,inertia,force_x,force_y,accel_x,accel_y,normal_force,measured_normal_force,body_force_residual,yaw_residual,requested_engine_torque,available_engine_torque,delivered_engine_torque,omega_before,omega_after,engine_work,longitudinal_loss,lateral_loss,resistance_loss,bearing_loss,feed_forward_curvature,feed_forward_acceleration");
-        var path=AuthoredRacingPath.Crossover(wide);
+        var path=pathOverride??AuthoredRacingPath.Crossover(wide);
         foreach(var tick in c.Ticks){var v=tick.Before;var middle=(v.Velocity+tick.After.Velocity)/2;var speed=middle.Length();var normal=speed>.01f?new Vector2(-middle.Y,middle.X)/speed:Vector2.Zero;
             var acceleration=(tick.After.Velocity-v.Velocity)/(float)tick.DurationSeconds;var force=tick.Applied.ForceNewtons;var wheel=byTime[Math.Round(tick.TimeSeconds,8)].Step;
             var guidance=path.Guidance(v,Parameters(engine),true);var along=v.Velocity.X*guidance.Tangent.X+v.Velocity.Y*guidance.Tangent.Y;
