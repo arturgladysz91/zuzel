@@ -14,12 +14,16 @@ public sealed class AuthoredRacingPath
     private readonly MeterPoint[][]? c3Pieces;
     private readonly double c3Spacing;
     private readonly bool crossoverWide;
+    private readonly NaturalRacingLineParameters? natural;
     public bool IsCrossover=>c3Pieces is not null;
     public double C3KnotSpacingMeters=>c3Spacing;
     public static AuthoredRacingPath Crossover(bool wide)=>new(wide);
-    private AuthoredRacingPath(bool wide):this("inner")
+    public static AuthoredRacingPath Natural(NaturalRacingLineParameters parameters)=>new(false,parameters);
+    private AuthoredRacingPath(bool wide,NaturalRacingLineParameters? natural=null):this("inner")
     {
-        Name=wide?"crossover-wide-straight":"crossover-inner";crossoverWide=wide;
+        natural?.Validate(Frame);this.natural=natural;
+        if(natural is not null)ApexFraction=natural.ApexFraction;
+        Name=natural is not null?"natural-racing-line":wide?"crossover-wide-straight":"crossover-inner";crossoverWide=wide;
         // Same AuthoredRacingPath, full XY rather than only a smoother d(s).
         // Shared P/P'/P''/P''' at every periodic septic-Hermite knot guarantee C3.
         var count=(int)Math.Ceiling(Frame.LapMeters/1.0);c3Spacing=Frame.LapMeters/count;
@@ -42,7 +46,16 @@ public sealed class AuthoredRacingPath
     private MeterPoint RawCrossover(double s)
     {
         var reference=Frame.Shape!.At(s);var offset=1d;
-        if(crossoverWide){
+        if(natural is { } p){
+            var half=Frame.LapMeters/2;var entry=Frame.SegmentStartMeters(1);var bend=Frame.SegmentStartMeters(4)-entry;
+            var x=((s-(entry-p.TurnInBeforeEntryMeters))%half+half)%half;
+            var apex=p.TurnInBeforeEntryMeters+bend*p.ApexFraction;
+            var end=p.TurnInBeforeEntryMeters+bend+p.OutsideAfterExitMeters;
+            static double S(double u){u=Math.Clamp(u,0,1);return u*u*u*u*(35+u*(-84+u*(70-20*u)));}
+            offset=x<apex?p.OutsideOffsetMeters+(p.ApexOffsetMeters-p.OutsideOffsetMeters)*S(x/apex)
+                :x<end?p.ApexOffsetMeters+(p.OutsideOffsetMeters-p.ApexOffsetMeters)*S((x-apex)/(end-apex))
+                :p.OutsideOffsetMeters;
+        }else if(crossoverWide){
             var half=Frame.LapMeters/2;var entry=Frame.SegmentStartMeters(1);var bend=Frame.SegmentStartMeters(4)-entry;
             var x=((s-entry)%half+half)%half;var apex=bend/2;var wide=bend+10;var returning=bend+25;var inner=half-5;
             static double S(double u){u=Math.Clamp(u,0,1);return u*u*u*u*(35+u*(-84+u*(70-20*u)));}
@@ -140,6 +153,20 @@ public sealed class AuthoredRacingPath
             curvature=BikeAngles.Wrap(next.Heading-current.Heading)/length;
         }
         return new(current.Position,current.Heading,curvature);
+    }
+}
+/// <summary>One explicitly authored hypothesis. Parameters are frozen before any timed run.</summary>
+public sealed record NaturalRacingLineParameters(double OutsideOffsetMeters=8,double ApexOffsetMeters=1.5,
+    double TurnInBeforeEntryMeters=25,double ApexFraction=.58,double OutsideAfterExitMeters=20)
+{
+    public void Validate(TrackFrame frame)
+    {
+        var values=new[]{OutsideOffsetMeters,ApexOffsetMeters,TurnInBeforeEntryMeters,ApexFraction,OutsideAfterExitMeters};
+        var bend=frame.SegmentStartMeters(4)-frame.SegmentStartMeters(1);
+        if(values.Any(v=>!double.IsFinite(v))||OutsideOffsetMeters<=ApexOffsetMeters||ApexOffsetMeters<0
+            ||TurnInBeforeEntryMeters<=0||ApexFraction<=0||ApexFraction>=1||OutsideAfterExitMeters<=0
+            ||TurnInBeforeEntryMeters+bend+OutsideAfterExitMeters>=frame.LapMeters/2)
+            throw new ArgumentException("Natural line requires finite, ordered offsets and a nonoverlapping periodic preparation interval.");
     }
 }
 public readonly record struct PathGuidanceSample(MeterPoint Position,double Heading,double FeedForwardCurvature)
