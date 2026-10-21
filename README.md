@@ -3,6 +3,10 @@
 Release platform: **Windows only**. See the current [Windows CI policy](docs/ci.md)
 for Draft/full validation, the merge gate and optional historical audits.
 
+[Current Box2D replay viewer](tools/replay-viewer/README.md) opens recorded
+#107 baseline and #109 FULL runs with native snapshots, a motorcycle close-up,
+heading/velocity/slip vectors and bend navigation. It changes visualization only.
+
 Isolated research prototype: [Shared World Speedway Simulation](docs/experiments/shared-world-speedway.md)
 uses one Box2D.NET world and causal rider observations. Recommendation B: full
 contact-free heats work; crowded-contact sensitivity and post-crash boundaries

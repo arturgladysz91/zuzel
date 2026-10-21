@@ -31,6 +31,47 @@ export function parseCsv(text) {
       drive: number('drive'), heading: number('heading_rad'), activity: value('activity') };
   });
 }
+// Dense Before snapshots from the existing audit, never a resimulation.
+// These four recordings have constant Drive; native target is present per row.
+export function parseNativeCsv(text, accepted) {
+  if (!accepted.length || new Set(accepted.map(p => p.id)).size !== 1 || new Set(accepted.map(p => p.drive)).size !== 1)
+    throw new Error('Gęsty zapis wymaga jednego zawodnika i zapisanego stałego gazu.');
+  const lines = text.trim().split(/\r?\n/), header = lines.shift().split(',');
+  const fields = { t: 't', reference: 's', x: 'x', y: 'y', vx: 'vx', vy: 'vy', speed: 'speed', offset: 'offset', target: 'target', heading: 'body_heading' };
+  const indexes = Object.fromEntries(Object.entries(fields).map(([key, name]) => [key, header.indexOf(name)]));
+  if (Object.values(indexes).some(i => i < 0)) throw new Error('Brak pól natywnego zapisu XY/heading/v.');
+  let current = 0;
+  return lines.map(line => {
+    const cells = line.split(','); if (cells.length !== header.length) throw new Error('Niepełny native snapshot.');
+    const row = Object.fromEntries(Object.entries(indexes).map(([key, i]) => {
+      if (!cells[i].trim()) throw new Error('Puste pole native snapshot.');
+      return [key, finite(Number(cells[i]), key)];
+    }));
+    while (current + 1 < accepted.length && accepted[current + 1].t <= row.t) current++;
+    return { ...row, id: accepted[0].id, drive: accepted[0].drive, activity: accepted[current].activity, source: 'native' };
+  });
+}
+export function motionVectors(state, seconds = .2) {
+  const vx = state.renderVx ?? state.vx, vy = state.renderVy ?? state.vy;
+  const moving = Math.hypot(vx, vy) > .01, travel = Math.atan2(vy, vx);
+  return { heading: { x: Math.cos(state.heading), y: Math.sin(state.heading) },
+    velocity: { x: vx * seconds, y: vy * seconds }, travel, beta: moving ? angleDelta(travel, state.heading) : null };
+}
+// Three metres of recorded lead-in; no extrapolation to an imagined entry pose.
+export function bendJumps(geometry, track) {
+  return geometry.segments.filter(s => s.type === 'TurnEntry').slice(0, 2).map(segment => {
+    let target = segment.startReferenceMeters - 3;
+    while (target < track[0].reference - 1e-6) target += geometry.lapMeters;
+    return track.find(p => p.reference >= target)?.t ?? null;
+  });
+}
+export function boundaryStatus(document) {
+  if (document.MinimumInner < 0 || document.MinimumOuter < 0)
+    return { level: 'unsafe', text: 'Zaobserwowany wyjazd obrysu poza tor' };
+  if (document.BoundarySafe)
+    return { level: 'safe', text: 'Pełny certyfikat granic PASS' };
+  return { level: 'caution', text: 'Brak pełnego certyfikatu między krokami; zapisane obrysy pozostają w torze' };
+}
 export function decisionStatus(d, time) {
   if (time < d.ObservedAt) return 'future';
   if (d.ActualActivation != null && d.ActualActivation <= time) return 'active';
@@ -38,7 +79,7 @@ export function decisionStatus(d, time) {
   return time >= d.RequestedActivation ? 'waiting' : 'pending';
 }
 export class Replay {
-  constructor(csv, document) {
+  constructor(csv, document, nativeCsv = null) {
     this.run = document.Run;
     if (!this.run?.Initial || !this.run?.Result) throw new Error('Brak Run.Initial / Run.Result.');
     this.result = this.run.Result;
@@ -50,8 +91,17 @@ export class Replay {
         vx: v.Velocity.X, vy: v.Velocity.Y, speed: v.Speed, heading: v.Heading, reference: v.TotalReferenceMeters,
         offset: v.Road.OffsetMeters, target: v.TargetOffsetMeters, drive: v.Drive, activity: v.Activity }]);
     }
-    for (const row of parseCsv(csv)) {
+    const accepted = parseCsv(csv);
+    this.native = nativeCsv != null;
+    if (this.native && (this.run.Initial.Riders.length !== 1 || this.run.Initial.Riders[0].Drive !== accepted[0]?.drive || this.decisions.some(d => d.ActualActivation != null)))
+      throw new Error('Brak pełnego natywnego zapisu zmiennych aktuatorów.');
+    for (const row of this.native ? parseNativeCsv(nativeCsv, accepted) : accepted) {
       const track = this.tracks.get(row.id);
+      if (this.native && row.t === 0 && track?.length === 1) {
+        if (Math.hypot(row.x - track[0].x, row.y - track[0].y) > 1e-5 || Math.abs(angleDelta(row.heading, track[0].heading)) > 1e-5)
+          throw new Error('Native t=0 nie zgadza się z Initial.');
+        continue;
+      }
       if (!track || row.t <= track.at(-1).t || row.t > this.duration + 1e-6) throw new Error('Nieznany zawodnik lub nieuporządkowany czas CSV.');
       track.push(row);
     }
@@ -65,7 +115,7 @@ export class Replay {
         throw new Error('Sprzeczny zapis aktywacji / anulowania komendy.');
     }
   }
-  state(id, time) {
+  state(id, time, interpolatePose = true) {
     time = clamp(finite(time, 'czas odtwarzania'), 0, this.duration);
     const track = this.tracks.get(id); if (!track) throw new Error('Nieznany zawodnik.');
     const leftIndex = Math.max(0, upperBound(track, time) - 1), left = track[leftIndex], right = track[leftIndex + 1];
@@ -73,11 +123,12 @@ export class Replay {
     const finished = finish != null && time >= finish;
     // After the finish, use the last accepted point already present at this time.
     // An accepted post-crossing point is still inspectable at its own timestamp.
-    const fraction = right && !finished ? clamp((time - left.t) / (right.t - left.t), 0, 1) : 0;
+    const fraction = right && !finished && interpolatePose ? clamp((time - left.t) / (right.t - left.t), 0, 1) : 0;
     const lerp = (a, b) => a + (b - a) * fraction;
     const state = { ...left, x: right ? lerp(left.x, right.x) : left.x, y: right ? lerp(left.y, right.y) : left.y,
       heading: right ? angleAt(left.heading, right.heading, fraction) : left.heading,
       reference: right ? lerp(left.reference, right.reference) : left.reference,
+      renderVx: right ? lerp(left.vx, right.vx) : left.vx, renderVy: right ? lerp(left.vy, right.vy) : left.vy,
       sampleTime: left.t, poseKnownThrough: track.at(-1).t, interpolated: fraction > 0, stale: time > track.at(-1).t,
       finished, finish, intent: 0, lastDecision: null };
     const knownTime = Math.min(time, track.at(-1).t);

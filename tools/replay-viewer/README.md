@@ -1,3 +1,68 @@
+# Obecna symulacja Box2D — wizualna diagnostyka
+
+Viewer rozszerzony na bazie Draft #109, HEAD `a5164d9daddb091eb86a2809792703941069fd56`.
+Wyłącznie zapisane dane: bez nowych symulacji, optymalizacji lub zmian fizyki.
+
+## Windows: uruchomienie
+
+W PowerShell, z głównego katalogu repozytorium na gałęzi `tools/current-box2d-replay`:
+
+```powershell
+py -m http.server 8000 --bind 127.0.0.1
+```
+
+Jeśli launcher `py` nie jest dostępny: `python -m http.server 8000 --bind 127.0.0.1`.
+Otwórz **http://127.0.0.1:8000/tools/replay-viewer/?case=current-baseline-inner**.
+Do oglądania wystarczą Python oraz aktualny Chrome/Edge; .NET i Node nie są potrzebne.
+Pozostaw terminal serwera otwarty. Moduły/fetch wymagają HTTP, nie `file://`.
+
+## Najnowsze przejazdy
+
+| Wartość `case` | Zapis | Regulator | Granice |
+| --- | --- | --- | --- |
+| `current-baseline-inner` | #107 `full-throttle-slide-grip-audit/repeat18` — dokładny repeat baseline #106 | poprawki OFF | certyfikat PASS |
+| `current-baseline-wide` | #106/#107 `speed-grip-line-crossover/baseline-wide` | poprawki OFF | brak pełnego certyfikatu między krokami |
+| `current-full-inner` | #109 `full-contact-yaw-feedforward/full-inner` | coupled inverse + full contact yaw ON | certyfikat PASS |
+| `current-full-wide` | #109 `full-contact-yaw-feedforward/full-wide` | coupled inverse + full contact yaw ON | brak pełnego certyfikatu między krokami |
+
+Wszystkie cztery mają pełny gaz 100%, osiem okrążeń i nie przechodzą dokładnego
+trackingu planu. Dodatnie minima footprintu w zapisanych stanach WIDE **nie są
+zaobserwowanym crossing**; ujemny konserwatywny bound oznacza brak certyfikatu.
+Komunikat o faktycznym wyjeździe pojawia się wyłącznie dla ujemnego zapisanego
+prześwitu. Historyczny #95 z czterema zawodnikami pozostaje na liście, jawnie
+oznaczony jako starsza fizyka sprzed niezależnego tylnego koła #100.
+
+## Oglądanie łuku
+
+- Domyślnie zbliżenie i śledzenie R1, najazd 3 m przed pierwszym łukiem oraz tempo **0,1×**. Naciśnij **Odtwórz**. **Łuk 1 / Łuk 2** zatrzymują i przenoszą do rzeczywistej próbki najazdu; **Zbliżenie** przywraca powiększenie motocykla.
+- Złoty wektor pokazuje heading motocykla, niebieski rzeczywiste `v × 0,2 s`, różowy łuk kąt **β = heading − atan2(vy,vx)**. Nieruchomy motocykl nie ma określonego β. Mała mapa pokazuje oba brzegi i aktualną pozycję.
+- Motocykl to eksportowane kapsuły C# `BikeFootprint`: korpus 2,10 × 0,30 m i kierownica 0,80 m, obrócone zapisanym heading. To rzeczywisty mechaniczny model 2D, bez domyślonej animacji koła lub skrętu kierownicy. Numery, wektory i pierścień wyboru są nakładkami.
+- Turkusowy ślad pochodzi z zapisanych XY. Zielona przerywana C3 to niezmieniony plan #106; biała krawędź to kreda, złota banda. Plan jest odczytany z istniejącego `viewer-paths.json`, tor z zamrożonego `progressive-b-geometry.json`.
+- Zachowano Play/Pause, suwak, poprzednią/następną próbkę, zoom, przeciąganie, **Cały tor** i wybór/śledzenie motocykla.
+
+## Gęstość i wierność zapisu
+
+Nowe cztery pozycje czytają oryginalne `*-tracking.csv.gz` przez przeglądarkowy
+`DecompressionStream`: wszystkie native **Before** snapshoty, zwykle co 10 ms,
+z zachowaniem krótszych podziałów. Nie są to próbki wygenerowane z rzadkiego CSV.
+XY, heading, vx/vy, speed, reference, offset i target pochodzą z tych wierszy.
+Stały Drive pochodzi z Initial/accepted CSV i jest sprawdzany; import odrzuca
+zmienny gaz bez natywnego zapisu aktuatorów. Wyniki i czasy mety pozostają z JSON.
+
+Domyślnie **Interpolacja OFF**: motocykl, wektory i β pochodzą z tego samego
+ostatniego snapshotu. Po jej włączeniu wyłącznie rendering interpoluje XY,
+heading i wektory; panel wyraźnie to opisuje. Prędkość/gaz w panelu nadal są
+ostatnimi zapisanymi pomiarami. Interpolacja nie dodaje kroków fizyki, a po
+ostatnim snapshotcie pozycja nie jest ekstrapolowana. Historyczne CSV zachowują
+swój oryginalny odstęp około 0,1 s i dotychczasowe znaczniki sterowania.
+
+Testy: `node --test tools/replay-viewer/replay.test.mjs` (19 przypadków).
+Targeted C#: `dotnet test tests/CoreSim.Tests/CoreSim.Tests.csproj -c Release --filter FullyQualifiedName~ReplayGeometryTests`.
+
+---
+
+Poniżej zachowano historyczny opis wcześniejszych wersji viewera.
+
 # Shared World Speedway — Diagnostic Replay Viewer 2D (#96)
 
 ## Progressive Bend Width #103
