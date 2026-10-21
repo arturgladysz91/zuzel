@@ -106,7 +106,7 @@ public sealed class WorldRunner : IDisposable
             if(this.steeringCommands.Any(c=>!double.IsFinite(c.AtSeconds)||c.AtSeconds<0||!float.IsFinite(c.AngleRadians)||!specs.Any(s=>s.Profile.Id==c.RiderId))
                 ||this.steeringCommands.Select(c=>(c.RiderId,c.AtSeconds)).Distinct().Count()!=this.steeringCommands.Length)
                 throw new ArgumentException("Unique finite accepted-time steering commands required.");
-        }else if(Parameters.TwoContactBike is not null||twoContactInitial is not null||this.steeringCommands.Length>0)
+        }else if(Parameters.EnablePhysicalSteeringControl||Parameters.TwoContactBike is not null||twoContactInitial is not null||this.steeringCommands.Length>0)
             throw new ArgumentException("Two-contact settings/initial states/steering require the opt-in variant.");
         if(Parameters.EnableFullContactYawFeedForward&&!Parameters.EnableCoupledSlipInverse)
             throw new ArgumentException("Full-contact yaw experiment requires the frozen coupled inverse control.");
@@ -229,7 +229,7 @@ public sealed class WorldRunner : IDisposable
                     (System.Numerics.Vector2 Force,float Torque) force;
                     if(Parameters.EnableTwoContactBikeDynamics){
                         var contact=TwoContactBikeDynamics.Forces(views[i],specs[i],Frame,surface,Parameters,TimeSeconds,physics.Masses[i],rearWheels[i],twoContactStates[i],(float)duration,
-                            diagnosticPathGuidance?authoredPath!.Guidance(views[i],Parameters,diagnosticPathPreview):null,SteeringOverride(views[i].Id),diagnostics?.Force,diagnostics?.TwoContact);
+                            diagnosticPathGuidance?authoredPath!.Guidance(views[i],Parameters,diagnosticPathPreview):null,SteeringOverride(views[i].Id),diagnostics?.Force,diagnostics?.TwoContact,physics.Inertias[i]);
                         physics.ForcesAtContacts(i,contact);force=(contact.NetForce,contact.NetTorque);
                     }else{
                         force = diagnosticPathGuidance?SlipCoupledDynamics.Forces(views[i],specs[i],Frame,surface,Parameters,
@@ -551,7 +551,7 @@ public sealed class WorldRunner : IDisposable
             Work.RearWheelBoundaryEvaluations++;
             if(Parameters.EnableTwoContactBikeDynamics){
                 var f=TwoContactBikeDynamics.Forces(views[i],specs[i],Frame,surface,Parameters,TimeSeconds,physics.Masses[i],rearWheels[i],twoContactStates[i],0,
-                    diagnosticPathGuidance?authoredPath!.Guidance(views[i],Parameters,diagnosticPathPreview):null,SteeringOverride(views[i].Id));
+                    diagnosticPathGuidance?authoredPath!.Guidance(views[i],Parameters,diagnosticPathPreview):null,SteeringOverride(views[i].Id),inertia:physics.Inertias[i]);
                 duration=UntilCurvatureChange(i,f.NetForce,duration);
             }else{
                 var f=RiderController.Forces(views[i],specs[i],Frame,surface,Parameters,TimeSeconds,physics.Masses[i],physics.Inertias[i],

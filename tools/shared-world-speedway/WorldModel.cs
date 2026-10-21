@@ -21,6 +21,8 @@ public sealed record WorldParameters
     public bool EnableFullContactYawFeedForward { get; init; }
     [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
     public bool EnableTwoContactBikeDynamics { get; init; }
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+    public bool EnablePhysicalSteeringControl { get; init; }
     [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
     public TwoContactBikeParameters? TwoContactBike { get; init; }
     // #102 tools-only authored controls. Historical worlds keep their original bounds.

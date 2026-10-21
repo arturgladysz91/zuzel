@@ -8,6 +8,12 @@ uses one Box2D.NET world and causal rider observations. Recommendation B: full
 contact-free heats work; crowded-contact sensitivity and post-crash boundaries
 still block adoption. Production CoreSim and defaults remain unchanged.
 
+[Physical Steering Control (#113)](docs/experiments/physical-steering-control.md)
+adds an opt-in local yaw-response inverse for the two-contact prototype. The same
+tyres, engine and C3 INNER complete the first two bends and eight laps safely.
+Full-drive INNER tracking still fails after acceleration: parts of the requested
+curvature exceed the frozen force budget. Both experiment flags remain OFF.
+
 [Two Contact Bike Dynamics, Stage1](docs/experiments/two-contact-bike-dynamics.md)
 adds default-OFF `EnableTwoContactBikeDynamics` in that same experimental world.
 Front steering and local axle velocities generate moments through actual Box2D
