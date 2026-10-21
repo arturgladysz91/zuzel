@@ -25,6 +25,16 @@ Stage1 excludes traffic, old yaw/inverse flags, lean and load transfer. Axle/ste
 inputs are provisional; energy-stable isolated tests do not certify track safety.
 Production CoreSim remains unchanged.
 
+[500cc Motorcycle Performance](experiments/motorcycle-performance-500cc.md)
+adds two independent default-OFF branches inside the existing two-contact force
+evaluation: one rigid single gear from rear-wheel RPM to a crank torque curve,
+and static normal loads with surface-dependent µFz contact capacities. The
+existing dissipative combined-slip solve, actual r×F, wheel commit and single
+native step remain. Shaft input work and transmission losses are explicit.
+Dynamic axle transfer and legacy envelope overrides are rejected. Mechanical
+and isolated acceleration checks pass; high-power Egg control fails, so there
+is no default enablement, production scheduling change or long-run promotion.
+
 [Adaptive Rider Decisions](experiments/adaptive-rider-decisions.md) is a
 PROVISIONAL, default-OFF single-rider controller requiring #113 physical steering
 and static #112 axle budgets. It rejects authored paths/controls, traffic and

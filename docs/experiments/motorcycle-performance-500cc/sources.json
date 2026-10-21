@@ -1,0 +1,34 @@
+{
+  "Retrieved": "2026-10-21",
+  "ConfirmedReference": {
+    "Engine": {
+      "Source": "Original JRM/JAWA 889 maintenance and parts document, technical table page12",
+      "Url": "https://www.jawa500.cz/element/simple/documents-to-download/c/9/82967b1759773d81.pdf",
+      "CapacityCm3": 499,
+      "PeakPowerKwRange": [48, 50],
+      "PeakPowerRpm": 8500,
+      "Fuel": "methanol",
+      "Limit": "Older class500 technical anchor, not a complete dyno map or a claim about the newest2026 GP engine. Use kW; the printed bhp conversion is inconsistent."
+    },
+    "GearRatios": {
+      "Source": "JK Speedway Service transmission ratio chart",
+      "Url": "https://www.speedwayservice.at/images/knowledge/JK_en_transmission-ratio.pdf",
+      "Use": "Verifies that overall reductions around8–10 are mechanically plausible combinations. Does not identify a track-optimal ratio."
+    },
+    "Tyres": {
+      "Source": "Mitas SPEEDWAY tyre technical/product description",
+      "Url": "https://www.mitas-moto.com/en/products/motorcycle-off-road-tires/speedway-tires/speedway",
+      "Use": "Qualitative carcass/contact-patch context only. Supplies no coefficient or force/slip calibration used by this model."
+    }
+  },
+  "ExplicitUnmeasuredHypotheses": {
+    "TorqueCurve": "Intermediate torque knots and high-RPM falloff; published peak-power anchor only is confirmed",
+    "FuelCutoffRpm": 12000,
+    "OverallRatioMapping": "setup.Gearing0..1 =>10..8, reference9; fixed throughout a run",
+    "TransmissionEfficiency": 0.94,
+    "ReferenceEffectiveTyreSoilFrictionCoefficient": 1.4,
+    "SurfaceMapping": "mu=1.4*existing EffectiveGrip; frozen surface gives approximately1.2845",
+    "TyreCalibration": "Not empirically calibrated. No claim that Mitas measured or recommends1.4. Not fitted to any speed, lap time or adaptive AI outcome.",
+    "CrankInertiaAndClutch": "Omitted for rolling-start stage; wheel inertia remains0.9kgm2"
+  }
+}
