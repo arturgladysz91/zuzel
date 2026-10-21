@@ -21,7 +21,7 @@ public static class TwoContactBikeAudit
         new Case("D-front-minus",12,35*MathF.PI/180,Steer:-.08f,Seconds:1.2),new Case("D-front-plus",12,35*MathF.PI/180,Steer:.08f,Seconds:1.2),
         new Case("E-rest",0,Steer:.04f),new Case("E-spin-only",0,Spin:2),new Case("E-low-speed",.05f,50*MathF.PI/180,Spin:.2f),
         new Case("E-left-h20",Steer:.04f,Step:.02),new Case("E-left-h5",Steer:.04f,Step:.005),new Case("E-left-repeat",Steer:.04f)};
-    public static Capture Execute(Case c,bool track=false,int laps=0,bool stopUnsafe=false,WorldParameters? parameters=null,double? stopReference=null)
+    public static Capture Execute(Case c,bool track=false,int laps=0,bool stopUnsafe=false,WorldParameters? parameters=null,double? stopReference=null,Action<AdaptiveRiderDecision>? adaptiveObserver=null)
     {
         var path=track?AuthoredRacingPath.Crossover(false):null;var frame=RacingLineRootCauseAudit.Frame();
         var rider=RacingLineRootCauseAudit.Rider(path??AuthoredRacingPath.Crossover(false)) with{
@@ -30,9 +30,10 @@ public static class TwoContactBikeAudit
             .Concat(c.Ramp?new[]{new ControlCommand(rider.Profile.Id,.3,5,.5f),new ControlCommand(rider.Profile.Id,.6,5,1)}:Array.Empty<ControlCommand>()).ToArray();
         var ticks=new List<Tick>();TwoContactForces forces=default;RearWheelStep wheel=default;RiderView forceBefore=default;var yawCalls=0;string? stop=null;
         using var world=new WorldRunner(new[]{rider},parameters:parameters??Parameters(),trackShape:RacingLineRootCauseAudit.Variant(),
-            frozenSurface:TrackState.CreateDefault(frame.Track,new(1,0,.5f)).Snapshot(),authoredPath:path,diagnosticPathGuidance:track,diagnosticPathPreview:track,
+            frozenSurface:TrackState.CreateDefault(frame.Track,new(1,0,.5f)).Snapshot(),authoredPath:parameters?.EnableAdaptiveRiderControl==true?null:path,
+            diagnosticPathGuidance:track&&parameters?.EnableAdaptiveRiderControl!=true,diagnosticPathPreview:track&&parameters?.EnableAdaptiveRiderControl!=true,
             controls:commands,twoContactInitial:new(c.Beta,c.Spin),steeringCommands:track?null:new[]{new TwoContactSteeringCommand(rider.Profile.Id,0,c.Steer)},
-            diagnostics:new(){Force=f=>forceBefore=f.Rider,TwoContact=o=>forces=o.Forces,RearWheel=w=>wheel=w.Step,YawLimit=_=>yawCalls++});
+            diagnostics:new(){Force=f=>forceBefore=f.Rider,TwoContact=o=>forces=o.Forces,RearWheel=w=>wheel=w.Step,YawLimit=_=>yawCalls++,AdaptiveRider=adaptiveObserver});
         var initial=world.Snapshot;var mechanical=world.MechanicalProperties(rider.Profile.Id);var geometry=new RacingLineGeometry(world.Frame);
         var previousTime=0d;
         var result=world.Run(c.Name,c.Step,c.Seconds,laps,snapshot=>{
