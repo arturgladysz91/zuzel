@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="24a09d35-2731-4ced-b656-58a03f1d2433" name="artur@ARTUR 2026-10-22 11:31:47" runUser="ARTUR\artur" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-22T11:31:47.6162688+02:00" queuing="2026-10-22T11:31:47.6162694+02:00" start="2026-10-22T11:31:45.9603913+02:00" finish="2026-10-22T11:31:47.6210551+02:00" />
+  <TestSettings name="default" id="0dd4b7d1-275c-4680-b396-34a9b7247410">
+    <Deployment runDeploymentRoot="artur_ARTUR_2026-10-22_11_31_47" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="6f290cb4-2443-408d-b423-a03317f5214b" testId="5aa0fff2-0e32-8dd8-e806-38a806f4febb" testName="CoreSim.Tests.EngineClutchModelTests.DisconnectedRunningCrankDoesNotDriveTheWheelBeforeReaction" computerName="ARTUR" duration="00:00:00.0126263" startTime="2026-10-22T11:31:47.4771423+02:00" endTime="2026-10-22T11:31:47.4771424+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6f290cb4-2443-408d-b423-a03317f5214b" />
+    <UnitTestResult executionId="5d3679e7-9268-413b-b4d1-db458f2ed378" testId="604fb36e-693a-5f16-e570-ff9d119b6c0f" testName="CoreSim.Tests.EngineClutchModelTests.SlidingClutchTransfersCrankEnergyThroughOriginalWheelSolver(dt: 0,0199999996)" computerName="ARTUR" duration="00:00:00.0113953" startTime="2026-10-22T11:31:47.4429684+02:00" endTime="2026-10-22T11:31:47.4429685+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5d3679e7-9268-413b-b4d1-db458f2ed378" />
+    <UnitTestResult executionId="689814ca-704e-4e98-af82-fa0b3bb9197a" testId="f2d2bfeb-4e97-bc98-f685-21a060e8ccb6" testName="CoreSim.Tests.EngineClutchModelTests.SlidingClutchTransfersCrankEnergyThroughOriginalWheelSolver(dt: 0,00499999989)" computerName="ARTUR" duration="00:00:00.0213822" startTime="2026-10-22T11:31:47.4644548+02:00" endTime="2026-10-22T11:31:47.4644551+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="689814ca-704e-4e98-af82-fa0b3bb9197a" />
+    <UnitTestResult executionId="2bbc82a9-5c38-4694-b392-4fbcb48cb700" testId="ab445c88-b97b-506c-8a23-64b1155469b6" testName="CoreSim.Tests.EngineClutchModelTests.FullyCoupledStateKeepsOriginalRatioAndTorqueCurveWithCrankInertia" computerName="ARTUR" duration="00:00:00.0112861" startTime="2026-10-22T11:31:47.4885082+02:00" endTime="2026-10-22T11:31:47.4885083+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2bbc82a9-5c38-4694-b392-4fbcb48cb700" />
+    <UnitTestResult executionId="488d4464-9213-4d48-a3ff-2c2e68de58ed" testId="d9ad5bfc-953d-e431-b512-e9c1288601c8" testName="CoreSim.Tests.EngineClutchModelTests.BackdriveAlsoDissipatesAndNearZeroRemainsFinite" computerName="ARTUR" duration="00:00:00.0703994" startTime="2026-10-22T11:31:47.4164658+02:00" endTime="2026-10-22T11:31:47.4164812+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="488d4464-9213-4d48-a3ff-2c2e68de58ed" />
+    <UnitTestResult executionId="305186ce-dc6d-4d82-b44e-c212ecddded3" testId="03fd1bc6-0e15-e1b3-7cf0-721b15bffbad" testName="CoreSim.Tests.EngineClutchModelTests.SlidingClutchTransfersCrankEnergyThroughOriginalWheelSolver(dt: 0,00999999978)" computerName="ARTUR" duration="00:00:00.0157021" startTime="2026-10-22T11:31:47.4315522+02:00" endTime="2026-10-22T11:31:47.4315523+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="305186ce-dc6d-4d82-b44e-c212ecddded3" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="CoreSim.Tests.EngineClutchModelTests.SlidingClutchTransfersCrankEnergyThroughOriginalWheelSolver(dt: 0,00499999989)" storage="c:\users\artur\documents\codex\2026-10-22\codex-118-czy-nasz-model-opony\work\zuzel\tests\coresim.tests\bin\release\net8.0\coresim.tests.dll" id="f2d2bfeb-4e97-bc98-f685-21a060e8ccb6">
+      <Execution id="689814ca-704e-4e98-af82-fa0b3bb9197a" />
+      <TestMethod codeBase="C:\Users\artur\Documents\Codex\2026-10-22\codex-118-czy-nasz-model-opony\work\zuzel\tests\CoreSim.Tests\bin\Release\net8.0\CoreSim.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CoreSim.Tests.EngineClutchModelTests" name="SlidingClutchTransfersCrankEnergyThroughOriginalWheelSolver" />
+    </UnitTest>
+    <UnitTest name="CoreSim.Tests.EngineClutchModelTests.FullyCoupledStateKeepsOriginalRatioAndTorqueCurveWithCrankInertia" storage="c:\users\artur\documents\codex\2026-10-22\codex-118-czy-nasz-model-opony\work\zuzel\tests\coresim.tests\bin\release\net8.0\coresim.tests.dll" id="ab445c88-b97b-506c-8a23-64b1155469b6">
+      <Execution id="2bbc82a9-5c38-4694-b392-4fbcb48cb700" />
+      <TestMethod codeBase="C:\Users\artur\Documents\Codex\2026-10-22\codex-118-czy-nasz-model-opony\work\zuzel\tests\CoreSim.Tests\bin\Release\net8.0\CoreSim.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CoreSim.Tests.EngineClutchModelTests" name="FullyCoupledStateKeepsOriginalRatioAndTorqueCurveWithCrankInertia" />
+    </UnitTest>
+    <UnitTest name="CoreSim.Tests.EngineClutchModelTests.DisconnectedRunningCrankDoesNotDriveTheWheelBeforeReaction" storage="c:\users\artur\documents\codex\2026-10-22\codex-118-czy-nasz-model-opony\work\zuzel\tests\coresim.tests\bin\release\net8.0\coresim.tests.dll" id="5aa0fff2-0e32-8dd8-e806-38a806f4febb">
+      <Execution id="6f290cb4-2443-408d-b423-a03317f5214b" />
+      <TestMethod codeBase="C:\Users\artur\Documents\Codex\2026-10-22\codex-118-czy-nasz-model-opony\work\zuzel\tests\CoreSim.Tests\bin\Release\net8.0\CoreSim.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CoreSim.Tests.EngineClutchModelTests" name="DisconnectedRunningCrankDoesNotDriveTheWheelBeforeReaction" />
+    </UnitTest>
+    <UnitTest name="CoreSim.Tests.EngineClutchModelTests.SlidingClutchTransfersCrankEnergyThroughOriginalWheelSolver(dt: 0,0199999996)" storage="c:\users\artur\documents\codex\2026-10-22\codex-118-czy-nasz-model-opony\work\zuzel\tests\coresim.tests\bin\release\net8.0\coresim.tests.dll" id="604fb36e-693a-5f16-e570-ff9d119b6c0f">
+      <Execution id="5d3679e7-9268-413b-b4d1-db458f2ed378" />
+      <TestMethod codeBase="C:\Users\artur\Documents\Codex\2026-10-22\codex-118-czy-nasz-model-opony\work\zuzel\tests\CoreSim.Tests\bin\Release\net8.0\CoreSim.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CoreSim.Tests.EngineClutchModelTests" name="SlidingClutchTransfersCrankEnergyThroughOriginalWheelSolver" />
+    </UnitTest>
+    <UnitTest name="CoreSim.Tests.EngineClutchModelTests.BackdriveAlsoDissipatesAndNearZeroRemainsFinite" storage="c:\users\artur\documents\codex\2026-10-22\codex-118-czy-nasz-model-opony\work\zuzel\tests\coresim.tests\bin\release\net8.0\coresim.tests.dll" id="d9ad5bfc-953d-e431-b512-e9c1288601c8">
+      <Execution id="488d4464-9213-4d48-a3ff-2c2e68de58ed" />
+      <TestMethod codeBase="C:\Users\artur\Documents\Codex\2026-10-22\codex-118-czy-nasz-model-opony\work\zuzel\tests\CoreSim.Tests\bin\Release\net8.0\CoreSim.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CoreSim.Tests.EngineClutchModelTests" name="BackdriveAlsoDissipatesAndNearZeroRemainsFinite" />
+    </UnitTest>
+    <UnitTest name="CoreSim.Tests.EngineClutchModelTests.SlidingClutchTransfersCrankEnergyThroughOriginalWheelSolver(dt: 0,00999999978)" storage="c:\users\artur\documents\codex\2026-10-22\codex-118-czy-nasz-model-opony\work\zuzel\tests\coresim.tests\bin\release\net8.0\coresim.tests.dll" id="03fd1bc6-0e15-e1b3-7cf0-721b15bffbad">
+      <Execution id="305186ce-dc6d-4d82-b44e-c212ecddded3" />
+      <TestMethod codeBase="C:\Users\artur\Documents\Codex\2026-10-22\codex-118-czy-nasz-model-opony\work\zuzel\tests\CoreSim.Tests\bin\Release\net8.0\CoreSim.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CoreSim.Tests.EngineClutchModelTests" name="SlidingClutchTransfersCrankEnergyThroughOriginalWheelSolver" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="5aa0fff2-0e32-8dd8-e806-38a806f4febb" executionId="6f290cb4-2443-408d-b423-a03317f5214b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="604fb36e-693a-5f16-e570-ff9d119b6c0f" executionId="5d3679e7-9268-413b-b4d1-db458f2ed378" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f2d2bfeb-4e97-bc98-f685-21a060e8ccb6" executionId="689814ca-704e-4e98-af82-fa0b3bb9197a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ab445c88-b97b-506c-8a23-64b1155469b6" executionId="2bbc82a9-5c38-4694-b392-4fbcb48cb700" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d9ad5bfc-953d-e431-b512-e9c1288601c8" executionId="488d4464-9213-4d48-a3ff-2c2e68de58ed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="03fd1bc6-0e15-e1b3-7cf0-721b15bffbad" executionId="305186ce-dc6d-4d82-b44e-c212ecddded3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Wyniki, których nie ma na liście" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="Wszystkie załadowane wyniki" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="6" executed="6" passed="6" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.5.7+8f2703126a (64-bit .NET 8.0.26)&#xD;
+[xUnit.net 00:00:00.20]   Discovering: CoreSim.Tests&#xD;
+[xUnit.net 00:00:00.78]   Discovered:  CoreSim.Tests&#xD;
+[xUnit.net 00:00:00.79]   Starting:    CoreSim.Tests&#xD;
+[xUnit.net 00:00:00.97]   Finished:    CoreSim.Tests&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

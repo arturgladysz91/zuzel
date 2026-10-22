@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="63dc2752-ede0-42e3-8874-fa84abe416c2" name="artur@ARTUR 2026-10-22 11:34:59" runUser="ARTUR\artur" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-22T11:34:59.9984241+02:00" queuing="2026-10-22T11:34:59.9984241+02:00" start="2026-10-22T11:34:58.0000444+02:00" finish="2026-10-22T11:35:00.6260413+02:00" />
+  <TestSettings name="default" id="dad3ed19-15df-4fcf-b86c-b0111beda058">
+    <Deployment runDeploymentRoot="artur_ARTUR_2026-10-22_11_34_59" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="beccea61-e633-4cfc-8cd9-ef551502ea2d" testId="8dd1ed15-e732-f53a-e09c-77d41a1a1f3a" testName="CoreSim.Tests.EngineClutchStartTests.TapeAndReactionPrecedeAllMotionAndStatesCommitOnce" computerName="ARTUR" duration="00:00:01.2083899" startTime="2026-10-22T11:35:00.5624974+02:00" endTime="2026-10-22T11:35:00.5624976+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="beccea61-e633-4cfc-8cd9-ef551502ea2d" />
+    <UnitTestResult executionId="dba70fbf-689b-4e3d-8b7f-7eda81725847" testId="1b402049-4b4d-c4b6-39a7-6dc849f37d28" testName="CoreSim.Tests.EngineClutchStartTests.FlagOffAndDependenciesRetainRollingStartContract" computerName="ARTUR" duration="00:00:00.0898496" startTime="2026-10-22T11:34:59.3546405+02:00" endTime="2026-10-22T11:34:59.3546573+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="dba70fbf-689b-4e3d-8b7f-7eda81725847" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="CoreSim.Tests.EngineClutchStartTests.FlagOffAndDependenciesRetainRollingStartContract" storage="c:\users\artur\documents\codex\2026-10-22\codex-118-czy-nasz-model-opony\work\zuzel\tests\coresim.tests\bin\release\net8.0\coresim.tests.dll" id="1b402049-4b4d-c4b6-39a7-6dc849f37d28">
+      <Execution id="dba70fbf-689b-4e3d-8b7f-7eda81725847" />
+      <TestMethod codeBase="C:\Users\artur\Documents\Codex\2026-10-22\codex-118-czy-nasz-model-opony\work\zuzel\tests\CoreSim.Tests\bin\Release\net8.0\CoreSim.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CoreSim.Tests.EngineClutchStartTests" name="FlagOffAndDependenciesRetainRollingStartContract" />
+    </UnitTest>
+    <UnitTest name="CoreSim.Tests.EngineClutchStartTests.TapeAndReactionPrecedeAllMotionAndStatesCommitOnce" storage="c:\users\artur\documents\codex\2026-10-22\codex-118-czy-nasz-model-opony\work\zuzel\tests\coresim.tests\bin\release\net8.0\coresim.tests.dll" id="8dd1ed15-e732-f53a-e09c-77d41a1a1f3a">
+      <Execution id="beccea61-e633-4cfc-8cd9-ef551502ea2d" />
+      <TestMethod codeBase="C:\Users\artur\Documents\Codex\2026-10-22\codex-118-czy-nasz-model-opony\work\zuzel\tests\CoreSim.Tests\bin\Release\net8.0\CoreSim.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CoreSim.Tests.EngineClutchStartTests" name="TapeAndReactionPrecedeAllMotionAndStatesCommitOnce" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="8dd1ed15-e732-f53a-e09c-77d41a1a1f3a" executionId="beccea61-e633-4cfc-8cd9-ef551502ea2d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1b402049-4b4d-c4b6-39a7-6dc849f37d28" executionId="dba70fbf-689b-4e3d-8b7f-7eda81725847" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Wyniki, których nie ma na liście" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="Wszystkie załadowane wyniki" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="2" executed="2" passed="2" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.5.7+8f2703126a (64-bit .NET 8.0.26)&#xD;
+[xUnit.net 00:00:00.19]   Discovering: CoreSim.Tests&#xD;
+[xUnit.net 00:00:00.75]   Discovered:  CoreSim.Tests&#xD;
+[xUnit.net 00:00:00.76]   Starting:    CoreSim.Tests&#xD;
+[xUnit.net 00:00:02.10]   Finished:    CoreSim.Tests&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

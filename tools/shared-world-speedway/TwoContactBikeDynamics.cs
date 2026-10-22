@@ -52,6 +52,8 @@ public readonly record struct TwoContactForces(Vector2 FrontPoint,Vector2 RearPo
     public Engine500Command? Engine {get;init;}
     [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
     public LoadBasedTyreBudget? TyreLoads {get;init;}
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
+    public EngineClutchStep? Drivetrain {get;init;}
     public Vector2 NetForce=>FrontForce+RearForce+Resistance;
     public float FrontTorque=>Cross(FrontArm,FrontForce);
     public float RearTorque=>Cross(RearArm,RearForce);
@@ -66,11 +68,12 @@ public static class TwoContactBikeDynamics
 {
     public static TwoContactForces Forces(RiderView v,RiderSpec spec,TrackFrame frame,TrackStateSnapshot surface,WorldParameters p,
         double time,float mass,RearWheelState wheel,TwoContactBikeState state,float seconds,PathGuidanceSample? path=null,
-        float? steeringOverride=null,Action<ForceObservation>? observe=null,Action<TwoContactObservation>? observeContacts=null,float? inertia=null)
+        float? steeringOverride=null,Action<ForceObservation>? observe=null,Action<TwoContactObservation>? observeContacts=null,float? inertia=null,EngineClutchState? drivetrain=null)
     {
         if(!p.EnableTwoContactBikeDynamics||!p.EnableSlipCoupledDynamics||!p.EnableRearWheelDynamics||p.EnableCoupledSlipInverse||p.EnableFullContactYawFeedForward
             ||p.EnableTravelDirectionSteering&&(!p.EnablePhysicalSteeringControl||p.EnableDynamicAxleLoad)
             ||p.EnableReachableTravelDirectionSteering&&!p.EnableTravelDirectionSteering
+            ||p.EnableEngineClutchStart&&(!p.Enable500CcEngine||drivetrain is null)
             ||(p.Enable500CcEngine||p.EnableLoadBasedTyreGrip)&&(p.EnableDynamicAxleLoad||p.ExperimentalDrive is not null)
             ||!float.IsFinite(seconds)||seconds is <0 or >.020001f||!float.IsFinite(mass)||mass<=0||!float.IsFinite(v.Speed)||!float.IsFinite(v.Heading)
             ||!float.IsFinite(v.AngularVelocity)||steeringOverride is { } input&&!float.IsFinite(input))throw new ArgumentException("Finite isolated two-contact variant with original rear wheel required.");
@@ -109,7 +112,8 @@ public static class TwoContactBikeDynamics
             // identical accepted rigid-body state, original tyre/engine equations.
             var original=p with{EnablePhysicalSteeringControl=false,EnableTravelDirectionSteering=false,EnableReachableTravelDirectionSteering=false};
             TwoContactForces Response(float delta)=>Forces(v,spec,frame,surface,original,time,mass,
-                new RearWheelState(wheel.AngularVelocityRadPerSecond*wheel.Parameters.WheelRadiusMeters,wheel.Parameters),new(delta){AxleLoad=load},seconds,path,delta);
+                new RearWheelState(wheel.AngularVelocityRadPerSecond*wheel.Parameters.WheelRadiusMeters,wheel.Parameters),new(delta){AxleLoad=load},seconds,path,delta,
+                drivetrain:drivetrain is null?null:new(drivetrain.Parameters,drivetrain.AngularVelocityRadPerSecond));
             if(p.EnableTravelDirectionSteering){
                 travel=p.EnableReachableTravelDirectionSteering
                     ?ReachableTravelDirectionSteering.Decide(v,(float)demand,mass,moment,p.SlipYawResponseSeconds,geometry,state.SteeringRadians,seconds,Response)
@@ -138,7 +142,8 @@ public static class TwoContactBikeDynamics
         var throttle=v.Activity is RiderActivity.Finished or RiderActivity.Crashed?0:v.Drive*(1-v.Impairment);
         Engine500Command? engineCommand=null;double requestedTorque,availableTorque,driveTorque;
         if(p.Enable500CcEngine){
-            engineCommand=Engine500.Evaluate(wheel.AngularVelocityRadPerSecond,spec.Setup,throttle,p.Engine500);
+            var ratio=p.EnableEngineClutchStart?Engine500.Evaluate(0,spec.Setup,0,p.Engine500).OverallRatio:1;
+            engineCommand=Engine500.Evaluate(p.EnableEngineClutchStart?drivetrain!.AngularVelocityRadPerSecond/ratio:wheel.AngularVelocityRadPerSecond,spec.Setup,throttle,p.Engine500);
             availableTorque=engineCommand.AvailableWheelTorqueNewtonMeters;driveTorque=engineCommand.DriveWheelTorqueNewtonMeters;requestedTorque=driveTorque;
         }else{
             var launch=spec.SpeedMetersPerSecond==0&&v.TotalReferenceMeters<frame.Embedding.Segments[0].StraightLengthMeters&&!road.IsTurn;
@@ -151,7 +156,15 @@ public static class TwoContactBikeDynamics
             requestedTorque=(p.ExperimentalDrive?.ReferenceForce(reference)??reference)*wp.WheelRadiusMeters*throttle;
             availableTorque=available*wp.WheelRadiusMeters;driveTorque=available*wp.WheelRadiusMeters*throttle;
         }
-        var contact=RearWheelDynamics.Evaluate(ur,wr,wheel.AngularVelocityRadPerSecond,budget,mass,SlipCoupledDynamics.VelocityScaleSquared(ur,budget/mass),
+        EngineClutchStep? clutch=null;
+        RearWheelStep contact;
+        if(p.EnableEngineClutchStart){
+            RearWheelStep WheelAtTorque(double torque)=>RearWheelDynamics.Evaluate(ur,wr,wheel.AngularVelocityRadPerSecond,budget,mass,
+                SlipCoupledDynamics.VelocityScaleSquared(ur,budget/mass),requestedTorque,availableTorque,torque,
+                Vector2.Dot(resistance+frontForce,forward),seconds,wp,rearBudgetNewtons:rearBudget);
+            clutch=EngineClutch.Evaluate(drivetrain!,spec.Setup,p.Engine500,time,RiderController.TapeReactionSeconds(spec),throttle,seconds,WheelAtTorque);
+            drivetrain!.Prepared=clutch;contact=clutch.Wheel;
+        }else contact=RearWheelDynamics.Evaluate(ur,wr,wheel.AngularVelocityRadPerSecond,budget,mass,SlipCoupledDynamics.VelocityScaleSquared(ur,budget/mass),
             requestedTorque,availableTorque,driveTorque,
             // Front force is an external longitudinal load in the original scalar
             // wheel/contact solve. Omitting it would break the midpoint energy identity.
@@ -159,7 +172,7 @@ public static class TwoContactBikeDynamics
         wheel.Prepared=contact with{FrontLateralNewtons=0}; // front now has its OWN axes/velocity, recorded separately.
         var rearForce=forward*contact.LongitudinalNewtons+left*contact.RearLateralNewtons;
         var result=new TwoContactForces(frontPoint,rearPoint,frontArm,rearArm,vf,vr,frontForce,rearForce,resistance,forward,frontLeft,left,
-            fyFront,contact.RearLateralNewtons,contact.LongitudinalNewtons,budget,requested,state.SteeringRadians,used,after,(float)demand){SteeringControl=control,TravelSteering=travel,AxleLoad=load,Engine=engineCommand,TyreLoads=tyreLoads};
+            fyFront,contact.RearLateralNewtons,contact.LongitudinalNewtons,budget,requested,state.SteeringRadians,used,after,(float)demand){SteeringControl=control,TravelSteering=travel,AxleLoad=load,Engine=engineCommand,TyreLoads=tyreLoads,Drivetrain=clutch};
         observe?.Invoke(new(time,v,result.NetForce,result.NetTorque,(float)(mass*demand),Vector2.Dot(result.FrontForce+result.RearForce,new(-road.Tangent.Y,road.Tangent.X)),budget,
             Vector2.Dot(result.NetForce,road.Tangent),"two-contact"));
         observeContacts?.Invoke(new(time,v.Id,result));return result;

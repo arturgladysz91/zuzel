@@ -38,6 +38,7 @@ public sealed class WorldRunner : IDisposable
     private int nextControl;
     private bool disposed;
     private readonly RearWheelState[] rearWheels;
+    private readonly EngineClutchState[] engines;
     private readonly TwoContactBikeState[] twoContactStates;
     private readonly TwoContactSteeringCommand[] steeringCommands;
     private readonly AuthoredRacingPath? authoredPath;
@@ -46,6 +47,7 @@ public sealed class WorldRunner : IDisposable
     private readonly AdaptiveRiderControl? adaptiveRider;
     private readonly FeasibleCornerEntry? cornerEntry;
     public WorldSnapshot Snapshot => new(TimeSeconds, Array.AsReadOnly((RiderView[])views.Clone())) {
+        Engines=engines.Length==0?null:engines.Select((e,i)=>e.View(specs[i].Profile.Id)).ToArray(),
         RearWheels=rearWheels.Length==0?null:rearWheels.Select((w,i)=>w.View(specs[i].Profile.Id)).ToArray(),
         Steering=twoContactStates.Length==0?null:twoContactStates.Select((s,i)=>new SteeringView(specs[i].Profile.Id,s.SteeringRadians)).ToArray(),
         AxleLoad=Parameters.EnableDynamicAxleLoad?twoContactStates[0].AxleLoad:null };
@@ -110,7 +112,15 @@ public sealed class WorldRunner : IDisposable
             throw new ArgumentException("Reachable steering requires the isolated travel-direction variant.");
         if(Parameters.EnableTravelDirectionSteering&&(!Parameters.EnableTwoContactBikeDynamics||!Parameters.EnablePhysicalSteeringControl||Parameters.EnableDynamicAxleLoad))
             throw new ArgumentException("Travel-direction steering requires isolated physical steering and static axle loads.");
-        if(Parameters.Enable500CcEngine&&specs.Any(s=>s.SpeedMetersPerSecond<=0))throw new ArgumentException("500cc Stage1 supports rolling starts only; no clutch model.");
+        if(Parameters.EnableEngineClutchStart&&(!Parameters.Enable500CcEngine||!Parameters.EnableLoadBasedTyreGrip||Parameters.EnableDynamicAxleLoad
+            ||Parameters.EnableAdaptiveRiderControl||Parameters.EnableFeasibleCornerEntry||specs.Any(s=>s.SpeedMetersPerSecond!=0||s.InitialOutwardSpeed!=0))
+            ||Parameters.EngineClutch is not null&&!Parameters.EnableEngineClutchStart)
+            throw new ArgumentException("Clutch launch requires original500cc/static tyres, zero-speed isolated starts and no entry AI.");
+        Parameters.EngineClutch?.Validate();
+        if(Parameters.EnableEngineClutchStart&&(twoContactInitial is {BetaRadians:not 0} or {BodyAngularVelocity:not 0} or {SteeringRadians:not 0} or {RearWheelOmega:not null and not 0}
+            ||diagnosticSteadyStart is not null||specs.Any(s=>Frame.RoadAt(s.ReferenceMeters,s.OffsetMeters).IsTurn)))
+            throw new ArgumentException("Launch initially has zero wheel, steering, lateral and angular motion on a straight.");
+        if(Parameters.Enable500CcEngine&&!Parameters.EnableEngineClutchStart&&specs.Any(s=>s.SpeedMetersPerSecond<=0))throw new ArgumentException("500cc Stage1 supports rolling starts only; no clutch model.");
         if(Parameters.EnableAdaptiveRiderControl&&(!Parameters.EnableTwoContactBikeDynamics||!Parameters.EnablePhysicalSteeringControl
             ||Parameters.EnableDynamicAxleLoad||Parameters.EnableLocalOffsetLimit||authoredPath is not null||diagnosticPathGuidance
             ||controls?.Any()==true||spatialControls?.Any()==true||steeringCommands?.Any()==true))
@@ -219,6 +229,7 @@ public sealed class WorldRunner : IDisposable
             initial.RearWheelOmega*(Parameters.RearWheel??RearWheelParameters.Default).WheelRadiusMeters:v.ForwardSpeed,Parameters.RearWheel)).ToArray():Array.Empty<RearWheelState>();
         if(twoContactInitial?.RearWheelOmega is { } initialOmega)rearWheels[0]=new(initialOmega*(Parameters.RearWheel??RearWheelParameters.Default).WheelRadiusMeters,Parameters.RearWheel);
         twoContactStates=Parameters.EnableTwoContactBikeDynamics?specs.Select(_=>new TwoContactBikeState(twoContactInitial?.SteeringRadians??0)).ToArray():Array.Empty<TwoContactBikeState>();
+        engines=Parameters.EnableEngineClutchStart?specs.Select(_=>new EngineClutchState(Parameters.EngineClutch??new())).ToArray():Array.Empty<EngineClutchState>();
         if(Parameters.EnableDynamicAxleLoad){twoContactStates[0].AxleLoad=DynamicAxleLoad.AtAcceleration(0,Parameters.TwoContactBike??TwoContactBikeParameters.Default,Parameters.AxleLoadHeightMeters??DynamicAxleLoad.ProvisionalHeightMeters);Work.AxleLoadUpdates++;}
         Record();
     }
@@ -228,6 +239,7 @@ public sealed class WorldRunner : IDisposable
         if (TimeSeconds != 0 || stepSeconds is not (.005 or .01 or .02) || !double.IsFinite(maximumSeconds)
             || maximumSeconds <= 0 || requiredLaps < 0) throw new ArgumentException("Run once at 5/10/20 ms.");
         if(diagnosticStop is not null&&!Parameters.EnableTwoContactBikeDynamics)throw new ArgumentException("Stage1 diagnostic stop is only available for the two-contact variant.");
+        if(engines.Length>0&&lapsFromInitialPosition)throw new ArgumentException("Tape launch uses the common start/finish line, not an initial-position-relative finish.");
         var diagnosticHalted=false;
         var aiEvery = (int)Math.Round(Parameters.AiIntervalSeconds / stepSeconds);
         var ticks = checked((int)Math.Ceiling(maximumSeconds / stepSeconds));
@@ -275,7 +287,7 @@ public sealed class WorldRunner : IDisposable
                     (System.Numerics.Vector2 Force,float Torque) force;
                     if(Parameters.EnableTwoContactBikeDynamics){
                         var contact=TwoContactBikeDynamics.Forces(views[i],specs[i],Frame,surface,Parameters,TimeSeconds,physics.Masses[i],rearWheels[i],twoContactStates[i],(float)duration,
-                            diagnosticPathGuidance?authoredPath!.Guidance(views[i],Parameters,diagnosticPathPreview):null,SteeringOverride(views[i].Id),diagnostics?.Force,diagnostics?.TwoContact,physics.Inertias[i]);
+                            diagnosticPathGuidance?authoredPath!.Guidance(views[i],Parameters,diagnosticPathPreview):null,SteeringOverride(views[i].Id),diagnostics?.Force,diagnostics?.TwoContact,physics.Inertias[i],engines.Length==0?null:engines[i]);
                         physics.ForcesAtContacts(i,contact);force=(contact.NetForce,contact.NetTorque);
                     }else{
                         force = diagnosticPathGuidance?SlipCoupledDynamics.Forces(views[i],specs[i],Frame,surface,Parameters,
@@ -298,6 +310,7 @@ public sealed class WorldRunner : IDisposable
                 var watch = Stopwatch.GetTimestamp();
                 physics.Step((float)duration, Parameters.SolverSubsteps);
                 foreach(var wheel in rearWheels){wheel.Commit();Work.RearWheelCommits++;}
+                foreach(var engine in engines){engine.Commit();Work.EngineClutchCommits++;}
                 foreach(var state in twoContactStates)state.Commit();
                 Work.SolverElapsedMilliseconds += Stopwatch.GetElapsedTime(watch).TotalMilliseconds;
                 Work.SolverCalls++;
@@ -556,7 +569,8 @@ public sealed class WorldRunner : IDisposable
         if (nextControl < controls.Length) Before(controls[nextControl].AtSeconds);
         for (var i = 0; i < specs.Length; i++)
         {
-            if (specs[i].SpeedMetersPerSecond == 0) Before(RiderController.TapeReactionSeconds(specs[i]));
+            if (specs[i].SpeedMetersPerSecond == 0) Before(RiderController.TapeReactionSeconds(specs[i])+(engines.Length==0?0:engines[i].Parameters.TapeReleaseSeconds));
+            if(engines.Length>0){Before(engines[i].Parameters.TapeReleaseSeconds);Before(engines[i].Parameters.TapeReleaseSeconds+RiderController.TapeReactionSeconds(specs[i])+engines[i].Parameters.ReleaseSeconds);}
             // A logical Hold that leaves both actuators unchanged does not
             // justify repartitioning Box2D time. Acknowledge it at the first
             // existing accepted boundary AFTER its complete reaction delay.
@@ -601,7 +615,7 @@ public sealed class WorldRunner : IDisposable
             Work.RearWheelBoundaryEvaluations++;
             if(Parameters.EnableTwoContactBikeDynamics){
                 var f=TwoContactBikeDynamics.Forces(views[i],specs[i],Frame,surface,Parameters,TimeSeconds,physics.Masses[i],rearWheels[i],twoContactStates[i],0,
-                    diagnosticPathGuidance?authoredPath!.Guidance(views[i],Parameters,diagnosticPathPreview):null,SteeringOverride(views[i].Id),inertia:physics.Inertias[i]);
+                    diagnosticPathGuidance?authoredPath!.Guidance(views[i],Parameters,diagnosticPathPreview):null,SteeringOverride(views[i].Id),inertia:physics.Inertias[i],drivetrain:engines.Length==0?null:engines[i]);
                 duration=UntilCurvatureChange(i,f.NetForce,duration);
             }else{
                 var f=RiderController.Forces(views[i],specs[i],Frame,surface,Parameters,TimeSeconds,physics.Masses[i],physics.Inertias[i],
@@ -658,6 +672,7 @@ public sealed class WorldRunner : IDisposable
             wheelData[0]=cornerEntry.Preparing?1:0;hash.AppendData(System.Runtime.InteropServices.MemoryMarshal.AsBytes(wheelData));}
         foreach (var v in views)
         {
+            if(engines.Length>0){wheelData[0]=engines[wheelIndex].AngularVelocityRadPerSecond;hash.AppendData(System.Runtime.InteropServices.MemoryMarshal.AsBytes(wheelData));}
             data[0] = TimeSeconds; data[1] = v.Id; data[2] = v.Position.X; data[3] = v.Position.Y;
             data[4] = v.Velocity.X; data[5] = v.Velocity.Y; data[6] = v.Heading; data[7] = v.AngularVelocity;
             data[8] = v.TotalReferenceMeters; data[9] = (int)v.Activity; data[10] = v.Drive; data[11] = v.TargetOffsetMeters;

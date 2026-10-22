@@ -26,6 +26,12 @@ contact capacity before the steering-rate limiter activates. A single default-OF
 reachable-angle search trial barely changes peak error and fails later recovery;
 keep #117 and address feasible preparation before increasing throttle.
 
+[Physical 500cc Tape Start (#121)](docs/experiments/physical-500cc-tape-start.md)
+adds a default-OFF independent crank and bounded dry clutch around the original
+wheel/contact solver. Three frozen straight launches reach70km/h in3.405–3.582s
+from the tape, with explicit crank/clutch/gear energy. Static rear grip limits
+acceleration; real launch calibration and four-rider integration remain unverified.
+
 [Controlled Slip / Travel-Direction Steering (#117)](docs/experiments/controlled-slip-travel-direction.md) adds a
 default-OFF local contact-response controller distinguishing body yaw from velocity
 direction. Short feasible arcs and an explicit coast recovery pass; Egg Mild INNER
