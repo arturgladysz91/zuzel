@@ -8,6 +8,12 @@ uses one Box2D.NET world and causal rider observations. Recommendation B: full
 contact-free heats work; crowded-contact sensitivity and post-crash boundaries
 still block adoption. Production CoreSim and defaults remain unchanged.
 
+[Tyre / Speedway Surface Diagnostic (#118)](docs/experiments/tyre-surface-diagnostic.md)
+queries the original contacts without new worlds. A locally stable nonzero-slip
+operating point exists at partial throttle, but the saved Egg state exceeds the
+absolute force bound. Real soil calibration and the need for tyre changes remain
+inconclusive; no physics or controller changes.
+
 [Controlled Slip / Travel-Direction Steering (#117)](docs/experiments/controlled-slip-travel-direction.md) adds a
 default-OFF local contact-response controller distinguishing body yaw from velocity
 direction. Short feasible arcs and an explicit coast recovery pass; Egg Mild INNER
