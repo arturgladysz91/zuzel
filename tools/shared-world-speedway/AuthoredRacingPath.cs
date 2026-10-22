@@ -15,6 +15,17 @@ public sealed class AuthoredRacingPath
     private readonly double c3Spacing;
     private readonly bool crossoverWide;
     private readonly NaturalRacingLineParameters? natural;
+    private readonly OffsetKnot[]? preparedKnots;
+    /// <summary>Finite, unwrapped reference stations; each knot has zero offset slope and acceleration.</summary>
+    public readonly record struct OffsetKnot(double ReferenceMeters,double OffsetMeters);
+    public static AuthoredRacingPath Prepared(TrackFrame frame,params OffsetKnot[] knots)=>new(frame,knots);
+    private AuthoredRacingPath(TrackFrame frame,OffsetKnot[] knots)
+    {
+        if(frame.Shape is null||knots.Length<2||knots.Any(k=>!double.IsFinite(k.ReferenceMeters)||!double.IsFinite(k.OffsetMeters))
+            ||knots.Zip(knots.Skip(1)).Any(pair=>pair.First.ReferenceMeters>=pair.Second.ReferenceMeters))
+            throw new ArgumentException("Prepared paths require shaped geometry and increasing finite reference knots.");
+        Frame=frame;Name="prepared-offset-path";ApexFraction=.5;preparedKnots=(OffsetKnot[])knots.Clone();
+    }
     public bool IsCrossover=>c3Pieces is not null;
     public double C3KnotSpacingMeters=>c3Spacing;
     public static AuthoredRacingPath Crossover(bool wide)=>new(wide);
@@ -74,6 +85,7 @@ public sealed class AuthoredRacingPath
     }
     public double CurvatureDerivative(double s)
     {
+        if(preparedKnots is not null)return(At(s+.001).Curvature-At(s-.001).Curvature)/(.002*At(s).Metric);
         var(_,d,dd,ddd)=C3Jet(s);var square=MeterPoint.Dot(d,d);var cross=MeterPoint.Cross(d,dd);
         return MeterPoint.Cross(d,ddd)/(square*square)-3*cross*MeterPoint.Dot(d,dd)/(square*square*square);
     }
@@ -98,6 +110,14 @@ public sealed class AuthoredRacingPath
     public (double D,double First,double Second) Offset(double s)
     {
         if(!double.IsFinite(s))throw new ArgumentOutOfRangeException(nameof(s));
+        if(preparedKnots is not null){
+            if(s<=preparedKnots[0].ReferenceMeters)return(preparedKnots[0].OffsetMeters,0,0);
+            for(var i=1;i<preparedKnots.Length;i++)if(s<preparedKnots[i].ReferenceMeters){
+                var a=preparedKnots[i-1];var b=preparedKnots[i];
+                return Blend(a.OffsetMeters,b.OffsetMeters,s-a.ReferenceMeters,b.ReferenceMeters-a.ReferenceMeters);
+            }
+            return(preparedKnots[^1].OffsetMeters,0,0);
+        }
         if(c3Pieces is not null){var q=At(s);return(q.OffsetMeters,q.OffsetFirst,q.OffsetSecond);}
         if(MatchedEntryOffset is { } entry){
             if(entry==1)return(1,0,0);

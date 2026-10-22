@@ -1,0 +1,28 @@
+{
+  "BaseHead": "46129d74cf725c33d67040663262062ac9067281",
+  "ReleaseBuild": {
+    "Warnings": 0,
+    "Errors": 0
+  },
+  "TargetedCSharp": {
+    "Passed": 45,
+    "NewCases": 14,
+    "FinalSuiteTrx": "tests/prepared-targeted-final.trx",
+    "OffFingerprintTrx": "tests/off-fingerprint.trx"
+  },
+  "PythonTargeted": {
+    "Passed": 5
+  },
+  "CiPolicyTests": {
+    "Passed": 7
+  },
+  "NativeMeasurementTrials": 3,
+  "NewFullLaps": 0,
+  "AdditionalOnRecaptures": 0,
+  "ReplayWorlds": 0,
+  "HistoricalFilesVerified": 1178,
+  "FrozenExecutionSourcesPreserved": true,
+  "DefaultOffFingerprint": "6D76ADBCAE18C30367FD72F13749C6DEED795876672CB03063C1665A774EFFFE",
+  "Grade": "B",
+  "FinalWindowsCI": "Required on exact final PR HEAD; result linked in PR description."
+}

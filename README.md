@@ -26,6 +26,11 @@ contact capacity before the steering-rate limiter activates. A single default-OF
 reachable-angle search trial barely changes peak error and fails later recovery;
 keep #117 and address feasible preparation before increasing throttle.
 
+[Prepared Path & Speed Planning](docs/experiments/feasible-path-speed-planning.md)
+tests three frozen first-bend variants over #120. Combined geometry/throttle
+finishes safely and raises exit44.58→54.92km/h, but peak path error remains5.91m
+and gas oscillates. Grade B; default OFF, unchanged #116/#117 and tyre physics.
+
 [Controlled Slip / Travel-Direction Steering (#117)](docs/experiments/controlled-slip-travel-direction.md) adds a
 default-OFF local contact-response controller distinguishing body yaw from velocity
 direction. Short feasible arcs and an explicit coast recovery pass; Egg Mild INNER

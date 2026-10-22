@@ -45,6 +45,7 @@ public sealed class WorldRunner : IDisposable
     private readonly bool diagnosticPathPreview;
     private readonly AdaptiveRiderControl? adaptiveRider;
     private readonly FeasibleCornerEntry? cornerEntry;
+    private readonly PreparedCornerPlan? preparedCorner;
     public WorldSnapshot Snapshot => new(TimeSeconds, Array.AsReadOnly((RiderView[])views.Clone())) {
         RearWheels=rearWheels.Length==0?null:rearWheels.Select((w,i)=>w.View(specs[i].Profile.Id)).ToArray(),
         Steering=twoContactStates.Length==0?null:twoContactStates.Select((s,i)=>new SteeringView(specs[i].Profile.Id,s.SteeringRadians)).ToArray(),
@@ -67,7 +68,7 @@ public sealed class WorldRunner : IDisposable
         TrackStateSnapshot? frozenSurface = null, IEnumerable<SpatialControlCommand>? spatialControls = null,
         TrackShapeVariant? trackShape = null,AuthoredRacingPath? authoredPath=null,bool diagnosticPathGuidance=false,bool diagnosticPathPreview=false,
         AuthoredSteadyStart? diagnosticSteadyStart=null,TwoContactInitialState? twoContactInitial=null,
-        IEnumerable<TwoContactSteeringCommand>? steeringCommands=null)
+        IEnumerable<TwoContactSteeringCommand>? steeringCommands=null,PreparedCornerOptions? preparedOptions=null)
     {
         this.diagnostics = diagnostics;
         Parameters = parameters ?? new();
@@ -121,6 +122,12 @@ public sealed class WorldRunner : IDisposable
             ||controls?.Any()==true||spatialControls?.Any()==true||steeringCommands?.Any()==true||specs.Length!=1||specs[0].TrafficEnabled))
             throw new ArgumentException("Entry preparation needs one isolated travel-steering rider and no competing controls.");
         cornerEntry=Parameters.EnableFeasibleCornerEntry?new():null;
+        if(Parameters.EnablePreparedCornerPlan&&(!Parameters.EnableTravelDirectionSteering||!Parameters.Enable500CcEngine||!Parameters.EnableLoadBasedTyreGrip
+            ||Parameters.EnableFeasibleCornerEntry||Parameters.EnableAdaptiveRiderControl||Parameters.EnableReachableTravelDirectionSteering||Parameters.EnableLocalOffsetLimit
+            ||authoredPath is not null||diagnosticPathGuidance||controls?.Any()==true||spatialControls?.Any()==true||steeringCommands?.Any()==true
+            ||specs.Length!=1||specs[0].TrafficEnabled)||!Parameters.EnablePreparedCornerPlan&&preparedOptions is not null)
+            throw new ArgumentException("Prepared plan requires isolated #116 contacts/#117 steering and no competing controls.");
+        preparedOptions?.Validate();
         this.steeringCommands=(steeringCommands??Array.Empty<TwoContactSteeringCommand>()).OrderBy(c=>c.AtSeconds).ToArray();
         if(Parameters.EnableDynamicAxleLoad&&(!Parameters.EnableTwoContactBikeDynamics||!Parameters.EnablePhysicalSteeringControl
             ||Parameters.AxleLoadHeightMeters is { } height&&(!double.IsFinite(height)||height<=0))||!Parameters.EnableDynamicAxleLoad&&Parameters.AxleLoadHeightMeters is not null)
@@ -220,6 +227,7 @@ public sealed class WorldRunner : IDisposable
         if(twoContactInitial?.RearWheelOmega is { } initialOmega)rearWheels[0]=new(initialOmega*(Parameters.RearWheel??RearWheelParameters.Default).WheelRadiusMeters,Parameters.RearWheel);
         twoContactStates=Parameters.EnableTwoContactBikeDynamics?specs.Select(_=>new TwoContactBikeState(twoContactInitial?.SteeringRadians??0)).ToArray():Array.Empty<TwoContactBikeState>();
         if(Parameters.EnableDynamicAxleLoad){twoContactStates[0].AxleLoad=DynamicAxleLoad.AtAcceleration(0,Parameters.TwoContactBike??TwoContactBikeParameters.Default,Parameters.AxleLoadHeightMeters??DynamicAxleLoad.ProvisionalHeightMeters);Work.AxleLoadUpdates++;}
+        if(Parameters.EnablePreparedCornerPlan)preparedCorner=new(views[0],specs[0],Frame,Parameters,0,physics.Masses[0],rearWheels[0],twoContactStates[0],preparedOptions,surface);
         Record();
     }
     public RunResult Run(string name, double stepSeconds, double maximumSeconds, int requiredLaps = 0,
@@ -244,6 +252,21 @@ public sealed class WorldRunner : IDisposable
             {
                 TimeSeconds = nextTime;
                 Activate();
+                if(preparedCorner is not null&&TimeSeconds+1e-10>=preparedCorner.NextReviewSeconds){
+                    var started=Stopwatch.GetTimestamp();
+                    var choice=preparedCorner.Observe(views[0],specs[0],Frame,surface,Parameters,TimeSeconds,physics.Masses[0],physics.Inertias[0],rearWheels[0],twoContactStates[0]);
+                    Work.PreparedReviews++;Work.PreparedContactQueries+=choice.ContactQueries;
+                    Work.PreparedMilliseconds+=Stopwatch.GetElapsedTime(started).TotalMilliseconds;
+                    diagnostics?.PreparedCorner?.Invoke(choice);
+                    if(pending[0] is null){
+                        var target=preparedCorner.Options.Path?views[0].TargetOffsetMeters:(float)preparedCorner.Options.PreferredOffsetMeters;
+                        var drive=(float)choice.Drive;
+                        if(drive!=views[0].Drive||target!=views[0].TargetOffsetMeters){
+                            var command=new DecisionEvent(views[0].Id,0,TrafficAction.KeepIntent,TimeSeconds,TimeSeconds,choice.Activation,null,target,drive,Reason:choice.Reason);
+                            pending[0]=command;decisions.Add(command);
+                        }
+                    }
+                }
                 if(cornerEntry is not null&&pending[0] is null&&TimeSeconds+1e-10>=cornerEntry.NextReviewSeconds){
                     var choice=cornerEntry.Observe(views[0],specs[0],Frame,surface,Parameters,TimeSeconds,physics.Masses[0],rearWheels[0],twoContactStates[0]);
                     Work.CornerEntryReviews++;diagnostics?.CornerEntry?.Invoke(choice);
@@ -275,7 +298,7 @@ public sealed class WorldRunner : IDisposable
                     (System.Numerics.Vector2 Force,float Torque) force;
                     if(Parameters.EnableTwoContactBikeDynamics){
                         var contact=TwoContactBikeDynamics.Forces(views[i],specs[i],Frame,surface,Parameters,TimeSeconds,physics.Masses[i],rearWheels[i],twoContactStates[i],(float)duration,
-                            diagnosticPathGuidance?authoredPath!.Guidance(views[i],Parameters,diagnosticPathPreview):null,SteeringOverride(views[i].Id),diagnostics?.Force,diagnostics?.TwoContact,physics.Inertias[i]);
+                            preparedCorner?.Guidance(views[i],Parameters,TimeSeconds)??(diagnosticPathGuidance?authoredPath!.Guidance(views[i],Parameters,diagnosticPathPreview):null),SteeringOverride(views[i].Id),diagnostics?.Force,diagnostics?.TwoContact,physics.Inertias[i]);
                         physics.ForcesAtContacts(i,contact);force=(contact.NetForce,contact.NetTorque);
                     }else{
                         force = diagnosticPathGuidance?SlipCoupledDynamics.Forces(views[i],specs[i],Frame,surface,Parameters,
@@ -518,6 +541,7 @@ public sealed class WorldRunner : IDisposable
             var index = decisions.IndexOf(command); decisions[index] = command with { ActualActivation = TimeSeconds };
             pending[i] = null;
         }
+        if(preparedCorner is not null)views[0]=views[0] with{TargetOffsetMeters=preparedCorner.Target(views[0],TimeSeconds)};
     }
     private float ResolveTarget(int riderIndex,float target,float? fraction)
     {
@@ -601,7 +625,7 @@ public sealed class WorldRunner : IDisposable
             Work.RearWheelBoundaryEvaluations++;
             if(Parameters.EnableTwoContactBikeDynamics){
                 var f=TwoContactBikeDynamics.Forces(views[i],specs[i],Frame,surface,Parameters,TimeSeconds,physics.Masses[i],rearWheels[i],twoContactStates[i],0,
-                    diagnosticPathGuidance?authoredPath!.Guidance(views[i],Parameters,diagnosticPathPreview):null,SteeringOverride(views[i].Id),inertia:physics.Inertias[i]);
+                    preparedCorner?.Guidance(views[i],Parameters,TimeSeconds)??(diagnosticPathGuidance?authoredPath!.Guidance(views[i],Parameters,diagnosticPathPreview):null),SteeringOverride(views[i].Id),inertia:physics.Inertias[i]);
                 duration=UntilCurvatureChange(i,f.NetForce,duration);
             }else{
                 var f=RiderController.Forces(views[i],specs[i],Frame,surface,Parameters,TimeSeconds,physics.Masses[i],physics.Inertias[i],
@@ -656,6 +680,7 @@ public sealed class WorldRunner : IDisposable
         if(adaptiveRider is not null){wheelData[0]=adaptiveRider.NextReviewSeconds;hash.AppendData(System.Runtime.InteropServices.MemoryMarshal.AsBytes(wheelData));}
         if(cornerEntry is not null){wheelData[0]=cornerEntry.NextReviewSeconds;hash.AppendData(System.Runtime.InteropServices.MemoryMarshal.AsBytes(wheelData));
             wheelData[0]=cornerEntry.Preparing?1:0;hash.AppendData(System.Runtime.InteropServices.MemoryMarshal.AsBytes(wheelData));}
+        if(preparedCorner is not null){wheelData[0]=preparedCorner.NextReviewSeconds;hash.AppendData(System.Runtime.InteropServices.MemoryMarshal.AsBytes(wheelData));}
         foreach (var v in views)
         {
             data[0] = TimeSeconds; data[1] = v.Id; data[2] = v.Position.X; data[3] = v.Position.Y;

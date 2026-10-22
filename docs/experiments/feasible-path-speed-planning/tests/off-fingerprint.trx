@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="d5bdf0e3-265f-4afb-954b-8b6203bf494b" name="artur@ARTUR 2026-10-22 13:02:25" runUser="ARTUR\artur" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-22T13:02:25.1401034+02:00" queuing="2026-10-22T13:02:25.1401035+02:00" start="2026-10-22T13:02:23.3626095+02:00" finish="2026-10-22T13:02:25.1445131+02:00" />
+  <TestSettings name="default" id="a6d3fe61-95b7-4434-af2d-3233ca1f2f68">
+    <Deployment runDeploymentRoot="artur_ARTUR_2026-10-22_13_02_25" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="e33100af-3b8e-4ea1-97a2-03d4b33687da" testId="c50e6062-25d5-7f8d-bce9-8956df5d4701" testName="CoreSim.Tests.FeasibleCornerEntryTests.ExplicitCombinedTrialRemainsExactWithFlagOff" computerName="ARTUR" duration="00:00:00.4679982" startTime="2026-10-22T13:02:25.0155515+02:00" endTime="2026-10-22T13:02:25.0155736+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e33100af-3b8e-4ea1-97a2-03d4b33687da" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="CoreSim.Tests.FeasibleCornerEntryTests.ExplicitCombinedTrialRemainsExactWithFlagOff" storage="c:\users\artur\documents\codex\2026-10-22\codex-118-czy-nasz-model-opony\work\zuzel\tests\coresim.tests\bin\release\net8.0\coresim.tests.dll" id="c50e6062-25d5-7f8d-bce9-8956df5d4701">
+      <Execution id="e33100af-3b8e-4ea1-97a2-03d4b33687da" />
+      <TestMethod codeBase="C:\Users\artur\Documents\Codex\2026-10-22\codex-118-czy-nasz-model-opony\work\zuzel\tests\CoreSim.Tests\bin\Release\net8.0\CoreSim.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="CoreSim.Tests.FeasibleCornerEntryTests" name="ExplicitCombinedTrialRemainsExactWithFlagOff" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="c50e6062-25d5-7f8d-bce9-8956df5d4701" executionId="e33100af-3b8e-4ea1-97a2-03d4b33687da" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Wyniki, których nie ma na liście" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="Wszystkie załadowane wyniki" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="1" executed="1" passed="1" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.5.7+8f2703126a (64-bit .NET 8.0.26)&#xD;
+[xUnit.net 00:00:00.09]   Discovering: CoreSim.Tests&#xD;
+[xUnit.net 00:00:00.66]   Discovered:  CoreSim.Tests&#xD;
+[xUnit.net 00:00:00.67]   Starting:    CoreSim.Tests&#xD;
+[xUnit.net 00:00:01.18]   Finished:    CoreSim.Tests&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>
