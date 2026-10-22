@@ -155,7 +155,7 @@ zachowuje oryginalne zachowanie. Geometria wspólnego prefiksu nie skacze.
 | Błąd linii max / RMS, cały przejazd [m] | 5,906 / 1,876 | 5,375 / 1,868 |
 | Błąd max / RMS, łuk 1 [m] | 5,906 / 2,770 | 5,375 / 2,757 |
 | Błąd max / RMS, łuk 2 [m] | 1,475 / 0,766 | 1,435 / 0,750 |
-| Maksymalny |β| [°] | 12,25 | **13,86** |
+| Maksymalny moduł β [°] | 12,25 | **13,86** |
 | Praca silnika [kJ] | 80,121 | 79,685 |
 | Strata przednia / tylna boczna / tylna wzdłużna [kJ] | 18,180 / 17,874 / 15,400 | 18,343 / 18,151 / 14,525 |
 | Łożysko / praca oporów [kJ] | 1,219 / −32,459 | 1,213 / −32,501 |
