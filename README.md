@@ -8,6 +8,11 @@ uses one Box2D.NET world and causal rider observations. Recommendation B: full
 contact-free heats work; crowded-contact sensitivity and post-crash boundaries
 still block adoption. Production CoreSim and defaults remain unchanged.
 
+[Speed, Line and Rider Root-Cause Audit (#124)](docs/experiments/speed-line-rider-root-cause.md)
+uses saved captures only. It separates contact response from total grip, traces
+delayed throttle and measured losses, and recommends a small causal planning
+experiment. No physics or rider behavior changes; tyre realism remains unverified.
+
 [Tyre / Speedway Surface Diagnostic (#118)](docs/experiments/tyre-surface-diagnostic.md)
 queries the original contacts without new worlds. A locally stable nonzero-slip
 operating point exists at partial throttle, but the saved Egg state exceeds the
