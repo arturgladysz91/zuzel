@@ -112,8 +112,18 @@ Pozostały ten sam silnik, początkowe 6000 RPM, Je, pojemność sprzęgła, zaw
 | pośredni | 1,674 / 1,394 | 2,559 / 2,279 | 3,481 / 3,200 |
 | agresywny | 1,599 / 1,334 | 2,484 / 2,219 | 3,405 / 3,140 |
 
-„Od ruszenia” używa opisanego progu 0,01 m/s. Od matematycznego początku
-dodatniego ruchu wyniki mają dodatkową niepewność pierwszego interwału 10 ms.
+„Od ruszenia” w tej tabeli używa opisanego progu 0,01 m/s. Pierwszy dodatni ruch
+występuje wcześniej niż detekcja tego progu. Z granic pierwszego dodatniego
+interwału 0,240–0,250 s wynika osobny pomiar od fizycznego początku ruchu:
+
+| Wariant | Do 30 km/h od fizycznego początku [s] | Do 50 km/h od fizycznego początku [s] | Do 70 km/h od fizycznego początku [s] |
+|---|---:|---:|---:|
+| spokojny | 1,526–1,536 | 2,411–2,421 | 3,332–3,342 |
+| pośredni | 1,424–1,434 | 2,309–2,319 | 3,231–3,241 |
+| agresywny | 1,349–1,359 | 2,234–2,244 | 3,155–3,165 |
+
+Przedziały zachowują niepewność próbkowania początku ruchu; nie są czasami od
+przekroczenia progu i nie wymagają kolejnej symulacji.
 70 km/h osiągnięto po rzeczywistych 30,73 / 30,68 / 30,68 m.
 
 | Wariant | V po 5 m | V po 10 m | V po 20 m | V po 30 m | V po 60 m | V po 2 s od taśmy | V na końcu próby |

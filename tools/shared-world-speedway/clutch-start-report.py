@@ -69,7 +69,8 @@ def analyze():
         min_step_residual=min(d['engine_change']+d['wheel_input_work']+d['clutch_loss']+d['gear_loss']-d['combustion_work'] for d in ds)
         out[name]=dict(ReleaseSeconds=case['ReleaseSeconds'],TapeReactionSeconds=reaction,FirstPositiveMotionBracketSeconds=[first[0]['t'],first[0]['t']+first[0]['dt']],
             MotionThresholdMetersPerSecond=.01,DetectedMotionSeconds=motion,MechanicalDetectionDelaySeconds=motion-reaction,
-            TimesToSpeed={k:None if v is None else dict(FromTapeSeconds=v['t'],FromDetectedMotionSeconds=v['t']-motion,DistanceMeters=v['distance']) for k,v in times.items()},
+            TimesToSpeed={k:None if v is None else dict(FromTapeSeconds=v['t'],FromDetectedMotionSeconds=v['t']-motion,
+                FromPhysicalMotionOnsetSecondsInterval=[v['t']-first[0]['t']-first[0]['dt'],v['t']-first[0]['t']],DistanceMeters=v['distance']) for k,v in times.items()},
             SpeedsAtDistance={k:None if v is None else dict(SpeedKph=v['speed']*3.6,TimeFromTapeSeconds=v['t']) for k,v in speeds.items()},
             SpeedAt2SecondsKph=crossing(events,'t',2)['speed']*3.6,EndSpeedKph=final['Speed']*3.6,EndTime=run['Result']['TimeSeconds'],DistanceMeters=distance,
             PeakEngineRpm=max(e['engine_rpm'] for e in events),EndEngineRpm=end['engine_rpm'],EndWheelRpm=end['wheel_rpm'],
