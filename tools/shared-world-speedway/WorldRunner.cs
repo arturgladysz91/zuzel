@@ -106,6 +106,8 @@ public sealed class WorldRunner : IDisposable
             ||Parameters.Engine500 is not null&&!Parameters.Enable500CcEngine||Parameters.LoadBasedTyres is not null&&!Parameters.EnableLoadBasedTyreGrip)
             throw new ArgumentException("Performance variants require two contacts, physical steering, static loads and no legacy envelope override.");
         Parameters.Engine500?.Validate();Parameters.LoadBasedTyres?.Validate();
+        if(Parameters.EnableReachableTravelDirectionSteering&&!Parameters.EnableTravelDirectionSteering)
+            throw new ArgumentException("Reachable steering requires the isolated travel-direction variant.");
         if(Parameters.EnableTravelDirectionSteering&&(!Parameters.EnableTwoContactBikeDynamics||!Parameters.EnablePhysicalSteeringControl||Parameters.EnableDynamicAxleLoad))
             throw new ArgumentException("Travel-direction steering requires isolated physical steering and static axle loads.");
         if(Parameters.Enable500CcEngine&&specs.Any(s=>s.SpeedMetersPerSecond<=0))throw new ArgumentException("500cc Stage1 supports rolling starts only; no clutch model.");
