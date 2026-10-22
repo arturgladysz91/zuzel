@@ -47,7 +47,12 @@ class PredictiveRiderEvidenceTests(unittest.TestCase):
             else:self.assertEqual(actual,digest)
         attempt=load(DATA/'controller-attempt.json')
         for name in ['PredictiveRiderModel.cs','PredictiveRiderControl.cs']:
-            self.assertEqual(hashlib.sha256((ROOT/'tools/shared-world-speedway'/name).read_bytes()).hexdigest().upper(),attempt['SourceHashes'][name])
+            expected=attempt['SourceHashes'][name]
+            if name=='PredictiveRiderModel.cs':
+                extension=load(DATA/'../first-bend-zigzag/source-extension.json')
+                self.assertEqual(extension['BaseSha256'],expected)
+                expected=extension['ApprovedSha256']
+            self.assertEqual(hashlib.sha256((ROOT/'tools/shared-world-speedway'/name).read_bytes()).hexdigest().upper(),expected)
     def test_no_retuning_and_uncontrolled_trial_remains_explicitly_excluded(self):
         protocol=load(DATA/'controlled/controlled-comparison-protocol.json');a=load(DATA/'analysis.json')
         self.assertTrue(protocol['ControllerUnchanged']);self.assertTrue(protocol['ToleranceUnchanged']);self.assertTrue(protocol['NoRetuning'])

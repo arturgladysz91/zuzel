@@ -1,3 +1,30 @@
+# Audyt zygzaka #127 — zsynchronizowana telemetria
+
+Z głównego katalogu gałęzi `audit/first-bend-zigzag-127`:
+
+```powershell
+py -m http.server 8002 --bind 127.0.0.1
+```
+
+[Kandydat #126 w 5,44 s](http://127.0.0.1:8002/tools/replay-viewer/?case=zigzag-candidate&t=5.44)
+lub [baseline #124](http://127.0.0.1:8002/tools/replay-viewer/?case=zigzag-baseline&t=5.44).
+Pod istniejącym widokiem toru są wspólne wykresy steering, ψ/χ, β, yaw rate,
+błędu normalnego, prędkości, η i aktywnego Drive. Wszystkie używają kursora replaya.
+Kliknij wykres/znacznik, użyj Play lub kroków; **Porównaj w tej samej sekundzie**
+przełącza rzeczywisty przejazd, zachowując czas i przedział. Otwórz diagnostykę
+sił/przyczepności/energii, aby zobaczyć bieżące wartości natywnej próbki.
+
+Niebieski: baseline, pomarańczowy: #126. Kierownica ciągła: stan, przerywana:
+żądanie. W ψ/χ: ψ ciągła, χ przerywana. Czerwone pasy: aktywny override100ms,
+pionowe kreski: podjęcie decyzji. Projekt używa β=ψ−χ. η=χ−styczna planu nie
+jest wyznaczonym optymalnym kierunkiem odzyskiwania linii. Wykres łączy pomiary,
+nie tworzy stanów fizycznych; motocykl domyślnie nie jest interpolowany.
+
+Duży cykl3,90–9,20s istnieje też w baseline. Potwierdzono krótkie zaburzenia
+override i luki kosztu, lecz bias daje mieszane wyniki. **PARTIAL, bez nowego
+regulatora i bez nowej jazdy.** C nie ma w selektorze, ponieważ istnieje tylko
+w prognozach offline. [Pełny audyt](../../docs/experiments/first-bend-zigzag.md).
+
 # Porównanie Predictive Rider Control — PARTIAL, sterownik OFF
 
 Na gałęzi `experiment/predictive-rider-control` z głównego katalogu repozytorium:
