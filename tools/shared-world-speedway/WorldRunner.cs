@@ -45,7 +45,10 @@ public sealed class WorldRunner : IDisposable
     private readonly bool diagnosticPathPreview;
     private readonly AdaptiveRiderControl? adaptiveRider;
     private readonly FeasibleCornerEntry? cornerEntry;
-    private readonly PreparedCornerPlan? preparedCorner;
+    private PreparedCornerPlan? preparedCorner;
+    private readonly ContinuousCornerPlanning? continuousCorners;
+    public AuthoredRacingPath? PreparedPath=>preparedCorner?.Path;
+    public string CurrentFingerprint=>Convert.ToHexString(hash.GetCurrentHash());
     public WorldSnapshot Snapshot => new(TimeSeconds, Array.AsReadOnly((RiderView[])views.Clone())) {
         RearWheels=rearWheels.Length==0?null:rearWheels.Select((w,i)=>w.View(specs[i].Profile.Id)).ToArray(),
         Steering=twoContactStates.Length==0?null:twoContactStates.Select((s,i)=>new SteeringView(specs[i].Profile.Id,s.SteeringRadians)).ToArray(),
@@ -128,6 +131,8 @@ public sealed class WorldRunner : IDisposable
             ||specs.Length!=1||specs[0].TrafficEnabled)||!Parameters.EnablePreparedCornerPlan&&preparedOptions is not null)
             throw new ArgumentException("Prepared plan requires isolated #116 contacts/#117 steering and no competing controls.");
         preparedOptions?.Validate();
+        if(Parameters.EnableContinuousCornerPlanning&&(!Parameters.EnablePreparedCornerPlan||preparedOptions is {Path:false} or {Throttle:false}))
+            throw new ArgumentException("Continuous corners require the existing prepared C path/throttle experiment.");
         this.steeringCommands=(steeringCommands??Array.Empty<TwoContactSteeringCommand>()).OrderBy(c=>c.AtSeconds).ToArray();
         if(Parameters.EnableDynamicAxleLoad&&(!Parameters.EnableTwoContactBikeDynamics||!Parameters.EnablePhysicalSteeringControl
             ||Parameters.AxleLoadHeightMeters is { } height&&(!double.IsFinite(height)||height<=0))||!Parameters.EnableDynamicAxleLoad&&Parameters.AxleLoadHeightMeters is not null)
@@ -228,6 +233,7 @@ public sealed class WorldRunner : IDisposable
         twoContactStates=Parameters.EnableTwoContactBikeDynamics?specs.Select(_=>new TwoContactBikeState(twoContactInitial?.SteeringRadians??0)).ToArray():Array.Empty<TwoContactBikeState>();
         if(Parameters.EnableDynamicAxleLoad){twoContactStates[0].AxleLoad=DynamicAxleLoad.AtAcceleration(0,Parameters.TwoContactBike??TwoContactBikeParameters.Default,Parameters.AxleLoadHeightMeters??DynamicAxleLoad.ProvisionalHeightMeters);Work.AxleLoadUpdates++;}
         if(Parameters.EnablePreparedCornerPlan)preparedCorner=new(views[0],specs[0],Frame,Parameters,0,physics.Masses[0],rearWheels[0],twoContactStates[0],preparedOptions,surface);
+        if(Parameters.EnableContinuousCornerPlanning)continuousCorners=new(preparedCorner!);
         Record();
     }
     public RunResult Run(string name, double stepSeconds, double maximumSeconds, int requiredLaps = 0,
@@ -252,6 +258,15 @@ public sealed class WorldRunner : IDisposable
             {
                 TimeSeconds = nextTime;
                 Activate();
+                if(continuousCorners is not null){
+                    var change=continuousCorners.Advance(views[0],specs[0],Frame,surface,Parameters,TimeSeconds,physics.Masses[0],rearWheels[0],twoContactStates[0],pending[0]);
+                    if(change is not null){
+                        if(change.Phase=="prepared")Work.CornerPlansPrepared++;else Work.CornerPlansActivated++;
+                        preparedCorner=continuousCorners.Active;
+                        views[0]=views[0] with{TargetOffsetMeters=preparedCorner.Target(views[0],TimeSeconds)};
+                        diagnostics?.CornerPlan?.Invoke(change);
+                    }
+                }
                 if(preparedCorner is not null&&TimeSeconds+1e-10>=preparedCorner.NextReviewSeconds){
                     var started=Stopwatch.GetTimestamp();
                     var choice=preparedCorner.Observe(views[0],specs[0],Frame,surface,Parameters,TimeSeconds,physics.Masses[0],physics.Inertias[0],rearWheels[0],twoContactStates[0]);
@@ -578,6 +593,7 @@ public sealed class WorldRunner : IDisposable
         void Before(double deadline)
         { if (deadline > TimeSeconds + 1e-12) duration = Math.Min(duration, deadline - TimeSeconds); }
         if (nextControl < controls.Length) Before(controls[nextControl].AtSeconds);
+        if(continuousCorners?.Waiting is { } waiting)Before(waiting.ActivationSeconds);
         for (var i = 0; i < specs.Length; i++)
         {
             if (specs[i].SpeedMetersPerSecond == 0) Before(RiderController.TapeReactionSeconds(specs[i]));

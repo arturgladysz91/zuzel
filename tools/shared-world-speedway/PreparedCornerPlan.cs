@@ -17,6 +17,8 @@ public sealed record PreparedSpeedPoint(double S,double Curvature,double Curvatu
 public sealed record PreparedCornerReview(double Time,double Activation,double Drive,double SpeedTarget,double Beta,double BetaDot,
     double Wheelspin,double ActualFx,double ActualFy,double ImmediateNormal,double HeldSteeringNormal,double ContactCeiling,double FrontBudget,double RearBudget,
     double ResponseSeconds,int ContactQueries,bool NoCertifiedCoastSolution,string Reason,PreparedSpeedPoint[] Profile);
+public readonly record struct PreparedControlMemory(float Drive,double NextReviewSeconds);
+public sealed record PreparedContinuation(AuthoredRacingPath Prefix,PreparedControlMemory Memory,DecisionEvent? Pending);
 
 /// <summary>Geometry and work estimates only. Does not integrate a rigid body or commit a wheel.</summary>
 public sealed class PreparedCornerPlan
@@ -29,13 +31,21 @@ public sealed class PreparedCornerPlan
     public double ActivationSeconds {get;}
     public double NextReviewSeconds {get;private set;}
     public double BendExitMeters {get;}
+    public double BendStartMeters {get;}
     public double TransitionStartMeters {get;}
     public double TransitionEndMeters {get;}
     public double SelectedOffsetMeters {get;}
     private readonly RacingLineGeometry geometry;
     private float plannedDrive=1;
+    public PreparedControlMemory ControlMemory=>new(plannedDrive,NextReviewSeconds);
+    public void CarryControlMemory(PreparedControlMemory memory)
+    {
+        if(!float.IsFinite(memory.Drive)||memory.Drive is <0 or >1||!double.IsFinite(memory.NextReviewSeconds)||memory.NextReviewSeconds<0)
+            throw new ArgumentException("Finite existing planner memory required.");
+        plannedDrive=memory.Drive;NextReviewSeconds=memory.NextReviewSeconds;
+    }
     public PreparedCornerPlan(RiderView v,RiderSpec spec,TrackFrame frame,WorldParameters p,double time,float mass,
-        RearWheelState wheel,TwoContactBikeState steering,PreparedCornerOptions? options=null,TrackStateSnapshot? surface=null)
+        RearWheelState wheel,TwoContactBikeState steering,PreparedCornerOptions? options=null,TrackStateSnapshot? surface=null,PreparedContinuation? continuation=null)
     {
         Options=options??new();Options.Validate();geometry=new(frame);
         ActivationSeconds=time+RiderController.ReactionSeconds(spec);
@@ -45,7 +55,7 @@ public sealed class PreparedCornerPlan
             (Start:origin+frame.SegmentStartMeters(c.StartSegmentIndex),End:origin+frame.SegmentStartMeters(c.StartSegmentIndex+c.SegmentCount))))
             .Where(c=>c.End>v.TotalReferenceMeters).OrderBy(c=>c.Start).ToArray();
         if(bends.Length==0)throw new InvalidOperationException("No future bend in closed topology.");
-        var bend=bends[0];BendExitMeters=bend.End;
+        var bend=bends[0];BendExitMeters=bend.End;BendStartMeters=bend.Start;
         // Whole initial reaction can accelerate, so delay the geometric transition by an upper distance bound.
         var observedSurface=surface?.SampleSurface(v.Road.Segment,Math.Clamp((float)v.Road.OffsetMeters/Math.Max(1,frame.MinimumUsableWidthMeters)*4,0,4))??new(1,0,.5f);
         var budget=LoadBasedTyreGrip.Budget(mass,observedSurface,p.TwoContactBike??TwoContactBikeParameters.Default,p.LoadBasedTyres);
@@ -53,7 +63,8 @@ public sealed class PreparedCornerPlan
         TransitionStartMeters=v.TotalReferenceMeters+Math.Max(0,frame.ReferenceSpeed(v))*reaction+.5*budget.TotalCapacityNewtons/mass*reaction*reaction;
         TransitionEndMeters=Math.Max(TransitionStartMeters+v.Speed*(p.LateralResponseSeconds+4*p.SlipYawResponseSeconds),
             (bend.Start+bend.End)/2);
-        AuthoredRacingPath Make(double offset)=>AuthoredRacingPath.Prepared(frame,new(TransitionStartMeters,v.Road.OffsetMeters),new(TransitionEndMeters,offset));
+        AuthoredRacingPath Make(double offset)=>continuation is null?AuthoredRacingPath.Prepared(frame,new(TransitionStartMeters,v.Road.OffsetMeters),new(TransitionEndMeters,offset))
+            :AuthoredRacingPath.Connected(continuation.Prefix,TransitionStartMeters,TransitionEndMeters,offset);
         var preferred=Make(Options.PreferredOffsetMeters);var alternative=Make(Options.AlternativeOffsetMeters);
         // Two line intents only. Prefer the requested line unless its conservative coast estimate fails.
         bool Legal(AuthoredRacingPath path)=>Enumerable.Range(0,(int)Math.Ceiling((bend.End-v.TotalReferenceMeters)/.25)+1)
@@ -62,6 +73,13 @@ public sealed class PreparedCornerPlan
                 var interpolation=.125*q.Metric*(1+Math.Abs(q.Curvature)*SpeedwayBikeDimensions.Reference.OverallMechanicalLengthMeters/2);
                 return clearance.Inner>=FootprintReserveMeters+interpolation&&clearance.Outer>=FootprintReserveMeters+interpolation;}));
         var pendingWork=MaximumWheelPower(p)*v.Drive*reaction;
+        if(continuation is not null){
+            CarryControlMemory(continuation.Memory);
+            if(continuation.Pending is { } pending){
+                var before=Math.Clamp(pending.RequestedActivation-time,0,reaction);
+                pendingWork=MaximumWheelPower(p)*(v.Drive*before+pending.Drive*(reaction-before));
+            }
+        }
         double Score(AuthoredRacingPath path)=>Enumerable.Range(0,(int)Math.Ceiling((bend.End-v.TotalReferenceMeters)/GeometryStepMeters)+1)
             .Select(i=>path.At(Math.Min(bend.End,v.TotalReferenceMeters+i*GeometryStepMeters)))
             .Max(q=>mass*Math.Pow(Coast(v,wheel,pendingWork,Math.Max(0,q.ReferenceMeters-v.TotalReferenceMeters),mass).Upper,2)*Math.Abs(q.Curvature)/(ForceReserve*budget.TotalCapacityNewtons));
