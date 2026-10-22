@@ -48,10 +48,14 @@ class PreparedCornerEvidenceTests(unittest.TestCase):
             if name=='A':self.assertTrue(all(abs(row['drive']-.15)<1e-8 for row in rows if row['t']>=.24-1e-8))
         self.assertTrue(report.load(DATA,'geometry.json')['InitialReview']['NoCertifiedCoastSolution'])
 
-    def test_history_manifest_and_frozen_sources(self):
+    def test_history_manifest_and_unchanged_contact_sources(self):
         a=report.load(DATA,'analysis.json')
         for n,h in a['HistoricalSha256'].items():self.assertEqual(hashlib.sha256((ROOT/n).read_bytes()).hexdigest().upper(),h.upper())
         for n,h in report.load(DATA,'manifest.json').items():self.assertEqual(hashlib.sha256((DATA/n).read_bytes()).hexdigest().upper(),h.upper())
-        for n,h in report.load(DATA,'source-canonical.json').items():self.assertEqual(hashlib.sha256((ROOT/'tools/shared-world-speedway'/n).read_bytes().replace(b'\r\n',b'\n')).hexdigest().upper(),h)
+        # #123 is explicitly allowed to evolve planning/integration. Keep the
+        # original snapshot in its manifest; contacts/engine/#117 remain frozen.
+        protected={'Engine500.cs','LoadBasedTyreGrip.cs','RearWheelDynamics.cs','TwoContactBikeDynamics.cs','TravelDirectionSteering.cs'}
+        for n,h in report.load(DATA,'source-canonical.json').items():
+            if n in protected:self.assertEqual(hashlib.sha256((ROOT/'tools/shared-world-speedway'/n).read_bytes().replace(b'\r\n',b'\n')).hexdigest().upper(),h)
 
 if __name__=='__main__':unittest.main()

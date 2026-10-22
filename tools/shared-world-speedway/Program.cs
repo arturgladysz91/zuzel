@@ -2,6 +2,7 @@ using System.Text.Json;
 using SharedWorldSpeedway;
 
 var scenario = args.FirstOrDefault() ?? "A";
+if(scenario=="continuous-corners"){ContinuousCornerAudit.Run(args[1],args[2]);return;}
 if(scenario=="prepared-post"){PreparedCornerReplay.Run(args[1]);return;}
 if(scenario=="prepared-corner"){PreparedCornerAudit.Run(args[1],args[2]);return;}
 if(scenario=="reachable-steering"){ReachableSteeringAudit.Run(args[1],args[2]);return;}

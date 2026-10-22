@@ -16,15 +16,22 @@ public sealed class AuthoredRacingPath
     private readonly bool crossoverWide;
     private readonly NaturalRacingLineParameters? natural;
     private readonly OffsetKnot[]? preparedKnots;
+    private readonly AuthoredRacingPath? preparedPrefix;
     /// <summary>Finite, unwrapped reference stations; each knot has zero offset slope and acceleration.</summary>
     public readonly record struct OffsetKnot(double ReferenceMeters,double OffsetMeters);
     public static AuthoredRacingPath Prepared(TrackFrame frame,params OffsetKnot[] knots)=>new(frame,knots);
-    private AuthoredRacingPath(TrackFrame frame,OffsetKnot[] knots)
+    /// <summary>Retain the existing path up to the splice and match its offset jet C2.</summary>
+    public static AuthoredRacingPath Connected(AuthoredRacingPath prefix,double spliceMeters,double endMeters,double endOffset)
+    {
+        if(prefix.preparedKnots is null)throw new ArgumentException("An offset-defined prepared prefix is required.");
+        return new(prefix.Frame,new[]{new OffsetKnot(spliceMeters,prefix.Offset(spliceMeters).D),new OffsetKnot(endMeters,endOffset)},prefix);
+    }
+    private AuthoredRacingPath(TrackFrame frame,OffsetKnot[] knots,AuthoredRacingPath? prefix=null)
     {
         if(frame.Shape is null||knots.Length<2||knots.Any(k=>!double.IsFinite(k.ReferenceMeters)||!double.IsFinite(k.OffsetMeters))
             ||knots.Zip(knots.Skip(1)).Any(pair=>pair.First.ReferenceMeters>=pair.Second.ReferenceMeters))
             throw new ArgumentException("Prepared paths require shaped geometry and increasing finite reference knots.");
-        Frame=frame;Name="prepared-offset-path";ApexFraction=.5;preparedKnots=(OffsetKnot[])knots.Clone();
+        Frame=frame;Name="prepared-offset-path";ApexFraction=.5;preparedKnots=(OffsetKnot[])knots.Clone();preparedPrefix=prefix;
     }
     public bool IsCrossover=>c3Pieces is not null;
     public double C3KnotSpacingMeters=>c3Spacing;
@@ -111,9 +118,14 @@ public sealed class AuthoredRacingPath
     {
         if(!double.IsFinite(s))throw new ArgumentOutOfRangeException(nameof(s));
         if(preparedKnots is not null){
+            if(preparedPrefix is not null&&s<=preparedKnots[0].ReferenceMeters)return preparedPrefix.Offset(s);
             if(s<=preparedKnots[0].ReferenceMeters)return(preparedKnots[0].OffsetMeters,0,0);
             for(var i=1;i<preparedKnots.Length;i++)if(s<preparedKnots[i].ReferenceMeters){
                 var a=preparedKnots[i-1];var b=preparedKnots[i];
+                if(i==1&&preparedPrefix is not null){
+                    var jet=preparedPrefix.Offset(a.ReferenceMeters);
+                    if(jet.First!=0||jet.Second!=0)return ConnectedBlend(jet,b.OffsetMeters,s-a.ReferenceMeters,b.ReferenceMeters-a.ReferenceMeters);
+                }
                 return Blend(a.OffsetMeters,b.OffsetMeters,s-a.ReferenceMeters,b.ReferenceMeters-a.ReferenceMeters);
             }
             return(preparedKnots[^1].OffsetMeters,0,0);
@@ -143,6 +155,14 @@ public sealed class AuthoredRacingPath
     }
     private static (double,double,double) Blend(double a,double b,double x,double length){var u=Math.Clamp(x/length,0,1);var delta=b-a;
         return(a+delta*u*u*u*(10+u*(-15+6*u)),delta*30*u*u*(1-u)*(1-u)/length,delta*60*u*(1-u)*(1-2*u)/(length*length));}
+    private static (double,double,double) ConnectedBlend((double D,double First,double Second) a,double b,double x,double length)
+    {
+        var u=x/length;var c1=a.First*length;var c2=a.Second*length*length/2;var delta=b-a.D;
+        var c3=10*delta-6*c1-3*c2;var c4=-15*delta+8*c1+3*c2;var c5=6*delta-3*c1-c2;
+        return(a.D+u*(c1+u*(c2+u*(c3+u*(c4+u*c5)))),
+            (c1+u*(2*c2+u*(3*c3+u*(4*c4+u*5*c5))))/length,
+            (2*c2+u*(6*c3+u*(12*c4+u*20*c5)))/(length*length));
+    }
     public AuthoredPathSample At(double s)
     {
         if(c3Pieces is not null){

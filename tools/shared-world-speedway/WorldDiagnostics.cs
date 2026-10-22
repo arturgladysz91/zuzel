@@ -22,6 +22,7 @@ public sealed class WorldDiagnostics
     public Action<AdaptiveRiderDecision>? AdaptiveRider {get;init;}
     public Action<CornerEntryDecision>? CornerEntry {get;init;}
     public Action<PreparedCornerReview>? PreparedCorner {get;init;}
+    public Action<CornerPlanChange>? CornerPlan {get;init;}
 }
 /// <summary>One accepted wheel interval; Before/After are actual Box2D poses.</summary>
 public readonly record struct RearWheelObservation(double TimeSeconds,int RiderId,RiderView Before,RiderView After,RearWheelStep Step);
