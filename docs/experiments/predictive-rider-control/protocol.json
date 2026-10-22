@@ -1,0 +1,26 @@
+{
+  "BaseHead": "d8d7e959eab00d0b41236aa6292ab04f3c15f3fa",
+  "OriginalCaptureHead": "c625de6faaeafb1d1ddb86f0598b61642c1452e5",
+  "DefaultEnabled": false,
+  "ObservationTimes": [1.4,1.6,1.8,2.0,2.2,2.4,2.6,2.8,5.3,5.5,5.7,5.9,6.1,6.3,6.5,6.7,10.4,10.6,10.8,11.0,11.2],
+  "HorizonsSeconds": [0.3,0.6,0.9],
+  "PredictionStepSeconds": 0.01,
+  "ReactionSeconds": 0.24,
+  "PredictionTolerance": {
+    "PositionMeters": 0.10,
+    "SpeedMetersPerSecond": 0.20,
+    "ChiDegrees": 1.0,
+    "BetaDegrees": 1.0,
+    "SteeringDegrees": 1.5,
+    "WheelOmegaRadPerSecond": 2.0,
+    "BoundaryOptimismMeters": 0.10
+  },
+  "MaximumContactQueriesPerCandidate": 5000,
+  "MaximumCandidateCount": 3,
+  "MaximumMedianMillisecondsPerThreeCandidates": 50,
+  "MaximumMillisecondsPerThreeCandidates": 150,
+  "Gate": "Every observation and every horizon must pass each numerical tolerance. Report all horizons; no selection by lap time. Time includes original policy reviews, contact evaluation and footprint checks; constructors/setup reported separately. Failure blocks any new controller or full native candidate ride.",
+  "CandidateRule": "Retain original #117, or a small positive/negative steering endpoint correction, activated only after full reaction. Pending throttle cannot be cancelled or moved. No path modification. No world per candidate.",
+  "NativeTrialLimitAfterPredictionGate": 1,
+  "NoRetuning": true
+}

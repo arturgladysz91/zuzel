@@ -1,0 +1,13 @@
+{
+  "BaseHead": "d8d7e959eab00d0b41236aa6292ab04f3c15f3fa",
+  "ProtocolDeviation": "The first candidate completed safely at20.28s, but its unchanged dynamic replanning prepared the second path at10.19s with splice137.706308989m instead of baseline9.91s/splice137.530234847m. It is retained in the parent folder and excluded from a same-line performance claim. This correction freezes the comparison input; it does not retune the controller.",
+  "SharedPlan": "Original #122 initial path and #123 second path, prepared9.91s and active10.15s for both runs. Only path geometry/lifecycle is supplied; actual body, wheel, steering, Drive, pending and policy memory remain physical/causal.",
+  "ControllerUnchanged": true,
+  "ModelUnchanged": true,
+  "ToleranceUnchanged": true,
+  "HorizonSeconds": 0.6,
+  "CorrectionRadians": 0.015707963267948967,
+  "ReactionSeconds": 0.24,
+  "MaximumAdditionalCandidateWorlds": 1,
+  "NoRetuning": true
+}

@@ -1,3 +1,194 @@
+# Porównanie Predictive Rider Control — PARTIAL, sterownik OFF
+
+Na gałęzi `experiment/predictive-rider-control` z głównego katalogu repozytorium:
+
+```powershell
+py -m http.server 8001 --bind 127.0.0.1
+```
+
+- [Kandydat, 20,27 s](http://127.0.0.1:8001/tools/replay-viewer/?case=predictive-candidate)
+- [Baseline #123/#124, 19,98 s](http://127.0.0.1:8001/tools/replay-viewer/?case=predictive-baseline)
+
+To dwa osobne rzeczywiste przejazdy jednego zawodnika, z identycznym planem.
+Kandydat jest wolniejszy i ma większy maksymalny β; status PARTIAL jest widoczny
+w odtwarzaczu. Domyślnie zbliżenie pierwszego łuku, pauza i 0,25×. Zdarzenia
+„Decyzja skrętu” i „Aktywacja skrętu” pokazują pełne 0,24 s reakcji. Gaz nadal
+pochodzi z aktywnego `Before.Drive` każdego natywnego interwału, a nie z intencji.
+
+Kandydat czyta wyłącznie `predictive-rider-control/controlled/candidate*`,
+2031 interwałów i zapisany koniec. Pierwsza próba ON, która zmieniła drugi plan,
+jest zachowana w danych i wykluczona z porównania. Nie ma jej w selektorze.
+Nie utworzono nowego renderera: rozszerzono importer i oś zdarzeń istniejącego
+viewera #125. 26 testów importu/replaya sprawdza wszystkie natywne kanały.
+
+[Raport, pełne metryki i ograniczenia](../../docs/experiments/predictive-rider-control.md).
+Kolory i sterowanie są opisane poniżej. Pierwotny `latest-two-bends` nadal jest dostępny.
+
+# Najnowsza oryginalna jazda Box2D — #123 / audyt #124
+
+Domyślny `latest-two-bends` odtwarza **jednego** zawodnika, dwa kolejne łuki
+Egg Mild w jednym świecie, 19,98 s i 2002 oryginalne interwały. #124 jest audytem
+tego samego przejazdu, nie nową symulacją. Motocykl zachowuje utratę prędkości,
+uślizg i błąd linii pierwszego łuku.
+
+## Otwórz na Windows
+
+Z katalogu repozytorium na gałęzi `tools/latest-two-bends-replay`:
+
+```powershell
+py -m http.server 8000 --bind 127.0.0.1
+```
+
+Adres: **http://127.0.0.1:8000/tools/replay-viewer/?case=latest-two-bends**.
+Jeśli nie ma `py`, użyj `python`. Pozostaw terminal otwarty; potrzebny jest
+aktualny Chrome/Edge i HTTP. Nie potrzeba .NET, npm ani uruchamiania symulatora.
+
+Start: pauza, zbliżenie i śledzenie R1, próbka najazdu 1,45 s, tempo **0,25×**,
+wygładzanie OFF. Play/Pause, 0,1× / 0,25× / 0,5× / 1× / 2×, suwak, kroki
+←/→, zoom, przeciąganie, Cały tor/Zbliżenie i Łuk 1/Łuk 2 są wspólne z #110.
+Najazd drugiego łuku jest w 13,03 s. `Zapisz klip (12 s)` nagrywa wyłącznie
+aktualne odtwarzanie Canvas i pobiera WebM; wybierz 2× od Łuku 1, aby zmieścić
+oba łuki w krótkim klipie. Wideo zawiera czas, tempo, prędkość, Drive, β i skręt.
+
+## Dane i chronologia
+
+| Oryginalny plik w docs/experiments/ | Zastosowanie |
+| --- | --- |
+| continuous-corner-planning/continuous.csv.gz | 2002 Before snapshoty: t, dt, s, XY, heading, vx/vy, speed, aktywny drive, steer_before/used/after |
+| continuous-corner-planning/continuous-plan.csv.gz | dokładnie sparowane t/s, rzeczywisty offset i aktywny target; zapisane projekcje planu path_x/path_y |
+| continuous-corner-planning/continuous.json | Initial, Result.Decisions, wynik i zapisany końcowy Rider w 19,98 s |
+| continuous-corner-planning/changes.json | przygotowanie planu 2 w 9,91 s, aktywacja w 10,15 s, zachowane pending |
+| feasible-path-speed-planning/planned-geometry.csv.gz | zapisany plan 1 #122, do końca eksportowanego zakresu s=134,25 m |
+| continuous-corner-planning/diagnostic-geometry.csv.gz | zapisany plan 2 #123, połączony z zachowanym prefiksem planu 1 |
+| progressive-bend-width/progressive-b-geometry.json | cały oryginalny Egg Mild / progressive-b: kreda, banda, metryczne kapsuły |
+
+`TwoContactBikeAudit.Export` zapisuje `t.Before.Drive`; obserwacja sił pobiera
+ten stan **po `WorldRunner.Activate()`**. Dlatego ten konkretny CSV ma już
+rzeczywiście aktywny gaz. Import nie nakłada ponownie zaokrąglonych komend JSON,
+nie korzysta z intencji w reviews i nie przypisuje stałego 100%. Test porównuje
+wszystkie interwały z aktywacjami #123 oraz `speed-line-rider-root-cause/activation-timeline.csv`
+z #124, w tym dodatnie komendy wykonywane pomimo nowszej intencji odjęcia gazu.
+W 10,15 s aktywny gaz wynosi 48,5416%, a oczekujące 63,5416% aktywuje się
+dopiero w 10,34 s. Ostatnie żądanie na 20,04 s nie wydłuża replaya.
+
+XY i obrót pochodzą wyłącznie z natywnych wierszy; ostatni punkt z Result.Riders
+jest jawnie zapisanym końcem tego samego ostatniego interwału, bez dopisywania
+pozycji po nim. Kierownica i jej liczba pokazują `steer_before`, zgodny z czasem
+pozycji; importer zachowuje też `steer_used` (kąt kontaktu podczas interwału)
+i `steer_after` (zaakceptowany koniec). Końcowa kierownica używa ostatniego
+`steer_after`. Gdy brak zapisu skrętu w historycznym przypadku, panel pokazuje
+„brak zapisu”. Rendering nie wytwarza zawodników ani nie poprawia toru jazdy.
+
+Plan 1 pozostaje aktywny przez reakcję do 10,15 s. Wtedy przełącza się tylko
+zielona nakładka planu oraz jej opis. Pozycja, heading, steering i Drive nadal
+pochodzą z nieprzerwanego strumienia tych samych stanów. Pokazywany jest tylko
+wyeksportowany zakres planu — brakujący fragment nie jest ekstrapolowany.
+`continuous-plan.csv.gz` jest diagnostyką planu, nie źródłem pozycji motocykla.
+
+## Kolory i skala
+
+- Turkusowy motocykl i ciągły ślad: rzeczywiste XY. Korpus 2,10 × 0,30 m,
+  kierownica 0,80 m; pozycja i obrót korpusu z zapisanych stanów. Pierścień R1
+  jest zaznaczeniem, nie rozmiarem motocykla.
+- Zielona przerywana linia: aktywny zapisany plan; nigdy pozycja motocykla.
+- Złota strzałka: heading; niebieska: rzeczywiste v × 0,2 s; różowy łuk:
+  β = wrap(heading − atan2(vy,vx)). β jest podpisany i zmienny w czasie.
+- Biała krawędź: kreda, złota: banda, cienka referencja: 1 m od kredy.
+  Opcjonalny limit obrysu i cel poprzeczny są dodatkowymi nakładkami.
+
+Wygładzanie obrazu jest opcjonalne i jawnie opisane: interpoluje wyłącznie
+rendering XY/heading/wektorów pomiędzy sąsiednimi próbkami. Drive, kierownica,
+prędkość i offset pozostają zapisanymi wartościami skokowymi. Domyślnie geometria,
+wektory i β używają tego samego snapshotu, co najwyżej 10 ms starego.
+
+## Baza i celowana walidacja
+
+HEAD bazowy: #124 `d8d7e959eab00d0b41236aa6292ab04f3c15f3fa`, którego rodzicem
+jest #123 `c625de6faaeafb1d1ddb86f0598b61642c1452e5`. #110
+`ef106816d11491bcf1936317d86f199a097fd083` jest osobną odnogą od #109
+`a5164d9daddb091eb86a2809792703941069fd56`. Przeniesiono wyłącznie siedem plików
+viewera #110, zachowując późniejszą fizykę, dane i geometrię HEAD #124.
+
+```powershell
+node --test tools/replay-viewer/replay.test.mjs
+```
+
+25 testów importu/odtwarzania: 19 zachowanych oraz 6 dla #123. Nowe testy
+sprawdzają wszystkie natywne XY/heading/v/t/Drive i skręt, chronologię aktywacji,
+plan w 10,15 s, kroki całych 2002 interwałów, oba najazdy, zgodność geometrii,
+zapisany koniec, brak ekstrapolacji, opcjonalne wygładzanie i przeglądarkowy gzip.
+Bez nowych symulacji, strojenia, C# buildów lub szerokich benchmarków.
+
+Historyczny czteroosobowy #95 jest osobną pozycją **historyczna fizyka**.
+Nie jest wspólnym wyścigiem z #123. Pozostałe stare przejazdy pozostają dostępne.
+
+---
+
+# Historyczny viewer #110 — opis i źródła
+
+Viewer rozszerzony na bazie Draft #109, HEAD `a5164d9daddb091eb86a2809792703941069fd56`.
+Wyłącznie zapisane dane: bez nowych symulacji, optymalizacji lub zmian fizyki.
+
+## Windows: uruchomienie
+
+W PowerShell, z głównego katalogu repozytorium na gałęzi `tools/current-box2d-replay`:
+
+```powershell
+py -m http.server 8000 --bind 127.0.0.1
+```
+
+Jeśli launcher `py` nie jest dostępny: `python -m http.server 8000 --bind 127.0.0.1`.
+Otwórz **http://127.0.0.1:8000/tools/replay-viewer/?case=current-baseline-inner**.
+Do oglądania wystarczą Python oraz aktualny Chrome/Edge; .NET i Node nie są potrzebne.
+Pozostaw terminal serwera otwarty. Moduły/fetch wymagają HTTP, nie `file://`.
+
+## Najnowsze przejazdy
+
+| Wartość `case` | Zapis | Regulator | Granice |
+| --- | --- | --- | --- |
+| `current-baseline-inner` | #107 `full-throttle-slide-grip-audit/repeat18` — dokładny repeat baseline #106 | poprawki OFF | certyfikat PASS |
+| `current-baseline-wide` | #106/#107 `speed-grip-line-crossover/baseline-wide` | poprawki OFF | brak pełnego certyfikatu między krokami |
+| `current-full-inner` | #109 `full-contact-yaw-feedforward/full-inner` | coupled inverse + full contact yaw ON | certyfikat PASS |
+| `current-full-wide` | #109 `full-contact-yaw-feedforward/full-wide` | coupled inverse + full contact yaw ON | brak pełnego certyfikatu między krokami |
+
+Wszystkie cztery mają pełny gaz 100%, osiem okrążeń i nie przechodzą dokładnego
+trackingu planu. Dodatnie minima footprintu w zapisanych stanach WIDE **nie są
+zaobserwowanym crossing**; ujemny konserwatywny bound oznacza brak certyfikatu.
+Komunikat o faktycznym wyjeździe pojawia się wyłącznie dla ujemnego zapisanego
+prześwitu. Historyczny #95 z czterema zawodnikami pozostaje na liście, jawnie
+oznaczony jako starsza fizyka sprzed niezależnego tylnego koła #100.
+
+## Oglądanie łuku
+
+- Domyślnie zbliżenie i śledzenie R1, najazd 3 m przed pierwszym łukiem oraz tempo **0,1×**. Naciśnij **Odtwórz**. **Łuk 1 / Łuk 2** zatrzymują i przenoszą do rzeczywistej próbki najazdu; **Zbliżenie** przywraca powiększenie motocykla.
+- Złoty wektor pokazuje heading motocykla, niebieski rzeczywiste `v × 0,2 s`, różowy łuk kąt **β = heading − atan2(vy,vx)**. Nieruchomy motocykl nie ma określonego β. Mała mapa pokazuje oba brzegi i aktualną pozycję.
+- Motocykl to eksportowane kapsuły C# `BikeFootprint`: korpus 2,10 × 0,30 m i kierownica 0,80 m, obrócone zapisanym heading. To rzeczywisty mechaniczny model 2D, bez domyślonej animacji koła lub skrętu kierownicy. Numery, wektory i pierścień wyboru są nakładkami.
+- Turkusowy ślad pochodzi z zapisanych XY. Zielona przerywana C3 to niezmieniony plan #106; biała krawędź to kreda, złota banda. Plan jest odczytany z istniejącego `viewer-paths.json`, tor z zamrożonego `progressive-b-geometry.json`.
+- Zachowano Play/Pause, suwak, poprzednią/następną próbkę, zoom, przeciąganie, **Cały tor** i wybór/śledzenie motocykla.
+
+## Gęstość i wierność zapisu
+
+Nowe cztery pozycje czytają oryginalne `*-tracking.csv.gz` przez przeglądarkowy
+`DecompressionStream`: wszystkie native **Before** snapshoty, zwykle co 10 ms,
+z zachowaniem krótszych podziałów. Nie są to próbki wygenerowane z rzadkiego CSV.
+XY, heading, vx/vy, speed, reference, offset i target pochodzą z tych wierszy.
+Stały Drive pochodzi z Initial/accepted CSV i jest sprawdzany; import odrzuca
+zmienny gaz bez natywnego zapisu aktuatorów. Wyniki i czasy mety pozostają z JSON.
+
+Domyślnie **Interpolacja OFF**: motocykl, wektory i β pochodzą z tego samego
+ostatniego snapshotu. Po jej włączeniu wyłącznie rendering interpoluje XY,
+heading i wektory; panel wyraźnie to opisuje. Prędkość/gaz w panelu nadal są
+ostatnimi zapisanymi pomiarami. Interpolacja nie dodaje kroków fizyki, a po
+ostatnim snapshotcie pozycja nie jest ekstrapolowana. Historyczne CSV zachowują
+swój oryginalny odstęp około 0,1 s i dotychczasowe znaczniki sterowania.
+
+Testy: `node --test tools/replay-viewer/replay.test.mjs` (19 przypadków).
+Targeted C#: `dotnet test tests/CoreSim.Tests/CoreSim.Tests.csproj -c Release --filter FullyQualifiedName~ReplayGeometryTests`.
+
+---
+
+Poniżej zachowano historyczny opis wcześniejszych wersji viewera.
+
 # Shared World Speedway — Diagnostic Replay Viewer 2D (#96)
 
 ## Progressive Bend Width #103

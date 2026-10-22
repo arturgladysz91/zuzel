@@ -38,6 +38,8 @@ public sealed class PreparedCornerPlan
     private readonly RacingLineGeometry geometry;
     private float plannedDrive=1;
     public PreparedControlMemory ControlMemory=>new(plannedDrive,NextReviewSeconds);
+    // Geometry/path/options are immutable. Only the two scalar policy-memory fields are forked.
+    public PreparedCornerPlan ForkForPrediction()=>(PreparedCornerPlan)MemberwiseClone();
     public void CarryControlMemory(PreparedControlMemory memory)
     {
         if(!float.IsFinite(memory.Drive)||memory.Drive is <0 or >1||!double.IsFinite(memory.NextReviewSeconds)||memory.NextReviewSeconds<0)

@@ -1,0 +1,23 @@
+{
+  "BaseHead": "d8d7e959eab00d0b41236aa6292ab04f3c15f3fa",
+  "HorizonSeconds": 0.6,
+  "ReviewSeconds": 0.4,
+  "PulseSeconds": 0.1,
+  "CorrectionRadians": 0.015707964,
+  "MinimumScoreGainSquareMeters": 0.01,
+  "ReversalCostSquareMeters": 0.01,
+  "ProgressWeightMeters": 0.1,
+  "PredictionAllowanceMeters": 0.1,
+  "DefaultEnabled": false,
+  "MaximumCandidateNativeWorlds": 1,
+  "MaximumOffVerificationWorlds": 1,
+  "SourceHashes": {
+    "PredictiveRiderControl.cs": "E4C86635F98D5688A5B37303D92942C9D9310F05A1D4ED3487AEDEE31CDAEDCC",
+    "PredictiveRiderModel.cs": "056E800CD32BF0F7A9BF5A7BD13B447A7E635FF78B8C359DAE52E932B035D595",
+    "WorldRunner.cs": "C8EE967BD4DD8410C5E83467985AAAEDC01D264B49F52D6CE941DA8C93086F95",
+    "WorldModel.cs": "510D680FA3F1E63A1400779B99EA4F21AF53B15BDB12C628D72EBAF2A2097218",
+    "PreparedCornerPlan.cs": "4ECBC1080231093E09DFA63A4A86AD0EA36BF48BB7362DDC82AB9A829F362DF9"
+  },
+  "RetuningAllowed": false,
+  "Rule": "Fixed0.6s from model timescale, no selection by native elapsed time. Three actions original/\u002B0.9/-0.9deg after0.24s, pulse0.1s. Keep path/throttle. At plan lifecycle uncertainty retain original controller. Stop first physical failure."
+}

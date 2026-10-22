@@ -1,0 +1,31 @@
+{
+  "BaseHead": "d8d7e959eab00d0b41236aa6292ab04f3c15f3fa",
+  "Result": "PARTIAL",
+  "DefaultEnabled": false,
+  "TargetedReleaseDotnetTests": {"Passed": 18, "Failed": 0, "Filter": "PredictiveRiderControlTests|ContinuousCornerPlanningTests", "WarningsAsErrors": true},
+  "PythonEvidenceTests": {"Predictive": 5, "ContinuousHistoricalContract": 6, "PreparedHistoricalContract": 5, "Failed": 0},
+  "NodeReplayTests": {"Passed": 26, "Failed": 0},
+  "Browser": {
+    "Engine": "Chromium, Codex in-app browser",
+    "CandidateUrl": "http://127.0.0.1:8001/tools/replay-viewer/?case=predictive-candidate",
+    "BaselineUrl": "http://127.0.0.1:8001/tools/replay-viewer/?case=predictive-baseline",
+    "CandidateIntervals": 2031,
+    "Riders": 1,
+    "PlayObservedTimeChanges": true,
+    "FirstAndSecondBendNavigation": true,
+    "PlanBeforeAt10_149": 1,
+    "PlanAt10_15": 2,
+    "DriveAtPlanChangePercent": 12.6,
+    "LastTime": 20.27,
+    "PreviousNextAndFit": true,
+    "SteeringActivationEventSeek": 1.44,
+    "SmoothingDefault": false,
+    "RateDefault": 0.25,
+    "ConsoleWarningsOrErrors": 0,
+    "Screenshots": "Task outputs: predictive-candidate-first-bend.jpg, predictive-baseline-first-bend.jpg, predictive-candidate-full-track.jpg",
+    "RecordedClip": "predictive-candidate-first-bend.webm: actual replay 1.45-3.65 s, recorded with existing Canvas MediaRecorder at 2x; background browser throttled animation. Full replay remains available interactively."
+  },
+  "NativeWorlds": 3,
+  "ProtocolDeviation": "First ON changed the dynamically replanned Q2. Retained and excluded. One fixed-input correction used unchanged controller/model/horizon/tolerances; see controlled/controlled-comparison-protocol.json.",
+  "WindowsCI": "Use the standard PR-triggered Draft Windows CI at the exact PR head. Final run and conclusion are recorded in the PR description. No broad local historical matrix was run."
+}

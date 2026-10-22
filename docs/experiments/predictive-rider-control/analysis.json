@@ -1,0 +1,924 @@
+{
+  "Grade": "PARTIAL",
+  "SharedPreparedLine": true,
+  "NativeSafetyPassed": true,
+  "PredictionBaselineGate": true,
+  "SelectedPredictionAgainstRealCandidate": {
+    "Passed": true,
+    "MaximumErrors": {
+      "PositionMeters": 0.00018319104895004747,
+      "SpeedMetersPerSecond": 0.0001288645767658636,
+      "ChiDegrees": 0.003302007971032932,
+      "BetaDegrees": 0.0029103469158774787,
+      "SteeringDegrees": 0.017090775291776827,
+      "WheelOmegaRadPerSecond": 0.002236024460970043
+    },
+    "Records": [
+      {
+        "ObservedAt": 0,
+        "Queued": false,
+        "ComparedStates": 61,
+        "Errors": {
+          "PositionMeters": 3.2608579851365353e-06,
+          "SpeedMetersPerSecond": 2.2714905757226234e-05,
+          "ChiDegrees": 3.624459231777021e-07,
+          "BetaDegrees": 4.4723227681389645e-07,
+          "SteeringDegrees": 1.1594451037310537e-08,
+          "WheelOmegaRadPerSecond": 5.2204176796522006e-05
+        },
+        "Passed": true
+      },
+      {
+        "ObservedAt": 0.4,
+        "Queued": false,
+        "ComparedStates": 61,
+        "Errors": {
+          "PositionMeters": 4.434402884213253e-06,
+          "SpeedMetersPerSecond": 3.17678656216458e-05,
+          "ChiDegrees": 5.488569228685347e-06,
+          "BetaDegrees": 4.132193909786335e-06,
+          "SteeringDegrees": 7.253450525372759e-08,
+          "WheelOmegaRadPerSecond": 8.224301319614824e-05
+        },
+        "Passed": true
+      },
+      {
+        "ObservedAt": 0.8,
+        "Queued": false,
+        "ComparedStates": 61,
+        "Errors": {
+          "PositionMeters": 4.660655902301394e-06,
+          "SpeedMetersPerSecond": 1.3774972455138368e-05,
+          "ChiDegrees": 3.0235445287539173e-05,
+          "BetaDegrees": 1.8410876780350595e-05,
+          "SteeringDegrees": 2.433804035733486e-08,
+          "WheelOmegaRadPerSecond": 3.060037913371616e-05
+        },
+        "Passed": true
+      },
+      {
+        "ObservedAt": 1.2,
+        "Queued": true,
+        "ComparedStates": 61,
+        "Errors": {
+          "PositionMeters": 2.7595745609740384e-05,
+          "SpeedMetersPerSecond": 2.946629390265798e-05,
+          "ChiDegrees": 1.1339598613133025e-05,
+          "BetaDegrees": 1.2554161437592288e-05,
+          "SteeringDegrees": 2.6984547505879834e-08,
+          "WheelOmegaRadPerSecond": 7.676262817568613e-05
+        },
+        "Passed": true
+      },
+      {
+        "ObservedAt": 1.6,
+        "Queued": true,
+        "ComparedStates": 62,
+        "Errors": {
+          "PositionMeters": 3.453045179084672e-05,
+          "SpeedMetersPerSecond": 1.8025230819063154e-05,
+          "ChiDegrees": 3.932460725437041e-05,
+          "BetaDegrees": 2.248572687195367e-05,
+          "SteeringDegrees": 8.904217076346965e-08,
+          "WheelOmegaRadPerSecond": 4.676485784926854e-05
+        },
+        "Passed": true
+      },
+      {
+        "ObservedAt": 2,
+        "Queued": false,
+        "ComparedStates": 61,
+        "Errors": {
+          "PositionMeters": 1.642828400052843e-05,
+          "SpeedMetersPerSecond": 1.6397701443793267e-05,
+          "ChiDegrees": 8.460827496837943e-05,
+          "BetaDegrees": 0.0002813982953153434,
+          "SteeringDegrees": 0.008545719293099973,
+          "WheelOmegaRadPerSecond": 3.615404225598695e-05
+        },
+        "Passed": true
+      },
+      {
+        "ObservedAt": 2.4,
+        "Queued": false,
+        "ComparedStates": 61,
+        "Errors": {
+          "PositionMeters": 2.873441043535572e-05,
+          "SpeedMetersPerSecond": 0.0001288645767658636,
+          "ChiDegrees": 0.0006432023989843008,
+          "BetaDegrees": 0.0023406588816755718,
+          "SteeringDegrees": 0.017090775291776827,
+          "WheelOmegaRadPerSecond": 0.0004111322279811702
+        },
+        "Passed": true
+      },
+      {
+        "ObservedAt": 2.8000000000000003,
+        "Queued": false,
+        "ComparedStates": 61,
+        "Errors": {
+          "PositionMeters": 2.144203443310067e-05,
+          "SpeedMetersPerSecond": 4.095490226063703e-05,
+          "ChiDegrees": 0.0001612930884769637,
+          "BetaDegrees": 0.001629118313126447,
+          "SteeringDegrees": 0.017090396083717426,
+          "WheelOmegaRadPerSecond": 0.00015939358366523493
+        },
+        "Passed": true
+      },
+      {
+        "ObservedAt": 3.2,
+        "Queued": false,
+        "ComparedStates": 61,
+        "Errors": {
+          "PositionMeters": 4.58937209741373e-05,
+          "SpeedMetersPerSecond": 0.00012410482074010076,
+          "ChiDegrees": 0.0003979029185643185,
+          "BetaDegrees": 0.002225725345322929,
+          "SteeringDegrees": 0.017090202065145214,
+          "WheelOmegaRadPerSecond": 0.00025872667635695734
+        },
+        "Passed": true
+      },
+      {
+        "ObservedAt": 3.6,
+        "Queued": false,
+        "ComparedStates": 61,
+        "Errors": {
+          "PositionMeters": 6.138301930144593e-05,
+          "SpeedMetersPerSecond": 5.667017038391009e-05,
+          "ChiDegrees": 0.00016953955602016615,
+          "BetaDegrees": 0.0009682627582407641,
+          "SteeringDegrees": 0.008545142142661387,
+          "WheelOmegaRadPerSecond": 0.0006915442649955139
+        },
+        "Passed": true
+      },
+      {
+        "ObservedAt": 4,
+        "Queued": false,
+        "ComparedStates": 61,
+        "Errors": {
+          "PositionMeters": 3.3206813438445013e-05,
+          "SpeedMetersPerSecond": 4.268803191997961e-05,
+          "ChiDegrees": 8.027027493487572e-05,
+          "BetaDegrees": 0.0005750346907132965,
+          "SteeringDegrees": 1.2587219001010757e-06,
+          "WheelOmegaRadPerSecond": 0.0001265832210890494
+        },
+        "Passed": true
+      },
+      {
+        "ObservedAt": 4.4,
+        "Queued": false,
+        "ComparedStates": 61,
+        "Errors": {
+          "PositionMeters": 4.039215963909449e-05,
+          "SpeedMetersPerSecond": 3.0504693755872836e-05,
+          "ChiDegrees": 3.8518280860982935e-05,
+          "BetaDegrees": 0.00040793520846009554,
+          "SteeringDegrees": 1.447737824766117e-06,
+          "WheelOmegaRadPerSecond": 2.3194253159886102e-05
+        },
+        "Passed": true
+      },
+      {
+        "ObservedAt": 4.8,
+        "Queued": false,
+        "ComparedStates": 61,
+        "Errors": {
+          "PositionMeters": 4.7257310252128044e-05,
+          "SpeedMetersPerSecond": 4.9305765585927475e-05,
+          "ChiDegrees": 0.0003125581517621449,
+          "BetaDegrees": 0.0013843807042040492,
+          "SteeringDegrees": 1.447737824766117e-06,
+          "WheelOmegaRadPerSecond": 0.0004238968449925551
+        },
+        "Passed": true
+      },
+      {
+        "ObservedAt": 5.2,
+        "Queued": true,
+        "ComparedStates": 61,
+        "Errors": {
+          "PositionMeters": 0.00018319104895004747,
+          "SpeedMetersPerSecond": 9.670381106552384e-05,
+          "ChiDegrees": 0.003302007971032932,
+          "BetaDegrees": 0.0029103469158774787,
+          "SteeringDegrees": 0.008545160858472406,
+          "WheelOmegaRadPerSecond": 0.0020733024027634883
+        },
+        "Passed": true
+      },
+      {
+        "ObservedAt": 5.6000000000000005,
+        "Queued": true,
+        "ComparedStates": 61,
+        "Errors": {
+          "PositionMeters": 0.00010738395008343959,
+          "SpeedMetersPerSecond": 2.170631726094996e-05,
+          "ChiDegrees": 0.0011351040480138668,
+          "BetaDegrees": 0.0013329032579370527,
+          "SteeringDegrees": 0.008545014756901382,
+          "WheelOmegaRadPerSecond": 6.107486179018906e-05
+        },
+        "Passed": true
+      },
+      {
+        "ObservedAt": 6,
+        "Queued": true,
+        "ComparedStates": 61,
+        "Errors": {
+          "PositionMeters": 5.650639623893697e-05,
+          "SpeedMetersPerSecond": 2.28842043874522e-05,
+          "ChiDegrees": 0.00048074491604764596,
+          "BetaDegrees": 0.0007410871073815337,
+          "SteeringDegrees": 0.008545011207388839,
+          "WheelOmegaRadPerSecond": 7.159085646435415e-05
+        },
+        "Passed": true
+      },
+      {
+        "ObservedAt": 6.4,
+        "Queued": true,
+        "ComparedStates": 61,
+        "Errors": {
+          "PositionMeters": 3.8076468925104245e-05,
+          "SpeedMetersPerSecond": 7.2720936827863625e-06,
+          "ChiDegrees": 0.00021304548025514834,
+          "BetaDegrees": 0.00012521932691419654,
+          "SteeringDegrees": 0.008544906204978407,
+          "WheelOmegaRadPerSecond": 1.6640062227679664e-05
+        },
+        "Passed": true
+      },
+      {
+        "ObservedAt": 6.8,
+        "Queued": true,
+        "ComparedStates": 61,
+        "Errors": {
+          "PositionMeters": 3.193338329239175e-05,
+          "SpeedMetersPerSecond": 7.607660560182694e-06,
+          "ChiDegrees": 0.00037010434015725095,
+          "BetaDegrees": 0.0001576014889675308,
+          "SteeringDegrees": 1.048264649307787e-07,
+          "WheelOmegaRadPerSecond": 1.96600501709554e-05
+        },
+        "Passed": true
+      },
+      {
+        "ObservedAt": 7.2,
+        "Queued": true,
+        "ComparedStates": 61,
+        "Errors": {
+          "PositionMeters": 3.781936312117078e-05,
+          "SpeedMetersPerSecond": 3.982950359038284e-05,
+          "ChiDegrees": 0.0007733394295111622,
+          "BetaDegrees": 0.0007567379161274305,
+          "SteeringDegrees": 0.00854496819992804,
+          "WheelOmegaRadPerSecond": 0.00015293333575527868
+        },
+        "Passed": true
+      },
+      {
+        "ObservedAt": 7.6000000000000005,
+        "Queued": false,
+        "ComparedStates": 61,
+        "Errors": {
+          "PositionMeters": 4.2759600811476086e-05,
+          "SpeedMetersPerSecond": 5.5171048462199224e-05,
+          "ChiDegrees": 0.0008682660096826368,
+          "BetaDegrees": 0.0016842179790018598,
+          "SteeringDegrees": 0.008545002952149038,
+          "WheelOmegaRadPerSecond": 0.0008995516933083536
+        },
+        "Passed": true
+      },
+      {
+        "ObservedAt": 8,
+        "Queued": false,
+        "ComparedStates": 61,
+        "Errors": {
+          "PositionMeters": 9.516661879999984e-05,
+          "SpeedMetersPerSecond": 0.0001019925962424395,
+          "ChiDegrees": 0.0015927723832619503,
+          "BetaDegrees": 0.0022357899555192125,
+          "SteeringDegrees": 0.00854521639463168,
+          "WheelOmegaRadPerSecond": 0.0020307160268373536
+        },
+        "Passed": true
+      },
+      {
+        "ObservedAt": 10.4,
+        "Queued": true,
+        "ComparedStates": 61,
+        "Errors": {
+          "PositionMeters": 3.756669327270631e-05,
+          "SpeedMetersPerSecond": 1.145019647097456e-05,
+          "ChiDegrees": 3.751565408780639e-05,
+          "BetaDegrees": 3.676467886952556e-05,
+          "SteeringDegrees": 1.3078350601938894e-08,
+          "WheelOmegaRadPerSecond": 2.2539641015839607e-05
+        },
+        "Passed": true
+      },
+      {
+        "ObservedAt": 10.8,
+        "Queued": true,
+        "ComparedStates": 61,
+        "Errors": {
+          "PositionMeters": 2.6716933380010217e-05,
+          "SpeedMetersPerSecond": 1.6133475874369196e-05,
+          "ChiDegrees": 1.888746339938715e-05,
+          "BetaDegrees": 3.384256456059204e-05,
+          "SteeringDegrees": 2.648356670909946e-08,
+          "WheelOmegaRadPerSecond": 2.7367042264359043e-05
+        },
+        "Passed": true
+      },
+      {
+        "ObservedAt": 11.200000000000001,
+        "Queued": false,
+        "ComparedStates": 61,
+        "Errors": {
+          "PositionMeters": 2.7756755919526328e-05,
+          "SpeedMetersPerSecond": 2.8793448098696217e-05,
+          "ChiDegrees": 8.099200488924939e-05,
+          "BetaDegrees": 5.631972349611218e-05,
+          "SteeringDegrees": 7.941586619546532e-08,
+          "WheelOmegaRadPerSecond": 7.172689277012978e-05
+        },
+        "Passed": true
+      },
+      {
+        "ObservedAt": 11.6,
+        "Queued": false,
+        "ComparedStates": 61,
+        "Errors": {
+          "PositionMeters": 6.363961810684032e-05,
+          "SpeedMetersPerSecond": 1.431647621430443e-05,
+          "ChiDegrees": 1.2195388111639644e-05,
+          "BetaDegrees": 3.8184620891847294e-05,
+          "SteeringDegrees": 3.135730284472431e-08,
+          "WheelOmegaRadPerSecond": 3.198354721689611e-05
+        },
+        "Passed": true
+      },
+      {
+        "ObservedAt": 12,
+        "Queued": false,
+        "ComparedStates": 61,
+        "Errors": {
+          "PositionMeters": 3.889919521871293e-05,
+          "SpeedMetersPerSecond": 1.7790434739595185e-05,
+          "ChiDegrees": 1.2655983216612715e-05,
+          "BetaDegrees": 3.984402283047086e-05,
+          "SteeringDegrees": 2.0089717412027778e-08,
+          "WheelOmegaRadPerSecond": 4.6685043656680136e-05
+        },
+        "Passed": true
+      },
+      {
+        "ObservedAt": 12.4,
+        "Queued": false,
+        "ComparedStates": 61,
+        "Errors": {
+          "PositionMeters": 5.0028722287810145e-05,
+          "SpeedMetersPerSecond": 2.283962616189683e-05,
+          "ChiDegrees": 9.73925012631142e-06,
+          "BetaDegrees": 1.3990590829608592e-05,
+          "SteeringDegrees": 2.0089717412027778e-08,
+          "WheelOmegaRadPerSecond": 6.081580890793248e-05
+        },
+        "Passed": true
+      },
+      {
+        "ObservedAt": 12.8,
+        "Queued": false,
+        "ComparedStates": 61,
+        "Errors": {
+          "PositionMeters": 2.3352372580195465e-05,
+          "SpeedMetersPerSecond": 1.218001295555382e-05,
+          "ChiDegrees": 6.164405976530244e-05,
+          "BetaDegrees": 8.629138431274281e-05,
+          "SteeringDegrees": 4.5097280233799444e-08,
+          "WheelOmegaRadPerSecond": 3.175528433985164e-05
+        },
+        "Passed": true
+      },
+      {
+        "ObservedAt": 13.200000000000001,
+        "Queued": false,
+        "ComparedStates": 62,
+        "Errors": {
+          "PositionMeters": 3.242233108533605e-05,
+          "SpeedMetersPerSecond": 1.0988763982311411e-05,
+          "ChiDegrees": 0.00028284157919152106,
+          "BetaDegrees": 0.00020910076158747306,
+          "SteeringDegrees": 4.5097280233799444e-08,
+          "WheelOmegaRadPerSecond": 2.8262598121386873e-05
+        },
+        "Passed": true
+      },
+      {
+        "ObservedAt": 13.6,
+        "Queued": false,
+        "ComparedStates": 61,
+        "Errors": {
+          "PositionMeters": 4.5710040605649784e-05,
+          "SpeedMetersPerSecond": 2.2291444018662787e-05,
+          "ChiDegrees": 0.0001916319641718694,
+          "BetaDegrees": 0.0006467808259042529,
+          "SteeringDegrees": 0.008544966463420721,
+          "WheelOmegaRadPerSecond": 4.590346046029481e-05
+        },
+        "Passed": true
+      },
+      {
+        "ObservedAt": 14,
+        "Queued": false,
+        "ComparedStates": 61,
+        "Errors": {
+          "PositionMeters": 5.2145286386791644e-05,
+          "SpeedMetersPerSecond": 5.377567341469103e-05,
+          "ChiDegrees": 0.00096934675253369,
+          "BetaDegrees": 0.0009993385108936863,
+          "SteeringDegrees": 0.008545106774302938,
+          "WheelOmegaRadPerSecond": 0.00018168098029036628
+        },
+        "Passed": true
+      },
+      {
+        "ObservedAt": 14.4,
+        "Queued": false,
+        "ComparedStates": 61,
+        "Errors": {
+          "PositionMeters": 8.497021539861532e-05,
+          "SpeedMetersPerSecond": 8.67599895997273e-05,
+          "ChiDegrees": 0.0011887755378688877,
+          "BetaDegrees": 0.00207351402623894,
+          "SteeringDegrees": 0.008545059882049039,
+          "WheelOmegaRadPerSecond": 0.0002741595262207852
+        },
+        "Passed": true
+      },
+      {
+        "ObservedAt": 14.8,
+        "Queued": false,
+        "ComparedStates": 61,
+        "Errors": {
+          "PositionMeters": 1.6399433223866496e-05,
+          "SpeedMetersPerSecond": 4.1929087331027404e-05,
+          "ChiDegrees": 0.00034580385879998983,
+          "BetaDegrees": 0.0016888933252765192,
+          "SteeringDegrees": 0.008544911787701876,
+          "WheelOmegaRadPerSecond": 0.0003115268571960428
+        },
+        "Passed": true
+      },
+      {
+        "ObservedAt": 15.200000000000001,
+        "Queued": false,
+        "ComparedStates": 61,
+        "Errors": {
+          "PositionMeters": 5.843238563237086e-05,
+          "SpeedMetersPerSecond": 5.211251633596703e-05,
+          "ChiDegrees": 0.00046826464310874386,
+          "BetaDegrees": 0.0011270707910338192,
+          "SteeringDegrees": 0.008544869353156974,
+          "WheelOmegaRadPerSecond": 0.0014406103949085036
+        },
+        "Passed": true
+      },
+      {
+        "ObservedAt": 15.6,
+        "Queued": false,
+        "ComparedStates": 61,
+        "Errors": {
+          "PositionMeters": 4.6318815241352256e-05,
+          "SpeedMetersPerSecond": 3.33544857333834e-05,
+          "ChiDegrees": 0.0004591486333716512,
+          "BetaDegrees": 0.00048360957316553676,
+          "SteeringDegrees": 0.008545021618564203,
+          "WheelOmegaRadPerSecond": 0.0011799262908240848
+        },
+        "Passed": true
+      },
+      {
+        "ObservedAt": 16,
+        "Queued": false,
+        "ComparedStates": 61,
+        "Errors": {
+          "PositionMeters": 2.7324043617009538e-05,
+          "SpeedMetersPerSecond": 1.775125969771807e-05,
+          "ChiDegrees": 0.00010939849707597004,
+          "BetaDegrees": 0.00031972464336973375,
+          "SteeringDegrees": 0.008545020282087423,
+          "WheelOmegaRadPerSecond": 0.00011061466876327586
+        },
+        "Passed": true
+      },
+      {
+        "ObservedAt": 16.4,
+        "Queued": false,
+        "ComparedStates": 61,
+        "Errors": {
+          "PositionMeters": 2.6153392862556396e-05,
+          "SpeedMetersPerSecond": 1.888332180044472e-05,
+          "ChiDegrees": 0.00021490983326989097,
+          "BetaDegrees": 0.0002268846739848089,
+          "SteeringDegrees": 0.008544907452990493,
+          "WheelOmegaRadPerSecond": 2.0783993633699538e-05
+        },
+        "Passed": true
+      },
+      {
+        "ObservedAt": 16.8,
+        "Queued": false,
+        "ComparedStates": 61,
+        "Errors": {
+          "PositionMeters": 2.5536272367253403e-05,
+          "SpeedMetersPerSecond": 2.250112103396873e-05,
+          "ChiDegrees": 0.00014363956768326534,
+          "BetaDegrees": 0.00040720472022501774,
+          "SteeringDegrees": 0.008544907452990493,
+          "WheelOmegaRadPerSecond": 3.249963317841775e-05
+        },
+        "Passed": true
+      },
+      {
+        "ObservedAt": 17.2,
+        "Queued": false,
+        "ComparedStates": 61,
+        "Errors": {
+          "PositionMeters": 4.4681203707079465e-05,
+          "SpeedMetersPerSecond": 3.9109860022534804e-05,
+          "ChiDegrees": 0.0006864754699002767,
+          "BetaDegrees": 0.0007811197077799011,
+          "SteeringDegrees": 5.231897593226551e-08,
+          "WheelOmegaRadPerSecond": 0.0003670673272182512
+        },
+        "Passed": true
+      },
+      {
+        "ObservedAt": 17.6,
+        "Queued": false,
+        "ComparedStates": 61,
+        "Errors": {
+          "PositionMeters": 7.404127608475417e-05,
+          "SpeedMetersPerSecond": 7.770190770983731e-05,
+          "ChiDegrees": 0.0005168014593913952,
+          "BetaDegrees": 0.001454276714508936,
+          "SteeringDegrees": 0.008544979304067004,
+          "WheelOmegaRadPerSecond": 0.0014099056425536105
+        },
+        "Passed": true
+      },
+      {
+        "ObservedAt": 18,
+        "Queued": false,
+        "ComparedStates": 61,
+        "Errors": {
+          "PositionMeters": 9.460522836827041e-05,
+          "SpeedMetersPerSecond": 8.476958802106083e-05,
+          "ChiDegrees": 0.001001991555798011,
+          "BetaDegrees": 0.0016243672545490954,
+          "SteeringDegrees": 0.008545852743521766,
+          "WheelOmegaRadPerSecond": 0.0018671095076143729
+        },
+        "Passed": true
+      },
+      {
+        "ObservedAt": 18.400000000000002,
+        "Queued": false,
+        "ComparedStates": 61,
+        "Errors": {
+          "PositionMeters": 0.00011680284927289456,
+          "SpeedMetersPerSecond": 0.00012549097800373943,
+          "ChiDegrees": 0.0013472165331950075,
+          "BetaDegrees": 0.002651720047204541,
+          "SteeringDegrees": 0.008544993306829125,
+          "WheelOmegaRadPerSecond": 0.002236024460970043
+        },
+        "Passed": true
+      }
+    ]
+  },
+  "Baseline": {
+    "Time": 19.98,
+    "Steps": 2002,
+    "Fingerprint": "33741F49880FADBCA5C7ECE240B32EF0017463A30B1BF85B32E06131D5CD4A03",
+    "Initial": {
+      "TimeSeconds": 0,
+      "Riders": [
+        {
+          "Id": 1,
+          "Position": {
+            "X": 4,
+            "Y": -1
+          },
+          "Velocity": {
+            "X": 18,
+            "Y": 0
+          },
+          "Heading": 0,
+          "AngularVelocity": 0,
+          "Road": {
+            "Segment": 0,
+            "Progress": 0.11428571428571428,
+            "ReferenceMeters": 4,
+            "OffsetMeters": 1,
+            "Heading": 0,
+            "RadiusMeters": 0,
+            "CornerProgress": 0,
+            "Tangent": {
+              "X": 1,
+              "Y": 0
+            },
+            "Outward": {
+              "X": 0,
+              "Y": -1
+            },
+            "IsTurn": false
+          },
+          "TotalReferenceMeters": 4,
+          "DistanceMeters": 0,
+          "Activity": 0,
+          "Drive": 1,
+          "TargetOffsetMeters": 1,
+          "Impairment": 0,
+          "Context": 0,
+          "Speed": 18,
+          "ForwardSpeed": 18,
+          "SideSpeed": 0,
+          "SlideRadians": 0
+        }
+      ],
+      "RearWheels": [
+        {
+          "RiderId": 1,
+          "RearWheelAngularVelocityRadPerSecond": 54.54545454545454,
+          "WheelRadiusMeters": 0.33,
+          "WheelInertiaKgMetersSquared": 0.9,
+          "CircumferentialSpeedMetersPerSecond": 18,
+          "Rpm": 520.8707228462029,
+          "RotationalEnergyJoules": 1338.8429752066113
+        }
+      ],
+      "Steering": [
+        {
+          "RiderId": 1,
+          "AngleRadians": 0
+        }
+      ]
+    },
+    "PerBend": {
+      "First": {
+        "Entry": {
+          "Time": 1.6013587992021279,
+          "SpeedKph": 68.6160466863754,
+          "DistanceXY": 31.029700639342444
+        },
+        "Middle": {
+          "Time": 5.46741817445022,
+          "SpeedKph": 46.64688156548059,
+          "DistanceXY": 93.6717625129109
+        },
+        "Exit": {
+          "Time": 9.838773998040914,
+          "SpeedKph": 54.92410763951431,
+          "DistanceXY": 153.75883298640719
+        },
+        "FullFootprintTime": 9.91,
+        "MinimumSpeedKph": 45.479051971435545,
+        "MaximumError": 5.906074653177024,
+        "RmsError": 2.770031503109119,
+        "MaximumBetaDegrees": 12.248357111209486,
+        "ConservativeInner": 2.546995971505426,
+        "ConservativeOuter": 1.7354919901501582
+      },
+      "Second": {
+        "Entry": {
+          "Time": 13.186707961664062,
+          "SpeedKph": 66.32934134473611,
+          "DistanceXY": 215.84442829536076
+        },
+        "Middle": {
+          "Time": 16.576889511692524,
+          "SpeedKph": 64.11001857424107,
+          "DistanceXY": 274.46650624371154
+        },
+        "Exit": {
+          "Time": 19.905058168882334,
+          "SpeedKph": 57.839426433399694,
+          "DistanceXY": 330.6294829358144
+        },
+        "FullFootprintTime": 19.98,
+        "MinimumSpeedKph": 57.74459381103516,
+        "MaximumError": 1.4748107414614111,
+        "RmsError": 0.7657829561118865,
+        "MaximumBetaDegrees": 6.897259920114983,
+        "ConservativeInner": 4.627446807731821,
+        "ConservativeOuter": 3.7691410720919984
+      }
+    },
+    "DistanceXY": 331.83361190853,
+    "ReferenceProgress": 288.98224687576294,
+    "MaximumError": 5.906074653177024,
+    "RmsError": 1.876117365221662,
+    "MaximumBetaDegrees": 12.248357111209486,
+    "MeanDrive": 0.15545257345377556,
+    "ZeroDriveSeconds": 7.79999982600566,
+    "ThrottleCommands": 48,
+    "PendingCommands": 1,
+    "LateCommands": 0,
+    "PositiveAfterNewerZero": 6,
+    "SteeringReversals": 52,
+    "ConservativeInner": 1.490225730318097,
+    "ConservativeOuter": 1.7354919901501582,
+    "Energy": {
+      "Engine": 80120.83434919245,
+      "FrontLoss": 18179.829654524205,
+      "RearLateralLoss": 17874.050373416332,
+      "RearLongitudinalLoss": 15400.489630372691,
+      "Bearing": 1218.7671742741538,
+      "ResistanceWork": -32459.34215046223,
+      "FrontWork": -18179.829654524205,
+      "RearWork": 45806.45854318352,
+      "BodyChange": -4832.6155411404,
+      "WheelChange": -178.93137205449952,
+      "Residual": 0.09772066226651077
+    },
+    "UnexplainedEnergyJoules": -1.712169434009425e-10,
+    "NativeForceEvaluations": 2002,
+    "BoundaryForceEvaluations": 5,
+    "PreparedContactQueries": 2600,
+    "SolverMilliseconds": 44.2767000000002,
+    "PreparedMilliseconds": 247.89369999999997,
+    "OriginalInversionContactQueries": 102102
+  },
+  "Candidate": {
+    "Time": 20.27,
+    "Steps": 2031,
+    "Fingerprint": "A367628ED457B6C075B059E9811C485A242D1C80A9E102519CFBC266675CA316",
+    "Initial": {
+      "TimeSeconds": 0,
+      "Riders": [
+        {
+          "Id": 1,
+          "Position": {
+            "X": 4,
+            "Y": -1
+          },
+          "Velocity": {
+            "X": 18,
+            "Y": 0
+          },
+          "Heading": 0,
+          "AngularVelocity": 0,
+          "Road": {
+            "Segment": 0,
+            "Progress": 0.11428571428571428,
+            "ReferenceMeters": 4,
+            "OffsetMeters": 1,
+            "Heading": 0,
+            "RadiusMeters": 0,
+            "CornerProgress": 0,
+            "Tangent": {
+              "X": 1,
+              "Y": 0
+            },
+            "Outward": {
+              "X": 0,
+              "Y": -1
+            },
+            "IsTurn": false
+          },
+          "TotalReferenceMeters": 4,
+          "DistanceMeters": 0,
+          "Activity": 0,
+          "Drive": 1,
+          "TargetOffsetMeters": 1,
+          "Impairment": 0,
+          "Context": 0,
+          "Speed": 18,
+          "ForwardSpeed": 18,
+          "SideSpeed": 0,
+          "SlideRadians": 0
+        }
+      ],
+      "RearWheels": [
+        {
+          "RiderId": 1,
+          "RearWheelAngularVelocityRadPerSecond": 54.54545454545454,
+          "WheelRadiusMeters": 0.33,
+          "WheelInertiaKgMetersSquared": 0.9,
+          "CircumferentialSpeedMetersPerSecond": 18,
+          "Rpm": 520.8707228462029,
+          "RotationalEnergyJoules": 1338.8429752066113
+        }
+      ],
+      "Steering": [
+        {
+          "RiderId": 1,
+          "AngleRadians": 0
+        }
+      ]
+    },
+    "PerBend": {
+      "First": {
+        "Entry": {
+          "Time": 1.6014077990867581,
+          "SpeedKph": 68.61134316561973,
+          "DistanceXY": 31.030492908570604
+        },
+        "Middle": {
+          "Time": 5.620101831030217,
+          "SpeedKph": 47.13799571403914,
+          "DistanceXY": 95.18743013538533
+        },
+        "Exit": {
+          "Time": 10.113228022698815,
+          "SpeedKph": 56.26224041215782,
+          "DistanceXY": 155.94117222200177
+        },
+        "FullFootprintTime": 10.19,
+        "MinimumSpeedKph": 44.06788902282715,
+        "MaximumError": 5.3751490253147365,
+        "RmsError": 2.7572581761989667,
+        "MaximumBetaDegrees": 13.864295345243525,
+        "ConservativeInner": 2.567068336711074,
+        "ConservativeOuter": 1.8072645400262297
+      },
+      "Second": {
+        "Entry": {
+          "Time": 13.494759,
+          "SpeedKph": 66.92907485961915,
+          "DistanceXY": 218.00848170533118
+        },
+        "Middle": {
+          "Time": 16.87290847412571,
+          "SpeedKph": 64.0770851643338,
+          "DistanceXY": 276.7254435215416
+        },
+        "Exit": {
+          "Time": 20.2014275254237,
+          "SpeedKph": 57.88267162319197,
+          "DistanceXY": 332.97627384822493
+        },
+        "FullFootprintTime": 20.27,
+        "MinimumSpeedKph": 57.7828125,
+        "MaximumError": 1.4354939188931652,
+        "RmsError": 0.74983410689396,
+        "MaximumBetaDegrees": 6.6080530620705416,
+        "ConservativeInner": 4.739773163102164,
+        "ConservativeOuter": 3.308515774490422
+      }
+    },
+    "DistanceXY": 334.07836541736697,
+    "ReferenceProgress": 288.8802990913391,
+    "MaximumError": 5.3751490253147365,
+    "RmsError": 1.868441768077614,
+    "MaximumBetaDegrees": 13.864295345243525,
+    "MeanDrive": 0.1565360775688827,
+    "ZeroDriveSeconds": 7.2999998377636075,
+    "ThrottleCommands": 50,
+    "PendingCommands": 1,
+    "LateCommands": 0,
+    "PositiveAfterNewerZero": 5,
+    "SteeringReversals": 62,
+    "ConservativeInner": 1.490225730318097,
+    "ConservativeOuter": 1.8072645400262297,
+    "Energy": {
+      "Engine": 79685.36842046662,
+      "FrontLoss": 18342.761021014354,
+      "RearLateralLoss": 18151.312742680486,
+      "RearLongitudinalLoss": 14525.486264026225,
+      "Bearing": 1213.3042396664111,
+      "ResistanceWork": -32500.791786273032,
+      "FrontWork": -18342.761021014354,
+      "RearWork": 46001.372370836645,
+      "BodyChange": -4842.123991469241,
+      "WheelChange": -206.10719674335522,
+      "Residual": 0.05644498130277498
+    },
+    "UnexplainedEnergyJoules": -1.9247348159723288e-10,
+    "NativeForceEvaluations": 2031,
+    "BoundaryForceEvaluations": 7,
+    "PreparedContactQueries": 2639,
+    "SolverMilliseconds": 29.382899999998855,
+    "PreparedMilliseconds": 232.09989999999996,
+    "OriginalInversionContactQueries": 98481,
+    "PredictiveDecisions": 51,
+    "PredictiveEvaluations": 42,
+    "PredictiveQueued": 10,
+    "PredictiveActivations": 10,
+    "PredictiveContactQueries": 359358,
+    "PredictiveMilliseconds": 1668.4493,
+    "PredictiveMedianMilliseconds": 36.6044,
+    "PredictiveMaximumMilliseconds": 68.5557
+  },
+  "ExcludedUncontrolledPlanRun": "C953F8AC60CE60FB6B6EEAE8CF4833C5269EAE8707D0F844E7654B487DB4BE8A",
+  "NativeWorlds": 3,
+  "Interpretation": "First ON run excluded because dynamic planning changed Q2. One fixed-input repeat, same controller/model/horizon/tolerances, no retuning."
+}

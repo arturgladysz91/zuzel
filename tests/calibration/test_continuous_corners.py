@@ -60,6 +60,14 @@ class ContinuousCornerEvidenceTests(unittest.TestCase):
         a=report.load(DATA,'analysis.json')
         for n,h in a['HistoricalSha256'].items():self.assertEqual(hashlib.sha256((ROOT/n).read_bytes()).hexdigest().upper(),h.upper())
         for n,h in report.load(DATA,'manifest.json').items():self.assertEqual(hashlib.sha256((DATA/n).read_bytes()).hexdigest().upper(),h.upper())
-        for n,h in report.load(DATA,'protocol.json')['Sources'].items():self.assertEqual(hashlib.sha256((ROOT/'tools/shared-world-speedway'/n).read_bytes().replace(b'\r\n',b'\n')).hexdigest().upper(),h)
+        # Approved default-OFF planning/integration extensions have their own exact
+        # source guard plus native OFF fingerprint and all2002-contact replay.
+        # Preserve this historical manifest; tyre/engine/#117 stay byte-frozen.
+        extensions=report.load(ROOT/'docs/experiments/predictive-rider-control','approved-source-extensions.json')['Sources']
+        for n,h in report.load(DATA,'protocol.json')['Sources'].items():
+            actual=hashlib.sha256((ROOT/'tools/shared-world-speedway'/n).read_bytes().replace(b'\r\n',b'\n')).hexdigest().upper()
+            if n in extensions:
+                self.assertEqual(extensions[n]['BaseSha256'],h);self.assertEqual(actual,extensions[n]['ApprovedSha256'])
+            else:self.assertEqual(actual,h)
 
 if __name__=='__main__':unittest.main()

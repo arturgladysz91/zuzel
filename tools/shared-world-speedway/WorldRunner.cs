@@ -47,6 +47,9 @@ public sealed class WorldRunner : IDisposable
     private readonly FeasibleCornerEntry? cornerEntry;
     private PreparedCornerPlan? preparedCorner;
     private readonly ContinuousCornerPlanning? continuousCorners;
+    private readonly PredictiveRiderControl? predictiveRider;
+    public IReadOnlyList<PredictiveSteeringDecision> PredictiveDecisions=>predictiveRider?.Decisions??(IReadOnlyList<PredictiveSteeringDecision>)Array.Empty<PredictiveSteeringDecision>();
+    public IReadOnlyList<PredictiveSteeringActivation> PredictiveActivations=>predictiveRider?.Activations??(IReadOnlyList<PredictiveSteeringActivation>)Array.Empty<PredictiveSteeringActivation>();
     public AuthoredRacingPath? PreparedPath=>preparedCorner?.Path;
     public string CurrentFingerprint=>Convert.ToHexString(hash.GetCurrentHash());
     public WorldSnapshot Snapshot => new(TimeSeconds, Array.AsReadOnly((RiderView[])views.Clone())) {
@@ -71,7 +74,7 @@ public sealed class WorldRunner : IDisposable
         TrackStateSnapshot? frozenSurface = null, IEnumerable<SpatialControlCommand>? spatialControls = null,
         TrackShapeVariant? trackShape = null,AuthoredRacingPath? authoredPath=null,bool diagnosticPathGuidance=false,bool diagnosticPathPreview=false,
         AuthoredSteadyStart? diagnosticSteadyStart=null,TwoContactInitialState? twoContactInitial=null,
-        IEnumerable<TwoContactSteeringCommand>? steeringCommands=null,PreparedCornerOptions? preparedOptions=null)
+        IEnumerable<TwoContactSteeringCommand>? steeringCommands=null,PreparedCornerOptions? preparedOptions=null,PreparedCornerPlan? diagnosticFrozenNextPlan=null)
     {
         this.diagnostics = diagnostics;
         Parameters = parameters ?? new();
@@ -133,6 +136,11 @@ public sealed class WorldRunner : IDisposable
         preparedOptions?.Validate();
         if(Parameters.EnableContinuousCornerPlanning&&(!Parameters.EnablePreparedCornerPlan||preparedOptions is {Path:false} or {Throttle:false}))
             throw new ArgumentException("Continuous corners require the existing prepared C path/throttle experiment.");
+        if(Parameters.EnablePredictiveRiderControl&&!Parameters.EnableContinuousCornerPlanning)
+            throw new ArgumentException("Predictive rider requires the isolated continuous prepared-plan experiment.");
+        if(diagnosticFrozenNextPlan is not null&&!Parameters.EnableContinuousCornerPlanning)
+            throw new ArgumentException("Frozen diagnostic plan requires continuous prepared planning.");
+        predictiveRider=Parameters.EnablePredictiveRiderControl?new():null;
         this.steeringCommands=(steeringCommands??Array.Empty<TwoContactSteeringCommand>()).OrderBy(c=>c.AtSeconds).ToArray();
         if(Parameters.EnableDynamicAxleLoad&&(!Parameters.EnableTwoContactBikeDynamics||!Parameters.EnablePhysicalSteeringControl
             ||Parameters.AxleLoadHeightMeters is { } height&&(!double.IsFinite(height)||height<=0))||!Parameters.EnableDynamicAxleLoad&&Parameters.AxleLoadHeightMeters is not null)
@@ -233,7 +241,7 @@ public sealed class WorldRunner : IDisposable
         twoContactStates=Parameters.EnableTwoContactBikeDynamics?specs.Select(_=>new TwoContactBikeState(twoContactInitial?.SteeringRadians??0)).ToArray():Array.Empty<TwoContactBikeState>();
         if(Parameters.EnableDynamicAxleLoad){twoContactStates[0].AxleLoad=DynamicAxleLoad.AtAcceleration(0,Parameters.TwoContactBike??TwoContactBikeParameters.Default,Parameters.AxleLoadHeightMeters??DynamicAxleLoad.ProvisionalHeightMeters);Work.AxleLoadUpdates++;}
         if(Parameters.EnablePreparedCornerPlan)preparedCorner=new(views[0],specs[0],Frame,Parameters,0,physics.Masses[0],rearWheels[0],twoContactStates[0],preparedOptions,surface);
-        if(Parameters.EnableContinuousCornerPlanning)continuousCorners=new(preparedCorner!);
+        if(Parameters.EnableContinuousCornerPlanning)continuousCorners=new(preparedCorner!,diagnosticFrozenNextPlan);
         Record();
     }
     public RunResult Run(string name, double stepSeconds, double maximumSeconds, int requiredLaps = 0,
@@ -281,6 +289,11 @@ public sealed class WorldRunner : IDisposable
                             pending[0]=command;decisions.Add(command);
                         }
                     }
+                }
+                if(predictiveRider is not null&&TimeSeconds+1e-10>=predictiveRider.NextReviewSeconds){
+                    var observed=new PredictiveRiderInput(views[0],TimeSeconds,rearWheels[0].AngularVelocityRadPerSecond,twoContactStates[0].SteeringRadians,
+                        preparedCorner!.ControlMemory,pending[0]);
+                    predictiveRider.Decide(observed,specs[0],preparedCorner,surface,Parameters,physics.Masses[0],physics.Inertias[0],continuousCorners!.Waiting is not null);
                 }
                 if(cornerEntry is not null&&pending[0] is null&&TimeSeconds+1e-10>=cornerEntry.NextReviewSeconds){
                     var choice=cornerEntry.Observe(views[0],specs[0],Frame,surface,Parameters,TimeSeconds,physics.Masses[0],rearWheels[0],twoContactStates[0]);
@@ -594,6 +607,7 @@ public sealed class WorldRunner : IDisposable
         { if (deadline > TimeSeconds + 1e-12) duration = Math.Min(duration, deadline - TimeSeconds); }
         if (nextControl < controls.Length) Before(controls[nextControl].AtSeconds);
         if(continuousCorners?.Waiting is { } waiting)Before(waiting.ActivationSeconds);
+        if(predictiveRider?.NextControlDeadline(TimeSeconds) is { } predictiveDeadline)Before(predictiveDeadline);
         for (var i = 0; i < specs.Length; i++)
         {
             if (specs[i].SpeedMetersPerSecond == 0) Before(RiderController.TapeReactionSeconds(specs[i]));
@@ -653,6 +667,7 @@ public sealed class WorldRunner : IDisposable
     }
     private float? SteeringOverride(int riderId)
     {
+        if(predictiveRider is not null)return predictiveRider.SteeringOverride(TimeSeconds,twoContactStates[0].SteeringRadians,Parameters.TwoContactBike??TwoContactBikeParameters.Default);
         for(var i=steeringCommands.Length-1;i>=0;i--){var c=steeringCommands[i];if(c.RiderId==riderId&&c.AtSeconds<=TimeSeconds+1e-12)return c.AngleRadians;}
         return null;
     }

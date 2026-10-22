@@ -1,0 +1,3811 @@
+{
+  "Passed": true,
+  "NativeWorlds": 0,
+  "States": 21,
+  "Queued": 15,
+  "MedianMilliseconds": 45.7903,
+  "MaximumMilliseconds": 72.1131,
+  "Records": [
+    {
+      "ObservedAt": 1.4000000000000001,
+      "Activation": 1.6400000000000001,
+      "CorrectionRadians": -0.015707964,
+      "Queued": true,
+      "Reason": "Delayed reachable steering pulse improves frozen future-motion score.",
+      "Milliseconds": 72.1131,
+      "Candidates": [
+        {
+          "CorrectionRadians": 0,
+          "Score": -0.24380456979685394,
+          "Safe": true,
+          "ContactQueries": 3341,
+          "MinimumInner": 2.323825801438828,
+          "MinimumOuter": 7.675279336021446,
+          "End": {
+            "Time": 2,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 42.520184,
+                "Y": -2.4392872
+              },
+              "Velocity": {
+                "X": 18.727924,
+                "Y": -0.5233541
+              },
+              "Heading": 0.00494361,
+              "AngularVelocity": 0.34175676,
+              "Road": {
+                "Segment": 1,
+                "Progress": 0.21571519364034455,
+                "ReferenceMeters": 42.00278929348849,
+                "OffsetMeters": 2.933632491042701,
+                "Heading": 0.1865826540687024,
+                "RadiusMeters": 27.63148711488697,
+                "CornerProgress": 0.07190506454678151,
+                "Tangent": {
+                  "X": 0.9826439,
+                  "Y": 0.18550195
+                },
+                "Outward": {
+                  "X": 0.18550195,
+                  "Y": -0.9826439
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 42.00278929348849,
+              "DistanceMeters": 11.388345701619983,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 3.9418128,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 18.735235,
+              "ForwardSpeed": 18.72511,
+              "SideSpeed": -0.6159309,
+              "SlideRadians": 0.03288146
+            },
+            "Omega": 56.80599533514178,
+            "Steering": 0.03221361,
+            "Inner": 3.6345368341837068,
+            "Outer": 7.675279336021446
+          }
+        },
+        {
+          "CorrectionRadians": 0.015707964,
+          "Score": -0.22843472607003923,
+          "Safe": true,
+          "ContactQueries": 2831,
+          "MinimumInner": 2.323825801438828,
+          "MinimumOuter": 7.716207720982498,
+          "End": {
+            "Time": 2,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 42.52014,
+                "Y": -2.406591
+              },
+              "Velocity": {
+                "X": 18.721428,
+                "Y": -0.34429553
+              },
+              "Heading": 0.019802324,
+              "AngularVelocity": 0.35804102,
+              "Road": {
+                "Segment": 1,
+                "Progress": 0.21588124959378915,
+                "ReferenceMeters": 42.00817998866057,
+                "OffsetMeters": 2.9014965968441877,
+                "Heading": 0.18680091698543544,
+                "RadiusMeters": 27.59998709667182,
+                "CornerProgress": 0.07196041653126305,
+                "Tangent": {
+                  "X": 0.9826034,
+                  "Y": 0.18571642
+                },
+                "Outward": {
+                  "X": 0.18571642,
+                  "Y": -0.9826034
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 42.00817998866057,
+              "DistanceMeters": 11.386734841391444,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 3.9427207,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 18.724592,
+              "ForwardSpeed": 18.710941,
+              "SideSpeed": -0.7149316,
+              "SlideRadians": 0.038190704
+            },
+            "Omega": 56.770164769051085,
+            "Steering": 0.032709606,
+            "Inner": 3.6154627791451266,
+            "Outer": 7.716207720982498
+          }
+        },
+        {
+          "CorrectionRadians": -0.015707964,
+          "Score": -0.26363636759335907,
+          "Safe": true,
+          "ContactQueries": 2831,
+          "MinimumInner": 2.323825801438828,
+          "MinimumOuter": 7.618138137157955,
+          "End": {
+            "Time": 2,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 42.519024,
+                "Y": -2.485083
+              },
+              "Velocity": {
+                "X": 18.72993,
+                "Y": -0.7805902
+              },
+              "Heading": -0.016193615,
+              "AngularVelocity": 0.31725278,
+              "Road": {
+                "Segment": 1,
+                "Progress": 0.21545034253181358,
+                "ReferenceMeters": 41.994191398848386,
+                "OffsetMeters": 2.978420126244037,
+                "Heading": 0.1862345237890635,
+                "RadiusMeters": 27.67526156833669,
+                "CornerProgress": 0.07181678084393786,
+                "Tangent": {
+                  "X": 0.9827084,
+                  "Y": 0.18515985
+                },
+                "Outward": {
+                  "X": 0.18515985,
+                  "Y": -0.9827084
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 41.994191398848386,
+              "DistanceMeters": 11.389718664810061,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 3.9403622,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 18.74619,
+              "ForwardSpeed": 18.740114,
+              "SideSpeed": -0.4771958,
+              "SlideRadians": 0.025458366
+            },
+            "Omega": 56.84262019874527,
+            "Steering": 0.031467915,
+            "Inner": 3.660826827075247,
+            "Outer": 7.618138137157955
+          }
+        }
+      ]
+    },
+    {
+      "ObservedAt": 1.6,
+      "Activation": 1.84,
+      "CorrectionRadians": -0.015707964,
+      "Queued": true,
+      "Reason": "Delayed reachable steering pulse improves frozen future-motion score.",
+      "Milliseconds": 62.06,
+      "Candidates": [
+        {
+          "CorrectionRadians": 0,
+          "Score": -0.05406696845335013,
+          "Safe": true,
+          "ContactQueries": 3289,
+          "MinimumInner": 2.627076782560153,
+          "MinimumOuter": 6.922649588493095,
+          "End": {
+            "Time": 2.2,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 46.246296,
+                "Y": -2.4378915
+              },
+              "Velocity": {
+                "X": 18.517126,
+                "Y": 0.5858355
+              },
+              "Heading": 0.08616504,
+              "AngularVelocity": 0.4656833,
+              "Road": {
+                "Segment": 1,
+                "Progress": 0.3136521634160972,
+                "ReferenceMeters": 45.18212938450597,
+                "OffsetMeters": 3.8580546204519175,
+                "Heading": 0.31420112604496414,
+                "RadiusMeters": 29.015522952149293,
+                "CornerProgress": 0.10455072113869907,
+                "Tangent": {
+                  "X": 0.9510436,
+                  "Y": 0.30905682
+                },
+                "Outward": {
+                  "X": 0.30905682,
+                  "Y": -0.9510436
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 45.18212938450597,
+              "DistanceMeters": 11.287919042631984,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 4.532454,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 18.526392,
+              "ForwardSpeed": 18.498846,
+              "SideSpeed": -1.0098932,
+              "SlideRadians": 0.054538094
+            },
+            "Omega": 56.160556802638624,
+            "Steering": 0.042205814,
+            "Inner": 4.517162668220058,
+            "Outer": 6.922649588493095
+          }
+        },
+        {
+          "CorrectionRadians": 0.015707964,
+          "Score": -0.04410251866411696,
+          "Safe": true,
+          "ContactQueries": 2779,
+          "MinimumInner": 2.627076782560153,
+          "MinimumOuter": 6.954680092997603,
+          "End": {
+            "Time": 2.2,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 46.243946,
+                "Y": -2.4126399
+              },
+              "Velocity": {
+                "X": 18.497833,
+                "Y": 0.7190138
+              },
+              "Heading": 0.09842093,
+              "AngularVelocity": 0.4777519,
+              "Road": {
+                "Segment": 1,
+                "Progress": 0.31380103918536695,
+                "ReferenceMeters": 45.186962357211826,
+                "OffsetMeters": 3.833313519478922,
+                "Heading": 0.31439323175241984,
+                "RadiusMeters": 28.99160911373042,
+                "CornerProgress": 0.10460034639512232,
+                "Tangent": {
+                  "X": 0.9509842,
+                  "Y": 0.3092395
+                },
+                "Outward": {
+                  "X": 0.3092395,
+                  "Y": -0.9509842
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 45.186962357211826,
+              "DistanceMeters": 11.28548170439899,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 4.5332994,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 18.5118,
+              "ForwardSpeed": 18.478966,
+              "SideSpeed": -1.102102,
+              "SlideRadians": 0.059570327
+            },
+            "Omega": 56.110184634142456,
+            "Steering": 0.042504087,
+            "Inner": 4.503092062899676,
+            "Outer": 6.954680092997603
+          }
+        },
+        {
+          "CorrectionRadians": -0.015707964,
+          "Score": -0.06862954619951889,
+          "Safe": true,
+          "ContactQueries": 2779,
+          "MinimumInner": 2.627076782560153,
+          "MinimumOuter": 6.8705605096531555,
+          "End": {
+            "Time": 2.2,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 46.248997,
+                "Y": -2.4792187
+              },
+              "Velocity": {
+                "X": 18.543121,
+                "Y": 0.36058748
+              },
+              "Heading": 0.06588127,
+              "AngularVelocity": 0.44380984,
+              "Road": {
+                "Segment": 1,
+                "Progress": 0.3133800127329582,
+                "ReferenceMeters": 45.17329452286299,
+                "OffsetMeters": 3.8981951190237747,
+                "Heading": 0.3138499330338774,
+                "RadiusMeters": 29.054152189813056,
+                "CornerProgress": 0.1044600042443194,
+                "Tangent": {
+                  "X": 0.9511521,
+                  "Y": 0.3087228
+                },
+                "Outward": {
+                  "X": 0.3087228,
+                  "Y": -0.9511521
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 45.17329452286299,
+              "DistanceMeters": 11.290992392227054,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 4.5309086,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 18.546627,
+              "ForwardSpeed": 18.526634,
+              "SideSpeed": -0.8609556,
+              "SlideRadians": 0.04643783
+            },
+            "Omega": 56.229957513163754,
+            "Steering": 0.041609257,
+            "Inner": 4.539729957103954,
+            "Outer": 6.8705605096531555
+          }
+        }
+      ]
+    },
+    {
+      "ObservedAt": 1.8,
+      "Activation": 2.04,
+      "CorrectionRadians": 0,
+      "Queued": false,
+      "Reason": "Insufficient forecast gain; original control retained.",
+      "Milliseconds": 62.8485,
+      "Candidates": [
+        {
+          "CorrectionRadians": 0,
+          "Score": -0.1805232631342163,
+          "Safe": true,
+          "ContactQueries": 3185,
+          "MinimumInner": 2.982953573148256,
+          "MinimumOuter": 6.101640286043065,
+          "End": {
+            "Time": 2.4,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 49.915905,
+                "Y": -2.1797354
+              },
+              "Velocity": {
+                "X": 18.151083,
+                "Y": 2.0234802
+              },
+              "Heading": 0.18989764,
+              "AngularVelocity": 0.5659204,
+              "Road": {
+                "Segment": 1,
+                "Progress": 0.40589319272902297,
+                "ReferenceMeters": 48.176561448340465,
+                "OffsetMeters": 4.957687312904816,
+                "Heading": 0.4319191675361079,
+                "RadiusMeters": 30.701763458682123,
+                "CornerProgress": 0.1352977309096743,
+                "Tangent": {
+                  "X": 0.908164,
+                  "Y": 0.41861448
+                },
+                "Outward": {
+                  "X": 0.41861448,
+                  "Y": -0.908164
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 48.176561448340465,
+              "DistanceMeters": 11.170799270272255,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 5.094806,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 18.263523,
+              "ForwardSpeed": 18.20674,
+              "SideSpeed": -1.4390638,
+              "SlideRadians": 0.07887618
+            },
+            "Omega": 55.33663243365419,
+            "Steering": 0.050408393,
+            "Inner": 5.603733979956987,
+            "Outer": 6.101640286043065
+          }
+        },
+        {
+          "CorrectionRadians": 0.015707964,
+          "Score": -0.17652651374003925,
+          "Safe": true,
+          "ContactQueries": 2675,
+          "MinimumInner": 2.982953573148256,
+          "MinimumOuter": 6.125502258390315,
+          "End": {
+            "Time": 2.4,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 49.9119,
+                "Y": -2.161885
+              },
+              "Velocity": {
+                "X": 18.124424,
+                "Y": 2.1129336
+              },
+              "Heading": 0.19979183,
+              "AngularVelocity": 0.5745031,
+              "Road": {
+                "Segment": 1,
+                "Progress": 0.40599230460542657,
+                "ReferenceMeters": 48.179778929572194,
+                "OffsetMeters": 4.9397997302763414,
+                "Heading": 0.43204414529333957,
+                "RadiusMeters": 30.684585360729567,
+                "CornerProgress": 0.13533076820180887,
+                "Tangent": {
+                  "X": 0.9081117,
+                  "Y": 0.418728
+                },
+                "Outward": {
+                  "X": 0.418728,
+                  "Y": -0.9081117
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 48.179778929572194,
+              "DistanceMeters": 11.16789361834526,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 5.0953717,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 18.24717,
+              "ForwardSpeed": 18.183235,
+              "SideSpeed": -1.5261662,
+              "SlideRadians": 0.083736345
+            },
+            "Omega": 55.27798601854262,
+            "Steering": 0.050408334,
+            "Inner": 5.594454546391784,
+            "Outer": 6.125502258390315
+          }
+        },
+        {
+          "CorrectionRadians": -0.015707964,
+          "Score": -0.18598735198813476,
+          "Safe": true,
+          "ContactQueries": 2675,
+          "MinimumInner": 2.982953573148256,
+          "MinimumOuter": 6.062065369534147,
+          "End": {
+            "Time": 2.4,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 49.921658,
+                "Y": -2.2096543
+              },
+              "Velocity": {
+                "X": 18.192038,
+                "Y": 1.8683672
+              },
+              "Heading": 0.17327455,
+              "AngularVelocity": 0.5502975,
+              "Road": {
+                "Segment": 1,
+                "Progress": 0.40570481072822945,
+                "ReferenceMeters": 48.17044597990275,
+                "OffsetMeters": 4.987267563507988,
+                "Heading": 0.4316816127473054,
+                "RadiusMeters": 30.729995638806916,
+                "CornerProgress": 0.13523493690940983,
+                "Tangent": {
+                  "X": 0.90826344,
+                  "Y": 0.41839874
+                },
+                "Outward": {
+                  "X": 0.41839874,
+                  "Y": -0.90826344
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 48.17044597990275,
+              "DistanceMeters": 11.17480854690075,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 5.093732,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 18.28773,
+              "ForwardSpeed": 18.241743,
+              "SideSpeed": -1.2960777,
+              "SlideRadians": 0.070930906
+            },
+            "Omega": 55.42315588659001,
+            "Steering": 0.05030778,
+            "Inner": 5.6189182356868885,
+            "Outer": 6.062065369534147
+          }
+        }
+      ]
+    },
+    {
+      "ObservedAt": 2,
+      "Activation": 2.24,
+      "CorrectionRadians": 0,
+      "Queued": false,
+      "Reason": "Insufficient forecast gain; original control retained.",
+      "Milliseconds": 60.9081,
+      "Candidates": [
+        {
+          "CorrectionRadians": 0,
+          "Score": -0.4366087143821083,
+          "Safe": true,
+          "ContactQueries": 3185,
+          "MinimumInner": 3.6345341008905523,
+          "MinimumOuter": 5.296429304490782,
+          "End": {
+            "Time": 2.6,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 53.490166,
+                "Y": -1.610404
+              },
+              "Velocity": {
+                "X": 17.556211,
+                "Y": 3.6741807
+              },
+              "Heading": 0.31092444,
+              "AngularVelocity": 0.6390223,
+              "Road": {
+                "Segment": 1,
+                "Progress": 0.49297660274766797,
+                "ReferenceMeters": 51.0035610723715,
+                "OffsetMeters": 6.126615476834842,
+                "Heading": 0.5403342753094458,
+                "RadiusMeters": 32.558218723399285,
+                "CornerProgress": 0.16432553424922267,
+                "Tangent": {
+                  "X": 0.8575368,
+                  "Y": 0.51442266
+                },
+                "Outward": {
+                  "X": 0.51442266,
+                  "Y": -0.8575368
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 51.0035610723715,
+              "DistanceMeters": 11.027026638388634,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 5.617754,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 17.93656,
+              "ForwardSpeed": 17.838486,
+              "SideSpeed": -1.8731196,
+              "SlideRadians": 0.104621015
+            },
+            "Omega": 54.30089398387926,
+            "Steering": 0.05652303,
+            "Inner": 6.78304944723384,
+            "Outer": 5.296429304490782
+          }
+        },
+        {
+          "CorrectionRadians": 0.015707964,
+          "Score": -0.4364426649305813,
+          "Safe": true,
+          "ContactQueries": 2675,
+          "MinimumInner": 3.6345341008905523,
+          "MinimumOuter": 5.3129726766851615,
+          "End": {
+            "Time": 2.6,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 53.4856,
+                "Y": -1.5992415
+              },
+              "Velocity": {
+                "X": 17.529623,
+                "Y": 3.7261257
+              },
+              "Heading": 0.31849805,
+              "AngularVelocity": 0.64446795,
+              "Road": {
+                "Segment": 1,
+                "Progress": 0.49302229785647056,
+                "ReferenceMeters": 51.00504447840001,
+                "OffsetMeters": 6.1146943041866235,
+                "Heading": 0.5403903973297035,
+                "RadiusMeters": 32.54669154396828,
+                "CornerProgress": 0.16434076595215685,
+                "Tangent": {
+                  "X": 0.8575079,
+                  "Y": 0.5144708
+                },
+                "Outward": {
+                  "X": 0.5144708,
+                  "Y": -0.8575079
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 51.00504447840001,
+              "DistanceMeters": 11.024095386266708,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 5.618009,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 17.921263,
+              "ForwardSpeed": 17.814804,
+              "SideSpeed": -1.9505081,
+              "SlideRadians": 0.10905366
+            },
+            "Omega": 54.24300726268622,
+            "Steering": 0.056075554,
+            "Inner": 6.777765347927364,
+            "Outer": 5.3129726766851615
+          }
+        },
+        {
+          "CorrectionRadians": -0.015707964,
+          "Score": -0.43622255465744136,
+          "Safe": true,
+          "ContactQueries": 2675,
+          "MinimumInner": 3.6345341008905523,
+          "MinimumOuter": 5.2698664459307585,
+          "End": {
+            "Time": 2.6,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 53.49677,
+                "Y": -1.6286548
+              },
+              "Velocity": {
+                "X": 17.5969,
+                "Y": 3.5864778
+              },
+              "Heading": 0.29863703,
+              "AngularVelocity": 0.62934786,
+              "Road": {
+                "Segment": 1,
+                "Progress": 0.49288347618334516,
+                "ReferenceMeters": 51.000537893073954,
+                "OffsetMeters": 6.145663298634545,
+                "Heading": 0.5402198961253375,
+                "RadiusMeters": 32.5764636919028,
+                "CornerProgress": 0.16429449206111504,
+                "Tangent": {
+                  "X": 0.8575956,
+                  "Y": 0.5143246
+                },
+                "Outward": {
+                  "X": 0.5143246,
+                  "Y": -0.8575956
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 51.000537893073954,
+              "DistanceMeters": 11.030991241335869,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 5.617233,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 17.958668,
+              "ForwardSpeed": 17.87324,
+              "SideSpeed": -1.749588,
+              "SlideRadians": 0.097577795
+            },
+            "Omega": 54.384767857641506,
+            "Steering": 0.056869786,
+            "Inner": 6.791372459222843,
+            "Outer": 5.2698664459307585
+          }
+        }
+      ]
+    },
+    {
+      "ObservedAt": 2.1999999999999997,
+      "Activation": 2.4399999999999995,
+      "CorrectionRadians": 0,
+      "Queued": false,
+      "Reason": "Insufficient forecast gain; original control retained.",
+      "Milliseconds": 56.5146,
+      "Candidates": [
+        {
+          "CorrectionRadians": 0,
+          "Score": -0.3609926746774711,
+          "Safe": true,
+          "ContactQueries": 3185,
+          "MinimumInner": 4.517156908678362,
+          "MinimumOuter": 4.566235299334631,
+          "End": {
+            "Time": 2.8,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 56.91818,
+                "Y": -0.69985545
+              },
+              "Velocity": {
+                "X": 16.686995,
+                "Y": 5.414539
+              },
+              "Heading": 0.44398877,
+              "AngularVelocity": 0.6872359,
+              "Road": {
+                "Segment": 1,
+                "Progress": 0.5756734992992688,
+                "ReferenceMeters": 53.688160761449524,
+                "OffsetMeters": 7.2806847834400825,
+                "Heading": 0.6404884330183255,
+                "RadiusMeters": 34.480182584949524,
+                "CornerProgress": 0.1918911664330896,
+                "Tangent": {
+                  "X": 0.80180395,
+                  "Y": 0.59758717
+                },
+                "Outward": {
+                  "X": 0.59758717,
+                  "Y": -0.80180395
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 53.688160761449524,
+              "DistanceMeters": 10.848939061164856,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 6.0961795,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 17.54346,
+              "ForwardSpeed": 17.394903,
+              "SideSpeed": -2.2782388,
+              "SlideRadians": 0.13023037
+            },
+            "Omega": 53.04882672870335,
+            "Steering": 0.059804045,
+            "Inner": 7.965552544745941,
+            "Outer": 4.566235299334631
+          }
+        },
+        {
+          "CorrectionRadians": 0.015707964,
+          "Score": -0.3626733017882726,
+          "Safe": true,
+          "ContactQueries": 2675,
+          "MinimumInner": 4.517156908678362,
+          "MinimumOuter": 4.577506261895698,
+          "End": {
+            "Time": 2.8,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 56.91379,
+                "Y": -0.69341063
+              },
+              "Velocity": {
+                "X": 16.66466,
+                "Y": 5.4415774
+              },
+              "Heading": 0.4496662,
+              "AngularVelocity": 0.69060755,
+              "Road": {
+                "Segment": 1,
+                "Progress": 0.5756816148390125,
+                "ReferenceMeters": 53.68842421723059,
+                "OffsetMeters": 7.272895753204736,
+                "Heading": 0.6404981190571113,
+                "RadiusMeters": 34.47247416685671,
+                "CornerProgress": 0.19189387161300417,
+                "Tangent": {
+                  "X": 0.80179816,
+                  "Y": 0.5975949
+                },
+                "Outward": {
+                  "X": 0.5975949,
+                  "Y": -0.80179816
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 53.68842421723059,
+              "DistanceMeters": 10.846191421151161,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 6.0962234,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 17.530592,
+              "ForwardSpeed": 17.373325,
+              "SideSpeed": -2.3429008,
+              "SlideRadians": 0.13404751
+            },
+            "Omega": 52.99702815690736,
+            "Steering": 0.059058346,
+            "Inner": 7.962795826328481,
+            "Outer": 4.577506261895698
+          }
+        },
+        {
+          "CorrectionRadians": -0.015707964,
+          "Score": -0.35821135937566684,
+          "Safe": true,
+          "ContactQueries": 2675,
+          "MinimumInner": 4.517156908678362,
+          "MinimumOuter": 4.549626352324495,
+          "End": {
+            "Time": 2.8,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 56.92397,
+                "Y": -0.7097009
+              },
+              "Velocity": {
+                "X": 16.718206,
+                "Y": 5.3721557
+              },
+              "Heading": 0.435511,
+              "AngularVelocity": 0.68184704,
+              "Road": {
+                "Segment": 1,
+                "Progress": 0.5756433656901343,
+                "ReferenceMeters": 53.68718253032978,
+                "OffsetMeters": 7.292039369232295,
+                "Heading": 0.6404524677770068,
+                "RadiusMeters": 34.49123786058384,
+                "CornerProgress": 0.19188112189671144,
+                "Tangent": {
+                  "X": 0.80182546,
+                  "Y": 0.5975583
+                },
+                "Outward": {
+                  "X": 0.5975583,
+                  "Y": -0.80182546
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 53.68718253032978,
+              "DistanceMeters": 10.852254211902618,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 6.096018,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 17.560139,
+              "ForwardSpeed": 17.42401,
+              "SideSpeed": -2.182283,
+              "SlideRadians": 0.12459694
+            },
+            "Omega": 53.117333096401936,
+            "Steering": 0.060698748,
+            "Inner": 7.96942155811009,
+            "Outer": 4.549626352324495
+          }
+        }
+      ]
+    },
+    {
+      "ObservedAt": 2.4,
+      "Activation": 2.6399999999999997,
+      "CorrectionRadians": 0,
+      "Queued": false,
+      "Reason": "Insufficient forecast gain; original control retained.",
+      "Milliseconds": 58.5757,
+      "Candidates": [
+        {
+          "CorrectionRadians": 0,
+          "Score": 0.38041505837405176,
+          "Safe": true,
+          "ContactQueries": 3185,
+          "MinimumInner": 5.603736621775731,
+          "MinimumOuter": 3.9515566069052284,
+          "End": {
+            "Time": 3,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 60.143078,
+                "Y": 0.55833274
+              },
+              "Velocity": {
+                "X": 15.5296545,
+                "Y": 7.1344895
+              },
+              "Heading": 0.58458215,
+              "AngularVelocity": 0.71534127,
+              "Road": {
+                "Segment": 1,
+                "Progress": 0.6547133853817889,
+                "ReferenceMeters": 56.254042462578354,
+                "OffsetMeters": 8.354846600811065,
+                "Heading": 0.7334370093491077,
+                "RadiusMeters": 36.38528151581093,
+                "CornerProgress": 0.21823779512726296,
+                "Tangent": {
+                  "X": 0.74287796,
+                  "Y": 0.66942686
+                },
+                "Outward": {
+                  "X": 0.66942686,
+                  "Y": -0.74287796
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 56.254042462578354,
+              "DistanceMeters": 10.63289213180542,
+              "Activity": 0,
+              "Drive": 0.00689002,
+              "TargetOffsetMeters": 6.527949,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 17.090088,
+              "ForwardSpeed": 16.888018,
+              "SideSpeed": -2.6202989,
+              "SlideRadians": 0.15392989
+            },
+            "Omega": 51.723357833716804,
+            "Steering": 0.060847986,
+            "Inner": 9.061404862013624,
+            "Outer": 3.9515566069052284
+          }
+        },
+        {
+          "CorrectionRadians": 0.015707964,
+          "Score": 0.3779727019852308,
+          "Safe": true,
+          "ContactQueries": 2675,
+          "MinimumInner": 5.603736621775731,
+          "MinimumOuter": 3.9593802762919337,
+          "End": {
+            "Time": 3,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 60.13921,
+                "Y": 0.5618457
+              },
+              "Velocity": {
+                "X": 15.514342,
+                "Y": 7.148493
+              },
+              "Heading": 0.5888464,
+              "AngularVelocity": 0.7175815,
+              "Road": {
+                "Segment": 1,
+                "Progress": 0.6547009997488613,
+                "ReferenceMeters": 56.25364038622854,
+                "OffsetMeters": 8.349647478109766,
+                "Heading": 0.733422665036066,
+                "RadiusMeters": 36.37994529345609,
+                "CornerProgress": 0.21823366658295376,
+                "Tangent": {
+                  "X": 0.74288756,
+                  "Y": 0.6694162
+                },
+                "Outward": {
+                  "X": 0.6694162,
+                  "Y": -0.74288756
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 56.25364038622854,
+              "DistanceMeters": 10.63043062388897,
+              "Activity": 0,
+              "Drive": 0.01953727,
+              "TargetOffsetMeters": 6.5278835,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 17.082031,
+              "ForwardSpeed": 16.871735,
+              "SideSpeed": -2.6721396,
+              "SlideRadians": 0.157075
+            },
+            "Omega": 51.90431014175279,
+            "Steering": 0.059654888,
+            "Inner": 9.053195160222538,
+            "Outer": 3.9593802762919337
+          }
+        },
+        {
+          "CorrectionRadians": -0.015707964,
+          "Score": 0.3838832082947038,
+          "Safe": true,
+          "ContactQueries": 2675,
+          "MinimumInner": 5.603736621775731,
+          "MinimumOuter": 3.9408542306023797,
+          "End": {
+            "Time": 3,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 60.147797,
+                "Y": 0.55317897
+              },
+              "Velocity": {
+                "X": 15.550478,
+                "Y": 7.114511
+              },
+              "Heading": 0.5786547,
+              "AngularVelocity": 0.7120938,
+              "Road": {
+                "Segment": 1,
+                "Progress": 0.6547146998795703,
+                "ReferenceMeters": 56.25408513528413,
+                "OffsetMeters": 8.36183410535077,
+                "Heading": 0.7334385317191611,
+                "RadiusMeters": 36.392283570961446,
+                "CornerProgress": 0.21823823329319011,
+                "Tangent": {
+                  "X": 0.74287695,
+                  "Y": 0.669428
+                },
+                "Outward": {
+                  "X": 0.669428,
+                  "Y": -0.74287695
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 56.25408513528413,
+              "DistanceMeters": 10.635603085160255,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 6.527957,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 17.10069,
+              "ForwardSpeed": 16.90976,
+              "SideSpeed": -2.5482645,
+              "SlideRadians": 0.14957242
+            },
+            "Omega": 51.65496293841825,
+            "Steering": 0.06219015,
+            "Inner": 9.072572539014049,
+            "Outer": 3.9408542306023797
+          }
+        }
+      ]
+    },
+    {
+      "ObservedAt": 2.5999999999999996,
+      "Activation": 2.84,
+      "CorrectionRadians": 0,
+      "Queued": false,
+      "Reason": "Insufficient forecast gain; original control retained.",
+      "Milliseconds": 57.5474,
+      "Candidates": [
+        {
+          "CorrectionRadians": 0,
+          "Score": 1.853050281490962,
+          "Safe": true,
+          "ContactQueries": 3185,
+          "MinimumInner": 6.783048635314153,
+          "MinimumOuter": 3.4798202782597842,
+          "End": {
+            "Time": 3.1999999999999997,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 63.10871,
+                "Y": 2.15099
+              },
+              "Velocity": {
+                "X": 14.100428,
+                "Y": 8.747097
+              },
+              "Heading": 0.7292028,
+              "AngularVelocity": 0.7285097,
+              "Road": {
+                "Segment": 1,
+                "Progress": 0.730715082458566,
+                "ReferenceMeters": 58.72129505426909,
+                "OffsetMeters": 9.299313956047389,
+                "Heading": 0.8201252198114792,
+                "RadiusMeters": 38.20767212978778,
+                "CornerProgress": 0.24357169415285532,
+                "Tangent": {
+                  "X": 0.6821296,
+                  "Y": 0.7312313
+                },
+                "Outward": {
+                  "X": 0.7312313,
+                  "Y": -0.6821296
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 58.72129505426909,
+              "DistanceMeters": 10.380604699254036,
+              "Activity": 0,
+              "Drive": 0.0067983926,
+              "TargetOffsetMeters": 6.912461,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 16.593184,
+              "ForwardSpeed": 16.342747,
+              "SideSpeed": -2.872007,
+              "SlideRadians": 0.17395958
+            },
+            "Omega": 50.22136657126063,
+            "Steering": 0.06010232,
+            "Inner": 9.965226799845492,
+            "Outer": 3.4798202782597842
+          }
+        },
+        {
+          "CorrectionRadians": 0.015707964,
+          "Score": 1.850287842899144,
+          "Safe": true,
+          "ContactQueries": 2675,
+          "MinimumInner": 6.783048635314153,
+          "MinimumOuter": 3.4857123936240413,
+          "End": {
+            "Time": 3.1999999999999997,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 63.105175,
+                "Y": 2.152765
+              },
+              "Velocity": {
+                "X": 14.086673,
+                "Y": 8.752718
+              },
+              "Heading": 0.7326121,
+              "AngularVelocity": 0.73027056,
+              "Road": {
+                "Segment": 1,
+                "Progress": 0.7306891112786108,
+                "ReferenceMeters": 58.72045194860806,
+                "OffsetMeters": 9.29551737644692,
+                "Heading": 0.8200960548827265,
+                "RadiusMeters": 38.203563844645046,
+                "CornerProgress": 0.24356303709287028,
+                "Tangent": {
+                  "X": 0.68215096,
+                  "Y": 0.73121136
+                },
+                "Outward": {
+                  "X": 0.73121136,
+                  "Y": -0.68215096
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 58.72045194860806,
+              "DistanceMeters": 10.37821689248085,
+              "Activity": 0,
+              "Drive": 0.0067983926,
+              "TargetOffsetMeters": 6.9123397,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 16.584463,
+              "ForwardSpeed": 16.326393,
+              "SideSpeed": -2.914329,
+              "SlideRadians": 0.17664364
+            },
+            "Omega": 50.18413017768715,
+            "Steering": 0.05876008,
+            "Inner": 9.959070008889235,
+            "Outer": 3.4857123936240413
+          }
+        },
+        {
+          "CorrectionRadians": -0.015707964,
+          "Score": 1.8565499798558918,
+          "Safe": true,
+          "ContactQueries": 2675,
+          "MinimumInner": 6.783048635314153,
+          "MinimumOuter": 3.472557357368562,
+          "End": {
+            "Time": 3.1999999999999997,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 63.11255,
+                "Y": 2.1484072
+              },
+              "Velocity": {
+                "X": 14.115744,
+                "Y": 8.738642
+              },
+              "Heading": 0.72493565,
+              "AngularVelocity": 0.7262663,
+              "Road": {
+                "Segment": 1,
+                "Progress": 0.7307320737782609,
+                "ReferenceMeters": 58.7218466456041,
+                "OffsetMeters": 9.303881922002677,
+                "Heading": 0.8201443004312124,
+                "RadiusMeters": 38.21244402969522,
+                "CornerProgress": 0.24357735792608695,
+                "Tangent": {
+                  "X": 0.6821157,
+                  "Y": 0.73124427
+                },
+                "Outward": {
+                  "X": 0.73124427,
+                  "Y": -0.6821157
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 58.7218466456041,
+              "DistanceMeters": 10.38290622830391,
+              "Activity": 0,
+              "Drive": 0.0067983926,
+              "TargetOffsetMeters": 6.91254,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 16.60175,
+              "ForwardSpeed": 16.36071,
+              "SideSpeed": -2.818728,
+              "SlideRadians": 0.17061155
+            },
+            "Omega": 50.26056335650138,
+            "Steering": 0.061444446,
+            "Inner": 9.972742714088957,
+            "Outer": 3.472557357368562
+          }
+        }
+      ]
+    },
+    {
+      "ObservedAt": 2.8,
+      "Activation": 3.04,
+      "CorrectionRadians": 0,
+      "Queued": false,
+      "Reason": "Insufficient forecast gain; original control retained.",
+      "Milliseconds": 57.0165,
+      "Candidates": [
+        {
+          "CorrectionRadians": 0,
+          "Score": 3.857473435081405,
+          "Safe": true,
+          "ContactQueries": 3185,
+          "MinimumInner": 7.965532051653172,
+          "MinimumOuter": 3.1692184647701658,
+          "End": {
+            "Time": 3.4,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 65.768814,
+                "Y": 4.053813
+              },
+              "Velocity": {
+                "X": 12.518375,
+                "Y": 10.258026
+              },
+              "Heading": 0.87550277,
+              "AngularVelocity": 0.7331516,
+              "Road": {
+                "Segment": 1,
+                "Progress": 0.8043157950709947,
+                "ReferenceMeters": 61.11060418719353,
+                "OffsetMeters": 10.077530177957343,
+                "Heading": 0.9015134305786815,
+                "RadiusMeters": 39.896315125349204,
+                "CornerProgress": 0.2681052650236649,
+                "Tangent": {
+                  "X": 0.62042373,
+                  "Y": 0.78426677
+                },
+                "Outward": {
+                  "X": 0.78426677,
+                  "Y": -0.62042373
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 61.11060418719353,
+              "DistanceMeters": 10.104994401335716,
+              "Activity": 0,
+              "Drive": 0.15678579,
+              "TargetOffsetMeters": 7.2504725,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 16.184464,
+              "ForwardSpeed": 15.896193,
+              "SideSpeed": -3.0410275,
+              "SlideRadians": 0.18902156
+            },
+            "Omega": 53.120929643332424,
+            "Steering": 0.043100677,
+            "Inner": 10.699264665027796,
+            "Outer": 3.1692184647701658
+          }
+        },
+        {
+          "CorrectionRadians": 0.015707964,
+          "Score": 3.85457769792339,
+          "Safe": true,
+          "ContactQueries": 2675,
+          "MinimumInner": 7.965532051653172,
+          "MinimumOuter": 3.1739186580292698,
+          "End": {
+            "Time": 3.4,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 65.76556,
+                "Y": 4.054475
+              },
+              "Velocity": {
+                "X": 12.506514,
+                "Y": 10.259561
+              },
+              "Heading": 0.8783256,
+              "AngularVelocity": 0.73473114,
+              "Road": {
+                "Segment": 1,
+                "Progress": 0.8042812088772573,
+                "ReferenceMeters": 61.10948141126329,
+                "OffsetMeters": 10.07456463255889,
+                "Heading": 0.901475776992176,
+                "RadiusMeters": 39.892910406493705,
+                "CornerProgress": 0.2680937362924191,
+                "Tangent": {
+                  "X": 0.6204533,
+                  "Y": 0.7842434
+                },
+                "Outward": {
+                  "X": 0.7842434,
+                  "Y": -0.6204533
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 61.10948141126329,
+              "DistanceMeters": 10.102636560797691,
+              "Activity": 0,
+              "Drive": 0.15678579,
+              "TargetOffsetMeters": 7.2503276,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 16.176262,
+              "ForwardSpeed": 15.881154,
+              "SideSpeed": -3.0757785,
+              "SlideRadians": 0.19130623
+            },
+            "Omega": 53.111992841417965,
+            "Steering": 0.041609317,
+            "Inner": 10.694395996617217,
+            "Outer": 3.1739186580292698
+          }
+        },
+        {
+          "CorrectionRadians": -0.015707964,
+          "Score": 3.8609291316799603,
+          "Safe": true,
+          "ContactQueries": 2675,
+          "MinimumInner": 7.965532051653172,
+          "MinimumOuter": 3.1637357958029817,
+          "End": {
+            "Time": 3.4,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 65.77213,
+                "Y": 4.052609
+              },
+              "Velocity": {
+                "X": 12.5307455,
+                "Y": 10.254682
+              },
+              "Heading": 0.87215036,
+              "AngularVelocity": 0.7313409,
+              "Road": {
+                "Segment": 1,
+                "Progress": 0.8043414589601546,
+                "ReferenceMeters": 61.11143731723507,
+                "OffsetMeters": 10.080880006380426,
+                "Heading": 0.9015413701976331,
+                "RadiusMeters": 39.89999083737655,
+                "CornerProgress": 0.2681138196533849,
+                "Tangent": {
+                  "X": 0.62040186,
+                  "Y": 0.7842841
+                },
+                "Outward": {
+                  "X": 0.7842841,
+                  "Y": -0.62040186
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 61.11143731723507,
+              "DistanceMeters": 10.107107117772102,
+              "Activity": 0,
+              "Drive": 0.15678579,
+              "TargetOffsetMeters": 7.250581,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 16.191914,
+              "ForwardSpeed": 15.911695,
+              "SideSpeed": -2.9993424,
+              "SlideRadians": 0.18631314
+            },
+            "Omega": 53.12436821308565,
+            "Steering": 0.044591922,
+            "Inner": 10.70486686296824,
+            "Outer": 3.1637357958029817
+          }
+        }
+      ]
+    },
+    {
+      "ObservedAt": 5.3,
+      "Activation": 5.54,
+      "CorrectionRadians": -0.015707964,
+      "Queued": true,
+      "Reason": "Delayed reachable steering pulse improves frozen future-motion score.",
+      "Milliseconds": 45.7916,
+      "Candidates": [
+        {
+          "CorrectionRadians": 0,
+          "Score": 7.725176362868528,
+          "Safe": true,
+          "ContactQueries": 3185,
+          "MinimumInner": 4.507432538876041,
+          "MinimumOuter": 6.777295619367103,
+          "End": {
+            "Time": 5.8999999999999995,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 68.737045,
+                "Y": 36.178825
+              },
+              "Velocity": {
+                "X": -7.247388,
+                "Y": 11.479269
+              },
+              "Heading": 2.0997663,
+              "AngularVelocity": -0.64640355,
+              "Road": {
+                "Segment": 2,
+                "Progress": 0.6343805597479898,
+                "ReferenceMeters": 88.0571003930823,
+                "OffsetMeters": 4.132795370770139,
+                "Heading": 1.6909468029306232,
+                "RadiusMeters": 40.205248388641444,
+                "CornerProgress": 0.5447935199159967,
+                "Tangent": {
+                  "X": -0.1198616,
+                  "Y": 0.99279064
+                },
+                "Outward": {
+                  "X": 0.99279064,
+                  "Y": 0.1198616
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 88.0571003930823,
+              "DistanceMeters": 7.970661506056786,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 8.5,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 13.575649,
+              "ForwardSpeed": 13.56772,
+              "SideSpeed": 0.46391964,
+              "SlideRadians": -0.034179624
+            },
+            "Omega": 41.18652780708727,
+            "Steering": -0.06875217,
+            "Inner": 4.507432538876041,
+            "Outer": 10.932600327842971
+          }
+        },
+        {
+          "CorrectionRadians": 0.015707964,
+          "Score": 7.712557116564092,
+          "Safe": true,
+          "ContactQueries": 2675,
+          "MinimumInner": 4.5153869524068355,
+          "MinimumOuter": 6.777295619367103,
+          "End": {
+            "Time": 5.8999999999999995,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 68.74268,
+                "Y": 36.182484
+              },
+              "Velocity": {
+                "X": -7.213625,
+                "Y": 11.499077
+              },
+              "Heading": 2.09561,
+              "AngularVelocity": -0.64965165,
+              "Road": {
+                "Segment": 2,
+                "Progress": 0.6344622480967101,
+                "ReferenceMeters": 88.05975225215707,
+                "OffsetMeters": 4.138831443621839,
+                "Heading": 1.6910203181604733,
+                "RadiusMeters": 40.21086001745373,
+                "CornerProgress": 0.54482074936557,
+                "Tangent": {
+                  "X": -0.11993458,
+                  "Y": 0.9927818
+                },
+                "Outward": {
+                  "X": 0.9927818,
+                  "Y": 0.11993458
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 88.05975225215707,
+              "DistanceMeters": 7.9705362021923065,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 8.5,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 13.57443,
+              "ForwardSpeed": 13.5659,
+              "SideSpeed": 0.48116493,
+              "SlideRadians": -0.035453815
+            },
+            "Omega": 41.18300870130386,
+            "Steering": -0.068505906,
+            "Inner": 4.5153869524068355,
+            "Outer": 10.930011451871756
+          }
+        },
+        {
+          "CorrectionRadians": -0.015707964,
+          "Score": 7.567034482879277,
+          "Safe": true,
+          "ContactQueries": 2675,
+          "MinimumInner": 4.597631282072886,
+          "MinimumOuter": 6.777295619367103,
+          "End": {
+            "Time": 5.8999999999999995,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 68.802765,
+                "Y": 36.222504
+              },
+              "Velocity": {
+                "X": -6.8965735,
+                "Y": 11.681907
+              },
+              "Heading": 2.0582676,
+              "AngularVelocity": -0.6662075,
+              "Road": {
+                "Segment": 2,
+                "Progress": 0.6353595926733971,
+                "ReferenceMeters": 88.08888286130957,
+                "OffsetMeters": 4.203292159734453,
+                "Heading": 1.6918279382944956,
+                "RadiusMeters": 40.270641874187476,
+                "CornerProgress": 0.5451198642244658,
+                "Tangent": {
+                  "X": -0.12073634,
+                  "Y": 0.9926846
+                },
+                "Outward": {
+                  "X": 0.9926846,
+                  "Y": 0.12073634
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 88.08888286130957,
+              "DistanceMeters": 7.970840603113174,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 8.5,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 13.565754,
+              "ForwardSpeed": 13.551508,
+              "SideSpeed": 0.6215358,
+              "SlideRadians": -0.04583258
+            },
+            "Omega": 41.15623656588129,
+            "Steering": -0.064579785,
+            "Inner": 4.597631282072886,
+            "Outer": 10.896855458079509
+          }
+        }
+      ]
+    },
+    {
+      "ObservedAt": 5.5,
+      "Activation": 5.74,
+      "CorrectionRadians": -0.015707964,
+      "Queued": true,
+      "Reason": "Delayed reachable steering pulse improves frozen future-motion score.",
+      "Milliseconds": 45.7189,
+      "Candidates": [
+        {
+          "CorrectionRadians": 0,
+          "Score": 15.125945349003707,
+          "Safe": true,
+          "ContactQueries": 3185,
+          "MinimumInner": 3.6499784549881955,
+          "MinimumOuter": 8.010218593377392,
+          "End": {
+            "Time": 6.1,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 67.41007,
+                "Y": 38.527294
+              },
+              "Velocity": {
+                "X": -5.991299,
+                "Y": 12.008729
+              },
+              "Heading": 1.9690344,
+              "AngularVelocity": -0.62959677,
+              "Road": {
+                "Segment": 2,
+                "Progress": 0.7049063690414445,
+                "ReferenceMeters": 90.34658855522929,
+                "OffsetMeters": 3.176260069611574,
+                "Heading": 1.7547925130903732,
+                "RadiusMeters": 38.79601228165036,
+                "CornerProgress": 0.5683021230138149,
+                "Tangent": {
+                  "X": -0.18295975,
+                  "Y": 0.9831204
+                },
+                "Outward": {
+                  "X": 0.9831204,
+                  "Y": 0.18295975
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 90.34658855522929,
+              "DistanceMeters": 8.104798033833504,
+              "Activity": 0,
+              "Drive": 0.05,
+              "TargetOffsetMeters": 8.5,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 13.420329,
+              "ForwardSpeed": 13.392389,
+              "SideSpeed": 0.86552954,
+              "SlideRadians": -0.06453873
+            },
+            "Omega": 41.503270943088964,
+            "Steering": -0.050855722,
+            "Inner": 3.6499784549881955,
+            "Outer": 12.001470532478246
+          }
+        },
+        {
+          "CorrectionRadians": 0.015707964,
+          "Score": 15.215665547475934,
+          "Safe": true,
+          "ContactQueries": 2675,
+          "MinimumInner": 3.6063357902494966,
+          "MinimumOuter": 8.010218593377392,
+          "End": {
+            "Time": 6.1,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 67.37891,
+                "Y": 38.512566
+              },
+              "Velocity": {
+                "X": -6.144249,
+                "Y": 11.951454
+              },
+              "Heading": 1.9873103,
+              "AngularVelocity": -0.623178,
+              "Road": {
+                "Segment": 2,
+                "Progress": 0.7046578994584928,
+                "ReferenceMeters": 90.3385224561016,
+                "OffsetMeters": 3.1429263263902247,
+                "Heading": 1.7545660689063807,
+                "RadiusMeters": 38.764563055257945,
+                "CornerProgress": 0.5682192998194976,
+                "Tangent": {
+                  "X": -0.18273713,
+                  "Y": 0.9831618
+                },
+                "Outward": {
+                  "X": 0.9831618,
+                  "Y": 0.18273713
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 90.3385224561016,
+              "DistanceMeters": 8.107940956950188,
+              "Activity": 0,
+              "Drive": 0.05,
+              "TargetOffsetMeters": 8.5,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 13.438342,
+              "ForwardSpeed": 13.415473,
+              "SideSpeed": 0.78368664,
+              "SlideRadians": -0.058350336
+            },
+            "Omega": 41.542284958873566,
+            "Steering": -0.05324189,
+            "Inner": 3.6063357902494966,
+            "Outer": 12.01881186736353
+          }
+        },
+        {
+          "CorrectionRadians": -0.015707964,
+          "Score": 15.083050419122996,
+          "Safe": true,
+          "ContactQueries": 2675,
+          "MinimumInner": 3.670260113758136,
+          "MinimumOuter": 8.010218593377392,
+          "End": {
+            "Time": 6.1,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 67.42473,
+                "Y": 38.53383
+              },
+              "Velocity": {
+                "X": -5.9222374,
+                "Y": 12.032663
+              },
+              "Heading": 1.9608331,
+              "AngularVelocity": -0.6317762,
+              "Road": {
+                "Segment": 2,
+                "Progress": 0.7050121812143044,
+                "ReferenceMeters": 90.35002354902235,
+                "OffsetMeters": 3.1918644929873814,
+                "Heading": 1.7548889492613862,
+                "RadiusMeters": 38.8108135735032,
+                "CornerProgress": 0.5683373937381014,
+                "Tangent": {
+                  "X": -0.18305457,
+                  "Y": 0.98310274
+                },
+                "Outward": {
+                  "X": 0.98310274,
+                  "Y": 0.18305457
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 90.35002354902235,
+              "DistanceMeters": 8.103048160672188,
+              "Activity": 0,
+              "Drive": 0.05,
+              "TargetOffsetMeters": 8.5,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 13.41111,
+              "ForwardSpeed": 13.380718,
+              "SideSpeed": 0.90236044,
+              "SlideRadians": -0.06733539
+            },
+            "Omega": 41.482207935641384,
+            "Steering": -0.04966262,
+            "Inner": 3.670260113758136,
+            "Outer": 11.993065428511375
+          }
+        }
+      ]
+    },
+    {
+      "ObservedAt": 5.7,
+      "Activation": 5.94,
+      "CorrectionRadians": -0.015707964,
+      "Queued": true,
+      "Reason": "Delayed reachable steering pulse improves frozen future-motion score.",
+      "Milliseconds": 45.7903,
+      "Candidates": [
+        {
+          "CorrectionRadians": 0,
+          "Score": 23.31893879367167,
+          "Safe": true,
+          "ContactQueries": 3185,
+          "MinimumInner": 3.256209385705466,
+          "MinimumOuter": 9.496465317871278,
+          "End": {
+            "Time": 6.3,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 66.35229,
+                "Y": 40.97665
+              },
+              "Velocity": {
+                "X": -4.606655,
+                "Y": 12.443774
+              },
+              "Heading": 1.8573167,
+              "AngularVelocity": -0.47355655,
+              "Road": {
+                "Segment": 2,
+                "Progress": 0.7794622049608108,
+                "ReferenceMeters": 92.76690397544814,
+                "OffsetMeters": 2.673410466185513,
+                "Heading": 1.8233410407177852,
+                "RadiusMeters": 37.645360234341695,
+                "CornerProgress": 0.5931540683202702,
+                "Tangent": {
+                  "X": -0.24986877,
+                  "Y": 0.9682797
+                },
+                "Outward": {
+                  "X": 0.9682797,
+                  "Y": 0.24986877
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 92.76690397544814,
+              "DistanceMeters": 8.096421539783478,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 8.5,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 13.269092,
+              "ForwardSpeed": 13.238395,
+              "SideSpeed": 0.9020436,
+              "SlideRadians": -0.06803329
+            },
+            "Omega": 40.39706947115721,
+            "Steering": -0.028336065,
+            "Inner": 3.256209385705466,
+            "Outer": 12.257821804589364
+          }
+        },
+        {
+          "CorrectionRadians": 0.015707964,
+          "Score": 23.354231721048258,
+          "Safe": true,
+          "ContactQueries": 2675,
+          "MinimumInner": 3.2390796288800194,
+          "MinimumOuter": 9.496465317871278,
+          "End": {
+            "Time": 6.3,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 66.34019,
+                "Y": 40.973606
+              },
+              "Velocity": {
+                "X": -4.66559,
+                "Y": 12.433277
+              },
+              "Heading": 1.8645674,
+              "AngularVelocity": -0.47058547,
+              "Road": {
+                "Segment": 2,
+                "Progress": 0.7794643776556146,
+                "ReferenceMeters": 92.76697450791113,
+                "OffsetMeters": 2.6609334363838815,
+                "Heading": 1.82334305754798,
+                "RadiusMeters": 37.632862103082154,
+                "CornerProgress": 0.5931547925518715,
+                "Tangent": {
+                  "X": -0.24987072,
+                  "Y": 0.9682792
+                },
+                "Outward": {
+                  "X": 0.9682792,
+                  "Y": 0.24987072
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 92.76697450791113,
+              "DistanceMeters": 8.098693192005157,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 8.5,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 13.279839,
+              "ForwardSpeed": 13.251605,
+              "SideSpeed": 0.86548305,
+              "SlideRadians": -0.06521894
+            },
+            "Omega": 40.42661986945605,
+            "Steering": -0.02938002,
+            "Inner": 3.2390796288800194,
+            "Outer": 12.274802640971147
+          }
+        },
+        {
+          "CorrectionRadians": -0.015707964,
+          "Score": 23.265489823362866,
+          "Safe": true,
+          "ContactQueries": 2675,
+          "MinimumInner": 3.283638146937707,
+          "MinimumOuter": 9.496465317871278,
+          "End": {
+            "Time": 6.3,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 66.37142,
+                "Y": 40.980537
+              },
+              "Velocity": {
+                "X": -4.511432,
+                "Y": 12.45702
+              },
+              "Heading": 1.8450086,
+              "AngularVelocity": -0.47978503,
+              "Road": {
+                "Segment": 2,
+                "Progress": 0.7794331099269353,
+                "ReferenceMeters": 92.76595945972684,
+                "OffsetMeters": 2.69290933287007,
+                "Heading": 1.8233140330184197,
+                "RadiusMeters": 37.66514166387302,
+                "CornerProgress": 0.593144369975645,
+                "Tangent": {
+                  "X": -0.24984261,
+                  "Y": 0.96828645
+                },
+                "Outward": {
+                  "X": 0.96828645,
+                  "Y": 0.24984261
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 92.76595945972684,
+              "DistanceMeters": 8.092091277241707,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 8.5,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 13.248787,
+              "ForwardSpeed": 13.213256,
+              "SideSpeed": 0.9696593,
+              "SlideRadians": -0.07325401
+            },
+            "Omega": 40.34104045849109,
+            "Steering": -0.026695548,
+            "Inner": 3.283638146937707,
+            "Outer": 12.230790908307965
+          }
+        }
+      ]
+    },
+    {
+      "ObservedAt": 5.8999999999999995,
+      "Activation": 6.14,
+      "CorrectionRadians": -0.015707964,
+      "Queued": true,
+      "Reason": "Delayed reachable steering pulse improves frozen future-motion score.",
+      "Milliseconds": 43.8617,
+      "Candidates": [
+        {
+          "CorrectionRadians": 0,
+          "Score": 29.691609789735953,
+          "Safe": true,
+          "ContactQueries": 3185,
+          "MinimumInner": 3.2266753030847672,
+          "MinimumOuter": 10.932674761631977,
+          "End": {
+            "Time": 6.499999999999999,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 65.55954,
+                "Y": 43.489273
+              },
+              "Velocity": {
+                "X": -3.4000473,
+                "Y": 12.647955
+              },
+              "Heading": 1.7847978,
+              "AngularVelocity": -0.24558714,
+              "Road": {
+                "Segment": 2,
+                "Progress": 0.854849916522735,
+                "ReferenceMeters": 95.21422467862789,
+                "OffsetMeters": 2.6264369135571295,
+                "Heading": 1.8941096861870346,
+                "RadiusMeters": 36.80084516245463,
+                "CornerProgress": 0.6182833055075784,
+                "Tangent": {
+                  "X": -0.31770998,
+                  "Y": 0.94818795
+                },
+                "Outward": {
+                  "X": 0.94818795,
+                  "Y": 0.31770998
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 95.21422467862789,
+              "DistanceMeters": 8.00352829694748,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 8.5,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 13.096988,
+              "ForwardSpeed": 13.081516,
+              "SideSpeed": 0.63642,
+              "SlideRadians": -0.048612
+            },
+            "Omega": 39.69237494780076,
+            "Steering": -0.0076060137,
+            "Inner": 3.305313554775195,
+            "Outer": 11.992638259437125
+          }
+        },
+        {
+          "CorrectionRadians": 0.015707964,
+          "Score": 29.721460671144293,
+          "Safe": true,
+          "ContactQueries": 2675,
+          "MinimumInner": 3.217674016265745,
+          "MinimumOuter": 10.932674761631977,
+          "End": {
+            "Time": 6.499999999999999,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 65.54875,
+                "Y": 43.4877
+              },
+              "Velocity": {
+                "X": -3.4548314,
+                "Y": 12.642275
+              },
+              "Heading": 1.7910004,
+              "AngularVelocity": -0.2429681,
+              "Road": {
+                "Segment": 2,
+                "Progress": 0.8549053481987897,
+                "ReferenceMeters": 95.21602416405608,
+                "OffsetMeters": 2.6157086167771606,
+                "Heading": 1.8941623426073866,
+                "RadiusMeters": 36.78948719723711,
+                "CornerProgress": 0.6183017827329299,
+                "Tangent": {
+                  "X": -0.3177599,
+                  "Y": 0.9481712
+                },
+                "Outward": {
+                  "X": 0.9481712,
+                  "Y": 0.3177599
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 95.21602416405608,
+              "DistanceMeters": 8.005485236644745,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 8.5,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 13.105837,
+              "ForwardSpeed": 13.091636,
+              "SideSpeed": 0.60997105,
+              "SlideRadians": -0.046558756
+            },
+            "Omega": 39.72114002032538,
+            "Steering": -0.008053406,
+            "Inner": 3.2903295588657686,
+            "Outer": 12.006496915805208
+          }
+        },
+        {
+          "CorrectionRadians": -0.015707964,
+          "Score": 29.635360364297707,
+          "Safe": true,
+          "ContactQueries": 2675,
+          "MinimumInner": 3.2440003670152624,
+          "MinimumOuter": 10.932674761631977,
+          "End": {
+            "Time": 6.499999999999999,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 65.58112,
+                "Y": 43.491474
+              },
+              "Velocity": {
+                "X": -3.2862508,
+                "Y": 12.656033
+              },
+              "Heading": 1.7713012,
+              "AngularVelocity": -0.25334552,
+              "Road": {
+                "Segment": 2,
+                "Progress": 0.8547135376157021,
+                "ReferenceMeters": 95.20979739312281,
+                "OffsetMeters": 2.6476017962610063,
+                "Heading": 1.8939801393887412,
+                "RadiusMeters": 36.82355898259796,
+                "CornerProgress": 0.6182378458719007,
+                "Tangent": {
+                  "X": -0.31758714,
+                  "Y": 0.9482291
+                },
+                "Outward": {
+                  "X": 0.9482291,
+                  "Y": 0.31758714
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 95.20979739312281,
+              "DistanceMeters": 7.998862206935883,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 8.5,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 13.075726,
+              "ForwardSpeed": 13.056987,
+              "SideSpeed": 0.69978786,
+              "SlideRadians": -0.053543657
+            },
+            "Omega": 39.622950514154724,
+            "Steering": -0.006513448,
+            "Inner": 3.335766839946522,
+            "Outer": 11.96477972175273
+          }
+        }
+      ]
+    },
+    {
+      "ObservedAt": 6.1,
+      "Activation": 6.34,
+      "CorrectionRadians": -0.015707964,
+      "Queued": true,
+      "Reason": "Delayed reachable steering pulse improves frozen future-motion score.",
+      "Milliseconds": 45.5626,
+      "Candidates": [
+        {
+          "CorrectionRadians": 0,
+          "Score": 32.40930164397604,
+          "Safe": true,
+          "ContactQueries": 3185,
+          "MinimumInner": 3.226574744620682,
+          "MinimumOuter": 11.33417970044854,
+          "End": {
+            "Time": 6.699999999999999,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 64.95832,
+                "Y": 46.025135
+              },
+              "Velocity": {
+                "X": -2.7303448,
+                "Y": 12.685394
+              },
+              "Heading": 1.7615258,
+              "AngularVelocity": 0.0090272585,
+              "Road": {
+                "Segment": 2,
+                "Progress": 0.928427209038175,
+                "ReferenceMeters": 97.60277352201649,
+                "OffsetMeters": 2.953579421572243,
+                "Heading": 1.9649032550543548,
+                "RadiusMeters": 36.248817925108554,
+                "CornerProgress": 0.6428090696793917,
+                "Tangent": {
+                  "X": -0.38398373,
+                  "Y": 0.92333984
+                },
+                "Outward": {
+                  "X": 0.92333984,
+                  "Y": 0.38398373
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 97.60277352201649,
+              "DistanceMeters": 7.911357089877129,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 8.5,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 12.975902,
+              "ForwardSpeed": 12.972966,
+              "SideSpeed": 0.27599788,
+              "SlideRadians": -0.021271639
+            },
+            "Omega": 39.33380139699976,
+            "Steering": 0.014168015,
+            "Inner": 3.6317398568237524,
+            "Outer": 11.33417970044854
+          }
+        },
+        {
+          "CorrectionRadians": 0.015707964,
+          "Score": 32.44562033472967,
+          "Safe": true,
+          "ContactQueries": 2675,
+          "MinimumInner": 3.2259374452447385,
+          "MinimumOuter": 11.352057159217141,
+          "End": {
+            "Time": 6.699999999999999,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 64.94316,
+                "Y": 46.023132
+              },
+              "Velocity": {
+                "X": -2.8075821,
+                "Y": 12.676034
+              },
+              "Heading": 1.7692498,
+              "AngularVelocity": 0.0120958015,
+              "Road": {
+                "Segment": 2,
+                "Progress": 0.9285396352407395,
+                "ReferenceMeters": 97.60642322788254,
+                "OffsetMeters": 2.938813159567877,
+                "Heading": 1.9650128738101673,
+                "RadiusMeters": 36.2326512686711,
+                "CornerProgress": 0.6428465450802464,
+                "Tangent": {
+                  "X": -0.38408494,
+                  "Y": 0.92329776
+                },
+                "Outward": {
+                  "X": 0.92329776,
+                  "Y": 0.38408494
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 97.60642322788254,
+              "DistanceMeters": 7.913104265928268,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 8.5,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 12.983233,
+              "ForwardSpeed": 12.980762,
+              "SideSpeed": 0.2533536,
+              "SlideRadians": -0.01951515
+            },
+            "Omega": 39.357123855332134,
+            "Steering": 0.013720607,
+            "Inner": 3.62372489813972,
+            "Outer": 11.352057159217141
+          }
+        },
+        {
+          "CorrectionRadians": -0.015707964,
+          "Score": 32.34558931830323,
+          "Safe": true,
+          "ContactQueries": 2675,
+          "MinimumInner": 3.226983261718944,
+          "MinimumOuter": 11.300938789677325,
+          "End": {
+            "Time": 6.699999999999999,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 64.98651,
+                "Y": 46.027927
+              },
+              "Velocity": {
+                "X": -2.580219,
+                "Y": 12.699745
+              },
+              "Heading": 1.7460573,
+              "AngularVelocity": 0.0012326622,
+              "Road": {
+                "Segment": 2,
+                "Progress": 0.928194055786738,
+                "ReferenceMeters": 97.59520463887316,
+                "OffsetMeters": 2.980682095463559,
+                "Heading": 1.964675938673496,
+                "RadiusMeters": 36.27882421660975,
+                "CornerProgress": 0.6427313519289126,
+                "Tangent": {
+                  "X": -0.38377383,
+                  "Y": 0.9234271
+                },
+                "Outward": {
+                  "X": 0.9234271,
+                  "Y": 0.38377383
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 97.59520463887316,
+              "DistanceMeters": 7.90741354227066,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 8.5,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 12.959208,
+              "ForwardSpeed": 12.955098,
+              "SideSpeed": 0.32630062,
+              "SlideRadians": -0.025181718
+            },
+            "Omega": 39.280523459193816,
+            "Steering": 0.014913701,
+            "Inner": 3.645357864649776,
+            "Outer": 11.300938789677325
+          }
+        }
+      ]
+    },
+    {
+      "ObservedAt": 6.3,
+      "Activation": 6.54,
+      "CorrectionRadians": -0.015707964,
+      "Queued": true,
+      "Reason": "Delayed reachable steering pulse improves frozen future-motion score.",
+      "Milliseconds": 47.3993,
+      "Candidates": [
+        {
+          "CorrectionRadians": 0,
+          "Score": 31.12572628686125,
+          "Safe": true,
+          "ContactQueries": 3185,
+          "MinimumInner": 3.226544529437276,
+          "MinimumOuter": 10.430671839572753,
+          "End": {
+            "Time": 6.8999999999999995,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 64.42208,
+                "Y": 48.55391
+              },
+              "Velocity": {
+                "X": -2.7372282,
+                "Y": 12.580835
+              },
+              "Heading": 1.786852,
+              "AngularVelocity": 0.23166682,
+              "Road": {
+                "Segment": 2,
+                "Progress": 0.9991802916896377,
+                "ReferenceMeters": 99.8996396875915,
+                "OffsetMeters": 3.5179657921433334,
+                "Heading": 2.034835270864969,
+                "RadiusMeters": 35.908459763390496,
+                "CornerProgress": 0.6663934305632125,
+                "Tangent": {
+                  "X": -0.4475636,
+                  "Y": 0.8942521
+                },
+                "Outward": {
+                  "X": 0.8942521,
+                  "Y": 0.4475636
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 99.8996396875915,
+              "DistanceMeters": 7.827100992202759,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 8.5,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 12.875163,
+              "ForwardSpeed": 12.875142,
+              "SideSpeed": -0.02347374,
+              "SlideRadians": 0.0018231665
+            },
+            "Omega": 39.03804977149039,
+            "Steering": 0.033704966,
+            "Inner": 4.156900346847276,
+            "Outer": 10.430671839572753
+          }
+        },
+        {
+          "CorrectionRadians": 0.015707964,
+          "Score": 31.165173668398033,
+          "Safe": true,
+          "ContactQueries": 2675,
+          "MinimumInner": 3.226544529437276,
+          "MinimumOuter": 10.452047258009703,
+          "End": {
+            "Time": 6.8999999999999995,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 64.403145,
+                "Y": 48.550587
+              },
+              "Velocity": {
+                "X": -2.8277526,
+                "Y": 12.563301
+              },
+              "Heading": 1.7955788,
+              "AngularVelocity": 0.23388685,
+              "Road": {
+                "Segment": 2,
+                "Progress": 0.9993333024037264,
+                "ReferenceMeters": 99.90460689352784,
+                "OffsetMeters": 3.499545440230351,
+                "Heading": 2.0349886294096113,
+                "RadiusMeters": 35.888043050137824,
+                "CornerProgress": 0.6664444341345755,
+                "Tangent": {
+                  "X": -0.4477007,
+                  "Y": 0.89418346
+                },
+                "Outward": {
+                  "X": 0.89418346,
+                  "Y": 0.4477007
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 99.90460689352784,
+              "DistanceMeters": 7.827892333269119,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 8.5,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 12.877605,
+              "ForwardSpeed": 12.877531,
+              "SideSpeed": -0.043675184,
+              "SlideRadians": 0.0033915623
+            },
+            "Omega": 39.04591985457398,
+            "Steering": 0.033156972,
+            "Inner": 4.146018257528744,
+            "Outer": 10.452047258009703
+          }
+        },
+        {
+          "CorrectionRadians": -0.015707964,
+          "Score": 31.050862951905916,
+          "Safe": true,
+          "ContactQueries": 2675,
+          "MinimumInner": 3.226544529437276,
+          "MinimumOuter": 10.387173038072707,
+          "End": {
+            "Time": 6.8999999999999995,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 64.460686,
+                "Y": 48.559753
+              },
+              "Velocity": {
+                "X": -2.5424652,
+                "Y": 12.613983
+              },
+              "Heading": 1.767767,
+              "AngularVelocity": 0.22426766,
+              "Road": {
+                "Segment": 2,
+                "Progress": 0.9988457562553591,
+                "ReferenceMeters": 99.88877962197478,
+                "OffsetMeters": 3.555105793057853,
+                "Heading": 2.034500007869917,
+                "RadiusMeters": 35.94996409109814,
+                "CornerProgress": 0.6662819187517863,
+                "Tangent": {
+                  "X": -0.44726375,
+                  "Y": 0.8944021
+                },
+                "Outward": {
+                  "X": 0.8944021,
+                  "Y": 0.44726375
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 99.88877962197478,
+              "DistanceMeters": 7.824906945228577,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 8.5,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 12.8676605,
+              "ForwardSpeed": 12.867637,
+              "SideSpeed": 0.024754286,
+              "SlideRadians": -0.0019237796
+            },
+            "Omega": 39.013907328623006,
+            "Steering": 0.03464835,
+            "Inner": 4.177606818975801,
+            "Outer": 10.387173038072707
+          }
+        }
+      ]
+    },
+    {
+      "ObservedAt": 6.5,
+      "Activation": 6.74,
+      "CorrectionRadians": -0.015707964,
+      "Queued": true,
+      "Reason": "Delayed reachable steering pulse improves frozen future-motion score.",
+      "Milliseconds": 43.1474,
+      "Candidates": [
+        {
+          "CorrectionRadians": 0,
+          "Score": 26.86909660283532,
+          "Safe": true,
+          "ContactQueries": 3185,
+          "MinimumInner": 3.3051627449794267,
+          "MinimumOuter": 9.418710044109496,
+          "End": {
+            "Time": 7.1,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 63.827183,
+                "Y": 51.047714
+              },
+              "Velocity": {
+                "X": -3.2785883,
+                "Y": 12.343554
+              },
+              "Heading": 1.8500917,
+              "AngularVelocity": 0.38737223,
+              "Road": {
+                "Segment": 3,
+                "Progress": 0.06721812531204581,
+                "ReferenceMeters": 102.10836038455608,
+                "OffsetMeters": 4.188099975101178,
+                "Heading": 2.103984189245963,
+                "RadiusMeters": 35.682794915282344,
+                "CornerProgress": 0.6890727084373486,
+                "Tangent": {
+                  "X": -0.5082813,
+                  "Y": 0.8611911
+                },
+                "Outward": {
+                  "X": 0.8611911,
+                  "Y": 0.5082813
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 102.10836038455608,
+              "DistanceMeters": 7.755456417798996,
+              "Activity": 0,
+              "Drive": 0.05,
+              "TargetOffsetMeters": 8.5,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 12.771548,
+              "ForwardSpeed": 12.769076,
+              "SideSpeed": -0.2513082,
+              "SlideRadians": 0.019678462
+            },
+            "Omega": 39.293586790283754,
+            "Steering": 0.04682904,
+            "Inner": 4.821917316806452,
+            "Outer": 9.418710044109496
+          }
+        },
+        {
+          "CorrectionRadians": 0.015707964,
+          "Score": 26.904340285493955,
+          "Safe": true,
+          "ContactQueries": 2675,
+          "MinimumInner": 3.3051627449794267,
+          "MinimumOuter": 9.441021080087582,
+          "End": {
+            "Time": 7.1,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 63.807667,
+                "Y": 51.042625
+              },
+              "Velocity": {
+                "X": -3.3682342,
+                "Y": 12.316291
+              },
+              "Heading": 1.8591273,
+              "AngularVelocity": 0.38893685,
+              "Road": {
+                "Segment": 3,
+                "Progress": 0.06736875522307326,
+                "ReferenceMeters": 102.11325030218507,
+                "OffsetMeters": 4.168706861774426,
+                "Heading": 2.1041394557851754,
+                "RadiusMeters": 35.66140966141601,
+                "CornerProgress": 0.689122918407691,
+                "Tangent": {
+                  "X": -0.508415,
+                  "Y": 0.8611122
+                },
+                "Outward": {
+                  "X": 0.8611122,
+                  "Y": 0.508415
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 102.11325030218507,
+              "DistanceMeters": 7.754994511604309,
+              "Activity": 0,
+              "Drive": 0.05,
+              "TargetOffsetMeters": 8.5,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 12.768557,
+              "ForwardSpeed": 12.765637,
+              "SideSpeed": -0.2729752,
+              "SlideRadians": 0.02138032
+            },
+            "Omega": 39.28612068414586,
+            "Steering": 0.046232488,
+            "Inner": 4.810319708291622,
+            "Outer": 9.441021080087582
+          }
+        },
+        {
+          "CorrectionRadians": -0.015707964,
+          "Score": 26.800813831298406,
+          "Safe": true,
+          "ContactQueries": 2675,
+          "MinimumInner": 3.3051627449794267,
+          "MinimumOuter": 9.372379268257195,
+          "End": {
+            "Time": 7.1,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 63.86787,
+                "Y": 51.05743
+              },
+              "Velocity": {
+                "X": -3.0817008,
+                "Y": 12.398435
+              },
+              "Heading": 1.8301053,
+              "AngularVelocity": 0.3810948,
+              "Road": {
+                "Segment": 3,
+                "Progress": 0.06688371304141508,
+                "ReferenceMeters": 102.09750431721625,
+                "OffsetMeters": 4.228080341512192,
+                "Heading": 2.1036395183362258,
+                "RadiusMeters": 35.727198087150406,
+                "CornerProgress": 0.6889612376804717,
+                "Tangent": {
+                  "X": -0.5079844,
+                  "Y": 0.8613663
+                },
+                "Outward": {
+                  "X": 0.8613663,
+                  "Y": 0.5079844
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 102.09750431721625,
+              "DistanceMeters": 7.755867198109627,
+              "Activity": 0,
+              "Drive": 0.05,
+              "TargetOffsetMeters": 8.5,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 12.7756815,
+              "ForwardSpeed": 12.77411,
+              "SideSpeed": -0.20044446,
+              "SlideRadians": 0.015690178
+            },
+            "Omega": 39.30218633318657,
+            "Steering": 0.048171245,
+            "Inner": 4.844713938278387,
+            "Outer": 9.372379268257195
+          }
+        }
+      ]
+    },
+    {
+      "ObservedAt": 6.7,
+      "Activation": 6.94,
+      "CorrectionRadians": -0.015707964,
+      "Queued": true,
+      "Reason": "Delayed reachable steering pulse improves frozen future-motion score.",
+      "Milliseconds": 35.6733,
+      "Candidates": [
+        {
+          "CorrectionRadians": 0,
+          "Score": 21.254319485516884,
+          "Safe": true,
+          "ContactQueries": 3185,
+          "MinimumInner": 3.631729705087025,
+          "MinimumOuter": 8.390919449265743,
+          "End": {
+            "Time": 7.3,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 63.086296,
+                "Y": 53.484306
+              },
+              "Velocity": {
+                "X": -4.1588225,
+                "Y": 11.999321
+              },
+              "Heading": 1.9379066,
+              "AngularVelocity": 0.48077503,
+              "Road": {
+                "Segment": 3,
+                "Progress": 0.13316811396072686,
+                "ReferenceMeters": 104.24930310917784,
+                "OffsetMeters": 4.873523980929105,
+                "Heading": 2.172919317222948,
+                "RadiusMeters": 35.499202690439965,
+                "CornerProgress": 0.711056037986909,
+                "Tangent": {
+                  "X": -0.5663934,
+                  "Y": 0.824135
+                },
+                "Outward": {
+                  "X": 0.824135,
+                  "Y": 0.5663934
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 104.24930310917784,
+              "DistanceMeters": 7.696363270282745,
+              "Activity": 0,
+              "Drive": 0.05,
+              "TargetOffsetMeters": 8.5,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 12.699587,
+              "ForwardSpeed": 12.692471,
+              "SideSpeed": -0.4250803,
+              "SlideRadians": 0.033478208
+            },
+            "Omega": 39.217961732225405,
+            "Steering": 0.05398766,
+            "Inner": 5.523976775282142,
+            "Outer": 8.390919449265743
+          }
+        },
+        {
+          "CorrectionRadians": 0.015707964,
+          "Score": 21.2835821459503,
+          "Safe": true,
+          "ContactQueries": 2675,
+          "MinimumInner": 3.631729705087025,
+          "MinimumOuter": 8.413634573001806,
+          "End": {
+            "Time": 7.3,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 63.067665,
+                "Y": 53.47717
+              },
+              "Velocity": {
+                "X": -4.244078,
+                "Y": 11.961246
+              },
+              "Heading": 1.9474055,
+              "AngularVelocity": 0.48290226,
+              "Road": {
+                "Segment": 3,
+                "Progress": 0.133292297369346,
+                "ReferenceMeters": 104.25333449069359,
+                "OffsetMeters": 4.8541273252958,
+                "Heading": 2.173050954743989,
+                "RadiusMeters": 35.478181754183694,
+                "CornerProgress": 0.7110974324564486,
+                "Tangent": {
+                  "X": -0.56650186,
+                  "Y": 0.82406044
+                },
+                "Outward": {
+                  "X": 0.82406044,
+                  "Y": 0.56650186
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 104.25333449069359,
+              "DistanceMeters": 7.69479376077652,
+              "Activity": 0,
+              "Drive": 0.05,
+              "TargetOffsetMeters": 8.5,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 12.691871,
+              "ForwardSpeed": 12.683807,
+              "SideSpeed": -0.45233917,
+              "SlideRadians": 0.03564761
+            },
+            "Omega": 39.19973976207061,
+            "Steering": 0.053241927,
+            "Inner": 5.512838311535098,
+            "Outer": 8.413634573001806
+          }
+        },
+        {
+          "CorrectionRadians": -0.015707964,
+          "Score": 21.20615115049764,
+          "Safe": true,
+          "ContactQueries": 2675,
+          "MinimumInner": 3.631729705087025,
+          "MinimumOuter": 8.351396920087168,
+          "End": {
+            "Time": 7.3,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 63.119152,
+                "Y": 53.49603
+              },
+              "Velocity": {
+                "X": -4.0035152,
+                "Y": 12.063973
+              },
+              "Heading": 1.9207543,
+              "AngularVelocity": 0.47604397,
+              "Road": {
+                "Segment": 3,
+                "Progress": 0.13293053129536406,
+                "ReferenceMeters": 104.2415904334166,
+                "OffsetMeters": 4.9072424608242935,
+                "Heading": 2.172667493106676,
+                "RadiusMeters": 35.53602887537041,
+                "CornerProgress": 0.7109768437651214,
+                "Tangent": {
+                  "X": -0.56618583,
+                  "Y": 0.82427764
+                },
+                "Outward": {
+                  "X": 0.82427764,
+                  "Y": 0.56618583
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 104.2415904334166,
+              "DistanceMeters": 7.6985126584768295,
+              "Activity": 0,
+              "Drive": 0.05,
+              "TargetOffsetMeters": 8.5,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 12.710924,
+              "ForwardSpeed": 12.70538,
+              "SideSpeed": -0.37538314,
+              "SlideRadians": 0.02953663
+            },
+            "Omega": 39.24316623315637,
+            "Steering": 0.055329904,
+            "Inner": 5.542839506248228,
+            "Outer": 8.351396920087168
+          }
+        }
+      ]
+    },
+    {
+      "ObservedAt": 10.4,
+      "Activation": 10.64,
+      "CorrectionRadians": -0.015707964,
+      "Queued": true,
+      "Reason": "Delayed reachable steering pulse improves frozen future-motion score.",
+      "Milliseconds": 38.6747,
+      "Candidates": [
+        {
+          "CorrectionRadians": 0,
+          "Score": -0.04858811605054503,
+          "Safe": true,
+          "ContactQueries": 3185,
+          "MinimumInner": 7.673948896771514,
+          "MinimumOuter": 2.718718275042002,
+          "End": {
+            "Time": 11,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 15.131563,
+                "Y": 69.757385
+              },
+              "Velocity": {
+                "X": -19.82727,
+                "Y": -1.1583654
+              },
+              "Heading": -3.111138,
+              "AngularVelocity": -0.08873884,
+              "Road": {
+                "Segment": 4,
+                "Progress": 0.32045865827991116,
+                "ReferenceMeters": 152.25781178474426,
+                "OffsetMeters": 7.094365085775252,
+                "Heading": 3.141592653589793,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": -1,
+                  "Y": 1.2246469E-16
+                },
+                "Outward": {
+                  "X": 1.2246469E-16,
+                  "Y": 1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 152.25781178474426,
+              "DistanceMeters": 10.980192571878433,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 8.426526,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 19.861078,
+              "ForwardSpeed": 19.853348,
+              "SideSpeed": 0.554091,
+              "SlideRadians": -0.027901953
+            },
+            "Omega": 77.21333012358494,
+            "Steering": 0.005219801,
+            "Inner": 7.673948896771514,
+            "Outer": 3.5248035182013324
+          }
+        },
+        {
+          "CorrectionRadians": 0.015707964,
+          "Score": -0.03626289413120687,
+          "Safe": true,
+          "ContactQueries": 2675,
+          "MinimumInner": 7.643156585065719,
+          "MinimumOuter": 2.718718275042002,
+          "End": {
+            "Time": 11,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 15.132271,
+                "Y": 69.73545
+              },
+              "Velocity": {
+                "X": -19.825777,
+                "Y": -1.2755259
+              },
+              "Heading": -3.0971959,
+              "AngularVelocity": -0.07627129,
+              "Road": {
+                "Segment": 4,
+                "Progress": 0.32044724495180194,
+                "ReferenceMeters": 152.2571041584015,
+                "OffsetMeters": 7.072430576497908,
+                "Heading": 3.141592653589793,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": -1,
+                  "Y": 1.2246469E-16
+                },
+                "Outward": {
+                  "X": 1.2246469E-16,
+                  "Y": 1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 152.2571041584015,
+              "DistanceMeters": 10.981004789471626,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 8.426536,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 19.866766,
+              "ForwardSpeed": 19.862852,
+              "SideSpeed": 0.39435738,
+              "SlideRadians": -0.019851405
+            },
+            "Omega": 77.07905807670016,
+            "Steering": 0.0025353301,
+            "Inner": 7.643156585065719,
+            "Outer": 3.555992300394189
+          }
+        },
+        {
+          "CorrectionRadians": -0.015707964,
+          "Score": -0.06481635295744637,
+          "Safe": true,
+          "ContactQueries": 2675,
+          "MinimumInner": 7.720436033728981,
+          "MinimumOuter": 2.718718275042002,
+          "End": {
+            "Time": 11,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 15.131764,
+                "Y": 69.78998
+              },
+              "Velocity": {
+                "X": -19.822428,
+                "Y": -0.98305935
+              },
+              "Heading": -3.132767,
+              "AngularVelocity": -0.10864268,
+              "Road": {
+                "Segment": 4,
+                "Progress": 0.32045541271086664,
+                "ReferenceMeters": 152.2576105594635,
+                "OffsetMeters": 7.126957859212752,
+                "Heading": 3.141592653589793,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": -1,
+                  "Y": 1.2246469E-16
+                },
+                "Outward": {
+                  "X": 1.2246469E-16,
+                  "Y": 1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 152.2576105594635,
+              "DistanceMeters": 10.977895125746727,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 8.426528,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 19.84679,
+              "ForwardSpeed": 19.830332,
+              "SideSpeed": 0.80807674,
+              "SlideRadians": -0.040726997
+            },
+            "Omega": 77.49928499585198,
+            "Steering": 0.00989161,
+            "Inner": 7.720436033728981,
+            "Outer": 3.477993565354717
+          }
+        }
+      ]
+    },
+    {
+      "ObservedAt": 10.6,
+      "Activation": 10.84,
+      "CorrectionRadians": -0.015707964,
+      "Queued": true,
+      "Reason": "Delayed reachable steering pulse improves frozen future-motion score.",
+      "Milliseconds": 37.966,
+      "Candidates": [
+        {
+          "CorrectionRadians": 0,
+          "Score": 0.3601113971844958,
+          "Safe": true,
+          "ContactQueries": 3185,
+          "MinimumInner": 7.509064635767467,
+          "MinimumOuter": 3.0161610860904147,
+          "End": {
+            "Time": 11.2,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 11.133641,
+                "Y": 69.578995
+              },
+              "Velocity": {
+                "X": -19.97529,
+                "Y": -0.6249079
+              },
+              "Heading": -3.1321666,
+              "AngularVelocity": -0.10917983,
+              "Road": {
+                "Segment": 4,
+                "Progress": 0.3849412702745007,
+                "ReferenceMeters": 156.2557337284088,
+                "OffsetMeters": 6.915974582845564,
+                "Heading": 3.141592653589793,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": -1,
+                  "Y": 1.2246469E-16
+                },
+                "Outward": {
+                  "X": 1.2246469E-16,
+                  "Y": 1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 156.2557337284088,
+              "DistanceMeters": 11.521169051527977,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 8.357097,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 19.985064,
+              "ForwardSpeed": 19.980293,
+              "SideSpeed": 0.43659526,
+              "SlideRadians": -0.021847818
+            },
+            "Omega": 60.665235242881934,
+            "Steering": -0.006114619,
+            "Inner": 7.509064635767467,
+            "Outer": 3.689369126994913
+          }
+        },
+        {
+          "CorrectionRadians": 0.015707964,
+          "Score": 0.3790744675544786,
+          "Safe": true,
+          "ContactQueries": 2675,
+          "MinimumInner": 7.465435591038394,
+          "MinimumOuter": 3.0161610860904147,
+          "End": {
+            "Time": 11.2,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 11.134177,
+                "Y": 69.54643
+              },
+              "Velocity": {
+                "X": -19.974907,
+                "Y": -0.83187175
+              },
+              "Heading": -3.1149564,
+              "AngularVelocity": -0.085101515,
+              "Road": {
+                "Segment": 4,
+                "Progress": 0.3849326256782778,
+                "ReferenceMeters": 156.255197763443,
+                "OffsetMeters": 6.883412326986189,
+                "Heading": 3.141592653589793,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": -1,
+                  "Y": 1.2246469E-16
+                },
+                "Outward": {
+                  "X": 1.2246469E-16,
+                  "Y": 1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 156.255197763443,
+              "DistanceMeters": 11.522233307361603,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 8.357107,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 19.992222,
+              "ForwardSpeed": 19.989977,
+              "SideSpeed": 0.29958254,
+              "SlideRadians": -0.014985512
+            },
+            "Omega": 60.685605627057214,
+            "Steering": -0.0053689335,
+            "Inner": 7.465435591038394,
+            "Outer": 3.7332339996500905
+          }
+        },
+        {
+          "CorrectionRadians": -0.015707964,
+          "Score": 0.33738444699882164,
+          "Safe": true,
+          "ContactQueries": 2675,
+          "MinimumInner": 7.565374794724641,
+          "MinimumOuter": 3.0161610860904147,
+          "End": {
+            "Time": 11.2,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 11.134372,
+                "Y": 69.62052
+              },
+              "Velocity": {
+                "X": -19.96699,
+                "Y": -0.36058563
+              },
+              "Heading": 3.1283002,
+              "AngularVelocity": -0.14093018,
+              "Road": {
+                "Segment": 4,
+                "Progress": 0.3849294877821399,
+                "ReferenceMeters": 156.25500321388245,
+                "OffsetMeters": 6.957501377279158,
+                "Heading": 3.141592653589793,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": -1,
+                  "Y": 1.2246469E-16
+                },
+                "Outward": {
+                  "X": 1.2246469E-16,
+                  "Y": 1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 156.25500321388245,
+              "DistanceMeters": 11.518697917461395,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 8.35711,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 19.970245,
+              "ForwardSpeed": 19.960432,
+              "SideSpeed": 0.6259564,
+              "SlideRadians": -0.03134959
+            },
+            "Omega": 60.62289439311134,
+            "Steering": -0.0070094424,
+            "Inner": 7.565374794724641,
+            "Outer": 3.6330923463305793
+          }
+        }
+      ]
+    },
+    {
+      "ObservedAt": 10.8,
+      "Activation": 11.040000000000001,
+      "CorrectionRadians": -0.015707964,
+      "Queued": true,
+      "Reason": "Delayed reachable steering pulse improves frozen future-motion score.",
+      "Milliseconds": 37.5461,
+      "Candidates": [
+        {
+          "CorrectionRadians": 0,
+          "Score": 0.6691693918071677,
+          "Safe": true,
+          "ContactQueries": 3185,
+          "MinimumInner": 7.444817658447641,
+          "MinimumOuter": 3.2851923938366183,
+          "End": {
+            "Time": 11.4,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 7.1543207,
+                "Y": 69.50222
+              },
+              "Velocity": {
+                "X": -19.817926,
+                "Y": -0.16488251
+              },
+              "Heading": 3.1317475,
+              "AngularVelocity": -0.081635535,
+              "Road": {
+                "Segment": 4,
+                "Progress": 0.4491238594055176,
+                "ReferenceMeters": 160.23505425453186,
+                "OffsetMeters": 6.839199985677595,
+                "Heading": 3.141592653589793,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": -1,
+                  "Y": 1.2246469E-16
+                },
+                "Outward": {
+                  "X": 1.2246469E-16,
+                  "Y": 1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 160.23505425453186,
+              "DistanceMeters": 11.849011674523354,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 8.259969,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 19.818613,
+              "ForwardSpeed": 19.815344,
+              "SideSpeed": 0.3599822,
+              "SlideRadians": -0.018164845
+            },
+            "Omega": 60.089001736385896,
+            "Steering": -0.0035792894,
+            "Inner": 7.444817658447641,
+            "Outer": 3.753619173651708
+          }
+        },
+        {
+          "CorrectionRadians": 0.015707964,
+          "Score": 0.6973316158463589,
+          "Safe": true,
+          "ContactQueries": 2675,
+          "MinimumInner": 7.3835951945536715,
+          "MinimumOuter": 3.2851923938366183,
+          "End": {
+            "Time": 11.4,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 7.153727,
+                "Y": 69.454956
+              },
+              "Velocity": {
+                "X": -19.823559,
+                "Y": -0.43866724
+              },
+              "Heading": -3.1299517,
+              "AngularVelocity": -0.054292563,
+              "Road": {
+                "Segment": 4,
+                "Progress": 0.4491334346032912,
+                "ReferenceMeters": 160.23564791679382,
+                "OffsetMeters": 6.791935886556502,
+                "Heading": 3.141592653589793,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": -1,
+                  "Y": 1.2246469E-16
+                },
+                "Outward": {
+                  "X": 1.2246469E-16,
+                  "Y": 1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 160.23564791679382,
+              "DistanceMeters": 11.850840017199516,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 8.2599535,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 19.828411,
+              "ForwardSpeed": 19.827322,
+              "SideSpeed": 0.20787789,
+              "SlideRadians": -0.010484032
+            },
+            "Omega": 60.122327341279174,
+            "Steering": -0.0029827436,
+            "Inner": 7.3835951945536715,
+            "Outer": 3.814856299212161
+          }
+        },
+        {
+          "CorrectionRadians": -0.015707964,
+          "Score": 0.6513567627839303,
+          "Safe": true,
+          "ContactQueries": 2675,
+          "MinimumInner": 7.483573745523764,
+          "MinimumOuter": 3.2851923938366183,
+          "End": {
+            "Time": 11.4,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 7.1555862,
+                "Y": 69.533
+              },
+              "Velocity": {
+                "X": -19.809084,
+                "Y": 0.013184566
+              },
+              "Heading": 3.117532,
+              "AngularVelocity": -0.099497646,
+              "Road": {
+                "Segment": 4,
+                "Progress": 0.44910344769877775,
+                "ReferenceMeters": 160.233788728714,
+                "OffsetMeters": 6.869976963216658,
+                "Heading": 3.141592653589793,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": -1,
+                  "Y": 1.2246469E-16
+                },
+                "Outward": {
+                  "X": 1.2246469E-16,
+                  "Y": 1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 160.233788728714,
+              "DistanceMeters": 11.847166940569878,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 8.260002,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 19.809088,
+              "ForwardSpeed": 19.803667,
+              "SideSpeed": 0.46339247,
+              "SlideRadians": -0.023395058
+            },
+            "Omega": 60.05646122746056,
+            "Steering": -0.0038775618,
+            "Inner": 7.484924857880665,
+            "Outer": 3.713695118954669
+          }
+        }
+      ]
+    },
+    {
+      "ObservedAt": 11,
+      "Activation": 11.24,
+      "CorrectionRadians": -0.015707964,
+      "Queued": true,
+      "Reason": "Delayed reachable steering pulse improves frozen future-motion score.",
+      "Milliseconds": 36.4448,
+      "Candidates": [
+        {
+          "CorrectionRadians": 0,
+          "Score": 0.7595976040008032,
+          "Safe": true,
+          "ContactQueries": 3185,
+          "MinimumInner": 7.441668621814125,
+          "MinimumOuter": 3.5248041488372706,
+          "End": {
+            "Time": 11.6,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 3.2071633,
+                "Y": 69.506676
+              },
+              "Velocity": {
+                "X": -19.655645,
+                "Y": 0.18442479
+              },
+              "Heading": 3.1189258,
+              "AngularVelocity": -0.046366554,
+              "Road": {
+                "Segment": 4,
+                "Progress": 0.512787688163019,
+                "ReferenceMeters": 164.18221163749695,
+                "OffsetMeters": 6.843655552083845,
+                "Heading": 3.141592653589793,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": -1,
+                  "Y": 1.2246469E-16
+                },
+                "Outward": {
+                  "X": 1.2246469E-16,
+                  "Y": 1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 164.18221163749695,
+              "DistanceMeters": 11.92939569056034,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 8.13535,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 19.656511,
+              "ForwardSpeed": 19.654778,
+              "SideSpeed": 0.26111585,
+              "SlideRadians": -0.013284329
+            },
+            "Omega": 59.59900734165342,
+            "Steering": -0.0011930971,
+            "Inner": 7.457685354024371,
+            "Outer": 3.7409098762223123
+          }
+        },
+        {
+          "CorrectionRadians": 0.015707964,
+          "Score": 0.7808058973876111,
+          "Safe": true,
+          "ContactQueries": 2675,
+          "MinimumInner": 7.406623793360304,
+          "MinimumOuter": 3.5248041488372706,
+          "End": {
+            "Time": 11.6,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 3.206187,
+                "Y": 69.467255
+              },
+              "Velocity": {
+                "X": -19.662601,
+                "Y": -0.04296772
+              },
+              "Heading": 3.136693,
+              "AngularVelocity": -0.023929222,
+              "Road": {
+                "Segment": 4,
+                "Progress": 0.5128034353256226,
+                "ReferenceMeters": 164.18318796157837,
+                "OffsetMeters": 6.804234470540877,
+                "Heading": 3.141592653589793,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": -1,
+                  "Y": 1.2246469E-16
+                },
+                "Outward": {
+                  "X": 1.2246469E-16,
+                  "Y": 1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 164.18318796157837,
+              "DistanceMeters": 11.93055309355259,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 8.135319,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 19.662647,
+              "ForwardSpeed": 19.662155,
+              "SideSpeed": 0.13930674,
+              "SlideRadians": -0.0070849005
+            },
+            "Omega": 59.619857242727136,
+            "Steering": -0.0005965477,
+            "Inner": 7.406623793360304,
+            "Outer": 3.7917853291284955
+          }
+        },
+        {
+          "CorrectionRadians": -0.015707964,
+          "Score": 0.7387767486110883,
+          "Safe": true,
+          "ContactQueries": 2675,
+          "MinimumInner": 7.459905226906593,
+          "MinimumOuter": 3.5248041488372706,
+          "End": {
+            "Time": 11.6,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 3.2092714,
+                "Y": 69.54683
+              },
+              "Velocity": {
+                "X": -19.641842,
+                "Y": 0.4168635
+              },
+              "Heading": 3.1004562,
+              "AngularVelocity": -0.06988116,
+              "Road": {
+                "Segment": 4,
+                "Progress": 0.5127536865972704,
+                "ReferenceMeters": 164.18010354042053,
+                "OffsetMeters": 6.883809055501814,
+                "Heading": 3.141592653589793,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": -1,
+                  "Y": 1.2246469E-16
+                },
+                "Outward": {
+                  "X": 1.2246469E-16,
+                  "Y": 1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 164.18010354042053,
+              "DistanceMeters": 11.927406564354897,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 8.13542,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 19.646265,
+              "ForwardSpeed": 19.642368,
+              "SideSpeed": 0.39125624,
+              "SlideRadians": -0.019916363
+            },
+            "Omega": 59.56404046570289,
+            "Steering": -0.0016405068,
+            "Inner": 7.510061658747298,
+            "Outer": 3.6889812883662727
+          }
+        }
+      ]
+    },
+    {
+      "ObservedAt": 11.2,
+      "Activation": 11.44,
+      "CorrectionRadians": -0.015707964,
+      "Queued": true,
+      "Reason": "Delayed reachable steering pulse improves frozen future-motion score.",
+      "Milliseconds": 37.4951,
+      "Candidates": [
+        {
+          "CorrectionRadians": 0,
+          "Score": 0.58392247894466,
+          "Safe": true,
+          "ContactQueries": 3185,
+          "MinimumInner": 7.441658492212164,
+          "MinimumOuter": 3.6763106289533964,
+          "End": {
+            "Time": 11.799999999999999,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": -0.7076596,
+                "Y": 69.56774
+              },
+              "Velocity": {
+                "X": -19.495277,
+                "Y": 0.40058398
+              },
+              "Heading": 3.1134057,
+              "AngularVelocity": -0.009440044,
+              "Road": {
+                "Segment": 4,
+                "Progress": 0.57592999358331,
+                "ReferenceMeters": 168.097034573555,
+                "OffsetMeters": 6.90472122591197,
+                "Heading": 3.141592653589793,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": -1,
+                  "Y": 1.2246469E-16
+                },
+                "Outward": {
+                  "X": 1.2246469E-16,
+                  "Y": 1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 168.097034573555,
+              "DistanceMeters": 11.842684805393219,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 7.984658,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 19.499392,
+              "ForwardSpeed": 19.498823,
+              "SideSpeed": 0.14901474,
+              "SlideRadians": -0.0076420954
+            },
+            "Omega": 59.12412696186467,
+            "Steering": 0.0013422332,
+            "Inner": 7.522391262615607,
+            "Outer": 3.6763106289533964
+          }
+        },
+        {
+          "CorrectionRadians": 0.015707964,
+          "Score": 0.601703483737597,
+          "Safe": true,
+          "ContactQueries": 2675,
+          "MinimumInner": 7.440240368651879,
+          "MinimumOuter": 3.689369126994913,
+          "End": {
+            "Time": 11.799999999999999,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": -0.70880234,
+                "Y": 69.52792
+              },
+              "Velocity": {
+                "X": -19.502237,
+                "Y": 0.17160207
+              },
+              "Heading": 3.1312418,
+              "AngularVelocity": 0.0128608765,
+              "Road": {
+                "Segment": 4,
+                "Progress": 0.575948424877659,
+                "ReferenceMeters": 168.09817731380463,
+                "OffsetMeters": 6.864903415853377,
+                "Heading": 3.141592653589793,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": -1,
+                  "Y": 1.2246469E-16
+                },
+                "Outward": {
+                  "X": 1.2246469E-16,
+                  "Y": 1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 168.09817731380463,
+              "DistanceMeters": 11.843414798378944,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 7.984613,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 19.502993,
+              "ForwardSpeed": 19.502968,
+              "SideSpeed": 0.030268356,
+              "SlideRadians": -0.0015519856
+            },
+            "Omega": 59.13626650211349,
+            "Steering": 0.0017896442,
+            "Inner": 7.4708517080427805,
+            "Outer": 3.7275890048709157
+          }
+        },
+        {
+          "CorrectionRadians": -0.015707964,
+          "Score": 0.5662157703083395,
+          "Safe": true,
+          "ContactQueries": 2675,
+          "MinimumInner": 7.441787307855528,
+          "MinimumOuter": 3.622722955451232,
+          "End": {
+            "Time": 11.799999999999999,
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": -0.70532244,
+                "Y": 69.6093
+              },
+              "Velocity": {
+                "X": -19.481054,
+                "Y": 0.640775
+              },
+              "Heading": 3.094467,
+              "AngularVelocity": -0.03333752,
+              "Road": {
+                "Segment": 4,
+                "Progress": 0.5758922974909505,
+                "ReferenceMeters": 168.0946974158287,
+                "OffsetMeters": 6.946278537923689,
+                "Heading": 3.141592653589793,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": -1,
+                  "Y": 1.2246469E-16
+                },
+                "Outward": {
+                  "X": 1.2246469E-16,
+                  "Y": 1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 168.0946974158287,
+              "DistanceMeters": 11.841103196144104,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 7.98475,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 19.491589,
+              "ForwardSpeed": 19.489613,
+              "SideSpeed": 0.27765548,
+              "SlideRadians": -0.014245369
+            },
+            "Omega": 59.09769128241182,
+            "Steering": 0.000745685,
+            "Inner": 7.576520805421048,
+            "Outer": 3.622722955451232
+          }
+        }
+      ]
+    }
+  ]
+}

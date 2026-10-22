@@ -9,7 +9,7 @@ public sealed record CornerPlanChange(string Phase,int Generation,double Time,do
     TravelDirectionState Motion,double ExitPlaneClearance,int DiagnosticContactQueries);
 
 /// <summary>Only manages path lifecycle. The #122 throttle policy, clocks, pending commands and all mechanics survive.</summary>
-public sealed class ContinuousCornerPlanning(PreparedCornerPlan initial)
+public sealed class ContinuousCornerPlanning(PreparedCornerPlan initial,PreparedCornerPlan? diagnosticFrozenNext=null)
 {
     public PreparedCornerPlan Active {get;private set;}=initial;
     public PreparedCornerPlan? Waiting {get;private set;}
@@ -30,8 +30,15 @@ public sealed class ContinuousCornerPlanning(PreparedCornerPlan initial)
             if(time+1e-10<ready.ActivationSeconds)return null;
             ready.CarryControlMemory(Active.ControlMemory);Active=ready;Waiting=null;Generation++;phase="activated";
         }else{
-            if(!Cleared(v,frame,Active.BendExitMeters))return null;
-            Waiting=new(v,spec,frame,p,time,mass,wheel,steering,Active.Options,surface,new(Active.Path,Active.ControlMemory,pending));
+            if(diagnosticFrozenNext is not null&&Generation==1){
+                // Controlled comparison only: replay the SAME already-authored path and its reaction deadline.
+                // No recorded body/wheel/steering/Drive is imported into the executed state.
+                if(time+1e-10<diagnosticFrozenNext.ActivationSeconds-RiderController.ReactionSeconds(spec))return null;
+                Waiting=diagnosticFrozenNext.ForkForPrediction();Waiting.CarryControlMemory(Active.ControlMemory);
+            }else{
+                if(!Cleared(v,frame,Active.BendExitMeters))return null;
+                Waiting=new(v,spec,frame,p,time,mass,wheel,steering,Active.Options,surface,new(Active.Path,Active.ControlMemory,pending));
+            }
             phase="prepared";
         }
         var plan=Waiting??Active;
