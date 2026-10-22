@@ -14,6 +14,12 @@ operating point exists at partial throttle, but the saved Egg state exceeds the
 absolute force bound. Real soil calibration and the need for tyre changes remain
 inconclusive; no physics or controller changes.
 
+[Feasible 500cc Corner Entry (#119)](docs/experiments/feasible-500cc-corner-entry.md)
+demonstrates a safe first Egg Mild bend after early throttle and line decisions.
+The default-OFF rider rule executes the proven physical prefix and restores gas
+after slip clears. Speed falls from74.05 to44.58km/h through the bend; fast
+cornering is not certified. Engine, tyres, geometry and steering laws are unchanged.
+
 [Controlled Slip / Travel-Direction Steering (#117)](docs/experiments/controlled-slip-travel-direction.md) adds a
 default-OFF local contact-response controller distinguishing body yaw from velocity
 direction. Short feasible arcs and an explicit coast recovery pass; Egg Mild INNER
