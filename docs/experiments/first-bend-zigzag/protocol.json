@@ -1,0 +1,26 @@
+{
+  "BaseHead": "1b3c43c4dcb54b5a925912ecf75c48edf1e58f4d",
+  "Status": "Audit first; no native trial authorized by this file alone",
+  "NewNativeWorldLimit": 1,
+  "DefaultEnabled": false,
+  "BetaConvention": "Project: wrap(psi-chi). The opposite expression in the request is not used to reinterpret recorded beta.",
+  "Observations": "All ten queued decisions in the original controlled #126 native stream, plus all native states through the first full bend. Times fixed by the source events, not by an improved result.",
+  "OfflineVariants": ["A original #117", "B original #126 frozen endpoint pulse", "C same correction biased onto current #117 request at each force evaluation"],
+  "HorizonsSeconds": [0.6, 0.9],
+  "ReactionSeconds": 0.24,
+  "PulseSeconds": 0.1,
+  "CorrectionDegrees": -0.9,
+  "CChangesOnlyExecution": true,
+  "ScoreWeightsUnchanged": true,
+  "PlanAndThrottlePolicyUnchanged": true,
+  "KnownPendingPreserved": true,
+  "NoFutureRecordedControlsAsPredictionInputs": true,
+  "ModelMaximumHorizonSeconds": 0.9,
+  "NumericalEventRules": {
+    "Direction": "eta=wrap(chi-path_heading); zero crossing brackets from native samples. This is tangent error, not a unique optimal recovery heading.",
+    "LateralReversal": "Sign reversal of derivative of recorded normal error; retain changes exceeding 0.01m on each side within 0.1s, report raw and tolerance sensitivity.",
+    "PhysicalExcursion": "Between successive eta zero crossings, report extrema; classify a resolved directional lobe only if peak abs eta exceeds1deg and duration exceeds0.1s. Countersteering alone is not a physical excursion.",
+    "Recovery": "Report first e=0 crossing and next same-direction eta=0 after each turning point, not a claim of permanent stable tracking."
+  },
+  "NativeGate": "A single isolated change may proceed only if the same-state A/B/C comparisons and continuous native event sequence separate the cause, C has no safety/peak-beta/speed-loss tradeoff across relevant first-bend events, and the validated model applies. Otherwise stop with an audit and one proposed discriminating measurement. Never choose by a prettier steering trace or alter physics/cost/horizon together."
+}

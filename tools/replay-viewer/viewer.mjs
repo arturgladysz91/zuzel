@@ -1,6 +1,7 @@
 import { Replay, parseCsv, clamp, enumName, decisionStatus, crossSection, worldCapsules, authoredReplayDocument, motionVectors, bendJumps, boundaryStatus } from './model.mjs';
 import { currentRecordings, readGzip } from './recordings.mjs';
 import { loadContinuous } from './continuous.mjs';
+import { loadZigzag, createZigzagPanel } from './zigzag.mjs';
 
 const $ = id => document.getElementById(id);
 const canvas = $('track'), context = canvas.getContext('2d');
@@ -32,6 +33,10 @@ for (const name of ['matched-inner-entry-steady-18', 'matched-mid-entry-steady-1
   const option = document.createElement('option'); option.value = 'inverse-' + name; option.textContent = '#105 · ' + name; $('scenario').append(option);
 }
 const widthColors = ['#ffb36d', '#70e2e4', '#e5a5f5'];
+for(const [key,label] of [['zigzag-baseline','Zygzak #127 · baseline #124'],['zigzag-candidate','Zygzak #127 · kandydat #126']]){
+  const option=document.createElement('option');option.value=key;option.textContent=label;$('scenario').prepend(option);
+}
+let zigzagPanel=null,zigzagDataPromise=null,zigzagWindow='main';
 let widthGeometries = [];
 let comparisonTrails = [];
 const format = (x, digits = 3) => Number(x).toFixed(digits);
@@ -136,6 +141,7 @@ function rebuildEvents() {
   dirty = true; lastPanelTime = -1;
 }
 function updatePanel() {
+  zigzagPanel?.update(time);
   const state = displayState(), last = state.lastDecision, motion = motionVectors(state);
   $('clock').textContent = `${format(time)} / ${format(replay.duration)} s`;
   $('rider-name').textContent = `R${selected}`; $('rider-name').style.color = color(selected);
@@ -323,12 +329,14 @@ function recordClip() {
   };
   recorder.start(); setPlaying(true);
 }
-async function loadScenario(key) {
+async function loadScenario(key,keepTime=null) {
   if (clipRecorder) clipRecorder.stop();
   const generation = ++loadGeneration; setPlaying(false); $('load-state').hidden = false; $('load-state').classList.remove('error');
+  zigzagPanel=null;$('zigzag-analysis').hidden=true;
   $('load-state').textContent = 'Wczytywanie zaakceptowanych stanów…';
   try {
-    const predictive = key.startsWith('predictive-'), candidate = key === 'predictive-candidate';
+    const zigzag=key.startsWith('zigzag-');
+    const predictive = key.startsWith('predictive-')||zigzag, candidate = key === 'predictive-candidate'||key==='zigzag-candidate';
     $('record-clip').hidden = !(key === 'latest-two-bends' || predictive) || typeof MediaRecorder === 'undefined' || !canvas.captureStream;
     if (key === 'latest-two-bends' || predictive) {
       const dataset = candidate ? {root:'../../docs/experiments/predictive-rider-control/controlled/', name:'candidate'} : null;
@@ -358,7 +366,19 @@ async function loadScenario(key) {
       button.style.setProperty('--rider', color(selected)); button.addEventListener('click', () => chooseRider(selected));
       $('riders').replaceChildren(button); $('source-count').textContent = '1 motocykl';
       $('scrub').max = String(replay.duration); setTime(0); chooseRider(selected); fit(); $('load-state').hidden = true;
-      jumpBend(0); return;
+      jumpBend(0);
+      if(zigzag){
+        const audit=await(zigzagDataPromise??=loadZigzag());if(generation!==loadGeneration)return;
+        zigzagPanel=createZigzagPanel($('zigzag-analysis'),audit,{selected:candidate?'candidate':'baseline',windowId:zigzagWindow,
+          onSeek:t=>{setPlaying(false);setTime(t);},onWindow:id=>{zigzagWindow=id;},
+          onCompare:t=>{const other=candidate?'zigzag-baseline':'zigzag-candidate';$('scenario').value=other;
+            const url=new URL(location.href);url.searchParams.set('case',other);url.searchParams.set('t',String(t));history.replaceState(null,'',url);loadScenario(other,t);}});
+        const requestedTime=Number(new URL(location.href).searchParams.get('t')??5.44);
+        setTime(keepTime??(Number.isFinite(requestedTime)?requestedTime:5.44));closeup();
+        $('recording-mode').textContent=`AUDYT #127 · NATIVE ${candidate?'#126 kandydat':'#124 baseline'} · brak nowego przejazdu · zsynchronizowane wykresy poniżej.`;
+        document.querySelector('.brand p').textContent='Audyt zygzaka · rzeczywisty ruch i telemetria · PARTIAL';
+      }
+      return;
     }
     const base = sources[key];
     const recording = currentRecordings[key];

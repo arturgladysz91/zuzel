@@ -20,7 +20,8 @@ public static class PredictiveRiderModel
 {
     public static PredictiveRiderResult Predict(PredictiveRiderInput input,RiderSpec spec,PreparedCornerPlan disposablePlan,
         TrackStateSnapshot surface,WorldParameters p,float mass,float inertia,double horizon,
-        PredictiveRiderOptions? options=null,float? delayedSteeringCorrection=null,bool reachableOnly=false)
+        PredictiveRiderOptions? options=null,float? delayedSteeringCorrection=null,bool reachableOnly=false,
+        bool diagnosticRequestBias=false)
     {
         options??=new();
         if(!options.Enabled)throw new InvalidOperationException("Predictive research model is OFF by default.");
@@ -65,7 +66,20 @@ public static class PredictiveRiderModel
             var parameters=reachableOnly?p with{EnableReachableTravelDirectionSteering=true}:p;
             var guidance=disposablePlan.Guidance(v,p,time);
             float? steeringOverride=targetSteering is not null&&time<reactionEnd+PreparedCornerPlan.ReviewSeconds-1e-10?targetSteering:null;
-            TwoContactForces Query(float dt){var f=TwoContactBikeDynamics.Forces(v,spec,frame,surface,parameters,time,mass,wheel,steering,dt,guidance,steeringOverride,inertia:inertia);
+            TwoContactForces Query(float dt){
+                var appliedOverride=steeringOverride;
+                // Explicit offline actuator comparison only. The default #126 rollout is unchanged.
+                // Re-evaluate #117 on this accepted predicted state; never hold its old endpoint.
+                if(diagnosticRequestBias&&appliedOverride is not null){
+                    var original=TwoContactBikeDynamics.Forces(v,spec,frame,surface,parameters,time,mass,
+                        new(wheel.AngularVelocityRadPerSecond*wheel.Parameters.WheelRadiusMeters,wheel.Parameters),
+                        new(steering.SteeringRadians),dt,guidance,inertia:inertia);
+                    queries+=1+(original.TravelSteering?.ContactQueries??0);forces++;
+                    var geometry=p.TwoContactBike??TwoContactBikeParameters.Default;
+                    appliedOverride=Math.Clamp(original.SteeringRequest+delayedSteeringCorrection!.Value,
+                        -geometry.MaximumSteeringRadians,geometry.MaximumSteeringRadians);
+                }
+                var f=TwoContactBikeDynamics.Forces(v,spec,frame,surface,parameters,time,mass,wheel,steering,dt,guidance,appliedOverride,inertia:inertia);
                 queries+=1+(f.TravelSteering?.ContactQueries??0);forces++;return f;}
             // Same held-force curvature-event estimate as WorldRunner, but no native step or state mutation there.
             if(frame.DistanceToCurvatureChange(v.Road)<=(v.Speed+5)*duration+.001){
