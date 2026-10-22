@@ -20,6 +20,12 @@ The default-OFF rider rule executes the proven physical prefix and restores gas
 after slip clears. Speed falls from74.05 to44.58km/h through the bend; fast
 cornering is not certified. Engine, tyres, geometry and steering laws are unchanged.
 
+[Reachable Steering / Line Tracking (#120)](docs/experiments/reachable-steering-line-tracking.md)
+replays the complete successful #119 capture. Entry demand exceeds even total
+contact capacity before the steering-rate limiter activates. A single default-OFF
+reachable-angle search trial barely changes peak error and fails later recovery;
+keep #117 and address feasible preparation before increasing throttle.
+
 [Controlled Slip / Travel-Direction Steering (#117)](docs/experiments/controlled-slip-travel-direction.md) adds a
 default-OFF local contact-response controller distinguishing body yaw from velocity
 direction. Short feasible arcs and an explicit coast recovery pass; Egg Mild INNER

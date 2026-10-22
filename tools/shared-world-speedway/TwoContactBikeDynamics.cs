@@ -70,6 +70,7 @@ public static class TwoContactBikeDynamics
     {
         if(!p.EnableTwoContactBikeDynamics||!p.EnableSlipCoupledDynamics||!p.EnableRearWheelDynamics||p.EnableCoupledSlipInverse||p.EnableFullContactYawFeedForward
             ||p.EnableTravelDirectionSteering&&(!p.EnablePhysicalSteeringControl||p.EnableDynamicAxleLoad)
+            ||p.EnableReachableTravelDirectionSteering&&!p.EnableTravelDirectionSteering
             ||(p.Enable500CcEngine||p.EnableLoadBasedTyreGrip)&&(p.EnableDynamicAxleLoad||p.ExperimentalDrive is not null)
             ||!float.IsFinite(seconds)||seconds is <0 or >.020001f||!float.IsFinite(mass)||mass<=0||!float.IsFinite(v.Speed)||!float.IsFinite(v.Heading)
             ||!float.IsFinite(v.AngularVelocity)||steeringOverride is { } input&&!float.IsFinite(input))throw new ArgumentException("Finite isolated two-contact variant with original rear wheel required.");
@@ -106,11 +107,13 @@ public static class TwoContactBikeDynamics
             if(inertia is not { } moment||!float.IsFinite(moment)||moment<=0)throw new ArgumentException("Physical steering requires actual body inertia.");
             // Pure local contact queries: separate uncommitted wheel/steering wrappers,
             // identical accepted rigid-body state, original tyre/engine equations.
-            var original=p with{EnablePhysicalSteeringControl=false,EnableTravelDirectionSteering=false};
+            var original=p with{EnablePhysicalSteeringControl=false,EnableTravelDirectionSteering=false,EnableReachableTravelDirectionSteering=false};
             TwoContactForces Response(float delta)=>Forces(v,spec,frame,surface,original,time,mass,
                 new RearWheelState(wheel.AngularVelocityRadPerSecond*wheel.Parameters.WheelRadiusMeters,wheel.Parameters),new(delta){AxleLoad=load},seconds,path,delta);
             if(p.EnableTravelDirectionSteering){
-                travel=TravelDirectionSteering.Decide(v,(float)demand,mass,moment,p.SlipYawResponseSeconds,geometry,state.SteeringRadians,seconds,Response);
+                travel=p.EnableReachableTravelDirectionSteering
+                    ?ReachableTravelDirectionSteering.Decide(v,(float)demand,mass,moment,p.SlipYawResponseSeconds,geometry,state.SteeringRadians,seconds,Response)
+                    :TravelDirectionSteering.Decide(v,(float)demand,mass,moment,p.SlipYawResponseSeconds,geometry,state.SteeringRadians,seconds,Response);
                 requested=travel.AngleRequestRadians;
             }else{
                 control=PhysicalSteeringControl.Decide(v,(float)demand,mass,moment,p.SlipYawResponseSeconds,geometry,state.SteeringRadians,seconds,Response);

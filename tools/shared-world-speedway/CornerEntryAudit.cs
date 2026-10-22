@@ -46,9 +46,9 @@ public static class CornerEntryAudit
         if(stage is not ("partial" or "wide" or "combined"))throw new ArgumentException("freeze, approach, partial, wide, combined");
         var c=Execute(stage,offset,drive);TwoContactBikeAudit.Export(dir,stage,c);Export(dir,stage,c);
     }
-    public static TwoContactBikeAudit.Capture Execute(string name,float offset,float drive,bool ai=false,Action<CornerEntryDecision>? observe=null)
+    public static TwoContactBikeAudit.Capture Execute(string name,float offset,float drive,bool ai=false,Action<CornerEntryDecision>? observe=null,bool reachableSteering=false)
     {
-        var spec=Rider();var frame=RacingLineRootCauseAudit.Frame();var p=Parameters() with{EnableFeasibleCornerEntry=ai};
+        var spec=Rider();var frame=RacingLineRootCauseAudit.Frame();var p=Parameters() with{EnableFeasibleCornerEntry=ai,EnableReachableTravelDirectionSteering=reachableSteering};
         var ticks=new List<TwoContactBikeAudit.Tick>();TwoContactForces forces=default;RearWheelStep wheel=default;RiderView before=default;
         var reaction=RiderController.ReactionSeconds(spec);string? stop=null;double previous=0;
         using var world=new WorldRunner(new[]{spec},parameters:p,trackShape:RacingLineRootCauseAudit.Variant(),
