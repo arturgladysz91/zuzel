@@ -1,0 +1,2486 @@
+{
+  "BaseHead": "d8d7e959eab00d0b41236aa6292ab04f3c15f3fa",
+  "NewWorlds": 0,
+  "NativeSteps": 0,
+  "MaximumNativeReplayError": 0,
+  "Records": [
+    {
+      "Time": 1.4000000000000001,
+      "Dt": 0.009999999776482582,
+      "Drive": 0,
+      "Before": {
+        "Id": 1,
+        "Position": {
+          "X": 31.159634,
+          "Y": -1.6644821
+        },
+        "Velocity": {
+          "X": 19.153778,
+          "Y": -1.4979594
+        },
+        "Heading": -0.090270944,
+        "AngularVelocity": -0.00655876,
+        "Road": {
+          "Segment": 0,
+          "Progress": 0.8902752467564174,
+          "ReferenceMeters": 31.15963363647461,
+          "OffsetMeters": 1.6644821166992188,
+          "Heading": 0,
+          "RadiusMeters": 0,
+          "CornerProgress": 0,
+          "Tangent": {
+            "X": 1,
+            "Y": 0
+          },
+          "Outward": {
+            "X": 0,
+            "Y": -1
+          },
+          "IsTurn": false
+        },
+        "TotalReferenceMeters": 31.15963363647461,
+        "DistanceMeters": 0,
+        "Activity": 0,
+        "Drive": 0,
+        "TargetOffsetMeters": 2.2195563,
+        "Impairment": 0,
+        "Context": 2,
+        "Speed": 19.212265,
+        "ForwardSpeed": 19.210829,
+        "SideSpeed": 0.23482227,
+        "SlideRadians": -0.012222815
+      },
+      "Original": {
+        "SteeringRequest": 0.0052197953,
+        "SteeringBefore": 0.0047723847,
+        "SteeringUsed": 0.00499609,
+        "SteeringAfter": 0.0052197953,
+        "FrontForce": {
+          "X": -4.1760664,
+          "Y": -48.853073
+        },
+        "RearForce": {
+          "X": -6.38739,
+          "Y": -101.21411
+        },
+        "FrontLateral": -49.03124,
+        "RearLateral": -101.377815,
+        "RearLongitudinal": 2.762907,
+        "NetTorque": 26.505287,
+        "Demand": 4.1861033,
+        "Motion": {
+          "Psi": -0.09027094393968582,
+          "Chi": -0.07804812825189233,
+          "Beta": -0.012222815687793487,
+          "PsiDot": -0.006558760069310665,
+          "ChiDot": -0.05326598510146141,
+          "BetaDot": 0.046707225032150745,
+          "DirectionDefined": true
+        },
+        "ProjectedBetaRate": 0.09698187932372093,
+        "LocalScore": 0.08292944200154909,
+        "RateLimited": false,
+        "FrontUtilization": 0.057351461921211246,
+        "RearUtilization": 0.10167847392214807
+      },
+      "Reachable": {
+        "SteeringRequest": 0.0056314142,
+        "SteeringBefore": 0.0047723847,
+        "SteeringUsed": 0.0052018994,
+        "SteeringAfter": 0.0056314142,
+        "FrontForce": {
+          "X": -4.0436983,
+          "Y": -47.41959
+        },
+        "RearForce": {
+          "X": -6.3874083,
+          "Y": -101.21411
+        },
+        "FrontLateral": -47.59169,
+        "RearLateral": -101.377815,
+        "RearLongitudinal": 2.7628891,
+        "NetTorque": 27.512993,
+        "Demand": 4.1861033,
+        "Motion": {
+          "Psi": -0.09027094393968582,
+          "Chi": -0.07804812825189233,
+          "Beta": -0.012222815687793487,
+          "PsiDot": -0.006558760069310665,
+          "ChiDot": -0.05275630205869675,
+          "BetaDot": 0.04619754198938608,
+          "DirectionDefined": true
+        },
+        "ProjectedBetaRate": 0.0983835943043232,
+        "LocalScore": 0.08292714430281319,
+        "RateLimited": false,
+        "FrontUtilization": 0.05566763314227289,
+        "RearUtilization": 0.10167847343373539
+      },
+      "NativeChiRate": -0.053287236634638774,
+      "NativeYawRate": -0.003416836338121511,
+      "NativeBetaRate": 0.0498703692079418,
+      "NormalError": -0.5502936119769349,
+      "LocalScoreReduction": 2.2976987359007994E-06
+    },
+    {
+      "Time": 1.6,
+      "Dt": 0.0013589999871328473,
+      "Drive": 0,
+      "Before": {
+        "Id": 1,
+        "Position": {
+          "X": 34.974186,
+          "Y": -1.9740185
+        },
+        "Velocity": {
+          "X": 18.998474,
+          "Y": -1.5430748
+        },
+        "Heading": -0.08100218,
+        "AngularVelocity": 0.098999366,
+        "Road": {
+          "Segment": 0,
+          "Progress": 0.999262455531529,
+          "ReferenceMeters": 34.974185943603516,
+          "OffsetMeters": 1.9740184545516968,
+          "Heading": 0,
+          "RadiusMeters": 0,
+          "CornerProgress": 0,
+          "Tangent": {
+            "X": 1,
+            "Y": 0
+          },
+          "Outward": {
+            "X": 0,
+            "Y": -1
+          },
+          "IsTurn": false
+        },
+        "TotalReferenceMeters": 34.974185943603516,
+        "DistanceMeters": 0,
+        "Activity": 0,
+        "Drive": 0,
+        "TargetOffsetMeters": 2.7695422,
+        "Impairment": 0,
+        "Context": 2,
+        "Speed": 19.061035,
+        "ForwardSpeed": 19.061035,
+        "SideSpeed": -0.00077962875,
+        "SlideRadians": 4.090789E-05
+      },
+      "Original": {
+        "SteeringRequest": 0.012676654,
+        "SteeringBefore": 0.01237838,
+        "SteeringUsed": 0.012527517,
+        "SteeringAfter": 0.012676654,
+        "FrontForce": {
+          "X": 4.2832217,
+          "Y": 62.45412
+        },
+        "RearForce": {
+          "X": 4.77207,
+          "Y": 25.570915
+        },
+        "FrontLateral": 62.600822,
+        "RearLateral": 25.873196,
+        "RearLongitudinal": 2.6873872,
+        "NetTorque": 28.29316,
+        "Demand": 6.945934,
+        "Motion": {
+          "Psi": -0.08100218325853348,
+          "Chi": -0.08104309114668985,
+          "Beta": 4.090788815637458E-05,
+          "PsiDot": 0.09899936616420746,
+          "ChiDot": 0.03157390281558037,
+          "BetaDot": 0.06742546334862709,
+          "DirectionDefined": true
+        },
+        "ProjectedBetaRate": 0.1210913248360157,
+        "LocalScore": 0.12543955311946722,
+        "RateLimited": false,
+        "FrontUtilization": 0.07322369963816162,
+        "RearUtilization": 0.026079849374658664
+      },
+      "Reachable": {
+        "SteeringRequest": 0.013010038,
+        "SteeringBefore": 0.01237838,
+        "SteeringUsed": 0.012694209,
+        "SteeringAfter": 0.013010038,
+        "FrontForce": {
+          "X": 4.3521113,
+          "Y": 63.613953
+        },
+        "RearForce": {
+          "X": 4.7720966,
+          "Y": 25.570911
+        },
+        "FrontLateral": 63.762653,
+        "RearLateral": 25.873196,
+        "RearLongitudinal": 2.687414,
+        "NetTorque": 29.106281,
+        "Demand": 6.945934,
+        "Motion": {
+          "Psi": -0.08100218325853348,
+          "Chi": -0.08104309114668985,
+          "Beta": 4.090788815637458E-05,
+          "PsiDot": 0.09899936616420746,
+          "ChiDot": 0.031988468021154404,
+          "BetaDot": 0.06701089814305305,
+          "DirectionDefined": true
+        },
+        "ProjectedBetaRate": 0.12221905961632729,
+        "LocalScore": 0.1254381543007175,
+        "RateLimited": false,
+        "FrontUtilization": 0.07458268429168355,
+        "RearUtilization": 0.026079852140550232
+      },
+      "NativeChiRate": 0.03156959333061727,
+      "NativeYawRate": 0.09945072355249882,
+      "NativeBetaRate": 0.06788113018976555,
+      "NormalError": -0.7860831598838567,
+      "LocalScoreReduction": 1.3988187497204763E-06
+    },
+    {
+      "Time": 1.8,
+      "Dt": 0.009999999776482582,
+      "Drive": 0,
+      "Before": {
+        "Id": 1,
+        "Position": {
+          "X": 38.760303,
+          "Y": -2.257648
+        },
+        "Velocity": {
+          "X": 18.866821,
+          "Y": -1.2336228
+        },
+        "Heading": -0.05028597,
+        "AngularVelocity": 0.2097819,
+        "Road": {
+          "Segment": 1,
+          "Progress": 0.11222543742223641,
+          "ReferenceMeters": 38.64318840214747,
+          "OffsetMeters": 2.307684778556554,
+          "Heading": 0.051080323504409934,
+          "RadiusMeters": 29.58039342659438,
+          "CornerProgress": 0.03740847914074547,
+          "Tangent": {
+            "X": 0.9986957,
+            "Y": 0.051058114
+          },
+          "Outward": {
+            "X": 0.051058114,
+            "Y": -0.9986957
+          },
+          "IsTurn": true
+        },
+        "TotalReferenceMeters": 38.64318840214747,
+        "DistanceMeters": 0,
+        "Activity": 0,
+        "Drive": 0,
+        "TargetOffsetMeters": 3.3731272,
+        "Impairment": 0,
+        "Context": 2,
+        "Speed": 18.907108,
+        "ForwardSpeed": 18.90498,
+        "SideSpeed": -0.2837268,
+        "SlideRadians": 0.015006919
+      },
+      "Original": {
+        "SteeringRequest": 0.021923156,
+        "SteeringBefore": 0.021326609,
+        "SteeringUsed": 0.021624882,
+        "SteeringAfter": 0.021923156,
+        "FrontForce": {
+          "X": 5.65566,
+          "Y": 197.27484
+        },
+        "RearForce": {
+          "X": 11.945368,
+          "Y": 174.44383
+        },
+        "FrontLateral": 197.3559,
+        "RearLateral": 174.82376,
+        "RearLongitudinal": 3.1618876,
+        "NetTorque": 33.222412,
+        "Demand": 9.70521,
+        "Motion": {
+          "Psi": -0.05028596892952919,
+          "Chi": -0.0652928878585541,
+          "Beta": 0.015006918929024907,
+          "PsiDot": 0.20978190004825592,
+          "ChiDot": 0.13387148082256317,
+          "BetaDot": 0.07591041922569275,
+          "DirectionDefined": true
+        },
+        "ProjectedBetaRate": 0.13892598450183868,
+        "LocalScore": 0.16327407577409447,
+        "RateLimited": false,
+        "FrontUtilization": 0.23084567079088428,
+        "RearUtilization": 0.1753058230191333
+      },
+      "Reachable": {
+        "SteeringRequest": 0.022461753,
+        "SteeringBefore": 0.021326609,
+        "SteeringUsed": 0.021894181,
+        "SteeringAfter": 0.022461753,
+        "FrontForce": {
+          "X": 5.6520076,
+          "Y": 199.01842
+        },
+        "RearForce": {
+          "X": 11.945991,
+          "Y": 174.4438
+        },
+        "FrontLateral": 199.09866,
+        "RearLateral": 174.82376,
+        "RearLongitudinal": 3.1625106,
+        "NetTorque": 34.441254,
+        "Demand": 9.70521,
+        "Motion": {
+          "Psi": -0.05028596892952919,
+          "Chi": -0.0652928878585541,
+          "Beta": 0.015006918929024907,
+          "PsiDot": 0.20978190004825592,
+          "ChiDot": 0.13449740409851074,
+          "BetaDot": 0.07528449594974518,
+          "DirectionDefined": true
+        },
+        "ProjectedBetaRate": 0.1406119167804718,
+        "LocalScore": 0.16327075062938068,
+        "RateLimited": false,
+        "FrontUtilization": 0.23288417231228817,
+        "RearUtilization": 0.17530583431506594
+      },
+      "NativeChiRate": 0.13392735839275208,
+      "NativeYawRate": 0.21372251690303945,
+      "NativeBetaRate": 0.07979506805081073,
+      "NormalError": -1.0530915838271484,
+      "LocalScoreReduction": 3.3251447137949697E-06
+    },
+    {
+      "Time": 2,
+      "Dt": 0.009999999776482582,
+      "Drive": 0,
+      "Before": {
+        "Id": 1,
+        "Position": {
+          "X": 42.52016,
+          "Y": -2.4392803
+        },
+        "Velocity": {
+          "X": 18.727898,
+          "Y": -0.52327603
+        },
+        "Heading": 0.004952184,
+        "AngularVelocity": 0.34183335,
+        "Road": {
+          "Segment": 1,
+          "Progress": 0.2157146096957367,
+          "ReferenceMeters": 42.0027703368217,
+          "OffsetMeters": 2.933621451111857,
+          "Heading": 0.18658188652561253,
+          "RadiusMeters": 27.631473839730177,
+          "CornerProgress": 0.0719048698985789,
+          "Tangent": {
+            "X": 0.982644,
+            "Y": 0.1855012
+          },
+          "Outward": {
+            "X": 0.1855012,
+            "Y": -0.982644
+          },
+          "IsTurn": true
+        },
+        "TotalReferenceMeters": 42.0027703368217,
+        "DistanceMeters": 0,
+        "Activity": 0,
+        "Drive": 0,
+        "TargetOffsetMeters": 3.971736,
+        "Impairment": 0,
+        "Context": 2,
+        "Speed": 18.735207,
+        "ForwardSpeed": 18.725075,
+        "SideSpeed": -0.6160132,
+        "SlideRadians": 0.03288591
+      },
+      "Original": {
+        "SteeringRequest": 0.032810155,
+        "SteeringBefore": 0.032213606,
+        "SteeringUsed": 0.032511882,
+        "SteeringAfter": 0.032810155,
+        "FrontForce": {
+          "X": -12.716945,
+          "Y": 339.28494
+        },
+        "RearForce": {
+          "X": 2.752213,
+          "Y": 338.0535
+        },
+        "FrontLateral": 339.5232,
+        "RearLateral": 338.03574,
+        "RearLongitudinal": 4.4262757,
+        "NetTorque": 34.720383,
+        "Demand": 12.778942,
+        "Motion": {
+          "Psi": 0.004952183924615383,
+          "Chi": -0.027933723849725405,
+          "Beta": 0.03288590777434079,
+          "PsiDot": 0.34183335304260254,
+          "ChiDot": 0.24574342370033264,
+          "BetaDot": 0.0960899293422699,
+          "DirectionDefined": true
+        },
+        "ProjectedBetaRate": 0.16194680333137512,
+        "LocalScore": 0.21661785792479726,
+        "RateLimited": false,
+        "FrontUtilization": 0.397137663025073,
+        "RearUtilization": 0.33894146853541646
+      },
+      "Reachable": {
+        "SteeringRequest": 0.033287395,
+        "SteeringBefore": 0.032213606,
+        "SteeringUsed": 0.032750502,
+        "SteeringAfter": 0.033287395,
+        "FrontForce": {
+          "X": -12.84681,
+          "Y": 340.57846
+        },
+        "RearForce": {
+          "X": 2.753024,
+          "Y": 338.0535
+        },
+        "FrontLateral": 340.82068,
+        "RearLateral": 338.03574,
+        "RearLongitudinal": 4.427087,
+        "NetTorque": 35.626297,
+        "Demand": 12.778942,
+        "Motion": {
+          "Psi": 0.004952183924615383,
+          "Chi": -0.027933723849725405,
+          "Beta": 0.03288590777434079,
+          "PsiDot": 0.34183335304260254,
+          "ChiDot": 0.24621160328388214,
+          "BetaDot": 0.0956217497587204,
+          "DirectionDefined": true
+        },
+        "ProjectedBetaRate": 0.16319693624973297,
+        "LocalScore": 0.21661598066458732,
+        "RateLimited": false,
+        "FrontUtilization": 0.39865532164282574,
+        "RearUtilization": 0.3389414791836526
+      },
+      "NativeChiRate": 0.24586680621517684,
+      "NativeYawRate": 0.34594937069600906,
+      "NativeBetaRate": 0.1000825338084072,
+      "NormalError": -1.0254731088179183,
+      "LocalScoreReduction": 1.8772602099481617E-06
+    },
+    {
+      "Time": 2.1999999999999997,
+      "Dt": 0.009999999776482582,
+      "Drive": 0,
+      "Before": {
+        "Id": 1,
+        "Position": {
+          "X": 46.24628,
+          "Y": -2.4378889
+        },
+        "Velocity": {
+          "X": 18.51712,
+          "Y": 0.5858457
+        },
+        "Heading": 0.08616621,
+        "AngularVelocity": 0.46568286,
+        "Road": {
+          "Segment": 1,
+          "Progress": 0.31365179747922023,
+          "ReferenceMeters": 45.182117505051394,
+          "OffsetMeters": 3.8580474104114924,
+          "Heading": 0.31420065384104845,
+          "RadiusMeters": 29.015513709181775,
+          "CornerProgress": 0.10455059915974008,
+          "Tangent": {
+            "X": 0.9510437,
+            "Y": 0.30905637
+          },
+          "Outward": {
+            "X": 0.30905637,
+            "Y": -0.9510437
+          },
+          "IsTurn": true
+        },
+        "TotalReferenceMeters": 45.182117505051394,
+        "DistanceMeters": 0,
+        "Activity": 0,
+        "Drive": 0,
+        "TargetOffsetMeters": 4.561368,
+        "Impairment": 0,
+        "Context": 2,
+        "Speed": 18.526386,
+        "ForwardSpeed": 18.498838,
+        "SideSpeed": -1.0099041,
+        "SlideRadians": 0.054538704
+      },
+      "Original": {
+        "SteeringRequest": 0.042653225,
+        "SteeringBefore": 0.042205814,
+        "SteeringUsed": 0.04242952,
+        "SteeringAfter": 0.042653225,
+        "FrontForce": {
+          "X": -59.95979,
+          "Y": 463.69275
+        },
+        "RearForce": {
+          "X": -36.093296,
+          "Y": 494.18143
+        },
+        "FrontLateral": 467.55334,
+        "RearLateral": 495.4542,
+        "RearLongitudinal": 6.5696774,
+        "NetTorque": 29.720032,
+        "Demand": 14.906727,
+        "Motion": {
+          "Psi": 0.08616621047258377,
+          "Chi": 0.031627507088527386,
+          "Beta": 0.054538703384056385,
+          "PsiDot": 0.46568286418914795,
+          "ChiDot": 0.3526621460914612,
+          "BetaDot": 0.11302071809768677,
+          "DirectionDefined": true
+        },
+        "ProjectedBetaRate": 0.16939306259155273,
+        "LocalScore": 0.23296117544568062,
+        "RateLimited": false,
+        "FrontUtilization": 0.5468935445235504,
+        "RearUtilization": 0.49678279752126936
+      },
+      "Reachable": {
+        "SteeringRequest": 0.04309553,
+        "SteeringBefore": 0.042205814,
+        "SteeringUsed": 0.04265067,
+        "SteeringAfter": 0.04309553,
+        "FrontForce": {
+          "X": -60.17994,
+          "Y": 464.58743
+        },
+        "RearForce": {
+          "X": -36.092426,
+          "Y": 494.1815
+        },
+        "FrontLateral": 468.46887,
+        "RearLateral": 495.4542,
+        "RearLongitudinal": 6.57055,
+        "NetTorque": 30.357239,
+        "Demand": 14.906727,
+        "Motion": {
+          "Psi": 0.08616621047258377,
+          "Chi": 0.031627507088527386,
+          "Beta": 0.054538703384056385,
+          "PsiDot": 0.46568286418914795,
+          "ChiDot": 0.35299307107925415,
+          "BetaDot": 0.1126897931098938,
+          "DirectionDefined": true
+        },
+        "ProjectedBetaRate": 0.17027074098587036,
+        "LocalScore": 0.23296027131862118,
+        "RateLimited": false,
+        "FrontUtilization": 0.5479644298028001,
+        "RearUtilization": 0.4967828091217835
+      },
+      "NativeChiRate": 0.35288571971800164,
+      "NativeYawRate": 0.46921820497255484,
+      "NativeBetaRate": 0.11633225045350754,
+      "NormalError": -0.6946523432718812,
+      "LocalScoreReduction": 9.041270594423167E-07
+    },
+    {
+      "Time": 2.4,
+      "Dt": 0.009999999776482582,
+      "Drive": 0,
+      "Before": {
+        "Id": 1,
+        "Position": {
+          "X": 49.915905,
+          "Y": -2.1797314
+        },
+        "Velocity": {
+          "X": 18.151062,
+          "Y": 2.0235074
+        },
+        "Heading": 0.18990488,
+        "AngularVelocity": 0.56591547,
+        "Road": {
+          "Segment": 1,
+          "Progress": 0.40589323655453485,
+          "ReferenceMeters": 48.176562871053534,
+          "OffsetMeters": 4.95768363201084,
+          "Heading": 0.43191922279981404,
+          "RadiusMeters": 30.701760091474423,
+          "CornerProgress": 0.13529774551817828,
+          "Tangent": {
+            "X": 0.908164,
+            "Y": 0.41861454
+          },
+          "Outward": {
+            "X": 0.41861454,
+            "Y": -0.908164
+          },
+          "IsTurn": true
+        },
+        "TotalReferenceMeters": 48.176562871053534,
+        "DistanceMeters": 0,
+        "Activity": 0,
+        "Drive": 0,
+        "TargetOffsetMeters": 5.12195,
+        "Impairment": 0,
+        "Context": 2,
+        "Speed": 18.263506,
+        "ForwardSpeed": 18.206713,
+        "SideSpeed": -1.4391652,
+        "SlideRadians": 0.07888182
+      },
+      "Original": {
+        "SteeringRequest": 0.05085581,
+        "SteeringBefore": 0.050408397,
+        "SteeringUsed": 0.050632104,
+        "SteeringAfter": 0.05085581,
+        "FrontForce": {
+          "X": -135.28802,
+          "Y": 551.5523
+        },
+        "RearForce": {
+          "X": -108.592186,
+          "Y": 614.5096
+        },
+        "FrontLateral": 567.9021,
+        "RearLateral": 623.9605,
+        "RearLongitudinal": 9.358273,
+        "NetTorque": 22.645416,
+        "Demand": 16.175863,
+        "Motion": {
+          "Psi": 0.18990488350391388,
+          "Chi": 0.11102306392330877,
+          "Beta": 0.07888181958060511,
+          "PsiDot": 0.5659154653549194,
+          "ChiDot": 0.4417208135128021,
+          "BetaDot": 0.12419465184211731,
+          "DirectionDefined": true
+        },
+        "ProjectedBetaRate": 0.16714796423912048,
+        "LocalScore": 0.2250499152368466,
+        "RateLimited": false,
+        "FrontUtilization": 0.6642707098574474,
+        "RearUtilization": 0.6256490785106761
+      },
+      "Reachable": {
+        "SteeringRequest": 0.051252086,
+        "SteeringBefore": 0.050408397,
+        "SteeringUsed": 0.05083024,
+        "SteeringAfter": 0.051252086,
+        "FrontForce": {
+          "X": -135.53716,
+          "Y": 552.0952
+        },
+        "RearForce": {
+          "X": -108.59141,
+          "Y": 614.5097
+        },
+        "FrontLateral": 568.4887,
+        "RearLateral": 623.9605,
+        "RearLongitudinal": 9.359068,
+        "NetTorque": 23.051575,
+        "Demand": 16.175863,
+        "Motion": {
+          "Psi": 0.18990488350391388,
+          "Chi": 0.11102306392330877,
+          "Beta": 0.07888181958060511,
+          "PsiDot": 0.5659154653549194,
+          "ChiDot": 0.44193214178085327,
+          "BetaDot": 0.12398332357406616,
+          "DirectionDefined": true
+        },
+        "ProjectedBetaRate": 0.16770702600479126,
+        "LocalScore": 0.22504951669075268,
+        "RateLimited": false,
+        "FrontUtilization": 0.6649568617520387,
+        "RearUtilization": 0.6256490904697953
+      },
+      "NativeChiRate": 0.4420801428518363,
+      "NativeYawRate": 0.5686327942155182,
+      "NativeBetaRate": 0.12655258461578006,
+      "NormalError": -0.16231633586377256,
+      "LocalScoreReduction": 3.985460939048835E-07
+    },
+    {
+      "Time": 2.5999999999999996,
+      "Dt": 0.009999999776482582,
+      "Drive": 0,
+      "Before": {
+        "Id": 1,
+        "Position": {
+          "X": 53.49017,
+          "Y": -1.6103889
+        },
+        "Velocity": {
+          "X": 17.55616,
+          "Y": 3.6742737
+        },
+        "Heading": 0.31093636,
+        "AngularVelocity": 0.63905513,
+        "Road": {
+          "Segment": 1,
+          "Progress": 0.4929768793168121,
+          "ReferenceMeters": 51.00357005067019,
+          "OffsetMeters": 6.126604456457143,
+          "Heading": 0.5403346149898732,
+          "RadiusMeters": 32.55821008756179,
+          "CornerProgress": 0.16432562643893736,
+          "Tangent": {
+            "X": 0.8575366,
+            "Y": 0.51442295
+          },
+          "Outward": {
+            "X": 0.51442295,
+            "Y": -0.8575366
+          },
+          "IsTurn": true
+        },
+        "TotalReferenceMeters": 51.00357005067019,
+        "DistanceMeters": 0,
+        "Activity": 0,
+        "Drive": 0,
+        "TargetOffsetMeters": 5.6427603,
+        "Impairment": 0,
+        "Context": 2,
+        "Speed": 17.936527,
+        "ForwardSpeed": 17.838444,
+        "SideSpeed": -1.8732281,
+        "SlideRadians": 0.104627274
+      },
+      "Original": {
+        "SteeringRequest": 0.056672174,
+        "SteeringBefore": 0.056523036,
+        "SteeringUsed": 0.056597605,
+        "SteeringAfter": 0.056672174,
+        "FrontForce": {
+          "X": -229.62877,
+          "Y": 596.3937
+        },
+        "RearForce": {
+          "X": -207.91006,
+          "Y": 687.52374
+        },
+        "FrontLateral": 639.07336,
+        "RearLateral": 718.1654,
+        "RearLongitudinal": 12.407794,
+        "NetTorque": 15.735046,
+        "Demand": 16.718071,
+        "Motion": {
+          "Psi": 0.3109363615512848,
+          "Chi": 0.2063090848367749,
+          "Beta": 0.10462727671450989,
+          "PsiDot": 0.6390551328659058,
+          "ChiDot": 0.5106137990951538,
+          "BetaDot": 0.12844133377075195,
+          "DirectionDefined": true
+        },
+        "ProjectedBetaRate": 0.15828722715377808,
+        "LocalScore": 0.20267888349698993,
+        "RateLimited": false,
+        "FrontUtilization": 0.7475191896957659,
+        "RearUtilization": 0.720135387954272
+      },
+      "Reachable": {
+        "SteeringRequest": 0.05689119,
+        "SteeringBefore": 0.056523036,
+        "SteeringUsed": 0.056707114,
+        "SteeringAfter": 0.05689119,
+        "FrontForce": {
+          "X": -229.77638,
+          "Y": 596.5822
+        },
+        "RearForce": {
+          "X": -207.90967,
+          "Y": 687.5239
+        },
+        "FrontLateral": 639.30237,
+        "RearLateral": 718.1654,
+        "RearLongitudinal": 12.408213,
+        "NetTorque": 15.892273,
+        "Demand": 16.718071,
+        "Motion": {
+          "Psi": 0.3109363615512848,
+          "Chi": 0.2063090848367749,
+          "Beta": 0.10462727671450989,
+          "PsiDot": 0.6390551328659058,
+          "ChiDot": 0.5106952786445618,
+          "BetaDot": 0.128359854221344,
+          "DirectionDefined": true
+        },
+        "ProjectedBetaRate": 0.1585039496421814,
+        "LocalScore": 0.20267886603514995,
+        "RateLimited": false,
+        "FrontUtilization": 0.7477870538002823,
+        "RearUtilization": 0.7201353952053418
+      },
+      "NativeChiRate": 0.511135843564768,
+      "NativeYawRate": 0.6408989572725957,
+      "NativeBetaRate": 0.1297630398667538,
+      "NormalError": 0.47853029626089794,
+      "LocalScoreReduction": 1.7461839973975657E-08
+    },
+    {
+      "Time": 2.8,
+      "Dt": 0.009999999776482582,
+      "Drive": 0,
+      "Before": {
+        "Id": 1,
+        "Position": {
+          "X": 56.918167,
+          "Y": -0.69983906
+        },
+        "Velocity": {
+          "X": 16.686974,
+          "Y": 5.414579
+        },
+        "Heading": 0.4439882,
+        "AngularVelocity": 0.6872002,
+        "Road": {
+          "Segment": 1,
+          "Progress": 0.5756735143480433,
+          "ReferenceMeters": 53.68816124997977,
+          "OffsetMeters": 7.280664802006738,
+          "Heading": 0.6404884509793279,
+          "RadiusMeters": 34.48016275299564,
+          "CornerProgress": 0.19189117144934775,
+          "Tangent": {
+            "X": 0.80180395,
+            "Y": 0.59758717
+          },
+          "Outward": {
+            "X": 0.59758717,
+            "Y": -0.80180395
+          },
+          "IsTurn": true
+        },
+        "TotalReferenceMeters": 53.68816124997977,
+        "DistanceMeters": 0,
+        "Activity": 0,
+        "Drive": 0,
+        "TargetOffsetMeters": 6.1188865,
+        "Impairment": 0,
+        "Context": 2,
+        "Speed": 17.543453,
+        "ForwardSpeed": 17.394903,
+        "SideSpeed": -2.2781835,
+        "SlideRadians": 0.13022725
+      },
+      "Original": {
+        "SteeringRequest": 0.05995318,
+        "SteeringBefore": 0.059804045,
+        "SteeringUsed": 0.05987861,
+        "SteeringAfter": 0.05995318,
+        "FrontForce": {
+          "X": -331.35474,
+          "Y": 601.0055
+        },
+        "RearForce": {
+          "X": -322.5043,
+          "Y": 713.69336
+        },
+        "FrontLateral": 686.297,
+        "RearLateral": 783.0277,
+        "RearLongitudinal": 15.326867,
+        "NetTorque": 9.730682,
+        "Demand": 16.649393,
+        "Motion": {
+          "Psi": 0.44398820400238037,
+          "Chi": 0.31376094818125366,
+          "Beta": 0.1302272558211267,
+          "PsiDot": 0.6872001886367798,
+          "ChiDot": 0.5631577372550964,
+          "BetaDot": 0.12404245138168335,
+          "DirectionDefined": true
+        },
+        "ProjectedBetaRate": 0.1424993872642517,
+        "LocalScore": 0.169209168704203,
+        "RateLimited": false,
+        "FrontUtilization": 0.8027563091076925,
+        "RearUtilization": 0.7852088323191568
+      },
+      "Reachable": {
+        "SteeringRequest": 0.059942104,
+        "SteeringBefore": 0.059804045,
+        "SteeringUsed": 0.059873074,
+        "SteeringAfter": 0.059942104,
+        "FrontForce": {
+          "X": -331.34744,
+          "Y": 601
+        },
+        "RearForce": {
+          "X": -322.5043,
+          "Y": 713.69336
+        },
+        "FrontLateral": 686.2887,
+        "RearLateral": 783.0277,
+        "RearLongitudinal": 15.326848,
+        "NetTorque": 9.725006,
+        "Demand": 16.649393,
+        "Motion": {
+          "Psi": 0.44398820400238037,
+          "Chi": 0.31376094818125366,
+          "Beta": 0.1302272558211267,
+          "PsiDot": 0.6872001886367798,
+          "ChiDot": 0.5631548762321472,
+          "BetaDot": 0.12404531240463257,
+          "DirectionDefined": true
+        },
+        "ProjectedBetaRate": 0.14249151945114136,
+        "LocalScore": 0.16920913447818364,
+        "RateLimited": false,
+        "FrontUtilization": 0.8027465997478272,
+        "RearUtilization": 0.7852088319449189
+      },
+      "NativeChiRate": 0.5638412904740314,
+      "NativeYawRate": 0.6882250462820764,
+      "NativeBetaRate": 0.12438446561361399,
+      "NormalError": 1.1503911862573686,
+      "LocalScoreReduction": 3.4226019351990544E-08
+    },
+    {
+      "Time": 5.3,
+      "Dt": 0.009999999776482582,
+      "Drive": 0.35000002,
+      "Before": {
+        "Id": 1,
+        "Position": {
+          "X": 72.99148,
+          "Y": 29.448978
+        },
+        "Velocity": {
+          "X": -5.4255776,
+          "Y": 11.449033
+        },
+        "Heading": 2.1533377,
+        "AngularVelocity": 1.0069852,
+        "Road": {
+          "Segment": 2,
+          "Progress": 0.45258679003078056,
+          "ReferenceMeters": 82.15550652426504,
+          "OffsetMeters": 8.135890406086755,
+          "Heading": 1.5285254413206115,
+          "RadiusMeters": 44.518354124312125,
+          "CornerProgress": 0.48419559667692685,
+          "Tangent": {
+            "X": 0.0422583,
+            "Y": 0.9991067
+          },
+          "Outward": {
+            "X": 0.9991067,
+            "Y": -0.0422583
+          },
+          "IsTurn": true
+        },
+        "TotalReferenceMeters": 82.15550652426504,
+        "DistanceMeters": 0,
+        "Activity": 0,
+        "Drive": 0.35000002,
+        "TargetOffsetMeters": 8.499372,
+        "Impairment": 0,
+        "Context": 2,
+        "Speed": 12.66954,
+        "ForwardSpeed": 12.545582,
+        "SideSpeed": -1.7679396,
+        "SlideRadians": 0.13999942
+      },
+      "Original": {
+        "SteeringRequest": -0.6108653,
+        "SteeringBefore": 0.04537843,
+        "SteeringUsed": 0.03752445,
+        "SteeringAfter": 0.029670468,
+        "FrontForce": {
+          "X": -489.62576,
+          "Y": -349.59692
+        },
+        "RearForce": {
+          "X": -857.9734,
+          "Y": -88.18054
+        },
+        "FrontLateral": 601.62396,
+        "RearLateral": 764.9778,
+        "RearLongitudinal": 398.3756,
+        "NetTorque": -38.14618,
+        "Demand": -8.779499,
+        "Motion": {
+          "Psi": 2.1533377170562744,
+          "Chi": 2.0133382919723246,
+          "Beta": 0.1399994250839498,
+          "PsiDot": 1.0069851875305176,
+          "ChiDot": 0.7545293569564819,
+          "BetaDot": 0.25245583057403564,
+          "DirectionDefined": true
+        },
+        "ProjectedBetaRate": 0.18010097742080688,
+        "LocalScore": 2.127665148233042,
+        "RateLimited": true,
+        "FrontUtilization": 0.7037149129174619,
+        "RearUtilization": 0.8647298113954548
+      },
+      "Reachable": {
+        "SteeringRequest": 0.029670468,
+        "SteeringBefore": 0.04537843,
+        "SteeringUsed": 0.03752445,
+        "SteeringAfter": 0.029670468,
+        "FrontForce": {
+          "X": -489.62576,
+          "Y": -349.59692
+        },
+        "RearForce": {
+          "X": -857.9734,
+          "Y": -88.18054
+        },
+        "FrontLateral": 601.62396,
+        "RearLateral": 764.9778,
+        "RearLongitudinal": 398.3756,
+        "NetTorque": -38.14618,
+        "Demand": -8.779499,
+        "Motion": {
+          "Psi": 2.1533377170562744,
+          "Chi": 2.0133382919723246,
+          "Beta": 0.1399994250839498,
+          "PsiDot": 1.0069851875305176,
+          "ChiDot": 0.7545293569564819,
+          "BetaDot": 0.25245583057403564,
+          "DirectionDefined": true
+        },
+        "ProjectedBetaRate": 0.18010097742080688,
+        "LocalScore": 2.127665148233042,
+        "RateLimited": false,
+        "FrontUtilization": 0.7037149129174619,
+        "RearUtilization": 0.8647298113954548
+      },
+      "NativeChiRate": 0.754075317461324,
+      "NativeYawRate": 1.002812407973686,
+      "NativeBetaRate": 0.24873763878802146,
+      "NormalError": -0.3634812474449031,
+      "LocalScoreReduction": 0
+    },
+    {
+      "Time": 5.5,
+      "Dt": 0.009999999776482582,
+      "Drive": 0.50000006,
+      "Before": {
+        "Id": 1,
+        "Position": {
+          "X": 71.75477,
+          "Y": 31.69423
+        },
+        "Velocity": {
+          "X": -6.8231378,
+          "Y": 11.122159
+        },
+        "Heading": 2.2686977,
+        "AngularVelocity": -0.027528666,
+        "Road": {
+          "Segment": 2,
+          "Progress": 0.5094024552011139,
+          "ReferenceMeters": 83.99992056410588,
+          "OffsetMeters": 6.860913101950821,
+          "Heading": 1.579175708270155,
+          "RadiusMeters": 43.28641965929315,
+          "CornerProgress": 0.5031341517337046,
+          "Tangent": {
+            "X": -0.008379283,
+            "Y": 0.9999649
+          },
+          "Outward": {
+            "X": 0.9999649,
+            "Y": 0.008379283
+          },
+          "IsTurn": true
+        },
+        "TotalReferenceMeters": 83.99992056410588,
+        "DistanceMeters": 0,
+        "Activity": 0,
+        "Drive": 0.50000006,
+        "TargetOffsetMeters": 8.5,
+        "Impairment": 0,
+        "Context": 2,
+        "Speed": 13.048281,
+        "ForwardSpeed": 12.90634,
+        "SideSpeed": -1.9193873,
+        "SlideRadians": 0.14763457
+      },
+      "Original": {
+        "SteeringRequest": -0.11349328,
+        "SteeringBefore": -0.11886222,
+        "SteeringUsed": -0.11617775,
+        "SteeringAfter": -0.11349328,
+        "FrontForce": {
+          "X": -183.97842,
+          "Y": -120.99061
+        },
+        "RearForce": {
+          "X": -856.0829,
+          "Y": 83.4426
+        },
+        "FrontLateral": 220.19716,
+        "RearLateral": 602.30304,
+        "RearLongitudinal": 614.0615,
+        "NetTorque": -208.28218,
+        "Demand": -11.498033,
+        "Motion": {
+          "Psi": 2.268697738647461,
+          "Chi": 2.1210631656533283,
+          "Beta": 0.14763457299413263,
+          "PsiDot": -0.027528665959835052,
+          "ChiDot": 0.47243019938468933,
+          "BetaDot": -0.4999588653445244,
+          "DirectionDefined": true
+        },
+        "ProjectedBetaRate": -0.8950240314006805,
+        "LocalScore": 2.6333593776617708,
+        "RateLimited": false,
+        "FrontUtilization": 0.25756291990156693,
+        "RearUtilization": 0.8623705491050901
+      },
+      "Reachable": {
+        "SteeringRequest": -0.10793261,
+        "SteeringBefore": -0.11886222,
+        "SteeringUsed": -0.11339742,
+        "SteeringAfter": -0.10793261,
+        "FrontForce": {
+          "X": -198.01045,
+          "Y": -131.00864
+        },
+        "RearForce": {
+          "X": -856.08215,
+          "Y": 83.43869
+        },
+        "FrontLateral": 237.42662,
+        "RearLateral": 602.30505,
+        "RearLongitudinal": 614.0581,
+        "NetTorque": -196.2511,
+        "Demand": -11.498033,
+        "Motion": {
+          "Psi": 2.268697738647461,
+          "Chi": 2.1210631656533283,
+          "Beta": 0.14763457299413263,
+          "PsiDot": -0.027528665959835052,
+          "ChiDot": 0.481397807598114,
+          "BetaDot": -0.5089264735579491,
+          "DirectionDefined": true
+        },
+        "ProjectedBetaRate": -0.8811713457107544,
+        "LocalScore": 2.6331122152342807,
+        "RateLimited": false,
+        "FrontUtilization": 0.2777160884526482,
+        "RearUtilization": 0.8623695167171241
+      },
+      "NativeChiRate": 0.47134963216395487,
+      "NativeYawRate": -0.052189828131865595,
+      "NativeBetaRate": -0.5235388992027692,
+      "NormalError": -1.6390868980491744,
+      "LocalScoreReduction": 0.00024716242749001083
+    },
+    {
+      "Time": 5.7,
+      "Dt": 0.009999999776482582,
+      "Drive": 0,
+      "Before": {
+        "Id": 1,
+        "Position": {
+          "X": 70.26684,
+          "Y": 33.919884
+        },
+        "Velocity": {
+          "X": -7.861792,
+          "Y": 11.185224
+        },
+        "Heading": 2.2122169,
+        "AngularVelocity": -0.44483826,
+        "Road": {
+          "Segment": 2,
+          "Progress": 0.56938988852211,
+          "ReferenceMeters": 85.94730010986245,
+          "OffsetMeters": 5.4515591856876915,
+          "Heading": 1.6326893196899863,
+          "RadiusMeters": 41.78308146632011,
+          "CornerProgress": 0.5231299628407033,
+          "Tangent": {
+            "X": -0.061853483,
+            "Y": 0.99808526
+          },
+          "Outward": {
+            "X": 0.99808526,
+            "Y": 0.061853483
+          },
+          "IsTurn": true
+        },
+        "TotalReferenceMeters": 85.94730010986245,
+        "DistanceMeters": 0,
+        "Activity": 0,
+        "Drive": 0,
+        "TargetOffsetMeters": 8.5,
+        "Impairment": 0,
+        "Context": 2,
+        "Speed": 13.67176,
+        "ForwardSpeed": 13.666102,
+        "SideSpeed": -0.3932681,
+        "SlideRadians": 0.028768951
+      },
+      "Original": {
+        "SteeringRequest": -0.056672048,
+        "SteeringBefore": -0.055329815,
+        "SteeringUsed": -0.056000933,
+        "SteeringAfter": -0.056672048,
+        "FrontForce": {
+          "X": 25.91659,
+          "Y": 17.181196
+        },
+        "RearForce": {
+          "X": -152.96585,
+          "Y": 81.65756
+        },
+        "FrontLateral": -31.094423,
+        "RearLateral": 73.70485,
+        "RearLongitudinal": 156.95255,
+        "NetTorque": -65.954636,
+        "Demand": -13.31429,
+        "Motion": {
+          "Psi": 2.212216854095459,
+          "Chi": 2.183447903703859,
+          "Beta": 0.02876895039159999,
+          "PsiDot": -0.4448382556438446,
+          "ChiDot": 0.02343885228037834,
+          "BetaDot": -0.46827710792422295,
+          "DirectionDefined": true
+        },
+        "ProjectedBetaRate": -0.5933784656226635,
+        "LocalScore": 1.346689858453492,
+        "RateLimited": false,
+        "FrontUtilization": 0.03637090732428261,
+        "RearUtilization": 0.17384665814681355
+      },
+      "Reachable": {
+        "SteeringRequest": -0.05812166,
+        "SteeringBefore": -0.055329815,
+        "SteeringUsed": -0.056725737,
+        "SteeringAfter": -0.05812166,
+        "FrontForce": {
+          "X": 30.112925,
+          "Y": 19.93172
+        },
+        "RearForce": {
+          "X": -152.9671,
+          "Y": 81.659294
+        },
+        "FrontLateral": -36.111794,
+        "RearLateral": 73.70483,
+        "RearLongitudinal": 156.95468,
+        "NetTorque": -69.46022,
+        "Demand": -13.31429,
+        "Motion": {
+          "Psi": 2.212216854095459,
+          "Chi": 2.183447903703859,
+          "Beta": 0.02876895039159999,
+          "PsiDot": -0.4448382556438446,
+          "ChiDot": 0.02094363234937191,
+          "BetaDot": -0.4657818879932165,
+          "DirectionDefined": true
+        },
+        "ProjectedBetaRate": -0.5975325014442205,
+        "LocalScore": 1.346666244337258,
+        "RateLimited": false,
+        "FrontUtilization": 0.04223968661318811,
+        "RearUtilization": 0.17384858704708858
+      },
+      "NativeChiRate": 0.023432011644773605,
+      "NativeYawRate": -0.4528522592675446,
+      "NativeBetaRate": -0.47628433576861773,
+      "NormalError": -3.048440814312308,
+      "LocalScoreReduction": 2.361411623419407E-05
+    },
+    {
+      "Time": 5.8999999999999995,
+      "Dt": 0.009999999776482582,
+      "Drive": 0,
+      "Before": {
+        "Id": 1,
+        "Position": {
+          "X": 68.73699,
+          "Y": 36.178764
+        },
+        "Velocity": {
+          "X": -7.2473397,
+          "Y": 11.479215
+        },
+        "Heading": 2.0997486,
+        "AngularVelocity": -0.64655775,
+        "Road": {
+          "Segment": 2,
+          "Progress": 0.6343790619504805,
+          "ReferenceMeters": 88.05705176989454,
+          "OffsetMeters": 4.132735034296381,
+          "Heading": 1.6909454549994893,
+          "RadiusMeters": 40.20519583230559,
+          "CornerProgress": 0.5447930206501602,
+          "Tangent": {
+            "X": -0.11986026,
+            "Y": 0.99279076
+          },
+          "Outward": {
+            "X": 0.99279076,
+            "Y": 0.11986026
+          },
+          "IsTurn": true
+        },
+        "TotalReferenceMeters": 88.05705176989454,
+        "DistanceMeters": 0,
+        "Activity": 0,
+        "Drive": 0,
+        "TargetOffsetMeters": 8.5,
+        "Impairment": 0,
+        "Context": 2,
+        "Speed": 13.575577,
+        "ForwardSpeed": 13.56764,
+        "SideSpeed": 0.46414566,
+        "SlideRadians": -0.034196407
+      },
+      "Original": {
+        "SteeringRequest": -0.0684539,
+        "SteeringBefore": -0.06875217,
+        "SteeringUsed": -0.06860304,
+        "SteeringAfter": -0.0684539,
+        "FrontForce": {
+          "X": 376.39758,
+          "Y": 186.64948
+        },
+        "RearForce": {
+          "X": 388.37656,
+          "Y": 232.7806
+        },
+        "FrontLateral": -420.1347,
+        "RearLateral": -452.76743,
+        "RearLongitudinal": 4.9818144,
+        "NetTorque": -21.74176,
+        "Demand": -11.588225,
+        "Motion": {
+          "Psi": 2.0997486114501953,
+          "Chi": 2.1339450178746215,
+          "Beta": -0.03419640642442623,
+          "PsiDot": -0.6465577483177185,
+          "ChiDot": -0.43625253438949585,
+          "BetaDot": -0.21030521392822266,
+          "DirectionDefined": true
+        },
+        "ProjectedBetaRate": -0.2515445351600647,
+        "LocalScore": 0.2374604967901668,
+        "RateLimited": false,
+        "FrontUtilization": 0.4914283265471437,
+        "RearUtilization": 0.4539691339333931
+      },
+      "Reachable": {
+        "SteeringRequest": -0.06801586,
+        "SteeringBefore": -0.06875217,
+        "SteeringUsed": -0.068384014,
+        "SteeringAfter": -0.06801586,
+        "FrontForce": {
+          "X": 375.45233,
+          "Y": 186.28325
+        },
+        "RearForce": {
+          "X": 388.3771,
+          "Y": 232.7797
+        },
+        "FrontLateral": -419.12515,
+        "RearLateral": -452.76743,
+        "RearLongitudinal": 4.9807634,
+        "NetTorque": -21.041138,
+        "Demand": -11.588225,
+        "Motion": {
+          "Psi": 2.0997486114501953,
+          "Chi": 2.1339450178746215,
+          "Beta": -0.03419640642442623,
+          "PsiDot": -0.6465577483177185,
+          "ChiDot": -0.43575406074523926,
+          "BetaDot": -0.21080368757247925,
+          "DirectionDefined": true
+        },
+        "ProjectedBetaRate": -0.2507140636444092,
+        "LocalScore": 0.2374597155154028,
+        "RateLimited": false,
+        "FrontUtilization": 0.490247461349715,
+        "RearUtilization": 0.45396912234170145
+      },
+      "NativeChiRate": -0.43653086717970435,
+      "NativeYawRate": -0.6491661216877279,
+      "NativeBetaRate": -0.21263510464061286,
+      "NormalError": -4.367264965703618,
+      "LocalScoreReduction": 7.812747639945883E-07
+    },
+    {
+      "Time": 6.1,
+      "Dt": 0.009999999776482582,
+      "Drive": 0.05,
+      "Before": {
+        "Id": 1,
+        "Position": {
+          "X": 67.41023,
+          "Y": 38.5274
+        },
+        "Velocity": {
+          "X": -5.9907765,
+          "Y": 12.008962
+        },
+        "Heading": 1.9689972,
+        "AngularVelocity": -0.62947387,
+        "Road": {
+          "Segment": 2,
+          "Progress": 0.7049085098619164,
+          "ReferenceMeters": 90.34665805295185,
+          "OffsetMeters": 3.1764371247777157,
+          "Heading": 1.7547944641914925,
+          "RadiusMeters": 38.796173091220595,
+          "CornerProgress": 0.5683028366206387,
+          "Tangent": {
+            "X": -0.18296167,
+            "Y": 0.98312
+          },
+          "Outward": {
+            "X": 0.98312,
+            "Y": 0.18296167
+          },
+          "IsTurn": true
+        },
+        "TotalReferenceMeters": 90.34665805295185,
+        "DistanceMeters": 0,
+        "Activity": 0,
+        "Drive": 0.05,
+        "TargetOffsetMeters": 8.5,
+        "Impairment": 0,
+        "Context": 2,
+        "Speed": 13.420304,
+        "ForwardSpeed": 13.392369,
+        "SideSpeed": 0.8654556,
+        "SlideRadians": -0.06453334
+      },
+      "Original": {
+        "SteeringRequest": -0.04966262,
+        "SteeringBefore": -0.050855715,
+        "SteeringUsed": -0.050259165,
+        "SteeringAfter": -0.04966262,
+        "FrontForce": {
+          "X": 445.448,
+          "Y": 161.563
+        },
+        "RearForce": {
+          "X": 528.81995,
+          "Y": 286.80215
+        },
+        "FrontLateral": -473.8423,
+        "RearLateral": -598.6557,
+        "RearLongitudinal": 59.307217,
+        "NetTorque": 27.922302,
+        "Demand": -7.971226,
+        "Motion": {
+          "Psi": 1.9689972400665283,
+          "Chi": 2.0335305809243223,
+          "Beta": -0.06453334085779394,
+          "PsiDot": -0.629473865032196,
+          "ChiDot": -0.5433729887008667,
+          "BetaDot": -0.08610087633132935,
+          "DirectionDefined": true
+        },
+        "ProjectedBetaRate": -0.0331384539604187,
+        "LocalScore": 0.003657973498896183,
+        "RateLimited": false,
+        "FrontUtilization": 0.5542496696837729,
+        "RearUtilization": 0.6031464165376055
+      },
+      "Reachable": {
+        "SteeringRequest": -0.048508722,
+        "SteeringBefore": -0.050855715,
+        "SteeringUsed": -0.04968222,
+        "SteeringAfter": -0.048508722,
+        "FrontForce": {
+          "X": 443.16745,
+          "Y": 161.02518
+        },
+        "RearForce": {
+          "X": 528.8209,
+          "Y": 286.80008
+        },
+        "FrontLateral": -471.5151,
+        "RearLateral": -598.6558,
+        "RearLongitudinal": 59.30492,
+        "NetTorque": 29.539856,
+        "Demand": -7.971226,
+        "Motion": {
+          "Psi": 1.9689972400665283,
+          "Chi": 2.0335305809243223,
+          "Beta": -0.06453334085779394,
+          "PsiDot": -0.629473865032196,
+          "ChiDot": -0.5422168374061584,
+          "BetaDot": -0.0872570276260376,
+          "DirectionDefined": true
+        },
+        "ProjectedBetaRate": -0.03122645616531372,
+        "LocalScore": 0.003653234707474695,
+        "RateLimited": false,
+        "FrontUtilization": 0.5515275863924479,
+        "RearUtilization": 0.6031463113508839
+      },
+      "NativeChiRate": -0.5436700898854558,
+      "NativeYawRate": -0.626051439927178,
+      "NativeBetaRate": -0.08238181655962355,
+      "NormalError": -5.323562875222285,
+      "LocalScoreReduction": 4.738791421488031E-06
+    },
+    {
+      "Time": 6.3,
+      "Dt": 0.009999999776482582,
+      "Drive": 0,
+      "Before": {
+        "Id": 1,
+        "Position": {
+          "X": 66.35242,
+          "Y": 40.9767
+        },
+        "Velocity": {
+          "X": -4.606459,
+          "Y": 12.443833
+        },
+        "Heading": 1.8573093,
+        "AngularVelocity": -0.47344372,
+        "Road": {
+          "Segment": 2,
+          "Progress": 0.7794626516676672,
+          "ReferenceMeters": 92.76691847694866,
+          "OffsetMeters": 2.6735484430416507,
+          "Heading": 1.8233414553787208,
+          "RadiusMeters": 37.64549387273992,
+          "CornerProgress": 0.5931542172225557,
+          "Tangent": {
+            "X": -0.24986917,
+            "Y": 0.9682796
+          },
+          "Outward": {
+            "X": 0.9682796,
+            "Y": 0.24986917
+          },
+          "IsTurn": true
+        },
+        "TotalReferenceMeters": 92.76691847694866,
+        "DistanceMeters": 0,
+        "Activity": 0,
+        "Drive": 0,
+        "TargetOffsetMeters": 8.5,
+        "Impairment": 0,
+        "Context": 2,
+        "Speed": 13.269079,
+        "ForwardSpeed": 13.23839,
+        "SideSpeed": 0.90193677,
+        "SlideRadians": -0.06802528
+      },
+      "Original": {
+        "SteeringRequest": -0.027292108,
+        "SteeringBefore": -0.028336067,
+        "SteeringUsed": -0.027814087,
+        "SteeringAfter": -0.027292108,
+        "FrontForce": {
+          "X": 412.07086,
+          "Y": 109.045876
+        },
+        "RearForce": {
+          "X": 557.20685,
+          "Y": 181.51404
+        },
+        "FrontLateral": -426.2551,
+        "RearLateral": -585.7899,
+        "RearLongitudinal": 16.64293,
+        "NetTorque": 53.21222,
+        "Demand": -3.7024994,
+        "Motion": {
+          "Psi": 1.857309341430664,
+          "Chi": 1.9253346262889202,
+          "Beta": -0.0680252848582561,
+          "PsiDot": -0.4734437167644501,
+          "ChiDot": -0.5177323818206787,
+          "BetaDot": 0.04428866505622864,
+          "DirectionDefined": true
+        },
+        "ProjectedBetaRate": 0.14522045850753784,
+        "LocalScore": 0.0780667865512017,
+        "RateLimited": false,
+        "FrontUtilization": 0.49858730172745636,
+        "RearUtilization": 0.5875461222637478
+      },
+      "Reachable": {
+        "SteeringRequest": -0.02638791,
+        "SteeringBefore": -0.028336067,
+        "SteeringUsed": -0.027361989,
+        "SteeringAfter": -0.02638791,
+        "FrontForce": {
+          "X": 410.0365,
+          "Y": 108.70587
+        },
+        "RearForce": {
+          "X": 557.20734,
+          "Y": 181.51262
+        },
+        "FrontLateral": -424.20148,
+        "RearLateral": -585.79,
+        "RearLongitudinal": 16.641432,
+        "NetTorque": 54.64554,
+        "Demand": -3.7024994,
+        "Motion": {
+          "Psi": 1.857309341430664,
+          "Chi": 1.9253346262889202,
+          "Beta": -0.0680252848582561,
+          "PsiDot": -0.4734437167644501,
+          "ChiDot": -0.5166937112808228,
+          "BetaDot": 0.04324999451637268,
+          "DirectionDefined": true
+        },
+        "ProjectedBetaRate": 0.146900475025177,
+        "LocalScore": 0.07806277156511943,
+        "RateLimited": false,
+        "FrontUtilization": 0.4961851989575712,
+        "RearUtilization": 0.587546140802281
+      },
+      "NativeChiRate": -0.5181054537891644,
+      "NativeYawRate": -0.4671335324749395,
+      "NativeBetaRate": 0.05097165817704033,
+      "NormalError": -5.826451556958356,
+      "LocalScoreReduction": 4.014986082268024E-06
+    },
+    {
+      "Time": 6.5,
+      "Dt": 0.009999999776482582,
+      "Drive": 0,
+      "Before": {
+        "Id": 1,
+        "Position": {
+          "X": 65.55942,
+          "Y": 43.489246
+        },
+        "Velocity": {
+          "X": -3.4004943,
+          "Y": 12.647912
+        },
+        "Heading": 1.7848365,
+        "AngularVelocity": -0.24560902,
+        "Road": {
+          "Segment": 2,
+          "Progress": 0.8548503016602305,
+          "ReferenceMeters": 95.21423718139454,
+          "OffsetMeters": 2.6263126841898536,
+          "Heading": 1.894110052038796,
+          "RadiusMeters": 36.80071655836577,
+          "CornerProgress": 0.6182834338867434,
+          "Tangent": {
+            "X": -0.31771034,
+            "Y": 0.9481878
+          },
+          "Outward": {
+            "X": 0.9481878,
+            "Y": 0.31771034
+          },
+          "IsTurn": true
+        },
+        "TotalReferenceMeters": 95.21423718139454,
+        "DistanceMeters": 0,
+        "Activity": 0,
+        "Drive": 0,
+        "TargetOffsetMeters": 8.5,
+        "Impairment": 0,
+        "Context": 2,
+        "Speed": 13.097063,
+        "ForwardSpeed": 13.0815935,
+        "SideSpeed": 0.6363592,
+        "SlideRadians": -0.048607066
+      },
+      "Original": {
+        "SteeringRequest": -0.0065620528,
+        "SteeringBefore": -0.0076060123,
+        "SteeringUsed": -0.0070840325,
+        "SteeringAfter": -0.0065620528,
+        "FrontForce": {
+          "X": 272.78134,
+          "Y": 57.273834
+        },
+        "RearForce": {
+          "X": 424.6035,
+          "Y": 95.89851
+        },
+        "FrontLateral": -278.7292,
+        "RearLateral": -435.2841,
+        "RearLongitudinal": 3.5203078,
+        "NetTorque": 66.06517,
+        "Demand": 0.35178205,
+        "Motion": {
+          "Psi": 1.7848365306854248,
+          "Chi": 1.8334435986815645,
+          "Beta": -0.048607067996139675,
+          "PsiDot": -0.24560901522636414,
+          "ChiDot": -0.3704616129398346,
+          "BetaDot": 0.12485259771347046,
+          "DirectionDefined": true
+        },
+        "ProjectedBetaRate": 0.25016359984874725,
+        "LocalScore": 0.22044598337925714,
+        "RateLimited": false,
+        "FrontUtilization": 0.3260273822576428,
+        "RearUtilization": 0.4364272482716167
+      },
+      "Reachable": {
+        "SteeringRequest": -0.0055159633,
+        "SteeringBefore": -0.0076060123,
+        "SteeringUsed": -0.006560988,
+        "SteeringAfter": -0.0055159633,
+        "FrontForce": {
+          "X": 269.7478,
+          "Y": 56.784203
+        },
+        "RearForce": {
+          "X": 424.6037,
+          "Y": 95.89744
+        },
+        "FrontLateral": -275.6598,
+        "RearLateral": -435.2841,
+        "RearLongitudinal": 3.5192106,
+        "NetTorque": 68.21298,
+        "Demand": 0.35178205,
+        "Motion": {
+          "Psi": 1.7848365306854248,
+          "Chi": 1.8334435986815645,
+          "Beta": -0.048607067996139675,
+          "PsiDot": -0.24560901522636414,
+          "ChiDot": -0.3688739240169525,
+          "BetaDot": 0.12326490879058838,
+          "DirectionDefined": true
+        },
+        "ProjectedBetaRate": 0.25264982879161835,
+        "LocalScore": 0.22043696841559157,
+        "RateLimited": false,
+        "FrontUtilization": 0.32243713227042997,
+        "RearUtilization": 0.4364272393767891
+      },
+      "NativeChiRate": -0.37066957844714066,
+      "NativeYawRate": -0.23779869611111348,
+      "NativeBetaRate": 0.13287067710319184,
+      "NormalError": -5.873687315810147,
+      "LocalScoreReduction": 9.014963665565645E-06
+    },
+    {
+      "Time": 6.7,
+      "Dt": 0.009999999776482582,
+      "Drive": 0,
+      "Before": {
+        "Id": 1,
+        "Position": {
+          "X": 64.95832,
+          "Y": 46.02512
+        },
+        "Velocity": {
+          "X": -2.7303178,
+          "Y": 12.685403
+        },
+        "Heading": 1.7615205,
+        "AngularVelocity": 0.009018879,
+        "Road": {
+          "Segment": 2,
+          "Progress": 0.9284268103992667,
+          "ReferenceMeters": 97.60276058095178,
+          "OffsetMeters": 2.953573562448191,
+          "Heading": 1.9649028663782462,
+          "RadiusMeters": 36.248817031037504,
+          "CornerProgress": 0.6428089367997556,
+          "Tangent": {
+            "X": -0.38398337,
+            "Y": 0.92334
+          },
+          "Outward": {
+            "X": 0.92334,
+            "Y": 0.38398337
+          },
+          "IsTurn": true
+        },
+        "TotalReferenceMeters": 97.60276058095178,
+        "DistanceMeters": 0,
+        "Activity": 0,
+        "Drive": 0,
+        "TargetOffsetMeters": 8.5,
+        "Impairment": 0,
+        "Context": 2,
+        "Speed": 12.975904,
+        "ForwardSpeed": 12.972968,
+        "SideSpeed": 0.2760377,
+        "SlideRadians": -0.021274716
+      },
+      "Original": {
+        "SteeringRequest": 0.015211974,
+        "SteeringBefore": 0.014168015,
+        "SteeringUsed": 0.014689995,
+        "SteeringAfter": 0.015211974,
+        "FrontForce": {
+          "X": 47.814842,
+          "Y": 9.962364
+        },
+        "RearForce": {
+          "X": 162.68706,
+          "Y": 33.17576
+        },
+        "FrontLateral": -48.84166,
+        "RearLateral": -166.02623,
+        "RearLongitudinal": 1.733604,
+        "NetTorque": 65.43002,
+        "Demand": 3.5066743,
+        "Motion": {
+          "Psi": 1.761520504951477,
+          "Chi": 1.7827952203958208,
+          "Beta": -0.021274715444343784,
+          "PsiDot": 0.009018879383802414,
+          "ChiDot": -0.11264527589082718,
+          "BetaDot": 0.12166415527462959,
+          "DirectionDefined": true
+        },
+        "ProjectedBetaRate": 0.2457704171538353,
+        "LocalScore": 0.2070081189262073,
+        "RateLimited": false,
+        "FrontUtilization": 0.0571297128140326,
+        "RearUtilization": 0.16646588508091398
+      },
+      "Reachable": {
+        "SteeringRequest": 0.01622355,
+        "SteeringBefore": 0.014168015,
+        "SteeringUsed": 0.015195782,
+        "SteeringAfter": 0.01622355,
+        "FrontForce": {
+          "X": 44.400543,
+          "Y": 9.274415
+        },
+        "RearForce": {
+          "X": 162.68703,
+          "Y": 33.175957
+        },
+        "FrontLateral": -45.358826,
+        "RearLateral": -166.02623,
+        "RearLongitudinal": 1.7338064,
+        "NetTorque": 67.86798,
+        "Demand": 3.5066743,
+        "Motion": {
+          "Psi": 1.761520504951477,
+          "Chi": 1.7827952203958208,
+          "Beta": -0.021274715444343784,
+          "PsiDot": 0.009018879383802414,
+          "ChiDot": -0.11081948131322861,
+          "BetaDot": 0.11983836069703102,
+          "DirectionDefined": true
+        },
+        "ProjectedBetaRate": 0.24856888502836227,
+        "LocalScore": 0.20699668685455264,
+        "RateLimited": false,
+        "FrontUtilization": 0.05305586888279861,
+        "RearUtilization": 0.16646588719999472
+      },
+      "NativeChiRate": -0.11268800022644532,
+      "NativeYawRate": 0.01677274741469504,
+      "NativeBetaRate": 0.12946073255227653,
+      "NormalError": -5.546426437551814,
+      "LocalScoreReduction": 1.1432071654660092E-05
+    },
+    {
+      "Time": 10.4,
+      "Dt": 0.009999999776482582,
+      "Drive": 0.63541603,
+      "Before": {
+        "Id": 1,
+        "Position": {
+          "X": 26.078459,
+          "Y": 70.60373
+        },
+        "Velocity": {
+          "X": -16.782059,
+          "Y": -1.5991107
+        },
+        "Heading": -3.051199,
+        "AngularVelocity": -0.0908632,
+        "Road": {
+          "Segment": 4,
+          "Progress": 0.1438958260320848,
+          "ReferenceMeters": 141.31091618537903,
+          "OffsetMeters": 7.940709079915877,
+          "Heading": 3.141592653589793,
+          "RadiusMeters": 0,
+          "CornerProgress": 0,
+          "Tangent": {
+            "X": -1,
+            "Y": 1.2246469E-16
+          },
+          "Outward": {
+            "X": 1.2246469E-16,
+            "Y": 1
+          },
+          "IsTurn": false
+        },
+        "TotalReferenceMeters": 141.31091618537903,
+        "DistanceMeters": 0,
+        "Activity": 0,
+        "Drive": 0.63541603,
+        "TargetOffsetMeters": 8.498477,
+        "Impairment": 0,
+        "Context": 2,
+        "Speed": 16.858074,
+        "ForwardSpeed": 16.857893,
+        "SideSpeed": 0.07765472,
+        "SlideRadians": -0.0046063997
+      },
+      "Original": {
+        "SteeringRequest": -0.0061146193,
+        "SteeringBefore": -0.006412893,
+        "SteeringUsed": -0.006263756,
+        "SteeringAfter": -0.0061146193,
+        "FrontForce": {
+          "X": -4.167826,
+          "Y": 49.423397
+        },
+        "RearForce": {
+          "X": -710.1927,
+          "Y": -19.245712
+        },
+        "FrontLateral": -49.59882,
+        "RearLateral": -44.942413,
+        "RearLongitudinal": 709.03046,
+        "NetTorque": -7.7539635,
+        "Demand": -3.1663258,
+        "Motion": {
+          "Psi": -3.051198959350586,
+          "Chi": -3.046592559441669,
+          "Beta": -0.0046063999089169805,
+          "PsiDot": -0.0908631980419159,
+          "ChiDot": -0.039466697722673416,
+          "BetaDot": -0.05139650031924248,
+          "DirectionDefined": true
+        },
+        "ProjectedBetaRate": -0.06610405072569847,
+        "LocalScore": 0.026379191322033507,
+        "RateLimited": false,
+        "FrontUtilization": 0.05801535725008214,
+        "RearUtilization": 0.712295909376777
+      },
+      "Reachable": {
+        "SteeringRequest": -0.0057762912,
+        "SteeringBefore": -0.006412893,
+        "SteeringUsed": -0.006094592,
+        "SteeringAfter": -0.0057762912,
+        "FrontForce": {
+          "X": -4.0770373,
+          "Y": 48.24939
+        },
+        "RearForce": {
+          "X": -710.1926,
+          "Y": -19.2457
+        },
+        "FrontLateral": -48.421337,
+        "RearLateral": -44.942417,
+        "RearLongitudinal": 709.0304,
+        "NetTorque": -6.9297714,
+        "Demand": -3.1663258,
+        "Motion": {
+          "Psi": -3.051198959350586,
+          "Chi": -3.046592559441669,
+          "Beta": -0.0046063999089169805,
+          "PsiDot": -0.0908631980419159,
+          "ChiDot": -0.038991618901491165,
+          "BetaDot": -0.05187157914042473,
+          "DirectionDefined": true
+        },
+        "ProjectedBetaRate": -0.06501581892371178,
+        "LocalScore": 0.026377689614758976,
+        "RateLimited": false,
+        "FrontUtilization": 0.05663806492030703,
+        "RearUtilization": 0.7122958485478287
+      },
+      "NativeChiRate": -0.03936748142302725,
+      "NativeYawRate": -0.09179115500579375,
+      "NativeBetaRate": -0.05242368323557861,
+      "NormalError": -0.5577674353938373,
+      "LocalScoreReduction": 1.501707274531583E-06
+    },
+    {
+      "Time": 10.6,
+      "Dt": 0.009999999776482582,
+      "Drive": 0.63541603,
+      "Before": {
+        "Id": 1,
+        "Position": {
+          "X": 22.631435,
+          "Y": 70.29261
+        },
+        "Velocity": {
+          "X": -17.696411,
+          "Y": -1.4964143
+        },
+        "Heading": -3.0713592,
+        "AngularVelocity": -0.10658252,
+        "Road": {
+          "Segment": 4,
+          "Progress": 0.19949297751149825,
+          "ReferenceMeters": 144.75793957710266,
+          "OffsetMeters": 7.629590000326033,
+          "Heading": 3.141592653589793,
+          "RadiusMeters": 0,
+          "CornerProgress": 0,
+          "Tangent": {
+            "X": -1,
+            "Y": 1.2246469E-16
+          },
+          "Outward": {
+            "X": 1.2246469E-16,
+            "Y": 1
+          },
+          "IsTurn": false
+        },
+        "TotalReferenceMeters": 144.75793957710266,
+        "DistanceMeters": 0,
+        "Activity": 0,
+        "Drive": 0.63541603,
+        "TargetOffsetMeters": 8.489885,
+        "Impairment": 0,
+        "Context": 2,
+        "Speed": 17.759567,
+        "ForwardSpeed": 17.757795,
+        "SideSpeed": 0.25086594,
+        "SlideRadians": -0.0141261425
+      },
+      "Original": {
+        "SteeringRequest": -0.0007456853,
+        "SteeringBefore": -0.0010439594,
+        "SteeringUsed": -0.00089482235,
+        "SteeringAfter": -0.0007456853,
+        "FrontForce": {
+          "X": -5.2363043,
+          "Y": 75.3967
+        },
+        "RearForce": {
+          "X": -804.2971,
+          "Y": 29.295506
+        },
+        "FrontLateral": -75.57831,
+        "RearLateral": -85.66545,
+        "RearLongitudinal": 800.2584,
+        "NetTorque": -1.5046387,
+        "Demand": -3.020345,
+        "Motion": {
+          "Psi": -3.071359157562256,
+          "Chi": -3.0572330148530655,
+          "Beta": -0.014126142709190326,
+          "PsiDot": -0.10658252239227295,
+          "ChiDot": -0.06608715653419495,
+          "BetaDot": -0.040495365858078,
+          "DirectionDefined": true
+        },
+        "ProjectedBetaRate": -0.043349333107471466,
+        "LocalScore": 0.01269130666657442,
+        "RateLimited": false,
+        "FrontUtilization": 0.08840336461086719,
+        "RearUtilization": 0.806917776319331
+      },
+      "Reachable": {
+        "SteeringRequest": -0.00043803582,
+        "SteeringBefore": -0.0010439594,
+        "SteeringUsed": -0.0007409976,
+        "SteeringAfter": -0.00043803582,
+        "FrontForce": {
+          "X": -5.1738796,
+          "Y": 74.332466
+        },
+        "RearForce": {
+          "X": -804.2971,
+          "Y": 29.295506
+        },
+        "FrontLateral": -74.512314,
+        "RearLateral": -85.66545,
+        "RearLongitudinal": 800.2584,
+        "NetTorque": -0.75844574,
+        "Demand": -3.020345,
+        "Motion": {
+          "Psi": -3.071359157562256,
+          "Chi": -3.0572330148530655,
+          "Beta": -0.014126142709190326,
+          "PsiDot": -0.10658252239227295,
+          "ChiDot": -0.06567894667387009,
+          "BetaDot": -0.04090357571840286,
+          "DirectionDefined": true
+        },
+        "ProjectedBetaRate": -0.0423421785235405,
+        "LocalScore": 0.012690061209646442,
+        "RateLimited": false,
+        "FrontUtilization": 0.08715647933597272,
+        "RearUtilization": 0.806917776319331
+      },
+      "NativeChiRate": -0.06591187830384969,
+      "NativeYawRate": -0.10676384210803752,
+      "NativeBetaRate": -0.04085199998733401,
+      "NormalError": -0.8602885790772328,
+      "LocalScoreReduction": 1.2454569279785055E-06
+    },
+    {
+      "Time": 10.8,
+      "Dt": 0.009999999776482582,
+      "Drive": 0.78541607,
+      "Before": {
+        "Id": 1,
+        "Position": {
+          "X": 18.990152,
+          "Y": 70.00939
+        },
+        "Velocity": {
+          "X": -18.730286,
+          "Y": -1.340233
+        },
+        "Heading": -3.0924869,
+        "AngularVelocity": -0.100783885,
+        "Road": {
+          "Segment": 4,
+          "Progress": 0.25822334904824534,
+          "ReferenceMeters": 148.39922261238098,
+          "OffsetMeters": 7.34637161653697,
+          "Heading": 3.141592653589793,
+          "RadiusMeters": 0,
+          "CornerProgress": 0,
+          "Tangent": {
+            "X": -1,
+            "Y": 1.2246469E-16
+          },
+          "Outward": {
+            "X": 1.2246469E-16,
+            "Y": 1
+          },
+          "IsTurn": false
+        },
+        "TotalReferenceMeters": 148.39922261238098,
+        "DistanceMeters": 0,
+        "Activity": 0,
+        "Drive": 0.78541607,
+        "TargetOffsetMeters": 8.467446,
+        "Impairment": 0,
+        "Context": 2,
+        "Speed": 18.778175,
+        "ForwardSpeed": 18.773493,
+        "SideSpeed": 0.41922152,
+        "SlideRadians": -0.022326784
+      },
+      "Original": {
+        "SteeringRequest": 0.00954477,
+        "SteeringBefore": 0.008948222,
+        "SteeringUsed": 0.0092464965,
+        "SteeringAfter": 0.00954477,
+        "FrontForce": {
+          "X": -3.808201,
+          "Y": 65.18805
+        },
+        "RearForce": {
+          "X": -915.73145,
+          "Y": 37.701256
+        },
+        "FrontLateral": -65.29919,
+        "RearLateral": -82.60546,
+        "RearLongitudinal": 912.777,
+        "NetTorque": 3.8538513,
+        "Demand": -2.672966,
+        "Motion": {
+          "Psi": -3.09248685836792,
+          "Chi": -3.0701600735273926,
+          "Beta": -0.022326784840527303,
+          "PsiDot": -0.10078388452529907,
+          "ChiDot": -0.06095372140407562,
+          "BetaDot": -0.03983016312122345,
+          "DirectionDefined": true
+        },
+        "ProjectedBetaRate": -0.03252026438713074,
+        "LocalScore": 0.00768199079974341,
+        "RateLimited": false,
+        "FrontUtilization": 0.07637995551787044,
+        "RearUtilization": 0.9188841313220072
+      },
+      "Reachable": {
+        "SteeringRequest": 0.010068028,
+        "SteeringBefore": 0.008948222,
+        "SteeringUsed": 0.0095081255,
+        "SteeringAfter": 0.010068028,
+        "FrontForce": {
+          "X": -3.718544,
+          "Y": 63.36863
+        },
+        "RearForce": {
+          "X": -915.73145,
+          "Y": 37.701256
+        },
+        "FrontLateral": -63.477642,
+        "RearLateral": -82.60546,
+        "RearLongitudinal": 912.777,
+        "NetTorque": 5.1289864,
+        "Demand": -2.672966,
+        "Motion": {
+          "Psi": -3.09248685836792,
+          "Chi": -3.0701600735273926,
+          "Beta": -0.022326784840527303,
+          "PsiDot": -0.10078388452529907,
+          "ChiDot": -0.06029396876692772,
+          "BetaDot": -0.04048991575837135,
+          "DirectionDefined": true
+        },
+        "ProjectedBetaRate": -0.030761364847421646,
+        "LocalScore": 0.007678515317519757,
+        "RateLimited": false,
+        "FrontUtilization": 0.0742493087802091,
+        "RearUtilization": 0.9188841313220072
+      },
+      "NativeChiRate": -0.06077775044450477,
+      "NativeYawRate": -0.10032654032841043,
+      "NativeBetaRate": -0.03954880027954579,
+      "NormalError": -1.1210339855655953,
+      "LocalScoreReduction": 3.4754822236526817E-06
+    },
+    {
+      "Time": 11,
+      "Dt": 0.009999999776482582,
+      "Drive": 0,
+      "Before": {
+        "Id": 1,
+        "Position": {
+          "X": 15.131572,
+          "Y": 69.757385
+        },
+        "Velocity": {
+          "X": -19.827248,
+          "Y": -1.1583706
+        },
+        "Heading": -3.1111372,
+        "AngularVelocity": -0.08873409,
+        "Road": {
+          "Segment": 4,
+          "Progress": 0.32045851984331686,
+          "ReferenceMeters": 152.25780320167542,
+          "OffsetMeters": 7.094365085775252,
+          "Heading": 3.141592653589793,
+          "RadiusMeters": 0,
+          "CornerProgress": 0,
+          "Tangent": {
+            "X": -1,
+            "Y": 1.2246469E-16
+          },
+          "Outward": {
+            "X": 1.2246469E-16,
+            "Y": 1
+          },
+          "IsTurn": false
+        },
+        "TotalReferenceMeters": 152.25780320167542,
+        "DistanceMeters": 0,
+        "Activity": 0,
+        "Drive": 0,
+        "TargetOffsetMeters": 8.4237175,
+        "Impairment": 0,
+        "Context": 2,
+        "Speed": 19.861057,
+        "ForwardSpeed": 19.853327,
+        "SideSpeed": 0.554078,
+        "SlideRadians": -0.027901331
+      },
+      "Original": {
+        "SteeringRequest": 0.0023861926,
+        "SteeringBefore": 0.005219801,
+        "SteeringUsed": 0.0038029966,
+        "SteeringAfter": 0.0023861926,
+        "FrontForce": {
+          "X": -4.979953,
+          "Y": 145.30705
+        },
+        "RearForce": {
+          "X": -759.4111,
+          "Y": 136.04619
+        },
+        "FrontLateral": -145.39236,
+        "RearLateral": -159.10776,
+        "RearLongitudinal": 754.9162,
+        "NetTorque": -6.307808,
+        "Demand": -2.1765444,
+        "Motion": {
+          "Psi": -3.1111371517181396,
+          "Chi": -3.083235821303741,
+          "Beta": -0.027901330414398462,
+          "PsiDot": -0.08873409032821655,
+          "ChiDot": -0.11147388815879822,
+          "BetaDot": 0.022739797830581665,
+          "DirectionDefined": true
+        },
+        "ProjectedBetaRate": 0.010775282979011536,
+        "LocalScore": 0.00011966122875195495,
+        "RateLimited": false,
+        "FrontUtilization": 0.1700643284150499,
+        "RearUtilization": 0.7735018200810259
+      },
+      "Reachable": {
+        "SteeringRequest": -0.0003447154,
+        "SteeringBefore": 0.005219801,
+        "SteeringUsed": 0.0024375427,
+        "SteeringAfter": -0.00034471555,
+        "FrontForce": {
+          "X": -5.083077,
+          "Y": 154.47754
+        },
+        "RearForce": {
+          "X": -759.41144,
+          "Y": 136.04608
+        },
+        "FrontLateral": -154.56114,
+        "RearLateral": -159.10767,
+        "RearLongitudinal": 754.91656,
+        "NetTorque": -12.726433,
+        "Demand": -2.1765444,
+        "Motion": {
+          "Psi": -3.1111371517181396,
+          "Chi": -3.083235821303741,
+          "Beta": -0.027901330414398462,
+          "PsiDot": -0.08873409032821655,
+          "ChiDot": -0.11461159586906433,
+          "BetaDot": 0.02587750554084778,
+          "DirectionDefined": true
+        },
+        "ProjectedBetaRate": 0.0017382800579071045,
+        "LocalScore": 2.8252622018998252E-05,
+        "RateLimited": false,
+        "FrontUtilization": 0.18078897676541653,
+        "RearUtilization": 0.7735021604189471
+      },
+      "NativeChiRate": -0.11123587193705864,
+      "NativeYawRate": -0.08950233659525968,
+      "NativeBetaRate": 0.021733530351523988,
+      "NormalError": -1.329215749835226,
+      "LocalScoreReduction": 9.14086067329567E-05
+    },
+    {
+      "Time": 11.2,
+      "Dt": 0.009999999776482582,
+      "Drive": 0,
+      "Before": {
+        "Id": 1,
+        "Position": {
+          "X": 11.133647,
+          "Y": 69.578995
+        },
+        "Velocity": {
+          "X": -19.975273,
+          "Y": -0.6249098
+        },
+        "Heading": -3.1321666,
+        "AngularVelocity": -0.1091795,
+        "Road": {
+          "Segment": 4,
+          "Progress": 0.3849411779834378,
+          "ReferenceMeters": 156.25572800636292,
+          "OffsetMeters": 6.915974582845564,
+          "Heading": 3.141592653589793,
+          "RadiusMeters": 0,
+          "CornerProgress": 0,
+          "Tangent": {
+            "X": -1,
+            "Y": 1.2246469E-16
+          },
+          "Outward": {
+            "X": 1.2246469E-16,
+            "Y": 1
+          },
+          "IsTurn": false
+        },
+        "TotalReferenceMeters": 156.25572800636292,
+        "DistanceMeters": 0,
+        "Activity": 0,
+        "Drive": 0,
+        "TargetOffsetMeters": 8.3529,
+        "Impairment": 0,
+        "Context": 2,
+        "Speed": 19.985044,
+        "ForwardSpeed": 19.980276,
+        "SideSpeed": 0.43659732,
+        "SlideRadians": -0.02184794
+      },
+      "Original": {
+        "SteeringRequest": -0.0059654815,
+        "SteeringBefore": -0.006114619,
+        "SteeringUsed": -0.00604005,
+        "SteeringAfter": -0.0059654815,
+        "FrontForce": {
+          "X": -0.56242335,
+          "Y": 166.10522
+        },
+        "RearForce": {
+          "X": -10.036189,
+          "Y": 201.89726
+        },
+        "FrontLateral": -166.10617,
+        "RearLateral": -201.9829,
+        "RearLongitudinal": 8.132682,
+        "NetTorque": 4.9175186,
+        "Demand": -0.9942249,
+        "Motion": {
+          "Psi": -3.132166624069214,
+          "Chi": -3.1103186846476087,
+          "Beta": -0.021847939421605123,
+          "PsiDot": -0.10917949676513672,
+          "ChiDot": -0.12531614303588867,
+          "BetaDot": 0.016136646270751953,
+          "DirectionDefined": true
+        },
+        "ProjectedBetaRate": 0.02546408772468567,
+        "LocalScore": 0.006358896479204082,
+        "RateLimited": false,
+        "FrontUtilization": 0.19429310785807594,
+        "RearUtilization": 0.20267081400539683
+      },
+      "Reachable": {
+        "SteeringRequest": -0.0058154925,
+        "SteeringBefore": -0.006114619,
+        "SteeringUsed": -0.005965056,
+        "SteeringAfter": -0.0058154925,
+        "FrontForce": {
+          "X": -0.5731708,
+          "Y": 165.6061
+        },
+        "RearForce": {
+          "X": -10.036085,
+          "Y": 201.89726
+        },
+        "FrontLateral": -165.60709,
+        "RearLateral": -201.9829,
+        "RearLongitudinal": 8.132578,
+        "NetTorque": 5.266815,
+        "Demand": -0.9942249,
+        "Motion": {
+          "Psi": -3.132166624069214,
+          "Chi": -3.1103186846476087,
+          "Beta": -0.021847939421605123,
+          "PsiDot": -0.10917949676513672,
+          "ChiDot": -0.12514643371105194,
+          "BetaDot": 0.015966936945915222,
+          "DirectionDefined": true
+        },
+        "ProjectedBetaRate": 0.02595692127943039,
+        "LocalScore": 0.006358618193697166,
+        "RateLimited": false,
+        "FrontUtilization": 0.19370933259618092,
+        "RearUtilization": 0.2026708098124813
+      },
+      "NativeChiRate": -0.1253668537201415,
+      "NativeYawRate": -0.1085996652081534,
+      "NativeBetaRate": 0.016767159479122447,
+      "NormalError": -1.4366027749535129,
+      "LocalScoreReduction": 2.782855069161094E-07
+    }
+  ]
+}

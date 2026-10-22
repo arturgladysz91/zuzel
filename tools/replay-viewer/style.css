@@ -13,3 +13,14 @@ main{display:grid;grid-template-columns:minmax(0,1fr) 350px;min-height:calc(100d
 .safety-note{position:absolute;top:68px;left:22px;right:18px;font-size:11px;color:#a8e4bd;pointer-events:none}.safety-note.unsafe{color:#ffb09b}.comparison-legend{position:absolute;bottom:72px;left:20px;max-width:calc(100% - 40px);font-size:10px;line-height:1.5;color:#a3b8c6;pointer-events:none}.view-options{flex-wrap:wrap}[hidden]{display:none!important}
 
 .width-comparison{padding:20px 26px;border-top:1px solid var(--border);background:#101b28}.width-comparison summary{cursor:pointer;color:var(--accent);font-size:13px}.width-comparison p{font-size:12px;color:var(--muted);line-height:1.6}.width-comparison img{display:block;width:100%;max-width:1200px;margin:auto}.map-title small{max-width:calc(100vw - 60px);line-height:1.5}
+
+/* Recorded physics inspection: keep provenance outside the close-up canvas. */
+.recording-mode{padding:9px 20px 4px;color:#cedee9;background:#111d2a;font-size:12px}
+.safety-note{position:static;padding:5px 20px 10px;background:#111d2a;line-height:1.5;pointer-events:auto}
+.safety-note.caution{color:#f1cf88}.bend-jumps{display:flex;gap:5px}.bend-jumps button{font-size:12px;padding:7px}
+.slip-readout{display:grid;grid-template-columns:1fr auto;gap:5px;margin-top:16px;padding:10px 12px;border:1px solid #795878;border-radius:6px;background:#292236}
+.slip-readout span{font-size:12px;color:#efc8ef}.slip-readout strong{font-size:24px;color:#f0bef0;font-variant-numeric:tabular-nums}.slip-readout small{grid-column:1/-1;color:#bca9c2;font-size:10px}
+#sampling-note{max-width:340px;text-align:right}.transport-row{flex-wrap:wrap}.case-label select{max-width:49vw;width:430px}.view-options{gap:10px}.map-legend{max-width:85%;line-height:1.5}
+@media(max-width:760px){.case-label select{max-width:90vw;width:100%}.recording-mode,.safety-note{padding-left:14px}.bend-jumps{margin-left:auto}}
+
+.map-legend{background:#10202ddc;border:1px solid #3b5363;border-radius:5px;padding:7px 9px;left:12px;bottom:10px}.comparison-legend{background:#10202ddc;padding:4px 7px;border-radius:4px;bottom:70px}
