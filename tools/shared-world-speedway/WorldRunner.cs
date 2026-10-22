@@ -44,6 +44,7 @@ public sealed class WorldRunner : IDisposable
     private readonly bool diagnosticPathGuidance;
     private readonly bool diagnosticPathPreview;
     private readonly AdaptiveRiderControl? adaptiveRider;
+    private readonly FeasibleCornerEntry? cornerEntry;
     public WorldSnapshot Snapshot => new(TimeSeconds, Array.AsReadOnly((RiderView[])views.Clone())) {
         RearWheels=rearWheels.Length==0?null:rearWheels.Select((w,i)=>w.View(specs[i].Profile.Id)).ToArray(),
         Steering=twoContactStates.Length==0?null:twoContactStates.Select((s,i)=>new SteeringView(specs[i].Profile.Id,s.SteeringRadians)).ToArray(),
@@ -113,6 +114,11 @@ public sealed class WorldRunner : IDisposable
             ||controls?.Any()==true||spatialControls?.Any()==true||steeringCommands?.Any()==true))
             throw new ArgumentException("Adaptive rider needs isolated physical steering, static loads and no authored guidance/controls.");
         adaptiveRider=Parameters.EnableAdaptiveRiderControl?new(Frame):null;
+        if(Parameters.EnableFeasibleCornerEntry&&(!Parameters.EnableTravelDirectionSteering||!Parameters.Enable500CcEngine||!Parameters.EnableLoadBasedTyreGrip||Parameters.EnableAdaptiveRiderControl
+            ||Parameters.EnableDynamicAxleLoad||authoredPath is not null||diagnosticPathGuidance
+            ||controls?.Any()==true||spatialControls?.Any()==true||steeringCommands?.Any()==true||specs.Length!=1||specs[0].TrafficEnabled))
+            throw new ArgumentException("Entry preparation needs one isolated travel-steering rider and no competing controls.");
+        cornerEntry=Parameters.EnableFeasibleCornerEntry?new():null;
         this.steeringCommands=(steeringCommands??Array.Empty<TwoContactSteeringCommand>()).OrderBy(c=>c.AtSeconds).ToArray();
         if(Parameters.EnableDynamicAxleLoad&&(!Parameters.EnableTwoContactBikeDynamics||!Parameters.EnablePhysicalSteeringControl
             ||Parameters.AxleLoadHeightMeters is { } height&&(!double.IsFinite(height)||height<=0))||!Parameters.EnableDynamicAxleLoad&&Parameters.AxleLoadHeightMeters is not null)
@@ -236,6 +242,15 @@ public sealed class WorldRunner : IDisposable
             {
                 TimeSeconds = nextTime;
                 Activate();
+                if(cornerEntry is not null&&pending[0] is null&&TimeSeconds+1e-10>=cornerEntry.NextReviewSeconds){
+                    var choice=cornerEntry.Observe(views[0],specs[0],Frame,surface,Parameters,TimeSeconds,physics.Masses[0],rearWheels[0],twoContactStates[0]);
+                    Work.CornerEntryReviews++;diagnostics?.CornerEntry?.Invoke(choice);
+                    if(choice.Drive!=views[0].Drive||choice.TargetOffsetMeters!=views[0].TargetOffsetMeters){
+                        var command=new DecisionEvent(views[0].Id,0,TrafficAction.KeepIntent,TimeSeconds,TimeSeconds,
+                            TimeSeconds+RiderController.ReactionSeconds(specs[0]),null,choice.TargetOffsetMeters,choice.Drive,Reason:choice.Reason);
+                        pending[0]=command;decisions.Add(command);
+                    }
+                }
                 if(adaptiveRider is not null&&TimeSeconds+1e-10>=adaptiveRider.NextReviewSeconds){
                     var started=Stopwatch.GetTimestamp();
                     var decision=adaptiveRider.Decide(views[0],specs[0],Frame,surface,Parameters,TimeSeconds,physics.Masses[0],physics.Inertias[0],rearWheels[0],twoContactStates[0]);
@@ -637,6 +652,8 @@ public sealed class WorldRunner : IDisposable
         Span<double> data = stackalloc double[14];
         Span<double> wheelData=stackalloc double[1];var wheelIndex=0;
         if(adaptiveRider is not null){wheelData[0]=adaptiveRider.NextReviewSeconds;hash.AppendData(System.Runtime.InteropServices.MemoryMarshal.AsBytes(wheelData));}
+        if(cornerEntry is not null){wheelData[0]=cornerEntry.NextReviewSeconds;hash.AppendData(System.Runtime.InteropServices.MemoryMarshal.AsBytes(wheelData));
+            wheelData[0]=cornerEntry.Preparing?1:0;hash.AppendData(System.Runtime.InteropServices.MemoryMarshal.AsBytes(wheelData));}
         foreach (var v in views)
         {
             data[0] = TimeSeconds; data[1] = v.Id; data[2] = v.Position.X; data[3] = v.Position.Y;
