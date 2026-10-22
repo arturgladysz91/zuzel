@@ -1,0 +1,11 @@
+{
+  "accessed": "2026-10-22",
+  "scope": "Qualitative structure only. No real speedway mu, peak slip ratio, optimum angle or post-peak falloff calibrated from these sources.",
+  "sources": [
+    {"title": "Mitas SPEEDWAY", "url": "https://www.mitas-moto.com/en-gb/products/motorcycle-off-road-tyres/speedway-tyres/speedway", "use": "Speedway product and footprint/carcass description; no usable force-slip surface calibration."},
+    {"title": "Altair Soft Soil Tire Model 2025", "url": "https://2025.help.altair.com/2025/hwdesktop/hwx/topics/motionview/soft_soil_tire_r.htm", "use": "Pressure-sinkage, shear-displacement, lateral bulldozing and multipass structures; no numerical transfer to shale."},
+    {"title": "Naranjo 2013, Virginia Tech", "url": "https://vtechworks.lib.vt.edu/items/167607e6-71f1-4b5c-bce9-9e8678ef2fbe", "use": "Controlled low-speed single-wheel soil experiments show sinkage/slip dependence; not a speedway tyre dataset."},
+    {"title": "McIntyre 2015, Auburn", "url": "https://auetd.auburn.edu/handle/10415/4630", "use": "Combined-force measurements on prepared remolded clay varying slip angle, camber, pressure and load; relevant experimental design, not shale calibration."},
+    {"title": "Project Chrono Terrain Models", "url": "https://api.projectchrono.org/vehicle_terrain.html", "use": "Distinguishes scalar friction handling queries from deformable terrain interaction; no recommendation to implement SCM/DEM now."}
+  ]
+}

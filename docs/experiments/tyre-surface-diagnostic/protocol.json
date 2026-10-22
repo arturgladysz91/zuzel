@@ -1,0 +1,18 @@
+{
+  "basePr": 117,
+  "baseHead": "29cece47bc8fc7dfe6e678c08b3a0c8e5c837a89",
+  "frozenSurface": {"Grip": 1, "Ruts": 0, "Moisture": 0.5},
+  "massKg": 147,
+  "inertiaKgMetersSquared": 52.72097,
+  "gridSourceSeconds": [0.2, 0.5, 1.0],
+  "kappa": [0, 0.1, 0.3, 1, 3],
+  "alphaRearDegrees": [0, 5, 10, 20, 40],
+  "tailQueries": [{"kappa": 10, "alpha": 10}, {"kappa": 0.3, "alpha": 80}],
+  "representative": "#116 C-both-egg-first, accepted pre-step t=0.5 s; original finite-step replay before interventions",
+  "throttle": [0, 0.25, 0.5, 0.75, 1],
+  "equilibrium": "One constant-speed R46 V18 fixture already defined in #116/#117. Solve four algebraic balance equations for beta, steering, wheel omega and throttle using original h0 contact, then local linearization. If infeasible, report it; no parameter search or power fitting.",
+  "algebraicInitialGuesses": [[5, 0, 60, 0.2], [20, 0, 110, 0.8]],
+  "stability": "Body-frame u,w,r,omega plus steering actuator state; throttle and steering rate as controls. Check eigenvalues, controllability and a mathematical local feedback witness only. No change to #117, no nonlinear ride certificate.",
+  "nativeWorlds": 0,
+  "rule": "No historical simulations, energy reruns, physics/engine/controller/mu edits. Retain both final algebraic outcomes and query counts. Two plots. No full Windows CI."
+}
