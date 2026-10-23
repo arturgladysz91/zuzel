@@ -34,17 +34,22 @@ public sealed class RobustBudget : IDisposable
     public const double CpuLimitSeconds=2600,EpisodeCpuSeconds=30,GenerationCpuSeconds=150;
     public const long ContactLimit=38000000;
     private readonly string directory;private readonly FileStream lease;
+    private readonly IReadOnlyDictionary<string,int>? categoryLimits;
+    private readonly int worldLimit;
+    private readonly double cpuLimit;
+    private readonly long contactLimit;
     public List<RobustReservation> Entries {get;}
-    public RobustBudget(string directory){
+    public RobustBudget(string directory,IReadOnlyDictionary<string,int>? categoryLimits=null,int worldLimit=531,double cpuLimit=CpuLimitSeconds,long contactLimit=ContactLimit){
+        this.categoryLimits=categoryLimits;this.worldLimit=worldLimit;this.cpuLimit=cpuLimit;this.contactLimit=contactLimit;
         this.directory=directory;Directory.CreateDirectory(directory);
         lease=new(Path.Combine(directory,"budget.lock"),FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.None);
         Entries=File.Exists(Path.Combine(directory,"attempts.json"))?RobustLearningExperiment.Read<List<RobustReservation>>(directory,"attempts.json"):new();
     }
     public int Reserve(string name,string category,bool native=true){
-        var max=category switch{"train-A"=>100,"train-B"=>300,"selection"=>72,"test"=>48,"diagnostic"=>8,"two-bends"=>3,"offline"=>8,_=>throw new ArgumentException("Unknown budget category.")};
+        var max=categoryLimits is not null?categoryLimits[category]:category switch{"train-A"=>100,"train-B"=>300,"selection"=>72,"test"=>48,"diagnostic"=>8,"two-bends"=>3,"offline"=>8,_=>throw new ArgumentException("Unknown budget category.")};
         if(Entries.Any(e=>e.Name==name)||Entries.Count(e=>e.Category==category)>=max
-            ||Entries.Sum(e=>e.NativeWorlds)+(native?1:0)>531||Entries.Sum(e=>e.CpuSeconds)>=CpuLimitSeconds-60
-            ||Entries.Sum(e=>e.Evaluations)>=ContactLimit-1000000)throw new InvalidOperationException("Frozen native/CPU/contact budget or duplicate reservation.");
+            ||Entries.Sum(e=>e.NativeWorlds)+(native?1:0)>worldLimit||Entries.Sum(e=>e.CpuSeconds)>=cpuLimit-60
+            ||Entries.Sum(e=>e.Evaluations)>=contactLimit-1000000)throw new InvalidOperationException("Frozen native/CPU/contact budget or duplicate reservation.");
         var n=Entries.Count+1;Entries.Add(new(n,name,category,native?1:0));Save();return n;
     }
     public void Complete(int n,double cpu,long evaluations,long forecasts,RobustMetrics? metrics=null,string? rawPath=null){

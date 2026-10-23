@@ -96,7 +96,8 @@ public static class RobustLearningExperiment
     }
 
     public static RobustEpisode Execute(string directory,string raw,RobustBudget budget,string category,string name,int id,FreeLearningPolicy policy,
-        FreeLearningScenario scenario,double? shortSeconds=null,bool refinedDiagnostic=false,double? interveneAt=null,FreeRacingAction? intervention=null,bool twoBends=false){
+        FreeLearningScenario scenario,double? shortSeconds=null,bool refinedDiagnostic=false,double? interveneAt=null,FreeRacingAction? intervention=null,bool twoBends=false,
+        double horizonSeconds=.6,bool normalizeProgress=false,double? holdAt=null,FreeRacingAction? holdAction=null){
         var previousReservation=budget.Entries.SingleOrDefault(e=>e.Name==name);
         if(previousReservation is not null){
             if(!previousReservation.Complete||previousReservation.RawSha256!=Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(RawPath(raw,name)))))throw new IOException("Incomplete/corrupt attempt; never silently repeat.");
@@ -115,9 +116,11 @@ public static class RobustLearningExperiment
             twoContactInitial:new(scenario.HeadingError,scenario.YawRate),freeLearningPolicy:policy,
             diagnostics:new(){Force=f=>before=f.Rider,TwoContact=o=>force=o.Forces,RearWheel=o=>wheel=o.Step});
         var mechanical=world.MechanicalProperties(1);
-        if(interveneAt is{} observation&&intervention is{} alternate)world.FreeLearning!.DiagnosticChooser=input=>{
-            var d=FreeLearningController.Choose(input,policy,spec,frame,surface,p,mechanical.MassKg,mechanical.InertiaKgMetersSquared);
-            return Math.Abs(input.Time-observation)<1e-8?d with{Action=alternate}:d;
+        if(interveneAt is not null||horizonSeconds!=.6||normalizeProgress||holdAt is not null)world.FreeLearning!.DiagnosticChooser=input=>{
+            if(holdAt is{} held&&input.Time>=held-1e-8&&holdAction is{} heldAction)
+                return new(input.Time,heldAction,FreeActionSafety.Uncertain,false,Array.Empty<FreeLearningCandidate>(),0,0);
+            var d=FreeLearningController.Choose(input,policy,spec,frame,surface,p,mechanical.MassKg,mechanical.InertiaKgMetersSquared,horizonSeconds,normalizeProgress);
+            return interveneAt is{} observation&&intervention is{} alternate&&Math.Abs(input.Time-observation)<1e-8?d with{Action=alternate}:d;
         };
         var gateReference=frame.SegmentStartMeters(twoBends?8:4)+3;var gate=frame.At(gateReference,0);
         var gatePoint=new MeterPoint(gate.Position.X,gate.Position.Y);var tangent=new MeterPoint(gate.Road.Tangent.X,gate.Road.Tangent.Y);

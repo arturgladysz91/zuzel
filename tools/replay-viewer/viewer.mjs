@@ -27,6 +27,7 @@ const latestOption = document.createElement('option'); latestOption.value = 'lat
 latestOption.textContent = '#123 · najnowszy przejazd · dwa łuki Egg Mild · 1 zawodnik';
 $('scenario').prepend(latestOption);
 const robustOption=document.createElement('option');robustOption.value='robust-learning';robustOption.textContent='#130 · Robust Learning · A/B i12 nowych przypadków';$('scenario').prepend(robustOption);
+const extendedOption=document.createElement('option');extendedOption.value='extended-learning';extendedOption.textContent='#131 · Extended Learning · H06/H09 i dwa łuki';$('scenario').prepend(extendedOption);
 const learningOption=document.createElement('option');learningOption.value='free-learning';
 learningOption.textContent='#129 · Free Racing Learning · proces uczenia i kamienie milowe';$('scenario').prepend(learningOption);
 const freeOption=document.createElement('option');freeOption.value='free-racing';
@@ -56,7 +57,7 @@ let geometry, nativeGeometry, replay, time = 0, selected = 1, playing = false, d
 let clipRecorder = null;
 let width = 0, height = 0, dpr = 1, fitScale = 1, eventNodes = [], lastPanelTime = -1;
 const camera = { x: 0, y: 0, scale: 1 };
-const color = id => replay.robust?robustColors[replay.robustPolicy]:colors[[...replay.tracks.keys()].indexOf(id) % colors.length];
+const color = id => replay.robust?(replay.robustColor??robustColors[replay.robustPolicy]??colors[0]):colors[[...replay.tracks.keys()].indexOf(id) % colors.length];
 const displayState = (id = selected) => replay.state(id, time, $('smooth').checked);
 const worldToScreen = p => ({ x: width / 2 + (p.x - camera.x) * camera.scale, y: height / 2 - (p.y - camera.y) * camera.scale });
 const screenToWorld = p => ({ x: camera.x + (p.x - width / 2) / camera.scale, y: camera.y - (p.y - height / 2) / camera.scale });
@@ -178,7 +179,7 @@ function updatePanel() {
   }
   $('intent').textContent = enumName(geometry, 'intent', state.intent);
   if(replay.freeRacing){$('intent').textContent='Autonomiczne działania';$('lap').textContent='Kontrola wstępna · nieukończony';}
-  if(replay.learning){$('intent').textContent='Wyuczone preferencje gazu i kierownicy';$('lap').textContent=replay.learning.Metrics.Completed?'Pierwszy łuk + 1s kontroli na wyjściu':'Próba nieukończona';}
+  if(replay.learning){$('intent').textContent='Wyuczone preferencje gazu i kierownicy';$('lap').textContent=replay.episodeScope??(replay.learning.Metrics.Completed?'Pierwszy łuk + 1s kontroli na wyjściu':'Próba nieukończona');}
   if(replay.robust?.Replay.Name.startsWith('two-bends'))$('lap').textContent='Dwa kolejne łuki · '+(replay.learning.Metrics.Completed?'ukończone':'próba nieukończona');
   $('sample-at').textContent = `${format(state.sampleTime)} s${state.stale ? ' · ostatni' : state.interpolated ? ' · pozycja interpolowana' : ' · zaakceptowany'}`;
   $('slip-angle').textContent = motion.beta == null ? '—' : `${format(motion.beta * 180 / Math.PI, 1)}°`;
@@ -357,25 +358,25 @@ async function loadScenario(key,keepTime=null) {
   $('free-racing-analysis').hidden=true;
   $('free-learning-analysis').hidden=true;
   $('robust-learning-analysis').hidden=true;
-  $('targets').disabled=['free-racing','free-learning','robust-learning'].includes(key);
-  $('outer-limit').disabled=['free-racing','free-learning','robust-learning'].includes(key);
+  $('targets').disabled=['free-racing','free-learning','robust-learning','extended-learning'].includes(key);
+  $('outer-limit').disabled=['free-racing','free-learning','robust-learning','extended-learning'].includes(key);
   $('load-state').textContent = 'Wczytywanie zaakceptowanych stanów…';
   try {
-    if(key==='robust-learning'){
-      const data=await loadRobust(fetch,new URL(location.href).searchParams.get('run'));if(generation!==loadGeneration)return;
+    if(key==='robust-learning'||key==='extended-learning'){
+      const data=await loadRobust(fetch,new URL(location.href).searchParams.get('run'),key==='extended-learning'?'../../docs/experiments/autonomous-speedway-extended-learning/':undefined,new URL(location.href).searchParams.get('group'));if(generation!==loadGeneration)return;
       geometry=data.geometry;replay=data.replay;selected=[...replay.tracks.keys()][0];comparisonTrails=data.comparisons;widthGeometries=[];
       for(const id of ['width-controls','width-comparison'])$(id).hidden=true;
       $('comparison-legend').hidden=false;$('comparison-legend').replaceChildren();
       for(const c of data.comparisons){const span=document.createElement('span');span.style.color=c.color;span.textContent=c.name+' · ';$('comparison-legend').append(span);}
       $('recording-mode').hidden=false;$('recording-mode').textContent=`ROBUST LEARNING · ${data.index.Grade} · zapisów natywnych: ${data.group.Runs.length} · identyczne warunki`;
-      document.querySelector('.brand p').textContent='Robust Free Racing Learning · kontrolowane A/B · nowy niezależny test';
-      $('safety-note').hidden=false;$('safety-note').className='safety-note'+(data.document.Replay.Metrics.Completed?'':' unsafe');
+      document.querySelector('.brand p').textContent=data.index.Title??'Robust Free Racing Learning · kontrolowane A/B · nowy niezależny test';
+      $('safety-note').hidden=false;$('safety-note').className='safety-note'+(data.document.Replay.Metrics.Completed||data.document.Replay.Metrics.Outcome==='probe'?'':' unsafe');
       $('safety-note').textContent=`${data.group.Id}: ${data.document.Replay.Metrics.Outcome}. Potwierdzone przekroczenie i brak certyfikacji są odrębnymi wynikami.`;
       document.querySelector('.map-title span').textContent='EGG MILD · PROGRESSIVE B';document.querySelector('.map-title small').textContent='Rzeczywiste ślady · bez idealnej linii';
       $('smooth').checked=false;$('targets').checked=false;$('outer-limit').checked=false;$('rate').value='0.5';
       $('sampling-note').textContent=`${data.document.Replay.Samples.length} natywnych stanów · bez ekstrapolacji`;
       $('record-clip').hidden=typeof MediaRecorder==='undefined'||!canvas.captureStream;
-      setupRobust($('robust-learning-analysis'),data,run=>{const at=time;const url=new URL(location.href);url.searchParams.set('run',run);url.searchParams.delete('t');history.replaceState(null,'',url);loadScenario('robust-learning',at);},
+      setupRobust($('robust-learning-analysis'),data,(run,groupId)=>{const at=time;const url=new URL(location.href);url.searchParams.set('run',run);if(groupId)url.searchParams.set('group',groupId);url.searchParams.delete('t');history.replaceState(null,'',url);loadScenario(key,at);},
         (policy,visible)=>{comparisonTrails.find(c=>c.policy===policy).visible=visible;dirty=true;});
       const button=document.createElement('button');button.textContent=`R${selected}`;button.dataset.id=String(selected);button.addEventListener('click',()=>chooseRider(selected));
       $('riders').replaceChildren(button);$('source-count').textContent='1 motocykl';$('scrub').max=String(replay.duration);
@@ -570,7 +571,7 @@ async function loadScenario(key,keepTime=null) {
   }
 }
 $('scenario').addEventListener('change', e => {
-  const url = new URL(location.href); url.searchParams.set('case', e.target.value); history.replaceState(null, '', url);
+  const url = new URL(location.href); url.searchParams.set('case', e.target.value);url.searchParams.delete('run');url.searchParams.delete('group'); history.replaceState(null, '', url);
   loadScenario(e.target.value);
 });
 $('play').addEventListener('click', () => { if (replay && time >= replay.duration) setTime(0); setPlaying(!playing); });

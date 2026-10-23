@@ -3,6 +3,11 @@
 Release platform: **Windows only**. See the current [Windows CI policy](docs/ci.md)
 for Draft/full validation, the merge gate and optional historical audits.
 
+[Autonomous Speedway Rider #131](docs/experiments/autonomous-speedway-extended-learning/README.md)
+compares H06/H09 with two seeds, then trains one continuous two-bend controller.
+The sealed test reaches 24/24 single bends and 12/12 two bends, but paired time
+regression keeps the verdict PARTIAL. Original physics and defaults remain unchanged.
+
 [Free Racing (#128)](docs/experiments/free-racing.md) isolates path-free throttle
 and steering with a gated, deterministic small-policy trainer. The first native
 preflight crosses the outer boundary before the bend; training remains stopped.

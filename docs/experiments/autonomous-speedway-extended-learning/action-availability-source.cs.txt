@@ -1,0 +1,29 @@
+using System.Diagnostics;
+using System.Numerics;
+using SharedWorldSpeedway;
+using CoreSim;
+using CoreSim.PhysicalSpace;
+
+var directory=args[0];var raw=args[1];var phase=args[2];
+using var budget=new RobustBudget(directory,ExtendedLearningExperiment.Limits,1000,6000,90000000);
+var reservation=budget.Reserve("extra-audit-"+phase,"offline",false);var started=Process.GetCurrentProcess().TotalProcessorTime;long queries=0,forecasts=0;
+var root=RobustLearningExperiment.ReadEpisode(raw,"audit130-two");var frame=RacingLineRootCauseAudit.Frame();var surface=TrackState.CreateDefault(frame.Track,new(1,0,.5f)).Snapshot();
+var p=FreeLearningExperiment.Parameters();var spec=FreeLearningExperiment.Rider(root.Replay.Scenario);var records=new List<object>();
+// This is an action-availability diagnostic, never a policy or a training intervention.
+foreach(var time in new[]{8.4,9.2,9.6,9.8,10.0}){
+    var saved=root.Replay.Samples.Single(s=>Math.Abs(s.Input.Time-time)<1e-7);var input=saved.Input with{
+        Pending=saved.Input.Pending.Where(c=>c.ObservedAt<time-1e-8).ToArray(),NextReview=time};
+    foreach(var steering in new[]{-35f,-25f,-15f,-5f,0f,5f,15f,25f,35f})foreach(var drive in new[]{0f,(float)root.Replay.Policy.Drive,.8f,1f}){
+        var action=new FreeRacingAction(steering*MathF.PI/180,drive);action.Validate();
+        var prediction=FreeRacingModel.Predict(input,spec,frame,surface,p,147,52.72097f,.9,action);queries+=prediction.ForceEvaluations;forecasts++;
+        var end=prediction.Points[^1];var clearance=prediction.Points.Min(q=>Math.Min(q.Inner,q.Outer));
+        var closing=Vector2.Dot(end.Rider.Velocity,end.Rider.Road.Outward);var future=Math.Min(end.Inner-Math.Max(0,-closing)*.24,end.Outer-Math.Max(0,closing)*.24);
+        var beta=prediction.Points.Max(q=>Math.Abs(q.Rider.SlideRadians))*180/Math.PI;
+        var safe=clearance>=.2&&future>=.1&&beta<=45;
+        records.Add(new{Time=time,Action=action,SafeInHorizon=safe,Clearance=clearance,FutureClearance=future,MaximumBeta=beta,EndSpeed=end.Rider.Speed,
+            Scope="Prediction only. Beyond-envelope points cannot establish validated recovery; no native or learned trajectory claim."});
+    }
+}
+RobustLearningExperiment.Save(directory,"action-availability.json",new{Records=records,Queries=queries,Forecasts=forecasts,NativeWorlds=0});
+budget.Complete(reservation,(Process.GetCurrentProcess().TotalProcessorTime-started).TotalSeconds,queries,forecasts);
+Console.WriteLine($"Action availability: {forecasts} forecasts, {queries} contact evaluations; no native worlds.");

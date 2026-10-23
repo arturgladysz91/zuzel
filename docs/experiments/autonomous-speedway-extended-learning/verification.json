@@ -1,0 +1,60 @@
+{
+  "RemoteCI": "Status and exact head link will be recorded in the Draft PR body",
+  "CSharp": {
+    "Failed": 0,
+    "Passed": 2380,
+    "Skipped": 0,
+    "Trajectory": 395,
+    "ArchiveCemReconstruction": true,
+    "Core": 1985,
+    "ArchiveCemSameRuntimeExact": true,
+    "ArchiveCemCrossRuntimeAbsoluteBound": 1e-12
+  },
+  "Platform": "Windows 10, net8.0 runtime8.0.30, SDK10.0.400",
+  "CoreSimUnmodified": true,
+  "Viewer": {
+    "Opened": "http://127.0.0.1:8013/tools/replay-viewer/?case=extended-learning",
+    "TwoBendScope": true,
+    "SharedReplayGroupSelection": true,
+    "ConsoleErrors": 0,
+    "NativeOnly": true
+  },
+  "Python": {
+    "Failed": 0,
+    "Data": 179,
+    "CI": 7
+  },
+  "Build": {
+    "WarningsAsErrors": true,
+    "Warnings": 0,
+    "Release": true
+  },
+  "Discovery": {
+    "FourRider": 48,
+    "Total": 2901,
+    "Duplicates": 0,
+    "Missing": 0,
+    "Historical": 473
+  },
+  "HistoricalResultsUnmodified": true,
+  "Node": {
+    "Failed": 0,
+    "Passed": 41
+  },
+  "Native": {
+    "Deterministic130Fingerprint": true,
+    "PredictorEndpoints": 6,
+    "HighSlipPoints": 91,
+    "H06ReferenceParity": true,
+    "FullGasPoints": 91,
+    "CounterfactualPhysicalPrefixExact": true
+  },
+  "Notes": [
+    "Standard Draft scope; historical-analysis/four-rider execution not required.",
+    "NuGet vulnerability metadata endpoint unavailable locally; restore completed with NuGetAudit=false; no dependency versions changed.",
+    "Initial test path and line-ending failures were corrected, original raw/protocol retained.",
+    "Original counterfactual flag includes Drive at the activation deadline; physical prefix independently verified."
+  ],
+  "InitialRemoteRun": "https://github.com/arturgladysz91/zuzel/actions/runs/40020772738",
+  "InitialRemoteFailure": "Only new archive coefficient equality;2.22e-16 runtime difference. Native outcomes and thresholds unchanged."
+}

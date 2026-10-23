@@ -406,3 +406,20 @@ komendę; nie są przedstawiane jako wyuczona polityka130.
 Pełne surowe450 replayów pozostało lokalnie. Git zawiera agregaty wszystkich
 prób, hashe i wybrane reprezentatywne nagrania w jednym pliku gzip.
 [Pełny raport i lokalizacja danych](../../docs/experiments/robust-free-racing-learning/README.md).
+
+# Autonomous Speedway Rider #131
+
+`?case=extended-learning` otwiera zamrożoną politykę #4061 przy H09 na nowym
+stanie V00. Zbiór końcowy dał 24/24 ukończeń jednego łuku i 12/12 dwóch łuków.
+Werdykt PARTIAL wynika z regresji czasów: mediana +8,41%, maksimum +32,88%
+na wspólnie ukończonych pojedynczych łukach wobec #130.
+
+Grupy AB porównują oba horyzonty na identycznym wejściu; TWO pokazuje checkpoint
+początkowy i wyuczony. U/V to niezależny finał. BETA130 zachowuje nieudaną jazdę
+i jedną zmienioną komendę, HIGH-BETA i FULL-GAS są wyraźnie opisanymi sondami
+fizyki, a nie wyuczonymi przejazdami. Każdy obraz i ślad pochodzi z Box2D.
+Etykieta odróżnia dwa łuki, pierwszy łuk i zaplanowany koniec sondy.
+
+Lokalnie: `python -m http.server 8013 --bind 127.0.0.1` z katalogu repo.
+[Raport, wyniki, protokół i manifest](../../docs/experiments/autonomous-speedway-extended-learning/README.md).
+Do odtworzenia wykresów zainstaluj `tools/extended-learning-report.requirements.txt`.

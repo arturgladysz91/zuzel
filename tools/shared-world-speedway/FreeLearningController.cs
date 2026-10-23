@@ -55,7 +55,7 @@ public sealed class FreeLearningController
             .Append(input.Active).Distinct().ToArray();
     }
     public static FreeLearningDecision Choose(FreeRacingInput input,FreeLearningPolicy policy,RiderSpec spec,TrackFrame frame,
-        TrackStateSnapshot surface,WorldParameters p,float mass,float inertia,double horizonSeconds=HorizonSeconds){
+        TrackStateSnapshot surface,WorldParameters p,float mass,float inertia,double horizonSeconds=HorizonSeconds,bool normalizeProgress=false){
         if(!double.IsFinite(horizonSeconds)||horizonSeconds<.3||horizonSeconds>FreeRacingModel.MaximumHorizonSeconds)throw new ArgumentException("Bounded audit horizon required.");
         var candidates=new List<FreeLearningCandidate>();var evaluations=0;var forecasts=0;
         foreach(var action in Actions(input,policy)){
@@ -74,7 +74,10 @@ public sealed class FreeLearningController
             var lane=Math.Clamp((float)v.Road.OffsetMeters/LaneModel.UsableRacingWidthMeters(frame.Track.Segments[v.Road.Segment].Type,frame.Track.Geometry)*4,0,4);
             var capacity=LoadBasedTyreGrip.Budget(mass,surface.SampleSurface(v.Road.Segment,lane),TwoContactBikeParameters.Default,null).TotalCapacityNewtons/mass;
             var speedEnvelope=desiredYaw>1e-8?Math.Sqrt(.8*capacity/(desiredYaw/Math.Max(v.Speed,.5))):100;
-            var score=-policy.ProgressWeight*progress+policy.DirectionWeight*error*error*10
+            // #131 compares horizons in equivalent 0.6-second progress units. The default
+            // retains the frozen #129/#130 scoring byte-for-byte in arithmetic order.
+            var scoredProgress=normalizeProgress?progress*HorizonSeconds/horizonSeconds:progress;
+            var score=-policy.ProgressWeight*scoredProgress+policy.DirectionWeight*error*error*10
                 +policy.YawWeight*Math.Pow(v.AngularVelocity-desiredYaw,2)*10
                 +policy.ThrottleWeight*Math.Pow(action.Drive-policy.Drive,2)
                 +policy.SteeringChangeWeight*Math.Pow((action.SteeringRadians-input.Active.SteeringRadians)*180/Math.PI,2)
