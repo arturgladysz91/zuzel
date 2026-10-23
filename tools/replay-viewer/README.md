@@ -391,3 +391,18 @@ Nakładki pochodzą z identycznego stanu9m/s/offset4m, także nowy natywny#124.
 Wykresy przedstawiają postęp, ukończenia, czasy, parametry, przyczyny zakończeń
 i prędkości. Sterowanie i XY są zapisane, bez symulacji w przeglądarce.
 [Raport, tabele, koszt i ograniczenia](../../docs/experiments/free-racing-learning/README.md).
+
+# Robust Free Racing Learning #130
+
+`?case=robust-learning` porównuje #129 po100, po200, końcową i wybraną przed
+nowym testem politykę #130 na identycznych warunkach. Każdy ślad można wyłączyć.
+Wynik **PARTIAL**: nowa polityka A1020 kończy12/12 nowych stanów, starsze
+referencje11/12,11/12,9/12. B nie wygrał selekcji z A. W ciągłej próbie dwóch
+łuków przekroczono obwiednię wiarygodnościβ45° przy wejściu w drugi.
+Panel odróżnia brak certyfikacji od potwierdzonego przekroczenia i pokazuje
+rzeczywiste sterowanie, β/ψ/χ, yaw, siły opon, pracę silnika i bilans energii.
+Osobne scenariusze diagnostyczne pokazują oryginalny DNF i jedną zmienioną
+komendę; nie są przedstawiane jako wyuczona polityka130.
+Pełne surowe450 replayów pozostało lokalnie. Git zawiera agregaty wszystkich
+prób, hashe i wybrane reprezentatywne nagrania w jednym pliku gzip.
+[Pełny raport i lokalizacja danych](../../docs/experiments/robust-free-racing-learning/README.md).

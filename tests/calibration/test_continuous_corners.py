@@ -74,6 +74,8 @@ class ContinuousCornerEvidenceTests(unittest.TestCase):
                 if newer:self.assertEqual(newer['BaseSha256'],expected);expected=newer['ApprovedSha256']
                 newest=json.loads((ROOT/'docs/experiments/free-racing-learning/source-extensions.json').read_bytes())['Sources'].get(n)
                 if newest:self.assertEqual(newest['BaseSha256'],expected);expected=newest['ApprovedSha256']
+                robust=json.loads((ROOT/'docs/experiments/robust-free-racing-learning/source-extensions.json').read_bytes())['Sources'].get(n)
+                if robust:self.assertEqual(robust['BaseSha256'],expected);expected=robust['ApprovedSha256']
                 self.assertEqual(actual,expected)
             else:
                 import json
@@ -82,6 +84,8 @@ class ContinuousCornerEvidenceTests(unittest.TestCase):
                 if newer:self.assertEqual(newer['BaseSha256'],expected);expected=newer['ApprovedSha256']
                 newest=json.loads((ROOT/'docs/experiments/free-racing-learning/source-extensions.json').read_bytes())['Sources'].get(n)
                 if newest:self.assertEqual(newest['BaseSha256'],expected);expected=newest['ApprovedSha256']
+                robust=json.loads((ROOT/'docs/experiments/robust-free-racing-learning/source-extensions.json').read_bytes())['Sources'].get(n)
+                if robust:self.assertEqual(robust['BaseSha256'],expected);expected=robust['ApprovedSha256']
                 self.assertEqual(actual,expected)
 
 if __name__=='__main__':unittest.main()

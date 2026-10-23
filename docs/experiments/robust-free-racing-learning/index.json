@@ -1,0 +1,321 @@
+{
+  "Grade": "PARTIAL",
+  "Groups": [
+    {
+      "Id": "T01",
+      "Reasons": [
+        "poprawa czasu lub ukończenia",
+        "nieudany przejazd"
+      ],
+      "Scenario": {
+        "Name": "T01",
+        "Level": 2,
+        "Speed": 9.25,
+        "Offset": 6.8,
+        "Start": 22,
+        "OutwardSpeed": -0.12,
+        "HeadingError": -0.025,
+        "YawRate": -0.015
+      },
+      "Runs": [
+        {
+          "Name": "test-129-100-T01",
+          "Policy": "129-100"
+        },
+        {
+          "Name": "test-129-200-T01",
+          "Policy": "129-200"
+        },
+        {
+          "Name": "test-129-final-T01",
+          "Policy": "129-final"
+        },
+        {
+          "Name": "test-130-final-T01",
+          "Policy": "130-final"
+        }
+      ],
+      "Scope": "Nowy końcowy test. Główna certyfikacja129 i horyzont0,6s. Cztery wcześniej zamrożone polityki."
+    },
+    {
+      "Id": "T02",
+      "Reasons": [
+        "regresja czasu względem referencji"
+      ],
+      "Scenario": {
+        "Name": "T02",
+        "Level": 2,
+        "Speed": 10.75,
+        "Offset": 4.6,
+        "Start": 22,
+        "OutwardSpeed": 0.15,
+        "HeadingError": -0.02,
+        "YawRate": 0.025
+      },
+      "Runs": [
+        {
+          "Name": "test-129-100-T02",
+          "Policy": "129-100"
+        },
+        {
+          "Name": "test-129-200-T02",
+          "Policy": "129-200"
+        },
+        {
+          "Name": "test-129-final-T02",
+          "Policy": "129-final"
+        },
+        {
+          "Name": "test-130-final-T02",
+          "Policy": "130-final"
+        }
+      ],
+      "Scope": "Nowy końcowy test. Główna certyfikacja129 i horyzont0,6s. Cztery wcześniej zamrożone polityki."
+    },
+    {
+      "Id": "T11",
+      "Reasons": [
+        "legalna jazda blisko granicy"
+      ],
+      "Scenario": {
+        "Name": "T11",
+        "Level": 4,
+        "Speed": 17.75,
+        "Offset": 6.6,
+        "Start": 22,
+        "OutwardSpeed": -0.15,
+        "HeadingError": 0.015,
+        "YawRate": -0.025
+      },
+      "Runs": [
+        {
+          "Name": "test-129-100-T11",
+          "Policy": "129-100"
+        },
+        {
+          "Name": "test-129-200-T11",
+          "Policy": "129-200"
+        },
+        {
+          "Name": "test-129-final-T11",
+          "Policy": "129-final"
+        },
+        {
+          "Name": "test-130-final-T11",
+          "Policy": "130-final"
+        }
+      ],
+      "Scope": "Nowy końcowy test. Główna certyfikacja129 i horyzont0,6s. Cztery wcześniej zamrożone polityki."
+    },
+    {
+      "Id": "T00",
+      "Reasons": [
+        "wspólna kontrola"
+      ],
+      "Scenario": {
+        "Name": "T00",
+        "Level": 2,
+        "Speed": 8.75,
+        "Offset": 2.9,
+        "Start": 22,
+        "OutwardSpeed": 0.08,
+        "HeadingError": 0.015,
+        "YawRate": 0.02
+      },
+      "Runs": [
+        {
+          "Name": "test-129-100-T00",
+          "Policy": "129-100"
+        },
+        {
+          "Name": "test-129-200-T00",
+          "Policy": "129-200"
+        },
+        {
+          "Name": "test-129-final-T00",
+          "Policy": "129-final"
+        },
+        {
+          "Name": "test-130-final-T00",
+          "Policy": "130-final"
+        }
+      ],
+      "Scope": "Nowy końcowy test. Główna certyfikacja129 i horyzont0,6s. Cztery wcześniej zamrożone polityki."
+    },
+    {
+      "Id": "diagnostic-14-5",
+      "Reasons": [
+        "kontrolowana zmiana jednej komendy"
+      ],
+      "Scenario": {
+        "Name": "holdout-14-5",
+        "Level": 3,
+        "Speed": 14,
+        "Offset": 5,
+        "Start": 22,
+        "OutwardSpeed": 0.1,
+        "HeadingError": 0.015,
+        "YawRate": 0.015
+      },
+      "Scope": "Osobna diagnostyka, nie polityka130 ani dane treningowe: dokładniejszy certyfikat w obu próbach; w drugiej jedna komenda z horyzontu0,9s, potem oryginalne sprzężenie0,6s.",
+      "Runs": [
+        {
+          "Name": "diagnostic-boundary",
+          "Policy": "diag-original"
+        },
+        {
+          "Name": "diagnostic-one-command",
+          "Policy": "diag-intervention"
+        }
+      ]
+    },
+    {
+      "Id": "two-bends",
+      "Reasons": [
+        "dwa łuki bez resetu"
+      ],
+      "Scenario": {
+        "Name": "S2",
+        "Level": 3,
+        "Speed": 12.5,
+        "Offset": 3.2,
+        "Start": 22,
+        "OutwardSpeed": 0.12,
+        "HeadingError": -0.02,
+        "YawRate": -0.025
+      },
+      "Runs": [
+        {
+          "Name": "two-bends-130-final",
+          "Policy": "130-final"
+        }
+      ],
+      "Scope": "Jeden ciągły świat. Brak resetu pozycji, koła, sterowania i kolejki pomiędzy łukami."
+    }
+  ],
+  "DefaultRun": "test-130-final-T01",
+  "RawDirectory": "C:\\Users\\artur\\Documents\\Codex\\2026-10-23\\files-pasted-by-the-user-pr\\work\\robust-free-racing-130-raw",
+  "AllSealedScenarios": [
+    {
+      "Name": "T00",
+      "Level": 2,
+      "Speed": 8.75,
+      "Offset": 2.9,
+      "Start": 22,
+      "OutwardSpeed": 0.08,
+      "HeadingError": 0.015,
+      "YawRate": 0.02
+    },
+    {
+      "Name": "T01",
+      "Level": 2,
+      "Speed": 9.25,
+      "Offset": 6.8,
+      "Start": 22,
+      "OutwardSpeed": -0.12,
+      "HeadingError": -0.025,
+      "YawRate": -0.015
+    },
+    {
+      "Name": "T02",
+      "Level": 2,
+      "Speed": 10.75,
+      "Offset": 4.6,
+      "Start": 22,
+      "OutwardSpeed": 0.15,
+      "HeadingError": -0.02,
+      "YawRate": 0.025
+    },
+    {
+      "Name": "T03",
+      "Level": 2,
+      "Speed": 11.25,
+      "Offset": 7.6,
+      "Start": 22,
+      "OutwardSpeed": -0.18,
+      "HeadingError": 0.03,
+      "YawRate": -0.02
+    },
+    {
+      "Name": "T04",
+      "Level": 3,
+      "Speed": 12.75,
+      "Offset": 3.9,
+      "Start": 22,
+      "OutwardSpeed": 0.1,
+      "HeadingError": 0.025,
+      "YawRate": -0.03
+    },
+    {
+      "Name": "T05",
+      "Level": 3,
+      "Speed": 13.25,
+      "Offset": 6.1,
+      "Start": 22,
+      "OutwardSpeed": -0.08,
+      "HeadingError": -0.015,
+      "YawRate": 0.02
+    },
+    {
+      "Name": "T06",
+      "Level": 3,
+      "Speed": 14.75,
+      "Offset": 5.2,
+      "Start": 22,
+      "OutwardSpeed": 0.16,
+      "HeadingError": -0.03,
+      "YawRate": -0.015
+    },
+    {
+      "Name": "T07",
+      "Level": 3,
+      "Speed": 15.25,
+      "Offset": 2.8,
+      "Start": 22,
+      "OutwardSpeed": -0.12,
+      "HeadingError": 0.02,
+      "YawRate": 0.03
+    },
+    {
+      "Name": "T08",
+      "Level": 4,
+      "Speed": 16.25,
+      "Offset": 7.1,
+      "Start": 22,
+      "OutwardSpeed": 0.18,
+      "HeadingError": 0.03,
+      "YawRate": -0.02
+    },
+    {
+      "Name": "T09",
+      "Level": 4,
+      "Speed": 16.75,
+      "Offset": 4.7,
+      "Start": 22,
+      "OutwardSpeed": -0.1,
+      "HeadingError": -0.02,
+      "YawRate": 0.025
+    },
+    {
+      "Name": "T10",
+      "Level": 4,
+      "Speed": 17.25,
+      "Offset": 3.4,
+      "Start": 22,
+      "OutwardSpeed": 0.14,
+      "HeadingError": -0.025,
+      "YawRate": 0.015
+    },
+    {
+      "Name": "T11",
+      "Level": 4,
+      "Speed": 17.75,
+      "Offset": 6.6,
+      "Start": 22,
+      "OutwardSpeed": -0.15,
+      "HeadingError": 0.015,
+      "YawRate": -0.025
+    }
+  ],
+  "Note": "Only representative native replays are in Git; all48 final metrics and all training attempts remain in aggregates. Full raw episodes require the local directory or deterministic re-execution."
+}

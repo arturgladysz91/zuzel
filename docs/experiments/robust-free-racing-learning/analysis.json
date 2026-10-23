@@ -1,0 +1,168 @@
+{
+  "Grade": "PARTIAL",
+  "BaseHead": "9470f63a11ccc31e6c7bdb862743d11e4be053d4",
+  "SelectedVariant": "A",
+  "SelectedId": 1020,
+  "SelectedBeforeTest": true,
+  "TrainingA": 100,
+  "TrainingB": 260,
+  "WorldsByCategory": {
+    "diagnostic": 5,
+    "offline": 0,
+    "selection": 36,
+    "test": 48,
+    "train-A": 100,
+    "train-B": 260,
+    "two-bends": 1
+  },
+  "NativeWorlds": 450,
+  "CpuSeconds": 1429.953125,
+  "ContactEvaluations": 19415734,
+  "Forecasts": 315663,
+  "NativeSteps": 338182,
+  "TestSummary": [
+    {
+      "Id": 40,
+      "Variant": "129-100",
+      "Completed": 11,
+      "Cases": 12,
+      "WorstTime": null,
+      "MeanCompletedTime": 7.553636363636364,
+      "WorstFailedProgress": 50.35584768728029,
+      "ConfirmedCrossings": 0,
+      "Uncertified": 1,
+      "MinimumCertificate": -0.06371726283858654,
+      "LowCompleted": 2,
+      "MediumCompleted": 2,
+      "HighCompleted": 2
+    },
+    {
+      "Id": 72,
+      "Variant": "129-200",
+      "Completed": 11,
+      "Cases": 12,
+      "WorstTime": null,
+      "MeanCompletedTime": 7.472727272727273,
+      "WorstFailedProgress": 79.01290136892271,
+      "ConfirmedCrossings": 0,
+      "Uncertified": 1,
+      "MinimumCertificate": -0.026873003395514503,
+      "LowCompleted": 2,
+      "MediumCompleted": 2,
+      "HighCompleted": 2
+    },
+    {
+      "Id": 161,
+      "Variant": "129-final",
+      "Completed": 9,
+      "Cases": 12,
+      "WorstTime": null,
+      "MeanCompletedTime": 6.795555555555556,
+      "WorstFailedProgress": 60.720617207982514,
+      "ConfirmedCrossings": 0,
+      "Uncertified": 3,
+      "MinimumCertificate": -0.02389688886043277,
+      "LowCompleted": 1,
+      "MediumCompleted": 2,
+      "HighCompleted": 1
+    },
+    {
+      "Id": 1020,
+      "Variant": "130-final",
+      "Completed": 12,
+      "Cases": 12,
+      "WorstTime": 7.65,
+      "MeanCompletedTime": 6.949166666666667,
+      "WorstFailedProgress": null,
+      "ConfirmedCrossings": 0,
+      "Uncertified": 0,
+      "MinimumCertificate": 0.1077869169195407,
+      "LowCompleted": 2,
+      "MediumCompleted": 2,
+      "HighCompleted": 2
+    }
+  ],
+  "RegressionAgainstOlderCompletionCount": false,
+  "BestOldCompletionCount": 11,
+  "BQualifiedForExtension": true,
+  "TimeRegressionsAgainstBestOlderCase": [
+    {
+      "Scenario": "T02",
+      "NewTime": 7.22,
+      "BestOlderTime": 6.95
+    },
+    {
+      "Scenario": "T03",
+      "NewTime": 7.18,
+      "BestOlderTime": 7.05
+    },
+    {
+      "Scenario": "T04",
+      "NewTime": 6.85,
+      "BestOlderTime": 6.66
+    },
+    {
+      "Scenario": "T06",
+      "NewTime": 7,
+      "BestOlderTime": 6.89
+    },
+    {
+      "Scenario": "T08",
+      "NewTime": 6.6899999999999995,
+      "BestOlderTime": 6.51
+    },
+    {
+      "Scenario": "T11",
+      "NewTime": 6.62,
+      "BestOlderTime": 6.51
+    }
+  ],
+  "TwoBends": {
+    "Run": true,
+    "Reason": "12/12 sealed single-bend tests, no completion regression"
+  },
+  "TwoBendMetrics": {
+    "Native": {
+      "Completed": false,
+      "Outcome": "control envelope",
+      "GateSeconds": null,
+      "DurationSeconds": 10.35,
+      "LegalProgress": 193.44085324406365,
+      "LegalSeconds": 10.34,
+      "MinimumClearanceMeters": 0.10677354685611143,
+      "EntrySpeed": 16.61560821533203,
+      "MinimumSpeed": 12.505118370056152,
+      "ExitSpeed": null,
+      "MaximumBetaDegrees": 45.23473641250166,
+      "MeanDrive": 0.29464894273100795,
+      "FullDriveFraction": 0.02318840527880019,
+      "LargeTrajectoryOscillations": 4,
+      "DistanceMeters": 195.19735996238887,
+      "BoundaryApproach": 5.014037993079412,
+      "RecoverySeconds": 2.189999951282516,
+      "NativeSteps": 1038,
+      "PhysicsEvaluations": 57666,
+      "Forecasts": 938,
+      "CpuSeconds": 3.734375,
+      "Fingerprint": "51AAC28A019C3845A0888D8C3A81781FDBDFB5E44F13BB5FC73FAD859C895592"
+    },
+    "MinimumInstantInner": 0.20042945427527037,
+    "MinimumInstantOuter": 7.295881602811206,
+    "MinimumLegacyCertificate": 0.10677354685611143,
+    "MinimumRefinedCertificate": 0.10677354685611143,
+    "CornerMinimumSpeed": 15.274314880371094,
+    "MaximumYawRate": 1.2937445640563965,
+    "ExitYawRate": null,
+    "SteeringRequestTravelDegrees": 92.50000302939294,
+    "MaximumRequestChangeDegrees": 10.000000430057334,
+    "EngineWorkJoules": 96778.79908979047,
+    "DissipationJoules": 81309.16148186084,
+    "NoSafeDecisions": 3,
+    "BoundaryClass": "none"
+  },
+  "PredictionPassed": true,
+  "NativeDeterminism": true,
+  "RawDirectory": "C:\\Users\\artur\\Documents\\Codex\\2026-10-23\\files-pasted-by-the-user-pr\\work\\robust-free-racing-130-raw",
+  "SelectedReplayCount": 19,
+  "RawNativeReplayCount": 450
+}
