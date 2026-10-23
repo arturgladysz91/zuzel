@@ -57,6 +57,13 @@ public sealed class ExtendedLearningTests
         Assert.All(world.FreeLearning.Decisions.Zip(world.FreeLearning.Decisions.Skip(1)),x=>Assert.Equal(.2,x.Second.Time-x.First.Time,9));
     }
     [Fact] public void EveryArchivedCemPopulationAndUpdateReconstructsFromTheFrozenSeed(){
+        // Math.Cos/Math.Tanh in the inherited sampler are not a cross-runtime bitwise
+        // contract. Compare frozen coefficients at1e-12; independently require exact
+        // same-runtime replay of every draw. Native predictor tolerances stay frozen.
+        static void ArchiveMatches(double[] expected,double[] actual){
+            Assert.Equal(expected.Length,actual.Length);
+            for(int i=0;i<expected.Length;i++)Assert.InRange(Math.Abs(expected[i]-actual[i]),0,1e-12);
+        }
         var directory=PhysicalSteeringAudit.PreviousPath("../autonomous-speedway-extended-learning");
         var starts=new List<(string Label,uint Seed,FreeLearningPolicy Policy)>();
         foreach(var seed in ExtendedLearningExperiment.Seeds)foreach(var horizon in new[]{"06","09"})
@@ -65,12 +72,16 @@ public sealed class ExtendedLearningTests
         foreach(var (label,seed,initial) in starts){
             var gs=RobustLearningExperiment.Read<RobustGeneration[]>(directory,"generations-"+label+".json");
             var incumbent=initial;var mean=initial.Values;var std=mean.Select((_,i)=>(FreeLearningPolicy.Upper[i]-FreeLearningPolicy.Lower[i])*.3).ToArray();
-            var random=new FreeRacingExperiment.RandomStream(seed);
+            var random=new FreeRacingExperiment.RandomStream(seed);var repeatedRandom=new FreeRacingExperiment.RandomStream(seed);
             foreach(var generation in gs){
-                for(int c=0;c<5;c++)Assert.Equal(generation.Candidates[c].Policy,RobustLearningExperiment.DrawPolicy(random,incumbent,mean,std,c));
+                for(int c=0;c<5;c++){
+                    var policy=RobustLearningExperiment.DrawPolicy(random,incumbent,mean,std,c);
+                    Assert.Equal(policy,RobustLearningExperiment.DrawPolicy(repeatedRandom,incumbent,mean,std,c));
+                    ArchiveMatches(generation.Candidates[c].Policy.Values,policy.Values);
+                }
                 var ranked=RobustRanking.Rank(generation.Candidates).ToArray();Assert.Equal(generation.BestId,ranked[0].Id);incumbent=ranked[0].Policy;
                 for(int i=0;i<8;i++){var m=ranked.Take(2).Average(c=>c.Policy.Values[i]);mean[i]=.4*mean[i]+.6*m;std[i]=Math.Max(.15*(FreeLearningPolicy.Upper[i]-FreeLearningPolicy.Lower[i]),Math.Sqrt(ranked.Take(2).Average(c=>Math.Pow(c.Policy.Values[i]-m,2))));}
-                Assert.Equal(generation.Mean,mean);Assert.Equal(generation.Std,std);Assert.Equal(generation.BestPolicy,incumbent);
+                ArchiveMatches(generation.Mean,mean);ArchiveMatches(generation.Std,std);Assert.Equal(generation.BestPolicy,incumbent);
             }
         }
     }
