@@ -4,6 +4,7 @@ import { loadContinuous } from './continuous.mjs';
 import { loadZigzag, createZigzagPanel } from './zigzag.mjs';
 import { loadFreeRacing, updateFreeRacingPanel } from './free-racing.mjs';
 import { loadLearning, setupLearning, updateLearningPanel } from './free-learning.mjs';
+import { loadRobust, setupRobust, updateRobustPanel, robustColors } from './robust-learning.mjs';
 
 const $ = id => document.getElementById(id);
 const canvas = $('track'), context = canvas.getContext('2d');
@@ -25,6 +26,7 @@ $('scenario').prepend(currentGroup);
 const latestOption = document.createElement('option'); latestOption.value = 'latest-two-bends';
 latestOption.textContent = '#123 · najnowszy przejazd · dwa łuki Egg Mild · 1 zawodnik';
 $('scenario').prepend(latestOption);
+const robustOption=document.createElement('option');robustOption.value='robust-learning';robustOption.textContent='#130 · Robust Learning · A/B i12 nowych przypadków';$('scenario').prepend(robustOption);
 const learningOption=document.createElement('option');learningOption.value='free-learning';
 learningOption.textContent='#129 · Free Racing Learning · proces uczenia i kamienie milowe';$('scenario').prepend(learningOption);
 const freeOption=document.createElement('option');freeOption.value='free-racing';
@@ -54,7 +56,7 @@ let geometry, nativeGeometry, replay, time = 0, selected = 1, playing = false, d
 let clipRecorder = null;
 let width = 0, height = 0, dpr = 1, fitScale = 1, eventNodes = [], lastPanelTime = -1;
 const camera = { x: 0, y: 0, scale: 1 };
-const color = id => colors[[...replay.tracks.keys()].indexOf(id) % colors.length];
+const color = id => replay.robust?robustColors[replay.robustPolicy]:colors[[...replay.tracks.keys()].indexOf(id) % colors.length];
 const displayState = (id = selected) => replay.state(id, time, $('smooth').checked);
 const worldToScreen = p => ({ x: width / 2 + (p.x - camera.x) * camera.scale, y: height / 2 - (p.y - camera.y) * camera.scale });
 const screenToWorld = p => ({ x: camera.x + (p.x - width / 2) / camera.scale, y: camera.y - (p.y - height / 2) / camera.scale });
@@ -161,7 +163,8 @@ function updatePanel() {
     $('comparison-legend').textContent='Turkusowy: natywny Free Racing. Pomarańczowy: historyczny #124 (18m/s, offset1m — inne warunki); wyłącznie odniesienie.';
     updateFreeRacingPanel($('free-racing-analysis'),replay,time);
   }
-  if(replay.learning){$('target').textContent='brak narzuconej linii';updateLearningPanel($('learning-telemetry'),replay,time);}
+  if(replay.learning&&!replay.robust){$('target').textContent='brak narzuconej linii';updateLearningPanel($('learning-telemetry'),replay,time);}
+  if(replay.robust){$('target').textContent='brak narzuconej linii';updateRobustPanel($('robust-telemetry'),replay,time);}
   $('status').textContent = state.finished ? 'Finished' : enumName(geometry, 'activity', state.activity);
   $('status').classList.toggle('finished', state.finished);
   $('lap').textContent = replay.planAt ? 'Dwa łuki · bez pełnego okrążenia' : state.finished ? `${state.totalLaps}/${state.totalLaps} · meta ${format(state.finish)} s` : `${state.lap}/${state.totalLaps} · ukończono ${state.completedLaps}`;
@@ -176,6 +179,7 @@ function updatePanel() {
   $('intent').textContent = enumName(geometry, 'intent', state.intent);
   if(replay.freeRacing){$('intent').textContent='Autonomiczne działania';$('lap').textContent='Kontrola wstępna · nieukończony';}
   if(replay.learning){$('intent').textContent='Wyuczone preferencje gazu i kierownicy';$('lap').textContent=replay.learning.Metrics.Completed?'Pierwszy łuk + 1s kontroli na wyjściu':'Próba nieukończona';}
+  if(replay.robust?.Replay.Name.startsWith('two-bends'))$('lap').textContent='Dwa kolejne łuki · '+(replay.learning.Metrics.Completed?'ukończone':'próba nieukończona');
   $('sample-at').textContent = `${format(state.sampleTime)} s${state.stale ? ' · ostatni' : state.interpolated ? ' · pozycja interpolowana' : ' · zaakceptowany'}`;
   $('slip-angle').textContent = motion.beta == null ? '—' : `${format(motion.beta * 180 / Math.PI, 1)}°`;
   $('body-angle').textContent = `${format(state.heading * 180 / Math.PI, 1)}°`;
@@ -272,6 +276,7 @@ function draw() {
     context.strokeStyle = widthColors[i]; context.lineWidth = 1.5; context.stroke();
   }
   if ($('compare-lines').checked) for (const line of comparisonTrails) {
+    if(line.visible===false)continue;
     if (line.generation && line.generation !== replay.planAt(time)) continue;
     pointPath(line.points); context.strokeStyle = line.color; context.lineWidth = 1.8; context.globalAlpha = .8; context.setLineDash(line.planned ? [8, 5] : []); context.stroke(); context.globalAlpha = 1; context.setLineDash([]);
   }
@@ -351,10 +356,32 @@ async function loadScenario(key,keepTime=null) {
   zigzagPanel=null;$('zigzag-analysis').hidden=true;
   $('free-racing-analysis').hidden=true;
   $('free-learning-analysis').hidden=true;
-  $('targets').disabled=key==='free-racing'||key==='free-learning';
-  $('outer-limit').disabled=key==='free-racing'||key==='free-learning';
+  $('robust-learning-analysis').hidden=true;
+  $('targets').disabled=['free-racing','free-learning','robust-learning'].includes(key);
+  $('outer-limit').disabled=['free-racing','free-learning','robust-learning'].includes(key);
   $('load-state').textContent = 'Wczytywanie zaakceptowanych stanów…';
   try {
+    if(key==='robust-learning'){
+      const data=await loadRobust(fetch,new URL(location.href).searchParams.get('run'));if(generation!==loadGeneration)return;
+      geometry=data.geometry;replay=data.replay;selected=[...replay.tracks.keys()][0];comparisonTrails=data.comparisons;widthGeometries=[];
+      for(const id of ['width-controls','width-comparison'])$(id).hidden=true;
+      $('comparison-legend').hidden=false;$('comparison-legend').replaceChildren();
+      for(const c of data.comparisons){const span=document.createElement('span');span.style.color=c.color;span.textContent=c.name+' · ';$('comparison-legend').append(span);}
+      $('recording-mode').hidden=false;$('recording-mode').textContent=`ROBUST LEARNING · ${data.index.Grade} · zapisów natywnych: ${data.group.Runs.length} · identyczne warunki`;
+      document.querySelector('.brand p').textContent='Robust Free Racing Learning · kontrolowane A/B · nowy niezależny test';
+      $('safety-note').hidden=false;$('safety-note').className='safety-note'+(data.document.Replay.Metrics.Completed?'':' unsafe');
+      $('safety-note').textContent=`${data.group.Id}: ${data.document.Replay.Metrics.Outcome}. Potwierdzone przekroczenie i brak certyfikacji są odrębnymi wynikami.`;
+      document.querySelector('.map-title span').textContent='EGG MILD · PROGRESSIVE B';document.querySelector('.map-title small').textContent='Rzeczywiste ślady · bez idealnej linii';
+      $('smooth').checked=false;$('targets').checked=false;$('outer-limit').checked=false;$('rate').value='0.5';
+      $('sampling-note').textContent=`${data.document.Replay.Samples.length} natywnych stanów · bez ekstrapolacji`;
+      $('record-clip').hidden=typeof MediaRecorder==='undefined'||!canvas.captureStream;
+      setupRobust($('robust-learning-analysis'),data,run=>{const at=time;const url=new URL(location.href);url.searchParams.set('run',run);url.searchParams.delete('t');history.replaceState(null,'',url);loadScenario('robust-learning',at);},
+        (policy,visible)=>{comparisonTrails.find(c=>c.policy===policy).visible=visible;dirty=true;});
+      const button=document.createElement('button');button.textContent=`R${selected}`;button.dataset.id=String(selected);button.addEventListener('click',()=>chooseRider(selected));
+      $('riders').replaceChildren(button);$('source-count').textContent='1 motocykl';$('scrub').max=String(replay.duration);
+      setTime(keepTime??Number(new URL(location.href).searchParams.get('t')??0));chooseRider(selected);fit();
+      $('robust-learning-analysis').hidden=false;$('load-state').hidden=true;return;
+    }
     if(key==='free-learning'){
       const name=new URL(location.href).searchParams.get('run')??'overlay-final';
       const data=await loadLearning(fetch,name);if(generation!==loadGeneration)return;

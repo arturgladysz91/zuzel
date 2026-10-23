@@ -33,6 +33,8 @@ public sealed class FreeLearningController
     public List<FreeRacingCommand> Activations {get;}=new();
     public long Evaluations {get;private set;}
     public long Forecasts {get;private set;}
+    // Experiment-only intervention at an observation, still through the same reaction queue and actuator.
+    internal Func<FreeRacingInput,FreeLearningDecision>? DiagnosticChooser {get;set;}
     public FreeLearningController(FreeLearningPolicy? policy=null){Policy=policy??new();FreeLearningPolicy.From(Policy.Values);}
     public FreeRacingInput Input(RiderView v,double time,double omega,float steering)=>new(v,time,omega,steering,Active,pending.ToArray(),NextReview);
     public double Deadline=>pending.Count>0?Math.Min(NextReview,pending[0].ActivationAt):NextReview;
@@ -40,7 +42,9 @@ public sealed class FreeLearningController
         TrackStateSnapshot surface,WorldParameters p,float mass,float inertia){
         while(pending.Count>0&&pending[0].ActivationAt<=time+1e-10){Active=pending[0].Action;Activations.Add(pending[0]);pending.RemoveAt(0);}
         if(time<NextReview-1e-10)return;
-        var decision=Choose(Input(v with{Drive=Active.Drive},time,omega,steering),Policy,spec,frame,surface,p,mass,inertia);
+        var input=Input(v with{Drive=Active.Drive},time,omega,steering);
+        var decision=DiagnosticChooser?.Invoke(input)??Choose(input,Policy,spec,frame,surface,p,mass,inertia);
+        decision.Action.Validate();
         Decisions.Add(decision);Evaluations+=decision.ForceEvaluations;Forecasts+=decision.Forecasts;
         pending.Add(new(time,time+RiderController.ReactionSeconds(spec),decision.Action));NextReview+=ReviewSeconds;
     }
@@ -51,10 +55,11 @@ public sealed class FreeLearningController
             .Append(input.Active).Distinct().ToArray();
     }
     public static FreeLearningDecision Choose(FreeRacingInput input,FreeLearningPolicy policy,RiderSpec spec,TrackFrame frame,
-        TrackStateSnapshot surface,WorldParameters p,float mass,float inertia){
+        TrackStateSnapshot surface,WorldParameters p,float mass,float inertia,double horizonSeconds=HorizonSeconds){
+        if(!double.IsFinite(horizonSeconds)||horizonSeconds<.3||horizonSeconds>FreeRacingModel.MaximumHorizonSeconds)throw new ArgumentException("Bounded audit horizon required.");
         var candidates=new List<FreeLearningCandidate>();var evaluations=0;var forecasts=0;
         foreach(var action in Actions(input,policy)){
-            var prediction=FreeRacingModel.Predict(input,spec,frame,surface,p,mass,inertia,HorizonSeconds,action);
+            var prediction=FreeRacingModel.Predict(input,spec,frame,surface,p,mass,inertia,horizonSeconds,action);
             evaluations+=prediction.ForceEvaluations;forecasts++;
             var end=prediction.Points[^1];var v=end.Rider;var clearance=prediction.Points.Min(q=>Math.Min(q.Inner,q.Outer));
             var closing=Vector2.Dot(v.Velocity,v.Road.Outward);

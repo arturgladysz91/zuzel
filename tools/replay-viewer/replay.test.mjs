@@ -3,6 +3,7 @@ import './continuous.test.mjs';
 import './zigzag.test.mjs';
 import './free-racing.test.mjs';
 import './free-learning.test.mjs';
+import './robust-learning.test.mjs';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { gunzipSync } from 'node:zlib';

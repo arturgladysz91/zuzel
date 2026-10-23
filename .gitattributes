@@ -41,6 +41,9 @@
 /docs/experiments/free-racing/** -text whitespace=trailing-space,space-before-tab,cr-at-eol
 /tools/shared-world-speedway/FreeRacing*.cs text eol=lf
 /tools/shared-world-speedway/FreeLearning*.cs text eol=lf
+/tools/shared-world-speedway/RobustLearning*.cs text eol=lf
+/tools/shared-world-speedway/RobustSweepCertificate.cs text eol=lf
+/docs/experiments/robust-free-racing-learning/** -text whitespace=trailing-space,space-before-tab,cr-at-eol
 /docs/experiments/free-racing-learning/** -text whitespace=trailing-space,space-before-tab,cr-at-eol
 # Reproduce the exact Windows source bytes sealed before the #128 native preflight.
 /tools/shared-world-speedway/WorldRunner.cs text eol=crlf
@@ -51,3 +54,4 @@
 /tools/shared-world-speedway/Engine500.cs text eol=crlf
 /tools/shared-world-speedway/LoadBasedTyreGrip.cs text eol=crlf
 /tools/shared-world-speedway/TrackFrame.cs text eol=crlf
+/tools/shared-world-speedway/CurveBoundaryAudit.cs text eol=crlf

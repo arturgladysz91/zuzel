@@ -1,0 +1,60 @@
+{
+  "NativeWorlds": 0,
+  "Timings": [
+    {
+      "Horizon": 0.6,
+      "Observations": 35,
+      "CpuSeconds": 3,
+      "Evaluations": 38401,
+      "Forecasts": 636
+    },
+    {
+      "Horizon": 0.9,
+      "Observations": 35,
+      "CpuSeconds": 3.328125,
+      "Evaluations": 57633,
+      "Forecasts": 636
+    }
+  ],
+  "EarlyAblations": [
+    {
+      "Parameter": "DirectionWeight",
+      "Value": 3.783685099120639,
+      "Action": {
+        "SteeringRadians": 0.02617994,
+        "Drive": 0
+      },
+      "Scope": "local one-weight intervention at1.0s on original129 state; no native trajectory"
+    },
+    {
+      "Parameter": "ThrottleWeight",
+      "Value": 2.1513958361733994,
+      "Action": {
+        "SteeringRadians": 0.02617994,
+        "Drive": 0
+      },
+      "Scope": "local one-weight intervention at1.0s on original129 state; no native trajectory"
+    },
+    {
+      "Parameter": "ProgressWeight",
+      "Value": 1.5482001378287262,
+      "Action": {
+        "SteeringRadians": 0.02617994,
+        "Drive": 0
+      },
+      "Scope": "local one-weight intervention at1.0s on original129 state; no native trajectory"
+    },
+    {
+      "Parameter": "SteeringChangeWeight",
+      "Value": 0.014351529615100946,
+      "Action": {
+        "SteeringRadians": 0.02617994,
+        "Drive": 0
+      },
+      "Scope": "local one-weight intervention at1.0s on original129 state; no native trajectory"
+    }
+  ],
+  "Evaluations": 103247,
+  "Forecasts": 1382,
+  "CpuSeconds": 7.53125
+}

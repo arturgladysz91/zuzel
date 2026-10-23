@@ -107,9 +107,16 @@ class FreeLearningEvidenceTests(unittest.TestCase):
 
     def test_integration_is_exactly_reversible_to_128_and_manifest_matches(self):
         for name,expected in load('protocol.json')['Sources'].items():
+            newer=json.loads((DATA/'../robust-free-racing-learning/source-extensions.json').read_bytes())['Sources'].get(name)
+            if newer:self.assertEqual(newer['BaseRawSha256'],expected);expected=newer['ApprovedRawSha256']
             self.assertEqual(sha((ROOT/'tools/shared-world-speedway'/name).read_bytes()),expected,name)
         for name,item in load('source-extensions.json')['Sources'].items():
             current=(ROOT/'tools/shared-world-speedway'/name).read_bytes().replace(b'\r\n',b'\n').decode()
+            newer=json.loads((DATA/'../robust-free-racing-learning/source-extensions.json').read_bytes())['Sources'].get(name)
+            if newer:
+                self.assertEqual(sha(current.encode()),newer['ApprovedSha256'])
+                for edit in reversed(newer['Edits']):
+                    self.assertEqual(current.count(edit['After']),1);current=current.replace(edit['After'],edit['Before'],1)
             self.assertEqual(sha(current.encode()),item['ApprovedSha256'])
             for edit in reversed(item['Edits']):
                 self.assertEqual(current.count(edit['After']),1);current=current.replace(edit['After'],edit['Before'],1)

@@ -1,0 +1,8 @@
+{
+  "NativeWorlds": 0,
+  "ChangedThresholds": false,
+  "ChangedPolicy": false,
+  "Reason": "First turn samples occurred at curvature-event microtimes; nine horizon endpoints did not exist in the saved native grid. Initial records and all work retained. Corrected sampling chooses only origins with actual endpoints for every requested horizon.",
+  "OriginalFile": "post-prediction-initial.json",
+  "OriginRule": "first/middle/last available native turn origin with actual endpoints at0.3,0.6,0.9s; no invented interpolation or tolerance widening"
+}

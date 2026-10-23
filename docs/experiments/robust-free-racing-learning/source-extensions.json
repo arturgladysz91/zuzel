@@ -1,0 +1,42 @@
+{
+  "BaseHead": "9470f63a11ccc31e6c7bdb862743d11e4be053d4",
+  "Sources": {
+    "Program.cs": {
+      "BaseSha256": "BAC986BC7C41BAA530AA6766E607D57FE5799925C5CB227AB5DE732B72FE333B",
+      "ApprovedSha256": "BAE0E49BF7AADDB49B74C2E9365AECD70FC986EF63CA504C16FF9F6320F256E5",
+      "BaseRawSha256": "BAC986BC7C41BAA530AA6766E607D57FE5799925C5CB227AB5DE732B72FE333B",
+      "ApprovedRawSha256": "E9E83F9E33F46EE5F3FC02558148FF74D57D80968045988852C701A7196F3550",
+      "Edits": [
+        {
+          "Before": "",
+          "After": "if(scenario==\"robust-learning\"){RobustLearningExperiment.Run(args[1],args[2],args[3]);return;}\n"
+        }
+      ]
+    },
+    "FreeLearningController.cs": {
+      "BaseSha256": "F45303602912B8A4240BE1426470864D2ABAE8CA7DE099F2171BA4C6FCB23693",
+      "ApprovedSha256": "FFEA771D9390617BC63B901509303FF5D290CE7D8F28DB98005AE6A4BA26AACD",
+      "BaseRawSha256": "F45303602912B8A4240BE1426470864D2ABAE8CA7DE099F2171BA4C6FCB23693",
+      "ApprovedRawSha256": "FFEA771D9390617BC63B901509303FF5D290CE7D8F28DB98005AE6A4BA26AACD",
+      "Edits": [
+        {
+          "Before": "",
+          "After": "    // Experiment-only intervention at an observation, still through the same reaction queue and actuator.\n    internal Func<FreeRacingInput,FreeLearningDecision>? DiagnosticChooser {get;set;}\n"
+        },
+        {
+          "Before": "        var decision=Choose(Input(v with{Drive=Active.Drive},time,omega,steering),Policy,spec,frame,surface,p,mass,inertia);\n",
+          "After": "        var input=Input(v with{Drive=Active.Drive},time,omega,steering);\n        var decision=DiagnosticChooser?.Invoke(input)??Choose(input,Policy,spec,frame,surface,p,mass,inertia);\n        decision.Action.Validate();\n"
+        },
+        {
+          "Before": "        TrackStateSnapshot surface,WorldParameters p,float mass,float inertia){\n",
+          "After": "        TrackStateSnapshot surface,WorldParameters p,float mass,float inertia,double horizonSeconds=HorizonSeconds){\n        if(!double.IsFinite(horizonSeconds)||horizonSeconds<.3||horizonSeconds>FreeRacingModel.MaximumHorizonSeconds)throw new ArgumentException(\"Bounded audit horizon required.\");\n"
+        },
+        {
+          "Before": "            var prediction=FreeRacingModel.Predict(input,spec,frame,surface,p,mass,inertia,HorizonSeconds,action);\n",
+          "After": "            var prediction=FreeRacingModel.Predict(input,spec,frame,surface,p,mass,inertia,horizonSeconds,action);\n"
+        }
+      ]
+    }
+  },
+  "Rule": "CLI dispatch and optional diagnostic chooser/horizon only. Main0.6s decisions and full native reaction/physics unchanged."
+}

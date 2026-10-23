@@ -54,6 +54,11 @@ class FreeRacingEvidenceTests(unittest.TestCase):
         guard=load('source-extensions.json');self.assertEqual(set(guard['Sources']),{'WorldRunner.cs','WorldModel.cs','Program.cs'})
         for name,item in guard['Sources'].items():
             current=(ROOT/'tools/shared-world-speedway'/name).read_bytes().replace(b'\r\n',b'\n').decode()
+            robust=json.loads((DATA/'../robust-free-racing-learning/source-extensions.json').read_bytes())['Sources'].get(name)
+            if robust:
+                self.assertEqual(digest(current.encode()),robust['ApprovedSha256'])
+                for edit in reversed(robust['Edits']):
+                    self.assertEqual(current.count(edit['After']),1);current=current.replace(edit['After'],edit['Before'],1)
             newer=json.loads((DATA/'../free-racing-learning/source-extensions.json').read_bytes())['Sources'].get(name)
             if newer:
                 self.assertEqual(digest(current.encode()),newer['ApprovedSha256'])

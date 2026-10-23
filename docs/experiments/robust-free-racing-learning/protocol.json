@@ -1,0 +1,586 @@
+{
+  "BaseHead": "9470f63a11ccc31e6c7bdb862743d11e4be053d4",
+  "Seed": 1302026,
+  "RawDirectory": "C:\\Users\\artur\\Documents\\Codex\\2026-10-23\\files-pasted-by-the-user-pr\\work\\robust-free-racing-130-raw",
+  "RawAvailability": "Full native episodes stay local and untracked; Git contains hashes, all metrics and selected native replays only.",
+  "StartingCheckpoint": "129-final: policy161, generation32; chosen as the latest checkpoint, not from known holdout results.",
+  "StartingPolicy": {
+    "PreviewSeconds": 0.5089611751087222,
+    "DirectionWeight": 4,
+    "YawWeight": 0.3115673601366482,
+    "Drive": 0.519849474314494,
+    "ThrottleWeight": 4,
+    "ProgressWeight": 2,
+    "SteeringChangeWeight": 0,
+    "GeometrySpeedWeight": 0.5308454323167466,
+    "Values": [
+      0.5089611751087222,
+      4,
+      0.3115673601366482,
+      0.519849474314494,
+      4,
+      2,
+      0,
+      0.5308454323167466
+    ]
+  },
+  "ReferencePolicies": {
+    "129-100": {
+      "PreviewSeconds": 0.8448242780281454,
+      "DirectionWeight": 2.8012910532029607,
+      "YawWeight": 0.4701056399803278,
+      "Drive": 0.3419221959332114,
+      "ThrottleWeight": 3.299303829861091,
+      "ProgressWeight": 1.630222686406416,
+      "SteeringChangeWeight": 0,
+      "GeometrySpeedWeight": 0.47367336709467744,
+      "Values": [
+        0.8448242780281454,
+        2.8012910532029607,
+        0.4701056399803278,
+        0.3419221959332114,
+        3.299303829861091,
+        1.630222686406416,
+        0,
+        0.47367336709467744
+      ]
+    },
+    "129-200": {
+      "PreviewSeconds": 0.5442055309564335,
+      "DirectionWeight": 3.783685099120639,
+      "YawWeight": 1.0027863160753574,
+      "Drive": 0.3353733881152864,
+      "ThrottleWeight": 2.1513958361733994,
+      "ProgressWeight": 1.5482001378287262,
+      "SteeringChangeWeight": 0.014351529615100946,
+      "GeometrySpeedWeight": 0.44753529533089154,
+      "Values": [
+        0.5442055309564335,
+        3.783685099120639,
+        1.0027863160753574,
+        0.3353733881152864,
+        2.1513958361733994,
+        1.5482001378287262,
+        0.014351529615100946,
+        0.44753529533089154
+      ]
+    },
+    "129-final": {
+      "PreviewSeconds": 0.5089611751087222,
+      "DirectionWeight": 4,
+      "YawWeight": 0.3115673601366482,
+      "Drive": 0.519849474314494,
+      "ThrottleWeight": 4,
+      "ProgressWeight": 2,
+      "SteeringChangeWeight": 0,
+      "GeometrySpeedWeight": 0.5308454323167466,
+      "Values": [
+        0.5089611751087222,
+        4,
+        0.3115673601366482,
+        0.519849474314494,
+        4,
+        2,
+        0,
+        0.5308454323167466
+      ]
+    }
+  },
+  "High": [
+    {
+      "Name": "H0",
+      "Level": 4,
+      "Speed": 16,
+      "Offset": 3,
+      "Start": 22,
+      "OutwardSpeed": 0.1,
+      "HeadingError": 0.02,
+      "YawRate": 0.02
+    },
+    {
+      "Name": "H1",
+      "Level": 4,
+      "Speed": 18,
+      "Offset": 6,
+      "Start": 22,
+      "OutwardSpeed": -0.1,
+      "HeadingError": -0.02,
+      "YawRate": -0.02
+    },
+    {
+      "Name": "H2",
+      "Level": 4,
+      "Speed": 17,
+      "Offset": 4.5,
+      "Start": 22,
+      "OutwardSpeed": 0.15,
+      "HeadingError": -0.015,
+      "YawRate": 0.025
+    },
+    {
+      "Name": "H3",
+      "Level": 4,
+      "Speed": 16.5,
+      "Offset": 7,
+      "Start": 22,
+      "OutwardSpeed": -0.12,
+      "HeadingError": 0.015,
+      "YawRate": -0.025
+    },
+    {
+      "Name": "H4",
+      "Level": 4,
+      "Speed": 16,
+      "Offset": 4.3,
+      "Start": 22,
+      "OutwardSpeed": -0.08,
+      "HeadingError": 0.025,
+      "YawRate": -0.015
+    },
+    {
+      "Name": "H5",
+      "Level": 4,
+      "Speed": 18,
+      "Offset": 7.4,
+      "Start": 22,
+      "OutwardSpeed": 0.12,
+      "HeadingError": -0.025,
+      "YawRate": 0.015
+    },
+    {
+      "Name": "H6",
+      "Level": 4,
+      "Speed": 17.5,
+      "Offset": 2.7,
+      "Start": 22,
+      "OutwardSpeed": 0.1,
+      "HeadingError": 0.015,
+      "YawRate": -0.02
+    },
+    {
+      "Name": "H7",
+      "Level": 4,
+      "Speed": 16.5,
+      "Offset": 5.8,
+      "Start": 22,
+      "OutwardSpeed": -0.15,
+      "HeadingError": -0.015,
+      "YawRate": 0.02
+    }
+  ],
+  "Medium": [
+    {
+      "Name": "M0",
+      "Level": 3,
+      "Speed": 12,
+      "Offset": 3.5,
+      "Start": 22,
+      "OutwardSpeed": -0.12,
+      "HeadingError": 0.018,
+      "YawRate": 0.025
+    },
+    {
+      "Name": "M1",
+      "Level": 3,
+      "Speed": 14.5,
+      "Offset": 6.5,
+      "Start": 22,
+      "OutwardSpeed": 0.12,
+      "HeadingError": -0.018,
+      "YawRate": -0.025
+    }
+  ],
+  "Retention": [
+    {
+      "Name": "R0",
+      "Level": 2,
+      "Speed": 9.5,
+      "Offset": 3.8,
+      "Start": 4,
+      "OutwardSpeed": 0.08,
+      "HeadingError": -0.025,
+      "YawRate": 0.02
+    },
+    {
+      "Name": "R1",
+      "Level": 2,
+      "Speed": 10.5,
+      "Offset": 6.2,
+      "Start": 22,
+      "OutwardSpeed": -0.08,
+      "HeadingError": 0.025,
+      "YawRate": -0.02
+    }
+  ],
+  "Selection": [
+    {
+      "Name": "S0",
+      "Level": 2,
+      "Speed": 8.5,
+      "Offset": 4.4,
+      "Start": 22,
+      "OutwardSpeed": 0.1,
+      "HeadingError": 0.015,
+      "YawRate": -0.015
+    },
+    {
+      "Name": "S1",
+      "Level": 2,
+      "Speed": 10.5,
+      "Offset": 6.7,
+      "Start": 22,
+      "OutwardSpeed": -0.14,
+      "HeadingError": -0.025,
+      "YawRate": 0.02
+    },
+    {
+      "Name": "S2",
+      "Level": 3,
+      "Speed": 12.5,
+      "Offset": 3.2,
+      "Start": 22,
+      "OutwardSpeed": 0.12,
+      "HeadingError": -0.02,
+      "YawRate": -0.025
+    },
+    {
+      "Name": "S3",
+      "Level": 3,
+      "Speed": 14.5,
+      "Offset": 5.6,
+      "Start": 22,
+      "OutwardSpeed": -0.1,
+      "HeadingError": 0.025,
+      "YawRate": 0.015
+    },
+    {
+      "Name": "S4",
+      "Level": 4,
+      "Speed": 16.5,
+      "Offset": 4.1,
+      "Start": 22,
+      "OutwardSpeed": 0.15,
+      "HeadingError": 0.02,
+      "YawRate": -0.02
+    },
+    {
+      "Name": "S5",
+      "Level": 4,
+      "Speed": 17.5,
+      "Offset": 7.3,
+      "Start": 22,
+      "OutwardSpeed": -0.12,
+      "HeadingError": -0.015,
+      "YawRate": 0.025
+    }
+  ],
+  "SealedTest": [
+    {
+      "Name": "T00",
+      "Level": 2,
+      "Speed": 8.75,
+      "Offset": 2.9,
+      "Start": 22,
+      "OutwardSpeed": 0.08,
+      "HeadingError": 0.015,
+      "YawRate": 0.02
+    },
+    {
+      "Name": "T01",
+      "Level": 2,
+      "Speed": 9.25,
+      "Offset": 6.8,
+      "Start": 22,
+      "OutwardSpeed": -0.12,
+      "HeadingError": -0.025,
+      "YawRate": -0.015
+    },
+    {
+      "Name": "T02",
+      "Level": 2,
+      "Speed": 10.75,
+      "Offset": 4.6,
+      "Start": 22,
+      "OutwardSpeed": 0.15,
+      "HeadingError": -0.02,
+      "YawRate": 0.025
+    },
+    {
+      "Name": "T03",
+      "Level": 2,
+      "Speed": 11.25,
+      "Offset": 7.6,
+      "Start": 22,
+      "OutwardSpeed": -0.18,
+      "HeadingError": 0.03,
+      "YawRate": -0.02
+    },
+    {
+      "Name": "T04",
+      "Level": 3,
+      "Speed": 12.75,
+      "Offset": 3.9,
+      "Start": 22,
+      "OutwardSpeed": 0.1,
+      "HeadingError": 0.025,
+      "YawRate": -0.03
+    },
+    {
+      "Name": "T05",
+      "Level": 3,
+      "Speed": 13.25,
+      "Offset": 6.1,
+      "Start": 22,
+      "OutwardSpeed": -0.08,
+      "HeadingError": -0.015,
+      "YawRate": 0.02
+    },
+    {
+      "Name": "T06",
+      "Level": 3,
+      "Speed": 14.75,
+      "Offset": 5.2,
+      "Start": 22,
+      "OutwardSpeed": 0.16,
+      "HeadingError": -0.03,
+      "YawRate": -0.015
+    },
+    {
+      "Name": "T07",
+      "Level": 3,
+      "Speed": 15.25,
+      "Offset": 2.8,
+      "Start": 22,
+      "OutwardSpeed": -0.12,
+      "HeadingError": 0.02,
+      "YawRate": 0.03
+    },
+    {
+      "Name": "T08",
+      "Level": 4,
+      "Speed": 16.25,
+      "Offset": 7.1,
+      "Start": 22,
+      "OutwardSpeed": 0.18,
+      "HeadingError": 0.03,
+      "YawRate": -0.02
+    },
+    {
+      "Name": "T09",
+      "Level": 4,
+      "Speed": 16.75,
+      "Offset": 4.7,
+      "Start": 22,
+      "OutwardSpeed": -0.1,
+      "HeadingError": -0.02,
+      "YawRate": 0.025
+    },
+    {
+      "Name": "T10",
+      "Level": 4,
+      "Speed": 17.25,
+      "Offset": 3.4,
+      "Start": 22,
+      "OutwardSpeed": 0.14,
+      "HeadingError": -0.025,
+      "YawRate": 0.015
+    },
+    {
+      "Name": "T11",
+      "Level": 4,
+      "Speed": 17.75,
+      "Offset": 6.6,
+      "Start": 22,
+      "OutwardSpeed": -0.15,
+      "HeadingError": 0.015,
+      "YawRate": -0.025
+    }
+  ],
+  "ScheduleA": [
+    [
+      "H0",
+      "H1",
+      "H2",
+      "H3"
+    ],
+    [
+      "H4",
+      "H5",
+      "H6",
+      "H7"
+    ],
+    [
+      "H0",
+      "H1",
+      "H2",
+      "H3"
+    ],
+    [
+      "H4",
+      "H5",
+      "H6",
+      "H7"
+    ],
+    [
+      "H0",
+      "H1",
+      "H2",
+      "H3"
+    ]
+  ],
+  "ScheduleB": [
+    [
+      "H0",
+      "H1",
+      "M0",
+      "R0"
+    ],
+    [
+      "H4",
+      "H5",
+      "M1",
+      "R1"
+    ],
+    [
+      "H0",
+      "H1",
+      "M0",
+      "R0"
+    ],
+    [
+      "H4",
+      "H5",
+      "M1",
+      "R1"
+    ],
+    [
+      "H0",
+      "H1",
+      "M0",
+      "R0"
+    ],
+    [
+      "H4",
+      "H5",
+      "M1",
+      "R1"
+    ],
+    [
+      "H0",
+      "H1",
+      "M0",
+      "R0"
+    ],
+    [
+      "H4",
+      "H5",
+      "M1",
+      "R1"
+    ],
+    [
+      "H0",
+      "H1",
+      "M0",
+      "R0"
+    ],
+    [
+      "H4",
+      "H5",
+      "M1",
+      "R1"
+    ],
+    [
+      "H0",
+      "H1",
+      "M0",
+      "R0"
+    ],
+    [
+      "H4",
+      "H5",
+      "M1",
+      "R1"
+    ],
+    [
+      "H0",
+      "H1",
+      "M0",
+      "R0"
+    ],
+    [
+      "H4",
+      "H5",
+      "M1",
+      "R1"
+    ],
+    [
+      "H0",
+      "H1",
+      "M0",
+      "R0"
+    ]
+  ],
+  "CandidateCount": 5,
+  "EpisodesPerCandidate": 4,
+  "InitialGenerationsPerVariant": 5,
+  "MaximumAdditionalBGenerations": 10,
+  "Limits": {
+    "TrainA": 100,
+    "TrainB": 300,
+    "Selection": 72,
+    "SealedTest": 48,
+    "Diagnostic": 8,
+    "TwoBends": 3,
+    "OfflineStages": 8,
+    "NativeWorlds": 531,
+    "CpuSeconds": 2600,
+    "ContactEvaluations": 38000000,
+    "EpisodeCpu": 30,
+    "GenerationCpu": 150
+  },
+  "CostBasis129": {
+    "NativeWorlds": 442,
+    "CpuSeconds": 1347.953125,
+    "Contacts": 18323957,
+    "MeanCpuPerWorld": 3.0496677036199094
+  },
+  "CEM": "Same seed and 32 normal draws per generation in both branches. Incumbent \u002B3 Gaussian mutations \u002Btanh-normal immigrant, same eight ranges as129. Two elites, mean0.4old\u002B0.6elite, std floor15% range; no hybrid policy.",
+  "Ranking": "Completed count first; worst failed legal progress; confirmed crossing/control count; worst all-completed time in50ms bins; mean in25ms bins; certified reserve; minimum exit speed; exit yaw; mean legal progress; stableID. Never average away DNFs.",
+  "MainCertificate": "Exactly the legacy129 conservative swept bound, unchanged margins. Report confirmed crossing only below an additional1.6mm uncertainty allowance; otherwise uncertified interval. Refined certificate is isolated diagnostic only.",
+  "Horizon": 0.6,
+  "Reaction": 0.24,
+  "MaximumSteeringDegrees": 35,
+  "SteeringRateDegreesPerSecond": 90,
+  "Shortlist": "Per variant: last incumbent and best archived winner of the recurring even-generation group. Selection evaluates each unique policy on the SAME six S scenarios; seed161 is a safety fallback. Old40/72 archived as references, never selected using old holdouts.",
+  "Extension": "B must improve selection completions over seed and match/exceed A, or complete all6 with \u003E=0.10s worst-time gain over seed and no lower certified reserve. No increase of confirmed/control failures. At most200 more B episodes; stop after two recurring-anchor evaluations without \u003E=0.05s or completion improvement, or budget/unsafe plateau.",
+  "FinalChoice": "Rank shortlisted policies by the same hierarchy on S only; stableID prefers seed in exact ties. Freeze final policy before ANY T outcome. The sealed T set never controls CEM, shortlist, stopping, bounds or variant choice.",
+  "TwoBendGate": "Only if selected130 completes12/12 T and has at least as many completions as every129 reference. Then one uninterrupted native world, same queue, wheel and controller through two bends; otherwise skipped.",
+  "PredictionTolerances": {
+    "XY": 0.1,
+    "Speed": 0.2,
+    "ChiDegrees": 1,
+    "BetaDegrees": 1,
+    "SteeringDegrees": 1.5,
+    "Omega": 2,
+    "YawRate": 0.05,
+    "ClearanceOptimism": 0.1
+  },
+  "Sources": {
+    "FreeLearningController.cs": "FFEA771D9390617BC63B901509303FF5D290CE7D8F28DB98005AE6A4BA26AACD",
+    "FreeLearningExperiment.cs": "6B4B1865E0363EB32C8D50A6ADCAAFB47903FBF62845A14992393805D965CB56",
+    "FreeRacingModel.cs": "11958B125963658F5A66925557F95D2696F8A8E12DE13AA183B7CF5BBBB535D9",
+    "WorldRunner.cs": "9FC4D50020E481EB210181B271BCDED6DF2A1C627C9DB25C68896E8EB02ACD2C",
+    "WorldModel.cs": "B8FA04CE1A9B6809982AEBB6DFF75AED8C82043B6ACDC2F5E0B46D94E57EAB4E",
+    "ContactAdapter.cs": "1CB8EC9C92937B9A42568A12A1F19530088A6DC2AB7EAAE53F04E8F58D0C0C4F",
+    "TwoContactBikeDynamics.cs": "7F5F9FFEF31B5F3CF242C140077CBB9D429F210320EE9055AC0B0EE3EB9CBBEC",
+    "RearWheelDynamics.cs": "AD74D451CA769D8189BD17CCB61A41779F7540F3AF489BC4B716A799205FB7A3",
+    "Engine500.cs": "209B62347B2F37C4F21294FA9F986625A9CEC29BA0CAFAFA88595C34CCBDA9A6",
+    "LoadBasedTyreGrip.cs": "511D95E8FE959935D34FAE7C6EA06BD3650977702F78CB9D1452DF4376DE0172",
+    "TrackFrame.cs": "85069E1CCD70CC2FD8A25A5CC32A1CFF76C17E24DB1B9729C6934A8D29138B4F",
+    "CurveBoundaryAudit.cs": "3DC41B6886446DCDD6BA96C7A42FAB54963F0D576FD891F2D1075A931A63DE9D",
+    "RobustLearningModel.cs": "252E395E7AC72AD5D15070875004F582EC6D0EA4F73D8F891E7626447E07B118",
+    "RobustLearningExperiment.cs": "DC30244B13836E54B3F278349F9EB70CDBFDB6FE4E91981B5402D3B3A34ED0A7",
+    "RobustLearningAudit.cs": "DFFA2A3D7DC5B17F541E8FA3A890451A60F45D1EB54BDDBE360E979DD005EB11",
+    "RobustSweepCertificate.cs": "CB136104C3034AA08303405BFBD350C15D840565C009030E0B11F2418F00FAC6"
+  }
+}
