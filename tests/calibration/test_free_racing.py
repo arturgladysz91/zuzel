@@ -54,11 +54,18 @@ class FreeRacingEvidenceTests(unittest.TestCase):
         guard=load('source-extensions.json');self.assertEqual(set(guard['Sources']),{'WorldRunner.cs','WorldModel.cs','Program.cs'})
         for name,item in guard['Sources'].items():
             current=(ROOT/'tools/shared-world-speedway'/name).read_bytes().replace(b'\r\n',b'\n').decode()
+            newer=json.loads((DATA/'../free-racing-learning/source-extensions.json').read_bytes())['Sources'].get(name)
+            if newer:
+                self.assertEqual(digest(current.encode()),newer['ApprovedSha256'])
+                for edit in reversed(newer['Edits']):
+                    self.assertEqual(current.count(edit['After']),1);current=current.replace(edit['After'],edit['Before'],1)
             self.assertEqual(digest(current.encode()),item['ApprovedSha256'])
             for edit in reversed(item['Edits']):
                 self.assertEqual(current.count(edit['After']),1);current=current.replace(edit['After'],edit['Before'],1)
             self.assertEqual(digest(current.encode()),item['BaseSha256'])
         for name,expected in load('protocol.json')['Sources'].items():
+            newer=json.loads((DATA/'../free-racing-learning/source-extensions.json').read_bytes())['Sources'].get(name)
+            if newer:self.assertEqual(newer['BaseRawSha256'],expected);expected=newer['ApprovedRawSha256']
             self.assertEqual(digest((ROOT/'tools/shared-world-speedway'/name).read_bytes()),expected)
     def test_manifest_protects_failed_evidence_and_all_attempts_remain_visible(self):
         for name,expected in load('manifest.json').items():self.assertEqual(digest((DATA/name).read_bytes()),expected)

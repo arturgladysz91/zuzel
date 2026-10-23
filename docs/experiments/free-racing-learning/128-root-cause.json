@@ -1,0 +1,66 @@
+{
+  "NativeWorlds": 0,
+  "OriginalChosen": {
+    "SteeringRadians": -0.011620756,
+    "Drive": 0
+  },
+  "CounterfactualWithoutOverspeedTerm": {
+    "SteeringDegrees": 0.03417969069837937,
+    "Drive": 0.15,
+    "Progress": 15.874433517456055,
+    "OriginalScore": 5.488034061942589,
+    "OverspeedCost": 21.362467579398643,
+    "ScoreWithoutOverspeedTerm": -15.874433517456055
+  },
+  "Conclusion": "The initial right request is selected by the finite geometric overspeed cost despite slightly less predicted progress. Without that term the narrow old set selects +0.034 degrees. This establishes a local scoring cause, not a complete causal decomposition of the later -35degree saturation. Physical signs are correct.",
+  "Candidates": [
+    {
+      "SteeringDegrees": -0.6658202735513284,
+      "Drive": 0,
+      "Progress": 15.619636535644531,
+      "OriginalScore": -3.9385246196851575,
+      "OverspeedCost": 11.681111915959374,
+      "ScoreWithoutOverspeedTerm": -15.619636535644531
+    },
+    {
+      "SteeringDegrees": -0.6658202735513284,
+      "Drive": 0.15,
+      "Progress": 15.863521575927734,
+      "OriginalScore": 4.139116124965916,
+      "OverspeedCost": 20.00263770089365,
+      "ScoreWithoutOverspeedTerm": -15.863521575927734
+    },
+    {
+      "SteeringDegrees": 0.03417969069837937,
+      "Drive": 0,
+      "Progress": 15.629268646240234,
+      "OriginalScore": -2.9804985085328486,
+      "OverspeedCost": 12.648770137707386,
+      "ScoreWithoutOverspeedTerm": -15.629268646240234
+    },
+    {
+      "SteeringDegrees": 0.03417969069837937,
+      "Drive": 0.15,
+      "Progress": 15.874433517456055,
+      "OriginalScore": 5.488034061942589,
+      "OverspeedCost": 21.362467579398643,
+      "ScoreWithoutOverspeedTerm": -15.874433517456055
+    },
+    {
+      "SteeringDegrees": 0.7341796962010485,
+      "Drive": 0,
+      "Progress": 15.617584228515625,
+      "OriginalScore": -2.402295443979499,
+      "OverspeedCost": 13.215288784536126,
+      "ScoreWithoutOverspeedTerm": -15.617584228515625
+    },
+    {
+      "SteeringDegrees": 0.7341796962010485,
+      "Drive": 0.15,
+      "Progress": 15.86119270324707,
+      "OriginalScore": 6.235327001071511,
+      "OverspeedCost": 22.09651970431858,
+      "ScoreWithoutOverspeedTerm": -15.86119270324707
+    }
+  ]
+}

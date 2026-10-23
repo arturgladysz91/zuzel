@@ -1,0 +1,223 @@
+{
+  "BaseHead": "e23261afe1205c71a8db3733b6553485f4de29f5",
+  "Seed": 1292026,
+  "InitialPolicy": {
+    "PreviewSeconds": 0.5,
+    "DirectionWeight": 0.25,
+    "YawWeight": 0.05,
+    "Drive": 0.15,
+    "ThrottleWeight": 0.2,
+    "ProgressWeight": 1,
+    "SteeringChangeWeight": 0.01,
+    "GeometrySpeedWeight": 0.1,
+    "Values": [
+      0.5,
+      0.25,
+      0.05,
+      0.15,
+      0.2,
+      1,
+      0.01,
+      0.1
+    ]
+  },
+  "Names": [
+    "PreviewSeconds",
+    "DirectionWeight",
+    "YawWeight",
+    "Drive",
+    "ThrottleWeight",
+    "ProgressWeight",
+    "SteeringChangeWeight",
+    "GeometrySpeedWeight"
+  ],
+  "Lower": [
+    0,
+    0,
+    0,
+    0.01,
+    0,
+    0.2,
+    0,
+    0
+  ],
+  "Upper": [
+    1.5,
+    4,
+    2,
+    0.8,
+    4,
+    2,
+    0.2,
+    1
+  ],
+  "Curriculum": [
+    [
+      {
+        "Name": "straight-6-3",
+        "Level": 1,
+        "Speed": 6,
+        "Offset": 3,
+        "Start": 4,
+        "OutwardSpeed": 0.1,
+        "HeadingError": 0.02,
+        "YawRate": 0.02
+      },
+      {
+        "Name": "straight-8-6",
+        "Level": 1,
+        "Speed": 8,
+        "Offset": 6,
+        "Start": 4,
+        "OutwardSpeed": -0.1,
+        "HeadingError": -0.02,
+        "YawRate": -0.02
+      }
+    ],
+    [
+      {
+        "Name": "bend-8-3",
+        "Level": 2,
+        "Speed": 8,
+        "Offset": 3,
+        "Start": 22,
+        "OutwardSpeed": 0.1,
+        "HeadingError": 0.02,
+        "YawRate": 0.02
+      },
+      {
+        "Name": "bend-10-6",
+        "Level": 2,
+        "Speed": 10,
+        "Offset": 6,
+        "Start": 22,
+        "OutwardSpeed": -0.1,
+        "HeadingError": -0.02,
+        "YawRate": -0.02
+      }
+    ],
+    [
+      {
+        "Name": "bend-12-3",
+        "Level": 3,
+        "Speed": 12,
+        "Offset": 3,
+        "Start": 22,
+        "OutwardSpeed": 0.1,
+        "HeadingError": 0.02,
+        "YawRate": 0.02
+      },
+      {
+        "Name": "bend-14-6",
+        "Level": 3,
+        "Speed": 14,
+        "Offset": 6,
+        "Start": 22,
+        "OutwardSpeed": -0.1,
+        "HeadingError": -0.02,
+        "YawRate": -0.02
+      }
+    ],
+    [
+      {
+        "Name": "bend-16-3",
+        "Level": 4,
+        "Speed": 16,
+        "Offset": 3,
+        "Start": 22,
+        "OutwardSpeed": 0.1,
+        "HeadingError": 0.02,
+        "YawRate": 0.02
+      },
+      {
+        "Name": "bend-18-6",
+        "Level": 4,
+        "Speed": 18,
+        "Offset": 6,
+        "Start": 22,
+        "OutwardSpeed": -0.1,
+        "HeadingError": -0.02,
+        "YawRate": -0.02
+      }
+    ]
+  ],
+  "Validation": [
+    {
+      "Name": "holdout-9-4",
+      "Level": 2,
+      "Speed": 9,
+      "Offset": 4,
+      "Start": 22,
+      "OutwardSpeed": 0.12,
+      "HeadingError": 0.025,
+      "YawRate": 0.02
+    },
+    {
+      "Name": "holdout-11-7",
+      "Level": 2,
+      "Speed": 11,
+      "Offset": 7,
+      "Start": 22,
+      "OutwardSpeed": -0.15,
+      "HeadingError": -0.02,
+      "YawRate": -0.02
+    },
+    {
+      "Name": "holdout-14-5",
+      "Level": 3,
+      "Speed": 14,
+      "Offset": 5,
+      "Start": 22,
+      "OutwardSpeed": 0.1,
+      "HeadingError": 0.015,
+      "YawRate": 0.015
+    }
+  ],
+  "ReviewSeconds": 0.2,
+  "HorizonSeconds": 0.6,
+  "Phase1Episodes": 200,
+  "Phase2Episodes": 1000,
+  "OptionalPhase3Episodes": 2000,
+  "PhysicsLimit": 8,
+  "ValidationLimit": 36,
+  "PhaseCpuSeconds": [
+    2400,
+    7200,
+    12000
+  ],
+  "PhaseContactEvaluations": [
+    50000000,
+    160000000,
+    300000000
+  ],
+  "MaximumEpisodeCpuSeconds": 90,
+  "MaximumGenerationCpuSeconds": 150,
+  "Advancement": "Two consecutive generations with >=6/10 legal completions and best2/2; only training outcomes advance curriculum.",
+  "FailureFeedback": "Rank legal completions first, then minimum legal progress across both identical scenarios, then mean progress, boundary approach per legal metre, recovery per metre. No survival-time-only reward; failure step and illegal progress excluded.",
+  "CEM": "Five candidates x same two scenarios per generation. Incumbent + three bounded Gaussian mutations + one uniform immigrant. Best two including DNFs update mean (0.6 new/0.4 old), std floor15% range. All outcomes from native Box2D. Stable seed; no retries.",
+  "Extension": "At200, extend only with full-bend completion or >=10m controlled legal-progress gain in current bend level. Beyond200 stop after8 generations without >=20ms time or >=1m legal-progress improvement. At any point stop6 consecutive generations repeating unsafe outward failure without gain. No validation-based parameter selection.",
+  "Checkpoints": [
+    50,
+    100,
+    200
+  ],
+  "Gate": "Whole footprint past fixed plane, +1s legal continuation. Swept boundary/reverse/projection/beta45/energy/stall failures precede finish.",
+  "PredictionTolerances": {
+    "XY": 0.1,
+    "Speed": 0.2,
+    "ChiDegrees": 1,
+    "BetaDegrees": 1,
+    "SteeringDegrees": 1.5,
+    "Omega": 2,
+    "YawRate": 0.05,
+    "ClearanceOptimism": 0.1
+  },
+  "Sources": {
+    "FreeLearningController.cs": "F45303602912B8A4240BE1426470864D2ABAE8CA7DE099F2171BA4C6FCB23693",
+    "FreeLearningExperiment.cs": "A8FDCF9D2950B0B49C6364B9B0985783F34BA590EB82B01BC32303EBE8D64588",
+    "FreeRacingModel.cs": "11958B125963658F5A66925557F95D2696F8A8E12DE13AA183B7CF5BBBB535D9",
+    "WorldRunner.cs": "9FC4D50020E481EB210181B271BCDED6DF2A1C627C9DB25C68896E8EB02ACD2C",
+    "WorldModel.cs": "B8FA04CE1A9B6809982AEBB6DFF75AED8C82043B6ACDC2F5E0B46D94E57EAB4E"
+  },
+  "ExportRevision": "Allow named infinite geometric radius metadata; policy/dynamics/scenarios/objectives/budgets unchanged before training"
+}

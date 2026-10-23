@@ -380,3 +380,14 @@ Pomarańczowy overlay to rzeczywisty historyczny #124 przy **innych warunkach**,
 odłączony od sterownika; nie jest gotową linią Free Racing.
 Źródło: `docs/experiments/free-racing/preflight-train-16-3.json.gz`.
 Pełny raport: [Free Racing](../../docs/experiments/free-racing.md).
+
+# Free Racing Learning #129
+
+`?case=free-learning&run=overlay-final` pokazuje końcową politykę po 411 próbach
+treningowych. Wynik **PARTIAL**: legalny łuk w treningu, 2/3 niezależnych
+przypadków na końcu, z zachowaną regresją względem walidacji po100/200.
+Selektor udostępnia wszystkie kompletne zapisy i sześć kamieni milowych.
+Nakładki pochodzą z identycznego stanu9m/s/offset4m, także nowy natywny#124.
+Wykresy przedstawiają postęp, ukończenia, czasy, parametry, przyczyny zakończeń
+i prędkości. Sterowanie i XY są zapisane, bez symulacji w przeglądarce.
+[Raport, tabele, koszt i ograniczenia](../../docs/experiments/free-racing-learning/README.md).

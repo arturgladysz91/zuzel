@@ -72,12 +72,16 @@ class ContinuousCornerEvidenceTests(unittest.TestCase):
                 newer=json.loads((ROOT/'docs/experiments/free-racing/source-extensions.json').read_text(encoding='utf-8'))['Sources'].get(n)
                 expected=extensions[n]['ApprovedSha256']
                 if newer:self.assertEqual(newer['BaseSha256'],expected);expected=newer['ApprovedSha256']
+                newest=json.loads((ROOT/'docs/experiments/free-racing-learning/source-extensions.json').read_bytes())['Sources'].get(n)
+                if newest:self.assertEqual(newest['BaseSha256'],expected);expected=newest['ApprovedSha256']
                 self.assertEqual(actual,expected)
             else:
                 import json
                 newer=json.loads((ROOT/'docs/experiments/free-racing/source-extensions.json').read_text(encoding='utf-8'))['Sources'].get(n)
                 expected=h
                 if newer:self.assertEqual(newer['BaseSha256'],expected);expected=newer['ApprovedSha256']
+                newest=json.loads((ROOT/'docs/experiments/free-racing-learning/source-extensions.json').read_bytes())['Sources'].get(n)
+                if newest:self.assertEqual(newest['BaseSha256'],expected);expected=newest['ApprovedSha256']
                 self.assertEqual(actual,expected)
 
 if __name__=='__main__':unittest.main()
