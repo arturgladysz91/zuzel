@@ -67,7 +67,17 @@ class ContinuousCornerEvidenceTests(unittest.TestCase):
         for n,h in report.load(DATA,'protocol.json')['Sources'].items():
             actual=hashlib.sha256((ROOT/'tools/shared-world-speedway'/n).read_bytes().replace(b'\r\n',b'\n')).hexdigest().upper()
             if n in extensions:
-                self.assertEqual(extensions[n]['BaseSha256'],h);self.assertEqual(actual,extensions[n]['ApprovedSha256'])
-            else:self.assertEqual(actual,h)
+                self.assertEqual(extensions[n]['BaseSha256'],h)
+                import json
+                newer=json.loads((ROOT/'docs/experiments/free-racing/source-extensions.json').read_text(encoding='utf-8'))['Sources'].get(n)
+                expected=extensions[n]['ApprovedSha256']
+                if newer:self.assertEqual(newer['BaseSha256'],expected);expected=newer['ApprovedSha256']
+                self.assertEqual(actual,expected)
+            else:
+                import json
+                newer=json.loads((ROOT/'docs/experiments/free-racing/source-extensions.json').read_text(encoding='utf-8'))['Sources'].get(n)
+                expected=h
+                if newer:self.assertEqual(newer['BaseSha256'],expected);expected=newer['ApprovedSha256']
+                self.assertEqual(actual,expected)
 
 if __name__=='__main__':unittest.main()

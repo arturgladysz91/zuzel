@@ -3,6 +3,11 @@
 Release platform: **Windows only**. See the current [Windows CI policy](docs/ci.md)
 for Draft/full validation, the merge gate and optional historical audits.
 
+[Free Racing (#128)](docs/experiments/free-racing.md) isolates path-free throttle
+and steering with a gated, deterministic small-policy trainer. The first native
+preflight crosses the outer boundary before the bend; training remains stopped.
+PARTIAL foundation, default OFF, with the failed trajectory visible in the replay.
+
 Isolated research prototype: [Shared World Speedway Simulation](docs/experiments/shared-world-speedway.md)
 uses one Box2D.NET world and causal rider observations. Recommendation B: full
 contact-free heats work; crowded-contact sensitivity and post-crash boundaries

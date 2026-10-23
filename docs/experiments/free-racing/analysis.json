@@ -1,0 +1,52 @@
+{
+  "Grade": "PARTIAL",
+  "Gate": "STOP",
+  "NativeRuns": 1,
+  "TrainingRuns": 0,
+  "ValidationRuns": 0,
+  "FinalRuns": 0,
+  "LearnedPolicyExists": false,
+  "PreflightCompleted": false,
+  "PreflightMetrics": {
+    "Completed": false,
+    "Outcome": "boundary or uncertified boundary sweep",
+    "GateSeconds": null,
+    "DurationSeconds": 1.9100000000000001,
+    "EntrySpeed": 16,
+    "MinimumSpeed": 15.731047630310059,
+    "ExitSpeed": 15.731573104858398,
+    "MaximumBetaDegrees": 7.575221954782259,
+    "MeanDrive": 0.15146603716956533,
+    "FullDriveFraction": 0.12565444745318427,
+    "LargeTrajectoryOscillations": 0,
+    "DistanceMeters": 32.16090075671673,
+    "MinimumClearanceMeters": -0.08150767113050494,
+    "NativeSteps": 191,
+    "PhysicsEvaluations": 14437,
+    "CpuSeconds": 1.328125,
+    "Fingerprint": "B3D57979C9730D145B8DDB746CF916AC2E61CA298870AC1F379F10E8CF8CB293"
+  },
+  "FirstObservationWithNoPredictedLegalCandidateSeconds": 1.1,
+  "NativeEndpointOuterClearanceMeters": -0.0001588645108607789,
+  "PredictionComparisons": 7,
+  "AllAvailablePredictionComparisonsPassed": true,
+  "MissingPredictionComparisonsAfterNativeStop": 2,
+  "MaximumEndpointPositionErrorMeters": 3.8788294e-05,
+  "MaximumAlongContinuationPositionErrorMeters": 4.114085e-05,
+  "PhysicsEvaluations": {
+    "NativeAndController": 14437,
+    "PreflightPredictionValidation": 20736,
+    "IndependentOfflineAudit": 35173,
+    "TotalExperimentAndAudit": 70346
+  },
+  "CpuSeconds": {
+    "NativeAndController": 1.328125,
+    "IndependentOfflineAudit": 1.984375,
+    "InitialPredictionValidation": "not separately instrumented; no fabricated total"
+  },
+  "BestCompletedRun": null,
+  "WorstAndOnlyRun": "preflight-train-16-3",
+  "IncompleteRuns": 1,
+  "HistoricalComparison": "Native #124 overlay only: different initial speed/offset (18m/s/1m vs16m/s/3m), no matched time comparison.",
+  "Limitation": "Initial reactive action set plus soft finite safety cost fails before the first bend. At1.10s all candidate continuations already cross an edge; no safety certificate or fallback actuator exists. Predictor accuracy is not policy adequacy."
+}

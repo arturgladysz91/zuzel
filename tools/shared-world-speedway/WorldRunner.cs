@@ -48,6 +48,7 @@ public sealed class WorldRunner : IDisposable
     private PreparedCornerPlan? preparedCorner;
     private readonly ContinuousCornerPlanning? continuousCorners;
     private readonly PredictiveRiderControl? predictiveRider;
+    public FreeRacingController? FreeRacing { get; }
     public IReadOnlyList<PredictiveSteeringDecision> PredictiveDecisions=>predictiveRider?.Decisions??(IReadOnlyList<PredictiveSteeringDecision>)Array.Empty<PredictiveSteeringDecision>();
     public IReadOnlyList<PredictiveSteeringActivation> PredictiveActivations=>predictiveRider?.Activations??(IReadOnlyList<PredictiveSteeringActivation>)Array.Empty<PredictiveSteeringActivation>();
     public AuthoredRacingPath? PreparedPath=>preparedCorner?.Path;
@@ -74,7 +75,8 @@ public sealed class WorldRunner : IDisposable
         TrackStateSnapshot? frozenSurface = null, IEnumerable<SpatialControlCommand>? spatialControls = null,
         TrackShapeVariant? trackShape = null,AuthoredRacingPath? authoredPath=null,bool diagnosticPathGuidance=false,bool diagnosticPathPreview=false,
         AuthoredSteadyStart? diagnosticSteadyStart=null,TwoContactInitialState? twoContactInitial=null,
-        IEnumerable<TwoContactSteeringCommand>? steeringCommands=null,PreparedCornerOptions? preparedOptions=null,PreparedCornerPlan? diagnosticFrozenNextPlan=null)
+        IEnumerable<TwoContactSteeringCommand>? steeringCommands=null,PreparedCornerOptions? preparedOptions=null,PreparedCornerPlan? diagnosticFrozenNextPlan=null,
+        FreeRacingPolicy? freeRacingPolicy=null)
     {
         this.diagnostics = diagnostics;
         Parameters = parameters ?? new();
@@ -108,6 +110,18 @@ public sealed class WorldRunner : IDisposable
             || Parameters.YawResponseSeconds <= 0 || Parameters.PredictionSeconds <= 0
             || Parameters.RecoverySeconds <= 0) throw new ArgumentOutOfRangeException(nameof(parameters));
         specs = riders.OrderBy(r => r.Profile.Id).ToArray();
+        if (Parameters.EnableFreeRacing && (!Parameters.EnableTwoContactBikeDynamics || !Parameters.EnablePhysicalSteeringControl
+            || !Parameters.Enable500CcEngine || !Parameters.EnableLoadBasedTyreGrip || Parameters.EnableTravelDirectionSteering
+            || Parameters.EnablePreparedCornerPlan || Parameters.EnableContinuousCornerPlanning || Parameters.EnablePredictiveRiderControl
+            || Parameters.EnableFeasibleCornerEntry || Parameters.EnableAdaptiveRiderControl || Parameters.EnableDynamicAxleLoad
+            || Parameters.EnableLocalOffsetLimit || Parameters.TwoContactBike is not null || Parameters.RearWheel is not null
+            || Parameters.Engine500 is not null || Parameters.LoadBasedTyres is not null || authoredPath is not null
+            || diagnosticPathGuidance || diagnosticPathPreview || diagnosticSteadyStart is not null
+            || controls?.Any() == true || spatialControls?.Any() == true || steeringCommands?.Any() == true
+            || specs.Length != 1 || specs[0].TrafficEnabled || specs[0].Passive)
+            || !Parameters.EnableFreeRacing && freeRacingPolicy is not null)
+            throw new ArgumentException("Free Racing requires one isolated rider, frozen #116 physics and no path or competing controller.");
+        FreeRacing = Parameters.EnableFreeRacing ? new(freeRacingPolicy) : null;
         if((Parameters.Enable500CcEngine||Parameters.EnableLoadBasedTyreGrip)&&(!Parameters.EnableTwoContactBikeDynamics||!Parameters.EnablePhysicalSteeringControl
             ||Parameters.EnableDynamicAxleLoad||Parameters.ExperimentalDrive is not null)
             ||Parameters.Engine500 is not null&&!Parameters.Enable500CcEngine||Parameters.LoadBasedTyres is not null&&!Parameters.EnableLoadBasedTyreGrip)
@@ -266,6 +280,11 @@ public sealed class WorldRunner : IDisposable
             {
                 TimeSeconds = nextTime;
                 Activate();
+                if (FreeRacing is not null) {
+                    FreeRacing.Advance(views[0], TimeSeconds, rearWheels[0].AngularVelocityRadPerSecond,
+                        twoContactStates[0].SteeringRadians, specs[0], Frame, surface, Parameters, physics.Masses[0], physics.Inertias[0]);
+                    views[0] = views[0] with { Drive = FreeRacing.Active.Drive };
+                }
                 if(continuousCorners is not null){
                     var change=continuousCorners.Advance(views[0],specs[0],Frame,surface,Parameters,TimeSeconds,physics.Masses[0],rearWheels[0],twoContactStates[0],pending[0]);
                     if(change is not null){
@@ -608,6 +627,7 @@ public sealed class WorldRunner : IDisposable
         if (nextControl < controls.Length) Before(controls[nextControl].AtSeconds);
         if(continuousCorners?.Waiting is { } waiting)Before(waiting.ActivationSeconds);
         if(predictiveRider?.NextControlDeadline(TimeSeconds) is { } predictiveDeadline)Before(predictiveDeadline);
+        if (FreeRacing is not null) Before(FreeRacing.Deadline);
         for (var i = 0; i < specs.Length; i++)
         {
             if (specs[i].SpeedMetersPerSecond == 0) Before(RiderController.TapeReactionSeconds(specs[i]));
@@ -667,6 +687,7 @@ public sealed class WorldRunner : IDisposable
     }
     private float? SteeringOverride(int riderId)
     {
+        if (FreeRacing is not null) return FreeRacing.Active.SteeringRadians;
         if(predictiveRider is not null)return predictiveRider.SteeringOverride(TimeSeconds,twoContactStates[0].SteeringRadians,Parameters.TwoContactBike??TwoContactBikeParameters.Default);
         for(var i=steeringCommands.Length-1;i>=0;i--){var c=steeringCommands[i];if(c.RiderId==riderId&&c.AtSeconds<=TimeSeconds+1e-12)return c.AngleRadians;}
         return null;

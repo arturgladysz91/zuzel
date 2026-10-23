@@ -370,3 +370,13 @@ tail: there is no wall or renderer correction. Stress CSV is sampled at about
 0.1 s; the report measures first crossing from the full 5 ms native record.
 The controls demonstrate feasibility, not performance at full drive. See the
 [audit and five plots](../../docs/experiments/speed-grip-line-crossover.md).
+# Free Racing #128
+
+`?case=free-racing` otwiera jedyną natywną próbę wstępną (16 m/s, offset3 m).
+Zatrzymano ją w1,91 s po przekroczeniu bandy. Trening nie wystartował; brak
+zapisu pośredniego i wyuczonego. Nowy panel pokazuje obie komendy i ich wykonanie,
+prześwity całego obrysu, parametry, pending i kandydackie prognozy0,9 s.
+Pomarańczowy overlay to rzeczywisty historyczny #124 przy **innych warunkach**,
+odłączony od sterownika; nie jest gotową linią Free Racing.
+Źródło: `docs/experiments/free-racing/preflight-train-16-3.json.gz`.
+Pełny raport: [Free Racing](../../docs/experiments/free-racing.md).

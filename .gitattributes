@@ -38,3 +38,14 @@
 /docs/experiments/predictive-rider-control/** -text whitespace=trailing-space,space-before-tab,cr-at-eol
 /tools/shared-world-speedway/PredictiveRider*.cs text eol=lf
 /docs/experiments/first-bend-zigzag/** -text whitespace=trailing-space,space-before-tab,cr-at-eol
+/docs/experiments/free-racing/** -text whitespace=trailing-space,space-before-tab,cr-at-eol
+/tools/shared-world-speedway/FreeRacing*.cs text eol=lf
+# Reproduce the exact Windows source bytes sealed before the #128 native preflight.
+/tools/shared-world-speedway/WorldRunner.cs text eol=crlf
+/tools/shared-world-speedway/WorldModel.cs text eol=crlf
+/tools/shared-world-speedway/TwoContactBikeDynamics.cs text eol=crlf
+/tools/shared-world-speedway/ContactAdapter.cs text eol=crlf
+/tools/shared-world-speedway/RearWheelDynamics.cs text eol=crlf
+/tools/shared-world-speedway/Engine500.cs text eol=crlf
+/tools/shared-world-speedway/LoadBasedTyreGrip.cs text eol=crlf
+/tools/shared-world-speedway/TrackFrame.cs text eol=crlf
