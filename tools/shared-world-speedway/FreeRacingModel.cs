@@ -26,14 +26,17 @@ public static class FreeRacingModel
     public const double MaximumHorizonSeconds = .9;
     public static FreeRacingPrediction Predict(FreeRacingInput input, RiderSpec spec, TrackFrame frame,
         TrackStateSnapshot surface, WorldParameters p, float mass, float inertia, double horizon,
-        FreeRacingAction? candidate = null, FreeRacingPolicy? closedLoop = null)
+        FreeRacingAction? candidate = null, FreeRacingPolicy? closedLoop = null,
+        Func<FreeRacingInput, (FreeRacingAction Action, int Evaluations)>? causalPolicy = null, double reviewSeconds = .1)
     {
         if (!p.EnableFreeRacing) throw new InvalidOperationException("Free Racing is OFF by default.");
         if (!double.IsFinite(horizon) || horizon <= 0 || horizon > MaximumHorizonSeconds + 1e-10
             || !float.IsFinite(mass) || mass <= 0 || !float.IsFinite(inertia) || inertia <= 0
             || !double.IsFinite(input.Time) || !double.IsFinite(input.Omega) || input.Omega < 0
             || !double.IsFinite(input.NextReview) || input.NextReview < input.Time - 1e-8
-            || candidate is not null && closedLoop is not null) throw new ArgumentException("Bounded causal prediction required.");
+            || candidate is not null && (closedLoop is not null || causalPolicy is not null)
+            || closedLoop is not null && causalPolicy is not null || !double.IsFinite(reviewSeconds) || reviewSeconds < .1 || reviewSeconds > .4)
+            throw new ArgumentException("Bounded causal prediction required.");
         input.Active.Validate(); candidate?.Validate();
         var reaction = RiderController.ReactionSeconds(spec);
         foreach (var command in input.Pending) {
@@ -58,17 +61,22 @@ public static class FreeRacingModel
         Activate(); Point();
         while (time < end - 1e-10) {
             Activate();
-            if (closedLoop is not null && time >= nextReview - 1e-10) {
+            if ((closedLoop is not null || causalPolicy is not null) && time >= nextReview - 1e-10) {
                 var observed = new FreeRacingInput(v, time, wheel.AngularVelocityRadPerSecond, steering.SteeringRadians, active, queue.ToArray(), nextReview);
-                var decision = FreeRacingController.Choose(observed, closedLoop, spec, frame, surface, p, mass, inertia);
-                forces += decision.ForceEvaluations; queue.Add(new(time, time + reaction, decision.Action));
-                nextReview += FreeRacingController.ReviewSeconds;
+                if (causalPolicy is not null) {
+                    var decision = causalPolicy(observed); forces += decision.Evaluations;
+                    queue.Add(new(time, time + reaction, decision.Action)); nextReview += reviewSeconds;
+                } else {
+                    var decision = FreeRacingController.Choose(observed, closedLoop!, spec, frame, surface, p, mass, inertia);
+                    forces += decision.ForceEvaluations; queue.Add(new(time, time + reaction, decision.Action));
+                    nextReview += FreeRacingController.ReviewSeconds;
+                }
             }
             points[^1] = points[^1] with { Rider = v };
             var nominal = (Math.Floor((time + 1e-8) / .01) + 1) * .01;
             var duration = Math.Min(end - time, nominal - time);
             if (queue.Count > 0 && queue[0].ActivationAt > time + 1e-10) duration = Math.Min(duration, queue[0].ActivationAt - time);
-            if (closedLoop is not null && nextReview > time + 1e-10) duration = Math.Min(duration, nextReview - time);
+            if ((closedLoop is not null || causalPolicy is not null) && nextReview > time + 1e-10) duration = Math.Min(duration, nextReview - time);
             TwoContactForces Query(float dt) {
                 forces++;
                 return TwoContactBikeDynamics.Forces(v, spec, frame, surface, p, time, mass, wheel, steering, dt,

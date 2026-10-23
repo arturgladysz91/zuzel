@@ -1,0 +1,83 @@
+{
+  "TrainingEpisodes": 50,
+  "Level": 2,
+  "Best": {
+    "Id": 22,
+    "Generation": 4,
+    "Level": 2,
+    "Policy": {
+      "PreviewSeconds": 0.9582805268459753,
+      "DirectionWeight": 2.388690986954616,
+      "YawWeight": 0.4711570660396781,
+      "Drive": 0.35420313570005313,
+      "ThrottleWeight": 3.6444007691852986,
+      "ProgressWeight": 1.3278702908390618,
+      "SteeringChangeWeight": 0.042214215306174425,
+      "GeometrySpeedWeight": 0.29977636971709404,
+      "Values": [
+        0.9582805268459753,
+        2.388690986954616,
+        0.4711570660396781,
+        0.35420313570005313,
+        3.6444007691852986,
+        1.3278702908390618,
+        0.042214215306174425,
+        0.29977636971709404
+      ]
+    },
+    "Results": [
+      {
+        "Completed": true,
+        "Outcome": "completed",
+        "GateSeconds": 8.13,
+        "DurationSeconds": 9.13,
+        "LegalProgress": 133.00708985328674,
+        "LegalSeconds": 9.13,
+        "MinimumClearanceMeters": 0.13013773873574574,
+        "EntrySpeed": 11.717073440551758,
+        "MinimumSpeed": 8.004027366638184,
+        "ExitSpeed": 17.48021697998047,
+        "MaximumBetaDegrees": 10.015803969976927,
+        "MeanDrive": 0.28582901571987335,
+        "FullDriveFraction": 0.02628696545844271,
+        "LargeTrajectoryOscillations": 2,
+        "DistanceMeters": 133.10154951480217,
+        "BoundaryApproach": 3.8883774912077325,
+        "RecoverySeconds": 2.9299999345093966,
+        "NativeSteps": 915,
+        "PhysicsEvaluations": 50994,
+        "Forecasts": 830,
+        "CpuSeconds": 3.203125,
+        "Fingerprint": "716A99D6674EBFB14D35167848A8BD2B303D4AFC57D99840447A2D461586A0C9"
+      },
+      {
+        "Completed": true,
+        "Outcome": "completed",
+        "GateSeconds": 7.96,
+        "DurationSeconds": 8.96,
+        "LegalProgress": 134.3120949268341,
+        "LegalSeconds": 8.96,
+        "MinimumClearanceMeters": 2.327184838387287,
+        "EntrySpeed": 13.517160415649414,
+        "MinimumSpeed": 10.004150390625,
+        "ExitSpeed": 18.649059295654297,
+        "MaximumBetaDegrees": 7.137241083060582,
+        "MeanDrive": 0.2924380588259797,
+        "FullDriveFraction": 0.026785713687006912,
+        "LargeTrajectoryOscillations": 3,
+        "DistanceMeters": 148.09419760853052,
+        "BoundaryApproach": 5.24387571282955,
+        "RecoverySeconds": 0,
+        "NativeSteps": 898,
+        "PhysicsEvaluations": 49840,
+        "Forecasts": 812,
+        "CpuSeconds": 3.765625,
+        "Fingerprint": "05999DF5B36171F0B0B709BFCFFF5E88A1B016A67D9550049128F13C343AB207"
+      }
+    ]
+  },
+  "UseValidationForSelection": false,
+  "Completed": 36,
+  "CpuSeconds": 169.328125,
+  "Evaluations": 2324822
+}

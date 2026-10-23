@@ -3,6 +3,7 @@ import { currentRecordings, readGzip } from './recordings.mjs';
 import { loadContinuous } from './continuous.mjs';
 import { loadZigzag, createZigzagPanel } from './zigzag.mjs';
 import { loadFreeRacing, updateFreeRacingPanel } from './free-racing.mjs';
+import { loadLearning, setupLearning, updateLearningPanel } from './free-learning.mjs';
 
 const $ = id => document.getElementById(id);
 const canvas = $('track'), context = canvas.getContext('2d');
@@ -24,6 +25,8 @@ $('scenario').prepend(currentGroup);
 const latestOption = document.createElement('option'); latestOption.value = 'latest-two-bends';
 latestOption.textContent = '#123 · najnowszy przejazd · dwa łuki Egg Mild · 1 zawodnik';
 $('scenario').prepend(latestOption);
+const learningOption=document.createElement('option');learningOption.value='free-learning';
+learningOption.textContent='#129 · Free Racing Learning · proces uczenia i kamienie milowe';$('scenario').prepend(learningOption);
 const freeOption=document.createElement('option');freeOption.value='free-racing';
 freeOption.textContent='#128 · Free Racing · próba wstępna PARTIAL · trening zatrzymany';$('scenario').prepend(freeOption);
 for (const [key,label] of [['predictive-baseline','Predykcja · baseline #123 / #124 · 19,98 s'],['predictive-candidate','Predykcja · kandydat · PARTIAL · 20,27 s']]) {
@@ -95,7 +98,7 @@ function jumpBend(index) {
 function setTime(value, immediate = true) {
   if (!replay) return;
   time = clamp(Number(value), 0, replay.duration); $('scrub').value = String(time); dirty = true; if (immediate) lastPanelTime = -1;
-  if(replay.freeRacing){const exact=replay.sampleTimes.find(t=>Math.abs(t-time)<1e-7);if(exact!=null)time=exact;}
+  if(replay.freeRacing||replay.learning){const exact=replay.sampleTimes.find(t=>Math.abs(t-time)<1e-7);if(exact!=null)time=exact;}
 }
 function setPlaying(value) {
   playing = Boolean(value && replay);
@@ -123,8 +126,9 @@ function rebuildEvents() {
       const d = event.decision, channel = enumName(geometry, 'channels', d.Channels ?? 0);
       reason.textContent = `R${event.rider} · ${d.Reason || enumName(geometry, 'action', d.Action)}`;
       detail.textContent = `${enumName(geometry, 'action', d.Action)} · ${enumName(geometry, 'intent', d.Intent ?? 0)}${d.OpponentId ? ` · rywal R${d.OpponentId}` : ''}`;
+      if(replay.learning)detail.textContent='Gaz i kierownica · bez celu poprzecznego';
       const badge = document.createElement('span'); badge.className = `channel ${channel.toLowerCase()}`; badge.textContent = ` · ${channel}`; detail.append(badge);
-      button.title = `${statusLabels[decisionStatus(d, time)]}\nObservedAt ${format(d.ObservedAt)} s\nRequestedActivation ${format(d.RequestedActivation)} s\nActualActivation ${d.ActualActivation == null ? 'brak' : format(d.ActualActivation) + ' s'}\nCancelledAt ${d.CancelledAt == null ? 'brak' : format(d.CancelledAt) + ' s'}\nTarget ${format(d.TargetOffsetMeters, 2)} m · Drive ${format(d.Drive * 100, 1)}%`;
+      button.title = `${statusLabels[decisionStatus(d, time)]}\nObservedAt ${format(d.ObservedAt)} s\nRequestedActivation ${format(d.RequestedActivation)} s\nActualActivation ${d.ActualActivation == null ? 'brak' : format(d.ActualActivation) + ' s'}\nCancelledAt ${d.CancelledAt == null ? 'brak' : format(d.CancelledAt) + ' s'}\n${replay.learning?'Brak celu poprzecznego':'Target '+format(d.TargetOffsetMeters,2)+' m'} · Drive ${format(d.Drive * 100, 1)}%`;
     } else if (event.steering) {
       reason.textContent = `R1 · korekta ${format(event.steering.CorrectionRadians * 180 / Math.PI, 2)}° · reakcja 0,24 s`;
       detail.textContent = `Obserwacja ${format(event.steering.ObservedAt)} s → aktywacja ${format(event.steering.ActualActivation)} s · impuls 0,1 s`;
@@ -157,6 +161,7 @@ function updatePanel() {
     $('comparison-legend').textContent='Turkusowy: natywny Free Racing. Pomarańczowy: historyczny #124 (18m/s, offset1m — inne warunki); wyłącznie odniesienie.';
     updateFreeRacingPanel($('free-racing-analysis'),replay,time);
   }
+  if(replay.learning){$('target').textContent='brak narzuconej linii';updateLearningPanel($('learning-telemetry'),replay,time);}
   $('status').textContent = state.finished ? 'Finished' : enumName(geometry, 'activity', state.activity);
   $('status').classList.toggle('finished', state.finished);
   $('lap').textContent = replay.planAt ? 'Dwa łuki · bez pełnego okrążenia' : state.finished ? `${state.totalLaps}/${state.totalLaps} · meta ${format(state.finish)} s` : `${state.lap}/${state.totalLaps} · ukończono ${state.completedLaps}`;
@@ -170,6 +175,7 @@ function updatePanel() {
   }
   $('intent').textContent = enumName(geometry, 'intent', state.intent);
   if(replay.freeRacing){$('intent').textContent='Autonomiczne działania';$('lap').textContent='Kontrola wstępna · nieukończony';}
+  if(replay.learning){$('intent').textContent='Wyuczone preferencje gazu i kierownicy';$('lap').textContent=replay.learning.Metrics.Completed?'Pierwszy łuk + 1s kontroli na wyjściu':'Próba nieukończona';}
   $('sample-at').textContent = `${format(state.sampleTime)} s${state.stale ? ' · ostatni' : state.interpolated ? ' · pozycja interpolowana' : ' · zaakceptowany'}`;
   $('slip-angle').textContent = motion.beta == null ? '—' : `${format(motion.beta * 180 / Math.PI, 1)}°`;
   $('body-angle').textContent = `${format(state.heading * 180 / Math.PI, 1)}°`;
@@ -344,10 +350,32 @@ async function loadScenario(key,keepTime=null) {
   const generation = ++loadGeneration; setPlaying(false); $('load-state').hidden = false; $('load-state').classList.remove('error');
   zigzagPanel=null;$('zigzag-analysis').hidden=true;
   $('free-racing-analysis').hidden=true;
-  $('targets').disabled=key==='free-racing';
-  $('outer-limit').disabled=key==='free-racing';
+  $('free-learning-analysis').hidden=true;
+  $('targets').disabled=key==='free-racing'||key==='free-learning';
+  $('outer-limit').disabled=key==='free-racing'||key==='free-learning';
   $('load-state').textContent = 'Wczytywanie zaakceptowanych stanów…';
   try {
+    if(key==='free-learning'){
+      const name=new URL(location.href).searchParams.get('run')??'overlay-final';
+      const data=await loadLearning(fetch,name);if(generation!==loadGeneration)return;
+      geometry=data.geometry;replay=data.replay;selected=[...replay.tracks.keys()][0];comparisonTrails=data.comparisons;widthGeometries=[];
+      for(const id of ['width-controls','width-comparison'])$(id).hidden=true;
+      $('comparison-legend').hidden=false;$('comparison-legend').replaceChildren();
+      for(const c of data.comparisons){const span=document.createElement('span');span.style.color=c.color;span.textContent=c.name+' · ';$('comparison-legend').append(span);}
+      $('recording-mode').hidden=false;$('recording-mode').textContent=`FREE RACING LEARNING · ${data.index.Grade} · rzeczywiste przejazdy treningowe i niezależna walidacja`;
+      document.querySelector('.brand p').textContent='Free Racing Learning · jeden zawodnik · bez narzuconej linii';
+      $('safety-note').hidden=false;$('safety-note').className='safety-note'+(data.run.Metrics.Completed?'':' unsafe');
+      $('safety-note').textContent=`${data.run.Name}: ${data.run.Metrics.Outcome}. Nakładki pokazują wspólny stan 9m/s / offset4m; pozostałe próby mogą mieć inne warunki wejściowe.`;
+      document.querySelector('.map-title span').textContent='EGG MILD · PROGRESSIVE B';document.querySelector('.map-title small').textContent='Natywne XY · brak idealnej linii';
+      $('smooth').checked=false;$('targets').checked=false;$('outer-limit').checked=false;$('rate').value='0.5';
+      $('sampling-note').textContent=`${data.run.Samples.length} zaakceptowanych stanów · bez ekstrapolacji`;
+      $('record-clip').hidden=typeof MediaRecorder==='undefined'||!canvas.captureStream;
+      setupLearning($('free-learning-analysis'),data,run=>{const url=new URL(location.href);url.searchParams.set('run',run);url.searchParams.delete('t');history.replaceState(null,'',url);loadScenario('free-learning',0);});
+      const button=document.createElement('button');button.textContent=`R${selected}`;button.dataset.id=String(selected);button.addEventListener('click',()=>chooseRider(selected));
+      $('riders').replaceChildren(button);$('source-count').textContent='1 motocykl';$('scrub').max=String(replay.duration);
+      setTime(keepTime??Number(new URL(location.href).searchParams.get('t')??0));chooseRider(selected);fit();
+      $('free-learning-analysis').hidden=false;$('load-state').hidden=true;return;
+    }
     if(key==='free-racing'){
       const data=await loadFreeRacing();if(generation!==loadGeneration)return;
       geometry=data.geometry;replay=data.replay;selected=[...replay.tracks.keys()][0];comparisonTrails=data.comparisons;widthGeometries=[];

@@ -1,0 +1,12 @@
+{
+  "LocalWindowsBuild": "Release --no-restore --warnaserror: passed, zero warnings",
+  "DotnetCoreAndTrajectory": {"Passed": 2363, "Failed": 0, "Skipped": 0, "Duration": "2m17s"},
+  "CalibrationPython": {"Passed": 164},
+  "CiPolicyPython": {"Passed": 7},
+  "ReplayNode": {"Passed": 35},
+  "CompleteDiscovery": {"Cases": 2884, "Core": 1968, "Trajectory": 395, "HistoricalAnalysis": 473, "FourRider": 48, "Missing": 0, "Extra": 0, "Duplicates": 0},
+  "LegacyConsumerAudit": {"FrozenReaders": 39, "Passed": true},
+  "HistoricalAndFourRiderShardsExecutedLocally": false,
+  "ExperimentNativeWorlds": 442,
+  "Note": "Unit/scenario CI verification is separate from the counted learning experiment. Exact remote Windows CI commit and URL are recorded in the PR description."
+}

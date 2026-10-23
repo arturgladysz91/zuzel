@@ -48,11 +48,15 @@ class PredictiveRiderEvidenceTests(unittest.TestCase):
                 extension=load(DATA/'../free-racing/source-extensions.json')['Sources'].get(name)
                 expected=approved['ApprovedSha256']
                 if extension:self.assertEqual(extension['BaseSha256'],expected);expected=extension['ApprovedSha256']
+                newest=load(DATA/'../free-racing-learning/source-extensions.json')['Sources'].get(name)
+                if newest:self.assertEqual(newest['BaseSha256'],expected);expected=newest['ApprovedSha256']
                 self.assertEqual(actual,expected)
             else:
                 extension=load(DATA/'../free-racing/source-extensions.json')['Sources'].get(name)
                 expected=digest
                 if extension:self.assertEqual(extension['BaseSha256'],expected);expected=extension['ApprovedSha256']
+                newest=load(DATA/'../free-racing-learning/source-extensions.json')['Sources'].get(name)
+                if newest:self.assertEqual(newest['BaseSha256'],expected);expected=newest['ApprovedSha256']
                 self.assertEqual(actual,expected)
         attempt=load(DATA/'controller-attempt.json')
         for name in ['PredictiveRiderModel.cs','PredictiveRiderControl.cs']:

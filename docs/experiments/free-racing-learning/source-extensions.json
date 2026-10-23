@@ -1,0 +1,90 @@
+{
+  "BaseHead": "e23261afe1205c71a8db3733b6553485f4de29f5",
+  "Sources": {
+    "WorldRunner.cs": {
+      "BaseSha256": "A737C3BD98F81D78133E68B1A3DE36414ED98235CA426CD76C881159FC90BC40",
+      "ApprovedSha256": "127813FE6F6F9597A707F0B29815D245E8452C8AF4D9DF1E7016B5F6D9ED30B7",
+      "BaseRawSha256": "4C017D530E2503206E8A92F1BB5C47B1D159E18F063209BF80C54C642184F09E",
+      "ApprovedRawSha256": "9FC4D50020E481EB210181B271BCDED6DF2A1C627C9DB25C68896E8EB02ACD2C",
+      "Edits": [
+        {
+          "Before": "",
+          "After": "    public FreeLearningController? FreeLearning { get; }\n"
+        },
+        {
+          "Before": "        FreeRacingPolicy? freeRacingPolicy=null)\n",
+          "After": "        FreeRacingPolicy? freeRacingPolicy=null, FreeLearningPolicy? freeLearningPolicy=null)\n"
+        },
+        {
+          "Before": "        FreeRacing = Parameters.EnableFreeRacing ? new(freeRacingPolicy) : null;\n",
+          "After": "        if (Parameters.EnableFreeRacingLearning && (!Parameters.EnableFreeRacing || freeRacingPolicy is not null)\n            || !Parameters.EnableFreeRacingLearning && freeLearningPolicy is not null)\n            throw new ArgumentException(\"Learning requires isolated Free Racing and its own policy.\");\n        FreeRacing = Parameters.EnableFreeRacing && !Parameters.EnableFreeRacingLearning ? new(freeRacingPolicy) : null;\n        FreeLearning = Parameters.EnableFreeRacingLearning ? new(freeLearningPolicy) : null;\n"
+        },
+        {
+          "Before": "",
+          "After": "                if (FreeLearning is not null) {\n                    FreeLearning.Advance(views[0], TimeSeconds, rearWheels[0].AngularVelocityRadPerSecond,\n                        twoContactStates[0].SteeringRadians, specs[0], Frame, surface, Parameters, physics.Masses[0], physics.Inertias[0]);\n                    views[0] = views[0] with { Drive = FreeLearning.Active.Drive };\n                }\n"
+        },
+        {
+          "Before": "",
+          "After": "        if (FreeLearning is not null) Before(FreeLearning.Deadline);\n"
+        },
+        {
+          "Before": "",
+          "After": "        if (FreeLearning is not null) return FreeLearning.Active.SteeringRadians;\n"
+        }
+      ]
+    },
+    "WorldModel.cs": {
+      "BaseSha256": "CB76585EAB1B045F6299E087FF8DE1046A026563194BF2527C8D76E64958A3BD",
+      "ApprovedSha256": "E707FB2A616FF13F841A33C1935A1DFD81A14F193D139F1C2A0B7110361A7347",
+      "BaseRawSha256": "98273A120EF97BD809A40BE2C7DA00455F554A9DA81D08FBE11FE90C60B54A44",
+      "ApprovedRawSha256": "B8FA04CE1A9B6809982AEBB6DFF75AED8C82043B6ACDC2F5E0B46D94E57EAB4E",
+      "Edits": [
+        {
+          "Before": "",
+          "After": "    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]\n    public bool EnableFreeRacingLearning {get;init;}\n"
+        }
+      ]
+    },
+    "Program.cs": {
+      "BaseSha256": "885BD2D9FC720212CA1E22D5D31A3E5EA8667A3FD606AAFA408E5E9CAC21FA25",
+      "ApprovedSha256": "BAC986BC7C41BAA530AA6766E607D57FE5799925C5CB227AB5DE732B72FE333B",
+      "BaseRawSha256": null,
+      "ApprovedRawSha256": "DEB586C344BA0793A3335BE01E95D0710FD7B9DE1E8E2DC2AE85FAE7E6FEC774",
+      "Edits": [
+        {
+          "Before": "",
+          "After": "if(scenario==\"free-learning\"){FreeLearningExperiment.Run(args[1],args[2]);return;}\n"
+        }
+      ]
+    },
+    "FreeRacingModel.cs": {
+      "BaseSha256": "62E4CCE684C60DF9861B48B4EACC51E03A815D91CC8EBE847BD4DCA144017DB9",
+      "ApprovedSha256": "11958B125963658F5A66925557F95D2696F8A8E12DE13AA183B7CF5BBBB535D9",
+      "BaseRawSha256": "62E4CCE684C60DF9861B48B4EACC51E03A815D91CC8EBE847BD4DCA144017DB9",
+      "ApprovedRawSha256": "11958B125963658F5A66925557F95D2696F8A8E12DE13AA183B7CF5BBBB535D9",
+      "Edits": [
+        {
+          "Before": "        FreeRacingAction? candidate = null, FreeRacingPolicy? closedLoop = null)\n",
+          "After": "        FreeRacingAction? candidate = null, FreeRacingPolicy? closedLoop = null,\n        Func<FreeRacingInput, (FreeRacingAction Action, int Evaluations)>? causalPolicy = null, double reviewSeconds = .1)\n"
+        },
+        {
+          "Before": "            || candidate is not null && closedLoop is not null) throw new ArgumentException(\"Bounded causal prediction required.\");\n",
+          "After": "            || candidate is not null && (closedLoop is not null || causalPolicy is not null)\n            || closedLoop is not null && causalPolicy is not null || !double.IsFinite(reviewSeconds) || reviewSeconds < .1 || reviewSeconds > .4)\n            throw new ArgumentException(\"Bounded causal prediction required.\");\n"
+        },
+        {
+          "Before": "            if (closedLoop is not null && time >= nextReview - 1e-10) {\n",
+          "After": "            if ((closedLoop is not null || causalPolicy is not null) && time >= nextReview - 1e-10) {\n"
+        },
+        {
+          "Before": "                var decision = FreeRacingController.Choose(observed, closedLoop, spec, frame, surface, p, mass, inertia);\n                forces += decision.ForceEvaluations; queue.Add(new(time, time + reaction, decision.Action));\n                nextReview += FreeRacingController.ReviewSeconds;\n",
+          "After": "                if (causalPolicy is not null) {\n                    var decision = causalPolicy(observed); forces += decision.Evaluations;\n                    queue.Add(new(time, time + reaction, decision.Action)); nextReview += reviewSeconds;\n                } else {\n                    var decision = FreeRacingController.Choose(observed, closedLoop!, spec, frame, surface, p, mass, inertia);\n                    forces += decision.ForceEvaluations; queue.Add(new(time, time + reaction, decision.Action));\n                    nextReview += FreeRacingController.ReviewSeconds;\n                }\n"
+        },
+        {
+          "Before": "            if (closedLoop is not null && nextReview > time + 1e-10) duration = Math.Min(duration, nextReview - time);\n",
+          "After": "            if ((closedLoop is not null || causalPolicy is not null) && nextReview > time + 1e-10) duration = Math.Min(duration, nextReview - time);\n"
+        }
+      ]
+    }
+  },
+  "Rule": "Exact reversible integration/callback extensions; old OFF code and evidence remain guarded."
+}

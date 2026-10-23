@@ -1,0 +1,27 @@
+{
+  "BaseHead": "e23261afe1205c71a8db3733b6553485f4de29f5",
+  "AnglesDegrees": [
+    0,
+    5,
+    -5,
+    15,
+    -15
+  ],
+  "Start": {
+    "Speed": 8,
+    "Offset": 5,
+    "Reference": 4,
+    "Drive": 1
+  },
+  "Reaction": 0.24,
+  "Duration": 0.5,
+  "PhysicsSources": {
+    "TwoContactBikeDynamics.cs": "7F5F9FFEF31B5F3CF242C140077CBB9D429F210320EE9055AC0B0EE3EB9CBBEC",
+    "ContactAdapter.cs": "1CB8EC9C92937B9A42568A12A1F19530088A6DC2AB7EAAE53F04E8F58D0C0C4F",
+    "RearWheelDynamics.cs": "AD74D451CA769D8189BD17CCB61A41779F7540F3AF489BC4B716A799205FB7A3",
+    "Engine500.cs": "209B62347B2F37C4F21294FA9F986625A9CEC29BA0CAFAFA88595C34CCBDA9A6",
+    "LoadBasedTyreGrip.cs": "511D95E8FE959935D34FAE7C6EA06BD3650977702F78CB9D1452DF4376DE0172",
+    "TrackFrame.cs": "85069E1CCD70CC2FD8A25A5CC32A1CFF76C17E24DB1B9729C6934A8D29138B4F"
+  },
+  "Rule": "Five identical native initial states. Zero steering until full .24s reaction, then held impulse. Original frozen contacts; record both tyres and r cross F."
+}
