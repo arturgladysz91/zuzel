@@ -1,3 +1,4 @@
+from extended_source_guard import source130
 import csv,gzip,hashlib,json,math,unittest
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2];DATA=ROOT/'docs/experiments/predictive-rider-control'
@@ -41,7 +42,7 @@ class PredictiveRiderEvidenceTests(unittest.TestCase):
         guard=load(DATA/'approved-source-extensions.json');base=load(DATA/'../continuous-corner-planning/protocol.json')['Sources']
         self.assertEqual(set(guard['Sources']),{'PreparedCornerPlan.cs','ContinuousCornerPlanning.cs','WorldModel.cs','WorldRunner.cs'})
         for name,digest in base.items():
-            actual=hashlib.sha256((ROOT/'tools/shared-world-speedway'/name).read_bytes().replace(b'\r\n',b'\n')).hexdigest().upper()
+            actual=hashlib.sha256(source130(name).replace(b'\r\n',b'\n')).hexdigest().upper()
             approved=guard['Sources'].get(name)
             if approved:
                 self.assertEqual(approved['BaseSha256'],digest)
@@ -69,7 +70,7 @@ class PredictiveRiderEvidenceTests(unittest.TestCase):
                 extension=load(DATA/'../first-bend-zigzag/source-extension.json')
                 self.assertEqual(extension['BaseSha256'],expected)
                 expected=extension['ApprovedSha256']
-            self.assertEqual(hashlib.sha256((ROOT/'tools/shared-world-speedway'/name).read_bytes()).hexdigest().upper(),expected)
+            self.assertEqual(hashlib.sha256(source130(name)).hexdigest().upper(),expected)
     def test_no_retuning_and_uncontrolled_trial_remains_explicitly_excluded(self):
         protocol=load(DATA/'controlled/controlled-comparison-protocol.json');a=load(DATA/'analysis.json')
         self.assertTrue(protocol['ControllerUnchanged']);self.assertTrue(protocol['ToleranceUnchanged']);self.assertTrue(protocol['NoRetuning'])

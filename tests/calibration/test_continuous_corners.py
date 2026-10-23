@@ -1,3 +1,4 @@
+from extended_source_guard import source130
 import copy
 import hashlib
 import importlib.util
@@ -65,7 +66,7 @@ class ContinuousCornerEvidenceTests(unittest.TestCase):
         # Preserve this historical manifest; tyre/engine/#117 stay byte-frozen.
         extensions=report.load(ROOT/'docs/experiments/predictive-rider-control','approved-source-extensions.json')['Sources']
         for n,h in report.load(DATA,'protocol.json')['Sources'].items():
-            actual=hashlib.sha256((ROOT/'tools/shared-world-speedway'/n).read_bytes().replace(b'\r\n',b'\n')).hexdigest().upper()
+            actual=hashlib.sha256(source130(n).replace(b'\r\n',b'\n')).hexdigest().upper()
             if n in extensions:
                 self.assertEqual(extensions[n]['BaseSha256'],h)
                 import json

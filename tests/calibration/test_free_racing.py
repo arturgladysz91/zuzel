@@ -1,3 +1,4 @@
+from extended_source_guard import source130
 import gzip
 import hashlib
 import json
@@ -53,7 +54,7 @@ class FreeRacingEvidenceTests(unittest.TestCase):
     def test_exact_additive_extensions_restore_off_base_and_preserve_physics(self):
         guard=load('source-extensions.json');self.assertEqual(set(guard['Sources']),{'WorldRunner.cs','WorldModel.cs','Program.cs'})
         for name,item in guard['Sources'].items():
-            current=(ROOT/'tools/shared-world-speedway'/name).read_bytes().replace(b'\r\n',b'\n').decode()
+            current=source130(name).replace(b'\r\n',b'\n').decode()
             robust=json.loads((DATA/'../robust-free-racing-learning/source-extensions.json').read_bytes())['Sources'].get(name)
             if robust:
                 self.assertEqual(digest(current.encode()),robust['ApprovedSha256'])
@@ -71,7 +72,7 @@ class FreeRacingEvidenceTests(unittest.TestCase):
         for name,expected in load('protocol.json')['Sources'].items():
             newer=json.loads((DATA/'../free-racing-learning/source-extensions.json').read_bytes())['Sources'].get(name)
             if newer:self.assertEqual(newer['BaseRawSha256'],expected);expected=newer['ApprovedRawSha256']
-            self.assertEqual(digest((ROOT/'tools/shared-world-speedway'/name).read_bytes()),expected)
+            self.assertEqual(digest(source130(name)),expected)
     def test_manifest_protects_failed_evidence_and_all_attempts_remain_visible(self):
         for name,expected in load('manifest.json').items():self.assertEqual(digest((DATA/name).read_bytes()),expected)
         run=load('preflight-train-16-3.json.gz')

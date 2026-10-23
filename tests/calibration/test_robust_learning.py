@@ -1,3 +1,4 @@
+from extended_source_guard import source130
 """Audit immutable native evidence without creating Box2D worlds in CI."""
 import gzip
 import hashlib
@@ -122,9 +123,9 @@ class RobustLearningEvidenceTests(unittest.TestCase):
         self.assertEqual(sum(e['Category']=='two-bends' for e in self.attempts),int(decision['Run']))
 
     def test_source_protocol_and_all_manifests_match_without_modifying129(self):
-        for name,expected in self.protocol['Sources'].items():self.assertEqual(sha((ROOT/'tools/shared-world-speedway'/name).read_bytes()),expected,name)
+        for name,expected in self.protocol['Sources'].items():self.assertEqual(sha(source130(name)),expected,name)
         for name,item in load('source-extensions.json')['Sources'].items():
-            current=(ROOT/'tools/shared-world-speedway'/name).read_bytes().replace(b'\r\n',b'\n').decode();self.assertEqual(sha(current.encode()),item['ApprovedSha256'])
+            current=source130(name).replace(b'\r\n',b'\n').decode();self.assertEqual(sha(current.encode()),item['ApprovedSha256'])
             for edit in reversed(item['Edits']):
                 self.assertEqual(current.count(edit['After']),1);current=current.replace(edit['After'],edit['Before'],1)
             self.assertEqual(sha(current.encode()),item['BaseSha256'])

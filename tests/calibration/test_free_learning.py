@@ -1,3 +1,4 @@
+from extended_source_guard import source130
 """Audit saved native evidence; no simulation or training is run in CI."""
 import gzip
 import hashlib
@@ -109,9 +110,9 @@ class FreeLearningEvidenceTests(unittest.TestCase):
         for name,expected in load('protocol.json')['Sources'].items():
             newer=json.loads((DATA/'../robust-free-racing-learning/source-extensions.json').read_bytes())['Sources'].get(name)
             if newer:self.assertEqual(newer['BaseRawSha256'],expected);expected=newer['ApprovedRawSha256']
-            self.assertEqual(sha((ROOT/'tools/shared-world-speedway'/name).read_bytes()),expected,name)
+            self.assertEqual(sha(source130(name)),expected,name)
         for name,item in load('source-extensions.json')['Sources'].items():
-            current=(ROOT/'tools/shared-world-speedway'/name).read_bytes().replace(b'\r\n',b'\n').decode()
+            current=source130(name).replace(b'\r\n',b'\n').decode()
             newer=json.loads((DATA/'../robust-free-racing-learning/source-extensions.json').read_bytes())['Sources'].get(name)
             if newer:
                 self.assertEqual(sha(current.encode()),newer['ApprovedSha256'])

@@ -1,0 +1,132 @@
+{
+  "Grade": "PARTIAL",
+  "BaseHead": "5dbdbd53145c39ec27356bd43cdeb41983a119cf",
+  "Winner": {
+    "Label": "two",
+    "Id": 4061,
+    "Policy": {
+      "PreviewSeconds": 0.9910648400046381,
+      "DirectionWeight": 3.2251494695972176,
+      "YawWeight": 1.7641558104925692,
+      "Drive": 0.3936023368138517,
+      "ThrottleWeight": 4,
+      "ProgressWeight": 1.5144165233089346,
+      "SteeringChangeWeight": 0.05958697340438881,
+      "GeometrySpeedWeight": 0.5440168959155742,
+      "Values": [
+        0.9910648400046381,
+        3.2251494695972176,
+        1.7641558104925692,
+        0.3936023368138517,
+        4,
+        1.5144165233089346,
+        0.05958697340438881,
+        0.5440168959155742
+      ]
+    },
+    "Horizon": 0.9
+  },
+  "WinnerLock": {
+    "PolicyHash": "29D62D4409FA11813D9696E2818205E0C55B5FF9DCC513463EEBC3F1F26E9A1D",
+    "FinalWorlds": 0,
+    "Frozen": true
+  },
+  "ProtocolSha256": "F81D060F84C605F30FA7FCA7909957D5B621EE2E92CD312FDC289C7CC4F4F292",
+  "TrainingStop": {
+    "Generation": 12,
+    "Reason": "three recurring anchor evaluations without declared gain"
+  },
+  "TrainingAB": 320,
+  "TrainingTwo": 260,
+  "WorldsByCategory": {
+    "evaluation": 156,
+    "train-ab": 320,
+    "train-two": 260
+  },
+  "EpisodeRoles": {
+    "diagnostic": 2,
+    "reproduction": 2,
+    "predictor-validation": 8,
+    "train-ab": 320,
+    "selection": 36,
+    "train-two": 260,
+    "final-validation": 108
+  },
+  "NativeWorlds": 736,
+  "CpuSeconds": 2798.734375,
+  "ContactEvaluations": 63082861,
+  "Forecasts": 751281,
+  "NativeSteps": 827252,
+  "FinalSummary": [
+    [
+      "129-after200-single",
+      23,
+      24,
+      {
+        "uncertified interval": 1
+      },
+      7.449
+    ],
+    [
+      "129-after200-two",
+      8,
+      12,
+      {
+        "uncertified interval": 3,
+        "confirmed crossing": 1
+      },
+      16.42
+    ],
+    [
+      "130-H06-single",
+      23,
+      24,
+      {
+        "uncertified interval": 1
+      },
+      6.966
+    ],
+    [
+      "130-H06-two",
+      0,
+      12,
+      {
+        "uncertified interval": 4,
+        "control envelope": 8
+      },
+      null
+    ],
+    [
+      "131-final-single",
+      24,
+      24,
+      {},
+      7.801
+    ],
+    [
+      "131-final-two",
+      12,
+      12,
+      {},
+      17.031
+    ]
+  ],
+  "PairedTimingPassed": false,
+  "PassChecks": {
+    "Predictor": true,
+    "Single": true,
+    "Two": true,
+    "TwoGain": true,
+    "PairedTiming": false,
+    "PhysicsUnchanged": true,
+    "NoLeak": true,
+    "ExecutionSourceHashes": true,
+    "H06ReferenceParity": true
+  },
+  "SelectedNativeReplays": 23,
+  "AdditionalHighSlipValidation": {
+    "Passed": true,
+    "MaximumNativeBeta": 40.3026103675491,
+    "Comparisons": 91
+  }
+}

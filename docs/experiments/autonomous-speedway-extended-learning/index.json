@@ -1,0 +1,364 @@
+{
+  "Title": "Autonomous Speedway Rider #131",
+  "Grade": "PARTIAL",
+  "Groups": [
+    {
+      "Id": "AB-Q0",
+      "Scenario": {
+        "Name": "Q0",
+        "Level": 2,
+        "Speed": 9.8,
+        "Offset": 4.15,
+        "Start": 22,
+        "OutwardSpeed": 0.09,
+        "HeadingError": -0.018,
+        "YawRate": 0.023
+      },
+      "Reasons": [
+        "horyzonty na tym samym wejściu"
+      ],
+      "Runs": [
+        {
+          "Name": "ab-select-130-H06-1020-Q0",
+          "Policy": "#130 H06"
+        },
+        {
+          "Name": "ab-select-H06-s1312026-10015-Q0",
+          "Policy": "H06-s1312026 #10015"
+        },
+        {
+          "Name": "ab-select-H09-s2312026-21015-Q0",
+          "Policy": "H09-s2312026 #21015"
+        }
+      ],
+      "TwoBends": false,
+      "Scope": "Rzeczywiste natywne stany. Identyczne wejście; przewidywania nie są rysowane jako przejazdy."
+    },
+    {
+      "Id": "TWO-Q0",
+      "Scenario": {
+        "Name": "Q0",
+        "Level": 2,
+        "Speed": 9.8,
+        "Offset": 4.15,
+        "Start": 22,
+        "OutwardSpeed": 0.09,
+        "HeadingError": -0.018,
+        "YawRate": 0.023
+      },
+      "Reasons": [
+        "początek i koniec nauki dwóch łuków"
+      ],
+      "Runs": [
+        {
+          "Name": "two-select-130-H09-1020-Q0",
+          "Policy": "130-H09 #1020"
+        },
+        {
+          "Name": "two-select-two-4061-Q0",
+          "Policy": "two #4061"
+        }
+      ],
+      "TwoBends": true,
+      "Scope": "Rzeczywiste natywne stany. Identyczne wejście; przewidywania nie są rysowane jako przejazdy."
+    },
+    {
+      "Id": "AB-Q1",
+      "Scenario": {
+        "Name": "Q1",
+        "Level": 3,
+        "Speed": 12.8,
+        "Offset": 6.85,
+        "Start": 22,
+        "OutwardSpeed": -0.17,
+        "HeadingError": 0.026,
+        "YawRate": -0.018
+      },
+      "Reasons": [
+        "horyzonty na tym samym wejściu"
+      ],
+      "Runs": [
+        {
+          "Name": "ab-select-130-H06-1020-Q1",
+          "Policy": "#130 H06"
+        },
+        {
+          "Name": "ab-select-H06-s1312026-10015-Q1",
+          "Policy": "H06-s1312026 #10015"
+        },
+        {
+          "Name": "ab-select-H09-s2312026-21015-Q1",
+          "Policy": "H09-s2312026 #21015"
+        }
+      ],
+      "TwoBends": false,
+      "Scope": "Rzeczywiste natywne stany. Identyczne wejście; przewidywania nie są rysowane jako przejazdy."
+    },
+    {
+      "Id": "AB-Q2",
+      "Scenario": {
+        "Name": "Q2",
+        "Level": 4,
+        "Speed": 15.8,
+        "Offset": 3.45,
+        "Start": 22,
+        "OutwardSpeed": 0.13,
+        "HeadingError": 0.018,
+        "YawRate": -0.027
+      },
+      "Reasons": [
+        "horyzonty na tym samym wejściu"
+      ],
+      "Runs": [
+        {
+          "Name": "ab-select-130-H06-1020-Q2",
+          "Policy": "#130 H06"
+        },
+        {
+          "Name": "ab-select-H06-s1312026-10015-Q2",
+          "Policy": "H06-s1312026 #10015"
+        },
+        {
+          "Name": "ab-select-H09-s2312026-21015-Q2",
+          "Policy": "H09-s2312026 #21015"
+        }
+      ],
+      "TwoBends": false,
+      "Scope": "Rzeczywiste natywne stany. Identyczne wejście; przewidywania nie są rysowane jako przejazdy."
+    },
+    {
+      "Id": "TWO-Q2",
+      "Scenario": {
+        "Name": "Q2",
+        "Level": 4,
+        "Speed": 15.8,
+        "Offset": 3.45,
+        "Start": 22,
+        "OutwardSpeed": 0.13,
+        "HeadingError": 0.018,
+        "YawRate": -0.027
+      },
+      "Reasons": [
+        "początek i koniec nauki dwóch łuków"
+      ],
+      "Runs": [
+        {
+          "Name": "two-select-130-H09-1020-Q2",
+          "Policy": "130-H09 #1020"
+        },
+        {
+          "Name": "two-select-two-4061-Q2",
+          "Policy": "two #4061"
+        }
+      ],
+      "TwoBends": true,
+      "Scope": "Rzeczywiste natywne stany. Identyczne wejście; przewidywania nie są rysowane jako przejazdy."
+    },
+    {
+      "Id": "U00",
+      "Scenario": {
+        "Name": "U00",
+        "Level": 2,
+        "Speed": 9.15,
+        "Offset": 2.65,
+        "Start": 22,
+        "OutwardSpeed": 0.065,
+        "HeadingError": 0.013,
+        "YawRate": -0.012
+      },
+      "Reasons": [
+        "niezależny finał single"
+      ],
+      "Runs": [
+        {
+          "Name": "final-129-after200-U00",
+          "Policy": "129-after200"
+        },
+        {
+          "Name": "final-130-H06-U00",
+          "Policy": "130-H06"
+        },
+        {
+          "Name": "final-131-final-U00",
+          "Policy": "131-final"
+        }
+      ],
+      "TwoBends": false,
+      "Scope": "Rzeczywiste natywne stany. Identyczne wejście; przewidywania nie są rysowane jako przejazdy."
+    },
+    {
+      "Id": "V00",
+      "Scenario": {
+        "Name": "V00",
+        "Level": 2,
+        "Speed": 9.45,
+        "Offset": 2.85,
+        "Start": 22,
+        "OutwardSpeed": -0.075,
+        "HeadingError": -0.014,
+        "YawRate": 0.013
+      },
+      "Reasons": [
+        "niezależny finał two"
+      ],
+      "Runs": [
+        {
+          "Name": "final-129-after200-V00",
+          "Policy": "129-after200"
+        },
+        {
+          "Name": "final-130-H06-V00",
+          "Policy": "130-H06"
+        },
+        {
+          "Name": "final-131-final-V00",
+          "Policy": "131-final"
+        }
+      ],
+      "TwoBends": true,
+      "Scope": "Rzeczywiste natywne stany. Identyczne wejście; przewidywania nie są rysowane jako przejazdy."
+    },
+    {
+      "Id": "BETA130",
+      "Scenario": {
+        "Name": "S2",
+        "Level": 3,
+        "Speed": 12.5,
+        "Offset": 3.2,
+        "Start": 22,
+        "OutwardSpeed": 0.12,
+        "HeadingError": -0.02,
+        "YawRate": -0.025
+      },
+      "Reasons": [
+        "narastające beta i kontrfaktyczna pojedyncza komenda"
+      ],
+      "Runs": [
+        {
+          "Name": "audit130-two",
+          "Policy": "#130 oryginał"
+        },
+        {
+          "Name": "counter-8.40",
+          "Policy": "jedna komenda 8.4"
+        }
+      ],
+      "TwoBends": true,
+      "Scope": "Rzeczywiste natywne stany. Identyczne wejście; przewidywania nie są rysowane jako przejazdy."
+    },
+    {
+      "Id": "HIGH-BETA",
+      "Scenario": {
+        "Name": "S2",
+        "Level": 3,
+        "Speed": 12.5,
+        "Offset": 3.2,
+        "Start": 22,
+        "OutwardSpeed": 0.12,
+        "HeadingError": -0.02,
+        "YawRate": -0.025
+      },
+      "Reasons": [
+        "diagnostyka fizyki do40° beta; ręczna komenda nie jest wyuczoną polityką"
+      ],
+      "Runs": [
+        {
+          "Name": "audit130-two",
+          "Policy": "#130 oryginał"
+        },
+        {
+          "Name": "validate-high-beta",
+          "Policy": "walidacja: utrzymane35°"
+        }
+      ],
+      "TwoBends": true,
+      "Scope": "Rzeczywiste natywne stany. Identyczne wejście; przewidywania nie są rysowane jako przejazdy."
+    },
+    {
+      "Id": "FULL-GAS",
+      "Scenario": {
+        "Name": "S2",
+        "Level": 3,
+        "Speed": 12.5,
+        "Offset": 3.2,
+        "Start": 22,
+        "OutwardSpeed": 0.12,
+        "HeadingError": -0.02,
+        "YawRate": -0.025
+      },
+      "Reasons": [
+        "natywna sonda możliwości pełnego gazu; ręczna komenda diagnostyczna"
+      ],
+      "Runs": [
+        {
+          "Name": "audit130-two",
+          "Policy": "#130 oryginał"
+        },
+        {
+          "Name": "validate-full-gas",
+          "Policy": "diagnostyka: gaz1"
+        }
+      ],
+      "TwoBends": true,
+      "Scope": "Rzeczywiste natywne stany. Identyczne wejście; przewidywania nie są rysowane jako przejazdy."
+    }
+  ],
+  "DefaultRun": "final-131-final-V00",
+  "Labels": {
+    "#130 H06": "#130 H06",
+    "H06-s1312026 #10015": "H06-s1312026 #10015",
+    "H09-s2312026 #21015": "H09-s2312026 #21015",
+    "130-H09 #1020": "130-H09 #1020",
+    "two #4061": "two #4061",
+    "129-after200": "129-after200",
+    "130-H06": "130-H06",
+    "131-final": "131-final",
+    "#130 oryginał": "#130 oryginał",
+    "jedna komenda 8.4": "jedna komenda 8.4",
+    "walidacja: utrzymane35°": "walidacja: utrzymane35°",
+    "diagnostyka: gaz1": "diagnostyka: gaz1"
+  },
+  "Horizons": {
+    "#130 H06": 0.6,
+    "H06-s1312026 #10015": 0.6,
+    "H09-s2312026 #21015": 0.9,
+    "130-H09 #1020": 0.9,
+    "two #4061": 0.9,
+    "129-after200": 0.6,
+    "130-H06": 0.6,
+    "131-final": 0.9,
+    "#130 oryginał": 0.6,
+    "jedna komenda 8.4": 0.6,
+    "walidacja: utrzymane35°": 0.9,
+    "diagnostyka: gaz1": 0.9
+  },
+  "Colors": {
+    "#130 H06": "#ff9c86",
+    "H06-s1312026 #10015": "#ffd27b",
+    "H09-s2312026 #21015": "#73dfdf",
+    "130-H09 #1020": "#ffd27b",
+    "two #4061": "#73dfdf",
+    "129-after200": "#ffd27b",
+    "130-H06": "#ff9c86",
+    "131-final": "#73dfdf",
+    "#130 oryginał": "#ff9c86",
+    "jedna komenda 8.4": "#d99fe3",
+    "walidacja: utrzymane35°": "#8bcf74",
+    "diagnostyka: gaz1": "#a6b8ff"
+  },
+  "RawDirectory": "C:\\Users\\Administrator\\Documents\\Codex\\2026-10-23\\files-pasted-by-the-user-pr\\work\\extended-learning-131-raw",
+  "Charts": [
+    [
+      "learning.svg",
+      "H06/H09: oba seedy i ciągły trening"
+    ],
+    [
+      "final.svg",
+      "Nowy niezależny test: ukończenia i DNF"
+    ],
+    [
+      "trajectories.svg",
+      "Natywne trajektorie na wspólnym stanie"
+    ]
+  ]
+}
