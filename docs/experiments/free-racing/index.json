@@ -1,0 +1,22 @@
+{
+  "Grade": "PARTIAL",
+  "TrainingStopped": true,
+  "Runs": [
+    {
+      "Name": "preflight-train-16-3",
+      "PolicyId": 0,
+      "Scenario": {
+        "Name": "train-16-3",
+        "Speed": 16,
+        "Offset": 3
+      },
+      "Outcome": "boundary or uncertified boundary sweep"
+    }
+  ],
+  "MissingStages": [
+    "intermediate",
+    "learned",
+    "validation",
+    "two-bend final"
+  ]
+}

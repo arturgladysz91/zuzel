@@ -1,6 +1,7 @@
 import test from 'node:test';
 import './continuous.test.mjs';
 import './zigzag.test.mjs';
+import './free-racing.test.mjs';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { gunzipSync } from 'node:zlib';

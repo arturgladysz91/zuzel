@@ -2,6 +2,7 @@ import { Replay, parseCsv, clamp, enumName, decisionStatus, crossSection, worldC
 import { currentRecordings, readGzip } from './recordings.mjs';
 import { loadContinuous } from './continuous.mjs';
 import { loadZigzag, createZigzagPanel } from './zigzag.mjs';
+import { loadFreeRacing, updateFreeRacingPanel } from './free-racing.mjs';
 
 const $ = id => document.getElementById(id);
 const canvas = $('track'), context = canvas.getContext('2d');
@@ -23,6 +24,8 @@ $('scenario').prepend(currentGroup);
 const latestOption = document.createElement('option'); latestOption.value = 'latest-two-bends';
 latestOption.textContent = '#123 · najnowszy przejazd · dwa łuki Egg Mild · 1 zawodnik';
 $('scenario').prepend(latestOption);
+const freeOption=document.createElement('option');freeOption.value='free-racing';
+freeOption.textContent='#128 · Free Racing · próba wstępna PARTIAL · trening zatrzymany';$('scenario').prepend(freeOption);
 for (const [key,label] of [['predictive-baseline','Predykcja · baseline #123 / #124 · 19,98 s'],['predictive-candidate','Predykcja · kandydat · PARTIAL · 20,27 s']]) {
   const option=document.createElement('option'); option.value=key; option.textContent=label; $('scenario').prepend(option);
 }
@@ -92,6 +95,7 @@ function jumpBend(index) {
 function setTime(value, immediate = true) {
   if (!replay) return;
   time = clamp(Number(value), 0, replay.duration); $('scrub').value = String(time); dirty = true; if (immediate) lastPanelTime = -1;
+  if(replay.freeRacing){const exact=replay.sampleTimes.find(t=>Math.abs(t-time)<1e-7);if(exact!=null)time=exact;}
 }
 function setPlaying(value) {
   playing = Boolean(value && replay);
@@ -148,6 +152,11 @@ function updatePanel() {
   $('speed').textContent = format(state.speed * 3.6, 1); $('drive').textContent = `${format(state.drive * 100, 1)}%`;
   $('drive-fill').style.width = `${clamp(state.drive, 0, 1) * 100}%`;
   $('offset').textContent = `${format(state.offset, 2)} m`; $('target').textContent = `${format(state.target, 2)} m`;
+  if (replay.freeRacing) {
+    $('target').textContent='brak narzuconej linii';$('intent').textContent='gaz i kierownica';
+    $('comparison-legend').textContent='Turkusowy: natywny Free Racing. Pomarańczowy: historyczny #124 (18m/s, offset1m — inne warunki); wyłącznie odniesienie.';
+    updateFreeRacingPanel($('free-racing-analysis'),replay,time);
+  }
   $('status').textContent = state.finished ? 'Finished' : enumName(geometry, 'activity', state.activity);
   $('status').classList.toggle('finished', state.finished);
   $('lap').textContent = replay.planAt ? 'Dwa łuki · bez pełnego okrążenia' : state.finished ? `${state.totalLaps}/${state.totalLaps} · meta ${format(state.finish)} s` : `${state.lap}/${state.totalLaps} · ukończono ${state.completedLaps}`;
@@ -160,6 +169,7 @@ function updatePanel() {
     $('comparison-legend').textContent = `Zielona przerywana: aktywny plan ${plan}. Turkusowa: rzeczywisty ślad XY.`;
   }
   $('intent').textContent = enumName(geometry, 'intent', state.intent);
+  if(replay.freeRacing){$('intent').textContent='Autonomiczne działania';$('lap').textContent='Kontrola wstępna · nieukończony';}
   $('sample-at').textContent = `${format(state.sampleTime)} s${state.stale ? ' · ostatni' : state.interpolated ? ' · pozycja interpolowana' : ' · zaakceptowany'}`;
   $('slip-angle').textContent = motion.beta == null ? '—' : `${format(motion.beta * 180 / Math.PI, 1)}°`;
   $('body-angle').textContent = `${format(state.heading * 180 / Math.PI, 1)}°`;
@@ -333,8 +343,29 @@ async function loadScenario(key,keepTime=null) {
   if (clipRecorder) clipRecorder.stop();
   const generation = ++loadGeneration; setPlaying(false); $('load-state').hidden = false; $('load-state').classList.remove('error');
   zigzagPanel=null;$('zigzag-analysis').hidden=true;
+  $('free-racing-analysis').hidden=true;
+  $('targets').disabled=key==='free-racing';
+  $('outer-limit').disabled=key==='free-racing';
   $('load-state').textContent = 'Wczytywanie zaakceptowanych stanów…';
   try {
+    if(key==='free-racing'){
+      const data=await loadFreeRacing();if(generation!==loadGeneration)return;
+      geometry=data.geometry;replay=data.replay;selected=[...replay.tracks.keys()][0];comparisonTrails=data.comparisons;widthGeometries=[];
+      for(const id of ['width-controls','width-comparison'])$(id).hidden=true;
+      $('comparison-legend').hidden=false;$('recording-mode').hidden=false;
+      $('recording-mode').textContent='FREE RACING · PARTIAL · 1/40 natywnych przejazdów · polityka początkowa · brak gotowej trajektorii';
+      document.querySelector('.brand p').textContent='Free Racing · kontrola wstępna · trening nieuruchomiony';
+      $('safety-note').hidden=false;$('safety-note').textContent='STOP w 1,91s: obrys przekroczył bandę na prostej. Nie wykonano treningu, walidacji ani finału.';
+      $('safety-note').className='safety-note unsafe';
+      document.querySelector('.map-title span').textContent='EGG MILD · PROGRESSIVE B';
+      document.querySelector('.map-title small').textContent='Ruch natywny · bez gotowej linii';
+      $('smooth').checked=false;$('rate').value='0.25';$('targets').checked=false;$('outer-limit').checked=false;
+      $('sampling-note').textContent=`${data.document.Samples.length} zapisanych stanów · stop na granicy · bez ekstrapolacji`;
+      const button=document.createElement('button');button.textContent=`R${selected}`;button.dataset.id=String(selected);button.addEventListener('click',()=>chooseRider(selected));
+      $('riders').replaceChildren(button);$('source-count').textContent='1 motocykl';$('scrub').max=String(replay.duration);
+      setTime(keepTime??Number(new URL(location.href).searchParams.get('t')??0));chooseRider(selected);fit();
+      $('free-racing-analysis').hidden=false;$('load-state').hidden=true;return;
+    }
     const zigzag=key.startsWith('zigzag-');
     const predictive = key.startsWith('predictive-')||zigzag, candidate = key === 'predictive-candidate'||key==='zigzag-candidate';
     $('record-clip').hidden = !(key === 'latest-two-bends' || predictive) || typeof MediaRecorder === 'undefined' || !canvas.captureStream;

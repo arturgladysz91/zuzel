@@ -1,0 +1,56 @@
+{
+  "BaseHead": "9a7ba4daef3e7702e1bac3e9bc9271eedeca64df",
+  "Sources": {
+    "WorldRunner.cs": {
+      "BaseSha256": "44C9DEED47F29C720F4D582AB3C0985583BA524F2FFF63400EE7F9B2AFBA1881",
+      "ApprovedSha256": "A737C3BD98F81D78133E68B1A3DE36414ED98235CA426CD76C881159FC90BC40",
+      "Edits": [
+        {
+          "Before": "",
+          "After": "    public FreeRacingController? FreeRacing { get; }\n"
+        },
+        {
+          "Before": "        IEnumerable<TwoContactSteeringCommand>? steeringCommands=null,PreparedCornerOptions? preparedOptions=null,PreparedCornerPlan? diagnosticFrozenNextPlan=null)\n",
+          "After": "        IEnumerable<TwoContactSteeringCommand>? steeringCommands=null,PreparedCornerOptions? preparedOptions=null,PreparedCornerPlan? diagnosticFrozenNextPlan=null,\n        FreeRacingPolicy? freeRacingPolicy=null)\n"
+        },
+        {
+          "Before": "",
+          "After": "        if (Parameters.EnableFreeRacing && (!Parameters.EnableTwoContactBikeDynamics || !Parameters.EnablePhysicalSteeringControl\n            || !Parameters.Enable500CcEngine || !Parameters.EnableLoadBasedTyreGrip || Parameters.EnableTravelDirectionSteering\n            || Parameters.EnablePreparedCornerPlan || Parameters.EnableContinuousCornerPlanning || Parameters.EnablePredictiveRiderControl\n            || Parameters.EnableFeasibleCornerEntry || Parameters.EnableAdaptiveRiderControl || Parameters.EnableDynamicAxleLoad\n            || Parameters.EnableLocalOffsetLimit || Parameters.TwoContactBike is not null || Parameters.RearWheel is not null\n            || Parameters.Engine500 is not null || Parameters.LoadBasedTyres is not null || authoredPath is not null\n            || diagnosticPathGuidance || diagnosticPathPreview || diagnosticSteadyStart is not null\n            || controls?.Any() == true || spatialControls?.Any() == true || steeringCommands?.Any() == true\n            || specs.Length != 1 || specs[0].TrafficEnabled || specs[0].Passive)\n            || !Parameters.EnableFreeRacing && freeRacingPolicy is not null)\n            throw new ArgumentException(\"Free Racing requires one isolated rider, frozen #116 physics and no path or competing controller.\");\n        FreeRacing = Parameters.EnableFreeRacing ? new(freeRacingPolicy) : null;\n"
+        },
+        {
+          "Before": "",
+          "After": "                if (FreeRacing is not null) {\n                    FreeRacing.Advance(views[0], TimeSeconds, rearWheels[0].AngularVelocityRadPerSecond,\n                        twoContactStates[0].SteeringRadians, specs[0], Frame, surface, Parameters, physics.Masses[0], physics.Inertias[0]);\n                    views[0] = views[0] with { Drive = FreeRacing.Active.Drive };\n                }\n"
+        },
+        {
+          "Before": "",
+          "After": "        if (FreeRacing is not null) Before(FreeRacing.Deadline);\n"
+        },
+        {
+          "Before": "",
+          "After": "        if (FreeRacing is not null) return FreeRacing.Active.SteeringRadians;\n"
+        }
+      ]
+    },
+    "WorldModel.cs": {
+      "BaseSha256": "E49FF45BA86B395A8AC8F359B438DDF9B74E810544CBBCA4D1319CF984CED523",
+      "ApprovedSha256": "CB76585EAB1B045F6299E087FF8DE1046A026563194BF2527C8D76E64958A3BD",
+      "Edits": [
+        {
+          "Before": "",
+          "After": "    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]\n    public bool EnableFreeRacing {get;init;}\n"
+        }
+      ]
+    },
+    "Program.cs": {
+      "BaseSha256": "50636D9DABB39EA9D5AFF79BF4077E91EAEE59C5F613CF3BECC2361C57800AD0",
+      "ApprovedSha256": "885BD2D9FC720212CA1E22D5D31A3E5EA8667A3FD606AAFA408E5E9CAC21FA25",
+      "Edits": [
+        {
+          "Before": "",
+          "After": "if(scenario==\"free-racing\"){FreeRacingExperiment.Run(args[1],args[2]);return;}\n"
+        }
+      ]
+    }
+  },
+  "Rule": "Reverse the exact additive OFF-gated integration edits to recover #127. Old source manifests are retained."
+}

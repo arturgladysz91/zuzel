@@ -43,8 +43,17 @@ class PredictiveRiderEvidenceTests(unittest.TestCase):
         for name,digest in base.items():
             actual=hashlib.sha256((ROOT/'tools/shared-world-speedway'/name).read_bytes().replace(b'\r\n',b'\n')).hexdigest().upper()
             approved=guard['Sources'].get(name)
-            if approved:self.assertEqual(approved['BaseSha256'],digest);self.assertEqual(actual,approved['ApprovedSha256'])
-            else:self.assertEqual(actual,digest)
+            if approved:
+                self.assertEqual(approved['BaseSha256'],digest)
+                extension=load(DATA/'../free-racing/source-extensions.json')['Sources'].get(name)
+                expected=approved['ApprovedSha256']
+                if extension:self.assertEqual(extension['BaseSha256'],expected);expected=extension['ApprovedSha256']
+                self.assertEqual(actual,expected)
+            else:
+                extension=load(DATA/'../free-racing/source-extensions.json')['Sources'].get(name)
+                expected=digest
+                if extension:self.assertEqual(extension['BaseSha256'],expected);expected=extension['ApprovedSha256']
+                self.assertEqual(actual,expected)
         attempt=load(DATA/'controller-attempt.json')
         for name in ['PredictiveRiderModel.cs','PredictiveRiderControl.cs']:
             expected=attempt['SourceHashes'][name]

@@ -1,0 +1,138 @@
+{
+  "BaseHead": "9a7ba4daef3e7702e1bac3e9bc9271eedeca64df",
+  "Seed": 1282026,
+  "Parameters": {
+    "EnableTacticalRacing": false,
+    "EnableSideBySideContests": false,
+    "EnableTacticalQualityScoring": false,
+    "EnableProportionalTrafficThrottle": false,
+    "EnableClosureAdaptiveFollowingGap": false,
+    "EnableAutonomousRacingLine": false,
+    "EnableSlipCoupledDynamics": true,
+    "EnableRearWheelDynamics": true,
+    "EnableTwoContactBikeDynamics": true,
+    "EnablePhysicalSteeringControl": true,
+    "EnableFreeRacing": true,
+    "Enable500CcEngine": true,
+    "EnableLoadBasedTyreGrip": true,
+    "EnableLocalOffsetLimit": false,
+    "RearWheel": null,
+    "SlipYawResponseSeconds": 0.1,
+    "AiIntervalSeconds": 0.1,
+    "LateralResponseSeconds": 0.65,
+    "YawResponseSeconds": 0.35,
+    "SlideAngleRadians": 0.20943952,
+    "ContactFriction": 0.2,
+    "NearbyMaximumTravelMeters": 0.02,
+    "PredictionSeconds": 1.1,
+    "RecoverySeconds": 0.5,
+    "SolverSubsteps": 4
+  },
+  "InitialPolicy": {
+    "PreviewSeconds": 1.8,
+    "DirectionGain": 1,
+    "YawResponseSeconds": 0.25,
+    "EdgeHorizonSeconds": 1,
+    "GripFraction": 0.65,
+    "ThrottleOpening": 0.22,
+    "SteeringSpreadDegrees": 0.7,
+    "Values": [
+      1.8,
+      1,
+      0.25,
+      1,
+      0.65,
+      0.22,
+      0.7
+    ]
+  },
+  "Names": [
+    "PreviewSeconds",
+    "DirectionGain",
+    "YawResponseSeconds",
+    "EdgeHorizonSeconds",
+    "GripFraction",
+    "ThrottleOpening",
+    "SteeringSpreadDegrees"
+  ],
+  "Lower": [
+    0.8,
+    0.5,
+    0.12,
+    0.5,
+    0.35,
+    0.05,
+    0.25
+  ],
+  "Upper": [
+    2.8,
+    1.6,
+    0.45,
+    1.5,
+    0.85,
+    0.5,
+    1.5
+  ],
+  "TrainingScenarios": [
+    {
+      "Name": "train-16-3",
+      "Speed": 16,
+      "Offset": 3
+    },
+    {
+      "Name": "train-18-6",
+      "Speed": 18,
+      "Offset": 6
+    }
+  ],
+  "ValidationScenarios": [
+    {
+      "Name": "test-17-4",
+      "Speed": 17,
+      "Offset": 4
+    },
+    {
+      "Name": "test-19-5",
+      "Speed": 19,
+      "Offset": 5
+    },
+    {
+      "Name": "test-20-7",
+      "Speed": 20,
+      "Offset": 7
+    }
+  ],
+  "PreflightMaximumSeconds": 3,
+  "TrainingCandidates": 12,
+  "ScenariosPerCandidate": 2,
+  "MaximumNativeRuns": 40,
+  "PredictionHorizonSeconds": 0.9,
+  "PredictionTolerances": {
+    "PositionMeters": 0.1,
+    "Speed": 0.2,
+    "ChiDegrees": 1,
+    "BetaDegrees": 1,
+    "SteeringDegrees": 1.5,
+    "WheelOmega": 2,
+    "YawRate": 0.05,
+    "ClearanceOptimismMeters": 0.1
+  },
+  "Gate": "Whole mechanical footprint across fixed exit plane \u002B3m, then 1s legal continuation; 10ms upper-bound time. Boundary sweep bound, reverse, projection, beta45, energy failures precede finish.",
+  "Selection": "Completion count first, then worst actual gate time, sum of actual gate times; comparable 20ms times prefer higher minimum exit speed. Unsafe partial progress cannot beat a completion. Only 2/2 safe candidates update CEM; otherwise retain previous mean.",
+  "CEM": "Two generations of six: incumbent plus five independent normal samples. Top two 2/2-safe elites; mean and std from elites, std floor 5% of range. Initial std=18% of range. Fixed xorshift32 \u002B Box-Muller seed; no retries or hidden evaluations.",
+  "PreflightGate": "Both 3s runs must remain legal, make \u003E=10m progress, preserve physical limits and pass causal closed-loop .3/.6/.9s prediction checks before training.",
+  "Verdict": "PASS only if at least two of three untouched validation cases improve by \u003E=20ms with 3/3 legal completions, no validation regression \u003E20ms, and safe two-bend final. Otherwise PARTIAL; invalid physics/hidden path/numerical failure FAIL.",
+  "Sources": {
+    "FreeRacingController.cs": "D48EEC4EC1910AC597DA8838A8522ECB7C409E6C68E4FE0A2A6FD4485902D00A",
+    "FreeRacingModel.cs": "62E4CCE684C60DF9861B48B4EACC51E03A815D91CC8EBE847BD4DCA144017DB9",
+    "FreeRacingExperiment.cs": "8414FB3B9F497FEF17E57DA02D358AAC53351C6141AA8BBCAC0BADA813D7594F",
+    "WorldRunner.cs": "4C017D530E2503206E8A92F1BB5C47B1D159E18F063209BF80C54C642184F09E",
+    "WorldModel.cs": "98273A120EF97BD809A40BE2C7DA00455F554A9DA81D08FBE11FE90C60B54A44",
+    "TwoContactBikeDynamics.cs": "7F5F9FFEF31B5F3CF242C140077CBB9D429F210320EE9055AC0B0EE3EB9CBBEC",
+    "ContactAdapter.cs": "1CB8EC9C92937B9A42568A12A1F19530088A6DC2AB7EAAE53F04E8F58D0C0C4F",
+    "RearWheelDynamics.cs": "AD74D451CA769D8189BD17CCB61A41779F7540F3AF489BC4B716A799205FB7A3",
+    "Engine500.cs": "209B62347B2F37C4F21294FA9F986625A9CEC29BA0CAFAFA88595C34CCBDA9A6",
+    "LoadBasedTyreGrip.cs": "511D95E8FE959935D34FAE7C6EA06BD3650977702F78CB9D1452DF4376DE0172",
+    "TrackFrame.cs": "85069E1CCD70CC2FD8A25A5CC32A1CFF76C17E24DB1B9729C6934A8D29138B4F"
+  }
+}
