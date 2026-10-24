@@ -1,0 +1,1531 @@
+{
+  "Summary": {
+    "B-s1322026": {
+      "Decisions": 8403,
+      "ActualFull": 49,
+      "ActualSafeFull": 49,
+      "CoastWithSafePositive": 4648,
+      "OfflineWeight0Full": 559,
+      "OfflineWeight1Full": 329,
+      "OfflineWeight4Full": 46,
+      "OfflineWeight0SafeFull": 559,
+      "OfflineWeight1SafeFull": 329,
+      "OfflineWeight4SafeFull": 46
+    },
+    "B-s2322026": {
+      "Decisions": 8452,
+      "ActualFull": 29,
+      "ActualSafeFull": 29,
+      "CoastWithSafePositive": 4246,
+      "OfflineWeight0Full": 765,
+      "OfflineWeight1Full": 421,
+      "OfflineWeight4Full": 30,
+      "OfflineWeight0SafeFull": 765,
+      "OfflineWeight1SafeFull": 421,
+      "OfflineWeight4SafeFull": 30
+    }
+  },
+  "First100ChangedFullChoices": [
+    {
+      "Run": "B-s1322026-g00-p6000-F1",
+      "Time": 9.6,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.39360234
+      },
+      "Offline": {
+        "SteeringRadians": -0.008726646,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 4,
+      "DrivePreference": 0.3936023368138517
+    },
+    {
+      "Run": "B-s1322026-g00-p6000-F1",
+      "Time": 10.6,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.39360234
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 4,
+      "DrivePreference": 0.3936023368138517
+    },
+    {
+      "Run": "B-s1322026-g00-p6000-F1",
+      "Time": 18.8,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.39360234
+      },
+      "Offline": {
+        "SteeringRadians": -0.008726646,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 4,
+      "DrivePreference": 0.3936023368138517
+    },
+    {
+      "Run": "B-s1322026-g00-p6001-F1",
+      "Time": 9.200000000000001,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.61017674
+      },
+      "Offline": {
+        "SteeringRadians": -0.008726646,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.762937438036524,
+      "DrivePreference": 0.6101767138346076
+    },
+    {
+      "Run": "B-s1322026-g00-p6001-F1",
+      "Time": 9.4,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.61017674
+      },
+      "Offline": {
+        "SteeringRadians": -0.008726646,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.762937438036524,
+      "DrivePreference": 0.6101767138346076
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F0",
+      "Time": 0,
+      "Original": {
+        "SteeringRadians": 0.02617994,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F0",
+      "Time": 12.4,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F0",
+      "Time": 12.6,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F0",
+      "Time": 12.8,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F0",
+      "Time": 13,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F0",
+      "Time": 13.6,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F0",
+      "Time": 13.8,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F0",
+      "Time": 14,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F1",
+      "Time": 11.6,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F1",
+      "Time": 11.8,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F1",
+      "Time": 12,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F1",
+      "Time": 12.200000000000001,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F1",
+      "Time": 12.4,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F1",
+      "Time": 12.6,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F1",
+      "Time": 20.2,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": -0.008726646,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F1",
+      "Time": 20.8,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F1",
+      "Time": 21,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F1",
+      "Time": 21.2,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F1",
+      "Time": 21.400000000000002,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F1",
+      "Time": 21.6,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F1",
+      "Time": 21.8,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F2",
+      "Time": 9.200000000000001,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": -0.008726646,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F2",
+      "Time": 9.8,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F2",
+      "Time": 10,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F2",
+      "Time": 10.200000000000001,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F2",
+      "Time": 10.4,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F2",
+      "Time": 10.6,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F2",
+      "Time": 10.8,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F2",
+      "Time": 11,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F2",
+      "Time": 11.200000000000001,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F2",
+      "Time": 21.400000000000002,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F2",
+      "Time": 21.6,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F2",
+      "Time": 21.8,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F2",
+      "Time": 22,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F3",
+      "Time": 7.2,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": -0.008726646,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F3",
+      "Time": 7.8,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F3",
+      "Time": 8,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F3",
+      "Time": 8.2,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F3",
+      "Time": 8.4,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F3",
+      "Time": 8.6,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F3",
+      "Time": 8.8,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F3",
+      "Time": 19,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F3",
+      "Time": 19.2,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F3",
+      "Time": 19.400000000000002,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6002-F3",
+      "Time": 19.6,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.20725358
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.8719020636856545,
+      "DrivePreference": 0.2072535741188713
+    },
+    {
+      "Run": "B-s1322026-g00-p6003-F0",
+      "Time": 9,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.58626336
+      },
+      "Offline": {
+        "SteeringRadians": -0.008726646,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 4,
+      "DrivePreference": 0.5862633645612185
+    },
+    {
+      "Run": "B-s1322026-g00-p6003-F0",
+      "Time": 9.200000000000001,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.58626336
+      },
+      "Offline": {
+        "SteeringRadians": -0.008726646,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 4,
+      "DrivePreference": 0.5862633645612185
+    },
+    {
+      "Run": "B-s1322026-g00-p6003-F0",
+      "Time": 9.4,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.58626336
+      },
+      "Offline": {
+        "SteeringRadians": -0.008726646,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 4,
+      "DrivePreference": 0.5862633645612185
+    },
+    {
+      "Run": "B-s1322026-g00-p6003-F0",
+      "Time": 10.200000000000001,
+      "Original": {
+        "SteeringRadians": -0.008726646,
+        "Drive": 0.58626336
+      },
+      "Offline": {
+        "SteeringRadians": -0.008726646,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 4,
+      "DrivePreference": 0.5862633645612185
+    },
+    {
+      "Run": "B-s1322026-g00-p6003-F1",
+      "Time": 10,
+      "Original": {
+        "SteeringRadians": -0.008726646,
+        "Drive": 0.58626336
+      },
+      "Offline": {
+        "SteeringRadians": -0.008726646,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 4,
+      "DrivePreference": 0.5862633645612185
+    },
+    {
+      "Run": "B-s1322026-g00-p6003-F3",
+      "Time": 9.200000000000001,
+      "Original": {
+        "SteeringRadians": -0.008726646,
+        "Drive": 0.58626336
+      },
+      "Offline": {
+        "SteeringRadians": -0.008726646,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 4,
+      "DrivePreference": 0.5862633645612185
+    },
+    {
+      "Run": "B-s1322026-g00-p6003-F3",
+      "Time": 18.400000000000002,
+      "Original": {
+        "SteeringRadians": -0.008726646,
+        "Drive": 0.58626336
+      },
+      "Offline": {
+        "SteeringRadians": -0.008726646,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 4,
+      "DrivePreference": 0.5862633645612185
+    },
+    {
+      "Run": "B-s1322026-g00-p6004-F1",
+      "Time": 10,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.6437459
+      },
+      "Offline": {
+        "SteeringRadians": -0.008726646,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 2.333466525309217,
+      "DrivePreference": 0.6437458994535908
+    },
+    {
+      "Run": "B-s1322026-g01-p6006-F4",
+      "Time": 9.8,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.539916
+      },
+      "Offline": {
+        "SteeringRadians": -0.008726646,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.1760202687890184,
+      "DrivePreference": 0.5399160024291895
+    },
+    {
+      "Run": "B-s1322026-g01-p6006-F4",
+      "Time": 10,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.539916
+      },
+      "Offline": {
+        "SteeringRadians": -0.008726646,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.1760202687890184,
+      "DrivePreference": 0.5399160024291895
+    },
+    {
+      "Run": "B-s1322026-g01-p6006-F5",
+      "Time": 19.400000000000002,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.539916
+      },
+      "Offline": {
+        "SteeringRadians": -0.008726646,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.1760202687890184,
+      "DrivePreference": 0.5399160024291895
+    },
+    {
+      "Run": "B-s1322026-g01-p6006-F5",
+      "Time": 19.6,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.539916
+      },
+      "Offline": {
+        "SteeringRadians": -0.008726646,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.1760202687890184,
+      "DrivePreference": 0.5399160024291895
+    },
+    {
+      "Run": "B-s1322026-g01-p6006-F5",
+      "Time": 19.8,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.539916
+      },
+      "Offline": {
+        "SteeringRadians": -0.008726646,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.1760202687890184,
+      "DrivePreference": 0.5399160024291895
+    },
+    {
+      "Run": "B-s1322026-g01-p6006-F5",
+      "Time": 20.2,
+      "Original": {
+        "SteeringRadians": -0.008726646,
+        "Drive": 0.539916
+      },
+      "Offline": {
+        "SteeringRadians": -0.008726646,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.1760202687890184,
+      "DrivePreference": 0.5399160024291895
+    },
+    {
+      "Run": "B-s1322026-g01-p6006-F6",
+      "Time": 9.4,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.539916
+      },
+      "Offline": {
+        "SteeringRadians": -0.008726646,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.1760202687890184,
+      "DrivePreference": 0.5399160024291895
+    },
+    {
+      "Run": "B-s1322026-g01-p6006-F7",
+      "Time": 9.200000000000001,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.539916
+      },
+      "Offline": {
+        "SteeringRadians": -0.008726646,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 3.1760202687890184,
+      "DrivePreference": 0.5399160024291895
+    },
+    {
+      "Run": "B-s1322026-g01-p6007-F4",
+      "Time": 8.8,
+      "Original": {
+        "SteeringRadians": -0.008726646,
+        "Drive": 0.5460652
+      },
+      "Offline": {
+        "SteeringRadians": -0.02617994,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 2.129389272802781,
+      "DrivePreference": 0.5460652328774713
+    },
+    {
+      "Run": "B-s1322026-g01-p6007-F7",
+      "Time": 8.2,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.5460652
+      },
+      "Offline": {
+        "SteeringRadians": -0.008726646,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 2.129389272802781,
+      "DrivePreference": 0.5460652328774713
+    },
+    {
+      "Run": "B-s1322026-g01-p6008-F4",
+      "Time": 12.8,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.3612035
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 2.499050646301741,
+      "DrivePreference": 0.36120350299092
+    },
+    {
+      "Run": "B-s1322026-g01-p6008-F6",
+      "Time": 18.8,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.3612035
+      },
+      "Offline": {
+        "SteeringRadians": -0.008726646,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 2.499050646301741,
+      "DrivePreference": 0.36120350299092
+    },
+    {
+      "Run": "B-s1322026-g01-p6008-F7",
+      "Time": 8.2,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.3612035
+      },
+      "Offline": {
+        "SteeringRadians": -0.008726646,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 2.499050646301741,
+      "DrivePreference": 0.36120350299092
+    },
+    {
+      "Run": "B-s1322026-g01-p6009-F4",
+      "Time": 0,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.06852373
+      },
+      "Offline": {
+        "SteeringRadians": 0.008726646,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 1.5251780645539716,
+      "DrivePreference": 0.06852372775355256
+    },
+    {
+      "Run": "B-s1322026-g01-p6009-F4",
+      "Time": 13.4,
+      "Original": {
+        "SteeringRadians": 0.008726646,
+        "Drive": 0.06852373
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 1.5251780645539716,
+      "DrivePreference": 0.06852372775355256
+    },
+    {
+      "Run": "B-s1322026-g01-p6009-F4",
+      "Time": 13.6,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.06852373
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 1.5251780645539716,
+      "DrivePreference": 0.06852372775355256
+    },
+    {
+      "Run": "B-s1322026-g01-p6009-F4",
+      "Time": 13.8,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.06852373
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 1.5251780645539716,
+      "DrivePreference": 0.06852372775355256
+    },
+    {
+      "Run": "B-s1322026-g01-p6009-F4",
+      "Time": 14,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.06852373
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 1.5251780645539716,
+      "DrivePreference": 0.06852372775355256
+    },
+    {
+      "Run": "B-s1322026-g01-p6009-F4",
+      "Time": 14.200000000000001,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.06852373
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 1.5251780645539716,
+      "DrivePreference": 0.06852372775355256
+    },
+    {
+      "Run": "B-s1322026-g01-p6009-F4",
+      "Time": 14.4,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.06852373
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 1.5251780645539716,
+      "DrivePreference": 0.06852372775355256
+    },
+    {
+      "Run": "B-s1322026-g01-p6009-F4",
+      "Time": 14.6,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.06852373
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 1.5251780645539716,
+      "DrivePreference": 0.06852372775355256
+    },
+    {
+      "Run": "B-s1322026-g01-p6009-F4",
+      "Time": 14.8,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.06852373
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 1.5251780645539716,
+      "DrivePreference": 0.06852372775355256
+    },
+    {
+      "Run": "B-s1322026-g01-p6009-F4",
+      "Time": 15,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.06852373
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 1.5251780645539716,
+      "DrivePreference": 0.06852372775355256
+    },
+    {
+      "Run": "B-s1322026-g01-p6009-F4",
+      "Time": 15.200000000000001,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.06852373
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 1.5251780645539716,
+      "DrivePreference": 0.06852372775355256
+    },
+    {
+      "Run": "B-s1322026-g01-p6009-F4",
+      "Time": 15.4,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.06852373
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 1.5251780645539716,
+      "DrivePreference": 0.06852372775355256
+    },
+    {
+      "Run": "B-s1322026-g01-p6009-F4",
+      "Time": 15.6,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.06852373
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 1.5251780645539716,
+      "DrivePreference": 0.06852372775355256
+    },
+    {
+      "Run": "B-s1322026-g01-p6009-F5",
+      "Time": 10.8,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.06852373
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 1.5251780645539716,
+      "DrivePreference": 0.06852372775355256
+    },
+    {
+      "Run": "B-s1322026-g01-p6009-F5",
+      "Time": 11,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.06852373
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 1.5251780645539716,
+      "DrivePreference": 0.06852372775355256
+    },
+    {
+      "Run": "B-s1322026-g01-p6009-F5",
+      "Time": 11.200000000000001,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.06852373
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 1.5251780645539716,
+      "DrivePreference": 0.06852372775355256
+    },
+    {
+      "Run": "B-s1322026-g01-p6009-F5",
+      "Time": 11.4,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.06852373
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 1.5251780645539716,
+      "DrivePreference": 0.06852372775355256
+    },
+    {
+      "Run": "B-s1322026-g01-p6009-F5",
+      "Time": 11.6,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.06852373
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 1.5251780645539716,
+      "DrivePreference": 0.06852372775355256
+    },
+    {
+      "Run": "B-s1322026-g01-p6009-F5",
+      "Time": 11.8,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.06852373
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 1.5251780645539716,
+      "DrivePreference": 0.06852372775355256
+    },
+    {
+      "Run": "B-s1322026-g01-p6009-F5",
+      "Time": 12,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.06852373
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 1.5251780645539716,
+      "DrivePreference": 0.06852372775355256
+    },
+    {
+      "Run": "B-s1322026-g01-p6009-F5",
+      "Time": 12.200000000000001,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.06852373
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 1.5251780645539716,
+      "DrivePreference": 0.06852372775355256
+    },
+    {
+      "Run": "B-s1322026-g01-p6009-F5",
+      "Time": 12.4,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.06852373
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 1.5251780645539716,
+      "DrivePreference": 0.06852372775355256
+    },
+    {
+      "Run": "B-s1322026-g01-p6009-F5",
+      "Time": 12.6,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.06852373
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 1.5251780645539716,
+      "DrivePreference": 0.06852372775355256
+    },
+    {
+      "Run": "B-s1322026-g01-p6009-F5",
+      "Time": 12.8,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.06852373
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 1.5251780645539716,
+      "DrivePreference": 0.06852372775355256
+    },
+    {
+      "Run": "B-s1322026-g01-p6009-F5",
+      "Time": 13,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.06852373
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 1.5251780645539716,
+      "DrivePreference": 0.06852372775355256
+    },
+    {
+      "Run": "B-s1322026-g01-p6009-F5",
+      "Time": 13.200000000000001,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.06852373
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 1.5251780645539716,
+      "DrivePreference": 0.06852372775355256
+    },
+    {
+      "Run": "B-s1322026-g01-p6009-F5",
+      "Time": 13.4,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.06852373
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 1.5251780645539716,
+      "DrivePreference": 0.06852372775355256
+    },
+    {
+      "Run": "B-s1322026-g01-p6009-F5",
+      "Time": 13.6,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.06852373
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 1.5251780645539716,
+      "DrivePreference": 0.06852372775355256
+    },
+    {
+      "Run": "B-s1322026-g01-p6009-F5",
+      "Time": 13.8,
+      "Original": {
+        "SteeringRadians": 0,
+        "Drive": 0.06852373
+      },
+      "Offline": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Safety": 0,
+      "OriginalThrottleWeight": 1.5251780645539716,
+      "DrivePreference": 0.06852372775355256
+    }
+  ],
+  "Scope": "Offline reranking of identical saved B states/candidates, changing only ThrottleWeight to0/1/4 inside original bounds. No rollout, retraining, or claim of full-bend safety. Original A/B objective preserved."
+}

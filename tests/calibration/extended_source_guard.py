@@ -5,8 +5,24 @@ from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[2]
 
-def source130(name):
+def source131(name):
     current=(ROOT/'tools/shared-world-speedway'/name).read_bytes()
+    manifest=ROOT/'docs/experiments/full-throttle-learning/source-extensions.json'
+    if not manifest.exists():
+        return current
+    item=json.loads(manifest.read_bytes())['Sources'].get(name)
+    if item is None:
+        return current
+    digest=lambda b:hashlib.sha256(b).hexdigest().upper()
+    if digest(current)!=item['ApprovedSha256']:
+        raise AssertionError('Unreviewed #132 source bytes: '+name)
+    restored=item['Before'].encode('utf-8')
+    if digest(restored)!=item['BaseSha256']:
+        raise AssertionError('Cannot restore exact #131: '+name)
+    return restored
+
+def source130(name):
+    current=source131(name)
     manifest=ROOT/'docs/experiments/autonomous-speedway-extended-learning/source-extensions.json'
     item=json.loads(manifest.read_bytes())['Sources'].get(name)
     if item is None:
