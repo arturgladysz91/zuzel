@@ -3,6 +3,12 @@
 Release platform: **Windows only**. See the current [Windows CI policy](docs/ci.md)
 for Draft/full validation, the merge gate and optional historical audits.
 
+[Full Throttle Learning #132](docs/experiments/full-throttle-learning/README.md)
+isolates an optional full-throttle candidate with the same H09 predictor, eight
+preferences and native physics. It compares unchanged #131 weights and controlled
+two-seed learning, then freezes a learned policy before a new 36-case final test.
+The experiment remains default OFF.
+
 [Autonomous Speedway Rider #131](docs/experiments/autonomous-speedway-extended-learning/README.md)
 compares H06/H09 with two seeds, then trains one continuous two-bend controller.
 The sealed test reaches 24/24 single bends and 12/12 two bends, but paired time

@@ -1,0 +1,295 @@
+{
+  "Title": "Full Throttle Learning #132",
+  "Grade": "PARTIAL",
+  "DefaultRun": "final-132-final-Z01",
+  "RawDirectory": "C:\\Users\\Administrator\\Documents\\Codex\\2026-10-23\\files-pasted-by-the-user-pr\\work\\full-throttle-132-raw",
+  "Labels": {
+    "130-H06-A": "#130 #1020 H06 · A",
+    "131-A": "#131 #4061 H09 · A",
+    "131-B": "#131 #4061 H09 · B bez nauki",
+    "132-final": "#132 #6022 H09 · B",
+    "diag-A": "#4061 H09 · diagnostyka A",
+    "diag-B": "#4061 H09 · diagnostyka B",
+    "mutation-B": "Badana mutacja B #6001 · DNF",
+    "queue-A": "Mutacja #5001 · A i wcześniejsze pending1",
+    "queue-B": "Ta sama mutacja #6001 · B"
+  },
+  "Colors": {
+    "130-H06-A": "#ff9c86",
+    "131-A": "#ffd27b",
+    "131-B": "#d99fe3",
+    "132-final": "#73dfdf",
+    "diag-A": "#ffd27b",
+    "diag-B": "#d99fe3",
+    "mutation-B": "#ff9c86",
+    "queue-A": "#ffd27b",
+    "queue-B": "#d99fe3"
+  },
+  "TimeGain": "time-gain.json",
+  "Horizons": {
+    "130-H06-A": 0.6,
+    "131-A": 0.9,
+    "131-B": 0.9,
+    "132-final": 0.9,
+    "diag-A": 0.9,
+    "diag-B": 0.9,
+    "mutation-B": 0.9,
+    "queue-A": 0.9,
+    "queue-B": 0.9
+  },
+  "Groups": [
+    {
+      "Id": "W00",
+      "Scenario": {
+        "Name": "W00",
+        "Level": 2,
+        "Speed": 9.235,
+        "Offset": 2.775,
+        "Start": 21,
+        "OutwardSpeed": -0.0725,
+        "HeadingError": -0.0145,
+        "YawRate": 0.0135
+      },
+      "TwoBends": false,
+      "Reasons": [
+        "identyczny nowy stan",
+        "pierwszy łuk"
+      ],
+      "Scope": "Całe natywne światy, bez resetu. Osiągnięcie bramki całym obrysem i dodatkowa1s kontroli. Wszystkie DNF pozostają widoczne.",
+      "Runs": [
+        {
+          "Name": "final-130-H06-A-W00",
+          "Policy": "130-H06-A"
+        },
+        {
+          "Name": "final-131-A-W00",
+          "Policy": "131-A"
+        },
+        {
+          "Name": "final-131-B-W00",
+          "Policy": "131-B"
+        },
+        {
+          "Name": "final-132-final-W00",
+          "Policy": "132-final"
+        }
+      ]
+    },
+    {
+      "Id": "Z00",
+      "Scenario": {
+        "Name": "Z00",
+        "Level": 2,
+        "Speed": 9.535,
+        "Offset": 2.975,
+        "Start": 21,
+        "OutwardSpeed": 0.0825,
+        "HeadingError": 0.0155,
+        "YawRate": -0.0145
+      },
+      "TwoBends": true,
+      "Reasons": [
+        "identyczny nowy stan",
+        "dwa pełne łuki"
+      ],
+      "Scope": "Całe natywne światy, bez resetu. Osiągnięcie bramki całym obrysem i dodatkowa1s kontroli. Wszystkie DNF pozostają widoczne.",
+      "Runs": [
+        {
+          "Name": "final-130-H06-A-Z00",
+          "Policy": "130-H06-A"
+        },
+        {
+          "Name": "final-131-A-Z00",
+          "Policy": "131-A"
+        },
+        {
+          "Name": "final-131-B-Z00",
+          "Policy": "131-B"
+        },
+        {
+          "Name": "final-132-final-Z00",
+          "Policy": "132-final"
+        }
+      ]
+    },
+    {
+      "Id": "Z01",
+      "Scenario": {
+        "Name": "Z01",
+        "Level": 2,
+        "Speed": 10.25,
+        "Offset": 4.6,
+        "Start": 21,
+        "OutwardSpeed": -0.11,
+        "HeadingError": -0.02,
+        "YawRate": 0.016999999
+      },
+      "TwoBends": true,
+      "Reasons": [
+        "identyczny nowy stan",
+        "dwa pełne łuki"
+      ],
+      "Scope": "Całe natywne światy, bez resetu. Osiągnięcie bramki całym obrysem i dodatkowa1s kontroli. Wszystkie DNF pozostają widoczne.",
+      "Runs": [
+        {
+          "Name": "final-130-H06-A-Z01",
+          "Policy": "130-H06-A"
+        },
+        {
+          "Name": "final-131-A-Z01",
+          "Policy": "131-A"
+        },
+        {
+          "Name": "final-131-B-Z01",
+          "Policy": "131-B"
+        },
+        {
+          "Name": "final-132-final-Z01",
+          "Policy": "132-final"
+        }
+      ]
+    },
+    {
+      "Id": "Z05",
+      "Scenario": {
+        "Name": "Z05",
+        "Level": 3,
+        "Speed": 13.11,
+        "Offset": 6.875,
+        "Start": 21,
+        "OutwardSpeed": -0.11,
+        "HeadingError": -0.02,
+        "YawRate": 0.0145
+      },
+      "TwoBends": true,
+      "Reasons": [
+        "identyczny nowy stan",
+        "dwa pełne łuki"
+      ],
+      "Scope": "Całe natywne światy, bez resetu. Osiągnięcie bramki całym obrysem i dodatkowa1s kontroli. Wszystkie DNF pozostają widoczne.",
+      "Runs": [
+        {
+          "Name": "final-130-H06-A-Z05",
+          "Policy": "130-H06-A"
+        },
+        {
+          "Name": "final-131-A-Z05",
+          "Policy": "131-A"
+        },
+        {
+          "Name": "final-131-B-Z05",
+          "Policy": "131-B"
+        },
+        {
+          "Name": "final-132-final-Z05",
+          "Policy": "132-final"
+        }
+      ]
+    },
+    {
+      "Id": "D1",
+      "Scenario": {
+        "Name": "D1",
+        "Level": 3,
+        "Speed": 12.65,
+        "Offset": 6.35,
+        "Start": 21,
+        "OutwardSpeed": -0.145,
+        "HeadingError": -0.023,
+        "YawRate": 0.021
+      },
+      "TwoBends": true,
+      "Reasons": [
+        "bez retreningu",
+        "oddzielna diagnostyka"
+      ],
+      "Scope": "Wcześniej zamrożony stan diagnostyczny; pełne autonomiczne decyzje.",
+      "Runs": [
+        {
+          "Name": "diag-A-D1",
+          "Policy": "diag-A"
+        },
+        {
+          "Name": "diag-B-D1",
+          "Policy": "diag-B"
+        }
+      ]
+    },
+    {
+      "Id": "TRAIN-FAIL",
+      "Scenario": {
+        "Name": "F1",
+        "Level": 3,
+        "Speed": 12.35,
+        "Offset": 6.55,
+        "Start": 21,
+        "OutwardSpeed": -0.125,
+        "HeadingError": -0.021,
+        "YawRate": 0.017
+      },
+      "TwoBends": true,
+      "Reasons": [
+        "ponowne żądania100%",
+        "nieudana mutacja B"
+      ],
+      "Scope": "Natywna próba treningowa z ponownym gaz1 i DNF. To badana mutacja, nie wybrany zwycięzca. Te same wejścia #4061 A/B.",
+      "Runs": [
+        {
+          "Name": "A-s1322026-g00-p5000-F1",
+          "Policy": "131-A"
+        },
+        {
+          "Name": "B-s1322026-g00-p6000-F1",
+          "Policy": "131-B"
+        },
+        {
+          "Name": "B-s1322026-g00-p6001-F1",
+          "Policy": "mutation-B"
+        }
+      ]
+    },
+    {
+      "Id": "QUEUE-A",
+      "Scenario": {
+        "Name": "F0",
+        "Level": 2,
+        "Speed": 9.35,
+        "Offset": 3.85,
+        "Start": 21,
+        "OutwardSpeed": 0.105,
+        "HeadingError": 0.019,
+        "YawRate": -0.021
+      },
+      "TwoBends": false,
+      "Reasons": [
+        "zachowane pending",
+        "ta sama mutacja A/B"
+      ],
+      "Scope": "A może w0,2s zaplanować utrzymanie wciąż aktywnego1 przed aktywacją wcześniejszego0. Nowe żądanie1 przy już obniżonym aktywnym gazie wymaga B. Obie polityki mają identyczne osiem wag.",
+      "Runs": [
+        {
+          "Name": "A-s1322026-g00-p5001-F0",
+          "Policy": "queue-A"
+        },
+        {
+          "Name": "B-s1322026-g00-p6001-F0",
+          "Policy": "queue-B"
+        }
+      ]
+    }
+  ],
+  "Charts": [
+    [
+      "learning.svg",
+      "Uczenie A/B · dwa seedy"
+    ],
+    [
+      "final.svg",
+      "Niezależny finał · ukończenia i czasy parami"
+    ],
+    [
+      "time-gain.svg",
+      "Gdzie zyskano czas · rzeczywiste przekroczenia postępu"
+    ]
+  ]
+}

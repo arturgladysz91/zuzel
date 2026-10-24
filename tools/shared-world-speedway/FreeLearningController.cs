@@ -48,17 +48,19 @@ public sealed class FreeLearningController
         Decisions.Add(decision);Evaluations+=decision.ForceEvaluations;Forecasts+=decision.Forecasts;
         pending.Add(new(time,time+RiderController.ReactionSeconds(spec),decision.Action));NextReview+=ReviewSeconds;
     }
-    public static FreeRacingAction[] Actions(FreeRacingInput input,FreeLearningPolicy policy){
+    public static FreeRacingAction[] Actions(FreeRacingInput input,FreeLearningPolicy policy,bool fullThrottleCandidate=false){
         var angles=new[]{-15f,-5f,-1.5f,-.5f,0f,.5f,1.5f,5f,15f}.Select(d=>d*MathF.PI/180)
             .Append(input.Steering).Append(input.Active.SteeringRadians).Distinct();
-        return angles.SelectMany(a=>new[]{new FreeRacingAction(a,0),new FreeRacingAction(a,(float)policy.Drive)})
+        return angles.SelectMany(a=>fullThrottleCandidate
+            ?new[]{new FreeRacingAction(a,0),new FreeRacingAction(a,(float)policy.Drive),new FreeRacingAction(a,1)}
+            :new[]{new FreeRacingAction(a,0),new FreeRacingAction(a,(float)policy.Drive)})
             .Append(input.Active).Distinct().ToArray();
     }
     public static FreeLearningDecision Choose(FreeRacingInput input,FreeLearningPolicy policy,RiderSpec spec,TrackFrame frame,
-        TrackStateSnapshot surface,WorldParameters p,float mass,float inertia,double horizonSeconds=HorizonSeconds,bool normalizeProgress=false){
+        TrackStateSnapshot surface,WorldParameters p,float mass,float inertia,double horizonSeconds=HorizonSeconds,bool normalizeProgress=false,bool fullThrottleCandidate=false){
         if(!double.IsFinite(horizonSeconds)||horizonSeconds<.3||horizonSeconds>FreeRacingModel.MaximumHorizonSeconds)throw new ArgumentException("Bounded audit horizon required.");
         var candidates=new List<FreeLearningCandidate>();var evaluations=0;var forecasts=0;
-        foreach(var action in Actions(input,policy)){
+        foreach(var action in Actions(input,policy,fullThrottleCandidate)){
             var prediction=FreeRacingModel.Predict(input,spec,frame,surface,p,mass,inertia,horizonSeconds,action);
             evaluations+=prediction.ForceEvaluations;forecasts++;
             var end=prediction.Points[^1];var v=end.Rider;var clearance=prediction.Points.Min(q=>Math.Min(q.Inner,q.Outer));

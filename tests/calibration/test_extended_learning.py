@@ -5,7 +5,7 @@ import json
 import math
 from pathlib import Path
 import unittest
-from extended_source_guard import source130
+from extended_source_guard import source130, source131
 
 ROOT=Path(__file__).resolve().parents[2]
 DATA=ROOT/'docs/experiments/autonomous-speedway-extended-learning'
@@ -94,7 +94,7 @@ class ExtendedLearningEvidenceTests(unittest.TestCase):
         correction=load('line-ending-correction.json');self.assertEqual(correction['OriginalProtocolSha256'],sha((DATA/'protocol-before-line-ending-correction.json').read_bytes()))
         for label in ['action-availability','high-slip']:
             self.assertEqual(load(label+'-protocol.json')['SourceSha256'],sha((DATA/(label+'-source.cs.txt')).read_bytes()))
-        for name,digest in self.p['Sources'].items():self.assertEqual(sha((ROOT/'tools/shared-world-speedway'/name).read_bytes()),digest,name)
+        for name,digest in self.p['Sources'].items():self.assertEqual(sha(source131(name)),digest,name)
         old=json.loads((DATA/'../robust-free-racing-learning/protocol.json').read_bytes())
         for name,digest in old['Sources'].items():self.assertEqual(sha(source130(name)),digest,name)
         for name,digest in load('manifest.json').items():self.assertEqual(sha((DATA/name).read_bytes()),digest,name)

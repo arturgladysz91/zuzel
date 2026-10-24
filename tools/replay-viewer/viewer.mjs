@@ -28,6 +28,7 @@ latestOption.textContent = '#123 · najnowszy przejazd · dwa łuki Egg Mild · 
 $('scenario').prepend(latestOption);
 const robustOption=document.createElement('option');robustOption.value='robust-learning';robustOption.textContent='#130 · Robust Learning · A/B i12 nowych przypadków';$('scenario').prepend(robustOption);
 const extendedOption=document.createElement('option');extendedOption.value='extended-learning';extendedOption.textContent='#131 · Extended Learning · H06/H09 i dwa łuki';$('scenario').prepend(extendedOption);
+const throttleOption=document.createElement('option');throttleOption.value='full-throttle-learning';throttleOption.textContent='#132 · Full Throttle Learning · gaz A/B i dwa łuki';$('scenario').prepend(throttleOption);
 const learningOption=document.createElement('option');learningOption.value='free-learning';
 learningOption.textContent='#129 · Free Racing Learning · proces uczenia i kamienie milowe';$('scenario').prepend(learningOption);
 const freeOption=document.createElement('option');freeOption.value='free-racing';
@@ -280,6 +281,11 @@ function draw() {
     if(line.visible===false)continue;
     if (line.generation && line.generation !== replay.planAt(time)) continue;
     pointPath(line.points); context.strokeStyle = line.color; context.lineWidth = 1.8; context.globalAlpha = .8; context.setLineDash(line.planned ? [8, 5] : []); context.stroke(); context.globalAlpha = 1; context.setLineDash([]);
+    if(line.gainSamples)for(const sample of line.gainSamples){
+      const p=worldToScreen({x:sample.NewXY.X,y:sample.NewXY.Y});context.fillStyle=sample.GainSeconds>=0?'#8be08f':'#ff9cbe';
+      context.beginPath();context.arc(p.x,p.y,2.5,0,Math.PI*2);context.fill();
+      if((sample.ReferenceMeters-30)%25===0){context.font='10px Segoe UI';context.fillText(`${sample.GainSeconds>=0?'+':''}${sample.GainSeconds.toFixed(2)}s`,p.x+5,p.y-5);}
+    }
   }
   context.setLineDash([5, 5]); context.strokeStyle = '#b4e2ce9c'; context.lineWidth = .8;
   pointPath(allSections.map(p => p.reference), true); context.stroke(); context.setLineDash([]);
@@ -358,12 +364,13 @@ async function loadScenario(key,keepTime=null) {
   $('free-racing-analysis').hidden=true;
   $('free-learning-analysis').hidden=true;
   $('robust-learning-analysis').hidden=true;
-  $('targets').disabled=['free-racing','free-learning','robust-learning','extended-learning'].includes(key);
-  $('outer-limit').disabled=['free-racing','free-learning','robust-learning','extended-learning'].includes(key);
+  $('targets').disabled=['free-racing','free-learning','robust-learning','extended-learning','full-throttle-learning'].includes(key);
+  $('outer-limit').disabled=['free-racing','free-learning','robust-learning','extended-learning','full-throttle-learning'].includes(key);
   $('load-state').textContent = 'Wczytywanie zaakceptowanych stanów…';
   try {
-    if(key==='robust-learning'||key==='extended-learning'){
-      const data=await loadRobust(fetch,new URL(location.href).searchParams.get('run'),key==='extended-learning'?'../../docs/experiments/autonomous-speedway-extended-learning/':undefined,new URL(location.href).searchParams.get('group'));if(generation!==loadGeneration)return;
+    if(key==='robust-learning'||key==='extended-learning'||key==='full-throttle-learning'){
+      const root=key==='full-throttle-learning'?'../../docs/experiments/full-throttle-learning/':key==='extended-learning'?'../../docs/experiments/autonomous-speedway-extended-learning/':undefined;
+      const data=await loadRobust(fetch,new URL(location.href).searchParams.get('run'),root,new URL(location.href).searchParams.get('group'));if(generation!==loadGeneration)return;
       geometry=data.geometry;replay=data.replay;selected=[...replay.tracks.keys()][0];comparisonTrails=data.comparisons;widthGeometries=[];
       for(const id of ['width-controls','width-comparison'])$(id).hidden=true;
       $('comparison-legend').hidden=false;$('comparison-legend').replaceChildren();
