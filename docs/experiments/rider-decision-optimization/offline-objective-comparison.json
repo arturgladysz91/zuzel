@@ -1,0 +1,42 @@
+[
+  {
+    "Variant": "B1",
+    "States": 380,
+    "Changed": 144,
+    "SafetyClassChanged": 0,
+    "CoastToPositiveSameClass": 106,
+    "CoastToPositiveGreaterProgress": 106,
+    "MedianProgressDelta": 0.0,
+    "MedianFutureClearanceDelta": 0.0,
+    "MedianEndSpeedDelta": 0.0,
+    "MedianAbsoluteDirectionDelta": 0.0,
+    "TerminalThreatChoices": 9,
+    "Scope": "Offline reranking of the exact same held forecasts on all380 historical states; medians include unchanged decisions. No full-run or continuation safety claim.",
+    "ChangedDecisionMedians": {
+      "ProgressMeters": 0.5405154585434104,
+      "FutureClearanceMeters": 0.029240834232374002,
+      "EndSpeedMetersPerSecond": 1.8737730979919434,
+      "AbsoluteDirectionRadians": 0.054909615451994215
+    }
+  },
+  {
+    "Variant": "B2",
+    "States": 380,
+    "Changed": 67,
+    "SafetyClassChanged": 0,
+    "CoastToPositiveSameClass": 59,
+    "CoastToPositiveGreaterProgress": 59,
+    "MedianProgressDelta": 0.0,
+    "MedianFutureClearanceDelta": 0.0,
+    "MedianEndSpeedDelta": 0.0,
+    "MedianAbsoluteDirectionDelta": 0.0,
+    "TerminalThreatChoices": 10,
+    "Scope": "Offline reranking of the exact same held forecasts on all380 historical states; medians include unchanged decisions. No full-run or continuation safety claim.",
+    "ChangedDecisionMedians": {
+      "ProgressMeters": 0.5154367357049523,
+      "FutureClearanceMeters": -0.0047998876363655185,
+      "EndSpeedMetersPerSecond": 1.8769073486328125,
+      "AbsoluteDirectionRadians": 0.0379885718751265
+    }
+  }
+]

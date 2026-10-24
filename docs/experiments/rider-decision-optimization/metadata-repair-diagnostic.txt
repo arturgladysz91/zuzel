@@ -1,0 +1,19 @@
+Przebieg testu dla: C:\Users\Administrator\Documents\Codex\2026-10-23\files-pasted-by-the-user-pr\work\zuzel\tests\CoreSim.Tests\bin\Release\net8.0\CoreSim.Tests.dll (.NETCoreApp,Version=v8.0)
+Łączna liczba plików testowych dopasowanych do określonego wzorca: 1.
+[xUnit.net 00:00:00.65]     CoreSim.Tests.RiderDecisionTests.ArchivedCemReproducesEveryDrawAndR0EliteUpdateForBothArms [FAIL]
+  Niepowodzenie CoreSim.Tests.RiderDecisionTests.ArchivedCemReproducesEveryDrawAndR0EliteUpdateForBothArms [69 ms]
+  Komunikat o błędzie:
+   A-1332026 g0 mean[0]: expected 1,0366929633577708, stored 0,9397631194661215
+A-1332026 g0 mean[1]: expected 2,9004919422897033, stored 3,5023932369527437
+A-1332026 g0 mean[2]: expected 1,6787773175296756, stored 1,6967115552322765
+A-1332026 g0 mean[3]: expected 0,3803903223956709, stored 0,35743915635280465
+A-1332026 g0 mean[4]: expected 4, stored 2,9316359802569183
+A-1332026 g0 mean[5]: expected 1,5516626358460206, stored 1,4816494385976053
+A-1332026 g0 mean[6]: expected 0,0695196178743138, stored 0,0694698184357917
+A-1332026 g0 mean[7]: expected 0,5844671655786142, stored 0,47660986389981363
+  Ślad stosu:
+     at CoreSim.Tests.RiderDecisionTests.ArchivedCemReproducesEveryDrawAndR0EliteUpdateForBothArms() in C:\Users\Administrator\Documents\Codex\2026-10-23\files-pasted-by-the-user-pr\work\zuzel\tests\CoreSim.Tests\RiderDecisionTests.cs:line 101
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+
+Niepowodzenie! — niepowodzenie:     1, powodzenie:     0, pominięto:     0, łącznie:     1, czas trwania: 69 ms - CoreSim.Tests.dll (net8.0)

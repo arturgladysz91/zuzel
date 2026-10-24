@@ -4,6 +4,16 @@ import {readGzip} from './recordings.mjs';
 export const robustRoot='../../docs/experiments/robust-free-racing-learning/';
 export const robustColors={'129-100':'#73dfdf','129-200':'#ffd27b','129-final':'#d99fe3','130-final':'#ff9c86','diag-original':'#d99fe3','diag-intervention':'#73dfdf'};
 export const robustLabels={'129-100':'#129 po 100','129-200':'#129 po 200','129-final':'#129 końcowa','130-final':'#130 wybrana przed testem','diag-original':'Diagnostyka: oryginalna #129','diag-intervention':'Diagnostyka: jedna komenda z0,9s'};
+// Keep only the current experiment bundle per fetcher. Switching policies on a
+// frozen experiment must not repeatedly decompress hundreds of MB of samples.
+const bundleCache=new WeakMap();
+function nativeBundle(fetcher,root){
+  const cached=bundleCache.get(fetcher);if(cached?.root===root)return cached.promise;
+  const entry={root,promise:fetcher(root+'selected-replays.json.gz').then(readGzip).then(JSON.parse)};
+  bundleCache.set(fetcher,entry);
+  entry.promise.catch(()=>{if(bundleCache.get(fetcher)===entry)bundleCache.delete(fetcher);});
+  return entry.promise;
+}
 export function robustReplay(document){const replay=learningReplay(document.Replay);replay.robust=document;return replay;}
 export function robustReadout(replay,time){
   const base=learningReadout(replay,time);return {...base,metrics:replay.robust.Metrics,
@@ -12,7 +22,7 @@ export function robustReadout(replay,time){
 export async function loadRobust(fetcher=fetch,name=null,root=robustRoot,groupId=null){
   const json=async url=>{const r=await fetcher(url);if(!r.ok)throw new Error('Brak danych '+url);return r.json();};
   const [index,bundle,geometry]=await Promise.all([json(root+'index.json'),
-    fetcher(root+'selected-replays.json.gz').then(readGzip).then(JSON.parse),
+    nativeBundle(fetcher,root),
     json('../../docs/experiments/progressive-bend-width/progressive-b-geometry.json')]);
   const requestedGroup=groupId?index.Groups.find(g=>g.Id===groupId):null;
   name=name??requestedGroup?.Runs[0].Name??index.DefaultRun;const document=bundle.Runs[name];if(!document)throw new Error('Ten pełny replay jest lokalny i nie należy do wybranych zapisów w Git.');
@@ -22,12 +32,13 @@ export async function loadRobust(fetcher=fetch,name=null,root=robustRoot,groupId
     points:bundle.Runs[r.Name].Replay.Samples.map(s=>({x:s.Input.Rider.Position.X,y:s.Input.Rider.Position.Y}))}));
   const gains=index.TimeGain?await json(root+index.TimeGain):[];
   const gain=gains.find(g=>g.Group===group.Id);
-  if(gain){const line=comparisons.find(c=>c.policy==='132-final');if(line)line.gainSamples=gain.Samples;}
+  if(gain){const line=comparisons.find(c=>c.policy===(gain.Policy??index.TimeGainPolicy??'132-final'));if(line)line.gainSamples=gain.Samples;}
   const replay=robustReplay(document);replay.robustPolicy=group.Runs.find(r=>r.Name===name).Policy;
   replay.robustLabel=labels[replay.robustPolicy]??replay.robustPolicy;replay.robustColor=colors[replay.robustPolicy];replay.horizon=index.Horizons?.[replay.robustPolicy]??.6;
   replay.episodeScope=document.Replay.Metrics.Outcome==='probe'?'Sonda diagnostyczna · zaplanowany koniec':group.TwoBends?
     (document.Replay.Metrics.Completed?'Dwa kolejne łuki + 1s kontroli na wyjściu':'Dwa kolejne łuki · próba nieukończona'):undefined;
-  return {index,group,document,replay,geometry,comparisons,root,labels};
+  const comparisonRuns=group.Runs.map(r=>({policy:r.Policy,name:labels[r.Policy]??r.Policy,color:colors[r.Policy]??'#73dfdf',run:bundle.Runs[r.Name]}));
+  return {index,group,document,replay,geometry,comparisons,comparisonRuns,gain,root,labels};
 }
 const el=(tag,text)=>{const e=document.createElement(tag);if(text!=null)e.textContent=text;return e;};
 const svgEl=(tag,attributes)=>{const e=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const [k,v] of Object.entries(attributes))e.setAttribute(k,String(v));return e;};
@@ -37,6 +48,41 @@ export function throttleSeries(run){
     reopenings:run.Replay.Decisions.filter((d,i,all)=>i>0&&d.Action.Drive>=.99&&all[i-1].Action.Drive<.99).map(d=>d.Time),
     activeDropRequests:run.Replay.Decisions.filter(d=>d.Action.Drive>=.99&&active.get(d.Time.toFixed(8))<.99).map(d=>d.Time),
     activeReopenings:run.Replay.Activations.filter((c,i,all)=>i>0&&c.Action.Drive>=.99&&all[i-1].Action.Drive<.99).map(c=>c.ActivationAt)};
+}
+// No resampling, normalization of elapsed time, or continuation beyond a DNF.
+export function comparisonSeries(run){
+  const samples=run.Replay.Samples,degrees=x=>x*180/Math.PI;
+  return [
+    ['Prędkość km/h',s=>s.Input.Rider.Speed*3.6],
+    ['Gaz żądany %',s=>s.RequestedDrive*100],
+    ['Gaz aktywny %',s=>s.Input.Active.Drive*100],
+    ['Kierownica żądana °',s=>degrees(s.RequestedSteering)],
+    ['Kierownica wykonana °',s=>degrees(s.Input.Steering)],
+    ['β °',s=>degrees(s.Input.Rider.SlideRadians)],
+    ['Najmniejszy chwilowy prześwit obrysu m',s=>Math.min(s.Inner,s.Outer)]
+  ].map(([title,value])=>({title,step:title.startsWith('Gaz'),points:samples.map(s=>[s.Input.Time,value(s)])}));
+}
+function comparisonCharts(element,runs){
+  const series=runs.map(r=>({...r,series:comparisonSeries(r.run)}));
+  const duration=Math.max(...runs.map(r=>r.run.Replay.Metrics.DurationSeconds));
+  for(let i=0;i<series[0].series.length;i++){
+    const title=series[0].series[i].title,figure=el('figure');figure.append(el('figcaption',title));
+    const svg=svgEl('svg',{viewBox:'0 0 600 150',role:'img','aria-label':'Porównanie: '+title});
+    const values=series.flatMap(r=>r.series[i].points.map(p=>p[1]));
+    const lo=Math.min(0,...values),hi=Math.max(1,...values),y=v=>125-(v-lo)/(hi-lo)*100;
+    svg.append(svgEl('path',{d:'M40,15V125H590',stroke:'#48677a',fill:'none'}));
+    for(const r of series){let path='';
+      for(const [j,p] of r.series[i].points.entries()){
+        const x=40+p[0]/duration*550,yy=y(p[1]);
+        path+=j===0?`M${x},${yy}`:r.series[i].step?`H${x}V${yy}`:`L${x},${yy}`;
+      }
+      const line=svgEl('path',{d:path,fill:'none',stroke:r.color,'stroke-width':1.5,'data-comparison-policy':r.policy});
+      const tooltip=svgEl('title',{});tooltip.textContent=r.name;line.append(tooltip);svg.append(line);
+    }
+    svg.append(svgEl('line',{x1:40,x2:40,y1:12,y2:128,stroke:'#f4f7fa','stroke-dasharray':'3 3','data-robust-cursor':duration}));
+    const label=svgEl('text',{x:45,y:145,fill:'#b9d2df','font-size':11});label.textContent=`Wspólny zegar 0–${duration.toFixed(2)}s · zakres ${lo.toFixed(2)}…${hi.toFixed(2)}`;svg.append(label);
+    figure.append(svg);element.append(figure);
+  }
 }
 function telemetryCharts(element,run){
   const samples=run.Replay.Samples;const degrees=x=>x*180/Math.PI;const duration=run.Replay.Metrics.DurationSeconds;
@@ -78,7 +124,7 @@ export function setupRobust(element,data,onRun,onOverlay){
   const controls=el('div');controls.className='audit-controls';
   const caseLabel=el('label','Wspólny stan '),caseSelect=el('select');caseSelect.id='robust-case';
   for(const group of data.index.Groups){const option=el('option',`${group.Id}: ${group.Reasons.join(', ')}`);option.value=group.Id;option.selected=group.Id===data.group.Id;caseSelect.append(option);}
-  caseSelect.addEventListener('change',()=>{const group=data.index.Groups.find(g=>g.Id===caseSelect.value);onRun((group.Runs.find(r=>r.Policy==='132-final'||r.Policy==='131-final'||r.Policy==='130-final')??group.Runs[0]).Name,group.Id);});caseLabel.append(caseSelect);controls.append(caseLabel);
+  caseSelect.addEventListener('change',()=>{const group=data.index.Groups.find(g=>g.Id===caseSelect.value);onRun((group.Runs.find(r=>r.Policy===(data.index.PreferredPolicy??'132-final')||r.Policy==='131-final'||r.Policy==='130-final')??group.Runs[0]).Name,group.Id);});caseLabel.append(caseSelect);controls.append(caseLabel);
   const policyLabel=el('label','Polityka '),policySelect=el('select');policySelect.id='robust-policy';
   for(const r of data.group.Runs){const option=el('option',data.labels[r.Policy]??r.Policy);option.value=r.Name;option.selected=r.Name===data.document.Replay.Name;policySelect.append(option);}
   policySelect.addEventListener('change',()=>onRun(policySelect.value,data.group.Id));policyLabel.append(policySelect);controls.append(policyLabel);element.append(controls);
@@ -87,10 +133,15 @@ export function setupRobust(element,data,onRun,onOverlay){
     check.addEventListener('change',()=>onOverlay(line.policy,check.checked));label.append(check,document.createTextNode(' '+line.name));overlay.append(label);}element.append(overlay);
   element.append(el('p',`Ten sam stan ${data.group.Id}: ${data.group.Scenario.Speed}m/s, offset${data.group.Scenario.Offset}m, heading${data.group.Scenario.HeadingError}rad, v boczna${data.group.Scenario.OutwardSpeed}m/s, yaw${data.group.Scenario.YawRate}rad/s. Nakładki są całymi rzeczywistymi przejazdami, bez prognoz.`));
   element.append(el('p',data.group.Scope));
-  if(data.comparisons.some(c=>c.gainSamples))element.append(el('p','Nakładka całych przejazdów: zielone punkty to zysk czasu #132 względem #131-A na tym samym postępie toru, różowe to strata. Etykiety co25m. Porównaj miejsce zysku z gazem, prędkością i β na wykresach.'));
+  if(data.comparisons.some(c=>c.gainSamples))element.append(el('p',`${data.gain?.Description??data.index.TimeGainDescription??'Zysk czasu #132 względem #131-A na identycznym postępie toru'}: zielone punkty oznaczają zysk, różowe stratę. Etykiety co25m. Każdy punkt to rzeczywista pozycja XY z zapisu.`));
   element.append(el('p',`W Git są wybrane reprezentatywne replaye. Pełne surowe dane wszystkich prób pozostały lokalnie: ${data.index.RawDirectory}.`));
   const current=el('div');current.id='robust-telemetry';element.append(current);
   const details=el('details'),summary=el('summary','Przebiegi czasowe wybranego natywnego przejazdu');details.append(summary);const charts=el('div');charts.className='audit-charts';telemetryCharts(charts,data.document);details.append(charts);element.append(details);
+  if(data.index.ComparisonCharts){
+    const d=el('details');d.append(el('summary','Porównawcze nakładki prędkości, gazu, kierownicy, β i prześwitu'));
+    d.append(el('p','Kolory zgodne z legendą śladów. Jeden wspólny zegar; linia kończy się na końcu rzeczywistego zapisu, także przy DNF. Gaz żądany i aktywny są osobno. Prześwit chwilowy nie zastępuje certyfikatu interwału.'));
+    const c=el('div');c.className='audit-charts';comparisonCharts(c,data.comparisonRuns);d.append(c);element.append(d);
+  }
   for(const [file,title] of data.index.Charts??[['ab-learning.svg','Uczenie A/B i utrzymywanie umiejętności'],['sealed-test.svg','Wszystkie12 nowych przypadków, cztery polityki'],['native-trajectories.svg','Wybrane nakładki na identycznych stanach']]){
     const d=el('details'),s=el('summary',title),img=el('img');img.src=(data.root??robustRoot)+file;img.alt=title;img.style.width='100%';d.append(s,img);element.append(d);
   }

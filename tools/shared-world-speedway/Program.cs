@@ -2,6 +2,7 @@ using System.Text.Json;
 using SharedWorldSpeedway;
 
 var scenario = args.FirstOrDefault() ?? "A";
+if(scenario=="rider-decision"){RiderDecisionExperiment133.Run(args[1],args[2],args[3]);return;}
 if(scenario=="full-throttle-learning"){FullThrottleLearningExperiment.Run(args[1],args[2],args[3]);return;}
 if(scenario=="extended-learning"){ExtendedLearningExperiment.Run(args[1],args[2],args[3]);return;}
 if(scenario=="robust-learning"){RobustLearningExperiment.Run(args[1],args[2],args[3]);return;}

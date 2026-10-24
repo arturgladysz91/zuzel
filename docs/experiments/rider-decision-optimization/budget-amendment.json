@@ -1,0 +1,24 @@
+{
+  "Authorized": true,
+  "Authorization": "Direct user reply: Tak, kontynuuj z limitem 600 s",
+  "Reason": "Initial complete 20-world generation took 233.90625 CPU seconds, above the self-imposed 225 second scheduling guard. Resume next generation without repeating worlds.",
+  "OriginalGenerationCpuSeconds": 225,
+  "GenerationCpuSeconds": 600,
+  "OriginalSourceSha256": "5126C81301CAB1E47AD658A07317952D4ED13774E35CA012A39B88B2AF6ACBDA",
+  "ApprovedSourceSha256": "50C3255AF2FCC5F254FD894093C409C9824E36AB465EDC9F0B5BCD73CCC8C088",
+  "CompletedGenerationsAtAmendment": 1,
+  "TrainingWorldsAtAmendment": 20,
+  "FinalWorldsAtAmendment": 0,
+  "ReservationCount": 47,
+  "ObservedCpuSeconds": 233.90625,
+  "Unchanged": {
+    "TotalCpuSeconds": 7000,
+    "NativeWorlds": 800,
+    "Forecasts": 1500000,
+    "ContactEvaluations": 135000000,
+    "Score": "B1 robust direction",
+    "CEMRanking": "R0 both arms",
+    "Selection": "frozen R0/R1",
+    "PassCriteria": "original protocol"
+  }
+}

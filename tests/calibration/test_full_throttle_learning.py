@@ -1,7 +1,7 @@
 """Audit #132 native evidence and untouched historical contracts without new worlds."""
 import gzip,hashlib,json,math,statistics,unittest
 from pathlib import Path
-from extended_source_guard import source131
+from extended_source_guard import source131, source132
 ROOT=Path(__file__).resolve().parents[2]
 D=ROOT/'docs/experiments/full-throttle-learning'
 load=lambda n:json.loads((D/n).read_bytes())
@@ -15,7 +15,7 @@ class FullThrottleEvidenceTests(unittest.TestCase):
         cls.runs=json.loads(gzip.decompress((D/'selected-replays.json.gz').read_bytes()))['Runs']
 
     def test_frozen_sources_history_and_manifests(self):
-        for name,digest in self.p['Sources'].items():self.assertEqual(sha((ROOT/'tools/shared-world-speedway'/name).read_bytes()),digest,name)
+        for name,digest in self.p['Sources'].items():self.assertEqual(sha(source132(name)),digest,name)
         old=json.loads((D.parent/'autonomous-speedway-extended-learning/protocol.json').read_bytes())
         for name,digest in old['Sources'].items():self.assertEqual(sha(source131(name)),digest,name)
         for name,digest in old['Sources'].items():
