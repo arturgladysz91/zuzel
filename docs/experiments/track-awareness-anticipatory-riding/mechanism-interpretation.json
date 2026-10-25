@@ -1,0 +1,12 @@
+{
+  "ChangesNativeOrScore": false,
+  "OriginalSourcesRemainFrozen": true,
+  "LegacyMargin": "The frozen field TyreResponseSeconds equals legacy LateralResponseSeconds+SlipYawResponseSeconds. With steeringOverride, those settings are bypassed for physical tyre forces; it is an uncalibrated soft preparation margin, not tyre relaxation or a certified reachability bound.",
+  "ArchivedActuatorRange": "ReachableSteeringLow/High in original raw idealizes motion from the current angle after0.24s and omits existing pending activations. It is not used by Evaluate. Retained unmodified for audit; viewer/report use known-pending actuator continuation then held +/-15deg grid extrema.",
+  "Verification": "C# LegacyResponseSettingsAreOnlyHeuristicMarginsWithDirectSteering: identical H09 points/force counts after changing all three legacy response settings. JS actuator continuation is checked against native0.23s prefixes before a new command can activate.",
+  "Scope": "Interpretation and additional read-only diagnostics only; no new world, no policy choice or source hash change.",
+  "SourceSha256": {
+    "TrackAwareness134.cs": "D3FBA7EAFF1BD8B0D994EBC8E5199BEB1BED386D53AA9CAF07CC33667E7A3305",
+    "TrackAwarenessExperiment134.cs": "CFF43F69611ED278461C24AAAAF4E99108BEAE5FEF38E3FBC9CA1CA71A6B2DD4"
+  }
+}

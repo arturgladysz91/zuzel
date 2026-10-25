@@ -1,6 +1,7 @@
 // Four policies on the same sealed initial state. All displayed poses are native observations.
 import {learningReplay,learningReadout} from './free-learning.mjs';
 import {readGzip} from './recordings.mjs';
+import {awarenessReadout,awarenessPanel} from './track-awareness.mjs';
 export const robustRoot='../../docs/experiments/robust-free-racing-learning/';
 export const robustColors={'129-100':'#73dfdf','129-200':'#ffd27b','129-final':'#d99fe3','130-final':'#ff9c86','diag-original':'#d99fe3','diag-intervention':'#73dfdf'};
 export const robustLabels={'129-100':'#129 po 100','129-200':'#129 po 200','129-final':'#129 końcowa','130-final':'#130 wybrana przed testem','diag-original':'Diagnostyka: oryginalna #129','diag-intervention':'Diagnostyka: jedna komenda z0,9s'};
@@ -21,12 +22,11 @@ export function robustReadout(replay,time){
 }
 export async function loadRobust(fetcher=fetch,name=null,root=robustRoot,groupId=null){
   const json=async url=>{const r=await fetcher(url);if(!r.ok)throw new Error('Brak danych '+url);return r.json();};
-  const [index,bundle,geometry]=await Promise.all([json(root+'index.json'),
-    nativeBundle(fetcher,root),
-    json('../../docs/experiments/progressive-bend-width/progressive-b-geometry.json')]);
+  const [index,bundle]=await Promise.all([json(root+'index.json'),nativeBundle(fetcher,root)]);
   const requestedGroup=groupId?index.Groups.find(g=>g.Id===groupId):null;
   name=name??requestedGroup?.Runs[0].Name??index.DefaultRun;const document=bundle.Runs[name];if(!document)throw new Error('Ten pełny replay jest lokalny i nie należy do wybranych zapisów w Git.');
   const group=requestedGroup?.Runs.some(r=>r.Name===name)?requestedGroup:index.Groups.find(g=>g.Runs.some(r=>r.Name===name));if(!group)throw new Error('Brak wspólnego scenariusza.');
+  const geometry=await json(group.GeometryFile?root+group.GeometryFile:'../../docs/experiments/progressive-bend-width/progressive-b-geometry.json');
   const labels=index.Labels??robustLabels;const colors=index.Colors??robustColors;
   const comparisons=group.Runs.map(r=>({name:labels[r.Policy]??r.Policy,policy:r.Policy,color:colors[r.Policy]??'#73dfdf',planned:false,visible:true,
     points:bundle.Runs[r.Name].Replay.Samples.map(s=>({x:s.Input.Rider.Position.X,y:s.Input.Rider.Position.Y}))}));
@@ -136,6 +136,7 @@ export function setupRobust(element,data,onRun,onOverlay){
   if(data.comparisons.some(c=>c.gainSamples))element.append(el('p',`${data.gain?.Description??data.index.TimeGainDescription??'Zysk czasu #132 względem #131-A na identycznym postępie toru'}: zielone punkty oznaczają zysk, różowe stratę. Etykiety co25m. Każdy punkt to rzeczywista pozycja XY z zapisu.`));
   element.append(el('p',`W Git są wybrane reprezentatywne replaye. Pełne surowe dane wszystkich prób pozostały lokalnie: ${data.index.RawDirectory}.`));
   const current=el('div');current.id='robust-telemetry';element.append(current);
+  if(data.index.TrackAwareness){const panel=el('div');panel.id='track-awareness';element.append(panel);}
   const details=el('details'),summary=el('summary','Przebiegi czasowe wybranego natywnego przejazdu');details.append(summary);const charts=el('div');charts.className='audit-charts';telemetryCharts(charts,data.document);details.append(charts);element.append(details);
   if(data.index.ComparisonCharts){
     const d=el('details');d.append(el('summary','Porównawcze nakładki prędkości, gazu, kierownicy, β i prześwitu'));
@@ -156,5 +157,6 @@ export function updateRobustPanel(element,replay,time){
   if(d)lines.push(d.Candidates.length===0?`Diagnostyczne utrzymanie komendy od ${d.Time.toFixed(2)}s; ten odcinek nie jest decyzją wyuczonej polityki.`:`Decyzja ${d.Time.toFixed(2)}s, reakcja0,24s, ${d.Candidates.length} działań: ${d.NoSafeContinuation?'BRAK bezpiecznej opcji w horyzoncie':`dostępna opcja bezpieczna tylko w horyzoncie ${replay.horizon??.6}s`}.`);
   if(t)lines.push(`Ostatni zakończony przedział ${(t.Time-t.Seconds).toFixed(3)}–${t.Time.toFixed(3)}s: Fprzód (${t.Forces.FrontForce.X.toFixed(1)}, ${t.Forces.FrontForce.Y.toFixed(1)})N, Ftył (${t.Forces.RearForce.X.toFixed(1)}, ${t.Forces.RearForce.Y.toFixed(1)})N; yaw moment przód/tył ${t.Forces.FrontTorque.toFixed(1)}/${t.Forces.RearTorque.toFixed(1)}Nm; praca silnika ${t.Wheel.EngineWorkJoules.toFixed(2)}J, bilans strat ${t.EnergyResidual.toFixed(2)}J; certyfikat ${t.AcceptedCertificate.toFixed(4)}m.`);
   for(const text of lines)element.append(el('p',text));
+  const awareness=document.getElementById('track-awareness');if(awareness)awarenessPanel(awareness,awarenessReadout(replay.robust,time));
   for(const cursor of document.querySelectorAll('[data-robust-cursor]')){const x=40+time/Number(cursor.getAttribute('data-robust-cursor'))*550;cursor.setAttribute('x1',x);cursor.setAttribute('x2',x);}
 }

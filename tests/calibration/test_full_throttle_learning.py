@@ -1,7 +1,7 @@
 """Audit #132 native evidence and untouched historical contracts without new worlds."""
 import gzip,hashlib,json,math,statistics,unittest
 from pathlib import Path
-from extended_source_guard import source131, source132
+from extended_source_guard import source131, source132, source133
 ROOT=Path(__file__).resolve().parents[2]
 D=ROOT/'docs/experiments/full-throttle-learning'
 load=lambda n:json.loads((D/n).read_bytes())
@@ -19,7 +19,7 @@ class FullThrottleEvidenceTests(unittest.TestCase):
         old=json.loads((D.parent/'autonomous-speedway-extended-learning/protocol.json').read_bytes())
         for name,digest in old['Sources'].items():self.assertEqual(sha(source131(name)),digest,name)
         for name,digest in old['Sources'].items():
-            if name not in ['Program.cs','FreeLearningController.cs','RobustLearningExperiment.cs']:self.assertEqual(sha((ROOT/'tools/shared-world-speedway'/name).read_bytes()),digest,name)
+            if name not in ['Program.cs','FreeLearningController.cs','RobustLearningExperiment.cs']:self.assertEqual(sha(source133(name)),digest,name)
         for name,digest in load('manifest.json').items():self.assertEqual(sha((D/name).read_bytes()),digest,name)
         self.assertEqual(sha((D/'selected-replays.json.gz').read_bytes()),load('selected-manifest.json')['BundleSha256'])
         packed=(D/'throttle-audit.json.gz').read_bytes();original=gzip.decompress(packed);archive=load('throttle-audit-archive.json')

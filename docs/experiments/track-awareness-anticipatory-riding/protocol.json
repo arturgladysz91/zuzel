@@ -1,0 +1,1055 @@
+{
+  "BaseHead": "5ed4499b2118ca8206bf8dcaf9741dc0790c01ac",
+  "Seeds": [
+    1342026,
+    2342026
+  ],
+  "Training": [
+    {
+      "Name": "G0",
+      "Geometry": "progressive-b",
+      "Scenario": {
+        "Name": "G0",
+        "Level": 2,
+        "Speed": 10.175,
+        "Offset": 4.375,
+        "Start": 18.875,
+        "OutwardSpeed": 0.105,
+        "HeadingError": -0.0175,
+        "YawRate": 0.0215
+      },
+      "Two": false
+    },
+    {
+      "Name": "G1",
+      "Geometry": "progressive-b",
+      "Scenario": {
+        "Name": "G1",
+        "Level": 3,
+        "Speed": 13.175,
+        "Offset": 6.375,
+        "Start": 18.875,
+        "OutwardSpeed": -0.115,
+        "HeadingError": 0.0235,
+        "YawRate": -0.0175
+      },
+      "Two": true
+    },
+    {
+      "Name": "G2",
+      "Geometry": "egg-medium",
+      "Scenario": {
+        "Name": "G2",
+        "Level": 4,
+        "Speed": 16.175,
+        "Offset": 4.875,
+        "Start": 18.875,
+        "OutwardSpeed": 0.145,
+        "HeadingError": -0.0215,
+        "YawRate": 0.0195
+      },
+      "Two": true
+    },
+    {
+      "Name": "G3",
+      "Geometry": "egg-medium",
+      "Scenario": {
+        "Name": "G3",
+        "Level": 3,
+        "Speed": 11.175,
+        "Offset": 6.175,
+        "Start": 18.375,
+        "OutwardSpeed": -0.105,
+        "HeadingError": 0.0195,
+        "YawRate": -0.0215
+      },
+      "Two": false
+    },
+    {
+      "Name": "G4",
+      "Geometry": "progressive-b",
+      "Scenario": {
+        "Name": "G4",
+        "Level": 4,
+        "Speed": 16.875,
+        "Offset": 4.175,
+        "Start": 18.375,
+        "OutwardSpeed": 0.115,
+        "HeadingError": -0.0235,
+        "YawRate": 0.0175
+      },
+      "Two": true
+    },
+    {
+      "Name": "G5",
+      "Geometry": "egg-medium",
+      "Scenario": {
+        "Name": "G5",
+        "Level": 4,
+        "Speed": 17.475,
+        "Offset": 6.875,
+        "Start": 18.375,
+        "OutwardSpeed": -0.145,
+        "HeadingError": 0.0215,
+        "YawRate": -0.0195
+      },
+      "Two": true
+    }
+  ],
+  "Selection": [
+    {
+      "Name": "K0",
+      "Geometry": "progressive-b",
+      "Scenario": {
+        "Name": "K0",
+        "Level": 2,
+        "Speed": 10.475,
+        "Offset": 4.625,
+        "Start": 19.175,
+        "OutwardSpeed": 0.085,
+        "HeadingError": 0.01875,
+        "YawRate": -0.02075
+      },
+      "Two": false
+    },
+    {
+      "Name": "K1",
+      "Geometry": "egg-medium",
+      "Scenario": {
+        "Name": "K1",
+        "Level": 4,
+        "Speed": 16.475,
+        "Offset": 6.625,
+        "Start": 19.175,
+        "OutwardSpeed": -0.095,
+        "HeadingError": -0.02275,
+        "YawRate": 0.01675
+      },
+      "Two": false
+    },
+    {
+      "Name": "K2",
+      "Geometry": "progressive-b",
+      "Scenario": {
+        "Name": "K2",
+        "Level": 3,
+        "Speed": 11.475,
+        "Offset": 3.625,
+        "Start": 19.175,
+        "OutwardSpeed": 0.125,
+        "HeadingError": -0.01675,
+        "YawRate": 0.02275
+      },
+      "Two": true
+    },
+    {
+      "Name": "K3",
+      "Geometry": "egg-medium",
+      "Scenario": {
+        "Name": "K3",
+        "Level": 3,
+        "Speed": 13.875,
+        "Offset": 6.925,
+        "Start": 19.175,
+        "OutwardSpeed": -0.085,
+        "HeadingError": 0.02475,
+        "YawRate": -0.01875
+      },
+      "Two": true
+    },
+    {
+      "Name": "K4",
+      "Geometry": "progressive-b",
+      "Scenario": {
+        "Name": "K4",
+        "Level": 4,
+        "Speed": 16.075,
+        "Offset": 4.925,
+        "Start": 19.175,
+        "OutwardSpeed": 0.135,
+        "HeadingError": 0.02075,
+        "YawRate": -0.02475
+      },
+      "Two": true
+    },
+    {
+      "Name": "K5",
+      "Geometry": "egg-medium",
+      "Scenario": {
+        "Name": "K5",
+        "Level": 4,
+        "Speed": 17.675,
+        "Offset": 5.925,
+        "Start": 19.175,
+        "OutwardSpeed": -0.125,
+        "HeadingError": -0.01875,
+        "YawRate": 0.02075
+      },
+      "Two": true
+    }
+  ],
+  "Diagnostic": [
+    {
+      "Name": "P0",
+      "Geometry": "progressive-b",
+      "Scenario": {
+        "Name": "P0",
+        "Level": 2,
+        "Speed": 10.125,
+        "Offset": 4.325,
+        "Start": 17.875,
+        "OutwardSpeed": 0.095,
+        "HeadingError": -0.01925,
+        "YawRate": 0.01825
+      },
+      "Two": false
+    },
+    {
+      "Name": "P1",
+      "Geometry": "progressive-b",
+      "Scenario": {
+        "Name": "P1",
+        "Level": 3,
+        "Speed": 12.825,
+        "Offset": 6.275,
+        "Start": 19.125,
+        "OutwardSpeed": -0.125,
+        "HeadingError": 0.02125,
+        "YawRate": -0.02225
+      },
+      "Two": true
+    },
+    {
+      "Name": "P2",
+      "Geometry": "egg-medium",
+      "Scenario": {
+        "Name": "P2",
+        "Level": 4,
+        "Speed": 15.825,
+        "Offset": 4.275,
+        "Start": 18.125,
+        "OutwardSpeed": 0.115,
+        "HeadingError": -0.02325,
+        "YawRate": 0.02025
+      },
+      "Two": true
+    },
+    {
+      "Name": "P3",
+      "Geometry": "egg-medium",
+      "Scenario": {
+        "Name": "P3",
+        "Level": 4,
+        "Speed": 17.525,
+        "Offset": 6.125,
+        "Start": 19.375,
+        "OutwardSpeed": -0.095,
+        "HeadingError": 0.01725,
+        "YawRate": -0.01625
+      },
+      "Two": true
+    }
+  ],
+  "FinalSingle": [
+    {
+      "Name": "M00",
+      "Geometry": "progressive-c",
+      "Scenario": {
+        "Name": "M00",
+        "Level": 2,
+        "Speed": 9.475,
+        "Offset": 3.075,
+        "Start": 18.625,
+        "OutwardSpeed": 0.08375,
+        "HeadingError": 0.01775,
+        "YawRate": -0.01675
+      },
+      "Two": false
+    },
+    {
+      "Name": "M01",
+      "Geometry": "progressive-c",
+      "Scenario": {
+        "Name": "M01",
+        "Level": 2,
+        "Speed": 9.825001,
+        "Offset": 4.972,
+        "Start": 18.625,
+        "OutwardSpeed": -0.11125,
+        "HeadingError": -0.020750001,
+        "YawRate": 0.01875
+      },
+      "Two": false
+    },
+    {
+      "Name": "M02",
+      "Geometry": "progressive-c",
+      "Scenario": {
+        "Name": "M02",
+        "Level": 2,
+        "Speed": 10.175,
+        "Offset": 6.869,
+        "Start": 18.625,
+        "OutwardSpeed": 0.13875,
+        "HeadingError": -0.02375,
+        "YawRate": -0.020750001
+      },
+      "Two": false
+    },
+    {
+      "Name": "M03",
+      "Geometry": "progressive-c",
+      "Scenario": {
+        "Name": "M03",
+        "Level": 2,
+        "Speed": 10.525001,
+        "Offset": 4.159,
+        "Start": 18.625,
+        "OutwardSpeed": -0.16624999,
+        "HeadingError": 0.02675,
+        "YawRate": 0.022750001
+      },
+      "Two": false
+    },
+    {
+      "Name": "M04",
+      "Geometry": "progressive-c",
+      "Scenario": {
+        "Name": "M04",
+        "Level": 2,
+        "Speed": 10.875,
+        "Offset": 6.0559998,
+        "Start": 18.625,
+        "OutwardSpeed": 0.08375,
+        "HeadingError": -0.02975,
+        "YawRate": -0.024750002
+      },
+      "Two": false
+    },
+    {
+      "Name": "M05",
+      "Geometry": "progressive-c",
+      "Scenario": {
+        "Name": "M05",
+        "Level": 3,
+        "Speed": 11.225,
+        "Offset": 3.346,
+        "Start": 18.625,
+        "OutwardSpeed": -0.11125,
+        "HeadingError": -0.01775,
+        "YawRate": 0.026750002
+      },
+      "Two": false
+    },
+    {
+      "Name": "M06",
+      "Geometry": "progressive-c",
+      "Scenario": {
+        "Name": "M06",
+        "Level": 3,
+        "Speed": 11.575001,
+        "Offset": 5.243,
+        "Start": 18.625,
+        "OutwardSpeed": 0.13875,
+        "HeadingError": 0.020750001,
+        "YawRate": -0.01675
+      },
+      "Two": false
+    },
+    {
+      "Name": "M07",
+      "Geometry": "progressive-c",
+      "Scenario": {
+        "Name": "M07",
+        "Level": 3,
+        "Speed": 11.925,
+        "Offset": 7.1400003,
+        "Start": 18.625,
+        "OutwardSpeed": -0.16624999,
+        "HeadingError": -0.02375,
+        "YawRate": 0.01875
+      },
+      "Two": false
+    },
+    {
+      "Name": "M08",
+      "Geometry": "progressive-c",
+      "Scenario": {
+        "Name": "M08",
+        "Level": 3,
+        "Speed": 12.275001,
+        "Offset": 4.4300003,
+        "Start": 18.625,
+        "OutwardSpeed": 0.08375,
+        "HeadingError": -0.02675,
+        "YawRate": -0.020750001
+      },
+      "Two": false
+    },
+    {
+      "Name": "M09",
+      "Geometry": "progressive-c",
+      "Scenario": {
+        "Name": "M09",
+        "Level": 3,
+        "Speed": 12.625,
+        "Offset": 6.3269997,
+        "Start": 18.625,
+        "OutwardSpeed": -0.11125,
+        "HeadingError": 0.02975,
+        "YawRate": 0.022750001
+      },
+      "Two": false
+    },
+    {
+      "Name": "M10",
+      "Geometry": "progressive-c",
+      "Scenario": {
+        "Name": "M10",
+        "Level": 3,
+        "Speed": 12.975,
+        "Offset": 3.617,
+        "Start": 18.625,
+        "OutwardSpeed": 0.13875,
+        "HeadingError": -0.01775,
+        "YawRate": -0.024750002
+      },
+      "Two": false
+    },
+    {
+      "Name": "M11",
+      "Geometry": "progressive-c",
+      "Scenario": {
+        "Name": "M11",
+        "Level": 3,
+        "Speed": 13.325001,
+        "Offset": 5.514,
+        "Start": 18.625,
+        "OutwardSpeed": -0.16624999,
+        "HeadingError": -0.020750001,
+        "YawRate": 0.026750002
+      },
+      "Two": false
+    },
+    {
+      "Name": "M12",
+      "Geometry": "progressive-c",
+      "Scenario": {
+        "Name": "M12",
+        "Level": 3,
+        "Speed": 13.675,
+        "Offset": 7.4110003,
+        "Start": 18.625,
+        "OutwardSpeed": 0.08375,
+        "HeadingError": 0.02375,
+        "YawRate": -0.01675
+      },
+      "Two": false
+    },
+    {
+      "Name": "M13",
+      "Geometry": "progressive-c",
+      "Scenario": {
+        "Name": "M13",
+        "Level": 3,
+        "Speed": 14.025,
+        "Offset": 4.701,
+        "Start": 18.625,
+        "OutwardSpeed": -0.11125,
+        "HeadingError": -0.02675,
+        "YawRate": 0.01875
+      },
+      "Two": false
+    },
+    {
+      "Name": "M14",
+      "Geometry": "progressive-c",
+      "Scenario": {
+        "Name": "M14",
+        "Level": 3,
+        "Speed": 14.375,
+        "Offset": 6.598,
+        "Start": 18.625,
+        "OutwardSpeed": 0.13875,
+        "HeadingError": -0.02975,
+        "YawRate": -0.020750001
+      },
+      "Two": false
+    },
+    {
+      "Name": "M15",
+      "Geometry": "progressive-c",
+      "Scenario": {
+        "Name": "M15",
+        "Level": 3,
+        "Speed": 14.725,
+        "Offset": 3.888,
+        "Start": 18.625,
+        "OutwardSpeed": -0.16624999,
+        "HeadingError": 0.01775,
+        "YawRate": 0.022750001
+      },
+      "Two": false
+    },
+    {
+      "Name": "M16",
+      "Geometry": "progressive-c",
+      "Scenario": {
+        "Name": "M16",
+        "Level": 4,
+        "Speed": 15.075001,
+        "Offset": 5.785,
+        "Start": 18.625,
+        "OutwardSpeed": 0.08375,
+        "HeadingError": -0.020750001,
+        "YawRate": -0.024750002
+      },
+      "Two": false
+    },
+    {
+      "Name": "M17",
+      "Geometry": "progressive-c",
+      "Scenario": {
+        "Name": "M17",
+        "Level": 4,
+        "Speed": 15.425,
+        "Offset": 3.075,
+        "Start": 18.625,
+        "OutwardSpeed": -0.11125,
+        "HeadingError": -0.02375,
+        "YawRate": 0.026750002
+      },
+      "Two": false
+    },
+    {
+      "Name": "M18",
+      "Geometry": "progressive-c",
+      "Scenario": {
+        "Name": "M18",
+        "Level": 4,
+        "Speed": 15.775,
+        "Offset": 4.972,
+        "Start": 18.625,
+        "OutwardSpeed": 0.13875,
+        "HeadingError": 0.02675,
+        "YawRate": -0.01675
+      },
+      "Two": false
+    },
+    {
+      "Name": "M19",
+      "Geometry": "progressive-c",
+      "Scenario": {
+        "Name": "M19",
+        "Level": 4,
+        "Speed": 16.125,
+        "Offset": 6.869,
+        "Start": 18.625,
+        "OutwardSpeed": -0.16624999,
+        "HeadingError": -0.02975,
+        "YawRate": 0.01875
+      },
+      "Two": false
+    },
+    {
+      "Name": "M20",
+      "Geometry": "progressive-c",
+      "Scenario": {
+        "Name": "M20",
+        "Level": 4,
+        "Speed": 16.475,
+        "Offset": 4.159,
+        "Start": 18.625,
+        "OutwardSpeed": 0.08375,
+        "HeadingError": -0.01775,
+        "YawRate": -0.020750001
+      },
+      "Two": false
+    },
+    {
+      "Name": "M21",
+      "Geometry": "progressive-c",
+      "Scenario": {
+        "Name": "M21",
+        "Level": 4,
+        "Speed": 16.825,
+        "Offset": 6.0559998,
+        "Start": 18.625,
+        "OutwardSpeed": -0.11125,
+        "HeadingError": 0.020750001,
+        "YawRate": 0.022750001
+      },
+      "Two": false
+    },
+    {
+      "Name": "M22",
+      "Geometry": "progressive-c",
+      "Scenario": {
+        "Name": "M22",
+        "Level": 4,
+        "Speed": 17.175,
+        "Offset": 3.346,
+        "Start": 18.625,
+        "OutwardSpeed": 0.13875,
+        "HeadingError": -0.02375,
+        "YawRate": -0.024750002
+      },
+      "Two": false
+    },
+    {
+      "Name": "M23",
+      "Geometry": "progressive-c",
+      "Scenario": {
+        "Name": "M23",
+        "Level": 4,
+        "Speed": 17.525002,
+        "Offset": 5.243,
+        "Start": 18.625,
+        "OutwardSpeed": -0.16624999,
+        "HeadingError": -0.02675,
+        "YawRate": 0.026750002
+      },
+      "Two": false
+    }
+  ],
+  "FinalTwo": [
+    {
+      "Name": "N00",
+      "Geometry": "progressive-c",
+      "Scenario": {
+        "Name": "N00",
+        "Level": 2,
+        "Speed": 9.775,
+        "Offset": 3.275,
+        "Start": 18.625,
+        "OutwardSpeed": -0.09375,
+        "HeadingError": -0.01875,
+        "YawRate": 0.01775
+      },
+      "Two": true
+    },
+    {
+      "Name": "N01",
+      "Geometry": "progressive-c",
+      "Scenario": {
+        "Name": "N01",
+        "Level": 2,
+        "Speed": 10.469999,
+        "Offset": 4.8,
+        "Start": 18.625,
+        "OutwardSpeed": 0.1175,
+        "HeadingError": 0.0225,
+        "YawRate": -0.01975
+      },
+      "Two": true
+    },
+    {
+      "Name": "N02",
+      "Geometry": "progressive-c",
+      "Scenario": {
+        "Name": "N02",
+        "Level": 3,
+        "Speed": 11.165,
+        "Offset": 6.3250003,
+        "Start": 18.625,
+        "OutwardSpeed": -0.14125,
+        "HeadingError": 0.026250001,
+        "YawRate": 0.021750001
+      },
+      "Two": true
+    },
+    {
+      "Name": "N03",
+      "Geometry": "progressive-c",
+      "Scenario": {
+        "Name": "N03",
+        "Level": 3,
+        "Speed": 11.86,
+        "Offset": 3.8850002,
+        "Start": 18.625,
+        "OutwardSpeed": 0.16499999,
+        "HeadingError": -0.030000001,
+        "YawRate": -0.02375
+      },
+      "Two": true
+    },
+    {
+      "Name": "N04",
+      "Geometry": "progressive-c",
+      "Scenario": {
+        "Name": "N04",
+        "Level": 3,
+        "Speed": 12.554999,
+        "Offset": 5.41,
+        "Start": 18.625,
+        "OutwardSpeed": -0.09375,
+        "HeadingError": 0.01875,
+        "YawRate": 0.02575
+      },
+      "Two": true
+    },
+    {
+      "Name": "N05",
+      "Geometry": "progressive-c",
+      "Scenario": {
+        "Name": "N05",
+        "Level": 3,
+        "Speed": 13.25,
+        "Offset": 6.9350004,
+        "Start": 18.625,
+        "OutwardSpeed": 0.1175,
+        "HeadingError": 0.0225,
+        "YawRate": -0.01775
+      },
+      "Two": true
+    },
+    {
+      "Name": "N06",
+      "Geometry": "progressive-c",
+      "Scenario": {
+        "Name": "N06",
+        "Level": 3,
+        "Speed": 13.945,
+        "Offset": 4.495,
+        "Start": 18.625,
+        "OutwardSpeed": -0.14125,
+        "HeadingError": -0.026250001,
+        "YawRate": 0.01975
+      },
+      "Two": true
+    },
+    {
+      "Name": "N07",
+      "Geometry": "progressive-c",
+      "Scenario": {
+        "Name": "N07",
+        "Level": 3,
+        "Speed": 14.639999,
+        "Offset": 6.0200005,
+        "Start": 18.625,
+        "OutwardSpeed": 0.16499999,
+        "HeadingError": 0.030000001,
+        "YawRate": -0.021750001
+      },
+      "Two": true
+    },
+    {
+      "Name": "N08",
+      "Geometry": "progressive-c",
+      "Scenario": {
+        "Name": "N08",
+        "Level": 4,
+        "Speed": 15.334999,
+        "Offset": 3.5800002,
+        "Start": 18.625,
+        "OutwardSpeed": -0.09375,
+        "HeadingError": 0.01875,
+        "YawRate": 0.02375
+      },
+      "Two": true
+    },
+    {
+      "Name": "N09",
+      "Geometry": "progressive-c",
+      "Scenario": {
+        "Name": "N09",
+        "Level": 4,
+        "Speed": 16.029999,
+        "Offset": 5.105,
+        "Start": 18.625,
+        "OutwardSpeed": 0.1175,
+        "HeadingError": -0.0225,
+        "YawRate": -0.02575
+      },
+      "Two": true
+    },
+    {
+      "Name": "N10",
+      "Geometry": "progressive-c",
+      "Scenario": {
+        "Name": "N10",
+        "Level": 4,
+        "Speed": 16.724998,
+        "Offset": 6.63,
+        "Start": 18.625,
+        "OutwardSpeed": -0.14125,
+        "HeadingError": 0.026250001,
+        "YawRate": 0.01775
+      },
+      "Two": true
+    },
+    {
+      "Name": "N11",
+      "Geometry": "progressive-c",
+      "Scenario": {
+        "Name": "N11",
+        "Level": 4,
+        "Speed": 17.42,
+        "Offset": 4.19,
+        "Start": 18.625,
+        "OutwardSpeed": 0.16499999,
+        "HeadingError": 0.030000001,
+        "YawRate": -0.01975
+      },
+      "Two": true
+    }
+  ],
+  "Transfer": [
+    {
+      "Name": "T00",
+      "Geometry": "egg-asymmetric",
+      "Scenario": {
+        "Name": "T00",
+        "Level": 2,
+        "Speed": 10.275,
+        "Offset": 3.575,
+        "Start": 18.125,
+        "OutwardSpeed": 0.11275,
+        "HeadingError": 0.02175,
+        "YawRate": -0.01975
+      },
+      "Two": false
+    },
+    {
+      "Name": "T01",
+      "Geometry": "egg-asymmetric",
+      "Scenario": {
+        "Name": "T01",
+        "Level": 2,
+        "Speed": 10.9,
+        "Offset": 4.526,
+        "Start": 18.125,
+        "OutwardSpeed": -0.11275,
+        "HeadingError": -0.02175,
+        "YawRate": 0.01975
+      },
+      "Two": false
+    },
+    {
+      "Name": "T02",
+      "Geometry": "egg-asymmetric",
+      "Scenario": {
+        "Name": "T02",
+        "Level": 3,
+        "Speed": 11.525,
+        "Offset": 5.477,
+        "Start": 18.125,
+        "OutwardSpeed": 0.11275,
+        "HeadingError": -0.02175,
+        "YawRate": -0.01975
+      },
+      "Two": false
+    },
+    {
+      "Name": "T03",
+      "Geometry": "egg-asymmetric",
+      "Scenario": {
+        "Name": "T03",
+        "Level": 3,
+        "Speed": 12.15,
+        "Offset": 6.428,
+        "Start": 18.125,
+        "OutwardSpeed": -0.11275,
+        "HeadingError": 0.02175,
+        "YawRate": 0.01975
+      },
+      "Two": false
+    },
+    {
+      "Name": "T04",
+      "Geometry": "egg-asymmetric",
+      "Scenario": {
+        "Name": "T04",
+        "Level": 3,
+        "Speed": 12.775,
+        "Offset": 3.892,
+        "Start": 18.125,
+        "OutwardSpeed": 0.11275,
+        "HeadingError": -0.02175,
+        "YawRate": -0.01975
+      },
+      "Two": false
+    },
+    {
+      "Name": "T05",
+      "Geometry": "egg-asymmetric",
+      "Scenario": {
+        "Name": "T05",
+        "Level": 3,
+        "Speed": 13.4,
+        "Offset": 4.843,
+        "Start": 18.125,
+        "OutwardSpeed": -0.11275,
+        "HeadingError": -0.02175,
+        "YawRate": 0.01975
+      },
+      "Two": false
+    },
+    {
+      "Name": "T06",
+      "Geometry": "egg-asymmetric",
+      "Scenario": {
+        "Name": "T06",
+        "Level": 3,
+        "Speed": 14.025,
+        "Offset": 5.794,
+        "Start": 18.125,
+        "OutwardSpeed": 0.11275,
+        "HeadingError": 0.02175,
+        "YawRate": -0.01975
+      },
+      "Two": true
+    },
+    {
+      "Name": "T07",
+      "Geometry": "egg-asymmetric",
+      "Scenario": {
+        "Name": "T07",
+        "Level": 3,
+        "Speed": 14.65,
+        "Offset": 6.745,
+        "Start": 18.125,
+        "OutwardSpeed": -0.11275,
+        "HeadingError": -0.02175,
+        "YawRate": 0.01975
+      },
+      "Two": true
+    },
+    {
+      "Name": "T08",
+      "Geometry": "egg-asymmetric",
+      "Scenario": {
+        "Name": "T08",
+        "Level": 4,
+        "Speed": 15.275,
+        "Offset": 4.209,
+        "Start": 18.125,
+        "OutwardSpeed": 0.11275,
+        "HeadingError": -0.02175,
+        "YawRate": -0.01975
+      },
+      "Two": true
+    },
+    {
+      "Name": "T09",
+      "Geometry": "egg-asymmetric",
+      "Scenario": {
+        "Name": "T09",
+        "Level": 4,
+        "Speed": 15.9,
+        "Offset": 5.16,
+        "Start": 18.125,
+        "OutwardSpeed": -0.11275,
+        "HeadingError": 0.02175,
+        "YawRate": 0.01975
+      },
+      "Two": true
+    },
+    {
+      "Name": "T10",
+      "Geometry": "egg-asymmetric",
+      "Scenario": {
+        "Name": "T10",
+        "Level": 4,
+        "Speed": 16.525,
+        "Offset": 6.111,
+        "Start": 18.125,
+        "OutwardSpeed": 0.11275,
+        "HeadingError": -0.02175,
+        "YawRate": -0.01975
+      },
+      "Two": true
+    },
+    {
+      "Name": "T11",
+      "Geometry": "egg-asymmetric",
+      "Scenario": {
+        "Name": "T11",
+        "Level": 4,
+        "Speed": 17.15,
+        "Offset": 3.575,
+        "Start": 18.125,
+        "OutwardSpeed": -0.11275,
+        "HeadingError": -0.02175,
+        "YawRate": 0.01975
+      },
+      "Two": true
+    }
+  ],
+  "StartingPolicy": {
+    "PreviewSeconds": 0.6929365719922038,
+    "DirectionWeight": 4,
+    "YawWeight": 1.9188859030185472,
+    "Drive": 0.36751342500789463,
+    "ThrottleWeight": 4,
+    "ProgressWeight": 1.8138912583004796,
+    "SteeringChangeWeight": 0.054859424362461905,
+    "GeometrySpeedWeight": 0.36794194916556583,
+    "Values": [
+      0.6929365719922038,
+      4,
+      1.9188859030185472,
+      0.36751342500789463,
+      4,
+      1.8138912583004796,
+      0.054859424362461905,
+      0.36794194916556583
+    ]
+  },
+  "StartingPolicyHash": "7361147564E7D5711B973401E90840F59CB5CAE29668A492209B1D1AA05A9810",
+  "Sources": {
+    "FreeLearningController.cs": "908149F9A44A2A2E3120855C06C366CDFFA33F1214DC24BF58BD47B62E3414AE",
+    "FreeLearningExperiment.cs": "6B4B1865E0363EB32C8D50A6ADCAAFB47903FBF62845A14992393805D965CB56",
+    "FreeRacingModel.cs": "11958B125963658F5A66925557F95D2696F8A8E12DE13AA183B7CF5BBBB535D9",
+    "WorldRunner.cs": "9FC4D50020E481EB210181B271BCDED6DF2A1C627C9DB25C68896E8EB02ACD2C",
+    "WorldModel.cs": "B8FA04CE1A9B6809982AEBB6DFF75AED8C82043B6ACDC2F5E0B46D94E57EAB4E",
+    "ContactAdapter.cs": "1CB8EC9C92937B9A42568A12A1F19530088A6DC2AB7EAAE53F04E8F58D0C0C4F",
+    "TwoContactBikeDynamics.cs": "7F5F9FFEF31B5F3CF242C140077CBB9D429F210320EE9055AC0B0EE3EB9CBBEC",
+    "RearWheelDynamics.cs": "AD74D451CA769D8189BD17CCB61A41779F7540F3AF489BC4B716A799205FB7A3",
+    "Engine500.cs": "209B62347B2F37C4F21294FA9F986625A9CEC29BA0CAFAFA88595C34CCBDA9A6",
+    "LoadBasedTyreGrip.cs": "511D95E8FE959935D34FAE7C6EA06BD3650977702F78CB9D1452DF4376DE0172",
+    "TrackFrame.cs": "85069E1CCD70CC2FD8A25A5CC32A1CFF76C17E24DB1B9729C6934A8D29138B4F",
+    "CurveBoundaryAudit.cs": "3DC41B6886446DCDD6BA96C7A42FAB54963F0D576FD891F2D1075A931A63DE9D",
+    "RobustLearningModel.cs": "680609D8A46A43A1687247985BF2CB5F6054B7CD3B9D9CD07A1A1E22EE8529B5",
+    "RobustLearningExperiment.cs": "7212FAB90C5BFCD4E09A344238F0123E4B1C34A1113637015CBC22962DC4D1D8",
+    "RobustLearningAudit.cs": "DFFA2A3D7DC5B17F541E8FA3A890451A60F45D1EB54BDDBE360E979DD005EB11",
+    "RobustSweepCertificate.cs": "CB136104C3034AA08303405BFBD350C15D840565C009030E0B11F2418F00FAC6",
+    "ExtendedLearningExperiment.cs": "FD3DE0168B6A00D2DF168349D338FF606E7B55C489B744AD96ACF1E45FF7EB0B",
+    "Program.cs": "573A558CF34306FB6AF87B52D7037693ADF202AE49AAA5E20691817E584C8F7B",
+    "FullThrottleLearningExperiment.cs": "76E4E3BAA7861771A4FBF514B11092C5E65AE9E19F8635AD309CFE7AE8A87A43",
+    "RiderDecisionObjective133.cs": "4938EEA115124B7A7B259EE04E0F8E5E7FF2689B1F47802E72515C8897131FBB",
+    "RiderDecisionExperiment133.cs": "0315BD591780182D7A0C5BEAF4A159595C28AC0391C4E6FF792F5A67263DFBF2",
+    "RiderDecisionAudit133.cs": "203CA380B2918F88397444F2E9ABB0C986BA46BE42BA572493DE4BECB86717F2",
+    "TrackAwareness134.cs": "D3FBA7EAFF1BD8B0D994EBC8E5199BEB1BED386D53AA9CAF07CC33667E7A3305",
+    "TrackAwarenessExperiment134.cs": "CFF43F69611ED278461C24AAAAF4E99108BEAE5FEF38E3FBC9CA1CA71A6B2DD4",
+    "TrackAwarenessAudit134.cs": "73B3F27D5FB1F2DE167765C8B139881E50C7F029FB567A7094B4A58315AD10D1"
+  },
+  "Limits": {
+    "geometry": 5,
+    "diagnostic": 40,
+    "offline": 20,
+    "train-ab": 240,
+    "selection": 72,
+    "final": 192
+  },
+  "NativeWorldLimit": 600,
+  "CpuSeconds": 6500,
+  "Forecasts": 1400000,
+  "Contacts": 125000000,
+  "GenerationCpuSeconds": 600,
+  "EpisodeCpuSeconds": 30,
+  "Basis133": {
+    "Worlds": 636,
+    "CpuSeconds": 4617.59375,
+    "Forecasts": 1235197,
+    "Contacts": 111767891
+  },
+  "Geometry": "Train/select progressive-b \u002B egg-medium (different curvature and width profiles). Main held progressive-c24single/12two; transfer held egg-asymmetric6single/6two. Neither held geometry enters preflight/training/selection driving. Cheap static shape validation may inspect all frozen geometries without rider outcomes.",
+  "Mechanism": "Only geometry-speed utility changes in B, same GeometrySpeedWeight and seven other original terms/weights. Read-only adaptive20-60m profile plus next-corner descriptor. Replace single-point geometry-speed penalty by spatial continuation heuristic: actual H09 endpoint, same-angle H09 coast response, tyre capacity, actuator delay, observed yaw authority, and optimistic width affordance. No fixed line, speed map, forced coasting or turn point. Extrapolated arrival/coast/width estimates are explicitly uncertified; H09 safety and native certificate unchanged. Threatened endpoints keep old cost. Eight same parameters/bounds; no133 B1 objective.",
+  "CEM": "2seeds x2arms x4generations x5policies x3shared cases=240. One single\u002Btwo uninterrupted two bends; two geometry cohorts. Same132 R0, DrawPolicy,32normal draws/generation,2elites,.4/.6mean,std floor.15range. Clone archive distributions on resume. No extra generations.",
+  "SelectionRule": "Per arm/seed up to2 distinct vectors: final R0 winner and best R0 winner on recurring even cohort. Add unchanged12023 and131 references; at most10x6=60 selection worlds within72cap. Same native R0 for both arms. Freeze A/B and all final aliases/hashes at0 final worlds; no swap after opening final.",
+  "Preflight": "Four frozen cases on training geometries, unchanged12023 A/B before learning. Geometry and H09/native continuation parity must pass; native repeats/OFF exact. Diagnose when B loses \u003E1 completion or common two median regresses\u003E10%; training remains closed until cause resolved. No final outcomes to decide training. Counterfactual timing uses only finite sampled maneuvers, not a global last-reaction claim.",
+  "Reserve": "Before each training generation stop if native\u002Boffline CPU\u003E3800 or contacts\u003E70M or forecasts\u003E800k, leaving2700CPU/55Mcontacts/600kforecasts for selection/final. No raising budgets to fill generations. Every native world reserved before creation.",
+  "PASS": "24/24 single12/12 two on progressive-c; paired median two\u003C=-2% vs133A0; paired median single\u003C=\u002B5%, max\u003C=\u002B15%; transfer at least as reliable as trainedA and measurable geometry-specific benefit; unchanged physics/safety/defaultOFF, independent and reproducible. PARTIAL for valid but insufficient benefit; FAIL for geometry/physics/queue/leak/reproduction error.",
+  "RawDirectory": "C:\\Users\\Administrator\\Documents\\Codex\\2026-10-23\\files-pasted-by-the-user-pr\\work\\track-awareness-134-raw"
+}

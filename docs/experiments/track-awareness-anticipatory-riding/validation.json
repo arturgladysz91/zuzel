@@ -1,0 +1,80 @@
+{
+  "BaseHead": "5ed4499b2118ca8206bf8dcaf9741dc0790c01ac",
+  "ReleaseBuild": {
+    "Passed": true,
+    "Warnings": 0,
+    "Errors": 0,
+    "Restore": "NuGet audit refreshed successfully with network access after sandbox NU1900; no suppression or dependency change"
+  },
+  "LocalCSharp": {
+    "CorePassed": 2011,
+    "TrajectoryPassed": 395,
+    "TotalPassed": 2406,
+    "CoreScope": "2010 core cases plus the subsequently added legacy-response interpretation case; all passed. Remote Draft executes all2011 core together."
+  },
+  "PythonDataPassed": 203,
+  "PythonCiPassed": 7,
+  "NodePassed": 50,
+  "Discovery": {
+    "FullDiscovered": 2927,
+    "UnionShards": 2927,
+    "Missing": [],
+    "Extra": [],
+    "UnintendedDuplicates": [],
+    "ShardCounts": {
+      "core": 2011,
+      "trajectory": 395,
+      "historical-analysis": 473,
+      "four-rider": 48
+    }
+  },
+  "FrozenConsumers": 39,
+  "PreFinalCem": {
+    "CemArchiveReproduced": true,
+    "All80PoliciesReproduced": true,
+    "FinalWorldsAtCheck": 0,
+    "ReservationCountAtCheck": 292,
+    "Test": "TrackAwarenessTests.ArchivedCemReproducesEvery134DrawAndEliteDistribution",
+    "TrxSha256": "E9B1412E4D3FB64537B4A5AE62AA87EA2B32AD3532751FA0AB116293E2484739",
+    "Scope": "Read-only CEM replay before final; no native world. Four generations, five policies, two arms, two seeds."
+  },
+  "ProcessCosts": [
+    {
+      "TotalProcessCpuSeconds": 1969.828125,
+      "Stage": "train",
+      "Scope": "Whole dotnet stage process including archive serialization; observed from original process start. Ledger simulation CPU retained separately."
+    },
+    {
+      "ExitCode": 0,
+      "Stage": "select",
+      "Scope": "Whole dotnet stage CPU, including raw compression; separate from simulation CPU ledger.",
+      "TotalProcessCpuSeconds": 242.046875
+    },
+    {
+      "ExitCode": 0,
+      "Stage": "freeze-winners",
+      "Scope": "Whole dotnet stage CPU, including raw compression; separate from simulation CPU ledger.",
+      "TotalProcessCpuSeconds": 0.21875
+    },
+    {
+      "ExitCode": 0,
+      "Stage": "final",
+      "Scope": "Whole dotnet stage CPU, including raw compression; separate from simulation CPU ledger.",
+      "TotalProcessCpuSeconds": 1083.140625
+    }
+  ],
+  "ExperimentCostScope": "attempts.json uses the same simulation/audit CPU definition as133. Whole-process costs above also include raw serialization. Automatic test/plot/report CPU is separate; do not add generation or process CPU to the ledger a second time.",
+  "WindowsCI": "Required standard Draft core+trajectory/build/discovery/Python/Node; confirmed run URL and tested HEAD will be recorded in the PR description after publication.",
+  "HistoricalMatrix": "Not repeated locally; standard Draft scope. Historical473 and four-rider48 cases discovered and assigned exactly once.",
+  "Browser": {
+    "Checked": true,
+    "N00Geometry": "progressive-c",
+    "T07Geometry": "egg-asymmetric",
+    "N00BFinalGateSeconds": 17.69,
+    "T07BFinalGateSeconds": 16.91,
+    "NativeComparisonPolicies": 4,
+    "ConsoleErrors": 0,
+    "KnowledgeEdges": "Exported inner/outer reference offset respected; no target path",
+    "QueueDiagnostics": "Known pending + held inherited grid extremes, validated against >100 native0.23s prefixes"
+  }
+}

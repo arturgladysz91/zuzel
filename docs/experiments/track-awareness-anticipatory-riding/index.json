@@ -1,0 +1,491 @@
+{
+  "Title": "Track Awareness & Anticipatory Riding #134",
+  "Grade": "PARTIAL",
+  "TrackAwareness": true,
+  "DefaultRun": "final-134-B-progressive-c-N00",
+  "PreferredPolicy": "134-B",
+  "RawDirectory": "C:\\Users\\Administrator\\Documents\\Codex\\2026-10-23\\files-pasted-by-the-user-pr\\work\\track-awareness-134-raw",
+  "Labels": {
+    "131-H09": "#131 #4061",
+    "133-A0": "#133 A0 #12023",
+    "134-A": "#134 A · trening bez profilu",
+    "134-B": "#134 B · trening z profilem",
+    "preflight-A": "#12023 bez uczenia · A",
+    "preflight-B": "#12023 bez uczenia · B",
+    "timing-P1-060-drive": "Jedna komenda w 0.6s",
+    "timing-base": "Oryginalna A #12023",
+    "timing-P3-020-drive": "Jedna komenda w 0.2s",
+    "timing-P3-040-drive": "Jedna komenda w 0.4s",
+    "timing-P3-060-drive": "Jedna komenda w 0.6s"
+  },
+  "Colors": {
+    "131-H09": "#ffd27b",
+    "133-A0": "#d99fe3",
+    "134-A": "#ff9c86",
+    "134-B": "#73dfdf",
+    "preflight-A": "#ffd27b",
+    "preflight-B": "#73dfdf",
+    "timing-P1-060-drive": "#73dfdf",
+    "timing-base": "#ffd27b",
+    "timing-P3-020-drive": "#73dfdf",
+    "timing-P3-040-drive": "#73dfdf",
+    "timing-P3-060-drive": "#73dfdf"
+  },
+  "Horizons": {
+    "131-H09": 0.9,
+    "133-A0": 0.9,
+    "134-A": 0.9,
+    "134-B": 0.9,
+    "preflight-A": 0.9,
+    "preflight-B": 0.9,
+    "timing-P1-060-drive": 0.9,
+    "timing-base": 0.9,
+    "timing-P3-020-drive": 0.9,
+    "timing-P3-040-drive": 0.9,
+    "timing-P3-060-drive": 0.9
+  },
+  "TimeGain": "time-gain.json",
+  "ComparisonCharts": true,
+  "Groups": [
+    {
+      "Id": "M00",
+      "Scenario": {
+        "Name": "M00",
+        "Level": 2,
+        "Speed": 9.475,
+        "Offset": 3.075,
+        "Start": 18.625,
+        "OutwardSpeed": 0.08375,
+        "HeadingError": 0.01775,
+        "YawRate": -0.01675
+      },
+      "TwoBends": false,
+      "GeometryFile": "progressive-c-geometry.json",
+      "Reasons": [
+        "nowy niezależny finał",
+        "pierwszy łuk"
+      ],
+      "Scope": "Wspólny stan i rzeczywista geometria. Jawne aliasy: {\"131-H09\": \"131-H09\", \"133-A0\": \"133-A0\", \"134-A\": \"134-A\", \"134-B\": \"134-B\"}. Bez resetów między łukami; DNF nie ma czasu mety.",
+      "Runs": [
+        {
+          "Policy": "131-H09",
+          "Name": "final-131-H09-progressive-c-M00"
+        },
+        {
+          "Policy": "133-A0",
+          "Name": "final-133-A0-progressive-c-M00"
+        },
+        {
+          "Policy": "134-A",
+          "Name": "final-134-A-progressive-c-M00"
+        },
+        {
+          "Policy": "134-B",
+          "Name": "final-134-B-progressive-c-M00"
+        }
+      ]
+    },
+    {
+      "Id": "N00",
+      "Scenario": {
+        "Name": "N00",
+        "Level": 2,
+        "Speed": 9.775,
+        "Offset": 3.275,
+        "Start": 18.625,
+        "OutwardSpeed": -0.09375,
+        "HeadingError": -0.01875,
+        "YawRate": 0.01775
+      },
+      "TwoBends": true,
+      "GeometryFile": "progressive-c-geometry.json",
+      "Reasons": [
+        "nowy niezależny finał",
+        "dwa ciągłe łuki"
+      ],
+      "Scope": "Wspólny stan i rzeczywista geometria. Jawne aliasy: {\"131-H09\": \"131-H09\", \"133-A0\": \"133-A0\", \"134-A\": \"134-A\", \"134-B\": \"134-B\"}. Bez resetów między łukami; DNF nie ma czasu mety.",
+      "Runs": [
+        {
+          "Policy": "131-H09",
+          "Name": "final-131-H09-progressive-c-N00"
+        },
+        {
+          "Policy": "133-A0",
+          "Name": "final-133-A0-progressive-c-N00"
+        },
+        {
+          "Policy": "134-A",
+          "Name": "final-134-A-progressive-c-N00"
+        },
+        {
+          "Policy": "134-B",
+          "Name": "final-134-B-progressive-c-N00"
+        }
+      ]
+    },
+    {
+      "Id": "T06",
+      "Scenario": {
+        "Name": "T06",
+        "Level": 3,
+        "Speed": 14.025,
+        "Offset": 5.794,
+        "Start": 18.125,
+        "OutwardSpeed": 0.11275,
+        "HeadingError": 0.02175,
+        "YawRate": -0.01975
+      },
+      "TwoBends": true,
+      "GeometryFile": "egg-asymmetric-geometry.json",
+      "Reasons": [
+        "nieznana geometria transferu",
+        "dwa ciągłe łuki"
+      ],
+      "Scope": "Wspólny stan i rzeczywista geometria. Jawne aliasy: {\"131-H09\": \"131-H09\", \"133-A0\": \"133-A0\", \"134-A\": \"134-A\", \"134-B\": \"134-B\"}. Bez resetów między łukami; DNF nie ma czasu mety.",
+      "Runs": [
+        {
+          "Policy": "131-H09",
+          "Name": "final-131-H09-egg-asymmetric-T06"
+        },
+        {
+          "Policy": "133-A0",
+          "Name": "final-133-A0-egg-asymmetric-T06"
+        },
+        {
+          "Policy": "134-A",
+          "Name": "final-134-A-egg-asymmetric-T06"
+        },
+        {
+          "Policy": "134-B",
+          "Name": "final-134-B-egg-asymmetric-T06"
+        }
+      ]
+    },
+    {
+      "Id": "T07",
+      "Scenario": {
+        "Name": "T07",
+        "Level": 3,
+        "Speed": 14.65,
+        "Offset": 6.745,
+        "Start": 18.125,
+        "OutwardSpeed": -0.11275,
+        "HeadingError": -0.02175,
+        "YawRate": 0.01975
+      },
+      "TwoBends": true,
+      "GeometryFile": "egg-asymmetric-geometry.json",
+      "Reasons": [
+        "nieznana geometria transferu",
+        "dwa ciągłe łuki"
+      ],
+      "Scope": "Wspólny stan i rzeczywista geometria. Jawne aliasy: {\"131-H09\": \"131-H09\", \"133-A0\": \"133-A0\", \"134-A\": \"134-A\", \"134-B\": \"134-B\"}. Bez resetów między łukami; DNF nie ma czasu mety.",
+      "Runs": [
+        {
+          "Policy": "131-H09",
+          "Name": "final-131-H09-egg-asymmetric-T07"
+        },
+        {
+          "Policy": "133-A0",
+          "Name": "final-133-A0-egg-asymmetric-T07"
+        },
+        {
+          "Policy": "134-A",
+          "Name": "final-134-A-egg-asymmetric-T07"
+        },
+        {
+          "Policy": "134-B",
+          "Name": "final-134-B-egg-asymmetric-T07"
+        }
+      ]
+    },
+    {
+      "Id": "N02",
+      "Scenario": {
+        "Name": "N02",
+        "Level": 3,
+        "Speed": 11.165,
+        "Offset": 6.3250003,
+        "Start": 18.625,
+        "OutwardSpeed": -0.14125,
+        "HeadingError": 0.026250001,
+        "YawRate": 0.021750001
+      },
+      "TwoBends": true,
+      "GeometryFile": "progressive-c-geometry.json",
+      "Reasons": [
+        "nowy niezależny finał",
+        "dwa ciągłe łuki"
+      ],
+      "Scope": "Wspólny stan i rzeczywista geometria. Jawne aliasy: {\"131-H09\": \"131-H09\", \"133-A0\": \"133-A0\", \"134-A\": \"134-A\", \"134-B\": \"134-B\"}. Bez resetów między łukami; DNF nie ma czasu mety.",
+      "Runs": [
+        {
+          "Policy": "131-H09",
+          "Name": "final-131-H09-progressive-c-N02"
+        },
+        {
+          "Policy": "133-A0",
+          "Name": "final-133-A0-progressive-c-N02"
+        },
+        {
+          "Policy": "134-A",
+          "Name": "final-134-A-progressive-c-N02"
+        },
+        {
+          "Policy": "134-B",
+          "Name": "final-134-B-progressive-c-N02"
+        }
+      ]
+    },
+    {
+      "Id": "AB-P0",
+      "Scenario": {
+        "Name": "P0",
+        "Level": 2,
+        "Speed": 10.125,
+        "Offset": 4.325,
+        "Start": 17.875,
+        "OutwardSpeed": 0.095,
+        "HeadingError": -0.01925,
+        "YawRate": 0.01825
+      },
+      "TwoBends": false,
+      "GeometryFile": "progressive-b-geometry.json",
+      "Reasons": [
+        "izolowany wpływ wiedzy, bez retreningu"
+      ],
+      "Scope": "Te same osiem wag, H09 i akcje. Zmienia się tylko miękka ocena przyszłej geometrii. Prognoza H09 nie jest pełną trajektorią przejazdu.",
+      "Runs": [
+        {
+          "Policy": "preflight-A",
+          "Name": "profile-A-P0"
+        },
+        {
+          "Policy": "preflight-B",
+          "Name": "profile-B-P0"
+        }
+      ]
+    },
+    {
+      "Id": "AB-P1",
+      "Scenario": {
+        "Name": "P1",
+        "Level": 3,
+        "Speed": 12.825,
+        "Offset": 6.275,
+        "Start": 19.125,
+        "OutwardSpeed": -0.125,
+        "HeadingError": 0.02125,
+        "YawRate": -0.02225
+      },
+      "TwoBends": true,
+      "GeometryFile": "progressive-b-geometry.json",
+      "Reasons": [
+        "izolowany wpływ wiedzy, bez retreningu"
+      ],
+      "Scope": "Te same osiem wag, H09 i akcje. Zmienia się tylko miękka ocena przyszłej geometrii. Prognoza H09 nie jest pełną trajektorią przejazdu.",
+      "Runs": [
+        {
+          "Policy": "preflight-A",
+          "Name": "profile-A-P1"
+        },
+        {
+          "Policy": "preflight-B",
+          "Name": "profile-B-P1"
+        }
+      ]
+    },
+    {
+      "Id": "AB-P2",
+      "Scenario": {
+        "Name": "P2",
+        "Level": 4,
+        "Speed": 15.825,
+        "Offset": 4.275,
+        "Start": 18.125,
+        "OutwardSpeed": 0.115,
+        "HeadingError": -0.02325,
+        "YawRate": 0.02025
+      },
+      "TwoBends": true,
+      "GeometryFile": "egg-medium-geometry.json",
+      "Reasons": [
+        "izolowany wpływ wiedzy, bez retreningu"
+      ],
+      "Scope": "Te same osiem wag, H09 i akcje. Zmienia się tylko miękka ocena przyszłej geometrii. Prognoza H09 nie jest pełną trajektorią przejazdu.",
+      "Runs": [
+        {
+          "Policy": "preflight-A",
+          "Name": "profile-A-P2"
+        },
+        {
+          "Policy": "preflight-B",
+          "Name": "profile-B-P2"
+        }
+      ]
+    },
+    {
+      "Id": "AB-P3",
+      "Scenario": {
+        "Name": "P3",
+        "Level": 4,
+        "Speed": 17.525,
+        "Offset": 6.125,
+        "Start": 19.375,
+        "OutwardSpeed": -0.095,
+        "HeadingError": 0.01725,
+        "YawRate": -0.01625
+      },
+      "TwoBends": true,
+      "GeometryFile": "egg-medium-geometry.json",
+      "Reasons": [
+        "izolowany wpływ wiedzy, bez retreningu"
+      ],
+      "Scope": "Te same osiem wag, H09 i akcje. Zmienia się tylko miękka ocena przyszłej geometrii. Prognoza H09 nie jest pełną trajektorią przejazdu.",
+      "Runs": [
+        {
+          "Policy": "preflight-A",
+          "Name": "profile-A-P3"
+        },
+        {
+          "Policy": "preflight-B",
+          "Name": "profile-B-P3"
+        }
+      ]
+    },
+    {
+      "Id": "timing-P1-060-drive",
+      "Scenario": {
+        "Name": "P1",
+        "Level": 3,
+        "Speed": 12.825,
+        "Offset": 6.275,
+        "Start": 19.125,
+        "OutwardSpeed": -0.125,
+        "HeadingError": 0.02125,
+        "YawRate": -0.02225
+      },
+      "TwoBends": true,
+      "GeometryFile": "progressive-b-geometry.json",
+      "Reasons": [
+        "kontrolowana kontynuacja",
+        "reakcja0,24s"
+      ],
+      "Scope": "Jedna komenda, potem A. Osiągalność badana tylko dla2akcji i4chwil co0,2s; brak twierdzenia o globalnie ostatniej możliwej reakcji. Nieskuteczna próba pozostaje DNF.",
+      "Runs": [
+        {
+          "Policy": "timing-base",
+          "Name": "profile-A-P1"
+        },
+        {
+          "Policy": "timing-P1-060-drive",
+          "Name": "timing-P1-060-drive"
+        }
+      ]
+    },
+    {
+      "Id": "timing-P3-020-drive",
+      "Scenario": {
+        "Name": "P3",
+        "Level": 4,
+        "Speed": 17.525,
+        "Offset": 6.125,
+        "Start": 19.375,
+        "OutwardSpeed": -0.095,
+        "HeadingError": 0.01725,
+        "YawRate": -0.01625
+      },
+      "TwoBends": true,
+      "GeometryFile": "egg-medium-geometry.json",
+      "Reasons": [
+        "kontrolowana kontynuacja",
+        "reakcja0,24s"
+      ],
+      "Scope": "Jedna komenda, potem A. Osiągalność badana tylko dla2akcji i4chwil co0,2s; brak twierdzenia o globalnie ostatniej możliwej reakcji. Nieskuteczna próba pozostaje DNF.",
+      "Runs": [
+        {
+          "Policy": "timing-base",
+          "Name": "profile-A-P3"
+        },
+        {
+          "Policy": "timing-P3-020-drive",
+          "Name": "timing-P3-020-drive"
+        }
+      ]
+    },
+    {
+      "Id": "timing-P3-040-drive",
+      "Scenario": {
+        "Name": "P3",
+        "Level": 4,
+        "Speed": 17.525,
+        "Offset": 6.125,
+        "Start": 19.375,
+        "OutwardSpeed": -0.095,
+        "HeadingError": 0.01725,
+        "YawRate": -0.01625
+      },
+      "TwoBends": true,
+      "GeometryFile": "egg-medium-geometry.json",
+      "Reasons": [
+        "kontrolowana kontynuacja",
+        "reakcja0,24s"
+      ],
+      "Scope": "Jedna komenda, potem A. Osiągalność badana tylko dla2akcji i4chwil co0,2s; brak twierdzenia o globalnie ostatniej możliwej reakcji. Nieskuteczna próba pozostaje DNF.",
+      "Runs": [
+        {
+          "Policy": "timing-base",
+          "Name": "profile-A-P3"
+        },
+        {
+          "Policy": "timing-P3-040-drive",
+          "Name": "timing-P3-040-drive"
+        }
+      ]
+    },
+    {
+      "Id": "timing-P3-060-drive",
+      "Scenario": {
+        "Name": "P3",
+        "Level": 4,
+        "Speed": 17.525,
+        "Offset": 6.125,
+        "Start": 19.375,
+        "OutwardSpeed": -0.095,
+        "HeadingError": 0.01725,
+        "YawRate": -0.01625
+      },
+      "TwoBends": true,
+      "GeometryFile": "egg-medium-geometry.json",
+      "Reasons": [
+        "kontrolowana kontynuacja",
+        "reakcja0,24s"
+      ],
+      "Scope": "Jedna komenda, potem A. Osiągalność badana tylko dla2akcji i4chwil co0,2s; brak twierdzenia o globalnie ostatniej możliwej reakcji. Nieskuteczna próba pozostaje DNF.",
+      "Runs": [
+        {
+          "Policy": "timing-base",
+          "Name": "profile-A-P3"
+        },
+        {
+          "Policy": "timing-P3-060-drive",
+          "Name": "timing-P3-060-drive"
+        }
+      ]
+    }
+  ],
+  "Charts": [
+    [
+      "learning.svg",
+      "Uczenie obu ramion i seedów"
+    ],
+    [
+      "final.svg",
+      "Nowe finały i transfer"
+    ],
+    [
+      "anticipation.svg",
+      "Decyzja, aktywacja i wykonanie bez retreningu"
+    ]
+  ]
+}

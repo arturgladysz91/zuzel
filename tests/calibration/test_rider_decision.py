@@ -1,7 +1,7 @@
 """Audit frozen #133 evidence without creating native worlds or retuning."""
 import gzip, hashlib, json, math, statistics, unittest
 from pathlib import Path
-from extended_source_guard import source132
+from extended_source_guard import source132, source133
 
 ROOT = Path(__file__).resolve().parents[2]
 D = ROOT/'docs/experiments/rider-decision-optimization'
@@ -19,7 +19,7 @@ class RiderDecisionEvidence(unittest.TestCase):
         amendment = load('budget-amendment.json')
         self.assertEqual(sha((D/'budget-source-before.txt').read_bytes()), amendment['OriginalSourceSha256'])
         for name, digest in self.p['Sources'].items():
-            current = sha((ROOT/'tools/shared-world-speedway'/name).read_bytes())
+            current = sha(source133(name))
             if name == 'RiderDecisionExperiment133.cs':
                 self.assertEqual(digest, amendment['OriginalSourceSha256'])
                 repair = load('metadata-repair.json')
