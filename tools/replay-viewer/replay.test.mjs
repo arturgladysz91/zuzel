@@ -7,6 +7,7 @@ import './robust-learning.test.mjs';
 import './extended-learning.test.mjs';
 import './full-throttle-learning.test.mjs';
 import './rider-decision.test.mjs';
+import './track-awareness.test.mjs';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { gunzipSync } from 'node:zlib';

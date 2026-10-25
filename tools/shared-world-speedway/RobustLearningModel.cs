@@ -21,7 +21,10 @@ public sealed record RobustMetrics(FreeLearningMetrics Native)
 }
 public sealed record RobustTelemetry(double Time,double Seconds,TwoContactForces Forces,RearWheelStep Wheel,
     double BodyEnergyDelta,double EnergyResidual,double LegacyCertificate,double AcceptedCertificate);
-public sealed record RobustEpisode(FreeLearningEpisode Replay,RobustMetrics Metrics,RobustTelemetry[] Telemetry);
+public sealed record RobustEpisode(FreeLearningEpisode Replay,RobustMetrics Metrics,RobustTelemetry[] Telemetry){
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
+    public string? GeometryName {get;init;}
+}
 public sealed record RobustEvaluation(string Variant,int Generation,int Id,FreeLearningPolicy Policy,string[] Scenarios,RobustMetrics[] Results);
 public sealed record RobustGeneration(string Variant,int Generation,int Episodes,RobustEvaluation[] Candidates,
     int BestId,FreeLearningPolicy BestPolicy,double[] Mean,double[] Std,double CpuSeconds,long Evaluations,long Forecasts);

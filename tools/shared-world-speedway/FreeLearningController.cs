@@ -18,9 +18,15 @@ public sealed record FreeLearningPolicy(double PreviewSeconds=.5, double Directi
 }
 public enum FreeActionSafety { SafeInHorizon, Uncertain, Unsafe }
 public sealed record FreeLearningCandidate(FreeRacingAction Action,FreeActionSafety Safety,double Score,double Progress,
-    double Clearance,double FutureClearance,double ExitSpeed,double ExitBeta,double DirectionError);
+    double Clearance,double FutureClearance,double ExitSpeed,double ExitBeta,double DirectionError){
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
+    public TrackReachability134? TrackAwareness {get;init;}
+}
 public sealed record FreeLearningDecision(double Time,FreeRacingAction Action,FreeActionSafety Safety,bool NoSafeContinuation,
-    FreeLearningCandidate[] Candidates,int ForceEvaluations,int Forecasts);
+    FreeLearningCandidate[] Candidates,int ForceEvaluations,int Forecasts){
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
+    public TrackKnowledge134? TrackKnowledge {get;init;}
+}
 
 public sealed class FreeLearningController
 {
@@ -57,9 +63,11 @@ public sealed class FreeLearningController
             .Append(input.Active).Distinct().ToArray();
     }
     public static FreeLearningDecision Choose(FreeRacingInput input,FreeLearningPolicy policy,RiderSpec spec,TrackFrame frame,
-        TrackStateSnapshot surface,WorldParameters p,float mass,float inertia,double horizonSeconds=HorizonSeconds,bool normalizeProgress=false,bool fullThrottleCandidate=false,bool decisionObjective=false){
+        TrackStateSnapshot surface,WorldParameters p,float mass,float inertia,double horizonSeconds=HorizonSeconds,bool normalizeProgress=false,bool fullThrottleCandidate=false,bool decisionObjective=false,bool trackAwareness=false){
+        if(decisionObjective&&trackAwareness)throw new ArgumentException("Isolate the133 and134 score experiments.");
         if(!double.IsFinite(horizonSeconds)||horizonSeconds<.3||horizonSeconds>FreeRacingModel.MaximumHorizonSeconds)throw new ArgumentException("Bounded audit horizon required.");
         var candidates=new List<FreeLearningCandidate>();var evaluations=0;var forecasts=0;
+        var held=trackAwareness?new List<(FreeLearningCandidate Candidate,FreeRacingPrediction Prediction,double Capacity,double OldCost)>():null;
         foreach(var action in Actions(input,policy,fullThrottleCandidate)){
             var prediction=FreeRacingModel.Predict(input,spec,frame,surface,p,mass,inertia,horizonSeconds,action);
             evaluations+=prediction.ForceEvaluations;forecasts++;
@@ -90,8 +98,15 @@ public sealed class FreeLearningController
             if(decisionObjective)score+=policy.DirectionWeight*(RiderDecisionObjective133.DirectionShape(error,safety,futureGap,progress)-error*error*10);
             if(safety==FreeActionSafety.Unsafe)score+=10000*Math.Pow(Math.Max(.001,-clearance),2);
             candidates.Add(new(action,safety,score,progress,clearance,futureGap,v.Speed,v.SlideRadians,error));
+            held?.Add((candidates[^1],prediction,capacity,policy.GeometrySpeedWeight*Math.Pow(Math.Max(0,v.Speed-speedEnvelope),2)));
+        }
+        if(held is not null)for(int i=0;i<candidates.Count;i++){
+            var item=held[i];var coast=held.First(h=>h.Candidate.Action.SteeringRadians==item.Candidate.Action.SteeringRadians&&h.Candidate.Action.Drive==0);
+            var estimate=TrackAwareness134.Evaluate(input,policy,frame,p,item.Candidate,item.Prediction,coast.Prediction,item.Capacity,item.OldCost);
+            candidates[i]=item.Candidate with{Score=item.Candidate.Score+estimate.ScoreDelta,TrackAwareness=estimate};
         }
         var chosen=candidates.OrderBy(c=>c.Safety).ThenBy(c=>c.Score).ThenBy(c=>Math.Abs(c.Action.SteeringRadians-input.Active.SteeringRadians)).ThenBy(c=>c.Action.SteeringRadians).First();
-        return new(input.Time,chosen.Action,chosen.Safety,candidates.All(c=>c.Safety!=FreeActionSafety.SafeInHorizon),candidates.ToArray(),evaluations,forecasts);
+        return new(input.Time,chosen.Action,chosen.Safety,candidates.All(c=>c.Safety!=FreeActionSafety.SafeInHorizon),candidates.ToArray(),evaluations,forecasts){
+            TrackKnowledge=trackAwareness?TrackAwareness134.Observe(input,frame,p):null};
     }
 }

@@ -3,6 +3,12 @@
 Release platform: **Windows only**. See the current [Windows CI policy](docs/ci.md)
 for Draft/full validation, the merge gate and optional historical audits.
 
+[Track Awareness & Anticipatory Riding #134](docs/experiments/track-awareness-anticipatory-riding/README.md)
+adds a read-only geometry profile and a separate soft continuation estimate to
+the unchanged H09 action evaluation. Two-seed A/B learning starts at #133 A0
+#12023; sealed new states and an unseen track test transfer. Physics, safety,
+action space, reaction and defaults remain unchanged; the experiment is OFF.
+
 [Rider Decision Optimization #133](docs/experiments/rider-decision-optimization/README.md)
 compares the original maneuver score with a robust direction cost on identical
 full-throttle actions and native CEM ranking, then studies R0/R1 selection on the

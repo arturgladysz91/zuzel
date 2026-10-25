@@ -441,3 +441,22 @@ shows one predetermined alternative command, full reaction and pending history,
 then restored original autonomy. A locally safe forecast is not a whole-run
 guarantee. The report identifies whether each alternative was also the offline
 B1 score choice. Predictions never appear as native trails.
+
+# Track Awareness & Anticipatory Riding #134
+
+Open `?case=track-awareness&group=N00` for the sealed continuous two-bend case,
+`M00` for the first bend, or `T06` for the unseen egg-asymmetric geometry.
+`AB-P0` through `AB-P3` isolate the geometry treatment with the exact same
+#12023 weights before learning. `timing-P3-020-drive` and
+`timing-P3-040-drive` retain a failed and successful one-command continuation;
+`timing-P3-060-drive` demonstrates a request activated after the first entry.
+These are finite sampled maneuvers, not a global latest-reaction bound.
+
+Every group loads the geometry actually used by its native worlds. Pink edges
+and cross sections show the observed geometry range; green cross sections mark
+the next bend's start/end. They are not a target path. The knowledge panel shows
+the curvature/width profile, distance and estimated arrival time, pending and
+activation times, actual steering/yaw/chi, and the separately labeled heuristic.
+H09 safety remains unchanged. Estimated arrival and coast continuation do not
+represent a simulated future trajectory. All comparison trails remain actual
+accepted Box2D poses, including the last state before a DNF.

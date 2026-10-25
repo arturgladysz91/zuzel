@@ -97,14 +97,16 @@ public static class RobustLearningExperiment
 
     public static RobustEpisode Execute(string directory,string raw,RobustBudget budget,string category,string name,int id,FreeLearningPolicy policy,
         FreeLearningScenario scenario,double? shortSeconds=null,bool refinedDiagnostic=false,double? interveneAt=null,FreeRacingAction? intervention=null,bool twoBends=false,
-        double horizonSeconds=.6,bool normalizeProgress=false,double? holdAt=null,FreeRacingAction? holdAction=null,bool fullThrottleCandidate=false,bool decisionObjective=false){
+        double horizonSeconds=.6,bool normalizeProgress=false,double? holdAt=null,FreeRacingAction? holdAction=null,bool fullThrottleCandidate=false,bool decisionObjective=false,
+        TrackShapeVariant? trackShape=null,bool trackAwareness=false){
         var previousReservation=budget.Entries.SingleOrDefault(e=>e.Name==name);
         if(previousReservation is not null){
             if(!previousReservation.Complete||previousReservation.RawSha256!=Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(RawPath(raw,name)))))throw new IOException("Incomplete/corrupt attempt; never silently repeat.");
-            var cached=ReadEpisode(raw,name);if(cached.Replay.Policy!=policy||cached.Replay.Scenario!=scenario)throw new InvalidOperationException("Cache conditions differ.");return cached;
+            var cached=ReadEpisode(raw,name);if(cached.Replay.Policy!=policy||cached.Replay.Scenario!=scenario||cached.GeometryName!=trackShape?.Name)throw new InvalidOperationException("Cache conditions differ.");return cached;
         }
         var reservation=budget.Reserve(name,category);var cpu=Process.GetCurrentProcess().TotalProcessorTime;
-        var spec=FreeLearningExperiment.Rider(scenario);var p=FreeLearningExperiment.Parameters();var frame=RacingLineRootCauseAudit.Frame();
+        var spec=FreeLearningExperiment.Rider(scenario);var p=FreeLearningExperiment.Parameters();
+        var frame=trackShape is null?RacingLineRootCauseAudit.Frame():new TrackFrame(CoreSim.Analysis.MatchedVenueProfiles.CreateMotoarenaStandingStartTrack(),trackShape);
         var surface=TrackState.CreateDefault(frame.Track,new(1,0,.5f)).Snapshot();var boundary=new RacingLineGeometry(frame);
         var samples=new List<FreeRacingSample>();var telemetry=new List<RobustTelemetry>();TwoContactForces force=default;RearWheelStep wheel=default;RiderView before=default;
         string? failure=null;string boundaryClass="none";double? gateTime=null,entrySpeed=null,exitSpeed=null,exitYaw=null,cornerMin=null;
@@ -112,14 +114,14 @@ public static class RobustLearningExperiment
         double innerMin=double.PositiveInfinity,outerMin=double.PositiveInfinity,minSpeed=double.PositiveInfinity,maxBeta=0,maxYaw=0;
         double driveIntegral=0,fullDrive=0,boundaryApproach=0,recovery=0,previousProgress=0,stall=0,engineWork=0,dissipation=0;
         double lastOffset=scenario.Offset,lastExtreme=scenario.Offset;int direction=0,oscillations=0;long certificateQueries=0;
-        using var world=new WorldRunner(new[]{spec},parameters:p,trackShape:RacingLineRootCauseAudit.Variant(),frozenSurface:surface,
+        using var world=new WorldRunner(new[]{spec},parameters:p,trackShape:trackShape??RacingLineRootCauseAudit.Variant(),frozenSurface:surface,
             twoContactInitial:new(scenario.HeadingError,scenario.YawRate),freeLearningPolicy:policy,
             diagnostics:new(){Force=f=>before=f.Rider,TwoContact=o=>force=o.Forces,RearWheel=o=>wheel=o.Step});
         var mechanical=world.MechanicalProperties(1);
-        if(interveneAt is not null||horizonSeconds!=.6||normalizeProgress||holdAt is not null||fullThrottleCandidate||decisionObjective)world.FreeLearning!.DiagnosticChooser=input=>{
+        if(interveneAt is not null||horizonSeconds!=.6||normalizeProgress||holdAt is not null||fullThrottleCandidate||decisionObjective||trackAwareness)world.FreeLearning!.DiagnosticChooser=input=>{
             if(holdAt is{} held&&input.Time>=held-1e-8&&holdAction is{} heldAction)
                 return new(input.Time,heldAction,FreeActionSafety.Uncertain,false,Array.Empty<FreeLearningCandidate>(),0,0);
-            var d=FreeLearningController.Choose(input,policy,spec,frame,surface,p,mechanical.MassKg,mechanical.InertiaKgMetersSquared,horizonSeconds,normalizeProgress,fullThrottleCandidate,decisionObjective);
+            var d=FreeLearningController.Choose(input,policy,spec,frame,surface,p,mechanical.MassKg,mechanical.InertiaKgMetersSquared,horizonSeconds,normalizeProgress,fullThrottleCandidate,decisionObjective,trackAwareness);
             return interveneAt is{} observation&&intervention is{} alternate&&Math.Abs(input.Time-observation)<1e-8?d with{Action=alternate}:d;
         };
         var gateReference=frame.SegmentStartMeters(twoBends?8:4)+3;var gate=frame.At(gateReference,0);
@@ -173,7 +175,7 @@ public static class RobustLearningExperiment
         var metrics=new RobustMetrics(native){MinimumInstantInner=innerMin,MinimumInstantOuter=outerMin,MinimumLegacyCertificate=minLegacy,MinimumRefinedCertificate=minRefined,
             CornerMinimumSpeed=cornerMin,MaximumYawRate=maxYaw,ExitYawRate=completed?exitYaw:null,SteeringRequestTravelDegrees=changes.Sum(),MaximumRequestChangeDegrees=changes.DefaultIfEmpty(0).Max(),
             EngineWorkJoules=engineWork,DissipationJoules=dissipation,NoSafeDecisions=ctl.Decisions.Count(d=>d.NoSafeContinuation),BoundaryClass=boundaryClass};
-        var replay=new FreeLearningEpisode(name,id,policy,scenario,native,samples.ToArray(),ctl.Decisions.ToArray(),ctl.Activations.ToArray());var episode=new RobustEpisode(replay,metrics,telemetry.ToArray());
+        var replay=new FreeLearningEpisode(name,id,policy,scenario,native,samples.ToArray(),ctl.Decisions.ToArray(),ctl.Activations.ToArray());var episode=new RobustEpisode(replay,metrics,telemetry.ToArray()){GeometryName=trackShape?.Name};
         SaveEpisode(raw,episode);budget.Complete(reservation,native.CpuSeconds,native.PhysicsEvaluations,native.Forecasts,metrics,RawPath(raw,name));
         Console.WriteLine($"{category} #{budget.Entries.Count(e=>e.Category==category)} {name}: {native.Outcome} legal={legalProgress:F1} gate={native.GateSeconds} CPU={native.CpuSeconds:F2} certQueries={certificateQueries}");
         if(failure?.Contains("invariant")==true)throw new InvalidOperationException("Physical invariant failed; no training continuation.");return episode;
