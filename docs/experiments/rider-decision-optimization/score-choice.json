@@ -1,0 +1,12 @@
+{
+  "Frozen": true,
+  "Chosen": "B1-robust-direction",
+  "Passed": true,
+  "FinalWorlds": 0,
+  "TrainingWorlds": 0,
+  "Reason": "Minimal change to the dominant cost shape; preserves local DirectionWeight semantics, original quadratic near terminal threat/other safety classes, all yaw/clearance costs and eight bounds. Offline B2 needs an unverified terminal reaction-distance credit and does not directly address the observed direction cost. B1 changes at least one same-class coast choice to positive greater predicted progress. This is a hypothesis for controlled native training, not a full-run safety claim.",
+  "B2": "Offline heuristic only, never trained or combined with B1",
+  "DirectionTransitionDegrees": 10,
+  "TerminalReserveMeters": 0.2,
+  "OriginalRankForBothTrainingArms": "R0 exactly132"
+}

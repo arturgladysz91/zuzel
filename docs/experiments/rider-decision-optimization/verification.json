@@ -1,0 +1,65 @@
+{
+  "Date": "2026-10-24",
+  "Platform": "Windows",
+  "BaseHead": "e8f7d822ab549019967aecba5868e3132d87c07e",
+  "Restore": "PASS; unchanged locked packages; local NuGetAudit=false",
+  "ReleaseBuildWarningsAsErrors": {
+    "Passed": true,
+    "Warnings": 0
+  },
+  "DotnetDraftScope": {
+    "Passed": 2395,
+    "Failed": 0,
+    "Skipped": 0,
+    "Core": 2000,
+    "Trajectory": 395,
+    "PreTrainingTargetedCases": 5,
+    "NewFinalCases": 8
+  },
+  "PythonEvidenceTests": {
+    "Passed": 194,
+    "Failed": 0
+  },
+  "PythonCiTests": {
+    "Passed": 7,
+    "Failed": 0
+  },
+  "NodeReplayTests": {
+    "Passed": 46,
+    "Failed": 0
+  },
+  "Discovery": {
+    "Cases": 2916,
+    "ExactlyOneShard": true,
+    "HistoricalAnalysis": 473,
+    "FourRider": 48,
+    "HistoricalShardsExecuted": false
+  },
+  "FrozenProductionConsumers": 39,
+  "ProductionCoreSimDiff": false,
+  "Historical129Through132DataDiff": false,
+  "Off132NativeFingerprintExact": true,
+  "NativeRepeatsAandBExact": true,
+  "InitialPolicyAcrossSeedsFingerprintsExact": true,
+  "CemActual100PolicyDrawsReproduce": true,
+  "CemArchivedCoefficientTolerance": 1e-12,
+  "CemMetadataRepair": "After the225s scheduling stop, resume reused the final archived Mean array as mutable CEM state. Subsequent updates overwrote only A-s1332026 generation0 Mean metadata. All100 actual policy draws, R0 winners, and all remaining distribution snapshots reproduce at1e-12 before repair; diagnostic retained. Correct only these8 saved means from original start and identical R0 elites. No scores, policies, results, selections or final criteria changed.",
+  "MetadataRepairNativeWorldsAdded": 0,
+  "AnalysisAndPairedTimesIdenticalBeforeAfterMetadataRepair": true,
+  "ContinuousTwoBendWorlds": true,
+  "TrainingRanking": "Exact132 R0 for both score arms",
+  "Selection": "R0/R1 on same6-policy pool and6 L states, all choices sealed before final",
+  "DefaultObjectiveOffParity": true,
+  "ActionAnglesAndPhysicsUnchanged": true,
+  "ReactionSeconds": 0.24,
+  "HorizonSeconds": 0.9,
+  "BetaEnvelopeDegrees": 45,
+  "Viewer": "X00 shows five actual policies and7 comparative charts; SCORE-ONLY B reports uncertified interval, not confirmed crossing; CAUSAL-straight shows16.92s full gate; CAUSAL-exit1 reportsDNF; timegain and current requested/pending/active signals inspected; console errors0; screenshot outputs/replay-133.jpg",
+  "NativeWorlds": 636,
+  "TrainingWorlds": 400,
+  "WinnerId": 11021,
+  "WinnerHashBeforeAnyFinalWorld": "C84E47412502C13D1BB630A99E9670BBA01FBA98DE49F9C0AE3AA359689D831A",
+  "WinnerChangedAfterFinal": false,
+  "Verdict": "PARTIAL",
+  "RemoteWindowsCi": "Reported on the Draft PR for its exact HEAD; no merge"
+}

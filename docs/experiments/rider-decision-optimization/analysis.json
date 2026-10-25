@@ -1,0 +1,111 @@
+{
+  "Verdict": "PARTIAL",
+  "NativeWorlds": 636,
+  "TrainingWorlds": 400,
+  "CpuSeconds": 4617.59375,
+  "Forecasts": 1235197,
+  "ContactEvaluations": 111767891,
+  "Roles": {
+    "diagnostic": 20,
+    "train-ab": 400,
+    "selection": 36,
+    "final": 180
+  },
+  "PhysicalSourcesUnchanged": true,
+  "PreflightPassed": true,
+  "Final": [
+    {
+      "Variant": "130-H06-single",
+      "Completed": 23,
+      "Cases": 24,
+      "DNF": {
+        "uncertified interval": 1
+      }
+    },
+    {
+      "Variant": "130-H06-two",
+      "Completed": 0,
+      "Cases": 12,
+      "DNF": {
+        "uncertified interval": 5,
+        "control envelope": 7
+      }
+    },
+    {
+      "Variant": "131-H09-single",
+      "Completed": 24,
+      "Cases": 24,
+      "DNF": {}
+    },
+    {
+      "Variant": "131-H09-two",
+      "Completed": 12,
+      "Cases": 12,
+      "DNF": {}
+    },
+    {
+      "Variant": "132-H09-single",
+      "Completed": 24,
+      "Cases": 24,
+      "DNF": {}
+    },
+    {
+      "Variant": "132-H09-two",
+      "Completed": 12,
+      "Cases": 12,
+      "DNF": {}
+    },
+    {
+      "Variant": "133-B1-single",
+      "Completed": 24,
+      "Cases": 24,
+      "DNF": {}
+    },
+    {
+      "Variant": "133-B1-two",
+      "Completed": 12,
+      "Cases": 12,
+      "DNF": {}
+    },
+    {
+      "Variant": "133-A0-single",
+      "Completed": 24,
+      "Cases": 24,
+      "DNF": {}
+    },
+    {
+      "Variant": "133-A0-two",
+      "Completed": 12,
+      "Cases": 12,
+      "DNF": {}
+    },
+    {
+      "Variant": "133-A1-single",
+      "Completed": 24,
+      "Cases": 24,
+      "DNF": {}
+    },
+    {
+      "Variant": "133-A1-two",
+      "Completed": 12,
+      "Cases": 12,
+      "DNF": {}
+    },
+    {
+      "Variant": "133-B0-single",
+      "Completed": 24,
+      "Cases": 24,
+      "DNF": {}
+    },
+    {
+      "Variant": "133-B0-two",
+      "Completed": 12,
+      "Cases": 12,
+      "DNF": {}
+    }
+  ],
+  "SinglePairedVs130Median": 0.2545219638242895,
+  "SinglePairedVs130Maximum": 0.7063711911357342,
+  "TwoPairedVs131Median": 0.09936933171588647,
+  "TwoPairedVs131Maximum": 0.3193473193473193
+}

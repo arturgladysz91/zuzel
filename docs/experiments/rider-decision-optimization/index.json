@@ -1,0 +1,334 @@
+{
+  "Title": "Rider Decision Optimization #133",
+  "Grade": "PARTIAL",
+  "DefaultRun": "final-133-B1-X00",
+  "RawDirectory": "C:\\Users\\Administrator\\Documents\\Codex\\2026-10-23\\files-pasted-by-the-user-pr\\work\\rider-decision-133-raw",
+  "Labels": {
+    "130-H06": "#130 #1020 H06",
+    "131-H09": "#131 #4061 H09",
+    "132-H09": "#132 #6022 H09",
+    "133-B1": "#133 B1 · nowy koszt + R1",
+    "133-A0": "#133 A0 · stary koszt + R0",
+    "133-A1": "#133 A1 · stary koszt + R1",
+    "133-B0": "#133 B0 · nowy koszt + R0",
+    "causal-base-131-Q0": "Oryginalna autonomia",
+    "causal-straight": "Jedna dodatnia komenda · straight",
+    "causal-entry1": "Jedna dodatnia komenda · entry1",
+    "causal-base-132-Z01": "Oryginalna autonomia",
+    "causal-exit1": "Jedna dodatnia komenda · exit1",
+    "causal-bend2": "Jedna dodatnia komenda · bend2",
+    "profile-A-P1": "Ten sam #4061 · koszt A bez treningu",
+    "profile-B-P1": "Ten sam #4061 · koszt B bez treningu"
+  },
+  "Colors": {
+    "130-H06": "#ff9c86",
+    "131-H09": "#ffd27b",
+    "132-H09": "#a6b8ff",
+    "133-B1": "#73dfdf",
+    "133-A0": "#d99fe3",
+    "133-A1": "#8bcf74",
+    "133-B0": "#ffaade",
+    "causal-base-131-Q0": "#ffd27b",
+    "causal-straight": "#73dfdf",
+    "causal-entry1": "#73dfdf",
+    "causal-base-132-Z01": "#ffd27b",
+    "causal-exit1": "#73dfdf",
+    "causal-bend2": "#73dfdf",
+    "profile-A-P1": "#ffd27b",
+    "profile-B-P1": "#73dfdf"
+  },
+  "Horizons": {
+    "130-H06": 0.6,
+    "131-H09": 0.9,
+    "132-H09": 0.9,
+    "133-B1": 0.9,
+    "133-A0": 0.9,
+    "133-A1": 0.9,
+    "133-B0": 0.9,
+    "causal-base-131-Q0": 0.9,
+    "causal-straight": 0.9,
+    "causal-entry1": 0.9,
+    "causal-base-132-Z01": 0.9,
+    "causal-exit1": 0.9,
+    "causal-bend2": 0.9,
+    "profile-A-P1": 0.9,
+    "profile-B-P1": 0.9
+  },
+  "TimeGain": "time-gain.json",
+  "TimeGainPolicy": "133-B1",
+  "TimeGainDescription": "Zysk czasu #133-B1 względem #131 na identycznym postępie toru",
+  "ComparisonCharts": true,
+  "PreferredPolicy": "133-B1",
+  "Groups": [
+    {
+      "Id": "Y00",
+      "Scenario": {
+        "Name": "Y00",
+        "Level": 2,
+        "Speed": 9.325,
+        "Offset": 2.925,
+        "Start": 20,
+        "OutwardSpeed": 0.07875,
+        "HeadingError": 0.01625,
+        "YawRate": -0.01525
+      },
+      "TwoBends": false,
+      "Reasons": [
+        "nowy zamrożony finał",
+        "pierwszy łuk"
+      ],
+      "Scope": "Rzeczywiste światy bez resetu; DNF pozostaje DNF. Dokładnie równoważne polityki korzystają z tego samego natywnego zapisu: 133-A1=133-A0, 133-B0=133-B1.",
+      "Runs": [
+        {
+          "Name": "final-130-H06-Y00",
+          "Policy": "130-H06"
+        },
+        {
+          "Name": "final-131-H09-Y00",
+          "Policy": "131-H09"
+        },
+        {
+          "Name": "final-132-H09-Y00",
+          "Policy": "132-H09"
+        },
+        {
+          "Name": "final-133-B1-Y00",
+          "Policy": "133-B1"
+        }
+      ]
+    },
+    {
+      "Id": "X00",
+      "Scenario": {
+        "Name": "X00",
+        "Level": 2,
+        "Speed": 9.625,
+        "Offset": 3.125,
+        "Start": 20,
+        "OutwardSpeed": -0.08875,
+        "HeadingError": -0.01725,
+        "YawRate": 0.01625
+      },
+      "TwoBends": true,
+      "Reasons": [
+        "nowy zamrożony finał",
+        "dwa pełne łuki"
+      ],
+      "Scope": "Rzeczywiste światy bez resetu; DNF pozostaje DNF. Dokładnie równoważne polityki korzystają z tego samego natywnego zapisu: 133-A1=133-A0, 133-B0=133-B1.",
+      "Runs": [
+        {
+          "Name": "final-130-H06-X00",
+          "Policy": "130-H06"
+        },
+        {
+          "Name": "final-131-H09-X00",
+          "Policy": "131-H09"
+        },
+        {
+          "Name": "final-132-H09-X00",
+          "Policy": "132-H09"
+        },
+        {
+          "Name": "final-133-B1-X00",
+          "Policy": "133-B1"
+        },
+        {
+          "Name": "final-133-A0-X00",
+          "Policy": "133-A0"
+        }
+      ]
+    },
+    {
+      "Id": "X11",
+      "Scenario": {
+        "Name": "X11",
+        "Level": 4,
+        "Speed": 17.38,
+        "Offset": 4.061,
+        "Start": 20,
+        "OutwardSpeed": 0.16749999,
+        "HeadingError": 0.030000001,
+        "YawRate": -0.0185
+      },
+      "TwoBends": true,
+      "Reasons": [
+        "nowy zamrożony finał",
+        "dwa pełne łuki"
+      ],
+      "Scope": "Rzeczywiste światy bez resetu; DNF pozostaje DNF. Dokładnie równoważne polityki korzystają z tego samego natywnego zapisu: 133-A1=133-A0, 133-B0=133-B1.",
+      "Runs": [
+        {
+          "Name": "final-130-H06-X11",
+          "Policy": "130-H06"
+        },
+        {
+          "Name": "final-131-H09-X11",
+          "Policy": "131-H09"
+        },
+        {
+          "Name": "final-132-H09-X11",
+          "Policy": "132-H09"
+        },
+        {
+          "Name": "final-133-B1-X11",
+          "Policy": "133-B1"
+        }
+      ]
+    },
+    {
+      "Id": "CAUSAL-straight",
+      "Scenario": {
+        "Name": "Q0",
+        "Level": 2,
+        "Speed": 9.8,
+        "Offset": 4.15,
+        "Start": 22,
+        "OutwardSpeed": 0.09,
+        "HeadingError": -0.018,
+        "YawRate": 0.023
+      },
+      "TwoBends": true,
+      "Reasons": [
+        "ta sama historia i pending",
+        "jeden manewr"
+      ],
+      "Scope": "Diagnostyka przyczynowa: jedna istniejąca dodatnia akcja zamiast gaz0, reakcja0,24s; następnie pierwotna autonomia. Wybór ręczny według zamrożonej reguły, nie dowód działania wyuczonej B1. Prognozy nie są trajektoriami replaya.",
+      "Runs": [
+        {
+          "Name": "causal-base-131-Q0",
+          "Policy": "causal-base-131-Q0"
+        },
+        {
+          "Name": "causal-straight",
+          "Policy": "causal-straight"
+        }
+      ]
+    },
+    {
+      "Id": "CAUSAL-entry1",
+      "Scenario": {
+        "Name": "Q0",
+        "Level": 2,
+        "Speed": 9.8,
+        "Offset": 4.15,
+        "Start": 22,
+        "OutwardSpeed": 0.09,
+        "HeadingError": -0.018,
+        "YawRate": 0.023
+      },
+      "TwoBends": true,
+      "Reasons": [
+        "ta sama historia i pending",
+        "jeden manewr"
+      ],
+      "Scope": "Diagnostyka przyczynowa: jedna istniejąca dodatnia akcja zamiast gaz0, reakcja0,24s; następnie pierwotna autonomia. Wybór ręczny według zamrożonej reguły, nie dowód działania wyuczonej B1. Prognozy nie są trajektoriami replaya.",
+      "Runs": [
+        {
+          "Name": "causal-base-131-Q0",
+          "Policy": "causal-base-131-Q0"
+        },
+        {
+          "Name": "causal-entry1",
+          "Policy": "causal-entry1"
+        }
+      ]
+    },
+    {
+      "Id": "CAUSAL-exit1",
+      "Scenario": {
+        "Name": "Z01",
+        "Level": 2,
+        "Speed": 10.25,
+        "Offset": 4.6,
+        "Start": 21,
+        "OutwardSpeed": -0.11,
+        "HeadingError": -0.02,
+        "YawRate": 0.016999999
+      },
+      "TwoBends": true,
+      "Reasons": [
+        "ta sama historia i pending",
+        "jeden manewr"
+      ],
+      "Scope": "Diagnostyka przyczynowa: jedna istniejąca dodatnia akcja zamiast gaz0, reakcja0,24s; następnie pierwotna autonomia. Wybór ręczny według zamrożonej reguły, nie dowód działania wyuczonej B1. Prognozy nie są trajektoriami replaya.",
+      "Runs": [
+        {
+          "Name": "causal-base-132-Z01",
+          "Policy": "causal-base-132-Z01"
+        },
+        {
+          "Name": "causal-exit1",
+          "Policy": "causal-exit1"
+        }
+      ]
+    },
+    {
+      "Id": "CAUSAL-bend2",
+      "Scenario": {
+        "Name": "Z01",
+        "Level": 2,
+        "Speed": 10.25,
+        "Offset": 4.6,
+        "Start": 21,
+        "OutwardSpeed": -0.11,
+        "HeadingError": -0.02,
+        "YawRate": 0.016999999
+      },
+      "TwoBends": true,
+      "Reasons": [
+        "ta sama historia i pending",
+        "jeden manewr"
+      ],
+      "Scope": "Diagnostyka przyczynowa: jedna istniejąca dodatnia akcja zamiast gaz0, reakcja0,24s; następnie pierwotna autonomia. Wybór ręczny według zamrożonej reguły, nie dowód działania wyuczonej B1. Prognozy nie są trajektoriami replaya.",
+      "Runs": [
+        {
+          "Name": "causal-base-132-Z01",
+          "Policy": "causal-base-132-Z01"
+        },
+        {
+          "Name": "causal-bend2",
+          "Policy": "causal-bend2"
+        }
+      ]
+    },
+    {
+      "Id": "SCORE-ONLY",
+      "Scenario": {
+        "Name": "P1",
+        "Level": 3,
+        "Speed": 12.725,
+        "Offset": 6.525,
+        "Start": 20,
+        "OutwardSpeed": -0.1425,
+        "HeadingError": -0.0225,
+        "YawRate": 0.0205
+      },
+      "TwoBends": true,
+      "Reasons": [
+        "izolowana zmiana kosztu",
+        "DNF bez uczenia"
+      ],
+      "Scope": "Te same wagi i akcje; różni je wyłącznie kształt kosztu kierunku. B uzyskuje inne lokalne decyzje, ale kończy DNF. H09 safe nie dowodzi możliwości dalszej kontynuacji.",
+      "Runs": [
+        {
+          "Name": "profile-A-P1",
+          "Policy": "profile-A-P1"
+        },
+        {
+          "Name": "profile-B-P1",
+          "Policy": "profile-B-P1"
+        }
+      ]
+    }
+  ],
+  "Charts": [
+    [
+      "learning.svg",
+      "Oba seedy i koszty A/B"
+    ],
+    [
+      "final.svg",
+      "Nowy finał i czasy parami"
+    ]
+  ]
+}

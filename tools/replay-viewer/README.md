@@ -423,3 +423,21 @@ Etykieta odróżnia dwa łuki, pierwszy łuk i zaplanowany koniec sondy.
 Lokalnie: `python -m http.server 8013 --bind 127.0.0.1` z katalogu repo.
 [Raport, wyniki, protokół i manifest](../../docs/experiments/autonomous-speedway-extended-learning/README.md).
 Do odtworzenia wykresów zainstaluj `tools/extended-learning-report.requirements.txt`.
+# Rider Decision Optimization #133
+
+Open `?case=rider-decision&run=final-133-B1-X00&group=X00` after starting the local
+server from the repository root. The selected bundle contains native #130/#131/
+#132/#133 worlds on the same new initial states, including any DNF. Equivalent
+frozen configurations share an explicitly documented native record.
+
+The comparison panel overlays speed, requested/active throttle, requested/executed
+steering, beta and instantaneous footprint clearance on a common native clock.
+Traces stop at the actual recording end. Track points show #133-B1 time gained
+against #131 at each5m crossing, using actual XY samples and elapsed times.
+Instantaneous clearance does not replace the conservative interval certificate.
+
+`SCORE-ONLY` isolates the new score with unchanged #4061 weights; `CAUSAL-*`
+shows one predetermined alternative command, full reaction and pending history,
+then restored original autonomy. A locally safe forecast is not a whole-run
+guarantee. The report identifies whether each alternative was also the offline
+B1 score choice. Predictions never appear as native trails.

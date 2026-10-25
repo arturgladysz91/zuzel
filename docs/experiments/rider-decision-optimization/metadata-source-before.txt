@@ -1,0 +1,175 @@
+using System.Diagnostics;
+using System.IO.Compression;
+using System.Security.Cryptography;
+using System.Text.Json;
+using CoreSim;
+
+namespace SharedWorldSpeedway;
+
+public sealed record RiderDecisionCandidate(string Label,int Id,FreeLearningPolicy Policy,bool NewObjective,bool FullThrottle=true,double Horizon=.9);
+public sealed record RiderDecisionTimeScore(int Pairs,double? MedianTwo,double? MedianSingle,double? WorstRatio,bool WithinWorstBound,double? WorstExcess);
+
+/// <summary>Two score arms, one inherited CEM ranking, then two offline selection rankings.</summary>
+public static class RiderDecisionExperiment133
+{
+    public const string BaseHead="e8f7d822ab549019967aecba5868e3132d87c07e";
+    public static readonly uint[] Seeds={1332026,2332026};
+    public static readonly Dictionary<string,int> Limits=new(){["train-ab"]=400,["selection"]=84,["final"]=252,["diagnostic"]=32,["offline"]=32};
+    public static readonly FreeLearningScenario[] Training={
+        new("J0",2,9.425f,4.025f,20,.1025f,.0185f,-.0205f),new("J1",3,12.425f,6.725f,20,-.1225f,-.0205f,.0165f),
+        new("J2",4,15.425f,4.825f,20,.1525f,-.0185f,-.0205f),new("J3",4,17.725f,6.875f,20,-.0925f,.0245f,.0185f),
+        new("J4",2,10.425f,6.225f,20,-.1025f,-.0185f,.0205f),new("J5",3,13.425f,4.025f,20,.1225f,.0205f,-.0165f),
+        new("J6",4,16.425f,7.075f,20,-.1525f,.0185f,.0205f),new("J7",4,17.425f,4.525f,20,.0925f,-.0245f,-.0185f)};
+    public static readonly FreeLearningScenario[] Selection={
+        new("L0",2,10.025f,4.55f,20,.0925f,-.0165f,.0205f),new("L1",4,16.625f,6.55f,20,-.1125f,.0225f,-.0185f),
+        new("L2",2,10.625f,3.45f,20,.1225f,.0205f,-.0225f),new("L3",3,13.625f,6.95f,20,-.0925f,-.0245f,.0165f),
+        new("L4",4,16.025f,4.95f,20,.1425f,-.0185f,-.0205f),new("L5",4,17.625f,6.05f,20,-.1225f,.0165f,.0225f)};
+    public static readonly FreeLearningScenario[] Diagnostic={
+        new("P0",2,9.725f,4.525f,20,.0825f,.0165f,-.0185f),new("P1",3,12.725f,6.525f,20,-.1425f,-.0225f,.0205f),
+        new("P2",4,15.725f,3.825f,20,.1325f,-.0165f,-.0245f),new("P3",4,17.725f,6.475f,20,-.0825f,.0225f,.0165f)};
+    public static readonly FreeLearningScenario[] FinalSingle=Enumerable.Range(0,24).Select(i=>new FreeLearningScenario(
+        $"Y{i:D2}",i<8?2:i<16?3:4,9.325f+i*.35f,2.925f+(i*7%17)*.278f,20,
+        (i%2==0?1:-1)*(.07875f+i%4*.03125f),(i%3==0?1:-1)*(.01625f+i%5*.00325f),(i%2==0?-1:1)*(.01525f+i%6*.00225f))).ToArray();
+    public static readonly FreeLearningScenario[] FinalTwo=Enumerable.Range(0,12).Select(i=>new FreeLearningScenario(
+        $"X{i:D2}",i<4?2:i<8?3:4,9.625f+i*.705f,3.125f+(i*5%13)*.312f,20,
+        (i%2==0?-1:1)*(.08875f+i%4*.02625f),(i%3==0?-1:1)*(.01725f+i%4*.00425f),(i%2==0?1:-1)*(.01625f+i%5*.00225f))).ToArray();
+    public static FreeLearningScenario[] Schedule(int g)=>Training.Skip(g%2*4).Take(4).ToArray();
+    public static FreeLearningPolicy StartPolicy()=>FullThrottleLearningExperiment.StartPolicy();
+    public static readonly JsonSerializerOptions Json=FreeLearningExperiment.Json;
+    public static void Save(string d,string n,object o)=>RobustLearningExperiment.Save(d,n,o);
+    public static T Read<T>(string d,string n)=>RobustLearningExperiment.Read<T>(d,n);
+    public static string Hash(object o)=>Convert.ToHexString(SHA256.HashData(JsonSerializer.SerializeToUtf8Bytes(o,Json)));
+    public static Dictionary<string,string> Sources()=>FullThrottleLearningExperiment.Sources().Keys.Concat(new[]{"RiderDecisionObjective133.cs","RiderDecisionExperiment133.cs","RiderDecisionAudit133.cs"})
+        .ToDictionary(n=>n,n=>Convert.ToHexString(SHA256.HashData(File.ReadAllBytes("tools/shared-world-speedway/"+n))));
+    public static RobustEpisode Historical(string directory,string name){
+        using var z=new GZipStream(File.OpenRead(Path.Combine(directory,"selected-replays.json.gz")),CompressionMode.Decompress);
+        using var document=JsonDocument.Parse(z);return document.RootElement.GetProperty("Runs").GetProperty(name).Deserialize<RobustEpisode>(Json)!;
+    }
+    public static RobustEpisode Execute(string d,string raw,RobustBudget b,string category,string name,RiderDecisionCandidate c,FreeLearningScenario s,bool two,double? interveneAt=null,FreeRacingAction? alternative=null){
+        if(b.Entries.Sum(e=>e.Forecasts)>1480000)throw new InvalidOperationException("Forecast reserve exhausted.");
+        var run=RobustLearningExperiment.Execute(d,raw,b,category,name,c.Id,c.Policy,s,twoBends:two,horizonSeconds:c.Horizon,normalizeProgress:true,
+            fullThrottleCandidate:c.FullThrottle,decisionObjective:c.NewObjective,interveneAt:interveneAt,intervention:alternative);
+        if(run.Metrics.Native.Outcome=="projection")throw new InvalidOperationException("Projection model disagreement; stop experiment.");
+        return run;
+    }
+    private static double Median(IEnumerable<double> values){var a=values.Order().ToArray();return a.Length%2==1?a[a.Length/2]:(a[a.Length/2-1]+a[a.Length/2])/2;}
+    public static RiderDecisionTimeScore TimeScore(RobustEvaluation e,RobustEvaluation baseline){
+        if(!e.Scenarios.SequenceEqual(baseline.Scenarios))throw new ArgumentException("Paired selection states must match.");
+        var all=e.Results.Zip(baseline.Results,(a,b)=>(a,b)).Select((p,i)=>(p.a,p.b,Two:e.Scenarios[i].EndsWith("-two",StringComparison.Ordinal)))
+            .Where(p=>p.a.Native.Completed&&p.b.Native.Completed).Select(p=>(p.Two,Ratio:p.a.Native.GateSeconds!.Value/p.b.Native.GateSeconds!.Value-1)).ToArray();
+        var two=all.Where(p=>p.Two).Select(p=>p.Ratio).ToArray();var single=all.Where(p=>!p.Two).Select(p=>p.Ratio).ToArray();
+        double? worst=all.Length>0?all.Max(p=>p.Ratio):null;return new(all.Length,two.Length>0?Median(two):null,single.Length>0?Median(single):null,worst,
+            worst is not null&&worst<=.15,worst is{} w?Math.Max(0,w-.15):null);
+    }
+    private static int Severity(RobustEvaluation e)=>e.Results.Sum(r=>r.Native.Completed?0:r.Native.Outcome switch{"confirmed crossing" or "control envelope"=>3,"reverse"=>2,"uncertified interval"=>1,_=>4});
+    public static IOrderedEnumerable<RobustEvaluation> RankR1(IEnumerable<RobustEvaluation> scores,RobustEvaluation baseline)=>scores
+        .OrderByDescending(RobustRanking.Completed).ThenBy(Severity).ThenByDescending(FullThrottleLearningExperiment.TwoCompleted)
+        .ThenByDescending(e=>TimeScore(e,baseline).WithinWorstBound).ThenBy(e=>TimeScore(e,baseline).WorstExcess??double.PositiveInfinity)
+        .ThenBy(e=>TimeScore(e,baseline).MedianTwo??double.PositiveInfinity).ThenBy(e=>TimeScore(e,baseline).MedianSingle??double.PositiveInfinity)
+        .ThenBy(e=>TimeScore(e,baseline).WorstRatio??double.PositiveInfinity).ThenByDescending(e=>e.Results.Min(r=>r.Native.MinimumClearanceMeters))
+        .ThenByDescending(e=>e.Results.Where(r=>r.Native.Completed).Select(r=>r.Native.ExitSpeed!.Value).DefaultIfEmpty(0).Min())
+        .ThenBy(e=>e.Results.Where(r=>r.Native.Completed).Select(r=>Math.Abs(r.ExitYawRate??0)).DefaultIfEmpty(double.PositiveInfinity).Max()).ThenBy(e=>e.Id);
+    public static void Run(string d,string raw,string stage){
+        if(stage=="freeze"){
+            if(File.Exists(Path.Combine(d,"protocol.json")))throw new IOException("Protocol already frozen.");
+            Save(d,"protocol.json",new{BaseHead,Seeds,Training,Selection,Diagnostic,FinalSingle,FinalTwo,StartingPolicy=StartPolicy(),StartingPolicyHash=Hash(StartPolicy()),Sources=Sources(),Limits,
+                MaximumWorlds=800,CpuSeconds=7000,ContactEvaluations=135000000,Forecasts=1500000,EpisodeCpuSeconds=30,GenerationCpuSeconds=225,
+                Basis132=new{Worlds=595,CpuSeconds=3953.671875,Forecasts=1044869,Contacts=94541553},
+                Fixed="Box2D/tyres/engine/wheel/mass/inertia/geometry unchanged; H09.9, reaction.24, review.2, beta45, steering35deg/90deg/s, exact legacy boundary certificate; same132 full-throttle action space in both arms; no path or offset target.",
+                B1="Only direction shape changes for SafeInHorizon candidates with futureGap>=.2m and positive progress: 20*error^2/(sqrt(1+(error/delta)^2)+1), delta10deg. Same local quadratic curvature and eight weights; linear tails retain nonzero direction gradient. Other classes/threatened terminal states keep the original quadratic. Yaw, progress, throttle, steering, geometry and future-clearance terms remain exact.",
+                B2="OFFLINE alternative only: add reaction-distance terminal progress credit along end velocity, scaled by clamp(futureGap/.2,0,1), normalized to.6s. This is a heuristic, not a certified continuation. Compare on identical predictions; never combine with B1.",
+                Choice="Choose one score change after offline component/ranking audit, before training; prefer minimal robust direction shape if it preserves safety/near-zero meaning and changes any coast choice to a same-class positive higher-progress action. Do not choose using new final outcomes. Record limitations even if one-command native trials do not improve the full run.",
+                Audit="Four saved131/132 native replays; reproduce every candidate forecast and all seven cost terms. Six causal one-command trials: straight/entry/middle on131 Q0; exit/preparation/second bend on132 Z01. Pick nearest phase target among safe coast decisions with a safe positive greater-progress alternative that loses old score. Full native prefix+pending, full.24s delay, then original autonomous controller; evaluate complete two bends, not only.9s.",
+                CEM="2seeds x2score arms x5generations x5policies x4shared states=400. Both start4061 H09 with132 full actions. Exact132 DrawPolicy and R0 native ranking/elites: incumbent+3Gaussian+1immigrant,32normal draws/generation,2elites,mean.4old+.6elite,std floor.15range. One single+three full continuous two bends per policy. No additional generations.",
+                Shortlist="Per arm/seed up to3 distinct vectors: last R0 incumbent; best R0 winner on recurring even cohort; speed representative from ALL even-cohort candidates ranked by two completions, all completions, severity, median completed two time (all3 required), worst time, reserve, ID. This bounded training-only pool is shared by R0/R1, not all100 costly K evaluations. Archive every candidate. Add unchanged4061-full and6022 references; max14 policies x6K=84 worlds.",
+                R0="Exact132 FullThrottleLearningExperiment.Rank, used for BOTH CEM arms and selection R0.",
+                R1="Selection only: all legal completions; severity of DNF; two-bend completions; max paired regression<=15% tier (otherwise least excess); paired median two change vs frozen4061-full on SAME K; paired median single; worst pair; minimum certified clearance; exit speed/yaw; stableID. Missing common pairs remain unknown, never zero. No fixed reserve/offset target and no min-clearance improvement prerequisite.",
+                MainCandidate="B1 comparison group = new score arm selected by R1. Freeze A0/A1/B0/B1 and all parameters/hashes before any X/Y. Main B1 is not replaced after final even if selection is poor. Formula concept B1 and comparison-group B1 are explicitly distinguished.",
+                Reserve="Stop training before generation if CPU>5000 or contacts>90M or forecasts>1M; preserve2000CPU/45Mcontacts/500kforecasts for independent selection/final. No invariant/projection/forecast model changes to continue. Every world reserved before creation; offline work charged separately.",
+                Final="Four mandatory references130/131/132/main133-B1 on24newY+12newX; also frozen A0/A1/B0 when budget permits. Identical policy+objective+actions+horizon aliases reuse an actual recorded world, explicitly mapped, rather than create wasteful duplicates. Worst-case252 final worlds, at most756 planned native worlds incl20diagnostics and84selection. No native final before winner lock.",
+                PASS="24/24 single and12/12 two; paired median two<=-2% vs131; paired median single<=+5% and max<=+15% vs130; unchanged physics/limits, no artificial trajectory, beta45, independent test, correct/reproducible scoring. PARTIAL for valid but insufficient speed/reliability; FAIL for leakage/incomparable/incorrect physics or scoring/unreproducible results.",RawDirectory=Path.GetFullPath(raw)});return;
+        }
+        var sources=Sources();var amended=File.Exists(Path.Combine(d,"budget-amendment.json"))?Read<JsonElement>(d,"budget-amendment.json"):(JsonElement?)null;
+        foreach(var x in Read<JsonElement>(d,"protocol.json").GetProperty("Sources").EnumerateObject()){
+            if(sources[x.Name]==x.Value.GetString())continue;
+            if(x.Name=="RiderDecisionExperiment133.cs"&&amended is{} a&&a.GetProperty("OriginalSourceSha256").GetString()==x.Value.GetString()
+                &&a.GetProperty("ApprovedSourceSha256").GetString()==sources[x.Name]&&a.GetProperty("GenerationCpuSeconds").GetInt32()==600)continue;
+            throw new InvalidOperationException("Frozen source changed: "+x.Name);
+        }
+        using var b=new RobustBudget(d,Limits,800,7000,135000000);
+        if(stage=="audit"){RiderDecisionAudit133.Run(d,raw,b);return;}
+        if(stage=="preflight"){RiderDecisionAudit133.Preflight(d,raw,b);return;}
+        if(stage=="train"){
+            if(!Read<JsonElement>(d,"preflight.json").GetProperty("Passed").GetBoolean()||File.Exists(Path.Combine(d,"training-complete.json")))throw new InvalidOperationException("Training gate closed.");
+            foreach(var seed in Seeds)foreach(var newer in new[]{false,true})Train(d,raw,b,$"{(newer?"B":"A")}-s{seed}",seed,newer);
+            Save(d,"training-complete.json",new{Worlds=b.Entries.Count(e=>e.Category=="train-ab"),FinalWorlds=0});return;
+        }
+        if(stage=="select"){Select(d,raw,b);return;}
+        if(stage=="freeze-winner"){Freeze(d,b);return;}
+        if(stage=="final"){Final(d,raw,b);return;}
+        throw new ArgumentException("freeze|audit|preflight|train|select|freeze-winner|final");
+    }
+    private static void Train(string d,string raw,RobustBudget b,string label,uint seed,bool newer){
+        var file="generations-"+label+".json";var gs=File.Exists(Path.Combine(d,file))?Read<List<RobustGeneration>>(d,file):new();
+        var random=new FreeRacingExperiment.RandomStream(seed);for(int i=0;i<gs.Count*32;i++)random.Normal();
+        var incumbent=gs.Count>0?gs[^1].BestPolicy:StartPolicy();var mean=gs.Count>0?gs[^1].Mean:incumbent.Values;var std=gs.Count>0?gs[^1].Std:mean.Select((_,i)=>(FreeLearningPolicy.Upper[i]-FreeLearningPolicy.Lower[i])*.3).ToArray();
+        for(int g=gs.Count;g<5;g++){
+            if(b.Entries.Sum(e=>e.CpuSeconds)>5000||b.Entries.Sum(e=>e.Evaluations)>90000000||b.Entries.Sum(e=>e.Forecasts)>1000000)throw new InvalidOperationException("Independent evaluation reserve reached.");
+            var cpu=Process.GetCurrentProcess().TotalProcessorTime;var cases=Schedule(g);var cs=new List<RobustEvaluation>();
+            for(int c=0;c<5;c++){
+                var id=10000+(seed==Seeds[1]?2000:0)+(newer?1000:0)+g*5+c;var policy=RobustLearningExperiment.DrawPolicy(random,incumbent,mean,std,c);var candidate=new RiderDecisionCandidate(label,id,policy,newer);
+                cs.Add(new(label,g,id,policy,cases.Select((s,i)=>s.Name+(i>0?"-two":"-single")).ToArray(),cases.Select((s,i)=>Execute(d,raw,b,"train-ab",$"{label}-g{g:D2}-p{id}-"+s.Name,candidate,s,i>0).Metrics).ToArray()));
+            }
+            var ranked=FullThrottleLearningExperiment.Rank(cs).ToArray();incumbent=ranked[0].Policy;
+            for(int i=0;i<8;i++){var m=ranked.Take(2).Average(c=>c.Policy.Values[i]);mean[i]=.4*mean[i]+.6*m;std[i]=Math.Max(.15*(FreeLearningPolicy.Upper[i]-FreeLearningPolicy.Lower[i]),Math.Sqrt(ranked.Take(2).Average(c=>Math.Pow(c.Policy.Values[i]-m,2))));}
+            var generation=new RobustGeneration(label,g,(g+1)*20,cs.ToArray(),ranked[0].Id,incumbent,(double[])mean.Clone(),(double[])std.Clone(),(Process.GetCurrentProcess().TotalProcessorTime-cpu).TotalSeconds,
+                cs.Sum(c=>c.Results.Sum(r=>r.Native.PhysicsEvaluations)),cs.Sum(c=>c.Results.Sum(r=>r.Native.Forecasts)));gs.Add(generation);Save(d,file,gs);
+            Console.WriteLine($"GEN {label}/{g}: {cs.Sum(RobustRanking.Completed)}/20 two={cs.Sum(FullThrottleLearningExperiment.TwoCompleted)}/15 best={ranked[0].Id} CPU={generation.CpuSeconds:F2}");
+            // User-authorized scheduling amendment after the first complete generation.
+            // All aggregate budgets and all scientific choices remain frozen.
+            var generationCpuLimit=File.Exists(Path.Combine(d,"budget-amendment.json"))?600:225;
+            if(generation.CpuSeconds>generationCpuLimit)throw new InvalidOperationException("Generation CPU limit.");
+        }
+    }
+    private static RiderDecisionCandidate[] Shortlist(string d,string label,bool newer){
+        var gs=Read<RobustGeneration[]>(d,"generations-"+label+".json");var even=gs.Where(g=>g.Generation%2==0).SelectMany(g=>g.Candidates).ToArray();
+        var speed=even.OrderByDescending(FullThrottleLearningExperiment.TwoCompleted).ThenByDescending(RobustRanking.Completed).ThenBy(Severity)
+            .ThenBy(e=>FullThrottleLearningExperiment.Two(e).All(r=>r.Native.Completed)?Median(FullThrottleLearningExperiment.Two(e).Select(r=>r.Native.GateSeconds!.Value)):double.PositiveInfinity)
+            .ThenBy(RobustRanking.WorstTime).ThenByDescending(e=>e.Results.Min(r=>r.Native.MinimumClearanceMeters)).ThenBy(e=>e.Id).First();
+        var last=FullThrottleLearningExperiment.Rank(gs[^1].Candidates).First();var anchor=FullThrottleLearningExperiment.Rank(gs.Where(g=>g.Generation%2==0).Select(g=>FullThrottleLearningExperiment.Rank(g.Candidates).First())).First();
+        return new[]{last,anchor,speed}.DistinctBy(x=>Hash(x.Policy)).Select(x=>new RiderDecisionCandidate(label,x.Id,x.Policy,newer)).ToArray();
+    }
+    private static void Select(string d,string raw,RobustBudget b){
+        if(!File.Exists(Path.Combine(d,"training-complete.json"))||b.Entries.Any(e=>e.Category=="final"))throw new InvalidOperationException("Invalid selection stage.");
+        var cs=Seeds.SelectMany(seed=>new[]{false,true}.SelectMany(newer=>Shortlist(d,$"{(newer?"B":"A")}-s{seed}",newer))).Concat(new[]{new RiderDecisionCandidate("baseline4061-full",4061,StartPolicy(),false),
+            new RiderDecisionCandidate("reference132",6022,Read<ThrottleCandidate>(PhysicalSteeringAudit.PreviousPath("../full-throttle-learning"),"winner.json").Policy,false)}).ToArray();Save(d,"selection-candidates.json",cs);
+        var scores=new List<RobustEvaluation>();foreach(var c in cs){var results=Selection.Select((s,i)=>Execute(d,raw,b,"selection",$"select-{c.Label}-{c.Id}-"+s.Name,c,s,i>=2).Metrics).ToArray();
+            scores.Add(new(c.Label,-1,c.Id,c.Policy,Selection.Select((s,i)=>s.Name+(i>=2?"-two":"-single")).ToArray(),results));Save(d,"selection.json",scores);}
+        var baseline=scores.Single(s=>s.Variant=="baseline4061-full");Save(d,"selection-time-scores.json",scores.Select(s=>new{s.Variant,s.Id,Score=TimeScore(s,baseline)}));
+        var choices=new List<RiderDecisionCandidate>();foreach(var newer in new[]{false,true})foreach(var r in new[]{0,1}){
+            var pool=scores.Where(s=>s.Variant.StartsWith(newer?"B-":"A-",StringComparison.Ordinal));var selected=(r==0?FullThrottleLearningExperiment.Rank(pool):RankR1(pool,baseline)).First();
+            var candidate=cs.Single(c=>c.Label==selected.Variant&&c.Id==selected.Id);choices.Add(candidate with{Label=(newer?"B":"A")+r});
+        }
+        Save(d,"ranked-choices.json",choices);
+    }
+    private static void Freeze(string d,RobustBudget b){
+        if(File.Exists(Path.Combine(d,"winner-lock.json"))||b.Entries.Any(e=>e.Category=="final"))throw new InvalidOperationException("Choice already sealed/final opened.");
+        var choices=Read<RiderDecisionCandidate[]>(d,"ranked-choices.json");var main=choices.Single(c=>c.Label=="B1");Save(d,"winner.json",main);
+        var plan=new[]{new RiderDecisionCandidate("130-H06",1020,ExtendedLearningExperiment.StartPolicy(),false,false,.6),new RiderDecisionCandidate("131-H09",4061,StartPolicy(),false,false),
+            new RiderDecisionCandidate("132-H09",6022,Read<ThrottleCandidate>(PhysicalSteeringAudit.PreviousPath("../full-throttle-learning"),"winner.json").Policy,false),main with{Label="133-B1"}}
+            .Concat(choices.Where(c=>c.Label!="B1").Select(c=>c with{Label="133-"+c.Label})).ToArray();
+        Save(d,"final-plan.json",plan);Save(d,"winner-lock.json",new{PolicyHash=Hash(main),PlanHash=Hash(plan),FinalWorlds=0,ReservationCount=b.Entries.Count,Frozen=true});
+    }
+    private static string Semantics(RiderDecisionCandidate c)=>Hash(new{c.Policy,c.NewObjective,c.FullThrottle,c.Horizon});
+    private static void Final(string d,string raw,RobustBudget b){
+        var winner=Read<RiderDecisionCandidate>(d,"winner.json");var plan=Read<RiderDecisionCandidate[]>(d,"final-plan.json");var seal=Read<JsonElement>(d,"winner-lock.json");
+        if(Hash(winner)!=seal.GetProperty("PolicyHash").GetString()||Hash(plan)!=seal.GetProperty("PlanHash").GetString())throw new InvalidOperationException("Frozen choice changed.");
+        var aliases=plan.ToDictionary(c=>c.Label,c=>plan.First(p=>Semantics(p)==Semantics(c)).Label);Save(d,"final-aliases.json",aliases);var evaluations=new List<RobustEvaluation>();
+        foreach(var c in plan)foreach(var two in new[]{false,true}){
+            var suffix=two?"-two":"-single";var cases=two?FinalTwo:FinalSingle;RobustMetrics[] results;
+            if(aliases[c.Label]!=c.Label)results=evaluations.Single(e=>e.Variant==aliases[c.Label]+suffix).Results;
+            else results=cases.Select(s=>Execute(d,raw,b,"final","final-"+c.Label+"-"+s.Name,c,s,two).Metrics).ToArray();
+            evaluations.Add(new(c.Label+suffix,-1,c.Id,c.Policy,cases.Select(s=>s.Name).ToArray(),results));Save(d,"final-results.json",evaluations);
+        }
+    }
+}

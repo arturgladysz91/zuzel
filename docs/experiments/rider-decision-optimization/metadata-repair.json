@@ -1,0 +1,43 @@
+{
+  "Reason": "After the225s scheduling stop, resume reused the final archived Mean array as mutable CEM state. Subsequent updates overwrote only A-s1332026 generation0 Mean metadata. All100 actual policy draws, R0 winners, and all remaining distribution snapshots reproduce at1e-12 before repair; diagnostic retained. Correct only these8 saved means from original start and identical R0 elites. No scores, policies, results, selections or final criteria changed.",
+  "Scope": "Post-run archive metadata repair and defensive copies for future resume",
+  "NativeWorldsAdded": 0,
+  "NativeWorldsAtRepair": 636,
+  "TrainingWorldsAtRepair": 400,
+  "FinalWorldsAtRepair": 180,
+  "SourceBeforeSha256": "50C3255AF2FCC5F254FD894093C409C9824E36AB465EDC9F0B5BCD73CCC8C088",
+  "SourceAfterSha256": "0315BD591780182D7A0C5BEAF4A159595C28AC0391C4E6FF792F5A67263DFBF2",
+  "OriginalArchiveSha256": "7088CC00E89FAC2FE1CE0ABDA0AE7CCBBFC00E56949A1DC370FED70A1E9FA02E",
+  "OriginalPackedSha256": "784C5D7068810AD6C89713A52797F73496E1C85B5EA836E7DA203CA8E2143D5F",
+  "CorrectedArchiveSha256": "35CBB74DAC72695661D34BEFECF94E8A8927824798A467F2733C303454B69483",
+  "EliteIds": [
+    10000,
+    10001
+  ],
+  "OriginalMean": [
+    0.9397631194661215,
+    3.5023932369527437,
+    1.6967115552322765,
+    0.35743915635280465,
+    2.9316359802569183,
+    1.4816494385976053,
+    0.0694698184357917,
+    0.47660986389981363
+  ],
+  "ReconstructedMean": [
+    1.0366929633577708,
+    2.9004919422897033,
+    1.6787773175296756,
+    0.3803903223956709,
+    4,
+    1.5516626358460206,
+    0.0695196178743138,
+    0.5844671655786142
+  ],
+  "StdUnchanged": true,
+  "ImmutableCandidateResultsDigestBefore": "518986BA4802EE5FEFFEDEF544F5662AE2DF4CAA67290845B12D989B6AA5BE1C",
+  "ImmutableCandidateResultsDigestAfter": "518986BA4802EE5FEFFEDEF544F5662AE2DF4CAA67290845B12D989B6AA5BE1C",
+  "AnalysisBeforeSha256": "D4693F06D0A0B19325968A03F65F58D406561DEC07FE0D6BBACE4646C6C910AA",
+  "PairedTimesBeforeSha256": "E694B073B982F6338D484EF54759C1F1A4A83F9FA355C49BED0729F85FAC87D8",
+  "DiagnosticSha256": "BA44EC5592E2C3013937264A8CF78B6430FF3F0F342F88A4AB461D77835C3DA3"
+}

@@ -3,6 +3,11 @@
 Release platform: **Windows only**. See the current [Windows CI policy](docs/ci.md)
 for Draft/full validation, the merge gate and optional historical audits.
 
+[Rider Decision Optimization #133](docs/experiments/rider-decision-optimization/README.md)
+compares the original maneuver score with a robust direction cost on identical
+full-throttle actions and native CEM ranking, then studies R0/R1 selection on the
+same frozen pool. Physics and defaults remain unchanged; the experiment is OFF.
+
 [Full Throttle Learning #132](docs/experiments/full-throttle-learning/README.md)
 isolates an optional full-throttle candidate with the same H09 predictor, eight
 preferences and native physics. It compares unchanged #131 weights and controlled

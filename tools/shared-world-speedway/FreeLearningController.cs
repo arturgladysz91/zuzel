@@ -57,7 +57,7 @@ public sealed class FreeLearningController
             .Append(input.Active).Distinct().ToArray();
     }
     public static FreeLearningDecision Choose(FreeRacingInput input,FreeLearningPolicy policy,RiderSpec spec,TrackFrame frame,
-        TrackStateSnapshot surface,WorldParameters p,float mass,float inertia,double horizonSeconds=HorizonSeconds,bool normalizeProgress=false,bool fullThrottleCandidate=false){
+        TrackStateSnapshot surface,WorldParameters p,float mass,float inertia,double horizonSeconds=HorizonSeconds,bool normalizeProgress=false,bool fullThrottleCandidate=false,bool decisionObjective=false){
         if(!double.IsFinite(horizonSeconds)||horizonSeconds<.3||horizonSeconds>FreeRacingModel.MaximumHorizonSeconds)throw new ArgumentException("Bounded audit horizon required.");
         var candidates=new List<FreeLearningCandidate>();var evaluations=0;var forecasts=0;
         foreach(var action in Actions(input,policy,fullThrottleCandidate)){
@@ -87,6 +87,7 @@ public sealed class FreeLearningController
                 +10*Math.Pow(Math.Max(0,.2-futureGap),2);
             // Beta is not a zero-slip target. Only departure from the inherited control envelope is unsafe.
             if(prediction.Points.Any(q=>Math.Abs(q.Rider.SlideRadians)>Math.PI/4))safety=FreeActionSafety.Unsafe;
+            if(decisionObjective)score+=policy.DirectionWeight*(RiderDecisionObjective133.DirectionShape(error,safety,futureGap,progress)-error*error*10);
             if(safety==FreeActionSafety.Unsafe)score+=10000*Math.Pow(Math.Max(.001,-clearance),2);
             candidates.Add(new(action,safety,score,progress,clearance,futureGap,v.Speed,v.SlideRadians,error));
         }

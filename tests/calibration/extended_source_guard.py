@@ -1,12 +1,24 @@
-"""Verify exact #131 extensions before reconstructing frozen #130 source bytes."""
+"""Verify approved extensions before restoring exact frozen #130–#132 bytes."""
 import hashlib
 import json
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[2]
 
-def source131(name):
+def source132(name):
     current=(ROOT/'tools/shared-world-speedway'/name).read_bytes()
+    manifest=ROOT/'docs/experiments/rider-decision-optimization/source-extensions.json'
+    if not manifest.exists():return current
+    item=json.loads(manifest.read_bytes())['Sources'].get(name)
+    if item is None:return current
+    digest=lambda b:hashlib.sha256(b).hexdigest().upper()
+    if digest(current)!=item['ApprovedSha256']:raise AssertionError('Unreviewed #133 source bytes: '+name)
+    restored=item['Before'].encode('utf-8')
+    if digest(restored)!=item['BaseSha256']:raise AssertionError('Cannot restore exact #132: '+name)
+    return restored
+
+def source131(name):
+    current=source132(name)
     manifest=ROOT/'docs/experiments/full-throttle-learning/source-extensions.json'
     if not manifest.exists():
         return current
