@@ -1,0 +1,114 @@
+{
+  "state": {
+    "Name": "D-B-middle1",
+    "Case": {
+      "Name": "D-B",
+      "Geometry": "progressive-b",
+      "Scenario": {
+        "Name": "D-B",
+        "Level": 4,
+        "Speed": 16,
+        "Offset": 5,
+        "Start": 18.125,
+        "OutwardSpeed": 0.08,
+        "HeadingError": 0.012,
+        "YawRate": 0.025
+      },
+      "Two": true
+    },
+    "Phase": "middle1",
+    "Time": 3.8,
+    "Input": {
+      "Rider": {
+        "Id": 1,
+        "Position": {
+          "X": 64.819725,
+          "Y": 32.70299
+        },
+        "Velocity": {
+          "X": -1.0882633,
+          "Y": 16.570482
+        },
+        "Heading": 1.732508,
+        "AngularVelocity": 0.41505757,
+        "Road": {
+          "Segment": 2,
+          "Progress": 0.5423152297326045,
+          "ReferenceMeters": 85.06837207750459,
+          "OffsetMeters": -0.04978311063611239,
+          "Heading": 1.608518996903008,
+          "RadiusMeters": 36.34178334462129,
+          "CornerProgress": 0.5141050765775348,
+          "Tangent": {
+            "X": -0.037713725,
+            "Y": 0.99928856
+          },
+          "Outward": {
+            "X": 0.99928856,
+            "Y": 0.037713725
+          },
+          "IsTurn": true
+        },
+        "TotalReferenceMeters": 85.06837207750459,
+        "DistanceMeters": 67.99834588170052,
+        "Activity": 0,
+        "Drive": 0,
+        "TargetOffsetMeters": 5,
+        "Impairment": 0,
+        "Context": 1,
+        "Speed": 16.60618,
+        "ForwardSpeed": 16.529509,
+        "SideSpeed": -1.5939108,
+        "SlideRadians": 0.09613099
+      },
+      "Time": 3.8,
+      "Omega": 50.25019761034828,
+      "Steering": 0.02617994,
+      "Active": {
+        "SteeringRadians": 0.02617994,
+        "Drive": 0
+      },
+      "Pending": [
+        {
+          "ObservedAt": 3.6,
+          "ActivationAt": 3.84,
+          "Action": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0
+          }
+        }
+      ],
+      "NextReview": 3.8
+    }
+  },
+  "Actions": [
+    {
+      "SteeringRadians": -0.02617994,
+      "Drive": 1
+    },
+    {
+      "SteeringRadians": 0.02617994,
+      "Drive": 0
+    }
+  ],
+  "Evaluation": {
+    "Action": {
+      "SteeringRadians": -0.02617994,
+      "Drive": 1
+    },
+    "Safety": 0,
+    "Score": -9.21410923732659,
+    "Progress": 15.357261223636442,
+    "Clearance": 0.32064493584190423,
+    "FutureClearance": 0.5509908561776246,
+    "ExitSpeed": 17.21211814880371,
+    "ExitBeta": 0.09728547185659409,
+    "DirectionError": 0.37683158638808845
+  },
+  "ExpectedActivations": [
+    4.04,
+    4.24
+  ],
+  "CachedVsCausalPolicyMaximumXY": 0,
+  "ExactPredictedPending": true
+}

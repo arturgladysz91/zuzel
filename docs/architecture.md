@@ -1,5 +1,13 @@
 # Architecture
 
+[Causal Yaw & Throttle (#137)](experiments/causal-yaw-throttle/README.md) is an
+explicit tools-only CLI. It reuses the unchanged model for a common pre-activation
+prefix and bounded suffixes, with original reaction and pending semantics. Native
+execution replans every0.2s and does not promise to execute a forecast second action.
+The separate observation collector retains the original guards and two-bend gate;
+extended captures record the full next straight as a separate scope. No production
+CoreSim, physics, policy weight, geometry or default changes.
+
 [Multi-Action Planning (#135)](experiments/multi-action-planning/README.md) is an
 isolated, default-OFF diagnostic CLI referencing the existing experimental world.
 It reuses the frozen causal predictor callback and original native integration.

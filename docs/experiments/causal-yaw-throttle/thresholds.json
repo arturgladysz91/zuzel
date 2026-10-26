@@ -1,0 +1,15 @@
+{
+  "BaselineMeanDecisionCpu": 0.09341809640522876,
+  "NewPreflightMaximumMeanDecisionCpu": 0.1578125,
+  "Projected20SecondEpisodeCpu": 18.78125,
+  "TimeGainSeconds": 0.15,
+  "ExitSpeedGainKph": 1,
+  "StraightSpeedGainKph": 2,
+  "MinimumHeldCasesImproved": 3,
+  "MinimumGeometries": 2,
+  "NewDnf": 0,
+  "MaximumMeanDecisionCpu": 0.16348166870915032,
+  "MaximumFourRiderSearchCpuPerSimSecond": 4,
+  "Rule": "Require \u003E=3 of4held cases improve full time\u003E=.15s, geometric exit\u003E=1kmh and shared straight sample\u003E=2kmh, with two geometries and no newDNF. Mean decision CPU\u003C=min(.2,1.75*Apreflight) and20decisions/s\u003C=4CPU-s/s; excludes native/traffic, so no production readiness claim.",
+  "BeforeSelectionAndConfirmation": true
+}
