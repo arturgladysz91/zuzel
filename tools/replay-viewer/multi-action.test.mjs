@@ -12,6 +12,11 @@ test('135 sequence readout uses recorded requests and activations, never future 
   const before=planningReadout(plan,run,plan.Time+.23);assert.equal(before.events[0].status,'pending');assert.equal(before.events[2].status,'przyszłe żądanie');assert.ok(before.sample.Input.Time<=plan.Time+.23+1e-8);
   const after=planningReadout(plan,run,plan.Time+.65);for(const e of after.events)assert.ok(Math.abs(e.actual-e.activation)<1e-8);
 });
+test('135 activation labels respect native timestamp tolerance at exact9.44',()=>{
+  const g=index.Groups.find(g=>g.Id==='V-C-preparation2'),run=bundle.Runs[g.Runs.find(r=>r.Policy==='B').Name],plan=g.Plans.find(p=>p.Arm==='B');
+  const t=plan.Time+.2+plan.ReactionSeconds;const at=planningReadout(plan,run,t);assert.equal(at.events[1].status,'aktywna lub zastąpiona');
+  assert.equal(planningReadout(plan,run,t-.0001).events[1].status,'pending');
+});
 test('135 selected native bundle retains exact original prefices, full geometry and DNF endpoints',()=>{
   assert.ok(index.Groups.some(g=>g.Runs.some(r=>!bundle.Runs[r.Name].Replay.Metrics.Completed)));
   assert.ok(index.Groups.some(g=>g.GeometryFile.startsWith('egg-asymmetric')));

@@ -3,7 +3,7 @@ export function planningReadout(plan,run,time){
   const events=(plan?.Actions??[]).map((a,j)=>{
     const observation=plan.Time+j*.2,activation=observation+plan.ReactionSeconds;
     const actual=run.Replay.Activations.find(x=>Math.abs(x.ObservedAt-observation)<1e-8&&x.Action.Drive===a.Drive&&x.Action.SteeringRadians===a.SteeringRadians);
-    return {action:a,observation,activation,actual:actual?.ActivationAt??null,status:time<observation?'przyszłe żądanie':time<activation?'pending':actual&&actual.ActivationAt<=time?'aktywna lub zastąpiona':'nie doszło do aktywacji'};
+    return {action:a,observation,activation,actual:actual?.ActivationAt??null,status:time<observation-1e-8?'przyszłe żądanie':time<activation-1e-8?'pending':actual&&actual.ActivationAt<=time+1e-8?'aktywna lub zastąpiona':'nie doszło do aktywacji'};
   });
   const sample=run.Replay.Samples.filter(s=>s.Input.Time<=time+1e-10).at(-1)??run.Replay.Samples[0];
   return {events,sample};
