@@ -1,0 +1,382 @@
+{
+  "Title": "#137 Causal Yaw & Throttle · autonomiczne wybory Native Box2D",
+  "Grade": "PARTIAL",
+  "PreferredPolicy": "B",
+  "DefaultRun": "extended-V0-b-B",
+  "Labels": {
+    "A": "A · oryginalne #134 A #16015",
+    "B": "B · dwie akcje, yaw terminalny",
+    "C": "C · jedna akcja, yaw w czasie",
+    "D": "D · dwie akcje, yaw w czasie"
+  },
+  "Colors": {
+    "A": "#ffd27b",
+    "B": "#73dfdf",
+    "C": "#d99fe3",
+    "D": "#ff9c86"
+  },
+  "Horizons": {
+    "A": 0.9,
+    "B": 0.9,
+    "C": 0.9,
+    "D": 0.9
+  },
+  "Groups": [
+    {
+      "Id": "V0-b",
+      "Reasons": [
+        "autonomiczne A / B",
+        "pełna następna prosta"
+      ],
+      "Scenario": {
+        "Name": "V0",
+        "Level": 4,
+        "Speed": 15.65,
+        "Offset": 4.85,
+        "Start": 18.85,
+        "OutwardSpeed": -0.0875,
+        "HeadingError": -0.0165,
+        "YawRate": 0.019
+      },
+      "Scope": "Historyczne dwa łuki i osobny pomiar pełnej następnej prostej. Prognozowana druga akcja nie jest gwarancją jej wykonania przy kolejnym replanowaniu.",
+      "GeometryFile": "progressive-b-viewer-geometry.json",
+      "TwoBends": true,
+      "Runs": [
+        {
+          "Name": "extended-V0-b-A",
+          "Policy": "A"
+        },
+        {
+          "Name": "extended-V0-b-B",
+          "Policy": "B"
+        }
+      ],
+      "Events": [
+        {
+          "Time": 1.8,
+          "Label": "Nowe żądanie gaz1 odrzucone przez A w tym samym stanie",
+          "Kind": "request"
+        },
+        {
+          "Time": 2.04,
+          "Label": "Rzeczywista aktywacja gaz1",
+          "Kind": "activation"
+        },
+        {
+          "Time": 2,
+          "Label": "Nowa rzeczywista komenda kierownicy",
+          "Kind": "correction"
+        },
+        {
+          "Time": 6.494758,
+          "Label": "Geometryczny koniec łuku 1",
+          "Kind": "exit"
+        },
+        {
+          "Time": 15.522905999999999,
+          "Label": "Geometryczny koniec łuku 2",
+          "Kind": "exit"
+        }
+      ],
+      "PlansFile": "plans-extended-V0-b-B.json.gz",
+      "PairedSummary": "A / B; zakres: dwa łuki i osobny pełny pomiar prostej. Wyniki: completed / completed"
+    },
+    {
+      "Id": "V0-c",
+      "Reasons": [
+        "autonomiczne A / B",
+        "pełna następna prosta"
+      ],
+      "Scenario": {
+        "Name": "V0",
+        "Level": 4,
+        "Speed": 15.65,
+        "Offset": 4.85,
+        "Start": 18.85,
+        "OutwardSpeed": -0.0875,
+        "HeadingError": -0.0165,
+        "YawRate": 0.019
+      },
+      "Scope": "Historyczne dwa łuki i osobny pomiar pełnej następnej prostej. Prognozowana druga akcja nie jest gwarancją jej wykonania przy kolejnym replanowaniu.",
+      "GeometryFile": "progressive-c-viewer-geometry.json",
+      "TwoBends": true,
+      "Runs": [
+        {
+          "Name": "extended-V0-c-A",
+          "Policy": "A"
+        },
+        {
+          "Name": "extended-V0-c-B",
+          "Policy": "B"
+        }
+      ],
+      "Events": [
+        {
+          "Time": 1.8,
+          "Label": "Nowe żądanie gaz1 odrzucone przez A w tym samym stanie",
+          "Kind": "request"
+        },
+        {
+          "Time": 2.04,
+          "Label": "Rzeczywista aktywacja gaz1",
+          "Kind": "activation"
+        },
+        {
+          "Time": 2,
+          "Label": "Nowa rzeczywista komenda kierownicy",
+          "Kind": "correction"
+        },
+        {
+          "Time": 6.494758,
+          "Label": "Geometryczny koniec łuku 1",
+          "Kind": "exit"
+        },
+        {
+          "Time": 15.522905999999999,
+          "Label": "Geometryczny koniec łuku 2",
+          "Kind": "exit"
+        }
+      ],
+      "PlansFile": "plans-extended-V0-c-B.json.gz",
+      "PairedSummary": "A / B; zakres: dwa łuki i osobny pełny pomiar prostej. Wyniki: completed / completed"
+    },
+    {
+      "Id": "V1-b",
+      "Reasons": [
+        "autonomiczne A / B",
+        "pełna następna prosta"
+      ],
+      "Scenario": {
+        "Name": "V1",
+        "Level": 4,
+        "Speed": 17.85,
+        "Offset": 6.35,
+        "Start": 19.05,
+        "OutwardSpeed": 0.0975,
+        "HeadingError": 0.0185,
+        "YawRate": -0.021
+      },
+      "Scope": "Historyczne dwa łuki i osobny pomiar pełnej następnej prostej. Prognozowana druga akcja nie jest gwarancją jej wykonania przy kolejnym replanowaniu.",
+      "GeometryFile": "progressive-b-viewer-geometry.json",
+      "TwoBends": true,
+      "Runs": [
+        {
+          "Name": "extended-V1-b-A",
+          "Policy": "A"
+        },
+        {
+          "Name": "extended-V1-b-B",
+          "Policy": "B"
+        }
+      ],
+      "Events": [
+        {
+          "Time": 1.2,
+          "Label": "Nowe żądanie gaz1 odrzucone przez A w tym samym stanie",
+          "Kind": "request"
+        },
+        {
+          "Time": 1.44,
+          "Label": "Rzeczywista aktywacja gaz1",
+          "Kind": "activation"
+        },
+        {
+          "Time": 1.4000000000000001,
+          "Label": "Nowa rzeczywista komenda kierownicy",
+          "Kind": "correction"
+        },
+        {
+          "Time": 6.349146999999999,
+          "Label": "Geometryczny koniec łuku 1",
+          "Kind": "exit"
+        },
+        {
+          "Time": 15.333379,
+          "Label": "Geometryczny koniec łuku 2",
+          "Kind": "exit"
+        }
+      ],
+      "PlansFile": "plans-extended-V1-b-B.json.gz",
+      "PairedSummary": "A / B; zakres: dwa łuki i osobny pełny pomiar prostej. Wyniki: completed / completed"
+    },
+    {
+      "Id": "V1-c",
+      "Reasons": [
+        "autonomiczne A / B",
+        "pełna następna prosta"
+      ],
+      "Scenario": {
+        "Name": "V1",
+        "Level": 4,
+        "Speed": 17.85,
+        "Offset": 6.35,
+        "Start": 19.05,
+        "OutwardSpeed": 0.0975,
+        "HeadingError": 0.0185,
+        "YawRate": -0.021
+      },
+      "Scope": "Historyczne dwa łuki i osobny pomiar pełnej następnej prostej. Prognozowana druga akcja nie jest gwarancją jej wykonania przy kolejnym replanowaniu.",
+      "GeometryFile": "progressive-c-viewer-geometry.json",
+      "TwoBends": true,
+      "Runs": [
+        {
+          "Name": "extended-V1-c-A",
+          "Policy": "A"
+        },
+        {
+          "Name": "extended-V1-c-B",
+          "Policy": "B"
+        }
+      ],
+      "Events": [
+        {
+          "Time": 1.2,
+          "Label": "Nowe żądanie gaz1 odrzucone przez A w tym samym stanie",
+          "Kind": "request"
+        },
+        {
+          "Time": 1.44,
+          "Label": "Rzeczywista aktywacja gaz1",
+          "Kind": "activation"
+        },
+        {
+          "Time": 1.4000000000000001,
+          "Label": "Nowa rzeczywista komenda kierownicy",
+          "Kind": "correction"
+        },
+        {
+          "Time": 6.349146999999999,
+          "Label": "Geometryczny koniec łuku 1",
+          "Kind": "exit"
+        },
+        {
+          "Time": 15.333379,
+          "Label": "Geometryczny koniec łuku 2",
+          "Kind": "exit"
+        }
+      ],
+      "PlansFile": "plans-extended-V1-c-B.json.gz",
+      "PairedSummary": "A / B; zakres: dwa łuki i osobny pełny pomiar prostej. Wyniki: completed / completed"
+    },
+    {
+      "Id": "T-E",
+      "Reasons": [
+        "autonomiczne A / B",
+        "transfer, standardowy zakres"
+      ],
+      "Scenario": {
+        "Name": "V1",
+        "Level": 4,
+        "Speed": 17.85,
+        "Offset": 6.35,
+        "Start": 19.05,
+        "OutwardSpeed": 0.0975,
+        "HeadingError": 0.0185,
+        "YawRate": -0.021
+      },
+      "Scope": "Transfer egg-asymmetric: standardowe dwa łuki +1s kontroli. Prognozowana druga akcja nie jest gwarancją jej wykonania przy kolejnym replanowaniu.",
+      "GeometryFile": "egg-asymmetric-viewer-geometry.json",
+      "TwoBends": true,
+      "Runs": [
+        {
+          "Name": "transfer-A",
+          "Policy": "A"
+        },
+        {
+          "Name": "transfer-B",
+          "Policy": "B"
+        }
+      ],
+      "Events": [
+        {
+          "Time": 3.8000000000000003,
+          "Label": "Nowe żądanie gaz1 odrzucone przez A w tym samym stanie",
+          "Kind": "request"
+        },
+        {
+          "Time": 4.04,
+          "Label": "Rzeczywista aktywacja gaz1",
+          "Kind": "activation"
+        },
+        {
+          "Time": 4,
+          "Label": "Nowa rzeczywista komenda kierownicy",
+          "Kind": "correction"
+        },
+        {
+          "Time": 6.789522,
+          "Label": "Geometryczny koniec łuku 1",
+          "Kind": "exit"
+        },
+        {
+          "Time": 16.121478,
+          "Label": "Geometryczny koniec łuku 2",
+          "Kind": "exit"
+        }
+      ],
+      "PlansFile": "plans-transfer-B.json.gz",
+      "PairedSummary": "A / B; zakres: transfer standardowy. Wyniki: completed / completed"
+    },
+    {
+      "Id": "S-B-C-DNF",
+      "Reasons": [
+        "autonomiczne A / C",
+        "DNF C w selekcji"
+      ],
+      "Scenario": {
+        "Name": "S",
+        "Level": 4,
+        "Speed": 17.1,
+        "Offset": 5.8,
+        "Start": 18.4,
+        "OutwardSpeed": 0.095,
+        "HeadingError": 0.015,
+        "YawRate": -0.022
+      },
+      "Scope": "Selekcyjny C: DNF, bez ekstrapolacji. Prognozowana druga akcja nie jest gwarancją jej wykonania przy kolejnym replanowaniu.",
+      "GeometryFile": "progressive-b-viewer-geometry.json",
+      "TwoBends": true,
+      "Runs": [
+        {
+          "Name": "select-S-B-A",
+          "Policy": "A"
+        },
+        {
+          "Name": "select-S-B-C",
+          "Policy": "C"
+        }
+      ],
+      "Events": [
+        {
+          "Time": 0.2,
+          "Label": "Nowa rzeczywista komenda kierownicy",
+          "Kind": "correction"
+        },
+        {
+          "Time": 6.814717000000001,
+          "Label": "Geometryczny koniec łuku 1",
+          "Kind": "exit"
+        },
+        {
+          "Time": 13.05,
+          "Label": "Brak certyfikacji obrysu — DNF C",
+          "Kind": "failure"
+        }
+      ],
+      "PlansFile": "plans-select-S-B-C.json.gz",
+      "PairedSummary": "A / C; zakres: selekcja — DNF. Wyniki: completed / uncertified interval"
+    }
+  ],
+  "ComparisonCharts": true,
+  "RawAvailability": "W Git są pełne raw wszystkich nowych światów w native/, CSV w telemetry/ i oddzielne prognozy offline. Bez wymuszonego gazu w tych przejazdach.",
+  "Charts": [
+    [
+      "native-telemetry.svg",
+      "Prędkość, gaz, yaw, beta, opony i prześwity względem drogi"
+    ],
+    [
+      "yaw-diagnostic.svg",
+      "Oddzielne prognozy yaw — stała komenda i przyczynowa korekta"
+    ]
+  ]
+}

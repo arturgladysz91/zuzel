@@ -3,6 +3,10 @@
 Release platform: **Windows only**. See the current [Windows CI policy](docs/ci.md)
 for Draft/full validation, the merge gate and optional historical audits.
 
+[Causal Yaw & Throttle Continuation (#137)](docs/experiments/causal-yaw-throttle/README.md)
+compares held and causal two-command forecasts with terminal and time-averaged yaw
+costs. Native evidence remains PARTIAL; the bounded prototype is default OFF.
+
 [Speed & Throttle Root Cause (#136)](docs/experiments/speed-throttle-root-cause/README.md)
 audits the frozen #134 A controller, 54 bounded native worlds and delayed full-gas
 interventions. Physics, policy weights and production defaults remain unchanged.

@@ -1,0 +1,75 @@
+{
+  "BaseHead": "060d6819cbae1ab701f3439d74a6e6266230419a",
+  "Verdict": "PARTIAL",
+  "DefaultOff": true,
+  "CemRuns": 0,
+  "LocalWindows": {
+    "Restore": "PASS; cached packages, local NuGetAudit=false because the remote audit feed was unavailable; standard remote CI keeps its normal settings",
+    "ReleaseBuildWarningsAsErrors": {
+      "Passed": true,
+      "Warnings": 0,
+      "Errors": 0
+    },
+    "Dotnet": {
+      "Passed": 2418,
+      "Failed": 0,
+      "Skipped": 0,
+      "Core": 2023,
+      "Trajectory": 395
+    },
+    "PythonCalibration": {
+      "Passed": 220,
+      "Failed": 0
+    },
+    "PythonCi": {
+      "Passed": 7,
+      "Failed": 0
+    },
+    "Node": {
+      "Passed": 60,
+      "Failed": 0,
+      "Skipped": 0
+    },
+    "FinalViewerFocused": {
+      "Passed": 3,
+      "Failed": 0
+    },
+    "Discovery": {
+      "Discovered": 2939,
+      "AssignedExactlyOnce": 2939,
+      "Missing": 0,
+      "Extra": 0,
+      "Duplicates": 0
+    },
+    "FrozenProductionConsumers": 39,
+    "ViewerVisualQa": "PASS: native map, two moving recorded traces, full second straight, planned versus actual next replan and explicit failed C case; async publication waits until plans are loaded"
+  },
+  "ScientificEvidence": {
+    "Worlds": 60,
+    "EpisodeAndSearchCpuSeconds": 520.453125,
+    "Contacts": 13442811,
+    "Forecasts": 153955,
+    "Off136Exact": true,
+    "PrefixVsCausalPolicyMaxXYMeters": 0,
+    "PredictVsNativeMaxXYMeters": 0.00013,
+    "SelectedArm": "B",
+    "HeldPhysicalStartFamilies": 2,
+    "HeldCaseGeometryPairs": 4,
+    "JointGoCases": 0,
+    "NewSelectedHeldDnf": 0,
+    "ExtendedFullSecondStraightsLegal": 8,
+    "MeanHeldSearchCpuSeconds": 0.15671781437125748,
+    "FourRiderSearchOnlyExtrapolationCpuSecondsPerSimSecond": 3.13435628742515,
+    "ReadOnlyMetricsCpuSeconds": 8.859375,
+    "NativeMetricForceQueries": 0,
+    "DiagnosticForecastStateQueries": 3292
+  },
+  "RemoteCi": "Standard Windows CI for the final pushed head is recorded in the Draft PR; not asserted by this pre-push file.",
+  "Limitations": [
+    "Finite H09 continuation is not global reachability.",
+    "The second predicted request is reconsidered at the next real review.",
+    "Four case/geometry pairs contain two physical start families; B/C paths were identical within their different widths.",
+    "Neither full active throttle at held exits nor 100km/h was achieved.",
+    "CPU extrapolation excludes native dynamics and traffic; not a four-rider heat."
+  ]
+}

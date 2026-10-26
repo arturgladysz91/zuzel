@@ -1,6 +1,7 @@
 import {awarenessReadout,knowledgeEdges} from './track-awareness.mjs';
 import {planningPanel} from './multi-action.mjs';
 import {speedThrottlePanel,throttleMarkers} from './speed-throttle.mjs';
+import {causalPanel,causalMarkers} from './causal-yaw.mjs';
 import { Replay, parseCsv, clamp, enumName, decisionStatus, crossSection, worldCapsules, authoredReplayDocument, motionVectors, bendJumps, boundaryStatus } from './model.mjs';
 import { currentRecordings, readGzip } from './recordings.mjs';
 import { loadContinuous } from './continuous.mjs';
@@ -35,6 +36,7 @@ const throttleOption=document.createElement('option');throttleOption.value='full
 const awarenessOption=document.createElement('option');awarenessOption.value='track-awareness';awarenessOption.textContent='#134 · Track Awareness · geometria i reakcja';$('scenario').prepend(awarenessOption);
 const planningOption=document.createElement('option');planningOption.value='multi-action';planningOption.textContent='#135 · Multi-Action Planning · sekwencje i Box2D';$('scenario').prepend(planningOption);
 const speedThrottleOption=document.createElement('option');speedThrottleOption.value='speed-throttle';speedThrottleOption.textContent='#136 · Speed & Throttle · native A / interwencje';$('scenario').prepend(speedThrottleOption);
+const causalOption=document.createElement('option');causalOption.value='causal-yaw';causalOption.textContent='#137 · Causal Yaw · autonomiczne A / B';$('scenario').prepend(causalOption);
 const decisionOption=document.createElement('option');decisionOption.value='rider-decision';decisionOption.textContent='#133 · Rider Decision Optimization · koszt i selekcja';$('scenario').prepend(decisionOption);
 const learningOption=document.createElement('option');learningOption.value='free-learning';
 learningOption.textContent='#129 · Free Racing Learning · proces uczenia i kamienie milowe';$('scenario').prepend(learningOption);
@@ -173,7 +175,7 @@ function updatePanel() {
     updateFreeRacingPanel($('free-racing-analysis'),replay,time);
   }
   if(replay.learning&&!replay.robust){$('target').textContent='brak narzuconej linii';updateLearningPanel($('learning-telemetry'),replay,time);}
-  if(replay.robust){$('target').textContent='brak narzuconej linii';updateRobustPanel($('robust-telemetry'),replay,time);if(replay.throttleData)speedThrottlePanel($('speed-throttle-panel'),replay.throttleData,time);if(replay.planningData){const data=replay.planningData;planningPanel($('planning-panel'),data.group.Plans?.find(p=>p.Arm===replay.robustPolicy),data.document,time,data.group);}}
+  if(replay.robust){$('target').textContent='brak narzuconej linii';updateRobustPanel($('robust-telemetry'),replay,time);if(replay.causalData)causalPanel($('causal-yaw-panel'),replay.causalData,time);if(replay.throttleData)speedThrottlePanel($('speed-throttle-panel'),replay.throttleData,time);if(replay.planningData){const data=replay.planningData;planningPanel($('planning-panel'),data.group.Plans?.find(p=>p.Arm===replay.robustPolicy),data.document,time,data.group);}}
   $('status').textContent = state.finished ? 'Finished' : enumName(geometry, 'activity', state.activity);
   $('status').classList.toggle('finished', state.finished);
   $('lap').textContent = replay.planAt ? 'Dwa łuki · bez pełnego okrążenia' : state.finished ? `${state.totalLaps}/${state.totalLaps} · meta ${format(state.finish)} s` : `${state.lap}/${state.totalLaps} · ukończono ${state.completedLaps}`;
@@ -332,6 +334,20 @@ function draw() {
       context.fillStyle=comparison.color;context.fillText(comparison.policy,p.x+8,p.y+12);
     }
   }
+  if(replay.causalData){
+    const markers=causalMarkers(replay.causalData),left=Math.max(12,width-254);
+    context.fillStyle='#10202de8';context.fillRect(left-6,8,248,markers.length*15+10);
+    for(const [index,marker] of markers.entries()){
+      const p=worldToScreen(marker);context.beginPath();context.arc(p.x,p.y,4,0,Math.PI*2);context.fillStyle=marker.color;context.fill();
+      context.font='9px Segoe UI';context.fillText(`${index+1}`,p.x+4,p.y-6-index*8);
+      context.fillText(`${index+1}. ${marker.shortLabel} · ${marker.time.toFixed(2)}s`,left,22+index*15);
+    }
+    for(const comparison of replay.causalData.comparisonRuns.filter(r=>r.policy!==replay.robustPolicy)){
+      const sample=comparison.run.Replay.Samples.filter(s=>s.Input.Time<=time+1e-9).at(-1);if(!sample)continue;
+      const native=sample.Input.Rider.Position,p=worldToScreen({x:native.X,y:native.Y});context.beginPath();context.arc(p.x,p.y,5,0,Math.PI*2);
+      context.strokeStyle=comparison.color;context.lineWidth=2;context.stroke();context.fillStyle=comparison.color;context.fillText(comparison.policy,p.x+8,p.y+12);
+    }
+  }
   for (const state of states) {
     if ($('trails').checked) {
       const points = replay.tracks.get(state.id).filter(p => p.t <= time);
@@ -400,14 +416,17 @@ async function loadScenario(key,keepTime=null) {
   $('free-racing-analysis').hidden=true;
   $('free-learning-analysis').hidden=true;
   $('robust-learning-analysis').hidden=true;
-  $('targets').disabled=['free-racing','free-learning','robust-learning','extended-learning','full-throttle-learning','rider-decision','track-awareness','multi-action','speed-throttle'].includes(key);
-  $('outer-limit').disabled=['free-racing','free-learning','robust-learning','extended-learning','full-throttle-learning','rider-decision','track-awareness','multi-action','speed-throttle'].includes(key);
+  $('targets').disabled=['free-racing','free-learning','robust-learning','extended-learning','full-throttle-learning','rider-decision','track-awareness','multi-action','speed-throttle','causal-yaw'].includes(key);
+  $('outer-limit').disabled=['free-racing','free-learning','robust-learning','extended-learning','full-throttle-learning','rider-decision','track-awareness','multi-action','speed-throttle','causal-yaw'].includes(key);
   $('load-state').textContent = 'Wczytywanie zaakceptowanych stanów…';
   try {
-    if(['robust-learning','extended-learning','full-throttle-learning','rider-decision','track-awareness','multi-action','speed-throttle'].includes(key)){
-      const root=key==='speed-throttle'?'../../docs/experiments/speed-throttle-root-cause/':key==='multi-action'?'../../docs/experiments/multi-action-planning/':key==='track-awareness'?'../../docs/experiments/track-awareness-anticipatory-riding/':key==='rider-decision'?'../../docs/experiments/rider-decision-optimization/':key==='full-throttle-learning'?'../../docs/experiments/full-throttle-learning/':key==='extended-learning'?'../../docs/experiments/autonomous-speedway-extended-learning/':undefined;
+    if(['robust-learning','extended-learning','full-throttle-learning','rider-decision','track-awareness','multi-action','speed-throttle','causal-yaw'].includes(key)){
+      const root=key==='causal-yaw'?'../../docs/experiments/causal-yaw-throttle/':key==='speed-throttle'?'../../docs/experiments/speed-throttle-root-cause/':key==='multi-action'?'../../docs/experiments/multi-action-planning/':key==='track-awareness'?'../../docs/experiments/track-awareness-anticipatory-riding/':key==='rider-decision'?'../../docs/experiments/rider-decision-optimization/':key==='full-throttle-learning'?'../../docs/experiments/full-throttle-learning/':key==='extended-learning'?'../../docs/experiments/autonomous-speedway-extended-learning/':undefined;
       const data=await loadRobust(fetch,new URL(location.href).searchParams.get('run'),root,new URL(location.href).searchParams.get('group'));if(generation!==loadGeneration)return;
+      if(key==='causal-yaw'){data.causalPlans=JSON.parse(await readGzip(await fetch(root+data.group.PlansFile)));if(generation!==loadGeneration)return;}
       geometry=data.geometry;replay=data.replay;if(key==='multi-action')replay.planningData=data;if(key==='speed-throttle')replay.throttleData=data;selected=[...replay.tracks.keys()][0];comparisonTrails=data.comparisons;widthGeometries=[];
+      if(key==='causal-yaw'){replay.causalData=data;
+        if(data.document.Replay.Name.startsWith('extended-'))replay.episodeScope='Dwa łuki + pełna następna prosta · osobny pomiar';}
       for(const id of ['width-controls','width-comparison'])$(id).hidden=true;
       $('comparison-legend').hidden=false;$('comparison-legend').replaceChildren();
       for(const c of data.comparisons){const span=document.createElement('span');span.style.color=c.color;span.textContent=c.name+' · ';$('comparison-legend').append(span);}
@@ -415,7 +434,7 @@ async function loadScenario(key,keepTime=null) {
       document.querySelector('.brand p').textContent=data.index.Title??'Robust Free Racing Learning · kontrolowane A/B · nowy niezależny test';
       $('safety-note').hidden=false;$('safety-note').className='safety-note'+(data.document.Replay.Metrics.Completed||data.document.Replay.Metrics.Outcome==='probe'?'':' unsafe');
       $('safety-note').textContent=`${data.group.Id}: ${data.document.Replay.Metrics.Outcome}. Potwierdzone przekroczenie i brak certyfikacji są odrębnymi wynikami.`;
-      document.querySelector('.map-title span').textContent=['track-awareness','multi-action','speed-throttle'].includes(key)?data.document.GeometryName.toUpperCase():'EGG MILD · PROGRESSIVE B';document.querySelector('.map-title small').textContent='Rzeczywiste ślady · bez idealnej linii';
+      document.querySelector('.map-title span').textContent=['track-awareness','multi-action','speed-throttle','causal-yaw'].includes(key)?data.document.GeometryName.toUpperCase():'EGG MILD · PROGRESSIVE B';document.querySelector('.map-title small').textContent='Rzeczywiste ślady · bez idealnej linii';
       $('smooth').checked=false;$('targets').checked=false;$('outer-limit').checked=false;$('rate').value='0.5';
       $('sampling-note').textContent=`${data.document.Replay.Samples.length} natywnych stanów · bez ekstrapolacji`;
       $('record-clip').hidden=typeof MediaRecorder==='undefined'||!canvas.captureStream;
@@ -425,6 +444,7 @@ async function loadScenario(key,keepTime=null) {
       $('riders').replaceChildren(button);$('source-count').textContent='1 motocykl';$('scrub').max=String(replay.duration);
       setTime(keepTime??Number(new URL(location.href).searchParams.get('t')??0));chooseRider(selected);fit();
       if(key==='speed-throttle'){const panel=document.createElement('div');panel.id='speed-throttle-panel';$('robust-learning-analysis').prepend(panel);speedThrottlePanel(panel,data,time);}
+      if(key==='causal-yaw'){const panel=document.createElement('div');panel.id='causal-yaw-panel';$('robust-learning-analysis').prepend(panel);causalPanel(panel,data,time);$('recording-mode').textContent='#137 CAUSAL YAW · '+data.index.Grade+' · autonomiczne A / '+data.group.Runs.find(r=>r.Policy!=='A')?.Policy;}
       if(key==='multi-action'){const panel=document.createElement('div');panel.id='planning-panel';$('robust-learning-analysis').prepend(panel);planningPanel(panel,data.group.Plans?.find(p=>p.Arm===replay.robustPolicy),data.document,time,data.group);}
       $('robust-learning-analysis').hidden=false;$('load-state').hidden=true;return;
     }

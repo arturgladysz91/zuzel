@@ -1,0 +1,2162 @@
+[
+  {
+    "Name": "D-B-middle1",
+    "Arm": "A",
+    "Native": {
+      "Name": "control-D-B-middle1-A",
+      "Arm": "A",
+      "Mode": "controlled-H09-then-A",
+      "Case": {
+        "Name": "D-B",
+        "Geometry": "progressive-b",
+        "Scenario": {
+          "Name": "D-B",
+          "Level": 4,
+          "Speed": 16,
+          "Offset": 5,
+          "Start": 18.125,
+          "OutwardSpeed": 0.08,
+          "HeadingError": 0.012,
+          "YawRate": 0.025
+        },
+        "Two": true
+      },
+      "Metrics": {
+        "Native": {
+          "Completed": true,
+          "Outcome": "completed",
+          "GateSeconds": 15.89,
+          "DurationSeconds": 16.89,
+          "LegalProgress": 296.5852665901184,
+          "LegalSeconds": 16.89,
+          "MinimumClearanceMeters": 0.11695217968257675,
+          "EntrySpeed": 18.789688110351562,
+          "MinimumSpeed": 15.750160217285156,
+          "ExitSpeed": 17.889049530029297,
+          "MaximumBetaDegrees": 11.927124036870165,
+          "MeanDrive": 0.19224718239492736,
+          "FullDriveFraction": 0.014209591156635995,
+          "LargeTrajectoryOscillations": 4,
+          "DistanceMeters": 300.24930663593113,
+          "BoundaryApproach": 12.336530224612211,
+          "RecoverySeconds": 4.539999898523092,
+          "NativeSteps": 1693,
+          "PhysicsEvaluations": 209441,
+          "Forecasts": 2295,
+          "CpuSeconds": 7.734375,
+          "Fingerprint": "64D05E59F28670F36BB89A0A75CDBCC38B0DCBD677AAE641B370E57712E7751E"
+        },
+        "MinimumInstantInner": 0.2134373429540039,
+        "MinimumInstantOuter": 4.699821645130279,
+        "MinimumLegacyCertificate": 0.11695217968257675,
+        "MinimumRefinedCertificate": 0.11695217968257675,
+        "CornerMinimumSpeed": 15.750160217285156,
+        "MaximumYawRate": 0.823837399482727,
+        "ExitYawRate": 0.13544392585754395,
+        "SteeringRequestTravelDegrees": 81.50000503796525,
+        "MaximumRequestChangeDegrees": 10.000000430057334,
+        "EngineWorkJoules": 86646.81066757729,
+        "DissipationJoules": 75579.67650555258,
+        "NoSafeDecisions": 0,
+        "BoundaryClass": "none"
+      },
+      "SearchCpu": 7.59375,
+      "Searches": 85,
+      "NativeContacts": 1699,
+      "PredictionContacts": 207742,
+      "Forecasts": 2295
+    },
+    "ExactPrefix": true,
+    "Accuracy": {
+      "Passed": true,
+      "Compared": 91,
+      "XY": 2.979373857669998E-05,
+      "Speed": 4.1961669921875E-05,
+      "HeadingDegrees": 0.0013660378340025502,
+      "BetaDegrees": 0.0008627382695372356,
+      "Omega": 0.00026313560719870566,
+      "Yaw": 2.0831823348999023E-05,
+      "SteeringDegrees": 0,
+      "ClearanceOptimism": 2.5587145867977945E-05
+    },
+    "FiniteContinuationConfirmed": true,
+    "SelectedActions": [
+      {
+        "SteeringRadians": 0.02617994,
+        "Drive": 0.31820688
+      }
+    ]
+  },
+  {
+    "Name": "D-B-middle1",
+    "Arm": "B",
+    "Native": {
+      "Name": "control-D-B-middle1-B",
+      "Arm": "B",
+      "Mode": "controlled-H09-then-A",
+      "Case": {
+        "Name": "D-B",
+        "Geometry": "progressive-b",
+        "Scenario": {
+          "Name": "D-B",
+          "Level": 4,
+          "Speed": 16,
+          "Offset": 5,
+          "Start": 18.125,
+          "OutwardSpeed": 0.08,
+          "HeadingError": 0.012,
+          "YawRate": 0.025
+        },
+        "Two": true
+      },
+      "Metrics": {
+        "Native": {
+          "Completed": true,
+          "Outcome": "completed",
+          "GateSeconds": 15.89,
+          "DurationSeconds": 16.89,
+          "LegalProgress": 296.5852665901184,
+          "LegalSeconds": 16.89,
+          "MinimumClearanceMeters": 0.11695217968257675,
+          "EntrySpeed": 18.789688110351562,
+          "MinimumSpeed": 15.750160217285156,
+          "ExitSpeed": 17.889049530029297,
+          "MaximumBetaDegrees": 11.927124036870165,
+          "MeanDrive": 0.19224718239492736,
+          "FullDriveFraction": 0.014209591156635995,
+          "LargeTrajectoryOscillations": 4,
+          "DistanceMeters": 300.24930663593113,
+          "BoundaryApproach": 12.336530224612211,
+          "RecoverySeconds": 4.539999898523092,
+          "NativeSteps": 1693,
+          "PhysicsEvaluations": 209441,
+          "Forecasts": 2295,
+          "CpuSeconds": 7.453125,
+          "Fingerprint": "64D05E59F28670F36BB89A0A75CDBCC38B0DCBD677AAE641B370E57712E7751E"
+        },
+        "MinimumInstantInner": 0.2134373429540039,
+        "MinimumInstantOuter": 4.699821645130279,
+        "MinimumLegacyCertificate": 0.11695217968257675,
+        "MinimumRefinedCertificate": 0.11695217968257675,
+        "CornerMinimumSpeed": 15.750160217285156,
+        "MaximumYawRate": 0.823837399482727,
+        "ExitYawRate": 0.13544392585754395,
+        "SteeringRequestTravelDegrees": 81.50000503796525,
+        "MaximumRequestChangeDegrees": 10.000000430057334,
+        "EngineWorkJoules": 86646.81066757729,
+        "DissipationJoules": 75579.67650555258,
+        "NoSafeDecisions": 0,
+        "BoundaryClass": "none"
+      },
+      "SearchCpu": 7.359375,
+      "Searches": 85,
+      "NativeContacts": 1699,
+      "PredictionContacts": 207742,
+      "Forecasts": 2295
+    },
+    "ExactPrefix": true,
+    "Accuracy": {
+      "Passed": true,
+      "Compared": 91,
+      "XY": 2.979373857669998E-05,
+      "Speed": 4.1961669921875E-05,
+      "HeadingDegrees": 0.0013660378340025502,
+      "BetaDegrees": 0.0008627382695372356,
+      "Omega": 0.00026313560719160023,
+      "Yaw": 2.0831823348999023E-05,
+      "SteeringDegrees": 0,
+      "ClearanceOptimism": 2.5587145867977945E-05
+    },
+    "FiniteContinuationConfirmed": true,
+    "SelectedActions": [
+      {
+        "SteeringRadians": 0.02617994,
+        "Drive": 0.31820688
+      },
+      {
+        "SteeringRadians": 0.02617994,
+        "Drive": 0.31820688
+      }
+    ]
+  },
+  {
+    "Name": "D-B-middle1",
+    "Arm": "C",
+    "Native": {
+      "Name": "control-D-B-middle1-C",
+      "Arm": "C",
+      "Mode": "controlled-H09-then-A",
+      "Case": {
+        "Name": "D-B",
+        "Geometry": "progressive-b",
+        "Scenario": {
+          "Name": "D-B",
+          "Level": 4,
+          "Speed": 16,
+          "Offset": 5,
+          "Start": 18.125,
+          "OutwardSpeed": 0.08,
+          "HeadingError": 0.012,
+          "YawRate": 0.025
+        },
+        "Two": true
+      },
+      "Metrics": {
+        "Native": {
+          "Completed": true,
+          "Outcome": "completed",
+          "GateSeconds": 15.89,
+          "DurationSeconds": 16.89,
+          "LegalProgress": 296.5852665901184,
+          "LegalSeconds": 16.89,
+          "MinimumClearanceMeters": 0.11695217968257675,
+          "EntrySpeed": 18.789688110351562,
+          "MinimumSpeed": 15.750160217285156,
+          "ExitSpeed": 17.889049530029297,
+          "MaximumBetaDegrees": 11.927124036870165,
+          "MeanDrive": 0.19224718239492736,
+          "FullDriveFraction": 0.014209591156635995,
+          "LargeTrajectoryOscillations": 4,
+          "DistanceMeters": 300.24930663593113,
+          "BoundaryApproach": 12.336530224612211,
+          "RecoverySeconds": 4.539999898523092,
+          "NativeSteps": 1693,
+          "PhysicsEvaluations": 209441,
+          "Forecasts": 2295,
+          "CpuSeconds": 7,
+          "Fingerprint": "64D05E59F28670F36BB89A0A75CDBCC38B0DCBD677AAE641B370E57712E7751E"
+        },
+        "MinimumInstantInner": 0.2134373429540039,
+        "MinimumInstantOuter": 4.699821645130279,
+        "MinimumLegacyCertificate": 0.11695217968257675,
+        "MinimumRefinedCertificate": 0.11695217968257675,
+        "CornerMinimumSpeed": 15.750160217285156,
+        "MaximumYawRate": 0.823837399482727,
+        "ExitYawRate": 0.13544392585754395,
+        "SteeringRequestTravelDegrees": 81.50000503796525,
+        "MaximumRequestChangeDegrees": 10.000000430057334,
+        "EngineWorkJoules": 86646.81066757729,
+        "DissipationJoules": 75579.67650555258,
+        "NoSafeDecisions": 0,
+        "BoundaryClass": "none"
+      },
+      "SearchCpu": 6.84375,
+      "Searches": 85,
+      "NativeContacts": 1699,
+      "PredictionContacts": 207742,
+      "Forecasts": 2295
+    },
+    "ExactPrefix": true,
+    "Accuracy": {
+      "Passed": true,
+      "Compared": 91,
+      "XY": 2.979373857669998E-05,
+      "Speed": 4.1961669921875E-05,
+      "HeadingDegrees": 0.0013660378340025502,
+      "BetaDegrees": 0.0008627382695372356,
+      "Omega": 0.00026313560719870566,
+      "Yaw": 2.0831823348999023E-05,
+      "SteeringDegrees": 0,
+      "ClearanceOptimism": 2.5587145867977945E-05
+    },
+    "FiniteContinuationConfirmed": true,
+    "SelectedActions": [
+      {
+        "SteeringRadians": 0.02617994,
+        "Drive": 0.31820688
+      }
+    ]
+  },
+  {
+    "Name": "D-B-middle1",
+    "Arm": "D",
+    "Native": {
+      "Name": "control-D-B-middle1-D",
+      "Arm": "D",
+      "Mode": "controlled-H09-then-A",
+      "Case": {
+        "Name": "D-B",
+        "Geometry": "progressive-b",
+        "Scenario": {
+          "Name": "D-B",
+          "Level": 4,
+          "Speed": 16,
+          "Offset": 5,
+          "Start": 18.125,
+          "OutwardSpeed": 0.08,
+          "HeadingError": 0.012,
+          "YawRate": 0.025
+        },
+        "Two": true
+      },
+      "Metrics": {
+        "Native": {
+          "Completed": true,
+          "Outcome": "completed",
+          "GateSeconds": 15.89,
+          "DurationSeconds": 16.89,
+          "LegalProgress": 296.5852665901184,
+          "LegalSeconds": 16.89,
+          "MinimumClearanceMeters": 0.11695217968257675,
+          "EntrySpeed": 18.789688110351562,
+          "MinimumSpeed": 15.750160217285156,
+          "ExitSpeed": 17.889049530029297,
+          "MaximumBetaDegrees": 11.927124036870165,
+          "MeanDrive": 0.19224718239492736,
+          "FullDriveFraction": 0.014209591156635995,
+          "LargeTrajectoryOscillations": 4,
+          "DistanceMeters": 300.24930663593113,
+          "BoundaryApproach": 12.336530224612211,
+          "RecoverySeconds": 4.539999898523092,
+          "NativeSteps": 1693,
+          "PhysicsEvaluations": 209441,
+          "Forecasts": 2295,
+          "CpuSeconds": 7.109375,
+          "Fingerprint": "64D05E59F28670F36BB89A0A75CDBCC38B0DCBD677AAE641B370E57712E7751E"
+        },
+        "MinimumInstantInner": 0.2134373429540039,
+        "MinimumInstantOuter": 4.699821645130279,
+        "MinimumLegacyCertificate": 0.11695217968257675,
+        "MinimumRefinedCertificate": 0.11695217968257675,
+        "CornerMinimumSpeed": 15.750160217285156,
+        "MaximumYawRate": 0.823837399482727,
+        "ExitYawRate": 0.13544392585754395,
+        "SteeringRequestTravelDegrees": 81.50000503796525,
+        "MaximumRequestChangeDegrees": 10.000000430057334,
+        "EngineWorkJoules": 86646.81066757729,
+        "DissipationJoules": 75579.67650555258,
+        "NoSafeDecisions": 0,
+        "BoundaryClass": "none"
+      },
+      "SearchCpu": 7,
+      "Searches": 85,
+      "NativeContacts": 1699,
+      "PredictionContacts": 207742,
+      "Forecasts": 2295
+    },
+    "ExactPrefix": true,
+    "Accuracy": {
+      "Passed": true,
+      "Compared": 91,
+      "XY": 2.979373857669998E-05,
+      "Speed": 4.1961669921875E-05,
+      "HeadingDegrees": 0.0013660378340025502,
+      "BetaDegrees": 0.0008627382695372356,
+      "Omega": 0.00026313560719160023,
+      "Yaw": 2.0831823348999023E-05,
+      "SteeringDegrees": 0,
+      "ClearanceOptimism": 2.5587145867977945E-05
+    },
+    "FiniteContinuationConfirmed": true,
+    "SelectedActions": [
+      {
+        "SteeringRadians": 0.02617994,
+        "Drive": 0.31820688
+      },
+      {
+        "SteeringRadians": 0.02617994,
+        "Drive": 0.31820688
+      }
+    ]
+  },
+  {
+    "Name": "D-B-exit1-10",
+    "Arm": "A",
+    "Native": {
+      "Name": "control-D-B-exit1-10-A",
+      "Arm": "A",
+      "Mode": "controlled-H09-then-A",
+      "Case": {
+        "Name": "D-B",
+        "Geometry": "progressive-b",
+        "Scenario": {
+          "Name": "D-B",
+          "Level": 4,
+          "Speed": 16,
+          "Offset": 5,
+          "Start": 18.125,
+          "OutwardSpeed": 0.08,
+          "HeadingError": 0.012,
+          "YawRate": 0.025
+        },
+        "Two": true
+      },
+      "Metrics": {
+        "Native": {
+          "Completed": true,
+          "Outcome": "completed",
+          "GateSeconds": 16.07,
+          "DurationSeconds": 17.07,
+          "LegalProgress": 296.01939725875854,
+          "LegalSeconds": 17.07,
+          "MinimumClearanceMeters": 0.11695217968257675,
+          "EntrySpeed": 18.789688110351562,
+          "MinimumSpeed": 14.835821151733398,
+          "ExitSpeed": 17.335628509521484,
+          "MaximumBetaDegrees": 11.923425413543612,
+          "MeanDrive": 0.1823906283354375,
+          "FullDriveFraction": 0.01405975364004581,
+          "LargeTrajectoryOscillations": 6,
+          "DistanceMeters": 298.5112455794588,
+          "BoundaryApproach": 11.545523897261385,
+          "RecoverySeconds": 4.999999888241291,
+          "NativeSteps": 1711,
+          "PhysicsEvaluations": 211819,
+          "Forecasts": 2322,
+          "CpuSeconds": 7.28125,
+          "Fingerprint": "D92C7AE4851772E4869249E52F9045427E2B66BB5A7BD829A36AABF467D19F14"
+        },
+        "MinimumInstantInner": 0.20715783989140596,
+        "MinimumInstantOuter": 5.605984159531803,
+        "MinimumLegacyCertificate": 0.11695217968257675,
+        "MinimumRefinedCertificate": 0.11695217968257675,
+        "CornerMinimumSpeed": 14.835821151733398,
+        "MaximumYawRate": 0.8518360257148743,
+        "ExitYawRate": 0.145547553896904,
+        "SteeringRequestTravelDegrees": 54.50000348976643,
+        "MaximumRequestChangeDegrees": 3.500000211232859,
+        "EngineWorkJoules": 81328.71465215311,
+        "DissipationJoules": 71982.49964556129,
+        "NoSafeDecisions": 0,
+        "BoundaryClass": "none"
+      },
+      "SearchCpu": 7.1875,
+      "Searches": 86,
+      "NativeContacts": 1716,
+      "PredictionContacts": 210103,
+      "Forecasts": 2322
+    },
+    "ExactPrefix": true,
+    "Accuracy": {
+      "Passed": true,
+      "Compared": 92,
+      "XY": 5.737918399972841E-05,
+      "Speed": 1.52587890625E-05,
+      "HeadingDegrees": 0.0005737358902810711,
+      "BetaDegrees": 0.00015101121368075066,
+      "Omega": 2.4642659596452177E-05,
+      "Yaw": 4.023313522338867E-06,
+      "SteeringDegrees": 0,
+      "ClearanceOptimism": 6.0150963719252104E-05
+    },
+    "FiniteContinuationConfirmed": true,
+    "SelectedActions": [
+      {
+        "SteeringRadians": 0.008726646,
+        "Drive": 0.31820688
+      }
+    ]
+  },
+  {
+    "Name": "D-B-exit1-10",
+    "Arm": "B",
+    "Native": {
+      "Name": "control-D-B-exit1-10-B",
+      "Arm": "B",
+      "Mode": "controlled-H09-then-A",
+      "Case": {
+        "Name": "D-B",
+        "Geometry": "progressive-b",
+        "Scenario": {
+          "Name": "D-B",
+          "Level": 4,
+          "Speed": 16,
+          "Offset": 5,
+          "Start": 18.125,
+          "OutwardSpeed": 0.08,
+          "HeadingError": 0.012,
+          "YawRate": 0.025
+        },
+        "Two": true
+      },
+      "Metrics": {
+        "Native": {
+          "Completed": true,
+          "Outcome": "completed",
+          "GateSeconds": 16.07,
+          "DurationSeconds": 17.07,
+          "LegalProgress": 296.01939725875854,
+          "LegalSeconds": 17.07,
+          "MinimumClearanceMeters": 0.11695217968257675,
+          "EntrySpeed": 18.789688110351562,
+          "MinimumSpeed": 14.835821151733398,
+          "ExitSpeed": 17.335628509521484,
+          "MaximumBetaDegrees": 11.923425413543612,
+          "MeanDrive": 0.1823906283354375,
+          "FullDriveFraction": 0.01405975364004581,
+          "LargeTrajectoryOscillations": 6,
+          "DistanceMeters": 298.5112455794588,
+          "BoundaryApproach": 11.545523897261385,
+          "RecoverySeconds": 4.999999888241291,
+          "NativeSteps": 1711,
+          "PhysicsEvaluations": 211819,
+          "Forecasts": 2322,
+          "CpuSeconds": 7.53125,
+          "Fingerprint": "D92C7AE4851772E4869249E52F9045427E2B66BB5A7BD829A36AABF467D19F14"
+        },
+        "MinimumInstantInner": 0.20715783989140596,
+        "MinimumInstantOuter": 5.605984159531803,
+        "MinimumLegacyCertificate": 0.11695217968257675,
+        "MinimumRefinedCertificate": 0.11695217968257675,
+        "CornerMinimumSpeed": 14.835821151733398,
+        "MaximumYawRate": 0.8518360257148743,
+        "ExitYawRate": 0.145547553896904,
+        "SteeringRequestTravelDegrees": 54.50000348976643,
+        "MaximumRequestChangeDegrees": 3.500000211232859,
+        "EngineWorkJoules": 81328.71465215311,
+        "DissipationJoules": 71982.49964556129,
+        "NoSafeDecisions": 0,
+        "BoundaryClass": "none"
+      },
+      "SearchCpu": 7.453125,
+      "Searches": 86,
+      "NativeContacts": 1716,
+      "PredictionContacts": 210103,
+      "Forecasts": 2322
+    },
+    "ExactPrefix": true,
+    "Accuracy": {
+      "Passed": true,
+      "Compared": 92,
+      "XY": 5.737918399972841E-05,
+      "Speed": 1.52587890625E-05,
+      "HeadingDegrees": 0.0005737358902810711,
+      "BetaDegrees": 0.00015101121368075066,
+      "Omega": 2.4642659603557604E-05,
+      "Yaw": 4.023313522338867E-06,
+      "SteeringDegrees": 0,
+      "ClearanceOptimism": 6.0150963719252104E-05
+    },
+    "FiniteContinuationConfirmed": true,
+    "SelectedActions": [
+      {
+        "SteeringRadians": 0.008726646,
+        "Drive": 0.31820688
+      },
+      {
+        "SteeringRadians": 0.008726646,
+        "Drive": 0.31820688
+      }
+    ]
+  },
+  {
+    "Name": "D-B-exit1-10",
+    "Arm": "C",
+    "Native": {
+      "Name": "control-D-B-exit1-10-C",
+      "Arm": "C",
+      "Mode": "controlled-H09-then-A",
+      "Case": {
+        "Name": "D-B",
+        "Geometry": "progressive-b",
+        "Scenario": {
+          "Name": "D-B",
+          "Level": 4,
+          "Speed": 16,
+          "Offset": 5,
+          "Start": 18.125,
+          "OutwardSpeed": 0.08,
+          "HeadingError": 0.012,
+          "YawRate": 0.025
+        },
+        "Two": true
+      },
+      "Metrics": {
+        "Native": {
+          "Completed": true,
+          "Outcome": "completed",
+          "GateSeconds": 16.07,
+          "DurationSeconds": 17.07,
+          "LegalProgress": 296.01939725875854,
+          "LegalSeconds": 17.07,
+          "MinimumClearanceMeters": 0.11695217968257675,
+          "EntrySpeed": 18.789688110351562,
+          "MinimumSpeed": 14.835821151733398,
+          "ExitSpeed": 17.335628509521484,
+          "MaximumBetaDegrees": 11.923425413543612,
+          "MeanDrive": 0.1823906283354375,
+          "FullDriveFraction": 0.01405975364004581,
+          "LargeTrajectoryOscillations": 6,
+          "DistanceMeters": 298.5112455794588,
+          "BoundaryApproach": 11.545523897261385,
+          "RecoverySeconds": 4.999999888241291,
+          "NativeSteps": 1711,
+          "PhysicsEvaluations": 211819,
+          "Forecasts": 2322,
+          "CpuSeconds": 7.484375,
+          "Fingerprint": "D92C7AE4851772E4869249E52F9045427E2B66BB5A7BD829A36AABF467D19F14"
+        },
+        "MinimumInstantInner": 0.20715783989140596,
+        "MinimumInstantOuter": 5.605984159531803,
+        "MinimumLegacyCertificate": 0.11695217968257675,
+        "MinimumRefinedCertificate": 0.11695217968257675,
+        "CornerMinimumSpeed": 14.835821151733398,
+        "MaximumYawRate": 0.8518360257148743,
+        "ExitYawRate": 0.145547553896904,
+        "SteeringRequestTravelDegrees": 54.50000348976643,
+        "MaximumRequestChangeDegrees": 3.500000211232859,
+        "EngineWorkJoules": 81328.71465215311,
+        "DissipationJoules": 71982.49964556129,
+        "NoSafeDecisions": 0,
+        "BoundaryClass": "none"
+      },
+      "SearchCpu": 7.390625,
+      "Searches": 86,
+      "NativeContacts": 1716,
+      "PredictionContacts": 210103,
+      "Forecasts": 2322
+    },
+    "ExactPrefix": true,
+    "Accuracy": {
+      "Passed": true,
+      "Compared": 92,
+      "XY": 5.737918399972841E-05,
+      "Speed": 1.52587890625E-05,
+      "HeadingDegrees": 0.0005737358902810711,
+      "BetaDegrees": 0.00015101121368075066,
+      "Omega": 2.4642659596452177E-05,
+      "Yaw": 4.023313522338867E-06,
+      "SteeringDegrees": 0,
+      "ClearanceOptimism": 6.0150963719252104E-05
+    },
+    "FiniteContinuationConfirmed": true,
+    "SelectedActions": [
+      {
+        "SteeringRadians": 0.008726646,
+        "Drive": 0.31820688
+      }
+    ]
+  },
+  {
+    "Name": "D-B-exit1-10",
+    "Arm": "D",
+    "Native": {
+      "Name": "control-D-B-exit1-10-D",
+      "Arm": "D",
+      "Mode": "controlled-H09-then-A",
+      "Case": {
+        "Name": "D-B",
+        "Geometry": "progressive-b",
+        "Scenario": {
+          "Name": "D-B",
+          "Level": 4,
+          "Speed": 16,
+          "Offset": 5,
+          "Start": 18.125,
+          "OutwardSpeed": 0.08,
+          "HeadingError": 0.012,
+          "YawRate": 0.025
+        },
+        "Two": true
+      },
+      "Metrics": {
+        "Native": {
+          "Completed": true,
+          "Outcome": "completed",
+          "GateSeconds": 16.07,
+          "DurationSeconds": 17.07,
+          "LegalProgress": 296.01939725875854,
+          "LegalSeconds": 17.07,
+          "MinimumClearanceMeters": 0.11695217968257675,
+          "EntrySpeed": 18.789688110351562,
+          "MinimumSpeed": 14.835821151733398,
+          "ExitSpeed": 17.335628509521484,
+          "MaximumBetaDegrees": 11.923425413543612,
+          "MeanDrive": 0.1823906283354375,
+          "FullDriveFraction": 0.01405975364004581,
+          "LargeTrajectoryOscillations": 6,
+          "DistanceMeters": 298.5112455794588,
+          "BoundaryApproach": 11.545523897261385,
+          "RecoverySeconds": 4.999999888241291,
+          "NativeSteps": 1711,
+          "PhysicsEvaluations": 211819,
+          "Forecasts": 2322,
+          "CpuSeconds": 7.375,
+          "Fingerprint": "D92C7AE4851772E4869249E52F9045427E2B66BB5A7BD829A36AABF467D19F14"
+        },
+        "MinimumInstantInner": 0.20715783989140596,
+        "MinimumInstantOuter": 5.605984159531803,
+        "MinimumLegacyCertificate": 0.11695217968257675,
+        "MinimumRefinedCertificate": 0.11695217968257675,
+        "CornerMinimumSpeed": 14.835821151733398,
+        "MaximumYawRate": 0.8518360257148743,
+        "ExitYawRate": 0.145547553896904,
+        "SteeringRequestTravelDegrees": 54.50000348976643,
+        "MaximumRequestChangeDegrees": 3.500000211232859,
+        "EngineWorkJoules": 81328.71465215311,
+        "DissipationJoules": 71982.49964556129,
+        "NoSafeDecisions": 0,
+        "BoundaryClass": "none"
+      },
+      "SearchCpu": 7.296875,
+      "Searches": 86,
+      "NativeContacts": 1716,
+      "PredictionContacts": 210103,
+      "Forecasts": 2322
+    },
+    "ExactPrefix": true,
+    "Accuracy": {
+      "Passed": true,
+      "Compared": 92,
+      "XY": 5.737918399972841E-05,
+      "Speed": 1.52587890625E-05,
+      "HeadingDegrees": 0.0005737358902810711,
+      "BetaDegrees": 0.00015101121368075066,
+      "Omega": 2.4642659603557604E-05,
+      "Yaw": 4.023313522338867E-06,
+      "SteeringDegrees": 0,
+      "ClearanceOptimism": 6.0150963719252104E-05
+    },
+    "FiniteContinuationConfirmed": true,
+    "SelectedActions": [
+      {
+        "SteeringRadians": 0.008726646,
+        "Drive": 0.31820688
+      },
+      {
+        "SteeringRadians": 0.008726646,
+        "Drive": 0.31820688
+      }
+    ]
+  },
+  {
+    "Name": "D-B-exit2-5",
+    "Arm": "A",
+    "Native": {
+      "Name": "control-D-B-exit2-5-A",
+      "Arm": "A",
+      "Mode": "controlled-H09-then-A",
+      "Case": {
+        "Name": "D-B",
+        "Geometry": "progressive-b",
+        "Scenario": {
+          "Name": "D-B",
+          "Level": 4,
+          "Speed": 16,
+          "Offset": 5,
+          "Start": 18.125,
+          "OutwardSpeed": 0.08,
+          "HeadingError": 0.012,
+          "YawRate": 0.025
+        },
+        "Two": true
+      },
+      "Metrics": {
+        "Native": {
+          "Completed": true,
+          "Outcome": "completed",
+          "GateSeconds": 15.999999999999975,
+          "DurationSeconds": 16.99999999999997,
+          "LegalProgress": 296.5061559677124,
+          "LegalSeconds": 16.99999999999997,
+          "MinimumClearanceMeters": 0.11335358754516568,
+          "EntrySpeed": 18.789688110351562,
+          "MinimumSpeed": 15.324419975280762,
+          "ExitSpeed": 18.136425018310547,
+          "MaximumBetaDegrees": 9.24284269347322,
+          "MeanDrive": 0.1855749952094265,
+          "FullDriveFraction": 0.014117646743269551,
+          "LargeTrajectoryOscillations": 6,
+          "DistanceMeters": 301.6983697870746,
+          "BoundaryApproach": 16.115065992739233,
+          "RecoverySeconds": 4.129999907687306,
+          "NativeSteps": 1704,
+          "PhysicsEvaluations": 209322,
+          "Forecasts": 2295,
+          "CpuSeconds": 7.453125,
+          "Fingerprint": "280F0E2CD6B6F95BBD20175F2225B91FC05D4CC468EF37948FC304FCCD08AB4D"
+        },
+        "MinimumInstantInner": 0.2059718637240025,
+        "MinimumInstantOuter": 3.1269183120669664,
+        "MinimumLegacyCertificate": 0.11335358754516568,
+        "MinimumRefinedCertificate": 0.11335358754516568,
+        "CornerMinimumSpeed": 15.324419975280762,
+        "MaximumYawRate": 0.7641396522521973,
+        "ExitYawRate": 0.1607234925031662,
+        "SteeringRequestTravelDegrees": 56.50000324185753,
+        "MaximumRequestChangeDegrees": 4.500000011387423,
+        "EngineWorkJoules": 84226.35159505688,
+        "DissipationJoules": 72594.79506914997,
+        "NoSafeDecisions": 0,
+        "BoundaryClass": "none"
+      },
+      "SearchCpu": 7.328125,
+      "Searches": 85,
+      "NativeContacts": 1709,
+      "PredictionContacts": 207613,
+      "Forecasts": 2295
+    },
+    "ExactPrefix": true,
+    "Accuracy": {
+      "Passed": true,
+      "Compared": 92,
+      "XY": 2.6187000912614167E-05,
+      "Speed": 1.33514404296875E-05,
+      "HeadingDegrees": 0.00039871229279949435,
+      "BetaDegrees": 0.0001265719430567988,
+      "Omega": 1.6577921172711285E-05,
+      "Yaw": 2.8908252716064453E-06,
+      "SteeringDegrees": 0,
+      "ClearanceOptimism": 3.062088095528992E-05
+    },
+    "FiniteContinuationConfirmed": true,
+    "SelectedActions": [
+      {
+        "SteeringRadians": 0.008726646,
+        "Drive": 0.31820688
+      }
+    ]
+  },
+  {
+    "Name": "D-B-exit2-5",
+    "Arm": "B",
+    "Native": {
+      "Name": "control-D-B-exit2-5-B",
+      "Arm": "B",
+      "Mode": "controlled-H09-then-A",
+      "Case": {
+        "Name": "D-B",
+        "Geometry": "progressive-b",
+        "Scenario": {
+          "Name": "D-B",
+          "Level": 4,
+          "Speed": 16,
+          "Offset": 5,
+          "Start": 18.125,
+          "OutwardSpeed": 0.08,
+          "HeadingError": 0.012,
+          "YawRate": 0.025
+        },
+        "Two": true
+      },
+      "Metrics": {
+        "Native": {
+          "Completed": true,
+          "Outcome": "completed",
+          "GateSeconds": 15.999999999999975,
+          "DurationSeconds": 16.99999999999997,
+          "LegalProgress": 296.5061559677124,
+          "LegalSeconds": 16.99999999999997,
+          "MinimumClearanceMeters": 0.11335358754516568,
+          "EntrySpeed": 18.789688110351562,
+          "MinimumSpeed": 15.324419975280762,
+          "ExitSpeed": 18.136425018310547,
+          "MaximumBetaDegrees": 9.24284269347322,
+          "MeanDrive": 0.1855749952094265,
+          "FullDriveFraction": 0.014117646743269551,
+          "LargeTrajectoryOscillations": 6,
+          "DistanceMeters": 301.6983697870746,
+          "BoundaryApproach": 16.115065992739233,
+          "RecoverySeconds": 4.129999907687306,
+          "NativeSteps": 1704,
+          "PhysicsEvaluations": 209322,
+          "Forecasts": 2295,
+          "CpuSeconds": 7.546875,
+          "Fingerprint": "280F0E2CD6B6F95BBD20175F2225B91FC05D4CC468EF37948FC304FCCD08AB4D"
+        },
+        "MinimumInstantInner": 0.2059718637240025,
+        "MinimumInstantOuter": 3.1269183120669664,
+        "MinimumLegacyCertificate": 0.11335358754516568,
+        "MinimumRefinedCertificate": 0.11335358754516568,
+        "CornerMinimumSpeed": 15.324419975280762,
+        "MaximumYawRate": 0.7641396522521973,
+        "ExitYawRate": 0.1607234925031662,
+        "SteeringRequestTravelDegrees": 56.50000324185753,
+        "MaximumRequestChangeDegrees": 4.500000011387423,
+        "EngineWorkJoules": 84226.35159505688,
+        "DissipationJoules": 72594.79506914997,
+        "NoSafeDecisions": 0,
+        "BoundaryClass": "none"
+      },
+      "SearchCpu": 7.390625,
+      "Searches": 85,
+      "NativeContacts": 1709,
+      "PredictionContacts": 207613,
+      "Forecasts": 2295
+    },
+    "ExactPrefix": true,
+    "Accuracy": {
+      "Passed": true,
+      "Compared": 92,
+      "XY": 2.6187000912614167E-05,
+      "Speed": 1.33514404296875E-05,
+      "HeadingDegrees": 0.00039871229279949435,
+      "BetaDegrees": 0.0001265719430567988,
+      "Omega": 1.6577921172711285E-05,
+      "Yaw": 2.8908252716064453E-06,
+      "SteeringDegrees": 0,
+      "ClearanceOptimism": 3.062088095528992E-05
+    },
+    "FiniteContinuationConfirmed": true,
+    "SelectedActions": [
+      {
+        "SteeringRadians": 0.008726646,
+        "Drive": 0.31820688
+      },
+      {
+        "SteeringRadians": 0.008726646,
+        "Drive": 0.31820688
+      }
+    ]
+  },
+  {
+    "Name": "D-B-exit2-5",
+    "Arm": "C",
+    "Native": {
+      "Name": "control-D-B-exit2-5-C",
+      "Arm": "C",
+      "Mode": "controlled-H09-then-A",
+      "Case": {
+        "Name": "D-B",
+        "Geometry": "progressive-b",
+        "Scenario": {
+          "Name": "D-B",
+          "Level": 4,
+          "Speed": 16,
+          "Offset": 5,
+          "Start": 18.125,
+          "OutwardSpeed": 0.08,
+          "HeadingError": 0.012,
+          "YawRate": 0.025
+        },
+        "Two": true
+      },
+      "Metrics": {
+        "Native": {
+          "Completed": true,
+          "Outcome": "completed",
+          "GateSeconds": 15.999999999999975,
+          "DurationSeconds": 16.99999999999997,
+          "LegalProgress": 296.5061559677124,
+          "LegalSeconds": 16.99999999999997,
+          "MinimumClearanceMeters": 0.11335358754516568,
+          "EntrySpeed": 18.789688110351562,
+          "MinimumSpeed": 15.324419975280762,
+          "ExitSpeed": 18.136425018310547,
+          "MaximumBetaDegrees": 9.24284269347322,
+          "MeanDrive": 0.1855749952094265,
+          "FullDriveFraction": 0.014117646743269551,
+          "LargeTrajectoryOscillations": 6,
+          "DistanceMeters": 301.6983697870746,
+          "BoundaryApproach": 16.115065992739233,
+          "RecoverySeconds": 4.129999907687306,
+          "NativeSteps": 1704,
+          "PhysicsEvaluations": 209322,
+          "Forecasts": 2295,
+          "CpuSeconds": 7.453125,
+          "Fingerprint": "280F0E2CD6B6F95BBD20175F2225B91FC05D4CC468EF37948FC304FCCD08AB4D"
+        },
+        "MinimumInstantInner": 0.2059718637240025,
+        "MinimumInstantOuter": 3.1269183120669664,
+        "MinimumLegacyCertificate": 0.11335358754516568,
+        "MinimumRefinedCertificate": 0.11335358754516568,
+        "CornerMinimumSpeed": 15.324419975280762,
+        "MaximumYawRate": 0.7641396522521973,
+        "ExitYawRate": 0.1607234925031662,
+        "SteeringRequestTravelDegrees": 56.50000324185753,
+        "MaximumRequestChangeDegrees": 4.500000011387423,
+        "EngineWorkJoules": 84226.35159505688,
+        "DissipationJoules": 72594.79506914997,
+        "NoSafeDecisions": 0,
+        "BoundaryClass": "none"
+      },
+      "SearchCpu": 7.390625,
+      "Searches": 85,
+      "NativeContacts": 1709,
+      "PredictionContacts": 207613,
+      "Forecasts": 2295
+    },
+    "ExactPrefix": true,
+    "Accuracy": {
+      "Passed": true,
+      "Compared": 92,
+      "XY": 2.6187000912614167E-05,
+      "Speed": 1.33514404296875E-05,
+      "HeadingDegrees": 0.00039871229279949435,
+      "BetaDegrees": 0.0001265719430567988,
+      "Omega": 1.6577921172711285E-05,
+      "Yaw": 2.8908252716064453E-06,
+      "SteeringDegrees": 0,
+      "ClearanceOptimism": 3.062088095528992E-05
+    },
+    "FiniteContinuationConfirmed": true,
+    "SelectedActions": [
+      {
+        "SteeringRadians": 0.008726646,
+        "Drive": 0.31820688
+      }
+    ]
+  },
+  {
+    "Name": "D-B-exit2-5",
+    "Arm": "D",
+    "Native": {
+      "Name": "control-D-B-exit2-5-D",
+      "Arm": "D",
+      "Mode": "controlled-H09-then-A",
+      "Case": {
+        "Name": "D-B",
+        "Geometry": "progressive-b",
+        "Scenario": {
+          "Name": "D-B",
+          "Level": 4,
+          "Speed": 16,
+          "Offset": 5,
+          "Start": 18.125,
+          "OutwardSpeed": 0.08,
+          "HeadingError": 0.012,
+          "YawRate": 0.025
+        },
+        "Two": true
+      },
+      "Metrics": {
+        "Native": {
+          "Completed": true,
+          "Outcome": "completed",
+          "GateSeconds": 15.999999999999975,
+          "DurationSeconds": 16.99999999999997,
+          "LegalProgress": 296.48408031463623,
+          "LegalSeconds": 16.99999999999997,
+          "MinimumClearanceMeters": 0.11335358754516568,
+          "EntrySpeed": 18.789688110351562,
+          "MinimumSpeed": 15.324419975280762,
+          "ExitSpeed": 18.136425018310547,
+          "MaximumBetaDegrees": 9.24284269347322,
+          "MeanDrive": 0.1855749952094265,
+          "FullDriveFraction": 0.014117646743269551,
+          "LargeTrajectoryOscillations": 7,
+          "DistanceMeters": 301.5771265188232,
+          "BoundaryApproach": 14.997100082074304,
+          "RecoverySeconds": 4.129999907687306,
+          "NativeSteps": 1704,
+          "PhysicsEvaluations": 209322,
+          "Forecasts": 2295,
+          "CpuSeconds": 7.53125,
+          "Fingerprint": "1411A5BDF993582001F22A8157732FCA37E084790E64E82436CF6154C6ECDC44"
+        },
+        "MinimumInstantInner": 0.2059718637240025,
+        "MinimumInstantOuter": 4.2475277458358205,
+        "MinimumLegacyCertificate": 0.11335358754516568,
+        "MinimumRefinedCertificate": 0.11335358754516568,
+        "CornerMinimumSpeed": 15.324419975280762,
+        "MaximumYawRate": 0.7641396522521973,
+        "ExitYawRate": 0.1607234925031662,
+        "SteeringRequestTravelDegrees": 61.00000344297243,
+        "MaximumRequestChangeDegrees": 4.500000011387423,
+        "EngineWorkJoules": 84308.29765802695,
+        "DissipationJoules": 73685.73996943214,
+        "NoSafeDecisions": 0,
+        "BoundaryClass": "none"
+      },
+      "SearchCpu": 7.421875,
+      "Searches": 85,
+      "NativeContacts": 1709,
+      "PredictionContacts": 207613,
+      "Forecasts": 2295
+    },
+    "ExactPrefix": true,
+    "Accuracy": {
+      "Passed": true,
+      "Compared": 92,
+      "XY": 2.603024222480599E-05,
+      "Speed": 1.71661376953125E-05,
+      "HeadingDegrees": 0.0005566604173560392,
+      "BetaDegrees": 0.0002232618084947918,
+      "Omega": 4.14539821491644E-05,
+      "Yaw": 3.9637088775634766E-06,
+      "SteeringDegrees": 0,
+      "ClearanceOptimism": 3.231684197668727E-05
+    },
+    "FiniteContinuationConfirmed": true,
+    "SelectedActions": [
+      {
+        "SteeringRadians": 0.008726646,
+        "Drive": 0.31820688
+      },
+      {
+        "SteeringRadians": 0.02617994,
+        "Drive": 0.31820688
+      }
+    ]
+  },
+  {
+    "Name": "D-C-middle1",
+    "Arm": "A",
+    "Native": {
+      "Name": "control-D-C-middle1-A",
+      "Arm": "A",
+      "Mode": "controlled-H09-then-A",
+      "Case": {
+        "Name": "D-C",
+        "Geometry": "progressive-c",
+        "Scenario": {
+          "Name": "D-C",
+          "Level": 4,
+          "Speed": 12,
+          "Offset": 7,
+          "Start": 18.625,
+          "OutwardSpeed": -0.1,
+          "HeadingError": -0.02,
+          "YawRate": -0.035
+        },
+        "Two": true
+      },
+      "Metrics": {
+        "Native": {
+          "Completed": true,
+          "Outcome": "completed",
+          "GateSeconds": 16.85,
+          "DurationSeconds": 17.85,
+          "LegalProgress": 297.51320362091064,
+          "LegalSeconds": 17.85,
+          "MinimumClearanceMeters": 0.09509955290335662,
+          "EntrySpeed": 15.534455299377441,
+          "MinimumSpeed": 12.00412368774414,
+          "ExitSpeed": 19.28897476196289,
+          "MaximumBetaDegrees": 17.94295309134589,
+          "MeanDrive": 0.24995319256635534,
+          "FullDriveFraction": 0.035854340935287686,
+          "LargeTrajectoryOscillations": 8,
+          "DistanceMeters": 321.62816155701876,
+          "BoundaryApproach": 15.999419988613592,
+          "RecoverySeconds": 0.9299999794457108,
+          "NativeSteps": 1789,
+          "PhysicsEvaluations": 221631,
+          "Forecasts": 2430,
+          "CpuSeconds": 8.796875,
+          "Fingerprint": "41E7D559EF68A5C0569D42FF1BAF9C828CE616AD6AEA3FEA0FA46E11CF683FA2"
+        },
+        "MinimumInstantInner": 0.20582339260357863,
+        "MinimumInstantOuter": 3.4888182279646363,
+        "MinimumLegacyCertificate": 0.09509955290335662,
+        "MinimumRefinedCertificate": 0.09509955290335662,
+        "CornerMinimumSpeed": 15.096936225891113,
+        "MaximumYawRate": 0.8840039968490601,
+        "ExitYawRate": 0.045586857944726944,
+        "SteeringRequestTravelDegrees": 61.00000329119046,
+        "MaximumRequestChangeDegrees": 5.500000418669911,
+        "EngineWorkJoules": 122894.72863877444,
+        "DissipationJoules": 98599.8615095189,
+        "NoSafeDecisions": 0,
+        "BoundaryClass": "none"
+      },
+      "SearchCpu": 8.65625,
+      "Searches": 90,
+      "NativeContacts": 1795,
+      "PredictionContacts": 219836,
+      "Forecasts": 2430
+    },
+    "ExactPrefix": true,
+    "Accuracy": {
+      "Passed": true,
+      "Compared": 91,
+      "XY": 7.638925308128819E-05,
+      "Speed": 3.62396240234375E-05,
+      "HeadingDegrees": 0.0010518491321819636,
+      "BetaDegrees": 0.0010202595072706547,
+      "Omega": 0.0004690432084970553,
+      "Yaw": 2.1755695343017578E-05,
+      "SteeringDegrees": 0,
+      "ClearanceOptimism": 7.64089789448974E-05
+    },
+    "FiniteContinuationConfirmed": true,
+    "SelectedActions": [
+      {
+        "SteeringRadians": 0.02617994,
+        "Drive": 0.31820688
+      }
+    ]
+  },
+  {
+    "Name": "D-C-middle1",
+    "Arm": "B",
+    "Native": {
+      "Name": "control-D-C-middle1-B",
+      "Arm": "B",
+      "Mode": "controlled-H09-then-A",
+      "Case": {
+        "Name": "D-C",
+        "Geometry": "progressive-c",
+        "Scenario": {
+          "Name": "D-C",
+          "Level": 4,
+          "Speed": 12,
+          "Offset": 7,
+          "Start": 18.625,
+          "OutwardSpeed": -0.1,
+          "HeadingError": -0.02,
+          "YawRate": -0.035
+        },
+        "Two": true
+      },
+      "Metrics": {
+        "Native": {
+          "Completed": true,
+          "Outcome": "completed",
+          "GateSeconds": 16.85,
+          "DurationSeconds": 17.85,
+          "LegalProgress": 297.51320362091064,
+          "LegalSeconds": 17.85,
+          "MinimumClearanceMeters": 0.09509955290335662,
+          "EntrySpeed": 15.534455299377441,
+          "MinimumSpeed": 12.00412368774414,
+          "ExitSpeed": 19.28897476196289,
+          "MaximumBetaDegrees": 17.94295309134589,
+          "MeanDrive": 0.24995319256635534,
+          "FullDriveFraction": 0.035854340935287686,
+          "LargeTrajectoryOscillations": 8,
+          "DistanceMeters": 321.62816155701876,
+          "BoundaryApproach": 15.999419988613592,
+          "RecoverySeconds": 0.9299999794457108,
+          "NativeSteps": 1789,
+          "PhysicsEvaluations": 221631,
+          "Forecasts": 2430,
+          "CpuSeconds": 8.828125,
+          "Fingerprint": "41E7D559EF68A5C0569D42FF1BAF9C828CE616AD6AEA3FEA0FA46E11CF683FA2"
+        },
+        "MinimumInstantInner": 0.20582339260357863,
+        "MinimumInstantOuter": 3.4888182279646363,
+        "MinimumLegacyCertificate": 0.09509955290335662,
+        "MinimumRefinedCertificate": 0.09509955290335662,
+        "CornerMinimumSpeed": 15.096936225891113,
+        "MaximumYawRate": 0.8840039968490601,
+        "ExitYawRate": 0.045586857944726944,
+        "SteeringRequestTravelDegrees": 61.00000329119046,
+        "MaximumRequestChangeDegrees": 5.500000418669911,
+        "EngineWorkJoules": 122894.72863877444,
+        "DissipationJoules": 98599.8615095189,
+        "NoSafeDecisions": 0,
+        "BoundaryClass": "none"
+      },
+      "SearchCpu": 8.6875,
+      "Searches": 90,
+      "NativeContacts": 1795,
+      "PredictionContacts": 219836,
+      "Forecasts": 2430
+    },
+    "ExactPrefix": true,
+    "Accuracy": {
+      "Passed": true,
+      "Compared": 91,
+      "XY": 7.638925308128819E-05,
+      "Speed": 3.62396240234375E-05,
+      "HeadingDegrees": 0.0010518491321819636,
+      "BetaDegrees": 0.0010202595072706547,
+      "Omega": 0.0004690432084970553,
+      "Yaw": 2.1755695343017578E-05,
+      "SteeringDegrees": 0,
+      "ClearanceOptimism": 7.64089789448974E-05
+    },
+    "FiniteContinuationConfirmed": true,
+    "SelectedActions": [
+      {
+        "SteeringRadians": 0.02617994,
+        "Drive": 0.31820688
+      },
+      {
+        "SteeringRadians": 0.02617994,
+        "Drive": 0.31820688
+      }
+    ]
+  },
+  {
+    "Name": "D-C-middle1",
+    "Arm": "C",
+    "Native": {
+      "Name": "control-D-C-middle1-C",
+      "Arm": "C",
+      "Mode": "controlled-H09-then-A",
+      "Case": {
+        "Name": "D-C",
+        "Geometry": "progressive-c",
+        "Scenario": {
+          "Name": "D-C",
+          "Level": 4,
+          "Speed": 12,
+          "Offset": 7,
+          "Start": 18.625,
+          "OutwardSpeed": -0.1,
+          "HeadingError": -0.02,
+          "YawRate": -0.035
+        },
+        "Two": true
+      },
+      "Metrics": {
+        "Native": {
+          "Completed": true,
+          "Outcome": "completed",
+          "GateSeconds": 16.85,
+          "DurationSeconds": 17.85,
+          "LegalProgress": 297.51320362091064,
+          "LegalSeconds": 17.85,
+          "MinimumClearanceMeters": 0.09509955290335662,
+          "EntrySpeed": 15.534455299377441,
+          "MinimumSpeed": 12.00412368774414,
+          "ExitSpeed": 19.28897476196289,
+          "MaximumBetaDegrees": 17.94295309134589,
+          "MeanDrive": 0.24995319256635534,
+          "FullDriveFraction": 0.035854340935287686,
+          "LargeTrajectoryOscillations": 8,
+          "DistanceMeters": 321.62816155701876,
+          "BoundaryApproach": 15.999419988613592,
+          "RecoverySeconds": 0.9299999794457108,
+          "NativeSteps": 1789,
+          "PhysicsEvaluations": 221631,
+          "Forecasts": 2430,
+          "CpuSeconds": 8.625,
+          "Fingerprint": "41E7D559EF68A5C0569D42FF1BAF9C828CE616AD6AEA3FEA0FA46E11CF683FA2"
+        },
+        "MinimumInstantInner": 0.20582339260357863,
+        "MinimumInstantOuter": 3.4888182279646363,
+        "MinimumLegacyCertificate": 0.09509955290335662,
+        "MinimumRefinedCertificate": 0.09509955290335662,
+        "CornerMinimumSpeed": 15.096936225891113,
+        "MaximumYawRate": 0.8840039968490601,
+        "ExitYawRate": 0.045586857944726944,
+        "SteeringRequestTravelDegrees": 61.00000329119046,
+        "MaximumRequestChangeDegrees": 5.500000418669911,
+        "EngineWorkJoules": 122894.72863877444,
+        "DissipationJoules": 98599.8615095189,
+        "NoSafeDecisions": 0,
+        "BoundaryClass": "none"
+      },
+      "SearchCpu": 8.46875,
+      "Searches": 90,
+      "NativeContacts": 1795,
+      "PredictionContacts": 219836,
+      "Forecasts": 2430
+    },
+    "ExactPrefix": true,
+    "Accuracy": {
+      "Passed": true,
+      "Compared": 91,
+      "XY": 7.638925308128819E-05,
+      "Speed": 3.62396240234375E-05,
+      "HeadingDegrees": 0.0010518491321819636,
+      "BetaDegrees": 0.0010202595072706547,
+      "Omega": 0.0004690432084970553,
+      "Yaw": 2.1755695343017578E-05,
+      "SteeringDegrees": 0,
+      "ClearanceOptimism": 7.64089789448974E-05
+    },
+    "FiniteContinuationConfirmed": true,
+    "SelectedActions": [
+      {
+        "SteeringRadians": 0.02617994,
+        "Drive": 0.31820688
+      }
+    ]
+  },
+  {
+    "Name": "D-C-middle1",
+    "Arm": "D",
+    "Native": {
+      "Name": "control-D-C-middle1-D",
+      "Arm": "D",
+      "Mode": "controlled-H09-then-A",
+      "Case": {
+        "Name": "D-C",
+        "Geometry": "progressive-c",
+        "Scenario": {
+          "Name": "D-C",
+          "Level": 4,
+          "Speed": 12,
+          "Offset": 7,
+          "Start": 18.625,
+          "OutwardSpeed": -0.1,
+          "HeadingError": -0.02,
+          "YawRate": -0.035
+        },
+        "Two": true
+      },
+      "Metrics": {
+        "Native": {
+          "Completed": true,
+          "Outcome": "completed",
+          "GateSeconds": 16.85,
+          "DurationSeconds": 17.85,
+          "LegalProgress": 297.51320362091064,
+          "LegalSeconds": 17.85,
+          "MinimumClearanceMeters": 0.09509955290335662,
+          "EntrySpeed": 15.534455299377441,
+          "MinimumSpeed": 12.00412368774414,
+          "ExitSpeed": 19.28897476196289,
+          "MaximumBetaDegrees": 17.94295309134589,
+          "MeanDrive": 0.24995319256635534,
+          "FullDriveFraction": 0.035854340935287686,
+          "LargeTrajectoryOscillations": 8,
+          "DistanceMeters": 321.62816155701876,
+          "BoundaryApproach": 15.999419988613592,
+          "RecoverySeconds": 0.9299999794457108,
+          "NativeSteps": 1789,
+          "PhysicsEvaluations": 221631,
+          "Forecasts": 2430,
+          "CpuSeconds": 8.953125,
+          "Fingerprint": "41E7D559EF68A5C0569D42FF1BAF9C828CE616AD6AEA3FEA0FA46E11CF683FA2"
+        },
+        "MinimumInstantInner": 0.20582339260357863,
+        "MinimumInstantOuter": 3.4888182279646363,
+        "MinimumLegacyCertificate": 0.09509955290335662,
+        "MinimumRefinedCertificate": 0.09509955290335662,
+        "CornerMinimumSpeed": 15.096936225891113,
+        "MaximumYawRate": 0.8840039968490601,
+        "ExitYawRate": 0.045586857944726944,
+        "SteeringRequestTravelDegrees": 61.00000329119046,
+        "MaximumRequestChangeDegrees": 5.500000418669911,
+        "EngineWorkJoules": 122894.72863877444,
+        "DissipationJoules": 98599.8615095189,
+        "NoSafeDecisions": 0,
+        "BoundaryClass": "none"
+      },
+      "SearchCpu": 8.8125,
+      "Searches": 90,
+      "NativeContacts": 1795,
+      "PredictionContacts": 219836,
+      "Forecasts": 2430
+    },
+    "ExactPrefix": true,
+    "Accuracy": {
+      "Passed": true,
+      "Compared": 91,
+      "XY": 7.638925308128819E-05,
+      "Speed": 3.62396240234375E-05,
+      "HeadingDegrees": 0.0010518491321819636,
+      "BetaDegrees": 0.0010202595072706547,
+      "Omega": 0.0004690432084970553,
+      "Yaw": 2.1755695343017578E-05,
+      "SteeringDegrees": 0,
+      "ClearanceOptimism": 7.64089789448974E-05
+    },
+    "FiniteContinuationConfirmed": true,
+    "SelectedActions": [
+      {
+        "SteeringRadians": 0.02617994,
+        "Drive": 0.31820688
+      },
+      {
+        "SteeringRadians": 0.02617994,
+        "Drive": 0.31820688
+      }
+    ]
+  },
+  {
+    "Name": "D-C-exit1-10",
+    "Arm": "A",
+    "Native": {
+      "Name": "control-D-C-exit1-10-A",
+      "Arm": "A",
+      "Mode": "controlled-H09-then-A",
+      "Case": {
+        "Name": "D-C",
+        "Geometry": "progressive-c",
+        "Scenario": {
+          "Name": "D-C",
+          "Level": 4,
+          "Speed": 12,
+          "Offset": 7,
+          "Start": 18.625,
+          "OutwardSpeed": -0.1,
+          "HeadingError": -0.02,
+          "YawRate": -0.035
+        },
+        "Two": true
+      },
+      "Metrics": {
+        "Native": {
+          "Completed": true,
+          "Outcome": "completed",
+          "GateSeconds": 16.87,
+          "DurationSeconds": 17.87,
+          "LegalProgress": 295.7178645133972,
+          "LegalSeconds": 17.87,
+          "MinimumClearanceMeters": 0.14689990401094077,
+          "EntrySpeed": 15.534455299377441,
+          "MinimumSpeed": 12.00412368774414,
+          "ExitSpeed": 17.747814178466797,
+          "MaximumBetaDegrees": 13.51289239567562,
+          "MeanDrive": 0.21340028753157309,
+          "FullDriveFraction": 0.013430329862091884,
+          "LargeTrajectoryOscillations": 7,
+          "DistanceMeters": 312.82964439317584,
+          "BoundaryApproach": 14.915150588851507,
+          "RecoverySeconds": 2.029999954858795,
+          "NativeSteps": 1791,
+          "PhysicsEvaluations": 221643,
+          "Forecasts": 2430,
+          "CpuSeconds": 8.640625,
+          "Fingerprint": "51EFF9EEACE02002D3B62BA3CE67CB8B8E96130B706B53A15015487C17882B6A"
+        },
+        "MinimumInstantInner": 0.23176869324236443,
+        "MinimumInstantOuter": 2.9568687652881613,
+        "MinimumLegacyCertificate": 0.14689990401094077,
+        "MinimumRefinedCertificate": 0.14689990401094077,
+        "CornerMinimumSpeed": 15.381253242492676,
+        "MaximumYawRate": 0.791793167591095,
+        "ExitYawRate": 0.15313789248466492,
+        "SteeringRequestTravelDegrees": 51.50000249559194,
+        "MaximumRequestChangeDegrees": 4.500000011387423,
+        "EngineWorkJoules": 96672.64876278727,
+        "DissipationJoules": 77476.26469383338,
+        "NoSafeDecisions": 0,
+        "BoundaryClass": "none"
+      },
+      "SearchCpu": 8.59375,
+      "Searches": 90,
+      "NativeContacts": 1796,
+      "PredictionContacts": 219847,
+      "Forecasts": 2430
+    },
+    "ExactPrefix": true,
+    "Accuracy": {
+      "Passed": true,
+      "Compared": 91,
+      "XY": 1.945121584867593E-05,
+      "Speed": 2.288818359375E-05,
+      "HeadingDegrees": 6.830189170012751E-05,
+      "BetaDegrees": 3.313708964513999E-05,
+      "Omega": 5.960142397753998E-05,
+      "Yaw": 8.01868736743927E-07,
+      "SteeringDegrees": 0,
+      "ClearanceOptimism": 1.0991923225844857E-05
+    },
+    "FiniteContinuationConfirmed": true,
+    "SelectedActions": [
+      {
+        "SteeringRadians": 0,
+        "Drive": 0.31820688
+      }
+    ]
+  },
+  {
+    "Name": "D-C-exit1-10",
+    "Arm": "B",
+    "Native": {
+      "Name": "control-D-C-exit1-10-B",
+      "Arm": "B",
+      "Mode": "controlled-H09-then-A",
+      "Case": {
+        "Name": "D-C",
+        "Geometry": "progressive-c",
+        "Scenario": {
+          "Name": "D-C",
+          "Level": 4,
+          "Speed": 12,
+          "Offset": 7,
+          "Start": 18.625,
+          "OutwardSpeed": -0.1,
+          "HeadingError": -0.02,
+          "YawRate": -0.035
+        },
+        "Two": true
+      },
+      "Metrics": {
+        "Native": {
+          "Completed": true,
+          "Outcome": "completed",
+          "GateSeconds": 16.87,
+          "DurationSeconds": 17.87,
+          "LegalProgress": 295.7178645133972,
+          "LegalSeconds": 17.87,
+          "MinimumClearanceMeters": 0.14689990401094077,
+          "EntrySpeed": 15.534455299377441,
+          "MinimumSpeed": 12.00412368774414,
+          "ExitSpeed": 17.747814178466797,
+          "MaximumBetaDegrees": 13.51289239567562,
+          "MeanDrive": 0.21340028753157309,
+          "FullDriveFraction": 0.013430329862091884,
+          "LargeTrajectoryOscillations": 7,
+          "DistanceMeters": 312.82964439317584,
+          "BoundaryApproach": 14.915150588851507,
+          "RecoverySeconds": 2.029999954858795,
+          "NativeSteps": 1791,
+          "PhysicsEvaluations": 221643,
+          "Forecasts": 2430,
+          "CpuSeconds": 8.609375,
+          "Fingerprint": "51EFF9EEACE02002D3B62BA3CE67CB8B8E96130B706B53A15015487C17882B6A"
+        },
+        "MinimumInstantInner": 0.23176869324236443,
+        "MinimumInstantOuter": 2.9568687652881613,
+        "MinimumLegacyCertificate": 0.14689990401094077,
+        "MinimumRefinedCertificate": 0.14689990401094077,
+        "CornerMinimumSpeed": 15.381253242492676,
+        "MaximumYawRate": 0.791793167591095,
+        "ExitYawRate": 0.15313789248466492,
+        "SteeringRequestTravelDegrees": 51.50000249559194,
+        "MaximumRequestChangeDegrees": 4.500000011387423,
+        "EngineWorkJoules": 96672.64876278727,
+        "DissipationJoules": 77476.26469383338,
+        "NoSafeDecisions": 0,
+        "BoundaryClass": "none"
+      },
+      "SearchCpu": 8.390625,
+      "Searches": 90,
+      "NativeContacts": 1796,
+      "PredictionContacts": 219847,
+      "Forecasts": 2430
+    },
+    "ExactPrefix": true,
+    "Accuracy": {
+      "Passed": true,
+      "Compared": 91,
+      "XY": 1.945121584867593E-05,
+      "Speed": 2.288818359375E-05,
+      "HeadingDegrees": 6.830189170012751E-05,
+      "BetaDegrees": 3.313708964513999E-05,
+      "Omega": 5.960142397753998E-05,
+      "Yaw": 8.01868736743927E-07,
+      "SteeringDegrees": 0,
+      "ClearanceOptimism": 1.0991923225844857E-05
+    },
+    "FiniteContinuationConfirmed": true,
+    "SelectedActions": [
+      {
+        "SteeringRadians": 0,
+        "Drive": 0.31820688
+      },
+      {
+        "SteeringRadians": 0,
+        "Drive": 0.31820688
+      }
+    ]
+  },
+  {
+    "Name": "D-C-exit1-10",
+    "Arm": "C",
+    "Native": {
+      "Name": "control-D-C-exit1-10-C",
+      "Arm": "C",
+      "Mode": "controlled-H09-then-A",
+      "Case": {
+        "Name": "D-C",
+        "Geometry": "progressive-c",
+        "Scenario": {
+          "Name": "D-C",
+          "Level": 4,
+          "Speed": 12,
+          "Offset": 7,
+          "Start": 18.625,
+          "OutwardSpeed": -0.1,
+          "HeadingError": -0.02,
+          "YawRate": -0.035
+        },
+        "Two": true
+      },
+      "Metrics": {
+        "Native": {
+          "Completed": true,
+          "Outcome": "completed",
+          "GateSeconds": 16.87,
+          "DurationSeconds": 17.87,
+          "LegalProgress": 295.7178645133972,
+          "LegalSeconds": 17.87,
+          "MinimumClearanceMeters": 0.14689990401094077,
+          "EntrySpeed": 15.534455299377441,
+          "MinimumSpeed": 12.00412368774414,
+          "ExitSpeed": 17.747814178466797,
+          "MaximumBetaDegrees": 13.51289239567562,
+          "MeanDrive": 0.21340028753157309,
+          "FullDriveFraction": 0.013430329862091884,
+          "LargeTrajectoryOscillations": 7,
+          "DistanceMeters": 312.82964439317584,
+          "BoundaryApproach": 14.915150588851507,
+          "RecoverySeconds": 2.029999954858795,
+          "NativeSteps": 1791,
+          "PhysicsEvaluations": 221643,
+          "Forecasts": 2430,
+          "CpuSeconds": 8.484375,
+          "Fingerprint": "51EFF9EEACE02002D3B62BA3CE67CB8B8E96130B706B53A15015487C17882B6A"
+        },
+        "MinimumInstantInner": 0.23176869324236443,
+        "MinimumInstantOuter": 2.9568687652881613,
+        "MinimumLegacyCertificate": 0.14689990401094077,
+        "MinimumRefinedCertificate": 0.14689990401094077,
+        "CornerMinimumSpeed": 15.381253242492676,
+        "MaximumYawRate": 0.791793167591095,
+        "ExitYawRate": 0.15313789248466492,
+        "SteeringRequestTravelDegrees": 51.50000249559194,
+        "MaximumRequestChangeDegrees": 4.500000011387423,
+        "EngineWorkJoules": 96672.64876278727,
+        "DissipationJoules": 77476.26469383338,
+        "NoSafeDecisions": 0,
+        "BoundaryClass": "none"
+      },
+      "SearchCpu": 8.359375,
+      "Searches": 90,
+      "NativeContacts": 1796,
+      "PredictionContacts": 219847,
+      "Forecasts": 2430
+    },
+    "ExactPrefix": true,
+    "Accuracy": {
+      "Passed": true,
+      "Compared": 91,
+      "XY": 1.945121584867593E-05,
+      "Speed": 2.288818359375E-05,
+      "HeadingDegrees": 6.830189170012751E-05,
+      "BetaDegrees": 3.313708964513999E-05,
+      "Omega": 5.960142397753998E-05,
+      "Yaw": 8.01868736743927E-07,
+      "SteeringDegrees": 0,
+      "ClearanceOptimism": 1.0991923225844857E-05
+    },
+    "FiniteContinuationConfirmed": true,
+    "SelectedActions": [
+      {
+        "SteeringRadians": 0,
+        "Drive": 0.31820688
+      }
+    ]
+  },
+  {
+    "Name": "D-C-exit1-10",
+    "Arm": "D",
+    "Native": {
+      "Name": "control-D-C-exit1-10-D",
+      "Arm": "D",
+      "Mode": "controlled-H09-then-A",
+      "Case": {
+        "Name": "D-C",
+        "Geometry": "progressive-c",
+        "Scenario": {
+          "Name": "D-C",
+          "Level": 4,
+          "Speed": 12,
+          "Offset": 7,
+          "Start": 18.625,
+          "OutwardSpeed": -0.1,
+          "HeadingError": -0.02,
+          "YawRate": -0.035
+        },
+        "Two": true
+      },
+      "Metrics": {
+        "Native": {
+          "Completed": true,
+          "Outcome": "completed",
+          "GateSeconds": 16.87,
+          "DurationSeconds": 17.87,
+          "LegalProgress": 295.7178645133972,
+          "LegalSeconds": 17.87,
+          "MinimumClearanceMeters": 0.14689990401094077,
+          "EntrySpeed": 15.534455299377441,
+          "MinimumSpeed": 12.00412368774414,
+          "ExitSpeed": 17.747814178466797,
+          "MaximumBetaDegrees": 13.51289239567562,
+          "MeanDrive": 0.21340028753157309,
+          "FullDriveFraction": 0.013430329862091884,
+          "LargeTrajectoryOscillations": 7,
+          "DistanceMeters": 312.82964439317584,
+          "BoundaryApproach": 14.915150588851507,
+          "RecoverySeconds": 2.029999954858795,
+          "NativeSteps": 1791,
+          "PhysicsEvaluations": 221643,
+          "Forecasts": 2430,
+          "CpuSeconds": 8.640625,
+          "Fingerprint": "51EFF9EEACE02002D3B62BA3CE67CB8B8E96130B706B53A15015487C17882B6A"
+        },
+        "MinimumInstantInner": 0.23176869324236443,
+        "MinimumInstantOuter": 2.9568687652881613,
+        "MinimumLegacyCertificate": 0.14689990401094077,
+        "MinimumRefinedCertificate": 0.14689990401094077,
+        "CornerMinimumSpeed": 15.381253242492676,
+        "MaximumYawRate": 0.791793167591095,
+        "ExitYawRate": 0.15313789248466492,
+        "SteeringRequestTravelDegrees": 51.50000249559194,
+        "MaximumRequestChangeDegrees": 4.500000011387423,
+        "EngineWorkJoules": 96672.64876278727,
+        "DissipationJoules": 77476.26469383338,
+        "NoSafeDecisions": 0,
+        "BoundaryClass": "none"
+      },
+      "SearchCpu": 8.484375,
+      "Searches": 90,
+      "NativeContacts": 1796,
+      "PredictionContacts": 219847,
+      "Forecasts": 2430
+    },
+    "ExactPrefix": true,
+    "Accuracy": {
+      "Passed": true,
+      "Compared": 91,
+      "XY": 1.945121584867593E-05,
+      "Speed": 2.288818359375E-05,
+      "HeadingDegrees": 6.830189170012751E-05,
+      "BetaDegrees": 3.313708964513999E-05,
+      "Omega": 5.960142397753998E-05,
+      "Yaw": 8.01868736743927E-07,
+      "SteeringDegrees": 0,
+      "ClearanceOptimism": 1.0991923225844857E-05
+    },
+    "FiniteContinuationConfirmed": true,
+    "SelectedActions": [
+      {
+        "SteeringRadians": 0,
+        "Drive": 0.31820688
+      },
+      {
+        "SteeringRadians": 0,
+        "Drive": 0.31820688
+      }
+    ]
+  },
+  {
+    "Name": "D-C-exit2-5",
+    "Arm": "A",
+    "Native": {
+      "Name": "control-D-C-exit2-5-A",
+      "Arm": "A",
+      "Mode": "controlled-H09-then-A",
+      "Case": {
+        "Name": "D-C",
+        "Geometry": "progressive-c",
+        "Scenario": {
+          "Name": "D-C",
+          "Level": 4,
+          "Speed": 12,
+          "Offset": 7,
+          "Start": 18.625,
+          "OutwardSpeed": -0.1,
+          "HeadingError": -0.02,
+          "YawRate": -0.035
+        },
+        "Two": true
+      },
+      "Metrics": {
+        "Native": {
+          "Completed": true,
+          "Outcome": "completed",
+          "GateSeconds": 16.87,
+          "DurationSeconds": 17.87,
+          "LegalProgress": 295.7216091156006,
+          "LegalSeconds": 17.87,
+          "MinimumClearanceMeters": 0.14689990401094077,
+          "EntrySpeed": 15.534455299377441,
+          "MinimumSpeed": 12.00412368774414,
+          "ExitSpeed": 17.747814178466797,
+          "MaximumBetaDegrees": 13.51289239567562,
+          "MeanDrive": 0.21340028753157309,
+          "FullDriveFraction": 0.013430329862091884,
+          "LargeTrajectoryOscillations": 7,
+          "DistanceMeters": 312.8266929201782,
+          "BoundaryApproach": 14.846507158794871,
+          "RecoverySeconds": 2.029999954858795,
+          "NativeSteps": 1791,
+          "PhysicsEvaluations": 221643,
+          "Forecasts": 2430,
+          "CpuSeconds": 8.609375,
+          "Fingerprint": "4DCFB93BC7611581E04316D6B94C0B89D0738F96D6D6DF18265546B18546629C"
+        },
+        "MinimumInstantInner": 0.23176869324236443,
+        "MinimumInstantOuter": 3.0255121953447985,
+        "MinimumLegacyCertificate": 0.14689990401094077,
+        "MinimumRefinedCertificate": 0.14689990401094077,
+        "CornerMinimumSpeed": 15.381253242492676,
+        "MaximumYawRate": 0.791793167591095,
+        "ExitYawRate": 0.15313789248466492,
+        "SteeringRequestTravelDegrees": 51.50000249559194,
+        "MaximumRequestChangeDegrees": 4.500000011387423,
+        "EngineWorkJoules": 96675.84030024977,
+        "DissipationJoules": 77517.84272764671,
+        "NoSafeDecisions": 0,
+        "BoundaryClass": "none"
+      },
+      "SearchCpu": 8.484375,
+      "Searches": 90,
+      "NativeContacts": 1796,
+      "PredictionContacts": 219847,
+      "Forecasts": 2430
+    },
+    "ExactPrefix": true,
+    "Accuracy": {
+      "Passed": true,
+      "Compared": 92,
+      "XY": 1.740292282192968E-05,
+      "Speed": 1.33514404296875E-05,
+      "HeadingDegrees": 0.0003517547422556567,
+      "BetaDegrees": 0.00012038208412147473,
+      "Omega": 3.529055320683483E-05,
+      "Yaw": 2.518296241760254E-06,
+      "SteeringDegrees": 0,
+      "ClearanceOptimism": 1.1713323331719039E-05
+    },
+    "FiniteContinuationConfirmed": true,
+    "SelectedActions": [
+      {
+        "SteeringRadians": 0.008726646,
+        "Drive": 0.31820688
+      }
+    ]
+  },
+  {
+    "Name": "D-C-exit2-5",
+    "Arm": "B",
+    "Native": {
+      "Name": "control-D-C-exit2-5-B",
+      "Arm": "B",
+      "Mode": "controlled-H09-then-A",
+      "Case": {
+        "Name": "D-C",
+        "Geometry": "progressive-c",
+        "Scenario": {
+          "Name": "D-C",
+          "Level": 4,
+          "Speed": 12,
+          "Offset": 7,
+          "Start": 18.625,
+          "OutwardSpeed": -0.1,
+          "HeadingError": -0.02,
+          "YawRate": -0.035
+        },
+        "Two": true
+      },
+      "Metrics": {
+        "Native": {
+          "Completed": true,
+          "Outcome": "completed",
+          "GateSeconds": 16.87,
+          "DurationSeconds": 17.87,
+          "LegalProgress": 295.74338722229004,
+          "LegalSeconds": 17.87,
+          "MinimumClearanceMeters": 0.14689990401094077,
+          "EntrySpeed": 15.534455299377441,
+          "MinimumSpeed": 12.00412368774414,
+          "ExitSpeed": 17.73024559020996,
+          "MaximumBetaDegrees": 13.51289239567562,
+          "MeanDrive": 0.21340028753157309,
+          "FullDriveFraction": 0.013430329862091884,
+          "LargeTrajectoryOscillations": 7,
+          "DistanceMeters": 312.810998942703,
+          "BoundaryApproach": 14.730286351797176,
+          "RecoverySeconds": 2.029999954858795,
+          "NativeSteps": 1791,
+          "PhysicsEvaluations": 221643,
+          "Forecasts": 2430,
+          "CpuSeconds": 8.609375,
+          "Fingerprint": "353E63E5A642C1C72AE7C341974CCD2D3B67DB8E7DBA989B792D73CFB91A4EAE"
+        },
+        "MinimumInstantInner": 0.23176869324236443,
+        "MinimumInstantOuter": 3.156929667135722,
+        "MinimumLegacyCertificate": 0.14689990401094077,
+        "MinimumRefinedCertificate": 0.14689990401094077,
+        "CornerMinimumSpeed": 15.381253242492676,
+        "MaximumYawRate": 0.791793167591095,
+        "ExitYawRate": 0.2954122722148895,
+        "SteeringRequestTravelDegrees": 54.500002617020044,
+        "MaximumRequestChangeDegrees": 4.500000011387423,
+        "EngineWorkJoules": 96663.1716510787,
+        "DissipationJoules": 77482.27670256382,
+        "NoSafeDecisions": 0,
+        "BoundaryClass": "none"
+      },
+      "SearchCpu": 8.515625,
+      "Searches": 90,
+      "NativeContacts": 1796,
+      "PredictionContacts": 219847,
+      "Forecasts": 2430
+    },
+    "ExactPrefix": true,
+    "Accuracy": {
+      "Passed": true,
+      "Compared": 92,
+      "XY": 3.135906808893196E-05,
+      "Speed": 1.1444091796875E-05,
+      "HeadingDegrees": 0.0004738443736696346,
+      "BetaDegrees": 0.00016840685172312688,
+      "Omega": 4.60410975122727E-05,
+      "Yaw": 5.4389238357543945E-06,
+      "SteeringDegrees": 0,
+      "ClearanceOptimism": 3.6770388600615433E-05
+    },
+    "FiniteContinuationConfirmed": true,
+    "SelectedActions": [
+      {
+        "SteeringRadians": 0.02617994,
+        "Drive": 0.31820688
+      },
+      {
+        "SteeringRadians": 0,
+        "Drive": 0.31820688
+      }
+    ]
+  },
+  {
+    "Name": "D-C-exit2-5",
+    "Arm": "C",
+    "Native": {
+      "Name": "control-D-C-exit2-5-C",
+      "Arm": "C",
+      "Mode": "controlled-H09-then-A",
+      "Case": {
+        "Name": "D-C",
+        "Geometry": "progressive-c",
+        "Scenario": {
+          "Name": "D-C",
+          "Level": 4,
+          "Speed": 12,
+          "Offset": 7,
+          "Start": 18.625,
+          "OutwardSpeed": -0.1,
+          "HeadingError": -0.02,
+          "YawRate": -0.035
+        },
+        "Two": true
+      },
+      "Metrics": {
+        "Native": {
+          "Completed": true,
+          "Outcome": "completed",
+          "GateSeconds": 16.87,
+          "DurationSeconds": 17.87,
+          "LegalProgress": 295.6593828201294,
+          "LegalSeconds": 17.87,
+          "MinimumClearanceMeters": 0.14689990401094077,
+          "EntrySpeed": 15.534455299377441,
+          "MinimumSpeed": 12.00412368774414,
+          "ExitSpeed": 17.728281021118164,
+          "MaximumBetaDegrees": 13.51289239567562,
+          "MeanDrive": 0.21340028753157309,
+          "FullDriveFraction": 0.013430329862091884,
+          "LargeTrajectoryOscillations": 8,
+          "DistanceMeters": 312.60519928857684,
+          "BoundaryApproach": 13.080278756538068,
+          "RecoverySeconds": 2.029999954858795,
+          "NativeSteps": 1791,
+          "PhysicsEvaluations": 221643,
+          "Forecasts": 2430,
+          "CpuSeconds": 8.859375,
+          "Fingerprint": "831B5DF3C6899DFEE8E22C64BBEC52BC0B8A6478203CC166927893D3B3A47CF1"
+        },
+        "MinimumInstantInner": 0.23176869324236443,
+        "MinimumInstantOuter": 3.4888182279646363,
+        "MinimumLegacyCertificate": 0.14689990401094077,
+        "MinimumRefinedCertificate": 0.14689990401094077,
+        "CornerMinimumSpeed": 15.381253242492676,
+        "MaximumYawRate": 0.791793167591095,
+        "ExitYawRate": 0.33837613463401794,
+        "SteeringRequestTravelDegrees": 56.000002696706844,
+        "MaximumRequestChangeDegrees": 4.500000011387423,
+        "EngineWorkJoules": 96769.00209953998,
+        "DissipationJoules": 79021.00973508191,
+        "NoSafeDecisions": 0,
+        "BoundaryClass": "none"
+      },
+      "SearchCpu": 8.6875,
+      "Searches": 90,
+      "NativeContacts": 1796,
+      "PredictionContacts": 219847,
+      "Forecasts": 2430
+    },
+    "ExactPrefix": true,
+    "Accuracy": {
+      "Passed": true,
+      "Compared": 92,
+      "XY": 3.2957002986222506E-05,
+      "Speed": 2.86102294921875E-05,
+      "HeadingDegrees": 0.0006106616004814525,
+      "BetaDegrees": 0.0002488750178823396,
+      "Omega": 7.612580451876738E-05,
+      "Yaw": 5.930662155151367E-06,
+      "SteeringDegrees": 0,
+      "ClearanceOptimism": 3.9945446160594145E-05
+    },
+    "FiniteContinuationConfirmed": true,
+    "SelectedActions": [
+      {
+        "SteeringRadians": 0.02617994,
+        "Drive": 0.31820688
+      }
+    ]
+  },
+  {
+    "Name": "D-C-exit2-5",
+    "Arm": "D",
+    "Native": {
+      "Name": "control-D-C-exit2-5-D",
+      "Arm": "D",
+      "Mode": "controlled-H09-then-A",
+      "Case": {
+        "Name": "D-C",
+        "Geometry": "progressive-c",
+        "Scenario": {
+          "Name": "D-C",
+          "Level": 4,
+          "Speed": 12,
+          "Offset": 7,
+          "Start": 18.625,
+          "OutwardSpeed": -0.1,
+          "HeadingError": -0.02,
+          "YawRate": -0.035
+        },
+        "Two": true
+      },
+      "Metrics": {
+        "Native": {
+          "Completed": true,
+          "Outcome": "completed",
+          "GateSeconds": 16.87,
+          "DurationSeconds": 17.87,
+          "LegalProgress": 295.74338722229004,
+          "LegalSeconds": 17.87,
+          "MinimumClearanceMeters": 0.14689990401094077,
+          "EntrySpeed": 15.534455299377441,
+          "MinimumSpeed": 12.00412368774414,
+          "ExitSpeed": 17.73024559020996,
+          "MaximumBetaDegrees": 13.51289239567562,
+          "MeanDrive": 0.21340028753157309,
+          "FullDriveFraction": 0.013430329862091884,
+          "LargeTrajectoryOscillations": 7,
+          "DistanceMeters": 312.810998942703,
+          "BoundaryApproach": 14.730286351797176,
+          "RecoverySeconds": 2.029999954858795,
+          "NativeSteps": 1791,
+          "PhysicsEvaluations": 221643,
+          "Forecasts": 2430,
+          "CpuSeconds": 8.375,
+          "Fingerprint": "353E63E5A642C1C72AE7C341974CCD2D3B67DB8E7DBA989B792D73CFB91A4EAE"
+        },
+        "MinimumInstantInner": 0.23176869324236443,
+        "MinimumInstantOuter": 3.156929667135722,
+        "MinimumLegacyCertificate": 0.14689990401094077,
+        "MinimumRefinedCertificate": 0.14689990401094077,
+        "CornerMinimumSpeed": 15.381253242492676,
+        "MaximumYawRate": 0.791793167591095,
+        "ExitYawRate": 0.2954122722148895,
+        "SteeringRequestTravelDegrees": 54.500002617020044,
+        "MaximumRequestChangeDegrees": 4.500000011387423,
+        "EngineWorkJoules": 96663.1716510787,
+        "DissipationJoules": 77482.27670256382,
+        "NoSafeDecisions": 0,
+        "BoundaryClass": "none"
+      },
+      "SearchCpu": 8.21875,
+      "Searches": 90,
+      "NativeContacts": 1796,
+      "PredictionContacts": 219847,
+      "Forecasts": 2430
+    },
+    "ExactPrefix": true,
+    "Accuracy": {
+      "Passed": true,
+      "Compared": 92,
+      "XY": 3.135906808893196E-05,
+      "Speed": 1.1444091796875E-05,
+      "HeadingDegrees": 0.0004738443736696346,
+      "BetaDegrees": 0.00016840685172312688,
+      "Omega": 4.60410975122727E-05,
+      "Yaw": 5.4389238357543945E-06,
+      "SteeringDegrees": 0,
+      "ClearanceOptimism": 3.6770388600615433E-05
+    },
+    "FiniteContinuationConfirmed": true,
+    "SelectedActions": [
+      {
+        "SteeringRadians": 0.02617994,
+        "Drive": 0.31820688
+      },
+      {
+        "SteeringRadians": 0,
+        "Drive": 0.31820688
+      }
+    ]
+  }
+]

@@ -1,0 +1,13 @@
+{
+  "FrozenBeforeOpeningConfirmation": true,
+  "ThresholdSource": "thresholds.json, measured preflight and locked before selection",
+  "TimeMetric": "Original full-footprint second-bend gate, with required +1s legal continuation. Positive gain = A GateSeconds minus chosen variant GateSeconds.",
+  "ExitSpeedMetric": "Arithmetic mean of the two geometric-exit speeds in km/h; first accepted native sample on/after each TrackFrame end. Both exits must be present.",
+  "StraightSpeedMetric": "Speed at first accepted native sample at/after 40 reference metres beyond first geometric exit. Fixed common cross-section, not selected after the final results.",
+  "JointCaseImprovement": "Legal completion, time gain >=0.15s, mean exit-speed gain >=1km/h, fixed +40m speed gain >=2km/h. At least3 of4 held cases in two geometries.",
+  "Reliability": "No additional DNF relative to A; an A DNF does not create a positive paired time gain.",
+  "ThrottleEvidence": "Autonomous full-throttle requests and actual full throttle at geometric exit must occur on both geometry profiles; an isolated straight result or forced diagnostic sequence never supplies this evidence.",
+  "CpuMetric": "Sum measured search CPU divided by real native review count in held autonomous runs, compared with MaximumMeanDecisionCpu frozen in thresholds.json. Four-rider extrapolation is20 real searches per simulated second; includes no native or traffic cost and is not a measured four-rider heat.",
+  "ExtendedScope": "Separate duplicates continue through the full next62m without changing the historical two-bend criterion. Post-two-bend DNF is reported separately; duplicates add no independent cases.",
+  "NoFinalTuning": "Neither this definition nor thresholds, source code, root/correction set, scoring, or winner can change after confirmation is opened."
+}
