@@ -6,6 +6,11 @@ def read(name):
     p=D/name
     return json.loads(p.read_bytes() if p.exists() else gzip.decompress(Path(str(p)+'.gz').read_bytes()))
 class MultiActionEvidenceTests(unittest.TestCase):
+    def test_fixed_plan_geometry_transfer_preserves_full_initial_state(self):
+        plan=read('geometry-transfer-plan.json');self.assertEqual(plan['NewWorlds'],4);self.assertEqual(plan['CachedWorlds'],2)
+        rows=read('geometry-transfer.json');self.assertEqual({r['Geometry'] for r in rows},{'progressive-b','progressive-c','egg-asymmetric'})
+        for row in rows:
+            self.assertTrue(row['SameInitialPhysicalState']);self.assertTrue(row['ExactPrefix']);self.assertEqual(row['Scenario'],plan['Scenario']);self.assertEqual(row['Actions'],plan['Actions']);self.assertEqual(row['StateTime'],plan['Time'])
     def test_native_collector_only_adds_diagnostic_integration_hook(self):
         original=(ROOT/'tools/shared-world-speedway/RobustLearningExperiment.cs').read_text(encoding='utf-8')
         original=original[original.index('    public static RobustEpisode Execute('):original.index('    private static void Train(')]

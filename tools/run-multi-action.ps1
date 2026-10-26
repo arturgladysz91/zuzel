@@ -22,6 +22,8 @@ try {
     if($LASTEXITCODE){throw 'Cannot package already frozen search for mechanism control.'}
     dotnet tools/multi-action-planning/bin/Release/net8.0/multi-action-planning.dll --enable-multi-action $Data $Raw mechanism-controls
     if($LASTEXITCODE){throw 'Mechanism control failed.'}
+    dotnet tools/multi-action-planning/bin/Release/net8.0/multi-action-planning.dll --enable-multi-action $Data $Raw geometry-transfer
+    if($LASTEXITCODE){throw 'Fixed-plan geometry transfer failed.'}
     & $Python tools/multi-action-report.py $Raw --data $Data
     if($LASTEXITCODE){throw 'Report failed; all raw retained.'}
 } finally {Pop-Location}

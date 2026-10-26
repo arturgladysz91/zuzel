@@ -8,7 +8,7 @@
 
 ## 2. Czy utrzymana komenda powodowała zły wybór?
 
-Liczba sparowanych wyników B/C z inną pierwszą akcją niż A i zyskiem co najmniej 0,15 s całych dwóch łuków: **1**. Konkretne dowody poniżej. To kontrfaktyczna dostępność lepszego manewru w ograniczonym zbiorze, nie dowód globalnej optymalności. `paired-results.json.gz` zachowuje dawną ocenę utrzymania tej pierwszej akcji i nową ocenę całej sekwencji.
+Liczba sparowanych wyników B/C z inną pierwszą akcją niż A i zyskiem co najmniej0,15s całych dwóch łuków: **1**. Konkretne dowody poniżej. To kontrfaktyczna dostępność lepszego manewru w ograniczonym zbiorze, nie dowód globalnej optymalności. `paired-results.json.gz` zachowuje dawną ocenę utrzymania tej pierwszej akcji i nową ocenę całej sekwencji.
 
 | Stan | Wariant | A dwa łuki [s] | Próba [s] | Zysk [s] | Pierwsza akcja inna niż A |
 | --- | --- | --- | --- | --- | --- |
@@ -74,6 +74,16 @@ Zamrożono16 stanów diagnostycznych i6 potwierdzających: koniec prostej, wejś
 
 Każda próba używa istniejącego progressive-b, progressive-c lub egg-asymmetric i własnego eksportu geometrii. Nie zakładamy idealnych półokręgów. B ma12→16,6→12m, C12→17/16,2→12m. Parametry apexu nie są pomiarami Motoareny. Zgodność komend z lokalnym gridem nie dowodzi przenoszalności jednego planu XY na inny tor: w każdej geometrii planner sam ocenia istniejące akcje.
 
+Główne pule mają różne stany początkowe pomiędzy wariantami toru, więc nie izolują samej geometrii. Dodatkowo po wynikach zamrożono **kontrolowany transfer stałego manewru**: dokładnie ten sam start17,25m/s, offset6,15m, heading0,016rad, v boczna0,11m/s, yaw−0,03rad/s, wheel/steering/gaz i terminy9,0/9,2s; zmienia się wyłącznie istniejący wariant geometrii. Para C jest odczytana z zapisów,4 nowe światy obejmują A/ten sam plan na B i egg-asymmetric. Nie przeliczamy wyszukiwania na obcym torze i nie dobieramy nowego manewru po wynikach.
+
+| Identyczny start i plan przy9,0/9,2s | A dwa łuki [s] | Plan z C [s] | Wynik planu |
+| --- | --- | --- | --- |
+| progressive-c | 15.590 | 15.340 | completed |
+| progressive-b | 15.590 | 15.340 | completed |
+| egg-asymmetric | 16.320 | DNF | uncertified interval |
+
+To diagnostyka post-hoc, nie dodatkowa niezależna walidacja. `geometry-transfer-plan.json` powstał przed nowymi4 wynikami. Każdy początkowy stan fizyczny i odpowiedni prefiks interwencji sprawdzono na dokładną równość. Viewer zawiera oddzielne grupy transfer-progressive-b i transfer-egg-asymmetric; różnicy czasu lub DNF nie przypisujemy zmianie opon czy gazu.
+
 Test odczytowy potwierdza obecną prostą35+27m, drugą62m i okrążenie≈318,78m. Uzgodnione31+31m pozostaje **osobnym zadaniem przywrócenia położenia start/meta** w `start-finish-follow-up.md`. Origin nadal(0,0), cztery neutralne pola A–D mają środki1,5/4,5/7,5/10,5m; bez bonusów i bez stałych pasów jazdy. #135 nie przesuwa startu, bandy ani kredy.
 
 ## 11. Koszt sekwencji
@@ -98,7 +108,7 @@ Trzecia komenda ma tylko0,26s skutku w H09. Cztery kontrolowane natywne próby u
 
 **INCONCLUSIVE** według progów zamrożonych w protokole przed próbami. Kryteria: `{"DiagnosticThree": true, "IndependentThree": false, "IndependentTwoGeometries": false, "NoNewCausalDNF": true, "PredictionPreflight": true, "PrefixAndQueue": true, "MatchedPrefixAccuracy": true, "SearchCpu": false, "SearchContacts": true}`. Diagnostyka: 4 unikalnych stanów zysku≥0,15s; niezależna pula: 1 w geometriach ['progressive-c']. Nowe causal DNF: 0. Oddzielne światy z jednego początku nie są niezależnymi osobnikami ani statystycznym dowodem gotowości. Nie otwieramy automatycznie #136. Następny pojedynczy eksperyment: zweryfikować wartość późniejszej kontynuacji na tych samych zamrożonych wagach i modelu, zanim zaczniemy duży trening lub domyślne MPC.
 
-Koszt łącznie: **80 światów, 802.296875s CPU epizodów/wyszukiwań, 152613 prognoz, 13925887 ocen kontaktu, 115256 kroków**. Limity96/1400s/250k/25M. Budżet CPU wynika z6 światów preflight i zamrożonej formuły, nie z dostosowania po wynikach. Builds, testy, przygotowanie geometrii przed pomiarem epizodu, serializacja raw i ten raport są poza pomiarem epizodów; koszt raportu jest osobno. Nie zmierzono sumy CPU całych procesów z tym narzutem, więc783s ani późniejsza suma nie są takim pomiarem.
+Koszt łącznie: **84 światów, 848.671875s CPU epizodów/wyszukiwań, 160842 prognoz, 14676592 ocen kontaktu, 121406 kroków**. Limity96/1400s/250k/25M. Budżet CPU wynika z6 światów preflight i zamrożonej formuły, nie z dostosowania po wynikach. Builds, testy, przygotowanie geometrii przed pomiarem epizodu, serializacja raw i ten raport są poza pomiarem epizodów; koszt raportu jest osobno. Nie zmierzono sumy CPU całych procesów z tym narzutem, więc783s ani późniejsza suma nie są takim pomiarem.
 
 Pełny raw: `C:\Users\artur\Documents\Codex\2026-10-23\files-pasted-by-the-user-pr\work\multi-action-135-raw`. Dostęp lokalny; Git zawiera wszystkie agregaty, prognozy, hashe i wybrany bundle, **nie każdy pełny replay**. Historyczne dane i źródła #129–#134 pozostały bez zmian. `tools/run-multi-action.ps1` odtwarza etapy do świeżych katalogów. Standardowy Windows Draft CI i dokładny HEAD są w opisie PR, bez merge. Testy fizyki/OFF i nowe kontrakty muszą przejść przed publikacją.
 

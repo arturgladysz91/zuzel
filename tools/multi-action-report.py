@@ -126,6 +126,15 @@ def main(raw):
         bundle[c['Name']]=read(raw/(c['Name']+'.json.gz'));group['Runs'].append(dict(Name=c['Name'],Policy=c['Arm']))
         group['Plans'].append(dict(Arm=c['Arm'],Time=mechanism['Time'],ReactionSeconds=.24,Actions=c['Actions'],Basis='Kontrola mechanizmu po wynikach; poza niezależnym wynikiem i wyborem planera'))
         group['PairedSummary']+=f" Kontrola {c['Arm']}: {fmt(c['Metrics']['Native']['GateSeconds'])} / {c['Metrics']['Native']['Outcome']}."
+    transfers=read(D/'geometry-transfer.json')
+    for t in transfers:
+        if t['Geometry']=='progressive-c':continue
+        for name in [t['BaselineName'],t['TrialName']]:bundle[name]=read(raw/(name+'.json.gz'))
+        groups.append(dict(Id='transfer-'+t['Geometry'],Scenario=t['Scenario'],GeometryFile=t['Geometry']+'-geometry.json',TwoBends=True,
+            Runs=[dict(Name=t['BaselineName'],Policy='A'),dict(Name=t['TrialName'],Policy='B')],
+            Plans=[dict(Arm='B',Time=t['StateTime'],ReactionSeconds=.24,Actions=t['Actions'],Basis='Stała sekwencja z progressive-c; kontrolowany transfer po wynikach, bez adaptacji ani strojenia')],
+            Reasons=['identyczny start jak V-C','stały plan z progressive-c',t['Geometry']],Scope='Post-hoc fixed-plan transfer. Ta sama prędkość/offset/heading/yaw/koło/gaz; zmienia się wyłącznie istniejący wariant geometrii. Nie doliczamy do niezależnej puli.',
+            PairedSummary=f"Ta sama konfiguracja początkowa: A {fmt(t['Baseline']['Native']['GateSeconds'])}, stała sekwencja B {fmt(t['Trial']['Native']['GateSeconds'])} s / {t['Trial']['Native']['Outcome']}."))
     packed('selected-replays.json.gz',dict(Runs=bundle))
     index=read(D/'index.json');index['Groups']=groups
     index['Labels'].update({'first-only':'Kontrola: tylko pierwsza akcja','repeat-first':'Kontrola: powtórzona pierwsza akcja'})
@@ -162,6 +171,7 @@ def plots(pairs,groups,bundle):
 def report(s,p,rows,searches,oracle,preflight):
     sequence_cost=read(D/'sequence-cost.json');costs=[c['CpuSecondsPerSequence'] for c in sequence_cost['Checks']]
     controls=read(D/'mechanism-controls.json');mechanism_table=table(['V-C-preparation2','Dwa łuki [s]','Wynik'],[['Oryginalny A','15.590','completed'],['Wybrany B: −15°/gaz0 → −5°/gaz1','15.340','completed']]+[[c['Arm'],fmt(c['Metrics']['Native']['GateSeconds']),c['Metrics']['Native']['Outcome']] for c in controls])
+    transfers=read(D/'geometry-transfer.json');transfer_table=table(['Identyczny start i plan przy9,0/9,2s','A dwa łuki [s]','Plan z C [s]','Wynik planu'],[[t['Geometry'],fmt(t['Baseline']['Native']['GateSeconds']),fmt(t['Trial']['Native']['GateSeconds']),t['Trial']['Native']['Outcome']] for t in transfers])
     causal=[r for r in rows if r['Arm'] in ['B','C']];winning=[r for r in causal if gain(r) is not None and gain(r)>=.15-1e-8]
     examples=sorted(winning,key=lambda r:gain(r),reverse=True)[:5]
     table_rows=[[r['State'],r['Arm'],r['Pool'],fmt(r['Baseline']['Native']['GateSeconds']),fmt(r['Native']['Native']['GateSeconds']),fmt(gain(r)),r['Native']['Native']['Outcome']] for r in rows]
@@ -214,6 +224,12 @@ Zamrożono16 stanów diagnostycznych i6 potwierdzających: koniec prostej, wejś
 
 ## 10. Geometria i transfer
 Każda próba używa istniejącego progressive-b, progressive-c lub egg-asymmetric i własnego eksportu geometrii. Nie zakładamy idealnych półokręgów. B ma12→16,6→12m, C12→17/16,2→12m. Parametry apexu nie są pomiarami Motoareny. Zgodność komend z lokalnym gridem nie dowodzi przenoszalności jednego planu XY na inny tor: w każdej geometrii planner sam ocenia istniejące akcje.
+
+Główne pule mają różne stany początkowe pomiędzy wariantami toru, więc nie izolują samej geometrii. Dodatkowo po wynikach zamrożono **kontrolowany transfer stałego manewru**: dokładnie ten sam start17,25m/s, offset6,15m, heading0,016rad, v boczna0,11m/s, yaw−0,03rad/s, wheel/steering/gaz i terminy9,0/9,2s; zmienia się wyłącznie istniejący wariant geometrii. Para C jest odczytana z zapisów,4 nowe światy obejmują A/ten sam plan na B i egg-asymmetric. Nie przeliczamy wyszukiwania na obcym torze i nie dobieramy nowego manewru po wynikach.
+
+{transfer_table}
+
+To diagnostyka post-hoc, nie dodatkowa niezależna walidacja. `geometry-transfer-plan.json` powstał przed nowymi4 wynikami. Każdy początkowy stan fizyczny i odpowiedni prefiks interwencji sprawdzono na dokładną równość. Viewer zawiera oddzielne grupy transfer-progressive-b i transfer-egg-asymmetric; różnicy czasu lub DNF nie przypisujemy zmianie opon czy gazu.
 
 Test odczytowy potwierdza obecną prostą35+27m, drugą62m i okrążenie≈318,78m. Uzgodnione31+31m pozostaje **osobnym zadaniem przywrócenia położenia start/meta** w `start-finish-follow-up.md`. Origin nadal(0,0), cztery neutralne pola A–D mają środki1,5/4,5/7,5/10,5m; bez bonusów i bez stałych pasów jazdy. #135 nie przesuwa startu, bandy ani kredy.
 

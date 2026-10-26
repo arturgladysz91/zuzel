@@ -469,6 +469,106 @@
       ],
       "Scope": "Jednakowy natywny prefiks; sekwencja dwóch/trzech żądań, potem oryginalny autonomiczny134A. Oracle nie jest sterownikiem.",
       "PairedSummary": "Pełny czas dwóch łuków A: 15.590 s; B: 15.340 s / completed; C: 15.480 s / completed; oracle-sample: 15.740 s / completed. Wszystkie DNF zachowane. Kontrola first-only: 15.490 / completed. Kontrola repeat-first: DNF / control envelope."
+    },
+    {
+      "Id": "transfer-progressive-b",
+      "Scenario": {
+        "Name": "V-C",
+        "Level": 4,
+        "Speed": 17.25,
+        "Offset": 6.15,
+        "Start": 19.125,
+        "OutwardSpeed": 0.11,
+        "HeadingError": 0.016,
+        "YawRate": -0.03
+      },
+      "GeometryFile": "progressive-b-geometry.json",
+      "TwoBends": true,
+      "Runs": [
+        {
+          "Name": "transfer-base-progressive-b",
+          "Policy": "A"
+        },
+        {
+          "Name": "transfer-plan-progressive-b",
+          "Policy": "B"
+        }
+      ],
+      "Plans": [
+        {
+          "Arm": "B",
+          "Time": 9,
+          "ReactionSeconds": 0.24,
+          "Actions": [
+            {
+              "SteeringRadians": -0.2617994,
+              "Drive": 0
+            },
+            {
+              "SteeringRadians": -0.08726647,
+              "Drive": 1
+            }
+          ],
+          "Basis": "Stała sekwencja z progressive-c; kontrolowany transfer po wynikach, bez adaptacji ani strojenia"
+        }
+      ],
+      "Reasons": [
+        "identyczny start jak V-C",
+        "stały plan z progressive-c",
+        "progressive-b"
+      ],
+      "Scope": "Post-hoc fixed-plan transfer. Ta sama prędkość/offset/heading/yaw/koło/gaz; zmienia się wyłącznie istniejący wariant geometrii. Nie doliczamy do niezależnej puli.",
+      "PairedSummary": "Ta sama konfiguracja początkowa: A 15.590, stała sekwencja B 15.340 s / completed."
+    },
+    {
+      "Id": "transfer-egg-asymmetric",
+      "Scenario": {
+        "Name": "V-C",
+        "Level": 4,
+        "Speed": 17.25,
+        "Offset": 6.15,
+        "Start": 19.125,
+        "OutwardSpeed": 0.11,
+        "HeadingError": 0.016,
+        "YawRate": -0.03
+      },
+      "GeometryFile": "egg-asymmetric-geometry.json",
+      "TwoBends": true,
+      "Runs": [
+        {
+          "Name": "transfer-base-egg-asymmetric",
+          "Policy": "A"
+        },
+        {
+          "Name": "transfer-plan-egg-asymmetric",
+          "Policy": "B"
+        }
+      ],
+      "Plans": [
+        {
+          "Arm": "B",
+          "Time": 9,
+          "ReactionSeconds": 0.24,
+          "Actions": [
+            {
+              "SteeringRadians": -0.2617994,
+              "Drive": 0
+            },
+            {
+              "SteeringRadians": -0.08726647,
+              "Drive": 1
+            }
+          ],
+          "Basis": "Stała sekwencja z progressive-c; kontrolowany transfer po wynikach, bez adaptacji ani strojenia"
+        }
+      ],
+      "Reasons": [
+        "identyczny start jak V-C",
+        "stały plan z progressive-c",
+        "egg-asymmetric"
+      ],
+      "Scope": "Post-hoc fixed-plan transfer. Ta sama prędkość/offset/heading/yaw/koło/gaz; zmienia się wyłącznie istniejący wariant geometrii. Nie doliczamy do niezależnej puli.",
+      "PairedSummary": "Ta sama konfiguracja początkowa: A 16.320, stała sekwencja B DNF s / uncertified interval."
     }
   ]
 }
