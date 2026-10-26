@@ -3,6 +3,10 @@
 Release platform: **Windows only**. See the current [Windows CI policy](docs/ci.md)
 for Draft/full validation, the merge gate and optional historical audits.
 
+[Speed & Throttle Root Cause (#136)](docs/experiments/speed-throttle-root-cause/README.md)
+audits the frozen #134 A controller, 54 bounded native worlds and delayed full-gas
+interventions. Physics, policy weights and production defaults remain unchanged.
+
 [Multi-Action Planning Feasibility (#135)](docs/experiments/multi-action-planning/README.md)
 tests bounded two/three-command plans with #134 A's frozen policy and original H09.
 One changing-action sequence has native support, but the small independent pool and

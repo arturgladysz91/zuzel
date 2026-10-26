@@ -1,0 +1,1968 @@
+{
+  "Title": "#136 Speed & Throttle Root Cause · interwencje diagnostyczne, Native Box2D",
+  "Grade": "MIXED",
+  "RawAvailability": "W Git zachowano pełne surowe dane wszystkich54 nowych światów w native/ oraz dawny #134 N00. SHA256: raw-manifest.json; CSV: telemetry/.",
+  "Charts": [
+    [
+      "speed-throttle.svg",
+      "Natywna prędkość i gaz — A / diagnostyka"
+    ]
+  ],
+  "ComparisonCharts": true,
+  "DefaultRun": "D-B-C-C1-M10",
+  "Groups": [
+    {
+      "Id": "D-B-C-C1-M10",
+      "Reasons": [
+        "oryginalne AI / diagnostyka",
+        "ten sam natywny prefiks"
+      ],
+      "Scenario": {
+        "Name": "D-B",
+        "Level": 4,
+        "Speed": 16,
+        "Offset": 5,
+        "Start": 18.125,
+        "OutwardSpeed": 0.08,
+        "HeadingError": 0.012,
+        "YawRate": 0.025
+      },
+      "Scope": "Dwa łuki +1s legalnej kontroli. Pełny gaz jest interwencją diagnostyczną; brak certyfikacji całej przyszłości z H09.",
+      "GeometryFile": "progressive-b-viewer-geometry.json",
+      "TwoBends": true,
+      "Runs": [
+        {
+          "Name": "baseline-D-B",
+          "Policy": "A"
+        },
+        {
+          "Name": "D-B-C-C1-M10",
+          "Policy": "C"
+        }
+      ],
+      "Trial": {
+        "Name": "D-B-C-C1-M10",
+        "Case": "D-B",
+        "Corner": 1,
+        "Distance": 10,
+        "Arm": "C",
+        "Time": 6.2,
+        "Actions": [
+          {
+            "SteeringRadians": 0,
+            "Drive": 0.31820688
+          },
+          {
+            "SteeringRadians": -0.02617994,
+            "Drive": 1
+          },
+          {
+            "SteeringRadians": 0,
+            "Drive": 1
+          }
+        ],
+        "ExactPrefix": true,
+        "Metrics": {
+          "Native": {
+            "Completed": true,
+            "Outcome": "completed",
+            "GateSeconds": 15.95,
+            "DurationSeconds": 16.95,
+            "LegalProgress": 295.9157977104187,
+            "LegalSeconds": 16.95,
+            "MinimumClearanceMeters": 0.11695217968257675,
+            "EntrySpeed": 18.789688110351562,
+            "MinimumSpeed": 15.146406173706055,
+            "ExitSpeed": 17.30061912536621,
+            "MaximumBetaDegrees": 12.70429756692601,
+            "MeanDrive": 0.18625465031868763,
+            "FullDriveFraction": 0.03775811125043571,
+            "LargeTrajectoryOscillations": 4,
+            "DistanceMeters": 302.2125453138724,
+            "BoundaryApproach": 16.546127026269318,
+            "RecoverySeconds": 4.829999892041087,
+            "NativeSteps": 1699,
+            "PhysicsEvaluations": 209340,
+            "Forecasts": 2295,
+            "CpuSeconds": 9.28125,
+            "Fingerprint": "9F615F323825FBE8FBA1750987C079BA9A3E4157BC2AC295113B9538E0EA9989"
+          },
+          "MinimumInstantInner": 0.2134373429540039,
+          "MinimumInstantOuter": 1.6794963055759893,
+          "MinimumLegacyCertificate": 0.11695217968257675,
+          "MinimumRefinedCertificate": 0.11695217968257675,
+          "CornerMinimumSpeed": 15.146406173706055,
+          "MaximumYawRate": 0.7637512683868408,
+          "ExitYawRate": 0.1477184295654297,
+          "SteeringRequestTravelDegrees": 77.5000041297997,
+          "MaximumRequestChangeDegrees": 6.500000218824474,
+          "EngineWorkJoules": 90608.35402527035,
+          "DissipationJoules": 81434.09688137782,
+          "NoSafeDecisions": 0,
+          "BoundaryClass": "none"
+        },
+        "Landmarks": {
+          "BoundaryReference": 132.38937497138977,
+          "Exit": {
+            "Time": 6.709233,
+            "Reference": 132.3893940448761,
+            "SpeedKph": 61.57474200000001,
+            "Requested": 1,
+            "Active": 1,
+            "BetaDegrees": 1.2142599441213544,
+            "YawRate": -0.037207484,
+            "SteeringDegrees": -1.5000000699057243,
+            "Inner": 2.1361014083086562,
+            "Outer": 9.038672623228189
+          },
+          "Before5m": {
+            "Time": 6.4,
+            "Reference": 127.40424929535527,
+            "SpeedKph": 58.919569200000005,
+            "Requested": 1,
+            "Active": 0.31820688,
+            "BetaDegrees": 2.2385294898000674,
+            "YawRate": 0.19024915,
+            "SteeringDegrees": 0.49999998510472177,
+            "Inner": 1.1480962489769686,
+            "Outer": 10.08563770707791
+          },
+          "After5m": {
+            "Time": 7,
+            "Reference": 137.49612736701965,
+            "SpeedKph": 67.5618588,
+            "Requested": 0.31820688,
+            "Active": 1,
+            "BetaDegrees": -0.9208318133461396,
+            "YawRate": -0.15627983,
+            "SteeringDegrees": 0.0,
+            "Inner": 3.14937944196311,
+            "Outer": 7.969363700050402
+          },
+          "After20m": {
+            "Time": 7.77,
+            "Reference": 152.5787374973297,
+            "SpeedKph": 74.933568,
+            "Requested": 0.31820688,
+            "Active": 0.31820688,
+            "BetaDegrees": 1.3461943053525545,
+            "YawRate": 0.16579172,
+            "SteeringDegrees": 0.49999998510472177,
+            "Inner": 6.4226201192428825,
+            "Outer": 4.77707697363534
+          },
+          "After40m": {
+            "Time": 8.7,
+            "Reference": 172.5722258090973,
+            "SpeedKph": 81.0499608,
+            "Requested": 0,
+            "Active": 0,
+            "BetaDegrees": 1.0571315400184413,
+            "YawRate": 0.20956081,
+            "SteeringDegrees": 1.5000000699057243,
+            "Inner": 9.110701245837385,
+            "Outer": 2.0899149846938143
+          },
+          "MaximumStraightKph": 81.065808,
+          "ObservedStraightMeters": 61.98879623413086,
+          "FirstFullAfterExitMeters": 1.9073486328125e-05
+        },
+        "BaselineLandmarks": {
+          "BoundaryReference": 132.38937497138977,
+          "Exit": {
+            "Time": 6.709313,
+            "Reference": 132.38938641548157,
+            "SpeedKph": 61.007457599999995,
+            "Requested": 0.31820688,
+            "Active": 0.31820688,
+            "BetaDegrees": 1.5353257827645153,
+            "YawRate": 0.15684265,
+            "SteeringDegrees": 0.49999998510472177,
+            "Inner": 2.134054141260877,
+            "Outer": 9.069839945633115
+          },
+          "Before5m": {
+            "Time": 6.4,
+            "Reference": 127.40424929535527,
+            "SpeedKph": 58.919569200000005,
+            "Requested": 0.31820688,
+            "Active": 0.31820688,
+            "BetaDegrees": 2.2385294898000674,
+            "YawRate": 0.19024915,
+            "SteeringDegrees": 0.49999998510472177,
+            "Inner": 1.1480962489769686,
+            "Outer": 10.08563770707791
+          },
+          "After5m": {
+            "Time": 7.01,
+            "Reference": 137.50269627571106,
+            "SpeedKph": 63.072907199999996,
+            "Requested": 0.31820688,
+            "Active": 0.31820688,
+            "BetaDegrees": 1.3394044690013567,
+            "YawRate": 0.15032476,
+            "SteeringDegrees": 0.49999998510472177,
+            "Inner": 2.9472003519014804,
+            "Outer": 8.256297541241745
+          },
+          "After20m": {
+            "Time": 7.83,
+            "Reference": 152.4513475894928,
+            "SpeedKph": 68.8692816,
+            "Requested": 0.31820688,
+            "Active": 0.31820688,
+            "BetaDegrees": 0.1960523778587948,
+            "YawRate": 0.00849331,
+            "SteeringDegrees": 0.0,
+            "Inner": 4.417866615870531,
+            "Outer": 6.78278423511025
+          },
+          "After40m": {
+            "Time": 8.83,
+            "Reference": 172.5162661075592,
+            "SpeedKph": 75.989574,
+            "Requested": 0,
+            "Active": 0.31820688,
+            "BetaDegrees": 0.33363771869096703,
+            "YawRate": 0.09848614,
+            "SteeringDegrees": 0.49999998510472177,
+            "Inner": 5.929710004128645,
+            "Outer": 5.270220774147156
+          },
+          "MaximumStraightKph": 76.1910012,
+          "ObservedStraightMeters": 62.0,
+          "FirstFullAfterExitMeters": null
+        },
+        "BaselineGateSeconds": 15.999999999999975,
+        "GainSeconds": 0.04999999999997584,
+        "Events": {
+          "Request": {
+            "Time": 6.4,
+            "Reference": 127.40424929535527,
+            "SpeedKph": 58.919569200000005,
+            "Requested": 1,
+            "Active": 0.31820688,
+            "BetaDegrees": 2.2385294898000674,
+            "YawRate": 0.19024915,
+            "SteeringDegrees": 0.49999998510472177,
+            "Inner": 1.1480962489769686,
+            "Outer": 10.08563770707791
+          },
+          "Activation": {
+            "Time": 6.64,
+            "Reference": 131.24152991787776,
+            "SpeedKph": 60.5587572,
+            "Requested": 1,
+            "Active": 1,
+            "BetaDegrees": 1.3789435988939809,
+            "YawRate": 0.0745252,
+            "SteeringDegrees": 0.0,
+            "Inner": 1.9007816090392387,
+            "Outer": 9.276178191664357
+          },
+          "ObservedAt": 6.4,
+          "ActivationAt": 6.640000000000001,
+          "Landmarks": {
+            "BoundaryReference": 132.38937497138977,
+            "Exit": {
+              "Time": 6.709233,
+              "Reference": 132.3893940448761,
+              "SpeedKph": 61.57474200000001,
+              "Requested": 1,
+              "Active": 1,
+              "BetaDegrees": 1.2142599441213544,
+              "YawRate": -0.037207484,
+              "SteeringDegrees": -1.5000000699057243,
+              "Inner": 2.1361014083086562,
+              "Outer": 9.038672623228189
+            },
+            "Before5m": {
+              "Time": 6.4,
+              "Reference": 127.40424929535527,
+              "SpeedKph": 58.919569200000005,
+              "Requested": 1,
+              "Active": 0.31820688,
+              "BetaDegrees": 2.2385294898000674,
+              "YawRate": 0.19024915,
+              "SteeringDegrees": 0.49999998510472177,
+              "Inner": 1.1480962489769686,
+              "Outer": 10.08563770707791
+            },
+            "After5m": {
+              "Time": 7,
+              "Reference": 137.49612736701965,
+              "SpeedKph": 67.5618588,
+              "Requested": 0.31820688,
+              "Active": 1,
+              "BetaDegrees": -0.9208318133461396,
+              "YawRate": -0.15627983,
+              "SteeringDegrees": 0.0,
+              "Inner": 3.14937944196311,
+              "Outer": 7.969363700050402
+            },
+            "After20m": {
+              "Time": 7.77,
+              "Reference": 152.5787374973297,
+              "SpeedKph": 74.933568,
+              "Requested": 0.31820688,
+              "Active": 0.31820688,
+              "BetaDegrees": 1.3461943053525545,
+              "YawRate": 0.16579172,
+              "SteeringDegrees": 0.49999998510472177,
+              "Inner": 6.4226201192428825,
+              "Outer": 4.77707697363534
+            },
+            "After40m": {
+              "Time": 8.7,
+              "Reference": 172.5722258090973,
+              "SpeedKph": 81.0499608,
+              "Requested": 0,
+              "Active": 0,
+              "BetaDegrees": 1.0571315400184413,
+              "YawRate": 0.20956081,
+              "SteeringDegrees": 1.5000000699057243,
+              "Inner": 9.110701245837385,
+              "Outer": 2.0899149846938143
+            },
+            "MaximumStraightKph": 81.065808,
+            "ObservedStraightMeters": 61.98879623413086,
+            "FirstFullAfterExitMeters": 1.9073486328125e-05
+          },
+          "NativeCompleted": true,
+          "Outcome": "completed",
+          "NativeFailureState": null
+        }
+      },
+      "Events": {
+        "Request": {
+          "Time": 6.4,
+          "Reference": 127.40424929535527,
+          "SpeedKph": 58.919569200000005,
+          "Requested": 1,
+          "Active": 0.31820688,
+          "BetaDegrees": 2.2385294898000674,
+          "YawRate": 0.19024915,
+          "SteeringDegrees": 0.49999998510472177,
+          "Inner": 1.1480962489769686,
+          "Outer": 10.08563770707791
+        },
+        "Activation": {
+          "Time": 6.64,
+          "Reference": 131.24152991787776,
+          "SpeedKph": 60.5587572,
+          "Requested": 1,
+          "Active": 1,
+          "BetaDegrees": 1.3789435988939809,
+          "YawRate": 0.0745252,
+          "SteeringDegrees": 0.0,
+          "Inner": 1.9007816090392387,
+          "Outer": 9.276178191664357
+        },
+        "ObservedAt": 6.4,
+        "ActivationAt": 6.640000000000001,
+        "Landmarks": {
+          "BoundaryReference": 132.38937497138977,
+          "Exit": {
+            "Time": 6.709233,
+            "Reference": 132.3893940448761,
+            "SpeedKph": 61.57474200000001,
+            "Requested": 1,
+            "Active": 1,
+            "BetaDegrees": 1.2142599441213544,
+            "YawRate": -0.037207484,
+            "SteeringDegrees": -1.5000000699057243,
+            "Inner": 2.1361014083086562,
+            "Outer": 9.038672623228189
+          },
+          "Before5m": {
+            "Time": 6.4,
+            "Reference": 127.40424929535527,
+            "SpeedKph": 58.919569200000005,
+            "Requested": 1,
+            "Active": 0.31820688,
+            "BetaDegrees": 2.2385294898000674,
+            "YawRate": 0.19024915,
+            "SteeringDegrees": 0.49999998510472177,
+            "Inner": 1.1480962489769686,
+            "Outer": 10.08563770707791
+          },
+          "After5m": {
+            "Time": 7,
+            "Reference": 137.49612736701965,
+            "SpeedKph": 67.5618588,
+            "Requested": 0.31820688,
+            "Active": 1,
+            "BetaDegrees": -0.9208318133461396,
+            "YawRate": -0.15627983,
+            "SteeringDegrees": 0.0,
+            "Inner": 3.14937944196311,
+            "Outer": 7.969363700050402
+          },
+          "After20m": {
+            "Time": 7.77,
+            "Reference": 152.5787374973297,
+            "SpeedKph": 74.933568,
+            "Requested": 0.31820688,
+            "Active": 0.31820688,
+            "BetaDegrees": 1.3461943053525545,
+            "YawRate": 0.16579172,
+            "SteeringDegrees": 0.49999998510472177,
+            "Inner": 6.4226201192428825,
+            "Outer": 4.77707697363534
+          },
+          "After40m": {
+            "Time": 8.7,
+            "Reference": 172.5722258090973,
+            "SpeedKph": 81.0499608,
+            "Requested": 0,
+            "Active": 0,
+            "BetaDegrees": 1.0571315400184413,
+            "YawRate": 0.20956081,
+            "SteeringDegrees": 1.5000000699057243,
+            "Inner": 9.110701245837385,
+            "Outer": 2.0899149846938143
+          },
+          "MaximumStraightKph": 81.065808,
+          "ObservedStraightMeters": 61.98879623413086,
+          "FirstFullAfterExitMeters": 1.9073486328125e-05
+        },
+        "NativeCompleted": true,
+        "Outcome": "completed",
+        "NativeFailureState": null
+      },
+      "PairedSummary": "A 16.00s; diagnostic 15.95s; completed."
+    },
+    {
+      "Id": "D-C-C-C1-M10",
+      "Reasons": [
+        "oryginalne AI / diagnostyka",
+        "ten sam natywny prefiks"
+      ],
+      "Scenario": {
+        "Name": "D-C",
+        "Level": 4,
+        "Speed": 12,
+        "Offset": 7,
+        "Start": 18.625,
+        "OutwardSpeed": -0.1,
+        "HeadingError": -0.02,
+        "YawRate": -0.035
+      },
+      "Scope": "Dwa łuki +1s legalnej kontroli. Pełny gaz jest interwencją diagnostyczną; brak certyfikacji całej przyszłości z H09.",
+      "GeometryFile": "progressive-c-viewer-geometry.json",
+      "TwoBends": true,
+      "Runs": [
+        {
+          "Name": "baseline-D-C",
+          "Policy": "A"
+        },
+        {
+          "Name": "D-C-C-C1-M10",
+          "Policy": "C"
+        }
+      ],
+      "Trial": {
+        "Name": "D-C-C-C1-M10",
+        "Case": "D-C",
+        "Corner": 1,
+        "Distance": 10,
+        "Arm": "C",
+        "Time": 7,
+        "Actions": [
+          {
+            "SteeringRadians": -0.02617994,
+            "Drive": 0.31820688
+          },
+          {
+            "SteeringRadians": 0.02617994,
+            "Drive": 1
+          },
+          {
+            "SteeringRadians": 0,
+            "Drive": 1
+          }
+        ],
+        "ExactPrefix": true,
+        "Metrics": {
+          "Native": {
+            "Completed": true,
+            "Outcome": "completed",
+            "GateSeconds": 16.65,
+            "DurationSeconds": 17.650000000000002,
+            "LegalProgress": 297.77884006500244,
+            "LegalSeconds": 17.650000000000002,
+            "MinimumClearanceMeters": 0.11716130413387285,
+            "EntrySpeed": 15.534455299377441,
+            "MinimumSpeed": 12.00412368774414,
+            "ExitSpeed": 19.565105438232422,
+            "MaximumBetaDegrees": 14.538745524312551,
+            "MeanDrive": 0.24557403623186008,
+            "FullDriveFraction": 0.03626062241897367,
+            "LargeTrajectoryOscillations": 7,
+            "DistanceMeters": 323.26066212169826,
+            "BoundaryApproach": 15.182021137516239,
+            "RecoverySeconds": 0.9699999783188105,
+            "NativeSteps": 1769,
+            "PhysicsEvaluations": 219123,
+            "Forecasts": 2403,
+            "CpuSeconds": 10.140625,
+            "Fingerprint": "DACF62D16245E5037E3743DC60C88F55B63875974EEAF5834F33A70225F66172"
+          },
+          "MinimumInstantInner": 0.23088840283725726,
+          "MinimumInstantOuter": 3.4888182279646363,
+          "MinimumLegacyCertificate": 0.11716130413387285,
+          "MinimumRefinedCertificate": 0.11716130413387285,
+          "CornerMinimumSpeed": 15.534455299377441,
+          "MaximumYawRate": 0.8224586844444275,
+          "ExitYawRate": 0.03806071728467941,
+          "SteeringRequestTravelDegrees": 46.500002356454274,
+          "MaximumRequestChangeDegrees": 4.500000011387423,
+          "EngineWorkJoules": 122180.61748860804,
+          "DissipationJoules": 96961.74134721168,
+          "NoSafeDecisions": 0,
+          "BoundaryClass": "none"
+        },
+        "Landmarks": {
+          "BoundaryReference": 132.38937497138977,
+          "Exit": {
+            "Time": 7.466888,
+            "Reference": 132.3893940448761,
+            "SpeedKph": 64.0913472,
+            "Requested": 1,
+            "Active": 1,
+            "BetaDegrees": -0.21932814084367602,
+            "YawRate": -0.20623243,
+            "SteeringDegrees": 0.919919951015189,
+            "Inner": 0.6493249955554544,
+            "Outer": 10.551731938864643
+          },
+          "Before5m": {
+            "Time": 7.1899999999999995,
+            "Reference": 127.52947530531924,
+            "SpeedKph": 62.01262440000001,
+            "Requested": 0.31820688,
+            "Active": 0.31820688,
+            "BetaDegrees": 2.0099691768710453,
+            "YawRate": 0.09785201,
+            "SteeringDegrees": 0.0,
+            "Inner": 0.3139272814717666,
+            "Outer": 10.91125354226544
+          },
+          "After5m": {
+            "Time": 7.74,
+            "Reference": 137.43516850471497,
+            "SpeedKph": 69.4840896,
+            "Requested": 0.31820688,
+            "Active": 1,
+            "BetaDegrees": 0.17244700371353075,
+            "YawRate": 0.084377065,
+            "SteeringDegrees": 0.0,
+            "Inner": 1.0342847640106654,
+            "Outer": 10.166217209980958
+          },
+          "After20m": {
+            "Time": 8.459999999999999,
+            "Reference": 152.50971627235413,
+            "SpeedKph": 79.096896,
+            "Requested": 0.31820688,
+            "Active": 0.31820688,
+            "BetaDegrees": 1.4355558397574717,
+            "YawRate": 0.07657856,
+            "SteeringDegrees": 0.0,
+            "Inner": 1.74272955894766,
+            "Outer": 9.455769266708268
+          },
+          "After40m": {
+            "Time": 9.34,
+            "Reference": 172.57236075401306,
+            "SpeedKph": 84.4908372,
+            "Requested": 0,
+            "Active": 0,
+            "BetaDegrees": 0.3197791301339017,
+            "YawRate": 0.011859829,
+            "SteeringDegrees": 0.0,
+            "Inner": 1.2452517347563457,
+            "Outer": 9.954044607803434
+          },
+          "MaximumStraightKph": 84.5945892,
+          "ObservedStraightMeters": 61.79741096496582,
+          "FirstFullAfterExitMeters": 1.9073486328125e-05
+        },
+        "BaselineLandmarks": {
+          "BoundaryReference": 132.38937497138977,
+          "Exit": {
+            "Time": 7.4668149999999995,
+            "Reference": 132.38938641548157,
+            "SpeedKph": 63.9493704,
+            "Requested": 0.31820688,
+            "Active": 0.31820688,
+            "BetaDegrees": 0.846295962960689,
+            "YawRate": 0.037111286,
+            "SteeringDegrees": 0.0,
+            "Inner": 0.5894471968039537,
+            "Outer": 10.609730444046415
+          },
+          "Before5m": {
+            "Time": 7.1899999999999995,
+            "Reference": 127.52947530531924,
+            "SpeedKph": 62.01262440000001,
+            "Requested": 0.31820688,
+            "Active": 0.31820688,
+            "BetaDegrees": 2.0099691768710453,
+            "YawRate": 0.09785201,
+            "SteeringDegrees": 0.0,
+            "Inner": 0.3139272814717666,
+            "Outer": 10.91125354226544
+          },
+          "After5m": {
+            "Time": 7.75,
+            "Reference": 137.4928638935089,
+            "SpeedKph": 65.9611584,
+            "Requested": 0.31820688,
+            "Active": 0.31820688,
+            "BetaDegrees": 0.33970703769647603,
+            "YawRate": 0.014415532,
+            "SteeringDegrees": 0.0,
+            "Inner": 0.8450759824979327,
+            "Outer": 10.353887593072999
+          },
+          "After20m": {
+            "Time": 8.54,
+            "Reference": 152.5765221118927,
+            "SpeedKph": 71.59172400000001,
+            "Requested": 0.31820688,
+            "Active": 0.31820688,
+            "BetaDegrees": 0.033715617802635205,
+            "YawRate": 0.0014746133,
+            "SteeringDegrees": 0.0,
+            "Inner": 1.4120514065666412,
+            "Outer": 9.786793208107946
+          },
+          "After40m": {
+            "Time": 9.5,
+            "Reference": 172.56770634651184,
+            "SpeedKph": 78.11304120000001,
+            "Requested": 0,
+            "Active": 0,
+            "BetaDegrees": 0.02015684029807019,
+            "YawRate": 0.10951839,
+            "SteeringDegrees": 1.5000000699057243,
+            "Inner": 2.0890316304541314,
+            "Outer": 9.109722994954746
+          },
+          "MaximumStraightKph": 78.1230024,
+          "ObservedStraightMeters": 61.945695877075195,
+          "FirstFullAfterExitMeters": null
+        },
+        "BaselineGateSeconds": 16.87,
+        "GainSeconds": 0.22000000000000242,
+        "Events": {
+          "Request": {
+            "Time": 7.2,
+            "Reference": 127.70377525914404,
+            "SpeedKph": 62.08128000000001,
+            "Requested": 1,
+            "Active": 0.31820688,
+            "BetaDegrees": 1.9517979178470033,
+            "YawRate": 0.094555214,
+            "SteeringDegrees": 0.0,
+            "Inner": 0.31797176989367804,
+            "Outer": 10.904195854651888
+          },
+          "Activation": {
+            "Time": 7.4399999999999995,
+            "Reference": 131.91338672124914,
+            "SpeedKph": 63.781293600000005,
+            "Requested": 1,
+            "Active": 1,
+            "BetaDegrees": 0.11539689704384462,
+            "YawRate": -0.23181194,
+            "SteeringDegrees": -1.5000000699057243,
+            "Inner": 0.6071096202503851,
+            "Outer": 10.593576891505693
+          },
+          "ObservedAt": 7.2,
+          "ActivationAt": 7.44,
+          "Landmarks": {
+            "BoundaryReference": 132.38937497138977,
+            "Exit": {
+              "Time": 7.466888,
+              "Reference": 132.3893940448761,
+              "SpeedKph": 64.0913472,
+              "Requested": 1,
+              "Active": 1,
+              "BetaDegrees": -0.21932814084367602,
+              "YawRate": -0.20623243,
+              "SteeringDegrees": 0.919919951015189,
+              "Inner": 0.6493249955554544,
+              "Outer": 10.551731938864643
+            },
+            "Before5m": {
+              "Time": 7.1899999999999995,
+              "Reference": 127.52947530531924,
+              "SpeedKph": 62.01262440000001,
+              "Requested": 0.31820688,
+              "Active": 0.31820688,
+              "BetaDegrees": 2.0099691768710453,
+              "YawRate": 0.09785201,
+              "SteeringDegrees": 0.0,
+              "Inner": 0.3139272814717666,
+              "Outer": 10.91125354226544
+            },
+            "After5m": {
+              "Time": 7.74,
+              "Reference": 137.43516850471497,
+              "SpeedKph": 69.4840896,
+              "Requested": 0.31820688,
+              "Active": 1,
+              "BetaDegrees": 0.17244700371353075,
+              "YawRate": 0.084377065,
+              "SteeringDegrees": 0.0,
+              "Inner": 1.0342847640106654,
+              "Outer": 10.166217209980958
+            },
+            "After20m": {
+              "Time": 8.459999999999999,
+              "Reference": 152.50971627235413,
+              "SpeedKph": 79.096896,
+              "Requested": 0.31820688,
+              "Active": 0.31820688,
+              "BetaDegrees": 1.4355558397574717,
+              "YawRate": 0.07657856,
+              "SteeringDegrees": 0.0,
+              "Inner": 1.74272955894766,
+              "Outer": 9.455769266708268
+            },
+            "After40m": {
+              "Time": 9.34,
+              "Reference": 172.57236075401306,
+              "SpeedKph": 84.4908372,
+              "Requested": 0,
+              "Active": 0,
+              "BetaDegrees": 0.3197791301339017,
+              "YawRate": 0.011859829,
+              "SteeringDegrees": 0.0,
+              "Inner": 1.2452517347563457,
+              "Outer": 9.954044607803434
+            },
+            "MaximumStraightKph": 84.5945892,
+            "ObservedStraightMeters": 61.79741096496582,
+            "FirstFullAfterExitMeters": 1.9073486328125e-05
+          },
+          "NativeCompleted": true,
+          "Outcome": "completed",
+          "NativeFailureState": null
+        }
+      },
+      "Events": {
+        "Request": {
+          "Time": 7.2,
+          "Reference": 127.70377525914404,
+          "SpeedKph": 62.08128000000001,
+          "Requested": 1,
+          "Active": 0.31820688,
+          "BetaDegrees": 1.9517979178470033,
+          "YawRate": 0.094555214,
+          "SteeringDegrees": 0.0,
+          "Inner": 0.31797176989367804,
+          "Outer": 10.904195854651888
+        },
+        "Activation": {
+          "Time": 7.4399999999999995,
+          "Reference": 131.91338672124914,
+          "SpeedKph": 63.781293600000005,
+          "Requested": 1,
+          "Active": 1,
+          "BetaDegrees": 0.11539689704384462,
+          "YawRate": -0.23181194,
+          "SteeringDegrees": -1.5000000699057243,
+          "Inner": 0.6071096202503851,
+          "Outer": 10.593576891505693
+        },
+        "ObservedAt": 7.2,
+        "ActivationAt": 7.44,
+        "Landmarks": {
+          "BoundaryReference": 132.38937497138977,
+          "Exit": {
+            "Time": 7.466888,
+            "Reference": 132.3893940448761,
+            "SpeedKph": 64.0913472,
+            "Requested": 1,
+            "Active": 1,
+            "BetaDegrees": -0.21932814084367602,
+            "YawRate": -0.20623243,
+            "SteeringDegrees": 0.919919951015189,
+            "Inner": 0.6493249955554544,
+            "Outer": 10.551731938864643
+          },
+          "Before5m": {
+            "Time": 7.1899999999999995,
+            "Reference": 127.52947530531924,
+            "SpeedKph": 62.01262440000001,
+            "Requested": 0.31820688,
+            "Active": 0.31820688,
+            "BetaDegrees": 2.0099691768710453,
+            "YawRate": 0.09785201,
+            "SteeringDegrees": 0.0,
+            "Inner": 0.3139272814717666,
+            "Outer": 10.91125354226544
+          },
+          "After5m": {
+            "Time": 7.74,
+            "Reference": 137.43516850471497,
+            "SpeedKph": 69.4840896,
+            "Requested": 0.31820688,
+            "Active": 1,
+            "BetaDegrees": 0.17244700371353075,
+            "YawRate": 0.084377065,
+            "SteeringDegrees": 0.0,
+            "Inner": 1.0342847640106654,
+            "Outer": 10.166217209980958
+          },
+          "After20m": {
+            "Time": 8.459999999999999,
+            "Reference": 152.50971627235413,
+            "SpeedKph": 79.096896,
+            "Requested": 0.31820688,
+            "Active": 0.31820688,
+            "BetaDegrees": 1.4355558397574717,
+            "YawRate": 0.07657856,
+            "SteeringDegrees": 0.0,
+            "Inner": 1.74272955894766,
+            "Outer": 9.455769266708268
+          },
+          "After40m": {
+            "Time": 9.34,
+            "Reference": 172.57236075401306,
+            "SpeedKph": 84.4908372,
+            "Requested": 0,
+            "Active": 0,
+            "BetaDegrees": 0.3197791301339017,
+            "YawRate": 0.011859829,
+            "SteeringDegrees": 0.0,
+            "Inner": 1.2452517347563457,
+            "Outer": 9.954044607803434
+          },
+          "MaximumStraightKph": 84.5945892,
+          "ObservedStraightMeters": 61.79741096496582,
+          "FirstFullAfterExitMeters": 1.9073486328125e-05
+        },
+        "NativeCompleted": true,
+        "Outcome": "completed",
+        "NativeFailureState": null
+      },
+      "PairedSummary": "A 16.87s; diagnostic 16.65s; completed."
+    },
+    {
+      "Id": "V-B-B-C2-M20",
+      "Reasons": [
+        "oryginalne AI / diagnostyka",
+        "ten sam natywny prefiks"
+      ],
+      "Scenario": {
+        "Name": "V-B",
+        "Level": 4,
+        "Speed": 13.75,
+        "Offset": 4.2,
+        "Start": 19.125,
+        "OutwardSpeed": -0.09,
+        "HeadingError": -0.014,
+        "YawRate": 0.02
+      },
+      "Scope": "Dwa łuki +1s legalnej kontroli. Pełny gaz jest interwencją diagnostyczną; brak certyfikacji całej przyszłości z H09.",
+      "GeometryFile": "progressive-b-viewer-geometry.json",
+      "TwoBends": true,
+      "Runs": [
+        {
+          "Name": "baseline-V-B",
+          "Policy": "A"
+        },
+        {
+          "Name": "V-B-B-C2-M20",
+          "Policy": "B"
+        }
+      ],
+      "Trial": {
+        "Name": "V-B-B-C2-M20",
+        "Case": "V-B",
+        "Corner": 2,
+        "Distance": 20,
+        "Arm": "B",
+        "Time": 14.59999999999998,
+        "Actions": [
+          {
+            "SteeringRadians": 0.008726646,
+            "Drive": 1
+          }
+        ],
+        "ExactPrefix": true,
+        "Metrics": {
+          "Native": {
+            "Completed": true,
+            "Outcome": "completed",
+            "GateSeconds": 15.93,
+            "DurationSeconds": 16.93,
+            "LegalProgress": 296.63606905937195,
+            "LegalSeconds": 16.93,
+            "MinimumClearanceMeters": 0.10910252785519,
+            "EntrySpeed": 16.671794891357422,
+            "MinimumSpeed": 13.75435733795166,
+            "ExitSpeed": 18.870756149291992,
+            "MaximumBetaDegrees": 12.782711781365315,
+            "MeanDrive": 0.21939448768554456,
+            "FullDriveFraction": 0.02598936740491634,
+            "LargeTrajectoryOscillations": 5,
+            "DistanceMeters": 304.68393994122744,
+            "BoundaryApproach": 16.696287539106265,
+            "RecoverySeconds": 3.3699999247910455,
+            "NativeSteps": 1697,
+            "PhysicsEvaluations": 209245,
+            "Forecasts": 2295,
+            "CpuSeconds": 8.78125,
+            "Fingerprint": "F66A510FE07B9679148C62B85D3500BC3B65C885495D386F9654393E74837552"
+          },
+          "MinimumInstantInner": 0.20044476991728183,
+          "MinimumInstantOuter": 2.73955423581682,
+          "MinimumLegacyCertificate": 0.10910252785519,
+          "MinimumRefinedCertificate": 0.10910252785519,
+          "CornerMinimumSpeed": 15.419306755065918,
+          "MaximumYawRate": 0.7793627977371216,
+          "ExitYawRate": 0.07977941632270813,
+          "SteeringRequestTravelDegrees": 83.50000425881944,
+          "MaximumRequestChangeDegrees": 6.500000218824474,
+          "EngineWorkJoules": 102926.86125804637,
+          "DissipationJoules": 83526.50619213778,
+          "NoSafeDecisions": 0,
+          "BoundaryClass": "none"
+        },
+        "Landmarks": {
+          "BoundaryReference": 291.77874994277954,
+          "Exit": {
+            "Time": 15.708428000000001,
+            "Reference": 291.7787594795227,
+            "SpeedKph": 66.4328628,
+            "Requested": 0.31820688,
+            "Active": 0.31820688,
+            "BetaDegrees": 2.8987751131878916,
+            "YawRate": 0.14183432,
+            "SteeringDegrees": 0.0,
+            "Inner": 0.7310596613398821,
+            "Outer": 10.467378386111575
+          },
+          "Before5m": {
+            "Time": 15.44,
+            "Reference": 286.88726071210135,
+            "SpeedKph": 64.7659692,
+            "Requested": 0.31820688,
+            "Active": 0.31820688,
+            "BetaDegrees": 5.271915880333789,
+            "YawRate": 0.20272952,
+            "SteeringDegrees": -0.49999998510472177,
+            "Inner": 0.351246373760669,
+            "Outer": 10.87246542989859
+          },
+          "After5m": {
+            "Time": 15.98,
+            "Reference": 296.8568844795227,
+            "SpeedKph": 68.2827192,
+            "Requested": 0.31820688,
+            "Active": 0.31820688,
+            "BetaDegrees": 1.4828733300852328,
+            "YawRate": 0.06930229,
+            "SteeringDegrees": 0.0,
+            "Inner": 0.8718077508468108,
+            "Outer": 10.326712035656506
+          },
+          "After20m": {
+            "Time": 16.740000000000002,
+            "Reference": 311.8377447128296,
+            "SpeedKph": 73.6730388,
+            "Requested": 0.31820688,
+            "Active": 0.31820688,
+            "BetaDegrees": -0.3556211868280866,
+            "YawRate": -0.053696554,
+            "SteeringDegrees": 0.0,
+            "Inner": 0.5744963877142001,
+            "Outer": 10.624058736982109
+          },
+          "After40m": null,
+          "MaximumStraightKph": 75.02277240000001,
+          "ObservedStraightMeters": 23.982319116592407,
+          "FirstFullAfterExitMeters": null
+        },
+        "BaselineLandmarks": {
+          "BoundaryReference": 291.77874994277954,
+          "Exit": {
+            "Time": 15.752413,
+            "Reference": 291.77875566482544,
+            "SpeedKph": 62.907908400000004,
+            "Requested": 0.31820688,
+            "Active": 0.31820688,
+            "BetaDegrees": 1.3766934790409429,
+            "YawRate": 0.15178731,
+            "SteeringDegrees": 0.49999998510472177,
+            "Inner": 1.0834509203407856,
+            "Outer": 10.119785156868124
+          },
+          "Before5m": {
+            "Time": 15.46,
+            "Reference": 286.7844781764902,
+            "SpeedKph": 60.90412320000001,
+            "Requested": 0.31820688,
+            "Active": 0.31820688,
+            "BetaDegrees": 1.6284035214286514,
+            "YawRate": 0.16108987,
+            "SteeringDegrees": 0.49999998510472177,
+            "Inner": 0.39809322728058044,
+            "Outer": 10.830402248024397
+          },
+          "After5m": {
+            "Time": 16.04,
+            "Reference": 296.84973764419556,
+            "SpeedKph": 64.9077696,
+            "Requested": 0.31820688,
+            "Active": 0.31820688,
+            "BetaDegrees": 1.068679275196185,
+            "YawRate": 0.061980903,
+            "SteeringDegrees": 0.0,
+            "Inner": 1.6519348311729,
+            "Outer": 9.548883289382006
+          },
+          "After20m": {
+            "Time": 16.84,
+            "Reference": 311.86308097839355,
+            "SpeedKph": 70.59626999999999,
+            "Requested": 0.31820688,
+            "Active": 0.31820688,
+            "BetaDegrees": 0.11222010390085202,
+            "YawRate": 0.004886834,
+            "SteeringDegrees": 0.0,
+            "Inner": 2.7775808209746424,
+            "Outer": 8.422338749209025
+          },
+          "After40m": null,
+          "MaximumStraightKph": 71.6654268,
+          "ObservedStraightMeters": 23.042319774627686,
+          "FirstFullAfterExitMeters": null
+        },
+        "BaselineGateSeconds": 15.99,
+        "GainSeconds": 0.0600000000000005,
+        "Events": {
+          "Request": {
+            "Time": 14.59999999999998,
+            "Reference": 272.97264302155065,
+            "SpeedKph": 55.7269632,
+            "Requested": 1,
+            "Active": 0.31820688,
+            "BetaDegrees": 6.571497605333932,
+            "YawRate": 0.35303742,
+            "SteeringDegrees": 0.0,
+            "Inner": 1.2902896652589435,
+            "Outer": 11.09141706250941
+          },
+          "Activation": {
+            "Time": 14.84,
+            "Reference": 276.6031287305302,
+            "SpeedKph": 56.9071656,
+            "Requested": 0.31820688,
+            "Active": 1,
+            "BetaDegrees": 4.24684453751657,
+            "YawRate": 0.28940064,
+            "SteeringDegrees": 0.49999998510472177,
+            "Inner": 0.7251243825978041,
+            "Outer": 11.167319641941459
+          },
+          "ObservedAt": 14.59999999999998,
+          "ActivationAt": 14.84,
+          "Landmarks": {
+            "BoundaryReference": 291.77874994277954,
+            "Exit": {
+              "Time": 15.708428000000001,
+              "Reference": 291.7787594795227,
+              "SpeedKph": 66.4328628,
+              "Requested": 0.31820688,
+              "Active": 0.31820688,
+              "BetaDegrees": 2.8987751131878916,
+              "YawRate": 0.14183432,
+              "SteeringDegrees": 0.0,
+              "Inner": 0.7310596613398821,
+              "Outer": 10.467378386111575
+            },
+            "Before5m": {
+              "Time": 15.44,
+              "Reference": 286.88726071210135,
+              "SpeedKph": 64.7659692,
+              "Requested": 0.31820688,
+              "Active": 0.31820688,
+              "BetaDegrees": 5.271915880333789,
+              "YawRate": 0.20272952,
+              "SteeringDegrees": -0.49999998510472177,
+              "Inner": 0.351246373760669,
+              "Outer": 10.87246542989859
+            },
+            "After5m": {
+              "Time": 15.98,
+              "Reference": 296.8568844795227,
+              "SpeedKph": 68.2827192,
+              "Requested": 0.31820688,
+              "Active": 0.31820688,
+              "BetaDegrees": 1.4828733300852328,
+              "YawRate": 0.06930229,
+              "SteeringDegrees": 0.0,
+              "Inner": 0.8718077508468108,
+              "Outer": 10.326712035656506
+            },
+            "After20m": {
+              "Time": 16.740000000000002,
+              "Reference": 311.8377447128296,
+              "SpeedKph": 73.6730388,
+              "Requested": 0.31820688,
+              "Active": 0.31820688,
+              "BetaDegrees": -0.3556211868280866,
+              "YawRate": -0.053696554,
+              "SteeringDegrees": 0.0,
+              "Inner": 0.5744963877142001,
+              "Outer": 10.624058736982109
+            },
+            "After40m": null,
+            "MaximumStraightKph": 75.02277240000001,
+            "ObservedStraightMeters": 23.982319116592407,
+            "FirstFullAfterExitMeters": null
+          },
+          "NativeCompleted": true,
+          "Outcome": "completed",
+          "NativeFailureState": null
+        }
+      },
+      "Events": {
+        "Request": {
+          "Time": 14.59999999999998,
+          "Reference": 272.97264302155065,
+          "SpeedKph": 55.7269632,
+          "Requested": 1,
+          "Active": 0.31820688,
+          "BetaDegrees": 6.571497605333932,
+          "YawRate": 0.35303742,
+          "SteeringDegrees": 0.0,
+          "Inner": 1.2902896652589435,
+          "Outer": 11.09141706250941
+        },
+        "Activation": {
+          "Time": 14.84,
+          "Reference": 276.6031287305302,
+          "SpeedKph": 56.9071656,
+          "Requested": 0.31820688,
+          "Active": 1,
+          "BetaDegrees": 4.24684453751657,
+          "YawRate": 0.28940064,
+          "SteeringDegrees": 0.49999998510472177,
+          "Inner": 0.7251243825978041,
+          "Outer": 11.167319641941459
+        },
+        "ObservedAt": 14.59999999999998,
+        "ActivationAt": 14.84,
+        "Landmarks": {
+          "BoundaryReference": 291.77874994277954,
+          "Exit": {
+            "Time": 15.708428000000001,
+            "Reference": 291.7787594795227,
+            "SpeedKph": 66.4328628,
+            "Requested": 0.31820688,
+            "Active": 0.31820688,
+            "BetaDegrees": 2.8987751131878916,
+            "YawRate": 0.14183432,
+            "SteeringDegrees": 0.0,
+            "Inner": 0.7310596613398821,
+            "Outer": 10.467378386111575
+          },
+          "Before5m": {
+            "Time": 15.44,
+            "Reference": 286.88726071210135,
+            "SpeedKph": 64.7659692,
+            "Requested": 0.31820688,
+            "Active": 0.31820688,
+            "BetaDegrees": 5.271915880333789,
+            "YawRate": 0.20272952,
+            "SteeringDegrees": -0.49999998510472177,
+            "Inner": 0.351246373760669,
+            "Outer": 10.87246542989859
+          },
+          "After5m": {
+            "Time": 15.98,
+            "Reference": 296.8568844795227,
+            "SpeedKph": 68.2827192,
+            "Requested": 0.31820688,
+            "Active": 0.31820688,
+            "BetaDegrees": 1.4828733300852328,
+            "YawRate": 0.06930229,
+            "SteeringDegrees": 0.0,
+            "Inner": 0.8718077508468108,
+            "Outer": 10.326712035656506
+          },
+          "After20m": {
+            "Time": 16.740000000000002,
+            "Reference": 311.8377447128296,
+            "SpeedKph": 73.6730388,
+            "Requested": 0.31820688,
+            "Active": 0.31820688,
+            "BetaDegrees": -0.3556211868280866,
+            "YawRate": -0.053696554,
+            "SteeringDegrees": 0.0,
+            "Inner": 0.5744963877142001,
+            "Outer": 10.624058736982109
+          },
+          "After40m": null,
+          "MaximumStraightKph": 75.02277240000001,
+          "ObservedStraightMeters": 23.982319116592407,
+          "FirstFullAfterExitMeters": null
+        },
+        "NativeCompleted": true,
+        "Outcome": "completed",
+        "NativeFailureState": null
+      },
+      "PairedSummary": "A 15.99s; diagnostic 15.93s; completed."
+    },
+    {
+      "Id": "V-C-C-C1-M10",
+      "Reasons": [
+        "oryginalne AI / diagnostyka",
+        "ten sam natywny prefiks"
+      ],
+      "Scenario": {
+        "Name": "V-C",
+        "Level": 4,
+        "Speed": 17.25,
+        "Offset": 6.15,
+        "Start": 19.125,
+        "OutwardSpeed": 0.11,
+        "HeadingError": 0.016,
+        "YawRate": -0.03
+      },
+      "Scope": "Dwa łuki +1s legalnej kontroli. Pełny gaz jest interwencją diagnostyczną; brak certyfikacji całej przyszłości z H09.",
+      "GeometryFile": "progressive-c-viewer-geometry.json",
+      "TwoBends": true,
+      "Runs": [
+        {
+          "Name": "baseline-V-C",
+          "Policy": "A"
+        },
+        {
+          "Name": "V-C-C-C1-M10",
+          "Policy": "C"
+        }
+      ],
+      "Trial": {
+        "Name": "V-C-C-C1-M10",
+        "Case": "V-C",
+        "Corner": 1,
+        "Distance": 10,
+        "Arm": "C",
+        "Time": 6,
+        "Actions": [
+          {
+            "SteeringRadians": -0.02617994,
+            "Drive": 0.31820688
+          },
+          {
+            "SteeringRadians": 0.02617994,
+            "Drive": 1
+          },
+          {
+            "SteeringRadians": 0,
+            "Drive": 1
+          }
+        ],
+        "ExactPrefix": true,
+        "Metrics": {
+          "Native": {
+            "Completed": true,
+            "Outcome": "completed",
+            "GateSeconds": 15.790000000000001,
+            "DurationSeconds": 16.79,
+            "LegalProgress": 294.4595260620117,
+            "LegalSeconds": 16.79,
+            "MinimumClearanceMeters": 0.11835005536037427,
+            "EntrySpeed": 19.035110473632812,
+            "MinimumSpeed": 14.468345642089844,
+            "ExitSpeed": 16.70113754272461,
+            "MaximumBetaDegrees": 14.076554819404793,
+            "MeanDrive": 0.19636851371597863,
+            "FullDriveFraction": 0.03811792648569894,
+            "LargeTrajectoryOscillations": 6,
+            "DistanceMeters": 299.8127607903443,
+            "BoundaryApproach": 12.346114427371335,
+            "RecoverySeconds": 3.799999915063381,
+            "NativeSteps": 1683,
+            "PhysicsEvaluations": 206993,
+            "Forecasts": 2268,
+            "CpuSeconds": 8.4375,
+            "Fingerprint": "E879622F81AD195AB7DA0D9478B37D4E467FB0883F4B0C8EDBDB8658C09B545F"
+          },
+          "MinimumInstantInner": 0.21257415407496744,
+          "MinimumInstantOuter": 4.456254789015017,
+          "MinimumLegacyCertificate": 0.11835005536037427,
+          "MinimumRefinedCertificate": 0.11835005536037427,
+          "CornerMinimumSpeed": 14.468345642089844,
+          "MaximumYawRate": 0.8576934933662415,
+          "ExitYawRate": 0.13523223996162415,
+          "SteeringRequestTravelDegrees": 66.50000370986035,
+          "MaximumRequestChangeDegrees": 5.000000215028667,
+          "EngineWorkJoules": 94662.76194862892,
+          "DissipationJoules": 90402.97429585666,
+          "NoSafeDecisions": 0,
+          "BoundaryClass": "none"
+        },
+        "Landmarks": {
+          "BoundaryReference": 132.38937497138977,
+          "Exit": {
+            "Time": 6.393917000000001,
+            "Reference": 132.38937497138977,
+            "SpeedKph": 65.3800428,
+            "Requested": 1,
+            "Active": 0.31820688,
+            "BetaDegrees": 2.068604760892262,
+            "YawRate": -0.07701181,
+            "SteeringDegrees": -1.5000000699057243,
+            "Inner": 2.1769505540062695,
+            "Outer": 9.029072623327432
+          },
+          "Before5m": {
+            "Time": 6.11,
+            "Reference": 127.47295961006392,
+            "SpeedKph": 63.537868800000005,
+            "Requested": 0.31820688,
+            "Active": 0.31820688,
+            "BetaDegrees": 3.8694338001171262,
+            "YawRate": 0.24279013,
+            "SteeringDegrees": 0.49999998510472177,
+            "Inner": 1.2402518317481879,
+            "Outer": 9.991796257858745
+          },
+          "After5m": {
+            "Time": 6.67,
+            "Reference": 137.4837715625763,
+            "SpeedKph": 69.90036839999999,
+            "Requested": 0,
+            "Active": 1,
+            "BetaDegrees": 1.5967963046602596,
+            "YawRate": 0.34207633,
+            "SteeringDegrees": 0.0,
+            "Inner": 2.9954775702188328,
+            "Outer": 8.20845335596456
+          },
+          "After20m": {
+            "Time": 7.4,
+            "Reference": 152.4118320941925,
+            "SpeedKph": 74.065896,
+            "Requested": 0.31820688,
+            "Active": 0.31820688,
+            "BetaDegrees": 8.035979448561703,
+            "YawRate": 0.25272387,
+            "SteeringDegrees": -1.5000000699057243,
+            "Inner": 3.4482167844076,
+            "Outer": 7.631152248841449
+          },
+          "After40m": {
+            "Time": 8.37,
+            "Reference": 172.54086709022522,
+            "SpeedKph": 77.2899228,
+            "Requested": 0,
+            "Active": 0,
+            "BetaDegrees": -1.7770952938856013,
+            "YawRate": -0.0688571,
+            "SteeringDegrees": 0.0,
+            "Inner": 0.9874040673351926,
+            "Outer": 10.211179211795299
+          },
+          "MaximumStraightKph": 77.4777816,
+          "ObservedStraightMeters": 61.99580955505371,
+          "FirstFullAfterExitMeters": 0.826324462890625
+        },
+        "BaselineLandmarks": {
+          "BoundaryReference": 132.38937497138977,
+          "Exit": {
+            "Time": 6.393854,
+            "Reference": 132.38937497138977,
+            "SpeedKph": 65.32816679999999,
+            "Requested": 0.31820688,
+            "Active": 0.31820688,
+            "BetaDegrees": 2.5283898123850026,
+            "YawRate": 0.14540127,
+            "SteeringDegrees": 0.0,
+            "Inner": 2.1532468069030997,
+            "Outer": 9.051002716307076
+          },
+          "Before5m": {
+            "Time": 6.11,
+            "Reference": 127.47295961006392,
+            "SpeedKph": 63.537868800000005,
+            "Requested": 0.31820688,
+            "Active": 0.31820688,
+            "BetaDegrees": 3.8694338001171262,
+            "YawRate": 0.24279013,
+            "SteeringDegrees": 0.49999998510472177,
+            "Inner": 1.2402518317481879,
+            "Outer": 9.991796257858745
+          },
+          "After5m": {
+            "Time": 6.67,
+            "Reference": 137.42218899726868,
+            "SpeedKph": 67.22533440000001,
+            "Requested": 0.31820688,
+            "Active": 0.31820688,
+            "BetaDegrees": 1.298160503189321,
+            "YawRate": 0.061457753,
+            "SteeringDegrees": 0.0,
+            "Inner": 2.8504082425004156,
+            "Outer": 8.351589445628528
+          },
+          "After20m": {
+            "Time": 7.45,
+            "Reference": 152.52109456062317,
+            "SpeedKph": 72.765648,
+            "Requested": 0.31820688,
+            "Active": 0.31820688,
+            "BetaDegrees": 0.15743581887831257,
+            "YawRate": 0.006971038,
+            "SteeringDegrees": 0.0,
+            "Inner": 4.258233106479943,
+            "Outer": 6.942513186717272
+          },
+          "After40m": {
+            "Time": 8.4,
+            "Reference": 172.5327250957489,
+            "SpeedKph": 78.24648239999999,
+            "Requested": 0,
+            "Active": 0,
+            "BetaDegrees": 0.24687950970147374,
+            "YawRate": 0.08652222,
+            "SteeringDegrees": 0.49999998510472177,
+            "Inner": 5.807242056090765,
+            "Outer": 5.39292541059178
+          },
+          "MaximumStraightKph": 78.5108268,
+          "ObservedStraightMeters": 61.984724044799805,
+          "FirstFullAfterExitMeters": 57.85038757324219
+        },
+        "BaselineGateSeconds": 15.59,
+        "GainSeconds": -0.20000000000000107,
+        "Events": {
+          "Request": {
+            "Time": 6.2,
+            "Reference": 129.00486501863895,
+            "SpeedKph": 64.0817208,
+            "Requested": 1,
+            "Active": 0.31820688,
+            "BetaDegrees": 3.3753891956307736,
+            "YawRate": 0.23733988,
+            "SteeringDegrees": 0.49999998510472177,
+            "Inner": 1.525812805447468,
+            "Outer": 9.688415447315274
+          },
+          "Activation": {
+            "Time": 6.4399999999999995,
+            "Reference": 133.2156994342804,
+            "SpeedKph": 65.7110016,
+            "Requested": 1,
+            "Active": 1,
+            "BetaDegrees": 1.48319372808427,
+            "YawRate": -0.14378652,
+            "SteeringDegrees": -1.5000000699057243,
+            "Inner": 2.326721005451384,
+            "Outer": 8.879871948341497
+          },
+          "ObservedAt": 6.2,
+          "ActivationAt": 6.44,
+          "Landmarks": {
+            "BoundaryReference": 132.38937497138977,
+            "Exit": {
+              "Time": 6.393917000000001,
+              "Reference": 132.38937497138977,
+              "SpeedKph": 65.3800428,
+              "Requested": 1,
+              "Active": 0.31820688,
+              "BetaDegrees": 2.068604760892262,
+              "YawRate": -0.07701181,
+              "SteeringDegrees": -1.5000000699057243,
+              "Inner": 2.1769505540062695,
+              "Outer": 9.029072623327432
+            },
+            "Before5m": {
+              "Time": 6.11,
+              "Reference": 127.47295961006392,
+              "SpeedKph": 63.537868800000005,
+              "Requested": 0.31820688,
+              "Active": 0.31820688,
+              "BetaDegrees": 3.8694338001171262,
+              "YawRate": 0.24279013,
+              "SteeringDegrees": 0.49999998510472177,
+              "Inner": 1.2402518317481879,
+              "Outer": 9.991796257858745
+            },
+            "After5m": {
+              "Time": 6.67,
+              "Reference": 137.4837715625763,
+              "SpeedKph": 69.90036839999999,
+              "Requested": 0,
+              "Active": 1,
+              "BetaDegrees": 1.5967963046602596,
+              "YawRate": 0.34207633,
+              "SteeringDegrees": 0.0,
+              "Inner": 2.9954775702188328,
+              "Outer": 8.20845335596456
+            },
+            "After20m": {
+              "Time": 7.4,
+              "Reference": 152.4118320941925,
+              "SpeedKph": 74.065896,
+              "Requested": 0.31820688,
+              "Active": 0.31820688,
+              "BetaDegrees": 8.035979448561703,
+              "YawRate": 0.25272387,
+              "SteeringDegrees": -1.5000000699057243,
+              "Inner": 3.4482167844076,
+              "Outer": 7.631152248841449
+            },
+            "After40m": {
+              "Time": 8.37,
+              "Reference": 172.54086709022522,
+              "SpeedKph": 77.2899228,
+              "Requested": 0,
+              "Active": 0,
+              "BetaDegrees": -1.7770952938856013,
+              "YawRate": -0.0688571,
+              "SteeringDegrees": 0.0,
+              "Inner": 0.9874040673351926,
+              "Outer": 10.211179211795299
+            },
+            "MaximumStraightKph": 77.4777816,
+            "ObservedStraightMeters": 61.99580955505371,
+            "FirstFullAfterExitMeters": 0.826324462890625
+          },
+          "NativeCompleted": true,
+          "Outcome": "completed",
+          "NativeFailureState": null
+        }
+      },
+      "Events": {
+        "Request": {
+          "Time": 6.2,
+          "Reference": 129.00486501863895,
+          "SpeedKph": 64.0817208,
+          "Requested": 1,
+          "Active": 0.31820688,
+          "BetaDegrees": 3.3753891956307736,
+          "YawRate": 0.23733988,
+          "SteeringDegrees": 0.49999998510472177,
+          "Inner": 1.525812805447468,
+          "Outer": 9.688415447315274
+        },
+        "Activation": {
+          "Time": 6.4399999999999995,
+          "Reference": 133.2156994342804,
+          "SpeedKph": 65.7110016,
+          "Requested": 1,
+          "Active": 1,
+          "BetaDegrees": 1.48319372808427,
+          "YawRate": -0.14378652,
+          "SteeringDegrees": -1.5000000699057243,
+          "Inner": 2.326721005451384,
+          "Outer": 8.879871948341497
+        },
+        "ObservedAt": 6.2,
+        "ActivationAt": 6.44,
+        "Landmarks": {
+          "BoundaryReference": 132.38937497138977,
+          "Exit": {
+            "Time": 6.393917000000001,
+            "Reference": 132.38937497138977,
+            "SpeedKph": 65.3800428,
+            "Requested": 1,
+            "Active": 0.31820688,
+            "BetaDegrees": 2.068604760892262,
+            "YawRate": -0.07701181,
+            "SteeringDegrees": -1.5000000699057243,
+            "Inner": 2.1769505540062695,
+            "Outer": 9.029072623327432
+          },
+          "Before5m": {
+            "Time": 6.11,
+            "Reference": 127.47295961006392,
+            "SpeedKph": 63.537868800000005,
+            "Requested": 0.31820688,
+            "Active": 0.31820688,
+            "BetaDegrees": 3.8694338001171262,
+            "YawRate": 0.24279013,
+            "SteeringDegrees": 0.49999998510472177,
+            "Inner": 1.2402518317481879,
+            "Outer": 9.991796257858745
+          },
+          "After5m": {
+            "Time": 6.67,
+            "Reference": 137.4837715625763,
+            "SpeedKph": 69.90036839999999,
+            "Requested": 0,
+            "Active": 1,
+            "BetaDegrees": 1.5967963046602596,
+            "YawRate": 0.34207633,
+            "SteeringDegrees": 0.0,
+            "Inner": 2.9954775702188328,
+            "Outer": 8.20845335596456
+          },
+          "After20m": {
+            "Time": 7.4,
+            "Reference": 152.4118320941925,
+            "SpeedKph": 74.065896,
+            "Requested": 0.31820688,
+            "Active": 0.31820688,
+            "BetaDegrees": 8.035979448561703,
+            "YawRate": 0.25272387,
+            "SteeringDegrees": -1.5000000699057243,
+            "Inner": 3.4482167844076,
+            "Outer": 7.631152248841449
+          },
+          "After40m": {
+            "Time": 8.37,
+            "Reference": 172.54086709022522,
+            "SpeedKph": 77.2899228,
+            "Requested": 0,
+            "Active": 0,
+            "BetaDegrees": -1.7770952938856013,
+            "YawRate": -0.0688571,
+            "SteeringDegrees": 0.0,
+            "Inner": 0.9874040673351926,
+            "Outer": 10.211179211795299
+          },
+          "MaximumStraightKph": 77.4777816,
+          "ObservedStraightMeters": 61.99580955505371,
+          "FirstFullAfterExitMeters": 0.826324462890625
+        },
+        "NativeCompleted": true,
+        "Outcome": "completed",
+        "NativeFailureState": null
+      },
+      "PairedSummary": "A 15.59s; diagnostic 15.790000000000001s; completed."
+    },
+    {
+      "Id": "D-C-D-C1-M20",
+      "Reasons": [
+        "oryginalne AI / diagnostyka",
+        "ten sam natywny prefiks"
+      ],
+      "Scenario": {
+        "Name": "D-C",
+        "Level": 4,
+        "Speed": 12,
+        "Offset": 7,
+        "Start": 18.625,
+        "OutwardSpeed": -0.1,
+        "HeadingError": -0.02,
+        "YawRate": -0.035
+      },
+      "Scope": "Dwa łuki +1s legalnej kontroli. Pełny gaz jest interwencją diagnostyczną; brak certyfikacji całej przyszłości z H09.",
+      "GeometryFile": "progressive-c-viewer-geometry.json",
+      "TwoBends": true,
+      "Runs": [
+        {
+          "Name": "baseline-D-C",
+          "Policy": "A"
+        },
+        {
+          "Name": "D-C-D-C1-M20",
+          "Policy": "D"
+        }
+      ],
+      "Trial": {
+        "Name": "D-C-D-C1-M20",
+        "Case": "D-C",
+        "Corner": 1,
+        "Distance": 20,
+        "Arm": "D",
+        "Time": 6.4,
+        "Actions": [
+          {
+            "SteeringRadians": 0,
+            "Drive": 1
+          }
+        ],
+        "ExactPrefix": true,
+        "Metrics": {
+          "Native": {
+            "Completed": false,
+            "Outcome": "uncertified interval",
+            "GateSeconds": null,
+            "DurationSeconds": 7.4,
+            "LegalProgress": 113.07798320636277,
+            "LegalSeconds": 7.39,
+            "MinimumClearanceMeters": -0.005561620188586358,
+            "EntrySpeed": 15.534455299377441,
+            "MinimumSpeed": 12.00412368774414,
+            "ExitSpeed": null,
+            "MaximumBetaDegrees": 32.15703574285465,
+            "MeanDrive": 0.33293940228460195,
+            "FullDriveFraction": 0.1351351321146295,
+            "LargeTrajectoryOscillations": 3,
+            "DistanceMeters": 124.13821762055159,
+            "BoundaryApproach": 5.91274546581192,
+            "RecoverySeconds": 0,
+            "NativeSteps": 741,
+            "PhysicsEvaluations": 91124,
+            "Forecasts": 999,
+            "CpuSeconds": 4.484375,
+            "Fingerprint": "C7E0B14D7E9197AB88F793EFD931C0303A92FE10D14F93F604A208169CC50013"
+          },
+          "MinimumInstantInner": 0.09758879225171363,
+          "MinimumInstantOuter": 3.4888182279646363,
+          "MinimumLegacyCertificate": -0.005561620188586358,
+          "MinimumRefinedCertificate": -0.005561620188586358,
+          "CornerMinimumSpeed": 15.534455299377441,
+          "MaximumYawRate": 1.7594776153564453,
+          "ExitYawRate": null,
+          "SteeringRequestTravelDegrees": 63.50000093224759,
+          "MaximumRequestChangeDegrees": 30.000000075916148,
+          "EngineWorkJoules": 71751.04954633772,
+          "DissipationJoules": 49337.41334473868,
+          "NoSafeDecisions": 3,
+          "BoundaryClass": "uncertified interval"
+        },
+        "Landmarks": {
+          "BoundaryReference": 132.38937497138977,
+          "Exit": null,
+          "Before5m": {
+            "Time": 7.17,
+            "Reference": 127.55786160687126,
+            "SpeedKph": 66.72910320000001,
+            "Requested": 1,
+            "Active": 1,
+            "BetaDegrees": 20.97498678726032,
+            "YawRate": 1.217566,
+            "SteeringDegrees": -15.000000699057246,
+            "Inner": 0.20151892405363248,
+            "Outer": 10.756715995171199
+          },
+          "After5m": null,
+          "After20m": null,
+          "After40m": null,
+          "MaximumStraightKph": null,
+          "ObservedStraightMeters": 0,
+          "FirstFullAfterExitMeters": null
+        },
+        "BaselineLandmarks": {
+          "BoundaryReference": 132.38937497138977,
+          "Exit": {
+            "Time": 7.4668149999999995,
+            "Reference": 132.38938641548157,
+            "SpeedKph": 63.9493704,
+            "Requested": 0.31820688,
+            "Active": 0.31820688,
+            "BetaDegrees": 0.846295962960689,
+            "YawRate": 0.037111286,
+            "SteeringDegrees": 0.0,
+            "Inner": 0.5894471968039537,
+            "Outer": 10.609730444046415
+          },
+          "Before5m": {
+            "Time": 7.1899999999999995,
+            "Reference": 127.52947530531924,
+            "SpeedKph": 62.01262440000001,
+            "Requested": 0.31820688,
+            "Active": 0.31820688,
+            "BetaDegrees": 2.0099691768710453,
+            "YawRate": 0.09785201,
+            "SteeringDegrees": 0.0,
+            "Inner": 0.3139272814717666,
+            "Outer": 10.91125354226544
+          },
+          "After5m": {
+            "Time": 7.75,
+            "Reference": 137.4928638935089,
+            "SpeedKph": 65.9611584,
+            "Requested": 0.31820688,
+            "Active": 0.31820688,
+            "BetaDegrees": 0.33970703769647603,
+            "YawRate": 0.014415532,
+            "SteeringDegrees": 0.0,
+            "Inner": 0.8450759824979327,
+            "Outer": 10.353887593072999
+          },
+          "After20m": {
+            "Time": 8.54,
+            "Reference": 152.5765221118927,
+            "SpeedKph": 71.59172400000001,
+            "Requested": 0.31820688,
+            "Active": 0.31820688,
+            "BetaDegrees": 0.033715617802635205,
+            "YawRate": 0.0014746133,
+            "SteeringDegrees": 0.0,
+            "Inner": 1.4120514065666412,
+            "Outer": 9.786793208107946
+          },
+          "After40m": {
+            "Time": 9.5,
+            "Reference": 172.56770634651184,
+            "SpeedKph": 78.11304120000001,
+            "Requested": 0,
+            "Active": 0,
+            "BetaDegrees": 0.02015684029807019,
+            "YawRate": 0.10951839,
+            "SteeringDegrees": 1.5000000699057243,
+            "Inner": 2.0890316304541314,
+            "Outer": 9.109722994954746
+          },
+          "MaximumStraightKph": 78.1230024,
+          "ObservedStraightMeters": 61.945695877075195,
+          "FirstFullAfterExitMeters": null
+        },
+        "BaselineGateSeconds": 16.87,
+        "GainSeconds": null,
+        "Events": {
+          "Request": {
+            "Time": 6.4,
+            "Reference": 114.71132044491856,
+            "SpeedKph": 57.9445308,
+            "Requested": 1,
+            "Active": 0.31820688,
+            "BetaDegrees": 8.601878403656514,
+            "YawRate": 0.4704149,
+            "SteeringDegrees": -0.49999998510472177,
+            "Inner": 1.7529769202071324,
+            "Outer": 10.534890437953417
+          },
+          "Activation": {
+            "Time": 6.64,
+            "Reference": 118.40264429672277,
+            "SpeedKph": 58.776012,
+            "Requested": 1,
+            "Active": 1,
+            "BetaDegrees": 6.609494218250505,
+            "YawRate": 0.34047082,
+            "SteeringDegrees": -0.49999998510472177,
+            "Inner": 1.113298568484325,
+            "Outer": 10.694324604429749
+          },
+          "ObservedAt": 6.4,
+          "ActivationAt": 6.640000000000001,
+          "Landmarks": {
+            "BoundaryReference": 132.38937497138977,
+            "Exit": null,
+            "Before5m": {
+              "Time": 7.17,
+              "Reference": 127.55786160687126,
+              "SpeedKph": 66.72910320000001,
+              "Requested": 1,
+              "Active": 1,
+              "BetaDegrees": 20.97498678726032,
+              "YawRate": 1.217566,
+              "SteeringDegrees": -15.000000699057246,
+              "Inner": 0.20151892405363248,
+              "Outer": 10.756715995171199
+            },
+            "After5m": null,
+            "After20m": null,
+            "After40m": null,
+            "MaximumStraightKph": null,
+            "ObservedStraightMeters": 0,
+            "FirstFullAfterExitMeters": null
+          },
+          "NativeCompleted": false,
+          "Outcome": "uncertified interval",
+          "NativeFailureState": {
+            "Time": 7.4,
+            "Reference": 131.89085673886558,
+            "SpeedKph": 67.6474308,
+            "Requested": 1,
+            "Active": 1,
+            "BetaDegrees": 32.15703623592413,
+            "YawRate": 1.7594776,
+            "SteeringDegrees": -0.5999977361311092,
+            "Inner": 0.09758879225171363,
+            "Outer": 10.544176499038198
+          }
+        }
+      },
+      "Events": {
+        "Request": {
+          "Time": 6.4,
+          "Reference": 114.71132044491856,
+          "SpeedKph": 57.9445308,
+          "Requested": 1,
+          "Active": 0.31820688,
+          "BetaDegrees": 8.601878403656514,
+          "YawRate": 0.4704149,
+          "SteeringDegrees": -0.49999998510472177,
+          "Inner": 1.7529769202071324,
+          "Outer": 10.534890437953417
+        },
+        "Activation": {
+          "Time": 6.64,
+          "Reference": 118.40264429672277,
+          "SpeedKph": 58.776012,
+          "Requested": 1,
+          "Active": 1,
+          "BetaDegrees": 6.609494218250505,
+          "YawRate": 0.34047082,
+          "SteeringDegrees": -0.49999998510472177,
+          "Inner": 1.113298568484325,
+          "Outer": 10.694324604429749
+        },
+        "ObservedAt": 6.4,
+        "ActivationAt": 6.640000000000001,
+        "Landmarks": {
+          "BoundaryReference": 132.38937497138977,
+          "Exit": null,
+          "Before5m": {
+            "Time": 7.17,
+            "Reference": 127.55786160687126,
+            "SpeedKph": 66.72910320000001,
+            "Requested": 1,
+            "Active": 1,
+            "BetaDegrees": 20.97498678726032,
+            "YawRate": 1.217566,
+            "SteeringDegrees": -15.000000699057246,
+            "Inner": 0.20151892405363248,
+            "Outer": 10.756715995171199
+          },
+          "After5m": null,
+          "After20m": null,
+          "After40m": null,
+          "MaximumStraightKph": null,
+          "ObservedStraightMeters": 0,
+          "FirstFullAfterExitMeters": null
+        },
+        "NativeCompleted": false,
+        "Outcome": "uncertified interval",
+        "NativeFailureState": {
+          "Time": 7.4,
+          "Reference": 131.89085673886558,
+          "SpeedKph": 67.6474308,
+          "Requested": 1,
+          "Active": 1,
+          "BetaDegrees": 32.15703623592413,
+          "YawRate": 1.7594776,
+          "SteeringDegrees": -0.5999977361311092,
+          "Inner": 0.09758879225171363,
+          "Outer": 10.544176499038198
+        }
+      },
+      "PairedSummary": "A 16.87s; diagnostic Nones; uncertified interval."
+    }
+  ],
+  "Labels": {
+    "A": "A · oryginalne AI #16015",
+    "B": "B · jeden gaz1",
+    "C": "C · przygotowanie offline",
+    "D": "D · diagnostyczne utrzymanie gaz1"
+  },
+  "Colors": {
+    "A": "#ffd27b",
+    "B": "#73dfdf",
+    "C": "#d99fe3",
+    "D": "#ff9c86"
+  },
+  "Horizons": {
+    "A": 0.9,
+    "B": 0.9,
+    "C": 0.9,
+    "D": 0.9
+  }
+}
