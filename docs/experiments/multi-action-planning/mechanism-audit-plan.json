@@ -1,0 +1,40 @@
+{
+  "State": "V-C-preparation2",
+  "Time": 9,
+  "OriginalSequence": [
+    {
+      "SteeringRadians": -0.2617994,
+      "Drive": 0
+    },
+    {
+      "SteeringRadians": -0.08726647,
+      "Drive": 1
+    }
+  ],
+  "Controls": [
+    {
+      "Arm": "first-only",
+      "Actions": [
+        {
+          "SteeringRadians": -0.2617994,
+          "Drive": 0
+        }
+      ]
+    },
+    {
+      "Arm": "repeat-first",
+      "Actions": [
+        {
+          "SteeringRadians": -0.2617994,
+          "Drive": 0
+        },
+        {
+          "SteeringRadians": -0.2617994,
+          "Drive": 0
+        }
+      ]
+    }
+  ],
+  "NativeWorldsBefore": 78,
+  "Scope": "Post-hoc mechanistic diagnostic after main sealed pool. Two controls frozen before their native outcomes. Never counted as additional independent evidence, no planner/model selection or GO threshold changes."
+}

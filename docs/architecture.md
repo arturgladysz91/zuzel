@@ -1,5 +1,11 @@
 # Architecture
 
+[Multi-Action Planning (#135)](experiments/multi-action-planning/README.md) is an
+isolated, default-OFF diagnostic CLI referencing the existing experimental world.
+It reuses the frozen causal predictor callback and original native integration.
+The separate collector adds only a diagnostic choice hook; exact source comparison
+guards every inherited physical check. No production CoreSim or default MPC change.
+
 Isolated PROVISIONAL experiment: [Shared World Speedway](experiments/shared-world-speedway.md)
 owns one world clock and uses Box2D.NET only in `tools/shared-world-speedway`.
 It reuses public force/geometry primitives, with no production scheduling change.

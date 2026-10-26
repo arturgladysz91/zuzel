@@ -1,0 +1,746 @@
+{
+  "Passed": true,
+  "Rule": "Require requests/activations only strictly before native termination. Keep absent later activations visible. No scientific code, plan, pool, threshold or raw replay changed.",
+  "InitialFailure": "confirm-pairs-initial.json.gz",
+  "Checks": [
+    {
+      "RawName": "V-B-straight-end-B",
+      "OriginalAllActivationsRequiredPassed": true,
+      "End": 16.990000000000002,
+      "Outcome": "completed",
+      "Events": [
+        {
+          "ObservedAt": 0.8,
+          "ActivationAt": 1.04,
+          "Action": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0.31820688
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        },
+        {
+          "ObservedAt": 1,
+          "ActivationAt": 1.24,
+          "Action": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0.31820688
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        }
+      ],
+      "Passed": true
+    },
+    {
+      "RawName": "V-B-straight-end-C",
+      "OriginalAllActivationsRequiredPassed": true,
+      "End": 17.24,
+      "Outcome": "completed",
+      "Events": [
+        {
+          "ObservedAt": 0.8,
+          "ActivationAt": 1.04,
+          "Action": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0.31820688
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        },
+        {
+          "ObservedAt": 1,
+          "ActivationAt": 1.24,
+          "Action": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0.31820688
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        },
+        {
+          "ObservedAt": 1.2000000000000002,
+          "ActivationAt": 1.4400000000000002,
+          "Action": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0.31820688
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        }
+      ],
+      "Passed": true
+    },
+    {
+      "RawName": "V-B-straight-end-oracle-sample",
+      "OriginalAllActivationsRequiredPassed": true,
+      "End": 3.9299999999999997,
+      "Outcome": "uncertified interval",
+      "Events": [
+        {
+          "ObservedAt": 0.8,
+          "ActivationAt": 1.04,
+          "Action": {
+            "SteeringRadians": -0.08726647,
+            "Drive": 1
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        },
+        {
+          "ObservedAt": 1,
+          "ActivationAt": 1.24,
+          "Action": {
+            "SteeringRadians": -0.08726647,
+            "Drive": 1
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        },
+        {
+          "ObservedAt": 1.2000000000000002,
+          "ActivationAt": 1.4400000000000002,
+          "Action": {
+            "SteeringRadians": -0.08726647,
+            "Drive": 1
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        }
+      ],
+      "Passed": true
+    },
+    {
+      "RawName": "V-B-preparation2-B",
+      "OriginalAllActivationsRequiredPassed": true,
+      "End": 16.990000000000002,
+      "Outcome": "completed",
+      "Events": [
+        {
+          "ObservedAt": 9.399999999999999,
+          "ActivationAt": 9.639999999999999,
+          "Action": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        },
+        {
+          "ObservedAt": 9.599999999999998,
+          "ActivationAt": 9.839999999999998,
+          "Action": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        }
+      ],
+      "Passed": true
+    },
+    {
+      "RawName": "V-B-preparation2-C",
+      "OriginalAllActivationsRequiredPassed": true,
+      "End": 17.03,
+      "Outcome": "completed",
+      "Events": [
+        {
+          "ObservedAt": 9.399999999999999,
+          "ActivationAt": 9.639999999999999,
+          "Action": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        },
+        {
+          "ObservedAt": 9.599999999999998,
+          "ActivationAt": 9.839999999999998,
+          "Action": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        },
+        {
+          "ObservedAt": 9.799999999999999,
+          "ActivationAt": 10.04,
+          "Action": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        }
+      ],
+      "Passed": true
+    },
+    {
+      "RawName": "V-B-preparation2-oracle-sample",
+      "OriginalAllActivationsRequiredPassed": true,
+      "End": 10.69,
+      "Outcome": "control envelope",
+      "Events": [
+        {
+          "ObservedAt": 9.399999999999999,
+          "ActivationAt": 9.639999999999999,
+          "Action": {
+            "SteeringRadians": -0.08726647,
+            "Drive": 1
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        },
+        {
+          "ObservedAt": 9.599999999999998,
+          "ActivationAt": 9.839999999999998,
+          "Action": {
+            "SteeringRadians": -0.2617994,
+            "Drive": 0
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        },
+        {
+          "ObservedAt": 9.799999999999999,
+          "ActivationAt": 10.04,
+          "Action": {
+            "SteeringRadians": -0.2617994,
+            "Drive": 1
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        }
+      ],
+      "Passed": true
+    },
+    {
+      "RawName": "V-C-straight-end-B",
+      "OriginalAllActivationsRequiredPassed": true,
+      "End": 16.59,
+      "Outcome": "completed",
+      "Events": [
+        {
+          "ObservedAt": 0.6,
+          "ActivationAt": 0.84,
+          "Action": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        },
+        {
+          "ObservedAt": 0.8,
+          "ActivationAt": 1.04,
+          "Action": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        }
+      ],
+      "Passed": true
+    },
+    {
+      "RawName": "V-C-straight-end-C",
+      "OriginalAllActivationsRequiredPassed": true,
+      "End": 16.79,
+      "Outcome": "completed",
+      "Events": [
+        {
+          "ObservedAt": 0.6,
+          "ActivationAt": 0.84,
+          "Action": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        },
+        {
+          "ObservedAt": 0.8,
+          "ActivationAt": 1.04,
+          "Action": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        },
+        {
+          "ObservedAt": 1,
+          "ActivationAt": 1.24,
+          "Action": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        }
+      ],
+      "Passed": true
+    },
+    {
+      "RawName": "V-C-straight-end-oracle-sample",
+      "OriginalAllActivationsRequiredPassed": true,
+      "End": 1.67,
+      "Outcome": "control envelope",
+      "Events": [
+        {
+          "ObservedAt": 0.6,
+          "ActivationAt": 0.84,
+          "Action": {
+            "SteeringRadians": -0.08726647,
+            "Drive": 1
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        },
+        {
+          "ObservedAt": 0.8,
+          "ActivationAt": 1.04,
+          "Action": {
+            "SteeringRadians": -0.08726647,
+            "Drive": 1
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        },
+        {
+          "ObservedAt": 1,
+          "ActivationAt": 1.24,
+          "Action": {
+            "SteeringRadians": -0.08726647,
+            "Drive": 1
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        }
+      ],
+      "Passed": true
+    },
+    {
+      "RawName": "V-C-preparation2-B",
+      "OriginalAllActivationsRequiredPassed": true,
+      "End": 16.34,
+      "Outcome": "completed",
+      "Events": [
+        {
+          "ObservedAt": 9,
+          "ActivationAt": 9.24,
+          "Action": {
+            "SteeringRadians": -0.2617994,
+            "Drive": 0
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        },
+        {
+          "ObservedAt": 9.2,
+          "ActivationAt": 9.44,
+          "Action": {
+            "SteeringRadians": -0.08726647,
+            "Drive": 1
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        }
+      ],
+      "Passed": true
+    },
+    {
+      "RawName": "V-C-preparation2-C",
+      "OriginalAllActivationsRequiredPassed": true,
+      "End": 16.48,
+      "Outcome": "completed",
+      "Events": [
+        {
+          "ObservedAt": 9,
+          "ActivationAt": 9.24,
+          "Action": {
+            "SteeringRadians": -0.2617994,
+            "Drive": 0
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        },
+        {
+          "ObservedAt": 9.2,
+          "ActivationAt": 9.44,
+          "Action": {
+            "SteeringRadians": -0.08726647,
+            "Drive": 1
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        },
+        {
+          "ObservedAt": 9.4,
+          "ActivationAt": 9.64,
+          "Action": {
+            "SteeringRadians": -0.08726647,
+            "Drive": 1
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        }
+      ],
+      "Passed": true
+    },
+    {
+      "RawName": "V-C-preparation2-oracle-sample",
+      "OriginalAllActivationsRequiredPassed": true,
+      "End": 16.740000000000002,
+      "Outcome": "completed",
+      "Events": [
+        {
+          "ObservedAt": 9,
+          "ActivationAt": 9.24,
+          "Action": {
+            "SteeringRadians": -0.2617994,
+            "Drive": 1
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        },
+        {
+          "ObservedAt": 9.2,
+          "ActivationAt": 9.44,
+          "Action": {
+            "SteeringRadians": -0.2617994,
+            "Drive": 1
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        },
+        {
+          "ObservedAt": 9.4,
+          "ActivationAt": 9.64,
+          "Action": {
+            "SteeringRadians": -0.2617994,
+            "Drive": 1
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        }
+      ],
+      "Passed": true
+    },
+    {
+      "RawName": "V-E-straight-end-B",
+      "OriginalAllActivationsRequiredPassed": true,
+      "End": 10.54,
+      "Outcome": "uncertified interval",
+      "Events": [
+        {
+          "ObservedAt": 1,
+          "ActivationAt": 1.24,
+          "Action": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0.31820688
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        },
+        {
+          "ObservedAt": 1.2,
+          "ActivationAt": 1.44,
+          "Action": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0.31820688
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        }
+      ],
+      "Passed": true
+    },
+    {
+      "RawName": "V-E-straight-end-C",
+      "OriginalAllActivationsRequiredPassed": true,
+      "End": 10.54,
+      "Outcome": "uncertified interval",
+      "Events": [
+        {
+          "ObservedAt": 1,
+          "ActivationAt": 1.24,
+          "Action": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0.31820688
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        },
+        {
+          "ObservedAt": 1.2,
+          "ActivationAt": 1.44,
+          "Action": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0.31820688
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        },
+        {
+          "ObservedAt": 1.4,
+          "ActivationAt": 1.64,
+          "Action": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0.31820688
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        }
+      ],
+      "Passed": true
+    },
+    {
+      "RawName": "V-E-straight-end-oracle-sample",
+      "OriginalAllActivationsRequiredPassed": true,
+      "End": 12.49,
+      "Outcome": "confirmed crossing",
+      "Events": [
+        {
+          "ObservedAt": 1,
+          "ActivationAt": 1.24,
+          "Action": {
+            "SteeringRadians": -0.02617994,
+            "Drive": 1
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        },
+        {
+          "ObservedAt": 1.2,
+          "ActivationAt": 1.44,
+          "Action": {
+            "SteeringRadians": -0.02617994,
+            "Drive": 1
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        },
+        {
+          "ObservedAt": 1.4,
+          "ActivationAt": 1.64,
+          "Action": {
+            "SteeringRadians": -0.02617994,
+            "Drive": 1
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        }
+      ],
+      "Passed": true
+    },
+    {
+      "RawName": "V-E-preparation2-B",
+      "OriginalAllActivationsRequiredPassed": true,
+      "End": 10.54,
+      "Outcome": "uncertified interval",
+      "Events": [
+        {
+          "ObservedAt": 9.999999999999996,
+          "ActivationAt": 10.239999999999997,
+          "Action": {
+            "SteeringRadians": 0.2617994,
+            "Drive": 0
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        },
+        {
+          "ObservedAt": 10.199999999999996,
+          "ActivationAt": 10.439999999999996,
+          "Action": {
+            "SteeringRadians": 0.2617994,
+            "Drive": 0
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        }
+      ],
+      "Passed": true
+    },
+    {
+      "RawName": "V-E-preparation2-C",
+      "OriginalAllActivationsRequiredPassed": false,
+      "End": 10.54,
+      "Outcome": "uncertified interval",
+      "Events": [
+        {
+          "ObservedAt": 9.999999999999996,
+          "ActivationAt": 10.239999999999997,
+          "Action": {
+            "SteeringRadians": 0.2617994,
+            "Drive": 0
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        },
+        {
+          "ObservedAt": 10.199999999999996,
+          "ActivationAt": 10.439999999999996,
+          "Action": {
+            "SteeringRadians": 0.2617994,
+            "Drive": 0
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        },
+        {
+          "ObservedAt": 10.399999999999997,
+          "ActivationAt": 10.639999999999997,
+          "Action": {
+            "SteeringRadians": 0.2617994,
+            "Drive": 0
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": false,
+          "Requested": true,
+          "Activated": false
+        }
+      ],
+      "Passed": true
+    },
+    {
+      "RawName": "V-E-preparation2-oracle-sample",
+      "OriginalAllActivationsRequiredPassed": false,
+      "End": 10.52,
+      "Outcome": "uncertified interval",
+      "Events": [
+        {
+          "ObservedAt": 9.999999999999996,
+          "ActivationAt": 10.239999999999997,
+          "Action": {
+            "SteeringRadians": 0.2617994,
+            "Drive": 1
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        },
+        {
+          "ObservedAt": 10.199999999999996,
+          "ActivationAt": 10.439999999999996,
+          "Action": {
+            "SteeringRadians": 0.2617994,
+            "Drive": 1
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": true,
+          "Requested": true,
+          "Activated": true
+        },
+        {
+          "ObservedAt": 10.399999999999997,
+          "ActivationAt": 10.639999999999997,
+          "Action": {
+            "SteeringRadians": 0.2617994,
+            "Drive": 1
+          },
+          "RequestRequiredBeforeStop": true,
+          "ActivationRequiredBeforeStop": false,
+          "Requested": true,
+          "Activated": false
+        }
+      ],
+      "Passed": true
+    }
+  ],
+  "AuditSourceSha256": "18F22CD76336FB559D01633F4800BFEC930D03AF03CA2443B8F9C29C03BB50A7"
+}

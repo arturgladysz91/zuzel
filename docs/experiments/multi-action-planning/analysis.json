@@ -1,0 +1,31 @@
+{
+  "Verdict": "INCONCLUSIVE",
+  "Criteria": {
+    "DiagnosticThree": true,
+    "IndependentThree": false,
+    "IndependentTwoGeometries": false,
+    "NoNewCausalDNF": true,
+    "PredictionPreflight": true,
+    "PrefixAndQueue": true,
+    "MatchedPrefixAccuracy": true,
+    "SearchCpu": false,
+    "SearchContacts": true
+  },
+  "DiagnosticWinningUniqueStates": 4,
+  "IndependentWinningUniqueStates": 1,
+  "IndependentWinningGeometries": [
+    "progressive-c"
+  ],
+  "NewCausalDNF": [],
+  "MaximumSearchCpuSeconds": 0.53125,
+  "MaximumSearchContacts": 5859,
+  "NativeWorlds": 80,
+  "CpuSeconds": 802.296875,
+  "Forecasts": 152613,
+  "ContactEvaluations": 13925887,
+  "NativeSteps": 115256,
+  "FirstActionChangedWins": 1,
+  "PolicyId": 16015,
+  "RawDirectory": "C:\\Users\\artur\\Documents\\Codex\\2026-10-23\\files-pasted-by-the-user-pr\\work\\multi-action-135-raw",
+  "CpuScope": "Native episodes and explicitly reserved offline searches; excludes builds, tests, compression and this read-only report."
+}
