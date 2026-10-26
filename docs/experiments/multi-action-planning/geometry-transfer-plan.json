@@ -1,0 +1,31 @@
+{
+  "Time": 9,
+  "Actions": [
+    {
+      "SteeringRadians": -0.2617994,
+      "Drive": 0
+    },
+    {
+      "SteeringRadians": -0.08726647,
+      "Drive": 1
+    }
+  ],
+  "Scenario": {
+    "Name": "V-C",
+    "Level": 4,
+    "Speed": 17.25,
+    "Offset": 6.15,
+    "Start": 19.125,
+    "OutwardSpeed": 0.11,
+    "HeadingError": 0.016,
+    "YawRate": -0.03
+  },
+  "Geometries": [
+    "progressive-c",
+    "progressive-b",
+    "egg-asymmetric"
+  ],
+  "NewWorlds": 4,
+  "CachedWorlds": 2,
+  "Scope": "Post-hoc fixed-plan transfer. Identical full initial scenario, original134A, same observation times and commands. Reuse the original C pair; no extra search, tuning or independent success count."
+}

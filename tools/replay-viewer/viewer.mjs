@@ -1,4 +1,5 @@
 import {awarenessReadout,knowledgeEdges} from './track-awareness.mjs';
+import {planningPanel} from './multi-action.mjs';
 import { Replay, parseCsv, clamp, enumName, decisionStatus, crossSection, worldCapsules, authoredReplayDocument, motionVectors, bendJumps, boundaryStatus } from './model.mjs';
 import { currentRecordings, readGzip } from './recordings.mjs';
 import { loadContinuous } from './continuous.mjs';
@@ -31,6 +32,7 @@ const robustOption=document.createElement('option');robustOption.value='robust-l
 const extendedOption=document.createElement('option');extendedOption.value='extended-learning';extendedOption.textContent='#131 · Extended Learning · H06/H09 i dwa łuki';$('scenario').prepend(extendedOption);
 const throttleOption=document.createElement('option');throttleOption.value='full-throttle-learning';throttleOption.textContent='#132 · Full Throttle Learning · gaz A/B i dwa łuki';$('scenario').prepend(throttleOption);
 const awarenessOption=document.createElement('option');awarenessOption.value='track-awareness';awarenessOption.textContent='#134 · Track Awareness · geometria i reakcja';$('scenario').prepend(awarenessOption);
+const planningOption=document.createElement('option');planningOption.value='multi-action';planningOption.textContent='#135 · Multi-Action Planning · sekwencje i Box2D';$('scenario').prepend(planningOption);
 const decisionOption=document.createElement('option');decisionOption.value='rider-decision';decisionOption.textContent='#133 · Rider Decision Optimization · koszt i selekcja';$('scenario').prepend(decisionOption);
 const learningOption=document.createElement('option');learningOption.value='free-learning';
 learningOption.textContent='#129 · Free Racing Learning · proces uczenia i kamienie milowe';$('scenario').prepend(learningOption);
@@ -169,7 +171,7 @@ function updatePanel() {
     updateFreeRacingPanel($('free-racing-analysis'),replay,time);
   }
   if(replay.learning&&!replay.robust){$('target').textContent='brak narzuconej linii';updateLearningPanel($('learning-telemetry'),replay,time);}
-  if(replay.robust){$('target').textContent='brak narzuconej linii';updateRobustPanel($('robust-telemetry'),replay,time);}
+  if(replay.robust){$('target').textContent='brak narzuconej linii';updateRobustPanel($('robust-telemetry'),replay,time);if(replay.planningData){const data=replay.planningData;planningPanel($('planning-panel'),data.group.Plans?.find(p=>p.Arm===replay.robustPolicy),data.document,time,data.group);}}
   $('status').textContent = state.finished ? 'Finished' : enumName(geometry, 'activity', state.activity);
   $('status').classList.toggle('finished', state.finished);
   $('lap').textContent = replay.planAt ? 'Dwa łuki · bez pełnego okrążenia' : state.finished ? `${state.totalLaps}/${state.totalLaps} · meta ${format(state.finish)} s` : `${state.lap}/${state.totalLaps} · ukończono ${state.completedLaps}`;
@@ -380,22 +382,22 @@ async function loadScenario(key,keepTime=null) {
   $('free-racing-analysis').hidden=true;
   $('free-learning-analysis').hidden=true;
   $('robust-learning-analysis').hidden=true;
-  $('targets').disabled=['free-racing','free-learning','robust-learning','extended-learning','full-throttle-learning','rider-decision','track-awareness'].includes(key);
-  $('outer-limit').disabled=['free-racing','free-learning','robust-learning','extended-learning','full-throttle-learning','rider-decision','track-awareness'].includes(key);
+  $('targets').disabled=['free-racing','free-learning','robust-learning','extended-learning','full-throttle-learning','rider-decision','track-awareness','multi-action'].includes(key);
+  $('outer-limit').disabled=['free-racing','free-learning','robust-learning','extended-learning','full-throttle-learning','rider-decision','track-awareness','multi-action'].includes(key);
   $('load-state').textContent = 'Wczytywanie zaakceptowanych stanów…';
   try {
-    if(['robust-learning','extended-learning','full-throttle-learning','rider-decision','track-awareness'].includes(key)){
-      const root=key==='track-awareness'?'../../docs/experiments/track-awareness-anticipatory-riding/':key==='rider-decision'?'../../docs/experiments/rider-decision-optimization/':key==='full-throttle-learning'?'../../docs/experiments/full-throttle-learning/':key==='extended-learning'?'../../docs/experiments/autonomous-speedway-extended-learning/':undefined;
+    if(['robust-learning','extended-learning','full-throttle-learning','rider-decision','track-awareness','multi-action'].includes(key)){
+      const root=key==='multi-action'?'../../docs/experiments/multi-action-planning/':key==='track-awareness'?'../../docs/experiments/track-awareness-anticipatory-riding/':key==='rider-decision'?'../../docs/experiments/rider-decision-optimization/':key==='full-throttle-learning'?'../../docs/experiments/full-throttle-learning/':key==='extended-learning'?'../../docs/experiments/autonomous-speedway-extended-learning/':undefined;
       const data=await loadRobust(fetch,new URL(location.href).searchParams.get('run'),root,new URL(location.href).searchParams.get('group'));if(generation!==loadGeneration)return;
-      geometry=data.geometry;replay=data.replay;selected=[...replay.tracks.keys()][0];comparisonTrails=data.comparisons;widthGeometries=[];
+      geometry=data.geometry;replay=data.replay;if(key==='multi-action')replay.planningData=data;selected=[...replay.tracks.keys()][0];comparisonTrails=data.comparisons;widthGeometries=[];
       for(const id of ['width-controls','width-comparison'])$(id).hidden=true;
       $('comparison-legend').hidden=false;$('comparison-legend').replaceChildren();
       for(const c of data.comparisons){const span=document.createElement('span');span.style.color=c.color;span.textContent=c.name+' · ';$('comparison-legend').append(span);}
-      $('recording-mode').hidden=false;$('recording-mode').textContent=`ROBUST LEARNING · ${data.index.Grade} · zapisów natywnych: ${data.group.Runs.length} · identyczne warunki`;
+      $('recording-mode').hidden=false;$('recording-mode').textContent=`${key==='multi-action'?'MULTI-ACTION PLANNING':'ROBUST LEARNING'} · ${data.index.Grade} · zapisów natywnych: ${data.group.Runs.length} · identyczne warunki`;
       document.querySelector('.brand p').textContent=data.index.Title??'Robust Free Racing Learning · kontrolowane A/B · nowy niezależny test';
       $('safety-note').hidden=false;$('safety-note').className='safety-note'+(data.document.Replay.Metrics.Completed||data.document.Replay.Metrics.Outcome==='probe'?'':' unsafe');
       $('safety-note').textContent=`${data.group.Id}: ${data.document.Replay.Metrics.Outcome}. Potwierdzone przekroczenie i brak certyfikacji są odrębnymi wynikami.`;
-      document.querySelector('.map-title span').textContent=key==='track-awareness'?data.document.GeometryName.toUpperCase():'EGG MILD · PROGRESSIVE B';document.querySelector('.map-title small').textContent='Rzeczywiste ślady · bez idealnej linii';
+      document.querySelector('.map-title span').textContent=['track-awareness','multi-action'].includes(key)?data.document.GeometryName.toUpperCase():'EGG MILD · PROGRESSIVE B';document.querySelector('.map-title small').textContent='Rzeczywiste ślady · bez idealnej linii';
       $('smooth').checked=false;$('targets').checked=false;$('outer-limit').checked=false;$('rate').value='0.5';
       $('sampling-note').textContent=`${data.document.Replay.Samples.length} natywnych stanów · bez ekstrapolacji`;
       $('record-clip').hidden=typeof MediaRecorder==='undefined'||!canvas.captureStream;
@@ -404,6 +406,7 @@ async function loadScenario(key,keepTime=null) {
       const button=document.createElement('button');button.textContent=`R${selected}`;button.dataset.id=String(selected);button.addEventListener('click',()=>chooseRider(selected));
       $('riders').replaceChildren(button);$('source-count').textContent='1 motocykl';$('scrub').max=String(replay.duration);
       setTime(keepTime??Number(new URL(location.href).searchParams.get('t')??0));chooseRider(selected);fit();
+      if(key==='multi-action'){const panel=document.createElement('div');panel.id='planning-panel';$('robust-learning-analysis').prepend(panel);planningPanel(panel,data.group.Plans?.find(p=>p.Arm===replay.robustPolicy),data.document,time,data.group);}
       $('robust-learning-analysis').hidden=false;$('load-state').hidden=true;return;
     }
     if(key==='free-learning'){

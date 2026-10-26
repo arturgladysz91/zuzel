@@ -3,6 +3,11 @@
 Release platform: **Windows only**. See the current [Windows CI policy](docs/ci.md)
 for Draft/full validation, the merge gate and optional historical audits.
 
+[Multi-Action Planning Feasibility (#135)](docs/experiments/multi-action-planning/README.md)
+tests bounded two/three-command plans with #134 A's frozen policy and original H09.
+One changing-action sequence has native support, but the small independent pool and
+search cost do not meet GO: **INCONCLUSIVE**, diagnostic CLI only, default OFF.
+
 [Track Awareness & Anticipatory Riding #134](docs/experiments/track-awareness-anticipatory-riding/README.md)
 adds a read-only geometry profile and a separate soft continuation estimate to
 the unchanged H09 action evaluation. Two-seed A/B learning starts at #133 A0

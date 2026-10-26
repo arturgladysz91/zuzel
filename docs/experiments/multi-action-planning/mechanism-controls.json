@@ -1,0 +1,106 @@
+[
+  {
+    "Arm": "first-only",
+    "Actions": [
+      {
+        "SteeringRadians": -0.2617994,
+        "Drive": 0
+      }
+    ],
+    "Name": "mechanism-first-only",
+    "Metrics": {
+      "Native": {
+        "Completed": true,
+        "Outcome": "completed",
+        "GateSeconds": 15.49,
+        "DurationSeconds": 16.490000000000002,
+        "LegalProgress": 295.16257190704346,
+        "LegalSeconds": 16.490000000000002,
+        "MinimumClearanceMeters": 0.11835005536037427,
+        "EntrySpeed": 19.035110473632812,
+        "MinimumSpeed": 15.587096214294434,
+        "ExitSpeed": 17.415882110595703,
+        "MaximumBetaDegrees": 12.883803438104913,
+        "MeanDrive": 0.19691054643118994,
+        "FullDriveFraction": 0.014554274993061367,
+        "LargeTrajectoryOscillations": 4,
+        "DistanceMeters": 299.02715799957514,
+        "BoundaryApproach": 12.194053110428403,
+        "RecoverySeconds": 4.179999906569719,
+        "NativeSteps": 1653,
+        "PhysicsEvaluations": 202494,
+        "Forecasts": 2220,
+        "CpuSeconds": 12,
+        "Fingerprint": "38ABA5B3ADCC7772481617FC3AE5B10176C7802468D7E3C21BE6EFB9D8BE8036"
+      },
+      "MinimumInstantInner": 0.21257415407496744,
+      "MinimumInstantOuter": 4.456254789015017,
+      "MinimumLegacyCertificate": 0.11835005536037427,
+      "MinimumRefinedCertificate": 0.11835005536037427,
+      "CornerMinimumSpeed": 15.587096214294434,
+      "MaximumYawRate": 0.8096017837524414,
+      "ExitYawRate": 0.021117903292179108,
+      "SteeringRequestTravelDegrees": 105.50000551609861,
+      "MaximumRequestChangeDegrees": 20.000000860114667,
+      "EngineWorkJoules": 89624.64810255916,
+      "DissipationJoules": 83202.31186110667,
+      "NoSafeDecisions": 0,
+      "BoundaryClass": "none"
+    },
+    "ExactPrefix": true
+  },
+  {
+    "Arm": "repeat-first",
+    "Actions": [
+      {
+        "SteeringRadians": -0.2617994,
+        "Drive": 0
+      },
+      {
+        "SteeringRadians": -0.2617994,
+        "Drive": 0
+      }
+    ],
+    "Name": "mechanism-repeat-first",
+    "Metrics": {
+      "Native": {
+        "Completed": false,
+        "Outcome": "control envelope",
+        "GateSeconds": null,
+        "DurationSeconds": 10.11,
+        "LegalProgress": 186.23403428685742,
+        "LegalSeconds": 10.1,
+        "MinimumClearanceMeters": 0.11835005536037427,
+        "EntrySpeed": 19.035110473632812,
+        "MinimumSpeed": 16.46314239501953,
+        "ExitSpeed": null,
+        "MaximumBetaDegrees": 45.86360437550722,
+        "MeanDrive": 0.19999589153762853,
+        "FullDriveFraction": 0.023738871872955685,
+        "LargeTrajectoryOscillations": 4,
+        "DistanceMeters": 190.0604570582509,
+        "BoundaryApproach": 9.227341402001699,
+        "RecoverySeconds": 2.0399999544024467,
+        "NativeSteps": 1014,
+        "PhysicsEvaluations": 121060,
+        "Forecasts": 1326,
+        "CpuSeconds": 6.609375,
+        "Fingerprint": "6FB7CD6E3725A7A639DF66349A497239EDA6DC5B4E969BD94DBB4237FEE24650"
+      },
+      "MinimumInstantInner": 0.21257415407496744,
+      "MinimumInstantOuter": 4.456254789015017,
+      "MinimumLegacyCertificate": 0.11835005536037427,
+      "MinimumRefinedCertificate": 0.11835005536037427,
+      "CornerMinimumSpeed": 16.46314239501953,
+      "MaximumYawRate": 2.2706310749053955,
+      "ExitYawRate": null,
+      "SteeringRequestTravelDegrees": 56.50000312802104,
+      "MaximumRequestChangeDegrees": 20.000000860114667,
+      "EngineWorkJoules": 59565.920863512496,
+      "DissipationJoules": 61624.41385220185,
+      "NoSafeDecisions": 4,
+      "BoundaryClass": "none"
+    },
+    "ExactPrefix": true
+  }
+]

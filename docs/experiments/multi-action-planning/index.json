@@ -1,0 +1,574 @@
+{
+  "Title": "Multi-Action Planning Feasibility #135",
+  "Grade": "INCONCLUSIVE",
+  "DefaultRun": "D-B-entry1-B",
+  "PreferredPolicy": "B",
+  "RawDirectory": "C:\\Users\\artur\\Documents\\Codex\\2026-10-23\\files-pasted-by-the-user-pr\\work\\multi-action-135-raw",
+  "Labels": {
+    "A": "#134 A · jedna utrzymana decyzja",
+    "B": "#135 B · dwie decyzje",
+    "C": "#135 C · trzy decyzje",
+    "oracle-sample": "Próbka offline oracle · bez selekcji przyczynowej",
+    "first-only": "Kontrola: tylko pierwsza akcja",
+    "repeat-first": "Kontrola: powtórzona pierwsza akcja"
+  },
+  "Colors": {
+    "A": "#ffd27b",
+    "B": "#73dfdf",
+    "C": "#d99fe3",
+    "oracle-sample": "#ff9c86",
+    "first-only": "#8bb3ef",
+    "repeat-first": "#ed6565"
+  },
+  "Horizons": {
+    "A": 0.9,
+    "B": 0.9,
+    "C": 0.9,
+    "oracle-sample": 0.9,
+    "first-only": 0.9,
+    "repeat-first": 0.9
+  },
+  "TimeGain": "time-gains.json",
+  "TimeGainPolicy": "B",
+  "ComparisonCharts": true,
+  "Charts": [
+    [
+      "paired-times.svg",
+      "Wszystkie sparowane czasy"
+    ],
+    [
+      "trajectories.svg",
+      "Wybrane natywne trajektorie"
+    ]
+  ],
+  "Groups": [
+    {
+      "Id": "D-B-entry1",
+      "Scenario": {
+        "Name": "D-B",
+        "Level": 4,
+        "Speed": 16,
+        "Offset": 5,
+        "Start": 18.125,
+        "OutwardSpeed": 0.08,
+        "HeadingError": 0.012,
+        "YawRate": 0.025
+      },
+      "GeometryFile": "progressive-b-geometry.json",
+      "TwoBends": true,
+      "Runs": [
+        {
+          "Name": "baseline-D-B",
+          "Policy": "A"
+        },
+        {
+          "Name": "D-B-entry1-B",
+          "Policy": "B"
+        },
+        {
+          "Name": "D-B-entry1-C",
+          "Policy": "C"
+        },
+        {
+          "Name": "D-B-entry1-oracle-sample",
+          "Policy": "oracle-sample"
+        }
+      ],
+      "Plans": [
+        {
+          "Arm": "B",
+          "Time": 1.2,
+          "ReactionSeconds": 0.24,
+          "Actions": [
+            {
+              "SteeringRadians": 0.02617994,
+              "Drive": 0
+            },
+            {
+              "SteeringRadians": 0.02617994,
+              "Drive": 0
+            }
+          ],
+          "Basis": "Przyczynowy wybór H09 przed natywną próbą"
+        },
+        {
+          "Arm": "C",
+          "Time": 1.2,
+          "ReactionSeconds": 0.24,
+          "Actions": [
+            {
+              "SteeringRadians": 0.02617994,
+              "Drive": 0
+            },
+            {
+              "SteeringRadians": 0.02617994,
+              "Drive": 0
+            },
+            {
+              "SteeringRadians": 0.02617994,
+              "Drive": 0
+            }
+          ],
+          "Basis": "Przyczynowy wybór H09 przed natywną próbą"
+        },
+        {
+          "Arm": "oracle-sample",
+          "Time": 1.2,
+          "ReactionSeconds": 0.24,
+          "Actions": [
+            {
+              "SteeringRadians": -0.02617994,
+              "Drive": 1
+            },
+            {
+              "SteeringRadians": -0.02617994,
+              "Drive": 1
+            },
+            {
+              "SteeringRadians": -0.02617994,
+              "Drive": 1
+            }
+          ],
+          "Basis": "Dodatkowa próbka wybrana według prognozowanego postępu; wynik tylko do retrospektywnego oracle"
+        }
+      ],
+      "Reasons": [
+        "entry1",
+        "progressive-b",
+        "D-B"
+      ],
+      "Scope": "Jednakowy natywny prefiks; sekwencja dwóch/trzech żądań, potem oryginalny autonomiczny134A. Oracle nie jest sterownikiem.",
+      "PairedSummary": "Pełny czas dwóch łuków A: 16.000 s; B: 15.340 s / completed; C: 16.040 s / completed; oracle-sample: DNF s / control envelope. Wszystkie DNF zachowane."
+    },
+    {
+      "Id": "D-C-entry1",
+      "Scenario": {
+        "Name": "D-C",
+        "Level": 4,
+        "Speed": 12,
+        "Offset": 7,
+        "Start": 18.625,
+        "OutwardSpeed": -0.1,
+        "HeadingError": -0.02,
+        "YawRate": -0.035
+      },
+      "GeometryFile": "progressive-c-geometry.json",
+      "TwoBends": true,
+      "Runs": [
+        {
+          "Name": "baseline-D-C",
+          "Policy": "A"
+        },
+        {
+          "Name": "D-C-entry1-B",
+          "Policy": "B"
+        },
+        {
+          "Name": "D-C-entry1-C",
+          "Policy": "C"
+        },
+        {
+          "Name": "D-C-entry1-oracle-sample",
+          "Policy": "oracle-sample"
+        }
+      ],
+      "Plans": [
+        {
+          "Arm": "B",
+          "Time": 1.4,
+          "ReactionSeconds": 0.24,
+          "Actions": [
+            {
+              "SteeringRadians": 0.02617994,
+              "Drive": 0.31820688
+            },
+            {
+              "SteeringRadians": 0.02617994,
+              "Drive": 0.31820688
+            }
+          ],
+          "Basis": "Przyczynowy wybór H09 przed natywną próbą"
+        },
+        {
+          "Arm": "C",
+          "Time": 1.4,
+          "ReactionSeconds": 0.24,
+          "Actions": [
+            {
+              "SteeringRadians": 0.02617994,
+              "Drive": 0.31820688
+            },
+            {
+              "SteeringRadians": 0.02617994,
+              "Drive": 0.31820688
+            },
+            {
+              "SteeringRadians": 0.02617994,
+              "Drive": 0.31820688
+            }
+          ],
+          "Basis": "Przyczynowy wybór H09 przed natywną próbą"
+        },
+        {
+          "Arm": "oracle-sample",
+          "Time": 1.4,
+          "ReactionSeconds": 0.24,
+          "Actions": [
+            {
+              "SteeringRadians": -0.02617994,
+              "Drive": 1
+            },
+            {
+              "SteeringRadians": -0.02617994,
+              "Drive": 1
+            },
+            {
+              "SteeringRadians": -0.02617994,
+              "Drive": 1
+            }
+          ],
+          "Basis": "Dodatkowa próbka wybrana według prognozowanego postępu; wynik tylko do retrospektywnego oracle"
+        }
+      ],
+      "Reasons": [
+        "entry1",
+        "progressive-c",
+        "D-C"
+      ],
+      "Scope": "Jednakowy natywny prefiks; sekwencja dwóch/trzech żądań, potem oryginalny autonomiczny134A. Oracle nie jest sterownikiem.",
+      "PairedSummary": "Pełny czas dwóch łuków A: 16.870 s; B: 16.870 s / completed; C: 16.870 s / completed; oracle-sample: DNF s / control envelope. Wszystkie DNF zachowane."
+    },
+    {
+      "Id": "D-E-entry1",
+      "Scenario": {
+        "Name": "D-E",
+        "Level": 4,
+        "Speed": 15,
+        "Offset": 4,
+        "Start": 18.125,
+        "OutwardSpeed": 0.12,
+        "HeadingError": 0.018,
+        "YawRate": 0.04
+      },
+      "GeometryFile": "egg-asymmetric-geometry.json",
+      "TwoBends": true,
+      "Runs": [
+        {
+          "Name": "baseline-D-E",
+          "Policy": "A"
+        },
+        {
+          "Name": "D-E-entry1-B",
+          "Policy": "B"
+        },
+        {
+          "Name": "D-E-entry1-C",
+          "Policy": "C"
+        },
+        {
+          "Name": "D-E-entry1-oracle-sample",
+          "Policy": "oracle-sample"
+        }
+      ],
+      "Plans": [
+        {
+          "Arm": "B",
+          "Time": 1.2,
+          "ReactionSeconds": 0.24,
+          "Actions": [
+            {
+              "SteeringRadians": 0.02617994,
+              "Drive": 0.31820688
+            },
+            {
+              "SteeringRadians": 0.02617994,
+              "Drive": 0.31820688
+            }
+          ],
+          "Basis": "Przyczynowy wybór H09 przed natywną próbą"
+        },
+        {
+          "Arm": "C",
+          "Time": 1.2,
+          "ReactionSeconds": 0.24,
+          "Actions": [
+            {
+              "SteeringRadians": 0.02617994,
+              "Drive": 0.31820688
+            },
+            {
+              "SteeringRadians": 0.02617994,
+              "Drive": 0.31820688
+            },
+            {
+              "SteeringRadians": 0.02617994,
+              "Drive": 0.31820688
+            }
+          ],
+          "Basis": "Przyczynowy wybór H09 przed natywną próbą"
+        },
+        {
+          "Arm": "oracle-sample",
+          "Time": 1.2,
+          "ReactionSeconds": 0.24,
+          "Actions": [
+            {
+              "SteeringRadians": -0.008726646,
+              "Drive": 1
+            },
+            {
+              "SteeringRadians": -0.008726646,
+              "Drive": 1
+            },
+            {
+              "SteeringRadians": -0.008726646,
+              "Drive": 1
+            }
+          ],
+          "Basis": "Dodatkowa próbka wybrana według prognozowanego postępu; wynik tylko do retrospektywnego oracle"
+        }
+      ],
+      "Reasons": [
+        "entry1",
+        "egg-asymmetric",
+        "D-E"
+      ],
+      "Scope": "Jednakowy natywny prefiks; sekwencja dwóch/trzech żądań, potem oryginalny autonomiczny134A. Oracle nie jest sterownikiem.",
+      "PairedSummary": "Pełny czas dwóch łuków A: 16.060 s; B: 16.060 s / completed; C: 15.860 s / completed; oracle-sample: 17.020 s / completed. Wszystkie DNF zachowane."
+    },
+    {
+      "Id": "V-C-preparation2",
+      "Scenario": {
+        "Name": "V-C",
+        "Level": 4,
+        "Speed": 17.25,
+        "Offset": 6.15,
+        "Start": 19.125,
+        "OutwardSpeed": 0.11,
+        "HeadingError": 0.016,
+        "YawRate": -0.03
+      },
+      "GeometryFile": "progressive-c-geometry.json",
+      "TwoBends": true,
+      "Runs": [
+        {
+          "Name": "baseline-V-C",
+          "Policy": "A"
+        },
+        {
+          "Name": "V-C-preparation2-B",
+          "Policy": "B"
+        },
+        {
+          "Name": "V-C-preparation2-C",
+          "Policy": "C"
+        },
+        {
+          "Name": "V-C-preparation2-oracle-sample",
+          "Policy": "oracle-sample"
+        },
+        {
+          "Name": "mechanism-first-only",
+          "Policy": "first-only"
+        },
+        {
+          "Name": "mechanism-repeat-first",
+          "Policy": "repeat-first"
+        }
+      ],
+      "Plans": [
+        {
+          "Arm": "B",
+          "Time": 9,
+          "ReactionSeconds": 0.24,
+          "Actions": [
+            {
+              "SteeringRadians": -0.2617994,
+              "Drive": 0
+            },
+            {
+              "SteeringRadians": -0.08726647,
+              "Drive": 1
+            }
+          ],
+          "Basis": "Przyczynowy wybór H09 przed natywną próbą"
+        },
+        {
+          "Arm": "C",
+          "Time": 9,
+          "ReactionSeconds": 0.24,
+          "Actions": [
+            {
+              "SteeringRadians": -0.2617994,
+              "Drive": 0
+            },
+            {
+              "SteeringRadians": -0.08726647,
+              "Drive": 1
+            },
+            {
+              "SteeringRadians": -0.08726647,
+              "Drive": 1
+            }
+          ],
+          "Basis": "Przyczynowy wybór H09 przed natywną próbą"
+        },
+        {
+          "Arm": "oracle-sample",
+          "Time": 9,
+          "ReactionSeconds": 0.24,
+          "Actions": [
+            {
+              "SteeringRadians": -0.2617994,
+              "Drive": 1
+            },
+            {
+              "SteeringRadians": -0.2617994,
+              "Drive": 1
+            },
+            {
+              "SteeringRadians": -0.2617994,
+              "Drive": 1
+            }
+          ],
+          "Basis": "Dodatkowa próbka wybrana według prognozowanego postępu; wynik tylko do retrospektywnego oracle"
+        },
+        {
+          "Arm": "first-only",
+          "Time": 9,
+          "ReactionSeconds": 0.24,
+          "Actions": [
+            {
+              "SteeringRadians": -0.2617994,
+              "Drive": 0
+            }
+          ],
+          "Basis": "Kontrola mechanizmu po wynikach; poza niezależnym wynikiem i wyborem planera"
+        },
+        {
+          "Arm": "repeat-first",
+          "Time": 9,
+          "ReactionSeconds": 0.24,
+          "Actions": [
+            {
+              "SteeringRadians": -0.2617994,
+              "Drive": 0
+            },
+            {
+              "SteeringRadians": -0.2617994,
+              "Drive": 0
+            }
+          ],
+          "Basis": "Kontrola mechanizmu po wynikach; poza niezależnym wynikiem i wyborem planera"
+        }
+      ],
+      "Reasons": [
+        "preparation2",
+        "progressive-c",
+        "V-C"
+      ],
+      "Scope": "Jednakowy natywny prefiks; sekwencja dwóch/trzech żądań, potem oryginalny autonomiczny134A. Oracle nie jest sterownikiem.",
+      "PairedSummary": "Pełny czas dwóch łuków A: 15.590 s; B: 15.340 s / completed; C: 15.480 s / completed; oracle-sample: 15.740 s / completed. Wszystkie DNF zachowane. Kontrola first-only: 15.490 / completed. Kontrola repeat-first: DNF / control envelope."
+    },
+    {
+      "Id": "transfer-progressive-b",
+      "Scenario": {
+        "Name": "V-C",
+        "Level": 4,
+        "Speed": 17.25,
+        "Offset": 6.15,
+        "Start": 19.125,
+        "OutwardSpeed": 0.11,
+        "HeadingError": 0.016,
+        "YawRate": -0.03
+      },
+      "GeometryFile": "progressive-b-geometry.json",
+      "TwoBends": true,
+      "Runs": [
+        {
+          "Name": "transfer-base-progressive-b",
+          "Policy": "A"
+        },
+        {
+          "Name": "transfer-plan-progressive-b",
+          "Policy": "B"
+        }
+      ],
+      "Plans": [
+        {
+          "Arm": "B",
+          "Time": 9,
+          "ReactionSeconds": 0.24,
+          "Actions": [
+            {
+              "SteeringRadians": -0.2617994,
+              "Drive": 0
+            },
+            {
+              "SteeringRadians": -0.08726647,
+              "Drive": 1
+            }
+          ],
+          "Basis": "Stała sekwencja z progressive-c; kontrolowany transfer po wynikach, bez adaptacji ani strojenia"
+        }
+      ],
+      "Reasons": [
+        "identyczny start jak V-C",
+        "stały plan z progressive-c",
+        "progressive-b"
+      ],
+      "Scope": "Post-hoc fixed-plan transfer. Ta sama prędkość/offset/heading/yaw/koło/gaz; zmienia się wyłącznie istniejący wariant geometrii. Nie doliczamy do niezależnej puli.",
+      "PairedSummary": "Ta sama konfiguracja początkowa: A 15.590, stała sekwencja B 15.340 s / completed."
+    },
+    {
+      "Id": "transfer-egg-asymmetric",
+      "Scenario": {
+        "Name": "V-C",
+        "Level": 4,
+        "Speed": 17.25,
+        "Offset": 6.15,
+        "Start": 19.125,
+        "OutwardSpeed": 0.11,
+        "HeadingError": 0.016,
+        "YawRate": -0.03
+      },
+      "GeometryFile": "egg-asymmetric-geometry.json",
+      "TwoBends": true,
+      "Runs": [
+        {
+          "Name": "transfer-base-egg-asymmetric",
+          "Policy": "A"
+        },
+        {
+          "Name": "transfer-plan-egg-asymmetric",
+          "Policy": "B"
+        }
+      ],
+      "Plans": [
+        {
+          "Arm": "B",
+          "Time": 9,
+          "ReactionSeconds": 0.24,
+          "Actions": [
+            {
+              "SteeringRadians": -0.2617994,
+              "Drive": 0
+            },
+            {
+              "SteeringRadians": -0.08726647,
+              "Drive": 1
+            }
+          ],
+          "Basis": "Stała sekwencja z progressive-c; kontrolowany transfer po wynikach, bez adaptacji ani strojenia"
+        }
+      ],
+      "Reasons": [
+        "identyczny start jak V-C",
+        "stały plan z progressive-c",
+        "egg-asymmetric"
+      ],
+      "Scope": "Post-hoc fixed-plan transfer. Ta sama prędkość/offset/heading/yaw/koło/gaz; zmienia się wyłącznie istniejący wariant geometrii. Nie doliczamy do niezależnej puli.",
+      "PairedSummary": "Ta sama konfiguracja początkowa: A 16.320, stała sekwencja B DNF s / uncertified interval."
+    }
+  ]
+}
