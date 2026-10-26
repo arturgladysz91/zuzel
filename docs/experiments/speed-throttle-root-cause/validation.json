@@ -1,0 +1,38 @@
+{
+  "BaseHead": "faadcba0652e0661de57e201d05fedb0ab4a52d0",
+  "Platform": "Windows x64 .NET8",
+  "Restore": "PASS; local cached packages, -p:NuGetAudit=false because sandbox cannot reach NuGet vulnerability feed; normal Windows CI audit remains enabled",
+  "ReleaseWarningsAsErrors": "PASS, full solution including separate default-OFF CLI",
+  "CSharp": {
+    "Passed": 2413,
+    "Failed": 0,
+    "Skipped": 0,
+    "Core": 2018,
+    "Trajectory": 395,
+    "FullHistoricalMatrixRun": false
+  },
+  "PythonData": {
+    "HistoricalPassed": 209,
+    "NewEvidenceContractsPassed": 5,
+    "Total": 214
+  },
+  "PythonCiPassed": 7,
+  "Node": {
+    "Passed": 57,
+    "Failed": 0,
+    "Skipped": 0
+  },
+  "Discovery": {
+    "Discovered": 2934,
+    "Missing": 0,
+    "Extra": 0,
+    "Duplicates": 0
+  },
+  "LegacyFrozenConsumers": 39,
+  "NativeWorlds": 54,
+  "AllFour135BaselineFingerprintsExact": true,
+  "PhysicalAndPolicyDiff": "No Git diff from base for src/,data/,physics,engine,tyres,geometry,controller,actuator or predictor",
+  "Packaging": "Only CLI dispatch relocated after experiment; all executed bytes archived; source methods unchanged; packaging-audit.json",
+  "Ui": "Native comparison, two geometry profiles, actual request/activation/exit markers, controls and current telemetry verified in browser",
+  "RemoteWindowsCi": "Reported on exact commit in PR. Not substituted by historical135 CI."
+}

@@ -1,3 +1,4 @@
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
@@ -15,6 +16,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "shared-world-speedway", "tools\shared-world-speedway\shared-world-speedway.csproj", "{6FE752B9-650D-46DB-B292-E4AD5A7B41E8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "multi-action-planning", "tools\multi-action-planning\multi-action-planning.csproj", "{6CA979D0-B699-4FB1-807C-8EE5712EC1DB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "speed-throttle-root-cause", "tools\speed-throttle-root-cause\speed-throttle-root-cause.csproj", "{39833EED-C63C-43B3-A22C-B11AB27DC632}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -86,6 +89,18 @@ Global
 		{6CA979D0-B699-4FB1-807C-8EE5712EC1DB}.Release|x64.Build.0 = Release|Any CPU
 		{6CA979D0-B699-4FB1-807C-8EE5712EC1DB}.Release|x86.ActiveCfg = Release|Any CPU
 		{6CA979D0-B699-4FB1-807C-8EE5712EC1DB}.Release|x86.Build.0 = Release|Any CPU
+		{39833EED-C63C-43B3-A22C-B11AB27DC632}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39833EED-C63C-43B3-A22C-B11AB27DC632}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39833EED-C63C-43B3-A22C-B11AB27DC632}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{39833EED-C63C-43B3-A22C-B11AB27DC632}.Debug|x64.Build.0 = Debug|Any CPU
+		{39833EED-C63C-43B3-A22C-B11AB27DC632}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{39833EED-C63C-43B3-A22C-B11AB27DC632}.Debug|x86.Build.0 = Debug|Any CPU
+		{39833EED-C63C-43B3-A22C-B11AB27DC632}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39833EED-C63C-43B3-A22C-B11AB27DC632}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39833EED-C63C-43B3-A22C-B11AB27DC632}.Release|x64.ActiveCfg = Release|Any CPU
+		{39833EED-C63C-43B3-A22C-B11AB27DC632}.Release|x64.Build.0 = Release|Any CPU
+		{39833EED-C63C-43B3-A22C-B11AB27DC632}.Release|x86.ActiveCfg = Release|Any CPU
+		{39833EED-C63C-43B3-A22C-B11AB27DC632}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -96,5 +111,6 @@ Global
 		{B941520C-1A6B-4EEC-9D1A-3C332A18F19F} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{6FE752B9-650D-46DB-B292-E4AD5A7B41E8} = {07C2787E-EAC7-C090-1BA3-A61EC2A24D84}
 		{6CA979D0-B699-4FB1-807C-8EE5712EC1DB} = {07C2787E-EAC7-C090-1BA3-A61EC2A24D84}
+		{39833EED-C63C-43B3-A22C-B11AB27DC632} = {07C2787E-EAC7-C090-1BA3-A61EC2A24D84}
 	EndGlobalSection
 EndGlobal

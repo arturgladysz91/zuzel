@@ -134,7 +134,7 @@ export function setupRobust(element,data,onRun,onOverlay){
   element.append(el('p',`Ten sam stan ${data.group.Id}: ${data.group.Scenario.Speed}m/s, offset${data.group.Scenario.Offset}m, heading${data.group.Scenario.HeadingError}rad, v boczna${data.group.Scenario.OutwardSpeed}m/s, yaw${data.group.Scenario.YawRate}rad/s. Nakładki są całymi rzeczywistymi przejazdami, bez prognoz.`));
   element.append(el('p',data.group.Scope));
   if(data.comparisons.some(c=>c.gainSamples))element.append(el('p',`${data.gain?.Description??data.index.TimeGainDescription??'Zysk czasu #132 względem #131-A na identycznym postępie toru'}: zielone punkty oznaczają zysk, różowe stratę. Etykiety co25m. Każdy punkt to rzeczywista pozycja XY z zapisu.`));
-  element.append(el('p',`W Git są wybrane reprezentatywne replaye. Pełne surowe dane wszystkich prób pozostały lokalnie: ${data.index.RawDirectory}.`));
+  element.append(el('p',data.index.RawAvailability??`W Git są wybrane reprezentatywne replaye. Pełne surowe dane wszystkich prób pozostały lokalnie: ${data.index.RawDirectory}.`));
   const current=el('div');current.id='robust-telemetry';element.append(current);
   if(data.index.TrackAwareness){const panel=el('div');panel.id='track-awareness';element.append(panel);}
   const details=el('details'),summary=el('summary','Przebiegi czasowe wybranego natywnego przejazdu');details.append(summary);const charts=el('div');charts.className='audit-charts';telemetryCharts(charts,data.document);details.append(charts);element.append(details);

@@ -1,0 +1,466 @@
+[
+  {
+    "Name": "straight-60-partial",
+    "InitialKph": 60,
+    "RequestedDrive": 0.3182068898595169,
+    "InitialWheelOmega": 50.50504857843572,
+    "InitialEngine": {
+      "EngineRpm": 4340.5891914713475,
+      "OverallRatio": 9,
+      "CrankTorqueNewtonMeters": 48.19206217014972,
+      "AvailableWheelTorqueNewtonMeters": 407.7048459594666,
+      "DriveWheelTorqueNewtonMeters": 407.7048459594666,
+      "Efficiency": 0.94,
+      "CrankPowerWatts": 21905.481968985656
+    },
+    "StartReference": 132.38937497138977,
+    "EndReference": 194.38937497138977,
+    "Milestones": {
+      "10": {
+        "Time": 0.56,
+        "ActualDistance": 10.09339714050293,
+        "SpeedKph": 69.21307754516602,
+        "Drive": 0.31820688
+      },
+      "20": {
+        "Time": 1.07,
+        "ActualDistance": 20.162622451782227,
+        "SpeedKph": 72.88902053833009,
+        "Drive": 0.31820688
+      },
+      "30": {
+        "Time": 1.55,
+        "ActualDistance": 30.110217094421387,
+        "SpeedKph": 76.30587844848633,
+        "Drive": 0.31820688
+      },
+      "40": {
+        "Time": 2.01,
+        "ActualDistance": 40.069475173950195,
+        "SpeedKph": 79.55349197387696,
+        "Drive": 0.31820688
+      },
+      "50": {
+        "Time": 2.46,
+        "ActualDistance": 50.21111869812012,
+        "SpeedKph": 82.6882209777832,
+        "Drive": 0.31820688
+      },
+      "62": {
+        "Time": 2.962688,
+        "ActualDistance": 62.0000057220459,
+        "SpeedKph": 86.13743362426759,
+        "Drive": 0.31820688
+      }
+    },
+    "Failure": null,
+    "CpuSeconds": 0.109375,
+    "Note": "Pure rolling initial wheel; rigid crank ratio, no independent crank state. Initial active gas1 for shared .24s latency, then requested gas. First accepted native sample at/after each distance, actual distance included; no speed interpolation."
+  },
+  {
+    "Name": "straight-60-full",
+    "InitialKph": 60,
+    "RequestedDrive": 1,
+    "InitialWheelOmega": 50.50504857843572,
+    "InitialEngine": {
+      "EngineRpm": 4340.5891914713475,
+      "OverallRatio": 9,
+      "CrankTorqueNewtonMeters": 48.19206217014972,
+      "AvailableWheelTorqueNewtonMeters": 407.7048459594666,
+      "DriveWheelTorqueNewtonMeters": 407.7048459594666,
+      "Efficiency": 0.94,
+      "CrankPowerWatts": 21905.481968985656
+    },
+    "StartReference": 132.38937497138977,
+    "EndReference": 194.38937497138977,
+    "Milestones": {
+      "10": {
+        "Time": 0.56,
+        "ActualDistance": 10.136724472045898,
+        "SpeedKph": 70.98610610961914,
+        "Drive": 1
+      },
+      "20": {
+        "Time": 1.03,
+        "ActualDistance": 20.04600715637207,
+        "SpeedKph": 80.70837478637695,
+        "Drive": 1
+      },
+      "30": {
+        "Time": 1.46,
+        "ActualDistance": 30.204381465911865,
+        "SpeedKph": 89.27941360473633,
+        "Drive": 1
+      },
+      "40": {
+        "Time": 1.84,
+        "ActualDistance": 40.01738929748535,
+        "SpeedKph": 96.5530014038086,
+        "Drive": 1
+      },
+      "50": {
+        "Time": 2.1999999999999997,
+        "ActualDistance": 50.007240295410156,
+        "SpeedKph": 103.1469955444336,
+        "Drive": 1
+      },
+      "62": {
+        "Time": 2.6045730000000002,
+        "ActualDistance": 62.00002098083496,
+        "SpeedKph": 110.16687469482422,
+        "Drive": 1
+      }
+    },
+    "Failure": null,
+    "CpuSeconds": 0.03125,
+    "Note": "Pure rolling initial wheel; rigid crank ratio, no independent crank state. Initial active gas1 for shared .24s latency, then requested gas. First accepted native sample at/after each distance, actual distance included; no speed interpolation."
+  },
+  {
+    "Name": "straight-70-partial",
+    "InitialKph": 70,
+    "RequestedDrive": 0.3182068898595169,
+    "InitialWheelOmega": 58.922559564763844,
+    "InitialEngine": {
+      "EngineRpm": 5064.020971753754,
+      "OverallRatio": 9,
+      "CrankTorqueNewtonMeters": 50.724073401138135,
+      "AvailableWheelTorqueNewtonMeters": 429.1256609736286,
+      "DriveWheelTorqueNewtonMeters": 429.1256609736286,
+      "Efficiency": 0.94,
+      "CrankPowerWatts": 26899.130127114135
+    },
+    "StartReference": 132.38937497138977,
+    "EndReference": 194.38937497138977,
+    "Milestones": {
+      "10": {
+        "Time": 0.49,
+        "ActualDistance": 10.099632263183594,
+        "SpeedKph": 78.31099319458008,
+        "Drive": 0.31820688
+      },
+      "20": {
+        "Time": 0.9400000000000001,
+        "ActualDistance": 20.10453701019287,
+        "SpeedKph": 81.61897659301758,
+        "Drive": 0.31820688
+      },
+      "30": {
+        "Time": 1.37,
+        "ActualDistance": 30.032212734222412,
+        "SpeedKph": 84.58781204223634,
+        "Drive": 0.31820688
+      },
+      "40": {
+        "Time": 1.79,
+        "ActualDistance": 40.06897592544556,
+        "SpeedKph": 87.44714126586915,
+        "Drive": 0.31820688
+      },
+      "50": {
+        "Time": 2.1999999999999997,
+        "ActualDistance": 50.186224937438965,
+        "SpeedKph": 90.19809036254883,
+        "Drive": 0.31820688
+      },
+      "62": {
+        "Time": 2.663583,
+        "ActualDistance": 62.00000762939453,
+        "SpeedKph": 93.25866165161133,
+        "Drive": 0.31820688
+      }
+    },
+    "Failure": null,
+    "CpuSeconds": 0.046875,
+    "Note": "Pure rolling initial wheel; rigid crank ratio, no independent crank state. Initial active gas1 for shared .24s latency, then requested gas. First accepted native sample at/after each distance, actual distance included; no speed interpolation."
+  },
+  {
+    "Name": "straight-70-full",
+    "InitialKph": 70,
+    "RequestedDrive": 1,
+    "InitialWheelOmega": 58.922559564763844,
+    "InitialEngine": {
+      "EngineRpm": 5064.020971753754,
+      "OverallRatio": 9,
+      "CrankTorqueNewtonMeters": 50.724073401138135,
+      "AvailableWheelTorqueNewtonMeters": 429.1256609736286,
+      "DriveWheelTorqueNewtonMeters": 429.1256609736286,
+      "Efficiency": 0.94,
+      "CrankPowerWatts": 26899.130127114135
+    },
+    "StartReference": 132.38937497138977,
+    "EndReference": 194.38937497138977,
+    "Milestones": {
+      "10": {
+        "Time": 0.49,
+        "ActualDistance": 10.117441177368164,
+        "SpeedKph": 79.25988235473633,
+        "Drive": 1
+      },
+      "20": {
+        "Time": 0.92,
+        "ActualDistance": 20.10549545288086,
+        "SpeedKph": 87.87986526489259,
+        "Drive": 1
+      },
+      "30": {
+        "Time": 1.31,
+        "ActualDistance": 30.038469314575195,
+        "SpeedKph": 95.39819412231445,
+        "Drive": 1
+      },
+      "40": {
+        "Time": 1.68,
+        "ActualDistance": 40.19916582107544,
+        "SpeedKph": 102.22435684204102,
+        "Drive": 1
+      },
+      "50": {
+        "Time": 2.02,
+        "ActualDistance": 50.14030170440674,
+        "SpeedKph": 108.19960098266601,
+        "Drive": 1
+      },
+      "62": {
+        "Time": 2.40315,
+        "ActualDistance": 62.000003814697266,
+        "SpeedKph": 114.55104446411133,
+        "Drive": 1
+      }
+    },
+    "Failure": null,
+    "CpuSeconds": 0.078125,
+    "Note": "Pure rolling initial wheel; rigid crank ratio, no independent crank state. Initial active gas1 for shared .24s latency, then requested gas. First accepted native sample at/after each distance, actual distance included; no speed interpolation."
+  },
+  {
+    "Name": "straight-80-partial",
+    "InitialKph": 80,
+    "RequestedDrive": 0.3182068898595169,
+    "InitialWheelOmega": 67.34006477124763,
+    "InitialEngine": {
+      "EngineRpm": 5787.452255295129,
+      "OverallRatio": 9,
+      "CrankTorqueNewtonMeters": 53.256082893532955,
+      "AvailableWheelTorqueNewtonMeters": 450.5464612792888,
+      "DriveWheelTorqueNewtonMeters": 450.5464612792888,
+      "Efficiency": 0.94,
+      "CrankPowerWatts": 32276.412643620977
+    },
+    "StartReference": 132.38937497138977,
+    "EndReference": 194.38937497138977,
+    "Milestones": {
+      "10": {
+        "Time": 0.44,
+        "ActualDistance": 10.219823837280273,
+        "SpeedKph": 87.32378540039063,
+        "Drive": 0.31820688
+      },
+      "20": {
+        "Time": 0.84,
+        "ActualDistance": 20.09994411468506,
+        "SpeedKph": 90.2884735107422,
+        "Drive": 0.31820688
+      },
+      "30": {
+        "Time": 1.23,
+        "ActualDistance": 30.022038459777832,
+        "SpeedKph": 92.865673828125,
+        "Drive": 0.31820688
+      },
+      "40": {
+        "Time": 1.62,
+        "ActualDistance": 40.22122049331665,
+        "SpeedKph": 95.40409240722657,
+        "Drive": 0.31820688
+      },
+      "50": {
+        "Time": 1.99,
+        "ActualDistance": 50.14902687072754,
+        "SpeedKph": 97.75621032714844,
+        "Drive": 0.31820688
+      },
+      "62": {
+        "Time": 2.420557,
+        "ActualDistance": 62.0000057220459,
+        "SpeedKph": 100.38806762695313,
+        "Drive": 0.31820688
+      }
+    },
+    "Failure": null,
+    "CpuSeconds": 0.109375,
+    "Note": "Pure rolling initial wheel; rigid crank ratio, no independent crank state. Initial active gas1 for shared .24s latency, then requested gas. First accepted native sample at/after each distance, actual distance included; no speed interpolation."
+  },
+  {
+    "Name": "straight-80-full",
+    "InitialKph": 80,
+    "RequestedDrive": 1,
+    "InitialWheelOmega": 67.34006477124763,
+    "InitialEngine": {
+      "EngineRpm": 5787.452255295129,
+      "OverallRatio": 9,
+      "CrankTorqueNewtonMeters": 53.256082893532955,
+      "AvailableWheelTorqueNewtonMeters": 450.5464612792888,
+      "DriveWheelTorqueNewtonMeters": 450.5464612792888,
+      "Efficiency": 0.94,
+      "CrankPowerWatts": 32276.412643620977
+    },
+    "StartReference": 132.38937497138977,
+    "EndReference": 194.38937497138977,
+    "Milestones": {
+      "10": {
+        "Time": 0.44,
+        "ActualDistance": 10.229520797729492,
+        "SpeedKph": 87.93929443359376,
+        "Drive": 1
+      },
+      "20": {
+        "Time": 0.8300000000000001,
+        "ActualDistance": 20.168127059936523,
+        "SpeedKph": 95.44660949707031,
+        "Drive": 1
+      },
+      "30": {
+        "Time": 1.19,
+        "ActualDistance": 30.04975175857544,
+        "SpeedKph": 102.08984985351563,
+        "Drive": 1
+      },
+      "40": {
+        "Time": 1.54,
+        "ActualDistance": 40.278982162475586,
+        "SpeedKph": 108.24296264648437,
+        "Drive": 1
+      },
+      "50": {
+        "Time": 1.86,
+        "ActualDistance": 50.14158821105957,
+        "SpeedKph": 113.57490234375,
+        "Drive": 1
+      },
+      "62": {
+        "Time": 2.226462,
+        "ActualDistance": 62.00000762939453,
+        "SpeedKph": 119.30204772949219,
+        "Drive": 1
+      }
+    },
+    "Failure": null,
+    "CpuSeconds": 0.03125,
+    "Note": "Pure rolling initial wheel; rigid crank ratio, no independent crank state. Initial active gas1 for shared .24s latency, then requested gas. First accepted native sample at/after each distance, actual distance included; no speed interpolation."
+  },
+  {
+    "Name": "straight-90-partial",
+    "InitialKph": 90,
+    "RequestedDrive": 0.3182068898595169,
+    "InitialWheelOmega": 75.75757575757575,
+    "InitialEngine": {
+      "EngineRpm": 6510.8840355775355,
+      "OverallRatio": 9,
+      "CrankTorqueNewtonMeters": 55.02176807115507,
+      "AvailableWheelTorqueNewtonMeters": 465.4841578819719,
+      "DriveWheelTorqueNewtonMeters": 465.4841578819719,
+      "Efficiency": 0.94,
+      "CrankPowerWatts": 37514.84186669663
+    },
+    "StartReference": 132.38937497138977,
+    "EndReference": 194.38937497138977,
+    "Milestones": {
+      "10": {
+        "Time": 0.39,
+        "ActualDistance": 10.075942993164062,
+        "SpeedKph": 96.22779235839845,
+        "Drive": 0.31820688
+      },
+      "20": {
+        "Time": 0.76,
+        "ActualDistance": 20.11914348602295,
+        "SpeedKph": 98.91394958496095,
+        "Drive": 0.31820688
+      },
+      "30": {
+        "Time": 1.12,
+        "ActualDistance": 30.120338439941406,
+        "SpeedKph": 101.08168945312501,
+        "Drive": 0.31820688
+      },
+      "40": {
+        "Time": 1.47,
+        "ActualDistance": 40.047842025756836,
+        "SpeedKph": 103.11465454101562,
+        "Drive": 0.31820688
+      },
+      "50": {
+        "Time": 1.82,
+        "ActualDistance": 50.16947650909424,
+        "SpeedKph": 105.07598876953125,
+        "Drive": 0.31820688
+      },
+      "62": {
+        "Time": 2.2211440000000002,
+        "ActualDistance": 62.0000114440918,
+        "SpeedKph": 107.23779602050782,
+        "Drive": 0.31820688
+      }
+    },
+    "Failure": null,
+    "CpuSeconds": 0.046875,
+    "Note": "Pure rolling initial wheel; rigid crank ratio, no independent crank state. Initial active gas1 for shared .24s latency, then requested gas. First accepted native sample at/after each distance, actual distance included; no speed interpolation."
+  },
+  {
+    "Name": "straight-90-full",
+    "InitialKph": 90,
+    "RequestedDrive": 1,
+    "InitialWheelOmega": 75.75757575757575,
+    "InitialEngine": {
+      "EngineRpm": 6510.8840355775355,
+      "OverallRatio": 9,
+      "CrankTorqueNewtonMeters": 55.02176807115507,
+      "AvailableWheelTorqueNewtonMeters": 465.4841578819719,
+      "DriveWheelTorqueNewtonMeters": 465.4841578819719,
+      "Efficiency": 0.94,
+      "CrankPowerWatts": 37514.84186669663
+    },
+    "StartReference": 132.38937497138977,
+    "EndReference": 194.38937497138977,
+    "Milestones": {
+      "10": {
+        "Time": 0.39,
+        "ActualDistance": 10.080726623535156,
+        "SpeedKph": 96.61206665039063,
+        "Drive": 1
+      },
+      "20": {
+        "Time": 0.75,
+        "ActualDistance": 20.075467109680176,
+        "SpeedKph": 103.19109191894532,
+        "Drive": 1
+      },
+      "30": {
+        "Time": 1.09,
+        "ActualDistance": 30.10559892654419,
+        "SpeedKph": 109.11736450195313,
+        "Drive": 1
+      },
+      "40": {
+        "Time": 1.41,
+        "ActualDistance": 40.04382562637329,
+        "SpeedKph": 114.40176086425781,
+        "Drive": 1
+      },
+      "50": {
+        "Time": 1.72,
+        "ActualDistance": 50.10658931732178,
+        "SpeedKph": 119.22448425292968,
+        "Drive": 1
+      },
+      "62": {
+        "Time": 2.0715049999999997,
+        "ActualDistance": 62.00003433227539,
+        "SpeedKph": 124.2768768310547,
+        "Drive": 1
+      }
+    },
+    "Failure": null,
+    "CpuSeconds": 0.046875,
+    "Note": "Pure rolling initial wheel; rigid crank ratio, no independent crank state. Initial active gas1 for shared .24s latency, then requested gas. First accepted native sample at/after each distance, actual distance included; no speed interpolation."
+  }
+]
