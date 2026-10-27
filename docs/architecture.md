@@ -1,5 +1,15 @@
 # Architecture
 
+[Standing Start + Three Laps (#144)](experiments/standing-start-three-laps/README.md)
+is a PROVISIONAL, default-OFF launch harness over the existing ContactAdapter and
+one native Box2D clock. A copied crank state extends every held H09 forecast;
+the original engine net-torque curve and tyre laws remain frozen. Finite crank
+energy, passive clutch loss and transmission efficiency are accounted explicitly.
+No movement occurs before tape reaction; L/2L/3L crossings never reset physical
+or control state. Solo A/B/F/K1 and one full-history repeat pass. Shared four-body
+integration records actual impulses but leaves overlap, rival prediction and
+post-contact behavior unresolved. It does not substitute the legacy HeatSimulator.
+
 [Racing Constraints Audit (#143)](experiments/racing-constraints-speed/README.md)
 is a PROVISIONAL tools-only CLI, default OFF, based exactly on #142. Autonomous
 isolated variants share original H09, actions, reaction, observation and native

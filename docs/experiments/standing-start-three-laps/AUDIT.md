@@ -1,0 +1,27 @@
+# #144 — architektura i protokół przed próbą A
+
+Status PROVISIONAL, domyślnie OFF. Baza dokładnie `a6b301c6bf8a2854a6963a849b3944b435734f60`.
+
+`WorldRunner` odrzuca zerowy start500cc (brak sprzęgła) i ogranicza FreeLearning oraz dwa kontakty do jednego aktywnego motocykla. `Engine500.Evaluate` wiąże RPM sztywno z kołem; przy ω=0 krzywa daje0Nm. Samo usunięcie guardu nie uruchomi napędu. Starszy `HeatSimulator` i jego `StartingGrid` mają start oraz pola, lecz inną dynamikę; nie są zamiennikiem tego testu. `requiredLaps` daje poprawny próg `N*LapMeters`; #144 zachowuje ten próg i bracketing natywnych crossingów, bez bramki dwóch łuków.
+
+Nowy minimalny harness korzysta z ORYGINALNEGO `ContactAdapter`: ta sama geometria kapsuł, masa147kg, bezwładność korpusu, przyłożenie dwóch sił i jedna integracja Box2D. Oryginalne `WorldRunner`, `Engine500`, prawa opon/koła i kontrolery #143 pozostają bajtowo niezmienione. Generator tworzy sprawdzane rozszerzenie kontaktu i predyktora z jednym punktem podania momentu sprzęgła. Nie powstaje drugi solver korpusu ani druga charakterystyka opony.
+
+Start: COM ma reference0, kierunek lokalnej stycznej, v=0, r=0, β=0, ω_koła=0, skręt=0, aktywny gaz0. Pojedynczy motocykl stoi w środku pola B: fizyczny offset4,5m od kredy =3,5m od wewnętrznej referencji. Pola pochodzą z `StartingGateGeometry`, nie z dobranej linii jazdy. Referencja35m do łuku i27m za drugim łukiem pochodzi z istniejącej geometrii modelu; nie jest zweryfikowanym pomiarem homologacyjnym ani pomiarem ustawienia przedniego koła pod taśmą.
+
+Silnik jest uruchomiony przed taśmą: początkowo4000RPM, skończona energia wału. To nie jest prędkość motocykla. Przez0,24s reakcji sprzęgło ma dokładnie zerowy moment; brak siły napędowej/ruchu potwierdza test. Gaz i skręt zawsze przechodzą przez kolejkę0,24s, review0,2s. Sprzęgło nie jest skryptem pozycji/okrążenia.
+
+## Nowe parametry i bilans
+
+Parametry sprzęgła są jawne, prowizoryczne i zamknięte przed przejazdem: I_crank=0,01kgm²; drag=0 (oryginalna mapa już dostarcza moment netto); capacity=80Nm; lepkość20Nm·s; odłączenie poniżej1500RPM, pełna zdolność od4000RPM. Nie są pomiarami konkretnego sprzęgła ani parametrami dopasowanymi do czasu/prędkości. Sztywność20Nm·s ogranicza ustalony slip przy57Nm do2,85rad/s (<0,5% z8500RPM). Wcześniejsze pięć prób z dodatkowym drag i słabym sprzęgłem0,2 zachowano jako odrębny, superseded prototyp; bilans ujawnił nieuzasadnioną dodatkową stratę mocy. Nie zastępują kalibracji empirycznej #140.
+
+Załączanie to smoothstep z obrotów zaakceptowanego wału (0…1), po reakcji. `T_clutch=clamp(k*engagement*(ω_crank_mid−ratio*ω_wheel_mid), ±capacity*engagement)`. Oryginalny solver koła zachowuje Iw=0,9kgm² i swoje prawo Fx/Fy; nie podmieniamy jego Iw na bezwładność zastępczą, co zmieniłoby dawną numeryczną regularyzację opony. Sprzęgło i wał rozwiązywane są wspólnie implicit-midpoint. `I_crank*dω/dt=gas*Engine500.Torque(RPM_mid)−drag*ω_mid−T_clutch`. Oryginalne ratio9 i efficiency0,94 są zachowane; przy przenoszeniu energii od koła stosowany jest odwrotny kierunek strat. Brak sprzęgła/wału w #143 oznacza, że rozszerzona dynamika nie jest dokładnie równoważna dawnemu sztywnemu napędowi również po ruszeniu. Nie ukrywamy tej różnicy.
+
+Kontrolujemy nieujemne ciepło sprzęgła, straty przekładni i tarcia, ścisłą tożsamość energii wału oraz natywny bilans korpus+koło+wał względem pracy spalania. Koło może ślizgać się; prędkości/ω/pozycje nie są narzucane ani resetowane. Nowy stan wału jest kopiowany także do każdej prognozy H09; #143 score, priorytety i dostępne akcje nie zmieniają się.
+
+Wspólny dystans: trzy pełne referencyjne okrążenia. Crossing0 na starcie nie zalicza okrążenia. Dopiero L,2L,3L w certyfikowanym przedziale; stan po ostatnim crossing pozostaje prawdziwym pierwszym natywnym stanem za metą. Interpolowane są wyłącznie czasy/prędkości metryk. Kolejki, wał, koło, skręt, yaw i sterownik nie są resetowane. Eksperymentalny limit120s jest timeoutem, nie fizycznym DNF.
+
+Certyfikat: zachowany legacy sweep, a w solo dodatkowo istniejący refined proof, jeżeli jego założenia są spełnione. Oba są zapisane. Ujemny certyfikat bez ujemnego chwilowego gapu nie jest kolizją. β45 pozostaje odziedziczoną obwiednią eksperymentalną, nie empirycznym progiem upadku. Adapter nie ma fizycznej ściany toru; bandę kontroluje geometria, a rzeczywiste impulsy dotyczą motocykli.
+
+Etap B wymaga osobnych stanów wału/koła/aktuatora/kolejki, wspólnego snapshotu i fizycznych kontaktów. `ContactAdapter` już obsługuje do4 ciał. Nadal brak predykcji ruchu rywali w H09 i kompletnego zachowania po wypadku; test solo nie potwierdza wyścigu czterech zawodników. Pierwszeństwo ma pełna próba A, potem B/F/K1 i jedna dokładna powtórka A. Żadne wagi ani parametry startu nie będą dostrajane na okrążeniach2/3.
+
+Właściwy etap B uruchomił cztery ciała we wspólnym świecie. Oryginalne specyfikacje solo mają `Bullet=false`; cienki harness nie przenosi jeszcze adaptacyjnego zagęszczania kroku `WorldRunner.NearbySubdivisions`. Kontakt R2/R3 wystąpił w21,89s (closing4,91m/s), z impulsem284,54N·s i do26,87mm ujemnego gapu kapsuł. W22,51s R3 przekroczył eksperymentalneβ45. To PARTIAL: brak predykcji rywali, wystarczającej kontroli overlap oraz kompletnej obsługi skutków kontaktu. Mniejszy krok/CCD sam nie zastępuje planowania ruchu innych motocykli. Nie wykonano dodatkowych powtórek stawki w celu gonienia PASS.

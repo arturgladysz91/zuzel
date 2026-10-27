@@ -1,0 +1,13 @@
+{
+  "Worlds": 11,
+  "PrimarySoloWorlds": 5,
+  "SharedWorlds": 1,
+  "SupersededPrototypeWorlds": 5,
+  "PrimaryReservationCpuSeconds": 191.03125,
+  "PrototypeReservationCpuSeconds": 246.90625,
+  "SharedReservationCpuSeconds": 62.90625,
+  "MainControllerCpuSeconds": 182.828125,
+  "MainNativeAndObservationCpuSeconds": 58.546875,
+  "Scope": "Whole attempts including raw serialization in reservation totals. Run totals split controller CPU (including forecasts) from native dynamics/observation CPU. Setup/serialization and read-only reporting/verification are separate; tests/build/Git excluded.",
+  "TotalReservationCpuSeconds": 500.84375
+}

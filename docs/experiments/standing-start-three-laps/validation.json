@@ -1,0 +1,71 @@
+{
+  "BaseHead": "a6b301c6bf8a2854a6963a849b3944b435734f60",
+  "ReleaseBuild": {
+    "Passed": true,
+    "Warnings": 0,
+    "Errors": 0
+  },
+  "Restore": "PASS; cached local restore with NuGetAudit=false; standard remote restore required on final head",
+  "CSharp": {
+    "Passed": 2454,
+    "Failed": 0,
+    "Skipped": 0,
+    "Filter": "Shard=core|Shard=trajectory",
+    "NewStanding144Cases": 9
+  },
+  "Discovery": {
+    "Full": 2975,
+    "Core": 2059,
+    "Trajectory": 395,
+    "HistoricalAnalysis": 473,
+    "FourRider": 48,
+    "Missing": 0,
+    "Duplicates": 0
+  },
+  "PythonCalibration": {
+    "Passed": 254,
+    "Failed": 0,
+    "New144EvidenceTests": 10
+  },
+  "PythonCiPolicy": {
+    "Passed": 7,
+    "Failed": 0
+  },
+  "Node": {
+    "Passed": 65,
+    "Failed": 0,
+    "New144Cases": 2
+  },
+  "LegacyFrozenReaders": 39,
+  "Native": {
+    "StageA": "PASS",
+    "MainSoloAttempts": 5,
+    "IndependentMainPolicies": 4,
+    "FullLapsPerPolicy": 3,
+    "DeterministicARepeat": true,
+    "StageB": "PARTIAL",
+    "SharedWorlds": 1,
+    "ActualBodiesInSharedWorld": 4,
+    "RetainedPreliminaryWorlds": 5,
+    "AllNativeWorlds": 11,
+    "TotalReservationCpuSeconds": 500.84375
+  },
+  "Predictor": {
+    "Passed": true,
+    "Comparisons": 20,
+    "NativeWorlds": 0,
+    "CpuSeconds": 2.078125,
+    "Checks": "Common first0.4s before another review activation, including launch and laps2/3; body, wheel, crank, steering"
+  },
+  "Browser": {
+    "Passed": true,
+    "ObservedZeroSpeedAtStart": true,
+    "NativeLap2And3JumpButtonsVerified": true,
+    "ActualFourRiderReplayVerified": true,
+    "UncaughtJavaScriptErrors": 0,
+    "FailedDataRequests": 0,
+    "Proof": "Local outputs: replay-144-check.json and PNG screenshots; installed headless Chrome against actual HTTP viewer"
+  },
+  "Scope": "Implementation/evidence checks are separate from native race outcomes. Original143/historical sources and fingerprints are unchanged; production CoreSim/engine/tyre files unchanged. No CEM or lap-specific tuning. Shared run has contact, overlap and beta45 stop, not a completed four-rider heat.",
+  "WindowsCI": "Required on final published head; exact head and successful run will be recorded in the Draft PR body and local CI-144.json without rewriting frozen study data."
+}

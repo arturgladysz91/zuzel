@@ -1,0 +1,48 @@
+{
+  "Outcome": "experimental beta45 envelope",
+  "EndSeconds": 22.51,
+  "Worlds": 1,
+  "TotalCpuSeconds": 60.390625,
+  "ControllerCpuSeconds": 45.671875,
+  "NativeAndObservationCpuSeconds": 14.71875,
+  "ReservationCpuSeconds": 62.90625,
+  "Fingerprint": "6467D6080702EE5A0606FDB4EB0BC3EBD5299C286740FBC6A4D16F85247186E0",
+  "ContactBegins": 1,
+  "TotalImpulseNewtonSeconds": 284.54327392578125,
+  "MinimumNativeCapsuleGapMeters": -0.02687290598607368,
+  "NegativeGapSamples": 20,
+  "FirstNegativeGapTime": 21.88,
+  "Riders": [
+    {
+      "Id": 1,
+      "Gate": "A",
+      "Outcome": "interrupted by another rider stop",
+      "CompletedLaps": 0,
+      "FinishSeconds": null
+    },
+    {
+      "Id": 2,
+      "Gate": "B",
+      "Outcome": "interrupted by another rider stop",
+      "CompletedLaps": 0,
+      "FinishSeconds": null
+    },
+    {
+      "Id": 3,
+      "Gate": "C",
+      "Outcome": "experimental beta45 envelope",
+      "CompletedLaps": 0,
+      "FinishSeconds": null
+    },
+    {
+      "Id": 4,
+      "Gate": "D",
+      "Outcome": "interrupted by another rider stop",
+      "CompletedLaps": 0,
+      "FinishSeconds": null
+    }
+  ],
+  "RawSha256": "8AF9D2562F3BEF57058880E3DA95573F994F366ADD6F35149EE7A90EAF2CF78A",
+  "RawBytes": 7124942,
+  "Interpretation": "Actual same-world rigid-body impulses, not four stitched solo traces. Negative capsule gap, if any, remains explicit solver overlap; it is not concealed by a zero tolerance claim. No traffic-aware prediction or post-crash management is established."
+}

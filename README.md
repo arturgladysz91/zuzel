@@ -3,6 +3,12 @@
 Release platform: **Windows only**. See the current [Windows CI policy](docs/ci.md)
 for Draft/full validation, the merge gate and optional historical audits.
 
+[Standing Start + Three Laps (#144)](docs/experiments/standing-start-three-laps/README.md)
+adds an explicit default-OFF crank/clutch launch over the original engine map and
+tyres. A/B/F/K1 complete three uninterrupted solo laps from zero; a shared four-bike
+attempt records a real contact, overlap and beta-envelope stop. Solo foundation
+PASS, four-rider validation PARTIAL; production and historical experiments are unchanged.
+
 [Racing Constraints Audit (#143)](docs/experiments/racing-constraints-speed/README.md)
 audits objective penalties, caution, action selection and continuation in 146 native
 worlds. Held results are **PARTIAL**: removing the throttle preference keeps 12/12

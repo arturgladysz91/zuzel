@@ -1,0 +1,15 @@
+{
+  "BeforeNativeWorld": true,
+  "SourceSha256": "C2EF2A94B33370E58A8495191AC8FA2AA3E879299ED3FAD56A03BC7C2D645806",
+  "WorldsReserved": 1,
+  "MainACompletedFirst": true,
+  "Gates": [
+    "A",
+    "B",
+    "C",
+    "D"
+  ],
+  "Variant": "A",
+  "Scope": "One common Box2D world; one clock, separate crank/wheel/steering/queue per rider, same accepted snapshot. Original solo H09 forecasts do not anticipate rivals. Stop whole capture on first failed rider; others are interrupted, not falsely classified as finished or DNF.",
+  "NoControllerOrPhysicsChange": true
+}

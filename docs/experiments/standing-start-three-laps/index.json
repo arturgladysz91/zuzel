@@ -1,0 +1,62 @@
+{
+  "Title": "#144 · Start0 → trzy pełne okrążenia",
+  "DefaultRun": "A",
+  "GeometryFile": "../causal-yaw-throttle/progressive-b-viewer-geometry.json",
+  "Runs": [
+    {
+      "Id": "A",
+      "File": "native/A.json.gz",
+      "Variant": "A",
+      "Riders": 1,
+      "Outcome": "completed",
+      "Duration": 60.06,
+      "Fingerprint": "3814B9A13FBDA2C0725617B6749DE4BAFBC92384CEACE1DE5EDDD03BDA1521BC"
+    },
+    {
+      "Id": "B",
+      "File": "native/B.json.gz",
+      "Variant": "B",
+      "Riders": 1,
+      "Outcome": "completed",
+      "Duration": 55.52,
+      "Fingerprint": "7F14DD178219C638CC02727945C8693B4D81BCBAC130C1F3F30409907904806B"
+    },
+    {
+      "Id": "F",
+      "File": "native/F.json.gz",
+      "Variant": "F",
+      "Riders": 1,
+      "Outcome": "completed",
+      "Duration": 58.870000000000005,
+      "Fingerprint": "42F29D14367754D724FCB2ED14E07040002879526E9F9F28E30A6B0D3FE4255C"
+    },
+    {
+      "Id": "K1",
+      "File": "native/K1.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "completed",
+      "Duration": 54.800000000000004,
+      "Fingerprint": "2778FE469DB24286F7E07123E74E5FC3DB5D0BAAA25DEE89329A10A11DC0FD40"
+    },
+    {
+      "Id": "shared-A",
+      "File": "native/shared-A.json.gz",
+      "Variant": "A",
+      "Riders": 4,
+      "Outcome": "experimental beta45 envelope",
+      "Duration": 22.51,
+      "Fingerprint": "6467D6080702EE5A0606FDB4EB0BC3EBD5299C286740FBC6A4D16F85247186E0"
+    }
+  ],
+  "LapMeters": 318.77874994277954,
+  "RequiredLaps": 3,
+  "StartReference": 0,
+  "BendReferences": [
+    35,
+    132.38937497138977,
+    194.38937497138977,
+    291.77874994277954
+  ],
+  "Note": "Wyłącznie natywne pozycje i sterowanie. Start nie liczy się jako okrążenie. Każdy pełny crossing ma osobny native bracket. Niepewny certyfikat nie oznacza kolizji."
+}
