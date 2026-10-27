@@ -82,4 +82,4 @@ Node 61+4, discovery 2954 bez luk/duplikatów, 39 zamrożonych konsumentów i ha
 konfiguracja i testy w `results.json`. Workflow bez zmian; ciężkie historyczne audyty pomija
 standardowa polityka Draft. Kolejny krok: osobno zamrozić metodę pomiaru CPU
 i ograniczyć powtarzane przeglądanie punktów/geometrii prognoz, następnie wrócić do
-ciągłych prób A/B. Fizyka i prototyp pozostają OFF; pytanie o osiągi pozostaje otwarte.
+ciągłych prób A/B. Prototyp pozostaje OFF, fizyka bez zmian; pytanie o osiągi pozostaje otwarte.
