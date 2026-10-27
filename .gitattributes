@@ -75,3 +75,9 @@
 /tools/shared-world-speedway/CausalYaw*.cs text eol=lf
 /tools/causal-yaw-throttle/*.cs text eol=lf
 /tools/causal-yaw-analysis/*.cs text eol=lf
+# Keep the historical raw source digest stable under Windows autocrlf as well.
+/tools/shared-world-speedway/CoupledSlipInverse.cs text eol=lf
+/tools/shared-world-speedway/ThrottleSteering138.cs text eol=lf
+/tools/throttle-steering-decoupling/*.cs text eol=lf
+/tools/throttle-steering-transfer/*.cs text eol=lf
+/docs/experiments/throttle-steering-decoupling/** -text whitespace=trailing-space,space-before-tab,cr-at-eol

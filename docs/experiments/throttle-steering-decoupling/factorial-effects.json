@@ -1,0 +1,641 @@
+[
+  {
+    "State": "D0",
+    "Metrics": {
+      "speed": {
+        "H09Native": {
+          "A": 60.11787960000001,
+          "B": 61.8209748,
+          "C": 56.057814,
+          "D": 56.8516536
+        },
+        "SteeringAtFull_BminusA": 1.7030951999999928,
+        "SteeringAtPartial_DminusC": 0.7938395999999983,
+        "GasUnderHold_AminusC": 4.060065600000009,
+        "GasUnderCorrection_BminusD": 4.969321200000003,
+        "Interaction": 0.9092555999999945
+      },
+      "yaw": {
+        "H09Native": {
+          "A": 2.0801802,
+          "B": 1.4770405,
+          "C": 0.4160366,
+          "D": 0.039780892
+        },
+        "SteeringAtFull_BminusA": -0.6031397000000001,
+        "SteeringAtPartial_DminusC": -0.37625570799999997,
+        "GasUnderHold_AminusC": 1.6641436,
+        "GasUnderCorrection_BminusD": 1.437259608,
+        "Interaction": -0.2268839920000001
+      },
+      "beta": {
+        "H09Native": {
+          "A": 20.987117449698832,
+          "B": 13.137579613588288,
+          "C": 3.801173327278626,
+          "D": 0.9445154821741084
+        },
+        "SteeringAtFull_BminusA": -7.849537836110544,
+        "SteeringAtPartial_DminusC": -2.8566578451045173,
+        "GasUnderHold_AminusC": 17.185944122420207,
+        "GasUnderCorrection_BminusD": 12.19306413141418,
+        "Interaction": -4.992879991006027
+      },
+      "chi": {
+        "H09Native": {
+          "A": 2.908426904214978,
+          "B": 2.842397501552924,
+          "C": 2.9011622220783595,
+          "D": 2.800830674359651
+        },
+        "SteeringAtFull_BminusA": -0.06602940266205382,
+        "SteeringAtPartial_DminusC": -0.10033154771870834,
+        "GasUnderHold_AminusC": 0.007264682136618461,
+        "GasUnderCorrection_BminusD": 0.04156682719327298,
+        "Interaction": 0.03430214505665452
+      },
+      "certificate": {
+        "H09Native": {
+          "A": 0.4726321157445881,
+          "B": 0.8546469915702218,
+          "C": 0.5704807504159665,
+          "D": 0.9839125527124122
+        },
+        "SteeringAtFull_BminusA": 0.38201487582563376,
+        "SteeringAtPartial_DminusC": 0.4134318022964457,
+        "GasUnderHold_AminusC": -0.09784863467137839,
+        "GasUnderCorrection_BminusD": -0.12926556114219034,
+        "Interaction": -0.03141692647081196
+      }
+    },
+    "Basis": "Actual accepted H09 states; signed yaw/beta/chi are not zero-valued control objectives."
+  },
+  {
+    "State": "D1",
+    "Metrics": {
+      "speed": {
+        "H09Native": {
+          "A": 66.14415,
+          "B": 67.55487120000001,
+          "C": 61.3556748,
+          "D": 61.64789040000001
+        },
+        "SteeringAtFull_BminusA": 1.4107212000000118,
+        "SteeringAtPartial_DminusC": 0.2922156000000058,
+        "GasUnderHold_AminusC": 4.7884751999999935,
+        "GasUnderCorrection_BminusD": 5.9069807999999995,
+        "Interaction": 1.118505600000006
+      },
+      "yaw": {
+        "H09Native": {
+          "A": 1.5961149,
+          "B": -0.2504386,
+          "C": 0.16180357,
+          "D": -0.23578443
+        },
+        "SteeringAtFull_BminusA": -1.8465535,
+        "SteeringAtPartial_DminusC": -0.397588,
+        "GasUnderHold_AminusC": 1.4343113299999999,
+        "GasUnderCorrection_BminusD": -0.014654170000000022,
+        "Interaction": -1.4489655
+      },
+      "beta": {
+        "H09Native": {
+          "A": 14.104418390897386,
+          "B": -0.7085548463631764,
+          "C": 1.6306021323759068,
+          "D": -1.2456734438592127
+        },
+        "SteeringAtFull_BminusA": -14.812973237260563,
+        "SteeringAtPartial_DminusC": -2.8762755762351198,
+        "GasUnderHold_AminusC": 12.47381625852148,
+        "GasUnderCorrection_BminusD": 0.5371185974960363,
+        "Interaction": -11.936697661025443
+      },
+      "chi": {
+        "H09Native": {
+          "A": -0.2833819623620336,
+          "B": -0.42897668365469604,
+          "C": -0.31508102941431526,
+          "D": -0.45146753524687533
+        },
+        "SteeringAtFull_BminusA": -0.14559472129266243,
+        "SteeringAtPartial_DminusC": -0.13638650583256007,
+        "GasUnderHold_AminusC": 0.03169906705228165,
+        "GasUnderCorrection_BminusD": 0.022490851592179284,
+        "Interaction": -0.009208215460102365
+      },
+      "certificate": {
+        "H09Native": {
+          "A": 3.0434487672924795,
+          "B": 3.3955683147572584,
+          "C": 2.948701454407968,
+          "D": 3.2827653936086207
+        },
+        "SteeringAtFull_BminusA": 0.3521195474647789,
+        "SteeringAtPartial_DminusC": 0.3340639392006528,
+        "GasUnderHold_AminusC": 0.09474731288451155,
+        "GasUnderCorrection_BminusD": 0.11280292114863766,
+        "Interaction": 0.01805560826412611
+      }
+    },
+    "Basis": "Actual accepted H09 states; signed yaw/beta/chi are not zero-valued control objectives."
+  },
+  {
+    "State": "S0",
+    "Metrics": {
+      "speed": {
+        "H09Native": {
+          "A": 66.5214876,
+          "B": 68.664852,
+          "C": 62.5677624,
+          "D": 63.3788172
+        },
+        "SteeringAtFull_BminusA": 2.143364399999996,
+        "SteeringAtPartial_DminusC": 0.8110548000000009,
+        "GasUnderHold_AminusC": 3.953725200000001,
+        "GasUnderCorrection_BminusD": 5.286034799999996,
+        "Interaction": 1.332309599999995
+      },
+      "yaw": {
+        "H09Native": {
+          "A": 2.0810564,
+          "B": 1.1447117,
+          "C": 0.45814252,
+          "D": 0.027146593
+        },
+        "SteeringAtFull_BminusA": -0.9363447,
+        "SteeringAtPartial_DminusC": -0.430995927,
+        "GasUnderHold_AminusC": 1.62291388,
+        "GasUnderCorrection_BminusD": 1.117565107,
+        "Interaction": -0.505348773
+      },
+      "beta": {
+        "H09Native": {
+          "A": 21.188391793550338,
+          "B": 9.408927846270553,
+          "C": 4.28794566495028,
+          "D": 0.6281613619592059
+        },
+        "SteeringAtFull_BminusA": -11.779463947279785,
+        "SteeringAtPartial_DminusC": -3.659784302991074,
+        "GasUnderHold_AminusC": 16.90044612860006,
+        "GasUnderCorrection_BminusD": 8.780766484311346,
+        "Interaction": -8.119679644288711
+      },
+      "chi": {
+        "H09Native": {
+          "A": 2.869180056518891,
+          "B": 2.7729268005524372,
+          "C": 2.861333234799867,
+          "D": 2.7375368620907623
+        },
+        "SteeringAtFull_BminusA": -0.09625325596645373,
+        "SteeringAtPartial_DminusC": -0.12379637270910449,
+        "GasUnderHold_AminusC": 0.007846821719024177,
+        "GasUnderCorrection_BminusD": 0.03538993846167493,
+        "Interaction": 0.027543116742650753
+      },
+      "certificate": {
+        "H09Native": {
+          "A": 2.4945943124264685,
+          "B": 3.062769907101586,
+          "C": 2.536974026127034,
+          "D": 2.838680436938392
+        },
+        "SteeringAtFull_BminusA": 0.5681755946751177,
+        "SteeringAtPartial_DminusC": 0.30170641081135763,
+        "GasUnderHold_AminusC": -0.0423797137005657,
+        "GasUnderCorrection_BminusD": 0.22408947016319436,
+        "Interaction": 0.26646918386376006
+      }
+    },
+    "Basis": "Actual accepted H09 states; signed yaw/beta/chi are not zero-valued control objectives."
+  },
+  {
+    "State": "S1",
+    "Metrics": {
+      "speed": {
+        "H09Native": {
+          "A": 65.9628972,
+          "B": 67.91549040000001,
+          "C": 61.85080440000001,
+          "D": 62.670477600000005
+        },
+        "SteeringAtFull_BminusA": 1.9525932000000097,
+        "SteeringAtPartial_DminusC": 0.8196731999999969,
+        "GasUnderHold_AminusC": 4.112092799999992,
+        "GasUnderCorrection_BminusD": 5.245012800000005,
+        "Interaction": 1.1329200000000128
+      },
+      "yaw": {
+        "H09Native": {
+          "A": 2.0407326,
+          "B": 1.244065,
+          "C": 0.44606847,
+          "D": 0.031195475
+        },
+        "SteeringAtFull_BminusA": -0.7966676000000001,
+        "SteeringAtPartial_DminusC": -0.41487299499999997,
+        "GasUnderHold_AminusC": 1.5946641300000002,
+        "GasUnderCorrection_BminusD": 1.212869525,
+        "Interaction": -0.3817946050000002
+      },
+      "beta": {
+        "H09Native": {
+          "A": 20.57122457494722,
+          "B": 10.498493610338878,
+          "C": 4.1568262215910945,
+          "D": 0.7408567458102748
+        },
+        "SteeringAtFull_BminusA": -10.072730964608342,
+        "SteeringAtPartial_DminusC": -3.4159694757808197,
+        "GasUnderHold_AminusC": 16.414398353356127,
+        "GasUnderCorrection_BminusD": 9.757636864528603,
+        "Interaction": -6.656761488827522
+      },
+      "chi": {
+        "H09Native": {
+          "A": -0.35679481454516354,
+          "B": -0.43882198997965294,
+          "C": -0.36391923467948556,
+          "D": -0.47565123199384196
+        },
+        "SteeringAtFull_BminusA": -0.0820271754344894,
+        "SteeringAtPartial_DminusC": -0.1117319973143564,
+        "GasUnderHold_AminusC": 0.007124420134322018,
+        "GasUnderCorrection_BminusD": 0.03682924201418902,
+        "Interaction": 0.029704821879867005
+      },
+      "certificate": {
+        "H09Native": {
+          "A": 1.3517632765962244,
+          "B": 1.8743653600072896,
+          "C": 1.4298083828457309,
+          "D": 1.7693517950929654
+        },
+        "SteeringAtFull_BminusA": 0.5226020834110652,
+        "SteeringAtPartial_DminusC": 0.3395434122472345,
+        "GasUnderHold_AminusC": -0.07804510624950645,
+        "GasUnderCorrection_BminusD": 0.10501356491432423,
+        "Interaction": 0.18305867116383068
+      }
+    },
+    "Basis": "Actual accepted H09 states; signed yaw/beta/chi are not zero-valued control objectives."
+  },
+  {
+    "State": "H0",
+    "Metrics": {
+      "speed": {
+        "H09Native": {
+          "A": 67.94569440000001,
+          "B": 68.9533416,
+          "C": 63.74418120000001,
+          "D": 63.8795448
+        },
+        "SteeringAtFull_BminusA": 1.0076471999999939,
+        "SteeringAtPartial_DminusC": 0.13536359999999092,
+        "GasUnderHold_AminusC": 4.201513200000001,
+        "GasUnderCorrection_BminusD": 5.073796800000004,
+        "Interaction": 0.8722836000000029
+      },
+      "yaw": {
+        "H09Native": {
+          "A": 1.6662911,
+          "B": 0.9588551,
+          "C": -0.042294763,
+          "D": -0.42678872
+        },
+        "SteeringAtFull_BminusA": -0.7074360000000001,
+        "SteeringAtPartial_DminusC": -0.384493957,
+        "GasUnderHold_AminusC": 1.708585863,
+        "GasUnderCorrection_BminusD": 1.3856438199999999,
+        "Interaction": -0.32294204300000007
+      },
+      "beta": {
+        "H09Native": {
+          "A": 16.605734973434206,
+          "B": 9.950709861852719,
+          "C": 1.014419484447942,
+          "D": -1.4531564729703161
+        },
+        "SteeringAtFull_BminusA": -6.655025111581487,
+        "SteeringAtPartial_DminusC": -2.467575957418258,
+        "GasUnderHold_AminusC": 15.591315488986265,
+        "GasUnderCorrection_BminusD": 11.403866334823036,
+        "Interaction": -4.187449154163229
+      },
+      "chi": {
+        "H09Native": {
+          "A": 2.9976048910184585,
+          "B": 2.9529478880740148,
+          "C": 2.951526645091551,
+          "D": 2.879748693999138
+        },
+        "SteeringAtFull_BminusA": -0.04465700294444375,
+        "SteeringAtPartial_DminusC": -0.07177795109241325,
+        "GasUnderHold_AminusC": 0.046078245926907346,
+        "GasUnderCorrection_BminusD": 0.07319919407487685,
+        "Interaction": 0.027120948147969504
+      },
+      "certificate": {
+        "H09Native": {
+          "A": 1.0950183117212737,
+          "B": 1.334695710032613,
+          "C": 1.2588156861613615,
+          "D": 1.3410885004889264
+        },
+        "SteeringAtFull_BminusA": 0.23967739831133916,
+        "SteeringAtPartial_DminusC": 0.08227281432756484,
+        "GasUnderHold_AminusC": -0.1637973744400878,
+        "GasUnderCorrection_BminusD": -0.0063927904563134685,
+        "Interaction": 0.15740458398377433
+      }
+    },
+    "Basis": "Actual accepted H09 states; signed yaw/beta/chi are not zero-valued control objectives."
+  },
+  {
+    "State": "H1",
+    "Metrics": {
+      "speed": {
+        "H09Native": {
+          "A": 67.94569440000001,
+          "B": 68.9533416,
+          "C": 63.74418120000001,
+          "D": 63.8795448
+        },
+        "SteeringAtFull_BminusA": 1.0076471999999939,
+        "SteeringAtPartial_DminusC": 0.13536359999999092,
+        "GasUnderHold_AminusC": 4.201513200000001,
+        "GasUnderCorrection_BminusD": 5.073796800000004,
+        "Interaction": 0.8722836000000029
+      },
+      "yaw": {
+        "H09Native": {
+          "A": 1.6662911,
+          "B": 0.9588551,
+          "C": -0.042294763,
+          "D": -0.42678872
+        },
+        "SteeringAtFull_BminusA": -0.7074360000000001,
+        "SteeringAtPartial_DminusC": -0.384493957,
+        "GasUnderHold_AminusC": 1.708585863,
+        "GasUnderCorrection_BminusD": 1.3856438199999999,
+        "Interaction": -0.32294204300000007
+      },
+      "beta": {
+        "H09Native": {
+          "A": 16.605734973434206,
+          "B": 9.950709861852719,
+          "C": 1.014419484447942,
+          "D": -1.4531564729703161
+        },
+        "SteeringAtFull_BminusA": -6.655025111581487,
+        "SteeringAtPartial_DminusC": -2.467575957418258,
+        "GasUnderHold_AminusC": 15.591315488986265,
+        "GasUnderCorrection_BminusD": 11.403866334823036,
+        "Interaction": -4.187449154163229
+      },
+      "chi": {
+        "H09Native": {
+          "A": 2.9976048910184585,
+          "B": 2.9529478880740148,
+          "C": 2.951526645091551,
+          "D": 2.879748693999138
+        },
+        "SteeringAtFull_BminusA": -0.04465700294444375,
+        "SteeringAtPartial_DminusC": -0.07177795109241325,
+        "GasUnderHold_AminusC": 0.046078245926907346,
+        "GasUnderCorrection_BminusD": 0.07319919407487685,
+        "Interaction": 0.027120948147969504
+      },
+      "certificate": {
+        "H09Native": {
+          "A": 1.0950183117212737,
+          "B": 1.334695710032613,
+          "C": 1.2588156861613615,
+          "D": 1.3410885004889264
+        },
+        "SteeringAtFull_BminusA": 0.23967739831133916,
+        "SteeringAtPartial_DminusC": 0.08227281432756484,
+        "GasUnderHold_AminusC": -0.1637973744400878,
+        "GasUnderCorrection_BminusD": -0.0063927904563134685,
+        "Interaction": 0.15740458398377433
+      }
+    },
+    "Basis": "Actual accepted H09 states; signed yaw/beta/chi are not zero-valued control objectives."
+  },
+  {
+    "State": "H2",
+    "Metrics": {
+      "speed": {
+        "H09Native": {
+          "A": 64.9149588,
+          "B": 66.877524,
+          "C": 60.715454400000006,
+          "D": 61.2273096
+        },
+        "SteeringAtFull_BminusA": 1.9625652000000002,
+        "SteeringAtPartial_DminusC": 0.5118551999999923,
+        "GasUnderHold_AminusC": 4.199504399999988,
+        "GasUnderCorrection_BminusD": 5.650214399999996,
+        "Interaction": 1.450710000000008
+      },
+      "yaw": {
+        "H09Native": {
+          "A": 1.8540199,
+          "B": 0.55278206,
+          "C": 0.19169179,
+          "D": -0.21714129
+        },
+        "SteeringAtFull_BminusA": -1.30123784,
+        "SteeringAtPartial_DminusC": -0.40883307999999996,
+        "GasUnderHold_AminusC": 1.66232811,
+        "GasUnderCorrection_BminusD": 0.76992335,
+        "Interaction": -0.89240476
+      },
+      "beta": {
+        "H09Native": {
+          "A": 18.08828905143599,
+          "B": 5.266249327739945,
+          "C": 2.2338833750393516,
+          "D": -0.8243762592965894
+        },
+        "SteeringAtFull_BminusA": -12.822039723696044,
+        "SteeringAtPartial_DminusC": -3.058259634335941,
+        "GasUnderHold_AminusC": 15.854405676396638,
+        "GasUnderCorrection_BminusD": 6.090625587036534,
+        "Interaction": -9.763780089360102
+      },
+      "chi": {
+        "H09Native": {
+          "A": -0.17446871076987597,
+          "B": -0.287034683068015,
+          "C": -0.20345314372515025,
+          "D": -0.33436420876113515
+        },
+        "SteeringAtFull_BminusA": -0.11256597229813903,
+        "SteeringAtPartial_DminusC": -0.1309110650359849,
+        "GasUnderHold_AminusC": 0.02898443295527428,
+        "GasUnderCorrection_BminusD": 0.047329525693120156,
+        "Interaction": 0.018345092737845875
+      },
+      "certificate": {
+        "H09Native": {
+          "A": 1.5613325672871317,
+          "B": 2.1707166103937494,
+          "C": 1.6941348950299036,
+          "D": 2.02058960404424
+        },
+        "SteeringAtFull_BminusA": 0.6093840431066178,
+        "SteeringAtPartial_DminusC": 0.3264547090143366,
+        "GasUnderHold_AminusC": -0.1328023277427719,
+        "GasUnderCorrection_BminusD": 0.15012700634950926,
+        "Interaction": 0.28292933409228116
+      }
+    },
+    "Basis": "Actual accepted H09 states; signed yaw/beta/chi are not zero-valued control objectives."
+  },
+  {
+    "State": "H3",
+    "Metrics": {
+      "speed": {
+        "H09Native": {
+          "A": 64.9149588,
+          "B": 66.877524,
+          "C": 60.715454400000006,
+          "D": 61.2273096
+        },
+        "SteeringAtFull_BminusA": 1.9625652000000002,
+        "SteeringAtPartial_DminusC": 0.5118551999999923,
+        "GasUnderHold_AminusC": 4.199504399999988,
+        "GasUnderCorrection_BminusD": 5.650214399999996,
+        "Interaction": 1.450710000000008
+      },
+      "yaw": {
+        "H09Native": {
+          "A": 1.8540199,
+          "B": 0.55278206,
+          "C": 0.19169179,
+          "D": -0.21714129
+        },
+        "SteeringAtFull_BminusA": -1.30123784,
+        "SteeringAtPartial_DminusC": -0.40883307999999996,
+        "GasUnderHold_AminusC": 1.66232811,
+        "GasUnderCorrection_BminusD": 0.76992335,
+        "Interaction": -0.89240476
+      },
+      "beta": {
+        "H09Native": {
+          "A": 18.08828905143599,
+          "B": 5.266249327739945,
+          "C": 2.2338833750393516,
+          "D": -0.8243762592965894
+        },
+        "SteeringAtFull_BminusA": -12.822039723696044,
+        "SteeringAtPartial_DminusC": -3.058259634335941,
+        "GasUnderHold_AminusC": 15.854405676396638,
+        "GasUnderCorrection_BminusD": 6.090625587036534,
+        "Interaction": -9.763780089360102
+      },
+      "chi": {
+        "H09Native": {
+          "A": -0.17446871076987597,
+          "B": -0.287034683068015,
+          "C": -0.20345314372515025,
+          "D": -0.33436420876113515
+        },
+        "SteeringAtFull_BminusA": -0.11256597229813903,
+        "SteeringAtPartial_DminusC": -0.1309110650359849,
+        "GasUnderHold_AminusC": 0.02898443295527428,
+        "GasUnderCorrection_BminusD": 0.047329525693120156,
+        "Interaction": 0.018345092737845875
+      },
+      "certificate": {
+        "H09Native": {
+          "A": 1.5613325672871317,
+          "B": 2.1707166103937494,
+          "C": 1.6941348950299036,
+          "D": 2.02058960404424
+        },
+        "SteeringAtFull_BminusA": 0.6093840431066178,
+        "SteeringAtPartial_DminusC": 0.3264547090143366,
+        "GasUnderHold_AminusC": -0.1328023277427719,
+        "GasUnderCorrection_BminusD": 0.15012700634950926,
+        "Interaction": 0.28292933409228116
+      }
+    },
+    "Basis": "Actual accepted H09 states; signed yaw/beta/chi are not zero-valued control objectives."
+  },
+  {
+    "State": "T0",
+    "Metrics": {
+      "speed": {
+        "H09Native": {
+          "A": 67.8726576,
+          "B": 69.84827279999999,
+          "C": 64.08063720000001,
+          "D": 65.073312
+        },
+        "SteeringAtFull_BminusA": 1.975615199999993,
+        "SteeringAtPartial_DminusC": 0.992674799999989,
+        "GasUnderHold_AminusC": 3.792020399999984,
+        "GasUnderCorrection_BminusD": 4.774960799999988,
+        "Interaction": 0.9829404000000039
+      },
+      "yaw": {
+        "H09Native": {
+          "A": 2.112731,
+          "B": 1.4997492,
+          "C": 0.49209097,
+          "D": 0.051744208
+        },
+        "SteeringAtFull_BminusA": -0.6129818000000002,
+        "SteeringAtPartial_DminusC": -0.440346762,
+        "GasUnderHold_AminusC": 1.6206400300000001,
+        "GasUnderCorrection_BminusD": 1.448004992,
+        "Interaction": -0.17263503800000024
+      },
+      "beta": {
+        "H09Native": {
+          "A": 22.669956373439934,
+          "B": 13.701324247373408,
+          "C": 5.083255775299882,
+          "D": 1.1689605257396034
+        },
+        "SteeringAtFull_BminusA": -8.968632126066526,
+        "SteeringAtPartial_DminusC": -3.914295249560279,
+        "GasUnderHold_AminusC": 17.58670059814005,
+        "GasUnderCorrection_BminusD": 12.532363721633805,
+        "Interaction": -5.054336876506246
+      },
+      "chi": {
+        "H09Native": {
+          "A": 2.8558875125109284,
+          "B": 2.7910741724557284,
+          "C": 2.8543935289388176,
+          "D": 2.753617273633099
+        },
+        "SteeringAtFull_BminusA": -0.06481334005520001,
+        "SteeringAtPartial_DminusC": -0.10077625530571854,
+        "GasUnderHold_AminusC": 0.0014939835721108352,
+        "GasUnderCorrection_BminusD": 0.03745689882262937,
+        "Interaction": 0.035962915250518535
+      },
+      "certificate": {
+        "H09Native": {
+          "A": 1.6033226151832107,
+          "B": 2.049004317837736,
+          "C": 1.6750641414787613,
+          "D": 1.9965346018549803
+        },
+        "SteeringAtFull_BminusA": 0.44568170265452545,
+        "SteeringAtPartial_DminusC": 0.32147046037621907,
+        "GasUnderHold_AminusC": -0.07174152629555053,
+        "GasUnderCorrection_BminusD": 0.05246971598275585,
+        "Interaction": 0.12421124227830638
+      }
+    },
+    "Basis": "Actual accepted H09 states; signed yaw/beta/chi are not zero-valued control objectives."
+  }
+]
