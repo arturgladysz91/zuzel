@@ -36,4 +36,19 @@ public class RacingObjective142Tests
         Assert.NotEqual(Clock142.StateHash(input),Clock142.StateHash(input with{Omega=1}));
         Assert.NotEqual(Clock142.StateHash(input),Clock142.StateHash(input with{Pending=new[]{new FreeRacingCommand(10.6,10.84,new(0,1))}}));
     }
+    [Fact] public void NominalConstraintCheckKeepsActualBoundsAndExperimentalBetaSeparateFromMargins(){
+        var archived=ThrottleSteering138.State(ThrottleSteering138.Cases()[0]).Input;
+        var rider=archived.Rider with{Heading=(float)Math.Atan2(archived.Rider.Velocity.Y,archived.Rider.Velocity.X)};
+        var point=new FreeRacingPoint(archived.Time,rider,archived.Omega,0,.15,.05);
+        string? Check(FreeRacingPoint p)=>Objective142.HardViolation(new(new[]{p},0,0));
+        Assert.Null(Check(point)); // inside true bounds, despite being Uncertain
+        Assert.Equal("predicted footprint boundary crossing",Check(point with{Inner=-.01}));
+        Assert.Equal("predicted experimental beta45 envelope",Check(point with{Rider=rider with{Heading=rider.Heading+(float)Math.PI/3}}));
+        Assert.Equal("invalid physical state",Check(point with{Omega=double.NaN}));
+    }
+    [Fact] public void EveryPreviouslyFrozen141RuntimeSourceIsUnchanged(){
+        var root=Experiment140.RepoRoot();var previous=System.Text.Json.Nodes.JsonNode.Parse(File.ReadAllText(Path.Combine(root,"docs/experiments/autonomous-acceleration/results.json")))!;
+        foreach(var item in previous["Protocol"]!["Sources"]!.AsObject())
+            Assert.Equal(item.Value!.GetValue<string>(),Offline142.Hash(File.ReadAllText(Path.Combine(root,item.Key))));
+    }
 }

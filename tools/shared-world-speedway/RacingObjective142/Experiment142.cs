@@ -33,6 +33,15 @@ public static class Experiment142
             if(File.Exists(path))throw new IOException("Offline audit already exists; no repeat.");Save(path,Offline142.Run());return;
         }
         var r=JsonNode.Parse(File.ReadAllText(path))!.AsObject();
+        if(stage=="freeze-boundary-audit"){
+            if(r["BoundaryDiagnosticExtension"] is not null||Attempts(r).Count!=22)throw new IOException("One bounded two-world boundary diagnostic extension only.");
+            const string host="tools/shared-world-speedway/RacingObjective142/Experiment142.cs";
+            foreach(var s in r["Protocol"]!["Sources"]!.AsObject())if(s.Key!=host&&Hash(File.ReadAllText(s.Key))!=s.Value!.GetValue<string>())throw new IOException("Policy/physics/source changed outside diagnostic dispatcher: "+s.Key);
+            r["BoundaryDiagnosticExtension"]=Node(new{FrozenBeforeTwoAdditionalWorlds=true,PreviousHostSha256=r["Protocol"]!["Sources"]![host]!.GetValue<string>(),
+                Cases=new[]{"D0-B","H1-B"},Purpose="Resolve the two ambiguous conservative native swept-certificate stops using existing RobustSweepCertificate.Refine. Same original B requests, worlds and point forces; only observation certificate refined. Never promote main results or count repetitions as independent held confirmations.",
+                MaximumAdditionalWorlds=2,MaximumTotalWorlds=24,NoObjectiveOrPhysicsChange=true,OriginalMainResultsRetained=true});
+            r["Protocol"]!["Sources"]=Node(Sources());Save(path,r);return;
+        }
         if(stage=="clock-audit"){
             var failed=Attempts(r).Last();if(failed?["Error"]?.GetValue<string>()!="Historical branch state/pending mismatch."||failed["Complete"]!.GetValue<bool>())throw new IOException("Only the retained comparison abort can be audited.");
             var cpu=Process.GetCurrentProcess().TotalProcessorTime;var proofs=new List<object>();long forecasts=0;
@@ -115,10 +124,15 @@ public static class Experiment142
                 }
             }return;
         }
+        if(stage=="boundary-audit"){
+            if(r["BoundaryDiagnosticExtension"] is null)throw new IOException("Freeze boundary diagnostic extension first.");
+            foreach(var c in cases.Where(x=>x.Name is "D0" or "H1"))Native(r,path,c,"B","boundary-refined-"+c.Name,null,null,null,true);
+            return;
+        }
         if(stage=="analyze"){r["Analysis"]=Summary142.Compare(r);Cost(r);Save(path,r);return;}
         throw new ArgumentException("offline|freeze|preflight|diagnostic|branches|confirmation|recovery|analyze");
     }
-    static void Native(JsonObject r,string path,NativeCase139 c,string mode,string name,double? shortSeconds=null,JsonNode? branch=null,double? switchAt=null){
+    static void Native(JsonObject r,string path,NativeCase139 c,string mode,string name,double? shortSeconds=null,JsonNode? branch=null,double? switchAt=null,bool refinedBoundary=false){
         if(Row(r,name) is not null)return;var reservation=Reserve(r,path,name);var cpu=Process.GetCurrentProcess().TotalProcessorTime;
         var frame=TrackAwarenessExperiment134.Frame(c.Case.Geometry);var surface=MultiActionExperiment135.Surface(frame);var spec=FreeLearningExperiment.Rider(c.Case.Scenario);var p=FreeLearningExperiment.Parameters();
         var branchState=branch?["State"]!.Deserialize<YawState137>(Json);var branchMode=branch?["Mode"]!.GetValue<string>();
@@ -146,12 +160,13 @@ public static class Experiment142
             return choice.Decision;
         }
         NativeCaptureResult142 capture;
-        try{capture=NativeCapture142.Execute(name,16015,PhysicsExperiment139.Policy,c.Case.Scenario,shortSeconds:shortSeconds,twoBends:true,horizonSeconds:.9,
+        try{capture=NativeCapture142.Execute(name,16015,PhysicsExperiment139.Policy,c.Case.Scenario,shortSeconds:shortSeconds,refinedDiagnostic:refinedBoundary,twoBends:true,horizonSeconds:.9,
             normalizeProgress:true,fullThrottleCandidate:true,trackShape:TrackAwarenessExperiment134.Variant(c.Case.Geometry),chooser:Choose,extendAfterSecondStraight:shortSeconds is null,
             studiedCorner:c.Corner,controllerHalt:()=>halt,cpuCeilingSeconds:Math.Max(1,450-Used(r)-3));}
         catch(Exception ex){Attempts(r)[reservation]!["CpuSeconds"]=(Process.GetCurrentProcess().TotalProcessorTime-cpu).TotalSeconds;
             Attempts(r)[reservation]!["Error"]=ex.Message;r["Stopped"]=ex.Message;Cost(r);Save(path,r);throw;}
         var summary=Summary142.Native(capture,c,mode);summary["Name"]=name;summary["Decisions"]=Node(decisions);summary["BranchObservations"]=Node(observations);
+        summary["RefinedBoundaryDiagnostic"]=refinedBoundary;
         summary["DecisionCpu"]=Node(new{Count=timings.Count,TotalSeconds=timings.Sum(),MeanSeconds=timings.Average(),MaxSeconds=timings.Max(),
             ColdFirstSeconds=timings[0],WarmMeanSeconds=timings.Count>1?timings.Skip(1).Average():timings[0],Meaning="Process CPU quantized; cold and subsequent observed decisions, no per-decision acceptance gate."});
         var samples=capture.Episode.Replay.Samples;
