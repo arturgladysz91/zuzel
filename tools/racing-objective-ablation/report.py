@@ -2,14 +2,26 @@
 from pathlib import Path
 import hashlib
 import json
+import re
 import time
 
 ROOT=Path(__file__).resolve().parents[2]
 P=ROOT/'docs/experiments/racing-objective-ablation/results.json'
 started=time.process_time()
 r=json.loads(P.read_text(encoding='utf-8'))
+self_name=str(Path(__file__).relative_to(ROOT)).replace('\\','/')
+self_hash=hashlib.sha256(Path(__file__).read_bytes().replace(b'\r\n',b'\n')).hexdigest().upper()
 for name,digest in r['Protocol']['Sources'].items():
+    if name==self_name:continue
     assert hashlib.sha256((ROOT/name).read_text(encoding='utf-8').replace('\r\n','\n').encode()).hexdigest().upper()==digest,name
+if r['Protocol']['Sources'].get(self_name)!=self_hash:
+    revision={'PreviousFrozenReporterSha256':r['Protocol']['Sources'].get(self_name),
+        'NewReporterSha256':self_hash,'NativeWorlds':0,'NewForecasts':0,'Meaning':'Reporting-only revision after all24 worlds to include refined-boundary outcomes. Every runtime objective, physics, comparison and dispatcher hash stays exact.'}
+    history=r.setdefault('PostRunReportingRevisions',[])
+    if r.get('PostRunReportingRevision') and not history:history.append(r['PostRunReportingRevision'])
+    history.append(revision)
+    r['PostRunReportingRevision']=revision
+    r['Protocol']['Sources'][self_name]=self_hash
 rows={n['Name']:n for n in r['Native']}
 main=[rows[c+'-'+mode] for c in ('D0','D1','H0','H1') for mode in ('A','B','C')]
 branches=[]
@@ -70,6 +82,18 @@ for n in r['Native']:
         if not o['ExactCachedPredecision'] and n['Name'].endswith('-A'):
             proof=next((x for x in r['ClockComparisonCorrection']['Proofs'] if x['Name']==o['Name']),None)
             if proof:o['ClockNormalizedPredecisionExact']=True
+boundary=[]
+for case in ['D0','H1']:
+    a,b=rows[case+'-B'],rows['boundary-refined-'+case]
+    def stable_decision(d):return {k:v for k,v in d.items() if k!='CpuSeconds'}
+    same=[stable_decision(x) for x in a['Decisions']]==[stable_decision(x) for x in b['Decisions'][:len(a['Decisions'])]]
+    assert same and b['Outcome']=='confirmed crossing'
+    boundary.append({'Case':case,'OriginalMainStopSeconds':a['NativeEndTimeSeconds'],'OriginalReason':a['Outcome'],
+        'RefinedStopSeconds':b['NativeEndTimeSeconds'],'RefinedOutcome':b['Outcome'],
+        'RefinedMinimumInstantOuterMeters':b['RobustMetrics']['MinimumInstantOuter'],
+        'ExactLoggedBDecisionPrefix':same,'IndependentConfirmation':False,
+        'Meaning':'Existing refined swept certificate observes the SAME B/physics, without changing requests or accepted integration. Another0.02s confirms an actual sampled footprint crossing. Diagnostic repetition, not a replacement main result or independent held family.'})
+r['BoundaryDiagnosticResults']=boundary
 r['BranchComparison']=branches
 r['MarginPriorityNativeComparison']=margin
 r['RecoverabilityFindings']=recover
@@ -77,13 +101,15 @@ r['FieldDefinitions']={
     'PhysicalDnf':'Legacy collector boolean for a NATIVE GUARD STOP, including uncertified swept bounds and experimental beta45. It does NOT assert a real-world crash or a confirmed physical boundary crossing. NativeGuardStop is the explicit alias; FailureClassification and ConfirmedSampledFootprintCrossing distinguish evidence.',
     'ControllerForecastStop':'C has no admissible nominal H09 action. Diagnostic placeholder never activates before stopping. Current native state may remain legal. Not counted as an actual native boundary/beta/reverse DNF.',
     'Uncertain':'Caution margin from predicted clearance/closing, never an actual DNF by itself.',
+    'Reverse':'Original guard triggers velocity dot road tangent<=0 OR reference delta<-0.02m. Exported generic reverse label does not distinguish these; no claim of rear-wheel reversal.',
     'Metrics':'Main same-reference scalar crossings interpolate adjacent accepted0.01s samples with brackets retained. Missing targets/times remain null. First-straight branch diagnostics derived from0.2s decision observations are explicitly secondary.',
     'Contacts':'Lower bound: aborted development world contacts were not fully exported. Its CPU is retained and forecasts reconstructed from identical original A decision prefix, including failing chooser call.',
     'Independence':'Four main initial physical families; original branch counterpart reused from main A, prefixes, diagnostic recovery switches and software restart are not independent confirmations.'}
 r['FinalSummary']={
     'Verdict':'PARTIAL — individual preferences can harm legal time; blanket Progress Only is not a successful replacement',
     'MainCompletion':{m:sum(rows[c+'-'+m]['Completed'] for c in ['D0','D1','H0','H1']) for m in ['A','B','C']},
-    'MainBGuardStops':{'uncertified swept-boundary interval':2,'reverse along track tangent':1,'experimental beta45':1},
+    'MainBGuardStops':{'uncertified swept-boundary interval':2,'native reverse/progress guard':1,'experimental beta45':1},
+    'RefinedDiagnosticsConfirmedCrossings':2,
     'MainCControllerForecastStops':4,
     'AllNativeGuardStopsIncludingRecoveryDiagnostics':len(native_failures),
     'AllConfirmedSampledFootprintCrossings':sum(n['ConfirmedSampledFootprintCrossing'] for n in r['Native']),
@@ -99,9 +125,9 @@ r['Recommendations']={
     'Uncertain':'Not DNF. Relaxing class priority admits more aggressive nominally valid actions but does not improve completion here. Keep safety observation distinct from proof of recovery.',
     'NextStep':'One autonomous no-throttle-prior A/B validation, same actions/H09/physics and full next-corner scope; no new cost terms, training or tyre changes.'}
 r['Provenance']={'BaseHead':'266df048536c256ced410a1045a5924899153237','Branch':'experiment/racing-objective-ablation-142',
-    'PreWorldProtocolCommit':'a3341b9','ClockComparisonCorrectionCommit':'01ec8ba','PreHeldConfirmationLockCommit':'c533227',
+    'PreWorldProtocolCommit':'a3341b9','ClockComparisonCorrectionCommit':'01ec8ba','PreHeldConfirmationLockCommit':'c533227','PreRefinedBoundaryDiagnosticCommit':'71b2155',
     'ObjectiveOrPhysicsRetuned':False,'PhysicsWorkflowChanged':False,
-    'ReporterSourceSha256':hashlib.sha256(Path(__file__).read_bytes().replace(b'\r\n',b'\n')).hexdigest().upper()}
+    'ReporterSourceSha256':self_hash}
 r['Cost']['ContactsAreLowerBound']=True
 r['Cost']['ContactCountIncompleteWorlds']=1
 r['Cost']['AbortedWorldCpuSeconds']=next(a['CpuSeconds'] for a in r['Reservations'] if a.get('AbortedBeforeIntervention'))
@@ -116,8 +142,8 @@ predyktor H09 i legalny zestaw akcji identyczne. Nowe polityki OFF; bez treningu
 
 ## Co ograniczało zawodnika
 
-Audyt38 zapisanych obserwacji #136/#137 obejmuje28 unikalnych stanów dwóch
-rodzin, nie28 niezależnych zawodników. Zero nowych prognoz/światów offline.
+Audyt38 obserwacji #136/#137:28 unikalnych stanów dwóch rodzin; zero nowych
+prognoz/światów offline. Nie są to28 niezależne przypadki.
 Usunięcie yaw zmienia26/28 wyborów (głównie skręt), kierunku16/28, preferencji
 gazu4/28 (gaz1 w2 stanach). Usunięcie osobno kosztów skrętu, geometrii,
 prześwitu i Unsafe-score nie zmienia wyboru w tej próbce. Nie dowodzi to ich
@@ -129,7 +155,7 @@ fizyki ani celem β=0. Kara gaz1 wynosi1,307 punktu za odejście od preferowanyc
 `sqrt(0.8*capacity/curvature)` ma20% heurystycznej rezerwy; nie jest prawem opony.
 Track Awareness jest OFF w A; po włączeniu zastępuje koszt geometrii, jego delta
 może być ujemna. Enabled-vs-removed zmienia1/18 pełnych zapisanych pul.
-Równania, wagi #16015, klasyfikacje i wszystkie rankingi są w `results.json`.
+Równania, wagi #16015 i rankingi są w `results.json`.
 
 ## Ciągłe natywne A/B/C
 
@@ -141,7 +167,7 @@ toru, bez priorytetu Safe nad Uncertain. Każdy pełny zakres obejmuje badany ł
 | Rodzina | A: pełny czas | B: stop natywny | C: brak dopuszczalnego H09 |
 |---|---:|---|---:|
 |D0|18,869s|2,350s — brak certyfikacji obrysu|1,610s|
-|D1|28,771s|5,770s — ruch przeciwnie do toru|1,610s|
+|D1|28,771s|5,770s — reverse / cofnięcie postępu|1,610s|
 |H0|18,712s|2,040s — β45,408°|1,210s|
 |H1|27,555s|2,240s — brak certyfikacji obrysu|1,210s|
 
@@ -157,20 +183,23 @@ nie przekracza jeszcze twardych granic; następnie wyczerpuje skończony zbiór
 dopuszczalnych prognoz. Jego cztery zatrzymania nie są czterema rzeczywistymi
 wypadnięciami. D0/H1 B mają nadal dodatnie chwilowe prześwity; ujemna jest
 konserwatywna dolna granica obrysu w ruchu. To brak certyfikacji, nie potwierdzone
-przekroczenie w próbce. β45° jest nieskalibrowaną obwiednią eksperymentalną,
+przekroczenie w próbce. Dwie dodatkowe diagnostyki z istniejącym dokładniejszym
+testem obrysu, przy identycznym prefiksie decyzji B, potwierdzają jednak przekroczenie
+po kolejnych 0,02 s: D0 po 2,370 s (−0,060 m), H1 po 2,260 s (−0,030 m).
+Nie są niezależnymi rodzinami. β45° jest nieskalibrowaną obwiednią eksperymentalną,
 nie dowodem fizycznego upadku. Detektory natywne zachowano.
 
 ## Izolowane decyzje i przyczyna niepowodzeń
 
-Z identycznego zaakceptowanego stanu/pending, po tym samym prefiksie A, zmieniono
-jedną decyzję i przywrócono autonomiczne A przy następnej obserwacji:
+Po identycznym prefiksie, z identycznym stanem/pending, zmieniono jedną decyzję,
+następnie przywrócono autonomiczne A:
 
 - D1, gaz po8s, bez preferencji gazu częściowego: **28,771→28,191s**, poprawa
 0,581s, droga krótsza o5,460m; +40m po badanym drugim łuku **76,36→77,87km/h**.
 - D0, kierunek po10,8s: **18,869→18,841s**, poprawa0,027s, droga dłuższa o0,732m.
 
-Oba pełne zakresy legalne; nie są to autonomiczne polityki z globalnie usuniętą
-karą. Przy B wszystkie4 próby pełne zawodzą. W D0 brak dopuszczalnego held-H09
+Obie próby legalne; nie dowodzą korzyści z globalnego usunięcia danej kary.
+Przy B wszystkie4 pełne próby zawodzą. W D0 brak dopuszczalnego held-H09
 występuje od1,6s, w D1 od5,0s. Przełączenia B→A po1,2/1,6s oraz4,6/5,0s nie
 odzyskują legalnej kontynuacji; A od początku kończy. To dowód znaczenia wcześniejszej
 strategii i ograniczenia H09, nie globalny certyfikat nieodwracalności ani dowód
@@ -178,23 +207,22 @@ konieczności konkretnych wag yaw. Źródła i ostatnie decyzje przy stopach zac
 
 ## Rekomendacja i koszt
 
-Pierwszy kandydat do usunięcia: preferencja częściowego gazu, z osobnym pełnym
-autonomicznym A/B przed wdrożeniem. Zachować rzeczywiste ograniczenia i ocenę
-dalszej legalnej kontynuacji. Nie uznawać yaw/kierunku, rezerwy80% i marginesów za
-fizykę; brak izolowanego dowodu, że wszystkie te konkretne kary są potrzebne.
-Usunięcie ich naraz z krótkim horyzontem nie zastępuje skutecznej strategii.
+Najpierw sprawdzić globalne usunięcie preferencji częściowego gazu w osobnym
+autonomicznym A/B. Zachować ograniczenia i ocenę dalszej legalnej kontynuacji.
+Nie traktować yaw/kierunku, rezerwy80% i marginesów jako fizyki: nie wykazano
+konieczności wszystkich tych kar. Sam krótkoterminowy postęp nie wystarcza.
 
-**22/24 świata,146,8125s CPU epizodów/prognoz +3,25s odczytów =150,0625/450s;
-26034 prognozy.** Wliczono przerwany świat8,516s: porównanie zegarów różniło się
-o7×10⁻¹⁵s. Odczyt bez nowego świata udowodnił identyczność fizyki/pending;
-poprawiono wyłącznie porównanie i policzono nową próbę oddzielnie. Kontakty tej
-przerwanej próby nie zostały w pełni wyeksportowane; suma jest dolną granicą.
-Protokół `a3341b9`, korekta `01ec8ba`, lock przed H0/H1 `c533227`; bez strojenia.
-Łącznie8 natywnych stopów zabezpieczeń (w tym4 diagnostyczne późne przełączenia),
-4 zatrzymania C i1 przerwanie programistyczne; zero potwierdzonych przekroczeń
-obrysu w zapisanych próbkach. Bez progu CPU pojedynczej decyzji.
+**24/24 światy, 152,8125 s CPU epizodów/prognoz +3,25 s odczytów =156,0625/450 s;
+26682 prognozy.** Wliczono przerwany świat8,516s: błąd porównania zegara7×10⁻¹⁵s
+skorygowano po dowodzie identyczności stanu/pending, bez zmiany sterownika.
+Kontakty przerwanej próby są niepełne; suma jest dolną granicą.
+Protokół `a3341b9`, korekta `01ec8ba`, lock H0/H1 `c533227`, dodatkowe diagnostyki
+`71b2155`; bez strojenia. Łącznie 10 stopów zabezpieczeń
+(w tym 4 późne przełączenia i 2 powtórzenia diagnostyczne), 4 zatrzymania C i 1
+przerwanie programistyczne; 2 potwierdzone przekroczenia obrysu w dodatkowych
+diagnostykach. Bez progu CPU pojedynczej decyzji.
 
-Walidacja lokalna i końcowy standardowy Windows CI: `results.json` oraz PR.
+Walidacja lokalna i standardowy Windows CI: `results.json` oraz PR.
 Workflow i produkcja bez zmian; ciężkie audyty historyczne pomija polityka Draft.
 Tylko te dwa raporty, bez dodatkowych materiałów prezentacyjnych.
 '''
@@ -211,6 +239,9 @@ for a,b in {
  'rezerwy80%':'rezerwy 80%','świata,146,8125s':'świata, 146,8125 s','+3,25s':'+3,25 s','=150,0625/450s':'=150,0625/450 s',
  'świat8,516s':'świat 8,516 s','o7×':'o 7×','⁻¹⁵s':'⁻¹⁵ s','Łącznie8':'Łącznie 8','tym4':'tym 4','4 zatrzymania C i1':'4 zatrzymania C i 1'
 }.items():text=text.replace(a,b)
+text=text.replace('to28','to 28').replace('zegara7','zegara 7')
+text=re.sub(r'(?<=\d)s\b',' s',text)
+text=re.sub(r'(?<=\d)m\b',' m',text)
 (P.parent/'README.md').write_text(text,encoding='utf-8',newline='\n')
 
 def compact(value,level=0,key=''):
