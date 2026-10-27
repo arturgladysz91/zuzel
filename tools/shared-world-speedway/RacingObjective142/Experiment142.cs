@@ -33,6 +33,34 @@ public static class Experiment142
             if(File.Exists(path))throw new IOException("Offline audit already exists; no repeat.");Save(path,Offline142.Run());return;
         }
         var r=JsonNode.Parse(File.ReadAllText(path))!.AsObject();
+        if(stage=="clock-audit"){
+            var failed=Attempts(r).Last();if(failed?["Error"]?.GetValue<string>()!="Historical branch state/pending mismatch."||failed["Complete"]!.GetValue<bool>())throw new IOException("Only the retained comparison abort can be audited.");
+            var cpu=Process.GetCurrentProcess().TotalProcessorTime;var proofs=new List<object>();long forecasts=0;
+            foreach(var b in Branches(r)){
+                var target=b["State"]!.Deserialize<YawState137>(Json)!;var c=PhysicsExperiment139.Cases().Single(x=>x.Case.Name==target.Case.Name);
+                var original=Row(r,c.Name+"-A")!;var obs=((JsonArray)original["BranchObservations"]!).Single(x=>x!["Name"]!.GetValue<string>()==target.Name)!;
+                var old=RobustLearningExperiment.ReadEpisode("docs/experiments/motorcycle-physics-validation/native","off-"+c.Name);
+                var sample=old.Replay.Samples.Single(x=>Math.Abs(x.Input.Time-target.Time)<1e-8);
+                var archived=RiderDecisionAudit133.BeforeDecision(sample);var callerTime=obs["Time"]!.GetValue<double>();
+                var caller=archived with{Time=callerTime,NextReview=callerTime};
+                var oldRaw=Hash(JsonSerializer.Serialize(caller,Json));var expected=obs["ObservedInputSha256"]!.GetValue<string>();
+                if(oldRaw!=expected)throw new IOException("Reconstructed caller differs beyond clock; no continuation authorized by this audit.");
+                var canonical=Clock142.StateHash(caller);if(canonical!=Clock142.StateHash(target.Input))throw new IOException("Nonclock physical/pending mismatch retained; no continuation.");
+                proofs.Add(new{target.Name,AcceptedSampleTimeSeconds=archived.Time,ChooserTimeSeconds=callerTime,
+                    ClockDifferenceSeconds=callerTime-archived.Time,ExactOriginalCallerHash=oldRaw,CanonicalPhysicalAndPendingHash=canonical,
+                    Meaning="Entire reconstructed actual chooser input has the recorded old hash. Only time/NextReview/pending timestamps canonicalized to1e-10s for equality; no physics/state rounding or controller input change."});
+                if(c.Name=="D0")forecasts=old.Replay.Decisions.Where(x=>x.Time<=target.Time+1e-8).Sum(x=>(long)x.Forecasts);
+            }
+            var previous= r["Protocol"]!["Sources"]!.DeepClone();var current=Sources();
+            failed!["Complete"]=true;failed["AbortedBeforeIntervention"]=true;failed["Forecasts"]=forecasts;failed["ContactsUnknown"]=true;
+            failed["ForecastCountMethod"]="Reconstructed from identical original A decision prefix, including failing chooser call. World was aborted before issuing the changed branch request. Native/forecast contacts not fully captured: aggregate contacts is a lower bound.";
+            r["ClockComparisonCorrection"]=Node(new{NativeWorlds=0,NewForecasts=0,Proofs=proofs,PreviousFrozenSources=previous,
+                AbortedWorldRetained=true,RetryDisposition="One new, separately named clock-corrected branch allowed after exact read-only proof; no completed scientific result repeated or policy tuned.",
+                Changes="Comparison canonicalization and abort accounting only. Objective142, original physics, actions, safety and native scope unchanged. Original all-source manifest retained."});
+            r["Protocol"]!["Sources"]=Node(current);r["Protocol"]!["DevelopmentComparisonAbortException"]=true;
+            r["Audit"]!["CpuSeconds"]=r["Audit"]!["CpuSeconds"]!.GetValue<double>()+(Process.GetCurrentProcess().TotalProcessorTime-cpu).TotalSeconds;
+            r.Remove("Stopped");Cost(r);Save(path,r);Console.WriteLine("Clock-only caller/sample difference proven without worlds or forecasts; aborted world's cost retained.");return;
+        }
         if(stage=="freeze"){
             if(r["Protocol"] is not null||Attempts(r).Count!=0)throw new IOException("Already frozen.");
             r["Protocol"]=Node(new{BaseHead,DefaultEnabled=false,ProductionPhysicsChanged=false,Policy=PhysicsExperiment139.Policy,
@@ -70,7 +98,8 @@ public static class Experiment142
         if(stage=="branches"){
             foreach(var b in Branches(r)){
                 var state=b["State"]!.Deserialize<YawState137>(Json)!;var c=cases.Single(x=>x.Case.Name==state.Case.Name);
-                Native(r,path,c,"A","branch-"+c.Name,null,b);
+                var corrected=Attempts(r).Any(x=>x!["Name"]!.GetValue<string>()=="branch-"+c.Name&&x["AbortedBeforeIntervention"]?.GetValue<bool>()==true);
+                Native(r,path,c,"A","branch-"+c.Name+(corrected?"-clock-corrected":""),null,b);
             }return;
         }
         if(stage=="recovery"){
@@ -103,7 +132,7 @@ public static class Experiment142
             foreach(var b in Branches(r)){
                 var target=b["State"]!.Deserialize<YawState137>(Json)!;
                 if(target.Case.Name!=c.Case.Name||Math.Abs(input.Time-target.Time)>1e-8)continue;
-                var observed=Hash(JsonSerializer.Serialize(input with{NextReview=input.Time},Json));var cached=Hash(JsonSerializer.Serialize(target.Input with{NextReview=target.Input.Time},Json));
+                var observed=Clock142.StateHash(input);var cached=Clock142.StateHash(target.Input);
                 observations.Add(new{target.Name,input.Time,ObservedInputSha256=observed,CachedInputSha256=cached,ExactCachedPredecision=observed==cached,
                     PendingCount=input.Pending.Length,OriginalAction=choice.Original.Candidate.Action,ChosenAction=choice.Selected?.Candidate.Action});
                 if(branchState is not null){branchObserved=true;if(observed!=cached)throw new InvalidOperationException("Historical branch state/pending mismatch.");}

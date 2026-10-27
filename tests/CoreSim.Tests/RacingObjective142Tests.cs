@@ -30,4 +30,10 @@ public class RacingObjective142Tests
         var p=TwoContactBikeParameters.Default;Assert.InRange(p.MaximumSteeringRadians*180/Math.PI,34.999,35.001);
         Assert.InRange(p.SteeringRateRadiansPerSecond*180/Math.PI,89.999,90.001);
     }
+    [Fact] public void ComparingClockRoundoffDoesNotIgnorePhysicalOrPendingChanges(){
+        var input=Input() with{Time=10.799999999999994,NextReview=10.799999999999994};var rounded=input with{Time=10.8,NextReview=10.8};
+        Assert.Equal(Clock142.StateHash(input),Clock142.StateHash(rounded));
+        Assert.NotEqual(Clock142.StateHash(input),Clock142.StateHash(input with{Omega=1}));
+        Assert.NotEqual(Clock142.StateHash(input),Clock142.StateHash(input with{Pending=new[]{new FreeRacingCommand(10.6,10.84,new(0,1))}}));
+    }
 }
