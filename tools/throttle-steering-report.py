@@ -261,6 +261,8 @@ def plots(captures, rows):
     for arm in 'ABCD':
         fs=captures['D0-'+arm];ax.plot([f['x'] for f in fs],[f['y'] for f in fs],label='D0-'+arm,color=colors[arm])
     ax.axis('equal');ax.legend();ax.set_title('Native XY traces; unchanged egg-shaped Motoarena');fig.tight_layout();fig.savefig(D/'xy-traces.svg');plt.close(fig)
+    for path in D.glob('*.svg'):
+        path.write_text('\n'.join(line.rstrip() for line in path.read_text(encoding='utf-8').splitlines())+'\n',encoding='utf-8')
 
 
 def markdown(e, rows, cps, dnfs, offline):
