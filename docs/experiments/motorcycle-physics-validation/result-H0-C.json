@@ -1,0 +1,71 @@
+{
+  "Name": "H0-C",
+  "Arm": "C",
+  "Case": {
+    "Name": "H0",
+    "Pool": "confirmation",
+    "Case": {
+      "Name": "V0-b",
+      "Geometry": "progressive-b",
+      "Scenario": {
+        "Name": "V0",
+        "Level": 4,
+        "Speed": 15.65,
+        "Offset": 4.85,
+        "Start": 18.85,
+        "OutwardSpeed": -0.0875,
+        "HeadingError": -0.0165,
+        "YawRate": 0.019
+      },
+      "Two": true
+    },
+    "Corner": 1,
+    "BaselineDirectory": "docs/experiments/causal-yaw-throttle/native",
+    "BaselineName": "extended-V0-b-A"
+  },
+  "Variant": "original",
+  "Metrics": {
+    "Native": {
+      "Completed": true,
+      "Outcome": "completed",
+      "GateSeconds": 16.04,
+      "DurationSeconds": 18.773882,
+      "LegalProgress": 334.92875719070435,
+      "LegalSeconds": 18.773882,
+      "MinimumClearanceMeters": 0.0929024093811879,
+      "EntrySpeed": 17.48581886291504,
+      "MinimumSpeed": 15.653910636901855,
+      "ExitSpeed": 19.329784393310547,
+      "MaximumBetaDegrees": 12.086580115413467,
+      "MeanDrive": 0.20649081421045393,
+      "FullDriveFraction": 0.023436814527654122,
+      "LargeTrajectoryOscillations": 6,
+      "DistanceMeters": 353.7512108865194,
+      "BoundaryApproach": 16.510307743909614,
+      "RecoverySeconds": 2.6899999398738146,
+      "NativeSteps": 1882,
+      "PhysicsEvaluations": 231976,
+      "Forecasts": 2541,
+      "CpuSeconds": 14.515625,
+      "Fingerprint": "B2E6B4DFF549471B039DC4711FE1D3DCDD39A3A82D46EAE16BFE1CBFED15F1CA"
+    },
+    "MinimumInstantInner": 0.20341565544060564,
+    "MinimumInstantOuter": 1.6703248929871637,
+    "MinimumLegacyCertificate": 0.0929024093811879,
+    "MinimumRefinedCertificate": 0.0929024093811879,
+    "CornerMinimumSpeed": 16.063257217407227,
+    "MaximumYawRate": 0.7972990870475769,
+    "ExitYawRate": 0.01850152760744095,
+    "SteeringRequestTravelDegrees": 59.24404339017725,
+    "MaximumRequestChangeDegrees": 7.1220203859501625,
+    "EngineWorkJoules": 112112.19547778188,
+    "DissipationJoules": 98623.858457194,
+    "NoSafeDecisions": 0,
+    "BoundaryClass": "none"
+  },
+  "PreparationTime": 4.4,
+  "OpenRequestTime": 6.2,
+  "ExactInitial": true,
+  "PrefixExact": true,
+  "Execution": "Controlled preparation/pulse followed by causal frozen134A, never future native states."
+}

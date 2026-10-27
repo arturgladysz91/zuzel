@@ -1,0 +1,23 @@
+{
+  "Reason": "Infrastructure only: exclude compiler-generated obj/bin from future freezes and resolve saved data from test output cwd. No equations, parameters, case pools, command rules or gates changed.",
+  "OriginalProtocolCommit": "b63f575",
+  "OriginalProtocolSha256": "FDB48A133E2994184B4A4EAF122F15BE8A648B53B1D13EBCE0C0E343F42ADB2D",
+  "AfterNativeWorlds": 2,
+  "TreatmentWorldsStarted": 0,
+  "RerunNativeWorlds": 0,
+  "ExcludedGeneratedFiles": [
+    "tools/shared-world-speedway/obj/Release/net8.0/.NETCoreApp,Version=v8.0.AssemblyAttributes.cs",
+    "tools/shared-world-speedway/obj/Release/net8.0/shared-world-speedway.AssemblyInfo.cs",
+    "tools/shared-world-speedway/obj/Release/net8.0/shared-world-speedway.GlobalUsings.g.cs"
+  ],
+  "SourceUpdates": {
+    "tools/shared-world-speedway/PhysicsValidation139/PhysicsAudit139.cs": {
+      "OriginalSha256": "1F189C44702DF6CC9370BE40DEF5F2AB9D0DDE4E16C0A245CF22CB1C4218601A",
+      "NewSha256": "F8BB086AA882F424637A7C634F8C88438D6F650B5DF6CC4DB2D119337F6920C5"
+    },
+    "tools/shared-world-speedway/PhysicsValidation139/PhysicsExperiment139.cs": {
+      "OriginalSha256": "02C44D1BC7FE859CA4A20BE92BA3EC9FCF8D3594A6D7B95B8F9F571CE2CE273D",
+      "NewSha256": "EAD3A31FBE064C16A20A97B1E158999E25DC39A1C8B301A512970C407CF4F5DC"
+    }
+  }
+}

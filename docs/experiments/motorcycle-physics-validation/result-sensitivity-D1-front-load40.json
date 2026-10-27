@@ -1,0 +1,71 @@
+{
+  "Name": "sensitivity-D1-front-load40",
+  "Arm": "sensitivity",
+  "Case": {
+    "Name": "D1",
+    "Pool": "diagnostic",
+    "Case": {
+      "Name": "D-C",
+      "Geometry": "progressive-c",
+      "Scenario": {
+        "Name": "D-C",
+        "Level": 4,
+        "Speed": 12,
+        "Offset": 7,
+        "Start": 18.625,
+        "OutwardSpeed": -0.1,
+        "HeadingError": -0.02,
+        "YawRate": -0.035
+      },
+      "Two": true
+    },
+    "Corner": 2,
+    "BaselineDirectory": "D:\\Codex-work\\pr138\\repo\\docs/experiments/two-contact-bike-dynamics\\../throttle-steering-decoupling/native",
+    "BaselineName": "off-D1"
+  },
+  "Variant": "front-load40",
+  "Metrics": {
+    "Native": {
+      "Completed": false,
+      "Outcome": "uncertified interval",
+      "GateSeconds": null,
+      "DurationSeconds": 3.73,
+      "LegalProgress": 51.01387072273957,
+      "LegalSeconds": 3.7199999999999998,
+      "MinimumClearanceMeters": -0.06528793721840365,
+      "EntrySpeed": 15.53934097290039,
+      "MinimumSpeed": 12.004199028015137,
+      "ExitSpeed": null,
+      "MaximumBetaDegrees": 1.9167543171788812,
+      "MeanDrive": 0.3202736201059955,
+      "FullDriveFraction": 0.06434316210069221,
+      "LargeTrajectoryOscillations": 1,
+      "DistanceMeters": 61.79701994359493,
+      "BoundaryApproach": 5.613690484666986,
+      "RecoverySeconds": 0,
+      "NativeSteps": 374,
+      "PhysicsEvaluations": 375,
+      "Forecasts": 0,
+      "CpuSeconds": 0.0625,
+      "Fingerprint": "FCB2D93C9FCE5DF90DA607D88A90E6D76D81EC40F785643CC27C140617932BBA"
+    },
+    "MinimumInstantInner": 6.009739633249595,
+    "MinimumInstantOuter": 0.03090776056602018,
+    "MinimumLegacyCertificate": -0.06528793721840365,
+    "MinimumRefinedCertificate": -0.06528793721840365,
+    "CornerMinimumSpeed": 15.53934097290039,
+    "MaximumYawRate": 0.23975306749343872,
+    "ExitYawRate": null,
+    "SteeringRequestTravelDegrees": 0,
+    "MaximumRequestChangeDegrees": 0,
+    "EngineWorkJoules": 28610.19924027214,
+    "DissipationJoules": 11727.956961997994,
+    "NoSafeDecisions": 0,
+    "BoundaryClass": "uncertified interval"
+  },
+  "PreparationTime": null,
+  "OpenRequestTime": null,
+  "ExactInitial": true,
+  "PrefixExact": true,
+  "Execution": "Prescribed originalB command tape; if B DNF, historical134A timeline afterwards. All requests retain .24s queue. Not autonomous."
+}

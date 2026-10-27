@@ -1,0 +1,90 @@
+[
+  {
+    "Name": "D0",
+    "Pool": "diagnostic",
+    "Case": {
+      "Name": "D-B",
+      "Geometry": "progressive-b",
+      "Scenario": {
+        "Name": "D-B",
+        "Level": 4,
+        "Speed": 16,
+        "Offset": 5,
+        "Start": 18.125,
+        "OutwardSpeed": 0.08,
+        "HeadingError": 0.012,
+        "YawRate": 0.025
+      },
+      "Two": true
+    },
+    "Corner": 1,
+    "BaselineDirectory": "docs/experiments/throttle-steering-decoupling/native",
+    "BaselineName": "off-D0"
+  },
+  {
+    "Name": "D1",
+    "Pool": "diagnostic",
+    "Case": {
+      "Name": "D-C",
+      "Geometry": "progressive-c",
+      "Scenario": {
+        "Name": "D-C",
+        "Level": 4,
+        "Speed": 12,
+        "Offset": 7,
+        "Start": 18.625,
+        "OutwardSpeed": -0.1,
+        "HeadingError": -0.02,
+        "YawRate": -0.035
+      },
+      "Two": true
+    },
+    "Corner": 2,
+    "BaselineDirectory": "docs/experiments/throttle-steering-decoupling/native",
+    "BaselineName": "off-D1"
+  },
+  {
+    "Name": "H0",
+    "Pool": "confirmation",
+    "Case": {
+      "Name": "V0-b",
+      "Geometry": "progressive-b",
+      "Scenario": {
+        "Name": "V0",
+        "Level": 4,
+        "Speed": 15.65,
+        "Offset": 4.85,
+        "Start": 18.85,
+        "OutwardSpeed": -0.0875,
+        "HeadingError": -0.0165,
+        "YawRate": 0.019
+      },
+      "Two": true
+    },
+    "Corner": 1,
+    "BaselineDirectory": "docs/experiments/causal-yaw-throttle/native",
+    "BaselineName": "extended-V0-b-A"
+  },
+  {
+    "Name": "H1",
+    "Pool": "confirmation",
+    "Case": {
+      "Name": "V1-c",
+      "Geometry": "progressive-c",
+      "Scenario": {
+        "Name": "V1",
+        "Level": 4,
+        "Speed": 17.85,
+        "Offset": 6.35,
+        "Start": 19.05,
+        "OutwardSpeed": 0.0975,
+        "HeadingError": 0.0185,
+        "YawRate": -0.021
+      },
+      "Two": true
+    },
+    "Corner": 2,
+    "BaselineDirectory": "docs/experiments/causal-yaw-throttle/native",
+    "BaselineName": "extended-V1-c-A"
+  }
+]
