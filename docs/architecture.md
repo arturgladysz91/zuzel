@@ -1,5 +1,14 @@
 # Architecture
 
+[Throttle–Steering Decoupling (#138)](experiments/throttle-steering-decoupling/README.md)
+is an explicit tools-only controlled experiment, default OFF. A common native prefix
+retains all pending commands. Preparation steering activates after 0.24s and target
+throttle after 0.44s; the original WorldRunner/actuator/tyres own every physical step.
+The unchanged #137 collector preserves the two-bend gate and separately certifies the
+next 62m. Initial-observation forecasts choose a finite steering pair; the native
+quartets are interventions, not autonomous policies. Failed long-continuation gates
+do not justify a new autonomous prototype or a global physics impossibility claim.
+
 [Causal Yaw & Throttle (#137)](experiments/causal-yaw-throttle/README.md) is an
 explicit tools-only CLI. It reuses the unchanged model for a common pre-activation
 prefix and bounded suffixes, with original reaction and pending semantics. Native

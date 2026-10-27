@@ -1,0 +1,746 @@
+[
+  {
+    "Definition": {
+      "Name": "D0",
+      "Pool": "diagnostic",
+      "Case": {
+        "Name": "D-B",
+        "Geometry": "progressive-b",
+        "Scenario": {
+          "Name": "D-B",
+          "Level": 4,
+          "Speed": 16,
+          "Offset": 5,
+          "Start": 18.125,
+          "OutwardSpeed": 0.08,
+          "HeadingError": 0.012,
+          "YawRate": 0.025
+        },
+        "Two": true
+      },
+      "Corner": 1,
+      "BeforeExit": 20,
+      "BaselineDirectory": "D:\\Codex-work\\pr138\\repo\\docs/experiments/two-contact-bike-dynamics\\../speed-throttle-root-cause/native",
+      "BaselineName": "baseline-D-B"
+    },
+    "Input": {
+      "Rider": {
+        "Id": 1,
+        "Position": {
+          "X": 54.032703,
+          "Y": 56.199932
+        },
+        "Velocity": {
+          "X": -11.866451,
+          "Y": 10.442132
+        },
+        "Heading": 2.5560226,
+        "AngularVelocity": 0.6191428,
+        "Road": {
+          "Segment": 3,
+          "Progress": 0.3634287007087959,
+          "ReferenceMeters": 111.72428131715782,
+          "OffsetMeters": -0.11593887893902188,
+          "Heading": 2.4292417564725453,
+          "RadiusMeters": 27.715910388147613,
+          "CornerProgress": 0.7878095669029319,
+          "Tangent": {
+            "X": -0.7568274,
+            "Y": 0.6536148
+          },
+          "Outward": {
+            "X": 0.6536148,
+            "Y": 0.7568274
+          },
+          "IsTurn": true
+        },
+        "TotalReferenceMeters": 111.72428131715782,
+        "DistanceMeters": 94.47218546271324,
+        "Activity": 0,
+        "Drive": 0,
+        "TargetOffsetMeters": 5,
+        "Impairment": 0,
+        "Context": 1,
+        "Speed": 15.806669,
+        "ForwardSpeed": 15.660568,
+        "SideSpeed": -2.1441588,
+        "SlideRadians": 0.13606845
+      },
+      "Time": 5.3999999999999995,
+      "Omega": 47.756384885952,
+      "Steering": 0.02617994,
+      "Active": {
+        "SteeringRadians": 0.02617994,
+        "Drive": 0
+      },
+      "Pending": [
+        {
+          "ObservedAt": 5.2,
+          "ActivationAt": 5.44,
+          "Action": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0
+          }
+        }
+      ],
+      "NextReview": 5.3999999999999995
+    },
+    "ActualBeforeExit": 20.665093654231953,
+    "Hold": {
+      "Name": "hold-active",
+      "First": 0.02617994,
+      "Second": 0.02617994
+    }
+  },
+  {
+    "Definition": {
+      "Name": "D1",
+      "Pool": "diagnostic",
+      "Case": {
+        "Name": "D-C",
+        "Geometry": "progressive-c",
+        "Scenario": {
+          "Name": "D-C",
+          "Level": 4,
+          "Speed": 12,
+          "Offset": 7,
+          "Start": 18.625,
+          "OutwardSpeed": -0.1,
+          "HeadingError": -0.02,
+          "YawRate": -0.035
+        },
+        "Two": true
+      },
+      "Corner": 2,
+      "BeforeExit": 15,
+      "BaselineDirectory": "D:\\Codex-work\\pr138\\repo\\docs/experiments/two-contact-bike-dynamics\\../speed-throttle-root-cause/native",
+      "BaselineName": "baseline-D-C"
+    },
+    "Input": {
+      "Rider": {
+        "Id": 1,
+        "Position": {
+          "X": -42.222095,
+          "Y": 3.6577454
+        },
+        "Velocity": {
+          "X": 12.739077,
+          "Y": -8.854561
+        },
+        "Heading": -0.5230738,
+        "AngularVelocity": 0.48938346,
+        "Road": {
+          "Segment": 7,
+          "Progress": 0.5098785680886103,
+          "ReferenceMeters": 275.8678766381353,
+          "OffsetMeters": -0.07202362527426716,
+          "Heading": -0.5368259418517238,
+          "RadiusMeters": 26.33502977899946,
+          "CornerProgress": 0.8366261893628701,
+          "Tangent": {
+            "X": 0.85933626,
+            "Y": -0.511411
+          },
+          "Outward": {
+            "X": -0.511411,
+            "Y": -0.85933626
+          },
+          "IsTurn": true
+        },
+        "TotalReferenceMeters": 275.8678766381353,
+        "DistanceMeters": 273.07111220806837,
+        "Activity": 0,
+        "Drive": 0.31820688,
+        "TargetOffsetMeters": 7,
+        "Impairment": 0,
+        "Context": 2,
+        "Speed": 15.514101,
+        "ForwardSpeed": 15.458961,
+        "SideSpeed": -1.3068519,
+        "SlideRadians": 0.084336355
+      },
+      "Time": 15.599999999999977,
+      "Omega": 53.364157378381904,
+      "Steering": 0.008726646,
+      "Active": {
+        "SteeringRadians": 0.008726646,
+        "Drive": 0.31820688
+      },
+      "Pending": [
+        {
+          "ObservedAt": 15.4,
+          "ActivationAt": 15.64,
+          "Action": {
+            "SteeringRadians": 0.008726646,
+            "Drive": 0.31820688
+          }
+        }
+      ],
+      "NextReview": 15.599999999999977
+    },
+    "ActualBeforeExit": 15.91087330464427,
+    "Hold": {
+      "Name": "hold-active",
+      "First": 0.008726646,
+      "Second": 0.008726646
+    }
+  },
+  {
+    "Definition": {
+      "Name": "S0",
+      "Pool": "selection",
+      "Case": {
+        "Name": "S-B",
+        "Geometry": "progressive-b",
+        "Scenario": {
+          "Name": "S",
+          "Level": 4,
+          "Speed": 17.1,
+          "Offset": 5.8,
+          "Start": 18.4,
+          "OutwardSpeed": 0.095,
+          "HeadingError": 0.015,
+          "YawRate": -0.022
+        },
+        "Two": true
+      },
+      "Corner": 1,
+      "BeforeExit": 15,
+      "BaselineDirectory": "docs/experiments/causal-yaw-throttle/native",
+      "BaselineName": "select-S-B-A"
+    },
+    "Input": {
+      "Rider": {
+        "Id": 1,
+        "Position": {
+          "X": 51.25755,
+          "Y": 58.06659
+        },
+        "Velocity": {
+          "X": -13.42404,
+          "Y": 9.618672
+        },
+        "Heading": 2.5784192,
+        "AngularVelocity": 0.37389266,
+        "Road": {
+          "Segment": 3,
+          "Progress": 0.4671587541896071,
+          "ReferenceMeters": 115.09168300857283,
+          "OffsetMeters": -0.3133165757587897,
+          "Heading": 2.552620321022126,
+          "RadiusMeters": 26.47490306408564,
+          "CornerProgress": 0.8223862513965358,
+          "Tangent": {
+            "X": -0.831512,
+            "Y": 0.5555068
+          },
+          "Outward": {
+            "X": 0.5555068,
+            "Y": 0.831512
+          },
+          "IsTurn": true
+        },
+        "TotalReferenceMeters": 115.09168339004256,
+        "DistanceMeters": 98.97236178815365,
+        "Activity": 0,
+        "Drive": 0.31820688,
+        "TargetOffsetMeters": 5.8,
+        "Impairment": 0,
+        "Context": 1,
+        "Speed": 16.514349,
+        "ForwardSpeed": 16.486042,
+        "SideSpeed": -0.9664917,
+        "SlideRadians": 0.058557842
+      },
+      "Time": 5.6,
+      "Omega": 55.9726466193886,
+      "Steering": 0.02617994,
+      "Active": {
+        "SteeringRadians": 0.02617994,
+        "Drive": 0.31820688
+      },
+      "Pending": [
+        {
+          "ObservedAt": 5.4,
+          "ActivationAt": 5.640000000000001,
+          "Action": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0
+          }
+        }
+      ],
+      "NextReview": 5.6
+    },
+    "ActualBeforeExit": 17.29769158134721,
+    "Hold": {
+      "Name": "hold-active",
+      "First": 0.02617994,
+      "Second": 0.02617994
+    }
+  },
+  {
+    "Definition": {
+      "Name": "S1",
+      "Pool": "selection",
+      "Case": {
+        "Name": "S-C",
+        "Geometry": "progressive-c",
+        "Scenario": {
+          "Name": "S",
+          "Level": 4,
+          "Speed": 17.1,
+          "Offset": 5.8,
+          "Start": 18.4,
+          "OutwardSpeed": 0.095,
+          "HeadingError": 0.015,
+          "YawRate": -0.022
+        },
+        "Two": true
+      },
+      "Corner": 2,
+      "BeforeExit": 20,
+      "BaselineDirectory": "docs/experiments/causal-yaw-throttle/native",
+      "BaselineName": "select-S-C-A"
+    },
+    "Input": {
+      "Rider": {
+        "Id": 1,
+        "Position": {
+          "X": -46.826385,
+          "Y": 7.4592147
+        },
+        "Velocity": {
+          "X": 12.528903,
+          "Y": -11.808362
+        },
+        "Heading": -0.6571234,
+        "AngularVelocity": 0.46519142,
+        "Road": {
+          "Segment": 7,
+          "Progress": 0.32440696301511773,
+          "ReferenceMeters": 269.84688874045264,
+          "OffsetMeters": -0.322724433536978,
+          "Heading": -0.7575185643232065,
+          "RadiusMeters": 27.941722110445962,
+          "CornerProgress": 0.7748023210050392,
+          "Tangent": {
+            "X": 0.7265433,
+            "Y": -0.6871207
+          },
+          "Outward": {
+            "X": -0.6871207,
+            "Y": -0.7265433
+          },
+          "IsTurn": true
+        },
+        "TotalReferenceMeters": 269.84688912192235,
+        "DistanceMeters": 258.634429872036,
+        "Activity": 0,
+        "Drive": 0,
+        "TargetOffsetMeters": 5.8,
+        "Impairment": 0,
+        "Context": 2,
+        "Speed": 17.216585,
+        "ForwardSpeed": 17.132833,
+        "SideSpeed": -1.6961236,
+        "SlideRadians": 0.098676935
+      },
+      "Time": 14.199999999999982,
+      "Omega": 52.32526277403845,
+      "Steering": 0.02617994,
+      "Active": {
+        "SteeringRadians": 0.02617994,
+        "Drive": 0
+      },
+      "Pending": [
+        {
+          "ObservedAt": 14,
+          "ActivationAt": 14.24,
+          "Action": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0
+          }
+        }
+      ],
+      "NextReview": 14.199999999999982
+    },
+    "ActualBeforeExit": 21.931860820857196,
+    "Hold": {
+      "Name": "hold-active",
+      "First": 0.02617994,
+      "Second": 0.02617994
+    }
+  },
+  {
+    "Definition": {
+      "Name": "H0",
+      "Pool": "confirmation",
+      "Case": {
+        "Name": "V0-b",
+        "Geometry": "progressive-b",
+        "Scenario": {
+          "Name": "V0",
+          "Level": 4,
+          "Speed": 15.65,
+          "Offset": 4.85,
+          "Start": 18.85,
+          "OutwardSpeed": -0.0875,
+          "HeadingError": -0.0165,
+          "YawRate": 0.019
+        },
+        "Two": true
+      },
+      "Corner": 1,
+      "BeforeExit": 15,
+      "BaselineDirectory": "docs/experiments/causal-yaw-throttle/native",
+      "BaselineName": "extended-V0-b-A"
+    },
+    "Input": {
+      "Rider": {
+        "Id": 1,
+        "Position": {
+          "X": 50.744076,
+          "Y": 58.485947
+        },
+        "Velocity": {
+          "X": -14.031845,
+          "Y": 8.521162
+        },
+        "Heading": 2.7531543,
+        "AngularVelocity": 0.4527741,
+        "Road": {
+          "Segment": 3,
+          "Progress": 0.4876747145459804,
+          "ReferenceMeters": 115.75769519392117,
+          "OffsetMeters": -0.2416308888799269,
+          "Heading": 2.5775700371900316,
+          "RadiusMeters": 26.359850239350155,
+          "CornerProgress": 0.8292249048486601,
+          "Tangent": {
+            "X": -0.8451115,
+            "Y": 0.53459007
+          },
+          "Outward": {
+            "X": 0.53459007,
+            "Y": 0.8451115
+          },
+          "IsTurn": true
+        },
+        "TotalReferenceMeters": 115.75769481245143,
+        "DistanceMeters": 98.87747616274282,
+        "Activity": 0,
+        "Drive": 0.31820688,
+        "TargetOffsetMeters": 4.85,
+        "Impairment": 0,
+        "Context": 1,
+        "Speed": 16.416542,
+        "ForwardSpeed": 16.21383,
+        "SideSpeed": -2.5718784,
+        "SlideRadians": 0.15731184
+      },
+      "Time": 5.6,
+      "Omega": 58.06407768969869,
+      "Steering": -0.008726646,
+      "Active": {
+        "SteeringRadians": -0.008726646,
+        "Drive": 0.31820688
+      },
+      "Pending": [
+        {
+          "ObservedAt": 5.4,
+          "ActivationAt": 5.640000000000001,
+          "Action": {
+            "SteeringRadians": 0,
+            "Drive": 0.31820688
+          }
+        }
+      ],
+      "NextReview": 5.6
+    },
+    "ActualBeforeExit": 16.631680158938337,
+    "Hold": {
+      "Name": "hold-active",
+      "First": -0.008726646,
+      "Second": -0.008726646
+    }
+  },
+  {
+    "Definition": {
+      "Name": "H1",
+      "Pool": "confirmation",
+      "Case": {
+        "Name": "V0-c",
+        "Geometry": "progressive-c",
+        "Scenario": {
+          "Name": "V0",
+          "Level": 4,
+          "Speed": 15.65,
+          "Offset": 4.85,
+          "Start": 18.85,
+          "OutwardSpeed": -0.0875,
+          "HeadingError": -0.0165,
+          "YawRate": 0.019
+        },
+        "Two": true
+      },
+      "Corner": 1,
+      "BeforeExit": 15,
+      "BaselineDirectory": "docs/experiments/causal-yaw-throttle/native",
+      "BaselineName": "extended-V0-c-A"
+    },
+    "Input": {
+      "Rider": {
+        "Id": 1,
+        "Position": {
+          "X": 50.744076,
+          "Y": 58.485947
+        },
+        "Velocity": {
+          "X": -14.031845,
+          "Y": 8.521162
+        },
+        "Heading": 2.7531543,
+        "AngularVelocity": 0.4527741,
+        "Road": {
+          "Segment": 3,
+          "Progress": 0.4876747145459804,
+          "ReferenceMeters": 115.75769519392117,
+          "OffsetMeters": -0.2416308888799269,
+          "Heading": 2.5775700371900316,
+          "RadiusMeters": 26.359850239350155,
+          "CornerProgress": 0.8292249048486601,
+          "Tangent": {
+            "X": -0.8451115,
+            "Y": 0.53459007
+          },
+          "Outward": {
+            "X": 0.53459007,
+            "Y": 0.8451115
+          },
+          "IsTurn": true
+        },
+        "TotalReferenceMeters": 115.75769481245143,
+        "DistanceMeters": 98.87747616274282,
+        "Activity": 0,
+        "Drive": 0.31820688,
+        "TargetOffsetMeters": 4.85,
+        "Impairment": 0,
+        "Context": 1,
+        "Speed": 16.416542,
+        "ForwardSpeed": 16.21383,
+        "SideSpeed": -2.5718784,
+        "SlideRadians": 0.15731184
+      },
+      "Time": 5.6,
+      "Omega": 58.06407768969869,
+      "Steering": -0.008726646,
+      "Active": {
+        "SteeringRadians": -0.008726646,
+        "Drive": 0.31820688
+      },
+      "Pending": [
+        {
+          "ObservedAt": 5.4,
+          "ActivationAt": 5.640000000000001,
+          "Action": {
+            "SteeringRadians": 0,
+            "Drive": 0.31820688
+          }
+        }
+      ],
+      "NextReview": 5.6
+    },
+    "ActualBeforeExit": 16.631680158938337,
+    "Hold": {
+      "Name": "hold-active",
+      "First": -0.008726646,
+      "Second": -0.008726646
+    }
+  },
+  {
+    "Definition": {
+      "Name": "H2",
+      "Pool": "confirmation",
+      "Case": {
+        "Name": "V1-b",
+        "Geometry": "progressive-b",
+        "Scenario": {
+          "Name": "V1",
+          "Level": 4,
+          "Speed": 17.85,
+          "Offset": 6.35,
+          "Start": 19.05,
+          "OutwardSpeed": 0.0975,
+          "HeadingError": 0.0185,
+          "YawRate": -0.021
+        },
+        "Two": true
+      },
+      "Corner": 2,
+      "BeforeExit": 15,
+      "BaselineDirectory": "docs/experiments/causal-yaw-throttle/native",
+      "BaselineName": "extended-V1-b-A"
+    },
+    "Input": {
+      "Rider": {
+        "Id": 1,
+        "Position": {
+          "X": -43.13375,
+          "Y": 4.0000677
+        },
+        "Velocity": {
+          "X": 13.00038,
+          "Y": -8.474278
+        },
+        "Heading": -0.45401895,
+        "AngularVelocity": 0.47662637,
+        "Road": {
+          "Segment": 7,
+          "Progress": 0.4804767860261718,
+          "ReferenceMeters": 274.91340291209997,
+          "OffsetMeters": 0.11730515738102895,
+          "Heading": -0.5727959608381961,
+          "RadiusMeters": 26.78353308205356,
+          "CornerProgress": 0.8268255953420572,
+          "Tangent": {
+            "X": 0.8403889,
+            "Y": -0.54198384
+          },
+          "Outward": {
+            "X": -0.54198384,
+            "Y": -0.8403889
+          },
+          "IsTurn": true
+        },
+        "TotalReferenceMeters": 274.91340367503943,
+        "DistanceMeters": 260.01454593939707,
+        "Activity": 0,
+        "Drive": 0.31820688,
+        "TargetOffsetMeters": 6.35,
+        "Impairment": 0,
+        "Context": 2,
+        "Speed": 15.518481,
+        "ForwardSpeed": 15.39999,
+        "SideSpeed": -1.9140458,
+        "SlideRadians": 0.12365467
+      },
+      "Time": 14.39999999999998,
+      "Omega": 54.39862307181096,
+      "Steering": 0.008726646,
+      "Active": {
+        "SteeringRadians": 0.008726646,
+        "Drive": 0.31820688
+      },
+      "Pending": [
+        {
+          "ObservedAt": 14.200000000000001,
+          "ActivationAt": 14.440000000000001,
+          "Action": {
+            "SteeringRadians": 0.008726646,
+            "Drive": 0.31820688
+          }
+        }
+      ],
+      "NextReview": 14.39999999999998
+    },
+    "ActualBeforeExit": 16.865346267740108,
+    "Hold": {
+      "Name": "hold-active",
+      "First": 0.008726646,
+      "Second": 0.008726646
+    }
+  },
+  {
+    "Definition": {
+      "Name": "H3",
+      "Pool": "confirmation",
+      "Case": {
+        "Name": "V1-c",
+        "Geometry": "progressive-c",
+        "Scenario": {
+          "Name": "V1",
+          "Level": 4,
+          "Speed": 17.85,
+          "Offset": 6.35,
+          "Start": 19.05,
+          "OutwardSpeed": 0.0975,
+          "HeadingError": 0.0185,
+          "YawRate": -0.021
+        },
+        "Two": true
+      },
+      "Corner": 2,
+      "BeforeExit": 15,
+      "BaselineDirectory": "docs/experiments/causal-yaw-throttle/native",
+      "BaselineName": "extended-V1-c-A"
+    },
+    "Input": {
+      "Rider": {
+        "Id": 1,
+        "Position": {
+          "X": -43.13375,
+          "Y": 4.0000677
+        },
+        "Velocity": {
+          "X": 13.00038,
+          "Y": -8.474278
+        },
+        "Heading": -0.45401895,
+        "AngularVelocity": 0.47662637,
+        "Road": {
+          "Segment": 7,
+          "Progress": 0.4804767860261718,
+          "ReferenceMeters": 274.91340291209997,
+          "OffsetMeters": 0.11730515738102895,
+          "Heading": -0.5727959608381961,
+          "RadiusMeters": 26.78353308205356,
+          "CornerProgress": 0.8268255953420572,
+          "Tangent": {
+            "X": 0.8403889,
+            "Y": -0.54198384
+          },
+          "Outward": {
+            "X": -0.54198384,
+            "Y": -0.8403889
+          },
+          "IsTurn": true
+        },
+        "TotalReferenceMeters": 274.91340367503943,
+        "DistanceMeters": 260.01454593939707,
+        "Activity": 0,
+        "Drive": 0.31820688,
+        "TargetOffsetMeters": 6.35,
+        "Impairment": 0,
+        "Context": 2,
+        "Speed": 15.518481,
+        "ForwardSpeed": 15.39999,
+        "SideSpeed": -1.9140458,
+        "SlideRadians": 0.12365467
+      },
+      "Time": 14.39999999999998,
+      "Omega": 54.39862307181096,
+      "Steering": 0.008726646,
+      "Active": {
+        "SteeringRadians": 0.008726646,
+        "Drive": 0.31820688
+      },
+      "Pending": [
+        {
+          "ObservedAt": 14.200000000000001,
+          "ActivationAt": 14.440000000000001,
+          "Action": {
+            "SteeringRadians": 0.008726646,
+            "Drive": 0.31820688
+          }
+        }
+      ],
+      "NextReview": 14.39999999999998
+    },
+    "ActualBeforeExit": 16.865346267740108,
+    "Hold": {
+      "Name": "hold-active",
+      "First": 0.008726646,
+      "Second": 0.008726646
+    }
+  }
+]

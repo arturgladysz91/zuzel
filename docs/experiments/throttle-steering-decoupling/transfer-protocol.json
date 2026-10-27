@@ -1,0 +1,33 @@
+{
+  "FrozenBeforeAnyNewTransferWorld": true,
+  "OptionalAllocation": "Original protocol allows one egg quartet when prototype gate is closed; existing V1 #137 transfer-A prefix. This transfer does not select a policy.",
+  "Definition": {
+    "Name": "T0",
+    "Pool": "transfer",
+    "Case": {
+      "Name": "T0",
+      "Geometry": "egg-asymmetric",
+      "Scenario": {
+        "Name": "V1",
+        "Level": 4,
+        "Speed": 17.85,
+        "Offset": 6.35,
+        "Start": 19.05,
+        "OutwardSpeed": 0.0975,
+        "HeadingError": 0.0185,
+        "YawRate": -0.021
+      },
+      "Two": true
+    },
+    "Corner": 1,
+    "BeforeExit": 20,
+    "BaselineDirectory": "docs/experiments/causal-yaw-throttle/native",
+    "BaselineName": "transfer-A"
+  },
+  "ProtocolHash": "902D0EC3FCC8073D2A91171AFF3BB5FDCD7A2EBC8E09DF3CF4F10366031CD0BA",
+  "SelectionLockHash": "665A29EBD25AAB72800D15DB2E8B1C9DB214EB71CB3A82445AF89D6FA6A6BE4D",
+  "SourceHash": "79DED400F4FDB8CAF3BAA712A9462554E495E7E5E85F884E8105729461D7C156",
+  "MaxTransferWorlds": 4,
+  "TotalWorldLimit": 48,
+  "TotalCpuLimit": 650
+}

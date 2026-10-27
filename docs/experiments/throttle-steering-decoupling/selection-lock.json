@@ -1,0 +1,50 @@
+{
+  "ConfirmationNotOpened": true,
+  "ProtocolCommit": "dded3ec",
+  "RuleUnchanged": true,
+  "PrototypeGate": false,
+  "Tests": [
+    {
+      "State": "D0",
+      "Passed": false,
+      "BCompleted": false,
+      "DCompleted": true,
+      "BExitKph": null,
+      "DExitKph": 60.0158052
+    },
+    {
+      "State": "D1",
+      "Passed": false,
+      "BCompleted": false,
+      "DCompleted": false,
+      "BExitKph": 69.7936788,
+      "DExitKph": 62.599751999999995
+    },
+    {
+      "State": "S0",
+      "Passed": false,
+      "BCompleted": false,
+      "DCompleted": false,
+      "BExitKph": 70.41829320000001,
+      "DExitKph": 64.6124688
+    },
+    {
+      "State": "S1",
+      "Passed": false,
+      "BCompleted": false,
+      "DCompleted": false,
+      "BExitKph": 68.298102,
+      "DExitKph": 65.83534560000001
+    }
+  ],
+  "Decision": "No autonomous prototype: repeatable legal long full-gas benefit was not demonstrated. Keep all held factorial tests; do not tune on them.",
+  "NumericalThresholds": {
+    "ExitGainKph": 2,
+    "HistoricalGateGainSeconds": 0.1,
+    "DistinctFamilies": 3,
+    "NewDnf": 0,
+    "SearchCpuSecondsPerReview": 0.163482,
+    "CpuSeconds": 650,
+    "NativeWorlds": 48
+  }
+}

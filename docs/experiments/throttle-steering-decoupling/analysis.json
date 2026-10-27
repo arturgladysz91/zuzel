@@ -1,0 +1,131 @@
+{
+  "Verdict": "PHYSICS LIMITATION",
+  "Scope": "Finite frozen maneuvers and sampled native states only; no global impossibility claim.",
+  "AutonomousPrototypeBuilt": false,
+  "AutonomousGo": false,
+  "PrototypeReason": "No autonomous prototype: repeatable legal long full-gas benefit was not demonstrated. Keep all held factorial tests; do not tune on them.",
+  "NativeWorlds": 40,
+  "CpuSeconds": 373.359375,
+  "Contacts": 6350251,
+  "Forecasts": 69665,
+  "Rows": 36,
+  "DnfCount": 28,
+  "LegalFullCorrected": 0,
+  "StrictPhysicalPassFamilies": [],
+  "PhysicalTests": [
+    {
+      "State": "D0",
+      "Family": "D-B",
+      "Passed": false,
+      "ExitGainKph": null,
+      "HistoricalTimeGainSeconds": null
+    },
+    {
+      "State": "D1",
+      "Family": "D-C",
+      "Passed": false,
+      "ExitGainKph": 7.1939268,
+      "HistoricalTimeGainSeconds": null
+    },
+    {
+      "State": "S0",
+      "Family": "S",
+      "Passed": false,
+      "ExitGainKph": 5.805824400000006,
+      "HistoricalTimeGainSeconds": null
+    },
+    {
+      "State": "S1",
+      "Family": "S",
+      "Passed": false,
+      "ExitGainKph": 2.4627563999999893,
+      "HistoricalTimeGainSeconds": null
+    },
+    {
+      "State": "H0",
+      "Family": "V0",
+      "Passed": false,
+      "ExitGainKph": 5.457394800000003,
+      "HistoricalTimeGainSeconds": null
+    },
+    {
+      "State": "H1",
+      "Family": "V0",
+      "Passed": false,
+      "ExitGainKph": 5.457394800000003,
+      "HistoricalTimeGainSeconds": null
+    },
+    {
+      "State": "H2",
+      "Family": "V1",
+      "Passed": false,
+      "ExitGainKph": 6.954307199999995,
+      "HistoricalTimeGainSeconds": null
+    },
+    {
+      "State": "H3",
+      "Family": "V1",
+      "Passed": false,
+      "ExitGainKph": 6.954307199999995,
+      "HistoricalTimeGainSeconds": null
+    },
+    {
+      "State": "T0",
+      "Family": "V1",
+      "Passed": false,
+      "ExitGainKph": 3.047004000000001,
+      "HistoricalTimeGainSeconds": null
+    }
+  ],
+  "IdenticalGeometryTrajectories": [
+    {
+      "A": "H0-A",
+      "B": "H1-A",
+      "IdenticalExecutedTrajectory": true
+    },
+    {
+      "A": "H0-B",
+      "B": "H1-B",
+      "IdenticalExecutedTrajectory": true
+    },
+    {
+      "A": "H0-C",
+      "B": "H1-C",
+      "IdenticalExecutedTrajectory": true
+    },
+    {
+      "A": "H0-D",
+      "B": "H1-D",
+      "IdenticalExecutedTrajectory": true
+    },
+    {
+      "A": "H2-A",
+      "B": "H3-A",
+      "IdenticalExecutedTrajectory": true
+    },
+    {
+      "A": "H2-B",
+      "B": "H3-B",
+      "IdenticalExecutedTrajectory": true
+    },
+    {
+      "A": "H2-C",
+      "B": "H3-C",
+      "IdenticalExecutedTrajectory": true
+    },
+    {
+      "A": "H2-D",
+      "B": "H3-D",
+      "IdenticalExecutedTrajectory": true
+    }
+  ],
+  "Offline18": {
+    "FixedSteeringLowerYaw": 10,
+    "FixedSteeringNoSpeedLossVsHeld": 12,
+    "VariableChosenGas0": 2,
+    "Original137ClosesWhileFixedGasHasSameSafetyLowerYaw": 2
+  },
+  "ReportingCpuSeconds": 1.46875,
+  "NewNativeWorldsDuringReporting": 0,
+  "NewForceQueriesDuringReporting": 0
+}

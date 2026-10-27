@@ -3,6 +3,11 @@
 Release platform: **Windows only**. See the current [Windows CI policy](docs/ci.md)
 for Draft/full validation, the merge gate and optional historical audits.
 
+[Throttle–Steering Decoupling & Controlled Slide (#138)](docs/experiments/throttle-steering-decoupling/README.md)
+separates throttle, steering and their interaction in native factorial interventions.
+The finite sampled maneuvers do not demonstrate repeatable legal full-gas continuation;
+the autonomous prototype gate stays closed. Physics, policy and defaults remain unchanged.
+
 [Causal Yaw & Throttle Continuation (#137)](docs/experiments/causal-yaw-throttle/README.md)
 compares held and causal two-command forecasts with terminal and time-averaged yaw
 costs. Native evidence remains PARTIAL; the bounded prototype is default OFF.

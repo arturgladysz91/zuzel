@@ -1,0 +1,2162 @@
+[
+  {
+    "Name": "D-B-exit1-10",
+    "Original137": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.02617994,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": 0.02617994,
+          "Drive": 0
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.02617994,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -13.168665613172882,
+        "Progress": 15.161172971598887,
+        "Clearance": 0.7283699622897111,
+        "FutureClearance": 3.3639706933874804,
+        "ExitSpeed": 17.799697875976562,
+        "ExitBeta": 0.044884782284498215,
+        "DirectionError": 0.12035395216216926
+      },
+      "TerminalYawCost": 1.3214375228506037,
+      "MeanYawCost": 0.5889149316201525,
+      "SpeedKph": 64.07891235351563,
+      "MaxBeta": 3.142203331855428
+    },
+    "FixedGas138": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.02617994,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": -0.017453292,
+          "Drive": 1
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.02617994,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -13.060559149506542,
+        "Progress": 15.51099406229713,
+        "Clearance": 0.7283699622897111,
+        "FutureClearance": 3.772675144513759,
+        "ExitSpeed": 20.135147094726562,
+        "ExitBeta": 0.01384523045271635,
+        "DirectionError": 0.21021288327807364
+      },
+      "TerminalYawCost": 0.022330365541972395,
+      "MeanYawCost": 0.14956743718604662,
+      "SpeedKph": 72.48652954101563,
+      "MaxBeta": 3.142203331855428
+    },
+    "VariableGas138": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.02617994,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": -0.017453292,
+          "Drive": 1
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.02617994,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -13.060559149506542,
+        "Progress": 15.51099406229713,
+        "Clearance": 0.7283699622897111,
+        "FutureClearance": 3.772675144513759,
+        "ExitSpeed": 20.135147094726562,
+        "ExitBeta": 0.01384523045271635,
+        "DirectionError": 0.21021288327807364
+      },
+      "TerminalYawCost": 0.022330365541972395,
+      "MeanYawCost": 0.14956743718604662,
+      "SpeedKph": 72.48652954101563,
+      "MaxBeta": 3.142203331855428
+    },
+    "Held": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.02617994,
+          "Drive": 1
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.02617994,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -8.184739174290081,
+        "Progress": 15.492635831706309,
+        "Clearance": 0.7283699622897111,
+        "FutureClearance": 3.7702415717201956,
+        "ExitSpeed": 20.120641708374023,
+        "ExitBeta": -0.050741344690322876,
+        "DirectionError": 0.23996258121493996
+      },
+      "TerminalYawCost": 4.2881747801620085,
+      "MeanYawCost": 0.5544061997052521,
+      "SpeedKph": 72.43431015014649,
+      "MaxBeta": 3.142203331855428
+    },
+    "Basis": "Forecast only; identical native observation/irrevocable pending and first full action. No native outcome selection."
+  },
+  {
+    "Name": "D-B-exit1-20",
+    "Original137": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.02617994,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": 0.02617994,
+          "Drive": 0
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.02617994,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -9.411003706339631,
+        "Progress": 14.381053494171454,
+        "Clearance": 0.426418450423962,
+        "FutureClearance": 1.297565918453816,
+        "ExitSpeed": 16.26120376586914,
+        "ExitBeta": 0.1571786254644394,
+        "DirectionError": 0.13918621935429742
+      },
+      "TerminalYawCost": 4.037518317444755,
+      "MeanYawCost": 2.8689444527130457,
+      "SpeedKph": 58.54033355712891,
+      "MaxBeta": 9.034118183716892
+    },
+    "FixedGas138": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.02617994,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": -0.017453292,
+          "Drive": 1
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.02617994,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": 48.39137720909141,
+        "Progress": 14.668091477926339,
+        "Clearance": 0.426418450423962,
+        "FutureClearance": 1.4104905852206415,
+        "ExitSpeed": 17.918176651000977,
+        "ExitBeta": 0.5122262835502625,
+        "DirectionError": 0.18380119409987827
+      },
+      "TerminalYawCost": 60.97893831837622,
+      "MeanYawCost": 12.393118918304951,
+      "SpeedKph": 64.50543594360352,
+      "MaxBeta": 29.34840367186449
+    },
+    "VariableGas138": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.02617994,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": -0.017453292,
+          "Drive": 0
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.02617994,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -12.899815462226504,
+        "Progress": 14.39818296444031,
+        "Clearance": 0.426418450423962,
+        "FutureClearance": 1.5327741279435754,
+        "ExitSpeed": 16.53954315185547,
+        "ExitBeta": 0.06690094619989395,
+        "DirectionError": 0.19119776424169244
+      },
+      "TerminalYawCost": 0.007830248695014955,
+      "MeanYawCost": 1.2104613527579078,
+      "SpeedKph": 59.54235534667969,
+      "MaxBeta": 7.291384185121504
+    },
+    "Held": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.02617994,
+          "Drive": 1
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.02617994,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": 44.00267255166106,
+        "Progress": 14.67415276195004,
+        "Clearance": 0.426418450423962,
+        "FutureClearance": 1.4562526325292375,
+        "ExitSpeed": 18.01070213317871,
+        "ExitBeta": 0.4862212538719177,
+        "DirectionError": 0.19020822701692008
+      },
+      "TerminalYawCost": 56.37210864144094,
+      "MeanYawCost": 11.18028581351493,
+      "SpeedKph": 64.83852767944336,
+      "MaxBeta": 27.858426743002703
+    },
+    "Basis": "Forecast only; identical native observation/irrevocable pending and first full action. No native outcome selection."
+  },
+  {
+    "Name": "D-B-exit1-5",
+    "Original137": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": 0.008726646,
+          "Drive": 0
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -15.720440561034646,
+        "Progress": 16.011263378416118,
+        "Clearance": 1.7689249061157475,
+        "FutureClearance": 3.889050524118184,
+        "ExitSpeed": 18.561935424804688,
+        "ExitBeta": 0.02944946102797985,
+        "DirectionError": 0.059088618226100564
+      },
+      "TerminalYawCost": 0.23329564203775563,
+      "MeanYawCost": 0.3277683501765953,
+      "SpeedKph": 66.82296752929688,
+      "MaxBeta": 2.1909685020810694
+    },
+    "FixedGas138": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": -0.017453292,
+          "Drive": 1
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -10.2634002359797,
+        "Progress": 16.392462261472758,
+        "Clearance": 1.7689249061157475,
+        "FutureClearance": 4.087423836476881,
+        "ExitSpeed": 20.79729461669922,
+        "ExitBeta": 0.10952787101268768,
+        "DirectionError": 0.0924440765089396
+      },
+      "TerminalYawCost": 5.184289272398609,
+      "MeanYawCost": 0.7403626045794853,
+      "SpeedKph": 74.8702606201172,
+      "MaxBeta": 6.275484918835003
+    },
+    "VariableGas138": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": -0.017453292,
+          "Drive": 0.31820688
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -15.544969277035804,
+        "Progress": 16.233795650754985,
+        "Clearance": 1.7689249061157475,
+        "FutureClearance": 4.185476018415195,
+        "ExitSpeed": 19.797550201416016,
+        "ExitBeta": -0.003451706375926733,
+        "DirectionError": 0.11955550381766855
+      },
+      "TerminalYawCost": 0.4184215077053643,
+      "MeanYawCost": 0.1798110065930109,
+      "SpeedKph": 71.27118072509766,
+      "MaxBeta": 1.9904238268747494
+    },
+    "Held": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -1.3585846513675754,
+        "Progress": 16.391748913084086,
+        "Clearance": 1.7689249061157475,
+        "FutureClearance": 3.9578109475322605,
+        "ExitSpeed": 20.70743179321289,
+        "ExitBeta": 0.17062781751155853,
+        "DirectionError": 0.06818063545984865
+      },
+      "TerminalYawCost": 14.233229985243803,
+      "MeanYawCost": 1.876306873757923,
+      "SpeedKph": 74.54675445556641,
+      "MaxBeta": 9.776253754022461
+    },
+    "Basis": "Forecast only; identical native observation/irrevocable pending and first full action. No native outcome selection."
+  },
+  {
+    "Name": "D-B-exit1",
+    "Original137": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": 0.008726646,
+          "Drive": 0
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -16.239608763110205,
+        "Progress": 16.418655395507812,
+        "Clearance": 2.405740608980247,
+        "FutureClearance": 4.054129558867751,
+        "ExitSpeed": 18.93735122680664,
+        "ExitBeta": 0.03032209724187851,
+        "DirectionError": 0.03033273930384217
+      },
+      "TerminalYawCost": 0.24213170030284323,
+      "MeanYawCost": 0.320214116440421,
+      "SpeedKph": 68.17446441650391,
+      "MaxBeta": 2.180227801938252
+    },
+    "FixedGas138": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": -0.017453292,
+          "Drive": 1
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -11.409542927103905,
+        "Progress": 16.804981231689453,
+        "Clearance": 2.405740608980247,
+        "FutureClearance": 4.25030093033356,
+        "ExitSpeed": 21.17221450805664,
+        "ExitBeta": 0.104545459151268,
+        "DirectionError": 0.06496162839210173
+      },
+      "TerminalYawCost": 4.641681434466001,
+      "MeanYawCost": 0.6669314093942811,
+      "SpeedKph": 76.21997222900391,
+      "MaxBeta": 5.990013367924782
+    },
+    "VariableGas138": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": -0.017453292,
+          "Drive": 0.31820688
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -16.20043809138791,
+        "Progress": 16.647829055786133,
+        "Clearance": 2.405740608980247,
+        "FutureClearance": 4.348506612545429,
+        "ExitSpeed": 20.17780303955078,
+        "ExitBeta": -0.004116841126233339,
+        "DirectionError": 0.09117778524881004
+      },
+      "TerminalYawCost": 0.43423742383818664,
+      "MeanYawCost": 0.17260174674886475,
+      "SpeedKph": 72.64009094238281,
+      "MaxBeta": 1.9435233463559767
+    },
+    "Held": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -2.52655263579599,
+        "Progress": 16.80224609375,
+        "Clearance": 2.405740608980247,
+        "FutureClearance": 4.119205064077996,
+        "ExitSpeed": 21.082265853881836,
+        "ExitBeta": 0.16684117913246155,
+        "DirectionError": 0.04045843255709558
+      },
+      "TerminalYawCost": 13.614119749151147,
+      "MeanYawCost": 1.7830826303516292,
+      "SpeedKph": 75.8961570739746,
+      "MaxBeta": 9.559295375330693
+    },
+    "Basis": "Forecast only; identical native observation/irrevocable pending and first full action. No native outcome selection."
+  },
+  {
+    "Name": "D-B-exit2-5",
+    "Original137": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.02617994,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": 0.02617994,
+          "Drive": 0
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.02617994,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -13.169679221192718,
+        "Progress": 16.11362129280883,
+        "Clearance": 2.6203465277856064,
+        "FutureClearance": 3.226281582622239,
+        "ExitSpeed": 19.184446334838867,
+        "ExitBeta": 0.045802317559719086,
+        "DirectionError": 0.1913478007214381
+      },
+      "TerminalYawCost": 1.4292295203041914,
+      "MeanYawCost": 0.5036823803421986,
+      "SpeedKph": 69.06400680541992,
+      "MaxBeta": 2.6242794975762176
+    },
+    "FixedGas138": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.02617994,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.02617994,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -12.799659438792327,
+        "Progress": 16.441071091392814,
+        "Clearance": 2.6203465277856064,
+        "FutureClearance": 2.2904642700508226,
+        "ExitSpeed": 21.488933563232422,
+        "ExitBeta": -0.0011322553036734462,
+        "DirectionError": 0.2703732793660199
+      },
+      "TerminalYawCost": 0.08633267437982897,
+      "MeanYawCost": 0.10603428823575001,
+      "SpeedKph": 77.36016082763672,
+      "MaxBeta": 1.8226466047566114
+    },
+    "VariableGas138": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.02617994,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 0.31820688
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.02617994,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -13.258884983351601,
+        "Progress": 16.28385120461303,
+        "Clearance": 2.6203465277856064,
+        "FutureClearance": 2.338402146872241,
+        "ExitSpeed": 20.440391540527344,
+        "ExitBeta": -0.011563220992684364,
+        "DirectionError": 0.2787496650479826
+      },
+      "TerminalYawCost": 0.19023601295503895,
+      "MeanYawCost": 0.13574314532379694,
+      "SpeedKph": 73.58540954589844,
+      "MaxBeta": 1.8226466047566114
+    },
+    "Held": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.02617994,
+          "Drive": 1
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.02617994,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": 3.375925284145234,
+        "Progress": 16.38722282479125,
+        "Clearance": 2.6203465277856064,
+        "FutureClearance": 1.781580765926556,
+        "ExitSpeed": 21.391128540039062,
+        "ExitBeta": -0.1329001486301422,
+        "DirectionError": 0.32530566379617243
+      },
+      "TerminalYawCost": 14.852748463797088,
+      "MeanYawCost": 1.753514025366979,
+      "SpeedKph": 77.00806274414063,
+      "MaxBeta": 7.614617878786966
+    },
+    "Basis": "Forecast only; identical native observation/irrevocable pending and first full action. No native outcome selection."
+  },
+  {
+    "Name": "D-B-middle1",
+    "Original137": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.02617994,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": 0.02617994,
+          "Drive": 0
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.02617994,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -9.21410923732659,
+        "Progress": 15.357261223636442,
+        "Clearance": 0.32064493584190423,
+        "FutureClearance": 0.5509908561776246,
+        "ExitSpeed": 17.21211814880371,
+        "ExitBeta": 0.09728547185659409,
+        "DirectionError": 0.37683158638808845
+      },
+      "TerminalYawCost": 0.3274043161373999,
+      "MeanYawCost": 0.24029059339247585,
+      "SpeedKph": 61.96362533569336,
+      "MaxBeta": 5.819857266809719
+    },
+    "FixedGas138": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.02617994,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.02617994,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": 17.245082579349376,
+        "Progress": 15.699070062406122,
+        "Clearance": 0.32064493584190423,
+        "FutureClearance": 0.6239459649533574,
+        "ExitSpeed": 19.002059936523438,
+        "ExitBeta": 0.42154058814048767,
+        "DirectionError": 0.4542938798185061
+      },
+      "TerminalYawCost": 23.19779377458338,
+      "MeanYawCost": 3.0667462488636636,
+      "SpeedKph": 68.40741577148438,
+      "MaxBeta": 24.152496024729995
+    },
+    "VariableGas138": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.02617994,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 0.31820688
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.02617994,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -6.7849622657464295,
+        "Progress": 15.577917780173948,
+        "Clearance": 0.32064493584190423,
+        "FutureClearance": 0.720631995876106,
+        "ExitSpeed": 18.414844512939453,
+        "ExitBeta": 0.11051323264837265,
+        "DirectionError": 0.43652111642987435
+      },
+      "TerminalYawCost": 0.9633562518258689,
+      "MeanYawCost": 0.3259875663401489,
+      "SpeedKph": 66.29344024658204,
+      "MaxBeta": 6.6319965083926204
+    },
+    "Held": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.02617994,
+          "Drive": 1
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.02617994,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": 10.054428400042738,
+        "Progress": 15.713995717325474,
+        "Clearance": 0.32064493584190423,
+        "FutureClearance": 0.7510986259220606,
+        "ExitSpeed": 19.212757110595703,
+        "ExitBeta": 0.35259515047073364,
+        "DirectionError": 0.47767176476070206
+      },
+      "TerminalYawCost": 14.885202622283666,
+      "MeanYawCost": 1.7149647684582048,
+      "SpeedKph": 69.16592559814454,
+      "MaxBeta": 20.202214529990176
+    },
+    "Basis": "Forecast only; identical native observation/irrevocable pending and first full action. No native outcome selection."
+  },
+  {
+    "Name": "D-B-near-control",
+    "Original137": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.08726647,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": 0.02617994,
+          "Drive": 0
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.08726647,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -4.983244068696456,
+        "Progress": 16.61430763187036,
+        "Clearance": 0.20597217797552164,
+        "FutureClearance": 2.3858729197453146,
+        "ExitSpeed": 18.933361053466797,
+        "ExitBeta": 0.12050492316484451,
+        "DirectionError": 0.5225604466064975
+      },
+      "TerminalYawCost": 0.023543021309103265,
+      "MeanYawCost": 0.4193691170984198,
+      "SpeedKph": 68.16009979248047,
+      "MaxBeta": 7.0547433261895
+    },
+    "FixedGas138": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.08726647,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.08726647,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": 27.573820096806582,
+        "Progress": 16.876586238068853,
+        "Clearance": 0.20597217797552164,
+        "FutureClearance": 2.4221310148318946,
+        "ExitSpeed": 20.5156307220459,
+        "ExitBeta": 0.47841283679008484,
+        "DirectionError": 0.5745922335480411
+      },
+      "TerminalYawCost": 30.037024951875544,
+      "MeanYawCost": 4.590003138191019,
+      "SpeedKph": 73.85627059936523,
+      "MaxBeta": 27.41103660268042
+    },
+    "VariableGas138": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.08726647,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 0.31820688
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.08726647,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -4.130630481356059,
+        "Progress": 16.791298580815578,
+        "Clearance": 0.20597217797552164,
+        "FutureClearance": 2.484982249533391,
+        "ExitSpeed": 20.017826080322266,
+        "ExitBeta": 0.18564563989639282,
+        "DirectionError": 0.5539933737184146
+      },
+      "TerminalYawCost": 0.19059499325836265,
+      "MeanYawCost": 0.44508587326776083,
+      "SpeedKph": 72.06417388916016,
+      "MaxBeta": 10.636711271613848
+    },
+    "Held": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.08726647,
+          "Drive": 1
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.08726647,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": 3.2104407273766786,
+        "Progress": 16.867123461991355,
+        "Clearance": 0.20597217797552164,
+        "FutureClearance": 3.024158364637969,
+        "ExitSpeed": 21.382953643798828,
+        "ExitBeta": 0.15876159071922302,
+        "DirectionError": 0.6761123773013726
+      },
+      "TerminalYawCost": 0.11020490710977056,
+      "MeanYawCost": 0.7867814858485552,
+      "SpeedKph": 76.97863311767578,
+      "MaxBeta": 9.09636883137635
+    },
+    "Basis": "Forecast only; identical native observation/irrevocable pending and first full action. No native outcome selection."
+  },
+  {
+    "Name": "D-B-preparation2",
+    "Original137": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.08726647,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": 0.02617994,
+          "Drive": 0
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.08726647,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -13.584288996054887,
+        "Progress": 17.440912577660583,
+        "Clearance": 1.6720867934978627,
+        "FutureClearance": 0.3580427566326283,
+        "ExitSpeed": 19.87091827392578,
+        "ExitBeta": 0.3473048210144043,
+        "DirectionError": 0.15348801408631285
+      },
+      "TerminalYawCost": 0.4483970174271085,
+      "MeanYawCost": 0.2616415336955392,
+      "SpeedKph": 71.53530578613281,
+      "MaxBeta": 19.899101055799754
+    },
+    "FixedGas138": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.08726647,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.08726647,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": 19.964176281854886,
+        "Progress": 17.726173970853324,
+        "Clearance": 1.5794168711726497,
+        "FutureClearance": 0.35474672804520835,
+        "ExitSpeed": 21.126663208007812,
+        "ExitBeta": 0.6934012770652771,
+        "DirectionError": 0.2122783260758112
+      },
+      "TerminalYawCost": 31.746944352885173,
+      "MeanYawCost": 5.732696719085414,
+      "SpeedKph": 76.05598754882813,
+      "MaxBeta": 39.7289676714047
+    },
+    "VariableGas138": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.08726647,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 0
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.08726647,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -14.122999805079157,
+        "Progress": 17.462539088040216,
+        "Clearance": 1.6895618008348179,
+        "FutureClearance": 0.38446853148667337,
+        "ExitSpeed": 19.99067497253418,
+        "ExitBeta": 0.3225048780441284,
+        "DirectionError": 0.15940857944083753
+      },
+      "TerminalYawCost": 0.07595936439758337,
+      "MeanYawCost": 0.15668011408612711,
+      "SpeedKph": 71.96642990112305,
+      "MaxBeta": 18.47816792896394
+    },
+    "Held": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.08726647,
+          "Drive": 1
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.08726647,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": 10.060776138792985,
+        "Progress": 17.815903517510606,
+        "Clearance": 1.7256969456557205,
+        "FutureClearance": 0.5599659352187087,
+        "ExitSpeed": 21.637374877929688,
+        "ExitBeta": 0.5819875001907349,
+        "DirectionError": 0.23868043830346775
+      },
+      "TerminalYawCost": 19.651047494060215,
+      "MeanYawCost": 2.941982446855838,
+      "SpeedKph": 77.89454956054688,
+      "MaxBeta": 33.345427945644246
+    },
+    "Basis": "Forecast only; identical native observation/irrevocable pending and first full action. No native outcome selection."
+  },
+  {
+    "Name": "D-B-straight\u002B10",
+    "Original137": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": 0.008726646,
+          "Drive": 0.31820688
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -17.317916077008274,
+        "Progress": 17.403844833374023,
+        "Clearance": 3.355424906561589,
+        "FutureClearance": 4.867402267588184,
+        "ExitSpeed": 20.952232360839844,
+        "ExitBeta": 0.019872302189469337,
+        "DirectionError": 0.06333997558366189
+      },
+      "TerminalYawCost": 0.27155422592295636,
+      "MeanYawCost": 0.07561267133218884,
+      "SpeedKph": 75.42803649902343,
+      "MaxBeta": 1.1467761637406717
+    },
+    "FixedGas138": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": 0,
+          "Drive": 1
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -16.662404396759136,
+        "Progress": 17.556525230407715,
+        "Clearance": 3.355424906561589,
+        "FutureClearance": 5.006819938339867,
+        "ExitSpeed": 22.003835678100586,
+        "ExitBeta": -0.004334664903581142,
+        "DirectionError": 0.0912887409251435
+      },
+      "TerminalYawCost": 0.013368543537049641,
+      "MeanYawCost": 0.011180768985763763,
+      "SpeedKph": 79.21380844116212,
+      "MaxBeta": 1.1467761637406717
+    },
+    "VariableGas138": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": 0,
+          "Drive": 0.31820688
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -17.420978610609435,
+        "Progress": 17.397692680358887,
+        "Clearance": 3.355424906561589,
+        "FutureClearance": 4.991271349547511,
+        "ExitSpeed": 20.962177276611328,
+        "ExitBeta": -0.001157487160526216,
+        "DirectionError": 0.09129280577182719
+      },
+      "TerminalYawCost": 0.00019719588061463362,
+      "MeanYawCost": 0.01003001203776473,
+      "SpeedKph": 75.46383819580079,
+      "MaxBeta": 1.1467761637406717
+    },
+    "Held": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -11.838725741676472,
+        "Progress": 17.545342445373535,
+        "Clearance": 3.355424906561589,
+        "FutureClearance": 5.106405213058554,
+        "ExitSpeed": 21.97180938720703,
+        "ExitBeta": -0.07384650409221649,
+        "DirectionError": 0.120873439563709
+      },
+      "TerminalYawCost": 4.574306832026221,
+      "MeanYawCost": 0.48109455120728073,
+      "SpeedKph": 79.09851379394532,
+      "MaxBeta": 4.231093035252315
+    },
+    "Basis": "Forecast only; identical native observation/irrevocable pending and first full action. No native outcome selection."
+  },
+  {
+    "Name": "D-C-exit1-10",
+    "Original137": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": 0.008726646,
+          "Drive": 0
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -16.212913244793523,
+        "Progress": 16.33345921295296,
+        "Clearance": 0.30674411394531353,
+        "FutureClearance": 0.7587769581861421,
+        "ExitSpeed": 18.700136184692383,
+        "ExitBeta": 0.026661435142159462,
+        "DirectionError": -0.009032599144692455
+      },
+      "TerminalYawCost": 0.2182496551371427,
+      "MeanYawCost": 0.2369279599284774,
+      "SpeedKph": 67.32049026489258,
+      "MaxBeta": 3.3428011307552925
+    },
+    "FixedGas138": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": -0.02617994,
+          "Drive": 1
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -15.5261800524449,
+        "Progress": 16.72908146637093,
+        "Clearance": 0.30674411394531353,
+        "FutureClearance": 1.1550250882762199,
+        "ExitSpeed": 20.988576889038086,
+        "ExitBeta": 0.003911595791578293,
+        "DirectionError": 0.061349643530114406
+      },
+      "TerminalYawCost": 0.4578554823592451,
+      "MeanYawCost": 0.10273025409332794,
+      "SpeedKph": 75.5588768005371,
+      "MaxBeta": 3.3428011307552925
+    },
+    "VariableGas138": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": -0.02617994,
+          "Drive": 1
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -15.5261800524449,
+        "Progress": 16.72908146637093,
+        "Clearance": 0.30674411394531353,
+        "FutureClearance": 1.1550250882762199,
+        "ExitSpeed": 20.988576889038086,
+        "ExitBeta": 0.003911595791578293,
+        "DirectionError": 0.061349643530114406
+      },
+      "TerminalYawCost": 0.4578554823592451,
+      "MeanYawCost": 0.10273025409332794,
+      "SpeedKph": 75.5588768005371,
+      "MaxBeta": 3.3428011307552925
+    },
+    "Held": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -6.818241566675863,
+        "Progress": 16.726592376405108,
+        "Clearance": 0.30674411394531353,
+        "FutureClearance": 0.8720554959746009,
+        "ExitSpeed": 20.889280319213867,
+        "ExitBeta": 0.1346171796321869,
+        "DirectionError": 0.004902056564902502
+      },
+      "TerminalYawCost": 9.32380909508134,
+      "MeanYawCost": 1.165865494210265,
+      "SpeedKph": 75.20140914916992,
+      "MaxBeta": 7.712996280824272
+    },
+    "Basis": "Forecast only; identical native observation/irrevocable pending and first full action. No native outcome selection."
+  },
+  {
+    "Name": "D-C-exit1-20",
+    "Original137": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.08726647,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": 0.02617994,
+          "Drive": 0
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.08726647,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -12.65826627402214,
+        "Progress": 15.045018036733893,
+        "Clearance": 0.6540264326649716,
+        "FutureClearance": 0.9330853604192321,
+        "ExitSpeed": 17.618576049804688,
+        "ExitBeta": 0.04734921455383301,
+        "DirectionError": 0.11012330893077227
+      },
+      "TerminalYawCost": 1.212423085259889,
+      "MeanYawCost": 0.6912389698639949,
+      "SpeedKph": 63.426873779296876,
+      "MaxBeta": 8.60187892079351
+    },
+    "FixedGas138": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.08726647,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": -0.034906585,
+          "Drive": 1
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.08726647,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -8.93051468489385,
+        "Progress": 15.3855460737459,
+        "Clearance": 0.6713590822328497,
+        "FutureClearance": 1.2508794537979957,
+        "ExitSpeed": 19.83751678466797,
+        "ExitBeta": 0.12102310359477997,
+        "DirectionError": 0.17197020222434345
+      },
+      "TerminalYawCost": 4.373650795645351,
+      "MeanYawCost": 0.8683053771909296,
+      "SpeedKph": 71.4150604248047,
+      "MaxBeta": 8.60187892079351
+    },
+    "VariableGas138": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.08726647,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": -0.034906585,
+          "Drive": 0.31820688
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.08726647,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -11.559505461933314,
+        "Progress": 15.244208914591013,
+        "Clearance": 0.6716934571114869,
+        "FutureClearance": 1.3001553774201788,
+        "ExitSpeed": 18.906166076660156,
+        "ExitBeta": -0.017767908051609993,
+        "DirectionError": 0.2127336569598559
+      },
+      "TerminalYawCost": 1.8810761852402023,
+      "MeanYawCost": 0.5825389536317334,
+      "SpeedKph": 68.06219787597657,
+      "MaxBeta": 8.60187892079351
+    },
+    "Held": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.08726647,
+          "Drive": 1
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.08726647,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": 29.74236941818923,
+        "Progress": 15.294307672276148,
+        "Clearance": 0.6897594595934082,
+        "FutureClearance": 1.4389881084674299,
+        "ExitSpeed": 19.702804565429688,
+        "ExitBeta": -0.2090531438589096,
+        "DirectionError": 0.31193379773162944
+      },
+      "TerminalYawCost": 40.076820645333164,
+      "MeanYawCost": 5.481468085618519,
+      "SpeedKph": 70.93009643554687,
+      "MaxBeta": 11.977862931920503
+    },
+    "Basis": "Forecast only; identical native observation/irrevocable pending and first full action. No native outcome selection."
+  },
+  {
+    "Name": "D-C-exit1-5",
+    "Original137": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": 0.008726646,
+          "Drive": 0.31820688
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -16.865102242995317,
+        "Progress": 16.895379451625615,
+        "Clearance": 0.31797176989367804,
+        "FutureClearance": 1.0591634816627589,
+        "ExitSpeed": 20.30246353149414,
+        "ExitBeta": 0.027171757072210312,
+        "DirectionError": 0.009386534372934019
+      },
+      "TerminalYawCost": 0.35069444337927014,
+      "MeanYawCost": 0.1338925757246498,
+      "SpeedKph": 73.08886871337891,
+      "MaxBeta": 1.9517978928624748
+    },
+    "FixedGas138": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -15.802366816283564,
+        "Progress": 17.052916911952764,
+        "Clearance": 0.31797176989367804,
+        "FutureClearance": 1.299482949868478,
+        "ExitSpeed": 21.376710891723633,
+        "ExitBeta": -0.017821257933974266,
+        "DirectionError": 0.06010910522585622
+      },
+      "TerminalYawCost": 0.5366686398616717,
+      "MeanYawCost": 0.06258199079198523,
+      "SpeedKph": 76.95615921020509,
+      "MaxBeta": 1.9517978928624748
+    },
+    "VariableGas138": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 0.31820688
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -16.85452605903594,
+        "Progress": 16.891301540248662,
+        "Clearance": 0.31797176989367804,
+        "FutureClearance": 1.300748351106138,
+        "ExitSpeed": 20.321258544921875,
+        "ExitBeta": -0.013098582625389099,
+        "DirectionError": 0.06535367887100163
+      },
+      "TerminalYawCost": 0.20071788333816798,
+      "MeanYawCost": 0.05386717101992464,
+      "SpeedKph": 73.15653076171876,
+      "MaxBeta": 1.9517978928624748
+    },
+    "Held": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -15.802366816283564,
+        "Progress": 17.052916911952764,
+        "Clearance": 0.31797176989367804,
+        "FutureClearance": 1.299482949868478,
+        "ExitSpeed": 21.376710891723633,
+        "ExitBeta": -0.017821257933974266,
+        "DirectionError": 0.06010910522585622
+      },
+      "TerminalYawCost": 0.5366686398616717,
+      "MeanYawCost": 0.06258199079198523,
+      "SpeedKph": 76.95615921020509,
+      "MaxBeta": 1.9517978928624748
+    },
+    "Basis": "Forecast only; identical native observation/irrevocable pending and first full action. No native outcome selection."
+  },
+  {
+    "Name": "D-C-exit1",
+    "Original137": {
+      "Actions": [
+        {
+          "SteeringRadians": 0,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": 0.008726646,
+          "Drive": 0.31820688
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": 0,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -17.554430173403034,
+        "Progress": 17.586336135864258,
+        "Clearance": 0.7178967756708031,
+        "FutureClearance": 1.1901320378329636,
+        "ExitSpeed": 21.075679779052734,
+        "ExitBeta": 0.029759399592876434,
+        "DirectionError": -0.006014743594509042
+      },
+      "TerminalYawCost": 0.3971368039356219,
+      "MeanYawCost": 0.14216836130953264,
+      "SpeedKph": 75.87244720458985,
+      "MaxBeta": 1.7050879690560385
+    },
+    "FixedGas138": {
+      "Actions": [
+        {
+          "SteeringRadians": 0,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": 0,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -16.504545606112337,
+        "Progress": 17.744439125061035,
+        "Clearance": 0.7178967756708031,
+        "FutureClearance": 1.4695118962259257,
+        "ExitSpeed": 22.137205123901367,
+        "ExitBeta": -0.019887294620275497,
+        "DirectionError": 0.04583579885773803
+      },
+      "TerminalYawCost": 0.6182377261271003,
+      "MeanYawCost": 0.05791561179239094,
+      "SpeedKph": 79.69393844604492,
+      "MaxBeta": 1.1394580713909477
+    },
+    "VariableGas138": {
+      "Actions": [
+        {
+          "SteeringRadians": 0,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 0.31820688
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": 0,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -17.640800100196767,
+        "Progress": 17.584806442260742,
+        "Clearance": 0.7178967756708031,
+        "FutureClearance": 1.4704343604594299,
+        "ExitSpeed": 21.096477508544922,
+        "ExitBeta": -0.013556063175201416,
+        "DirectionError": 0.05024513803691155
+      },
+      "TerminalYawCost": 0.20963463983308328,
+      "MeanYawCost": 0.04165529288516196,
+      "SpeedKph": 75.94731903076172,
+      "MaxBeta": 0.776705206751755
+    },
+    "Held": {
+      "Actions": [
+        {
+          "SteeringRadians": 0,
+          "Drive": 1
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": 0,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -15.465290142479965,
+        "Progress": 17.746212005615234,
+        "Clearance": 0.7178967756708031,
+        "FutureClearance": 1.3140124853665198,
+        "ExitSpeed": 22.124496459960938,
+        "ExitBeta": 0.050569262355566025,
+        "DirectionError": 0.015575937849768628
+      },
+      "TerminalYawCost": 1.7373500215372761,
+      "MeanYawCost": 0.1839254304445089,
+      "SpeedKph": 79.64818725585938,
+      "MaxBeta": 2.8974054056706504
+    },
+    "Basis": "Forecast only; identical native observation/irrevocable pending and first full action. No native outcome selection."
+  },
+  {
+    "Name": "D-C-exit2-5",
+    "Original137": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": 0.008726646,
+          "Drive": 0
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -14.180098657740547,
+        "Progress": 15.630604099252878,
+        "Clearance": 2.6105299241660553,
+        "FutureClearance": 3.608808727833698,
+        "ExitSpeed": 18.666704177856445,
+        "ExitBeta": 0.031185230240225792,
+        "DirectionError": 0.1782608237244089
+      },
+      "TerminalYawCost": 0.24496853070500385,
+      "MeanYawCost": 0.357593417031286,
+      "SpeedKph": 67.2001350402832,
+      "MaxBeta": 2.334816080551077
+    },
+    "FixedGas138": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": -0.017453292,
+          "Drive": 1
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -6.741669947362703,
+        "Progress": 15.980580638864694,
+        "Clearance": 2.6105299241660553,
+        "FutureClearance": 3.1295974799841764,
+        "ExitSpeed": 20.885332107543945,
+        "ExitBeta": 0.12477369606494904,
+        "DirectionError": 0.20919736861438437
+      },
+      "TerminalYawCost": 6.867480329553918,
+      "MeanYawCost": 0.9567868759395225,
+      "SpeedKph": 75.1871955871582,
+      "MaxBeta": 7.149006008014938
+    },
+    "VariableGas138": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": -0.017453292,
+          "Drive": 0.31820688
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -13.47657053060999,
+        "Progress": 15.82472164533442,
+        "Clearance": 2.6105299241660553,
+        "FutureClearance": 2.9742021592716936,
+        "ExitSpeed": 19.90737533569336,
+        "ExitBeta": -0.000752474123146385,
+        "DirectionError": 0.2370934533433283
+      },
+      "TerminalYawCost": 0.3831247982486553,
+      "MeanYawCost": 0.18965594535810432,
+      "SpeedKph": 71.6665512084961,
+      "MaxBeta": 2.1354129576280383
+    },
+    "Held": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": 2.261591594446412,
+        "Progress": 15.987899135568796,
+        "Clearance": 2.6105299241660553,
+        "FutureClearance": 3.374778064487937,
+        "ExitSpeed": 20.78919219970703,
+        "ExitBeta": 0.1848376840353012,
+        "DirectionError": 0.1860233998299454
+      },
+      "TerminalYawCost": 16.23370994282246,
+      "MeanYawCost": 2.174850675388135,
+      "SpeedKph": 74.84109191894531,
+      "MaxBeta": 10.59041898149517
+    },
+    "Basis": "Forecast only; identical native observation/irrevocable pending and first full action. No native outcome selection."
+  },
+  {
+    "Name": "D-C-middle1",
+    "Original137": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.08726647,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": 0.02617994,
+          "Drive": 0
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.08726647,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -9.386956023965032,
+        "Progress": 14.763382253153452,
+        "Clearance": 4.683431859545797,
+        "FutureClearance": 4.796978969267229,
+        "ExitSpeed": 18.623830795288086,
+        "ExitBeta": 0.11327792704105377,
+        "DirectionError": 0.3306865823810057
+      },
+      "TerminalYawCost": 0.1466710661550415,
+      "MeanYawCost": 0.18630258453598297,
+      "SpeedKph": 67.04579086303711,
+      "MaxBeta": 7.043332963944058
+    },
+    "FixedGas138": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.08726647,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.08726647,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": 19.500035479191936,
+        "Progress": 15.034329097710668,
+        "Clearance": 4.683431859545797,
+        "FutureClearance": 4.806648686408328,
+        "ExitSpeed": 20.198362350463867,
+        "ExitBeta": 0.46114569902420044,
+        "DirectionError": 0.3891699477958228
+      },
+      "TerminalYawCost": 26.656405354070003,
+      "MeanYawCost": 3.769544558921082,
+      "SpeedKph": 72.71410446166992,
+      "MaxBeta": 26.42170221880582
+    },
+    "VariableGas138": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.08726647,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 0.31820688
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.08726647,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -8.8955178139791,
+        "Progress": 14.94482591588013,
+        "Clearance": 4.683431859545797,
+        "FutureClearance": 4.862419639022534,
+        "ExitSpeed": 19.70763397216797,
+        "ExitBeta": 0.17966529726982117,
+        "DirectionError": 0.3666157195129336
+      },
+      "TerminalYawCost": 0.03240869951192742,
+      "MeanYawCost": 0.16733883154887855,
+      "SpeedKph": 70.94748229980469,
+      "MaxBeta": 10.294062841123615
+    },
+    "Held": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.08726647,
+          "Drive": 1
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.08726647,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -0.8710503795610125,
+        "Progress": 15.081499514653444,
+        "Clearance": 4.683431859545797,
+        "FutureClearance": 5.413788738395616,
+        "ExitSpeed": 21.04025650024414,
+        "ExitBeta": 0.13371257483959198,
+        "DirectionError": 0.5021489131115504
+      },
+      "TerminalYawCost": 1.3968988744217254,
+      "MeanYawCost": 0.8335498873147066,
+      "SpeedKph": 75.7449234008789,
+      "MaxBeta": 7.6611663768905105
+    },
+    "Basis": "Forecast only; identical native observation/irrevocable pending and first full action. No native outcome selection."
+  },
+  {
+    "Name": "D-C-near-control",
+    "Original137": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.08726647,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": 0.02617994,
+          "Drive": 0
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.08726647,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -4.8198366898077545,
+        "Progress": 14.266055935279496,
+        "Clearance": 0.2454861588295817,
+        "FutureClearance": 1.93402924671436,
+        "ExitSpeed": 16.38958740234375,
+        "ExitBeta": 0.06709430366754532,
+        "DirectionError": 0.4239046663210669
+      },
+      "TerminalYawCost": 1.3946375390592902,
+      "MeanYawCost": 0.8064800362030997,
+      "SpeedKph": 59.002514648437504,
+      "MaxBeta": 6.262958048333237
+    },
+    "FixedGas138": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.08726647,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.08726647,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": 42.95894009203213,
+        "Progress": 14.557667740693432,
+        "Clearance": 0.2454861588295817,
+        "FutureClearance": 1.9625026645002823,
+        "ExitSpeed": 18.142606735229492,
+        "ExitBeta": 0.4047059416770935,
+        "DirectionError": 0.4376125375715342
+      },
+      "TerminalYawCost": 48.615982382997736,
+      "MeanYawCost": 7.850158454450312,
+      "SpeedKph": 65.31338424682617,
+      "MaxBeta": 23.187942174292132
+    },
+    "VariableGas138": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.08726647,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 0.31820688
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.08726647,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -5.549316363188935,
+        "Progress": 14.453982951651255,
+        "Clearance": 0.2454861588295817,
+        "FutureClearance": 2.072867423789588,
+        "ExitSpeed": 17.542091369628906,
+        "ExitBeta": 0.09125909209251404,
+        "DirectionError": 0.43951570976117166
+      },
+      "TerminalYawCost": 0.8439368773234317,
+      "MeanYawCost": 0.84501716206264,
+      "SpeedKph": 63.151528930664064,
+      "MaxBeta": 6.262958048333237
+    },
+    "Held": {
+      "Actions": [
+        {
+          "SteeringRadians": -0.08726647,
+          "Drive": 1
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": -0.08726647,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": 2.5523304296771974,
+        "Progress": 14.507277913428311,
+        "Clearance": 0.2454861588295817,
+        "FutureClearance": 2.4633847114014,
+        "ExitSpeed": 18.855396270751953,
+        "ExitBeta": 0.04162042587995529,
+        "DirectionError": 0.5797164374133582
+      },
+      "TerminalYawCost": 2.050795674545331,
+      "MeanYawCost": 0.9069526111323741,
+      "SpeedKph": 67.87942657470704,
+      "MaxBeta": 6.2716861194006235
+    },
+    "Basis": "Forecast only; identical native observation/irrevocable pending and first full action. No native outcome selection."
+  },
+  {
+    "Name": "D-C-preparation2",
+    "Original137": {
+      "Actions": [
+        {
+          "SteeringRadians": 0,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": 0,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": 9.313868166200574,
+        "Progress": 19.682441512094442,
+        "Clearance": 0.3251886388521703,
+        "FutureClearance": 1.2340455989759314,
+        "ExitSpeed": 24.1182861328125,
+        "ExitBeta": 0.13828200101852417,
+        "DirectionError": 0.731625091376896
+      },
+      "TerminalYawCost": 0.15819118535308047,
+      "MeanYawCost": 4.593182416880842,
+      "SpeedKph": 86.82583007812501,
+      "MaxBeta": 7.922975116876177
+    },
+    "FixedGas138": {
+      "Actions": [
+        {
+          "SteeringRadians": 0,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": 0,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": 9.313868166200574,
+        "Progress": 19.682441512094442,
+        "Clearance": 0.3251886388521703,
+        "FutureClearance": 1.2340455989759314,
+        "ExitSpeed": 24.1182861328125,
+        "ExitBeta": 0.13828200101852417,
+        "DirectionError": 0.731625091376896
+      },
+      "TerminalYawCost": 0.15819118535308047,
+      "MeanYawCost": 4.593182416880842,
+      "SpeedKph": 86.82583007812501,
+      "MaxBeta": 7.922975116876177
+    },
+    "VariableGas138": {
+      "Actions": [
+        {
+          "SteeringRadians": 0,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": 0,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": 9.313868166200574,
+        "Progress": 19.682441512094442,
+        "Clearance": 0.3251886388521703,
+        "FutureClearance": 1.2340455989759314,
+        "ExitSpeed": 24.1182861328125,
+        "ExitBeta": 0.13828200101852417,
+        "DirectionError": 0.731625091376896
+      },
+      "TerminalYawCost": 0.15819118535308047,
+      "MeanYawCost": 4.593182416880842,
+      "SpeedKph": 86.82583007812501,
+      "MaxBeta": 7.922975116876177
+    },
+    "Held": {
+      "Actions": [
+        {
+          "SteeringRadians": 0,
+          "Drive": 1
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": 0,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": 10.628527611335862,
+        "Progress": 19.69007148028186,
+        "Clearance": 0.3169657835645675,
+        "FutureClearance": 1.098471810988857,
+        "ExitSpeed": 24.00075340270996,
+        "ExitBeta": 0.20107077062129974,
+        "DirectionError": 0.710307264023966
+      },
+      "TerminalYawCost": 2.9065489518858345,
+      "MeanYawCost": 4.265019138431142,
+      "SpeedKph": 86.40271224975587,
+      "MaxBeta": 11.520506179561334
+    },
+    "Basis": "Forecast only; identical native observation/irrevocable pending and first full action. No native outcome selection."
+  },
+  {
+    "Name": "D-C-straight\u002B10",
+    "Original137": {
+      "Actions": [
+        {
+          "SteeringRadians": 0,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": 0.008726646,
+          "Drive": 0.31820688
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": 0,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -18.342188018402304,
+        "Progress": 18.294265747070312,
+        "Clearance": 1.0345789096272298,
+        "FutureClearance": 1.5343144022930644,
+        "ExitSpeed": 21.85196876525879,
+        "ExitBeta": 0.025525208562612534,
+        "DirectionError": 0.0019583338630382308
+      },
+      "TerminalYawCost": 0.3494581869023405,
+      "MeanYawCost": 0.10127173110098447,
+      "SpeedKph": 78.66708755493164,
+      "MaxBeta": 1.4624867834903188
+    },
+    "FixedGas138": {
+      "Actions": [
+        {
+          "SteeringRadians": 0,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": 0,
+          "Drive": 1
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": 0,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -17.73416903410809,
+        "Progress": 18.452733516693115,
+        "Clearance": 1.0345789096272298,
+        "FutureClearance": 1.6559166233181641,
+        "ExitSpeed": 22.89842987060547,
+        "ExitBeta": 0.01630326360464096,
+        "DirectionError": 0.027964229565612175
+      },
+      "TerminalYawCost": 0.18421166949662313,
+      "MeanYawCost": 0.019097876059903103,
+      "SpeedKph": 82.4343475341797,
+      "MaxBeta": 0.9341082063215421
+    },
+    "VariableGas138": {
+      "Actions": [
+        {
+          "SteeringRadians": 0,
+          "Drive": 1
+        },
+        {
+          "SteeringRadians": 0,
+          "Drive": 0.31820688
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": 0,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -18.658635593528878,
+        "Progress": 18.2941951751709,
+        "Clearance": 1.0345789096272298,
+        "FutureClearance": 1.6622454663148942,
+        "ExitSpeed": 21.86779022216797,
+        "ExitBeta": 0.002635685494169593,
+        "DirectionError": 0.029984593229953393
+      },
+      "TerminalYawCost": 0.0008015870175929301,
+      "MeanYawCost": 0.0012980065438957114,
+      "SpeedKph": 78.72404479980469,
+      "MaxBeta": 0.1784453135555285
+    },
+    "Held": {
+      "Actions": [
+        {
+          "SteeringRadians": 0,
+          "Drive": 1
+        }
+      ],
+      "Evaluation": {
+        "Action": {
+          "SteeringRadians": 0,
+          "Drive": 1
+        },
+        "Safety": 0,
+        "Score": -17.73416903410809,
+        "Progress": 18.452733516693115,
+        "Clearance": 1.0345789096272298,
+        "FutureClearance": 1.6559166233181641,
+        "ExitSpeed": 22.89842987060547,
+        "ExitBeta": 0.01630326360464096,
+        "DirectionError": 0.027964229565612175
+      },
+      "TerminalYawCost": 0.18421166949662313,
+      "MeanYawCost": 0.019097876059903412,
+      "SpeedKph": 82.4343475341797,
+      "MaxBeta": 0.9341082063215421
+    },
+    "Basis": "Forecast only; identical native observation/irrevocable pending and first full action. No native outcome selection."
+  }
+]

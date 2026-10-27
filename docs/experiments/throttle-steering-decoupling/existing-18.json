@@ -1,0 +1,444 @@
+{
+  "NewNativeWorlds": 0,
+  "Count": 18,
+  "ZeroCorrections": 13,
+  "PartialCorrections": 4,
+  "FullCorrections": 1,
+  "SameSafety": 18,
+  "MeanSpeedCostKph": 6.426777648925782,
+  "Interpretation": "Same H09 safety in all 18; the objective ranks different yaw/direction/progress/throttle/steering outcomes. This does not establish that gas0 is physically necessary or that gas1 has a legal long continuation.",
+  "Rows": [
+    {
+      "State": "D-B-exit1-10",
+      "First": {
+        "SteeringRadians": -0.02617994,
+        "Drive": 1
+      },
+      "Second": {
+        "SteeringRadians": 0.02617994,
+        "Drive": 0
+      },
+      "HeldSafety": 0,
+      "CorrectedSafety": 0,
+      "HeldScore": -8.184739174290081,
+      "CorrectedScore": -13.168665613172882,
+      "HeldYaw": 4.2881747801620085,
+      "CorrectedYaw": 1.3214375228506037,
+      "HeldMeanYaw": 0.5544061997052521,
+      "CorrectedMeanYaw": 0.5889149316201525,
+      "HeldSpeedKph": 72.43431015014649,
+      "CorrectedSpeedKph": 64.07891235351563,
+      "HeldProgress": 15.492635831706309,
+      "CorrectedProgress": 15.161172971598887,
+      "Basis": "Same first full-throttle action and steering. Finite predicted suffix, not a native full completion."
+    },
+    {
+      "State": "D-B-exit1-20",
+      "First": {
+        "SteeringRadians": -0.02617994,
+        "Drive": 1
+      },
+      "Second": {
+        "SteeringRadians": 0.02617994,
+        "Drive": 0
+      },
+      "HeldSafety": 0,
+      "CorrectedSafety": 0,
+      "HeldScore": 44.00267255166106,
+      "CorrectedScore": -9.411003706339631,
+      "HeldYaw": 56.37210864144094,
+      "CorrectedYaw": 4.037518317444755,
+      "HeldMeanYaw": 11.18028581351493,
+      "CorrectedMeanYaw": 2.8689444527130457,
+      "HeldSpeedKph": 64.83852767944336,
+      "CorrectedSpeedKph": 58.54033355712891,
+      "HeldProgress": 14.67415276195004,
+      "CorrectedProgress": 14.381053494171454,
+      "Basis": "Same first full-throttle action and steering. Finite predicted suffix, not a native full completion."
+    },
+    {
+      "State": "D-B-exit1-5",
+      "First": {
+        "SteeringRadians": -0.008726646,
+        "Drive": 1
+      },
+      "Second": {
+        "SteeringRadians": 0.008726646,
+        "Drive": 0
+      },
+      "HeldSafety": 0,
+      "CorrectedSafety": 0,
+      "HeldScore": -1.3585846513675754,
+      "CorrectedScore": -15.720440561034646,
+      "HeldYaw": 14.233229985243803,
+      "CorrectedYaw": 0.23329564203775563,
+      "HeldMeanYaw": 1.876306873757923,
+      "CorrectedMeanYaw": 0.3277683501765953,
+      "HeldSpeedKph": 74.54675445556641,
+      "CorrectedSpeedKph": 66.82296752929688,
+      "HeldProgress": 16.391748913084086,
+      "CorrectedProgress": 16.011263378416118,
+      "Basis": "Same first full-throttle action and steering. Finite predicted suffix, not a native full completion."
+    },
+    {
+      "State": "D-B-exit1",
+      "First": {
+        "SteeringRadians": -0.008726646,
+        "Drive": 1
+      },
+      "Second": {
+        "SteeringRadians": 0.008726646,
+        "Drive": 0
+      },
+      "HeldSafety": 0,
+      "CorrectedSafety": 0,
+      "HeldScore": -2.52655263579599,
+      "CorrectedScore": -16.239608763110205,
+      "HeldYaw": 13.614119749151147,
+      "CorrectedYaw": 0.24213170030284323,
+      "HeldMeanYaw": 1.7830826303516292,
+      "CorrectedMeanYaw": 0.320214116440421,
+      "HeldSpeedKph": 75.8961570739746,
+      "CorrectedSpeedKph": 68.17446441650391,
+      "HeldProgress": 16.80224609375,
+      "CorrectedProgress": 16.418655395507812,
+      "Basis": "Same first full-throttle action and steering. Finite predicted suffix, not a native full completion."
+    },
+    {
+      "State": "D-B-exit2-5",
+      "First": {
+        "SteeringRadians": -0.02617994,
+        "Drive": 1
+      },
+      "Second": {
+        "SteeringRadians": 0.02617994,
+        "Drive": 0
+      },
+      "HeldSafety": 0,
+      "CorrectedSafety": 0,
+      "HeldScore": 3.375925284145234,
+      "CorrectedScore": -13.169679221192718,
+      "HeldYaw": 14.852748463797088,
+      "CorrectedYaw": 1.4292295203041914,
+      "HeldMeanYaw": 1.753514025366979,
+      "CorrectedMeanYaw": 0.5036823803421986,
+      "HeldSpeedKph": 77.00806274414063,
+      "CorrectedSpeedKph": 69.06400680541992,
+      "HeldProgress": 16.38722282479125,
+      "CorrectedProgress": 16.11362129280883,
+      "Basis": "Same first full-throttle action and steering. Finite predicted suffix, not a native full completion."
+    },
+    {
+      "State": "D-B-middle1",
+      "First": {
+        "SteeringRadians": -0.02617994,
+        "Drive": 1
+      },
+      "Second": {
+        "SteeringRadians": 0.02617994,
+        "Drive": 0
+      },
+      "HeldSafety": 0,
+      "CorrectedSafety": 0,
+      "HeldScore": 10.054428400042738,
+      "CorrectedScore": -9.21410923732659,
+      "HeldYaw": 14.885202622283666,
+      "CorrectedYaw": 0.3274043161373999,
+      "HeldMeanYaw": 1.7149647684582048,
+      "CorrectedMeanYaw": 0.24029059339247585,
+      "HeldSpeedKph": 69.16592559814454,
+      "CorrectedSpeedKph": 61.96362533569336,
+      "HeldProgress": 15.713995717325474,
+      "CorrectedProgress": 15.357261223636442,
+      "Basis": "Same first full-throttle action and steering. Finite predicted suffix, not a native full completion."
+    },
+    {
+      "State": "D-B-near-control",
+      "First": {
+        "SteeringRadians": -0.08726647,
+        "Drive": 1
+      },
+      "Second": {
+        "SteeringRadians": 0.02617994,
+        "Drive": 0
+      },
+      "HeldSafety": 0,
+      "CorrectedSafety": 0,
+      "HeldScore": 3.2104407273766786,
+      "CorrectedScore": -4.983244068696456,
+      "HeldYaw": 0.11020490710977056,
+      "CorrectedYaw": 0.023543021309103265,
+      "HeldMeanYaw": 0.7867814858485552,
+      "CorrectedMeanYaw": 0.4193691170984198,
+      "HeldSpeedKph": 76.97863311767578,
+      "CorrectedSpeedKph": 68.16009979248047,
+      "HeldProgress": 16.867123461991355,
+      "CorrectedProgress": 16.61430763187036,
+      "Basis": "Same first full-throttle action and steering. Finite predicted suffix, not a native full completion."
+    },
+    {
+      "State": "D-B-preparation2",
+      "First": {
+        "SteeringRadians": -0.08726647,
+        "Drive": 1
+      },
+      "Second": {
+        "SteeringRadians": 0.02617994,
+        "Drive": 0
+      },
+      "HeldSafety": 0,
+      "CorrectedSafety": 0,
+      "HeldScore": 10.060776138792985,
+      "CorrectedScore": -13.584288996054887,
+      "HeldYaw": 19.651047494060215,
+      "CorrectedYaw": 0.4483970174271085,
+      "HeldMeanYaw": 2.941982446855838,
+      "CorrectedMeanYaw": 0.2616415336955392,
+      "HeldSpeedKph": 77.89454956054688,
+      "CorrectedSpeedKph": 71.53530578613281,
+      "HeldProgress": 17.815903517510606,
+      "CorrectedProgress": 17.440912577660583,
+      "Basis": "Same first full-throttle action and steering. Finite predicted suffix, not a native full completion."
+    },
+    {
+      "State": "D-B-straight\u002B10",
+      "First": {
+        "SteeringRadians": -0.008726646,
+        "Drive": 1
+      },
+      "Second": {
+        "SteeringRadians": 0.008726646,
+        "Drive": 0.31820688
+      },
+      "HeldSafety": 0,
+      "CorrectedSafety": 0,
+      "HeldScore": -11.838725741676472,
+      "CorrectedScore": -17.317916077008274,
+      "HeldYaw": 4.574306832026221,
+      "CorrectedYaw": 0.27155422592295636,
+      "HeldMeanYaw": 0.48109455120728073,
+      "CorrectedMeanYaw": 0.07561267133218884,
+      "HeldSpeedKph": 79.09851379394532,
+      "CorrectedSpeedKph": 75.42803649902343,
+      "HeldProgress": 17.545342445373535,
+      "CorrectedProgress": 17.403844833374023,
+      "Basis": "Same first full-throttle action and steering. Finite predicted suffix, not a native full completion."
+    },
+    {
+      "State": "D-C-exit1-10",
+      "First": {
+        "SteeringRadians": -0.008726646,
+        "Drive": 1
+      },
+      "Second": {
+        "SteeringRadians": 0.008726646,
+        "Drive": 0
+      },
+      "HeldSafety": 0,
+      "CorrectedSafety": 0,
+      "HeldScore": -6.818241566675863,
+      "CorrectedScore": -16.212913244793523,
+      "HeldYaw": 9.32380909508134,
+      "CorrectedYaw": 0.2182496551371427,
+      "HeldMeanYaw": 1.165865494210265,
+      "CorrectedMeanYaw": 0.2369279599284774,
+      "HeldSpeedKph": 75.20140914916992,
+      "CorrectedSpeedKph": 67.32049026489258,
+      "HeldProgress": 16.726592376405108,
+      "CorrectedProgress": 16.33345921295296,
+      "Basis": "Same first full-throttle action and steering. Finite predicted suffix, not a native full completion."
+    },
+    {
+      "State": "D-C-exit1-20",
+      "First": {
+        "SteeringRadians": -0.08726647,
+        "Drive": 1
+      },
+      "Second": {
+        "SteeringRadians": 0.02617994,
+        "Drive": 0
+      },
+      "HeldSafety": 0,
+      "CorrectedSafety": 0,
+      "HeldScore": 29.74236941818923,
+      "CorrectedScore": -12.65826627402214,
+      "HeldYaw": 40.076820645333164,
+      "CorrectedYaw": 1.212423085259889,
+      "HeldMeanYaw": 5.481468085618519,
+      "CorrectedMeanYaw": 0.6912389698639949,
+      "HeldSpeedKph": 70.93009643554687,
+      "CorrectedSpeedKph": 63.426873779296876,
+      "HeldProgress": 15.294307672276148,
+      "CorrectedProgress": 15.045018036733893,
+      "Basis": "Same first full-throttle action and steering. Finite predicted suffix, not a native full completion."
+    },
+    {
+      "State": "D-C-exit1-5",
+      "First": {
+        "SteeringRadians": -0.008726646,
+        "Drive": 1
+      },
+      "Second": {
+        "SteeringRadians": 0.008726646,
+        "Drive": 0.31820688
+      },
+      "HeldSafety": 0,
+      "CorrectedSafety": 0,
+      "HeldScore": -15.802366816283564,
+      "CorrectedScore": -16.865102242995317,
+      "HeldYaw": 0.5366686398616717,
+      "CorrectedYaw": 0.35069444337927014,
+      "HeldMeanYaw": 0.06258199079198523,
+      "CorrectedMeanYaw": 0.1338925757246498,
+      "HeldSpeedKph": 76.95615921020509,
+      "CorrectedSpeedKph": 73.08886871337891,
+      "HeldProgress": 17.052916911952764,
+      "CorrectedProgress": 16.895379451625615,
+      "Basis": "Same first full-throttle action and steering. Finite predicted suffix, not a native full completion."
+    },
+    {
+      "State": "D-C-exit1",
+      "First": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Second": {
+        "SteeringRadians": 0.008726646,
+        "Drive": 0.31820688
+      },
+      "HeldSafety": 0,
+      "CorrectedSafety": 0,
+      "HeldScore": -15.465290142479965,
+      "CorrectedScore": -17.554430173403034,
+      "HeldYaw": 1.7373500215372761,
+      "CorrectedYaw": 0.3971368039356219,
+      "HeldMeanYaw": 0.1839254304445089,
+      "CorrectedMeanYaw": 0.14216836130953264,
+      "HeldSpeedKph": 79.64818725585938,
+      "CorrectedSpeedKph": 75.87244720458985,
+      "HeldProgress": 17.746212005615234,
+      "CorrectedProgress": 17.586336135864258,
+      "Basis": "Same first full-throttle action and steering. Finite predicted suffix, not a native full completion."
+    },
+    {
+      "State": "D-C-exit2-5",
+      "First": {
+        "SteeringRadians": -0.008726646,
+        "Drive": 1
+      },
+      "Second": {
+        "SteeringRadians": 0.008726646,
+        "Drive": 0
+      },
+      "HeldSafety": 0,
+      "CorrectedSafety": 0,
+      "HeldScore": 2.261591594446412,
+      "CorrectedScore": -14.180098657740547,
+      "HeldYaw": 16.23370994282246,
+      "CorrectedYaw": 0.24496853070500385,
+      "HeldMeanYaw": 2.174850675388135,
+      "CorrectedMeanYaw": 0.357593417031286,
+      "HeldSpeedKph": 74.84109191894531,
+      "CorrectedSpeedKph": 67.2001350402832,
+      "HeldProgress": 15.987899135568796,
+      "CorrectedProgress": 15.630604099252878,
+      "Basis": "Same first full-throttle action and steering. Finite predicted suffix, not a native full completion."
+    },
+    {
+      "State": "D-C-middle1",
+      "First": {
+        "SteeringRadians": -0.08726647,
+        "Drive": 1
+      },
+      "Second": {
+        "SteeringRadians": 0.02617994,
+        "Drive": 0
+      },
+      "HeldSafety": 0,
+      "CorrectedSafety": 0,
+      "HeldScore": -0.8710503795610125,
+      "CorrectedScore": -9.386956023965032,
+      "HeldYaw": 1.3968988744217254,
+      "CorrectedYaw": 0.1466710661550415,
+      "HeldMeanYaw": 0.8335498873147066,
+      "CorrectedMeanYaw": 0.18630258453598297,
+      "HeldSpeedKph": 75.7449234008789,
+      "CorrectedSpeedKph": 67.04579086303711,
+      "HeldProgress": 15.081499514653444,
+      "CorrectedProgress": 14.763382253153452,
+      "Basis": "Same first full-throttle action and steering. Finite predicted suffix, not a native full completion."
+    },
+    {
+      "State": "D-C-near-control",
+      "First": {
+        "SteeringRadians": -0.08726647,
+        "Drive": 1
+      },
+      "Second": {
+        "SteeringRadians": 0.02617994,
+        "Drive": 0
+      },
+      "HeldSafety": 0,
+      "CorrectedSafety": 0,
+      "HeldScore": 2.5523304296771974,
+      "CorrectedScore": -4.8198366898077545,
+      "HeldYaw": 2.050795674545331,
+      "CorrectedYaw": 1.3946375390592902,
+      "HeldMeanYaw": 0.9069526111323741,
+      "CorrectedMeanYaw": 0.8064800362030997,
+      "HeldSpeedKph": 67.87942657470704,
+      "CorrectedSpeedKph": 59.002514648437504,
+      "HeldProgress": 14.507277913428311,
+      "CorrectedProgress": 14.266055935279496,
+      "Basis": "Same first full-throttle action and steering. Finite predicted suffix, not a native full completion."
+    },
+    {
+      "State": "D-C-preparation2",
+      "First": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Second": {
+        "SteeringRadians": -0.008726646,
+        "Drive": 1
+      },
+      "HeldSafety": 0,
+      "CorrectedSafety": 0,
+      "HeldScore": 10.628527611335862,
+      "CorrectedScore": 9.313868166200574,
+      "HeldYaw": 2.9065489518858345,
+      "CorrectedYaw": 0.15819118535308047,
+      "HeldMeanYaw": 4.265019138431142,
+      "CorrectedMeanYaw": 4.593182416880842,
+      "HeldSpeedKph": 86.40271224975587,
+      "CorrectedSpeedKph": 86.82583007812501,
+      "HeldProgress": 19.69007148028186,
+      "CorrectedProgress": 19.682441512094442,
+      "Basis": "Same first full-throttle action and steering. Finite predicted suffix, not a native full completion."
+    },
+    {
+      "State": "D-C-straight\u002B10",
+      "First": {
+        "SteeringRadians": 0,
+        "Drive": 1
+      },
+      "Second": {
+        "SteeringRadians": 0.008726646,
+        "Drive": 0.31820688
+      },
+      "HeldSafety": 0,
+      "CorrectedSafety": 0,
+      "HeldScore": -17.73416903410809,
+      "CorrectedScore": -18.342188018402304,
+      "HeldYaw": 0.18421166949662313,
+      "CorrectedYaw": 0.3494581869023405,
+      "HeldMeanYaw": 0.019097876059903412,
+      "CorrectedMeanYaw": 0.10127173110098447,
+      "HeldSpeedKph": 82.4343475341797,
+      "CorrectedSpeedKph": 78.66708755493164,
+      "HeldProgress": 18.452733516693115,
+      "CorrectedProgress": 18.294265747070312,
+      "Basis": "Same first full-throttle action and steering. Finite predicted suffix, not a native full completion."
+    }
+  ]
+}
