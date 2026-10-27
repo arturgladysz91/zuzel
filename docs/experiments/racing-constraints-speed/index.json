@@ -1,0 +1,408 @@
+{
+  "Title": "#143 · Audyt ograniczeń · autonomiczne A/B",
+  "Grade": "PARTIAL",
+  "DefaultRun": "H0-F",
+  "PreferredPolicy": "F",
+  "Labels": {
+    "A": "A · oryginalne #142",
+    "F": "F · bez preferencji geometrycznej",
+    "K1": "F+B · bez geometrii i preferencji gazu",
+    "K2": "F+E · bez geometrii i kary skrętu",
+    "B": "B · bez preferencji gazu",
+    "D": "D · bez kary yaw"
+  },
+  "Colors": {
+    "A": "#ffd27b",
+    "F": "#73dfdf",
+    "K1": "#d99fe3",
+    "K2": "#a9d77d",
+    "B": "#f28f71",
+    "D": "#ff7777"
+  },
+  "Horizons": {
+    "A": 0.9,
+    "F": 0.9,
+    "K1": 0.9,
+    "K2": 0.9,
+    "B": 0.9,
+    "D": 0.9
+  },
+  "Groups": [
+    {
+      "Id": "H0",
+      "Reasons": [
+        "ciągła jazda autonomiczna",
+        "odłożony stan"
+      ],
+      "Scenario": {
+        "Name": "V0",
+        "Level": 4,
+        "Speed": 15.65,
+        "Offset": 4.85,
+        "Start": 18.85,
+        "OutwardSpeed": -0.0875,
+        "HeadingError": -0.0165,
+        "YawRate": 0.019
+      },
+      "Runs": [
+        {
+          "Name": "H0-A",
+          "Policy": "A"
+        },
+        {
+          "Name": "H0-F",
+          "Policy": "F"
+        },
+        {
+          "Name": "H0-B",
+          "Policy": "B"
+        }
+      ],
+      "GeometryFile": "../causal-yaw-throttle/progressive-b-viewer-geometry.json",
+      "TwoBends": true,
+      "DecisionFile": "viewer-H0.json.gz",
+      "Scope": "Pełny zakres #142/#143, bez resetów; dwa łuki i dalsze62m, dla studiedCorner2 także trzeci łuk. Czasy poniżej obejmują cały wspólny dystans, a historyczna bramka pozostaje osobna.",
+      "Summary": {
+        "A": {
+          "Name": "H0-A",
+          "Completed": true,
+          "Outcome": "completed",
+          "FullTimeSeconds": 18.712031209890327,
+          "NativeEndTimeSeconds": 18.712032,
+          "StopCategory": "legal completion",
+          "DecisionCpu": {
+            "Count": 94,
+            "Total": 9.65625,
+            "Mean": 0.10272606382978723,
+            "Maximum": 0.53125,
+            "ColdFirst": 0.390625,
+            "WarmMean": 0.09963037634408602,
+            "P95": 0.203125,
+            "NoDecisionCpuCutoff": true
+          },
+          "ChangedDecisions": 0,
+          "HistoricalGateSeconds": 15.75
+        },
+        "F": {
+          "Name": "H0-F",
+          "Completed": true,
+          "Outcome": "completed",
+          "FullTimeSeconds": 18.585626310676595,
+          "NativeEndTimeSeconds": 18.585627000000002,
+          "StopCategory": "legal completion",
+          "DecisionCpu": {
+            "Count": 93,
+            "Total": 8.703125,
+            "Mean": 0.09358198924731183,
+            "Maximum": 0.21875,
+            "ColdFirst": 0.0625,
+            "WarmMean": 0.09391983695652174,
+            "P95": 0.140625,
+            "NoDecisionCpuCutoff": true
+          },
+          "ChangedDecisions": 6,
+          "HistoricalGateSeconds": 15.89
+        },
+        "B": {
+          "Name": "H0-B",
+          "Completed": true,
+          "Outcome": "completed",
+          "FullTimeSeconds": 19.134541623004672,
+          "NativeEndTimeSeconds": 19.134542,
+          "StopCategory": "legal completion",
+          "DecisionCpu": {
+            "Count": 96,
+            "Total": 8.25,
+            "Mean": 0.0859375,
+            "Maximum": 0.125,
+            "ColdFirst": 0.0625,
+            "WarmMean": 0.0861842105263158,
+            "P95": 0.125,
+            "NoDecisionCpuCutoff": true
+          },
+          "ChangedDecisions": 13,
+          "HistoricalGateSeconds": 16.19
+        }
+      }
+    },
+    {
+      "Id": "H1",
+      "Reasons": [
+        "ciągła jazda autonomiczna",
+        "odłożony stan"
+      ],
+      "Scenario": {
+        "Name": "V1",
+        "Level": 4,
+        "Speed": 17.85,
+        "Offset": 6.35,
+        "Start": 19.05,
+        "OutwardSpeed": 0.0975,
+        "HeadingError": 0.0185,
+        "YawRate": -0.021
+      },
+      "Runs": [
+        {
+          "Name": "H1-A",
+          "Policy": "A"
+        },
+        {
+          "Name": "H1-F",
+          "Policy": "F"
+        },
+        {
+          "Name": "H1-K1",
+          "Policy": "K1"
+        }
+      ],
+      "GeometryFile": "../causal-yaw-throttle/progressive-c-viewer-geometry.json",
+      "TwoBends": true,
+      "DecisionFile": "viewer-H1.json.gz",
+      "Scope": "Pełny zakres #142/#143, bez resetów; dwa łuki i dalsze62m, dla studiedCorner2 także trzeci łuk. Czasy poniżej obejmują cały wspólny dystans, a historyczna bramka pozostaje osobna.",
+      "Summary": {
+        "A": {
+          "Name": "H1-A",
+          "Completed": true,
+          "Outcome": "completed",
+          "FullTimeSeconds": 27.554852078252615,
+          "NativeEndTimeSeconds": 27.554853,
+          "StopCategory": "legal completion",
+          "DecisionCpu": {
+            "Count": 138,
+            "Total": 11.53125,
+            "Mean": 0.08355978260869565,
+            "Maximum": 0.125,
+            "ColdFirst": 0.078125,
+            "WarmMean": 0.08359945255474452,
+            "P95": 0.109375,
+            "NoDecisionCpuCutoff": true
+          },
+          "ChangedDecisions": 0,
+          "HistoricalGateSeconds": 15.7
+        },
+        "F": {
+          "Name": "H1-F",
+          "Completed": true,
+          "Outcome": "completed",
+          "FullTimeSeconds": 26.676571013239208,
+          "NativeEndTimeSeconds": 26.676572,
+          "StopCategory": "legal completion",
+          "DecisionCpu": {
+            "Count": 134,
+            "Total": 11.5625,
+            "Mean": 0.08628731343283583,
+            "Maximum": 0.125,
+            "ColdFirst": 0.078125,
+            "WarmMean": 0.08634868421052631,
+            "P95": 0.125,
+            "NoDecisionCpuCutoff": true
+          },
+          "ChangedDecisions": 21,
+          "HistoricalGateSeconds": 15.41
+        },
+        "K1": {
+          "Name": "H1-K1",
+          "Completed": false,
+          "Outcome": "uncertified interval",
+          "FullTimeSeconds": null,
+          "NativeEndTimeSeconds": 19.78,
+          "StopCategory": "native swept-certificate uncertainty; no confirmed crossing",
+          "DecisionCpu": {
+            "Count": 99,
+            "Total": 8.8125,
+            "Mean": 0.08901515151515152,
+            "Maximum": 0.140625,
+            "ColdFirst": 0.046875,
+            "WarmMean": 0.08944515306122448,
+            "P95": 0.125,
+            "NoDecisionCpuCutoff": true
+          },
+          "ChangedDecisions": 17,
+          "HistoricalGateSeconds": 15.620000000000001
+        }
+      }
+    },
+    {
+      "Id": "H4-b",
+      "Reasons": [
+        "ciągła jazda autonomiczna",
+        "odłożony stan"
+      ],
+      "Scenario": {
+        "Name": "H4",
+        "Level": 4,
+        "Speed": 18.3,
+        "Offset": 5.9,
+        "Start": 19.15,
+        "OutwardSpeed": -0.115,
+        "HeadingError": 0.023,
+        "YawRate": -0.031
+      },
+      "Runs": [
+        {
+          "Name": "H4-b-A",
+          "Policy": "A"
+        },
+        {
+          "Name": "H4-b-F",
+          "Policy": "F"
+        },
+        {
+          "Name": "H4-b-K2",
+          "Policy": "K2"
+        }
+      ],
+      "GeometryFile": "../causal-yaw-throttle/progressive-b-viewer-geometry.json",
+      "TwoBends": true,
+      "DecisionFile": "viewer-H4-b.json.gz",
+      "Scope": "Pełny zakres #142/#143, bez resetów; dwa łuki i dalsze62m, dla studiedCorner2 także trzeci łuk. Czasy poniżej obejmują cały wspólny dystans, a historyczna bramka pozostaje osobna.",
+      "Summary": {
+        "A": {
+          "Name": "H4-b-A",
+          "Completed": true,
+          "Outcome": "completed",
+          "FullTimeSeconds": 18.779930571790242,
+          "NativeEndTimeSeconds": 18.779931,
+          "StopCategory": "legal completion",
+          "DecisionCpu": {
+            "Count": 94,
+            "Total": 7.71875,
+            "Mean": 0.08211436170212766,
+            "Maximum": 0.125,
+            "ColdFirst": 0.109375,
+            "WarmMean": 0.08182123655913978,
+            "P95": 0.109375,
+            "NoDecisionCpuCutoff": true
+          },
+          "ChangedDecisions": 0,
+          "HistoricalGateSeconds": 15.83
+        },
+        "F": {
+          "Name": "H4-b-F",
+          "Completed": false,
+          "Outcome": "uncertified interval",
+          "FullTimeSeconds": null,
+          "NativeEndTimeSeconds": 11.59999999999999,
+          "StopCategory": "native swept-certificate uncertainty; no confirmed crossing",
+          "DecisionCpu": {
+            "Count": 58,
+            "Total": 4.890625,
+            "Mean": 0.08432112068965517,
+            "Maximum": 0.109375,
+            "ColdFirst": 0.0625,
+            "WarmMean": 0.08470394736842106,
+            "P95": 0.109375,
+            "NoDecisionCpuCutoff": true
+          },
+          "ChangedDecisions": 6,
+          "HistoricalGateSeconds": null
+        },
+        "K2": {
+          "Name": "H4-b-K2",
+          "Completed": true,
+          "Outcome": "completed",
+          "FullTimeSeconds": 18.256528436888964,
+          "NativeEndTimeSeconds": 18.256529,
+          "StopCategory": "legal completion",
+          "DecisionCpu": {
+            "Count": 92,
+            "Total": 7.625,
+            "Mean": 0.08288043478260869,
+            "Maximum": 0.125,
+            "ColdFirst": 0.0625,
+            "WarmMean": 0.0831043956043956,
+            "P95": 0.109375,
+            "NoDecisionCpuCutoff": true
+          },
+          "ChangedDecisions": 13,
+          "HistoricalGateSeconds": 15.42
+        }
+      }
+    },
+    {
+      "Id": "D0",
+      "Reasons": [
+        "ciągła jazda autonomiczna",
+        "diagnostyka yaw"
+      ],
+      "Scenario": {
+        "Name": "D-B",
+        "Level": 4,
+        "Speed": 16,
+        "Offset": 5,
+        "Start": 18.125,
+        "OutwardSpeed": 0.08,
+        "HeadingError": 0.012,
+        "YawRate": 0.025
+      },
+      "Runs": [
+        {
+          "Name": "D0-A",
+          "Policy": "A"
+        },
+        {
+          "Name": "D0-D",
+          "Policy": "D"
+        }
+      ],
+      "GeometryFile": "../causal-yaw-throttle/progressive-b-viewer-geometry.json",
+      "TwoBends": true,
+      "DecisionFile": "viewer-D0.json.gz",
+      "Scope": "Pełny zakres #142/#143, bez resetów; dwa łuki i dalsze62m, dla studiedCorner2 także trzeci łuk. Czasy poniżej obejmują cały wspólny dystans, a historyczna bramka pozostaje osobna.",
+      "Summary": {
+        "A": {
+          "Name": "D0-A",
+          "Completed": true,
+          "Outcome": "completed",
+          "FullTimeSeconds": 18.868819038461538,
+          "NativeEndTimeSeconds": 18.86882,
+          "StopCategory": "legal completion",
+          "DecisionCpu": {
+            "Count": 95,
+            "Total": 10.046875,
+            "Mean": 0.10575657894736842,
+            "Maximum": 0.328125,
+            "ColdFirst": 0.328125,
+            "WarmMean": 0.10339095744680851,
+            "P95": 0.1875,
+            "NoDecisionCpuCutoff": true
+          },
+          "ChangedDecisions": 0,
+          "HistoricalGateSeconds": 15.999999999999975
+        },
+        "D": {
+          "Name": "D0-D",
+          "Completed": false,
+          "Outcome": "control envelope",
+          "FullTimeSeconds": null,
+          "NativeEndTimeSeconds": 12.15,
+          "StopCategory": "experimental beta detector, not empirical fall threshold",
+          "DecisionCpu": {
+            "Count": 61,
+            "Total": 5.96875,
+            "Mean": 0.09784836065573771,
+            "Maximum": 0.203125,
+            "ColdFirst": 0.078125,
+            "WarmMean": 0.09817708333333333,
+            "P95": 0.125,
+            "NoDecisionCpuCutoff": true
+          },
+          "ChangedDecisions": 23,
+          "HistoricalGateSeconds": null
+        }
+      }
+    }
+  ],
+  "ComparisonCharts": true,
+  "Charts": [
+    [
+      "native-comparison.svg",
+      "Prędkość, gaz, yaw i β względem drogi"
+    ],
+    [
+      "held-effects.svg",
+      "Pełne odłożone wyniki"
+    ]
+  ],
+  "RawAvailability": "W Git: pełne natywne CSV wszystkich światów, wszystkie logi decyzji i reprezentatywne pełne replaye. Pozostałe pełne JSON są lokalnym cache; źródła i konfiguracje odtwarzają każdy wynik."
+}

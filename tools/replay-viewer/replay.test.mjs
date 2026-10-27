@@ -11,6 +11,7 @@ import './track-awareness.test.mjs';
 import './multi-action.test.mjs';
 import './speed-throttle.test.mjs';
 import './causal-yaw.test.mjs';
+import './constraints143.test.mjs';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { gunzipSync } from 'node:zlib';

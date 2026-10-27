@@ -1,0 +1,72 @@
+{
+  "Restore": "PASS; local cached restore with NuGetAudit=false; remote standard restore still required",
+  "ReleaseWarnAsErrorBuild": {
+    "Passed": true,
+    "Warnings": 0,
+    "Errors": 0
+  },
+  "CSharp": {
+    "Passed": 2445,
+    "Failed": 0,
+    "Skipped": 0,
+    "Filter": "Shard=core|Shard=trajectory",
+    "Added143Cases": 3
+  },
+  "Discovery": {
+    "Full": 2966,
+    "Core": 2050,
+    "Trajectory": 395,
+    "HistoricalAnalysis": 473,
+    "FourRider": 48,
+    "Missing": 0,
+    "Duplicate": 0
+  },
+  "PythonCalibration": {
+    "Passed": 244,
+    "Failed": 0,
+    "New143ReadOnlyEvidenceTests": 7
+  },
+  "PythonCiPolicy": {
+    "Passed": 7,
+    "Failed": 0
+  },
+  "Node": {
+    "Passed": 63,
+    "Failed": 0,
+    "New143Cases": 2
+  },
+  "LegacyConsumerAudit": {
+    "Passed": true,
+    "FrozenReaders": 39
+  },
+  "NativeStudy": {
+    "Worlds": 146,
+    "MainCpuSeconds": 1366.5625,
+    "Limits": {
+      "Worlds": 160,
+      "CpuSeconds": 1800
+    },
+    "Verdict": "PARTIAL",
+    "SourceManifestVerified": true,
+    "Original142Fingerprints": 4
+  },
+  "Predictor": {
+    "Passed": true,
+    "Comparisons": 18,
+    "NewNativeWorlds": 0,
+    "CpuSeconds": 1.4375
+  },
+  "Browser": {
+    "Passed": true,
+    "Cases": [
+      "H0-F",
+      "H4-b-F",
+      "H1-K1"
+    ],
+    "JavaScriptErrors": 0,
+    "FailedDataRequests": 0,
+    "Basis": "Headless installed Chrome, actual local HTTP viewer; PNG proof in local outputs. Favicon excluded from data-request checks."
+  },
+  "WindowsCI": "Required on final published head; status and run URL recorded in PR body after completion.",
+  "Scope": "CI/data checks create no training/native study worlds. Historical and four-rider jobs remain under existing Draft policy; their complete discovery responsibilities were checked. No production source, engine, tyre, mass/I or Box2D changes."
+}

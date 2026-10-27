@@ -35,6 +35,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "autonomous-acceleration", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "racing-objective-ablation", "tools\racing-objective-ablation\racing-objective-ablation.csproj", "{F9AF2212-0966-425B-A40E-272E70C527B9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "racing-constraints", "tools\racing-constraints\racing-constraints.csproj", "{34882167-D608-4F61-826D-258E4E518528}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "constraints-analysis143", "tools\constraints-analysis143\constraints-analysis143.csproj", "{D57961C5-D49F-417B-828F-BB31292A5127}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -213,6 +217,30 @@ Global
 		{F9AF2212-0966-425B-A40E-272E70C527B9}.Release|x64.Build.0 = Release|Any CPU
 		{F9AF2212-0966-425B-A40E-272E70C527B9}.Release|x86.ActiveCfg = Release|Any CPU
 		{F9AF2212-0966-425B-A40E-272E70C527B9}.Release|x86.Build.0 = Release|Any CPU
+		{34882167-D608-4F61-826D-258E4E518528}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34882167-D608-4F61-826D-258E4E518528}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34882167-D608-4F61-826D-258E4E518528}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{34882167-D608-4F61-826D-258E4E518528}.Debug|x64.Build.0 = Debug|Any CPU
+		{34882167-D608-4F61-826D-258E4E518528}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{34882167-D608-4F61-826D-258E4E518528}.Debug|x86.Build.0 = Debug|Any CPU
+		{34882167-D608-4F61-826D-258E4E518528}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34882167-D608-4F61-826D-258E4E518528}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34882167-D608-4F61-826D-258E4E518528}.Release|x64.ActiveCfg = Release|Any CPU
+		{34882167-D608-4F61-826D-258E4E518528}.Release|x64.Build.0 = Release|Any CPU
+		{34882167-D608-4F61-826D-258E4E518528}.Release|x86.ActiveCfg = Release|Any CPU
+		{34882167-D608-4F61-826D-258E4E518528}.Release|x86.Build.0 = Release|Any CPU
+		{D57961C5-D49F-417B-828F-BB31292A5127}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D57961C5-D49F-417B-828F-BB31292A5127}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D57961C5-D49F-417B-828F-BB31292A5127}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D57961C5-D49F-417B-828F-BB31292A5127}.Debug|x64.Build.0 = Debug|Any CPU
+		{D57961C5-D49F-417B-828F-BB31292A5127}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D57961C5-D49F-417B-828F-BB31292A5127}.Debug|x86.Build.0 = Debug|Any CPU
+		{D57961C5-D49F-417B-828F-BB31292A5127}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D57961C5-D49F-417B-828F-BB31292A5127}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D57961C5-D49F-417B-828F-BB31292A5127}.Release|x64.ActiveCfg = Release|Any CPU
+		{D57961C5-D49F-417B-828F-BB31292A5127}.Release|x64.Build.0 = Release|Any CPU
+		{D57961C5-D49F-417B-828F-BB31292A5127}.Release|x86.ActiveCfg = Release|Any CPU
+		{D57961C5-D49F-417B-828F-BB31292A5127}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -232,5 +260,7 @@ Global
 		{78D281D8-6090-4A7D-8145-610FDAB14A6F} = {07C2787E-EAC7-C090-1BA3-A61EC2A24D84}
 		{F241BBE5-C977-4EB6-B624-A352A331B9F6} = {07C2787E-EAC7-C090-1BA3-A61EC2A24D84}
 		{F9AF2212-0966-425B-A40E-272E70C527B9} = {07C2787E-EAC7-C090-1BA3-A61EC2A24D84}
+		{34882167-D608-4F61-826D-258E4E518528} = {07C2787E-EAC7-C090-1BA3-A61EC2A24D84}
+		{D57961C5-D49F-417B-828F-BB31292A5127} = {07C2787E-EAC7-C090-1BA3-A61EC2A24D84}
 	EndGlobalSection
 EndGlobal

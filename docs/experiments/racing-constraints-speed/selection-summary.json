@@ -1,0 +1,355 @@
+[
+  {
+    "Variant": "A",
+    "Configuration": {
+      "Id": "A",
+      "Changes": [],
+      "Recovery": false,
+      "NominalHierarchy": false
+    },
+    "Complete": 4,
+    "Cases": 4,
+    "MeanPairedGainFraction": 0.0,
+    "ChangedDecisions": 0,
+    "Outcomes": {
+      "completed": 4
+    },
+    "MeanDecisionCpu": 0.09404984008528784
+  },
+  {
+    "Variant": "B",
+    "Configuration": {
+      "Id": "B",
+      "Changes": [
+        "B"
+      ],
+      "Recovery": false,
+      "NominalHierarchy": false
+    },
+    "Complete": 4,
+    "Cases": 4,
+    "MeanPairedGainFraction": 0.00011815797137637585,
+    "ChangedDecisions": 62,
+    "Outcomes": {
+      "completed": 4
+    },
+    "MeanDecisionCpu": 0.09271941489361703
+  },
+  {
+    "Variant": "C",
+    "Configuration": {
+      "Id": "C",
+      "Changes": [
+        "C"
+      ],
+      "Recovery": false,
+      "NominalHierarchy": false
+    },
+    "Complete": 0,
+    "Cases": 4,
+    "MeanPairedGainFraction": null,
+    "ChangedDecisions": 62,
+    "Outcomes": {
+      "uncertified interval": 4
+    },
+    "MeanDecisionCpu": 0.1308936403508772
+  },
+  {
+    "Variant": "D",
+    "Configuration": {
+      "Id": "D",
+      "Changes": [
+        "D"
+      ],
+      "Recovery": false,
+      "NominalHierarchy": false
+    },
+    "Complete": 0,
+    "Cases": 4,
+    "MeanPairedGainFraction": null,
+    "ChangedDecisions": 57,
+    "Outcomes": {
+      "control envelope": 3,
+      "uncertified interval": 1
+    },
+    "MeanDecisionCpu": 0.09469379194630873
+  },
+  {
+    "Variant": "E",
+    "Configuration": {
+      "Id": "E",
+      "Changes": [
+        "E"
+      ],
+      "Recovery": false,
+      "NominalHierarchy": false
+    },
+    "Complete": 4,
+    "Cases": 4,
+    "MeanPairedGainFraction": -0.0021073079476479073,
+    "ChangedDecisions": 23,
+    "Outcomes": {
+      "completed": 4
+    },
+    "MeanDecisionCpu": 0.0895279255319149
+  },
+  {
+    "Variant": "F",
+    "Configuration": {
+      "Id": "F",
+      "Changes": [
+        "F"
+      ],
+      "Recovery": false,
+      "NominalHierarchy": false
+    },
+    "Complete": 4,
+    "Cases": 4,
+    "MeanPairedGainFraction": 0.023746481038486505,
+    "ChangedDecisions": 65,
+    "Outcomes": {
+      "completed": 4
+    },
+    "MeanDecisionCpu": 0.08851902173913044
+  },
+  {
+    "Variant": "G",
+    "Configuration": {
+      "Id": "G",
+      "Changes": [
+        "G"
+      ],
+      "Recovery": false,
+      "NominalHierarchy": false
+    },
+    "Complete": 1,
+    "Cases": 4,
+    "MeanPairedGainFraction": 0.004644859802565238,
+    "ChangedDecisions": 30,
+    "Outcomes": {
+      "uncertified interval": 3,
+      "completed": 1
+    },
+    "MeanDecisionCpu": 0.09229473039215687
+  },
+  {
+    "Variant": "H",
+    "Configuration": {
+      "Id": "H",
+      "Changes": [
+        "H"
+      ],
+      "Recovery": false,
+      "NominalHierarchy": false
+    },
+    "Complete": 4,
+    "Cases": 4,
+    "MeanPairedGainFraction": 0.01227328626902624,
+    "ChangedDecisions": 53,
+    "Outcomes": {
+      "completed": 4
+    },
+    "MeanDecisionCpu": 0.08639112903225807
+  },
+  {
+    "Variant": "I",
+    "Configuration": {
+      "Id": "I",
+      "Changes": [],
+      "Recovery": false,
+      "NominalHierarchy": true
+    },
+    "Complete": 0,
+    "Cases": 4,
+    "MeanPairedGainFraction": null,
+    "ChangedDecisions": 17,
+    "Outcomes": {
+      "uncertified interval": 4
+    },
+    "MeanDecisionCpu": 0.09616623711340207
+  },
+  {
+    "Variant": "K1",
+    "Configuration": {
+      "Id": "K1",
+      "Changes": [
+        "B",
+        "F"
+      ],
+      "Recovery": false,
+      "NominalHierarchy": false
+    },
+    "Complete": 4,
+    "Cases": 4,
+    "MeanPairedGainFraction": 0.014389578551713494,
+    "ChangedDecisions": 96,
+    "Outcomes": {
+      "completed": 4
+    },
+    "MeanDecisionCpu": 0.08991935483870968
+  },
+  {
+    "Variant": "K2",
+    "Configuration": {
+      "Id": "K2",
+      "Changes": [
+        "E",
+        "F"
+      ],
+      "Recovery": false,
+      "NominalHierarchy": false
+    },
+    "Complete": 4,
+    "Cases": 4,
+    "MeanPairedGainFraction": 0.021243205753516292,
+    "ChangedDecisions": 63,
+    "Outcomes": {
+      "completed": 4
+    },
+    "MeanDecisionCpu": 0.08731019522776573
+  },
+  {
+    "Variant": "K3",
+    "Configuration": {
+      "Id": "K3",
+      "Changes": [
+        "B",
+        "E"
+      ],
+      "Recovery": false,
+      "NominalHierarchy": false
+    },
+    "Complete": 2,
+    "Cases": 4,
+    "MeanPairedGainFraction": -0.0065536974465763564,
+    "ChangedDecisions": 70,
+    "Outcomes": {
+      "uncertified interval": 2,
+      "completed": 2
+    },
+    "MeanDecisionCpu": 0.08776891691394659
+  },
+  {
+    "Variant": "K4",
+    "Configuration": {
+      "Id": "K4",
+      "Changes": [
+        "B",
+        "E",
+        "F"
+      ],
+      "Recovery": false,
+      "NominalHierarchy": false
+    },
+    "Complete": 3,
+    "Cases": 4,
+    "MeanPairedGainFraction": -0.010649153993566104,
+    "ChangedDecisions": 113,
+    "Outcomes": {
+      "uncertified interval": 1,
+      "completed": 3
+    },
+    "MeanDecisionCpu": 0.0924270594965675
+  },
+  {
+    "Variant": "KR-C",
+    "Configuration": {
+      "Id": "KR-C",
+      "Changes": [
+        "C"
+      ],
+      "Recovery": true,
+      "NominalHierarchy": false
+    },
+    "Complete": 1,
+    "Cases": 4,
+    "MeanPairedGainFraction": 0.0361799783208151,
+    "ChangedDecisions": 174,
+    "Outcomes": {
+      "uncertified interval": 3,
+      "completed": 1
+    },
+    "MeanDecisionCpu": 0.11629353233830846
+  },
+  {
+    "Variant": "KR-D",
+    "Configuration": {
+      "Id": "KR-D",
+      "Changes": [
+        "D"
+      ],
+      "Recovery": true,
+      "NominalHierarchy": false
+    },
+    "Complete": 3,
+    "Cases": 4,
+    "MeanPairedGainFraction": -0.06460049836060493,
+    "ChangedDecisions": 104,
+    "Outcomes": {
+      "completed": 3,
+      "uncertified interval": 1
+    },
+    "MeanDecisionCpu": 0.09579694323144104
+  },
+  {
+    "Variant": "KR1",
+    "Configuration": {
+      "Id": "KR1",
+      "Changes": [
+        "E",
+        "F"
+      ],
+      "Recovery": true,
+      "NominalHierarchy": false
+    },
+    "Complete": 4,
+    "Cases": 4,
+    "MeanPairedGainFraction": -0.00763822230368702,
+    "ChangedDecisions": 100,
+    "Outcomes": {
+      "completed": 4
+    },
+    "MeanDecisionCpu": 0.10315148305084745
+  },
+  {
+    "Variant": "KR2",
+    "Configuration": {
+      "Id": "KR2",
+      "Changes": [
+        "B",
+        "E",
+        "F"
+      ],
+      "Recovery": true,
+      "NominalHierarchy": false
+    },
+    "Complete": 3,
+    "Cases": 4,
+    "MeanPairedGainFraction": 0.005425384082703211,
+    "ChangedDecisions": 107,
+    "Outcomes": {
+      "completed": 3,
+      "uncertified interval": 1
+    },
+    "MeanDecisionCpu": 0.10041571100917432
+  },
+  {
+    "Variant": "R",
+    "Configuration": {
+      "Id": "R",
+      "Changes": [
+        "F"
+      ],
+      "Recovery": true,
+      "NominalHierarchy": false
+    },
+    "Complete": 4,
+    "Cases": 4,
+    "MeanPairedGainFraction": -0.009043557074688124,
+    "ChangedDecisions": 85,
+    "Outcomes": {
+      "completed": 4
+    },
+    "MeanDecisionCpu": 0.10653409090909091
+  }
+]
