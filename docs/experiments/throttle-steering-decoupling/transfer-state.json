@@ -1,0 +1,93 @@
+{
+  "Definition": {
+    "Name": "T0",
+    "Pool": "transfer",
+    "Case": {
+      "Name": "T0",
+      "Geometry": "egg-asymmetric",
+      "Scenario": {
+        "Name": "V1",
+        "Level": 4,
+        "Speed": 17.85,
+        "Offset": 6.35,
+        "Start": 19.05,
+        "OutwardSpeed": 0.0975,
+        "HeadingError": 0.0185,
+        "YawRate": -0.021
+      },
+      "Two": true
+    },
+    "Corner": 1,
+    "BeforeExit": 20,
+    "BaselineDirectory": "docs/experiments/causal-yaw-throttle/native",
+    "BaselineName": "transfer-A"
+  },
+  "Input": {
+    "Rider": {
+      "Id": 1,
+      "Position": {
+        "X": 53.89234,
+        "Y": 58.036335
+      },
+      "Velocity": {
+        "X": -13.335013,
+        "Y": 11.27976
+      },
+      "Heading": 2.5548832,
+      "AngularVelocity": 0.5046683,
+      "Road": {
+        "Segment": 3,
+        "Progress": 0.3847483370236188,
+        "ReferenceMeters": 114.507856576932,
+        "OffsetMeters": -0.2973686723975787,
+        "Heading": 2.4542117016990117,
+        "RadiusMeters": 28.05272677542186,
+        "CornerProgress": 0.7949161123412063,
+        "Tangent": {
+          "X": -0.7729105,
+          "Y": 0.63451505
+        },
+        "Outward": {
+          "X": 0.63451505,
+          "Y": 0.7729105
+        },
+        "IsTurn": true
+      },
+      "TotalReferenceMeters": 114.50785733987145,
+      "DistanceMeters": 97.70774774998426,
+      "Activity": 0,
+      "Drive": 0,
+      "TargetOffsetMeters": 6.35,
+      "Impairment": 0,
+      "Context": 1,
+      "Speed": 17.46584,
+      "ForwardSpeed": 17.3497,
+      "SideSpeed": -2.0108318,
+      "SlideRadians": 0.11538526
+    },
+    "Time": 5.3999999999999995,
+    "Omega": 53.120657454713,
+    "Steering": 0.02617994,
+    "Active": {
+      "SteeringRadians": 0.02617994,
+      "Drive": 0
+    },
+    "Pending": [
+      {
+        "ObservedAt": 5.2,
+        "ActivationAt": 5.44,
+        "Action": {
+          "SteeringRadians": 0.008726646,
+          "Drive": 0.31820688
+        }
+      }
+    ],
+    "NextReview": 5.3999999999999995
+  },
+  "ActualBeforeExit": 20.51257921004766,
+  "Hold": {
+    "Name": "hold-active",
+    "First": 0.02617994,
+    "Second": 0.02617994
+  }
+}
