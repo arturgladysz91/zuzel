@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tyre-law-regularization", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "autonomous-acceleration", "tools\autonomous-acceleration\autonomous-acceleration.csproj", "{F241BBE5-C977-4EB6-B624-A352A331B9F6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "racing-objective-ablation", "tools\racing-objective-ablation\racing-objective-ablation.csproj", "{F9AF2212-0966-425B-A40E-272E70C527B9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -199,6 +201,18 @@ Global
 		{F241BBE5-C977-4EB6-B624-A352A331B9F6}.Release|x64.Build.0 = Release|Any CPU
 		{F241BBE5-C977-4EB6-B624-A352A331B9F6}.Release|x86.ActiveCfg = Release|Any CPU
 		{F241BBE5-C977-4EB6-B624-A352A331B9F6}.Release|x86.Build.0 = Release|Any CPU
+		{F9AF2212-0966-425B-A40E-272E70C527B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9AF2212-0966-425B-A40E-272E70C527B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9AF2212-0966-425B-A40E-272E70C527B9}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F9AF2212-0966-425B-A40E-272E70C527B9}.Debug|x64.Build.0 = Debug|Any CPU
+		{F9AF2212-0966-425B-A40E-272E70C527B9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F9AF2212-0966-425B-A40E-272E70C527B9}.Debug|x86.Build.0 = Debug|Any CPU
+		{F9AF2212-0966-425B-A40E-272E70C527B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9AF2212-0966-425B-A40E-272E70C527B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9AF2212-0966-425B-A40E-272E70C527B9}.Release|x64.ActiveCfg = Release|Any CPU
+		{F9AF2212-0966-425B-A40E-272E70C527B9}.Release|x64.Build.0 = Release|Any CPU
+		{F9AF2212-0966-425B-A40E-272E70C527B9}.Release|x86.ActiveCfg = Release|Any CPU
+		{F9AF2212-0966-425B-A40E-272E70C527B9}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -217,5 +231,6 @@ Global
 		{302C2109-8C29-4CD5-93E3-5FA6C2C6BB9A} = {07C2787E-EAC7-C090-1BA3-A61EC2A24D84}
 		{78D281D8-6090-4A7D-8145-610FDAB14A6F} = {07C2787E-EAC7-C090-1BA3-A61EC2A24D84}
 		{F241BBE5-C977-4EB6-B624-A352A331B9F6} = {07C2787E-EAC7-C090-1BA3-A61EC2A24D84}
+		{F9AF2212-0966-425B-A40E-272E70C527B9} = {07C2787E-EAC7-C090-1BA3-A61EC2A24D84}
 	EndGlobalSection
 EndGlobal
