@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "throttle-steering-transfer"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "motorcycle-physics-validation", "tools\motorcycle-physics-validation\motorcycle-physics-validation.csproj", "{302C2109-8C29-4CD5-93E3-5FA6C2C6BB9A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tyre-law-regularization", "tools\tyre-law-regularization\tyre-law-regularization.csproj", "{78D281D8-6090-4A7D-8145-610FDAB14A6F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -171,6 +173,18 @@ Global
 		{302C2109-8C29-4CD5-93E3-5FA6C2C6BB9A}.Release|x64.Build.0 = Release|Any CPU
 		{302C2109-8C29-4CD5-93E3-5FA6C2C6BB9A}.Release|x86.ActiveCfg = Release|Any CPU
 		{302C2109-8C29-4CD5-93E3-5FA6C2C6BB9A}.Release|x86.Build.0 = Release|Any CPU
+		{78D281D8-6090-4A7D-8145-610FDAB14A6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78D281D8-6090-4A7D-8145-610FDAB14A6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78D281D8-6090-4A7D-8145-610FDAB14A6F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{78D281D8-6090-4A7D-8145-610FDAB14A6F}.Debug|x64.Build.0 = Debug|Any CPU
+		{78D281D8-6090-4A7D-8145-610FDAB14A6F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{78D281D8-6090-4A7D-8145-610FDAB14A6F}.Debug|x86.Build.0 = Debug|Any CPU
+		{78D281D8-6090-4A7D-8145-610FDAB14A6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78D281D8-6090-4A7D-8145-610FDAB14A6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78D281D8-6090-4A7D-8145-610FDAB14A6F}.Release|x64.ActiveCfg = Release|Any CPU
+		{78D281D8-6090-4A7D-8145-610FDAB14A6F}.Release|x64.Build.0 = Release|Any CPU
+		{78D281D8-6090-4A7D-8145-610FDAB14A6F}.Release|x86.ActiveCfg = Release|Any CPU
+		{78D281D8-6090-4A7D-8145-610FDAB14A6F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -187,5 +201,6 @@ Global
 		{259DF538-99E2-4C4F-86A3-A94C61202489} = {07C2787E-EAC7-C090-1BA3-A61EC2A24D84}
 		{A8763A9F-9AB1-48E9-9320-0E8F2A11AAB8} = {07C2787E-EAC7-C090-1BA3-A61EC2A24D84}
 		{302C2109-8C29-4CD5-93E3-5FA6C2C6BB9A} = {07C2787E-EAC7-C090-1BA3-A61EC2A24D84}
+		{78D281D8-6090-4A7D-8145-610FDAB14A6F} = {07C2787E-EAC7-C090-1BA3-A61EC2A24D84}
 	EndGlobalSection
 EndGlobal
