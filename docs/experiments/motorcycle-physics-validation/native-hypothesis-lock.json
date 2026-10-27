@@ -1,0 +1,20 @@
+{
+  "FrozenBeforeNewNativeWorlds": true,
+  "ProtocolCommit": "b63f575",
+  "MapsAddedWorlds": 0,
+  "MapQueries": 3951,
+  "MapCpuSeconds": 0.578125,
+  "NativeForceReproductionErrorNewtons": 0,
+  "Evidence": [
+    "D0-failed has a finite legal-angle yaw torque root near -28.51deg, but betaDot remains +2.20rad/s; tau0 is not stable motion.",
+    "Changing only wheel inertia in an instantaneous original contact query changes Fx/Fy at fixed v/omega/load; investigate numerical stiffness coupling, do not calibrate it as an empirical tyre.",
+    "Audit shows static loads and front saturation can affect the yaw balance; all alternative values are sensitivity hypotheses."
+  ],
+  "NativeHypothesis": "Earlier local-front preparation and short causal gas exposure may preserve legal exit even when long held full gas fails. Test frozen A/B/C on four different initial families, both bends and both profiles. Separately vary four physical mechanisms using the same originalB command tape.",
+  "NoParametersOrCasesSelectedFromMapOutcomes": true,
+  "LimitsRetained": {
+    "Worlds": 24,
+    "CpuSeconds": 450
+  },
+  "ModelCannotBeDeclaredRealisticFromEnergyAlone": true
+}
