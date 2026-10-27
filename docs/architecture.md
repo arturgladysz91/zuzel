@@ -1,5 +1,15 @@
 # Architecture
 
+[Racing Constraints Audit (#143)](experiments/racing-constraints-speed/README.md)
+is a PROVISIONAL tools-only CLI, default OFF, based exactly on #142. Autonomous
+isolated variants share original H09, actions, reaction, observation and native
+physics. The separately identified recovery treatment checks at most four causal
+continuations, with an explicit original-A fallback. Static track preparation is
+an uncertified soft estimate. Detector-only diagnostics never promote a main
+result. Frozen source hashes, world reservations, full telemetry and matched
+held pairs separate legal completion from uncertified stops and local score gains.
+The replay viewer only displays saved native states and cannot alter the policy.
+
 [Throttle–Steering Decoupling (#138)](experiments/throttle-steering-decoupling/README.md)
 is an explicit tools-only controlled experiment, default OFF. A common native prefix
 retains all pending commands. Preparation steering activates after 0.24s and target

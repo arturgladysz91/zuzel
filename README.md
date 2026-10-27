@@ -3,6 +3,12 @@
 Release platform: **Windows only**. See the current [Windows CI policy](docs/ci.md)
 for Draft/full validation, the merge gate and optional historical audits.
 
+[Racing Constraints Audit (#143)](docs/experiments/racing-constraints-speed/README.md)
+audits objective penalties, caution, action selection and continuation in 146 native
+worlds. Held results are **PARTIAL**: removing the throttle preference keeps 12/12
+completions with a 0.29% family-weighted time gain; faster geometry combinations
+add failures. Tools-only, default OFF; production physics and behavior are unchanged.
+
 [Throttle–Steering Decoupling & Controlled Slide (#138)](docs/experiments/throttle-steering-decoupling/README.md)
 separates throttle, steering and their interaction in native factorial interventions.
 The finite sampled maneuvers do not demonstrate repeatable legal full-gas continuation;
