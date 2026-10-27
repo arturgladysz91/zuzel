@@ -9,7 +9,7 @@ public sealed record ContactState139(string Name,AwarenessCase134 Case,FreeRacin
 public static class PhysicsAudit139
 {
     public static long Queries {get;private set;}
-    public static readonly string Old="docs/experiments/throttle-steering-decoupling";
+    public static readonly string Old=PhysicalSteeringAudit.PreviousPath("../throttle-steering-decoupling");
     public static readonly JsonSerializerOptions Json=FreeLearningExperiment.Json;
     public static void Save(string d,string n,object v)=>RobustLearningExperiment.Save(d,n,v);
     public static T Read<T>(string d,string n)=>RobustLearningExperiment.Read<T>(d,n);

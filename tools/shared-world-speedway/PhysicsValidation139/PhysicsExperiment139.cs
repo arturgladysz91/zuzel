@@ -21,6 +21,7 @@ public static class PhysicsExperiment139
         new("H1","confirmation",CausalYawExperiment137.Confirmation[3],2,"docs/experiments/causal-yaw-throttle/native","extended-V1-c-A")};
     public static Dictionary<string,string> Sources()=>Directory.GetFiles("tools/shared-world-speedway","*.cs",SearchOption.AllDirectories)
         .Concat(Directory.GetFiles("tools/motorcycle-physics-validation","*.*").Where(x=>x.EndsWith(".cs")||x.EndsWith(".py")||x.EndsWith(".csproj"))).Order()
+        .Where(x=>!x.Replace('\\','/').Contains("/obj/")&&!x.Replace('\\','/').Contains("/bin/"))
         .ToDictionary(x=>x.Replace('\\','/'),x=>Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(File.ReadAllText(x).Replace("\r\n","\n")))));
     static void Save(string d,string n,object v)=>PhysicsAudit139.Save(d,n,v);
     static T Read<T>(string d,string n)=>PhysicsAudit139.Read<T>(d,n);
@@ -105,8 +106,15 @@ public static class PhysicsExperiment139
                     ModelVerdict="One of CONSISTENT,DEFICIENCY,STATE/PREPARATION,MIXED,INCONCLUSIVE; conservation alone does not validate tyres, no110km/h fitting"},
                 FrozenBeforeNewPhysicsQueriesAndWorlds=true,ProductionDefaultChanged=false});return;
         }
-        var protocol=Read<JsonElement>(d,"protocol.json");foreach(var x in protocol.GetProperty("Sources").EnumerateObject()){
-            var hash=Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(File.ReadAllText(x.Name).Replace("\r\n","\n"))));if(hash!=x.Value.GetString())throw new IOException("Frozen source changed: "+x.Name);}
+        var protocol=Read<JsonElement>(d,"protocol.json");
+        var amendment=File.Exists(Path.Combine(d,"infrastructure-amendment.json"))?Read<JsonElement>(d,"infrastructure-amendment.json"):default;
+        foreach(var x in protocol.GetProperty("Sources").EnumerateObject()){
+            var expected=x.Value.GetString();
+            if(amendment.ValueKind==JsonValueKind.Object){
+                if(amendment.GetProperty("ExcludedGeneratedFiles").EnumerateArray().Any(a=>a.GetString()==x.Name))continue;
+                if(amendment.GetProperty("SourceUpdates").TryGetProperty(x.Name,out var changed))expected=changed.GetProperty("NewSha256").GetString();
+            }
+            var hash=Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(File.ReadAllText(x.Name).Replace("\r\n","\n"))));if(hash!=expected)throw new IOException("Frozen source changed: "+x.Name);}
         using var budget=new RobustBudget(d,new Dictionary<string,int>{{"native",24},{"offline",40}},24,450,12000000);
         if(budget.Entries.Any(x=>!x.Complete))throw new IOException("Incomplete reservation. Preserve it; do not retry.");
         if(stage=="maps"){PhysicsAudit139.Run(d,budget);return;}
