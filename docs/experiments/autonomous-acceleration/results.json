@@ -1937,8 +1937,8 @@
         "AllShortClassificationsRemainForecastOnly": true
       },
       {
-        "Name": "D-B-straight\u002B10",
-        "Phase": "straight\u002B10",
+        "Name": "D-B-straight+10",
+        "Phase": "straight+10",
         "TimeSeconds": 7.2,
         "Current": {
           "Rider": {
@@ -4088,8 +4088,8 @@
         "AllShortClassificationsRemainForecastOnly": true
       },
       {
-        "Name": "D-C-straight\u002B10",
-        "Phase": "straight\u002B10",
+        "Name": "D-C-straight+10",
+        "Phase": "straight+10",
         "TimeSeconds": 8,
         "Current": {
           "Rider": {
@@ -4556,7 +4556,7 @@
       "docs/experiments/causal-yaw-throttle/offline-D-B-middle1.json.gz": "19534D8BB97B60C1A113F56CCE2EF22BB8C5BA9037A238D5C27ECA80BB53DF4B",
       "docs/experiments/causal-yaw-throttle/offline-D-B-near-control.json.gz": "6F6C8B87E078767DF8735FE45AF346A1D031FBF0867700229C8EA10A1E3E3CB7",
       "docs/experiments/causal-yaw-throttle/offline-D-B-preparation2.json.gz": "70377CF2BD83D0F99F6D695512E80D7C84A76BA9C07D3736281A02744F99BC4D",
-      "docs/experiments/causal-yaw-throttle/offline-D-B-straight\u002B10.json.gz": "E040CB51202D20DC03747F4FBFE0E4D2AFD20E7F5C63EFC318659DF272C78A9E",
+      "docs/experiments/causal-yaw-throttle/offline-D-B-straight+10.json.gz": "E040CB51202D20DC03747F4FBFE0E4D2AFD20E7F5C63EFC318659DF272C78A9E",
       "docs/experiments/causal-yaw-throttle/offline-D-C-exit1-10.json.gz": "21BC8B2DC3FAE09FB117E36D157C1DB6DA387D39402FB5430A149CFC300A5759",
       "docs/experiments/causal-yaw-throttle/offline-D-C-exit1-20.json.gz": "4E8A72259955B0B79A9551776F8009814B7282416D0E02BAA0A7EF027D96FA2E",
       "docs/experiments/causal-yaw-throttle/offline-D-C-exit1-5.json.gz": "A7FAB4E8388CDE61D5DF4D51AB060735A7D0C81F7A9C43E94672A95D14C60ED1",
@@ -4565,7 +4565,7 @@
       "docs/experiments/causal-yaw-throttle/offline-D-C-middle1.json.gz": "EDFFDFBE9B36060466F17681C947FD9A853190EA9BD73A27D1633CF8FF71609B",
       "docs/experiments/causal-yaw-throttle/offline-D-C-near-control.json.gz": "A81A48085FD6A61E63457D03AEF28A48D806EBF19AED465F8797922C7ED7B38F",
       "docs/experiments/causal-yaw-throttle/offline-D-C-preparation2.json.gz": "27E9B7EABD3368B5844242529731DE130FB9C4BAD28350ADECEF729AD5346248",
-      "docs/experiments/causal-yaw-throttle/offline-D-C-straight\u002B10.json.gz": "F63DA9DEECBD89A78560F4229EA0D533F5F361F38E382EACB92A64EC57DCC97E",
+      "docs/experiments/causal-yaw-throttle/offline-D-C-straight+10.json.gz": "F63DA9DEECBD89A78560F4229EA0D533F5F361F38E382EACB92A64EC57DCC97E",
       "docs/experiments/motorcycle-physics-validation/native/off-D0.json.gz": "BEC7561061CA7365EC1C2D8402E04D81A6E3DC097905F1280DCB93A05599B6B4",
       "docs/experiments/motorcycle-physics-validation/native/D1-C.json.gz": "EEEF05C48D54A94411E31A1411F94E7E304E217A59636F971FF664B618D4B0ED",
       "docs/experiments/causal-yaw-throttle/native/extended-V0-b-A.json.gz": "0C01D96017A9800F171D8CCE0D229B94B7BF2CE91E63543996C32F96DD7FBEFA",
@@ -4590,6 +4590,14 @@
       "CpuSeconds": 3.328125,
       "ContactEvaluations": 36988,
       "Forecasts": 405
+    },
+    {
+      "Name": "preflight-B",
+      "NativeWorlds": 1,
+      "Complete": true,
+      "CpuSeconds": 3.390625,
+      "ContactEvaluations": 43010,
+      "Forecasts": 451
     }
   ],
   "Native": [
@@ -4720,8 +4728,8 @@
       "MaximumAbsYawTorqueNewtonMeters": 140.82411193847656,
       "MaximumAbsoluteWheelSlipRatio": 0.8847804512551675,
       "MaximumRearUtilization": 0.9629732194635394,
-      "MaximumFrontDriveNewtons": 3.0517578125E-05,
-      "MaximumSolverResidualMetersPerSecond": 1.934303384132363E-08,
+      "MaximumFrontDriveNewtons": 3.0517578125e-05,
+      "MaximumSolverResidualMetersPerSecond": 1.934303384132363e-08,
       "MaximumSolverIterations": 3,
       "MaximumEnergyLedgerResidualJoules": 0.013452699599170503,
       "SumSignedEnergyLedgerResidualJoules": -0.016917808635309672,
@@ -4729,9 +4737,9 @@
       "MaximumEnergyGainBeyondDriveJoules": -8.746877896328987,
       "MaximumNegativeFrontMidpointDissipationJoules": 0,
       "EnergyLedgerPassed": true,
-      "MaximumYawUpdateErrorRadiansPerSecond": 1.1817473835563572E-07,
-      "MaximumReactionErrorSeconds": 2.220446049250313E-16,
-      "MaximumReviewIntervalErrorSeconds": 2.7755575615628914E-16,
+      "MaximumYawUpdateErrorRadiansPerSecond": 1.1817473835563572e-07,
+      "MaximumReactionErrorSeconds": 2.220446049250313e-16,
+      "MaximumReviewIntervalErrorSeconds": 2.7755575615628914e-16,
       "Work": {
         "EngineJoules": 20794.845317341504,
         "ResistanceJoules": -5764.012057148508,
@@ -4740,7 +4748,7 @@
         "RearLongitudinalSlipJoules": 4530.131037087997,
         "BearingJoules": 232.5979913985855
       },
-      "EnergyMeaning": "DeltaK(body\u002Bwheel)-driveWork-resistanceWork\u002BslipLosses\u002BbearingLoss. Contact work uses midpoint body velocities and original held world arms; all intervals retained in extrema/sums. Float/Box2D tolerance .05J\u002B1e-6*K_body.",
+      "EnergyMeaning": "DeltaK(body+wheel)-driveWork-resistanceWork+slipLosses+bearingLoss. Contact work uses midpoint body velocities and original held world arms; all intervals retained in extrema/sums. Float/Box2D tolerance .05J+1e-6*K_body.",
       "PeakBeta": {
         "TimeSeconds": 2.6399999999999997,
         "ReferenceMeters": 65.21803184100798,
@@ -4863,7 +4871,7 @@
           "BearingLossJoules": 0.5715817871755824,
           "EngineWorkJoules": 0,
           "RearUtilization": 0.8136804407371859,
-          "RootResidualMetersPerSecond": -2.37555919380128E-10,
+          "RootResidualMetersPerSecond": -2.37555919380128e-10,
           "RootIterations": 1,
           "LateralNewtons": 811.43475,
           "MidOmega": 53.459414510048234
@@ -4992,7 +5000,7 @@
             "BearingLossJoules": 0.7178676837627294,
             "EngineWorkJoules": 82.25083879249962,
             "RearUtilization": 0.8164081732527114,
-            "RootResidualMetersPerSecond": 4.3410564032342336E-10,
+            "RootResidualMetersPerSecond": 4.3410564032342336e-10,
             "RootIterations": 2,
             "LateralNewtons": 725.41736,
             "MidOmega": 59.91108828123233
@@ -5120,7 +5128,7 @@
             "BearingLossJoules": 0.7213843042594015,
             "EngineWorkJoules": 82.5277756739408,
             "RearUtilization": 0.8169336301508517,
-            "RootResidualMetersPerSecond": 3.245802737694703E-09,
+            "RootResidualMetersPerSecond": 3.245802737694703e-09,
             "RootIterations": 2,
             "LateralNewtons": 723.2511,
             "MidOmega": 60.057652317735396
@@ -5620,6 +5628,2102 @@
       "HistoricalPrefixSha256": "E248BC797D927DDEFCA2B29001E81AFACFE819C9BE683D2B636F2C6B6D51501F",
       "NewPrefixSha256": "E248BC797D927DDEFCA2B29001E81AFACFE819C9BE683D2B636F2C6B6D51501F",
       "NumericalAndClockGatesPassed": true
+    },
+    {
+      "Name": "preflight-B",
+      "Model": "original139",
+      "Mode": "B",
+      "Case": {
+        "Name": "D0",
+        "Pool": "diagnostic",
+        "Case": {
+          "Name": "D-B",
+          "Geometry": "progressive-b",
+          "Scenario": {
+            "Name": "D-B",
+            "Level": 4,
+            "Speed": 16,
+            "Offset": 5,
+            "Start": 18.125,
+            "OutwardSpeed": 0.08,
+            "HeadingError": 0.012,
+            "YawRate": 0.025
+          },
+          "Two": true
+        },
+        "Corner": 1,
+        "BaselineDirectory": "D:\\Codex-work\\pr138\\repo\\docs/experiments/two-contact-bike-dynamics\\../throttle-steering-decoupling/native",
+        "BaselineName": "off-D0"
+      },
+      "Initial": {
+        "Rider": {
+          "Id": 1,
+          "Position": {
+            "X": 18.125,
+            "Y": -5
+          },
+          "Velocity": {
+            "X": 16,
+            "Y": -0.08
+          },
+          "Heading": 0.012213876,
+          "AngularVelocity": 0.025,
+          "Road": {
+            "Segment": 0,
+            "Progress": 0.5178571428571429,
+            "ReferenceMeters": 18.125,
+            "OffsetMeters": 5,
+            "Heading": 0,
+            "RadiusMeters": 0,
+            "CornerProgress": 0,
+            "Tangent": {
+              "X": 1,
+              "Y": 0
+            },
+            "Outward": {
+              "X": 0,
+              "Y": -1
+            },
+            "IsTurn": false
+          },
+          "TotalReferenceMeters": 18.125,
+          "DistanceMeters": 0,
+          "Activity": 0,
+          "Drive": 1,
+          "TargetOffsetMeters": 5,
+          "Impairment": 0,
+          "Context": 0,
+          "Speed": 16.0002,
+          "ForwardSpeed": 15.997829,
+          "SideSpeed": -0.2754112,
+          "SlideRadians": 0.017213834
+        },
+        "Time": 0,
+        "Omega": 48.47827102198745,
+        "Steering": 0,
+        "Active": {
+          "SteeringRadians": 0,
+          "Drive": 1
+        },
+        "Pending": [
+          {
+            "ObservedAt": 0,
+            "ActivationAt": 0.24,
+            "Action": {
+              "SteeringRadians": 0.02617994,
+              "Drive": 0.31820688
+            }
+          }
+        ],
+        "NextReview": 0.2
+      },
+      "PreObservationInitialPendingCommands": [],
+      "NoteInitial": "Recorded Input at0 is annotated with decision0 pending; actual constructor starts with an empty queue and Active(0,1).",
+      "PreparationRequestTimeSeconds": null,
+      "OpenRequestTimeSeconds": null,
+      "FullActivationTimeSeconds": null,
+      "HistoricalCompleted": false,
+      "HistoricalGateSeconds": null,
+      "FullNextStraightCertified": false,
+      "Metrics": {
+        "Completed": false,
+        "Outcome": "probe",
+        "GateSeconds": null,
+        "DurationSeconds": 3,
+        "LegalProgress": 51.911481064293525,
+        "LegalSeconds": 3,
+        "MinimumClearanceMeters": 0.2046237554073458,
+        "EntrySpeed": 18.789688110351562,
+        "MinimumSpeed": 16.003990173339844,
+        "ExitSpeed": null,
+        "MaximumBetaDegrees": 6.920847940468128,
+        "MeanDrive": 0.18606895467981568,
+        "FullDriveFraction": 0.07999999821186066,
+        "LargeTrajectoryOscillations": 2,
+        "DistanceMeters": 52.98769669234753,
+        "BoundaryApproach": 5.298600006960379,
+        "RecoverySeconds": 0.7399999834597111,
+        "NativeSteps": 301,
+        "PhysicsEvaluations": 43010,
+        "Forecasts": 451,
+        "CpuSeconds": 3.21875,
+        "Fingerprint": "CB194478ECABB8A58B36983F88F2326F06AB218F37D289034943CDAFB66C4CCA"
+      },
+      "Exit": null,
+      "Straight20Meters": null,
+      "Straight40Meters": null,
+      "Straight62Meters": null,
+      "MaximumAbsYawTorqueNewtonMeters": 140.82411193847656,
+      "MaximumAbsoluteWheelSlipRatio": 0.8847804512551675,
+      "MaximumRearUtilization": 0.9629732194635394,
+      "MaximumFrontDriveNewtons": 3.0517578125e-05,
+      "MaximumSolverResidualMetersPerSecond": 1.934303384132363e-08,
+      "MaximumSolverIterations": 3,
+      "MaximumEnergyLedgerResidualJoules": 0.013452699599170503,
+      "SumSignedEnergyLedgerResidualJoules": 0.010511320236722854,
+      "MaximumEnergyLedgerToleranceRatio": 0.17862430480188266,
+      "MaximumEnergyGainBeyondDriveJoules": -8.746877896328987,
+      "MaximumNegativeFrontMidpointDissipationJoules": 0,
+      "EnergyLedgerPassed": true,
+      "MaximumYawUpdateErrorRadiansPerSecond": 1.1825791771183369e-07,
+      "MaximumReactionErrorSeconds": 2.220446049250313e-16,
+      "MaximumReviewIntervalErrorSeconds": 2.7755575615628914e-16,
+      "Work": {
+        "EngineJoules": 17553.80012151783,
+        "ResistanceJoules": -5439.594046821685,
+        "FrontSlipJoules": 2299.257907162781,
+        "RearLateralSlipJoules": 2858.484629185743,
+        "RearLongitudinalSlipJoules": 4325.011405655249,
+        "BearingJoules": 218.74530695521392
+      },
+      "EnergyMeaning": "DeltaK(body+wheel)-driveWork-resistanceWork+slipLosses+bearingLoss. Contact work uses midpoint body velocities and original held world arms; all intervals retained in extrema/sums. Float/Box2D tolerance .05J+1e-6*K_body.",
+      "PeakBeta": {
+        "TimeSeconds": 2.9499999999999997,
+        "ReferenceMeters": 69.18943838683134,
+        "SpeedMetersPerSecond": 17.015835,
+        "BetaRadians": 0.120791584,
+        "YawRateRadiansPerSecond": 0.54285145,
+        "ChiRadians": 1.1267071670896276,
+        "ChiRateFiniteDifferenceRadiansPerSecond": 0.5436084387406652,
+        "BetaRateFiniteDifferenceRadiansPerSecond": 0.0008322298712781788,
+        "EstimatedBetaRateFromEndYaw": -0.0007569906815831917,
+        "OmegaRadPerSecond": 52.37516432814468,
+        "SteeringRadians": 0.02617994,
+        "Active": {
+          "SteeringRadians": 0.02617994,
+          "Drive": 0
+        },
+        "Requested": {
+          "SteeringRadians": 0.02617994,
+          "Drive": 0.31820688
+        },
+        "InnerClearanceMeters": 0.587532751681449,
+        "OuterClearanceMeters": 14.370891628816752,
+        "PreviousIntervalForces": {
+          "FrontPoint": {
+            "X": 62.18496,
+            "Y": 17.71617
+          },
+          "RearPoint": {
+            "X": 61.76525,
+            "Y": 16.485786
+          },
+          "FrontArm": {
+            "X": 0.22599792,
+            "Y": 0.66251373
+          },
+          "RearArm": {
+            "X": -0.19371033,
+            "Y": -0.5678692
+          },
+          "FrontVelocity": {
+            "X": 7.037699,
+            "Y": 15.461856
+          },
+          "RearVelocity": {
+            "X": 7.71094,
+            "Y": 15.2322
+          },
+          "FrontForce": {
+            "X": -584.2455,
+            "Y": 182.36972
+          },
+          "RearForce": {
+            "X": -690.3824,
+            "Y": 304.8862
+          },
+          "Resistance": {
+            "X": -42.568413,
+            "Y": -88.23024
+          },
+          "BodyForward": {
+            "X": 0.32285264,
+            "Y": 0.9464492
+          },
+          "FrontLeft": {
+            "X": -0.9545762,
+            "Y": 0.29796687
+          },
+          "BodyLeft": {
+            "X": -0.9464492,
+            "Y": 0.32285264
+          },
+          "FrontLateral": 612.047,
+          "RearLateral": 751.8452,
+          "RearLongitudinal": 65.66753,
+          "Budget": 1852.339,
+          "SteeringRequest": 0.02617994,
+          "SteeringBefore": 0.02617994,
+          "SteeringUsed": 0.02617994,
+          "SteeringAfter": 0.02617994,
+          "Demand": 4.83495,
+          "Engine": {
+            "EngineRpm": 4523.010099707931,
+            "OverallRatio": 9,
+            "CrankTorqueNewtonMeters": 48.830535348977754,
+            "AvailableWheelTorqueNewtonMeters": 413.1063290523518,
+            "DriveWheelTorqueNewtonMeters": 0,
+            "Efficiency": 0.94,
+            "CrankPowerWatts": 23128.51031275095
+          },
+          "TyreLoads": {
+            "EffectiveFrictionCoefficient": 1.2845000267028808,
+            "FrontNormalNewtons": 665.5707895749277,
+            "RearNormalNewtons": 776.4992104250724,
+            "FrontCapacityNewtons": 854.9256969816521,
+            "RearCapacityNewtons": 997.4132565257713,
+            "TotalCapacityNewtons": 1852.3389535074234
+          },
+          "NetForce": {
+            "X": -1317.1963,
+            "Y": 399.0257
+          },
+          "FrontTorque": 428.28583,
+          "RearTorque": -451.10648,
+          "NetTorque": -22.820648
+        },
+        "PreviousIntervalWheel": {
+          "Seconds": 0.009999999776482582,
+          "BeforeOmega": 52.62761222724028,
+          "AfterOmega": 52.37516432814468,
+          "RequestedTorqueNewtonMeters": 0,
+          "AvailableTorqueNewtonMeters": 413.1063290523518,
+          "DriveTorqueNewtonMeters": 0,
+          "BearingTorqueNewtonMeters": 1.0500277655538495,
+          "LongitudinalNewtons": 65.66753,
+          "FrontLateralNewtons": 0,
+          "RearLateralNewtons": 751.8452,
+          "InstantSlipRatio": 0.02726300726113084,
+          "MidSlipVelocityMetersPerSecond": 0.421075228691409,
+          "LongitudinalLossJoules": 0.2765096801321451,
+          "BearingLossJoules": 0.5512791418949557,
+          "EngineWorkJoules": 0,
+          "RearUtilization": 0.7566648246490315,
+          "RootResidualMetersPerSecond": 1.072614386199433e-09,
+          "RootIterations": 1,
+          "LateralNewtons": 751.8452,
+          "MidOmega": 52.50138827769248
+        }
+      },
+      "LastTwo": [
+        {
+          "TimeSeconds": 2.9899999999999998,
+          "ReferenceMeters": 69.86744011542493,
+          "SpeedMetersPerSecond": 16.953457,
+          "BetaRadians": 0.1203813,
+          "YawRateRadiansPerSecond": 0.5259929,
+          "ChiRadians": 1.1484697376054815,
+          "ChiRateFiniteDifferenceRadiansPerSecond": 0.5442642902143552,
+          "BetaRateFiniteDifferenceRadiansPerSecond": -0.016739219801259482,
+          "EstimatedBetaRateFromEndYaw": -0.018271419883544637,
+          "OmegaRadPerSecond": 51.664885360325925,
+          "SteeringRadians": 0.02617994,
+          "Active": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0
+          },
+          "Requested": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0.31820688
+          },
+          "InnerClearanceMeters": 0.6077249454173713,
+          "OuterClearanceMeters": 14.445183804863024,
+          "PreviousIntervalForces": {
+            "FrontPoint": {
+              "X": 62.45901,
+              "Y": 18.336634
+            },
+            "RearPoint": {
+              "X": 62.065876,
+              "Y": 17.097502
+            },
+            "FrontArm": {
+              "X": 0.211689,
+              "Y": 0.6672249
+            },
+            "RearArm": {
+              "X": -0.18144608,
+              "Y": -0.57190704
+            },
+            "FrontVelocity": {
+              "X": 6.686016,
+              "Y": 15.552802
+            },
+            "RearVelocity": {
+              "X": 7.34291,
+              "Y": 15.344392
+            },
+            "FrontForce": {
+              "X": -588.897,
+              "Y": 170.00357
+            },
+            "RearForce": {
+              "X": -705.1235,
+              "Y": 261.40427
+            },
+            "Resistance": {
+              "X": -40.46848,
+              "Y": -88.76149
+            },
+            "BodyForward": {
+              "X": 0.30241048,
+              "Y": 0.9531778
+            },
+            "FrontLeft": {
+              "X": -0.9607673,
+              "Y": 0.2773556
+            },
+            "BodyLeft": {
+              "X": -0.9531778,
+              "Y": 0.30241048
+            },
+            "FrontLateral": 612.9444,
+            "RearLateral": 751.1594,
+            "RearLongitudinal": 35.92803,
+            "Budget": 1852.339,
+            "SteeringRequest": 0.02617994,
+            "SteeringBefore": 0.02617994,
+            "SteeringUsed": 0.02617994,
+            "SteeringAfter": 0.02617994,
+            "Demand": 4.7041984,
+            "Engine": {
+              "EngineRpm": 4452.579798459868,
+              "OverallRatio": 9,
+              "CrankTorqueNewtonMeters": 48.584029294609536,
+              "AvailableWheelTorqueNewtonMeters": 411.0208878323966,
+              "DriveWheelTorqueNewtonMeters": 0,
+              "Efficiency": 0.94,
+              "CrankPowerWatts": 22653.424304898504
+            },
+            "TyreLoads": {
+              "EffectiveFrictionCoefficient": 1.2845000267028808,
+              "FrontNormalNewtons": 665.5707895749277,
+              "RearNormalNewtons": 776.4992104250724,
+              "FrontCapacityNewtons": 854.9256969816521,
+              "RearCapacityNewtons": 997.4132565257713,
+              "TotalCapacityNewtons": 1852.3389535074234
+            },
+            "NetForce": {
+              "X": -1334.489,
+              "Y": 342.64636
+            },
+            "FrontTorque": 428.9146,
+            "RearTorque": -450.69586,
+            "NetTorque": -21.78125
+          },
+          "PreviousIntervalWheel": {
+            "Seconds": 0.009999999776482582,
+            "BeforeOmega": 51.80811846060682,
+            "AfterOmega": 51.664885360325925,
+            "RequestedTorqueNewtonMeters": 0,
+            "AvailableTorqueNewtonMeters": 411.0208878323966,
+            "DriveTorqueNewtonMeters": 0,
+            "BearingTorqueNewtonMeters": 1.0347300382093274,
+            "LongitudinalNewtons": 35.92803,
+            "FrontLateralNewtons": 0,
+            "RearLateralNewtons": 751.1594,
+            "InstantSlipRatio": 0.014843603600406515,
+            "MidSlipVelocityMetersPerSecond": 0.22915721721914978,
+            "LongitudinalLossJoules": 0.08233166757074732,
+            "BearingLossJoules": 0.5353331140207104,
+            "EngineWorkJoules": 0,
+            "RearUtilization": 0.7539684765470446,
+            "RootResidualMetersPerSecond": 1.1359653218079302e-09,
+            "RootIterations": 1,
+            "LateralNewtons": 751.1594,
+            "MidOmega": 51.73650191046637
+          }
+        },
+        {
+          "TimeSeconds": 3,
+          "ReferenceMeters": 70.03648106429353,
+          "SpeedMetersPerSecond": 16.936983,
+          "BetaRadians": 0.120172426,
+          "YawRateRadiansPerSecond": 0.5219214,
+          "ChiRadians": 1.1539129735868632,
+          "ChiRateFiniteDifferenceRadiansPerSecond": 0.5443236103047441,
+          "BetaRateFiniteDifferenceRadiansPerSecond": -0.0208877031703525,
+          "EstimatedBetaRateFromEndYaw": -0.022402214049250913,
+          "OmegaRadPerSecond": 51.53799246006595,
+          "SteeringRadians": 0.02617994,
+          "Active": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0
+          },
+          "Requested": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0.31820688
+          },
+          "InnerClearanceMeters": 0.612655211142657,
+          "OuterClearanceMeters": 14.46324352555515,
+          "PreviousIntervalForces": {
+            "FrontPoint": {
+              "X": 62.525314,
+              "Y": 18.49229
+            },
+            "RearPoint": {
+              "X": 62.13872,
+              "Y": 17.251102
+            },
+            "FrontArm": {
+              "X": 0.20816422,
+              "Y": 0.66833115
+            },
+            "RearArm": {
+              "X": -0.17842865,
+              "Y": -0.5728569
+            },
+            "FrontVelocity": {
+              "X": 6.597409,
+              "Y": 15.573381
+            },
+            "RearVelocity": {
+              "X": 7.2502646,
+              "Y": 15.370036
+            },
+            "FrontForce": {
+              "X": -589.7337,
+              "Y": 166.87994
+            },
+            "RearForce": {
+              "X": -707.24976,
+              "Y": 253.25775
+            },
+            "Resistance": {
+              "X": -39.939713,
+              "Y": -88.880135
+            },
+            "BodyForward": {
+              "X": 0.29737803,
+              "Y": 0.95475984
+            },
+            "FrontLeft": {
+              "X": -0.9622171,
+              "Y": 0.27228346
+            },
+            "BodyLeft": {
+              "X": -0.95475984,
+              "Y": 0.29737803
+            },
+            "FrontLateral": 612.8905,
+            "RearLateral": 750.5669,
+            "RearLongitudinal": 31.479795,
+            "Budget": 1852.339,
+            "SteeringRequest": 0.02617994,
+            "SteeringBefore": 0.02617994,
+            "SteeringUsed": 0.02617994,
+            "SteeringAfter": 0.02617994,
+            "Demand": 4.6696267,
+            "Engine": {
+              "EngineRpm": 4440.2698202608635,
+              "OverallRatio": 9,
+              "CrankTorqueNewtonMeters": 48.540944370913024,
+              "AvailableWheelTorqueNewtonMeters": 410.6563893779242,
+              "DriveWheelTorqueNewtonMeters": 0,
+              "Efficiency": 0.94,
+              "CrankPowerWatts": 22570.760935846614
+            },
+            "TyreLoads": {
+              "EffectiveFrictionCoefficient": 1.2845000267028808,
+              "FrontNormalNewtons": 665.5707895749277,
+              "RearNormalNewtons": 776.4992104250724,
+              "FrontCapacityNewtons": 854.9256969816521,
+              "RearCapacityNewtons": 997.4132565257713,
+              "TotalCapacityNewtons": 1852.3389535074234
+            },
+            "NetForce": {
+              "X": -1336.9231,
+              "Y": 331.25757
+            },
+            "FrontTorque": 428.87582,
+            "RearTorque": -450.34134,
+            "NetTorque": -21.465515
+          },
+          "PreviousIntervalWheel": {
+            "Seconds": 0.009999999776482582,
+            "BeforeOmega": 51.664885360325925,
+            "AfterOmega": 51.53799246006595,
+            "RequestedTorqueNewtonMeters": 0,
+            "AvailableTorqueNewtonMeters": 410.6563893779242,
+            "DriveTorqueNewtonMeters": 0,
+            "BearingTorqueNewtonMeters": 1.0320287782039188,
+            "LongitudinalNewtons": 31.479795,
+            "FrontLateralNewtons": 0,
+            "RearLateralNewtons": 750.5669,
+            "InstantSlipRatio": 0.012985322673960619,
+            "MidSlipVelocityMetersPerSecond": 0.20047728862486003,
+            "LongitudinalLossJoules": 0.06310983898409075,
+            "BearingLossJoules": 0.5325416876173021,
+            "EngineWorkJoules": 0,
+            "RearUtilization": 0.7531750277580569,
+            "RootResidualMetersPerSecond": -7.60324858628536e-11,
+            "RootIterations": 1,
+            "LateralNewtons": 750.5669,
+            "MidOmega": 51.60143891019594
+          }
+        }
+      ],
+      "Trace": null,
+      "TraceMeaning": null,
+      "FullCaptureFingerprint": "CB194478ECABB8A58B36983F88F2326F06AB218F37D289034943CDAFB66C4CCA",
+      "DecisionCount": 15,
+      "ActivationCount": 14,
+      "NativeContacts": 301,
+      "BoundaryContacts": 1,
+      "Controller": "autonomous141 prototype",
+      "ExactInitialPhysicalState": true,
+      "NextCornerEndReferenceMeters": 291.77874994277954,
+      "StopReferenceMeters": 353.77874994277954,
+      "FullScopeCertified": false,
+      "DNF": false,
+      "DecisionCpu": {
+        "Count": 15,
+        "TotalSeconds": 3.078125,
+        "MeanSeconds": 0.20520833333333333,
+        "MaximumSeconds": 0.40625,
+        "Timer": "Process.TotalProcessorTime; quantized native timer. Includes every original/prototype forecast and inverse query."
+      },
+      "Decisions": [
+        {
+          "Time": 0,
+          "ReferenceMeters": 18.125,
+          "SpeedMetersPerSecond": 16.0002,
+          "Active": {
+            "SteeringRadians": 0,
+            "Drive": 1
+          },
+          "Pending": [],
+          "Request": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0.31820688
+          },
+          "Safety": 0,
+          "CpuSeconds": 0.40625,
+          "OriginalAction": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0.31820688
+          },
+          "Changed": false,
+          "Reason": "frozen134A action retained; no admissible candidate has better utility",
+          "Preparation": {
+            "Recovery": {
+              "SteeringRadians": 0.14514762,
+              "Drive": 0
+            },
+            "TailSafety": 2,
+            "ResidualSpeedMetersPerSecond": 0.6973014415246119,
+            "CoastDecelerationMetersPerSecondSquared": 3.3476193745930987,
+            "ReactionSeconds": 0.24,
+            "SteeringTravelSeconds": 0.07573717832565308,
+            "ResponseSeconds": 0.75,
+            "CriticalDistanceMeters": 0,
+            "SpeedHintMetersPerSecond": 16.209270900394333,
+            "MaximumTailBetaRadians": 0.30443575978279114,
+            "ContactQueries": 155,
+            "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+          },
+          "OriginalPreparation": {
+            "Recovery": {
+              "SteeringRadians": 0.14514762,
+              "Drive": 0
+            },
+            "TailSafety": 2,
+            "ResidualSpeedMetersPerSecond": 0.6973014415246119,
+            "CoastDecelerationMetersPerSecondSquared": 3.3476193745930987,
+            "ReactionSeconds": 0.24,
+            "SteeringTravelSeconds": 0.07573717832565308,
+            "ResponseSeconds": 0.75,
+            "CriticalDistanceMeters": 0,
+            "SpeedHintMetersPerSecond": 16.209270900394333,
+            "MaximumTailBetaRadians": 0.30443575978279114,
+            "ContactQueries": 155,
+            "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+          },
+          "GasRoots": [
+            {
+              "Action": {
+                "SteeringRadians": 0.02617994,
+                "Drive": 0
+              },
+              "H09Safety": 0,
+              "Score": -14.921820640137831,
+              "Utility": -15.421359550329937,
+              "MeanYaw": 0.47680322742835723,
+              "TerminalYaw": 0.6915630864515393,
+              "ThrottlePrior": 0.2847790511689229,
+              "Estimate": {
+                "Recovery": {
+                  "SteeringRadians": 0.1301407,
+                  "Drive": 0
+                },
+                "TailSafety": 1,
+                "ResidualSpeedMetersPerSecond": 0,
+                "CoastDecelerationMetersPerSecondSquared": 2.470529440677527,
+                "ReactionSeconds": 0.24,
+                "SteeringTravelSeconds": 0.06618347764015198,
+                "ResponseSeconds": 0.75,
+                "CriticalDistanceMeters": 0,
+                "SpeedHintMetersPerSecond": 100,
+                "MaximumTailBetaRadians": 0.25098708271980286,
+                "ContactQueries": 141,
+                "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+              },
+              "Eligible": false
+            },
+            {
+              "Action": {
+                "SteeringRadians": 0.02617994,
+                "Drive": 0.31820688
+              },
+              "H09Safety": 0,
+              "Score": -15.62493835507731,
+              "Utility": -15.349455269929527,
+              "MeanYaw": 0.3613919052124512,
+              "TerminalYaw": 0.08590882006466906,
+              "ThrottlePrior": 5.007341688165179e-16,
+              "Estimate": {
+                "Recovery": {
+                  "SteeringRadians": 0.14514762,
+                  "Drive": 0
+                },
+                "TailSafety": 2,
+                "ResidualSpeedMetersPerSecond": 0.6973014415246119,
+                "CoastDecelerationMetersPerSecondSquared": 3.3476193745930987,
+                "ReactionSeconds": 0.24,
+                "SteeringTravelSeconds": 0.07573717832565308,
+                "ResponseSeconds": 0.75,
+                "CriticalDistanceMeters": 0,
+                "SpeedHintMetersPerSecond": 16.209270900394333,
+                "MaximumTailBetaRadians": 0.30443575978279114,
+                "ContactQueries": 155,
+                "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+              },
+              "Eligible": false
+            },
+            {
+              "Action": {
+                "SteeringRadians": 0,
+                "Drive": 1
+              },
+              "H09Safety": 0,
+              "Score": 5.078755116604621,
+              "Utility": -11.842188702826014,
+              "MeanYaw": 1.8858607308069204,
+              "TerminalYaw": 17.49944784887691,
+              "ThrottlePrior": 1.307356701360647,
+              "Estimate": {
+                "Recovery": {
+                  "SteeringRadians": -0.31923246,
+                  "Drive": 0
+                },
+                "TailSafety": 2,
+                "ResidualSpeedMetersPerSecond": 0,
+                "CoastDecelerationMetersPerSecondSquared": 11.391094959143436,
+                "ReactionSeconds": 0.24,
+                "SteeringTravelSeconds": 0.20322969555854797,
+                "ResponseSeconds": 0.75,
+                "CriticalDistanceMeters": 0,
+                "SpeedHintMetersPerSecond": 100,
+                "MaximumTailBetaRadians": 2.6236660480499268,
+                "ContactQueries": 141,
+                "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+              },
+              "Eligible": false
+            }
+          ]
+        },
+        {
+          "Time": 0.2,
+          "ReferenceMeters": 21.40686798095703,
+          "SpeedMetersPerSecond": 16.940426,
+          "Active": {
+            "SteeringRadians": 0,
+            "Drive": 1
+          },
+          "Pending": [
+            {
+              "ObservedAt": 0,
+              "ActivationAt": 0.24,
+              "Action": {
+                "SteeringRadians": 0.02617994,
+                "Drive": 0.31820688
+              }
+            }
+          ],
+          "Request": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0.31820688
+          },
+          "Safety": 0,
+          "CpuSeconds": 0.109375,
+          "OriginalAction": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0.31820688
+          },
+          "Changed": false,
+          "Reason": "frozen134A action retained; no admissible candidate has better utility",
+          "Preparation": {
+            "Recovery": {
+              "SteeringRadians": 0.26725358,
+              "Drive": 0
+            },
+            "TailSafety": 2,
+            "ResidualSpeedMetersPerSecond": 0,
+            "CoastDecelerationMetersPerSecondSquared": 4.3298952507250235,
+            "ReactionSeconds": 0.24,
+            "SteeringTravelSeconds": 0.15347224473953247,
+            "ResponseSeconds": 0.75,
+            "CriticalDistanceMeters": 0,
+            "SpeedHintMetersPerSecond": 100,
+            "MaximumTailBetaRadians": 0.342070072889328,
+            "ContactQueries": 125,
+            "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+          },
+          "OriginalPreparation": {
+            "Recovery": {
+              "SteeringRadians": 0.26725358,
+              "Drive": 0
+            },
+            "TailSafety": 2,
+            "ResidualSpeedMetersPerSecond": 0,
+            "CoastDecelerationMetersPerSecondSquared": 4.3298952507250235,
+            "ReactionSeconds": 0.24,
+            "SteeringTravelSeconds": 0.15347224473953247,
+            "ResponseSeconds": 0.75,
+            "CriticalDistanceMeters": 0,
+            "SpeedHintMetersPerSecond": 100,
+            "MaximumTailBetaRadians": 0.342070072889328,
+            "ContactQueries": 125,
+            "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+          },
+          "GasRoots": null
+        },
+        {
+          "Time": 0.4,
+          "ReferenceMeters": 24.90862274169922,
+          "SpeedMetersPerSecond": 18.026096,
+          "Active": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0.31820688
+          },
+          "Pending": [
+            {
+              "ObservedAt": 0.2,
+              "ActivationAt": 0.44,
+              "Action": {
+                "SteeringRadians": 0.02617994,
+                "Drive": 0.31820688
+              }
+            }
+          ],
+          "Request": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0.31820688
+          },
+          "Safety": 0,
+          "CpuSeconds": 0.15625,
+          "OriginalAction": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0.31820688
+          },
+          "Changed": false,
+          "Reason": "frozen134A action retained; no admissible candidate has better utility",
+          "Preparation": {
+            "Recovery": {
+              "SteeringRadians": 0.22907448,
+              "Drive": 0
+            },
+            "TailSafety": 2,
+            "ResidualSpeedMetersPerSecond": 0,
+            "CoastDecelerationMetersPerSecondSquared": 4.838833664402817,
+            "ReactionSeconds": 0.24,
+            "SteeringTravelSeconds": 0.12916667759418488,
+            "ResponseSeconds": 0.75,
+            "CriticalDistanceMeters": 0,
+            "SpeedHintMetersPerSecond": 100,
+            "MaximumTailBetaRadians": 0.41109782457351685,
+            "ContactQueries": 125,
+            "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+          },
+          "OriginalPreparation": {
+            "Recovery": {
+              "SteeringRadians": 0.22907448,
+              "Drive": 0
+            },
+            "TailSafety": 2,
+            "ResidualSpeedMetersPerSecond": 0,
+            "CoastDecelerationMetersPerSecondSquared": 4.838833664402817,
+            "ReactionSeconds": 0.24,
+            "SteeringTravelSeconds": 0.12916667759418488,
+            "ResponseSeconds": 0.75,
+            "CriticalDistanceMeters": 0,
+            "SpeedHintMetersPerSecond": 100,
+            "MaximumTailBetaRadians": 0.41109782457351685,
+            "ContactQueries": 125,
+            "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+          },
+          "GasRoots": null
+        },
+        {
+          "Time": 0.6,
+          "ReferenceMeters": 28.567974090576172,
+          "SpeedMetersPerSecond": 18.540157,
+          "Active": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0.31820688
+          },
+          "Pending": [
+            {
+              "ObservedAt": 0.4,
+              "ActivationAt": 0.64,
+              "Action": {
+                "SteeringRadians": 0.02617994,
+                "Drive": 0.31820688
+              }
+            }
+          ],
+          "Request": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0
+          },
+          "Safety": 0,
+          "CpuSeconds": 0.203125,
+          "OriginalAction": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0
+          },
+          "Changed": false,
+          "Reason": "frozen134A action retained; no admissible candidate has better utility",
+          "Preparation": {
+            "Recovery": {
+              "SteeringRadians": 0.26725358,
+              "Drive": 0
+            },
+            "TailSafety": 2,
+            "ResidualSpeedMetersPerSecond": 0,
+            "CoastDecelerationMetersPerSecondSquared": 3.408942078099106,
+            "ReactionSeconds": 0.24,
+            "SteeringTravelSeconds": 0.15347224473953247,
+            "ResponseSeconds": 0.75,
+            "CriticalDistanceMeters": 0,
+            "SpeedHintMetersPerSecond": 100,
+            "MaximumTailBetaRadians": 0.2930516302585602,
+            "ContactQueries": 125,
+            "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+          },
+          "OriginalPreparation": {
+            "Recovery": {
+              "SteeringRadians": 0.26725358,
+              "Drive": 0
+            },
+            "TailSafety": 2,
+            "ResidualSpeedMetersPerSecond": 0,
+            "CoastDecelerationMetersPerSecondSquared": 3.408942078099106,
+            "ReactionSeconds": 0.24,
+            "SteeringTravelSeconds": 0.15347224473953247,
+            "ResponseSeconds": 0.75,
+            "CriticalDistanceMeters": 0,
+            "SpeedHintMetersPerSecond": 100,
+            "MaximumTailBetaRadians": 0.2930516302585602,
+            "ContactQueries": 125,
+            "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+          },
+          "GasRoots": null
+        },
+        {
+          "Time": 0.8,
+          "ReferenceMeters": 32.26866149902344,
+          "SpeedMetersPerSecond": 18.802494,
+          "Active": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0.31820688
+          },
+          "Pending": [
+            {
+              "ObservedAt": 0.6,
+              "ActivationAt": 0.84,
+              "Action": {
+                "SteeringRadians": 0.02617994,
+                "Drive": 0
+              }
+            }
+          ],
+          "Request": {
+            "SteeringRadians": 0.008726646,
+            "Drive": 0
+          },
+          "Safety": 0,
+          "CpuSeconds": 0.15625,
+          "OriginalAction": {
+            "SteeringRadians": 0.008726646,
+            "Drive": 0
+          },
+          "Changed": false,
+          "Reason": "frozen134A action retained; no admissible candidate has better utility",
+          "Preparation": {
+            "Recovery": {
+              "SteeringRadians": 0.30543262,
+              "Drive": 0
+            },
+            "TailSafety": 0,
+            "ResidualSpeedMetersPerSecond": 0,
+            "CoastDecelerationMetersPerSecondSquared": 3.4432570139567056,
+            "ReactionSeconds": 0.24,
+            "SteeringTravelSeconds": 0.18888887763023376,
+            "ResponseSeconds": 0.75,
+            "CriticalDistanceMeters": 0,
+            "SpeedHintMetersPerSecond": 100,
+            "MaximumTailBetaRadians": 0.34731659293174744,
+            "ContactQueries": 125,
+            "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+          },
+          "OriginalPreparation": {
+            "Recovery": {
+              "SteeringRadians": 0.30543262,
+              "Drive": 0
+            },
+            "TailSafety": 0,
+            "ResidualSpeedMetersPerSecond": 0,
+            "CoastDecelerationMetersPerSecondSquared": 3.4432570139567056,
+            "ReactionSeconds": 0.24,
+            "SteeringTravelSeconds": 0.18888887763023376,
+            "ResponseSeconds": 0.75,
+            "CriticalDistanceMeters": 0,
+            "SpeedHintMetersPerSecond": 100,
+            "MaximumTailBetaRadians": 0.34731659293174744,
+            "ContactQueries": 125,
+            "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+          },
+          "GasRoots": null
+        },
+        {
+          "Time": 1,
+          "ReferenceMeters": 35.93614446668187,
+          "SpeedMetersPerSecond": 18.709711,
+          "Active": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0
+          },
+          "Pending": [
+            {
+              "ObservedAt": 0.8,
+              "ActivationAt": 1.04,
+              "Action": {
+                "SteeringRadians": 0.008726646,
+                "Drive": 0
+              }
+            }
+          ],
+          "Request": {
+            "SteeringRadians": 0.008726646,
+            "Drive": 0
+          },
+          "Safety": 0,
+          "CpuSeconds": 0.171875,
+          "OriginalAction": {
+            "SteeringRadians": 0.008726646,
+            "Drive": 0.31820688
+          },
+          "Changed": true,
+          "Reason": "mean-yaw/no-throttle-prior candidate passes relative preparation and physical recovery probes",
+          "Preparation": {
+            "Recovery": {
+              "SteeringRadians": 0.30543262,
+              "Drive": 0
+            },
+            "TailSafety": 0,
+            "ResidualSpeedMetersPerSecond": 0,
+            "CoastDecelerationMetersPerSecondSquared": 3.4381938703132398,
+            "ReactionSeconds": 0.24,
+            "SteeringTravelSeconds": 0.18888887763023376,
+            "ResponseSeconds": 0.75,
+            "CriticalDistanceMeters": 0,
+            "SpeedHintMetersPerSecond": 100,
+            "MaximumTailBetaRadians": 0.3512232303619385,
+            "ContactQueries": 125,
+            "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+          },
+          "OriginalPreparation": {
+            "Recovery": {
+              "SteeringRadians": 0.30543262,
+              "Drive": 0
+            },
+            "TailSafety": 0,
+            "ResidualSpeedMetersPerSecond": 0,
+            "CoastDecelerationMetersPerSecondSquared": 3.5036751718232124,
+            "ReactionSeconds": 0.24,
+            "SteeringTravelSeconds": 0.18888887763023376,
+            "ResponseSeconds": 0.75,
+            "CriticalDistanceMeters": 0,
+            "SpeedHintMetersPerSecond": 100,
+            "MaximumTailBetaRadians": 0.3438034653663635,
+            "ContactQueries": 125,
+            "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+          },
+          "GasRoots": [
+            {
+              "Action": {
+                "SteeringRadians": 0.008726646,
+                "Drive": 0
+              },
+              "H09Safety": 0,
+              "Score": -8.910267985867181,
+              "Utility": -9.927866606064512,
+              "MeanYaw": 1.614658060622166,
+              "TerminalYaw": 2.347477629650572,
+              "ThrottlePrior": 0.2847790511689229,
+              "Estimate": {
+                "Recovery": {
+                  "SteeringRadians": 0.30543262,
+                  "Drive": 0
+                },
+                "TailSafety": 0,
+                "ResidualSpeedMetersPerSecond": 0,
+                "CoastDecelerationMetersPerSecondSquared": 3.4381938703132398,
+                "ReactionSeconds": 0.24,
+                "SteeringTravelSeconds": 0.18888887763023376,
+                "ResponseSeconds": 0.75,
+                "CriticalDistanceMeters": 0,
+                "SpeedHintMetersPerSecond": 100,
+                "MaximumTailBetaRadians": 0.3512232303619385,
+                "ContactQueries": 125,
+                "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+              },
+              "Eligible": true
+            },
+            {
+              "Action": {
+                "SteeringRadians": 0.008726646,
+                "Drive": 0.31820688
+              },
+              "H09Safety": 0,
+              "Score": -9.522850335597552,
+              "Utility": -9.890047994291356,
+              "MeanYaw": 1.176271661271572,
+              "TerminalYaw": 1.5434693199653773,
+              "ThrottlePrior": 5.007341688165179e-16,
+              "Estimate": {
+                "Recovery": {
+                  "SteeringRadians": 0.30543262,
+                  "Drive": 0
+                },
+                "TailSafety": 0,
+                "ResidualSpeedMetersPerSecond": 0,
+                "CoastDecelerationMetersPerSecondSquared": 3.5036751718232124,
+                "ReactionSeconds": 0.24,
+                "SteeringTravelSeconds": 0.18888887763023376,
+                "ResponseSeconds": 0.75,
+                "CriticalDistanceMeters": 0,
+                "SpeedHintMetersPerSecond": 100,
+                "MaximumTailBetaRadians": 0.3438034653663635,
+                "ContactQueries": 125,
+                "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+              },
+              "Eligible": true
+            },
+            {
+              "Action": {
+                "SteeringRadians": -0.02617994,
+                "Drive": 1
+              },
+              "H09Safety": 0,
+              "Score": 18.465323075715084,
+              "Utility": -5.815555836911912,
+              "MeanYaw": 4.198316956059802,
+              "TerminalYaw": 27.17183916732615,
+              "ThrottlePrior": 1.307356701360647,
+              "Estimate": {
+                "Recovery": {
+                  "SteeringRadians": -0.46759123,
+                  "Drive": 0
+                },
+                "TailSafety": 2,
+                "ResidualSpeedMetersPerSecond": 0,
+                "CoastDecelerationMetersPerSecondSquared": 12.046980135368578,
+                "ReactionSeconds": 0.24,
+                "SteeringTravelSeconds": 0.2810111343860626,
+                "ResponseSeconds": 0.75,
+                "CriticalDistanceMeters": 0,
+                "SpeedHintMetersPerSecond": 100,
+                "MaximumTailBetaRadians": 2.8883583545684814,
+                "ContactQueries": 139,
+                "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+              },
+              "Eligible": false
+            }
+          ]
+        },
+        {
+          "Time": 1.2,
+          "ReferenceMeters": 39.28833895334702,
+          "SpeedMetersPerSecond": 18.382788,
+          "Active": {
+            "SteeringRadians": 0.008726646,
+            "Drive": 0
+          },
+          "Pending": [
+            {
+              "ObservedAt": 1,
+              "ActivationAt": 1.24,
+              "Action": {
+                "SteeringRadians": 0.008726646,
+                "Drive": 0
+              }
+            }
+          ],
+          "Request": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0
+          },
+          "Safety": 0,
+          "CpuSeconds": 0.3125,
+          "OriginalAction": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0.31820688
+          },
+          "Changed": true,
+          "Reason": "mean-yaw/no-throttle-prior candidate passes relative preparation and physical recovery probes",
+          "Preparation": {
+            "Recovery": {
+              "SteeringRadians": 0.30543262,
+              "Drive": 0
+            },
+            "TailSafety": 0,
+            "ResidualSpeedMetersPerSecond": 0,
+            "CoastDecelerationMetersPerSecondSquared": 3.504738663182114,
+            "ReactionSeconds": 0.24,
+            "SteeringTravelSeconds": 0.17777776718139648,
+            "ResponseSeconds": 0.75,
+            "CriticalDistanceMeters": 0,
+            "SpeedHintMetersPerSecond": 100,
+            "MaximumTailBetaRadians": 0.3140987455844879,
+            "ContactQueries": 125,
+            "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+          },
+          "OriginalPreparation": {
+            "Recovery": {
+              "SteeringRadians": 0.26725358,
+              "Drive": 0
+            },
+            "TailSafety": 0,
+            "ResidualSpeedMetersPerSecond": 0,
+            "CoastDecelerationMetersPerSecondSquared": 3.7538355047052554,
+            "ReactionSeconds": 0.24,
+            "SteeringTravelSeconds": 0.15347224473953247,
+            "ResponseSeconds": 0.75,
+            "CriticalDistanceMeters": 0,
+            "SpeedHintMetersPerSecond": 100,
+            "MaximumTailBetaRadians": 0.31369808316230774,
+            "ContactQueries": 125,
+            "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+          },
+          "GasRoots": [
+            {
+              "Action": {
+                "SteeringRadians": 0.02617994,
+                "Drive": 0
+              },
+              "H09Safety": 0,
+              "Score": -10.74989609188494,
+              "Utility": -10.473433540473744,
+              "MeanYaw": 1.051980361148735,
+              "TerminalYaw": 0.4907387585686145,
+              "ThrottlePrior": 0.2847790511689229,
+              "Estimate": {
+                "Recovery": {
+                  "SteeringRadians": 0.30543262,
+                  "Drive": 0
+                },
+                "TailSafety": 0,
+                "ResidualSpeedMetersPerSecond": 0,
+                "CoastDecelerationMetersPerSecondSquared": 3.504738663182114,
+                "ReactionSeconds": 0.24,
+                "SteeringTravelSeconds": 0.17777776718139648,
+                "ResponseSeconds": 0.75,
+                "CriticalDistanceMeters": 0,
+                "SpeedHintMetersPerSecond": 100,
+                "MaximumTailBetaRadians": 0.3140987455844879,
+                "ContactQueries": 125,
+                "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+              },
+              "Eligible": true
+            },
+            {
+              "Action": {
+                "SteeringRadians": 0.02617994,
+                "Drive": 0.31820688
+              },
+              "H09Safety": 0,
+              "Score": -11.014381365940901,
+              "Utility": -10.25640097804736,
+              "MeanYaw": 0.8400689098210297,
+              "TerminalYaw": 0.0820885219274886,
+              "ThrottlePrior": 5.007341688165179e-16,
+              "Estimate": {
+                "Recovery": {
+                  "SteeringRadians": 0.26725358,
+                  "Drive": 0
+                },
+                "TailSafety": 0,
+                "ResidualSpeedMetersPerSecond": 0,
+                "CoastDecelerationMetersPerSecondSquared": 3.7538355047052554,
+                "ReactionSeconds": 0.24,
+                "SteeringTravelSeconds": 0.15347224473953247,
+                "ResponseSeconds": 0.75,
+                "CriticalDistanceMeters": 0,
+                "SpeedHintMetersPerSecond": 100,
+                "MaximumTailBetaRadians": 0.31369808316230774,
+                "ContactQueries": 125,
+                "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+              },
+              "Eligible": true
+            },
+            {
+              "Action": {
+                "SteeringRadians": -0.008726646,
+                "Drive": 1
+              },
+              "H09Safety": 0,
+              "Score": 20.1846157480941,
+              "Utility": -4.608806518806576,
+              "MeanYaw": 4.493081938857165,
+              "TerminalYaw": 27.979147504397194,
+              "ThrottlePrior": 1.307356701360647,
+              "Estimate": {
+                "Recovery": {
+                  "SteeringRadians": -0.4250825,
+                  "Drive": 0
+                },
+                "TailSafety": 2,
+                "ResidualSpeedMetersPerSecond": 0,
+                "CoastDecelerationMetersPerSecondSquared": 11.937470869584516,
+                "ReactionSeconds": 0.24,
+                "SteeringTravelSeconds": 0.2650603652000427,
+                "ResponseSeconds": 0.75,
+                "CriticalDistanceMeters": 0,
+                "SpeedHintMetersPerSecond": 100,
+                "MaximumTailBetaRadians": 2.8996024131774902,
+                "ContactQueries": 139,
+                "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+              },
+              "Eligible": false
+            }
+          ]
+        },
+        {
+          "Time": 1.4000000000000001,
+          "ReferenceMeters": 42.56526173577913,
+          "SpeedMetersPerSecond": 18.093678,
+          "Active": {
+            "SteeringRadians": 0.008726646,
+            "Drive": 0
+          },
+          "Pending": [
+            {
+              "ObservedAt": 1.2,
+              "ActivationAt": 1.44,
+              "Action": {
+                "SteeringRadians": 0.02617994,
+                "Drive": 0
+              }
+            }
+          ],
+          "Request": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0
+          },
+          "Safety": 0,
+          "CpuSeconds": 0.203125,
+          "OriginalAction": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0.31820688
+          },
+          "Changed": true,
+          "Reason": "mean-yaw/no-throttle-prior candidate passes relative preparation and physical recovery probes",
+          "Preparation": {
+            "Recovery": {
+              "SteeringRadians": 0.30543262,
+              "Drive": 0
+            },
+            "TailSafety": 0,
+            "ResidualSpeedMetersPerSecond": 0,
+            "CoastDecelerationMetersPerSecondSquared": 3.478216402458422,
+            "ReactionSeconds": 0.24,
+            "SteeringTravelSeconds": 0.17777776718139648,
+            "ResponseSeconds": 0.75,
+            "CriticalDistanceMeters": 0,
+            "SpeedHintMetersPerSecond": 100,
+            "MaximumTailBetaRadians": 0.3119863271713257,
+            "ContactQueries": 125,
+            "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+          },
+          "OriginalPreparation": {
+            "Recovery": {
+              "SteeringRadians": 0.26725358,
+              "Drive": 0
+            },
+            "TailSafety": 0,
+            "ResidualSpeedMetersPerSecond": 0,
+            "CoastDecelerationMetersPerSecondSquared": 3.7123535618637544,
+            "ReactionSeconds": 0.24,
+            "SteeringTravelSeconds": 0.15347224473953247,
+            "ResponseSeconds": 0.75,
+            "CriticalDistanceMeters": 0,
+            "SpeedHintMetersPerSecond": 100,
+            "MaximumTailBetaRadians": 0.31072118878364563,
+            "ContactQueries": 125,
+            "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+          },
+          "GasRoots": [
+            {
+              "Action": {
+                "SteeringRadians": 0.02617994,
+                "Drive": 0
+              },
+              "H09Safety": 0,
+              "Score": -10.108832068631681,
+              "Utility": -9.889220438668806,
+              "MeanYaw": 0.8656954649899452,
+              "TerminalYaw": 0.36130478385814707,
+              "ThrottlePrior": 0.2847790511689229,
+              "Estimate": {
+                "Recovery": {
+                  "SteeringRadians": 0.30543262,
+                  "Drive": 0
+                },
+                "TailSafety": 0,
+                "ResidualSpeedMetersPerSecond": 0,
+                "CoastDecelerationMetersPerSecondSquared": 3.478216402458422,
+                "ReactionSeconds": 0.24,
+                "SteeringTravelSeconds": 0.17777776718139648,
+                "ResponseSeconds": 0.75,
+                "CriticalDistanceMeters": 0,
+                "SpeedHintMetersPerSecond": 100,
+                "MaximumTailBetaRadians": 0.3119863271713257,
+                "ContactQueries": 125,
+                "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+              },
+              "Eligible": true
+            },
+            {
+              "Action": {
+                "SteeringRadians": 0.02617994,
+                "Drive": 0.31820688
+              },
+              "H09Safety": 0,
+              "Score": -10.400235616654763,
+              "Utility": -9.737760049655634,
+              "MeanYaw": 0.696483694928946,
+              "TerminalYaw": 0.03400812792981587,
+              "ThrottlePrior": 5.007341688165179e-16,
+              "Estimate": {
+                "Recovery": {
+                  "SteeringRadians": 0.26725358,
+                  "Drive": 0
+                },
+                "TailSafety": 0,
+                "ResidualSpeedMetersPerSecond": 0,
+                "CoastDecelerationMetersPerSecondSquared": 3.7123535618637544,
+                "ReactionSeconds": 0.24,
+                "SteeringTravelSeconds": 0.15347224473953247,
+                "ResponseSeconds": 0.75,
+                "CriticalDistanceMeters": 0,
+                "SpeedHintMetersPerSecond": 100,
+                "MaximumTailBetaRadians": 0.31072118878364563,
+                "ContactQueries": 125,
+                "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+              },
+              "Eligible": true
+            },
+            {
+              "Action": {
+                "SteeringRadians": -0.008726646,
+                "Drive": 1
+              },
+              "H09Safety": 0,
+              "Score": 20.215887093084827,
+              "Utility": -3.989392038064059,
+              "MeanYaw": 4.209886801937865,
+              "TerminalYaw": 27.107809231726105,
+              "ThrottlePrior": 1.307356701360647,
+              "Estimate": {
+                "Recovery": {
+                  "SteeringRadians": -0.39058524,
+                  "Drive": 0
+                },
+                "TailSafety": 2,
+                "ResidualSpeedMetersPerSecond": 0,
+                "CoastDecelerationMetersPerSecondSquared": 11.824970534353545,
+                "ReactionSeconds": 0.24,
+                "SteeringTravelSeconds": 0.24309872090816498,
+                "ResponseSeconds": 0.75,
+                "CriticalDistanceMeters": 0,
+                "SpeedHintMetersPerSecond": 100,
+                "MaximumTailBetaRadians": 2.8453140258789062,
+                "ContactQueries": 139,
+                "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+              },
+              "Eligible": false
+            }
+          ]
+        },
+        {
+          "Time": 1.6,
+          "ReferenceMeters": 45.94783999175041,
+          "SpeedMetersPerSecond": 17.853638,
+          "Active": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0
+          },
+          "Pending": [
+            {
+              "ObservedAt": 1.4000000000000001,
+              "ActivationAt": 1.6400000000000001,
+              "Action": {
+                "SteeringRadians": 0.02617994,
+                "Drive": 0
+              }
+            }
+          ],
+          "Request": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0
+          },
+          "Safety": 0,
+          "CpuSeconds": 0.28125,
+          "OriginalAction": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0.31820688
+          },
+          "Changed": true,
+          "Reason": "mean-yaw/no-throttle-prior candidate passes relative preparation and physical recovery probes",
+          "Preparation": {
+            "Recovery": {
+              "SteeringRadians": 0.30543262,
+              "Drive": 0
+            },
+            "TailSafety": 0,
+            "ResidualSpeedMetersPerSecond": 0,
+            "CoastDecelerationMetersPerSecondSquared": 3.4523284796512486,
+            "ReactionSeconds": 0.24,
+            "SteeringTravelSeconds": 0.17777776718139648,
+            "ResponseSeconds": 0.75,
+            "CriticalDistanceMeters": 0,
+            "SpeedHintMetersPerSecond": 100,
+            "MaximumTailBetaRadians": 0.3103572428226471,
+            "ContactQueries": 125,
+            "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+          },
+          "OriginalPreparation": {
+            "Recovery": {
+              "SteeringRadians": 0.30543262,
+              "Drive": 0
+            },
+            "TailSafety": 0,
+            "ResidualSpeedMetersPerSecond": 0,
+            "CoastDecelerationMetersPerSecondSquared": 3.8020972049597535,
+            "ReactionSeconds": 0.24,
+            "SteeringTravelSeconds": 0.17777776718139648,
+            "ResponseSeconds": 0.75,
+            "CriticalDistanceMeters": 0,
+            "SpeedHintMetersPerSecond": 100,
+            "MaximumTailBetaRadians": 0.30379635095596313,
+            "ContactQueries": 125,
+            "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+          },
+          "GasRoots": [
+            {
+              "Action": {
+                "SteeringRadians": 0.02617994,
+                "Drive": 0
+              },
+              "H09Safety": 0,
+              "Score": -9.441178095885796,
+              "Utility": -9.401211153523931,
+              "MeanYaw": 0.5909824623046894,
+              "TerminalYaw": 0.26623646877390145,
+              "ThrottlePrior": 0.2847790511689229,
+              "Estimate": {
+                "Recovery": {
+                  "SteeringRadians": 0.30543262,
+                  "Drive": 0
+                },
+                "TailSafety": 0,
+                "ResidualSpeedMetersPerSecond": 0,
+                "CoastDecelerationMetersPerSecondSquared": 3.4523284796512486,
+                "ReactionSeconds": 0.24,
+                "SteeringTravelSeconds": 0.17777776718139648,
+                "ResponseSeconds": 0.75,
+                "CriticalDistanceMeters": 0,
+                "SpeedHintMetersPerSecond": 100,
+                "MaximumTailBetaRadians": 0.3103572428226471,
+                "ContactQueries": 125,
+                "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+              },
+              "Eligible": true
+            },
+            {
+              "Action": {
+                "SteeringRadians": 0.02617994,
+                "Drive": 0.31820688
+              },
+              "H09Safety": 0,
+              "Score": -9.706484571650359,
+              "Utility": -9.266053673922887,
+              "MeanYaw": 0.45057746560804174,
+              "TerminalYaw": 0.01014656788056936,
+              "ThrottlePrior": 5.007341688165179e-16,
+              "Estimate": {
+                "Recovery": {
+                  "SteeringRadians": 0.30543262,
+                  "Drive": 0
+                },
+                "TailSafety": 0,
+                "ResidualSpeedMetersPerSecond": 0,
+                "CoastDecelerationMetersPerSecondSquared": 3.8020972049597535,
+                "ReactionSeconds": 0.24,
+                "SteeringTravelSeconds": 0.17777776718139648,
+                "ResponseSeconds": 0.75,
+                "CriticalDistanceMeters": 0,
+                "SpeedHintMetersPerSecond": 100,
+                "MaximumTailBetaRadians": 0.30379635095596313,
+                "ContactQueries": 125,
+                "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+              },
+              "Eligible": true
+            },
+            {
+              "Action": {
+                "SteeringRadians": -0.008726646,
+                "Drive": 1
+              },
+              "H09Safety": 0,
+              "Score": 22.337814678056937,
+              "Utility": -3.2792356398633062,
+              "MeanYaw": 4.293632822395447,
+              "TerminalYaw": 28.603326438955044,
+              "ThrottlePrior": 1.307356701360647,
+              "Estimate": {
+                "Recovery": {
+                  "SteeringRadians": -0.39329767,
+                  "Drive": 0
+                },
+                "TailSafety": 2,
+                "ResidualSpeedMetersPerSecond": 0,
+                "CoastDecelerationMetersPerSecondSquared": 11.821680357961943,
+                "ReactionSeconds": 0.24,
+                "SteeringTravelSeconds": 0.24482551217079163,
+                "ResponseSeconds": 0.75,
+                "CriticalDistanceMeters": 0,
+                "SpeedHintMetersPerSecond": 100,
+                "MaximumTailBetaRadians": 2.8651981353759766,
+                "ContactQueries": 139,
+                "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+              },
+              "Eligible": false
+            }
+          ]
+        },
+        {
+          "Time": 1.8,
+          "ReferenceMeters": 49.412865389662045,
+          "SpeedMetersPerSecond": 17.64161,
+          "Active": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0
+          },
+          "Pending": [
+            {
+              "ObservedAt": 1.6,
+              "ActivationAt": 1.84,
+              "Action": {
+                "SteeringRadians": 0.02617994,
+                "Drive": 0
+              }
+            }
+          ],
+          "Request": {
+            "SteeringRadians": 0.08726647,
+            "Drive": 0
+          },
+          "Safety": 0,
+          "CpuSeconds": 0.171875,
+          "OriginalAction": {
+            "SteeringRadians": 0.08726647,
+            "Drive": 0
+          },
+          "Changed": false,
+          "Reason": "frozen134A action retained; no admissible candidate has better utility",
+          "Preparation": {
+            "Recovery": {
+              "SteeringRadians": 0.09201754,
+              "Drive": 0
+            },
+            "TailSafety": 2,
+            "ResidualSpeedMetersPerSecond": 0,
+            "CoastDecelerationMetersPerSecondSquared": 4.159933148008404,
+            "ReactionSeconds": 0.24,
+            "SteeringTravelSeconds": 0.003024625824764371,
+            "ResponseSeconds": 0.75,
+            "CriticalDistanceMeters": 0,
+            "SpeedHintMetersPerSecond": 100,
+            "MaximumTailBetaRadians": 0.32300007343292236,
+            "ContactQueries": 153,
+            "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+          },
+          "OriginalPreparation": {
+            "Recovery": {
+              "SteeringRadians": 0.09201754,
+              "Drive": 0
+            },
+            "TailSafety": 2,
+            "ResidualSpeedMetersPerSecond": 0,
+            "CoastDecelerationMetersPerSecondSquared": 4.159933148008404,
+            "ReactionSeconds": 0.24,
+            "SteeringTravelSeconds": 0.003024625824764371,
+            "ResponseSeconds": 0.75,
+            "CriticalDistanceMeters": 0,
+            "SpeedHintMetersPerSecond": 100,
+            "MaximumTailBetaRadians": 0.32300007343292236,
+            "ContactQueries": 153,
+            "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+          },
+          "GasRoots": null
+        },
+        {
+          "Time": 2,
+          "ReferenceMeters": 52.91667784382361,
+          "SpeedMetersPerSecond": 17.435112,
+          "Active": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0
+          },
+          "Pending": [
+            {
+              "ObservedAt": 1.8,
+              "ActivationAt": 2.04,
+              "Action": {
+                "SteeringRadians": 0.08726647,
+                "Drive": 0
+              }
+            }
+          ],
+          "Request": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0
+          },
+          "Safety": 0,
+          "CpuSeconds": 0.1875,
+          "OriginalAction": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0
+          },
+          "Changed": false,
+          "Reason": "frozen134A action retained; no admissible candidate has better utility",
+          "Preparation": {
+            "Recovery": {
+              "SteeringRadians": 0.30543262,
+              "Drive": 0
+            },
+            "TailSafety": 1,
+            "ResidualSpeedMetersPerSecond": 0,
+            "CoastDecelerationMetersPerSecondSquared": 3.326434800119111,
+            "ReactionSeconds": 0.24,
+            "SteeringTravelSeconds": 0.17777776718139648,
+            "ResponseSeconds": 0.75,
+            "CriticalDistanceMeters": 0,
+            "SpeedHintMetersPerSecond": 100,
+            "MaximumTailBetaRadians": 0.2848254144191742,
+            "ContactQueries": 125,
+            "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+          },
+          "OriginalPreparation": {
+            "Recovery": {
+              "SteeringRadians": 0.30543262,
+              "Drive": 0
+            },
+            "TailSafety": 1,
+            "ResidualSpeedMetersPerSecond": 0,
+            "CoastDecelerationMetersPerSecondSquared": 3.326434800119111,
+            "ReactionSeconds": 0.24,
+            "SteeringTravelSeconds": 0.17777776718139648,
+            "ResponseSeconds": 0.75,
+            "CriticalDistanceMeters": 0,
+            "SpeedHintMetersPerSecond": 100,
+            "MaximumTailBetaRadians": 0.2848254144191742,
+            "ContactQueries": 125,
+            "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+          },
+          "GasRoots": [
+            {
+              "Action": {
+                "SteeringRadians": 0.02617994,
+                "Drive": 0
+              },
+              "H09Safety": 0,
+              "Score": -11.710223676563556,
+              "Utility": -11.919057710700583,
+              "MeanYaw": 0.118253354894919,
+              "TerminalYaw": 0.04230833786302298,
+              "ThrottlePrior": 0.2847790511689229,
+              "Estimate": {
+                "Recovery": {
+                  "SteeringRadians": 0.30543262,
+                  "Drive": 0
+                },
+                "TailSafety": 1,
+                "ResidualSpeedMetersPerSecond": 0,
+                "CoastDecelerationMetersPerSecondSquared": 3.326434800119111,
+                "ReactionSeconds": 0.24,
+                "SteeringTravelSeconds": 0.17777776718139648,
+                "ResponseSeconds": 0.75,
+                "CriticalDistanceMeters": 0,
+                "SpeedHintMetersPerSecond": 100,
+                "MaximumTailBetaRadians": 0.2848254144191742,
+                "ContactQueries": 125,
+                "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+              },
+              "Eligible": false
+            },
+            {
+              "Action": {
+                "SteeringRadians": 0.02617994,
+                "Drive": 0.31820688
+              },
+              "H09Safety": 0,
+              "Score": -11.368149864945298,
+              "Utility": -11.727072990278508,
+              "MeanYaw": 0.2999506421155619,
+              "TerminalYaw": 0.6588737674487716,
+              "ThrottlePrior": 5.007341688165179e-16,
+              "Estimate": {
+                "Recovery": {
+                  "SteeringRadians": 0.22907448,
+                  "Drive": 0
+                },
+                "TailSafety": 2,
+                "ResidualSpeedMetersPerSecond": 0,
+                "CoastDecelerationMetersPerSecondSquared": 4.496454470085375,
+                "ReactionSeconds": 0.24,
+                "SteeringTravelSeconds": 0.12916667759418488,
+                "ResponseSeconds": 0.75,
+                "CriticalDistanceMeters": 0,
+                "SpeedHintMetersPerSecond": 100,
+                "MaximumTailBetaRadians": 0.36417481303215027,
+                "ContactQueries": 125,
+                "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+              },
+              "Eligible": false
+            },
+            {
+              "Action": {
+                "SteeringRadians": -0.08726647,
+                "Drive": 1
+              },
+              "H09Safety": 0,
+              "Score": 1.5295518919562887,
+              "Utility": -4.554141012018074,
+              "MeanYaw": 0.5600784862678718,
+              "TerminalYaw": 5.336414688881588,
+              "ThrottlePrior": 1.307356701360647,
+              "Estimate": {
+                "Recovery": {
+                  "SteeringRadians": -0.14475615,
+                  "Drive": 0
+                },
+                "TailSafety": 2,
+                "ResidualSpeedMetersPerSecond": 0,
+                "CoastDecelerationMetersPerSecondSquared": 9.738465511437617,
+                "ReactionSeconds": 0.24,
+                "SteeringTravelSeconds": 0.03659906983375549,
+                "ResponseSeconds": 0.75,
+                "CriticalDistanceMeters": 0,
+                "SpeedHintMetersPerSecond": 100,
+                "MaximumTailBetaRadians": 1.9443002939224243,
+                "ContactQueries": 139,
+                "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+              },
+              "Eligible": false
+            }
+          ]
+        },
+        {
+          "Time": 2.2,
+          "ReferenceMeters": 56.40824580640253,
+          "SpeedMetersPerSecond": 17.177776,
+          "Active": {
+            "SteeringRadians": 0.08726647,
+            "Drive": 0
+          },
+          "Pending": [
+            {
+              "ObservedAt": 2,
+              "ActivationAt": 2.24,
+              "Action": {
+                "SteeringRadians": 0.02617994,
+                "Drive": 0
+              }
+            }
+          ],
+          "Request": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0.31820688
+          },
+          "Safety": 0,
+          "CpuSeconds": 0.171875,
+          "OriginalAction": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0.31820688
+          },
+          "Changed": false,
+          "Reason": "frozen134A action retained; no admissible candidate has better utility",
+          "Preparation": {
+            "Recovery": {
+              "SteeringRadians": 0.26725358,
+              "Drive": 0
+            },
+            "TailSafety": 1,
+            "ResidualSpeedMetersPerSecond": 0,
+            "CoastDecelerationMetersPerSecondSquared": 3.92750393260609,
+            "ReactionSeconds": 0.24,
+            "SteeringTravelSeconds": 0.15347224473953247,
+            "ResponseSeconds": 0.75,
+            "CriticalDistanceMeters": 0,
+            "SpeedHintMetersPerSecond": 100,
+            "MaximumTailBetaRadians": 0.297597736120224,
+            "ContactQueries": 125,
+            "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+          },
+          "OriginalPreparation": {
+            "Recovery": {
+              "SteeringRadians": 0.26725358,
+              "Drive": 0
+            },
+            "TailSafety": 1,
+            "ResidualSpeedMetersPerSecond": 0,
+            "CoastDecelerationMetersPerSecondSquared": 3.92750393260609,
+            "ReactionSeconds": 0.24,
+            "SteeringTravelSeconds": 0.15347224473953247,
+            "ResponseSeconds": 0.75,
+            "CriticalDistanceMeters": 0,
+            "SpeedHintMetersPerSecond": 100,
+            "MaximumTailBetaRadians": 0.297597736120224,
+            "ContactQueries": 125,
+            "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+          },
+          "GasRoots": null
+        },
+        {
+          "Time": 2.4,
+          "ReferenceMeters": 59.845022444116296,
+          "SpeedMetersPerSecond": 16.887188,
+          "Active": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0
+          },
+          "Pending": [
+            {
+              "ObservedAt": 2.2,
+              "ActivationAt": 2.4400000000000004,
+              "Action": {
+                "SteeringRadians": 0.02617994,
+                "Drive": 0.31820688
+              }
+            }
+          ],
+          "Request": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0.31820688
+          },
+          "Safety": 0,
+          "CpuSeconds": 0.203125,
+          "OriginalAction": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0.31820688
+          },
+          "Changed": false,
+          "Reason": "frozen134A action retained; no admissible candidate has better utility",
+          "Preparation": {
+            "Recovery": {
+              "SteeringRadians": 0.26725358,
+              "Drive": 0
+            },
+            "TailSafety": 2,
+            "ResidualSpeedMetersPerSecond": 0,
+            "CoastDecelerationMetersPerSecondSquared": 4.311226353500828,
+            "ReactionSeconds": 0.24,
+            "SteeringTravelSeconds": 0.15347224473953247,
+            "ResponseSeconds": 0.75,
+            "CriticalDistanceMeters": 0,
+            "SpeedHintMetersPerSecond": 100,
+            "MaximumTailBetaRadians": 0.3271068036556244,
+            "ContactQueries": 125,
+            "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+          },
+          "OriginalPreparation": {
+            "Recovery": {
+              "SteeringRadians": 0.26725358,
+              "Drive": 0
+            },
+            "TailSafety": 2,
+            "ResidualSpeedMetersPerSecond": 0,
+            "CoastDecelerationMetersPerSecondSquared": 4.311226353500828,
+            "ReactionSeconds": 0.24,
+            "SteeringTravelSeconds": 0.15347224473953247,
+            "ResponseSeconds": 0.75,
+            "CriticalDistanceMeters": 0,
+            "SpeedHintMetersPerSecond": 100,
+            "MaximumTailBetaRadians": 0.3271068036556244,
+            "ContactQueries": 125,
+            "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+          },
+          "GasRoots": null
+        },
+        {
+          "Time": 2.6,
+          "ReferenceMeters": 63.23043488922974,
+          "SpeedMetersPerSecond": 16.858011,
+          "Active": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0.31820688
+          },
+          "Pending": [
+            {
+              "ObservedAt": 2.4,
+              "ActivationAt": 2.6399999999999997,
+              "Action": {
+                "SteeringRadians": 0.02617994,
+                "Drive": 0.31820688
+              }
+            }
+          ],
+          "Request": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0
+          },
+          "Safety": 0,
+          "CpuSeconds": 0.171875,
+          "OriginalAction": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0
+          },
+          "Changed": false,
+          "Reason": "frozen134A action retained; no admissible candidate has better utility",
+          "Preparation": {
+            "Recovery": {
+              "SteeringRadians": 0.30543262,
+              "Drive": 0
+            },
+            "TailSafety": 1,
+            "ResidualSpeedMetersPerSecond": 0,
+            "CoastDecelerationMetersPerSecondSquared": 3.331516728256688,
+            "ReactionSeconds": 0.24,
+            "SteeringTravelSeconds": 0.17777776718139648,
+            "ResponseSeconds": 0.75,
+            "CriticalDistanceMeters": 0,
+            "SpeedHintMetersPerSecond": 100,
+            "MaximumTailBetaRadians": 0.28769129514694214,
+            "ContactQueries": 125,
+            "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+          },
+          "OriginalPreparation": {
+            "Recovery": {
+              "SteeringRadians": 0.30543262,
+              "Drive": 0
+            },
+            "TailSafety": 1,
+            "ResidualSpeedMetersPerSecond": 0,
+            "CoastDecelerationMetersPerSecondSquared": 3.331516728256688,
+            "ReactionSeconds": 0.24,
+            "SteeringTravelSeconds": 0.17777776718139648,
+            "ResponseSeconds": 0.75,
+            "CriticalDistanceMeters": 0,
+            "SpeedHintMetersPerSecond": 100,
+            "MaximumTailBetaRadians": 0.28769129514694214,
+            "ContactQueries": 125,
+            "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+          },
+          "GasRoots": null
+        },
+        {
+          "Time": 2.8000000000000003,
+          "ReferenceMeters": 66.63020298708204,
+          "SpeedMetersPerSecond": 17.047092,
+          "Active": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0.31820688
+          },
+          "Pending": [
+            {
+              "ObservedAt": 2.6,
+              "ActivationAt": 2.84,
+              "Action": {
+                "SteeringRadians": 0.02617994,
+                "Drive": 0
+              }
+            }
+          ],
+          "Request": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0.31820688
+          },
+          "Safety": 0,
+          "CpuSeconds": 0.171875,
+          "OriginalAction": {
+            "SteeringRadians": 0.02617994,
+            "Drive": 0.31820688
+          },
+          "Changed": false,
+          "Reason": "frozen134A action retained; no admissible candidate has better utility",
+          "Preparation": {
+            "Recovery": {
+              "SteeringRadians": 0.26725358,
+              "Drive": 0
+            },
+            "TailSafety": 2,
+            "ResidualSpeedMetersPerSecond": 0,
+            "CoastDecelerationMetersPerSecondSquared": 3.8612726962927613,
+            "ReactionSeconds": 0.24,
+            "SteeringTravelSeconds": 0.15347224473953247,
+            "ResponseSeconds": 0.75,
+            "CriticalDistanceMeters": 0,
+            "SpeedHintMetersPerSecond": 100,
+            "MaximumTailBetaRadians": 0.29444101452827454,
+            "ContactQueries": 125,
+            "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+          },
+          "OriginalPreparation": {
+            "Recovery": {
+              "SteeringRadians": 0.26725358,
+              "Drive": 0
+            },
+            "TailSafety": 2,
+            "ResidualSpeedMetersPerSecond": 0,
+            "CoastDecelerationMetersPerSecondSquared": 3.8612726962927613,
+            "ReactionSeconds": 0.24,
+            "SteeringTravelSeconds": 0.15347224473953247,
+            "ResponseSeconds": 0.75,
+            "CriticalDistanceMeters": 0,
+            "SpeedHintMetersPerSecond": 100,
+            "MaximumTailBetaRadians": 0.29444101452827454,
+            "ContactQueries": 125,
+            "Classification": "uncertified recovery forecast and geometry estimate; not a native certificate"
+          },
+          "GasRoots": null
+        }
+      ],
+      "StudiedStraight": {
+        "ObservedSeconds": 0,
+        "FullGasTimeFraction": null,
+        "CertifiedTo62Meters": false
+      },
+      "NextCorner": {
+        "Entered": false,
+        "Completed": false,
+        "MinimumSpeedMetersPerSecond": null,
+        "ObservedSeconds": 0
+      },
+      "NumericalAndClockGatesPassed": true
     }
   ],
   "Protocol": {
@@ -5647,8 +7751,8 @@
       ]
     },
     "Controller": "One prototype: remove throttle prior, replace terminal yaw with existing mean yaw; best per original gas plus original134A fallback. No weights fitted.",
-    "Preparation": "For \u003C=4 roots reuse H09 endpoint, one additional H09 coast/inverse-steering recovery forecast each. Original point forces, queue and actuator. Geometry estimates beyond H1.8 use attained offset and measured coast deceleration; reaction, actual steering travel, lateral\u002Bslip-yaw response consume available time. Relative residual-speed gate vs original134A. Uncertified estimate; no native future input.",
-    "Actions": "Original 0 / 0.318... / 1 and original steering set; only first request issued, .24s irrevocable pending, .2s reviews, \u002B/-35deg,90deg/s, beta45deg. No native intervention, reset or suffix commitment.",
+    "Preparation": "For <=4 roots reuse H09 endpoint, one additional H09 coast/inverse-steering recovery forecast each. Original point forces, queue and actuator. Geometry estimates beyond H1.8 use attained offset and measured coast deceleration; reaction, actual steering travel, lateral+slip-yaw response consume available time. Relative residual-speed gate vs original134A. Uncertified estimate; no native future input.",
+    "Actions": "Original 0 / 0.318... / 1 and original steering set; only first request issued, .24s irrevocable pending, .2s reviews, +/-35deg,90deg/s, beta45deg. No native intervention, reset or suffix commitment.",
     "HorizonSeconds": 0.9,
     "RecoverySeconds": 0.9,
     "PreparationToleranceMetersPerSecond": 0.001,
@@ -5742,7 +7846,7 @@
         "BaselineName": "extended-V1-c-A"
       }
     ],
-    "Scope": "One continuous original WorldRunner through studied exit, next62m, entire NEXT bend and another62m. D1/H1 include bend3. Historical two-bend\u002B1s gate separate.",
+    "Scope": "One continuous original WorldRunner through studied exit, next62m, entire NEXT bend and another62m. D1/H1 include bend3. Historical two-bend+1s gate separate.",
     "Gates": {
       "AllFourLegalWhenBaselineLegal": true,
       "NewDnf": 0,
@@ -5889,12 +7993,12 @@
     "FrozenBeforeAnyNewWorld": true
   },
   "Cost": {
-    "NewNativeWorlds": 1,
-    "CpuSeconds": 8.328125,
+    "NewNativeWorlds": 2,
+    "CpuSeconds": 11.71875,
     "AuditCpuSeconds": 5,
-    "EpisodeAndForecastCpuSeconds": 3.328125,
-    "Contacts": 36988,
-    "Forecasts": 405,
+    "EpisodeAndForecastCpuSeconds": 6.71875,
+    "Contacts": 79998,
+    "Forecasts": 856,
     "Meaning": "Includes chooser forecasts, native world, compact summaries and historical prefix reads; audit reads counted conservatively too. Build/tests excluded: no new forecasts/worlds there.",
     "Limits": {
       "Worlds": 20,
@@ -5908,5 +8012,183 @@
     "PreviousHistoricalSha256": "49FD65EFAAB30CE05610CCFBFB8BC560AF8237812CBFB624A784CD6B57094D60",
     "NormalizedHistoricalSha256": "E248BC797D927DDEFCA2B29001E81AFACFE819C9BE683D2B636F2C6B6D51501F",
     "PreviousHostSourceSha256": "B912318370288860397F2A584A198A233DF4E8FE7911AFA062271F1DCEBDB72C"
+  },
+  "Preflight": {
+    "Passed": false,
+    "CpuRatio": 1.2236024844720497,
+    "Meaning": "Original prefix parity and physical guards plus frozen CPU gate;3s does not certify later bends."
+  },
+  "Stopped": "Preflight CPU gate",
+  "Verdict": "INCONCLUSIVE",
+  "Provenance": {
+    "BaseHead": "932fc33ba20a8c96c2cd1a102957c9b297d412ea",
+    "Branch": "experiment/autonomous-acceleration-141",
+    "ProtocolCommit": "0920124",
+    "CollectorBoundaryCorrectionCommit": "e60a073",
+    "ControllerRetunedAfterFreeze": false,
+    "ConfirmationLock": null,
+    "PhysicsSourcesChangedFromBase": false,
+    "WorkflowChanged": false
+  },
+  "FinalSummary": {
+    "Verdict": "INCONCLUSIVE",
+    "StopReason": "Frozen preflight CPU gate: B mean 0.20520833333333333 CPU-s/decision > 0.200. Relative B/A 1.2236024844720497 passes <=1.5. No extra worlds, tuning, or held cases after stop.",
+    "ObservedDnfs": 0,
+    "FullScopeACompleted": 0,
+    "FullScopeBCompleted": 0,
+    "FullScopeTrialsRun": 0,
+    "FamiliesWithDemonstratedSpeedAndTimeImprovement": 0,
+    "PhysicalGuards": "Both 3s probes pass original track, beta45, energy, actuator, reaction/review and independent ledger/yaw-update checks. No full bend continuation certified.",
+    "TimingMeaning": "Process CPU, includes cold/JIT first decisions and quantized timer. This limited preflight is not a steady-state four-rider benchmark. Frozen stopping threshold retained; no repeat to obtain a better number.",
+    "TargetStraightSpeedsAndFullTimes": "Not measured: both probes stop inside first bend before studied exit. End speeds at equal3s are different-distance observations, not +40m or full-scope comparisons.",
+    "NextStep": "In a separately frozen follow-up, reduce repeated forecast-point/geometry work and establish CPU methodology before new A/B continuous next-corner runs. Keep original physics and this prototype OFF."
+  },
+  "Comparisons": [
+    {
+      "Case": "D0",
+      "Pool": "diagnostic",
+      "Status": "NOT RUN — preflight CPU stop",
+      "A": {
+        "ExitKph": null,
+        "Plus20Kph": null,
+        "Plus40Kph": null,
+        "Plus62Kph": null,
+        "FullTimeSeconds": null,
+        "DNF": null
+      },
+      "B": {
+        "ExitKph": null,
+        "Plus20Kph": null,
+        "Plus40Kph": null,
+        "Plus62Kph": null,
+        "FullTimeSeconds": null,
+        "DNF": null
+      },
+      "NextBendSpeedSacrifice": null
+    },
+    {
+      "Case": "D1",
+      "Pool": "diagnostic",
+      "Status": "NOT RUN — preflight CPU stop",
+      "A": {
+        "ExitKph": null,
+        "Plus20Kph": null,
+        "Plus40Kph": null,
+        "Plus62Kph": null,
+        "FullTimeSeconds": null,
+        "DNF": null
+      },
+      "B": {
+        "ExitKph": null,
+        "Plus20Kph": null,
+        "Plus40Kph": null,
+        "Plus62Kph": null,
+        "FullTimeSeconds": null,
+        "DNF": null
+      },
+      "NextBendSpeedSacrifice": null
+    },
+    {
+      "Case": "H0",
+      "Pool": "confirmation",
+      "Status": "NOT RUN — preflight CPU stop",
+      "A": {
+        "ExitKph": null,
+        "Plus20Kph": null,
+        "Plus40Kph": null,
+        "Plus62Kph": null,
+        "FullTimeSeconds": null,
+        "DNF": null
+      },
+      "B": {
+        "ExitKph": null,
+        "Plus20Kph": null,
+        "Plus40Kph": null,
+        "Plus62Kph": null,
+        "FullTimeSeconds": null,
+        "DNF": null
+      },
+      "NextBendSpeedSacrifice": null
+    },
+    {
+      "Case": "H1",
+      "Pool": "confirmation",
+      "Status": "NOT RUN — preflight CPU stop",
+      "A": {
+        "ExitKph": null,
+        "Plus20Kph": null,
+        "Plus40Kph": null,
+        "Plus62Kph": null,
+        "FullTimeSeconds": null,
+        "DNF": null
+      },
+      "B": {
+        "ExitKph": null,
+        "Plus20Kph": null,
+        "Plus40Kph": null,
+        "Plus62Kph": null,
+        "FullTimeSeconds": null,
+        "DNF": null
+      },
+      "NextBendSpeedSacrifice": null
+    }
+  ],
+  "Dnfs": [],
+  "Validation": {
+    "Status": "PASS — local standard Draft validation; final-head Windows CI outcome linked in PR checks and final response",
+    "Restore": "PASS",
+    "ReleaseBuildWarningsAsErrors": {
+      "Passed": true,
+      "Warnings": 0,
+      "Errors": 0
+    },
+    "Dotnet": {
+      "Passed": 2433,
+      "Failed": 0,
+      "Skipped": 0,
+      "Shards": [
+        "core",
+        "trajectory"
+      ],
+      "NewFocusedTests": 3
+    },
+    "Discovery": {
+      "Total": 2954,
+      "Core": 2038,
+      "Trajectory": 395,
+      "HistoricalAnalysis": 473,
+      "FourRider": 48,
+      "Missing": 0,
+      "Duplicate": 0
+    },
+    "PythonCalibration": {
+      "Passed": 237,
+      "Failed": 0
+    },
+    "PythonCi": {
+      "Passed": 7,
+      "Failed": 0
+    },
+    "NodeStandard": {
+      "Passed": 61,
+      "Failed": 0
+    },
+    "NodeHistoricalThrottleSteering": {
+      "Passed": 4,
+      "Failed": 0
+    },
+    "FrozenLegacyConsumers": 39,
+    "FrozenPreviousRuntimeSources": "PASS — all #140 source manifest hashes unchanged",
+    "ObservationGenerator": "PASS --check",
+    "OriginalOffPrefix": "Exact serialized SHA256 after only terminal command-annotation normalization. All initial physical state fields agree A/B. Correction evidence retained separately.",
+    "FinalFrozenSourcesAndOnlyTwoReports": "PASS",
+    "WindowsCi": {
+      "Workflow": ".github/workflows/ci.yml",
+      "Changed": false,
+      "Policy": "Standard Draft Windows: coverage/build/discovery, Python/Node, core, trajectory, final gate; heavy historical audits skipped by existing policy",
+      "ResultLocation": "https://github.com/arturgladysz91/zuzel/pull/141/checks",
+      "ExactHeadSource": "Workflow checks out pull_request.head.sha; final outcome recorded in PR description and final answer"
+    },
+    "ExperimentBudgetExcludes": "Build and regression tests; new141 focused unit tests create zero forecasts and zero native worlds."
   }
 }
