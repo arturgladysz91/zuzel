@@ -1,0 +1,71 @@
+{
+  "Name": "off-D0",
+  "Arm": "off",
+  "Case": {
+    "Name": "D0",
+    "Pool": "diagnostic",
+    "Case": {
+      "Name": "D-B",
+      "Geometry": "progressive-b",
+      "Scenario": {
+        "Name": "D-B",
+        "Level": 4,
+        "Speed": 16,
+        "Offset": 5,
+        "Start": 18.125,
+        "OutwardSpeed": 0.08,
+        "HeadingError": 0.012,
+        "YawRate": 0.025
+      },
+      "Two": true
+    },
+    "Corner": 1,
+    "BaselineDirectory": "docs/experiments/throttle-steering-decoupling/native",
+    "BaselineName": "off-D0"
+  },
+  "Variant": "original",
+  "Metrics": {
+    "Native": {
+      "Completed": true,
+      "Outcome": "completed",
+      "GateSeconds": 15.999999999999975,
+      "DurationSeconds": 16.99999999999997,
+      "LegalProgress": 296.50422382354736,
+      "LegalSeconds": 16.99999999999997,
+      "MinimumClearanceMeters": 0.11335358754516568,
+      "EntrySpeed": 18.789688110351562,
+      "MinimumSpeed": 15.324419975280762,
+      "ExitSpeed": 18.136425018310547,
+      "MaximumBetaDegrees": 9.24284269347322,
+      "MeanDrive": 0.1855749952094265,
+      "FullDriveFraction": 0.014117646743269551,
+      "LargeTrajectoryOscillations": 6,
+      "DistanceMeters": 301.7006108025089,
+      "BoundaryApproach": 16.163567080336335,
+      "RecoverySeconds": 4.129999907687306,
+      "NativeSteps": 1704,
+      "PhysicsEvaluations": 209322,
+      "Forecasts": 2295,
+      "CpuSeconds": 12.140625,
+      "Fingerprint": "980730E1B6228333B446D07C1A2F45E14E2626B6B43D71246BA42424F91D55AD"
+    },
+    "MinimumInstantInner": 0.2059718637240025,
+    "MinimumInstantOuter": 3.078417224469861,
+    "MinimumLegacyCertificate": 0.11335358754516568,
+    "MinimumRefinedCertificate": 0.11335358754516568,
+    "CornerMinimumSpeed": 15.324419975280762,
+    "MaximumYawRate": 0.7641396522521973,
+    "ExitYawRate": 0.1607234925031662,
+    "SteeringRequestTravelDegrees": 56.50000324185753,
+    "MaximumRequestChangeDegrees": 4.500000011387423,
+    "EngineWorkJoules": 84223.49849993589,
+    "DissipationJoules": 72555.98622154749,
+    "NoSafeDecisions": 0,
+    "BoundaryClass": "none"
+  },
+  "PreparationTime": null,
+  "OpenRequestTime": null,
+  "ExactInitial": true,
+  "PrefixExact": true,
+  "Execution": "Original frozen134A; exact native fingerprint required"
+}

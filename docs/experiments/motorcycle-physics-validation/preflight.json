@@ -1,0 +1,148 @@
+{
+  "Passed": true,
+  "Rows": [
+    {
+      "Name": "off-D0",
+      "Arm": "off",
+      "Case": {
+        "Name": "D0",
+        "Pool": "diagnostic",
+        "Case": {
+          "Name": "D-B",
+          "Geometry": "progressive-b",
+          "Scenario": {
+            "Name": "D-B",
+            "Level": 4,
+            "Speed": 16,
+            "Offset": 5,
+            "Start": 18.125,
+            "OutwardSpeed": 0.08,
+            "HeadingError": 0.012,
+            "YawRate": 0.025
+          },
+          "Two": true
+        },
+        "Corner": 1,
+        "BaselineDirectory": "docs/experiments/throttle-steering-decoupling/native",
+        "BaselineName": "off-D0"
+      },
+      "Variant": "original",
+      "Metrics": {
+        "Native": {
+          "Completed": true,
+          "Outcome": "completed",
+          "GateSeconds": 15.999999999999975,
+          "DurationSeconds": 16.99999999999997,
+          "LegalProgress": 296.50422382354736,
+          "LegalSeconds": 16.99999999999997,
+          "MinimumClearanceMeters": 0.11335358754516568,
+          "EntrySpeed": 18.789688110351562,
+          "MinimumSpeed": 15.324419975280762,
+          "ExitSpeed": 18.136425018310547,
+          "MaximumBetaDegrees": 9.24284269347322,
+          "MeanDrive": 0.1855749952094265,
+          "FullDriveFraction": 0.014117646743269551,
+          "LargeTrajectoryOscillations": 6,
+          "DistanceMeters": 301.7006108025089,
+          "BoundaryApproach": 16.163567080336335,
+          "RecoverySeconds": 4.129999907687306,
+          "NativeSteps": 1704,
+          "PhysicsEvaluations": 209322,
+          "Forecasts": 2295,
+          "CpuSeconds": 12.140625,
+          "Fingerprint": "980730E1B6228333B446D07C1A2F45E14E2626B6B43D71246BA42424F91D55AD"
+        },
+        "MinimumInstantInner": 0.2059718637240025,
+        "MinimumInstantOuter": 3.078417224469861,
+        "MinimumLegacyCertificate": 0.11335358754516568,
+        "MinimumRefinedCertificate": 0.11335358754516568,
+        "CornerMinimumSpeed": 15.324419975280762,
+        "MaximumYawRate": 0.7641396522521973,
+        "ExitYawRate": 0.1607234925031662,
+        "SteeringRequestTravelDegrees": 56.50000324185753,
+        "MaximumRequestChangeDegrees": 4.500000011387423,
+        "EngineWorkJoules": 84223.49849993589,
+        "DissipationJoules": 72555.98622154749,
+        "NoSafeDecisions": 0,
+        "BoundaryClass": "none"
+      },
+      "PreparationTime": null,
+      "OpenRequestTime": null,
+      "ExactInitial": true,
+      "PrefixExact": true,
+      "Execution": "Original frozen134A; exact native fingerprint required"
+    },
+    {
+      "Name": "off-D1",
+      "Arm": "off",
+      "Case": {
+        "Name": "D1",
+        "Pool": "diagnostic",
+        "Case": {
+          "Name": "D-C",
+          "Geometry": "progressive-c",
+          "Scenario": {
+            "Name": "D-C",
+            "Level": 4,
+            "Speed": 12,
+            "Offset": 7,
+            "Start": 18.625,
+            "OutwardSpeed": -0.1,
+            "HeadingError": -0.02,
+            "YawRate": -0.035
+          },
+          "Two": true
+        },
+        "Corner": 2,
+        "BaselineDirectory": "docs/experiments/throttle-steering-decoupling/native",
+        "BaselineName": "off-D1"
+      },
+      "Variant": "original",
+      "Metrics": {
+        "Native": {
+          "Completed": true,
+          "Outcome": "completed",
+          "GateSeconds": 16.87,
+          "DurationSeconds": 17.87,
+          "LegalProgress": 295.7178645133972,
+          "LegalSeconds": 17.87,
+          "MinimumClearanceMeters": 0.14689990401094077,
+          "EntrySpeed": 15.534455299377441,
+          "MinimumSpeed": 12.00412368774414,
+          "ExitSpeed": 17.747814178466797,
+          "MaximumBetaDegrees": 13.51289239567562,
+          "MeanDrive": 0.21340028753157309,
+          "FullDriveFraction": 0.013430329862091884,
+          "LargeTrajectoryOscillations": 7,
+          "DistanceMeters": 312.82964439317584,
+          "BoundaryApproach": 14.915150588851507,
+          "RecoverySeconds": 2.029999954858795,
+          "NativeSteps": 1791,
+          "PhysicsEvaluations": 221643,
+          "Forecasts": 2430,
+          "CpuSeconds": 13.9375,
+          "Fingerprint": "51EFF9EEACE02002D3B62BA3CE67CB8B8E96130B706B53A15015487C17882B6A"
+        },
+        "MinimumInstantInner": 0.23176869324236443,
+        "MinimumInstantOuter": 2.9568687652881613,
+        "MinimumLegacyCertificate": 0.14689990401094077,
+        "MinimumRefinedCertificate": 0.14689990401094077,
+        "CornerMinimumSpeed": 15.381253242492676,
+        "MaximumYawRate": 0.791793167591095,
+        "ExitYawRate": 0.15313789248466492,
+        "SteeringRequestTravelDegrees": 51.50000249559194,
+        "MaximumRequestChangeDegrees": 4.500000011387423,
+        "EngineWorkJoules": 96672.64876278727,
+        "DissipationJoules": 77476.26469383338,
+        "NoSafeDecisions": 0,
+        "BoundaryClass": "none"
+      },
+      "PreparationTime": null,
+      "OpenRequestTime": null,
+      "ExactInitial": true,
+      "PrefixExact": true,
+      "Execution": "Original frozen134A; exact native fingerprint required"
+    }
+  ],
+  "LimitsRetained": true
+}

@@ -1,0 +1,71 @@
+{
+  "Name": "D1-C",
+  "Arm": "C",
+  "Case": {
+    "Name": "D1",
+    "Pool": "diagnostic",
+    "Case": {
+      "Name": "D-C",
+      "Geometry": "progressive-c",
+      "Scenario": {
+        "Name": "D-C",
+        "Level": 4,
+        "Speed": 12,
+        "Offset": 7,
+        "Start": 18.625,
+        "OutwardSpeed": -0.1,
+        "HeadingError": -0.02,
+        "YawRate": -0.035
+      },
+      "Two": true
+    },
+    "Corner": 2,
+    "BaselineDirectory": "D:\\Codex-work\\pr138\\repo\\docs/experiments/two-contact-bike-dynamics\\../throttle-steering-decoupling/native",
+    "BaselineName": "off-D1"
+  },
+  "Variant": "original",
+  "Metrics": {
+    "Native": {
+      "Completed": true,
+      "Outcome": "completed",
+      "GateSeconds": 16.799999999999972,
+      "DurationSeconds": 19.665436,
+      "LegalProgress": 335.15376138687134,
+      "LegalSeconds": 19.665436,
+      "MinimumClearanceMeters": 0.14689990401094077,
+      "EntrySpeed": 15.534455299377441,
+      "MinimumSpeed": 12.00412368774414,
+      "ExitSpeed": 18.405332565307617,
+      "MaximumBetaDegrees": 13.51289239567562,
+      "MeanDrive": 0.21007414610878888,
+      "FullDriveFraction": 0.022374280966771562,
+      "LargeTrajectoryOscillations": 8,
+      "DistanceMeters": 351.4141688346863,
+      "BoundaryApproach": 14.56236788405823,
+      "RecoverySeconds": 1.859999958658591,
+      "NativeSteps": 1971,
+      "PhysicsEvaluations": 244148,
+      "Forecasts": 2676,
+      "CpuSeconds": 15.1875,
+      "Fingerprint": "F743421F028E7DB96E66FDD6038FE5CE560078D668541EA5929571938B404DC5"
+    },
+    "MinimumInstantInner": 0.25067324906413674,
+    "MinimumInstantOuter": 3.4888182279646363,
+    "MinimumLegacyCertificate": 0.14689990401094077,
+    "MinimumRefinedCertificate": 0.14689990401094077,
+    "CornerMinimumSpeed": 15.469027519226074,
+    "MaximumYawRate": 0.8893957734107971,
+    "ExitYawRate": 0.43203744292259216,
+    "SteeringRequestTravelDegrees": 64.11041406562526,
+    "MaximumRequestChangeDegrees": 7.305206059489905,
+    "EngineWorkJoules": 108358.90356315227,
+    "DissipationJoules": 87200.29975686246,
+    "NoSafeDecisions": 0,
+    "BoundaryClass": "none"
+  },
+  "PreparationTime": 14.200000000000001,
+  "OpenRequestTime": 16.2,
+  "ExactInitial": true,
+  "PrefixExact": true,
+  "Execution": "Controlled preparation/pulse followed by causal frozen134A, never future native states."
+}

@@ -1,0 +1,71 @@
+{
+  "Name": "sensitivity-D0-yaw-inertia125",
+  "Arm": "sensitivity",
+  "Case": {
+    "Name": "D0",
+    "Pool": "diagnostic",
+    "Case": {
+      "Name": "D-B",
+      "Geometry": "progressive-b",
+      "Scenario": {
+        "Name": "D-B",
+        "Level": 4,
+        "Speed": 16,
+        "Offset": 5,
+        "Start": 18.125,
+        "OutwardSpeed": 0.08,
+        "HeadingError": 0.012,
+        "YawRate": 0.025
+      },
+      "Two": true
+    },
+    "Corner": 1,
+    "BaselineDirectory": "D:\\Codex-work\\pr138\\repo\\docs/experiments/two-contact-bike-dynamics\\../throttle-steering-decoupling/native",
+    "BaselineName": "off-D0"
+  },
+  "Variant": "yaw-inertia125",
+  "Metrics": {
+    "Native": {
+      "Completed": false,
+      "Outcome": "control envelope",
+      "GateSeconds": null,
+      "DurationSeconds": 7.71,
+      "LegalProgress": 127.35775113105774,
+      "LegalSeconds": 7.7,
+      "MinimumClearanceMeters": 1.2193685751313643,
+      "EntrySpeed": 18.873064041137695,
+      "MinimumSpeed": 15.8097562789917,
+      "ExitSpeed": null,
+      "MaximumBetaDegrees": 45.54605218497536,
+      "MeanDrive": 0.24101970995882968,
+      "FullDriveFraction": 0.10894941396760029,
+      "LargeTrajectoryOscillations": 5,
+      "DistanceMeters": 136.10804538056254,
+      "BoundaryApproach": 5.534952872540016,
+      "RecoverySeconds": 0,
+      "NativeSteps": 773,
+      "PhysicsEvaluations": 775,
+      "Forecasts": 0,
+      "CpuSeconds": 0.265625,
+      "Fingerprint": "27B3A02163E829ADE950BF9F13242DB924E3956843C66B251D1B6B22C38E36FC"
+    },
+    "MinimumInstantInner": 1.315890127038427,
+    "MinimumInstantOuter": 4.355132977836934,
+    "MinimumLegacyCertificate": 1.2193685751313643,
+    "MinimumRefinedCertificate": 1.2193685751313643,
+    "CornerMinimumSpeed": 15.8097562789917,
+    "MaximumYawRate": 1.8103958368301392,
+    "ExitYawRate": null,
+    "SteeringRequestTravelDegrees": 55.331498197310296,
+    "MaximumRequestChangeDegrees": 15.000000037958074,
+    "EngineWorkJoules": 59490.40281635501,
+    "DissipationJoules": 55106.51166552908,
+    "NoSafeDecisions": 0,
+    "BoundaryClass": "none"
+  },
+  "PreparationTime": null,
+  "OpenRequestTime": null,
+  "ExactInitial": true,
+  "PrefixExact": true,
+  "Execution": "Prescribed originalB command tape; if B DNF, historical134A timeline afterwards. All requests retain .24s queue. Not autonomous."
+}
