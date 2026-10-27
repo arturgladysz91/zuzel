@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "motorcycle-physics-validati
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tyre-law-regularization", "tools\tyre-law-regularization\tyre-law-regularization.csproj", "{78D281D8-6090-4A7D-8145-610FDAB14A6F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "autonomous-acceleration", "tools\autonomous-acceleration\autonomous-acceleration.csproj", "{F241BBE5-C977-4EB6-B624-A352A331B9F6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -185,6 +187,18 @@ Global
 		{78D281D8-6090-4A7D-8145-610FDAB14A6F}.Release|x64.Build.0 = Release|Any CPU
 		{78D281D8-6090-4A7D-8145-610FDAB14A6F}.Release|x86.ActiveCfg = Release|Any CPU
 		{78D281D8-6090-4A7D-8145-610FDAB14A6F}.Release|x86.Build.0 = Release|Any CPU
+		{F241BBE5-C977-4EB6-B624-A352A331B9F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F241BBE5-C977-4EB6-B624-A352A331B9F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F241BBE5-C977-4EB6-B624-A352A331B9F6}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F241BBE5-C977-4EB6-B624-A352A331B9F6}.Debug|x64.Build.0 = Debug|Any CPU
+		{F241BBE5-C977-4EB6-B624-A352A331B9F6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F241BBE5-C977-4EB6-B624-A352A331B9F6}.Debug|x86.Build.0 = Debug|Any CPU
+		{F241BBE5-C977-4EB6-B624-A352A331B9F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F241BBE5-C977-4EB6-B624-A352A331B9F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F241BBE5-C977-4EB6-B624-A352A331B9F6}.Release|x64.ActiveCfg = Release|Any CPU
+		{F241BBE5-C977-4EB6-B624-A352A331B9F6}.Release|x64.Build.0 = Release|Any CPU
+		{F241BBE5-C977-4EB6-B624-A352A331B9F6}.Release|x86.ActiveCfg = Release|Any CPU
+		{F241BBE5-C977-4EB6-B624-A352A331B9F6}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -202,5 +216,6 @@ Global
 		{A8763A9F-9AB1-48E9-9320-0E8F2A11AAB8} = {07C2787E-EAC7-C090-1BA3-A61EC2A24D84}
 		{302C2109-8C29-4CD5-93E3-5FA6C2C6BB9A} = {07C2787E-EAC7-C090-1BA3-A61EC2A24D84}
 		{78D281D8-6090-4A7D-8145-610FDAB14A6F} = {07C2787E-EAC7-C090-1BA3-A61EC2A24D84}
+		{F241BBE5-C977-4EB6-B624-A352A331B9F6} = {07C2787E-EAC7-C090-1BA3-A61EC2A24D84}
 	EndGlobalSection
 EndGlobal
