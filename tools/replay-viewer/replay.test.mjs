@@ -303,3 +303,5 @@ test('Target cross-sections read exported model positions/normals; offset zero i
   }
   assert.equal(geometry.enums.channels['1'], 'Line'); assert.equal(geometry.enums.channels['2'], 'Throttle');
 });
+
+import './motorcycle-physics.test.mjs';

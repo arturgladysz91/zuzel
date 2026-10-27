@@ -1,0 +1,17 @@
+<!doctype html><html lang="pl"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>#139 · Fizyka motocykla · natywne replaye</title>
+<style>
+:root{color-scheme:dark;font:15px system-ui;background:#0b1520;color:#e5edf3}body{margin:0}header{padding:24px 28px;border-bottom:1px solid #294154}h1{font-size:24px;margin:0 0 8px}p{color:#afc1ce;line-height:1.5}a{color:#7bd3ed}main{padding:22px;display:grid;grid-template-columns:minmax(500px,1fr) 420px;gap:20px}canvas{width:100%;background:#102231;border:1px solid #294154;border-radius:10px}button,select{padding:9px 12px;border:1px solid #476273;border-radius:7px;background:#142e3e;color:#e5edf3}button{cursor:pointer}input[type=range]{width:100%}.tools{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:12px 0}.card{padding:16px;background:#102231;border:1px solid #294154;border-radius:10px;margin-bottom:12px}h2{font-size:18px;margin:0 0 10px}.readout{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px}.readout b{display:block;font-size:18px;color:#fff}small{color:#afc1ce}@media(max-width:1000px){main{grid-template-columns:1fr}}
+</style>
+<header><h1>#139 · Fizyka motocykla i kontakt opon</h1><small>22 natywne przejazdy · oba łuki · progressive-b / progressive-c</small>
+<p>A: bez przygotowania, impuls gaz1 przez 0,6 s żądań. B: jedno wcześniejsze przygotowanie i ten sam impuls. C: przygotowanie i krótkie korekty obu kanałów co 0,2 s. Reakcja 0,24 s.<br>Warianty parametrów wykonują zamrożoną taśmę B. Są analizą wrażliwości, nie skalibrowaną fizyką ani autonomicznym zawodnikiem.</p>
+<a href="../../docs/experiments/motorcycle-physics-validation/README.md">Raport, mapy i wszystkie DNF</a> · <a href="throttle-steering.html">Historyczne #138</a></header>
+<main><section>
+<div class="tools"><label>Przypadek <select id="case"></select></label><label><input id="follow" type="checkbox"> Zbliżenie</label><button id="xy">Pełne ślady XY</button><button id="intervention">Do żądania gaz1</button></div>
+<canvas id="map" width="1100" height="660" aria-label="Natywne pozycje i kierunki prędkości na Motoarenie"></canvas>
+<div class="tools"><button id="play">▶ Odtwórz</button><button id="back">−0,01 s</button><button id="next">+0,01 s</button><span id="clock"></span><label>Tempo <select id="rate"><option>.25</option><option>.5</option><option selected>1</option><option>2</option></select></label></div>
+<input id="time" type="range" min="0" max="20" step="any" value="0" aria-label="Czas zapisanego przejazdu">
+<p id="message"></p><div class="tools"><label>Wykres <select id="metric"><option value="beta">β [°]</option><option value="speed">Prędkość [km/h]</option><option value="slip">Slip tyłu</option><option value="gas">Gaz aktywny</option><option value="netTorque">Moment yaw [Nm]</option></select></label></div>
+<canvas id="chart" width="1100" height="290" aria-label="Wykres zapisanej telemetrii"></canvas>
+</section><aside><div class="card"><h2>Jak czytać dowód</h2><p>Motocykl pokazuje orientację ψ; strzałka — wektor prędkości χ. Wyświetlamy ostatnią rzeczywistą próbkę przed wybraną chwilą, bez interpolacji. Po DNF nie dopisujemy ruchu. Końcowy stan naruszający β45° jest oznaczony jako nielegalny.</p><p>Siły dotyczą poprzedniego natywnego przedziału, stan — jego końca. „Uncertified interval” oznacza brak certyfikacji, nie dowiedzione przekroczenie bandy.</p></div><div id="readouts"></div></aside></main>
+<script type="module" src="motorcycle-physics.mjs"></script></html>
