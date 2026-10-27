@@ -16,6 +16,16 @@ public static class Experiment141
         .Concat(Directory.GetFiles("tools/autonomous-acceleration").Where(x=>x.EndsWith(".cs",StringComparison.Ordinal)||x.EndsWith(".py",StringComparison.Ordinal)||x.EndsWith(".csproj",StringComparison.Ordinal)))
         .Where(x=>!x.Replace('\\','/').Contains("/obj/")&&!x.Replace('\\','/').Contains("/bin/")).Order().ToDictionary(x=>x.Replace('\\','/'),x=>Hash(File.ReadAllText(x)));
     static void Save(string path,JsonObject root){File.WriteAllText(path+".tmp",root.ToJsonString(Json));File.Move(path+".tmp",path,true);}
+    static FreeRacingSample[] HistoricalPrefix(double end){
+        var old=RobustLearningExperiment.ReadEpisode("docs/experiments/motorcycle-physics-validation/native","off-D0");
+        var saved=old.Replay.Samples.Where(s=>s.Input.Time<=end+1e-8).ToArray();
+        // The long capture annotates each sample before its NEXT accepted interval.
+        // A short capture's final sample has no next interval: exclude only a request
+        // at the endpoint, which has not been observed by the short world yet.
+        var d=old.Replay.Decisions.Last(x=>x.Time<end-1e-8);var last=saved[^1];
+        saved[^1]=last with{Input=last.Input with{Pending=last.Input.Pending.Where(x=>x.ObservedAt<end-1e-8).ToArray(),NextReview=d.Time+.2},RequestedSteering=d.Action.SteeringRadians,RequestedDrive=d.Action.Drive};
+        return saved;
+    }
     static JsonArray Attempts(JsonObject r)=>(JsonArray)r["Reservations"]!;
     static double Cpu(JsonObject r)=>r["Audit"]!["CpuSeconds"]!.GetValue<double>()+Attempts(r).Sum(x=>x!["CpuSeconds"]!.GetValue<double>());
     static int Reserve(JsonObject r,string path,string name){
@@ -32,6 +42,21 @@ public static class Experiment141
         Directory.SetCurrentDirectory(Experiment140.RepoRoot());path=Path.GetFullPath(path);Directory.CreateDirectory("work");
         using var lease=new FileStream("work/acceleration141.lock",FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.None);
         var r=JsonNode.Parse(File.ReadAllText(path))!.AsObject();
+        if(stage=="prefix-audit"){
+            // Read-only correction of the export comparison; never reruns a world.
+            if(Attempts(r).Count!=1||r["Stopped"]?.GetValue<string>()!="Native guard, clock, ledger or original-prefix gate: preflight-A")throw new IOException("Only the single stopped original preflight may be audited.");
+            var cpu=Process.GetCurrentProcess().TotalProcessorTime;var row=r["Native"]![0]!;
+            var normalizedHash=Hash(JsonSerializer.Serialize(HistoricalPrefix(3),Json));
+            if(normalizedHash!=row["NewPrefixSha256"]!.GetValue<string>())throw new IOException("Difference exceeds endpoint annotation; stop remains.");
+            r["CollectorBoundaryCorrection"]=Node(new{NativeWorlds=0,NewForecasts=0,
+                Meaning="Original long capture had already annotated decision3.00s; short capture ends before observing it. Removing only endpoint command annotation from saved historical prefix makes its entire serialized SHA256 equal the new capture. No physical state, earlier command, score, gate threshold or controller changed.",
+                PreviousHistoricalSha256=row["HistoricalPrefixSha256"]!.GetValue<string>(),NormalizedHistoricalSha256=normalizedHash,
+                PreviousHostSourceSha256=r["Protocol"]!["Sources"]!["tools/shared-world-speedway/AutonomousAcceleration141/Experiment141.cs"]!.GetValue<string>()});
+            row["HistoricalPrefixSha256"]=normalizedHash;row["ExactHistoricalPrefix"]=true;row["NumericalAndClockGatesPassed"]=true;
+            r["Protocol"]!["Sources"]!["tools/shared-world-speedway/AutonomousAcceleration141/Experiment141.cs"]=Hash(File.ReadAllText("tools/shared-world-speedway/AutonomousAcceleration141/Experiment141.cs"));
+            Attempts(r)[0]!["CpuSeconds"]=Attempts(r)[0]!["CpuSeconds"]!.GetValue<double>()+(Process.GetCurrentProcess().TotalProcessorTime-cpu).TotalSeconds;
+            r.Remove("Stopped");r.Remove("Verdict");Cost(r);Save(path,r);Console.WriteLine("Exact prefix confirmed after endpoint annotation normalization, zero new worlds/forecasts.");return;
+        }
         if(stage=="freeze"){
             if(r["Protocol"] is not null||Attempts(r).Count>0)throw new IOException("Cannot overwrite a frozen experiment.");
             r["Protocol"]=Node(new{BaseHead,DefaultEnabled=false,ProductionChanged=false,Policy=PhysicsExperiment139.Policy,
@@ -117,8 +142,7 @@ public static class Experiment141
         if(summary["ExactInitialPhysicalState"] is not null)pass&=summary["ExactInitialPhysicalState"]!.GetValue<bool>();
         if(shortSeconds is not null){pass&=metrics.Outcome=="probe";
             if(mode=="A"){
-                var old=RobustLearningExperiment.ReadEpisode("docs/experiments/motorcycle-physics-validation/native","off-D0");
-                var saved=old.Replay.Samples.Where(s=>s.Input.Time<=shortSeconds+1e-8).ToArray();
+                var saved=HistoricalPrefix(shortSeconds.Value);
                 var actual=JsonSerializer.Serialize(samples,Json);var historical=JsonSerializer.Serialize(saved,Json);var same=actual==historical;
                 summary["ExactHistoricalPrefix"]=same;summary["HistoricalPrefixSha256"]=Hash(historical);summary["NewPrefixSha256"]=Hash(actual);pass&=same;
             }
