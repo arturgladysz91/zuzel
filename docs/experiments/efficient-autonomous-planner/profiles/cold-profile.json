@@ -1,0 +1,97 @@
+{
+  "NativeWorlds": 0,
+  "CpuSeconds": 23.421875,
+  "Action": {
+    "SteeringRadians": 0,
+    "Drive": 1
+  },
+  "OriginalAction": {
+    "SteeringRadians": 0,
+    "Drive": 1
+  },
+  "CommandsMatch": true,
+  "Forecasts": 5120,
+  "ForceEvaluations": 304242,
+  "SeedDecisions": 106,
+  "Profile": {
+    "MeasuredCpuSeconds": 22.640625,
+    "Phases": [
+      {
+        "Name": "seed_k1",
+        "CpuSeconds": 15.625,
+        "Percent": 69.01311249137336
+      },
+      {
+        "Name": "model_step",
+        "CpuSeconds": 6.953125,
+        "Percent": 30.710835058661146
+      },
+      {
+        "Name": "rollout_bookkeeping",
+        "CpuSeconds": 0.046875,
+        "Percent": 0.2070393374741201
+      },
+      {
+        "Name": "decision_dispatch",
+        "CpuSeconds": 0.015625,
+        "Percent": 0.06901311249137336
+      },
+      {
+        "Name": "outside_decision",
+        "CpuSeconds": 0,
+        "Percent": 0
+      },
+      {
+        "Name": "safety_check",
+        "CpuSeconds": 0,
+        "Percent": 0
+      }
+    ],
+    "Operations": [
+      {
+        "Name": "fresh-K1-seed",
+        "CpuSeconds": 15.953125,
+        "Percent": 70.4623878536922
+      },
+      {
+        "Name": "beam-1",
+        "CpuSeconds": 3.34375,
+        "Percent": 14.768806073153899
+      },
+      {
+        "Name": "beam-2",
+        "CpuSeconds": 2.4375,
+        "Percent": 10.766045548654244
+      },
+      {
+        "Name": "beam-3",
+        "CpuSeconds": 0.859375,
+        "Percent": 3.795721187025535
+      },
+      {
+        "Name": "dispatch",
+        "CpuSeconds": 0.03125,
+        "Percent": 0.13802622498274672
+      },
+      {
+        "Name": "independent_preflight",
+        "CpuSeconds": 0.015625,
+        "Percent": 0.06901311249137336
+      }
+    ],
+    "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+  },
+  "Review": {
+    "Candidates": 64,
+    "Reason": "new endogenous maneuver",
+    "GoalTime": 12.280976425803589,
+    "Safety": {
+      "Legal": true,
+      "MinimumGapMeters": 0.20463248107517673,
+      "SweepLowerBoundMeters": 0.09743945964340524,
+      "MaximumBetaDegrees": 13.33887253243807,
+      "MaximumYawRate": 0.9048423171043396,
+      "Reason": "legal complete forecast"
+    }
+  }
+}

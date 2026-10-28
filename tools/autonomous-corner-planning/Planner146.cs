@@ -36,14 +36,14 @@ public sealed class Planner146
     public List<Review146> Reviews {get;}=new();
     public object? LastProgress {get;private set;}
     public long SeedDecisions {get;private set;}
-    readonly Action? budgetGuard;
+    readonly Action? budgetGuard;readonly ExecutionHooks146? hooks;
     readonly RiderSpec spec;readonly TrackFrame frame;readonly TrackStateSnapshot surface;
     readonly WorldParameters parameters;readonly float mass,inertia;
     readonly Model146 model;
     Plan146? previous;State146? expectedState;double nextSearch;
     int policyForecasts,policyContacts;long reviewForecastStart;
     public Planner146(RiderSpec spec,TrackFrame frame,TrackStateSnapshot surface,WorldParameters parameters,
-        PlannerOptions146? options=null,float mass=147,float inertia=52.72097f,Action? budgetGuard=null){
+        PlannerOptions146? options=null,float mass=147,float inertia=52.72097f,Action? budgetGuard=null,ExecutionHooks146? hooks=null){
         Options=options??new();if(!Options.Enabled)throw new InvalidOperationException("Study146 is OFF by default.");
         if(Options.RequiredLaps is <1 or >3||Options.BeamWidth is <1 or >3||Options.MaximumCandidates is <1 or >160
             ||!double.IsFinite(Options.SearchIntervalSeconds)||!double.IsFinite(Options.MaximumPlanSeconds)||!double.IsFinite(Options.ClearanceReserveMeters)||!double.IsFinite(Options.SwitchImprovementSeconds)
@@ -52,7 +52,7 @@ public sealed class Planner146
             ||Options.ClearanceReserveMeters<.05||Options.SwitchImprovementSeconds<.01)
             throw new ArgumentException("Bounded, explicit research planner options required.");
         this.spec=spec;this.frame=frame;this.surface=surface;this.parameters=parameters;this.mass=mass;this.inertia=inertia;
-        this.budgetGuard=budgetGuard;model=new(spec,frame,surface,parameters,mass,inertia,ForecastGuard);
+        this.budgetGuard=budgetGuard;this.hooks=hooks;model=new(spec,frame,surface,parameters,mass,inertia,ForecastGuard,hooks);
     }
     // Geometry supplies a common finish of the maneuver, never a lateral target or an action.
     // Stop three metres before the next bend, after the entire current bend and following straight.
@@ -102,14 +102,20 @@ public sealed class Planner146
         if(model.Forecasts-reviewForecastStart+policyForecasts>=Options.MaximumForecastsPerReview)
             throw new InvalidOperationException("STUDY146_BUDGET: deterministic per-review forecast cap");
     }
+    public Memory146 CaptureMemory()=>new(previous,expectedState,nextSearch);
+    public void RestoreMemoryForDiagnostics(Memory146 memory){if(Reviews.Count!=0)throw new InvalidOperationException("Restore only a new diagnostic planner; never substitute a native body.");previous=memory.Previous;expectedState=memory.ExpectedState;nextSearch=memory.NextSearch;}
     FreeRacingAction SeedAction(State146 state){
+        using var measured=hooks?.Phase?.Invoke("seed_k1");
         ForecastGuard();
         if(model.Forecasts-reviewForecastStart+policyForecasts+FreeLearningController.Actions(state.Input,Controller143.Policy,true).Length>Options.MaximumForecastsPerReview)
             throw new InvalidOperationException("STUDY146_BUDGET: reserve for complete K1 seed decision");
-        SeedDecisions++;var d=Policy144.Choose(state.Input,new CrankClutch144(omega:state.CrankOmega),spec,frame,surface,parameters,mass,inertia,"K1");
+        SeedDecisions++;var d=hooks?.Seed?.Invoke(state)??Policy144.Choose(state.Input,new CrankClutch144(omega:state.CrankOmega),spec,frame,surface,parameters,mass,inertia,"K1");
         policyForecasts+=d.Choice.Forecasts;policyContacts+=d.Choice.ForceEvaluations;return d.Choice.Action;
     }
+    Plan146 RoleRollout(State146 start,double goal,FreeRacingAction[]? tail,string origin){using var role=hooks?.Operation?.Invoke(origin);return Rollout(start,goal,tail,origin);}
+    Safety146 MeasuredCheck(FreeRacingPoint[] points,double reserve){using var measured=hooks?.Phase?.Invoke("safety_check");return Check(points,reserve);}
     Plan146 Rollout(State146 start,double goal,FreeRacingAction[]? tail,string origin){
+        using var measured=hooks?.Phase?.Invoke("rollout_bookkeeping");
         var state=start;var actions=new List<FreeRacingAction>();var points=new List<FreeRacingPoint>();
         var exit=ExitBefore(goal);var safetyGoal=Options.TerminalContinuation?Goal(frame,goal+.005,Options.RequiredLaps):goal;
         double? goalTime=null,exitTime=null,exitSpeed=null;
@@ -130,7 +136,7 @@ public sealed class Planner146
             // Reject early after a confirmed violation, but never score a partial trajectory as an arrival.
             if(state.Input.Rider.TotalReferenceMeters>=safetyGoal&&actions.Count>=4||transition.Prediction.Points.Any(p=>Math.Min(p.Inner,p.Outer)<0||Math.Abs(p.Rider.SlideRadians)>Math.PI/4))break;
         }
-        var safety=Check(points.ToArray(),Options.ClearanceReserveMeters);
+        var safety=MeasuredCheck(points.ToArray(),Options.ClearanceReserveMeters);
         if(goalTime is null||state.Input.Rider.TotalReferenceMeters<safetyGoal)safety=safety with{Legal=false,Reason=safety.Legal?"terminal continuation not completed":safety.Reason};
         return new(start.Input.Time,goal,safetyGoal,actions.ToArray(),points.ToArray(),state,goalTime,exitTime,exitSpeed,safety,origin);
     }
@@ -144,6 +150,7 @@ public sealed class Planner146
         p.CornerExitSpeed??p.End.Input.Rider.Speed,p.AlongExitSpeed,p.Safety.Reason);
     static bool SameQueue(FreeRacingCommand[] a,FreeRacingCommand[] b)=>a.Length==b.Length&&a.Zip(b).All(q=>q.First.Action==q.Second.Action&&Math.Abs(q.First.ActivationAt-q.Second.ActivationAt)<1e-7&&Math.Abs(q.First.ObservedAt-q.Second.ObservedAt)<1e-7);
     public Decision144 Choose(FreeRacingInput input,CrankClutch144 crank){
+        hooks?.BeginReview?.Invoke(input.Time);using var measured=hooks?.Phase?.Invoke("decision_dispatch");
         var cpu=Process.GetCurrentProcess().TotalProcessorTime;var forecasts=model.Forecasts;var contacts=model.Contacts;
         policyContacts=policyForecasts=0;reviewForecastStart=model.Forecasts;
         var start=new State146(input with{NextReview=input.Time},crank.Omega);var goal=previous is not null&&previous.GoalMeters>input.Rider.TotalReferenceMeters+.001?previous.GoalMeters:Goal(frame,input.Rider.TotalReferenceMeters,Options.RequiredLaps);
@@ -155,14 +162,14 @@ public sealed class Planner146
         FreeRacingAction? expectedAction=null;Plan146? incumbent=null;
         if(previous is not null&&(Options.TerminalContinuation||Math.Abs(previous.GoalMeters-goal)<1e-7)){
             int shift=(int)Math.Round((input.Time-previous.CreatedAt)/.2);
-            if(shift<previous.Actions.Length){var suffix=previous.Actions.Skip(shift).ToArray();expectedAction=suffix[0];incumbent=Rollout(start,goal,suffix,"shifted-incumbent");}
+            if(shift<previous.Actions.Length){var suffix=previous.Actions.Skip(shift).ToArray();expectedAction=suffix[0];incumbent=RoleRollout(start,goal,suffix,"shifted-incumbent");}
         }
         var candidates=new List<Plan146>();if(incumbent is not null)candidates.Add(incumbent);
         var reason=expectedAction is null?"new endogenous maneuver":"retained legal suffix";
         bool modelMismatch=error is not null&&(error.PositionMeters>.03||error.YawRate>.01||!error.ActiveMatches||!error.QueueMatches);
-        bool search=incumbent is null||!incumbent.Safety.Legal||modelMismatch||input.Time>=nextSearch-1e-8;
+        bool search=incumbent is null||!incumbent.Safety.Legal||modelMismatch||(hooks?.ScheduledSearch?.Invoke(input.Time)??input.Time>=nextSearch-1e-8);
         if(search){
-            if(incumbent is null||!incumbent.Safety.Legal||modelMismatch){var seed=Rollout(start,goal,null,"fresh-K1-seed");candidates.Add(seed);incumbent=Order(candidates.Where(p=>p.Safety.Legal)).FirstOrDefault()??seed;}
+            if(incumbent is null||!incumbent.Safety.Legal||modelMismatch){var seed=RoleRollout(start,goal,null,"fresh-K1-seed");candidates.Add(seed);incumbent=Order(candidates.Where(p=>p.Safety.Legal)).FirstOrDefault()??seed;}
             var roots=new[]{incumbent};
             for(int depth=0;depth<3&&candidates.Count<Options.MaximumCandidates;depth++){
                 var layer=new List<Plan146>();
@@ -175,7 +182,7 @@ public sealed class Planner146
                     foreach(var action in grid){
                         if(candidates.Count>=Options.MaximumCandidates)break;
                         var changed=root.Actions.ToArray();if(changed.Length<=depth)continue;changed[depth]=action;
-                        var plan=Rollout(start,goal,changed,$"beam-{depth+1}");layer.Add(plan);candidates.Add(plan);
+                        var plan=RoleRollout(start,goal,changed,$"beam-{depth+1}");layer.Add(plan);candidates.Add(plan);
                     }
                 }
                 // Intermediate nodes may need a later correction. Only complete legal plans reach execution.
@@ -192,10 +199,11 @@ public sealed class Planner146
         else reason="abstain: no certified complete continuation";
         Safety146? independent=null;
         if(selected is not null){
+            using var role=hooks?.Operation?.Invoke("independent_preflight");
             var state=start;var preflight=new List<FreeRacingPoint>();
             // Independent replay of the next four reviews, with current accepted queue, no scoring.
             for(int k=0;k<4;k++){var t=model.Step(state,selected.Actions[Math.Min(k,selected.Actions.Length-1)]);state=t.End;preflight.AddRange(t.Prediction.Points.Skip(k==0?0:1));}
-            independent=Check(preflight.ToArray(),Options.ClearanceReserveMeters);
+            independent=MeasuredCheck(preflight.ToArray(),Options.ClearanceReserveMeters);
             if(!independent.Legal){reason="abstain: independent preflight "+independent.Reason;selected=null;}
         }
         if(selected is not null){previous=selected;expectedState=model.Step(start,selected.Actions[0]).End;}

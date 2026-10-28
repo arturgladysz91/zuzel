@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "dependencies": {
+    "net8.0": {
+      "Box2D.NET": {
+        "type": "Transitive",
+        "resolved": "3.1.654",
+        "contentHash": "Sh43ZKml3BPnhGD9FzvHfBLcLR1LDUN1iMJnnX2dJJam15+DG2nLRezPlxjdXWfrskg0wEJpgdNVEkNnHx9wwA=="
+      },
+      "autonomous-corner-planning": {
+        "type": "Project",
+        "dependencies": {
+          "corner-speed-loss": "[1.0.0, )"
+        }
+      },
+      "coresim": {
+        "type": "Project"
+      },
+      "corner-speed-loss": {
+        "type": "Project",
+        "dependencies": {
+          "shared-world-speedway": "[1.0.0, )"
+        }
+      },
+      "shared-world-speedway": {
+        "type": "Project",
+        "dependencies": {
+          "Box2D.NET": "[3.1.654, 3.1.654]",
+          "CoreSim": "[1.0.0, )"
+        }
+      }
+    }
+  }
+}
