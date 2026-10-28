@@ -7,7 +7,7 @@ using System.Text.Json.Nodes;
 using CoreSim;
 using SharedWorldSpeedway;
 
-if(args.Length<2||args[0] is not ("--audit-saved" or "--enable-native145"))
+if(args.Length<2||args[0] is not ("--audit-saved" or "--audit-all-saved" or "--enable-native145"))
     throw new ArgumentException("Default OFF: --audit-saved <output> | --enable-native145 <output> <treatments.json>");
 var output=Path.GetFullPath(args[1]);Directory.CreateDirectory(output);
 var json=FreeLearningExperiment.Json;
@@ -15,6 +15,8 @@ var oldRoot="docs/experiments/standing-start-three-laps/native";
 Run144 Read(string name){using var z=new GZipStream(File.OpenRead(Path.Combine(oldRoot,name+".json.gz")),CompressionMode.Decompress);return JsonSerializer.Deserialize<Run144>(z,json)!;}
 void Save(string name,object value)=>File.WriteAllText(Path.Combine(output,name),JsonSerializer.Serialize(value,json));
 string Hash(object value)=>Convert.ToHexString(SHA256.HashData(JsonSerializer.SerializeToUtf8Bytes(value,json)));
+
+if(args[0]=="--audit-all-saved"){FullScoreAudit145.Run(output);return;}
 
 if(args[0]=="--audit-saved"){
     if(File.Exists(Path.Combine(output,"score-audit.json")))throw new IOException("Preserve completed read-only audit.");

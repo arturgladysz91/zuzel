@@ -4,15 +4,18 @@
   "Worlds": 17,
   "NativeReservationCpuSeconds": 360.984375,
   "OfflineScoreAuditCpuSeconds": 5.03125,
+  "ExhaustiveScoreAuditCpuSeconds": 178.703125,
   "Sources": {
     "tools/corner-speed-loss/DiagnosticWorld145.cs": "94e4f33fe5707ecf73601de23a3ccfa34fc0915ab4fe44d735e52c3b4b4612df",
-    "tools/corner-speed-loss/Program.cs": "06176e5c7c34987a3bf2635575255407d10bb1d7ae170a8850c2b0f247ae4b33",
-    "tools/corner-speed-loss/analyze145.py": "0de296e97bcae783b0961bc9e053634ee1059c6394fd1d9171c28faa369339d9",
+    "tools/corner-speed-loss/FullScoreAudit145.cs": "61895a82b110a6eec008ea9bb32a2eb303674793c27bb569a39b34bb5f959174",
+    "tools/corner-speed-loss/Program.cs": "5fa25a1649a1e81086a589f862815963e595971e3d642ed026349583cf0afb94",
+    "tools/corner-speed-loss/analyze145.py": "d439d8be6371a69c7b819ec5c1eebbae213232247be61d80f9d983afb294f0c0",
     "tools/corner-speed-loss/generate.py": "ee27dacaf73074cbf2948e03c65f0d4a65fdebf73134d18a55a3f3992021d76c",
     "tools/corner-speed-loss/plot145.py": "54adcf5f415acab0815e1c6c12a1f7643109167c515ee1d241fa66cf71309084",
-    "tools/corner-speed-loss/report145.py": "1a2cf53dc18b80660bf0a5e2d73f707a1102e0a7c2c6dfa5b489161c5b1b1b29"
+    "tools/corner-speed-loss/report145.py": "09bca2f6e21f7365fdb38ba21fc05aeff0243e9599b8fc43fa44bce41e68ad6a"
   },
   "NativeFiles": {
+    "all-scores.json.gz": "b58f2fb78f0d4ede5c4b961c6cba7b60e59eac85b5619343295bf314ff4757e3",
     "autonomous-two-command-K1-plans.json.gz": "e86f94e880507a7384a2e5621178b45a7a077884f7b8bdf18e4dc250c3d8b8fd",
     "autonomous-two-command-K1.json.gz": "7cb83c67dac38da8947d85593cc6de011a8be61813dfb728b4e979c782ab3bce",
     "early-joint-284.json.gz": "978802aa59a012ca5efaf9d16f26b5e2db68b841311ba98b5ceb192e165a727f",

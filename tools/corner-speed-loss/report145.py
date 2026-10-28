@@ -4,7 +4,7 @@ from pathlib import Path
 from analyze145 import ROOT, OLD, read, save, point, ref, time, rider
 
 D=ROOT/'docs/experiments/corner-speed-loss';N=D/'native'
-a=read(D/'saved-analysis.json');audit=read(N/'score-audit.json')
+a=read(D/'saved-analysis.json');audit=read(N/'score-audit.json');all_scores=read(N/'all-scores-summary.json')
 results=[read(p) for p in sorted(N.glob('*-result.json'))]
 corners=a['corners'];get=lambda name,lap=2,bend=2:next((c for c in corners if (c['run'],c['lap'],c['bend'])==(name,lap,bend)),None)
 baseline=get('K1');energy=baseline['entry_to_minimum']['energy'];budget=read(N/'budget.json')
@@ -101,7 +101,8 @@ for target in [29,33.8]:
     for x in shown:
         t=x['Terms'];lines.append(f"|{math.degrees(x['Action']['SteeringRadians']):.1f}|{x['Action']['Drive']:.3f}|{x['Safety']}|{x['Score']:.3f}|{t['Progress']:.3f}|{t['Direction']:.3f}|{t['Yaw']:.3f}|{t['Steering']:.3f}|{t['Clearance']+t['Unsafe']:.3f}|")
     lines+=['', 'K1 usuwa składniki Throttle i Geometry; ich pierwotne wartości pozostają zapisane w pełnym audycie. W 29,0 s gaz 0 wygrywa z częściowym głównie przez prognozowany yaw i kierunek. W 33,8 s częściowy gaz przegrywa głównie przez kierunek, a pełny przez yaw; wszystkie te trzy kandydatury mają Safety=Safe. Legalna natywna ingerencja w 33,8 s pokazuje zbyt późny powrót do napędu w tej konkretnej kontynuacji.']
-lines+=['', '## Interwencje: identyczny pełny prefiks od startu', '',
+lines+=['', f"Pełne dodatkowe odtworzenie obejmuje **{all_scores['Decisions']} decyzji i {all_scores['Candidates']} wybranych/odrzuconych kandydatur** A/B/F/K1: [wszystkie składniki punktacji](native/all-scores.json.gz), [podsumowanie](native/all-scores-summary.json). Maksymalna różnica wyniku względem oryginalnego zapisu wynosi 0, a wszystkie wybrane działania odtworzono identycznie. Ta uzupełniająca kontrola została wykonana po próbach przyczynowych; przed pierwszym nowym światem były już gotowe wszystkie 24 łuki/72 fazy oraz dziewięć szczegółowych audytów decyzji. Nie tworzy nowych światów.",
+    '', '## Interwencje: identyczny pełny prefiks od startu', '',
     'Każdy nowy świat zaczyna się od właściwego v=0, koła=0, wału i sprzęgła #144. Prefiks wykonuje zapisane oryginalne decyzje przez natywną kolejkę i aktuator. Nie wczytuje się uproszczonego checkpointu i nie ustawia po fakcie pozycji, prędkości, yaw ani β. Pierwsze fingerprinty stanów przed ingerencją są identyczne. Następne punkty sekwencji celowo różnią się od bazy po wcześniejszej ingerencji. Powtórka `replay-K1` odtwarza fingerprint **całego** oryginalnego dystansu.', '',
     '|Próba|Wynik / ukończone okr.|Łuk L2 B2 s|V min / wyjście km/h|Następna prosta s|Całość s|',
     '|---|---|---:|---:|---:|---:|']
@@ -125,7 +126,7 @@ lines+=[
     '`autonomous-two-command-K1`: jedna zmiana algorytmiczna, bez zmiany wag — zamiast utrzymania pierwszej komendy przez H09 ocenia się do 36 opóźnionych par spośród maksymalnie sześciu korzeni wybranych z dotychczasowej siatki. Obie komendy zachowują reakcję 0,24 s; druga jest obserwowana hipotetycznie w +0,2 s. W świecie natywnym wykonywana jest tylko pierwsza, po czym sterownik ponownie podejmuje decyzję. Wał/koło i nieodwracalne kolejki są przenoszone między częściami prognozy.',
     '', 'Próba od właściwego startu **narusza obrys w 6,57 s**, przed końcem pierwszego okrążenia. Nie ma dowodu, że sam dodatkowy krok planowania wystarcza. Planowana korzystna druga korekta nie jest zobowiązaniem kolejnej decyzji; receding-horizon może zmienić przyszłość, na której opierał ocenę. Zapis planów pokazuje ten problem, ale pełnego związku przyczynowego tej porażki nie izolowano osobnym eksperymentem. Prototyp pozostaje OFF i nie jest proponowany do produkcji.',
     '', '## Koszt, zakres i odtworzenie', '',
-    f"**{len(budget)} nowych światów, {sum(r['CpuSeconds'] for r in budget):.3f} CPU-s rezerwacji natywnych**; dodatkowo {audit['CpuSeconds']:.3f} CPU-s audytu bez światów. Wszystkie próby zachowano. Budżet nie obejmuje kompilacji, testów regresji i prezentacji danych; nie są to trening ani nowe próby badawcze. Bez szerokiego przeszukiwania wag. Wszystkie 4×6 łuków zachowanych #144 przeanalizowano przed pierwszym nowym światem.",
+    f"**{len(budget)} nowych światów, {sum(r['CpuSeconds'] for r in budget):.3f} CPU-s rezerwacji natywnych**; dodatkowo {audit['CpuSeconds']:.3f} CPU-s audytu dziewięciu punktów i {all_scores['CpuSeconds']:.3f} CPU-s pełnego odtworzenia punktacji bez światów. Łącznie rezerwacje natywne i oba audyty prognoz: {sum(r['CpuSeconds'] for r in budget)+audit['CpuSeconds']+all_scores['CpuSeconds']:.3f} CPU-s. Wszystkie próby zachowano. Koszt kompilacji, testów regresji oraz prezentacji danych jest poza tą liczbą; nie są to trening ani nowe próby badawcze. Bez szerokiego przeszukiwania wag. Wszystkie 4×6 łuków zachowanych #144 przeanalizowano przed pierwszym nowym światem.",
     '', 'Generator `generate.py --check` dowodzi, że nowy collector jest dokładnie #144 z nazwą klasy i jednym wstrzyknięciem chooser. Używa publicznych rekordów #144 i tego samego ContactAdapter/Box2D, nie alternatywnego solvera. Historyczne źródła #144 oraz dane bazowe są nienaruszone. `provenance.json` podaje hashe końcowych źródeł i surowych zapisów; jest manifestem odtwarzania, nie deklaracją prerejestracji powstałą przed badaniem.',
     '', 'Odtworzenie: `powershell -File tools/corner-speed-loss/run.ps1 -Evidence work/repro145`. Analiza zapisów sama nie uruchamia światów. Pełne natywne odtworzenie wymaga .NET 8 i Windows. Skrypt zachowuje niekompletne rezerwacje i nie ponawia ich po cichu.',
     '', '[Rozbudowany istniejący viewer](http://127.0.0.1:8018/tools/replay-viewer/?case=corner145&run=K1&t=29): porównanie A/B/F/K1, legalnych ingerencji, późnej porażki większego skrętu i nieudanego prototypu. Wybór każdego okrążenia/łuku, prędkość po czasie i pozycji, gaz żądany/aktywny, skręt żądany/rzeczywisty, β/wheelspin, wspólne linie XY i skoki do Vmin/maksymalnego opóźnienia. Wykresy są próbkowane do prezentacji; surowe 10ms dane pozostają w zapisach.',
@@ -144,7 +145,7 @@ with (D/'phases.csv').open('w',encoding='utf-8',newline='') as f:
 
 sources=[*ROOT.joinpath('tools/corner-speed-loss').glob('*.cs'),*ROOT.joinpath('tools/corner-speed-loss').glob('*.py')]
 save(D/'provenance.json',dict(BaseHead='9342ac506c6fc7b713c91842b4e6fff55b4891b6',EnabledByDefault=False,Worlds=len(budget),
-    NativeReservationCpuSeconds=sum(r['CpuSeconds'] for r in budget),OfflineScoreAuditCpuSeconds=audit['CpuSeconds'],
+    NativeReservationCpuSeconds=sum(r['CpuSeconds'] for r in budget),OfflineScoreAuditCpuSeconds=audit['CpuSeconds'],ExhaustiveScoreAuditCpuSeconds=all_scores['CpuSeconds'],
     Sources={str(p.relative_to(ROOT)).replace('\\','/'):hashlib.sha256(p.read_bytes()).hexdigest() for p in sources},
     NativeFiles={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in N.glob('*.json.gz')},
     HistoricalInputHashes=a['sources'][:4]))

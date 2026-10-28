@@ -61,5 +61,20 @@ class CornerSpeedLoss145Tests(unittest.TestCase):
     def test_final_source_manifest_matches_frozen_git_line_conventions(self):
         for path,digest in read(D/'provenance.json')['Sources'].items():
             self.assertEqual(digest,hashlib.sha256((ROOT/path).read_bytes()).hexdigest(),path)
+    def test_every_saved_decision_and_candidate_has_an_exact_component_reconstruction(self):
+        summary=read(N/'all-scores-summary.json');data=read(N/'all-scores.json.gz');rows=data['Audits']
+        self.assertEqual(0,summary['NativeWorlds']);self.assertEqual(0,summary['MaximumScoreDifference'])
+        self.assertEqual(summary['RawSha256'],hashlib.sha256((N/'all-scores.json.gz').read_bytes()).hexdigest().upper())
+        self.assertEqual(1148,len(rows));self.assertEqual(31017,sum(len(d['Leaves']) for d in rows))
+        for name in ['A','B','F','K1']:
+            original=read(ROOT/'docs/experiments/standing-start-three-laps/native'/f'{name}.json.gz')['Riders'][0]['Decisions']
+            actual=[d for d in rows if d['Run']==name]
+            self.assertEqual(len(original),len(actual));self.assertEqual([d['Choice']['Time'] for d in original],[d['Time'] for d in actual])
+        for d in rows:
+            self.assertTrue(d['ChosenMatches']);self.assertEqual(1,sum(c['Selected'] for c in d['Leaves']))
+            for c in d['Leaves']:
+                self.assertEqual(0,c['ScoreDifference'])
+                self.assertAlmostEqual(c['Score'],c['Terms']['Sum']-c['RemovedThrottle']-c['RemovedGeometry'],7)
+        cost=read(D/'provenance.json');self.assertLess(cost['NativeReservationCpuSeconds']+cost['OfflineScoreAuditCpuSeconds']+summary['CpuSeconds'],900)
 
 if __name__=='__main__':unittest.main()

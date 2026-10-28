@@ -128,7 +128,7 @@ def main():
     args=p.parse_args();out=args.output;out.mkdir(parents=True,exist_ok=True)
     g=read(ROOT/'docs/experiments/causal-yaw-throttle/progressive-b-viewer-geometry.json');starts=[q['startReferenceMeters'] for q in g['segments']]
     paths=[OLD/'native'/f'{n}.json.gz' for n in ['A','B','F','K1']]
-    if args.native: paths+=sorted(p for p in args.native.glob('*.json.gz') if not p.name.endswith('-plans.json.gz'))
+    if args.native: paths+=sorted(p for p in args.native.glob('*.json.gz') if (args.native/(p.name.removesuffix('.json.gz')+'-result.json')).exists())
     allcorners=[];sources=[];runs=[]
     for path in paths:
         run=read(path);corners,rows=analyze(run,starts);allcorners+=corners

@@ -118,6 +118,8 @@ Stan: v=48.110 km/h; ref=583.938 m; offset=-0.016 m; β=1.938°; yaw=0.132 rad/s
 
 K1 usuwa składniki Throttle i Geometry; ich pierwotne wartości pozostają zapisane w pełnym audycie. W 29,0 s gaz 0 wygrywa z częściowym głównie przez prognozowany yaw i kierunek. W 33,8 s częściowy gaz przegrywa głównie przez kierunek, a pełny przez yaw; wszystkie te trzy kandydatury mają Safety=Safe. Legalna natywna ingerencja w 33,8 s pokazuje zbyt późny powrót do napędu w tej konkretnej kontynuacji.
 
+Pełne dodatkowe odtworzenie obejmuje **1148 decyzji i 31017 wybranych/odrzuconych kandydatur** A/B/F/K1: [wszystkie składniki punktacji](native/all-scores.json.gz), [podsumowanie](native/all-scores-summary.json). Maksymalna różnica wyniku względem oryginalnego zapisu wynosi 0, a wszystkie wybrane działania odtworzono identycznie. Ta uzupełniająca kontrola została wykonana po próbach przyczynowych; przed pierwszym nowym światem były już gotowe wszystkie 24 łuki/72 fazy oraz dziewięć szczegółowych audytów decyzji. Nie tworzy nowych światów.
+
 ## Interwencje: identyczny pełny prefiks od startu
 
 Każdy nowy świat zaczyna się od właściwego v=0, koła=0, wału i sprzęgła #144. Prefiks wykonuje zapisane oryginalne decyzje przez natywną kolejkę i aktuator. Nie wczytuje się uproszczonego checkpointu i nie ustawia po fakcie pozycji, prędkości, yaw ani β. Pierwsze fingerprinty stanów przed ingerencją są identyczne. Następne punkty sekwencji celowo różnią się od bazy po wcześniejszej ingerencji. Powtórka `replay-K1` odtwarza fingerprint **całego** oryginalnego dystansu.
@@ -169,7 +171,7 @@ Próba od właściwego startu **narusza obrys w 6,57 s**, przed końcem pierwsze
 
 ## Koszt, zakres i odtworzenie
 
-**17 nowych światów, 360.984 CPU-s rezerwacji natywnych**; dodatkowo 5.031 CPU-s audytu bez światów. Wszystkie próby zachowano. Budżet nie obejmuje kompilacji, testów regresji i prezentacji danych; nie są to trening ani nowe próby badawcze. Bez szerokiego przeszukiwania wag. Wszystkie 4×6 łuków zachowanych #144 przeanalizowano przed pierwszym nowym światem.
+**17 nowych światów, 360.984 CPU-s rezerwacji natywnych**; dodatkowo 5.031 CPU-s audytu dziewięciu punktów i 178.703 CPU-s pełnego odtworzenia punktacji bez światów. Łącznie rezerwacje natywne i oba audyty prognoz: 544.719 CPU-s. Wszystkie próby zachowano. Koszt kompilacji, testów regresji oraz prezentacji danych jest poza tą liczbą; nie są to trening ani nowe próby badawcze. Bez szerokiego przeszukiwania wag. Wszystkie 4×6 łuków zachowanych #144 przeanalizowano przed pierwszym nowym światem.
 
 Generator `generate.py --check` dowodzi, że nowy collector jest dokładnie #144 z nazwą klasy i jednym wstrzyknięciem chooser. Używa publicznych rekordów #144 i tego samego ContactAdapter/Box2D, nie alternatywnego solvera. Historyczne źródła #144 oraz dane bazowe są nienaruszone. `provenance.json` podaje hashe końcowych źródeł i surowych zapisów; jest manifestem odtwarzania, nie deklaracją prerejestracji powstałą przed badaniem.
 
