@@ -108,3 +108,7 @@
 /tools/standing144-validation/*.cs text eol=lf
 /tools/standing-start-three-laps/packages.lock.json text eol=lf
 /tools/standing144-validation/packages.lock.json text eol=lf
+# Preserve #145 forensic captures and exact generated-source checks.
+/docs/experiments/corner-speed-loss/** -text whitespace=trailing-space,space-before-tab,cr-at-eol
+/tools/corner-speed-loss/** text eol=lf
+/tools/replay-viewer/corner145*.mjs text eol=lf

@@ -1,0 +1,128 @@
+{
+  "Treatment": {
+    "Name": "prepare-284",
+    "Variant": "K1",
+    "Changes": [
+      {
+        "Time": 28.4,
+        "Action": {
+          "SteeringRadians": -0.02617994,
+          "Drive": 0.31820688
+        }
+      }
+    ],
+    "Autonomous": false,
+    "Mode": ""
+  },
+  "Outcome": "confirmed footprint crossing",
+  "EndSeconds": 32.18,
+  "Fingerprint": "5FDD98FA96BF3786BD3E1AECA00AAC53D868B0DE1A05592D118222BE456DB58E",
+  "FullOriginalFingerprint": "2778FE469DB24286F7E07123E74E5FC3DB5D0BAAA25DEE89329A10A11DC0FD40",
+  "PrefixExact": true,
+  "PrefixSamples": 2847,
+  "PrefixFingerprint": "1B4DA927F283634BA6A9140708E4FB46668E09C62FDF92D27E4836B6EC91EC78",
+  "OriginalPrefixFingerprint": "1B4DA927F283634BA6A9140708E4FB46668E09C62FDF92D27E4836B6EC91EC78",
+  "Checkpoints": [
+    {
+      "Time": 28.39999999999993,
+      "NativeStateFingerprint": "BFE2EA0D81A40332072AF614959698D4EDC3543160F6EB8C744F5C7A9D212AE1",
+      "OriginalStateFingerprint": "BFE2EA0D81A40332072AF614959698D4EDC3543160F6EB8C744F5C7A9D212AE1",
+      "NativeState": {
+        "Rider": {
+          "Id": 1,
+          "Position": {
+            "X": 4.1766796,
+            "Y": 72.97543
+          },
+          "Velocity": {
+            "X": -24.553745,
+            "Y": 0.057409547
+          },
+          "Heading": -3.1291077,
+          "AngularVelocity": 0.08650412,
+          "Road": {
+            "Segment": 4,
+            "Progress": 0.4971503288515152,
+            "ReferenceMeters": 163.21269536018372,
+            "OffsetMeters": 10.312413181478377,
+            "Heading": 3.141592653589793,
+            "RadiusMeters": 0,
+            "CornerProgress": 0,
+            "Tangent": {
+              "X": -1,
+              "Y": 1.2246469E-16
+            },
+            "Outward": {
+              "X": 1.2246469E-16,
+              "Y": 1
+            },
+            "IsTurn": false
+          },
+          "TotalReferenceMeters": 481.99144530296326,
+          "DistanceMeters": 504.32079434395564,
+          "Activity": 0,
+          "Drive": 0.31820688,
+          "TargetOffsetMeters": 3.5,
+          "Impairment": 0,
+          "Context": 2,
+          "Speed": 24.553812,
+          "ForwardSpeed": 24.551113,
+          "SideSpeed": -0.36394915,
+          "SlideRadians": 0.014823053
+        },
+        "Time": 28.39999999999993,
+        "Omega": 96.63920020081966,
+        "Steering": 0,
+        "Active": {
+          "SteeringRadians": 0,
+          "Drive": 0.31820688
+        },
+        "Pending": [
+          {
+            "ObservedAt": 28.199999999999932,
+            "ActivationAt": 28.43999999999993,
+            "Action": {
+              "SteeringRadians": -0.008726646,
+              "Drive": 1
+            }
+          }
+        ],
+        "NextReview": 28.39999999999993
+      },
+      "Crank": 871.1418922918746,
+      "OriginalAction": {
+        "SteeringRadians": 0.02617994,
+        "Drive": 0.31820688
+      },
+      "Override": {
+        "SteeringRadians": -0.02617994,
+        "Drive": 0.31820688
+      }
+    }
+  ],
+  "CompletedLaps": 1,
+  "Crossings": [
+    {
+      "RiderId": 1,
+      "Lap": 1,
+      "Time": 19.3176233106967,
+      "BeforeTime": 19.31,
+      "AfterTime": 19.32,
+      "BeforeReference": 318.6156402528286,
+      "AfterReference": 318.82960200309753,
+      "PhysicalDistance": 321.101611735216,
+      "SpeedKph": 77.20606654096277,
+      "CrankOmega": 774.6847567298352,
+      "WheelOmega": 85.89459255630408,
+      "Steering": 0,
+      "PendingCount": 1
+    }
+  ],
+  "TotalCpuSeconds": 10.515625,
+  "ControllerCpuSeconds": 17.03125,
+  "MinimumInner": -0.03459141138376673,
+  "MinimumOuter": 0.2949314342502531,
+  "MaximumBetaDegrees": 36.45315308969737,
+  "RawSha256": "0D0A34792C21017AF9780D31DC204DDD856329ADFBF6A7451D44EADA7A175B71",
+  "CpuSeconds": 12.078125
+}

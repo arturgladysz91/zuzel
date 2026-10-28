@@ -1,0 +1,158 @@
+{
+  "Treatment": {
+    "Name": "steer-29",
+    "Variant": "K1",
+    "Changes": [
+      {
+        "Time": 29,
+        "Action": {
+          "SteeringRadians": -0.08726646,
+          "Drive": 0
+        }
+      }
+    ],
+    "Autonomous": false,
+    "Mode": ""
+  },
+  "Outcome": "completed",
+  "EndSeconds": 55.36,
+  "Fingerprint": "65E85CA60EEA0BEC2B2988D1D3CA08452150BFBB866E93BC8D07F8242291EB24",
+  "FullOriginalFingerprint": "2778FE469DB24286F7E07123E74E5FC3DB5D0BAAA25DEE89329A10A11DC0FD40",
+  "PrefixExact": true,
+  "PrefixSamples": 2907,
+  "PrefixFingerprint": "F417906F8D690C2E2C7114C50C3376A9A667AB272944220416CFC9EFE3276FA6",
+  "OriginalPrefixFingerprint": "F417906F8D690C2E2C7114C50C3376A9A667AB272944220416CFC9EFE3276FA6",
+  "Checkpoints": [
+    {
+      "Time": 28.99999999999993,
+      "NativeStateFingerprint": "6C5BBE8DFC7C43C6667BC600FEF3777394B5B1B7246002E143F5BBE7AB4089E4",
+      "OriginalStateFingerprint": "6C5BBE8DFC7C43C6667BC600FEF3777394B5B1B7246002E143F5BBE7AB4089E4",
+      "NativeState": {
+        "Rider": {
+          "Id": 1,
+          "Position": {
+            "X": -11.350329,
+            "Y": 72.60443
+          },
+          "Velocity": {
+            "X": -26.77177,
+            "Y": -2.0996013
+          },
+          "Heading": -2.9549,
+          "AngularVelocity": 0.5816377,
+          "Road": {
+            "Segment": 4,
+            "Progress": 0.7475859580501434,
+            "ReferenceMeters": 178.73970437049866,
+            "OffsetMeters": 9.941410984212752,
+            "Heading": 3.141592653589793,
+            "RadiusMeters": 0,
+            "CornerProgress": 0,
+            "Tangent": {
+              "X": -1,
+              "Y": 1.2246469E-16
+            },
+            "Outward": {
+              "X": 1.2246469E-16,
+              "Y": 1
+            },
+            "IsTurn": false
+          },
+          "TotalReferenceMeters": 497.5184543132782,
+          "DistanceMeters": 519.8563346117808,
+          "Activity": 0,
+          "Drive": 0.31820688,
+          "TargetOffsetMeters": 3.5,
+          "Impairment": 0,
+          "Context": 2,
+          "Speed": 26.853977,
+          "ForwardSpeed": 26.69628,
+          "SideSpeed": -2.905991,
+          "SlideRadians": 0.108426884
+        },
+        "Time": 28.99999999999993,
+        "Omega": 91.84173099251902,
+        "Steering": 0.008726646,
+        "Active": {
+          "SteeringRadians": 0.008726646,
+          "Drive": 0.31820688
+        },
+        "Pending": [
+          {
+            "ObservedAt": 28.79999999999993,
+            "ActivationAt": 29.039999999999928,
+            "Action": {
+              "SteeringRadians": 0,
+              "Drive": 0.31820688
+            }
+          }
+        ],
+        "NextReview": 28.99999999999993
+      },
+      "Crank": 827.5084075402548,
+      "OriginalAction": {
+        "SteeringRadians": 0.02617994,
+        "Drive": 0
+      },
+      "Override": {
+        "SteeringRadians": -0.08726646,
+        "Drive": 0
+      }
+    }
+  ],
+  "CompletedLaps": 3,
+  "Crossings": [
+    {
+      "RiderId": 1,
+      "Lap": 1,
+      "Time": 19.3176233106967,
+      "BeforeTime": 19.31,
+      "AfterTime": 19.32,
+      "BeforeReference": 318.6156402528286,
+      "AfterReference": 318.82960200309753,
+      "PhysicalDistance": 321.101611735216,
+      "SpeedKph": 77.20606654096277,
+      "CrankOmega": 774.6847567298352,
+      "WheelOmega": 85.89459255630408,
+      "Steering": 0,
+      "PendingCount": 1
+    },
+    {
+      "RiderId": 1,
+      "Lap": 2,
+      "Time": 37.15997286104836,
+      "BeforeTime": 37.15,
+      "AfterTime": 37.160000000000004,
+      "BeforeReference": 637.3601469248533,
+      "AfterReference": 637.5580369383097,
+      "PhysicalDistance": 669.0484320264536,
+      "SpeedKph": 71.44173990459689,
+      "CrankOmega": 729.012252200464,
+      "WheelOmega": 80.77801357620251,
+      "Steering": 0,
+      "PendingCount": 1
+    },
+    {
+      "RiderId": 1,
+      "Lap": 3,
+      "Time": 55.35928437019006,
+      "BeforeTime": 55.35,
+      "AfterTime": 55.36,
+      "BeforeReference": 956.139712169765,
+      "AfterReference": 956.3513987511382,
+      "PhysicalDistance": 1011.1904888722127,
+      "SpeedKph": 76.5092147514007,
+      "CrankOmega": 635.7362843669742,
+      "WheelOmega": 70.54333976830335,
+      "Steering": 0,
+      "PendingCount": 1
+    }
+  ],
+  "TotalCpuSeconds": 32.765625,
+  "ControllerCpuSeconds": 34.265625,
+  "MinimumInner": 0.20039791913124844,
+  "MinimumOuter": 0.21538816389634052,
+  "MaximumBetaDegrees": 35.72497599754361,
+  "RawSha256": "603FDF6329F8703DE5F640466CDEDB109EFB3AF6A42178697B841D01818113FC",
+  "CpuSeconds": 35.3125
+}
