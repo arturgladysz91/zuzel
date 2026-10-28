@@ -1,0 +1,116 @@
+{
+  "Title": "#146 Â· SpĂłjne planowanie autonomiczne Â· zapis badania",
+  "DefaultRun": "autonomous146-viable",
+  "GeometryFile": "../causal-yaw-throttle/progressive-b-viewer-geometry.json",
+  "Runs": [
+    {
+      "Id": "K1",
+      "File": "../standing-start-three-laps/native/K1.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "completed",
+      "Duration": 54.800000000000004,
+      "Fingerprint": "2778FE469DB24286F7E07123E74E5FC3DB5D0BAAA25DEE89329A10A11DC0FD40"
+    },
+    {
+      "Id": "F",
+      "File": "../standing-start-three-laps/native/F.json.gz",
+      "Variant": "F",
+      "Riders": 1,
+      "Outcome": "completed",
+      "Duration": 58.870000000000005,
+      "Fingerprint": "42F29D14367754D724FCB2ED14E07040002879526E9F9F28E30A6B0D3FE4255C"
+    },
+    {
+      "Id": "joint-grid-29",
+      "File": "../corner-speed-loss/native/joint-grid-29.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "completed",
+      "Duration": 54.22,
+      "Fingerprint": "F552E014114A507AAF6AB26D9F355EAE4317AE445BF545D4BC0808FADF13CE40"
+    },
+    {
+      "Id": "autonomous146-first",
+      "File": "native/autonomous146-first.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "technical invariant: STUDY146_ABSTAIN: abstain: no certified complete continuation",
+      "Duration": 11.99999999999999,
+      "Fingerprint": "E9E46D35E51F40E8AE52C177E8368B8A43B1A30BBE96A5B96C945FA326EBE0CF"
+    },
+    {
+      "Id": "autonomous146-viable",
+      "File": "native/autonomous146-viable.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "technical invariant: STUDY146_BUDGET: native CPU reserve stop",
+      "Duration": 38.4,
+      "Fingerprint": "204D72039C595B308320CAEA75594200C82A87116EC551CD44C0E2ED933407E2"
+    },
+    {
+      "Id": "bounded-viability-probe",
+      "File": "native/bounded-viability-probe.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "technical invariant: STUDY146_BUDGET: bounded inner forecast stop",
+      "Duration": 0,
+      "Fingerprint": "06BDAF205E02AE26B28A022E44B71ED82F6B751AB1469D5724437240E7C8A73A"
+    },
+    {
+      "Id": "local-K1-28-4",
+      "File": "native/local-K1-28-4.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "technical invariant: STUDY146_BUDGET: native CPU reserve stop",
+      "Duration": 31.19999999999992,
+      "Fingerprint": "EE51277068FF8C9FAEA006B297E3F1A918631AAC3CF35F3DD40C83C1B694DB01"
+    },
+    {
+      "Id": "local-K1-29",
+      "File": "native/local-K1-29.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "technical invariant: STUDY146_BUDGET: native CPU reserve stop",
+      "Duration": 55.2,
+      "Fingerprint": "06DE91728CC2C064B1D914A6B0E093261210860D102B15C73E5DFD2DFDBAA203"
+    },
+    {
+      "Id": "repair-at-12",
+      "File": "native/repair-at-12.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "technical invariant: STUDY146_ABSTAIN: abstain: no certified complete continuation",
+      "Duration": 11.99999999999999,
+      "Fingerprint": "E9E46D35E51F40E8AE52C177E8368B8A43B1A30BBE96A5B96C945FA326EBE0CF"
+    },
+    {
+      "Id": "repeat-local-K1-29",
+      "File": "native/repeat-local-K1-29.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "experiment timeout",
+      "Duration": 35.99999999999997,
+      "Fingerprint": "6C76C4A3D1C94FEF42B525B81596D74E2F75B97EDB845CEF29661C5AC2A6C277"
+    },
+    {
+      "Id": "validate-local-K1-29-plan",
+      "File": "native/validate-local-K1-29-plan.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "experiment timeout",
+      "Duration": 40,
+      "Fingerprint": "34BFDBF3916146E32B82CEFA28F888E5648829DD531A14532610403D18AC4BAD"
+    }
+  ],
+  "LapMeters": 318.77874994277954,
+  "RequiredLaps": 3,
+  "StartReference": 0,
+  "BendReferences": [
+    35,
+    132.38937497138977,
+    194.38937497138977,
+    291.77874994277954
+  ],
+  "Note": "Tylko zapis natywny. Lokalne prefiksy i wymuszone walidacje nie sÄ… autonomicznym sukcesem. Przerwana prĂłba nie ma czasu trzech okrÄ…ĹĽeĹ„."
+}

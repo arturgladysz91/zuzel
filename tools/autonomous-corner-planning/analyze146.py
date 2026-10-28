@@ -55,10 +55,11 @@ def forecast_audit(plans,run):
             forecast_legal=selected['Safety']['Legal'] if selected else None,actual_action=actual,actual_activation=activation,
             submitted_matches=not selected or actual==selected['Actions'][0],activation_matches=not activation or selected is not None and activation['Action']==selected['Actions'][0] and abs(activation['ActivationAt']-t-.24)<1e-7,
             next_followed=next_plan['FollowedExpected'] if next_plan else None,next_change_reason=next_plan['Reason'] if next_plan and not next_plan['FollowedExpected'] else None,
-            prediction_error=p['PredictionError']))
+            prediction_error=p['PredictionError'],
+            predicted_trace=[[q['Time'],q['Rider']['Position']['X'],q['Rider']['Position']['Y'],q['Rider']['Speed']*3.6,q['Rider']['SlideRadians']*180/math.pi,q['Rider']['AngularVelocity']] for q in selected['Points'][::10]] if selected and (p['ExpectedAction'] is None or p['Reason']!='retained legal suffix') else None))
     errors=[p['PredictionError'] for p in plans if p['PredictionError']]
     costs=[p['CpuSeconds'] for p in plans]
-    return dict(reviews=len(plans),reason_counts=dict(Counter(p['Reason'] for p in plans)),selected_reviews=sum(p['Selected'] is not None for p in plans),
+    return dict(reviews=len(plans),native_decisions=len(decisions),coverage_start_s=plans[0]['Time'] if plans else None,coverage_end_s=plans[-1]['Time'] if plans else None,reason_counts=dict(Counter(p['Reason'] for p in plans)),selected_reviews=sum(p['Selected'] is not None for p in plans),
         followed_expected=sum(p['FollowedExpected'] for p in plans if p['ExpectedAction'] is not None),expected_reviews=sum(p['ExpectedAction'] is not None for p in plans),
         submitted_match=all(p['submitted_matches'] for p in rows),activation_match=all(p['activation_matches'] for p in rows),
         maximum_error={key:max(p[key] for p in errors) for key in ['PositionMeters','SpeedMps','BetaRadians','YawRate','WheelOmega','CrankOmega']} if errors else {},
@@ -68,7 +69,7 @@ def forecast_audit(plans,run):
 def main():
     ap=argparse.ArgumentParser();ap.add_argument('--output',type=Path,default=DOC);a=ap.parse_args();out=a.output;out.mkdir(parents=True,exist_ok=True)
     starts=[s['startReferenceMeters'] for s in read(ROOT/'docs/experiments/causal-yaw-throttle/progressive-b-viewer-geometry.json')['segments']]
-    sources=[];runs=[];corners=[];audits={}
+    sources=[];runs=[];corners=[];audits={};curves=[];indexruns=[];lapmetrics=[]
     paths=[ROOT/f'docs/experiments/standing-start-three-laps/native/{n}.json.gz' for n in ['K1','F']]
     paths += [ROOT/'docs/experiments/corner-speed-loss/native/joint-grid-29.json.gz']
     paths += sorted(p for p in (DOC/'native').glob('*.json.gz') if not p.name.endswith('-plans.json.gz'))
@@ -79,8 +80,19 @@ def main():
             inner_min_m=min(s['Inner'] for s in r['Samples']),outer_min_m=min(s['Outer'] for s in r['Samples']),
             sweep_min_m=min((s['Certificate'] for s in r['Samples'] if s['Certificate'] is not None),default=None),
             beta_max_deg=max(abs(s['Input']['Rider']['SlideRadians'])*180/math.pi for s in r['Samples'])))
+        indexruns.append(dict(Id=run['Name'],File=Path(__import__('os').path.relpath(p,DOC)).as_posix(),Variant=run['Variant'],Riders=1,Outcome=run['Outcome'],Duration=run['EndSeconds'],Fingerprint=run['Fingerprint']))
+        lapmetrics.append(dict(Run=run['Name'],RiderId=r['Spec']['Profile']['Id'],Laps=[dict(Lap=c['Lap'],LapSeconds=c['Time']-(run['Crossings'][j-1]['Time'] if j else 0)) for j,c in enumerate(run['Crossings'])]))
+        curves.append(dict(name=run['Name'],points=[dict(t=time(s),reference=ref(s),x=s['Input']['Rider']['Position']['X'],y=s['Input']['Rider']['Position']['Y'],speed=s['Input']['Rider']['Speed']*3.6,beta=s['Input']['Rider']['SlideRadians']*180/math.pi,gas=s['Input']['Active']['Drive'],offset=s['Input']['Rider']['Road']['OffsetMeters']) for s in r['Samples'][::4]]))
         planpath=p.with_name(p.name.removesuffix('.json.gz')+'-plans.json.gz')
-        if planpath.exists():audits[run['Name']]=forecast_audit(read(planpath),run)
+        if planpath.exists():
+            audits[run['Name']]=forecast_audit(read(planpath),run)
+            recovery=p.with_name(p.name.removesuffix('.json.gz')+'-recovery.json')
+            if recovery.exists():audits[run['Name']]['archive_recovery']=read(recovery)
+    save(out/'index.json',dict(Title='#146 Â· SpĂłjne planowanie autonomiczne Â· zapis badania',DefaultRun='autonomous146-viable' if any(r['name']=='autonomous146-viable' for r in runs) else 'autonomous146-first',
+        GeometryFile='../causal-yaw-throttle/progressive-b-viewer-geometry.json',Runs=indexruns,LapMeters=runs and read(paths[0])['LapMeters'],RequiredLaps=3,StartReference=0,
+        BendReferences=[starts[k] for k in [1,4,5,8]],Note='Tylko zapis natywny. Lokalne prefiksy i wymuszone walidacje nie sÄ… autonomicznym sukcesem. Przerwana prĂłba nie ma czasu trzech okrÄ…ĹĽeĹ„.'))
+    save(out/'lap-metrics.json',lapmetrics)
+    (out/'comparison.json.gz').write_bytes(gzip.compress(json.dumps(curves,separators=(',',':')).encode(),mtime=0))
     baseline={(c['lap'],c['bend']):c for c in corners if c['run']=='K1'}
     for c in corners:c['delta_K1_s']=c['seconds']-baseline[(c['lap'],c['bend'])]['seconds'] if c['complete'] else None
     budget=read(DOC/'stage-A/budget.json')+read(DOC/'native/budget.json')

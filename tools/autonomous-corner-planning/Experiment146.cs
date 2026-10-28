@@ -5,7 +5,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using SharedWorldSpeedway;
 namespace Autonomous146;
-public sealed record Treatment146(string Name,string PrefixVariant="K1",double StartSeconds=0,double MaximumSeconds=120,double CpuLimitSeconds=260,string? PlanSource=null,bool RepairUnsafePrefixes=true,string? NativePrefixSource=null);
+public sealed record Treatment146(string Name,string PrefixVariant="K1",double StartSeconds=0,double MaximumSeconds=120,double CpuLimitSeconds=260,string? PlanSource=null,bool RepairUnsafePrefixes=true,string? NativePrefixSource=null,bool TerminalContinuation=true);
 public static class Experiment146{
     public static void Run(string directory,string treatmentPath){
         var output=Path.GetFullPath(directory);Directory.CreateDirectory(output);var json=FreeLearningExperiment.Json;
@@ -27,7 +27,8 @@ public static class Experiment146{
             using var baselineStream=new GZipStream(File.OpenRead(treatment.NativePrefixSource is null?$"docs/experiments/standing-start-three-laps/native/{treatment.PrefixVariant}.json.gz":Path.Combine(output,treatment.NativePrefixSource+".json.gz")),CompressionMode.Decompress);
             var baseline=JsonSerializer.Deserialize<Run144>(baselineStream,json)!;var old=baseline.Riders[0];
             var reservation=new JsonObject{["Name"]=treatment.Name,["Complete"]=false,["CpuSeconds"]=0};ledger.Add(reservation);Save("budget.json",ledger);
-            var started=Process.GetCurrentProcess().TotalProcessorTime;Planner146? planner=null;
+            var experimentProcess=Process.GetCurrentProcess();var started=experimentProcess.TotalProcessorTime;Planner146? planner=null;int guardChecks=0;
+            void Guard(){if(++guardChecks%16!=0)return;if((experimentProcess.TotalProcessorTime-started).TotalSeconds>Math.Min(treatment.CpuLimitSeconds,880-spent))throw new InvalidOperationException("STUDY146_BUDGET: bounded inner forecast stop");}
             Plan146? validationPlan=null;
             if(treatment.PlanSource is not null){using var z=new GZipStream(File.OpenRead(Path.Combine(output,treatment.PlanSource+"-plans.json.gz")),CompressionMode.Decompress);
                 validationPlan=JsonSerializer.Deserialize<Review146[]>(z,json)!.First(r=>r.Selected is not null).Selected!;
@@ -38,7 +39,8 @@ public static class Experiment146{
                 if(validationPlan is not null){int k=(int)Math.Round((i.Time-validationPlan.CreatedAt)/.2);
                     if(k<validationPlan.Actions.Length)return new(new(i.Time,validationPlan.Actions[k],FreeActionSafety.Uncertain,false,Array.Empty<FreeLearningCandidate>(),0,0),0);
                     return Policy144.Choose(i,c,s,f,t,p,m,inertia,"K1");}
-                planner??=new(s,f,t,p,new(Enabled:true,RepairUnsafePrefixes:treatment.RepairUnsafePrefixes),m,inertia);
+                planner??=new(s,f,t,p,new(Enabled:true,RepairUnsafePrefixes:treatment.RepairUnsafePrefixes,TerminalContinuation:treatment.TerminalContinuation,
+                    SearchIntervalSeconds:treatment.TerminalContinuation?1.2:.8,MaximumPlanSeconds:treatment.TerminalContinuation?26:16,BeamWidth:treatment.TerminalContinuation?1:2,MaximumCandidates:treatment.TerminalContinuation?80:128),m,inertia,Guard);
                 var decision=planner.Choose(i,c);
                 if(planner.Reviews.Count%10==0)Console.WriteLine($"{treatment.Name}: t={i.Time:F1}s CPU={(Process.GetCurrentProcess().TotalProcessorTime-started).TotalSeconds:F2}s");
                 return decision;
@@ -59,9 +61,9 @@ public static class Experiment146{
                 planAgreement=new{Points=count,MaximumXYMeters=xy,MaximumSpeedMps=speed,MaximumYawRate=yaw,PredictedGoalTime=validationPlan.GoalTime,NativeGoalTime=actualGoal,GoalErrorSeconds=actualGoal-validationPlan.GoalTime,
                     Passed=count>=validationPlan.Points.Length*.8&&xy<.03&&speed<.03&&yaw<.01&&actualGoal is not null&&Math.Abs((actualGoal-validationPlan.GoalTime)??1)<.01};
             }
-            var result=new{Treatment=treatment,Revision=treatment.RepairUnsafePrefixes?"bounded-repair-2":"legal-roots-1",
+            var result=new{Treatment=treatment,Revision=treatment.TerminalContinuation?"terminal-viability-3":treatment.RepairUnsafePrefixes?"bounded-repair-2":"legal-roots-1",
                 SourceSha256=new[]{"Planner146.cs","Model146.cs","Experiment146.cs"}.ToDictionary(n=>n,n=>Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(Path.Combine("tools/autonomous-corner-planning",n))))),
-                PlanAgreement=planAgreement,run.Outcome,run.EndSeconds,run.Fingerprint,PrefixExact=exact,PrefixSamples=prefix.Length,
+                PlannerOptions=planner?.Options,LastProgress=planner?.LastProgress,SeedDecisions=planner?.SeedDecisions,PlanAgreement=planAgreement,run.Outcome,run.EndSeconds,run.Fingerprint,PrefixExact=exact,PrefixSamples=prefix.Length,
                 PrefixFingerprint=Hash(prefix),HistoricalPrefixFingerprint=Hash(expected),CompletedLaps=run.Riders[0].CompletedLaps,run.Crossings,
                 MinimumInner=run.Riders[0].Samples.Min(s=>s.Inner),MinimumOuter=run.Riders[0].Samples.Min(s=>s.Outer),
                 run.TotalCpuSeconds,run.ControllerCpuSeconds,run.NativeSteps,run.Forecasts,run.ForecastContactQueries,

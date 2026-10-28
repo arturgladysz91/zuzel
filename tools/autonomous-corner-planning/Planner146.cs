@@ -6,12 +6,12 @@ using SharedWorldSpeedway;
 namespace Autonomous146;
 
 public sealed record PlannerOptions146(bool Enabled=false, int RequiredLaps=3,
-    double SearchIntervalSeconds=.8, double MaximumPlanSeconds=16,
-    int BeamWidth=2, int MaximumCandidates=128,
-    double ClearanceReserveMeters=.10, double SwitchImprovementSeconds=.02, bool RepairUnsafePrefixes=true);
+    double SearchIntervalSeconds=1.2, double MaximumPlanSeconds=26,
+    int BeamWidth=1, int MaximumCandidates=80,
+    double ClearanceReserveMeters=.10, double SwitchImprovementSeconds=.02, bool RepairUnsafePrefixes=true,bool TerminalContinuation=true);
 public sealed record Safety146(bool Legal,double MinimumGapMeters,double SweepLowerBoundMeters,
     double MaximumBetaDegrees,double MaximumYawRate,string Reason);
-public sealed record Plan146(double CreatedAt,double GoalMeters,FreeRacingAction[] Actions,
+public sealed record Plan146(double CreatedAt,double GoalMeters,double SafetyGoalMeters,FreeRacingAction[] Actions,
     FreeRacingPoint[] Points,State146 End,double? GoalTime,double? CornerExitTime,
     double? CornerExitSpeed,Safety146 Safety,string Origin){
     public double TravelSeconds=>GoalTime is double t?t-CreatedAt:double.PositiveInfinity;
@@ -34,20 +34,23 @@ public sealed class Planner146
 {
     public PlannerOptions146 Options {get;}
     public List<Review146> Reviews {get;}=new();
+    public object? LastProgress {get;private set;}
+    public long SeedDecisions {get;private set;}
+    readonly Action? budgetGuard;
     readonly RiderSpec spec;readonly TrackFrame frame;readonly TrackStateSnapshot surface;
     readonly WorldParameters parameters;readonly float mass,inertia;
     readonly Model146 model;
     Plan146? previous;State146? expectedState;double nextSearch;
     int policyForecasts,policyContacts;
     public Planner146(RiderSpec spec,TrackFrame frame,TrackStateSnapshot surface,WorldParameters parameters,
-        PlannerOptions146? options=null,float mass=147,float inertia=52.72097f){
+        PlannerOptions146? options=null,float mass=147,float inertia=52.72097f,Action? budgetGuard=null){
         Options=options??new();if(!Options.Enabled)throw new InvalidOperationException("Study146 is OFF by default.");
         if(Options.RequiredLaps<1||Options.BeamWidth is <1 or >3||Options.MaximumCandidates is <1 or >160
-            ||Options.SearchIntervalSeconds<.2||Options.MaximumPlanSeconds is <2 or >20
+            ||Options.SearchIntervalSeconds<.2||Options.MaximumPlanSeconds is <2 or >30
             ||Options.ClearanceReserveMeters<.05||Options.SwitchImprovementSeconds<.01)
             throw new ArgumentException("Bounded, explicit research planner options required.");
         this.spec=spec;this.frame=frame;this.surface=surface;this.parameters=parameters;this.mass=mass;this.inertia=inertia;
-        model=new(spec,frame,surface,parameters,mass,inertia);
+        this.budgetGuard=budgetGuard;model=new(spec,frame,surface,parameters,mass,inertia,budgetGuard);
     }
     // Geometry supplies a common finish of the maneuver, never a lateral target or an action.
     // Stop three metres before the next bend, after the entire current bend and following straight.
@@ -93,15 +96,17 @@ public sealed class Planner146
         return new(minimum>=reserveMeters&&certificate>=0&&beta<=45,minimum,certificate,beta,yaw,reason);
     }
     FreeRacingAction SeedAction(State146 state){
-        var d=Policy144.Choose(state.Input,new CrankClutch144(omega:state.CrankOmega),spec,frame,surface,parameters,mass,inertia,"K1");
+        budgetGuard?.Invoke();SeedDecisions++;var d=Policy144.Choose(state.Input,new CrankClutch144(omega:state.CrankOmega),spec,frame,surface,parameters,mass,inertia,"K1");
         policyForecasts+=d.Choice.Forecasts;policyContacts+=d.Choice.ForceEvaluations;return d.Choice.Action;
     }
     Plan146 Rollout(State146 start,double goal,FreeRacingAction[]? tail,string origin){
         var state=start;var actions=new List<FreeRacingAction>();var points=new List<FreeRacingPoint>();
-        var exit=ExitBefore(goal);double? goalTime=null,exitTime=null,exitSpeed=null;
+        var exit=ExitBefore(goal);var safetyGoal=Options.TerminalContinuation?Goal(frame,goal+.005,Options.RequiredLaps):goal;
+        double? goalTime=null,exitTime=null,exitSpeed=null;
         int limit=(int)Math.Ceiling(Options.MaximumPlanSeconds/.2);
         for(int k=0;k<limit;k++){
-            var action=tail is null?SeedAction(state):tail[Math.Min(k,tail.Length-1)];
+            LastProgress=new{ReviewTime=start.Input.Time,Origin=origin,Step=k,ForecastTime=state.Input.Time,Goal=goal,SafetyGoal=safetyGoal,model.Forecasts,model.Contacts,SeedDecisions,policyForecasts};
+            var action=tail is null||Options.TerminalContinuation&&k>=tail.Length?SeedAction(state):tail[Math.Min(k,tail.Length-1)];
             var transition=model.Step(state,action);actions.Add(action);
             foreach(var point in transition.Prediction.Points.Skip(k==0?0:1)){
                 if(points.Count>0){var a=points[^1];var ds=point.Rider.TotalReferenceMeters-a.Rider.TotalReferenceMeters;
@@ -113,11 +118,11 @@ public sealed class Planner146
             }
             state=transition.End;
             // Reject early after a confirmed violation, but never score a partial trajectory as an arrival.
-            if(goalTime is not null&&actions.Count>=4||transition.Prediction.Points.Any(p=>Math.Min(p.Inner,p.Outer)<0||Math.Abs(p.Rider.SlideRadians)>Math.PI/4))break;
+            if(state.Input.Rider.TotalReferenceMeters>=safetyGoal&&actions.Count>=4||transition.Prediction.Points.Any(p=>Math.Min(p.Inner,p.Outer)<0||Math.Abs(p.Rider.SlideRadians)>Math.PI/4))break;
         }
         var safety=Check(points.ToArray(),Options.ClearanceReserveMeters);
-        if(goalTime is null)safety=safety with{Legal=false,Reason=safety.Legal?"common goal not reached":safety.Reason};
-        return new(start.Input.Time,goal,actions.ToArray(),points.ToArray(),state,goalTime,exitTime,exitSpeed,safety,origin);
+        if(goalTime is null||state.Input.Rider.TotalReferenceMeters<safetyGoal)safety=safety with{Legal=false,Reason=safety.Legal?"terminal continuation not completed":safety.Reason};
+        return new(start.Input.Time,goal,safetyGoal,actions.ToArray(),points.ToArray(),state,goalTime,exitTime,exitSpeed,safety,origin);
     }
     static IEnumerable<Plan146> Order(IEnumerable<Plan146> plans)=>plans.OrderBy(p=>!p.Safety.Legal)
         .ThenBy(p=>!p.Safety.Legal&&p.Safety.MaximumBetaDegrees>45)
@@ -138,7 +143,7 @@ public sealed class Planner146
             Math.Abs(expected.Rider.AngularVelocity-input.Rider.AngularVelocity),Math.Abs(expected.Omega-input.Omega),
             Math.Abs(expectedState.CrankOmega-crank.Omega),expected.Active==input.Active,SameQueue(expected.Pending,input.Pending));}
         FreeRacingAction? expectedAction=null;Plan146? incumbent=null;
-        if(previous is not null&&Math.Abs(previous.GoalMeters-goal)<1e-7){
+        if(previous is not null&&(Options.TerminalContinuation||Math.Abs(previous.GoalMeters-goal)<1e-7)){
             int shift=(int)Math.Round((input.Time-previous.CreatedAt)/.2);
             if(shift<previous.Actions.Length){var suffix=previous.Actions.Skip(shift).ToArray();expectedAction=suffix[0];incumbent=Rollout(start,goal,suffix,"shifted-incumbent");}
         }

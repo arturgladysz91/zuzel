@@ -1,0 +1,1412 @@
+{
+  "K1": {
+    "run": "K1",
+    "lap": 2,
+    "bend": 2,
+    "entry": {
+      "time_s": 29.596834003186032,
+      "reference_m": 513.1681249141693,
+      "distance_m": 535.8174789813735,
+      "speed_kph": 93.88600801272172,
+      "x_m": -27.00000020448962,
+      "y_m": 69.65193784121428
+    },
+    "minimum": {
+      "time_s": 34.67,
+      "reference_m": 595.4198092732022,
+      "distance_m": 622.3658787012173,
+      "x_m": -41.53845,
+      "y_m": 3.3008037,
+      "speed_kph": 46.1601792,
+      "corner_progress": 0.844565276070373
+    },
+    "exit": {
+      "time_s": 35.80823707042552,
+      "reference_m": 610.5574998855591,
+      "distance_m": 637.8861929044584,
+      "speed_kph": 52.58658347537047,
+      "x_m": -27.000000351433304,
+      "y_m": -1.8449580553929816
+    },
+    "duration_s": 6.2114030672394875,
+    "distance_m": 102.06871392308494,
+    "deceleration_onset": {
+      "time_s": 29.596835,
+      "dt_s": 0.006834999999998814,
+      "reference_m": 513.1681497097015,
+      "speed_kph": 93.8859948,
+      "acceleration_mps2": -3.68193123628428,
+      "requested_gas": 0,
+      "active_gas": 0,
+      "requested_steering_deg": 1.5000000699057243,
+      "steering_deg": 1.5000000699057243,
+      "beta_deg": 14.852842218955843,
+      "yaw_rads": 0.6700211,
+      "wheel_slip": 0.040523013690872536,
+      "front_fx_body_N": -20.45837564590505,
+      "front_fy_body_N": 781.2710194498351,
+      "rear_fx_N": 86.573814,
+      "rear_fy_N": 911.85895,
+      "front_util": 0.9141599940712282,
+      "rear_util": 0.9183349753316974,
+      "front_load_N": 665.5707895749277,
+      "rear_load_N": 776.4992104250724,
+      "front_capacity_N": 854.9256969816521,
+      "rear_capacity_N": 997.4132565257713,
+      "inner_m": 7.29858744398426,
+      "outer_m": 3.3771786683425415,
+      "offset_m": 6.988911594564314,
+      "x_m": -27.000025,
+      "y_m": 69.65193,
+      "clutch_torque_Nm": 1.6177736878799132,
+      "drive_torque_Nm": 13.686365399464064,
+      "crank_rpm": 6830.817402963199,
+      "trajectory_radius_m": 60.4723430651068,
+      "local_offset_radius_m": 155031890467.5995,
+      "local_radius_90_demand_N": 5.926200069088443e-07,
+      "front_translation_J": -38.82678812653811,
+      "rear_drive_translation_J": 14.935816453994592,
+      "rear_lateral_translation_J": -41.19715350539472,
+      "resistance_J": -31.433570477251223,
+      "translation_change_J": -96.52490462593022,
+      "yaw_change_J": -0.0010279554456148,
+      "wheel_change_J": -8.95516295610364,
+      "crank_change_J": -7.91576926229056,
+      "front_yaw_work_J": 2.504583174322961,
+      "rear_yaw_work_J": -2.505614521336939,
+      "front_slip_loss_J": 36.32220498960308,
+      "rear_lateral_slip_loss_J": 43.70276720082104,
+      "rear_long_slip_loss_J": 0.5946422319974038,
+      "combustion_J": 0,
+      "clutch_heat_J": 0.0008944252828157567,
+      "transmission_loss_J": 0.47489249022048696,
+      "bearing_loss_J": 0.8646871753593643,
+      "crank_drag_J": 0,
+      "body_work_residual_J": -0.003208970740757877,
+      "total_energy_residual_J": -0.0032058092346431977
+    },
+    "preparation_deceleration": {
+      "time_s": 29.25,
+      "dt_s": 0.010000000000072617,
+      "reference_m": 504.20121359825134,
+      "speed_kph": 97.06732559999999,
+      "acceleration_mps2": -0.21149999999880612,
+      "requested_gas": 0,
+      "active_gas": 0,
+      "requested_steering_deg": 1.5000000699057243,
+      "steering_deg": 0.9000000419434347,
+      "beta_deg": 9.872256469838838,
+      "yaw_rads": 0.62610346,
+      "wheel_slip": 0.14884137337950273,
+      "front_fx_body_N": -5.3954961945939885,
+      "front_fy_body_N": 686.961726749625,
+      "rear_fx_N": 407.7061,
+      "rear_fy_N": 762.70807,
+      "front_util": 0.8035586169230856,
+      "rear_util": 0.8670827034896507,
+      "front_load_N": 665.5707895749277,
+      "rear_load_N": 776.4992104250724,
+      "front_capacity_N": 854.9256969816521,
+      "rear_capacity_N": 997.4132565257713,
+      "inner_m": 9.538969056148241,
+      "outer_m": 1.4186865052221729,
+      "offset_m": 9.13317581575572,
+      "x_m": -18.033089,
+      "y_m": 71.796196,
+      "clutch_torque_Nm": 7.897512853747714,
+      "drive_torque_Nm": 66.81295874270566,
+      "crank_rpm": 7884.92636676012,
+      "trajectory_radius_m": 71.40061025594113,
+      "local_offset_radius_m": null,
+      "local_radius_90_demand_N": null,
+      "front_translation_J": -32.39783077791377,
+      "rear_drive_translation_J": 108.38772548168986,
+      "rear_lateral_translation_J": -34.377568667530724,
+      "resistance_J": -49.989622907052116,
+      "translation_change_J": -8.380999204362524,
+      "yaw_change_J": 0.14504819977857222,
+      "wheel_change_J": -64.10453616374217,
+      "crank_change_J": -65.52221262310864,
+      "front_yaw_work_J": 3.00016655672985,
+      "rear_yaw_work_J": -2.855117374102325,
+      "front_slip_loss_J": 29.397664330655303,
+      "rear_lateral_slip_loss_J": 37.23268981009717,
+      "rear_long_slip_loss_J": 15.58041823909548,
+      "combustion_J": 0,
+      "clutch_heat_J": 0.031185353936123004,
+      "transmission_loss_J": 3.9294616361503856,
+      "bearing_loss_J": 1.6979617747523548,
+      "crank_drag_J": 0,
+      "body_work_residual_J": -0.003702333555771986,
+      "total_energy_residual_J": -0.0036957396958143818
+    },
+    "worst_deceleration": {
+      "time_s": 31.05,
+      "dt_s": 0.010000000000079723,
+      "reference_m": 542.416222497845,
+      "speed_kph": 67.44414239999999,
+      "acceleration_mps2": -5.689799999954673,
+      "requested_gas": 0.31820688,
+      "active_gas": 0,
+      "requested_steering_deg": -15.000000699057246,
+      "steering_deg": -1.5000000699057243,
+      "beta_deg": 27.229529296948037,
+      "yaw_rads": 0.61231166,
+      "wheel_slip": 0.09212294300233545,
+      "front_fx_body_N": 21.619722296114503,
+      "front_fy_body_N": 825.6246997081386,
+      "rear_fx_N": 80.01883,
+      "rear_fy_N": 969.3738,
+      "front_util": 0.9660578909308012,
+      "rear_util": 0.9751934018296897,
+      "front_load_N": 665.5707895749277,
+      "rear_load_N": 776.4992104250724,
+      "front_capacity_N": 854.9256969816521,
+      "rear_capacity_N": 997.4132565257713,
+      "inner_m": 1.779687486435678,
+      "outer_m": 11.863180020453388,
+      "offset_m": 1.4475619773794093,
+      "x_m": -52.90252,
+      "y_m": 50.576233,
+      "clutch_torque_Nm": 1.4903484578289738,
+      "drive_torque_Nm": 12.608347953233118,
+      "crank_rpm": 4739.532014816439,
+      "trajectory_radius_m": 31.455243474557147,
+      "local_offset_radius_m": 32.52179946570477,
+      "local_radius_90_demand_N": 2825.028181385996,
+      "front_translation_J": -66.83491181334882,
+      "rear_drive_translation_J": 13.371488819144508,
+      "rear_lateral_translation_J": -82.71326671417049,
+      "resistance_J": -20.74862831132615,
+      "translation_change_J": -156.93030446697418,
+      "yaw_change_J": -0.02259521536158811,
+      "wheel_change_J": -8.229267296164835,
+      "crank_change_J": -7.40804221826882,
+      "front_yaw_work_J": 3.540791942371316,
+      "rear_yaw_work_J": -3.5633853029901785,
+      "front_slip_loss_J": 63.2941197792207,
+      "rear_lateral_slip_loss_J": 86.27665127453723,
+      "rear_long_slip_loss_J": 1.210413192014133,
+      "combustion_J": 0,
+      "clutch_heat_J": 0.0011105692380536216,
+      "transmission_loss_J": 0.4444158989418643,
+      "bearing_loss_J": 0.6098822803808995,
+      "crank_drag_J": 0,
+      "body_work_residual_J": -0.004986447273218175,
+      "total_energy_residual_J": -0.004987891110403098
+    },
+    "phases": {
+      "entry": {
+        "start_s": 29.596834003186032,
+        "end_s": 31.23447166900144,
+        "duration_s": 1.637637665815408,
+        "energy": {
+          "front_translation_J": -11285.15386644908,
+          "rear_drive_translation_J": 2669.216078002783,
+          "rear_lateral_translation_J": -13236.843888219042,
+          "resistance_J": -5140.526799459535,
+          "translation_change_J": -26993.333482286176,
+          "yaw_change_J": -2.3773588512247503,
+          "wheel_change_J": -1618.6875314251467,
+          "crank_change_J": -1457.132740824265,
+          "front_yaw_work_J": 605.7046678726254,
+          "rear_yaw_work_J": -608.0820288692735,
+          "front_slip_loss_J": 10679.449195799269,
+          "rear_lateral_slip_loss_J": 13844.92593417688,
+          "rear_long_slip_loss_J": 174.86669964377688,
+          "combustion_J": 0.0,
+          "clutch_heat_J": 0.18492489314454608,
+          "transmission_loss_J": 87.41686895586764,
+          "bearing_loss_J": 144.13574456335064,
+          "crank_drag_J": 0.0,
+          "body_work_residual_J": -0.025006161300127068,
+          "total_energy_residual_J": -0.024945894989317253
+        },
+        "stats": {
+          "acceleration_mps2": {
+            "min": -5.689799999954673,
+            "max": -3.68193123628428,
+            "mean": -5.123854889280568
+          },
+          "requested_gas": {
+            "min": 0,
+            "max": 0.31820688,
+            "mean": 0.038861695311771936
+          },
+          "active_gas": {
+            "min": 0,
+            "max": 0,
+            "mean": 0.0
+          },
+          "requested_steering_deg": {
+            "min": -15.000000699057246,
+            "max": 1.5000000699057243,
+            "mean": -2.5721967314997505
+          },
+          "steering_deg": {
+            "min": -1.5000000699057243,
+            "max": 1.5000000699057243,
+            "mean": -0.1911036526613726
+          },
+          "beta_deg": {
+            "min": 14.852842218955843,
+            "max": 27.254823091771883,
+            "mean": 23.121308878963127
+          },
+          "yaw_rads": {
+            "min": 0.5985299,
+            "max": 0.6700211,
+            "mean": 0.6475545365629061
+          },
+          "wheel_slip": {
+            "min": 0.03976441818354164,
+            "max": 0.09309425812516464,
+            "mean": 0.06898105736882869
+          },
+          "front_fx_body_N": {
+            "min": -21.311506682274967,
+            "max": 21.620406243697353,
+            "mean": 2.7933437411080804
+          },
+          "front_fy_body_N": {
+            "min": 781.2710194498351,
+            "max": 825.6508278166766,
+            "mean": 815.9589534746286
+          },
+          "rear_fx_N": {
+            "min": 75.33762,
+            "max": 86.573814,
+            "mean": 80.03676242384995
+          },
+          "rear_fy_N": {
+            "min": 911.85895,
+            "max": 969.5197,
+            "mean": 955.7654295045219
+          },
+          "front_util": {
+            "min": 0.9141599940712282,
+            "max": 0.9660884593470221,
+            "mean": 0.9546740215689301
+          },
+          "rear_util": {
+            "min": 0.9183349753316974,
+            "max": 0.9752479587827001,
+            "mean": 0.961600742747026
+          },
+          "inner_m": {
+            "min": 1.6323858598825955,
+            "max": 7.29858744398426,
+            "mean": 3.2141364968946315
+          },
+          "outer_m": {
+            "min": 3.3771786683425415,
+            "max": 12.536434577013564,
+            "mean": 8.70850926682051
+          },
+          "offset_m": {
+            "min": 1.3044976298238837,
+            "max": 6.988911594564314,
+            "mean": 2.8957955298228413
+          },
+          "drive_torque_Nm": {
+            "min": 12.083302636041358,
+            "max": 14.04067000121414,
+            "mean": 12.708569428050259
+          },
+          "clutch_torque_Nm": {
+            "min": 1.4282863635982692,
+            "max": 1.659653664446116,
+            "mean": 1.5021949678546407
+          },
+          "crank_rpm": {
+            "min": 4474.063704911333,
+            "max": 6830.817402963199,
+            "mean": 5653.8693702220025
+          }
+        },
+        "closed_gas_s": 1.637637665815408,
+        "open_gas_decelerating_s": 0,
+        "negative_drive_torque_s": 0
+      },
+      "middle": {
+        "start_s": 31.23447166900144,
+        "end_s": 33.36295315296133,
+        "duration_s": 2.1284814839598916,
+        "energy": {
+          "front_translation_J": -2899.0085058584937,
+          "rear_drive_translation_J": 1920.4322962691313,
+          "rear_lateral_translation_J": -5038.129281133172,
+          "resistance_J": -2921.0088681852953,
+          "translation_change_J": -8937.714027563183,
+          "yaw_change_J": -3.255158692112971,
+          "wheel_change_J": -428.93079644556127,
+          "crank_change_J": -386.28083595133467,
+          "front_yaw_work_J": 370.2922967511444,
+          "rear_yaw_work_J": -373.5474443190795,
+          "front_slip_loss_J": 2528.716207727381,
+          "rear_lateral_slip_loss_J": 5411.676725846946,
+          "rear_long_slip_loss_J": 311.9428518392197,
+          "combustion_J": 1640.0598245352833,
+          "clutch_heat_J": 1.6476723011105103,
+          "transmission_loss_J": 121.48157929113108,
+          "bearing_loss_J": 99.7671107710602,
+          "crank_drag_J": 0.0,
+          "body_work_residual_J": 0.00033134464765569125,
+          "total_energy_residual_J": 0.00037277466957938394
+        },
+        "stats": {
+          "acceleration_mps2": {
+            "min": -5.635500000045162,
+            "max": -0.5834000000001277,
+            "mean": -1.8125777920317525
+          },
+          "requested_gas": {
+            "min": 0,
+            "max": 0,
+            "mean": 0.0
+          },
+          "active_gas": {
+            "min": 0,
+            "max": 0.31820688,
+            "mean": 0.029899896465906496
+          },
+          "requested_steering_deg": {
+            "min": -15.000000699057246,
+            "max": 5.000000424005013,
+            "mean": -0.4704990005227842
+          },
+          "steering_deg": {
+            "min": -15.000000699057246,
+            "max": 5.000000424005013,
+            "mean": -2.0718131423788617
+          },
+          "beta_deg": {
+            "min": -3.530671185943098,
+            "max": 27.124876263836214,
+            "mean": 9.17703558732743
+          },
+          "yaw_rads": {
+            "min": -0.81750846,
+            "max": 0.9300445,
+            "mean": 0.28331608041278017
+          },
+          "wheel_slip": {
+            "min": 0.0006404457183325437,
+            "max": 0.32198989071525497,
+            "mean": 0.05517846758297098
+          },
+          "front_fx_body_N": {
+            "min": -60.15727834545905,
+            "max": 183.60744976866317,
+            "mean": 24.007931843032146
+          },
+          "front_fy_body_N": {
+            "min": -369.23688830958326,
+            "max": 825.196467132236,
+            "mean": 466.03837033533597
+          },
+          "rear_fx_N": {
+            "min": 2.805872,
+            "max": 266.12976,
+            "mean": 59.47973221826101
+          },
+          "rear_fy_N": {
+            "min": -518.21515,
+            "max": 969.41205,
+            "mean": 548.415215731967
+          },
+          "front_util": {
+            "min": 0.0005294983989088989,
+            "max": 0.9655568648925079,
+            "mean": 0.6110485959750038
+          },
+          "rear_util": {
+            "min": 0.01498085426474284,
+            "max": 0.9750293459148717,
+            "mean": 0.6963674668495774
+          },
+          "inner_m": {
+            "min": 0.2040042163927397,
+            "max": 1.6323858598825955,
+            "mean": 0.8704488704706689
+          },
+          "outer_m": {
+            "min": 12.536434577013564,
+            "max": 15.594671972640779,
+            "mean": 14.439255851903619
+          },
+          "offset_m": {
+            "min": -0.422038982860863,
+            "max": 1.3044976298238837,
+            "mean": 0.3643883993434683
+          },
+          "drive_torque_Nm": {
+            "min": 0.8538227311824097,
+            "max": 115.95788795241234,
+            "mean": 16.31138181595442
+          },
+          "clutch_torque_Nm": {
+            "min": 0.1009246727165969,
+            "max": 13.706606140947086,
+            "mean": 1.9280593163066693
+          },
+          "crank_rpm": {
+            "min": 3608.0148286178305,
+            "max": 5233.044602394788,
+            "mean": 4140.207389105958
+          }
+        },
+        "closed_gas_s": 1.9284814839598923,
+        "open_gas_decelerating_s": 0.1999999999999993,
+        "negative_drive_torque_s": 0
+      },
+      "exit": {
+        "start_s": 33.36295315296133,
+        "end_s": 35.80823707042552,
+        "duration_s": 2.445283917464188,
+        "energy": {
+          "front_translation_J": -751.6803750053748,
+          "rear_drive_translation_J": 5483.755856446835,
+          "rear_lateral_translation_J": -606.6666262472154,
+          "resistance_J": -2501.3180010263477,
+          "translation_change_J": 1624.0494192706371,
+          "yaw_change_J": -5.725075886994947,
+          "wheel_change_J": 294.03567121630357,
+          "crank_change_J": 267.80363712236147,
+          "front_yaw_work_J": 178.95514286606598,
+          "rear_yaw_work_J": -184.6802180633697,
+          "front_slip_loss_J": 572.7252312040782,
+          "rear_lateral_slip_loss_J": 791.3468413711323,
+          "rear_long_slip_loss_J": 636.5038497947324,
+          "combustion_J": 7200.121193878861,
+          "clutch_heat_J": 11.72303661405295,
+          "transmission_loss_J": 415.2356712085467,
+          "bearing_loss_J": 91.06359531588467,
+          "crank_drag_J": 0.0,
+          "body_work_residual_J": -0.04143489726060475,
+          "total_energy_residual_J": -0.04131562177894404
+        },
+        "stats": {
+          "acceleration_mps2": {
+            "min": -1.643450000000229,
+            "max": 1.8301772274826758,
+            "mean": 0.3177519192757283
+          },
+          "requested_gas": {
+            "min": 0,
+            "max": 1,
+            "mean": 0.23901901300956924
+          },
+          "active_gas": {
+            "min": 0,
+            "max": 0.31820688,
+            "mean": 0.1520236855219512
+          },
+          "requested_steering_deg": {
+            "min": -0.49999998510472177,
+            "max": 5.000000424005013,
+            "mean": 1.3587960526948395
+          },
+          "steering_deg": {
+            "min": 0.49999998510472177,
+            "max": 5.000000424005013,
+            "mean": 1.4405861408469727
+          },
+          "beta_deg": {
+            "min": 1.0444950704383902,
+            "max": 7.627468562042558,
+            "mean": 2.3556601381511046
+          },
+          "yaw_rads": {
+            "min": 0.11989173,
+            "max": 0.68635315,
+            "mean": 0.3067741088047851
+          },
+          "wheel_slip": {
+            "min": 0.0019430185790052692,
+            "max": 0.13009361175958786,
+            "mean": 0.05720168616036916
+          },
+          "front_fx_body_N": {
+            "min": -43.63290833390499,
+            "max": -1.4187163970310017,
+            "mean": -8.566004201572362
+          },
+          "front_fy_body_N": {
+            "min": 162.5685215415023,
+            "max": 595.9725029463159,
+            "mean": 313.2337063801514
+          },
+          "rear_fx_N": {
+            "min": 6.110266,
+            "max": 360.7729,
+            "mean": 164.32684479401686
+          },
+          "rear_fy_N": {
+            "min": 200.58105,
+            "max": 784.89655,
+            "mean": 378.03695929204434
+          },
+          "front_util": {
+            "min": 0.1901623907178644,
+            "max": 0.6971310216134342,
+            "mean": 0.36662238888469995
+          },
+          "rear_util": {
+            "min": 0.2216902787747193,
+            "max": 0.7872796822219629,
+            "mean": 0.4439391172931722
+          },
+          "inner_m": {
+            "min": 0.2744781581880878,
+            "max": 2.5514687165616508,
+            "mean": 0.8716535229314036
+          },
+          "outer_m": {
+            "min": 8.655937234805672,
+            "max": 13.598367061670519,
+            "mean": 11.469435945139587
+          },
+          "offset_m": {
+            "min": -0.3154612226405749,
+            "max": 1.8449604511260986,
+            "mean": 0.26536940076330523
+          },
+          "drive_torque_Nm": {
+            "min": 1.291954105924138,
+            "max": 124.70878296992328,
+            "mean": 57.72554180033598
+          },
+          "clutch_torque_Nm": {
+            "min": 0.15271325129126928,
+            "max": 14.740990894789986,
+            "mean": 6.823350094602361
+          },
+          "crank_rpm": {
+            "min": 3353.6963328049383,
+            "max": 4233.723121838391,
+            "mean": 3702.479476172542
+          }
+        },
+        "closed_gas_s": 1.2770468470386191,
+        "open_gas_decelerating_s": 0.030000000000050875,
+        "negative_drive_torque_s": 0
+      }
+    },
+    "entry_to_minimum": {
+      "start_s": 29.596834003186032,
+      "end_s": 34.67,
+      "duration_s": 5.0731659968139695,
+      "energy": {
+        "front_translation_J": -14665.899938607638,
+        "rear_drive_translation_J": 4777.131933517118,
+        "rear_lateral_translation_J": -18653.031782370843,
+        "resistance_J": -9364.048266539998,
+        "translation_change_J": -37905.926921602644,
+        "yaw_change_J": -0.02999253068782822,
+        "wheel_change_J": -2098.5248986196293,
+        "crank_change_J": -1886.143333813078,
+        "front_yaw_work_J": 1078.7522766064005,
+        "rear_yaw_work_J": -1078.7822626834866,
+        "front_slip_loss_J": 13587.147656715704,
+        "rear_lateral_slip_loss_J": 19731.814061294703,
+        "rear_long_slip_loss_J": 488.45133379125144,
+        "combustion_J": 1789.6408975319707,
+        "clutch_heat_J": 1.9696321535938122,
+        "transmission_loss_J": 220.4288759514884,
+        "bearing_loss_J": 286.3274573445999,
+        "crank_drag_J": 0.0,
+        "body_work_residual_J": -0.07886760128847582,
+        "total_energy_residual_J": -0.07876030667467064
+      },
+      "stats": {
+        "acceleration_mps2": {
+          "min": -5.689799999954673,
+          "max": -0.06100000000001208,
+          "mean": -2.6131955229783927
+        },
+        "requested_gas": {
+          "min": 0,
+          "max": 0.31820688,
+          "mean": 0.02948005913741852
+        },
+        "active_gas": {
+          "min": 0,
+          "max": 0.31820688,
+          "mean": 0.014426411918312737
+        },
+        "requested_steering_deg": {
+          "min": -15.000000699057246,
+          "max": 5.000000424005013,
+          "mean": -0.5500019314113641
+        },
+        "steering_deg": {
+          "min": -15.000000699057246,
+          "max": 5.000000424005013,
+          "mean": -0.5007230030561797
+        },
+        "beta_deg": {
+          "min": -3.530671185943098,
+          "max": 27.254823091771883,
+          "mean": 11.938923464709998
+        },
+        "yaw_rads": {
+          "min": -0.81750846,
+          "max": 0.9300445,
+          "mean": 0.40480656980897367
+        },
+        "wheel_slip": {
+          "min": 0.0006404457183325437,
+          "max": 0.32198989071525497,
+          "mean": 0.04642171544705948
+        },
+        "front_fx_body_N": {
+          "min": -60.15727834545905,
+          "max": 183.60744976866317,
+          "mean": 8.269958038330488
+        },
+        "front_fy_body_N": {
+          "min": -369.23688830958326,
+          "max": 825.6508278166766,
+          "mean": 546.1727059461723
+        },
+        "rear_fx_N": {
+          "min": 2.805872,
+          "max": 266.12976,
+          "mean": 53.58082634234673
+        },
+        "rear_fy_N": {
+          "min": -518.21515,
+          "max": 969.5197,
+          "mean": 637.2162252935199
+        },
+        "front_util": {
+          "min": 0.0005294983989088989,
+          "max": 0.9660884593470221,
+          "mean": 0.6666887253954533
+        },
+        "rear_util": {
+          "min": 0.01498085426474284,
+          "max": 0.9752479587827001,
+          "mean": 0.7014969782748142
+        },
+        "inner_m": {
+          "min": 0.2040042163927397,
+          "max": 7.29858744398426,
+          "mean": 1.531720149291141
+        },
+        "outer_m": {
+          "min": 3.3771786683425415,
+          "max": 15.594671972640779,
+          "mean": 12.133761455906829
+        },
+        "offset_m": {
+          "min": -0.422038982860863,
+          "max": 6.988911594564314,
+          "mean": 1.072920824726354
+        },
+        "drive_torque_Nm": {
+          "min": 0.8538227311824097,
+          "max": 115.95788795241234,
+          "mean": 11.831228738940263
+        },
+        "clutch_torque_Nm": {
+          "min": 0.1009246727165969,
+          "max": 13.706606140947086,
+          "mean": 1.3984903946737899
+        },
+        "crank_rpm": {
+          "min": 3353.6963328049383,
+          "max": 6830.817402963199,
+          "mean": 4453.953939319458
+        }
+      },
+      "closed_gas_s": 4.843165996813919,
+      "open_gas_decelerating_s": 0.23000000000005016,
+      "negative_drive_torque_s": 0
+    },
+    "measured_leading_negative_body_work": [
+      "rear_lateral_translation_J",
+      "front_translation_J",
+      "resistance_J"
+    ]
+  },
+  "F": {
+    "run": "F",
+    "lap": 2,
+    "bend": 2,
+    "entry": {
+      "time_s": 34.06929706320813,
+      "reference_m": 513.1681249141693,
+      "distance_m": 523.6806174350884,
+      "speed_kph": 82.59855629847499,
+      "x_m": -27.00000001920699,
+      "y_m": 64.89878465826762
+    },
+    "minimum": {
+      "time_s": 38.71,
+      "reference_m": 594.0347699369366,
+      "distance_m": 606.0676996528709,
+      "x_m": -42.843597,
+      "y_m": 3.815041,
+      "speed_kph": 53.6889168,
+      "corner_progress": 0.8303436082891347
+    },
+    "exit": {
+      "time_s": 39.789739648094404,
+      "reference_m": 610.5574998855591,
+      "distance_m": 622.8569610068619,
+      "speed_kph": 59.19099609207734,
+      "x_m": -26.99999972211512,
+      "y_m": -1.3258098582302436
+    },
+    "duration_s": 5.720442584886271,
+    "distance_m": 99.17634357177349,
+    "deceleration_onset": {
+      "time_s": 34.27,
+      "dt_s": 0.010000000000005116,
+      "reference_m": 517.5381718000864,
+      "speed_kph": 82.9566108,
+      "acceleration_mps2": -0.1511999999997408,
+      "requested_gas": 0,
+      "active_gas": 0,
+      "requested_steering_deg": 5.000000424005013,
+      "steering_deg": 1.5000000699057243,
+      "beta_deg": 8.640955271200026,
+      "yaw_rads": 0.53133595,
+      "wheel_slip": 0.13147589765868098,
+      "front_fx_body_N": -17.904164523539976,
+      "front_fy_body_N": 683.73028478568,
+      "rear_fx_N": 356.6449,
+      "rear_fy_N": 750.5155,
+      "front_util": 0.8000281943480636,
+      "rear_util": 0.8330997204187275,
+      "front_load_N": 665.5707895749277,
+      "rear_load_N": 776.4992104250724,
+      "front_capacity_N": 854.9256969816521,
+      "rear_capacity_N": 997.4132565257713,
+      "inner_m": 1.5315473153033627,
+      "outer_m": 9.383128437427251,
+      "offset_m": 1.1394639935348296,
+      "x_m": -31.458202,
+      "y_m": 63.70463,
+      "clutch_torque_Nm": 6.868836413795681,
+      "drive_torque_Nm": 58.11035606071146,
+      "crank_rpm": 6656.192037933281,
+      "trajectory_radius_m": 53.14663825835643,
+      "local_offset_radius_m": 25.81208245673119,
+      "local_radius_90_demand_N": 3559.379610459951,
+      "front_translation_J": -27.266365291225956,
+      "rear_drive_translation_J": 81.29128842836644,
+      "rear_lateral_translation_J": -25.45010599033947,
+      "resistance_J": -33.68597467176756,
+      "translation_change_J": -5.122257554130783,
+      "yaw_change_J": 0.14962424031332233,
+      "wheel_change_J": -47.56055046604361,
+      "crank_change_J": -48.11408366352786,
+      "front_yaw_work_J": 2.5301905940582947,
+      "rear_yaw_work_J": -2.380566084870778,
+      "front_slip_loss_J": 24.736174738917985,
+      "rear_lateral_slip_loss_J": 27.83067581821756,
+      "rear_long_slip_loss_J": 10.264013499060137,
+      "combustion_J": 0,
+      "clutch_heat_J": 0.023590456312448545,
+      "transmission_loss_J": 2.885429592432935,
+      "bearing_loss_J": 1.210311338358505,
+      "crank_drag_J": 0,
+      "body_work_residual_J": -0.011100029164246905,
+      "total_energy_residual_J": -0.011097328321795885
+    },
+    "preparation_deceleration": null,
+    "worst_deceleration": {
+      "time_s": 35.43999999999996,
+      "dt_s": 0.009999999999962483,
+      "reference_m": 542.3963025433329,
+      "speed_kph": 69.9652548,
+      "acceleration_mps2": -3.9118000000148743,
+      "requested_gas": 0,
+      "active_gas": 0,
+      "requested_steering_deg": 0.49999998510472177,
+      "steering_deg": 1.5000000699057243,
+      "beta_deg": 16.830415789132395,
+      "yaw_rads": 0.64626706,
+      "wheel_slip": 0.037812866133459244,
+      "front_fx_body_N": -20.79260166905101,
+      "front_fy_body_N": 794.0385191708925,
+      "rear_fx_N": 56.84866,
+      "rear_fy_N": 931.66144,
+      "front_util": 0.9290991287141934,
+      "rear_util": 0.9358149520728869,
+      "front_load_N": 665.5707895749277,
+      "rear_load_N": 776.4992104250724,
+      "front_capacity_N": 854.9256969816521,
+      "rear_capacity_N": 997.4132565257713,
+      "inner_m": 1.063404622745066,
+      "outer_m": 12.959906662116362,
+      "offset_m": 0.5763035987845648,
+      "x_m": -52.156338,
+      "y_m": 50.12598,
+      "clutch_torque_Nm": 1.0796980959435138,
+      "drive_torque_Nm": 9.134245891682125,
+      "crank_rpm": 5029.266781623029,
+      "trajectory_radius_m": 33.430951501932235,
+      "local_offset_radius_m": 31.64244689155545,
+      "local_radius_90_demand_N": 2903.53651583497,
+      "front_translation_J": -48.07705557949101,
+      "rear_drive_translation_J": 10.597073505348233,
+      "rear_lateral_translation_J": -51.86208664114894,
+      "resistance_J": -22.52959626310663,
+      "translation_change_J": -111.87117154940381,
+      "yaw_change_J": -0.020488053169677094,
+      "wheel_change_J": -6.324185434733454,
+      "crank_change_J": -5.6922053204732945,
+      "front_yaw_work_J": 3.5938042951164966,
+      "rear_yaw_work_J": -3.61429305187525,
+      "front_slip_loss_J": 44.48325109124553,
+      "rear_lateral_slip_loss_J": 55.4763787432036,
+      "rear_long_slip_loss_J": 0.3910983211708043,
+      "combustion_J": 0,
+      "clutch_heat_J": 0.0005828739761625478,
+      "transmission_loss_J": 0.34149734678985855,
+      "bearing_loss_J": 0.6861395959372534,
+      "crank_drag_J": 0,
+      "body_work_residual_J": 0.0004934289945417447,
+      "total_energy_residual_J": 0.0004938776495890806
+    },
+    "phases": {
+      "entry": {
+        "start_s": 34.06929706320813,
+        "end_s": 35.61424522733694,
+        "duration_s": 1.5449481641288045,
+        "energy": {
+          "front_translation_J": -6241.860812081038,
+          "rear_drive_translation_J": 4042.034180463838,
+          "rear_lateral_translation_J": -6199.6546807387,
+          "resistance_J": -4394.167074980663,
+          "translation_change_J": -12793.602108631296,
+          "yaw_change_J": 4.670748695582945,
+          "wheel_change_J": -1369.7642617019867,
+          "crank_change_J": -1238.6508352998376,
+          "front_yaw_work_J": 501.8149115900705,
+          "rear_yaw_work_J": -497.1441846337737,
+          "front_slip_loss_J": 5740.0459008278385,
+          "rear_lateral_slip_loss_J": 6696.7988701998465,
+          "rear_long_slip_loss_J": 382.52171365971634,
+          "combustion_J": 2160.879180289478,
+          "clutch_heat_J": 2.820309945229959,
+          "transmission_loss_J": 203.80258233864512,
+          "bearing_loss_J": 138.11558630130176,
+          "crank_drag_J": 0.0,
+          "body_work_residual_J": 0.04627870526636884,
+          "total_energy_residual_J": 0.04640102622489635
+        },
+        "stats": {
+          "acceleration_mps2": {
+            "min": -3.9118000000148743,
+            "max": 0.6231447623145754,
+            "mean": -2.7008184007587315
+          },
+          "requested_gas": {
+            "min": 0,
+            "max": 0,
+            "mean": 0.0
+          },
+          "active_gas": {
+            "min": 0,
+            "max": 0.31820688,
+            "mean": 0.035159010628677136
+          },
+          "requested_steering_deg": {
+            "min": 0.0,
+            "max": 5.000000424005013,
+            "mean": 1.943869243717064
+          },
+          "steering_deg": {
+            "min": 0.0,
+            "max": 5.000000424005013,
+            "mean": 2.024891025009313
+          },
+          "beta_deg": {
+            "min": 7.813527438686569,
+            "max": 17.214979331646255,
+            "mean": 12.741020358704315
+          },
+          "yaw_rads": {
+            "min": 0.44584662,
+            "max": 0.69139516,
+            "mean": 0.6151502752781149
+          },
+          "wheel_slip": {
+            "min": 0.023076056769435235,
+            "max": 0.15441104303132233,
+            "mean": 0.05049743689207176
+          },
+          "front_fx_body_N": {
+            "min": -69.79444299488,
+            "max": 1.665882203383262e-05,
+            "mean": -27.117227437238753
+          },
+          "front_fy_body_N": {
+            "min": 630.03538780233,
+            "max": 797.75393534226,
+            "mean": 750.1416165502195
+          },
+          "rear_fx_N": {
+            "min": 49.94507,
+            "max": 426.20456,
+            "mean": 119.53774706859326
+          },
+          "rear_fy_N": {
+            "min": 699.60077,
+            "max": 934.27704,
+            "mean": 865.6494298907065
+          },
+          "front_util": {
+            "min": 0.7369756135128138,
+            "max": 0.9366910192783581,
+            "mean": 0.8784365232242146
+          },
+          "rear_util": {
+            "min": 0.8201264739136287,
+            "max": 0.9383471706243777,
+            "mean": 0.8871441623463531
+          },
+          "inner_m": {
+            "min": 0.2580840059188723,
+            "max": 2.6321242887498277,
+            "mean": 0.8670026773331324
+          },
+          "outer_m": {
+            "min": 8.29954499621795,
+            "max": 13.161696500510434,
+            "mean": 11.399183815761395
+          },
+          "offset_m": {
+            "min": -0.21227955907916815,
+            "max": 2.235760654622908,
+            "mean": 0.4125791010449914
+          },
+          "drive_torque_Nm": {
+            "min": 8.147469354814946,
+            "max": 146.39961560246093,
+            "mean": 27.67914980631494
+          },
+          "clutch_torque_Nm": {
+            "min": 0.9630578433587409,
+            "max": 17.30491910194574,
+            "mean": 3.2717671165856905
+          },
+          "crank_rpm": {
+            "min": 4845.826839047525,
+            "max": 6860.0642591903415,
+            "mean": 5711.498257078476
+          }
+        },
+        "closed_gas_s": 1.374245227336992,
+        "open_gas_decelerating_s": 0,
+        "negative_drive_torque_s": 0
+      },
+      "middle": {
+        "start_s": 35.61424522733694,
+        "end_s": 37.66043518578304,
+        "duration_s": 2.0461899584460994,
+        "energy": {
+          "front_translation_J": -4078.968791386017,
+          "rear_drive_translation_J": 3306.5012012438688,
+          "rear_lateral_translation_J": -4841.396911412149,
+          "resistance_J": -3141.9955197856243,
+          "translation_change_J": -8755.82274011606,
+          "yaw_change_J": -9.472671209946249,
+          "wheel_change_J": -466.82392753608565,
+          "crank_change_J": -420.3755910321948,
+          "front_yaw_work_J": 359.59659961040165,
+          "rear_yaw_work_J": -369.069265834921,
+          "front_slip_loss_J": 3719.3721918119554,
+          "rear_lateral_slip_loss_J": 5210.466175291623,
+          "rear_long_slip_loss_J": 472.91086805602987,
+          "combustion_J": 3223.4066655571833,
+          "clutch_heat_J": 4.1358325813827,
+          "transmission_loss_J": 218.37878544047987,
+          "bearing_loss_J": 108.67958565018047,
+          "crank_drag_J": 0.0,
+          "body_work_residual_J": 0.037281223862200945,
+          "total_energy_residual_J": 0.03736316580579259
+        },
+        "stats": {
+          "acceleration_mps2": {
+            "min": -3.8709999999981997,
+            "max": 0.23540000000058975,
+            "mean": -1.71012041505405
+          },
+          "requested_gas": {
+            "min": 0,
+            "max": 0.31820688,
+            "mean": 0.07160314872305808
+          },
+          "active_gas": {
+            "min": 0,
+            "max": 0.31820688,
+            "mean": 0.06220475839724179
+          },
+          "requested_steering_deg": {
+            "min": -1.5000000699057243,
+            "max": 5.000000424005013,
+            "mean": 0.5784068318680339
+          },
+          "steering_deg": {
+            "min": -1.5000000699057243,
+            "max": 3.199999996343467,
+            "mean": 0.11992659220715754
+          },
+          "beta_deg": {
+            "min": 0.5950998637152128,
+            "max": 17.222137293380822,
+            "mean": 9.551699740221931
+          },
+          "yaw_rads": {
+            "min": 0.04879843,
+            "max": 0.61205876,
+            "mean": 0.3606980685020967
+          },
+          "wheel_slip": {
+            "min": 0.0016298581122512652,
+            "max": 0.2271634959251611,
+            "mean": 0.059407213725875055
+          },
+          "front_fx_body_N": {
+            "min": -20.61929773055046,
+            "max": 16.75166845601899,
+            "mean": -0.912975321167538
+          },
+          "front_fy_body_N": {
+            "min": 110.40423603521188,
+            "max": 790.3029507093879,
+            "mean": 561.1771854682695
+          },
+          "rear_fx_N": {
+            "min": 5.9679227,
+            "max": 398.3604,
+            "mean": 101.35726748081447
+          },
+          "rear_fy_N": {
+            "min": 126.81029,
+            "max": 934.33246,
+            "mean": 675.5083258439997
+          },
+          "front_util": {
+            "min": 0.12914390229103784,
+            "max": 0.9244464682928609,
+            "mean": 0.6564738523571676
+          },
+          "rear_util": {
+            "min": 0.12728027678694598,
+            "max": 0.9383832979385951,
+            "mean": 0.6919088388019872
+          },
+          "inner_m": {
+            "min": 0.21847373437714462,
+            "max": 2.0761464815886725,
+            "mean": 1.3662002431497726
+          },
+          "outer_m": {
+            "min": 13.161696500510434,
+            "max": 14.875170933981675,
+            "mean": 14.00596345672313
+          },
+          "offset_m": {
+            "min": -0.37464658428281683,
+            "max": 1.6213822755464973,
+            "mean": 0.887957920209621
+          },
+          "drive_torque_Nm": {
+            "min": 1.327777720609557,
+            "max": 134.7530055363223,
+            "mean": 30.036921875899637
+          },
+          "clutch_torque_Nm": {
+            "min": 0.15694772111224078,
+            "max": 15.928251245428166,
+            "mean": 3.5504635787115415
+          },
+          "crank_rpm": {
+            "min": 3982.4232512678855,
+            "max": 5055.738657776136,
+            "mean": 4415.502378173081
+          }
+        },
+        "closed_gas_s": 1.6461899584460937,
+        "open_gas_decelerating_s": 0.3300000000000267,
+        "negative_drive_torque_s": 0
+      },
+      "exit": {
+        "start_s": 37.66043518578304,
+        "end_s": 39.789739648094404,
+        "duration_s": 2.1293044623113673,
+        "energy": {
+          "front_translation_J": -1730.5465645353888,
+          "rear_drive_translation_J": 8690.86013897786,
+          "rear_lateral_translation_J": -1387.3676407475587,
+          "resistance_J": -2846.328742517214,
+          "translation_change_J": 2726.6889971360492,
+          "yaw_change_J": 0.1833146932051534,
+          "wheel_change_J": 399.4662363254563,
+          "crank_change_J": 363.2864654429841,
+          "front_yaw_work_J": 346.0560038073421,
+          "rear_yaw_work_J": -345.8727051088435,
+          "front_slip_loss_J": 1384.4905592073053,
+          "rear_lateral_slip_loss_J": 1733.2403569245098,
+          "rear_long_slip_loss_J": 1033.5001093214437,
+          "combustion_J": 11266.899293360662,
+          "clutch_heat_J": 16.20207362733835,
+          "transmission_loss_J": 653.2446452574226,
+          "bearing_loss_J": 110.33984049947523,
+          "crank_drag_J": 0.0,
+          "body_work_residual_J": 0.07180595835064221,
+          "total_energy_residual_J": 0.07204759174070599
+        },
+        "stats": {
+          "acceleration_mps2": {
+            "min": -1.6315500000002507,
+            "max": 1.821765913757604,
+            "mean": 0.5493604199337081
+          },
+          "requested_gas": {
+            "min": 0,
+            "max": 0.31820688,
+            "mean": 0.25843019974928866
+          },
+          "active_gas": {
+            "min": 0,
+            "max": 0.31820688,
+            "mean": 0.23159572853997348
+          },
+          "requested_steering_deg": {
+            "min": 0.0,
+            "max": 5.000000424005013,
+            "mean": 1.4578550300979631
+          },
+          "steering_deg": {
+            "min": 0.0,
+            "max": 5.000000424005013,
+            "mean": 1.907419795077552
+          },
+          "beta_deg": {
+            "min": 0.5274750875504096,
+            "max": 6.914577857564728,
+            "mean": 4.18203144961984
+          },
+          "yaw_rads": {
+            "min": 0.15352312,
+            "max": 0.73381495,
+            "mean": 0.458944323914443
+          },
+          "wheel_slip": {
+            "min": 0.0016657809805628123,
+            "max": 0.1579874871563903,
+            "mean": 0.09600737096945679
+          },
+          "front_fx_body_N": {
+            "min": -59.790553434961964,
+            "max": 7.819450985380172e-06,
+            "mean": -18.195372919330136
+          },
+          "front_fy_body_N": {
+            "min": 199.07854763387036,
+            "max": 683.409347347972,
+            "mean": 460.65936970943204
+          },
+          "rear_fx_N": {
+            "min": 6.1938643,
+            "max": 389.96307,
+            "mean": 265.15757298421454
+          },
+          "rear_fy_N": {
+            "min": 129.23763,
+            "max": 750.03455,
+            "mean": 536.4136178901928
+          },
+          "front_util": {
+            "min": 0.23286951608310785,
+            "max": 0.8024321302384892,
+            "mean": 0.539580625287653
+          },
+          "rear_util": {
+            "min": 0.12972152038332405,
+            "max": 0.7860932077689502,
+            "mean": 0.6197937203784569
+          },
+          "inner_m": {
+            "min": 0.22691713904616162,
+            "max": 2.004576509754417,
+            "mean": 0.7629355657442367
+          },
+          "outer_m": {
+            "min": 9.19916060408367,
+            "max": 14.376836025613384,
+            "mean": 11.578466114119225
+          },
+          "offset_m": {
+            "min": -0.37437861713517173,
+            "max": 1.3258106708526611,
+            "mean": 0.16949622675632295
+          },
+          "drive_torque_Nm": {
+            "min": 1.360745735340932,
+            "max": 130.88601126155035,
+            "mean": 92.21667868126045
+          },
+          "clutch_torque_Nm": {
+            "min": 0.16084464956748606,
+            "max": 15.471159723587515,
+            "mean": 10.900316628990598
+          },
+          "crank_rpm": {
+            "min": 3948.321512400427,
+            "max": 4743.095042925212,
+            "mean": 4375.013061917002
+          }
+        },
+        "closed_gas_s": 0.5795648142169654,
+        "open_gas_decelerating_s": 0.1600000000000037,
+        "negative_drive_torque_s": 0
+      }
+    },
+    "entry_to_minimum": {
+      "start_s": 34.06929706320813,
+      "end_s": 38.71,
+      "duration_s": 4.640702936791868,
+      "energy": {
+        "front_translation_J": -11505.507854368081,
+        "rear_drive_translation_J": 9844.121744355889,
+        "rear_lateral_translation_J": -11785.040331583721,
+        "resistance_J": -8898.673792376463,
+        "translation_change_J": -22345.031223975373,
+        "yaw_change_J": 6.526828861788088,
+        "wheel_change_J": -1708.2985196930144,
+        "crank_change_J": -1540.1179160085478,
+        "front_yaw_work_J": 1105.1860716111241,
+        "rear_yaw_work_J": -1098.6592810896925,
+        "front_slip_loss_J": 10400.321782008927,
+        "rear_lateral_slip_loss_J": 12883.699626047655,
+        "rear_long_slip_loss_J": 1079.1966689541775,
+        "combustion_J": 8588.99311469239,
+        "clutch_heat_J": 10.808737604811464,
+        "transmission_loss_J": 607.0981375857683,
+        "bearing_loss_J": 296.18449451650895,
+        "crank_drag_J": 0.0,
+        "body_work_residual_J": 0.06900999700587516,
+        "total_energy_residual_J": 0.06929358677623519
+      },
+      "stats": {
+        "acceleration_mps2": {
+          "min": -3.9118000000148743,
+          "max": 1.1473000000002793,
+          "mean": -1.7304394454074952
+        },
+        "requested_gas": {
+          "min": 0,
+          "max": 0.31820688,
+          "mean": 0.07611123608014851
+        },
+        "active_gas": {
+          "min": 0,
+          "max": 0.31820688,
+          "mean": 0.07135962784816656
+        },
+        "requested_steering_deg": {
+          "min": -1.5000000699057243,
+          "max": 5.000000424005013,
+          "mean": 1.4547483378338433
+        },
+        "steering_deg": {
+          "min": -1.5000000699057243,
+          "max": 5.000000424005013,
+          "mean": 1.4998486277694798
+        },
+        "beta_deg": {
+          "min": 0.5274750875504096,
+          "max": 17.222137293380822,
+          "mean": 9.430976659978645
+        },
+        "yaw_rads": {
+          "min": 0.04879843,
+          "max": 0.73381495,
+          "mean": 0.5020159617596686
+        },
+        "wheel_slip": {
+          "min": 0.0016298581122512652,
+          "max": 0.2271634959251611,
+          "mean": 0.056557568229274095
+        },
+        "front_fx_body_N": {
+          "min": -69.79444299488,
+          "max": 16.75166845601899,
+          "mean": -17.12674474953039
+        },
+        "front_fy_body_N": {
+          "min": 110.40423603521188,
+          "max": 797.75393534226,
+          "mean": 618.7645406020224
+        },
+        "rear_fx_N": {
+          "min": 5.9679227,
+          "max": 426.20456,
+          "mean": 120.1495730815438
+        },
+        "rear_fy_N": {
+          "min": 126.81029,
+          "max": 934.33246,
+          "mean": 717.6834491157358
+        },
+        "front_util": {
+          "min": 0.12914390229103784,
+          "max": 0.9366910192783581,
+          "mean": 0.7244693270519755
+        },
+        "rear_util": {
+          "min": 0.12728027678694598,
+          "max": 0.9383832979385951,
+          "mean": 0.7388266168655552
+        },
+        "inner_m": {
+          "min": 0.21847373437714462,
+          "max": 2.6321242887498277,
+          "mean": 0.9936234699804982
+        },
+        "outer_m": {
+          "min": 8.29954499621795,
+          "max": 14.875170933981675,
+          "mean": 12.870317395010133
+        },
+        "offset_m": {
+          "min": -0.37464658428281683,
+          "max": 2.235760654622908,
+          "mean": 0.5006760447050356
+        },
+        "drive_torque_Nm": {
+          "min": 1.327777720609557,
+          "max": 146.39961560246093,
+          "mean": 35.02461202570586
+        },
+        "clutch_torque_Nm": {
+          "min": 0.15694772111224078,
+          "max": 17.30491910194574,
+          "mean": 4.1400250621401735
+        },
+        "crank_rpm": {
+          "min": 3948.321512400427,
+          "max": 6860.0642591903415,
+          "mean": 4791.412379636533
+        }
+      },
+      "closed_gas_s": 3.600000000000051,
+      "open_gas_decelerating_s": 0.4900000000000304,
+      "negative_drive_torque_s": 0
+    },
+    "measured_leading_negative_body_work": [
+      "rear_lateral_translation_J",
+      "front_translation_J",
+      "resistance_J"
+    ]
+  }
+}
