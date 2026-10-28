@@ -8,7 +8,7 @@ namespace Autonomous146;
 public sealed record PlannerOptions146(bool Enabled=false, int RequiredLaps=3,
     double SearchIntervalSeconds=.8, double MaximumPlanSeconds=16,
     int BeamWidth=2, int MaximumCandidates=128,
-    double ClearanceReserveMeters=.10, double SwitchImprovementSeconds=.02);
+    double ClearanceReserveMeters=.10, double SwitchImprovementSeconds=.02, bool RepairUnsafePrefixes=true);
 public sealed record Safety146(bool Legal,double MinimumGapMeters,double SweepLowerBoundMeters,
     double MaximumBetaDegrees,double MaximumYawRate,string Reason);
 public sealed record Plan146(double CreatedAt,double GoalMeters,FreeRacingAction[] Actions,
@@ -120,6 +120,8 @@ public sealed class Planner146
         return new(start.Input.Time,goal,actions.ToArray(),points.ToArray(),state,goalTime,exitTime,exitSpeed,safety,origin);
     }
     static IEnumerable<Plan146> Order(IEnumerable<Plan146> plans)=>plans.OrderBy(p=>!p.Safety.Legal)
+        .ThenBy(p=>!p.Safety.Legal&&p.Safety.MaximumBetaDegrees>45)
+        .ThenByDescending(p=>p.Safety.Legal?0:p.Safety.MinimumGapMeters)
         .ThenBy(p=>p.TravelSeconds).ThenByDescending(p=>p.AlongExitSpeed).ThenBy(p=>Math.Abs(p.Terminal.SlideRadians))
         .ThenBy(p=>Math.Abs(p.Terminal.AngularVelocity));
     static Candidate146 Summary(Plan146 p)=>new(p.Origin,p.Actions.Take(3).ToArray(),p.Safety.Legal,p.GoalTime is null?null:p.TravelSeconds,
@@ -161,8 +163,8 @@ public sealed class Planner146
                         var plan=Rollout(start,goal,changed,$"beam-{depth+1}");layer.Add(plan);candidates.Add(plan);
                     }
                 }
-                // No failed partial forecast may outrank a complete legal arrival.
-                roots=Order(layer.Where(p=>p.Safety.Legal)).Take(Options.BeamWidth).ToArray();if(roots.Length==0)break;
+                // Intermediate nodes may need a later correction. Only complete legal plans reach execution.
+                roots=Order(Options.RepairUnsafePrefixes?layer:layer.Where(p=>p.Safety.Legal)).Take(Options.BeamWidth).ToArray();if(roots.Length==0)break;
             }
             nextSearch=input.Time+Options.SearchIntervalSeconds;
         }

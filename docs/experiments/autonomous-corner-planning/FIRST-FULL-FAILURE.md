@@ -9,3 +9,9 @@ This is not native forecast divergence: maximum review-to-review position error 
 Two limitations are established. First, the objective ends three metres before the next bend without requiring a viable next maneuver; time improvements at 8.8, 9.6 and 10.4 s therefore allow excessive terminal speed. Second, the search keeps only roots whose *old tail* already completes legally, so an empty first layer prevents evaluation of a two- or three-coordinate repair. This proves a search restriction, not physical impossibility of recovery.
 
 The next revision may retain bounded unsafe *intermediate search nodes*, ranked by envelope violation and clearance, to seek a final legal repaired sequence. The execution veto remains unchanged. This does not solve the terminal viability defect; later results must report whether reactive repair compensates for it. No new full attempt is authorized internally until this diagnosis exists.
+
+## Bounded repair check before any second full attempt
+
+`repair-at-12` exactly replays the complete first-attempt prefix from rest, then evaluates 100 complete sequence candidates at the failure state, including second and third corrections through unsafe intermediate search nodes. No final legal continuation is found. This demonstrates that the revised beam still does not certify recovery in this finite search, not that all physical recoveries are impossible.
+
+The next revision therefore adds an explicit terminal-viability continuation: every candidate must also complete the following bend and reach the following common geometric goal legally. Arrival time at the current common goal remains the primary objective. This reuses a longer endogenous K1 tail and the unchanged predictor; it changes neither physics nor grid actions. A narrower beam and less frequent scheduled search bound compute; observation, suffix revalidation, immediate unsafe re-search and veto remain at 0.2 s.
