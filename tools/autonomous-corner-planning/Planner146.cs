@@ -8,7 +8,7 @@ namespace Autonomous146;
 public sealed record PlannerOptions146(bool Enabled=false, int RequiredLaps=3,
     double SearchIntervalSeconds=1.2, double MaximumPlanSeconds=26,
     int BeamWidth=1, int MaximumCandidates=80,
-    double ClearanceReserveMeters=.10, double SwitchImprovementSeconds=.02, bool RepairUnsafePrefixes=true,bool TerminalContinuation=true);
+    double ClearanceReserveMeters=.10, double SwitchImprovementSeconds=.02, bool RepairUnsafePrefixes=true,bool TerminalContinuation=true,int MaximumForecastsPerReview=25000);
 public sealed record Safety146(bool Legal,double MinimumGapMeters,double SweepLowerBoundMeters,
     double MaximumBetaDegrees,double MaximumYawRate,string Reason);
 public sealed record Plan146(double CreatedAt,double GoalMeters,double SafetyGoalMeters,FreeRacingAction[] Actions,
@@ -41,16 +41,18 @@ public sealed class Planner146
     readonly WorldParameters parameters;readonly float mass,inertia;
     readonly Model146 model;
     Plan146? previous;State146? expectedState;double nextSearch;
-    int policyForecasts,policyContacts;
+    int policyForecasts,policyContacts;long reviewForecastStart;
     public Planner146(RiderSpec spec,TrackFrame frame,TrackStateSnapshot surface,WorldParameters parameters,
         PlannerOptions146? options=null,float mass=147,float inertia=52.72097f,Action? budgetGuard=null){
         Options=options??new();if(!Options.Enabled)throw new InvalidOperationException("Study146 is OFF by default.");
-        if(Options.RequiredLaps<1||Options.BeamWidth is <1 or >3||Options.MaximumCandidates is <1 or >160
+        if(Options.RequiredLaps is <1 or >3||Options.BeamWidth is <1 or >3||Options.MaximumCandidates is <1 or >160
+            ||!double.IsFinite(Options.SearchIntervalSeconds)||!double.IsFinite(Options.MaximumPlanSeconds)||!double.IsFinite(Options.ClearanceReserveMeters)||!double.IsFinite(Options.SwitchImprovementSeconds)
             ||Options.SearchIntervalSeconds<.2||Options.MaximumPlanSeconds is <2 or >30
+            ||Options.MaximumForecastsPerReview is <32 or >40000
             ||Options.ClearanceReserveMeters<.05||Options.SwitchImprovementSeconds<.01)
             throw new ArgumentException("Bounded, explicit research planner options required.");
         this.spec=spec;this.frame=frame;this.surface=surface;this.parameters=parameters;this.mass=mass;this.inertia=inertia;
-        this.budgetGuard=budgetGuard;model=new(spec,frame,surface,parameters,mass,inertia,budgetGuard);
+        this.budgetGuard=budgetGuard;model=new(spec,frame,surface,parameters,mass,inertia,ForecastGuard);
     }
     // Geometry supplies a common finish of the maneuver, never a lateral target or an action.
     // Stop three metres before the next bend, after the entire current bend and following straight.
@@ -95,8 +97,16 @@ public sealed class Planner146
         var reason=minimum<reserveMeters?"footprint reserve":certificate<0?"uncertified swept interval":beta>45?"beta45 envelope":"legal complete forecast";
         return new(minimum>=reserveMeters&&certificate>=0&&beta<=45,minimum,certificate,beta,yaw,reason);
     }
+    void ForecastGuard(){
+        budgetGuard?.Invoke();
+        if(model.Forecasts-reviewForecastStart+policyForecasts>=Options.MaximumForecastsPerReview)
+            throw new InvalidOperationException("STUDY146_BUDGET: deterministic per-review forecast cap");
+    }
     FreeRacingAction SeedAction(State146 state){
-        budgetGuard?.Invoke();SeedDecisions++;var d=Policy144.Choose(state.Input,new CrankClutch144(omega:state.CrankOmega),spec,frame,surface,parameters,mass,inertia,"K1");
+        ForecastGuard();
+        if(model.Forecasts-reviewForecastStart+policyForecasts+FreeLearningController.Actions(state.Input,Controller143.Policy,true).Length>Options.MaximumForecastsPerReview)
+            throw new InvalidOperationException("STUDY146_BUDGET: reserve for complete K1 seed decision");
+        SeedDecisions++;var d=Policy144.Choose(state.Input,new CrankClutch144(omega:state.CrankOmega),spec,frame,surface,parameters,mass,inertia,"K1");
         policyForecasts+=d.Choice.Forecasts;policyContacts+=d.Choice.ForceEvaluations;return d.Choice.Action;
     }
     Plan146 Rollout(State146 start,double goal,FreeRacingAction[]? tail,string origin){
@@ -135,7 +145,7 @@ public sealed class Planner146
     static bool SameQueue(FreeRacingCommand[] a,FreeRacingCommand[] b)=>a.Length==b.Length&&a.Zip(b).All(q=>q.First.Action==q.Second.Action&&Math.Abs(q.First.ActivationAt-q.Second.ActivationAt)<1e-7&&Math.Abs(q.First.ObservedAt-q.Second.ObservedAt)<1e-7);
     public Decision144 Choose(FreeRacingInput input,CrankClutch144 crank){
         var cpu=Process.GetCurrentProcess().TotalProcessorTime;var forecasts=model.Forecasts;var contacts=model.Contacts;
-        policyContacts=policyForecasts=0;
+        policyContacts=policyForecasts=0;reviewForecastStart=model.Forecasts;
         var start=new State146(input with{NextReview=input.Time},crank.Omega);var goal=previous is not null&&previous.GoalMeters>input.Rider.TotalReferenceMeters+.001?previous.GoalMeters:Goal(frame,input.Rider.TotalReferenceMeters,Options.RequiredLaps);
         Error146? error=null;
         if(expectedState is not null){var expected=expectedState.Input;error=new(Vector2.Distance(expected.Rider.Position,input.Rider.Position),

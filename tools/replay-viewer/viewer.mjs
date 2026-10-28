@@ -208,7 +208,7 @@ function updatePanel() {
   $('last-state').textContent = last ? `${statusLabels[decisionStatus(last, time)]} · ${enumName(geometry, 'channels', last.Channels ?? 0)} · obserwacja ${format(last.ObservedAt)} s · plan ${format(last.RequestedActivation)} s${last.ActualActivation != null && last.ActualActivation <= time ? ` · aktywacja ${format(last.ActualActivation)} s` : ''}${last.CancelledAt != null && last.CancelledAt <= time ? ` · anulowanie ${format(last.CancelledAt)} s` : ''}` : 'Pozycje i sterowanie pochodzą z zapisu.';
   if (replay.planAt && last) $('last-state').textContent += ` · żądanie ${format(last.Drive * 100, 1)}% (oddzielne od aktywnego Drive powyżej)`;
   if(replay.standingData){
-    $('target').textContent='brak narzuconej linii';$('intent').textContent=replay.standingData.cornerAnalysis?'Zapis bazowy / interwencja badawcza · #145':'Autonomiczne gaz / kierownica · #143';
+    $('target').textContent='brak narzuconej linii';$('intent').textContent=replay.standingData.analysis146?'Planowanie sekwencji · #146':replay.standingData.cornerAnalysis?'Zapis bazowy / interwencja badawcza · #145':'Autonomiczne gaz / kierownica · #143';
     standingPanel144($('standing-telemetry'),replay.standingData,time,selected);
     const outcome=replay.standingData.run.Riders.find(r=>r.Spec.Profile.Id===selected).Outcome;
     if(time>=replay.duration-1e-8&&!state.finished)$('status').textContent=outcome;

@@ -40,6 +40,10 @@ def analyze(run,starts):
                     beta_abs_max_deg=max(abs(v['SlideRadians'])*180/math.pi for v in riders),yaw_abs_max_rads=max(abs(v['AngularVelocity']) for v in riders),
                     offset_min_m=min(v['Road']['OffsetMeters'] for v in riders),offset_max_m=max(v['Road']['OffsetMeters'] for v in riders),
                     inner_min_m=min(s['Inner'] for s in selected),outer_min_m=min(s['Outer'] for s in selected))
+            if entry and exit:
+                decisions=[d for d in run['Riders'][0]['Decisions'] if entry['time_s']<=d['Choice']['Time']<exit['time_s']]
+                row.update(decision_cpu_s=sum(d['CpuSeconds'] for d in decisions),forecasts=sum(d['Choice']['Forecasts'] for d in decisions),forecast_contacts=sum(d['Choice']['ForceEvaluations'] for d in decisions))
+            else:row.update(decision_cpu_s=None,forecasts=None,forecast_contacts=None)
             rows.append(row)
     return rows
 
@@ -75,7 +79,8 @@ def main():
     paths += sorted(p for p in (DOC/'native').glob('*.json.gz') if not p.name.endswith('-plans.json.gz'))
     for p in paths:
         run=read(p);corners+=analyze(run,starts);r=run['Riders'][0];sources.append(dict(path=p.relative_to(ROOT).as_posix(),sha256=hashlib.sha256(p.read_bytes()).hexdigest()))
-        runs.append(dict(name=run['Name'],outcome=run['Outcome'],laps=r['CompletedLaps'],finish_s=r['FinishSeconds'],end_s=run['EndSeconds'],fingerprint=run['Fingerprint'],
+        costs=[d['CpuSeconds'] for d in r['Decisions']]
+        runs.append(dict(decision_cpu_p50_s=percentile(costs,.5),decision_cpu_p95_s=percentile(costs,.95),decision_cpu_max_s=max(costs,default=None),name=run['Name'],outcome=run['Outcome'],laps=r['CompletedLaps'],finish_s=r['FinishSeconds'],end_s=run['EndSeconds'],fingerprint=run['Fingerprint'],
             native_cpu_s=run['TotalCpuSeconds'],controller_cpu_s=run['ControllerCpuSeconds'],forecasts=run['Forecasts'],contacts=run['ForecastContactQueries'],
             inner_min_m=min(s['Inner'] for s in r['Samples']),outer_min_m=min(s['Outer'] for s in r['Samples']),
             sweep_min_m=min((s['Certificate'] for s in r['Samples'] if s['Certificate'] is not None),default=None),
@@ -88,16 +93,16 @@ def main():
             audits[run['Name']]=forecast_audit(read(planpath),run)
             recovery=p.with_name(p.name.removesuffix('.json.gz')+'-recovery.json')
             if recovery.exists():audits[run['Name']]['archive_recovery']=read(recovery)
-    save(out/'index.json',dict(Title='#146 Â· SpĂłjne planowanie autonomiczne Â· zapis badania',DefaultRun='autonomous146-viable' if any(r['name']=='autonomous146-viable' for r in runs) else 'autonomous146-first',
+    save(out/'index.json',dict(Title='#146 · Spójne planowanie autonomiczne · zapis badania',DefaultRun='autonomous146-viable' if any(r['name']=='autonomous146-viable' for r in runs) else 'autonomous146-first',
         GeometryFile='../causal-yaw-throttle/progressive-b-viewer-geometry.json',Runs=indexruns,LapMeters=runs and read(paths[0])['LapMeters'],RequiredLaps=3,StartReference=0,
-        BendReferences=[starts[k] for k in [1,4,5,8]],Note='Tylko zapis natywny. Lokalne prefiksy i wymuszone walidacje nie sÄ… autonomicznym sukcesem. Przerwana prĂłba nie ma czasu trzech okrÄ…ĹĽeĹ„.'))
+        BendReferences=[starts[k] for k in [1,4,5,8]],Note='Tylko zapis natywny. Lokalne prefiksy i wymuszone walidacje nie są autonomicznym sukcesem. Przerwana próba nie ma czasu trzech okrążeń.'))
     save(out/'lap-metrics.json',lapmetrics)
     (out/'comparison.json.gz').write_bytes(gzip.compress(json.dumps(curves,separators=(',',':')).encode(),mtime=0))
     baseline={(c['lap'],c['bend']):c for c in corners if c['run']=='K1'}
     for c in corners:c['delta_K1_s']=c['seconds']-baseline[(c['lap'],c['bend'])]['seconds'] if c['complete'] else None
     budget=read(DOC/'stage-A/budget.json')+read(DOC/'native/budget.json')
     save(out/'analysis.json',dict(native_worlds_created_by_analysis=0,sources=sources,runs=runs,corners=corners,plan_audits=audits,
-        native_budget=dict(worlds=len(budget),cpu_s=sum(b['CpuSeconds'] for b in budget),attempts=budget),method=__doc__))
+        native_budget=dict(worlds=len(budget),cpu_s=sum(b['CpuSeconds'] for b in budget),read_only_sequence_audit_cpu_s=read(DOC/'executed-sequence-audit.json')['CpuSeconds'] if (DOC/'executed-sequence-audit.json').exists() else None,attempts=budget),method=__doc__))
     with (out/'corners.csv').open('w',encoding='utf-8',newline='') as f:
         writer=csv.DictWriter(f,fieldnames=list(corners[0]));writer.writeheader();writer.writerows(corners)
     for run in runs:print(run['name'],run['outcome'],run['finish_s'])

@@ -64,7 +64,7 @@ test('Exact snapshot playback never turns rendering interpolation into another p
   assert.equal(replay.step(left.t, 1), right.t);
   assert.equal(replay.state(1, replay.duration).x, points.at(-1).x);
   const changed = parseCsv(csv); changed[1].drive = .5;
-  assert.throws(() => parseNativeCsv('irrelevant', changed), /staĹ‚ego gazu/);
+  assert.throws(() => parseNativeCsv('irrelevant', changed), /stałego gazu/);
 });
 test('Native body heading and velocity define distinct vectors, signed slip and physical capsules', () => {
   const { replay } = currentFixture('current-baseline-inner'), state = replay.state(1, 1.5, false), motion = motionVectors(state);

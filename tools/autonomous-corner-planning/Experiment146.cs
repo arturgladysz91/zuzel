@@ -22,11 +22,15 @@ public static class Experiment146{
         foreach(var treatment in treatments){
             if(ledger.Any(x=>x!["Name"]!.GetValue<string>()==treatment.Name))continue;
             var spent=ledger.Sum(x=>x!["CpuSeconds"]!.GetValue<double>())+StageACpuSeconds;
-            if(ledger.Count+StageAWorlds>=50||spent>=890)throw new IOException("Study146 native budget exhausted.");
+            if(ledger.Count+StageAWorlds>=50||spent>=880)throw new IOException("Study146 native budget exhausted.");
             if(treatment.StartSeconds<0||Math.Abs(treatment.StartSeconds/.2-Math.Round(treatment.StartSeconds/.2))>1e-7)throw new ArgumentException("Start at an original review.");
             using var baselineStream=new GZipStream(File.OpenRead(treatment.NativePrefixSource is null?$"docs/experiments/standing-start-three-laps/native/{treatment.PrefixVariant}.json.gz":Path.Combine(output,treatment.NativePrefixSource+".json.gz")),CompressionMode.Decompress);
             var baseline=JsonSerializer.Deserialize<Run144>(baselineStream,json)!;var old=baseline.Riders[0];
             var reservation=new JsonObject{["Name"]=treatment.Name,["Complete"]=false,["CpuSeconds"]=0};ledger.Add(reservation);Save("budget.json",ledger);
+            using var journalFile=File.Create(Path.Combine(output,treatment.Name+"-decision-journal.jsonl.gz"));
+            using var journalZip=new GZipStream(journalFile,CompressionLevel.Fastest,leaveOpen:true);
+            using var journal=new StreamWriter(journalZip);
+            var compactJson=new JsonSerializerOptions(json){WriteIndented=false};
             var experimentProcess=Process.GetCurrentProcess();var started=experimentProcess.TotalProcessorTime;Planner146? planner=null;int guardChecks=0;
             void Guard(){if(++guardChecks%16!=0)return;if((experimentProcess.TotalProcessorTime-started).TotalSeconds>Math.Min(treatment.CpuLimitSeconds,880-spent))throw new InvalidOperationException("STUDY146_BUDGET: bounded inner forecast stop");}
             Plan146? validationPlan=null;
@@ -42,10 +46,16 @@ public static class Experiment146{
                 planner??=new(s,f,t,p,new(Enabled:true,RepairUnsafePrefixes:treatment.RepairUnsafePrefixes,TerminalContinuation:treatment.TerminalContinuation,
                     SearchIntervalSeconds:treatment.TerminalContinuation?1.2:.8,MaximumPlanSeconds:treatment.TerminalContinuation?26:16,BeamWidth:treatment.TerminalContinuation?1:2,MaximumCandidates:treatment.TerminalContinuation?80:128),m,inertia,Guard);
                 var decision=planner.Choose(i,c);
+                var review=planner.Reviews[^1];var plan=review.Selected;
+                journal.WriteLine(JsonSerializer.Serialize(new{review.Time,review.Input,review.CrankOmega,review.Reason,review.PredictionError,review.ExpectedAction,review.FollowedExpected,
+                    review.CpuSeconds,review.Forecasts,review.Contacts,Sequence=plan?.Actions,plan?.GoalMeters,plan?.SafetyGoalMeters,plan?.GoalTime,plan?.CornerExitTime,plan?.CornerExitSpeed,plan?.Safety,
+                    Predicted=plan?.Points.Where((_,k)=>k%10==0).Select(p=>new{p.Time,p.Rider.Speed,p.Rider.SlideRadians,p.Rider.AngularVelocity,p.Rider.Position,p.Inner,p.Outer})},compactJson));
+                journal.Flush();journalZip.Flush();journalFile.Flush();
                 if(planner.Reviews.Count%10==0)Console.WriteLine($"{treatment.Name}: t={i.Time:F1}s CPU={(Process.GetCurrentProcess().TotalProcessorTime-started).TotalSeconds:F2}s");
                 return decision;
             }
             Run144 run;using(var world=new DiagnosticWorld145(new(Enabled:true,MaximumSeconds:treatment.MaximumSeconds)))run=world.Run(treatment.Name,"K1",Choose);
+            journal.Dispose();journalZip.Dispose();journalFile.Dispose();
             void Zip(string name,object value){using var z=new GZipStream(File.Create(Path.Combine(output,name)),CompressionLevel.SmallestSize);JsonSerializer.Serialize(z,value,json);}
             Zip(treatment.Name+".json.gz",run);Zip(treatment.Name+"-plans.json.gz",planner?.Reviews??new());
             var prefix=run.Riders[0].Samples.Where(s=>s.Input.Time<=treatment.StartSeconds+1e-8).ToArray();var expected=old.Samples.Where(s=>s.Input.Time<=treatment.StartSeconds+1e-8).ToArray();
@@ -63,7 +73,7 @@ public static class Experiment146{
             }
             var result=new{Treatment=treatment,Revision=treatment.TerminalContinuation?"terminal-viability-3":treatment.RepairUnsafePrefixes?"bounded-repair-2":"legal-roots-1",
                 SourceSha256=new[]{"Planner146.cs","Model146.cs","Experiment146.cs"}.ToDictionary(n=>n,n=>Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(Path.Combine("tools/autonomous-corner-planning",n))))),
-                PlannerOptions=planner?.Options,LastProgress=planner?.LastProgress,SeedDecisions=planner?.SeedDecisions,PlanAgreement=planAgreement,run.Outcome,run.EndSeconds,run.Fingerprint,PrefixExact=exact,PrefixSamples=prefix.Length,
+                PlannerOptions=planner?.Options,LastProgress=planner?.LastProgress,SeedDecisions=planner?.SeedDecisions,PlanAgreement=planAgreement,run.Outcome,run.EndSeconds,run.Fingerprint,PrefixExact=exact,PrefixComparison=treatment.StartSeconds==0?"Initial physical state from rest; selected command excluded":"All saved native prefix samples",PrefixSamples=prefix.Length,
                 PrefixFingerprint=Hash(prefix),HistoricalPrefixFingerprint=Hash(expected),CompletedLaps=run.Riders[0].CompletedLaps,run.Crossings,
                 MinimumInner=run.Riders[0].Samples.Min(s=>s.Inner),MinimumOuter=run.Riders[0].Samples.Min(s=>s.Outer),
                 run.TotalCpuSeconds,run.ControllerCpuSeconds,run.NativeSteps,run.Forecasts,run.ForecastContactQueries,

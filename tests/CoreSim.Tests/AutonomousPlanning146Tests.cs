@@ -8,7 +8,9 @@ namespace CoreSim.Tests;
 public class AutonomousPlanning146Tests{
     static Run144 Saved(){using var z=new GZipStream(File.OpenRead(Path.Combine(PhysicalSteeringAudit.PreviousPath("../standing-start-three-laps"),"native/K1.json.gz")),CompressionMode.Decompress);return JsonSerializer.Deserialize<Run144>(z,FreeLearningExperiment.Json)!;}
     [Fact] public void ExperimentalPlannerIsOffWithoutExplicitOptIn(){
-        var f=StandingWorld144.Frame();Assert.Throws<InvalidOperationException>(()=>new Planner146(StandingWorld144.Rider(CoreSim.StartingGate.B),f,MultiActionExperiment135.Surface(f),FreeLearningExperiment.Parameters()));
+        var f=StandingWorld144.Frame();
+        Assert.Throws<ArgumentException>(()=>new Planner146(StandingWorld144.Rider(CoreSim.StartingGate.B),f,MultiActionExperiment135.Surface(f),FreeLearningExperiment.Parameters(),new(Enabled:true,SearchIntervalSeconds:double.NaN)));
+        Assert.Throws<InvalidOperationException>(()=>new Planner146(StandingWorld144.Rider(CoreSim.StartingGate.B),f,MultiActionExperiment135.Surface(f),FreeLearningExperiment.Parameters()));
     }
     [Fact] public void ManeuverGoalIncludesNextBendAndItsFollowingStraight(){
         var f=StandingWorld144.Frame();Assert.Equal(f.SegmentStartMeters(5)-3,Planner146.Goal(f,0,3),8);
@@ -43,4 +45,18 @@ public class AutonomousPlanning146Tests{
         Assert.Equal("experimental beta45 envelope",rows[2].GetProperty("Outcome").GetString());
         Assert.All(rows.Skip(1),x=>Assert.True(x.GetProperty("Agreement").GetProperty("Passed").GetBoolean()));
     }
+    [Fact] public void ForecastBudgetStopsBeforeMutatingAnAcceptedObservation(){
+        var run=Saved();var s=run.Riders[0].Samples[400];var before=JsonSerializer.Serialize(s.Input,FreeLearningExperiment.Json);
+        var f=StandingWorld144.Frame();var model=new Model146(run.Riders[0].Spec,f,MultiActionExperiment135.Surface(f),FreeLearningExperiment.Parameters(),budgetGuard:()=>throw new InvalidOperationException("forecast budget"));
+        Assert.Throws<InvalidOperationException>(()=>model.Step(new(s.Input,s.CrankOmega),new(0,1)));
+        Assert.Equal(0,model.Forecasts);Assert.Equal(before,JsonSerializer.Serialize(s.Input,FreeLearningExperiment.Json));
+    }
+
+    [Fact] public void DeterministicForecastCapRejectsUnfinishedSearchWithoutSubmittingAnAction(){
+        var run=Saved();var s=run.Riders[0].Samples.MinBy(s=>Math.Abs(s.Input.Time-29))!;var shaft=new CrankClutch144(omega:s.CrankOmega);
+        var f=StandingWorld144.Frame();var planner=new Planner146(run.Riders[0].Spec,f,MultiActionExperiment135.Surface(f),FreeLearningExperiment.Parameters(),new(Enabled:true,MaximumForecastsPerReview:32));
+        var error=Assert.Throws<InvalidOperationException>(()=>planner.Choose(s.Input with{Time=29,NextReview=29},shaft));
+        Assert.Contains("STUDY146_BUDGET",error.Message);Assert.Equal(s.CrankOmega,shaft.Omega);Assert.Null(shaft.Prepared);Assert.Empty(planner.Reviews);
+    }
+
 }

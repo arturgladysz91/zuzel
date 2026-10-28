@@ -6,7 +6,7 @@ const root=new URL('../../docs/experiments/autonomous-corner-planning/',import.m
 const fetcher=async url=>new Response(fs.readFileSync(new URL(url.replace('local/',''),root)));
 test('146 veto remains a DNF with no extrapolated lap or command',async()=>{
   const d=await loadPlanning146(fetcher,'autonomous146-first','local/');
-  assert.equal(d.replay.state(1,0,false).speed,0);
+  assert.equal(d.replay.state(1,0,false).speed,0);assert.match(d.index.Title,/Spójne/);assert.match(d.index.Note,/nie są/);
   assert.equal(d.replay.state(1,100,false).finished,false);
   assert.equal(d.replay.state(1,100,false).completedLaps,0);
   const last=review146(d,100);assert.match(last.reason,/abstain/);assert.equal(last.actual_action,null);assert.equal(last.selected,null);
@@ -19,4 +19,10 @@ test('146 submitted plan actions use real native activations and full prefixes',
   assert.ok(Math.abs(row.actual_activation.ActivationAt-row.time_s-.24)<1e-8);
   assert.deepEqual(row.selected[0],row.actual_action);
   assert.ok(d.curves146.find(c=>c.name==='F').points.length>1000);
+});
+
+test('146 never presents a recovered early plan as the missing later forecast',async()=>{
+  const d=await loadPlanning146(fetcher,'autonomous146-viable','local/');
+  assert.equal(d.run.Riders[0].CompletedLaps,2);assert.equal(d.replay.state(1,100,false).finished,false);
+  assert.equal(review146(d,29),null);assert.equal(d.analysis146.plan_audits[d.run.Name].archive_recovery.CompleteReviewsRecovered,72);
 });

@@ -3,6 +3,12 @@
 Release platform: **Windows only**. See the current [Windows CI policy](docs/ci.md)
 for Draft/full validation, the merge gate and optional historical audits.
 
+[Autonomous Corner Planning (study #146)](docs/experiments/autonomous-corner-planning/README.md)
+diagnoses the failed two-command planner before adding persistent multi-stage plans,
+independent execution checks and a terminal-viability experiment. The target corner
+improves autonomously to 5.295 s, but the continuous trial stops after two laps on
+CPU budget. Scientific verdict PARTIAL; no three-lap autonomous PASS. Default OFF.
+
 [Corner Speed Loss Investigation (study #145)](docs/experiments/corner-speed-loss/README.md)
 analyzes all 24 saved A/B/F/K1 corners before 17 bounded native causal trials.
 K1 loses energy mainly through lateral tyre work and resistance while coasting;

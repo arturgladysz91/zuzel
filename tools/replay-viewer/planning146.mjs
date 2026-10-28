@@ -8,7 +8,8 @@ export async function loadPlanning146(fetcher=fetch,name=null,root=planning146Ro
   return data;
 }
 export function review146(data,time){
-  return data.analysis146.plan_audits[data.run.Name]?.rows.findLast(r=>r.time_s<=time+1e-8)??null;
+  const audit=data.analysis146.plan_audits[data.run.Name];if(audit?.archive_recovery&&time>audit.coverage_end_s+.2)return null;
+  return audit?.rows.findLast(r=>r.time_s<=time+1e-8)??null;
 }
 const number=(x,d=3)=>x==null?'N/D':Number(x).toFixed(d);
 export function setupPlanning146(element,data,onRun,onJump,onTrails){
@@ -21,7 +22,8 @@ export function setupPlanning146(element,data,onRun,onJump,onTrails){
     const tr=document.createElement('tr');for(const value of [`${c.lap}.${c.bend}`,number(c.seconds),number(c.delta_K1_s),[c.entry_kph,c.minimum_kph,c.exit_kph].map(v=>number(v,1)).join(' / '),number(c.beta_abs_max_deg,1),[c.offset_min_m,c.offset_max_m].map(v=>number(v,2)).join(' / ')]){const td=document.createElement('td');td.textContent=value;tr.append(td);}table.append(tr);
   }element.append(table);
   const audit=data.analysis146.plan_audits[data.run.Name];if(!audit)return;
-  const stats=document.createElement('p');stats.textContent=`${audit.reviews} obserwacji · zachowano ${audit.followed_expected}/${audit.expected_reviews} kolejnych komend · kolejki zgodne: ${audit.queues_match} · max błąd XY ${number(audit.maximum_error.PositionMeters,6)}m · CPU p50/p95 ${number(audit.cpu_p50_s)}/${number(audit.cpu_p95_s)}s`;element.append(stats);
+  const stats=document.createElement('p');stats.textContent=`${audit.reviews} zachowanych planów; zakres ${number(audit.coverage_start_s,1)}–${number(audit.coverage_end_s,1)}s; ${audit.native_decisions} decyzji w zapisie natywnym · zachowano ${audit.followed_expected}/${audit.expected_reviews} kolejnych komend · kolejki zgodne: ${audit.queues_match} · max błąd XY ${number(audit.maximum_error.PositionMeters,6)}m · CPU p50/p95 ${number(audit.cpu_p50_s)}/${number(audit.cpu_p95_s)}s`;element.append(stats);
+  if(audit.archive_recovery){const gap=document.createElement('p');gap.textContent='Archiwum planów zostało przerwane. Po 14,2 s dostępne są natywne stany i wykonane komendy; dalszych przewidywanych sekwencji nie odzyskano.';element.append(gap);}
   const controls=document.createElement('div'),readout=document.createElement('pre');readout.style.whiteSpace='pre-wrap';controls.className='audit-controls';element.append(controls,readout);
   const show=row=>{
     onJump(row.time_s);

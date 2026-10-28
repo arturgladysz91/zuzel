@@ -112,3 +112,8 @@
 /docs/experiments/corner-speed-loss/** -text whitespace=trailing-space,space-before-tab,cr-at-eol
 /tools/corner-speed-loss/** text eol=lf
 /tools/replay-viewer/corner145*.mjs text eol=lf
+
+# Study146: preserve native JSON/gzip and explicit LF research sources.
+/docs/experiments/autonomous-corner-planning/** -text whitespace=trailing-space,space-before-tab,cr-at-eol
+/tools/autonomous-corner-planning/** text eol=lf
+/tools/replay-viewer/planning146*.mjs text eol=lf

@@ -1,5 +1,17 @@
 # Architecture
 
+[Autonomous Corner Planning (study #146)](experiments/autonomous-corner-planning/README.md)
+is a PROVISIONAL tools-only controller, explicitly OFF. It composes the unchanged
+#144 predictor with full crank, rear-wheel, steering and irrevocable command state.
+An endogenous K1 seed supplies a continuation, then bounded coordinate beam search
+compares arrival times at common geometric goals. Every review shifts/revalidates
+the prior suffix; switching requires a legal time improvement or unsafe incumbent.
+A separate swept-footprint/beta preflight can veto execution. The terminal variant
+also requires a legal continuation through the following bend. Candidate, forecast
+and process-CPU caps remain explicit; CPU stops and missing diagnostic coverage
+never count as race completion. Compact decision journals now flush per review.
+No CoreSim physics, historical artifacts, policy weights or default entrypoints change.
+
 [Corner Speed Loss (study #145)](experiments/corner-speed-loss/README.md) is a
 PROVISIONAL, default-OFF forensic CLI. Its generated collector reuses the frozen
 #144 records, ContactAdapter, native clock, delays, actuator and all guards;
