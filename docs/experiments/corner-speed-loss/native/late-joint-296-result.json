@@ -1,0 +1,143 @@
+{
+  "Treatment": {
+    "Name": "late-joint-296",
+    "Variant": "K1",
+    "Changes": [
+      {
+        "Time": 29.6,
+        "Action": {
+          "SteeringRadians": -0.08726646,
+          "Drive": 0.31820688
+        }
+      }
+    ],
+    "Autonomous": false,
+    "Mode": ""
+  },
+  "Outcome": "confirmed footprint crossing",
+  "EndSeconds": 49.160000000000004,
+  "Fingerprint": "B2D5966163D41B50A5E6AFB9B699961153D097AA6D6DFF902E50E4A2567C1849",
+  "FullOriginalFingerprint": "2778FE469DB24286F7E07123E74E5FC3DB5D0BAAA25DEE89329A10A11DC0FD40",
+  "PrefixExact": true,
+  "PrefixSamples": 2968,
+  "PrefixFingerprint": "9844288377F782A06B34AEB189AA4AD132ACB72659FF07D1BFBD4ECFB0B66E82",
+  "OriginalPrefixFingerprint": "9844288377F782A06B34AEB189AA4AD132ACB72659FF07D1BFBD4ECFB0B66E82",
+  "Checkpoints": [
+    {
+      "Time": 29.599999999999927,
+      "NativeStateFingerprint": "78CAE858BC765A43F70C5A141AD6792D93C4FDC8DD7562936D48AD11CA610EB0",
+      "OriginalStateFingerprint": "78CAE858BC765A43F70C5A141AD6792D93C4FDC8DD7562936D48AD11CA610EB0",
+      "NativeState": {
+        "Rider": {
+          "Id": 1,
+          "Position": {
+            "X": -27.078653,
+            "Y": 69.6269
+          },
+          "Velocity": {
+            "X": -24.834965,
+            "Y": -7.9214444
+          },
+          "Heading": -2.5728455,
+          "AngularVelocity": 0.67000896,
+          "Road": {
+            "Segment": 5,
+            "Progress": 0.002422844459451893,
+            "ReferenceMeters": 194.4680280739094,
+            "OffsetMeters": 6.963879551635569,
+            "Heading": -3.1415926201240243,
+            "RadiusMeters": 590357.8827821495,
+            "CornerProgress": 0.0008076148198172977,
+            "Tangent": {
+              "X": -1,
+              "Y": -3.346577E-08
+            },
+            "Outward": {
+              "X": -3.346577E-08,
+              "Y": 1
+            },
+            "IsTurn": true
+          },
+          "TotalReferenceMeters": 513.246778016689,
+          "DistanceMeters": 535.9000219553782,
+          "Activity": 0,
+          "Drive": 0,
+          "TargetOffsetMeters": 3.5,
+          "Impairment": 0,
+          "Context": 2,
+          "Speed": 26.067696,
+          "ForwardSpeed": 25.191662,
+          "SideSpeed": -6.701117,
+          "SlideRadians": 0.25998485
+        },
+        "Time": 29.599999999999927,
+        "Omega": 79.41347570425836,
+        "Steering": 0.02617994,
+        "Active": {
+          "SteeringRadians": 0.02617994,
+          "Drive": 0
+        },
+        "Pending": [
+          {
+            "ObservedAt": 29.399999999999928,
+            "ActivationAt": 29.639999999999926,
+            "Action": {
+              "SteeringRadians": 0.02617994,
+              "Drive": 0
+            }
+          }
+        ],
+        "NextReview": 29.599999999999927
+      },
+      "Crank": 714.796245339625,
+      "OriginalAction": {
+        "SteeringRadians": 0.02617994,
+        "Drive": 0
+      },
+      "Override": {
+        "SteeringRadians": -0.08726646,
+        "Drive": 0.31820688
+      }
+    }
+  ],
+  "CompletedLaps": 2,
+  "Crossings": [
+    {
+      "RiderId": 1,
+      "Lap": 1,
+      "Time": 19.3176233106967,
+      "BeforeTime": 19.31,
+      "AfterTime": 19.32,
+      "BeforeReference": 318.6156402528286,
+      "AfterReference": 318.82960200309753,
+      "PhysicalDistance": 321.101611735216,
+      "SpeedKph": 77.20606654096277,
+      "CrankOmega": 774.6847567298352,
+      "WheelOmega": 85.89459255630408,
+      "Steering": 0,
+      "PendingCount": 1
+    },
+    {
+      "RiderId": 1,
+      "Lap": 2,
+      "Time": 36.487377587186806,
+      "BeforeTime": 36.480000000000004,
+      "AfterTime": 36.49,
+      "BeforeReference": 637.4037815332413,
+      "AfterReference": 637.6121401041746,
+      "PhysicalDistance": 664.704707668687,
+      "SpeedKph": 75.02369411245695,
+      "CrankOmega": 624.859776061837,
+      "WheelOmega": 69.33571225218992,
+      "Steering": 0,
+      "PendingCount": 1
+    }
+  ],
+  "TotalCpuSeconds": 27.296875,
+  "ControllerCpuSeconds": 30.5,
+  "MinimumInner": 0.20273165492947182,
+  "MinimumOuter": -0.009850959463238865,
+  "MaximumBetaDegrees": 27.38327628538178,
+  "RawSha256": "65D9B18BD7B27EC41F8621510855CEF62FFE1326B6AC9A222013832A61A909CE",
+  "CpuSeconds": 29.640625
+}

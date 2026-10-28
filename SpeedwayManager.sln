@@ -43,6 +43,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "standing-start-three-laps",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "standing144-validation", "tools\standing144-validation\standing144-validation.csproj", "{1D12F631-B4FF-4154-A6E6-124A4BF9177B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "corner-speed-loss", "tools\corner-speed-loss\corner-speed-loss.csproj", "{E8A2C25C-F84E-48C5-B224-D5B6092E2189}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -269,6 +271,18 @@ Global
 		{1D12F631-B4FF-4154-A6E6-124A4BF9177B}.Release|x64.Build.0 = Release|Any CPU
 		{1D12F631-B4FF-4154-A6E6-124A4BF9177B}.Release|x86.ActiveCfg = Release|Any CPU
 		{1D12F631-B4FF-4154-A6E6-124A4BF9177B}.Release|x86.Build.0 = Release|Any CPU
+		{E8A2C25C-F84E-48C5-B224-D5B6092E2189}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8A2C25C-F84E-48C5-B224-D5B6092E2189}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8A2C25C-F84E-48C5-B224-D5B6092E2189}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E8A2C25C-F84E-48C5-B224-D5B6092E2189}.Debug|x64.Build.0 = Debug|Any CPU
+		{E8A2C25C-F84E-48C5-B224-D5B6092E2189}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E8A2C25C-F84E-48C5-B224-D5B6092E2189}.Debug|x86.Build.0 = Debug|Any CPU
+		{E8A2C25C-F84E-48C5-B224-D5B6092E2189}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8A2C25C-F84E-48C5-B224-D5B6092E2189}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8A2C25C-F84E-48C5-B224-D5B6092E2189}.Release|x64.ActiveCfg = Release|Any CPU
+		{E8A2C25C-F84E-48C5-B224-D5B6092E2189}.Release|x64.Build.0 = Release|Any CPU
+		{E8A2C25C-F84E-48C5-B224-D5B6092E2189}.Release|x86.ActiveCfg = Release|Any CPU
+		{E8A2C25C-F84E-48C5-B224-D5B6092E2189}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -292,5 +306,6 @@ Global
 		{D57961C5-D49F-417B-828F-BB31292A5127} = {07C2787E-EAC7-C090-1BA3-A61EC2A24D84}
 		{363888E0-1DC5-44FA-865A-3B8841451B81} = {07C2787E-EAC7-C090-1BA3-A61EC2A24D84}
 		{1D12F631-B4FF-4154-A6E6-124A4BF9177B} = {07C2787E-EAC7-C090-1BA3-A61EC2A24D84}
+		{E8A2C25C-F84E-48C5-B224-D5B6092E2189} = {07C2787E-EAC7-C090-1BA3-A61EC2A24D84}
 	EndGlobalSection
 EndGlobal

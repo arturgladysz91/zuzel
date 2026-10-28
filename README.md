@@ -3,6 +3,13 @@
 Release platform: **Windows only**. See the current [Windows CI policy](docs/ci.md)
 for Draft/full validation, the merge gate and optional historical audits.
 
+[Corner Speed Loss Investigation (study #145)](docs/experiments/corner-speed-loss/README.md)
+analyzes all 24 saved A/B/F/K1 corners before 17 bounded native causal trials.
+K1 loses energy mainly through lateral tyre work and resistance while coasting;
+one coordinated intervention legally improves the whole three-lap continuation.
+The autonomous two-command prototype fails and remains OFF. Physics, weights,
+production defaults and historical evidence are unchanged.
+
 [Standing Start + Three Laps (#144)](docs/experiments/standing-start-three-laps/README.md)
 adds an explicit default-OFF crank/clutch launch over the original engine map and
 tyres. A/B/F/K1 complete three uninterrupted solo laps from zero; a shared four-bike

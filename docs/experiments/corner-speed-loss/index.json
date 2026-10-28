@@ -1,0 +1,62 @@
+{
+  "Title": "#145 · Przyczyny utraty prędkości · 3 pełne okrążenia",
+  "DefaultRun": "K1",
+  "Runs": [
+    {
+      "Id": "A",
+      "File": "../standing-start-three-laps/native/A.json.gz",
+      "Riders": 1,
+      "Outcome": "completed"
+    },
+    {
+      "Id": "B",
+      "File": "../standing-start-three-laps/native/B.json.gz",
+      "Riders": 1,
+      "Outcome": "completed"
+    },
+    {
+      "Id": "F",
+      "File": "../standing-start-three-laps/native/F.json.gz",
+      "Riders": 1,
+      "Outcome": "completed"
+    },
+    {
+      "Id": "K1",
+      "File": "../standing-start-three-laps/native/K1.json.gz",
+      "Riders": 1,
+      "Outcome": "completed"
+    },
+    {
+      "Id": "joint-grid-29",
+      "File": "native/joint-grid-29.json.gz",
+      "Riders": 1,
+      "Outcome": "completed"
+    },
+    {
+      "Id": "exit-full-338",
+      "File": "native/exit-full-338.json.gz",
+      "Riders": 1,
+      "Outcome": "completed"
+    },
+    {
+      "Id": "steer-large-31",
+      "File": "native/steer-large-31.json.gz",
+      "Riders": 1,
+      "Outcome": "confirmed footprint crossing"
+    },
+    {
+      "Id": "autonomous-two-command-K1",
+      "File": "native/autonomous-two-command-K1.json.gz",
+      "Riders": 1,
+      "Outcome": "confirmed footprint crossing"
+    }
+  ],
+  "GeometryFile": "../causal-yaw-throttle/progressive-b-viewer-geometry.json",
+  "BendReferences": [
+    35,
+    132.38937497138977,
+    194.38937497138977,
+    291.77874994277954
+  ],
+  "Note": "Zapis natywny; ręczne interwencje są diagnostyką. Nieudane próby i naruszenia pozostają widoczne. Prototyp autonomiczny nie przeszedł walidacji."
+}

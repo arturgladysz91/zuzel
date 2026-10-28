@@ -1,5 +1,15 @@
 # Architecture
 
+[Corner Speed Loss (study #145)](experiments/corner-speed-loss/README.md) is a
+PROVISIONAL, default-OFF forensic CLI. Its generated collector reuses the frozen
+#144 records, ContactAdapter, native clock, delays, actuator and all guards;
+generation parity checks permit only a chooser hook. Causal trials replay the
+entire original prefix from rest and compare full-state fingerprints before
+intervening. Work ledgers separate translation, yaw, wheel and crank energy.
+One bounded two-command planning change is tested from rest and rejected after
+an actual boundary crossing; no autonomous improvement is promoted. The existing
+replay viewer compares saved curves and interventions without executing physics.
+
 [Standing Start + Three Laps (#144)](experiments/standing-start-three-laps/README.md)
 is a PROVISIONAL, default-OFF launch harness over the existing ContactAdapter and
 one native Box2D clock. A copied crank state extends every held H09 forecast;

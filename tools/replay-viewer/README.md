@@ -1,3 +1,14 @@
+# Badanie strat w łukach — study #145
+
+Z repozytorium: `python -m http.server 8018 --bind 127.0.0.1`.
+[K1, drugie okrążenie, drugi łuk](http://127.0.0.1:8018/tools/replay-viewer/?case=corner145&run=K1&t=29).
+Istniejący viewer porównuje A/B/F/K1 i diagnostyczne interwencje, z wyborem
+każdego z sześciu łuków. Pokazuje prędkość po czasie i pozycji, gaz żądany/aktywny,
+skręt żądany/wykonany, β, wheelspin oraz wspólne linie XY. Przyciski V min i
+maksymalnego opóźnienia przesuwają replay do zachowanej próbki; na torze są oba
+markery. Rozwijany audyt podaje pełną punktację K1. Wariant dwóch komend nie
+przeszedł testu natywnego; ręczne interwencje nie są autonomicznym sterownikiem.
+
 # Audyt zygzaka #127 — zsynchronizowana telemetria
 
 Z głównego katalogu gałęzi `audit/first-bend-zigzag-127`:

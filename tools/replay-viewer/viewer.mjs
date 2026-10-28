@@ -4,6 +4,7 @@ import {speedThrottlePanel,throttleMarkers} from './speed-throttle.mjs';
 import {causalPanel,causalMarkers} from './causal-yaw.mjs';
 import {loadConstraints143,constraintsReadout,constraintsPanel} from './constraints143.mjs';
 import {loadStanding144,setupStanding144,standingPanel144} from './standing144.mjs';
+import {loadCorner145,setupCorner145} from './corner145.mjs';
 import { Replay, parseCsv, clamp, enumName, decisionStatus, crossSection, worldCapsules, authoredReplayDocument, motionVectors, bendJumps, boundaryStatus } from './model.mjs';
 import { currentRecordings, readGzip } from './recordings.mjs';
 import { loadContinuous } from './continuous.mjs';
@@ -41,6 +42,7 @@ const speedThrottleOption=document.createElement('option');speedThrottleOption.v
 const causalOption=document.createElement('option');causalOption.value='causal-yaw';causalOption.textContent='#137 · Causal Yaw · autonomiczne A / B';$('scenario').prepend(causalOption);
 const constraintsOption=document.createElement('option');constraintsOption.value='constraints143';constraintsOption.textContent='#143 · Audyt ograniczeń · PARTIAL · pełne A/B';$('scenario').prepend(constraintsOption);
 const standingOption=document.createElement('option');standingOption.value='standing144';standingOption.textContent='#144 · Start0 → trzy okrążenia · solo / wspólny świat';$('scenario').prepend(standingOption);
+const cornerOption=document.createElement('option');cornerOption.value='corner145';cornerOption.textContent='#145 · Straty w łukach · A/B/F/K1 i interwencje';$('scenario').prepend(cornerOption);
 const decisionOption=document.createElement('option');decisionOption.value='rider-decision';decisionOption.textContent='#133 · Rider Decision Optimization · koszt i selekcja';$('scenario').prepend(decisionOption);
 const learningOption=document.createElement('option');learningOption.value='free-learning';
 learningOption.textContent='#129 · Free Racing Learning · proces uczenia i kamienie milowe';$('scenario').prepend(learningOption);
@@ -204,7 +206,7 @@ function updatePanel() {
   $('last-state').textContent = last ? `${statusLabels[decisionStatus(last, time)]} · ${enumName(geometry, 'channels', last.Channels ?? 0)} · obserwacja ${format(last.ObservedAt)} s · plan ${format(last.RequestedActivation)} s${last.ActualActivation != null && last.ActualActivation <= time ? ` · aktywacja ${format(last.ActualActivation)} s` : ''}${last.CancelledAt != null && last.CancelledAt <= time ? ` · anulowanie ${format(last.CancelledAt)} s` : ''}` : 'Pozycje i sterowanie pochodzą z zapisu.';
   if (replay.planAt && last) $('last-state').textContent += ` · żądanie ${format(last.Drive * 100, 1)}% (oddzielne od aktywnego Drive powyżej)`;
   if(replay.standingData){
-    $('target').textContent='brak narzuconej linii';$('intent').textContent='Autonomiczne gaz / kierownica · #143';
+    $('target').textContent='brak narzuconej linii';$('intent').textContent=replay.standingData.cornerAnalysis?'Zapis bazowy / interwencja badawcza · #145':'Autonomiczne gaz / kierownica · #143';
     standingPanel144($('standing-telemetry'),replay.standingData,time,selected);
     const outcome=replay.standingData.run.Riders.find(r=>r.Spec.Profile.Id===selected).Outcome;
     if(time>=replay.duration-1e-8&&!state.finished)$('status').textContent=outcome;
@@ -317,6 +319,13 @@ function draw() {
       const p=worldToScreen({x:sample.NewXY.X,y:sample.NewXY.Y});context.fillStyle=sample.GainSeconds>=0?'#8be08f':'#ff9cbe';
       context.beginPath();context.arc(p.x,p.y,2.5,0,Math.PI*2);context.fill();
       if((sample.ReferenceMeters-30)%25===0){context.font='10px Segoe UI';context.fillText(`${sample.GainSeconds>=0?'+':''}${sample.GainSeconds.toFixed(2)}s`,p.x+5,p.y-5);}
+    }
+  }
+  if(replay.standingData?.cornerAnalysis){
+    const c=replay.standingData.cornerAnalysis.corners.find(c=>c.run===replay.standingData.run.Name&&c.entry.time_s<=time&&c.exit.time_s>=time);
+    if(c)for(const [label,q,color] of [['V min',c.minimum,'#fff07b'],['Max opóźnienie',c.worst_deceleration,'#ff8eaa']]){
+      const p=worldToScreen({x:q.x_m,y:q.y_m});context.beginPath();context.arc(p.x,p.y,4,0,Math.PI*2);context.strokeStyle=color;context.lineWidth=2;context.stroke();
+      context.fillStyle=color;context.font='11px Segoe UI';context.fillText(label,p.x+7,p.y-5);
     }
   }
   if(replay.constraintsData&&$('compare-lines').checked)for(const r of constraintsReadout(replay.constraintsData,time)){
@@ -441,11 +450,11 @@ async function loadScenario(key,keepTime=null) {
   $('outer-limit').disabled=['free-racing','free-learning','robust-learning','extended-learning','full-throttle-learning','rider-decision','track-awareness','multi-action','speed-throttle','causal-yaw','constraints143','standing144'].includes(key);
   $('load-state').textContent = 'Wczytywanie zaakceptowanych stanów…';
   try {
-    if(key==='standing144'){
-      const data=await loadStanding144(fetch,new URL(location.href).searchParams.get('run'));if(generation!==loadGeneration)return;
+    if(key==='standing144'||key==='corner145'){
+      const data=await (key==='corner145'?loadCorner145:loadStanding144)(fetch,new URL(location.href).searchParams.get('run')??(key==='corner145'?'K1':null));if(generation!==loadGeneration)return;
       geometry=data.geometry;replay=data.replay;selected=[...replay.tracks.keys()][0];comparisonTrails=[];widthGeometries=[];
       for(const id of ['width-controls','width-comparison','comparison-legend'])$(id).hidden=true;
-      $('recording-mode').hidden=false;$('recording-mode').textContent='#144 · START0 →3 OKRĄŻENIA · '+data.run.Riders.length+' motocykli · '+data.run.Outcome;
+      $('recording-mode').hidden=false;$('recording-mode').textContent=(key==='corner145'?'#145 · BADANIE STRAT · ':'#144 · START0 →3 OKRĄŻENIA · ')+data.run.Riders.length+' motocykli · '+data.run.Outcome;
       document.querySelector('.brand p').textContent=data.index.Title;
       $('safety-note').hidden=false;$('safety-note').className='safety-note'+(data.run.Outcome==='completed'?'':' unsafe');
       $('safety-note').textContent=data.index.Note;
@@ -453,8 +462,8 @@ async function loadScenario(key,keepTime=null) {
       $('smooth').checked=false;$('targets').checked=false;$('outer-limit').checked=false;$('rate').value='1';
       $('record-clip').hidden=typeof MediaRecorder==='undefined'||!canvas.captureStream;
       $('sampling-note').textContent=data.run.Riders.reduce((n,r)=>n+r.Samples.length,0)+' natywnych stanów · bez ekstrapolacji';
-      setupStanding144($('robust-learning-analysis'),data,run=>{const url=new URL(location.href);url.searchParams.set('run',run);url.searchParams.delete('t');history.replaceState(null,'',url);loadScenario(key,0);},
-        (t,id)=>{if(id!=null)chooseRider(id);setPlaying(false);setTime(t);});
+      (key==='corner145'?setupCorner145:setupStanding144)($('robust-learning-analysis'),data,run=>{const url=new URL(location.href);url.searchParams.set('run',run);url.searchParams.delete('t');history.replaceState(null,'',url);loadScenario(key,0);},
+        (t,id)=>{if(id!=null)chooseRider(id);setPlaying(false);setTime(t);},lines=>{comparisonTrails=lines;$('compare-lines').checked=true;dirty=true;});
       $('riders').replaceChildren();for(const id of replay.tracks.keys()){
         const button=document.createElement('button');button.textContent='R'+id;button.dataset.id=String(id);button.addEventListener('click',()=>chooseRider(id));$('riders').append(button);
       }

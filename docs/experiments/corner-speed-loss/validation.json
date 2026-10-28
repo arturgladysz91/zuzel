@@ -1,0 +1,152 @@
+{
+  "ResearchVerdict": "PARTIAL: legal diagnostic gains; autonomous prototype rejected",
+  "ProductionDefaultsChanged": false,
+  "HistoricalPhysicsOrDataChanged": false,
+  "EnabledByDefault": false,
+  "Local": {
+    "DotnetRestore": "PASS",
+    "ReleaseWarningsAsErrorsBuild": "PASS",
+    "CSharp": {
+      "Scope": "Complete Draft CI core + trajectory shards",
+      "Counters": {
+        "total": "2457",
+        "executed": "2457",
+        "passed": "2457",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "OtherShards": "Not asserted by this local Draft run",
+      "FinalReadOnlyExtensionFocusedCasesPassed": 3
+    },
+    "PythonCalibration": {
+      "Passed": 263,
+      "Failed": 0
+    },
+    "NodeReplay": {
+      "Passed": 67,
+      "Failed": 0
+    },
+    "CiRoutingPython": {
+      "Passed": 7,
+      "Failed": 0
+    },
+    "Discovery": "All 2978 cases assigned exactly once; 2062 core, 395 trajectory, 473 historical-analysis, 48 four-rider",
+    "Generator145": "PASS",
+    "Generator144": "PASS",
+    "Browser": "PASS: K1 corner charts, score audit, native 34.670s / 46.16kmh jump; no browser console errors",
+    "LineEndingNote": "Three untouched historical source files restored to exact Git blob bytes after Windows autocrlf checkout; historical hashes and code unchanged.",
+    "ExhaustiveScoreReconstruction": {
+      "NativeWorlds": 0,
+      "Decisions": 1148,
+      "Candidates": 31017,
+      "Forecasts": 31017,
+      "MaximumScoreDifference": 0,
+      "Variants": [
+        {
+          "Run": "A",
+          "Decisions": 301,
+          "Candidates": 8127,
+          "MaximumScoreDifference": 0,
+          "AllChoicesMatch": true
+        },
+        {
+          "Run": "B",
+          "Decisions": 278,
+          "Candidates": 7521,
+          "MaximumScoreDifference": 0,
+          "AllChoicesMatch": true
+        },
+        {
+          "Run": "F",
+          "Decisions": 295,
+          "Candidates": 7965,
+          "MaximumScoreDifference": 0,
+          "AllChoicesMatch": true
+        },
+        {
+          "Run": "K1",
+          "Decisions": 274,
+          "Candidates": 7404,
+          "MaximumScoreDifference": 0,
+          "AllChoicesMatch": true
+        }
+      ],
+      "CpuSeconds": 178.703125,
+      "RawSha256": "B58F2FB78F0D4EDE5C4B961C6CBA7B60E59EAC85B5619343295BF314FF4757E3",
+      "Scope": "Every chosen and rejected candidate at every saved A/B/F/K1 decision, including start and all six corners. No native worlds or control interventions."
+    }
+  },
+  "WindowsCI": {
+    "Scope": "Draft Windows CI on the created PR head",
+    "Status": "Previous head passed Draft Windows CI; final head must pass its own run. Remote check result is authoritative.",
+    "PreviouslyValidatedHead": "95f6c69a50ce093bef622d70d6ffb45b13a65887",
+    "PreviousRun": "https://github.com/arturgladysz91/zuzel/actions/runs/40666163076"
+  },
+  "NativeStudy": {
+    "BaseHead": "9342ac506c6fc7b713c91842b4e6fff55b4891b6",
+    "EnabledByDefault": false,
+    "Worlds": 17,
+    "NativeReservationCpuSeconds": 360.984375,
+    "OfflineScoreAuditCpuSeconds": 5.03125,
+    "ExhaustiveScoreAuditCpuSeconds": 178.703125,
+    "Sources": {
+      "tools/corner-speed-loss/DiagnosticWorld145.cs": "94e4f33fe5707ecf73601de23a3ccfa34fc0915ab4fe44d735e52c3b4b4612df",
+      "tools/corner-speed-loss/FullScoreAudit145.cs": "61895a82b110a6eec008ea9bb32a2eb303674793c27bb569a39b34bb5f959174",
+      "tools/corner-speed-loss/Program.cs": "5fa25a1649a1e81086a589f862815963e595971e3d642ed026349583cf0afb94",
+      "tools/corner-speed-loss/analyze145.py": "d439d8be6371a69c7b819ec5c1eebbae213232247be61d80f9d983afb294f0c0",
+      "tools/corner-speed-loss/generate.py": "ee27dacaf73074cbf2948e03c65f0d4a65fdebf73134d18a55a3f3992021d76c",
+      "tools/corner-speed-loss/plot145.py": "54adcf5f415acab0815e1c6c12a1f7643109167c515ee1d241fa66cf71309084",
+      "tools/corner-speed-loss/report145.py": "09bca2f6e21f7365fdb38ba21fc05aeff0243e9599b8fc43fa44bce41e68ad6a"
+    },
+    "NativeFiles": {
+      "all-scores.json.gz": "b58f2fb78f0d4ede5c4b961c6cba7b60e59eac85b5619343295bf314ff4757e3",
+      "autonomous-two-command-K1-plans.json.gz": "e86f94e880507a7384a2e5621178b45a7a077884f7b8bdf18e4dc250c3d8b8fd",
+      "autonomous-two-command-K1.json.gz": "7cb83c67dac38da8947d85593cc6de011a8be61813dfb728b4e979c782ab3bce",
+      "early-joint-284.json.gz": "978802aa59a012ca5efaf9d16f26b5e2db68b841311ba98b5ceb192e165a727f",
+      "exit-full-338.json.gz": "59f41daeb38cb1e97f94f80a59ced42cc31d2e2ad79c78ea7ec4ea19ae830f14",
+      "exit-partial-338.json.gz": "fa16226d56c2bc0fafef56683cde47e4a9ef992013b2934e86c23dcd77dc8b45",
+      "full-gas-entry-sequence.json.gz": "612aabcd3653f1c91be5bc0378bb9e2cc57a14c4c675585932a7cdcc80078e64",
+      "gas-full-29.json.gz": "77ac7403e6cf10b02454979dab326e32a3758bbdf4632e9fdb24e64b5b3dd10f",
+      "gas-partial-29.json.gz": "1e244bde2ee13f98aa3be9737f1cb82b295982db5e40b9df0159316e0afb9d8f",
+      "joint-29.json.gz": "8c5ac7051f8ad873a6eaf25f8c0e85d4cf115319e6e919e19def5f20f8eba873",
+      "joint-grid-29.json.gz": "b9a4ffab15baefe19e7135b608635f5512df070642d8705c00d27f93bf204a99",
+      "late-joint-296.json.gz": "65d9b18bd7b27ec41f8621510855cef62ffe1326b6ac9a222013832a61a909ce",
+      "prepare-284.json.gz": "0d0a34792c21017af9780d31dc204ddd856329adfbf6a7451d44eada7a175b71",
+      "prepare-coast-284.json.gz": "cc1240ce2eb30b366bf6704f11f56acc2e3ed3aa82e067725b12ba73a6cd3c77",
+      "replay-K1.json.gz": "8f7fdcf9465194f9c19c2a83ca3eb6f9b9d9bf0f7963e3cfa9d19343189938e4",
+      "sequence-29.json.gz": "46ac508d8f011f6d24746401f788f50c6e16644b420b4938d8223fde88357e03",
+      "steer-29.json.gz": "603fdf6329f8703de5f640466cdedb109efb3af6a42178697b841d01818113fc",
+      "steer-intermediate-31.json.gz": "4b4c2be31004333f9d9fb713b3df6b846532e76b47520ae80ea4939785880c65",
+      "steer-large-31.json.gz": "f428072ea57aa610ed6a7de47e5fd1dc185d5f827808a69090b1faae3fc3da6d"
+    },
+    "HistoricalInputHashes": [
+      {
+        "path": "docs\\experiments\\standing-start-three-laps\\native\\A.json.gz",
+        "sha256": "ad7a032d8f53c2c49683d33741b947a9aba55cf6b842ef9d34a23b3abffc08c2"
+      },
+      {
+        "path": "docs\\experiments\\standing-start-three-laps\\native\\B.json.gz",
+        "sha256": "dd957a0d8fb9c997a9ec397d2ec33b420862ea8fa1d943263b8218a6350e421d"
+      },
+      {
+        "path": "docs\\experiments\\standing-start-three-laps\\native\\F.json.gz",
+        "sha256": "456987aa373ad6911dbf8900ff0a22b873ff08865f3632de8f5d2c00c9df159b"
+      },
+      {
+        "path": "docs\\experiments\\standing-start-three-laps\\native\\K1.json.gz",
+        "sha256": "b128aa872ed1aba5e1d1d5e0524e64204e06feff38ad8820561d3ef5a63ca3e5"
+      }
+    ]
+  }
+}
