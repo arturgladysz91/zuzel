@@ -1,0 +1,70 @@
+{
+  "NativeWorlds": 3,
+  "Checks": [
+    {
+      "Mode": "replay145",
+      "Outcome": "confirmed footprint crossing",
+      "EndSeconds": 6.57,
+      "Fingerprint": "7EB8D9163C4D21E093EBD771DB78D0771BA1DE098B1E9C02D4CC2E9AD8FB1076",
+      "HistoricalFingerprint": "7EB8D9163C4D21E093EBD771DB78D0771BA1DE098B1E9C02D4CC2E9AD8FB1076",
+      "PrefixExact": true,
+      "NativePrefixFingerprint": "83859897FA1599CE6A65BF23C5C6FDD521FD4A01F5DC144E380A2C91D74AADF9",
+      "HistoricalPrefixFingerprint": "83859897FA1599CE6A65BF23C5C6FDD521FD4A01F5DC144E380A2C91D74AADF9",
+      "Agreement": null,
+      "MinimumInner": -0.008799692501369727,
+      "MinimumOuter": 7.0992,
+      "CpuSeconds": 2.59375,
+      "Scope": "Diagnostic forced pair / exact tape replay; not a new autonomous controller."
+    },
+    {
+      "Mode": "pair-50",
+      "Outcome": "confirmed footprint crossing",
+      "EndSeconds": 6.25,
+      "Fingerprint": "FA96962D75A12E1D2AD1AF83D1A6CE01BE5D164798E7F33F021A324814808EE1",
+      "HistoricalFingerprint": "7EB8D9163C4D21E093EBD771DB78D0771BA1DE098B1E9C02D4CC2E9AD8FB1076",
+      "PrefixExact": true,
+      "NativePrefixFingerprint": "E135926C1D62151B98017E9FFBA03E5B384D57DD8204188BFD6F2E241D99CF9E",
+      "HistoricalPrefixFingerprint": "E135926C1D62151B98017E9FFBA03E5B384D57DD8204188BFD6F2E241D99CF9E",
+      "Agreement": {
+        "Points": 91,
+        "MaximumXYMeters": 7.406802615150809E-05,
+        "MaximumSpeedMps": 0.0001316070556640625,
+        "MaximumYawRadiansPerSecond": 6.449222564697266E-05,
+        "MaximumWheelOmega": 0.00027919135474974155,
+        "PredictedMinimumGap": 0.3237623590782916,
+        "Passed": true,
+        "Forecasts": 5,
+        "Contacts": 90
+      },
+      "MinimumInner": -0.005837548878818679,
+      "MinimumOuter": 7.0992,
+      "CpuSeconds": 2.046875,
+      "Scope": "Diagnostic forced pair / exact tape replay; not a new autonomous controller."
+    },
+    {
+      "Mode": "pair-52",
+      "Outcome": "experimental beta45 envelope",
+      "EndSeconds": 6.92,
+      "Fingerprint": "F468CCC9CB438FD2E4057C014F3E082B8A9DC7C15640AFEC48E75DE8FC2792D3",
+      "HistoricalFingerprint": "7EB8D9163C4D21E093EBD771DB78D0771BA1DE098B1E9C02D4CC2E9AD8FB1076",
+      "PrefixExact": true,
+      "NativePrefixFingerprint": "B00400082BB4234D0C0D413071B257BBE827BF3F7B4E0D174CF50526C8314926",
+      "HistoricalPrefixFingerprint": "B00400082BB4234D0C0D413071B257BBE827BF3F7B4E0D174CF50526C8314926",
+      "Agreement": {
+        "Points": 91,
+        "MaximumXYMeters": 8.707208326086402E-05,
+        "MaximumSpeedMps": 0.0002117156982421875,
+        "MaximumYawRadiansPerSecond": 0.00035677850246429443,
+        "MaximumWheelOmega": 0.0006086033291268222,
+        "PredictedMinimumGap": 0.37794149159907814,
+        "Passed": true,
+        "Forecasts": 5,
+        "Contacts": 90
+      },
+      "MinimumInner": 0.3770159988688084,
+      "MinimumOuter": 7.0992,
+      "CpuSeconds": 1.875,
+      "Scope": "Diagnostic forced pair / exact tape replay; not a new autonomous controller."
+    }
+  ]
+}

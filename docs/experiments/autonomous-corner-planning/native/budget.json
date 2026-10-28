@@ -1,0 +1,44 @@
+[
+  {
+    "Name": "local-K1-29",
+    "Complete": true,
+    "CpuSeconds": 223.015625
+  },
+  {
+    "Name": "validate-local-K1-29-plan",
+    "Complete": true,
+    "CpuSeconds": 15.15625
+  },
+  {
+    "Name": "autonomous146-first",
+    "Complete": true,
+    "CpuSeconds": 86.203125
+  },
+  {
+    "Name": "repair-at-12",
+    "Complete": true,
+    "CpuSeconds": 10.6875
+  },
+  {
+    "Name": "autonomous146-viable",
+    "Complete": true,
+    "CpuSeconds": 432.546875,
+    "Aborted": true,
+    "Reason": "External stop during plan-archive serialization, after the world returned its CPU-limit stop at 38.4 s. Native run is complete as a partial trajectory; plan archive is truncated. Fully parsed review objects recovered separately; no completion is claimed."
+  },
+  {
+    "Name": "repeat-local-K1-29",
+    "Complete": true,
+    "CpuSeconds": 60.140625
+  },
+  {
+    "Name": "bounded-viability-probe",
+    "Complete": true,
+    "CpuSeconds": 10.09375
+  },
+  {
+    "Name": "local-K1-28-4",
+    "Complete": true,
+    "CpuSeconds": 36.265625
+  }
+]

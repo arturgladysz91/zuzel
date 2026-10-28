@@ -1,0 +1,64 @@
+{
+  "Treatment": {
+    "Name": "local-K1-29",
+    "PrefixVariant": "K1",
+    "StartSeconds": 29,
+    "MaximumSeconds": 120,
+    "CpuLimitSeconds": 210
+  },
+  "Outcome": "technical invariant: STUDY146_BUDGET: native CPU reserve stop",
+  "EndSeconds": 55.2,
+  "Fingerprint": "06DE91728CC2C064B1D914A6B0E093261210860D102B15C73E5DFD2DFDBAA203",
+  "PrefixExact": true,
+  "PrefixSamples": 2907,
+  "PrefixFingerprint": "F417906F8D690C2E2C7114C50C3376A9A667AB272944220416CFC9EFE3276FA6",
+  "HistoricalPrefixFingerprint": "F417906F8D690C2E2C7114C50C3376A9A667AB272944220416CFC9EFE3276FA6",
+  "CompletedLaps": 2,
+  "Crossings": [
+    {
+      "RiderId": 1,
+      "Lap": 1,
+      "Time": 19.3176233106967,
+      "BeforeTime": 19.31,
+      "AfterTime": 19.32,
+      "BeforeReference": 318.6156402528286,
+      "AfterReference": 318.82960200309753,
+      "PhysicalDistance": 321.101611735216,
+      "SpeedKph": 77.20606654096277,
+      "CrankOmega": 774.6847567298352,
+      "WheelOmega": 85.89459255630408,
+      "Steering": 0,
+      "PendingCount": 1
+    },
+    {
+      "RiderId": 1,
+      "Lap": 2,
+      "Time": 37.16477705031531,
+      "BeforeTime": 37.160000000000004,
+      "AfterTime": 37.17,
+      "BeforeReference": 637.4485145956278,
+      "AfterReference": 637.6766580790281,
+      "PhysicalDistance": 666.4733830283709,
+      "SpeedKph": 82.81879998569693,
+      "CrankOmega": 906.2549487536189,
+      "WheelOmega": 100.57473304457807,
+      "Steering": 0,
+      "PendingCount": 1
+    }
+  ],
+  "MinimumInner": 0.2040042163927397,
+  "MinimumOuter": 0.13446852382960472,
+  "TotalCpuSeconds": 213.21875,
+  "ControllerCpuSeconds": 197.953125,
+  "NativeSteps": 5531,
+  "Forecasts": 49868,
+  "ForecastContactQueries": 1791774,
+  "Reviews": 131,
+  "LastReview": {
+    "Time": 55,
+    "Reason": "common-goal time improvement",
+    "Candidates": 74
+  },
+  "CpuSeconds": 223.015625,
+  "Scope": "Local autonomous suffix, full exact native standing-start prefix; not a full autonomous success."
+}

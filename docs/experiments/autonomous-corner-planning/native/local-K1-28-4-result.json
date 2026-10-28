@@ -1,0 +1,85 @@
+{
+  "Treatment": {
+    "Name": "local-K1-28-4",
+    "PrefixVariant": "K1",
+    "StartSeconds": 28.4,
+    "MaximumSeconds": 36.5,
+    "CpuLimitSeconds": 33,
+    "PlanSource": null,
+    "RepairUnsafePrefixes": false,
+    "NativePrefixSource": null,
+    "TerminalContinuation": false
+  },
+  "Revision": "legal-roots-1",
+  "SourceSha256": {
+    "Planner146.cs": "CBEC02A0DB47328C2701D3A87508836D33606FA3706205BDF7F514CC63A3E801",
+    "Model146.cs": "AF172A1FDC0807DD9D7CEC1992C6FE6F113F8BAD57B8D1EDC6AD49CDB520032A",
+    "Experiment146.cs": "EE8E9AC4799CAAD3B38C72529A73DF796A994D50AA8303D3BB7D0954BA3A9291"
+  },
+  "PlannerOptions": {
+    "Enabled": true,
+    "RequiredLaps": 3,
+    "SearchIntervalSeconds": 0.8,
+    "MaximumPlanSeconds": 16,
+    "BeamWidth": 2,
+    "MaximumCandidates": 128,
+    "ClearanceReserveMeters": 0.1,
+    "SwitchImprovementSeconds": 0.02,
+    "RepairUnsafePrefixes": false,
+    "TerminalContinuation": false
+  },
+  "LastProgress": {
+    "ReviewTime": 30.999999999999922,
+    "Origin": "shifted-incumbent",
+    "Step": 39,
+    "ForecastTime": 38.800000000000004,
+    "Goal": 669.5574998855591,
+    "SafetyGoal": 669.5574998855591,
+    "Forecasts": 4865,
+    "Contacts": 97768,
+    "SeedDecisions": 53,
+    "policyForecasts": 0
+  },
+  "SeedDecisions": 53,
+  "PlanAgreement": null,
+  "Outcome": "technical invariant: STUDY146_BUDGET: native CPU reserve stop",
+  "EndSeconds": 31.19999999999992,
+  "Fingerprint": "EE51277068FF8C9FAEA006B297E3F1A918631AAC3CF35F3DD40C83C1B694DB01",
+  "PrefixExact": true,
+  "PrefixSamples": 2847,
+  "PrefixFingerprint": "1B4DA927F283634BA6A9140708E4FB46668E09C62FDF92D27E4836B6EC91EC78",
+  "HistoricalPrefixFingerprint": "1B4DA927F283634BA6A9140708E4FB46668E09C62FDF92D27E4836B6EC91EC78",
+  "CompletedLaps": 1,
+  "Crossings": [
+    {
+      "RiderId": 1,
+      "Lap": 1,
+      "Time": 19.3176233106967,
+      "BeforeTime": 19.31,
+      "AfterTime": 19.32,
+      "BeforeReference": 318.6156402528286,
+      "AfterReference": 318.82960200309753,
+      "PhysicalDistance": 321.101611735216,
+      "SpeedKph": 77.20606654096277,
+      "CrankOmega": 774.6847567298352,
+      "WheelOmega": 85.89459255630408,
+      "Steering": 0,
+      "PendingCount": 1
+    }
+  ],
+  "MinimumInner": 0.204562399309271,
+  "MinimumOuter": 0.2949314342502531,
+  "TotalCpuSeconds": 33.015625,
+  "ControllerCpuSeconds": 24.03125,
+  "NativeSteps": 3127,
+  "Forecasts": 6302,
+  "ForecastContactQueries": 227504,
+  "Reviews": 14,
+  "LastReview": {
+    "Time": 30.999999999999922,
+    "Reason": "retained legal suffix",
+    "Candidates": 1
+  },
+  "CpuSeconds": 36.265625,
+  "Scope": "Local autonomous suffix, full exact native standing-start prefix; not a full autonomous success."
+}

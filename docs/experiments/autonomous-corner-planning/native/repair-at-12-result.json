@@ -1,0 +1,43 @@
+{
+  "Treatment": {
+    "Name": "repair-at-12",
+    "PrefixVariant": "K1",
+    "StartSeconds": 12,
+    "MaximumSeconds": 14,
+    "CpuLimitSeconds": 65,
+    "PlanSource": null,
+    "RepairUnsafePrefixes": true,
+    "NativePrefixSource": "autonomous146-first"
+  },
+  "Revision": "bounded-repair-2",
+  "SourceSha256": {
+    "Planner146.cs": "A6F6198DFEF46C694BD5ED19129E165E58B6859AF19DEF8F09A1D26569833448",
+    "Model146.cs": "66EFCBD2C5F68AB6AB9862C32EAB7BDC9B34E2A482B3E0BF092F64F2B8527A44",
+    "Experiment146.cs": "51975B4B7D12B9914733D64850FB9ABFFCBBD11820D0F9DD607363014DE7283D"
+  },
+  "PlanAgreement": null,
+  "Outcome": "technical invariant: STUDY146_ABSTAIN: abstain: no certified complete continuation",
+  "EndSeconds": 11.99999999999999,
+  "Fingerprint": "E9E46D35E51F40E8AE52C177E8368B8A43B1A30BBE96A5B96C945FA326EBE0CF",
+  "PrefixExact": true,
+  "PrefixSamples": 1203,
+  "PrefixFingerprint": "4228C03F8A647279F8CE2AE66DB92DA2707E4477DDF7CA0E544E5A24BBD48114",
+  "HistoricalPrefixFingerprint": "4228C03F8A647279F8CE2AE66DB92DA2707E4477DDF7CA0E544E5A24BBD48114",
+  "CompletedLaps": 0,
+  "Crossings": [],
+  "MinimumInner": 0.204562399309271,
+  "MinimumOuter": 2.8655422719776538,
+  "TotalCpuSeconds": 9.640625,
+  "ControllerCpuSeconds": 0,
+  "NativeSteps": 1202,
+  "Forecasts": 0,
+  "ForecastContactQueries": 0,
+  "Reviews": 1,
+  "LastReview": {
+    "Time": 11.99999999999999,
+    "Reason": "abstain: no certified complete continuation",
+    "Candidates": 100
+  },
+  "CpuSeconds": 10.6875,
+  "Scope": "Local autonomous suffix, full exact native standing-start prefix; not a full autonomous success."
+}

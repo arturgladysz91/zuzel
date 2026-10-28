@@ -71,7 +71,7 @@ export function standingPanel144(element,data,time,riderId){
   add(`Native ${s.Input.Time.toFixed(3)}s · ${(v.Speed*3.6).toFixed(2)}km/h · gaz żądany / aktywny ${(s.RequestedDrive*100).toFixed(1)} / ${(s.Input.Active.Drive*100).toFixed(1)}% · skręt żądany / wykonany ${(s.RequestedSteering*180/Math.PI).toFixed(2)} / ${(s.Input.Steering*180/Math.PI).toFixed(2)}°.`);
   add(`β ${(v.SlideRadians*180/Math.PI).toFixed(2)}° · yaw ${v.AngularVelocity.toFixed(3)}rad/s · koło ${s.Input.Omega.toFixed(2)}rad/s · wał ${(s.CrankOmega*30/Math.PI).toFixed(0)}RPM · pending ${s.Input.Pending.length}. Sterowanie próbki dotyczy ostatniego zakończonego przedziału.`);
   add(`Chwilowy gap kreda / banda ${s.Inner.toFixed(4)} / ${s.Outer.toFixed(4)}m · certyfikat ${s.Certificate?.toFixed(4)??'N/D'}m. Brak certyfikacji nie jest kolizją.`);
-  if(d)add(`Decyzja ${d.Choice.Time.toFixed(2)}s · ${d.Choice.Forecasts} prognoz · ${d.CpuSeconds.toFixed(4)}CPU-s · ${d.Choice.NoSafeContinuation?'brak Safe w H09':'klasa Safe dostępna w H09'}. To nie certyfikat dalszego okrążenia.`);
+  if(d)add(`Decyzja ${d.Choice.Time.toFixed(2)}s · ${d.Choice.Forecasts} prognoz · ${d.CpuSeconds.toFixed(4)}CPU-s · ${data.analysis146?'ocena sterowania z wybranego zapisu':d.Choice.NoSafeContinuation?'brak Safe w H09':'klasa Safe dostępna w H09'}. To nie certyfikat dalszego okrążenia.`);
   if(s.Powertrain)add(`Sprzęgło ${s.Powertrain.ClutchTorque.toFixed(2)}Nm · slip ${s.Powertrain.SlipRadiansPerSecond.toFixed(2)}rad/s · energia wału / sprzęgła jest ciągła, bez resetu na mecie.`);
   const m=data.metrics.find(q=>q.RiderId===r.Spec.Profile.Id);
   if(m)add('Czasy okrążeń: '+m.Laps.map(q=>q.LapSeconds==null?'N/D':q.LapSeconds.toFixed(3)+'s').join(' / ')+'. Start nie liczy się jako ukończone okrążenie.');
