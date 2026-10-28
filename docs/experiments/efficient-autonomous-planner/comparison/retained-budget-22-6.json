@@ -1,0 +1,104 @@
+{
+  "Mode": "retained-budget-22-6",
+  "At": 22.59999999999995,
+  "StrategyChanged": true,
+  "Outcome": "abstain",
+  "Error": "STUDY146_ABSTAIN: abstain: no certified complete continuation",
+  "Command": null,
+  "CommandMatchesBaseline": false,
+  "EndStateBitExact": null,
+  "GoalTimeMatches": false,
+  "LogicalForecasts": null,
+  "LogicalForecastsMatch": false,
+  "CpuSeconds": 5.140625,
+  "Counts": {
+    "ActualForecasts": 1896,
+    "ActualContacts": 140706,
+    "PredictionRequests": 2094,
+    "PredictionHits": 198,
+    "SeedRequests": 54,
+    "SeedHits": 0,
+    "CrossReviewHits": 0,
+    "InactivePrefixRequests": 633,
+    "BudgetFallbacks": 0,
+    "BudgetReason": null,
+    "CacheEntries": 1896,
+    "SeedCacheEntries": 54
+  },
+  "Profile": {
+    "MeasuredCpuSeconds": 5.140625,
+    "Phases": [
+      {
+        "Name": "seed_k1",
+        "CpuSeconds": 4.78125,
+        "Percent": 93.00911854103343
+      },
+      {
+        "Name": "model_step",
+        "CpuSeconds": 0.328125,
+        "Percent": 6.382978723404255
+      },
+      {
+        "Name": "rollout_bookkeeping",
+        "CpuSeconds": 0.015625,
+        "Percent": 0.303951367781155
+      },
+      {
+        "Name": "safety_check",
+        "CpuSeconds": 0.015625,
+        "Percent": 0.303951367781155
+      },
+      {
+        "Name": "outside_decision",
+        "CpuSeconds": 0,
+        "Percent": 0
+      },
+      {
+        "Name": "decision_dispatch",
+        "CpuSeconds": 0,
+        "Percent": 0
+      }
+    ],
+    "Operations": [
+      {
+        "Name": "fresh-K1-seed",
+        "CpuSeconds": 4.78125,
+        "Percent": 93.00911854103343
+      },
+      {
+        "Name": "beam-1",
+        "CpuSeconds": 0.203125,
+        "Percent": 3.951367781155015
+      },
+      {
+        "Name": "beam-2",
+        "CpuSeconds": 0.109375,
+        "Percent": 2.127659574468085
+      },
+      {
+        "Name": "shifted-incumbent",
+        "CpuSeconds": 0.046875,
+        "Percent": 0.9118541033434651
+      },
+      {
+        "Name": "dispatch",
+        "CpuSeconds": 0,
+        "Percent": 0
+      },
+      {
+        "Name": "beam-3",
+        "CpuSeconds": 0,
+        "Percent": 0
+      }
+    ],
+    "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+  },
+  "Review": {
+    "Reason": "abstain: no certified complete continuation",
+    "Candidates": 65,
+    "IndependentSafety": null,
+    "Safety": null,
+    "GoalTime": null,
+    "End": null
+  }
+}

@@ -8,8 +8,9 @@ public static class Predictor144
     public static FreeRacingPrediction Predict(FreeRacingInput input, RiderSpec spec, TrackFrame frame,
         TrackStateSnapshot surface, WorldParameters p, float mass, float inertia, double horizon,
         FreeRacingAction? candidate = null, FreeRacingPolicy? closedLoop = null,
-        Func<FreeRacingInput, (FreeRacingAction Action, int Evaluations)>? causalPolicy = null, double reviewSeconds = .1,CrankClutch144? powertrain=null,Action<double,double>? observeCrank=null)
+        Func<FreeRacingInput, (FreeRacingAction Action, int Evaluations)>? causalPolicy = null, double reviewSeconds = .1,CrankClutch144? powertrain=null,Action<double,double>? observeCrank=null,RacingLineGeometry? boundaryCache=null)
     {
+        if(boundaryCache is not null&&!boundaryCache.IsFor(frame))throw new ArgumentException("Cached boundary must belong to this exact immutable frame.");
         var shaft=powertrain?.Copy();
         if(shaft is not null&&(closedLoop is not null||causalPolicy is not null))throw new ArgumentException("Launch prediction accepts a held candidate only.");
         if (!p.EnableFreeRacing) throw new InvalidOperationException("Free Racing is OFF by default.");
@@ -33,7 +34,7 @@ public static class Predictor144
         if (candidate is { } action) queue.Add(new(input.Time, input.Time + reaction, action));
         var active = input.Active; var v = input.Rider;
         var wheel = new RearWheelState(input.Omega * (p.RearWheel ?? RearWheelParameters.Default).WheelRadiusMeters, p.RearWheel);
-        var steering = new TwoContactBikeState(input.Steering); var boundary = new RacingLineGeometry(frame);
+        var steering = new TwoContactBikeState(input.Steering); var boundary = boundaryCache??new RacingLineGeometry(frame);
         var points = new List<FreeRacingPoint>(); var time = input.Time; var end = time + horizon;
         var nextReview = input.NextReview; var forces = 0; double distance = 0;
         void Activate() {

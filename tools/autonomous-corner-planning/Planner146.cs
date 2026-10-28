@@ -99,7 +99,7 @@ public sealed class Planner146
     }
     void ForecastGuard(){
         budgetGuard?.Invoke();
-        if(model.Forecasts-reviewForecastStart+policyForecasts>=Options.MaximumForecastsPerReview)
+        if(hooks?.UseOwnWorkBudget!=true&&model.Forecasts-reviewForecastStart+policyForecasts>=Options.MaximumForecastsPerReview)
             throw new InvalidOperationException("STUDY146_BUDGET: deterministic per-review forecast cap");
     }
     public Memory146 CaptureMemory()=>new(previous,expectedState,nextSearch);
@@ -107,7 +107,7 @@ public sealed class Planner146
     FreeRacingAction SeedAction(State146 state){
         using var measured=hooks?.Phase?.Invoke("seed_k1");
         ForecastGuard();
-        if(model.Forecasts-reviewForecastStart+policyForecasts+FreeLearningController.Actions(state.Input,Controller143.Policy,true).Length>Options.MaximumForecastsPerReview)
+        if(hooks?.UseOwnWorkBudget!=true&&model.Forecasts-reviewForecastStart+policyForecasts+FreeLearningController.Actions(state.Input,Controller143.Policy,true).Length>Options.MaximumForecastsPerReview)
             throw new InvalidOperationException("STUDY146_BUDGET: reserve for complete K1 seed decision");
         SeedDecisions++;var d=hooks?.Seed?.Invoke(state)??Policy144.Choose(state.Input,new CrankClutch144(omega:state.CrankOmega),spec,frame,surface,parameters,mass,inertia,"K1");
         policyForecasts+=d.Choice.Forecasts;policyContacts+=d.Choice.ForceEvaluations;return d.Choice.Action;
@@ -121,6 +121,7 @@ public sealed class Planner146
         double? goalTime=null,exitTime=null,exitSpeed=null;
         int limit=(int)Math.Ceiling(Options.MaximumPlanSeconds/.2);
         for(int k=0;k<limit;k++){
+            if(hooks?.FreezeCandidateTail==true&&origin.StartsWith("beam-")&&tail is not null&&k>=tail.Length)break;
             LastProgress=new{ReviewTime=start.Input.Time,Origin=origin,Step=k,ForecastTime=state.Input.Time,Goal=goal,SafetyGoal=safetyGoal,model.Forecasts,model.Contacts,SeedDecisions,policyForecasts};
             var action=tail is null||Options.TerminalContinuation&&k>=tail.Length?SeedAction(state):tail[Math.Min(k,tail.Length-1)];
             var transition=model.Step(state,action);actions.Add(action);
@@ -133,12 +134,14 @@ public sealed class Planner146
                 points.Add(point);
             }
             state=transition.End;
+            if(hooks?.EarlyReject==true&&origin.StartsWith("beam-")&&!MeasuredCheck(transition.Prediction.Points,Options.ClearanceReserveMeters).Legal)break;
             // Reject early after a confirmed violation, but never score a partial trajectory as an arrival.
             if(state.Input.Rider.TotalReferenceMeters>=safetyGoal&&actions.Count>=4||transition.Prediction.Points.Any(p=>Math.Min(p.Inner,p.Outer)<0||Math.Abs(p.Rider.SlideRadians)>Math.PI/4))break;
         }
         var safety=MeasuredCheck(points.ToArray(),Options.ClearanceReserveMeters);
         if(goalTime is null||state.Input.Rider.TotalReferenceMeters<safetyGoal)safety=safety with{Legal=false,Reason=safety.Legal?"terminal continuation not completed":safety.Reason};
-        return new(start.Input.Time,goal,safetyGoal,actions.ToArray(),points.ToArray(),state,goalTime,exitTime,exitSpeed,safety,origin);
+        var result=new Plan146(start.Input.Time,goal,safetyGoal,actions.ToArray(),points.ToArray(),state,goalTime,exitTime,exitSpeed,safety,origin);
+        hooks?.ObservePlan?.Invoke(result,tail);return result;
     }
     static IEnumerable<Plan146> Order(IEnumerable<Plan146> plans)=>plans.OrderBy(p=>!p.Safety.Legal)
         .ThenBy(p=>!p.Safety.Legal&&p.Safety.MaximumBetaDegrees>45)
@@ -167,21 +170,24 @@ public sealed class Planner146
         var candidates=new List<Plan146>();if(incumbent is not null)candidates.Add(incumbent);
         var reason=expectedAction is null?"new endogenous maneuver":"retained legal suffix";
         bool modelMismatch=error is not null&&(error.PositionMeters>.03||error.YawRate>.01||!error.ActiveMatches||!error.QueueMatches);
-        bool search=incumbent is null||!incumbent.Safety.Legal||modelMismatch||(hooks?.ScheduledSearch?.Invoke(input.Time)??input.Time>=nextSearch-1e-8);
+        bool search=incumbent is null||!incumbent.Safety.Legal||modelMismatch||(hooks?.ScheduledSearch?.Invoke(input,incumbent,input.Time>=nextSearch-1e-8)??input.Time>=nextSearch-1e-8);
         if(search){
+          try{
             if(incumbent is null||!incumbent.Safety.Legal||modelMismatch){var seed=RoleRollout(start,goal,null,"fresh-K1-seed");candidates.Add(seed);incumbent=Order(candidates.Where(p=>p.Safety.Legal)).FirstOrDefault()??seed;}
             var roots=new[]{incumbent};
             for(int depth=0;depth<3&&candidates.Count<Options.MaximumCandidates;depth++){
                 var layer=new List<Plan146>();
                 foreach(var root in roots){
+                    var candidateTail=hooks?.SearchTail?.Invoke(root)??root.Actions;
                     var state=start;for(int j=0;j<depth;j++)state=model.Step(state,root.Actions[Math.Min(j,root.Actions.Length-1)]).End;
                     var grid=FreeLearningController.Actions(state.Input,Controller143.Policy,true);
                     // Third correction uses neighbouring grid angles and all throttle choices; no coordinates.
                     if(depth==2){var current=root.Actions[Math.Min(depth,root.Actions.Length-1)].SteeringRadians;
                         var angles=grid.Select(a=>a.SteeringRadians).Distinct().OrderBy(a=>Math.Abs(a-current)).Take(3).ToHashSet();grid=grid.Where(a=>angles.Contains(a.SteeringRadians)).ToArray();}
+                    grid=hooks?.Proposals?.Invoke(state,grid)??grid;
                     foreach(var action in grid){
                         if(candidates.Count>=Options.MaximumCandidates)break;
-                        var changed=root.Actions.ToArray();if(changed.Length<=depth)continue;changed[depth]=action;
+                        var changed=candidateTail.ToArray();if(changed.Length<=depth)continue;changed[depth]=action;
                         var plan=RoleRollout(start,goal,changed,$"beam-{depth+1}");layer.Add(plan);candidates.Add(plan);
                     }
                 }
@@ -189,6 +195,7 @@ public sealed class Planner146
                 roots=Order(Options.RepairUnsafePrefixes?layer:layer.Where(p=>p.Safety.Legal)).Take(Options.BeamWidth).ToArray();if(roots.Length==0)break;
             }
             nextSearch=input.Time+Options.SearchIntervalSeconds;
+          }catch(PlanningBudget146 exhausted){hooks?.SearchBudgetFallback?.Invoke(exhausted.Message);reason="optional search budget exhausted";}
         }
         var best=Order(candidates.Where(p=>p.Safety.Legal)).FirstOrDefault();Plan146? selected=null;
         if(incumbent is not null&&incumbent.Safety.Legal){

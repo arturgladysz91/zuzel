@@ -4,6 +4,9 @@ using System.Text.Json;
 using Autonomous146;
 using Efficient147;
 using SharedWorldSpeedway;
+if(args.Length==3&&args[0]=="--enable-native147"){Native147.Run(args[1],args[2]);return;}
+if(args.Length==2&&args[0]=="--compare147"){Benchmark147.Run(args[1]);return;}
+if(args.Length==2&&args[0]=="--profile-replay147"){ReplayProfile147.Run(args[1]);return;}
 if(args.Length!=2||args[0]!="--profile-cold147")throw new ArgumentException("Default OFF: --profile-cold147 <new-directory>");
 var output=Path.GetFullPath(args[1]);Directory.CreateDirectory(output);var file=Path.Combine(output,"cold-profile.json");if(File.Exists(file))throw new IOException("Preserve prior profile.");
 var process=Process.GetCurrentProcess();var cpu=process.TotalProcessorTime;

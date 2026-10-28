@@ -1,0 +1,92 @@
+{
+  "Mode": "buffered-events-22-6",
+  "At": 22.59999999999995,
+  "StrategyChanged": true,
+  "Outcome": "abstain",
+  "Error": "Crank/clutch passivity or energy identity failed.",
+  "Command": null,
+  "CommandMatchesBaseline": false,
+  "EndStateBitExact": null,
+  "GoalTimeMatches": false,
+  "LogicalForecasts": null,
+  "LogicalForecastsMatch": false,
+  "CpuSeconds": 6.421875,
+  "Counts": {
+    "ActualForecasts": 2223,
+    "ActualContacts": 177904,
+    "PredictionRequests": 2335,
+    "PredictionHits": 111,
+    "SeedRequests": 71,
+    "SeedHits": 0,
+    "CrossReviewHits": 0,
+    "InactivePrefixRequests": 435,
+    "BudgetFallbacks": 0,
+    "BudgetReason": null,
+    "CacheEntries": 2223,
+    "SeedCacheEntries": 70
+  },
+  "Profile": {
+    "MeasuredCpuSeconds": 6.421875,
+    "Phases": [
+      {
+        "Name": "seed_k1",
+        "CpuSeconds": 6.140625,
+        "Percent": 95.62043795620438
+      },
+      {
+        "Name": "model_step",
+        "CpuSeconds": 0.265625,
+        "Percent": 4.13625304136253
+      },
+      {
+        "Name": "safety_check",
+        "CpuSeconds": 0.015625,
+        "Percent": 0.24330900243309003
+      },
+      {
+        "Name": "outside_decision",
+        "CpuSeconds": 0,
+        "Percent": 0
+      },
+      {
+        "Name": "decision_dispatch",
+        "CpuSeconds": 0,
+        "Percent": 0
+      },
+      {
+        "Name": "rollout_bookkeeping",
+        "CpuSeconds": 0,
+        "Percent": 0
+      }
+    ],
+    "Operations": [
+      {
+        "Name": "fresh-K1-seed",
+        "CpuSeconds": 4.5,
+        "Percent": 70.07299270072993
+      },
+      {
+        "Name": "beam-buffer",
+        "CpuSeconds": 1.6875,
+        "Percent": 26.277372262773724
+      },
+      {
+        "Name": "beam-1",
+        "CpuSeconds": 0.203125,
+        "Percent": 3.1630170316301705
+      },
+      {
+        "Name": "shifted-incumbent",
+        "CpuSeconds": 0.03125,
+        "Percent": 0.48661800486618007
+      },
+      {
+        "Name": "dispatch",
+        "CpuSeconds": 0,
+        "Percent": 0
+      }
+    ],
+    "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+  },
+  "Review": null
+}
