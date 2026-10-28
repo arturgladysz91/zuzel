@@ -7,6 +7,7 @@ using System.Text.Json.Nodes;
 using Autonomous146;
 using SharedWorldSpeedway;
 
+if(args.Length==3&&args[0]=="--enable-native146"){Experiment146.Run(args[1],args[2]);return;}
 if(args.Length!=2||args[0]!="--diagnose146")throw new ArgumentException("Default OFF: --diagnose146 <new-stage-A-directory>");
 var output=Path.GetFullPath(args[1]);Directory.CreateDirectory(output);var json=FreeLearningExperiment.Json;
 var old="docs/experiments/corner-speed-loss/native/";

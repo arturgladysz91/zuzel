@@ -1,0 +1,71 @@
+{
+  "Treatment": {
+    "Name": "validate-local-K1-29-plan",
+    "PrefixVariant": "K1",
+    "StartSeconds": 29,
+    "MaximumSeconds": 40,
+    "CpuLimitSeconds": 35,
+    "PlanSource": "local-K1-29"
+  },
+  "PlanAgreement": {
+    "Points": 1002,
+    "MaximumXYMeters": 0.005015422590076923,
+    "MaximumSpeedMps": 0.000247955322265625,
+    "MaximumYawRate": 0.0001016855239868164,
+    "PredictedGoalTime": 38.806870847413,
+    "NativeGoalTime": 38.80696654262042,
+    "GoalErrorSeconds": 9.569520742047644E-05,
+    "Passed": true
+  },
+  "Outcome": "experiment timeout",
+  "EndSeconds": 40,
+  "Fingerprint": "34BFDBF3916146E32B82CEFA28F888E5648829DD531A14532610403D18AC4BAD",
+  "PrefixExact": true,
+  "PrefixSamples": 2907,
+  "PrefixFingerprint": "F417906F8D690C2E2C7114C50C3376A9A667AB272944220416CFC9EFE3276FA6",
+  "HistoricalPrefixFingerprint": "F417906F8D690C2E2C7114C50C3376A9A667AB272944220416CFC9EFE3276FA6",
+  "CompletedLaps": 2,
+  "Crossings": [
+    {
+      "RiderId": 1,
+      "Lap": 1,
+      "Time": 19.3176233106967,
+      "BeforeTime": 19.31,
+      "AfterTime": 19.32,
+      "BeforeReference": 318.6156402528286,
+      "AfterReference": 318.82960200309753,
+      "PhysicalDistance": 321.101611735216,
+      "SpeedKph": 77.20606654096277,
+      "CrankOmega": 774.6847567298352,
+      "WheelOmega": 85.89459255630408,
+      "Steering": 0,
+      "PendingCount": 1
+    },
+    {
+      "RiderId": 1,
+      "Lap": 2,
+      "Time": 37.34462183966629,
+      "BeforeTime": 37.34,
+      "AfterTime": 37.35,
+      "BeforeReference": 637.4657752215862,
+      "AfterReference": 637.6642344295979,
+      "PhysicalDistance": 665.0742040481578,
+      "SpeedKph": 71.59230532209087,
+      "CrankOmega": 594.4920254950669,
+      "WheelOmega": 65.96422672890742,
+      "Steering": 0,
+      "PendingCount": 1
+    }
+  ],
+  "MinimumInner": 0.2040042163927397,
+  "MinimumOuter": 0.2949314342502531,
+  "TotalCpuSeconds": 11.515625,
+  "ControllerCpuSeconds": 0.96875,
+  "NativeSteps": 4009,
+  "Forecasts": 135,
+  "ForecastContactQueries": 12150,
+  "Reviews": 0,
+  "LastReview": null,
+  "CpuSeconds": 15.15625,
+  "Scope": "Forced execution of a previously autonomous forecast for model validation only; no claim of autonomous success."
+}
