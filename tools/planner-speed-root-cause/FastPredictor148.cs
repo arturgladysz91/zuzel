@@ -14,7 +14,7 @@ public static class FastPredictor148
         FreeRacingAction? candidate = null, FreeRacingPolicy? closedLoop = null,
         Func<FreeRacingInput, (FreeRacingAction Action, int Evaluations)>? causalPolicy = null, double reviewSeconds = .1,CrankClutch144? powertrain=null,Action<double,double>? observeCrank=null,PredictionBoundary147? boundaryCache=null,FastBoundary148? fastBoundary=null)
     {
-        var shaft=powertrain?.Copy();
+        var shaft=powertrain is null?null:new FastCrank148(powertrain.Parameters,powertrain.Omega);
         if(shaft is not null&&(closedLoop is not null||causalPolicy is not null))throw new ArgumentException("Launch prediction accepts a held candidate only.");
         if (!p.EnableFreeRacing) throw new InvalidOperationException("Free Racing is OFF by default.");
         if (!double.IsFinite(horizon) || horizon <= 0 || horizon > MaximumHorizonSeconds + 1e-10
@@ -66,7 +66,7 @@ public static class FastPredictor148
             if ((closedLoop is not null || causalPolicy is not null) && nextReview > time + 1e-10) duration = Math.Min(duration, nextReview - time);
             TwoContactForces Query(float dt) {
                 forces++;
-                return Contact144.Forces(v, spec, frame, surface, p, time, mass, wheel, steering, dt,
+                return ForecastContact148.Forces(v, spec, frame, surface, p, time, mass, wheel, steering, dt,
                     steeringOverride: active.SteeringRadians, inertia: inertia,powertrain:shaft,releaseAt:reaction);
             }
             // Identical curvature event estimate to WorldRunner/#126. No future control tape.
