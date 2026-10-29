@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {loadRobust150} from './robust150.mjs';
+import {review146} from './planning146.mjs';
+const root=new URL('../../docs/experiments/robust-autonomous-racing/',import.meta.url);
+const fetcher=async url=>new Response(fs.readFileSync(new URL(url.replace('local/',''),root)));
+test('150 default replay exposes failed standing-start rather than promoting local recovery',async()=>{const d=await loadRobust150(fetcher,null,'local/');assert.equal(d.studyNumber,150);assert.equal(d.run.Name,'robust150-tube-full-A');assert.equal(d.replay.state(1,0,false).speed,0);assert.equal(d.run.EndSeconds,.4);assert.match(d.run.Outcome,/ABSTAIN/);assert.equal(d.run.Riders[0].FinishSeconds,null);});
+test('150 both exact1s recoveries retain rolling scope and actual activation delay',async()=>{for(const model of ['A','B']){const d=await loadRobust150(fetcher,'robust150-exact-recovery-'+model,'local/');assert.ok(d.replay.state(1,0,false).speed>24);assert.equal(d.run.Riders[0].CompletedLaps,1);const r=review146(d,1);assert.deepEqual(r.actual_action,r.selected[0]);assert.ok(Math.abs(r.actual_activation.ActivationAt-r.time_s-.24)<1e-8);assert.equal(r.same_feedback_contract,false);}});
+test('150 prefix diagnosis preserves legal abstention and improved local final bend separately',async()=>{const d=await loadRobust150(fetcher,'robust150-prefix-B-28','local/');assert.equal(d.run.EndSeconds,38.4);assert.match(d.run.Outcome,/ABSTAIN/);const a=d.analysis146;const c=a.corners.find(x=>x.run==='robust150-prefix-B-45'&&x.lap===3&&x.bend===2);assert.ok(c.delta_model_baseline_s<-.29);assert.equal(a.verdict,'PARTIAL');assert.ok(a.full_runs.every(x=>x.kind!=='full autonomous attempt'||x.finish_s===null));});

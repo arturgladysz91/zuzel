@@ -1,0 +1,107 @@
+{
+  "Title": "#150 · Odporna kontynuacja · PARTIAL",
+  "DefaultRun": "robust150-tube-full-A",
+  "GeometryFile": "../causal-yaw-throttle/progressive-b-viewer-geometry.json",
+  "Runs": [
+    {
+      "Id": "baseline149-final148",
+      "File": "../tyre-physics-corner-limits/native/baseline149-final148.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "completed",
+      "Duration": 53.99,
+      "Fingerprint": "EA342AF146E248C411CB7C409D26AEFAB4ED79A307AD1D03D80AE9F5F478AAE0"
+    },
+    {
+      "Id": "separated149-autonomous",
+      "File": "../tyre-physics-corner-limits/native/separated149-autonomous.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "completed",
+      "Duration": 54.24,
+      "Fingerprint": "26C5D60F981B40950CCF468798FB29C3593BB4A3C828E0D4747A603846DF0BD8"
+    },
+    {
+      "Id": "fixed-certified-tape-native-A",
+      "File": "native/fixed-certified-tape-native-A.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "confirmed footprint crossing",
+      "Duration": 13.47,
+      "Fingerprint": "3D5867C3161D38908FBE2E1F091E6DA7AD2F0A6E5F545D5FFEFEE36DB29AC68F"
+    },
+    {
+      "Id": "fixed-certified-tape-native-B",
+      "File": "native/fixed-certified-tape-native-B.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "confirmed footprint crossing",
+      "Duration": 13.48,
+      "Fingerprint": "B266CF443742474ABD3CBEB77CA7D8FEE14AF9FC2FADE225CEBCF6660BBC3F3D"
+    },
+    {
+      "Id": "robust150-exact-recovery-A",
+      "File": "native/robust150-exact-recovery-A.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "completed",
+      "Duration": 16.47,
+      "Fingerprint": "1C5C90C6A7CA1A6356349119CA4D2F60BEC5E012580AE397ED9108C4FC4776DD"
+    },
+    {
+      "Id": "robust150-exact-recovery-B",
+      "File": "native/robust150-exact-recovery-B.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "completed",
+      "Duration": 16.48,
+      "Fingerprint": "FD398E96911F88E38AC84E92646A2EEBF4C72F8346F905995A912B8630B6A004"
+    },
+    {
+      "Id": "robust150-prefix-B-28",
+      "File": "native/robust150-prefix-B-28.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "technical invariant: STUDY150_ABSTAIN: abstain: no robust complete continuation",
+      "Duration": 38.4,
+      "Fingerprint": "E764EAB58624D3EECA36B6AFEAF2A6F173ECDE40F81B1107DE25FE367CA8B609"
+    },
+    {
+      "Id": "robust150-prefix-B-45",
+      "File": "native/robust150-prefix-B-45.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "completed",
+      "Duration": 54.13,
+      "Fingerprint": "3BACFCB08B2697ECA698DF9EE5D7D12B91F34463A7DB1185FF052A4718DD26AD"
+    },
+    {
+      "Id": "robust150-tube-full-A",
+      "File": "native/robust150-tube-full-A.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "technical invariant: STUDY150_ABSTAIN: abstain: no robust complete continuation",
+      "Duration": 0.4,
+      "Fingerprint": "F9ABD9A5CF2B51A150DD47D89846DE4ABED4EA3E53A848A5F73F5C861068165A"
+    },
+    {
+      "Id": "robust150-tube-rolling-A",
+      "File": "native/robust150-tube-rolling-A.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "completed",
+      "Duration": 16.43,
+      "Fingerprint": "589A8D191E0EA28A67925A606E9C11941E1E438EBA22C97CA597D352E5F0C497"
+    }
+  ],
+  "LapMeters": 318.77874994277954,
+  "RequiredLaps": 3,
+  "StartReference": 0,
+  "BendReferences": [
+    35,
+    132.38937497138977,
+    194.38937497138977,
+    291.77874994277954
+  ],
+  "Note": "PARTIAL: nowy pełny start A kończy się abstain0,4s. Odzyskanie przypadku90km/h i przejazdy z prefiksem są osobnymi diagnostykami, bez statusu pełnej autonomii."
+}

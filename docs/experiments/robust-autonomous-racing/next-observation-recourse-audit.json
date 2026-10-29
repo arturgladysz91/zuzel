@@ -1,0 +1,274 @@
+[
+  {
+    "Root": "retained",
+    "RootAction": {
+      "SteeringRadians": 0,
+      "Drive": 1
+    },
+    "AllNextScenariosCovered": false,
+    "Cases": [
+      {
+        "Sign": 0,
+        "Queue": [
+          {
+            "ObservedAt": 0.4,
+            "ActivationAt": 0.64,
+            "Action": {
+              "SteeringRadians": 0,
+              "Drive": 1
+            }
+          }
+        ],
+        "Covered": true,
+        "Alternatives": [
+          {
+            "Index": 0,
+            "Safety": {
+              "Legal": true,
+              "MinimumGapMeters": 0.1834138263297897,
+              "SweepLowerBoundMeters": 0.07632127488979144,
+              "MaximumBetaDegrees": 13.347522891130902,
+              "MaximumYawRate": 0.9048423171043396,
+              "Reason": "legal complete forecast"
+            },
+            "Arrival": 12.280749280769003,
+            "EndReference": 354.1191080906326
+          },
+          {
+            "Index": 1,
+            "Safety": {
+              "Legal": true,
+              "MinimumGapMeters": 0.20463248107517673,
+              "SweepLowerBoundMeters": 0.09743945964340524,
+              "MaximumBetaDegrees": 13.33887253243807,
+              "MaximumYawRate": 0.9048423171043396,
+              "Reason": "legal complete forecast"
+            },
+            "Arrival": 12.280976425803589,
+            "EndReference": 353.98963632727936
+          }
+        ]
+      },
+      {
+        "Sign": 1,
+        "Queue": [
+          {
+            "ObservedAt": 0.4,
+            "ActivationAt": 0.64,
+            "Action": {
+              "SteeringRadians": 0,
+              "Drive": 1
+            }
+          }
+        ],
+        "Covered": false,
+        "Alternatives": [
+          {
+            "Index": 0,
+            "Safety": {
+              "Legal": false,
+              "MinimumGapMeters": -0.29493203423716,
+              "SweepLowerBoundMeters": -0.4048163380302745,
+              "MaximumBetaDegrees": 13.544779968616723,
+              "MaximumYawRate": 0.895649790763855,
+              "Reason": "footprint reserve"
+            },
+            "Arrival": 12.273869736074408,
+            "EndReference": 210.85821373453473
+          },
+          {
+            "Index": 1,
+            "Safety": {
+              "Legal": false,
+              "MinimumGapMeters": -0.31058856220747183,
+              "SweepLowerBoundMeters": -0.42052328426575014,
+              "MaximumBetaDegrees": 13.505461149858645,
+              "MaximumYawRate": 0.895649790763855,
+              "Reason": "footprint reserve"
+            },
+            "Arrival": 12.273830046408689,
+            "EndReference": 210.88865260773287
+          }
+        ]
+      },
+      {
+        "Sign": -1,
+        "Queue": [
+          {
+            "ObservedAt": 0.4,
+            "ActivationAt": 0.64,
+            "Action": {
+              "SteeringRadians": 0,
+              "Drive": 1
+            }
+          }
+        ],
+        "Covered": false,
+        "Alternatives": [
+          {
+            "Index": 0,
+            "Safety": {
+              "Legal": false,
+              "MinimumGapMeters": -0.18516244032816204,
+              "SweepLowerBoundMeters": -0.2692491765599799,
+              "MaximumBetaDegrees": 13.47475383360612,
+              "MaximumYawRate": 0.9135945439338684,
+              "Reason": "footprint reserve"
+            },
+            "Arrival": 12.295033710929843,
+            "EndReference": 252.85965058340003
+          },
+          {
+            "Index": 1,
+            "Safety": {
+              "Legal": false,
+              "MinimumGapMeters": -0.24618379673864071,
+              "SweepLowerBoundMeters": -0.33019421163681195,
+              "MaximumBetaDegrees": 13.529099068538226,
+              "MaximumYawRate": 0.9135945439338684,
+              "Reason": "footprint reserve"
+            },
+            "Arrival": 12.295749279784532,
+            "EndReference": 252.72860172564174
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Root": "fresh",
+    "RootAction": {
+      "SteeringRadians": 0,
+      "Drive": 1
+    },
+    "AllNextScenariosCovered": false,
+    "Cases": [
+      {
+        "Sign": 0,
+        "Queue": [
+          {
+            "ObservedAt": 0.4,
+            "ActivationAt": 0.64,
+            "Action": {
+              "SteeringRadians": 0,
+              "Drive": 1
+            }
+          }
+        ],
+        "Covered": true,
+        "Alternatives": [
+          {
+            "Index": 0,
+            "Safety": {
+              "Legal": true,
+              "MinimumGapMeters": 0.1834138263297897,
+              "SweepLowerBoundMeters": 0.07632127488979144,
+              "MaximumBetaDegrees": 13.347522891130902,
+              "MaximumYawRate": 0.9048423171043396,
+              "Reason": "legal complete forecast"
+            },
+            "Arrival": 12.280749280769003,
+            "EndReference": 354.1191080906326
+          },
+          {
+            "Index": 1,
+            "Safety": {
+              "Legal": true,
+              "MinimumGapMeters": 0.20463248107517673,
+              "SweepLowerBoundMeters": 0.09743945964340524,
+              "MaximumBetaDegrees": 13.33887253243807,
+              "MaximumYawRate": 0.9048423171043396,
+              "Reason": "legal complete forecast"
+            },
+            "Arrival": 12.280976425803589,
+            "EndReference": 353.98963632727936
+          }
+        ]
+      },
+      {
+        "Sign": 1,
+        "Queue": [
+          {
+            "ObservedAt": 0.4,
+            "ActivationAt": 0.64,
+            "Action": {
+              "SteeringRadians": 0,
+              "Drive": 1
+            }
+          }
+        ],
+        "Covered": false,
+        "Alternatives": [
+          {
+            "Index": 0,
+            "Safety": {
+              "Legal": false,
+              "MinimumGapMeters": -0.29493203423716,
+              "SweepLowerBoundMeters": -0.4048163380302745,
+              "MaximumBetaDegrees": 13.544779968616723,
+              "MaximumYawRate": 0.895649790763855,
+              "Reason": "footprint reserve"
+            },
+            "Arrival": 12.273869736074408,
+            "EndReference": 210.85821373453473
+          },
+          {
+            "Index": 1,
+            "Safety": {
+              "Legal": false,
+              "MinimumGapMeters": -0.31058856220747183,
+              "SweepLowerBoundMeters": -0.42052328426575014,
+              "MaximumBetaDegrees": 13.505461149858645,
+              "MaximumYawRate": 0.895649790763855,
+              "Reason": "footprint reserve"
+            },
+            "Arrival": 12.273830046408689,
+            "EndReference": 210.88865260773287
+          }
+        ]
+      },
+      {
+        "Sign": -1,
+        "Queue": [
+          {
+            "ObservedAt": 0.4,
+            "ActivationAt": 0.64,
+            "Action": {
+              "SteeringRadians": 0,
+              "Drive": 1
+            }
+          }
+        ],
+        "Covered": false,
+        "Alternatives": [
+          {
+            "Index": 0,
+            "Safety": {
+              "Legal": false,
+              "MinimumGapMeters": -0.18516244032816204,
+              "SweepLowerBoundMeters": -0.2692491765599799,
+              "MaximumBetaDegrees": 13.47475383360612,
+              "MaximumYawRate": 0.9135945439338684,
+              "Reason": "footprint reserve"
+            },
+            "Arrival": 12.295033710929843,
+            "EndReference": 252.85965058340003
+          },
+          {
+            "Index": 1,
+            "Safety": {
+              "Legal": false,
+              "MinimumGapMeters": -0.24618379673864071,
+              "SweepLowerBoundMeters": -0.33019421163681195,
+              "MaximumBetaDegrees": 13.529099068538226,
+              "MaximumYawRate": 0.9135945439338684,
+              "Reason": "footprint reserve"
+            },
+            "Arrival": 12.295749279784532,
+            "EndReference": 252.72860172564174
+          }
+        ]
+      }
+    ]
+  }
+]
