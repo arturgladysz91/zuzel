@@ -1,0 +1,65 @@
+[
+  {
+    "Name": "causal-plan-tail-diagnosis",
+    "Complete": true,
+    "NativeWorlds": 0,
+    "CpuSeconds": 10.359375,
+    "Outcome": "exception; inspect saved diagnostics"
+  },
+  {
+    "Name": "causal-plan-tail-diagnosis-safe-window",
+    "Complete": true,
+    "NativeWorlds": 0,
+    "CpuSeconds": 10.0625,
+    "Outcome": "A-E counterfactuals complete; no native worlds"
+  },
+  {
+    "Name": "fixed-certified-tape-native-A",
+    "Complete": true,
+    "NativeWorlds": 1,
+    "CpuSeconds": 3.859375,
+    "Outcome": "confirmed footprint crossing"
+  },
+  {
+    "Name": "fixed-certified-tape-native-B",
+    "Complete": true,
+    "NativeWorlds": 1,
+    "CpuSeconds": 3.078125,
+    "Outcome": "confirmed footprint crossing"
+  },
+  {
+    "Name": "prototype-critical-1s",
+    "Complete": true,
+    "NativeWorlds": 0,
+    "CpuSeconds": 7.875,
+    "Outcome": "critical pair complete; see explicit abstentions"
+  },
+  {
+    "Name": "prototype-critical-1s-tube",
+    "Complete": true,
+    "NativeWorlds": 0,
+    "CpuSeconds": 2.28125,
+    "Outcome": "critical pair complete; see explicit abstentions"
+  },
+  {
+    "Name": "robust150-tube-rolling-A",
+    "Complete": true,
+    "NativeWorlds": 1,
+    "CpuSeconds": 23.03125,
+    "Outcome": "completed"
+  },
+  {
+    "Name": "critical22-ranking-and-manual-space-audit",
+    "Complete": true,
+    "NativeWorlds": 0,
+    "CpuSeconds": 14.203125,
+    "Outcome": "baseline complete plan ranks and action-space exclusion audit"
+  },
+  {
+    "Name": "single-state-critical-and-heldout",
+    "Complete": true,
+    "NativeWorlds": 0,
+    "CpuSeconds": 26.796875,
+    "Outcome": "design/held-out detached state probes complete"
+  }
+]
