@@ -1,0 +1,18 @@
+{
+  "StaticRows": 6804,
+  "DynamicRows": 1080,
+  "MaximumEnergyIdentityResidualJoules": 9.970760483923868E-08,
+  "MaximumRootResidual": 7.465994578126356E-08,
+  "MaximumRearUtilization": 0.9995019096949024,
+  "NominalMaximumFxDifference": 6.103515625E-05,
+  "NominalMaximumFyDifference": 6.103515625E-05,
+  "Material": {
+    "LongitudinalFloorMetersPerSecond": 3.824163847010136,
+    "LateralFloorMetersPerSecond": 0.37802834418284414,
+    "LongitudinalRatio": 0.1,
+    "LateralRatio": 0.11999999731779099,
+    "LowSpeedMetersPerSecond": 0.5
+  },
+  "Conclusion": "Original dx contains Br*(R^2/Iw\u002B1/m)*0.03 even at h=0. This is constitutive inertia coupling, separate from correct finite-step midpoint inertia. B freezes scales at nominal #139 reference; no measured tyre calibration and no claim of improved realism at nominal conditions.",
+  "CpuSeconds": 0.15625
+}

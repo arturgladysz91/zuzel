@@ -1,0 +1,175 @@
+{
+  "Model": "B",
+  "At": 37.2,
+  "Mode": "early",
+  "PrefixSource": "B",
+  "Outcome": "completed",
+  "EndSeconds": 55.09,
+  "Fingerprint": "934782FD2E1FCA181466B21903C7C6F97D170E9E8C03F5765ADC4B7C0E81644E",
+  "FinishSeconds": 55.08629224765974,
+  "PrefixDecisions": 186,
+  "PrefixExact": true,
+  "PrefixMaximumPositionDifference": 0,
+  "ExtendedBetaObservation": true,
+  "MaximumBetaDegrees": 23.871993208767986,
+  "MinimumGap": 0.20443656323982634,
+  "MinimumSweep": 0.10060418635577609,
+  "Contacts": 0,
+  "ControllerCpuSeconds": 5.1875,
+  "NativeAndObservationCpuSeconds": 13.484375,
+  "CpuSeconds": 19.09375,
+  "Interventions": [
+    {
+      "Time": 37.19999999999999,
+      "Observed": {
+        "Rider": {
+          "Id": 1,
+          "Position": {
+            "X": 3.422969,
+            "Y": -5.312305
+          },
+          "Velocity": {
+            "X": 22.606121,
+            "Y": -1.6311505
+          },
+          "Heading": -0.05772035,
+          "AngularVelocity": 0.00657494,
+          "Road": {
+            "Segment": 0,
+            "Progress": 0.09779911722455706,
+            "ReferenceMeters": 3.422969102859497,
+            "OffsetMeters": 5.312304973602295,
+            "Heading": 0,
+            "RadiusMeters": 0,
+            "CornerProgress": 0,
+            "Tangent": {
+              "X": 1,
+              "Y": 0
+            },
+            "Outward": {
+              "X": 0,
+              "Y": -1
+            },
+            "IsTurn": false
+          },
+          "TotalReferenceMeters": 640.9804689884186,
+          "DistanceMeters": 663.938849299222,
+          "Activity": 0,
+          "Drive": 1,
+          "TargetOffsetMeters": 3.5,
+          "Impairment": 0,
+          "Context": 2,
+          "Speed": 22.664894,
+          "ForwardSpeed": 22.662573,
+          "SideSpeed": -0.32432532,
+          "SlideRadians": 0.014310076
+        },
+        "Time": 37.19999999999999,
+        "Omega": 94.82830608819417,
+        "Steering": -0.008726646,
+        "Active": {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        "Pending": [
+          {
+            "ObservedAt": 36.999999999999986,
+            "ActivationAt": 37.23999999999999,
+            "Action": {
+              "SteeringRadians": 0,
+              "Drive": 0.31820688
+            }
+          }
+        ],
+        "NextReview": 37.19999999999999
+      },
+      "CrankOmega": 855.5847346017886,
+      "Unmodified": {
+        "SteeringRadians": 0.02617994,
+        "Drive": 0.31820688
+      },
+      "Submitted": {
+        "SteeringRadians": 0.034906585,
+        "Drive": 0.31820688
+      },
+      "ActualActivation": 37.43999999999999,
+      "Scope": "Diagnostic intervention, no autonomous credit; after pulse endogenous K1 through current and following bend."
+    },
+    {
+      "Time": 37.39999999999999,
+      "Observed": {
+        "Rider": {
+          "Id": 1,
+          "Position": {
+            "X": 8.04552,
+            "Y": -5.6282125
+          },
+          "Velocity": {
+            "X": 23.569065,
+            "Y": -1.512316
+          },
+          "Heading": -0.05150622,
+          "AngularVelocity": 0.059926115,
+          "Road": {
+            "Segment": 0,
+            "Progress": 0.2298719951084682,
+            "ReferenceMeters": 8.045519828796387,
+            "OffsetMeters": 5.6282124519348145,
+            "Heading": 0,
+            "RadiusMeters": 0,
+            "CornerProgress": 0,
+            "Tangent": {
+              "X": 1,
+              "Y": 0
+            },
+            "Outward": {
+              "X": 0,
+              "Y": -1
+            },
+            "IsTurn": false
+          },
+          "TotalReferenceMeters": 645.6030197143555,
+          "DistanceMeters": 668.5721948584614,
+          "Activity": 0,
+          "Drive": 0.31820688,
+          "TargetOffsetMeters": 3.5,
+          "Impairment": 0,
+          "Context": 2,
+          "Speed": 23.617535,
+          "ForwardSpeed": 23.61567,
+          "SideSpeed": -0.2968936,
+          "SlideRadians": 0.01257123
+        },
+        "Time": 37.39999999999999,
+        "Omega": 86.73514565654465,
+        "Steering": 0,
+        "Active": {
+          "SteeringRadians": 0,
+          "Drive": 0.31820688
+        },
+        "Pending": [
+          {
+            "ObservedAt": 37.19999999999999,
+            "ActivationAt": 37.43999999999999,
+            "Action": {
+              "SteeringRadians": 0.034906585,
+              "Drive": 0.31820688
+            }
+          }
+        ],
+        "NextReview": 37.39999999999999
+      },
+      "CrankOmega": 781.9335623037921,
+      "Unmodified": {
+        "SteeringRadians": 0.02617994,
+        "Drive": 0.31820688
+      },
+      "Submitted": {
+        "SteeringRadians": 0.034906585,
+        "Drive": 0.31820688
+      },
+      "ActualActivation": 37.63999999999999,
+      "Scope": "Diagnostic intervention, no autonomous credit; after pulse endogenous K1 through current and following bend."
+    }
+  ]
+}
