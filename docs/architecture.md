@@ -366,3 +366,7 @@ bound is min(4, available processors). Canonical cost/time/change/E-A-X reductio
 makes degree 1 and degree 4 equivalent. Normal Decide omits publication of candidate
 observations; explicit Evaluate retains them. Normal race Resolve/Commit remains
 unchanged. See [measurement and CI responsibility](calibration/trajectory-performance-ci.md).
+
+[Efficient Autonomous Planner (study #147)](experiments/efficient-autonomous-planner/README.md) — PROVISIONAL, domyślnie OFF.
+Jedna autonomiczna próba solo ukończyła trzy legalne okrążenia w 53,990 s (K1: 54,795 s),
+z pełnym dziennikiem 270 decyzji. Sterownik: 154,500 CPU-s; brak gotowości wydajnościowej dla czterech zawodników.

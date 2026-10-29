@@ -1,0 +1,20 @@
+{
+  "Name": "autonomous147-shortlist",
+  "Enabled": true,
+  "MaximumCpuSeconds": 300,
+  "Runtime": {
+    "Cache": true,
+    "ShareInactivePrefix": true,
+    "ReuseBoundary": true,
+    "EventSearch": true,
+    "WorkBudget": true,
+    "BufferedTail": false,
+    "RetainProposalTape": false,
+    "ProposalsPerThrottle": 2,
+    "MaximumActualForecasts": 8192,
+    "MaximumContacts": 700000,
+    "OptionalSearchContacts": 500000,
+    "MaximumReviewCpuSeconds": 30,
+    "MaximumCacheEntries": 20000
+  }
+}

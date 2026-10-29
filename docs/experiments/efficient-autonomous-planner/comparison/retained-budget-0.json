@@ -1,0 +1,180 @@
+{
+  "Mode": "retained-budget-0",
+  "At": 0,
+  "StrategyChanged": true,
+  "Outcome": "certified decision",
+  "Error": null,
+  "Command": {
+    "SteeringRadians": 0,
+    "Drive": 1
+  },
+  "CommandMatchesBaseline": true,
+  "EndStateBitExact": null,
+  "GoalTimeMatches": null,
+  "LogicalForecasts": 4240,
+  "LogicalForecastsMatch": null,
+  "CpuSeconds": 8.65625,
+  "Counts": {
+    "ActualForecasts": 4092,
+    "ActualContacts": 283587,
+    "PredictionRequests": 4241,
+    "PredictionHits": 148,
+    "SeedRequests": 106,
+    "SeedHits": 0,
+    "CrossReviewHits": 0,
+    "InactivePrefixRequests": 1379,
+    "BudgetFallbacks": 1,
+    "BudgetReason": "per-review physical forecast/contact/CPU budget",
+    "CacheEntries": 4088,
+    "SeedCacheEntries": 106
+  },
+  "Profile": {
+    "MeasuredCpuSeconds": 8.625,
+    "Phases": [
+      {
+        "Name": "seed_k1",
+        "CpuSeconds": 7.890625,
+        "Percent": 91.48550724637681
+      },
+      {
+        "Name": "model_step",
+        "CpuSeconds": 0.71875,
+        "Percent": 8.333333333333334
+      },
+      {
+        "Name": "rollout_bookkeeping",
+        "CpuSeconds": 0.015625,
+        "Percent": 0.18115942028985507
+      },
+      {
+        "Name": "outside_decision",
+        "CpuSeconds": 0,
+        "Percent": 0
+      },
+      {
+        "Name": "decision_dispatch",
+        "CpuSeconds": 0,
+        "Percent": 0
+      },
+      {
+        "Name": "safety_check",
+        "CpuSeconds": 0,
+        "Percent": 0
+      }
+    ],
+    "Operations": [
+      {
+        "Name": "fresh-K1-seed",
+        "CpuSeconds": 7.96875,
+        "Percent": 92.3913043478261
+      },
+      {
+        "Name": "beam-1",
+        "CpuSeconds": 0.5,
+        "Percent": 5.797101449275362
+      },
+      {
+        "Name": "beam-2",
+        "CpuSeconds": 0.15625,
+        "Percent": 1.8115942028985508
+      },
+      {
+        "Name": "dispatch",
+        "CpuSeconds": 0,
+        "Percent": 0
+      },
+      {
+        "Name": "independent_preflight",
+        "CpuSeconds": 0,
+        "Percent": 0
+      }
+    ],
+    "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+  },
+  "Review": {
+    "Reason": "optional search budget exhausted",
+    "Candidates": 34,
+    "IndependentSafety": {
+      "Legal": true,
+      "MinimumGapMeters": 4.0992,
+      "SweepLowerBoundMeters": 4.082534367990494,
+      "MaximumBetaDegrees": 0,
+      "MaximumYawRate": 0,
+      "Reason": "legal complete forecast"
+    },
+    "Safety": {
+      "Legal": true,
+      "MinimumGapMeters": 0.20463248107517673,
+      "SweepLowerBoundMeters": 0.09743945964340524,
+      "MaximumBetaDegrees": 13.33887253243807,
+      "MaximumYawRate": 0.9048423171043396,
+      "Reason": "legal complete forecast"
+    },
+    "GoalTime": 12.280976425803589,
+    "End": {
+      "Input": {
+        "Rider": {
+          "Id": 1,
+          "Position": {
+            "X": 35.2109,
+            "Y": -7.7513113
+          },
+          "Velocity": {
+            "X": 20.995333,
+            "Y": 5.32145
+          },
+          "Heading": 0.40267274,
+          "AngularVelocity": 0.6219263,
+          "Road": {
+            "Segment": 1,
+            "Progress": 0.006496182501276999,
+            "ReferenceMeters": 35.210886384499815,
+            "OffsetMeters": 7.75131137339052,
+            "Heading": 1.6730752966594491E-06,
+            "RadiusMeters": 31944.811566984852,
+            "CornerProgress": 0.0021653941670923328,
+            "Tangent": {
+              "X": 1,
+              "Y": 1.6730753E-06
+            },
+            "Outward": {
+              "X": 1.6730753E-06,
+              "Y": -1
+            },
+            "IsTurn": true
+          },
+          "TotalReferenceMeters": 353.98963632727936,
+          "DistanceMeters": 358.0934367495429,
+          "Activity": 0,
+          "Drive": 0,
+          "TargetOffsetMeters": 3.5,
+          "Impairment": 0,
+          "Context": 0,
+          "Speed": 21.65922,
+          "ForwardSpeed": 21.401424,
+          "SideSpeed": -3.3318,
+          "SlideRadians": 0.15444146
+        },
+        "Time": 21.199999999999953,
+        "Omega": 65.73583470869053,
+        "Steering": 0.08726647,
+        "Active": {
+          "SteeringRadians": 0.08726647,
+          "Drive": 0
+        },
+        "Pending": [
+          {
+            "ObservedAt": 20.999999999999954,
+            "ActivationAt": 21.239999999999952,
+            "Action": {
+              "SteeringRadians": 0.02617994,
+              "Drive": 0
+            }
+          }
+        ],
+        "NextReview": 21.199999999999953
+      },
+      "CrankOmega": 591.65898593178
+    }
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "Title": "#147 · Wydajny planner · pełne trzy okrążenia",
+  "DefaultRun": "autonomous147-shortlist",
+  "GeometryFile": "../causal-yaw-throttle/progressive-b-viewer-geometry.json",
+  "Runs": [
+    {
+      "Id": "K1",
+      "File": "../standing-start-three-laps/native/K1.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "completed",
+      "Duration": 54.800000000000004,
+      "Fingerprint": "2778FE469DB24286F7E07123E74E5FC3DB5D0BAAA25DEE89329A10A11DC0FD40"
+    },
+    {
+      "Id": "F",
+      "File": "../standing-start-three-laps/native/F.json.gz",
+      "Variant": "F",
+      "Riders": 1,
+      "Outcome": "completed",
+      "Duration": 58.870000000000005,
+      "Fingerprint": "42F29D14367754D724FCB2ED14E07040002879526E9F9F28E30A6B0D3FE4255C"
+    },
+    {
+      "Id": "autonomous146-viable",
+      "File": "../autonomous-corner-planning/native/autonomous146-viable.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "technical invariant: STUDY146_BUDGET: native CPU reserve stop",
+      "Duration": 38.4,
+      "Fingerprint": "204D72039C595B308320CAEA75594200C82A87116EC551CD44C0E2ED933407E2"
+    },
+    {
+      "Id": "autonomous147-shortlist",
+      "File": "native/autonomous147-shortlist.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "completed",
+      "Duration": 53.99,
+      "Fingerprint": "EA342AF146E248C411CB7C409D26AEFAB4ED79A307AD1D03D80AE9F5F478AAE0"
+    }
+  ],
+  "LapMeters": 318.77874994277954,
+  "RequiredLaps": 3,
+  "StartReference": 0,
+  "BendReferences": [
+    35,
+    132.38937497138977,
+    194.38937497138977,
+    291.77874994277954
+  ],
+  "Note": "Cały natywny przejazd i wszystkie decyzje są zachowane. Techniczny PASS nie oznacza gotowości do ekonomicznej symulacji czterech zawodników."
+}

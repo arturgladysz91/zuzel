@@ -1,0 +1,97 @@
+[
+  {
+    "Name": "cold-profile",
+    "Complete": true,
+    "NativeWorlds": 0,
+    "CpuSeconds": 23.421875
+  },
+  {
+    "Name": "prepare-memory",
+    "Complete": true,
+    "NativeWorlds": 0,
+    "CpuSeconds": 2.03125
+  },
+  {
+    "Name": "profile-replay",
+    "Complete": true,
+    "NativeWorlds": 0,
+    "CpuSeconds": 235.640625
+  },
+  {
+    "Name": "exact-0",
+    "Complete": true,
+    "NativeWorlds": 0,
+    "CpuSeconds": 10.65625,
+    "Outcome": "certified decision"
+  },
+  {
+    "Name": "exact-22-6",
+    "Complete": true,
+    "NativeWorlds": 0,
+    "CpuSeconds": 58.46875,
+    "Outcome": "certified decision"
+  },
+  {
+    "Name": "budget-only-22-6",
+    "Complete": true,
+    "NativeWorlds": 0,
+    "CpuSeconds": 8.296875,
+    "Outcome": "abstain"
+  },
+  {
+    "Name": "buffered-events-22-6",
+    "Complete": true,
+    "NativeWorlds": 0,
+    "CpuSeconds": 6.421875,
+    "Outcome": "abstain"
+  },
+  {
+    "Name": "retained-tape-22-6",
+    "Complete": true,
+    "NativeWorlds": 0,
+    "CpuSeconds": 6.609375,
+    "Outcome": "abstain"
+  },
+  {
+    "Name": "retained-budget-22-6",
+    "Complete": true,
+    "NativeWorlds": 0,
+    "CpuSeconds": 5.140625,
+    "Outcome": "abstain"
+  },
+  {
+    "Name": "retained-budget-0",
+    "Complete": true,
+    "NativeWorlds": 0,
+    "CpuSeconds": 8.65625,
+    "Outcome": "certified decision"
+  },
+  {
+    "Name": "shortlist-22-6",
+    "Complete": true,
+    "NativeWorlds": 0,
+    "CpuSeconds": 17.65625,
+    "Outcome": "certified decision"
+  },
+  {
+    "Name": "shortlist-0",
+    "Complete": true,
+    "NativeWorlds": 0,
+    "CpuSeconds": 8.328125,
+    "Outcome": "certified decision"
+  },
+  {
+    "Name": "autonomous147-shortlist",
+    "Complete": true,
+    "NativeWorlds": 1,
+    "CpuSeconds": 168.921875,
+    "Outcome": "exception; inspect saved diagnostics"
+  },
+  {
+    "Name": "finalize-native-audit",
+    "Complete": true,
+    "NativeWorlds": 0,
+    "CpuSeconds": 0.90625,
+    "Outcome": "technical PASS and complete durable audit"
+  }
+]

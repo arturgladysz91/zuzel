@@ -1,0 +1,128 @@
+using System.Diagnostics;
+using System.Security.Cryptography;
+using System.Text.Json;
+using Autonomous146;
+using CoreSim;
+using SharedWorldSpeedway;
+namespace Efficient147;
+public sealed record RuntimeOptions147(bool Cache=true,bool ShareInactivePrefix=true,bool ReuseBoundary=true,bool EventSearch=false,
+    bool WorkBudget=false,bool BufferedTail=false,bool RetainProposalTape=false,int ProposalsPerThrottle=0,int MaximumActualForecasts=4096,int MaximumContacts=400000,int OptionalSearchContacts=100000,double MaximumReviewCpuSeconds=30,int MaximumCacheEntries=20000);
+public sealed record Physical147(FreeRacingPrediction Prediction,double CrankOmega,double Review);
+public sealed class ExactRuntime147{
+    readonly RiderSpec spec;readonly TrackFrame frame;readonly TrackStateSnapshot surface;readonly WorldParameters p;readonly float mass,inertia;
+    PredictionBoundary147 boundary;readonly Dictionary<string,Physical147> predictions=new();readonly Dictionary<string,Decision144> seeds=new();
+    readonly Dictionary<Plan146,FreeRacingAction[]> tapes=new(ReferenceEqualityComparer.Instance);FreeRacingAction[]? inheritedTape;
+    readonly Process process=Process.GetCurrentProcess();string? conditions;double reviewTime;TimeSpan reviewCpu;
+    long startForecasts,startContacts,optionalStartContacts;string operation="dispatch";bool optionalStarted;
+    int? lastSegment;double? lastGoal,lastGoalTime;
+    public RuntimeOptions147 Options {get;}
+    public long ActualForecasts {get;private set;}public long ActualContacts {get;private set;}
+    public long PredictionRequests {get;private set;}public long PredictionHits {get;private set;}
+    public long SeedRequests {get;private set;}public long SeedHits {get;private set;}
+    public long CrossReviewHits {get;private set;}public long InactivePrefixRequests {get;private set;}
+    public long BudgetFallbacks {get;private set;}public string? BudgetReason {get;private set;}
+    public CpuProfile147? Profile {get;private set;}
+    public ExactRuntime147(RiderSpec spec,TrackFrame frame,TrackStateSnapshot surface,WorldParameters p,RuntimeOptions147? options=null,float mass=147,float inertia=52.72097f){
+        this.spec=spec;this.frame=frame;this.surface=surface;this.p=p;this.mass=mass;this.inertia=inertia;Options=options??new();boundary=new(frame);
+    }
+    public void Begin(double time){
+        reviewTime=time;reviewCpu=process.TotalProcessorTime;startForecasts=ActualForecasts;startContacts=ActualContacts;optionalStarted=false;operation="dispatch";BudgetReason=null;tapes.Clear();inheritedTape=null;Profile=new();
+        // Conditions are fixed for a chooser snapshot. Cross-review reuse additionally requires exact context equality.
+        var token=Convert.ToHexString(SHA256.HashData(JsonSerializer.SerializeToUtf8Bytes(new{spec,frame.Track,surface,p,mass,inertia,LaunchParameters144.Default,Policy=Controller143.Policy},FreeLearningExperiment.Json)));
+        if(token!=conditions){predictions.Clear();seeds.Clear();if(conditions is not null)boundary=new(frame);conditions=token;}
+    }
+    public IDisposable Phase(string phase)=>Profile!.Phase(phase);
+    public IDisposable Operation(string role){
+        var old=operation;operation=role;var measured=Profile!.Operation(role);
+        if(role.StartsWith("beam-")&&!optionalStarted){optionalStarted=true;optionalStartContacts=ActualContacts;}
+        return new Scope(()=>{measured.Dispose();operation=old;});
+    }
+    public bool Scheduled(FreeRacingInput input,Plan146? incumbent,bool legacyDue){
+        if(!Options.EventSearch)return legacyDue;
+        return lastSegment!=input.Rider.Road.Segment||lastGoal!=incumbent?.GoalMeters
+            ||incumbent is not null&&lastGoalTime is double t&&Math.Abs(incumbent.GoalTime.GetValueOrDefault()-t)>.02;
+    }
+    public void Completed(FreeRacingInput input,Plan146? plan){lastSegment=input.Rider.Road.Segment;lastGoal=plan?.GoalMeters;lastGoalTime=plan?.GoalTime;}
+    public void InitializeHistory(FreeRacingInput input,Plan146? plan)=>Completed(input,plan);
+    public void OnFallback(string reason){BudgetFallbacks++;BudgetReason=reason;}
+    void CheckWork(double seconds){
+        if(!Options.WorkBudget)return;
+        var optional=operation.StartsWith("beam-");
+        const int PreflightContactsReserve=200,PreflightForecastsReserve=8;
+        var contactReserve=optional?PreflightContactsReserve:0;var forecastReserve=optional?PreflightForecastsReserve:0;
+        var estimatedBound=2*((int)Math.Ceiling(seconds/.01)+4);
+        if(ActualForecasts-startForecasts>=Options.MaximumActualForecasts-forecastReserve
+            ||ActualContacts-startContacts+estimatedBound>Options.MaximumContacts-contactReserve
+            ||optional&&ActualContacts-optionalStartContacts+estimatedBound>Options.OptionalSearchContacts
+            ||(process.TotalProcessorTime-reviewCpu).TotalSeconds>Options.MaximumReviewCpuSeconds-(optional ? .2 : 0))
+            throw new PlanningBudget146("per-review physical forecast/contact/CPU budget");
+    }
+    Physical147 Predict(State146 state,FreeRacingAction? action,double seconds){
+        PredictionRequests++;
+        if(Options.ShareInactivePrefix&&action is not null&&state.Input.Time+RiderController.ReactionSeconds(spec)>state.Input.Time+seconds+1e-10){action=null;InactivePrefixRequests++;}
+        var canCache=Options.Cache&&operation!="independent_preflight";
+        var key=canCache?ExactKey147.State(state,seconds,action):"";
+        if(canCache&&predictions.TryGetValue(key,out var hit)){PredictionHits++;if(hit.Review!=reviewTime)CrossReviewHits++;return hit;}
+        CheckWork(seconds);double crank=state.CrankOmega;
+        var forecast=CachedPredictor147.Predict(state.Input,spec,frame,surface,p,mass,inertia,seconds,action,
+            powertrain:new CrankClutch144(omega:state.CrankOmega),observeCrank:(_,w)=>crank=w,
+            boundaryCache:Options.ReuseBoundary?boundary:null);
+        ActualForecasts++;ActualContacts+=forecast.ForceEvaluations;var result=new Physical147(forecast,crank,reviewTime);
+        if(canCache){if(predictions.Count>=Options.MaximumCacheEntries)predictions.Clear();predictions[key]=result;}
+        return result;
+    }
+    public FreeRacingPrediction ForecastForDiagnostics(State146 state,FreeRacingAction action,double seconds)=>Predict(state,action,seconds).Prediction;
+    public Transition146 Step(State146 state,FreeRacingAction action,double seconds){
+        action.Validate();var result=Predict(state,action,seconds);var i=state.Input;var end=result.Prediction.Points[^1];
+        var queue=i.Pending.Append(new FreeRacingCommand(i.Time,i.Time+RiderController.ReactionSeconds(spec),action)).OrderBy(c=>c.ActivationAt).ToArray();
+        var active=queue.Where(c=>c.ActivationAt<=end.Time+1e-10).Select(c=>c.Action).LastOrDefault(i.Active);
+        var input=new FreeRacingInput(end.Rider with{Drive=active.Drive},end.Time,end.Omega,end.Steering,active,queue.Where(c=>c.ActivationAt>end.Time+1e-10).ToArray(),end.Time);
+        return new(new(input,result.CrankOmega),result.Prediction);
+    }
+    public Decision144 Seed(State146 state){
+        SeedRequests++;var key=Options.Cache?ExactKey147.State(state):"";if(Options.Cache&&seeds.TryGetValue(key,out var cached)){SeedHits++;return cached with{CpuSeconds=0};}
+        var began=process.TotalProcessorTime;var input=state.Input;var rows=new List<FreeLearningCandidate>();int contacts=0,forecasts=0;
+        foreach(var action in FreeLearningController.Actions(input,Controller143.Policy,true)){
+            var prediction=Predict(state,action,.9).Prediction;contacts+=prediction.ForceEvaluations;forecasts++;
+            var leaf=Objective142.FromPrediction(input,Controller143.Policy,frame,surface,prediction,action);var score=Controller143.Score(leaf,Policy144.Variant("K1"));rows.Add(leaf.Candidate with{Score=score.Score,Safety=score.Safety});
+        }
+        var chosen=rows.OrderBy(r=>r.Safety).ThenBy(r=>r.Score).ThenBy(r=>Math.Abs(r.Action.SteeringRadians-input.Active.SteeringRadians)).ThenBy(r=>r.Action.SteeringRadians).First();
+        var result=new Decision144(new(input.Time,chosen.Action,chosen.Safety,rows.All(r=>r.Safety!=FreeActionSafety.SafeInHorizon),rows.ToArray(),contacts,forecasts),(process.TotalProcessorTime-began).TotalSeconds);
+        if(Options.Cache){if(seeds.Count>=Options.MaximumCacheEntries)seeds.Clear();seeds[key]=result;}return result;
+    }
+    public void ObservePlan(Plan146 plan,FreeRacingAction[]? proposed){
+        if(!Options.RetainProposalTape)return;
+        var tape=proposed is not null&&proposed.Length>plan.Actions.Length?proposed:plan.Actions;
+        if(plan.Origin=="shifted-incumbent")inheritedTape=tape;
+        if(proposed is null&&inheritedTape is not null&&inheritedTape.Length>tape.Length)tape=tape.Concat(inheritedTape.Skip(tape.Length)).ToArray();
+        tapes[plan]=tape;
+    }
+    public FreeRacingAction[] Retained(Plan146 root){
+        var tape=tapes.GetValueOrDefault(root)??root.Actions;
+        // Reuse controls, never predicted states/certificates. Each candidate propagates them anew.
+        // Three held-command reviews provide a bounded arrival buffer; no nested full-K1 search.
+        return tape.Concat(Enumerable.Repeat(tape[^1],3)).ToArray();
+    }
+    public FreeRacingAction[] Buffered(Plan146 root){
+        if(!Options.BufferedTail)return root.Actions;
+        using var scope=Operation("beam-buffer");
+        var state=root.End;var actions=root.Actions.ToList();
+        // A single endogenous two-second action buffer per beam root. Every candidate re-simulates it.
+        // Buffer states are never substituted for candidate or native states and do not imply certification.
+        for(int k=0;k<10&&state.Input.Time<root.CreatedAt+25.8-1e-8;k++){
+            FreeRacingAction a;using(Phase("seed_k1"))a=Seed(state).Choice.Action;
+            using(Phase("model_step"))state=Step(state,a,.2).End;actions.Add(a);
+        }
+        return actions.ToArray();
+    }
+    public FreeRacingAction[] Proposals(State146 state,FreeRacingAction[] grid){
+        using var role=Operation("proposal-ranking");using var phase=Phase("seed_k1");
+        var allowed=grid.ToHashSet();var candidates=Seed(state).Choice.Candidates.Where(c=>allowed.Contains(c.Action));
+        return candidates.GroupBy(c=>c.Action.Drive).SelectMany(g=>g.OrderBy(c=>c.Safety).ThenBy(c=>c.Score)
+            .ThenBy(c=>Math.Abs(c.Action.SteeringRadians-state.Input.Active.SteeringRadians)).ThenBy(c=>c.Action.SteeringRadians).Take(Options.ProposalsPerThrottle)).Select(c=>c.Action).ToArray();
+    }
+    public ExecutionHooks146 Hooks()=>new(Step:Step,Seed:Seed,Phase:Phase,Operation:Operation,BeginReview:Begin,ScheduledSearch:Scheduled,
+        UseOwnWorkBudget:Options.WorkBudget,SearchBudgetFallback:OnFallback,EarlyReject:Options.EventSearch,SearchTail:Options.RetainProposalTape?Retained:Options.BufferedTail?Buffered:null,FreezeCandidateTail:Options.BufferedTail||Options.RetainProposalTape,ObservePlan:ObservePlan,Proposals:Options.ProposalsPerThrottle>0?Proposals:null);
+    public object Counters()=>new{ActualForecasts,ActualContacts,PredictionRequests,PredictionHits,SeedRequests,SeedHits,CrossReviewHits,InactivePrefixRequests,BudgetFallbacks,BudgetReason,CacheEntries=predictions.Count,SeedCacheEntries=seeds.Count};
+    sealed class Scope(Action action):IDisposable{public void Dispose()=>action();}
+}
