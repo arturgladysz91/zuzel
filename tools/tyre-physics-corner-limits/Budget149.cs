@@ -11,7 +11,7 @@ public sealed class Budget149:IDisposable{
     public Budget149(string name,int nativeWorlds,double maximumCpu){
         lease=new FileStream(Path+".lock",FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.None);
         ledger=JsonNode.Parse(File.ReadAllText(Path))!.AsArray();if(ledger.Any(x=>!x!["Complete"]!.GetValue<bool>()))throw new IOException("Inspect incomplete Study149 reservation.");
-        if(nativeWorlds<0||ledger.Sum(x=>x!["NativeWorlds"]!.GetValue<int>())+nativeWorlds>48)throw new IOException("Study149 48-world diagnostic ceiling; preserve failures.");
+        if(nativeWorlds<0||ledger.Sum(x=>x!["NativeWorlds"]!.GetValue<int>())+nativeWorlds>50)throw new IOException("Study149 50-world diagnostic ceiling; preserve failures.");
         if(ledger.Any(x=>x!["Name"]!.GetValue<string>()==name))throw new IOException("Preserve existing attempt "+name);
         SpentBefore=ledger.Sum(x=>x!["CpuSeconds"]!.GetValue<double>());cap=Math.Min(maximumCpu,1180-SpentBefore);if(cap<=0)throw new IOException("Study149 1200 CPU-s reserve exhausted.");
         start=process.TotalProcessorTime;row=new(){["Name"]=name,["Complete"]=false,["NativeWorlds"]=nativeWorlds,["CpuSeconds"]=0};ledger.Add(row);Save();

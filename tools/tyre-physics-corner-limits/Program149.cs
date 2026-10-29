@@ -18,6 +18,8 @@ public static class Program149{
    case "--causal149":Causal149.Run();break;
    case "--causal-own-b149":Causal149.Run(true);break;
    case "--capabilities149":Fixtures149.Capabilities();break;
+   case "--local-planner149":Local149.Run();break;
+   case "--local-audit149":LocalAudit149.Run();break;
    case "--native-b149":Native149.Run("separated149-autonomous",false);break;
    case "--repeat-b149":Native149.Run("separated149-repeat",false);break;
    default:throw new ArgumentException("Unknown explicit flag.");

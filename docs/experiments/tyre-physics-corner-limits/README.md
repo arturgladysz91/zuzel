@@ -130,6 +130,14 @@ K1 ukończył łuk+62 m w20/24 przypadkach. Minimum przy początkowych90 km/h na
 
 Standardoweβ45° jest w diagnostykach obserwatorem, nie automatycznym fizycznym DNF. Oprócz skończoności i ciągłości stanów zachowano kontrole dodatnich strat kontaktu/sprzęgła, energii korpusu/koła/wału, wykorzystania opony≤1, fizycznej zmiany kierownicy, ruchu naprzód i sweep pełnego obrysu. Próby gazu przekraczająβ45° do47,48/47,71° i kontynuują aż do utraty certyfikatu sweep. Dla B w tym miejscu endpoint ma jeszcze+0,001725 m odstępu: to **brak certyfikatu**, nie potwierdzone przekroczenie ani kontakt. Żadna jazda poza obwiednią nie dostała race PASS. Zaplanowany timeout14 s oznacza koniec okna, nie upadek.
 
+## Dodatkowe próby z pełnym plannerem sekwencji
+
+Dwie dodatkowe próby A/B zaczynają od90 km/h,12 m przed łukiem i offset10 m. Planner ma ten sam beam, ranking H09, cache i certyfikację co w pełnym A/B, z geometryczną metą jednego okrążenia dla tego diagnostycznego startu. Nie wymusza prędkości ani linii. Obie próby wykonują pięć decyzji i zatrzymują się po1 s przez STUDY146_ABSTAIN. Nie ma wtedy fizycznego DNF: min clearance0,5992 m, sweep0,474235 m i β12,694°. Koszt całych prób15,65625/18,25 CPU-s. W surowym rozbiciu CPU ostatnia odmówiona decyzja trafia do NativeAndObservationCpuSeconds, ponieważ oryginalny kolektor zlicza CPU kontrolera tylko po zwrocie decyzji; dla tych prób nie używamy tego pola jako pomiaru czystej fizyki.
+
+Odtworzenie wszystkich pięciu decyzji z ich rzeczywistych obserwacji oraz ostatniej odmowy, bez nowego świata, daje identyczne komendy A/B. W chwili1 s błąd przewidywanego XY wynosi tylko7,864 μm, aktywne sterowanie i pending są zgodne. Plan z0,8 s miał legalną kompletną prognozę, min odstęp0,349042 m i βmax23,699°. Po przesunięciu na rzeczywistą obserwację prognoza incumbent przewiduje β47,275/47,277° przy nadal dodatnim sweep0,30954 m. Wszystkich20 kandydatów odrzucono:12 zaβ45°,8 za rezerwę obrysu. To nie limit CPU: fallback budżetu=0. Nowy sterownik słusznie nie wykonuje niecertyfikowanej komendy, lecz jego daleka kontynuacja nie jest odporna na małą zmianę stanu.
+
+To konkretny blok planowania/robustności, wspólny dla A i B, a nie dowód fizycznej niemożliwości90 km/h. Pełne alternatywy i poprzednie certyfikaty są w local-replanning-audit.json.gz. Nie zmierzono natywnego skutku dalszego wykonania odrzuconego ogona; oddzielenie fizycznej niestabilności dalekiego otwartego planu od dyskretnych rozgałęzień dobudowywanego K1 wymaga kolejnego celowanego eksperymentu. Nie osłabionoβ45 ani rezerw, żeby uzyskać PASS.
+
 ## Pięć obszarów strat i wpływ następnej prostej
 
 Zakres raportu: start do pierwszego wejścia oraz łuki2.1,2.2,3.1,3.2 od1,2 s przed wejściem do następnego wejścia. Ostatni3.2 jest ucięty metą; brakujące35 m nie zostało dopowiedziane. Całki do końca następnego łuku są zapisane oddzielnie w `regions`; za metą pozostają N/D.
@@ -200,7 +208,7 @@ Potrzebne są zmierzone oddzielnie dla przodu i tyłu: Fx(κ,α,Fz,V), Fy(κ,α,
 
 ## Budżet i odtwarzanie
 
-Eksperymenty i zapisane analizy/wykresy: **794.796875 CPU-s /1200**, **48 światy**. Podział: trzy pełne autonomiczne przejazdy (A i dwaB),24 wejścia, cztery testy zgodności,17 prób przyczynowych. Pierwszy start pełnego B odrzucono przed budową świata przez odziedziczony limit24; zachowano log i konserwatywny1 CPU-s, jawnie nie jako pomiar. Nowy centralny limit48 światów i1180 CPU-s zostawia rezerwę przed1200. Kompilacja, standardowe testy i CI są walidacją, poza budżetem eksperymentów natywnych. Koszt samego generatora raportu jest dopisany osobno w ledgerze.
+Eksperymenty i zapisane analizy/wykresy: **883.281250 CPU-s /1200**, **50 światów**. Podział: trzy pełne autonomiczne przejazdy (A i dwaB),24 wejścia, cztery testy zgodności,17 prób przyczynowych oraz dwie ograniczone próby z pełnym plannerem. Pierwszy start pełnego B odrzucono przed budową świata przez odziedziczony limit24; zachowano log i konserwatywny1 CPU-s, jawnie nie jako pomiar. Nowy centralny limit50 światów i1180 CPU-s zostawia rezerwę przed1200. Kompilacja, standardowe testy i CI są walidacją, poza budżetem eksperymentów natywnych. Koszt samego generatora raportu jest dopisany osobno w ledgerze.
 
 Wcześniejsze badania #139/#140 rozdzielają problem konstytutywny i jego brak kalibracji; #143 potwierdza, że usunięcie preferencji gazu samo niewiele zmienia; #145 dowodzi istnienia korzystnych komend; #146 diagnozuje zaniechanie obiecywanej korekty i wprowadza spójny ogon; #147 waliduje trzy okrążenia; #148 daje dokładne optymalizacje i negatywny wynik rzadszego ogona. Ich źródła, parametry i evidence pozostają bez zmian (`source-proof.json`).
 
@@ -214,6 +222,6 @@ node --test tools/replay-viewer/replay.test.mjs
 python tools/tyre-physics-corner-limits/generate149.py --check
 ```
 
-Jawne flagi programu `tools/tyre-physics-corner-limits`: `--baseline149`, `--audit149`, `--coupling149`, `--parity149`, `--corner-parity149`, `--capabilities149`, `--native-b149`, `--repeat-b149`, `--causal149`, `--causal-own-b149`. Istniejące próby nie są nadpisywane; ponowna symulacja wymaga nowego jawnego katalogu/budżetu w nowym badaniu. Zapisy można odtwarzać wielokrotnie bez tworzenia światów.
+Jawne flagi programu `tools/tyre-physics-corner-limits`: `--baseline149`, `--audit149`, `--coupling149`, `--parity149`, `--corner-parity149`, `--capabilities149`, `--native-b149`, `--repeat-b149`, `--causal149`, `--causal-own-b149`, `--local-planner149`, `--local-audit149`. Istniejące próby nie są nadpisywane; ponowna symulacja wymaga nowego jawnego katalogu/budżetu w nowym badaniu. Zapisy można odtwarzać wielokrotnie bez tworzenia światów.
 
 [Replay A/B i diagnostyk](http://127.0.0.1:8018/tools/replay-viewer/?case=tyre149&run=separated149-autonomous&t=29) czyta zapisane stany. Lista zawiera także nieudane próby i starty diagnostyczne w ruchu, z odpowiednimi opisami. [Walidacja](VALIDATION.md) podaje zakres testów i Windows CI.
