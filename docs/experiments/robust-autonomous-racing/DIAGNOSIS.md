@@ -1,0 +1,11 @@
+# Causal diagnosis before planner implementation
+
+The frozen0.8s complete plan is reproduced exactly, including every predicted point, for A and B. Shifting it to its own predicted1.0s state preserves legality and beta23.698891°. Substituting the actual1.0s state while holding every future command fixed gives beta45 failure at10.93s. No command diverges. Appending K1 after the saved tape produces exactly the same failure before the appendix is reached. Thus regeneration is not the cause of this particular incumbent rejection.
+
+The input error is a vector, not just7.864 micrometres of position. Controlled heading-only perturbations in the measured direction fail beta at10.87s; the opposite heading direction fails footprint reserve at9.36s. Wheel/crank-only perturbations remain legal. Position-only effects differ between A/B and can fail a later reserve. First growth past1mm is at3.2s for the full observed-state substitution, not instantly at1s. This is long open-loop sensitivity of the frozen discrete numerical/contact dynamics. It does not establish physical impossibility or measured real-bike chaos.
+
+Fresh causal K1 differs from the preserved tape first at5.8s (step24 after1s): steer0.5° instead of0°, same partial throttle. It subsequently fails footprint reserve around11.12s. This is a separate discrete policy mechanism, not the initial same-tape divergence. Complete A–E traces include state, commands, matched queue, first growing error and first rejected point.
+
+An initial diagnostic deliberately propagated beyond the first failure and hit the unchanged crank passivity invariant in a later heading perturbation. All partial files and10.359375 CPU-s are preserved. The completed audit stops each counterfactual at its first unchanged certificate failure, avoiding interpretation outside an already rejected continuation. No guard was weakened.
+
+Prototype consequence: storing one immutable tape alone cannot solve this case. Need alternatives and repairs at the *future* unstable section, plus measured-error recourse screening; near-term3-command edits followed by a single long tape are insufficient. Any attempted repair must be fully repropagated from the observed state with its existing queue and independently certified. A nominal certificate is not a robustness proof. New planner work begins only after this diagnosis.

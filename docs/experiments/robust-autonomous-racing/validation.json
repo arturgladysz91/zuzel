@@ -1,0 +1,37 @@
+{
+  "Local": {
+    "ReleaseBuild": {
+      "Success": true,
+      "Warnings": 0,
+      "Errors": 0
+    },
+    "CSharp": {
+      "Passed": 2492,
+      "Failed": 0,
+      "Skipped": 0,
+      "Scope": "core2097 + trajectory395; final repeat",
+      "Trx": "validation/dotnet/study150-final.trx"
+    },
+    "Discovery": {
+      "Total": 3013,
+      "Missing": 0,
+      "Duplicates": 0,
+      "HistoricalNotExecuted": 473,
+      "FourRiderNotExecuted": 48
+    },
+    "PythonCalibration": 302,
+    "PythonCiPolicy": 7,
+    "NodeReplay": 83,
+    "Generated148Check": true,
+    "Generated149Check": true,
+    "HttpReplayModule": 200,
+    "GitDiffCheck": true
+  },
+  "WindowsCI": {
+    "Required": true,
+    "PullRequest": "https://github.com/arturgladysz91/zuzel/pull/149/checks",
+    "Receipt": "ci-final.json in delivered outputs, captured after final head completes",
+    "Note": "Draft profile executes core and trajectory; historical/four-rider shards are discovered but not run."
+  },
+  "SportingVerdict": "PARTIAL"
+}

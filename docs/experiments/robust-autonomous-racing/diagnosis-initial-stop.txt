@@ -1,0 +1,20 @@
+A A-original-fixed legal complete forecast beta=23,69889132295489
+A B-predicted-shift-fixed legal complete forecast beta=23,69889132295489
+A C-observed-shift-fixed reverse motion beta=178,446593229415
+A D-observed-shift-append-K1 reverse motion beta=178,446593229415
+A D-fresh-K1 footprint reserve beta=27,20744718092409
+A E-position--1 footprint reserve beta=23,789773516487113
+A E-position-1 footprint reserve beta=23,789773516487113
+A E-velocity--1 footprint reserve beta=25,55017979475901
+A E-velocity-1 legal complete forecast beta=23,806141685378098
+A E-heading--1 reverse motion beta=63,009897558877206
+Unhandled exception. System.InvalidOperationException: Crank/clutch passivity or energy identity failed.
+   at Speed148.FastCrank148.Prepare(Double throttle, Double ratio, Double efficiency, Double seconds, Boolean released, Func`2 wheelAtTorque) in D:\CodexWork\2026-10-28-corner-speed-loss-145\work\zuzel\tools\shared-world-speedway\PlannerPerformance148\FastCrank148.cs:line 66
+   at Speed148.ForecastContact148.Forces(RiderView v, RiderSpec spec, TrackFrame frame, TrackStateSnapshot surface, WorldParameters p, Double time, Single mass, RearWheelState wheel, TwoContactBikeState state, Single seconds, Nullable`1 path, Nullable`1 steeringOverride, Action`1 observe, Action`1 observeContacts, Nullable`1 inertia, FastCrank148 powertrain, Double releaseAt) in D:\CodexWork\2026-10-28-corner-speed-loss-145\work\zuzel\tools\shared-world-speedway\PlannerPerformance148\ForecastContact148.cs:line 86
+   at Speed148.FastPredictor148.<Predict>g__Query|1_3(Single dt, <>c__DisplayClass1_0&) in D:\CodexWork\2026-10-28-corner-speed-loss-145\work\zuzel\tools\planner-speed-root-cause\FastPredictor148.cs:line 69
+   at Speed148.FastPredictor148.Predict(FreeRacingInput input, RiderSpec spec, TrackFrame frame, TrackStateSnapshot surface, WorldParameters p, Single mass, Single inertia, Double horizon, Nullable`1 candidate, FreeRacingPolicy closedLoop, Func`2 causalPolicy, Double reviewSeconds, CrankClutch144 powertrain, Action`2 observeCrank, PredictionBoundary147 boundaryCache, FastBoundary148 fastBoundary, Boolean exactInitialWheel, Nullable`1 stopAt) in D:\CodexWork\2026-10-28-corner-speed-loss-145\work\zuzel\tools\planner-speed-root-cause\FastPredictor148.cs:line 83
+   at Speed148.ExactRuntime148.Predict(State146 state, Nullable`1 action, Double seconds) in D:\CodexWork\2026-10-28-corner-speed-loss-145\work\zuzel\tools\planner-speed-root-cause\ExactRuntime148.cs:line 63
+   at Speed148.ExactRuntime148.Step(State146 state, FreeRacingAction action, Double seconds) in D:\CodexWork\2026-10-28-corner-speed-loss-145\work\zuzel\tools\planner-speed-root-cause\ExactRuntime148.cs:line 93
+   at Robust150.Rollout150.Evaluate(Runtime150 rt, State146 start, FreeRacingAction[] tape, Double goal, Double safetyGoal, String origin, Boolean generateTail, Boolean regenerateAll, Boolean early, Action guard) in D:\CodexWork\2026-10-28-corner-speed-loss-145\work\zuzel\tools\robust-autonomous-racing\Tape150.cs:line 12
+   at Robust150.Diagnosis150.Run() in D:\CodexWork\2026-10-28-corner-speed-loss-145\work\zuzel\tools\robust-autonomous-racing\Diagnosis150.cs:line 20
+   at Robust150.Program150.Main(String[] args) in D:\CodexWork\2026-10-28-corner-speed-loss-145\work\zuzel\tools\robust-autonomous-racing\Program150.cs:line 10

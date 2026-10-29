@@ -1,0 +1,24 @@
+using System.Numerics;
+using Autonomous146;
+using CoreSim.PhysicalSpace;
+using SharedWorldSpeedway;
+namespace Robust150;
+/// <summary>Tube feedback around an endogenous predicted maneuver, not an authored racing line.
+/// Critical damping timescale is two existing reaction+review pipelines. No force/body writes.</summary>
+public static class Feedback150{
+ public static (State146 Reference,FreeRacingAction Action) SpatialReference(Runtime150 rt,State146 state,Tape150 anchor){
+  var pts=anchor.Points;var target=state.Input.Rider.TotalReferenceMeters;int lo=0,hi=pts.Length-1;while(lo<hi){var mid=(lo+hi)/2;if(pts[mid].Rider.TotalReferenceMeters<target)lo=mid+1;else hi=mid;}var j=Math.Clamp(lo,1,pts.Length-1);var a=pts[j-1];var b=pts[j];var ds=b.Rider.TotalReferenceMeters-a.Rider.TotalReferenceMeters;var u=ds>0?Math.Clamp((target-a.Rider.TotalReferenceMeters)/ds,0,1):0;var time=a.Time+(b.Time-a.Time)*u;var z=Math.Clamp((time-anchor.CreatedAt)/.2,0,anchor.Actions.Length-1);var k=Math.Min((int)Math.Floor(z),anchor.Actions.Length-1);var f=z-k;var next=Math.Min(k+1,anchor.Actions.Length-1);float L(float x,float y)=>(float)(x+(y-x)*u);
+  var rider=a.Rider with{Position=Vector2.Lerp(a.Rider.Position,b.Rider.Position,(float)u),Velocity=Vector2.Lerp(a.Rider.Velocity,b.Rider.Velocity,(float)u),Heading=(float)(a.Rider.Heading+BikeAngles.Wrap(b.Rider.Heading-a.Rider.Heading)*u),AngularVelocity=L(a.Rider.AngularVelocity,b.Rider.AngularVelocity)};var refState=anchor.States[k];var crank=refState.CrankOmega+(anchor.States[Math.Min(k+1,anchor.States.Length-1)].CrankOmega-refState.CrankOmega)*f;var omega=a.Omega+(b.Omega-a.Omega)*u;var action=new FreeRacingAction((float)(anchor.Actions[k].SteeringRadians+(anchor.Actions[next].SteeringRadians-anchor.Actions[k].SteeringRadians)*f),(float)(anchor.Actions[k].Drive+(anchor.Actions[next].Drive-anchor.Actions[k].Drive)*f));return(new(refState.Input with{Rider=rider,Time=time,Omega=omega},crank),action);
+ }
+ public static FreeRacingAction Action(Runtime150 rt,State146 state,Tape150 anchor){
+  var index=Math.Clamp((int)Math.Round((state.Input.Time-anchor.CreatedAt)/.2),0,anchor.Actions.Length-1);var reference=anchor.States[index];var action=anchor.Actions[index];if(rt.Spatial&&state.Input.Rider.Speed>RearWheelParameters.Default.LowSpeedMetersPerSecond)(reference,action)=SpatialReference(rt,state,anchor);var v=state.Input.Rider;var r=reference.Input.Rider;
+  if(v.Position==r.Position&&v.Velocity==r.Velocity&&v.Heading==r.Heading&&v.AngularVelocity==r.AngularVelocity&&state.Input.Omega==reference.Input.Omega&&state.CrankOmega==reference.CrankOmega)return action;
+  var tau=2*(RiderController.ReactionSeconds(rt.Spec)+FreeLearningController.ReviewSeconds);var course=r.Speed>.5f?Vector2.Normalize(r.Velocity):new Vector2(MathF.Cos(r.Heading),MathF.Sin(r.Heading));var left=new Vector2(-course.Y,course.X);var lateral=Vector2.Dot(v.Position-r.Position,left);var lateralVelocity=Vector2.Dot(v.Velocity-r.Velocity,left);
+  var headingError=BikeAngles.Wrap(v.Heading-r.Heading)+(lateral/tau+lateralVelocity)/Math.Max(r.Speed,RearWheelParameters.Default.LowSpeedMetersPerSecond);var yawError=v.AngularVelocity-r.AngularVelocity;
+  var referenceAngle=rt.AcceptedOperatingPoint?reference.Input.Steering:action.SteeringRadians;var actualAngle=rt.AcceptedOperatingPoint?state.Input.Steering:action.SteeringRadians;var referenceDrive=rt.AcceptedOperatingPoint?reference.Input.Active:action;var actualDrive=rt.AcceptedOperatingPoint?state.Input.Active:action;var nominal=rt.LocalAlpha(reference,referenceDrive,referenceAngle);var actual=rt.LocalAlpha(state,actualDrive,actualAngle);var desired=nominal-2*yawError/tau-headingError/(tau*tau);
+  if(rt.Joint)return Joint150.Correct(rt,state,reference,action,desired,tau);
+  var delta=.5f*MathF.PI/180;var max=TwoContactBikeParameters.Default.MaximumSteeringRadians;var lo=Math.Clamp(actualAngle-delta,-max,max);var hi=Math.Clamp(actualAngle+delta,-max,max);var derivative=(rt.LocalAlpha(state,actualDrive,hi)-rt.LocalAlpha(state,actualDrive,lo))/(hi-lo);
+  if(!double.IsFinite(derivative)||Math.Abs(derivative)<1e-8)return action;var request=Math.Clamp(action.SteeringRadians+(desired-actual)/derivative,-max,max);return action with{SteeringRadians=(float)request};
+ }
+ public static Tape150 Evaluate(Runtime150 rt,State146 state,Tape150 anchor,double goal,double safetyGoal,string origin,Action guard,bool extend=false){var shift=Math.Max(0,(int)Math.Round((state.Input.Time-anchor.CreatedAt)/.2));return Rollout150.Evaluate(rt,state,anchor.Actions.Skip(shift).ToArray(),goal,safetyGoal,origin,generateTail:extend,guard:guard,feedback:(s,_)=>Action(rt,s,anchor));}
+}
