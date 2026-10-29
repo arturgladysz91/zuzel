@@ -3,7 +3,7 @@ using System.Numerics;
 using Autonomous146;
 using SharedWorldSpeedway;
 namespace Robust150;
-public sealed record Options150(bool Enabled=false,int Laps=3,int Portfolio=3,int Candidates=36,bool RobustScreen=true,bool Feedback=false);
+public sealed record Options150(bool Enabled=false,int Laps=3,int Portfolio=3,int Candidates=36,bool RobustScreen=true,bool Feedback=false,bool SpatialFeedback=false);
 public sealed record Candidate150(Tape150 Tape,bool Robust,Tape150? Challenge,string Reason,Tape150? Anchor=null);
 public sealed record Summary150(string Origin,bool Legal,bool Robust,double? Seconds,double EndReference,double MinimumGap,double Sweep,double Beta,double Yaw,string Reason,int Actions);
 public sealed record Review150(double Time,State146 Observed,double Goal,double SafetyGoal,string Reason,int Considered,int Legal,int Robust,int Inherited,int Pruned,Summary150[] Alternatives,FreeRacingAction[]? Selected,double? Arrival,Safety146? Certificate,Safety146? Independent,FreeRacingPoint[]? ForecastTrace,object Counts,double CpuSeconds);
@@ -11,7 +11,7 @@ public sealed record Review150(double Time,State146 Observed,double Goal,double 
 public sealed class Planner150{
  public Options150 Options {get;}public Runtime150 Runtime {get;}public Review150? Last {get;private set;}public Tape150? SelectedAnchor {get;private set;}
  readonly Action guard;readonly ErrorVector150 measuredError;readonly List<Candidate150> portfolio=new();double nextSearch;int? lastSegment;
- public Planner150(RiderSpec spec,bool separated,Options150? options=null,Action? guard=null,ErrorVector150? error=null){Options=options??new();if(!Options.Enabled)throw new InvalidOperationException("Planner150 is OFF by default.");if(Options.Laps is <1 or >3||Options.Portfolio is <1 or >3||Options.Candidates is <6 or >60)throw new ArgumentException("Bounded planner required.");this.guard=guard??(()=>{});Runtime=new(spec,separated);
+ public Planner150(RiderSpec spec,bool separated,Options150? options=null,Action? guard=null,ErrorVector150? error=null){Options=options??new();if(!Options.Enabled)throw new InvalidOperationException("Planner150 is OFF by default.");if(Options.Laps is <1 or >3||Options.Portfolio is <1 or >3||Options.Candidates is <6 or >60)throw new ArgumentException("Bounded planner required.");this.guard=guard??(()=>{});Runtime=new(spec,separated,spatial:Options.SpatialFeedback);
   // Measured model-error vector only. No saved action, target line or future native state is loaded.
   measuredError=error??Program150.Read<ErrorVector150[]>(Program150.Doc+"/model-errors.json").Single(x=>x.Model==(separated?"B":"A"));
  }
