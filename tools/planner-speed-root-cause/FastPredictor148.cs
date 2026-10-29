@@ -12,7 +12,7 @@ public static class FastPredictor148
     public static FreeRacingPrediction Predict(FreeRacingInput input, RiderSpec spec, TrackFrame frame,
         TrackStateSnapshot surface, WorldParameters p, float mass, float inertia, double horizon,
         FreeRacingAction? candidate = null, FreeRacingPolicy? closedLoop = null,
-        Func<FreeRacingInput, (FreeRacingAction Action, int Evaluations)>? causalPolicy = null, double reviewSeconds = .1,CrankClutch144? powertrain=null,Action<double,double>? observeCrank=null,PredictionBoundary147? boundaryCache=null,FastBoundary148? fastBoundary=null)
+        Func<FreeRacingInput, (FreeRacingAction Action, int Evaluations)>? causalPolicy = null, double reviewSeconds = .1,CrankClutch144? powertrain=null,Action<double,double>? observeCrank=null,PredictionBoundary147? boundaryCache=null,FastBoundary148? fastBoundary=null,bool exactInitialWheel=false,double? stopAt=null)
     {
         var shaft=powertrain is null?null:new FastCrank148(powertrain.Parameters,powertrain.Omega);
         if(shaft is not null&&(closedLoop is not null||causalPolicy is not null))throw new ArgumentException("Launch prediction accepts a held candidate only.");
@@ -36,9 +36,9 @@ public static class FastPredictor148
         var queue = input.Pending.OrderBy(c => c.ActivationAt).ToList();
         if (candidate is { } action) queue.Add(new(input.Time, input.Time + reaction, action));
         var active = input.Active; var v = input.Rider;
-        var wheel = new RearWheelState(input.Omega * (p.RearWheel ?? RearWheelParameters.Default).WheelRadiusMeters, p.RearWheel);
+        var wheel = exactInitialWheel?ForecastFork148.Wheel(input.Omega,p.RearWheel):new RearWheelState(input.Omega * (p.RearWheel ?? RearWheelParameters.Default).WheelRadiusMeters, p.RearWheel);
         var steering = new TwoContactBikeState(input.Steering); var boundary = boundaryCache?.For(frame)??new RacingLineGeometry(frame);
-        var points = new List<FreeRacingPoint>(); var time = input.Time; var end = time + horizon;
+        var points = new List<FreeRacingPoint>(); var time = input.Time; var end = stopAt??time + horizon;
         var nextReview = input.NextReview; var forces = 0; double distance = 0;
         void Activate() {
             while (queue.Count > 0 && queue[0].ActivationAt <= time + 1e-10) { active = queue[0].Action; queue.RemoveAt(0); }

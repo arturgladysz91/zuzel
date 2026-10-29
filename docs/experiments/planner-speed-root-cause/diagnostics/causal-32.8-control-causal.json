@@ -1,0 +1,97 @@
+{
+  "At": 32.8,
+  "Mode": "control",
+  "PrefixExact": true,
+  "PrefixDecisions": 164,
+  "Checkpoint": {
+    "Observed": {
+      "Rider": {
+        "Id": 1,
+        "Position": {
+          "X": -55.5989,
+          "Y": 20.763998
+        },
+        "Velocity": {
+          "X": 3.7834063,
+          "Y": -16.590263
+        },
+        "Heading": -1.2037315,
+        "AngularVelocity": 0.7875156,
+        "Road": {
+          "Segment": 6,
+          "Progress": 0.827802519544663,
+          "ReferenceMeters": 253.72555662125183,
+          "OffsetMeters": 0.273478515192137,
+          "Heading": -1.2730628798552661,
+          "RadiusMeters": 34.74809753445116,
+          "CornerProgress": 0.6092675065148877,
+          "Tangent": {
+            "X": 0.29335412,
+            "Y": -0.95600384
+          },
+          "Outward": {
+            "X": -0.95600384,
+            "Y": -0.29335412
+          },
+          "IsTurn": true
+        },
+        "TotalReferenceMeters": 572.5043065640314,
+        "DistanceMeters": 583.7283020268733,
+        "Activity": 0,
+        "Drive": 0,
+        "TargetOffsetMeters": 3.5,
+        "Impairment": 0,
+        "Context": 2,
+        "Speed": 17.0162,
+        "ForwardSpeed": 16.842876,
+        "SideSpeed": -2.4224954,
+        "SlideRadians": 0.1428494
+      },
+      "Time": 32.799999999999926,
+      "Omega": 51.68337657992956,
+      "Steering": 0.02617994,
+      "Active": {
+        "SteeringRadians": 0.02617994,
+        "Drive": 0
+      },
+      "Pending": [
+        {
+          "ObservedAt": 32.59999999999992,
+          "ActivationAt": 32.839999999999925,
+          "Action": {
+            "SteeringRadians": 0.08726647,
+            "Drive": 0
+          }
+        }
+      ],
+      "NextReview": 32.799999999999926
+    },
+    "CrankOmega": 465.1784269799874,
+    "Action": {
+      "SteeringRadians": 0.02617994,
+      "Drive": 0
+    }
+  },
+  "HeldRequest": null,
+  "Duration": 0.6,
+  "ActualActivation": 33.04,
+  "Outcome": "completed",
+  "Counts": {
+    "FullK1Executions": 106,
+    "HeldContinuationRequests": 0,
+    "ActualForecasts": 2862,
+    "ActualContacts": 259139,
+    "PredictionRequests": 2862,
+    "PredictionHits": 0,
+    "SeedRequests": 106,
+    "SeedHits": 0,
+    "CrossReviewHits": 0,
+    "InactivePrefixRequests": 0,
+    "BudgetFallbacks": 0,
+    "BudgetReason": null,
+    "CacheEntries": 2862,
+    "SeedCacheEntries": 106,
+    "FastBoundaryQueries": 258321,
+    "BoundaryFallbackQueries": 2740
+  }
+}

@@ -9,9 +9,9 @@ using SharedWorldSpeedway;
 namespace Speed148;
 public static class Diagnostics148{
  public static TrackFrame Circular(float straight,float radius){var original=MatchedVenueProfiles.CreateMotoarenaStandingStartTrack();return new(new Track(original.Segments.Select((s,i)=>new TrackSegment(s.Id,s.Type,i==0?straight*35/62:i==8?straight*27/62:s.StraightLengthMetersOverride,s.IsStandingStartSegment)).ToArray(),new TrackGeometry(straight,radius,12,16.6f,MathF.PI/3)));}
- static Run144 Execute(string name,TrackFrame frame,double seconds,RiderSpec? rider,string control,Func<FreeRacingInput,CrankClutch144,RiderSpec,TrackFrame,TrackStateSnapshot,WorldParameters,float,float,string,Decision144>? choose=null){
+ public static Run144 Execute(string name,TrackFrame frame,double seconds,RiderSpec? rider,string control,Func<FreeRacingInput,CrankClutch144,RiderSpec,TrackFrame,TrackStateSnapshot,WorldParameters,float,float,string,Decision144>? choose=null,int laps=1){
   var folder=Program.Doc+"/diagnostics";Directory.CreateDirectory(folder);using var budget=new Budget148(name,1,100);
-  using var world=new DiagnosticWorld148(new(Enabled:true,RequiredLaps:1,MaximumSeconds:seconds),diagnosticFrame:frame,diagnosticRider:rider);
+  using var world=new DiagnosticWorld148(new(Enabled:true,RequiredLaps:laps,MaximumSeconds:seconds),diagnosticFrame:frame,diagnosticRider:rider);
   ExactRuntime148? rt=null;
   Decision144 Chooser(FreeRacingInput i,CrankClutch144 c,RiderSpec s,TrackFrame f,TrackStateSnapshot surface,WorldParameters p,float m,float inertia,string variant){budget.Guard();if(choose is not null)return choose(i,c,s,f,surface,p,m,inertia,variant);rt??=new(s,f,surface,p,mass:m,inertia:inertia);rt.Begin(i.Time);if(control=="gas1-straight")return new(new(i.Time,new(0,1),FreeActionSafety.Uncertain,false,Array.Empty<FreeLearningCandidate>(),0,0),0);return rt.Seed(new(i,c.Omega));}
   var run=world.Run(name,"K1",Chooser);using(var z=new GZipStream(File.Create(folder+"/"+name+".json.gz"),CompressionLevel.Fastest))JsonSerializer.Serialize(z,run,Program.Json);
