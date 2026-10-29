@@ -370,3 +370,8 @@ unchanged. See [measurement and CI responsibility](calibration/trajectory-perfor
 [Efficient Autonomous Planner (study #147)](experiments/efficient-autonomous-planner/README.md) — PROVISIONAL, domyślnie OFF.
 Jedna autonomiczna próba solo ukończyła trzy legalne okrążenia w 53,990 s (K1: 54,795 s),
 z pełnym dziennikiem 270 decyzji. Sterownik: 154,500 CPU-s; brak gotowości wydajnościowej dla czterech zawodników.
+
+[Planner performance and slow-speed root causes (study #148)](experiments/planner-speed-root-cause/README.md) — PROVISIONAL, default OFF.
+Exact optimization preserves all #147 native states and commands: 53.990 s / three legal laps,
+82.000 controller CPU-s versus 154.500. Target 40–60 CPU-s is not reached.
+Geometry and throttle interventions are separate diagnostics; original physical laws and historical data stay frozen.

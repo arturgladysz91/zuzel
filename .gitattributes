@@ -122,3 +122,9 @@
 /docs/experiments/efficient-autonomous-planner/** -text whitespace=trailing-space,space-before-tab,cr-at-eol
 /tools/efficient-autonomous-planner/** text eol=lf
 /tools/replay-viewer/efficient147*.mjs text eol=lf
+
+# Study148: preserve native evidence and LF generated exact-performance helpers.
+/docs/experiments/planner-speed-root-cause/** -text whitespace=trailing-space,space-before-tab,cr-at-eol
+/tools/planner-speed-root-cause/** text eol=lf
+/tools/shared-world-speedway/PlannerPerformance148/*.cs text eol=lf
+/tools/replay-viewer/speed148*.mjs text eol=lf

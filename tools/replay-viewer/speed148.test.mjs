@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {loadSpeed148} from './speed148.mjs';
+import {review146} from './planning146.mjs';
+const root=new URL('../../docs/experiments/planner-speed-root-cause/',import.meta.url);
+const fetcher=async url=>new Response(fs.readFileSync(new URL(url.replace('local/',''),root)));
+test('148 exact variant preserves three-lap completion and baseline fingerprint',async()=>{const d=await loadSpeed148(fetcher,'autonomous148-prefix','local/');assert.equal(d.studyNumber,148);assert.equal(d.replay.state(1,0,false).speed,0);assert.equal(d.replay.state(1,100,false).completedLaps,3);assert.equal(d.run.Fingerprint,'EA342AF146E248C411CB7C409D26AEFAB4ED79A307AD1D03D80AE9F5F478AAE0');});
+test('148 retains every decision and both axes of saved comparison trails',async()=>{const d=await loadSpeed148(fetcher,'autonomous148-prefix','local/');assert.equal(d.analysis146.plan_audits[d.run.Name].reviews,270);assert.deepEqual(review146(d,22.6).actual_action,review146(d,22.6).selected[0]);assert.ok(d.curves146.every(c=>c.points.every(p=>Number.isFinite(p.x)&&Number.isFinite(p.y))));});
+test('148 separates complete autonomous evidence from diagnostic beta-envelope stops',async()=>{const a=JSON.parse(fs.readFileSync(new URL('analysis.json',root),'utf8'));assert.equal(a.full_equivalence.length,3);assert.ok(a.full_equivalence.every(x=>x.samples_bit_equal&&x.commands_equal));assert.ok(a.causal.some(x=>x.outcome==='experimental beta45 envelope'&&!x.actual_boundary_crossing));});
