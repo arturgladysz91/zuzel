@@ -15,7 +15,7 @@ public static class Native149{
         if(!trial.Enabled)throw new InvalidOperationException("Study147 native controller is OFF by default.");
         if(trial.Name.Length<1||trial.Name.Any(c=>!char.IsAsciiLetterOrDigit(c)&&c!='-'))throw new ArgumentException("Simple unique trial name required.");
         var existing=JsonNode.Parse(File.ReadAllText("docs/experiments/tyre-physics-corner-limits/budget.json"))!.AsArray();
-        if(existing.Sum(x=>x!["NativeWorlds"]!.GetValue<int>())>=24)throw new IOException("Study148 world cap; preserve failed attempts.");
+        if(existing.Sum(x=>x!["NativeWorlds"]!.GetValue<int>())>=48)throw new IOException("Study149 48-world cap; preserve failed attempts.");
         var output=Path.GetFullPath(directory);Directory.CreateDirectory(output);using var budget=new Budget149(trial.Name,1,trial.MaximumCpuSeconds);
         var journalPath=Path.Combine(output,trial.Name+"-decisions.jsonl");using var journal=new Journal147(journalPath);var json=FreeLearningExperiment.Json;
         var process=Process.GetCurrentProcess();Planner146? planner=null;ExactRuntime149? runtime=null;double journalCpu=0;var costs=new List<double>();
