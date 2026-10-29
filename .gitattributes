@@ -128,3 +128,9 @@
 /tools/planner-speed-root-cause/** text eol=lf
 /tools/shared-world-speedway/PlannerPerformance148/*.cs text eol=lf
 /tools/replay-viewer/speed148*.mjs text eol=lf
+
+# Study149: preserve native evidence and explicit LF isolated research sources.
+/docs/experiments/tyre-physics-corner-limits/** -text whitespace=trailing-space,space-before-tab,cr-at-eol
+/tools/tyre-physics-corner-limits/** text eol=lf
+/tools/shared-world-speedway/TyrePhysics149/*.cs text eol=lf
+/tools/replay-viewer/tyre149*.mjs text eol=lf
