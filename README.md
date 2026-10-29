@@ -3,6 +3,12 @@
 Release platform: **Windows only**. See the current [Windows CI policy](docs/ci.md)
 for Draft/full validation, the merge gate and optional historical audits.
 
+[Contingency Planning and Robust Recourse (study #151)](docs/experiments/contingency-recourse/REPORT.md)
+separates irrevocable execution, finite future observations with distinct delayed
+reactions, and complete reserve maneuvers. It diagnoses the0.4s refusal and the
+misaligned0.26m error claim. Native gates, failures, process CPU and actual full-race
+scope are reported separately. Tools-only, default OFF; original physics is unchanged.
+
 [Autonomous Corner Planning (study #146)](docs/experiments/autonomous-corner-planning/README.md)
 diagnoses the failed two-command planner before adding persistent multi-stage plans,
 independent execution checks and a terminal-viability experiment. The target corner

@@ -1,0 +1,39 @@
+.............................................................F................................................................................................................F....F..................................................................................................................................
+======================================================================
+FAIL: test_generated_performance_adapter_preserves_frozen_equations (test_efficient_planning147.Efficient147EvidenceTests.test_generated_performance_adapter_preserves_frozen_equations)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Administrator\Documents\Codex\2026-10-29\files-pasted-by-the-user-codex\work\zuzel\tests\calibration\test_efficient_planning147.py", line 23, in test_generated_performance_adapter_preserves_frozen_equations
+    spec=importlib.util.spec_from_file_location('proof147',ROOT/'tools/efficient-autonomous-planner/check-source147.py');module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module);self.assertTrue(module.check())
+                                                                                                                                                                                                                      ^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\Documents\Codex\2026-10-29\files-pasted-by-the-user-codex\work\zuzel\tools\efficient-autonomous-planner\check-source147.py", line 15, in check
+    assert hashlib.sha256((ROOT/path).read_bytes()).hexdigest()==saved['SourceSha256'][path],path
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: tools/shared-world-speedway/RacingLineGeometry.cs
+
+======================================================================
+FAIL: test_detectors_predictor_and_repeatability_stay_separate (test_racing_constraints143.RacingConstraintsEvidenceTests.test_detectors_predictor_and_repeatability_stay_separate)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Administrator\Documents\Codex\2026-10-29\files-pasted-by-the-user-codex\work\zuzel\tests\calibration\test_racing_constraints143.py", line 63, in test_detectors_predictor_and_repeatability_stay_separate
+    self.assertEqual(predictor['SourceSha256'],sha(ROOT/'tools/constraints-analysis143/Program.cs'))
+AssertionError: '1F3D8B0DF433EB5995603F6601B0067F8BAC9885B18393A4C72E1CCDDB010E97' != '6533F6DE1D10619660D87E90FAA107E51E3EF6A2E98B7DB4259A2E1E591EEEDA'
+- 1F3D8B0DF433EB5995603F6601B0067F8BAC9885B18393A4C72E1CCDDB010E97
++ 6533F6DE1D10619660D87E90FAA107E51E3EF6A2E98B7DB4259A2E1E591EEEDA
+
+
+======================================================================
+FAIL: test_sources_base_and_historical_evidence_are_frozen (test_racing_constraints143.RacingConstraintsEvidenceTests.test_sources_base_and_historical_evidence_are_frozen)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Administrator\Documents\Codex\2026-10-29\files-pasted-by-the-user-codex\work\zuzel\tests\calibration\test_racing_constraints143.py", line 21, in test_sources_base_and_historical_evidence_are_frozen
+    self.assertEqual(self.r['CombinationExtension']['ScriptSha256'],sha(ROOT/'tools/racing-constraints/extend-recovery.py'))
+AssertionError: '3B4B74339E1A52BECD6376B27A2E580E5E18C922DF2D4AE5DAC50453EDF749E9' != 'EDC26D4E4EE70CBF41F84EACD34189AF6353CF34B5EF4CFB32381062DEB99C12'
+- 3B4B74339E1A52BECD6376B27A2E580E5E18C922DF2D4AE5DAC50453EDF749E9
++ EDC26D4E4EE70CBF41F84EACD34189AF6353CF34B5EF4CFB32381062DEB99C12
+
+
+----------------------------------------------------------------------
+Ran 310 tests in 101.502s
+
+FAILED (failures=3)

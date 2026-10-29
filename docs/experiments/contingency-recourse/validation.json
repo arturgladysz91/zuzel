@@ -1,0 +1,13 @@
+{
+  "Local": {
+    "ReleaseBuild": { "Success": true, "Warnings": 0, "Errors": 0 },
+    "CSharp": { "Passed": 2500, "Failed": 0, "Skipped": 0, "Scope": "core2105 + trajectory395", "Trx": "validation/study151.trx" },
+    "Discovery": { "Total": 3021, "Missing": 0, "Duplicates": 0, "HistoricalNotExecuted": 473, "FourRiderNotExecuted": 48 },
+    "PythonCalibration": { "Passed": 310, "Failed": 0, "InitialFailures": 3, "InitialFailureCause": "Clone core.autocrlf checkout differed from exact historical Git bytes. Restore original Git blobs; no model or expectation changes. Full repeat310 passed." },
+    "PythonCiPolicy": { "Passed": 7, "Failed": 0 },
+    "NodeReplay": { "Passed": 86, "Failed": 0 },
+    "GitDiffCheck": true
+  },
+  "WindowsCI": { "Required": true, "Status": "pending PR creation", "Scope": "Draft: core, trajectory, Python and Node; complete discovery. Historical and four-rider execution not requested." },
+  "SportingVerdict": "PARTIAL. Gates1-3 passed; no new three-lap A/B finish. Last full A abstains34.6s on cumulative study CPU budget."
+}

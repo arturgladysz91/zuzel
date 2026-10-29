@@ -10,6 +10,7 @@ import {loadEfficient147,setupEfficient147} from './efficient147.mjs';
 import {loadSpeed148,setupSpeed148} from './speed148.mjs';
 import {loadTyre149,setupTyre149} from './tyre149.mjs';
 import {loadRobust150,setupRobust150} from './robust150.mjs';
+import {loadContingency151,setupContingency151} from './contingency151.mjs';
 import { Replay, parseCsv, clamp, enumName, decisionStatus, crossSection, worldCapsules, authoredReplayDocument, motionVectors, bendJumps, boundaryStatus } from './model.mjs';
 import { currentRecordings, readGzip } from './recordings.mjs';
 import { loadContinuous } from './continuous.mjs';
@@ -48,6 +49,7 @@ const causalOption=document.createElement('option');causalOption.value='causal-y
 const constraintsOption=document.createElement('option');constraintsOption.value='constraints143';constraintsOption.textContent='#143 · Audyt ograniczeń · PARTIAL · pełne A/B';$('scenario').prepend(constraintsOption);
 const standingOption=document.createElement('option');standingOption.value='standing144';standingOption.textContent='#144 · Start0 → trzy okrążenia · solo / wspólny świat';$('scenario').prepend(standingOption);
 const robust150Option=document.createElement('option');robust150Option.value='robust150';robust150Option.textContent='#150 · Odporna kontynuacja · PARTIAL';$('scenario').prepend(robust150Option);
+const contingency151Option=document.createElement('option');contingency151Option.value='contingency151';contingency151Option.textContent='#151 · Planowanie warunkowe';$('scenario').prepend(contingency151Option);
 const tyre149Option=document.createElement('option');tyre149Option.value='tyre149';tyre149Option.textContent='#149 · Opony, prędkość i geometria';$('scenario').prepend(tyre149Option);
 const speed148Option=document.createElement('option');speed148Option.value='speed148';speed148Option.textContent='#148 · Dokładna optymalizacja i przyczyny wolnej jazdy';$('scenario').prepend(speed148Option);
 const efficient147Option=document.createElement('option');efficient147Option.value='efficient147';efficient147Option.textContent='#147 · Wydajny planner · pełne trzy okrążenia';$('scenario').prepend(efficient147Option);
@@ -460,11 +462,11 @@ async function loadScenario(key,keepTime=null) {
   $('outer-limit').disabled=['free-racing','free-learning','robust-learning','extended-learning','full-throttle-learning','rider-decision','track-awareness','multi-action','speed-throttle','causal-yaw','constraints143','standing144'].includes(key);
   $('load-state').textContent = 'Wczytywanie zaakceptowanych stanów…';
   try {
-    if(key==='robust150'||key==='standing144'||key==='corner145'||key==='planning146'||key==='efficient147'||key==='speed148'||key==='tyre149'){
-      const data=await (key==='robust150'?loadRobust150:key==='tyre149'?loadTyre149:key==='speed148'?loadSpeed148:key==='efficient147'?loadEfficient147:key==='planning146'?loadPlanning146:key==='corner145'?loadCorner145:loadStanding144)(fetch,new URL(location.href).searchParams.get('run')??(key==='corner145'?'K1':null));if(generation!==loadGeneration)return;
+    if(key==='contingency151'||key==='robust150'||key==='standing144'||key==='corner145'||key==='planning146'||key==='efficient147'||key==='speed148'||key==='tyre149'){
+      const data=await (key==='contingency151'?loadContingency151:key==='robust150'?loadRobust150:key==='tyre149'?loadTyre149:key==='speed148'?loadSpeed148:key==='efficient147'?loadEfficient147:key==='planning146'?loadPlanning146:key==='corner145'?loadCorner145:loadStanding144)(fetch,new URL(location.href).searchParams.get('run')??(key==='corner145'?'K1':null));if(generation!==loadGeneration)return;
       geometry=data.geometry;replay=data.replay;selected=[...replay.tracks.keys()][0];comparisonTrails=[];widthGeometries=[];
       for(const id of ['width-controls','width-comparison','comparison-legend'])$(id).hidden=true;
-      $('recording-mode').hidden=false;$('recording-mode').textContent=(key==='robust150'?'#150 · ODPORNOŚĆ · PARTIAL · ':key==='tyre149'?'#149 · OPONY I GRANICA PRĘDKOŚCI · ':key==='speed148'?'#148 · DOKŁADNA OPTYMALIZACJA · ':key==='efficient147'?'#147 · WYDAJNY PLANNER · ':key==='planning146'?'#146 · PLANOWANIE · ':key==='corner145'?'#145 · BADANIE STRAT · ':'#144 · START0 →3 OKRĄŻENIA · ')+data.run.Riders.length+' motocykli · '+data.run.Outcome;
+      $('recording-mode').hidden=false;$('recording-mode').textContent=(key==='contingency151'?'#151 · PLANOWANIE WARUNKOWE · ':key==='robust150'?'#150 · ODPORNOŚĆ · PARTIAL · ':key==='tyre149'?'#149 · OPONY I GRANICA PRĘDKOŚCI · ':key==='speed148'?'#148 · DOKŁADNA OPTYMALIZACJA · ':key==='efficient147'?'#147 · WYDAJNY PLANNER · ':key==='planning146'?'#146 · PLANOWANIE · ':key==='corner145'?'#145 · BADANIE STRAT · ':'#144 · START0 →3 OKRĄŻENIA · ')+data.run.Riders.length+' motocykli · '+data.run.Outcome;
       document.querySelector('.brand p').textContent=data.index.Title;
       $('safety-note').hidden=false;$('safety-note').className='safety-note'+(data.run.Outcome==='completed'?'':' unsafe');
       $('safety-note').textContent=data.index.Note;
@@ -472,7 +474,7 @@ async function loadScenario(key,keepTime=null) {
       $('smooth').checked=false;$('targets').checked=false;$('outer-limit').checked=false;$('rate').value='1';
       $('record-clip').hidden=typeof MediaRecorder==='undefined'||!canvas.captureStream;
       $('sampling-note').textContent=data.run.Riders.reduce((n,r)=>n+r.Samples.length,0)+' natywnych stanów · bez ekstrapolacji';
-      (key==='robust150'?setupRobust150:key==='tyre149'?setupTyre149:key==='speed148'?setupSpeed148:key==='efficient147'?setupEfficient147:key==='planning146'?setupPlanning146:key==='corner145'?setupCorner145:setupStanding144)($('robust-learning-analysis'),data,run=>{const url=new URL(location.href);url.searchParams.set('run',run);url.searchParams.delete('t');history.replaceState(null,'',url);loadScenario(key,0);},
+      (key==='contingency151'?setupContingency151:key==='robust150'?setupRobust150:key==='tyre149'?setupTyre149:key==='speed148'?setupSpeed148:key==='efficient147'?setupEfficient147:key==='planning146'?setupPlanning146:key==='corner145'?setupCorner145:setupStanding144)($('robust-learning-analysis'),data,run=>{const url=new URL(location.href);url.searchParams.set('run',run);url.searchParams.delete('t');history.replaceState(null,'',url);loadScenario(key,0);},
         (t,id)=>{if(id!=null)chooseRider(id);setPlaying(false);setTime(t);},lines=>{comparisonTrails=lines;$('compare-lines').checked=true;dirty=true;});
       $('riders').replaceChildren();for(const id of replay.tracks.keys()){
         const button=document.createElement('button');button.textContent='R'+id;button.dataset.id=String(id);button.addEventListener('click',()=>chooseRider(id));$('riders').append(button);

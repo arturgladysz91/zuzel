@@ -1,5 +1,14 @@
 # Architecture
 
+[Contingency recourse (study #151)](experiments/contingency-recourse/REPORT.md) is a
+PROVISIONAL default-OFF tools controller. A common root command preserves pending
+controls and the0.24s reaction delay. Separate future observations may choose
+different commands; a finite two-observation tree requires nine complete physical
+reserve maneuvers and uncached independent replay before returning a command.
+Every actual move remains in the unchanged native Box2D world. Finite model
+certificates are distinguished from global robustness and full-race completion.
+Explicit physical-forecast failures exclude proposals, never disable native guards.
+
 [Autonomous Corner Planning (study #146)](experiments/autonomous-corner-planning/README.md)
 is a PROVISIONAL tools-only controller, explicitly OFF. It composes the unchanged
 #144 predictor with full crank, rear-wheel, steering and irrevocable command state.

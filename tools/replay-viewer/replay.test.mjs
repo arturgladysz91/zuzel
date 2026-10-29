@@ -315,3 +315,4 @@ import './speed148.test.mjs';
 import './tyre149.test.mjs';
 
 import './robust150.test.mjs';
+import './contingency151.test.mjs';

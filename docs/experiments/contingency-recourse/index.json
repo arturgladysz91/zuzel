@@ -1,0 +1,89 @@
+{
+  "Title": "#151 · Planowanie warunkowe · PARTIAL — no new three-lap completion",
+  "DefaultRun": "contingency151-gate4-A-v2",
+  "GeometryFile": "../causal-yaw-throttle/progressive-b-viewer-geometry.json",
+  "Runs": [
+    {
+      "Id": "baseline149-final148",
+      "File": "../tyre-physics-corner-limits/native/baseline149-final148.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "completed",
+      "Duration": 53.99,
+      "Fingerprint": "EA342AF146E248C411CB7C409D26AEFAB4ED79A307AD1D03D80AE9F5F478AAE0"
+    },
+    {
+      "Id": "separated149-autonomous",
+      "File": "../tyre-physics-corner-limits/native/separated149-autonomous.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "completed",
+      "Duration": 54.24,
+      "Fingerprint": "26C5D60F981B40950CCF468798FB29C3593BB4A3C828E0D4747A603846DF0BD8"
+    },
+    {
+      "Id": "contingency151-gate2-A-v1",
+      "File": "native/contingency151-gate2-A-v1.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "technical invariant: STUDY151_ABSTAIN: abstain: Study151 deterministic forecast/contact or30 CPU-s review cap",
+      "Duration": 0.6,
+      "Fingerprint": "748648308BF9DBDB57C8629D0C8556053C3A52DE9B01F7200882740CDEA8B999"
+    },
+    {
+      "Id": "contingency151-gate2-A-v2",
+      "File": "native/contingency151-gate2-A-v2.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "technical invariant: STUDY151_GATE2_TARGET_REACHED",
+      "Duration": 9.599999999999998,
+      "Fingerprint": "F6886766DFD4A3F7B80BE699CDF810C2EDC9F14D219FCFAF21CC30B25380EB31"
+    },
+    {
+      "Id": "contingency151-gate2-A-v3",
+      "File": "native/contingency151-gate2-A-v3.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "technical invariant: STUDY151_GATE2_TARGET_REACHED",
+      "Duration": 9.599999999999998,
+      "Fingerprint": "F6886766DFD4A3F7B80BE699CDF810C2EDC9F14D219FCFAF21CC30B25380EB31"
+    },
+    {
+      "Id": "contingency151-gate3-A-v1",
+      "File": "native/contingency151-gate3-A-v1.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "completed",
+      "Duration": 19.54,
+      "Fingerprint": "87AF3B0B25D1A0B76C84B8FEC04ADA905A59839ED5A51FBBEE9DB592898DF836"
+    },
+    {
+      "Id": "contingency151-gate4-A-v1",
+      "File": "native/contingency151-gate4-A-v1.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "technical invariant: Crank/clutch passivity or energy identity failed.",
+      "Duration": 29.799999999999926,
+      "Fingerprint": "8553271F8B78693C632ADC38D4B32178C643CCE9B16A4EDF80A45E523F51370E"
+    },
+    {
+      "Id": "contingency151-gate4-A-v2",
+      "File": "native/contingency151-gate4-A-v2.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "technical invariant: STUDY151_ABSTAIN: abstain: STUDY151_CPU_STOP",
+      "Duration": 34.59999999999995,
+      "Fingerprint": "400146EA7BE6C61D2163F6D58C51D019693BFB36CB1306A42E29863D0DB2CFF7"
+    }
+  ],
+  "LapMeters": 318.77874994277954,
+  "RequiredLaps": 3,
+  "StartReference": 0,
+  "BendReferences": [
+    35,
+    132.38937497138977,
+    194.38937497138977,
+    291.77874994277954
+  ],
+  "Note": "Wyniki bramek i prognozy są osobne. Pełny wynik wymaga trzech legalnych natywnych okrążeń od zera. PARTIAL — no new three-lap completion"
+}
