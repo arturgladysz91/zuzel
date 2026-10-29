@@ -6,7 +6,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 R=Path(__file__).resolve().parents[2];D=R/'docs/experiments/tyre-physics-corner-limits';P=D/'plots'
 def read(p):return json.loads(gzip.decompress(p.read_bytes()) if p.name.endswith('.gz') else p.read_bytes())
-def finish(fig,name):fig.tight_layout();fig.savefig(P/(name+'.png'),dpi=150);fig.savefig(P/(name+'.svg'));plt.close(fig)
+def finish(fig,name):fig.tight_layout();fig.savefig(P/(name+'.png'),dpi=150);fig.savefig(P/(name+'.svg'));svg=P/(name+'.svg');svg.write_text('\n'.join(s.rstrip() for s in svg.read_text(encoding='utf-8').splitlines())+'\n',encoding='utf-8',newline='\n');plt.close(fig)
 def main():
  begin=time.process_time();ledger=read(D/'budget.json');assert all(x['Complete'] for x in ledger);assert not any(x['Name']=='saved-figures' for x in ledger);P.mkdir(exist_ok=True);a=read(D/'analysis.json');grid=read(D/'contact-grid.json.gz')
  fig,ax=plt.subplots(2,2,figsize=(11,7));colors={.45:'#d67b19',.9:'#19769d',1.8:'#8b48a5'}
