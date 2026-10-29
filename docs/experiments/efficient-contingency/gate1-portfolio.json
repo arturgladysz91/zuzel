@@ -1,0 +1,26 @@
+[
+  {
+    "Model": "A",
+    "Passed": true,
+    "PrefixExact": true,
+    "FirstBendRecovered": true,
+    "EndSeconds": 6.6000000000000005,
+    "Outcome": "technical invariant: STUDY152_DIAGNOSTIC_FIRST_BEND_RECOVERED",
+    "Fingerprint": "50AC6AD940F0C8927389AA6F504EB4DA9E773AA950FB7533A99E3241E5603129",
+    "Decisions": 28,
+    "ControllerCpu": 78.171875,
+    "Scope": "Diagnostic native own-model prefix0..1s, then algorithmic152 choices to first difficult bend exit; deliberate target stop, not a completed lap/race."
+  },
+  {
+    "Model": "B",
+    "Passed": false,
+    "PrefixExact": true,
+    "FirstBendRecovered": false,
+    "EndSeconds": 1.5999999999999999,
+    "Outcome": "technical invariant: STUDY152_ABSTAIN: abstain: STUDY152_CPU_STOP",
+    "Fingerprint": "2282A7636266C8DC5B675A7F2CE7F8D82EEC6E148566F78C393FAC7D92AE9934",
+    "Decisions": 3,
+    "ControllerCpu": 30.40625,
+    "Scope": "Diagnostic native own-model prefix0..1s, then algorithmic152 choices to first difficult bend exit; deliberate target stop, not a completed lap/race."
+  }
+]

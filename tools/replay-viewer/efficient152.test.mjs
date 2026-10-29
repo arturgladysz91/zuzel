@@ -1,0 +1,12 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import zlib from 'node:zlib';
+import {loadEfficient152,compactPolicy152} from './efficient152.mjs';
+const root=new URL('../../docs/experiments/efficient-contingency/',import.meta.url);
+const json=name=>JSON.parse(fs.readFileSync(new URL(name,root)));
+const gz=name=>JSON.parse(zlib.gunzipSync(fs.readFileSync(new URL(name,root))));
+const fetcher=async url=>new Response(fs.readFileSync(new URL(url.replace('local/',''),root)));
+test('152 default replay uses actual native standing execution',async()=>{const d=await loadEfficient152(fetcher,null,'local/');assert.equal(d.studyNumber,152);assert.equal(d.run.Name,json('index.json').DefaultRun);assert.equal(d.run.Riders[0].Samples[0].Input.Rider.Speed,0);assert.equal(d.replay.state(1,0,false).speed,0);assert.match(d.index.Note,/globalną gwarancją/);});
+test('152 shared policy keeps complete finite scenarios and legal reserves',()=>{const p=compactPolicy152(gz('policies/efficient152-A-v1/decision-0000.json.gz'));assert.equal(p.nodes.length,13);assert.equal(p.terminal_reserves.length,9);assert.ok(p.independent_preflight);assert.ok(p.terminal_reserves.every(x=>x.legal&&x.actions.length));assert.ok(p.shared_tapes<10);for(const n of p.nodes)assert.ok(Math.abs(n.activation-n.time-.24)<1e-8);});
+test('152 exact comparison covers all151 commands and native fields',()=>{const p=json('analysis.json').prefix;assert.equal(p.accepted_commands,173);assert.equal(p.accepted_commands_all_bits_equal,true);assert.equal(p.native_samples_all_fields_equal,true);assert.equal(p.observations_queues_and_activations_equal,true);assert.ok(p.new_controller_cpu_s<=p.old_controller_cpu_s);});

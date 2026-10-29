@@ -1,0 +1,81 @@
+{
+  "Model": "A",
+  "Gate2": true,
+  "Gate3": true,
+  "Gate4": false,
+  "Gate5": false,
+  "Outcome": "technical invariant: STUDY152_ABSTAIN: abstain: finite recourse search has no certified complete reserve",
+  "EndSeconds": 38.6,
+  "Fingerprint": "0F7CBCC7A1BC2E87973D7470A74FC223A377CDE9BC52DBCA0EC7486222B49669",
+  "FinishSeconds": null,
+  "CompletedLaps": 2,
+  "Decisions": 193,
+  "Exact151Decisions": 173,
+  "PrefixControllerAttemptCpu": 219.046875,
+  "ControllerAttemptCpu": 275.15625,
+  "PlanningCpu": 247.6875,
+  "PolicyArchiveCpu": 1.953125,
+  "CpuSeconds": 282.765625,
+  "MinimumGap": 0.20335157070212495,
+  "MinimumSweep": 0.09430340327262934,
+  "MaximumBeta": 17.63038177832076,
+  "Contacts": 0,
+  "Counts": {
+    "Search": {
+      "SeedSharedPrefixes": 7840,
+      "SharedPrefixContactQueriesSaved": 4955853,
+      "FullK1Executions": 7840,
+      "HeldContinuationRequests": 0,
+      "ActualForecasts": 390482,
+      "ActualContacts": 17743511,
+      "PredictionRequests": 383294,
+      "PredictionHits": 651,
+      "SeedRequests": 7883,
+      "SeedHits": 43,
+      "CrossReviewHits": 651,
+      "InactivePrefixRequests": 170149,
+      "BudgetFallbacks": 0,
+      "BudgetReason": null,
+      "CacheEntries": 9498,
+      "SeedCacheEntries": 7839,
+      "FastBoundaryQueries": 17628474,
+      "BoundaryFallbackQueries": 450839
+    },
+    "SearchWork": {
+      "ForecastRequests": 383294,
+      "PhysicalForecastCalls": 390483,
+      "ContactQueries": 17743575
+    },
+    "SearchMemo": {
+      "KernelHits": 0,
+      "KernelMisses": 0,
+      "ProjectionHits": 0,
+      "ProjectionMisses": 17688830,
+      "ClearanceHits": 0
+    },
+    "IndependentMemo": {
+      "KernelHits": 0,
+      "KernelMisses": 0,
+      "ProjectionHits": 0,
+      "ProjectionMisses": 0,
+      "ClearanceHits": 0
+    },
+    "FullK1": 7840,
+    "Forecasts": 505777,
+    "Contacts": 20061493,
+    "FeedbackQueries": 558416,
+    "IndependentForecasts": 115295,
+    "IndependentContacts": 2317982,
+    "TransitionRequests": 361270,
+    "SearchHits": 74087,
+    "IndependentHits": 1739,
+    "RolloutHits": 49,
+    "IndependentComparisons": 115295,
+    "Verification": "Fresh per-review DAG; every unique physical prefix repropagated independently; no search or historical result accepted as proof",
+    "options": {
+      "Memoize": true,
+      "ValidatedIndependent": true
+    }
+  },
+  "Scope": "Continuous native Box2D from rest. Every choice generated and independently certified at its actual observation; frozen finite151 scenarios and horizons, no historical commands executed."
+}

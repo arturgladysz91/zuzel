@@ -1,0 +1,30 @@
+{
+  "Passed": true,
+  "Criterion": "Gate1: exact151 certificate at1s and native recovery through the difficult first bend on both models. Full diagnostic lap reported separately; B stopped later at9.8s on its attempt CPU cap.",
+  "Rows": [
+    {
+      "model": "A",
+      "run": "recovery152-A",
+      "exact151_certificate_at1s": true,
+      "certified": true,
+      "first_difficult_bend_exit_s": 6.577381,
+      "first_difficult_bend_exit_reference": 132.38937497138977,
+      "passed_first_difficult_bend": true,
+      "native_samples_legal": true,
+      "full_diagnostic_lap": true,
+      "later_stop": "completed"
+    },
+    {
+      "model": "B",
+      "run": "recovery152-B-v2",
+      "exact151_certificate_at1s": true,
+      "certified": true,
+      "first_difficult_bend_exit_s": 6.577391,
+      "first_difficult_bend_exit_reference": 132.38937497138977,
+      "passed_first_difficult_bend": true,
+      "native_samples_legal": true,
+      "full_diagnostic_lap": false,
+      "later_stop": "technical invariant: STUDY152_ABSTAIN: abstain: STUDY152_CPU_STOP"
+    }
+  ]
+}

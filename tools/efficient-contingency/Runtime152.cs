@@ -1,0 +1,72 @@
+using System.Text;
+using Autonomous146;
+using Contingency151;
+using Efficient147;
+using Robust150;
+using SharedWorldSpeedway;
+namespace Efficient152;
+public sealed record RuntimeOptions152(bool Memoize=true,bool ValidatedIndependent=false,bool ShareCurrentPolicies=false,bool ShortlistK1=false);
+public sealed class Work152 { public long ForecastRequests,PhysicalForecastCalls,ContactQueries;public void Contact()=>ContactQueries++; }
+/// <summary>Exact search adapters plus a fresh, isolated verification DAG. No search cache is a certificate.</summary>
+public sealed class Runtime152 {
+ readonly ExactRuntimeA152? a;readonly ExactRuntimeB152? b;readonly Runtime150 alpha;
+ readonly CoreSim.TrackStateSnapshot surface;readonly WorldParameters parameters;
+ readonly Efficient147.PredictionBoundary147 independentBoundary;
+ readonly ForecastMemo152 independentMemo;readonly Speed148.FastBoundary148 independentFastBoundary;
+ readonly Dictionary<string,Transition146> search=new(),verification=new();
+ readonly Dictionary<string,Tape150> rollouts=new(),verifiedRollouts=new();
+ readonly Dictionary<State146,(string Key,FreeRacingCommand[] Pending)> keys=new(ReferenceEqualityComparer.Instance);
+ readonly Dictionary<Tape150,int> anchors=new(ReferenceEqualityComparer.Instance);
+ readonly RuntimeOptions152 options;bool independent;
+ long independentForecasts,independentContacts;public long TransitionRequests,SearchHits,IndependentHits,RolloutHits,IndependentComparisons;
+ public Runtime150 Alpha=>alpha;public TrackFrame Frame=>alpha.Frame;public RiderSpec Spec=>alpha.Spec;public bool Separated=>alpha.Separated;
+ public bool Spatial=>false;public bool AcceptedOperatingPoint=>false;public bool Joint=>false;
+ public Runtime152(RiderSpec spec,bool separated,RuntimeOptions152? options=null){
+  this.options=options??new();alpha=new(spec,separated,workBudget:false);parameters=FreeLearningExperiment.Parameters();surface=MultiActionExperiment135.Surface(Frame);independentBoundary=new(Frame);independentMemo=new(Frame,parameters);independentFastBoundary=new(Frame);
+  var o=new RuntimeOptions147(EventSearch:true,WorkBudget:false,MaximumCacheEntries:20000);
+  if(separated)b=new(spec,Frame,surface,parameters,o,shortlistK1:this.options.ShortlistK1);else a=new(spec,Frame,surface,parameters,o,shortlistK1:this.options.ShortlistK1);
+ }
+ public void Begin(double time){search.Clear();verification.Clear();rollouts.Clear();verifiedRollouts.Clear();keys.Clear();anchors.Clear();independent=false;alpha.Begin(time);if(a is not null)a.Begin(time);else b!.Begin(time);}
+ public string Key(State146 state){
+  if(keys.TryGetValue(state,out var stored)&&stored.Pending.Length==state.Input.Pending.Length&&stored.Pending.Zip(state.Input.Pending).All(p=>ReferenceEquals(p.First,p.Second)))return stored.Key;
+  var key=ExactKey147.State(state);keys[state]=(key,state.Input.Pending.ToArray());return key;
+ }
+ public string RolloutKey(State146 state,Tape150? anchor,FreeRacingAction[]? actions,double goal,double safetyGoal){
+  if(anchor is not null&&!anchors.ContainsKey(anchor))anchors[anchor]=anchors.Count+1;
+  using var bytes=new MemoryStream();using var w=new BinaryWriter(bytes);w.Write(Key(state));w.Write(anchor is null?0:anchors[anchor]);w.Write(goal);w.Write(safetyGoal);w.Write(actions?.Length??-1);if(actions is not null)foreach(var action in actions){w.Write(action.SteeringRadians);w.Write(action.Drive);}return Convert.ToBase64String(bytes.GetBuffer(),0,(int)bytes.Length);
+ }
+ public bool TryRollout(string key,out Tape150 tape){if(options.Memoize&&(independent?verifiedRollouts:rollouts).TryGetValue(key,out var hit)){RolloutHits++;tape=hit;return true;}tape=null!;return false;}
+ public void StoreRollout(string key,Tape150 tape){if(options.Memoize)(independent?verifiedRollouts:rollouts)[key]=tape;}
+ Transition146 Requeue(Transition146 physical,State146 state,FreeRacingAction action){
+  var i=state.Input;var end=physical.Prediction.Points[^1];var queue=i.Pending.Append(new FreeRacingCommand(i.Time,i.Time+RiderController.ReactionSeconds(Spec),action)).OrderBy(c=>c.ActivationAt).ToArray();
+  var active=queue.Where(c=>c.ActivationAt<=end.Time+1e-10).Select(c=>c.Action).LastOrDefault(i.Active);
+  return new(new(new(end.Rider with{Drive=active.Drive},end.Time,end.Omega,end.Steering,active,queue.Where(c=>c.ActivationAt>end.Time+1e-10).ToArray(),end.Time),physical.End.CrankOmega),physical.Prediction);
+ }
+ public Transition146 Step(State146 state,FreeRacingAction action){
+  action.Validate();TransitionRequests++;var canShare=RiderController.ReactionSeconds(Spec)>.2+1e-10;var key=canShare?Key(state):ExactKey147.State(state,.2,action);var cache=independent?verification:search;
+  // Every new action has0.24s latency and this complete step lasts0.2s. Only the returned queue can depend on this new action.
+  if(options.Memoize&&cache.TryGetValue(key,out var hit)){if(independent)IndependentHits++;else SearchHits++;return Requeue(hit,state,action);}
+  Transition146 result;
+  if(!independent)result=a is not null?a.Step(state,action,.2):b!.Step(state,action,.2);
+  else{
+   double crank=state.CrankOmega;independentForecasts++;
+   // Independent provider is the frozen148/149 implementation, including its
+   // original wheel/clutch solve and original BVH. Search has a separate adapter.
+   var prediction=Separated?Limits149.FastPredictor149.Predict(state.Input,Spec,Frame,surface,parameters,147,52.72097f,.2,canShare?null:action,powertrain:new(omega:state.CrankOmega),observeCrank:(_,w)=>crank=w,boundaryCache:independentBoundary,fastBoundary:options.ValidatedIndependent?independentFastBoundary:null)
+    :Speed148.FastPredictor148.Predict(state.Input,Spec,Frame,surface,parameters,147,52.72097f,.2,canShare?null:action,powertrain:new(omega:state.CrankOmega),observeCrank:(_,w)=>crank=w,boundaryCache:independentBoundary,fastBoundary:options.ValidatedIndependent?independentFastBoundary:null);independentContacts+=prediction.ForceEvaluations;
+   result=Requeue(new(new(state.Input,crank),prediction),state,action);
+   if(search.TryGetValue(key,out var proposed)){IndependentComparisons++;if(!Bits152.Transition(result,Requeue(proposed,state,action)))throw new InvalidOperationException("Independent physical prefix mismatch");}
+  }
+  if(options.Memoize)cache[key]=result;return result;
+ }
+ public Decision144 Seed(State146 state)=>a is not null?a.Seed(state):b!.Seed(state);
+ public double LocalAlpha(State146 state,FreeRacingAction action,float steer)=>alpha.LocalAlpha(state,action,steer);
+ sealed class Scope(Action close):IDisposable{public void Dispose()=>close();}
+ public IDisposable Operation(string role){if(role!="independent_preflight")return new Scope(()=>{});if(independent)throw new InvalidOperationException("Nested independent validation");
+  verification.Clear();verifiedRollouts.Clear();var lease=independentMemo.Lease();independent=true;return new Scope(()=>{independent=false;verification.Clear();verifiedRollouts.Clear();lease.Dispose();});}
+ public long Forecasts=>(a?.ActualForecasts??b!.ActualForecasts)+independentForecasts;
+ public long Contacts=>(a?.ActualContacts??b!.ActualContacts)+independentContacts;
+ public long K1Calls=>a?.FullK1Executions??b!.FullK1Executions;
+ public object Counters()=>new{Search=a is not null?a.Counters():b!.Counters(),SearchWork=a?.Work??b!.Work,SearchMemo=(a?.Memo??b!.Memo).Counters(),IndependentMemo=independentMemo.Counters(),FullK1=K1Calls,Forecasts,Contacts,FeedbackQueries=alpha.FeedbackContactQueries,IndependentForecasts=independentForecasts,IndependentContacts=independentContacts,TransitionRequests,SearchHits,IndependentHits,RolloutHits,IndependentComparisons,Verification="Fresh per-review DAG; every unique physical prefix repropagated independently; no search or historical result accepted as proof",options};
+ public void CorruptSearchForDiagnostics(){var first=search.First();var p=first.Value.Prediction.Points[^1];first.Value.Prediction.Points[^1]=p with{Omega=p.Omega+1};}
+}
