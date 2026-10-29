@@ -5,7 +5,7 @@ from collections import Counter
 import csv,gzip,hashlib,importlib.util,json,math,os,subprocess,sys,time
 R=Path(__file__).resolve().parents[2];D=R/'docs/experiments/efficient-contingency';BASE='5558a30c8864199fb1c7abc18852ca27f4d29d9b'
 def read(p):return json.loads(gzip.decompress(p.read_bytes()) if str(p).endswith('.gz') else p.read_bytes())
-def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2,allow_nan=False)+'\n',encoding='utf-8',newline='\n')
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=None if p.name=='analysis.json' else 2,separators=(',',':') if p.name=='analysis.json' else None,allow_nan=False)+'\n',encoding='utf-8',newline='\n')
 def module(name,path):
  s=importlib.util.spec_from_file_location(name,R/path);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);return m
 @contextmanager

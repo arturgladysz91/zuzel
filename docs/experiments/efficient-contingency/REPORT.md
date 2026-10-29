@@ -156,4 +156,4 @@ Certyfikat pozostaje ograniczony do skończonych, skorelowanych scenariuszy151. 
 
 Lokalna walidacja: `validation.json`. C#, Python, Node, kontrola wygenerowanych adapterów i przypisanie wszystkich testów do shardów. Windows CI ma być oceniane dla dokładnego HEAD nowego Draft PR; przebiegi historyczne i czterech zawodników są w Draft odkrywane, lecz nie wykonywane zgodnie z istniejącą polityką CI. Nie przedstawiamy tego jako testu czterech zawodników.
 
-Lokalnie: build bez ostrzeżeń;2507 C# core/trajectory,318 Python,7 testów polityki CI i89 Node — PASS. Odkryto3028 C# przypadków; pozostałe shardy mają jawny status tylko discovery. Nowe dowody zajmują około31MB, zamiast ponownego zapisywania wielkich historycznych drzew.
+Lokalnie: build bez ostrzeżeń;2507 C# core/trajectory,318 Python,7 testów polityki CI i89 Node — PASS. Odkryto3028 C# przypadków; pozostałe shardy mają jawny status tylko discovery. Nowe dowody zajmują około26MB, zamiast ponownego zapisywania wielkich historycznych drzew.
