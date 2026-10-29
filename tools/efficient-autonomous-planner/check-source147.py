@@ -8,14 +8,20 @@ def generated(source):
  return ('// Generated mechanically from frozen StandingStart144/Predictor144.cs. See source-proof.json; no physical formula changes.\nusing SharedWorldSpeedway;\n'+s).encode('utf-8')
 def check(write=False):
  pred='tools/shared-world-speedway/StandingStart144/Predictor144.cs';geom='tools/shared-world-speedway/RacingLineGeometry.cs';cached='tools/efficient-autonomous-planner/CachedPredictor147.cs'
- assert (ROOT/pred).read_bytes()==blob(BASE,pred)
- assert (ROOT/geom).read_bytes()==blob(BASE,geom)
- assert (ROOT/cached).read_bytes()==generated(blob(BASE,pred)),'Generated performance adapter drifted from frozen equations'
- n=blob(NATIVE,pred).replace(b',RacingLineGeometry? boundaryCache=null',b'').replace(b'        if(boundaryCache is not null&&!boundaryCache.IsFor(frame))throw new ArgumentException("Cached boundary must belong to this exact immutable frame.");\n',b'').replace(b'boundaryCache??new RacingLineGeometry(frame)',b'new RacingLineGeometry(frame)')
- assert n==blob(BASE,pred)
- assert blob(NATIVE,geom).replace(b'    public bool IsFor(TrackFrame candidate)=>ReferenceEquals(frame,candidate);\n',b'')==blob(BASE,geom)
+ # The Python CI job intentionally uses a shallow checkout. Verify packaged
+ # frozen hashes + complete generated text without requiring or fetching history.
+ saved=json.loads((DOC/'source-proof.json').read_text(encoding='utf-8'))
+ for path in [pred,geom]:
+  assert hashlib.sha256((ROOT/path).read_bytes()).hexdigest()==saved['SourceSha256'][path],path
+ assert (ROOT/cached).read_bytes()==generated((ROOT/pred).read_bytes()),'Generated performance adapter drifted from frozen equations'
+ if write:
+  assert (ROOT/pred).read_bytes()==blob(BASE,pred)
+  assert (ROOT/geom).read_bytes()==blob(BASE,geom)
+  n=blob(NATIVE,pred).replace(b',RacingLineGeometry? boundaryCache=null',b'').replace(b'        if(boundaryCache is not null&&!boundaryCache.IsFor(frame))throw new ArgumentException("Cached boundary must belong to this exact immutable frame.");\n',b'').replace(b'boundaryCache??new RacingLineGeometry(frame)',b'new RacingLineGeometry(frame)')
+  assert n==blob(BASE,pred)
+  assert blob(NATIVE,geom).replace(b'    public bool IsFor(TrackFrame candidate)=>ReferenceEquals(frame,candidate);\n',b'')==blob(BASE,geom)
  paths=['src','data','docs/experiments/corner-speed-loss','docs/experiments/standing-start-three-laps','docs/experiments/autonomous-corner-planning']
- assert not subprocess.check_output(['git','diff',BASE,'--name-only','--']+paths,cwd=ROOT).strip()
+ if write:assert not subprocess.check_output(['git','diff',BASE,'--name-only','--']+paths,cwd=ROOT).strip()
  if write:
   sources=[ROOT/'tools/autonomous-corner-planning'/n for n in ['Planner146.cs','Model146.cs','ExecutionHooks146.cs']]+list((ROOT/'tools/efficient-autonomous-planner').glob('*.cs'))+[ROOT/pred,ROOT/geom]
   nativepaths=[str(p.relative_to(ROOT)).replace('\\','/') for p in sources if p.name not in ['CachedPredictor147.cs','PredictionBoundary147.cs','Finalize147.cs']]
