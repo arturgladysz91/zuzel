@@ -13,7 +13,8 @@ public sealed class Journal147:IDisposable{
         file.Write(Encoding.UTF8.GetBytes(line));file.Flush(true);previous=hash;index++;
     }
     public static JsonElement[] ReadComplete(string path){
-        var text=File.ReadAllText(path,Encoding.UTF8);var stop=text.LastIndexOf('\n');if(stop<0)return Array.Empty<JsonElement>();
+        using var input=new FileStream(path,FileMode.Open,FileAccess.Read,FileShare.ReadWrite);using var reader=new StreamReader(input,Encoding.UTF8);
+        var text=reader.ReadToEnd();var stop=text.LastIndexOf('\n');if(stop<0)return Array.Empty<JsonElement>();
         var rows=new List<JsonElement>();string previous="GENESIS";int index=0;
         foreach(var line in text[..stop].Split('\n',StringSplitOptions.RemoveEmptyEntries)){
             using var doc=JsonDocument.Parse(line);var e=doc.RootElement;var payload=e.GetProperty("Payload");

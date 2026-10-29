@@ -40,7 +40,8 @@ public static class Native147{
             return new(decision.Choice with{Forecasts=physicalForecasts,ForceEvaluations=contacts},total);
         }
         Run144 run;using(var world=new DiagnosticWorld145(new(Enabled:true,RequiredLaps:3,MaximumSeconds:120)))run=world.Run(trial.Name,"K1",Choose);
-        journal.Append(new{Event="summary",run.Outcome,run.EndSeconds,run.Fingerprint,CompletedLaps=run.Riders[0].CompletedLaps,NativeDecisions=run.Riders[0].Decisions.Length,run.Crossings});
+        journal.Append(new{Event="summary",run.Outcome,run.EndSeconds,run.Fingerprint,CompletedLaps=run.Riders[0].CompletedLaps,NativeDecisions=run.Riders[0].Decisions.Length,run.Crossings,Runtime=runtime?.Counters(),JournalCpuSeconds=journalCpu});
+        journal.Dispose();
         using(var z=new GZipStream(File.Create(Path.Combine(output,trial.Name+".json.gz")),CompressionLevel.Fastest))JsonSerializer.Serialize(z,run,json);
         var rows=Journal147.ReadComplete(journalPath);var decisions=rows.Where(r=>r.GetProperty("Event").GetString()=="decision").ToArray();var native=run.Riders[0].Decisions;
         var complete=decisions.Length==native.Length&&decisions.Zip(native).All(q=>Math.Abs(q.First.GetProperty("Time").GetDouble()-q.Second.Choice.Time)<1e-8&&q.First.GetProperty("Selected").Deserialize<FreeRacingAction>(json)==q.Second.Choice.Action);

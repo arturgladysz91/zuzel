@@ -17,9 +17,9 @@ public class EfficientPlanning147Tests{
     [Fact] public void CachedGeometryRetainsEveryPredictionValueAndRejectsAnotherFrame(){
         var run=Saved();var s=State(run,22.6);var f=StandingWorld144.Frame();var spec=run.Riders[0].Spec;var surface=MultiActionExperiment135.Surface(f);var p=FreeLearningExperiment.Parameters();var a=new FreeRacingAction(.01f,.31820688f);
         var first=Predictor144.Predict(s.Input,spec,f,surface,p,147,52.72097f,.9,a,powertrain:new CrankClutch144(omega:s.CrankOmega));
-        var same=Predictor144.Predict(s.Input,spec,f,surface,p,147,52.72097f,.9,a,powertrain:new CrankClutch144(omega:s.CrankOmega),boundaryCache:new(f));
+        var same=CachedPredictor147.Predict(s.Input,spec,f,surface,p,147,52.72097f,.9,a,powertrain:new CrankClutch144(omega:s.CrankOmega),boundaryCache:new(f));
         Assert.Equal(JsonSerializer.Serialize(first,FreeLearningExperiment.Json),JsonSerializer.Serialize(same,FreeLearningExperiment.Json));
-        Assert.Throws<ArgumentException>(()=>Predictor144.Predict(s.Input,spec,f,surface,p,147,52.72097f,.2,a,boundaryCache:new(StandingWorld144.Frame())));
+        Assert.Throws<ArgumentException>(()=>CachedPredictor147.Predict(s.Input,spec,f,surface,p,147,52.72097f,.2,a,boundaryCache:new(StandingWorld144.Frame())));
     }
     [Fact] public void ExactKeyIncludesWheelCrankActuatorQueueAndIeeeBits(){
         var s=State(Saved(),22.6);var key=ExactKey147.State(s);
@@ -51,7 +51,7 @@ public class EfficientPlanning147Tests{
     }
     [Fact] public void DurableJournalRetainsCompleteHashCheckedRecordsAfterPartialTail(){
         var folder=Path.Combine(Root,"../../../work/test147-journal");Directory.CreateDirectory(folder);var path=Path.Combine(folder,"decisions.jsonl");
-        try{using(var journal=new Journal147(path)){journal.Append(new{Event="decision",Time=0,Selected=new FreeRacingAction(0,1)});journal.Append(new{Event="decision",Time=.2,Selected=new FreeRacingAction(0,0)});}
+        try{using(var journal=new Journal147(path)){journal.Append(new{Event="decision",Time=0,Selected=new FreeRacingAction(0,1)});journal.Append(new{Event="decision",Time=.2,Selected=new FreeRacingAction(0,0)});Assert.Equal(2,Journal147.ReadComplete(path).Length);}
             File.AppendAllText(path,"{\"Index\":2,\"Payload\":");Assert.Equal(2,Journal147.ReadComplete(path).Length);
             var text=File.ReadAllText(path).Replace("\"Time\":0,","\"Time\":1,");File.WriteAllText(path,text);Assert.Throws<IOException>(()=>Journal147.ReadComplete(path));
         }finally{File.Delete(path);Directory.Delete(folder);}
@@ -61,4 +61,15 @@ public class EfficientPlanning147Tests{
         Assert.True(a.GetProperty("CommandMatchesBaseline").GetBoolean());Assert.True(a.GetProperty("EndStateBitExact").GetBoolean());Assert.True(a.GetProperty("LogicalForecastsMatch").GetBoolean());Assert.False(a.GetProperty("StrategyChanged").GetBoolean());
         using var changed=JsonDocument.Parse(File.ReadAllText(Path.Combine(Root,"comparison/shortlist-22-6.json")));Assert.True(changed.RootElement.GetProperty("StrategyChanged").GetBoolean());Assert.Equal("certified decision",changed.RootElement.GetProperty("Outcome").GetString());
     }
+    [Fact] public void OptionalWorkExhaustionRetainsAndIndependentlyChecksLegalIncumbent(){
+        var r=Saved();var state=State(r,14.4);var frame=StandingWorld144.Frame();var surface=MultiActionExperiment135.Surface(frame);var p=FreeLearningExperiment.Parameters();
+        using var z=new GZipStream(File.OpenRead(Path.Combine(Root,"memory-14-2.json.gz")),CompressionMode.Decompress);using var data=JsonDocument.Parse(z);
+        var previous=data.RootElement.GetProperty("LastReview").Deserialize<Review146>(FreeLearningExperiment.Json)!;var expected=new Model146(r.Riders[0].Spec,frame,surface,p).Step(new(previous.Input,previous.CrankOmega),previous.Selected!.Actions[0]).End;
+        var runtime=new ExactRuntime147(r.Riders[0].Spec,frame,surface,p,new(WorkBudget:true,OptionalSearchContacts:1,MaximumActualForecasts:8192,MaximumContacts:700000));
+        var hooks=runtime.Hooks() with{ScheduledSearch=(_,_,_)=>true};var planner=new Planner146(r.Riders[0].Spec,frame,surface,p,new(Enabled:true),hooks:hooks);
+        planner.RestoreMemoryForDiagnostics(new(previous.Selected,expected,data.RootElement.GetProperty("NextSearch").GetDouble()));
+        var chosen=planner.Choose(state.Input,new CrankClutch144(omega:state.CrankOmega));var review=planner.Reviews.Single();
+        Assert.Equal(FreeActionSafety.SafeInHorizon,chosen.Choice.Safety);Assert.True(review.Selected!.Safety.Legal);Assert.True(review.IndependentSafety!.Legal);Assert.Equal(1,runtime.BudgetFallbacks);
+    }
+
 }

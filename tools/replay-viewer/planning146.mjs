@@ -14,7 +14,7 @@ export function review146(data,time){
 const number=(x,d=3)=>x==null?'N/D':Number(x).toFixed(d);
 export function setupPlanning146(element,data,onRun,onJump,onTrails){
   setupStanding144(element,data,onRun,onJump);
-  element.querySelector('h2').textContent='#146 · '+data.run.Name+' · '+data.run.Outcome;
+  element.querySelector('h2').textContent='#'+(data.studyNumber??146)+' · '+data.run.Name+' · '+data.run.Outcome;
   const p=document.createElement('p');p.textContent='Prognoza jest zapisem planu z chwili decyzji. Kolejne obserwacje mogą go zmienić; poniżej podano przyczynę każdej zmiany. Wymuszone walidacje sprawdzają model, nie autonomię.';element.append(p);
   const table=document.createElement('table'),head=document.createElement('tr');
   for(const t of ['Łuk','Czas s','Δ K1 s','V wej./min./wyj. km/h','β max °','Linia min./max. m']){const th=document.createElement('th');th.textContent=t;head.append(th);}table.append(head);

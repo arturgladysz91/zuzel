@@ -117,3 +117,8 @@
 /docs/experiments/autonomous-corner-planning/** -text whitespace=trailing-space,space-before-tab,cr-at-eol
 /tools/autonomous-corner-planning/** text eol=lf
 /tools/replay-viewer/planning146*.mjs text eol=lf
+
+# Study147: preserve saved physical evidence and research source line endings.
+/docs/experiments/efficient-autonomous-planner/** -text whitespace=trailing-space,space-before-tab,cr-at-eol
+/tools/efficient-autonomous-planner/** text eol=lf
+/tools/replay-viewer/efficient147*.mjs text eol=lf

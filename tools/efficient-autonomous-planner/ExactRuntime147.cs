@@ -10,7 +10,7 @@ public sealed record RuntimeOptions147(bool Cache=true,bool ShareInactivePrefix=
 public sealed record Physical147(FreeRacingPrediction Prediction,double CrankOmega,double Review);
 public sealed class ExactRuntime147{
     readonly RiderSpec spec;readonly TrackFrame frame;readonly TrackStateSnapshot surface;readonly WorldParameters p;readonly float mass,inertia;
-    RacingLineGeometry boundary;readonly Dictionary<string,Physical147> predictions=new();readonly Dictionary<string,Decision144> seeds=new();
+    PredictionBoundary147 boundary;readonly Dictionary<string,Physical147> predictions=new();readonly Dictionary<string,Decision144> seeds=new();
     readonly Dictionary<Plan146,FreeRacingAction[]> tapes=new(ReferenceEqualityComparer.Instance);FreeRacingAction[]? inheritedTape;
     readonly Process process=Process.GetCurrentProcess();string? conditions;double reviewTime;TimeSpan reviewCpu;
     long startForecasts,startContacts,optionalStartContacts;string operation="dispatch";bool optionalStarted;
@@ -64,7 +64,7 @@ public sealed class ExactRuntime147{
         var key=canCache?ExactKey147.State(state,seconds,action):"";
         if(canCache&&predictions.TryGetValue(key,out var hit)){PredictionHits++;if(hit.Review!=reviewTime)CrossReviewHits++;return hit;}
         CheckWork(seconds);double crank=state.CrankOmega;
-        var forecast=Predictor144.Predict(state.Input,spec,frame,surface,p,mass,inertia,seconds,action,
+        var forecast=CachedPredictor147.Predict(state.Input,spec,frame,surface,p,mass,inertia,seconds,action,
             powertrain:new CrankClutch144(omega:state.CrankOmega),observeCrank:(_,w)=>crank=w,
             boundaryCache:Options.ReuseBoundary?boundary:null);
         ActualForecasts++;ActualContacts+=forecast.ForceEvaluations;var result=new Physical147(forecast,crank,reviewTime);

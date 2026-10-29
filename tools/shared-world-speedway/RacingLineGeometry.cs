@@ -34,7 +34,6 @@ public sealed class RacingLineGeometry
             if (Length(a-b)>.001) outer.Add(new(a,b,default,0,0));
         }
     }
-    public bool IsFor(TrackFrame candidate)=>ReferenceEquals(frame,candidate);
     public (double Inner, double Outer) Clearance(RiderView v)
     {
         if(curve is not null)return curve.Clearance(v);
