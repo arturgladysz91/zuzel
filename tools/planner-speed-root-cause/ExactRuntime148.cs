@@ -68,7 +68,7 @@ public sealed class ExactRuntime148{
         if(shared){
             var duration=RiderController.ReactionSeconds(spec);var prefixKey=ExactKey147.State(state,duration,null);
             if(!sharedPrefixes.TryGetValue(prefixKey,out var prefix)){
-                double endCrank=state.CrankOmega;
+                double endCrank=state.CrankOmega;CheckWork(duration);
                 var q=FastPredictor148.Predict(state.Input,spec,frame,surface,p,mass,inertia,duration,null,powertrain:new CrankClutch144(omega:state.CrankOmega),observeCrank:(_,w)=>endCrank=w,boundaryCache:boundary,fastBoundary:fastBoundary);
                 prefix=(q,endCrank);sharedPrefixes[prefixKey]=prefix;SeedSharedPrefixes++;ActualForecasts++;ActualContacts+=q.ForceEvaluations;
             }else SharedPrefixContactQueriesSaved+=prefix.Prediction.ForceEvaluations;
@@ -76,7 +76,7 @@ public sealed class ExactRuntime148{
             var active=oldQueue.Where(c=>c.ActivationAt<=end.Time+1e-10).Select(c=>c.Action).LastOrDefault(state.Input.Active);
             var pending=oldQueue.Where(c=>c.ActivationAt>end.Time+1e-10).Append(new FreeRacingCommand(state.Input.Time,state.Input.Time+duration,action!.Value)).OrderBy(c=>c.ActivationAt).ToArray();
             var input=new FreeRacingInput(end.Rider,end.Time,end.Omega,end.Steering,active,pending,end.Time);
-            var stop=state.Input.Time+seconds;
+            var stop=state.Input.Time+seconds;CheckWork(stop-end.Time);
             var tail=FastPredictor148.Predict(input,spec,frame,surface,p,mass,inertia,stop-end.Time,null,powertrain:new CrankClutch144(omega:prefix.Crank),observeCrank:(_,w)=>crank=w,boundaryCache:boundary,fastBoundary:fastBoundary,exactInitialWheel:true,stopAt:stop);
             ActualForecasts++;ActualContacts+=tail.ForceEvaluations;
             forecast=new(prefix.Prediction.Points.SkipLast(1).Concat(tail.Points).ToArray(),prefix.Prediction.ForceEvaluations+tail.ForceEvaluations,prefix.Prediction.DistanceMeters+tail.DistanceMeters);

@@ -1,0 +1,44 @@
+{
+  "Title": "#148 · Optymalizacja dokładna i przyczyny strat prędkości",
+  "DefaultRun": "autonomous148-prefix",
+  "GeometryFile": "../causal-yaw-throttle/progressive-b-viewer-geometry.json",
+  "Runs": [
+    {
+      "Id": "K1",
+      "File": "../standing-start-three-laps/native/K1.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "completed",
+      "Duration": 54.800000000000004,
+      "Fingerprint": "2778FE469DB24286F7E07123E74E5FC3DB5D0BAAA25DEE89329A10A11DC0FD40"
+    },
+    {
+      "Id": "autonomous147-shortlist",
+      "File": "../efficient-autonomous-planner/native/autonomous147-shortlist.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "completed",
+      "Duration": 53.99,
+      "Fingerprint": "EA342AF146E248C411CB7C409D26AEFAB4ED79A307AD1D03D80AE9F5F478AAE0"
+    },
+    {
+      "Id": "autonomous148-prefix",
+      "File": "native/autonomous148-prefix.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "completed",
+      "Duration": 53.99,
+      "Fingerprint": "EA342AF146E248C411CB7C409D26AEFAB4ED79A307AD1D03D80AE9F5F478AAE0"
+    }
+  ],
+  "LapMeters": 318.77874994277954,
+  "RequiredLaps": 3,
+  "StartReference": 0,
+  "BendReferences": [
+    35,
+    132.38937497138977,
+    194.38937497138977,
+    291.77874994277954
+  ],
+  "Note": "Wariant dokładny ma tę samą trajektorię co #147. Mniejszy CPU nie jest poprawą czasu jazdy. Diagnostyki geometrii i ręcznych impulsów są osobnymi eksperymentami."
+}

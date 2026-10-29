@@ -1,0 +1,52 @@
+{
+  "BaseCommit": "b92694ada648404bdd8180f8d02ac9138b67ac66",
+  "HistoricalFilesChecked": 4534,
+  "ChangedHistoricalFiles": [],
+  "HistoricalComparison": "Git canonical blobs under repository attributes; raw hashes below for frozen physics. Binary and -text evidence is compared verbatim; unchanged text checkout EOL is not treated as a source change.",
+  "FrozenSources": {
+    "tools/shared-world-speedway/StandingStart144/Contact144.cs": "c0a1320133a2e56919dd69811201d56187eb191cdd91330afdfb2611facff65b",
+    "tools/shared-world-speedway/StandingStart144/CrankClutch144.cs": "33aeb44080c5406cab0371789e9e66a9596f6736ae71288e46b0f0882bb68cef",
+    "tools/shared-world-speedway/StandingStart144/Predictor144.cs": "8408b97a02552757bc7d8d07ffd91f471d5f3fc32eecb0678a0d91a6b124d63c",
+    "tools/shared-world-speedway/CurveBoundaryAudit.cs": "3dc41b6886446dcdd6ba96c7a42fab54963f0d576fd891f2d1075a931a63de9d",
+    "tools/shared-world-speedway/RacingLineGeometry.cs": "669f65ee1042ef63cb165aa72a4936809a916879572689d94d5bce2e7a7a3581",
+    "tools/shared-world-speedway/ExperimentalTrackShape.cs": "43036ac576a361758e12f9832423c717fbba70a7a42721681bc9fd04941f5c52",
+    "tools/shared-world-speedway/RearWheelDynamics.cs": "ad74d451ca769d8189bd17ccb61a41779f7540f3af489bc4b716a799205fb7a3",
+    "tools/shared-world-speedway/Engine500.cs": "209b62347b2f37c4f21294fa9f986625a9cec29ba0cafafa88595c34ccbda9a6"
+  },
+  "MainNativeControlCommits": {
+    "autonomous148-exact": "eb0c3dce13b44add53e1e36501afd0d323de6997",
+    "autonomous148-hoisted": "c2452a8c257064aa6b87787fe82498e7fd512876",
+    "autonomous148-prefix": "1e19a5a5b995f21b2afbfaa0fc75f78b3314976c"
+  },
+  "Sources": {
+    "tools/planner-speed-root-cause/Budget148.cs": "884d95932820b34af7fdbaa66ac055261c4773408aaf8812239523d4b58b9002",
+    "tools/planner-speed-root-cause/Causal148.cs": "0a47e3a0ca069d91926a5c33111e4a1328dfb10205988e7137278be036219b7b",
+    "tools/planner-speed-root-cause/Compare148.cs": "3429d0671be1abed997079db3f0af3a70befe35a21182a7c27bc844489da6141",
+    "tools/planner-speed-root-cause/Diagnostics148.cs": "d1baa4c9600671e9c505ec745ebdcae40f22f38fc5af2f097392226e6ad75166",
+    "tools/planner-speed-root-cause/DiagnosticWorld148.cs": "04d88f0373de9ac9c23375c4c9107b2f812eba1791f475d722bf4077a9b1eaf0",
+    "tools/planner-speed-root-cause/ExactRuntime148.cs": "e09323c8c2116c00cc65c0a6c4177f15021723bf70682af148521145b3a8a430",
+    "tools/planner-speed-root-cause/FastBoundary148.cs": "94fa69a9a3266c61ee4e66fe8ff2294c5144b9e733b34e5505b9e6691ef559a4",
+    "tools/planner-speed-root-cause/FastPredictor148.cs": "f680be5d6cd00d9a222a98bfef9ed50ec6f7995252101ab52ed04f6c0fc1a013",
+    "tools/planner-speed-root-cause/Maps148.cs": "158449bcf90235bf170262400f4e61cf1592161e3d1a4fd341551471f53d48c5",
+    "tools/planner-speed-root-cause/Native148.cs": "857b107842b29fafd5fc4e14a48b91170836c03554c4e6a5aedb03fae4bc3f41",
+    "tools/planner-speed-root-cause/Program.cs": "f4874038331dfbdb396227c534290db077984498059e6ca4a9518a84aa03a4cb",
+    "tools/shared-world-speedway/PlannerPerformance148/FastCrank148.cs": "d98761ca764981bf385424354716113296a1ca908916cdb5323d6fbfb039b74d",
+    "tools/shared-world-speedway/PlannerPerformance148/ForecastContact148.cs": "2b563820128666faa254c8520acdf3dcdfb575596b71c59c298e66e2bbee1082",
+    "tools/shared-world-speedway/PlannerPerformance148/ForecastFork148.cs": "705742f192a1c6088b722a0d22005c8524a21abfefe7f8285478a4616b3f3f02"
+  },
+  "PostTrialGuardFix": "Regression adds a work check before each shared prefix and tail; removing just those two calls reproduces measured runtime source exactly. No mathematical/policy change. No native repeat after this resource-check repair; measured CPU belongs to 1e19a5a.",
+  "MeasuredWorkMargins": {
+    "MaximumActualForecasts": 7474,
+    "ForecastLimit": 8192,
+    "MaximumActualContacts": 463249,
+    "ContactLimit": 700000,
+    "OptionalContactLimit": 500000,
+    "MaximumPlanningCpu": 10.28125,
+    "CpuLimit": 30
+  },
+  "Assumptions": [
+    "Sign fast path requires a known projected accepted/predicted CoM and connected capsule axes avoiding both edges. Native observations and each predictor integration step use Frame.Project; original independent preflight retains endpoint sign checks.",
+    "Wheel fork copies a predicted scalar with exact IEEE bits and never writes a native body.",
+    "Fast helpers are mechanically generated; no physical constants, solver tolerance, action objective or safety reserve changed."
+  ]
+}

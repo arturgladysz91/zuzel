@@ -310,3 +310,5 @@ test('Target cross-sections read exported model positions/normals; offset zero i
 });
 
 import './motorcycle-physics.test.mjs';
+
+import './speed148.test.mjs';

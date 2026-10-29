@@ -19,7 +19,7 @@ public static class Diagnostics148{
  }
  public static void Geometry(){
   var variants=new[]{("G0c",62f,31f),("G1",75f,31f),("G2",90f,31f),("G3",62f,36f),("G4",62f,42f)};
-  foreach(var (name,l,r) in variants){if(File.Exists(Program.Doc+"/diagnostics/geometry-"+name+"-result.json"))continue;var f=Circular(l,r);Program.Save(Program.Doc+"/geometry-"+name+".json",ReplayGeometry.Create(f));Execute("geometry-"+name,f,40,null,"causal-K1");}
+  foreach(var (name,l,r) in variants){if(File.Exists(Program.Doc+"/diagnostics/geometry-"+name+"-result.json"))continue;var f=Circular(l,r);Program.Save(Program.Doc+"/geometry-"+name+".json.gz",ReplayGeometry.Create(f));Execute("geometry-"+name,f,40,null,"causal-K1");}
  }
  public static void Capabilities(){
   foreach(var kph in new[]{0,40,70,90}){var name="long-straight-"+kph;if(File.Exists(Program.Doc+"/diagnostics/"+name+"-result.json"))continue;var spec=StandingWorld144.Rider(StartingGate.B) with{SpeedMetersPerSecond=kph/3.6f};Execute(name,Circular(1200,31),10,spec,"gas1-straight");}

@@ -16,7 +16,7 @@ public static class Compare148{
  public static void Run(){
   var saved=Journal();var run=Program.Baseline();var f=StandingWorld144.Frame();var surface=MultiActionExperiment135.Surface(f);var p=FreeLearningExperiment.Parameters();var spec=run.Riders[0].Spec;
   foreach(var at in new[]{0d,22.6,30d})foreach(var mode in new[]{"A","B"}){
-   var path=Program.Doc+$"/decision-{mode}-{at:0.0}.json";if(File.Exists(path))continue;using var budget=new Budget148($"decision-{mode}-{at:0.0}",0,100);
+   var path=Program.Doc+$"/decision-{mode}-{at:0.0}.json";if(File.Exists(path)||File.Exists(path+".gz"))continue;using var budget=new Budget148($"decision-{mode}-{at:0.0}",0,100);
    var index=Array.FindIndex(saved,e=>Math.Abs(e.GetProperty("Time").GetDouble()-at)<1e-7);var state=State(saved[index]);var memory=index==0?null:Before(saved[index-1],spec,f,surface,p);
    var runtime=new ExactRuntime148(spec,f,surface,p,Options,cheapTail:mode=="B");var planner=new Planner146(spec,f,surface,p,new(Enabled:true),budgetGuard:budget.Guard,hooks:runtime.Hooks());
    if(memory is not null){planner.RestoreMemoryForDiagnostics(memory);runtime.InitializeHistory(State(saved[index-1]).Input,memory.Previous);}

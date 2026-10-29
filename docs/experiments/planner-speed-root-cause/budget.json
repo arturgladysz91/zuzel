@@ -236,5 +236,48 @@
     "NativeWorlds": 0,
     "CpuSeconds": 3.390625,
     "Outcome": "exact prediction/seed/clearance parity PASS"
+  },
+  {
+    "Name": "autonomous148-prefix",
+    "Complete": true,
+    "NativeWorlds": 1,
+    "CpuSeconds": 97,
+    "Outcome": "technical PASS"
+  },
+  {
+    "Name": "accepted-state-tyre-maps",
+    "Complete": true,
+    "NativeWorlds": 0,
+    "CpuSeconds": 1.0625,
+    "Outcome": "static tyre and yaw maps saved"
+  },
+  {
+    "Name": "causal-29.4-short",
+    "Complete": true,
+    "NativeWorlds": 1,
+    "CpuSeconds": 9.96875,
+    "Outcome": "experimental beta45 envelope"
+  },
+  {
+    "Name": "causal-32.8-short",
+    "Complete": true,
+    "NativeWorlds": 1,
+    "CpuSeconds": 21.15625,
+    "Outcome": "completed"
+  },
+  {
+    "Name": "saved-diagnostic-summary",
+    "Complete": true,
+    "NativeWorlds": 0,
+    "CpuSeconds": 8,
+    "Outcome": "postprocessing KeyError before any world creation; conservative single-thread wall-time upper bound 8s (exec elapsed 7.6732712s), not a direct CPU measurement",
+    "CpuMeasurement": "upper bound"
+  },
+  {
+    "Name": "saved-diagnostic-summary-final",
+    "Complete": true,
+    "NativeWorlds": 0,
+    "CpuSeconds": 13.390625,
+    "Outcome": "saved native/geometry/causal evidence audit complete"
   }
 ]
