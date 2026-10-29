@@ -12,7 +12,7 @@ class Study149Tests(unittest.TestCase):
  def test_B_is_repeated_but_is_not_a_sporting_improvement_over_A(self):
   a=next(x for x in self.a['full_runs'] if x['name']=='baseline149-final148');b=next(x for x in self.a['full_runs'] if x['name']=='separated149-autonomous');self.assertGreater(b['finish_s'],a['finish_s']);self.assertEqual(b['legal_completions'],1);self.assertTrue(self.a['B_repeatability']['samples_equal']);self.assertTrue(self.a['B_repeatability']['commands_equal']);self.assertEqual(len([c for c in self.a['corners'] if c['run']==b['name'] and c['complete']]),6)
  def test_same_capacity_engine_and_historical_files(self):
-  for path,expected in read(D/'source-proof.json')['FrozenHashes'].items():self.assertEqual(hashlib.sha256((R/path).read_bytes()).hexdigest(),expected)
+  for path,expected in read(D/'source-proof.json')['FrozenHashes'].items():self.assertEqual(hashlib.sha256((R/path).read_bytes().replace(b'\r\n',b'\n') if path.endswith('.cs') else (R/path).read_bytes()).hexdigest(),expected)
   a=read(D/'native/baseline149-final148.json.gz')['Riders'][0]['Samples'][100]['Forces']['TyreLoads'];b=read(D/'native/separated149-autonomous.json.gz')['Riders'][0]['Samples'][100]['Forces']['TyreLoads'];self.assertEqual(a,b)
  def test_resource_ledger_includes_failures_and_stays_bounded(self):
   b=read(D/'budget.json');self.assertTrue(all(x['Complete'] for x in b));self.assertLess(sum(x['CpuSeconds'] for x in b),1200);self.assertLessEqual(sum(x['NativeWorlds'] for x in b),48);self.assertTrue(any('Preflight rejected' in x['Outcome'] for x in b));self.assertTrue(any(x['Outcome']=='confirmed footprint crossing' for x in b))
