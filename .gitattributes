@@ -139,3 +139,11 @@
 /docs/experiments/robust-autonomous-racing/** -text whitespace=trailing-space,space-before-tab,cr-at-eol
 /tools/robust-autonomous-racing/** text eol=lf
 /tools/replay-viewer/robust150*.mjs text eol=lf
+
+# Study151 keeps complete finite contingency trees and all failed attempts.
+/docs/experiments/contingency-recourse/** -text whitespace=trailing-space,space-before-tab,cr-at-eol
+/tools/contingency-recourse/** text eol=lf
+/tools/replay-viewer/contingency151*.mjs text eol=lf
+# These historical lock blobs contain CRLF; preserve their exact bytes instead of an apparent checkout-only diff.
+/tools/autonomous-corner-planning/packages.lock.json -text
+/tools/efficient-autonomous-planner/packages.lock.json -text

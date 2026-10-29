@@ -1,0 +1,402 @@
+[
+  {
+    "Epoch": "current-0.4",
+    "Sign": 0,
+    "Policy": "retained",
+    "Safety": {
+      "Legal": true,
+      "MinimumGapMeters": 0.1834138263297897,
+      "SweepLowerBoundMeters": 0.07632127488979144,
+      "MaximumBetaDegrees": 13.347522891130902,
+      "MaximumYawRate": 0.9048423171043396,
+      "Reason": "legal complete forecast"
+    },
+    "FirstFailure": null,
+    "Pending": [
+      {
+        "ObservedAt": 0.2,
+        "ActivationAt": 0.44,
+        "Action": {
+          "SteeringRadians": 0,
+          "Drive": 1
+        }
+      }
+    ],
+    "InitialAction": {
+      "SteeringRadians": 0,
+      "Drive": 1
+    }
+  },
+  {
+    "Epoch": "current-0.4",
+    "Sign": 0,
+    "Policy": "fresh",
+    "Safety": {
+      "Legal": true,
+      "MinimumGapMeters": 0.20463248107517673,
+      "SweepLowerBoundMeters": 0.09743945964340524,
+      "MaximumBetaDegrees": 13.33887253243807,
+      "MaximumYawRate": 0.9048423171043396,
+      "Reason": "legal complete forecast"
+    },
+    "FirstFailure": null,
+    "Pending": [
+      {
+        "ObservedAt": 0.2,
+        "ActivationAt": 0.44,
+        "Action": {
+          "SteeringRadians": 0,
+          "Drive": 1
+        }
+      }
+    ],
+    "InitialAction": {
+      "SteeringRadians": 0,
+      "Drive": 1
+    }
+  },
+  {
+    "Epoch": "current-0.4",
+    "Sign": 1,
+    "Policy": "retained",
+    "Safety": {
+      "Legal": false,
+      "MinimumGapMeters": -0.020464889100267728,
+      "SweepLowerBoundMeters": -0.1304692947550377,
+      "MaximumBetaDegrees": 13.432427303101534,
+      "MaximumYawRate": 0.8991873264312744,
+      "Reason": "footprint reserve"
+    },
+    "FirstFailure": {
+      "Time": 13.14,
+      "Reason": "uncertified swept interval",
+      "Inner": 0.10051132649844469,
+      "Outer": 11.586738639106722,
+      "SweepLowerBoundMeters": -0.010130119197906878,
+      "BetaDegrees": 8.809542778062726,
+      "Reference": 209.46728648454882
+    },
+    "Pending": [
+      {
+        "ObservedAt": 0.2,
+        "ActivationAt": 0.44,
+        "Action": {
+          "SteeringRadians": 0,
+          "Drive": 1
+        }
+      }
+    ],
+    "InitialAction": {
+      "SteeringRadians": 2.6562539E-06,
+      "Drive": 1
+    }
+  },
+  {
+    "Epoch": "current-0.4",
+    "Sign": 1,
+    "Policy": "fresh",
+    "Safety": {
+      "Legal": false,
+      "MinimumGapMeters": -0.027415331124596223,
+      "SweepLowerBoundMeters": -0.13745628522995532,
+      "MaximumBetaDegrees": 13.401751557501171,
+      "MaximumYawRate": 0.8991873264312744,
+      "Reason": "footprint reserve"
+    },
+    "FirstFailure": {
+      "Time": 13.14,
+      "Reason": "footprint reserve",
+      "Inner": 0.09027550923903609,
+      "Outer": 11.604280000028773,
+      "SweepLowerBoundMeters": -0.020397124542990724,
+      "BetaDegrees": 8.729225217574712,
+      "Reference": 209.4874308626372
+    },
+    "Pending": [
+      {
+        "ObservedAt": 0.2,
+        "ActivationAt": 0.44,
+        "Action": {
+          "SteeringRadians": 0,
+          "Drive": 1
+        }
+      }
+    ],
+    "InitialAction": {
+      "SteeringRadians": 2.6562543E-06,
+      "Drive": 1
+    }
+  },
+  {
+    "Epoch": "current-0.4",
+    "Sign": -1,
+    "Policy": "retained",
+    "Safety": {
+      "Legal": false,
+      "MinimumGapMeters": -0.0053131627269322156,
+      "SweepLowerBoundMeters": -0.08975943904124843,
+      "MaximumBetaDegrees": 13.381962829873848,
+      "MaximumYawRate": 0.9103162288665771,
+      "Reason": "footprint reserve"
+    },
+    "FirstFailure": {
+      "Time": 15.75,
+      "Reason": "footprint reserve",
+      "Inner": 0.0875607950510048,
+      "Outer": 15.015411178551549,
+      "SweepLowerBoundMeters": 0.0032189357177894455,
+      "BetaDegrees": 5.121355373433896,
+      "Reference": 255.9904546496939
+    },
+    "Pending": [
+      {
+        "ObservedAt": 0.2,
+        "ActivationAt": 0.44,
+        "Action": {
+          "SteeringRadians": 0,
+          "Drive": 1
+        }
+      }
+    ],
+    "InitialAction": {
+      "SteeringRadians": -2.6554387E-06,
+      "Drive": 1
+    }
+  },
+  {
+    "Epoch": "current-0.4",
+    "Sign": -1,
+    "Policy": "fresh",
+    "Safety": {
+      "Legal": false,
+      "MinimumGapMeters": -0.010155462139654929,
+      "SweepLowerBoundMeters": -0.0945913895379174,
+      "MaximumBetaDegrees": 13.407553271964163,
+      "MaximumYawRate": 0.9103162288665771,
+      "Reason": "footprint reserve"
+    },
+    "FirstFailure": {
+      "Time": 15.75,
+      "Reason": "footprint reserve",
+      "Inner": 0.08254182497992929,
+      "Outer": 15.031865329904914,
+      "SweepLowerBoundMeters": -0.0017811033444107,
+      "BetaDegrees": 5.0233539978387745,
+      "Reference": 255.89851096033772
+    },
+    "Pending": [
+      {
+        "ObservedAt": 0.2,
+        "ActivationAt": 0.44,
+        "Action": {
+          "SteeringRadians": 0,
+          "Drive": 1
+        }
+      }
+    ],
+    "InitialAction": {
+      "SteeringRadians": -2.655439E-06,
+      "Drive": 1
+    }
+  },
+  {
+    "Epoch": "next-0.6",
+    "Sign": 0,
+    "Policy": "retained",
+    "Safety": {
+      "Legal": true,
+      "MinimumGapMeters": 0.1834138263297897,
+      "SweepLowerBoundMeters": 0.07632127488979144,
+      "MaximumBetaDegrees": 13.347522891130902,
+      "MaximumYawRate": 0.9048423171043396,
+      "Reason": "legal complete forecast"
+    },
+    "FirstFailure": null,
+    "Pending": [
+      {
+        "ObservedAt": 0.4,
+        "ActivationAt": 0.64,
+        "Action": {
+          "SteeringRadians": 0,
+          "Drive": 1
+        }
+      }
+    ],
+    "InitialAction": {
+      "SteeringRadians": 0,
+      "Drive": 1
+    }
+  },
+  {
+    "Epoch": "next-0.6",
+    "Sign": 0,
+    "Policy": "fresh",
+    "Safety": {
+      "Legal": true,
+      "MinimumGapMeters": 0.20463248107517673,
+      "SweepLowerBoundMeters": 0.09743945964340524,
+      "MaximumBetaDegrees": 13.33887253243807,
+      "MaximumYawRate": 0.9048423171043396,
+      "Reason": "legal complete forecast"
+    },
+    "FirstFailure": null,
+    "Pending": [
+      {
+        "ObservedAt": 0.4,
+        "ActivationAt": 0.64,
+        "Action": {
+          "SteeringRadians": 0,
+          "Drive": 1
+        }
+      }
+    ],
+    "InitialAction": {
+      "SteeringRadians": 0,
+      "Drive": 1
+    }
+  },
+  {
+    "Epoch": "next-0.6",
+    "Sign": 1,
+    "Policy": "retained",
+    "Safety": {
+      "Legal": false,
+      "MinimumGapMeters": -0.29493203423716,
+      "SweepLowerBoundMeters": -0.4048163380302745,
+      "MaximumBetaDegrees": 13.544779968616723,
+      "MaximumYawRate": 0.895649790763855,
+      "Reason": "footprint reserve"
+    },
+    "FirstFailure": {
+      "Time": 13.05,
+      "Reason": "footprint reserve",
+      "Inner": 0.08745362158213611,
+      "Outer": 11.343370522800962,
+      "SweepLowerBoundMeters": -0.02392087605521115,
+      "BetaDegrees": 9.041342398911024,
+      "Reference": 207.57102103165562
+    },
+    "Pending": [
+      {
+        "ObservedAt": 0.4,
+        "ActivationAt": 0.64,
+        "Action": {
+          "SteeringRadians": 0,
+          "Drive": 1
+        }
+      }
+    ],
+    "InitialAction": {
+      "SteeringRadians": 8.891412E-06,
+      "Drive": 1
+    }
+  },
+  {
+    "Epoch": "next-0.6",
+    "Sign": 1,
+    "Policy": "fresh",
+    "Safety": {
+      "Legal": false,
+      "MinimumGapMeters": -0.31058856220747183,
+      "SweepLowerBoundMeters": -0.42052328426575014,
+      "MaximumBetaDegrees": 13.505461149858645,
+      "MaximumYawRate": 0.895649790763855,
+      "Reason": "footprint reserve"
+    },
+    "FirstFailure": {
+      "Time": 13.039999999999983,
+      "Reason": "footprint reserve",
+      "Inner": 0.09480505343906583,
+      "Outer": 11.317140634165067,
+      "SweepLowerBoundMeters": -0.01669453697251691,
+      "BetaDegrees": 9.007674119762308,
+      "Reference": 207.37753715275358
+    },
+    "Pending": [
+      {
+        "ObservedAt": 0.4,
+        "ActivationAt": 0.64,
+        "Action": {
+          "SteeringRadians": 0,
+          "Drive": 1
+        }
+      }
+    ],
+    "InitialAction": {
+      "SteeringRadians": 8.891412E-06,
+      "Drive": 1
+    }
+  },
+  {
+    "Epoch": "next-0.6",
+    "Sign": -1,
+    "Policy": "retained",
+    "Safety": {
+      "Legal": false,
+      "MinimumGapMeters": -0.18516244032816204,
+      "SweepLowerBoundMeters": -0.2692491765599799,
+      "MaximumBetaDegrees": 13.47475383360612,
+      "MaximumYawRate": 0.9135945439338684,
+      "Reason": "footprint reserve"
+    },
+    "FirstFailure": {
+      "Time": 15.48,
+      "Reason": "footprint reserve",
+      "Inner": 0.07874037041611279,
+      "Outer": 15.502786218333638,
+      "SweepLowerBoundMeters": -0.005756207271446934,
+      "BetaDegrees": 5.529951253526362,
+      "Reference": 250.89143087560558
+    },
+    "Pending": [
+      {
+        "ObservedAt": 0.4,
+        "ActivationAt": 0.64,
+        "Action": {
+          "SteeringRadians": 0,
+          "Drive": 1
+        }
+      }
+    ],
+    "InitialAction": {
+      "SteeringRadians": -8.891236E-06,
+      "Drive": 1
+    }
+  },
+  {
+    "Epoch": "next-0.6",
+    "Sign": -1,
+    "Policy": "fresh",
+    "Safety": {
+      "Legal": false,
+      "MinimumGapMeters": -0.24618379673864071,
+      "SweepLowerBoundMeters": -0.33019421163681195,
+      "MaximumBetaDegrees": 13.529099068538226,
+      "MaximumYawRate": 0.9135945439338684,
+      "Reason": "footprint reserve"
+    },
+    "FirstFailure": {
+      "Time": 15.450000000000001,
+      "Reason": "footprint reserve",
+      "Inner": 0.08528335580898314,
+      "Outer": 15.524720565708888,
+      "SweepLowerBoundMeters": 0.0009694116627245041,
+      "BetaDegrees": 5.453746984738511,
+      "Reference": 250.26781535150053
+    },
+    "Pending": [
+      {
+        "ObservedAt": 0.4,
+        "ActivationAt": 0.64,
+        "Action": {
+          "SteeringRadians": 0,
+          "Drive": 1
+        }
+      }
+    ],
+    "InitialAction": {
+      "SteeringRadians": -8.891236E-06,
+      "Drive": 1
+    }
+  }
+]

@@ -1,0 +1,155 @@
+[
+  {
+    "Time": 0,
+    "Profile": {
+      "MeasuredCpuSeconds": 10.359375,
+      "Phases": [
+        {
+          "Name": "full_k1",
+          "CpuSeconds": 9.71875,
+          "Percent": 93.81598793363499
+        },
+        {
+          "Name": "independent_preflight",
+          "CpuSeconds": 0.421875,
+          "Percent": 4.072398190045249
+        },
+        {
+          "Name": "outside_decision",
+          "CpuSeconds": 0.109375,
+          "Percent": 1.0558069381598794
+        },
+        {
+          "Name": "conditional_continuations",
+          "CpuSeconds": 0.0625,
+          "Percent": 0.6033182503770739
+        },
+        {
+          "Name": "recertification",
+          "CpuSeconds": 0.046875,
+          "Percent": 0.45248868778280543
+        },
+        {
+          "Name": "candidate_generation",
+          "CpuSeconds": 0,
+          "Percent": 0
+        },
+        {
+          "Name": "uncertainty_scenarios",
+          "CpuSeconds": 0,
+          "Percent": 0
+        }
+      ],
+      "Operations": [
+        {
+          "Name": "dispatch",
+          "CpuSeconds": 10.359375,
+          "Percent": 100
+        }
+      ],
+      "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+    }
+  },
+  {
+    "Time": 0.2,
+    "Profile": {
+      "MeasuredCpuSeconds": 16.8125,
+      "Phases": [
+        {
+          "Name": "full_k1",
+          "CpuSeconds": 16.109375,
+          "Percent": 95.817843866171
+        },
+        {
+          "Name": "independent_preflight",
+          "CpuSeconds": 0.359375,
+          "Percent": 2.137546468401487
+        },
+        {
+          "Name": "conditional_continuations",
+          "CpuSeconds": 0.25,
+          "Percent": 1.486988847583643
+        },
+        {
+          "Name": "outside_decision",
+          "CpuSeconds": 0.09375,
+          "Percent": 0.5576208178438662
+        },
+        {
+          "Name": "recertification",
+          "CpuSeconds": 0,
+          "Percent": 0
+        },
+        {
+          "Name": "candidate_generation",
+          "CpuSeconds": 0,
+          "Percent": 0
+        },
+        {
+          "Name": "uncertainty_scenarios",
+          "CpuSeconds": 0,
+          "Percent": 0
+        }
+      ],
+      "Operations": [
+        {
+          "Name": "dispatch",
+          "CpuSeconds": 16.8125,
+          "Percent": 100
+        }
+      ],
+      "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+    }
+  },
+  {
+    "Time": 0.4,
+    "Profile": {
+      "MeasuredCpuSeconds": 26.390625,
+      "Phases": [
+        {
+          "Name": "full_k1",
+          "CpuSeconds": 25.578125,
+          "Percent": 96.92125518058023
+        },
+        {
+          "Name": "conditional_continuations",
+          "CpuSeconds": 0.375,
+          "Percent": 1.4209591474245116
+        },
+        {
+          "Name": "independent_preflight",
+          "CpuSeconds": 0.359375,
+          "Percent": 1.3617525162818236
+        },
+        {
+          "Name": "outside_decision",
+          "CpuSeconds": 0.046875,
+          "Percent": 0.17761989342806395
+        },
+        {
+          "Name": "recertification",
+          "CpuSeconds": 0.03125,
+          "Percent": 0.11841326228537596
+        },
+        {
+          "Name": "candidate_generation",
+          "CpuSeconds": 0,
+          "Percent": 0
+        },
+        {
+          "Name": "uncertainty_scenarios",
+          "CpuSeconds": 0,
+          "Percent": 0
+        }
+      ],
+      "Operations": [
+        {
+          "Name": "dispatch",
+          "CpuSeconds": 26.390625,
+          "Percent": 100
+        }
+      ],
+      "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+    }
+  }
+]

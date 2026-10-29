@@ -1,0 +1,526 @@
+TAP version 13
+# Subtest: latest: every native pose, time, velocity, Drive and steering survives import unchanged
+ok 1 - latest: every native pose, time, velocity, Drive and steering survives import unchanged
+  ---
+  duration_ms: 159.0954
+  type: 'test'
+  ...
+# Subtest: latest: active throttle agrees with all \#123 activations and independent \#124 audit
+ok 2 - latest: active throttle agrees with all \#123 activations and independent \#124 audit
+  ---
+  duration_ms: 58.1934
+  type: 'test'
+  ...
+# Subtest: latest: plan changes exactly at 10.15, preserving continuous snapshots and pending throttle
+ok 3 - latest: plan changes exactly at 10.15, preserving continuous snapshots and pending throttle
+  ---
+  duration_ms: 104.4266
+  type: 'test'
+  ...
+# Subtest: latest: recorded plan and Egg Mild edges align, both bends navigate without invented poses
+ok 4 - latest: recorded plan and Egg Mild edges align, both bends navigate without invented poses
+  ---
+  duration_ms: 275.6307
+  type: 'test'
+  ...
+# Subtest: latest: smoothing is optional, controls stay stepped and the recorded endpoint never extrapolates
+ok 5 - latest: smoothing is optional, controls stay stepped and the recorded endpoint never extrapolates
+  ---
+  duration_ms: 105.0271
+  type: 'test'
+  ...
+# Subtest: latest: browser loader reads original gzip/JSON only and fails on missing evidence
+ok 6 - latest: browser loader reads original gzip/JSON only and fails on missing evidence
+  ---
+  duration_ms: 303.8343
+  type: 'test'
+  ...
+# Subtest: predictive candidate: every actual XY/heading/time/Drive/steering is recorded, with the same plan lifecycle
+ok 7 - predictive candidate: every actual XY/heading/time/Drive/steering is recorded, with the same plan lifecycle
+  ---
+  duration_ms: 435.5982
+  type: 'test'
+  ...
+# Subtest: zigzag telemetry keeps every native pose/control and the project beta sign without forecast substitution
+ok 8 - zigzag telemetry keeps every native pose/control and the project beta sign without forecast substitution
+  ---
+  duration_ms: 402.9572
+  type: 'test'
+  ...
+# Subtest: zigzag seeks step native snapshots and retains their own sample time at shared cursor
+ok 9 - zigzag seeks step native snapshots and retains their own sample time at shared cursor
+  ---
+  duration_ms: 0.7137
+  type: 'test'
+  ...
+# Subtest: zigzag loader requests only labelled native telemetry and preserves all actual activation times
+ok 10 - zigzag loader requests only labelled native telemetry and preserves all actual activation times
+  ---
+  duration_ms: 321.6969
+  type: 'test'
+  ...
+# Subtest: Free Racing retains every native position, orientation and both actuator observations
+ok 11 - Free Racing retains every native position, orientation and both actuator observations
+  ---
+  duration_ms: 3.2131
+  type: 'test'
+  ...
+# Subtest: Failed preflight is never shown as completed training and does not extrapolate
+ok 12 - Failed preflight is never shown as completed training and does not extrapolate
+  ---
+  duration_ms: 0.5482
+  type: 'test'
+  ...
+# Subtest: Chronology and recorded end are checked
+ok 13 - Chronology and recorded end are checked
+  ---
+  duration_ms: 44.1607
+  type: 'test'
+  ...
+# Subtest: Learning milestones retain every accepted native XY, heading, throttle and steering
+ok 14 - Learning milestones retain every accepted native XY, heading, throttle and steering
+  ---
+  duration_ms: 280.1123
+  type: 'test'
+  ...
+# Subtest: Learning DNF has no gate time and never extrapolates beyond the actual failed state
+ok 15 - Learning DNF has no gate time and never extrapolates beyond the actual failed state
+  ---
+  duration_ms: 43.0592
+  type: 'test'
+  ...
+# Subtest: Learning loader overlays actual common-condition recordings and matched historical controller
+ok 16 - Learning loader overlays actual common-condition recordings and matched historical controller
+  ---
+  duration_ms: 886.1104
+  type: 'test'
+  ...
+# Subtest: Robust learning preserves every selected native position, pose, throttle and steering
+ok 17 - Robust learning preserves every selected native position, pose, throttle and steering
+  ---
+  duration_ms: 53.3773
+  type: 'test'
+  ...
+# Subtest: Robust comparisons overlay only identical physical initial conditions and actual full traces
+ok 18 - Robust comparisons overlay only identical physical initial conditions and actual full traces
+  ---
+  duration_ms: 1638.1339
+  type: 'test'
+  ...
+# Subtest: Uncertified DNF and confirmed crossing remain failures without an invented finish time
+ok 19 - Uncertified DNF and confirmed crossing remain failures without an invented finish time
+  ---
+  duration_ms: 5.2496
+  type: 'test'
+  ...
+# Subtest: Telemetry reads the latest accepted interval without future forces or pending observations
+ok 20 - Telemetry reads the latest accepted interval without future forces or pending observations
+  ---
+  duration_ms: 2.2899
+  type: 'test'
+  ...
+# Subtest: Extended horizon groups load only full native traces on identical initial physical states
+ok 21 - Extended horizon groups load only full native traces on identical initial physical states
+  ---
+  duration_ms: 4509.8345
+  type: 'test'
+  ...
+# Subtest: Extended playback preserves native wheel-independent pose, executed steering and actual throttle
+ok 22 - Extended playback preserves native wheel-independent pose, executed steering and actual throttle
+  ---
+  duration_ms: 128.5525
+  type: 'test'
+  ...
+# Subtest: Full-throttle comparison loads identical native initial states and distinguishes all variants
+ok 23 - Full-throttle comparison loads identical native initial states and distinguishes all variants
+  ---
+  duration_ms: 7697.672
+  type: 'test'
+  ...
+# Subtest: Throttle chart preserves requested pending active gas and marks only reopened100%
+ok 24 - Throttle chart preserves requested pending active gas and marks only reopened100%
+  ---
+  duration_ms: 146.5386
+  type: 'test'
+  ...
+# Subtest: Rider decision viewer compares identical native initial states with explicit failures
+ok 25 - Rider decision viewer compares identical native initial states with explicit failures
+  ---
+  duration_ms: 9512.6205
+  type: 'test'
+  ...
+# Subtest: Comparative charts use every actual sample and retain a common native clock
+ok 26 - Comparative charts use every actual sample and retain a common native clock
+  ---
+  duration_ms: 83.0593
+  type: 'test'
+  ...
+# Subtest: Switching policies reuses the frozen native bundle and retains the selected group
+ok 27 - Switching policies reuses the frozen native bundle and retains the selected group
+  ---
+  duration_ms: 3367.4676
+  type: 'test'
+  ...
+# Subtest: Track awareness loads actual per-group geometry and identical native initial states
+ok 28 - Track awareness loads actual per-group geometry and identical native initial states
+  ---
+  duration_ms: 5650.9323
+  type: 'test'
+  ...
+# Subtest: Knowledge overlay represents observed geometry edges without a target trajectory
+ok 29 - Knowledge overlay represents observed geometry edges without a target trajectory
+  ---
+  duration_ms: 148.508
+  type: 'test'
+  ...
+# Subtest: Required \#134 examples retain continuous worlds, transfer and failed counterfactual
+ok 30 - Required \#134 examples retain continuous worlds, transfer and failed counterfactual
+  ---
+  duration_ms: 1.9687
+  type: 'test'
+  ...
+# Subtest: Actuator diagnostics retain pending motion before new-command latency and match native prefixes
+ok 31 - Actuator diagnostics retain pending motion before new-command latency and match native prefixes
+  ---
+  duration_ms: 9.7426
+  type: 'test'
+  ...
+# Subtest: 135 sequence readout uses recorded requests and activations, never future poses
+ok 32 - 135 sequence readout uses recorded requests and activations, never future poses
+  ---
+  duration_ms: 0.5625
+  type: 'test'
+  ...
+# Subtest: 135 activation labels respect native timestamp tolerance at exact9.44
+ok 33 - 135 activation labels respect native timestamp tolerance at exact9.44
+  ---
+  duration_ms: 0.324
+  type: 'test'
+  ...
+# Subtest: 135 selected native bundle retains exact original prefices, full geometry and DNF endpoints
+ok 34 - 135 selected native bundle retains exact original prefices, full geometry and DNF endpoints
+  ---
+  duration_ms: 51.9936
+  type: 'test'
+  ...
+# Subtest: 135 common loader selects per-case geometry and does not extrapolate failed native motion
+ok 35 - 135 common loader selects per-case geometry and does not extrapolate failed native motion
+  ---
+  duration_ms: 3515.1535
+  type: 'test'
+  ...
+# Subtest: Throttle markers use recorded samples and distinguish request from real activation
+ok 36 - Throttle markers use recorded samples and distinguish request from real activation
+  ---
+  duration_ms: 0.7236
+  type: 'test'
+  ...
+# Subtest: Rejected full gas compares the same steering and never claims later decisions early
+ok 37 - Rejected full gas compares the same steering and never claims later decisions early
+  ---
+  duration_ms: 0.2897
+  type: 'test'
+  ...
+# Subtest: 136 bundle supplies the common viewer schema and real nine-segment geometry
+ok 38 - 136 bundle supplies the common viewer schema and real nine-segment geometry
+  ---
+  duration_ms: 1314.9135
+  type: 'test'
+  ...
+# Subtest: 137 predicted second command is distinct from the actual later replan
+ok 39 - 137 predicted second command is distinct from the actual later replan
+  ---
+  duration_ms: 2.397
+  type: 'test'
+  ...
+# Subtest: 137 markers anchor only to recorded native states of the new variant
+ok 40 - 137 markers anchor only to recorded native states of the new variant
+  ---
+  duration_ms: 0.3525
+  type: 'test'
+  ...
+# Subtest: 137 common loader preserves full-second-straight native data and geometry
+ok 41 - 137 common loader preserves full-second-straight native data and geometry
+  ---
+  duration_ms: 1816.0783
+  type: 'test'
+  ...
+# Subtest: 143 loader preserves full native scope, decisions and both completed/failed counterexamples
+ok 42 - 143 loader preserves full native scope, decisions and both completed/failed counterexamples
+  ---
+  duration_ms: 2410.351
+  type: 'test'
+  ...
+# Subtest: 143 native readout never advances to a later sample or a forecast pose
+ok 43 - 143 native readout never advances to a later sample or a forecast pose
+  ---
+  duration_ms: 34.3611
+  type: 'test'
+  ...
+# Subtest: 144 full native replay begins at rest and credits exactly three completed forward laps
+ok 44 - 144 full native replay begins at rest and credits exactly three completed forward laps
+  ---
+  duration_ms: 1071.9886
+  type: 'test'
+  ...
+# Subtest: 144 shared heat is four recorded bodies on one clock with actual contacts, not stitched solos
+ok 45 - 144 shared heat is four recorded bodies on one clock with actual contacts, not stitched solos
+  ---
+  duration_ms: 1687.4548
+  type: 'test'
+  ...
+# Subtest: 145 extends three-lap native replay and compares all original variants at the same corner
+ok 46 - 145 extends three-lap native replay and compares all original variants at the same corner
+  ---
+  duration_ms: 928.4959
+  type: 'test'
+  ...
+# Subtest: 145 failed autonomous trial ends at actual failure and is never extrapolated to finish
+ok 47 - 145 failed autonomous trial ends at actual failure and is never extrapolated to finish
+  ---
+  duration_ms: 193.6048
+  type: 'test'
+  ...
+# Subtest: 146 veto remains a DNF with no extrapolated lap or command
+ok 48 - 146 veto remains a DNF with no extrapolated lap or command
+  ---
+  duration_ms: 147.229
+  type: 'test'
+  ...
+# Subtest: 146 submitted plan actions use real native activations and full prefixes
+ok 49 - 146 submitted plan actions use real native activations and full prefixes
+  ---
+  duration_ms: 738.9585
+  type: 'test'
+  ...
+# Subtest: 146 never presents a recovered early plan as the missing later forecast
+ok 50 - 146 never presents a recovered early plan as the missing later forecast
+  ---
+  duration_ms: 443.9954
+  type: 'test'
+  ...
+# Subtest: 147 credits exactly three native crossings from a zero start
+ok 51 - 147 credits exactly three native crossings from a zero start
+  ---
+  duration_ms: 825.4714
+  type: 'test'
+  ...
+# Subtest: 147 has all six measured corners and all 270 durable decisions
+ok 52 - 147 has all six measured corners and all 270 durable decisions
+  ---
+  duration_ms: 705.7104
+  type: 'test'
+  ...
+# Subtest: 147 keeps the partial 146 baseline partial instead of projecting a finish
+ok 53 - 147 keeps the partial 146 baseline partial instead of projecting a finish
+  ---
+  duration_ms: 451.5194
+  type: 'test'
+  ...
+# Subtest: 148 exact variant preserves three-lap completion and baseline fingerprint
+ok 54 - 148 exact variant preserves three-lap completion and baseline fingerprint
+  ---
+  duration_ms: 941.0846
+  type: 'test'
+  ...
+# Subtest: 148 retains every decision and both axes of saved comparison trails
+ok 55 - 148 retains every decision and both axes of saved comparison trails
+  ---
+  duration_ms: 739.6523
+  type: 'test'
+  ...
+# Subtest: 148 separates complete autonomous evidence from diagnostic beta-envelope stops
+ok 56 - 148 separates complete autonomous evidence from diagnostic beta-envelope stops
+  ---
+  duration_ms: 14.858
+  type: 'test'
+  ...
+# Subtest: 149 loads actual continuous A and B from rest and completed three laps
+ok 57 - 149 loads actual continuous A and B from rest and completed three laps
+  ---
+  duration_ms: 1474.6631
+  type: 'test'
+  ...
+# Subtest: 149 physics separation is not presented as faster autonomous riding
+ok 58 - 149 physics separation is not presented as faster autonomous riding
+  ---
+  duration_ms: 14.9867
+  type: 'test'
+  ...
+# Subtest: 149 rolling fixture keeps its observed boundary stop and initial speed
+ok 59 - 149 rolling fixture keeps its observed boundary stop and initial speed
+  ---
+  duration_ms: 58.4781
+  type: 'test'
+  ...
+# Subtest: 149 sequence capability stop is a controller abstention with a legal observed prefix
+ok 60 - 149 sequence capability stop is a controller abstention with a legal observed prefix
+  ---
+  duration_ms: 75.0198
+  type: 'test'
+  ...
+# Subtest: 150 default replay exposes failed standing-start rather than promoting local recovery
+ok 61 - 150 default replay exposes failed standing-start rather than promoting local recovery
+  ---
+  duration_ms: 298.5964
+  type: 'test'
+  ...
+# Subtest: 150 both exact1s recoveries retain rolling scope and actual activation delay
+ok 62 - 150 both exact1s recoveries retain rolling scope and actual activation delay
+  ---
+  duration_ms: 1012.044
+  type: 'test'
+  ...
+# Subtest: 150 prefix diagnosis preserves legal abstention and improved local final bend separately
+ok 63 - 150 prefix diagnosis preserves legal abstention and improved local final bend separately
+  ---
+  duration_ms: 757.4107
+  type: 'test'
+  ...
+# Subtest: 151 default replay is actual continuous native execution from rest
+ok 64 - 151 default replay is actual continuous native execution from rest
+  ---
+  duration_ms: 591.8896
+  type: 'test'
+  ...
+# Subtest: 151 finite tree preserves all nine reserves and command activation times
+ok 65 - 151 finite tree preserves all nine reserves and command activation times
+  ---
+  duration_ms: 355.3988
+  type: 'test'
+  ...
+# Subtest: 151 native partial gates remain separately labeled
+ok 66 - 151 native partial gates remain separately labeled
+  ---
+  duration_ms: 0.6656
+  type: 'test'
+  ...
+# Subtest: 139 viewer keeps every native time and never extrapolates a DNF
+ok 67 - 139 viewer keeps every native time and never extrapolates a DNF
+  ---
+  duration_ms: 355.0315
+  type: 'test'
+  ...
+# Subtest: Current four recordings retain every native XY/heading/velocity and constant actuator
+ok 68 - Current four recordings retain every native XY/heading/velocity and constant actuator
+  ---
+  duration_ms: 1306.6867
+  type: 'test'
+  ...
+# Subtest: Exact snapshot playback never turns rendering interpolation into another physics state
+ok 69 - Exact snapshot playback never turns rendering interpolation into another physics state
+  ---
+  duration_ms: 163.1862
+  type: 'test'
+  ...
+# Subtest: Native body heading and velocity define distinct vectors, signed slip and physical capsules
+ok 70 - Native body heading and velocity define distinct vectors, signed slip and physical capsules
+  ---
+  duration_ms: 162.4478
+  type: 'test'
+  ...
+# Subtest: WIDE incomplete certificates remain distinct from observed edge crossings
+ok 71 - WIDE incomplete certificates remain distinct from observed edge crossings
+  ---
+  duration_ms: 657.5869
+  type: 'test'
+  ...
+# Subtest: Both bend jumps land on recorded lead-in snapshots with native resolution
+ok 72 - Both bend jumps land on recorded lead-in snapshots with native resolution
+  ---
+  duration_ms: 816.9084
+  type: 'test'
+  ...
+# Subtest: Browser gzip decompression reads the original native bytes without a simulator
+ok 73 - Browser gzip decompression reads the original native bytes without a simulator
+  ---
+  duration_ms: 219.0983
+  type: 'test'
+  ...
+# Subtest: \#106 valid A/B and rejected overspeed preserve native poses and classification
+ok 74 - \#106 valid A/B and rejected overspeed preserve native poses and classification
+  ---
+  duration_ms: 47.4027
+  type: 'test'
+  ...
+# Subtest: \#105 adapters preserve all seven accepted trajectories and their recorded gates
+ok 75 - \#105 adapters preserve all seven accepted trajectories and their recorded gates
+  ---
+  duration_ms: 60.2458
+  type: 'test'
+  ...
+# Subtest: \#103 twelve real replays retain yaw, own C2 boundaries, interval evidence and unsafe trajectories
+ok 76 - \#103 twelve real replays retain yaw, own C2 boundaries, interval evidence and unsafe trajectories
+  ---
+  duration_ms: 191.6936
+  type: 'test'
+  ...
+# Subtest: \#102 own geometry, local footprint limit and rejected poses remain recorded data
+ok 77 - \#102 own geometry, local footprint limit and rejected poses remain recorded data
+  ---
+  duration_ms: 180.8773
+  type: 'test'
+  ...
+# Subtest: \#101 recorded poses use dataset geometry and preserve rejected inner trajectories
+ok 78 - \#101 recorded poses use dataset geometry and preserve rejected inner trajectories
+  ---
+  duration_ms: 124.9025
+  type: 'test'
+  ...
+# Subtest: \#100 body replay remains compatible while independent wheel telemetry is retained
+ok 79 - \#100 body replay remains compatible while independent wheel telemetry is retained
+  ---
+  duration_ms: 38.7247
+  type: 'test'
+  ...
+# Subtest: \#99 actual Box2D plans preserve every saved pose, spatial command and individual lap
+ok 80 - \#99 actual Box2D plans preserve every saved pose, spatial command and individual lap
+  ---
+  duration_ms: 43.4862
+  type: 'test'
+  ...
+# Subtest: Both unmodified CSV/JSON pairs load initial time zero and every recorded point
+ok 81 - Both unmodified CSV/JSON pairs load initial time zero and every recorded point
+  ---
+  duration_ms: 58.8169
+  type: 'test'
+  ...
+# Subtest: Bike capsules keep real dimensions and CSV body heading, independently of velocity
+ok 82 - Bike capsules keep real dimensions and CSV body heading, independently of velocity
+  ---
+  duration_ms: 2.8875
+  type: 'test'
+  ...
+# Subtest: Commands activate only at ActualActivation; cancelled plans and the other channel cannot execute
+ok 83 - Commands activate only at ActualActivation; cancelled plans and the other channel cannot execute
+  ---
+  duration_ms: 19.1138
+  type: 'test'
+  ...
+# Subtest: Shortest-arc angles interpolate across pi while discrete controls and missing tails do not
+ok 84 - Shortest-arc angles interpolate across pi while discrete controls and missing tails do not
+  ---
+  duration_ms: 3.2343
+  type: 'test'
+  ...
+# Subtest: Individual rolling crossings and finish times never substitute final-world positions for missing poses
+ok 85 - Individual rolling crossings and finish times never substitute final-world positions for missing poses
+  ---
+  duration_ms: 12.7064
+  type: 'test'
+  ...
+# Subtest: Target cross-sections read exported model positions/normals; offset zero is a metre outside the inner edge
+ok 86 - Target cross-sections read exported model positions/normals; offset zero is a metre outside the inner edge
+  ---
+  duration_ms: 0.3852
+  type: 'test'
+  ...
+1..86
+# tests 86
+# suites 0
+# pass 86
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 75003.1491

@@ -1,0 +1,74 @@
+[
+  {
+    "Model": "A",
+    "Time": 1,
+    "Role": "historical exact1s",
+    "Failure": null,
+    "Certified": true,
+    "CpuSeconds": 12
+  },
+  {
+    "Model": "B",
+    "Time": 1,
+    "Role": "historical exact1s",
+    "Failure": null,
+    "Certified": true,
+    "CpuSeconds": 15.0625
+  },
+  {
+    "Model": "A",
+    "Time": 22.6,
+    "Role": "historical22.6",
+    "Failure": null,
+    "Certified": true,
+    "CpuSeconds": 6.46875
+  },
+  {
+    "Model": "B",
+    "Time": 22.6,
+    "Role": "historical22.6",
+    "Failure": null,
+    "Certified": true,
+    "CpuSeconds": 10.90625
+  },
+  {
+    "Model": "A",
+    "Time": 28.4,
+    "Role": "corner2.2",
+    "Failure": null,
+    "Certified": true,
+    "CpuSeconds": 24.1875
+  },
+  {
+    "Model": "B",
+    "Time": 28.4,
+    "Role": "corner2.2",
+    "Failure": null,
+    "Certified": true,
+    "CpuSeconds": 3.984375
+  },
+  {
+    "Model": "B",
+    "Time": 45.8,
+    "Role": "last B corner",
+    "Failure": "not run: reserved native-race CPU budget",
+    "Certified": null,
+    "CpuSeconds": null
+  },
+  {
+    "Model": "A",
+    "Time": 12.8,
+    "Role": "held for151; no tuning",
+    "Failure": "not run: reserved native-race CPU budget",
+    "Certified": null,
+    "CpuSeconds": null
+  },
+  {
+    "Model": "B",
+    "Time": 39.4,
+    "Role": "held for151; no tuning",
+    "Failure": "not run: reserved native-race CPU budget",
+    "Certified": null,
+    "CpuSeconds": null
+  }
+]
