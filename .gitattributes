@@ -147,3 +147,8 @@
 # These historical lock blobs contain CRLF; preserve their exact bytes instead of an apparent checkout-only diff.
 /tools/autonomous-corner-planning/packages.lock.json -text
 /tools/efficient-autonomous-planner/packages.lock.json -text
+
+# Study152: preserve measured Windows source/evidence bytes and explicit CRLF handling.
+/docs/experiments/efficient-contingency/** -text whitespace=trailing-space,space-before-tab,cr-at-eol
+/tools/efficient-contingency/** -text whitespace=trailing-space,space-before-tab,cr-at-eol
+/tools/replay-viewer/efficient152*.mjs text eol=lf

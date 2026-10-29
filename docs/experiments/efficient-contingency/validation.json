@@ -1,0 +1,41 @@
+{
+  "Base": "5558a30c8864199fb1c7abc18852ca27f4d29d9b",
+  "LocalHost": "Windows .NET10.0.400 SDK targeting net8 / Python3.12.14 / Node22.20",
+  "Restore": "locked-mode PASS",
+  "Build": "solution Release --warnaserror:0 warnings,0 errors",
+  "Dotnet": {
+    "Executed": 2507,
+    "Passed": 2507,
+    "Failed": 0,
+    "Shards": [
+      "core",
+      "trajectory"
+    ]
+  },
+  "Python": {
+    "Executed": 318,
+    "Passed": 318
+  },
+  "CiPolicyTests": {
+    "Executed": 7,
+    "Passed": 7
+  },
+  "Node": {
+    "Executed": 89,
+    "Passed": 89
+  },
+  "Discovery": {
+    "Total": 3028,
+    "core": 2112,
+    "trajectory": 395,
+    "historical_analysis": 473,
+    "four_rider": 48,
+    "Scope": "Every case assigned once; historical and four-rider cases discovered, not executed in Draft."
+  },
+  "GeneratedSources": "PASS generate152.py --check",
+  "LegacyConsumers": "PASS39 frozen readers",
+  "DiffWhitespace": "PASS; explicit research attributes preserve audited CRLF bytes",
+  "WindowsCi": "Pending exact new Draft PR head; see PR checks and external final receipt",
+  "PhysicsAndHistory": "157 byte-hashed source files and149 immutable historical Git trees",
+  "CompletedA": "AA7E0E6577296792A6AF5D1D9FF737E8453B7DA5A2A04EFE732038287EF55C24"
+}

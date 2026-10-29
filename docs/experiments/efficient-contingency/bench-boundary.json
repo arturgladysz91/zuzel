@@ -1,0 +1,562 @@
+[
+  {
+    "Time": 0,
+    "Failure": null,
+    "AllPhysicalBitsEqual": true,
+    "OldCpu": 5,
+    "NewCpu": 5.03125,
+    "Profile": {
+      "MeasuredCpuSeconds": 5.03125,
+      "Phases": [
+        {
+          "Name": "full_k1",
+          "CpuSeconds": 4.5625,
+          "Percent": 90.6832298136646
+        },
+        {
+          "Name": "independent_preflight",
+          "CpuSeconds": 0.3125,
+          "Percent": 6.211180124223603
+        },
+        {
+          "Name": "outside_decision",
+          "CpuSeconds": 0.078125,
+          "Percent": 1.5527950310559007
+        },
+        {
+          "Name": "conditional_continuations",
+          "CpuSeconds": 0.046875,
+          "Percent": 0.9316770186335404
+        },
+        {
+          "Name": "recertification",
+          "CpuSeconds": 0.03125,
+          "Percent": 0.6211180124223602
+        },
+        {
+          "Name": "candidate_generation",
+          "CpuSeconds": 0,
+          "Percent": 0
+        },
+        {
+          "Name": "uncertainty_scenarios",
+          "CpuSeconds": 0,
+          "Percent": 0
+        }
+      ],
+      "Operations": [
+        {
+          "Name": "dispatch",
+          "CpuSeconds": 5.03125,
+          "Percent": 100
+        }
+      ],
+      "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+    },
+    "Counts": {
+      "Search": {
+        "SeedSharedPrefixes": 106,
+        "SharedPrefixContactQueriesSaved": 66456,
+        "FullK1Executions": 106,
+        "HeldContinuationRequests": 0,
+        "ActualForecasts": 3282,
+        "ActualContacts": 198719,
+        "PredictionRequests": 3176,
+        "PredictionHits": 0,
+        "SeedRequests": 106,
+        "SeedHits": 0,
+        "CrossReviewHits": 0,
+        "InactivePrefixRequests": 314,
+        "BudgetFallbacks": 0,
+        "BudgetReason": null,
+        "CacheEntries": 314,
+        "SeedCacheEntries": 106,
+        "FastBoundaryQueries": 198618,
+        "BoundaryFallbackQueries": 2839
+      },
+      "SearchWork": {
+        "ForecastRequests": 3176,
+        "PhysicalForecastCalls": 3282,
+        "ContactQueries": 198719
+      },
+      "SearchMemo": {
+        "KernelHits": 0,
+        "KernelMisses": 0,
+        "ProjectionHits": 0,
+        "ProjectionMisses": 198175,
+        "ClearanceHits": 0
+      },
+      "IndependentMemo": {
+        "KernelHits": 0,
+        "KernelMisses": 6311,
+        "ProjectionHits": 6295,
+        "ProjectionMisses": 6274,
+        "ClearanceHits": 335
+      },
+      "FullK1": 106,
+      "Forecasts": 3596,
+      "Contacts": 205030,
+      "FeedbackQueries": 728,
+      "IndependentForecasts": 314,
+      "IndependentContacts": 6311,
+      "TransitionRequests": 1485,
+      "SearchHits": 846,
+      "IndependentHits": 11,
+      "RolloutHits": 8,
+      "IndependentComparisons": 314,
+      "Verification": "Fresh per-review DAG; every unique physical prefix repropagated independently; no search or historical result accepted as proof",
+      "options": {
+        "Memoize": true,
+        "ValidatedIndependent": true
+      }
+    },
+    "RejectedTrees": 0,
+    "Leaves": 9
+  },
+  {
+    "Time": 0.4,
+    "Failure": null,
+    "AllPhysicalBitsEqual": true,
+    "OldCpu": 0.6875,
+    "NewCpu": 0.5625,
+    "Profile": {
+      "MeasuredCpuSeconds": 0.5625,
+      "Phases": [
+        {
+          "Name": "independent_preflight",
+          "CpuSeconds": 0.25,
+          "Percent": 44.44444444444444
+        },
+        {
+          "Name": "conditional_continuations",
+          "CpuSeconds": 0.21875,
+          "Percent": 38.888888888888886
+        },
+        {
+          "Name": "outside_decision",
+          "CpuSeconds": 0.0625,
+          "Percent": 11.11111111111111
+        },
+        {
+          "Name": "recertification",
+          "CpuSeconds": 0.03125,
+          "Percent": 5.555555555555555
+        },
+        {
+          "Name": "candidate_generation",
+          "CpuSeconds": 0,
+          "Percent": 0
+        },
+        {
+          "Name": "uncertainty_scenarios",
+          "CpuSeconds": 0,
+          "Percent": 0
+        }
+      ],
+      "Operations": [
+        {
+          "Name": "dispatch",
+          "CpuSeconds": 0.5625,
+          "Percent": 100
+        }
+      ],
+      "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+    },
+    "Counts": {
+      "Search": {
+        "SeedSharedPrefixes": 0,
+        "SharedPrefixContactQueriesSaved": 0,
+        "FullK1Executions": 0,
+        "HeldContinuationRequests": 0,
+        "ActualForecasts": 922,
+        "ActualContacts": 18533,
+        "PredictionRequests": 922,
+        "PredictionHits": 0,
+        "SeedRequests": 0,
+        "SeedHits": 0,
+        "CrossReviewHits": 0,
+        "InactivePrefixRequests": 922,
+        "BudgetFallbacks": 0,
+        "BudgetReason": null,
+        "CacheEntries": 922,
+        "SeedCacheEntries": 0,
+        "FastBoundaryQueries": 19407,
+        "BoundaryFallbackQueries": 0
+      },
+      "SearchWork": {
+        "ForecastRequests": 922,
+        "PhysicalForecastCalls": 922,
+        "ContactQueries": 18533
+      },
+      "SearchMemo": {
+        "KernelHits": 0,
+        "KernelMisses": 0,
+        "ProjectionHits": 0,
+        "ProjectionMisses": 18485,
+        "ClearanceHits": 0
+      },
+      "IndependentMemo": {
+        "KernelHits": 0,
+        "KernelMisses": 18533,
+        "ProjectionHits": 18485,
+        "ProjectionMisses": 18494,
+        "ClearanceHits": 913
+      },
+      "FullK1": 0,
+      "Forecasts": 1844,
+      "Contacts": 37066,
+      "FeedbackQueries": 3058,
+      "IndependentForecasts": 922,
+      "IndependentContacts": 18533,
+      "TransitionRequests": 2275,
+      "SearchHits": 422,
+      "IndependentHits": 9,
+      "RolloutHits": 0,
+      "IndependentComparisons": 922,
+      "Verification": "Fresh per-review DAG; every unique physical prefix repropagated independently; no search or historical result accepted as proof",
+      "options": {
+        "Memoize": true,
+        "ValidatedIndependent": true
+      }
+    },
+    "RejectedTrees": 0,
+    "Leaves": 9
+  },
+  {
+    "Time": 2.6,
+    "Failure": null,
+    "AllPhysicalBitsEqual": true,
+    "OldCpu": 0.859375,
+    "NewCpu": 0.796875,
+    "Profile": {
+      "MeasuredCpuSeconds": 0.796875,
+      "Phases": [
+        {
+          "Name": "conditional_continuations",
+          "CpuSeconds": 0.390625,
+          "Percent": 49.01960784313726
+        },
+        {
+          "Name": "independent_preflight",
+          "CpuSeconds": 0.21875,
+          "Percent": 27.45098039215686
+        },
+        {
+          "Name": "outside_decision",
+          "CpuSeconds": 0.140625,
+          "Percent": 17.647058823529413
+        },
+        {
+          "Name": "full_k1",
+          "CpuSeconds": 0.03125,
+          "Percent": 3.9215686274509802
+        },
+        {
+          "Name": "recertification",
+          "CpuSeconds": 0.015625,
+          "Percent": 1.9607843137254901
+        },
+        {
+          "Name": "candidate_generation",
+          "CpuSeconds": 0,
+          "Percent": 0
+        },
+        {
+          "Name": "uncertainty_scenarios",
+          "CpuSeconds": 0,
+          "Percent": 0
+        }
+      ],
+      "Operations": [
+        {
+          "Name": "dispatch",
+          "CpuSeconds": 0.796875,
+          "Percent": 100
+        }
+      ],
+      "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+    },
+    "Counts": {
+      "Search": {
+        "SeedSharedPrefixes": 1,
+        "SharedPrefixContactQueriesSaved": 783,
+        "FullK1Executions": 1,
+        "HeldContinuationRequests": 0,
+        "ActualForecasts": 1408,
+        "ActualContacts": 29695,
+        "PredictionRequests": 1407,
+        "PredictionHits": 0,
+        "SeedRequests": 1,
+        "SeedHits": 0,
+        "CrossReviewHits": 0,
+        "InactivePrefixRequests": 1377,
+        "BudgetFallbacks": 0,
+        "BudgetReason": null,
+        "CacheEntries": 1377,
+        "SeedCacheEntries": 1,
+        "FastBoundaryQueries": 31008,
+        "BoundaryFallbackQueries": 13
+      },
+      "SearchWork": {
+        "ForecastRequests": 1407,
+        "PhysicalForecastCalls": 1408,
+        "ContactQueries": 29695
+      },
+      "SearchMemo": {
+        "KernelHits": 0,
+        "KernelMisses": 0,
+        "ProjectionHits": 0,
+        "ProjectionMisses": 29613,
+        "ClearanceHits": 0
+      },
+      "IndependentMemo": {
+        "KernelHits": 0,
+        "KernelMisses": 16491,
+        "ProjectionHits": 16441,
+        "ProjectionMisses": 16450,
+        "ClearanceHits": 811
+      },
+      "FullK1": 1,
+      "Forecasts": 2228,
+      "Contacts": 46186,
+      "FeedbackQueries": 4676,
+      "IndependentForecasts": 820,
+      "IndependentContacts": 16491,
+      "TransitionRequests": 2767,
+      "SearchHits": 561,
+      "IndependentHits": 9,
+      "RolloutHits": 0,
+      "IndependentComparisons": 820,
+      "Verification": "Fresh per-review DAG; every unique physical prefix repropagated independently; no search or historical result accepted as proof",
+      "options": {
+        "Memoize": true,
+        "ValidatedIndependent": true
+      }
+    },
+    "RejectedTrees": 0,
+    "Leaves": 9
+  },
+  {
+    "Time": 9.999999999999996,
+    "Failure": null,
+    "AllPhysicalBitsEqual": true,
+    "OldCpu": 0.34375,
+    "NewCpu": 0.28125,
+    "Profile": {
+      "MeasuredCpuSeconds": 0.28125,
+      "Phases": [
+        {
+          "Name": "conditional_continuations",
+          "CpuSeconds": 0.140625,
+          "Percent": 50
+        },
+        {
+          "Name": "independent_preflight",
+          "CpuSeconds": 0.109375,
+          "Percent": 38.888888888888886
+        },
+        {
+          "Name": "outside_decision",
+          "CpuSeconds": 0.015625,
+          "Percent": 5.555555555555555
+        },
+        {
+          "Name": "recertification",
+          "CpuSeconds": 0.015625,
+          "Percent": 5.555555555555555
+        },
+        {
+          "Name": "candidate_generation",
+          "CpuSeconds": 0,
+          "Percent": 0
+        },
+        {
+          "Name": "uncertainty_scenarios",
+          "CpuSeconds": 0,
+          "Percent": 0
+        }
+      ],
+      "Operations": [
+        {
+          "Name": "dispatch",
+          "CpuSeconds": 0.28125,
+          "Percent": 100
+        }
+      ],
+      "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+    },
+    "Counts": {
+      "Search": {
+        "SeedSharedPrefixes": 0,
+        "SharedPrefixContactQueriesSaved": 0,
+        "FullK1Executions": 0,
+        "HeldContinuationRequests": 0,
+        "ActualForecasts": 490,
+        "ActualContacts": 9858,
+        "PredictionRequests": 490,
+        "PredictionHits": 0,
+        "SeedRequests": 0,
+        "SeedHits": 0,
+        "CrossReviewHits": 0,
+        "InactivePrefixRequests": 490,
+        "BudgetFallbacks": 0,
+        "BudgetReason": null,
+        "CacheEntries": 490,
+        "SeedCacheEntries": 0,
+        "FastBoundaryQueries": 10317,
+        "BoundaryFallbackQueries": 0
+      },
+      "SearchWork": {
+        "ForecastRequests": 490,
+        "PhysicalForecastCalls": 490,
+        "ContactQueries": 9858
+      },
+      "SearchMemo": {
+        "KernelHits": 0,
+        "KernelMisses": 0,
+        "ProjectionHits": 0,
+        "ProjectionMisses": 9827,
+        "ClearanceHits": 0
+      },
+      "IndependentMemo": {
+        "KernelHits": 0,
+        "KernelMisses": 9858,
+        "ProjectionHits": 9827,
+        "ProjectionMisses": 9836,
+        "ClearanceHits": 481
+      },
+      "FullK1": 0,
+      "Forecasts": 980,
+      "Contacts": 19716,
+      "FeedbackQueries": 1689,
+      "IndependentForecasts": 490,
+      "IndependentContacts": 9858,
+      "TransitionRequests": 1219,
+      "SearchHits": 230,
+      "IndependentHits": 9,
+      "RolloutHits": 0,
+      "IndependentComparisons": 490,
+      "Verification": "Fresh per-review DAG; every unique physical prefix repropagated independently; no search or historical result accepted as proof",
+      "options": {
+        "Memoize": true,
+        "ValidatedIndependent": true
+      }
+    },
+    "RejectedTrees": 0,
+    "Leaves": 9
+  },
+  {
+    "Time": 29.799999999999926,
+    "Failure": null,
+    "AllPhysicalBitsEqual": true,
+    "OldCpu": 20.5,
+    "NewCpu": 18.953125,
+    "Profile": {
+      "MeasuredCpuSeconds": 18.953125,
+      "Phases": [
+        {
+          "Name": "full_k1",
+          "CpuSeconds": 18.296875,
+          "Percent": 96.53751030502886
+        },
+        {
+          "Name": "conditional_continuations",
+          "CpuSeconds": 0.328125,
+          "Percent": 1.731244847485573
+        },
+        {
+          "Name": "independent_preflight",
+          "CpuSeconds": 0.25,
+          "Percent": 1.3190436933223413
+        },
+        {
+          "Name": "recertification",
+          "CpuSeconds": 0.046875,
+          "Percent": 0.247320692497939
+        },
+        {
+          "Name": "outside_decision",
+          "CpuSeconds": 0.03125,
+          "Percent": 0.16488046166529266
+        },
+        {
+          "Name": "candidate_generation",
+          "CpuSeconds": 0,
+          "Percent": 0
+        },
+        {
+          "Name": "uncertainty_scenarios",
+          "CpuSeconds": 0,
+          "Percent": 0
+        }
+      ],
+      "Operations": [
+        {
+          "Name": "dispatch",
+          "CpuSeconds": 18.953125,
+          "Percent": 100
+        }
+      ],
+      "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+    },
+    "Counts": {
+      "Search": {
+        "SeedSharedPrefixes": 699,
+        "SharedPrefixContactQueriesSaved": 440242,
+        "FullK1Executions": 699,
+        "HeldContinuationRequests": 0,
+        "ActualForecasts": 20934,
+        "ActualContacts": 1299425,
+        "PredictionRequests": 20236,
+        "PredictionHits": 0,
+        "SeedRequests": 699,
+        "SeedHits": 0,
+        "CrossReviewHits": 0,
+        "InactivePrefixRequests": 1290,
+        "BudgetFallbacks": 0,
+        "BudgetReason": null,
+        "CacheEntries": 1290,
+        "SeedCacheEntries": 698,
+        "FastBoundaryQueries": 1272711,
+        "BoundaryFallbackQueries": 44086
+      },
+      "SearchWork": {
+        "ForecastRequests": 20236,
+        "PhysicalForecastCalls": 20935,
+        "ContactQueries": 1299489
+      },
+      "SearchMemo": {
+        "KernelHits": 0,
+        "KernelMisses": 0,
+        "ProjectionHits": 0,
+        "ProjectionMisses": 1295862,
+        "ClearanceHits": 0
+      },
+      "IndependentMemo": {
+        "KernelHits": 0,
+        "KernelMisses": 15105,
+        "ProjectionHits": 15069,
+        "ProjectionMisses": 15078,
+        "ClearanceHits": 743
+      },
+      "FullK1": 699,
+      "Forecasts": 21686,
+      "Contacts": 1314530,
+      "FeedbackQueries": 1958,
+      "IndependentForecasts": 752,
+      "IndependentContacts": 15105,
+      "TransitionRequests": 2911,
+      "SearchHits": 860,
+      "IndependentHits": 9,
+      "RolloutHits": 2,
+      "IndependentComparisons": 752,
+      "Verification": "Fresh per-review DAG; every unique physical prefix repropagated independently; no search or historical result accepted as proof",
+      "options": {
+        "Memoize": true,
+        "ValidatedIndependent": true
+      }
+    },
+    "RejectedTrees": 2,
+    "Leaves": 9
+  }
+]

@@ -1,0 +1,98 @@
+{
+  "Title": "#152 · Wydajny planner warunkowy",
+  "DefaultRun": "efficient152-A-portfolio-v1",
+  "GeometryFile": "../causal-yaw-throttle/progressive-b-viewer-geometry.json",
+  "Runs": [
+    {
+      "Id": "baseline149-final148",
+      "File": "../tyre-physics-corner-limits/native/baseline149-final148.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "completed",
+      "Duration": 53.99,
+      "Fingerprint": "EA342AF146E248C411CB7C409D26AEFAB4ED79A307AD1D03D80AE9F5F478AAE0"
+    },
+    {
+      "Id": "separated149-autonomous",
+      "File": "../tyre-physics-corner-limits/native/separated149-autonomous.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "completed",
+      "Duration": 54.24,
+      "Fingerprint": "26C5D60F981B40950CCF468798FB29C3593BB4A3C828E0D4747A603846DF0BD8"
+    },
+    {
+      "Id": "efficient152-A-portfolio-v1",
+      "File": "native/efficient152-A-portfolio-v1.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "completed",
+      "Duration": 55.17,
+      "Fingerprint": "AA7E0E6577296792A6AF5D1D9FF737E8453B7DA5A2A04EFE732038287EF55C24"
+    },
+    {
+      "Id": "efficient152-A-v1",
+      "File": "native/efficient152-A-v1.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "technical invariant: STUDY152_ABSTAIN: abstain: finite recourse search has no certified complete reserve",
+      "Duration": 38.6,
+      "Fingerprint": "0F7CBCC7A1BC2E87973D7470A74FC223A377CDE9BC52DBCA0EC7486222B49669"
+    },
+    {
+      "Id": "recovery152-A-portfolio",
+      "File": "native/recovery152-A-portfolio.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "technical invariant: STUDY152_DIAGNOSTIC_FIRST_BEND_RECOVERED",
+      "Duration": 6.6000000000000005,
+      "Fingerprint": "50AC6AD940F0C8927389AA6F504EB4DA9E773AA950FB7533A99E3241E5603129"
+    },
+    {
+      "Id": "recovery152-A",
+      "File": "native/recovery152-A.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "completed",
+      "Duration": 16.83999999999997,
+      "Fingerprint": "929A558AB645FAC5A3B7F9C22730C10041565986304E0B182B8F98A6ECE4182F"
+    },
+    {
+      "Id": "recovery152-B-portfolio",
+      "File": "native/recovery152-B-portfolio.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "technical invariant: STUDY152_ABSTAIN: abstain: STUDY152_CPU_STOP",
+      "Duration": 1.5999999999999999,
+      "Fingerprint": "2282A7636266C8DC5B675A7F2CE7F8D82EEC6E148566F78C393FAC7D92AE9934"
+    },
+    {
+      "Id": "recovery152-B-v2",
+      "File": "native/recovery152-B-v2.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "technical invariant: STUDY152_ABSTAIN: abstain: STUDY152_CPU_STOP",
+      "Duration": 9.799999999999997,
+      "Fingerprint": "E2FF12FDB5A071DE493584A5E5850699370F8F617B449F07F64480CB77AB6AD5"
+    },
+    {
+      "Id": "recovery152-B",
+      "File": "native/recovery152-B.json.gz",
+      "Variant": "K1",
+      "Riders": 1,
+      "Outcome": "technical invariant: STUDY152_ABSTAIN: abstain: STUDY152_CPU_STOP",
+      "Duration": 1,
+      "Fingerprint": "9948472A3F714F734A4476A8218F648E1E24C18CFA6504B3A7E09CC3AE9E7732"
+    }
+  ],
+  "LapMeters": 318.77874994277954,
+  "RequiredLaps": 3,
+  "StartReference": 0,
+  "BendReferences": [
+    35,
+    132.38937497138977,
+    194.38937497138977,
+    291.77874994277954
+  ],
+  "Note": "Trzy legalne natywne okrążenia od zera wymagają completed i3 laps. Diagnostyka1s i wyniki negatywne są osobno. Skończone scenariusze nie są globalną gwarancją."
+}

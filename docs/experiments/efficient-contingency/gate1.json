@@ -1,0 +1,26 @@
+[
+  {
+    "Model": "A",
+    "Passed": true,
+    "PrefixExact": true,
+    "CriticalCertificateAllBitsEqual": true,
+    "Outcome": "completed",
+    "EndSeconds": 16.83999999999997,
+    "FinishSeconds": 16.832644084237682,
+    "Fingerprint": "929A558AB645FAC5A3B7F9C22730C10041565986304E0B182B8F98A6ECE4182F",
+    "DecisionsAfter1s": 80,
+    "Scope": "Diagnostic: exact native own-model historical controls until1s, independently certified new decisions from1s; not a standing three-lap race."
+  },
+  {
+    "Model": "B",
+    "Passed": false,
+    "PrefixExact": true,
+    "CriticalCertificateAllBitsEqual": false,
+    "Outcome": "technical invariant: STUDY152_ABSTAIN: abstain: STUDY152_CPU_STOP",
+    "EndSeconds": 1,
+    "FinishSeconds": null,
+    "Fingerprint": "9948472A3F714F734A4476A8218F648E1E24C18CFA6504B3A7E09CC3AE9E7732",
+    "DecisionsAfter1s": 0,
+    "Scope": "Diagnostic: exact native own-model historical controls until1s, independently certified new decisions from1s; not a standing three-lap race."
+  }
+]
