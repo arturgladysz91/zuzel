@@ -40,7 +40,7 @@ K1:247,953 CPU-s; kontynuacje:46,984; niezależny preflight:18,484. Główny kos
 
 ## 2. Odrzucenia i pierwsza utrata przyszłej wykonalności
 
-W4708 zapisanych ocenach pełnych rolloutów było1578 legalnych. Według wyniku **całej** prognozy: 935 odrzuceń przez zapas pozy poniżej0,5 m i 2017 przez sweep;177 przez beta. Licznik2938 opisuje inny przekrój: **pierwszy** zły interwał był jeszcze sweep-only. Późniejsze punkty tej samej prognozy mogą naruszać0,5 m. Nie nazywamy tych2938 przypadków wyłącznie nadmierną konserwatywnością.
+W4708 zapisanych ocenach pełnych rolloutów było1578 legalnych. Według wyniku **całej** prognozy: 935 odrzuceń przez zapas pozy poniżej0,5 m i 2017 przez sweep;177 przez beta oraz1 przez odrzuconą prognozę fizyczną. Licznik2938 opisuje inny przekrój: **pierwszy** zły interwał był jeszcze sweep-only. Późniejsze punkty tej samej prognozy mogą naruszać0,5 m. Nie nazywamy tych2938 przypadków wyłącznie nadmierną konserwatywnością.
 
 Pierwszy niedopuszczalny interwał zapisany w końcowej próbie13,8 s leży w prognozie14,82 s: obrys0,590505 m, dolna granica sweep0,489416 m, reference227,418 m. Ta prognoza nie została wykonana w natywnym świecie. W ostatniej próbie:77 odrzuceń całego rolloutu przez pozycję,33 przez sweep,1 przez beta i10 legalnych rolloutów. Powstało tylko9/13 węzłów i6/9 rezerw, po czym skończyła się globalna rezerwacja CPU. **To odmowa z powodu budżetu, nie dowód niewykonalności stanu.**
 
@@ -200,7 +200,7 @@ S0 był jedną ciągłą próbą od zera, z celem trzech okrążeń, limitem330 
 
 ## Budżet, niepowodzenia i reprodukcja
 
-Zamknięte pozycje przed tym eksportem: 675.797 CPU-s i5 światów. Limit1500 CPU-s /15 światów; końcowa suma znajduje się w budget.json. Zachowano dużą niewykorzystaną rezerwę i przerwano strojenie po niepowodzeniach kolejnych merytorycznie różnych wariantów. Bez CEM, losowego treningu i zwiększania limitu30 CPU-s decyzji lub330 CPU-s świata. Kompilacje, regresje i CI są poza budżetem eksperymentów.
+Zamknięte pozycje przed tym eksportem: 676.375 CPU-s i5 światów. Limit1500 CPU-s /15 światów; końcowa suma znajduje się w budget.json. Zachowano dużą niewykorzystaną rezerwę i przerwano strojenie po niepowodzeniach kolejnych merytorycznie różnych wariantów. Bez CEM, losowego treningu i zwiększania limitu30 CPU-s decyzji lub330 CPU-s świata. Kompilacje, regresje i CI są poza budżetem eksperymentów.
 
 Każda próba ma source zip i SHA256 rzeczywistego kodu. Dane153 i wcześniejsze nie były nadpisane. diagnosis153-first-pass.json zachowuje pierwszy eksport; finalny diagnosis153.json rozdziela wynik całej prognozy od pierwszego złego interwału. Archive surowych liczników nie jest przepisywane po doprecyzowaniu nazwy. Wczesne prototypy zachowują wszystkie natywne stany, pełne przyjęte polityki i odmowy; szczegółowe pełne lokalne kandydatury są dostępne w później instrumentowanym S0.
 
