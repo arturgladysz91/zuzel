@@ -48,3 +48,7 @@ nie kasuj jej. Źródła każdego uruchomienia są w `sources/` z SHA-256.
 Lokalne C-0.0-v4 ma pełne13/9 i zero K1. B nie uzyskało żadnego pełnego certyfikatu;
 C odmówiło w obu późniejszych stanach. Nie promowano C do bram natywnych C–E.
 Nie ma dowodu niezmienniczego zbioru terminalnego ani ukończonego biegu S.
+
+Końcowe zabezpieczenie API: włączenie bez opcji wybiera ścisły S, a jawna próba
+legacy lub wyłączenia niezależnej walidacji jest odrzucana. Wszystkie zapieczętowane
+pomiary podawały już dokładnie te ścisłe opcje; ta blokada nie zmienia ich ścieżki.

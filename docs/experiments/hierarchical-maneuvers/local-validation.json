@@ -38,5 +38,11 @@
     }
   },
   "LegacyConsumers": 39,
-  "Scope": "Local Windows validation; exact-final-head GitHub CI required separately. No new native experiment."
+  "Scope": "Local Windows validation; exact-final-head GitHub CI required separately. No new native experiment.",
+  "FinalApiGuardValidation": {
+    "ReleaseWarnAsErrorBuild": "PASS",
+    "HierarchicalCSharpCases": 4,
+    "SealedPythonCases": 8,
+    "Scope": "After constructor strict-S guard; same explicit options as all experiments. Full final-head GitHub run remains required."
+  }
 }

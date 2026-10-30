@@ -54,11 +54,12 @@ public sealed class Planner155 {
     }
 
     public Planner155(RiderSpec spec, bool separated, Options151? options = null, Action? guard = null, Envelope151? envelope = null, RuntimeOptions153? performance = null,bool forwardCheck=false) {
-        this.performance=performance??new();Options = options ?? new();shareCurrentPolicies=performance?.ShareCurrentPolicies??false;
+        this.performance=performance??Program155.Options();Options = options ?? new();shareCurrentPolicies=this.performance.ShareCurrentPolicies;
         if (!Options.Enabled) throw new InvalidOperationException("Planner151 is OFF by default.");
         if (Options.Laps is < 1 or > 3 || Options.ObservationDepth is < 2 or > 3 || Options.MaximumRepairs is < 0 or > 60 || Options.MaximumRoots is < 1 or > 15) throw new ArgumentException("Bounded contingency planner required.");
         Envelope = envelope ?? new(); this.guard = guard ?? (() => { });
-        Runtime = new(spec, separated, performance);Generator=new(Runtime,Step,Guard,forwardCheck);
+        if(this.performance.Regime!=Regime153.SafetyHalfMeter||!this.performance.ValidatedIndependent)throw new ArgumentException("Study155 requires S0.5m and fresh independent validation");
+        Runtime = new(spec, separated, this.performance);Generator=new(Runtime,Step,Guard,forwardCheck);
     }
     public void InitializeDiagnosticTape(Tape150 tape) { if (portfolio.Count != 0) throw new InvalidOperationException("Initialize once"); portfolio.Add(tape); }
     public void InitializeDiagnosticReview(Review151 review) {

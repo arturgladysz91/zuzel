@@ -201,6 +201,8 @@ build/test CI są walidacją kodu, nie nowymi eksperymentalnymi przejazdami.
 Zatrzymanie wynika z niezawodności, nie wyczerpania budżetu. Nie uruchamiano CEM,
 losowego treningu, arbitralnego podnoszenia30 CPU-s/32768 prognoz/26 s ani fallbacku K1.
 
+Końcowy przegląd API zablokował odziedziczenie trybu legacy: konstruktor włączony bez opcji wybiera S0,5 m i niezależną walidację, a niezgodne jawne opcje są odrzucane. Wszystkie pomiary miały te ścisłe opcje już przed poprawką; ich ścieżka obliczeń pozostaje identyczna. Cztery testy nowej klasy ponownie przeszły po zmianie.
+
 ## Dane, odtwarzanie i walidacja
 
 - `analysis.json`, `measurements155.csv`, `cpu-phases155.csv`: pełna macierz i profile.
