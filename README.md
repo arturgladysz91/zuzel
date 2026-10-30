@@ -1,5 +1,11 @@
 # Speedway Manager (Żużlowy) – Core Simulation
 
+[Viable safety0.5m planning (study #154)](docs/experiments/viable-safe-contingency/REPORT.md)
+reports S0/S1/S2, exact H09 prediction reuse, all five gates and failed native
+continuations. PROVISIONAL, default OFF, scientific verdict PARTIAL. No full
+three-lap S or four-rider readiness is claimed; physics and historical data stay frozen.
+
+
 [Swept clearance and bounded contingency selection (study #153)](docs/experiments/safe-fast-contingency/REPORT.md)
 repairs immutable Windows checkout hashes and separates historical legacy results
 from the required0.5 m whole-footprint swept margin. Exact native parity, CPU,

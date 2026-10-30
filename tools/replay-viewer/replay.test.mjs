@@ -319,3 +319,5 @@ import './contingency151.test.mjs';
 
 import './efficient152.test.mjs';
 import './safety153.test.mjs';
+
+import './viable154.test.mjs';
