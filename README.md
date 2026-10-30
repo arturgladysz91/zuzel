@@ -812,3 +812,7 @@ Geometry and throttle interventions are separate diagnostics; original physical 
 [Hierarchical maneuver generator (study #155)](docs/experiments/hierarchical-maneuvers/REPORT.md) — PROVISIONAL, default OFF.
 Local start-state13/9 certification uses zero K1 at7.781 CPU-s; both later saved states abstain.
 PARTIAL: no new native run and no complete three-lap S. Frozen physics and historical evidence remain unchanged.
+
+[Line, throttle and physics investigation (study #156)](docs/experiments/line-throttle-physics/REPORT.md) — PROVISIONAL, default OFF.
+Native common-section witnesses separate line length, throttle/steering interaction and physical losses.
+State-dependent gains do not establish a new autonomous rider; held-state transfer is partial.

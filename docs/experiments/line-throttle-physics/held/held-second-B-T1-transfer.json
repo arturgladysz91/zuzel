@@ -1,0 +1,176 @@
+{
+  "Source": "docs/experiments/line-throttle-physics/best/second-B-v3.json.gz",
+  "SkippedPastCommands": 1,
+  "NoSearch": true,
+  "SourceInitial": {
+    "Time": 10.199999999999996,
+    "Rider": {
+      "Id": 1,
+      "Position": {
+        "X": 28.77237,
+        "Y": 67.11808
+      },
+      "Velocity": {
+        "X": -16.5815,
+        "Y": 3.6095626
+      },
+      "Heading": 2.9478743,
+      "AngularVelocity": 0.13980392,
+      "Road": {
+        "Segment": 4,
+        "Progress": 0.1004456550844254,
+        "ReferenceMeters": 138.61700558662415,
+        "OffsetMeters": 4.455059971029158,
+        "Heading": 3.141592653589793,
+        "RadiusMeters": 0,
+        "CornerProgress": 0,
+        "Tangent": {
+          "X": -1,
+          "Y": 1.2246469E-16
+        },
+        "Outward": {
+          "X": 1.2246469E-16,
+          "Y": 1
+        },
+        "IsTurn": false
+      },
+      "TotalReferenceMeters": 138.61700558662415,
+      "DistanceMeters": 143.72236950696242,
+      "Activity": 0,
+      "Drive": 0.31820688,
+      "TargetOffsetMeters": 3.5,
+      "Impairment": 0,
+      "Context": 2,
+      "Speed": 16.969828,
+      "ForwardSpeed": 16.966219,
+      "SideSpeed": -0.34995866,
+      "SlideRadians": 0.020623857
+    },
+    "Omega": 56.6833083011616,
+    "Steering": 0.008728359,
+    "Inner": 5.131001859823332,
+    "Outer": 6.026116992828812
+  },
+  "Held": {
+    "Name": "held-second",
+    "Source": "docs/experiments/viable-safe-contingency/native/S0-full-baseline-v1.json.gz",
+    "Time": 10.4,
+    "Entry": 194.38937497138977,
+    "Exit": 291.77874994277954,
+    "Goal": 365.77874994277954,
+    "State": {
+      "Input": {
+        "Rider": {
+          "Id": 1,
+          "Position": {
+            "X": 25.409666,
+            "Y": 67.79944
+          },
+          "Velocity": {
+            "X": -17.037783,
+            "Y": 3.207608
+          },
+          "Heading": 2.9758966,
+          "AngularVelocity": 0.14083728,
+          "Road": {
+            "Segment": 4,
+            "Progress": 0.15468280546126828,
+            "ReferenceMeters": 141.9797089099884,
+            "OffsetMeters": 5.136418308431502,
+            "Heading": 3.141592653589793,
+            "RadiusMeters": 0,
+            "CornerProgress": 0,
+            "Tangent": {
+              "X": -1,
+              "Y": 1.2246469E-16
+            },
+            "Outward": {
+              "X": 1.2246469E-16,
+              "Y": 1
+            },
+            "IsTurn": false
+          },
+          "TotalReferenceMeters": 141.9797089099884,
+          "DistanceMeters": 147.15352129936946,
+          "Activity": 0,
+          "Drive": 0.31820688,
+          "TargetOffsetMeters": 3.5,
+          "Impairment": 0,
+          "Context": 2,
+          "Speed": 17.337093,
+          "ForwardSpeed": 17.333488,
+          "SideSpeed": -0.35348296,
+          "SlideRadians": 0.020390233
+        },
+        "Time": 10.399999999999995,
+        "Omega": 57.8518431924206,
+        "Steering": 0.008729292,
+        "Active": {
+          "SteeringRadians": 0.008729292,
+          "Drive": 0.31820688
+        },
+        "Pending": [
+          {
+            "ObservedAt": 10.199999999999996,
+            "ActivationAt": 10.439999999999996,
+            "Action": {
+              "SteeringRadians": 0.008731914,
+              "Drive": 0.31820688
+            }
+          }
+        ],
+        "NextReview": 10.399999999999995
+      },
+      "CrankOmega": 521.4424614055754
+    },
+    "Spec": {
+      "Profile": {
+        "Id": 1,
+        "Name": "R1",
+        "Skills": {
+          "Start": 50,
+          "Speed": 50,
+          "SlideControl": 50,
+          "TrackReading": 50,
+          "PairRiding": 50,
+          "Adaptability": 50
+        },
+        "Style": {
+          "RiskTolerance": 0.5,
+          "LaneChangeTendency": 0.5,
+          "OutsidePreference": 0.5,
+          "SetupIndependence": 0.5
+        }
+      },
+      "Setup": {
+        "Gearing": 0.5,
+        "TractionBias": 0.5
+      },
+      "ReferenceMeters": 0,
+      "OffsetMeters": 3.5,
+      "SpeedMetersPerSecond": 0,
+      "TargetOffsetMeters": 3.5,
+      "InitialOutwardSpeed": 0,
+      "TrafficEnabled": false,
+      "Passive": false,
+      "Bullet": false
+    },
+    "Held": true
+  },
+  "Summary": {
+    "Label": "B-T1-held-second-B-T1",
+    "Fixture": "held-second",
+    "Family": "B",
+    "Strategy": "T1",
+    "Complete": false,
+    "Legal": false,
+    "FamilyAchieved": false,
+    "MeanOffset": 11.15032669466197,
+    "Arrival": null,
+    "Reason": "footprint reserve",
+    "MinimumGap": -1.0351049661463454,
+    "Sweep": -1.1197667439853334,
+    "MaxBeta": 19.765784262992074,
+    "CpuSeconds": 0.0625
+  }
+}

@@ -1,0 +1,478 @@
+[
+  {
+    "Label": "inspect-v1",
+    "CpuSeconds": 1.140625,
+    "Closed": true,
+    "Recovery": "Closed CPU reconstructed from successor reservation and stored output; exact process measurements."
+  },
+  {
+    "Label": "search-first-pilot-v1",
+    "CpuSeconds": 0.0625,
+    "Closed": true,
+    "Recovery": "Closed CPU reconstructed from successor reservation and stored output; exact process measurements."
+  },
+  {
+    "Label": "search-first-pilot-v2",
+    "CpuSeconds": 20.0625,
+    "Closed": true,
+    "Recovery": "Closed CPU reconstructed from successor reservation and stored output; exact process measurements."
+  },
+  {
+    "Label": "native-first-A-T0-v3",
+    "CpuSeconds": 3.78125,
+    "Closed": true,
+    "Recovery": "Closed CPU reconstructed from successor reservation and stored output; exact process measurements."
+  },
+  {
+    "Label": "matrix-first-v3",
+    "CpuSeconds": 100.125,
+    "Closed": true,
+    "Recovery": "Closed CPU reconstructed from successor reservation and stored output; exact process measurements."
+  },
+  {
+    "Label": "matrix-second-v3",
+    "CpuSeconds": 88.078125,
+    "Closed": true,
+    "Recovery": "Closed CPU reconstructed from successor reservation and stored output; exact process measurements."
+  },
+  {
+    "Label": "matrix-historical-v3",
+    "CpuSeconds": 130,
+    "Closed": true,
+    "Measured": false,
+    "Reason": "Disk-full interrupted save; entire predeclared130 CPU-s reservation charged conservatively, not a direct CPU reading."
+  },
+  {
+    "Label": "matrix-historical-v4",
+    "CpuSeconds": 55.359375,
+    "Closed": true,
+    "Reason": "matrix complete"
+  },
+  {
+    "Label": "native-first-A-T1-final",
+    "CpuSeconds": 3.5625,
+    "Closed": true,
+    "Reason": "experiment timeout"
+  },
+  {
+    "Label": "native-first-B-T0-final",
+    "CpuSeconds": 3.8125,
+    "Closed": true,
+    "Reason": "experiment timeout"
+  },
+  {
+    "Label": "native-first-B-T1-final",
+    "CpuSeconds": 4.015625,
+    "Closed": true,
+    "Reason": "experiment timeout"
+  },
+  {
+    "Label": "native-first-C-T0-final",
+    "CpuSeconds": 4.03125,
+    "Closed": true,
+    "Reason": "experiment timeout"
+  },
+  {
+    "Label": "native-first-C-T1-final",
+    "CpuSeconds": 4.09375,
+    "Closed": true,
+    "Reason": "experiment timeout"
+  },
+  {
+    "Label": "native-second-A-T0-final",
+    "CpuSeconds": 3.140625,
+    "Closed": true,
+    "Reason": "technical invariant: STUDY156_TAPE_EXHAUSTED"
+  },
+  {
+    "Label": "native-second-A-T1-final",
+    "CpuSeconds": 3.203125,
+    "Closed": true,
+    "Reason": "experimental beta45 envelope"
+  },
+  {
+    "Label": "native-second-B-T0-final",
+    "CpuSeconds": 5.9375,
+    "Closed": true,
+    "Reason": "experiment timeout"
+  },
+  {
+    "Label": "native-second-B-T1-final",
+    "CpuSeconds": 5.75,
+    "Closed": true,
+    "Reason": "experiment timeout"
+  },
+  {
+    "Label": "native-second-C-T0-final",
+    "CpuSeconds": 5.796875,
+    "Closed": true,
+    "Reason": "experiment timeout"
+  },
+  {
+    "Label": "native-second-C-T1-final",
+    "CpuSeconds": 5.828125,
+    "Closed": true,
+    "Reason": "experiment timeout"
+  },
+  {
+    "Label": "native-historical-A-T0-final",
+    "CpuSeconds": 7.390625,
+    "Closed": true,
+    "Reason": "technical invariant: STUDY156_TAPE_EXHAUSTED"
+  },
+  {
+    "Label": "native-historical-A-T1-final",
+    "CpuSeconds": 7.671875,
+    "Closed": true,
+    "Reason": "experimental beta45 envelope"
+  },
+  {
+    "Label": "native-historical-B-T0-final",
+    "CpuSeconds": 7.59375,
+    "Closed": true,
+    "Reason": "technical invariant: STUDY156_TAPE_EXHAUSTED"
+  },
+  {
+    "Label": "native-historical-B-T1-final",
+    "CpuSeconds": 7.78125,
+    "Closed": true,
+    "Reason": "experimental beta45 envelope"
+  },
+  {
+    "Label": "native-historical-C-T0-final",
+    "CpuSeconds": 10.0625,
+    "Closed": true,
+    "Reason": "experiment timeout"
+  },
+  {
+    "Label": "native-historical-C-T1-final",
+    "CpuSeconds": 10.078125,
+    "Closed": true,
+    "Reason": "experiment timeout"
+  },
+  {
+    "Label": "held-held-first-A-T0",
+    "CpuSeconds": 0.5,
+    "Closed": true,
+    "Reason": "beta45 envelope"
+  },
+  {
+    "Label": "native-held-first-A-T0-final",
+    "CpuSeconds": 2.890625,
+    "Closed": true,
+    "Reason": "experimental beta45 envelope"
+  },
+  {
+    "Label": "held-held-first-A-T1",
+    "CpuSeconds": 0.484375,
+    "Closed": true,
+    "Reason": "beta45 envelope"
+  },
+  {
+    "Label": "native-held-first-A-T1-final",
+    "CpuSeconds": 2.640625,
+    "Closed": true,
+    "Reason": "experimental beta45 envelope"
+  },
+  {
+    "Label": "held-held-first-B-T0",
+    "CpuSeconds": 0.765625,
+    "Closed": true,
+    "Reason": "complete common geometric section"
+  },
+  {
+    "Label": "held-held-first-B-T1",
+    "CpuSeconds": 0.796875,
+    "Closed": true,
+    "Reason": "complete common geometric section"
+  },
+  {
+    "Label": "held-held-first-C-T0",
+    "CpuSeconds": 0.171875,
+    "Closed": true,
+    "Reason": "footprint reserve"
+  },
+  {
+    "Label": "held-held-first-C-T1",
+    "CpuSeconds": 0.140625,
+    "Closed": true,
+    "Reason": "footprint reserve"
+  },
+  {
+    "Label": "held-held-second-B-T0",
+    "CpuSeconds": 0.171875,
+    "Closed": true,
+    "Reason": "footprint reserve"
+  },
+  {
+    "Label": "native-held-second-B-T0-final",
+    "CpuSeconds": 3.3125,
+    "Closed": true,
+    "Reason": "uncertified swept physical footprint clearance0.5m"
+  },
+  {
+    "Label": "held-held-second-B-T1",
+    "CpuSeconds": 0.15625,
+    "Closed": true,
+    "Reason": "footprint reserve"
+  },
+  {
+    "Label": "native-held-second-B-T1-final",
+    "CpuSeconds": 3.671875,
+    "Closed": true,
+    "Reason": "uncertified swept physical footprint clearance0.5m"
+  },
+  {
+    "Label": "held-held-second-C-T0",
+    "CpuSeconds": 0.1875,
+    "Closed": true,
+    "Reason": "footprint reserve"
+  },
+  {
+    "Label": "native-held-second-C-T0-final",
+    "CpuSeconds": 3.078125,
+    "Closed": true,
+    "Reason": "uncertified swept physical footprint clearance0.5m"
+  },
+  {
+    "Label": "held-held-second-C-T1",
+    "CpuSeconds": 0.15625,
+    "Closed": true,
+    "Reason": "footprint reserve"
+  },
+  {
+    "Label": "native-held-second-C-T1-final",
+    "CpuSeconds": 3.4375,
+    "Closed": true,
+    "Reason": "uncertified swept physical footprint clearance0.5m"
+  },
+  {
+    "Label": "ablation-first-A",
+    "CpuSeconds": 0.796875,
+    "Closed": true,
+    "Reason": "matched command-component interventions"
+  },
+  {
+    "Label": "native-first-A-gas-only-final",
+    "CpuSeconds": 3.53125,
+    "Closed": true,
+    "Reason": "uncertified swept physical footprint clearance0.5m"
+  },
+  {
+    "Label": "native-first-A-steer-only-final",
+    "CpuSeconds": 3.703125,
+    "Closed": true,
+    "Reason": "experiment timeout"
+  },
+  {
+    "Label": "ablation-second-C",
+    "CpuSeconds": 0.875,
+    "Closed": true,
+    "Reason": "matched command-component interventions"
+  },
+  {
+    "Label": "native-second-C-gas-only-final",
+    "CpuSeconds": 5.796875,
+    "Closed": true,
+    "Reason": "experiment timeout"
+  },
+  {
+    "Label": "native-second-C-steer-only-final",
+    "CpuSeconds": 5.59375,
+    "Closed": true,
+    "Reason": "experiment timeout"
+  },
+  {
+    "Label": "ablation-historical-C",
+    "CpuSeconds": 0.875,
+    "Closed": true,
+    "Reason": "matched command-component interventions"
+  },
+  {
+    "Label": "native-historical-C-gas-only-final",
+    "CpuSeconds": 9.484375,
+    "Closed": true,
+    "Reason": "experimental beta45 envelope"
+  },
+  {
+    "Label": "native-historical-C-steer-only-final",
+    "CpuSeconds": 10.125,
+    "Closed": true,
+    "Reason": "experiment timeout"
+  },
+  {
+    "Label": "native-held-first-B-T0-final",
+    "CpuSeconds": 3.65625,
+    "Closed": true,
+    "Reason": "experiment timeout"
+  },
+  {
+    "Label": "native-held-first-B-T1-final",
+    "CpuSeconds": 3.828125,
+    "Closed": true,
+    "Reason": "experiment timeout"
+  },
+  {
+    "Label": "prior-process-initialization-allowance",
+    "CpuSeconds": 100,
+    "Closed": true,
+    "Measured": false,
+    "Reason": "Conservative provision for pre-Begin file loading/JIT in prior short-lived C# processes. Those costs were not separately metered; from this correction Begin charges total process CPU from zero."
+  },
+  {
+    "Label": "native-analysis-v1",
+    "CpuSeconds": 9.640625,
+    "Closed": true,
+    "Reason": "native common-section and energy analysis"
+  },
+  {
+    "Label": "refine-first-v5",
+    "CpuSeconds": 61.125,
+    "Closed": true,
+    "Reason": "balanced joint command search"
+  },
+  {
+    "Label": "refine-second-v5",
+    "CpuSeconds": 47.03125,
+    "Closed": true,
+    "Reason": "balanced joint command search"
+  },
+  {
+    "Label": "refine-historical-v5",
+    "CpuSeconds": 42.96875,
+    "Closed": true,
+    "Reason": "balanced joint command search"
+  },
+  {
+    "Label": "native-first-A-T1-refined",
+    "CpuSeconds": 4.078125,
+    "Closed": true,
+    "Reason": "experiment timeout"
+  },
+  {
+    "Label": "native-first-B-T1-refined",
+    "CpuSeconds": 4.359375,
+    "Closed": true,
+    "Reason": "experiment timeout"
+  },
+  {
+    "Label": "native-first-C-T1-refined",
+    "CpuSeconds": 4.453125,
+    "Closed": true,
+    "Reason": "experiment timeout"
+  },
+  {
+    "Label": "control-first-v1",
+    "CpuSeconds": 2.5,
+    "Closed": true,
+    "Reason": "footprint reserve"
+  },
+  {
+    "Label": "native-first-unconditioned-final",
+    "CpuSeconds": 2.578125,
+    "Closed": true,
+    "Reason": "uncertified swept physical footprint clearance0.5m"
+  },
+  {
+    "Label": "native-second-B-T1-refined",
+    "CpuSeconds": 6.28125,
+    "Closed": true,
+    "Reason": "experiment timeout"
+  },
+  {
+    "Label": "native-second-C-T1-refined",
+    "CpuSeconds": 6.125,
+    "Closed": true,
+    "Reason": "experiment timeout"
+  },
+  {
+    "Label": "control-second-v1",
+    "CpuSeconds": 3.625,
+    "Closed": true,
+    "Reason": "swept physical footprint reserve0.5m"
+  },
+  {
+    "Label": "native-second-unconditioned-final",
+    "CpuSeconds": 5.8125,
+    "Closed": true,
+    "Reason": "uncertified swept physical footprint clearance0.5m"
+  },
+  {
+    "Label": "native-historical-B-T1-refined",
+    "CpuSeconds": 14.03125,
+    "Closed": true,
+    "Reason": "experiment timeout"
+  },
+  {
+    "Label": "native-historical-C-T1-refined",
+    "CpuSeconds": 13.375,
+    "Closed": true,
+    "Reason": "experiment timeout"
+  },
+  {
+    "Label": "control-historical-v1",
+    "CpuSeconds": 2.03125,
+    "Closed": true,
+    "Reason": "swept physical footprint reserve0.5m"
+  },
+  {
+    "Label": "native-historical-unconditioned-final",
+    "CpuSeconds": 11.21875,
+    "Closed": true,
+    "Reason": "uncertified swept physical footprint clearance0.5m"
+  },
+  {
+    "Label": "held-held-first-B-refined",
+    "CpuSeconds": 1.59375,
+    "Closed": true,
+    "Reason": "complete common geometric section"
+  },
+  {
+    "Label": "native-held-first-B-refined-final",
+    "CpuSeconds": 4.390625,
+    "Closed": true,
+    "Reason": "experiment timeout"
+  },
+  {
+    "Label": "held-held-second-C-refined",
+    "CpuSeconds": 1.03125,
+    "Closed": true,
+    "Reason": "footprint reserve"
+  },
+  {
+    "Label": "native-held-second-C-refined-final",
+    "CpuSeconds": 3.984375,
+    "Closed": true,
+    "Reason": "uncertified swept physical footprint clearance0.5m"
+  },
+  {
+    "Label": "native-analysis-v2",
+    "CpuSeconds": 12.421875,
+    "Closed": true,
+    "Reason": "native common-section and energy analysis"
+  },
+  {
+    "Label": "figures-v1",
+    "CpuSeconds": 3.359375,
+    "Closed": true,
+    "Reason": "native speed/XY/forces/energy/throttle/actual-curvature figures"
+  },
+  {
+    "Label": "report-replay-export-v1",
+    "CpuSeconds": 0.265625,
+    "Closed": true,
+    "Reason": "Polish report and self-contained native replay export"
+  },
+  {
+    "Label": "report-replay-export-v2",
+    "CpuSeconds": 0.234375,
+    "Closed": true,
+    "Reason": "Polish report and self-contained native replay export"
+  },
+  {
+    "Label": "report-replay-export-v3",
+    "CpuSeconds": 0.25,
+    "Closed": true,
+    "Reason": "Polish report and self-contained native replay export"
+  }
+]
