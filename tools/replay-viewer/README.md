@@ -471,3 +471,10 @@ activation times, actual steering/yaw/chi, and the separately labeled heuristic.
 H09 safety remains unchanged. Estimated arrival and coast continuation do not
 represent a simulated future trajectory. All comparison trails remain actual
 accepted Box2D poses, including the last state before a DNF.
+
+## Study155 — explicit forecast comparison
+
+Open `hierarchy155.html` over HTTP for saved-state A/B/C forecasts. Continuous lines identify
+complete13/9 model policies; dashed lines are legal partial forecasts, with no extrapolation.
+The optional gray native trace is explicitly the unchanged154 reference;155 ran zero new
+native worlds because the later saved states failed. PARTIAL, default OFF.

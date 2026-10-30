@@ -1,3 +1,4 @@
+import './hierarchy155.test.mjs';
 import test from 'node:test';
 import './continuous.test.mjs';
 import './zigzag.test.mjs';
