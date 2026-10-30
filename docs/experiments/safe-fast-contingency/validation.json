@@ -1,0 +1,21 @@
+{
+  "dotnet": "PASS",
+  "dotnet_cases": 2521,
+  "core_cases": 2126,
+  "trajectory_cases": 395,
+  "python": "PASS",
+  "python_cases": 328,
+  "ci_policy_cases": 7,
+  "node": "PASS",
+  "node_cases": 93,
+  "discovered_cases": 3042,
+  "discovery_only": {
+    "historical-analysis": 473,
+    "four-rider": 48
+  },
+  "restore": "locked PASS",
+  "build": "Release warnaserror PASS; 0 warnings",
+  "generated_sources": "PASS",
+  "legacy_consumers": "39 frozen readers PASS",
+  "replay_ui": "L and S loaded; S marked PARTIAL; no console errors; observed native playback"
+}

@@ -1,5 +1,12 @@
 # Speedway Manager (Żużlowy) – Core Simulation
 
+[Swept clearance and bounded contingency selection (study #153)](docs/experiments/safe-fast-contingency/REPORT.md)
+repairs immutable Windows checkout hashes and separates historical legacy results
+from the required0.5 m whole-footprint swept margin. Exact native parity, CPU,
+ranked-policy attempts and failures are reported separately. Tools-only, default OFF;
+original physics and historical evidence remain unchanged. Earlier reports using
+"legal" do not establish compliance with the new safety0.5 m regime.
+
 Release platform: **Windows only**. See the current [Windows CI policy](docs/ci.md)
 for Draft/full validation, the merge gate and optional historical audits.
 

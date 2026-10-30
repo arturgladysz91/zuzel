@@ -1,0 +1,45 @@
+{
+  "Passed": true,
+  "OriginalAndIndependentGapBitsEqual": true,
+  "Runs": [
+    {
+      "Run": "baseline149-final148",
+      "Poses": 5412,
+      "PoseViolations": 969,
+      "DefinitelyPhysicalPoseViolations": 963,
+      "Intervals": 5411,
+      "UncertifiedHalfMeterIntervals": 1235,
+      "Decisions": 270,
+      "LegalExecutedDecisions": 199,
+      "MinimumGap": 0.18487020973183932,
+      "MinimumCenterGap": 0.604976359825412,
+      "HistoricalThreeLaps": 3,
+      "LegalThreeLapsUnderS": false
+    },
+    {
+      "Run": "efficient152-A-portfolio-v1",
+      "Poses": 5530,
+      "PoseViolations": 983,
+      "DefinitelyPhysicalPoseViolations": 979,
+      "Intervals": 5529,
+      "UncertifiedHalfMeterIntervals": 1184,
+      "Decisions": 276,
+      "LegalExecutedDecisions": 206,
+      "MinimumGap": 0.16481071922988672,
+      "MinimumCenterGap": 0.5807402019212344,
+      "HistoricalThreeLaps": 3,
+      "LegalThreeLapsUnderS": false
+    }
+  ],
+  "MinimumPhysicalTrackWidth": 12,
+  "MinimumMiddleCorridorGapAtSampledYaw": 5.208517970029779,
+  "StaticPoses": 1914,
+  "StaticScope": "0.5m reference sampling and yaw0,\u002B/-45deg. Static room only; no proof of dynamic or all-continuous-pose feasibility.",
+  "Allowances": {
+    "ChordMeters": 0.0007,
+    "NumericalMeters": 0.0001,
+    "FloatTubeMeters": 0.0005,
+    "DefiniteViolationUpperErrorMeters": 0.001425
+  },
+  "Semantics": "Distances are full chassis\u002Bhandlebar capsule clearance, not CoM offset. Chord and numerical allowances are already subtracted. S requires swept lower bound\u003E=0.5; historical certificates remain unchanged."
+}

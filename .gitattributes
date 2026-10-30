@@ -218,3 +218,8 @@
 /tools/shared-world-speedway/TwoContactBikeAudit.cs text eol=crlf
 /tools/shared-world-speedway/WorldDiagnostics.cs text eol=crlf
 /tools/shared-world-speedway/RacingLineGeometry.cs text eol=lf
+
+# Study153 keeps new evidence immutable and isolated research sources reproducible.
+/docs/experiments/safe-fast-contingency/** -text whitespace=trailing-space,space-before-tab,cr-at-eol
+/tools/safe-fast-contingency/** text eol=lf
+/tools/replay-viewer/safety153*.mjs text eol=lf

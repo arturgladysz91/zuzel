@@ -1,0 +1,13 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import zlib from 'node:zlib';
+import {loadSafety153,margin153} from './safety153.mjs';
+const root=new URL('../../docs/experiments/safe-fast-contingency/',import.meta.url);
+const json=name=>JSON.parse(fs.readFileSync(new URL(name,root)));
+const gz=name=>JSON.parse(zlib.gunzipSync(fs.readFileSync(new URL(name,root))));
+const fetcher=async url=>new Response(fs.readFileSync(new URL(url.replace('local/',''),root)));
+test('153 replay distinguishes actual legacy and safety recordings',async()=>{const index=json('index.json');assert.ok(index.Runs.some(r=>r.Regime==='Legacy'));assert.ok(index.Runs.some(r=>r.Regime==='SafetyHalfMeter'));const d=await loadSafety153(fetcher,null,'local/');assert.equal(d.studyNumber,153);assert.equal(d.run.Riders[0].Samples[0].Input.Rider.Speed,0);assert.match(d.index.Note,/0,5 m|0,5m/);});
+test('153 legacy noncontact clearance cannot silently pass safety half meter',()=>{const p={Inner:.164810719,Outer:5,Certificate:.085106366};assert.equal(margin153(p,'Legacy').interval_pass,true);assert.equal(margin153(p,'SafetyHalfMeter').interval_pass,false);assert.equal(margin153(p,'SafetyHalfMeter').pose_pass,false);});
+test('153 partial safety remains partial and completed safety needs the native certificate',()=>{for(const r of json('analysis.json').full_runs.filter(r=>r.new&&r.regime==='SafetyHalfMeter')){if(r.outcome==='completed'){assert.equal(r.laps,3);assert.ok(r.minimum_sweep_m>=.5);assert.equal(r.half_meter_pose_violations,0);}else assert.equal(r.finish_s,null);}});
+test('153 accepted policies retain every logical branch and shared reserve',()=>{const p=gz('policies/exact-L-v3/decision-0000.json.gz');assert.equal(p.Tree.length,13);assert.equal(p.Terminals.length,9);assert.ok(p.Independent);for(const n of p.Tree.filter(n=>n.Depth<2))assert.deepEqual(p.Tree.filter(c=>c.Parent===n.Id).map(c=>c.Sign).sort(),[-1,0,1]);});
