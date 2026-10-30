@@ -1,0 +1,28 @@
+using System.Text.Json;
+using Autonomous146;
+using Contingency151;
+using Efficient152;
+using LineThrottle156;
+using Safety153;
+using SharedWorldSpeedway;
+namespace Transfer157;
+public static class Program157 {
+ public const string Base="9fe4d6612ce13c135fa967d48faa85509257d129";
+ public static string Doc=>Path.Combine(Study156.Root,"docs/experiments/state-maneuver-transfer");
+ public static JsonSerializerOptions Json=>Study156.Json;
+ public static void Save(string name,object value)=>Study156.Save(Path.Combine(Doc,name),value);
+ public static int Main(string[] args){try{Run(args);return 0;}catch(Exception error){Console.Error.WriteLine(error);return 1;}}
+ static void Run(string[] args){if(args.Length!=3||args[0] is not ("--probe" or "--generation" or "--native" or "--native-window" or "--causal" or "--heldset"))throw new ArgumentException("Study157 OFF: explicit --probe|--generation|--native fixture unique-label");
+  if(args[0]=="--causal"){Diagnostics157.Run(args[2]);return;}var fixture=Study156.Fixtures().Single(x=>x.Name==args[1]);if(args[0] is "--native" or "--native-window"){Native(fixture,args[2],args[0]=="--native-window");return;}if(args[0]=="--heldset"){HeldSet(fixture,args[2]);return;}using var b=new Budget157(args[2],0,80);var planner=new Planner157(fixture.Spec,false,new(Enabled:true),b.Guard);string? error=null;
+  if(args[0]=="--generation"){planner.Runtime.Begin(fixture.Time);var plans=planner.Generator.Generate(fixture.State,fixture.Goal,fixture.Goal,"common156 diagnostic only");Save(args[2]+".json.gz",new{Fixture=fixture,Plans=plans,planner.Generator.Outcomes,planner.Generator.Rejections,planner.Generator.FurthestPartial,Counters=planner.Runtime.Counters(),Scope="Generator diagnostics only, no13/9 certificate; never executed"});Console.WriteLine(args[2]+" candidates="+plans.Length);}
+  else {try{planner.Choose(fixture.State.Input,new(omega:fixture.State.CrankOmega));}catch(InvalidOperationException e){error=e.Message;}SaveReview(args[2],fixture.State,planner,error);Console.WriteLine(args[2]+" "+(error??"CERTIFIED"));}
+  b.Finish(error??"diagnostic complete");
+ }
+ public static void SaveReview(string label,State146 state,Planner157 p,string? error)=>Save(label+".json.gz",new{Observed=state,Error=error,Pass=error is null&&p.Last is{ConditionalCertificate:true,Independent:true},Review=p.Last is null?null:Evidence152.Compact(p.Last),p.Generator.Outcomes,p.Generator.Rejections,p.Generator.FurthestPartial,Counters=p.Runtime.Counters(),K1Calls=p.Runtime.K1Calls});
+ static void HeldSet(Fixture156 f,string label){using var b=new Budget157(label,0,80);var frame=StandingWorld144.Frame();foreach(var axis in new[]{"velocity","yaw","position"})foreach(var sign in new[]{-1,1}){var state=f.State;var v=state.Input.Rider;var tangent=new System.Numerics.Vector2(MathF.Cos((float)v.Road.Heading),MathF.Sin((float)v.Road.Heading));var normal=new System.Numerics.Vector2(-tangent.Y,tangent.X);if(axis=="velocity")v=v with{Velocity=v.Velocity+tangent*(sign*.02f)};if(axis=="yaw")v=v with{AngularVelocity=v.AngularVelocity+sign*.001f};if(axis=="position"){v=v with{Position=v.Position+normal*(sign*.001f),Road=v.Road with{OffsetMeters=v.Road.OffsetMeters+sign*.001}};}state=state with{Input=state.Input with{Rider=v}};var planner=new Planner157(f.Spec,false,new(Enabled:true),b.Guard);string? error=null;try{planner.Choose(state.Input,new(omega:state.CrankOmega));}catch(InvalidOperationException e){error=e.Message;}SaveReview(label+"-"+axis+"-"+sign,state,planner,error);Console.WriteLine(label+" "+axis+" "+sign+" "+(error??"CERTIFIED"));}b.Finish("First frozen held perturbation results, no tuning");}
+ static void Native(Fixture156 f,string label,bool fullWindow){using var budget=new Budget157(label,1,70);var prefix=Study156.Read<Run144>(f.Source).Riders[0];Planner157? planner=null;State146? first=null;var decisions=new List<object>();
+  Decision144 Choose(FreeRacingInput i,CrankClutch144 c,RiderSpec spec,TrackFrame frame,CoreSim.TrackStateSnapshot surface,WorldParameters parameters,float mass,float inertia,string variant){budget.Guard();if(i.Time<f.Time-1e-8){var old=prefix.Decisions.Single(d=>Math.Abs(d.Choice.Time-i.Time)<1e-7);return old with{CpuSeconds=0};}first??=new(i,c.Omega);planner??=new(spec,false,new(Enabled:true),budget.Guard);try{var q=planner.Choose(i,c);SaveReview(label+"/decision-"+decisions.Count.ToString("D4"),new(i,c.Omega),planner,null);decisions.Add(new{Time=i.Time,Pass=true,Action=q.Choice.Action,q.CpuSeconds});return q;}catch(InvalidOperationException e){SaveReview(label+"/abstain",new(i,c.Omega),planner,e.Message);decisions.Add(new{Time=i.Time,Pass=false,Reason=e.Message});throw;}}
+  Run144 run;using(var world=new NativeWorld156(new(Enabled:true,RequiredLaps:3,MaximumSeconds:f.Time+(fullWindow?26:.8)),safetyHalfMeter:true,safetyFrom:f.Time,stopReference:f.Goal))run=world.Run(label,"K1",Choose);
+  Save("native/"+label+".json.gz",run);var points=run.Riders[0].Samples.Where(s=>s.Input.Time>=f.Time-1e-8).Select(s=>new FreeRacingPoint(s.Input.Time,s.Input.Rider,s.Input.Omega,s.Input.Steering,s.Inner,s.Outer)).ToArray();var complete=points.Any(p=>p.Rider.TotalReferenceMeters>=f.Goal);Save("native/"+label+"-result.json",new{Fixture=f,First=first,ExactInitialKey=first is not null&&Efficient147.ExactKey147.State(first)==Efficient147.ExactKey147.State(f.State),Complete=complete,Pass=complete&&points.Length>1&&Clearance153.Check(points,Regime153.SafetyHalfMeter).Legal,Decisions=decisions,run.Outcome,run.EndSeconds,run.Fingerprint,Scope="Native prefix from stopped launch; only freshly certified157 actions after fixture; previous prefix never relabelled S"});Console.WriteLine(label+" "+run.Outcome);budget.Finish(run.Outcome);
+ }
+}

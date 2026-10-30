@@ -1,0 +1,2755 @@
+{
+  "witnesses": [
+    {
+      "family": "A",
+      "status": "PASS",
+      "complete": true,
+      "safe": true,
+      "exact_initial": true,
+      "family_achieved": true,
+      "mean_offset_m": 0.41162026619214054,
+      "time_s": 11.17588362832534,
+      "observed_prefix_s": 11.17588362832534,
+      "distance_m": 203.11337642788203,
+      "mean_speed_kph": 65.42732364241196,
+      "entry_kph": 65.4538329817913,
+      "minimum_kph": 56.8475316,
+      "exit_kph": 65.76590708987038,
+      "bend_time_s": 5.8811517913345135,
+      "bend_mean_kph": 60.57412752793765,
+      "bend_gas_zero_s": 2.71219742731579,
+      "bend_gas_full_s": 0.1999999999999993,
+      "bend_gas_mean": 0.19464583565475788,
+      "minimum_gap_m": 0.6325799229870782,
+      "sweep_m": 0.5417117985020643,
+      "max_beta_deg": 16.632149473705326,
+      "max_yaw_rads": 1.5797654,
+      "combustion_kj": 147.70845636339746,
+      "lateral_loss_kj": 16.75128471383659,
+      "longitudinal_loss_kj": 38.78615191017568,
+      "resistance_kj": 23.660316925460403,
+      "clutch_loss_kj": 0.3056731552340439,
+      "energy_residual_J": 0.129009045768196,
+      "max_front_util": 0.9398196879390401,
+      "max_rear_util": 0.9889520250604316,
+      "max_actual_curvature": 0.039863392298824143,
+      "mean_abs_curvature": 0.0175901384759301,
+      "bend_gas_partial_s": 2.968954364018724,
+      "fixture": "first",
+      "strategy": "T1",
+      "label": "first-A-T1-final",
+      "cpu_s": 3.5625,
+      "outcome": "experiment timeout",
+      "source": "docs\\experiments\\line-throttle-physics\\native\\first-A-T1-final-result.json",
+      "attempt": "docs/experiments/line-throttle-physics/best/first-A-v3.json.gz",
+      "forecast_time_s": 11.176486182905565,
+      "fixture_start": 1.6,
+      "command_changes": 35,
+      "first_T0_difference": 11.199999999999992,
+      "command_log": "commands/first-A-T1-final.csv"
+    },
+    {
+      "family": "B",
+      "status": "PASS",
+      "complete": true,
+      "safe": true,
+      "exact_initial": true,
+      "family_achieved": true,
+      "mean_offset_m": 3.8602267119081968,
+      "time_s": 12.128826600937936,
+      "observed_prefix_s": 12.128826600937936,
+      "distance_m": 212.6305887675067,
+      "mean_speed_kph": 63.11163847489002,
+      "entry_kph": 71.66481999131898,
+      "minimum_kph": 52.792174800000005,
+      "exit_kph": 57.13429716492105,
+      "bend_time_s": 6.54533927851293,
+      "bend_mean_kph": 59.429072177051225,
+      "bend_gas_zero_s": 4.399999999999999,
+      "bend_gas_full_s": 0,
+      "bend_gas_mean": 0.10429737700505412,
+      "minimum_gap_m": 1.66240731097985,
+      "sweep_m": 1.5309544559202535,
+      "max_beta_deg": 18.885496798003068,
+      "max_yaw_rads": 1.094765,
+      "combustion_kj": 141.7005291164205,
+      "lateral_loss_kj": 21.427250995840936,
+      "longitudinal_loss_kj": 47.18143919082815,
+      "resistance_kj": 23.18304998622888,
+      "clutch_loss_kj": 0.2782953835013092,
+      "energy_residual_J": 0.058140509156880724,
+      "max_front_util": 0.9401684883698035,
+      "max_rear_util": 0.9896855509216349,
+      "max_actual_curvature": 0.04211241952978088,
+      "mean_abs_curvature": 0.016953709821148893,
+      "bend_gas_partial_s": 2.1453392785129317,
+      "fixture": "first",
+      "strategy": "T1",
+      "label": "first-B-T1-refined",
+      "cpu_s": 4.359375,
+      "outcome": "experiment timeout",
+      "source": "docs\\experiments\\line-throttle-physics\\native\\first-B-T1-refined-result.json",
+      "attempt": "docs/experiments/line-throttle-physics/best/first-B-v5.json.gz",
+      "forecast_time_s": 12.12879053222204,
+      "fixture_start": 1.6,
+      "command_changes": 38,
+      "first_T0_difference": 6.6000000000000005,
+      "command_log": "commands/first-B-T1-refined.csv"
+    },
+    {
+      "family": "C",
+      "status": "PASS",
+      "complete": true,
+      "safe": true,
+      "exact_initial": true,
+      "family_achieved": true,
+      "mean_offset_m": 9.158185587116945,
+      "time_s": 13.508601350187352,
+      "observed_prefix_s": 13.508601350187352,
+      "distance_m": 230.456456913598,
+      "mean_speed_kph": 61.415924815743146,
+      "entry_kph": 48.60000547311353,
+      "minimum_kph": 47.1765852,
+      "exit_kph": 64.5284473121909,
+      "bend_time_s": 7.921828996047759,
+      "bend_mean_kph": 56.8973768141069,
+      "bend_gas_zero_s": 2.6666758476376593,
+      "bend_gas_full_s": 0,
+      "bend_gas_mean": 0.21109088420263047,
+      "minimum_gap_m": 0.7526076770273303,
+      "sweep_m": 0.6614876805094356,
+      "max_beta_deg": 28.964639733296718,
+      "max_yaw_rads": 1.6420796,
+      "combustion_kj": 147.9714996774695,
+      "lateral_loss_kj": 18.647983139359845,
+      "longitudinal_loss_kj": 35.72848301155165,
+      "resistance_kj": 25.50062338903212,
+      "clutch_loss_kj": 0.2741692344347053,
+      "energy_residual_J": -0.12957913613968547,
+      "max_front_util": 0.9716672737471214,
+      "max_rear_util": 0.9889520250604316,
+      "max_actual_curvature": 0.03855565459741496,
+      "mean_abs_curvature": 0.019446126323176258,
+      "bend_gas_partial_s": 5.255153148410099,
+      "fixture": "first",
+      "strategy": "T1",
+      "label": "first-C-T1-refined",
+      "cpu_s": 4.453125,
+      "outcome": "experiment timeout",
+      "source": "docs\\experiments\\line-throttle-physics\\native\\first-C-T1-refined-result.json",
+      "attempt": "docs/experiments/line-throttle-physics/best/first-C-v5.json.gz",
+      "forecast_time_s": 13.508424361010317,
+      "fixture_start": 1.6,
+      "command_changes": 33,
+      "first_T0_difference": 11.99999999999999,
+      "command_log": "commands/first-C-T1-refined.csv"
+    },
+    {
+      "family": "B",
+      "status": "PASS",
+      "complete": true,
+      "safe": true,
+      "exact_initial": true,
+      "family_achieved": true,
+      "mean_offset_m": 3.859458974628977,
+      "time_s": 12.950551248818709,
+      "observed_prefix_s": 12.950551248818709,
+      "distance_m": 239.2396494496565,
+      "mean_speed_kph": 66.50394423151091,
+      "entry_kph": 67.53054652769575,
+      "minimum_kph": 58.0519656,
+      "exit_kph": 61.04822102288236,
+      "bend_time_s": 6.219416747947507,
+      "bend_mean_kph": 62.18184411713288,
+      "bend_gas_zero_s": 3.7999999999999865,
+      "bend_gas_full_s": 0.11855820773606496,
+      "bend_gas_mean": 0.13678247649489844,
+      "minimum_gap_m": 0.7956131399088152,
+      "sweep_m": 0.7097011871003026,
+      "max_beta_deg": 34.64958828306882,
+      "max_yaw_rads": 1.916476,
+      "combustion_kj": 110.14963848015611,
+      "lateral_loss_kj": 29.214261006633166,
+      "longitudinal_loss_kj": 16.752561942277154,
+      "resistance_kj": 27.181798333689553,
+      "clutch_loss_kj": 0.19936979136320723,
+      "energy_residual_J": 0.2216140992841627,
+      "max_front_util": 0.9835256641204895,
+      "max_rear_util": 0.9883524313517307,
+      "max_actual_curvature": 0.037114548796514366,
+      "mean_abs_curvature": 0.01891368645958999,
+      "bend_gas_partial_s": 2.300858540211456,
+      "fixture": "second",
+      "strategy": "T1",
+      "label": "second-B-T1-refined",
+      "cpu_s": 6.28125,
+      "outcome": "experiment timeout",
+      "source": "docs\\experiments\\line-throttle-physics\\native\\second-B-T1-refined-result.json",
+      "attempt": "docs/experiments/line-throttle-physics/best/second-B-v5.json.gz",
+      "forecast_time_s": 12.950848321715085,
+      "fixture_start": 10.2,
+      "command_changes": 41,
+      "first_T0_difference": 13.599999999999984,
+      "command_log": "commands/second-B-T1-refined.csv"
+    },
+    {
+      "family": "C",
+      "status": "PASS",
+      "complete": true,
+      "safe": true,
+      "exact_initial": true,
+      "family_achieved": true,
+      "mean_offset_m": 8.718276156821506,
+      "time_s": 12.93238028990482,
+      "observed_prefix_s": 12.93238028990482,
+      "distance_m": 254.266642212445,
+      "mean_speed_kph": 70.7804666616047,
+      "entry_kph": 74.71418136004397,
+      "minimum_kph": 60.6563352,
+      "exit_kph": 67.7245642037699,
+      "bend_time_s": 6.70447945820035,
+      "bend_mean_kph": 65.87401737132039,
+      "bend_gas_zero_s": 3.504479458200363,
+      "bend_gas_full_s": 0,
+      "bend_gas_mean": 0.151877863501326,
+      "minimum_gap_m": 1.9777020350345427,
+      "sweep_m": 1.8819437285051888,
+      "max_beta_deg": 19.209657983838646,
+      "max_yaw_rads": 1.2329108,
+      "combustion_kj": 118.03424447333478,
+      "lateral_loss_kj": 22.07373401082903,
+      "longitudinal_loss_kj": 20.788111218819918,
+      "resistance_kj": 31.220369620635143,
+      "clutch_loss_kj": 0.20902240958939633,
+      "energy_residual_J": 0.0615072781598527,
+      "max_front_util": 0.9282255174371922,
+      "max_rear_util": 0.9627431339102437,
+      "max_actual_curvature": 0.03155897659093577,
+      "mean_abs_curvature": 0.016435278168173126,
+      "bend_gas_partial_s": 3.199999999999987,
+      "fixture": "second",
+      "strategy": "T1",
+      "label": "second-C-T1-refined",
+      "cpu_s": 6.109375,
+      "outcome": "experiment timeout",
+      "source": "docs\\experiments\\line-throttle-physics\\native\\second-C-T1-refined-result.json",
+      "attempt": "docs/experiments/line-throttle-physics/best/second-C-v5.json.gz",
+      "forecast_time_s": 12.932395682158596,
+      "fixture_start": 10.2,
+      "command_changes": 35,
+      "first_T0_difference": 17.39999999999997,
+      "command_log": "commands/second-C-T1-refined.csv"
+    },
+    {
+      "family": "B",
+      "status": "PASS",
+      "complete": true,
+      "safe": true,
+      "exact_initial": true,
+      "family_achieved": true,
+      "mean_offset_m": 3.8111020060429,
+      "time_s": 12.49524169028071,
+      "observed_prefix_s": 12.49524169028071,
+      "distance_m": 252.56570225478413,
+      "mean_speed_kph": 72.76662193933093,
+      "entry_kph": 81.47468624415066,
+      "minimum_kph": 59.314204800000006,
+      "exit_kph": 67.46275880126421,
+      "bend_time_s": 5.980782745288529,
+      "bend_mean_kph": 66.21848447599055,
+      "bend_gas_zero_s": 3.552518171575926,
+      "bend_gas_full_s": 0,
+      "bend_gas_mean": 0.1291955462559343,
+      "minimum_gap_m": 0.9001041579894687,
+      "sweep_m": 0.7821635097466192,
+      "max_beta_deg": 11.41726695821445,
+      "max_yaw_rads": 0.8230978,
+      "combustion_kj": 106.65868977585728,
+      "lateral_loss_kj": 25.02230798301482,
+      "longitudinal_loss_kj": 15.61293973035909,
+      "resistance_kj": 31.871077528168325,
+      "clutch_loss_kj": 0.1777364785148514,
+      "energy_residual_J": -0.049344619032122436,
+      "max_front_util": 0.864193434656952,
+      "max_rear_util": 0.9295985036448156,
+      "max_actual_curvature": 0.03299038125779961,
+      "mean_abs_curvature": 0.016652015896111812,
+      "bend_gas_partial_s": 2.428264573712603,
+      "fixture": "historical",
+      "strategy": "T1",
+      "label": "historical-B-T1-refined",
+      "cpu_s": 14.03125,
+      "outcome": "experiment timeout",
+      "source": "docs\\experiments\\line-throttle-physics\\native\\historical-B-T1-refined-result.json",
+      "attempt": "docs/experiments/line-throttle-physics/best/historical-B-v5.json.gz",
+      "forecast_time_s": 12.49529007790775,
+      "fixture_start": 26.8,
+      "command_changes": 45,
+      "first_T0_difference": 26.799999999999937,
+      "command_log": "commands/historical-B-T1-refined.csv"
+    },
+    {
+      "family": "C",
+      "status": "PASS",
+      "complete": true,
+      "safe": true,
+      "exact_initial": true,
+      "family_achieved": true,
+      "mean_offset_m": 7.638314018443334,
+      "time_s": 12.730008991945322,
+      "observed_prefix_s": 12.730008991945322,
+      "distance_m": 260.9498655179168,
+      "mean_speed_kph": 73.79566789457107,
+      "entry_kph": 81.56222873115652,
+      "minimum_kph": 61.910204400000005,
+      "exit_kph": 68.20797276,
+      "bend_time_s": 6.382225728165157,
+      "bend_mean_kph": 67.59339706470617,
+      "bend_gas_zero_s": 3.7822257281651197,
+      "bend_gas_full_s": 0,
+      "bend_gas_mean": 0.1296315616586419,
+      "minimum_gap_m": 0.9001041579894687,
+      "sweep_m": 0.7821635097466192,
+      "max_beta_deg": 35.289307120488296,
+      "max_yaw_rads": 1.4883186,
+      "combustion_kj": 126.39511360627151,
+      "lateral_loss_kj": 30.842401731166706,
+      "longitudinal_loss_kj": 23.6147228558659,
+      "resistance_kj": 33.689392780772145,
+      "clutch_loss_kj": 0.2140553995993751,
+      "energy_residual_J": -0.14698957858975947,
+      "max_front_util": 0.9751280308822958,
+      "max_rear_util": 0.9887776235500719,
+      "max_actual_curvature": 0.031500495558756426,
+      "mean_abs_curvature": 0.01632854446801388,
+      "bend_gas_partial_s": 2.600000000000037,
+      "fixture": "historical",
+      "strategy": "T1",
+      "label": "historical-C-T1-refined",
+      "cpu_s": 13.359375,
+      "outcome": "experiment timeout",
+      "source": "docs\\experiments\\line-throttle-physics\\native\\historical-C-T1-refined-result.json",
+      "attempt": "docs/experiments/line-throttle-physics/best/historical-C-v5.json.gz",
+      "forecast_time_s": 12.729996860422315,
+      "fixture_start": 26.8,
+      "command_changes": 44,
+      "first_T0_difference": 29.399999999999928,
+      "command_log": "commands/historical-C-T1-refined.csv"
+    },
+    {
+      "family": "B",
+      "status": "PASS",
+      "complete": true,
+      "safe": true,
+      "exact_initial": true,
+      "family_achieved": true,
+      "mean_offset_m": 3.8602267119081968,
+      "time_s": 11.928826600937935,
+      "observed_prefix_s": 11.928826600937935,
+      "distance_m": 210.86459469554626,
+      "mean_speed_kph": 63.63681578239048,
+      "entry_kph": 71.66481999131898,
+      "minimum_kph": 52.792174800000005,
+      "exit_kph": 57.13429716492105,
+      "bend_time_s": 6.54533927851293,
+      "bend_mean_kph": 59.429072177051225,
+      "bend_gas_zero_s": 4.399999999999999,
+      "bend_gas_full_s": 0,
+      "bend_gas_mean": 0.10429737700505412,
+      "minimum_gap_m": 1.66240731097985,
+      "sweep_m": 1.5309544559202535,
+      "max_beta_deg": 18.885496798003068,
+      "max_yaw_rads": 1.094765,
+      "combustion_kj": 132.0488518428586,
+      "lateral_loss_kj": 21.427250995840936,
+      "longitudinal_loss_kj": 42.39944525089286,
+      "resistance_kj": 23.085223180210242,
+      "clutch_loss_kj": 0.25652933126874444,
+      "energy_residual_J": 0.05772948849442615,
+      "max_front_util": 0.9401684883698035,
+      "max_rear_util": 0.9896855509216349,
+      "max_actual_curvature": 0.04211241952978088,
+      "mean_abs_curvature": 0.017237957557968468,
+      "bend_gas_partial_s": 2.1453392785129317,
+      "fixture": "held-first",
+      "strategy": "T1",
+      "label": "held-first-B-refined-final",
+      "cpu_s": 4.375,
+      "outcome": "experiment timeout",
+      "source": "docs\\experiments\\line-throttle-physics\\native\\held-first-B-refined-final-result.json",
+      "attempt": "docs/experiments/line-throttle-physics/held/held-first-B-refined.json.gz",
+      "forecast_time_s": 11.928790532222038,
+      "fixture_start": 1.8,
+      "command_changes": 38,
+      "first_T0_difference": null,
+      "command_log": "commands/held-first-B-refined-final.csv"
+    }
+  ],
+  "generation": [
+    {
+      "fixture": "first",
+      "family": "A",
+      "forecast_time_s": 11.176486182905565,
+      "witness_native_time_s": 11.17588362832534,
+      "delta_s": 0.0006025545802241794,
+      "minimum_gap_m": 0.6326452342979167,
+      "sweep_m": 0.5417774026356215,
+      "max_beta_deg": 17.961908839458435,
+      "status": "FORECAST_ONLY_NO_13_9",
+      "origin": "common156 diagnostic only/A/0"
+    },
+    {
+      "fixture": "first",
+      "family": "B",
+      "forecast_time_s": 12.12879053222204,
+      "witness_native_time_s": 12.128826600937936,
+      "delta_s": -3.6068715896675485e-05,
+      "minimum_gap_m": 1.6617601958804509,
+      "sweep_m": 1.5315285301514254,
+      "max_beta_deg": 21.490609202019726,
+      "status": "FORECAST_ONLY_NO_13_9",
+      "origin": "common156 diagnostic only/B/0"
+    },
+    {
+      "fixture": "first",
+      "family": "C",
+      "forecast_time_s": 13.508424361010317,
+      "witness_native_time_s": 13.508601350187352,
+      "delta_s": -0.00017698917703512507,
+      "minimum_gap_m": 0.7522518744801157,
+      "sweep_m": 0.6611318475042475,
+      "max_beta_deg": 35.80142797452536,
+      "status": "FORECAST_ONLY_NO_13_9",
+      "origin": "common156 diagnostic only/C/0"
+    },
+    {
+      "fixture": "historical",
+      "family": "B",
+      "forecast_time_s": 12.49529007790775,
+      "witness_native_time_s": 12.49524169028071,
+      "delta_s": 4.838762703940347e-05,
+      "minimum_gap_m": 0.9000367723539368,
+      "sweep_m": 0.7820959812089514,
+      "max_beta_deg": 11.414988560239568,
+      "status": "FORECAST_ONLY_NO_13_9",
+      "origin": "common156 diagnostic only/B/0"
+    },
+    {
+      "fixture": "historical",
+      "family": "C",
+      "forecast_time_s": 12.729996860422315,
+      "witness_native_time_s": 12.730008991945322,
+      "delta_s": -1.213152300749698e-05,
+      "minimum_gap_m": 0.9000367723539368,
+      "sweep_m": 0.7820959812089514,
+      "max_beta_deg": 38.92455716832263,
+      "status": "FORECAST_ONLY_NO_13_9",
+      "origin": "common156 diagnostic only/C/0"
+    },
+    {
+      "fixture": "second",
+      "family": "C",
+      "forecast_time_s": 12.932395682158596,
+      "witness_native_time_s": 12.93238028990482,
+      "delta_s": 1.5392253775559084e-05,
+      "minimum_gap_m": 1.9785381487474996,
+      "sweep_m": 1.8827794075251967,
+      "max_beta_deg": 21.476205699098003,
+      "status": "FORECAST_ONLY_NO_13_9",
+      "origin": "common156 diagnostic only/C/0"
+    },
+    {
+      "fixture": "second",
+      "family": "B",
+      "forecast_time_s": 12.950848321715085,
+      "witness_native_time_s": 12.950551248818709,
+      "delta_s": 0.0002970728963767044,
+      "minimum_gap_m": 0.7959134320232809,
+      "sweep_m": 0.7100012824282286,
+      "max_beta_deg": 36.90216304732682,
+      "status": "FORECAST_ONLY_NO_13_9",
+      "origin": "common156 diagnostic only/B/0"
+    }
+  ],
+  "reviews": [
+    {
+      "label": "A-first-v2",
+      "pass_": false,
+      "time": 1.5999999999999999,
+      "reference": 5.441455841064453,
+      "reason": "STUDY157_ABSTAIN: abstain: finite recourse search has no certified complete reserve",
+      "cpu_s": 1.125,
+      "forecasts": 286,
+      "contacts": 5747,
+      "independent_forecasts": 0,
+      "independent_comparisons": 0,
+      "search_hits": 8,
+      "rollout_hits": 0,
+      "K1": 0,
+      "nodes": 0,
+      "reserves": 0,
+      "rejected": 9,
+      "goal": 191.38937497138977,
+      "safety_goal": 350.77874994277954,
+      "profile": {
+        "MeasuredCpuSeconds": 1.125,
+        "Phases": [
+          {
+            "Name": "learned_proposal_physics",
+            "CpuSeconds": 1.0625,
+            "Percent": 94.44444444444444
+          },
+          {
+            "Name": "outside_decision",
+            "CpuSeconds": 0.03125,
+            "Percent": 2.7777777777777777
+          },
+          {
+            "Name": "hierarchical_generation",
+            "CpuSeconds": 0.03125,
+            "Percent": 2.7777777777777777
+          },
+          {
+            "Name": "candidate_generation",
+            "CpuSeconds": 0,
+            "Percent": 0
+          }
+        ],
+        "Operations": [
+          {
+            "Name": "dispatch",
+            "CpuSeconds": 1.125,
+            "Percent": 100
+          }
+        ],
+        "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+      }
+    },
+    {
+      "label": "A-historical-v1",
+      "pass_": true,
+      "time": 26.799999999999937,
+      "reference": 447.8126382892272,
+      "reason": "finite conditional reserve certified",
+      "cpu_s": 1.609375,
+      "forecasts": 1155,
+      "contacts": 23200,
+      "independent_forecasts": 535,
+      "independent_comparisons": 535,
+      "search_hits": 290,
+      "rollout_hits": 0,
+      "K1": 0,
+      "nodes": 13,
+      "reserves": 9,
+      "rejected": 7,
+      "goal": 510.1681249141693,
+      "safety_goal": 669.5574998855591,
+      "profile": {
+        "MeasuredCpuSeconds": 1.609375,
+        "Phases": [
+          {
+            "Name": "conditional_continuations",
+            "CpuSeconds": 0.921875,
+            "Percent": 57.28155339805825
+          },
+          {
+            "Name": "learned_proposal_physics",
+            "CpuSeconds": 0.4375,
+            "Percent": 27.184466019417474
+          },
+          {
+            "Name": "independent_preflight",
+            "CpuSeconds": 0.1875,
+            "Percent": 11.650485436893204
+          },
+          {
+            "Name": "outside_decision",
+            "CpuSeconds": 0.0625,
+            "Percent": 3.883495145631068
+          },
+          {
+            "Name": "hierarchical_generation",
+            "CpuSeconds": 0,
+            "Percent": 0
+          },
+          {
+            "Name": "candidate_generation",
+            "CpuSeconds": 0,
+            "Percent": 0
+          },
+          {
+            "Name": "uncertainty_scenarios",
+            "CpuSeconds": 0,
+            "Percent": 0
+          }
+        ],
+        "Operations": [
+          {
+            "Name": "dispatch",
+            "CpuSeconds": 1.609375,
+            "Percent": 100
+          }
+        ],
+        "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+      }
+    },
+    {
+      "label": "A-second-v1",
+      "pass_": false,
+      "time": 10.199999999999996,
+      "reference": 138.61700558662415,
+      "reason": "STUDY157_ABSTAIN: abstain: finite recourse search has no certified complete reserve",
+      "cpu_s": 0.703125,
+      "forecasts": 218,
+      "contacts": 4380,
+      "independent_forecasts": 0,
+      "independent_comparisons": 0,
+      "search_hits": 8,
+      "rollout_hits": 0,
+      "K1": 0,
+      "nodes": 0,
+      "reserves": 0,
+      "rejected": 9,
+      "goal": 350.77874994277954,
+      "safety_goal": 510.1681249141693,
+      "profile": {
+        "MeasuredCpuSeconds": 0.703125,
+        "Phases": [
+          {
+            "Name": "learned_proposal_physics",
+            "CpuSeconds": 0.625,
+            "Percent": 88.88888888888889
+          },
+          {
+            "Name": "outside_decision",
+            "CpuSeconds": 0.03125,
+            "Percent": 4.444444444444445
+          },
+          {
+            "Name": "hierarchical_generation",
+            "CpuSeconds": 0.03125,
+            "Percent": 4.444444444444445
+          },
+          {
+            "Name": "candidate_generation",
+            "CpuSeconds": 0.015625,
+            "Percent": 2.2222222222222223
+          }
+        ],
+        "Operations": [
+          {
+            "Name": "dispatch",
+            "CpuSeconds": 0.703125,
+            "Percent": 100
+          }
+        ],
+        "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+      }
+    },
+    {
+      "label": "B-held-first-v1",
+      "pass_": false,
+      "time": 1.7999999999999998,
+      "reference": 7.207449913024902,
+      "reason": "STUDY157_ABSTAIN: abstain: finite recourse search has no certified complete reserve",
+      "cpu_s": 0.515625,
+      "forecasts": 137,
+      "contacts": 2756,
+      "independent_forecasts": 0,
+      "independent_comparisons": 0,
+      "search_hits": 8,
+      "rollout_hits": 0,
+      "K1": 0,
+      "nodes": 0,
+      "reserves": 0,
+      "rejected": 9,
+      "goal": 191.38937497138977,
+      "safety_goal": 350.77874994277954,
+      "profile": {
+        "MeasuredCpuSeconds": 0.515625,
+        "Phases": [
+          {
+            "Name": "learned_proposal_physics",
+            "CpuSeconds": 0.46875,
+            "Percent": 90.9090909090909
+          },
+          {
+            "Name": "outside_decision",
+            "CpuSeconds": 0.03125,
+            "Percent": 6.0606060606060606
+          },
+          {
+            "Name": "candidate_generation",
+            "CpuSeconds": 0.015625,
+            "Percent": 3.0303030303030303
+          },
+          {
+            "Name": "hierarchical_generation",
+            "CpuSeconds": 0,
+            "Percent": 0
+          }
+        ],
+        "Operations": [
+          {
+            "Name": "dispatch",
+            "CpuSeconds": 0.515625,
+            "Percent": 100
+          }
+        ],
+        "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+      }
+    },
+    {
+      "label": "B-held-second-v1",
+      "pass_": false,
+      "time": 10.399999999999995,
+      "reference": 141.9797089099884,
+      "reason": "STUDY157_ABSTAIN: abstain: finite recourse search has no certified complete reserve",
+      "cpu_s": 0.640625,
+      "forecasts": 160,
+      "contacts": 3212,
+      "independent_forecasts": 0,
+      "independent_comparisons": 0,
+      "search_hits": 8,
+      "rollout_hits": 0,
+      "K1": 0,
+      "nodes": 0,
+      "reserves": 0,
+      "rejected": 9,
+      "goal": 350.77874994277954,
+      "safety_goal": 510.1681249141693,
+      "profile": {
+        "MeasuredCpuSeconds": 0.640625,
+        "Phases": [
+          {
+            "Name": "learned_proposal_physics",
+            "CpuSeconds": 0.578125,
+            "Percent": 90.2439024390244
+          },
+          {
+            "Name": "outside_decision",
+            "CpuSeconds": 0.03125,
+            "Percent": 4.878048780487805
+          },
+          {
+            "Name": "hierarchical_generation",
+            "CpuSeconds": 0.015625,
+            "Percent": 2.4390243902439024
+          },
+          {
+            "Name": "candidate_generation",
+            "CpuSeconds": 0.015625,
+            "Percent": 2.4390243902439024
+          }
+        ],
+        "Operations": [
+          {
+            "Name": "dispatch",
+            "CpuSeconds": 0.640625,
+            "Percent": 100
+          }
+        ],
+        "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+      }
+    },
+    {
+      "label": "B-perturb-v1-position--1",
+      "pass_": true,
+      "time": 26.799999999999937,
+      "reference": 447.8126382892272,
+      "reason": "finite conditional reserve certified",
+      "cpu_s": 0.375,
+      "forecasts": 1154,
+      "contacts": 23168,
+      "independent_forecasts": 535,
+      "independent_comparisons": 535,
+      "search_hits": 290,
+      "rollout_hits": 0,
+      "K1": 0,
+      "nodes": 13,
+      "reserves": 9,
+      "rejected": 7,
+      "goal": 510.1681249141693,
+      "safety_goal": 669.5574998855591,
+      "profile": {
+        "MeasuredCpuSeconds": 0.375,
+        "Phases": [
+          {
+            "Name": "independent_preflight",
+            "CpuSeconds": 0.203125,
+            "Percent": 54.166666666666664
+          },
+          {
+            "Name": "conditional_continuations",
+            "CpuSeconds": 0.140625,
+            "Percent": 37.5
+          },
+          {
+            "Name": "learned_proposal_physics",
+            "CpuSeconds": 0.03125,
+            "Percent": 8.333333333333334
+          },
+          {
+            "Name": "outside_decision",
+            "CpuSeconds": 0,
+            "Percent": 0
+          },
+          {
+            "Name": "hierarchical_generation",
+            "CpuSeconds": 0,
+            "Percent": 0
+          },
+          {
+            "Name": "candidate_generation",
+            "CpuSeconds": 0,
+            "Percent": 0
+          },
+          {
+            "Name": "uncertainty_scenarios",
+            "CpuSeconds": 0,
+            "Percent": 0
+          }
+        ],
+        "Operations": [
+          {
+            "Name": "dispatch",
+            "CpuSeconds": 0.375,
+            "Percent": 100
+          }
+        ],
+        "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+      }
+    },
+    {
+      "label": "B-perturb-v1-position-1",
+      "pass_": true,
+      "time": 26.799999999999937,
+      "reference": 447.8126382892272,
+      "reason": "finite conditional reserve certified",
+      "cpu_s": 0.375,
+      "forecasts": 1155,
+      "contacts": 23196,
+      "independent_forecasts": 535,
+      "independent_comparisons": 535,
+      "search_hits": 290,
+      "rollout_hits": 0,
+      "K1": 0,
+      "nodes": 13,
+      "reserves": 9,
+      "rejected": 7,
+      "goal": 510.1681249141693,
+      "safety_goal": 669.5574998855591,
+      "profile": {
+        "MeasuredCpuSeconds": 0.375,
+        "Phases": [
+          {
+            "Name": "independent_preflight",
+            "CpuSeconds": 0.171875,
+            "Percent": 45.833333333333336
+          },
+          {
+            "Name": "conditional_continuations",
+            "CpuSeconds": 0.109375,
+            "Percent": 29.166666666666668
+          },
+          {
+            "Name": "learned_proposal_physics",
+            "CpuSeconds": 0.078125,
+            "Percent": 20.833333333333332
+          },
+          {
+            "Name": "outside_decision",
+            "CpuSeconds": 0.015625,
+            "Percent": 4.166666666666667
+          },
+          {
+            "Name": "hierarchical_generation",
+            "CpuSeconds": 0,
+            "Percent": 0
+          },
+          {
+            "Name": "candidate_generation",
+            "CpuSeconds": 0,
+            "Percent": 0
+          },
+          {
+            "Name": "uncertainty_scenarios",
+            "CpuSeconds": 0,
+            "Percent": 0
+          }
+        ],
+        "Operations": [
+          {
+            "Name": "dispatch",
+            "CpuSeconds": 0.375,
+            "Percent": 100
+          }
+        ],
+        "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+      }
+    },
+    {
+      "label": "B-perturb-v1-velocity--1",
+      "pass_": true,
+      "time": 26.799999999999937,
+      "reference": 447.8126382892272,
+      "reason": "finite conditional reserve certified",
+      "cpu_s": 1.609375,
+      "forecasts": 1164,
+      "contacts": 23376,
+      "independent_forecasts": 535,
+      "independent_comparisons": 535,
+      "search_hits": 290,
+      "rollout_hits": 0,
+      "K1": 0,
+      "nodes": 13,
+      "reserves": 9,
+      "rejected": 7,
+      "goal": 510.1681249141693,
+      "safety_goal": 669.5574998855591,
+      "profile": {
+        "MeasuredCpuSeconds": 1.609375,
+        "Phases": [
+          {
+            "Name": "conditional_continuations",
+            "CpuSeconds": 0.796875,
+            "Percent": 49.51456310679612
+          },
+          {
+            "Name": "learned_proposal_physics",
+            "CpuSeconds": 0.46875,
+            "Percent": 29.12621359223301
+          },
+          {
+            "Name": "independent_preflight",
+            "CpuSeconds": 0.171875,
+            "Percent": 10.679611650485437
+          },
+          {
+            "Name": "outside_decision",
+            "CpuSeconds": 0.15625,
+            "Percent": 9.70873786407767
+          },
+          {
+            "Name": "candidate_generation",
+            "CpuSeconds": 0.015625,
+            "Percent": 0.970873786407767
+          },
+          {
+            "Name": "hierarchical_generation",
+            "CpuSeconds": 0,
+            "Percent": 0
+          },
+          {
+            "Name": "uncertainty_scenarios",
+            "CpuSeconds": 0,
+            "Percent": 0
+          }
+        ],
+        "Operations": [
+          {
+            "Name": "dispatch",
+            "CpuSeconds": 1.609375,
+            "Percent": 100
+          }
+        ],
+        "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+      }
+    },
+    {
+      "label": "B-perturb-v1-velocity-1",
+      "pass_": true,
+      "time": 26.799999999999937,
+      "reference": 447.8126382892272,
+      "reason": "finite conditional reserve certified",
+      "cpu_s": 0.578125,
+      "forecasts": 1153,
+      "contacts": 23157,
+      "independent_forecasts": 535,
+      "independent_comparisons": 535,
+      "search_hits": 290,
+      "rollout_hits": 0,
+      "K1": 0,
+      "nodes": 13,
+      "reserves": 9,
+      "rejected": 7,
+      "goal": 510.1681249141693,
+      "safety_goal": 669.5574998855591,
+      "profile": {
+        "MeasuredCpuSeconds": 0.578125,
+        "Phases": [
+          {
+            "Name": "independent_preflight",
+            "CpuSeconds": 0.3125,
+            "Percent": 54.054054054054056
+          },
+          {
+            "Name": "conditional_continuations",
+            "CpuSeconds": 0.203125,
+            "Percent": 35.13513513513514
+          },
+          {
+            "Name": "learned_proposal_physics",
+            "CpuSeconds": 0.046875,
+            "Percent": 8.108108108108109
+          },
+          {
+            "Name": "outside_decision",
+            "CpuSeconds": 0.015625,
+            "Percent": 2.7027027027027026
+          },
+          {
+            "Name": "hierarchical_generation",
+            "CpuSeconds": 0,
+            "Percent": 0
+          },
+          {
+            "Name": "candidate_generation",
+            "CpuSeconds": 0,
+            "Percent": 0
+          },
+          {
+            "Name": "uncertainty_scenarios",
+            "CpuSeconds": 0,
+            "Percent": 0
+          }
+        ],
+        "Operations": [
+          {
+            "Name": "dispatch",
+            "CpuSeconds": 0.578125,
+            "Percent": 100
+          }
+        ],
+        "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+      }
+    },
+    {
+      "label": "B-perturb-v1-yaw--1",
+      "pass_": true,
+      "time": 26.799999999999937,
+      "reference": 447.8126382892272,
+      "reason": "finite conditional reserve certified",
+      "cpu_s": 0.421875,
+      "forecasts": 1154,
+      "contacts": 23171,
+      "independent_forecasts": 535,
+      "independent_comparisons": 535,
+      "search_hits": 290,
+      "rollout_hits": 0,
+      "K1": 0,
+      "nodes": 13,
+      "reserves": 9,
+      "rejected": 7,
+      "goal": 510.1681249141693,
+      "safety_goal": 669.5574998855591,
+      "profile": {
+        "MeasuredCpuSeconds": 0.421875,
+        "Phases": [
+          {
+            "Name": "independent_preflight",
+            "CpuSeconds": 0.203125,
+            "Percent": 48.148148148148145
+          },
+          {
+            "Name": "conditional_continuations",
+            "CpuSeconds": 0.140625,
+            "Percent": 33.333333333333336
+          },
+          {
+            "Name": "outside_decision",
+            "CpuSeconds": 0.03125,
+            "Percent": 7.407407407407407
+          },
+          {
+            "Name": "learned_proposal_physics",
+            "CpuSeconds": 0.03125,
+            "Percent": 7.407407407407407
+          },
+          {
+            "Name": "hierarchical_generation",
+            "CpuSeconds": 0.015625,
+            "Percent": 3.7037037037037037
+          },
+          {
+            "Name": "candidate_generation",
+            "CpuSeconds": 0,
+            "Percent": 0
+          },
+          {
+            "Name": "uncertainty_scenarios",
+            "CpuSeconds": 0,
+            "Percent": 0
+          }
+        ],
+        "Operations": [
+          {
+            "Name": "dispatch",
+            "CpuSeconds": 0.421875,
+            "Percent": 100
+          }
+        ],
+        "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+      }
+    },
+    {
+      "label": "B-perturb-v1-yaw-1",
+      "pass_": true,
+      "time": 26.799999999999937,
+      "reference": 447.8126382892272,
+      "reason": "finite conditional reserve certified",
+      "cpu_s": 0.4375,
+      "forecasts": 1164,
+      "contacts": 23370,
+      "independent_forecasts": 535,
+      "independent_comparisons": 535,
+      "search_hits": 290,
+      "rollout_hits": 0,
+      "K1": 0,
+      "nodes": 13,
+      "reserves": 9,
+      "rejected": 7,
+      "goal": 510.1681249141693,
+      "safety_goal": 669.5574998855591,
+      "profile": {
+        "MeasuredCpuSeconds": 0.4375,
+        "Phases": [
+          {
+            "Name": "conditional_continuations",
+            "CpuSeconds": 0.1875,
+            "Percent": 42.857142857142854
+          },
+          {
+            "Name": "independent_preflight",
+            "CpuSeconds": 0.140625,
+            "Percent": 32.142857142857146
+          },
+          {
+            "Name": "learned_proposal_physics",
+            "CpuSeconds": 0.0625,
+            "Percent": 14.285714285714286
+          },
+          {
+            "Name": "hierarchical_generation",
+            "CpuSeconds": 0.03125,
+            "Percent": 7.142857142857143
+          },
+          {
+            "Name": "outside_decision",
+            "CpuSeconds": 0.015625,
+            "Percent": 3.5714285714285716
+          },
+          {
+            "Name": "candidate_generation",
+            "CpuSeconds": 0,
+            "Percent": 0
+          },
+          {
+            "Name": "uncertainty_scenarios",
+            "CpuSeconds": 0,
+            "Percent": 0
+          }
+        ],
+        "Operations": [
+          {
+            "Name": "dispatch",
+            "CpuSeconds": 0.4375,
+            "Percent": 100
+          }
+        ],
+        "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+      }
+    },
+    {
+      "label": "native-A-historical-v1/decision-0000",
+      "pass_": true,
+      "time": 26.799999999999937,
+      "reference": 447.8126382892272,
+      "reason": "finite conditional reserve certified",
+      "cpu_s": 1.46875,
+      "forecasts": 1155,
+      "contacts": 23200,
+      "independent_forecasts": 535,
+      "independent_comparisons": 535,
+      "search_hits": 290,
+      "rollout_hits": 0,
+      "K1": 0,
+      "nodes": 13,
+      "reserves": 9,
+      "rejected": 7,
+      "goal": 510.1681249141693,
+      "safety_goal": 669.5574998855591,
+      "profile": {
+        "MeasuredCpuSeconds": 1.46875,
+        "Phases": [
+          {
+            "Name": "conditional_continuations",
+            "CpuSeconds": 0.75,
+            "Percent": 51.06382978723404
+          },
+          {
+            "Name": "independent_preflight",
+            "CpuSeconds": 0.421875,
+            "Percent": 28.72340425531915
+          },
+          {
+            "Name": "learned_proposal_physics",
+            "CpuSeconds": 0.1875,
+            "Percent": 12.76595744680851
+          },
+          {
+            "Name": "outside_decision",
+            "CpuSeconds": 0.109375,
+            "Percent": 7.446808510638298
+          },
+          {
+            "Name": "hierarchical_generation",
+            "CpuSeconds": 0,
+            "Percent": 0
+          },
+          {
+            "Name": "candidate_generation",
+            "CpuSeconds": 0,
+            "Percent": 0
+          },
+          {
+            "Name": "uncertainty_scenarios",
+            "CpuSeconds": 0,
+            "Percent": 0
+          }
+        ],
+        "Operations": [
+          {
+            "Name": "dispatch",
+            "CpuSeconds": 1.46875,
+            "Percent": 100
+          }
+        ],
+        "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+      }
+    },
+    {
+      "label": "native-A-historical-v1/decision-0001",
+      "pass_": true,
+      "time": 26.999999999999936,
+      "reference": 451.41987586021423,
+      "reason": "finite conditional reserve certified",
+      "cpu_s": 0.421875,
+      "forecasts": 2207,
+      "contacts": 44324,
+      "independent_forecasts": 1061,
+      "independent_comparisons": 1061,
+      "search_hits": 536,
+      "rollout_hits": 0,
+      "K1": 0,
+      "nodes": 13,
+      "reserves": 9,
+      "rejected": 0,
+      "goal": 510.1681249141693,
+      "safety_goal": 669.5574998855591,
+      "profile": {
+        "MeasuredCpuSeconds": 0.421875,
+        "Phases": [
+          {
+            "Name": "independent_preflight",
+            "CpuSeconds": 0.25,
+            "Percent": 59.25925925925926
+          },
+          {
+            "Name": "conditional_continuations",
+            "CpuSeconds": 0.140625,
+            "Percent": 33.333333333333336
+          },
+          {
+            "Name": "outside_decision",
+            "CpuSeconds": 0.015625,
+            "Percent": 3.7037037037037037
+          },
+          {
+            "Name": "recertification",
+            "CpuSeconds": 0.015625,
+            "Percent": 3.7037037037037037
+          },
+          {
+            "Name": "candidate_generation",
+            "CpuSeconds": 0,
+            "Percent": 0
+          },
+          {
+            "Name": "uncertainty_scenarios",
+            "CpuSeconds": 0,
+            "Percent": 0
+          }
+        ],
+        "Operations": [
+          {
+            "Name": "dispatch",
+            "CpuSeconds": 0.421875,
+            "Percent": 100
+          }
+        ],
+        "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+      }
+    },
+    {
+      "label": "native-A-historical-v1/decision-0002",
+      "pass_": true,
+      "time": 27.199999999999935,
+      "reference": 455.4653127193451,
+      "reason": "finite conditional reserve certified",
+      "cpu_s": 0.390625,
+      "forecasts": 3241,
+      "contacts": 65088,
+      "independent_forecasts": 1578,
+      "independent_comparisons": 1578,
+      "search_hits": 778,
+      "rollout_hits": 0,
+      "K1": 0,
+      "nodes": 13,
+      "reserves": 9,
+      "rejected": 0,
+      "goal": 510.1681249141693,
+      "safety_goal": 669.5574998855591,
+      "profile": {
+        "MeasuredCpuSeconds": 0.390625,
+        "Phases": [
+          {
+            "Name": "conditional_continuations",
+            "CpuSeconds": 0.21875,
+            "Percent": 56
+          },
+          {
+            "Name": "independent_preflight",
+            "CpuSeconds": 0.125,
+            "Percent": 32
+          },
+          {
+            "Name": "recertification",
+            "CpuSeconds": 0.03125,
+            "Percent": 8
+          },
+          {
+            "Name": "outside_decision",
+            "CpuSeconds": 0.015625,
+            "Percent": 4
+          },
+          {
+            "Name": "candidate_generation",
+            "CpuSeconds": 0,
+            "Percent": 0
+          },
+          {
+            "Name": "uncertainty_scenarios",
+            "CpuSeconds": 0,
+            "Percent": 0
+          }
+        ],
+        "Operations": [
+          {
+            "Name": "dispatch",
+            "CpuSeconds": 0.390625,
+            "Percent": 100
+          }
+        ],
+        "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+      }
+    },
+    {
+      "label": "native-A-historical-v1/decision-0003",
+      "pass_": true,
+      "time": 27.399999999999935,
+      "reference": 459.4989106655121,
+      "reason": "finite conditional reserve certified",
+      "cpu_s": 0.375,
+      "forecasts": 4257,
+      "contacts": 85488,
+      "independent_forecasts": 2086,
+      "independent_comparisons": 2086,
+      "search_hits": 1016,
+      "rollout_hits": 0,
+      "K1": 0,
+      "nodes": 13,
+      "reserves": 9,
+      "rejected": 0,
+      "goal": 510.1681249141693,
+      "safety_goal": 669.5574998855591,
+      "profile": {
+        "MeasuredCpuSeconds": 0.375,
+        "Phases": [
+          {
+            "Name": "conditional_continuations",
+            "CpuSeconds": 0.171875,
+            "Percent": 45.833333333333336
+          },
+          {
+            "Name": "independent_preflight",
+            "CpuSeconds": 0.171875,
+            "Percent": 45.833333333333336
+          },
+          {
+            "Name": "recertification",
+            "CpuSeconds": 0.03125,
+            "Percent": 8.333333333333334
+          },
+          {
+            "Name": "outside_decision",
+            "CpuSeconds": 0,
+            "Percent": 0
+          },
+          {
+            "Name": "candidate_generation",
+            "CpuSeconds": 0,
+            "Percent": 0
+          },
+          {
+            "Name": "uncertainty_scenarios",
+            "CpuSeconds": 0,
+            "Percent": 0
+          }
+        ],
+        "Operations": [
+          {
+            "Name": "dispatch",
+            "CpuSeconds": 0.375,
+            "Percent": 100
+          }
+        ],
+        "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+      }
+    },
+    {
+      "label": "native-A-window-v1/abstain",
+      "pass_": false,
+      "time": 29.799999999999926,
+      "reference": 511.21324706077576,
+      "reason": "STUDY157_ABSTAIN: abstain: finite recourse search has no certified complete reserve",
+      "cpu_s": 0.078125,
+      "forecasts": 14472,
+      "contacts": 290677,
+      "independent_forecasts": 7080,
+      "independent_comparisons": 7080,
+      "search_hits": 3379,
+      "rollout_hits": 0,
+      "K1": 0,
+      "nodes": 0,
+      "reserves": 0,
+      "rejected": 9,
+      "goal": 669.5574998855591,
+      "safety_goal": 828.9468748569489,
+      "profile": {
+        "MeasuredCpuSeconds": 0.078125,
+        "Phases": [
+          {
+            "Name": "learned_proposal_physics",
+            "CpuSeconds": 0.0625,
+            "Percent": 80
+          },
+          {
+            "Name": "hierarchical_generation",
+            "CpuSeconds": 0.015625,
+            "Percent": 20
+          },
+          {
+            "Name": "outside_decision",
+            "CpuSeconds": 0,
+            "Percent": 0
+          },
+          {
+            "Name": "candidate_generation",
+            "CpuSeconds": 0,
+            "Percent": 0
+          }
+        ],
+        "Operations": [
+          {
+            "Name": "dispatch",
+            "CpuSeconds": 0.078125,
+            "Percent": 100
+          }
+        ],
+        "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+      }
+    },
+    {
+      "label": "native-A-window-v1/decision-0000",
+      "pass_": true,
+      "time": 26.799999999999937,
+      "reference": 447.8126382892272,
+      "reason": "finite conditional reserve certified",
+      "cpu_s": 1.46875,
+      "forecasts": 1155,
+      "contacts": 23200,
+      "independent_forecasts": 535,
+      "independent_comparisons": 535,
+      "search_hits": 290,
+      "rollout_hits": 0,
+      "K1": 0,
+      "nodes": 13,
+      "reserves": 9,
+      "rejected": 7,
+      "goal": 510.1681249141693,
+      "safety_goal": 669.5574998855591,
+      "profile": {
+        "MeasuredCpuSeconds": 1.46875,
+        "Phases": [
+          {
+            "Name": "conditional_continuations",
+            "CpuSeconds": 0.6875,
+            "Percent": 46.808510638297875
+          },
+          {
+            "Name": "independent_preflight",
+            "CpuSeconds": 0.5,
+            "Percent": 34.04255319148936
+          },
+          {
+            "Name": "learned_proposal_physics",
+            "CpuSeconds": 0.1875,
+            "Percent": 12.76595744680851
+          },
+          {
+            "Name": "outside_decision",
+            "CpuSeconds": 0.09375,
+            "Percent": 6.382978723404255
+          },
+          {
+            "Name": "hierarchical_generation",
+            "CpuSeconds": 0,
+            "Percent": 0
+          },
+          {
+            "Name": "candidate_generation",
+            "CpuSeconds": 0,
+            "Percent": 0
+          },
+          {
+            "Name": "uncertainty_scenarios",
+            "CpuSeconds": 0,
+            "Percent": 0
+          }
+        ],
+        "Operations": [
+          {
+            "Name": "dispatch",
+            "CpuSeconds": 1.46875,
+            "Percent": 100
+          }
+        ],
+        "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+      }
+    },
+    {
+      "label": "native-A-window-v1/decision-0001",
+      "pass_": true,
+      "time": 26.999999999999936,
+      "reference": 451.41987586021423,
+      "reason": "finite conditional reserve certified",
+      "cpu_s": 0.3125,
+      "forecasts": 2207,
+      "contacts": 44324,
+      "independent_forecasts": 1061,
+      "independent_comparisons": 1061,
+      "search_hits": 536,
+      "rollout_hits": 0,
+      "K1": 0,
+      "nodes": 13,
+      "reserves": 9,
+      "rejected": 0,
+      "goal": 510.1681249141693,
+      "safety_goal": 669.5574998855591,
+      "profile": {
+        "MeasuredCpuSeconds": 0.3125,
+        "Phases": [
+          {
+            "Name": "conditional_continuations",
+            "CpuSeconds": 0.125,
+            "Percent": 40
+          },
+          {
+            "Name": "independent_preflight",
+            "CpuSeconds": 0.109375,
+            "Percent": 35
+          },
+          {
+            "Name": "outside_decision",
+            "CpuSeconds": 0.046875,
+            "Percent": 15
+          },
+          {
+            "Name": "recertification",
+            "CpuSeconds": 0.03125,
+            "Percent": 10
+          },
+          {
+            "Name": "candidate_generation",
+            "CpuSeconds": 0,
+            "Percent": 0
+          },
+          {
+            "Name": "uncertainty_scenarios",
+            "CpuSeconds": 0,
+            "Percent": 0
+          }
+        ],
+        "Operations": [
+          {
+            "Name": "dispatch",
+            "CpuSeconds": 0.3125,
+            "Percent": 100
+          }
+        ],
+        "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+      }
+    },
+    {
+      "label": "native-A-window-v1/decision-0002",
+      "pass_": true,
+      "time": 27.199999999999935,
+      "reference": 455.4653127193451,
+      "reason": "finite conditional reserve certified",
+      "cpu_s": 0.46875,
+      "forecasts": 3241,
+      "contacts": 65088,
+      "independent_forecasts": 1578,
+      "independent_comparisons": 1578,
+      "search_hits": 778,
+      "rollout_hits": 0,
+      "K1": 0,
+      "nodes": 13,
+      "reserves": 9,
+      "rejected": 0,
+      "goal": 510.1681249141693,
+      "safety_goal": 669.5574998855591,
+      "profile": {
+        "MeasuredCpuSeconds": 0.46875,
+        "Phases": [
+          {
+            "Name": "independent_preflight",
+            "CpuSeconds": 0.234375,
+            "Percent": 50
+          },
+          {
+            "Name": "conditional_continuations",
+            "CpuSeconds": 0.171875,
+            "Percent": 36.666666666666664
+          },
+          {
+            "Name": "outside_decision",
+            "CpuSeconds": 0.03125,
+            "Percent": 6.666666666666667
+          },
+          {
+            "Name": "recertification",
+            "CpuSeconds": 0.03125,
+            "Percent": 6.666666666666667
+          },
+          {
+            "Name": "candidate_generation",
+            "CpuSeconds": 0,
+            "Percent": 0
+          },
+          {
+            "Name": "uncertainty_scenarios",
+            "CpuSeconds": 0,
+            "Percent": 0
+          }
+        ],
+        "Operations": [
+          {
+            "Name": "dispatch",
+            "CpuSeconds": 0.46875,
+            "Percent": 100
+          }
+        ],
+        "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+      }
+    },
+    {
+      "label": "native-A-window-v1/decision-0003",
+      "pass_": true,
+      "time": 27.399999999999935,
+      "reference": 459.4989106655121,
+      "reason": "finite conditional reserve certified",
+      "cpu_s": 0.3125,
+      "forecasts": 4257,
+      "contacts": 85488,
+      "independent_forecasts": 2086,
+      "independent_comparisons": 2086,
+      "search_hits": 1016,
+      "rollout_hits": 0,
+      "K1": 0,
+      "nodes": 13,
+      "reserves": 9,
+      "rejected": 0,
+      "goal": 510.1681249141693,
+      "safety_goal": 669.5574998855591,
+      "profile": {
+        "MeasuredCpuSeconds": 0.3125,
+        "Phases": [
+          {
+            "Name": "conditional_continuations",
+            "CpuSeconds": 0.15625,
+            "Percent": 50
+          },
+          {
+            "Name": "independent_preflight",
+            "CpuSeconds": 0.125,
+            "Percent": 40
+          },
+          {
+            "Name": "outside_decision",
+            "CpuSeconds": 0.015625,
+            "Percent": 5
+          },
+          {
+            "Name": "recertification",
+            "CpuSeconds": 0.015625,
+            "Percent": 5
+          },
+          {
+            "Name": "candidate_generation",
+            "CpuSeconds": 0,
+            "Percent": 0
+          },
+          {
+            "Name": "uncertainty_scenarios",
+            "CpuSeconds": 0,
+            "Percent": 0
+          }
+        ],
+        "Operations": [
+          {
+            "Name": "dispatch",
+            "CpuSeconds": 0.3125,
+            "Percent": 100
+          }
+        ],
+        "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+      }
+    },
+    {
+      "label": "native-A-window-v1/decision-0004",
+      "pass_": true,
+      "time": 27.599999999999934,
+      "reference": 463.49337935447693,
+      "reason": "finite conditional reserve certified",
+      "cpu_s": 0.328125,
+      "forecasts": 5255,
+      "contacts": 105530,
+      "independent_forecasts": 2585,
+      "independent_comparisons": 2585,
+      "search_hits": 1250,
+      "rollout_hits": 0,
+      "K1": 0,
+      "nodes": 13,
+      "reserves": 9,
+      "rejected": 0,
+      "goal": 510.1681249141693,
+      "safety_goal": 669.5574998855591,
+      "profile": {
+        "MeasuredCpuSeconds": 0.328125,
+        "Phases": [
+          {
+            "Name": "conditional_continuations",
+            "CpuSeconds": 0.15625,
+            "Percent": 47.61904761904762
+          },
+          {
+            "Name": "independent_preflight",
+            "CpuSeconds": 0.125,
+            "Percent": 38.095238095238095
+          },
+          {
+            "Name": "recertification",
+            "CpuSeconds": 0.03125,
+            "Percent": 9.523809523809524
+          },
+          {
+            "Name": "outside_decision",
+            "CpuSeconds": 0.015625,
+            "Percent": 4.761904761904762
+          },
+          {
+            "Name": "candidate_generation",
+            "CpuSeconds": 0,
+            "Percent": 0
+          },
+          {
+            "Name": "uncertainty_scenarios",
+            "CpuSeconds": 0,
+            "Percent": 0
+          }
+        ],
+        "Operations": [
+          {
+            "Name": "dispatch",
+            "CpuSeconds": 0.328125,
+            "Percent": 100
+          }
+        ],
+        "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+      }
+    },
+    {
+      "label": "native-A-window-v1/decision-0005",
+      "pass_": true,
+      "time": 27.799999999999933,
+      "reference": 467.49275374412537,
+      "reason": "finite conditional reserve certified",
+      "cpu_s": 0.3125,
+      "forecasts": 6235,
+      "contacts": 125212,
+      "independent_forecasts": 3075,
+      "independent_comparisons": 3075,
+      "search_hits": 1480,
+      "rollout_hits": 0,
+      "K1": 0,
+      "nodes": 13,
+      "reserves": 9,
+      "rejected": 0,
+      "goal": 510.1681249141693,
+      "safety_goal": 669.5574998855591,
+      "profile": {
+        "MeasuredCpuSeconds": 0.3125,
+        "Phases": [
+          {
+            "Name": "independent_preflight",
+            "CpuSeconds": 0.15625,
+            "Percent": 50
+          },
+          {
+            "Name": "conditional_continuations",
+            "CpuSeconds": 0.140625,
+            "Percent": 45
+          },
+          {
+            "Name": "recertification",
+            "CpuSeconds": 0.015625,
+            "Percent": 5
+          },
+          {
+            "Name": "outside_decision",
+            "CpuSeconds": 0,
+            "Percent": 0
+          },
+          {
+            "Name": "candidate_generation",
+            "CpuSeconds": 0,
+            "Percent": 0
+          },
+          {
+            "Name": "uncertainty_scenarios",
+            "CpuSeconds": 0,
+            "Percent": 0
+          }
+        ],
+        "Operations": [
+          {
+            "Name": "dispatch",
+            "CpuSeconds": 0.3125,
+            "Percent": 100
+          }
+        ],
+        "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+      }
+    },
+    {
+      "label": "native-A-window-v1/decision-0006",
+      "pass_": true,
+      "time": 27.999999999999932,
+      "reference": 471.4946162700653,
+      "reason": "finite conditional reserve certified",
+      "cpu_s": 0.328125,
+      "forecasts": 7197,
+      "contacts": 144536,
+      "independent_forecasts": 3556,
+      "independent_comparisons": 3556,
+      "search_hits": 1706,
+      "rollout_hits": 0,
+      "K1": 0,
+      "nodes": 13,
+      "reserves": 9,
+      "rejected": 0,
+      "goal": 510.1681249141693,
+      "safety_goal": 669.5574998855591,
+      "profile": {
+        "MeasuredCpuSeconds": 0.328125,
+        "Phases": [
+          {
+            "Name": "conditional_continuations",
+            "CpuSeconds": 0.125,
+            "Percent": 38.095238095238095
+          },
+          {
+            "Name": "independent_preflight",
+            "CpuSeconds": 0.125,
+            "Percent": 38.095238095238095
+          },
+          {
+            "Name": "outside_decision",
+            "CpuSeconds": 0.0625,
+            "Percent": 19.047619047619047
+          },
+          {
+            "Name": "recertification",
+            "CpuSeconds": 0.015625,
+            "Percent": 4.761904761904762
+          },
+          {
+            "Name": "candidate_generation",
+            "CpuSeconds": 0,
+            "Percent": 0
+          },
+          {
+            "Name": "uncertainty_scenarios",
+            "CpuSeconds": 0,
+            "Percent": 0
+          }
+        ],
+        "Operations": [
+          {
+            "Name": "dispatch",
+            "CpuSeconds": 0.328125,
+            "Percent": 100
+          }
+        ],
+        "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+      }
+    },
+    {
+      "label": "native-A-window-v1/decision-0007",
+      "pass_": true,
+      "time": 28.199999999999932,
+      "reference": 475.5514495372772,
+      "reason": "finite conditional reserve certified",
+      "cpu_s": 0.3125,
+      "forecasts": 8141,
+      "contacts": 163494,
+      "independent_forecasts": 4028,
+      "independent_comparisons": 4028,
+      "search_hits": 1928,
+      "rollout_hits": 0,
+      "K1": 0,
+      "nodes": 13,
+      "reserves": 9,
+      "rejected": 0,
+      "goal": 510.1681249141693,
+      "safety_goal": 669.5574998855591,
+      "profile": {
+        "MeasuredCpuSeconds": 0.3125,
+        "Phases": [
+          {
+            "Name": "independent_preflight",
+            "CpuSeconds": 0.140625,
+            "Percent": 45
+          },
+          {
+            "Name": "conditional_continuations",
+            "CpuSeconds": 0.125,
+            "Percent": 40
+          },
+          {
+            "Name": "recertification",
+            "CpuSeconds": 0.046875,
+            "Percent": 15
+          },
+          {
+            "Name": "outside_decision",
+            "CpuSeconds": 0,
+            "Percent": 0
+          },
+          {
+            "Name": "candidate_generation",
+            "CpuSeconds": 0,
+            "Percent": 0
+          },
+          {
+            "Name": "uncertainty_scenarios",
+            "CpuSeconds": 0,
+            "Percent": 0
+          }
+        ],
+        "Operations": [
+          {
+            "Name": "dispatch",
+            "CpuSeconds": 0.3125,
+            "Percent": 100
+          }
+        ],
+        "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+      }
+    },
+    {
+      "label": "native-A-window-v1/decision-0008",
+      "pass_": true,
+      "time": 28.39999999999993,
+      "reference": 479.6979057788849,
+      "reason": "finite conditional reserve certified",
+      "cpu_s": 0.28125,
+      "forecasts": 9067,
+      "contacts": 182094,
+      "independent_forecasts": 4491,
+      "independent_comparisons": 4491,
+      "search_hits": 2146,
+      "rollout_hits": 0,
+      "K1": 0,
+      "nodes": 13,
+      "reserves": 9,
+      "rejected": 0,
+      "goal": 510.1681249141693,
+      "safety_goal": 669.5574998855591,
+      "profile": {
+        "MeasuredCpuSeconds": 0.28125,
+        "Phases": [
+          {
+            "Name": "independent_preflight",
+            "CpuSeconds": 0.140625,
+            "Percent": 50
+          },
+          {
+            "Name": "conditional_continuations",
+            "CpuSeconds": 0.125,
+            "Percent": 44.44444444444444
+          },
+          {
+            "Name": "recertification",
+            "CpuSeconds": 0.015625,
+            "Percent": 5.555555555555555
+          },
+          {
+            "Name": "outside_decision",
+            "CpuSeconds": 0,
+            "Percent": 0
+          },
+          {
+            "Name": "candidate_generation",
+            "CpuSeconds": 0,
+            "Percent": 0
+          },
+          {
+            "Name": "uncertainty_scenarios",
+            "CpuSeconds": 0,
+            "Percent": 0
+          }
+        ],
+        "Operations": [
+          {
+            "Name": "dispatch",
+            "CpuSeconds": 0.28125,
+            "Percent": 100
+          }
+        ],
+        "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+      }
+    },
+    {
+      "label": "native-A-window-v1/decision-0009",
+      "pass_": true,
+      "time": 28.59999999999993,
+      "reference": 484.02540922164917,
+      "reason": "finite conditional reserve certified",
+      "cpu_s": 0.28125,
+      "forecasts": 9975,
+      "contacts": 200338,
+      "independent_forecasts": 4945,
+      "independent_comparisons": 4945,
+      "search_hits": 2360,
+      "rollout_hits": 0,
+      "K1": 0,
+      "nodes": 13,
+      "reserves": 9,
+      "rejected": 0,
+      "goal": 510.1681249141693,
+      "safety_goal": 669.5574998855591,
+      "profile": {
+        "MeasuredCpuSeconds": 0.28125,
+        "Phases": [
+          {
+            "Name": "independent_preflight",
+            "CpuSeconds": 0.125,
+            "Percent": 44.44444444444444
+          },
+          {
+            "Name": "conditional_continuations",
+            "CpuSeconds": 0.078125,
+            "Percent": 27.77777777777778
+          },
+          {
+            "Name": "outside_decision",
+            "CpuSeconds": 0.0625,
+            "Percent": 22.22222222222222
+          },
+          {
+            "Name": "recertification",
+            "CpuSeconds": 0.015625,
+            "Percent": 5.555555555555555
+          },
+          {
+            "Name": "candidate_generation",
+            "CpuSeconds": 0,
+            "Percent": 0
+          },
+          {
+            "Name": "uncertainty_scenarios",
+            "CpuSeconds": 0,
+            "Percent": 0
+          }
+        ],
+        "Operations": [
+          {
+            "Name": "dispatch",
+            "CpuSeconds": 0.28125,
+            "Percent": 100
+          }
+        ],
+        "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+      }
+    },
+    {
+      "label": "native-A-window-v1/decision-0010",
+      "pass_": true,
+      "time": 28.79999999999993,
+      "reference": 488.4912610054016,
+      "reason": "finite conditional reserve certified",
+      "cpu_s": 0.28125,
+      "forecasts": 10865,
+      "contacts": 218216,
+      "independent_forecasts": 5390,
+      "independent_comparisons": 5390,
+      "search_hits": 2570,
+      "rollout_hits": 0,
+      "K1": 0,
+      "nodes": 13,
+      "reserves": 9,
+      "rejected": 0,
+      "goal": 510.1681249141693,
+      "safety_goal": 669.5574998855591,
+      "profile": {
+        "MeasuredCpuSeconds": 0.28125,
+        "Phases": [
+          {
+            "Name": "conditional_continuations",
+            "CpuSeconds": 0.140625,
+            "Percent": 50
+          },
+          {
+            "Name": "independent_preflight",
+            "CpuSeconds": 0.125,
+            "Percent": 44.44444444444444
+          },
+          {
+            "Name": "recertification",
+            "CpuSeconds": 0.015625,
+            "Percent": 5.555555555555555
+          },
+          {
+            "Name": "outside_decision",
+            "CpuSeconds": 0,
+            "Percent": 0
+          },
+          {
+            "Name": "candidate_generation",
+            "CpuSeconds": 0,
+            "Percent": 0
+          },
+          {
+            "Name": "uncertainty_scenarios",
+            "CpuSeconds": 0,
+            "Percent": 0
+          }
+        ],
+        "Operations": [
+          {
+            "Name": "dispatch",
+            "CpuSeconds": 0.28125,
+            "Percent": 100
+          }
+        ],
+        "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+      }
+    },
+    {
+      "label": "native-A-window-v1/decision-0011",
+      "pass_": true,
+      "time": 28.99999999999993,
+      "reference": 492.9759347438812,
+      "reason": "finite conditional reserve certified",
+      "cpu_s": 0.28125,
+      "forecasts": 11737,
+      "contacts": 235744,
+      "independent_forecasts": 5826,
+      "independent_comparisons": 5826,
+      "search_hits": 2776,
+      "rollout_hits": 0,
+      "K1": 0,
+      "nodes": 13,
+      "reserves": 9,
+      "rejected": 0,
+      "goal": 510.1681249141693,
+      "safety_goal": 669.5574998855591,
+      "profile": {
+        "MeasuredCpuSeconds": 0.28125,
+        "Phases": [
+          {
+            "Name": "independent_preflight",
+            "CpuSeconds": 0.140625,
+            "Percent": 50
+          },
+          {
+            "Name": "conditional_continuations",
+            "CpuSeconds": 0.125,
+            "Percent": 44.44444444444444
+          },
+          {
+            "Name": "recertification",
+            "CpuSeconds": 0.015625,
+            "Percent": 5.555555555555555
+          },
+          {
+            "Name": "outside_decision",
+            "CpuSeconds": 0,
+            "Percent": 0
+          },
+          {
+            "Name": "candidate_generation",
+            "CpuSeconds": 0,
+            "Percent": 0
+          },
+          {
+            "Name": "uncertainty_scenarios",
+            "CpuSeconds": 0,
+            "Percent": 0
+          }
+        ],
+        "Operations": [
+          {
+            "Name": "dispatch",
+            "CpuSeconds": 0.28125,
+            "Percent": 100
+          }
+        ],
+        "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+      }
+    },
+    {
+      "label": "native-A-window-v1/decision-0012",
+      "pass_": true,
+      "time": 29.19999999999993,
+      "reference": 497.5183742046356,
+      "reason": "finite conditional reserve certified",
+      "cpu_s": 0.265625,
+      "forecasts": 12591,
+      "contacts": 252902,
+      "independent_forecasts": 6253,
+      "independent_comparisons": 6253,
+      "search_hits": 2978,
+      "rollout_hits": 0,
+      "K1": 0,
+      "nodes": 13,
+      "reserves": 9,
+      "rejected": 0,
+      "goal": 510.1681249141693,
+      "safety_goal": 669.5574998855591,
+      "profile": {
+        "MeasuredCpuSeconds": 0.265625,
+        "Phases": [
+          {
+            "Name": "conditional_continuations",
+            "CpuSeconds": 0.125,
+            "Percent": 47.05882352941177
+          },
+          {
+            "Name": "independent_preflight",
+            "CpuSeconds": 0.125,
+            "Percent": 47.05882352941177
+          },
+          {
+            "Name": "recertification",
+            "CpuSeconds": 0.015625,
+            "Percent": 5.882352941176471
+          },
+          {
+            "Name": "outside_decision",
+            "CpuSeconds": 0,
+            "Percent": 0
+          },
+          {
+            "Name": "candidate_generation",
+            "CpuSeconds": 0,
+            "Percent": 0
+          },
+          {
+            "Name": "uncertainty_scenarios",
+            "CpuSeconds": 0,
+            "Percent": 0
+          }
+        ],
+        "Operations": [
+          {
+            "Name": "dispatch",
+            "CpuSeconds": 0.265625,
+            "Percent": 100
+          }
+        ],
+        "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+      }
+    },
+    {
+      "label": "native-A-window-v1/decision-0013",
+      "pass_": true,
+      "time": 29.399999999999928,
+      "reference": 502.1115710735321,
+      "reason": "finite conditional reserve certified",
+      "cpu_s": 0.265625,
+      "forecasts": 13427,
+      "contacts": 269704,
+      "independent_forecasts": 6671,
+      "independent_comparisons": 6671,
+      "search_hits": 3176,
+      "rollout_hits": 0,
+      "K1": 0,
+      "nodes": 13,
+      "reserves": 9,
+      "rejected": 0,
+      "goal": 510.1681249141693,
+      "safety_goal": 669.5574998855591,
+      "profile": {
+        "MeasuredCpuSeconds": 0.265625,
+        "Phases": [
+          {
+            "Name": "independent_preflight",
+            "CpuSeconds": 0.125,
+            "Percent": 47.05882352941177
+          },
+          {
+            "Name": "conditional_continuations",
+            "CpuSeconds": 0.109375,
+            "Percent": 41.1764705882353
+          },
+          {
+            "Name": "outside_decision",
+            "CpuSeconds": 0.015625,
+            "Percent": 5.882352941176471
+          },
+          {
+            "Name": "recertification",
+            "CpuSeconds": 0.015625,
+            "Percent": 5.882352941176471
+          },
+          {
+            "Name": "candidate_generation",
+            "CpuSeconds": 0,
+            "Percent": 0
+          },
+          {
+            "Name": "uncertainty_scenarios",
+            "CpuSeconds": 0,
+            "Percent": 0
+          }
+        ],
+        "Operations": [
+          {
+            "Name": "dispatch",
+            "CpuSeconds": 0.265625,
+            "Percent": 100
+          }
+        ],
+        "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+      }
+    },
+    {
+      "label": "native-A-window-v1/decision-0014",
+      "pass_": true,
+      "time": 29.599999999999927,
+      "reference": 506.67600417137146,
+      "reason": "finite conditional reserve certified",
+      "cpu_s": 0.265625,
+      "forecasts": 14245,
+      "contacts": 286126,
+      "independent_forecasts": 7080,
+      "independent_comparisons": 7080,
+      "search_hits": 3370,
+      "rollout_hits": 0,
+      "K1": 0,
+      "nodes": 13,
+      "reserves": 9,
+      "rejected": 0,
+      "goal": 510.1681249141693,
+      "safety_goal": 669.5574998855591,
+      "profile": {
+        "MeasuredCpuSeconds": 0.265625,
+        "Phases": [
+          {
+            "Name": "conditional_continuations",
+            "CpuSeconds": 0.125,
+            "Percent": 47.05882352941177
+          },
+          {
+            "Name": "independent_preflight",
+            "CpuSeconds": 0.09375,
+            "Percent": 35.294117647058826
+          },
+          {
+            "Name": "outside_decision",
+            "CpuSeconds": 0.03125,
+            "Percent": 11.764705882352942
+          },
+          {
+            "Name": "recertification",
+            "CpuSeconds": 0.015625,
+            "Percent": 5.882352941176471
+          },
+          {
+            "Name": "candidate_generation",
+            "CpuSeconds": 0,
+            "Percent": 0
+          },
+          {
+            "Name": "uncertainty_scenarios",
+            "CpuSeconds": 0,
+            "Percent": 0
+          }
+        ],
+        "Operations": [
+          {
+            "Name": "dispatch",
+            "CpuSeconds": 0.265625,
+            "Percent": 100
+          }
+        ],
+        "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+      }
+    },
+    {
+      "label": "native-B-held-first-v1/abstain",
+      "pass_": false,
+      "time": 1.7999999999999998,
+      "reference": 7.207449913024902,
+      "reason": "STUDY157_ABSTAIN: abstain: finite recourse search has no certified complete reserve",
+      "cpu_s": 0.203125,
+      "forecasts": 137,
+      "contacts": 2756,
+      "independent_forecasts": 0,
+      "independent_comparisons": 0,
+      "search_hits": 8,
+      "rollout_hits": 0,
+      "K1": 0,
+      "nodes": 0,
+      "reserves": 0,
+      "rejected": 9,
+      "goal": 191.38937497138977,
+      "safety_goal": 350.77874994277954,
+      "profile": {
+        "MeasuredCpuSeconds": 0.203125,
+        "Phases": [
+          {
+            "Name": "learned_proposal_physics",
+            "CpuSeconds": 0.15625,
+            "Percent": 76.92307692307692
+          },
+          {
+            "Name": "outside_decision",
+            "CpuSeconds": 0.03125,
+            "Percent": 15.384615384615385
+          },
+          {
+            "Name": "candidate_generation",
+            "CpuSeconds": 0.015625,
+            "Percent": 7.6923076923076925
+          },
+          {
+            "Name": "hierarchical_generation",
+            "CpuSeconds": 0,
+            "Percent": 0
+          }
+        ],
+        "Operations": [
+          {
+            "Name": "dispatch",
+            "CpuSeconds": 0.203125,
+            "Percent": 100
+          }
+        ],
+        "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+      }
+    },
+    {
+      "label": "native-B-held-second-v1/abstain",
+      "pass_": false,
+      "time": 10.399999999999995,
+      "reference": 141.9797089099884,
+      "reason": "STUDY157_ABSTAIN: abstain: finite recourse search has no certified complete reserve",
+      "cpu_s": 0.25,
+      "forecasts": 160,
+      "contacts": 3212,
+      "independent_forecasts": 0,
+      "independent_comparisons": 0,
+      "search_hits": 8,
+      "rollout_hits": 0,
+      "K1": 0,
+      "nodes": 0,
+      "reserves": 0,
+      "rejected": 9,
+      "goal": 350.77874994277954,
+      "safety_goal": 510.1681249141693,
+      "profile": {
+        "MeasuredCpuSeconds": 0.25,
+        "Phases": [
+          {
+            "Name": "learned_proposal_physics",
+            "CpuSeconds": 0.203125,
+            "Percent": 81.25
+          },
+          {
+            "Name": "outside_decision",
+            "CpuSeconds": 0.03125,
+            "Percent": 12.5
+          },
+          {
+            "Name": "hierarchical_generation",
+            "CpuSeconds": 0.015625,
+            "Percent": 6.25
+          },
+          {
+            "Name": "candidate_generation",
+            "CpuSeconds": 0,
+            "Percent": 0
+          }
+        ],
+        "Operations": [
+          {
+            "Name": "dispatch",
+            "CpuSeconds": 0.25,
+            "Percent": 100
+          }
+        ],
+        "Method": "Exclusive process-CPU tick partition at phase switches. Operations are a separate partition, not additive to phases. Counter granularity and instrumentation overhead are retained; percentages are measured instrumented attribution, not estimates of uninstrumented cost."
+      }
+    }
+  ],
+  "native": [
+    {
+      "label": "native-A-historical-v1",
+      "fixture": "historical",
+      "exact": true,
+      "complete": false,
+      "pass_": false,
+      "end_s": 27.599999999999934,
+      "duration_s": 0.7999999999999332,
+      "certified_decisions": 4,
+      "reason": "experiment timeout",
+      "min_gap": 1.1407374210031036,
+      "sweep": 1.036597332042559,
+      "max_beta": 5.7665377397987365
+    },
+    {
+      "label": "native-A-window-v1",
+      "fixture": "historical",
+      "exact": true,
+      "complete": false,
+      "pass_": false,
+      "end_s": 29.799999999999926,
+      "duration_s": 2.9999999999999254,
+      "certified_decisions": 15,
+      "reason": "technical invariant: STUDY157_ABSTAIN: abstain: finite recourse search has no certified complete reserve",
+      "min_gap": 0.8998757557466005,
+      "sweep": 0.7819350591047795,
+      "max_beta": 6.879915629832698
+    },
+    {
+      "label": "native-B-held-first-v1",
+      "fixture": "held-first",
+      "exact": true,
+      "complete": false,
+      "pass_": false,
+      "end_s": 1.7999999999999998,
+      "duration_s": -2.220446049250313e-16,
+      "certified_decisions": 0,
+      "reason": "technical invariant: STUDY157_ABSTAIN: abstain: finite recourse search has no certified complete reserve",
+      "min_gap": 4.0992,
+      "sweep": 4.051429601860048,
+      "max_beta": 0.0
+    },
+    {
+      "label": "native-B-held-second-v1",
+      "fixture": "held-second",
+      "exact": true,
+      "complete": false,
+      "pass_": false,
+      "end_s": 10.399999999999995,
+      "duration_s": -5.329070518200751e-15,
+      "certified_decisions": 0,
+      "reason": "technical invariant: STUDY157_ABSTAIN: abstain: finite recourse search has no certified complete reserve",
+      "min_gap": 5.360775971080636,
+      "sweep": 5.272851108584129,
+      "max_beta": 1.1682742941883753
+    }
+  ],
+  "causal": [
+    {
+      "fixture": "held-first",
+      "teacher": "first-A-T1-final",
+      "same_initial_body": true,
+      "new_action_irrelevant_next_point2": true,
+      "next_error": {
+        "Position": 0.0039125276,
+        "Velocity": 0.0502463,
+        "Yaw": -0.07640194,
+        "Beta": -0.0021711218,
+        "Wheel": 37.29480548742657
+      },
+      "observed_queue": [
+        {
+          "ObservedAt": 1.5999999999999999,
+          "ActivationAt": 1.8399999999999999,
+          "Action": {
+            "SteeringRadians": 0,
+            "Drive": 1
+          }
+        }
+      ],
+      "teacher_queue": [
+        {
+          "ObservedAt": 1.5999999999999999,
+          "ActivationAt": 1.8399999999999999,
+          "Action": {
+            "SteeringRadians": 0.008726646,
+            "Drive": 0
+          }
+        }
+      ],
+      "first_forecast_failure_s": 7.6000000000000005,
+      "reason": "beta45 envelope",
+      "counterfactual_complete": true,
+      "counterfactual_safe": true
+    },
+    {
+      "fixture": "held-first",
+      "teacher": "first-B-T1-refined",
+      "same_initial_body": true,
+      "new_action_irrelevant_next_point2": true,
+      "next_error": {
+        "Position": 0,
+        "Velocity": 0,
+        "Yaw": 0,
+        "Beta": 0,
+        "Wheel": 0
+      },
+      "observed_queue": [
+        {
+          "ObservedAt": 1.5999999999999999,
+          "ActivationAt": 1.8399999999999999,
+          "Action": {
+            "SteeringRadians": 0,
+            "Drive": 1
+          }
+        }
+      ],
+      "teacher_queue": [
+        {
+          "ObservedAt": 1.5999999999999999,
+          "ActivationAt": 1.8399999999999999,
+          "Action": {
+            "SteeringRadians": 0,
+            "Drive": 1
+          }
+        }
+      ],
+      "first_forecast_failure_s": 13.79999999999998,
+      "reason": "complete common156 section",
+      "counterfactual_complete": true,
+      "counterfactual_safe": true
+    },
+    {
+      "fixture": "held-second",
+      "teacher": "second-B-T1-refined",
+      "same_initial_body": true,
+      "new_action_irrelevant_next_point2": true,
+      "next_error": {
+        "Position": 0.039692026,
+        "Velocity": 0.6635584,
+        "Yaw": -0.7093835,
+        "Beta": -0.017878147,
+        "Wheel": 5.8068904310700304
+      },
+      "observed_queue": [
+        {
+          "ObservedAt": 10.199999999999996,
+          "ActivationAt": 10.439999999999996,
+          "Action": {
+            "SteeringRadians": 0.008731914,
+            "Drive": 0.31820688
+          }
+        }
+      ],
+      "teacher_queue": [
+        {
+          "ObservedAt": 10.199999999999996,
+          "ActivationAt": 10.439999999999996,
+          "Action": {
+            "SteeringRadians": 0.2617994,
+            "Drive": 0
+          }
+        }
+      ],
+      "first_forecast_failure_s": 11.59999999999999,
+      "reason": "footprint reserve",
+      "counterfactual_complete": true,
+      "counterfactual_safe": true
+    },
+    {
+      "fixture": "held-second",
+      "teacher": "second-C-T1-refined",
+      "same_initial_body": true,
+      "new_action_irrelevant_next_point2": true,
+      "next_error": {
+        "Position": 0.033832774,
+        "Velocity": 0.52344686,
+        "Yaw": -0.49846914,
+        "Beta": -0.015611259,
+        "Wheel": 5.74869360595325
+      },
+      "observed_queue": [
+        {
+          "ObservedAt": 10.199999999999996,
+          "ActivationAt": 10.439999999999996,
+          "Action": {
+            "SteeringRadians": 0.008731914,
+            "Drive": 0.31820688
+          }
+        }
+      ],
+      "teacher_queue": [
+        {
+          "ObservedAt": 10.199999999999996,
+          "ActivationAt": 10.439999999999996,
+          "Action": {
+            "SteeringRadians": 0.08726647,
+            "Drive": 0
+          }
+        }
+      ],
+      "first_forecast_failure_s": 11.99999999999999,
+      "reason": "footprint reserve",
+      "counterfactual_complete": true,
+      "counterfactual_safe": true
+    }
+  ],
+  "decomposition": {
+    "gain_pct": 4.256035039131801,
+    "distance_change_pct": -4.884347291805025,
+    "mean_speed_change_pct": -0.6562421484529346,
+    "log_distance": -0.050076637885955046,
+    "negative_log_speed": 0.006584048842886187,
+    "log_time": -0.04349258904306888,
+    "scope": "Exact kinematic identity, not causal attribution of throttle versus yaw"
+  },
+  "freeze_unchanged": true,
+  "gates": {
+    "A": "PARTIAL:7 local common-section reproductions; only historical certified;15 actual reviews then ABSTAIN",
+    "B": "PARTIAL:6/6 small perturbations certified; held-first/held-second ABSTAIN",
+    "C": "NOT_RUN: earlier transfer/stability gates fail",
+    "D": "NOT_RUN:C gate closed"
+  },
+  "success": false
+}

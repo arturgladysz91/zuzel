@@ -816,3 +816,5 @@ PARTIAL: no new native run and no complete three-lap S. Frozen physics and histo
 [Line, throttle and physics investigation (study #156)](docs/experiments/line-throttle-physics/REPORT.md) — PROVISIONAL, default OFF.
 Native common-section witnesses separate line length, throttle/steering interaction and physical losses.
 State-dependent gains do not establish a new autonomous rider; held-state transfer is partial.
+
+Badanie #157 (OFF): [stanowy transfer manewrów, częściowy wynik i zamknięte bramki C/D](docs/experiments/state-maneuver-transfer/REPORT.md).
