@@ -107,7 +107,7 @@ export class Replay {
       if (!track || row.t <= track.at(-1).t || row.t > this.duration + 1e-6) throw new Error('Nieznany zawodnik lub nieuporządkowany czas CSV.');
       track.push(row);
     }
-    if ([...this.tracks.values()].some(x => x.length < 2)) throw new Error('Brak próbek zawodnika.');
+    if ([...this.tracks.values()].some(x => x.length < 2 && !(this.recordedControls && this.duration === 0 && x.length === 1 && x[0].t === 0))) throw new Error('Brak próbek zawodnika.');
     this.activated = this.decisions.filter(d => d.ActualActivation != null).sort((a, b) => a.ActualActivation - b.ActualActivation || a.index - b.index);
     this.metrics = new Map(this.run.Riders.map(r => [r.Measurement.RiderId, r.Measurement]));
     this.sampleTimes = [...new Set([...this.tracks.values()].flat().map(s => s.t))].sort((a, b) => a - b);

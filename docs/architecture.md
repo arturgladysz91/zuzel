@@ -1,3 +1,10 @@
+Study154 is PROVISIONAL and tools-only, default OFF: [report](experiments/viable-safe-contingency/REPORT.md).
+It isolates short-horizon proposal quality from complete13/9 S certification,
+prioritises repropagated retained controls and keeps covered prefixes across goals.
+Independent preflight and original native0.5m guards remain mandatory. The tighter
+two-endpoint Lipschitz bound is diagnostic, unpromoted. PARTIAL is not four-rider readiness.
+Original force equations, dimensions, geometry and historical evidence are unchanged.
+
 # Architecture
 
 [Safety and performance (study #153)](experiments/safe-fast-contingency/REPORT.md)
