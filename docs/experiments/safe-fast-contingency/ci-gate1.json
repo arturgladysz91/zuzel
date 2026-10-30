@@ -1,0 +1,45 @@
+{
+  "Passed": true,
+  "Commit": "7445a18d57746471a06724773384f5eeb8b9ecc1",
+  "RunId": 41022785453,
+  "Url": "https://github.com/arturgladysz91/zuzel/actions/runs/41022785453",
+  "Scope": "Initial Windows checkout repair gate. Final research HEAD requires a separate final CI run; this is not final-head evidence.",
+  "Jobs": [
+    {
+      "Id": 123953843593,
+      "Name": "coverage",
+      "Status": "completed",
+      "Conclusion": "success"
+    },
+    {
+      "Id": 123953843888,
+      "Name": "python",
+      "Status": "completed",
+      "Conclusion": "success"
+    },
+    {
+      "Id": 123954786447,
+      "Name": "dotnet (trajectory)",
+      "Status": "completed",
+      "Conclusion": "success"
+    },
+    {
+      "Id": 123954786573,
+      "Name": "dotnet (core)",
+      "Status": "completed",
+      "Conclusion": "success"
+    },
+    {
+      "Id": 123954788006,
+      "Name": "historical-audits",
+      "Status": "completed",
+      "Conclusion": "skipped"
+    },
+    {
+      "Id": 123956070578,
+      "Name": "Draft Windows CI",
+      "Status": "completed",
+      "Conclusion": "success"
+    }
+  ]
+}

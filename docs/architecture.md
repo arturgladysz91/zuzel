@@ -1,5 +1,15 @@
 # Architecture
 
+[Safety and performance (study #153)](experiments/safe-fast-contingency/REPORT.md)
+is a PROVISIONAL default-OFF tools adapter. Legacy L retains152 physical rules;
+safety S requires>=0.5 m from both boundaries for both mechanical capsules over
+every swept interval, including yaw and segment handoffs. Proposal scoring cannot
+override this condition: full finite independent certification and actual native
+enforcement both apply. Historical legal completions remain legacy evidence and
+are not relabelled as S. Failed optional rankings and CPU stops remain explicit.
+The only shared build change grants access to the isolated collector; no original
+force law, native integrator, geometry or production default changes.
+
 [Contingency recourse (study #151)](experiments/contingency-recourse/REPORT.md) is a
 PROVISIONAL default-OFF tools controller. A common root command preserves pending
 controls and the0.24s reaction delay. Separate future observations may choose

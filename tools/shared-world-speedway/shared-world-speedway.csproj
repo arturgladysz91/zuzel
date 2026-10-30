@@ -1,5 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <ItemGroup><InternalsVisibleTo Include="efficient-contingency" /></ItemGroup>
+  <ItemGroup><InternalsVisibleTo Include="efficient-contingency" /><InternalsVisibleTo Include="safe-fast-contingency" /></ItemGroup>
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
