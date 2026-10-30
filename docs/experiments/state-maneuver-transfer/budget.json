@@ -1,0 +1,171 @@
+[
+  {
+    "Name": "train-v1",
+    "Complete": true,
+    "NativeWorlds": 0,
+    "CpuSeconds": 2.109
+  },
+  {
+    "Name": "A-first-v1",
+    "Complete": true,
+    "NativeWorlds": 0,
+    "CpuSeconds": 10,
+    "Base": "9fe4d6612ce13c135fa967d48faa85509257d129",
+    "CapCpuSeconds": 80,
+    "Outcome": "Technical loader failure before forecasts: wrong resource name. Owned process CPU1.12s, conservative10s including failed blocked retries; zero worlds."
+  },
+  {
+    "Name": "A-first-v2",
+    "Complete": true,
+    "NativeWorlds": 0,
+    "CpuSeconds": 3.203125,
+    "Base": "9fe4d6612ce13c135fa967d48faa85509257d129",
+    "CapCpuSeconds": 80,
+    "Outcome": "STUDY157_ABSTAIN: abstain: finite recourse search has no certified complete reserve"
+  },
+  {
+    "Name": "A-second-v1",
+    "Complete": true,
+    "NativeWorlds": 0,
+    "CpuSeconds": 2.75,
+    "Base": "9fe4d6612ce13c135fa967d48faa85509257d129",
+    "CapCpuSeconds": 80,
+    "Outcome": "STUDY157_ABSTAIN: abstain: finite recourse search has no certified complete reserve"
+  },
+  {
+    "Name": "A-historical-v1",
+    "Complete": true,
+    "NativeWorlds": 0,
+    "CpuSeconds": 3.671875,
+    "Base": "9fe4d6612ce13c135fa967d48faa85509257d129",
+    "CapCpuSeconds": 80,
+    "Outcome": "diagnostic complete"
+  },
+  {
+    "Name": "generation-first-v1",
+    "Complete": true,
+    "NativeWorlds": 0,
+    "CpuSeconds": 2.96875,
+    "Base": "9fe4d6612ce13c135fa967d48faa85509257d129",
+    "CapCpuSeconds": 80,
+    "Outcome": "diagnostic complete"
+  },
+  {
+    "Name": "generation-second-v1",
+    "Complete": true,
+    "NativeWorlds": 0,
+    "CpuSeconds": 2.828125,
+    "Base": "9fe4d6612ce13c135fa967d48faa85509257d129",
+    "CapCpuSeconds": 80,
+    "Outcome": "diagnostic complete"
+  },
+  {
+    "Name": "generation-historical-v1",
+    "Complete": true,
+    "NativeWorlds": 0,
+    "CpuSeconds": 2.625,
+    "Base": "9fe4d6612ce13c135fa967d48faa85509257d129",
+    "CapCpuSeconds": 80,
+    "Outcome": "diagnostic complete"
+  },
+  {
+    "Name": "native-A-historical-v1",
+    "Complete": true,
+    "NativeWorlds": 1,
+    "CpuSeconds": 10.53125,
+    "Base": "9fe4d6612ce13c135fa967d48faa85509257d129",
+    "CapCpuSeconds": 70,
+    "Outcome": "experiment timeout"
+  },
+  {
+    "Name": "B-held-first-v1",
+    "Complete": true,
+    "NativeWorlds": 0,
+    "CpuSeconds": 2.546875,
+    "Base": "9fe4d6612ce13c135fa967d48faa85509257d129",
+    "CapCpuSeconds": 80,
+    "Outcome": "STUDY157_ABSTAIN: abstain: finite recourse search has no certified complete reserve"
+  },
+  {
+    "Name": "B-held-second-v1",
+    "Complete": true,
+    "NativeWorlds": 0,
+    "CpuSeconds": 2.65625,
+    "Base": "9fe4d6612ce13c135fa967d48faa85509257d129",
+    "CapCpuSeconds": 80,
+    "Outcome": "STUDY157_ABSTAIN: abstain: finite recourse search has no certified complete reserve"
+  },
+  {
+    "Name": "B-perturb-v1",
+    "Complete": true,
+    "NativeWorlds": 0,
+    "CpuSeconds": 6.25,
+    "Base": "9fe4d6612ce13c135fa967d48faa85509257d129",
+    "CapCpuSeconds": 80,
+    "Outcome": "First frozen held perturbation results, no tuning"
+  },
+  {
+    "Name": "causal-v1",
+    "Complete": true,
+    "NativeWorlds": 0,
+    "CpuSeconds": 4.359375,
+    "Base": "9fe4d6612ce13c135fa967d48faa85509257d129",
+    "CapCpuSeconds": 100,
+    "Outcome": "pending causality diagnostic only; zero native worlds"
+  },
+  {
+    "Name": "native-B-held-first-v1",
+    "Complete": true,
+    "NativeWorlds": 1,
+    "CpuSeconds": 3.390625,
+    "Base": "9fe4d6612ce13c135fa967d48faa85509257d129",
+    "CapCpuSeconds": 70,
+    "Outcome": "technical invariant: STUDY157_ABSTAIN: abstain: finite recourse search has no certified complete reserve"
+  },
+  {
+    "Name": "native-B-held-second-v1",
+    "Complete": true,
+    "NativeWorlds": 1,
+    "CpuSeconds": 4.96875,
+    "Base": "9fe4d6612ce13c135fa967d48faa85509257d129",
+    "CapCpuSeconds": 70,
+    "Outcome": "technical invariant: STUDY157_ABSTAIN: abstain: finite recourse search has no certified complete reserve"
+  },
+  {
+    "Name": "native-A-window-v1",
+    "Complete": true,
+    "NativeWorlds": 1,
+    "CpuSeconds": 14.203125,
+    "Base": "9fe4d6612ce13c135fa967d48faa85509257d129",
+    "CapCpuSeconds": 70,
+    "Outcome": "technical invariant: STUDY157_ABSTAIN: abstain: finite recourse search has no certified complete reserve"
+  },
+  {
+    "Name": "forensics-export-v1",
+    "Complete": true,
+    "NativeWorlds": 0,
+    "CpuSeconds": 9.78125,
+    "Outcome": "export failed; preserved: name 'json' is not defined"
+  },
+  {
+    "Name": "forensics-export-v2",
+    "Complete": true,
+    "NativeWorlds": 0,
+    "CpuSeconds": 9.71875,
+    "Outcome": "recorded command/force/energy/pending analysis, plots and comparative replay export"
+  },
+  {
+    "Name": "replay-rounding-export-v3",
+    "Complete": true,
+    "NativeWorlds": 0,
+    "CpuSeconds": 10.671875,
+    "Outcome": "recorded command/force/energy/pending analysis, plots and comparative replay export"
+  },
+  {
+    "Name": "held-replay-export-v4",
+    "Complete": true,
+    "NativeWorlds": 0,
+    "CpuSeconds": 10.125,
+    "Outcome": "recorded command/force/energy/pending analysis, plots and comparative replay export"
+  }
+]

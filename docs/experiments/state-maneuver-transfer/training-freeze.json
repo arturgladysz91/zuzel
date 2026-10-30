@@ -1,0 +1,92 @@
+{
+  "Base": "9fe4d6612ce13c135fa967d48faa85509257d129",
+  "Sources": [
+    {
+      "Path": "docs/experiments/line-throttle-physics/native/first-A-T1-final.json.gz",
+      "Sha256": "e7ff883803ba6a90a2833448db9947f24456b3fae05f2fb2f5818a7276f7e13a",
+      "Count": 56,
+      "Start": 1.6,
+      "End": 12.77588362832534
+    },
+    {
+      "Path": "docs/experiments/line-throttle-physics/native/first-B-T1-refined.json.gz",
+      "Sha256": "e9039a0f989561b1c0a914377ef8edac12bec842e2879226c8172ddc0c4209f2",
+      "Count": 61,
+      "Start": 1.6,
+      "End": 13.728826600937936
+    },
+    {
+      "Path": "docs/experiments/line-throttle-physics/native/first-C-T1-refined.json.gz",
+      "Sha256": "abe9d3f7d105d2a22ef8aa2062db911ecad15165415506fe628a82c351f97e5e",
+      "Count": 68,
+      "Start": 1.6,
+      "End": 15.108601350187351
+    },
+    {
+      "Path": "docs/experiments/line-throttle-physics/native/second-B-T1-refined.json.gz",
+      "Sha256": "c48bd606272456bb7f6929a15c37d507efb7aeca6c49b41ff86ecdce4bee14ae",
+      "Count": 65,
+      "Start": 10.2,
+      "End": 23.150551248818708
+    },
+    {
+      "Path": "docs/experiments/line-throttle-physics/native/second-C-T1-refined.json.gz",
+      "Sha256": "fc971950140c269b6a6b91017059aff132605b8405cbd012dbbc38f55fcd8426",
+      "Count": 65,
+      "Start": 10.2,
+      "End": 23.13238028990482
+    },
+    {
+      "Path": "docs/experiments/line-throttle-physics/native/historical-B-T1-refined.json.gz",
+      "Sha256": "59234e0462f9fde46ab14566223f055df7725f80b0161b208218fa4628c69500",
+      "Count": 63,
+      "Start": 26.8,
+      "End": 39.29524169028071
+    },
+    {
+      "Path": "docs/experiments/line-throttle-physics/native/historical-C-T1-refined.json.gz",
+      "Sha256": "70518ace7c193c32a15ab8dc5c8dfcda022070c1b4308f1b91397eaaf532e156",
+      "Count": 64,
+      "Start": 26.8,
+      "End": 39.53000899194532
+    },
+    {
+      "Path": "docs/experiments/viable-safe-contingency/native/S0-full-baseline-v1.json.gz",
+      "Sha256": "e30288ea4e855b1fd00f1b2f32d02db312cdf6582e43fe70a45dce43249d15e3",
+      "Count": 8,
+      "Start": 0,
+      "End": 1.4
+    }
+  ],
+  "Count": 450,
+  "ModelSha256": "fee0106633085bbd6160438025a7c15e05d1811680ed98c530a36defe6627f5a",
+  "HeldExcluded": [
+    "held-first",
+    "held-second",
+    "velocity+/-0.02m/s",
+    "yaw+/-0.001rad/s",
+    "lateral+/-0.001m"
+  ],
+  "FrozenBeforeFirstB": true,
+  "Features": [
+    "sin phase",
+    "cos phase",
+    "offset",
+    "speed",
+    "beta",
+    "yaw",
+    "course error",
+    "actual steering",
+    "wheel omega",
+    "crank omega",
+    "active steering",
+    "active drive",
+    "first pending steer",
+    "first pending drive",
+    "last pending steer",
+    "last pending drive",
+    "first activation delay",
+    "last activation delay"
+  ],
+  "NoFutureTape": true
+}
