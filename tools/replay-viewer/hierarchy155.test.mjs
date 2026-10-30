@@ -1,0 +1,7 @@
+import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import {gunzipSync} from 'node:zlib';
+import {sample155,validate155} from './hierarchy155.mjs';
+const data=()=>JSON.parse(gunzipSync(fs.readFileSync(new URL('../../docs/experiments/hierarchical-maneuvers/replay.json.gz',import.meta.url))));
+test('155 forecast matrix identifies partial verdict and historical native provenance',()=>{const x=validate155(data());assert.equal(x.Cases.length,3);assert.equal(x.NativeReference.CompletedLaps,0);assert.ok(Math.abs(x.NativeReference.Points.at(-1).t-13.8)<1e-8);assert.equal(x.Cases.flatMap(c=>c.Series).filter(s=>s.Passed).length,4);});
+test('155 prefixes are never extrapolated or converted into full policies',()=>{for(const c of data().Cases)for(const s of c.Series){assert.equal(sample155(s,s.Points.at(-1).t+.01),null);assert.equal(sample155(s,c.Time-.01),null);assert.ok(Math.abs(sample155(s,c.Time).t-c.Time)<1e-8);if(!s.Passed)assert.equal(s.FullPolicy,false);}});
+test('155 sample selection retains recorded poses and rejects missing policy proof',()=>{const x=data(),s=x.Cases[0].Series[2];const t=s.Points[100].t;assert.equal(sample155(s,t),s.Points[100]);s.Nodes=12;assert.throws(()=>validate155(x),/Incomplete policy/);});
+test('155 new forecasts cannot be relabelled as native data',()=>{const x=data();x.Cases[0].Series[0].Kind='native';assert.throws(()=>validate155(x),/provenance/);});

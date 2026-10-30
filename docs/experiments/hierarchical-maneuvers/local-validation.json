@@ -1,0 +1,48 @@
+{
+  "Study": 155,
+  "Base": "405111a721d5bc5ba1477999f25b3837e8c62307",
+  "LockedRestore": "PASS",
+  "ReleaseWarnAsErrorBuild": "PASS",
+  "DotNet": {
+    "total": "2536",
+    "executed": "2536",
+    "passed": "2536",
+    "failed": "0",
+    "error": "0",
+    "timeout": "0",
+    "aborted": "0",
+    "inconclusive": "0",
+    "passedButRunAborted": "0",
+    "notRunnable": "0",
+    "notExecuted": "0",
+    "disconnected": "0",
+    "warning": "0",
+    "completed": "0",
+    "inProgress": "0",
+    "pending": "0"
+  },
+  "PythonCalibrationTests": 346,
+  "PythonPolicyTests": 7,
+  "NodeTests": 103,
+  "Discovery": {
+    "FullDiscovered": 3057,
+    "UnionShards": 3057,
+    "Missing": [],
+    "Extra": [],
+    "UnintendedDuplicates": [],
+    "ShardCounts": {
+      "core": 2141,
+      "trajectory": 395,
+      "historical-analysis": 473,
+      "four-rider": 48
+    }
+  },
+  "LegacyConsumers": 39,
+  "Scope": "Local Windows validation; exact-final-head GitHub CI required separately. No new native experiment.",
+  "FinalApiGuardValidation": {
+    "ReleaseWarnAsErrorBuild": "PASS",
+    "HierarchicalCSharpCases": 4,
+    "SealedPythonCases": 8,
+    "Scope": "After constructor strict-S guard; same explicit options as all experiments. Full final-head GitHub run remains required."
+  }
+}

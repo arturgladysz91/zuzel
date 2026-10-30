@@ -808,3 +808,7 @@ z pełnym dziennikiem 270 decyzji. Sterownik: 154,500 CPU-s; brak gotowości wyd
 Exact optimization preserves all #147 native states and commands: 53.990 s / three legal laps,
 82.000 controller CPU-s versus 154.500. Target 40–60 CPU-s is not reached.
 Geometry and throttle interventions are separate diagnostics; original physical laws and historical data stay frozen.
+
+[Hierarchical maneuver generator (study #155)](docs/experiments/hierarchical-maneuvers/REPORT.md) — PROVISIONAL, default OFF.
+Local start-state13/9 certification uses zero K1 at7.781 CPU-s; both later saved states abstain.
+PARTIAL: no new native run and no complete three-lap S. Frozen physics and historical evidence remain unchanged.
