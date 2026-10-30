@@ -1,0 +1,402 @@
+[
+  {
+    "Name": "first",
+    "Source": "docs/experiments/viable-safe-contingency/native/S0-full-baseline-v1.json.gz",
+    "Time": 1.6,
+    "Entry": 35,
+    "Exit": 132.38937497138977,
+    "Goal": 206.38937497138977,
+    "Held": false,
+    "State": {
+      "Input": {
+        "Rider": {
+          "Id": 1,
+          "Position": {
+            "X": 5.441456,
+            "Y": -3.5
+          },
+          "Velocity": {
+            "X": 8.189893,
+            "Y": 0
+          },
+          "Heading": 0,
+          "AngularVelocity": 0,
+          "Road": {
+            "Segment": 0,
+            "Progress": 0.1554701668875558,
+            "ReferenceMeters": 5.441455841064453,
+            "OffsetMeters": 3.5,
+            "Heading": 0,
+            "RadiusMeters": 0,
+            "CornerProgress": 0,
+            "Tangent": {
+              "X": 1,
+              "Y": 0
+            },
+            "Outward": {
+              "X": 0,
+              "Y": -1
+            },
+            "IsTurn": false
+          },
+          "TotalReferenceMeters": 5.441455841064453,
+          "DistanceMeters": 5.441455841071729,
+          "Activity": 0,
+          "Drive": 1,
+          "TargetOffsetMeters": 3.5,
+          "Impairment": 0,
+          "Context": 0,
+          "Speed": 8.189893,
+          "ForwardSpeed": 8.189893,
+          "SideSpeed": 0,
+          "SlideRadians": 0
+        },
+        "Time": 1.5999999999999999,
+        "Omega": 92.18620321324352,
+        "Steering": 0,
+        "Active": {
+          "SteeringRadians": 0,
+          "Drive": 1
+        },
+        "Pending": [
+          {
+            "ObservedAt": 1.4,
+            "ActivationAt": 1.64,
+            "Action": {
+              "SteeringRadians": 0,
+              "Drive": 1
+            }
+          }
+        ],
+        "NextReview": 1.6
+      },
+      "CrankOmega": 832.0768428088711
+    },
+    "PhysicalKey": "mZmZmZmZ\u002BT\u002BamZmZmZn5P0Y4w1\u002BdAIpAoNLhwOoLV0AAAAAAAQAAAGggrkAAAGDAzQkDQQAAAAAAAAAAAAAAAAAAAABJkiRJcubDPwAAAAANxBVAAAAAAAAADEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADcQVQAAgAAANxBVAAAAAAAAAgD8AAGBAAAAAAAAAAAAAAAAAAACAPwEAAABmZmZmZmb2Pz0K16NwPfo/AAAAAAAAgD8AAAAAAAAAAAA=",
+    "Gap": {
+      "Item1": 4.0992,
+      "Item2": 7.0992
+    },
+    "Reaction": 0.24
+  },
+  {
+    "Name": "second",
+    "Source": "docs/experiments/viable-safe-contingency/native/S0-full-baseline-v1.json.gz",
+    "Time": 10.2,
+    "Entry": 194.38937497138977,
+    "Exit": 291.77874994277954,
+    "Goal": 365.77874994277954,
+    "Held": false,
+    "State": {
+      "Input": {
+        "Rider": {
+          "Id": 1,
+          "Position": {
+            "X": 28.77237,
+            "Y": 67.11808
+          },
+          "Velocity": {
+            "X": -16.5815,
+            "Y": 3.6095626
+          },
+          "Heading": 2.9478743,
+          "AngularVelocity": 0.13980392,
+          "Road": {
+            "Segment": 4,
+            "Progress": 0.1004456550844254,
+            "ReferenceMeters": 138.61700558662415,
+            "OffsetMeters": 4.455059971029158,
+            "Heading": 3.141592653589793,
+            "RadiusMeters": 0,
+            "CornerProgress": 0,
+            "Tangent": {
+              "X": -1,
+              "Y": 1.2246469E-16
+            },
+            "Outward": {
+              "X": 1.2246469E-16,
+              "Y": 1
+            },
+            "IsTurn": false
+          },
+          "TotalReferenceMeters": 138.61700558662415,
+          "DistanceMeters": 143.72236950696242,
+          "Activity": 0,
+          "Drive": 0.31820688,
+          "TargetOffsetMeters": 3.5,
+          "Impairment": 0,
+          "Context": 2,
+          "Speed": 16.969828,
+          "ForwardSpeed": 16.966219,
+          "SideSpeed": -0.34995866,
+          "SlideRadians": 0.020623857
+        },
+        "Time": 10.199999999999996,
+        "Omega": 56.6833083011616,
+        "Steering": 0.008728359,
+        "Active": {
+          "SteeringRadians": 0.008728359,
+          "Drive": 0.31820688
+        },
+        "Pending": [
+          {
+            "ObservedAt": 9.999999999999996,
+            "ActivationAt": 10.239999999999997,
+            "Action": {
+              "SteeringRadians": 0.008729292,
+              "Drive": 0.31820688
+            }
+          }
+        ],
+        "NextReview": 10.2
+      },
+      "CrankOmega": 510.92047769950386
+    },
+    "PhysicalKey": "ZGZmZmZmJEBmZmZmZmYkQBAB00a67n9Ahkl7pXZXTEBkAQ88AQAAANAt5kF1PIZC6aaEwRMDZ0D5qTxAwigPPgQAAAA655xzzra5PwAAgIK\u002BU2FA4Ce1PfvREUAYLURU\u002ByEJQAAAAAAAAAAAAAAAAAAAAAAAAICCvlNhQAABqKYd92FAAAAAAAPsoj4AAGBAAAAAAAIAAABkAQ88A\u002ByiPgEAAAD\u002B//////8jQHkUrkfheiRATgUPPAPsoj4AAAAAAAAAAAA=",
+    "Gap": {
+      "Item1": 5.131001859823332,
+      "Item2": 6.026116992828812
+    },
+    "Reaction": 0.24
+  },
+  {
+    "Name": "historical",
+    "Source": "docs/experiments/standing-start-three-laps/native/K1.json.gz",
+    "Time": 28.6,
+    "Entry": 513.1681249141693,
+    "Exit": 610.5574998855591,
+    "Goal": 684.5574998855591,
+    "Held": false,
+    "State": {
+      "Input": {
+        "Rider": {
+          "Id": 1,
+          "Position": {
+            "X": -0.82745415,
+            "Y": 72.96384
+          },
+          "Velocity": {
+            "X": -25.497868,
+            "Y": -0.17176804
+          },
+          "Heading": -3.1126647,
+          "AngularVelocity": 0.077455565,
+          "Road": {
+            "Segment": 4,
+            "Progress": 0.5778621637052105,
+            "ReferenceMeters": 168.21682912111282,
+            "OffsetMeters": 10.300816501790877,
+            "Heading": 3.141592653589793,
+            "RadiusMeters": 0,
+            "CornerProgress": 0,
+            "Tangent": {
+              "X": -1,
+              "Y": 1.2246469E-16
+            },
+            "Outward": {
+              "X": 1.2246469E-16,
+              "Y": 1
+            },
+            "IsTurn": false
+          },
+          "TotalReferenceMeters": 486.99557906389236,
+          "DistanceMeters": 509.32495783270133,
+          "Activity": 0,
+          "Drive": 1,
+          "TargetOffsetMeters": 3.5,
+          "Impairment": 0,
+          "Context": 2,
+          "Speed": 25.498446,
+          "ForwardSpeed": 25.492168,
+          "SideSpeed": -0.5658021,
+          "SlideRadians": 0.022191491
+        },
+        "Time": 28.59999999999993,
+        "Omega": 108.62783824241447,
+        "Steering": -0.008726646,
+        "Active": {
+          "SteeringRadians": -0.008726646,
+          "Drive": 1
+        },
+        "Pending": [
+          {
+            "ObservedAt": 28.39999999999993,
+            "ActivationAt": 28.63999999999993,
+            "Action": {
+              "SteeringRadians": 0.02617994,
+              "Drive": 0.31820688
+            }
+          }
+        ],
+        "NextReview": 28.6
+      },
+      "CrankOmega": 979.6224866422534
+    },
+    "PhysicalKey": "hpmZmZmZPECamZmZmZk8QGfVRtr6nI5ASpZzgC4oW0A1\u002Bg68AQAAAAnUU7987ZFCovvLwfbjL77mNUfABqGePQQAAACttdbK2H3iPwAAoEPwBmVA8JPangSaJEAYLURU\u002ByEJQAAAAAAAAAAAAAAAAAAAAAAAAFDk7W9\u002BQIAA/AYz1X9AAAAAAAAAgD8AAGBAAAAAAAIAAAA1\u002Bg68AACAPwEAAABTZmZmZmY8QJBwPQrXozxAUHfWPAPsoj4AAAAAAAAAAAA=",
+    "Gap": {
+      "Item1": 10.88137494000902,
+      "Item2": 0.31734303189549834
+    },
+    "Reaction": 0.24
+  },
+  {
+    "Name": "held-first",
+    "Source": "docs/experiments/viable-safe-contingency/native/S0-full-baseline-v1.json.gz",
+    "Time": 1.8,
+    "Entry": 35,
+    "Exit": 132.38937497138977,
+    "Goal": 206.38937497138977,
+    "Held": true,
+    "State": {
+      "Input": {
+        "Rider": {
+          "Id": 1,
+          "Position": {
+            "X": 7.20745,
+            "Y": -3.5
+          },
+          "Velocity": {
+            "X": 9.45408,
+            "Y": 0
+          },
+          "Heading": 0,
+          "AngularVelocity": 0,
+          "Road": {
+            "Segment": 0,
+            "Progress": 0.20592714037214008,
+            "ReferenceMeters": 7.207449913024902,
+            "OffsetMeters": 3.5,
+            "Heading": 0,
+            "RadiusMeters": 0,
+            "CornerProgress": 0,
+            "Tangent": {
+              "X": 1,
+              "Y": 0
+            },
+            "Outward": {
+              "X": 0,
+              "Y": -1
+            },
+            "IsTurn": false
+          },
+          "TotalReferenceMeters": 7.207449913024902,
+          "DistanceMeters": 7.207449913032178,
+          "Activity": 0,
+          "Drive": 1,
+          "TargetOffsetMeters": 3.5,
+          "Impairment": 0,
+          "Context": 0,
+          "Speed": 9.45408,
+          "ForwardSpeed": 9.45408,
+          "SideSpeed": 0,
+          "SlideRadians": 0
+        },
+        "Time": 1.7999999999999998,
+        "Omega": 107.22397723637698,
+        "Steering": 0,
+        "Active": {
+          "SteeringRadians": 0,
+          "Drive": 1
+        },
+        "Pending": [
+          {
+            "ObservedAt": 1.5999999999999999,
+            "ActivationAt": 1.8399999999999999,
+            "Action": {
+              "SteeringRadians": 0,
+              "Drive": 1
+            }
+          }
+        ],
+        "NextReview": 1.8
+      },
+      "CrankOmega": 967.2477117474864
+    },
+    "PhysicalKey": "zMzMzMzM/D/NzMzMzMz8P1DyS1D7OY5AaFKepFXOWkAAAAAAAQAAAG6j5kAAAGDA6UMXQQAAAAAAAAAAAAAAAAAAAAAP6qAO0lvKPwAAAMBt1BxAAAAAAAAADEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAbdQcQAAgAMBt1BxAAAAAAAAAgD8AAGBAAAAAAAAAAAAAAAAAAACAPwEAAACZmZmZmZn5P3A9CtejcP0/AAAAAAAAgD8AAAAAAAAAAAA=",
+    "Gap": {
+      "Item1": 4.0992,
+      "Item2": 7.0992
+    },
+    "Reaction": 0.24
+  },
+  {
+    "Name": "held-second",
+    "Source": "docs/experiments/viable-safe-contingency/native/S0-full-baseline-v1.json.gz",
+    "Time": 10.4,
+    "Entry": 194.38937497138977,
+    "Exit": 291.77874994277954,
+    "Goal": 365.77874994277954,
+    "Held": true,
+    "State": {
+      "Input": {
+        "Rider": {
+          "Id": 1,
+          "Position": {
+            "X": 25.409666,
+            "Y": 67.79944
+          },
+          "Velocity": {
+            "X": -17.037783,
+            "Y": 3.207608
+          },
+          "Heading": 2.9758966,
+          "AngularVelocity": 0.14083728,
+          "Road": {
+            "Segment": 4,
+            "Progress": 0.15468280546126828,
+            "ReferenceMeters": 141.9797089099884,
+            "OffsetMeters": 5.136418308431502,
+            "Heading": 3.141592653589793,
+            "RadiusMeters": 0,
+            "CornerProgress": 0,
+            "Tangent": {
+              "X": -1,
+              "Y": 1.2246469E-16
+            },
+            "Outward": {
+              "X": 1.2246469E-16,
+              "Y": 1
+            },
+            "IsTurn": false
+          },
+          "TotalReferenceMeters": 141.9797089099884,
+          "DistanceMeters": 147.15352129936946,
+          "Activity": 0,
+          "Drive": 0.31820688,
+          "TargetOffsetMeters": 3.5,
+          "Impairment": 0,
+          "Context": 2,
+          "Speed": 17.337093,
+          "ForwardSpeed": 17.333488,
+          "SideSpeed": -0.35348296,
+          "SlideRadians": 0.020390233
+        },
+        "Time": 10.399999999999995,
+        "Omega": 57.8518431924206,
+        "Steering": 0.008729292,
+        "Active": {
+          "SteeringRadians": 0.008729292,
+          "Drive": 0.31820688
+        },
+        "Pending": [
+          {
+            "ObservedAt": 10.199999999999996,
+            "ActivationAt": 10.439999999999996,
+            "Action": {
+              "SteeringRadians": 0.008731914,
+              "Drive": 0.31820688
+            }
+          }
+        ],
+        "NextReview": 10.4
+      },
+      "CrankOmega": 521.4424614055754
+    },
+    "PhysicalKey": "yszMzMzMJEDNzMzMzMwkQIKVNCmKS4BAJGKeMgntTEBOBQ88AQAAAP9Gy0FQmYdCYU2IwXNJTUAXdT5ApjcQPgQAAAC21lprpczDPwAAgMZZv2FA4Ce1PbGLFEAYLURU\u002ByEJQAAAAAAAAAAAAAAAAAAAAAAAAIDGWb9hQAABgKXpZGJAAAAAAAPsoj4AAGBAAAAAAAIAAABOBQ88A\u002ByiPgEAAABkZmZmZmYkQN96FK5H4SRATRAPPAPsoj4AAAAAAAAAAAA=",
+    "Gap": {
+      "Item1": 5.837173303622652,
+      "Item2": 5.360775971080636
+    },
+    "Reaction": 0.24
+  }
+]

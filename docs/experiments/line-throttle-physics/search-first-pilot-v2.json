@@ -1,0 +1,3083 @@
+{
+  "Fixture": {
+    "Name": "first",
+    "Source": "docs/experiments/viable-safe-contingency/native/S0-full-baseline-v1.json.gz",
+    "Time": 1.6,
+    "Entry": 35,
+    "Exit": 132.38937497138977,
+    "Goal": 206.38937497138977,
+    "State": {
+      "Input": {
+        "Rider": {
+          "Id": 1,
+          "Position": {
+            "X": 5.441456,
+            "Y": -3.5
+          },
+          "Velocity": {
+            "X": 8.189893,
+            "Y": 0
+          },
+          "Heading": 0,
+          "AngularVelocity": 0,
+          "Road": {
+            "Segment": 0,
+            "Progress": 0.1554701668875558,
+            "ReferenceMeters": 5.441455841064453,
+            "OffsetMeters": 3.5,
+            "Heading": 0,
+            "RadiusMeters": 0,
+            "CornerProgress": 0,
+            "Tangent": {
+              "X": 1,
+              "Y": 0
+            },
+            "Outward": {
+              "X": 0,
+              "Y": -1
+            },
+            "IsTurn": false
+          },
+          "TotalReferenceMeters": 5.441455841064453,
+          "DistanceMeters": 5.441455841071729,
+          "Activity": 0,
+          "Drive": 1,
+          "TargetOffsetMeters": 3.5,
+          "Impairment": 0,
+          "Context": 0,
+          "Speed": 8.189893,
+          "ForwardSpeed": 8.189893,
+          "SideSpeed": 0,
+          "SlideRadians": 0
+        },
+        "Time": 1.5999999999999999,
+        "Omega": 92.18620321324352,
+        "Steering": 0,
+        "Active": {
+          "SteeringRadians": 0,
+          "Drive": 1
+        },
+        "Pending": [
+          {
+            "ObservedAt": 1.4,
+            "ActivationAt": 1.64,
+            "Action": {
+              "SteeringRadians": 0,
+              "Drive": 1
+            }
+          }
+        ],
+        "NextReview": 1.6
+      },
+      "CrankOmega": 832.0768428088711
+    },
+    "Spec": {
+      "Profile": {
+        "Id": 1,
+        "Name": "R1",
+        "Skills": {
+          "Start": 50,
+          "Speed": 50,
+          "SlideControl": 50,
+          "TrackReading": 50,
+          "PairRiding": 50,
+          "Adaptability": 50
+        },
+        "Style": {
+          "RiskTolerance": 0.5,
+          "LaneChangeTendency": 0.5,
+          "OutsidePreference": 0.5,
+          "SetupIndependence": 0.5
+        }
+      },
+      "Setup": {
+        "Gearing": 0.5,
+        "TractionBias": 0.5
+      },
+      "ReferenceMeters": 0,
+      "OffsetMeters": 3.5,
+      "SpeedMetersPerSecond": 0,
+      "TargetOffsetMeters": 3.5,
+      "InitialOutwardSpeed": 0,
+      "TrafficEnabled": false,
+      "Passive": false,
+      "Bullet": false
+    },
+    "Held": false
+  },
+  "Attempts": [
+    {
+      "Label": "A-T0-pilot-v2",
+      "Complete": true,
+      "Legal": true,
+      "FamilyAchieved": true,
+      "MeanOffset": 0.4117062335745397,
+      "Reason": "complete common geometric section",
+      "Arrival": 12.840356049340341,
+      "CpuSeconds": 5.875
+    },
+    {
+      "Label": "B-T0-pilot-v2",
+      "Complete": true,
+      "Legal": true,
+      "FamilyAchieved": true,
+      "MeanOffset": 4.053473447516088,
+      "Reason": "complete common geometric section",
+      "Arrival": 13.94349400021787,
+      "CpuSeconds": 5.234375
+    },
+    {
+      "Label": "C-T0-pilot-v2",
+      "Complete": true,
+      "Legal": true,
+      "FamilyAchieved": true,
+      "MeanOffset": 9.157633575521801,
+      "Reason": "complete common geometric section",
+      "Arrival": 15.28033586231247,
+      "CpuSeconds": 5.796875
+    },
+    {
+      "Label": "A-T1-pilot-v2-0000",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.173387750071274,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          1,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0001",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.173387750071274,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          1,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.8,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0002",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.315408529462532,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.015625,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          1,
+          0.31820688,
+          0.31820688,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0003",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.315408529462532,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.015625,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          1,
+          0.31820688,
+          0.31820688,
+          1,
+          1
+        ],
+        "Preview": 0.8,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0004",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.441514528179711,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          1,
+          0.6,
+          0.6,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0005",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.441514528179711,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.015625,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          1,
+          0.6,
+          0.6,
+          1,
+          1
+        ],
+        "Preview": 0.8,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0006",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.394460202452743,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.046875,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0007",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.394460202452743,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.0625,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "Preview": 0.8,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0008",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.173387750071274,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.0625,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          3.5,
+          1.5,
+          3.5,
+          5
+        ],
+        "Drives": [
+          1,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0009",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.173387750071274,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          3.5,
+          1.5,
+          3.5,
+          5
+        ],
+        "Drives": [
+          1,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.8,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0010",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.315408529462532,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.015625,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          3.5,
+          1.5,
+          3.5,
+          5
+        ],
+        "Drives": [
+          1,
+          0.31820688,
+          0.31820688,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0011",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.315408529462532,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          3.5,
+          1.5,
+          3.5,
+          5
+        ],
+        "Drives": [
+          1,
+          0.31820688,
+          0.31820688,
+          1,
+          1
+        ],
+        "Preview": 0.8,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0012",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.441514528179711,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          3.5,
+          1.5,
+          3.5,
+          5
+        ],
+        "Drives": [
+          1,
+          0.6,
+          0.6,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0013",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.441514528179711,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          3.5,
+          1.5,
+          3.5,
+          5
+        ],
+        "Drives": [
+          1,
+          0.6,
+          0.6,
+          1,
+          1
+        ],
+        "Preview": 0.8,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0014",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.394460202452743,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          3.5,
+          1.5,
+          3.5,
+          5
+        ],
+        "Drives": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0015",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.394460202452743,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          3.5,
+          1.5,
+          3.5,
+          5
+        ],
+        "Drives": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "Preview": 0.8,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0016",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.173387750071274,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.015625,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          3.5,
+          1,
+          1.5,
+          5
+        ],
+        "Drives": [
+          1,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0017",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.173387750071274,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          3.5,
+          1,
+          1.5,
+          5
+        ],
+        "Drives": [
+          1,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.8,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0018",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.315408529462532,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          3.5,
+          1,
+          1.5,
+          5
+        ],
+        "Drives": [
+          1,
+          0.31820688,
+          0.31820688,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0019",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.315408529462532,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          3.5,
+          1,
+          1.5,
+          5
+        ],
+        "Drives": [
+          1,
+          0.31820688,
+          0.31820688,
+          1,
+          1
+        ],
+        "Preview": 0.8,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0020",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.441514528179711,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.015625,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          3.5,
+          1,
+          1.5,
+          5
+        ],
+        "Drives": [
+          1,
+          0.6,
+          0.6,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0021",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.441514528179711,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.046875,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          3.5,
+          1,
+          1.5,
+          5
+        ],
+        "Drives": [
+          1,
+          0.6,
+          0.6,
+          1,
+          1
+        ],
+        "Preview": 0.8,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0022",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.394460202452743,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.046875,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          3.5,
+          1,
+          1.5,
+          5
+        ],
+        "Drives": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0023",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.394460202452743,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.046875,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          3.5,
+          1,
+          1.5,
+          5
+        ],
+        "Drives": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "Preview": 0.8,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0024",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.173387750071274,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          0.7,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          1,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0025",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.173387750071274,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.015625,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          3.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          1,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0026",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.173387750071274,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          0.7,
+          1.5,
+          5
+        ],
+        "Drives": [
+          1,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0027",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.173387750071274,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          3.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          1,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0028",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.173387750071274,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          0.7,
+          5
+        ],
+        "Drives": [
+          1,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0029",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.173387750071274,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.015625,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          3.5,
+          5
+        ],
+        "Drives": [
+          1,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0030",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.173387750071274,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          3
+        ],
+        "Drives": [
+          1,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0031",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.173387750071274,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          7
+        ],
+        "Drives": [
+          1,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0032",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.005619897023251,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.015625,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.75,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0033",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.173387750071274,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          1,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0034",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.005619897023251,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.015625,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.75,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0035",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.142910206908796,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.75,
+          0.25,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0036",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.005619897023251,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.015625,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.75,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0037",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.005619897023251,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.046875,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.75,
+          0,
+          0.25,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0038",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.005619897023251,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.015625,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.75,
+          0,
+          0,
+          0.75,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0039",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.005619897023251,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.75,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0040",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.005619897023251,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.015625,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.75,
+          0,
+          0,
+          1,
+          0.75
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0041",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.005619897023251,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.046875,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.75,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0042",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.005619897023251,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.015625,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.75,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.29000000000000004,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0043",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.005619897023251,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.75,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.59,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0044",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.005619897023251,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.75,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.6000000000000001,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0045",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.005619897023251,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.75,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 1,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0046",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.005619897023251,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.015625,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.75,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.5,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0047",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.005619897023251,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.75,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.8,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0048",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.005619897023251,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.015625,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          0.7,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.75,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0049",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.005619897023251,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          2.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.75,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0050",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.005619897023251,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.015625,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          0.7,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.75,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0051",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.005619897023251,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.015625,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          2.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.75,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0052",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.005619897023251,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          0.7,
+          5
+        ],
+        "Drives": [
+          0.75,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0053",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.005619897023251,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          2.5,
+          5
+        ],
+        "Drives": [
+          0.75,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0054",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.005619897023251,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          4
+        ],
+        "Drives": [
+          0.75,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0055",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.005619897023251,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.015625,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          6
+        ],
+        "Drives": [
+          0.75,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0056",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 11.71473959076424,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.5,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0057",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.005619897023251,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.015625,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.75,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0058",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 11.71473959076424,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.5,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0059",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 11.966200975468297,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.015625,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.5,
+          0.25,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0060",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 11.71473959076424,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.046875,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.5,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0061",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 11.71473959076424,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.5,
+          0,
+          0.25,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0062",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 11.71473959076424,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.5,
+          0,
+          0,
+          0.75,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0063",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 11.71473959076424,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.015625,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.5,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0064",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 11.71473959076424,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.5,
+          0,
+          0,
+          1,
+          0.75
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0065",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 11.71473959076424,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.5,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0066",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 11.71473959076424,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.5,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.29000000000000004,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0067",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 11.71473959076424,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.5,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.59,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0068",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 11.71473959076424,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.015625,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.5,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.6000000000000001,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0069",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 11.71473959076424,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.5,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 1,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0070",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 11.71473959076424,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.5,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.5,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0071",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 11.71473959076424,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.5,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.8,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0072",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 11.71473959076424,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          0.7,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.5,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0073",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 11.71473959076424,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.046875,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          2.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.5,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0074",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 11.71473959076424,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          0.7,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.5,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0075",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 11.71473959076424,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          2.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.5,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0076",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 11.71473959076424,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.046875,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          0.7,
+          5
+        ],
+        "Drives": [
+          0.5,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0077",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 11.71473959076424,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          2.5,
+          5
+        ],
+        "Drives": [
+          0.5,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0078",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 11.71473959076424,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.015625,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          4
+        ],
+        "Drives": [
+          0.5,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0079",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 11.71473959076424,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          6
+        ],
+        "Drives": [
+          0.5,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0080",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 11.795446011935253,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.25,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0081",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.005619897023251,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.75,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0082",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 11.71473959076424,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.015625,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.5,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0083",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 11.966200975468297,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.015625,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.5,
+          0.25,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0084",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 11.71473959076424,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.046875,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.5,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0085",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 11.71473959076424,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.5,
+          0,
+          0.25,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0086",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 11.71473959076424,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.046875,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.5,
+          0,
+          0,
+          0.75,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0087",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 11.71473959076424,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.5,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0088",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 11.71473959076424,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.5,
+          0,
+          0,
+          1,
+          0.75
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0089",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 11.71473959076424,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.046875,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.5,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0090",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 11.71473959076424,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.015625,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.5,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.29000000000000004,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0091",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 11.71473959076424,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.5,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.59,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0092",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 11.71473959076424,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.046875,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.5,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.6000000000000001,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0093",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 11.71473959076424,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.046875,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.5,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 1,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0094",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 11.71473959076424,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.5,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.5,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "A-T1-pilot-v2-0095",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 11.71473959076424,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          1.5,
+          1.5,
+          1.5,
+          5
+        ],
+        "Drives": [
+          0.5,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.8,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "B-T1-pilot-v2-0000",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.173387750071274,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "Drives": [
+          1,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.44,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    },
+    {
+      "Label": "B-T1-pilot-v2-0001",
+      "Complete": false,
+      "Legal": false,
+      "FamilyAchieved": false,
+      "MeanOffset": 12.173387750071274,
+      "Reason": "footprint reserve",
+      "Arrival": null,
+      "CpuSeconds": 0.03125,
+      "Parameters": {
+        "Offsets": [
+          3.5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "Drives": [
+          1,
+          0,
+          0,
+          1,
+          1
+        ],
+        "Preview": 0.8,
+        "CourseTime": 0.8,
+        "YawTime": 0.65,
+        "SteerBiasDegrees": 0
+      }
+    }
+  ],
+  "ElapsedCpu": 20.03125,
+  "Limit": 20,
+  "Scope": "offline finite search; family membership from executed forecast XY, no global infeasibility claim"
+}
