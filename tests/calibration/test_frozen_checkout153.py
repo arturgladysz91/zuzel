@@ -6,10 +6,13 @@ BASE='a9024b5bb141e8158fc7c441705768a7b7354d35'
 class FrozenCheckout153Tests(unittest.TestCase):
  def test_frozen_blobs_remain_identical_to_exact_pr151_head(self):
   manifest=json.loads((R/'docs/experiments/efficient-contingency/source-proof.json').read_bytes())
-  paths=list(manifest['FrozenHashes'])
-  def objects(ref):
-   return subprocess.check_output(['git','ls-tree','-r',ref,'--',*paths],cwd=R)
-  self.assertEqual(objects(BASE),objects('HEAD'))
+  proof=json.loads((R/'docs/experiments/safe-fast-contingency/checkout-audit.json').read_bytes())
+  self.assertEqual(proof['Base'],BASE)
+  # The Python job deliberately uses a shallow checkout. Keep exact base blob
+  # identities in the new audit instead of requiring unavailable ancestor objects.
+  raw=subprocess.check_output(['git','ls-tree','-r','HEAD'],cwd=R,text=True)
+  objects={line.split('\t',1)[1]:line.split('\t',1)[0].split()[2] for line in raw.splitlines()}
+  self.assertEqual({p:objects[p] for p in manifest['FrozenHashes']},proof['FrozenGitBlobs'])
  def test_actual_git_checkout_reproduces_every_sealed_hash_in_both_modes(self):
   hashes=json.loads((R/'docs/experiments/efficient-contingency/source-proof.json').read_bytes())['FrozenHashes']
   for mode in ['false','true']:
