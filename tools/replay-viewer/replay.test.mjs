@@ -1,3 +1,4 @@
+import './study158.test.mjs';
 import './study157.test.mjs';
 import './hierarchy155.test.mjs';
 import './study156.test.mjs';
