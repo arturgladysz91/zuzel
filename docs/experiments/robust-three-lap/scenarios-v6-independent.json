@@ -1,0 +1,87 @@
+{
+  "Base": "7c24c31dd8587889ff2459608c328fb865a541ef",
+  "RequiredLaps": 3,
+  "MinimumTrials": 5,
+  "StartingSpeed": 0,
+  "PairedIdenticalPhysicsAndInitialStates": true,
+  "DevelopmentScenario": "nominal-B",
+  "HeldNotUsedForTuning": true,
+  "Scenarios": [
+    {
+      "Id": "nominal-B",
+      "Gate": "B",
+      "OffsetMeters": 3.5,
+      "Held": false,
+      "Role": "independent"
+    },
+    {
+      "Id": "unseen-A-shift",
+      "Gate": "A",
+      "OffsetMeters": 1.25,
+      "Held": true,
+      "Role": "independent"
+    },
+    {
+      "Id": "unseen-B-in",
+      "Gate": "B",
+      "OffsetMeters": 3,
+      "Held": true,
+      "Role": "independent"
+    },
+    {
+      "Id": "unseen-C-in",
+      "Gate": "C",
+      "OffsetMeters": 6,
+      "Held": true,
+      "Role": "independent"
+    },
+    {
+      "Id": "unseen-D-in",
+      "Gate": "D",
+      "OffsetMeters": 9,
+      "Held": true,
+      "Role": "independent"
+    },
+    {
+      "Id": "unseen-C-out",
+      "Gate": "C",
+      "OffsetMeters": 7,
+      "Held": true,
+      "Role": "independent"
+    },
+    {
+      "Id": "regression-A",
+      "Gate": "A",
+      "OffsetMeters": 0.5,
+      "Held": false,
+      "Role": "regression"
+    },
+    {
+      "Id": "regression-C",
+      "Gate": "C",
+      "OffsetMeters": 6.5,
+      "Held": false,
+      "Role": "regression"
+    },
+    {
+      "Id": "regression-D",
+      "Gate": "D",
+      "OffsetMeters": 9.5,
+      "Held": false,
+      "Role": "regression"
+    },
+    {
+      "Id": "regression-B-shift",
+      "Gate": "B",
+      "OffsetMeters": 4,
+      "Held": false,
+      "Role": "regression"
+    }
+  ],
+  "Rules": "First complete native S from rest before held validation. Freeze controller before first held. No pasted commands, state resets or combining runs. Every ABSTAIN/budget stop remains incomplete. If no first completion, diagnose instead of repeating five identical failures.",
+  "MinimumIndependentTrials": 5,
+  "PlannedIndependentTrials": 6,
+  "AllRequiredTrials": 10,
+  "FrozenBeforeV6Development": true,
+  "Rule": "Every one of the10 distinct final conditions must pass;6 independent including nominal,4 known regressions. No exclusion of v5 failures. This set is frozen before any v6 model/native outcome."
+}

@@ -241,3 +241,8 @@
 
 tools/state-maneuver-transfer/** text eol=lf
 docs/experiments/state-maneuver-transfer/** -text
+
+# Study158: exact native receipts and frozen LF controller bytes.
+/docs/experiments/robust-three-lap/** -text whitespace=trailing-space,space-before-tab,cr-at-eol
+/tools/robust-three-lap/** text eol=lf
+/tools/replay-viewer/study158* text eol=lf

@@ -77,3 +77,34 @@ Nie przenoś algorytmów do JSON. Nie zaszywaj regulaminu konkretnej ligi w Core
 6. przegląd diffu pod kątem przypadkowych zmian i ukrytej zależności od kolejności
 
 PR powinien mieć jeden spójny cel. Duży etap dziel na fundament, zachowanie, integrację i balans.
+
+## Obowiązkowa walidacja autonomii S — od badania #158
+
+Główną jednostką wyniku jest pełny, nieprzerwany przejazd trzech okrążeń
+(sześciu łuków), od legalnego zatrzymanego startu do rzeczywistej mety,
+w jednym oryginalnym świecie Box2D. Wszystkie komendy muszą być autonomiczne;
+nie wolno resetować motocykla, wstawiać optymalnej taśmy ani składać prefiksów.
+
+PASS autonomii S wymaga co najmniej 5/5 legalnych ukończeń: jednej próby nominalnej
+i czterech innych, legalnych, wcześniej ustalonych warunków. Preferuj10 prób,
+jeżeli koszt pozwala. Powtórzenie identycznego deterministycznego przebiegu nie
+jest niezależnym potwierdzeniem odporności. Warunki w każdej parze baza/nowy
+muszą być identyczne. Zestaw końcowy jest odłożony i nie służy dostrajaniu.
+
+ABSTAIN, naruszenie kontaktowe, utrata wykonalności i wyczerpanie budżetu oznaczają
+nieukończenie i pozostają w raporcie. Nie należy sztucznie kontynuować jazdy.
+Jeżeli nie ma pierwszego pełnego S, diagnozuj przyczynę zamiast powtarzać pięć
+identycznych porażek. Krótkie testy służą wyłącznie opracowaniu i naprawie;
+nie zastępują wymaganej serii. Brak budżetu na serię nie pozwala ogłosić sukcesu.
+
+Raport zachowuje każdą próbę i jej czas/okrążenia, wszystkie sześć łuków
+(wejście/minimum/wyjście), profile prostych, gaz0/częściowy/100%, beta, yaw,
+wheelspin, Fx/Fy, odstępy całego obrysu i swept, odmowy/naprawy/odrzucenia,
+CPU decyzji i całego biegu oraz rzeczywistą drogę. Podaj medianę ukończeń,
+rozrzut, liczbę DNF i porównania parami. Nie ukrywaj nieukończeń w średnich.
+
+PASS poprawy sportowej wymaga ponadto przewagi nad porównywalną bazą S.
+Jeżeli baza nie kończy, raportuj poprawę niezawodności bez procentowej
+poprawy czasu. Historyczne L (w tym53,989766s i55,167079s) nie są ukończeniami S.
+Fizyka, silnik, opony, przyczepność, pełny obrys>=0,5m, swept, aktuatory,
+opóźnienia, niezależność certyfikacji i ciągłość świata pozostają obowiązujące.
