@@ -1,3 +1,5 @@
+[Badanie #159 — audyt geometrii, potencjału fizycznego i AI](docs/experiments/geometry-speed-audit/REPORT.md): PARTIAL, narzędzie domyślnie OFF. Diagnoza celu10 m/s, porównanie B/C, pełna telemetria i natywny replay; brak potwierdzonej szybszej autonomii S3.
+
 # Speedway Manager (Żużlowy) – Core Simulation
 
 [Viable safety0.5m planning (study #154)](docs/experiments/viable-safe-contingency/REPORT.md)

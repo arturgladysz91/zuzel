@@ -1,3 +1,5 @@
+[Geometry and speed audit (study #159)](experiments/geometry-speed-audit/REPORT.md) is PROVISIONAL and default OFF. It queries original geometry, contacts, clutch and predictors, and analyzes saved native S3 histories. Local equilibria and forecasts never count as autonomous finishes. Exact boundary export and native-state replay are observation-only; no production or frozen physics change.
+
 Study154 is PROVISIONAL and tools-only, default OFF: [report](experiments/viable-safe-contingency/REPORT.md).
 It isolates short-horizon proposal quality from complete13/9 S certification,
 prioritises repropagated retained controls and keeps covered prefixes across goals.

@@ -1,0 +1,18 @@
+Unhandled exception. System.IO.DirectoryNotFoundException: Could not find a part of the path 'C:\Users\artur\Documents\Codex\2026-11-02\files-pasted-by-the-user-zadanie\work\repo159\docs\experiments\track-awareness-anticipatory-riding\choices.json'.
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.StreamReader.ValidateArgsAndOpenPath(String path, Encoding encoding, Int32 bufferSize)
+   at System.IO.File.ReadAllText(String path, Encoding encoding)
+   at SharedWorldSpeedway.RobustLearningExperiment.Read[T](String directory, String name) in C:\Users\artur\Documents\Codex\2026-11-02\files-pasted-by-the-user-zadanie\work\repo159\tools\shared-world-speedway\RobustLearningExperiment.cs:line 47
+   at SharedWorldSpeedway.TrackAwarenessExperiment134.Read[T](String d, String name) in C:\Users\artur\Documents\Codex\2026-11-02\files-pasted-by-the-user-zadanie\work\repo159\tools\shared-world-speedway\TrackAwarenessExperiment134.cs:line 38
+   at SharedWorldSpeedway.MultiActionExperiment135.Policy() in C:\Users\artur\Documents\Codex\2026-11-02\files-pasted-by-the-user-zadanie\work\repo159\tools\shared-world-speedway\MultiActionExperiment135.cs:line 15
+   at SharedWorldSpeedway.CausalYawExperiment137.get_Policy() in C:\Users\artur\Documents\Codex\2026-11-02\files-pasted-by-the-user-zadanie\work\repo159\tools\shared-world-speedway\CausalYawExperiment137.cs:line 18
+   at SharedWorldSpeedway.PhysicsExperiment139.get_Policy() in C:\Users\artur\Documents\Codex\2026-11-02\files-pasted-by-the-user-zadanie\work\repo159\tools\shared-world-speedway\PhysicsValidation139\PhysicsExperiment139.cs:line 15
+   at SharedWorldSpeedway.Controller143.get_Policy() in C:\Users\artur\Documents\Codex\2026-11-02\files-pasted-by-the-user-zadanie\work\repo159\tools\shared-world-speedway\RacingConstraints143\Controller143.cs:line 14
+   at Speed148.ExactRuntime148.Begin(Double time) in C:\Users\artur\Documents\Codex\2026-11-02\files-pasted-by-the-user-zadanie\work\repo159\tools\planner-speed-root-cause\ExactRuntime148.cs:line 32
+   at Robust150.Runtime150.Begin(Double time) in C:\Users\artur\Documents\Codex\2026-11-02\files-pasted-by-the-user-zadanie\work\repo159\tools\robust-autonomous-racing\Runtime150.cs:line 16
+   at ThreeLap158.Runtime158.Begin(Double time) in C:\Users\artur\Documents\Codex\2026-11-02\files-pasted-by-the-user-zadanie\work\repo159\tools\robust-three-lap\Runtime158.Generated.cs:line 32
+   at Audit159.Program159.Diagnostics() in C:\Users\artur\Documents\Codex\2026-11-02\files-pasted-by-the-user-zadanie\work\repo159\tools\geometry-speed-audit\Program159.cs:line 52
+   at Audit159.Program159.Main(String[] args) in C:\Users\artur\Documents\Codex\2026-11-02\files-pasted-by-the-user-zadanie\work\repo159\tools\geometry-speed-audit\Program159.cs:line 21

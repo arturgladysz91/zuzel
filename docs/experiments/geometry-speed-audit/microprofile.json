@@ -1,0 +1,29 @@
+{
+  "Base": "9c94a21e37877fd82565fd309fd2850aeb23f341",
+  "Scope": "Batched read-only original functions, one process, no world; not additive to archived full-race phase times. CPU resolution retained.",
+  "Phases": [
+    {
+      "Name": "pending0.24-cold",
+      "Calls": 490,
+      "CpuSeconds": 2.953125,
+      "WallSeconds": 2.4063399
+    },
+    {
+      "Name": "Control158.Action-warm-pending",
+      "Calls": 490,
+      "CpuSeconds": 0.34375,
+      "WallSeconds": 0.3203069
+    },
+    {
+      "Name": "Joint158.Correct-distinct-native",
+      "Calls": 490,
+      "CpuSeconds": 0.171875,
+      "WallSeconds": 0.1772497
+    }
+  ],
+  "PrefixForecasts": 490,
+  "PrefixContactQueries": 11804,
+  "ForceQueries": 25930,
+  "JointMemoHits": 644,
+  "JointMemoMisses": 2296
+}
