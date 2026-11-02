@@ -1,0 +1,176 @@
+{
+  "Label": "native-dev-v5",
+  "Baseline": false,
+  "Validation": false,
+  "Scenario": {
+    "Id": "nominal-B",
+    "Gate": "B",
+    "OffsetMeters": 3.5,
+    "Held": false,
+    "Role": "independent"
+  },
+  "Spec": {
+    "Profile": {
+      "Id": 1,
+      "Name": "R1",
+      "Skills": {
+        "Start": 50,
+        "Speed": 50,
+        "SlideControl": 50,
+        "TrackReading": 50,
+        "PairRiding": 50,
+        "Adaptability": 50
+      },
+      "Style": {
+        "RiskTolerance": 0.5,
+        "LaneChangeTendency": 0.5,
+        "OutsidePreference": 0.5,
+        "SetupIndependence": 0.5
+      }
+    },
+    "Setup": {
+      "Gearing": 0.5,
+      "TractionBias": 0.5
+    },
+    "ReferenceMeters": 0,
+    "OffsetMeters": 3.5,
+    "SpeedMetersPerSecond": 0,
+    "TargetOffsetMeters": 3.5,
+    "InitialOutwardSpeed": 0,
+    "TrafficEnabled": false,
+    "Passive": false,
+    "Bullet": false
+  },
+  "Initial": {
+    "Input": {
+      "Rider": {
+        "Id": 1,
+        "Position": {
+          "X": 0,
+          "Y": -3.5
+        },
+        "Velocity": {
+          "X": 0,
+          "Y": 0
+        },
+        "Heading": 0,
+        "AngularVelocity": 0,
+        "Road": {
+          "Segment": 0,
+          "Progress": 0,
+          "ReferenceMeters": 0,
+          "OffsetMeters": 3.5,
+          "Heading": 0,
+          "RadiusMeters": 0,
+          "CornerProgress": 0,
+          "Tangent": {
+            "X": 1,
+            "Y": 0
+          },
+          "Outward": {
+            "X": 0,
+            "Y": -1
+          },
+          "IsTurn": false
+        },
+        "TotalReferenceMeters": 0,
+        "DistanceMeters": 0,
+        "Activity": 0,
+        "Drive": 0,
+        "TargetOffsetMeters": 3.5,
+        "Impairment": 0,
+        "Context": 0,
+        "Speed": 0,
+        "ForwardSpeed": 0,
+        "SideSpeed": 0,
+        "SlideRadians": 0
+      },
+      "Time": 0,
+      "Omega": 0,
+      "Steering": 0,
+      "Active": {
+        "SteeringRadians": 0,
+        "Drive": 0
+      },
+      "Pending": [],
+      "NextReview": 0
+    },
+    "CrankOmega": 418.87902047863906
+  },
+  "ExpectedInitial": {
+    "Input": {
+      "Rider": {
+        "Id": 1,
+        "Position": {
+          "X": 0,
+          "Y": -3.5
+        },
+        "Velocity": {
+          "X": 0,
+          "Y": 0
+        },
+        "Heading": 0,
+        "AngularVelocity": 0,
+        "Road": {
+          "Segment": 0,
+          "Progress": 0,
+          "ReferenceMeters": 0,
+          "OffsetMeters": 3.5,
+          "Heading": 0,
+          "RadiusMeters": 0,
+          "CornerProgress": 0,
+          "Tangent": {
+            "X": 1,
+            "Y": 0
+          },
+          "Outward": {
+            "X": 0,
+            "Y": -1
+          },
+          "IsTurn": false
+        },
+        "TotalReferenceMeters": 0,
+        "DistanceMeters": 0,
+        "Activity": 0,
+        "Drive": 0,
+        "TargetOffsetMeters": 3.5,
+        "Impairment": 0,
+        "Context": 0,
+        "Speed": 0,
+        "ForwardSpeed": 0,
+        "SideSpeed": 0,
+        "SlideRadians": 0
+      },
+      "Time": 0,
+      "Omega": 0,
+      "Steering": 0,
+      "Active": {
+        "SteeringRadians": 0,
+        "Drive": 0
+      },
+      "Pending": [],
+      "NextReview": 0
+    },
+    "CrankOmega": 418.87902047863906
+  },
+  "ActualMassKg": 147,
+  "ActualInertiaKgMetersSquared": 52.72097,
+  "StoppedStart": true,
+  "RequiredLaps": 3,
+  "CompletedLaps": 2,
+  "FinishSeconds": null,
+  "Pass": false,
+  "Complete": false,
+  "MinimumPoseMeters": 0.7887035949938892,
+  "MinimumSweepMeters": 0.7188560161032814,
+  "MaximumBetaDegrees": 3.154397496253624,
+  "Contacts": 0,
+  "AcceptedDecisions": 335,
+  "Abstain": 0,
+  "Outcome": "technical invariant: Finite physical actions required.",
+  "Fingerprint": "00FF29483A26CF3152D49693AA9FEEFE5BD255EB324482F20E0E363DB8D17F47",
+  "TotalCpuSeconds": 1251.703125,
+  "ControllerCpuSeconds": 1232.3125,
+  "ChargedCpuSeconds": 1252.84375,
+  "Scope": "ONE continuous original Box2D world from stopped start, three-lap target, autonomous decisions only, S from0; DNF never promoted"
+}

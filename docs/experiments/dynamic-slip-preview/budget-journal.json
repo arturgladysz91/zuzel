@@ -1,0 +1,196 @@
+[
+  {
+    "Label": "exact-rest-speed12",
+    "Kind": "diagnostic",
+    "Complete": true,
+    "ChargedCpuSeconds": 3,
+    "CpuCapSeconds": 1800,
+    "ProcessId": 20228,
+    "CpuSeconds": 1.203125,
+    "Reason": "footprint reserve"
+  },
+  {
+    "Label": "mpc12-v1",
+    "Kind": "diagnostic",
+    "Complete": true,
+    "ChargedCpuSeconds": 17,
+    "CpuCapSeconds": 1797,
+    "ProcessId": 11524,
+    "CpuSeconds": 15.828125,
+    "Reason": "diagnostic goal"
+  },
+  {
+    "Label": "dynamic12-v2",
+    "Kind": "diagnostic",
+    "Complete": true,
+    "ChargedCpuSeconds": 17,
+    "CpuCapSeconds": 1780,
+    "ProcessId": 20188,
+    "CpuSeconds": 15.984375,
+    "Reason": "diagnostic goal"
+  },
+  {
+    "Label": "adaptive-v2",
+    "Kind": "diagnostic",
+    "Complete": true,
+    "ChargedCpuSeconds": 5,
+    "CpuCapSeconds": 1763,
+    "ProcessId": 13328,
+    "CpuSeconds": 3.140625,
+    "Reason": "Lateral position must be finite and between 0 and 4 inclusive. (Parameter \u0027lateralPosition\u0027)\r\nActual value was 4,40347."
+  },
+  {
+    "Label": "ablate-actuator-v2",
+    "Kind": "diagnostic",
+    "Complete": true,
+    "ChargedCpuSeconds": 3,
+    "CpuCapSeconds": 1758,
+    "ProcessId": 18632,
+    "CpuSeconds": 1.640625,
+    "Reason": "footprint reserve"
+  },
+  {
+    "Label": "ablate-beta-v2",
+    "Kind": "diagnostic",
+    "Complete": true,
+    "ChargedCpuSeconds": 18,
+    "CpuCapSeconds": 1755,
+    "ProcessId": 14356,
+    "CpuSeconds": 16.328125,
+    "Reason": "diagnostic goal"
+  },
+  {
+    "Label": "ablate-preview-v2",
+    "Kind": "diagnostic",
+    "Complete": true,
+    "ChargedCpuSeconds": 16,
+    "CpuCapSeconds": 1737,
+    "ProcessId": 10340,
+    "CpuSeconds": 14.09375,
+    "Reason": "diagnostic goal"
+  },
+  {
+    "Label": "adaptive-v3",
+    "Kind": "diagnostic",
+    "Complete": true,
+    "ChargedCpuSeconds": 16,
+    "CpuCapSeconds": 1721,
+    "ProcessId": 19116,
+    "CpuSeconds": 14.515625,
+    "Reason": "diagnostic goal"
+  },
+  {
+    "Label": "adaptive-v3-initial",
+    "Kind": "certificate",
+    "Complete": true,
+    "ChargedCpuSeconds": 35,
+    "CpuCapSeconds": 60,
+    "ProcessId": 1932,
+    "CpuSeconds": 34,
+    "Reason": "Fresh full13/9 independent certificate"
+  },
+  {
+    "Label": "adaptive-v4-initial",
+    "Kind": "certificate",
+    "Complete": true,
+    "ChargedCpuSeconds": 8,
+    "CpuCapSeconds": 60,
+    "ProcessId": 18896,
+    "CpuSeconds": 6.859375,
+    "Reason": "Fresh full13/9 independent certificate"
+  },
+  {
+    "Label": "adaptive-v4-entry",
+    "Kind": "certificate",
+    "Complete": true,
+    "ChargedCpuSeconds": 11,
+    "CpuCapSeconds": 60,
+    "ProcessId": 1252,
+    "CpuSeconds": 9.484375,
+    "Reason": "Fresh full13/9 independent certificate"
+  },
+  {
+    "Label": "adaptive-wide-v5",
+    "Kind": "diagnostic",
+    "Complete": true,
+    "ChargedCpuSeconds": 3,
+    "CpuCapSeconds": 1705,
+    "ProcessId": 9600,
+    "CpuSeconds": 1.234375,
+    "Reason": "beta45 envelope"
+  },
+  {
+    "Label": "adaptive-v5-initial",
+    "Kind": "certificate",
+    "Complete": true,
+    "ChargedCpuSeconds": 9,
+    "CpuCapSeconds": 60,
+    "ProcessId": 8960,
+    "CpuSeconds": 7.140625,
+    "Reason": "Fresh full13/9 independent certificate"
+  },
+  {
+    "Label": "adaptive-v5-bend",
+    "Kind": "certificate",
+    "Complete": true,
+    "ChargedCpuSeconds": 13,
+    "CpuCapSeconds": 60,
+    "ProcessId": 14368,
+    "CpuSeconds": 11.953125,
+    "Reason": "Fresh full13/9 independent certificate"
+  },
+  {
+    "Label": "native-dev-v5",
+    "Kind": "native",
+    "Complete": true,
+    "ChargedCpuSeconds": 1254,
+    "CpuCapSeconds": 1800,
+    "ProcessId": 18976,
+    "CpuSeconds": 1252.84375,
+    "Reason": "technical invariant: Finite physical actions required."
+  },
+  {
+    "Label": "terminal-cause-v5",
+    "Kind": "certificate",
+    "Complete": true,
+    "ChargedCpuSeconds": 6,
+    "CpuCapSeconds": 60,
+    "ProcessId": 18160,
+    "Concurrent": false,
+    "CpuSeconds": 4.5625,
+    "Reason": "System.ArgumentException: Finite physical actions required.\r\n   at Safety153.PredictorA153.Predict(FreeRacingInput input, RiderSpec spec, TrackFrame frame, TrackStateSnapshot surface, WorldParameters p, Single mass, Single inertia, Double horizon, Nullable\u00601 candidate, FreeRacingPolicy closedLoop, Func\u00602 causalPolicy, Double reviewSeconds, CrankClutch144 powertrain, Action\u00602 observeCrank, PredictionBoundary147 boundaryCache, Boundary152 fastBoundary, Boolean exactInitialWheel, Nullable\u00601 stopAt, Action onContact, Boolean verifyFinalWheel, ForecastMemo152 memo, IndependentBoundary152 checkedBoundary) in D:\\CodexWork-160\\repo160\\tools\\safe-fast-contingency\\PredictorA153.Generated.cs:line 34\r\n   at Dynamic160.Control160.Predict(State146 s, FreeRacingAction action, Double horizon) in D:\\CodexWork-160\\repo160\\tools\\dynamic-slip-preview\\Control160.cs:line 43\r\n   at Dynamic160.Control160.\u003CAction\u003Eg__Evaluate|27_0(Single steer, Single gas, \u003C\u003Ec__DisplayClass27_0\u0026) in D:\\CodexWork-160\\repo160\\tools\\dynamic-slip-preview\\Control160.cs:line 79\r\n   at Dynamic160.Control160.Action(State146 observed) in D:\\CodexWork-160\\repo160\\tools\\dynamic-slip-preview\\Control160.cs:line 86\r\n   at Dynamic160.Generator160.Generate(State146 start, Double goal, Double safetyGoal, String origin, Int32 maximumPlans) in D:\\CodexWork-160\\repo160\\tools\\dynamic-slip-preview\\Generator160.cs:line 18\r\n   at Dynamic160.Planner160.Complete(State146 state, Tape150 anchor, String phase, Nullable\u00601 forcedRoot) in D:\\CodexWork-160\\repo160\\tools\\dynamic-slip-preview\\Planner160.Generated.cs:line 141\r\n   at Dynamic160.Planner160.Choose(FreeRacingInput input, CrankClutch144 crank, Nullable\u00601 diagnosticRoot) in D:\\CodexWork-160\\repo160\\tools\\dynamic-slip-preview\\Planner160.Generated.cs:line 212\r\n   at Dynamic160.Program160.Probe(String label, Double time, Boolean nativeEnd) in D:\\CodexWork-160\\repo160\\tools\\dynamic-slip-preview\\Program160.cs:line 25"
+  },
+  {
+    "Label": "off-base10",
+    "Kind": "diagnostic",
+    "Complete": true,
+    "ChargedCpuSeconds": 6,
+    "CpuCapSeconds": 1702,
+    "ProcessId": 9964,
+    "Concurrent": false,
+    "CpuSeconds": 4.359375,
+    "Reason": "diagnostic goal"
+  },
+  {
+    "Label": "bounded-tail-v6",
+    "Kind": "diagnostic",
+    "Complete": true,
+    "ChargedCpuSeconds": 6,
+    "CpuCapSeconds": 1696,
+    "ProcessId": 18108,
+    "Concurrent": false,
+    "CpuSeconds": 4.65625,
+    "Reason": "footprint reserve"
+  },
+  {
+    "Label": "adaptive-bounded-v6",
+    "Kind": "diagnostic",
+    "Complete": true,
+    "ChargedCpuSeconds": 16,
+    "CpuCapSeconds": 1690,
+    "ProcessId": 22252,
+    "Concurrent": false,
+    "CpuSeconds": 14.734375,
+    "Reason": "diagnostic goal"
+  }
+]

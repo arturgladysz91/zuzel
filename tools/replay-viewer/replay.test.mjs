@@ -1,3 +1,4 @@
+import './study160.test.mjs';
 import './study159.test.mjs';
 import './study158.test.mjs';
 import './study157.test.mjs';

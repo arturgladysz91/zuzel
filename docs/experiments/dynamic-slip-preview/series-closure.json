@@ -1,0 +1,13 @@
+{
+  "Status": "CLOSED_AFTER_FIRST_NATIVE_DNF",
+  "NativeLabel": "native-dev-v5",
+  "NativeOutcome": "technical invariant: Finite physical actions required.",
+  "ObservedUntilSeconds": 67,
+  "NewNativeWorlds": 1,
+  "NativeS3Completions": 0,
+  "HeldTrialsExecuted": 0,
+  "HeldSubsetIfSuccessfulDevelopment": 5,
+  "Reason": "First native failure closes development series under the predeclared gate E. No automatic restart or held validation. Six certificate probes consumed. Bounded-difference repair is diagnostic-only and has no new full certificate or native S3 evidence.",
+  "CandidateV5Preserved": "sources/native-dev-v5.zip",
+  "FinalSourceV6": "One-sided admissible steering differences and diagnostic failure observation; never native-validated."
+}

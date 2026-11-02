@@ -1,0 +1,1881 @@
+{
+  "base": "9fb071ba3129aae88a6ec8c401d51a784be2da2b",
+  "verdict": "PARTIAL",
+  "exact_rest_speed12_reproduced": true,
+  "forecasts": [
+    {
+      "Label": "ablate-actuator-v2",
+      "Settings": {
+        "Enabled": true,
+        "DiagnosticSpeed": 12,
+        "Actuator": false,
+        "Beta": true,
+        "Preview": true,
+        "Adaptive": false,
+        "CourseSeconds": 1.2,
+        "BetaSeconds": 1.5,
+        "HorizonSeconds": 0.64,
+        "ForceFraction": 0.5
+      },
+      "Reached": false,
+      "Legal": false,
+      "Reason": "footprint reserve",
+      "Error": null,
+      "EndTime": 15.399999999999974,
+      "EndReference": 155.11820530891418,
+      "MaximumSpeedKph": 49.04742507934571,
+      "Safety": {
+        "Legal": false,
+        "MinimumGapMeters": 0.4052065159198163,
+        "SweepLowerBoundMeters": 0.340536481801992,
+        "MaximumBetaDegrees": 5.5636177112912995,
+        "MaximumYawRate": 0.7186530232429504,
+        "Reason": "footprint reserve"
+      },
+      "CpuSeconds": 1.5,
+      "Predictions": 75,
+      "ForceQueries": 1003,
+      "initial_time_s": 0,
+      "goal_reference_m": 956.3362498283386,
+      "scope": "Diagnostic forecast only; no native world and no13/9 certificate",
+      "first_bend_entry_s": 4.812621695682451,
+      "first_bend_exit_s": 13.553842105585277,
+      "first_bend_duration_s": 8.741220409902827,
+      "source": "docs/experiments/dynamic-slip-preview/forecasts/ablate-actuator-v2.json.gz",
+      "sha256": "be852dfc63e6854bb26209c298f40d05fc1c1902ef376a4271d59a61452b8453"
+    },
+    {
+      "Label": "ablate-beta-v2",
+      "Settings": {
+        "Enabled": true,
+        "DiagnosticSpeed": 12,
+        "Actuator": true,
+        "Beta": false,
+        "Preview": true,
+        "Adaptive": false,
+        "CourseSeconds": 1.2,
+        "BetaSeconds": 1.5,
+        "HorizonSeconds": 0.64,
+        "ForceFraction": 0.5
+      },
+      "Reached": true,
+      "Legal": true,
+      "Reason": "diagnostic goal",
+      "Error": null,
+      "EndTime": 86.60000000000001,
+      "EndReference": 956.5817363858225,
+      "MaximumSpeedKph": 43.464128494262695,
+      "Safety": {
+        "Legal": true,
+        "MinimumGapMeters": 3.83079008885035,
+        "SweepLowerBoundMeters": 3.768241684074791,
+        "MaximumBetaDegrees": 1.9739037242202304,
+        "MaximumYawRate": 0.422465443611145,
+        "Reason": "legal complete forecast; swept physical footprint>=0.5m"
+      },
+      "CpuSeconds": 15.96875,
+      "Predictions": 4245,
+      "ForceQueries": 691,
+      "initial_time_s": 0,
+      "goal_reference_m": 956.3362498283386,
+      "scope": "Diagnostic forecast only; no native world and no13/9 certificate",
+      "first_bend_entry_s": 4.157668046302438,
+      "first_bend_exit_s": 13.212837681909845,
+      "first_bend_duration_s": 9.055169635607406,
+      "source": "docs/experiments/dynamic-slip-preview/forecasts/ablate-beta-v2.json.gz",
+      "sha256": "2be8126569c68d158b6c40acbf378be1332af726ed9a9be8f87693ff2d5125f7"
+    },
+    {
+      "Label": "ablate-preview-v2",
+      "Settings": {
+        "Enabled": true,
+        "DiagnosticSpeed": 12,
+        "Actuator": true,
+        "Beta": true,
+        "Preview": false,
+        "Adaptive": false,
+        "CourseSeconds": 1.2,
+        "BetaSeconds": 1.5,
+        "HorizonSeconds": 0.64,
+        "ForceFraction": 0.5
+      },
+      "Reached": true,
+      "Legal": true,
+      "Reason": "diagnostic goal",
+      "Error": null,
+      "EndTime": 86.4,
+      "EndReference": 957.5591456890133,
+      "MaximumSpeedKph": 47.83721580505371,
+      "Safety": {
+        "Legal": true,
+        "MinimumGapMeters": 3.9906733553996303,
+        "SweepLowerBoundMeters": 3.9301409127698284,
+        "MaximumBetaDegrees": 2.207222834485884,
+        "MaximumYawRate": 0.4700995087623596,
+        "Reason": "legal complete forecast; swept physical footprint>=0.5m"
+      },
+      "CpuSeconds": 13.71875,
+      "Predictions": 4149,
+      "ForceQueries": 856,
+      "initial_time_s": 0,
+      "goal_reference_m": 956.3362498283386,
+      "scope": "Diagnostic forecast only; no native world and no13/9 certificate",
+      "first_bend_entry_s": 4.016035093829755,
+      "first_bend_exit_s": 13.028879046285805,
+      "first_bend_duration_s": 9.01284395245605,
+      "source": "docs/experiments/dynamic-slip-preview/forecasts/ablate-preview-v2.json.gz",
+      "sha256": "b7a8f8c0ff38423dd932ffd30f217ac59ab5ec49d30cdd8d936d955310c8388f"
+    },
+    {
+      "Label": "adaptive-bounded-v6",
+      "Settings": {
+        "Enabled": true,
+        "DiagnosticSpeed": 12,
+        "Actuator": true,
+        "Beta": true,
+        "Preview": true,
+        "Adaptive": true,
+        "CourseSeconds": 1.2,
+        "BetaSeconds": 1.5,
+        "ForceFraction": 0.5,
+        "OffsetMeters": 3.5
+      },
+      "Reached": true,
+      "Legal": true,
+      "Reason": "diagnostic goal",
+      "Error": null,
+      "EndTime": 78.2,
+      "EndReference": 959.0685467720023,
+      "MaximumSpeedKph": 54.126033782958984,
+      "Safety": {
+        "Legal": true,
+        "MinimumGapMeters": 3.7681049426244937,
+        "SweepLowerBoundMeters": 3.698891975906715,
+        "MaximumBetaDegrees": 2.8547495082660865,
+        "MaximumYawRate": 0.4717349708080292,
+        "Reason": "legal complete forecast; swept physical footprint>=0.5m"
+      },
+      "CpuSeconds": 14.40625,
+      "Predictions": 3840,
+      "ForceQueries": 1405,
+      "initial_time_s": 0,
+      "goal_reference_m": 956.3362498283386,
+      "scope": "Diagnostic forecast only; no native world and no13/9 certificate",
+      "first_bend_entry_s": 3.9783367127252682,
+      "first_bend_exit_s": 12.113826712514904,
+      "first_bend_duration_s": 8.135489999789636,
+      "source": "docs/experiments/dynamic-slip-preview/forecasts/adaptive-bounded-v6.json.gz",
+      "sha256": "344b70ba934b3a17611aabd4cba259f7986a25a4b57a4c75d461e7226a69c749"
+    },
+    {
+      "Label": "adaptive-v2",
+      "Settings": {
+        "Enabled": true,
+        "DiagnosticSpeed": 12,
+        "Actuator": true,
+        "Beta": true,
+        "Preview": true,
+        "Adaptive": true,
+        "CourseSeconds": 1.2,
+        "BetaSeconds": 1.5,
+        "HorizonSeconds": 0.64,
+        "ForceFraction": 0.5
+      },
+      "Reached": false,
+      "Legal": true,
+      "Reason": "Lateral position must be finite and between 0 and 4 inclusive. (Parameter 'lateralPosition')\r\nActual value was 4,40347.",
+      "Error": "System.ArgumentOutOfRangeException: Lateral position must be finite and between 0 and 4 inclusive. (Parameter 'lateralPosition')\r\nActual value was 4,40347.\r\n   at CoreSim.TrackStateSnapshot.SampleSurface(Int32 segmentIndex, Single lateralPosition) in D:\\CodexWork-160\\repo160\\src\\CoreSim\\SimulationSnapshot.cs:line 113\r\n   at Dynamic160.Control160.Action(State146 observed) in D:\\CodexWork-160\\repo160\\tools\\dynamic-slip-preview\\Control160.cs:line 55\r\n   at Dynamic160.Program160.Forecast(String label, Settings160 settings, Double goal) in D:\\CodexWork-160\\repo160\\tools\\dynamic-slip-preview\\Program160.cs:line 24",
+      "EndTime": 12.399999999999984,
+      "EndReference": 136.65951085090637,
+      "MaximumSpeedKph": 54.13067207336426,
+      "Safety": {
+        "Legal": true,
+        "MinimumGapMeters": 3.7682375894395315,
+        "SweepLowerBoundMeters": 3.6989961229992723,
+        "MaximumBetaDegrees": 3.491986426170674,
+        "MaximumYawRate": 0.6901702880859375,
+        "Reason": "legal complete forecast; swept physical footprint>=0.5m"
+      },
+      "CpuSeconds": 3.046875,
+      "Predictions": 551,
+      "ForceQueries": 1031,
+      "initial_time_s": 0,
+      "goal_reference_m": 956.3362498283386,
+      "scope": "Diagnostic forecast only; no native world and no13/9 certificate",
+      "first_bend_entry_s": 3.9781157127791342,
+      "first_bend_exit_s": 12.106121900370516,
+      "first_bend_duration_s": 8.128006187591382,
+      "source": "docs/experiments/dynamic-slip-preview/forecasts/adaptive-v2.json.gz",
+      "sha256": "f61a6d577209c728e11f9b9f6451b3f1c343caecd1848beb72dde92040e7e205"
+    },
+    {
+      "Label": "adaptive-v3",
+      "Settings": {
+        "Enabled": true,
+        "DiagnosticSpeed": 12,
+        "Actuator": true,
+        "Beta": true,
+        "Preview": true,
+        "Adaptive": true,
+        "CourseSeconds": 1.2,
+        "BetaSeconds": 1.5,
+        "ForceFraction": 0.5
+      },
+      "Reached": true,
+      "Legal": true,
+      "Reason": "diagnostic goal",
+      "Error": null,
+      "EndTime": 78.2,
+      "EndReference": 959.0684416294105,
+      "MaximumSpeedKph": 54.12588615417481,
+      "Safety": {
+        "Legal": true,
+        "MinimumGapMeters": 3.7681049426244937,
+        "SweepLowerBoundMeters": 3.698891975906715,
+        "MaximumBetaDegrees": 2.8547513296498654,
+        "MaximumYawRate": 0.4717349708080292,
+        "Reason": "legal complete forecast; swept physical footprint>=0.5m"
+      },
+      "CpuSeconds": 14.203125,
+      "Predictions": 3840,
+      "ForceQueries": 1405,
+      "initial_time_s": 0,
+      "goal_reference_m": 956.3362498283386,
+      "scope": "Diagnostic forecast only; no native world and no13/9 certificate",
+      "first_bend_entry_s": 3.9783367127252682,
+      "first_bend_exit_s": 12.113826712514904,
+      "first_bend_duration_s": 8.135489999789636,
+      "source": "docs/experiments/dynamic-slip-preview/forecasts/adaptive-v3.json.gz",
+      "sha256": "95fbca972f43bdbe0c817be3c4841c7e9d0ccd7170f9e7a42510d94a9a1f0e08"
+    },
+    {
+      "Label": "adaptive-wide-v5",
+      "Settings": {
+        "Enabled": true,
+        "DiagnosticSpeed": 12,
+        "Actuator": true,
+        "Beta": true,
+        "Preview": true,
+        "Adaptive": true,
+        "CourseSeconds": 1.2,
+        "BetaSeconds": 1.5,
+        "ForceFraction": 0.5,
+        "OffsetMeters": 6
+      },
+      "Reached": false,
+      "Legal": false,
+      "Reason": "beta45 envelope",
+      "Error": null,
+      "EndTime": 3.6,
+      "EndReference": 32.688690185546875,
+      "MaximumSpeedKph": 62.425428771972655,
+      "Safety": {
+        "Legal": false,
+        "MinimumGapMeters": 3.73904698295294,
+        "SweepLowerBoundMeters": 3.6516729713171574,
+        "MaximumBetaDegrees": 58.51347413810316,
+        "MaximumYawRate": 2.2828986644744873,
+        "Reason": "beta45 envelope"
+      },
+      "CpuSeconds": 1.1875,
+      "Predictions": 95,
+      "ForceQueries": 317,
+      "initial_time_s": 0,
+      "goal_reference_m": 956.3362498283386,
+      "scope": "Diagnostic forecast only; no native world and no13/9 certificate",
+      "first_bend_entry_s": null,
+      "first_bend_exit_s": null,
+      "first_bend_duration_s": null,
+      "source": "docs/experiments/dynamic-slip-preview/forecasts/adaptive-wide-v5.json.gz",
+      "sha256": "eac649bb0498202731367c78d27ce82a36dd30b8f47b973d73a05dc4035ec05e"
+    },
+    {
+      "Label": "bounded-tail-v6",
+      "Settings": {
+        "Enabled": true,
+        "DiagnosticSpeed": 12,
+        "Actuator": true,
+        "Beta": true,
+        "Preview": true,
+        "Adaptive": true,
+        "CourseSeconds": 1.2,
+        "BetaSeconds": 1.5,
+        "ForceFraction": 0.5,
+        "OffsetMeters": 3.5
+      },
+      "Reached": false,
+      "Legal": false,
+      "Reason": "footprint reserve",
+      "Error": null,
+      "EndTime": 78.4,
+      "EndReference": 981.7521185874948,
+      "MaximumSpeedKph": 65.90418777465821,
+      "Safety": {
+        "Legal": false,
+        "MinimumGapMeters": -0.5916420324325562,
+        "SweepLowerBoundMeters": -0.6664161658466242,
+        "MaximumBetaDegrees": 49.19841722057323,
+        "MaximumYawRate": 1.571946144104004,
+        "Reason": "footprint reserve"
+      },
+      "CpuSeconds": 4.59375,
+      "Predictions": 531,
+      "ForceQueries": 1362,
+      "initial_time_s": 67,
+      "goal_reference_m": 988.3362498283386,
+      "scope": "Diagnostic continuation from actual DNF state; no new native world, no stopped-start S3, no13/9 certificate",
+      "first_bend_entry_s": null,
+      "first_bend_exit_s": null,
+      "first_bend_duration_s": null,
+      "source": "docs/experiments/dynamic-slip-preview/forecasts/bounded-tail-v6.json.gz",
+      "sha256": "65fc318817e4b43ebae2623a330412fa28cbbcc8a2c5169440ececbf788f568a"
+    },
+    {
+      "Label": "dynamic12-v2",
+      "Settings": {
+        "Enabled": true,
+        "DiagnosticSpeed": 12,
+        "Actuator": true,
+        "Beta": true,
+        "Preview": true,
+        "Adaptive": false,
+        "CourseSeconds": 1.2,
+        "BetaSeconds": 1.5,
+        "HorizonSeconds": 0.64,
+        "ForceFraction": 0.5
+      },
+      "Reached": true,
+      "Legal": true,
+      "Reason": "diagnostic goal",
+      "Error": null,
+      "EndTime": 86.4,
+      "EndReference": 957.9529949426658,
+      "MaximumSpeedKph": 43.464128494262695,
+      "Safety": {
+        "Legal": true,
+        "MinimumGapMeters": 3.7685158245867814,
+        "SweepLowerBoundMeters": 3.7059474312743825,
+        "MaximumBetaDegrees": 2.0012990058532254,
+        "MaximumYawRate": 0.42634424567222595,
+        "Reason": "legal complete forecast; swept physical footprint>=0.5m"
+      },
+      "CpuSeconds": 15.59375,
+      "Predictions": 4199,
+      "ForceQueries": 736,
+      "initial_time_s": 0,
+      "goal_reference_m": 956.3362498283386,
+      "scope": "Diagnostic forecast only; no native world and no13/9 certificate",
+      "first_bend_entry_s": 4.157668364175269,
+      "first_bend_exit_s": 13.160950681939799,
+      "first_bend_duration_s": 9.00328231776453,
+      "source": "docs/experiments/dynamic-slip-preview/forecasts/dynamic12-v2.json.gz",
+      "sha256": "b5b1da7c8448c7a2f3014a5ea4497030d980201016a44da98c8a38a7e8b8fd08"
+    },
+    {
+      "Label": "exact-rest-speed12",
+      "Settings": {
+        "Enabled": false,
+        "DiagnosticSpeed": 12,
+        "Actuator": true,
+        "Beta": true,
+        "Preview": true,
+        "Adaptive": false,
+        "CourseSeconds": 1.2,
+        "BetaSeconds": 1.5,
+        "HorizonSeconds": 0.64,
+        "ForceFraction": 0.5
+      },
+      "Reached": false,
+      "Legal": false,
+      "Reason": "footprint reserve",
+      "Error": null,
+      "EndTime": 8.799999999999997,
+      "EndReference": 75.37355021645925,
+      "MaximumSpeedKph": 49.47910194396973,
+      "Safety": {
+        "Legal": false,
+        "MinimumGapMeters": -1.1087125972733882,
+        "SweepLowerBoundMeters": -1.1769722397551665,
+        "MaximumBetaDegrees": 40.77910713134642,
+        "MaximumYawRate": 1.607546091079712,
+        "Reason": "footprint reserve"
+      },
+      "CpuSeconds": 1.09375,
+      "Predictions": 0,
+      "ForceQueries": 0,
+      "initial_time_s": 0,
+      "goal_reference_m": 956.3362498283386,
+      "scope": "Diagnostic forecast only; no native world and no13/9 certificate",
+      "first_bend_entry_s": 4.812325695907963,
+      "first_bend_exit_s": null,
+      "first_bend_duration_s": null,
+      "source": "docs/experiments/dynamic-slip-preview/forecasts/exact-rest-speed12.json.gz",
+      "sha256": "11682ce4664774993e63db230176cbf73decfe1fd013a91bf9ffac5bce10f6b3"
+    },
+    {
+      "Label": "mpc12-v1",
+      "Settings": {
+        "Enabled": true,
+        "DiagnosticSpeed": 12,
+        "Actuator": true,
+        "Beta": true,
+        "Preview": true,
+        "Adaptive": false,
+        "CourseSeconds": 1.2,
+        "BetaSeconds": 1.5,
+        "HorizonSeconds": 0.64,
+        "ForceFraction": 0.5
+      },
+      "Reached": true,
+      "Legal": true,
+      "Reason": "diagnostic goal",
+      "Error": null,
+      "EndTime": 86.4,
+      "EndReference": 957.9335135221487,
+      "MaximumSpeedKph": 43.464128494262695,
+      "Safety": {
+        "Legal": true,
+        "MinimumGapMeters": 3.77143321060074,
+        "SweepLowerBoundMeters": 3.708863203537293,
+        "MaximumBetaDegrees": 2.002112405492383,
+        "MaximumYawRate": 0.42633363604545593,
+        "Reason": "legal complete forecast; swept physical footprint>=0.5m"
+      },
+      "CpuSeconds": 15.46875,
+      "Predictions": 4202,
+      "ForceQueries": 735,
+      "initial_time_s": 0,
+      "goal_reference_m": 956.3362498283386,
+      "scope": "Diagnostic forecast only; no native world and no13/9 certificate",
+      "first_bend_entry_s": 4.157668364175269,
+      "first_bend_exit_s": 13.16124436382217,
+      "first_bend_duration_s": 9.003575999646902,
+      "source": "docs/experiments/dynamic-slip-preview/forecasts/mpc12-v1.json.gz",
+      "sha256": "f8f04addb09124f9554bc29d6f5576fbb4d63eb1ff95565858763acccf546492"
+    },
+    {
+      "Label": "off-base10",
+      "Settings": {
+        "Enabled": false,
+        "DiagnosticSpeed": 10,
+        "Actuator": true,
+        "Beta": true,
+        "Preview": true,
+        "Adaptive": false,
+        "CourseSeconds": 1.2,
+        "BetaSeconds": 1.5,
+        "ForceFraction": 0.5,
+        "OffsetMeters": 3.5
+      },
+      "Reached": true,
+      "Legal": true,
+      "Reason": "diagnostic goal",
+      "Error": null,
+      "EndTime": 101,
+      "EndReference": 956.4372096285224,
+      "MaximumSpeedKph": 41.400511550903325,
+      "Safety": {
+        "Legal": true,
+        "MinimumGapMeters": 1.4551227908339774,
+        "SweepLowerBoundMeters": 1.4014397171423045,
+        "MaximumBetaDegrees": 6.489353016382295,
+        "MaximumYawRate": 0.9823381900787354,
+        "Reason": "legal complete forecast; swept physical footprint>=0.5m"
+      },
+      "CpuSeconds": 3.9375,
+      "Predictions": 0,
+      "ForceQueries": 0,
+      "initial_time_s": 0,
+      "goal_reference_m": 956.3362498283386,
+      "scope": "Diagnostic forecast only; no native world and no13/9 certificate",
+      "first_bend_entry_s": 5.035792898479087,
+      "first_bend_exit_s": 15.627052,
+      "first_bend_duration_s": 10.591259101520913,
+      "source": "docs/experiments/dynamic-slip-preview/forecasts/off-base10.json.gz",
+      "sha256": "92b28e12abd62ae3ff9851c70ba367adf916234dec87a78b65c38368a8391251"
+    }
+  ],
+  "certificates": [
+    {
+      "label": "adaptive-v3-initial.json",
+      "pass_": true,
+      "cpu_s": 33.828125,
+      "error": null,
+      "nodes": 13,
+      "reserves": 9
+    },
+    {
+      "label": "adaptive-v4-entry.json",
+      "pass_": true,
+      "cpu_s": 9.296875,
+      "error": null,
+      "nodes": 13,
+      "reserves": 9
+    },
+    {
+      "label": "adaptive-v4-initial.json",
+      "pass_": true,
+      "cpu_s": 6.703125,
+      "error": null,
+      "nodes": 13,
+      "reserves": 9
+    },
+    {
+      "label": "adaptive-v5-bend.json",
+      "pass_": true,
+      "cpu_s": 11.78125,
+      "error": null,
+      "nodes": 13,
+      "reserves": 9
+    },
+    {
+      "label": "adaptive-v5-initial.json",
+      "pass_": true,
+      "cpu_s": 6.96875,
+      "error": null,
+      "nodes": 13,
+      "reserves": 9
+    },
+    {
+      "label": "terminal-cause-v5.json",
+      "pass_": false,
+      "cpu_s": 4.53125,
+      "error": "System.ArgumentException: Finite physical actions required.\r\n   at Safety153.PredictorA153.Predict(FreeRacingInput input, RiderSpec spec, TrackFrame frame, TrackStateSnapshot surface, WorldParameters p, Single mass, Single inertia, Double horizon, Nullable`1 candidate, FreeRacingPolicy closedLoop, Func`2 causalPolicy, Double reviewSeconds, CrankClutch144 powertrain, Action`2 observeCrank, PredictionBoundary147 boundaryCache, Boundary152 fastBoundary, Boolean exactInitialWheel, Nullable`1 stopAt, Action onContact, Boolean verifyFinalWheel, ForecastMemo152 memo, IndependentBoundary152 checkedBoundary) in D:\\CodexWork-160\\repo160\\tools\\safe-fast-contingency\\PredictorA153.Generated.cs:line 34\r\n   at Dynamic160.Control160.Predict(State146 s, FreeRacingAction action, Double horizon) in D:\\CodexWork-160\\repo160\\tools\\dynamic-slip-preview\\Control160.cs:line 43\r\n   at Dynamic160.Control160.<Action>g__Evaluate|27_0(Single steer, Single gas, <>c__DisplayClass27_0&) in D:\\CodexWork-160\\repo160\\tools\\dynamic-slip-preview\\Control160.cs:line 79\r\n   at Dynamic160.Control160.Action(State146 observed) in D:\\CodexWork-160\\repo160\\tools\\dynamic-slip-preview\\Control160.cs:line 86\r\n   at Dynamic160.Generator160.Generate(State146 start, Double goal, Double safetyGoal, String origin, Int32 maximumPlans) in D:\\CodexWork-160\\repo160\\tools\\dynamic-slip-preview\\Generator160.cs:line 18\r\n   at Dynamic160.Planner160.Complete(State146 state, Tape150 anchor, String phase, Nullable`1 forcedRoot) in D:\\CodexWork-160\\repo160\\tools\\dynamic-slip-preview\\Planner160.Generated.cs:line 141\r\n   at Dynamic160.Planner160.Choose(FreeRacingInput input, CrankClutch144 crank, Nullable`1 diagnosticRoot) in D:\\CodexWork-160\\repo160\\tools\\dynamic-slip-preview\\Planner160.Generated.cs:line 212\r\n   at Dynamic160.Program160.Probe(String label, Double time, Boolean nativeEnd) in D:\\CodexWork-160\\repo160\\tools\\dynamic-slip-preview\\Program160.cs:line 25",
+      "nodes": 0,
+      "reserves": 0
+    }
+  ],
+  "first_response_error": {
+    "Time": 4.8,
+    "ActivationTime": 5.04,
+    "Speed": 12.4587555,
+    "Theta": -0.00015905872,
+    "Chi": -0.0002671049469622661,
+    "Beta": 0.000108046224,
+    "Yaw": 0.0014341294,
+    "ActualPathCurvature": 0.0010629747695940325,
+    "RoadCurvature": 0.02354549934898221,
+    "CourseTerm": 0.34528145235912444,
+    "BetaTerm": -0.0001350577804259956,
+    "DesiredAlpha": 0.5728537752478623,
+    "Action": {
+      "SteeringRadians": 0.0064128926,
+      "Drive": 0
+    },
+    "Imagined": {
+      "YawAcceleration": 0.5731555819511414,
+      "LongitudinalAcceleration": -0.3384097218513489,
+      "LateralAcceleration": 0.3116852641105652
+    },
+    "Actual": {
+      "YawAcceleration": 0.2868482708615111,
+      "ChiDot": 0.013243342749774456,
+      "BetaDot": -0.011809213319793344,
+      "AlongAcceleration": -0.3369778
+    },
+    "Forces": {
+      "FrontPoint": {
+        "X": 38.54543,
+        "Y": -3.545709
+      },
+      "RearPoint": {
+        "X": 37.24543,
+        "Y": -3.5455022
+      },
+      "FrontArm": {
+        "X": 0.70000076,
+        "Y": -0.00011134148
+      },
+      "RearArm": {
+        "X": -0.5999985,
+        "Y": 9.536743e-05
+      },
+      "FrontVelocity": {
+        "X": 12.4587555,
+        "Y": -0.0023239036
+      },
+      "RearVelocity": {
+        "X": 12.4587555,
+        "Y": -0.004188271
+      },
+      "FrontForce": {
+        "X": -0.07126279,
+        "Y": 22.826254
+      },
+      "RearForce": {
+        "X": 21.528984,
+        "Y": 1.4223627
+      },
+      "Resistance": {
+        "X": -70.98698,
+        "Y": 0.018960973
+      },
+      "BodyForward": {
+        "X": 1,
+        "Y": -0.00015905872
+      },
+      "FrontLeft": {
+        "X": -0.003121951,
+        "Y": 0.9999951
+      },
+      "BodyLeft": {
+        "X": 0.00015905872,
+        "Y": 1
+      },
+      "FrontLateral": 22.826365,
+      "RearLateral": 1.425787,
+      "RearLongitudinal": 21.528757,
+      "Budget": 1852.339,
+      "SteeringRequest": 0.0064128926,
+      "SteeringBefore": 0.00014913703,
+      "SteeringUsed": 0.0032810147,
+      "SteeringAfter": 0.0064128926,
+      "Demand": 5.9557147,
+      "Engine": {
+        "EngineRpm": 3267.151186076427,
+        "OverallRatio": 9,
+        "CrankTorqueNewtonMeters": 42.60290711645856,
+        "AvailableWheelTorqueNewtonMeters": 360.42059420523935,
+        "DriveWheelTorqueNewtonMeters": 3.8389579985410163,
+        "Efficiency": 0.94,
+        "CrankPowerWatts": 14575.95722045044
+      },
+      "TyreLoads": {
+        "EffectiveFrictionCoefficient": 1.2845000267028808,
+        "FrontNormalNewtons": 665.5707895749277,
+        "RearNormalNewtons": 776.4992104250724,
+        "FrontCapacityNewtons": 854.9256969816521,
+        "RearCapacityNewtons": 997.4132565257713,
+        "TotalCapacityNewtons": 1852.3389535074234
+      },
+      "NetForce": {
+        "X": -49.529255,
+        "Y": 24.267578
+      },
+      "FrontTorque": 15.978388,
+      "RearTorque": -0.8554686,
+      "NetTorque": 15.122919
+    },
+    "Powertrain": {
+      "Seconds": 0.009999999776482582,
+      "BeforeOmega": 342.36216091035743,
+      "AfterOmega": 341.90838337930137,
+      "CrankTorque": 0,
+      "ClutchTorque": 0.45377754119870173,
+      "Engagement": 0.7936636054367691,
+      "SlipRadiansPerSecond": 0.028587523930639236,
+      "CombustionWorkJoules": 0,
+      "CrankDragWorkJoules": 0,
+      "ClutchHeatJoules": 0.00012972376028249312,
+      "TransmissionLossJoules": 0.0931441960230115,
+      "EnergyResidualJoules": 2.472883009474458e-13,
+      "RootResidualNewtonMeters": -5.067319341911514e-09,
+      "WheelQueries": 8,
+      "Wheel": {
+        "Seconds": 0.009999999776482582,
+        "BeforeOmega": 38.03421922915471,
+        "AfterOmega": 37.98948846437835,
+        "RequestedTorqueNewtonMeters": 3.8389579985410163,
+        "AvailableTorqueNewtonMeters": 3.8389579985410163,
+        "DriveTorqueNewtonMeters": 3.8389579985410163,
+        "BearingTorqueNewtonMeters": 0.7602370769353306,
+        "LongitudinalNewtons": 21.528757,
+        "FrontLateralNewtons": 1.222388,
+        "RearLateralNewtons": 1.425787,
+        "InstantSlipRatio": 0.00742140432815553,
+        "MidSlipVelocityMetersPerSecond": 0.08684012246488694,
+        "LongitudinalLossJoules": 0.018695598608879413,
+        "BearingLossJoules": 0.2889802001143769,
+        "EngineWorkJoules": 1.459259071027182,
+        "RearUtilization": 0.021631874411624234,
+        "RootResidualMetersPerSecond": 5.213270093396005e-11,
+        "RootIterations": 1,
+        "LateralNewtons": 2.648175,
+        "MidOmega": 38.01185384676653
+      },
+      "Engine": {
+        "EngineRpm": 3267.151186076427,
+        "OverallRatio": 9,
+        "CrankTorqueNewtonMeters": 42.60290711645856,
+        "AvailableWheelTorqueNewtonMeters": 360.42059420523935,
+        "DriveWheelTorqueNewtonMeters": 3.8389579985410163,
+        "Efficiency": 0.94,
+        "CrankPowerWatts": 14575.95722045044
+      },
+      "MidOmega": 342.1352721448294
+    },
+    "Pending": [
+      {
+        "ObservedAt": 4.6000000000000005,
+        "ActivationAt": 4.840000000000001,
+        "Action": {
+          "SteeringRadians": 0.00014913703,
+          "Drive": 0.019042969
+        }
+      }
+    ]
+  },
+  "first_opposite_yaw_response": {
+    "Time": 6.2,
+    "ActivationTime": 6.44,
+    "Speed": 13.29124,
+    "Theta": 0.4828074,
+    "Chi": 0.39048935282129676,
+    "Beta": 0.09231804,
+    "Yaw": 0.649473,
+    "ActualPathCurvature": 0.04851278084219023,
+    "RoadCurvature": 0.0330144372223809,
+    "CourseTerm": 1.0883689329635946,
+    "BetaTerm": -0.11539755389094353,
+    "DesiredAlpha": 0.5391639459649471,
+    "Action": {
+      "SteeringRadians": 0.08038486,
+      "Drive": 0
+    },
+    "Imagined": {
+      "YawAcceleration": 0.5429522395133972,
+      "LongitudinalAcceleration": -0.921235978603363,
+      "LateralAcceleration": 9.079383850097656
+    },
+    "Actual": {
+      "YawAcceleration": -0.4848402595645883,
+      "ChiDot": 0.6447950005531311,
+      "BetaDot": 0.004678010940551758,
+      "AlongAcceleration": -0.7111706
+    },
+    "Forces": {
+      "FrontPoint": {
+        "X": 55.882866,
+        "Y": -1.0616119
+      },
+      "RearPoint": {
+        "X": 54.73146,
+        "Y": -1.6651596
+      },
+      "FrontArm": {
+        "X": 0.6199875,
+        "Y": 0.32498717
+      },
+      "RearArm": {
+        "X": -0.53141785,
+        "Y": -0.27856052
+      },
+      "FrontVelocity": {
+        "X": 12.079643,
+        "Y": 5.4618554
+      },
+      "RearVelocity": {
+        "X": 12.471631,
+        "Y": 4.714049
+      },
+      "FrontForce": {
+        "X": -284.52905,
+        "Y": 483.75476
+      },
+      "RearForce": {
+        "X": -222.06671,
+        "Y": 670.07996
+      },
+      "Resistance": {
+        "X": -69.61144,
+        "Y": -28.653954
+      },
+      "BodyForward": {
+        "X": 0.88569504,
+        "Y": 0.4642675
+      },
+      "FrontLeft": {
+        "X": -0.506977,
+        "Y": 0.8619596
+      },
+      "BodyLeft": {
+        "X": -0.4642675,
+        "Y": 0.88569504
+      },
+      "FrontLateral": 561.22675,
+      "RearLateral": 696.58484,
+      "RearLongitudinal": 114.41297,
+      "Budget": 1852.339,
+      "SteeringRequest": 0.08038486,
+      "SteeringBefore": 0.041012682,
+      "SteeringUsed": 0.048866663,
+      "SteeringAfter": 0.056720644,
+      "Demand": 12.941386,
+      "Engine": {
+        "EngineRpm": 3619.138140915204,
+        "OverallRatio": 9,
+        "CrankTorqueNewtonMeters": 44.714828845491226,
+        "AvailableWheelTorqueNewtonMeters": 378.28745203285575,
+        "DriveWheelTorqueNewtonMeters": 18.763955513079612,
+        "Efficiency": 0.94,
+        "CrankPowerWatts": 16946.708177930865
+      },
+      "TyreLoads": {
+        "EffectiveFrictionCoefficient": 1.2845000267028808,
+        "FrontNormalNewtons": 665.5707895749277,
+        "RearNormalNewtons": 776.4992104250724,
+        "FrontCapacityNewtons": 854.9256969816521,
+        "RearCapacityNewtons": 997.4132565257713,
+        "TotalCapacityNewtons": 1852.3389535074234
+      },
+      "NetForce": {
+        "X": -576.2072,
+        "Y": 1125.1808
+      },
+      "FrontTorque": 392.3902,
+      "RearTorque": -417.95145,
+      "NetTorque": -25.561249
+    },
+    "Powertrain": {
+      "Seconds": 0.009999999776482582,
+      "BeforeOmega": 380.10424065835923,
+      "AfterOmega": 377.8862790633625,
+      "CrankTorque": 0,
+      "ClutchTorque": 2.2179616445720582,
+      "Engagement": 0.9406892821292363,
+      "SlipRadiansPerSecond": 0.11789023680330502,
+      "CombustionWorkJoules": 0,
+      "CrankDragWorkJoules": 0,
+      "ClutchHeatJoules": 0.002614760176548032,
+      "TransmissionLossJoules": 0.5042012730237291,
+      "EnergyResidualJoules": -2.1604940059205546e-13,
+      "RootResidualNewtonMeters": 1.1248779685502086e-12,
+      "WheelQueries": 12,
+      "Wheel": {
+        "Seconds": 0.009999999776482582,
+        "BeforeOmega": 42.20767592682716,
+        "AfterOmega": 41.987295100741186,
+        "RequestedTorqueNewtonMeters": 18.763955513079612,
+        "AvailableTorqueNewtonMeters": 18.763955513079612,
+        "DriveTorqueNewtonMeters": 18.763955513079612,
+        "BearingTorqueNewtonMeters": 0.8419497102756834,
+        "LongitudinalNewtons": 114.41297,
+        "FrontLateralNewtons": 601.0402,
+        "RearLateralNewtons": 696.58484,
+        "InstantSlipRatio": 0.05239260436091437,
+        "MidSlipVelocityMetersPerSecond": 0.6571195868475723,
+        "LongitudinalLossJoules": 0.7518300287936596,
+        "BearingLossJoules": 0.35443964939430994,
+        "EngineWorkJoules": 7.899153277371757,
+        "RearUtilization": 0.7077491501451307,
+        "RootResidualMetersPerSecond": -1.9323557198802632e-09,
+        "RootIterations": 2,
+        "LateralNewtons": 1297.625,
+        "MidOmega": 42.09748551378417
+      },
+      "Engine": {
+        "EngineRpm": 3619.138140915204,
+        "OverallRatio": 9,
+        "CrankTorqueNewtonMeters": 44.714828845491226,
+        "AvailableWheelTorqueNewtonMeters": 378.28745203285575,
+        "DriveWheelTorqueNewtonMeters": 18.763955513079612,
+        "Efficiency": 0.94,
+        "CrankPowerWatts": 16946.708177930865
+      },
+      "MidOmega": 378.99525986086087
+    },
+    "Pending": [
+      {
+        "ObservedAt": 6,
+        "ActivationAt": 6.24,
+        "Action": {
+          "SteeringRadians": 0.041012682,
+          "Drive": 0
+        }
+      }
+    ]
+  },
+  "native": [
+    {
+      "label": "native-dev-v5",
+      "pass_": false,
+      "validation": false,
+      "scenario": {
+        "Id": "nominal-B",
+        "Gate": "B",
+        "OffsetMeters": 3.5,
+        "Held": false,
+        "Role": "independent"
+      },
+      "completed_laps": 2,
+      "finish_s": null,
+      "observed_until_s": 67,
+      "outcome": "technical invariant: Finite physical actions required.",
+      "samples": 6711,
+      "laps_s": [
+        26.74235826389081,
+        25.066719844880186
+      ],
+      "six_bends": [
+        {
+          "lap": 1,
+          "bend": 1,
+          "status": "complete",
+          "entry": {
+            "time_s": 3.97833742546081,
+            "reference_m": 35.0,
+            "distance_m": 35.00008305805915,
+            "speed_kph": 47.8109807379845,
+            "x_m": 35.00000037057709,
+            "y_m": -3.4834574247958656
+          },
+          "exit": {
+            "time_s": 11.998296716495753,
+            "reference_m": 132.38937497138977,
+            "distance_m": 142.88358331652924,
+            "speed_kph": 48.44071439827786,
+            "x_m": 34.9999998147159,
+            "y_m": 66.19140001776813
+          },
+          "minimum_kph": 47.796876000000005,
+          "duration_s": 8.019959291034944
+        },
+        {
+          "lap": 1,
+          "bend": 2,
+          "status": "complete",
+          "entry": {
+            "time_s": 16.61255028981069,
+            "reference_m": 194.38937497138977,
+            "distance_m": 204.96093645307522,
+            "speed_kph": 48.409520387973274,
+            "x_m": -27.00000046325167,
+            "y_m": 63.144173501113585
+          },
+          "exit": {
+            "time_s": 24.75528372017097,
+            "reference_m": 291.77874994277954,
+            "distance_m": 314.1693927493093,
+            "speed_kph": 49.104414007053975,
+            "x_m": -26.999999814762393,
+            "y_m": -6.712547430154393
+          },
+          "minimum_kph": 48.1058064,
+          "duration_s": 8.142733430360277
+        },
+        {
+          "lap": 2,
+          "bend": 3,
+          "status": "complete",
+          "entry": {
+            "time_s": 29.32325043715374,
+            "reference_m": 353.77874994277954,
+            "distance_m": 376.42845134191697,
+            "speed_kph": 49.0180230009349,
+            "x_m": 35.00000037049862,
+            "y_m": -1.0796332224203602
+          },
+          "exit": {
+            "time_s": 37.351772430361414,
+            "reference_m": 451.1681249141693,
+            "distance_m": 484.59197531990196,
+            "speed_kph": 48.2261904,
+            "x_m": 34.99999962987991,
+            "y_m": 67.0365501799197
+          },
+          "minimum_kph": 48.2261904,
+          "duration_s": 8.028521993207676
+        },
+        {
+          "lap": 2,
+          "bend": 4,
+          "status": "complete",
+          "entry": {
+            "time_s": 41.988667714469244,
+            "reference_m": 513.1681249141693,
+            "distance_m": 546.7028221232281,
+            "speed_kph": 48.20741279964424,
+            "x_m": -27.00000018532488,
+            "y_m": 63.356190259474594
+          },
+          "exit": {
+            "time_s": 49.7992278581369,
+            "reference_m": 610.5574998855591,
+            "distance_m": 651.7244782112277,
+            "speed_kph": 48.40318799939122,
+            "x_m": -26.99999990737302,
+            "y_m": -3.4525094092792115
+          },
+          "minimum_kph": 47.79918,
+          "duration_s": 7.810560143667658
+        },
+        {
+          "lap": 3,
+          "bend": 5,
+          "status": "complete",
+          "entry": {
+            "time_s": 54.4167157157369,
+            "reference_m": 672.5574998855591,
+            "distance_m": 713.8003532192458,
+            "speed_kph": 48.37533299718107,
+            "x_m": 35.00000018530432,
+            "y_m": -0.4335332682980615
+          },
+          "exit": {
+            "time_s": 62.538705719212864,
+            "reference_m": 769.9468748569489,
+            "distance_m": 822.8823270571845,
+            "speed_kph": 48.947731221015495,
+            "x_m": 34.99999981475092,
+            "y_m": 69.37934015126254
+          },
+          "minimum_kph": 48.119238,
+          "duration_s": 8.121990003475965
+        },
+        {
+          "lap": 3,
+          "bend": 6,
+          "status": "unreached",
+          "entry": null,
+          "exit": null,
+          "minimum_kph": null,
+          "duration_s": null
+        }
+      ],
+      "straights": [
+        {
+          "lap": 1,
+          "section": 1,
+          "observed_s": 3.97,
+          "mean_kph": 31.682881475737027,
+          "maximum_kph": 48.1923558
+        },
+        {
+          "lap": 1,
+          "section": 2,
+          "observed_s": 4.619999999999999,
+          "mean_kph": 48.432199706663376,
+          "maximum_kph": 48.4539552
+        },
+        {
+          "lap": 1,
+          "section": 3,
+          "observed_s": 1.990000000000002,
+          "mean_kph": 49.09313622678151,
+          "maximum_kph": 49.107470400000004
+        },
+        {
+          "lap": 2,
+          "section": 1,
+          "observed_s": 2.5799999999999983,
+          "mean_kph": 49.04538973953488,
+          "maximum_kph": 49.071412800000004
+        },
+        {
+          "lap": 2,
+          "section": 2,
+          "observed_s": 4.630000000000003,
+          "mean_kph": 48.22173145236907,
+          "maximum_kph": 48.2349168
+        },
+        {
+          "lap": 2,
+          "section": 3,
+          "observed_s": 2.010000000000005,
+          "mean_kph": 48.40991732377075,
+          "maximum_kph": 48.4182288
+        },
+        {
+          "lap": 3,
+          "section": 1,
+          "observed_s": 2.6099999999999994,
+          "mean_kph": 48.38730550344828,
+          "maximum_kph": 48.401067600000005
+        },
+        {
+          "lap": 3,
+          "section": 2,
+          "observed_s": 4.469999999999999,
+          "mean_kph": 49.95931706492134,
+          "maximum_kph": 50.2615476
+        },
+        {
+          "lap": 3,
+          "section": 3,
+          "observed_s": 0,
+          "mean_kph": null,
+          "maximum_kph": null
+        }
+      ],
+      "pair": {
+        "initial_state_exact": true,
+        "baseline_first_bend_s": 10.679037642835942,
+        "new_first_bend_s": 8.019959291034944,
+        "baseline_source": "docs/experiments/robust-three-lap/final-v6/native/validation-v6-new-0.json.gz",
+        "baseline_sha256": "95deeae0f8a585ca19605dbd348be1ef608d030b0cb359cd4990b26d46efe38a",
+        "baseline_finish_s": 101.39013057507105,
+        "new_finish_s": null,
+        "delta_s": null
+      },
+      "distance_xy_m": 884.795544494882,
+      "minimum_pose_m": 0.7887035949938892,
+      "minimum_swept_m": 0.7188560161032814,
+      "maximum_beta_deg": 3.154397496253624,
+      "maximum_yaw_rads": 0.48795822,
+      "contacts": 0,
+      "abstain": 0,
+      "accepted_decisions": 335,
+      "rejected_plans": [
+        {
+          "time_s": 0,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 0,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "swept physical footprint reserve0.5m"
+        },
+        {
+          "time_s": 1,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 1,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "swept physical footprint reserve0.5m"
+        },
+        {
+          "time_s": 1.9999999999999998,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "swept physical footprint reserve0.5m"
+        },
+        {
+          "time_s": 1.9999999999999998,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 3,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "reserve maneuver did not reach terminal geometric section"
+        },
+        {
+          "time_s": 3,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 4,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "reserve maneuver did not reach terminal geometric section"
+        },
+        {
+          "time_s": 4,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 5,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "reserve maneuver did not reach terminal geometric section"
+        },
+        {
+          "time_s": 5,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "swept physical footprint reserve0.5m"
+        },
+        {
+          "time_s": 6,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "reserve maneuver did not reach terminal geometric section"
+        },
+        {
+          "time_s": 7,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "reserve maneuver did not reach terminal geometric section"
+        },
+        {
+          "time_s": 7,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "swept physical footprint reserve0.5m"
+        },
+        {
+          "time_s": 8,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "reserve maneuver did not reach terminal geometric section"
+        },
+        {
+          "time_s": 8,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 9,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "reserve maneuver did not reach terminal geometric section"
+        },
+        {
+          "time_s": 9,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "swept physical footprint reserve0.5m"
+        },
+        {
+          "time_s": 9.999999999999996,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "reserve maneuver did not reach terminal geometric section"
+        },
+        {
+          "time_s": 9.999999999999996,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 10.999999999999993,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "reserve maneuver did not reach terminal geometric section"
+        },
+        {
+          "time_s": 10.999999999999993,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "swept physical footprint reserve0.5m"
+        },
+        {
+          "time_s": 11.99999999999999,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "reserve maneuver did not reach terminal geometric section"
+        },
+        {
+          "time_s": 11.99999999999999,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 12.999999999999986,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "reserve maneuver did not reach terminal geometric section"
+        },
+        {
+          "time_s": 12.999999999999986,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 13.999999999999982,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "reserve maneuver did not reach terminal geometric section"
+        },
+        {
+          "time_s": 13.999999999999982,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 14.999999999999979,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "reserve maneuver did not reach terminal geometric section"
+        },
+        {
+          "time_s": 14.999999999999979,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "swept physical footprint reserve0.5m"
+        },
+        {
+          "time_s": 15.999999999999975,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "reserve maneuver did not reach terminal geometric section"
+        },
+        {
+          "time_s": 15.999999999999975,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 16.99999999999997,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 17.999999999999968,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 18.999999999999964,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "swept physical footprint reserve0.5m"
+        },
+        {
+          "time_s": 19.99999999999996,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "swept physical footprint reserve0.5m"
+        },
+        {
+          "time_s": 20.999999999999957,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "swept physical footprint reserve0.5m"
+        },
+        {
+          "time_s": 21.999999999999954,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 22.99999999999995,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "swept physical footprint reserve0.5m"
+        },
+        {
+          "time_s": 24.999999999999943,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 25.99999999999994,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 26.999999999999936,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "swept physical footprint reserve0.5m"
+        },
+        {
+          "time_s": 27.999999999999932,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "reserve maneuver did not reach terminal geometric section"
+        },
+        {
+          "time_s": 27.999999999999932,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 28.99999999999993,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "reserve maneuver did not reach terminal geometric section"
+        },
+        {
+          "time_s": 28.99999999999993,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 29.999999999999925,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "reserve maneuver did not reach terminal geometric section"
+        },
+        {
+          "time_s": 29.999999999999925,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "swept physical footprint reserve0.5m"
+        },
+        {
+          "time_s": 30.999999999999922,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "reserve maneuver did not reach terminal geometric section"
+        },
+        {
+          "time_s": 30.999999999999922,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 31.99999999999992,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "reserve maneuver did not reach terminal geometric section"
+        },
+        {
+          "time_s": 31.99999999999992,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 32.99999999999993,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "reserve maneuver did not reach terminal geometric section"
+        },
+        {
+          "time_s": 32.99999999999993,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 33.99999999999994,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "reserve maneuver did not reach terminal geometric section"
+        },
+        {
+          "time_s": 33.99999999999994,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 34.99999999999996,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "reserve maneuver did not reach terminal geometric section"
+        },
+        {
+          "time_s": 34.99999999999996,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "swept physical footprint reserve0.5m"
+        },
+        {
+          "time_s": 35.99999999999997,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "reserve maneuver did not reach terminal geometric section"
+        },
+        {
+          "time_s": 35.99999999999997,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 36.999999999999986,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "swept physical footprint reserve0.5m"
+        },
+        {
+          "time_s": 38,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 39,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 40,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 41,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "reserve maneuver did not reach terminal geometric section"
+        },
+        {
+          "time_s": 41,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 42,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "reserve maneuver did not reach terminal geometric section"
+        },
+        {
+          "time_s": 42,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "swept physical footprint reserve0.5m"
+        },
+        {
+          "time_s": 43,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "reserve maneuver did not reach terminal geometric section"
+        },
+        {
+          "time_s": 43,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "swept physical footprint reserve0.5m"
+        },
+        {
+          "time_s": 44,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "reserve maneuver did not reach terminal geometric section"
+        },
+        {
+          "time_s": 45,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "reserve maneuver did not reach terminal geometric section"
+        },
+        {
+          "time_s": 45,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 46,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "reserve maneuver did not reach terminal geometric section"
+        },
+        {
+          "time_s": 46,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 47,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "reserve maneuver did not reach terminal geometric section"
+        },
+        {
+          "time_s": 47,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 48,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "reserve maneuver did not reach terminal geometric section"
+        },
+        {
+          "time_s": 48,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 49,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "reserve maneuver did not reach terminal geometric section"
+        },
+        {
+          "time_s": 49,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "swept physical footprint reserve0.5m"
+        },
+        {
+          "time_s": 50,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "reserve maneuver did not reach terminal geometric section"
+        },
+        {
+          "time_s": 50,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "swept physical footprint reserve0.5m"
+        },
+        {
+          "time_s": 51,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "reserve maneuver did not reach terminal geometric section"
+        },
+        {
+          "time_s": 51,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 52,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "reserve maneuver did not reach terminal geometric section"
+        },
+        {
+          "time_s": 52,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 53,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "reserve maneuver did not reach terminal geometric section"
+        },
+        {
+          "time_s": 53,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 54,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "reserve maneuver did not reach terminal geometric section"
+        },
+        {
+          "time_s": 54,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 55,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 56,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 57,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 58,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 59,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 60,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 62,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 64,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 65,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        },
+        {
+          "time_s": 66,
+          "origin": "primitive retained controls; full physical revalidation",
+          "reason": "footprint reserve"
+        }
+      ],
+      "failures": [
+        {
+          "source": "docs/experiments/dynamic-slip-preview/native/native-dev-v5.json.gz",
+          "time_s": 67,
+          "reason": "technical invariant: Finite physical actions required.",
+          "scope": "Actual native technical DNF; failed callback threw before journal write. Separate terminal-cause-v5 probe preserves diagnostic candidate and stack."
+        }
+      ],
+      "cpu_process_s": 1252.84375,
+      "cpu_callbacks": {
+        "total": 1232.3125,
+        "median": 3.140625,
+        "maximum": 12.28125
+      },
+      "cpu_phases": {
+        "hierarchical_generation": 242.25,
+        "conditional_continuations": 724.875,
+        "independent_preflight": 117.75,
+        "outside_decision": 34.03125,
+        "nominal_propagation": 3.875,
+        "causal_reserve_generation": 0.09375,
+        "candidate_generation": 0.171875,
+        "uncertainty_scenarios": 0,
+        "recertification": 104.34375
+      },
+      "averages": {
+        "speed_kph": 47.54411387481704,
+        "front_util": 0.251101235337423,
+        "rear_util": 0.3184531855359734,
+        "active_gas": 0.11662043328059701,
+        "wheel_slip": 0.1370791793818812
+      },
+      "source": "docs/experiments/dynamic-slip-preview/native/native-dev-v5.json.gz",
+      "sha256": "a8dc01f2008db563af468895a1a41e6de83ab5085dc860e5761bb6a2beae60d8"
+    }
+  ],
+  "new_native_worlds": 1,
+  "held_trials": 0,
+  "held_set_exact": false,
+  "series_closure": {
+    "Status": "CLOSED_AFTER_FIRST_NATIVE_DNF",
+    "NativeLabel": "native-dev-v5",
+    "NativeOutcome": "technical invariant: Finite physical actions required.",
+    "ObservedUntilSeconds": 67,
+    "NewNativeWorlds": 1,
+    "NativeS3Completions": 0,
+    "HeldTrialsExecuted": 0,
+    "HeldSubsetIfSuccessfulDevelopment": 5,
+    "Reason": "First native failure closes development series under the predeclared gate E. No automatic restart or held validation. Six certificate probes consumed. Bounded-difference repair is diagnostic-only and has no new full certificate or native S3 evidence.",
+    "CandidateV5Preserved": "sources/native-dev-v5.zip",
+    "FinalSourceV6": "One-sided admissible steering differences and diagnostic failure observation; never native-validated."
+  },
+  "held_dnf": 0,
+  "median_finish_s": null,
+  "finish_range_s": null,
+  "budget": [
+    {
+      "Label": "exact-rest-speed12",
+      "Kind": "diagnostic",
+      "Complete": true,
+      "ChargedCpuSeconds": 3,
+      "CpuCapSeconds": 1800,
+      "ProcessId": 20228,
+      "CpuSeconds": 1.203125,
+      "Reason": "footprint reserve"
+    },
+    {
+      "Label": "mpc12-v1",
+      "Kind": "diagnostic",
+      "Complete": true,
+      "ChargedCpuSeconds": 17,
+      "CpuCapSeconds": 1797,
+      "ProcessId": 11524,
+      "CpuSeconds": 15.828125,
+      "Reason": "diagnostic goal"
+    },
+    {
+      "Label": "dynamic12-v2",
+      "Kind": "diagnostic",
+      "Complete": true,
+      "ChargedCpuSeconds": 17,
+      "CpuCapSeconds": 1780,
+      "ProcessId": 20188,
+      "CpuSeconds": 15.984375,
+      "Reason": "diagnostic goal"
+    },
+    {
+      "Label": "adaptive-v2",
+      "Kind": "diagnostic",
+      "Complete": true,
+      "ChargedCpuSeconds": 5,
+      "CpuCapSeconds": 1763,
+      "ProcessId": 13328,
+      "CpuSeconds": 3.140625,
+      "Reason": "Lateral position must be finite and between 0 and 4 inclusive. (Parameter 'lateralPosition')\r\nActual value was 4,40347."
+    },
+    {
+      "Label": "ablate-actuator-v2",
+      "Kind": "diagnostic",
+      "Complete": true,
+      "ChargedCpuSeconds": 3,
+      "CpuCapSeconds": 1758,
+      "ProcessId": 18632,
+      "CpuSeconds": 1.640625,
+      "Reason": "footprint reserve"
+    },
+    {
+      "Label": "ablate-beta-v2",
+      "Kind": "diagnostic",
+      "Complete": true,
+      "ChargedCpuSeconds": 18,
+      "CpuCapSeconds": 1755,
+      "ProcessId": 14356,
+      "CpuSeconds": 16.328125,
+      "Reason": "diagnostic goal"
+    },
+    {
+      "Label": "ablate-preview-v2",
+      "Kind": "diagnostic",
+      "Complete": true,
+      "ChargedCpuSeconds": 16,
+      "CpuCapSeconds": 1737,
+      "ProcessId": 10340,
+      "CpuSeconds": 14.09375,
+      "Reason": "diagnostic goal"
+    },
+    {
+      "Label": "adaptive-v3",
+      "Kind": "diagnostic",
+      "Complete": true,
+      "ChargedCpuSeconds": 16,
+      "CpuCapSeconds": 1721,
+      "ProcessId": 19116,
+      "CpuSeconds": 14.515625,
+      "Reason": "diagnostic goal"
+    },
+    {
+      "Label": "adaptive-v3-initial",
+      "Kind": "certificate",
+      "Complete": true,
+      "ChargedCpuSeconds": 35,
+      "CpuCapSeconds": 60,
+      "ProcessId": 1932,
+      "CpuSeconds": 34,
+      "Reason": "Fresh full13/9 independent certificate"
+    },
+    {
+      "Label": "adaptive-v4-initial",
+      "Kind": "certificate",
+      "Complete": true,
+      "ChargedCpuSeconds": 8,
+      "CpuCapSeconds": 60,
+      "ProcessId": 18896,
+      "CpuSeconds": 6.859375,
+      "Reason": "Fresh full13/9 independent certificate"
+    },
+    {
+      "Label": "adaptive-v4-entry",
+      "Kind": "certificate",
+      "Complete": true,
+      "ChargedCpuSeconds": 11,
+      "CpuCapSeconds": 60,
+      "ProcessId": 1252,
+      "CpuSeconds": 9.484375,
+      "Reason": "Fresh full13/9 independent certificate"
+    },
+    {
+      "Label": "adaptive-wide-v5",
+      "Kind": "diagnostic",
+      "Complete": true,
+      "ChargedCpuSeconds": 3,
+      "CpuCapSeconds": 1705,
+      "ProcessId": 9600,
+      "CpuSeconds": 1.234375,
+      "Reason": "beta45 envelope"
+    },
+    {
+      "Label": "adaptive-v5-initial",
+      "Kind": "certificate",
+      "Complete": true,
+      "ChargedCpuSeconds": 9,
+      "CpuCapSeconds": 60,
+      "ProcessId": 8960,
+      "CpuSeconds": 7.140625,
+      "Reason": "Fresh full13/9 independent certificate"
+    },
+    {
+      "Label": "adaptive-v5-bend",
+      "Kind": "certificate",
+      "Complete": true,
+      "ChargedCpuSeconds": 13,
+      "CpuCapSeconds": 60,
+      "ProcessId": 14368,
+      "CpuSeconds": 11.953125,
+      "Reason": "Fresh full13/9 independent certificate"
+    },
+    {
+      "Label": "native-dev-v5",
+      "Kind": "native",
+      "Complete": true,
+      "ChargedCpuSeconds": 1254,
+      "CpuCapSeconds": 1800,
+      "ProcessId": 18976,
+      "CpuSeconds": 1252.84375,
+      "Reason": "technical invariant: Finite physical actions required."
+    },
+    {
+      "Label": "terminal-cause-v5",
+      "Kind": "certificate",
+      "Complete": true,
+      "ChargedCpuSeconds": 6,
+      "CpuCapSeconds": 60,
+      "ProcessId": 18160,
+      "Concurrent": false,
+      "CpuSeconds": 4.5625,
+      "Reason": "System.ArgumentException: Finite physical actions required.\r\n   at Safety153.PredictorA153.Predict(FreeRacingInput input, RiderSpec spec, TrackFrame frame, TrackStateSnapshot surface, WorldParameters p, Single mass, Single inertia, Double horizon, Nullable`1 candidate, FreeRacingPolicy closedLoop, Func`2 causalPolicy, Double reviewSeconds, CrankClutch144 powertrain, Action`2 observeCrank, PredictionBoundary147 boundaryCache, Boundary152 fastBoundary, Boolean exactInitialWheel, Nullable`1 stopAt, Action onContact, Boolean verifyFinalWheel, ForecastMemo152 memo, IndependentBoundary152 checkedBoundary) in D:\\CodexWork-160\\repo160\\tools\\safe-fast-contingency\\PredictorA153.Generated.cs:line 34\r\n   at Dynamic160.Control160.Predict(State146 s, FreeRacingAction action, Double horizon) in D:\\CodexWork-160\\repo160\\tools\\dynamic-slip-preview\\Control160.cs:line 43\r\n   at Dynamic160.Control160.<Action>g__Evaluate|27_0(Single steer, Single gas, <>c__DisplayClass27_0&) in D:\\CodexWork-160\\repo160\\tools\\dynamic-slip-preview\\Control160.cs:line 79\r\n   at Dynamic160.Control160.Action(State146 observed) in D:\\CodexWork-160\\repo160\\tools\\dynamic-slip-preview\\Control160.cs:line 86\r\n   at Dynamic160.Generator160.Generate(State146 start, Double goal, Double safetyGoal, String origin, Int32 maximumPlans) in D:\\CodexWork-160\\repo160\\tools\\dynamic-slip-preview\\Generator160.cs:line 18\r\n   at Dynamic160.Planner160.Complete(State146 state, Tape150 anchor, String phase, Nullable`1 forcedRoot) in D:\\CodexWork-160\\repo160\\tools\\dynamic-slip-preview\\Planner160.Generated.cs:line 141\r\n   at Dynamic160.Planner160.Choose(FreeRacingInput input, CrankClutch144 crank, Nullable`1 diagnosticRoot) in D:\\CodexWork-160\\repo160\\tools\\dynamic-slip-preview\\Planner160.Generated.cs:line 212\r\n   at Dynamic160.Program160.Probe(String label, Double time, Boolean nativeEnd) in D:\\CodexWork-160\\repo160\\tools\\dynamic-slip-preview\\Program160.cs:line 25"
+    },
+    {
+      "Label": "off-base10",
+      "Kind": "diagnostic",
+      "Complete": true,
+      "ChargedCpuSeconds": 6,
+      "CpuCapSeconds": 1702,
+      "ProcessId": 9964,
+      "Concurrent": false,
+      "CpuSeconds": 4.359375,
+      "Reason": "diagnostic goal"
+    },
+    {
+      "Label": "bounded-tail-v6",
+      "Kind": "diagnostic",
+      "Complete": true,
+      "ChargedCpuSeconds": 6,
+      "CpuCapSeconds": 1696,
+      "ProcessId": 18108,
+      "Concurrent": false,
+      "CpuSeconds": 4.65625,
+      "Reason": "footprint reserve"
+    },
+    {
+      "Label": "adaptive-bounded-v6",
+      "Kind": "diagnostic",
+      "Complete": true,
+      "ChargedCpuSeconds": 16,
+      "CpuCapSeconds": 1690,
+      "ProcessId": 22252,
+      "Concurrent": false,
+      "CpuSeconds": 14.734375,
+      "Reason": "diagnostic goal"
+    }
+  ]
+}
