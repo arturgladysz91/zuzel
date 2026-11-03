@@ -1,0 +1,193 @@
+{
+  "Source": "docs/experiments/trajectory-continuation/native/native-dev.json.gz",
+  "Sha256": "CF291C3B81E5F1372CFD4F40C6B2B365094F7849BC6999CB09960AE0C896E0C8",
+  "section": {
+    "Entry": 35,
+    "Exit": 132.38937497138977,
+    "NextEntry": 194.38937497138977,
+    "Goal": 206.38937497138977
+  },
+  "Fingerprint": "D5A67C9195D775D5FC7B2C64A9F9B849B35BDA959891927D80ADC7C3AA4C6788",
+  "Metrics": {
+    "Entry": {
+      "Time": 3.97849513819104,
+      "Reference": 35,
+      "Distance": 35.00008308735242,
+      "Kph": 47.81104078496318,
+      "X": 35,
+      "Y": -3.4834567987243705
+    },
+    "Exit": {
+      "Time": 12.11407871250338,
+      "Reference": 132.38937497138977,
+      "Distance": 143.03305215045108,
+      "Kph": 47.788244228803975,
+      "X": 35.000000000001926,
+      "Y": 66.28327930924716
+    },
+    "After20": {
+      "Time": 13.620430526126775,
+      "Reference": 152.38937497138977,
+      "Distance": 163.03403808859952,
+      "Kph": 47.79947063948141,
+      "X": 15,
+      "Y": 66.39526553827505
+    },
+    "After40": {
+      "Time": 15.12670541675196,
+      "Reference": 172.38937497138977,
+      "Distance": 183.03428425806496,
+      "Kph": 47.79989209728253,
+      "X": -5,
+      "Y": 66.29649104690004
+    },
+    "After62": {
+      "Time": 16.783602856356893,
+      "Reference": 194.38937497138977,
+      "Distance": 205.034562283785,
+      "Kph": 47.811775575028044,
+      "X": -27,
+      "Y": 66.19979099108976
+    },
+    "Goal": {
+      "Time": 17.783028422395486,
+      "Reference": 206.38937497138977,
+      "Distance": 218.31065864830612,
+      "Kph": 47.80772043805593,
+      "X": -39.97181980698555,
+      "Y": 63.7874798688924
+    },
+    "MinBendKph": 47.78108596801758,
+    "BendMaxAbsBeta": 2.816520787699544,
+    "Apex": {
+      "Time": 5.0200000000000005,
+      "Reference": 47.50993889296262,
+      "Distance": 48.83528773301077,
+      "Kph": 47.80904960632324,
+      "X": 48.4914665222168,
+      "Y": -0.8796390891075134
+    },
+    "BendSeconds": 8.13558357431234,
+    "SectionSeconds": 14.933570840431207,
+    "Terminal": {
+      "Rider": {
+        "Id": 1,
+        "Position": {
+          "X": -40.057465,
+          "Y": 63.75232
+        },
+        "Velocity": {
+          "X": -12.276667,
+          "Y": -5.063548
+        },
+        "Heading": -2.7059097,
+        "AngularVelocity": 0.43884537,
+        "Road": {
+          "Segment": 5,
+          "Progress": 0.37218269125408,
+          "ReferenceMeters": 206.47158819685797,
+          "OffsetMeters": 3.2156815381849078,
+          "Heading": -2.752377232447337,
+          "RadiusMeters": 28.72825080837538,
+          "CornerProgress": 0.12406089708469333,
+          "Tangent": {
+            "X": -0.9252071,
+            "Y": -0.37946263
+          },
+          "Outward": {
+            "X": -0.37946263,
+            "Y": 0.9252071
+          },
+          "IsTurn": true
+        },
+        "TotalReferenceMeters": 206.47158819685797,
+        "DistanceMeters": 218.40323993005586,
+        "Activity": 0,
+        "Drive": 0.113870576,
+        "TargetOffsetMeters": 3.5,
+        "Impairment": 0,
+        "Context": 2,
+        "Speed": 13.279911,
+        "ForwardSpeed": 13.266773,
+        "SideSpeed": -0.59059525,
+        "SlideRadians": 0.044487506
+      },
+      "Time": 17.79,
+      "Omega": 41.98940140008912,
+      "Steering": 0.04221683,
+      "Active": {
+        "SteeringRadians": 0.04221683,
+        "Drive": 0.113870576
+      },
+      "Pending": [
+        {
+          "ObservedAt": 17.59999999999997,
+          "ActivationAt": 17.839999999999968,
+          "Action": {
+            "SteeringRadians": 0.04178478,
+            "Drive": 0.112345204
+          }
+        }
+      ],
+      "NextReview": 17.79999999999997
+    },
+    "TerminalCrankOmega": 378.17684115060445,
+    "TerminalPowertrain": {
+      "Seconds": 0.009999999776482582,
+      "BeforeOmega": 378.1698286062061,
+      "AfterOmega": 378.17684115060445,
+      "CrankTorque": 5.086340829481665,
+      "ClutchTorque": 5.079328284926605,
+      "Engagement": 0.9349811524303405,
+      "SlipRadiansPerSecond": 0.2716273088352068,
+      "CombustionWorkJoules": 19.23518430819287,
+      "CrankDragWorkJoules": 0,
+      "ClutchHeatJoules": 0.013796842418868138,
+      "TransmissionLossJoules": 1.1516920735657834,
+      "EnergyResidualJoules": 6.217248937900877E-14,
+      "RootResidualNewtonMeters": 7.318590178329032E-13,
+      "WheelQueries": 12,
+      "Wheel": {
+        "Seconds": 0.009999999776482582,
+        "BeforeOmega": 41.98875583759312,
+        "AfterOmega": 41.98940140008912,
+        "RequestedTorqueNewtonMeters": 42.97111729047908,
+        "AvailableTorqueNewtonMeters": 42.97111729047908,
+        "DriveTorqueNewtonMeters": 42.97111729047908,
+        "BearingTorqueNewtonMeters": 0.8397815723768224,
+        "LongitudinalNewtons": 127.49465,
+        "FrontLateralNewtons": 395.24506,
+        "RearLateralNewtons": 457.3365,
+        "InstantSlipRatio": 0.044401987751839005,
+        "MidSlipVelocityMetersPerSecond": 0.5883787200821866,
+        "LongitudinalLossJoules": 0.7501513836341385,
+        "BearingLossJoules": 0.3526165367702502,
+        "EngineWorkJoules": 18.043175819197273,
+        "RearUtilization": 0.47600656783262685,
+        "RootResidualMetersPerSecond": 6.116851469784024E-10,
+        "RootIterations": 2,
+        "LateralNewtons": 852.58154,
+        "MidOmega": 41.98907861884112
+      },
+      "Engine": {
+        "EngineRpm": 3611.2893354866924,
+        "OverallRatio": 9,
+        "CrankTorqueNewtonMeters": 44.66773601292016,
+        "AvailableWheelTorqueNewtonMeters": 377.88904666930455,
+        "DriveWheelTorqueNewtonMeters": 42.97111729047908,
+        "Efficiency": 0.94,
+        "CrankPowerWatts": 16892.14668947426
+      },
+      "MidOmega": 378.1733348784053
+    }
+  },
+  "Audit": {
+    "Reason": null,
+    "FirstFailureSeconds": null,
+    "FirstFailureReference": null,
+    "PoseMeters": 3.768025489003688,
+    "SweptMeters": 3.6988125411358785,
+    "MaxAbsBetaDegrees": 2.8165209252519645,
+    "SweptMismatchMeters": 1.2434497875801753E-14
+  }
+}

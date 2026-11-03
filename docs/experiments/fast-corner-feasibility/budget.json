@@ -1,0 +1,16 @@
+{
+  "Study": 165,
+  "TechnicalBase": "c2023dc82c6771f8799cfc05f6e69ed798d1355c",
+  "ReferenceController": "85a5ee3295c2dd983fbacb21859649f794cc5ba5",
+  "InitialCandidates": 100,
+  "ExpandedTotalCandidates": 250,
+  "ExpansionGate": "At least one complete legal candidate or a materially improved legal continuation in the first 100",
+  "NativeConfirmationLimit": 6,
+  "CombinedProcessCpuSeconds": 900,
+  "AdmissionCpuSeconds": 880,
+  "MaximumTrialSimulationSeconds": 30,
+  "EntryTargetsKph": [60, 70, 80, 90],
+  "EntryToleranceKph": 2.5,
+  "IndependentNativeConfirmations": "Different frozen command sequences and/or launch geometry, replayed from stopped initial conditions in fresh worlds at the original 0.01 s step",
+  "Scope": "Progressive-b only; start at rest; bend 1, full 62 m straight, and 12 m of bend 2. Phase B stops at the first illegal interval or the common goal; no study of autonomy S3."
+}
