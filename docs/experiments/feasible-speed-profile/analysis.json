@@ -1,0 +1,1143 @@
+{
+  "base": "75c208c28225005589b5ad84eb5825c1abcf3e1b",
+  "controller_reference": "85a5ee3295c2dd983fbacb21859649f794cc5ba5",
+  "verdict": "PARTIAL",
+  "native_legal_gate": false,
+  "sports_gate": false,
+  "cpu_gate": false,
+  "speed_profile_gate": false,
+  "diagnostics": [
+    {
+      "Label": "d1-straight",
+      "PolicyHash": "2B6BCA461AD1E4C061D96D2F30432F1228D4FB75AAE7DC2E629BBA30EA0D76B5",
+      "Initial": {
+        "Input": {
+          "Rider": {
+            "Id": 1,
+            "Position": {
+              "X": 28.549202,
+              "Y": 66.38513
+            },
+            "Velocity": {
+              "X": -13.277834,
+              "Y": 0.10511203
+            },
+            "Heading": 3.1357868,
+            "AngularVelocity": 0.017869025,
+            "Road": {
+              "Segment": 4,
+              "Progress": 0.10404512959141884,
+              "ReferenceMeters": 138.84017300605774,
+              "OffsetMeters": 3.7221116678065016,
+              "Heading": 3.141592653589793,
+              "RadiusMeters": 0,
+              "CornerProgress": 0,
+              "Tangent": {
+                "X": -1,
+                "Y": 1.2246469e-16
+              },
+              "Outward": {
+                "X": 1.2246469e-16,
+                "Y": 1
+              },
+              "IsTurn": false
+            },
+            "TotalReferenceMeters": 138.84017300605774,
+            "DistanceMeters": 149.48475935869646,
+            "Activity": 0,
+            "Drive": 0.069503516,
+            "TargetOffsetMeters": 3.5,
+            "Impairment": 0,
+            "Context": 2,
+            "Speed": 13.27825,
+            "ForwardSpeed": 13.27822,
+            "SideSpeed": -0.028021157,
+            "SlideRadians": 0.0021103066
+          },
+          "Time": 12.599999999999987,
+          "Omega": 41.177034134833946,
+          "Steering": 0.0015857895,
+          "Active": {
+            "SteeringRadians": 0.0015857895,
+            "Drive": 0.069503516
+          },
+          "Pending": [
+            {
+              "ObservedAt": 12.399999999999988,
+              "ActivationAt": 12.639999999999988,
+              "Action": {
+                "SteeringRadians": 0.0012910864,
+                "Drive": 0.067881346
+              }
+            }
+          ],
+          "NextReview": 12.599999999999987
+        },
+        "CrankOmega": 370.76173030037694
+      },
+      "Goal": 191.38937497138977,
+      "SafetyGoal": 350.77874994277954,
+      "Baseline161Arrival": 16.557669577958457,
+      "TrackArrival": 16.45633402156458,
+      "GatePassed": true,
+      "Error": null,
+      "Outcomes": [
+        {
+          "Maneuver": "Track",
+          "Legal": true,
+          "Arrival": 16.45633402156458,
+          "Commands": 83,
+          "EndReference": 351.8309578895569,
+          "MinimumGap": 3.7744703337263386,
+          "Sweep": 3.705276785270493,
+          "Reason": "legal complete forecast; swept physical footprint>=0.5m",
+          "First": {
+            "SteeringRadians": 0.00076427957,
+            "Drive": 0.3831727
+          },
+          "CpuSeconds": 3.90625
+        },
+        {
+          "Maneuver": "Prepare",
+          "Legal": true,
+          "Arrival": 16.718803410823764,
+          "Commands": 90,
+          "EndReference": 351.6702256202698,
+          "MinimumGap": 4.057847818731076,
+          "Sweep": 3.9940914303946453,
+          "Reason": "legal complete forecast; swept physical footprint>=0.5m",
+          "First": {
+            "SteeringRadians": -8.542144e-05,
+            "Drive": 0
+          },
+          "CpuSeconds": 3.421875
+        },
+        {
+          "Maneuver": "Recover",
+          "Legal": true,
+          "Arrival": 16.82512916963561,
+          "Commands": 103,
+          "EndReference": 352.144278049469,
+          "MinimumGap": 2.818441712890986,
+          "Sweep": 2.765401412927627,
+          "Reason": "legal complete forecast; swept physical footprint>=0.5m",
+          "First": {
+            "SteeringRadians": 0.002739487,
+            "Drive": 0
+          },
+          "CpuSeconds": 3.15625
+        }
+      ],
+      "Rejections": [],
+      "PhysicalCounters": {
+        "Search": {
+          "ShortlistK1": false,
+          "Complete27K1Batches": 0,
+          "ShortRankingCandidates": 0,
+          "FullHorizonCandidates": 0,
+          "SeedSharedPrefixes": 0,
+          "SharedPrefixContactQueriesSaved": 0,
+          "FullK1Executions": 0,
+          "HeldContinuationRequests": 0,
+          "ActualForecasts": 0,
+          "ActualContacts": 0,
+          "PredictionRequests": 0,
+          "PredictionHits": 0,
+          "SeedRequests": 0,
+          "SeedHits": 0,
+          "CrossReviewHits": 0,
+          "InactivePrefixRequests": 0,
+          "BudgetFallbacks": 0,
+          "BudgetReason": null,
+          "CacheEntries": 0,
+          "SeedCacheEntries": 0,
+          "FastBoundaryQueries": 0,
+          "BoundaryFallbackQueries": 0
+        },
+        "SearchWork": {
+          "ForecastRequests": 0,
+          "PhysicalForecastCalls": 0,
+          "ContactQueries": 0
+        },
+        "SearchMemo": {
+          "KernelHits": 0,
+          "KernelMisses": 0,
+          "ProjectionHits": 0,
+          "ProjectionMisses": 0,
+          "ClearanceHits": 0
+        },
+        "IndependentMemo": {
+          "KernelHits": 0,
+          "KernelMisses": 0,
+          "ProjectionHits": 0,
+          "ProjectionMisses": 0,
+          "ClearanceHits": 0
+        },
+        "FullK1": 0,
+        "Forecasts": 0,
+        "Contacts": 0,
+        "FeedbackQueries": 0,
+        "IndependentForecasts": 0,
+        "IndependentContacts": 0,
+        "TransitionRequests": 276,
+        "SearchHits": 276,
+        "IndependentHits": 0,
+        "RolloutHits": 0,
+        "IndependentComparisons": 0,
+        "PrimedPrefixes": 274,
+        "Verification": "Fresh per-review DAG; every unique physical prefix repropagated independently; no search or historical result accepted as proof",
+        "options": {
+          "Memoize": true,
+          "ValidatedIndependent": true,
+          "ShareCurrentPolicies": true,
+          "ShortlistK1": false,
+          "FastIndependent": true,
+          "Regime": 1,
+          "RankPolicies": false,
+          "StrictSeeds": true
+        }
+      },
+      "ControlObservations": 276,
+      "UncommittedForceProbes": 276,
+      "CpuSeconds": 10.828125,
+      "Scope": "Diagnostic predictions only, not13/9 certificate or nativeS3. Full identical initial/pending and original propagation.",
+      "source": "docs/experiments/feasible-speed-profile/diagnostics/d1-straight.zip",
+      "sha256": "ee16dba458fd9364b00bbb6e73f9e511f78142d52d658961e0487086fc618528",
+      "improvement_s": 0.10133555639387737
+    },
+    {
+      "Label": "d2-entry",
+      "PolicyHash": "2B6BCA461AD1E4C061D96D2F30432F1228D4FB75AAE7DC2E629BBA30EA0D76B5",
+      "Initial": {
+        "Input": {
+          "Rider": {
+            "Id": 1,
+            "Position": {
+              "X": 35.28556,
+              "Y": -3.4781199
+            },
+            "Velocity": {
+              "X": 13.278722,
+              "Y": 0.26857817
+            },
+            "Heading": 0.026874052,
+            "AngularVelocity": 0.2634147,
+            "Road": {
+              "Segment": 1,
+              "Progress": 0.008795869643675394,
+              "ReferenceMeters": 35.285541415642456,
+              "OffsetMeters": 3.478120169173955,
+              "Heading": 5.5180003269697435e-06,
+              "RadiusMeters": 13179.644859183138,
+              "CornerProgress": 0.002931956547891798,
+              "Tangent": {
+                "X": 1,
+                "Y": 5.5180003e-06
+              },
+              "Outward": {
+                "X": 5.5180003e-06,
+                "Y": -1
+              },
+              "IsTurn": true
+            },
+            "TotalReferenceMeters": 35.285541415642456,
+            "DistanceMeters": 35.28569367342425,
+            "Activity": 0,
+            "Drive": 0.08031992,
+            "TargetOffsetMeters": 3.5,
+            "Impairment": 0,
+            "Context": 1,
+            "Speed": 13.281437,
+            "ForwardSpeed": 13.281143,
+            "SideSpeed": -0.0883289,
+            "SlideRadians": 0.0066506034
+          },
+          "Time": 4,
+          "Omega": 41.32979245659499,
+          "Steering": 0.034234084,
+          "Active": {
+            "SteeringRadians": 0.034234084,
+            "Drive": 0.08031992
+          },
+          "Pending": [
+            {
+              "ObservedAt": 3.8000000000000003,
+              "ActivationAt": 4.04,
+              "Action": {
+                "SteeringRadians": 0.04239698,
+                "Drive": 0.09633061
+              }
+            }
+          ],
+          "NextReview": 4.000000000000001
+        },
+        "CrankOmega": 372.16161419540117
+      },
+      "Goal": 191.38937497138977,
+      "SafetyGoal": 350.77874994277954,
+      "Baseline161Arrival": 16.557589387039776,
+      "TrackArrival": 16.422987567931862,
+      "GatePassed": true,
+      "Error": null,
+      "Outcomes": [
+        {
+          "Maneuver": "Track",
+          "Legal": true,
+          "Arrival": 16.422987567931862,
+          "Commands": 126,
+          "EndReference": 352.2500596046448,
+          "MinimumGap": 3.7680683923644414,
+          "Sweep": 3.69885553353107,
+          "Reason": "legal complete forecast; swept physical footprint>=0.5m",
+          "First": {
+            "SteeringRadians": 0.042726886,
+            "Drive": 0.10476747
+          },
+          "CpuSeconds": 5.578125
+        },
+        {
+          "Maneuver": "Prepare",
+          "Legal": true,
+          "Arrival": 17.43409346351876,
+          "Commands": 137,
+          "EndReference": 352.8296036720276,
+          "MinimumGap": 3.5808285379441354,
+          "Sweep": 3.5175993898244373,
+          "Reason": "legal complete forecast; swept physical footprint>=0.5m",
+          "First": {
+            "SteeringRadians": 0.04239698,
+            "Drive": 0
+          },
+          "CpuSeconds": 5.25
+        },
+        {
+          "Maneuver": "Recover",
+          "Legal": true,
+          "Arrival": 19.002046172095962,
+          "Commands": 160,
+          "EndReference": 351.962393283844,
+          "MinimumGap": 2.4373896107343347,
+          "Sweep": 2.3805070709524427,
+          "Reason": "legal complete forecast; swept physical footprint>=0.5m",
+          "First": {
+            "SteeringRadians": 0.047295943,
+            "Drive": 0
+          },
+          "CpuSeconds": 4.6875
+        }
+      ],
+      "Rejections": [],
+      "PhysicalCounters": {
+        "Search": {
+          "ShortlistK1": false,
+          "Complete27K1Batches": 0,
+          "ShortRankingCandidates": 0,
+          "FullHorizonCandidates": 0,
+          "SeedSharedPrefixes": 0,
+          "SharedPrefixContactQueriesSaved": 0,
+          "FullK1Executions": 0,
+          "HeldContinuationRequests": 0,
+          "ActualForecasts": 0,
+          "ActualContacts": 0,
+          "PredictionRequests": 0,
+          "PredictionHits": 0,
+          "SeedRequests": 0,
+          "SeedHits": 0,
+          "CrossReviewHits": 0,
+          "InactivePrefixRequests": 0,
+          "BudgetFallbacks": 0,
+          "BudgetReason": null,
+          "CacheEntries": 0,
+          "SeedCacheEntries": 0,
+          "FastBoundaryQueries": 0,
+          "BoundaryFallbackQueries": 0
+        },
+        "SearchWork": {
+          "ForecastRequests": 0,
+          "PhysicalForecastCalls": 0,
+          "ContactQueries": 0
+        },
+        "SearchMemo": {
+          "KernelHits": 0,
+          "KernelMisses": 0,
+          "ProjectionHits": 0,
+          "ProjectionMisses": 0,
+          "ClearanceHits": 0
+        },
+        "IndependentMemo": {
+          "KernelHits": 0,
+          "KernelMisses": 0,
+          "ProjectionHits": 0,
+          "ProjectionMisses": 0,
+          "ClearanceHits": 0
+        },
+        "FullK1": 0,
+        "Forecasts": 0,
+        "Contacts": 0,
+        "FeedbackQueries": 0,
+        "IndependentForecasts": 0,
+        "IndependentContacts": 0,
+        "TransitionRequests": 423,
+        "SearchHits": 423,
+        "IndependentHits": 0,
+        "RolloutHits": 0,
+        "IndependentComparisons": 0,
+        "PrimedPrefixes": 421,
+        "Verification": "Fresh per-review DAG; every unique physical prefix repropagated independently; no search or historical result accepted as proof",
+        "options": {
+          "Memoize": true,
+          "ValidatedIndependent": true,
+          "ShareCurrentPolicies": true,
+          "ShortlistK1": false,
+          "FastIndependent": true,
+          "Regime": 1,
+          "RankPolicies": false,
+          "StrictSeeds": true
+        }
+      },
+      "ControlObservations": 423,
+      "UncommittedForceProbes": 423,
+      "CpuSeconds": 15.859375,
+      "Scope": "Diagnostic predictions only, not13/9 certificate or nativeS3. Full identical initial/pending and original propagation.",
+      "source": "docs/experiments/feasible-speed-profile/diagnostics/d2-entry.zip",
+      "sha256": "78de26aa727881e8ba31d180ccdeb01a27005ac4d7089617ad876271349a9fe5",
+      "improvement_s": 0.1346018191079139
+    },
+    {
+      "Label": "d3-rest",
+      "PolicyHash": "2B6BCA461AD1E4C061D96D2F30432F1228D4FB75AAE7DC2E629BBA30EA0D76B5",
+      "Initial": {
+        "Input": {
+          "Rider": {
+            "Id": 1,
+            "Position": {
+              "X": 0,
+              "Y": -3.5
+            },
+            "Velocity": {
+              "X": 0,
+              "Y": 0
+            },
+            "Heading": 0,
+            "AngularVelocity": 0,
+            "Road": {
+              "Segment": 0,
+              "Progress": 0,
+              "ReferenceMeters": 0,
+              "OffsetMeters": 3.5,
+              "Heading": 0,
+              "RadiusMeters": 0,
+              "CornerProgress": 0,
+              "Tangent": {
+                "X": 1,
+                "Y": 0
+              },
+              "Outward": {
+                "X": 0,
+                "Y": -1
+              },
+              "IsTurn": false
+            },
+            "TotalReferenceMeters": 0,
+            "DistanceMeters": 0,
+            "Activity": 0,
+            "Drive": 0,
+            "TargetOffsetMeters": 3.5,
+            "Impairment": 0,
+            "Context": 0,
+            "Speed": 0,
+            "ForwardSpeed": 0,
+            "SideSpeed": 0,
+            "SlideRadians": 0
+          },
+          "Time": 0,
+          "Omega": 0,
+          "Steering": 0,
+          "Active": {
+            "SteeringRadians": 0,
+            "Drive": 0
+          },
+          "Pending": [],
+          "NextReview": 0
+        },
+        "CrankOmega": 418.87902047863906
+      },
+      "Goal": 956.3362498283386,
+      "SafetyGoal": 988.3362498283386,
+      "Baseline161Arrival": 78.17890648407827,
+      "TrackArrival": 77.2882425993419,
+      "GatePassed": true,
+      "Error": null,
+      "Outcomes": [
+        {
+          "Maneuver": "Track",
+          "Legal": true,
+          "Arrival": 77.2882425993419,
+          "Commands": 399,
+          "EndReference": 990.3714823722828,
+          "MinimumGap": 3.7751942541561356,
+          "Sweep": 3.7059953682384856,
+          "Reason": "legal complete forecast; swept physical footprint>=0.5m",
+          "First": {
+            "SteeringRadians": 0,
+            "Drive": 1
+          },
+          "CpuSeconds": 15.296875
+        },
+        {
+          "Maneuver": "Prepare",
+          "Legal": true,
+          "Arrival": 84.00801981125241,
+          "Commands": 433,
+          "EndReference": 988.6657366752625,
+          "MinimumGap": 3.776125340247223,
+          "Sweep": 3.712617657752405,
+          "Reason": "legal complete forecast; swept physical footprint>=0.5m",
+          "First": {
+            "SteeringRadians": 0,
+            "Drive": 1
+          },
+          "CpuSeconds": 15.78125
+        },
+        {
+          "Maneuver": "Recover",
+          "Legal": false,
+          "Arrival": null,
+          "Commands": 450,
+          "EndReference": 843.3391165546307,
+          "MinimumGap": 2.7593600239670213,
+          "Sweep": 2.708557004592979,
+          "Reason": "bounded terminal maneuver incomplete",
+          "First": {
+            "SteeringRadians": 0,
+            "Drive": 1
+          },
+          "CpuSeconds": 12.96875
+        }
+      ],
+      "Rejections": [],
+      "PhysicalCounters": {
+        "Search": {
+          "ShortlistK1": false,
+          "Complete27K1Batches": 0,
+          "ShortRankingCandidates": 0,
+          "FullHorizonCandidates": 0,
+          "SeedSharedPrefixes": 0,
+          "SharedPrefixContactQueriesSaved": 0,
+          "FullK1Executions": 0,
+          "HeldContinuationRequests": 0,
+          "ActualForecasts": 0,
+          "ActualContacts": 0,
+          "PredictionRequests": 0,
+          "PredictionHits": 0,
+          "SeedRequests": 0,
+          "SeedHits": 0,
+          "CrossReviewHits": 0,
+          "InactivePrefixRequests": 0,
+          "BudgetFallbacks": 0,
+          "BudgetReason": null,
+          "CacheEntries": 0,
+          "SeedCacheEntries": 0,
+          "FastBoundaryQueries": 0,
+          "BoundaryFallbackQueries": 0
+        },
+        "SearchWork": {
+          "ForecastRequests": 0,
+          "PhysicalForecastCalls": 0,
+          "ContactQueries": 0
+        },
+        "SearchMemo": {
+          "KernelHits": 0,
+          "KernelMisses": 0,
+          "ProjectionHits": 0,
+          "ProjectionMisses": 0,
+          "ClearanceHits": 0
+        },
+        "IndependentMemo": {
+          "KernelHits": 0,
+          "KernelMisses": 0,
+          "ProjectionHits": 0,
+          "ProjectionMisses": 0,
+          "ClearanceHits": 0
+        },
+        "FullK1": 0,
+        "Forecasts": 0,
+        "Contacts": 0,
+        "FeedbackQueries": 0,
+        "IndependentForecasts": 0,
+        "IndependentContacts": 0,
+        "TransitionRequests": 1282,
+        "SearchHits": 1282,
+        "IndependentHits": 0,
+        "RolloutHits": 0,
+        "IndependentComparisons": 0,
+        "PrimedPrefixes": 1269,
+        "Verification": "Fresh per-review DAG; every unique physical prefix repropagated independently; no search or historical result accepted as proof",
+        "options": {
+          "Memoize": true,
+          "ValidatedIndependent": true,
+          "ShareCurrentPolicies": true,
+          "ShortlistK1": false,
+          "FastIndependent": true,
+          "Regime": 1,
+          "RankPolicies": false,
+          "StrictSeeds": true
+        }
+      },
+      "ControlObservations": 1276,
+      "UncommittedForceProbes": 1282,
+      "CpuSeconds": 45.171875,
+      "Scope": "Diagnostic predictions only, not13/9 certificate or nativeS3. Full identical initial/pending and original propagation.",
+      "source": "docs/experiments/feasible-speed-profile/diagnostics/d3-rest.zip",
+      "sha256": "803cf6d887c195fa02016412b9dca673ff9cdf6a3e28535fa713cd129092d6c5",
+      "improvement_s": 0.8906638847363695
+    }
+  ],
+  "certificates": [
+    {
+      "Label": "c1-rest",
+      "PolicyHash": "2B6BCA461AD1E4C061D96D2F30432F1228D4FB75AAE7DC2E629BBA30EA0D76B5",
+      "GatePassed": true,
+      "Error": null,
+      "CpuSeconds": 19.03125,
+      "Nodes": 13,
+      "Reserves": 9,
+      "Independent": true,
+      "PhysicalHash": "EE2916AAB3247A073D03698C1D0EFDA3F6872EB6F46BE50F8EA1836DB5989F76",
+      "PhysicalCounters": {
+        "Search": {
+          "ShortlistK1": false,
+          "Complete27K1Batches": 0,
+          "ShortRankingCandidates": 0,
+          "FullHorizonCandidates": 0,
+          "SeedSharedPrefixes": 0,
+          "SharedPrefixContactQueriesSaved": 0,
+          "FullK1Executions": 0,
+          "HeldContinuationRequests": 0,
+          "ActualForecasts": 0,
+          "ActualContacts": 0,
+          "PredictionRequests": 0,
+          "PredictionHits": 0,
+          "SeedRequests": 0,
+          "SeedHits": 0,
+          "CrossReviewHits": 0,
+          "InactivePrefixRequests": 0,
+          "BudgetFallbacks": 0,
+          "BudgetReason": null,
+          "CacheEntries": 0,
+          "SeedCacheEntries": 0,
+          "FastBoundaryQueries": 0,
+          "BoundaryFallbackQueries": 0
+        },
+        "SearchWork": {
+          "ForecastRequests": 0,
+          "PhysicalForecastCalls": 0,
+          "ContactQueries": 0
+        },
+        "SearchMemo": {
+          "KernelHits": 0,
+          "KernelMisses": 0,
+          "ProjectionHits": 0,
+          "ProjectionMisses": 0,
+          "ClearanceHits": 0
+        },
+        "IndependentMemo": {
+          "KernelHits": 0,
+          "KernelMisses": 0,
+          "ProjectionHits": 0,
+          "ProjectionMisses": 0,
+          "ClearanceHits": 0
+        },
+        "FullK1": 0,
+        "Forecasts": 433,
+        "Contacts": 8684,
+        "FeedbackQueries": 0,
+        "IndependentForecasts": 433,
+        "IndependentContacts": 8684,
+        "TransitionRequests": 2386,
+        "SearchHits": 1942,
+        "IndependentHits": 11,
+        "RolloutHits": 8,
+        "IndependentComparisons": 433,
+        "PrimedPrefixes": 767,
+        "Verification": "Fresh per-review DAG; every unique physical prefix repropagated independently; no search or historical result accepted as proof",
+        "options": {
+          "Memoize": true,
+          "ValidatedIndependent": true,
+          "ShareCurrentPolicies": true,
+          "ShortlistK1": false,
+          "FastIndependent": true,
+          "Regime": 1,
+          "RankPolicies": false,
+          "StrictSeeds": true
+        }
+      },
+      "Scope": "Fresh original complete13/9 independent certificate, not a native S3"
+    },
+    {
+      "Label": "c2-straight",
+      "PolicyHash": "2B6BCA461AD1E4C061D96D2F30432F1228D4FB75AAE7DC2E629BBA30EA0D76B5",
+      "GatePassed": true,
+      "Error": null,
+      "CpuSeconds": 21.8125,
+      "Nodes": 13,
+      "Reserves": 9,
+      "Independent": true,
+      "PhysicalHash": "B3C1161FCDC10537E8E2CA8CB8CC0BCDBDFCD7F381B5C3FAD34D06A11628C7F4",
+      "PhysicalCounters": {
+        "Search": {
+          "ShortlistK1": false,
+          "Complete27K1Batches": 0,
+          "ShortRankingCandidates": 0,
+          "FullHorizonCandidates": 0,
+          "SeedSharedPrefixes": 0,
+          "SharedPrefixContactQueriesSaved": 0,
+          "FullK1Executions": 0,
+          "HeldContinuationRequests": 0,
+          "ActualForecasts": 860,
+          "ActualContacts": 17259,
+          "PredictionRequests": 860,
+          "PredictionHits": 0,
+          "SeedRequests": 0,
+          "SeedHits": 0,
+          "CrossReviewHits": 0,
+          "InactivePrefixRequests": 860,
+          "BudgetFallbacks": 0,
+          "BudgetReason": null,
+          "CacheEntries": 860,
+          "SeedCacheEntries": 0,
+          "FastBoundaryQueries": 18084,
+          "BoundaryFallbackQueries": 0
+        },
+        "SearchWork": {
+          "ForecastRequests": 860,
+          "PhysicalForecastCalls": 860,
+          "ContactQueries": 17259
+        },
+        "SearchMemo": {
+          "KernelHits": 0,
+          "KernelMisses": 0,
+          "ProjectionHits": 0,
+          "ProjectionMisses": 0,
+          "ClearanceHits": 0
+        },
+        "IndependentMemo": {
+          "KernelHits": 0,
+          "KernelMisses": 0,
+          "ProjectionHits": 0,
+          "ProjectionMisses": 0,
+          "ClearanceHits": 0
+        },
+        "FullK1": 0,
+        "Forecasts": 2164,
+        "Contacts": 43426,
+        "FeedbackQueries": 0,
+        "IndependentForecasts": 1304,
+        "IndependentContacts": 26167,
+        "TransitionRequests": 4319,
+        "SearchHits": 2146,
+        "IndependentHits": 9,
+        "RolloutHits": 0,
+        "IndependentComparisons": 1304,
+        "PrimedPrefixes": 1547,
+        "Verification": "Fresh per-review DAG; every unique physical prefix repropagated independently; no search or historical result accepted as proof",
+        "options": {
+          "Memoize": true,
+          "ValidatedIndependent": true,
+          "ShareCurrentPolicies": true,
+          "ShortlistK1": false,
+          "FastIndependent": true,
+          "Regime": 1,
+          "RankPolicies": false,
+          "StrictSeeds": true
+        }
+      },
+      "Scope": "Fresh original complete13/9 independent certificate, not a native S3"
+    }
+  ],
+  "native": [
+    {
+      "label": "native-dev",
+      "validation": false,
+      "pass_": true,
+      "faster_than161": false,
+      "exact_initial": true,
+      "finish_s": 80.30643296680432,
+      "completed_laps": 3,
+      "outcome": "completed",
+      "observed_until_s": 80.31,
+      "laps_s": [
+        26.6409429627756,
+        26.312192733506432,
+        27.35329727052229
+      ],
+      "six_bends": [
+        {
+          "lap": 1,
+          "bend": 1,
+          "status": "complete",
+          "entry": {
+            "time_s": 3.877461179849789,
+            "reference_m": 35.0,
+            "distance_m": 35.00010900032104,
+            "speed_kph": 50.234617725942485,
+            "x_m": 34.99999855614582,
+            "y_m": -3.4780541961238325
+          },
+          "exit": {
+            "time_s": 11.98866171253016,
+            "reference_m": 132.38937497138977,
+            "distance_m": 143.04804063811636,
+            "speed_kph": 47.790255577060826,
+            "x_m": 34.99999981470021,
+            "y_m": 66.28062389366735
+          },
+          "minimum_kph": 47.782373400000004,
+          "duration_s": 8.111200532680371
+        },
+        {
+          "lap": 1,
+          "bend": 2,
+          "status": "complete",
+          "entry": {
+            "time_s": 16.519039425758297,
+            "reference_m": 194.38937497138977,
+            "distance_m": 205.04945611434982,
+            "speed_kph": 47.83931999862792,
+            "x_m": -27.00000037058917,
+            "y_m": 66.19910014953152
+          },
+          "exit": {
+            "time_s": 24.707277427445007,
+            "reference_m": 291.77874994277954,
+            "distance_m": 314.024225042934,
+            "speed_kph": 48.40534434052602,
+            "x_m": -26.999999629425062,
+            "y_m": -5.686477570919333
+          },
+          "minimum_kph": 47.7961596,
+          "duration_s": 8.18823800168671
+        },
+        {
+          "lap": 2,
+          "bend": 3,
+          "status": "complete",
+          "entry": {
+            "time_s": 29.184212156556555,
+            "reference_m": 353.77874994277954,
+            "distance_m": 376.1972480858677,
+            "speed_kph": 48.8499258572973,
+            "x_m": 34.99999855655656,
+            "y_m": -9.838852104104104
+          },
+          "exit": {
+            "time_s": 37.875952142299475,
+            "reference_m": 451.1681249141693,
+            "distance_m": 492.068497890187,
+            "speed_kph": 48.252896034380484,
+            "x_m": 35.00000144417135,
+            "y_m": 67.80764892085051
+          },
+          "minimum_kph": 47.8148256,
+          "duration_s": 8.69173998574292
+        },
+        {
+          "lap": 2,
+          "bend": 4,
+          "status": "complete",
+          "entry": {
+            "time_s": 42.35169930899927,
+            "reference_m": 513.1681249141693,
+            "distance_m": 554.2783877497416,
+            "speed_kph": 49.69424090347126,
+            "x_m": -27.00000046297049,
+            "y_m": 72.42332518087962
+          },
+          "exit": {
+            "time_s": 51.00751742529246,
+            "reference_m": 610.5574998855591,
+            "distance_m": 669.7138328952914,
+            "speed_kph": 48.12304677880967,
+            "x_m": -26.99999962943741,
+            "y_m": -5.639380498845137
+          },
+          "minimum_kph": 47.7865836,
+          "duration_s": 8.65581811629319
+        },
+        {
+          "lap": 3,
+          "bend": 5,
+          "status": "complete",
+          "entry": {
+            "time_s": 55.5621134170688,
+            "reference_m": 672.5574998855591,
+            "distance_m": 731.9450022342894,
+            "speed_kph": 47.37871046645526,
+            "x_m": 35.00000037060527,
+            "y_m": -6.1731748032538265
+          },
+          "exit": {
+            "time_s": 64.16185000000003,
+            "reference_m": 769.9468748569489,
+            "distance_m": 846.8071836642998,
+            "speed_kph": 48.73325400000024,
+            "x_m": 34.999999999999545,
+            "y_m": 69.51441000000004
+          },
+          "minimum_kph": 47.37189600000001,
+          "duration_s": 8.599736582931229
+        },
+        {
+          "lap": 3,
+          "bend": 6,
+          "status": "complete",
+          "entry": {
+            "time_s": 68.67054271674495,
+            "reference_m": 831.9468748569489,
+            "distance_m": 908.9087809629167,
+            "speed_kph": 48.48154487887332,
+            "x_m": -27.00000018518564,
+            "y_m": 72.65549504434011
+          },
+          "exit": {
+            "time_s": 78.27529970572657,
+            "reference_m": 929.3362498283386,
+            "distance_m": 1030.5401282755988,
+            "speed_kph": 46.875101312696785,
+            "x_m": -26.999999814672034,
+            "y_m": -8.143344650425373
+          },
+          "minimum_kph": 45.1424952,
+          "duration_s": 9.60475698898162
+        }
+      ],
+      "straights": [
+        {
+          "lap": 1,
+          "section": 1,
+          "status": "complete",
+          "duration_s": 3.877461179849789,
+          "mean_kph": 32.495590943875534,
+          "maximum_kph": 52.234639200000004
+        },
+        {
+          "lap": 1,
+          "section": 2,
+          "status": "complete",
+          "duration_s": 4.5303777132281375,
+          "mean_kph": 49.268540029832266,
+          "maximum_kph": 50.5445076
+        },
+        {
+          "lap": 1,
+          "section": 3,
+          "status": "complete",
+          "duration_s": 1.9336655353305936,
+          "mean_kph": 50.52286908079127,
+          "maximum_kph": 51.1984548
+        },
+        {
+          "lap": 2,
+          "section": 1,
+          "status": "complete",
+          "duration_s": 2.5432691937809544,
+          "mean_kph": 49.593079873509765,
+          "maximum_kph": 50.6485368
+        },
+        {
+          "lap": 2,
+          "section": 2,
+          "status": "complete",
+          "duration_s": 4.475747166699797,
+          "mean_kph": 50.037590407397964,
+          "maximum_kph": 50.9476752
+        },
+        {
+          "lap": 2,
+          "section": 3,
+          "status": "complete",
+          "duration_s": 1.94561827098957,
+          "mean_kph": 50.168896879381194,
+          "maximum_kph": 50.7844836
+        },
+        {
+          "lap": 3,
+          "section": 1,
+          "status": "complete",
+          "duration_s": 2.6089777207867684,
+          "mean_kph": 48.45679064608991,
+          "maximum_kph": 49.8351096
+        },
+        {
+          "lap": 3,
+          "section": 2,
+          "status": "complete",
+          "duration_s": 4.508692716744918,
+          "mean_kph": 49.58549280697612,
+          "maximum_kph": 50.8425156
+        },
+        {
+          "lap": 3,
+          "section": 3,
+          "status": "complete",
+          "duration_s": 2.0311332610777555,
+          "mean_kph": 47.9360799129879,
+          "maximum_kph": 48.330072
+        }
+      ],
+      "minimum_pose_m": 0.5757182324731586,
+      "minimum_swept_m": 0.5051020960414287,
+      "baseline_minimum_swept_m": 0.5755229171544352,
+      "swept_surplus_m": 0.00510209604142875,
+      "maximum_beta_deg": 7.700689797759725,
+      "accepted_certificates": 402,
+      "abstain": 0,
+      "contacts": 0,
+      "failures": [],
+      "selected_origins": {
+        "causal physical state-feedback reserve/Track": 1,
+        "endogenous primitive feedback; full physical replay": 249,
+        "primitive retained controls; full physical revalidation": 152
+      },
+      "profile_cpu_s": {
+        "hierarchical_generation": 980.703125,
+        "conditional_continuations": 984.984375,
+        "outside_decision": 50.953125,
+        "independent_preflight": 133.09375,
+        "causal_reserve_generation": 0.5,
+        "candidate_generation": 0.28125,
+        "uncertainty_scenarios": 0.015625,
+        "recertification": 135.6875
+      },
+      "cpu_s": 2313.25,
+      "charged_cpu_s": 2315,
+      "earlier_result_cpu_snapshot_s": 2312.109375,
+      "baseline_cpu_s": 1370.78125,
+      "cpu_ratio": 1.687541319958965,
+      "baseline_finish_s": 79.86783202593783,
+      "delta_s": 0.43860094086649326,
+      "distance_xy_m": 1057.6327456208019,
+      "baseline_distance_xy_m": 1049.217986758922,
+      "minimum_terminal_safety_goal_m": 350.77874994277954,
+      "stats": {
+        "mean_speed_kph": 47.41201956935731,
+        "maximum_speed_kph": 52.234639200000004,
+        "mean_front_util": 0.29279696437535235,
+        "mean_rear_util": 0.32289838264747184,
+        "mean_active_gas": 0.11181518119782703,
+        "mean_requested_gas": 0.11181646203753202,
+        "maximum_abs_yaw": 1.1566402,
+        "maximum_abs_wheel_slip": 11.31631502211948,
+        "mean_drive_torque_fraction": 0.11197604823492664,
+        "straight_mean_kph": 47.166686168069916,
+        "baseline_straight_mean_kph": 46.12878639857613,
+        "mean_combustion_power_W": 2219.259665919678,
+        "mean_available_engine_power_W": 17288.42981670897,
+        "baseline_mean_front_util": 0.26381894383419174,
+        "baseline_mean_rear_util": 0.3089409775970138
+      },
+      "source": "docs/experiments/feasible-speed-profile/native/native-dev.zip",
+      "sha256": "3eb8240cd01fcf22341e214a7a79614b172dae9486e1175b216b733f9e5b59c2",
+      "policy_records": 402,
+      "rejected_plans_count": 2216,
+      "fifth_bend_cpu": {
+        "reference_start_m": 672.5574998855591,
+        "reference_end_m": 769.9468748569489,
+        "new_callback_cpu_s": 990.375,
+        "baseline_callback_cpu_s": 152.515625,
+        "scope": "Same fifth-bend geometric reference interval, actual callback CPU including evidence writing; if DNF, new coverage can be incomplete."
+      },
+      "rejected_reason_counts": {
+        "footprint reserve": 1448,
+        "swept physical footprint reserve0.5m": 768
+      },
+      "missing_failed_review": false,
+      "hierarchy_totals": {
+        "PrimitiveCandidates": 261,
+        "PhysicalSteps": 24391,
+        "FullPlans": 248,
+        "GenerationBatches": 87
+      },
+      "final_safety_goal_m": 988.3362498283386,
+      "post_finish_reserve_m": 32.0,
+      "tightest_interval_s": [
+        68.45,
+        68.46000000000001
+      ]
+    }
+  ],
+  "held_count": 0,
+  "held_dnf": 0,
+  "median_finish_s": null,
+  "budget_journal": [
+    {
+      "Label": "d1-straight",
+      "Kind": "diagnostic",
+      "Complete": true,
+      "ChargedCpuSeconds": 13,
+      "CpuCapSeconds": 90,
+      "ProcessId": 24096,
+      "Concurrent": false,
+      "CpuSeconds": 11.1875,
+      "Reason": "diagnostic gate passed"
+    },
+    {
+      "Label": "d2-entry",
+      "Kind": "diagnostic",
+      "Complete": true,
+      "ChargedCpuSeconds": 18,
+      "CpuCapSeconds": 90,
+      "ProcessId": 24300,
+      "Concurrent": false,
+      "CpuSeconds": 16.453125,
+      "Reason": "diagnostic gate passed"
+    },
+    {
+      "Label": "d3-rest",
+      "Kind": "diagnostic",
+      "Complete": true,
+      "ChargedCpuSeconds": 49,
+      "CpuCapSeconds": 90,
+      "ProcessId": 20740,
+      "Concurrent": false,
+      "CpuSeconds": 47.015625,
+      "Reason": "diagnostic gate passed"
+    },
+    {
+      "Label": "c1-rest",
+      "Kind": "certificate",
+      "Complete": true,
+      "ChargedCpuSeconds": 21,
+      "CpuCapSeconds": 60,
+      "ProcessId": 16420,
+      "Concurrent": false,
+      "CpuSeconds": 19.140625,
+      "Reason": "full13/9 independent certification gate passed"
+    },
+    {
+      "Label": "c2-straight",
+      "Kind": "certificate",
+      "Complete": true,
+      "ChargedCpuSeconds": 23,
+      "CpuCapSeconds": 60,
+      "ProcessId": 14764,
+      "Concurrent": false,
+      "CpuSeconds": 21.921875,
+      "Reason": "full13/9 independent certification gate passed"
+    },
+    {
+      "Label": "native-dev",
+      "Kind": "native",
+      "Complete": true,
+      "ChargedCpuSeconds": 2315,
+      "CpuCapSeconds": 2400,
+      "ProcessId": 9080,
+      "Concurrent": false,
+      "CpuSeconds": 2313.25,
+      "Reason": "completed"
+    }
+  ],
+  "baseline_summary_source": "docs/experiments/trajectory-continuation/analysis.json",
+  "baseline_summary_sha256": "1da087c3363f41eaa2f854b17ea7d443e2dede49a7070c6cbc6efd411ec8341c",
+  "causal_scope": "Only the speed-target proposal is changed. Coupled gas/steering and the resulting executed path can change together; no independent causal attribution to throttle, steering or line is claimed."
+}

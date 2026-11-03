@@ -1,0 +1,23 @@
+{
+ "Base":"75c208c28225005589b5ad84eb5825c1abcf3e1b",
+ "ControllerReference":"85a5ee3295c2dd983fbacb21859649f794cc5ba5",
+ "DeclaredBeforeExperiments":true,
+ "MaximumDiagnostics":3,"MaximumDiagnosticCpuSeconds":270,
+ "MaximumCertificateProbes":2,
+ "DiagnosticCapEachCpuSeconds":90,"CertificateCapEachCpuSeconds":60,
+ "MaximumDevelopmentNativeWorlds":1,"MaximumHeldNativeWorlds":5,"NativeCapEachCpuSeconds":2400,
+ "Cases":[
+  {"Label":"d1-straight","Decision":63,"Native":"native-dev","Role":"authentic straight after first bend; full original goal and safety goal"},
+  {"Label":"d2-entry","Decision":20,"Native":"native-dev","Role":"authentic first bend entry; full original goal and safety goal"},
+  {"Label":"d3-rest","Decision":0,"Native":"native-dev","Role":"stopped start through three laps and32m reserve"}
+ ],
+ "Variant":"One fixed proposal: preserve161 ForceFraction0.5, equilibrium, line3.5m, Track/Prepare/Recover and coupled yaw/gas; distance-based straight bonus capped by0.25m/s2 coast proposal, actual resistance, delayed state and lateral/band/actuator preparation. No grid, no retuning from held results.",
+ "DiagnosticGate":"Each ordered diagnostic requires a complete legal Track candidate with unchanged0.5m swept/pose and beta45, same goal/safetyGoal as archived161, and arrival at least0.02s earlier than archived161 same-state nominal continuation (d3 uses existing full-rest161 diagnostic). Any failed stage closes later costly stages.",
+ "NativeAdmission":"All three diagnostics pass with current source hash, then fresh full13/9 independent certificate from rest and authentic straight. No archive accepted as certificate.",
+ "HeldScenarios":[0,1,2,3,4],
+ "HeldSource":"docs/experiments/robust-three-lap/final-v6/scenarios-frozen.json",
+ "SportsPass":"Five distinct full nativeS3, all five matched times below161, median below79.60283030281548s, improved actual speed profile; no DNF/ABSTAIN/contact,0.5m full swept/pose,beta45,32m reserves,original Box2D.",
+ "CpuAcceptance":"Matched held CPU sum and median <=125% of161 and each <=150%, all within2400CPU-s; predeclared threshold, no claim of real-time online readiness.",
+ "FirstNativeDnfClosesSeries":true,
+ "Storage":"EvidenceBundle162 per operation; exact payloadSHA256+CRC, full native and sources; no thousands of new archives"
+}

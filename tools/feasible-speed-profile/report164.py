@@ -1,0 +1,77 @@
+"""Render saved-data results only; no experiments. Local matplotlib/markdown."""
+from analyze164 import R,D,OLD,read,save,bundle_read,policies
+import base64,csv,gzip,json,math,statistics
+def n(v,d=3):return '—' if v is None else f'{v:.{d}f}'.replace('.',',')
+def table(head,rows):return '\n'.join(['|'+'|'.join(head)+'|','|'+'|'.join('---' for _ in head)+'|']+['|'+'|'.join(str(v) for v in row)+'|' for row in rows])+'\n'
+def plots(a):
+ import matplotlib;matplotlib.use('Agg')
+ import matplotlib.pyplot as plt
+ plt.rcParams.update({'font.size':10,'axes.grid':True,'grid.alpha':.2});out=D/'plots';out.mkdir(exist_ok=True)
+ fig,ax=plt.subplots(figsize=(9,4));labels=[q['Label'] for q in a['diagnostics']];ax.bar(labels,[q['improvement_s'] for q in a['diagnostics']],color='#17857b');ax.set(ylabel='Skrócenie prognozowanego czasu do tego samego celu [s]',title='Trzy diagnostyki • pełna fizyka • to nie są ukończenia natywne');fig.tight_layout();fig.savefig(out/'diagnostics.png',dpi=150);plt.close(fig)
+ if a['native']:
+  dev=next(q for q in a['native'] if not q['validation']);run=bundle_read(R/dev['source'],'native.json');ss=run['Riders'][0]['Samples'];old=read(OLD/'native/native-dev.json.gz')['Riders'][0]['Samples'];fig,axs=plt.subplots(4,1,figsize=(12,10),sharex=True)
+  for samples,label,c in [(old,'161 — pełne S3','#60728b'),(ss,'164 — '+('pełne S3' if dev['pass_'] else 'DNF/prefiks'),'#17857b')]:
+   ref=[s['Input']['Rider']['TotalReferenceMeters'] for s in samples];axs[0].plot(ref,[s['Input']['Rider']['Speed']*3.6 for s in samples],label=label,color=c);axs[1].plot(ref,[s['Input']['Active']['Drive'] for s in samples],label=label,color=c,alpha=.8);axs[2].plot(ref,[math.degrees(s['Input']['Rider']['SlideRadians']) for s in samples],label=label,color=c);axs[3].plot(ref,[s['Certificate'] for s in samples],label=label,color=c)
+  for ax,label in zip(axs,['Prędkość [km/h]','Gaz aktywny [0–1]','β [°]','Swept [m]']):ax.set_ylabel(label);ax.legend(fontsize=8)
+  axs[3].axhline(.5,color='#ab3c31',ls='--');axs[-1].set_xlabel('Rzeczywista referencja toru [m]');fig.tight_layout();fig.savefig(out/'native-profile.png',dpi=150);plt.close(fig)
+  fig,ax=plt.subplots(figsize=(10,6));g=read(OLD/'native-replay.json.gz')['geometry']
+  for edge in ['Inner','Outer']:
+   pts=g['Boundaries'][edge];ax.plot([p['X'] for p in pts],[p['Y'] for p in pts],color='#333',lw=1)
+  for samples,label,c in [(old,'161','#60728b'),(ss,'164','#17857b')]:ax.plot([s['Input']['Rider']['Position']['X'] for s in samples],[s['Input']['Rider']['Position']['Y'] for s in samples],lw=.9,label=label,color=c)
+  ax.set(aspect='equal',xlabel='X [m]',ylabel='Y [m]',title='Rzeczywiste pozycje XY; oryginalne granice progressive-b');ax.legend();fig.tight_layout();fig.savefig(out/'native-xy.png',dpi=150);plt.close(fig)
+def report(a):
+ base={q['label']:q for q in read(OLD/'analysis.json')['native']};p=[];add=p.append
+ add(f"# Badanie #164 — wykonalny profil prędkości\n\n**Wynik: {a['verdict']}. PROVISIONAL, domyślnie OFF, osobny Draft PR, bez merge.**\n")
+ add(f"Baza techniczna: `{a['base']}`. Kontroler referencyjny: `{a['controller_reference']}`. Nie zmieniono oryginalnej fizyki ani nie wykorzystano odrzuconych ResponseCache162 i agregacji163.\n")
+ if len(a['native'])==1 and not a['native'][0]['faster_than161']:
+  dev=a['native'][0];add('**Rekomendacja: odrzucić wariant jako poprawę sportową.** Jeden rzeczywisty bieg ukończył legalne S3, lecz był wolniejszy o '+n(dev['delta_s'],6)+'s ('+n(100*dev['delta_s']/dev['baseline_finish_s'],3)+'%) i kosztował '+n(100*(dev['cpu_ratio']-1),2)+'% więcej CPU. Brama szybszego development nie przeszła:0/5 odłożonych walidacji, bez powtórki i bez strojenia po wyniku.\n')
+ add('## Interwencja i niezmienione wymagania\n')
+ add('Jedna stała propozycja: zachowano Track ForceFraction0,5 (Prepare0,42, Recover0,32) i równowagowy pułap161 na łukach; na prostej cel zwiększa się przez wsteczną obwiednię prędkości `sqrt(v_bend²+2*a*d*stability)`. Droga dostępna kończy się przed następnym wejściem w łuk, z odjęciem przygotowania aktuatora,0,24s reakcji,0,2s review,2m dodatkowego przygotowania oraz długu ruchu poprzecznego/yaw. Opóźniony stan pochodzi z oryginalnego fizycznego ActivationState z pełną kolejką pending.\n')
+ add('Propozycja `a` to najwyżej0,25m/s² oraz połowa oryginalnej siły oporów/m147kg. Nie jest to udowodniona gwarancja hamowania: koło, wał, sprzęgło, aktywny napęd i poślizg mogą ją unieważnić. Wyłącznie pełna oryginalna propagacja i niezależny13/9 dopuszczają polecenie. Stabilność zależy od χ względem drogi, θ,β, prędkości poprzecznej i obu prześwitów; poniżej0,75m pose dodatkowy bonus znika. Próg akceptacji nadal wynosi0,5m.\n')
+ add('Proponowana linia3,5m, Track/Prepare/Recover, oryginalny optymalizator wspólnego gazu i yaw, koło/wał/sprzęgło, silnik/opony/μ, geometria, Box2D, aktuator, pending,β≤45°, cały13/9 i niezależny preflight, trzy okrążenia od legalnego startu oraz32m rezerw pozostają oryginalne. Cel profilu obejmuje także okresową geometrię za metą. Nie podnoszono samego ForceFraction.\n')
+ add('Jedyną zmianą reguły propozycji jest cel prędkości. Żądany gaz, skręt i rzeczywista linia mogą zmienić się wspólnie jako wynik sprzężonego regulatora. Nie przypisujemy zysku osobno gazowi, skrętowi lub skróceniu drogi bez niezależnego dowodu przyczynowego.\n')
+ add('## Trzy diagnostyki i dwie osobne certyfikacje\n')
+ add(table(['Próba','Start [s]','Cel / koniec rezerwy [m]','Przybycie161 /164 [s]','Zysk [s]','Brama'],[[q['Label'],n(q['Initial']['Input']['Time']),n(q['Goal'])+' / '+n(q['SafetyGoal']),n(q['Baseline161Arrival'])+' / '+n(q['TrackArrival']),n(q['improvement_s']),q['GatePassed']] for q in a['diagnostics']]))
+ add('To prognozy, a nie ukończenia natywne. d1/d2 używają dokładnych zapisanych stanów161 z pending i celu nominalnej taśmy tego samego review; d3 porównuje istniejącą prognozę161 od rest przez pełny dystans. Bazy nie uruchamiano ponownie.\n')
+ for q in a['diagnostics']:
+  add('### '+q['Label']+' — wszystkie ocenione manewry\n')
+  add(table(['Manewr','Legalny','Arrival [s]','Koniec ref [m]','Swept [m]','CPU [s]','Powód'],[[o['Maneuver'],o['Legal'],n(o['Arrival']),n(o['EndReference']),n(o['Sweep']),n(o['CpuSeconds']),o['Reason']] for o in q['Outcomes']]))
+ add(table(['Osobny certyfikat','13/9','Independent','Brama','CPU snapshot [s]'],[[c['Label'],str(c['Nodes'])+'/'+str(c['Reserves']),c['Independent'],c['GatePassed'],n(c['CpuSeconds'])] for c in a['certificates']]))
+ add('Pierwszy CPU snapshot wyniku poprzedza końcową kompresję. Rozliczony koszt poniżej pochodzi z ukończonego budget-journal.CpuSeconds. ChargedCpuSeconds to konserwatywne zaokrąglone obciążenie budżetu; oba pola pozostają w dowodach. Runtime158.Forecasts nie obejmuje osobnych prognoz Control164/ActivationState; zerowy licznik tego adaptera w diagnostyce nie oznacza zerowego kosztu fizyki.\n')
+ add('W d1 dodatkowy niezobowiązujący probe sił używał bieżącego gazu i proponowanego skrętu; nie jest faktycznym ledgerem przyszłej komendy. Przed d2 poprawiono wyłącznie obserwację na active steering i dodano liczniki Control; kod pięciu plików polityki i jego hash pozostał identyczny. Nie powtarzano d1. Raport sił wykonanej jazdy opiera się na natywnym ledgerze100Hz.\n')
+ add('![Diagnostyki](plots/diagnostics.png)\n')
+ add('## Rzeczywiste biegi i porównywalne pary\n')
+ add(table(['Próba','Status','S3 161 /164 [s]','Δ [s]','CPU161 /164 [s]','Swept161 /164 [m]','Zapas164 [m]','Certyfikaty'],[[q['label'],'S3' if q['pass_'] else 'DNF',n(q['baseline_finish_s'])+' / '+n(q['finish_s']),n(q['delta_s']),n(q['baseline_cpu_s'])+' / '+n(q['cpu_s']),n(q['baseline_minimum_swept_m'],6)+' / '+n(q['minimum_swept_m'],6),n(q['swept_surplus_m'],6),q['accepted_certificates']] for q in a['native']]))
+ add('Zapas to swept−0,5m. Legalność nie oznacza jednakowej odporności: wynik z pojedynczymi milimetrami zapasu wymaga ostrożniejszej interpretacji niż przejazd z dużym marginesem. Nie zwiększano tolerancji ani nie obniżano progu w celu uzyskania ukończeń.\n')
+ add(f"Odłożone warunki: {a['held_count']}/5; DNF: {a['held_dnf']}. Mediana pełnych odłożonych S3: {n(a['median_finish_s'],6)}s. Brama legalności: {a['native_legal_gate']}; sportowa: {a['sports_gate']}; profilu prędkości: {a['speed_profile_gate']}; CPU: {a['cpu_gate']}. Brak pięciu odłożonych legalnych ukończeń oznacza PARTIAL.\n")
+ add('PASS wymaga pięciu różnych startów identycznych z odpowiadającymi #161, każdej pary szybszej i mediany<79,602830s. Profil prędkości musi poprawić rzeczywistą średnią po prostych w każdej parze; samo Vmax i krótsza droga nie wystarczają. Zadeklarowane CPU: suma i mediana pięciu par≤125%161, każdy przypadek≤150%, twardy limit2400CPU-s/world. Nie jest to sterowanie online co0,2s.\n')
+ if a['native']:
+  peak=max(q['stats']['maximum_speed_kph'] or 0 for q in a['native']);add('Największa zmierzona prędkość164: '+n(peak)+'km/h. '+('Nie osiągnięto100km/h; to badanie nie wyznacza globalnego fizycznego Vmax.' if peak<100 else 'Przekroczenie100km/h samo nie rozstrzyga PASS sportowego.')+'\n')
+  add('![Prędkość i sterowanie natywne](plots/native-profile.png)\n![Rzeczywiste XY](plots/native-xy.png)\n')
+ for q in a['native']:
+  b=base[q['label']];add('### '+q['label']+' — okrążenia, sześć łuków i proste\n')
+  add('Okrążenia161 [s]: '+', '.join(n(v) for v in b['laps_s'])+'. Okrążenia164 [s]: '+(', '.join(n(v) for v in q['laps_s']) or 'brak pełnego okrążenia')+'. Rzeczywista droga161 /164: '+n(b['distance_xy_m'])+' / '+n(q['distance_xy_m'])+'m.\n')
+  add(table(['Łuk','Stan164','Czas161 /164 [s]','Wejście161 /164 [km/h]','Minimum161 /164','Wyjście161 /164'],[[x['bend'],x['status'],n(y['duration_s'])+' / '+n(x['duration_s']),n(y['entry']['speed_kph'] if y['entry'] else None)+' / '+n(x['entry']['speed_kph'] if x['entry'] else None),n(y['minimum_kph'])+' / '+n(x['minimum_kph']),n(y['exit']['speed_kph'] if y['exit'] else None)+' / '+n(x['exit']['speed_kph'] if x['exit'] else None)] for x,y in zip(q['six_bends'],b['six_bends'])]))
+  add(table(['Okr./prosta','Stan','Średnia164 [km/h]','Vmax164 [km/h]'],[[str(x['lap'])+'/'+str(x['section']),x['status'],n(x['mean_kph']),n(x['maximum_kph'])] for x in q['straights']]))
+  add('Średnia ważona czasem po prostych161 /164: '+n(q['stats']['baseline_straight_mean_kph'])+' / '+n(q['stats']['straight_mean_kph'])+'km/h. Dla DNF nowy profil obejmuje tylko zachowany prefiks i nie jest pełną parą sportową.\n')
+  add('Natywne statystyki164: '+json.dumps(q['stats'],ensure_ascii=False)+'. Maksimumβ='+n(q['maximum_beta_deg'])+'°, pose='+n(q['minimum_pose_m'],6)+'m. Wszystkie100Hz gaz żądany/aktywny, skręt,θχβ/yaw, wheelspin, siły, grip utilization, moment dostępny i użyty, XY i swept są w telemetry/'+q['label']+'.csv.gz oraz pełnym native.json bundle. Frakcja momentu to stosunek momentu faktycznie oddanego na koło do pełnego dostępnego momentu Engine500 przy RPM tego samego kroku, nie procentem szczytowej mocy całej mapy silnika. Osobno zachowano moc spalania z oryginalnego ledgeru i moc dostępną przy aktualnym RPM.\n')
+  add('Odrzuconych propozycji: '+str(q['rejected_plans_count'])+'; ABSTAIN='+str(q['abstain'])+'; kontakty='+str(q['contacts'])+'. Wszystkie odrzucenia pozostają w Review.Attempts/RejectedTrees i Outcomes/Rejections w policies.jsonl; wszystkie błędy: '+json.dumps(q['failures'],ensure_ascii=False)+'.\n')
+  add('Koszt piątego łuku: '+json.dumps(q['fifth_bend_cpu'],ensure_ascii=False)+'. Powody zapisanych odrzuceń: '+json.dumps(q['rejected_reason_counts'],ensure_ascii=False)+'.\n')
+  add('Liczniki generowania: '+json.dumps(q['hierarchy_totals'],ensure_ascii=False)+'. CPU faz nowego planera: '+json.dumps(q['profile_cpu_s'],ensure_ascii=False)+'. Najciaśniejszy interwał natywny: '+str(q['tightest_interval_s'])+'s; dokładne stany/pending/siły przed i po w '+q['label']+'-tightest.json.\n')
+  add('Ostatni zaakceptowany safetyGoal='+n(q['final_safety_goal_m'],6)+'m, czyli rezerwa za metą '+n(q['post_finish_reserve_m'],6)+'m, wciąż z dziewięcioma kompletnymi legalnymi terminalami.\n')
+  add(table(['Faza, ta sama instrumentacja161','CPU161 [s]','CPU164 [s]'],[[phase,n(b['cpu_phases'].get(phase,0)),n(q['profile_cpu_s'].get(phase,0))] for phase in sorted(set(b['cpu_phases'])|set(q['profile_cpu_s']))]))
+  if q['missing_failed_review']:add('Ograniczenie dowodów: wrapper zachował stan odmowy, wyjątek, liczniki i wyniki generatora, lecz pole Review ostatniej nieudanej Choose jest null. Nie da się z tego odtworzyć wszystkich odrzuconych gałęzi ostatniej decyzji. Nie uruchamiamy powtórki; wnioski o tej odmowie ograniczamy do zachowanego wyjątku i danych. Odrzucenia wcześniejszych zaakceptowanych review pozostają kompletne.\n')
+ add('## Budżet, integralność i walidacja\n')
+ if len(a['native'])==1 and not a['native'][0]['faster_than161']:
+  add('Proste były szybsze, lecz cały bieg nie był. Zaobserwowano dłuższą rzeczywistą drogę, gorszą końcówkę ostatniego łuku i znacznie większy koszt generowania/rezerw w piątym łuku. Nie dowodzi to osobnej przyczynowej wielkości wkładu każdego z tych efektów. Następny konkretny cel to profil zachowujący wykonalność całej rodziny13/9 i stabilny kierunek/linię także w trzecim okrążeniu; nie zwiększanie globalnego celu ani zmniejszanie certyfikacji. Bieżącego wariantu nie należy promować.\n')
+ add(table(['Operacja','Rodzaj','Ukończona','CPU rzeczywiste [s]','Obciążenie [s]','Powód'],[[q['Label'],q['Kind'],q['Complete'],n(q.get('CpuSeconds')),n(q['ChargedCpuSeconds']),q.get('Reason','w toku')] for q in a['budget_journal']]))
+ add('Pełne źródła kontrolera zamraża się dopiero po sukcesie development, przed odłożonymi wynikami. Wcześniejsze hashe pięciu plików polityki są identyczne w diagnostykach i certyfikacjach. Zapisane trajektorie nigdy nie dostarczają komend lub certyfikatu. Każdy zaakceptowany natywny review wykonuje nowy pełny13/9 i niezależny preflight.\n')
+ add('Skonsolidowany format162: jeden ZIP na operację, policies.jsonl z dokładnymi SHA256 payloadów, CRC, źródła, pełny native i journal. Nie powielamy starszych archiwów. Jedna pochodna tabela CSV na nowy świat ułatwia audyt100Hz; nie jest dodatkowym eksperymentem. Manifest pieczętuje dane, kod i78 starszych drzew.\n')
+ add('Walidacja końcowego SHA: jedna pełna lokalna regresja C#/Python/Node w zakresie Draft i jeden Windows CI. Wszystkie cztery shardy pozostają w discovery, core+trajectory wykonują się w całości; historical473 i four-rider48 discovery-only według niezmienionej polityki Draft. Końcowe receipts Local-validation-164.json i Windows-CI-164.json są dostarczane poza Git, bez kolejnego commitu lub ponowienia identycznej walidacji.\n')
+ text='\n'.join(p);(D/'REPORT.md').write_text(text,encoding='utf-8')
+ import markdown
+ body=markdown.markdown(text,extensions=['tables','fenced_code'])
+ for f in (D/'plots').glob('*.png'):body=body.replace('plots/'+f.name,'data:image/png;base64,'+base64.b64encode(f.read_bytes()).decode())
+ (D/'report.html').write_text('<!doctype html><html lang="pl"><meta charset="utf-8"><title>Badanie164</title><style>body{max-width:1180px;margin:40px auto;padding:0 24px;color:#192b3c;font:16px/1.6 system-ui}h1,h2,h3{line-height:1.25}h2{margin-top:2em}table{border-collapse:collapse;width:100%;font-size:13px}td,th{padding:7px;border-bottom:1px solid #cbd5df;text-align:left;overflow-wrap:anywhere}img{max-width:100%}p,code{overflow-wrap:anywhere}strong{color:#8b3f15}</style><body>'+body+'</body></html>',encoding='utf-8')
+if __name__=='__main__':
+ a=read(D/'analysis.json');plots(a);report(a)

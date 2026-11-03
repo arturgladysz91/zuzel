@@ -1,0 +1,11 @@
+{
+ "DeclaredBeforeNewHeldResults":true,
+ "FrozenControllerBeforeAnyHeldStart":true,
+ "FirstScenario":3,
+ "Reason":"Check the existing161 weakest swept case first, without changing any controller parameter. Stop if it fails, saving the remaining four worlds.",
+ "AfterFirstSuccessRemainingScenarios":[0,1,2,4],
+ "MaximumConcurrentRemainingWorlds":4,
+ "PeerFailureRule":"A native DNF closes the series. Already running peers stop at the callback boundary, preserving their raw prefix and failure evidence; no later starts or retries.",
+ "ConditionSource":"docs/experiments/robust-three-lap/final-v6/scenarios-frozen.json",
+ "NoRetuningFromNewHeldResults":true
+}

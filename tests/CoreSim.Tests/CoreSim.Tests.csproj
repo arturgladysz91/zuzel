@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="../../tools/feasible-speed-profile/feasible-speed-profile.csproj" />
     <ProjectReference Include="../../tools/instrumentation-cost/instrumentation-cost.csproj" />
     <ProjectReference Include="../../tools/s3-performance/s3-performance.csproj" />
     <ProjectReference Include="../../tools/trajectory-continuation/trajectory-continuation.csproj" />

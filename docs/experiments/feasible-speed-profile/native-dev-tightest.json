@@ -1,0 +1,412 @@
+{
+  "time_s": 68.46000000000001,
+  "reference_m": 829.1257078647609,
+  "swept_m": 0.5051020960414287,
+  "before": {
+    "Input": {
+      "Rider": {
+        "Id": 1,
+        "Position": {
+          "X": -24.045404,
+          "Y": 72.65442
+        },
+        "Velocity": {
+          "X": -13.34316,
+          "Y": 0.34149706
+        },
+        "Heading": 3.0914793,
+        "AngularVelocity": 0.56889486,
+        "Road": {
+          "Segment": 4,
+          "Progress": 0.9523452328097436,
+          "ReferenceMeters": 191.43477940559387,
+          "OffsetMeters": 9.991398777181502,
+          "Heading": 3.141592653589793,
+          "RadiusMeters": 0,
+          "CornerProgress": 0,
+          "Tangent": {
+            "X": -1,
+            "Y": 1.2246469e-16
+          },
+          "Outward": {
+            "X": 1.2246469e-16,
+            "Y": 1
+          },
+          "IsTurn": false
+        },
+        "TotalReferenceMeters": 828.9922792911525,
+        "DistanceMeters": 905.953998859979,
+        "Activity": 0,
+        "Drive": 0.19627407,
+        "TargetOffsetMeters": 3.5,
+        "Impairment": 0,
+        "Context": 2,
+        "Speed": 13.347529,
+        "ForwardSpeed": 13.343514,
+        "SideSpeed": 0.32732227,
+        "SlideRadians": -0.02452552
+      },
+      "Time": 68.45,
+      "Omega": 42.00824424989678,
+      "Steering": 0.17467864,
+      "Active": {
+        "SteeringRadians": -0.19759369,
+        "Drive": 0.19627407
+      },
+      "Pending": [
+        {
+          "ObservedAt": 68.4,
+          "ActivationAt": 68.64,
+          "Action": {
+            "SteeringRadians": 0.1451566,
+            "Drive": 0.13852377
+          }
+        }
+      ],
+      "NextReview": 68.60000000000043
+    },
+    "RequestedSteering": 0.1451566,
+    "RequestedDrive": 0.13852377,
+    "Inner": 10.62363588008976,
+    "Outer": 0.5757182324731586,
+    "CrankOmega": 378.5716830469436,
+    "Powertrain": {
+      "Seconds": 0.009999999776482582,
+      "BeforeOmega": 376.5853959301471,
+      "AfterOmega": 378.5716830469436,
+      "CrankTorque": 8.76042955502164,
+      "ClutchTorque": 6.774142393828087,
+      "Engagement": 0.9301373929416741,
+      "SlipRadiansPerSecond": 0.36414740689025393,
+      "CombustionWorkJoules": 33.0775012274338,
+      "CrankDragWorkJoules": 0,
+      "ClutchHeatJoules": 0.024667863314808625,
+      "TransmissionLossJoules": 1.533182368708161,
+      "EnergyResidualJoules": 3.788080960021034e-13,
+      "RootResidualNewtonMeters": 6.510347816401918e-13,
+      "WheelQueries": 12,
+      "Wheel": {
+        "Seconds": 0.009999999776482582,
+        "BeforeOmega": 41.81717621269324,
+        "AfterOmega": 42.00824424989678,
+        "RequestedTorqueNewtonMeters": 57.30924465178561,
+        "AvailableTorqueNewtonMeters": 57.30924465178561,
+        "DriveTorqueNewtonMeters": 57.30924465178561,
+        "BearingTorqueNewtonMeters": 0.8382542046259002,
+        "LongitudinalNewtons": 119.01475,
+        "FrontLateralNewtons": -36.636646,
+        "RearLateralNewtons": -42.437374,
+        "InstantSlipRatio": 0.03394634338582228,
+        "MidSlipVelocityMetersPerSecond": 0.4872660028468929,
+        "LongitudinalLossJoules": 0.579918390562297,
+        "BearingLossJoules": 0.35133504793354986,
+        "EngineWorkJoules": 24.019857109761183,
+        "RearUtilization": 0.126682119762559,
+        "RootResidualMetersPerSecond": -1.1500599916836052e-09,
+        "RootIterations": 2,
+        "LateralNewtons": -79.07402,
+        "MidOmega": 41.91271023129501
+      },
+      "Engine": {
+        "EngineRpm": 3605.609457901224,
+        "OverallRatio": 9,
+        "CrankTorqueNewtonMeters": 44.63365674740734,
+        "AvailableWheelTorqueNewtonMeters": 377.6007360830661,
+        "DriveWheelTorqueNewtonMeters": 57.30924465178561,
+        "Efficiency": 0.94,
+        "CrankPowerWatts": 16852.710926719123
+      },
+      "MidOmega": 377.57853948854535
+    },
+    "Forces": {
+      "FrontPoint": {
+        "X": -24.610886,
+        "Y": 72.689674
+      },
+      "RearPoint": {
+        "X": -23.312885,
+        "Y": 72.617584
+      },
+      "FrontArm": {
+        "X": -0.6989231,
+        "Y": 0.03881836
+      },
+      "RearArm": {
+        "X": 0.5990772,
+        "Y": -0.03327179
+      },
+      "FrontVelocity": {
+        "X": -13.364481,
+        "Y": 0.04284647
+      },
+      "RearVelocity": {
+        "X": -13.329674,
+        "Y": 0.6695467
+      },
+      "FrontForce": {
+        "X": 78.84513,
+        "Y": -617.2267
+      },
+      "RearForce": {
+        "X": -116.47843,
+        "Y": 48.971596
+      },
+      "Resistance": {
+        "X": 75.567,
+        "Y": -2.1533587
+      },
+      "BodyForward": {
+        "X": -0.9984614,
+        "Y": 0.05545122
+      },
+      "FrontLeft": {
+        "X": 0.12671132,
+        "Y": -0.99193966
+      },
+      "BodyLeft": {
+        "X": -0.05545122,
+        "Y": -0.9984614
+      },
+      "FrontLateral": 622.2422,
+      "RearLateral": -42.437374,
+      "RearLongitudinal": 119.01475,
+      "Budget": 1852.339,
+      "SteeringRequest": -0.19759369,
+      "SteeringBefore": 0.19038661,
+      "SteeringUsed": 0.18253262,
+      "SteeringAfter": 0.17467864,
+      "Demand": 9.162321,
+      "Engine": {
+        "EngineRpm": 3605.609457901224,
+        "OverallRatio": 9,
+        "CrankTorqueNewtonMeters": 44.63365674740734,
+        "AvailableWheelTorqueNewtonMeters": 377.6007360830661,
+        "DriveWheelTorqueNewtonMeters": 57.30924465178561,
+        "Efficiency": 0.94,
+        "CrankPowerWatts": 16852.710926719123
+      },
+      "TyreLoads": {
+        "EffectiveFrictionCoefficient": 1.2845000267028808,
+        "FrontNormalNewtons": 665.5707895749277,
+        "RearNormalNewtons": 776.4992104250724,
+        "FrontCapacityNewtons": 854.9256969816521,
+        "RearCapacityNewtons": 997.4132565257713,
+        "TotalCapacityNewtons": 1852.3389535074234
+      },
+      "NetForce": {
+        "X": 37.9337,
+        "Y": -570.40845
+      },
+      "FrontTorque": 428.33334,
+      "RearTorque": 25.462322,
+      "NetTorque": 453.79565
+    },
+    "LegacyCertificate": 0.5061561668718096,
+    "Certificate": 0.505475758036363,
+    "EnergyExcessJoules": -23.10007738381765
+  },
+  "after": {
+    "Input": {
+      "Rider": {
+        "Id": 1,
+        "Position": {
+          "X": -24.178833,
+          "Y": 72.657585
+        },
+        "Velocity": {
+          "X": -13.34261,
+          "Y": 0.30224848
+        },
+        "Heading": 3.0976348,
+        "AngularVelocity": 0.6435218,
+        "Road": {
+          "Segment": 4,
+          "Progress": 0.954497306577621,
+          "ReferenceMeters": 191.56820797920227,
+          "OffsetMeters": 9.99456497591197,
+          "Heading": 3.141592653589793,
+          "RadiusMeters": 0,
+          "CornerProgress": 0,
+          "Tangent": {
+            "X": -1,
+            "Y": 1.2246469e-16
+          },
+          "Outward": {
+            "X": 1.2246469e-16,
+            "Y": 1
+          },
+          "IsTurn": false
+        },
+        "TotalReferenceMeters": 829.1257078647609,
+        "DistanceMeters": 906.0874649994148,
+        "Activity": 0,
+        "Drive": 0.19627407,
+        "TargetOffsetMeters": 3.5,
+        "Impairment": 0,
+        "Context": 2,
+        "Speed": 13.346033,
+        "ForwardSpeed": 13.343003,
+        "SideSpeed": 0.28436723,
+        "SlideRadians": -0.02130886
+      },
+      "Time": 68.46000000000001,
+      "Omega": 42.194018212663124,
+      "Steering": 0.15897067,
+      "Active": {
+        "SteeringRadians": -0.19759369,
+        "Drive": 0.19627407
+      },
+      "Pending": [
+        {
+          "ObservedAt": 68.4,
+          "ActivationAt": 68.64,
+          "Action": {
+            "SteeringRadians": 0.1451566,
+            "Drive": 0.13852377
+          }
+        }
+      ],
+      "NextReview": 68.60000000000043
+    },
+    "RequestedSteering": 0.1451566,
+    "RequestedDrive": 0.13852377,
+    "Inner": 10.62269546150649,
+    "Outer": 0.5764386918207917,
+    "CrankOmega": 380.0306630494298,
+    "Powertrain": {
+      "Seconds": 0.009999999776482582,
+      "BeforeOmega": 378.5716830469436,
+      "AfterOmega": 380.0306630494298,
+      "CrankTorque": 8.779801733813171,
+      "ClutchTorque": 7.320821698716127,
+      "Engagement": 0.9361856921407651,
+      "SlipRadiansPerSecond": 0.3909919666671158,
+      "CombustionWorkJoules": 33.301890223303126,
+      "CrankDragWorkJoules": 0,
+      "ClutchHeatJoules": 0.0286238240962108,
+      "TransmissionLossJoules": 1.6643602881142776,
+      "EnergyResidualJoules": 2.9531932455029164e-13,
+      "RootResidualNewtonMeters": 1.4734879982825078e-12,
+      "WheelQueries": 12,
+      "Wheel": {
+        "Seconds": 0.009999999776482582,
+        "BeforeOmega": 42.00824424989678,
+        "AfterOmega": 42.194018212663124,
+        "RequestedTorqueNewtonMeters": 61.934151571138436,
+        "AvailableTorqueNewtonMeters": 61.934151571138436,
+        "DriveTorqueNewtonMeters": 61.934151571138436,
+        "BearingTorqueNewtonMeters": 0.8420226246255991,
+        "LongitudinalNewtons": 134.46204,
+        "FrontLateralNewtons": 7.2774153,
+        "RearLateralNewtons": 8.412812,
+        "InstantSlipRatio": 0.038883239165467626,
+        "MidSlipVelocityMetersPerSecond": 0.551112881738727,
+        "LongitudinalLossJoules": 0.7410375856126301,
+        "BearingLossJoules": 0.3545010422669753,
+        "EngineWorkJoules": 26.07497784712364,
+        "RearUtilization": 0.13507436169804035,
+        "RootResidualMetersPerSecond": 1.3877734517109275e-09,
+        "RootIterations": 2,
+        "LateralNewtons": 15.6902275,
+        "MidOmega": 42.10113123127995
+      },
+      "Engine": {
+        "EngineRpm": 3622.0593966703977,
+        "OverallRatio": 9,
+        "CrankTorqueNewtonMeters": 44.73235638002239,
+        "AvailableWheelTorqueNewtonMeters": 378.4357349749894,
+        "DriveWheelTorqueNewtonMeters": 61.934151571138436,
+        "Efficiency": 0.94,
+        "CrankPowerWatts": 16967.035248152028
+      },
+      "MidOmega": 379.3011730481867
+    },
+    "Forces": {
+      "FrontPoint": {
+        "X": -24.744526,
+        "Y": 72.68948
+      },
+      "RearPoint": {
+        "X": -23.446157,
+        "Y": 72.62437
+      },
+      "FrontArm": {
+        "X": -0.6991215,
+        "Y": 0.035064697
+      },
+      "RearArm": {
+        "X": 0.599247,
+        "Y": -0.030052185
+      },
+      "FrontVelocity": {
+        "X": -13.363108,
+        "Y": -0.05622956
+      },
+      "RearVelocity": {
+        "X": -13.326063,
+        "Y": 0.6824056
+      },
+      "FrontForce": {
+        "X": 67.22242,
+        "Y": -573.3546
+      },
+      "RearForce": {
+        "X": -134.71465,
+        "Y": -1.6667275
+      },
+      "Resistance": {
+        "X": 75.55356,
+        "Y": -1.9336739
+      },
+      "BodyForward": {
+        "X": -0.9987446,
+        "Y": 0.05009238
+      },
+      "FrontLeft": {
+        "X": 0.11644644,
+        "Y": -0.99319696
+      },
+      "BodyLeft": {
+        "X": -0.05009238,
+        "Y": -0.9987446
+      },
+      "FrontLateral": 577.28186,
+      "RearLateral": 8.412812,
+      "RearLongitudinal": 134.46204,
+      "Budget": 1852.339,
+      "SteeringRequest": -0.19759369,
+      "SteeringBefore": 0.17467864,
+      "SteeringUsed": 0.16682465,
+      "SteeringAfter": 0.15897067,
+      "Demand": 9.165121,
+      "Engine": {
+        "EngineRpm": 3622.0593966703977,
+        "OverallRatio": 9,
+        "CrankTorqueNewtonMeters": 44.73235638002239,
+        "AvailableWheelTorqueNewtonMeters": 378.4357349749894,
+        "DriveWheelTorqueNewtonMeters": 61.934151571138436,
+        "Efficiency": 0.94,
+        "CrankPowerWatts": 16967.035248152028
+      },
+      "TyreLoads": {
+        "EffectiveFrictionCoefficient": 1.2845000267028808,
+        "FrontNormalNewtons": 665.5707895749277,
+        "RearNormalNewtons": 776.4992104250724,
+        "FrontCapacityNewtons": 854.9256969816521,
+        "RearCapacityNewtons": 997.4132565257713,
+        "TotalCapacityNewtons": 1852.3389535074234
+      },
+      "NetForce": {
+        "X": 8.061333,
+        "Y": -576.955
+      },
+      "FrontTorque": 398.48737,
+      "RearTorque": -5.0472507,
+      "NetTorque": 393.44012
+    },
+    "LegacyCertificate": 0.5057535300457713,
+    "Certificate": 0.5051020960414287,
+    "EnergyExcessJoules": -21.27874950824778
+  },
+  "scope": "Saved native interval only; no new physics query or recertification."
+}
