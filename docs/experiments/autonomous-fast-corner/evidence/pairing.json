@@ -1,0 +1,382 @@
+{
+  "CpuSeconds": 823.25,
+  "ChargedCpuSeconds": 872.078125,
+  "Results": [
+    {
+      "result": {
+        "Id": "REF2-H5",
+        "Scenario": {
+          "Id": "H5",
+          "Gate": "A",
+          "Start": -1.5,
+          "Offset": 1.75,
+          "Reference161": null,
+          "Field": 0,
+          "Spec": {
+            "Profile": {
+              "Id": 1,
+              "Name": "R1",
+              "Skills": {
+                "Start": 50,
+                "Speed": 50,
+                "SlideControl": 50,
+                "TrackReading": 50,
+                "PairRiding": 50,
+                "Adaptability": 50
+              },
+              "Style": {
+                "RiskTolerance": 0.5,
+                "LaneChangeTendency": 0.5,
+                "OutsidePreference": 0.5,
+                "SetupIndependence": 0.5
+              }
+            },
+            "Setup": {
+              "Gearing": 0.5,
+              "TractionBias": 0.5
+            },
+            "ReferenceMeters": -1.5,
+            "OffsetMeters": 1.75,
+            "SpeedMetersPerSecond": 0,
+            "TargetOffsetMeters": 1.75,
+            "InitialOutwardSpeed": 0,
+            "TrafficEnabled": false,
+            "Passive": false,
+            "Bullet": false
+          }
+        },
+        "Legal": false,
+        "TerminalScreen": false,
+        "ReservePass": false,
+        "Reason": "technical invariant: Independent physical prefix mismatch",
+        "CpuSeconds": 186.59375,
+        "EndReference": 89.80293374361969,
+        "EndSeconds": 8.6,
+        "MinPose": 2.3492,
+        "MinSweep": 2.300776050047291,
+        "MaxBetaDegrees": 2.7243690896735844,
+        "MaxYaw": 0.4605204463005066,
+        "MaxSlip": 11.31631502211948,
+        "FirstBadTime": null,
+        "FirstBadReference": null,
+        "Entry": {
+          "Seconds": 4.0919144253563395,
+          "Kph": 47.80179514811259,
+          "X": 35,
+          "Y": -2.2680269479930444,
+          "Distance": 36.5061258701609
+        },
+        "Apex": null,
+        "Exit": null,
+        "After20": null,
+        "After40": null,
+        "After62": null,
+        "MinBendKph": null,
+        "SectionSeconds": null,
+        "BendSeconds": null,
+        "TerminalBetaDegrees": null,
+        "TerminalBetaDotDegreesPerSecond": null,
+        "TerminalOutwardMetersPerSecond": null,
+        "TerminalYaw": null,
+        "TerminalPose": null,
+        "TerminalWheelSlip": null,
+        "ForecastContactQueries": 0,
+        "Fingerprint": "60BF3163C025C891574E9E60C328D7230AC66C0AEED69B2E35FC06218D829BB5"
+      },
+      "Reviews": 43,
+      "AllocatedCpuSeconds": 205.78125,
+      "ChargedCpuSeconds": 186.75
+    },
+    {
+      "result": {
+        "Id": "REF2-H6",
+        "Scenario": {
+          "Id": "H6",
+          "Gate": "B",
+          "Start": -2,
+          "Offset": 4.4,
+          "Reference161": null,
+          "Field": 1,
+          "Spec": {
+            "Profile": {
+              "Id": 1,
+              "Name": "R1",
+              "Skills": {
+                "Start": 50,
+                "Speed": 50,
+                "SlideControl": 50,
+                "TrackReading": 50,
+                "PairRiding": 50,
+                "Adaptability": 50
+              },
+              "Style": {
+                "RiskTolerance": 0.5,
+                "LaneChangeTendency": 0.5,
+                "OutsidePreference": 0.5,
+                "SetupIndependence": 0.5
+              }
+            },
+            "Setup": {
+              "Gearing": 0.5,
+              "TractionBias": 0.5
+            },
+            "ReferenceMeters": -2,
+            "OffsetMeters": 4.4,
+            "SpeedMetersPerSecond": 0,
+            "TargetOffsetMeters": 4.4,
+            "InitialOutwardSpeed": 0,
+            "TrafficEnabled": false,
+            "Passive": false,
+            "Bullet": false
+          }
+        },
+        "Legal": false,
+        "TerminalScreen": false,
+        "ReservePass": false,
+        "Reason": "technical invariant: paired #161 CPU allocation exhausted",
+        "CpuSeconds": 212.125,
+        "EndReference": 163.04559350013733,
+        "EndSeconds": 14.59999999999998,
+        "MinPose": 4.012665981962247,
+        "MinSweep": 3.9437438008418932,
+        "MaxBetaDegrees": 2.8294350058182407,
+        "MaxYaw": 0.47224029898643494,
+        "MaxSlip": 11.31631502211948,
+        "FirstBadTime": null,
+        "FirstBadReference": null,
+        "Entry": {
+          "Seconds": 4.129288425114495,
+          "Kph": 47.80429450331503,
+          "X": 35,
+          "Y": -4.101892731334036,
+          "Distance": 37.00219632987256
+        },
+        "Apex": {
+          "Seconds": 6.41,
+          "Kph": 47.797424697875975,
+          "X": 61.12847900390625,
+          "Y": 8.920276641845703,
+          "Distance": 67.2919760486111
+        },
+        "Exit": {
+          "Seconds": 12.291106000000001,
+          "Kph": 47.78897209167481,
+          "X": 35,
+          "Y": 66.28361511230469,
+          "Distance": 145.38407959695905
+        },
+        "After20": {
+          "Seconds": 13.797452578807867,
+          "Kph": 47.80159069156379,
+          "X": 15,
+          "Y": 66.39944106498163,
+          "Distance": 165.38509181032603
+        },
+        "After40": null,
+        "After62": null,
+        "MinBendKph": 47.78517837524414,
+        "SectionSeconds": null,
+        "BendSeconds": 8.161817574885507,
+        "TerminalBetaDegrees": null,
+        "TerminalBetaDotDegreesPerSecond": null,
+        "TerminalOutwardMetersPerSecond": null,
+        "TerminalYaw": null,
+        "TerminalPose": null,
+        "TerminalWheelSlip": null,
+        "ForecastContactQueries": 0,
+        "Fingerprint": "84FA4FF119FB1DFED3B495E193A8B088F3A1114C045741234EA9B6C465B8E1B0"
+      },
+      "Reviews": 73,
+      "AllocatedCpuSeconds": 212.125,
+      "ChargedCpuSeconds": 212.265625
+    },
+    {
+      "result": {
+        "Id": "REF2-H7",
+        "Scenario": {
+          "Id": "H7",
+          "Gate": "C",
+          "Start": -1,
+          "Offset": 6.6,
+          "Reference161": null,
+          "Field": 2,
+          "Spec": {
+            "Profile": {
+              "Id": 1,
+              "Name": "R1",
+              "Skills": {
+                "Start": 50,
+                "Speed": 50,
+                "SlideControl": 50,
+                "TrackReading": 50,
+                "PairRiding": 50,
+                "Adaptability": 50
+              },
+              "Style": {
+                "RiskTolerance": 0.5,
+                "LaneChangeTendency": 0.5,
+                "OutsidePreference": 0.5,
+                "SetupIndependence": 0.5
+              }
+            },
+            "Setup": {
+              "Gearing": 0.5,
+              "TractionBias": 0.5
+            },
+            "ReferenceMeters": -1,
+            "OffsetMeters": 6.6,
+            "SpeedMetersPerSecond": 0,
+            "TargetOffsetMeters": 6.6,
+            "InitialOutwardSpeed": 0,
+            "TrafficEnabled": false,
+            "Passive": false,
+            "Bullet": false
+          }
+        },
+        "Legal": false,
+        "TerminalScreen": false,
+        "ReservePass": false,
+        "Reason": "technical invariant: paired #161 CPU allocation exhausted",
+        "CpuSeconds": 212.046875,
+        "EndReference": 155.2027895450592,
+        "EndSeconds": 13.999999999999982,
+        "MinPose": 3.999200095367432,
+        "MinSweep": 3.939192857351455,
+        "MaxBetaDegrees": 2.8345955931911395,
+        "MaxYaw": 0.4722423553466797,
+        "MaxSlip": 11.31631502211948,
+        "FirstBadTime": null,
+        "FirstBadReference": null,
+        "Entry": {
+          "Seconds": 4.055565711874935,
+          "Kph": 47.80465853442587,
+          "X": 35,
+          "Y": -5.608128364516386,
+          "Distance": 36.02300718042913
+        },
+        "Apex": {
+          "Seconds": 11.13,
+          "Kph": 47.80578117370606,
+          "X": 49.840614318847656,
+          "Y": 63.18972396850586,
+          "Distance": 129.9668260961771
+        },
+        "Exit": {
+          "Seconds": 12.28175742502042,
+          "Kph": 47.78857380696232,
+          "X": 35.00000000000031,
+          "Y": 66.27562691664363,
+          "Distance": 145.25887741205037
+        },
+        "After20": {
+          "Seconds": 13.788114855353502,
+          "Kph": 47.80316054957248,
+          "X": 15,
+          "Y": 66.39060592180132,
+          "Distance": 165.25988468632428
+        },
+        "After40": null,
+        "After62": null,
+        "MinBendKph": 47.78137435913086,
+        "SectionSeconds": null,
+        "BendSeconds": 8.226191713145486,
+        "TerminalBetaDegrees": null,
+        "TerminalBetaDotDegreesPerSecond": null,
+        "TerminalOutwardMetersPerSecond": null,
+        "TerminalYaw": null,
+        "TerminalPose": null,
+        "TerminalWheelSlip": null,
+        "ForecastContactQueries": 0,
+        "Fingerprint": "7823B2B9F5BA4BD165468FB4F552D3B00993322B3BCCFE6FACD0095AF3B2DC12"
+      },
+      "Reviews": 70,
+      "AllocatedCpuSeconds": 212.046875,
+      "ChargedCpuSeconds": 212.21875
+    },
+    {
+      "result": {
+        "Id": "REF2-H8",
+        "Scenario": {
+          "Id": "H8",
+          "Gate": "D",
+          "Start": -2.5,
+          "Offset": 8.5,
+          "Reference161": null,
+          "Field": 3,
+          "Spec": {
+            "Profile": {
+              "Id": 1,
+              "Name": "R1",
+              "Skills": {
+                "Start": 50,
+                "Speed": 50,
+                "SlideControl": 50,
+                "TrackReading": 50,
+                "PairRiding": 50,
+                "Adaptability": 50
+              },
+              "Style": {
+                "RiskTolerance": 0.5,
+                "LaneChangeTendency": 0.5,
+                "OutsidePreference": 0.5,
+                "SetupIndependence": 0.5
+              }
+            },
+            "Setup": {
+              "Gearing": 0.5,
+              "TractionBias": 0.5
+            },
+            "ReferenceMeters": -2.5,
+            "OffsetMeters": 8.5,
+            "SpeedMetersPerSecond": 0,
+            "TargetOffsetMeters": 8.5,
+            "InitialOutwardSpeed": 0,
+            "TrafficEnabled": false,
+            "Passive": false,
+            "Bullet": false
+          }
+        },
+        "Legal": false,
+        "TerminalScreen": false,
+        "ReservePass": false,
+        "Reason": "technical invariant: paired #161 CPU allocation exhausted",
+        "CpuSeconds": 211.875,
+        "EndReference": 83.89917502154566,
+        "EndSeconds": 8.4,
+        "MinPose": 2.0991999999999993,
+        "MinSweep": 2.0560206621087653,
+        "MaxBetaDegrees": 2.1805530707247263,
+        "MaxYaw": 0.39673736691474915,
+        "MaxSlip": 11.31631502211948,
+        "FirstBadTime": null,
+        "FirstBadReference": null,
+        "Entry": {
+          "Seconds": 4.170997421784473,
+          "Kph": 47.80715095988569,
+          "X": 35,
+          "Y": -6.954421430170052,
+          "Distance": 37.55571589310117
+        },
+        "Apex": null,
+        "Exit": null,
+        "After20": null,
+        "After40": null,
+        "After62": null,
+        "MinBendKph": null,
+        "SectionSeconds": null,
+        "BendSeconds": null,
+        "TerminalBetaDegrees": null,
+        "TerminalBetaDotDegreesPerSecond": null,
+        "TerminalOutwardMetersPerSecond": null,
+        "TerminalYaw": null,
+        "TerminalPose": null,
+        "TerminalWheelSlip": null,
+        "ForecastContactQueries": 0,
+        "Fingerprint": "204D941D4A1653FC8D31B324470C6EB163DA51AAC73C98CB2CFB30C9DF94AA4D"
+      },
+      "Reviews": 42,
+      "AllocatedCpuSeconds": 211.875,
+      "ChargedCpuSeconds": 211.953125
+    }
+  ]
+}
