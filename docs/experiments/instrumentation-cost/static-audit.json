@@ -1,0 +1,28 @@
+{
+  "ControllerReference": "85a5ee3295c2dd983fbacb21859649f794cc5ba5",
+  "Base": "2bb03d1e604a521202bd8f90aa70f8db0dc5632d",
+  "Method": "Static source audit and read-only archived161/162 evidence. No additional forecasts or experiments.",
+  "FrozenInputs": {
+    "tools/trajectory-continuation/Planner161.Generated.cs": "3f8b33d6e8216a8809953fe4ca0a68206dcaeb4898fdb61c51676942e6249363",
+    "tools/trajectory-continuation/Control161.cs": "794ae64dea4ae4e965b160fa872458f9d05dac4b91d9be043aa5e09b1d1881af",
+    "tools/trajectory-continuation/Generator161.cs": "4b5aed54525bae7e1b3558d0ebe1dde777148c988fe2eae445bdba34f55e6b56",
+    "tools/trajectory-continuation/Space161.cs": "edd21afb242d5cd034a83c7b8f818642b382947045a969982359c54c800ebb18",
+    "tools/robust-three-lap/Runtime158.Generated.cs": "23cd186a970b753358009cb4e5077e17d2661aa979c2f812961733f0c90d0c6e",
+    "tools/safe-fast-contingency/PredictorA153.Generated.cs": "d99d3de1f20fd1c724b48ce859a73a4d1beaca9c140bee3491269ed2250cb646",
+    "tools/efficient-autonomous-planner/CpuProfile147.cs": "1fc99c3ec0b48b886051b3786ece43787a6b2d29a836bd1ea9df28b86375f42c",
+    "tools/efficient-autonomous-planner/ExactKey147.cs": "030b792c1f879230abbd87681ca9f2f150e4b8bb5ddf2926da4e30689b6e749b",
+    "tools/efficient-contingency/Bits152.cs": "263d42a00f96aeb0f22bb4f2598116ce609df68814185a94df6ba958672d1459",
+    "docs/experiments/s3-performance/profile161.json": "0f2e276a5a26707412b14773793d6dc0bd824db1a0d702f876994660ba98b90f",
+    "docs/experiments/s3-performance/analysis.json": "af15a0e3a602aba29c17027dd47b0e4d84cf1cfabc791e539f736e20c33d868d",
+    "docs/experiments/s3-performance/prepare-witness.json": "84b48e5adffe9870b9cef50d5145a3df20470fdf772496e86d84f7f89ec7479f"
+  },
+  "Guard": "Entire original Guard text and call positions unchanged; generator check verifies entire planner transformation. Hard process CPU reads are never throttled.",
+  "Findings": [
+    "Repeated same-phase entry/exit clocks, closures and IDisposable allocations in147.",
+    "Whole Rollout aggregation changes phase attribution, not physical calls. Compare common outer range only.",
+    "Control161.Action has separate real prediction calls outside Runtime158 counters; hierarchical generation is dominant in the Prepare context.",
+    "ExactKey147 stream/writer/Base64, predictor queue/list creation and full tape arrays remain allocation candidates; no allocation stack profile was performed.",
+    "Independent runtime, full13/9, original physics, pending, delay and Prepare/Recover are frozen.",
+    "No ResponseCache162 invocation; economical bundle162 dependency retained independently."
+  ]
+}
