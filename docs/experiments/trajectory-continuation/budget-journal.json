@@ -1,0 +1,123 @@
+[
+  {
+    "Label": "d1-native67",
+    "Kind": "diagnostic",
+    "Complete": true,
+    "ChargedCpuSeconds": 11,
+    "CpuCapSeconds": 90,
+    "ProcessId": 11304,
+    "Concurrent": false,
+    "CpuSeconds": 9.046875,
+    "Reason": "legal full diagnostic continuation"
+  },
+  {
+    "Label": "d2-rest-terminal",
+    "Kind": "diagnostic",
+    "Complete": true,
+    "ChargedCpuSeconds": 48,
+    "CpuCapSeconds": 90,
+    "ProcessId": 21568,
+    "Concurrent": false,
+    "CpuSeconds": 46.15625,
+    "Reason": "legal full diagnostic continuation"
+  },
+  {
+    "Label": "c1-rest",
+    "Kind": "certificate",
+    "Complete": true,
+    "ChargedCpuSeconds": 19,
+    "CpuCapSeconds": 60,
+    "ProcessId": 16520,
+    "Concurrent": false,
+    "CpuSeconds": 17.109375,
+    "Reason": "full13/9 independent certificate"
+  },
+  {
+    "Label": "c2-native67",
+    "Kind": "certificate",
+    "Complete": true,
+    "ChargedCpuSeconds": 12,
+    "CpuCapSeconds": 60,
+    "ProcessId": 4360,
+    "Concurrent": false,
+    "CpuSeconds": 11,
+    "Reason": "full13/9 independent certificate"
+  },
+  {
+    "Label": "native-dev",
+    "Kind": "native",
+    "Complete": true,
+    "ChargedCpuSeconds": 1372,
+    "CpuCapSeconds": 2400,
+    "ProcessId": 12444,
+    "Concurrent": false,
+    "CpuSeconds": 1370.78125,
+    "Reason": "completed"
+  },
+  {
+    "Label": "d3-before-dnf",
+    "Kind": "diagnostic",
+    "Complete": true,
+    "ChargedCpuSeconds": 9,
+    "CpuCapSeconds": 90,
+    "ProcessId": 13984,
+    "Concurrent": false,
+    "CpuSeconds": 7.25,
+    "Reason": "legal full diagnostic continuation"
+  },
+  {
+    "Label": "held-0",
+    "Kind": "native",
+    "Complete": true,
+    "ChargedCpuSeconds": 1405,
+    "CpuCapSeconds": 2400,
+    "ProcessId": 15576,
+    "Concurrent": true,
+    "CpuSeconds": 1403.265625,
+    "Reason": "completed"
+  },
+  {
+    "Label": "held-1",
+    "Kind": "native",
+    "Complete": true,
+    "ChargedCpuSeconds": 1702,
+    "CpuCapSeconds": 2400,
+    "ProcessId": 22460,
+    "Concurrent": true,
+    "CpuSeconds": 1700.46875,
+    "Reason": "completed"
+  },
+  {
+    "Label": "held-2",
+    "Kind": "native",
+    "Complete": true,
+    "ChargedCpuSeconds": 1457,
+    "CpuCapSeconds": 2400,
+    "ProcessId": 16044,
+    "Concurrent": true,
+    "CpuSeconds": 1455.9375,
+    "Reason": "completed"
+  },
+  {
+    "Label": "held-3",
+    "Kind": "native",
+    "Complete": true,
+    "ChargedCpuSeconds": 1894,
+    "CpuCapSeconds": 2400,
+    "ProcessId": 17652,
+    "Concurrent": true,
+    "CpuSeconds": 1892.453125,
+    "Reason": "completed"
+  },
+  {
+    "Label": "held-4",
+    "Kind": "native",
+    "Complete": true,
+    "ChargedCpuSeconds": 1603,
+    "CpuCapSeconds": 2400,
+    "ProcessId": 1696,
+    "Concurrent": true,
+    "CpuSeconds": 1601.5625,
+    "Reason": "completed"
+  }
+]
