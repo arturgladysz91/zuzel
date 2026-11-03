@@ -1,0 +1,171 @@
+{
+  "MaximumEpisodes": 200,
+  "Training": [
+    {
+      "Id": "T1",
+      "Gate": "A",
+      "Start": 0,
+      "Offset": 2.2,
+      "Reference161": null,
+      "Field": 0,
+      "Spec": {
+        "Profile": {
+          "Id": 1,
+          "Name": "R1",
+          "Skills": {
+            "Start": 50,
+            "Speed": 50,
+            "SlideControl": 50,
+            "TrackReading": 50,
+            "PairRiding": 50,
+            "Adaptability": 50
+          },
+          "Style": {
+            "RiskTolerance": 0.5,
+            "LaneChangeTendency": 0.5,
+            "OutsidePreference": 0.5,
+            "SetupIndependence": 0.5
+          }
+        },
+        "Setup": {
+          "Gearing": 0.5,
+          "TractionBias": 0.5
+        },
+        "ReferenceMeters": 0,
+        "OffsetMeters": 2.2,
+        "SpeedMetersPerSecond": 0,
+        "TargetOffsetMeters": 2.2,
+        "InitialOutwardSpeed": 0,
+        "TrafficEnabled": false,
+        "Passive": false,
+        "Bullet": false
+      }
+    },
+    {
+      "Id": "T2",
+      "Gate": "B",
+      "Start": 0,
+      "Offset": 3.5,
+      "Reference161": null,
+      "Field": 1,
+      "Spec": {
+        "Profile": {
+          "Id": 1,
+          "Name": "R1",
+          "Skills": {
+            "Start": 50,
+            "Speed": 50,
+            "SlideControl": 50,
+            "TrackReading": 50,
+            "PairRiding": 50,
+            "Adaptability": 50
+          },
+          "Style": {
+            "RiskTolerance": 0.5,
+            "LaneChangeTendency": 0.5,
+            "OutsidePreference": 0.5,
+            "SetupIndependence": 0.5
+          }
+        },
+        "Setup": {
+          "Gearing": 0.5,
+          "TractionBias": 0.5
+        },
+        "ReferenceMeters": 0,
+        "OffsetMeters": 3.5,
+        "SpeedMetersPerSecond": 0,
+        "TargetOffsetMeters": 3.5,
+        "InitialOutwardSpeed": 0,
+        "TrafficEnabled": false,
+        "Passive": false,
+        "Bullet": false
+      }
+    },
+    {
+      "Id": "T3",
+      "Gate": "C",
+      "Start": -0.75,
+      "Offset": 5.3,
+      "Reference161": null,
+      "Field": 2,
+      "Spec": {
+        "Profile": {
+          "Id": 1,
+          "Name": "R1",
+          "Skills": {
+            "Start": 50,
+            "Speed": 50,
+            "SlideControl": 50,
+            "TrackReading": 50,
+            "PairRiding": 50,
+            "Adaptability": 50
+          },
+          "Style": {
+            "RiskTolerance": 0.5,
+            "LaneChangeTendency": 0.5,
+            "OutsidePreference": 0.5,
+            "SetupIndependence": 0.5
+          }
+        },
+        "Setup": {
+          "Gearing": 0.5,
+          "TractionBias": 0.5
+        },
+        "ReferenceMeters": -0.75,
+        "OffsetMeters": 5.3,
+        "SpeedMetersPerSecond": 0,
+        "TargetOffsetMeters": 5.3,
+        "InitialOutwardSpeed": 0,
+        "TrafficEnabled": false,
+        "Passive": false,
+        "Bullet": false
+      }
+    },
+    {
+      "Id": "T4",
+      "Gate": "D",
+      "Start": 0,
+      "Offset": 7.8,
+      "Reference161": null,
+      "Field": 3,
+      "Spec": {
+        "Profile": {
+          "Id": 1,
+          "Name": "R1",
+          "Skills": {
+            "Start": 50,
+            "Speed": 50,
+            "SlideControl": 50,
+            "TrackReading": 50,
+            "PairRiding": 50,
+            "Adaptability": 50
+          },
+          "Style": {
+            "RiskTolerance": 0.5,
+            "LaneChangeTendency": 0.5,
+            "OutsidePreference": 0.5,
+            "SetupIndependence": 0.5
+          }
+        },
+        "Setup": {
+          "Gearing": 0.5,
+          "TractionBias": 0.5
+        },
+        "ReferenceMeters": 0,
+        "OffsetMeters": 7.8,
+        "SpeedMetersPerSecond": 0,
+        "TargetOffsetMeters": 7.8,
+        "InitialOutwardSpeed": 0,
+        "TrafficEnabled": false,
+        "Passive": false,
+        "Bullet": false
+      }
+    }
+  ],
+  "Seeds": [
+    166042,
+    166097
+  ],
+  "PriorCpuSeconds": 2.234375,
+  "Limit": 720
+}

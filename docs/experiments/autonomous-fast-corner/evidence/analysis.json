@@ -1,0 +1,366 @@
+{
+  "Training": {
+    "166042/training": {
+      "Episodes": 100,
+      "Legal": 2,
+      "Screen": 2,
+      "MeanLegalSeconds": 10.479887492502758,
+      "BestLegalSeconds": 10.090789293587626,
+      "Rejections": {
+        "swept below 0.5 m": 52,
+        "beta exceeds 45 degrees": 45,
+        "pose below 0.5 m": 1
+      },
+      "CpuSeconds": 4.078125
+    },
+    "166042/extension": {
+      "Episodes": 100,
+      "Legal": 67,
+      "Screen": 55,
+      "MeanLegalSeconds": 10.410627275573747,
+      "BestLegalSeconds": 9.871128252491063,
+      "Rejections": {
+        "swept below 0.5 m": 29,
+        "beta exceeds 45 degrees": 4
+      },
+      "CpuSeconds": 9.15625
+    },
+    "166097/training": {
+      "Episodes": 100,
+      "Legal": 26,
+      "Screen": 26,
+      "MeanLegalSeconds": 13.019565360755802,
+      "BestLegalSeconds": 11.670865696117712,
+      "Rejections": {
+        "swept below 0.5 m": 20,
+        "beta exceeds 45 degrees": 52,
+        "pose below 0.5 m": 2
+      },
+      "CpuSeconds": 6.5
+    },
+    "166097/extension": {
+      "Episodes": 100,
+      "Legal": 99,
+      "Screen": 99,
+      "MeanLegalSeconds": 13.33531771052648,
+      "BestLegalSeconds": 11.420901159266553,
+      "Rejections": {
+        "swept below 0.5 m": 1
+      },
+      "CpuSeconds": 13.078125
+    }
+  },
+  "Paired": [
+    {
+      "Id": "H1",
+      "Seconds": 10.626571937695584,
+      "ReferenceSeconds": 13.866461315583889,
+      "Gain": 0.23364932870415467
+    },
+    {
+      "Id": "H2",
+      "Seconds": 10.634468367614707,
+      "ReferenceSeconds": 13.918655272029334,
+      "Gain": 0.23595576154648124
+    },
+    {
+      "Id": "H3",
+      "Seconds": 10.704567753342317,
+      "ReferenceSeconds": 14.011166282576825,
+      "Gain": 0.23599737970038448
+    },
+    {
+      "Id": "H4",
+      "Seconds": 10.969409295936169,
+      "ReferenceSeconds": 14.106980978192876,
+      "Gain": 0.222412696742619
+    }
+  ],
+  "MedianGain": 0.23480254512531795,
+  "MedianNewSeconds": 10.672309375637191,
+  "Intervention": {
+    "Injection": 6.8,
+    "Activation": 7.04,
+    "Comparison": [
+      {
+        "base": {
+          "time": 6.8,
+          "action": {
+            "SteeringRadians": 0.02705029,
+            "Drive": 0.20662792
+          },
+          "reference": 80.69721830243634,
+          "offset": 1.5349137192861195,
+          "yaw": 0.39149427,
+          "beta": 0.074550964,
+          "speedKph": 55.321246800000004
+        },
+        "perturbed": {
+          "time": 6.8,
+          "action": {
+            "SteeringRadians": 0.041050293,
+            "Drive": 0.20662792
+          },
+          "reference": 80.69721830243634,
+          "offset": 1.5349137192861195,
+          "yaw": 0.39149427,
+          "beta": 0.074550964,
+          "speedKph": 55.321246800000004
+        }
+      },
+      {
+        "base": {
+          "time": 7,
+          "action": {
+            "SteeringRadians": 0.034044486,
+            "Drive": 0.18737169
+          },
+          "reference": 83.65159644053028,
+          "offset": 1.3199758635202903,
+          "yaw": 0.25646114,
+          "beta": 0.05578947,
+          "speedKph": 55.5751512
+        },
+        "perturbed": {
+          "time": 7,
+          "action": {
+            "SteeringRadians": 0.013670113,
+            "Drive": 0.18951243
+          },
+          "reference": 83.65159644053028,
+          "offset": 1.3199758635202903,
+          "yaw": 0.25646114,
+          "beta": 0.05578947,
+          "speedKph": 55.5751512
+        }
+      },
+      {
+        "base": {
+          "time": 7.2,
+          "action": {
+            "SteeringRadians": 0.029543588,
+            "Drive": 0.18600973
+          },
+          "reference": 86.64719510233431,
+          "offset": 1.1239238987394675,
+          "yaw": 0.3026203,
+          "beta": 0.040563576,
+          "speedKph": 56.1090132
+        },
+        "perturbed": {
+          "time": 7.2,
+          "action": {
+            "SteeringRadians": 0.033457,
+            "Drive": 0.18688601
+          },
+          "reference": 86.64624615574144,
+          "offset": 1.1191061319477114,
+          "yaw": 0.3938778,
+          "beta": 0.04342648,
+          "speedKph": 56.0691342
+        }
+      },
+      {
+        "base": {
+          "time": 7.4,
+          "action": {
+            "SteeringRadians": 0.0383167,
+            "Drive": 0.14486143
+          },
+          "reference": 89.68716852102364,
+          "offset": 0.9790511670955158,
+          "yaw": 0.384166,
+          "beta": 0.043076195,
+          "speedKph": 56.5960392
+        },
+        "perturbed": {
+          "time": 7.4,
+          "action": {
+            "SteeringRadians": 0.041968293,
+            "Drive": 0.14418073
+          },
+          "reference": 89.68380925739245,
+          "offset": 0.954759321009675,
+          "yaw": 0.28273576,
+          "beta": 0.04776879,
+          "speedKph": 56.55924
+        }
+      },
+      {
+        "base": {
+          "time": 7.6000000000000005,
+          "action": {
+            "SteeringRadians": 0.04552135,
+            "Drive": 0.05902699
+          },
+          "reference": 92.76066592153518,
+          "offset": 0.8859814699440502,
+          "yaw": 0.38757443,
+          "beta": 0.050134253,
+          "speedKph": 56.989425600000004
+        },
+        "perturbed": {
+          "time": 7.6000000000000005,
+          "action": {
+            "SteeringRadians": 0.04619483,
+            "Drive": 0.05750203
+          },
+          "reference": 92.75887936318213,
+          "offset": 0.8496445798137655,
+          "yaw": 0.35752684,
+          "beta": 0.04187438,
+          "speedKph": 56.998422000000005
+        }
+      },
+      {
+        "base": {
+          "time": 7.8,
+          "action": {
+            "SteeringRadians": 0.052123,
+            "Drive": 0
+          },
+          "reference": 95.8569899796392,
+          "offset": 0.8373559381550822,
+          "yaw": 0.4419613,
+          "beta": 0.054883596,
+          "speedKph": 57.2120028
+        },
+        "perturbed": {
+          "time": 7.8,
+          "action": {
+            "SteeringRadians": 0.05195461,
+            "Drive": 0
+          },
+          "reference": 95.85983867791447,
+          "offset": 0.8045331404679501,
+          "yaw": 0.4616211,
+          "beta": 0.051073417,
+          "speedKph": 57.248528400000005
+        }
+      },
+      {
+        "base": {
+          "time": 8,
+          "action": {
+            "SteeringRadians": 0.05319538,
+            "Drive": 0
+          },
+          "reference": 98.9560244606867,
+          "offset": 0.8194594030132506,
+          "yaw": 0.507867,
+          "beta": 0.06394892,
+          "speedKph": 57.0159468
+        },
+        "perturbed": {
+          "time": 8,
+          "action": {
+            "SteeringRadians": 0.053082075,
+            "Drive": 0
+          },
+          "reference": 98.96329424865064,
+          "offset": 0.7980435889678128,
+          "yaw": 0.5243141,
+          "beta": 0.06481728,
+          "speedKph": 57.045798
+        }
+      }
+    ]
+  },
+  "DemonstrationDecisions": {
+    "observed legal first-bend prefix": 103,
+    "straight evidence outside fitted prefix": 15,
+    "terminal risk": 16
+  },
+  "QueueAudit": {
+    "D1": {
+      "Issued": 35,
+      "Activated": 33,
+      "Pending": 2
+    },
+    "D2": {
+      "Issued": 60,
+      "Activated": 59,
+      "Pending": 1
+    },
+    "D3": {
+      "Issued": 34,
+      "Activated": 33,
+      "Pending": 1
+    },
+    "D4": {
+      "Issued": 24,
+      "Activated": 23,
+      "Pending": 1
+    },
+    "H1": {
+      "Issued": 73,
+      "Activated": 71,
+      "Pending": 2
+    },
+    "H2": {
+      "Issued": 72,
+      "Activated": 71,
+      "Pending": 1
+    },
+    "H3": {
+      "Issued": 73,
+      "Activated": 72,
+      "Pending": 1
+    },
+    "H4": {
+      "Issued": 74,
+      "Activated": 73,
+      "Pending": 1
+    },
+    "H5": {
+      "Issued": 74,
+      "Activated": 72,
+      "Pending": 2
+    },
+    "H6": {
+      "Issued": 74,
+      "Activated": 73,
+      "Pending": 1
+    },
+    "H7": {
+      "Issued": 74,
+      "Activated": 73,
+      "Pending": 1
+    },
+    "H8": {
+      "Issued": 76,
+      "Activated": 74,
+      "Pending": 2
+    },
+    "P1": {
+      "Issued": 72,
+      "Activated": 71,
+      "Pending": 1
+    },
+    "R1": {
+      "Issued": 72,
+      "Activated": 71,
+      "Pending": 1
+    },
+    "REF2-H5": {
+      "Issued": 43,
+      "Activated": 42,
+      "Pending": 1
+    },
+    "REF2-H6": {
+      "Issued": 73,
+      "Activated": 72,
+      "Pending": 1
+    },
+    "REF2-H7": {
+      "Issued": 70,
+      "Activated": 69,
+      "Pending": 1
+    },
+    "REF2-H8": {
+      "Issued": 42,
+      "Activated": 41,
+      "Pending": 1
+    }
+  }
+}

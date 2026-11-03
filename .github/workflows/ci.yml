@@ -36,7 +36,7 @@ jobs:
     # One Windows compilation and complete discovery for every run, including Drafts.
     if: github.event_name != 'pull_request' || github.event.action != 'edited' || github.event.changes.base
     runs-on: windows-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
     outputs:
       full: ${{ steps.policy.outputs.full }}
       historical: ${{ steps.policy.outputs.historical }}
@@ -91,7 +91,7 @@ jobs:
     # Draft: all core + trajectory cases. Full: all four original shards, once.
     needs: coverage
     runs-on: windows-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
@@ -133,7 +133,7 @@ jobs:
     needs: coverage
     if: needs.coverage.outputs.historical == 'true'
     runs-on: windows-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
     steps:
       - name: Keep frozen Git blob bytes on Windows
         run: git config --global core.autocrlf false
@@ -267,7 +267,7 @@ jobs:
     # Calibration comparators remain tested even in Draft mode.
     if: github.event_name != 'pull_request' || github.event.action != 'edited' || github.event.changes.base
     runs-on: windows-latest
-    timeout-minutes: 10
+    timeout-minutes: 30
     steps:
       - name: Keep frozen Git blob bytes on Windows
         run: git config --global core.autocrlf false

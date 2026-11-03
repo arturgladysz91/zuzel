@@ -1,0 +1,17 @@
+{
+  "CpuSeconds": 900,
+  "AdmissionCpuSeconds": 880,
+  "InitialTrainingEpisodes": 200,
+  "MaximumTrainingEpisodes": 400,
+  "DiagnosticWorlds": 4,
+  "FinalNativePolicyWorlds": 8,
+  "MaximumAdditionalReplays": 2,
+  "TerminalHorizonSeconds": 0.9,
+  "TrainingSeeds": [166042, 166097],
+  "TrainingOffsets": [2.2, 3.5, 7.8],
+  "TrainingStepSeconds": 0.01,
+  "TrainingReviewSeconds": 0.2,
+  "ActivationDelaySeconds": 0.24,
+  "Selection": "Three distinct stopped training conditions. Complete legal count, terminal-screen count, completed mean elapsed time, margin and progress. Expansion only for measurable progress and available CPU.",
+  "FinalComparison": "Eight frozen scenarios, four with exact historical #161 starts. Missing reference arms stay missing unless a separately counted, bounded run of the genuine #161 controller completes."
+}

@@ -1,0 +1,1590 @@
+{
+  "CpuSeconds": 6.265625,
+  "ChargedCpuSeconds": 43.828125,
+  "Rows": [
+    {
+      "result": {
+        "Id": "H1",
+        "Scenario": {
+          "Id": "H1",
+          "Gate": "A",
+          "Start": 0,
+          "Offset": 1.25,
+          "Reference161": "held-1",
+          "Field": 0,
+          "Spec": {
+            "Profile": {
+              "Id": 1,
+              "Name": "R1",
+              "Skills": {
+                "Start": 50,
+                "Speed": 50,
+                "SlideControl": 50,
+                "TrackReading": 50,
+                "PairRiding": 50,
+                "Adaptability": 50
+              },
+              "Style": {
+                "RiskTolerance": 0.5,
+                "LaneChangeTendency": 0.5,
+                "OutsidePreference": 0.5,
+                "SetupIndependence": 0.5
+              }
+            },
+            "Setup": {
+              "Gearing": 0.5,
+              "TractionBias": 0.5
+            },
+            "ReferenceMeters": 0,
+            "OffsetMeters": 1.25,
+            "SpeedMetersPerSecond": 0,
+            "TargetOffsetMeters": 1.25,
+            "InitialOutwardSpeed": 0,
+            "TrafficEnabled": false,
+            "Passive": false,
+            "Bullet": false
+          }
+        },
+        "Legal": true,
+        "TerminalScreen": true,
+        "ReservePass": true,
+        "Reason": "reached goal",
+        "CpuSeconds": 0.578125,
+        "EndReference": 210.30629095959955,
+        "EndSeconds": 14.417651,
+        "MinPose": 0.9914930779316359,
+        "MinSweep": 0.9169115450232589,
+        "MaxBetaDegrees": 11.543155693977024,
+        "MaxYaw": 0.8790386915206909,
+        "MaxSlip": 11.31631502211948,
+        "FirstBadTime": null,
+        "FirstBadReference": null,
+        "Entry": {
+          "Seconds": 3.826724107409497,
+          "Kph": 62.348803109816046,
+          "X": 35,
+          "Y": -2.6350887654475352,
+          "Distance": 35.1326706960564
+        },
+        "Apex": {
+          "Seconds": 9.36,
+          "Kph": 52.479763412475585,
+          "X": 48.90748596191406,
+          "Y": 60.28246307373047,
+          "Distance": 122.03658350930345
+        },
+        "Exit": {
+          "Seconds": 10.322228526751553,
+          "Kph": 58.92389612428664,
+          "X": 35.00000000000064,
+          "Y": 64.7048097663117,
+          "Distance": 136.68660650447578
+        },
+        "After20": {
+          "Seconds": 11.434321131520296,
+          "Kph": 71.04665577944847,
+          "X": 15,
+          "Y": 65.26186982837051,
+          "Distance": 156.76466407364637
+        },
+        "After40": {
+          "Seconds": 12.421758851289914,
+          "Kph": 73.68312778123413,
+          "X": -5,
+          "Y": 65.73199226864263,
+          "Distance": 176.8253533859345
+        },
+        "After62": {
+          "Seconds": 13.517650807954416,
+          "Kph": 71.74888046782283,
+          "X": -27,
+          "Y": 65.79917176545783,
+          "Distance": 198.84129101580652
+        },
+        "MinBendKph": 52.251024627685545,
+        "SectionSeconds": 10.626571937695584,
+        "BendSeconds": 6.495504419342057,
+        "TerminalBetaDegrees": 3.1437797395158666,
+        "TerminalBetaDotDegreesPerSecond": 7.417709526504802,
+        "TerminalOutwardMetersPerSecond": -1.672468662261963,
+        "TerminalYaw": 0.45220357179641724,
+        "TerminalPose": 3.6490368977083416,
+        "TerminalWheelSlip": 0.023117901465673416,
+        "ForecastContactQueries": 1665,
+        "Fingerprint": "CED777B819C09307F6A405742FC9C584F70AF83814CFA1F887051B4EDB7DAF19"
+      },
+      "reference": {
+        "Id": "held-1",
+        "Scenario": {
+          "Id": "H1",
+          "Gate": "A",
+          "Start": 0,
+          "Offset": 1.25,
+          "Reference161": "held-1",
+          "Field": 0,
+          "Spec": {
+            "Profile": {
+              "Id": 1,
+              "Name": "R1",
+              "Skills": {
+                "Start": 50,
+                "Speed": 50,
+                "SlideControl": 50,
+                "TrackReading": 50,
+                "PairRiding": 50,
+                "Adaptability": 50
+              },
+              "Style": {
+                "RiskTolerance": 0.5,
+                "LaneChangeTendency": 0.5,
+                "OutsidePreference": 0.5,
+                "SetupIndependence": 0.5
+              }
+            },
+            "Setup": {
+              "Gearing": 0.5,
+              "TractionBias": 0.5
+            },
+            "ReferenceMeters": 0,
+            "OffsetMeters": 1.25,
+            "SpeedMetersPerSecond": 0,
+            "TargetOffsetMeters": 1.25,
+            "InitialOutwardSpeed": 0,
+            "TrafficEnabled": false,
+            "Passive": false,
+            "Bullet": false
+          }
+        },
+        "Legal": true,
+        "TerminalScreen": true,
+        "ReservePass": false,
+        "Reason": "completed",
+        "CpuSeconds": 0,
+        "EndReference": 194.38938450813293,
+        "EndSeconds": 16.716007,
+        "MinPose": 1.8492000000000002,
+        "MinSweep": 1.8034813466909532,
+        "MaxBetaDegrees": 2.8571956266808405,
+        "MaxYaw": 0.47339922189712524,
+        "MaxSlip": 11.31631502211948,
+        "FirstBadTime": null,
+        "FirstBadReference": null,
+        "Entry": {
+          "Seconds": 3.9792781379865607,
+          "Kph": 47.81187162176326,
+          "X": 35,
+          "Y": -1.9065980164909415,
+          "Distance": 35.01043154244418
+        },
+        "Apex": {
+          "Seconds": 4.76,
+          "Kph": 47.82351722717285,
+          "X": 45.28679275512695,
+          "Y": -0.905737578868866,
+          "Distance": 45.38320436329377
+        },
+        "Exit": {
+          "Seconds": 12.046563425117023,
+          "Kph": 47.79615436008703,
+          "X": 35.00000000001594,
+          "Y": 66.28881051749558,
+          "Distance": 142.1373490363496
+        },
+        "After20": {
+          "Seconds": 13.552878474466711,
+          "Kph": 47.80101652743359,
+          "X": 15,
+          "Y": 66.3909476464536,
+          "Distance": 162.1382350414549
+        },
+        "After40": {
+          "Seconds": 15.059144766610885,
+          "Kph": 47.80169393848879,
+          "X": -5,
+          "Y": 66.29330454188378,
+          "Distance": 182.13847488587615
+        },
+        "After62": {
+          "Seconds": 16.71600628169991,
+          "Kph": 47.806635954992764,
+          "X": -27,
+          "Y": 66.19520587641065,
+          "Distance": 204.13876303473484
+        },
+        "MinBendKph": 47.78621864318848,
+        "SectionSeconds": 13.866461315583889,
+        "BendSeconds": 8.067285287130463,
+        "TerminalBetaDegrees": 0.18176698633088725,
+        "TerminalBetaDotDegreesPerSecond": 3.4653729980845176,
+        "TerminalOutwardMetersPerSecond": -0.26662060618400574,
+        "TerminalYaw": 0.22589364647865295,
+        "TerminalPose": 4.1163932439820465,
+        "TerminalWheelSlip": 0.027632031415761572,
+        "ForecastContactQueries": 0,
+        "Fingerprint": "D38D4FE3D9928D054E51221A0626EFC5D7A541DEFBE72D3878BD024AF3B957E7"
+      },
+      "source": "docs/experiments/trajectory-continuation/native/held-1.json.gz",
+      "SourceSha256": "F7B5504003B17E6D847D4586B280088E0A5116F14CB65F3E5CC2200CAC77AEA9",
+      "Gain": 0.23364932870415467
+    },
+    {
+      "result": {
+        "Id": "H2",
+        "Scenario": {
+          "Id": "H2",
+          "Gate": "B",
+          "Start": 0,
+          "Offset": 3,
+          "Reference161": "held-2",
+          "Field": 1,
+          "Spec": {
+            "Profile": {
+              "Id": 1,
+              "Name": "R1",
+              "Skills": {
+                "Start": 50,
+                "Speed": 50,
+                "SlideControl": 50,
+                "TrackReading": 50,
+                "PairRiding": 50,
+                "Adaptability": 50
+              },
+              "Style": {
+                "RiskTolerance": 0.5,
+                "LaneChangeTendency": 0.5,
+                "OutsidePreference": 0.5,
+                "SetupIndependence": 0.5
+              }
+            },
+            "Setup": {
+              "Gearing": 0.5,
+              "TractionBias": 0.5
+            },
+            "ReferenceMeters": 0,
+            "OffsetMeters": 3,
+            "SpeedMetersPerSecond": 0,
+            "TargetOffsetMeters": 3,
+            "InitialOutwardSpeed": 0,
+            "TrafficEnabled": false,
+            "Passive": false,
+            "Bullet": false
+          }
+        },
+        "Legal": true,
+        "TerminalScreen": true,
+        "ReservePass": true,
+        "Reason": "reached goal",
+        "CpuSeconds": 0.15625,
+        "EndReference": 210.25091333428247,
+        "EndSeconds": 14.392664,
+        "MinPose": 0.98886183296355,
+        "MinSweep": 0.9145073376766101,
+        "MaxBetaDegrees": 11.70078796022995,
+        "MaxYaw": 0.8327435255050659,
+        "MaxSlip": 11.31631502211948,
+        "FirstBadTime": null,
+        "FirstBadReference": null,
+        "Entry": {
+          "Seconds": 3.781792121401446,
+          "Kph": 63.02830259581779,
+          "X": 35,
+          "Y": -2.3634262440120795,
+          "Distance": 35.04013607998468
+        },
+        "Apex": {
+          "Seconds": 9.3,
+          "Kph": 52.39164276123047,
+          "X": 49.022705078125,
+          "Y": 60.22211837768555,
+          "Distance": 121.7834283262564
+        },
+        "Exit": {
+          "Seconds": 10.270097527710842,
+          "Kph": 58.96995625139719,
+          "X": 35,
+          "Y": 64.71719994602434,
+          "Distance": 136.5667065753733
+        },
+        "After20": {
+          "Seconds": 11.388039940466284,
+          "Kph": 70.62354870452683,
+          "X": 15,
+          "Y": 65.29569752341213,
+          "Distance": 156.65057080775372
+        },
+        "After40": {
+          "Seconds": 12.383543076511872,
+          "Kph": 73.16566060513806,
+          "X": -5,
+          "Y": 65.83981780665509,
+          "Distance": 176.75199537685424
+        },
+        "After62": {
+          "Seconds": 13.492663903317123,
+          "Kph": 71.2632500863572,
+          "X": -27,
+          "Y": 65.70305649410652,
+          "Distance": 198.7875011866537
+        },
+        "MinBendKph": 52.23185691833496,
+        "SectionSeconds": 10.634468367614707,
+        "BendSeconds": 6.4883054063093955,
+        "TerminalBetaDegrees": 2.313546719693676,
+        "TerminalBetaDotDegreesPerSecond": 10.2500910390659,
+        "TerminalOutwardMetersPerSecond": -1.6464500427246094,
+        "TerminalYaw": 0.45935577154159546,
+        "TerminalPose": 3.561982339313713,
+        "TerminalWheelSlip": 0.0290537732644858,
+        "ForecastContactQueries": 1640,
+        "Fingerprint": "F2692B626E37EC39CD80229395E7610D58F6B5EF00302368E95B36A9BA1045AE"
+      },
+      "reference": {
+        "Id": "held-2",
+        "Scenario": {
+          "Id": "H2",
+          "Gate": "B",
+          "Start": 0,
+          "Offset": 3,
+          "Reference161": "held-2",
+          "Field": 1,
+          "Spec": {
+            "Profile": {
+              "Id": 1,
+              "Name": "R1",
+              "Skills": {
+                "Start": 50,
+                "Speed": 50,
+                "SlideControl": 50,
+                "TrackReading": 50,
+                "PairRiding": 50,
+                "Adaptability": 50
+              },
+              "Style": {
+                "RiskTolerance": 0.5,
+                "LaneChangeTendency": 0.5,
+                "OutsidePreference": 0.5,
+                "SetupIndependence": 0.5
+              }
+            },
+            "Setup": {
+              "Gearing": 0.5,
+              "TractionBias": 0.5
+            },
+            "ReferenceMeters": 0,
+            "OffsetMeters": 3,
+            "SpeedMetersPerSecond": 0,
+            "TargetOffsetMeters": 3,
+            "InitialOutwardSpeed": 0,
+            "TrafficEnabled": false,
+            "Passive": false,
+            "Bullet": false
+          }
+        },
+        "Legal": true,
+        "TerminalScreen": true,
+        "ReservePass": false,
+        "Reason": "completed",
+        "CpuSeconds": 0,
+        "EndReference": 194.38937497138977,
+        "EndSeconds": 16.768117,
+        "MinPose": 3.5363036873715843,
+        "MinSweep": 3.467042756885556,
+        "MaxBetaDegrees": 2.8200752181436184,
+        "MaxYaw": 0.47024253010749817,
+        "MaxSlip": 11.31631502211948,
+        "FirstBadTime": null,
+        "FirstBadReference": null,
+        "Entry": {
+          "Seconds": 3.9785234255096884,
+          "Kph": 47.81113351319594,
+          "X": 35,
+          "Y": -3.133016875402809,
+          "Distance": 35.00046960993408
+        },
+        "Apex": {
+          "Seconds": 4.78,
+          "Kph": 47.816396713256836,
+          "X": 45.51509475708008,
+          "Y": -1.7272194623947144,
+          "Distance": 45.648267785094504
+        },
+        "Exit": {
+          "Seconds": 12.098627,
+          "Kph": 47.790225219726565,
+          "X": 35,
+          "Y": 66.28297424316406,
+          "Distance": 142.8293562699182
+        },
+        "After20": {
+          "Seconds": 13.604942035023193,
+          "Kph": 47.79843596249249,
+          "X": 15,
+          "Y": 66.39130693488195,
+          "Distance": 162.83031952201594
+        },
+        "After40": {
+          "Seconds": 15.111224490528773,
+          "Kph": 47.803941173936686,
+          "X": -5,
+          "Y": 66.29034875358967,
+          "Distance": 182.83057609543334
+        },
+        "After62": {
+          "Seconds": 16.768117,
+          "Kph": 47.80798873901367,
+          "X": -27,
+          "Y": 66.19292449951172,
+          "Distance": 204.83085351810587
+        },
+        "MinBendKph": 47.78648300170899,
+        "SectionSeconds": 13.918655272029334,
+        "BendSeconds": 8.120103574490312,
+        "TerminalBetaDegrees": 0.22327601908281497,
+        "TerminalBetaDotDegreesPerSecond": 5.345757231270684,
+        "TerminalOutwardMetersPerSecond": -0.2551192045211792,
+        "TerminalYaw": 0.2450421005487442,
+        "TerminalPose": 4.114203300215929,
+        "TerminalWheelSlip": 0.02729392845678059,
+        "ForecastContactQueries": 0,
+        "Fingerprint": "C2B58842CC50BFC97FEBBEDD00AAE83FAB0FACDCF85C30115193DD3932A3BA42"
+      },
+      "source": "docs/experiments/trajectory-continuation/native/held-2.json.gz",
+      "SourceSha256": "A8050C6699CE8C28AC78166E54F007C2E14A11E293F83FED38D04A9AABC7BD4A",
+      "Gain": 0.23595576154648124
+    },
+    {
+      "result": {
+        "Id": "H3",
+        "Scenario": {
+          "Id": "H3",
+          "Gate": "C",
+          "Start": 0,
+          "Offset": 6,
+          "Reference161": "held-3",
+          "Field": 2,
+          "Spec": {
+            "Profile": {
+              "Id": 1,
+              "Name": "R1",
+              "Skills": {
+                "Start": 50,
+                "Speed": 50,
+                "SlideControl": 50,
+                "TrackReading": 50,
+                "PairRiding": 50,
+                "Adaptability": 50
+              },
+              "Style": {
+                "RiskTolerance": 0.5,
+                "LaneChangeTendency": 0.5,
+                "OutsidePreference": 0.5,
+                "SetupIndependence": 0.5
+              }
+            },
+            "Setup": {
+              "Gearing": 0.5,
+              "TractionBias": 0.5
+            },
+            "ReferenceMeters": 0,
+            "OffsetMeters": 6,
+            "SpeedMetersPerSecond": 0,
+            "TargetOffsetMeters": 6,
+            "InitialOutwardSpeed": 0,
+            "TrafficEnabled": false,
+            "Passive": false,
+            "Bullet": false
+          }
+        },
+        "Legal": true,
+        "TerminalScreen": true,
+        "ReservePass": true,
+        "Reason": "reached goal",
+        "CpuSeconds": 0.171875,
+        "EndReference": 210.28818926032636,
+        "EndSeconds": 14.486329,
+        "MinPose": 0.9674503980920265,
+        "MinSweep": 0.8924890333608355,
+        "MaxBetaDegrees": 10.70611692188385,
+        "MaxYaw": 0.7485288977622986,
+        "MaxSlip": 11.31631502211948,
+        "FirstBadTime": null,
+        "FirstBadReference": null,
+        "Entry": {
+          "Seconds": 3.81225178104035,
+          "Kph": 63.02890051753184,
+          "X": 35,
+          "Y": -2.833137891173189,
+          "Distance": 35.168648898457405
+        },
+        "Apex": {
+          "Seconds": 9.51,
+          "Kph": 52.64659080505371,
+          "X": 48.200767517089844,
+          "Y": 60.59731674194336,
+          "Distance": 124.49996890500915
+        },
+        "Exit": {
+          "Seconds": 10.415537056276246,
+          "Kph": 59.144325689664804,
+          "X": 35.00000000001904,
+          "Y": 64.67361177951082,
+          "Distance": 138.3543314349419
+        },
+        "After20": {
+          "Seconds": 11.517383936001847,
+          "Kph": 71.55918833608983,
+          "X": 15,
+          "Y": 65.20913240204818,
+          "Distance": 158.4196435389693
+        },
+        "After40": {
+          "Seconds": 12.496739369879721,
+          "Kph": 74.13321494481981,
+          "X": -5,
+          "Y": 65.62059362374661,
+          "Distance": 178.4458814448344
+        },
+        "After62": {
+          "Seconds": 13.586328039809448,
+          "Kph": 71.74579318257491,
+          "X": -27,
+          "Y": 65.82270970173671,
+          "Distance": 200.4599701972507
+        },
+        "MinBendKph": 52.25330085754395,
+        "SectionSeconds": 10.704567753342317,
+        "BendSeconds": 6.603285275235896,
+        "TerminalBetaDegrees": 3.466922363992395,
+        "TerminalBetaDotDegreesPerSecond": 7.2606845324091225,
+        "TerminalOutwardMetersPerSecond": -1.6523984670639038,
+        "TerminalYaw": 0.4634566605091095,
+        "TerminalPose": 3.669839717922148,
+        "TerminalWheelSlip": 0.016208977321678482,
+        "ForecastContactQueries": 1668,
+        "Fingerprint": "F3EBF2D537DAFB3338DD004EF9114286DD8B7A68A96730FA9D2B98885F1B12A0"
+      },
+      "reference": {
+        "Id": "held-3",
+        "Scenario": {
+          "Id": "H3",
+          "Gate": "C",
+          "Start": 0,
+          "Offset": 6,
+          "Reference161": "held-3",
+          "Field": 2,
+          "Spec": {
+            "Profile": {
+              "Id": 1,
+              "Name": "R1",
+              "Skills": {
+                "Start": 50,
+                "Speed": 50,
+                "SlideControl": 50,
+                "TrackReading": 50,
+                "PairRiding": 50,
+                "Adaptability": 50
+              },
+              "Style": {
+                "RiskTolerance": 0.5,
+                "LaneChangeTendency": 0.5,
+                "OutsidePreference": 0.5,
+                "SetupIndependence": 0.5
+              }
+            },
+            "Setup": {
+              "Gearing": 0.5,
+              "TractionBias": 0.5
+            },
+            "ReferenceMeters": 0,
+            "OffsetMeters": 6,
+            "SpeedMetersPerSecond": 0,
+            "TargetOffsetMeters": 6,
+            "InitialOutwardSpeed": 0,
+            "TrafficEnabled": false,
+            "Passive": false,
+            "Bullet": false
+          }
+        },
+        "Legal": true,
+        "TerminalScreen": true,
+        "ReservePass": false,
+        "Reason": "completed",
+        "CpuSeconds": 0,
+        "EndReference": 194.38938450813293,
+        "EndSeconds": 16.860734,
+        "MinPose": 4.010530273360882,
+        "MinSweep": 3.9412148622005856,
+        "MaxBetaDegrees": 2.8920584300244014,
+        "MaxYaw": 0.4727036952972412,
+        "MaxSlip": 11.31631502211948,
+        "FirstBadTime": null,
+        "FirstBadReference": null,
+        "Entry": {
+          "Seconds": 3.9795960000000004,
+          "Kph": 47.810292434692386,
+          "X": 35,
+          "Y": -5.235684394836426,
+          "Distance": 35.01455301047099
+        },
+        "Apex": {
+          "Seconds": 11.03,
+          "Kph": 47.80630302429199,
+          "X": 49.953792572021484,
+          "Y": 63.136497497558594,
+          "Distance": 128.6382105257435
+        },
+        "Exit": {
+          "Seconds": 12.191214137482241,
+          "Kph": 47.78865959485221,
+          "X": 35.00000000000016,
+          "Y": 66.27469603055131,
+          "Distance": 144.05599230082586
+        },
+        "After20": {
+          "Seconds": 13.697582006363708,
+          "Kph": 47.799945517041884,
+          "X": 15,
+          "Y": 66.38023001069502,
+          "Distance": 164.05689089276078
+        },
+        "After40": {
+          "Seconds": 15.203850974505192,
+          "Kph": 47.79938850402832,
+          "X": -5,
+          "Y": 66.2864699722592,
+          "Distance": 184.05711271166277
+        },
+        "After62": {
+          "Seconds": 16.860733281659815,
+          "Kph": 47.805740032095244,
+          "X": -27,
+          "Y": 66.18896503788217,
+          "Distance": 206.05741371669532
+        },
+        "MinBendKph": 47.780529785156254,
+        "SectionSeconds": 14.011166282576825,
+        "BendSeconds": 8.21161813748224,
+        "TerminalBetaDegrees": 0.34252260322752276,
+        "TerminalBetaDotDegreesPerSecond": 0.07836920901375444,
+        "TerminalOutwardMetersPerSecond": -0.2670871913433075,
+        "TerminalYaw": 0.18976053595542908,
+        "TerminalPose": 4.108332665492281,
+        "TerminalWheelSlip": 0.026076089238859824,
+        "ForecastContactQueries": 0,
+        "Fingerprint": "B5459D4B2760051DB43ED04A9F52C88C80112658165B47A67AE5BA2CEB87E945"
+      },
+      "source": "docs/experiments/trajectory-continuation/native/held-3.json.gz",
+      "SourceSha256": "BB0358E7754C898A3B72E75D0B7DDDBEBF2B69EC31BB26F8DE71B21CA88541D7",
+      "Gain": 0.23599737970038448
+    },
+    {
+      "result": {
+        "Id": "H4",
+        "Scenario": {
+          "Id": "H4",
+          "Gate": "D",
+          "Start": 0,
+          "Offset": 9,
+          "Reference161": "held-4",
+          "Field": 3,
+          "Spec": {
+            "Profile": {
+              "Id": 1,
+              "Name": "R1",
+              "Skills": {
+                "Start": 50,
+                "Speed": 50,
+                "SlideControl": 50,
+                "TrackReading": 50,
+                "PairRiding": 50,
+                "Adaptability": 50
+              },
+              "Style": {
+                "RiskTolerance": 0.5,
+                "LaneChangeTendency": 0.5,
+                "OutsidePreference": 0.5,
+                "SetupIndependence": 0.5
+              }
+            },
+            "Setup": {
+              "Gearing": 0.5,
+              "TractionBias": 0.5
+            },
+            "ReferenceMeters": 0,
+            "OffsetMeters": 9,
+            "SpeedMetersPerSecond": 0,
+            "TargetOffsetMeters": 9,
+            "InitialOutwardSpeed": 0,
+            "TrafficEnabled": false,
+            "Passive": false,
+            "Bullet": false
+          }
+        },
+        "Legal": true,
+        "TerminalScreen": true,
+        "ReservePass": true,
+        "Reason": "reached goal",
+        "CpuSeconds": 0.140625,
+        "EndReference": 210.2809164497885,
+        "EndSeconds": 14.785014,
+        "MinPose": 0.9093629723965108,
+        "MinSweep": 0.8331098376097037,
+        "MaxBetaDegrees": 11.378603383621002,
+        "MaxYaw": 0.8891933560371399,
+        "MaxSlip": 11.31631502211948,
+        "FirstBadTime": null,
+        "FirstBadReference": null,
+        "Entry": {
+          "Seconds": 3.8560623419795963,
+          "Kph": 62.82468389979355,
+          "X": 35,
+          "Y": -4.063087443040616,
+          "Distance": 35.41355786398894
+        },
+        "Apex": {
+          "Seconds": 9.86,
+          "Kph": 53.311438751220706,
+          "X": 46.99641036987305,
+          "Y": 61.0645637512207,
+          "Distance": 129.1357920914961
+        },
+        "Exit": {
+          "Seconds": 10.671536290724486,
+          "Kph": 59.15508094931931,
+          "X": 35.0000000000003,
+          "Y": 64.5877434660555,
+          "Distance": 141.6575481173771
+        },
+        "After20": {
+          "Seconds": 11.789686637385616,
+          "Kph": 70.74332867730924,
+          "X": 15,
+          "Y": 65.24397345726982,
+          "Distance": 161.75362924927094
+        },
+        "After40": {
+          "Seconds": 12.782265242754988,
+          "Kph": 73.37813835043544,
+          "X": -5,
+          "Y": 65.81655696069203,
+          "Distance": 181.83848930283423
+        },
+        "After62": {
+          "Seconds": 13.885013325103355,
+          "Kph": 71.46586627235116,
+          "X": -27,
+          "Y": 65.75780598893783,
+          "Distance": 203.860635185433
+        },
+        "MinBendKph": 52.5153865814209,
+        "SectionSeconds": 10.969409295936169,
+        "BendSeconds": 6.81547394874489,
+        "TerminalBetaDegrees": 2.8648524205224066,
+        "TerminalBetaDotDegreesPerSecond": 8.476478969649543,
+        "TerminalOutwardMetersPerSecond": -1.668468713760376,
+        "TerminalYaw": 0.4590989649295807,
+        "TerminalPose": 3.6104758720268477,
+        "TerminalWheelSlip": 0.03142814522992935,
+        "ForecastContactQueries": 1687,
+        "Fingerprint": "EF2F392ACE1A2C0728C6DB879DB9C23C9AEEA9F023108E210C59A9BFB378A380"
+      },
+      "reference": {
+        "Id": "held-4",
+        "Scenario": {
+          "Id": "H4",
+          "Gate": "D",
+          "Start": 0,
+          "Offset": 9,
+          "Reference161": "held-4",
+          "Field": 3,
+          "Spec": {
+            "Profile": {
+              "Id": 1,
+              "Name": "R1",
+              "Skills": {
+                "Start": 50,
+                "Speed": 50,
+                "SlideControl": 50,
+                "TrackReading": 50,
+                "PairRiding": 50,
+                "Adaptability": 50
+              },
+              "Style": {
+                "RiskTolerance": 0.5,
+                "LaneChangeTendency": 0.5,
+                "OutsidePreference": 0.5,
+                "SetupIndependence": 0.5
+              }
+            },
+            "Setup": {
+              "Gearing": 0.5,
+              "TractionBias": 0.5
+            },
+            "ReferenceMeters": 0,
+            "OffsetMeters": 9,
+            "SpeedMetersPerSecond": 0,
+            "TargetOffsetMeters": 9,
+            "InitialOutwardSpeed": 0,
+            "TrafficEnabled": false,
+            "Passive": false,
+            "Bullet": false
+          }
+        },
+        "Legal": true,
+        "TerminalScreen": true,
+        "ReservePass": false,
+        "Reason": "completed",
+        "CpuSeconds": 0,
+        "EndReference": 194.38938450813293,
+        "EndSeconds": 16.956953,
+        "MinPose": 1.5991999999999993,
+        "MinSweep": 1.562137014587688,
+        "MaxBetaDegrees": 2.832915366655316,
+        "MaxYaw": 0.47197145223617554,
+        "MaxSlip": 11.31631502211948,
+        "FirstBadTime": null,
+        "FirstBadReference": null,
+        "Entry": {
+          "Seconds": 3.9836847105490536,
+          "Kph": 47.810234046901876,
+          "X": 35,
+          "Y": -7.333910939118707,
+          "Distance": 35.06828766737567
+        },
+        "Apex": {
+          "Seconds": 10.870000000000001,
+          "Kph": 47.81012420654297,
+          "X": 52.910614013671875,
+          "Y": 61.44839096069336,
+          "Distance": 126.51317629591358
+        },
+        "Exit": {
+          "Seconds": 12.287400137510549,
+          "Kph": 47.78820643392188,
+          "X": 35.000000000034,
+          "Y": 66.27313961753127,
+          "Distance": 145.33341083552043
+        },
+        "After20": {
+          "Seconds": 13.79376791088191,
+          "Kph": 47.8013787824114,
+          "X": 15,
+          "Y": 66.392665043142,
+          "Distance": 165.33445773229622
+        },
+        "After40": {
+          "Seconds": 15.300042304404974,
+          "Kph": 47.80108428604758,
+          "X": -5,
+          "Y": 66.29669687731841,
+          "Distance": 185.33469031630906
+        },
+        "After62": {
+          "Seconds": 16.956952281729716,
+          "Kph": 47.80791995210349,
+          "X": -27,
+          "Y": 66.20133227198205,
+          "Distance": 207.3349585367278
+        },
+        "MinBendKph": 47.783310699462895,
+        "SectionSeconds": 14.106980978192876,
+        "BendSeconds": 8.303715426961496,
+        "TerminalBetaDegrees": 0.19921225708123225,
+        "TerminalBetaDotDegreesPerSecond": 5.15744577048568,
+        "TerminalOutwardMetersPerSecond": -0.2553137540817261,
+        "TerminalYaw": 0.24412590265274048,
+        "TerminalPose": 4.122870768111591,
+        "TerminalWheelSlip": 0.027630065334823914,
+        "ForecastContactQueries": 0,
+        "Fingerprint": "49969F71DCA9EC8CDD7C75C9553CCAD745B8693034F55B2E2FAEA4A314D490B3"
+      },
+      "source": "docs/experiments/trajectory-continuation/native/held-4.json.gz",
+      "SourceSha256": "DF7E2590EC8F06C2418DB6DBFB21E792FD2F47874E60CC0160AE6F5A78D37F59",
+      "Gain": 0.222412696742619
+    },
+    {
+      "result": {
+        "Id": "H5",
+        "Scenario": {
+          "Id": "H5",
+          "Gate": "A",
+          "Start": -1.5,
+          "Offset": 1.75,
+          "Reference161": null,
+          "Field": 0,
+          "Spec": {
+            "Profile": {
+              "Id": 1,
+              "Name": "R1",
+              "Skills": {
+                "Start": 50,
+                "Speed": 50,
+                "SlideControl": 50,
+                "TrackReading": 50,
+                "PairRiding": 50,
+                "Adaptability": 50
+              },
+              "Style": {
+                "RiskTolerance": 0.5,
+                "LaneChangeTendency": 0.5,
+                "OutsidePreference": 0.5,
+                "SetupIndependence": 0.5
+              }
+            },
+            "Setup": {
+              "Gearing": 0.5,
+              "TractionBias": 0.5
+            },
+            "ReferenceMeters": -1.5,
+            "OffsetMeters": 1.75,
+            "SpeedMetersPerSecond": 0,
+            "TargetOffsetMeters": 1.75,
+            "InitialOutwardSpeed": 0,
+            "TrafficEnabled": false,
+            "Passive": false,
+            "Bullet": false
+          }
+        },
+        "Legal": true,
+        "TerminalScreen": true,
+        "ReservePass": true,
+        "Reason": "reached goal",
+        "CpuSeconds": 0.125,
+        "EndReference": 210.31121038842548,
+        "EndSeconds": 14.626319,
+        "MinPose": 0.9895497707540636,
+        "MinSweep": 0.9148980436513683,
+        "MaxBetaDegrees": 11.61070717556034,
+        "MaxYaw": 0.9917927384376526,
+        "MaxSlip": 11.31631502211948,
+        "FirstBadTime": null,
+        "FirstBadReference": null,
+        "Entry": {
+          "Seconds": 4.029671552998267,
+          "Kph": 62.52432437472286,
+          "X": 35,
+          "Y": -2.3708882290527766,
+          "Distance": 36.61766734538646
+        },
+        "Apex": {
+          "Seconds": 9.57,
+          "Kph": 52.46966629028321,
+          "X": 48.950340270996094,
+          "Y": 60.25831604003906,
+          "Distance": 123.37670549377799
+        },
+        "Exit": {
+          "Seconds": 10.536190053000261,
+          "Kph": 58.91196448650929,
+          "X": 35.00000000002659,
+          "Y": 64.69963569305129,
+          "Distance": 138.0741300753888
+        },
+        "After20": {
+          "Seconds": 11.646731949467231,
+          "Kph": 71.14923824078369,
+          "X": 15,
+          "Y": 65.25349101605474,
+          "Distance": 158.14959052588722
+        },
+        "After40": {
+          "Seconds": 12.632369403811925,
+          "Kph": 73.79272674432485,
+          "X": -5,
+          "Y": 65.70505448364177,
+          "Distance": 178.20179986610657
+        },
+        "After62": {
+          "Seconds": 13.726318040715327,
+          "Kph": 71.81986798072631,
+          "X": -27,
+          "Y": 65.8090378416375,
+          "Distance": 200.21681972709885
+        },
+        "MinBendKph": 52.24037475585938,
+        "SectionSeconds": 10.640050997932065,
+        "BendSeconds": 6.506518500001994,
+        "TerminalBetaDegrees": 3.200583842549176,
+        "TerminalBetaDotDegreesPerSecond": 7.118146929717946,
+        "TerminalOutwardMetersPerSecond": -1.6695716381072998,
+        "TerminalYaw": 0.4493230879306793,
+        "TerminalPose": 3.65845109398017,
+        "TerminalWheelSlip": 0.020484171172192114,
+        "ForecastContactQueries": 1688,
+        "Fingerprint": "5FDA08DBC17047076FA0EECEE2F10E0D0917DD554FCE7BA69CC9D3D58D751DB4"
+      },
+      "reference": null,
+      "source": null,
+      "SourceSha256": null,
+      "Gain": null
+    },
+    {
+      "result": {
+        "Id": "H6",
+        "Scenario": {
+          "Id": "H6",
+          "Gate": "B",
+          "Start": -2,
+          "Offset": 4.4,
+          "Reference161": null,
+          "Field": 1,
+          "Spec": {
+            "Profile": {
+              "Id": 1,
+              "Name": "R1",
+              "Skills": {
+                "Start": 50,
+                "Speed": 50,
+                "SlideControl": 50,
+                "TrackReading": 50,
+                "PairRiding": 50,
+                "Adaptability": 50
+              },
+              "Style": {
+                "RiskTolerance": 0.5,
+                "LaneChangeTendency": 0.5,
+                "OutsidePreference": 0.5,
+                "SetupIndependence": 0.5
+              }
+            },
+            "Setup": {
+              "Gearing": 0.5,
+              "TractionBias": 0.5
+            },
+            "ReferenceMeters": -2,
+            "OffsetMeters": 4.4,
+            "SpeedMetersPerSecond": 0,
+            "TargetOffsetMeters": 4.4,
+            "InitialOutwardSpeed": 0,
+            "TrafficEnabled": false,
+            "Passive": false,
+            "Bullet": false
+          }
+        },
+        "Legal": true,
+        "TerminalScreen": true,
+        "ReservePass": true,
+        "Reason": "reached goal",
+        "CpuSeconds": 0.125,
+        "EndReference": 210.28874583682477,
+        "EndSeconds": 14.665231,
+        "MinPose": 0.9812832172437903,
+        "MinSweep": 0.9066994017883552,
+        "MaxBetaDegrees": 11.184249591878382,
+        "MaxYaw": 0.8324313759803772,
+        "MaxSlip": 11.31631502211948,
+        "FirstBadTime": null,
+        "FirstBadReference": null,
+        "Entry": {
+          "Seconds": 4.0817033434369385,
+          "Kph": 63.09939760785773,
+          "X": 35,
+          "Y": -2.2191207585590775,
+          "Distance": 37.080272351888254
+        },
+        "Apex": {
+          "Seconds": 9.63,
+          "Kph": 52.41506767272949,
+          "X": 48.9326057434082,
+          "Y": 60.258121490478516,
+          "Distance": 124.00894222594798
+        },
+        "Exit": {
+          "Seconds": 10.594190057248378,
+          "Kph": 59.145678178651174,
+          "X": 35.00000000000852,
+          "Y": 64.71754191785371,
+          "Distance": 138.69323165619582
+        },
+        "After20": {
+          "Seconds": 11.696435342007007,
+          "Kph": 71.53540008101766,
+          "X": 15,
+          "Y": 65.22343525133442,
+          "Distance": 158.75429378629104
+        },
+        "After40": {
+          "Seconds": 12.675928799857145,
+          "Kph": 74.1286327233812,
+          "X": -5,
+          "Y": 65.61849444930529,
+          "Distance": 178.78052373251433
+        },
+        "After62": {
+          "Seconds": 13.765230808188035,
+          "Kph": 71.82920448702296,
+          "X": -27,
+          "Y": 65.82370026422002,
+          "Distance": 200.7946692595546
+        },
+        "MinBendKph": 52.177972412109376,
+        "SectionSeconds": 10.620393347422835,
+        "BendSeconds": 6.512486713811439,
+        "TerminalBetaDegrees": 3.4112047163830623,
+        "TerminalBetaDotDegreesPerSecond": 7.094024975626253,
+        "TerminalOutwardMetersPerSecond": -1.6451642513275146,
+        "TerminalYaw": 0.45837825536727905,
+        "TerminalPose": 3.671676004559844,
+        "TerminalWheelSlip": 0.01205242016647511,
+        "ForecastContactQueries": 1687,
+        "Fingerprint": "7346C034B831CD688B41933ADC763F1F4600708188C443E899C87D1B64B3DF03"
+      },
+      "reference": null,
+      "source": null,
+      "SourceSha256": null,
+      "Gain": null
+    },
+    {
+      "result": {
+        "Id": "H7",
+        "Scenario": {
+          "Id": "H7",
+          "Gate": "C",
+          "Start": -1,
+          "Offset": 6.6,
+          "Reference161": null,
+          "Field": 2,
+          "Spec": {
+            "Profile": {
+              "Id": 1,
+              "Name": "R1",
+              "Skills": {
+                "Start": 50,
+                "Speed": 50,
+                "SlideControl": 50,
+                "TrackReading": 50,
+                "PairRiding": 50,
+                "Adaptability": 50
+              },
+              "Style": {
+                "RiskTolerance": 0.5,
+                "LaneChangeTendency": 0.5,
+                "OutsidePreference": 0.5,
+                "SetupIndependence": 0.5
+              }
+            },
+            "Setup": {
+              "Gearing": 0.5,
+              "TractionBias": 0.5
+            },
+            "ReferenceMeters": -1,
+            "OffsetMeters": 6.6,
+            "SpeedMetersPerSecond": 0,
+            "TargetOffsetMeters": 6.6,
+            "InitialOutwardSpeed": 0,
+            "TrafficEnabled": false,
+            "Passive": false,
+            "Bullet": false
+          }
+        },
+        "Legal": true,
+        "TerminalScreen": true,
+        "ReservePass": true,
+        "Reason": "reached goal",
+        "CpuSeconds": 0.125,
+        "EndReference": 210.2842689421352,
+        "EndSeconds": 14.677904,
+        "MinPose": 0.9573697097462517,
+        "MinSweep": 0.8821633969446492,
+        "MaxBetaDegrees": 10.892375269858208,
+        "MaxYaw": 0.7771744728088379,
+        "MaxSlip": 11.31631502211948,
+        "FirstBadTime": null,
+        "FirstBadReference": null,
+        "Entry": {
+          "Seconds": 3.9554810000000002,
+          "Kph": 63.03804016113281,
+          "X": 35,
+          "Y": -3.154473304748535,
+          "Distance": 36.1936640329659
+        },
+        "Apex": {
+          "Seconds": 9.72,
+          "Kph": 52.74550552368164,
+          "X": 47.96278762817383,
+          "Y": 60.69610595703125,
+          "Distance": 126.40931252017617
+        },
+        "Exit": {
+          "Seconds": 10.606889056452964,
+          "Kph": 59.1970738704432,
+          "X": 35.0000000000361,
+          "Y": 64.65631588850925,
+          "Distance": 139.99727017341584
+        },
+        "After20": {
+          "Seconds": 11.709105374584999,
+          "Kph": 71.55438966103263,
+          "X": 15,
+          "Y": 65.19975963879416,
+          "Distance": 160.06412469779445
+        },
+        "After40": {
+          "Seconds": 12.688478414605587,
+          "Kph": 74.1352071679522,
+          "X": -5,
+          "Y": 65.62090799328539,
+          "Distance": 180.09023285311196
+        },
+        "After62": {
+          "Seconds": 13.777903328127845,
+          "Kph": 71.76922763197751,
+          "X": -27,
+          "Y": 65.82327379979604,
+          "Distance": 202.10426248227412
+        },
+        "MinBendKph": 52.28428573608399,
+        "SectionSeconds": 10.759684971549863,
+        "BendSeconds": 6.651408056452963,
+        "TerminalBetaDegrees": 3.447532215848637,
+        "TerminalBetaDotDegreesPerSecond": 7.243681770955533,
+        "TerminalOutwardMetersPerSecond": -1.6487104892730713,
+        "TerminalYaw": 0.46196413040161133,
+        "TerminalPose": 3.670729038470269,
+        "TerminalWheelSlip": 0.013645217103782945,
+        "ForecastContactQueries": 1688,
+        "Fingerprint": "E72F7F7C8168200C89D74FD4DD4887019484C4092BA14685230D17A4222E2B51"
+      },
+      "reference": null,
+      "source": null,
+      "SourceSha256": null,
+      "Gain": null
+    },
+    {
+      "result": {
+        "Id": "H8",
+        "Scenario": {
+          "Id": "H8",
+          "Gate": "D",
+          "Start": -2.5,
+          "Offset": 8.5,
+          "Reference161": null,
+          "Field": 3,
+          "Spec": {
+            "Profile": {
+              "Id": 1,
+              "Name": "R1",
+              "Skills": {
+                "Start": 50,
+                "Speed": 50,
+                "SlideControl": 50,
+                "TrackReading": 50,
+                "PairRiding": 50,
+                "Adaptability": 50
+              },
+              "Style": {
+                "RiskTolerance": 0.5,
+                "LaneChangeTendency": 0.5,
+                "OutsidePreference": 0.5,
+                "SetupIndependence": 0.5
+              }
+            },
+            "Setup": {
+              "Gearing": 0.5,
+              "TractionBias": 0.5
+            },
+            "ReferenceMeters": -2.5,
+            "OffsetMeters": 8.5,
+            "SpeedMetersPerSecond": 0,
+            "TargetOffsetMeters": 8.5,
+            "InitialOutwardSpeed": 0,
+            "TrafficEnabled": false,
+            "Passive": false,
+            "Bullet": false
+          }
+        },
+        "Legal": true,
+        "TerminalScreen": true,
+        "ReservePass": true,
+        "Reason": "reached goal",
+        "CpuSeconds": 0.171875,
+        "EndReference": 210.31501436736175,
+        "EndSeconds": 15.035388000000001,
+        "MinPose": 0.9192600304518783,
+        "MinSweep": 0.8434607311372618,
+        "MaxBetaDegrees": 11.709114112610177,
+        "MaxYaw": 0.7708746790885925,
+        "MaxSlip": 11.31631502211948,
+        "FirstBadTime": null,
+        "FirstBadReference": null,
+        "Entry": {
+          "Seconds": 4.1878017820853,
+          "Kph": 63.10760392179783,
+          "X": 35,
+          "Y": -4.195019919322968,
+          "Distance": 37.81400376048211
+        },
+        "Apex": {
+          "Seconds": 10.120000000000001,
+          "Kph": 53.13085441589356,
+          "X": 47.24647903442383,
+          "Y": 60.97077560424805,
+          "Distance": 130.83526668697596
+        },
+        "Exit": {
+          "Seconds": 10.952481053123408,
+          "Kph": 59.1222435698275,
+          "X": 35.00000000000166,
+          "Y": 64.59710394732397,
+          "Distance": 143.6286743592271
+        },
+        "After20": {
+          "Seconds": 12.061659620062551,
+          "Kph": 71.33543951435989,
+          "X": 15,
+          "Y": 65.17093797063104,
+          "Distance": 163.7110694799571
+        },
+        "After40": {
+          "Seconds": 13.044327772508316,
+          "Kph": 73.97069673738808,
+          "X": -5,
+          "Y": 65.67011304433679,
+          "Distance": 183.74926780103468
+        },
+        "After62": {
+          "Seconds": 14.13538713792,
+          "Kph": 71.91701457824706,
+          "X": -27,
+          "Y": 65.81736895507812,
+          "Distance": 205.7623227412653
+        },
+        "MinBendKph": 52.457825088500975,
+        "SectionSeconds": 10.887650908067162,
+        "BendSeconds": 6.7646792710381085,
+        "TerminalBetaDegrees": 3.320333147589545,
+        "TerminalBetaDotDegreesPerSecond": 6.842430078359687,
+        "TerminalOutwardMetersPerSecond": -1.6382713317871094,
+        "TerminalYaw": 0.4502476453781128,
+        "TerminalPose": 3.666543528941139,
+        "TerminalWheelSlip": 0.018506382554162946,
+        "ForecastContactQueries": 1735,
+        "Fingerprint": "267D75B5A0520CBED97058032374472854DCAB2624603F4330FD726DD4DF4C53"
+      },
+      "reference": null,
+      "source": null,
+      "SourceSha256": null,
+      "Gain": null
+    }
+  ],
+  "Perturbation": {
+    "Id": "P1",
+    "Scenario": {
+      "Id": "H2",
+      "Gate": "B",
+      "Start": 0,
+      "Offset": 3,
+      "Reference161": "held-2",
+      "Field": 1,
+      "Spec": {
+        "Profile": {
+          "Id": 1,
+          "Name": "R1",
+          "Skills": {
+            "Start": 50,
+            "Speed": 50,
+            "SlideControl": 50,
+            "TrackReading": 50,
+            "PairRiding": 50,
+            "Adaptability": 50
+          },
+          "Style": {
+            "RiskTolerance": 0.5,
+            "LaneChangeTendency": 0.5,
+            "OutsidePreference": 0.5,
+            "SetupIndependence": 0.5
+          }
+        },
+        "Setup": {
+          "Gearing": 0.5,
+          "TractionBias": 0.5
+        },
+        "ReferenceMeters": 0,
+        "OffsetMeters": 3,
+        "SpeedMetersPerSecond": 0,
+        "TargetOffsetMeters": 3,
+        "InitialOutwardSpeed": 0,
+        "TrafficEnabled": false,
+        "Passive": false,
+        "Bullet": false
+      }
+    },
+    "Legal": true,
+    "TerminalScreen": true,
+    "ReservePass": true,
+    "Reason": "reached goal",
+    "CpuSeconds": 0.125,
+    "EndReference": 210.25037740394453,
+    "EndSeconds": 14.392695,
+    "MinPose": 0.9897108622510408,
+    "MinSweep": 0.9153970758039942,
+    "MaxBetaDegrees": 11.71036115337064,
+    "MaxYaw": 0.8338731527328491,
+    "MaxSlip": 11.31631502211948,
+    "FirstBadTime": null,
+    "FirstBadReference": null,
+    "Entry": {
+      "Seconds": 3.781792121401446,
+      "Kph": 63.02830259581779,
+      "X": 35,
+      "Y": -2.3634262440120795,
+      "Distance": 35.04013607998468
+    },
+    "Apex": {
+      "Seconds": 9.3,
+      "Kph": 52.37340888977051,
+      "X": 49.01777267456055,
+      "Y": 60.225502014160156,
+      "Distance": 121.7790770679785
+    },
+    "Exit": {
+      "Seconds": 10.26985425,
+      "Kph": 58.96664943695069,
+      "X": 35,
+      "Y": 64.71707153320312,
+      "Distance": 136.55637480319274
+    },
+    "After20": {
+      "Seconds": 11.387850858510935,
+      "Kph": 70.62043620812835,
+      "X": 15,
+      "Y": 65.29594111103233,
+      "Distance": 156.64027148596261
+    },
+    "After40": {
+      "Seconds": 12.383421855705222,
+      "Kph": 73.16079837928534,
+      "X": -5,
+      "Y": 65.84055756127665,
+      "Distance": 176.74205881495516
+    },
+    "After62": {
+      "Seconds": 13.492694709934344,
+      "Kph": 71.25882832197978,
+      "X": -27,
+      "Y": 65.70135545592021,
+      "Distance": 198.77793503607123
+    },
+    "MinBendKph": 52.20804061889648,
+    "SectionSeconds": 10.634499174231928,
+    "BendSeconds": 6.488062128598553,
+    "TerminalBetaDegrees": 2.2985011789899716,
+    "TerminalBetaDotDegreesPerSecond": 10.298822807421537,
+    "TerminalOutwardMetersPerSecond": -1.6455926895141602,
+    "TerminalYaw": 0.4593372046947479,
+    "TerminalPose": 3.5604610013212032,
+    "TerminalWheelSlip": 0.02905834728189526,
+    "ForecastContactQueries": 1639,
+    "Fingerprint": "6E456C807820F38782E0A59FC3AB381CAA25C6F002DB73D0AD0909F28E331762"
+  },
+  "TrainingWitness": {
+    "Id": "R1",
+    "Scenario": {
+      "Id": "T1",
+      "Gate": "A",
+      "Start": 0,
+      "Offset": 2.2,
+      "Reference161": null,
+      "Field": 0,
+      "Spec": {
+        "Profile": {
+          "Id": 1,
+          "Name": "R1",
+          "Skills": {
+            "Start": 50,
+            "Speed": 50,
+            "SlideControl": 50,
+            "TrackReading": 50,
+            "PairRiding": 50,
+            "Adaptability": 50
+          },
+          "Style": {
+            "RiskTolerance": 0.5,
+            "LaneChangeTendency": 0.5,
+            "OutsidePreference": 0.5,
+            "SetupIndependence": 0.5
+          }
+        },
+        "Setup": {
+          "Gearing": 0.5,
+          "TractionBias": 0.5
+        },
+        "ReferenceMeters": 0,
+        "OffsetMeters": 2.2,
+        "SpeedMetersPerSecond": 0,
+        "TargetOffsetMeters": 2.2,
+        "InitialOutwardSpeed": 0,
+        "TrafficEnabled": false,
+        "Passive": false,
+        "Bullet": false
+      }
+    },
+    "Legal": true,
+    "TerminalScreen": true,
+    "ReservePass": true,
+    "Reason": "reached goal",
+    "CpuSeconds": 0.140625,
+    "EndReference": 210.2891296526642,
+    "EndSeconds": 14.395588,
+    "MinPose": 0.990171587088923,
+    "MinSweep": 0.9157918934887792,
+    "MaxBetaDegrees": 11.43224556441454,
+    "MaxYaw": 0.7985414266586304,
+    "MaxSlip": 11.31631502211948,
+    "FirstBadTime": null,
+    "FirstBadReference": null,
+    "Entry": {
+      "Seconds": 3.8005683378588055,
+      "Kph": 62.832058971218586,
+      "X": 35,
+      "Y": -2.4824046585521002,
+      "Distance": 35.061975059759206
+    },
+    "Apex": {
+      "Seconds": 9.32,
+      "Kph": 52.423448181152345,
+      "X": 48.98143768310547,
+      "Y": 60.244110107421875,
+      "Distance": 121.86743997783196
+    },
+    "Exit": {
+      "Seconds": 10.28663152717967,
+      "Kph": 58.96282884255954,
+      "X": 35.00000000001649,
+      "Y": 64.7132097508787,
+      "Distance": 136.6028579029678
+    },
+    "After20": {
+      "Seconds": 11.402490077720454,
+      "Kph": 70.80139592953105,
+      "X": 15,
+      "Y": 65.27725267765999,
+      "Distance": 156.68443166254985
+    },
+    "After40": {
+      "Seconds": 12.394132280155857,
+      "Kph": 73.42674336739815,
+      "X": -5,
+      "Y": 65.79051275334385,
+      "Distance": 176.76534241305473
+    },
+    "After62": {
+      "Seconds": 13.495587518367206,
+      "Kph": 71.53389211547051,
+      "X": -27,
+      "Y": 65.76902851615611,
+      "Distance": 198.78716925111013
+    },
+    "MinBendKph": 52.24449119567871,
+    "SectionSeconds": 10.62360593980794,
+    "BendSeconds": 6.4860631893208645,
+    "TerminalBetaDegrees": 2.890187261755781,
+    "TerminalBetaDotDegreesPerSecond": 8.192743460863852,
+    "TerminalOutwardMetersPerSecond": -1.6869490146636963,
+    "TerminalYaw": 0.45443907380104065,
+    "TerminalPose": 3.620930484036339,
+    "TerminalWheelSlip": 0.02863782389306202,
+    "ForecastContactQueries": 1641,
+    "Fingerprint": "77A2EF94466DD1D8C0CEDDE189E38939B2F3D6932F1BE1D29B9E621E7012EE17"
+  }
+}
