@@ -1,0 +1,176 @@
+{
+  "Label": "held-2",
+  "Baseline": false,
+  "Validation": true,
+  "Scenario": {
+    "Id": "unseen-B-in",
+    "Gate": "B",
+    "OffsetMeters": 3,
+    "Held": true,
+    "Role": "independent"
+  },
+  "Spec": {
+    "Profile": {
+      "Id": 1,
+      "Name": "R1",
+      "Skills": {
+        "Start": 50,
+        "Speed": 50,
+        "SlideControl": 50,
+        "TrackReading": 50,
+        "PairRiding": 50,
+        "Adaptability": 50
+      },
+      "Style": {
+        "RiskTolerance": 0.5,
+        "LaneChangeTendency": 0.5,
+        "OutsidePreference": 0.5,
+        "SetupIndependence": 0.5
+      }
+    },
+    "Setup": {
+      "Gearing": 0.5,
+      "TractionBias": 0.5
+    },
+    "ReferenceMeters": 0,
+    "OffsetMeters": 3,
+    "SpeedMetersPerSecond": 0,
+    "TargetOffsetMeters": 3,
+    "InitialOutwardSpeed": 0,
+    "TrafficEnabled": false,
+    "Passive": false,
+    "Bullet": false
+  },
+  "Initial": {
+    "Input": {
+      "Rider": {
+        "Id": 1,
+        "Position": {
+          "X": 0,
+          "Y": -3
+        },
+        "Velocity": {
+          "X": 0,
+          "Y": 0
+        },
+        "Heading": 0,
+        "AngularVelocity": 0,
+        "Road": {
+          "Segment": 0,
+          "Progress": 0,
+          "ReferenceMeters": 0,
+          "OffsetMeters": 3,
+          "Heading": 0,
+          "RadiusMeters": 0,
+          "CornerProgress": 0,
+          "Tangent": {
+            "X": 1,
+            "Y": 0
+          },
+          "Outward": {
+            "X": 0,
+            "Y": -1
+          },
+          "IsTurn": false
+        },
+        "TotalReferenceMeters": 0,
+        "DistanceMeters": 0,
+        "Activity": 0,
+        "Drive": 0,
+        "TargetOffsetMeters": 3,
+        "Impairment": 0,
+        "Context": 0,
+        "Speed": 0,
+        "ForwardSpeed": 0,
+        "SideSpeed": 0,
+        "SlideRadians": 0
+      },
+      "Time": 0,
+      "Omega": 0,
+      "Steering": 0,
+      "Active": {
+        "SteeringRadians": 0,
+        "Drive": 0
+      },
+      "Pending": [],
+      "NextReview": 0
+    },
+    "CrankOmega": 418.87902047863906
+  },
+  "ExpectedInitial": {
+    "Input": {
+      "Rider": {
+        "Id": 1,
+        "Position": {
+          "X": 0,
+          "Y": -3
+        },
+        "Velocity": {
+          "X": 0,
+          "Y": 0
+        },
+        "Heading": 0,
+        "AngularVelocity": 0,
+        "Road": {
+          "Segment": 0,
+          "Progress": 0,
+          "ReferenceMeters": 0,
+          "OffsetMeters": 3,
+          "Heading": 0,
+          "RadiusMeters": 0,
+          "CornerProgress": 0,
+          "Tangent": {
+            "X": 1,
+            "Y": 0
+          },
+          "Outward": {
+            "X": 0,
+            "Y": -1
+          },
+          "IsTurn": false
+        },
+        "TotalReferenceMeters": 0,
+        "DistanceMeters": 0,
+        "Activity": 0,
+        "Drive": 0,
+        "TargetOffsetMeters": 3,
+        "Impairment": 0,
+        "Context": 0,
+        "Speed": 0,
+        "ForwardSpeed": 0,
+        "SideSpeed": 0,
+        "SlideRadians": 0
+      },
+      "Time": 0,
+      "Omega": 0,
+      "Steering": 0,
+      "Active": {
+        "SteeringRadians": 0,
+        "Drive": 0
+      },
+      "Pending": [],
+      "NextReview": 0
+    },
+    "CrankOmega": 418.87902047863906
+  },
+  "ActualMassKg": 147,
+  "ActualInertiaKgMetersSquared": 52.72097,
+  "StoppedStart": true,
+  "RequiredLaps": 3,
+  "CompletedLaps": 3,
+  "FinishSeconds": 79.60283030281548,
+  "Pass": true,
+  "Complete": true,
+  "MinimumPoseMeters": 0.8784658485879686,
+  "MinimumSweepMeters": 0.8069464282771279,
+  "MaximumBetaDegrees": 5.733751955801018,
+  "Contacts": 0,
+  "AcceptedDecisions": 399,
+  "Abstain": 0,
+  "Outcome": "completed",
+  "Fingerprint": "C2B58842CC50BFC97FEBBEDD00AAE83FAB0FACDCF85C30115193DD3932A3BA42",
+  "TotalCpuSeconds": 1454.640625,
+  "ControllerCpuSeconds": 1434.796875,
+  "ChargedCpuSeconds": 1455.9375,
+  "Scope": "ONE continuous original Box2D world from stopped start, three-lap target, autonomous decisions only, S from0; DNF never promoted"
+}
