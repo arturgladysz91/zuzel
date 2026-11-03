@@ -1,0 +1,590 @@
+{
+  "Base": "2bb03d1e604a521202bd8f90aa70f8db0dc5632d",
+  "ControllerReference": "85a5ee3295c2dd983fbacb21859649f794cc5ba5",
+  "Verdict": "PARTIAL",
+  "Recommendation": "Reject aggregation as a worthwhile planner optimization; keep OFF research harness and independent economical evidence format.",
+  "NativeGatePassed": false,
+  "NativeWorlds": 0,
+  "MicrobenchmarkBlocks": 3,
+  "ActualFullReviews": 18,
+  "StandaloneCertificateProbes": 0,
+  "CpuSecondsTotal": 94.734375,
+  "Cases": [
+    {
+      "Label": "m1-nominal",
+      "Context": {
+        "Native": "native-dev",
+        "Decision": 102,
+        "Observed": {
+          "Time": 20.39999999999996
+        },
+        "PreviousReconstructedHash": "BA636F43BDD5AC76B0BD6F95C45235E179EE8F8094E99E2C79FDB77905958A6D",
+        "PreviousArchivedHash": "BA636F43BDD5AC76B0BD6F95C45235E179EE8F8094E99E2C79FDB77905958A6D",
+        "ArchivedHash": "D355F69A3FB72662B094BD9FF64B1B73A825F26378B85CC1FFE4918CAE4144FD"
+      },
+      "ExactArchived161": true,
+      "IdenticalCountersAndGuardCalls": true,
+      "GuardCalls": 6494,
+      "PhysicalCounters": {
+        "Search": {
+          "ShortlistK1": false,
+          "Complete27K1Batches": 0,
+          "ShortRankingCandidates": 0,
+          "FullHorizonCandidates": 0,
+          "SeedSharedPrefixes": 0,
+          "SharedPrefixContactQueriesSaved": 0,
+          "FullK1Executions": 0,
+          "HeldContinuationRequests": 0,
+          "ActualForecasts": 985,
+          "ActualContacts": 19771,
+          "PredictionRequests": 985,
+          "PredictionHits": 0,
+          "SeedRequests": 0,
+          "SeedHits": 0,
+          "CrossReviewHits": 0,
+          "InactivePrefixRequests": 985,
+          "BudgetFallbacks": 0,
+          "BudgetReason": null,
+          "CacheEntries": 985,
+          "SeedCacheEntries": 0,
+          "FastBoundaryQueries": 20712,
+          "BoundaryFallbackQueries": 0
+        },
+        "SearchWork": {
+          "ForecastRequests": 985,
+          "PhysicalForecastCalls": 985,
+          "ContactQueries": 19771
+        },
+        "SearchMemo": {
+          "KernelHits": 0,
+          "KernelMisses": 0,
+          "ProjectionHits": 0,
+          "ProjectionMisses": 0,
+          "ClearanceHits": 0
+        },
+        "IndependentMemo": {
+          "KernelHits": 0,
+          "KernelMisses": 0,
+          "ProjectionHits": 0,
+          "ProjectionMisses": 0,
+          "ClearanceHits": 0
+        },
+        "FullK1": 0,
+        "Forecasts": 1979,
+        "Contacts": 39722,
+        "FeedbackQueries": 0,
+        "IndependentForecasts": 994,
+        "IndependentContacts": 19951,
+        "TransitionRequests": 3253,
+        "SearchHits": 1265,
+        "IndependentHits": 9,
+        "RolloutHits": 0,
+        "IndependentComparisons": 994,
+        "PrimedPrefixes": 896,
+        "Verification": "Fresh per-review DAG; every unique physical prefix repropagated independently; no search or historical result accepted as proof",
+        "options": {
+          "Memoize": true,
+          "ValidatedIndependent": true,
+          "ShareCurrentPolicies": true,
+          "ShortlistK1": false,
+          "FastIndependent": true,
+          "Regime": 1,
+          "RankPolicies": false,
+          "StrictSeeds": true
+        }
+      },
+      "PreparationCpuSeconds": 1.171875,
+      "Pairs": [
+        {
+          "Pair": 1,
+          "BeforeCpuSeconds": 3.09375,
+          "AfterCpuSeconds": 3.078125,
+          "Reduction": 0.005050505050505083,
+          "WholeReviewReduction": 0.08247422680412375
+        },
+        {
+          "Pair": 2,
+          "BeforeCpuSeconds": 3.140625,
+          "AfterCpuSeconds": 2.9375,
+          "Reduction": 0.06467661691542292,
+          "WholeReviewReduction": 0.04528301886792452
+        }
+      ],
+      "Modes": {
+        "Fine": {
+          "ReviewCpuSeconds": [
+            4.546875,
+            4.140625
+          ],
+          "ReviewMedianCpuSeconds": 4.34375,
+          "ConditionalCpuSeconds": [
+            3.09375,
+            3.140625
+          ],
+          "ConditionalMedianCpuSeconds": 3.1171875,
+          "ConditionalAllocatedBytes": [
+            2293122960,
+            2293090232
+          ],
+          "OutsideRolloutsCpuSeconds": [
+            0.078125,
+            0.0
+          ],
+          "Profiler": {
+            "ClockReads": 9058,
+            "PhaseRequests": 4497,
+            "ScopeAllocations": 4497,
+            "SamePhaseNoops": 0
+          }
+        },
+        "Aggregate": {
+          "ReviewCpuSeconds": [
+            4.171875,
+            3.953125
+          ],
+          "ReviewMedianCpuSeconds": 4.0625,
+          "ConditionalCpuSeconds": [
+            3.078125,
+            2.9375
+          ],
+          "ConditionalMedianCpuSeconds": 3.0078125,
+          "ConditionalAllocatedBytes": [
+            2292158776,
+            2292164136
+          ],
+          "OutsideRolloutsCpuSeconds": [
+            0.015625,
+            0.015625
+          ],
+          "Profiler": {
+            "ClockReads": 180,
+            "PhaseRequests": 4528,
+            "ScopeAllocations": 58,
+            "SamePhaseNoops": 4470
+          }
+        },
+        "Disabled": {
+          "ReviewCpuSeconds": [
+            4.171875,
+            4
+          ],
+          "ReviewMedianCpuSeconds": 4.0859375,
+          "ConditionalCpuSeconds": [
+            3.15625,
+            3.046875
+          ],
+          "ConditionalMedianCpuSeconds": 3.1015625,
+          "ConditionalAllocatedBytes": [
+            2292305920,
+            2292296736
+          ],
+          "OutsideRolloutsCpuSeconds": [
+            0.0,
+            0.0
+          ],
+          "Profiler": {
+            "ClockReads": 64,
+            "PhaseRequests": 4497,
+            "ScopeAllocations": 0,
+            "SamePhaseNoops": 0
+          }
+        }
+      },
+      "GatePassed": false
+    },
+    {
+      "Label": "m2-tight",
+      "Context": {
+        "Native": "held-3",
+        "Decision": 209,
+        "Observed": {
+          "Time": 41.800000000000004
+        },
+        "PreviousReconstructedHash": "2432C97C7BBF1BD180E1DB6A2DFC585FF166AB1700B30B02A400D76FF74FF60D",
+        "PreviousArchivedHash": "2432C97C7BBF1BD180E1DB6A2DFC585FF166AB1700B30B02A400D76FF74FF60D",
+        "ArchivedHash": "3419B810324F6A5C51E64CB07315C6F8267188D351D7AD03FF87B03CBAA09A86"
+      },
+      "ExactArchived161": true,
+      "IdenticalCountersAndGuardCalls": true,
+      "GuardCalls": 3174,
+      "PhysicalCounters": {
+        "Search": {
+          "ShortlistK1": false,
+          "Complete27K1Batches": 0,
+          "ShortRankingCandidates": 0,
+          "FullHorizonCandidates": 0,
+          "SeedSharedPrefixes": 0,
+          "SharedPrefixContactQueriesSaved": 0,
+          "FullK1Executions": 0,
+          "HeldContinuationRequests": 0,
+          "ActualForecasts": 0,
+          "ActualContacts": 0,
+          "PredictionRequests": 0,
+          "PredictionHits": 0,
+          "SeedRequests": 0,
+          "SeedHits": 0,
+          "CrossReviewHits": 0,
+          "InactivePrefixRequests": 0,
+          "BudgetFallbacks": 0,
+          "BudgetReason": null,
+          "CacheEntries": 0,
+          "SeedCacheEntries": 0,
+          "FastBoundaryQueries": 0,
+          "BoundaryFallbackQueries": 0
+        },
+        "SearchWork": {
+          "ForecastRequests": 0,
+          "PhysicalForecastCalls": 0,
+          "ContactQueries": 0
+        },
+        "SearchMemo": {
+          "KernelHits": 0,
+          "KernelMisses": 0,
+          "ProjectionHits": 0,
+          "ProjectionMisses": 0,
+          "ClearanceHits": 0
+        },
+        "IndependentMemo": {
+          "KernelHits": 0,
+          "KernelMisses": 0,
+          "ProjectionHits": 0,
+          "ProjectionMisses": 0,
+          "ClearanceHits": 0
+        },
+        "FullK1": 0,
+        "Forecasts": 643,
+        "Contacts": 12896,
+        "FeedbackQueries": 0,
+        "IndependentForecasts": 643,
+        "IndependentContacts": 12896,
+        "TransitionRequests": 1593,
+        "SearchHits": 941,
+        "IndependentHits": 9,
+        "RolloutHits": 0,
+        "IndependentComparisons": 643,
+        "PrimedPrefixes": 716,
+        "Verification": "Fresh per-review DAG; every unique physical prefix repropagated independently; no search or historical result accepted as proof",
+        "options": {
+          "Memoize": true,
+          "ValidatedIndependent": true,
+          "ShareCurrentPolicies": true,
+          "ShortlistK1": false,
+          "FastIndependent": true,
+          "Regime": 1,
+          "RankPolicies": false,
+          "StrictSeeds": true
+        }
+      },
+      "PreparationCpuSeconds": 0.859375,
+      "Pairs": [
+        {
+          "Pair": 1,
+          "BeforeCpuSeconds": 1.515625,
+          "AfterCpuSeconds": 1.65625,
+          "Reduction": -0.09278350515463907,
+          "WholeReviewReduction": -0.20945945945945943
+        },
+        {
+          "Pair": 2,
+          "BeforeCpuSeconds": 1.421875,
+          "AfterCpuSeconds": 1.4375,
+          "Reduction": -0.01098901098901095,
+          "WholeReviewReduction": -0.007518796992481258
+        }
+      ],
+      "Modes": {
+        "Fine": {
+          "ReviewCpuSeconds": [
+            2.3125,
+            2.078125
+          ],
+          "ReviewMedianCpuSeconds": 2.1953125,
+          "ConditionalCpuSeconds": [
+            1.515625,
+            1.421875
+          ],
+          "ConditionalMedianCpuSeconds": 1.46875,
+          "ConditionalAllocatedBytes": [
+            1310079552,
+            1310131816
+          ],
+          "OutsideRolloutsCpuSeconds": [
+            0.0,
+            0.03125
+          ],
+          "Profiler": {
+            "ClockReads": 5090,
+            "PhaseRequests": 2522,
+            "ScopeAllocations": 2522,
+            "SamePhaseNoops": 0
+          }
+        },
+        "Aggregate": {
+          "ReviewCpuSeconds": [
+            2.796875,
+            2.09375
+          ],
+          "ReviewMedianCpuSeconds": 2.4453125,
+          "ConditionalCpuSeconds": [
+            1.65625,
+            1.4375
+          ],
+          "ConditionalMedianCpuSeconds": 1.546875,
+          "ConditionalAllocatedBytes": [
+            1309701520,
+            1309616072
+          ],
+          "OutsideRolloutsCpuSeconds": [
+            0.046875,
+            0.015625
+          ],
+          "Profiler": {
+            "ClockReads": 144,
+            "PhaseRequests": 2544,
+            "ScopeAllocations": 49,
+            "SamePhaseNoops": 2495
+          }
+        },
+        "Disabled": {
+          "ReviewCpuSeconds": [
+            2.109375,
+            2.046875
+          ],
+          "ReviewMedianCpuSeconds": 2.078125,
+          "ConditionalCpuSeconds": [
+            1.375,
+            1.4375
+          ],
+          "ConditionalMedianCpuSeconds": 1.40625,
+          "ConditionalAllocatedBytes": [
+            1309646896,
+            1309613528
+          ],
+          "OutsideRolloutsCpuSeconds": [
+            0.03125,
+            0.0
+          ],
+          "Profiler": {
+            "ClockReads": 46,
+            "PhaseRequests": 2522,
+            "ScopeAllocations": 0,
+            "SamePhaseNoops": 0
+          }
+        }
+      },
+      "GatePassed": false
+    },
+    {
+      "Label": "m3-prepare",
+      "Context": {
+        "Native": "held-2",
+        "Decision": 344,
+        "Observed": {
+          "Time": 68.8
+        },
+        "PreviousReconstructedHash": "45638DF444FF8D957FD968C0DE930BFC9423A3E6CF10364C516D17A6E63A804A",
+        "PreviousArchivedHash": "45638DF444FF8D957FD968C0DE930BFC9423A3E6CF10364C516D17A6E63A804A",
+        "ArchivedHash": "E799288AF7A8C9B0142FA69587791A9E79EAC2AB66AA68112137349EBF5CAC7F"
+      },
+      "ExactArchived161": true,
+      "IdenticalCountersAndGuardCalls": true,
+      "GuardCalls": 3483,
+      "PhysicalCounters": {
+        "Search": {
+          "ShortlistK1": false,
+          "Complete27K1Batches": 0,
+          "ShortRankingCandidates": 0,
+          "FullHorizonCandidates": 0,
+          "SeedSharedPrefixes": 0,
+          "SharedPrefixContactQueriesSaved": 0,
+          "FullK1Executions": 0,
+          "HeldContinuationRequests": 0,
+          "ActualForecasts": 410,
+          "ActualContacts": 8221,
+          "PredictionRequests": 410,
+          "PredictionHits": 0,
+          "SeedRequests": 0,
+          "SeedHits": 0,
+          "CrossReviewHits": 0,
+          "InactivePrefixRequests": 410,
+          "BudgetFallbacks": 0,
+          "BudgetReason": null,
+          "CacheEntries": 410,
+          "SeedCacheEntries": 0,
+          "FastBoundaryQueries": 8618,
+          "BoundaryFallbackQueries": 0
+        },
+        "SearchWork": {
+          "ForecastRequests": 410,
+          "PhysicalForecastCalls": 410,
+          "ContactQueries": 8221
+        },
+        "SearchMemo": {
+          "KernelHits": 0,
+          "KernelMisses": 0,
+          "ProjectionHits": 0,
+          "ProjectionMisses": 0,
+          "ClearanceHits": 0
+        },
+        "IndependentMemo": {
+          "KernelHits": 0,
+          "KernelMisses": 0,
+          "ProjectionHits": 0,
+          "ProjectionMisses": 0,
+          "ClearanceHits": 0
+        },
+        "FullK1": 0,
+        "Forecasts": 885,
+        "Contacts": 17754,
+        "FeedbackQueries": 0,
+        "IndependentForecasts": 475,
+        "IndependentContacts": 9533,
+        "TransitionRequests": 1746,
+        "SearchHits": 852,
+        "IndependentHits": 9,
+        "RolloutHits": 0,
+        "IndependentComparisons": 475,
+        "PrimedPrefixes": 673,
+        "Verification": "Fresh per-review DAG; every unique physical prefix repropagated independently; no search or historical result accepted as proof",
+        "options": {
+          "Memoize": true,
+          "ValidatedIndependent": true,
+          "ShareCurrentPolicies": true,
+          "ShortlistK1": false,
+          "FastIndependent": true,
+          "Regime": 1,
+          "RankPolicies": false,
+          "StrictSeeds": true
+        }
+      },
+      "PreparationCpuSeconds": 0.734375,
+      "Pairs": [
+        {
+          "Pair": 1,
+          "BeforeCpuSeconds": 1.859375,
+          "AfterCpuSeconds": 1.515625,
+          "Reduction": 0.18487394957983194,
+          "WholeReviewReduction": 0.09169550173010377
+        },
+        {
+          "Pair": 2,
+          "BeforeCpuSeconds": 1.5625,
+          "AfterCpuSeconds": 1.5,
+          "Reduction": 0.040000000000000036,
+          "WholeReviewReduction": 0.016981132075471694
+        }
+      ],
+      "Modes": {
+        "Fine": {
+          "ReviewCpuSeconds": [
+            9.03125,
+            8.28125
+          ],
+          "ReviewMedianCpuSeconds": 8.65625,
+          "ConditionalCpuSeconds": [
+            1.859375,
+            1.5625
+          ],
+          "ConditionalMedianCpuSeconds": 1.7109375,
+          "ConditionalAllocatedBytes": [
+            1167182848,
+            1167177088
+          ],
+          "OutsideRolloutsCpuSeconds": [
+            6.328125,
+            6.171875
+          ],
+          "Profiler": {
+            "ClockReads": 4884,
+            "PhaseRequests": 2411,
+            "ScopeAllocations": 2411,
+            "SamePhaseNoops": 0
+          }
+        },
+        "Aggregate": {
+          "ReviewCpuSeconds": [
+            8.203125,
+            8.140625
+          ],
+          "ReviewMedianCpuSeconds": 8.171875,
+          "ConditionalCpuSeconds": [
+            1.515625,
+            1.5
+          ],
+          "ConditionalMedianCpuSeconds": 1.5078125,
+          "ConditionalAllocatedBytes": [
+            1166755504,
+            1166756720
+          ],
+          "OutsideRolloutsCpuSeconds": [
+            6.03125,
+            6.109375
+          ],
+          "Profiler": {
+            "ClockReads": 514,
+            "PhaseRequests": 2441,
+            "ScopeAllocations": 226,
+            "SamePhaseNoops": 2215
+          }
+        },
+        "Disabled": {
+          "ReviewCpuSeconds": [
+            8.421875,
+            8.234375
+          ],
+          "ReviewMedianCpuSeconds": 8.328125,
+          "ConditionalCpuSeconds": [
+            1.578125,
+            1.484375
+          ],
+          "ConditionalMedianCpuSeconds": 1.53125,
+          "ConditionalAllocatedBytes": [
+            1166745608,
+            1166761600
+          ],
+          "OutsideRolloutsCpuSeconds": [
+            6.296875,
+            6.234375
+          ],
+          "Profiler": {
+            "ClockReads": 62,
+            "PhaseRequests": 2411,
+            "ScopeAllocations": 0,
+            "SamePhaseNoops": 0
+          }
+        }
+      },
+      "GatePassed": false
+    }
+  ],
+  "Calibration": [
+    {
+      "Label": "m1-nominal",
+      "NetClockCpuSeconds": 0.390625,
+      "CpuMicrosecondsPerRead": 3.90625,
+      "BytesPerRead": 80.05576,
+      "NetScopeCpuSeconds": 0.171875,
+      "CpuMicrosecondsPerScope": 8.59375,
+      "BytesPerScope": 288.024
+    },
+    {
+      "Label": "m2-tight",
+      "NetClockCpuSeconds": 0.390625,
+      "CpuMicrosecondsPerRead": 3.90625,
+      "BytesPerRead": 80.00208,
+      "NetScopeCpuSeconds": 0.171875,
+      "CpuMicrosecondsPerScope": 8.59375,
+      "BytesPerScope": 288.024
+    },
+    {
+      "Label": "m3-prepare",
+      "NetClockCpuSeconds": 0.375,
+      "CpuMicrosecondsPerRead": 3.75,
+      "BytesPerRead": 80.00208,
+      "NetScopeCpuSeconds": 0.171875,
+      "CpuMicrosecondsPerScope": 8.59375,
+      "BytesPerScope": 288.024
+    }
+  ],
+  "Limits": "Three finite archived contexts, two repetitions per mode; cold first trial visible; process CPU quantization and GC/JIT noise. Not a native race speedup or an all-input equivalence proof."
+}

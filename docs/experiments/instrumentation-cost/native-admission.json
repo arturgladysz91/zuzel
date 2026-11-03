@@ -1,0 +1,32 @@
+{
+  "GatePassed": false,
+  "NativeWorldsStarted": 0,
+  "RequiredReduction": 0.1,
+  "Reason": "All three comparable conditional-continuation scopes must pass both counterbalanced pairs. This condition failed; no native development or held validation is admissible.",
+  "CaseResults": [
+    {
+      "Label": "m1-nominal",
+      "PairReductions": [
+        0.005050505050505083,
+        0.06467661691542292
+      ],
+      "Pass": false
+    },
+    {
+      "Label": "m2-tight",
+      "PairReductions": [
+        -0.09278350515463907,
+        -0.01098901098901095
+      ],
+      "Pass": false
+    },
+    {
+      "Label": "m3-prepare",
+      "PairReductions": [
+        0.18487394957983194,
+        0.040000000000000036
+      ],
+      "Pass": false
+    }
+  ]
+}
