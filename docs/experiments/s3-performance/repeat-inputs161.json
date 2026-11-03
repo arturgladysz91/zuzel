@@ -1,0 +1,47 @@
+{
+  "scope": "Read-only exact serialized full Start + orderedActions + Goal + SafetyGoal within one frozen configuration; excludes arrival/safety metadata from identity. No new forecasts.",
+  "runs": [
+    {
+      "label": "native-dev",
+      "minimum_unique": 3,
+      "maximum_unique": 9,
+      "duplicate_full_input_tuples": 6,
+      "review_count": 400
+    },
+    {
+      "label": "held-0",
+      "minimum_unique": 3,
+      "maximum_unique": 9,
+      "duplicate_full_input_tuples": 6,
+      "review_count": 400
+    },
+    {
+      "label": "held-1",
+      "minimum_unique": 3,
+      "maximum_unique": 9,
+      "duplicate_full_input_tuples": 6,
+      "review_count": 396
+    },
+    {
+      "label": "held-2",
+      "minimum_unique": 3,
+      "maximum_unique": 9,
+      "duplicate_full_input_tuples": 6,
+      "review_count": 399
+    },
+    {
+      "label": "held-3",
+      "minimum_unique": 3,
+      "maximum_unique": 9,
+      "duplicate_full_input_tuples": 6,
+      "review_count": 402
+    },
+    {
+      "label": "held-4",
+      "minimum_unique": 3,
+      "maximum_unique": 9,
+      "duplicate_full_input_tuples": 6,
+      "review_count": 398
+    }
+  ]
+}
