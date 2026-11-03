@@ -1,0 +1,195 @@
+{
+  "Label": "d1-straight",
+  "PolicyHash": "2B6BCA461AD1E4C061D96D2F30432F1228D4FB75AAE7DC2E629BBA30EA0D76B5",
+  "Initial": {
+    "Input": {
+      "Rider": {
+        "Id": 1,
+        "Position": {
+          "X": 28.549202,
+          "Y": 66.38513
+        },
+        "Velocity": {
+          "X": -13.277834,
+          "Y": 0.10511203
+        },
+        "Heading": 3.1357868,
+        "AngularVelocity": 0.017869025,
+        "Road": {
+          "Segment": 4,
+          "Progress": 0.10404512959141884,
+          "ReferenceMeters": 138.84017300605774,
+          "OffsetMeters": 3.7221116678065016,
+          "Heading": 3.141592653589793,
+          "RadiusMeters": 0,
+          "CornerProgress": 0,
+          "Tangent": {
+            "X": -1,
+            "Y": 1.2246469E-16
+          },
+          "Outward": {
+            "X": 1.2246469E-16,
+            "Y": 1
+          },
+          "IsTurn": false
+        },
+        "TotalReferenceMeters": 138.84017300605774,
+        "DistanceMeters": 149.48475935869646,
+        "Activity": 0,
+        "Drive": 0.069503516,
+        "TargetOffsetMeters": 3.5,
+        "Impairment": 0,
+        "Context": 2,
+        "Speed": 13.27825,
+        "ForwardSpeed": 13.27822,
+        "SideSpeed": -0.028021157,
+        "SlideRadians": 0.0021103066
+      },
+      "Time": 12.599999999999987,
+      "Omega": 41.177034134833946,
+      "Steering": 0.0015857895,
+      "Active": {
+        "SteeringRadians": 0.0015857895,
+        "Drive": 0.069503516
+      },
+      "Pending": [
+        {
+          "ObservedAt": 12.399999999999988,
+          "ActivationAt": 12.639999999999988,
+          "Action": {
+            "SteeringRadians": 0.0012910864,
+            "Drive": 0.067881346
+          }
+        }
+      ],
+      "NextReview": 12.599999999999987
+    },
+    "CrankOmega": 370.76173030037694
+  },
+  "Goal": 191.38937497138977,
+  "SafetyGoal": 350.77874994277954,
+  "Baseline161Arrival": 16.557669577958457,
+  "TrackArrival": 16.45633402156458,
+  "GatePassed": true,
+  "Error": null,
+  "Outcomes": [
+    {
+      "Maneuver": "Track",
+      "Legal": true,
+      "Arrival": 16.45633402156458,
+      "Commands": 83,
+      "EndReference": 351.8309578895569,
+      "MinimumGap": 3.7744703337263386,
+      "Sweep": 3.705276785270493,
+      "Reason": "legal complete forecast; swept physical footprint\u003E=0.5m",
+      "First": {
+        "SteeringRadians": 0.00076427957,
+        "Drive": 0.3831727
+      },
+      "CpuSeconds": 3.90625
+    },
+    {
+      "Maneuver": "Prepare",
+      "Legal": true,
+      "Arrival": 16.718803410823764,
+      "Commands": 90,
+      "EndReference": 351.6702256202698,
+      "MinimumGap": 4.057847818731076,
+      "Sweep": 3.9940914303946453,
+      "Reason": "legal complete forecast; swept physical footprint\u003E=0.5m",
+      "First": {
+        "SteeringRadians": -8.542144E-05,
+        "Drive": 0
+      },
+      "CpuSeconds": 3.421875
+    },
+    {
+      "Maneuver": "Recover",
+      "Legal": true,
+      "Arrival": 16.82512916963561,
+      "Commands": 103,
+      "EndReference": 352.144278049469,
+      "MinimumGap": 2.818441712890986,
+      "Sweep": 2.765401412927627,
+      "Reason": "legal complete forecast; swept physical footprint\u003E=0.5m",
+      "First": {
+        "SteeringRadians": 0.002739487,
+        "Drive": 0
+      },
+      "CpuSeconds": 3.15625
+    }
+  ],
+  "Rejections": [],
+  "PhysicalCounters": {
+    "Search": {
+      "ShortlistK1": false,
+      "Complete27K1Batches": 0,
+      "ShortRankingCandidates": 0,
+      "FullHorizonCandidates": 0,
+      "SeedSharedPrefixes": 0,
+      "SharedPrefixContactQueriesSaved": 0,
+      "FullK1Executions": 0,
+      "HeldContinuationRequests": 0,
+      "ActualForecasts": 0,
+      "ActualContacts": 0,
+      "PredictionRequests": 0,
+      "PredictionHits": 0,
+      "SeedRequests": 0,
+      "SeedHits": 0,
+      "CrossReviewHits": 0,
+      "InactivePrefixRequests": 0,
+      "BudgetFallbacks": 0,
+      "BudgetReason": null,
+      "CacheEntries": 0,
+      "SeedCacheEntries": 0,
+      "FastBoundaryQueries": 0,
+      "BoundaryFallbackQueries": 0
+    },
+    "SearchWork": {
+      "ForecastRequests": 0,
+      "PhysicalForecastCalls": 0,
+      "ContactQueries": 0
+    },
+    "SearchMemo": {
+      "KernelHits": 0,
+      "KernelMisses": 0,
+      "ProjectionHits": 0,
+      "ProjectionMisses": 0,
+      "ClearanceHits": 0
+    },
+    "IndependentMemo": {
+      "KernelHits": 0,
+      "KernelMisses": 0,
+      "ProjectionHits": 0,
+      "ProjectionMisses": 0,
+      "ClearanceHits": 0
+    },
+    "FullK1": 0,
+    "Forecasts": 0,
+    "Contacts": 0,
+    "FeedbackQueries": 0,
+    "IndependentForecasts": 0,
+    "IndependentContacts": 0,
+    "TransitionRequests": 276,
+    "SearchHits": 276,
+    "IndependentHits": 0,
+    "RolloutHits": 0,
+    "IndependentComparisons": 0,
+    "PrimedPrefixes": 274,
+    "Verification": "Fresh per-review DAG; every unique physical prefix repropagated independently; no search or historical result accepted as proof",
+    "options": {
+      "Memoize": true,
+      "ValidatedIndependent": true,
+      "ShareCurrentPolicies": true,
+      "ShortlistK1": false,
+      "FastIndependent": true,
+      "Regime": 1,
+      "RankPolicies": false,
+      "StrictSeeds": true
+    }
+  },
+  "ControlObservations": 276,
+  "UncommittedForceProbes": 276,
+  "CpuSeconds": 10.828125,
+  "Scope": "Diagnostic predictions only, not13/9 certificate or nativeS3. Full identical initial/pending and original propagation."
+}

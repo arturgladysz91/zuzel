@@ -1,0 +1,122 @@
+{
+  "Label": "native-dev",
+  "Validation": false,
+  "Scenario": {
+    "Id": "nominal-B",
+    "Gate": "B",
+    "OffsetMeters": 3.5,
+    "Held": false,
+    "Role": "independent"
+  },
+  "PolicyHash": "2B6BCA461AD1E4C061D96D2F30432F1228D4FB75AAE7DC2E629BBA30EA0D76B5",
+  "Pass": true,
+  "FasterThan161": false,
+  "Exact161Initial": true,
+  "Initial": {
+    "Input": {
+      "Rider": {
+        "Id": 1,
+        "Position": {
+          "X": 0,
+          "Y": -3.5
+        },
+        "Velocity": {
+          "X": 0,
+          "Y": 0
+        },
+        "Heading": 0,
+        "AngularVelocity": 0,
+        "Road": {
+          "Segment": 0,
+          "Progress": 0,
+          "ReferenceMeters": 0,
+          "OffsetMeters": 3.5,
+          "Heading": 0,
+          "RadiusMeters": 0,
+          "CornerProgress": 0,
+          "Tangent": {
+            "X": 1,
+            "Y": 0
+          },
+          "Outward": {
+            "X": 0,
+            "Y": -1
+          },
+          "IsTurn": false
+        },
+        "TotalReferenceMeters": 0,
+        "DistanceMeters": 0,
+        "Activity": 0,
+        "Drive": 0,
+        "TargetOffsetMeters": 3.5,
+        "Impairment": 0,
+        "Context": 0,
+        "Speed": 0,
+        "ForwardSpeed": 0,
+        "SideSpeed": 0,
+        "SlideRadians": 0
+      },
+      "Time": 0,
+      "Omega": 0,
+      "Steering": 0,
+      "Active": {
+        "SteeringRadians": 0,
+        "Drive": 0
+      },
+      "Pending": [],
+      "NextReview": 0
+    },
+    "CrankOmega": 418.87902047863906
+  },
+  "Spec": {
+    "Profile": {
+      "Id": 1,
+      "Name": "R1",
+      "Skills": {
+        "Start": 50,
+        "Speed": 50,
+        "SlideControl": 50,
+        "TrackReading": 50,
+        "PairRiding": 50,
+        "Adaptability": 50
+      },
+      "Style": {
+        "RiskTolerance": 0.5,
+        "LaneChangeTendency": 0.5,
+        "OutsidePreference": 0.5,
+        "SetupIndependence": 0.5
+      }
+    },
+    "Setup": {
+      "Gearing": 0.5,
+      "TractionBias": 0.5
+    },
+    "ReferenceMeters": 0,
+    "OffsetMeters": 3.5,
+    "SpeedMetersPerSecond": 0,
+    "TargetOffsetMeters": 3.5,
+    "InitialOutwardSpeed": 0,
+    "TrafficEnabled": false,
+    "Passive": false,
+    "Bullet": false
+  },
+  "ActualMassKg": 147,
+  "ActualInertiaKgMetersSquared": 52.72097,
+  "FinishSeconds": 80.30643296680432,
+  "CompletedLaps": 3,
+  "MinimumPoseMeters": 0.5757182324731586,
+  "MinimumSweepMeters": 0.5051020960414287,
+  "MaximumBetaDegrees": 7.700689797759725,
+  "Contacts": 0,
+  "AcceptedDecisions": 402,
+  "Abstain": 0,
+  "Outcome": "completed",
+  "Fingerprint": "9CF8E20ADAD086773A699B817FBE31C9317F0415C5B0B2E24B664A5C20958896",
+  "TotalCpuSeconds": 2312.015625,
+  "ControllerCpuSeconds": 2291.421875,
+  "ChargedCpuSeconds": 2312.109375,
+  "BaselineLabel": "native-dev",
+  "BaselineFinishSeconds": 79.86783202593783,
+  "BaselineCpuSeconds": 1370.78125,
+  "BundleFormat": "S3Evidence162-v1"
+}

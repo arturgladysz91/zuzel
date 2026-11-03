@@ -1,0 +1,80 @@
+{
+  "Label": "c2-straight",
+  "PolicyHash": "2B6BCA461AD1E4C061D96D2F30432F1228D4FB75AAE7DC2E629BBA30EA0D76B5",
+  "GatePassed": true,
+  "Error": null,
+  "CpuSeconds": 21.8125,
+  "Nodes": 13,
+  "Reserves": 9,
+  "Independent": true,
+  "PhysicalHash": "B3C1161FCDC10537E8E2CA8CB8CC0BCDBDFCD7F381B5C3FAD34D06A11628C7F4",
+  "PhysicalCounters": {
+    "Search": {
+      "ShortlistK1": false,
+      "Complete27K1Batches": 0,
+      "ShortRankingCandidates": 0,
+      "FullHorizonCandidates": 0,
+      "SeedSharedPrefixes": 0,
+      "SharedPrefixContactQueriesSaved": 0,
+      "FullK1Executions": 0,
+      "HeldContinuationRequests": 0,
+      "ActualForecasts": 860,
+      "ActualContacts": 17259,
+      "PredictionRequests": 860,
+      "PredictionHits": 0,
+      "SeedRequests": 0,
+      "SeedHits": 0,
+      "CrossReviewHits": 0,
+      "InactivePrefixRequests": 860,
+      "BudgetFallbacks": 0,
+      "BudgetReason": null,
+      "CacheEntries": 860,
+      "SeedCacheEntries": 0,
+      "FastBoundaryQueries": 18084,
+      "BoundaryFallbackQueries": 0
+    },
+    "SearchWork": {
+      "ForecastRequests": 860,
+      "PhysicalForecastCalls": 860,
+      "ContactQueries": 17259
+    },
+    "SearchMemo": {
+      "KernelHits": 0,
+      "KernelMisses": 0,
+      "ProjectionHits": 0,
+      "ProjectionMisses": 0,
+      "ClearanceHits": 0
+    },
+    "IndependentMemo": {
+      "KernelHits": 0,
+      "KernelMisses": 0,
+      "ProjectionHits": 0,
+      "ProjectionMisses": 0,
+      "ClearanceHits": 0
+    },
+    "FullK1": 0,
+    "Forecasts": 2164,
+    "Contacts": 43426,
+    "FeedbackQueries": 0,
+    "IndependentForecasts": 1304,
+    "IndependentContacts": 26167,
+    "TransitionRequests": 4319,
+    "SearchHits": 2146,
+    "IndependentHits": 9,
+    "RolloutHits": 0,
+    "IndependentComparisons": 1304,
+    "PrimedPrefixes": 1547,
+    "Verification": "Fresh per-review DAG; every unique physical prefix repropagated independently; no search or historical result accepted as proof",
+    "options": {
+      "Memoize": true,
+      "ValidatedIndependent": true,
+      "ShareCurrentPolicies": true,
+      "ShortlistK1": false,
+      "FastIndependent": true,
+      "Regime": 1,
+      "RankPolicies": false,
+      "StrictSeeds": true
+    }
+  },
+  "Scope": "Fresh original complete13/9 independent certificate, not a native S3"
+}

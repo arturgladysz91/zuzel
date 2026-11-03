@@ -1,0 +1,68 @@
+[
+  {
+    "Label": "d1-straight",
+    "Kind": "diagnostic",
+    "Complete": true,
+    "ChargedCpuSeconds": 13,
+    "CpuCapSeconds": 90,
+    "ProcessId": 24096,
+    "Concurrent": false,
+    "CpuSeconds": 11.1875,
+    "Reason": "diagnostic gate passed"
+  },
+  {
+    "Label": "d2-entry",
+    "Kind": "diagnostic",
+    "Complete": true,
+    "ChargedCpuSeconds": 18,
+    "CpuCapSeconds": 90,
+    "ProcessId": 24300,
+    "Concurrent": false,
+    "CpuSeconds": 16.453125,
+    "Reason": "diagnostic gate passed"
+  },
+  {
+    "Label": "d3-rest",
+    "Kind": "diagnostic",
+    "Complete": true,
+    "ChargedCpuSeconds": 49,
+    "CpuCapSeconds": 90,
+    "ProcessId": 20740,
+    "Concurrent": false,
+    "CpuSeconds": 47.015625,
+    "Reason": "diagnostic gate passed"
+  },
+  {
+    "Label": "c1-rest",
+    "Kind": "certificate",
+    "Complete": true,
+    "ChargedCpuSeconds": 21,
+    "CpuCapSeconds": 60,
+    "ProcessId": 16420,
+    "Concurrent": false,
+    "CpuSeconds": 19.140625,
+    "Reason": "full13/9 independent certification gate passed"
+  },
+  {
+    "Label": "c2-straight",
+    "Kind": "certificate",
+    "Complete": true,
+    "ChargedCpuSeconds": 23,
+    "CpuCapSeconds": 60,
+    "ProcessId": 14764,
+    "Concurrent": false,
+    "CpuSeconds": 21.921875,
+    "Reason": "full13/9 independent certification gate passed"
+  },
+  {
+    "Label": "native-dev",
+    "Kind": "native",
+    "Complete": true,
+    "ChargedCpuSeconds": 2315,
+    "CpuCapSeconds": 2400,
+    "ProcessId": 9080,
+    "Concurrent": false,
+    "CpuSeconds": 2313.25,
+    "Reason": "completed"
+  }
+]
