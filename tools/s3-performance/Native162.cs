@@ -1,0 +1,36 @@
+using System.Diagnostics;
+using System.Text.Json;
+using Autonomous146;
+using Continuation161;
+using CoreSim;
+using Efficient147;
+using Efficient152;
+using LineThrottle156;
+using SharedWorldSpeedway;
+using ThreeLap158;
+namespace S3Performance162;
+public static class Native162 {
+ sealed record Expected(string State,string Hash,FreeRacingAction Action);
+ public static void Run(string label,int scenario=0,bool validation=false){
+  if(scenario<0||scenario>=5||!validation&&scenario!=0)throw new ArgumentException("Five declared conditions; development nominal only");Gates162.Native(validation);
+  var condition=Study156.Read<JsonElement>(Path.Combine(Study156.Root,"docs/experiments/robust-three-lap/final-v6/scenarios-frozen.json")).GetProperty("Scenarios")[scenario];var gate=Enum.Parse<StartingGate>(condition.GetProperty("Gate").GetString()!);var spec=StandingWorld144.Rider(gate) with{OffsetMeters=condition.GetProperty("OffsetMeters").GetSingle(),TargetOffsetMeters=condition.GetProperty("OffsetMeters").GetSingle()};
+  if(validation&&Directory.Exists(Path.Combine(Program162.Doc,"native"))&&Directory.GetFiles(Path.Combine(Program162.Doc,"native"),"*-result.json").Any(p=>{var r=Study156.Read<JsonElement>(p);return r.GetProperty("Validation").GetBoolean()&&r.GetProperty("Scenario").GetProperty("Id").GetString()==condition.GetProperty("Id").GetString();}))throw new InvalidOperationException("Preserve distinct held conditions; no repeated native case");
+  using var budget=new Budget162(label,"native",concurrent:validation);Directory.CreateDirectory(Path.Combine(Program162.Doc,"native"));
+  string baselineLabel=validation?"held-"+scenario:"native-dev";var baseline=Study156.Read<JsonElement>(Path.Combine(Program161.Doc,"native/"+baselineLabel+"-result.json"));var expected=Directory.GetFiles(Path.Combine(Program161.Doc,"policies/"+baselineLabel),"decision-*.json.gz").OrderBy(p=>p,StringComparer.Ordinal).Select(p=>{var x=Study156.Read<JsonElement>(p);var r=x.GetProperty("Review");return new Expected(ExactKey147.State(x.GetProperty("Observed").Deserialize<State146>(Study156.Json)!),r.GetProperty("PhysicalHash").GetString()!,r.GetProperty("Tree")[0].GetProperty("Action").Deserialize<FreeRacingAction>(Study156.Json));}).ToArray();
+  using var evidence=new EvidenceBundle162(Path.Combine(Program162.Doc,"native/"+label+".zip"));Planner162? planner=null;State146? first=null;float? actualMass=null,actualInertia=null;int accepted=0,abstain=0;bool exact=true;double printAt=0;var journal=new List<object>();
+  Decision144 Choose(FreeRacingInput input,CrankClutch144 crank,RiderSpec rider,TrackFrame frame,TrackStateSnapshot surface,WorldParameters p,float mass,float inertia,string variant){
+   first??=new(input,crank.Omega);actualMass??=mass;actualInertia??=inertia;var began=Process.GetCurrentProcess().TotalProcessorTime;Decision144 decision=null!;string? error=null;object? compact=null;
+   try{budget.Guard();planner??=new(rider,false,new(Enabled:true,MaximumRoots:3),budget.Guard,settings:new(Enabled:true,Adaptive:true));decision=planner.Choose(input,crank);var review=planner.Last!;if(!review.Independent||!review.ConditionalCertificate||review.Tree.Length!=13||review.Terminals.Length!=9)throw new InvalidOperationException("Missing full fresh13/9");compact=Evidence152.Compact(review);var hash=(string)compact.GetType().GetProperty("PhysicalHash")!.GetValue(compact)!;
+    if(accepted>=expected.Length||ExactKey147.State(new(input,crank.Omega))!=expected[accepted].State||hash!=expected[accepted].Hash||decision.Choice.Action!=expected[accepted].Action){exact=false;throw new InvalidOperationException("Physical behavior or certificate differs from161");}
+   }catch(Exception e)when(e is InvalidOperationException or ArgumentException){error=e.ToString();abstain++;}
+   evidence.Policy(error is null?"decision-"+accepted.ToString("D4"):"abstain",new{Observed=new State146(input,crank.Omega),Error=error,Review=compact,Counters=planner?.Runtime.Counters(),ResponseStatistics=planner?.Generator.ResponseStatistics,SelectedOrigin=planner?.SelectedAnchor?.Origin,Outcomes=planner?.Generator.Outcomes,Rejections=planner?.Generator.Rejections});
+   double cpu=(Process.GetCurrentProcess().TotalProcessorTime-began).TotalSeconds;var s=planner?.Generator.ResponseStatistics;journal.Add(new{Time=input.Time,PlannerCpuSeconds=planner?.Last?.CpuSeconds,CallbackCpuSeconds=cpu,Accepted=error is null,Action=error is null?decision.Choice.Action:(FreeRacingAction?)null,ResponseRequests=s?.Requests??0,ResponseHits=s?.Hits??0,ResponseEvaluations=s?.Evaluations??0});
+   if(error is not null)throw new InvalidOperationException(error);accepted++;if(input.Time>=printAt){Console.WriteLine($"{label}: t={input.Time:F1} decisions={accepted} CPU={budget.Elapsed:F1} responseHits={s?.Hits}");printAt=input.Time+10;}
+   return decision with{CpuSeconds=cpu};
+  }
+  Run144 run;using(var world=new NativeWorld156(new(Enabled:true,RequiredLaps:3,MaximumSeconds:180,SoloGate:gate),diagnosticRider:spec,safetyHalfMeter:true,safetyFrom:0))run=world.Run(label,"K1",Choose);
+  var samples=run.Riders[0].Samples;var pose=samples.Min(s=>Math.Min(s.Inner,s.Outer));var swept=Native161.MinimumSweep(samples.Skip(1).Select(s=>s.Certificate));var beta=samples.Max(s=>Math.Abs(s.Input.Rider.SlideRadians))*180/Math.PI;bool fingerprint=run.Fingerprint==baseline.GetProperty("Fingerprint").GetString();bool legal=first is not null&&first.Input.Time==0&&first.Input.Rider.Speed==0&&first.Input.Pending.Length==0&&actualMass==147&&actualInertia==baseline.GetProperty("ActualInertiaKgMetersSquared").GetSingle()&&run.Riders[0].CompletedLaps==3&&run.Riders[0].FinishSeconds is not null&&run.Outcome=="completed"&&run.Contacts.Length==0&&pose>=.5&&swept>=.5&&beta<=45&&abstain==0&&exact&&fingerprint&&accepted==expected.Length;
+  var result=new{Label=label,Validation=validation,Scenario=condition,PolicyHash=Program162.PolicyHash(),Pass=legal,Exact161=exact,NativeFingerprintExact=fingerprint,Initial=first,Spec=spec,ActualMassKg=actualMass,ActualInertiaKgMetersSquared=actualInertia,FinishSeconds=run.Riders[0].FinishSeconds,CompletedLaps=run.Riders[0].CompletedLaps,MinimumPoseMeters=pose,MinimumSweepMeters=swept,MaximumBetaDegrees=beta,Contacts=run.Contacts.Length,AcceptedDecisions=accepted,Abstain=abstain,run.Outcome,run.Fingerprint,run.TotalCpuSeconds,run.ControllerCpuSeconds,ChargedCpuSeconds=budget.Elapsed,BaselineLabel=baselineLabel,BaselineCpuSeconds=baseline.GetProperty("ChargedCpuSeconds").GetDouble(),ResponseStatistics=planner?.Generator.ResponseStatistics,BundleFormat="S3Evidence162-v1"};
+  evidence.Complete(run,result,journal,new{Program162.Base,PolicyHash=Program162.PolicyHash(),Files=Program162.Sources(),Reproduce="Checkout exact162 commit; every full physics/preflight source is frozen. Read policies.jsonl + native.json, verify index and whole archive SHA. Archived161 equality is an additional check, never a certificate."});Program162.Save("native/"+label+"-result.json",result);if(!legal)Program162.Save("series-closure.json",new{NativeDNF=true,NoFurtherNativeWorlds=true,run.Outcome});budget.Finish(run.Outcome);Console.WriteLine(label+" PASS="+legal+" exact161="+exact+" CPU="+budget.Elapsed);
+ }
+}

@@ -1,0 +1,2826 @@
+{
+  "scope": "Read-only consolidation test on existing held-3 policies; no simulation, no deletion or replacement of original files. Exact decompressed UTF8 bytes preserved, original gzip-container hashes retained as provenance.",
+  "files_before": 402,
+  "files_after": 1,
+  "bytes_before": 6876393,
+  "bytes_after": 6500686,
+  "reduction_percent": 5.463722041483086,
+  "roundtrip_exact_payloads": 402,
+  "cpu_s": 1.625,
+  "inventory": [
+    {
+      "name": "decision-0000.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0000.json.gz",
+      "gzip_sha256": "d64098b2565e0c23585a1dbed292967f4f02e7151274db5ec369be7df6ff4e7b",
+      "payload_sha256": "022d20ca731c0ae365cf9dcde2f702e7f8fff393a9f1b8530aff19a9f5fa6aa4",
+      "bytes": 124251
+    },
+    {
+      "name": "decision-0001.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0001.json.gz",
+      "gzip_sha256": "a8ca20f40ded4adce2a678ca6656697a051a5587512bab8c692d803f28e16c9b",
+      "payload_sha256": "5a76b261eaa0c559d423b478715ceb4364d987f232554773e34f5b75ba06736a",
+      "bytes": 235647
+    },
+    {
+      "name": "decision-0002.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0002.json.gz",
+      "gzip_sha256": "08617f30d4ba350f5da4244561b08f6a4d432b31694fb69591dd149d0d879395",
+      "payload_sha256": "86663dcbf3df4bbdf71dfb62a972b2a7157ceaae032b19e5830e9778104001d4",
+      "bytes": 238670
+    },
+    {
+      "name": "decision-0003.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0003.json.gz",
+      "gzip_sha256": "b8f66c28e74fddda9a14405d990c0f71b9d47007832c8bb213170118fed0c7fd",
+      "payload_sha256": "250215c8493ff96b72fc69f38cfa57fdd259546acc048f70d22ce39a9e3b814d",
+      "bytes": 237071
+    },
+    {
+      "name": "decision-0004.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0004.json.gz",
+      "gzip_sha256": "7418390654b1e71894ea6426aee40f85191b3a1dd860dbb137f5f522e954d88c",
+      "payload_sha256": "994b4909f0bddeccbf4aa48a6ba9b153574ab80efdc213bd9b4006f91a51455b",
+      "bytes": 236856
+    },
+    {
+      "name": "decision-0005.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0005.json.gz",
+      "gzip_sha256": "12123c941b88190f4de7a6dbfea1090485ced3ae093ded25e9e4abc243434acd",
+      "payload_sha256": "f71597c72eef5f765d7e8af3323b4b0e7c031915b3ae5aecd1163eda03263bef",
+      "bytes": 235245
+    },
+    {
+      "name": "decision-0006.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0006.json.gz",
+      "gzip_sha256": "a5577133903dfd73018855010fd002db88b609e2ffaabe9498d1224a5118e826",
+      "payload_sha256": "3cad603c5a766eb5d606004a6ccfaba25b6ac67615ac5ff2af5e39fd53c2300a",
+      "bytes": 235555
+    },
+    {
+      "name": "decision-0007.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0007.json.gz",
+      "gzip_sha256": "fde54e6010039eb4c7f3bdf14d34ecac9770718d988e09a900634f0dc874edfb",
+      "payload_sha256": "940cae28230b2afdeb5034c6df4ba03ea44383de0cdf9cc2e5efb8fc23a6118e",
+      "bytes": 235800
+    },
+    {
+      "name": "decision-0008.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0008.json.gz",
+      "gzip_sha256": "79d31be35b728b3a5477acf32f4a1d8671b777291155e12d2d87da22e4b3dff0",
+      "payload_sha256": "576da8768e0c4aa5b13e5cf02cdded3c2623faba3644c8c4fd5be954074a27e1",
+      "bytes": 234285
+    },
+    {
+      "name": "decision-0009.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0009.json.gz",
+      "gzip_sha256": "45bed569168a831960f721297c5a811df939826159b2d1f6a79d6117ecc55668",
+      "payload_sha256": "950b4aebfc27042d8f9f03526e060d51ecda61a37d84aa7e716abdeee64ec387",
+      "bytes": 234250
+    },
+    {
+      "name": "decision-0010.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0010.json.gz",
+      "gzip_sha256": "dab3d62f38245a34caa6270564d1817f43c6d72631988819354d482715331924",
+      "payload_sha256": "e4b756035d89c82f6b8495e1b0484d92d5a77f610af13c35ac52aa0755479905",
+      "bytes": 231462
+    },
+    {
+      "name": "decision-0011.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0011.json.gz",
+      "gzip_sha256": "ce1c4723e99354205d3a01baae49831842c3cb45fa5e74711b2d213acfd2fe97",
+      "payload_sha256": "ab2e9f67730b3abeb7bf42b19877f363e037a6c2c5525345a4ed1b3582f827f9",
+      "bytes": 229204
+    },
+    {
+      "name": "decision-0012.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0012.json.gz",
+      "gzip_sha256": "f6035dba4ccd8baebdfb6a0bf39c0cdbe3dba37255e4e38493743b30ed9c0784",
+      "payload_sha256": "3011f7160e0bd7139a7af3895fa02593fe602384fdad7364f474e5eba93ba8f7",
+      "bytes": 227794
+    },
+    {
+      "name": "decision-0013.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0013.json.gz",
+      "gzip_sha256": "3e2ed06d504738bf21f975d1bb41ca6ce3d027868404c08c297dadc466ea9f27",
+      "payload_sha256": "054799bac6ac5eb840c55887a03b0e1ad021673e87fe076c0d94794c6ae9abfe",
+      "bytes": 225934
+    },
+    {
+      "name": "decision-0014.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0014.json.gz",
+      "gzip_sha256": "58972be9a625bf4787ed10f0425898765418f23cdc9e07b7dbc582f2dcf991b7",
+      "payload_sha256": "a5c60c4a59ce6f4210ac5557b85dd9ef679dc94a19f0d9ecbb12cd21e6d791ab",
+      "bytes": 225318
+    },
+    {
+      "name": "decision-0015.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0015.json.gz",
+      "gzip_sha256": "0114d010acb90b5a577f1fa4de82b2443e38893488fa560bed0755e7b886bf26",
+      "payload_sha256": "cca1dedc035205a931fe22673cc89ed9e655b49de89e9a1952abdfe78036a25c",
+      "bytes": 226788
+    },
+    {
+      "name": "decision-0016.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0016.json.gz",
+      "gzip_sha256": "31b036515f173277d0907254d0cb45e30f5ba075b05238d10108e0845fea91c8",
+      "payload_sha256": "1fdafb962a3f888a7a85020abc763c2d094ca03f53feaf09389d70941b2b1aa7",
+      "bytes": 225766
+    },
+    {
+      "name": "decision-0017.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0017.json.gz",
+      "gzip_sha256": "75c70fc3417f3aad0bbb65986ed4f6dbcd15ce4c7a6ad02744aecb38538abbdc",
+      "payload_sha256": "3be1b4075a4b426af13dc46592366fdcd425be84b0f4deff16fc4c26f99a5c01",
+      "bytes": 224801
+    },
+    {
+      "name": "decision-0018.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0018.json.gz",
+      "gzip_sha256": "6bd384d470bef615d1bad21edba79dc0a69c1d8c7e3c24bb42775d3af6b9988f",
+      "payload_sha256": "6d22256945249c9624e5d54835f5e571276ab8919a46b35de97810386f73beab",
+      "bytes": 224596
+    },
+    {
+      "name": "decision-0019.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0019.json.gz",
+      "gzip_sha256": "5247826c619ac2489eb67b9948f96fbe20ade682f27c7f50fa1c056022698b8e",
+      "payload_sha256": "bc0c38eb59dad5ed34233771f028111f1ee454cc8a251c60e7022350ba6f06be",
+      "bytes": 224287
+    },
+    {
+      "name": "decision-0020.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0020.json.gz",
+      "gzip_sha256": "b07384a491371cf378ef7304e701f66eb1c0cc79af8e73f1af2abc12b09e9f1e",
+      "payload_sha256": "eaf9bf954e724d43ef049bb5b2f36dd5bef77f93dc18162ed9eeea0c330da62a",
+      "bytes": 223395
+    },
+    {
+      "name": "decision-0021.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0021.json.gz",
+      "gzip_sha256": "115e71056ddc27b06eb6dff23ee3bcf367a77ada4d07a922fa69954c5207a448",
+      "payload_sha256": "1719aa3537315f56b3dc0a77c44044643686c9101f2ad03d61fcfa5a0999a9dc",
+      "bytes": 223301
+    },
+    {
+      "name": "decision-0022.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0022.json.gz",
+      "gzip_sha256": "4ba148f7de23c5f9226039a5c4ae5d91b4ce15202c7b5610aaba9e548eb95822",
+      "payload_sha256": "f1d74104dea9e6e566cb738aad90f1bbbfd96cf52a8dd2f0c5552286ad51f05b",
+      "bytes": 221921
+    },
+    {
+      "name": "decision-0023.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0023.json.gz",
+      "gzip_sha256": "af5dbb203e84a25a26b75fdb46346553036177b32e5aa2f8dc1870a07b865a6e",
+      "payload_sha256": "2b5d19b3d56da78c86be10ac984c2df44e0df0eaf7172352717a610b0aaa7bf1",
+      "bytes": 220460
+    },
+    {
+      "name": "decision-0024.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0024.json.gz",
+      "gzip_sha256": "3045901fd0fbaff2a9d3f59519c659ad0cb0ced8b66c9fcb0b974f0a0b059fa7",
+      "payload_sha256": "aace34c77f2146fb04dea9b77671a2c2e51a737e971b6c7612ed81110b9d93c1",
+      "bytes": 218743
+    },
+    {
+      "name": "decision-0025.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0025.json.gz",
+      "gzip_sha256": "7561a565097e647708db5c79af9fd809432efb8f6ba7d2ef7b65c3246668da9c",
+      "payload_sha256": "7b43ff8507535646d8e70315497d3db7561c2989b588ce701e69a6516226ff91",
+      "bytes": 218354
+    },
+    {
+      "name": "decision-0026.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0026.json.gz",
+      "gzip_sha256": "9643339f5aaab203ee327b8121be182777bebd02f3bb897933b4cc2a899a277e",
+      "payload_sha256": "a18b0b4c786d0640ba8824325b8e4f5ed4f966e79388fbb5e8f53a8c65698072",
+      "bytes": 216206
+    },
+    {
+      "name": "decision-0027.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0027.json.gz",
+      "gzip_sha256": "cdeb2ab93338a82a6689f9d78d744494422092304e1613363f6a923057e9e954",
+      "payload_sha256": "fb46c29b8196b67fd3268f2ef59886751420f3f5696faffce753e622cdae0f5d",
+      "bytes": 215484
+    },
+    {
+      "name": "decision-0028.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0028.json.gz",
+      "gzip_sha256": "c7fc1cdfe98632363d8f3558614e118447e85e9e71c103e4b993c27e26585164",
+      "payload_sha256": "f033b677c5e43945bfd9946d1fd545f52c907747d0b44124861fe77467866719",
+      "bytes": 213606
+    },
+    {
+      "name": "decision-0029.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0029.json.gz",
+      "gzip_sha256": "3adcb13fcca1efb287eb3b6e678ecb5f25f9bc19250d293ceae4b3b8021dea99",
+      "payload_sha256": "cd5fe3b60be9a26807bb5d33f78d36636d8faa7e9908faf33414a574b0dc2496",
+      "bytes": 212479
+    },
+    {
+      "name": "decision-0030.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0030.json.gz",
+      "gzip_sha256": "cba440d543af7ecc14874ed8ddc6c514d5408b09873f668809661e3eb5ccded6",
+      "payload_sha256": "5ab0ce6d3eb70a396bb5b1671b9dcd16de2df3367a369752d738f74d46f255c1",
+      "bytes": 211137
+    },
+    {
+      "name": "decision-0031.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0031.json.gz",
+      "gzip_sha256": "75c7ed49e7f0a20f3722238039f547160659d83ac2d70d00b2aeeab002ada9c8",
+      "payload_sha256": "0bb45ea26e6f98ab60206292e55ab3a29e8cdbffe404ce44702cc9037acf13af",
+      "bytes": 210458
+    },
+    {
+      "name": "decision-0032.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0032.json.gz",
+      "gzip_sha256": "92a7be89b0f3e5ace19d52d0e44208df3f313ec0286fd8053ace9277c462b834",
+      "payload_sha256": "9429977f9ff340714ba25a164d6b0dda087cd05ac3fc6fd5efac490af6daaa68",
+      "bytes": 210983
+    },
+    {
+      "name": "decision-0033.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0033.json.gz",
+      "gzip_sha256": "46647ed0ff24228b07166edc9cdb4c1b4dda29942876792431602a9c559032c9",
+      "payload_sha256": "2099f79617b6e06f57c99cd671afc9d194428acb5a3fa27a8eefdd48b1279d6f",
+      "bytes": 207757
+    },
+    {
+      "name": "decision-0034.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0034.json.gz",
+      "gzip_sha256": "bf2b26db9afa1f92ad6d954e14aacbceea8b77953d6290849c8decb04bbb07b4",
+      "payload_sha256": "ee024fc875d7677be8072f0dea464af1e9d3f510287128debe25bfa1ef80da0b",
+      "bytes": 206613
+    },
+    {
+      "name": "decision-0035.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0035.json.gz",
+      "gzip_sha256": "1be3f90dcce2a5259259d97a166555860c2147857ace1adcafe4fba6bdadf305",
+      "payload_sha256": "f21c409c8599a28f82f3fc9184391b301771660178d36a0c62c2df389144f680",
+      "bytes": 206281
+    },
+    {
+      "name": "decision-0036.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0036.json.gz",
+      "gzip_sha256": "e045793f7c9817e5af941ea2905687cb0450ba8ffb03100a1ced108383b7b206",
+      "payload_sha256": "45c3ce0ea76543b323829b78e2f4de4973f9dd42e97bcdec5b04d3504f0cb9dd",
+      "bytes": 206208
+    },
+    {
+      "name": "decision-0037.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0037.json.gz",
+      "gzip_sha256": "1bac73aa5e85d83406cb7f95da974a771fb92907ce4b5c6f2a49a7263d2b926c",
+      "payload_sha256": "7dd0b8aa7cb7dd1957abdd6e8117fad7270c25896b95abe5e8b83088ac5adc3c",
+      "bytes": 202776
+    },
+    {
+      "name": "decision-0038.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0038.json.gz",
+      "gzip_sha256": "6b3f290c0e0b5af3947ec4d88c3c4b782f4aec1d719291359f279f44fec45b76",
+      "payload_sha256": "ff249e3678c7f4db0537334e0e1362bb38d913be1a48dfab476fd6e5f4775ef6",
+      "bytes": 199985
+    },
+    {
+      "name": "decision-0039.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0039.json.gz",
+      "gzip_sha256": "386e8dc64f1b2e49df1a2048c85010e76e5dbba306df8eb3bbafda3be0ae2fef",
+      "payload_sha256": "cb4c7bc4928f687bc5a6117405b439ce4f41662e01bb97b3eb2a23e9e6334f69",
+      "bytes": 198621
+    },
+    {
+      "name": "decision-0040.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0040.json.gz",
+      "gzip_sha256": "21cc4ab8b0d71618396fb5142d7fd5fb6c17073cfa1b91415d99f47f749f1f7c",
+      "payload_sha256": "452a9e922f7564774bdd5c1294f9fba06807f103502bfdbf77f61d1f59b0911d",
+      "bytes": 197827
+    },
+    {
+      "name": "decision-0041.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0041.json.gz",
+      "gzip_sha256": "79f78857ffbc9774f5443f99bcde44e5e2070a6e9593ad45fef8c576ef03bbb4",
+      "payload_sha256": "9ce25d3ad6fce3810c7d556c359f218474347932361a707847393e9be5e57608",
+      "bytes": 196788
+    },
+    {
+      "name": "decision-0042.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0042.json.gz",
+      "gzip_sha256": "9f054e184c37f9606867f206c047cf45a4e5a6ae86f2314087231f60c23f4049",
+      "payload_sha256": "191191dada4af1a3bbbde7fff9818f0d82fc59d63566f2dfb594c27c462b4d64",
+      "bytes": 194726
+    },
+    {
+      "name": "decision-0043.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0043.json.gz",
+      "gzip_sha256": "9bbc34288b090a32a455c818b93837e1a36d40455cafa4f5ddcbc032f54d0be6",
+      "payload_sha256": "78faea24a1e61e372559b23e03fd76ff65da6917d4896b75abc720b8ab7e56e4",
+      "bytes": 193986
+    },
+    {
+      "name": "decision-0044.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0044.json.gz",
+      "gzip_sha256": "425ce411b796e7a9e1a7a087a44b2789df99d0d2ff4b07291a85851bab7472a4",
+      "payload_sha256": "51c95512b68e69a4237df545340f2d7d1dba0050f4deb4cbf83f98e19a250f1c",
+      "bytes": 191977
+    },
+    {
+      "name": "decision-0045.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0045.json.gz",
+      "gzip_sha256": "469c6df2ffacb72229d3e0cac6b9cb8905c99e54db7721ececf84710e7a53e19",
+      "payload_sha256": "618d79ecbd3916cf8b4208e3933a070dc2aee7414023b936a4d5eb03c4e798d0",
+      "bytes": 191645
+    },
+    {
+      "name": "decision-0046.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0046.json.gz",
+      "gzip_sha256": "4dd38b4f4675856d7cc2a9b488afa030c211257a3b3d0c5f331c73e728f1e456",
+      "payload_sha256": "86ff3d6f6caa21c1e7bc3936155858ac5f0460adc73dac6e413195a643127342",
+      "bytes": 191158
+    },
+    {
+      "name": "decision-0047.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0047.json.gz",
+      "gzip_sha256": "334f7204d4668e7d70ca5dd093b6aac2976c6fc540221b574f187ccf5ecf1fa2",
+      "payload_sha256": "883722dbe633f5a6db32cc4477872a9ecc1bd30e5c573139d53f58d2df07d861",
+      "bytes": 190340
+    },
+    {
+      "name": "decision-0048.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0048.json.gz",
+      "gzip_sha256": "9bc631432e7d580dad033e97844e7f474f5f69e2fceef17933fe14ecdf760d8c",
+      "payload_sha256": "5b27f8e8b8ee8872510d6b1c71a21c5dc60a977c1c5dd5132fe0cb9584003e2e",
+      "bytes": 189430
+    },
+    {
+      "name": "decision-0049.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0049.json.gz",
+      "gzip_sha256": "cf2e950f1497aa1de2e84e5a61e7b4332e19c91b0213833bfeb818b943533a4b",
+      "payload_sha256": "c99db025d3c2b860df16fd2fa45f8c2c5f1e62ff222fed1ff414157915a25f8b",
+      "bytes": 188469
+    },
+    {
+      "name": "decision-0050.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0050.json.gz",
+      "gzip_sha256": "9b1c98d64ab4714b2eff65451932846bbcacfd13aedfcd52502d162197a495c4",
+      "payload_sha256": "f100c98f40a104359c136f2a03bbd1a5e90103a649c20f7d6bfdae33507aa90e",
+      "bytes": 187346
+    },
+    {
+      "name": "decision-0051.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0051.json.gz",
+      "gzip_sha256": "6208f3b952aaabe344c2101c641b4e2707447f011bf424423b35b50bd1a03d45",
+      "payload_sha256": "5e994b2272fda866b2707bb17bf55e4c36ecc95b25aa34863b044288048accaa",
+      "bytes": 186551
+    },
+    {
+      "name": "decision-0052.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0052.json.gz",
+      "gzip_sha256": "90551c799ed49269e70172f611b30049f75081cc04f37456fc983304ba5a8ba1",
+      "payload_sha256": "c46c0e941a96320a3feaee312dbf2dd69270e81510328588481ba83af15802b3",
+      "bytes": 185558
+    },
+    {
+      "name": "decision-0053.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0053.json.gz",
+      "gzip_sha256": "7865b11c1f8d0e86b17b2dc47483c0e8e30005abcc8146d5c2df44cd450d15f7",
+      "payload_sha256": "29631047346a44eaca76d432509a0fa6947688aea16ff8a0bed37e2601065d83",
+      "bytes": 184307
+    },
+    {
+      "name": "decision-0054.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0054.json.gz",
+      "gzip_sha256": "741fd7ece453ecc69003bfdc84d9828bb0f6c53fb6f92ce9f6225a3bfd0471e8",
+      "payload_sha256": "8515e17ff69929b6338a0feaf5800387b207bf70c1cc4711ef087a6ea1989367",
+      "bytes": 183408
+    },
+    {
+      "name": "decision-0055.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0055.json.gz",
+      "gzip_sha256": "9a4991ce7e021d5b7bca64391e687626b90f4eb72b690e83283b040131abf116",
+      "payload_sha256": "cf13c409fb3aafddb3ae20accf61018ac6cbdf57eeff54fa2230e753c4af51c8",
+      "bytes": 182350
+    },
+    {
+      "name": "decision-0056.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0056.json.gz",
+      "gzip_sha256": "d76e083d7b4d60e02220f4ea5cbf79f254d7c958410c0324ff092724b8c62756",
+      "payload_sha256": "7e82eead44c623cebab86d80eabed4bcd1b3de89a8eefe20723df23969900cca",
+      "bytes": 181305
+    },
+    {
+      "name": "decision-0057.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0057.json.gz",
+      "gzip_sha256": "fd3861b6431ea1db9b5f9312c3ffe42c1eb9fb5209c2ced9da7eff40deb7a320",
+      "payload_sha256": "e6001b866a3d1bcefcdd849762052c79e9fd2aef6cbbd84f9bb4676abc7b977f",
+      "bytes": 180286
+    },
+    {
+      "name": "decision-0058.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0058.json.gz",
+      "gzip_sha256": "d27786ac9afa2bf63c91d2dd6ba758d75597e490569e647b2ce013793683bb1e",
+      "payload_sha256": "37f29b1cf5d61c9c3501bd48c1749fea2957882f9c31bb120772a5c5cc5079c1",
+      "bytes": 179297
+    },
+    {
+      "name": "decision-0059.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0059.json.gz",
+      "gzip_sha256": "96390bc740f26a25ae81c31eedac45c48c9a0cf3133d77cfb86f89b34150e0a8",
+      "payload_sha256": "be7a55dfddd089fde33dec2c8a26f4fa09a658e419accf824f573672e56080a1",
+      "bytes": 177628
+    },
+    {
+      "name": "decision-0060.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0060.json.gz",
+      "gzip_sha256": "f028ab72f27b220e5a3de140610d9bdf8a41d26b30b2076b810e1399c29c1af5",
+      "payload_sha256": "185ebea88bb5630f9beaf7e64b4503cf77d15ee162a9e0816cbe34c12d72458c",
+      "bytes": 176455
+    },
+    {
+      "name": "decision-0061.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0061.json.gz",
+      "gzip_sha256": "8520a3c0117475ac4f670ef1b60ac917882837a04e5260dd84bc75cc052b337e",
+      "payload_sha256": "f3e04ce5092a0482594471b5cfa215686ad1d7ed97f7ac42cfc91c2cf2bce420",
+      "bytes": 175284
+    },
+    {
+      "name": "decision-0062.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0062.json.gz",
+      "gzip_sha256": "59b90f537025ae2d4394e08b5b03347382e0aa7eed2e336af8230fd293b4d605",
+      "payload_sha256": "831845ee919466e403f9099f651daf6f58733d02ba0713a7f983ab027bea7832",
+      "bytes": 174237
+    },
+    {
+      "name": "decision-0063.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0063.json.gz",
+      "gzip_sha256": "dfae4ecfae41e0d2f1174d9ea8df2873cb058d92f03f63f76b73d51f5148279d",
+      "payload_sha256": "8ab064eb2b9d5a3f06794aa9af7039ee76a4aec3d997cd8f9eb8004bf4d041a0",
+      "bytes": 173182
+    },
+    {
+      "name": "decision-0064.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0064.json.gz",
+      "gzip_sha256": "9f614b214ba4a7c0ec2df22f697977cd2e5790218df4dcedf91f7c5b0cb243d0",
+      "payload_sha256": "27c678e2f0d08c29dd17d0b28bbf80bd7bb516b4a6fa67e9a6f7199190585892",
+      "bytes": 172284
+    },
+    {
+      "name": "decision-0065.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0065.json.gz",
+      "gzip_sha256": "5a095715fc38a7b1f7c61e4067ca847b851fc396f6c2ef29024ec7c37722a476",
+      "payload_sha256": "906cde00559a17e78d8be9298611541cb6f58d241b171226e76ef06032cda6cf",
+      "bytes": 171123
+    },
+    {
+      "name": "decision-0066.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0066.json.gz",
+      "gzip_sha256": "43ad96047ed763cc24bd5945a35f0084f41aca9fe21ff0b161534d73b7e154d5",
+      "payload_sha256": "281dc83179bb4b20ea539aef6d90b4b237fc29b16d5b06863609aeb2e190ef2b",
+      "bytes": 170120
+    },
+    {
+      "name": "decision-0067.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0067.json.gz",
+      "gzip_sha256": "d2126d22f28fab503bd11ea49c483210abd06afc4fa766877199e794042205cd",
+      "payload_sha256": "3c7fabb928d898e41994c3db3026502c7ce84bced3d631c162a2311723bda925",
+      "bytes": 169017
+    },
+    {
+      "name": "decision-0068.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0068.json.gz",
+      "gzip_sha256": "63a77769728239b254f132fae4e077969551ab89791b5adadb96c523be0ddfa6",
+      "payload_sha256": "1c8c52a4dd5ab1cf3c9ed7c124909cbea5a834787d9824885d5a0afbf0a5b1b7",
+      "bytes": 168019
+    },
+    {
+      "name": "decision-0069.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0069.json.gz",
+      "gzip_sha256": "3d76739b5eca931ec9905f97a7cedc0731bb1b121f286dec7d26575b37571012",
+      "payload_sha256": "6f6ffb2c0f18b961ff5bd57def41c642ce4ce6b9e9f4d4b8ae71cbe764d28db9",
+      "bytes": 166910
+    },
+    {
+      "name": "decision-0070.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0070.json.gz",
+      "gzip_sha256": "a56249a41d5c86055d6c276ee2cfe7d7b44897fd74d375a6c1f0740e5f898e56",
+      "payload_sha256": "ee32fd6d97c87b3867dc1d00e62bce2216812e3c2d2395900ce9d3c8544ab99d",
+      "bytes": 165979
+    },
+    {
+      "name": "decision-0071.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0071.json.gz",
+      "gzip_sha256": "7239d23865bc334abdc06c0a10548ae73808096736b279a1d2004972fe60f55f",
+      "payload_sha256": "bc4a516537662a9aa1fb9f7c5c9cfc3f1f3d4fb37f7a90c5410566d99624803d",
+      "bytes": 164881
+    },
+    {
+      "name": "decision-0072.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0072.json.gz",
+      "gzip_sha256": "713e16379f99474978e0bbf17523e6b6dc359086845efdb6d3fa4b644a2157bb",
+      "payload_sha256": "18f56d0a9afe140fcac0bbbe30b82e6143116ac1093a684fb1bb360cddfb3447",
+      "bytes": 163780
+    },
+    {
+      "name": "decision-0073.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0073.json.gz",
+      "gzip_sha256": "0e8d9346e7d876588d17c541bd335038988c21ba4423368fc1550a54313f198d",
+      "payload_sha256": "0e80f2cdd8161543c24587f9bb50335d487f7076f05e26aa583cb4b64f0e9f72",
+      "bytes": 162733
+    },
+    {
+      "name": "decision-0074.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0074.json.gz",
+      "gzip_sha256": "cdb4afc84ee78167cb6d41476cbbef16faa90bc0d19d155b1c5a7e7171f05ba6",
+      "payload_sha256": "39abb8ce0bd12199c2084b53cdb447aa707bbd163de4f5bfe3a92f7c7c267f70",
+      "bytes": 161664
+    },
+    {
+      "name": "decision-0075.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0075.json.gz",
+      "gzip_sha256": "09691e3a33a3e0a729546c9bfa9cbb7093a6cddc3d20fcaad6b3b246e36342d0",
+      "payload_sha256": "1587dc8ed9d7964f8dc21c7aff4f005fdb7efa3509fca5ea6ee820542cda7bc0",
+      "bytes": 160643
+    },
+    {
+      "name": "decision-0076.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0076.json.gz",
+      "gzip_sha256": "a774b9388486e2c11c98ab96557260b4393669ecb873109d84debf33049227bf",
+      "payload_sha256": "ccc910786da89ea33bea3ff37969857b4b654f0eb0f0ef5f4169e5fb38e70cba",
+      "bytes": 159638
+    },
+    {
+      "name": "decision-0077.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0077.json.gz",
+      "gzip_sha256": "f05dc4cf3b736a680d96ef4adc9c437c3d4ce423d8d6b08f6d526b6a7ea735b6",
+      "payload_sha256": "86072adea56b258a02fa06bbc0b5eea62efe93612e78f526b788b5466009a05c",
+      "bytes": 158536
+    },
+    {
+      "name": "decision-0078.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0078.json.gz",
+      "gzip_sha256": "50c8dc5ce8ed5d7abab43fd957fb8783f393765a29deae39035e674ed21f2b52",
+      "payload_sha256": "0c98ae5efdfe99c4f6b379bcde516484d39c526fe63237e7ae04db912a733ea7",
+      "bytes": 157545
+    },
+    {
+      "name": "decision-0079.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0079.json.gz",
+      "gzip_sha256": "d5e5b5da8a9d5fc5bdc29fb8963f31cdabe0bad9b1d8861acc4bc806366a7d6d",
+      "payload_sha256": "3bf7629f314aa1ee4a9960a204416da6aa1c2dbaf85d049b99a3049b6e26f23f",
+      "bytes": 156275
+    },
+    {
+      "name": "decision-0080.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0080.json.gz",
+      "gzip_sha256": "57e6cdf37e0e2b0bd083526231e04546959aa6734fb42a029d709ec52a758830",
+      "payload_sha256": "ff642e615b0024ef6ef0540634b6a455f843fcb16683ab5603a441c8eab17adb",
+      "bytes": 155218
+    },
+    {
+      "name": "decision-0081.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0081.json.gz",
+      "gzip_sha256": "f5c8df965a93bd2f4c3170de329cace00b08d049d7c46df150c7be699e9d5573",
+      "payload_sha256": "06106e6d8e162505252b43462b1fc2cc17fe6c04b33067b224f14dbab6feccb3",
+      "bytes": 154059
+    },
+    {
+      "name": "decision-0082.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0082.json.gz",
+      "gzip_sha256": "de9a8cf5cfb74bba758768b801d36d50f4af8cf79749f27bfdaa9db3d9b0e621",
+      "payload_sha256": "4b566eef30f63a0011832e62873686f99982f7018b140fe168846842313e6bc5",
+      "bytes": 152772
+    },
+    {
+      "name": "decision-0083.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0083.json.gz",
+      "gzip_sha256": "249dcceef71a2a4377cac71e28f31b30ae28119cb06ce6df906907cd2cd37775",
+      "payload_sha256": "b5e6f05249c6dffdb7672c1ddae8a0924b13215f7efee36d436e9457904befe7",
+      "bytes": 152386
+    },
+    {
+      "name": "decision-0084.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0084.json.gz",
+      "gzip_sha256": "e10426b3935e1c18585ef01002893d5e5a2f244444067d7dc1da7490d3eb1ed5",
+      "payload_sha256": "b58589007553866b25e2831765c93cb37a8f47d04590481c3c26e43ba864c305",
+      "bytes": 226391
+    },
+    {
+      "name": "decision-0085.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0085.json.gz",
+      "gzip_sha256": "3367c84462b6944eb497bea34defa838151cadef8d77639314ef8f510438f487",
+      "payload_sha256": "bb50e451db26ceb5e8c2bed9f594bd892bbabe82fe107522db8d449375a65c44",
+      "bytes": 226241
+    },
+    {
+      "name": "decision-0086.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0086.json.gz",
+      "gzip_sha256": "59ed245964dc2871631711e765d9e95ece0cbde7187632b4506f076e358299a6",
+      "payload_sha256": "467329e9733ee9284a647b6eb817a61a7d4a042c8efd8e8693f5b066c4327552",
+      "bytes": 225106
+    },
+    {
+      "name": "decision-0087.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0087.json.gz",
+      "gzip_sha256": "de74831b60e36a0954231722f6dba796f0518e55e26edb08ab3ef3dcdfc94ba6",
+      "payload_sha256": "07eb4d247c8ed0fcd91aad19d94b5d3cf51c9036d8952f4e17dfb4625236f128",
+      "bytes": 224037
+    },
+    {
+      "name": "decision-0088.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0088.json.gz",
+      "gzip_sha256": "f88902d41824cd8996583898014abae56f941ea7777023365260a96cd00fe522",
+      "payload_sha256": "00f3f678e60932fa8a919b8b1b8c3e56e97c91f2535516c494b5944fc8c0bcc7",
+      "bytes": 222959
+    },
+    {
+      "name": "decision-0089.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0089.json.gz",
+      "gzip_sha256": "5925d7783de57039a5b6fb96008f07a15ab47021aead1d882aaa4483cc8a27a9",
+      "payload_sha256": "2d7f4eda8591b9599b4b85be9b99755f2de87483ed915e08c64f0fcb943685a7",
+      "bytes": 222069
+    },
+    {
+      "name": "decision-0090.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0090.json.gz",
+      "gzip_sha256": "641d4d0d7986320254fe08b95d3deb99d48ff654257117386851f79f0d1c2c8f",
+      "payload_sha256": "b4871a6a90f796a33d428bc2f5144e2c75aff4434f45dfd5bc1e85c3847abde3",
+      "bytes": 221029
+    },
+    {
+      "name": "decision-0091.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0091.json.gz",
+      "gzip_sha256": "eae02956a690c636875beb70d41310d272e98634e0c3add32feb710a4400293d",
+      "payload_sha256": "6c87cb11fe452baf5917eee081582e4c77e4f6e2f34052682f240f2a22bf2713",
+      "bytes": 219908
+    },
+    {
+      "name": "decision-0092.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0092.json.gz",
+      "gzip_sha256": "002134280d58fcce03cf94c21d95d2e20c3c2f5b9557d45a92a62d4da1fb6af1",
+      "payload_sha256": "f8a0343736b98076bf13244b7cf09bfaa376a7df2fe1104078ecd0a6398344c6",
+      "bytes": 217533
+    },
+    {
+      "name": "decision-0093.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0093.json.gz",
+      "gzip_sha256": "f0b0def5bb0b0eb0f0dfca7b557bf86f409db03f912df6371c0abceca145f98e",
+      "payload_sha256": "b0e9a935e52ed691c077c9c36b62bbe6f8f7dc8d5bf4932589b4e18affd8a433",
+      "bytes": 217187
+    },
+    {
+      "name": "decision-0094.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0094.json.gz",
+      "gzip_sha256": "6cbd0c145c6ec7980c60b47f6861b6b19a9296bd83ab65e973392228307615b2",
+      "payload_sha256": "5eed0eb1f2361bea482aa3d95a79b0c4749da6b49feaf07bb57d0c04eeda83c5",
+      "bytes": 216426
+    },
+    {
+      "name": "decision-0095.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0095.json.gz",
+      "gzip_sha256": "8f49e3825943f13bfa3d27e091c7a5cf3a94c01e861981f5a31aee260ac3f858",
+      "payload_sha256": "8d420b290bd62cae78d6f2011b38fb628dfce97bae697a64639c1a311d4c93a8",
+      "bytes": 214740
+    },
+    {
+      "name": "decision-0096.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0096.json.gz",
+      "gzip_sha256": "7b119fe953f14ad16f249da98103d056ceed8ebc9e39442a90c216e6ebf1eced",
+      "payload_sha256": "3d65f31f822eeb5a14387ced27f220d5da8510931a47a94eeede274327f4b3d6",
+      "bytes": 214211
+    },
+    {
+      "name": "decision-0097.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0097.json.gz",
+      "gzip_sha256": "962d633975cc04dde3ee1f475a5cc2940f2cef34618e645cdf0c015047a3e51d",
+      "payload_sha256": "96bfc852eca8526c7ca0176811e8ad08b47ba2f15df836ab8a455a116b8c6ec5",
+      "bytes": 213144
+    },
+    {
+      "name": "decision-0098.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0098.json.gz",
+      "gzip_sha256": "4380c56088f09142b8c753a2e1df60687a800f09687146bbf459abd3c339af96",
+      "payload_sha256": "8fd3a26c2206378c7c79d7a31fa1b2e146d53f31f5137cccfd925f00b7973541",
+      "bytes": 211955
+    },
+    {
+      "name": "decision-0099.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0099.json.gz",
+      "gzip_sha256": "d64d37a2ecb7e8f57209f8cf5589e9e18ce84d1854a1ac4844f4afe58a3a0ea3",
+      "payload_sha256": "ed985b1190885a1226b3e976834d67d65cfdd7887d96d15fbce0306424c856b1",
+      "bytes": 211003
+    },
+    {
+      "name": "decision-0100.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0100.json.gz",
+      "gzip_sha256": "ce5206f153fe3daf3151c504a59ff6863d77cd19197c1f233a44b89c453bddac",
+      "payload_sha256": "5fe446ede5786ac065c285cfe6c2bb563890e4fa364c944db2ef293e91745ace",
+      "bytes": 209976
+    },
+    {
+      "name": "decision-0101.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0101.json.gz",
+      "gzip_sha256": "b83c7e5bbae89ac1e97a7c77c9cfc38ad326eb762c0f0bc2eee6c7d956f1b0cc",
+      "payload_sha256": "6c0d6428e6dd8b007bdd0fb12c4eb545efef3ce4b26601b6ee211d8b4b3ab15d",
+      "bytes": 208987
+    },
+    {
+      "name": "decision-0102.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0102.json.gz",
+      "gzip_sha256": "fbda5602ab65c19572c26d83ba1f383665e7d68eaa6ae023d98937fe40f262a3",
+      "payload_sha256": "5553b9825cfc8a53cb656b67bf1f15c4b2404b51b4123415344a23cea059100b",
+      "bytes": 208057
+    },
+    {
+      "name": "decision-0103.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0103.json.gz",
+      "gzip_sha256": "07438f4c2bf144cc9acb67ed123d4cda5ea69169d23447f053c6f2af6d0eb67d",
+      "payload_sha256": "95ee9b5d18f3dfd14632d422afa2ac09cb8e6a0cc5a87be676624cbfa8b3e370",
+      "bytes": 207006
+    },
+    {
+      "name": "decision-0104.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0104.json.gz",
+      "gzip_sha256": "65a50cb8e0844add5dd4ca10d3278a387ba740d32e3bbef8ec5babc89e7c1ed2",
+      "payload_sha256": "9cf1efd45943b780d736a00b2c93f011ac99b01b1a008e36d7cce4f4cda4f05b",
+      "bytes": 205931
+    },
+    {
+      "name": "decision-0105.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0105.json.gz",
+      "gzip_sha256": "5133b131215e9d55af4cdc26ae8aaeddff22b59ae2d51c179b0449f6891d5fc4",
+      "payload_sha256": "c3b893ce2e6cc2869c2eb12fe1a9f0d1a74665270f40f82f333beaa4dcf61bbe",
+      "bytes": 204856
+    },
+    {
+      "name": "decision-0106.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0106.json.gz",
+      "gzip_sha256": "ecc7bcb0845c35fce73e5c05c5462f585d74f7b62c2dcefda9faca82e5025b7e",
+      "payload_sha256": "65f550b723da6e31ccaef65f0194b847f839fbdacf313247be98ef3c2f4c0abf",
+      "bytes": 202935
+    },
+    {
+      "name": "decision-0107.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0107.json.gz",
+      "gzip_sha256": "bc45f63da7d02a2eefa1a564a0054a11e23b758f3d177bbc36800637f8f0716b",
+      "payload_sha256": "e676c1a936d889258e51d6877d31fb692baedb52c5001b0b7f733a5706c645bb",
+      "bytes": 202628
+    },
+    {
+      "name": "decision-0108.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0108.json.gz",
+      "gzip_sha256": "44dfe37dadd722140d98e6c849cf4bfdcd889facdd2424fe721e226ce12e588d",
+      "payload_sha256": "ccb6ad65ffc7e6fcdf3928c75a8d2456ad1de33834e78cb8e2b0ba0dbe8fc019",
+      "bytes": 201541
+    },
+    {
+      "name": "decision-0109.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0109.json.gz",
+      "gzip_sha256": "76c3270084cbb726a01d78f4f5dcbfbd36decf9824b5b24c0dea7f6001ad193d",
+      "payload_sha256": "70dbbfeca31f2e75dd16a0625826f03cc993841aa25bb052da266108d12345fa",
+      "bytes": 202159
+    },
+    {
+      "name": "decision-0110.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0110.json.gz",
+      "gzip_sha256": "9c59fdadf0bc71622803a3610d85df3cfe9416be9d7988dd8ec1331d986c24bf",
+      "payload_sha256": "1ecd96bd564e5bf3b4d16a8b1af1134b259bbff3021bb7a019126254453129bc",
+      "bytes": 201859
+    },
+    {
+      "name": "decision-0111.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0111.json.gz",
+      "gzip_sha256": "3afef9028383d590fae71277c1d1699125c7f4145b92705b0d505eff11104901",
+      "payload_sha256": "914753d12860a6f8ddca7d1ad47a70a35d1612b1cab7be86d0954bb78e82d7b7",
+      "bytes": 200697
+    },
+    {
+      "name": "decision-0112.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0112.json.gz",
+      "gzip_sha256": "04613e2d136e363c90f6e1f9659a91cffd407b76df839658e0af2c10b4a95c76",
+      "payload_sha256": "dfe167a62fdd1822f7670564a9d4f4ae8cbb53545f49d00eab41c96999d1ec35",
+      "bytes": 199613
+    },
+    {
+      "name": "decision-0113.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0113.json.gz",
+      "gzip_sha256": "aa7520217d1b84e6262ce08307f182016736892529a680a5c6da7ea5e1cffba8",
+      "payload_sha256": "26171962a176877946afd41a3481317af31589b999ac569d9b62af18357a2def",
+      "bytes": 198480
+    },
+    {
+      "name": "decision-0114.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0114.json.gz",
+      "gzip_sha256": "caedb404479469d2e4d316200838c1f503eb276ad2721bc8742c7b70b0c900a6",
+      "payload_sha256": "4bf699730de34e56c1ed47cc90339d883e6dd397ebcbd6f82d9176ff4ae3aecc",
+      "bytes": 196150
+    },
+    {
+      "name": "decision-0115.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0115.json.gz",
+      "gzip_sha256": "8e9959fa9749e9d457f9d40008f313875cb8cf5716b899dbbdc6bf3d489b1b45",
+      "payload_sha256": "36eaa6fe7b63c88a1bcafa69b0edb21511f8183df536687f1068996c2c9c4b39",
+      "bytes": 195737
+    },
+    {
+      "name": "decision-0116.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0116.json.gz",
+      "gzip_sha256": "07243f32dceb27a84e040e631fa326f62a43fa09608b9e67a7c041abd813e16c",
+      "payload_sha256": "aa42847738754ff2f2e052ca39880f776adde955f05cfefd4119d8f5b78a74ee",
+      "bytes": 194776
+    },
+    {
+      "name": "decision-0117.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0117.json.gz",
+      "gzip_sha256": "2d38936655695e6fdfeffac38c5de1ac557895970971db62a075584a2951e3ce",
+      "payload_sha256": "b1cb9f8413e40f67e503e80f0e394d63c1e7c78416a6fb516edf81362c0128c0",
+      "bytes": 193173
+    },
+    {
+      "name": "decision-0118.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0118.json.gz",
+      "gzip_sha256": "e680bdebb7f50768d38f0fb39e0f08cde355d3df3db58081e96d3c25f119d53f",
+      "payload_sha256": "864ba4d70e3ad5997aabfc00af22a2bcc4ebc0c68e5d869c70984a26d86b4d8c",
+      "bytes": 192720
+    },
+    {
+      "name": "decision-0119.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0119.json.gz",
+      "gzip_sha256": "400d7854f334185df523ac8ca7b7d4014387dffe1a1e09035076b9ffaa544148",
+      "payload_sha256": "db2c538eee16ce3b1e184b3c9bc514e4863a24400d2a67a7b60634efe9b68430",
+      "bytes": 190764
+    },
+    {
+      "name": "decision-0120.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0120.json.gz",
+      "gzip_sha256": "5ab550954b722a0929ab4a4c107245c24a704ff0a0f9bad83efd6bc048324c9c",
+      "payload_sha256": "a512bef363a5a6b825bf98369209998d11c2f352b7be7a11d44845c411bd68c7",
+      "bytes": 190535
+    },
+    {
+      "name": "decision-0121.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0121.json.gz",
+      "gzip_sha256": "0cbe2305e7f66cc04979c7d3e9e8540ff7c1550a2142d77ad360525ca4456c5a",
+      "payload_sha256": "210399fdedda86b450793690da775b989a434de345705101120625ad391aa98f",
+      "bytes": 188820
+    },
+    {
+      "name": "decision-0122.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0122.json.gz",
+      "gzip_sha256": "acd006ec160f4384d269a6699cfd63909112ca32615ff4d60d891464c6862605",
+      "payload_sha256": "6995cd2bf023e0f4477601bddcfcebfc501d4a6b158bcacc6cad7b36c909568c",
+      "bytes": 188571
+    },
+    {
+      "name": "decision-0123.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0123.json.gz",
+      "gzip_sha256": "d3b1514c2275bde16b210765007a2b1ddd3e7513557b5728915945d3ac3f675e",
+      "payload_sha256": "a4375e201787feaa178ee22edc6cb6c0365c25b3553ffd1971f7031320e584fc",
+      "bytes": 186535
+    },
+    {
+      "name": "decision-0124.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0124.json.gz",
+      "gzip_sha256": "91bd3b3e75493a73e5091329a5116384bb82e227ccaf6dffaffb5db6ffb4d2e8",
+      "payload_sha256": "7ac61f69f4fc9975bc585218e5bcc70437767dd2a1ec49a6b07a0da3e0174e87",
+      "bytes": 184444
+    },
+    {
+      "name": "decision-0125.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0125.json.gz",
+      "gzip_sha256": "7b4b95672c79ecdc2b08cf9ee345d47df4a7a0769fd22ef30e4a2121b62a1c9e",
+      "payload_sha256": "fd81d64b71234f2a32f07bf65d6a18874d06beda36c54002bbed0714f23b45cd",
+      "bytes": 183622
+    },
+    {
+      "name": "decision-0126.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0126.json.gz",
+      "gzip_sha256": "2dac0b4a77424c4de6e699c359aa6aa1e55c9ce18e8ac11ae4696f1a1a5f197a",
+      "payload_sha256": "ede5cddb048d24a80ad2dced5d00de0c7075c973b19cce1aa7178971c3acbe6a",
+      "bytes": 182288
+    },
+    {
+      "name": "decision-0127.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0127.json.gz",
+      "gzip_sha256": "82fa6fbeb95d82cc265dcb1085469426360e619343836f66f27d5b7e5dbde213",
+      "payload_sha256": "e9761b8998a592736c32d5cd146ec7bb6dc9a4c1b5de4d087f69228ef0f54db0",
+      "bytes": 180165
+    },
+    {
+      "name": "decision-0128.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0128.json.gz",
+      "gzip_sha256": "629d166994953491a1bafdd581692ccc1814aeb460a7e415d258e3512f350a59",
+      "payload_sha256": "7ba21e05dc22fb75a2d5746341f7ffc488832bb0b53c8ad1d4650bc43d31a8e1",
+      "bytes": 177169
+    },
+    {
+      "name": "decision-0129.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0129.json.gz",
+      "gzip_sha256": "2954e2c18ab93591ce87633d2a9849fb13f17d1c1a62013b0ccb30941523cdf9",
+      "payload_sha256": "99854e5bf8612eb678d9bf8af40a1816443d4ad0d558efdf3b76d21b0f5e4cd2",
+      "bytes": 178734
+    },
+    {
+      "name": "decision-0130.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0130.json.gz",
+      "gzip_sha256": "396e4339d4a0c2f87748dd17f6d77be82e014bd4ff05e2aef14f981ccc4b5ebe",
+      "payload_sha256": "07fc579b58194ef71e7c99f26b92f504ec5622505f317e791837df9b611fbb5b",
+      "bytes": 177771
+    },
+    {
+      "name": "decision-0131.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0131.json.gz",
+      "gzip_sha256": "0fda6763a0a4a9bd602b38cc0c1f083631d5d81a9f0d9daa3184b5fd043caae1",
+      "payload_sha256": "17bff745985122bb58706cc6e96fabd05d6c3c7cb16f36506eac1d5355c43c96",
+      "bytes": 176099
+    },
+    {
+      "name": "decision-0132.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0132.json.gz",
+      "gzip_sha256": "573d70feec9bba13b251af46dcb62c87572348ec85112caab170ad8504f60790",
+      "payload_sha256": "be0025f3ddad9e41e4dc8a3aa231f521182d1785c847ecee88d6b213383db89b",
+      "bytes": 175813
+    },
+    {
+      "name": "decision-0133.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0133.json.gz",
+      "gzip_sha256": "2d8a7aaa1f0e3c022541a1698126779f0eb0ee4976ef12e3c7543817c3777063",
+      "payload_sha256": "e8604578880896d2593e97e6d26b790b240db0e2a49b814f06930d7bc5ba30bc",
+      "bytes": 174683
+    },
+    {
+      "name": "decision-0134.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0134.json.gz",
+      "gzip_sha256": "e18d21cfe85f8c99baa94d644930925f7f5789a90706af4c3ec1431773b3cff7",
+      "payload_sha256": "d38ddee4c9389da5b83a23c9b5d1b1c0bbd53838b73c77dfa77d07dd998b44d1",
+      "bytes": 172787
+    },
+    {
+      "name": "decision-0135.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0135.json.gz",
+      "gzip_sha256": "56468a104dfff684302faf323289963cc91c58ff9312ab2e91a3f337d90ebaad",
+      "payload_sha256": "90b3c961cec046bec7c24e73e854f7e64560f265105dd5b9a72768a8fa7c3f7a",
+      "bytes": 172328
+    },
+    {
+      "name": "decision-0136.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0136.json.gz",
+      "gzip_sha256": "1188215140d5c03e36fc8db30437746a0db99c43bc53b637b2f4f9a6ca6bfbea",
+      "payload_sha256": "932b99bea8894bbfc8b55ff71f4b13fcb3849b747c9d8439d6bceb4af10c5323",
+      "bytes": 171414
+    },
+    {
+      "name": "decision-0137.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0137.json.gz",
+      "gzip_sha256": "ac1d41170aff72054eb3e457b6505e1b523e72786459b5dc31ee07f4b85d01ad",
+      "payload_sha256": "73271a597af2513aaa89e2eee0332e7ab60980bb81fa188f444428291746430e",
+      "bytes": 170210
+    },
+    {
+      "name": "decision-0138.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0138.json.gz",
+      "gzip_sha256": "2865c3b09952a3f72723cf8b5b451f3cb35bd5cef29a0af9e52542f43912d067",
+      "payload_sha256": "b285dc027635933fc3837ce32f190cf0ce51054dda51cb8ec0d40ed9130b64d8",
+      "bytes": 168625
+    },
+    {
+      "name": "decision-0139.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0139.json.gz",
+      "gzip_sha256": "ed1409ce186a2640d40c1246fa633bae435c76392abd656904847af871dd76c3",
+      "payload_sha256": "1f24d50f726d454ed1137a15a0feb4a5fbfaa4044511452d11e3e42f466bde44",
+      "bytes": 168221
+    },
+    {
+      "name": "decision-0140.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0140.json.gz",
+      "gzip_sha256": "eda13f38182ae25a86e6a2ad0d6e59bbb471d31e3a5afcbfcd8c5e5ae8308ac3",
+      "payload_sha256": "c01389d8ba8bab08966069bf86e83c1af5e5452481670f5cdf43c4180586f5d5",
+      "bytes": 166453
+    },
+    {
+      "name": "decision-0141.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0141.json.gz",
+      "gzip_sha256": "6581b750baaacee24aaabd67e75795a79e6e778aac4fa156aac538170dcc0cfb",
+      "payload_sha256": "6d4481ad95e07cd68139c7dceaac8869a0ce42f2a97e6e82d3807c66f4bce7b6",
+      "bytes": 165272
+    },
+    {
+      "name": "decision-0142.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0142.json.gz",
+      "gzip_sha256": "aa01dc10dbb9892699826df839b3bc128aa4dcdfcf2d82c62928bfb21a3a1bc8",
+      "payload_sha256": "1b76da673985068cf28f38beae0cf5bb84adcbbefe426f6c7b828a628ad5b9e7",
+      "bytes": 162394
+    },
+    {
+      "name": "decision-0143.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0143.json.gz",
+      "gzip_sha256": "eb5882689bac28f5c8023dadd6f5dd0a08c83e561e6960a65ad63f634dc5f9bd",
+      "payload_sha256": "e99a430a7ea5e878b46199c049a39a5163da997a91af6b20186cb94012ca2380",
+      "bytes": 162558
+    },
+    {
+      "name": "decision-0144.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0144.json.gz",
+      "gzip_sha256": "d721f07799c209afcab34714d6c4d3ab91c224ca973dbf32a7c78de9386ec7e4",
+      "payload_sha256": "6ce7570637a401687ce60c516256de5b3b5567d8322f0d3e27f3e220eccb40e9",
+      "bytes": 162225
+    },
+    {
+      "name": "decision-0145.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0145.json.gz",
+      "gzip_sha256": "8760f1759b3331fadcb52a9b33821654cca490860b2bd2efc0448dd37ca8774a",
+      "payload_sha256": "c1aad25b8c972ac73a3afb9f1ae06b141a198d3bc2a9c60de36dd6f2aa570fb1",
+      "bytes": 161162
+    },
+    {
+      "name": "decision-0146.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0146.json.gz",
+      "gzip_sha256": "09b9f3eda4efdfb78dc3365ebcbbbfc6f2a4f7f25f74b10dab9726cfcb24a68c",
+      "payload_sha256": "eaf102984b9d9417a3c1b15448e21a149ca6937322db606b7ac6d09013bcf378",
+      "bytes": 160840
+    },
+    {
+      "name": "decision-0147.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0147.json.gz",
+      "gzip_sha256": "2033320af4c68952a5737ac8c1e488d000842c63d05d0cb8485f7133e2231816",
+      "payload_sha256": "a9c178ed0a0c02e8596314723d5d396cbd2580714501efa9fc3bf371cba5c8d3",
+      "bytes": 156684
+    },
+    {
+      "name": "decision-0148.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0148.json.gz",
+      "gzip_sha256": "306c039e59b94ba798188d0401742ea5701b87a8c51b0547331e15b4ecc95f67",
+      "payload_sha256": "1bd102c8926ca02062fa49f9e1919a4c321d53e990107a7e3a7c9baf9adda42e",
+      "bytes": 228201
+    },
+    {
+      "name": "decision-0149.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0149.json.gz",
+      "gzip_sha256": "05c8d2a6f727adb4126f6be7976489f833d7aca7e60656b09a14992b93278a45",
+      "payload_sha256": "b524db3970ae416b017135d3bd9194718bb0b34d6696d0a5f2e6d0502e810b88",
+      "bytes": 228295
+    },
+    {
+      "name": "decision-0150.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0150.json.gz",
+      "gzip_sha256": "7257bbc5be6a81371863d105e89eb8510478644cfcac791ecb85070828ea5cf7",
+      "payload_sha256": "99e2b893324c9798f9c996d5eef877618f898bf1a3bceb896c12ebb5084f5754",
+      "bytes": 227234
+    },
+    {
+      "name": "decision-0151.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0151.json.gz",
+      "gzip_sha256": "897b3c14510180b8b337c82d8f21cb247c8cfa92b123499aaefa7e3e322fe3ef",
+      "payload_sha256": "d9407deee796c4eb866da3815b14287e56ee9e53798e9ec462735af9d414ee65",
+      "bytes": 226067
+    },
+    {
+      "name": "decision-0152.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0152.json.gz",
+      "gzip_sha256": "e0f64deacb645151f85eb1a325f62839bc91f2ed5035b300f673e6d0396ca2a1",
+      "payload_sha256": "7270cac58cf7730f75054e1793affc643ff2d80554b8693228bb4a2daec0087f",
+      "bytes": 225358
+    },
+    {
+      "name": "decision-0153.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0153.json.gz",
+      "gzip_sha256": "bc0df798a530826a2a8bb94982a9cb11eec11ee64b70f71e63b43b1a02d3b486",
+      "payload_sha256": "51833ef1701c70350f3e27231614ff16fc54aa3fcfde98bfe53e93f75be71437",
+      "bytes": 225472
+    },
+    {
+      "name": "decision-0154.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0154.json.gz",
+      "gzip_sha256": "040ea6e3de8dd44cbb7686dc09c8c90998ad84d1287d58206f6306f1ff5309b8",
+      "payload_sha256": "a69c4c1175ff87104c94660f09e2bd6c0003817fd9addd231e2c157fbc7607e4",
+      "bytes": 227632
+    },
+    {
+      "name": "decision-0155.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0155.json.gz",
+      "gzip_sha256": "59dda64e49a5bca326f0832c47235aacebff46c526202b905e3f175dc6ad6a2c",
+      "payload_sha256": "2217bfcf7b35f1f5e56b018c71c6576d4295c9fcbe788c96909ff722ca79bd68",
+      "bytes": 227202
+    },
+    {
+      "name": "decision-0156.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0156.json.gz",
+      "gzip_sha256": "6f461268f0be8252cd44d9bb2401294eeb0b7a0fbb8e3ab2ffd5dd5066673af2",
+      "payload_sha256": "6a4e8810639b542d383fe9541c70eac29e1b5c80119fc990c3154b74fbb80d92",
+      "bytes": 226142
+    },
+    {
+      "name": "decision-0157.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0157.json.gz",
+      "gzip_sha256": "3c1f5d84e4ed9514c83958e84dbc336e94a129092d0b9d532172e1bdf4f7ab0a",
+      "payload_sha256": "626f77addc36d9063c8364aff64fed342b15a5fb14b1b7852745076434510733",
+      "bytes": 225087
+    },
+    {
+      "name": "decision-0158.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0158.json.gz",
+      "gzip_sha256": "fefb6b8f167231e98e6f04df80f1eb404a37d0d793b7b78225f5be91b7e6a455",
+      "payload_sha256": "b23d9706fe241326d0f81ec8edcb4c735b18354ccd628978842a43efbda17ac3",
+      "bytes": 224076
+    },
+    {
+      "name": "decision-0159.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0159.json.gz",
+      "gzip_sha256": "9ece1a6a846aa6e15dcf2bc1b40008addc778d44ce8ea28172f694e058731808",
+      "payload_sha256": "129a8581e57c5baa46a2ba4355adcbed42c9384b6226e60b79597a507a800889",
+      "bytes": 222952
+    },
+    {
+      "name": "decision-0160.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0160.json.gz",
+      "gzip_sha256": "203172ec67e74663ec0c20ed8eb0571d0f83c4c9272ed1919f9ae436f76ea7b2",
+      "payload_sha256": "295edb127ba5421be6ab2edc40fb65a3dc10f52e1b6f62a6c35654c1182e3e66",
+      "bytes": 219848
+    },
+    {
+      "name": "decision-0161.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0161.json.gz",
+      "gzip_sha256": "a256804ae8875fa3b195f85eb255149e7f6cb3fee2ed9e1d708824dc761b4437",
+      "payload_sha256": "8e9c0661a997a6b9ee4bbaf4d9e23b9516cacc9bb70f4d26c994241918c1a8c6",
+      "bytes": 218834
+    },
+    {
+      "name": "decision-0162.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0162.json.gz",
+      "gzip_sha256": "57ad0015487b7f1adf3144dddef32fd9e850425d3055c41aee4c042519b410c2",
+      "payload_sha256": "03dc3b4d0801142994a639481be29ad6c584190edc6541f333e4e0596b7c87b2",
+      "bytes": 217825
+    },
+    {
+      "name": "decision-0163.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0163.json.gz",
+      "gzip_sha256": "cb54118149d44e0bc051e6c2a7124dfb13b972a37764b2dc32b38dd41da61877",
+      "payload_sha256": "2d08f9c786471d9e3ff7b1dc9e8079a2cfbe3ac389e52071b9d7088763a210a1",
+      "bytes": 216798
+    },
+    {
+      "name": "decision-0164.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0164.json.gz",
+      "gzip_sha256": "c4668cf81c4df584949233639e7f9cedb5c6094552638880d2ed85501d720f78",
+      "payload_sha256": "d81062493e54f40d1e966e1a29650d89a13b6865af5f4b69b1d60d39dc520dd6",
+      "bytes": 215830
+    },
+    {
+      "name": "decision-0165.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0165.json.gz",
+      "gzip_sha256": "1c610a164aee93678d851c08a506eb1cde8fea26adcc975ee2fd3e26813d521a",
+      "payload_sha256": "fb14b31cf0a40c694a3978a56942a8920cae7972b8cd1ec87fbbf767b6449f38",
+      "bytes": 214794
+    },
+    {
+      "name": "decision-0166.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0166.json.gz",
+      "gzip_sha256": "3c2194470bcfce27918a9391684d5d7ba84993b464ada7733c5935a6ee778f56",
+      "payload_sha256": "2f064f67c3503ef49dde2e4257147c02cab57b88970f94049f95f602b8f1ba6f",
+      "bytes": 213665
+    },
+    {
+      "name": "decision-0167.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0167.json.gz",
+      "gzip_sha256": "fac9b70acb5caa10e8831d377e291d167ea1a9eb475931d457d867cabd735ce9",
+      "payload_sha256": "4b853bd3bdf50e9fb0600fa0d60d4bb98a45bbb162867c6653642c32da48d888",
+      "bytes": 212528
+    },
+    {
+      "name": "decision-0168.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0168.json.gz",
+      "gzip_sha256": "1b8bf970cc69151378008ff92d185547e9dabf78b5279cb34dd080d1a97f24fe",
+      "payload_sha256": "d68803341aacd3389a5fd7e07ca687195778fdfea0254d242013d4f499a05910",
+      "bytes": 211531
+    },
+    {
+      "name": "decision-0169.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0169.json.gz",
+      "gzip_sha256": "86a02e1524665c21bbec023add2a1c34ce68c5111538f9a451a9bf7499eddfbd",
+      "payload_sha256": "9aa5aa7ce415b943df68c0b4879d50ef2a53987d6eb1261919f6e62977910ad2",
+      "bytes": 210632
+    },
+    {
+      "name": "decision-0170.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0170.json.gz",
+      "gzip_sha256": "b28f3b587f97ae66f18b836e1e98051806e19769da499268efc65e28302958e1",
+      "payload_sha256": "0633b7090b636643d281558e61218ac7673ab791ed065dab68607702f569abf7",
+      "bytes": 209583
+    },
+    {
+      "name": "decision-0171.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0171.json.gz",
+      "gzip_sha256": "67cd2e1a297fa7862ba0cdb6ee24686c2d8d151e804550cd42df18fc08f290eb",
+      "payload_sha256": "918715c1e830431f966b5dadb13bf168f73d1590de21f47b2381a261b5eef26c",
+      "bytes": 207810
+    },
+    {
+      "name": "decision-0172.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0172.json.gz",
+      "gzip_sha256": "bd9a7713ea394bed1385b804d8f2a72c7e274b192dcdf0932a918bc6a26806f9",
+      "payload_sha256": "c0ba6fbfc9a95f2863fddfb1694f9bcfccf1e710292c33f83335dfdd1232edcb",
+      "bytes": 207543
+    },
+    {
+      "name": "decision-0173.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0173.json.gz",
+      "gzip_sha256": "02030a2a669337dd0cef5e283e7be7f6450b6ffd1e2e36b6cb8c4f618b712e4a",
+      "payload_sha256": "2341caa18b701b1114c344907a75eebb65358541cdf8dc62eb0d1e27c728c019",
+      "bytes": 206474
+    },
+    {
+      "name": "decision-0174.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0174.json.gz",
+      "gzip_sha256": "6ec335a19b5d66cb54c48d65f3627653e00a3af050c7d05d381fc08343af229d",
+      "payload_sha256": "b088a1a1919b1576e110afa4e2865a17e60f4e8549b98c0208decee96f0ca75e",
+      "bytes": 205320
+    },
+    {
+      "name": "decision-0175.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0175.json.gz",
+      "gzip_sha256": "ff394d378eff2ef4ae4e1e9d741003a9db1c0b6c934031e1fb064d372d08301f",
+      "payload_sha256": "dd243619a1a171eb9c2f266f41bef1a936ef2db0414dee23d3fbb2ae2dde129f",
+      "bytes": 204327
+    },
+    {
+      "name": "decision-0176.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0176.json.gz",
+      "gzip_sha256": "266ee7d3a08a414de07ab7219d2895f79a88a9faff1d9b59039953db961862d6",
+      "payload_sha256": "176a5e371a8cc1985b0e8ee680ec472d771cb376744e3ff87933edbddcb762d6",
+      "bytes": 203364
+    },
+    {
+      "name": "decision-0177.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0177.json.gz",
+      "gzip_sha256": "7581d47aed081389b9e3f159ed7858907fb68c7f49422e378bd17d53948a0deb",
+      "payload_sha256": "23d3ea985802782f3e226f5063712680d9e32a19e01af68314d3110aca815858",
+      "bytes": 202246
+    },
+    {
+      "name": "decision-0178.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0178.json.gz",
+      "gzip_sha256": "3cf8a7cb06ce4413f6ccdc9a7f3fbba225cfcf4f1a71e12853d3b3a2ac3d5e38",
+      "payload_sha256": "486b1bbe2a37e1563ba0a09dc4728efdd2d54ce7b1584ae40ccfe313e7d05314",
+      "bytes": 201138
+    },
+    {
+      "name": "decision-0179.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0179.json.gz",
+      "gzip_sha256": "907e08e5d49d0506300562a0d933007c4be434e657c2d3dd16558cdea1c3a133",
+      "payload_sha256": "4c9543e7a411b96026a0b7af5f9eb26e1e8244e1681f19bc7dd8615d4ae92b7e",
+      "bytes": 200194
+    },
+    {
+      "name": "decision-0180.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0180.json.gz",
+      "gzip_sha256": "64d26ef036af563ba417b17b1574b5ca6c3f2ce860c4d3693f7b68116fbce607",
+      "payload_sha256": "1b284aba52f50764539a4bbe55db77b4e90696cc7e566f2734a835c78dc36dc3",
+      "bytes": 199026
+    },
+    {
+      "name": "decision-0181.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0181.json.gz",
+      "gzip_sha256": "89e5d98dc871bbf415551c67396d583f39b0cd5258e852e82236547fb6bef0e3",
+      "payload_sha256": "1da05eae92f2ac9753685acf54060f66f878d4f9354d5f6ca4b4877fc9a17087",
+      "bytes": 200143
+    },
+    {
+      "name": "decision-0182.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0182.json.gz",
+      "gzip_sha256": "a8a1801bd4559d84e33c67a2232a0fafeaf754d415d4ec702c26020ad2a93393",
+      "payload_sha256": "48b0edeba2a30b1bd73419bd384887a61e92973af5a8ad224337aaf94695b4b5",
+      "bytes": 199150
+    },
+    {
+      "name": "decision-0183.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0183.json.gz",
+      "gzip_sha256": "01cfbfe8a8743c6b784008aa18bb81b099eea9e8bf0a9f170bb6a2babcb992d4",
+      "payload_sha256": "41b462163317265094cea05935d7c32c4eadefc69d436fb3ece9db5eeb1e33ba",
+      "bytes": 197551
+    },
+    {
+      "name": "decision-0184.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0184.json.gz",
+      "gzip_sha256": "db188024af4860986e045a1babea9f30ca8387b419b11d61948b418ee264daac",
+      "payload_sha256": "b9d6165c0ad7da72dec8b4ea9d61074dc5f912e259ed5168f53f25fa1de09b1f",
+      "bytes": 197092
+    },
+    {
+      "name": "decision-0185.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0185.json.gz",
+      "gzip_sha256": "7ddcbcd8ad23e3f90ed918b21e5c4a25924768c32fdcce3698487074dcf32c4c",
+      "payload_sha256": "952ecee50965ff1a765d59430dcfb3a25745238249749a0486ed9c123f326171",
+      "bytes": 193897
+    },
+    {
+      "name": "decision-0186.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0186.json.gz",
+      "gzip_sha256": "66aefa80f242bc6309ca033ec06600f2c574170d2582c8435eeb37a7660b851c",
+      "payload_sha256": "52a5e3615651cef7cded251dfb678315243b4e07bf3cd7f3a6e24b512cb9eff6",
+      "bytes": 191471
+    },
+    {
+      "name": "decision-0187.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0187.json.gz",
+      "gzip_sha256": "a63fc0aa2f7fbcbbcf790be9fdbc4bb7f9eb471deffff9f87d777731ee242041",
+      "payload_sha256": "4570544daed3eb91cbd78627b0f29477649476d4b3582609511dd2f5e8280455",
+      "bytes": 191236
+    },
+    {
+      "name": "decision-0188.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0188.json.gz",
+      "gzip_sha256": "820e06450253c06b02994a9cbff58a8987bf67aac8f44b6016213fa6eee30631",
+      "payload_sha256": "092b3274a0ea984e35f9c0f4c74f24b35913878760de90b741fe6f4c8f6d7307",
+      "bytes": 189653
+    },
+    {
+      "name": "decision-0189.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0189.json.gz",
+      "gzip_sha256": "6b48faa941d08436c41ba15783c7ab9ff9fa75e56bde73b0823f9877adcade27",
+      "payload_sha256": "ced2e51de15d6d5630f80b1956633d89784d820e8fde853e372ac970952575aa",
+      "bytes": 188472
+    },
+    {
+      "name": "decision-0190.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0190.json.gz",
+      "gzip_sha256": "a96e1a10cb7a3a62bb7c833258405d3ff63daf3571397d351a2b1f9f79a88864",
+      "payload_sha256": "719a7fb8f486bdd0b22b7cb1c8ddf7ce6f235478cca4ee6c3a4881f664bb7db5",
+      "bytes": 186020
+    },
+    {
+      "name": "decision-0191.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0191.json.gz",
+      "gzip_sha256": "4fe39d0c3fa29a36fe9aab50149e04dfa0be353a9a33659dfc488ef86eba58c5",
+      "payload_sha256": "887321a35738fa2543207cd82c39f5ee432a16ee8133ac8e9b30e9047c8d630f",
+      "bytes": 183951
+    },
+    {
+      "name": "decision-0192.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0192.json.gz",
+      "gzip_sha256": "b1f39acf4abd70051ff4e53869c28eb238bf531e802c4729437a2fafbd0ad0f6",
+      "payload_sha256": "cd122f4cd771f9524b925c3d360d4fa12e47e22cd20185e171a482fbe16e8e55",
+      "bytes": 183431
+    },
+    {
+      "name": "decision-0193.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0193.json.gz",
+      "gzip_sha256": "bc2cecaf4e5a3723557f5469d4ad4716d11821718d18702a8a8fe7866896fa72",
+      "payload_sha256": "b89eff57058faa10073e960efa7f0f4f44190ab5cd24d81b90e9eb36d42bdd4f",
+      "bytes": 181453
+    },
+    {
+      "name": "decision-0194.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0194.json.gz",
+      "gzip_sha256": "abf4ea6478a4709192c21cef30e5850f0df0dacf98f248f945bc3e7c4f594c14",
+      "payload_sha256": "67cb7e220a38145ee6f846470a6523f92ec7c2faadd5350a6e9b2efed317ece1",
+      "bytes": 180710
+    },
+    {
+      "name": "decision-0195.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0195.json.gz",
+      "gzip_sha256": "9f580dee83060128c7d86073a21137a050e2789bd3f5fbb4350309e8b7749cfb",
+      "payload_sha256": "b2047b23a0a00670456b85ad78ae394cf1aeb337c5fa402eb9c2492e40dab6d5",
+      "bytes": 179790
+    },
+    {
+      "name": "decision-0196.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0196.json.gz",
+      "gzip_sha256": "97fa50ffcfcdbbff9343fa485faaf02228b39281b5d478ab1f3ac00edbb35372",
+      "payload_sha256": "10d90279d46d561cc9461aabece7169fd9e4def0ba65ab253fd4838cb8b91805",
+      "bytes": 177627
+    },
+    {
+      "name": "decision-0197.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0197.json.gz",
+      "gzip_sha256": "2bc0a6d0d11a34a0a7d1b76b46a07f1c48d3657c5ff3e96c5dd2f7d31d6fead1",
+      "payload_sha256": "547a377075479d8c2a8a82be495e8face6c294095ec969447a7835bf63eb09ee",
+      "bytes": 177202
+    },
+    {
+      "name": "decision-0198.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0198.json.gz",
+      "gzip_sha256": "f9122454c7c9bc3874345a1e2128128b553864f2061d625c6b06023670178a75",
+      "payload_sha256": "29175de86d0f308c8f8f031cc5ef9ea5d8db0d2f7751cf01377fa20366293689",
+      "bytes": 174605
+    },
+    {
+      "name": "decision-0199.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0199.json.gz",
+      "gzip_sha256": "9c45ed9ef88b6cbdbe2a1cc7bfab639e82175af45b0fed3f1dce30d59e19ee3c",
+      "payload_sha256": "35ac62ed4d5ff0612e68e6a515d1b03b423de982f48f77d49e71efbe7c6a7df8",
+      "bytes": 174573
+    },
+    {
+      "name": "decision-0200.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0200.json.gz",
+      "gzip_sha256": "8bb2209d0bd7194cfa5e56b930b6ba401a58afba34416d1d52d4fccb6167aab0",
+      "payload_sha256": "3e9e30feae9af36ff7d9e32a6fc9fe0035bb110a592645551e0354922f3aec2f",
+      "bytes": 174402
+    },
+    {
+      "name": "decision-0201.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0201.json.gz",
+      "gzip_sha256": "b6e6bd099cd6713b96c2c6cc2cab54c9ef7c59a87b23d8956fb0ff50bd3e6299",
+      "payload_sha256": "8317c98d8d41a51b81a9871b3dfb8c5fb258f9e40c20f7ec8c9305120daf26f7",
+      "bytes": 172986
+    },
+    {
+      "name": "decision-0202.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0202.json.gz",
+      "gzip_sha256": "f38c30b6e1d2c01e8ba9e2884a6ae6aef13f37c09b460e3f62157ebe15eafa3b",
+      "payload_sha256": "4398dbafb891b77596dbad621a6914467ddd62faf64405953717e7cd0ed256f6",
+      "bytes": 172567
+    },
+    {
+      "name": "decision-0203.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0203.json.gz",
+      "gzip_sha256": "b62e9b8906a6c5c7d883bff649511fd3ef60add8e70fa9edf603ccfa7f3f12d6",
+      "payload_sha256": "0a9c8cfcfacd54940d89746b4921a0ec69f3e5b0ac93ddf17ffc63f298da76b0",
+      "bytes": 170872
+    },
+    {
+      "name": "decision-0204.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0204.json.gz",
+      "gzip_sha256": "acf53e58b434f65809907dc1cb1e123c6523f1e0048030cd2f045ce4ec67209d",
+      "payload_sha256": "681f217e4f81c52a11242dbc030523ec8f24c9b25fc9b1af98299be1b105d180",
+      "bytes": 169452
+    },
+    {
+      "name": "decision-0205.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0205.json.gz",
+      "gzip_sha256": "8f7c9af8344a390ac0daae0363dec403f14173a2e647c44dd2bfbee700de99b1",
+      "payload_sha256": "a63f81f3f07a95f51c087e7301f0118a126ea08abba27fca05f84823326d6b8e",
+      "bytes": 168448
+    },
+    {
+      "name": "decision-0206.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0206.json.gz",
+      "gzip_sha256": "a92639635ab22a6b2084580cb8c3a28a454b5e991c95ff0d4ddd5b3405d78d03",
+      "payload_sha256": "1dc969eca710f53123c74c4a0f07c6e4e5e4abb5dfeb55eed0d5871bb25b08b0",
+      "bytes": 163233
+    },
+    {
+      "name": "decision-0207.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0207.json.gz",
+      "gzip_sha256": "918106b23da82f9484c9aebf9edca90f0fc67a92f7e949d43317222b13606471",
+      "payload_sha256": "bbda44904303ecd3c44e1d4d754684ca9f1b14816235e11daba12b9712816592",
+      "bytes": 161953
+    },
+    {
+      "name": "decision-0208.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0208.json.gz",
+      "gzip_sha256": "deb6d1b757381895f48c8e43c2c2ba51db56b3ac40354106101f9ab0ff15afd9",
+      "payload_sha256": "fea976d9a7fd363a243cfdb71dc7d3dc4a266574573f68edffe59a1094939ae1",
+      "bytes": 160201
+    },
+    {
+      "name": "decision-0209.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0209.json.gz",
+      "gzip_sha256": "c2eff0a5c0a7871482952dc88e5b196124acf4e6a99141dbb1b8d2d49b745c46",
+      "payload_sha256": "b234a1d83954d02f836ba3a9121c080fa42ed3cf891cfd6a8af74af0e6639d63",
+      "bytes": 158824
+    },
+    {
+      "name": "decision-0210.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0210.json.gz",
+      "gzip_sha256": "bb2813799423ecd51f01d68fa44b0a46c7c34ea6468adba5fedf7db3e10e51b4",
+      "payload_sha256": "6ef0f6c88c5f286adcee8d4c3bcc1acb5298cb7436084de25a17433ed1fa6ae1",
+      "bytes": 158061
+    },
+    {
+      "name": "decision-0211.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0211.json.gz",
+      "gzip_sha256": "3299b3aaa0d02791c890aac59f8cf17d9abc0d12b95592f7dd1ccb25c89e62b0",
+      "payload_sha256": "42d32e65dc1a743fea8aac3c8690d3db50edfe24c58ed490f65cd961be4a4154",
+      "bytes": 156513
+    },
+    {
+      "name": "decision-0212.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0212.json.gz",
+      "gzip_sha256": "cad0ae1b60366d0b7402203b1c75582994b7ee100365ee37e3c602bf6fb38263",
+      "payload_sha256": "b14be2bcb5816193d7799b9ba202639bc2e88677d4419586758fc78b7d45a5c2",
+      "bytes": 156162
+    },
+    {
+      "name": "decision-0213.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0213.json.gz",
+      "gzip_sha256": "909b03946359f169f6d1d88267537d4aefced180df15a2be9a4a6aac3641b878",
+      "payload_sha256": "bb026a4aea723bf1720b4b46669146e9b72f029e4790af67f36a099399fe3375",
+      "bytes": 154411
+    },
+    {
+      "name": "decision-0214.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0214.json.gz",
+      "gzip_sha256": "a365a534e7183b935ca4dd6c8e3fca5c55506bbd6117948bf697d83a9a5132f4",
+      "payload_sha256": "b3459fb3d6bf8f875bd631d1479efe624863dbb2f9753a0e9afd6639a7afe41a",
+      "bytes": 153935
+    },
+    {
+      "name": "decision-0215.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0215.json.gz",
+      "gzip_sha256": "36a9f85aeafaa9a03cea50a2b235046882a4eaafcbc78f9072e89606ae120d57",
+      "payload_sha256": "ff346c3f34607711edc472ff88cd48d2e3eff7d232f90e989dbdaa217db4ad42",
+      "bytes": 227569
+    },
+    {
+      "name": "decision-0216.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0216.json.gz",
+      "gzip_sha256": "9fbaf5be43b1e95006e2553504a8feda30b7c42270fc1d093a8dd7aaa751909e",
+      "payload_sha256": "16d64ae16a958f05ef7f11122639492baaef9acb3f38006de0ae944da9c10fb3",
+      "bytes": 224858
+    },
+    {
+      "name": "decision-0217.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0217.json.gz",
+      "gzip_sha256": "792e6d8e74473c77f6bb41d8b4d9d00974c9497f92678e8cd001c4f74400434f",
+      "payload_sha256": "57bc69bd1f8e809bbea7b7c57cb95534a11cb405b72a4accb34ddd43cc4de31c",
+      "bytes": 224229
+    },
+    {
+      "name": "decision-0218.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0218.json.gz",
+      "gzip_sha256": "55a0dcbca0a493176c2237d0c2e8a4b58a148a21985c363e20c5318fc36097ce",
+      "payload_sha256": "022adeed84af369c429806e65b7cf2dd44adbd83b61485ffbbb65e20e40139f4",
+      "bytes": 223639
+    },
+    {
+      "name": "decision-0219.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0219.json.gz",
+      "gzip_sha256": "b56ea58393bdf0633da7a6c79f65126bdfb497cd7fbe42873a550eb1b50cca2c",
+      "payload_sha256": "85e0776906577c24c8b8a0dc0f6da95ea3bba829b9f019edb8c754c15e5686ab",
+      "bytes": 223766
+    },
+    {
+      "name": "decision-0220.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0220.json.gz",
+      "gzip_sha256": "34d81af258021a4eddd0e80715ac99df707e22d51f8698b820fb3c6125dd32a9",
+      "payload_sha256": "9a2d4f8f5306d439294e7cff21f0106673b64d7fd270ec68a8f150f9313e5718",
+      "bytes": 222427
+    },
+    {
+      "name": "decision-0221.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0221.json.gz",
+      "gzip_sha256": "5445a583a9afdc90598a1bedfbc0bd90d7052e37864d251bc42c0f51ce8e1b92",
+      "payload_sha256": "ffdae8c87bdee31a017d1e6bee4e09e48cc32a88cbabcd5993263b72bf9435e2",
+      "bytes": 221826
+    },
+    {
+      "name": "decision-0222.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0222.json.gz",
+      "gzip_sha256": "3fb9dec5157a412832c777cbec87f0bc4083eea0dbbf616bfda71b986af6ed93",
+      "payload_sha256": "ed8fc4f8c1938cb54e798425c9b204fea1f14ccb47caba5fb9cb8f8288c70e81",
+      "bytes": 222057
+    },
+    {
+      "name": "decision-0223.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0223.json.gz",
+      "gzip_sha256": "33c6ee903c4448a966facc5ab13294f22ca99a06311af7c7ef973c119ce5e44e",
+      "payload_sha256": "8446c71c854a5592b8a1e9c5eaec4069705d3b9cd718ba02f54f994a8a25d171",
+      "bytes": 220810
+    },
+    {
+      "name": "decision-0224.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0224.json.gz",
+      "gzip_sha256": "1679fe817344c515009859371e4811eae3a878b7fd7a04f9bd382e282af03207",
+      "payload_sha256": "475d28bb6713f0c9fee08511afd7779f1be39cb548ecf9d1b66c763d141ba392",
+      "bytes": 222622
+    },
+    {
+      "name": "decision-0225.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0225.json.gz",
+      "gzip_sha256": "e368b0863b56dc84196b9395fa776fcdc1e7a7aeb01efdb65e56827e029cca69",
+      "payload_sha256": "c7ccc1251c2927d1b7dc4779881ef2983279c21c2e0e90d40002138bcdffd972",
+      "bytes": 218739
+    },
+    {
+      "name": "decision-0226.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0226.json.gz",
+      "gzip_sha256": "a1ee5e302a91168285c5e64d1dbf8be72f0d2a54fb0c48cd9898ab80d126c751",
+      "payload_sha256": "d82e9e9efb3c64d67df3f2184edfc152ea5414754212a94d15d607613cf4524e",
+      "bytes": 214644
+    },
+    {
+      "name": "decision-0227.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0227.json.gz",
+      "gzip_sha256": "f595e47cdeef39f6ce3cedf220ef5d2a450907eb7a3d37e23d2f656942359228",
+      "payload_sha256": "7045432a90a8646f325d203dbea6c2f90523c8df95c77912ed932c682380a788",
+      "bytes": 214222
+    },
+    {
+      "name": "decision-0228.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0228.json.gz",
+      "gzip_sha256": "f6ae137098eb02901d52f8093efaa89ab826b4b6dfb8c4e9e696101b0a93fbef",
+      "payload_sha256": "9d44a77e49e5cccb1cb20f207b6f762fe9d20b612e65b9d8587d8b5b9ba847c9",
+      "bytes": 212898
+    },
+    {
+      "name": "decision-0229.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0229.json.gz",
+      "gzip_sha256": "03417e5ba3590ad639f9b051aae9f6401ed7612104ac33408127649290f77bea",
+      "payload_sha256": "b89bd5aafcd5d2a694b6b0b9b4f100254709f42d961e1fd2b5c7ccb0e08afbbb",
+      "bytes": 215504
+    },
+    {
+      "name": "decision-0230.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0230.json.gz",
+      "gzip_sha256": "d2de3468a3d056acacbee34f175733e764e3a221422df46e918bfdf90a856836",
+      "payload_sha256": "0be319a1ba165debe51cd05ac90aa34ee4b27aa9e880523545c0f4e2d6d0c654",
+      "bytes": 210800
+    },
+    {
+      "name": "decision-0231.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0231.json.gz",
+      "gzip_sha256": "f190b723e1e19efcaeaa508aa67b8d4ae9eacbe9fdee3a26ef9db6fd4d6a6831",
+      "payload_sha256": "3192fb606ae48b5334dbb476d8bc7cd12a44763c04221f7fa2e4725b0e7458fd",
+      "bytes": 210141
+    },
+    {
+      "name": "decision-0232.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0232.json.gz",
+      "gzip_sha256": "f5b14f817eacbeb38e619433be25b1c54743342d592cc55f1ad3d69d507fbbaf",
+      "payload_sha256": "fa6e5287170222ba41153878380bc86e4b83a75b524311e5ac1b74e407073f5a",
+      "bytes": 209745
+    },
+    {
+      "name": "decision-0233.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0233.json.gz",
+      "gzip_sha256": "81596e0c6278ba291d58c87e5ca451c91210843739b462cdaf6fbabe3c2894d6",
+      "payload_sha256": "638228c44667ad1450a39d7dcd19b3c55c052c95d7c392c95d1584c40de62eaf",
+      "bytes": 207832
+    },
+    {
+      "name": "decision-0234.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0234.json.gz",
+      "gzip_sha256": "69b68eda079a9cc64d2847872d2e506e741b1204dff04dee98c77883d7530e2a",
+      "payload_sha256": "3707ac01106830f7e25127487b42ce8b939d28627a13f39e449359581b25e6f7",
+      "bytes": 206407
+    },
+    {
+      "name": "decision-0235.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0235.json.gz",
+      "gzip_sha256": "e87a6e2e4a38e0f05ff9bd3a9cd3f50735153ec87b818bee196dc90d694c1110",
+      "payload_sha256": "146af21e2b73b3d1db7900b16731dfef01bf35c9f63928c8ea892d2d699e0601",
+      "bytes": 204951
+    },
+    {
+      "name": "decision-0236.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0236.json.gz",
+      "gzip_sha256": "b0511edf606111cb639e797123593bebcd70b19b418d3731d751bb791b2aeffd",
+      "payload_sha256": "9f7d726d176554531f4a3d8e77df0a0d8cc50735b6dbe55cadde50f9de67cbde",
+      "bytes": 204291
+    },
+    {
+      "name": "decision-0237.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0237.json.gz",
+      "gzip_sha256": "d6a59dc8ca8184eed2cadc83c3d8e784dca0c6b3676da6c2bdc2014e5199d08e",
+      "payload_sha256": "3799aaa28d623cc3309cf7941758ed54a651953e4f0268948e33fa3578507aba",
+      "bytes": 203818
+    },
+    {
+      "name": "decision-0238.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0238.json.gz",
+      "gzip_sha256": "aeb3f3491399515063e870e4e2d7f72e85a93d4f4841dbd907576fdf5424ddf0",
+      "payload_sha256": "6051e40d01b5ab7e6e14e5200c5b6d6b84544aa5838164c064dfe3e7984e9072",
+      "bytes": 202462
+    },
+    {
+      "name": "decision-0239.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0239.json.gz",
+      "gzip_sha256": "fdee1d0d55ce45ea9f2cf3d019776a3aa39620d28463bb3d3ba2c358454011e8",
+      "payload_sha256": "59dc29ad1cc518290ce241d5370278ec6fc73e9240cc89e5acbb2a2ace94330e",
+      "bytes": 202615
+    },
+    {
+      "name": "decision-0240.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0240.json.gz",
+      "gzip_sha256": "22c4ac31f4c6b610cf2024320eb33443fa5a20132e04dfccc0d66fdbc2f42963",
+      "payload_sha256": "1258168fa151b145bc1170c657e4afa7c62d983284d68a80ca64773711e45110",
+      "bytes": 200217
+    },
+    {
+      "name": "decision-0241.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0241.json.gz",
+      "gzip_sha256": "f155e94ed31f2051f0f210ef5e782d9f2cc28f4a691575eed82836069d4bc784",
+      "payload_sha256": "6e8d0a22d30cb0902981954d01cc6dfdd8792cb783951667ec5848e4e42fb84a",
+      "bytes": 198269
+    },
+    {
+      "name": "decision-0242.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0242.json.gz",
+      "gzip_sha256": "bac120dca6601f64da26a94b79d845fb77731f5c6c498ba3edbc1f173066d617",
+      "payload_sha256": "3600d2043eb1c1667cd62a3225c2654821aef2dab0dd507b5c7b32ee5624f498",
+      "bytes": 198468
+    },
+    {
+      "name": "decision-0243.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0243.json.gz",
+      "gzip_sha256": "df8ea89cdfeefa472cdcf2fc11b1eb21a1aa2000ba785fad8281f28bc0fcf2fb",
+      "payload_sha256": "781079198301909e0f5fc84d7baa93fafb3ed065a79bf8f2b590a4db389a5670",
+      "bytes": 196593
+    },
+    {
+      "name": "decision-0244.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0244.json.gz",
+      "gzip_sha256": "f457191287a56e3403a2498298e404ab0492b14ecffd4c1eda838bcd2da03f7e",
+      "payload_sha256": "0b830d700d82927a90bd05d5e96a7c7adcbda6b1858faaaccee0b1b9cf047407",
+      "bytes": 195179
+    },
+    {
+      "name": "decision-0245.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0245.json.gz",
+      "gzip_sha256": "97cdf7093655d38b311d12b98e1e0c6408bdabbc2a387a9cb7fd90d21159f823",
+      "payload_sha256": "9695f79b972dfcf72fdac7dce631f53b853b86e2b090576a814b5340b86bcf72",
+      "bytes": 193619
+    },
+    {
+      "name": "decision-0246.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0246.json.gz",
+      "gzip_sha256": "e525acb7b955ffb6d42b0f7fac3d33ea178ae3b19a9bd925bfd901003f8e6e81",
+      "payload_sha256": "202482f83b0291879134d265b6a9019b2f4d880c23d6df921fa34e078894b822",
+      "bytes": 198237
+    },
+    {
+      "name": "decision-0247.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0247.json.gz",
+      "gzip_sha256": "71bc5f34472f75ed780738abf5b512fbb79d7144aad890a80c51928732b68a98",
+      "payload_sha256": "43406523966c9eb970f8a9bc7e76a22b5e45dd4e9840da2442298f58f736f93b",
+      "bytes": 192025
+    },
+    {
+      "name": "decision-0248.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0248.json.gz",
+      "gzip_sha256": "f9bec76f2e4a22fc3caf93a078b2ade1ac7b474faaff20ab9a611718d0abcd6c",
+      "payload_sha256": "5e88752247be354159633367b83740cfc8611457028cdfbc343d8b9a58a56618",
+      "bytes": 190734
+    },
+    {
+      "name": "decision-0249.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0249.json.gz",
+      "gzip_sha256": "5436b0d7bb37552eb9eb78d03ae1cd35bab674970d66ac035472c3599622037c",
+      "payload_sha256": "7f33b3927576a3acd1118721c6bc38495e9322d8b50e6cfab5cb73863b62a8e7",
+      "bytes": 188051
+    },
+    {
+      "name": "decision-0250.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0250.json.gz",
+      "gzip_sha256": "5773cd7de4178987bec87febc56c0e9d3a90cf61175995959d6bc5db14dc8805",
+      "payload_sha256": "9392a8bb147321f01d95acea47faddf8902c5c5b4d1ac3e640f182fb220e2de0",
+      "bytes": 188552
+    },
+    {
+      "name": "decision-0251.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0251.json.gz",
+      "gzip_sha256": "9bfb7fd15f5cf8679a659d7618d814a4d9bcd8aa63478f1298d1c04649ab9711",
+      "payload_sha256": "35703d6b547cdde2b82b173079ee458e905c6342b5bb0110c82da2986e46b5bf",
+      "bytes": 187262
+    },
+    {
+      "name": "decision-0252.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0252.json.gz",
+      "gzip_sha256": "dda3395e7273904ef0e07075f61fbb919de686aeb0829cde283ebe859b496042",
+      "payload_sha256": "57363791e8fa115cc5afcb6e518a5dfd49f04429c1328a9cb47d36e10e3f3db3",
+      "bytes": 185453
+    },
+    {
+      "name": "decision-0253.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0253.json.gz",
+      "gzip_sha256": "ede9be69d7b21d0c70dd619a2fc4b19a1e0b58b2d9f212b36cc710abea429c8a",
+      "payload_sha256": "27dda5dde8a6c7b800219dd7cbb568ef73730d97f3dbf81848c665580393ba6c",
+      "bytes": 184936
+    },
+    {
+      "name": "decision-0254.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0254.json.gz",
+      "gzip_sha256": "9fc5a9004aa87217f57dad8d91777185260ba603bebc29ccbdc6afaa4477e5ef",
+      "payload_sha256": "ffff19da27d9b522dbd6e45b355fdaeb071ee970a9f44e54ae2b22b02d767bfc",
+      "bytes": 183013
+    },
+    {
+      "name": "decision-0255.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0255.json.gz",
+      "gzip_sha256": "5e18d629005dc2c36ee1837253f0031d775643116e69588913f31c8f0966595b",
+      "payload_sha256": "030aea943dd959e954edfc0c29e353a6849213ed5192d12ccf99c9de82bd45dc",
+      "bytes": 182007
+    },
+    {
+      "name": "decision-0256.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0256.json.gz",
+      "gzip_sha256": "1190be8a866ae608e3a775db8cb381815e92c8513c87a58389639914b16f2019",
+      "payload_sha256": "0b744ee537bbd1f48fd2e66ffb51ae1b58122aa0d762da465655934293085466",
+      "bytes": 180227
+    },
+    {
+      "name": "decision-0257.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0257.json.gz",
+      "gzip_sha256": "882e2307fdddef7182f7161a14886e25a68de46c3a36fedde5d94160e066ad70",
+      "payload_sha256": "e0c9d861df9e22dca44dedb0cc1ab1d0dacf11cdf2ce68fc2103dc9ba6c9c0f9",
+      "bytes": 181924
+    },
+    {
+      "name": "decision-0258.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0258.json.gz",
+      "gzip_sha256": "e39a01bface1c0d63f466797930a7c6f320f344bf6963878a0b1e2546dd1a452",
+      "payload_sha256": "ff4c76332902f0ea5607ca53b2dae4e4f353d956e7f75dfd103bdda8ffffc6fc",
+      "bytes": 177603
+    },
+    {
+      "name": "decision-0259.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0259.json.gz",
+      "gzip_sha256": "68849e6fcdd3f421c7003f6bdea6aca2a0c1870eef5c3bcdae0bb497188bd7b5",
+      "payload_sha256": "60e21f7c9e8139adccc8b212bdbd150f97173b66657f5b07218f57bb3c7419f6",
+      "bytes": 177315
+    },
+    {
+      "name": "decision-0260.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0260.json.gz",
+      "gzip_sha256": "4dce6ea635ad44456d1b3ad44d80888cd7fee7b74715a639c8f7364bdacdb103",
+      "payload_sha256": "f67c947691345fd4a836f5b34e78cea31f504b38b4ec09e650cce72ced3eb99e",
+      "bytes": 174775
+    },
+    {
+      "name": "decision-0261.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0261.json.gz",
+      "gzip_sha256": "90f0c5944417fbcce5eabe0352a5278fba64e10d1bc8c2f354177f70d572348c",
+      "payload_sha256": "fb14bef35ddc5ee9719799bac6bf45309b23df9aefdcfc91bf7ed9cc3b7a3c86",
+      "bytes": 174733
+    },
+    {
+      "name": "decision-0262.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0262.json.gz",
+      "gzip_sha256": "224b289e36bdfa89711c2bbb4e7b4467d0d8d14bf6c62873d189c6b75789f0fc",
+      "payload_sha256": "fa71c447b5c916b648e117afbc40b02a464a4df3c2ec7d25cdd43b441586be22",
+      "bytes": 172987
+    },
+    {
+      "name": "decision-0263.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0263.json.gz",
+      "gzip_sha256": "fa0465548dde3a1cb6f32fe40d58248d244abf79f4afe279fa6ab7f2e6bb8ba7",
+      "payload_sha256": "d1c45229042ef14713e3441841671164ea4221334a78f74f89060f68a2b6f52d",
+      "bytes": 173119
+    },
+    {
+      "name": "decision-0264.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0264.json.gz",
+      "gzip_sha256": "81c1c50d2cd5a54cf2f7dadb972d605f65176bb7d6264d214a842b170d61db4c",
+      "payload_sha256": "a183eecc2f6586abe5b8ae7cd72a51b83bd3951f2f32fc0a056bccab88c615e7",
+      "bytes": 170329
+    },
+    {
+      "name": "decision-0265.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0265.json.gz",
+      "gzip_sha256": "5d5247f4ba44da14f79cb0e6976acb7c5e6687883729622c80eacf358dae0b1f",
+      "payload_sha256": "42cfe4e372a125ea0230ff4c15825cc3ebe5353d6b08cf5c683ed7e166b3069e",
+      "bytes": 170661
+    },
+    {
+      "name": "decision-0266.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0266.json.gz",
+      "gzip_sha256": "433afc9731b60ac70f8fe0de8a981a3668236898ee6e0a207d14500aa3566faa",
+      "payload_sha256": "e2d5e9cf286b65793660f87040e6815b8717e9f79f9d9bdcabe08c901d3a359e",
+      "bytes": 168145
+    },
+    {
+      "name": "decision-0267.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0267.json.gz",
+      "gzip_sha256": "54a40ff54c39d0d190f98291b85d6c9fea205592a2d78505aacc7b0f2e855b49",
+      "payload_sha256": "9efab3dba262452ef8b5cd964790f74920033ac47dd9df28e1a52cd8b803e373",
+      "bytes": 169011
+    },
+    {
+      "name": "decision-0268.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0268.json.gz",
+      "gzip_sha256": "7ad37a303fe19473f4f9efc4e6f425f2f3678fb6acbfb8bd8960636e33fcc349",
+      "payload_sha256": "5b11aa80adc1807819c9792291dd4c631612e6a605d47a29e8afaa389bc00337",
+      "bytes": 166551
+    },
+    {
+      "name": "decision-0269.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0269.json.gz",
+      "gzip_sha256": "b0d05eb27dae71d00d6b4facb43240826431a88145969d3ab501a2ee3a58485d",
+      "payload_sha256": "57798f11acdbdb5ddaf563fafe552dbc334cfa54931b79f58e4059094c41073c",
+      "bytes": 165763
+    },
+    {
+      "name": "decision-0270.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0270.json.gz",
+      "gzip_sha256": "64fcc2e061f951105b50e0193e3ac94f0aacf412b582b2667ae6992be88e8d9e",
+      "payload_sha256": "271d58e73ac5b454236318c1c9f0a081284ed4695f7b4b1478457f56efdea0e0",
+      "bytes": 164259
+    },
+    {
+      "name": "decision-0271.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0271.json.gz",
+      "gzip_sha256": "719e23aa4a8af480025c3d294f63aa5f5770891229d74212977a7216b177296e",
+      "payload_sha256": "84c429a09602aa02ddae421c0549d93cc66f63040f388a377548a6a11d9b656b",
+      "bytes": 163326
+    },
+    {
+      "name": "decision-0272.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0272.json.gz",
+      "gzip_sha256": "f8b6a2b45a43cd39ca32f747f973cb245d96df60ecfaf9dbcf13352f5daf2c02",
+      "payload_sha256": "36c7f33c6e10d73c8c3103e1bfb0b01348d02bdec65539dc5109afd9b682b91b",
+      "bytes": 162354
+    },
+    {
+      "name": "decision-0273.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0273.json.gz",
+      "gzip_sha256": "33c82bab974accc96d915d266d5c0223ef1e9bae25bdacc0ea72cd4027d24bfe",
+      "payload_sha256": "576bc0f653bc9552e01050d5ddda556eb9d2d11a986b00cbc734f2c5ea3d72b5",
+      "bytes": 162550
+    },
+    {
+      "name": "decision-0274.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0274.json.gz",
+      "gzip_sha256": "d27abdc60d0f3774a29b4466f0a525712dd88d9f3f3956d3e79508ffe4a6bfb6",
+      "payload_sha256": "0a3de3d8fd010214ae267d03e7a7b5cdb70c40927f5985b9627a073a400d53f3",
+      "bytes": 159782
+    },
+    {
+      "name": "decision-0275.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0275.json.gz",
+      "gzip_sha256": "18faae136dfa4263375ca2f85d1f55dedd564cb28261f25899728dd74341b386",
+      "payload_sha256": "ea3bfb44ead67bd3a621c1b14c94a03f75ca9a62d1daf81814131fd6d4cfaa1d",
+      "bytes": 159377
+    },
+    {
+      "name": "decision-0276.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0276.json.gz",
+      "gzip_sha256": "9718debe669b986299ead8bfa9ee80f8e2868729763186118c747873553c1b44",
+      "payload_sha256": "b667e04aa5136342a2075e7278a55111c97606aa4885d32d4cb9bbb485a62b48",
+      "bytes": 157521
+    },
+    {
+      "name": "decision-0277.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0277.json.gz",
+      "gzip_sha256": "6f7ee11b1c1fd8c9248cb23175a088343ac74be0ef31250ba20ec1913359f25b",
+      "payload_sha256": "749be4566422c472ecd1057cbb7fec94d9b9f1d6473d5bfbb2f21de0ee6425df",
+      "bytes": 157621
+    },
+    {
+      "name": "decision-0278.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0278.json.gz",
+      "gzip_sha256": "ff93353384fa348ec9c7dded8410a1e332841b68fbe795452c46092512db7936",
+      "payload_sha256": "fd258afef542e6e9a97638496eacde19b1a3344d3ffc009f0f30d868b3257a22",
+      "bytes": 155776
+    },
+    {
+      "name": "decision-0279.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0279.json.gz",
+      "gzip_sha256": "4f6c4022bc2394b497b6ba8b78df577eae7aa81e7f3fc3d39a057145991d31b0",
+      "payload_sha256": "382aeb6e2d881d632f3ca772c70a5ca0a246ee4179145f2712a49d1883eae57f",
+      "bytes": 153696
+    },
+    {
+      "name": "decision-0280.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0280.json.gz",
+      "gzip_sha256": "ba889df14029988213aef1a8832877f243b18004b0993040fb162b20f4ed5b92",
+      "payload_sha256": "273a99e762ea842a67f58c0204f7567149575c6b8f366a7313e2ff56ba893a1a",
+      "bytes": 153597
+    },
+    {
+      "name": "decision-0281.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0281.json.gz",
+      "gzip_sha256": "80a5bf6d82ad3842a2107bd9625e62e38bc4e81e7ee44822f7ba0901feee1c00",
+      "payload_sha256": "87634fbad128822ffcaa8e94ef8e8e500644b055e479989052f9477a0f4f52af",
+      "bytes": 153367
+    },
+    {
+      "name": "decision-0282.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0282.json.gz",
+      "gzip_sha256": "a27545f105020f0074fcce78f255e3699d65ebff60d46b89eac7f9d8ba789dde",
+      "payload_sha256": "d70896d28fac07dbdf4816ae60be58e1acb6598803c8e060248de4b1dbe80219",
+      "bytes": 214903
+    },
+    {
+      "name": "decision-0283.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0283.json.gz",
+      "gzip_sha256": "838ff168d977e783578dc957695fb92da5fb1615d439bfc113356a93aa4bac3b",
+      "payload_sha256": "2354fdeed8f8132aecf6518c4e8d01fae17104939c8d6a883e5d6f29436625a6",
+      "bytes": 212322
+    },
+    {
+      "name": "decision-0284.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0284.json.gz",
+      "gzip_sha256": "157b261efc839482201af9503b3d02e7da048e9b6bea8aedcad7e8e9aebf5510",
+      "payload_sha256": "9366dea5bbb9c8fbd836b5f60c2f762ca3b7cc2992e41e96d808b0cff72e0897",
+      "bytes": 211462
+    },
+    {
+      "name": "decision-0285.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0285.json.gz",
+      "gzip_sha256": "be3528dafd1f3e04d3f5f6c823e47dd097bcb2add4af926bbe216997b39e7aad",
+      "payload_sha256": "bd81fdb0fb0bf7c9bf7fe699927135a28bafed014f70623e4f61c24c6697d5b3",
+      "bytes": 209189
+    },
+    {
+      "name": "decision-0286.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0286.json.gz",
+      "gzip_sha256": "4829611ffe1ad5728b81327761f3050707caa440af52c26174a8a32ab61f8fd4",
+      "payload_sha256": "14a339353520b21729126c8e36bded4cc4ba9fc7832cdfd88cdf85327d064ee6",
+      "bytes": 207927
+    },
+    {
+      "name": "decision-0287.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0287.json.gz",
+      "gzip_sha256": "dc85ff34d16c4f4656a780a5dca4369185d8209fc556c8d18038a5c1465f49df",
+      "payload_sha256": "d157973524031fbf2a982c6797cba7b2c4acce83bf6ad9cad1dc276a0e108ac2",
+      "bytes": 207147
+    },
+    {
+      "name": "decision-0288.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0288.json.gz",
+      "gzip_sha256": "d274b503a1df2afdd4186d9e366909b781844a766203e62128b13c6e66c1702a",
+      "payload_sha256": "846cf1b98057a684cbd12c6b7723896eb23120f82dd8ef891858b1b1b9d0e392",
+      "bytes": 205572
+    },
+    {
+      "name": "decision-0289.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0289.json.gz",
+      "gzip_sha256": "d93adc0485e0878d623de5c7bdab157a69d347605befc9eadf94ad2dd369933e",
+      "payload_sha256": "cbc253e5df7c4058cd65ceec15a539da98b6d210e8ef2ab0155875ddbf28649d",
+      "bytes": 204372
+    },
+    {
+      "name": "decision-0290.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0290.json.gz",
+      "gzip_sha256": "e9ccfdd7956175360b6eb151cb87c9a3299e3ea6be48d7a89a4edd04efea4349",
+      "payload_sha256": "3424c84343f19ff5f5660279240e1db87c555fee0eb39892ce09a762d89f1edc",
+      "bytes": 203344
+    },
+    {
+      "name": "decision-0291.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0291.json.gz",
+      "gzip_sha256": "1bf5036ddedac98268d357d8e70069065b780459c579c0c8da4847cc01335642",
+      "payload_sha256": "e527302e5631df7650dacc20653851218080b5b3e6b39d69b92f002d2026e320",
+      "bytes": 202208
+    },
+    {
+      "name": "decision-0292.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0292.json.gz",
+      "gzip_sha256": "e9abaf61eda1a946af3751ef9be48ee790eeb7aa3362f9c0a44307d8b8f36e06",
+      "payload_sha256": "e1204ef79044ea0b759c9894fa2f64158346c18559fdb3863e22b0b40453af22",
+      "bytes": 200983
+    },
+    {
+      "name": "decision-0293.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0293.json.gz",
+      "gzip_sha256": "ffaddff3f96b5add4356c084fdbab701a317ff9fa567aea3dbde3bab22504766",
+      "payload_sha256": "9fcd40c4c5f959d9125687006591898b98b9de3ce5167b8c59ab4537cbbce43c",
+      "bytes": 199725
+    },
+    {
+      "name": "decision-0294.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0294.json.gz",
+      "gzip_sha256": "851970ef63d792e921dca1942c70a9df3a1f504b6cec4a2c8b90d9852daecdc2",
+      "payload_sha256": "68fe49a127e0dcdb129adf01a3c4630981f613dd0db4a61e7d2995036e11f7ce",
+      "bytes": 199491
+    },
+    {
+      "name": "decision-0295.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0295.json.gz",
+      "gzip_sha256": "4b46cd836abff73411dee3bf01126f1e50fe71d7fa72f021613da222b2c8c1f7",
+      "payload_sha256": "9d193d8bf236c35f88b09046acc90c966ea3bd32d1c083101e540ed723c7caf8",
+      "bytes": 196851
+    },
+    {
+      "name": "decision-0296.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0296.json.gz",
+      "gzip_sha256": "8d5ae4188b5560952ee55c5da66e437de0275d9b8540efb80f3f6b7ebaa6e104",
+      "payload_sha256": "e139d90713046a4881909806e4595f957ad508b9136ee2d9d76eeb7c63d143eb",
+      "bytes": 196227
+    },
+    {
+      "name": "decision-0297.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0297.json.gz",
+      "gzip_sha256": "d8708f921e604e2fc4d3e225a9a8af3e81c46bc31ed8c40ac7b237480d9d1303",
+      "payload_sha256": "0f9513ff56270801474c824beb9b4bd54547ac9cb7d62219720a1438bcb548a1",
+      "bytes": 195176
+    },
+    {
+      "name": "decision-0298.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0298.json.gz",
+      "gzip_sha256": "e627c9997ac616901b10fd85bbacbcb514eaefebb0b26816309e76b82e709658",
+      "payload_sha256": "b1ac77a737aa1f0329a259a04696bc65f848458c3810e138d041105679088f10",
+      "bytes": 194602
+    },
+    {
+      "name": "decision-0299.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0299.json.gz",
+      "gzip_sha256": "1884d8a9d44188452b031baf19ec245434de222ea36d67dc6815b6ca8db6862d",
+      "payload_sha256": "64493de54d2645a6f5f34c194214da00e1df5f68abecbade6dbad6d6504f1f23",
+      "bytes": 192571
+    },
+    {
+      "name": "decision-0300.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0300.json.gz",
+      "gzip_sha256": "60f4e0e671a0451a082dc6fdb2519dcabfcc376aac0c94db13166001856321a0",
+      "payload_sha256": "57b39f3173a0e9b9e1efc2fe54c2307fdd4c952b987505e83c47ecc966dcd847",
+      "bytes": 191806
+    },
+    {
+      "name": "decision-0301.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0301.json.gz",
+      "gzip_sha256": "e8f5660acd066e38339a3c1cfce0ede54c2a01c0e27358e15785630edde8b191",
+      "payload_sha256": "a5162bd60c1d26602ce4b6cdb961dc86e05038ff56f10fc01102d9cfe668b9a6",
+      "bytes": 190430
+    },
+    {
+      "name": "decision-0302.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0302.json.gz",
+      "gzip_sha256": "1dd3590b9b6f66d62a38ad4c8283401c658e418f06f9dd44c8f7f874a23a4099",
+      "payload_sha256": "dcb7726a1f9fee988fae0b4596794c09d2ddf46c509f7e2ad5cd68f3a2e65d5a",
+      "bytes": 190026
+    },
+    {
+      "name": "decision-0303.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0303.json.gz",
+      "gzip_sha256": "aced7ee1e80c531a08891e0e02f6085ce310e3ffae126bd5ae870bb56d86050f",
+      "payload_sha256": "1c8c369e992dbd2f692b5c68881f3928643722e084d894623214fdc3475a867f",
+      "bytes": 188173
+    },
+    {
+      "name": "decision-0304.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0304.json.gz",
+      "gzip_sha256": "5530e496f2af4524bb89c827a58705c4259640af827dc47cd7a9c1020219940c",
+      "payload_sha256": "ae41f2ed16d7bd1b95ad03535f6b664e910a80d8c10b05287feffc71a3d5f544",
+      "bytes": 188168
+    },
+    {
+      "name": "decision-0305.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0305.json.gz",
+      "gzip_sha256": "770e74269b1dfb66c355fb709ec3a39e155b1dc5c579935fe3d0a7df3cc35522",
+      "payload_sha256": "d59bbadf437e655df47b7787adcc14bcfeb52f3493766228a1d0ffc54b752f02",
+      "bytes": 185878
+    },
+    {
+      "name": "decision-0306.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0306.json.gz",
+      "gzip_sha256": "ad1815b1b094d5ccd83f437ffd89e324b8a8c178ba14bc8d5113e270d8931509",
+      "payload_sha256": "01478d9c36978ebcaaa3b17ff2e4ef0efe5d17bd3b156701da3bab8e161947e7",
+      "bytes": 184456
+    },
+    {
+      "name": "decision-0307.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0307.json.gz",
+      "gzip_sha256": "77a408f3d06677c9be541f00548778a96bc89d25feffaf3f1d637de37ab86b09",
+      "payload_sha256": "06a30dae587fadd4ad64dc0a8d3fcf88682af904fed2a436b139580b011a3274",
+      "bytes": 183283
+    },
+    {
+      "name": "decision-0308.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0308.json.gz",
+      "gzip_sha256": "d2df25bf6059c0aca01af8372d9d257e2189795ef83bbd0582122e57cb80c88b",
+      "payload_sha256": "b9c4b1e91da43bfcd37b2eca1c8847be49279d9948082d0eb3de7a86043a2ab7",
+      "bytes": 182088
+    },
+    {
+      "name": "decision-0309.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0309.json.gz",
+      "gzip_sha256": "de5de1dc4c2755ed65ba42dc8d0413533163ece9b2c1952d94c81f7c07b6687f",
+      "payload_sha256": "07f3e689bad01f13467a560b0a5e3292f8b36cd50a9113827efb5ccd23d2a822",
+      "bytes": 181318
+    },
+    {
+      "name": "decision-0310.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0310.json.gz",
+      "gzip_sha256": "3c86726fb840b20f329993a4d3bf692d1761ad983f9943eea4266e2ee08ca835",
+      "payload_sha256": "bebaf9f51214c3e1a1b611db9e3d17ff33fe493763ee69291c0ff15d3bc84a4f",
+      "bytes": 179830
+    },
+    {
+      "name": "decision-0311.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0311.json.gz",
+      "gzip_sha256": "c395bedb7cf9abe5df71fd3dc5b272e9e35686d13707ff9dd4640c8b0ae53230",
+      "payload_sha256": "dfc73d2f6aaf0b6099673ea6dbcac17382f99d756cd8703bbc2188a3218e46ca",
+      "bytes": 178456
+    },
+    {
+      "name": "decision-0312.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0312.json.gz",
+      "gzip_sha256": "e55cd93bd8b88cd4f5ef63f74c77f75f7f940a742e92c7c2f0ed79f0342f2084",
+      "payload_sha256": "a9e6a580026c539038fc096fe606369bd7c8ef7ccfe1d6e440c3a4cda72afcde",
+      "bytes": 178087
+    },
+    {
+      "name": "decision-0313.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0313.json.gz",
+      "gzip_sha256": "01c35af69d3dca6df18647d2ebbab1aabd00c2f11e530697d1b6778bb486b5fa",
+      "payload_sha256": "6c20f234ce087e3742d1cfaf77851dbb150dd3a20424df01c5467d65680ae90c",
+      "bytes": 176873
+    },
+    {
+      "name": "decision-0314.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0314.json.gz",
+      "gzip_sha256": "675feec39ff1c32f18e8c5cfee1306382b2a73f119e5d85874a7f720c44bc556",
+      "payload_sha256": "1c2d7bdf6a4ecea903ea690a2c2d1eb4e6dc74a2a24a454fca33f0911f0531c6",
+      "bytes": 175485
+    },
+    {
+      "name": "decision-0315.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0315.json.gz",
+      "gzip_sha256": "25c0624537f898f2a87eb8150fdce2734381fddebffd6af1603d00cbe383f156",
+      "payload_sha256": "1f664cca342cc31bcb814d8b790068109989c93684698ab83d8ce664f7aabfe9",
+      "bytes": 174628
+    },
+    {
+      "name": "decision-0316.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0316.json.gz",
+      "gzip_sha256": "f7fa1ebdd411cea81daa08832be59197841fc9cb12134709a12271903510b53e",
+      "payload_sha256": "534d3d5a1ed012217a8e144ae13dcf80ae1ff717d68f130e7c2eb43d58a4247e",
+      "bytes": 173268
+    },
+    {
+      "name": "decision-0317.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0317.json.gz",
+      "gzip_sha256": "bf9f01c52329ceff63ce78b046cf892897e94a8c76e4b61e07e46d248a96afc8",
+      "payload_sha256": "d1822cb6ad3b968fa7303d612f8d1244b6ae924910c7fda2f6c82f22e5338298",
+      "bytes": 172970
+    },
+    {
+      "name": "decision-0318.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0318.json.gz",
+      "gzip_sha256": "f325e036f44c10d96d27da942110f66e03a4d230a93731ddd762639fa68bbf16",
+      "payload_sha256": "6f3580d0af32d518d0c48037b12d91c4ce127bba9301668e4d0b421397ca1c4f",
+      "bytes": 171359
+    },
+    {
+      "name": "decision-0319.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0319.json.gz",
+      "gzip_sha256": "5b10d88934a93c1366aa834223d9b2e96b4d907a5417f351cd11c0fa4bed369d",
+      "payload_sha256": "21ccd7b92da06b60b8c598416f1de043bb61dfec9e4050862658ba49a04593c8",
+      "bytes": 170433
+    },
+    {
+      "name": "decision-0320.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0320.json.gz",
+      "gzip_sha256": "15dc03d8624e090bdb6c7ed44bf2acc51eed10c4d639fc7a4dabbdfbae6221fe",
+      "payload_sha256": "feac65992ab67635162c756f006733f137297d05d69c629b9900b69c33517e0f",
+      "bytes": 169088
+    },
+    {
+      "name": "decision-0321.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0321.json.gz",
+      "gzip_sha256": "6e798f43c0a852fe463f4a9a0cfd69191097ddcf9c4ca87977708c6156e7382a",
+      "payload_sha256": "0a70d4eedee28c9fb0be2cb18284c2825de55bce2cbf8b63031c420cb2425058",
+      "bytes": 168189
+    },
+    {
+      "name": "decision-0322.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0322.json.gz",
+      "gzip_sha256": "26ac4533fd8f66b4b28edddac9d8022b1addc5cc73030ddc14110dac2e0c7322",
+      "payload_sha256": "d5f871e1b9c77df8ce5f8baa80ec7ef5c0f5c4ca4693711184c121edaea7d0a2",
+      "bytes": 167237
+    },
+    {
+      "name": "decision-0323.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0323.json.gz",
+      "gzip_sha256": "f8bdd01af7fc14a40d6f486c28c6f7a3aca07dfceeee3e97d334f988e3a176e9",
+      "payload_sha256": "2a3ceaff5d750ad1b7b4b1bafafe5dbc9866bfa0001d75452c5e389a85a5bb1d",
+      "bytes": 166055
+    },
+    {
+      "name": "decision-0324.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0324.json.gz",
+      "gzip_sha256": "12c6fb02f0ec81bbbfb6e5c8333dc8fc8ac98acc3e40a5b53a515920ef7721fc",
+      "payload_sha256": "6724f9e6098c25a4e0a65460615bc38af7dee681dd33eea8e60ee2f724600b56",
+      "bytes": 164186
+    },
+    {
+      "name": "decision-0325.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0325.json.gz",
+      "gzip_sha256": "1bd74c2fdb60cfcf86660b5a782b115aecbe62f1f5f03cf1b6b6fe5b06f0afc5",
+      "payload_sha256": "690786f5cc20cd7946e0408422c98ed692d711456215368e720dd8783af4c7eb",
+      "bytes": 163067
+    },
+    {
+      "name": "decision-0326.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0326.json.gz",
+      "gzip_sha256": "77766c82f8eb13e1e97c6e7641cd56f1503b56ef2bd1a7e71db673a118b2868f",
+      "payload_sha256": "5e70775cc1aade346dd1c4e5da998fc3d800e44ae3806d1ea8785b4040c7b1e7",
+      "bytes": 161874
+    },
+    {
+      "name": "decision-0327.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0327.json.gz",
+      "gzip_sha256": "93ed07ab6e37c2f586d22c75c87b76e2145a28629243300e32d6db08285204a1",
+      "payload_sha256": "e1fd8335902e36bc47e151b339a14d5481ccb872000a5c363b13853cbb39b8f9",
+      "bytes": 161089
+    },
+    {
+      "name": "decision-0328.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0328.json.gz",
+      "gzip_sha256": "bd317962758d5e6db52c86abd1258a5e917082072ddb5181a65eae76a89b9873",
+      "payload_sha256": "faabe7befadbf6f69ca946b15cd568e022ba53e338cca93b0ff49a2301c05147",
+      "bytes": 159756
+    },
+    {
+      "name": "decision-0329.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0329.json.gz",
+      "gzip_sha256": "9df830911520d1e0db71816ccebd974793b183aa03ab2b1ae0ffd88c2a8e69ac",
+      "payload_sha256": "4b23e33e746aea769f8cd92e5e88797f651a9f478fb8078d210b5cc69f91a1de",
+      "bytes": 158804
+    },
+    {
+      "name": "decision-0330.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0330.json.gz",
+      "gzip_sha256": "07305103f7e933f981b5d18776586a49595ae180e2414b0da7de6a32c721a6bc",
+      "payload_sha256": "e97125865a19dec04ebb1fcd973a116e1d6fc4a6373fd805d978f86728da8757",
+      "bytes": 157599
+    },
+    {
+      "name": "decision-0331.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0331.json.gz",
+      "gzip_sha256": "33e6ee785880886c899a5ea0e0f16c438b10e702f6d218d5b2f0e513ff93c95f",
+      "payload_sha256": "a23b956a778290a7a0ecab6580d2b717dc5349342f7b91ba0acc9c125de5e03d",
+      "bytes": 156574
+    },
+    {
+      "name": "decision-0332.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0332.json.gz",
+      "gzip_sha256": "4bdf7392a563af065a770f383bbe5b25d4aa4d4a46a223fbd738bce67a92eefc",
+      "payload_sha256": "5c81a472eec7061c9d0a8d98ccccd52b6b793b0c24f6a280e1cc368e316549be",
+      "bytes": 155736
+    },
+    {
+      "name": "decision-0333.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0333.json.gz",
+      "gzip_sha256": "b5a2884bb22491831bafb57c85fdb791be4e5d1e4ffc2501c8c0591f3f16d6c8",
+      "payload_sha256": "e7b75ea568d78b28184175527b526363f0726bc42b000dfae9a23ee949175b8e",
+      "bytes": 154618
+    },
+    {
+      "name": "decision-0334.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0334.json.gz",
+      "gzip_sha256": "13b0459f1fccbcfe36625fd8a550e09a28a0c739c83c5ae4fbe61ca1637498f4",
+      "payload_sha256": "94a50f45b89d17a2a258f4e9dbfa86a23fabbb2e63fee598a59513c7e27051a9",
+      "bytes": 153446
+    },
+    {
+      "name": "decision-0335.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0335.json.gz",
+      "gzip_sha256": "eeb0f161dea4af90bef8076cb9e54c24b018f3585a81ac5dec1aab06e59d0567",
+      "payload_sha256": "d6e3bacc7bab4ded7ef3d7955a46b48881c27e17fc5cf66e6e8eb60ef3e0e2c1",
+      "bytes": 152238
+    },
+    {
+      "name": "decision-0336.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0336.json.gz",
+      "gzip_sha256": "4603278201bd81305d8beb3fbe955de6b1760918b33869a4b3e154b4ca971583",
+      "payload_sha256": "243c6c786a1844e913dcf70b75f6cc2ffec6c9a46ddaca5531cf45df86a4ff87",
+      "bytes": 151207
+    },
+    {
+      "name": "decision-0337.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0337.json.gz",
+      "gzip_sha256": "cdfca56a496d258470e44c830cdd8ad67e6b95ea55ba390b4d3ad4813e2255cf",
+      "payload_sha256": "60e278e2db92df35fe2d881fd8931ee0fde73aec18c9699ce26b3f3f3c53b3b4",
+      "bytes": 150450
+    },
+    {
+      "name": "decision-0338.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0338.json.gz",
+      "gzip_sha256": "f92cc23e6c3e3cf4a4830b3f40a06e918fa3bc967d27fd445e6db9f1b54f7c51",
+      "payload_sha256": "04d7969c95b31caef9fde7713dfd8bacfafac97697401a80f65a6188a6c8e9b3",
+      "bytes": 149454
+    },
+    {
+      "name": "decision-0339.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0339.json.gz",
+      "gzip_sha256": "299ff0498991d3968a99e408ba182617b6cb5b2b4ba772e5289e78815fd4b0fa",
+      "payload_sha256": "0b106027dc110f37547a393852ee00d81f591b0f933e23301f5605fee299fa6a",
+      "bytes": 148162
+    },
+    {
+      "name": "decision-0340.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0340.json.gz",
+      "gzip_sha256": "da4ef2eb8be2ea2c41b150da266b82d151a67a74ee6590d34f77695fea0db6f5",
+      "payload_sha256": "7ddec312e5009d58f89d93d636ce9f4b6eaf57b45e0eb00073d574e5f627aa2f",
+      "bytes": 147159
+    },
+    {
+      "name": "decision-0341.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0341.json.gz",
+      "gzip_sha256": "8b71326cc942cab58425ca0e623599eb721dcaa3822aca9df0da763401631746",
+      "payload_sha256": "a4929228d4d1edb9e4aa765aacddebcc8a2befd66fdfe09d7f222c2a1615d8b3",
+      "bytes": 146484
+    },
+    {
+      "name": "decision-0342.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0342.json.gz",
+      "gzip_sha256": "ad542bc4d6fc7b101d278e053d0edbfa30b96dbd61dc92543d7eac3e1a5f4235",
+      "payload_sha256": "dcdb06fdc2d58960acf9a4b121e2ddc7738a15c5710aa3dfd61d63fa64ccfd67",
+      "bytes": 145347
+    },
+    {
+      "name": "decision-0343.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0343.json.gz",
+      "gzip_sha256": "457a8dfcde6de9b8764f44e76a19c77cd7d27837e41525bb1d1c72e1d9758e90",
+      "payload_sha256": "97da2d8e3fd6b9d040445bda82703613758c5f97616e91ffe31c9c4c16be4cbf",
+      "bytes": 144062
+    },
+    {
+      "name": "decision-0344.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0344.json.gz",
+      "gzip_sha256": "9b958f9e8151d9bd147e9881a7553023d3d2fc881f0b35aeaa345be48fd08325",
+      "payload_sha256": "3dfd195913e1340d8c05f553bdd0cbae901297ce1dea533a63fd12351f482b91",
+      "bytes": 142816
+    },
+    {
+      "name": "decision-0345.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0345.json.gz",
+      "gzip_sha256": "d60d4a5626efc09351ce376ba5f8fa3cb311e9d1ee799b2fc984f90f1ce2a6a3",
+      "payload_sha256": "499af2d958ce779a0a86ab8914930fb01fd46309adbc521cab3dbed2d92bc1a9",
+      "bytes": 141737
+    },
+    {
+      "name": "decision-0346.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0346.json.gz",
+      "gzip_sha256": "64dcc4481bb07f39d818af008bc3d365ae941a40700fa6f8ee493c34ce7d8f54",
+      "payload_sha256": "9a4ba8ffbdcb397f3c49c53e39e3121dc0294eda757433dbf7926fbd332e34b2",
+      "bytes": 141076
+    },
+    {
+      "name": "decision-0347.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0347.json.gz",
+      "gzip_sha256": "dd644316df5c80fce794a5961d1f3ecb56346e4fe3a3d7a2b236474ad884f610",
+      "payload_sha256": "d3d318db9496111df178b75eca13c590e27a2158533b1009a42b0a62d122f6bc",
+      "bytes": 140348
+    },
+    {
+      "name": "decision-0348.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0348.json.gz",
+      "gzip_sha256": "ee1cd2a8c6ab79c5578e6d765ed80a91e0bad54f42c058be76f88041527e845a",
+      "payload_sha256": "b37e4f0bfe3086412aef08dc31bb953d40c27e5397071d1f264dbb3b15a87b54",
+      "bytes": 152483
+    },
+    {
+      "name": "decision-0349.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0349.json.gz",
+      "gzip_sha256": "a832d6e6a3d408f45c37519da312e6a9d335d300ae40a8a4b57b072d95bc051e",
+      "payload_sha256": "f36f8da9410509a26b370d762c42fea38a7eebddd4eb7ca03c1ce090ba646cbe",
+      "bytes": 151207
+    },
+    {
+      "name": "decision-0350.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0350.json.gz",
+      "gzip_sha256": "5e9e772379022db190d849b547c11661325706e98304cc8bd0db615e5b66f197",
+      "payload_sha256": "27d4a2b3e7d079cfcb9349f8cdc3b73c9e3ce7f035b04686405d74e35b5b68f4",
+      "bytes": 150139
+    },
+    {
+      "name": "decision-0351.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0351.json.gz",
+      "gzip_sha256": "13f72b01e73bfee629483cceda25230114cec314c8da94ca1546a2bbdad15c1c",
+      "payload_sha256": "91b68a13215f43f85d2f2a01131e9cc38872b25d4a50f9f546bc869a4c8931e7",
+      "bytes": 149627
+    },
+    {
+      "name": "decision-0352.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0352.json.gz",
+      "gzip_sha256": "44fea729109bfd81266ee5e2be228bd16c4139556a4fa9a70c668d6a432596c7",
+      "payload_sha256": "f71136c235d1e34aa37546c32b4c4e4b724073759b3119d9b2ce7ac31c6e6945",
+      "bytes": 148344
+    },
+    {
+      "name": "decision-0353.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0353.json.gz",
+      "gzip_sha256": "b67e05647c4f113ed51e4349288488185959cc55991e2103e3feb31065aef89c",
+      "payload_sha256": "d334a20a95968484bba1ee2ccc5c8bd382954887c783efc9b538af790484707a",
+      "bytes": 147229
+    },
+    {
+      "name": "decision-0354.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0354.json.gz",
+      "gzip_sha256": "bc9c1f450136be0ccdde2e4a935e2f58935fefe16b712e1b678dee17416c4774",
+      "payload_sha256": "3e805651aa54ef18ae95d5c6d510a38162593b2b2b17bf5dac851fb5dc0a3d18",
+      "bytes": 145853
+    },
+    {
+      "name": "decision-0355.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0355.json.gz",
+      "gzip_sha256": "aa8567475cc758bac0992fd912d161c541dbadc72e39a0dcd504046fd700d823",
+      "payload_sha256": "50dec188787960acdc39bfbe9c5e0dc2f5b3f8c9e84bc9dcf7d43f73fba93aa9",
+      "bytes": 144761
+    },
+    {
+      "name": "decision-0356.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0356.json.gz",
+      "gzip_sha256": "aa942e8c1d0a0feb15a4276ee9969f757e447644ef28536283bca922d0669d74",
+      "payload_sha256": "359c2db4e3faa9b8bc4b1b1330762ce96639a2c2770a2c55bd907e60a7ad14d1",
+      "bytes": 144278
+    },
+    {
+      "name": "decision-0357.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0357.json.gz",
+      "gzip_sha256": "21eefc1ea4044e5eb9e5952d94629a0752a2a3d9f87d44a3ea639f71e87db27a",
+      "payload_sha256": "f3758a62d86436991728d6fe79f8d3ff24aaea4d1716374fd949d0d2512a36a4",
+      "bytes": 143166
+    },
+    {
+      "name": "decision-0358.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0358.json.gz",
+      "gzip_sha256": "9d6a9d5faf70a4e957c3e2b004a0e80a2a7e15b9f37e103f031206af01091570",
+      "payload_sha256": "ba850498fa8f212183441bf534157b6dc4d49f5d0a433d90ee90f2a2431cf27b",
+      "bytes": 142097
+    },
+    {
+      "name": "decision-0359.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0359.json.gz",
+      "gzip_sha256": "930df2bed4c379f2beaaecd26b9445910b8a0a0facc6ffea8d783f590590e625",
+      "payload_sha256": "dd40e9fec46c88ed61acf82a25b1a7b089083073ecbcab569369abb5f829b487",
+      "bytes": 140774
+    },
+    {
+      "name": "decision-0360.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0360.json.gz",
+      "gzip_sha256": "c6bde4e2239123b0f2f13db9676d208a776d1bf4041f1d7c1ed7bc9a5df1d619",
+      "payload_sha256": "e3073cd257fb84126c366549099c308b35705a715574fd12f39af4e9d273e4cd",
+      "bytes": 139728
+    },
+    {
+      "name": "decision-0361.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0361.json.gz",
+      "gzip_sha256": "ccf50ab56ae705f55e1ca226134fd447d402fb82a04dd8f5b11aa9868d3a542e",
+      "payload_sha256": "37535d840764e2f26e8d57f1b1e8803c865928a85632d551bea11bb8062fe5d6",
+      "bytes": 139232
+    },
+    {
+      "name": "decision-0362.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0362.json.gz",
+      "gzip_sha256": "b7bb1ae501732330c45c66bccab734f261fecad12ed465bd71fe2228be9c315c",
+      "payload_sha256": "eb77904f0f1a82532b496889d2b78699c3dc3273e1019e61e74e6908b0ba761c",
+      "bytes": 137935
+    },
+    {
+      "name": "decision-0363.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0363.json.gz",
+      "gzip_sha256": "2e53fb3455abe83e230273b2d7f9744938dea3e8630d4a2a92d369c16cf48fd1",
+      "payload_sha256": "0cbf3cbcfb7df7e3e05548d4faaea1825095ca89d59510cb29065d1600e283e2",
+      "bytes": 136963
+    },
+    {
+      "name": "decision-0364.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0364.json.gz",
+      "gzip_sha256": "2937c4801c1d7e4bc541c548cd6930d88205d0cfe8e02724f8ef399700621034",
+      "payload_sha256": "26757df82bb0598927b25b278573f520eb645fe456a534f67890e21ba65a89a9",
+      "bytes": 135606
+    },
+    {
+      "name": "decision-0365.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0365.json.gz",
+      "gzip_sha256": "8416f9fcc46695b49b3f34ce928e5e5fc5cebc35924c41125630ecc3948cb4d3",
+      "payload_sha256": "f43c1313f6946107641ffa2a0a086e3521b7126c051508f1c2746176a51cbbba",
+      "bytes": 134415
+    },
+    {
+      "name": "decision-0366.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0366.json.gz",
+      "gzip_sha256": "a319e98d3e0f8d9f60b29dee5bf21688c6ba677f3e8ec02ab6ab3fa76ec50a87",
+      "payload_sha256": "59586d85694765a004a001a266b0d3732da7d128a3c555e753c3731d2f0367d4",
+      "bytes": 134024
+    },
+    {
+      "name": "decision-0367.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0367.json.gz",
+      "gzip_sha256": "ab84d2ea33fe8dc963dcc48903c1311eb57f6981321cd7e9d14296c936867ca9",
+      "payload_sha256": "b48113911a33a722894a01d308f3dd6f13b24244c54e6d366f5aed50492570fb",
+      "bytes": 132747
+    },
+    {
+      "name": "decision-0368.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0368.json.gz",
+      "gzip_sha256": "7afd5fbd9d6224560944807b5e4a9c915c77be8e873c180b73496220cab298e1",
+      "payload_sha256": "8c3e38512dbb2f0bd227c125289a93e74541e456a702d0e3b9fb2c6ba58fc5e0",
+      "bytes": 131664
+    },
+    {
+      "name": "decision-0369.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0369.json.gz",
+      "gzip_sha256": "ccaaae757ba7dbb6792c8a63f2d65d2a0b770c403a9fbbe9a8195ca92fd8f899",
+      "payload_sha256": "a9d186259e0f8f83b6c27cc74f63531e9f7a600cf41c833fbda167fba7a72e28",
+      "bytes": 130300
+    },
+    {
+      "name": "decision-0370.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0370.json.gz",
+      "gzip_sha256": "dda2918225985b2c0548bca8317b1bd1f122a944817c205069cc925f99db6b2a",
+      "payload_sha256": "d457d1a0e7b4f32487542061d0fbd5f2b9e333078d5eabad5a2d77b5a27c95c2",
+      "bytes": 129279
+    },
+    {
+      "name": "decision-0371.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0371.json.gz",
+      "gzip_sha256": "8000ba5eef6b3d8ce75ebbd00648134a0d6a53f8e6d33b45f9968bb428cb9d0a",
+      "payload_sha256": "5c3e53ee60d86bc7e3622c5432890f2db10be9c373f72468238acb317d59f15e",
+      "bytes": 128714
+    },
+    {
+      "name": "decision-0372.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0372.json.gz",
+      "gzip_sha256": "02f2ee95e602f087e68628f86ab44602b98b1392c9aaf71d99f6a7e6d66f5b14",
+      "payload_sha256": "4591434573ecead2a74d01111bdb4a3f0ade85a064a2e6a32734dee8b70a9dc1",
+      "bytes": 127384
+    },
+    {
+      "name": "decision-0373.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0373.json.gz",
+      "gzip_sha256": "b77d14265877d9a07f9a714499149a5b9539f74d8dad29ae21725ecf2cf71571",
+      "payload_sha256": "e1556aa869a376147e90615c77da024eca7fa92e3f993069f7ae8d5ee14505e9",
+      "bytes": 126290
+    },
+    {
+      "name": "decision-0374.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0374.json.gz",
+      "gzip_sha256": "71bfcc271c3f8bbe2d05545589c687cb589e157dc27094028bb77e0b33159ac6",
+      "payload_sha256": "2b27aafd1255d182293471be617cde5c40563fec5fcc501a5154ce6141a6ed34",
+      "bytes": 125047
+    },
+    {
+      "name": "decision-0375.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0375.json.gz",
+      "gzip_sha256": "0c256098b28054084f284beb2efef9811477149709d50bfaf4f55e49667b059a",
+      "payload_sha256": "8c543e0e2dde0243d8c5b7ea4452997504bff95a5cfbc07fcdbc5b7cfd7d0ed8",
+      "bytes": 123958
+    },
+    {
+      "name": "decision-0376.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0376.json.gz",
+      "gzip_sha256": "d3a58e56ab58e7243055cc36cb244681fe208f6a63aa562116ba2fc67371c29c",
+      "payload_sha256": "034790bfc887d77b5f526a827647f0e35593b0b8940cde8946f1a3e4c68eaf0d",
+      "bytes": 123400
+    },
+    {
+      "name": "decision-0377.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0377.json.gz",
+      "gzip_sha256": "6e43b5a9124fddd114fabbf08cc0ce5be7a8f800ae3661da5d1744bacf8390ac",
+      "payload_sha256": "740b8f668d3236dfa338fb7c0fe5360f2c4c815ab5a5ded8514dca2be8423d75",
+      "bytes": 122106
+    },
+    {
+      "name": "decision-0378.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0378.json.gz",
+      "gzip_sha256": "0ed848dc266e93bd816b2730a1b721605b63f64c05d90d64a1d36c8a48dfae85",
+      "payload_sha256": "63f237f06aa3bcbd9bd7edfbc9875e89c6b88310a4edd961b1388d434a590d5f",
+      "bytes": 121046
+    },
+    {
+      "name": "decision-0379.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0379.json.gz",
+      "gzip_sha256": "3e554b8b5c99f215d12eaf714b134baa81a51979472108c4bbeb3b0eace85a8d",
+      "payload_sha256": "b6f93a7dc86e2a4ae1e36775f0abb3e1a3bb8686874c9ada31fb13c7cb69b835",
+      "bytes": 119779
+    },
+    {
+      "name": "decision-0380.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0380.json.gz",
+      "gzip_sha256": "a220c2b38d4430ad8fdaae4d728f63d204fc60c12c18fa00103ed780b8260096",
+      "payload_sha256": "11d04b06b80edaf01129bad4f1e0448953b8615dd2892315893ebca34986996a",
+      "bytes": 118684
+    },
+    {
+      "name": "decision-0381.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0381.json.gz",
+      "gzip_sha256": "57e62e960e8574881599957c52c5ac49d5f82d1df323606390cc1704d7c031f6",
+      "payload_sha256": "1cf965c203e5e83e1237e5814a2ce5e0cc010e36c32a48857cfef6d51fe3b2ce",
+      "bytes": 118213
+    },
+    {
+      "name": "decision-0382.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0382.json.gz",
+      "gzip_sha256": "23ceaa01091304182a8c7b9c303584175c456724e71eb1d8a6cc7d1a274b1652",
+      "payload_sha256": "acb93f4e7141760f561d15ac644b9f8a67ce3882289c91b4d36eeeb383ede583",
+      "bytes": 116926
+    },
+    {
+      "name": "decision-0383.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0383.json.gz",
+      "gzip_sha256": "f0bd98f576cf0abd73c05642de26bc40271f5dc1d52e6823c1ad9d9e4264e341",
+      "payload_sha256": "793a3a77a6e34249b931ccedb73ff91aea929f9e7266a8c9cc153937522287f0",
+      "bytes": 115990
+    },
+    {
+      "name": "decision-0384.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0384.json.gz",
+      "gzip_sha256": "7fd94066018d0b9bfb1efd28b91f458b1fc3c0e7b8e36c66dec947971eb7d7b2",
+      "payload_sha256": "3e447f0538ea32424dacf24cad8dbd30dcf875df0fff85f513dceb375056815f",
+      "bytes": 114619
+    },
+    {
+      "name": "decision-0385.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0385.json.gz",
+      "gzip_sha256": "c937c7de3f61dd6adfb10ca6c11192c6510d73a1d7a50c87a19ec83ddf2a2b1e",
+      "payload_sha256": "19b914f648ef379592f222f3615ad0fadd100af87d9f8c2a06b945466993009c",
+      "bytes": 113556
+    },
+    {
+      "name": "decision-0386.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0386.json.gz",
+      "gzip_sha256": "2171f5298d540caca1c36d3e0b16edbb1109999b5b1d1317bc028c48ef9d788b",
+      "payload_sha256": "65d5bea6315c2610fb9622bc311768f6637ee49fd6756d6f59d3a1b2ae59d1d5",
+      "bytes": 113074
+    },
+    {
+      "name": "decision-0387.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0387.json.gz",
+      "gzip_sha256": "92e47583933d064b0eeb9c040de9f047766d6666c41eb062dd4bc8211257bc15",
+      "payload_sha256": "e0c0872a8cc46efa9ed6adb7eb3ab751f8f8ef817852264f1db62752fe043ded",
+      "bytes": 111812
+    },
+    {
+      "name": "decision-0388.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0388.json.gz",
+      "gzip_sha256": "512bce55e1a3a8cfeaf70e7c589f4fc73d440391c3575982af4e3e42080574c2",
+      "payload_sha256": "1f874d2a9df54c9d5a2f9d4edaaed9d3ddce120abacbd717d90d2c86277b3289",
+      "bytes": 110832
+    },
+    {
+      "name": "decision-0389.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0389.json.gz",
+      "gzip_sha256": "534ae84751e4043fa702ec2aced5852f3c95a3eab0c7da2c2293caee81e783b4",
+      "payload_sha256": "9aafc413c3a56785b4084fc6443ba71d6f1396e299693a6c082600aab8e6807c",
+      "bytes": 109342
+    },
+    {
+      "name": "decision-0390.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0390.json.gz",
+      "gzip_sha256": "9230ee15e4d54591b10b335cad7efb3875c244bf82a267cfc9ab6fcf9077ece8",
+      "payload_sha256": "c1f2550ce031469962d5cef718a753e4d8893806a53041970f01af9e1185675d",
+      "bytes": 106782
+    },
+    {
+      "name": "decision-0391.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0391.json.gz",
+      "gzip_sha256": "9066aac949065d04be6db558a9e668db381a7c0f362a98e41d9e4aa76f284f3f",
+      "payload_sha256": "5b56ec1c9d9e5d82cc57d67763402db4c8de1670c4f9f8cda08dd7f6d55f5561",
+      "bytes": 106060
+    },
+    {
+      "name": "decision-0392.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0392.json.gz",
+      "gzip_sha256": "1f212d8a05aba1a98a288bd8b39fef98c192eaccea1414cc11d2ad65c7e62da1",
+      "payload_sha256": "13b052b1fe633bf195ad5918b332c09d8626daa2cbccf95894d2e3f4ddec9b0c",
+      "bytes": 104507
+    },
+    {
+      "name": "decision-0393.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0393.json.gz",
+      "gzip_sha256": "7b1db2240c31d6dd94aa888f9728247a1ba1ef9c422f06e7f064b4357a835ca8",
+      "payload_sha256": "fbe9e6ef0d145f6f552ccbc161a732c369fa7d36f21c97185cefedb91bbfe2b6",
+      "bytes": 103467
+    },
+    {
+      "name": "decision-0394.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0394.json.gz",
+      "gzip_sha256": "de891b9c4524642bbcd07b33204d50d8c4bf48cf49afcd216185b72ba9d97864",
+      "payload_sha256": "dc515116f2bf383367b8d40726d99bde93141a6aedaa66e036c0230be2203e28",
+      "bytes": 102279
+    },
+    {
+      "name": "decision-0395.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0395.json.gz",
+      "gzip_sha256": "d6539e90c9791f36604734fec73d8d5b5ebbccf7a994ee09c1164437922608e5",
+      "payload_sha256": "2b28819d460cb8dcd885b6141d838cae37fea61a683bcea2c3cde28448f56d56",
+      "bytes": 100952
+    },
+    {
+      "name": "decision-0396.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0396.json.gz",
+      "gzip_sha256": "17ca78cca2ce1cf0754755ffd06db1c9d18baae8f5a96600682fb7d0e7be4050",
+      "payload_sha256": "6a0de68ca064ebe0b87b552a5b52fcd56331438fa66e5e57b54939eca28bccf0",
+      "bytes": 100531
+    },
+    {
+      "name": "decision-0397.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0397.json.gz",
+      "gzip_sha256": "e6b4092d5690f1fa1034e7e492975d684bd3f206a457f0e1c79062978488e053",
+      "payload_sha256": "8c42cf48ac4413321c6457d68b0a0f05671444ffd3ccebe23aa1c00be34ffef2",
+      "bytes": 99090
+    },
+    {
+      "name": "decision-0398.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0398.json.gz",
+      "gzip_sha256": "c51217c0210279270fec8242e5147f3c45b0084979f1d702ba30af1a652b51e6",
+      "payload_sha256": "c7e80403c6701b923ebe46260106bba24b57abff83c429997ce1858c445291c7",
+      "bytes": 98154
+    },
+    {
+      "name": "decision-0399.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0399.json.gz",
+      "gzip_sha256": "8372d33ffae7d2ac3735603e3f2ec7f2a48dfe03b14cf1a285ee919c645aef63",
+      "payload_sha256": "28d4293d17ed05413887e7275968f5aa5b3a36c759cd67c58c58e6bd05d0dd02",
+      "bytes": 96739
+    },
+    {
+      "name": "decision-0400.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0400.json.gz",
+      "gzip_sha256": "ebd038679cec220f4ce8a87d3b8bb726e2115b76c447bce302d9cb7e18ec8247",
+      "payload_sha256": "cd949a3f27e0cf73ee49b35b10a128ca999834b50700dd6b3529528d0fca12ca",
+      "bytes": 95387
+    },
+    {
+      "name": "decision-0401.json",
+      "source": "docs/experiments/trajectory-continuation/policies/held-3/decision-0401.json.gz",
+      "gzip_sha256": "0a9d6c00d77e10c40a9909e33411e584262e9525bda1838780832a7571f296f0",
+      "payload_sha256": "d1bf9b1954ac650ac71ede8933138fd6739a9931f3557d8407af3134592fa4a7",
+      "bytes": 95217
+    }
+  ]
+}

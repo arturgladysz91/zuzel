@@ -1,0 +1,554 @@
+{
+  "base": "85a5ee3295c2dd983fbacb21859649f794cc5ba5",
+  "performance_verdict": "PARTIAL",
+  "preserved_s3": "PASS",
+  "native": [
+    {
+      "label": "held-0",
+      "validation": true,
+      "scenario": {
+        "Id": "nominal-B",
+        "Gate": "B",
+        "OffsetMeters": 3.5,
+        "Held": false,
+        "Role": "independent"
+      },
+      "pass_": true,
+      "finish_s": 79.86783202593783,
+      "baseline_finish_s": 79.86783202593783,
+      "cpu_before_s": 1403.265625,
+      "cpu_after_s": 1409.65625,
+      "result_snapshot_cpu_s": 1408.625,
+      "cpu_scope": "Complete budget-ledger elapsed CPU, including final native archive serialization; result snapshot occurs before bundle finalization",
+      "cpu_delta_s": 6.390625,
+      "cpu_reduction_percent": -0.45541092763531493,
+      "planner_cpu_before_s": 1374.75,
+      "planner_cpu_after_s": 1380.296875,
+      "callback_before": {
+        "total": 1380.4375,
+        "median": 3.1484375,
+        "maximum": 56.359375
+      },
+      "callback_after": {
+        "total": 1385.796875,
+        "median": 3.140625,
+        "max": 56.140625
+      },
+      "phases_before": {
+        "hierarchical_generation": 76.09375,
+        "conditional_continuations": 984.640625,
+        "outside_decision": 54.265625,
+        "independent_preflight": 131.046875,
+        "causal_reserve_generation": 0.046875,
+        "candidate_generation": 0.359375,
+        "uncertainty_scenarios": 0.046875,
+        "recertification": 128.25
+      },
+      "phases_after": {
+        "hierarchical_generation": 75.78125,
+        "conditional_continuations": 991.09375,
+        "outside_decision": 53.28125,
+        "independent_preflight": 130.828125,
+        "causal_reserve_generation": 0,
+        "candidate_generation": 0.25,
+        "uncertainty_scenarios": 0.078125,
+        "recertification": 128.984375
+      },
+      "response_statistics": {
+        "Requests": 1752474,
+        "Hits": 219212,
+        "Evaluations": 1533262,
+        "CapacityClears": 0
+      },
+      "exact_native_fingerprint": true,
+      "exact_all_physical_reviews": true,
+      "all_maneuvers_equal": true,
+      "accepted_decisions": 400,
+      "policy_records": 400,
+      "failures": [],
+      "minimum_swept_m": 0.5755229171544352,
+      "source": "docs/experiments/s3-performance/native/held-0-result.json",
+      "bundle": "docs/experiments/s3-performance/native/held-0.zip",
+      "bundle_sha256": "7afc0376cd6963fcde9874f754b6e15e269897c5bc1322f7573557048dcc2c34",
+      "bundle_bytes": 11358322
+    },
+    {
+      "label": "held-1",
+      "validation": true,
+      "scenario": {
+        "Id": "unseen-A-shift",
+        "Gate": "A",
+        "OffsetMeters": 1.25,
+        "Held": true,
+        "Role": "independent"
+      },
+      "pass_": true,
+      "finish_s": 79.18350155575507,
+      "baseline_finish_s": 79.18350155575507,
+      "cpu_before_s": 1700.46875,
+      "cpu_after_s": 1686,
+      "result_snapshot_cpu_s": 1684.96875,
+      "cpu_scope": "Complete budget-ledger elapsed CPU, including final native archive serialization; result snapshot occurs before bundle finalization",
+      "cpu_delta_s": -14.46875,
+      "cpu_reduction_percent": 0.8508683267481393,
+      "planner_cpu_before_s": 1672.875,
+      "planner_cpu_after_s": 1658.6875,
+      "callback_before": {
+        "total": 1678.40625,
+        "median": 3.2421875,
+        "maximum": 46.59375
+      },
+      "callback_after": {
+        "total": 1663.5625,
+        "median": 3.2265625,
+        "max": 45.515625
+      },
+      "phases_before": {
+        "hierarchical_generation": 340.671875,
+        "conditional_continuations": 1013.53125,
+        "outside_decision": 49.640625,
+        "independent_preflight": 138.140625,
+        "causal_reserve_generation": 0.078125,
+        "candidate_generation": 0.09375,
+        "uncertainty_scenarios": 0.0625,
+        "recertification": 130.65625
+      },
+      "phases_after": {
+        "hierarchical_generation": 334.375,
+        "conditional_continuations": 1007.25,
+        "outside_decision": 50.265625,
+        "independent_preflight": 136.671875,
+        "causal_reserve_generation": 0.34375,
+        "candidate_generation": 0.203125,
+        "uncertainty_scenarios": 0.0625,
+        "recertification": 129.515625
+      },
+      "response_statistics": {
+        "Requests": 1701408,
+        "Hits": 199313,
+        "Evaluations": 1502095,
+        "CapacityClears": 0
+      },
+      "exact_native_fingerprint": true,
+      "exact_all_physical_reviews": true,
+      "all_maneuvers_equal": true,
+      "accepted_decisions": 396,
+      "policy_records": 396,
+      "failures": [],
+      "minimum_swept_m": 0.9237786707814961,
+      "source": "docs/experiments/s3-performance/native/held-1-result.json",
+      "bundle": "docs/experiments/s3-performance/native/held-1.zip",
+      "bundle_sha256": "f36547bee0de9d0b983b390e1dd0fe82ebc95a464d2f3f0aba6b043612ede35e",
+      "bundle_bytes": 11059852
+    },
+    {
+      "label": "held-2",
+      "validation": true,
+      "scenario": {
+        "Id": "unseen-B-in",
+        "Gate": "B",
+        "OffsetMeters": 3,
+        "Held": true,
+        "Role": "independent"
+      },
+      "pass_": true,
+      "finish_s": 79.60283030281548,
+      "baseline_finish_s": 79.60283030281548,
+      "cpu_before_s": 1455.9375,
+      "cpu_after_s": 1579.8125,
+      "result_snapshot_cpu_s": 1578.71875,
+      "cpu_scope": "Complete budget-ledger elapsed CPU, including final native archive serialization; result snapshot occurs before bundle finalization",
+      "cpu_delta_s": 123.875,
+      "cpu_reduction_percent": -8.50826357587465,
+      "planner_cpu_before_s": 1428.765625,
+      "planner_cpu_after_s": 1550.015625,
+      "callback_before": {
+        "total": 1434.796875,
+        "median": 3.375,
+        "maximum": 34.65625
+      },
+      "callback_after": {
+        "total": 1555.15625,
+        "median": 3.640625,
+        "max": 36.515625
+      },
+      "phases_before": {
+        "hierarchical_generation": 97.71875,
+        "conditional_continuations": 1013.078125,
+        "outside_decision": 51.703125,
+        "independent_preflight": 138.90625,
+        "causal_reserve_generation": 0.03125,
+        "candidate_generation": 0.1875,
+        "uncertainty_scenarios": 0.078125,
+        "recertification": 127.0625
+      },
+      "phases_after": {
+        "hierarchical_generation": 105.296875,
+        "conditional_continuations": 1108.828125,
+        "outside_decision": 53.609375,
+        "independent_preflight": 142.234375,
+        "candidate_generation": 0.484375,
+        "causal_reserve_generation": 0.03125,
+        "uncertainty_scenarios": 0.03125,
+        "recertification": 139.5
+      },
+      "response_statistics": {
+        "Requests": 1691460,
+        "Hits": 193648,
+        "Evaluations": 1497812,
+        "CapacityClears": 0
+      },
+      "exact_native_fingerprint": true,
+      "exact_all_physical_reviews": true,
+      "all_maneuvers_equal": true,
+      "accepted_decisions": 399,
+      "policy_records": 399,
+      "failures": [],
+      "minimum_swept_m": 0.8069464282771279,
+      "source": "docs/experiments/s3-performance/native/held-2-result.json",
+      "bundle": "docs/experiments/s3-performance/native/held-2.zip",
+      "bundle_sha256": "5a2eb53ef8b1864d45cf61f3fbd36585d575ed1c18e0ab06b199ca2a1692f8b5",
+      "bundle_bytes": 11004106
+    },
+    {
+      "label": "held-3",
+      "validation": true,
+      "scenario": {
+        "Id": "unseen-C-in",
+        "Gate": "C",
+        "OffsetMeters": 6,
+        "Held": true,
+        "Role": "independent"
+      },
+      "pass_": true,
+      "finish_s": 80.24817434187996,
+      "baseline_finish_s": 80.24817434187996,
+      "cpu_before_s": 1892.453125,
+      "cpu_after_s": 1945.84375,
+      "result_snapshot_cpu_s": 1944.78125,
+      "cpu_scope": "Complete budget-ledger elapsed CPU, including final native archive serialization; result snapshot occurs before bundle finalization",
+      "cpu_delta_s": 53.390625,
+      "cpu_reduction_percent": -2.8212389672795726,
+      "planner_cpu_before_s": 1865.578125,
+      "planner_cpu_after_s": 1917.921875,
+      "callback_before": {
+        "total": 1871.1875,
+        "median": 3.203125,
+        "maximum": 23.234375
+      },
+      "callback_after": {
+        "total": 1922.9375,
+        "median": 3.2734375,
+        "max": 23.640625
+      },
+      "phases_before": {
+        "hierarchical_generation": 566.015625,
+        "conditional_continuations": 974.640625,
+        "outside_decision": 51.046875,
+        "independent_preflight": 136.609375,
+        "causal_reserve_generation": 0.234375,
+        "candidate_generation": 0.359375,
+        "uncertainty_scenarios": 0.0625,
+        "recertification": 136.609375
+      },
+      "phases_after": {
+        "hierarchical_generation": 585.671875,
+        "conditional_continuations": 999.515625,
+        "outside_decision": 52.328125,
+        "independent_preflight": 138.046875,
+        "causal_reserve_generation": 0.390625,
+        "candidate_generation": 0.328125,
+        "uncertainty_scenarios": 0.078125,
+        "recertification": 141.5625
+      },
+      "response_statistics": {
+        "Requests": 1731048,
+        "Hits": 212935,
+        "Evaluations": 1518113,
+        "CapacityClears": 0
+      },
+      "exact_native_fingerprint": true,
+      "exact_all_physical_reviews": true,
+      "all_maneuvers_equal": true,
+      "accepted_decisions": 402,
+      "policy_records": 402,
+      "failures": [],
+      "minimum_swept_m": 0.5174019137391851,
+      "source": "docs/experiments/s3-performance/native/held-3-result.json",
+      "bundle": "docs/experiments/s3-performance/native/held-3.zip",
+      "bundle_sha256": "729d7764548dd6c572ddaafbd2cb2db5cc32853d6f618429b92fed42861f5a78",
+      "bundle_bytes": 11501982
+    },
+    {
+      "label": "held-4",
+      "validation": true,
+      "scenario": {
+        "Id": "unseen-D-in",
+        "Gate": "D",
+        "OffsetMeters": 9,
+        "Held": true,
+        "Role": "independent"
+      },
+      "pass_": true,
+      "finish_s": 79.58480347912044,
+      "baseline_finish_s": 79.58480347912044,
+      "cpu_before_s": 1601.5625,
+      "cpu_after_s": 1628.515625,
+      "result_snapshot_cpu_s": 1627.484375,
+      "cpu_scope": "Complete budget-ledger elapsed CPU, including final native archive serialization; result snapshot occurs before bundle finalization",
+      "cpu_delta_s": 26.953125,
+      "cpu_reduction_percent": -1.6829268292682926,
+      "planner_cpu_before_s": 1574.125,
+      "planner_cpu_after_s": 1600.203125,
+      "callback_before": {
+        "total": 1579.9375,
+        "median": 3.328125,
+        "maximum": 22.109375
+      },
+      "callback_after": {
+        "total": 1605.3125,
+        "median": 3.375,
+        "max": 22.453125
+      },
+      "phases_before": {
+        "hierarchical_generation": 255.609375,
+        "conditional_continuations": 1008.625,
+        "independent_preflight": 135.296875,
+        "outside_decision": 47.140625,
+        "candidate_generation": 0.328125,
+        "causal_reserve_generation": 0.203125,
+        "uncertainty_scenarios": 0.0625,
+        "recertification": 126.859375
+      },
+      "phases_after": {
+        "hierarchical_generation": 260.4375,
+        "conditional_continuations": 1024.515625,
+        "independent_preflight": 135.390625,
+        "outside_decision": 49.953125,
+        "causal_reserve_generation": 0.171875,
+        "candidate_generation": 0.21875,
+        "uncertainty_scenarios": 0.015625,
+        "recertification": 129.5
+      },
+      "response_statistics": {
+        "Requests": 1645872,
+        "Hits": 182488,
+        "Evaluations": 1463384,
+        "CapacityClears": 0
+      },
+      "exact_native_fingerprint": true,
+      "exact_all_physical_reviews": true,
+      "all_maneuvers_equal": true,
+      "accepted_decisions": 398,
+      "policy_records": 398,
+      "failures": [],
+      "minimum_swept_m": 0.5929452665233053,
+      "source": "docs/experiments/s3-performance/native/held-4-result.json",
+      "bundle": "docs/experiments/s3-performance/native/held-4.zip",
+      "bundle_sha256": "6d9861ed9e892ee6ab9b3b14c69ad239287a152ae5f27100e8da53e3821f40bc",
+      "bundle_bytes": 11016630
+    },
+    {
+      "label": "native-dev",
+      "validation": false,
+      "scenario": {
+        "Id": "nominal-B",
+        "Gate": "B",
+        "OffsetMeters": 3.5,
+        "Held": false,
+        "Role": "independent"
+      },
+      "pass_": true,
+      "finish_s": 79.86783202593783,
+      "baseline_finish_s": 79.86783202593783,
+      "cpu_before_s": 1370.78125,
+      "cpu_after_s": 1351.75,
+      "result_snapshot_cpu_s": 1350.71875,
+      "cpu_scope": "Complete budget-ledger elapsed CPU, including final native archive serialization; result snapshot occurs before bundle finalization",
+      "cpu_delta_s": -19.03125,
+      "cpu_reduction_percent": 1.3883506212242107,
+      "planner_cpu_before_s": 1342.71875,
+      "planner_cpu_after_s": 1323.625,
+      "callback_before": {
+        "total": 1348.265625,
+        "median": 3.03125,
+        "maximum": 55.15625
+      },
+      "callback_after": {
+        "total": 1328.65625,
+        "median": 3.015625,
+        "max": 54.234375
+      },
+      "phases_before": {
+        "hierarchical_generation": 75.5,
+        "conditional_continuations": 961.484375,
+        "outside_decision": 50.390625,
+        "independent_preflight": 128.765625,
+        "candidate_generation": 0.171875,
+        "causal_reserve_generation": 0.015625,
+        "uncertainty_scenarios": 0.046875,
+        "recertification": 126.34375
+      },
+      "phases_after": {
+        "hierarchical_generation": 73.328125,
+        "conditional_continuations": 948.203125,
+        "outside_decision": 48.578125,
+        "independent_preflight": 129.484375,
+        "candidate_generation": 0.1875,
+        "causal_reserve_generation": 0.03125,
+        "uncertainty_scenarios": 0.03125,
+        "recertification": 123.78125
+      },
+      "response_statistics": {
+        "Requests": 1752474,
+        "Hits": 219212,
+        "Evaluations": 1533262,
+        "CapacityClears": 0
+      },
+      "exact_native_fingerprint": true,
+      "exact_all_physical_reviews": true,
+      "all_maneuvers_equal": true,
+      "accepted_decisions": 400,
+      "policy_records": 400,
+      "failures": [],
+      "minimum_swept_m": 0.5755229171544352,
+      "source": "docs/experiments/s3-performance/native/native-dev-result.json",
+      "bundle": "docs/experiments/s3-performance/native/native-dev.zip",
+      "bundle_sha256": "ef0b119a008d261245be8275f7db0e69b78f07cc35303f61d0e222d0f9a209f2",
+      "bundle_bytes": 11358397
+    }
+  ],
+  "held_count": 5,
+  "held_dnf": 0,
+  "median_finish_s": 79.60283030281548,
+  "certificates": [
+    {
+      "label": "c1-original",
+      "optimized": false,
+      "cpu": 18.265625,
+      "result_snapshot_cpu_s": 18.234375,
+      "planner_cpu": 17.96875,
+      "physical_hash": "E712AF6B5C5D2871F39E99B93EF07E1A28750FB20505DFD0F5128DC61BE99829",
+      "statistics": null
+    },
+    {
+      "label": "c2-response-memo",
+      "optimized": true,
+      "cpu": 17.875,
+      "result_snapshot_cpu_s": 17.828125,
+      "planner_cpu": 17.5625,
+      "physical_hash": "E712AF6B5C5D2871F39E99B93EF07E1A28750FB20505DFD0F5128DC61BE99829",
+      "statistics": {
+        "Requests": 5220,
+        "Hits": 3638,
+        "Evaluations": 1582,
+        "CapacityClears": 0
+      }
+    }
+  ],
+  "budget": [
+    {
+      "Label": "d1-full-reserve",
+      "Kind": "diagnostic",
+      "Complete": true,
+      "ChargedCpuSeconds": 48,
+      "CpuCapSeconds": 90,
+      "ProcessId": 19556,
+      "Concurrent": false,
+      "CpuSeconds": 46.21875,
+      "Reason": "full three-lap+32m diagnostic and three retained maneuvers match161"
+    },
+    {
+      "Label": "c1-original",
+      "Kind": "certificate",
+      "Complete": true,
+      "ChargedCpuSeconds": 20,
+      "CpuCapSeconds": 60,
+      "ProcessId": 19332,
+      "Concurrent": false,
+      "CpuSeconds": 18.265625,
+      "Reason": "full13/9 independent from rest"
+    },
+    {
+      "Label": "c2-response-memo",
+      "Kind": "certificate",
+      "Complete": true,
+      "ChargedCpuSeconds": 19,
+      "CpuCapSeconds": 60,
+      "ProcessId": 16248,
+      "Concurrent": false,
+      "CpuSeconds": 17.875,
+      "Reason": "full13/9 independent from rest"
+    },
+    {
+      "Label": "native-dev",
+      "Kind": "native",
+      "Complete": true,
+      "ChargedCpuSeconds": 1353,
+      "CpuCapSeconds": 2400,
+      "ProcessId": 18184,
+      "Concurrent": false,
+      "CpuSeconds": 1351.75,
+      "Reason": "completed"
+    },
+    {
+      "Label": "held-1",
+      "Kind": "native",
+      "Complete": true,
+      "ChargedCpuSeconds": 1687,
+      "CpuCapSeconds": 2400,
+      "ProcessId": 15952,
+      "Concurrent": true,
+      "CpuSeconds": 1686,
+      "Reason": "completed"
+    },
+    {
+      "Label": "held-0",
+      "Kind": "native",
+      "Complete": true,
+      "ChargedCpuSeconds": 1411,
+      "CpuCapSeconds": 2400,
+      "ProcessId": 12632,
+      "Concurrent": true,
+      "CpuSeconds": 1409.65625,
+      "Reason": "completed"
+    },
+    {
+      "Label": "held-2",
+      "Kind": "native",
+      "Complete": true,
+      "ChargedCpuSeconds": 1581,
+      "CpuCapSeconds": 2400,
+      "ProcessId": 18700,
+      "Concurrent": true,
+      "CpuSeconds": 1579.8125,
+      "Reason": "completed"
+    },
+    {
+      "Label": "held-3",
+      "Kind": "native",
+      "Complete": true,
+      "ChargedCpuSeconds": 1947,
+      "CpuCapSeconds": 2400,
+      "ProcessId": 20848,
+      "Concurrent": true,
+      "CpuSeconds": 1945.84375,
+      "Reason": "completed"
+    },
+    {
+      "Label": "held-4",
+      "Kind": "native",
+      "Complete": true,
+      "ChargedCpuSeconds": 1630,
+      "CpuCapSeconds": 2400,
+      "ProcessId": 20124,
+      "Concurrent": true,
+      "CpuSeconds": 1628.515625,
+      "Reason": "completed"
+    }
+  ],
+  "historical_profile": "profile161.json",
+  "tightest": "tightest161.json",
+  "prepare_witness": "prepare-witness.json",
+  "storage_benchmark": "storage161.json"
+}

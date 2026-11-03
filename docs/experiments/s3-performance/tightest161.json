@@ -1,0 +1,1085 @@
+{
+  "label": "held-3",
+  "index": 4186,
+  "time": 41.800000000000004,
+  "interval": [
+    41.79,
+    41.800000000000004
+  ],
+  "swept": 0.5174019137391851,
+  "minimum_endpoint_pose": 0.5861643453495956,
+  "travel_plus_float_tube": 0.06876243161041051,
+  "position": {
+    "X": -9.60816,
+    "Y": 72.659386
+  },
+  "heading": 3.1164992,
+  "heading_deg": 178.56225101589743,
+  "chi": 3.1381053011687143,
+  "beta": -0.021606116,
+  "yaw": 0.17578806,
+  "speed": 13.467869,
+  "reference": 495.7762849330902,
+  "lap": 2,
+  "segment": 4,
+  "offset": 9.996365513021345,
+  "lateral_velocity": 0.04696710999999835,
+  "before": {
+    "Input": {
+      "Rider": {
+        "Id": 1,
+        "Position": {
+          "X": -9.473482,
+          "Y": 72.658875
+        },
+        "Velocity": {
+          "X": -13.467783,
+          "Y": 0.058191232
+        },
+        "Heading": 3.1149492,
+        "AngularVelocity": 0.12029387,
+        "Road": {
+          "Segment": 4,
+          "Progress": 0.7173142279348066,
+          "ReferenceMeters": 176.86285710334778,
+          "OffsetMeters": 9.995854343587752,
+          "Heading": 3.141592653589793,
+          "RadiusMeters": 0,
+          "CornerProgress": 0,
+          "Tangent": {
+            "X": -1,
+            "Y": 1.2246469e-16
+          },
+          "Outward": {
+            "X": 1.2246469e-16,
+            "Y": 1
+          },
+          "IsTurn": false
+        },
+        "TotalReferenceMeters": 495.6416070461273,
+        "DistanceMeters": 539.7207940900771,
+        "Activity": 0,
+        "Drive": 0.08432508,
+        "TargetOffsetMeters": 6,
+        "Impairment": 0,
+        "Context": 2,
+        "Speed": 13.467909,
+        "ForwardSpeed": 13.464554,
+        "SideSpeed": 0.30061486,
+        "SlideRadians": -0.02232268
+      },
+      "Time": 41.79,
+      "Omega": 41.98361298122924,
+      "Steering": 0.07524982,
+      "Active": {
+        "SteeringRadians": 0.07524982,
+        "Drive": 0.08432508
+      },
+      "Pending": [
+        {
+          "ObservedAt": 41.6,
+          "ActivationAt": 41.84,
+          "Action": {
+            "SteeringRadians": -0.044330407,
+            "Drive": 0.080399185
+          }
+        }
+      ],
+      "NextReview": 41.800000000000054
+    },
+    "RequestedSteering": -0.044330407,
+    "RequestedDrive": 0.080399185,
+    "Inner": 10.61250539013451,
+    "Outer": 0.5861643453495956,
+    "CrankOmega": 378.0550251117113,
+    "Powertrain": {
+      "Seconds": 0.009999999776482582,
+      "BeforeOmega": 378.06065736114,
+      "AfterOmega": 378.0550251117113,
+      "CrankTorque": 3.7660525246285146,
+      "ClutchTorque": 3.7716847741830852,
+      "Engagement": 0.9346522324502309,
+      "SlipRadiansPerSecond": 0.20176941985675967,
+      "CombustionWorkJoules": 14.237856556199569,
+      "CrankDragWorkJoules": 0,
+      "ClutchHeatJoules": 0.007610106317595813,
+      "TransmissionLossJoules": 0.8550923766291074,
+      "EnergyResidualJoules": -2.986499936241671e-14,
+      "RootResidualNewtonMeters": -3.0824232055692846e-12,
+      "WheelQueries": 12,
+      "Wheel": {
+        "Seconds": 0.009999999776482582,
+        "BeforeOmega": 41.98440297800829,
+        "AfterOmega": 41.98361298122924,
+        "RequestedTorqueNewtonMeters": 31.9084531895889,
+        "AvailableTorqueNewtonMeters": 31.9084531895889,
+        "DriveTorqueNewtonMeters": 31.9084531895889,
+        "BearingTorqueNewtonMeters": 0.8396801595923753,
+        "LongitudinalNewtons": 94.36325,
+        "FrontLateralNewtons": -135.6751,
+        "RearLateralNewtons": -157.5776,
+        "InstantSlipRatio": 0.02895976394214208,
+        "MidSlipVelocityMetersPerSecond": 0.390270710029131,
+        "LongitudinalLossJoules": 0.36827212040846846,
+        "BearingLossJoules": 0.35253137732684797,
+        "EngineWorkJoules": 13.396447233855985,
+        "RearUtilization": 0.18414758436358333,
+        "RootResidualMetersPerSecond": 1.1139988376207555e-09,
+        "RootIterations": 2,
+        "LateralNewtons": -293.2527,
+        "MidOmega": 41.98400797961877
+      },
+      "Engine": {
+        "EngineRpm": 3610.186452445688,
+        "OverallRatio": 9,
+        "CrankTorqueNewtonMeters": 44.661118714674124,
+        "AvailableWheelTorqueNewtonMeters": 377.8330643261431,
+        "DriveWheelTorqueNewtonMeters": 31.9084531895889,
+        "Efficiency": 0.94,
+        "CrankPowerWatts": 16884.48612847343
+      },
+      "MidOmega": 378.05784123642565
+    },
+    "Forces": {
+      "FrontPoint": {
+        "X": -10.038537,
+        "Y": 72.67758
+      },
+      "RearPoint": {
+        "X": -8.739033,
+        "Y": 72.64168
+      },
+      "FrontArm": {
+        "X": -0.6997328,
+        "Y": 0.019332886
+      },
+      "RearArm": {
+        "X": 0.5997715,
+        "Y": -0.016571045
+      },
+      "FrontVelocity": {
+        "X": -13.469044,
+        "Y": 0.026996277
+      },
+      "RearVelocity": {
+        "X": -13.4668865,
+        "Y": 0.10505779
+      },
+      "FrontForce": {
+        "X": 15.207852,
+        "Y": -319.0537
+      },
+      "RearForce": {
+        "X": -89.97545,
+        "Y": 160.12354
+      },
+      "Resistance": {
+        "X": 76.22421,
+        "Y": -0.3906858
+      },
+      "BodyForward": {
+        "X": -0.9996186,
+        "Y": 0.027616955
+      },
+      "FrontLeft": {
+        "X": 0.047611438,
+        "Y": -0.99886596
+      },
+      "BodyLeft": {
+        "X": -0.027616955,
+        "Y": -0.9996186
+      },
+      "FrontLateral": 319.41595,
+      "RearLateral": -157.5776,
+      "RearLongitudinal": 94.36325,
+      "Budget": 1852.339,
+      "SteeringRequest": 0.07524982,
+      "SteeringBefore": 0.07524982,
+      "SteeringUsed": 0.07524982,
+      "SteeringAfter": 0.07524982,
+      "Demand": 3.7552752,
+      "Engine": {
+        "EngineRpm": 3610.186452445688,
+        "OverallRatio": 9,
+        "CrankTorqueNewtonMeters": 44.661118714674124,
+        "AvailableWheelTorqueNewtonMeters": 377.8330643261431,
+        "DriveWheelTorqueNewtonMeters": 31.9084531895889,
+        "Efficiency": 0.94,
+        "CrankPowerWatts": 16884.48612847343
+      },
+      "TyreLoads": {
+        "EffectiveFrictionCoefficient": 1.2845000267028808,
+        "FrontNormalNewtons": 665.5707895749277,
+        "RearNormalNewtons": 776.4992104250724,
+        "FrontCapacityNewtons": 854.9256969816521,
+        "RearCapacityNewtons": 997.4132565257713,
+        "TotalCapacityNewtons": 1852.3389535074234
+      },
+      "NetForce": {
+        "X": 1.4566193,
+        "Y": -159.32086
+      },
+      "FrontTorque": 222.95833,
+      "RearTorque": 94.54655,
+      "NetTorque": 317.50488
+    },
+    "LegacyCertificate": 0.5183117335098243,
+    "Certificate": 0.5176925095985228,
+    "EnergyExcessJoules": -14.299870875213884
+  },
+  "after": {
+    "Input": {
+      "Rider": {
+        "Id": 1,
+        "Position": {
+          "X": -9.60816,
+          "Y": 72.659386
+        },
+        "Velocity": {
+          "X": -13.467787,
+          "Y": 0.04696711
+        },
+        "Heading": 3.1164992,
+        "AngularVelocity": 0.17578806,
+        "Road": {
+          "Segment": 4,
+          "Progress": 0.719486451918079,
+          "ReferenceMeters": 176.99753499031067,
+          "OffsetMeters": 9.996365513021345,
+          "Heading": 3.141592653589793,
+          "RadiusMeters": 0,
+          "CornerProgress": 0,
+          "Tangent": {
+            "X": -1,
+            "Y": 1.2246469e-16
+          },
+          "Outward": {
+            "X": 1.2246469e-16,
+            "Y": 1
+          },
+          "IsTurn": false
+        },
+        "TotalReferenceMeters": 495.7762849330902,
+        "DistanceMeters": 539.8554729456155,
+        "Activity": 0,
+        "Drive": 0.08432508,
+        "TargetOffsetMeters": 6,
+        "Impairment": 0,
+        "Context": 2,
+        "Speed": 13.467869,
+        "ForwardSpeed": 13.4647255,
+        "SideSpeed": 0.29096568,
+        "SlideRadians": -0.021606116
+      },
+      "Time": 41.800000000000004,
+      "Omega": 41.982443473100076,
+      "Steering": 0.07524982,
+      "Active": {
+        "SteeringRadians": 0.07524982,
+        "Drive": 0.08432508
+      },
+      "Pending": [
+        {
+          "ObservedAt": 41.6,
+          "ActivationAt": 41.84,
+          "Action": {
+            "SteeringRadians": -0.044330407,
+            "Drive": 0.080399185
+          }
+        }
+      ],
+      "NextReview": 41.800000000000054
+    },
+    "RequestedSteering": -0.044330407,
+    "RequestedDrive": 0.080399185,
+    "Inner": 10.611994188856494,
+    "Outer": 0.58664507780025,
+    "CrankOmega": 378.043640246791,
+    "Powertrain": {
+      "Seconds": 0.009999999776482582,
+      "BeforeOmega": 378.0550251117113,
+      "AfterOmega": 378.043640246791,
+      "CrankTorque": 3.766011415778381,
+      "ClutchTorque": 3.777396280953248,
+      "Engagement": 0.934635243668177,
+      "SlipRadiansPerSecond": 0.2020786347692365,
+      "CombustionWorkJoules": 14.237380707744322,
+      "CrankDragWorkJoules": 0,
+      "ClutchHeatJoules": 0.007633310663756444,
+      "TransmissionLossJoules": 0.8563672681763137,
+      "EnergyResidualJoules": -3.8391512191537913e-13,
+      "RootResidualNewtonMeters": -3.0953017926549364e-13,
+      "WheelQueries": 12,
+      "Wheel": {
+        "Seconds": 0.009999999776482582,
+        "BeforeOmega": 41.98361298122924,
+        "AfterOmega": 41.982443473100076,
+        "RequestedTorqueNewtonMeters": 31.95677253686448,
+        "AvailableTorqueNewtonMeters": 31.95677253686448,
+        "DriveTorqueNewtonMeters": 31.95677253686448,
+        "BearingTorqueNewtonMeters": 0.8396605645432932,
+        "LongitudinalNewtons": 94.613235,
+        "FrontLateralNewtons": -116.519,
+        "RearLateralNewtons": -135.32584,
+        "InstantSlipRatio": 0.02894784387252961,
+        "MidSlipVelocityMetersPerSecond": 0.38999371174683883,
+        "LongitudinalLossJoules": 0.36898566057992505,
+        "BearingLossJoules": 0.3525149239452582,
+        "EngineWorkJoules": 13.416420534762246,
+        "RearUtilization": 0.1655486311414479,
+        "RootResidualMetersPerSecond": -2.944128274506852e-10,
+        "RootIterations": 2,
+        "LateralNewtons": -251.84483,
+        "MidOmega": 41.98302822716466
+      },
+      "Engine": {
+        "EngineRpm": 3610.1052017097136,
+        "OverallRatio": 9,
+        "CrankTorqueNewtonMeters": 44.66063121025828,
+        "AvailableWheelTorqueNewtonMeters": 377.828940038785,
+        "DriveWheelTorqueNewtonMeters": 31.95677253686448,
+        "Efficiency": 0.94,
+        "CrankPowerWatts": 16883.92182607228
+      },
+      "MidOmega": 378.04933267925117
+    },
+    "Forces": {
+      "FrontPoint": {
+        "X": -10.173234,
+        "Y": 72.67752
+      },
+      "RearPoint": {
+        "X": -8.873695,
+        "Y": 72.64289
+      },
+      "FrontArm": {
+        "X": -0.69975185,
+        "Y": 0.01864624
+      },
+      "RearArm": {
+        "X": 0.59978676,
+        "Y": -0.015983582
+      },
+      "FrontVelocity": {
+        "X": -13.470026,
+        "Y": -0.02598463
+      },
+      "RearVelocity": {
+        "X": -13.46586,
+        "Y": 0.1303419
+      },
+      "FrontForce": {
+        "X": 14.713283,
+        "Y": -302.46362
+      },
+      "RearForce": {
+        "X": -90.97454,
+        "Y": 137.79834
+      },
+      "Resistance": {
+        "X": 76.223694,
+        "Y": -0.3293453
+      },
+      "BodyForward": {
+        "X": -0.9996451,
+        "Y": 0.026640275
+      },
+      "FrontLeft": {
+        "X": 0.048587345,
+        "Y": -0.99881893
+      },
+      "BodyLeft": {
+        "X": -0.026640275,
+        "Y": -0.9996451
+      },
+      "FrontLateral": 302.8213,
+      "RearLateral": -135.32584,
+      "RearLongitudinal": 94.613235,
+      "Budget": 1852.339,
+      "SteeringRequest": 0.07524982,
+      "SteeringBefore": 0.07524982,
+      "SteeringUsed": 0.07524982,
+      "SteeringAfter": 0.07524982,
+      "Demand": 3.7351987,
+      "Engine": {
+        "EngineRpm": 3610.1052017097136,
+        "OverallRatio": 9,
+        "CrankTorqueNewtonMeters": 44.66063121025828,
+        "AvailableWheelTorqueNewtonMeters": 377.828940038785,
+        "DriveWheelTorqueNewtonMeters": 31.95677253686448,
+        "Efficiency": 0.94,
+        "CrankPowerWatts": 16883.92182607228
+      },
+      "TyreLoads": {
+        "EffectiveFrictionCoefficient": 1.2845000267028808,
+        "FrontNormalNewtons": 665.5707895749277,
+        "RearNormalNewtons": 776.4992104250724,
+        "FrontCapacityNewtons": 854.9256969816521,
+        "RearCapacityNewtons": 997.4132565257713,
+        "TotalCapacityNewtons": 1852.3389535074234
+      },
+      "NetForce": {
+        "X": -0.03756714,
+        "Y": -164.99463
+      },
+      "FrontTorque": 211.37512,
+      "RearTorque": 81.19552,
+      "NetTorque": 292.57065
+    },
+    "LegacyCertificate": 0.5180111890094734,
+    "Certificate": 0.5174019137391851,
+    "EnergyExcessJoules": -13.969992565276897
+  },
+  "decisions": [
+    {
+      "time": 38.800000000000004,
+      "origin": "primitive retained controls; full physical revalidation",
+      "settings": {
+        "Enabled": true,
+        "DiagnosticSpeed": 12,
+        "Actuator": true,
+        "Beta": true,
+        "Preview": true,
+        "Adaptive": true,
+        "CourseSeconds": 1.2,
+        "BetaSeconds": 1.5,
+        "ForceFraction": 0.5,
+        "OffsetMeters": 3.5,
+        "Maneuver": 0
+      },
+      "action": {
+        "SteeringRadians": -0.029508451,
+        "Drive": 0.07206489
+      },
+      "goal": 510.1681249141693,
+      "safety_goal": 669.5574998855591,
+      "tape_minimum": {
+        "Legal": true,
+        "MinimumGapMeters": 0.5861036936830372,
+        "SweepLowerBoundMeters": 0.5173481353527727,
+        "MaximumBetaDegrees": 2.987687756811768,
+        "MaximumYawRate": 0.5773676633834839,
+        "Reason": "legal complete forecast; swept physical footprint>=0.5m"
+      },
+      "counter_delta": {
+        "Forecasts": 1547,
+        "Contacts": 31014,
+        "TransitionRequests": 2538,
+        "SearchHits": 982,
+        "IndependentHits": 9,
+        "RolloutHits": 0,
+        "IndependentForecasts": 778,
+        "IndependentContacts": 15597,
+        "IndependentComparisons": 778,
+        "PrimedPrefixes": 694
+      }
+    },
+    {
+      "time": 39,
+      "origin": "primitive retained controls; full physical revalidation",
+      "settings": {
+        "Enabled": true,
+        "DiagnosticSpeed": 12,
+        "Actuator": true,
+        "Beta": true,
+        "Preview": true,
+        "Adaptive": true,
+        "CourseSeconds": 1.2,
+        "BetaSeconds": 1.5,
+        "ForceFraction": 0.5,
+        "OffsetMeters": 3.5,
+        "Maneuver": 0
+      },
+      "action": {
+        "SteeringRadians": 0.04385446,
+        "Drive": 0.074263565
+      },
+      "goal": 510.1681249141693,
+      "safety_goal": 669.5574998855591,
+      "tape_minimum": {
+        "Legal": true,
+        "MinimumGapMeters": 0.5861027001795461,
+        "SweepLowerBoundMeters": 0.5173402103316724,
+        "MaximumBetaDegrees": 2.987686846119879,
+        "MaximumYawRate": 0.5773679614067078,
+        "Reason": "legal complete forecast; swept physical footprint>=0.5m"
+      },
+      "counter_delta": {
+        "Forecasts": 1529,
+        "Contacts": 30654,
+        "TransitionRequests": 2486,
+        "SearchHits": 948,
+        "IndependentHits": 9,
+        "RolloutHits": 0,
+        "IndependentForecasts": 769,
+        "IndependentContacts": 15417,
+        "IndependentComparisons": 769,
+        "PrimedPrefixes": 665
+      }
+    },
+    {
+      "time": 39.2,
+      "origin": "endogenous primitive feedback; full physical replay",
+      "settings": {
+        "Enabled": true,
+        "DiagnosticSpeed": 12,
+        "Actuator": true,
+        "Beta": true,
+        "Preview": true,
+        "Adaptive": true,
+        "CourseSeconds": 1.2,
+        "BetaSeconds": 1.5,
+        "ForceFraction": 0.5,
+        "OffsetMeters": 3.5,
+        "Maneuver": 0
+      },
+      "action": {
+        "SteeringRadians": -0.034903552,
+        "Drive": 0.07352329
+      },
+      "goal": 510.1681249141693,
+      "safety_goal": 669.5574998855591,
+      "tape_minimum": {
+        "Legal": true,
+        "MinimumGapMeters": 0.586078286963095,
+        "SweepLowerBoundMeters": 0.5173158001438823,
+        "MaximumBetaDegrees": 2.946136832232931,
+        "MaximumYawRate": 0.5773773789405823,
+        "Reason": "legal complete forecast; swept physical footprint>=0.5m"
+      },
+      "counter_delta": {
+        "Forecasts": 1426,
+        "Contacts": 28588,
+        "TransitionRequests": 2439,
+        "SearchHits": 1004,
+        "IndependentHits": 9,
+        "RolloutHits": 0,
+        "IndependentForecasts": 760,
+        "IndependentContacts": 15236,
+        "IndependentComparisons": 760,
+        "PrimedPrefixes": 732
+      }
+    },
+    {
+      "time": 39.4,
+      "origin": "endogenous primitive feedback; full physical replay",
+      "settings": {
+        "Enabled": true,
+        "DiagnosticSpeed": 12,
+        "Actuator": true,
+        "Beta": true,
+        "Preview": true,
+        "Adaptive": true,
+        "CourseSeconds": 1.2,
+        "BetaSeconds": 1.5,
+        "ForceFraction": 0.5,
+        "OffsetMeters": 3.5,
+        "Maneuver": 0
+      },
+      "action": {
+        "SteeringRadians": 0.047980834,
+        "Drive": 0.07471799
+      },
+      "goal": 510.1681249141693,
+      "safety_goal": 669.5574998855591,
+      "tape_minimum": {
+        "Legal": true,
+        "MinimumGapMeters": 0.5861080420256085,
+        "SweepLowerBoundMeters": 0.517345575293161,
+        "MaximumBetaDegrees": 2.9950740751622016,
+        "MaximumYawRate": 0.5773789286613464,
+        "Reason": "legal complete forecast; swept physical footprint>=0.5m"
+      },
+      "counter_delta": {
+        "Forecasts": 1409,
+        "Contacts": 28248,
+        "TransitionRequests": 2366,
+        "SearchHits": 948,
+        "IndependentHits": 9,
+        "RolloutHits": 0,
+        "IndependentForecasts": 751,
+        "IndependentContacts": 15056,
+        "IndependentComparisons": 751,
+        "PrimedPrefixes": 679
+      }
+    },
+    {
+      "time": 39.6,
+      "origin": "endogenous primitive feedback; full physical replay",
+      "settings": {
+        "Enabled": true,
+        "DiagnosticSpeed": 12,
+        "Actuator": true,
+        "Beta": true,
+        "Preview": true,
+        "Adaptive": true,
+        "CourseSeconds": 1.2,
+        "BetaSeconds": 1.5,
+        "ForceFraction": 0.5,
+        "OffsetMeters": 3.5,
+        "Maneuver": 0
+      },
+      "action": {
+        "SteeringRadians": -0.0424073,
+        "Drive": 0.0728895
+      },
+      "goal": 510.1681249141693,
+      "safety_goal": 669.5574998855591,
+      "tape_minimum": {
+        "Legal": true,
+        "MinimumGapMeters": 0.5773564631713869,
+        "SweepLowerBoundMeters": 0.5090865392347766,
+        "MaximumBetaDegrees": 2.978578409406713,
+        "MaximumYawRate": 0.577366828918457,
+        "Reason": "legal complete forecast; swept physical footprint>=0.5m"
+      },
+      "counter_delta": {
+        "Forecasts": 1230,
+        "Contacts": 24662,
+        "TransitionRequests": 2241,
+        "SearchHits": 1002,
+        "IndependentHits": 9,
+        "RolloutHits": 0,
+        "IndependentForecasts": 742,
+        "IndependentContacts": 14877,
+        "IndependentComparisons": 742,
+        "PrimedPrefixes": 738
+      }
+    },
+    {
+      "time": 39.800000000000004,
+      "origin": "primitive retained controls; full physical revalidation",
+      "settings": {
+        "Enabled": true,
+        "DiagnosticSpeed": 12,
+        "Actuator": true,
+        "Beta": true,
+        "Preview": true,
+        "Adaptive": true,
+        "CourseSeconds": 1.2,
+        "BetaSeconds": 1.5,
+        "ForceFraction": 0.5,
+        "OffsetMeters": 3.5,
+        "Maneuver": 0
+      },
+      "action": {
+        "SteeringRadians": 0.056326438,
+        "Drive": 0.07517977
+      },
+      "goal": 510.1681249141693,
+      "safety_goal": 669.5574998855591,
+      "tape_minimum": {
+        "Legal": true,
+        "MinimumGapMeters": 0.5773017099453769,
+        "SweepLowerBoundMeters": 0.509031785969651,
+        "MaximumBetaDegrees": 2.9785820521742705,
+        "MaximumYawRate": 0.5773667097091675,
+        "Reason": "legal complete forecast; swept physical footprint>=0.5m"
+      },
+      "counter_delta": {
+        "Forecasts": 1376,
+        "Contacts": 27590,
+        "TransitionRequests": 2327,
+        "SearchHits": 942,
+        "IndependentHits": 9,
+        "RolloutHits": 0,
+        "IndependentForecasts": 733,
+        "IndependentContacts": 14697,
+        "IndependentComparisons": 733,
+        "PrimedPrefixes": 672
+      }
+    },
+    {
+      "time": 40,
+      "origin": "primitive retained controls; full physical revalidation",
+      "settings": {
+        "Enabled": true,
+        "DiagnosticSpeed": 12,
+        "Actuator": true,
+        "Beta": true,
+        "Preview": true,
+        "Adaptive": true,
+        "CourseSeconds": 1.2,
+        "BetaSeconds": 1.5,
+        "ForceFraction": 0.5,
+        "OffsetMeters": 3.5,
+        "Maneuver": 0
+      },
+      "action": {
+        "SteeringRadians": -0.05489027,
+        "Drive": 0.073953345
+      },
+      "goal": 510.1681249141693,
+      "safety_goal": 669.5574998855591,
+      "tape_minimum": {
+        "Legal": true,
+        "MinimumGapMeters": 0.5773446960086032,
+        "SweepLowerBoundMeters": 0.5090747721111084,
+        "MaximumBetaDegrees": 2.9785817486103072,
+        "MaximumYawRate": 0.577366828918457,
+        "Reason": "legal complete forecast; swept physical footprint>=0.5m"
+      },
+      "counter_delta": {
+        "Forecasts": 1439,
+        "Contacts": 28854,
+        "TransitionRequests": 2381,
+        "SearchHits": 933,
+        "IndependentHits": 9,
+        "RolloutHits": 0,
+        "IndependentForecasts": 724,
+        "IndependentContacts": 14517,
+        "IndependentComparisons": 724,
+        "PrimedPrefixes": 662
+      }
+    },
+    {
+      "time": 40.2,
+      "origin": "primitive retained controls; full physical revalidation",
+      "settings": {
+        "Enabled": true,
+        "DiagnosticSpeed": 12,
+        "Actuator": true,
+        "Beta": true,
+        "Preview": true,
+        "Adaptive": true,
+        "CourseSeconds": 1.2,
+        "BetaSeconds": 1.5,
+        "ForceFraction": 0.5,
+        "OffsetMeters": 3.5,
+        "Maneuver": 0
+      },
+      "action": {
+        "SteeringRadians": 0.0724845,
+        "Drive": 0.07540737
+      },
+      "goal": 510.1681249141693,
+      "safety_goal": 669.5574998855591,
+      "tape_minimum": {
+        "Legal": true,
+        "MinimumGapMeters": 0.5773123218544546,
+        "SweepLowerBoundMeters": 0.5090424075719341,
+        "MaximumBetaDegrees": 2.9785820521742705,
+        "MaximumYawRate": 0.5773667097091675,
+        "Reason": "legal complete forecast; swept physical footprint>=0.5m"
+      },
+      "counter_delta": {
+        "Forecasts": 1421,
+        "Contacts": 28494,
+        "TransitionRequests": 2339,
+        "SearchHits": 909,
+        "IndependentHits": 9,
+        "RolloutHits": 0,
+        "IndependentForecasts": 715,
+        "IndependentContacts": 14337,
+        "IndependentComparisons": 715,
+        "PrimedPrefixes": 642
+      }
+    },
+    {
+      "time": 40.4,
+      "origin": "primitive retained controls; full physical revalidation",
+      "settings": {
+        "Enabled": true,
+        "DiagnosticSpeed": 12,
+        "Actuator": true,
+        "Beta": true,
+        "Preview": true,
+        "Adaptive": true,
+        "CourseSeconds": 1.2,
+        "BetaSeconds": 1.5,
+        "ForceFraction": 0.5,
+        "OffsetMeters": 3.5,
+        "Maneuver": 0
+      },
+      "action": {
+        "SteeringRadians": -0.079928055,
+        "Drive": 0.07455995
+      },
+      "goal": 510.1681249141693,
+      "safety_goal": 669.5574998855591,
+      "tape_minimum": {
+        "Legal": true,
+        "MinimumGapMeters": 0.5773335749877931,
+        "SweepLowerBoundMeters": 0.5090636510511829,
+        "MaximumBetaDegrees": 2.978578409406713,
+        "MaximumYawRate": 0.5773667693138123,
+        "Reason": "legal complete forecast; swept physical footprint>=0.5m"
+      },
+      "counter_delta": {
+        "Forecasts": 1403,
+        "Contacts": 28134,
+        "TransitionRequests": 2323,
+        "SearchHits": 911,
+        "IndependentHits": 9,
+        "RolloutHits": 0,
+        "IndependentForecasts": 706,
+        "IndependentContacts": 14157,
+        "IndependentComparisons": 706,
+        "PrimedPrefixes": 648
+      }
+    },
+    {
+      "time": 40.6,
+      "origin": "endogenous primitive feedback; full physical replay",
+      "settings": {
+        "Enabled": true,
+        "DiagnosticSpeed": 12,
+        "Actuator": true,
+        "Beta": true,
+        "Preview": true,
+        "Adaptive": true,
+        "CourseSeconds": 1.2,
+        "BetaSeconds": 1.5,
+        "ForceFraction": 0.5,
+        "OffsetMeters": 3.5,
+        "Maneuver": 0
+      },
+      "action": {
+        "SteeringRadians": 0.09352119,
+        "Drive": 0.07812132
+      },
+      "goal": 510.1681249141693,
+      "safety_goal": 669.5574998855591,
+      "tape_minimum": {
+        "Legal": true,
+        "MinimumGapMeters": 0.578501492344793,
+        "SweepLowerBoundMeters": 0.5102303172582601,
+        "MaximumBetaDegrees": 2.977404223997397,
+        "MaximumYawRate": 0.5773668885231018,
+        "Reason": "legal complete forecast; swept physical footprint>=0.5m"
+      },
+      "counter_delta": {
+        "Forecasts": 1307,
+        "Contacts": 26210,
+        "TransitionRequests": 2227,
+        "SearchHits": 911,
+        "IndependentHits": 9,
+        "RolloutHits": 0,
+        "IndependentForecasts": 697,
+        "IndependentContacts": 13977,
+        "IndependentComparisons": 697,
+        "PrimedPrefixes": 660
+      }
+    },
+    {
+      "time": 40.800000000000004,
+      "origin": "endogenous primitive feedback; full physical replay",
+      "settings": {
+        "Enabled": true,
+        "DiagnosticSpeed": 12,
+        "Actuator": true,
+        "Beta": true,
+        "Preview": true,
+        "Adaptive": true,
+        "CourseSeconds": 1.2,
+        "BetaSeconds": 1.5,
+        "ForceFraction": 0.5,
+        "OffsetMeters": 3.5,
+        "Maneuver": 0
+      },
+      "action": {
+        "SteeringRadians": -0.09899344,
+        "Drive": 0.078371935
+      },
+      "goal": 510.1681249141693,
+      "safety_goal": 669.5574998855591,
+      "tape_minimum": {
+        "Legal": true,
+        "MinimumGapMeters": 0.5843628693914494,
+        "SweepLowerBoundMeters": 0.5160844002647432,
+        "MaximumBetaDegrees": 2.970197919077089,
+        "MaximumYawRate": 0.5773675441741943,
+        "Reason": "legal complete forecast; swept physical footprint>=0.5m"
+      },
+      "counter_delta": {
+        "Forecasts": 1290,
+        "Contacts": 25870,
+        "TransitionRequests": 2203,
+        "SearchHits": 904,
+        "IndependentHits": 9,
+        "RolloutHits": 0,
+        "IndependentForecasts": 688,
+        "IndependentContacts": 13797,
+        "IndependentComparisons": 688,
+        "PrimedPrefixes": 656
+      }
+    },
+    {
+      "time": 41,
+      "origin": "endogenous primitive feedback; full physical replay",
+      "settings": {
+        "Enabled": true,
+        "DiagnosticSpeed": 12,
+        "Actuator": true,
+        "Beta": true,
+        "Preview": true,
+        "Adaptive": true,
+        "CourseSeconds": 1.2,
+        "BetaSeconds": 1.5,
+        "ForceFraction": 0.5,
+        "OffsetMeters": 3.5,
+        "Maneuver": 0
+      },
+      "action": {
+        "SteeringRadians": 0.10931075,
+        "Drive": 0.08060596
+      },
+      "goal": 510.1681249141693,
+      "safety_goal": 669.5574998855591,
+      "tape_minimum": {
+        "Legal": true,
+        "MinimumGapMeters": 0.586180140039198,
+        "SweepLowerBoundMeters": 0.5174245852437139,
+        "MaximumBetaDegrees": 2.957281879574613,
+        "MaximumYawRate": 0.5773685574531555,
+        "Reason": "legal complete forecast; swept physical footprint>=0.5m"
+      },
+      "counter_delta": {
+        "Forecasts": 1273,
+        "Contacts": 25530,
+        "TransitionRequests": 2196,
+        "SearchHits": 914,
+        "IndependentHits": 9,
+        "RolloutHits": 0,
+        "IndependentForecasts": 679,
+        "IndependentContacts": 13617,
+        "IndependentComparisons": 679,
+        "PrimedPrefixes": 669
+      }
+    },
+    {
+      "time": 41.2,
+      "origin": "endogenous primitive feedback; full physical replay",
+      "settings": {
+        "Enabled": true,
+        "DiagnosticSpeed": 12,
+        "Actuator": true,
+        "Beta": true,
+        "Preview": true,
+        "Adaptive": true,
+        "CourseSeconds": 1.2,
+        "BetaSeconds": 1.5,
+        "ForceFraction": 0.5,
+        "OffsetMeters": 3.5,
+        "Maneuver": 0
+      },
+      "action": {
+        "SteeringRadians": -0.098891206,
+        "Drive": 0.082089044
+      },
+      "goal": 510.1681249141693,
+      "safety_goal": 669.5574998855591,
+      "tape_minimum": {
+        "Legal": true,
+        "MinimumGapMeters": 0.5861574042664527,
+        "SweepLowerBoundMeters": 0.5174018614435599,
+        "MaximumBetaDegrees": 2.958507063729732,
+        "MaximumYawRate": 0.5773685574531555,
+        "Reason": "legal complete forecast; swept physical footprint>=0.5m"
+      },
+      "counter_delta": {
+        "Forecasts": 818,
+        "Contacts": 16404,
+        "TransitionRequests": 1789,
+        "SearchHits": 962,
+        "IndependentHits": 9,
+        "RolloutHits": 0,
+        "IndependentForecasts": 670,
+        "IndependentContacts": 13436,
+        "IndependentComparisons": 670,
+        "PrimedPrefixes": 726
+      }
+    },
+    {
+      "time": 41.4,
+      "origin": "endogenous primitive feedback; full physical replay",
+      "settings": {
+        "Enabled": true,
+        "DiagnosticSpeed": 12,
+        "Actuator": true,
+        "Beta": true,
+        "Preview": true,
+        "Adaptive": true,
+        "CourseSeconds": 1.2,
+        "BetaSeconds": 1.5,
+        "ForceFraction": 0.5,
+        "OffsetMeters": 3.5,
+        "Maneuver": 0
+      },
+      "action": {
+        "SteeringRadians": 0.07524982,
+        "Drive": 0.08432508
+      },
+      "goal": 510.1681249141693,
+      "safety_goal": 669.5574998855591,
+      "tape_minimum": {
+        "Legal": true,
+        "MinimumGapMeters": 0.5861726630555152,
+        "SweepLowerBoundMeters": 0.5174171441527113,
+        "MaximumBetaDegrees": 2.958123662444322,
+        "MaximumYawRate": 0.5773681402206421,
+        "Reason": "legal complete forecast; swept physical footprint>=0.5m"
+      },
+      "counter_delta": {
+        "Forecasts": 733,
+        "Contacts": 14700,
+        "TransitionRequests": 1703,
+        "SearchHits": 961,
+        "IndependentHits": 9,
+        "RolloutHits": 0,
+        "IndependentForecasts": 661,
+        "IndependentContacts": 13256,
+        "IndependentComparisons": 661,
+        "PrimedPrefixes": 729
+      }
+    },
+    {
+      "time": 41.6,
+      "origin": "endogenous primitive feedback; full physical replay",
+      "settings": {
+        "Enabled": true,
+        "DiagnosticSpeed": 12,
+        "Actuator": true,
+        "Beta": true,
+        "Preview": true,
+        "Adaptive": true,
+        "CourseSeconds": 1.2,
+        "BetaSeconds": 1.5,
+        "ForceFraction": 0.5,
+        "OffsetMeters": 3.5,
+        "Maneuver": 0
+      },
+      "action": {
+        "SteeringRadians": -0.044330407,
+        "Drive": 0.080399185
+      },
+      "goal": 510.1681249141693,
+      "safety_goal": 669.5574998855591,
+      "tape_minimum": {
+        "Legal": true,
+        "MinimumGapMeters": 0.5861804448609375,
+        "SweepLowerBoundMeters": 0.5174249405123086,
+        "MaximumBetaDegrees": 2.9594730042603534,
+        "MaximumYawRate": 0.5573124885559082,
+        "Reason": "legal complete forecast; swept physical footprint>=0.5m"
+      },
+      "counter_delta": {
+        "Forecasts": 652,
+        "Contacts": 13076,
+        "TransitionRequests": 1615,
+        "SearchHits": 954,
+        "IndependentHits": 9,
+        "RolloutHits": 0,
+        "IndependentForecasts": 652,
+        "IndependentContacts": 13076,
+        "IndependentComparisons": 652,
+        "PrimedPrefixes": 726
+      }
+    }
+  ],
+  "source": "docs/experiments/trajectory-continuation/native/held-3.json.gz",
+  "neighborhood_indices": [
+    3886,
+    4387
+  ]
+}

@@ -1,0 +1,3101 @@
+[
+  {
+    "source": "docs/experiments/trajectory-continuation/policies/held-2/decision-0344.json.gz",
+    "time": 68.8,
+    "nodes": [
+      {
+        "Id": 12,
+        "Parent": 9,
+        "Sign": -1,
+        "Depth": 2,
+        "Observed": {
+          "Input": {
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": -29.106653,
+                "Y": 68.176704
+              },
+              "Velocity": {
+                "X": -13.333015,
+                "Y": -0.63766223
+              },
+              "Heading": -3.0758274,
+              "AngularVelocity": 0.8334283,
+              "Road": {
+                "Segment": 5,
+                "Progress": 0.06336397978073058,
+                "ReferenceMeters": 196.4463677669048,
+                "OffsetMeters": 5.518032697564713,
+                "Heading": -3.1325909550125695,
+                "RadiusMeters": 73.66805417843455,
+                "CornerProgress": 0.02112132659357686,
+                "Tangent": {
+                  "X": -0.99995947,
+                  "Y": -0.009001577
+                },
+                "Outward": {
+                  "X": -0.009001577,
+                  "Y": 0.99995947
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 834.0038676524656,
+              "DistanceMeters": 903.4503570795132,
+              "Activity": 0,
+              "Drive": 0.2132211,
+              "TargetOffsetMeters": 3,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 13.348255,
+              "ForwardSpeed": 13.346098,
+              "SideSpeed": -0.23993403,
+              "SlideRadians": 0.0179759
+            },
+            "Time": 69.2,
+            "Omega": 43.45237205222611,
+            "Steering": 0.1743901,
+            "Active": {
+              "SteeringRadians": 0.1743901,
+              "Drive": 0.2132211
+            },
+            "Pending": [
+              {
+                "ObservedAt": 69,
+                "ActivationAt": 69.24,
+                "Action": {
+                  "SteeringRadians": -0.030611861,
+                  "Drive": 0.13583949
+                }
+              }
+            ],
+            "NextReview": 69.2
+          },
+          "CrankOmega": 391.5593785834859
+        },
+        "Action": {
+          "SteeringRadians": 0.025618497,
+          "Drive": 0
+        },
+        "Execution": {
+          "Legal": true,
+          "MinimumGapMeters": 5.121818985900707,
+          "SweepLowerBoundMeters": 5.049983135944993,
+          "MaximumBetaDegrees": 5.575837982190323,
+          "MaximumYawRate": 1.053324580192566,
+          "Reason": "legal complete forecast; swept physical footprint>=0.5m"
+        },
+        "TerminalPlan": 8,
+        "Source": "causal physical state-feedback reserve/Prepare"
+      }
+    ],
+    "outcomes": [
+      {
+        "Maneuver": "Track",
+        "Legal": true,
+        "Arrival": 69.2,
+        "Commands": 51,
+        "EndReference": 957.7721102237718,
+        "MinimumGap": 3.9971639300259123,
+        "Sweep": 3.9285372233289273,
+        "Reason": "legal complete forecast; swept physical footprint>=0.5m",
+        "First": {
+          "SteeringRadians": 0.03528966,
+          "Drive": 0.09771112
+        },
+        "CpuSeconds": 2.28125
+      },
+      {
+        "Maneuver": "Prepare",
+        "Legal": true,
+        "Arrival": 69.2,
+        "Commands": 55,
+        "EndReference": 957.256676316263,
+        "MinimumGap": 4.8699766153577455,
+        "Sweep": 4.80481901786815,
+        "Reason": "legal complete forecast; swept physical footprint>=0.5m",
+        "First": {
+          "SteeringRadians": 0.025618497,
+          "Drive": 0
+        },
+        "CpuSeconds": 2.515625
+      },
+      {
+        "Maneuver": "Recover",
+        "Legal": true,
+        "Arrival": 69.2,
+        "Commands": 62,
+        "EndReference": 956.9903284907358,
+        "MinimumGap": 1.2007960666973996,
+        "Sweep": 1.1421482786160517,
+        "Reason": "legal complete forecast; swept physical footprint>=0.5m",
+        "First": {
+          "SteeringRadians": 0.019528883,
+          "Drive": 0
+        },
+        "CpuSeconds": 2.3125
+      }
+    ],
+    "terminals": [
+      {
+        "Id": 0,
+        "Node": 2,
+        "Tape": "E58F6A2BFC237DE66D054B4262298F046421CA8D19DC1EF2AA74312A10D77284"
+      },
+      {
+        "Id": 1,
+        "Node": 3,
+        "Tape": "24FBEE7C3D82240F654EEC8E99FA96520A0902F1FD3434298EEE447F459FFE3F"
+      },
+      {
+        "Id": 2,
+        "Node": 4,
+        "Tape": "DE91BCCC2513190D2B5BE6A9886C7CBFD98AF453D3B838C6D4AF9D1B361E38AE"
+      },
+      {
+        "Id": 3,
+        "Node": 6,
+        "Tape": "CB2577EBABCA647E2D785CC97A3579ECB1C12EC1EAB21FD94DD60511E0E3CE74"
+      },
+      {
+        "Id": 4,
+        "Node": 7,
+        "Tape": "59EEEAE03F30AAE1C9BC674B32327DD8E9F2939315906C83F6FFA00F86F58151"
+      },
+      {
+        "Id": 5,
+        "Node": 8,
+        "Tape": "AB7DEA3C96225BE757A3738C30880B704DBF938773D4A64578253563C3A1B8DD"
+      },
+      {
+        "Id": 6,
+        "Node": 10,
+        "Tape": "ABE1AEC359EB64B47543C4E3145B10FEBAF37E5E6A44F212E500C42713F04B2D"
+      },
+      {
+        "Id": 7,
+        "Node": 11,
+        "Tape": "F2DB841755F2F3751096AF4246E3C756CC4E0042CDC91D4F9F6AA0D995934EF3"
+      },
+      {
+        "Id": 8,
+        "Node": 12,
+        "Tape": "294BB5C783040AECEF007D6A6888D6B47AE83F9EE665362213F6865F2A003630"
+      }
+    ],
+    "tapes": {
+      "6C9DD0C003492B408A1F27745627F45FCAFF0ED947D30A52573967BED213702F": {
+        "Start": {
+          "Input": {
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": -23.785587,
+                "Y": 68.14429
+              },
+              "Velocity": {
+                "X": -13.265285,
+                "Y": 0.3660734
+              },
+              "Heading": 3.1115866,
+              "AngularVelocity": 0.122100435,
+              "Road": {
+                "Segment": 4,
+                "Progress": 0.9481546340450164,
+                "ReferenceMeters": 191.1749622821808,
+                "OffsetMeters": 5.481266941244002,
+                "Heading": 3.141592653589793,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": -1,
+                  "Y": 1.2246469e-16
+                },
+                "Outward": {
+                  "X": 1.2246469e-16,
+                  "Y": 1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 828.7324621677416,
+              "DistanceMeters": 898.128112567596,
+              "Activity": 0,
+              "Drive": 0.08370414,
+              "TargetOffsetMeters": 3,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 13.270334,
+              "ForwardSpeed": 13.270296,
+              "SideSpeed": 0.032070875,
+              "SlideRadians": -0.0024167376
+            },
+            "Time": 68.8,
+            "Omega": 41.342117698557246,
+            "Steering": 0.021459963,
+            "Active": {
+              "SteeringRadians": 0.021459963,
+              "Drive": 0.08370414
+            },
+            "Pending": [
+              {
+                "ObservedAt": 68.60000000000001,
+                "ActivationAt": 68.84,
+                "Action": {
+                  "SteeringRadians": 0.007640432,
+                  "Drive": 0.098117255
+                }
+              }
+            ],
+            "NextReview": 68.8
+          },
+          "CrankOmega": 372.281267077492
+        },
+        "CreatedAt": 68.8,
+        "Goal": 828.9468748569489,
+        "SafetyGoal": 956.3362498283386,
+        "Actions": [
+          {
+            "SteeringRadians": 0.1743901,
+            "Drive": 0.2132211
+          },
+          {
+            "SteeringRadians": -0.030611861,
+            "Drive": 0.13583949
+          },
+          {
+            "SteeringRadians": 0.06298272,
+            "Drive": 0.1335884
+          },
+          {
+            "SteeringRadians": -0.01000541,
+            "Drive": 0.11106908
+          },
+          {
+            "SteeringRadians": 0.061158575,
+            "Drive": 0.1048792
+          },
+          {
+            "SteeringRadians": 0.0041464265,
+            "Drive": 0.094533265
+          },
+          {
+            "SteeringRadians": 0.052627645,
+            "Drive": 0.09597396
+          },
+          {
+            "SteeringRadians": 0.018826423,
+            "Drive": 0.092457816
+          },
+          {
+            "SteeringRadians": 0.036974438,
+            "Drive": 0.09776535
+          },
+          {
+            "SteeringRadians": 0.0339971,
+            "Drive": 0.09538566
+          },
+          {
+            "SteeringRadians": 0.033999015,
+            "Drive": 0.097154304
+          },
+          {
+            "SteeringRadians": 0.034273483,
+            "Drive": 0.09796187
+          },
+          {
+            "SteeringRadians": 0.033834696,
+            "Drive": 0.09805482
+          },
+          {
+            "SteeringRadians": 0.03395034,
+            "Drive": 0.09702044
+          },
+          {
+            "SteeringRadians": 0.033253696,
+            "Drive": 0.097258255
+          },
+          {
+            "SteeringRadians": 0.03347801,
+            "Drive": 0.09524816
+          },
+          {
+            "SteeringRadians": 0.03266556,
+            "Drive": 0.096335925
+          },
+          {
+            "SteeringRadians": 0.033143517,
+            "Drive": 0.095028594
+          },
+          {
+            "SteeringRadians": 0.032358546,
+            "Drive": 0.0969355
+          },
+          {
+            "SteeringRadians": 0.032926038,
+            "Drive": 0.0947868
+          },
+          {
+            "SteeringRadians": 0.032503802,
+            "Drive": 0.09731929
+          },
+          {
+            "SteeringRadians": 0.034460187,
+            "Drive": 0.09570422
+          },
+          {
+            "SteeringRadians": 0.03320022,
+            "Drive": 0.09636903
+          },
+          {
+            "SteeringRadians": 0.03642478,
+            "Drive": 0.096354075
+          },
+          {
+            "SteeringRadians": 0.034298446,
+            "Drive": 0.09829589
+          },
+          {
+            "SteeringRadians": 0.038263574,
+            "Drive": 0.09960117
+          },
+          {
+            "SteeringRadians": 0.035708282,
+            "Drive": 0.10141834
+          },
+          {
+            "SteeringRadians": 0.039833926,
+            "Drive": 0.10431437
+          },
+          {
+            "SteeringRadians": 0.037111897,
+            "Drive": 0.10586154
+          },
+          {
+            "SteeringRadians": 0.040852003,
+            "Drive": 0.10581396
+          },
+          {
+            "SteeringRadians": 0.038234748,
+            "Drive": 0.10936961
+          },
+          {
+            "SteeringRadians": 0.04131744,
+            "Drive": 0.11164226
+          },
+          {
+            "SteeringRadians": 0.038479622,
+            "Drive": 0.11537726
+          },
+          {
+            "SteeringRadians": 0.04141571,
+            "Drive": 0.11593314
+          },
+          {
+            "SteeringRadians": 0.037153315,
+            "Drive": 0.118800916
+          },
+          {
+            "SteeringRadians": 0.04289092,
+            "Drive": 0.122457206
+          },
+          {
+            "SteeringRadians": 0.033104006,
+            "Drive": 0.123067185
+          },
+          {
+            "SteeringRadians": 0.048564542,
+            "Drive": 0.12426619
+          },
+          {
+            "SteeringRadians": -0.0049247965,
+            "Drive": 0.09783229
+          },
+          {
+            "SteeringRadians": 0.029479124,
+            "Drive": 0.07875423
+          },
+          {
+            "SteeringRadians": -0.03990695,
+            "Drive": 0.071066834
+          },
+          {
+            "SteeringRadians": 0.04452317,
+            "Drive": 0.073337585
+          },
+          {
+            "SteeringRadians": -0.045308463,
+            "Drive": 0.07078129
+          },
+          {
+            "SteeringRadians": 0.058930904,
+            "Drive": 0.070971735
+          },
+          {
+            "SteeringRadians": -0.059639804,
+            "Drive": 0.07219019
+          },
+          {
+            "SteeringRadians": 0.07741992,
+            "Drive": 0.07192568
+          },
+          {
+            "SteeringRadians": -0.06932451,
+            "Drive": 0.07228429
+          },
+          {
+            "SteeringRadians": 0.08455158,
+            "Drive": 0.07509957
+          },
+          {
+            "SteeringRadians": -0.07702773,
+            "Drive": 0.07433157
+          },
+          {
+            "SteeringRadians": 0.07953389,
+            "Drive": 0.07809208
+          },
+          {
+            "SteeringRadians": -0.049858954,
+            "Drive": 0.08218993
+          },
+          {
+            "SteeringRadians": 0.08026722,
+            "Drive": 0.07906547
+          },
+          {
+            "SteeringRadians": -0.06358349,
+            "Drive": 0.07607563
+          },
+          {
+            "SteeringRadians": 0.101270035,
+            "Drive": 0.14434348
+          }
+        ],
+        "Arrival": 68.81616196322534,
+        "Safety": {
+          "Legal": true,
+          "MinimumGapMeters": 1.2051791711322788,
+          "SweepLowerBoundMeters": 1.1367137521117403,
+          "MaximumBetaDegrees": 5.664907291734846,
+          "MaximumYawRate": 1.053110122680664,
+          "Reason": "legal complete forecast; swept physical footprint>=0.5m"
+        }
+      },
+      "E58F6A2BFC237DE66D054B4262298F046421CA8D19DC1EF2AA74312A10D77284": {
+        "Start": {
+          "Input": {
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": -29.106653,
+                "Y": 68.17691
+              },
+              "Velocity": {
+                "X": -13.332931,
+                "Y": -0.6380472
+              },
+              "Heading": -3.075568,
+              "AngularVelocity": 0.8336983,
+              "Road": {
+                "Segment": 5,
+                "Progress": 0.06336392694013024,
+                "ReferenceMeters": 196.4463660515338,
+                "OffsetMeters": 5.518238682871242,
+                "Heading": -3.1325909801830605,
+                "RadiusMeters": 73.66838013405786,
+                "CornerProgress": 0.021121308980043413,
+                "Tangent": {
+                  "X": -0.99995947,
+                  "Y": -0.009001552
+                },
+                "Outward": {
+                  "X": -0.009001552,
+                  "Y": 0.99995947
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 834.0038659370946,
+              "DistanceMeters": 903.4503578543736,
+              "Activity": 0,
+              "Drive": 0.2132211,
+              "TargetOffsetMeters": 3,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 13.348189,
+              "ForwardSpeed": 13.345976,
+              "SideSpeed": -0.24300617,
+              "SlideRadians": 0.018206187
+            },
+            "Time": 69.2,
+            "Omega": 43.455320342023086,
+            "Steering": 0.1743901,
+            "Active": {
+              "SteeringRadians": 0.1743901,
+              "Drive": 0.2132211
+            },
+            "Pending": [
+              {
+                "ObservedAt": 69,
+                "ActivationAt": 69.24,
+                "Action": {
+                  "SteeringRadians": -0.030611861,
+                  "Drive": 0.13583949
+                }
+              }
+            ],
+            "NextReview": 69.2
+          },
+          "CrankOmega": 391.5864027290048
+        },
+        "CreatedAt": 69.2,
+        "Goal": 828.9468748569489,
+        "SafetyGoal": 956.3362498283386,
+        "Actions": [
+          {
+            "SteeringRadians": 0.06298272,
+            "Drive": 0.1335884
+          },
+          {
+            "SteeringRadians": -0.01000541,
+            "Drive": 0.11106908
+          },
+          {
+            "SteeringRadians": 0.061158575,
+            "Drive": 0.1048792
+          },
+          {
+            "SteeringRadians": 0.0041464265,
+            "Drive": 0.094533265
+          },
+          {
+            "SteeringRadians": 0.052627645,
+            "Drive": 0.09597396
+          },
+          {
+            "SteeringRadians": 0.018826423,
+            "Drive": 0.092457816
+          },
+          {
+            "SteeringRadians": 0.036974438,
+            "Drive": 0.09776535
+          },
+          {
+            "SteeringRadians": 0.0339971,
+            "Drive": 0.09538566
+          },
+          {
+            "SteeringRadians": 0.033999015,
+            "Drive": 0.097154304
+          },
+          {
+            "SteeringRadians": 0.034273483,
+            "Drive": 0.09796187
+          },
+          {
+            "SteeringRadians": 0.033834696,
+            "Drive": 0.09805482
+          },
+          {
+            "SteeringRadians": 0.03395034,
+            "Drive": 0.09702044
+          },
+          {
+            "SteeringRadians": 0.033253696,
+            "Drive": 0.097258255
+          },
+          {
+            "SteeringRadians": 0.03347801,
+            "Drive": 0.09524816
+          },
+          {
+            "SteeringRadians": 0.03266556,
+            "Drive": 0.096335925
+          },
+          {
+            "SteeringRadians": 0.033143517,
+            "Drive": 0.095028594
+          },
+          {
+            "SteeringRadians": 0.032358546,
+            "Drive": 0.0969355
+          },
+          {
+            "SteeringRadians": 0.032926038,
+            "Drive": 0.0947868
+          },
+          {
+            "SteeringRadians": 0.032503802,
+            "Drive": 0.09731929
+          },
+          {
+            "SteeringRadians": 0.034460187,
+            "Drive": 0.09570422
+          },
+          {
+            "SteeringRadians": 0.03320022,
+            "Drive": 0.09636903
+          },
+          {
+            "SteeringRadians": 0.03642478,
+            "Drive": 0.096354075
+          },
+          {
+            "SteeringRadians": 0.034298446,
+            "Drive": 0.09829589
+          },
+          {
+            "SteeringRadians": 0.038263574,
+            "Drive": 0.09960117
+          },
+          {
+            "SteeringRadians": 0.035708282,
+            "Drive": 0.10141834
+          },
+          {
+            "SteeringRadians": 0.039833926,
+            "Drive": 0.10431437
+          },
+          {
+            "SteeringRadians": 0.037111897,
+            "Drive": 0.10586154
+          },
+          {
+            "SteeringRadians": 0.040852003,
+            "Drive": 0.10581396
+          },
+          {
+            "SteeringRadians": 0.038234748,
+            "Drive": 0.10936961
+          },
+          {
+            "SteeringRadians": 0.04131744,
+            "Drive": 0.11164226
+          },
+          {
+            "SteeringRadians": 0.038479622,
+            "Drive": 0.11537726
+          },
+          {
+            "SteeringRadians": 0.04141571,
+            "Drive": 0.11593314
+          },
+          {
+            "SteeringRadians": 0.037153315,
+            "Drive": 0.118800916
+          },
+          {
+            "SteeringRadians": 0.04289092,
+            "Drive": 0.122457206
+          },
+          {
+            "SteeringRadians": 0.033104006,
+            "Drive": 0.123067185
+          },
+          {
+            "SteeringRadians": 0.048564542,
+            "Drive": 0.12426619
+          },
+          {
+            "SteeringRadians": -0.0049247965,
+            "Drive": 0.09783229
+          },
+          {
+            "SteeringRadians": 0.029479124,
+            "Drive": 0.07875423
+          },
+          {
+            "SteeringRadians": -0.03990695,
+            "Drive": 0.071066834
+          },
+          {
+            "SteeringRadians": 0.04452317,
+            "Drive": 0.073337585
+          },
+          {
+            "SteeringRadians": -0.045308463,
+            "Drive": 0.07078129
+          },
+          {
+            "SteeringRadians": 0.058930904,
+            "Drive": 0.070971735
+          },
+          {
+            "SteeringRadians": -0.059639804,
+            "Drive": 0.07219019
+          },
+          {
+            "SteeringRadians": 0.07741992,
+            "Drive": 0.07192568
+          },
+          {
+            "SteeringRadians": -0.06932451,
+            "Drive": 0.07228429
+          },
+          {
+            "SteeringRadians": 0.08455158,
+            "Drive": 0.07509957
+          },
+          {
+            "SteeringRadians": -0.07702773,
+            "Drive": 0.07433157
+          },
+          {
+            "SteeringRadians": 0.07953389,
+            "Drive": 0.07809208
+          },
+          {
+            "SteeringRadians": -0.049858954,
+            "Drive": 0.08218993
+          },
+          {
+            "SteeringRadians": 0.08026722,
+            "Drive": 0.07906547
+          },
+          {
+            "SteeringRadians": -0.06358349,
+            "Drive": 0.07607563
+          },
+          {
+            "SteeringRadians": 0.101270035,
+            "Drive": 0.14434348
+          }
+        ],
+        "Arrival": 69.2,
+        "Safety": {
+          "Legal": true,
+          "MinimumGapMeters": 1.2051791711322788,
+          "SweepLowerBoundMeters": 1.1367137521117403,
+          "MaximumBetaDegrees": 5.664907291734846,
+          "MaximumYawRate": 1.053110122680664,
+          "Reason": "legal complete forecast; swept physical footprint>=0.5m"
+        }
+      },
+      "24FBEE7C3D82240F654EEC8E99FA96520A0902F1FD3434298EEE447F459FFE3F": {
+        "Start": {
+          "Input": {
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": -29.106655,
+                "Y": 68.17706
+              },
+              "Velocity": {
+                "X": -13.332937,
+                "Y": -0.6372973
+              },
+              "Heading": -3.075448,
+              "AngularVelocity": 0.83424824,
+              "Road": {
+                "Segment": 5,
+                "Progress": 0.0633639421500559,
+                "ReferenceMeters": 196.44636654529552,
+                "OffsetMeters": 5.518391281748907,
+                "Heading": -3.1325909729378543,
+                "RadiusMeters": 73.6684981999895,
+                "CornerProgress": 0.021121314050018634,
+                "Tangent": {
+                  "X": -0.99995947,
+                  "Y": -0.009001559
+                },
+                "Outward": {
+                  "X": -0.009001559,
+                  "Y": 0.99995947
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 834.0038664308563,
+              "DistanceMeters": 903.4503578543736,
+              "Activity": 0,
+              "Drive": 0.2132211,
+              "TargetOffsetMeters": 3,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 13.348159,
+              "ForwardSpeed": 13.345904,
+              "SideSpeed": -0.24535543,
+              "SlideRadians": 0.018382255
+            },
+            "Time": 69.2,
+            "Omega": 43.45782034202308,
+            "Steering": 0.1743901,
+            "Active": {
+              "SteeringRadians": 0.1743901,
+              "Drive": 0.2132211
+            },
+            "Pending": [
+              {
+                "ObservedAt": 69,
+                "ActivationAt": 69.24,
+                "Action": {
+                  "SteeringRadians": -0.030611861,
+                  "Drive": 0.13583949
+                }
+              }
+            ],
+            "NextReview": 69.2
+          },
+          "CrankOmega": 391.60940272900484
+        },
+        "CreatedAt": 69.2,
+        "Goal": 828.9468748569489,
+        "SafetyGoal": 956.3362498283386,
+        "Actions": [
+          {
+            "SteeringRadians": 0.06298272,
+            "Drive": 0.1335884
+          },
+          {
+            "SteeringRadians": -0.01000541,
+            "Drive": 0.11106908
+          },
+          {
+            "SteeringRadians": 0.061158575,
+            "Drive": 0.1048792
+          },
+          {
+            "SteeringRadians": 0.0041464265,
+            "Drive": 0.094533265
+          },
+          {
+            "SteeringRadians": 0.052627645,
+            "Drive": 0.09597396
+          },
+          {
+            "SteeringRadians": 0.018826423,
+            "Drive": 0.092457816
+          },
+          {
+            "SteeringRadians": 0.036974438,
+            "Drive": 0.09776535
+          },
+          {
+            "SteeringRadians": 0.0339971,
+            "Drive": 0.09538566
+          },
+          {
+            "SteeringRadians": 0.033999015,
+            "Drive": 0.097154304
+          },
+          {
+            "SteeringRadians": 0.034273483,
+            "Drive": 0.09796187
+          },
+          {
+            "SteeringRadians": 0.033834696,
+            "Drive": 0.09805482
+          },
+          {
+            "SteeringRadians": 0.03395034,
+            "Drive": 0.09702044
+          },
+          {
+            "SteeringRadians": 0.033253696,
+            "Drive": 0.097258255
+          },
+          {
+            "SteeringRadians": 0.03347801,
+            "Drive": 0.09524816
+          },
+          {
+            "SteeringRadians": 0.03266556,
+            "Drive": 0.096335925
+          },
+          {
+            "SteeringRadians": 0.033143517,
+            "Drive": 0.095028594
+          },
+          {
+            "SteeringRadians": 0.032358546,
+            "Drive": 0.0969355
+          },
+          {
+            "SteeringRadians": 0.032926038,
+            "Drive": 0.0947868
+          },
+          {
+            "SteeringRadians": 0.032503802,
+            "Drive": 0.09731929
+          },
+          {
+            "SteeringRadians": 0.034460187,
+            "Drive": 0.09570422
+          },
+          {
+            "SteeringRadians": 0.03320022,
+            "Drive": 0.09636903
+          },
+          {
+            "SteeringRadians": 0.03642478,
+            "Drive": 0.096354075
+          },
+          {
+            "SteeringRadians": 0.034298446,
+            "Drive": 0.09829589
+          },
+          {
+            "SteeringRadians": 0.038263574,
+            "Drive": 0.09960117
+          },
+          {
+            "SteeringRadians": 0.035708282,
+            "Drive": 0.10141834
+          },
+          {
+            "SteeringRadians": 0.039833926,
+            "Drive": 0.10431437
+          },
+          {
+            "SteeringRadians": 0.037111897,
+            "Drive": 0.10586154
+          },
+          {
+            "SteeringRadians": 0.040852003,
+            "Drive": 0.10581396
+          },
+          {
+            "SteeringRadians": 0.038234748,
+            "Drive": 0.10936961
+          },
+          {
+            "SteeringRadians": 0.04131744,
+            "Drive": 0.11164226
+          },
+          {
+            "SteeringRadians": 0.038479622,
+            "Drive": 0.11537726
+          },
+          {
+            "SteeringRadians": 0.04141571,
+            "Drive": 0.11593314
+          },
+          {
+            "SteeringRadians": 0.037153315,
+            "Drive": 0.118800916
+          },
+          {
+            "SteeringRadians": 0.04289092,
+            "Drive": 0.122457206
+          },
+          {
+            "SteeringRadians": 0.033104006,
+            "Drive": 0.123067185
+          },
+          {
+            "SteeringRadians": 0.048564542,
+            "Drive": 0.12426619
+          },
+          {
+            "SteeringRadians": -0.0049247965,
+            "Drive": 0.09783229
+          },
+          {
+            "SteeringRadians": 0.029479124,
+            "Drive": 0.07875423
+          },
+          {
+            "SteeringRadians": -0.03990695,
+            "Drive": 0.071066834
+          },
+          {
+            "SteeringRadians": 0.04452317,
+            "Drive": 0.073337585
+          },
+          {
+            "SteeringRadians": -0.045308463,
+            "Drive": 0.07078129
+          },
+          {
+            "SteeringRadians": 0.058930904,
+            "Drive": 0.070971735
+          },
+          {
+            "SteeringRadians": -0.059639804,
+            "Drive": 0.07219019
+          },
+          {
+            "SteeringRadians": 0.07741992,
+            "Drive": 0.07192568
+          },
+          {
+            "SteeringRadians": -0.06932451,
+            "Drive": 0.07228429
+          },
+          {
+            "SteeringRadians": 0.08455158,
+            "Drive": 0.07509957
+          },
+          {
+            "SteeringRadians": -0.07702773,
+            "Drive": 0.07433157
+          },
+          {
+            "SteeringRadians": 0.07953389,
+            "Drive": 0.07809208
+          },
+          {
+            "SteeringRadians": -0.049858954,
+            "Drive": 0.08218993
+          },
+          {
+            "SteeringRadians": 0.08026722,
+            "Drive": 0.07906547
+          },
+          {
+            "SteeringRadians": -0.06358349,
+            "Drive": 0.07607563
+          },
+          {
+            "SteeringRadians": 0.101270035,
+            "Drive": 0.14434348
+          }
+        ],
+        "Arrival": 69.2,
+        "Safety": {
+          "Legal": true,
+          "MinimumGapMeters": 1.2140895010637016,
+          "SweepLowerBoundMeters": 1.1456259750680549,
+          "MaximumBetaDegrees": 5.671175280445176,
+          "MaximumYawRate": 1.0531679391860962,
+          "Reason": "legal complete forecast; swept physical footprint>=0.5m"
+        }
+      },
+      "DE91BCCC2513190D2B5BE6A9886C7CBFD98AF453D3B838C6D4AF9D1B361E38AE": {
+        "Start": {
+          "Input": {
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": -29.106651,
+                "Y": 68.17676
+              },
+              "Velocity": {
+                "X": -13.332924,
+                "Y": -0.63879716
+              },
+              "Heading": -3.075688,
+              "AngularVelocity": 0.8331483,
+              "Road": {
+                "Segment": 5,
+                "Progress": 0.06336391173014505,
+                "ReferenceMeters": 196.44636555777015,
+                "OffsetMeters": 5.518086083993588,
+                "Heading": -3.1325909874282916,
+                "RadiusMeters": 73.66826206829201,
+                "CornerProgress": 0.02112130391004835,
+                "Tangent": {
+                  "X": -0.99995947,
+                  "Y": -0.009001545
+                },
+                "Outward": {
+                  "X": -0.009001545,
+                  "Y": 0.99995947
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 834.0038654433309,
+              "DistanceMeters": 903.4503578543736,
+              "Activity": 0,
+              "Drive": 0.2132211,
+              "TargetOffsetMeters": 3,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 13.348218,
+              "ForwardSpeed": 13.346048,
+              "SideSpeed": -0.24065685,
+              "SlideRadians": 0.01803012
+            },
+            "Time": 69.2,
+            "Omega": 43.45282034202309,
+            "Steering": 0.1743901,
+            "Active": {
+              "SteeringRadians": 0.1743901,
+              "Drive": 0.2132211
+            },
+            "Pending": [
+              {
+                "ObservedAt": 69,
+                "ActivationAt": 69.24,
+                "Action": {
+                  "SteeringRadians": -0.030611861,
+                  "Drive": 0.13583949
+                }
+              }
+            ],
+            "NextReview": 69.2
+          },
+          "CrankOmega": 391.5634027290048
+        },
+        "CreatedAt": 69.2,
+        "Goal": 828.9468748569489,
+        "SafetyGoal": 956.3362498283386,
+        "Actions": [
+          {
+            "SteeringRadians": 0.06298272,
+            "Drive": 0.1335884
+          },
+          {
+            "SteeringRadians": -0.01000541,
+            "Drive": 0.11106908
+          },
+          {
+            "SteeringRadians": 0.061158575,
+            "Drive": 0.1048792
+          },
+          {
+            "SteeringRadians": 0.0041464265,
+            "Drive": 0.094533265
+          },
+          {
+            "SteeringRadians": 0.052627645,
+            "Drive": 0.09597396
+          },
+          {
+            "SteeringRadians": 0.018826423,
+            "Drive": 0.092457816
+          },
+          {
+            "SteeringRadians": 0.036974438,
+            "Drive": 0.09776535
+          },
+          {
+            "SteeringRadians": 0.0339971,
+            "Drive": 0.09538566
+          },
+          {
+            "SteeringRadians": 0.033999015,
+            "Drive": 0.097154304
+          },
+          {
+            "SteeringRadians": 0.034273483,
+            "Drive": 0.09796187
+          },
+          {
+            "SteeringRadians": 0.033834696,
+            "Drive": 0.09805482
+          },
+          {
+            "SteeringRadians": 0.03395034,
+            "Drive": 0.09702044
+          },
+          {
+            "SteeringRadians": 0.033253696,
+            "Drive": 0.097258255
+          },
+          {
+            "SteeringRadians": 0.03347801,
+            "Drive": 0.09524816
+          },
+          {
+            "SteeringRadians": 0.03266556,
+            "Drive": 0.096335925
+          },
+          {
+            "SteeringRadians": 0.033143517,
+            "Drive": 0.095028594
+          },
+          {
+            "SteeringRadians": 0.032358546,
+            "Drive": 0.0969355
+          },
+          {
+            "SteeringRadians": 0.032926038,
+            "Drive": 0.0947868
+          },
+          {
+            "SteeringRadians": 0.032503802,
+            "Drive": 0.09731929
+          },
+          {
+            "SteeringRadians": 0.034460187,
+            "Drive": 0.09570422
+          },
+          {
+            "SteeringRadians": 0.03320022,
+            "Drive": 0.09636903
+          },
+          {
+            "SteeringRadians": 0.03642478,
+            "Drive": 0.096354075
+          },
+          {
+            "SteeringRadians": 0.034298446,
+            "Drive": 0.09829589
+          },
+          {
+            "SteeringRadians": 0.038263574,
+            "Drive": 0.09960117
+          },
+          {
+            "SteeringRadians": 0.035708282,
+            "Drive": 0.10141834
+          },
+          {
+            "SteeringRadians": 0.039833926,
+            "Drive": 0.10431437
+          },
+          {
+            "SteeringRadians": 0.037111897,
+            "Drive": 0.10586154
+          },
+          {
+            "SteeringRadians": 0.040852003,
+            "Drive": 0.10581396
+          },
+          {
+            "SteeringRadians": 0.038234748,
+            "Drive": 0.10936961
+          },
+          {
+            "SteeringRadians": 0.04131744,
+            "Drive": 0.11164226
+          },
+          {
+            "SteeringRadians": 0.038479622,
+            "Drive": 0.11537726
+          },
+          {
+            "SteeringRadians": 0.04141571,
+            "Drive": 0.11593314
+          },
+          {
+            "SteeringRadians": 0.037153315,
+            "Drive": 0.118800916
+          },
+          {
+            "SteeringRadians": 0.04289092,
+            "Drive": 0.122457206
+          },
+          {
+            "SteeringRadians": 0.033104006,
+            "Drive": 0.123067185
+          },
+          {
+            "SteeringRadians": 0.048564542,
+            "Drive": 0.12426619
+          },
+          {
+            "SteeringRadians": -0.0049247965,
+            "Drive": 0.09783229
+          },
+          {
+            "SteeringRadians": 0.029479124,
+            "Drive": 0.07875423
+          },
+          {
+            "SteeringRadians": -0.03990695,
+            "Drive": 0.071066834
+          },
+          {
+            "SteeringRadians": 0.04452317,
+            "Drive": 0.073337585
+          },
+          {
+            "SteeringRadians": -0.045308463,
+            "Drive": 0.07078129
+          },
+          {
+            "SteeringRadians": 0.058930904,
+            "Drive": 0.070971735
+          },
+          {
+            "SteeringRadians": -0.059639804,
+            "Drive": 0.07219019
+          },
+          {
+            "SteeringRadians": 0.07741992,
+            "Drive": 0.07192568
+          },
+          {
+            "SteeringRadians": -0.06932451,
+            "Drive": 0.07228429
+          },
+          {
+            "SteeringRadians": 0.08455158,
+            "Drive": 0.07509957
+          },
+          {
+            "SteeringRadians": -0.07702773,
+            "Drive": 0.07433157
+          },
+          {
+            "SteeringRadians": 0.07953389,
+            "Drive": 0.07809208
+          },
+          {
+            "SteeringRadians": -0.049858954,
+            "Drive": 0.08218993
+          },
+          {
+            "SteeringRadians": 0.08026722,
+            "Drive": 0.07906547
+          },
+          {
+            "SteeringRadians": -0.06358349,
+            "Drive": 0.07607563
+          },
+          {
+            "SteeringRadians": 0.101270035,
+            "Drive": 0.14434348
+          }
+        ],
+        "Arrival": 69.2,
+        "Safety": {
+          "Legal": true,
+          "MinimumGapMeters": 1.197823177342332,
+          "SweepLowerBoundMeters": 1.1293558608414547,
+          "MaximumBetaDegrees": 5.658686659002762,
+          "MaximumYawRate": 1.05305016040802,
+          "Reason": "legal complete forecast; swept physical footprint>=0.5m"
+        }
+      },
+      "CB2577EBABCA647E2D785CC97A3579ECB1C12EC1EAB21FD94DD60511E0E3CE74": {
+        "Start": {
+          "Input": {
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": -29.106653,
+                "Y": 68.17697
+              },
+              "Velocity": {
+                "X": -13.332836,
+                "Y": -0.6391926
+              },
+              "Heading": -3.0754256,
+              "AngularVelocity": 0.83341366,
+              "Road": {
+                "Segment": 5,
+                "Progress": 0.06336391128371327,
+                "ReferenceMeters": 196.44636554327758,
+                "OffsetMeters": 5.518299715554669,
+                "Heading": -3.132590987640948,
+                "RadiusMeters": 73.66847671344283,
+                "CornerProgress": 0.021121303761237758,
+                "Tangent": {
+                  "X": -0.99995947,
+                  "Y": -0.009001545
+                },
+                "Outward": {
+                  "X": -0.009001545,
+                  "Y": 0.99995947
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 834.0038654288384,
+              "DistanceMeters": 903.4503608346058,
+              "Activity": 0,
+              "Drive": 0.2132211,
+              "TargetOffsetMeters": 3,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 13.348149,
+              "ForwardSpeed": 13.345923,
+              "SideSpeed": -0.24375677,
+              "SlideRadians": 0.018262476
+            },
+            "Time": 69.2,
+            "Omega": 43.45577617535153,
+            "Steering": 0.1743901,
+            "Active": {
+              "SteeringRadians": 0.1743901,
+              "Drive": 0.2132211
+            },
+            "Pending": [
+              {
+                "ObservedAt": 69,
+                "ActivationAt": 69.24,
+                "Action": {
+                  "SteeringRadians": -0.030611861,
+                  "Drive": 0.13583949
+                }
+              }
+            ],
+            "NextReview": 69.2
+          },
+          "CrankOmega": 391.59049228660615
+        },
+        "CreatedAt": 69.2,
+        "Goal": 828.9468748569489,
+        "SafetyGoal": 956.3362498283386,
+        "Actions": [
+          {
+            "SteeringRadians": 0.06298272,
+            "Drive": 0.1335884
+          },
+          {
+            "SteeringRadians": -0.01000541,
+            "Drive": 0.11106908
+          },
+          {
+            "SteeringRadians": 0.061158575,
+            "Drive": 0.1048792
+          },
+          {
+            "SteeringRadians": 0.0041464265,
+            "Drive": 0.094533265
+          },
+          {
+            "SteeringRadians": 0.052627645,
+            "Drive": 0.09597396
+          },
+          {
+            "SteeringRadians": 0.018826423,
+            "Drive": 0.092457816
+          },
+          {
+            "SteeringRadians": 0.036974438,
+            "Drive": 0.09776535
+          },
+          {
+            "SteeringRadians": 0.0339971,
+            "Drive": 0.09538566
+          },
+          {
+            "SteeringRadians": 0.033999015,
+            "Drive": 0.097154304
+          },
+          {
+            "SteeringRadians": 0.034273483,
+            "Drive": 0.09796187
+          },
+          {
+            "SteeringRadians": 0.033834696,
+            "Drive": 0.09805482
+          },
+          {
+            "SteeringRadians": 0.03395034,
+            "Drive": 0.09702044
+          },
+          {
+            "SteeringRadians": 0.033253696,
+            "Drive": 0.097258255
+          },
+          {
+            "SteeringRadians": 0.03347801,
+            "Drive": 0.09524816
+          },
+          {
+            "SteeringRadians": 0.03266556,
+            "Drive": 0.096335925
+          },
+          {
+            "SteeringRadians": 0.033143517,
+            "Drive": 0.095028594
+          },
+          {
+            "SteeringRadians": 0.032358546,
+            "Drive": 0.0969355
+          },
+          {
+            "SteeringRadians": 0.032926038,
+            "Drive": 0.0947868
+          },
+          {
+            "SteeringRadians": 0.032503802,
+            "Drive": 0.09731929
+          },
+          {
+            "SteeringRadians": 0.034460187,
+            "Drive": 0.09570422
+          },
+          {
+            "SteeringRadians": 0.03320022,
+            "Drive": 0.09636903
+          },
+          {
+            "SteeringRadians": 0.03642478,
+            "Drive": 0.096354075
+          },
+          {
+            "SteeringRadians": 0.034298446,
+            "Drive": 0.09829589
+          },
+          {
+            "SteeringRadians": 0.038263574,
+            "Drive": 0.09960117
+          },
+          {
+            "SteeringRadians": 0.035708282,
+            "Drive": 0.10141834
+          },
+          {
+            "SteeringRadians": 0.039833926,
+            "Drive": 0.10431437
+          },
+          {
+            "SteeringRadians": 0.037111897,
+            "Drive": 0.10586154
+          },
+          {
+            "SteeringRadians": 0.040852003,
+            "Drive": 0.10581396
+          },
+          {
+            "SteeringRadians": 0.038234748,
+            "Drive": 0.10936961
+          },
+          {
+            "SteeringRadians": 0.04131744,
+            "Drive": 0.11164226
+          },
+          {
+            "SteeringRadians": 0.038479622,
+            "Drive": 0.11537726
+          },
+          {
+            "SteeringRadians": 0.04141571,
+            "Drive": 0.11593314
+          },
+          {
+            "SteeringRadians": 0.037153315,
+            "Drive": 0.118800916
+          },
+          {
+            "SteeringRadians": 0.04289092,
+            "Drive": 0.122457206
+          },
+          {
+            "SteeringRadians": 0.033104006,
+            "Drive": 0.123067185
+          },
+          {
+            "SteeringRadians": 0.048564542,
+            "Drive": 0.12426619
+          },
+          {
+            "SteeringRadians": -0.0049247965,
+            "Drive": 0.09783229
+          },
+          {
+            "SteeringRadians": 0.029479124,
+            "Drive": 0.07875423
+          },
+          {
+            "SteeringRadians": -0.03990695,
+            "Drive": 0.071066834
+          },
+          {
+            "SteeringRadians": 0.04452317,
+            "Drive": 0.073337585
+          },
+          {
+            "SteeringRadians": -0.045308463,
+            "Drive": 0.07078129
+          },
+          {
+            "SteeringRadians": 0.058930904,
+            "Drive": 0.070971735
+          },
+          {
+            "SteeringRadians": -0.059639804,
+            "Drive": 0.07219019
+          },
+          {
+            "SteeringRadians": 0.07741992,
+            "Drive": 0.07192568
+          },
+          {
+            "SteeringRadians": -0.06932451,
+            "Drive": 0.07228429
+          },
+          {
+            "SteeringRadians": 0.08455158,
+            "Drive": 0.07509957
+          },
+          {
+            "SteeringRadians": -0.07702773,
+            "Drive": 0.07433157
+          },
+          {
+            "SteeringRadians": 0.07953389,
+            "Drive": 0.07809208
+          },
+          {
+            "SteeringRadians": -0.049858954,
+            "Drive": 0.08218993
+          },
+          {
+            "SteeringRadians": 0.08026722,
+            "Drive": 0.07906547
+          },
+          {
+            "SteeringRadians": -0.06358349,
+            "Drive": 0.07607563
+          },
+          {
+            "SteeringRadians": 0.101270035,
+            "Drive": 0.14434348
+          }
+        ],
+        "Arrival": 69.2,
+        "Safety": {
+          "Legal": true,
+          "MinimumGapMeters": 1.2065325860508316,
+          "SweepLowerBoundMeters": 1.1380671152040545,
+          "MaximumBetaDegrees": 5.66427345017987,
+          "MaximumYawRate": 1.0528295040130615,
+          "Reason": "legal complete forecast; swept physical footprint>=0.5m"
+        }
+      },
+      "59EEEAE03F30AAE1C9BC674B32327DD8E9F2939315906C83F6FFA00F86F58151": {
+        "Start": {
+          "Input": {
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": -29.106655,
+                "Y": 68.177124
+              },
+              "Velocity": {
+                "X": -13.332843,
+                "Y": -0.63844264
+              },
+              "Heading": -3.0753057,
+              "AngularVelocity": 0.83396363,
+              "Road": {
+                "Segment": 5,
+                "Progress": 0.06336392649365644,
+                "ReferenceMeters": 196.44636603703987,
+                "OffsetMeters": 5.518452314432328,
+                "Heading": -3.132590980395737,
+                "RadiusMeters": 73.66859477930325,
+                "CornerProgress": 0.02112130883121881,
+                "Tangent": {
+                  "X": -0.99995947,
+                  "Y": -0.009001551
+                },
+                "Outward": {
+                  "X": -0.009001551,
+                  "Y": 0.99995947
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 834.0038659226007,
+              "DistanceMeters": 903.4503608346058,
+              "Activity": 0,
+              "Drive": 0.2132211,
+              "TargetOffsetMeters": 3,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 13.34812,
+              "ForwardSpeed": 13.345851,
+              "SideSpeed": -0.24610591,
+              "SlideRadians": 0.018438544
+            },
+            "Time": 69.2,
+            "Omega": 43.45827617535153,
+            "Steering": 0.1743901,
+            "Active": {
+              "SteeringRadians": 0.1743901,
+              "Drive": 0.2132211
+            },
+            "Pending": [
+              {
+                "ObservedAt": 69,
+                "ActivationAt": 69.24,
+                "Action": {
+                  "SteeringRadians": -0.030611861,
+                  "Drive": 0.13583949
+                }
+              }
+            ],
+            "NextReview": 69.2
+          },
+          "CrankOmega": 391.6134922866062
+        },
+        "CreatedAt": 69.2,
+        "Goal": 828.9468748569489,
+        "SafetyGoal": 956.3362498283386,
+        "Actions": [
+          {
+            "SteeringRadians": 0.06298272,
+            "Drive": 0.1335884
+          },
+          {
+            "SteeringRadians": -0.01000541,
+            "Drive": 0.11106908
+          },
+          {
+            "SteeringRadians": 0.061158575,
+            "Drive": 0.1048792
+          },
+          {
+            "SteeringRadians": 0.0041464265,
+            "Drive": 0.094533265
+          },
+          {
+            "SteeringRadians": 0.052627645,
+            "Drive": 0.09597396
+          },
+          {
+            "SteeringRadians": 0.018826423,
+            "Drive": 0.092457816
+          },
+          {
+            "SteeringRadians": 0.036974438,
+            "Drive": 0.09776535
+          },
+          {
+            "SteeringRadians": 0.0339971,
+            "Drive": 0.09538566
+          },
+          {
+            "SteeringRadians": 0.033999015,
+            "Drive": 0.097154304
+          },
+          {
+            "SteeringRadians": 0.034273483,
+            "Drive": 0.09796187
+          },
+          {
+            "SteeringRadians": 0.033834696,
+            "Drive": 0.09805482
+          },
+          {
+            "SteeringRadians": 0.03395034,
+            "Drive": 0.09702044
+          },
+          {
+            "SteeringRadians": 0.033253696,
+            "Drive": 0.097258255
+          },
+          {
+            "SteeringRadians": 0.03347801,
+            "Drive": 0.09524816
+          },
+          {
+            "SteeringRadians": 0.03266556,
+            "Drive": 0.096335925
+          },
+          {
+            "SteeringRadians": 0.033143517,
+            "Drive": 0.095028594
+          },
+          {
+            "SteeringRadians": 0.032358546,
+            "Drive": 0.0969355
+          },
+          {
+            "SteeringRadians": 0.032926038,
+            "Drive": 0.0947868
+          },
+          {
+            "SteeringRadians": 0.032503802,
+            "Drive": 0.09731929
+          },
+          {
+            "SteeringRadians": 0.034460187,
+            "Drive": 0.09570422
+          },
+          {
+            "SteeringRadians": 0.03320022,
+            "Drive": 0.09636903
+          },
+          {
+            "SteeringRadians": 0.03642478,
+            "Drive": 0.096354075
+          },
+          {
+            "SteeringRadians": 0.034298446,
+            "Drive": 0.09829589
+          },
+          {
+            "SteeringRadians": 0.038263574,
+            "Drive": 0.09960117
+          },
+          {
+            "SteeringRadians": 0.035708282,
+            "Drive": 0.10141834
+          },
+          {
+            "SteeringRadians": 0.039833926,
+            "Drive": 0.10431437
+          },
+          {
+            "SteeringRadians": 0.037111897,
+            "Drive": 0.10586154
+          },
+          {
+            "SteeringRadians": 0.040852003,
+            "Drive": 0.10581396
+          },
+          {
+            "SteeringRadians": 0.038234748,
+            "Drive": 0.10936961
+          },
+          {
+            "SteeringRadians": 0.04131744,
+            "Drive": 0.11164226
+          },
+          {
+            "SteeringRadians": 0.038479622,
+            "Drive": 0.11537726
+          },
+          {
+            "SteeringRadians": 0.04141571,
+            "Drive": 0.11593314
+          },
+          {
+            "SteeringRadians": 0.037153315,
+            "Drive": 0.118800916
+          },
+          {
+            "SteeringRadians": 0.04289092,
+            "Drive": 0.122457206
+          },
+          {
+            "SteeringRadians": 0.033104006,
+            "Drive": 0.123067185
+          },
+          {
+            "SteeringRadians": 0.048564542,
+            "Drive": 0.12426619
+          },
+          {
+            "SteeringRadians": -0.0049247965,
+            "Drive": 0.09783229
+          },
+          {
+            "SteeringRadians": 0.029479124,
+            "Drive": 0.07875423
+          },
+          {
+            "SteeringRadians": -0.03990695,
+            "Drive": 0.071066834
+          },
+          {
+            "SteeringRadians": 0.04452317,
+            "Drive": 0.073337585
+          },
+          {
+            "SteeringRadians": -0.045308463,
+            "Drive": 0.07078129
+          },
+          {
+            "SteeringRadians": 0.058930904,
+            "Drive": 0.070971735
+          },
+          {
+            "SteeringRadians": -0.059639804,
+            "Drive": 0.07219019
+          },
+          {
+            "SteeringRadians": 0.07741992,
+            "Drive": 0.07192568
+          },
+          {
+            "SteeringRadians": -0.06932451,
+            "Drive": 0.07228429
+          },
+          {
+            "SteeringRadians": 0.08455158,
+            "Drive": 0.07509957
+          },
+          {
+            "SteeringRadians": -0.07702773,
+            "Drive": 0.07433157
+          },
+          {
+            "SteeringRadians": 0.07953389,
+            "Drive": 0.07809208
+          },
+          {
+            "SteeringRadians": -0.049858954,
+            "Drive": 0.08218993
+          },
+          {
+            "SteeringRadians": 0.08026722,
+            "Drive": 0.07906547
+          },
+          {
+            "SteeringRadians": -0.06358349,
+            "Drive": 0.07607563
+          },
+          {
+            "SteeringRadians": 0.101270035,
+            "Drive": 0.14434348
+          }
+        ],
+        "Arrival": 69.2,
+        "Safety": {
+          "Legal": true,
+          "MinimumGapMeters": 1.2158936166724792,
+          "SweepLowerBoundMeters": 1.1474300952887417,
+          "MaximumBetaDegrees": 5.670567545391027,
+          "MaximumYawRate": 1.0528876781463623,
+          "Reason": "legal complete forecast; swept physical footprint>=0.5m"
+        }
+      },
+      "AB7DEA3C96225BE757A3738C30880B704DBF938773D4A64578253563C3A1B8DD": {
+        "Start": {
+          "Input": {
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": -29.106651,
+                "Y": 68.17682
+              },
+              "Velocity": {
+                "X": -13.332829,
+                "Y": -0.6399425
+              },
+              "Heading": -3.0755455,
+              "AngularVelocity": 0.8328637,
+              "Road": {
+                "Segment": 5,
+                "Progress": 0.06336389607370356,
+                "ReferenceMeters": 196.44636504951313,
+                "OffsetMeters": 5.518147116677022,
+                "Heading": -3.132590994886187,
+                "RadiusMeters": 73.66835864776414,
+                "CornerProgress": 0.02112129869123452,
+                "Tangent": {
+                  "X": -0.99995947,
+                  "Y": -0.009001537
+                },
+                "Outward": {
+                  "X": -0.009001537,
+                  "Y": 0.99995947
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 834.0038649350739,
+              "DistanceMeters": 903.4503608346058,
+              "Activity": 0,
+              "Drive": 0.2132211,
+              "TargetOffsetMeters": 3,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 13.348179,
+              "ForwardSpeed": 13.345995,
+              "SideSpeed": -0.24140745,
+              "SlideRadians": 0.01808641
+            },
+            "Time": 69.2,
+            "Omega": 43.45327617535153,
+            "Steering": 0.1743901,
+            "Active": {
+              "SteeringRadians": 0.1743901,
+              "Drive": 0.2132211
+            },
+            "Pending": [
+              {
+                "ObservedAt": 69,
+                "ActivationAt": 69.24,
+                "Action": {
+                  "SteeringRadians": -0.030611861,
+                  "Drive": 0.13583949
+                }
+              }
+            ],
+            "NextReview": 69.2
+          },
+          "CrankOmega": 391.5674922866061
+        },
+        "CreatedAt": 69.2,
+        "Goal": 828.9468748569489,
+        "SafetyGoal": 956.3362498283386,
+        "Actions": [
+          {
+            "SteeringRadians": 0.06298272,
+            "Drive": 0.1335884
+          },
+          {
+            "SteeringRadians": -0.01000541,
+            "Drive": 0.11106908
+          },
+          {
+            "SteeringRadians": 0.061158575,
+            "Drive": 0.1048792
+          },
+          {
+            "SteeringRadians": 0.0041464265,
+            "Drive": 0.094533265
+          },
+          {
+            "SteeringRadians": 0.052627645,
+            "Drive": 0.09597396
+          },
+          {
+            "SteeringRadians": 0.018826423,
+            "Drive": 0.092457816
+          },
+          {
+            "SteeringRadians": 0.036974438,
+            "Drive": 0.09776535
+          },
+          {
+            "SteeringRadians": 0.0339971,
+            "Drive": 0.09538566
+          },
+          {
+            "SteeringRadians": 0.033999015,
+            "Drive": 0.097154304
+          },
+          {
+            "SteeringRadians": 0.034273483,
+            "Drive": 0.09796187
+          },
+          {
+            "SteeringRadians": 0.033834696,
+            "Drive": 0.09805482
+          },
+          {
+            "SteeringRadians": 0.03395034,
+            "Drive": 0.09702044
+          },
+          {
+            "SteeringRadians": 0.033253696,
+            "Drive": 0.097258255
+          },
+          {
+            "SteeringRadians": 0.03347801,
+            "Drive": 0.09524816
+          },
+          {
+            "SteeringRadians": 0.03266556,
+            "Drive": 0.096335925
+          },
+          {
+            "SteeringRadians": 0.033143517,
+            "Drive": 0.095028594
+          },
+          {
+            "SteeringRadians": 0.032358546,
+            "Drive": 0.0969355
+          },
+          {
+            "SteeringRadians": 0.032926038,
+            "Drive": 0.0947868
+          },
+          {
+            "SteeringRadians": 0.032503802,
+            "Drive": 0.09731929
+          },
+          {
+            "SteeringRadians": 0.034460187,
+            "Drive": 0.09570422
+          },
+          {
+            "SteeringRadians": 0.03320022,
+            "Drive": 0.09636903
+          },
+          {
+            "SteeringRadians": 0.03642478,
+            "Drive": 0.096354075
+          },
+          {
+            "SteeringRadians": 0.034298446,
+            "Drive": 0.09829589
+          },
+          {
+            "SteeringRadians": 0.038263574,
+            "Drive": 0.09960117
+          },
+          {
+            "SteeringRadians": 0.035708282,
+            "Drive": 0.10141834
+          },
+          {
+            "SteeringRadians": 0.039833926,
+            "Drive": 0.10431437
+          },
+          {
+            "SteeringRadians": 0.037111897,
+            "Drive": 0.10586154
+          },
+          {
+            "SteeringRadians": 0.040852003,
+            "Drive": 0.10581396
+          },
+          {
+            "SteeringRadians": 0.038234748,
+            "Drive": 0.10936961
+          },
+          {
+            "SteeringRadians": 0.04131744,
+            "Drive": 0.11164226
+          },
+          {
+            "SteeringRadians": 0.038479622,
+            "Drive": 0.11537726
+          },
+          {
+            "SteeringRadians": 0.04141571,
+            "Drive": 0.11593314
+          },
+          {
+            "SteeringRadians": 0.037153315,
+            "Drive": 0.118800916
+          },
+          {
+            "SteeringRadians": 0.04289092,
+            "Drive": 0.122457206
+          },
+          {
+            "SteeringRadians": 0.033104006,
+            "Drive": 0.123067185
+          },
+          {
+            "SteeringRadians": 0.048564542,
+            "Drive": 0.12426619
+          },
+          {
+            "SteeringRadians": -0.0049247965,
+            "Drive": 0.09783229
+          },
+          {
+            "SteeringRadians": 0.029479124,
+            "Drive": 0.07875423
+          },
+          {
+            "SteeringRadians": -0.03990695,
+            "Drive": 0.071066834
+          },
+          {
+            "SteeringRadians": 0.04452317,
+            "Drive": 0.073337585
+          },
+          {
+            "SteeringRadians": -0.045308463,
+            "Drive": 0.07078129
+          },
+          {
+            "SteeringRadians": 0.058930904,
+            "Drive": 0.070971735
+          },
+          {
+            "SteeringRadians": -0.059639804,
+            "Drive": 0.07219019
+          },
+          {
+            "SteeringRadians": 0.07741992,
+            "Drive": 0.07192568
+          },
+          {
+            "SteeringRadians": -0.06932451,
+            "Drive": 0.07228429
+          },
+          {
+            "SteeringRadians": 0.08455158,
+            "Drive": 0.07509957
+          },
+          {
+            "SteeringRadians": -0.07702773,
+            "Drive": 0.07433157
+          },
+          {
+            "SteeringRadians": 0.07953389,
+            "Drive": 0.07809208
+          },
+          {
+            "SteeringRadians": -0.049858954,
+            "Drive": 0.08218993
+          },
+          {
+            "SteeringRadians": 0.08026722,
+            "Drive": 0.07906547
+          },
+          {
+            "SteeringRadians": -0.06358349,
+            "Drive": 0.07607563
+          },
+          {
+            "SteeringRadians": 0.101270035,
+            "Drive": 0.14434348
+          }
+        ],
+        "Arrival": 69.2,
+        "Safety": {
+          "Legal": true,
+          "MinimumGapMeters": 1.199033762059892,
+          "SweepLowerBoundMeters": 1.13056642195185,
+          "MaximumBetaDegrees": 5.658073459797277,
+          "MaximumYawRate": 1.0527697801589966,
+          "Reason": "legal complete forecast; swept physical footprint>=0.5m"
+        }
+      },
+      "ABE1AEC359EB64B47543C4E3145B10FEBAF37E5E6A44F212E500C42713F04B2D": {
+        "Start": {
+          "Input": {
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": -29.106655,
+                "Y": 68.17686
+              },
+              "Velocity": {
+                "X": -13.333022,
+                "Y": -0.6369123
+              },
+              "Heading": -3.0757074,
+              "AngularVelocity": 0.8339783,
+              "Road": {
+                "Segment": 5,
+                "Progress": 0.06336399499058619,
+                "ReferenceMeters": 196.44636826066426,
+                "OffsetMeters": 5.518185296442384,
+                "Heading": -3.1325909477673837,
+                "RadiusMeters": 73.66817224463156,
+                "CornerProgress": 0.02112133166352873,
+                "Tangent": {
+                  "X": -0.99995947,
+                  "Y": -0.009001584
+                },
+                "Outward": {
+                  "X": -0.009001584,
+                  "Y": 0.99995947
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 834.003868146225,
+              "DistanceMeters": 903.4503570795132,
+              "Activity": 0,
+              "Drive": 0.2132211,
+              "TargetOffsetMeters": 3,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 13.348227,
+              "ForwardSpeed": 13.346027,
+              "SideSpeed": -0.24228328,
+              "SlideRadians": 0.018151967
+            },
+            "Time": 69.2,
+            "Omega": 43.45487205222611,
+            "Steering": 0.1743901,
+            "Active": {
+              "SteeringRadians": 0.1743901,
+              "Drive": 0.2132211
+            },
+            "Pending": [
+              {
+                "ObservedAt": 69,
+                "ActivationAt": 69.24,
+                "Action": {
+                  "SteeringRadians": -0.030611861,
+                  "Drive": 0.13583949
+                }
+              }
+            ],
+            "NextReview": 69.2
+          },
+          "CrankOmega": 391.58237858348593
+        },
+        "CreatedAt": 69.2,
+        "Goal": 828.9468748569489,
+        "SafetyGoal": 956.3362498283386,
+        "Actions": [
+          {
+            "SteeringRadians": 0.06298272,
+            "Drive": 0.1335884
+          },
+          {
+            "SteeringRadians": -0.01000541,
+            "Drive": 0.11106908
+          },
+          {
+            "SteeringRadians": 0.061158575,
+            "Drive": 0.1048792
+          },
+          {
+            "SteeringRadians": 0.0041464265,
+            "Drive": 0.094533265
+          },
+          {
+            "SteeringRadians": 0.052627645,
+            "Drive": 0.09597396
+          },
+          {
+            "SteeringRadians": 0.018826423,
+            "Drive": 0.092457816
+          },
+          {
+            "SteeringRadians": 0.036974438,
+            "Drive": 0.09776535
+          },
+          {
+            "SteeringRadians": 0.0339971,
+            "Drive": 0.09538566
+          },
+          {
+            "SteeringRadians": 0.033999015,
+            "Drive": 0.097154304
+          },
+          {
+            "SteeringRadians": 0.034273483,
+            "Drive": 0.09796187
+          },
+          {
+            "SteeringRadians": 0.033834696,
+            "Drive": 0.09805482
+          },
+          {
+            "SteeringRadians": 0.03395034,
+            "Drive": 0.09702044
+          },
+          {
+            "SteeringRadians": 0.033253696,
+            "Drive": 0.097258255
+          },
+          {
+            "SteeringRadians": 0.03347801,
+            "Drive": 0.09524816
+          },
+          {
+            "SteeringRadians": 0.03266556,
+            "Drive": 0.096335925
+          },
+          {
+            "SteeringRadians": 0.033143517,
+            "Drive": 0.095028594
+          },
+          {
+            "SteeringRadians": 0.032358546,
+            "Drive": 0.0969355
+          },
+          {
+            "SteeringRadians": 0.032926038,
+            "Drive": 0.0947868
+          },
+          {
+            "SteeringRadians": 0.032503802,
+            "Drive": 0.09731929
+          },
+          {
+            "SteeringRadians": 0.034460187,
+            "Drive": 0.09570422
+          },
+          {
+            "SteeringRadians": 0.03320022,
+            "Drive": 0.09636903
+          },
+          {
+            "SteeringRadians": 0.03642478,
+            "Drive": 0.096354075
+          },
+          {
+            "SteeringRadians": 0.034298446,
+            "Drive": 0.09829589
+          },
+          {
+            "SteeringRadians": 0.038263574,
+            "Drive": 0.09960117
+          },
+          {
+            "SteeringRadians": 0.035708282,
+            "Drive": 0.10141834
+          },
+          {
+            "SteeringRadians": 0.039833926,
+            "Drive": 0.10431437
+          },
+          {
+            "SteeringRadians": 0.037111897,
+            "Drive": 0.10586154
+          },
+          {
+            "SteeringRadians": 0.040852003,
+            "Drive": 0.10581396
+          },
+          {
+            "SteeringRadians": 0.038234748,
+            "Drive": 0.10936961
+          },
+          {
+            "SteeringRadians": 0.04131744,
+            "Drive": 0.11164226
+          },
+          {
+            "SteeringRadians": 0.038479622,
+            "Drive": 0.11537726
+          },
+          {
+            "SteeringRadians": 0.04141571,
+            "Drive": 0.11593314
+          },
+          {
+            "SteeringRadians": 0.037153315,
+            "Drive": 0.118800916
+          },
+          {
+            "SteeringRadians": 0.04289092,
+            "Drive": 0.122457206
+          },
+          {
+            "SteeringRadians": 0.033104006,
+            "Drive": 0.123067185
+          },
+          {
+            "SteeringRadians": 0.048564542,
+            "Drive": 0.12426619
+          },
+          {
+            "SteeringRadians": -0.0049247965,
+            "Drive": 0.09783229
+          },
+          {
+            "SteeringRadians": 0.029479124,
+            "Drive": 0.07875423
+          },
+          {
+            "SteeringRadians": -0.03990695,
+            "Drive": 0.071066834
+          },
+          {
+            "SteeringRadians": 0.04452317,
+            "Drive": 0.073337585
+          },
+          {
+            "SteeringRadians": -0.045308463,
+            "Drive": 0.07078129
+          },
+          {
+            "SteeringRadians": 0.058930904,
+            "Drive": 0.070971735
+          },
+          {
+            "SteeringRadians": -0.059639804,
+            "Drive": 0.07219019
+          },
+          {
+            "SteeringRadians": 0.07741992,
+            "Drive": 0.07192568
+          },
+          {
+            "SteeringRadians": -0.06932451,
+            "Drive": 0.07228429
+          },
+          {
+            "SteeringRadians": 0.08455158,
+            "Drive": 0.07509957
+          },
+          {
+            "SteeringRadians": -0.07702773,
+            "Drive": 0.07433157
+          },
+          {
+            "SteeringRadians": 0.07953389,
+            "Drive": 0.07809208
+          },
+          {
+            "SteeringRadians": -0.049858954,
+            "Drive": 0.08218993
+          },
+          {
+            "SteeringRadians": 0.08026722,
+            "Drive": 0.07906547
+          },
+          {
+            "SteeringRadians": -0.06358349,
+            "Drive": 0.07607563
+          },
+          {
+            "SteeringRadians": 0.101270035,
+            "Drive": 0.14434348
+          }
+        ],
+        "Arrival": 69.2,
+        "Safety": {
+          "Legal": true,
+          "MinimumGapMeters": 1.204145547735871,
+          "SweepLowerBoundMeters": 1.1356801946119925,
+          "MaximumBetaDegrees": 5.6655520615924955,
+          "MaximumYawRate": 1.0533828735351562,
+          "Reason": "legal complete forecast; swept physical footprint>=0.5m"
+        }
+      },
+      "F2DB841755F2F3751096AF4246E3C756CC4E0042CDC91D4F9F6AA0D995934EF3": {
+        "Start": {
+          "Input": {
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": -29.106657,
+                "Y": 68.17701
+              },
+              "Velocity": {
+                "X": -13.333029,
+                "Y": -0.63616234
+              },
+              "Heading": -3.0755875,
+              "AngularVelocity": 0.83452827,
+              "Road": {
+                "Segment": 5,
+                "Progress": 0.06336401020037527,
+                "ReferenceMeters": 196.44636875442154,
+                "OffsetMeters": 5.518337895320062,
+                "Heading": -3.132590940522226,
+                "RadiusMeters": 73.6682903110102,
+                "CornerProgress": 0.021121336733458423,
+                "Tangent": {
+                  "X": -0.99995947,
+                  "Y": -0.009001591
+                },
+                "Outward": {
+                  "X": -0.009001591,
+                  "Y": 0.99995947
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 834.0038686399823,
+              "DistanceMeters": 903.4503570795132,
+              "Activity": 0,
+              "Drive": 0.2132211,
+              "TargetOffsetMeters": 3,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 13.348197,
+              "ForwardSpeed": 13.345956,
+              "SideSpeed": -0.24463254,
+              "SlideRadians": 0.018328035
+            },
+            "Time": 69.2,
+            "Omega": 43.457372052226106,
+            "Steering": 0.1743901,
+            "Active": {
+              "SteeringRadians": 0.1743901,
+              "Drive": 0.2132211
+            },
+            "Pending": [
+              {
+                "ObservedAt": 69,
+                "ActivationAt": 69.24,
+                "Action": {
+                  "SteeringRadians": -0.030611861,
+                  "Drive": 0.13583949
+                }
+              }
+            ],
+            "NextReview": 69.2
+          },
+          "CrankOmega": 391.60537858348596
+        },
+        "CreatedAt": 69.2,
+        "Goal": 828.9468748569489,
+        "SafetyGoal": 956.3362498283386,
+        "Actions": [
+          {
+            "SteeringRadians": 0.06298272,
+            "Drive": 0.1335884
+          },
+          {
+            "SteeringRadians": -0.01000541,
+            "Drive": 0.11106908
+          },
+          {
+            "SteeringRadians": 0.061158575,
+            "Drive": 0.1048792
+          },
+          {
+            "SteeringRadians": 0.0041464265,
+            "Drive": 0.094533265
+          },
+          {
+            "SteeringRadians": 0.052627645,
+            "Drive": 0.09597396
+          },
+          {
+            "SteeringRadians": 0.018826423,
+            "Drive": 0.092457816
+          },
+          {
+            "SteeringRadians": 0.036974438,
+            "Drive": 0.09776535
+          },
+          {
+            "SteeringRadians": 0.0339971,
+            "Drive": 0.09538566
+          },
+          {
+            "SteeringRadians": 0.033999015,
+            "Drive": 0.097154304
+          },
+          {
+            "SteeringRadians": 0.034273483,
+            "Drive": 0.09796187
+          },
+          {
+            "SteeringRadians": 0.033834696,
+            "Drive": 0.09805482
+          },
+          {
+            "SteeringRadians": 0.03395034,
+            "Drive": 0.09702044
+          },
+          {
+            "SteeringRadians": 0.033253696,
+            "Drive": 0.097258255
+          },
+          {
+            "SteeringRadians": 0.03347801,
+            "Drive": 0.09524816
+          },
+          {
+            "SteeringRadians": 0.03266556,
+            "Drive": 0.096335925
+          },
+          {
+            "SteeringRadians": 0.033143517,
+            "Drive": 0.095028594
+          },
+          {
+            "SteeringRadians": 0.032358546,
+            "Drive": 0.0969355
+          },
+          {
+            "SteeringRadians": 0.032926038,
+            "Drive": 0.0947868
+          },
+          {
+            "SteeringRadians": 0.032503802,
+            "Drive": 0.09731929
+          },
+          {
+            "SteeringRadians": 0.034460187,
+            "Drive": 0.09570422
+          },
+          {
+            "SteeringRadians": 0.03320022,
+            "Drive": 0.09636903
+          },
+          {
+            "SteeringRadians": 0.03642478,
+            "Drive": 0.096354075
+          },
+          {
+            "SteeringRadians": 0.034298446,
+            "Drive": 0.09829589
+          },
+          {
+            "SteeringRadians": 0.038263574,
+            "Drive": 0.09960117
+          },
+          {
+            "SteeringRadians": 0.035708282,
+            "Drive": 0.10141834
+          },
+          {
+            "SteeringRadians": 0.039833926,
+            "Drive": 0.10431437
+          },
+          {
+            "SteeringRadians": 0.037111897,
+            "Drive": 0.10586154
+          },
+          {
+            "SteeringRadians": 0.040852003,
+            "Drive": 0.10581396
+          },
+          {
+            "SteeringRadians": 0.038234748,
+            "Drive": 0.10936961
+          },
+          {
+            "SteeringRadians": 0.04131744,
+            "Drive": 0.11164226
+          },
+          {
+            "SteeringRadians": 0.038479622,
+            "Drive": 0.11537726
+          },
+          {
+            "SteeringRadians": 0.04141571,
+            "Drive": 0.11593314
+          },
+          {
+            "SteeringRadians": 0.037153315,
+            "Drive": 0.118800916
+          },
+          {
+            "SteeringRadians": 0.04289092,
+            "Drive": 0.122457206
+          },
+          {
+            "SteeringRadians": 0.033104006,
+            "Drive": 0.123067185
+          },
+          {
+            "SteeringRadians": 0.048564542,
+            "Drive": 0.12426619
+          },
+          {
+            "SteeringRadians": -0.0049247965,
+            "Drive": 0.09783229
+          },
+          {
+            "SteeringRadians": 0.029479124,
+            "Drive": 0.07875423
+          },
+          {
+            "SteeringRadians": -0.03990695,
+            "Drive": 0.071066834
+          },
+          {
+            "SteeringRadians": 0.04452317,
+            "Drive": 0.073337585
+          },
+          {
+            "SteeringRadians": -0.045308463,
+            "Drive": 0.07078129
+          },
+          {
+            "SteeringRadians": 0.058930904,
+            "Drive": 0.070971735
+          },
+          {
+            "SteeringRadians": -0.059639804,
+            "Drive": 0.07219019
+          },
+          {
+            "SteeringRadians": 0.07741992,
+            "Drive": 0.07192568
+          },
+          {
+            "SteeringRadians": -0.06932451,
+            "Drive": 0.07228429
+          },
+          {
+            "SteeringRadians": 0.08455158,
+            "Drive": 0.07509957
+          },
+          {
+            "SteeringRadians": -0.07702773,
+            "Drive": 0.07433157
+          },
+          {
+            "SteeringRadians": 0.07953389,
+            "Drive": 0.07809208
+          },
+          {
+            "SteeringRadians": -0.049858954,
+            "Drive": 0.08218993
+          },
+          {
+            "SteeringRadians": 0.08026722,
+            "Drive": 0.07906547
+          },
+          {
+            "SteeringRadians": -0.06358349,
+            "Drive": 0.07607563
+          },
+          {
+            "SteeringRadians": 0.101270035,
+            "Drive": 0.14434348
+          }
+        ],
+        "Arrival": 69.2,
+        "Safety": {
+          "Legal": true,
+          "MinimumGapMeters": 1.2123950490542827,
+          "SweepLowerBoundMeters": 1.1439315653481315,
+          "MaximumBetaDegrees": 5.671795765185777,
+          "MaximumYawRate": 1.053442120552063,
+          "Reason": "legal complete forecast; swept physical footprint>=0.5m"
+        }
+      },
+      "294BB5C783040AECEF007D6A6888D6B47AE83F9EE665362213F6865F2A003630": {
+        "Start": {
+          "Input": {
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": -29.106653,
+                "Y": 68.176704
+              },
+              "Velocity": {
+                "X": -13.333015,
+                "Y": -0.63766223
+              },
+              "Heading": -3.0758274,
+              "AngularVelocity": 0.8334283,
+              "Road": {
+                "Segment": 5,
+                "Progress": 0.06336397978073058,
+                "ReferenceMeters": 196.4463677669048,
+                "OffsetMeters": 5.518032697564713,
+                "Heading": -3.1325909550125695,
+                "RadiusMeters": 73.66805417843455,
+                "CornerProgress": 0.02112132659357686,
+                "Tangent": {
+                  "X": -0.99995947,
+                  "Y": -0.009001577
+                },
+                "Outward": {
+                  "X": -0.009001577,
+                  "Y": 0.99995947
+                },
+                "IsTurn": true
+              },
+              "TotalReferenceMeters": 834.0038676524656,
+              "DistanceMeters": 903.4503570795132,
+              "Activity": 0,
+              "Drive": 0.2132211,
+              "TargetOffsetMeters": 3,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 13.348255,
+              "ForwardSpeed": 13.346098,
+              "SideSpeed": -0.23993403,
+              "SlideRadians": 0.0179759
+            },
+            "Time": 69.2,
+            "Omega": 43.45237205222611,
+            "Steering": 0.1743901,
+            "Active": {
+              "SteeringRadians": 0.1743901,
+              "Drive": 0.2132211
+            },
+            "Pending": [
+              {
+                "ObservedAt": 69,
+                "ActivationAt": 69.24,
+                "Action": {
+                  "SteeringRadians": -0.030611861,
+                  "Drive": 0.13583949
+                }
+              }
+            ],
+            "NextReview": 69.2
+          },
+          "CrankOmega": 391.5593785834859
+        },
+        "CreatedAt": 69.2,
+        "Goal": 828.9468748569489,
+        "SafetyGoal": 956.3362498283386,
+        "Actions": [
+          {
+            "SteeringRadians": 0.025618497,
+            "Drive": 0
+          },
+          {
+            "SteeringRadians": 0.027634362,
+            "Drive": 0
+          },
+          {
+            "SteeringRadians": 0.030150307,
+            "Drive": 0
+          },
+          {
+            "SteeringRadians": 0.032179143,
+            "Drive": 0
+          },
+          {
+            "SteeringRadians": 0.03368611,
+            "Drive": 0
+          },
+          {
+            "SteeringRadians": 0.03470655,
+            "Drive": 0.033777356
+          },
+          {
+            "SteeringRadians": 0.035359964,
+            "Drive": 0.067693286
+          },
+          {
+            "SteeringRadians": 0.03565052,
+            "Drive": 0.08092424
+          },
+          {
+            "SteeringRadians": 0.03572475,
+            "Drive": 0.08746388
+          },
+          {
+            "SteeringRadians": 0.03555828,
+            "Drive": 0.09067304
+          },
+          {
+            "SteeringRadians": 0.035277072,
+            "Drive": 0.0895199
+          },
+          {
+            "SteeringRadians": 0.034879368,
+            "Drive": 0.091375306
+          },
+          {
+            "SteeringRadians": 0.03441981,
+            "Drive": 0.08899867
+          },
+          {
+            "SteeringRadians": 0.033930834,
+            "Drive": 0.0889669
+          },
+          {
+            "SteeringRadians": 0.033452287,
+            "Drive": 0.08998645
+          },
+          {
+            "SteeringRadians": 0.03302103,
+            "Drive": 0.08732108
+          },
+          {
+            "SteeringRadians": 0.032652676,
+            "Drive": 0.08859776
+          },
+          {
+            "SteeringRadians": 0.032407086,
+            "Drive": 0.08621339
+          },
+          {
+            "SteeringRadians": 0.03225352,
+            "Drive": 0.08668285
+          },
+          {
+            "SteeringRadians": 0.032208573,
+            "Drive": 0.08782858
+          },
+          {
+            "SteeringRadians": 0.032283038,
+            "Drive": 0.08588487
+          },
+          {
+            "SteeringRadians": 0.03249941,
+            "Drive": 0.08774863
+          },
+          {
+            "SteeringRadians": 0.032828085,
+            "Drive": 0.0864593
+          },
+          {
+            "SteeringRadians": 0.03325652,
+            "Drive": 0.087769486
+          },
+          {
+            "SteeringRadians": 0.033780944,
+            "Drive": 0.089324184
+          },
+          {
+            "SteeringRadians": 0.03439425,
+            "Drive": 0.088281795
+          },
+          {
+            "SteeringRadians": 0.035073932,
+            "Drive": 0.091088094
+          },
+          {
+            "SteeringRadians": 0.035816804,
+            "Drive": 0.09020903
+          },
+          {
+            "SteeringRadians": 0.036628786,
+            "Drive": 0.091644496
+          },
+          {
+            "SteeringRadians": 0.037424218,
+            "Drive": 0.09386276
+          },
+          {
+            "SteeringRadians": 0.03823036,
+            "Drive": 0.095262535
+          },
+          {
+            "SteeringRadians": 0.039068144,
+            "Drive": 0.09517525
+          },
+          {
+            "SteeringRadians": 0.039836608,
+            "Drive": 0.096979946
+          },
+          {
+            "SteeringRadians": 0.04056791,
+            "Drive": 0.09931416
+          },
+          {
+            "SteeringRadians": 0.04125706,
+            "Drive": 0.09922815
+          },
+          {
+            "SteeringRadians": 0.04188094,
+            "Drive": 0.10031294
+          },
+          {
+            "SteeringRadians": 0.042430863,
+            "Drive": 0.101741515
+          },
+          {
+            "SteeringRadians": 0.042898484,
+            "Drive": 0.10316574
+          },
+          {
+            "SteeringRadians": 0.043238666,
+            "Drive": 0.10446239
+          },
+          {
+            "SteeringRadians": 0.041544955,
+            "Drive": 0.10297392
+          },
+          {
+            "SteeringRadians": 0.014845883,
+            "Drive": 0.077071995
+          },
+          {
+            "SteeringRadians": 0.0043361653,
+            "Drive": 0.07133333
+          },
+          {
+            "SteeringRadians": 0.0035982856,
+            "Drive": 0.06806616
+          },
+          {
+            "SteeringRadians": 0.002890792,
+            "Drive": 0.066157214
+          },
+          {
+            "SteeringRadians": 0.0022951863,
+            "Drive": 0.06743436
+          },
+          {
+            "SteeringRadians": 0.0018021761,
+            "Drive": 0.066316284
+          },
+          {
+            "SteeringRadians": 0.0013932541,
+            "Drive": 0.06748239
+          },
+          {
+            "SteeringRadians": 0.0010571606,
+            "Drive": 0.06631567
+          },
+          {
+            "SteeringRadians": 0.00078134803,
+            "Drive": 0.067474425
+          },
+          {
+            "SteeringRadians": 0.00055773713,
+            "Drive": 0.06630221
+          },
+          {
+            "SteeringRadians": 0.00037702144,
+            "Drive": 0.06736988
+          },
+          {
+            "SteeringRadians": 0.00023315701,
+            "Drive": 0.06616061
+          },
+          {
+            "SteeringRadians": 0.00011926671,
+            "Drive": 0.06730961
+          },
+          {
+            "SteeringRadians": 3.0930365e-05,
+            "Drive": 0.066136055
+          },
+          {
+            "SteeringRadians": -3.689189e-05,
+            "Drive": 0.06729639
+          }
+        ],
+        "Arrival": 69.2,
+        "Safety": {
+          "Legal": true,
+          "MinimumGapMeters": 4.8699766153577455,
+          "SweepLowerBoundMeters": 4.80481901786815,
+          "MaximumBetaDegrees": 5.659307143743362,
+          "MaximumYawRate": 1.053324580192566,
+          "Reason": "legal complete forecast; swept physical footprint>=0.5m"
+        }
+      }
+    },
+    "selected": "endogenous primitive feedback; full physical replay",
+    "physical_hash": "E799288AF7A8C9B0142FA69587791A9E79EAC2AB66AA68112137349EBF5CAC7F"
+  }
+]
