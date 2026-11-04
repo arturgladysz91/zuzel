@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <StartupObject>ThrottleContact168.Program</StartupObject>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../fast-corner-feasibility/fast-corner-feasibility.csproj" />
+    <Compile Include="../autonomous-fast-corner/NativeWorld166.Generated.cs" Link="NativeWorld166.Generated.cs" />
+    <Compile Include="../autonomous-fast-corner/Policy.cs" Link="Policy166.cs" />
+    <Compile Include="../autonomous-fast-corner/Runner.cs" Link="Runner166.cs" />
+    <Compile Include="../autonomous-fast-corner/Teacher.cs" Link="Teacher166.cs" />
+    <Compile Include="../fast-two-corners/*.cs" Link="Study167/%(Filename)%(Extension)" />
+  </ItemGroup>
+</Project>
