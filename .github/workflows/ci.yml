@@ -69,6 +69,11 @@ jobs:
           restore-keys: nuget-${{ runner.os }}-net8-
       - run: dotnet restore SpeedwayManager.sln
       - run: dotnet build SpeedwayManager.sln -c Release --no-restore --warnaserror
+      - name: Compile OFF study 172 and verify its cyclic map without native worlds
+        run: |
+          dotnet restore tools/three-lap-global-planning/three-lap-global-planning.csproj --locked-mode
+          dotnet build tools/three-lap-global-planning/three-lap-global-planning.csproj -c Release --no-restore --warnaserror
+          dotnet tools/three-lap-global-planning/bin/Release/net8.0/three-lap-global-planning.dll prepare ci172 results/study172-map
       - name: Require unchanged legacy production skill and style consumers
         run: python tools/rider-compatibility-audit/check-consumers.py
       - name: Prove exactly one responsibility for every discovered test case
