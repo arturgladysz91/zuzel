@@ -1,0 +1,210 @@
+using System.Numerics;
+using CoreSim;
+using CoreSim.PhysicalSpace;
+using SharedWorldSpeedway;
+
+namespace WholeCorner171;
+
+internal sealed record Nominal(double Offset, double Speed, double Beta, double Yaw, double Drive, double Crank, double Wheel);
+internal sealed record ShapeChoice(string Name, double Entry, double Middle, double Exit);
+internal sealed record PathPoint(double S, double Offset, Vector2 XY, double Heading, double Curvature,
+    double Beta, double Yaw, double Speed, double NominalSpeed, double Inner, double Outer);
+internal sealed record Plan(ShapeChoice Choice, BendVisit Visit, PathPoint[] Points, double Distance, double Seconds,
+    double MinPose, double MinSweep, double MaxCurvature, double MaxCurvatureGradient, bool Feasible)
+{
+    public PathPoint At(double s)
+    {
+        int i = Math.Clamp((int)Math.Floor((s - Points[0].S) / Planner.StepMeters), 0, Points.Length - 2);
+        var a = Points[i];
+        var b = Points[i + 1];
+        double u = Math.Clamp((s - a.S) / (b.S - a.S), 0, 1);
+        double Mix(double x, double y) => x + u * (y - x);
+        return a with { S = s, Offset = Mix(a.Offset, b.Offset), Heading = a.Heading + u * BikeAngles.Wrap(b.Heading - a.Heading),
+            Beta = Mix(a.Beta, b.Beta), Yaw = Mix(a.Yaw, b.Yaw), Speed = Mix(a.Speed, b.Speed),
+            NominalSpeed = Mix(a.NominalSpeed, b.NominalSpeed), Curvature = Mix(a.Curvature, b.Curvature) };
+    }
+}
+
+internal sealed class Planner(TrackFrame frame, TrackStateSnapshot surface, WorldParameters parameters,
+    RiderSpec spec, float mass, float inertia, Nominal[][] profiles)
+{
+    public const double ApproachMeters = 18;
+    public const double ExitMeters = 20;
+    public const double StepMeters = .5;
+    private const double MinimumGap = .5;
+    private const double ContactFraction = .86;
+    private static readonly ShapeChoice Baseline = new("K0", 0, 0, 0);
+    private static readonly ShapeChoice[] Alternatives =
+    [
+        new("K1", 1.25, .1, 0),
+        new("K2", .45, 1.1, -.14),
+        new("K3", 0, .15, 1.05),
+        new("K4", .8, .75, .75),
+        new("K4", 1.4, .45, .95),
+        new("K4", .55, 1.15, 1.25),
+        new("K4", 1.1, 1.0, .5)
+    ];
+    private readonly RacingLineGeometry boundary = new(frame);
+    private readonly TwoContactBikeParameters bike = parameters.TwoContactBike ?? TwoContactBikeParameters.Default;
+    private readonly RearWheelParameters wheel = parameters.RearWheel ?? RearWheelParameters.Default;
+
+    public Plan[] Build(BendVisit visit, RiderView? observed = null, double? crank = null, double? wheelOmega = null)
+    {
+        double start = visit.Entry - ApproachMeters;
+        int n = (int)Math.Ceiling((visit.Exit + ExitMeters - start) / StepMeters) + 1;
+        var basis = Enumerable.Range(0, n).Select(i => start + StepMeters * i).ToArray();
+        var nominal = basis.Select(s => NominalAt(visit.Index, s - visit.Entry)).ToArray();
+        var plan0 = BuildOne(Baseline, null);
+        return [plan0, ..Alternatives.Select(choice => BuildOne(choice, plan0))];
+
+        Plan BuildOne(ShapeChoice choice, Plan? reference)
+        {
+            var positions = new Vector2[n];
+            var offsets = new double[n];
+            var headings = new double[n];
+            var curvature = new double[n];
+            var path = new PathPoint[n];
+            var ds = new double[n];
+            var budgets = new LoadBasedTyreBudget[n];
+            var limits = new double[n];
+            var envelope = new double[n];
+            var startIndex = observed is { } state ? Math.Clamp((int)Math.Ceiling((state.TotalReferenceMeters - start) / StepMeters), 0, n - 2) : 0;
+            double correction = observed is { } observation ? Math.Clamp(observation.Road.OffsetMeters -
+                NominalAt(visit.Index, observation.TotalReferenceMeters - visit.Entry).Offset, -2.5, 2.5) : 0;
+
+            for (int i = 0; i < n; i++)
+            {
+                double u = (basis[i] - visit.Entry) / visit.Length;
+                double fit = correction * (1 - Smooth((i - startIndex) * StepMeters / 20));
+                offsets[i] = nominal[i].Offset + fit
+                    + choice.Entry * Bump(u, -.24, .55) + choice.Middle * Bump(u, .14, .79)
+                    + choice.Exit * Bump(u, .64, 1 + ExitMeters / visit.Length);
+                var sample = frame.At(basis[i], offsets[i]);
+                positions[i] = sample.Position;
+                var segment = frame.Track.Segments[sample.Road.Segment].Type;
+                var usable = LaneModel.UsableRacingWidthMeters(segment, frame.Track.Geometry);
+                var trackSurface = surface.SampleSurface(sample.Road.Segment, Math.Clamp((float)offsets[i] / usable * 4, 0, 4));
+                budgets[i] = LoadBasedTyreGrip.Budget(mass, trackSurface, bike, parameters.LoadBasedTyres);
+                if (i > 0) ds[i] = Vector2.Distance(positions[i - 1], positions[i]);
+            }
+            double Heading(Vector2 delta) => Math.Atan2(delta.Y, delta.X);
+            for (int i = 0; i < n; i++)
+                headings[i] = Heading(positions[Math.Min(n - 1, i + 1)] - positions[Math.Max(0, i - 1)]);
+            for (int i = 1; i < n - 1; i++)
+                curvature[i] = 2 * BikeAngles.Wrap(Heading(positions[i + 1] - positions[i]) -
+                    Heading(positions[i] - positions[i - 1])) / (ds[i] + ds[i + 1]);
+            curvature[0] = curvature[1];
+            curvature[^1] = curvature[^2];
+
+            double wheelbase = bike.FrontAxleFromComMeters + bike.RearAxleFromComMeters;
+            double minPose = double.PositiveInfinity, minSweep = double.PositiveInfinity;
+            double maxGradient = 0;
+            for (int i = 0; i < n; i++)
+            {
+                double curvatureGradient = i == 0 ? 0 : (curvature[i] - curvature[i - 1]) / ds[i];
+                maxGradient = Math.Max(maxGradient, Math.Abs(curvatureGradient));
+                double frontPerSpeedSquared = (mass * curvature[i] * bike.RearAxleFromComMeters + inertia * curvatureGradient) / wheelbase;
+                double rearPerSpeedSquared = mass * curvature[i] - frontPerSpeedSquared;
+                var grip = budgets[i];
+                var rpm = nominal[i].Crank * 30 / Math.PI;
+                if (crank is { } shaft && i >= startIndex)
+                    rpm += (shaft - nominal[startIndex].Crank) * 30 / Math.PI * (1 - Smooth((i - startIndex) * StepMeters / 18));
+                var shaftTorque = Engine500.Torque(Math.Max(0, rpm));
+                var engine = Engine500.Evaluate(wheelOmega is { } angular && i == startIndex ? angular : nominal[i].Wheel, spec.Setup, 1);
+                var availableTorque = Math.Min(engine.AvailableWheelTorqueNewtonMeters,
+                    shaftTorque * engine.OverallRatio * engine.Efficiency);
+                double rearBudget = ContactFraction * grip.RearCapacityNewtons;
+                double frontBudget = ContactFraction * grip.FrontCapacityNewtons;
+                double useFx = Math.Min(rearBudget * .45, availableTorque / wheel.WheelRadiusMeters * nominal[i].Drive);
+                double usableRearFy = Math.Sqrt(rearBudget * rearBudget - useFx * useFx);
+                // Tiny curvature gets its bound from the nearby section and engine integration.
+                limits[i] = Math.Min(frontBudget / Math.Max(.001, Math.Abs(frontPerSpeedSquared)),
+                    usableRearFy / Math.Max(.001, Math.Abs(rearPerSpeedSquared)));
+                double beta = nominal[i].Beta;
+                double theta = headings[i] + beta;
+                var pose = new RiderView(0, positions[i], Vector2.Zero, (float)theta, 0,
+                    frame.RoadAt(basis[i], offsets[i]), basis[i], 0, RiderActivity.Racing, 0, (float)offsets[i], 0);
+                var gap = boundary.Clearance(pose);
+                minPose = Math.Min(minPose, Math.Min(gap.Inner, gap.Outer));
+                if (i > 0)
+                {
+                    var previous = path[i - 1];
+                    double travel = ds[i] + SpeedwayBikeDimensions.Reference.BoundingRadiusMeters *
+                        Math.Abs(BikeAngles.Wrap(theta - previous.Heading - previous.Beta));
+                    minSweep = Math.Min(minSweep, Math.Min(Math.Min(gap.Inner, gap.Outer),
+                        Math.Min(previous.Inner, previous.Outer)) - .5 * travel);
+                }
+                double yaw = nominal[i].Yaw;
+                if (reference is not null)
+                    yaw += nominal[i].Speed * (curvature[i] - reference.Points[i].Curvature);
+                path[i] = new(basis[i], offsets[i], positions[i], headings[i], curvature[i], beta, yaw,
+                    nominal[i].Speed, nominal[i].Speed, gap.Inner, gap.Outer);
+            }
+
+            limits[^1] = Math.Min(limits[^1], Square(nominal[^1].Speed + .75));
+            for (int i = n - 2; i >= 0; i--)
+            {
+                double observedScrub = (Square(nominal[i].Speed) - Square(nominal[i + 1].Speed)) /
+                    Math.Max(.01, 2 * ds[i + 1]);
+                double rollOff = Math.Clamp(observedScrub, .65, 3.3);
+                limits[i] = Math.Min(limits[i], limits[i + 1] + 2 * rollOff * ds[i + 1]);
+            }
+            double startSpeed = observed?.Speed ?? nominal[startIndex].Speed;
+            envelope[startIndex] = Math.Min(limits[startIndex], Square(startSpeed));
+            double totalSeconds = 0;
+            for (int i = startIndex + 1; i < n; i++)
+            {
+                var engine = Engine500.Evaluate(nominal[i - 1].Wheel, spec.Setup, 1);
+                double speed = Math.Sqrt(envelope[i - 1]);
+                double fy = mass * Math.Abs(curvature[i - 1]) * Square(speed) * bike.FrontAxleFromComMeters / wheelbase;
+                double rear = ContactFraction * budgets[i - 1].RearCapacityNewtons;
+                double rearFx = Math.Sqrt(Math.Max(0, rear * rear - fy * fy));
+                double engineFx = Math.Min(engine.AvailableWheelTorqueNewtonMeters / wheel.WheelRadiusMeters,
+                    engine.CrankPowerWatts * engine.Efficiency / Math.Max(1, speed));
+                double resistance = LongitudinalDynamics.CalculateLongitudinalResistanceForceNewtons((float)speed);
+                double acceleration = (Math.Min(rearFx, engineFx) - resistance) / mass;
+                envelope[i] = Math.Min(limits[i], Math.Max(1, envelope[i - 1] + 2 * acceleration * ds[i]));
+                totalSeconds += 2 * ds[i] / (Math.Sqrt(envelope[i - 1]) + Math.Sqrt(envelope[i]));
+            }
+            for (int i = 0; i < n; i++)
+            {
+                double limit = Math.Sqrt(i < startIndex ? limits[i] : envelope[i]);
+                var v = path[i];
+                path[i] = v with { Speed = limit };
+            }
+            bool reachable = Square(startSpeed) <= limits[startIndex] + 2 * 3.3 * startSpeed * .24;
+            bool feasible = minPose >= MinimumGap && minSweep >= MinimumGap && reachable &&
+                curvature.Max(x => Math.Abs(Math.Atan(x * wheelbase))) < bike.MaximumSteeringRadians;
+            return new(choice, visit, path, ds.Sum(), totalSeconds, minPose, minSweep,
+                curvature.Max(x => Math.Abs(x)), maxGradient, feasible);
+        }
+    }
+
+    internal Nominal NominalAt(int corner, double s)
+    {
+        var series = profiles[corner];
+        double x = Math.Clamp((s + 24) / 2, 0, series.Length - 1d);
+        int i = (int)x;
+        double t = x - i;
+        Nominal At(int j) => series[Math.Clamp(j, 0, series.Length - 1)];
+        var a = At(i - 1); var b = At(i); var c = At(i + 1); var d = At(i + 2);
+        double Fit(double av, double bv, double cv, double dv) =>
+            (Math.Pow(1 - t, 3) * av + (4 - 6 * t * t + 3 * t * t * t) * bv +
+                (1 + 3 * t + 3 * t * t - 3 * t * t * t) * cv + t * t * t * dv) / 6;
+        return new(Fit(a.Offset, b.Offset, c.Offset, d.Offset), Fit(a.Speed, b.Speed, c.Speed, d.Speed),
+            Fit(a.Beta, b.Beta, c.Beta, d.Beta), Fit(a.Yaw, b.Yaw, c.Yaw, d.Yaw),
+            Fit(a.Drive, b.Drive, c.Drive, d.Drive), Fit(a.Crank, b.Crank, c.Crank, d.Crank),
+            Fit(a.Wheel, b.Wheel, c.Wheel, d.Wheel));
+    }
+
+    private static double Square(double x) => x * x;
+    private static double Smooth(double x)
+    {
+        double u = Math.Clamp(x, 0, 1);
+        return u * u * u * (10 + u * (-15 + 6 * u));
+    }
+
+    private static double Bump(double x, double start, double end) =>
+        Math.Pow(Math.Sin(Math.PI * Math.Clamp((x - start) / (end - start), 0, 1)), 3);
+}
+
