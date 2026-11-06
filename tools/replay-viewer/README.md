@@ -6,7 +6,8 @@ Z katalogu głównego repozytorium na gałęzi `fix/restore-stadium-viewer-172`:
 .\uruchom-stadion.ps1
 ```
 
-Skrypt wymaga Python 3.8+ (`py`, `python` lub `python3` w PATH), wybiera wolny
+Skrypt używa Python 3.8+ (`py`, `python` lub `python3` w PATH albo istniejący
+lokalny runtime Codex), wybiera wolny
 port, uruchamia serwer wyłącznie na `127.0.0.1`, wypisuje dokładny URL i otwiera
 domyślną przeglądarkę. Ctrl+C zatrzymuje serwer. Opcjonalnie:
 `.\uruchom-stadion.ps1 -Port 8000` lub `-NoBrowser`. Nie otwieraj HTML przez

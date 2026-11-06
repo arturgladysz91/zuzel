@@ -12,7 +12,8 @@ Z katalogu głównego tej gałęzi:
 .\uruchom-stadion.ps1
 ```
 
-Python 3.8+ musi być dostępny jako `py`, `python` lub `python3` w PATH.
+Skrypt używa Python 3.8+ z `py`, `python` lub `python3` w PATH, a w środowisku
+Codex potrafi też wybrać już obecny lokalny runtime. Pomija skróty Microsoft Store.
 Skrypt wybiera wolny port, wypisuje URL i otwiera domyślną przeglądarkę.
 Serwer nasłuchuje wyłącznie na `127.0.0.1`. Ctrl+C go zatrzymuje.
 Opcjonalnie `-Port 8000` albo `-NoBrowser`. Zajęty port daje czytelny błąd
@@ -135,6 +136,9 @@ Regresja lokalna:
 - `export172.py --check`: zgodność projekcji z przypiętymi ZIP-ami, bez symulacji.
 - HTTP: HTML/moduły/gzip 200, poprawny MIME mjs, odświeżenie 200/no-store,
   loopback; zajęty port: czytelny błąd i exit 1.
+- Start w świeżej konsoli z oryginalnym PATH (tylko aliasy Microsoft Store):
+  PASS dzięki wykryciu istniejącego runtime Codex; automatycznie wybrany port
+  52150 i HTTP 200. Dodatkowy serwer testowy zatrzymano.
 
 Status automatycznego CI i końcowy SHA zostaną podane w metadanych Draft PR.
 Bez merge. Produkcyjne opcje eksperymentalne pozostają OFF.

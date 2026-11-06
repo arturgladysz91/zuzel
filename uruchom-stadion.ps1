@@ -18,6 +18,13 @@ try {
         & $candidate.Source @prefix -c 'import sys; sys.exit(0 if sys.version_info >= (3, 8) else 1)' 2>$null
         if ($LASTEXITCODE -eq 0) { $pythonCommand = $candidate.Source; $pythonPrefix = $prefix; break }
     }
+    if (-not $pythonCommand) {
+        $bundledPython = Join-Path $env:USERPROFILE '.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe'
+        if (Test-Path -LiteralPath $bundledPython) {
+            & $bundledPython -c 'import sys; sys.exit(0 if sys.version_info >= (3, 8) else 1)' 2>$null
+            if ($LASTEXITCODE -eq 0) { $pythonCommand = $bundledPython; $pythonPrefix = @() }
+        }
+    }
     if (-not $pythonCommand) { throw 'Nie znaleziono Python 3.8+. Zainstaluj Python 3 lub udostępnij polecenie py/python w PATH.' }
     $serverArguments = @('-X', 'utf8', '-u', $server, '--port', [string]$Port)
     if ($NoBrowser) { $serverArguments += '--no-browser' }
