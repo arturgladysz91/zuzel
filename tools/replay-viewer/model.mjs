@@ -125,7 +125,7 @@ export class Replay {
     const finished = finish != null && time >= finish;
     // After the finish, use the last accepted point already present at this time.
     // An accepted post-crossing point is still inspectable at its own timestamp.
-    const fraction = right && !finished && interpolatePose ? clamp((time - left.t) / (right.t - left.t), 0, 1) : 0;
+    const fraction = right && (!finished || this.run.ContinueAfterFinish === true) && interpolatePose ? clamp((time - left.t) / (right.t - left.t), 0, 1) : 0;
     const lerp = (a, b) => a + (b - a) * fraction;
     const state = { ...left, x: right ? lerp(left.x, right.x) : left.x, y: right ? lerp(left.y, right.y) : left.y,
       heading: right ? angleAt(left.heading, right.heading, fraction) : left.heading,

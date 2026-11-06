@@ -1,3 +1,5 @@
+**Stadion 2D:** uruchom `.\uruchom-stadion.ps1` — aktualny zapis Solo #172 i historyczny wyścig czterech zawodników. [Instrukcja i testy](docs/replay-viewer-restoration/README.md).
+
 [Badanie #159 — audyt geometrii, potencjału fizycznego i AI](docs/experiments/geometry-speed-audit/REPORT.md): PARTIAL, narzędzie domyślnie OFF. Diagnoza celu10 m/s, porównanie B/C, pełna telemetria i natywny replay; brak potwierdzonej szybszej autonomii S3.
 
 # Speedway Manager (Żużlowy) – Core Simulation

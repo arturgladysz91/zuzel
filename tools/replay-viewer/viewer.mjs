@@ -17,6 +17,7 @@ import {loadContingency151,setupContingency151} from './contingency151.mjs';
 import { Replay, parseCsv, clamp, enumName, decisionStatus, crossSection, worldCapsules, authoredReplayDocument, motionVectors, bendJumps, boundaryStatus } from './model.mjs';
 import { currentRecordings, readGzip } from './recordings.mjs';
 import { loadContinuous } from './continuous.mjs';
+import {loadStudy172} from './study172.mjs';
 import { loadZigzag, createZigzagPanel } from './zigzag.mjs';
 import { loadFreeRacing, updateFreeRacingPanel } from './free-racing.mjs';
 import { loadLearning, setupLearning, updateLearningPanel } from './free-learning.mjs';
@@ -40,7 +41,7 @@ for (const [key, recording] of Object.entries(currentRecordings)) {
 }
 $('scenario').prepend(currentGroup);
 const latestOption = document.createElement('option'); latestOption.value = 'latest-two-bends';
-latestOption.textContent = '#123 · najnowszy przejazd · dwa łuki Egg Mild · 1 zawodnik';
+latestOption.textContent = 'HISTORYCZNY #123 · dwa łuki Egg Mild · 1 zawodnik';
 $('scenario').prepend(latestOption);
 const robustOption=document.createElement('option');robustOption.value='robust-learning';robustOption.textContent='#130 · Robust Learning · A/B i12 nowych przypadków';$('scenario').prepend(robustOption);
 const extendedOption=document.createElement('option');extendedOption.value='extended-learning';extendedOption.textContent='#131 · Extended Learning · H06/H09 i dwa łuki';$('scenario').prepend(extendedOption);
@@ -79,6 +80,8 @@ const widthColors = ['#ffb36d', '#70e2e4', '#e5a5f5'];
 for(const [key,label] of [['zigzag-baseline','Zygzak #127 · baseline #124'],['zigzag-candidate','Zygzak #127 · kandydat #126']]){
   const option=document.createElement('option');option.value=key;option.textContent=label;$('scenario').prepend(option);
 }
+const study172Option=document.createElement('option');study172Option.value='study172';study172Option.textContent='Solo — #172 · S3-K4 · 3 okrążenia';
+$('scenario').prepend($('scenario').querySelector('option[value="pack"]'));$('scenario').prepend(study172Option);
 let zigzagPanel=null,zigzagDataPromise=null,zigzagWindow='main';
 let widthGeometries = [];
 let comparisonTrails = [];
@@ -139,7 +142,8 @@ function setTime(value, immediate = true) {
 }
 function setPlaying(value) {
   playing = Boolean(value && replay);
-  $('play').textContent = playing ? 'Ⅱ Pauza' : '▶ Odtwórz'; $('play').setAttribute('aria-label', playing ? 'Pauza' : 'Odtwarzaj');
+  dirty = true; lastPanelTime = -1;
+  $('play').disabled=playing; $('pause').disabled=!playing; $('play').setAttribute('aria-pressed',String(playing));
 }
 function chooseRider(id) {
   selected = id;
@@ -188,7 +192,7 @@ function rebuildEvents() {
 function updatePanel() {
   zigzagPanel?.update(time);
   const state = displayState(), last = state.lastDecision, motion = motionVectors(state);
-  $('clock').textContent = `${format(time)} / ${format(replay.duration)} s`;
+  $('clock').textContent = `${format(time)} / ${format(replay.duration)} s`; syncRate();
   $('rider-name').textContent = `R${selected}`; $('rider-name').style.color = color(selected);
   $('speed').textContent = format(state.speed * 3.6, 1); $('drive').textContent = `${format(state.drive * 100, 1)}%`;
   $('drive-fill').style.width = `${clamp(state.drive, 0, 1) * 100}%`;
@@ -203,6 +207,8 @@ function updatePanel() {
   $('status').textContent = state.finished ? 'Finished' : enumName(geometry, 'activity', state.activity);
   $('status').classList.toggle('finished', state.finished);
   $('lap').textContent = replay.planAt ? 'Dwa łuki · bez pełnego okrążenia' : state.finished ? `${state.totalLaps}/${state.totalLaps} · meta ${format(state.finish)} s` : `${state.lap}/${state.totalLaps} · ukończono ${state.completedLaps}`;
+  const hudScope=replay.planAt?'dwa łuki':replay.freeRacing?'próba wstępna':replay.learning?'próba diagnostyczna':state.finished?'Meta':`okr. ${state.lap}/${state.totalLaps}`;
+  $('race-hud').textContent=`R${selected} · ${format(state.speed*3.6,1)} km/h · ${hudScope}`;
   $('steering').textContent = state.steering == null ? 'brak zapisu' : `${format(state.steering * 180 / Math.PI, 2)}°`;
   $('steering').title = 'steer_before: zaakceptowany kąt w czasie próbki; bez interpolacji. Kierownica w skali obraca się tym kątem.';
   $('active-plan-row').hidden = !replay.planAt;
@@ -212,6 +218,7 @@ function updatePanel() {
     $('comparison-legend').textContent = `Zielona przerywana: aktywny plan ${plan}. Turkusowa: rzeczywisty ślad XY.`;
   }
   $('intent').textContent = enumName(geometry, 'intent', state.intent);
+  if(replay.study172){$('target').textContent='brak narzuconej linii';$('intent').textContent='Autonomiczny K4 · #172';}
   if(replay.freeRacing){$('intent').textContent='Autonomiczne działania';$('lap').textContent='Kontrola wstępna · nieukończony';}
   if(replay.learning){$('intent').textContent='Wyuczone preferencje gazu i kierownicy';$('lap').textContent=replay.episodeScope??(replay.learning.Metrics.Completed?'Pierwszy łuk + 1s kontroli na wyjściu':'Próba nieukończona');}
   if(replay.robust?.Replay.Name.startsWith('two-bends'))$('lap').textContent='Dwa kolejne łuki · '+(replay.learning.Metrics.Completed?'ukończone':'próba nieukończona');
@@ -295,6 +302,7 @@ function drawOverview(sections, states) {
 function draw() {
   context.setTransform(dpr, 0, 0, dpr, 0, 0); context.clearRect(0, 0, width, height);
   if (!geometry || !replay) return;
+  const advancedView=document.body.classList.contains('advanced');
   if ($('follow').checked) { const rider = displayState(); camera.x = rider.x; camera.y = rider.y; }
   // An unobtrusive metric grid is an overlay, not track geometry.
   const lo = screenToWorld({ x: 0, y: height }), hi = screenToWorld({ x: width, y: 0 });
@@ -308,11 +316,11 @@ function draw() {
     context.fillStyle = '#8f795d'; context.fill();
   }
   for (const edge of ['inner', 'outer']) { pointPath(allSections.map(p => p[edge]), true); context.strokeStyle = edge === 'inner' ? '#e4e8de' : '#e8b67e'; context.lineWidth = edge === 'outer' ? 2 : 1.2; context.stroke(); }
-  if ($('outer-limit').checked && geometry.localOuterLimit) {
+  if (advancedView && $('outer-limit').checked && geometry.localOuterLimit) {
     pointPath(geometry.localOuterLimit.sections.map(p => p.point), true);
     context.strokeStyle = '#ffcf78'; context.lineWidth = 1; context.setLineDash([3, 4]); context.stroke(); context.setLineDash([]);
   }
-  if ($('compare-widths').checked) for (const [i, shape] of widthGeometries.entries()) {
+  if (advancedView && $('compare-widths').checked) for (const [i, shape] of widthGeometries.entries()) {
     pointPath(shape.segments.flatMap(s => s.sections.map(p => p.outer)), true);
     context.strokeStyle = widthColors[i]; context.lineWidth = 1.5; context.stroke();
   }
@@ -329,7 +337,7 @@ function draw() {
       }
     }
   }
-  if ($('compare-lines').checked) for (const line of comparisonTrails) {
+  if (advancedView && $('compare-lines').checked) for (const line of comparisonTrails) {
     if(line.visible===false)continue;
     if (line.generation && line.generation !== replay.planAt(time)) continue;
     pointPath(line.points); context.strokeStyle = line.color; context.lineWidth = 1.8; context.globalAlpha = .8; context.setLineDash(line.planned ? [8, 5] : []); context.stroke(); context.globalAlpha = 1; context.setLineDash([]);
@@ -354,7 +362,7 @@ function draw() {
   }
   context.setLineDash([5, 5]); context.strokeStyle = '#b4e2ce9c'; context.lineWidth = .8;
   pointPath(allSections.map(p => p.reference), true); context.stroke(); context.setLineDash([]);
-  if ($('segments').checked) for (const segment of geometry.segments) {
+  if (advancedView && $('segments').checked) for (const segment of geometry.segments) {
     const p = segment.sections[0]; pointPath([p.inner, p.outer]); context.strokeStyle = '#e4d8ba88'; context.lineWidth = .8; context.stroke();
     const label = worldToScreen(p.outer); context.font = '10px Segoe UI'; context.fillStyle = '#d3e1df'; context.fillText(`S${segment.index} ${segment.type}`, label.x + 6, label.y - 6);
   }
@@ -363,9 +371,20 @@ function draw() {
     context.strokeStyle=index===0?'#ffd27b':'#a5d4eb';context.lineWidth=2;context.stroke();
     const p=worldToScreen(section.outer);context.fillStyle=context.strokeStyle;context.font='11px Segoe UI';context.fillText(label,p.x+4,p.y-8);
   }
-  const origin = geometry.segments[0].sections[0]; pointPath([origin.inner, origin.outer]); context.strokeStyle = '#f1e7d1'; context.lineWidth = 2; context.stroke();
-  const start = worldToScreen(origin.outer); context.font = '10px Segoe UI'; context.fillStyle = '#b7c9d1'; context.fillText('ref. 0', start.x + 5, start.y + 15);
+  const origin = geometry.segments[0].sections[0];
+  // Gate markings follow the exported physical start cross-section; no authored oval.
+  const tangent={x:-origin.outward.y,y:origin.outward.x};
+  for(let gate=0;gate<4;gate++){
+    const at=f=>({x:origin.inner.x+(origin.outer.x-origin.inner.x)*f,y:origin.inner.y+(origin.outer.y-origin.inner.y)*f});
+    const a=at(gate/4),b=at((gate+1)/4),back=p=>({x:p.x-3*tangent.x,y:p.y-3*tangent.y});
+    pointPath([a,b,back(b),back(a)],true);context.fillStyle=colors[gate]+'28';context.fill();context.strokeStyle='#e1d7bf99';context.lineWidth=.8;context.stroke();
+    const label=worldToScreen(back(at((gate+.5)/4)));context.font='10px Segoe UI';context.fillStyle='#ede6d8';context.fillText('ABCD'[gate],label.x-4,label.y-3);
+  }
+  pointPath([origin.inner, origin.outer]); context.strokeStyle = '#f1e7d1'; context.lineWidth = 2; context.stroke();
+  const start = worldToScreen(origin.outer); context.font = '10px Segoe UI'; context.fillStyle = '#b7c9d1'; context.fillText('Start / meta', start.x + 5, start.y + 15);
   const states = [...replay.tracks.keys()].map(id => displayState(id));
+  const rendered=states.find(state=>state.id===selected);
+  canvas.dataset.renderX=String(rendered.x);canvas.dataset.renderY=String(rendered.y);canvas.dataset.renderHeading=String(rendered.heading);
   if(replay.throttleData){
     const markers=throttleMarkers(replay.throttleData),left=Math.max(12,width-230);
     context.fillStyle='#10202de8';context.fillRect(left-6,8,224,markers.length*16+10);
@@ -403,7 +422,7 @@ function draw() {
       pointPath(points); context.strokeStyle = color(state.id); context.globalAlpha = state.id === selected ? .65 : .4;
       context.lineWidth = 1.6; context.stroke(); context.globalAlpha = 1;
     }
-    if ($('targets').checked) {
+    if (advancedView && $('targets').checked) {
       const section = crossSection(geometry, state.reference);
       const at = offset => ({ x: section.point.x + section.normal.x * offset, y: section.point.y + section.normal.y * offset });
       pointPath([at(state.offset), at(state.target)]); context.strokeStyle = '#ffe095'; context.lineWidth = 1; context.setLineDash([3, 3]); context.stroke(); context.setLineDash([]);
@@ -420,9 +439,17 @@ function draw() {
       pointPath([part.start, part.end]); context.lineCap = 'round'; context.strokeStyle = part.component === 'Handlebar' ? '#fff4db' : color(state.id);
       context.lineWidth = part.radiusMeters * 2 * camera.scale; context.stroke();
     }
+    // A minimum-size UI symbol preserves recorded heading and XY; it is not a footprint.
+    if(geometry.dimensions.overallMechanicalLengthMeters*camera.scale<16){
+      context.save();context.translate(pos.x,pos.y);context.rotate(-state.heading);
+      context.fillStyle=color(state.id);context.strokeStyle='#09141e';context.lineWidth=1.2;
+      context.beginPath();context.moveTo(9,0);context.lineTo(2,-3.5);context.lineTo(-7,-3);context.lineTo(-7,3);context.lineTo(2,3.5);context.closePath();context.fill();context.stroke();
+      context.fillStyle='#fff4db';context.fillRect(4,-3,2,6);context.fillStyle='#14222a';context.fillRect(-9,-2,3,4);context.restore();
+    }
     context.lineCap = 'butt'; context.globalAlpha = 1;
-    if (state.id === selected && $('vectors').checked) drawMotion(state);
-    const labelX = pos.x + 11, labelY = pos.y - 12;
+    if (advancedView && state.id === selected && $('vectors').checked) drawMotion(state);
+    const slot=[...replay.tracks.keys()].indexOf(state.id);
+    const labelX = pos.x + (states.length===1||slot%2?11:-25), labelY = pos.y + (slot<2?-12:18);
     context.font = '600 12px Segoe UI'; context.lineWidth = 4; context.strokeStyle = '#10202d'; context.strokeText(`R${state.id}`, labelX, labelY);
     context.fillStyle = color(state.id); context.fillText(`R${state.id}`, labelX, labelY);
   }
@@ -460,6 +487,7 @@ function recordClip() {
 async function loadScenario(key,keepTime=null) {
   if (clipRecorder) clipRecorder.stop();
   const generation = ++loadGeneration; setPlaying(false); $('load-state').hidden = false; $('load-state').classList.remove('error');
+  document.querySelector('.brand p').textContent=[...$('scenario').options].find(option=>option.value===key)?.textContent??'Zapis historyczny';
   zigzagPanel=null;$('zigzag-analysis').hidden=true;
   $('free-racing-analysis').hidden=true;
   $('free-learning-analysis').hidden=true;
@@ -468,6 +496,24 @@ async function loadScenario(key,keepTime=null) {
   $('outer-limit').disabled=['free-racing','free-learning','robust-learning','extended-learning','full-throttle-learning','rider-decision','track-awareness','multi-action','speed-throttle','causal-yaw','constraints143','standing144'].includes(key);
   $('load-state').textContent = 'Wczytywanie zaakceptowanych stanów…';
   try {
+    if(key==='study172'){
+      const data=await loadStudy172();if(generation!==loadGeneration)return;
+      geometry=data.geometry;replay=data.replay;selected=[...replay.tracks.keys()][0];comparisonTrails=[];widthGeometries=[];
+      for(const id of ['width-controls','width-comparison','comparison-legend','safety-note','record-clip'])$(id).hidden=true;
+      $('recording-mode').hidden=false;$('recording-mode').textContent='Solo — #172 · S3-K4 · trzy pełne okrążenia';
+      document.querySelector('.brand p').textContent='Aktualny zapis autonomicznego sterownika · jeden motocykl';
+      document.querySelector('.map-title span').textContent='PROGRESSIVE-B · GEOMETRIA EKSPERYMENTALNA';
+      document.querySelector('.map-title small').textContent='Geometria symulatora · nie jest dokładnym odwzorowaniem Motoareny';
+      canvas.setAttribute('aria-label','Stadion progressive-b z rzeczywistej geometrii #172, jeden motocykl, trzy okrążenia');
+      $('smooth').checked=true;$('targets').checked=false;$('vectors').checked=false;$('outer-limit').checked=false;$('compare-lines').checked=false;$('rate').value='1';
+      $('targets').disabled=true;$('outer-limit').disabled=true;
+      $('sampling-note').textContent=replay.study172.samples+' natywnych stanów · interpolacja wyłącznie obrazu';
+      $('riders').replaceChildren();for(const id of replay.tracks.keys()){
+        const button=document.createElement('button');button.textContent='R'+id;button.dataset.id=String(id);button.style.setProperty('--rider',color(id));button.addEventListener('click',()=>chooseRider(id));$('riders').append(button);
+      }
+      $('source-count').textContent='1 motocykl · Solo — #172';$('scrub').max=String(replay.duration);$('scrub').step='0.001';
+      setTime(keepTime??Number(new URL(location.href).searchParams.get('t')??0));chooseRider(selected);fit();$('load-state').hidden=true;return;
+    }
     if(key==='viable154'||key==='safety153'||key==='efficient152'||key==='contingency151'||key==='robust150'||key==='standing144'||key==='corner145'||key==='planning146'||key==='efficient147'||key==='speed148'||key==='tyre149'){
       const data=await (key==='viable154'?loadViable154:key==='safety153'?loadSafety153:key==='efficient152'?loadEfficient152:key==='contingency151'?loadContingency151:key==='robust150'?loadRobust150:key==='tyre149'?loadTyre149:key==='speed148'?loadSpeed148:key==='efficient147'?loadEfficient147:key==='planning146'?loadPlanning146:key==='corner145'?loadCorner145:loadStanding144)(fetch,new URL(location.href).searchParams.get('run')??(key==='corner145'?'K1':null));if(generation!==loadGeneration)return;
       geometry=data.geometry;replay=data.replay;selected=[...replay.tracks.keys()][0];comparisonTrails=[];widthGeometries=[];
@@ -476,7 +522,7 @@ async function loadScenario(key,keepTime=null) {
       document.querySelector('.brand p').textContent=data.index.Title;
       $('safety-note').hidden=false;$('safety-note').className='safety-note'+(data.run.Outcome==='completed'?'':' unsafe');
       $('safety-note').textContent=data.index.Note;
-      document.querySelector('.map-title span').textContent='MOTOARENA · PROGRESSIVE B';document.querySelector('.map-title small').textContent='Start35m przed łukiem · ciągłe native · bez resetów';
+      document.querySelector('.map-title span').textContent='TOR EKSPERYMENTALNY · PROGRESSIVE-B';document.querySelector('.map-title small').textContent='Start35m przed łukiem · ciągłe native · bez resetów';
       $('smooth').checked=false;$('targets').checked=false;$('outer-limit').checked=false;$('rate').value='1';
       $('record-clip').hidden=typeof MediaRecorder==='undefined'||!canvas.captureStream;
       $('sampling-note').textContent=data.run.Riders.reduce((n,r)=>n+r.Samples.length,0)+' natywnych stanów · bez ekstrapolacji';
@@ -709,7 +755,13 @@ $('scenario').addEventListener('change', e => {
   const url = new URL(location.href); url.searchParams.set('case', e.target.value);url.searchParams.delete('run');url.searchParams.delete('group'); history.replaceState(null, '', url);
   loadScenario(e.target.value);
 });
-$('play').addEventListener('click', () => { if (replay && time >= replay.duration) setTime(0); setPlaying(!playing); });
+$('play').addEventListener('click', () => { if (replay && time >= replay.duration) setTime(0); setPlaying(true); });
+$('pause').addEventListener('click',()=>setPlaying(false));
+$('restart').addEventListener('click',()=>{setPlaying(false);setTime(0);});
+$('advanced-toggle').addEventListener('click',()=>{const shown=document.body.classList.toggle('advanced');$('advanced-toggle').setAttribute('aria-expanded',String(shown));dirty=true;lastPanelTime=-1;});
+for(const button of document.querySelectorAll('[data-rate]'))button.addEventListener('click',()=>{$('rate').value=button.dataset.rate;syncRate();});
+function syncRate(){for(const button of document.querySelectorAll('[data-rate]'))button.setAttribute('aria-pressed',String(button.dataset.rate===$('rate').value));}
+$('rate').addEventListener('change',syncRate);
 $('scrub').addEventListener('input', e => { setPlaying(false); setTime(e.target.value); });
 for (const [id, direction] of [['previous', -1], ['next', 1]]) $(id).addEventListener('click', () => { if (!replay) return; setPlaying(false); const t = replay.step(time, direction); if (t != null) setTime(t); });
 $('fit').addEventListener('click', fit); $('zoom-in').addEventListener('click', () => zoom(1.25)); $('zoom-out').addEventListener('click', () => zoom(.8));
@@ -741,7 +793,7 @@ canvas.addEventListener('pointerup', e => {
 canvas.addEventListener('pointercancel', () => { drag = null; });
 document.addEventListener('keydown', e => {
   if (['INPUT', 'SELECT', 'BUTTON', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
-  if (e.code === 'Space') { e.preventDefault(); $('play').click(); }
+  if (e.code === 'Space') { e.preventDefault(); if(replay&&time>=replay.duration)setTime(0); setPlaying(!playing); }
   if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') { e.preventDefault(); $(e.key === 'ArrowLeft' ? 'previous' : 'next').click(); }
 });
 new ResizeObserver(resize).observe($('canvas-wrap'));
@@ -757,6 +809,6 @@ try {
   const response = await fetch('./geometry.json'); if (!response.ok) throw new Error('Nie znaleziono geometrii modelu.');
   nativeGeometry = await response.json(); geometry = nativeGeometry;
   const requested = new URL(location.href).searchParams.get('case');
-  $('scenario').value = [...$('scenario').options].some(o => o.value === requested) ? requested : 'latest-two-bends';
+  $('scenario').value = [...$('scenario').options].some(o => o.value === requested) ? requested : 'study172';
   await loadScenario($('scenario').value);
 } catch (error) { $('load-state').classList.add('error'); $('load-state').textContent = `${error.message}\nUruchom statyczny serwer HTTP z katalogu repozytorium (instrukcja w README).`; }
