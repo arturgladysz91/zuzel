@@ -1,3 +1,43 @@
+# Stadion 2D — aktualny przejazd #172
+
+Z katalogu głównego repozytorium na gałęzi `fix/restore-stadium-viewer-172`:
+
+```powershell
+.\uruchom-stadion.ps1
+```
+
+Skrypt wymaga Python 3.8+ (`py`, `python` lub `python3` w PATH), wybiera wolny
+port, uruchamia serwer wyłącznie na `127.0.0.1`, wypisuje dokładny URL i otwiera
+domyślną przeglądarkę. Ctrl+C zatrzymuje serwer. Opcjonalnie:
+`.\uruchom-stadion.ps1 -Port 8000` lub `-NoBrowser`. Nie otwieraj HTML przez
+`file://`: moduły i pobieranie danych wymagają HTTP. Nie potrzeba npm, .NET ani
+uruchamiania symulatora do oglądania zapisu.
+
+Domyślnie otwiera się **Solo — #172 · S3-K4 · trzy okrążenia**, przejazd nominalny
+`v1-K4-S1` z zamrożonego commitu `c5f0a4cc4de34fc4c8c47ef912cafabf34055f29`.
+5636 natywnych stanów obejmuje start i pierwszą rzeczywistą próbkę po trzeciej
+mecie (56,230 s; crossing 56,22515215317 s). Sekunda rezerwy jest pominięta.
+Nie wygenerowano nowych światów. Menu udostępnia też **HISTORYCZNY #95 ·
+4 zawodników · starsza fizyka** i zachowuje pozostałe wcześniejsze przypadki.
+
+Start, Pauza, Od początku, tempo 0,25×/0,5×/1×/2×, suwak, zoom i Śledź Rn
+działają na zapisanych stanach. Cały tor przywraca dopasowanie. Zaawansowane
+odkrywa dotychczasowe nakładki, telemetrię i oś zdarzeń. Symbole mają minimalny
+rozmiar przy oddaleniu; położenie i orientacja nadal pochodzą z rzeczywistego
+XY/heading. Pełny mechaniczny obrys pozostaje w metrycznej skali.
+
+**progressive-b to geometria eksperymentalna**, nie dokładny pomiar Motoareny.
+Eksport zawiera przekroje `TrackFrame` z archiwalnego `geometry.json`, bez
+rysowania zastępczego owalu. `export172.py --check` sprawdza projekcję danych
+i zapieczętowane wejścia. Wygładzane są tylko XY/heading do renderingu; gaz,
+skręt, prędkość i znaczniki mety zachowują czasy pomiarów. Pełne decyzje
+pozostają w archiwum #172; ten prosty widok pokazuje aktywne sterowanie próbek,
+bez odtwarzania komend lub nowej fizyki w JS.
+
+[Przyczyna niedostępności, testy UI i zrzuty](../../docs/replay-viewer-restoration/README.md).
+
+Poniższe rozdziały zachowują instrukcje historycznych nagrań.
+
 # Badanie strat w łukach — study #145
 
 Z repozytorium: `python -m http.server 8018 --bind 127.0.0.1`.
