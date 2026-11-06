@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../autonomous-fast-corner/autonomous-fast-corner.csproj" />
+    <Compile Include="../autonomous-fast-corner/Policy.cs" Link="Policy166.cs" />
+    <Compile Include="../autonomous-fast-corner/Teacher.cs" Link="Teacher166.cs" />
+    <Compile Include="../autonomous-fast-corner/Runner.cs" Link="Runner166.cs" />
+    <Compile Include="../fast-two-corners/Course.cs" Link="Course167.cs" />
+    <Compile Include="../whole-corner-planning/BendMap.cs" Link="BendMap171.cs" />
+    <Compile Include="../three-lap-global-planning/CyclicReference172.cs" Link="CyclicReference172.cs" />
+    <Compile Include="../three-lap-global-planning/Planner172.Generated.cs" Link="Planner172.cs" />
+    <Compile Include="../three-lap-global-planning/NativeWorld172.Generated.cs" Link="NativeWorld172.cs" />
+    <Compile Include="../three-lap-global-planning/Inspect172.cs" Link="Inspect172.cs" />
+  </ItemGroup>
+</Project>
