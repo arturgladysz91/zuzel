@@ -1,0 +1,51 @@
+name: Study 174 isolated verification
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: study-174-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  sealed-evidence:
+    name: Study 174 build and zero-world verification
+    runs-on: windows-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: pwsh
+    env:
+      NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+      DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+    steps:
+      - run: git config --global core.autocrlf false
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/cache@v4
+        with:
+          path: ${{ env.NUGET_PACKAGES }}
+          key: study174-${{ runner.os }}-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: nuget-${{ runner.os }}-net8-
+      - run: dotnet restore tools/state-feasible-throttle/state-feasible-throttle.csproj --locked-mode
+      - run: dotnet build tools/state-feasible-throttle/state-feasible-throttle.csproj -c Release --no-restore --warnaserror
+      - name: Require default OFF and verify sealed evidence without new worlds
+        run: |
+          git rev-parse HEAD
+          dotnet tools/state-feasible-throttle/bin/Release/net8.0/state-feasible-throttle.dll
+          if ($LASTEXITCODE -ne 2) { throw 'Study 174 must be OFF without explicit arguments' }
+          $global:LASTEXITCODE = 0
+          python tools/state-feasible-throttle/verify174.py
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }

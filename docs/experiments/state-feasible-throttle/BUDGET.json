@@ -1,0 +1,23 @@
+{
+  "measured_stages_cpu_seconds": {
+    "analysis.cpu.json": 4.984375,
+    "c1.done.json": 17.109375,
+    "d1.done.json": 9.328125,
+    "pack1.cpu.json": 0.03125,
+    "x1.done.json": 5.375,
+    "archive-proof.json": 0.546875
+  },
+  "measured_cpu_seconds": 37.375,
+  "final_metadata_reserve_seconds": 1,
+  "charged_cpu_seconds": 38.375,
+  "maximum_cpu_seconds": 300,
+  "native_worlds": 3,
+  "maximum_native_worlds": 24,
+  "development_worlds": 3,
+  "integration_worlds": 0,
+  "validation_worlds": 0,
+  "heldout_unconsumed": true,
+  "full_s3_gate": false,
+  "excluded": "Compilation, regression tests and CI; no new #174 native worlds or forecasts in verification",
+  "reserve": "One CPU-second conservatively charged for writing final small metadata and manifest after the packaging sample"
+}
