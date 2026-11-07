@@ -1,0 +1,3676 @@
+{
+  "verdict": "PARTIAL",
+  "functional": "NOT ESTABLISHED: no 8-pair S3 after performance gate failed",
+  "sport": "NOT TESTED; threshold remains 5 percent",
+  "performance": "FAIL 200ms period; warm admission costs exceed 700ms",
+  "states": [
+    {
+      "Id": "P1",
+      "Trial": "v1-K4-S1",
+      "Reason": "first >=95% roll-off, lap 1 main",
+      "Evaluation": {
+        "Time": 10.599999999999994,
+        "StateSha256": "9686B07335ADB140C46D567EFE39B1855111510BE148A67DAE8D234823CF7C53",
+        "Reference": 138.57816051721574,
+        "CrankOmega": 851.9154844614203,
+        "Historical": {
+          "SteeringRadians": -0.008499995,
+          "Drive": 0.17115344
+        },
+        "Proposed": {
+          "SteeringRadians": -0.008499995,
+          "Drive": 0.95
+        },
+        "OldCanPrepare": true,
+        "HistoricalGate": "K0 action retained",
+        "Admitted": true,
+        "Reason": "admitted: causal whole-bend model predicts common-goal time gain",
+        "CpuSeconds": 1.09375,
+        "Milliseconds": 1018.6825,
+        "Short": [
+          {
+            "Name": "historical",
+            "Action": {
+              "SteeringRadians": -0.008499995,
+              "Drive": 0.17115344
+            },
+            "Legal": true,
+            "Sweep": 3.4375529840794683,
+            "Beta": 0.034229643642902374,
+            "Queries": 44
+          },
+          {
+            "Name": "plus20pp",
+            "Action": {
+              "SteeringRadians": -0.008499995,
+              "Drive": 0.37115344
+            },
+            "Legal": true,
+            "Sweep": 3.4375529840794683,
+            "Beta": 0.034229643642902374,
+            "Queries": 44
+          },
+          {
+            "Name": "95-fixed",
+            "Action": {
+              "SteeringRadians": -0.008499995,
+              "Drive": 0.95
+            },
+            "Legal": true,
+            "Sweep": 3.4375529840794683,
+            "Beta": 0.037664711475372314,
+            "Queries": 44
+          },
+          {
+            "Name": "100-fixed",
+            "Action": {
+              "SteeringRadians": -0.008499995,
+              "Drive": 1
+            },
+            "Legal": true,
+            "Sweep": 3.4375529840794683,
+            "Beta": 0.037893760949373245,
+            "Queries": 44
+          }
+        ],
+        "BaselinePath": {
+          "Kind": "historical",
+          "Reached": true,
+          "Failure": null,
+          "Seconds": 9.67427574610527,
+          "Goal": 311.77874994277954,
+          "Sweep": 1.4042955634934116,
+          "Pose": 1.4954024629036222,
+          "Beta": 0.20404386520385742,
+          "Reviews": 48,
+          "Forecasts": 934,
+          "Queries": 38923,
+          "CpuSeconds": 0.5625
+        },
+        "ProposedPath": {
+          "Kind": "95-pulse",
+          "Reached": true,
+          "Failure": null,
+          "Seconds": 9.581530083874469,
+          "Goal": 311.77874994277954,
+          "Sweep": 1.4243139155853486,
+          "Pose": 1.5154118741799234,
+          "Beta": 0.2605760395526886,
+          "Reviews": 47,
+          "Forecasts": 901,
+          "Queries": 37447,
+          "CpuSeconds": 0.53125
+        }
+      }
+    },
+    {
+      "Id": "P7",
+      "Trial": "v1-K4-S1",
+      "Reason": "middle of first main straight",
+      "Evaluation": {
+        "Time": 11.79999999999999,
+        "StateSha256": "26795AFFC0F2CC8D84848AA0B972BEA72560485451E251B675FE8EE04C343157",
+        "Reference": 163.58701323747636,
+        "CrankOmega": 589.6581597983669,
+        "Historical": {
+          "SteeringRadians": -0.0008497639,
+          "Drive": 0
+        },
+        "Proposed": {
+          "SteeringRadians": -0.0008497639,
+          "Drive": 0.95
+        },
+        "OldCanPrepare": false,
+        "HistoricalGate": "roll-off:entry-speed-budget",
+        "Admitted": true,
+        "Reason": "admitted: causal whole-bend model predicts common-goal time gain",
+        "CpuSeconds": 1.078125,
+        "Milliseconds": 952.3932,
+        "Short": [
+          {
+            "Name": "historical",
+            "Action": {
+              "SteeringRadians": -0.0008497639,
+              "Drive": 0
+            },
+            "Legal": true,
+            "Sweep": 4.343108234740713,
+            "Beta": 0.012560935690999031,
+            "Queries": 44
+          },
+          {
+            "Name": "plus20pp",
+            "Action": {
+              "SteeringRadians": -0.0008497639,
+              "Drive": 0.2
+            },
+            "Legal": true,
+            "Sweep": 4.341454519367032,
+            "Beta": 0.012560935690999031,
+            "Queries": 44
+          },
+          {
+            "Name": "95-fixed",
+            "Action": {
+              "SteeringRadians": -0.0008497639,
+              "Drive": 0.95
+            },
+            "Legal": true,
+            "Sweep": 4.3363934359942595,
+            "Beta": 0.012560935690999031,
+            "Queries": 44
+          },
+          {
+            "Name": "100-fixed",
+            "Action": {
+              "SteeringRadians": -0.0008497639,
+              "Drive": 1
+            },
+            "Legal": true,
+            "Sweep": 4.336206197142571,
+            "Beta": 0.012560935690999031,
+            "Queries": 44
+          }
+        ],
+        "BaselinePath": {
+          "Kind": "historical",
+          "Reached": true,
+          "Failure": null,
+          "Seconds": 8.472159890751207,
+          "Goal": 311.77874994277954,
+          "Sweep": 1.4043933145797507,
+          "Pose": 1.4955744659546495,
+          "Beta": 0.20397302508354187,
+          "Reviews": 42,
+          "Forecasts": 776,
+          "Queries": 32234,
+          "CpuSeconds": 0.59375
+        },
+        "ProposedPath": {
+          "Kind": "95-pulse",
+          "Reached": true,
+          "Failure": null,
+          "Seconds": 8.336391531150479,
+          "Goal": 311.77874994277954,
+          "Sweep": 1.470047496917955,
+          "Pose": 1.561507256267545,
+          "Beta": 0.33817771077156067,
+          "Reviews": 41,
+          "Forecasts": 759,
+          "Queries": 31531,
+          "CpuSeconds": 0.484375
+        }
+      }
+    },
+    {
+      "Id": "P8",
+      "Trial": "v1-K4-S1",
+      "Reason": "preparation immediately before second bend",
+      "Evaluation": {
+        "Time": 12.799999999999986,
+        "StateSha256": "9CC676949BCBB23ADCEFCEBF36240EF6B2839FB27C1BEEB22D4F6704652F9B44",
+        "Reference": 184.59745907068253,
+        "CrankOmega": 563.1429937060631,
+        "Historical": {
+          "SteeringRadians": 0.045014553,
+          "Drive": 0.023615671
+        },
+        "Proposed": {
+          "SteeringRadians": 0.045014553,
+          "Drive": 0.95
+        },
+        "OldCanPrepare": false,
+        "HistoricalGate": "tracked",
+        "Admitted": true,
+        "Reason": "admitted: causal whole-bend model predicts common-goal time gain",
+        "CpuSeconds": 0.84375,
+        "Milliseconds": 795.2003,
+        "Short": [
+          {
+            "Name": "historical",
+            "Action": {
+              "SteeringRadians": 0.045014553,
+              "Drive": 0.023615671
+            },
+            "Legal": true,
+            "Sweep": 3.8516343886368487,
+            "Beta": 0.05981123074889183,
+            "Queries": 44
+          },
+          {
+            "Name": "plus20pp",
+            "Action": {
+              "SteeringRadians": 0.045014553,
+              "Drive": 0.22361568
+            },
+            "Legal": true,
+            "Sweep": 3.849227868991152,
+            "Beta": 0.0611727349460125,
+            "Queries": 44
+          },
+          {
+            "Name": "95-fixed",
+            "Action": {
+              "SteeringRadians": 0.045014553,
+              "Drive": 0.95
+            },
+            "Legal": true,
+            "Sweep": 3.8402988185531672,
+            "Beta": 0.08045826852321625,
+            "Queries": 44
+          },
+          {
+            "Name": "100-fixed",
+            "Action": {
+              "SteeringRadians": 0.045014553,
+              "Drive": 1
+            },
+            "Legal": true,
+            "Sweep": 3.839811474644722,
+            "Beta": 0.0821143239736557,
+            "Queries": 44
+          }
+        ],
+        "BaselinePath": {
+          "Kind": "historical",
+          "Reached": true,
+          "Failure": null,
+          "Seconds": 7.4741741115054054,
+          "Goal": 311.77874994277954,
+          "Sweep": 1.4044983256871935,
+          "Pose": 1.4956160009764294,
+          "Beta": 0.2041633576154709,
+          "Reviews": 37,
+          "Forecasts": 689,
+          "Queries": 28771,
+          "CpuSeconds": 0.421875
+        },
+        "ProposedPath": {
+          "Kind": "95-pulse",
+          "Reached": true,
+          "Failure": null,
+          "Seconds": 7.402279391712007,
+          "Goal": 311.77874994277954,
+          "Sweep": 1.4375585748827113,
+          "Pose": 1.528622442633821,
+          "Beta": 0.28187909722328186,
+          "Reviews": 37,
+          "Forecasts": 724,
+          "Queries": 30265,
+          "CpuSeconds": 0.421875
+        }
+      }
+    },
+    {
+      "Id": "P2",
+      "Trial": "v1-K4-S1",
+      "Reason": "first >=95% roll-off, lap 1 home",
+      "Evaluation": {
+        "Time": 19.399999999999963,
+        "StateSha256": "5B908CA8011313194FC2FF29BA778CF806A81467C3D7CAF0C4AE6703E30F6BE0",
+        "Reference": 294.0557579922676,
+        "CrankOmega": 729.6854145276932,
+        "Historical": {
+          "SteeringRadians": -0.023511788,
+          "Drive": 0.40543512
+        },
+        "Proposed": {
+          "SteeringRadians": -0.023511788,
+          "Drive": 0.95
+        },
+        "OldCanPrepare": true,
+        "HistoricalGate": "tracked",
+        "Admitted": true,
+        "Reason": "admitted: causal whole-bend model predicts common-goal time gain",
+        "CpuSeconds": 1,
+        "Milliseconds": 1005.0746,
+        "Short": [
+          {
+            "Name": "historical",
+            "Action": {
+              "SteeringRadians": -0.023511788,
+              "Drive": 0.40543512
+            },
+            "Legal": true,
+            "Sweep": 3.0185697391837527,
+            "Beta": 0.03806845471262932,
+            "Queries": 44
+          },
+          {
+            "Name": "plus20pp",
+            "Action": {
+              "SteeringRadians": -0.023511788,
+              "Drive": 0.60543513
+            },
+            "Legal": true,
+            "Sweep": 3.0185697391837527,
+            "Beta": 0.038266364485025406,
+            "Queries": 44
+          },
+          {
+            "Name": "95-fixed",
+            "Action": {
+              "SteeringRadians": -0.023511788,
+              "Drive": 0.95
+            },
+            "Legal": true,
+            "Sweep": 3.0185697391837527,
+            "Beta": 0.040906161069869995,
+            "Queries": 44
+          },
+          {
+            "Name": "100-fixed",
+            "Action": {
+              "SteeringRadians": -0.023511788,
+              "Drive": 1
+            },
+            "Legal": true,
+            "Sweep": 3.0185697391837527,
+            "Beta": 0.04126624017953873,
+            "Queries": 44
+          }
+        ],
+        "BaselinePath": {
+          "Kind": "historical",
+          "Reached": true,
+          "Failure": null,
+          "Seconds": 9.758772868957479,
+          "Goal": 471.1681249141693,
+          "Sweep": 1.425986511868682,
+          "Pose": 1.5170820153857385,
+          "Beta": 0.23785941302776337,
+          "Reviews": 48,
+          "Forecasts": 949,
+          "Queries": 39619,
+          "CpuSeconds": 0.515625
+        },
+        "ProposedPath": {
+          "Kind": "95-pulse",
+          "Reached": true,
+          "Failure": null,
+          "Seconds": 9.738325293713967,
+          "Goal": 471.1681249141693,
+          "Sweep": 1.4646446935397297,
+          "Pose": 1.5557886924835604,
+          "Beta": 0.2814520597457886,
+          "Reviews": 48,
+          "Forecasts": 920,
+          "Queries": 38314,
+          "CpuSeconds": 0.484375
+        }
+      }
+    },
+    {
+      "Id": "P3",
+      "Trial": "v1-K4-S1",
+      "Reason": "first >=95% roll-off, lap 2 main",
+      "Evaluation": {
+        "Time": 28.199999999999932,
+        "StateSha256": "2744C24BAB390D6A03872578ACF05EDF4C259206FDFAA2A729243989D5E12D10",
+        "Reference": 451.9636838364601,
+        "CrankOmega": 681.7767154934073,
+        "Historical": {
+          "SteeringRadians": -0.02590125,
+          "Drive": 0.47772342
+        },
+        "Proposed": {
+          "SteeringRadians": -0.02590125,
+          "Drive": 0.95
+        },
+        "OldCanPrepare": true,
+        "HistoricalGate": "tracked",
+        "Admitted": true,
+        "Reason": "admitted: causal whole-bend model predicts common-goal time gain",
+        "CpuSeconds": 1.015625,
+        "Milliseconds": 1020.3906,
+        "Short": [
+          {
+            "Name": "historical",
+            "Action": {
+              "SteeringRadians": -0.02590125,
+              "Drive": 0.47772342
+            },
+            "Legal": true,
+            "Sweep": 2.771721559516151,
+            "Beta": 0.0428791344165802,
+            "Queries": 44
+          },
+          {
+            "Name": "plus20pp",
+            "Action": {
+              "SteeringRadians": -0.02590125,
+              "Drive": 0.6777234
+            },
+            "Legal": true,
+            "Sweep": 2.771721559516151,
+            "Beta": 0.04463217034935951,
+            "Queries": 44
+          },
+          {
+            "Name": "95-fixed",
+            "Action": {
+              "SteeringRadians": -0.02590125,
+              "Drive": 0.95
+            },
+            "Legal": true,
+            "Sweep": 2.771721559516151,
+            "Beta": 0.04783676564693451,
+            "Queries": 44
+          },
+          {
+            "Name": "100-fixed",
+            "Action": {
+              "SteeringRadians": -0.02590125,
+              "Drive": 1
+            },
+            "Legal": true,
+            "Sweep": 2.771721559516151,
+            "Beta": 0.04831930249929428,
+            "Queries": 44
+          }
+        ],
+        "BaselinePath": {
+          "Kind": "historical",
+          "Reached": true,
+          "Failure": null,
+          "Seconds": 9.889010013465864,
+          "Goal": 630.5574998855591,
+          "Sweep": 1.4250861992533759,
+          "Pose": 1.5161361182481157,
+          "Beta": 0.318623811006546,
+          "Reviews": 49,
+          "Forecasts": 979,
+          "Queries": 40829,
+          "CpuSeconds": 0.5
+        },
+        "ProposedPath": {
+          "Kind": "95-pulse",
+          "Reached": true,
+          "Failure": null,
+          "Seconds": 9.828220288823822,
+          "Goal": 630.5574998855591,
+          "Sweep": 1.4613658765127207,
+          "Pose": 1.5526812913884482,
+          "Beta": 0.2647848427295685,
+          "Reviews": 49,
+          "Forecasts": 949,
+          "Queries": 39553,
+          "CpuSeconds": 0.515625
+        }
+      }
+    },
+    {
+      "Id": "E41",
+      "Trial": "v1-K4-S1",
+      "Reason": "Additional authentic second-lap review",
+      "Evaluation": {
+        "Time": 29.19999999999993,
+        "StateSha256": "7D24BAE5CD122031B1ADAC1F6978748796E2C9F6F1BCCF22EA956425D6675D6F",
+        "Reference": 472.0623786377907,
+        "CrankOmega": 637.2685912342432,
+        "Historical": {
+          "SteeringRadians": 0.0014999993,
+          "Drive": 0.10910493
+        },
+        "Proposed": {
+          "SteeringRadians": 0.0014999993,
+          "Drive": 0.95
+        },
+        "OldCanPrepare": false,
+        "HistoricalGate": "roll-off:entry-speed-budget",
+        "Admitted": false,
+        "Reason": "whole-bend model rejected: MODEL_SWEPT065",
+        "CpuSeconds": 0.6875,
+        "Milliseconds": 691.6761,
+        "Short": [
+          {
+            "Name": "historical",
+            "Action": {
+              "SteeringRadians": 0.0014999993,
+              "Drive": 0.10910493
+            },
+            "Legal": true,
+            "Sweep": 4.654368141332561,
+            "Beta": 0.028619222342967987,
+            "Queries": 44
+          },
+          {
+            "Name": "plus20pp",
+            "Action": {
+              "SteeringRadians": 0.0014999993,
+              "Drive": 0.30910492
+            },
+            "Legal": true,
+            "Sweep": 4.654368141332561,
+            "Beta": 0.028619222342967987,
+            "Queries": 44
+          },
+          {
+            "Name": "95-fixed",
+            "Action": {
+              "SteeringRadians": 0.0014999993,
+              "Drive": 0.95
+            },
+            "Legal": true,
+            "Sweep": 4.654368141332561,
+            "Beta": 0.028619222342967987,
+            "Queries": 44
+          },
+          {
+            "Name": "100-fixed",
+            "Action": {
+              "SteeringRadians": 0.0014999993,
+              "Drive": 1
+            },
+            "Legal": true,
+            "Sweep": 4.654368141332561,
+            "Beta": 0.028619222342967987,
+            "Queries": 44
+          }
+        ],
+        "BaselinePath": {
+          "Kind": "historical",
+          "Reached": true,
+          "Failure": null,
+          "Seconds": 8.889701958030582,
+          "Goal": 630.5574998855591,
+          "Sweep": 1.4249066321271369,
+          "Pose": 1.5159273463360528,
+          "Beta": 0.31851354241371155,
+          "Reviews": 44,
+          "Forecasts": 807,
+          "Queries": 33468,
+          "CpuSeconds": 0.46875
+        },
+        "ProposedPath": {
+          "Kind": "95-pulse",
+          "Reached": false,
+          "Failure": "MODEL_SWEPT065",
+          "Seconds": 0,
+          "Goal": 630.5574998855591,
+          "Sweep": -0.5148357476944921,
+          "Pose": -0.44471144241683896,
+          "Beta": 0.7737575769424438,
+          "Reviews": 23,
+          "Forecasts": 176,
+          "Queries": 6569,
+          "CpuSeconds": 0.21875
+        }
+      },
+      "first_model_violation": {
+        "time": 33.83,
+        "reference": 557.3996552557031,
+        "beta_degrees": 36.981125438794685,
+        "pose": 0.7156999795244274,
+        "swept": 0.642231640449442
+      }
+    },
+    {
+      "Id": "E25",
+      "Trial": "v1-K4-S1",
+      "Reason": "Additional authentic second-lap review",
+      "Evaluation": {
+        "Time": 29.799999999999926,
+        "StateSha256": "9845E441FDEF01659C2EA20A71C81F909404CE39DD46866656888B48EABB2B5E",
+        "Reference": 485.2550706791878,
+        "CrankOmega": 607.9549606882587,
+        "Historical": {
+          "SteeringRadians": -0.0015150638,
+          "Drive": 0
+        },
+        "Proposed": {
+          "SteeringRadians": -0.0015150638,
+          "Drive": 0.95
+        },
+        "OldCanPrepare": false,
+        "HistoricalGate": "roll-off:entry-speed-budget",
+        "Admitted": false,
+        "Reason": "whole-bend model rejected: MODEL_SWEPT065",
+        "CpuSeconds": 0.65625,
+        "Milliseconds": 663.6072,
+        "Short": [
+          {
+            "Name": "historical",
+            "Action": {
+              "SteeringRadians": -0.0015150638,
+              "Drive": 0
+            },
+            "Legal": true,
+            "Sweep": 4.378612414311848,
+            "Beta": 0.010115932673215866,
+            "Queries": 44
+          },
+          {
+            "Name": "plus20pp",
+            "Action": {
+              "SteeringRadians": -0.0015150638,
+              "Drive": 0.2
+            },
+            "Legal": true,
+            "Sweep": 4.37693206720544,
+            "Beta": 0.010115932673215866,
+            "Queries": 44
+          },
+          {
+            "Name": "95-fixed",
+            "Action": {
+              "SteeringRadians": -0.0015150638,
+              "Drive": 0.95
+            },
+            "Legal": true,
+            "Sweep": 4.371932394301615,
+            "Beta": 0.010115932673215866,
+            "Queries": 44
+          },
+          {
+            "Name": "100-fixed",
+            "Action": {
+              "SteeringRadians": -0.0015150638,
+              "Drive": 1
+            },
+            "Legal": true,
+            "Sweep": 4.371718244886555,
+            "Beta": 0.010115932673215866,
+            "Queries": 44
+          }
+        ],
+        "BaselinePath": {
+          "Kind": "historical",
+          "Reached": true,
+          "Failure": null,
+          "Seconds": 8.286741310575259,
+          "Goal": 630.5574998855591,
+          "Sweep": 1.431192370078383,
+          "Pose": 1.5221637557887564,
+          "Beta": 0.31851521134376526,
+          "Reviews": 41,
+          "Forecasts": 744,
+          "Queries": 30956,
+          "CpuSeconds": 0.453125
+        },
+        "ProposedPath": {
+          "Kind": "95-pulse",
+          "Reached": false,
+          "Failure": "MODEL_SWEPT065",
+          "Seconds": 0,
+          "Goal": 630.5574998855591,
+          "Sweep": 0.16576237201713445,
+          "Pose": 0.23397990578395939,
+          "Beta": 0.8224976658821106,
+          "Reviews": 20,
+          "Forecasts": 113,
+          "Queries": 3982,
+          "CpuSeconds": 0.203125
+        }
+      },
+      "first_model_violation": {
+        "time": 33.93,
+        "reference": 558.246874442437,
+        "beta_degrees": 43.76029904542512,
+        "pose": 0.6937122362730062,
+        "swept": 0.62376531412302
+      }
+    },
+    {
+      "Id": "E12",
+      "Trial": "v1-K4-S1",
+      "Reason": "Additional authentic second-lap review",
+      "Evaluation": {
+        "Time": 30.399999999999924,
+        "StateSha256": "354E6ACE257B78C5AF7B34A8073D1D4DC068D35A775B8B893A4DC8FD03F8F167",
+        "Reference": 498.3126466202736,
+        "CrankOmega": 588.0167308844515,
+        "Historical": {
+          "SteeringRadians": 0.026294854,
+          "Drive": 0
+        },
+        "Proposed": {
+          "SteeringRadians": 0.026294854,
+          "Drive": 0.95
+        },
+        "OldCanPrepare": false,
+        "HistoricalGate": "tracked",
+        "Admitted": false,
+        "Reason": "whole-bend model rejected: BETA45",
+        "CpuSeconds": 0.59375,
+        "Milliseconds": 599.0248,
+        "Short": [
+          {
+            "Name": "historical",
+            "Action": {
+              "SteeringRadians": 0.026294854,
+              "Drive": 0
+            },
+            "Legal": true,
+            "Sweep": 4.0645572413476385,
+            "Beta": 0.008968514390289783,
+            "Queries": 44
+          },
+          {
+            "Name": "plus20pp",
+            "Action": {
+              "SteeringRadians": 0.026294854,
+              "Drive": 0.2
+            },
+            "Legal": true,
+            "Sweep": 4.063116016451622,
+            "Beta": 0.009084101766347885,
+            "Queries": 44
+          },
+          {
+            "Name": "95-fixed",
+            "Action": {
+              "SteeringRadians": 0.026294854,
+              "Drive": 0.95
+            },
+            "Legal": true,
+            "Sweep": 4.05897767574464,
+            "Beta": 0.009658207185566425,
+            "Queries": 44
+          },
+          {
+            "Name": "100-fixed",
+            "Action": {
+              "SteeringRadians": 0.026294854,
+              "Drive": 1
+            },
+            "Legal": true,
+            "Sweep": 4.058845031620273,
+            "Beta": 0.009647720493376255,
+            "Queries": 44
+          }
+        ],
+        "BaselinePath": {
+          "Kind": "historical",
+          "Reached": true,
+          "Failure": null,
+          "Seconds": 7.686765338908426,
+          "Goal": 630.5574998855591,
+          "Sweep": 1.4311752771024402,
+          "Pose": 1.5221466313639127,
+          "Beta": 0.3185521364212036,
+          "Reviews": 38,
+          "Forecasts": 703,
+          "Queries": 29344,
+          "CpuSeconds": 0.390625
+        },
+        "ProposedPath": {
+          "Kind": "95-pulse",
+          "Reached": false,
+          "Failure": "BETA45",
+          "Seconds": 0,
+          "Goal": 630.5574998855591,
+          "Sweep": 1.9542717696369514,
+          "Pose": 2.0173343433079243,
+          "Beta": 0.8971841931343079,
+          "Reviews": 16,
+          "Forecasts": 199,
+          "Queries": 8036,
+          "CpuSeconds": 0.203125
+        }
+      },
+      "first_model_violation": {
+        "time": 33.660000000000004,
+        "reference": 553.5341323712624,
+        "beta_degrees": 45.37530091213832,
+        "pose": 2.7548456200749563,
+        "swept": 2.6881804021499223
+      }
+    },
+    {
+      "Id": "P4",
+      "Trial": "v1-K4-S1",
+      "Reason": "first >=95% roll-off, lap 2 home",
+      "Evaluation": {
+        "Time": 37.19999999999999,
+        "StateSha256": "7DBBAD600ECC9FCDE3468D2A7A3AC0E1E1433F2C1B7F540B87F690FCA494CF14",
+        "Reference": 612.6249990391732,
+        "CrankOmega": 719.8944287088843,
+        "Historical": {
+          "SteeringRadians": -0.028007912,
+          "Drive": 0.41373244
+        },
+        "Proposed": {
+          "SteeringRadians": -0.028007912,
+          "Drive": 0.95
+        },
+        "OldCanPrepare": true,
+        "HistoricalGate": "tracked",
+        "Admitted": true,
+        "Reason": "admitted: causal whole-bend model predicts common-goal time gain",
+        "CpuSeconds": 0.953125,
+        "Milliseconds": 973.2323,
+        "Short": [
+          {
+            "Name": "historical",
+            "Action": {
+              "SteeringRadians": -0.028007912,
+              "Drive": 0.41373244
+            },
+            "Legal": true,
+            "Sweep": 3.002758699180643,
+            "Beta": 0.0461205393075943,
+            "Queries": 44
+          },
+          {
+            "Name": "plus20pp",
+            "Action": {
+              "SteeringRadians": -0.028007912,
+              "Drive": 0.61373246
+            },
+            "Legal": true,
+            "Sweep": 3.002758699180643,
+            "Beta": 0.04815392196178436,
+            "Queries": 44
+          },
+          {
+            "Name": "95-fixed",
+            "Action": {
+              "SteeringRadians": -0.028007912,
+              "Drive": 0.95
+            },
+            "Legal": true,
+            "Sweep": 3.002758699180643,
+            "Beta": 0.0518646165728569,
+            "Queries": 44
+          },
+          {
+            "Name": "100-fixed",
+            "Action": {
+              "SteeringRadians": -0.028007912,
+              "Drive": 1
+            },
+            "Legal": true,
+            "Sweep": 3.002758699180643,
+            "Beta": 0.05231264978647232,
+            "Queries": 44
+          }
+        ],
+        "BaselinePath": {
+          "Kind": "historical",
+          "Reached": true,
+          "Failure": null,
+          "Seconds": 9.77545257811503,
+          "Goal": 789.9468748569489,
+          "Sweep": 1.421524480425168,
+          "Pose": 1.5125451235327432,
+          "Beta": 0.23268774151802063,
+          "Reviews": 48,
+          "Forecasts": 954,
+          "Queries": 39881,
+          "CpuSeconds": 0.484375
+        },
+        "ProposedPath": {
+          "Kind": "95-pulse",
+          "Reached": true,
+          "Failure": null,
+          "Seconds": 9.743345659359036,
+          "Goal": 789.9468748569489,
+          "Sweep": 1.4681776830050126,
+          "Pose": 1.559362603912015,
+          "Beta": 0.2641010582447052,
+          "Reviews": 48,
+          "Forecasts": 945,
+          "Queries": 39382,
+          "CpuSeconds": 0.46875
+        }
+      }
+    },
+    {
+      "Id": "P5",
+      "Trial": "v1-K4-S1",
+      "Reason": "first >=95% roll-off, lap 3 main",
+      "Evaluation": {
+        "Time": 46,
+        "StateSha256": "0F7E3693D815E1A49F96798911F509DE47B04977DAD5D2F7AD16DD7A06EAC839",
+        "Reference": 770.4729254174238,
+        "CrankOmega": 676.7435956553434,
+        "Historical": {
+          "SteeringRadians": -0.022759901,
+          "Drive": 0.4887297
+        },
+        "Proposed": {
+          "SteeringRadians": -0.022759901,
+          "Drive": 0.95
+        },
+        "OldCanPrepare": true,
+        "HistoricalGate": "tracked",
+        "Admitted": true,
+        "Reason": "admitted: causal whole-bend model predicts common-goal time gain",
+        "CpuSeconds": 0.953125,
+        "Milliseconds": 974.8407,
+        "Short": [
+          {
+            "Name": "historical",
+            "Action": {
+              "SteeringRadians": -0.022759901,
+              "Drive": 0.4887297
+            },
+            "Legal": true,
+            "Sweep": 2.7436536909097358,
+            "Beta": 0.03763117268681526,
+            "Queries": 44
+          },
+          {
+            "Name": "plus20pp",
+            "Action": {
+              "SteeringRadians": -0.022759901,
+              "Drive": 0.6887297
+            },
+            "Legal": true,
+            "Sweep": 2.7436536909097358,
+            "Beta": 0.038802940398454666,
+            "Queries": 44
+          },
+          {
+            "Name": "95-fixed",
+            "Action": {
+              "SteeringRadians": -0.022759901,
+              "Drive": 0.95
+            },
+            "Legal": true,
+            "Sweep": 2.7436536909097358,
+            "Beta": 0.041644252836704254,
+            "Queries": 44
+          },
+          {
+            "Name": "100-fixed",
+            "Action": {
+              "SteeringRadians": -0.022759901,
+              "Drive": 1
+            },
+            "Legal": true,
+            "Sweep": 2.7436536909097358,
+            "Beta": 0.04208679124712944,
+            "Queries": 44
+          }
+        ],
+        "BaselinePath": {
+          "Kind": "historical",
+          "Reached": true,
+          "Failure": null,
+          "Seconds": 9.904163363830222,
+          "Goal": 949.3362498283386,
+          "Sweep": 1.4332299999123541,
+          "Pose": 1.5243359011760547,
+          "Beta": 0.32026347517967224,
+          "Reviews": 49,
+          "Forecasts": 976,
+          "Queries": 40724,
+          "CpuSeconds": 0.484375
+        },
+        "ProposedPath": {
+          "Kind": "95-pulse",
+          "Reached": true,
+          "Failure": null,
+          "Seconds": 9.877799942777777,
+          "Goal": 949.3362498283386,
+          "Sweep": 1.433721812344582,
+          "Pose": 1.5246844536887278,
+          "Beta": 0.33859801292419434,
+          "Reviews": 49,
+          "Forecasts": 955,
+          "Queries": 39717,
+          "CpuSeconds": 0.46875
+        }
+      }
+    },
+    {
+      "Id": "P6",
+      "Trial": "v1-K4-S1",
+      "Reason": "first >=95% roll-off, lap 3 home",
+      "Evaluation": {
+        "Time": 55,
+        "StateSha256": "C30EE423679038A8FE4AC9B42C2D8FFAD07461EEB7CE062171C4741CD91B9121",
+        "Reference": 931.082133762837,
+        "CrankOmega": 706.527211708104,
+        "Historical": {
+          "SteeringRadians": -0.0294987,
+          "Drive": 0.43432066
+        },
+        "Proposed": {
+          "SteeringRadians": -0.0294987,
+          "Drive": 0.95
+        },
+        "OldCanPrepare": true,
+        "HistoricalGate": "tracked",
+        "Admitted": true,
+        "Reason": "admitted: causal whole-bend model predicts common-goal time gain",
+        "CpuSeconds": 1.046875,
+        "Milliseconds": 1014.4392,
+        "Short": [
+          {
+            "Name": "historical",
+            "Action": {
+              "SteeringRadians": -0.0294987,
+              "Drive": 0.43432066
+            },
+            "Legal": true,
+            "Sweep": 2.9924769612195004,
+            "Beta": 0.0496957041323185,
+            "Queries": 44
+          },
+          {
+            "Name": "plus20pp",
+            "Action": {
+              "SteeringRadians": -0.0294987,
+              "Drive": 0.6343207
+            },
+            "Legal": true,
+            "Sweep": 2.9924769612195004,
+            "Beta": 0.052255261689424515,
+            "Queries": 44
+          },
+          {
+            "Name": "95-fixed",
+            "Action": {
+              "SteeringRadians": -0.0294987,
+              "Drive": 0.95
+            },
+            "Legal": true,
+            "Sweep": 2.9924769612195004,
+            "Beta": 0.05607019364833832,
+            "Queries": 44
+          },
+          {
+            "Name": "100-fixed",
+            "Action": {
+              "SteeringRadians": -0.0294987,
+              "Drive": 1
+            },
+            "Legal": true,
+            "Sweep": 2.9924769612195004,
+            "Beta": 0.05656633898615837,
+            "Queries": 44
+          }
+        ],
+        "BaselinePath": {
+          "Kind": "historical",
+          "Reached": true,
+          "Failure": null,
+          "Seconds": 9.805640714357935,
+          "Goal": 1108.7256247997284,
+          "Sweep": 1.4531731954926255,
+          "Pose": 1.544456365775448,
+          "Beta": 0.2709147036075592,
+          "Reviews": 49,
+          "Forecasts": 986,
+          "Queries": 41264,
+          "CpuSeconds": 0.53125
+        },
+        "ProposedPath": {
+          "Kind": "95-pulse",
+          "Reached": true,
+          "Failure": null,
+          "Seconds": 9.769559922381802,
+          "Goal": 1108.7256247997284,
+          "Sweep": 1.4273600357317022,
+          "Pose": 1.51842156855698,
+          "Beta": 0.2583484947681427,
+          "Reviews": 48,
+          "Forecasts": 953,
+          "Queries": 39772,
+          "CpuSeconds": 0.515625
+        }
+      }
+    },
+    {
+      "Id": "P9",
+      "Trial": "v1-K4-S4",
+      "Reason": "outer field, first direct CanPrepare veto",
+      "Evaluation": {
+        "Time": 11.399999999999991,
+        "StateSha256": "8F690F1FB8738120996BB1023BFB727F695E4EC762748C0E10FCDB559AE4C567",
+        "Reference": 145.6846287202835,
+        "CrankOmega": 779.0854951776741,
+        "Historical": {
+          "SteeringRadians": 0.008499995,
+          "Drive": 0.08460919
+        },
+        "Proposed": {
+          "SteeringRadians": 0.008499995,
+          "Drive": 0.95
+        },
+        "OldCanPrepare": false,
+        "HistoricalGate": "plan transition",
+        "Admitted": true,
+        "Reason": "admitted: causal whole-bend model predicts common-goal time gain",
+        "CpuSeconds": 0.96875,
+        "Milliseconds": 963.9328,
+        "Short": [
+          {
+            "Name": "historical",
+            "Action": {
+              "SteeringRadians": 0.008499995,
+              "Drive": 0.08460919
+            },
+            "Legal": true,
+            "Sweep": 4.499805923263628,
+            "Beta": 0.036058906465768814,
+            "Queries": 44
+          },
+          {
+            "Name": "plus20pp",
+            "Action": {
+              "SteeringRadians": 0.008499995,
+              "Drive": 0.2846092
+            },
+            "Legal": true,
+            "Sweep": 4.499805923263628,
+            "Beta": 0.03765944018959999,
+            "Queries": 44
+          },
+          {
+            "Name": "95-fixed",
+            "Action": {
+              "SteeringRadians": 0.008499995,
+              "Drive": 0.95
+            },
+            "Legal": true,
+            "Sweep": 4.499805923263628,
+            "Beta": 0.05460596829652786,
+            "Queries": 44
+          },
+          {
+            "Name": "100-fixed",
+            "Action": {
+              "SteeringRadians": 0.008499995,
+              "Drive": 1
+            },
+            "Legal": true,
+            "Sweep": 4.499805923263628,
+            "Beta": 0.05604356899857521,
+            "Queries": 44
+          }
+        ],
+        "BaselinePath": {
+          "Kind": "historical",
+          "Reached": true,
+          "Failure": null,
+          "Seconds": 9.321766911916018,
+          "Goal": 311.77874994277954,
+          "Sweep": 1.4254189572672946,
+          "Pose": 1.5164905800114792,
+          "Beta": 0.24005095660686493,
+          "Reviews": 46,
+          "Forecasts": 846,
+          "Queries": 35063,
+          "CpuSeconds": 0.46875
+        },
+        "ProposedPath": {
+          "Kind": "95-pulse",
+          "Reached": true,
+          "Failure": null,
+          "Seconds": 9.171124567617486,
+          "Goal": 311.77874994277954,
+          "Sweep": 1.4894929043013805,
+          "Pose": 1.5809131100779803,
+          "Beta": 0.29446709156036377,
+          "Reviews": 45,
+          "Forecasts": 870,
+          "Queries": 36256,
+          "CpuSeconds": 0.5
+        }
+      }
+    },
+    {
+      "Id": "X4",
+      "Trial": "v1-K4-S4",
+      "Reason": "Additional authentic first-lap state within selective region",
+      "Evaluation": {
+        "Time": 11.59999999999999,
+        "StateSha256": "AE0F80DB5DEB1361B226DB5A72550146AFD97D50BD1BDD1A2C11F09AE67D2960",
+        "Reference": 149.89211964130402,
+        "CrankOmega": 626.5892791982178,
+        "Historical": {
+          "SteeringRadians": 0.0055000037,
+          "Drive": 0.07546423
+        },
+        "Proposed": {
+          "SteeringRadians": 0.0055000037,
+          "Drive": 0.95
+        },
+        "OldCanPrepare": false,
+        "HistoricalGate": "plan transition",
+        "Admitted": true,
+        "Reason": "admitted: causal whole-bend model predicts common-goal time gain",
+        "CpuSeconds": 0.984375,
+        "Milliseconds": 895.5734,
+        "Short": [
+          {
+            "Name": "historical",
+            "Action": {
+              "SteeringRadians": 0.0055000037,
+              "Drive": 0.07546423
+            },
+            "Legal": true,
+            "Sweep": 4.901423214279937,
+            "Beta": 0.03605908900499344,
+            "Queries": 44
+          },
+          {
+            "Name": "plus20pp",
+            "Action": {
+              "SteeringRadians": 0.0055000037,
+              "Drive": 0.27546424
+            },
+            "Legal": true,
+            "Sweep": 4.901423214279937,
+            "Beta": 0.03605908900499344,
+            "Queries": 44
+          },
+          {
+            "Name": "95-fixed",
+            "Action": {
+              "SteeringRadians": 0.0055000037,
+              "Drive": 0.95
+            },
+            "Legal": true,
+            "Sweep": 4.901423214279937,
+            "Beta": 0.04680069535970688,
+            "Queries": 44
+          },
+          {
+            "Name": "100-fixed",
+            "Action": {
+              "SteeringRadians": 0.0055000037,
+              "Drive": 1
+            },
+            "Legal": true,
+            "Sweep": 4.901423214279937,
+            "Beta": 0.048111867159605026,
+            "Queries": 44
+          }
+        ],
+        "BaselinePath": {
+          "Kind": "historical",
+          "Reached": true,
+          "Failure": null,
+          "Seconds": 9.12240377964444,
+          "Goal": 311.77874994277954,
+          "Sweep": 1.4243616283512268,
+          "Pose": 1.5153956163129183,
+          "Beta": 0.23673833906650543,
+          "Reviews": 45,
+          "Forecasts": 824,
+          "Queries": 34158,
+          "CpuSeconds": 0.515625
+        },
+        "ProposedPath": {
+          "Kind": "95-pulse",
+          "Reached": true,
+          "Failure": null,
+          "Seconds": 8.96889817397604,
+          "Goal": 311.77874994277954,
+          "Sweep": 1.4915269748015527,
+          "Pose": 1.5829019942624512,
+          "Beta": 0.30483341217041016,
+          "Reviews": 44,
+          "Forecasts": 847,
+          "Queries": 35286,
+          "CpuSeconds": 0.46875
+        }
+      }
+    },
+    {
+      "Id": "XB",
+      "Trial": "v1-K4-S2",
+      "Reason": "Additional authentic first-lap state within selective region",
+      "Evaluation": {
+        "Time": 11.79999999999999,
+        "StateSha256": "C1BF6D9B47F387065A09606EFD0F247BD74511FC2968B0AA2519E8BC3CDD9EF7",
+        "Reference": 162.67875081062317,
+        "CrankOmega": 591.2674549563762,
+        "Historical": {
+          "SteeringRadians": -0.001575902,
+          "Drive": 0
+        },
+        "Proposed": {
+          "SteeringRadians": -0.001575902,
+          "Drive": 0.95
+        },
+        "OldCanPrepare": false,
+        "HistoricalGate": "roll-off:entry-speed-budget",
+        "Admitted": false,
+        "Reason": "whole-bend model rejected: MODEL_SWEPT065",
+        "CpuSeconds": 0.703125,
+        "Milliseconds": 691.5599,
+        "Short": [
+          {
+            "Name": "historical",
+            "Action": {
+              "SteeringRadians": -0.001575902,
+              "Drive": 0
+            },
+            "Legal": true,
+            "Sweep": 4.320542820198353,
+            "Beta": 0.011976199224591255,
+            "Queries": 44
+          },
+          {
+            "Name": "plus20pp",
+            "Action": {
+              "SteeringRadians": -0.001575902,
+              "Drive": 0.2
+            },
+            "Legal": true,
+            "Sweep": 4.318863984266868,
+            "Beta": 0.011976199224591255,
+            "Queries": 44
+          },
+          {
+            "Name": "95-fixed",
+            "Action": {
+              "SteeringRadians": -0.001575902,
+              "Drive": 0.95
+            },
+            "Legal": true,
+            "Sweep": 4.3138714819063395,
+            "Beta": 0.011976199224591255,
+            "Queries": 44
+          },
+          {
+            "Name": "100-fixed",
+            "Action": {
+              "SteeringRadians": -0.001575902,
+              "Drive": 1
+            },
+            "Legal": true,
+            "Sweep": 4.313664081582557,
+            "Beta": 0.011976199224591255,
+            "Queries": 44
+          }
+        ],
+        "BaselinePath": {
+          "Kind": "historical",
+          "Reached": true,
+          "Failure": null,
+          "Seconds": 8.540853570332178,
+          "Goal": 311.77874994277954,
+          "Sweep": 1.4319830912888507,
+          "Pose": 1.523034514366418,
+          "Beta": 0.25538524985313416,
+          "Reviews": 42,
+          "Forecasts": 790,
+          "Queries": 32911,
+          "CpuSeconds": 0.421875
+        },
+        "ProposedPath": {
+          "Kind": "95-pulse",
+          "Reached": false,
+          "Failure": "MODEL_SWEPT065",
+          "Seconds": 0,
+          "Goal": 311.77874994277954,
+          "Sweep": 0.48549013684044984,
+          "Pose": 0.570868135684011,
+          "Beta": 0.3784233629703522,
+          "Reviews": 21,
+          "Forecasts": 308,
+          "Queries": 12516,
+          "CpuSeconds": 0.28125
+        }
+      },
+      "first_model_violation": {
+        "time": 16.17,
+        "reference": 242.22126455386223,
+        "beta_degrees": 21.064103496799376,
+        "pose": 0.7275403698291533,
+        "swept": 0.6418985605291401
+      }
+    }
+  ],
+  "development": [
+    {
+      "id": "P7",
+      "branch": {
+        "Id": "P7",
+        "State": {
+          "Id": "P7",
+          "Trial": "v1-K4-S1",
+          "Reason": "middle of first main straight",
+          "Input": {
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 3.8023617,
+                "Y": 66.75229
+              },
+              "Velocity": {
+                "X": -21.40245,
+                "Y": -0.34022462
+              },
+              "Heading": -3.1131365,
+              "AngularVelocity": 0.024836063,
+              "Road": {
+                "Segment": 4,
+                "Progress": 0.5031877140845021,
+                "ReferenceMeters": 163.5870132446289,
+                "OffsetMeters": 4.089268650228377,
+                "Heading": 3.141592653589793,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": -1,
+                  "Y": 1.2246469e-16
+                },
+                "Outward": {
+                  "X": 1.2246469e-16,
+                  "Y": 1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 163.58701323747636,
+              "DistanceMeters": 169.19272075593472,
+              "Activity": 0,
+              "Drive": 0.030194351,
+              "TargetOffsetMeters": 1.46,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 21.405155,
+              "ForwardSpeed": 21.403465,
+              "SideSpeed": -0.2688617,
+              "SlideRadians": 0.012560936
+            },
+            "Time": 11.79999999999999,
+            "Omega": 65.50688415771835,
+            "Steering": 0,
+            "Active": {
+              "SteeringRadians": 0,
+              "Drive": 0.030194351
+            },
+            "Pending": [
+              {
+                "ObservedAt": 11.59999999999999,
+                "ActivationAt": 11.839999999999991,
+                "Action": {
+                  "SteeringRadians": -0.0014999993,
+                  "Drive": 0
+                }
+              }
+            ],
+            "NextReview": 11.79999999999999
+          },
+          "CrankOmega": 589.6581597983669,
+          "Action": {
+            "SteeringRadians": -0.0008497639,
+            "Drive": 0
+          },
+          "Spec": {
+            "Profile": {
+              "Id": 1,
+              "Name": "R1",
+              "Skills": {
+                "Start": 50,
+                "Speed": 50,
+                "SlideControl": 50,
+                "TrackReading": 50,
+                "PairRiding": 50,
+                "Adaptability": 50
+              },
+              "Style": {
+                "RiskTolerance": 0.5,
+                "LaneChangeTendency": 0.5,
+                "OutsidePreference": 0.5,
+                "SetupIndependence": 0.5
+              }
+            },
+            "Setup": {
+              "Gearing": 0.5,
+              "TractionBias": 0.5
+            },
+            "ReferenceMeters": -0.57,
+            "OffsetMeters": 1.46,
+            "SpeedMetersPerSecond": 0,
+            "TargetOffsetMeters": 1.46,
+            "InitialOutwardSpeed": 0,
+            "TrafficEnabled": false,
+            "Passive": false,
+            "Bullet": false
+          },
+          "Classification": {
+            "trial": "v1-K4-S1",
+            "time": 11.79999999999999,
+            "reference": 163.58701323747636,
+            "lap": 0,
+            "local": 163.58701323747636,
+            "segment": 4,
+            "straight": true,
+            "distance_to_entry": 30.802361733913415,
+            "speed_kph": 77.058558,
+            "reference_kph": 72.07393408425978,
+            "profile_drive": 0.1165616537142053,
+            "policy_drive": 0,
+            "speed_correction": -0.16933193130303795,
+            "slip_penalty": 0,
+            "exit_drive": 0,
+            "exit_gate": "roll-off:entry-speed-budget",
+            "exit_mode": "entry-preparation",
+            "exit_blend": 0.8271300073122737,
+            "k4_drive": 0,
+            "accepted_drive": 0,
+            "active_drive": 0.030194351,
+            "requested_steering": -0.0008497639,
+            "accepted_steering": -0.0008497639,
+            "active_steering": 0,
+            "physical_steering": 0,
+            "beta": 0.012560936,
+            "yaw": 0.024836063,
+            "course": -3.125697465602439,
+            "crank_rpm": 5630.820651982848,
+            "wheel_omega": 65.50688415771835,
+            "pending": [
+              {
+                "ObservedAt": 11.59999999999999,
+                "ActivationAt": 11.839999999999991,
+                "Action": {
+                  "SteeringRadians": -0.0014999993,
+                  "Drive": 0
+                }
+              }
+            ],
+            "activation_target": {
+              "S": 168.7031768488884,
+              "Offset": 3.3826589130821074,
+              "Course": 0,
+              "Beta": 0,
+              "Yaw": 0,
+              "Speed": 20.020537245627715,
+              "Steer": 0,
+              "Drive": 0.1165616537142053
+            },
+            "tracker_target": [],
+            "can_prepare": {
+              "checkPulse": true,
+              "Entry": 194.38937497138977,
+              "Reference": 168.7031768488884,
+              "ActualSpeed": 21.230051,
+              "PulseSpeed": 21.930051040649413,
+              "Remaining": 21.300187914371485,
+              "EntrySpeed": 20.46003777486338,
+              "Deceleration": 0.65,
+              "AllowedSpeed": 21.125893828132323,
+              "RequiredDeceleration": 1.462756881468824,
+              "Accepted": false
+            },
+            "first_reducing_layer": "REFERENCE",
+            "later_blockers": [
+              "ENTRY_SPEED_BUDGET"
+            ],
+            "mechanisms": {
+              "REFERENCE_LOW_DRIVE": 0.8306680686969621,
+              "SPEED_TARGET_REACHED": 0.1165616537142053,
+              "ENTRY_SPEED_BUDGET": 0
+            },
+            "reconstructed": true,
+            "matched": true,
+            "baseline_term_effects": {
+              "reference": 0.8306680686969621,
+              "speed": 0.1165616537142053,
+              "slip": 0
+            },
+            "raw_negative_speed_term": true,
+            "foregone_boost": 0.82713,
+            "plan_state": "K0",
+            "unknown": [
+              "The globally optimal entry speed and continuation beyond the evaluated horizon are not established."
+            ]
+          }
+        },
+        "BranchHash": "26795AFFC0F2CC8D84848AA0B972BEA72560485451E251B675FE8EE04C343157",
+        "PrefixReviews": 60,
+        "PhysicalPrefixSamples": 1206,
+        "PhysicalPrefixEqual": true,
+        "Admitted": true,
+        "StateHashMatches": true,
+        "Outcome": {
+          "Id": "d1-P7",
+          "Stage": "development",
+          "Controller": "NEW174",
+          "Start": {
+            "Id": "P7",
+            "Gate": "A",
+            "Start": -0.57,
+            "Offset": 1.46,
+            "Reference161": null,
+            "Field": 0,
+            "Spec": {
+              "Profile": {
+                "Id": 1,
+                "Name": "R1",
+                "Skills": {
+                  "Start": 50,
+                  "Speed": 50,
+                  "SlideControl": 50,
+                  "TrackReading": 50,
+                  "PairRiding": 50,
+                  "Adaptability": 50
+                },
+                "Style": {
+                  "RiskTolerance": 0.5,
+                  "LaneChangeTendency": 0.5,
+                  "OutsidePreference": 0.5,
+                  "SetupIndependence": 0.5
+                }
+              },
+              "Setup": {
+                "Gearing": 0.5,
+                "TractionBias": 0.5
+              },
+              "ReferenceMeters": -0.57,
+              "OffsetMeters": 1.46,
+              "SpeedMetersPerSecond": 0,
+              "TargetOffsetMeters": 1.46,
+              "InitialOutwardSpeed": 0,
+              "TrafficEnabled": false,
+              "Passive": false,
+              "Bullet": false
+            }
+          },
+          "ReachedStop": true,
+          "S3": false,
+          "Reserve": false,
+          "Reason": "integration goal",
+          "Stop": 311.77874994277954,
+          "EndReference": 311.8605537343025,
+          "EndTime": 20.14,
+          "FinishTime": null,
+          "Crossings": 0,
+          "MinPose": 1.479203989646643,
+          "MinSweep": 1.3928525715810962,
+          "MaxBetaDegrees": 19.393888051783957,
+          "FirstBadTime": null,
+          "FirstBadReference": null,
+          "CpuSeconds": 3.4375,
+          "WorldCpuSeconds": 3.390625,
+          "ControllerCpuSeconds": 2.953125,
+          "Decisions": 101,
+          "Plans": 2,
+          "Replans": 1,
+          "PlanCpuSeconds": 0.640625,
+          "Fingerprint": "1D01DD5CDEF99891BB116F1822DD184B0C1509BF4AAF868052029E4A168D87AB",
+          "AcceptedBends": 2
+        },
+        "BaselineGoalSeconds": 20.274178882092436,
+        "NewGoalSeconds": 20.136242032266544,
+        "Admissions": 1,
+        "MaximumDecisionMs": 899.0504,
+        "BranchDecisionMs": 892.3428
+      },
+      "arms": {
+        "BASE": {
+          "common_goal_seconds": 20.274178882092436,
+          "entry_seconds": 13.280073810854674,
+          "exit_seconds": 19.270933890193827,
+          "entry_kph": 72.65508927415813,
+          "exit_kph": 63.09527568697425,
+          "bend_seconds": 5.9908600793391535,
+          "minimum_bend_kph": 56.5969608,
+          "straight_vmax_kph": 77.7380148,
+          "high_intervals": [
+            {
+              "start": 10.439999999999996,
+              "end": 10.839999999999995,
+              "reference": 135.69269680261613,
+              "start_kph": 63.760604400000005,
+              "end_kph": 71.8333308,
+              "peak": 1
+            }
+          ],
+          "high_seconds": 0.3999999999999986,
+          "distance": 323.54583235074665,
+          "max_beta": 11.698564598438494,
+          "min_pose": 1.479203989646643,
+          "min_swept": 1.3928525715810962,
+          "branch_min_swept": 1.4044250696759215,
+          "sections": [
+            {
+              "segment": 5,
+              "lo": 194.38937497138977,
+              "hi": 226.85249996185303,
+              "seconds": 1.9372364053794904,
+              "distance": 35.331165253915515,
+              "entry": 72.65508927415813,
+              "exit": 61.08091763540594,
+              "min_speed": 60.8215896,
+              "mean_speed": 65.65651696452599,
+              "means": {
+                "beta": 8.231273980958495,
+                "beta_dot": 0.16004692909949622,
+                "yaw": 0.5317724951619237,
+                "side": -2.602643825280512,
+                "requested": 0.08732550902073642,
+                "active": 0.0601729748970852,
+                "slip": 0.03381902608906624,
+                "front": 0.7666385146089355,
+                "rear": 0.7798966484904833,
+                "front_fx": 0.0,
+                "front_fy": 655.4189664350226,
+                "rear_fx": 88.186599175758,
+                "rear_fy": 767.3884975657849,
+                "curvature": 0.029221626239030435,
+                "offset": 2.590205946658993
+              },
+              "peaks": {
+                "beta": 11.698564598438494,
+                "beta_dot": 16.20399129143414,
+                "yaw": 0.71347153,
+                "side": 3.635841,
+                "requested": 0.219557,
+                "active": 0.21692324,
+                "slip": 0.08411135754165562,
+                "front": 0.8645436002327376,
+                "rear": 0.8819274677060844,
+                "front_fx": 0,
+                "front_fy": 739.12054,
+                "rear_fx": 263.22458,
+                "rear_fy": 878.0663,
+                "curvature": 0.0344332880120861,
+                "offset": 3.376446689779158
+              },
+              "min_radius": 29.04166455579262,
+              "energy": {
+                "front_lateral": 3572.222082801587,
+                "rear_lateral": 4506.713973858758,
+                "rear_longitudinal": 162.5701433032791,
+                "bearing": 123.68501048400839,
+                "clutch": 2.209101746900313,
+                "transmission": 186.92752105528078,
+                "resistance": 3790.8179342026287,
+                "net": 12210.071707730764
+              },
+              "inner": 2.938544016293066,
+              "outer": 7.323048840695403,
+              "swept": 2.8421450421886285
+            },
+            {
+              "segment": 6,
+              "lo": 226.85249996185303,
+              "hi": 259.3156249523163,
+              "seconds": 2.0042769822319677,
+              "distance": 34.12293153672982,
+              "entry": 61.08091763540594,
+              "exit": 63.41988282220824,
+              "min_speed": 59.373684,
+              "mean_speed": 61.29020820038036,
+              "means": {
+                "beta": 5.444258999908604,
+                "beta_dot": 0.26891736340187267,
+                "yaw": 0.4592146769364303,
+                "side": -1.6027280478834691,
+                "requested": 0.20037781281819977,
+                "active": 0.21766607271005867,
+                "slip": 0.09603752359014525,
+                "front": 0.6058628975624846,
+                "rear": 0.6814436326790857,
+                "front_fx": 0.0,
+                "front_fy": 517.9677599739304,
+                "rear_fx": 275.54327186828226,
+                "rear_fy": 600.997547343023,
+                "curvature": 0.026783020051464615,
+                "offset": 1.7376792699277352
+              },
+              "peaks": {
+                "beta": 9.114229296176193,
+                "beta_dot": 20.13841225650995,
+                "yaw": 0.7081251,
+                "side": 2.6366906,
+                "requested": 0.35406253,
+                "active": 0.35406253,
+                "slip": 0.14993315380536465,
+                "front": 0.803162663637582,
+                "rear": 0.8350690472952035,
+                "front_fx": 0,
+                "front_fy": 686.6444,
+                "rear_fx": 445.35345,
+                "rear_fy": 821.4285,
+                "curvature": 0.03666993047427626,
+                "offset": 2.466456551386165
+              },
+              "min_radius": 27.27029986330337,
+              "energy": {
+                "front_lateral": 1906.2772954609402,
+                "rear_lateral": 2549.7850031099942,
+                "rear_longitudinal": 956.3116974832096,
+                "bearing": 126.7800468347484,
+                "clutch": 13.364692211720778,
+                "transmission": 667.0558738643416,
+                "resistance": 3344.0927434472032,
+                "net": 9470.990107098352
+              },
+              "inner": 1.4955429811485625,
+              "outer": 11.743407326561302,
+              "swept": 1.4044250696759215
+            },
+            {
+              "segment": 7,
+              "lo": 259.3156249523163,
+              "hi": 291.77874994277954,
+              "seconds": 2.0493466917276955,
+              "distance": 33.944842893090254,
+              "entry": 63.41988282220824,
+              "exit": 63.09527568697425,
+              "min_speed": 56.5969608,
+              "mean_speed": 59.62945894337838,
+              "means": {
+                "beta": 6.564654309034096,
+                "beta_dot": -1.9994743509289867,
+                "yaw": 0.43750053976898845,
+                "side": -1.8748159744605524,
+                "requested": 0.3308829728792375,
+                "active": 0.2334153029433312,
+                "slip": 0.10130887949599503,
+                "front": 0.6104116734281371,
+                "rear": 0.7638408563370422,
+                "front_fx": 0.0,
+                "front_fy": 521.0933150044664,
+                "rear_fx": 261.026951650281,
+                "rear_fy": 620.0966721259701,
+                "curvature": 0.02861440710555164,
+                "offset": 1.3207334635621997
+              },
+              "peaks": {
+                "beta": 11.068634171991041,
+                "beta_dot": 26.564025066923193,
+                "yaw": 0.7812898,
+                "side": 3.0541196,
+                "requested": 1,
+                "active": 0.8680721,
+                "slip": 0.333232270668148,
+                "front": 0.8615510126791845,
+                "rear": 0.8781825591595311,
+                "front_fx": 0,
+                "front_fy": 736.5621,
+                "rear_fx": 810.06537,
+                "rear_fy": 870.2319,
+                "curvature": 0.04167707809377867,
+                "offset": 2.071388483047723
+              },
+              "min_radius": 23.99400451610053,
+              "energy": {
+                "front_lateral": 2502.7264133608105,
+                "rear_lateral": 3410.1992513214464,
+                "rear_longitudinal": 1475.1914681189028,
+                "bearing": 124.19833927412591,
+                "clutch": 23.90230879202187,
+                "transmission": 720.4987677762077,
+                "resistance": 3227.3087854531364,
+                "net": 11373.041844880197
+              },
+              "inner": 1.5407786539665895,
+              "outer": 8.436810529328996,
+              "swept": 1.4459987300785377
+            }
+          ]
+        },
+        "NEW": {
+          "common_goal_seconds": 20.136242032266544,
+          "entry_seconds": 13.20256182496345,
+          "exit_seconds": 19.133500670688907,
+          "entry_kph": 78.49071091617485,
+          "exit_kph": 63.51042728120454,
+          "bend_seconds": 5.930938845725457,
+          "minimum_bend_kph": 56.550006,
+          "straight_vmax_kph": 80.9746164,
+          "high_intervals": [
+            {
+              "start": 10.439999999999996,
+              "end": 10.839999999999995,
+              "reference": 135.69269680261613,
+              "start_kph": 63.760604400000005,
+              "end_kph": 71.8333308,
+              "peak": 1
+            },
+            {
+              "start": 12.03999999999999,
+              "end": 12.23999999999999,
+              "reference": 168.70317553758622,
+              "start_kph": 76.428162,
+              "end_kph": 79.0632828,
+              "peak": 0.95
+            }
+          ],
+          "high_seconds": 0.5999999999999979,
+          "distance": 324.30099295078844,
+          "max_beta": 19.3938879792006,
+          "min_pose": 1.479203989646643,
+          "min_swept": 1.3928525715810962,
+          "branch_min_swept": 1.4699534429736483,
+          "sections": [
+            {
+              "segment": 5,
+              "lo": 194.38937497138977,
+              "hi": 226.85249996185303,
+              "seconds": 1.874421441882232,
+              "distance": 35.898583286396786,
+              "entry": 78.49071091617485,
+              "exit": 59.23975232787612,
+              "min_speed": 59.23975232787612,
+              "mean_speed": 68.94655435719676,
+              "means": {
+                "beta": 14.818587410370126,
+                "beta_dot": 6.152619561266364,
+                "yaw": 0.6842625910981087,
+                "side": -4.770991603114021,
+                "requested": 0.10532624288363017,
+                "active": 0.07454819541554127,
+                "slip": 0.08420869241058557,
+                "front": 0.8765902412710705,
+                "rear": 0.8943650302360773,
+                "front_fx": 0.0,
+                "front_fy": 749.4195229859845,
+                "rear_fx": 116.64436750686274,
+                "rear_fy": 881.8314258011038,
+                "curvature": 0.03079372886238989,
+                "offset": 3.1197008579238075
+              },
+              "peaks": {
+                "beta": 19.3938879792006,
+                "beta_dot": 17.448226439339383,
+                "yaw": 0.81992316,
+                "side": 6.0279593,
+                "requested": 0.33287185,
+                "active": 0.21658596,
+                "slip": 0.19357324126516648,
+                "front": 0.9229567584479033,
+                "rear": 0.9523402138151639,
+                "front_fx": 0,
+                "front_fy": 789.05945,
+                "rear_fx": 271.38773,
+                "rear_fy": 934.2084,
+                "curvature": 0.04127761116702298,
+                "offset": 3.499748995460437
+              },
+              "min_radius": 24.226208148375317,
+              "energy": {
+                "front_lateral": 6125.445618154567,
+                "rear_lateral": 8743.57973889817,
+                "rear_longitudinal": 450.67481219464264,
+                "bearing": 137.21209058243548,
+                "clutch": 2.6073355641724247,
+                "transmission": 247.73774879234935,
+                "resistance": 4131.912676962549,
+                "net": 19668.59675149155
+              },
+              "inner": 3.2008211154390445,
+              "outer": 7.32676940141727,
+              "swept": 3.0930272014111058
+            },
+            {
+              "segment": 6,
+              "lo": 226.85249996185303,
+              "hi": 259.3156249523163,
+              "seconds": 2.009066404653259,
+              "distance": 34.30287619078172,
+              "entry": 59.23975232787612,
+              "exit": 63.66812050574283,
+              "min_speed": 58.447731600000004,
+              "mean_speed": 61.46653689534326,
+              "means": {
+                "beta": 5.392784773890042,
+                "beta_dot": -5.353505952614117,
+                "yaw": 0.338484457553446,
+                "side": -1.5764794905249349,
+                "requested": 0.21288278831196397,
+                "active": 0.23446613987502826,
+                "slip": 0.11422739664930828,
+                "front": 0.5729561703519709,
+                "rear": 0.6492800210932008,
+                "front_fx": 0.0,
+                "front_fy": 489.83495327809686,
+                "rear_fx": 303.7558335360737,
+                "rear_fy": 564.3055207638645,
+                "curvature": 0.025417449957580825,
+                "offset": 1.8918840509027783
+              },
+              "peaks": {
+                "beta": 15.232771678822681,
+                "beta_dot": 22.496729459576184,
+                "yaw": 0.5748266,
+                "side": 4.3223076,
+                "requested": 0.39271498,
+                "active": 0.39271498,
+                "slip": 0.20795494379540516,
+                "front": 0.8669453996022611,
+                "rear": 0.9278796503131903,
+                "front_fx": 0,
+                "front_fy": 741.1739,
+                "rear_fx": 513.94385,
+                "rear_fy": 884.4128,
+                "curvature": 0.04135863729531777,
+                "offset": 3.407369716646783
+              },
+              "min_radius": 24.178746336819238,
+              "energy": {
+                "front_lateral": 1615.902585491244,
+                "rear_lateral": 2289.7841587597954,
+                "rear_longitudinal": 1285.116352580613,
+                "bearing": 131.35614334927274,
+                "clutch": 15.635073054419069,
+                "transmission": 741.1613610665112,
+                "resistance": 3375.7683667348956,
+                "net": 9373.580348927593
+              },
+              "inner": 1.5614113770253821,
+              "outer": 10.611005941832481,
+              "swept": 1.4699534429736483
+            },
+            {
+              "segment": 7,
+              "lo": 259.3156249523163,
+              "hi": 291.77874994277954,
+              "seconds": 2.047450999189966,
+              "distance": 33.936843197618714,
+              "entry": 63.66812050574283,
+              "exit": 63.51042728120454,
+              "min_speed": 56.550006,
+              "mean_speed": 59.67060289099109,
+              "means": {
+                "beta": 6.4899541876718425,
+                "beta_dot": -1.9121524183521519,
+                "yaw": 0.42808868753589085,
+                "side": -1.8524960543276274,
+                "requested": 0.3393531666630803,
+                "active": 0.2396033503929008,
+                "slip": 0.10411440560146366,
+                "front": 0.6029967463378438,
+                "rear": 0.7691061132191312,
+                "front_fx": 0.0,
+                "front_fy": 508.35563264759753,
+                "rear_fx": 264.5402768523645,
+                "rear_fy": 607.5949932882249,
+                "curvature": 0.027976547439067388,
+                "offset": 1.304970691396537
+              },
+              "peaks": {
+                "beta": 10.965956697356829,
+                "beta_dot": 25.16476472838679,
+                "yaw": 0.77768505,
+                "side": 3.0348563,
+                "requested": 0.9871835,
+                "active": 0.81476426,
+                "slip": 0.36523452396910555,
+                "front": 0.861915605767333,
+                "rear": 0.8758780878250128,
+                "front_fx": 0,
+                "front_fy": 736.8738,
+                "rear_fx": 834.2403,
+                "rear_fy": 868.4898,
+                "curvature": 0.04208740090723503,
+                "offset": 2.0698888303307905
+              },
+              "min_radius": 23.76007970185907,
+              "energy": {
+                "front_lateral": 2496.6493375849836,
+                "rear_lateral": 3414.701654315768,
+                "rear_longitudinal": 1623.1449785811974,
+                "bearing": 125.14026388071109,
+                "clutch": 25.94737041516993,
+                "transmission": 747.2510732581342,
+                "resistance": 3229.652975522131,
+                "net": 11551.715893629116
+              },
+              "inner": 1.590199942124892,
+              "outer": 8.426736381226231,
+              "swept": 1.4956353756129657
+            }
+          ]
+        }
+      },
+      "local_gain_seconds": 0.13793684982589127,
+      "gain_to_entry_seconds": 0.0775119858912241,
+      "gain_in_bend_seconds": 0.0599212336136965,
+      "timing_ms": {
+        "median": 9.5143,
+        "p95": 39.5283,
+        "p99": 453.8682,
+        "maximum": 899.0504
+      },
+      "first_decision_ms": 14.7561,
+      "maximum_warm_ms": 899.0504,
+      "forecasts": {
+        "base_controller": 1548,
+        "state_feasibility": 1540,
+        "total": 3088
+      },
+      "cpu": {
+        "total_native_run": 3.390625,
+        "controller": 2.953125,
+        "feasibility": 0.9375
+      },
+      "model_predicted_gain_seconds": 0.13576835960072842
+    },
+    {
+      "id": "P8",
+      "branch": {
+        "Id": "P8",
+        "State": {
+          "Id": "P8",
+          "Trial": "v1-K4-S1",
+          "Reason": "preparation immediately before second bend",
+          "Input": {
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": -17.208084,
+                "Y": 66.28482
+              },
+              "Velocity": {
+                "X": -20.611046,
+                "Y": -0.16198987
+              },
+              "Heading": 3.1373835,
+              "AngularVelocity": -0.0828518,
+              "Road": {
+                "Segment": 4,
+                "Progress": 0.8420658726846019,
+                "ReferenceMeters": 184.59745907783508,
+                "OffsetMeters": 3.6218003885096266,
+                "Heading": 3.141592653589793,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": -1,
+                  "Y": 1.2246469e-16
+                },
+                "Outward": {
+                  "X": 1.2246469e-16,
+                  "Y": 1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 184.59745907068253,
+              "DistanceMeters": 190.20862571895123,
+              "Activity": 0,
+              "Drive": 0,
+              "TargetOffsetMeters": 1.46,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 20.611683,
+              "ForwardSpeed": 20.610182,
+              "SideSpeed": 0.24874404,
+              "SlideRadians": -0.012068402
+            },
+            "Time": 12.799999999999986,
+            "Omega": 62.57020910873459,
+            "Steering": -0.0045981067,
+            "Active": {
+              "SteeringRadians": -0.0045981067,
+              "Drive": 0
+            },
+            "Pending": [
+              {
+                "ObservedAt": 12.599999999999987,
+                "ActivationAt": 12.839999999999987,
+                "Action": {
+                  "SteeringRadians": 0.03761901,
+                  "Drive": 0
+                }
+              }
+            ],
+            "NextReview": 12.799999999999986
+          },
+          "CrankOmega": 563.1429937060631,
+          "Action": {
+            "SteeringRadians": 0.045014553,
+            "Drive": 0.023615671
+          },
+          "Spec": {
+            "Profile": {
+              "Id": 1,
+              "Name": "R1",
+              "Skills": {
+                "Start": 50,
+                "Speed": 50,
+                "SlideControl": 50,
+                "TrackReading": 50,
+                "PairRiding": 50,
+                "Adaptability": 50
+              },
+              "Style": {
+                "RiskTolerance": 0.5,
+                "LaneChangeTendency": 0.5,
+                "OutsidePreference": 0.5,
+                "SetupIndependence": 0.5
+              }
+            },
+            "Setup": {
+              "Gearing": 0.5,
+              "TractionBias": 0.5
+            },
+            "ReferenceMeters": -0.57,
+            "OffsetMeters": 1.46,
+            "SpeedMetersPerSecond": 0,
+            "TargetOffsetMeters": 1.46,
+            "InitialOutwardSpeed": 0,
+            "TrafficEnabled": false,
+            "Passive": false,
+            "Bullet": false
+          },
+          "Classification": {
+            "trial": "v1-K4-S1",
+            "time": 12.799999999999986,
+            "reference": 184.59745907068253,
+            "lap": 0,
+            "local": 184.59745907068253,
+            "segment": 4,
+            "straight": true,
+            "distance_to_entry": 9.791915900707238,
+            "speed_kph": 74.2020588,
+            "reference_kph": 69.22608248782372,
+            "profile_drive": 0.2586204644316475,
+            "policy_drive": 0.09277528,
+            "speed_correction": -0.16584518911962706,
+            "slip_penalty": 0,
+            "exit_drive": 0.09277528,
+            "exit_gate": "reference",
+            "exit_mode": "cyclic-bend-reference",
+            "exit_blend": 0,
+            "k4_drive": 0.023615671,
+            "accepted_drive": 0.023615671,
+            "active_drive": 0,
+            "requested_steering": 0.045014553,
+            "accepted_steering": 0.045014553,
+            "active_steering": -0.0045981067,
+            "physical_steering": -0.0045981067,
+            "beta": -0.012068402,
+            "yaw": -0.0828518,
+            "course": -3.133733443787089,
+            "crank_rpm": 5377.619466953282,
+            "wheel_omega": 62.57020910873459,
+            "pending": [
+              {
+                "ObservedAt": 12.599999999999987,
+                "ActivationAt": 12.839999999999987,
+                "Action": {
+                  "SteeringRadians": 0.03761901,
+                  "Drive": 0
+                }
+              }
+            ],
+            "activation_target": {
+              "S": 189.52036594629288,
+              "Offset": 3.0458485575383283,
+              "Course": 0.07324451736013637,
+              "Beta": 0.04315819063286774,
+              "Yaw": 0.1586173527515461,
+              "Speed": 19.229467357728808,
+              "Steer": -0.013624659738649689,
+              "Drive": 0.2586204644316475
+            },
+            "tracker_target": [
+              {
+                "targetSpeed": 20.015811029840453,
+                "targetOffset": 3.7537136425939983,
+                "targetCourse": -3.116855151554525,
+                "targetYaw": 0.5660280156002031,
+                "targetBeta": 0.04961242061336864,
+                "speedDelta": -0.28816502911950803,
+                "ramp": 1,
+                "ShapeTarget": {
+                  "S": 193.5880920815468,
+                  "Offset": 3.6446004555988982,
+                  "XY": {
+                    "X": -25.737017,
+                    "Y": 66.3241
+                  },
+                  "Heading": -3.102898333691254,
+                  "Curvature": 0.014081595911401797,
+                  "Beta": 0.024819827956624442,
+                  "Yaw": 0.22210449819353398,
+                  "Speed": 20.99711737556326,
+                  "NominalSpeed": 20.253449603826915,
+                  "Inner": 4.22582252139953,
+                  "Outer": 6.973680397145906
+                },
+                "Nominal": {
+                  "S": 193.5880920815468,
+                  "Offset": 3.2719331667818654,
+                  "XY": {
+                    "X": -25.737017,
+                    "Y": 65.970314
+                  },
+                  "Heading": -3.062046906440017,
+                  "Curvature": 0.014505207316895063,
+                  "Beta": 0.024819827956624442,
+                  "Yaw": 0.23068433171442462,
+                  "Speed": 21.397346582673688,
+                  "NominalSpeed": 20.253449603826915,
+                  "Inner": 3.84686331742912,
+                  "Outer": 7.354926762282639
+                }
+              }
+            ],
+            "can_prepare": null,
+            "first_reducing_layer": "REFERENCE",
+            "later_blockers": [
+              "NO_BOOST_WINDOW",
+              "TRACKING_SCORE_RETAINED"
+            ],
+            "mechanisms": {
+              "REFERENCE_LOW_DRIVE": 0.7413795308803729,
+              "SPEED_TARGET_REACHED": 0.16584518443164747,
+              "NO_BOOST_WINDOW": 0,
+              "K4_DRIVE_REDUCTION": 0.069159609,
+              "TRACKING_SCORE_RETAINED": 0
+            },
+            "reconstructed": true,
+            "matched": true,
+            "baseline_term_effects": {
+              "reference": 0.7413795308803729,
+              "speed": 0.16584518443164747,
+              "slip": -4.687979573980705e-09
+            },
+            "raw_negative_speed_term": true,
+            "foregone_boost": null,
+            "plan_state": "K4",
+            "unknown": [
+              "The globally optimal entry speed and continuation beyond the evaluated horizon are not established."
+            ]
+          }
+        },
+        "BranchHash": "9CC676949BCBB23ADCEFCEBF36240EF6B2839FB27C1BEEB22D4F6704652F9B44",
+        "PrefixReviews": 65,
+        "PhysicalPrefixSamples": 1306,
+        "PhysicalPrefixEqual": true,
+        "Admitted": true,
+        "StateHashMatches": true,
+        "Outcome": {
+          "Id": "d1-P8",
+          "Stage": "development",
+          "Controller": "NEW174",
+          "Start": {
+            "Id": "P8",
+            "Gate": "A",
+            "Start": -0.57,
+            "Offset": 1.46,
+            "Reference161": null,
+            "Field": 0,
+            "Spec": {
+              "Profile": {
+                "Id": 1,
+                "Name": "R1",
+                "Skills": {
+                  "Start": 50,
+                  "Speed": 50,
+                  "SlideControl": 50,
+                  "TrackReading": 50,
+                  "PairRiding": 50,
+                  "Adaptability": 50
+                },
+                "Style": {
+                  "RiskTolerance": 0.5,
+                  "LaneChangeTendency": 0.5,
+                  "OutsidePreference": 0.5,
+                  "SetupIndependence": 0.5
+                }
+              },
+              "Setup": {
+                "Gearing": 0.5,
+                "TractionBias": 0.5
+              },
+              "ReferenceMeters": -0.57,
+              "OffsetMeters": 1.46,
+              "SpeedMetersPerSecond": 0,
+              "TargetOffsetMeters": 1.46,
+              "InitialOutwardSpeed": 0,
+              "TrafficEnabled": false,
+              "Passive": false,
+              "Bullet": false
+            }
+          },
+          "ReachedStop": true,
+          "S3": false,
+          "Reserve": false,
+          "Reason": "integration goal",
+          "Stop": 311.77874994277954,
+          "EndReference": 311.9458517956734,
+          "EndTime": 20.21,
+          "FinishTime": null,
+          "Crossings": 0,
+          "MinPose": 1.479203989646643,
+          "MinSweep": 1.3928525715810962,
+          "MaxBetaDegrees": 16.148806285702054,
+          "FirstBadTime": null,
+          "FirstBadReference": null,
+          "CpuSeconds": 1.875,
+          "WorldCpuSeconds": 1.875,
+          "ControllerCpuSeconds": 1.671875,
+          "Decisions": 102,
+          "Plans": 2,
+          "Replans": 0,
+          "PlanCpuSeconds": 0.109375,
+          "Fingerprint": "D10AB9A020068312FAFFAB48A33E8EFF08DEDDD275F174F6166178A632A1CEFB",
+          "AcceptedBends": 2
+        },
+        "BaselineGoalSeconds": 20.274178882092436,
+        "NewGoalSeconds": 20.20229023788987,
+        "Admissions": 1,
+        "MaximumDecisionMs": 741.2501,
+        "BranchDecisionMs": 737.7454
+      },
+      "arms": {
+        "BASE": {
+          "common_goal_seconds": 20.274178882092436,
+          "entry_seconds": 13.280073810854674,
+          "exit_seconds": 19.270933890193827,
+          "entry_kph": 72.65508927415813,
+          "exit_kph": 63.09527568697425,
+          "bend_seconds": 5.9908600793391535,
+          "minimum_bend_kph": 56.5969608,
+          "straight_vmax_kph": 77.7380148,
+          "high_intervals": [
+            {
+              "start": 10.439999999999996,
+              "end": 10.839999999999995,
+              "reference": 135.69269680261613,
+              "start_kph": 63.760604400000005,
+              "end_kph": 71.8333308,
+              "peak": 1
+            }
+          ],
+          "high_seconds": 0.3999999999999986,
+          "distance": 323.54583235074665,
+          "max_beta": 11.698564598438494,
+          "min_pose": 1.479203989646643,
+          "min_swept": 1.3928525715810962,
+          "branch_min_swept": 1.4044250696759215,
+          "sections": [
+            {
+              "segment": 5,
+              "lo": 194.38937497138977,
+              "hi": 226.85249996185303,
+              "seconds": 1.9372364053794904,
+              "distance": 35.331165253915515,
+              "entry": 72.65508927415813,
+              "exit": 61.08091763540594,
+              "min_speed": 60.8215896,
+              "mean_speed": 65.65651696452599,
+              "means": {
+                "beta": 8.231273980958495,
+                "beta_dot": 0.16004692909949622,
+                "yaw": 0.5317724951619237,
+                "side": -2.602643825280512,
+                "requested": 0.08732550902073642,
+                "active": 0.0601729748970852,
+                "slip": 0.03381902608906624,
+                "front": 0.7666385146089355,
+                "rear": 0.7798966484904833,
+                "front_fx": 0.0,
+                "front_fy": 655.4189664350226,
+                "rear_fx": 88.186599175758,
+                "rear_fy": 767.3884975657849,
+                "curvature": 0.029221626239030435,
+                "offset": 2.590205946658993
+              },
+              "peaks": {
+                "beta": 11.698564598438494,
+                "beta_dot": 16.20399129143414,
+                "yaw": 0.71347153,
+                "side": 3.635841,
+                "requested": 0.219557,
+                "active": 0.21692324,
+                "slip": 0.08411135754165562,
+                "front": 0.8645436002327376,
+                "rear": 0.8819274677060844,
+                "front_fx": 0,
+                "front_fy": 739.12054,
+                "rear_fx": 263.22458,
+                "rear_fy": 878.0663,
+                "curvature": 0.0344332880120861,
+                "offset": 3.376446689779158
+              },
+              "min_radius": 29.04166455579262,
+              "energy": {
+                "front_lateral": 3572.222082801587,
+                "rear_lateral": 4506.713973858758,
+                "rear_longitudinal": 162.5701433032791,
+                "bearing": 123.68501048400839,
+                "clutch": 2.209101746900313,
+                "transmission": 186.92752105528078,
+                "resistance": 3790.8179342026287,
+                "net": 12210.071707730764
+              },
+              "inner": 2.938544016293066,
+              "outer": 7.323048840695403,
+              "swept": 2.8421450421886285
+            },
+            {
+              "segment": 6,
+              "lo": 226.85249996185303,
+              "hi": 259.3156249523163,
+              "seconds": 2.0042769822319677,
+              "distance": 34.12293153672982,
+              "entry": 61.08091763540594,
+              "exit": 63.41988282220824,
+              "min_speed": 59.373684,
+              "mean_speed": 61.29020820038036,
+              "means": {
+                "beta": 5.444258999908604,
+                "beta_dot": 0.26891736340187267,
+                "yaw": 0.4592146769364303,
+                "side": -1.6027280478834691,
+                "requested": 0.20037781281819977,
+                "active": 0.21766607271005867,
+                "slip": 0.09603752359014525,
+                "front": 0.6058628975624846,
+                "rear": 0.6814436326790857,
+                "front_fx": 0.0,
+                "front_fy": 517.9677599739304,
+                "rear_fx": 275.54327186828226,
+                "rear_fy": 600.997547343023,
+                "curvature": 0.026783020051464615,
+                "offset": 1.7376792699277352
+              },
+              "peaks": {
+                "beta": 9.114229296176193,
+                "beta_dot": 20.13841225650995,
+                "yaw": 0.7081251,
+                "side": 2.6366906,
+                "requested": 0.35406253,
+                "active": 0.35406253,
+                "slip": 0.14993315380536465,
+                "front": 0.803162663637582,
+                "rear": 0.8350690472952035,
+                "front_fx": 0,
+                "front_fy": 686.6444,
+                "rear_fx": 445.35345,
+                "rear_fy": 821.4285,
+                "curvature": 0.03666993047427626,
+                "offset": 2.466456551386165
+              },
+              "min_radius": 27.27029986330337,
+              "energy": {
+                "front_lateral": 1906.2772954609402,
+                "rear_lateral": 2549.7850031099942,
+                "rear_longitudinal": 956.3116974832096,
+                "bearing": 126.7800468347484,
+                "clutch": 13.364692211720778,
+                "transmission": 667.0558738643416,
+                "resistance": 3344.0927434472032,
+                "net": 9470.990107098352
+              },
+              "inner": 1.4955429811485625,
+              "outer": 11.743407326561302,
+              "swept": 1.4044250696759215
+            },
+            {
+              "segment": 7,
+              "lo": 259.3156249523163,
+              "hi": 291.77874994277954,
+              "seconds": 2.0493466917276955,
+              "distance": 33.944842893090254,
+              "entry": 63.41988282220824,
+              "exit": 63.09527568697425,
+              "min_speed": 56.5969608,
+              "mean_speed": 59.62945894337838,
+              "means": {
+                "beta": 6.564654309034096,
+                "beta_dot": -1.9994743509289867,
+                "yaw": 0.43750053976898845,
+                "side": -1.8748159744605524,
+                "requested": 0.3308829728792375,
+                "active": 0.2334153029433312,
+                "slip": 0.10130887949599503,
+                "front": 0.6104116734281371,
+                "rear": 0.7638408563370422,
+                "front_fx": 0.0,
+                "front_fy": 521.0933150044664,
+                "rear_fx": 261.026951650281,
+                "rear_fy": 620.0966721259701,
+                "curvature": 0.02861440710555164,
+                "offset": 1.3207334635621997
+              },
+              "peaks": {
+                "beta": 11.068634171991041,
+                "beta_dot": 26.564025066923193,
+                "yaw": 0.7812898,
+                "side": 3.0541196,
+                "requested": 1,
+                "active": 0.8680721,
+                "slip": 0.333232270668148,
+                "front": 0.8615510126791845,
+                "rear": 0.8781825591595311,
+                "front_fx": 0,
+                "front_fy": 736.5621,
+                "rear_fx": 810.06537,
+                "rear_fy": 870.2319,
+                "curvature": 0.04167707809377867,
+                "offset": 2.071388483047723
+              },
+              "min_radius": 23.99400451610053,
+              "energy": {
+                "front_lateral": 2502.7264133608105,
+                "rear_lateral": 3410.1992513214464,
+                "rear_longitudinal": 1475.1914681189028,
+                "bearing": 124.19833927412591,
+                "clutch": 23.90230879202187,
+                "transmission": 720.4987677762077,
+                "resistance": 3227.3087854531364,
+                "net": 11373.041844880197
+              },
+              "inner": 1.5407786539665895,
+              "outer": 8.436810529328996,
+              "swept": 1.4459987300785377
+            }
+          ]
+        },
+        "NEW": {
+          "common_goal_seconds": 20.20229023788987,
+          "entry_seconds": 13.274923368512548,
+          "exit_seconds": 19.197851341665498,
+          "entry_kph": 76.28876595720637,
+          "exit_kph": 63.3421683069329,
+          "bend_seconds": 5.92292797315295,
+          "minimum_bend_kph": 56.6179416,
+          "straight_vmax_kph": 77.7380148,
+          "high_intervals": [
+            {
+              "start": 10.439999999999996,
+              "end": 10.839999999999995,
+              "reference": 135.69269680261613,
+              "start_kph": 63.760604400000005,
+              "end_kph": 71.8333308,
+              "peak": 1
+            },
+            {
+              "start": 13.039999999999987,
+              "end": 13.239999999999986,
+              "reference": 189.52037166833878,
+              "start_kph": 73.49065920000001,
+              "end_kph": 75.812472,
+              "peak": 0.95
+            }
+          ],
+          "high_seconds": 0.5999999999999979,
+          "distance": 323.995354821136,
+          "max_beta": 16.148805715479735,
+          "min_pose": 1.479203989646643,
+          "min_swept": 1.3928525715810962,
+          "branch_min_swept": 1.437505098575927,
+          "sections": [
+            {
+              "segment": 5,
+              "lo": 194.38937497138977,
+              "hi": 226.85249996185303,
+              "seconds": 1.8642319592145515,
+              "distance": 35.59643243433749,
+              "entry": 76.28876595720637,
+              "exit": 61.48421696691829,
+              "min_speed": 61.48421696691829,
+              "mean_speed": 68.73992055023379,
+              "means": {
+                "beta": 12.471784063768624,
+                "beta_dot": 0.49003912748608996,
+                "yaw": 0.5677250031728944,
+                "side": -4.142127964612485,
+                "requested": 0.07568404338657679,
+                "active": 0.048437279913656,
+                "slip": 0.06415557498671615,
+                "front": 0.8431416568111572,
+                "rear": 0.8824372499758969,
+                "front_fx": 0.0,
+                "front_fy": 720.8234686035436,
+                "rear_fx": 134.37189595479964,
+                "rear_fy": 859.5646479504843,
+                "curvature": 0.029686400514208813,
+                "offset": 2.840147166768682
+              },
+              "peaks": {
+                "beta": 16.148805715479735,
+                "beta_dot": 30.944549886793464,
+                "yaw": 0.9421441,
+                "side": 5.4806776,
+                "requested": 0.23140681,
+                "active": 0.18437064,
+                "slip": 0.32763704120541065,
+                "front": 0.9008270575080496,
+                "rear": 0.9302532278822813,
+                "front_fx": 0,
+                "front_fy": 770.1402,
+                "rear_fx": 735.8411,
+                "rear_fy": 926.2789,
+                "curvature": 0.03477227392114631,
+                "offset": 3.389782871419783
+              },
+              "min_radius": 28.75854487594678,
+              "energy": {
+                "front_lateral": 5092.744795290826,
+                "rear_lateral": 7341.916538002694,
+                "rear_longitudinal": 496.20812003183437,
+                "bearing": 135.67248431797444,
+                "clutch": 2.0871216100066996,
+                "transmission": 231.0885039958467,
+                "resistance": 4068.262996700183,
+                "net": 17208.438312891976
+              },
+              "inner": 3.023390013182201,
+              "outer": 7.30615005539045,
+              "swept": 2.9192594151676245
+            },
+            {
+              "segment": 6,
+              "lo": 226.85249996185303,
+              "hi": 259.3156249523163,
+              "seconds": 2.0076431425428183,
+              "distance": 34.288411685807404,
+              "entry": 61.48421696691829,
+              "exit": 63.548368239186374,
+              "min_speed": 59.551578,
+              "mean_speed": 61.484174878092915,
+              "means": {
+                "beta": 5.436909312276178,
+                "beta_dot": -0.7279092926497797,
+                "yaw": 0.43361138083970935,
+                "side": -1.6059618753642888,
+                "requested": 0.19652928973433156,
+                "active": 0.21322360654542538,
+                "slip": 0.09400339254052549,
+                "front": 0.5973819130678143,
+                "rear": 0.673001513499497,
+                "front_fx": 0.0,
+                "front_fy": 510.71714839373385,
+                "rear_fx": 270.99587598954054,
+                "rear_fy": 591.7305704283451,
+                "curvature": 0.026196322044179734,
+                "offset": 1.8868789939731283
+              },
+              "peaks": {
+                "beta": 9.222397425361146,
+                "beta_dot": 27.31387212214404,
+                "yaw": 0.71681255,
+                "side": 2.6808243,
+                "requested": 0.32766047,
+                "active": 0.32766047,
+                "slip": 0.13112252774220023,
+                "front": 0.8021574300798189,
+                "rear": 0.8381633904689395,
+                "front_fx": 0,
+                "front_fy": 685.785,
+                "rear_fx": 411.7753,
+                "rear_fy": 822.3272,
+                "curvature": 0.03602346549976704,
+                "offset": 2.977491324782691
+              },
+              "min_radius": 27.759683476495812,
+              "energy": {
+                "front_lateral": 1941.611656527649,
+                "rear_lateral": 2561.617631703399,
+                "rear_longitudinal": 904.57768106831,
+                "bearing": 127.27185855498388,
+                "clutch": 12.717042479624714,
+                "transmission": 655.1535007504068,
+                "resistance": 3372.969609797457,
+                "net": 9483.850009729866
+              },
+              "inner": 1.5285693128015387,
+              "outer": 11.189046429322763,
+              "swept": 1.437505098575927
+            },
+            {
+              "segment": 7,
+              "lo": 259.3156249523163,
+              "hi": 291.77874994277954,
+              "seconds": 2.05105287139558,
+              "distance": 33.990014960821554,
+              "entry": 63.548368239186374,
+              "exit": 63.3421683069329,
+              "min_speed": 56.6179416,
+              "mean_speed": 59.65914168545957,
+              "means": {
+                "beta": 6.67765290254428,
+                "beta_dot": -1.9405278625982691,
+                "yaw": 0.4420632517489066,
+                "side": -1.9089755833648927,
+                "requested": 0.33796621360861206,
+                "active": 0.23974691602536297,
+                "slip": 0.10464478574858838,
+                "front": 0.6120841101342747,
+                "rear": 0.76901205708353,
+                "front_fx": 0.0,
+                "front_fy": 523.2864344679391,
+                "rear_fx": 265.61060234555936,
+                "rear_fy": 627.0305577252965,
+                "curvature": 0.028841297224583545,
+                "offset": 1.3617666936281407
+              },
+              "peaks": {
+                "beta": 10.977537320312011,
+                "beta_dot": 24.813914022538306,
+                "yaw": 0.7699939,
+                "side": 3.0452075,
+                "requested": 0.9390339,
+                "active": 0.7815649,
+                "slip": 0.35883726709944996,
+                "front": 0.8571715677599141,
+                "rear": 0.8754664096638705,
+                "front_fx": 0,
+                "front_fy": 732.818,
+                "rear_fx": 827.17786,
+                "rear_fy": 865.7603,
+                "curvature": 0.04184261380633811,
+                "offset": 2.057552822668388
+              },
+              "min_radius": 23.899080603050784,
+              "energy": {
+                "front_lateral": 2538.9189858398895,
+                "rear_lateral": 3456.5918834562817,
+                "rear_longitudinal": 1583.424538375652,
+                "bearing": 125.3434536314507,
+                "clutch": 25.283264826397577,
+                "transmission": 745.8234125655177,
+                "resistance": 3233.543928842658,
+                "net": 11597.011148732081
+              },
+              "inner": 1.5845674282480282,
+              "outer": 8.456406377446317,
+              "swept": 1.489003851023516
+            }
+          ]
+        }
+      },
+      "local_gain_seconds": 0.07188864420256635,
+      "gain_to_entry_seconds": 0.005150442342126027,
+      "gain_in_bend_seconds": 0.06793210618620371,
+      "timing_ms": {
+        "median": 8.249649999999999,
+        "p95": 17.430415,
+        "p99": 57.15727699999995,
+        "maximum": 741.2501
+      },
+      "first_decision_ms": 0.2311,
+      "maximum_warm_ms": 741.2501,
+      "forecasts": {
+        "base_controller": 1599,
+        "state_feasibility": 1418,
+        "total": 3017
+      },
+      "cpu": {
+        "total_native_run": 1.875,
+        "controller": 1.671875,
+        "feasibility": 0.765625
+      },
+      "model_predicted_gain_seconds": 0.07189471979339856
+    },
+    {
+      "id": "X4",
+      "branch": {
+        "Id": "X4",
+        "State": {
+          "Id": "X4",
+          "Trial": "v1-K4-S4",
+          "Reason": "Additional authentic first-lap state within selective region",
+          "Input": {
+            "Rider": {
+              "Id": 1,
+              "Position": {
+                "X": 17.497255,
+                "Y": 67.03976
+              },
+              "Velocity": {
+                "X": -21.312447,
+                "Y": 1.8177199
+              },
+              "Heading": 3.0899348,
+              "AngularVelocity": 0.20452471,
+              "Road": {
+                "Segment": 4,
+                "Progress": 0.28230233346262285,
+                "ReferenceMeters": 149.8921196460724,
+                "OffsetMeters": 4.376736606771345,
+                "Heading": 3.141592653589793,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": -1,
+                  "Y": 1.2246469e-16
+                },
+                "Outward": {
+                  "X": 1.2246469e-16,
+                  "Y": 1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 149.89211964130402,
+              "DistanceMeters": 161.120612308383,
+              "Activity": 0,
+              "Drive": 0.13098402,
+              "TargetOffsetMeters": 8.69,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 21.389822,
+              "ForwardSpeed": 21.377874,
+              "SideSpeed": -0.71483016,
+              "SlideRadians": 0.03342539
+            },
+            "Time": 11.59999999999999,
+            "Omega": 69.56420995965112,
+            "Steering": 0.011431497,
+            "Active": {
+              "SteeringRadians": 0.011431497,
+              "Drive": 0.13098402
+            },
+            "Pending": [
+              {
+                "ObservedAt": 11.399999999999991,
+                "ActivationAt": 11.639999999999992,
+                "Action": {
+                  "SteeringRadians": 0.008499995,
+                  "Drive": 0.08460919
+                }
+              }
+            ],
+            "NextReview": 11.59999999999999
+          },
+          "CrankOmega": 626.5892791982178,
+          "Action": {
+            "SteeringRadians": 0.0055000037,
+            "Drive": 0.07546423
+          },
+          "Spec": {
+            "Profile": {
+              "Id": 1,
+              "Name": "R1",
+              "Skills": {
+                "Start": 50,
+                "Speed": 50,
+                "SlideControl": 50,
+                "TrackReading": 50,
+                "PairRiding": 50,
+                "Adaptability": 50
+              },
+              "Style": {
+                "RiskTolerance": 0.5,
+                "LaneChangeTendency": 0.5,
+                "OutsidePreference": 0.5,
+                "SetupIndependence": 0.5
+              }
+            },
+            "Setup": {
+              "Gearing": 0.5,
+              "TractionBias": 0.5
+            },
+            "ReferenceMeters": -1.63,
+            "OffsetMeters": 8.69,
+            "SpeedMetersPerSecond": 0,
+            "TargetOffsetMeters": 8.69,
+            "InitialOutwardSpeed": 0,
+            "TrafficEnabled": false,
+            "Passive": false,
+            "Bullet": false
+          },
+          "Classification": {
+            "Source": "archive"
+          }
+        },
+        "BranchHash": "AE0F80DB5DEB1361B226DB5A72550146AFD97D50BD1BDD1A2C11F09AE67D2960",
+        "PrefixReviews": 59,
+        "PhysicalPrefixSamples": 1186,
+        "PhysicalPrefixEqual": true,
+        "Admitted": true,
+        "StateHashMatches": true,
+        "Outcome": {
+          "Id": "d1-X4",
+          "Stage": "development",
+          "Controller": "NEW174",
+          "Start": {
+            "Id": "X4",
+            "Gate": "D",
+            "Start": -1.63,
+            "Offset": 8.69,
+            "Reference161": null,
+            "Field": 3,
+            "Spec": {
+              "Profile": {
+                "Id": 1,
+                "Name": "R1",
+                "Skills": {
+                  "Start": 50,
+                  "Speed": 50,
+                  "SlideControl": 50,
+                  "TrackReading": 50,
+                  "PairRiding": 50,
+                  "Adaptability": 50
+                },
+                "Style": {
+                  "RiskTolerance": 0.5,
+                  "LaneChangeTendency": 0.5,
+                  "OutsidePreference": 0.5,
+                  "SetupIndependence": 0.5
+                }
+              },
+              "Setup": {
+                "Gearing": 0.5,
+                "TractionBias": 0.5
+              },
+              "ReferenceMeters": -1.63,
+              "OffsetMeters": 8.69,
+              "SpeedMetersPerSecond": 0,
+              "TargetOffsetMeters": 8.69,
+              "InitialOutwardSpeed": 0,
+              "TrafficEnabled": false,
+              "Passive": false,
+              "Bullet": false
+            }
+          },
+          "ReachedStop": true,
+          "S3": false,
+          "Reserve": false,
+          "Reason": "integration goal",
+          "Stop": 311.77874994277954,
+          "EndReference": 311.82020520687104,
+          "EndTime": 20.57,
+          "FinishTime": null,
+          "Crossings": 0,
+          "MinPose": 1.4512240896657607,
+          "MinSweep": 1.3690805934656647,
+          "MaxBetaDegrees": 17.43072775978221,
+          "FirstBadTime": null,
+          "FirstBadReference": null,
+          "CpuSeconds": 1.921875,
+          "WorldCpuSeconds": 1.921875,
+          "ControllerCpuSeconds": 1.78125,
+          "Decisions": 103,
+          "Plans": 2,
+          "Replans": 0,
+          "PlanCpuSeconds": 0.125,
+          "Fingerprint": "1DB16FDBFFCE23CFBB709D898B38B2C8132F7597C7B151CD5688499A41DFF4C3",
+          "AcceptedBends": 2
+        },
+        "BaselineGoalSeconds": 20.722134594553175,
+        "NewGoalSeconds": 20.56809207184194,
+        "Admissions": 1,
+        "MaximumDecisionMs": 882.3462,
+        "BranchDecisionMs": 876.8402
+      },
+      "arms": {
+        "BASE": {
+          "common_goal_seconds": 20.722134594553175,
+          "entry_seconds": 13.726355810900953,
+          "exit_seconds": 19.715255557600305,
+          "entry_kph": 72.85402143041745,
+          "exit_kph": 62.991622195887594,
+          "bend_seconds": 5.988899746699351,
+          "minimum_bend_kph": 56.5955532,
+          "straight_vmax_kph": 77.23125,
+          "high_intervals": [
+            {
+              "start": 10.839999999999995,
+              "end": 11.239999999999993,
+              "reference": 135.02124905109406,
+              "start_kph": 63.733032,
+              "end_kph": 71.6085648,
+              "peak": 1
+            }
+          ],
+          "high_seconds": 0.3999999999999986,
+          "distance": 329.2115424173367,
+          "max_beta": 13.563339394529846,
+          "min_pose": 1.4512240896657607,
+          "min_swept": 1.3690805934656647,
+          "branch_min_swept": 1.4243763684595732,
+          "sections": [
+            {
+              "segment": 5,
+              "lo": 194.38937497138977,
+              "hi": 226.85249996185303,
+              "seconds": 1.9348235743505597,
+              "distance": 35.34114529506928,
+              "entry": 72.85402143041745,
+              "exit": 60.84427872264507,
+              "min_speed": 60.5211552,
+              "mean_speed": 65.75696345076561,
+              "means": {
+                "beta": 8.722140922311938,
+                "beta_dot": 0.8782724492384829,
+                "yaw": 0.5401712214903617,
+                "side": -2.745669239931116,
+                "requested": 0.08849270926399774,
+                "active": 0.06135365192613971,
+                "slip": 0.03662333090883139,
+                "front": 0.7650953252252688,
+                "rear": 0.771394841338064,
+                "front_fx": 0.0,
+                "front_fy": 654.0996541756167,
+                "rear_fx": 90.87310209538656,
+                "rear_fy": 758.0390081412321,
+                "curvature": 0.02901872060057841,
+                "offset": 2.596068204846533
+              },
+              "peaks": {
+                "beta": 13.563339394529846,
+                "beta_dot": 20.90511000048183,
+                "yaw": 0.7844485,
+                "side": 4.212591,
+                "requested": 0.23324087,
+                "active": 0.2235208,
+                "slip": 0.08397101796834461,
+                "front": 0.8779200375539865,
+                "rear": 0.907247370851247,
+                "front_fx": 0,
+                "front_fy": 750.5564,
+                "rear_fx": 270.44403,
+                "rear_fy": 902.9114,
+                "curvature": 0.035641395718970265,
+                "offset": 3.3891954080408766
+              },
+              "min_radius": 28.057262624755918,
+              "energy": {
+                "front_lateral": 3634.71219273379,
+                "rear_lateral": 4828.207122306953,
+                "rear_longitudinal": 174.4172292212171,
+                "bearing": 124.00187212909825,
+                "clutch": 2.3005291582715515,
+                "transmission": 190.74675897088994,
+                "resistance": 3802.9849976675937,
+                "net": 12622.699533674913
+              },
+              "inner": 2.945253329808947,
+              "outer": 7.299330502448103,
+              "swept": 2.8476396369430588
+            },
+            {
+              "segment": 6,
+              "lo": 226.85249996185303,
+              "hi": 259.3156249523163,
+              "seconds": 2.0020727995909002,
+              "distance": 34.089849378096176,
+              "entry": 60.84427872264507,
+              "exit": 63.44979121784514,
+              "min_speed": 59.4800892,
+              "mean_speed": 61.29819943921285,
+              "means": {
+                "beta": 5.244736507478966,
+                "beta_dot": 0.5348524397709653,
+                "yaw": 0.4607770161380642,
+                "side": -1.5454352457979754,
+                "requested": 0.2000838128532432,
+                "active": 0.21776611696174047,
+                "slip": 0.0943482113186513,
+                "front": 0.6020103758149074,
+                "rear": 0.6754192333994095,
+                "front_fx": 0.0,
+                "front_fy": 514.6741401337459,
+                "rear_fx": 274.8952266194628,
+                "rear_fy": 596.8876820560766,
+                "curvature": 0.026593670876496583,
+                "offset": 1.7080017046617588
+              },
+              "peaks": {
+                "beta": 8.64682293197996,
+                "beta_dot": 19.60163101656284,
+                "yaw": 0.69059306,
+                "side": 2.4962635,
+                "requested": 0.35140666,
+                "active": 0.35140666,
+                "slip": 0.14801429308890024,
+                "front": 0.7882874527918926,
+                "rear": 0.8223181589966768,
+                "front_fx": 0,
+                "front_fy": 673.9272,
+                "rear_fx": 434.45227,
+                "rear_fy": 810.3327,
+                "curvature": 0.03607472996792258,
+                "offset": 2.424294071355853
+              },
+              "min_radius": 27.720235214212096,
+              "energy": {
+                "front_lateral": 1829.5710084571278,
+                "rear_lateral": 2416.561495112752,
+                "rear_longitudinal": 937.3873442815751,
+                "bearing": 126.42641146352828,
+                "clutch": 13.273599627948956,
+                "transmission": 665.0943165367094,
+                "resistance": 3341.2950613995217,
+                "net": 9238.962876848442
+              },
+              "inner": 1.5154300751949277,
+              "outer": 11.798057878284027,
+              "swept": 1.4243763684595732
+            },
+            {
+              "segment": 7,
+              "lo": 259.3156249523163,
+              "hi": 291.77874994277954,
+              "seconds": 2.0520033727578912,
+              "distance": 33.966283786765075,
+              "entry": 63.44979121784514,
+              "exit": 62.991622195887594,
+              "min_speed": 56.5955532,
+              "mean_speed": 59.58987361117828,
+              "means": {
+                "beta": 6.468370929027775,
+                "beta_dot": -2.049791276397421,
+                "yaw": 0.43042708748740377,
+                "side": -1.8474117051914467,
+                "requested": 0.3295720924647054,
+                "active": 0.23136761402331904,
+                "slip": 0.09941657798204953,
+                "front": 0.6063248280010587,
+                "rear": 0.7626542000866344,
+                "front_fx": 0.0,
+                "front_fy": 513.5758173285792,
+                "rear_fx": 257.22928409517306,
+                "rear_fy": 613.4739376300515,
+                "curvature": 0.028263117945800505,
+                "offset": 1.3366000502229969
+              },
+              "peaks": {
+                "beta": 10.85708096529489,
+                "beta_dot": 24.088005143902265,
+                "yaw": 0.76476365,
+                "side": 3.0007892,
+                "requested": 0.99393815,
+                "active": 0.834242,
+                "slip": 0.34344639257122667,
+                "front": 0.8547699906319265,
+                "rear": 0.874482085002741,
+                "front_fx": 0,
+                "front_fy": 730.76483,
+                "rear_fx": 817.4431,
+                "rear_fy": 865.6898,
+                "curvature": 0.04176188862788695,
+                "offset": 2.1059863578024896
+              },
+              "min_radius": 23.945277209810843,
+              "energy": {
+                "front_lateral": 2495.9004287609973,
+                "rear_lateral": 3390.818214150171,
+                "rear_longitudinal": 1449.3224538595334,
+                "bearing": 123.83656990319113,
+                "clutch": 23.83514641332668,
+                "transmission": 712.9463702182501,
+                "resistance": 3226.9220379857534,
+                "net": 11312.510810369487
+              },
+              "inner": 1.561536021528249,
+              "outer": 8.394727857940728,
+              "swept": 1.4666795471975955
+            }
+          ]
+        },
+        "NEW": {
+          "common_goal_seconds": 20.56809207184194,
+          "entry_seconds": 13.622189465315492,
+          "exit_seconds": 19.564002780311636,
+          "entry_kph": 77.22706933748086,
+          "exit_kph": 63.2638184772209,
+          "bend_seconds": 5.9418133149961445,
+          "minimum_bend_kph": 56.5531272,
+          "straight_vmax_kph": 81.6213456,
+          "high_intervals": [
+            {
+              "start": 10.839999999999995,
+              "end": 11.239999999999993,
+              "reference": 135.02124905109406,
+              "start_kph": 63.733032,
+              "end_kph": 71.6085648,
+              "peak": 1
+            },
+            {
+              "start": 11.839999999999991,
+              "end": 12.03999999999999,
+              "reference": 155.02721237659455,
+              "start_kph": 77.1771852,
+              "end_kph": 79.78210200000001,
+              "peak": 0.95
+            }
+          ],
+          "high_seconds": 0.5999999999999979,
+          "distance": 329.67218284048164,
+          "max_beta": 17.43072830827615,
+          "min_pose": 1.4512240896657607,
+          "min_swept": 1.3690805934656647,
+          "branch_min_swept": 1.4906794367570193,
+          "sections": [
+            {
+              "segment": 5,
+              "lo": 194.38937497138977,
+              "hi": 226.85249996185303,
+              "seconds": 1.8914428972390596,
+              "distance": 35.702025954131614,
+              "entry": 77.22706933748086,
+              "exit": 59.68040683340849,
+              "min_speed": 59.680008,
+              "mean_speed": 67.9519818560133,
+              "means": {
+                "beta": 12.911662999314782,
+                "beta_dot": 3.0574196321163907,
+                "yaw": 0.6232822256842381,
+                "side": -4.141596479845544,
+                "requested": 0.09583822207305281,
+                "active": 0.060969037292896,
+                "slip": 0.056148445083325664,
+                "front": 0.8512520380044736,
+                "rear": 0.8731470641202502,
+                "front_fx": 0.0,
+                "front_fy": 727.7572418980265,
+                "rear_fx": 96.2525763750379,
+                "rear_fy": 862.122712506735,
+                "curvature": 0.030805230942835292,
+                "offset": 2.9359674207774633
+              },
+              "peaks": {
+                "beta": 17.43072830827615,
+                "beta_dot": 20.082457198230642,
+                "yaw": 0.8120285,
+                "side": 5.4579096,
+                "requested": 0.29416442,
+                "active": 0.2573956,
+                "slip": 0.14554728892606897,
+                "front": 0.9138474521918215,
+                "rear": 0.9403693754792082,
+                "front_fx": 0,
+                "front_fy": 781.27167,
+                "rear_fx": 316.18564,
+                "rear_fy": 934.12665,
+                "curvature": 0.0388807042568704,
+                "offset": 3.344044651204939
+              },
+              "min_radius": 25.719698732650794,
+              "energy": {
+                "front_lateral": 5346.565326323154,
+                "rear_lateral": 7558.632904182862,
+                "rear_longitudinal": 272.70819186192324,
+                "bearing": 130.45567729101361,
+                "clutch": 2.31549950707241,
+                "transmission": 197.12764908035857,
+                "resistance": 4030.07113010327,
+                "net": 17374.166021733625
+              },
+              "inner": 3.114051158060509,
+              "outer": 7.3427247357444685,
+              "swept": 3.0086099179834966
+            },
+            {
+              "segment": 6,
+              "lo": 226.85249996185303,
+              "hi": 259.3156249523163,
+              "seconds": 2.0008435741339152,
+              "distance": 34.2034719818497,
+              "entry": 59.68040683340849,
+              "exit": 63.61857356338134,
+              "min_speed": 59.68040683340849,
+              "mean_speed": 61.54029266778541,
+              "means": {
+                "beta": 4.561448499982374,
+                "beta_dot": -2.0078878448086015,
+                "yaw": 0.397635771210809,
+                "side": -1.3532388094399104,
+                "requested": 0.19378594357198325,
+                "active": 0.21829523213586205,
+                "slip": 0.09234115734924665,
+                "front": 0.5823399358594853,
+                "rear": 0.6434318611774482,
+                "front_fx": 0.0,
+                "front_fy": 497.857375544921,
+                "rear_fx": 279.94599472498214,
+                "rear_fy": 568.3930395632273,
+                "curvature": 0.025337007409491637,
+                "offset": 1.811632188646772
+              },
+              "peaks": {
+                "beta": 8.705691480640677,
+                "beta_dot": 18.42563514205477,
+                "yaw": 0.5727993,
+                "side": 2.5092428,
+                "requested": 0.30587468,
+                "active": 0.30587468,
+                "slip": 0.14536232251742806,
+                "front": 0.7688470147998214,
+                "rear": 0.8279564794631639,
+                "front_fx": 0,
+                "front_fy": 657.30707,
+                "rear_fx": 368.07483,
+                "rear_fy": 761.46136,
+                "curvature": 0.03574026370652936,
+                "offset": 3.0149932631503717
+              },
+              "min_radius": 27.979648057753725,
+              "energy": {
+                "front_lateral": 1591.9148441143977,
+                "rear_lateral": 1895.8142114603068,
+                "rear_longitudinal": 933.7003469036202,
+                "bearing": 127.1472477842052,
+                "clutch": 13.175707518871343,
+                "transmission": 672.2357214282656,
+                "resistance": 3368.2147796121003,
+                "net": 8521.384891591913
+              },
+              "inner": 1.5820065419364624,
+              "outer": 11.098087327585588,
+              "swept": 1.4906794367570193
+            },
+            {
+              "segment": 7,
+              "lo": 259.3156249523163,
+              "hi": 291.77874994277954,
+              "seconds": 2.0495268436231697,
+              "distance": 33.97600758016034,
+              "entry": 63.61857356338134,
+              "exit": 63.2638184772209,
+              "min_speed": 56.5531272,
+              "mean_speed": 59.67895842356973,
+              "means": {
+                "beta": 6.653470801494011,
+                "beta_dot": -1.8955407000929478,
+                "yaw": 0.43724429906002077,
+                "side": -1.9009007523688448,
+                "requested": 0.3365605644799836,
+                "active": 0.23759410635688483,
+                "slip": 0.10355167443714332,
+                "front": 0.6066331349678316,
+                "rear": 0.7665310598932769,
+                "front_fx": 0.0,
+                "front_fy": 518.1637476081165,
+                "rear_fx": 262.77534644238693,
+                "rear_fy": 619.9295628668946,
+                "curvature": 0.02848689497846484,
+                "offset": 1.3475635177134737
+              },
+              "peaks": {
+                "beta": 11.400883230062684,
+                "beta_dot": 28.902569496483533,
+                "yaw": 0.7888851,
+                "side": 3.1506033,
+                "requested": 0.969454,
+                "active": 0.7994382,
+                "slip": 0.3644306973552605,
+                "front": 0.8671727877842825,
+                "rear": 0.8831801160918854,
+                "front_fx": 0,
+                "front_fy": 741.3683,
+                "rear_fx": 831.16016,
+                "rear_fy": 872.0939,
+                "curvature": 0.04207511776247017,
+                "offset": 2.0500288012478656
+              },
+              "min_radius": 23.767016069815305,
+              "energy": {
+                "front_lateral": 2531.5918495665887,
+                "rear_lateral": 3461.8543007405547,
+                "rear_longitudinal": 1568.5958274639768,
+                "bearing": 125.02939676307676,
+                "clutch": 25.219145655987674,
+                "transmission": 738.1731297198693,
+                "resistance": 3233.8627675006214,
+                "net": 11573.048428378395
+              },
+              "inner": 1.6168078245024053,
+              "outer": 8.460924437709375,
+              "swept": 1.5222399372597804
+            }
+          ]
+        }
+      },
+      "local_gain_seconds": 0.15404252271123653,
+      "gain_to_entry_seconds": 0.10416634558546178,
+      "gain_in_bend_seconds": 0.0470864317032067,
+      "timing_ms": {
+        "median": 8.7504,
+        "p95": 17.109839999999995,
+        "p99": 50.50788200000001,
+        "maximum": 882.3462
+      },
+      "first_decision_ms": 0.2141,
+      "maximum_warm_ms": 882.3462,
+      "forecasts": {
+        "base_controller": 1618,
+        "state_feasibility": 1676,
+        "total": 3294
+      },
+      "cpu": {
+        "total_native_run": 1.921875,
+        "controller": 1.78125,
+        "feasibility": 0.890625
+      },
+      "model_predicted_gain_seconds": 0.15350560566839988
+    }
+  ],
+  "validation": [
+    {
+      "Id": "W1",
+      "Gate": "A",
+      "Start": -0.5831,
+      "Offset": 1.5137,
+      "BASE": "NOT_RUN",
+      "NEW": "NOT_RUN",
+      "reason": "development decision-cost gate failed; heldout unconsumed"
+    },
+    {
+      "Id": "W2",
+      "Gate": "A",
+      "Start": -0.5217,
+      "Offset": 1.6379,
+      "BASE": "NOT_RUN",
+      "NEW": "NOT_RUN",
+      "reason": "development decision-cost gate failed; heldout unconsumed"
+    },
+    {
+      "Id": "W3",
+      "Gate": "B",
+      "Start": -0.6113,
+      "Offset": 4.2871,
+      "BASE": "NOT_RUN",
+      "NEW": "NOT_RUN",
+      "reason": "development decision-cost gate failed; heldout unconsumed"
+    },
+    {
+      "Id": "W4",
+      "Gate": "B",
+      "Start": -0.4579,
+      "Offset": 4.6033,
+      "BASE": "NOT_RUN",
+      "NEW": "NOT_RUN",
+      "reason": "development decision-cost gate failed; heldout unconsumed"
+    },
+    {
+      "Id": "W5",
+      "Gate": "C",
+      "Start": -0.6473,
+      "Offset": 6.8879,
+      "BASE": "NOT_RUN",
+      "NEW": "NOT_RUN",
+      "reason": "development decision-cost gate failed; heldout unconsumed"
+    },
+    {
+      "Id": "W6",
+      "Gate": "C",
+      "Start": -0.4931,
+      "Offset": 7.2417,
+      "BASE": "NOT_RUN",
+      "NEW": "NOT_RUN",
+      "reason": "development decision-cost gate failed; heldout unconsumed"
+    },
+    {
+      "Id": "W7",
+      "Gate": "D",
+      "Start": -0.5719,
+      "Offset": 9.4123,
+      "BASE": "NOT_RUN",
+      "NEW": "NOT_RUN",
+      "reason": "development decision-cost gate failed; heldout unconsumed"
+    },
+    {
+      "Id": "W8",
+      "Gate": "D",
+      "Start": -0.4397,
+      "Offset": 9.6789,
+      "BASE": "NOT_RUN",
+      "NEW": "NOT_RUN",
+      "reason": "development decision-cost gate failed; heldout unconsumed"
+    }
+  ],
+  "settings": {
+    "Base173": "b306ffec897d11e291d3a90662c9d03b10285391",
+    "Reference172": "c5f0a4cc4de34fc4c8c47ef912cafabf34055f29",
+    "HeldSha256": "ad13c98a1103e3e0dd478fb6044c599f5d9650e3271be6201b9cf800540110bb",
+    "MaximumCpuSeconds": 300,
+    "MaximumWorlds": 24,
+    "MaximumDevelopmentWorlds": 6,
+    "ValidationWorlds": 16,
+    "ReactionSeconds": 0.24,
+    "ReviewSeconds": 0.2,
+    "NativeMinimumPose": 0.5,
+    "NativeMinimumSwept": 0.5,
+    "MaximumBetaDegrees": 45,
+    "ModelMinimumMargin": 0.65,
+    "WholeGoal": "next entire bend plus 20m",
+    "LongForecastMaximumSeconds": 15,
+    "MinimumPredictedCommonGoalGainSeconds": 0.005,
+    "AutomaticCheckRegionMeters": [
+      8,
+      45
+    ],
+    "MaximumChecksPerStraight": 3,
+    "RetrySeparationMeters": 8,
+    "Commitment": "after accepted pulse original causal K4 through next exit plus 20m; no second intervention inside witness",
+    "PerformanceGate": "Report warm decisions >200ms; no real-time readiness claim. Development gate requires trustworthy native safety and acceptable measured overhead before full S3.",
+    "NativePhase": "not enabled until phase C results audited",
+    "Validation": "sealed eight new standing states; code and settings frozen before execution; no retune after disclosure"
+  },
+  "closure": {
+    "Verdict": "PARTIAL",
+    "Functional": "full S3 not established; three controlled next-bend native admissions legal",
+    "Sport": "NOT TESTED; 5 percent criterion unchanged",
+    "Performance": "FAIL 200 ms review deadline; warm checks exceed period by more than 3x",
+    "FullS3Gate": false,
+    "DevelopmentWorlds": 3,
+    "TotalWorldLimit": 24,
+    "ValidationWorlds": 0,
+    "HeldInputsUnconsumed": true,
+    "Reason": "Development safety passed, acceptable decision-cost gate did not. User section 7 requires stop before full S3.",
+    "TrialResults": {
+      "P7": {
+        "Legal": true,
+        "TimeGainSeconds": 0.13793684982589127,
+        "DecisionMilliseconds": 899.0504
+      },
+      "P8": {
+        "Legal": true,
+        "TimeGainSeconds": 0.07188864420256635,
+        "DecisionMilliseconds": 741.2501
+      },
+      "X4": {
+        "Legal": true,
+        "TimeGainSeconds": 0.15404252271123653,
+        "DecisionMilliseconds": 882.3462
+      }
+    },
+    "Sources": {
+      "Fork174.CyclicController172.cs": "251b3fc371c710a0f1c2d590099921d3e6f1857b15dd60ead392bb0061d0f945",
+      "Fork174.CyclicExit172.Generated.cs": "ae03f8ad2ae2aa286f4131de47972bfad7dce5c2e832f692b5d31d5d0f824dc1",
+      "Fork174.Policy172.Generated.cs": "b974badc13924ab009051f0b2b53f8fb5d6a7954512ddc847acfb4ecc3c91fe6",
+      "Fork174.Tracker172.Generated.cs": "ad6dcd12eb39d282f4db4a94717aaa56b158bb1833ffc90119eae5c7e2b4d434",
+      "Native174.cs": "37433388906fb31af51718ba2aaae507af2c764bdf8b0fe6210210e81fe68acd",
+      "Program.cs": "0a0a126a2578f3d344aa2353727c008e9cfd8c4c540fff1df5d39a94d6d5e043",
+      "StateFeasibility174.cs": "5e06000db04615ac5cac3da6fd1f5c7fb803b96a42d957ed45c515bdc84cca47"
+    },
+    "PreviousReceipts": [
+      "c1.done.json",
+      "d1.done.json",
+      "x1.done.json"
+    ]
+  },
+  "scope": "All three native runs end before first finish; no new complete S3",
+  "provisional_cpu_seconds": 32.359375
+}
