@@ -1,0 +1,2285 @@
+{
+  "verdict": "PARTIAL",
+  "functional": "NOT_ESTABLISHED",
+  "sport": "NOT_TESTED",
+  "s3": "UNKNOWN",
+  "cpu_seconds": 39.0625,
+  "cpu_receipts": {
+    "aware.done.json": 7.71875,
+    "live.done.json": 7.859375,
+    "prepare.done.json": 1.140625,
+    "repair.done.json": 3.859375,
+    "tape.done.json": 6.140625,
+    "B-archiwum.json": 0.15625,
+    "invalid-integration.json": 1.640625,
+    "v0-analysis": 6.984375,
+    "analysis": 3.5625
+  },
+  "new_worlds": 14,
+  "diagnostics": {
+    "Verdict": "PARTIAL",
+    "Diagnostic": "PARTIAL: load invariants and two corrected X traces, no full bend; entry and adaptation trials invalid",
+    "Functional": "NOT_ESTABLISHED",
+    "Sport": "NOT_TESTED",
+    "S3": "UNKNOWN",
+    "Worlds": 14,
+    "MaxWorlds": 24,
+    "InvalidWorlds": 12,
+    "CorrectedWorlds": 2,
+    "ValidationWorlds": 0,
+    "HeldUnconsumed": true,
+    "HeldSha256": "18375b314b6a515c0058dd540f71a03c9d3833084d49ccb954e40e49228a1eba",
+    "Reason": "The first 12 worlds violated wheel/steering state commit. Both corrected fixed-command X reserve worlds stopped at swept 0.5 m on the following bend. No development or reserve allocations remain. Do not consume S3 holdouts.",
+    "Results": {
+      "repair-X-T35": "swept below 0.5 m",
+      "repair-X-T55": "swept below 0.5 m"
+    }
+  },
+  "baselines": [
+    {
+      "case": {
+        "Id": "E1",
+        "Archive": "v1-K4-S1",
+        "BranchSeconds": 21.999999999999954,
+        "BranchReference": 349.3283047604561,
+        "Bend": {
+          "Lap": 1,
+          "Index": 0,
+          "Entry": 353.77874994277954,
+          "Exit": 451.1681249141693,
+          "NextEntry": 513.1681249141693,
+          "Length": 97.38937497138977
+        },
+        "Goal": 471.1681249141693,
+        "BranchKappa": 0.001972695080148963
+      },
+      "goal_seconds": 29.158934104436042,
+      "manoeuvre_seconds": 7.158934104436089,
+      "entry_kph": 75.29662244604802,
+      "exit_kph": 63.1503782786353,
+      "minimum_bend_kph": 56.47325530679705,
+      "vmax_kph": 78.31525091569716,
+      "min_pose_m": 1.5170693975549625,
+      "min_swept_m": 1.4259889318874517,
+      "max_beta_deg": 13.628204519474401,
+      "ledger": {
+        "seconds": 7.158934104436089,
+        "energy_J": {
+          "combustion": 48563.45374119574,
+          "clutch": 88.35248059110543,
+          "transmission": 2886.4671438863375,
+          "crank_drag": 0.0,
+          "wheel_slip": 8500.968840094305,
+          "bearing": 531.9459667119282,
+          "wheel_input": 45221.31858755258,
+          "front_lateral": 8732.367660129801,
+          "rear_lateral": 11495.33278496019,
+          "resistance": 13564.611268321081,
+          "delta_kinetic": 2763.4692583686438,
+          "closure_residual": -0.06166186765928336
+        },
+        "avg_gas": 0.21464649875356026,
+        "mean_Fx": 278.79977756125044,
+        "mean_resistance": 104.66532307394726,
+        "mean_util_rear": 0.7420760330422759,
+        "max_kappa": 0.68133491180181,
+        "mean_accel": 0.08832449265614109
+      }
+    },
+    {
+      "case": {
+        "Id": "E2",
+        "Archive": "v1-K4-S4",
+        "BranchSeconds": 13.599999999999984,
+        "BranchReference": 191.83509182453156,
+        "Bend": {
+          "Lap": 0,
+          "Index": 1,
+          "Entry": 194.38937497138977,
+          "Exit": 291.77874994277954,
+          "NextEntry": 353.77874994277954,
+          "Length": 97.38937497138977
+        },
+        "Goal": 311.77874994277954,
+        "BranchKappa": 0.020580705723229724
+      },
+      "goal_seconds": 20.722134594553175,
+      "manoeuvre_seconds": 7.1221345945531915,
+      "entry_kph": 72.85402083532063,
+      "exit_kph": 62.99161833686185,
+      "minimum_bend_kph": 56.595552487181116,
+      "vmax_kph": 78.4764011190475,
+      "min_pose_m": 1.5154300751949277,
+      "min_swept_m": 1.4243763684595732,
+      "max_beta_deg": 13.563339394529846,
+      "ledger": {
+        "seconds": 7.1221345945531915,
+        "energy_J": {
+          "combustion": 49611.453353694254,
+          "clutch": 90.4462040508602,
+          "transmission": 2944.801906376538,
+          "crank_drag": 0.0,
+          "wheel_slip": 8811.21988715537,
+          "bearing": 523.274928480931,
+          "wheel_input": 46135.22986656572,
+          "front_lateral": 7946.143859726598,
+          "rear_lateral": 10633.108414552426,
+          "resistance": 13122.223564020795,
+          "delta_kinetic": 5540.1970849545305,
+          "closure_residual": 0.037504376208372076
+        },
+        "avg_gas": 0.22031083902462273,
+        "mean_Fx": 284.83516419883847,
+        "mean_resistance": 103.10883824695637,
+        "mean_util_rear": 0.7368714818197523,
+        "max_kappa": 0.7132223595544488,
+        "mean_accel": 0.20928746148950855
+      }
+    },
+    {
+      "case": {
+        "Id": "X",
+        "Archive": "v1-K4-S2",
+        "BranchSeconds": 28.59999999999993,
+        "BranchReference": 457.9979436969757,
+        "Bend": {
+          "Lap": 1,
+          "Index": 1,
+          "Entry": 513.1681249141693,
+          "Exit": 610.5574998855591,
+          "NextEntry": 672.5574998855591,
+          "Length": 97.38937497138977
+        },
+        "Goal": 630.5574998855591,
+        "BranchKappa": 0.7280176676930211
+      },
+      "goal_seconds": 38.12080678441022,
+      "manoeuvre_seconds": 9.52080678441029,
+      "entry_kph": 75.50371425696882,
+      "exit_kph": 62.97073054466795,
+      "minimum_bend_kph": 56.664365523071375,
+      "vmax_kph": 79.88931503222365,
+      "min_pose_m": 1.5451044511488026,
+      "min_swept_m": 1.4539316409746825,
+      "max_beta_deg": 16.298959045976286,
+      "ledger": {
+        "seconds": 9.52080678441029,
+        "energy_J": {
+          "combustion": 60579.211238867174,
+          "clutch": 109.24706137904802,
+          "transmission": 3765.673940020318,
+          "crank_drag": 0.0,
+          "wheel_slip": 12636.453058582083,
+          "bearing": 783.2139839811523,
+          "wheel_input": 58995.55839365159,
+          "front_lateral": 8989.987301981697,
+          "rear_lateral": 12137.27599326418,
+          "resistance": 20357.74372432874,
+          "delta_kinetic": 1799.3310300190478,
+          "closure_residual": 0.28514531090930273
+        },
+        "avg_gas": 0.19203562246530373,
+        "mean_Fx": 271.41442627211114,
+        "mean_resistance": 111.70715059633454,
+        "mean_util_rear": 0.632699274358606,
+        "max_kappa": 0.7629029177918145,
+        "mean_accel": 0.22829630242659266
+      }
+    }
+  ],
+  "native": [
+    {
+      "trial": {
+        "Id": "repair-X-T35",
+        "Stage": "repair",
+        "Height": 0.35,
+        "Case": {
+          "Id": "X",
+          "Archive": "v1-K4-S2",
+          "BranchSeconds": 28.59999999999993,
+          "BranchReference": 457.9979436969757,
+          "Bend": {
+            "Lap": 1,
+            "Index": 1,
+            "Entry": 513.1681249141693,
+            "Exit": 610.5574998855591,
+            "NextEntry": 672.5574998855591,
+            "Length": 97.38937497138977
+          },
+          "Goal": 630.5574998855591,
+          "BranchKappa": 0.7280176676930211
+        },
+        "Outcome": {
+          "Id": "repair-X-T35",
+          "Stage": "repair",
+          "Controller": "T35",
+          "Start": {
+            "Id": "X",
+            "Gate": "B",
+            "Start": -1.19,
+            "Offset": 3.58,
+            "Reference161": null,
+            "Field": 1,
+            "Spec": {
+              "Profile": {
+                "Id": 1,
+                "Name": "R1",
+                "Skills": {
+                  "Start": 50,
+                  "Speed": 50,
+                  "SlideControl": 50,
+                  "TrackReading": 50,
+                  "PairRiding": 50,
+                  "Adaptability": 50
+                },
+                "Style": {
+                  "RiskTolerance": 0.5,
+                  "LaneChangeTendency": 0.5,
+                  "OutsidePreference": 0.5,
+                  "SetupIndependence": 0.5
+                }
+              },
+              "Setup": {
+                "Gearing": 0.5,
+                "TractionBias": 0.5
+              },
+              "ReferenceMeters": -1.19,
+              "OffsetMeters": 3.58,
+              "SpeedMetersPerSecond": 0,
+              "TargetOffsetMeters": 3.58,
+              "InitialOutwardSpeed": 0,
+              "TrafficEnabled": false,
+              "Passive": false,
+              "Bullet": false
+            }
+          },
+          "ReachedStop": false,
+          "S3": false,
+          "Reserve": false,
+          "Reason": "swept below 0.5 m",
+          "Stop": 630.5574998855591,
+          "EndReference": 549.4330205236822,
+          "EndTime": 34.49,
+          "FinishTime": null,
+          "Crossings": 1,
+          "MinPose": 0.5056716631728486,
+          "MinSweep": 0.44382315164836234,
+          "MaxBetaDegrees": 39.11309224602032,
+          "FirstBadTime": 34.49,
+          "FirstBadReference": 549.4330205236822,
+          "CpuSeconds": 1.34375,
+          "WorldCpuSeconds": 1.296875,
+          "ControllerCpuSeconds": 0.046875,
+          "Decisions": 173,
+          "Plans": 0,
+          "Replans": 0,
+          "PlanCpuSeconds": 0,
+          "Fingerprint": "FB7C5F7E1D2F7BB5EB3F024312039C07C53DE2B8E3923D41AEBCDA5522C40605",
+          "AcceptedBends": 0
+        },
+        "GoalSeconds": null,
+        "BaselineSeconds": 38.12080678441022,
+        "GainSeconds": null,
+        "PrefixSamples": 2866,
+        "PrefixReviews": 144,
+        "BranchHash": "F3CF69B070C2A495D676330723421A88C89C41F88C236A734E6A06B7AA6723F9",
+        "PreviousAx": 5.693006055554205,
+        "FixedCommands": true,
+        "MinFront": 348.7822730960311,
+        "MinRear": 739.1153014180576,
+        "MaxDecisionMilliseconds": 8.9921,
+        "LoadAware": false
+      },
+      "profile": {
+        "entry_kph": 75.77622531026732,
+        "observed_minimum_kph": 39.17699717946872,
+        "exit_kph": null,
+        "following_straight_vmax_kph": null
+      },
+      "branch_speed_kph": 70.6484203824008,
+      "common_s": 549.4330205236822,
+      "base_speed_at_common_kph": 60.644533518527,
+      "new_speed_at_common_kph": 43.43508416361372,
+      "base_time_at_common": 33.31187521429451,
+      "new_time_at_common": 34.49,
+      "matched_partial_gain_s": -1.1781247857054922,
+      "base_straight_vmax_kph": 79.88931503222365,
+      "new_straight_vmax_kph": 80.17883656718053,
+      "base_ledger": {
+        "seconds": 4.7118752142945795,
+        "energy_J": {
+          "combustion": 15787.6676061371,
+          "clutch": 23.754527916804406,
+          "transmission": 1128.6582251200168,
+          "crank_drag": 0.0,
+          "wheel_slip": 4224.11434183869,
+          "bearing": 409.6439739269068,
+          "wheel_input": 17682.31219354691,
+          "front_lateral": 5125.374767434292,
+          "rear_lateral": 7007.939566114603,
+          "resistance": 11725.736715536927,
+          "delta_kinetic": -13857.730511339138,
+          "closure_residual": 0.17599958799785542
+        },
+        "avg_gas": 0.09626782996684229,
+        "mean_Fx": 175.71324357884387,
+        "mean_resistance": 122.01345843388685,
+        "mean_util_rear": 0.5395362274129507,
+        "max_kappa": 0.7629029177918145,
+        "mean_accel": -0.5897561662407461
+      },
+      "new_ledger": {
+        "seconds": 5.890000000000072,
+        "energy_J": {
+          "combustion": 18288.593029113803,
+          "clutch": 33.0827521093357,
+          "transmission": 1315.8460167906692,
+          "crank_drag": 0.0,
+          "wheel_slip": 5140.515812669652,
+          "bearing": 415.52733691841206,
+          "wheel_input": 20614.920929720458,
+          "front_lateral": 10520.092556938724,
+          "rear_lateral": 14271.785716313445,
+          "resistance": 11936.273475465565,
+          "delta_kinetic": -25344.544874296076,
+          "closure_residual": 0.014236204079695725
+        },
+        "avg_gas": 0.11982390869270118,
+        "mean_Fx": 199.35500973655456,
+        "mean_resistance": 106.82501806610009,
+        "mean_util_rear": 0.5026898086257277,
+        "max_kappa": 0.7359864166335736,
+        "mean_accel": -1.2834057828139378
+      },
+      "high_drive_s": {
+        "BASE": 0.03999999999999915,
+        "NEW": 0.03999999999999915
+      },
+      "max_kappa_after_branch": 0.7359864166335736,
+      "min_front_N": 348.7822730960311,
+      "min_rear_N": 739.1153014180576,
+      "load_lag_recompute_max_N": 2.32490918961048e-05,
+      "last": {
+        "time": 34.49,
+        "reference": 549.4330205236822,
+        "pose": 0.5056716631728486,
+        "swept": 0.44382315164836234,
+        "inner": 0.5056716631728486,
+        "outer": 14.181725434501226,
+        "offset": 0.17171010900875702,
+        "speed_kph": 43.43508416361372,
+        "yaw_rate": 0.19466797,
+        "beta_deg": 0.1247890905117928,
+        "Fx": 291.18628,
+        "Fy_front": 192.4097,
+        "Fy_rear": 89.558,
+        "Fz_front": 607.0171443331151,
+        "Fz_rear": 835.0528556668851,
+        "kappa": 0.100978804289942,
+        "capacity": 1852.3389535074234,
+        "gas": 0.26805434,
+        "steering_deg": 2.299646897806672,
+        "tracking": "tracked",
+        "transition": "matched archived time-based command"
+      },
+      "committed_max_error": {
+        "wheel": 0.0,
+        "steering": 0.0,
+        "crank": 0.0
+      },
+      "after_branch_seconds": 5.890000000000072,
+      "post_max_beta": 39.11309222715176,
+      "first_no_admissible": null,
+      "decision_ms": {
+        "median": 0.1025,
+        "p95": 0.18298000000000006,
+        "p99": 2.093188000000003,
+        "first": 8.9921,
+        "maximum": 8.9921
+      },
+      "forecasts": 0,
+      "contact_queries": 3463
+    },
+    {
+      "trial": {
+        "Id": "repair-X-T55",
+        "Stage": "repair",
+        "Height": 0.55,
+        "Case": {
+          "Id": "X",
+          "Archive": "v1-K4-S2",
+          "BranchSeconds": 28.59999999999993,
+          "BranchReference": 457.9979436969757,
+          "Bend": {
+            "Lap": 1,
+            "Index": 1,
+            "Entry": 513.1681249141693,
+            "Exit": 610.5574998855591,
+            "NextEntry": 672.5574998855591,
+            "Length": 97.38937497138977
+          },
+          "Goal": 630.5574998855591,
+          "BranchKappa": 0.7280176676930211
+        },
+        "Outcome": {
+          "Id": "repair-X-T55",
+          "Stage": "repair",
+          "Controller": "T55",
+          "Start": {
+            "Id": "X",
+            "Gate": "B",
+            "Start": -1.19,
+            "Offset": 3.58,
+            "Reference161": null,
+            "Field": 1,
+            "Spec": {
+              "Profile": {
+                "Id": 1,
+                "Name": "R1",
+                "Skills": {
+                  "Start": 50,
+                  "Speed": 50,
+                  "SlideControl": 50,
+                  "TrackReading": 50,
+                  "PairRiding": 50,
+                  "Adaptability": 50
+                },
+                "Style": {
+                  "RiskTolerance": 0.5,
+                  "LaneChangeTendency": 0.5,
+                  "OutsidePreference": 0.5,
+                  "SetupIndependence": 0.5
+                }
+              },
+              "Setup": {
+                "Gearing": 0.5,
+                "TractionBias": 0.5
+              },
+              "ReferenceMeters": -1.19,
+              "OffsetMeters": 3.58,
+              "SpeedMetersPerSecond": 0,
+              "TargetOffsetMeters": 3.58,
+              "InitialOutwardSpeed": 0,
+              "TrafficEnabled": false,
+              "Passive": false,
+              "Bullet": false
+            }
+          },
+          "ReachedStop": false,
+          "S3": false,
+          "Reserve": false,
+          "Reason": "swept below 0.5 m",
+          "Stop": 630.5574998855591,
+          "EndReference": 519.4589221129062,
+          "EndTime": 31.54,
+          "FinishTime": null,
+          "Crossings": 1,
+          "MinPose": 0.6001718182478495,
+          "MinSweep": 0.4923556601022047,
+          "MaxBetaDegrees": 14.633561906806705,
+          "FirstBadTime": 31.54,
+          "FirstBadReference": 519.4589221129062,
+          "CpuSeconds": 0.21875,
+          "WorldCpuSeconds": 0.203125,
+          "ControllerCpuSeconds": 0.03125,
+          "Decisions": 158,
+          "Plans": 0,
+          "Replans": 0,
+          "PlanCpuSeconds": 0,
+          "Fingerprint": "0E17699F0B0C045B08338C4DBF0AAFCEAE2D6233A622065B8C818EBEA78D746F",
+          "AcceptedBends": 0
+        },
+        "GoalSeconds": null,
+        "BaselineSeconds": 38.12080678441022,
+        "GainSeconds": null,
+        "PrefixSamples": 2866,
+        "PrefixReviews": 144,
+        "BranchHash": "F3CF69B070C2A495D676330723421A88C89C41F88C236A734E6A06B7AA6723F9",
+        "PreviousAx": 5.693006055554205,
+        "FixedCommands": true,
+        "MinFront": 53.72726944484316,
+        "MinRear": 718.0030300994282,
+        "MaxDecisionMilliseconds": 0.2516,
+        "LoadAware": false
+      },
+      "profile": {
+        "entry_kph": 75.74427376724988,
+        "observed_minimum_kph": 72.80553174441728,
+        "exit_kph": null,
+        "following_straight_vmax_kph": null
+      },
+      "branch_speed_kph": 70.6484203824008,
+      "common_s": 519.4589221129062,
+      "base_speed_at_common_kph": 73.59272253347453,
+      "new_speed_at_common_kph": 72.80553174441728,
+      "base_time_at_common": 31.485882159629284,
+      "new_time_at_common": 31.54,
+      "matched_partial_gain_s": -0.05411784037071499,
+      "base_straight_vmax_kph": 79.88931503222365,
+      "new_straight_vmax_kph": 80.16493209607222,
+      "base_ledger": {
+        "seconds": 2.885882159629354,
+        "energy_J": {
+          "combustion": 11176.433049535794,
+          "clutch": 19.301690827326077,
+          "transmission": 835.6726847026821,
+          "crank_drag": 0.0,
+          "wheel_slip": 3807.854784005948,
+          "bearing": 291.0256547749762,
+          "wheel_input": 13092.205393675338,
+          "front_lateral": 714.7513933605596,
+          "rear_lateral": 681.6796470772358,
+          "resistance": 8229.52453484993,
+          "delta_kinetic": -3403.5326031057702,
+          "closure_residual": 0.15526304290615614
+        },
+        "avg_gas": 0.09343588770604201,
+        "mean_Fx": 197.5553707124437,
+        "mean_resistance": 132.48441441916137,
+        "mean_util_rear": 0.33528351381422217,
+        "max_kappa": 0.7629029177918145,
+        "mean_accel": 0.28340093718055287
+      },
+      "new_ledger": {
+        "seconds": 2.940000000000069,
+        "energy_J": {
+          "combustion": 10527.693640057792,
+          "clutch": 21.904416313332234,
+          "transmission": 798.6851322665066,
+          "crank_drag": 0.0,
+          "wheel_slip": 3154.428380157102,
+          "bearing": 281.7279282707738,
+          "wheel_input": 12512.733738841924,
+          "front_lateral": 981.9254045742714,
+          "rear_lateral": 935.3098792269535,
+          "resistance": 8464.178542302596,
+          "delta_kinetic": -4110.518669618075,
+          "closure_residual": 0.05262656433313939
+        },
+        "avg_gas": 0.09171597326530341,
+        "mean_Fx": 195.39259945838555,
+        "mean_resistance": 133.22558267813508,
+        "mean_util_rear": 0.28188979536684655,
+        "max_kappa": 0.7359864166335736,
+        "mean_accel": 0.2038087076735106
+      },
+      "high_drive_s": {
+        "BASE": 0.03999999999999915,
+        "NEW": 0.03999999999999915
+      },
+      "max_kappa_after_branch": 0.7359864166335736,
+      "min_front_N": 53.72726944484316,
+      "min_rear_N": 718.0030300994282,
+      "load_lag_recompute_max_N": 2.5954730176636076e-05,
+      "last": {
+        "time": 31.54,
+        "reference": 519.4589221129062,
+        "pose": 0.6001718182478495,
+        "swept": 0.4923556601022047,
+        "inner": 10.645636181506303,
+        "outer": 0.6001718182478495,
+        "offset": 10.145937250251977,
+        "speed_kph": 72.80553174441728,
+        "yaw_rate": 1.1498965,
+        "beta_deg": 12.453226790970335,
+        "Fx": 47.94792,
+        "Fy_front": 817.4908,
+        "Fy_rear": 842.47534,
+        "Fz_front": 711.27464371081,
+        "Fz_rear": 730.7953562891902,
+        "kappa": 0.02481864988152496,
+        "capacity": 1852.3389535074234,
+        "gas": 0.0,
+        "steering_deg": 3.8031104975839627,
+        "tracking": "K0 action retained",
+        "transition": "matched archived time-based command"
+      },
+      "committed_max_error": {
+        "wheel": 0.0,
+        "steering": 0.0,
+        "crank": 0.0
+      },
+      "after_branch_seconds": 2.940000000000069,
+      "post_max_beta": 12.453226790970335,
+      "first_no_admissible": null,
+      "decision_ms": {
+        "median": 0.08595,
+        "p95": 0.13076000000000002,
+        "p99": 0.1549510000000003,
+        "first": 0.2516,
+        "maximum": 0.2516
+      },
+      "forecasts": 0,
+      "contact_queries": 3168
+    }
+  ],
+  "archive_deltas": {
+    "entry": {
+      "T35": {
+        "Fz_front": 29.64997077114316,
+        "Fx_rear": -0.2643135000000001,
+        "Fy_front": 33.484080000000006,
+        "Fy_rear": -32.80353500000001,
+        "rear_util": 1.54181337697068e-05,
+        "kappa_mid": 9.446151096369551e-06,
+        "slip_work_j": -0.0007337334948598756,
+        "yaw_moment": 43.073226500000004,
+        "along_accel": -0.01658595000000007
+      },
+      "T55": {
+        "Fz_front": 46.5928112117964,
+        "Fx_rear": -0.4283684999999977,
+        "Fy_front": 52.61780999999996,
+        "Fy_rear": -51.54855999999995,
+        "rear_util": 2.4857532145483585e-05,
+        "kappa_mid": 1.5104474091262067e-05,
+        "slip_work_j": -0.0011875321628564695,
+        "yaw_moment": 67.686584,
+        "along_accel": -0.026158000000000126
+      }
+    },
+    "middle": {
+      "T35": {
+        "Fz_front": -69.13461294319598,
+        "Fx_rear": 6.646530000000013,
+        "Fy_front": -49.71277999999998,
+        "Fy_rear": 66.80670000000003,
+        "rear_util": -0.004115505737857239,
+        "kappa_mid": -0.00014879811826401523,
+        "slip_work_j": 0.14400500624711787,
+        "yaw_moment": -74.28414599999999,
+        "along_accel": 0.022153129999999965
+      },
+      "T55": {
+        "Fz_front": -108.64010605359368,
+        "Fx_rear": 9.899280000000005,
+        "Fy_front": -78.12008499999999,
+        "Fy_rear": 104.93444499999998,
+        "rear_util": -0.006219512119236659,
+        "kappa_mid": -0.00022131935534090708,
+        "slip_work_j": 0.21437756776961825,
+        "yaw_moment": -116.705626,
+        "along_accel": 0.031496430000000075
+      }
+    },
+    "exit": {
+      "T35": {
+        "Fz_front": -143.42229961691226,
+        "Fx_rear": 49.46244999999999,
+        "Fy_front": -40.728984999999994,
+        "Fy_rear": -6.140045499999998,
+        "rear_util": -0.05643825458426721,
+        "kappa_mid": -0.0011314678322306704,
+        "slip_work_j": 1.5978851134894505,
+        "yaw_moment": -23.960844999999978,
+        "along_accel": 0.34122655
+      },
+      "T55": {
+        "Fz_front": -225.37789939800507,
+        "Fx_rear": 71.93257499999999,
+        "Fy_front": -64.002675,
+        "Fy_rear": -9.698217999999999,
+        "rear_util": -0.0856129102433072,
+        "kappa_mid": -0.0016456969277502537,
+        "slip_work_j": 2.317620722734688,
+        "yaw_moment": -37.522024999999985,
+        "along_accel": 0.49679459999999986
+      }
+    },
+    "high-spin": {
+      "T35": {
+        "Fz_front": -224.3853677873547,
+        "Fx_rear": 239.46222,
+        "Fy_front": -29.625766,
+        "Fy_rear": 61.68049800000001,
+        "rear_util": -0.022296073415111528,
+        "kappa_mid": -0.004664650316126007,
+        "slip_work_j": 31.204166889646373,
+        "yaw_moment": -56.866647,
+        "along_accel": 1.6135263499999999
+      },
+      "T55": {
+        "Fz_front": -352.6055779515573,
+        "Fx_rear": 366.75652,
+        "Fy_front": -46.554773999999995,
+        "Fy_rear": 101.93507300000002,
+        "rear_util": -0.03666491125279764,
+        "kappa_mid": -0.007142122582797228,
+        "slip_work_j": 47.61618146652668,
+        "yaw_moment": -92.3670165,
+        "along_accel": 2.4690658500000002
+      }
+    },
+    "straight": {
+      "T35": {
+        "Fz_front": -76.52095820569554,
+        "Fx_rear": 11.856629999999996,
+        "Fy_front": -24.432644999999994,
+        "Fy_rear": 29.247694999999993,
+        "rear_util": -0.018387811378520802,
+        "kappa_mid": -0.00020836191641238067,
+        "slip_work_j": 0.21770743909116108,
+        "yaw_moment": -34.651409,
+        "along_accel": 0.0800569499999999
+      },
+      "T55": {
+        "Fz_front": -120.24722003752146,
+        "Fx_rear": 17.65951000000001,
+        "Fy_front": -38.39416499999999,
+        "Fy_rear": 45.974095000000034,
+        "rear_util": -0.02789959331594244,
+        "kappa_mid": -0.000310353052941012,
+        "slip_work_j": 0.32370835365893447,
+        "yaw_moment": -54.460272,
+        "along_accel": 0.11919004999999994
+      }
+    },
+    "following": {
+      "T35": {
+        "Fz_front": -117.35020345606495,
+        "Fx_rear": 33.14467000000002,
+        "Fy_front": -45.40083,
+        "Fy_rear": 49.141245,
+        "rear_util": -0.03530585580960166,
+        "kappa_mid": -0.0005849455842706491,
+        "slip_work_j": 0.9417000076443927,
+        "yaw_moment": -62.276291,
+        "along_accel": 0.2265442000000002
+      },
+      "T55": {
+        "Fz_front": -184.40746257381642,
+        "Fx_rear": 48.701570000000004,
+        "Fy_front": -71.34416999999999,
+        "Fy_rear": 77.41491499999998,
+        "rear_util": -0.05347691960595646,
+        "kappa_mid": -0.0008595491905298847,
+        "slip_work_j": 1.3808369354092065,
+        "yaw_moment": -98.01172,
+        "along_accel": 0.3329530500000002
+      }
+    },
+    "prepare": {
+      "T35": {
+        "Fz_front": 31.425158620110267,
+        "Fx_rear": -0.07591150000000013,
+        "Fy_front": -3.4758699999999934,
+        "Fy_rear": 4.743434000000008,
+        "rear_util": 2.4207514819046816e-05,
+        "kappa_mid": 1.401268790386049e-06,
+        "slip_work_j": -2.6102089578971263e-05,
+        "yaw_moment": -5.437821500000001,
+        "along_accel": -0.0004698850000000032
+      },
+      "T55": {
+        "Fz_front": 49.38239211731616,
+        "Fx_rear": -0.12273400000000034,
+        "Fy_front": -5.462082500000001,
+        "Fy_rear": 7.453963999999999,
+        "rear_util": 3.904026545607786e-05,
+        "kappa_mid": 2.2646774602234215e-06,
+        "slip_work_j": -4.2225460941336e-05,
+        "yaw_moment": -8.545148750000001,
+        "along_accel": -0.00076133000000006
+      }
+    }
+  },
+  "invalid": {
+    "InvalidWorlds": 12,
+    "WorldsCountAgainstBudget": true,
+    "CpuSeconds": 1.640625,
+    "Error": "Contact169 returned detached wheel/steering results. The first harness committed stale Prepared fields.",
+    "Correction": "Commit the exact detached shaft wheel result and steering result as in NativeWorld169. Assert shaft, wheel and steer continuity each step.",
+    "ReservePlan": "Only two reserve worlds. Use the same archived X branch, frozen commands and original common goal for T35 and T55. Five S3 pairs remain sealed.",
+    "Receipts": [
+      {
+        "Id": "aware-E1-T35",
+        "MaxUncommittedWheelRadiansPerSecond": 0.9279045037920071,
+        "MaxUncommittedSteeringRadians": 0.015707963000000002,
+        "Status": "INVALID_INTEGRATION"
+      },
+      {
+        "Id": "aware-E2-T35",
+        "MaxUncommittedWheelRadiansPerSecond": 0.7178550530957608,
+        "MaxUncommittedSteeringRadians": 0.015707962000000002,
+        "Status": "INVALID_INTEGRATION"
+      },
+      {
+        "Id": "aware-X-T35",
+        "MaxUncommittedWheelRadiansPerSecond": 4.090198591969539,
+        "MaxUncommittedSteeringRadians": 0.015707964,
+        "Status": "INVALID_INTEGRATION"
+      },
+      {
+        "Id": "live-E1-T35",
+        "MaxUncommittedWheelRadiansPerSecond": 0.9279026192381679,
+        "MaxUncommittedSteeringRadians": 0.015707963000000002,
+        "Status": "INVALID_INTEGRATION"
+      },
+      {
+        "Id": "live-E2-T35",
+        "MaxUncommittedWheelRadiansPerSecond": 0.717850476447623,
+        "MaxUncommittedSteeringRadians": 0.015707962000000002,
+        "Status": "INVALID_INTEGRATION"
+      },
+      {
+        "Id": "live-X-T35",
+        "MaxUncommittedWheelRadiansPerSecond": 4.091832188618895,
+        "MaxUncommittedSteeringRadians": 0.015707964,
+        "Status": "INVALID_INTEGRATION"
+      },
+      {
+        "Id": "tape-E1-T35",
+        "MaxUncommittedWheelRadiansPerSecond": 0.6872079576119177,
+        "MaxUncommittedSteeringRadians": 0.015707963999999998,
+        "Status": "INVALID_INTEGRATION"
+      },
+      {
+        "Id": "tape-E1-T55",
+        "MaxUncommittedWheelRadiansPerSecond": 0.7440469458349952,
+        "MaxUncommittedSteeringRadians": 0.015707963999999998,
+        "Status": "INVALID_INTEGRATION"
+      },
+      {
+        "Id": "tape-E2-T35",
+        "MaxUncommittedWheelRadiansPerSecond": 0.6053259794311145,
+        "MaxUncommittedSteeringRadians": 0.0157079645,
+        "Status": "INVALID_INTEGRATION"
+      },
+      {
+        "Id": "tape-E2-T55",
+        "MaxUncommittedWheelRadiansPerSecond": 0.6153842133487188,
+        "MaxUncommittedSteeringRadians": 0.0157079645,
+        "Status": "INVALID_INTEGRATION"
+      },
+      {
+        "Id": "tape-X-T35",
+        "MaxUncommittedWheelRadiansPerSecond": 3.3392218606707615,
+        "MaxUncommittedSteeringRadians": 0.015707964,
+        "Status": "INVALID_INTEGRATION"
+      },
+      {
+        "Id": "tape-X-T55",
+        "MaxUncommittedWheelRadiansPerSecond": 4.033286389980475,
+        "MaxUncommittedSteeringRadians": 0.015707964,
+        "Status": "INVALID_INTEGRATION"
+      }
+    ]
+  },
+  "invalid_results": [
+    {
+      "Id": "aware-E1-T35",
+      "Stage": "aware",
+      "Height": 0.35,
+      "Case": {
+        "Id": "E1",
+        "Archive": "v1-K4-S1",
+        "BranchSeconds": 21.999999999999954,
+        "BranchReference": 349.3283047604561,
+        "Bend": {
+          "Lap": 1,
+          "Index": 0,
+          "Entry": 353.77874994277954,
+          "Exit": 451.1681249141693,
+          "NextEntry": 513.1681249141693,
+          "Length": 97.38937497138977
+        },
+        "Goal": 471.1681249141693,
+        "BranchKappa": 0.001972695080148963
+      },
+      "Outcome": {
+        "Id": "aware-E1-T35",
+        "Stage": "aware",
+        "Controller": "T35",
+        "Start": {
+          "Id": "E1",
+          "Gate": "A",
+          "Start": -0.57,
+          "Offset": 1.46,
+          "Reference161": null,
+          "Field": 0,
+          "Spec": {
+            "Profile": {
+              "Id": 1,
+              "Name": "R1",
+              "Skills": {
+                "Start": 50,
+                "Speed": 50,
+                "SlideControl": 50,
+                "TrackReading": 50,
+                "PairRiding": 50,
+                "Adaptability": 50
+              },
+              "Style": {
+                "RiskTolerance": 0.5,
+                "LaneChangeTendency": 0.5,
+                "OutsidePreference": 0.5,
+                "SetupIndependence": 0.5
+              }
+            },
+            "Setup": {
+              "Gearing": 0.5,
+              "TractionBias": 0.5
+            },
+            "ReferenceMeters": -0.57,
+            "OffsetMeters": 1.46,
+            "SpeedMetersPerSecond": 0,
+            "TargetOffsetMeters": 1.46,
+            "InitialOutwardSpeed": 0,
+            "TrafficEnabled": false,
+            "Passive": false,
+            "Bullet": false
+          }
+        },
+        "ReachedStop": false,
+        "S3": false,
+        "Reserve": false,
+        "Reason": "swept below 0.5 m",
+        "Stop": 471.1681249141693,
+        "EndReference": 406.5970066277534,
+        "EndTime": 25.42,
+        "FinishTime": null,
+        "Crossings": 1,
+        "MinPose": 0.5795728348736082,
+        "MinSweep": 0.4772737366501445,
+        "MaxBetaDegrees": 11.69856465776412,
+        "FirstBadTime": 25.42,
+        "FirstBadReference": 406.5970066277534,
+        "CpuSeconds": 2.8125,
+        "WorldCpuSeconds": 2.671875,
+        "ControllerCpuSeconds": 2.40625,
+        "Decisions": 128,
+        "Plans": 3,
+        "Replans": 2,
+        "PlanCpuSeconds": 0.765625,
+        "Fingerprint": "4648B70B7CC5376853C796B67D028A2BB09173A34D77F45439D40C0B602174E5",
+        "AcceptedBends": 3
+      },
+      "GoalSeconds": null,
+      "BaselineSeconds": 29.158934104436042,
+      "GainSeconds": null,
+      "PrefixSamples": 2204,
+      "PrefixReviews": 111,
+      "BranchHash": "FDA67DB05176A889F6F82B105ACD05A3F555CDD35C55432B97C807A262B98E2B",
+      "PreviousAx": -0.8382526103462997,
+      "FixedCommands": false,
+      "MinFront": 630.5176479975017,
+      "MinRear": 743.2659898290607,
+      "MaxDecisionMilliseconds": 481.5868,
+      "LoadAware": true
+    },
+    {
+      "Id": "aware-E2-T35",
+      "Stage": "aware",
+      "Height": 0.35,
+      "Case": {
+        "Id": "E2",
+        "Archive": "v1-K4-S4",
+        "BranchSeconds": 13.599999999999984,
+        "BranchReference": 191.83509182453156,
+        "Bend": {
+          "Lap": 0,
+          "Index": 1,
+          "Entry": 194.38937497138977,
+          "Exit": 291.77874994277954,
+          "NextEntry": 353.77874994277954,
+          "Length": 97.38937497138977
+        },
+        "Goal": 311.77874994277954,
+        "BranchKappa": 0.020580705723229724
+      },
+      "Outcome": {
+        "Id": "aware-E2-T35",
+        "Stage": "aware",
+        "Controller": "T35",
+        "Start": {
+          "Id": "E2",
+          "Gate": "D",
+          "Start": -1.63,
+          "Offset": 8.69,
+          "Reference161": null,
+          "Field": 3,
+          "Spec": {
+            "Profile": {
+              "Id": 1,
+              "Name": "R1",
+              "Skills": {
+                "Start": 50,
+                "Speed": 50,
+                "SlideControl": 50,
+                "TrackReading": 50,
+                "PairRiding": 50,
+                "Adaptability": 50
+              },
+              "Style": {
+                "RiskTolerance": 0.5,
+                "LaneChangeTendency": 0.5,
+                "OutsidePreference": 0.5,
+                "SetupIndependence": 0.5
+              }
+            },
+            "Setup": {
+              "Gearing": 0.5,
+              "TractionBias": 0.5
+            },
+            "ReferenceMeters": -1.63,
+            "OffsetMeters": 8.69,
+            "SpeedMetersPerSecond": 0,
+            "TargetOffsetMeters": 8.69,
+            "InitialOutwardSpeed": 0,
+            "TrafficEnabled": false,
+            "Passive": false,
+            "Bullet": false
+          }
+        },
+        "ReachedStop": false,
+        "S3": false,
+        "Reserve": false,
+        "Reason": "swept below 0.5 m",
+        "Stop": 311.77874994277954,
+        "EndReference": 238.34768962307282,
+        "EndTime": 16.47,
+        "FinishTime": null,
+        "Crossings": 0,
+        "MinPose": 0.5632622469049032,
+        "MinSweep": 0.46261000706072014,
+        "MaxBetaDegrees": 8.530206254846991,
+        "FirstBadTime": 16.47,
+        "FirstBadReference": 238.34768962307282,
+        "CpuSeconds": 0.96875,
+        "WorldCpuSeconds": 0.9375,
+        "ControllerCpuSeconds": 0.765625,
+        "Decisions": 83,
+        "Plans": 2,
+        "Replans": 2,
+        "PlanCpuSeconds": 0.171875,
+        "Fingerprint": "06059E70A20512661DB0CCE44BE2338F4C1E4DB27B46BA62FEAF46B55FD64633",
+        "AcceptedBends": 2
+      },
+      "GoalSeconds": null,
+      "BaselineSeconds": 20.722134594553175,
+      "GainSeconds": null,
+      "PrefixSamples": 1362,
+      "PrefixReviews": 69,
+      "BranchHash": "C878518A8A574A654AE3FA7F7C5C85FD2ECC5B3C3C40B0541862F7136C604C93",
+      "PreviousAx": -0.21748192933914645,
+      "FixedCommands": false,
+      "MinFront": 646.4014559510647,
+      "MinRear": 764.7822953972197,
+      "MaxDecisionMilliseconds": 52.47,
+      "LoadAware": true
+    },
+    {
+      "Id": "aware-X-T35",
+      "Stage": "aware",
+      "Height": 0.35,
+      "Case": {
+        "Id": "X",
+        "Archive": "v1-K4-S2",
+        "BranchSeconds": 28.59999999999993,
+        "BranchReference": 457.9979436969757,
+        "Bend": {
+          "Lap": 1,
+          "Index": 1,
+          "Entry": 513.1681249141693,
+          "Exit": 610.5574998855591,
+          "NextEntry": 672.5574998855591,
+          "Length": 97.38937497138977
+        },
+        "Goal": 630.5574998855591,
+        "BranchKappa": 0.7280176676930211
+      },
+      "Outcome": {
+        "Id": "aware-X-T35",
+        "Stage": "aware",
+        "Controller": "T35",
+        "Start": {
+          "Id": "X",
+          "Gate": "B",
+          "Start": -1.19,
+          "Offset": 3.58,
+          "Reference161": null,
+          "Field": 1,
+          "Spec": {
+            "Profile": {
+              "Id": 1,
+              "Name": "R1",
+              "Skills": {
+                "Start": 50,
+                "Speed": 50,
+                "SlideControl": 50,
+                "TrackReading": 50,
+                "PairRiding": 50,
+                "Adaptability": 50
+              },
+              "Style": {
+                "RiskTolerance": 0.5,
+                "LaneChangeTendency": 0.5,
+                "OutsidePreference": 0.5,
+                "SetupIndependence": 0.5
+              }
+            },
+            "Setup": {
+              "Gearing": 0.5,
+              "TractionBias": 0.5
+            },
+            "ReferenceMeters": -1.19,
+            "OffsetMeters": 3.58,
+            "SpeedMetersPerSecond": 0,
+            "TargetOffsetMeters": 3.58,
+            "InitialOutwardSpeed": 0,
+            "TrafficEnabled": false,
+            "Passive": false,
+            "Bullet": false
+          }
+        },
+        "ReachedStop": false,
+        "S3": false,
+        "Reserve": false,
+        "Reason": "swept below 0.5 m",
+        "Stop": 630.5574998855591,
+        "EndReference": 494.95965176582337,
+        "EndTime": 30.12,
+        "FinishTime": null,
+        "Crossings": 1,
+        "MinPose": 0.6034249667331663,
+        "MinSweep": 0.4585668091952661,
+        "MaxBetaDegrees": 14.633561906806705,
+        "FirstBadTime": 30.12,
+        "FirstBadReference": 494.95965176582337,
+        "CpuSeconds": 1.546875,
+        "WorldCpuSeconds": 1.515625,
+        "ControllerCpuSeconds": 1.28125,
+        "Decisions": 151,
+        "Plans": 4,
+        "Replans": 0,
+        "PlanCpuSeconds": 0.1875,
+        "Fingerprint": "1C1D9F07C555FC32D758C3F25417C09ED8A11E5C36F9CB768575D3EFD98057ED",
+        "AcceptedBends": 3
+      },
+      "GoalSeconds": null,
+      "BaselineSeconds": 38.12080678441022,
+      "GainSeconds": null,
+      "PrefixSamples": 2866,
+      "PrefixReviews": 144,
+      "BranchHash": "F3CF69B070C2A495D676330723421A88C89C41F88C236A734E6A06B7AA6723F9",
+      "PreviousAx": 5.693006055554205,
+      "FixedCommands": false,
+      "MinFront": 349.32407181100757,
+      "MinRear": 931.4200864640683,
+      "MaxDecisionMilliseconds": 49.9827,
+      "LoadAware": true
+    },
+    {
+      "Id": "live-E1-T35",
+      "Stage": "live",
+      "Height": 0.35,
+      "Case": {
+        "Id": "E1",
+        "Archive": "v1-K4-S1",
+        "BranchSeconds": 21.999999999999954,
+        "BranchReference": 349.3283047604561,
+        "Bend": {
+          "Lap": 1,
+          "Index": 0,
+          "Entry": 353.77874994277954,
+          "Exit": 451.1681249141693,
+          "NextEntry": 513.1681249141693,
+          "Length": 97.38937497138977
+        },
+        "Goal": 471.1681249141693,
+        "BranchKappa": 0.001972695080148963
+      },
+      "Outcome": {
+        "Id": "live-E1-T35",
+        "Stage": "live",
+        "Controller": "T35",
+        "Start": {
+          "Id": "E1",
+          "Gate": "A",
+          "Start": -0.57,
+          "Offset": 1.46,
+          "Reference161": null,
+          "Field": 0,
+          "Spec": {
+            "Profile": {
+              "Id": 1,
+              "Name": "R1",
+              "Skills": {
+                "Start": 50,
+                "Speed": 50,
+                "SlideControl": 50,
+                "TrackReading": 50,
+                "PairRiding": 50,
+                "Adaptability": 50
+              },
+              "Style": {
+                "RiskTolerance": 0.5,
+                "LaneChangeTendency": 0.5,
+                "OutsidePreference": 0.5,
+                "SetupIndependence": 0.5
+              }
+            },
+            "Setup": {
+              "Gearing": 0.5,
+              "TractionBias": 0.5
+            },
+            "ReferenceMeters": -0.57,
+            "OffsetMeters": 1.46,
+            "SpeedMetersPerSecond": 0,
+            "TargetOffsetMeters": 1.46,
+            "InitialOutwardSpeed": 0,
+            "TrafficEnabled": false,
+            "Passive": false,
+            "Bullet": false
+          }
+        },
+        "ReachedStop": false,
+        "S3": false,
+        "Reserve": false,
+        "Reason": "swept below 0.5 m",
+        "Stop": 471.1681249141693,
+        "EndReference": 406.597015985988,
+        "EndTime": 25.42,
+        "FinishTime": null,
+        "Crossings": 1,
+        "MinPose": 0.579587109288774,
+        "MinSweep": 0.47728806438166504,
+        "MaxBetaDegrees": 11.69856465776412,
+        "FirstBadTime": 25.42,
+        "FirstBadReference": 406.597015985988,
+        "CpuSeconds": 2.90625,
+        "WorldCpuSeconds": 2.78125,
+        "ControllerCpuSeconds": 2.375,
+        "Decisions": 128,
+        "Plans": 3,
+        "Replans": 2,
+        "PlanCpuSeconds": 0.765625,
+        "Fingerprint": "C25D6761A520586B12DA0DC4F461A21C01C10CE29B0F14EBF7F1565545243F6A",
+        "AcceptedBends": 3
+      },
+      "GoalSeconds": null,
+      "BaselineSeconds": 29.158934104436042,
+      "GainSeconds": null,
+      "PrefixSamples": 2204,
+      "PrefixReviews": 111,
+      "BranchHash": "FDA67DB05176A889F6F82B105ACD05A3F555CDD35C55432B97C807A262B98E2B",
+      "PreviousAx": -0.8382526103462997,
+      "FixedCommands": false,
+      "MinFront": 630.5173116835657,
+      "MinRear": 743.2659898290607,
+      "MaxDecisionMilliseconds": 471.2766
+    },
+    {
+      "Id": "live-E2-T35",
+      "Stage": "live",
+      "Height": 0.35,
+      "Case": {
+        "Id": "E2",
+        "Archive": "v1-K4-S4",
+        "BranchSeconds": 13.599999999999984,
+        "BranchReference": 191.83509182453156,
+        "Bend": {
+          "Lap": 0,
+          "Index": 1,
+          "Entry": 194.38937497138977,
+          "Exit": 291.77874994277954,
+          "NextEntry": 353.77874994277954,
+          "Length": 97.38937497138977
+        },
+        "Goal": 311.77874994277954,
+        "BranchKappa": 0.020580705723229724
+      },
+      "Outcome": {
+        "Id": "live-E2-T35",
+        "Stage": "live",
+        "Controller": "T35",
+        "Start": {
+          "Id": "E2",
+          "Gate": "D",
+          "Start": -1.63,
+          "Offset": 8.69,
+          "Reference161": null,
+          "Field": 3,
+          "Spec": {
+            "Profile": {
+              "Id": 1,
+              "Name": "R1",
+              "Skills": {
+                "Start": 50,
+                "Speed": 50,
+                "SlideControl": 50,
+                "TrackReading": 50,
+                "PairRiding": 50,
+                "Adaptability": 50
+              },
+              "Style": {
+                "RiskTolerance": 0.5,
+                "LaneChangeTendency": 0.5,
+                "OutsidePreference": 0.5,
+                "SetupIndependence": 0.5
+              }
+            },
+            "Setup": {
+              "Gearing": 0.5,
+              "TractionBias": 0.5
+            },
+            "ReferenceMeters": -1.63,
+            "OffsetMeters": 8.69,
+            "SpeedMetersPerSecond": 0,
+            "TargetOffsetMeters": 8.69,
+            "InitialOutwardSpeed": 0,
+            "TrafficEnabled": false,
+            "Passive": false,
+            "Bullet": false
+          }
+        },
+        "ReachedStop": false,
+        "S3": false,
+        "Reserve": false,
+        "Reason": "swept below 0.5 m",
+        "Stop": 311.77874994277954,
+        "EndReference": 238.34768422134096,
+        "EndTime": 16.47,
+        "FinishTime": null,
+        "Crossings": 0,
+        "MinPose": 0.5632620606980907,
+        "MinSweep": 0.462609844457347,
+        "MaxBetaDegrees": 8.530206254846991,
+        "FirstBadTime": 16.47,
+        "FirstBadReference": 238.34768422134096,
+        "CpuSeconds": 1,
+        "WorldCpuSeconds": 0.984375,
+        "ControllerCpuSeconds": 0.875,
+        "Decisions": 83,
+        "Plans": 2,
+        "Replans": 2,
+        "PlanCpuSeconds": 0.1875,
+        "Fingerprint": "E37969E6883C3E813A8B2F9AEE39C8771AA71701B32D2C4F53F087D78099ACF0",
+        "AcceptedBends": 2
+      },
+      "GoalSeconds": null,
+      "BaselineSeconds": 20.722134594553175,
+      "GainSeconds": null,
+      "PrefixSamples": 1362,
+      "PrefixReviews": 69,
+      "BranchHash": "C878518A8A574A654AE3FA7F7C5C85FD2ECC5B3C3C40B0541862F7136C604C93",
+      "PreviousAx": -0.21748192933914645,
+      "FixedCommands": false,
+      "MinFront": 646.4021935384848,
+      "MinRear": 764.7822953972197,
+      "MaxDecisionMilliseconds": 56.8128
+    },
+    {
+      "Id": "live-X-T35",
+      "Stage": "live",
+      "Height": 0.35,
+      "Case": {
+        "Id": "X",
+        "Archive": "v1-K4-S2",
+        "BranchSeconds": 28.59999999999993,
+        "BranchReference": 457.9979436969757,
+        "Bend": {
+          "Lap": 1,
+          "Index": 1,
+          "Entry": 513.1681249141693,
+          "Exit": 610.5574998855591,
+          "NextEntry": 672.5574998855591,
+          "Length": 97.38937497138977
+        },
+        "Goal": 630.5574998855591,
+        "BranchKappa": 0.7280176676930211
+      },
+      "Outcome": {
+        "Id": "live-X-T35",
+        "Stage": "live",
+        "Controller": "T35",
+        "Start": {
+          "Id": "X",
+          "Gate": "B",
+          "Start": -1.19,
+          "Offset": 3.58,
+          "Reference161": null,
+          "Field": 1,
+          "Spec": {
+            "Profile": {
+              "Id": 1,
+              "Name": "R1",
+              "Skills": {
+                "Start": 50,
+                "Speed": 50,
+                "SlideControl": 50,
+                "TrackReading": 50,
+                "PairRiding": 50,
+                "Adaptability": 50
+              },
+              "Style": {
+                "RiskTolerance": 0.5,
+                "LaneChangeTendency": 0.5,
+                "OutsidePreference": 0.5,
+                "SetupIndependence": 0.5
+              }
+            },
+            "Setup": {
+              "Gearing": 0.5,
+              "TractionBias": 0.5
+            },
+            "ReferenceMeters": -1.19,
+            "OffsetMeters": 3.58,
+            "SpeedMetersPerSecond": 0,
+            "TargetOffsetMeters": 3.58,
+            "InitialOutwardSpeed": 0,
+            "TrafficEnabled": false,
+            "Passive": false,
+            "Bullet": false
+          }
+        },
+        "ReachedStop": false,
+        "S3": false,
+        "Reserve": false,
+        "Reason": "swept below 0.5 m",
+        "Stop": 630.5574998855591,
+        "EndReference": 494.960780916214,
+        "EndTime": 30.12,
+        "FinishTime": null,
+        "Crossings": 1,
+        "MinPose": 0.6028482528931617,
+        "MinSweep": 0.4579864682412636,
+        "MaxBetaDegrees": 14.633561906806705,
+        "FirstBadTime": 30.12,
+        "FirstBadReference": 494.960780916214,
+        "CpuSeconds": 1.625,
+        "WorldCpuSeconds": 1.578125,
+        "ControllerCpuSeconds": 1.390625,
+        "Decisions": 151,
+        "Plans": 4,
+        "Replans": 0,
+        "PlanCpuSeconds": 0.171875,
+        "Fingerprint": "311CB0F7388023BBDD8CD2A58C2FD5EFE9AB97678C72464C7134201F6E8C13D7",
+        "AcceptedBends": 3
+      },
+      "GoalSeconds": null,
+      "BaselineSeconds": 38.12080678441022,
+      "GainSeconds": null,
+      "PrefixSamples": 2866,
+      "PrefixReviews": 144,
+      "BranchHash": "F3CF69B070C2A495D676330723421A88C89C41F88C236A734E6A06B7AA6723F9",
+      "PreviousAx": 5.693006055554205,
+      "FixedCommands": false,
+      "MinFront": 349.32407181100757,
+      "MinRear": 931.3948072689113,
+      "MaxDecisionMilliseconds": 51.0899
+    },
+    {
+      "Id": "tape-E1-T35",
+      "Stage": "tape",
+      "Height": 0.35,
+      "Case": {
+        "Id": "E1",
+        "Archive": "v1-K4-S1",
+        "BranchSeconds": 21.999999999999954,
+        "BranchReference": 349.3283047604561,
+        "Bend": {
+          "Lap": 1,
+          "Index": 0,
+          "Entry": 353.77874994277954,
+          "Exit": 451.1681249141693,
+          "NextEntry": 513.1681249141693,
+          "Length": 97.38937497138977
+        },
+        "Goal": 471.1681249141693,
+        "BranchKappa": 0.001972695080148963
+      },
+      "Outcome": {
+        "Id": "tape-E1-T35",
+        "Stage": "tape",
+        "Controller": "T35",
+        "Start": {
+          "Id": "E1",
+          "Gate": "A",
+          "Start": -0.57,
+          "Offset": 1.46,
+          "Reference161": null,
+          "Field": 0,
+          "Spec": {
+            "Profile": {
+              "Id": 1,
+              "Name": "R1",
+              "Skills": {
+                "Start": 50,
+                "Speed": 50,
+                "SlideControl": 50,
+                "TrackReading": 50,
+                "PairRiding": 50,
+                "Adaptability": 50
+              },
+              "Style": {
+                "RiskTolerance": 0.5,
+                "LaneChangeTendency": 0.5,
+                "OutsidePreference": 0.5,
+                "SetupIndependence": 0.5
+              }
+            },
+            "Setup": {
+              "Gearing": 0.5,
+              "TractionBias": 0.5
+            },
+            "ReferenceMeters": -0.57,
+            "OffsetMeters": 1.46,
+            "SpeedMetersPerSecond": 0,
+            "TargetOffsetMeters": 1.46,
+            "InitialOutwardSpeed": 0,
+            "TrafficEnabled": false,
+            "Passive": false,
+            "Bullet": false
+          }
+        },
+        "ReachedStop": false,
+        "S3": false,
+        "Reserve": false,
+        "Reason": "swept below 0.5 m",
+        "Stop": 471.1681249141693,
+        "EndReference": 399.5375284359044,
+        "EndTime": 24.98,
+        "FinishTime": null,
+        "Crossings": 1,
+        "MinPose": 0.5869764996063371,
+        "MinSweep": 0.4841033596586683,
+        "MaxBetaDegrees": 11.69856465776412,
+        "FirstBadTime": 24.98,
+        "FirstBadReference": 399.5375284359044,
+        "CpuSeconds": 1.046875,
+        "WorldCpuSeconds": 1,
+        "ControllerCpuSeconds": 0.046875,
+        "Decisions": 125,
+        "Plans": 0,
+        "Replans": 0,
+        "PlanCpuSeconds": 0,
+        "Fingerprint": "88022D610B05409B96C6029DCE7E896393BC939E1861E904B0F340F84726163F",
+        "AcceptedBends": 0
+      },
+      "GoalSeconds": null,
+      "BaselineSeconds": 29.158934104436042,
+      "GainSeconds": null,
+      "PrefixSamples": 2204,
+      "PrefixReviews": 111,
+      "BranchHash": "FDA67DB05176A889F6F82B105ACD05A3F555CDD35C55432B97C807A262B98E2B",
+      "PreviousAx": -0.8382526103462997,
+      "FixedCommands": true,
+      "MinFront": 634.3778695494916,
+      "MinRear": 743.2659898290607,
+      "MaxDecisionMilliseconds": 9.7077
+    },
+    {
+      "Id": "tape-E1-T55",
+      "Stage": "tape",
+      "Height": 0.55,
+      "Case": {
+        "Id": "E1",
+        "Archive": "v1-K4-S1",
+        "BranchSeconds": 21.999999999999954,
+        "BranchReference": 349.3283047604561,
+        "Bend": {
+          "Lap": 1,
+          "Index": 0,
+          "Entry": 353.77874994277954,
+          "Exit": 451.1681249141693,
+          "NextEntry": 513.1681249141693,
+          "Length": 97.38937497138977
+        },
+        "Goal": 471.1681249141693,
+        "BranchKappa": 0.001972695080148963
+      },
+      "Outcome": {
+        "Id": "tape-E1-T55",
+        "Stage": "tape",
+        "Controller": "T55",
+        "Start": {
+          "Id": "E1",
+          "Gate": "A",
+          "Start": -0.57,
+          "Offset": 1.46,
+          "Reference161": null,
+          "Field": 0,
+          "Spec": {
+            "Profile": {
+              "Id": 1,
+              "Name": "R1",
+              "Skills": {
+                "Start": 50,
+                "Speed": 50,
+                "SlideControl": 50,
+                "TrackReading": 50,
+                "PairRiding": 50,
+                "Adaptability": 50
+              },
+              "Style": {
+                "RiskTolerance": 0.5,
+                "LaneChangeTendency": 0.5,
+                "OutsidePreference": 0.5,
+                "SetupIndependence": 0.5
+              }
+            },
+            "Setup": {
+              "Gearing": 0.5,
+              "TractionBias": 0.5
+            },
+            "ReferenceMeters": -0.57,
+            "OffsetMeters": 1.46,
+            "SpeedMetersPerSecond": 0,
+            "TargetOffsetMeters": 1.46,
+            "InitialOutwardSpeed": 0,
+            "TrafficEnabled": false,
+            "Passive": false,
+            "Bullet": false
+          }
+        },
+        "ReachedStop": false,
+        "S3": false,
+        "Reserve": false,
+        "Reason": "swept below 0.5 m",
+        "Stop": 471.1681249141693,
+        "EndReference": 399.46912562848894,
+        "EndTime": 24.97,
+        "FinishTime": null,
+        "Crossings": 1,
+        "MinPose": 0.5527050660158277,
+        "MinSweep": 0.44963465127153057,
+        "MaxBetaDegrees": 11.69856465776412,
+        "FirstBadTime": 24.97,
+        "FirstBadReference": 399.46912562848894,
+        "CpuSeconds": 0.234375,
+        "WorldCpuSeconds": 0.234375,
+        "ControllerCpuSeconds": 0,
+        "Decisions": 125,
+        "Plans": 0,
+        "Replans": 0,
+        "PlanCpuSeconds": 0,
+        "Fingerprint": "137C1A9E16AA18DD597C8809A4F0FCE9FAE01F6F424EF0020D79A8DB7E53D431",
+        "AcceptedBends": 0
+      },
+      "GoalSeconds": null,
+      "BaselineSeconds": 29.158934104436042,
+      "GainSeconds": null,
+      "PrefixSamples": 2204,
+      "PrefixReviews": 111,
+      "BranchHash": "FDA67DB05176A889F6F82B105ACD05A3F555CDD35C55432B97C807A262B98E2B",
+      "PreviousAx": -0.8382526103462997,
+      "FixedCommands": true,
+      "MinFront": 607.7560420921202,
+      "MinRear": 724.1708494920769,
+      "MaxDecisionMilliseconds": 0.4092
+    },
+    {
+      "Id": "tape-E2-T35",
+      "Stage": "tape",
+      "Height": 0.35,
+      "Case": {
+        "Id": "E2",
+        "Archive": "v1-K4-S4",
+        "BranchSeconds": 13.599999999999984,
+        "BranchReference": 191.83509182453156,
+        "Bend": {
+          "Lap": 0,
+          "Index": 1,
+          "Entry": 194.38937497138977,
+          "Exit": 291.77874994277954,
+          "NextEntry": 353.77874994277954,
+          "Length": 97.38937497138977
+        },
+        "Goal": 311.77874994277954,
+        "BranchKappa": 0.020580705723229724
+      },
+      "Outcome": {
+        "Id": "tape-E2-T35",
+        "Stage": "tape",
+        "Controller": "T35",
+        "Start": {
+          "Id": "E2",
+          "Gate": "D",
+          "Start": -1.63,
+          "Offset": 8.69,
+          "Reference161": null,
+          "Field": 3,
+          "Spec": {
+            "Profile": {
+              "Id": 1,
+              "Name": "R1",
+              "Skills": {
+                "Start": 50,
+                "Speed": 50,
+                "SlideControl": 50,
+                "TrackReading": 50,
+                "PairRiding": 50,
+                "Adaptability": 50
+              },
+              "Style": {
+                "RiskTolerance": 0.5,
+                "LaneChangeTendency": 0.5,
+                "OutsidePreference": 0.5,
+                "SetupIndependence": 0.5
+              }
+            },
+            "Setup": {
+              "Gearing": 0.5,
+              "TractionBias": 0.5
+            },
+            "ReferenceMeters": -1.63,
+            "OffsetMeters": 8.69,
+            "SpeedMetersPerSecond": 0,
+            "TargetOffsetMeters": 8.69,
+            "InitialOutwardSpeed": 0,
+            "TrafficEnabled": false,
+            "Passive": false,
+            "Bullet": false
+          }
+        },
+        "ReachedStop": false,
+        "S3": false,
+        "Reserve": false,
+        "Reason": "swept below 0.5 m",
+        "Stop": 311.77874994277954,
+        "EndReference": 232.37990970085264,
+        "EndTime": 16.09,
+        "FinishTime": null,
+        "Crossings": 0,
+        "MinPose": 0.5368562295710008,
+        "MinSweep": 0.4344618035083179,
+        "MaxBetaDegrees": 8.530206254846991,
+        "FirstBadTime": 16.09,
+        "FirstBadReference": 232.37990970085264,
+        "CpuSeconds": 0.109375,
+        "WorldCpuSeconds": 0.109375,
+        "ControllerCpuSeconds": 0.03125,
+        "Decisions": 81,
+        "Plans": 0,
+        "Replans": 0,
+        "PlanCpuSeconds": 0,
+        "Fingerprint": "52D4982B0A3E32469075E5FBBF0DDDADD5F18F9D03666DFF709E4749D6441C4B",
+        "AcceptedBends": 0
+      },
+      "GoalSeconds": null,
+      "BaselineSeconds": 20.722134594553175,
+      "GainSeconds": null,
+      "PrefixSamples": 1362,
+      "PrefixReviews": 69,
+      "BranchHash": "C878518A8A574A654AE3FA7F7C5C85FD2ECC5B3C3C40B0541862F7136C604C93",
+      "PreviousAx": -0.21748192933914645,
+      "FixedCommands": true,
+      "MinFront": 646.302155620342,
+      "MinRear": 764.7822953972197,
+      "MaxDecisionMilliseconds": 1.1654
+    },
+    {
+      "Id": "tape-E2-T55",
+      "Stage": "tape",
+      "Height": 0.55,
+      "Case": {
+        "Id": "E2",
+        "Archive": "v1-K4-S4",
+        "BranchSeconds": 13.599999999999984,
+        "BranchReference": 191.83509182453156,
+        "Bend": {
+          "Lap": 0,
+          "Index": 1,
+          "Entry": 194.38937497138977,
+          "Exit": 291.77874994277954,
+          "NextEntry": 353.77874994277954,
+          "Length": 97.38937497138977
+        },
+        "Goal": 311.77874994277954,
+        "BranchKappa": 0.020580705723229724
+      },
+      "Outcome": {
+        "Id": "tape-E2-T55",
+        "Stage": "tape",
+        "Controller": "T55",
+        "Start": {
+          "Id": "E2",
+          "Gate": "D",
+          "Start": -1.63,
+          "Offset": 8.69,
+          "Reference161": null,
+          "Field": 3,
+          "Spec": {
+            "Profile": {
+              "Id": 1,
+              "Name": "R1",
+              "Skills": {
+                "Start": 50,
+                "Speed": 50,
+                "SlideControl": 50,
+                "TrackReading": 50,
+                "PairRiding": 50,
+                "Adaptability": 50
+              },
+              "Style": {
+                "RiskTolerance": 0.5,
+                "LaneChangeTendency": 0.5,
+                "OutsidePreference": 0.5,
+                "SetupIndependence": 0.5
+              }
+            },
+            "Setup": {
+              "Gearing": 0.5,
+              "TractionBias": 0.5
+            },
+            "ReferenceMeters": -1.63,
+            "OffsetMeters": 8.69,
+            "SpeedMetersPerSecond": 0,
+            "TargetOffsetMeters": 8.69,
+            "InitialOutwardSpeed": 0,
+            "TrafficEnabled": false,
+            "Passive": false,
+            "Bullet": false
+          }
+        },
+        "ReachedStop": false,
+        "S3": false,
+        "Reserve": false,
+        "Reason": "swept below 0.5 m",
+        "Stop": 311.77874994277954,
+        "EndReference": 232.09444758544248,
+        "EndTime": 16.07,
+        "FinishTime": null,
+        "Crossings": 0,
+        "MinPose": 0.5780902025273695,
+        "MinSweep": 0.4756471895074938,
+        "MaxBetaDegrees": 8.530206254846991,
+        "FirstBadTime": 16.07,
+        "FirstBadReference": 232.09444758544248,
+        "CpuSeconds": 0.15625,
+        "WorldCpuSeconds": 0.15625,
+        "ControllerCpuSeconds": 0,
+        "Decisions": 81,
+        "Plans": 0,
+        "Replans": 0,
+        "PlanCpuSeconds": 0,
+        "Fingerprint": "9DF45B03B8172425C0E1E3DF7DC4DD6633C8577B8A2A424A1A274E53ACEB86B1",
+        "AcceptedBends": 0
+      },
+      "GoalSeconds": null,
+      "BaselineSeconds": 20.722134594553175,
+      "GainSeconds": null,
+      "PrefixSamples": 1362,
+      "PrefixReviews": 69,
+      "BranchHash": "C878518A8A574A654AE3FA7F7C5C85FD2ECC5B3C3C40B0541862F7136C604C93",
+      "PreviousAx": -0.21748192933914645,
+      "FixedCommands": true,
+      "MinFront": 635.6889386295219,
+      "MinRear": 758.0124581208447,
+      "MaxDecisionMilliseconds": 0.2063
+    },
+    {
+      "Id": "tape-X-T35",
+      "Stage": "tape",
+      "Height": 0.35,
+      "Case": {
+        "Id": "X",
+        "Archive": "v1-K4-S2",
+        "BranchSeconds": 28.59999999999993,
+        "BranchReference": 457.9979436969757,
+        "Bend": {
+          "Lap": 1,
+          "Index": 1,
+          "Entry": 513.1681249141693,
+          "Exit": 610.5574998855591,
+          "NextEntry": 672.5574998855591,
+          "Length": 97.38937497138977
+        },
+        "Goal": 630.5574998855591,
+        "BranchKappa": 0.7280176676930211
+      },
+      "Outcome": {
+        "Id": "tape-X-T35",
+        "Stage": "tape",
+        "Controller": "T35",
+        "Start": {
+          "Id": "X",
+          "Gate": "B",
+          "Start": -1.19,
+          "Offset": 3.58,
+          "Reference161": null,
+          "Field": 1,
+          "Spec": {
+            "Profile": {
+              "Id": 1,
+              "Name": "R1",
+              "Skills": {
+                "Start": 50,
+                "Speed": 50,
+                "SlideControl": 50,
+                "TrackReading": 50,
+                "PairRiding": 50,
+                "Adaptability": 50
+              },
+              "Style": {
+                "RiskTolerance": 0.5,
+                "LaneChangeTendency": 0.5,
+                "OutsidePreference": 0.5,
+                "SetupIndependence": 0.5
+              }
+            },
+            "Setup": {
+              "Gearing": 0.5,
+              "TractionBias": 0.5
+            },
+            "ReferenceMeters": -1.19,
+            "OffsetMeters": 3.58,
+            "SpeedMetersPerSecond": 0,
+            "TargetOffsetMeters": 3.58,
+            "InitialOutwardSpeed": 0,
+            "TrafficEnabled": false,
+            "Passive": false,
+            "Bullet": false
+          }
+        },
+        "ReachedStop": false,
+        "S3": false,
+        "Reserve": false,
+        "Reason": "swept below 0.5 m",
+        "Stop": 630.5574998855591,
+        "EndReference": 494.9715698337555,
+        "EndTime": 30.12,
+        "FinishTime": null,
+        "Crossings": 1,
+        "MinPose": 0.597320648229933,
+        "MinSweep": 0.45239505692873744,
+        "MaxBetaDegrees": 14.633561906806705,
+        "FirstBadTime": 30.12,
+        "FirstBadReference": 494.9715698337555,
+        "CpuSeconds": 0.1875,
+        "WorldCpuSeconds": 0.1875,
+        "ControllerCpuSeconds": 0,
+        "Decisions": 151,
+        "Plans": 0,
+        "Replans": 0,
+        "PlanCpuSeconds": 0,
+        "Fingerprint": "D4C2C323D73437C2253DEDB5B55A9790CF2AC98248BD229B9BF1937E74F4D9E7",
+        "AcceptedBends": 0
+      },
+      "GoalSeconds": null,
+      "BaselineSeconds": 38.12080678441022,
+      "GainSeconds": null,
+      "PrefixSamples": 2866,
+      "PrefixReviews": 144,
+      "BranchHash": "F3CF69B070C2A495D676330723421A88C89C41F88C236A734E6A06B7AA6723F9",
+      "PreviousAx": 5.693006055554205,
+      "FixedCommands": true,
+      "MinFront": 349.32407181100757,
+      "MinRear": 930.9693890405588,
+      "MaxDecisionMilliseconds": 0.1983
+    },
+    {
+      "Id": "tape-X-T55",
+      "Stage": "tape",
+      "Height": 0.55,
+      "Case": {
+        "Id": "X",
+        "Archive": "v1-K4-S2",
+        "BranchSeconds": 28.59999999999993,
+        "BranchReference": 457.9979436969757,
+        "Bend": {
+          "Lap": 1,
+          "Index": 1,
+          "Entry": 513.1681249141693,
+          "Exit": 610.5574998855591,
+          "NextEntry": 672.5574998855591,
+          "Length": 97.38937497138977
+        },
+        "Goal": 630.5574998855591,
+        "BranchKappa": 0.7280176676930211
+      },
+      "Outcome": {
+        "Id": "tape-X-T55",
+        "Stage": "tape",
+        "Controller": "T55",
+        "Start": {
+          "Id": "X",
+          "Gate": "B",
+          "Start": -1.19,
+          "Offset": 3.58,
+          "Reference161": null,
+          "Field": 1,
+          "Spec": {
+            "Profile": {
+              "Id": 1,
+              "Name": "R1",
+              "Skills": {
+                "Start": 50,
+                "Speed": 50,
+                "SlideControl": 50,
+                "TrackReading": 50,
+                "PairRiding": 50,
+                "Adaptability": 50
+              },
+              "Style": {
+                "RiskTolerance": 0.5,
+                "LaneChangeTendency": 0.5,
+                "OutsidePreference": 0.5,
+                "SetupIndependence": 0.5
+              }
+            },
+            "Setup": {
+              "Gearing": 0.5,
+              "TractionBias": 0.5
+            },
+            "ReferenceMeters": -1.19,
+            "OffsetMeters": 3.58,
+            "SpeedMetersPerSecond": 0,
+            "TargetOffsetMeters": 3.58,
+            "InitialOutwardSpeed": 0,
+            "TrafficEnabled": false,
+            "Passive": false,
+            "Bullet": false
+          }
+        },
+        "ReachedStop": false,
+        "S3": false,
+        "Reserve": false,
+        "Reason": "swept below 0.5 m",
+        "Stop": 630.5574998855591,
+        "EndReference": 502.6557386493683,
+        "EndTime": 30.330000000000002,
+        "FinishTime": null,
+        "Crossings": 1,
+        "MinPose": 0.605195659101747,
+        "MinSweep": 0.45232088416886185,
+        "MaxBetaDegrees": 14.633561906806705,
+        "FirstBadTime": 30.330000000000002,
+        "FirstBadReference": 502.6557386493683,
+        "CpuSeconds": 0.21875,
+        "WorldCpuSeconds": 0.1875,
+        "ControllerCpuSeconds": 0,
+        "Decisions": 152,
+        "Plans": 0,
+        "Replans": 0,
+        "PlanCpuSeconds": 0,
+        "Fingerprint": "5D357C55F25045A07C4A381C2CDC4404488F86A7803D4E8740658E70F1DA26FD",
+        "AcceptedBends": 0
+      },
+      "GoalSeconds": null,
+      "BaselineSeconds": 38.12080678441022,
+      "GainSeconds": null,
+      "PrefixSamples": 2866,
+      "PrefixReviews": 144,
+      "BranchHash": "F3CF69B070C2A495D676330723421A88C89C41F88C236A734E6A06B7AA6723F9",
+      "PreviousAx": 5.693006055554205,
+      "FixedCommands": true,
+      "MinFront": 51.44429261728919,
+      "MinRear": 943.0852168595522,
+      "MaxDecisionMilliseconds": 0.1565
+    }
+  ],
+  "held": [
+    {
+      "Id": "H1",
+      "Gate": "A",
+      "Start": -0.5863,
+      "Offset": 1.5261,
+      "Reference161": null,
+      "Field": 0,
+      "Spec": {
+        "Profile": {
+          "Id": 1,
+          "Name": "R1",
+          "Skills": {
+            "Start": 50,
+            "Speed": 50,
+            "SlideControl": 50,
+            "TrackReading": 50,
+            "PairRiding": 50,
+            "Adaptability": 50
+          },
+          "Style": {
+            "RiskTolerance": 0.5,
+            "LaneChangeTendency": 0.5,
+            "OutsidePreference": 0.5,
+            "SetupIndependence": 0.5
+          }
+        },
+        "Setup": {
+          "Gearing": 0.5,
+          "TractionBias": 0.5
+        },
+        "ReferenceMeters": -0.5863,
+        "OffsetMeters": 1.5261,
+        "SpeedMetersPerSecond": 0,
+        "TargetOffsetMeters": 1.5261,
+        "InitialOutwardSpeed": 0,
+        "TrafficEnabled": false,
+        "Passive": false,
+        "Bullet": false
+      },
+      "BASE": "NOT_RUN",
+      "NEW": "NOT_RUN"
+    },
+    {
+      "Id": "H2",
+      "Gate": "B",
+      "Start": -0.5351,
+      "Offset": 4.4213,
+      "Reference161": null,
+      "Field": 1,
+      "Spec": {
+        "Profile": {
+          "Id": 1,
+          "Name": "R1",
+          "Skills": {
+            "Start": 50,
+            "Speed": 50,
+            "SlideControl": 50,
+            "TrackReading": 50,
+            "PairRiding": 50,
+            "Adaptability": 50
+          },
+          "Style": {
+            "RiskTolerance": 0.5,
+            "LaneChangeTendency": 0.5,
+            "OutsidePreference": 0.5,
+            "SetupIndependence": 0.5
+          }
+        },
+        "Setup": {
+          "Gearing": 0.5,
+          "TractionBias": 0.5
+        },
+        "ReferenceMeters": -0.5351,
+        "OffsetMeters": 4.4213,
+        "SpeedMetersPerSecond": 0,
+        "TargetOffsetMeters": 4.4213,
+        "InitialOutwardSpeed": 0,
+        "TrafficEnabled": false,
+        "Passive": false,
+        "Bullet": false
+      },
+      "BASE": "NOT_RUN",
+      "NEW": "NOT_RUN"
+    },
+    {
+      "Id": "H3",
+      "Gate": "C",
+      "Start": -0.6187,
+      "Offset": 7.1429,
+      "Reference161": null,
+      "Field": 2,
+      "Spec": {
+        "Profile": {
+          "Id": 1,
+          "Name": "R1",
+          "Skills": {
+            "Start": 50,
+            "Speed": 50,
+            "SlideControl": 50,
+            "TrackReading": 50,
+            "PairRiding": 50,
+            "Adaptability": 50
+          },
+          "Style": {
+            "RiskTolerance": 0.5,
+            "LaneChangeTendency": 0.5,
+            "OutsidePreference": 0.5,
+            "SetupIndependence": 0.5
+          }
+        },
+        "Setup": {
+          "Gearing": 0.5,
+          "TractionBias": 0.5
+        },
+        "ReferenceMeters": -0.6187,
+        "OffsetMeters": 7.1429,
+        "SpeedMetersPerSecond": 0,
+        "TargetOffsetMeters": 7.1429,
+        "InitialOutwardSpeed": 0,
+        "TrafficEnabled": false,
+        "Passive": false,
+        "Bullet": false
+      },
+      "BASE": "NOT_RUN",
+      "NEW": "NOT_RUN"
+    },
+    {
+      "Id": "H4",
+      "Gate": "D",
+      "Start": -0.4783,
+      "Offset": 9.6137,
+      "Reference161": null,
+      "Field": 3,
+      "Spec": {
+        "Profile": {
+          "Id": 1,
+          "Name": "R1",
+          "Skills": {
+            "Start": 50,
+            "Speed": 50,
+            "SlideControl": 50,
+            "TrackReading": 50,
+            "PairRiding": 50,
+            "Adaptability": 50
+          },
+          "Style": {
+            "RiskTolerance": 0.5,
+            "LaneChangeTendency": 0.5,
+            "OutsidePreference": 0.5,
+            "SetupIndependence": 0.5
+          }
+        },
+        "Setup": {
+          "Gearing": 0.5,
+          "TractionBias": 0.5
+        },
+        "ReferenceMeters": -0.4783,
+        "OffsetMeters": 9.6137,
+        "SpeedMetersPerSecond": 0,
+        "TargetOffsetMeters": 9.6137,
+        "InitialOutwardSpeed": 0,
+        "TrafficEnabled": false,
+        "Passive": false,
+        "Bullet": false
+      },
+      "BASE": "NOT_RUN",
+      "NEW": "NOT_RUN"
+    },
+    {
+      "Id": "H5",
+      "Gate": "A",
+      "Start": -0.4491,
+      "Offset": 1.6823,
+      "Reference161": null,
+      "Field": 0,
+      "Spec": {
+        "Profile": {
+          "Id": 1,
+          "Name": "R1",
+          "Skills": {
+            "Start": 50,
+            "Speed": 50,
+            "SlideControl": 50,
+            "TrackReading": 50,
+            "PairRiding": 50,
+            "Adaptability": 50
+          },
+          "Style": {
+            "RiskTolerance": 0.5,
+            "LaneChangeTendency": 0.5,
+            "OutsidePreference": 0.5,
+            "SetupIndependence": 0.5
+          }
+        },
+        "Setup": {
+          "Gearing": 0.5,
+          "TractionBias": 0.5
+        },
+        "ReferenceMeters": -0.4491,
+        "OffsetMeters": 1.6823,
+        "SpeedMetersPerSecond": 0,
+        "TargetOffsetMeters": 1.6823,
+        "InitialOutwardSpeed": 0,
+        "TrafficEnabled": false,
+        "Passive": false,
+        "Bullet": false
+      },
+      "BASE": "NOT_RUN",
+      "NEW": "NOT_RUN"
+    }
+  ]
+}
