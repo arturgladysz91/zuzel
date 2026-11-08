@@ -1,0 +1,54 @@
+name: Study 175 isolated audit
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: study-175-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    name: Study 175 build and archive replay without worlds
+    runs-on: windows-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: pwsh
+    env:
+      NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+      DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+    steps:
+      - run: git config --global core.autocrlf false
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/cache@v4
+        with:
+          path: ${{ env.NUGET_PACKAGES }}
+          key: study175-${{ runner.os }}-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: nuget-${{ runner.os }}-net8-
+      - run: dotnet restore tools/track-grip-root-cause/track-grip-root-cause.csproj --locked-mode
+      - run: dotnet build tools/track-grip-root-cause/track-grip-root-cause.csproj -c Release --no-restore --warnaserror
+      - name: Recompute and compare isolated contact and geometry evidence
+        run: |
+          git rev-parse HEAD
+          $dll = 'tools/track-grip-root-cause/bin/Release/net8.0/track-grip-root-cause.dll'
+          dotnet $dll
+          if ($LASTEXITCODE -ne 2) { throw 'Study 175 must be OFF without explicit arguments' }
+          $global:LASTEXITCODE = 0
+          dotnet $dll --measure results/study175
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          python tools/track-grip-root-cause/verify175.py --fresh results/study175
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
