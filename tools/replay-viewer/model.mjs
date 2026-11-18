@@ -125,7 +125,7 @@ export class Replay {
     const finished = finish != null && time >= finish;
     // After the finish, use the last accepted point already present at this time.
     // An accepted post-crossing point is still inspectable at its own timestamp.
-    const fraction = right && !finished && interpolatePose ? clamp((time - left.t) / (right.t - left.t), 0, 1) : 0;
+    const fraction = right && (!finished || this.run.ContinueAfterFinish === true) && interpolatePose ? clamp((time - left.t) / (right.t - left.t), 0, 1) : 0;
     const lerp = (a, b) => a + (b - a) * fraction;
     const state = { ...left, x: right ? lerp(left.x, right.x) : left.x, y: right ? lerp(left.y, right.y) : left.y,
       heading: right ? angleAt(left.heading, right.heading, fraction) : left.heading,
@@ -167,13 +167,16 @@ export class Replay {
         if (d[field] != null) rows.push({ t: d[field], kind, rider: d.RiderId, opponent: d.OpponentId, decision: d });
     }
     for (const p of this.run.Passes ?? []) if (rider == null || p.RiderId === rider || p.OpponentId === rider)
-      rows.push({ t: p.ConfirmedAtSeconds, kind: 'pass', rider: p.RiderId, opponent: p.OpponentId });
+      rows.push({ t: p.AtSeconds ?? p.ConfirmedAtSeconds, pass: p, kind: 'pass', rider: p.RiderId, opponent: p.OpponentId });
     for (const c of this.result.Contacts ?? []) if (rider == null || c.RiderA === rider || c.RiderB === rider)
       rows.push({ t: c.TimeSeconds, kind: 'contact', rider: c.RiderA, opponent: c.RiderB, contact: c });
     for (const c of this.run.Consequences ?? []) if (rider == null || c.RiderId === rider)
       rows.push({ t: c.TimeSeconds, kind: 'consequence', rider: c.RiderId, opponent: c.OpponentId, consequence: c });
     for (const [id, t] of Object.entries(this.result.FinishTimes)) if (rider == null || Number(id) === rider)
       rows.push({ t, kind: 'finish', rider: Number(id) });
+    for (const event of this.run.RaceEvents ?? []) {
+      if (rider == null || event.rider === rider || event.opponent === rider) rows.push(event);
+    }
     for (const change of this.planChanges ?? []) rows.push({ t: change.Time,
       kind: change.Phase === 'activated' ? 'planActivated' : 'planPrepared', rider: 1, change });
     for (const steering of this.steeringEvents ?? []) {

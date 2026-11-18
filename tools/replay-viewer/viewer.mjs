@@ -17,6 +17,8 @@ import {loadContingency151,setupContingency151} from './contingency151.mjs';
 import { Replay, parseCsv, clamp, enumName, decisionStatus, crossSection, worldCapsules, authoredReplayDocument, motionVectors, bendJumps, boundaryStatus } from './model.mjs';
 import { currentRecordings, readGzip } from './recordings.mjs';
 import { loadContinuous } from './continuous.mjs';
+import {loadStudy172} from './study172.mjs';
+import {isH25, loadH25, raceKey, setupRaces, updateRaceTable} from './h25.mjs';
 import { loadZigzag, createZigzagPanel } from './zigzag.mjs';
 import { loadFreeRacing, updateFreeRacingPanel } from './free-racing.mjs';
 import { loadLearning, setupLearning, updateLearningPanel } from './free-learning.mjs';
@@ -40,7 +42,7 @@ for (const [key, recording] of Object.entries(currentRecordings)) {
 }
 $('scenario').prepend(currentGroup);
 const latestOption = document.createElement('option'); latestOption.value = 'latest-two-bends';
-latestOption.textContent = '#123 · najnowszy przejazd · dwa łuki Egg Mild · 1 zawodnik';
+latestOption.textContent = 'HISTORYCZNY #123 · dwa łuki Egg Mild · 1 zawodnik';
 $('scenario').prepend(latestOption);
 const robustOption=document.createElement('option');robustOption.value='robust-learning';robustOption.textContent='#130 · Robust Learning · A/B i12 nowych przypadków';$('scenario').prepend(robustOption);
 const extendedOption=document.createElement('option');extendedOption.value='extended-learning';extendedOption.textContent='#131 · Extended Learning · H06/H09 i dwa łuki';$('scenario').prepend(extendedOption);
@@ -79,11 +81,17 @@ const widthColors = ['#ffb36d', '#70e2e4', '#e5a5f5'];
 for(const [key,label] of [['zigzag-baseline','Zygzak #127 · baseline #124'],['zigzag-candidate','Zygzak #127 · kandydat #126']]){
   const option=document.createElement('option');option.value=key;option.textContent=label;$('scenario').prepend(option);
 }
+const study172Option=document.createElement('option');study172Option.value='study172';study172Option.textContent='Solo — #172 · S3-K4 · 3 okrążenia';
+$('scenario').prepend($('scenario').querySelector('option[value="pack"]'));$('scenario').prepend(study172Option);
 let zigzagPanel=null,zigzagDataPromise=null,zigzagWindow='main';
 let widthGeometries = [];
 let comparisonTrails = [];
+let raceEntries = [];
+let h25Compare = null;
+let compareGeneration = 0;
+let activeH25Key = null;
 const format = (x, digits = 3) => Number(x).toFixed(digits);
-const kindLabels = { observed: 'Obserwacja', requested: 'Termin planu', activated: 'Aktywacja', cancelled: 'Anulowanie', pass: 'Potwierdzone minięcie', contact: 'Kontakt', consequence: 'Konsekwencja', finish: 'Meta' };
+const kindLabels = { observed: 'Obserwacja', requested: 'Termin planu', activated: 'Aktywacja', cancelled: 'Anulowanie', pass: 'Potwierdzone minięcie', contact: 'Kontakt', consequence: 'Konsekwencja', finish: 'Meta', tactic: 'Taktyka', lap: 'Okrążenie' };
 Object.assign(kindLabels, { planPrepared:'Plan 2 przygotowany', planActivated:'Plan 2 aktywny' });
 Object.assign(kindLabels, { steeringObserved:'Decyzja skrętu', steeringActivated:'Aktywacja skrętu' });
 const statusLabels = { future: 'Jeszcze nie zaobserwowano', active: 'Komenda aktywowana', cancelled: 'Anulowana, bez aktywacji', waiting: 'Termin planu minął — oczekuje', pending: 'Oczekuje na aktywację' };
@@ -139,11 +147,13 @@ function setTime(value, immediate = true) {
 }
 function setPlaying(value) {
   playing = Boolean(value && replay);
-  $('play').textContent = playing ? 'Ⅱ Pauza' : '▶ Odtwórz'; $('play').setAttribute('aria-label', playing ? 'Pauza' : 'Odtwarzaj');
+  dirty = true; lastPanelTime = -1;
+  $('play').disabled=playing; $('pause').disabled=!playing; $('play').setAttribute('aria-pressed',String(playing));
 }
 function chooseRider(id) {
   selected = id;
   for (const button of $('riders').children) { const current = Number(button.dataset.id) === id; button.classList.toggle('selected', current); button.setAttribute('aria-pressed', String(current)); }
+  $('follow-rider').value = String(id);
   $('follow-id').textContent = `R${id}`; rebuildEvents(); lastPanelTime = -1; dirty = true;
   const jumps = bendJumps(geometry, replay.tracks.get(id));
   for (let i = 0; i < 2; i++) { $('bend-' + (i + 1)).disabled = jumps[i] == null; $('bend-' + (i + 1)).title = jumps[i] == null ? 'Brak zapisanego najazdu' : `Najazd 3 m przed łukiem · próbka ${format(jumps[i])} s`; }
@@ -159,7 +169,10 @@ function rebuildEvents() {
     const kind = document.createElement('span'); kind.textContent = kindLabels[event.kind]; top.append(eventTime, kind);
     const reason = document.createElement('span'); reason.className = 'event-reason';
     const detail = document.createElement('span'); detail.className = 'event-details';
-    if (event.decision) {
+    if (event.label) {
+      reason.textContent = 'R' + event.rider + (event.opponent ? ' / R' + event.opponent : '') + ' · ' + event.label;
+      detail.textContent = event.detail ?? '';
+    } else if (event.decision) {
       const d = event.decision, channel = enumName(geometry, 'channels', d.Channels ?? 0);
       reason.textContent = `R${event.rider} · ${d.Reason || enumName(geometry, 'action', d.Action)}`;
       detail.textContent = `${enumName(geometry, 'action', d.Action)} · ${enumName(geometry, 'intent', d.Intent ?? 0)}${d.OpponentId ? ` · rywal R${d.OpponentId}` : ''}`;
@@ -175,8 +188,9 @@ function rebuildEvents() {
       detail.textContent = event.kind === 'planPrepared' ? 'Plan 1 działa podczas reakcji 0,24 s' : 'Zmiana planu bez resetu pozycji, gazu i kolejki';
     } else {
       reason.textContent = event.opponent ? `R${event.rider} / R${event.opponent}` : `R${event.rider}`;
-      detail.textContent = event.kind === 'pass' ? 'Minięcie potwierdzone w zapisanych danych' : event.kind === 'finish' ? 'Czas przekroczenia z FinishTimes; bez dopisywania pozycji' : event.kind === 'contact' ? event.contact.Kind : enumName(geometry, 'severity', event.consequence.Severity);
+      detail.textContent = event.kind === 'pass' ? 'Minięcie potwierdzone w zapisanych danych' : event.kind === 'finish' ? 'Czas przekroczenia z FinishTimes; bez dopisywania pozycji' : event.kind === 'contact' ? (event.contact.Kind === 'begin' && replay.h25 ? 'Początek kontaktu · ' + format(event.contact.ImpulseNewtonSeconds, 1) + ' Ns' : event.contact.Kind) : enumName(geometry, 'severity', event.consequence.Severity);
     }
+    button.dataset.time = String(event.t);
     button.append(top, reason, detail); button.addEventListener('click', () => { setPlaying(false); setTime(event.t); });
     button.setAttribute('aria-label', `${kindLabels[event.kind]}, ${format(event.t)} sekund, ${reason.textContent}`);
     fragment.append(button); eventNodes.push({ button, event, kind });
@@ -185,10 +199,252 @@ function rebuildEvents() {
   $('event-summary').textContent = `${events.length} znaczników · kontakty: ${replay.result.Contacts.filter(c => c.Kind === 'begin').length} · potwierdzone minięcia: ${replay.run.Passes.length}`;
   dirty = true; lastPanelTime = -1;
 }
+function sampleAtReference(points, value) {
+  if (!points?.length || value < points[0].reference || value > points.at(-1).reference) return null;
+  let lo = 0, hi = points.length - 1;
+  while (lo < hi) {
+    const mid = (lo + hi) >> 1;
+    if (points[mid].reference < value) lo = mid + 1;
+    else hi = mid;
+  }
+  return points[lo];
+}
+
+function updateComparisonChoices(entries) {
+  raceEntries = entries;
+  const select = $('h25-compare'), previous = select.value;
+  const choices = entries.filter(entry => raceKey(entry.id) !== activeH25Key);
+  select.replaceChildren(new Option('Wybierz…', ''), ...choices.map(entry => new Option(entry.label, raceKey(entry.id))));
+  if (choices.some(entry => raceKey(entry.id) === previous)) select.value = previous;
+}
+
+function comparedController(recording) {
+  return recording.exitStudy?.name.startsWith('#200') || recording.exitStudy?.native200 ? '#200' : recording.exitStudy?.native199 ? '#199' : recording.exitStudy?.native198 ? '#198' : recording.exitStudy?.native197 ? '#197' : recording.exitStudy?.native196 ? '#196' : recording.exitStudy?.name.startsWith('#194') ? '#194' : 'baza';
+}
+
+async function selectComparison(key) {
+  const generation = ++compareGeneration;
+  h25Compare = null;
+  delete canvas.dataset.comparison;
+  const status = $('h25-compare-info');
+  status.textContent = key ? 'Ładowanie zapisu…' : 'Wybierz przejazd z archiwum.';
+  dirty = true;
+  if (!key || !replay?.h25) return;
+  try {
+    const result = await loadH25(key);
+    if (generation !== compareGeneration) return;
+    if (result.geometry.frameId !== geometry.frameId || result.geometry.lapMeters !== geometry.lapMeters)
+      throw new Error('Nagrania muszą mieć tę samą geometrię i skalę.');
+    h25Compare = result.replay;
+    dirty = true;
+  } catch (error) {
+    if (generation === compareGeneration) status.textContent = error.message;
+  }
+}
+
+let solo200 = [];
+const colors200 = ['#95c6ff', '#ffb698', '#d4b6ff', '#82ebcd'];
+const dashes200 = [[2, 4], [7, 4], [11, 4, 2, 4], []];
+
+function drawSolo200(state) {
+  if (!replay.exitStudy?.native200 || !$('solo200-comparison').open || solo200.length !== 4) {
+    delete canvas.dataset.solo200;
+    return;
+  }
+  const length = Number(geometry.lapMeters);
+  const lap = Math.min(2, Math.max(0, Math.floor(state.reference / length)));
+  const labels = [['a', '#199 A'], ['b', '#199 B'], ['prev', '#199 B płynny'], ['new', '#200 C']];
+  const displayed = [];
+  const readout = [];
+  for (const [index, race] of solo200.entries()) {
+    const [key, label] = labels[index];
+    if (!$('trace200-' + key).checked) continue;
+    const samples = race.tracks.get(1);
+    const row = sampleAtReference(samples, state.reference);
+    const bounds = samples.filter(sample => sample.reference >= lap * length && sample.reference <= (lap + 1) * length);
+    if (bounds.length > 1) {
+      context.save();
+      context.strokeStyle = colors200[index];
+      context.lineWidth = 2.1;
+      context.setLineDash(dashes200[index]);
+      pointPath(bounds);
+      context.stroke();
+      context.restore();
+    }
+    if (!row) continue;
+    const p = worldToScreen(row);
+    context.fillStyle = colors200[index];
+    context.beginPath();
+    context.arc(p.x, p.y, 4, 0, Math.PI * 2);
+    context.fill();
+    const crossings = race.run.Riders[0].Measurement.CrossingSeconds;
+    const time = crossings[lap] - (lap ? crossings[lap - 1] : 0);
+    const formatLap = Number.isFinite(time) ? format(time, 3) + ' s' : '—';
+    const drive = Number.isFinite(row.drive) ? format(row.drive * 100, 0) + '%' : '—';
+    const clearance = Number.isFinite(row.outer) ? format(row.outer, 2) + ' m' : '—';
+    readout.push(label + ' · ' + format(row.speed * 3.6, 1) + ' km/h · okr. ' + (lap + 1) + ' ' + formatLap +
+        '\ngaz ' + drive + ' · banda ' + clearance);
+    displayed.push({ label, x: row.x, y: row.y, reference: row.reference, speed: row.speed });
+  }
+  $('trace200-readout').textContent = readout.join('\n');
+  canvas.dataset.solo200 = JSON.stringify(displayed);
+}
+
+let solo199 = [];
+const palette199 = ['#78ecd2','#ffd682','#b2c1ff'];
+
+function drawSolo199(state) {
+  if (!replay.exitStudy?.native199 || !$('solo199-comparison').open || solo199.length!==4) {
+    delete canvas.dataset.solo199; return;
+  }
+  const length=Number(geometry.lapMeters),lap=Math.min(2,Math.max(0,Math.floor(state.reference/length)));
+  const from=lap*length,to=(lap+1)*length;
+  const owners=[['a','A'],['b','B'],['base','#198']];
+  const applied=[];
+  const readout=[];
+  const selectedRuns = [solo199[0],solo199[$('trace199-b-version').value==='fast'?3:1],solo199[2]];
+  for (const [i, item] of selectedRuns.entries()) {
+    const [id,tag]=owners[i];
+    if (!$('trace199-'+id).checked) continue;
+    const path = item.tracks.get(1);
+    const near=sampleAtReference(path,state.reference);
+    const bounds=path.filter(s=>s.reference>=from && s.reference<=to);
+    if (bounds.length>1) {
+      context.save(); context.strokeStyle=palette199[i]; context.lineWidth=2.1;
+      context.setLineDash(i===0?[]:i===1?[8,4]:[2,4]);
+      pointPath(bounds); context.stroke(); context.restore();
+    }
+    if (near) {
+      const p=worldToScreen(near); context.fillStyle=palette199[i];
+      context.beginPath(); context.arc(p.x,p.y,4,0,Math.PI*2); context.fill();
+      applied.push({tag,reference:near.reference,x:near.x,y:near.y});
+      const crossed=item.run.Riders?.[0]?.Measurement?.CrossingSeconds??[];
+      const lapTime=crossed[lap]-(lap?crossed[lap-1]:0);
+      readout.push(tag+' · '+format(near.speed*3.6,1)+' km/h · okr. '+(lap+1)+
+        ' '+format(lapTime,3)+' s');
+    }
+  }
+  $('trace199-readout').textContent=readout.join('\n');
+  canvas.dataset.solo199=JSON.stringify(applied);
+}
+function drawH25Comparison(state) {
+  if (!h25Compare || !$('h25-comparison').open) return;
+  const coordinates = h25Compare.tracks.get(state.id);
+  const other = sampleAtReference(coordinates, state.reference);
+  if (!other) {
+    delete canvas.dataset.comparison;
+    $('h25-compare-info').textContent = 'Drugi zapis nie zawiera tego zawodnika lub odcinka.';
+    return;
+  }
+  const shade = recording => (['#194',comparedController(replay)==='#198'?'#198':'#197']).includes(comparedController(recording)) ? '#80f3d5' : '#fac685';
+  const start = state.reference - 29, end = state.reference + 11;
+  for (const [recording, index] of [[replay, 0], [h25Compare, 1]]) {
+    const line = recording.tracks.get(state.id).filter(p => p.reference >= start && p.reference <= end);
+    if (line.length < 2) continue;
+    context.save();
+    context.strokeStyle = shade(recording);
+    context.fillStyle = shade(recording);
+    context.lineWidth = 2.6;
+    context.setLineDash(index ? [6, 4] : []);
+    pointPath(line);
+    context.stroke();
+    context.setLineDash([]);
+    for (const exit of recording.exitStudy?.exits[state.id - 1] ?? []) {
+      for (const [seconds, label] of [[exit.taperStart, 'Prostowanie'], [exit.secondTurn, 'Drugi skręt']]) {
+        if (seconds == null) continue;
+        const marker = recording.state(state.id, seconds, false);
+        if (marker.reference < start || marker.reference > end) continue;
+        const p = worldToScreen(marker);
+        context.beginPath();
+        context.arc(p.x, p.y, 4.5, 0, 2 * Math.PI);
+        context.fill();
+        context.font = '11px Segoe UI';
+        const y = p.y + (index ? 17 : -11);
+        context.lineWidth = 3;
+        context.strokeStyle = '#10202d';
+        context.strokeText(label, p.x + 7, y);
+        context.fillText(label, p.x + 7, y);
+        context.strokeStyle = shade(recording);
+      }
+    }
+    context.restore();
+  }
+  const screen = worldToScreen(other);
+  context.save();
+  context.strokeStyle = shade(h25Compare);
+  context.lineWidth = 1.5;
+  context.beginPath(); context.arc(screen.x, screen.y, 8, 0, 2 * Math.PI); context.stroke();
+  const course = Math.atan2(other.vy, other.vx);
+  for (const [angle, color] of [[other.heading, '#ffe095'], [course, '#95c9ff']]) {
+    pointPath([other, {x: other.x + 3.5 * Math.cos(angle), y: other.y + 3.5 * Math.sin(angle)}]);
+    context.strokeStyle = color;
+    context.stroke();
+  }
+  context.restore();
+  const outer = value => Number.isFinite(value) ? format(value, 2) + ' m' : '—';
+  $('h25-compare-info').textContent =
+    comparedController(replay) + ' · ' + format(state.speed*3.6,1) + ' km/h · ' + format(state.sampleTime,3) +
+    ' s · banda ' + outer(state.outer) + ' | ' + comparedController(h25Compare) + ' · ' +
+    format(other.speed*3.6,1) + ' km/h · ' + format(other.t,3) + ' s · banda ' + outer(other.outer) +
+    ' · ślad odniesienia przerywany';
+  canvas.dataset.comparison = JSON.stringify({reference: other.reference, x: other.x, y: other.y, heading: other.heading, course});
+}
+
+function exitDecision(state) {
+  const test = replay.exitStudy?.native200 ?? replay.exitStudy?.native199 ?? replay.exitStudy?.native198 ?? replay.exitStudy?.native197 ?? replay.exitStudy?.native196;
+  if (test && state.sampleTime >= test.start) return null;
+  return replay.exitStudy?.decisions[state.id-1]?.findLast(d => d.t <= state.sampleTime + 1e-8);
+}
+
+function exitTarget(decision) {
+  if (!decision?.reference) return null;
+  const plan = decision.adjustment;
+  if (plan?.Action)
+    return {x: plan.TargetX, y: plan.TargetY, curvature: plan.PlannedCurvature};
+  return {x: decision.reference.X, y: decision.reference.Y, curvature: decision.reference.AheadCurvature};
+}
+
+function updateExitPanel(state) {
+  const decision = exitDecision(state);
+  const goal = exitTarget(decision);
+  const percent = value => Number.isFinite(value) ? format(value*100, 1)+'%' : '—';
+  const degrees = (value, suffix='°') => Number.isFinite(value) ? format(value*180/Math.PI, 2)+suffix : '—';
+  $('exit-readout').textContent =
+    'β ' + degrees(state.beta) + ' · przechył ' + degrees(state.lean) +
+    ' · yaw ' + degrees(state.yaw,'°/s') + ' · gaz zadany ' + percent(state.requestedDrive) +
+    ' · aktywny ' + percent(state.drive) + ' · skręt zadany ' + degrees(state.requestedSteering) +
+    ' · kolejka ' + (state.pending ?? '—') +
+    ((replay.exitStudy.native200 || replay.exitStudy.native199 || replay.exitStudy.native198 || replay.exitStudy.native197 || replay.exitStudy.native196) ? ' · heading ' + degrees(state.heading) +
+      ' · kierunek ruchu ' + degrees(Math.atan2(state.vy,state.vx)) : '') +
+    ((replay.exitStudy.native200 || replay.exitStudy.native199 || replay.exitStudy.native198 || replay.exitStudy.native197 || replay.exitStudy.native196) && Number.isFinite(state.swept) ? ' · swept ' + format(state.swept,3) + ' m' : '') +
+    (replay.exitStudy.native198 ? ' · żółte punkty: przyjęte plany · kropkowany odcinek: prognoza 50 ms' : '') +
+    (Number.isFinite(state.outer) ? ' · banda ' + format(state.outer, 2) + ' m' : '') + (goal ? ' · κ celu ' + format(goal.curvature,4) + ' 1/m' : '');
+  $('intent').textContent = replay.exitStudy.native200 ? 'Technika jazdy · #200' : replay.exitStudy.native199 ? 'Uczenie na pełnym cyklu · #199' : replay.exitStudy.native198 ? 'Zweryfikowana kontynuacja · #198' : replay.exitStudy.native197 ? 'Optymalizacja w pętli · #197' : replay.exitStudy.native196 ? 'Zapis natywny · #196' : decision?.wide ? 'Plan szerokiej prostej · #194' :
+    decision?.adjustment?.Action ? 'Prognoza H25 · #193' : 'FAST50 · #191';
+  $('target').textContent = decision ? format(decision.target, 2)+' m' : '—';
+  const jump = $('exit-jump');
+  const key = replay.h25.fingerprint + ':' + state.id;
+  if (jump.dataset.key !== key) {
+    jump.dataset.key = key;
+    const exits = replay.exitStudy.exits[state.id-1] ?? [];
+    const test = replay.exitStudy.native200 ?? replay.exitStudy.native199 ?? replay.exitStudy.native198 ?? replay.exitStudy.native197 ?? replay.exitStudy.native196;
+    const points = test?.tests?.[state.id-1]?.points ?? test?.points ?? (test ? [['Początek prostej', test.start], ['Vmax', test.peak], ['Wejście w łuk', test.entry],
+      ['Wyjście z łuku', test.exit], ['20 m za łukiem', test.goal]] :
+      exits.map(e => ['Okr. '+e.lap+' · łuk '+e.bend+' · '+format(e.time,2)+' s', e.taperStart ?? e.time]));
+    jump.replaceChildren(new Option('Wybierz…',''), ...points.map(([label,at]) => new Option(label,at)));
+  }
+}
+
 function updatePanel() {
   zigzagPanel?.update(time);
   const state = displayState(), last = state.lastDecision, motion = motionVectors(state);
-  $('clock').textContent = `${format(time)} / ${format(replay.duration)} s`;
+  if (replay.h25) {
+    updateRaceTable(replay, time, $('follow').checked ? selected : null, followRider);
+    $('race-outcome').hidden = time < replay.duration - 1e-8;
+    $('race-outcome').textContent = outcomeLabel(replay.h25.outcome);
+    $('lean').textContent = state.lean == null ? '—' : format(state.lean * 180 / Math.PI, 1) + '°';
+  }
+  $('clock').textContent = `${format(time)} / ${format(replay.duration)} s`; syncRate();
   $('rider-name').textContent = `R${selected}`; $('rider-name').style.color = color(selected);
   $('speed').textContent = format(state.speed * 3.6, 1); $('drive').textContent = `${format(state.drive * 100, 1)}%`;
   $('drive-fill').style.width = `${clamp(state.drive, 0, 1) * 100}%`;
@@ -200,9 +456,16 @@ function updatePanel() {
   }
   if(replay.learning&&!replay.robust){$('target').textContent='brak narzuconej linii';updateLearningPanel($('learning-telemetry'),replay,time);}
   if(replay.robust){$('target').textContent='brak narzuconej linii';updateRobustPanel($('robust-telemetry'),replay,time);if(replay.constraintsData)constraintsPanel($('constraints143-panel'),replay.constraintsData,time);if(replay.causalData)causalPanel($('causal-yaw-panel'),replay.causalData,time);if(replay.throttleData)speedThrottlePanel($('speed-throttle-panel'),replay.throttleData,time);if(replay.planningData){const data=replay.planningData;planningPanel($('planning-panel'),data.group.Plans?.find(p=>p.Arm===replay.robustPolicy),data.document,time,data.group);}}
-  $('status').textContent = state.finished ? 'Finished' : enumName(geometry, 'activity', state.activity);
+  $('status').textContent = replay.h25
+    ? (state.finished ? 'Na mecie' : (['Jedzie', 'Utrata rytmu', 'Upadek'][state.activity] ?? 'Przerwano'))
+    : (state.finished ? 'Finished' : enumName(geometry, 'activity', state.activity));
+  if ((replay.exitStudy?.native196 && time >= replay.exitStudy.native196.goal) ||
+      (replay.exitStudy?.native197?.complete && time >= replay.exitStudy.native197.goal))
+    $('status').textContent = 'Odcinek ukończony';
   $('status').classList.toggle('finished', state.finished);
   $('lap').textContent = replay.planAt ? 'Dwa łuki · bez pełnego okrążenia' : state.finished ? `${state.totalLaps}/${state.totalLaps} · meta ${format(state.finish)} s` : `${state.lap}/${state.totalLaps} · ukończono ${state.completedLaps}`;
+  const hudScope=replay.planAt?'dwa łuki':replay.freeRacing?'próba wstępna':replay.learning?'próba diagnostyczna':state.finished?'Meta':`okr. ${state.lap}/${state.totalLaps}`;
+  $('race-hud').textContent=`R${selected} · ${format(state.speed*3.6,1)} km/h · ${hudScope}`;
   $('steering').textContent = state.steering == null ? 'brak zapisu' : `${format(state.steering * 180 / Math.PI, 2)}°`;
   $('steering').title = 'steer_before: zaakceptowany kąt w czasie próbki; bez interpolacji. Kierownica w skali obraca się tym kątem.';
   $('active-plan-row').hidden = !replay.planAt;
@@ -212,6 +475,12 @@ function updatePanel() {
     $('comparison-legend').textContent = `Zielona przerywana: aktywny plan ${plan}. Turkusowa: rzeczywisty ślad XY.`;
   }
   $('intent').textContent = enumName(geometry, 'intent', state.intent);
+  if (replay.h25) {
+    $('target').textContent = 'Cel ruchomy';
+    $('intent').textContent = 'Autonomia #191';
+  }
+  if (replay.exitStudy && $('exit-diagnostics').open) updateExitPanel(state);
+  if(replay.study172){$('target').textContent='brak narzuconej linii';$('intent').textContent='Autonomiczny K4 · #172';}
   if(replay.freeRacing){$('intent').textContent='Autonomiczne działania';$('lap').textContent='Kontrola wstępna · nieukończony';}
   if(replay.learning){$('intent').textContent='Wyuczone preferencje gazu i kierownicy';$('lap').textContent=replay.episodeScope??(replay.learning.Metrics.Completed?'Pierwszy łuk + 1s kontroli na wyjściu':'Próba nieukończona');}
   if(replay.robust?.Replay.Name.startsWith('two-bends'))$('lap').textContent='Dwa kolejne łuki · '+(replay.learning.Metrics.Completed?'ukończone':'próba nieukończona');
@@ -295,6 +564,7 @@ function drawOverview(sections, states) {
 function draw() {
   context.setTransform(dpr, 0, 0, dpr, 0, 0); context.clearRect(0, 0, width, height);
   if (!geometry || !replay) return;
+  const advancedView=document.body.classList.contains('advanced');
   if ($('follow').checked) { const rider = displayState(); camera.x = rider.x; camera.y = rider.y; }
   // An unobtrusive metric grid is an overlay, not track geometry.
   const lo = screenToWorld({ x: 0, y: height }), hi = screenToWorld({ x: width, y: 0 });
@@ -308,11 +578,11 @@ function draw() {
     context.fillStyle = '#8f795d'; context.fill();
   }
   for (const edge of ['inner', 'outer']) { pointPath(allSections.map(p => p[edge]), true); context.strokeStyle = edge === 'inner' ? '#e4e8de' : '#e8b67e'; context.lineWidth = edge === 'outer' ? 2 : 1.2; context.stroke(); }
-  if ($('outer-limit').checked && geometry.localOuterLimit) {
+  if (advancedView && $('outer-limit').checked && geometry.localOuterLimit) {
     pointPath(geometry.localOuterLimit.sections.map(p => p.point), true);
     context.strokeStyle = '#ffcf78'; context.lineWidth = 1; context.setLineDash([3, 4]); context.stroke(); context.setLineDash([]);
   }
-  if ($('compare-widths').checked) for (const [i, shape] of widthGeometries.entries()) {
+  if (advancedView && $('compare-widths').checked) for (const [i, shape] of widthGeometries.entries()) {
     pointPath(shape.segments.flatMap(s => s.sections.map(p => p.outer)), true);
     context.strokeStyle = widthColors[i]; context.lineWidth = 1.5; context.stroke();
   }
@@ -329,7 +599,7 @@ function draw() {
       }
     }
   }
-  if ($('compare-lines').checked) for (const line of comparisonTrails) {
+  if (advancedView && $('compare-lines').checked) for (const line of comparisonTrails) {
     if(line.visible===false)continue;
     if (line.generation && line.generation !== replay.planAt(time)) continue;
     pointPath(line.points); context.strokeStyle = line.color; context.lineWidth = 1.8; context.globalAlpha = .8; context.setLineDash(line.planned ? [8, 5] : []); context.stroke(); context.globalAlpha = 1; context.setLineDash([]);
@@ -354,7 +624,7 @@ function draw() {
   }
   context.setLineDash([5, 5]); context.strokeStyle = '#b4e2ce9c'; context.lineWidth = .8;
   pointPath(allSections.map(p => p.reference), true); context.stroke(); context.setLineDash([]);
-  if ($('segments').checked) for (const segment of geometry.segments) {
+  if (advancedView && $('segments').checked) for (const segment of geometry.segments) {
     const p = segment.sections[0]; pointPath([p.inner, p.outer]); context.strokeStyle = '#e4d8ba88'; context.lineWidth = .8; context.stroke();
     const label = worldToScreen(p.outer); context.font = '10px Segoe UI'; context.fillStyle = '#d3e1df'; context.fillText(`S${segment.index} ${segment.type}`, label.x + 6, label.y - 6);
   }
@@ -363,9 +633,32 @@ function draw() {
     context.strokeStyle=index===0?'#ffd27b':'#a5d4eb';context.lineWidth=2;context.stroke();
     const p=worldToScreen(section.outer);context.fillStyle=context.strokeStyle;context.font='11px Segoe UI';context.fillText(label,p.x+4,p.y-8);
   }
-  const origin = geometry.segments[0].sections[0]; pointPath([origin.inner, origin.outer]); context.strokeStyle = '#f1e7d1'; context.lineWidth = 2; context.stroke();
-  const start = worldToScreen(origin.outer); context.font = '10px Segoe UI'; context.fillStyle = '#b7c9d1'; context.fillText('ref. 0', start.x + 5, start.y + 15);
+  const origin = geometry.segments[0].sections[0];
+  // Gate markings follow the exported physical start cross-section; no authored oval.
+  const tangent={x:-origin.outward.y,y:origin.outward.x};
+  for(let gate=0;gate<4;gate++){
+    const at=f=>({x:origin.inner.x+(origin.outer.x-origin.inner.x)*f,y:origin.inner.y+(origin.outer.y-origin.inner.y)*f});
+    const a=at(gate/4),b=at((gate+1)/4),back=p=>({x:p.x-3*tangent.x,y:p.y-3*tangent.y});
+    pointPath([a,b,back(b),back(a)],true);context.fillStyle=colors[gate]+'28';context.fill();context.strokeStyle='#e1d7bf99';context.lineWidth=.8;context.stroke();
+    const label=worldToScreen(back(at((gate+.5)/4)));context.font='10px Segoe UI';context.fillStyle='#ede6d8';context.fillText('ABCD'[gate],label.x-4,label.y-3);
+  }
+  pointPath([origin.inner, origin.outer]); context.strokeStyle = '#f1e7d1'; context.lineWidth = 2; context.stroke();
+  const start = worldToScreen(origin.outer); context.font = '10px Segoe UI'; context.fillStyle = '#b7c9d1'; context.fillText('Start / meta', start.x + 5, start.y + 15);
   const states = [...replay.tracks.keys()].map(id => displayState(id));
+  if (replay.h25) {
+    canvas.dataset.riders = JSON.stringify(states.map(({id,x,y,heading,sampleTime}) => ({id,x,y,heading,sampleTime})));
+    canvas.dataset.camera = JSON.stringify({x: camera.x, y: camera.y, follow: $('follow').checked ? selected : null});
+    const incident = replay.result.Contacts.find(c => c.Kind === 'begin' && c.XY
+      && time >= c.TimeSeconds - .0005 && time < c.TimeSeconds + 1.3);
+    canvas.dataset.contact = incident ? 'R' + incident.RiderA + '-R' + incident.RiderB : '';
+    if (incident) {
+      const point = worldToScreen({x: incident.XY.X, y: incident.XY.Y});
+      context.beginPath(); context.arc(point.x, point.y, 15, 0, Math.PI * 2);
+      context.lineWidth = 2; context.strokeStyle = '#ff9b89'; context.stroke();
+    }
+  }
+  const rendered=states.find(state=>state.id===selected);
+  canvas.dataset.renderX=String(rendered.x);canvas.dataset.renderY=String(rendered.y);canvas.dataset.renderHeading=String(rendered.heading);
   if(replay.throttleData){
     const markers=throttleMarkers(replay.throttleData),left=Math.max(12,width-230);
     context.fillStyle='#10202de8';context.fillRect(left-6,8,224,markers.length*16+10);
@@ -403,7 +696,7 @@ function draw() {
       pointPath(points); context.strokeStyle = color(state.id); context.globalAlpha = state.id === selected ? .65 : .4;
       context.lineWidth = 1.6; context.stroke(); context.globalAlpha = 1;
     }
-    if ($('targets').checked) {
+    if (advancedView && $('targets').checked) {
       const section = crossSection(geometry, state.reference);
       const at = offset => ({ x: section.point.x + section.normal.x * offset, y: section.point.y + section.normal.y * offset });
       pointPath([at(state.offset), at(state.target)]); context.strokeStyle = '#ffe095'; context.lineWidth = 1; context.setLineDash([3, 3]); context.stroke(); context.setLineDash([]);
@@ -412,19 +705,76 @@ function draw() {
       if (state.id === selected) { context.font = '10px Segoe UI'; context.fillStyle = '#ffe095'; context.fillText(`cel ${format(state.target, 2)} m`, target.x + 9, target.y + 14); }
     }
   }
+  if (replay.h25) drawH25Comparison(rendered);
   for (const state of states) {
-    const pos = worldToScreen(state); const ghost = state.stale || state.finished;
+    const pos = worldToScreen(state); const ghost = state.stale || (state.finished && !replay.h25);
     if (state.id === selected) { context.beginPath(); context.arc(pos.x, pos.y, Math.max(10, camera.scale * 1.3), 0, Math.PI * 2); context.strokeStyle = color(state.id); context.lineWidth = 1; context.setLineDash(ghost ? [3, 3] : []); context.stroke(); context.setLineDash([]); }
     context.globalAlpha = ghost ? .5 : 1;
     for (const part of worldCapsules(geometry, state)) {
       pointPath([part.start, part.end]); context.lineCap = 'round'; context.strokeStyle = part.component === 'Handlebar' ? '#fff4db' : color(state.id);
       context.lineWidth = part.radiusMeters * 2 * camera.scale; context.stroke();
     }
+    // A minimum-size UI symbol preserves recorded heading and XY; it is not a footprint.
+    if(geometry.dimensions.overallMechanicalLengthMeters*camera.scale<16){
+      context.save();context.translate(pos.x,pos.y);context.rotate(-state.heading);
+      context.fillStyle=color(state.id);context.strokeStyle='#09141e';context.lineWidth=1.2;
+      context.beginPath();context.moveTo(9,0);context.lineTo(2,-3.5);context.lineTo(-7,-3);context.lineTo(-7,3);context.lineTo(2,3.5);context.closePath();context.fill();context.stroke();
+      context.fillStyle='#fff4db';context.fillRect(4,-3,2,6);context.fillStyle='#14222a';context.fillRect(-9,-2,3,4);context.restore();
+    }
     context.lineCap = 'butt'; context.globalAlpha = 1;
-    if (state.id === selected && $('vectors').checked) drawMotion(state);
-    const labelX = pos.x + 11, labelY = pos.y - 12;
+    if (state.id === selected && ((advancedView && $('vectors').checked) ||
+        (replay.exitStudy && $('exit-diagnostics').open && $('exit-vectors').checked))) drawMotion(state);
+    const slot=[...replay.tracks.keys()].indexOf(state.id);
+    const labelX = pos.x + (states.length===1||slot%2?11:-25), labelY = pos.y + (slot<2?-12:18);
     context.font = '600 12px Segoe UI'; context.lineWidth = 4; context.strokeStyle = '#10202d'; context.strokeText(`R${state.id}`, labelX, labelY);
     context.fillStyle = color(state.id); context.fillText(`R${state.id}`, labelX, labelY);
+  }
+  drawSolo199(rendered);
+  drawSolo200(rendered);
+  if ((replay.exitStudy?.native200 || replay.exitStudy?.native199) && $('exit-diagnostics').open) {
+    const markers=(replay.exitStudy.native200 ?? replay.exitStudy.native199).markers.filter(p=>p.t<=time && p.t>=time-5);
+    for (const m of markers) {
+      const p=worldToScreen(m);
+      const palette={plan:'#fae388',onset:'#d9e7fd',slip:'#f2a49d',slipEnd:'#8be7d3',entry:'#aecafa',exit:'#ffc97e'};
+      context.fillStyle=palette[m.kind]??'#eee';
+      context.beginPath(); context.arc(p.x,p.y,m.kind==='plan'?4:3,0,Math.PI*2); context.fill();
+    }
+  }
+  if (replay.exitStudy?.native198 && $('exit-diagnostics').open) {
+    const data = replay.exitStudy.native198.tests[rendered.id-1];
+    const previous = data?.markers.filter(d=>d.t<=time).slice(-8) ?? [];
+    for (const marker of previous) {
+      const p=worldToScreen(marker);
+      context.fillStyle='#fae388';
+      context.beginPath(); context.arc(p.x,p.y,3.4,0,Math.PI*2); context.fill();
+    }
+    const next=data?.forecast.findLast(d=>d.t<=time+1e-6);
+    if(next && next.at>=time) {
+      pointPath([rendered,next]);
+      context.strokeStyle='#a8daf8';
+      context.lineWidth=2;
+      context.setLineDash([2,3]); context.stroke(); context.setLineDash([]);
+    }
+    canvas.dataset.planner198=JSON.stringify({count:previous.length,version:next?.version??0});
+  } else delete canvas.dataset.planner198;
+  if (replay.exitStudy && $('exit-diagnostics').open && $('exit-target').checked) {
+    const decision = exitDecision(rendered);
+    const goal = exitTarget(decision);
+    if (goal) {
+      pointPath([rendered, goal]);
+      context.strokeStyle = '#ffe095';
+      context.lineWidth = 1.5;
+      context.setLineDash([4, 4]);
+      context.stroke();
+      context.setLineDash([]);
+      const point = worldToScreen(goal);
+      context.beginPath();
+      context.arc(point.x, point.y, 4, 0, Math.PI * 2);
+      context.stroke();
+      context.fillStyle = '#ffe095';
+      context.font = '11px Segoe UI';
+      context.fillText('κ ' + format(goal.curvature, 4) + '/m', point.x+7, point.y-5);
+    }
   }
   drawOverview(allSections, states);
   const rawMeters = 75 / camera.scale, unit = 10 ** Math.floor(Math.log10(rawMeters));
@@ -457,9 +807,29 @@ function recordClip() {
   };
   recorder.start(); setPlaying(true);
 }
+function outcomeLabel(outcome) {
+  if (outcome === 'completed') return 'Bieg ukończony';
+  if (outcome === 'solver contact: crash threshold') return 'Bieg przerwany po upadku';
+  if (outcome?.includes('clearance')) return 'Bieg przerwany po naruszeniu granicy toru';
+  if (outcome === 'experiment timeout') return 'Przekroczono limit czasu biegu';
+  return outcome ?? 'Bieg nieukończony';
+}
+
+function followRider(id) {
+  chooseRider(id);
+  $('follow').checked = true;
+  camera.scale = Math.max(camera.scale, fitScale * 3);
+  dirty = true;
+}
+
 async function loadScenario(key,keepTime=null) {
   if (clipRecorder) clipRecorder.stop();
-  const generation = ++loadGeneration; setPlaying(false); $('load-state').hidden = false; $('load-state').classList.remove('error');
+  const generation = ++loadGeneration;
+  setPlaying(false);
+  replay = null;
+  $('load-state').hidden = false;
+  $('load-state').classList.remove('error');
+  document.querySelector('.brand p').textContent=[...$('scenario').options].find(option=>option.value===key)?.textContent??'Zapis historyczny';
   zigzagPanel=null;$('zigzag-analysis').hidden=true;
   $('free-racing-analysis').hidden=true;
   $('free-learning-analysis').hidden=true;
@@ -467,7 +837,132 @@ async function loadScenario(key,keepTime=null) {
   $('targets').disabled=['free-racing','free-learning','robust-learning','extended-learning','full-throttle-learning','rider-decision','track-awareness','multi-action','speed-throttle','causal-yaw','constraints143','standing144'].includes(key);
   $('outer-limit').disabled=['free-racing','free-learning','robust-learning','extended-learning','full-throttle-learning','rider-decision','track-awareness','multi-action','speed-throttle','causal-yaw','constraints143','standing144'].includes(key);
   $('load-state').textContent = 'Wczytywanie zaakceptowanych stanów…';
+  $('race-leaderboard').hidden = true;
+  $('exit-diagnostics').hidden = true;
+  $('h25-comparison').hidden = true;
+  $('solo199-comparison').hidden=true;
+  $('solo200-comparison').hidden=true;
+  solo200=[];
+  delete canvas.dataset.solo200;
+  solo199=[];
+  delete canvas.dataset.solo199;
+  activeH25Key = null; h25Compare = null; compareGeneration++;
+  delete canvas.dataset.comparison;
+  $('follow-rider').hidden = true;
+  $('lean-row').hidden = true;
+  delete canvas.dataset.riders;
+  delete canvas.dataset.contact;
+  document.body.classList.remove('h25-view');
   try {
+    if (isH25(key)) {
+      const data = await loadH25(key);
+      if (generation !== loadGeneration) return false;
+      geometry = data.geometry; replay = data.replay;
+      const ids = [...replay.tracks.keys()];
+      selected = ids[0]; comparisonTrails = []; widthGeometries = [];
+      for (const id of ['width-controls','width-comparison','comparison-legend','safety-note','record-clip']) $(id).hidden = true;
+      document.body.classList.add('h25-view');
+      $('race-leaderboard').hidden = false; $('follow-rider').hidden = false; $('lean-row').hidden = false;
+      $('follow-rider').replaceChildren(new Option('Wybierz zawodnika', ''), ...ids.map(id => new Option('R' + id, id)));
+      $('recording-mode').hidden = false;
+      $('recording-mode').textContent = replay.exitStudy?.name ?? (ids.length + ' motocykle · H25 / FAST50 · 3 okrążenia');
+      const test = replay.exitStudy?.native200 ?? replay.exitStudy?.native199 ?? replay.exitStudy?.native198 ?? replay.exitStudy?.native197 ?? replay.exitStudy?.native196;
+      $('exit-target').closest('label').hidden = Boolean(test);
+      $('exit-jump').previousSibling.textContent = test ? 'Punkt ' : 'Wyjście ';
+      $('exit-jump').setAttribute('aria-label', test ? 'Wybierz punkt pomiaru' : 'Przejdź do prostowania');
+      if (test) {
+        const recordedPeak=Math.max(...[...replay.tracks.values()].flatMap(track=>track.map(row=>row.speed*3.6)));
+        $('recording-mode').textContent += ' · ' + test.verdict + ' · Vmax ' + format(test.vmax,3).replace('.', ',') +
+          ' km/h przed łukami · całe nagranie '+format(recordedPeak,3)+' km/h · min. swept ' + format(test.swept,3).replace('.', ',') + ' m';
+        if (replay.exitStudy.native199 || replay.exitStudy.native200) {
+          $('recording-mode').textContent += ' · '+format(test.finish,3)+' s · korytarz '+format(test.wide*100,1)+'%';
+        }
+        if (test.primary) {
+          $('recording-mode').textContent += ' · odcinek ' + format(test.section,3) + ' s (#197: ' +
+            format(test.compareSection,3) + ' s) · wyjście ' + format(test.exitSpeed,1) + ' km/h';
+        }
+        if (test.complete) {
+          $('recording-mode').textContent += ' · ' + format(test.duration,3) + ' s (#196: ' +
+            format(test.baselineDuration,3) + ' s) · wyjście ' + format(test.exitSpeed,1) +
+            ' km/h, offset ' + format(test.exitOffset,2) + ' m';
+        }
+        $('exit-diagnostics').open = true;
+      }
+      $('exit-diagnostics').hidden = !replay.exitStudy;
+      $('exit-diagnostics').querySelector('summary').textContent = test ? 'Telemetria ' + comparedController(replay) :
+        comparedController(replay) === '#194' ? 'Diagnostyka wyjścia · #194' : 'Diagnostyka wyjścia';
+      $('h25-comparison').hidden = false;
+      activeH25Key = key;
+      updateComparisonChoices(raceEntries);
+      $('h25-compare').value = '';
+      $('h25-compare-info').textContent = 'Wybierz przejazd z archiwum.';
+      document.querySelector('.map-title span').textContent = 'MOTOARENA · TORUŃ';
+      document.querySelector('.map-title small').textContent = 'Geometria progressive-b · metry';
+      canvas.setAttribute('aria-label', 'Stadion Motoarena, liczba motocykli: ' + ids.length);
+      $('smooth').checked = true; $('targets').disabled = true;
+      $('outer-limit').checked = false; $('compare-lines').checked = false;
+      $('sampling-note').textContent = 'Natywne pozycje Box2D';
+      $('all-events').checked = true;
+      $('riders').replaceChildren(...ids.map(id => {
+        const button = document.createElement('button');
+        button.textContent = 'R' + id; button.dataset.id = String(id);
+        button.style.setProperty('--rider', color(id));
+        button.addEventListener('click', () => chooseRider(id));
+        return button;
+      }));
+      $('source-count').textContent = ids.length === 1 ? '1 motocykl' : ids.length + ' motocykle';
+      $('scrub').max = String(replay.duration); $('scrub').step = '0.001';
+      const requestedTime = new URL(location.href).searchParams.get('t');
+      setTime(keepTime ?? (requestedTime == null ? test?.start ?? 0 : Number(requestedTime) || 0));
+      fit(); chooseRider(selected); $('load-state').hidden = true;
+      if (replay.exitStudy?.native200) {
+        const peerKeys=['199-swobodna','199-bazowy-b','199-solo','200-solo'];
+        const sources=await Promise.all(peerKeys.map(key=>loadH25('h25-'+key)));
+        if(generation!==loadGeneration)return false;
+        if(sources.some(source=>source.geometry.frameId!==geometry.frameId ||
+          source.geometry.lapMeters!==geometry.lapMeters))throw new Error('Niezgodna geometria porównania #200.');
+        solo200=sources.map(source=>source.replay);
+        $('h25-comparison').hidden=true;
+        $('solo200-comparison').hidden=false; $('solo200-comparison').open=true;
+        dirty=true;
+      } else if (replay.exitStudy?.native199) {
+        const peers=await Promise.all(['199-swobodna','199-solo','198-solo','199-bazowy-b'].map(id=>loadH25('h25-'+id)));
+        if(generation!==loadGeneration)return false;
+        if(peers.some(source=>source.geometry.frameId!==geometry.frameId ||
+          source.geometry.lapMeters!==geometry.lapMeters))throw new Error('Niezgodna geometria pomiaru #199.');
+        solo199=peers.map(source=>source.replay);
+        $('h25-comparison').hidden=true;
+        $('solo199-comparison').hidden=false; $('solo199-comparison').open=true;
+        dirty=true;
+      } else if (test?.primary && raceEntries.some(entry => entry.id === '197-autonomiczna')) {
+        $('h25-comparison').open = true;
+        $('h25-compare').value = 'h25-197-autonomiczna';
+        await selectComparison('h25-197-autonomiczna');
+      } else if (test?.complete && raceEntries.some(entry => entry.id === '196-szybka-prosta')) {
+        $('h25-comparison').open = true;
+        $('h25-compare').value = 'h25-196-szybka-prosta';
+        await selectComparison('h25-196-szybka-prosta');
+      }
+      return true;
+    }
+    if(key==='study172'){
+      const data=await loadStudy172();if(generation!==loadGeneration)return;
+      geometry=data.geometry;replay=data.replay;selected=[...replay.tracks.keys()][0];comparisonTrails=[];widthGeometries=[];
+      for(const id of ['width-controls','width-comparison','comparison-legend','safety-note','record-clip'])$(id).hidden=true;
+      $('recording-mode').hidden=false;$('recording-mode').textContent='Solo — #172 · S3-K4 · trzy pełne okrążenia';
+      document.querySelector('.brand p').textContent='Aktualny zapis autonomicznego sterownika · jeden motocykl';
+      document.querySelector('.map-title span').textContent='PROGRESSIVE-B · GEOMETRIA EKSPERYMENTALNA';
+      document.querySelector('.map-title small').textContent='Geometria symulatora · nie jest dokładnym odwzorowaniem Motoareny';
+      canvas.setAttribute('aria-label','Stadion progressive-b z rzeczywistej geometrii #172, jeden motocykl, trzy okrążenia');
+      $('smooth').checked=true;$('targets').checked=false;$('vectors').checked=false;$('outer-limit').checked=false;$('compare-lines').checked=false;$('rate').value='1';
+      $('targets').disabled=true;$('outer-limit').disabled=true;
+      $('sampling-note').textContent=replay.study172.samples+' natywnych stanów · interpolacja wyłącznie obrazu';
+      $('riders').replaceChildren();for(const id of replay.tracks.keys()){
+        const button=document.createElement('button');button.textContent='R'+id;button.dataset.id=String(id);button.style.setProperty('--rider',color(id));button.addEventListener('click',()=>chooseRider(id));$('riders').append(button);
+      }
+      $('source-count').textContent='1 motocykl · Solo — #172';$('scrub').max=String(replay.duration);$('scrub').step='0.001';
+      setTime(keepTime??Number(new URL(location.href).searchParams.get('t')??0));chooseRider(selected);fit();$('load-state').hidden=true;return;
+    }
     if(key==='viable154'||key==='safety153'||key==='efficient152'||key==='contingency151'||key==='robust150'||key==='standing144'||key==='corner145'||key==='planning146'||key==='efficient147'||key==='speed148'||key==='tyre149'){
       const data=await (key==='viable154'?loadViable154:key==='safety153'?loadSafety153:key==='efficient152'?loadEfficient152:key==='contingency151'?loadContingency151:key==='robust150'?loadRobust150:key==='tyre149'?loadTyre149:key==='speed148'?loadSpeed148:key==='efficient147'?loadEfficient147:key==='planning146'?loadPlanning146:key==='corner145'?loadCorner145:loadStanding144)(fetch,new URL(location.href).searchParams.get('run')??(key==='corner145'?'K1':null));if(generation!==loadGeneration)return;
       geometry=data.geometry;replay=data.replay;selected=[...replay.tracks.keys()][0];comparisonTrails=[];widthGeometries=[];
@@ -476,7 +971,7 @@ async function loadScenario(key,keepTime=null) {
       document.querySelector('.brand p').textContent=data.index.Title;
       $('safety-note').hidden=false;$('safety-note').className='safety-note'+(data.run.Outcome==='completed'?'':' unsafe');
       $('safety-note').textContent=data.index.Note;
-      document.querySelector('.map-title span').textContent='MOTOARENA · PROGRESSIVE B';document.querySelector('.map-title small').textContent='Start35m przed łukiem · ciągłe native · bez resetów';
+      document.querySelector('.map-title span').textContent='TOR EKSPERYMENTALNY · PROGRESSIVE-B';document.querySelector('.map-title small').textContent='Start35m przed łukiem · ciągłe native · bez resetów';
       $('smooth').checked=false;$('targets').checked=false;$('outer-limit').checked=false;$('rate').value='1';
       $('record-clip').hidden=typeof MediaRecorder==='undefined'||!canvas.captureStream;
       $('sampling-note').textContent=data.run.Riders.reduce((n,r)=>n+r.Samples.length,0)+' natywnych stanów · bez ekstrapolacji';
@@ -702,14 +1197,29 @@ async function loadScenario(key,keepTime=null) {
   } catch (error) {
     if (generation !== loadGeneration) return;
     replay = null; $('load-state').hidden = false; $('load-state').classList.add('error');
-    $('load-state').textContent = `${error.message}\nZ katalogu repo: py -m http.server 8000 --bind 127.0.0.1\nOtwórz http://127.0.0.1:8000/tools/replay-viewer/`; dirty = true;
+    $('load-state').textContent = `${error.message}\nUruchom stadion poleceniem .\\uruchom-stadion.ps1.`; dirty = true;
   }
 }
+function rememberScenario(key) {
+  const url = new URL(location.href);
+  url.searchParams.set('case', key);
+  for (const param of ['run', 'group', 't']) url.searchParams.delete(param);
+  history.replaceState(null, '', url);
+}
 $('scenario').addEventListener('change', e => {
-  const url = new URL(location.href); url.searchParams.set('case', e.target.value);url.searchParams.delete('run');url.searchParams.delete('group'); history.replaceState(null, '', url);
+  rememberScenario(e.target.value);
   loadScenario(e.target.value);
 });
-$('play').addEventListener('click', () => { if (replay && time >= replay.duration) setTime(0); setPlaying(!playing); });
+$('follow-rider').addEventListener('change', event => {
+  if (event.target.value) followRider(Number(event.target.value));
+});
+$('play').addEventListener('click', () => { if (replay && time >= replay.duration) setTime(0); setPlaying(true); });
+$('pause').addEventListener('click',()=>setPlaying(false));
+$('restart').addEventListener('click',()=>{setPlaying(false);setTime(0);});
+$('advanced-toggle').addEventListener('click',()=>{const shown=document.body.classList.toggle('advanced');$('advanced-toggle').setAttribute('aria-expanded',String(shown));dirty=true;lastPanelTime=-1;});
+for(const button of document.querySelectorAll('[data-rate]'))button.addEventListener('click',()=>{$('rate').value=button.dataset.rate;syncRate();});
+function syncRate(){for(const button of document.querySelectorAll('[data-rate]'))button.setAttribute('aria-pressed',String(button.dataset.rate===$('rate').value));}
+$('rate').addEventListener('change',syncRate);
 $('scrub').addEventListener('input', e => { setPlaying(false); setTime(e.target.value); });
 for (const [id, direction] of [['previous', -1], ['next', 1]]) $(id).addEventListener('click', () => { if (!replay) return; setPlaying(false); const t = replay.step(time, direction); if (t != null) setTime(t); });
 $('fit').addEventListener('click', fit); $('zoom-in').addEventListener('click', () => zoom(1.25)); $('zoom-out').addEventListener('click', () => zoom(.8));
@@ -719,6 +1229,26 @@ for (let i = 0; i < 2; i++) $('bend-' + (i + 1)).addEventListener('click', () =>
 $('follow').addEventListener('change', () => { if ($('follow').checked) camera.scale = Math.max(camera.scale, fitScale * 3); dirty = true; });
 for (const id of ['trails', 'targets', 'segments', 'outer-limit', 'compare-lines', 'compare-widths', 'vectors', 'smooth']) $(id).addEventListener('change', () => { dirty = true; lastPanelTime = -1; });
 $('all-events').addEventListener('change', rebuildEvents);
+$('h25-compare').addEventListener('change', event => selectComparison(event.target.value));
+$('h25-comparison').addEventListener('toggle', () => {
+  if (!$('h25-comparison').open) delete canvas.dataset.comparison;
+  dirty = true;
+});
+for (const [id,event] of [['exit-vectors','change'],['exit-target','change'],['exit-diagnostics','toggle']])
+  $(id).addEventListener(event, () => { dirty=true; lastPanelTime=-1; });
+for (const id of ['a','b','prev','new'])
+  $('trace200-'+id).addEventListener('change',()=>{dirty=true;});
+$('solo200-comparison').addEventListener('toggle',()=>{dirty=true;});
+for (const id of ['trace199-a' ,'trace199-b','trace199-base'])
+  $(id).addEventListener('change',()=>{dirty=true;});
+$('trace199-b-version').addEventListener('change',()=>{dirty=true;});
+$('solo199-comparison').addEventListener('toggle',()=>{dirty=true;});
+$('exit-jump').addEventListener('change', event => {
+  if (event.target.value==='') return;
+  setPlaying(false);
+  setTime(Number(event.target.value));
+  event.target.value='';
+});
 canvas.addEventListener('wheel', e => { e.preventDefault(); const r = canvas.getBoundingClientRect(); zoom(Math.exp(-e.deltaY * .0015), { x: e.clientX - r.left, y: e.clientY - r.top }); }, { passive: false });
 let drag = null;
 canvas.addEventListener('pointerdown', e => { const rect = canvas.getBoundingClientRect(); drag = { x: e.clientX, y: e.clientY, startX: e.clientX, startY: e.clientY, rect, moved: false }; canvas.setPointerCapture(e.pointerId); });
@@ -741,7 +1271,7 @@ canvas.addEventListener('pointerup', e => {
 canvas.addEventListener('pointercancel', () => { drag = null; });
 document.addEventListener('keydown', e => {
   if (['INPUT', 'SELECT', 'BUTTON', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
-  if (e.code === 'Space') { e.preventDefault(); $('play').click(); }
+  if (e.code === 'Space') { e.preventDefault(); if(replay&&time>=replay.duration)setTime(0); setPlaying(!playing); }
   if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') { e.preventDefault(); $(e.key === 'ArrowLeft' ? 'previous' : 'next').click(); }
 });
 new ResizeObserver(resize).observe($('canvas-wrap'));
@@ -756,7 +1286,23 @@ requestAnimationFrame(frame);
 try {
   const response = await fetch('./geometry.json'); if (!response.ok) throw new Error('Nie znaleziono geometrii modelu.');
   nativeGeometry = await response.json(); geometry = nativeGeometry;
+  const entries = await setupRaces(async key => {
+    $('scenario').value = key;
+    rememberScenario(key);
+    if (await loadScenario(key, 0)) setPlaying(true);
+    else throw new Error('Bieg zapisano, ale odtwarzacz nie mógł wczytać nagrania.');
+  }, () => setPlaying(false), updateComparisonChoices);
+  if (document.body.hasAttribute('data-portable')) {
+    const included = new Set(['study172', 'pack', 'solo']);
+    for (const option of [...$('scenario').options]) {
+      if (!isH25(option.value) && !included.has(option.value)) option.remove();
+    }
+    for (const link of document.querySelectorAll('.advanced-link')) link.hidden = true;
+  }
   const requested = new URL(location.href).searchParams.get('case');
-  $('scenario').value = [...$('scenario').options].some(o => o.value === requested) ? requested : 'latest-two-bends';
+  const available = [...$('scenario').options].some(o => o.value === requested);
+  const latest191 = entries.find(item => item.id === '191-gearing');
+  $('scenario').value = available ? requested : latest191 ? raceKey(latest191.id)
+    : entries.length ? raceKey(entries[0].id) : 'study172';
   await loadScenario($('scenario').value);
 } catch (error) { $('load-state').classList.add('error'); $('load-state').textContent = `${error.message}\nUruchom statyczny serwer HTTP z katalogu repozytorium (instrukcja w README).`; }

@@ -2,41 +2,68 @@
 <html lang="pl">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Shared World · Replay 2D</title>
-  <link rel="stylesheet" href="style.css?view=123">
+  <title>Stadion żużlowy · Replay 2D</title>
+  <link rel="stylesheet" href="style.css?view=stadium192">
 </head>
-<body>
+<body data-portable>
   <header class="topbar">
-    <div class="brand"><span class="mark" aria-hidden="true">↺</span><div><h1>Shared World <span>Replay 2D</span></h1><p>Rzeczywista jazda Box2D · przejazd #123 · audyt #124</p></div></div>
-    <label class="case-label">Przejazd <select id="scenario"><option value="solo">Solo · przed łukiem</option><option value="pack">HISTORYCZNY #95 · 4 zawodników · starsza fizyka</option><option value="line-selected">#99 · wybrany</option><option value="line-inner">#99 · wewnętrzny</option><option value="line-wide">#99 · szeroki</option><option value="line-rejected">#99 · odrzucona kontrola</option><option value="wheel-old-A-neutral-inner">#100 · stary / inner</option><option value="wheel-new-A-neutral-inner">#100 · koło / inner i wyjście</option><option value="wheel-new-A-neutral-wide-tighten">#100 · koło / szeroki</option><option value="wheel-straight-launch-stress">#100 · wheelspin / start</option><option value="wheel-launch-through-corner">#100 · wheelspin / łuk</option><option value="shape-baseline-inner">#101 · baseline / inner</option><option value="shape-baseline-wide-tighten">#101 · baseline / wide-tighten</option><option value="shape-egg-mild-inner">#101 · egg-mild / inner</option><option value="shape-egg-mild-wide-tighten">#101 · egg-mild / wide-tighten</option><option value="shape-egg-medium-inner">#101 · egg-medium / inner</option><option value="shape-egg-medium-wide-tighten">#101 · egg-medium / wide-tighten</option><option value="shape-egg-strong-inner">#101 · egg-strong / inner</option><option value="shape-egg-strong-wide-tighten">#101 · egg-strong / wide-tighten</option><option value="shape-egg-asymmetric-inner">#101 · egg-asymmetric / inner</option><option value="shape-egg-asymmetric-wide-tighten">#101 · egg-asymmetric / wide-tighten</option><option value="local-egg-mild-inner">#102 · egg-mild / inner</option><option value="local-egg-mild-middle-tighten">#102 · egg-mild / middle-tighten</option><option value="local-egg-mild-wide-tighten">#102 · egg-mild / wide-tighten</option><option value="local-egg-mild-outer-max">#102 · egg-mild / outer-max</option><option value="local-egg-mild-outer-tighten">#102 · egg-mild / outer-tighten</option><option value="local-egg-mild-middle-to-outer">#102 · egg-mild / middle-to-outer</option><option value="local-baseline-inner">#102 · baseline / inner</option><option value="local-baseline-middle-tighten">#102 · baseline / middle-tighten</option><option value="local-baseline-wide-tighten">#102 · baseline / wide-tighten</option><option value="local-baseline-outer-max">#102 · baseline / outer-max</option><option value="local-baseline-outer-tighten">#102 · baseline / outer-tighten</option><option value="local-baseline-middle-to-outer">#102 · baseline / middle-to-outer</option><option value="width-a-inner">#103 · A / inner</option><option value="width-a-middle-tighten">#103 · A / middle-tighten</option><option value="width-a-wide-tighten">#103 · A / wide-tighten</option><option value="width-a-outer-max">#103 · A / outer-max</option><option value="width-a-outer-tighten">#103 · A / outer-tighten</option><option value="width-a-middle-to-outer">#103 · A / middle-to-outer</option><option value="width-b-inner">#103 · B / inner</option><option value="width-b-middle-tighten">#103 · B / middle-tighten</option><option value="width-b-wide-tighten">#103 · B / wide-tighten</option><option value="width-b-outer-max">#103 · B / outer-max</option><option value="width-b-outer-tighten">#103 · B / outer-tighten</option><option value="width-b-middle-to-outer">#103 · B / middle-to-outer</option><option value="width-c-inner">#103 · C / inner</option><option value="width-c-middle-tighten">#103 · C / middle-tighten</option><option value="width-c-wide-tighten">#103 · C / wide-tighten</option><option value="width-c-outer-max">#103 · C / outer-max</option><option value="width-c-outer-tighten">#103 · C / outer-tighten</option><option value="width-c-middle-to-outer">#103 · C / middle-to-outer</option></select></label>
-    <a href="throttle-steering.html">#138 · Gaz i kierownica</a><span class="recorded"><i></i> Zapis, bez symulacji</span>
+    <div class="brand"><span class="mark" aria-hidden="true">↺</span><div><h1>Stadion żużlowy <span>Replay 2D</span></h1><p>H25 / FAST50 · trzy okrążenia</p></div></div>
+    <label class="case-label">Przejazd <select id="scenario"><optgroup id="h25-recordings" label="Biegi H25 / FAST50" hidden></optgroup><option value="solo">Solo · przed łukiem</option><option value="pack">HISTORYCZNY #95 · 4 zawodników · starsza fizyka</option><option value="line-selected">#99 · wybrany</option><option value="line-inner">#99 · wewnętrzny</option><option value="line-wide">#99 · szeroki</option><option value="line-rejected">#99 · odrzucona kontrola</option><option value="wheel-old-A-neutral-inner">#100 · stary / inner</option><option value="wheel-new-A-neutral-inner">#100 · koło / inner i wyjście</option><option value="wheel-new-A-neutral-wide-tighten">#100 · koło / szeroki</option><option value="wheel-straight-launch-stress">#100 · wheelspin / start</option><option value="wheel-launch-through-corner">#100 · wheelspin / łuk</option><option value="shape-baseline-inner">#101 · baseline / inner</option><option value="shape-baseline-wide-tighten">#101 · baseline / wide-tighten</option><option value="shape-egg-mild-inner">#101 · egg-mild / inner</option><option value="shape-egg-mild-wide-tighten">#101 · egg-mild / wide-tighten</option><option value="shape-egg-medium-inner">#101 · egg-medium / inner</option><option value="shape-egg-medium-wide-tighten">#101 · egg-medium / wide-tighten</option><option value="shape-egg-strong-inner">#101 · egg-strong / inner</option><option value="shape-egg-strong-wide-tighten">#101 · egg-strong / wide-tighten</option><option value="shape-egg-asymmetric-inner">#101 · egg-asymmetric / inner</option><option value="shape-egg-asymmetric-wide-tighten">#101 · egg-asymmetric / wide-tighten</option><option value="local-egg-mild-inner">#102 · egg-mild / inner</option><option value="local-egg-mild-middle-tighten">#102 · egg-mild / middle-tighten</option><option value="local-egg-mild-wide-tighten">#102 · egg-mild / wide-tighten</option><option value="local-egg-mild-outer-max">#102 · egg-mild / outer-max</option><option value="local-egg-mild-outer-tighten">#102 · egg-mild / outer-tighten</option><option value="local-egg-mild-middle-to-outer">#102 · egg-mild / middle-to-outer</option><option value="local-baseline-inner">#102 · baseline / inner</option><option value="local-baseline-middle-tighten">#102 · baseline / middle-tighten</option><option value="local-baseline-wide-tighten">#102 · baseline / wide-tighten</option><option value="local-baseline-outer-max">#102 · baseline / outer-max</option><option value="local-baseline-outer-tighten">#102 · baseline / outer-tighten</option><option value="local-baseline-middle-to-outer">#102 · baseline / middle-to-outer</option><option value="width-a-inner">#103 · A / inner</option><option value="width-a-middle-tighten">#103 · A / middle-tighten</option><option value="width-a-wide-tighten">#103 · A / wide-tighten</option><option value="width-a-outer-max">#103 · A / outer-max</option><option value="width-a-outer-tighten">#103 · A / outer-tighten</option><option value="width-a-middle-to-outer">#103 · A / middle-to-outer</option><option value="width-b-inner">#103 · B / inner</option><option value="width-b-middle-tighten">#103 · B / middle-tighten</option><option value="width-b-wide-tighten">#103 · B / wide-tighten</option><option value="width-b-outer-max">#103 · B / outer-max</option><option value="width-b-outer-tighten">#103 · B / outer-tighten</option><option value="width-b-middle-to-outer">#103 · B / middle-to-outer</option><option value="width-c-inner">#103 · C / inner</option><option value="width-c-middle-tighten">#103 · C / middle-tighten</option><option value="width-c-wide-tighten">#103 · C / wide-tighten</option><option value="width-c-outer-max">#103 · C / outer-max</option><option value="width-c-outer-tighten">#103 · C / outer-tighten</option><option value="width-c-middle-to-outer">#103 · C / middle-to-outer</option></select></label>
+    <button id="advanced-toggle" aria-expanded="false">Zaawansowane</button><a class="advanced-link" href="throttle-steering.html">#138 · Gaz i kierownica</a>
   </header>
+  <form id="race-config" class="race-config" aria-labelledby="race-config-title">
+    <fieldset>
+      <legend id="race-config-title">Konfiguracja biegu</legend>
+      <label class="race-count">Liczba zawodników
+        <select id="race-count"><option value="1">Solo · pole D</option><option value="2">2 zawodników</option><option value="4" selected>4 zawodników</option></select>
+      </label>
+      <label class="race-controller">Sterowanie
+        <select id="race-controller">
+          <option value="base" selected>Dotychczasowe #192 — baza</option>
+          <option value="speedway200">C #200 · solo 8:1 (eksperymentalne)</option>
+          <option value="wide194">Nowe #194 — szeroka prosta (eksperymentalne)</option>
+        </select>
+      </label>
+      <div id="race-gearing" class="race-gearing"></div>
+      <button id="race-run" class="play-button" type="submit">Uruchom bieg</button>
+    </fieldset>
+    <output id="race-status" role="status" aria-live="polite"></output>
+  </form>
   <main>
     <section class="workspace" aria-label="Widok toru i odtwarzanie">
       <div class="map-tools">
-        <div class="view-options"><label id="width-controls" hidden><input id="compare-widths" type="checkbox" checked> Bandy A/B/C</label><label><input id="outer-limit" type="checkbox" checked> Limit obrysu + 0,5 m</label><label><input id="compare-lines" type="checkbox" checked> Plan / porównanie</label><label><input id="trails" type="checkbox" checked> Ślady</label><label><input id="targets" type="checkbox" checked> Cel poprzeczny</label><label><input id="vectors" type="checkbox" checked> Heading / v / β</label><label><input id="smooth" type="checkbox"> Wygładzanie obrazu</label><label><input id="segments" type="checkbox"> Segmenty</label></div>
-        <div class="camera-tools"><button id="zoom-out" aria-label="Oddal">−</button><output id="zoom-level">100%</output><button id="zoom-in" aria-label="Przybliż">+</button><button id="fit">Cały tor</button><button id="closeup">Zbliżenie</button><label class="follow"><input id="follow" type="checkbox"> Śledź <span id="follow-id">R1</span></label></div>
+        <div class="view-options"><label id="width-controls" hidden><input id="compare-widths" type="checkbox" checked> Bandy A/B/C</label><label><input id="outer-limit" type="checkbox" checked> Limit obrysu + 0,5 m</label><label><input id="compare-lines" type="checkbox" checked> Plan / porównanie</label><label><input id="trails" type="checkbox" checked> Ślady</label><label><input id="targets" type="checkbox" checked> Cel poprzeczny</label><label><input id="vectors" type="checkbox" checked> Heading / v / β</label><label><input id="smooth" type="checkbox" checked> Wygładzanie obrazu</label><label><input id="segments" type="checkbox"> Segmenty</label></div>
+        <div class="camera-tools"><button id="zoom-out" aria-label="Oddal">−</button><output id="zoom-level">100%</output><button id="zoom-in" aria-label="Przybliż">+</button><button id="fit">Cały tor</button><button id="closeup">Zbliżenie</button><label class="follow"><input id="follow" type="checkbox"> Śledź <span id="follow-id">R1</span></label><select id="follow-rider" aria-label="Kamera zawodnika" hidden></select></div>
       </div>
       <div id="recording-mode" class="recording-mode" hidden></div>
       <div id="safety-note" class="safety-note" hidden></div>
       <div class="canvas-wrap" id="canvas-wrap">
-        <canvas id="track" aria-label="Motoarena w skali metrycznej. Wybierz zawodnika klikając motocykl." tabindex="0"></canvas>
-        <div class="map-title"><span>MOTOARENA · TORUŃ</span><small>Geometria modelu · metry</small></div>
+        <canvas id="track" aria-label="Tor z geometrii nagrania. Wybierz zawodnika klikając motocykl." tabindex="0"></canvas>
+        <div class="map-title"><span>GEOMETRIA NAGRANIA</span><small>Geometria modelu · metry</small></div>
         <div class="map-legend"><span>Krawężnik: biały · banda: złota · limit: przerywany</span><span><i class="legend-trace"></i> Wykonana trasa</span><span><i class="legend-target"></i> Cel w przekroju</span><span><i class="legend-reference"></i> Referencja 1 m od krawędzi</span></div>
+        <output id="race-hud" aria-label="Wybrany zawodnik, okrążenie i prędkość"></output>
         <div id="load-state" class="load-state" role="status">Wczytywanie zaakceptowanych stanów…</div>
         <div id="comparison-legend" class="comparison-legend" hidden><span style="color:#9be6a8">inner</span> · <span style="color:#82bfff">middle-tighten</span> · <span style="color:#f498c8">outer-tighten (odrzucony)</span> · zapis okr. 2</div><div id="pose-note" class="pose-note" hidden></div>
       </div>
       <div class="transport">
         <div class="transport-row">
-          <div class="playback"><button id="previous" title="Poprzednia zapisana próbka (←)" aria-label="Poprzednia próbka">|‹</button><button id="play" class="play-button" aria-label="Odtwarzaj">▶ Odtwórz</button><button id="next" title="Następna zapisana próbka (→)" aria-label="Następna próbka">›|</button></div>
+          <div class="playback"><button id="previous" title="Poprzednia zapisana próbka (←)" aria-label="Poprzednia próbka">|‹</button><button id="play" class="play-button" aria-label="Start">▶ Start</button><button id="pause" disabled>Pauza</button><button id="restart">Od początku</button><button id="next" title="Następna zapisana próbka (→)" aria-label="Następna próbka">›|</button></div>
           <output id="clock">0.000 / — s</output>
-          <button id="record-clip" hidden title="Nagrywa rzeczywiste odtwarzanie Canvas do WebM przez maksymalnie 12 sekund, przy wybranym tempie">Zapisz klip (12 s)</button><div class="bend-jumps"><button id="bend-1">Łuk 1</button><button id="bend-2">Łuk 2</button></div><label class="rate-label">Tempo <select id="rate"><option value="0.1">0,1×</option><option value="0.25">0,25×</option><option value="0.5">0,5×</option><option value="1" selected>1×</option><option value="2">2×</option></select></label>
+          <button id="record-clip" hidden title="Nagrywa rzeczywiste odtwarzanie Canvas do WebM przez maksymalnie 12 sekund, przy wybranym tempie">Zapisz klip (12 s)</button><div class="bend-jumps"><button id="bend-1">Łuk 1</button><button id="bend-2">Łuk 2</button></div><div class="rate-buttons" role="group" aria-label="Tempo animacji"><button data-rate="0.25">0,25×</button><button data-rate="0.5">0,5×</button><button data-rate="1" aria-pressed="true">1×</button><button data-rate="2">2×</button><button data-rate="4">4×</button></div><label class="rate-label">Tempo <select id="rate"><option value="0.1">0,1×</option><option value="0.25">0,25×</option><option value="0.5">0,5×</option><option value="1" selected>1×</option><option value="2">2×</option><option value="4">4×</option></select></label>
         </div>
         <label class="sr-only" for="scrub">Czas przejazdu w sekundach</label><input id="scrub" type="range" min="0" max="1" step="0.001" value="0">
         <div class="transport-foot"><span>← → próbki · spacja play/pause · kółko zoom · przeciągnij widok</span><span id="sampling-note">Snapshoty z zapisu</span></div>
       </div>
     </section>
     <aside class="sidebar">
+      <section id="race-leaderboard" class="race-leaderboard" hidden>
+        <div class="section-heading"><h2 id="leaderboard-title">Klasyfikacja</h2></div>
+        <table aria-labelledby="leaderboard-title">
+          <thead><tr><th scope="col">Zaw.</th><th scope="col">Poz.</th><th scope="col">Okr. / meta</th><th scope="col">km/h</th><th scope="col">Przeł.</th></tr></thead>
+          <tbody id="race-order"></tbody>
+        </table>
+        <p id="race-outcome" hidden></p>
+      </section>
       <section class="rider-panel">
         <div class="section-heading"><h2>Zawodnik</h2><span id="source-count">—</span></div>
         <div id="riders" class="rider-tabs" role="group" aria-label="Wybór zawodnika"></div>
@@ -44,10 +71,52 @@
         <div class="metrics"><div><span>Prędkość</span><strong id="speed">—</strong><small>km/h · ostatnia próbka</small></div><div><span>Gaz (Drive)</span><strong id="drive">—</strong><small>dostępnego napędu</small></div></div>
         <div class="drive-track"><div id="drive-fill"></div></div>
         <div class="offsets"><div><span>Fizyczny offset</span><strong id="offset">—</strong></div><div><span>Aktywny target</span><strong id="target">—</strong></div></div>
-        <div class="slip-readout"><span>Kąt uślizgu β</span><strong id="slip-angle">—</strong><small>heading motocykla − kierunek v</small></div><dl class="details"><div><dt>Heading motocykla</dt><dd id="body-angle">—</dd></div><div><dt>Kierunek prędkości</dt><dd id="velocity-angle">—</dd></div><div><dt>Kierownica (stan)</dt><dd id="steering">—</dd></div><div id="active-plan-row" hidden><dt>Aktywny plan</dt><dd id="active-plan">—</dd></div><div><dt>Przebieg</dt><dd id="lap">—</dd></div><div><dt>Intencja linii</dt><dd id="intent">—</dd></div><div><dt>Stan pomiaru</dt><dd id="sample-at">—</dd></div></dl>
+        <div class="slip-readout"><span>Kąt uślizgu β</span><strong id="slip-angle">—</strong><small>heading motocykla − kierunek v</small></div><dl class="details"><div id="lean-row" hidden><dt>Przechył</dt><dd id="lean">—</dd></div><div><dt>Heading motocykla</dt><dd id="body-angle">—</dd></div><div><dt>Kierunek prędkości</dt><dd id="velocity-angle">—</dd></div><div><dt>Kierownica (stan)</dt><dd id="steering">—</dd></div><div id="active-plan-row" hidden><dt>Aktywny plan</dt><dd id="active-plan">—</dd></div><div><dt>Przebieg</dt><dd id="lap">—</dd></div><div><dt>Intencja linii</dt><dd id="intent">—</dd></div><div><dt>Stan pomiaru</dt><dd id="sample-at">—</dd></div></dl>
         <p id="vector-note" class="control-note"></p><p class="control-note">Wektor złoty: heading. Niebieski: v × 0,2 s. Łuk różowy: β.</p><p class="control-note">Drive to część dostępnego napędu, nie prędkości maksymalnej. Przerywany znacznik pokazuje cel poprzeczny, nie przyszłą trajektorię.</p>
         <div class="last-decision"><span>Ostatnia komenda / obserwacja</span><strong id="last-reason">—</strong><small id="last-state">—</small></div>
       </section>
+      <details id="solo200-comparison" class="exit-diagnostics" hidden>
+        <summary>Ślady Box2D · #199 i #200</summary>
+        <div class="exit-diagnostics-body">
+          <label><input id="trace200-a" type="checkbox" checked> #199 A · swobodna linia</label>
+          <label><input id="trace200-b" type="checkbox" checked> #199 B · szeroka prosta</label>
+          <label><input id="trace200-prev" type="checkbox" checked> #199 B płynny</label>
+          <label><input id="trace200-new" type="checkbox" checked> #200 C</label>
+          <output id="trace200-readout">—</output>
+        </div>
+      </details>
+      <details id="solo199-comparison" class="exit-diagnostics" hidden>
+        <summary>Ślady Box2D · porównanie solo</summary>
+        <div class="exit-diagnostics-body">
+          <label><input id="trace199-a" type="checkbox" checked> A · swobodna linia</label>
+          <label><input id="trace199-b" type="checkbox" checked> B · szeroka prosta</label>
+          <label><input id="trace199-base" type="checkbox" checked> #198 · punkt odniesienia</label>
+          <label for="trace199-b-version">Ślad B</label>
+          <select id="trace199-b-version">
+            <option value="smooth">B płynny · główny replay</option>
+            <option value="fast">B szybki · najlepszy czas</option>
+          </select>
+          <output id="trace199-readout">—</output>
+        </div>
+      </details>
+      <details id="h25-comparison" class="exit-diagnostics" hidden>
+        <summary>Porównaj przejazdy</summary>
+        <div class="exit-diagnostics-body">
+          <label>Drugi zapis
+            <select id="h25-compare" aria-label="Drugi zapis do porównania"><option value="">Wybierz…</option></select>
+          </label>
+          <output id="h25-compare-info">—</output>
+        </div>
+      </details>
+      <details id="exit-diagnostics" class="exit-diagnostics" hidden>
+        <summary>Diagnostyka wyjścia · #193</summary>
+        <div class="exit-diagnostics-body">
+          <label><input id="exit-vectors" type="checkbox" checked> Oś motocykla, prędkość i β</label>
+          <label><input id="exit-target" type="checkbox" checked> Cel ruchu i krzywizna</label>
+          <label>Wyjście <select id="exit-jump" aria-label="Przejdź do prostowania"><option value="">Wybierz…</option></select></label>
+          <output id="exit-readout" aria-live="off">—</output>
+        </div>
+      </details>
       <section class="events-panel">
         <div class="section-heading"><h2>Oś decyzji i zdarzeń</h2><label><input id="all-events" type="checkbox"> Wszyscy</label></div>
         <div class="event-summary" id="event-summary">—</div>
@@ -60,7 +129,7 @@
   <section id="free-learning-analysis" class="zigzag-analysis" aria-label="Proces uczenia Free Racing" hidden></section>
   <section id="robust-learning-analysis" class="zigzag-analysis" aria-label="Porównanie Robust Free Racing" hidden></section>
   <details id="width-comparison" class="width-comparison" hidden open><summary>Porównanie band A/B/C i szerokości obu łuków · ta sama skala</summary><p>A: profil #102 · B: maksimum 16,6 m · C: założone maksima 17 / 16,2 m. Profil C nie jest pomiarem geodezyjnym Motoareny.</p><img src="../../docs/experiments/progressive-bend-width/outer-width-comparison.svg" alt="Bandy A/B/C w jednej skali XY i wykresy szerokości pierwszego i drugiego łuku"><p><a href="../../docs/experiments/progressive-bend-width/outer-width-comparison.svg" target="_blank" rel="noopener">Porównanie w pełnym rozmiarze (SVG)</a> · Oddzielne przejazdy R1. Ruch i yaw pochodzą wyłącznie z zapisu wybranego przebiegu.</p></details>
-  <footer><span>Motocykl 2,10 × 0,80 m · korpus i kierownica w skali toru</span><span>Pozycja z CSV · orientacja heading_rad · <a href="README.md">Dane i ograniczenia</a></span></footer>
-  <script type="module" src="viewer.mjs?view=123"></script>
+  <footer><span>Obrys 2,10 × 0,80 m · symbol powiększony przy oddaleniu</span><span>XY i heading z nagrania · bez symulacji · <a href="README.md">Dane i ograniczenia</a></span></footer>
+  <script type="module" src="viewer.mjs?view=stadium192"></script>
 </body>
 </html>
