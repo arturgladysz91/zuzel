@@ -26,7 +26,7 @@ W kodzie pętla świata kończy się po ukończeniu trzech okrążeń. Pozycja w
 
 **Istnieje efekt końca horyzontu.** Przywróciłem w modelu ocenę kolejnego pełnego łuku i 20 m prostej, z tych samych stanów 66, 46, 26 i 6 m przed metą oraz z ostatniej próbki. Kontynuacja archiwalnych komend do mety jest legalna. Dalsze utrzymywanie końcówki taśmy narusza swept przy około **1002–1004 m postępu**, kilkanaście metrów w następnym łuku. Krótka próba odzysku przez poprzedni cykl i jego lokalne poprawki również nie znalazła legalnej kontynuacji. To dowód braku gwarancji **za metą** w użytym planie. Ciągła jazda po wyścigu wymagałaby odrębnego celu oraz bezpiecznego następcy.
 
-CSV obejmuje każdy krok od 42 s, prędkość, obydwa kanały poleceń, pełną kolejkę pending, status mety, politykę, pozostały czas celu i informację o braku prognozy następnego łuku. C #200 nie wylicza osobnej skalarnej „dozwolonej prędkości na następnym łuku”. Sprawdza dynamiczną kontynuację. [Telemetria przy mecie](finish.csv.gz) · [Interwencje na horyzoncie](finish-model.json.gz).
+CSV obejmuje każdy krok od wejścia w ostatni łuk, prędkość, obydwa kanały poleceń, pełną kolejkę pending, status mety, wersję polityki, pozostały czas celu, horyzont przewidywany przez bieżący plan i informację o braku prognozy następnego łuku. W epizodach interwencji podano kategorię z audytu gazu. C #200 nie wylicza osobnej skalarnej „dozwolonej prędkości na następnym łuku”. Sprawdza dynamiczną kontynuację. [Telemetria przy mecie](finish.csv.gz) · [Interwencje na horyzoncie](finish-model.json.gz).
 
 ## #196 i C #200 z identycznego stanu
 

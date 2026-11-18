@@ -67970,12 +67970,15 @@
         }
       ],
       "raceFinished": true,
-      "policy": "C200-certified-continuation",
+      "policy": "C200/v6",
+      "decisionReason": "certified-continuation",
       "goalReference": 956.3362498283386,
       "remainingObjectiveSeconds": 0,
+      "remainingPredictedHorizonSeconds": 0,
+      "localSafetyHorizonSeconds": 0,
       "nextBendPreview": null,
       "activeSpeedCap": null,
-      "throttleReason": "learned joint control; checked full finite continuation",
+      "throttleReason": "A-sampled-slower",
       "afterLastNativeSample": false
     }
   },

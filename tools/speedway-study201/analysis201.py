@@ -108,14 +108,27 @@ def main():
     rows=native_rows(raw)
     finish=raw['Run']['Riders'][0]['FinishSeconds']
     finish_rows=[]
+    last_entry=194.38937497138977+2*318.77874994277954
+    estimate=load(root/'outputs/badanie200/training-C.json.gz')['Winner']['Result']['Finish']
+    release=load(out/'release-audit.json.gz')['Events']
+    decisions=raw['Planner']
+    journal_index=0
     for s,r in zip(raw['Run']['Riders'][0]['Samples'],rows):
-        if r['t']<42:
+        if r['s']<last_entry:
             continue
+        while journal_index+1<len(decisions) and decisions[journal_index+1]['Time']<=r['t']+1e-9:
+            journal_index+=1
+            if decisions[journal_index]['NextFullSeconds'] is not None:
+                estimate=decisions[journal_index]['Time']+decisions[journal_index]['NextFullSeconds']
+        decision=decisions[journal_index]
+        episode=next((e for e in release if e['At']<=r['t']<e['At']+.8),None)
         finish_rows.append(dict(**r,pending=s['Input']['Pending'],raceFinished=r['t']>=finish,
-            policy='C200-certified-continuation',goalReference=956.3362498283386,
+            policy='C200/v'+str(decision['Version']),decisionReason=decision['Reason'],goalReference=956.3362498283386,
             remainingObjectiveSeconds=max(0,finish-r['t']),
+            remainingPredictedHorizonSeconds=max(0,estimate-r['t']),
+            localSafetyHorizonSeconds=min(.25,max(0,estimate-r['t'])),
             nextBendPreview=None,activeSpeedCap=None,
-            throttleReason='learned joint control; checked full finite continuation',
+            throttleReason=episode['Category'] if episode else 'certified learned joint control; no isolated throttle intervention at this step',
             afterLastNativeSample=False))
     audit=physics(raw)
     with gzip.open(out/'physics.csv.gz','wt',encoding='utf-8-sig',newline='') as f:
