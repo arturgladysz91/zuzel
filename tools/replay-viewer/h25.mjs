@@ -6,7 +6,7 @@ const number = new Intl.NumberFormat('pl-PL', {maximumFractionDigits: 1});
 const places = ['A', 'B', 'C', 'D'];
 
 export const raceKey = id => "h25-" + id;
-export const isH25 = key => /^h25-(191-(nominal|gearing)|193-(solo|four|alternate|two)-(stock|exit)|194-(solo-inside|solo-wide|four-stock|four-nominal|four-alternate|alternate-stock)|196-szybka-prosta|197-(autonomiczna|solo-dnf)|198-(autonomia|solo|czterech)|200-(solo|b|inny-start|inne-przelozenie|potwierdzenie)|199-(swobodna|swobodna-inny-stan|solo|bazowy-b|inny-stan|drugi-luk)|[a-f0-9]{32})$/.test(key);
+export const isH25 = key => /^h25-(191-(nominal|gearing)|193-(solo|four|alternate|two)-(stock|exit)|194-(solo-inside|solo-wide|four-stock|four-nominal|four-alternate|alternate-stock)|202-(h25|l|e|le|learned|alternate|l-trained|e-trained)|196-szybka-prosta|197-(autonomiczna|solo-dnf)|198-(autonomia|solo|czterech)|200-(solo|b|inny-start|inne-przelozenie|potwierdzenie)|199-(swobodna|swobodna-inny-stan|solo|bazowy-b|inny-stan|drugi-luk)|[a-f0-9]{32})$/.test(key);
 
 export async function raceRequest(url, options) {
   const response = await fetch(url, options);
@@ -33,6 +33,7 @@ export function raceFromRecording(payload) {
   }
   replay.h25 = {riders, outcome: payload.outcome, fingerprint: payload.fingerprint};
   replay.exitStudy = payload.exitStudy ?? null;
+  replay.physics202 = payload.physics202 ?? null;
   return {geometry: payload.geometry, replay};
 }
 
@@ -141,11 +142,12 @@ export async function setupRaces(onRecorded, onStart, onEntries) {
   update();
   count.addEventListener('change', update);
   $('race-controller').addEventListener('change', () => {
-    if ($('race-controller').value === 'speedway200') {
+    if ($('race-controller').value === 'speedway200' || $('race-controller').value.startsWith('h26-')) {
       count.value = '1';
       settings[0] = 8;
     }
     update();
+    status.textContent = $('race-controller').value.startsWith('h26-') ? 'H26: osobna wyuczona polityka solo 8:1. Parametry niezwalidowane pomiarowo. C #200 jest niekompatybilna.' : '';
   });
   form.addEventListener('submit', async event => {
     event.preventDefault();

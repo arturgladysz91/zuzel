@@ -219,6 +219,7 @@ function updateComparisonChoices(entries) {
 }
 
 function comparedController(recording) {
+  if(recording.physics202)return '#202 · '+recording.physics202.configuration;
   return recording.exitStudy?.name.startsWith('#200') || recording.exitStudy?.native200 ? '#200' : recording.exitStudy?.native199 ? '#199' : recording.exitStudy?.native198 ? '#198' : recording.exitStudy?.native197 ? '#197' : recording.exitStudy?.native196 ? '#196' : recording.exitStudy?.name.startsWith('#194') ? '#194' : 'baza';
 }
 
@@ -419,7 +420,17 @@ function updateExitPanel(state) {
     ((replay.exitStudy.native200 || replay.exitStudy.native199 || replay.exitStudy.native198 || replay.exitStudy.native197 || replay.exitStudy.native196) && Number.isFinite(state.swept) ? ' · swept ' + format(state.swept,3) + ' m' : '') +
     (replay.exitStudy.native198 ? ' · żółte punkty: przyjęte plany · kropkowany odcinek: prognoza 50 ms' : '') +
     (Number.isFinite(state.outer) ? ' · banda ' + format(state.outer, 2) + ' m' : '') + (goal ? ' · κ celu ' + format(goal.curvature,4) + ' 1/m' : '');
-  $('intent').textContent = replay.exitStudy.native200 ? 'Technika jazdy · #200' : replay.exitStudy.native199 ? 'Uczenie na pełnym cyklu · #199' : replay.exitStudy.native198 ? 'Zweryfikowana kontynuacja · #198' : replay.exitStudy.native197 ? 'Optymalizacja w pętli · #197' : replay.exitStudy.native196 ? 'Zapis natywny · #196' : decision?.wide ? 'Plan szerokiej prostej · #194' :
+  if (state.h26) {
+    const h = state.h26, n = value => Number.isFinite(value) ? format(value,2) : '—';
+    $('exit-readout').textContent += ' · ' + (replay.physics202?.configuration ?? 'H26') +
+      ' · Fz przód/tył ' + n(h.frontNormal) + '/' + n(h.rearNormal) + ' N · transfer ' + n(h.transfer) +
+      ' N · silnik '+(h.ledger?'brutto':'netto H25')+'/opór ' + n(h.grossTorque) + '/' + n(h.resistanceTorque) +
+      ' Nm · sprzęgło/koło ' + n(h.clutchTorque) + '/' + n(h.wheelTorque) + ' Nm · RPM ' + n(h.rpm) +
+      ' · wheelspin ' + percent(h.wheelspin) + ' · Fx ' + n(h.fx) + ' N · Fy przód/tył ' + n(h.frontFy) + '/' + n(h.rearFy) +
+      ' N · spalanie/straty ' + n(h.grossWork) + '/' + n(h.engineLossWork) + ' J · reszta E ' + n(h.energyResidual) +
+      ' J · Ek wał/koło '+n(h.shaftEnergy)+'/'+n(h.wheelEnergy)+' J · praca Fx do nadwozia '+n(h.bodyLongitudinalWork)+' J · ciepło sprzęgła/przekładni '+n(h.clutchHeat)+'/'+n(h.transmissionLoss)+' J · parametry H26 niezwalidowane pomiarowo';
+  }
+  $('intent').textContent = replay.physics202 ? '#202 · '+replay.physics202.configuration : replay.exitStudy.native200 ? 'Technika jazdy · #200' : replay.exitStudy.native199 ? 'Uczenie na pełnym cyklu · #199' : replay.exitStudy.native198 ? 'Zweryfikowana kontynuacja · #198' : replay.exitStudy.native197 ? 'Optymalizacja w pętli · #197' : replay.exitStudy.native196 ? 'Zapis natywny · #196' : decision?.wide ? 'Plan szerokiej prostej · #194' :
     decision?.adjustment?.Action ? 'Prognoza H25 · #193' : 'FAST50 · #191';
   $('target').textContent = decision ? format(decision.target, 2)+' m' : '—';
   const jump = $('exit-jump');

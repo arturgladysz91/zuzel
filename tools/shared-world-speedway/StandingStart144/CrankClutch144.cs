@@ -17,18 +17,25 @@ public sealed record ClutchStep144(double Seconds,double BeforeOmega,double Afte
     double Engagement,double SlipRadiansPerSecond,double CombustionWorkJoules,double CrankDragWorkJoules,double ClutchHeatJoules,
     double TransmissionLossJoules,double EnergyResidualJoules,double RootResidualNewtonMeters,int WheelQueries,RearWheelStep Wheel,Engine500Command Engine)
 {
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
+    public EngineLedgerH26? H26 {get;init;}
     public double MidOmega=>(BeforeOmega+AfterOmega)/2;
 }
 public sealed class CrankClutch144
 {
     public LaunchParameters144 Parameters {get;}
+    public EngineLossH26? LossH26 {get;}
     public double Omega {get;private set;}
     public ClutchStep144 Prepared {get;private set;}=null!;
-    public CrankClutch144(LaunchParameters144? parameters=null,double? omega=null){
-        Parameters=parameters??LaunchParameters144.Default;Parameters.Validate();Omega=omega??Parameters.InitialCrankRpm*Math.PI/30;
+    public CrankClutch144(LaunchParameters144? parameters,double? omega):this(parameters,omega,null) { }
+    public CrankClutch144(LaunchParameters144? parameters=null,double? omega=null,EngineLossH26? lossH26=null){
+        lossH26?.Validate();LossH26=lossH26;
+        Parameters=parameters??LaunchParameters144.Default;Parameters.Validate();
+        if(lossH26 is not null && Parameters.CrankDragNewtonMeterSeconds!=0)throw new ArgumentException("H26 replaces legacy crank drag; double counting forbidden.");
+        Omega=omega??Parameters.InitialCrankRpm*Math.PI/30;
         if(!double.IsFinite(Omega)||Omega<0)throw new ArgumentOutOfRangeException(nameof(omega));
     }
-    public CrankClutch144 Copy()=>new(Parameters,Omega);
+    public CrankClutch144 Copy()=>new(Parameters,Omega,LossH26);
     public void Commit(){if(Prepared is null||!double.IsFinite(Prepared.AfterOmega)||Prepared.AfterOmega<0)throw new InvalidOperationException("Invalid crank commit.");Omega=Prepared.AfterOmega;}
     // Engine midpoint is solved analytically on the unchanged piecewise-linear torque curve.
     double EngineMid(double torque,double throttle,double seconds){
@@ -38,12 +45,17 @@ public sealed class CrankClutch144
             var a=Engine500.Curve[i-1];var b=i<Engine500.Curve.Count?Engine500.Curve[i]:new EngineTorquePoint(double.PositiveInfinity,0);
             var lo=a.Rpm*Math.PI/30;var hi=b.Rpm*Math.PI/30;
             var slope=double.IsFinite(hi)?(b.NewtonMeters-a.NewtonMeters)/(hi-lo):0;var intercept=a.NewtonMeters-slope*lo;
-            var value=(c*Omega+throttle*intercept-torque)/(c+Parameters.CrankDragNewtonMeterSeconds-throttle*slope);
+            var value=LossH26 is null
+                ?(c*Omega+throttle*intercept-torque)/(c+Parameters.CrankDragNewtonMeterSeconds-throttle*slope)
+                :(c*Omega+throttle*intercept-torque)/(c+LossH26.NetViscosity(throttle)-throttle*slope);
             if(value>=lo-1e-9&&value<=hi+1e-9)return Math.Max(0,value);
         }
         throw new InvalidOperationException("No nonnegative crank midpoint; no hidden stall reset.");
     }
-    public Engine500Command Prepare(double throttle,double ratio,double efficiency,double seconds,bool released,Func<double,RearWheelStep> wheelAtTorque){
+    public Engine500Command Prepare(double throttle,double ratio,double efficiency,double seconds,bool released,Func<double,RearWheelStep> wheelAtTorque)
+        =>Prepare(throttle,ratio,efficiency,seconds,released,wheelAtTorque,null);
+    public Engine500Command Prepare(double throttle,double ratio,double efficiency,double seconds,bool released,Func<double,RearWheelStep> wheelAtTorque,
+        RearWheelParameters? wheelParameters){
         if(!double.IsFinite(throttle)||throttle is <0 or >1||!double.IsFinite(seconds)||seconds is <0 or >.020001
             ||!double.IsFinite(ratio)||ratio<=0||efficiency is <=0 or >1)throw new ArgumentException("Physical midpoint interval required.");
         var p=Parameters;var fraction=Math.Clamp((Omega*30/Math.PI-p.DisengagedBelowRpm)/(p.FullyEngagedAboveRpm-p.DisengagedBelowRpm),0,1);
@@ -71,6 +83,12 @@ public sealed class CrankClutch144
         }
         var mid=point.EngineMid;var after=2*mid-Omega;var crank=Engine500.Torque(mid*30/Math.PI);
         var combustion=throttle*crank*mid*seconds;var drag=p.CrankDragNewtonMeterSeconds*mid*mid*seconds;
+        double mechanical=0,pumping=0,grossTorque=throttle*crank;
+        if(LossH26 is {} losses){
+            mechanical=losses.Mechanical(mid);pumping=losses.Pumping(mid,throttle);
+            grossTorque=throttle*(crank+mechanical);
+            combustion=grossTorque*mid*seconds;drag=(mechanical+pumping)*mid*seconds;
+        }
         var slipRate=mid-ratio*point.Wheel.MidOmega;var heat=chosen*slipRate*seconds;
         var transmission=chosen*ratio*point.Wheel.MidOmega*seconds-point.Wheel.EngineWorkJoules;
         var change=.5*p.CrankInertiaKgMetersSquared*(after*after-Omega*Omega);
@@ -79,6 +97,14 @@ public sealed class CrankClutch144
             throw new InvalidOperationException("Crank/clutch passivity or energy identity failed.");
         var command=new Engine500Command(mid*30/Math.PI,ratio,crank,crank*ratio*efficiency,point.Wheel.DriveTorqueNewtonMeters,efficiency);
         Prepared=new(seconds,Omega,after,throttle*crank,chosen,engagement,slipRate,combustion,drag,heat,transmission,residual,point.Residual,queries,point.Wheel,command);
+        if(LossH26 is not null){
+            var w=point.Wheel;
+            var wp=wheelParameters??RearWheelParameters.Default;
+            double wheelChange=.5*wp.WheelInertiaKgMetersSquared*(w.AfterOmega*w.AfterOmega-w.BeforeOmega*w.BeforeOmega);
+            double bodyWork=w.LongitudinalNewtons*(wp.WheelRadiusMeters*w.MidOmega-w.MidSlipVelocityMetersPerSecond)*seconds;
+            Prepared=Prepared with {H26=new(grossTorque,mechanical,pumping,combustion,
+                mechanical*mid*seconds,pumping*mid*seconds,change,chosen*mid*seconds,wheelChange,bodyWork,residual)};
+        }
         return command;
     }
 }

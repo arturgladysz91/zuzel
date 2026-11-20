@@ -278,3 +278,22 @@ docs/experiments/state-maneuver-transfer/** -text
 /docs/experiments/feasible-speed-profile/** -text whitespace=trailing-space,space-before-tab,cr-at-eol
 /tools/feasible-speed-profile/** text eol=lf
 /tests/CoreSim.Tests/FeasibleSpeed164Tests.cs text eol=lf
+
+# Study #202: preserve evidence hashes and explicit source line endings.
+/data/experiments/speedway202/** -text whitespace=trailing-space,space-before-tab,cr-at-eol
+/docs/experiments/speedway-h26/*.md text eol=lf
+/tools/speedway-h26/** text eol=lf
+/tools/shared-world-speedway/H26Parameters.cs text eol=lf
+/tools/speedway-handling/HandlingContact.cs text eol=lf
+/tests/CoreSim.Tests/H26PhysicsTests.cs text eol=lf
+/tools/replay-viewer/export_h25.py text eol=lf
+/tools/replay-viewer/serve.py text eol=lf
+/tools/replay-viewer/h25.mjs text eol=lf
+/tools/replay-viewer/viewer.mjs text eol=lf
+/tools/replay-viewer/index.html text eol=lf
+/tools/replay-viewer/export_h25.py -text whitespace=trailing-space,space-before-tab,cr-at-eol
+/.gitattributes text eol=lf
+/tools/replay-viewer/serve.py text eol=lf
+/tools/replay-viewer/h25.mjs text eol=lf
+/tools/replay-viewer/viewer.mjs text eol=lf
+/tools/replay-viewer/index.html text eol=lf

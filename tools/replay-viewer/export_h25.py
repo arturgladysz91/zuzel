@@ -72,7 +72,7 @@ def export(native, geometry, *, recorded_passes=None, study=None, journal_overri
     tracks, initial, measurements, meta, finishes, events = {}, [], [], [], {}, []
     expected_times = None
     observations = []
-    journals = source['Journal'] if journal_override is None else journal_override
+    journals = source.get('Journal', [[] for _ in riders]) if journal_override is None else journal_override
     for i, (rider, lean, journal) in enumerate(zip(riders, source['Lean'], journals, strict=True), 1):
         samples = rider['Samples']
         bike = samples[0]['Input']['Rider']
@@ -112,6 +112,24 @@ def export(native, geometry, *, recorded_passes=None, study=None, journal_overri
                 rows[-1].update(yaw=v['AngularVelocity'], requestedDrive=sample['RequestedDrive'],
                     requestedSteering=sample['RequestedSteering'], pending=len(state['Pending']),
                     swept=sample['Certificate'], outer=sample['Outer'])
+            if study and '#202' in study and sample.get('Forces') and sample.get('Powertrain'):
+                f, power = sample['Forces'], sample['Powertrain']
+                z, loss = f['TyreLoads'], power.get('H26')
+                rows[-1]['h26'] = dict(
+                    frontNormal=z['FrontNormalNewtons'], rearNormal=z['RearNormalNewtons'],
+                    transfer=z['RearNormalNewtons']-147*9.81*.70/1.30,
+                    grossTorque=loss['GrossCombustionTorqueNewtonMeters'] if loss else power['CrankTorque'],
+                    resistanceTorque=loss['MechanicalTorqueNewtonMeters']+loss['PumpingTorqueNewtonMeters'] if loss else 0,
+                    clutchTorque=power['ClutchTorque'], wheelTorque=power['Wheel']['DriveTorqueNewtonMeters'],
+                    rpm=power['Engine']['EngineRpm'], wheelspin=power['Wheel']['InstantSlipRatio'],
+                    fx=f['RearLongitudinal'], frontFy=f['FrontLateral'], rearFy=f['RearLateral'],
+                    energyResidual=power['EnergyResidualJoules'], grossWork=power['CombustionWorkJoules'],
+                    engineLossWork=power['CrankDragWorkJoules'], ledger=loss,
+                    shaftEnergy=.005*power['AfterOmega']**2, wheelEnergy=.45*power['Wheel']['AfterOmega']**2,
+                    bodyLongitudinalWork=loss['BodyLongitudinalWorkJoules'] if loss else
+                        power['Wheel']['EngineWorkJoules']-power['Wheel']['BearingLossJoules']-
+                        .45*(power['Wheel']['AfterOmega']**2-power['Wheel']['BeforeOmega']**2)-power['Wheel']['LongitudinalLossJoules'],
+                    clutchHeat=power['ClutchHeatJoules'], transmissionLoss=power['TransmissionLossJoules'])
         if study:
             observations.append([
                 dict(t=d['Time'], reference=d['Motion'], adjustment=d.get('Exit'), reason=d['Reason'],
@@ -140,13 +158,16 @@ def export(native, geometry, *, recorded_passes=None, study=None, journal_overri
     payload = {'format': FORMAT, 'geometry': geometry, 'document': {'Run': {
         'Initial': {'Riders': initial}, 'RequiredLaps': 3, 'ContinueAfterFinish': True,
         'Result': {'TimeSeconds': end, 'Decisions': [], 'Contacts': contacts, 'FinishTimes': finishes},
-        'Riders': measurements, 'Passes': passes, 'Consequences': source['Consequences'],
+        'Riders': measurements, 'Passes': passes, 'Consequences': source.get('Consequences', []),
         'RaceEvents': events}}, 'riders': meta, 'outcome': run['Outcome'],
         'fingerprint': run['Fingerprint'], 'sourceSha256': hashlib.sha256(Path(native).read_bytes()).hexdigest(),
         'rows': list(itertools.chain.from_iterable(tracks.values()))}
     if study:
         payload['exitStudy'] = dict(name=study, decisions=observations,
                                     exits=exit_markers(tracks, geometry) if exits is None else exits)
+    if study and '#202' in study:
+        payload['physics202'] = dict(configuration=source.get('Result', {}).get('Variant', 'H26'),
+            experimental=True, calibrated=False, outcome=run['Outcome'])
     return payload
 
 

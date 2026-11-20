@@ -43,7 +43,15 @@ STUDY_194 = {
     '194-four-alternate': '#194 · inne przełożenia · szeroka prosta',
     '194-alternate-stock': '#191 · baza drugiej obsady #194',
 }
-STUDY_196 = {'196-szybka-prosta': '#196 — szybka prosta, test natywny',
+STUDY_196 = {'202-h25': '#202 — H25, zgodność historyczna',
+             '202-l': '#202 — H26-L, te same komendy, DNF',
+             '202-e': '#202 — H26-E, te same komendy, DNF',
+             '202-le': '#202 — H26-LE, te same komendy, DNF',
+             '202-learned': '#202 — H26-LE, osobno wyuczona polityka',
+             '202-alternate': '#202 — H26-LE, zmieniony start',
+             '202-l-trained': '#202 — H26-L, osobno wyuczona polityka',
+             '202-e-trained': '#202 — H26-E, osobno wyuczona polityka',
+             '196-szybka-prosta': '#196 — szybka prosta, test natywny',
              '199-swobodna': '#199 — wariant A, swobodna optymalizacja',
              '199-solo': '#199 — nauka techniki jazdy solo',
              '199-bazowy-b': '#199 — szeroka prosta, pierwszy wariant B',
@@ -77,7 +85,7 @@ class RaceService:
         self.geometry = load_gzip(VIEWER / 'recordings/172-s3-k4.json.gz')['geometry']
         self.lock = threading.Lock()
         self.history_lock = threading.Lock()
-        self.engine_ready = False
+        self.engine_ready = set()
 
     def entries(self):
         history = [dict(id=key, label=label) for key, (arm, label) in HISTORY.items()
@@ -140,8 +148,13 @@ class RaceService:
         finally:
             self.lock.release()
 
-    def engine_command(self):
+    def engine_command(self, controller='base'):
+        h26 = controller.startswith('h26-')
+        project = ROOT / 'tools/speedway-h26/H26.csproj' if h26 else PROJECT
+        engine_file = project.parent / 'bin/Release/net8.0/H26.dll' if h26 else ENGINE
         if self.portable:
+            if h26:
+                raise ValueError('Ta historyczna paczka #192 nie zawiera H26. Tryb #202 uruchom z aktualnego repozytorium.')
             runtime = ROOT / 'runtime' / 'dotnet'
             dotnet = runtime / 'dotnet.exe'
             engine = ROOT / 'simulator' / ENGINE.name
@@ -159,18 +172,19 @@ class RaceService:
         dotnet = shutil.which('dotnet')
         if not dotnet:
             raise ValueError('Brak .NET SDK. Zainstaluj .NET 8 SDK, aby obliczać nowe biegi.')
-        if not self.engine_ready:
-            if not PROJECT.is_file():
+        if str(project) not in self.engine_ready:
+            if not project.is_file():
                 raise ValueError('Brak lokalnego symulatora #191. Uruchom stadion z aktualnego drzewa repozytorium.')
-            self.command([sys.executable, str(PROJECT.parent / 'prepare.py')], 'przygotowania symulatora', 30)
-            self.command([dotnet, 'build', str(PROJECT), '-c', 'Release', '--verbosity', 'quiet',
+            if not h26:
+                self.command([sys.executable, str(project.parent / 'prepare.py')], 'przygotowania symulatora', 30)
+            self.command([dotnet, 'build', str(project), '-c', 'Release', '--verbosity', 'quiet',
                           '-p:NuGetAudit=false', '-p:RestoreLockedMode=true', '--warnaserror'],
                          'budowania symulatora', 120)
-            self.engine_ready = True
-        return [dotnet, str(ENGINE)], None
+            self.engine_ready.add(str(project))
+        return [dotnet, str(engine_file)], None
 
     def _run(self, ratios, controller):
-        engine, env = self.engine_command()
+        engine, env = self.engine_command(controller)
         self.archive.mkdir(parents=True, exist_ok=True)
         key = uuid.uuid4().hex
         staging = self.archive / ('.'+key)
@@ -181,12 +195,12 @@ class RaceService:
         result = load_result(staging / 'race.result.json')
         if result.get('Controller', 'base') != controller:
             raise ValueError('Symulator uruchomił inny wariant sterowania.')
-        study = '#200 · autonomiczna technika solo' if controller == 'speedway200' else '#194 · szeroka prosta' if controller == 'wide194' else '#192 · FAST50'
+        study = '#202 — nowa fizyka '+controller.upper() if controller.startswith('h26-') else '#200 · autonomiczna technika solo' if controller == 'speedway200' else '#194 · szeroka prosta' if controller == 'wide194' else '#192 · FAST50'
         payload = export(staging / 'race.json.gz', self.geometry, study=study)
         write_replay(staging / 'replay.json.gz', payload)
         created = datetime.now(timezone.utc)
         label = f'{created.astimezone():%d.%m %H:%M:%S} · {len(ratios)} zawodników · {"/".join(f"{r:g}" for r in ratios)}:1'
-        label += ' · #200' if controller == 'speedway200' else ' · #194' if controller == 'wide194' else ' · #192'
+        label += ' · #202 '+controller.upper() if controller.startswith('h26-') else ' · #200' if controller == 'speedway200' else ' · #194' if controller == 'wide194' else ' · #192'
         entry = dict(id=key, created=created.isoformat(), riders=len(ratios), ratios=ratios,
                      label=label, controller=controller, complete=result['Complete'], outcome=result['Outcome'],
                      fingerprint=result['Fingerprint'], nativeSha256=payload['sourceSha256'])
@@ -263,10 +277,12 @@ class ReplayHandler(SimpleHTTPRequestHandler):
                 raise ValueError('Oczekiwano konfiguracji biegu.')
             ratios = data['ratios']
             controller = data.get('controller', 'base')
-            if controller not in ('base', 'wide194', 'speedway200'):
+            if controller not in ('base', 'wide194', 'speedway200', 'h26-l', 'h26-e', 'h26-le'):
                 raise ValueError('Nieznany wariant sterowania.')
             if controller == 'speedway200' and ratios != [8]:
                 raise ValueError('C #200 wymaga solo z przełożeniem 8:1.')
+            if controller.startswith('h26-') and ratios != [8]:
+                raise ValueError('H26 #202: wyuczona polityka wymaga solo 8:1. C #200 i inne przełożenia nie są kompatybilne.')
             if not isinstance(ratios, list) or len(ratios) not in (1, 2, 4) or any(
                     type(r) not in (int, float) or not 8 <= r <= 10 or abs(r*10-round(r*10)) > 1e-8 for r in ratios):
                 raise ValueError('Wybierz 2 lub 4 przełożenia od 8:1 do 10:1, z krokiem 0,1.')

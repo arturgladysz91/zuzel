@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <StartupObject>SpeedwayHandling.Entry202</StartupObject>
+    <StudyTools>..</StudyTools>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="$(StudyTools)/safe-fast-contingency/safe-fast-contingency.csproj" />
+    <Compile Include="$(StudyTools)/autonomous-traffic191/*.cs" Exclude="$(StudyTools)/autonomous-traffic191/TrafficWorld191.Generated.cs"
+              />
+    <Compile Include="$(StudyTools)/three-lap-global-planning/NativeWorld172.Generated.cs" />
+    <Compile Include="$(StudyTools)/whole-corner-planning/BendMap.cs" />
+    <Compile Include="$(StudyTools)/speedway-handling/HandlingContact.cs" />
+    <Compile Include="$(StudyTools)/global-line-planner190/Schedule188.cs" />
+    <Compile Include="$(StudyTools)/speedway-controller200/Receding198.cs" />
+    <Compile Include="$(StudyTools)/speedway-controller200/Reservations198.cs" />
+    <Compile Include="$(StudyTools)/speedway-study201/Technique200.cs" />
+    <Compile Include="$(StudyTools)/speedway-controller200/ModelTypes200.cs" />
+    <EmbeddedResource Include="policies202.json" LogicalName="SpeedwayHandling.Policies202" />
+  </ItemGroup>
+</Project>

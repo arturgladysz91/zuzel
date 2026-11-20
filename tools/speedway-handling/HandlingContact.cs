@@ -7,14 +7,26 @@ namespace SpeedwayHandling;
 
 internal sealed record HandlingSettings(double GripScale = 1.25, double YawResponseSeconds = .15,
     double LeanResponseSeconds = .18, double LeanRateRadiansPerSecond = 1.75,
-    double MaximumLeanRadians = 1.02);
+    double MaximumLeanRadians = 1.02)
+{
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
+    public H26Configuration? H26 {get;init;}
+}
 
 internal sealed record LeanSample(double Seconds, double RequestRadians, double ActualRadians);
-internal sealed record HandlingStep(TwoContactForces Forces, double LeanAfter, double LeanRequest);
+internal sealed record LoadStepH26(double Seconds,double Acceleration,double Residual,int Iterations,
+    double FrontNormalNewtons,double RearNormalNewtons);
+internal sealed record HandlingStep(TwoContactForces Forces, double LeanAfter, double LeanRequest)
+{
+    public LoadStepH26? LoadH26 {get;init;}
+}
 
 /// <summary>Gameplay surrogate. Roll changes lateral compliance; yaw comes from the two contact arms.</summary>
 internal sealed class HandlingRig(HandlingSettings settings)
 {
+    internal EngineLossH26? EngineLoss=>settings.H26?.EngineLoss;
+    internal H26Configuration? Configuration=>settings.H26;
+    public List<LoadStepH26> LoadSamples {get;}=[];
     public List<LeanSample> LeanSamples { get; } = [new(0, 0, 0)];
     internal double Lean { get; private set; }
     private HandlingStep? prepared;
@@ -34,6 +46,7 @@ internal sealed class HandlingRig(HandlingSettings settings)
     internal void Commit(double seconds)
     {
         var step = prepared ?? throw new InvalidOperationException("Handling step was not prepared.");
+        if(step.LoadH26 is {} loads)LoadSamples.Add(loads with {Seconds=seconds});
         Lean = step.LeanAfter;
         LeanSamples.Add(new(seconds, step.LeanRequest, Lean));
     }
@@ -46,13 +59,70 @@ internal static class HandlingContact
     private const double LateralRelaxationSeconds = .03;
     private const double FrontForceTargetFraction = .98;
     private const double BetaDampingThresholdRadians = .24;
+    // Keeps ~0.06 N numerical reserve at the nominal height when bracketing.
+    // Reaching the boundary is an explicit unloading diagnostic, never a load clamp.
+    private const double ContactDomainAccelerationReserveMetersPerSecondSquared = .001;
 
     internal static HandlingStep Prepare(HandlingSettings settings, TrackSurfaceState surface, RiderView body, RiderSpec rider,
         WorldParameters parameters, double time, float mass, float inertia, RearWheelState wheel,
         float steering, double lean, float dt, float request, CrankClutch144 shaft, double release)
     {
+        if(settings.H26 is {} explicitH26){
+            explicitH26.Validate();
+            if(explicitH26.EngineLoss!=shaft.LossH26)
+                throw new InvalidOperationException("H26 contact/powertrain configuration mismatch.");
+        }
+        if(settings.H26 is not {DynamicLoads:true} h26)
+            return AtLoads(settings,surface,body,rider,parameters,time,mass,inertia,wheel,steering,lean,dt,request,shaft,release,null);
+        h26.Validate();
+        var bike=parameters.TwoContactBike??TwoContactBikeParameters.Default;
+        var original=LoadBasedTyreGrip.Budget(mass,surface,bike,parameters.LoadBasedTyres);
+        double normal=mass*LoadBasedTyreGrip.GravityMetersPerSecondSquared;
+        var forward=new Vector2(MathF.Cos(body.Heading),MathF.Sin(body.Heading));
+        int iterations=0;
+        (double Residual,HandlingStep Step) At(double ax){
+            var split=DynamicAxleLoad.AtAcceleration(ax,bike,h26.ComHeightMeters);
+            double rear=normal*split.RearFraction;
+            if(!split.WithinAssumptions || rear<=0 || rear>=normal)
+                throw new InvalidOperationException("H26 wheel unloading: two-contact assumption invalid.");
+            var loads=original with {FrontNormalNewtons=normal-rear,RearNormalNewtons=rear};
+            var step=AtLoads(settings,surface,body,rider,parameters,time,mass,inertia,wheel,steering,lean,dt,request,shaft,release,loads);
+            iterations++;
+            return(ax-Vector2.Dot(step.Forces.NetForce,forward)/mass,step);
+        }
+        // Search stays inside the two-positive-contact domain. A root outside it is rejected, never clamped.
+        double lo=-LoadBasedTyreGrip.GravityMetersPerSecondSquared*bike.FrontAxleFromComMeters/h26.ComHeightMeters+ContactDomainAccelerationReserveMetersPerSecondSquared;
+        double hi= LoadBasedTyreGrip.GravityMetersPerSecondSquared*bike.RearAxleFromComMeters/h26.ComHeightMeters-ContactDomainAccelerationReserveMetersPerSecondSquared;
+        var zero=At(0);
+        double ax=0;
+        var point=zero;
+        if(Math.Abs(point.Residual)>h26.AccelerationToleranceMetersPerSecondSquared){
+            var a=At(lo);var b=At(hi);
+            if(a.Residual>0 || b.Residual<0)
+                throw new InvalidOperationException($"H26 wheel unloading: no positive-load coupled root; ax domain [{lo:R},{hi:R}], residuals [{a.Residual:R},{b.Residual:R}].");
+            int side=0;
+            for(int i=0;i<36;i++){
+                ax=(lo*b.Residual-hi*a.Residual)/(b.Residual-a.Residual);
+                if(!double.IsFinite(ax)||ax<=lo||ax>=hi)ax=(lo+hi)/2;
+                point=At(ax);
+                if(Math.Abs(point.Residual)<=h26.AccelerationToleranceMetersPerSecondSquared)break;
+                if(point.Residual<0){lo=ax;a=point;if(side<0)b=(b.Residual/2,b.Step);side=-1;}
+                else {hi=ax;b=point;if(side>0)a=(a.Residual/2,a.Step);side=1;}
+                if(i==35)throw new InvalidOperationException("H26 coupled load solve failed convergence.");
+            }
+        }
+        // At(ax) last prepared the matching shaft/wheel state; only the accepted native step commits it.
+        var accepted=point.Step;
+        var final=accepted.Forces.TyreLoads!;
+        return accepted with {LoadH26=new(time,ax,point.Residual,iterations,final.FrontNormalNewtons,final.RearNormalNewtons)};
+    }
+
+    private static HandlingStep AtLoads(HandlingSettings settings, TrackSurfaceState surface, RiderView body, RiderSpec rider,
+        WorldParameters parameters, double time, float mass, float inertia, RearWheelState wheel,
+        float steering, double lean, float dt, float request, CrankClutch144 shaft, double release,LoadBasedTyreBudget? supplied)
+    {
         var bike = parameters.TwoContactBike ?? TwoContactBikeParameters.Default;
-        var baseLoads = LoadBasedTyreGrip.Budget(mass, surface, bike, parameters.LoadBasedTyres);
+        var baseLoads = supplied ?? LoadBasedTyreGrip.Budget(mass, surface, bike, parameters.LoadBasedTyres);
         var loads = baseLoads with { EffectiveFrictionCoefficient = baseLoads.EffectiveFrictionCoefficient * settings.GripScale };
         float budget = (float)loads.TotalCapacityNewtons;
         double wheelbase = bike.FrontAxleFromComMeters + bike.RearAxleFromComMeters;
@@ -119,7 +189,7 @@ internal static class HandlingContact
                 double use = Math.Sqrt(result.LongitudinalNewtons * (double)result.LongitudinalNewtons +
                     rearFy * (double)rearFy) / loads.RearCapacityNewtons;
                 return result with { RearLateralNewtons = rearFy, RearUtilization = use };
-            });
+            },wheel.Parameters);
         var rear = shaft.Prepared.Wheel;
         var rearForce = rear.LongitudinalNewtons * forward + rearFy * left;
         var forces = new TwoContactForces(frontPoint, rearPoint, frontArm, rearArm, frontVelocity, rearVelocity,

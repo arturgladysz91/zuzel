@@ -1,0 +1,682 @@
+{
+  "BaseSHA": "26b2103bf9d710b8d1ec8831352e753c6e7480b0",
+  "Branch": "experiment/speedway-202",
+  "NativeWorldInventory": {
+    "ResearchScenarioWorlds": 8,
+    "LegacyRegressionMicroWorlds": 18,
+    "TotalWorldConstructions": 26,
+    "RequestedMaximum": 8,
+    "StrictLimitCompliant": false,
+    "FourRiderWorlds": 0,
+    "Explanation": "The two 39-test runs each construct one .05s load-cache world and eight .3s isolated worlds (four attribution cases, each repeated). Research markers counted only the eight #202 runs; this was an accounting mistake.",
+    "RegressionRuns": [
+      {
+        "OriginalTRX": "h26-tests.trx",
+        "SHA256": "4b52fd95cedf1a303b3630b4977547d277788d4bf5db3f21fb7938e4a7ce8733",
+        "Counters": {
+          "total": "39",
+          "executed": "39",
+          "passed": "39",
+          "failed": "0",
+          "error": "0",
+          "timeout": "0",
+          "aborted": "0",
+          "inconclusive": "0",
+          "passedButRunAborted": "0",
+          "notRunnable": "0",
+          "notExecuted": "0",
+          "disconnected": "0",
+          "warning": "0",
+          "completed": "0",
+          "inProgress": "0",
+          "pending": "0"
+        },
+        "MicroWorlds": 9
+      },
+      {
+        "OriginalTRX": "h26-final.trx",
+        "SHA256": "73b940d7415b05c4888598e2ef1f7ca11a2a12c0a0e7cdc133221053bfb892b7",
+        "Counters": {
+          "total": "39",
+          "executed": "39",
+          "passed": "39",
+          "failed": "0",
+          "error": "0",
+          "timeout": "0",
+          "aborted": "0",
+          "inconclusive": "0",
+          "passedButRunAborted": "0",
+          "notRunnable": "0",
+          "notExecuted": "0",
+          "disconnected": "0",
+          "warning": "0",
+          "completed": "0",
+          "inProgress": "0",
+          "pending": "0"
+        },
+        "MicroWorlds": 9
+      }
+    ],
+    "MicroWorldSourceHashes": {
+      "DynamicAxleLoadTests.cs": "75522945f5167eccc26892b07522e4442e46dc879d0f9fc12491bc11704208b6",
+      "MotorcyclePerformanceTests.cs": "b833de3023ac144a6a37dce49f7ca200814af9a6775f84bd708ef758db118fa5"
+    }
+  },
+  "Files": [
+    {
+      "Path": ".gitattributes",
+      "Bytes": 19700,
+      "SHA256": "69fd918a3bfb937ea30d0ea080e67a3fecb2f27301926bd379fb002017b2637a"
+    },
+    {
+      "Path": "data/experiments/speedway202/alt-v10/changed-transfer.json.gz",
+      "Bytes": 266350,
+      "SHA256": "a16dae9758d2f40c5f752eb265322b96295461deabaf5dcecb38e350cabcccc5"
+    },
+    {
+      "Path": "data/experiments/speedway202/alt-v10/H26-LE-training.json.gz",
+      "Bytes": 422445,
+      "SHA256": "6e93afff8911c22be084a6ba955ba95819f8fe33703c6cdd35a38d3c0ebc73ee"
+    },
+    {
+      "Path": "data/experiments/speedway202/baza-h25.json",
+      "Bytes": 1278,
+      "SHA256": "6bbb75f8c2c917b6691fe622dfd7f2e0923ae08c079e85affa50dd629facf1cc"
+    },
+    {
+      "Path": "data/experiments/speedway202/browser-tests.json",
+      "Bytes": 169,
+      "SHA256": "b9564bf7fd29e2285c40b14cf76fd5de7634e401614a55eaa7672d36db10e7aa"
+    },
+    {
+      "Path": "data/experiments/speedway202/checks-final/dt-convergence-model.json",
+      "Bytes": 7357,
+      "SHA256": "115f3ebe2a2e419c518abe316e659350507a11448163adc357aa8115f4d3c243"
+    },
+    {
+      "Path": "data/experiments/speedway202/checks-final/eight-scenarios-model.json.gz",
+      "Bytes": 47551,
+      "SHA256": "b8f898a4da49792c4975228106e97298bc78b638c19e80b0d2db419099af7b12"
+    },
+    {
+      "Path": "data/experiments/speedway202/checks-final/engine-loss-matrix.json",
+      "Bytes": 13936,
+      "SHA256": "7393c56ffa61ebc43135be77e3c2a6e786cf5feb3ec7964d942b6ea7be739961"
+    },
+    {
+      "Path": "data/experiments/speedway202/checks-final/properties-probes.json.gz",
+      "Bytes": 247308,
+      "SHA256": "11b48a15f5c42fa25b1e9ee17df6bd79bae576cf4babfdf8b8aca85ea3aabde4"
+    },
+    {
+      "Path": "data/experiments/speedway202/checks-final/properties.json",
+      "Bytes": 175128,
+      "SHA256": "be499a81cd7b6f94c132dfd6693509e882568d9c9b113141562b9a77c6b5efed"
+    },
+    {
+      "Path": "data/experiments/speedway202/cycle-v8/cycle-probes.json",
+      "Bytes": 8579,
+      "SHA256": "d8a62b332aaca0ec2154a23c186da15707b826ef9b5ddaa6419368941570c9b6"
+    },
+    {
+      "Path": "data/experiments/speedway202/cycle-v8/H26-LE-training.json.gz",
+      "Bytes": 591274,
+      "SHA256": "c67b2db58d5f5ee830446f5b55a05ab6b97a60dd48628b285c8e58c9d2e04ef8"
+    },
+    {
+      "Path": "data/experiments/speedway202/e-cycle/cycle-probes.json",
+      "Bytes": 8133,
+      "SHA256": "b7e3d8f46d873a789008225b5f478d7d8f96cc7cc29f76d0481d6fddd5205056"
+    },
+    {
+      "Path": "data/experiments/speedway202/e-cycle/H26-E-training.json.gz",
+      "Bytes": 354775,
+      "SHA256": "cf0a8fac07e76bf3d41d7f58ba7b1be64e2b358003a5bc06cb14f8794e61aade"
+    },
+    {
+      "Path": "data/experiments/speedway202/e-learn/H26-E-seeds.json",
+      "Bytes": 23787,
+      "SHA256": "2d768eb4baa5942ce64e315e79079df0a657a11925619db62663388ee6cfd705"
+    },
+    {
+      "Path": "data/experiments/speedway202/e-learn/H26-E-training.json.gz",
+      "Bytes": 327173,
+      "SHA256": "ec443d7b13d5971a30354022f12cf9cfe38449111dc9109ec1175135570c30df"
+    },
+    {
+      "Path": "data/experiments/speedway202/e-learn/H26-E-transfer.json.gz",
+      "Bytes": 86240,
+      "SHA256": "47095406ca478a3f0a706764e12c5ff5fee0af3b52ba8c2ebb1b041dc32df9cd"
+    },
+    {
+      "Path": "data/experiments/speedway202/final-physics-parity.json",
+      "Bytes": 1218,
+      "SHA256": "620c468b79e4fe3a376088f892ca1bddd2d5f8702d5e7471fdd84a88a6fafe65"
+    },
+    {
+      "Path": "data/experiments/speedway202/gear-v9/changed-transfer.json.gz",
+      "Bytes": 1205,
+      "SHA256": "a496e8dcd87ce8c19228e512aa6e25e14c8f20693f187d9f94c930aa9c0e7fe9"
+    },
+    {
+      "Path": "data/experiments/speedway202/gear-v9/H26-LE-training.json.gz",
+      "Bytes": 1400,
+      "SHA256": "600d3af8af68fcff220a076a1ec4a7f2afa4cc7a8d6054dcc3c6d2fa673aa89c"
+    },
+    {
+      "Path": "data/experiments/speedway202/H25-same-telemetry.csv.gz",
+      "Bytes": 1325161,
+      "SHA256": "1735f1f4113c233de3d5dbb127b08773b4a457bdca4dd1977716779c2efcf9a7"
+    },
+    {
+      "Path": "data/experiments/speedway202/H25-same.json.gz",
+      "Bytes": 4465131,
+      "SHA256": "a3a089acef63485320172db5ac5b66cd6ab5ef5fad98d30660acdab27d4be157"
+    },
+    {
+      "Path": "data/experiments/speedway202/H25-same.reserved",
+      "Bytes": 98,
+      "SHA256": "ccdfbbc5eeccf9e01d857398b5affa622b37ba01ef600d5cde12f9b879b97024"
+    },
+    {
+      "Path": "data/experiments/speedway202/H25-same.result.json",
+      "Bytes": 394,
+      "SHA256": "458e82425263734d91eb65c303ebba124996da368672bebb9551a487d6a85977"
+    },
+    {
+      "Path": "data/experiments/speedway202/H26-E-learned-C-telemetry.csv.gz",
+      "Bytes": 1466667,
+      "SHA256": "17e7dc012d8ba2103be9db4c4475ea91cc6605ee98cfa132c532b741185b3dcc"
+    },
+    {
+      "Path": "data/experiments/speedway202/H26-E-learned-C.json.gz",
+      "Bytes": 5420143,
+      "SHA256": "37e1a73fad6f3eef3df27bc1dec00223b8ef37636511cc2244fd8ea8905c04d4"
+    },
+    {
+      "Path": "data/experiments/speedway202/H26-E-learned-C.reserved",
+      "Bytes": 105,
+      "SHA256": "a526392fcd957fa6cb63c7cb6a138a184c7fee6ad808c0e2c3f4fcb72d3838e0"
+    },
+    {
+      "Path": "data/experiments/speedway202/H26-E-learned-C.result.json",
+      "Bytes": 557,
+      "SHA256": "802f3012098755696b63192ef51418cefb89cde1a3ff5b86a174879b972c3d6a"
+    },
+    {
+      "Path": "data/experiments/speedway202/H26-E-same-telemetry.csv.gz",
+      "Bytes": 314529,
+      "SHA256": "a8f50611bf78a2c865fa4bf865bf9ffad8e7ca99318bfc0856ae073e8cd3fc56"
+    },
+    {
+      "Path": "data/experiments/speedway202/H26-E-same.json.gz",
+      "Bytes": 1110980,
+      "SHA256": "6b42cf510176897b268395145bab5a8932b4dbb76c6b0bbe53645975651ca17e"
+    },
+    {
+      "Path": "data/experiments/speedway202/H26-E-same.reserved",
+      "Bytes": 100,
+      "SHA256": "61b6eacd2bb99f1ee2422cf122ae5fd6fcce681ad2d4cdd7d04b10d49c021908"
+    },
+    {
+      "Path": "data/experiments/speedway202/H26-E-same.result.json",
+      "Bytes": 437,
+      "SHA256": "67505ee4c8e50528d506a99f5f6238a147a4176dea15d1c289d2ee1fb539c7e9"
+    },
+    {
+      "Path": "data/experiments/speedway202/H26-L-learned-C-telemetry.csv.gz",
+      "Bytes": 1499968,
+      "SHA256": "ca22a7057cd127b6037bc96ab6ff98170c4cd30b4ec96eb1cb7485c648035135"
+    },
+    {
+      "Path": "data/experiments/speedway202/H26-L-learned-C.json.gz",
+      "Bytes": 5451102,
+      "SHA256": "19938ce782f5ad4ffce223ece4135b8022f4f62394a1c18932babecf832cc2ae"
+    },
+    {
+      "Path": "data/experiments/speedway202/H26-L-learned-C.reserved",
+      "Bytes": 105,
+      "SHA256": "a5ab718860bb190850ca8ca1be62a0396365c10a96128a1562256e141a6f2d84"
+    },
+    {
+      "Path": "data/experiments/speedway202/H26-L-learned-C.result.json",
+      "Bytes": 561,
+      "SHA256": "c365dc65744837b3189389d1aa6f7ce94d764a6c0fdaa8a0e6f431655b132c3e"
+    },
+    {
+      "Path": "data/experiments/speedway202/H26-L-same-telemetry.csv.gz",
+      "Bytes": 5311,
+      "SHA256": "19f3efda23f992845fd21161aec43ee26fdd2a21c7ec8408abe513d0169022f2"
+    },
+    {
+      "Path": "data/experiments/speedway202/H26-L-same.json.gz",
+      "Bytes": 19312,
+      "SHA256": "0bca9be2890f0c1b029433b1160f34d55b51db09c9446dc212ee8d94a8da9d00"
+    },
+    {
+      "Path": "data/experiments/speedway202/H26-L-same.reserved",
+      "Bytes": 100,
+      "SHA256": "9c6a0c2e2737d215810e159f8a534a5b64084a6b3ffa98468e82977859ea1a68"
+    },
+    {
+      "Path": "data/experiments/speedway202/H26-L-same.result.json",
+      "Bytes": 445,
+      "SHA256": "63a7e105552b23f89c2c4746895ac39c359bc23e0447267e59934b5e551f73d0"
+    },
+    {
+      "Path": "data/experiments/speedway202/H26-LE-learned-C-alt-telemetry.csv.gz",
+      "Bytes": 1596859,
+      "SHA256": "4fd1eb3933ae23349a95151859058d1e22aebf4ba62e6a1aff559dcf98f71fbb"
+    },
+    {
+      "Path": "data/experiments/speedway202/H26-LE-learned-C-alt.json.gz",
+      "Bytes": 6074084,
+      "SHA256": "80c17c88ccb4f69639127d34bf8f2b806e17c88fb29d1002f5fee0729d698759"
+    },
+    {
+      "Path": "data/experiments/speedway202/H26-LE-learned-C-alt.reserved",
+      "Bytes": 110,
+      "SHA256": "d4e42b93084bbca2171b90734b271870c51fea2fdb8c59764c44285e4bde387f"
+    },
+    {
+      "Path": "data/experiments/speedway202/H26-LE-learned-C-alt.result.json",
+      "Bytes": 567,
+      "SHA256": "3e08fd1c442d6cebe0df1f15abff63f1e9c2e62948490a0ae7281b5b75073551"
+    },
+    {
+      "Path": "data/experiments/speedway202/H26-LE-learned-C-telemetry.csv.gz",
+      "Bytes": 1643158,
+      "SHA256": "53afa4bdca68ae5a5405acf1a73a7687409509ec0796237dc96dcdf657767fc2"
+    },
+    {
+      "Path": "data/experiments/speedway202/H26-LE-learned-C.json.gz",
+      "Bytes": 6243674,
+      "SHA256": "070ca7bea81ed03220730087a34e8fe86940c0bac1a63302b309461a88b50557"
+    },
+    {
+      "Path": "data/experiments/speedway202/H26-LE-learned-C.reserved",
+      "Bytes": 106,
+      "SHA256": "bb69be9b16355e416c84e5822815dc910513832aa0cf383bcbd81cd160fc037f"
+    },
+    {
+      "Path": "data/experiments/speedway202/H26-LE-learned-C.result.json",
+      "Bytes": 576,
+      "SHA256": "bea6e1853dbae0ad9c9dee4f2028c043c712112a42e84970f7aa559df2d702ad"
+    },
+    {
+      "Path": "data/experiments/speedway202/H26-LE-same-telemetry.csv.gz",
+      "Bytes": 6412,
+      "SHA256": "58264a000209fa70a2d4d6cedc40fcf7237d7de6c48538407db762699ddb4f59"
+    },
+    {
+      "Path": "data/experiments/speedway202/H26-LE-same.json.gz",
+      "Bytes": 23804,
+      "SHA256": "bfb0ef9f8ec05e406b41629ece1a6d614ccb67abdb9a87cbf08b23cddb7b047f"
+    },
+    {
+      "Path": "data/experiments/speedway202/H26-LE-same.reserved",
+      "Bytes": 101,
+      "SHA256": "0d60bb6b454dfa6765008c9a6792391bb5291caf541cbbe272ceff14980960cc"
+    },
+    {
+      "Path": "data/experiments/speedway202/H26-LE-same.result.json",
+      "Bytes": 446,
+      "SHA256": "30b4d34c01e46809b577fcfc9b9885b93c7da4300762725ec1f5e1195e8556fb"
+    },
+    {
+      "Path": "data/experiments/speedway202/H26-LE-seeds.json",
+      "Bytes": 4241,
+      "SHA256": "a0953af9442e414cca70408283507ec9b56ecbd8b4f7569dda2090ee1778f37d"
+    },
+    {
+      "Path": "data/experiments/speedway202/H26-LE-training.json.gz",
+      "Bytes": 1481,
+      "SHA256": "97031a1c9f9336048b5a170ced3059c6f5691f9ac1a6f94dd0fb6ba6b450dd98"
+    },
+    {
+      "Path": "data/experiments/speedway202/H26-LE-transfer.json.gz",
+      "Bytes": 1325,
+      "SHA256": "b8684bfb508234e13d6733bf5fc66a52ff81d2a64ab46eeceb6de9df3d1ac5d1"
+    },
+    {
+      "Path": "data/experiments/speedway202/l-cycle/cycle-probes.json",
+      "Bytes": 11585,
+      "SHA256": "91772c29f8097af2df2521e6622acbbdd2fc8d1b2c90cc22f539556b8194b5e9"
+    },
+    {
+      "Path": "data/experiments/speedway202/l-cycle/H26-L-training.json.gz",
+      "Bytes": 373620,
+      "SHA256": "d8ad03da6a67ae9f352edc41ddcc6f00962de089fcd0599439e35452b2b15bcb"
+    },
+    {
+      "Path": "data/experiments/speedway202/l-learn/H26-L-seeds.json",
+      "Bytes": 29212,
+      "SHA256": "98b5d193a75f3d552678307f284e03d57045770d7b94451212a16a8809f49347"
+    },
+    {
+      "Path": "data/experiments/speedway202/l-learn/H26-L-training.json.gz",
+      "Bytes": 475435,
+      "SHA256": "21595103fc03875fbbb179caa868a98ea0deb0fb3a233cd85a69156cff7b6cea"
+    },
+    {
+      "Path": "data/experiments/speedway202/l-learn/H26-L-transfer.json.gz",
+      "Bytes": 1421,
+      "SHA256": "4518604db6936a79c6d830f805f5061413d6d021490569eae77026bb9f292191"
+    },
+    {
+      "Path": "data/experiments/speedway202/launch-v2/H26-LE-seeds.json",
+      "Bytes": 6819,
+      "SHA256": "a8f2ca94ec2542d19fcb7193f50eafad9ec4b8fec0395bed8d50d8634514b8ae"
+    },
+    {
+      "Path": "data/experiments/speedway202/launch-v2/H26-LE-training.json.gz",
+      "Bytes": 1551,
+      "SHA256": "a7a160cd14f1dfa8d81aaedb9041fdbe2d45f88c5ee0b5fb0cf55fcc2300e585"
+    },
+    {
+      "Path": "data/experiments/speedway202/launch-v2/H26-LE-transfer.json.gz",
+      "Bytes": 1380,
+      "SHA256": "2069fd0b23b5ca6ae6a4eee776913821e035fb2b48e77a6a7e5ef1c062278b7e"
+    },
+    {
+      "Path": "data/experiments/speedway202/learn-v3/H26-LE-seeds.json",
+      "Bytes": 14461,
+      "SHA256": "e467f77b685db73d8f05fce9d97ad7a4da2e5a82f2d8cc760f3a20852f90bc5f"
+    },
+    {
+      "Path": "data/experiments/speedway202/learn-v3/H26-LE-training.json.gz",
+      "Bytes": 440829,
+      "SHA256": "351af3851fbaeddece7a2f01bffe46f76ba2745bce7998e7e24bd1bdfbaecfa5"
+    },
+    {
+      "Path": "data/experiments/speedway202/learn-v3/H26-LE-transfer.json.gz",
+      "Bytes": 1380,
+      "SHA256": "2069fd0b23b5ca6ae6a4eee776913821e035fb2b48e77a6a7e5ef1c062278b7e"
+    },
+    {
+      "Path": "data/experiments/speedway202/learn-v4/H26-LE-seeds.json",
+      "Bytes": 28574,
+      "SHA256": "5fd143bd34970d7b1da64ff800cc7c4049c98dd82f27a20159c598c66e693fce"
+    },
+    {
+      "Path": "data/experiments/speedway202/learn-v4/H26-LE-training.json.gz",
+      "Bytes": 1620,
+      "SHA256": "1241d01c07959356c4fabcbdd6db22bc181bb79f2c07ef1ac9602841940c7682"
+    },
+    {
+      "Path": "data/experiments/speedway202/learn-v4/H26-LE-transfer.json.gz",
+      "Bytes": 1450,
+      "SHA256": "f662058296b1ea7349c772c4fd89d61457bfa6e55e740a0359fff351fd15573a"
+    },
+    {
+      "Path": "data/experiments/speedway202/learn-v5/H26-LE-seeds.json",
+      "Bytes": 28574,
+      "SHA256": "5fd143bd34970d7b1da64ff800cc7c4049c98dd82f27a20159c598c66e693fce"
+    },
+    {
+      "Path": "data/experiments/speedway202/learn-v5/H26-LE-training.json.gz",
+      "Bytes": 556501,
+      "SHA256": "c814f272bd7cec54da9e21f84783894c4b9300b521afd2c2ee028b2f1ce34362"
+    },
+    {
+      "Path": "data/experiments/speedway202/learn-v5/H26-LE-transfer.json.gz",
+      "Bytes": 1450,
+      "SHA256": "f662058296b1ea7349c772c4fd89d61457bfa6e55e740a0359fff351fd15573a"
+    },
+    {
+      "Path": "data/experiments/speedway202/matched-irrevocable-prefix.json",
+      "Bytes": 1749,
+      "SHA256": "76390102e7ee74e3330c92713053b616c756059b73daed4ed4360d270fe160bf"
+    },
+    {
+      "Path": "data/experiments/speedway202/matched-probes.json",
+      "Bytes": 8117,
+      "SHA256": "de01cc44a2ef44d3333dd7e4650fba9307af9811535981c8fea05f505f93bbd9"
+    },
+    {
+      "Path": "data/experiments/speedway202/matched-training.json.gz",
+      "Bytes": 436,
+      "SHA256": "19c61026b131cc9000dfbc7a8cfe33bb2e1bcc1f10354cbf51d529bd4d614f95"
+    },
+    {
+      "Path": "data/experiments/speedway202/parameters.json",
+      "Bytes": 759,
+      "SHA256": "12be72279f136f5a943ee39f8f3f61573c8fa1837999117e48acd343b29da690"
+    },
+    {
+      "Path": "data/experiments/speedway202/physical-v6/H26-LE-seeds.json",
+      "Bytes": 29027,
+      "SHA256": "f7d5306b5300352d3eace0611c4be753ab608141e4eef36f7ae770b090de50fc"
+    },
+    {
+      "Path": "data/experiments/speedway202/physical-v6/H26-LE-training.json.gz",
+      "Bytes": 1089528,
+      "SHA256": "41a83c920da49f4e020bda779ee9a23c680bff9d087f0b77e487291e5d05e7c4"
+    },
+    {
+      "Path": "data/experiments/speedway202/physical-v6/H26-LE-transfer.json.gz",
+      "Bytes": 1450,
+      "SHA256": "f662058296b1ea7349c772c4fd89d61457bfa6e55e740a0359fff351fd15573a"
+    },
+    {
+      "Path": "data/experiments/speedway202/publication-check.json",
+      "Bytes": 252,
+      "SHA256": "56d18088ddc3cd322573def963360e1cdd31b46b5b809ba25e118f1de5379171"
+    },
+    {
+      "Path": "data/experiments/speedway202/published-policies-check.json",
+      "Bytes": 284,
+      "SHA256": "e9ebfd1624f4e441b179cd374b058984ba0617a8eb860eb87b21f9862cb27b0e"
+    },
+    {
+      "Path": "data/experiments/speedway202/README.md",
+      "Bytes": 1573,
+      "SHA256": "b0488ce7f1a2dd44beafc5e3c520617d500410bb34697bde05192b55577ed5e8"
+    },
+    {
+      "Path": "data/experiments/speedway202/refine-v7/H26-LE-training.json.gz",
+      "Bytes": 743442,
+      "SHA256": "295929fd487e2e6c05fbeb710a1ca93b2eb520f6ffa2f0111030ced48f64b961"
+    },
+    {
+      "Path": "data/experiments/speedway202/runtime-controller-parity.json",
+      "Bytes": 243,
+      "SHA256": "08dab5b8332a7aa8190c54719312a3dd271a0547e85af1fc8a55b6cea9f51334"
+    },
+    {
+      "Path": "data/experiments/speedway202/scenarios-v3/dt-convergence-model.json",
+      "Bytes": 7357,
+      "SHA256": "115f3ebe2a2e419c518abe316e659350507a11448163adc357aa8115f4d3c243"
+    },
+    {
+      "Path": "data/experiments/speedway202/scenarios-v3/eight-scenarios-model.json.gz",
+      "Bytes": 47960,
+      "SHA256": "bf709c2e035e8bbd431f5db560a7a4912e0bbb65a47e3f069a5ddcd170fc7dd0"
+    },
+    {
+      "Path": "data/experiments/speedway202/style-audit.json",
+      "Bytes": 1079,
+      "SHA256": "7860000388cec24cd676a3f75afdb6719323185b11b2115cf6893b05064ba5e5"
+    },
+    {
+      "Path": "data/experiments/speedway202/summary.json",
+      "Bytes": 30436,
+      "SHA256": "d4830680ba6e77d27029930ff3eb829b05f7cd10f19f3e1d1a4825cec98fb226"
+    },
+    {
+      "Path": "data/experiments/speedway202/world-inventory.json",
+      "Bytes": 1951,
+      "SHA256": "56c4121b76ed4d9267a2842841516615afa7ce4535e275ba5847e951f064f456"
+    },
+    {
+      "Path": "docs/experiments/speedway-h26/AUDYT.md",
+      "Bytes": 3184,
+      "SHA256": "8bed261813053ddaa1eb0a74435a99079c9b4da97e80a9658ee887e303715a27"
+    },
+    {
+      "Path": "docs/experiments/speedway-h26/REPORT.md",
+      "Bytes": 18399,
+      "SHA256": "2b7efec51534b004c093b720fe76b64e48e2272d6a0a1d30d91d59b86cc6ffb6"
+    },
+    {
+      "Path": "docs/experiments/speedway-h26/stadion-h26.png",
+      "Bytes": 176671,
+      "SHA256": "7652a602e43e4c5ed0689de80320b58f1e303aa95dfd19ff9f3a27aaa60066d5"
+    },
+    {
+      "Path": "tests/CoreSim.Tests/H26PhysicsTests.cs",
+      "Bytes": 3064,
+      "SHA256": "872067cf1d0059f8ef32d385f7242ad50745180f274bc930c4a94cb5e3528e3e"
+    },
+    {
+      "Path": "tools/replay-viewer/export_h25.py",
+      "Bytes": 12981,
+      "SHA256": "cdd49dfae0710a31e208b4e919b69fe723bbada3631cc749381e82b6770a8c9f"
+    },
+    {
+      "Path": "tools/replay-viewer/h25.mjs",
+      "Bytes": 8627,
+      "SHA256": "d3f17ead1048395d4135e4ee376848c63a0302fed74deee7f4e10551c188486a"
+    },
+    {
+      "Path": "tools/replay-viewer/index.html",
+      "Bytes": 16932,
+      "SHA256": "64077dfc434be71561937d3c4f2a2050e1afc88d4c5a41e3c67c411a6b0fdf30"
+    },
+    {
+      "Path": "tools/replay-viewer/recordings/h25/202-alternate.json.gz",
+      "Bytes": 2162112,
+      "SHA256": "7feb81bfa67c9f86754b57befda21aa7d26d62ae04176fd0cfa25cfc3b7501a1"
+    },
+    {
+      "Path": "tools/replay-viewer/recordings/h25/202-e-trained.json.gz",
+      "Bytes": 1946098,
+      "SHA256": "654b0ac5cb6a70558f5f30cbb578ceada10cb6df8043116c3fbbce63bdf153c5"
+    },
+    {
+      "Path": "tools/replay-viewer/recordings/h25/202-e.json.gz",
+      "Bytes": 495554,
+      "SHA256": "819a9d78d574ae5f9d121dca9c73d99d8c0d454b663e9b74fe85b12a9cce9709"
+    },
+    {
+      "Path": "tools/replay-viewer/recordings/h25/202-h25.json.gz",
+      "Bytes": 1359187,
+      "SHA256": "c0d766ef83b955568e33f05def0555a78aa77b511c403881c257e5613598109c"
+    },
+    {
+      "Path": "tools/replay-viewer/recordings/h25/202-l-trained.json.gz",
+      "Bytes": 1591259,
+      "SHA256": "935bc5b4d4e9323bc2a25b95200b77fc964b905c8004a21c5386d41f260c644e"
+    },
+    {
+      "Path": "tools/replay-viewer/recordings/h25/202-l.json.gz",
+      "Bytes": 107439,
+      "SHA256": "0943aa48e0aa71ad55fb955ee0af9c4badbc944ec9e990e4f150b86381e9a68a"
+    },
+    {
+      "Path": "tools/replay-viewer/recordings/h25/202-le.json.gz",
+      "Bytes": 110787,
+      "SHA256": "0508cf5bc76922c16b15abf5b3d0e8e0f448ff23e46245e61f0c2204db2c31fe"
+    },
+    {
+      "Path": "tools/replay-viewer/recordings/h25/202-learned.json.gz",
+      "Bytes": 2221070,
+      "SHA256": "883d56a5d46a0da69d699cc6662c66e4b3f43628de244a9f7b9a09baf84177de"
+    },
+    {
+      "Path": "tools/replay-viewer/serve.py",
+      "Bytes": 21461,
+      "SHA256": "17326ee08b51b4491eedb0f8e3985ee14d7445a0229e97b9d82d3384fffc65ca"
+    },
+    {
+      "Path": "tools/replay-viewer/viewer.mjs",
+      "Bytes": 107002,
+      "SHA256": "466734d189d9ef968cbb81bb29c3ce55056b378e8b55e57c933345067afb1293"
+    },
+    {
+      "Path": "tools/shared-world-speedway/H26Parameters.cs",
+      "Bytes": 2113,
+      "SHA256": "ae1c9bb146ee58b16b37a9f1072cf76559303f7f8c81dc711c0bd1f9dafee28b"
+    },
+    {
+      "Path": "tools/shared-world-speedway/StandingStart144/CrankClutch144.cs",
+      "Bytes": 8522,
+      "SHA256": "298424d49f074630ec5cd5cf04fe2c605fea34c7c91a873db768d7832faca87d"
+    },
+    {
+      "Path": "tools/speedway-h26/analyze202.py",
+      "Bytes": 9547,
+      "SHA256": "105563d00e117976be7621ea039a51f14d310fb213fdb9236f66927a9453ff4e"
+    },
+    {
+      "Path": "tools/speedway-h26/CyclePlanner199.cs",
+      "Bytes": 28371,
+      "SHA256": "16ae9ebd55f87582fd12322eddb25e1e27126fd73d2341aca3ed50e06c503525"
+    },
+    {
+      "Path": "tools/speedway-h26/H26.csproj",
+      "Bytes": 1414,
+      "SHA256": "745c58c4a386bdcb467071cd0f5c431cdd3c4d108424be9e67593bd1b6133e9e"
+    },
+    {
+      "Path": "tools/speedway-h26/Helpers202.cs",
+      "Bytes": 4750,
+      "SHA256": "b86d2440a10cedc3441c1bd84df9bd2f806ec83a268a2dbe6144d392d3897a3d"
+    },
+    {
+      "Path": "tools/speedway-h26/integration202.mjs",
+      "Bytes": 2956,
+      "SHA256": "65ae83ac3497c8994e5629f99990be6b2dd2b089ddb7e7248660380b4b8618c2"
+    },
+    {
+      "Path": "tools/speedway-h26/Native202.cs",
+      "Bytes": 3448,
+      "SHA256": "0223aac587c0e8ccf38e51f5b8bd14e80be1c05c553dda7e2c9f6e7161706125"
+    },
+    {
+      "Path": "tools/speedway-h26/packages.lock.json",
+      "Bytes": 1910,
+      "SHA256": "ece8865bac5f85aaeaf7c86bfce5d52ac09c916e746cbf304bf6a9a0e9e5e335"
+    },
+    {
+      "Path": "tools/speedway-h26/policies202.json",
+      "Bytes": 153274,
+      "SHA256": "f5d13fa21a39f03662dcf028d38f19f557e24c77b7dde7413ad28b115d6c961b"
+    },
+    {
+      "Path": "tools/speedway-h26/Predictor198.cs",
+      "Bytes": 9853,
+      "SHA256": "1d1cad46607381245e4df14d3a35c322a10f5b89b82ac55ebd137e50f23d315d"
+    },
+    {
+      "Path": "tools/speedway-h26/README.md",
+      "Bytes": 3804,
+      "SHA256": "27fb922ae7448aefc3ba58892c46cfdb9e2d0a32303f94723fb2842103b11e00"
+    },
+    {
+      "Path": "tools/speedway-h26/Runtime202.cs",
+      "Bytes": 13771,
+      "SHA256": "40be1a94c6dfe4105309d2644707823803ed68ec5ebf50ed04fd9823db17001c"
+    },
+    {
+      "Path": "tools/speedway-h26/Scenarios202.cs",
+      "Bytes": 4953,
+      "SHA256": "e092e23468e6426a2489d53da9f2f204c068b49ab305d48b47619c4477c19d8f"
+    },
+    {
+      "Path": "tools/speedway-h26/Study202.cs",
+      "Bytes": 20221,
+      "SHA256": "5526a626c8c304952aa05cc839346800ad7dad837a906f63eb1f225376565a5e"
+    },
+    {
+      "Path": "tools/speedway-h26/TrafficWorld191.Generated.cs",
+      "Bytes": 22140,
+      "SHA256": "76fbb3df093d9b8dde5bd387850942a8bd9675ae490905e224ec19462ce309dc"
+    },
+    {
+      "Path": "tools/speedway-handling/HandlingContact.cs",
+      "Bytes": 14136,
+      "SHA256": "54826af5bb2c6be67bb473b22fa17c5a5ace6021ca8772aecaa5e05a40ef48af"
+    }
+  ]
+}

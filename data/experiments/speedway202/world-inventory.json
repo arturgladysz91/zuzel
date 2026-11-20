@@ -1,0 +1,61 @@
+{
+  "ResearchScenarioWorlds": 8,
+  "LegacyRegressionMicroWorlds": 18,
+  "TotalWorldConstructions": 26,
+  "RequestedMaximum": 8,
+  "StrictLimitCompliant": false,
+  "FourRiderWorlds": 0,
+  "Explanation": "The two 39-test runs each construct one .05s load-cache world and eight .3s isolated worlds (four attribution cases, each repeated). Research markers counted only the eight #202 runs; this was an accounting mistake.",
+  "RegressionRuns": [
+    {
+      "OriginalTRX": "h26-tests.trx",
+      "SHA256": "4b52fd95cedf1a303b3630b4977547d277788d4bf5db3f21fb7938e4a7ce8733",
+      "Counters": {
+        "total": "39",
+        "executed": "39",
+        "passed": "39",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "MicroWorlds": 9
+    },
+    {
+      "OriginalTRX": "h26-final.trx",
+      "SHA256": "73b940d7415b05c4888598e2ef1f7ca11a2a12c0a0e7cdc133221053bfb892b7",
+      "Counters": {
+        "total": "39",
+        "executed": "39",
+        "passed": "39",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "MicroWorlds": 9
+    }
+  ],
+  "MicroWorldSourceHashes": {
+    "DynamicAxleLoadTests.cs": "75522945f5167eccc26892b07522e4442e46dc879d0f9fc12491bc11704208b6",
+    "MotorcyclePerformanceTests.cs": "b833de3023ac144a6a37dce49f7ca200814af9a6775f84bd708ef758db118fa5"
+  }
+}
