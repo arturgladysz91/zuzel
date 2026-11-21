@@ -23,8 +23,9 @@ internal static class Entry202
 internal static partial class Study191
 {
     private static HandlingSettings Settings202(string variant)=>Handling with {
-        H26=variant=="H25"?null:H26Configuration.For(variant=="H27-P"?"H26-LE":variant),
-        PostureH27 = variant == "H27-P" ? new() : null };
+        H26=variant=="H25"?null:H26Configuration.For(variant is "H27-P" or "H27-N"?"H26-LE":variant),
+        PostureH27 = variant is "H27-P" or "H27-N" ? new() : null,
+        DoubleContactSolve = variant == "H27-N" };
     internal static void StadiumEntry202(string config,string output)=>Stadium202(config,output);
     internal static void Run202(string[] args)
     {
@@ -32,6 +33,9 @@ internal static partial class Study191
         researchRepository202=Directory.Exists(Path.Combine(workspace,"tools/speedway-h26"))?workspace:Path.Combine(workspace,"work/zuzel");
         Directory.CreateDirectory(output);
         switch(mode){
+            case "model-204": Audit204(workspace,output);break;
+            case "native-204": Native204(workspace,output,args[3]);break;
+            case "throttle-204": AuditThrottle204(workspace,output,args.Length>3?args[3]:null);break;
             case "audit-203": Audit203(workspace,output);break;
             case "posture-check-203": CheckPosture203(workspace,output);break;
             case "native-check-203": CheckNative203(args[3],output);break;

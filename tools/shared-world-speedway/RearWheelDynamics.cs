@@ -34,6 +34,8 @@ public readonly record struct RearWheelStep(double Seconds,double BeforeOmega,do
 {
     public float LateralNewtons=>FrontLateralNewtons+RearLateralNewtons;
     public double MidOmega=>(BeforeOmega+AfterOmega)/2;
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
+    public double? AppliedLongitudinalNewtons { get; init; }
 }
 /// <summary>Accepted omega changes only in Commit, after the one Box2D step.</summary>
 public sealed class RearWheelState
@@ -61,6 +63,8 @@ public sealed class RearWheelState
             seconds*p.BearingResistanceNewtonMeterSeconds*middle*middle,0,0,0,0);
     }
 }
+public readonly record struct RearWheelTrial64(double Force, double MidOmega, double ConstitutiveSlip, double Denominator, int Iterations);
+
 public static class RearWheelDynamics
 {
     // The unchanged front constitutive law, also usable at a separate steered contact.
@@ -78,11 +82,57 @@ public static class RearWheelDynamics
         // Only Box2D applies the resulting force and advances its body.
         if(rearBudgetNewtons is { } input&&(!double.IsFinite(input)||input<0||input>budget))throw new ArgumentException("Rear contact budget must be within the unchanged total budget.");
         var rear=rearBudgetNewtons??p.RearBudgetFraction*budget;var front=budget-rear;var radius=p.WheelRadiusMeters;var inertia=p.WheelInertiaKgMetersSquared;
-        var mobility=radius*radius/inertia+1d/mass;
+        var b=side/Math.Sqrt(lateralScaleSquared);
+        var trial=SolveContact(forward,b,omega,mass,rear,driveTorque,resistanceForward,seconds,p,p.MinimumContactRelaxationSeconds);
+        var fx=(float)trial.Force;
+        var fyRear=(float)(-rear*b/trial.Denominator);
+        var fyFront=(float)(-front*side/Math.Sqrt(side*side+lateralScaleSquared));
+        // Use the EXACT float force submitted to Box2D also in wheel reaction.
+        var bearing=1+seconds*p.BearingResistanceNewtonMeterSeconds/(2*inertia);
+        var midOmega=(omega+seconds*(driveTorque-radius*fx)/(2*inertia))/bearing;
+        var after=2*midOmega-omega;
+        var actualMidSlip=radius*midOmega-forward-seconds*(fx+resistanceForward)/(2*mass);
+        var rootResidual=actualMidSlip-trial.ConstitutiveSlip;
+        return new(seconds,omega,after,requestedTorque,availableTorque,driveTorque,p.BearingResistanceNewtonMeterSeconds*midOmega,
+            fx,fyFront,fyRear,SlipRatio(forward,omega,p),actualMidSlip,fx*actualMidSlip*seconds,
+            seconds*p.BearingResistanceNewtonMeterSeconds*midOmega*midOmega,driveTorque*midOmega*seconds,
+            rear==0?0:Math.Sqrt((double)fx*fx+(double)fyRear*fyRear)/rear,rootResidual,trial.Iterations);
+    }
+
+    public static RearWheelTrial64 EvaluateLongitudinal64(double forward, double omega, double mass, double rearBudget,
+        double torque, double external, double seconds, RearWheelParameters p, double relaxationSeconds) =>
+        SolveContact(forward,0,omega,mass,rearBudget,torque,external,seconds,p,relaxationSeconds);
+
+    // The force arguments are projections of the already rounded world vectors sent to Box2D.
+    public static RearWheelStep AcceptLongitudinal64(double forward, double omega, double mass, double rearCapacity,
+        double torque, double external, double appliedFx, double appliedFy, double seconds, RearWheelParameters p,
+        RearWheelTrial64 trial)
+    {
+        double radius=p.WheelRadiusMeters, inertia=p.WheelInertiaKgMetersSquared;
+        double bearing=1+seconds*p.BearingResistanceNewtonMeterSeconds/(2*inertia);
+        double mid=(omega+seconds*(torque-radius*appliedFx)/(2*inertia))/bearing;
+        double slip=radius*mid-forward-seconds*(appliedFx+external)/(2*mass);
+        return new(seconds,omega,2*mid-omega,torque,Math.Abs(torque),torque,p.BearingResistanceNewtonMeterSeconds*mid,
+            (float)appliedFx,0,(float)appliedFy,SlipRatio(forward,omega,p),slip,appliedFx*slip*seconds,
+            seconds*p.BearingResistanceNewtonMeterSeconds*mid*mid,torque*mid*seconds,
+            Math.Sqrt(appliedFx*appliedFx+appliedFy*appliedFy)/rearCapacity,slip-trial.ConstitutiveSlip,trial.Iterations)
+            { AppliedLongitudinalNewtons=appliedFx };
+    }
+
+    private static double LongitudinalScale(double forward, double mass, double rear, RearWheelParameters p,
+        double relaxationSeconds)
+    {
+        var mobility=p.WheelRadiusMeters*p.WheelRadiusMeters/p.WheelInertiaKgMetersSquared+1d/mass;
         var speedScaleSquared=forward*forward+p.LowSpeedMetersPerSecond*p.LowSpeedMetersPerSecond;
-        var relaxation=rear*mobility*p.MinimumContactRelaxationSeconds;
-        var deltaX=Math.Sqrt(p.LongitudinalSlipStiffnessRatio*p.LongitudinalSlipStiffnessRatio*speedScaleSquared+relaxation*relaxation);
-        var deltaY=Math.Sqrt(lateralScaleSquared);var b=side/deltaY;
+        var relaxation=rear*mobility*relaxationSeconds;
+        return Math.Sqrt(p.LongitudinalSlipStiffnessRatio*p.LongitudinalSlipStiffnessRatio*speedScaleSquared+relaxation*relaxation);
+    }
+
+    private static RearWheelTrial64 SolveContact(double forward,double b,double omega,double mass,double rear,
+        double driveTorque,double resistanceForward,double seconds,RearWheelParameters p,double relaxationSeconds)
+    {
+        var radius=p.WheelRadiusMeters;var inertia=p.WheelInertiaKgMetersSquared;
+        var deltaX=LongitudinalScale(forward,mass,rear,p,relaxationSeconds);
         var bearing=1+seconds*p.BearingResistanceNewtonMeterSeconds/(2*inertia);
         var freeMidOmega=(omega+seconds*driveTorque/(2*inertia))/bearing;
         var freeMidSlip=radius*freeMidOmega-forward-seconds*resistanceForward/(2*mass);
@@ -99,16 +149,8 @@ public static class RearWheelDynamics
         }
         var midSlip=Math.CopySign(z,freeMidSlip);
         var a=midSlip/deltaX;var denominator=Math.Sqrt(1+a*a+b*b);
-        var fx=(float)(rear*a/denominator);var fyRear=(float)(-rear*b/denominator);
-        var fyFront=(float)(-front*side/Math.Sqrt(side*side+lateralScaleSquared));
-        // Use the EXACT float force submitted to Box2D also in wheel reaction.
-        var midOmega=(omega+seconds*(driveTorque-radius*fx)/(2*inertia))/bearing;
-        var after=2*midOmega-omega;
-        var actualMidSlip=radius*midOmega-forward-seconds*(fx+resistanceForward)/(2*mass);
-        var rootResidual=actualMidSlip-midSlip;
-        return new(seconds,omega,after,requestedTorque,availableTorque,driveTorque,p.BearingResistanceNewtonMeterSeconds*midOmega,
-            fx,fyFront,fyRear,SlipRatio(forward,omega,p),actualMidSlip,fx*actualMidSlip*seconds,
-            seconds*p.BearingResistanceNewtonMeterSeconds*midOmega*midOmega,driveTorque*midOmega*seconds,
-            rear==0?0:Math.Sqrt((double)fx*fx+(double)fyRear*fyRear)/rear,rootResidual,iterations);
+        double fx=rear*a/denominator;
+        double mid=(omega+seconds*(driveTorque-radius*fx)/(2*inertia))/bearing;
+        return new(fx,mid,midSlip,denominator,iterations);
     }
 }

@@ -13,11 +13,17 @@ internal sealed record HandlingSettings(double GripScale = 1.25, double YawRespo
     public H26Configuration? H26 {get;init;}
     [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
     public RiderPostureH27? PostureH27 { get; init; }
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+    public bool DoubleContactSolve { get; init; }
 }
 
 internal sealed record LeanSample(double Seconds, double RequestRadians, double ActualRadians);
 internal sealed record LoadStepH26(double Seconds,double Acceleration,double Residual,int Iterations,
-    double FrontNormalNewtons,double RearNormalNewtons);
+    double FrontNormalNewtons,double RearNormalNewtons)
+{
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
+    public ContactPrecision64? Precision { get; init; }
+}
 internal sealed record HandlingStep(TwoContactForces Forces, double LeanAfter, double LeanRequest)
 {
     public LoadStepH26? LoadH26 {get;init;}
@@ -62,7 +68,7 @@ internal sealed class HandlingRig(HandlingSettings settings)
     }
 }
 
-internal static class HandlingContact
+internal static partial class HandlingContact
 {
     private const double FrontSlipRatio = .115;
     private const double RearSlipRatio = .104;
@@ -109,6 +115,9 @@ internal static class HandlingContact
         // Search stays inside the two-positive-contact domain. A root outside it is rejected, never clamped.
         double lo=-LoadBasedTyreGrip.GravityMetersPerSecondSquared*bike.FrontAxleFromComMeters/height+ContactDomainAccelerationReserveMetersPerSecondSquared;
         double hi= LoadBasedTyreGrip.GravityMetersPerSecondSquared*bike.RearAxleFromComMeters/height-ContactDomainAccelerationReserveMetersPerSecondSquared;
+        if (settings.DoubleContactSolve)
+            return new ContactQuery64(settings, body, rider, bike, original, mass, inertia, height, time, dt,
+                steering, request, lean, wheel, shaft, release).Solve(lo,hi,posture);
         var zero=At(0);
         double ax=0;
         var point=zero;

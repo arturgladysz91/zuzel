@@ -68,7 +68,8 @@ internal static partial class Study191
         var (gates,specs)=Grid194("solo-wide");
         var spec=specs[0];
         if(arm=="C-gear")spec=Spec193(gates[0],1,8.4);
-        float offset = arm switch { "C-alt" => -.12f, "C-hold-minus" => -.02f, "C-hold-plus" => .02f, _ => 0 };
+        float offset = arm switch { "C-alt" => -.12f, "C-hold-minus" => -.02f, "C-hold-plus" => .02f,
+            "C-alt-plus" => .12f, _ => 0 };
         if(offset != 0){
             spec=spec with {OffsetMeters=spec.OffsetMeters+offset,TargetOffsetMeters=spec.TargetOffsetMeters+offset};
             var where=Frame.At(spec.ReferenceMeters,spec.OffsetMeters);

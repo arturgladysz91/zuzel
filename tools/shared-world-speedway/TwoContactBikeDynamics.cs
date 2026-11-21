@@ -52,6 +52,8 @@ public readonly record struct TwoContactForces(Vector2 FrontPoint,Vector2 RearPo
     public Engine500Command? Engine {get;init;}
     [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
     public LoadBasedTyreBudget? TyreLoads {get;init;}
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
+    public double? SteeringTargetBeforeRounding { get; init; }
     public Vector2 NetForce=>FrontForce+RearForce+Resistance;
     public float FrontTorque=>Cross(FrontArm,FrontForce);
     public float RearTorque=>Cross(RearArm,RearForce);

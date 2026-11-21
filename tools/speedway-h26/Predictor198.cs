@@ -8,7 +8,13 @@ using SharedWorldSpeedway;
 
 namespace SpeedwayHandling;
 
-internal sealed record Profile198(long Steps,long ForceTicks,long IntegrateTicks,long GeometryTicks,long GateTicks,long ClockTicks);
+internal sealed record Profile198(long Steps,long ForceTicks,long IntegrateTicks,long GeometryTicks,long GateTicks,long ClockTicks)
+{
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+    public long ResidualForceTicks { get; init; }
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+    public long LoadSolverTicks { get; init; }
+}
 internal sealed record ContactFailure203(HandlingForecast State, FreeRacingAction Action,
     double RiderHeightOffsetMeters, float Dt, string Error);
 
@@ -46,6 +52,7 @@ internal sealed class Predictor198(TrackFrame frame,TrackStateSnapshot surface,W
         private int index;
         private ClearancePair gap;
         private long forceTicks,integrateTicks,geometryTicks,gateTicks,clockTicks;
+        private long residualForceTicks,loadSolverTicks;
 
         internal Cursor198(Predictor198 model,Start197 start,FreeRacingAction[] controls,int from,
             double goal,double margin,bool profile,Func<RiderView,double,string?>? constraint,double stepSeconds,
@@ -85,7 +92,8 @@ internal sealed class Predictor198(TrackFrame frame,TrackStateSnapshot surface,W
         internal HeadingSample198 Snapshot=>new(state.Time,state.Rider.TotalReferenceMeters,state.Rider.Position.X,
             state.Rider.Position.Y,state.Rider.Speed,state.Rider.Heading,state.Rider.AngularVelocity,state.Rider.SlideRadians,
             state.Wheel,state.Shaft,state.Steer,state.Lean,LastSweep,gap.Outer,gap.Inner,active);
-        internal Profile198 Counters=>new(Steps,forceTicks,integrateTicks,geometryTicks,gateTicks,clockTicks);
+        internal Profile198 Counters=>new(Steps,forceTicks,integrateTicks,geometryTicks,gateTicks,clockTicks)
+            {ResidualForceTicks=residualForceTicks,LoadSolverTicks=loadSolverTicks};
 
         private void ApplyDue()
         {
@@ -159,7 +167,15 @@ internal sealed class Predictor198(TrackFrame frame,TrackStateSnapshot surface,W
             }
             var power=shaft.Prepared;
             var forces=contact.Forces;
-            if(profile) forceTicks+=Mark()-start;
+            if(profile)
+            {
+                forceTicks+=Mark()-start;
+                if (contact.LoadH26?.Precision is { } precision)
+                {
+                    residualForceTicks+=precision.ForceTicks;
+                    loadSolverTicks+=precision.SolverTicks;
+                }
+            }
 
             start=Mark();
             float step=(float)dt;
@@ -194,6 +210,8 @@ internal sealed class Predictor198(TrackFrame frame,TrackStateSnapshot surface,W
             else if(MaxBeta>Math.PI/4) Outcome="beta";
             else if(Vector2.Dot(v.Velocity,v.Road.Tangent)<-.001 || v.Speed<.2 && limit-originTime>2)
                 Outcome="progress";
+            else if(forces.SteeringTargetBeforeRounding is not null&&!FreeLearningExperiment.SteeringStepIsPhysical(forces,step))
+                Outcome="actuator invariant";
             else if(constraint?.Invoke(v,edge.Outer) is { } stop) Outcome=stop;
             else if(motionConstraint?.Invoke(v,edge.Outer,state.Time) is {} motionStop) Outcome=motionStop;
             else if(s>=goal)

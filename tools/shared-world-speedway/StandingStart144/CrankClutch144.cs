@@ -21,6 +21,9 @@ public sealed record ClutchStep144(double Seconds,double BeforeOmega,double Afte
     public EngineLedgerH26? H26 {get;init;}
     public double MidOmega=>(BeforeOmega+AfterOmega)/2;
 }
+public readonly record struct ClutchTrial64(double Torque, double EngineMid, double Engagement,
+    double Residual, int WheelQueries, RearWheelTrial64 Wheel);
+
 public sealed class CrankClutch144
 {
     public LaunchParameters144 Parameters {get;}
@@ -56,14 +59,40 @@ public sealed class CrankClutch144
         =>Prepare(throttle,ratio,efficiency,seconds,released,wheelAtTorque,null);
     public Engine500Command Prepare(double throttle,double ratio,double efficiency,double seconds,bool released,Func<double,RearWheelStep> wheelAtTorque,
         RearWheelParameters? wheelParameters){
+        var trial=Solve(throttle,ratio,efficiency,seconds,released,wheelAtTorque,static wheel=>wheel.MidOmega);
+        return Store(throttle,ratio,efficiency,seconds,trial.Torque,trial.EngineMid,trial.Engagement,trial.Residual,
+            trial.Queries,trial.Wheel,wheelParameters);
+    }
+
+    public ClutchTrial64 Evaluate64(double throttle,double ratio,double efficiency,double seconds,bool released,
+        Func<double,RearWheelTrial64> wheelAtTorque)
+    {
+        var trial=Solve(throttle,ratio,efficiency,seconds,released,wheelAtTorque,static wheel=>wheel.MidOmega);
+        return new(trial.Torque,trial.EngineMid,trial.Engagement,trial.Residual,trial.Queries,trial.Wheel);
+    }
+
+    public Engine500Command Accept64(double throttle,double ratio,double efficiency,double seconds,
+        ClutchTrial64 trial,RearWheelStep appliedWheel,RearWheelParameters wheelParameters)
+    {
+        double capacity=Parameters.ClutchCapacityNewtonMeters*trial.Engagement;
+        double residual=trial.Torque-Math.Clamp(Parameters.ClutchViscosityNewtonMeterSeconds*trial.Engagement*
+            (trial.EngineMid-ratio*appliedWheel.MidOmega),-capacity,capacity);
+        return Store(throttle,ratio,efficiency,seconds,trial.Torque,trial.EngineMid,trial.Engagement,residual,
+            trial.WheelQueries,appliedWheel,wheelParameters);
+    }
+
+    private (double Torque,double EngineMid,double Engagement,double Residual,int Queries,T Wheel) Solve<T>(
+        double throttle,double ratio,double efficiency,double seconds,bool released,Func<double,T> wheelAtTorque,
+        Func<T,double> midOmega)
+    {
         if(!double.IsFinite(throttle)||throttle is <0 or >1||!double.IsFinite(seconds)||seconds is <0 or >.020001
             ||!double.IsFinite(ratio)||ratio<=0||efficiency is <=0 or >1)throw new ArgumentException("Physical midpoint interval required.");
         var p=Parameters;var fraction=Math.Clamp((Omega*30/Math.PI-p.DisengagedBelowRpm)/(p.FullyEngagedAboveRpm-p.DisengagedBelowRpm),0,1);
         var engagement=released?fraction*fraction*(3-2*fraction):0;var capacity=p.ClutchCapacityNewtonMeters*engagement;
         int queries=0;
-        (double Residual,double EngineMid,RearWheelStep Wheel) At(double torque){
+        (double Residual,double EngineMid,T Wheel) At(double torque){
             var engine=EngineMid(torque,throttle,seconds);var wheel=wheelAtTorque(torque*ratio*(torque>=0?efficiency:1/efficiency));queries++;
-            var slip=engine-ratio*wheel.MidOmega;
+            var slip=engine-ratio*midOmega(wheel);
             return(torque-Math.Clamp(p.ClutchViscosityNewtonMeterSeconds*engagement*slip,-capacity,capacity),engine,wheel);
         }
         double chosen=0;var point=At(0);
@@ -81,7 +110,14 @@ public sealed class CrankClutch144
                 if(i==47)throw new InvalidOperationException("Clutch solve did not converge.");
             }
         }
-        var mid=point.EngineMid;var after=2*mid-Omega;var crank=Engine500.Torque(mid*30/Math.PI);
+        return (chosen,point.EngineMid,engagement,point.Residual,queries,point.Wheel);
+    }
+
+    private Engine500Command Store(double throttle,double ratio,double efficiency,double seconds,double chosen,double mid,
+        double engagement,double contactResidual,int queries,RearWheelStep wheel,RearWheelParameters? wheelParameters)
+    {
+        var p=Parameters;
+        var after=2*mid-Omega;var crank=Engine500.Torque(mid*30/Math.PI);
         var combustion=throttle*crank*mid*seconds;var drag=p.CrankDragNewtonMeterSeconds*mid*mid*seconds;
         double mechanical=0,pumping=0,grossTorque=throttle*crank;
         if(LossH26 is {} losses){
@@ -89,19 +125,20 @@ public sealed class CrankClutch144
             grossTorque=throttle*(crank+mechanical);
             combustion=grossTorque*mid*seconds;drag=(mechanical+pumping)*mid*seconds;
         }
-        var slipRate=mid-ratio*point.Wheel.MidOmega;var heat=chosen*slipRate*seconds;
-        var transmission=chosen*ratio*point.Wheel.MidOmega*seconds-point.Wheel.EngineWorkJoules;
+        var slipRate=mid-ratio*wheel.MidOmega;var heat=chosen*slipRate*seconds;
+        var transmission=chosen*ratio*wheel.MidOmega*seconds-wheel.EngineWorkJoules;
         var change=.5*p.CrankInertiaKgMetersSquared*(after*after-Omega*Omega);
-        var residual=combustion-drag-change-point.Wheel.EngineWorkJoules-heat-transmission;
+        var residual=combustion-drag-change-wheel.EngineWorkJoules-heat-transmission;
         if(after<0||!double.IsFinite(after)||heat< -1e-7||transmission< -1e-7||Math.Abs(residual)>1e-6)
             throw new InvalidOperationException("Crank/clutch passivity or energy identity failed.");
-        var command=new Engine500Command(mid*30/Math.PI,ratio,crank,crank*ratio*efficiency,point.Wheel.DriveTorqueNewtonMeters,efficiency);
-        Prepared=new(seconds,Omega,after,throttle*crank,chosen,engagement,slipRate,combustion,drag,heat,transmission,residual,point.Residual,queries,point.Wheel,command);
+        var command=new Engine500Command(mid*30/Math.PI,ratio,crank,crank*ratio*efficiency,wheel.DriveTorqueNewtonMeters,efficiency);
+        Prepared=new(seconds,Omega,after,throttle*crank,chosen,engagement,slipRate,combustion,drag,heat,transmission,residual,contactResidual,queries,wheel,command);
         if(LossH26 is not null){
-            var w=point.Wheel;
+            var w=wheel;
             var wp=wheelParameters??RearWheelParameters.Default;
             double wheelChange=.5*wp.WheelInertiaKgMetersSquared*(w.AfterOmega*w.AfterOmega-w.BeforeOmega*w.BeforeOmega);
-            double bodyWork=w.LongitudinalNewtons*(wp.WheelRadiusMeters*w.MidOmega-w.MidSlipVelocityMetersPerSecond)*seconds;
+            double bodyWork=(w.AppliedLongitudinalNewtons??w.LongitudinalNewtons)*
+                (wp.WheelRadiusMeters*w.MidOmega-w.MidSlipVelocityMetersPerSecond)*seconds;
             Prepared=Prepared with {H26=new(grossTorque,mechanical,pumping,combustion,
                 mechanical*mid*seconds,pumping*mid*seconds,change,chosen*mid*seconds,wheelChange,bodyWork,residual)};
         }

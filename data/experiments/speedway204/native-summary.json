@@ -1,0 +1,554 @@
+{
+  "H27-N-learned-C-hold-minus": {
+    "result": {
+      "Variant": "H27-N",
+      "Controller": "Learned feedback with FAST50 receding verification",
+      "Fixture": "C-hold-minus",
+      "Complete": true,
+      "Outcome": "completed",
+      "FinishSeconds": 47.356533868116294,
+      "EndSeconds": 47.36,
+      "TotalCpuSeconds": 5.078125,
+      "CompletedLaps": 3,
+      "NativeSteps": 4748,
+      "Contacts": 0,
+      "MinSweep": 0.5540591687866857,
+      "EndReference": 956.4245523214333,
+      "DecisionP50Milliseconds": 4.5629,
+      "DecisionP95Milliseconds": 9.7577,
+      "DecisionP99Milliseconds": 11.9525,
+      "MaxMilliseconds": 14.8835,
+      "Fingerprint": "A7A384E94837A7C6C024D321FD23FEA0B7689B9E218B661DB2ED47D7E7CB5282",
+      "AcceptedPatches": 5,
+      "Decisions": 948,
+      "DeadlineMisses": 0
+    },
+    "finish": 47.356533868116294,
+    "sections": [
+      {
+        "bend": 1,
+        "priorStraightMax": 73.8376956,
+        "entry": 73.88161656440367,
+        "minimum": 73.88163,
+        "apex": 74.81025183807438,
+        "exit": 82.82043430716122,
+        "entryToApex": 2.708881400867062,
+        "apexToExit": 2.733672677389028,
+        "exitTo20m": 0.8628790199047014,
+        "exitRegain99": null,
+        "exitRegain90": null
+      },
+      {
+        "bend": 2,
+        "priorStraightMax": 88.0940628,
+        "entry": 87.83223132805948,
+        "minimum": 79.57924200000001,
+        "apex": 80.10206088506611,
+        "exit": 82.325484,
+        "entryToApex": 2.4091991343113364,
+        "apexToExit": 2.3424619455930973,
+        "exitTo20m": 0.8739878338726541,
+        "exitRegain99": null,
+        "exitRegain90": null
+      },
+      {
+        "bend": 3,
+        "priorStraightMax": 84.6388728,
+        "entry": 84.63856338492783,
+        "minimum": 74.1733776,
+        "apex": 79.90324940033706,
+        "exit": 82.19541964996752,
+        "entryToApex": 2.645013513351195,
+        "apexToExit": 2.356561610236767,
+        "exitTo20m": 0.8887077601919984,
+        "exitRegain99": null,
+        "exitRegain90": null
+      },
+      {
+        "bend": 4,
+        "priorStraightMax": 84.3266268,
+        "entry": 81.50253344554524,
+        "minimum": 72.9695088,
+        "apex": 78.25674440658494,
+        "exit": 89.22897971953348,
+        "entryToApex": 2.690499296887392,
+        "apexToExit": 2.32649723022908,
+        "exitTo20m": 0.8071781246045191,
+        "exitRegain99": null,
+        "exitRegain90": null
+      },
+      {
+        "bend": 5,
+        "priorStraightMax": 94.9544028,
+        "entry": 90.10207298153851,
+        "minimum": 77.593338,
+        "apex": 79.73543611661766,
+        "exit": 86.40792239724462,
+        "entryToApex": 2.5390039460317126,
+        "apexToExit": 2.282966174299297,
+        "exitTo20m": 0.8189037293284613,
+        "exitRegain99": null,
+        "exitRegain90": null
+      },
+      {
+        "bend": 6,
+        "priorStraightMax": 92.45672280000001,
+        "entry": 86.50514747500524,
+        "minimum": 77.47052400000001,
+        "apex": 78.0895408257998,
+        "exit": 90.3043140887977,
+        "entryToApex": 2.488534038642733,
+        "apexToExit": 2.276367689636942,
+        "exitTo20m": 0.791841410298268,
+        "exitRegain99": null,
+        "exitRegain90": null
+      }
+    ],
+    "vmax": 94.9544028,
+    "v075": 16.0510734,
+    "speed70Seconds": 3.31,
+    "minFront": 43.21455627205569,
+    "maxAx": 11.29777065831683,
+    "heightMin": 0.48333333429194275,
+    "riderDropCm": -13.99999980529169,
+    "driveShares": [
+      0.001055743243163119,
+      0.9398226351397022,
+      0.05912162161713467
+    ],
+    "rearUtilization": 0.9931993770548743,
+    "maxImpulseNs": 0.0007282728110251759,
+    "maxYawImpulseNms": 1.2257818814864763e-05,
+    "maxEnergyJ": 0.0175296857174132,
+    "sumEnergyJ": -0.23719969437925145,
+    "maxCrankResidualJ": 7.759126674500294e-12,
+    "maxNormalResidualN": 0.0,
+    "patchReasons": {
+      "no-legal-time-gain": 28,
+      "adopted": 5
+    },
+    "driverPath": 1048.0639394407626,
+    "maxAbsBetaDegrees": 14.064431093417411,
+    "maxAbsYaw": 1.4499702453613281,
+    "wheelspinMin": -1.6693892907650794,
+    "wheelspinMax": 1069.8144678928115,
+    "rearFx": [
+      -89.24075200660567,
+      1741.049142375493
+    ],
+    "rearFy": [
+      -254.27590013465823,
+      1249.679337122002
+    ],
+    "maxInternalResidual": 1.9963709520176565e-05,
+    "maxAppliedResidual": 1.9970051132967015e-05,
+    "maxForceRounding": 0.0001087683436411224,
+    "maxMomentRounding": 0.006050205877500048,
+    "maxWheelImpulseResidual": 2.9476421303797906e-14,
+    "maxRearForceProjectionMismatch": 0.0,
+    "maxAppliedClutchResidual": 1.8934496260669675e-05,
+    "maxPreRoundingClutchResidual": 9.914678855693637e-09,
+    "solveQueries": 50034,
+    "nativeResidualForceWallMs": 116.7649,
+    "nativeLoadSolveWallMs": 124.7555,
+    "matchedDivergence": {
+      "first": {
+        "transform-float": {
+          "time": 0.34,
+          "positionDeltaMeters": 1.862645149230957e-09,
+          "reference": 0.03071514517068863,
+          "originalCommand": {
+            "SteeringRadians": 0.001407277,
+            "Drive": 1
+          },
+          "newCommand": {
+            "SteeringRadians": 0.001407277,
+            "Drive": 1
+          }
+        },
+        "force-0.001N": {
+          "time": 3.2600000000000002,
+          "positionDeltaMeters": 3.932099938981686e-06,
+          "reference": 30.200851440429688,
+          "originalCommand": {
+            "SteeringRadians": 0.02652807,
+            "Drive": 0.9354314
+          },
+          "newCommand": {
+            "SteeringRadians": 0.02652807,
+            "Drive": 0.9354314
+          }
+        }
+      },
+      "maxMatchedPositionDeltaMeters": 0.0007446407293725596
+    }
+  },
+  "H27-N-learned-C-hold-plus": {
+    "result": {
+      "Variant": "H27-N",
+      "Controller": "Learned feedback with FAST50 receding verification",
+      "Fixture": "C-hold-plus",
+      "Complete": true,
+      "Outcome": "completed",
+      "FinishSeconds": 47.356792188492015,
+      "EndSeconds": 47.36,
+      "TotalCpuSeconds": 5.046875,
+      "CompletedLaps": 3,
+      "NativeSteps": 4748,
+      "Contacts": 0,
+      "MinSweep": 0.6161471185361952,
+      "EndReference": 956.417916566133,
+      "DecisionP50Milliseconds": 4.533,
+      "DecisionP95Milliseconds": 9.7178,
+      "DecisionP99Milliseconds": 11.6961,
+      "MaxMilliseconds": 14.6154,
+      "Fingerprint": "A531B685D3272133B35047EB112A30920E99F3FBB1DF5B5259E8E38CDAF136B6",
+      "AcceptedPatches": 4,
+      "Decisions": 948,
+      "DeadlineMisses": 0
+    },
+    "finish": 47.356792188492015,
+    "sections": [
+      {
+        "bend": 1,
+        "priorStraightMax": 73.8376956,
+        "entry": 73.88161656440367,
+        "minimum": 73.88163,
+        "apex": 74.80921441513533,
+        "exit": 82.82052593015786,
+        "entryToApex": 2.7108085248378755,
+        "apexToExit": 2.7317477210878334,
+        "exitTo20m": 0.8628780591352214,
+        "exitRegain99": null,
+        "exitRegain90": null
+      },
+      {
+        "bend": 2,
+        "priorStraightMax": 88.09413839999999,
+        "entry": 87.8323004830369,
+        "minimum": 79.5792276,
+        "apex": 80.09395844185558,
+        "exit": 82.32539808453726,
+        "entryToApex": 2.407405593062112,
+        "apexToExit": 2.344259709364863,
+        "exitTo20m": 0.8739881949780539,
+        "exitRegain99": null,
+        "exitRegain90": null
+      },
+      {
+        "bend": 3,
+        "priorStraightMax": 84.6387972,
+        "entry": 84.638484,
+        "minimum": 74.1733488,
+        "apex": 79.9128728653715,
+        "exit": 82.1953418696219,
+        "entryToApex": 2.6468094586439435,
+        "apexToExit": 2.354749028839496,
+        "exitTo20m": 0.8887075948594614,
+        "exitRegain99": null,
+        "exitRegain90": null
+      },
+      {
+        "bend": 4,
+        "priorStraightMax": 84.3266052,
+        "entry": 81.50241464497401,
+        "minimum": 72.9694332,
+        "apex": 78.24758826912901,
+        "exit": 89.22891552005183,
+        "entryToApex": 2.6886575942366697,
+        "apexToExit": 2.328345337037508,
+        "exitTo20m": 0.8071777155763193,
+        "exitRegain99": null,
+        "exitRegain90": null
+      },
+      {
+        "bend": 5,
+        "priorStraightMax": 94.9543668,
+        "entry": 90.10208989116832,
+        "minimum": 77.5934496,
+        "apex": 79.74661602837458,
+        "exit": 86.40786121982215,
+        "entryToApex": 2.540787851440058,
+        "apexToExit": 2.281171961163764,
+        "exitTo20m": 0.8189049418471086,
+        "exitRegain99": null,
+        "exitRegain90": null
+      },
+      {
+        "bend": 6,
+        "priorStraightMax": 92.4566796,
+        "entry": 86.50510616868824,
+        "minimum": 77.47053840000001,
+        "apex": 78.08198436357402,
+        "exit": 90.30434400000009,
+        "entryToApex": 2.486691099618163,
+        "apexToExit": 2.278217142674798,
+        "exitTo20m": 0.7919509325962935,
+        "exitRegain99": null,
+        "exitRegain90": null
+      }
+    ],
+    "vmax": 94.9543668,
+    "v075": 16.0510734,
+    "speed70Seconds": 3.31,
+    "minFront": 43.21455627205569,
+    "maxAx": 11.29777065831683,
+    "heightMin": 0.48333333429194275,
+    "riderDropCm": -13.99999980529169,
+    "driveShares": [
+      0.0010557432431738238,
+      0.939822635139092,
+      0.05912162161773414
+    ],
+    "rearUtilization": 0.9931993910724881,
+    "maxImpulseNs": 0.000772501457077139,
+    "maxYawImpulseNms": 1.1708953655098497e-05,
+    "maxEnergyJ": 0.01699478895955764,
+    "sumEnergyJ": 0.052611277403352454,
+    "maxCrankResidualJ": 7.759126674500294e-12,
+    "maxNormalResidualN": 0.0,
+    "patchReasons": {
+      "no-legal-time-gain": 29,
+      "adopted": 4
+    },
+    "driverPath": 1048.0526505447924,
+    "maxAbsBetaDegrees": 14.064388121582777,
+    "maxAbsYaw": 1.4499680995941162,
+    "wheelspinMin": -1.6693878401188795,
+    "wheelspinMax": 1069.8144678928115,
+    "rearFx": [
+      -89.24071118498851,
+      1741.0928275053284
+    ],
+    "rearFy": [
+      -254.2773657230102,
+      1249.6785683545384
+    ],
+    "maxInternalResidual": 1.996924748981499e-05,
+    "maxAppliedResidual": 1.997125037922487e-05,
+    "maxForceRounding": 0.00010021433146151566,
+    "maxMomentRounding": 0.005831300670365636,
+    "maxWheelImpulseResidual": 3.2862601528904634e-14,
+    "maxRearForceProjectionMismatch": 0.0,
+    "maxAppliedClutchResidual": 2.4482819611648665e-05,
+    "maxPreRoundingClutchResidual": 9.912461962358066e-09,
+    "solveQueries": 50013,
+    "nativeResidualForceWallMs": 117.0197,
+    "nativeLoadSolveWallMs": 129.4777,
+    "matchedDivergence": {
+      "first": {
+        "transform-float": {
+          "time": 0.34,
+          "positionDeltaMeters": 1.862645149230957e-09,
+          "reference": 0.03071514517068863,
+          "originalCommand": {
+            "SteeringRadians": 0.001407277,
+            "Drive": 1
+          },
+          "newCommand": {
+            "SteeringRadians": 0.001407277,
+            "Drive": 1
+          }
+        },
+        "force-0.001N": {
+          "time": 3.2600000000000002,
+          "positionDeltaMeters": 3.932099938981686e-06,
+          "reference": 30.200851440429688,
+          "originalCommand": {
+            "SteeringRadians": 0.02652807,
+            "Drive": 0.9354314
+          },
+          "newCommand": {
+            "SteeringRadians": 0.02652807,
+            "Drive": 0.9354314
+          }
+        }
+      },
+      "maxMatchedPositionDeltaMeters": 0.0005089253860042861
+    }
+  },
+  "H27-N-learned-C": {
+    "result": {
+      "Variant": "H27-N",
+      "Controller": "Learned feedback with FAST50 receding verification",
+      "Fixture": "C",
+      "Complete": true,
+      "Outcome": "completed",
+      "FinishSeconds": 47.35652545074366,
+      "EndSeconds": 47.36,
+      "TotalCpuSeconds": 5.078125,
+      "CompletedLaps": 3,
+      "NativeSteps": 4748,
+      "Contacts": 0,
+      "MinSweep": 0.5341699838631085,
+      "EndReference": 956.4247667193406,
+      "DecisionP50Milliseconds": 4.5319,
+      "DecisionP95Milliseconds": 9.6676,
+      "DecisionP99Milliseconds": 11.8408,
+      "MaxMilliseconds": 14.6431,
+      "Fingerprint": "6E8D4FA876CB405B84A1950B1F02C67A285A54AC3D6F2408F3B9203DFE88232D",
+      "AcceptedPatches": 5,
+      "Decisions": 948,
+      "DeadlineMisses": 0
+    },
+    "finish": 47.35652545074366,
+    "sections": [
+      {
+        "bend": 1,
+        "priorStraightMax": 73.8376956,
+        "entry": 73.88161656440367,
+        "minimum": 73.88163,
+        "apex": 74.80976012104558,
+        "exit": 82.82048075343849,
+        "entryToApex": 2.7098447086189292,
+        "apexToExit": 2.732711704974757,
+        "exitTo20m": 0.8628785573431834,
+        "exitRegain99": null,
+        "exitRegain90": null
+      },
+      {
+        "bend": 2,
+        "priorStraightMax": 88.0940916,
+        "entry": 87.83228892098438,
+        "minimum": 79.57923480000001,
+        "apex": 80.09802024805035,
+        "exit": 82.3254128099416,
+        "entryToApex": 2.4083042730921704,
+        "apexToExit": 2.3433573786563517,
+        "exitTo20m": 0.8739882625798074,
+        "exitRegain99": null,
+        "exitRegain90": null
+      },
+      {
+        "bend": 3,
+        "priorStraightMax": 84.6388152,
+        "entry": 84.63849495919706,
+        "minimum": 74.17338480000001,
+        "apex": 79.90787300603955,
+        "exit": 82.19532387040124,
+        "entryToApex": 2.6459080692422496,
+        "apexToExit": 2.355656233092212,
+        "exitTo20m": 0.8887084247771639,
+        "exitRegain99": null,
+        "exitRegain90": null
+      },
+      {
+        "bend": 4,
+        "priorStraightMax": 84.32658359999999,
+        "entry": 81.50245829690722,
+        "minimum": 72.9694116,
+        "apex": 78.2521541912147,
+        "exit": 89.22897984103926,
+        "entryToApex": 2.689575517854582,
+        "apexToExit": 2.327422005219315,
+        "exitTo20m": 0.8071771150076472,
+        "exitRegain99": null,
+        "exitRegain90": null
+      },
+      {
+        "bend": 5,
+        "priorStraightMax": 94.9544712,
+        "entry": 90.1022004,
+        "minimum": 77.5933812,
+        "apex": 79.74099458778483,
+        "exit": 86.40790839816309,
+        "entryToApex": 2.5399013309977008,
+        "apexToExit": 2.282076338347906,
+        "exitTo20m": 0.8189037514946946,
+        "exitRegain99": null,
+        "exitRegain90": null
+      },
+      {
+        "bend": 6,
+        "priorStraightMax": 92.4567084,
+        "entry": 86.50513875865684,
+        "minimum": 77.47052400000001,
+        "apex": 78.0857720589885,
+        "exit": 90.30428602911887,
+        "entryToApex": 2.487604765688488,
+        "apexToExit": 2.2772874770716527,
+        "exitTo20m": 0.7918419121891063,
+        "exitRegain99": null,
+        "exitRegain90": null
+      }
+    ],
+    "vmax": 94.9544712,
+    "v075": 16.0510734,
+    "speed70Seconds": 3.31,
+    "minFront": 43.21455627205569,
+    "maxAx": 11.29777065831683,
+    "heightMin": 0.48333333429194275,
+    "riderDropCm": -13.99999980529169,
+    "driveShares": [
+      0.0010557432431709045,
+      0.9398226351392585,
+      0.05912162161757065
+    ],
+    "rearUtilization": 0.9931995157189555,
+    "maxImpulseNs": 0.0007569895506606727,
+    "maxYawImpulseNms": 1.2095546559232062e-05,
+    "maxEnergyJ": 0.016845354847284,
+    "sumEnergyJ": -0.3462917014797267,
+    "maxCrankResidualJ": 7.759126674500294e-12,
+    "maxNormalResidualN": 0.0,
+    "patchReasons": {
+      "no-legal-time-gain": 28,
+      "adopted": 5
+    },
+    "driverPath": 1048.063633690821,
+    "maxAbsBetaDegrees": 14.064396715949703,
+    "maxAbsYaw": 1.4499685764312744,
+    "wheelspinMin": -1.6693879064815293,
+    "wheelspinMax": 1069.8144678928115,
+    "rearFx": [
+      -89.24084881367,
+      1741.0863400043072
+    ],
+    "rearFy": [
+      -254.27673800263716,
+      1249.6786288053427
+    ],
+    "maxInternalResidual": 1.9985138911271516e-05,
+    "maxAppliedResidual": 1.999854422141123e-05,
+    "maxForceRounding": 9.725993155113946e-05,
+    "maxMomentRounding": 0.006385407928519271,
+    "maxWheelImpulseResidual": 2.919886554764162e-14,
+    "maxRearForceProjectionMismatch": 0.0,
+    "maxAppliedClutchResidual": 1.9534675352872455e-05,
+    "maxPreRoundingClutchResidual": 9.913549092743779e-09,
+    "solveQueries": 49982,
+    "nativeResidualForceWallMs": 116.7046,
+    "nativeLoadSolveWallMs": 124.6078,
+    "matchedDivergence": {
+      "first": {
+        "transform-float": {
+          "time": 0.34,
+          "positionDeltaMeters": 1.862645149230957e-09,
+          "reference": 0.03071514517068863,
+          "originalCommand": {
+            "SteeringRadians": 0.001407277,
+            "Drive": 1
+          },
+          "newCommand": {
+            "SteeringRadians": 0.001407277,
+            "Drive": 1
+          }
+        },
+        "force-0.001N": {
+          "time": 3.2600000000000002,
+          "positionDeltaMeters": 3.932099938981686e-06,
+          "reference": 30.200851440429688,
+          "originalCommand": {
+            "SteeringRadians": 0.02652807,
+            "Drive": 0.9354314
+          },
+          "newCommand": {
+            "SteeringRadians": 0.02652807,
+            "Drive": 0.9354314
+          }
+        }
+      },
+      "maxMatchedPositionDeltaMeters": 0.00057220458984375
+    }
+  }
+}

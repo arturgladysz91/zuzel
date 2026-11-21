@@ -194,6 +194,17 @@ public static class FreeLearningExperiment
     public static bool SteeringStepIsPhysical(TwoContactForces force,float seconds){
         // Reproduce the ORIGINAL float actuator, rather than divide two rounded angles by a microsecond.
         var p=TwoContactBikeParameters.Default;
+        if (force.SteeringTargetBeforeRounding is double preciseTarget)
+        {
+            double before=force.SteeringBefore;
+            double reach=(double)p.SteeringRateRadiansPerSecond*seconds;
+            if (!double.IsFinite(preciseTarget)||Math.Abs(preciseTarget)>p.MaximumSteeringRadians||
+                !double.IsFinite(before)||Math.Abs(before)>p.MaximumSteeringRadians||!double.IsFinite(reach)||reach<0)
+                return false;
+            double after=before+Math.Clamp(preciseTarget-before,-reach,reach);
+            return force.SteeringRequest==(float)preciseTarget&&force.SteeringAfter==(float)after&&
+                force.SteeringUsed==(float)((before+after)/2)&&Math.Abs(force.SteeringAfter)<=p.MaximumSteeringRadians;
+        }
         var target=Math.Clamp(force.SteeringRequest,-p.MaximumSteeringRadians,p.MaximumSteeringRadians);
         var expected=force.SteeringBefore+Math.Clamp(target-force.SteeringBefore,-p.SteeringRateRadiansPerSecond*seconds,p.SteeringRateRadiansPerSecond*seconds);
         return force.SteeringAfter==expected&&Math.Abs(force.SteeringAfter)<=p.MaximumSteeringRadians;
