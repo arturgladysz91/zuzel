@@ -11,6 +11,8 @@ internal sealed record HandlingSettings(double GripScale = 1.25, double YawRespo
 {
     [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
     public H26Configuration? H26 {get;init;}
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
+    public RiderPostureH27? PostureH27 { get; init; }
 }
 
 internal sealed record LeanSample(double Seconds, double RequestRadians, double ActualRadians);
@@ -19,6 +21,7 @@ internal sealed record LoadStepH26(double Seconds,double Acceleration,double Res
 internal sealed record HandlingStep(TwoContactForces Forces, double LeanAfter, double LeanRequest)
 {
     public LoadStepH26? LoadH26 {get;init;}
+    public PostureStepH27? PostureH27 { get; init; }
 }
 
 /// <summary>Gameplay surrogate. Roll changes lateral compliance; yaw comes from the two contact arms.</summary>
@@ -29,6 +32,8 @@ internal sealed class HandlingRig(HandlingSettings settings)
     public List<LoadStepH26> LoadSamples {get;}=[];
     public List<LeanSample> LeanSamples { get; } = [new(0, 0, 0)];
     internal double Lean { get; private set; }
+    internal double RiderHeightOffsetMeters { get; private set; }
+    public List<TimedPostureH27> PostureSamples { get; } = [];
     private HandlingStep? prepared;
 
     internal TwoContactForces Prepare(RiderView body, RiderSpec rider, TrackFrame frame, TrackStateSnapshot surface,
@@ -39,7 +44,7 @@ internal sealed class HandlingRig(HandlingSettings settings)
         var usable = LaneModel.UsableRacingWidthMeters(frame.Track.Segments[road.Segment].Type, frame.Track.Geometry);
         var grip = surface.SampleSurface(road.Segment, Math.Clamp((float)(road.OffsetMeters / usable) * 4, 0, 4));
         prepared = HandlingContact.Prepare(settings, grip, body, rider, parameters, time, mass, inertia,
-            wheel, steering.SteeringRadians, Lean, dt, request, shaft, release);
+            wheel, steering.SteeringRadians, Lean, dt, request, shaft, release, RiderHeightOffsetMeters);
         return prepared.Forces;
     }
 
@@ -47,6 +52,11 @@ internal sealed class HandlingRig(HandlingSettings settings)
     {
         var step = prepared ?? throw new InvalidOperationException("Handling step was not prepared.");
         if(step.LoadH26 is {} loads)LoadSamples.Add(loads with {Seconds=seconds});
+        if (step.PostureH27 is { } posture)
+        {
+            RiderHeightOffsetMeters = posture.RiderHeightOffsetAfterMeters;
+            PostureSamples.Add(new(seconds, posture));
+        }
         Lean = step.LeanAfter;
         LeanSamples.Add(new(seconds, step.LeanRequest, Lean));
     }
@@ -65,23 +75,29 @@ internal static class HandlingContact
 
     internal static HandlingStep Prepare(HandlingSettings settings, TrackSurfaceState surface, RiderView body, RiderSpec rider,
         WorldParameters parameters, double time, float mass, float inertia, RearWheelState wheel,
-        float steering, double lean, float dt, float request, CrankClutch144 shaft, double release)
+        float steering, double lean, float dt, float request, CrankClutch144 shaft, double release,
+        double riderHeightOffsetMeters = 0)
     {
         if(settings.H26 is {} explicitH26){
             explicitH26.Validate();
             if(explicitH26.EngineLoss!=shaft.LossH26)
                 throw new InvalidOperationException("H26 contact/powertrain configuration mismatch.");
         }
+        if (settings.PostureH27 is not null && settings.H26 is not { DynamicLoads: true })
+            throw new InvalidOperationException("H27-P requires the explicit H26 dynamic-load branch.");
         if(settings.H26 is not {DynamicLoads:true} h26)
             return AtLoads(settings,surface,body,rider,parameters,time,mass,inertia,wheel,steering,lean,dt,request,shaft,release,null);
         h26.Validate();
+        var posture = settings.PostureH27?.Prepare(mass, rider.Profile.Gameplay.Physical.MassKg,
+            h26.ComHeightMeters, riderHeightOffsetMeters, body.Drive, dt);
+        double height = posture?.CombinedMidpointHeightMeters ?? h26.ComHeightMeters;
         var bike=parameters.TwoContactBike??TwoContactBikeParameters.Default;
         var original=LoadBasedTyreGrip.Budget(mass,surface,bike,parameters.LoadBasedTyres);
         double normal=mass*LoadBasedTyreGrip.GravityMetersPerSecondSquared;
         var forward=new Vector2(MathF.Cos(body.Heading),MathF.Sin(body.Heading));
         int iterations=0;
         (double Residual,HandlingStep Step) At(double ax){
-            var split=DynamicAxleLoad.AtAcceleration(ax,bike,h26.ComHeightMeters);
+            var split=DynamicAxleLoad.AtAcceleration(ax,bike,height);
             double rear=normal*split.RearFraction;
             if(!split.WithinAssumptions || rear<=0 || rear>=normal)
                 throw new InvalidOperationException("H26 wheel unloading: two-contact assumption invalid.");
@@ -91,8 +107,8 @@ internal static class HandlingContact
             return(ax-Vector2.Dot(step.Forces.NetForce,forward)/mass,step);
         }
         // Search stays inside the two-positive-contact domain. A root outside it is rejected, never clamped.
-        double lo=-LoadBasedTyreGrip.GravityMetersPerSecondSquared*bike.FrontAxleFromComMeters/h26.ComHeightMeters+ContactDomainAccelerationReserveMetersPerSecondSquared;
-        double hi= LoadBasedTyreGrip.GravityMetersPerSecondSquared*bike.RearAxleFromComMeters/h26.ComHeightMeters-ContactDomainAccelerationReserveMetersPerSecondSquared;
+        double lo=-LoadBasedTyreGrip.GravityMetersPerSecondSquared*bike.FrontAxleFromComMeters/height+ContactDomainAccelerationReserveMetersPerSecondSquared;
+        double hi= LoadBasedTyreGrip.GravityMetersPerSecondSquared*bike.RearAxleFromComMeters/height-ContactDomainAccelerationReserveMetersPerSecondSquared;
         var zero=At(0);
         double ax=0;
         var point=zero;
@@ -114,12 +130,14 @@ internal static class HandlingContact
         // At(ax) last prepared the matching shaft/wheel state; only the accepted native step commits it.
         var accepted=point.Step;
         var final=accepted.Forces.TyreLoads!;
-        return accepted with {LoadH26=new(time,ax,point.Residual,iterations,final.FrontNormalNewtons,final.RearNormalNewtons)};
+        return accepted with {LoadH26=new(time,ax,point.Residual,iterations,final.FrontNormalNewtons,final.RearNormalNewtons),
+            PostureH27 = posture};
     }
 
-    private static HandlingStep AtLoads(HandlingSettings settings, TrackSurfaceState surface, RiderView body, RiderSpec rider,
+    internal static HandlingStep AtLoads(HandlingSettings settings, TrackSurfaceState surface, RiderView body, RiderSpec rider,
         WorldParameters parameters, double time, float mass, float inertia, RearWheelState wheel,
-        float steering, double lean, float dt, float request, CrankClutch144 shaft, double release,LoadBasedTyreBudget? supplied)
+        float steering, double lean, float dt, float request, CrankClutch144 shaft, double release,
+        LoadBasedTyreBudget? supplied, bool probeCombinedSlip = false)
     {
         var bike = parameters.TwoContactBike ?? TwoContactBikeParameters.Default;
         var baseLoads = supplied ?? LoadBasedTyreGrip.Budget(mass, surface, bike, parameters.LoadBasedTyres);
@@ -183,6 +201,12 @@ internal static class HandlingContact
         var command = shaft.Prepare(body.Drive * (1 - body.Impairment), ratio, engine.Efficiency, dt,
             time >= release - 1e-10, torque =>
             {
+                // A frozen-state diagnostic keeps the already prepared front control and changes
+                // only the rear law. The predictor and native caller retain lateral-first.
+                if (probeCombinedSlip)
+                    return RearWheelDynamics.Evaluate(rearForward, rearSide, wheel.AngularVelocityRadPerSecond,
+                        budget, mass, rearScale * rearScale, torque, Math.Abs(torque), torque, external, dt,
+                        wheel.Parameters, rearBudgetNewtons: loads.RearCapacityNewtons);
                 var result = RearWheelDynamics.Evaluate(rearForward, 0, wheel.AngularVelocityRadPerSecond, budget, mass,
                     rearScale * rearScale, torque, Math.Abs(torque), torque, external, dt, material,
                     rearBudgetNewtons: loads.RearCapacityNewtons * share);
@@ -191,6 +215,8 @@ internal static class HandlingContact
                 return result with { RearLateralNewtons = rearFy, RearUtilization = use };
             },wheel.Parameters);
         var rear = shaft.Prepared.Wheel;
+        if (probeCombinedSlip)
+            rearFy = rear.RearLateralNewtons;
         var rearForce = rear.LongitudinalNewtons * forward + rearFy * left;
         var forces = new TwoContactForces(frontPoint, rearPoint, frontArm, rearArm, frontVelocity, rearVelocity,
             frontForce, rearForce, resistance, forward, frontLeft, left, frontFy, rearFy, rear.LongitudinalNewtons,
@@ -199,7 +225,7 @@ internal static class HandlingContact
         return new(forces, leanAfter, leanRequest);
     }
 
-    private static double Scale(double forward, double slipRatio, double budgetAcceleration) =>
+    internal static double Scale(double forward, double slipRatio, double budgetAcceleration) =>
         Math.Sqrt(slipRatio * slipRatio * (forward * forward + .25) +
             Math.Pow(budgetAcceleration * LateralRelaxationSeconds, 2));
 
@@ -220,3 +246,47 @@ internal static class HandlingContact
         return (float)steer;
     }
 }
+
+/// <summary>Quasi-static vertical rider motion for the flat contact diagnostic.</summary>
+internal sealed record RiderPostureH27(double BikeHeightMeters = .45, double RiderTravelMeters = .14,
+    double RiderSpeedMetersPerSecond = .50, double ResponseSeconds = .15)
+{
+    internal PostureStepH27 Prepare(double massKg, double riderKg, double neutralHeightMeters,
+        double initialOffsetMeters, double activeDrive, double seconds)
+    {
+        if (!double.IsFinite(BikeHeightMeters) || BikeHeightMeters <= 0 ||
+            !double.IsFinite(RiderTravelMeters) || RiderTravelMeters < 0 ||
+            !double.IsFinite(RiderSpeedMetersPerSecond) || RiderSpeedMetersPerSecond <= 0 ||
+            !double.IsFinite(ResponseSeconds) || ResponseSeconds <= 0 ||
+            !double.IsFinite(massKg) || !double.IsFinite(riderKg) || riderKg <= 0 || massKg <= riderKg ||
+            !double.IsFinite(initialOffsetMeters) || initialOffsetMeters < -RiderTravelMeters - 1e-12 ||
+            initialOffsetMeters > 1e-12 || !double.IsFinite(activeDrive) || activeDrive is < 0 or > 1 ||
+            !double.IsFinite(seconds) || seconds < 0)
+            throw new ArgumentException("Finite bounded H27-P posture state required.");
+
+        double bikeKg = massKg - riderKg;
+        double riderNeutral = (massKg * neutralHeightMeters - bikeKg * BikeHeightMeters) / riderKg;
+        if (riderNeutral <= RiderTravelMeters)
+            throw new ArgumentException("Candidate rider COM must stay above ground.");
+        double target = -RiderTravelMeters * activeDrive;
+        double distance = Math.Abs(target - initialOffsetMeters);
+        double linearSeconds = Math.Max(0, distance / RiderSpeedMetersPerSecond - ResponseSeconds);
+        double At(double t)
+        {
+            double linear = Math.Min(t, linearSeconds);
+            double remaining = (distance - RiderSpeedMetersPerSecond * linear) *
+                Math.Exp(-(t - linear) / ResponseSeconds);
+            return target - Math.CopySign(remaining, target - initialOffsetMeters);
+        }
+        double middle = At(seconds / 2);
+        double after = At(seconds);
+        return new(bikeKg, riderKg, riderNeutral, riderNeutral + target, riderNeutral + middle,
+            riderNeutral + after, after, (bikeKg * BikeHeightMeters + riderKg * (riderNeutral + middle)) / massKg);
+    }
+}
+
+internal sealed record PostureStepH27(double BikeKg, double RiderKg, double RiderNeutralHeightMeters,
+    double RiderTargetHeightMeters, double RiderMidpointHeightMeters, double RiderHeightAfterMeters,
+    double RiderHeightOffsetAfterMeters, double CombinedMidpointHeightMeters);
+
+internal sealed record TimedPostureH27(double Seconds, PostureStepH27 Posture);

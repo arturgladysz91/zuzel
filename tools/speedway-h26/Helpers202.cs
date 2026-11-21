@@ -5,7 +5,11 @@ using SharedWorldSpeedway;
 using WholeCorner171;
 namespace SpeedwayHandling;
 
-internal sealed record Start197(HandlingForecast State,FreeRacingAction Active,FreeRacingCommand[] Pending,double Review);
+internal sealed record Start197(HandlingForecast State,FreeRacingAction Active,FreeRacingCommand[] Pending,double Review)
+{
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+    public double RiderHeightOffsetMeters { get; init; }
+}
 internal readonly record struct Edit197(int Center,int Radius,double Steer,double Gas)
 {
     internal static FreeRacingAction[] Apply(FreeRacingAction[] current,Edit197[] edits)
@@ -64,8 +68,9 @@ internal static partial class Study191
         var (gates,specs)=Grid194("solo-wide");
         var spec=specs[0];
         if(arm=="C-gear")spec=Spec193(gates[0],1,8.4);
-        if(arm=="C-alt"){
-            spec=spec with {OffsetMeters=spec.OffsetMeters-.12f,TargetOffsetMeters=spec.TargetOffsetMeters-.12f};
+        float offset = arm switch { "C-alt" => -.12f, "C-hold-minus" => -.02f, "C-hold-plus" => .02f, _ => 0 };
+        if(offset != 0){
+            spec=spec with {OffsetMeters=spec.OffsetMeters+offset,TargetOffsetMeters=spec.TargetOffsetMeters+offset};
             var where=Frame.At(spec.ReferenceMeters,spec.OffsetMeters);
             var rider=root.Start.State.Rider with {Position=where.Position,Road=Frame.Project(where.Position),
                 Heading=(float)where.Road.Heading,TargetOffsetMeters=(float)spec.TargetOffsetMeters};

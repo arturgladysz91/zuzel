@@ -23,7 +23,8 @@ internal static class Entry202
 internal static partial class Study191
 {
     private static HandlingSettings Settings202(string variant)=>Handling with {
-        H26=variant=="H25"?null:H26Configuration.For(variant)};
+        H26=variant=="H25"?null:H26Configuration.For(variant=="H27-P"?"H26-LE":variant),
+        PostureH27 = variant == "H27-P" ? new() : null };
     internal static void StadiumEntry202(string config,string output)=>Stadium202(config,output);
     internal static void Run202(string[] args)
     {
@@ -31,6 +32,14 @@ internal static partial class Study191
         researchRepository202=Directory.Exists(Path.Combine(workspace,"tools/speedway-h26"))?workspace:Path.Combine(workspace,"work/zuzel");
         Directory.CreateDirectory(output);
         switch(mode){
+            case "audit-203": Audit203(workspace,output);break;
+            case "posture-check-203": CheckPosture203(workspace,output);break;
+            case "native-check-203": CheckNative203(args[3],output);break;
+            case "holdout-solver-203": CheckHoldoutSolver203(args[3],args[4],output);break;
+            case "native-203-same": SameNative203(workspace,output,args[3],args[4]);break;
+            case "native-203-learned":
+                RequireLedger203(args[3]+"-learned-"+args[5]);
+                NativeLearned202(workspace,output,args[3],args[4],args[5]);break;
             case "properties": Properties202(workspace,output);break;
             case "scenarios": Scenarios202(workspace,output);break;
             case "same-native": SameNative202(workspace,output,args[3]);break;
@@ -145,16 +154,20 @@ internal static partial class Study191
         JsonSerializer.Serialize(marker,new{Arm=arm,Executable=Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(typeof(Entry202).Assembly.Location)))},Json);
     }
 
-    private static void SameNative202(string workspace,string output,string variant)
+    private static void SameNative202(string workspace,string output,string variant, string? archive = null, string? label = null)
     {
         var settings=Settings202(variant);
-        var source=Read199<Archive198>(Path.Combine(workspace,"outputs/badanie200/C-native.json.gz"));
+        if (variant == "H27-P") RequireLedger203(label ?? "H27-P-same");
+        var source=Read199<Archive198>(archive ?? Path.Combine(workspace,"outputs/badanie200/C-native.json.gz"));
         var driver=source.Run.Riders.Single();
         var rig=new HandlingRig(settings);
         int command=0;
-        Reserve202(output,variant+"-same");
+        string name = label ?? variant+"-same";
+        if (label is null && variant != "H27-P") Reserve202(output,name);
         using var world=new TrafficWorld191(source.Run.Options,Frame,[driver.Spec],[rig],Timing,[driver.Gate]);
-        var run=world.Run("202-"+variant+"-same","K1",(input,shaft,spec,snapshot)=>{
+        var run=world.Run(label is null ? "202-"+name : name,"K1",(input,shaft,spec,snapshot)=>{
+            if (command == driver.Decisions.Length)
+                throw new InvalidOperationException("Archived command stream exhausted.");
             var original=driver.Decisions[command++];
             if(Math.Abs(original.Choice.Time-input.Time)>1e-8)throw new InvalidOperationException("Command clock mismatch.");
             return new(original.Choice,0);
@@ -165,9 +178,9 @@ internal static partial class Study191
             run.Outcome,r.FinishSeconds,run.EndSeconds,run.TotalCpuSeconds,r.CompletedLaps,run.NativeSteps,
             Contacts=run.Contacts.Length,MinSweep=r.Samples.Where(s=>s.Certificate.HasValue).Min(s=>s.Certificate),
             EndReference=r.Samples[^1].Input.Rider.TotalReferenceMeters,run.Fingerprint};
-        Save(Path.Combine(output,variant+"-same.json.gz"),new{Run=run,Result=result,Timing,Handling=settings,
-            Lean=new[]{rig.LeanSamples},Loads=new[]{rig.LoadSamples}},true);
-        Save(Path.Combine(output,variant+"-same.result.json"),result);
+        Save(Path.Combine(output,name+".json.gz"),new{Run=run,Result=result,Timing,Handling=settings,
+            Lean=new[]{rig.LeanSamples},Loads=new[]{rig.LoadSamples},Posture=rig.PostureSamples},true);
+        Save(Path.Combine(output,name+".result.json"),result);
         Console.WriteLine(JsonSerializer.Serialize(result,Json));
     }
 

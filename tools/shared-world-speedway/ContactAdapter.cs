@@ -31,7 +31,7 @@ public sealed class ContactAdapter : IDisposable
         twoContactsEnabled=p.EnableTwoContactBikeDynamics;
         var wd = b2DefaultWorldDef(); wd.gravity = new(0, 0); wd.enableSleep = false;
         wd.hitEventThreshold = .01f; // event observation only; restitution remains zero
-        World = b2CreateWorld(wd);
+        World = Box2DConstructionBudget.Create(wd, nameof(ContactAdapter));
         Bodies = new B2BodyId[specs.Count]; Masses = new float[specs.Count]; Inertias = new float[specs.Count];
         impulses = new double[specs.Count, specs.Count]; closingSpeeds = new double[specs.Count, specs.Count]; active = new bool[specs.Count, specs.Count];
         interacting = new bool[specs.Count, specs.Count];

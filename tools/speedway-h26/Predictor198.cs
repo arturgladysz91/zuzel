@@ -9,6 +9,8 @@ using SharedWorldSpeedway;
 namespace SpeedwayHandling;
 
 internal sealed record Profile198(long Steps,long ForceTicks,long IntegrateTicks,long GeometryTicks,long GateTicks,long ClockTicks);
+internal sealed record ContactFailure203(HandlingForecast State, FreeRacingAction Action,
+    double RiderHeightOffsetMeters, float Dt, string Error);
 
 internal sealed class Predictor198(TrackFrame frame,TrackStateSnapshot surface,WorldParameters physics,
     HandlingSettings handling,Schedule188 timing,RiderSpec spec,float mass,float inertia)
@@ -38,6 +40,7 @@ internal sealed class Predictor198(TrackFrame frame,TrackStateSnapshot surface,W
         private readonly CrankClutch144 shaft;
         private RearWheelState wheel;
         private HandlingForecast state;
+        private double riderHeightOffsetMeters;
         private FreeRacingAction active;
         private double nextReview;
         private int index;
@@ -62,6 +65,7 @@ internal sealed class Predictor198(TrackFrame frame,TrackStateSnapshot surface,W
             nextReview=start.Review;
             index=from;
             state=start.State;
+            riderHeightOffsetMeters = start.RiderHeightOffsetMeters;
             shaft=new(LaunchParameters144.Default,state.Shaft,model.Handling.H26?.EngineLoss);
             wheel=ForecastFork148.Wheel(state.Wheel,model.Physics.RearWheel);
             var first=model.boundary.Clearance(state.Rider);
@@ -69,6 +73,7 @@ internal sealed class Predictor198(TrackFrame frame,TrackStateSnapshot surface,W
         }
 
         internal string? Outcome { get; private set; }
+        internal ContactFailure203? ContactFailure { get; private set; }
         internal int Steps { get; private set; }
         internal bool Reached=>Outcome=="goal";
         internal double GoalTime { get; private set; }
@@ -91,7 +96,8 @@ internal sealed class Predictor198(TrackFrame frame,TrackStateSnapshot surface,W
         internal Start197 Checkpoint()
         {
             ApplyDue();
-            return new(state with {Rider=state.Rider with {Drive=active.Drive}},active,pending.ToArray(),nextReview);
+            return new(state with {Rider=state.Rider with {Drive=active.Drive}},active,pending.ToArray(),nextReview)
+                { RiderHeightOffsetMeters = riderHeightOffsetMeters };
         }
 
         internal void Advance(int stepBudget,double timeLimit=double.PositiveInfinity)
@@ -139,8 +145,18 @@ internal sealed class Predictor198(TrackFrame frame,TrackStateSnapshot surface,W
             if(profile) clockTicks+=Mark()-start;
 
             start=Mark();
-            var contact=HandlingContact.Prepare(model.Handling,model.grip,before,model.Spec,model.Physics,t,
-                model.Mass,model.Inertia,wheel,state.Steer,state.Lean,(float)dt,active.SteeringRadians,shaft,model.riderReaction);
+            HandlingStep contact;
+            try
+            {
+                contact=HandlingContact.Prepare(model.Handling,model.grip,before,model.Spec,model.Physics,t,
+                    model.Mass,model.Inertia,wheel,state.Steer,state.Lean,(float)dt,active.SteeringRadians,shaft,model.riderReaction,
+                    riderHeightOffsetMeters);
+            }
+            catch (InvalidOperationException failure)
+            {
+                ContactFailure = new(state, active, riderHeightOffsetMeters, (float)dt, failure.Message);
+                throw;
+            }
             var power=shaft.Prepared;
             var forces=contact.Forces;
             if(profile) forceTicks+=Mark()-start;
@@ -158,6 +174,7 @@ internal sealed class Predictor198(TrackFrame frame,TrackStateSnapshot surface,W
                 DistanceMeters=before.DistanceMeters+Vector2.Distance(before.Position,pos),Context=model.Frame.Context(road,s)};
             wheel=ForecastFork148.Wheel(power.Wheel.AfterOmega,wheel.Parameters);
             shaft.Commit();
+            riderHeightOffsetMeters = contact.PostureH27?.RiderHeightOffsetAfterMeters ?? 0;
             state=new(v,limit,wheel.AngularVelocityRadPerSecond,forces.SteeringAfter,contact.LeanAfter,shaft.Omega);
             if(profile) integrateTicks+=Mark()-start;
 
