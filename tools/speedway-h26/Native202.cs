@@ -18,7 +18,7 @@ internal static partial class Study191
         var model=new Predictor198(Frame,Surface,Physics,settings,Timing,spec,Mass,Inertia);
         var certificate=model.Begin(seed.Start,controls,0,seed.Goal,.502,constraint:corridor.Check);
         certificate.Advance(10000);
-        bool holdout = variant == "H27-N" || fixture is "C-hold-minus" or "C-hold-plus";
+        bool holdout = variant is "H27-N" or "H28-C" || fixture is "C-hold-minus" or "C-hold-plus";
         if(!certificate.Reached || !holdout && Math.Abs(certificate.GoalTime-learned.Finish)>1e-6)
         {
             if (holdout)
@@ -31,7 +31,7 @@ internal static partial class Study191
         }
         var agent=new Receding198(model,new(.002,.012,.02,.08,.012),seed,controls,certificate.GoalTime,style:corridor.Check);
         string arm=variant+"-learned-"+fixture;
-        if (variant is "H27-P" or "H27-N") RequireLedger203(arm);
+        if (variant is "H27-P" or "H27-N" or "H28-C") RequireLedger203(arm);
         else if (Environment.GetEnvironmentVariable(Box2DConstructionBudget.LedgerVariable) is not { Length: > 0 })
             Reserve202(output,arm);
         var rig=new HandlingRig(settings);

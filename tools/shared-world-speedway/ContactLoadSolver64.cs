@@ -10,10 +10,13 @@ public enum ContactRootStatus
     InvalidPhysicalState
 }
 
-public sealed class ContactRootException(ContactRootStatus status, string detail)
-    : InvalidOperationException($"H27-N {status}: {detail}")
+public sealed class ContactRootException(ContactRootStatus status, string detail, string variant)
+    : InvalidOperationException($"{variant} {status}: {detail}")
 {
+    public ContactRootException(ContactRootStatus status, string detail) : this(status, detail, "H27-N") { }
+
     public ContactRootStatus Status { get; } = status;
+    public string Detail { get; } = detail;
 }
 
 public readonly record struct ContactResidual64<T>(double Ax, double Residual, T Value);
@@ -23,6 +26,61 @@ public static class ContactLoadSolver64
     public const int IterationLimit = 48;
     private const int InterpolationIterations = 12;
     public const int VerificationIntervals = 4;
+
+    // Bounds are supplied by the specific constitutive law. An unresolved box
+    // prevents acceptance, including when another box exhibited a valid root.
+    public static ContactResidual64<T> SolveCertified<T>(double lo,double hi,double tolerance,
+        Func<double,ContactResidual64<T>> at,
+        Func<double,double,ContactResidual64<T>,ContactSlope64> enclose,bool bisect=false)
+    {
+        if (!double.IsFinite(lo)||!double.IsFinite(hi)||lo>=hi||!double.IsFinite(tolerance)||tolerance<=0)
+            throw new ContactRootException(ContactRootStatus.InvalidPhysicalState,"invalid certified contact domain");
+        var first=at(lo);
+        var last=at(hi);
+        var stack=new Stack<(ContactResidual64<T> Low,ContactResidual64<T> High)>();
+        stack.Push((first,last));
+        (ContactResidual64<T> Low,ContactResidual64<T> High)? bracket=null;
+        const int boxBudget=512;
+        for (int i=0;i<boxBudget&&stack.TryPop(out var box);i++)
+        {
+            double a=box.Low.Ax,b=box.High.Ax;
+            var mid=at(a+(b-a)/2);
+            var enclosure=enclose(a,b,mid);
+            if (!double.IsFinite(mid.Residual))
+                throw new ContactRootException(ContactRootStatus.InvalidPhysicalState,"nonfinite certified residual");
+            if (enclosure.Value.ExcludesZero) continue;
+            if (enclosure.Slope.ExcludesZero)
+            {
+                int sa=Math.Sign(box.Low.Residual),sb=Math.Sign(box.High.Residual);
+                if (sa==sb&&sa!=0) continue;
+                var candidate=sa==0?(box.Low,box.Low):sb==0?(box.High,box.High):(box.Low,box.High);
+                if (bracket is { } known&&
+                    (known.Low.Ax!=candidate.Item1.Ax||known.High.Ax!=candidate.Item2.Ax))
+                    throw new ContactRootException(ContactRootStatus.AmbiguousOrMultipleRoots,"distinct isolated contact roots");
+                bracket=candidate;
+                continue;
+            }
+            if (b-a<=1e-9)
+                throw new ContactRootException(ContactRootStatus.AmbiguousOrMultipleRoots,
+                    $"cannot isolate root in [{a:R},{b:R}]");
+            stack.Push((mid,box.High));
+            stack.Push((box.Low,mid));
+        }
+        if (stack.Count!=0)
+            throw new ContactRootException(ContactRootStatus.AmbiguousOrMultipleRoots,"contact enclosure budget exhausted");
+        if (bracket is not { } root)
+            throw new ContactRootException(ContactRootStatus.NoPhysicallyAdmissibleRoot,
+                $"H28-C interval exclusion, endpoint residuals [{first.Residual:R},{last.Residual:R}]");
+        if(root.Low.Ax==root.High.Ax) return root.Low;
+        // Prefer the exact rest equilibrium over a nearby residual when a vehicle
+        // is held at rest. The enclosing interval has already proved uniqueness.
+        if(root.Low.Ax<0&&root.High.Ax>0)
+        {
+            var rest=at(0);
+            if(rest.Residual==0) return rest;
+        }
+        return Solve(root.Low.Ax,root.High.Ax,tolerance,at,_=>false,bisect);
+    }
 
     public static ContactResidual64<T> Solve<T>(double lo, double hi, double tolerance,
         Func<double, ContactResidual64<T>> evaluate, Func<int, bool> excludesRoots, bool bisect = false)

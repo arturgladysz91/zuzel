@@ -14,6 +14,10 @@ internal sealed record Profile198(long Steps,long ForceTicks,long IntegrateTicks
     public long ResidualForceTicks { get; init; }
     [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
     public long LoadSolverTicks { get; init; }
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+    public long CombinedPowerTicks { get; init; }
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+    public long CombinedProofTicks { get; init; }
 }
 internal sealed record ContactFailure203(HandlingForecast State, FreeRacingAction Action,
     double RiderHeightOffsetMeters, float Dt, string Error);
@@ -52,7 +56,7 @@ internal sealed class Predictor198(TrackFrame frame,TrackStateSnapshot surface,W
         private int index;
         private ClearancePair gap;
         private long forceTicks,integrateTicks,geometryTicks,gateTicks,clockTicks;
-        private long residualForceTicks,loadSolverTicks;
+        private long residualForceTicks,loadSolverTicks,combinedPowerTicks,combinedProofTicks;
 
         internal Cursor198(Predictor198 model,Start197 start,FreeRacingAction[] controls,int from,
             double goal,double margin,bool profile,Func<RiderView,double,string?>? constraint,double stepSeconds,
@@ -93,7 +97,11 @@ internal sealed class Predictor198(TrackFrame frame,TrackStateSnapshot surface,W
             state.Rider.Position.Y,state.Rider.Speed,state.Rider.Heading,state.Rider.AngularVelocity,state.Rider.SlideRadians,
             state.Wheel,state.Shaft,state.Steer,state.Lean,LastSweep,gap.Outer,gap.Inner,active);
         internal Profile198 Counters=>new(Steps,forceTicks,integrateTicks,geometryTicks,gateTicks,clockTicks)
-            {ResidualForceTicks=residualForceTicks,LoadSolverTicks=loadSolverTicks};
+            {ResidualForceTicks=residualForceTicks,LoadSolverTicks=loadSolverTicks,
+                CombinedPowerTicks=combinedPowerTicks,CombinedProofTicks=combinedProofTicks};
+        internal HandlingStep? LastContact { get; private set; }
+        internal RiderView LastContactInput { get; private set; }
+        internal ClutchStep144? LastPower { get; private set; }
 
         private void ApplyDue()
         {
@@ -169,11 +177,19 @@ internal sealed class Predictor198(TrackFrame frame,TrackStateSnapshot surface,W
             var forces=contact.Forces;
             if(profile)
             {
+                LastContact=contact;
+                LastContactInput=before;
+                LastPower=power;
                 forceTicks+=Mark()-start;
                 if (contact.LoadH26?.Precision is { } precision)
                 {
                     residualForceTicks+=precision.ForceTicks;
                     loadSolverTicks+=precision.SolverTicks;
+                    if(precision.Combined is {} combined)
+                    {
+                        combinedPowerTicks+=combined.PowerTicks;
+                        combinedProofTicks+=combined.ProofTicks;
+                    }
                 }
             }
 

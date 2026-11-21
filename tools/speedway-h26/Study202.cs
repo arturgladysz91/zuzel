@@ -23,9 +23,10 @@ internal static class Entry202
 internal static partial class Study191
 {
     private static HandlingSettings Settings202(string variant)=>Handling with {
-        H26=variant=="H25"?null:H26Configuration.For(variant is "H27-P" or "H27-N"?"H26-LE":variant),
-        PostureH27 = variant is "H27-P" or "H27-N" ? new() : null,
-        DoubleContactSolve = variant == "H27-N" };
+        H26=variant=="H25"?null:H26Configuration.For(variant is "H27-P" or "H27-N" or "H28-C"?"H26-LE":variant),
+        PostureH27 = variant is "H27-P" or "H27-N" or "H28-C" ? new() : null,
+        DoubleContactSolve = variant is "H27-N" or "H28-C",
+        CoupledRearTyre = variant=="H28-C" };
     internal static void StadiumEntry202(string config,string output)=>Stadium202(config,output);
     internal static void Run202(string[] args)
     {
@@ -33,6 +34,13 @@ internal static partial class Study191
         researchRepository202=Directory.Exists(Path.Combine(workspace,"tools/speedway-h26"))?workspace:Path.Combine(workspace,"work/zuzel");
         Directory.CreateDirectory(output);
         switch(mode){
+            case "preflight-205": Preflight205(workspace,output,args.Length>3?args[3]:null);break;
+            case "model-205": Audit205(workspace,output,args.Length>3&&args[3]=="focused");break;
+            case "certify-205": Certify205(workspace,output);break;
+            case "transients-205": Transients205(workspace,output);break;
+            case "equilibria-205": Equilibria205(workspace,output);break;
+            case "throttle-205": AuditThrottle204(workspace,output,args.Length>3?args[3]:null,combinedStudy:true);break;
+            case "native-205": Native205(workspace,output,args[3],args.Length>4?args[4]:null);break;
             case "model-204": Audit204(workspace,output);break;
             case "native-204": Native204(workspace,output,args[3]);break;
             case "throttle-204": AuditThrottle204(workspace,output,args.Length>3?args[3]:null);break;
@@ -161,13 +169,13 @@ internal static partial class Study191
     private static void SameNative202(string workspace,string output,string variant, string? archive = null, string? label = null)
     {
         var settings=Settings202(variant);
-        if (variant == "H27-P") RequireLedger203(label ?? "H27-P-same");
+        if (variant is "H27-P" or "H28-C") RequireLedger203(label ?? variant+"-same");
         var source=Read199<Archive198>(archive ?? Path.Combine(workspace,"outputs/badanie200/C-native.json.gz"));
         var driver=source.Run.Riders.Single();
         var rig=new HandlingRig(settings);
         int command=0;
         string name = label ?? variant+"-same";
-        if (label is null && variant != "H27-P") Reserve202(output,name);
+        if (label is null && variant is not ("H27-P" or "H28-C")) Reserve202(output,name);
         using var world=new TrafficWorld191(source.Run.Options,Frame,[driver.Spec],[rig],Timing,[driver.Gate]);
         var run=world.Run(label is null ? "202-"+name : name,"K1",(input,shaft,spec,snapshot)=>{
             if (command == driver.Decisions.Length)

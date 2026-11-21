@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Numerics;
 using SharedWorldSpeedway;
 
 namespace SpeedwayHandling;
@@ -6,11 +7,15 @@ namespace SpeedwayHandling;
 internal static partial class Study191
 {
     private sealed record ThrottleResult204(string? Outcome,double Sweep,HeadingSample198 End,Profile198 Profile,
-        double? TimeToGoal,ContactFailure203? ContactFailure);
-
-    private static void AuditThrottle204(string repository,string output,string? additionalNative)
+        double? TimeToGoal,ContactFailure203? ContactFailure)
     {
-        var paths=new List<string>{Path.Combine(repository,Source204,"native/H27-P-learned-C.json.gz")};
+        [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
+        public object? ContactDiagnostics { get; init; }
+    }
+
+    private static void AuditThrottle204(string repository,string output,string? additionalNative,bool combinedStudy=false)
+    {
+        var paths=new List<string>{Path.Combine(repository,combinedStudy?NativeSource205:Source204+"/native/H27-P-learned-C.json.gz")};
         if (additionalNative is not null) paths.Add(additionalNative);
         var rows=new List<object>();
         var phases=new List<object>();
@@ -21,7 +26,7 @@ internal static partial class Study191
             var run=archive.Run.Riders.Single();
             var actions=run.Decisions.Select(d=>d.Choice.Action).ToArray();
             var corridor=new Corridor199(Map199,double.PositiveInfinity);
-            foreach (string physics in new[] {"H27-P","H27-N"})
+            foreach (string physics in combinedStudy?Physics205:new[] {"H27-P","H27-N"})
             {
                 var predict=new Predictor198(Frame,Surface,Physics,Settings202(physics),Timing,run.Spec,Mass,Inertia);
                 var seen=new HashSet<(int,int)>();
@@ -43,7 +48,8 @@ internal static partial class Study191
                             constraint:withCorridor?corridor.Check:null);
                         cursor.Advance(10000,time);
                         return new(cursor.Outcome,cursor.Sweep,cursor.Snapshot,cursor.Counters,
-                            cursor.Reached?cursor.GoalTime-t:null,cursor.ContactFailure);
+                            cursor.Reached?cursor.GoalTime-t:null,cursor.ContactFailure)
+                            {ContactDiagnostics=combinedStudy?ThrottleContact205(cursor,physics):null};
                     }
                     foreach (var (horizon,reviews) in new[] {(.20,1),(.80,10),(1.50,24)})
                     {
@@ -82,5 +88,27 @@ internal static partial class Study191
         }
         Save(Path.Combine(output,"throttle-model.json.gz"),new {Trials=rows,Phases=phases,ElapsedSeconds=elapsed.Elapsed.TotalSeconds,
             Stopwatch.Frequency,NativeWorlds=0},true);
+    }
+
+    private static object? ThrottleContact205(Predictor198.Cursor198 cursor,string variant)
+    {
+        if(cursor.LastContact is not {} last||cursor.LastPower is not {} power) return null;
+        var before=cursor.LastContactInput;
+        var f=last.Forces;
+        var loads=f.TyreLoads!;
+        var forward=before.Speed>.01f?Vector2.Normalize(before.Velocity):f.BodyForward;
+        var lateral=new Vector2(-forward.Y,forward.X);
+        double lateralForce=Vector2.Dot(lateral,f.NetForce);
+        double demand=before.Road.IsTurn&&before.Road.RadiusMeters>0?
+            Mass*before.Speed*before.Speed/before.Road.RadiusMeters:0;
+        double desired=before.Speed>.01f?(f.Demand/before.Speed-before.AngularVelocity)*Inertia/
+            Settings202(variant).YawResponseSeconds:0;
+        double needed=Math.Abs(desired-f.RearTorque), available=f.FrontArm.Length()*loads.FrontCapacityNewtons;
+        return new {Fzf=loads.FrontNormalNewtons,Fzr=loads.RearNormalNewtons,Fx=power.Wheel.AppliedLongitudinalNewtons,
+            Fy=f.RearLateral,RearYaw=f.RearTorque,NetYaw=f.NetTorque,
+            NecessaryFrontYawDeficit=Math.Max(0,needed-available),ApproximateRoadLateralDemand=demand,
+            ActualLateralForce=lateralForce,power.Engine.EngineRpm,power.ClutchTorque,power.Engagement,
+            power.Wheel.InstantSlipRatio,RateLimited=f.SteeringRequest!=f.SteeringAfter,
+            before.Drive,after=cursor.Snapshot.S};
     }
 }

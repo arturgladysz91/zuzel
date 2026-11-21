@@ -1,0 +1,1323 @@
+{
+  "gridDifferences": {
+    "Fx": {
+      "minimum": -504.4960895240745,
+      "median": 1.527376696230931e-07,
+      "maximum": 503.28372175700474,
+      "positive": 6866,
+      "negative": 7487
+    },
+    "Fy": {
+      "minimum": -482.4776999999999,
+      "median": 1.5209779999999997e-05,
+      "maximum": 482.47979999999984,
+      "positive": 8126,
+      "negative": 7189
+    },
+    "RearMoment": {
+      "minimum": -289.48969999999986,
+      "median": -7.629399999999585e-06,
+      "maximum": 289.48575000000005,
+      "positive": 7189,
+      "negative": 7780
+    },
+    "NetMoment": {
+      "minimum": -289.48969999999997,
+      "median": -3.999999997006398e-06,
+      "maximum": 289.48573999999996,
+      "positive": 7207,
+      "negative": 7680
+    },
+    "YawDeficit": {
+      "minimum": -289.48968505859386,
+      "median": -2.16900634765625,
+      "maximum": 259.4503173828125,
+      "positive": 3558,
+      "negative": 11056
+    },
+    "aT": {
+      "minimum": -2.8480424880981445,
+      "median": 1.9311904907226562e-05,
+      "maximum": 3.8953635692596436,
+      "positive": 8178,
+      "negative": 5850
+    },
+    "aN": {
+      "minimum": -3.828036308288574,
+      "median": 1.0337680578231812e-07,
+      "maximum": 3.828054428100586,
+      "positive": 7176,
+      "negative": 7176
+    },
+    "BetaDot": {
+      "minimum": -0.11814448807313882,
+      "median": -3.721564639032511e-09,
+      "maximum": 0.12153332250006954,
+      "positive": 7097,
+      "negative": 7098
+    },
+    "YawDot": {
+      "minimum": -5.490978,
+      "median": -7.299999999973994e-08,
+      "maximum": 5.490902999999999,
+      "positive": 7176,
+      "negative": 7176
+    }
+  },
+  "gridStatuses": {
+    "H27-N Converged": 16200,
+    "H28-C Converged": 16200
+  },
+  "equilibriaBest": [
+    {
+      "variant": "H27-N",
+      "radius": 32,
+      "speedKph": 40,
+      "count": 5,
+      "best": {
+        "Variant": "H27-N",
+        "Radius": 32,
+        "SpeedKph": 40,
+        "Gas": 1,
+        "Status": "QuasiSteadyCandidate",
+        "ScaledNorm": 3.606654954984856e-07,
+        "Residual": [
+          1.81315857705755e-07,
+          -1.0132789611816406e-07,
+          8.565687319161963e-08,
+          2.4079976835622573e-07,
+          1.4702104778052671e-07
+        ],
+        "Heading": 1.5689937,
+        "Direction": 1.5696312183839933,
+        "Beta": -0.00063753076,
+        "Yaw": 0.3472222,
+        "Steer": 0.09301343,
+        "SteeringRequest": 0.043534677,
+        "Wheel": 46.20923405236796,
+        "Shaft": 371.9969338116886,
+        "EngineRpm": 3561.1018828631913,
+        "Kappa": 0.3720379776010658,
+        "Tangential": 5.538144111633301,
+        "Normal": 3.8580265045166016,
+        "NetYaw": 9.124207,
+        "FrontLateral": 270.19843,
+        "RearLongitudinal": 903.4673,
+        "RearLateral": 298.65958,
+        "TyreLoads": {
+          "EffectiveFrictionCoefficient": 1.605625033378601,
+          "FrontNormalNewtons": 330.54964179551484,
+          "RearNormalNewtons": 1111.5203582044853,
+          "FrontCapacityNewtons": 530.7387796412081,
+          "RearCapacityNewtons": 1784.6849122430713,
+          "TotalCapacityNewtons": 2315.4236918842794
+        },
+        "LongitudinalLossJoules": 37.478008079035504,
+        "Combined": null,
+        "Subsequent": {
+          "Outcome": null,
+          "End": {
+            "Time": 6.409999999999999,
+            "S": 85.73600187156677,
+            "X": 69.22953,
+            "Y": 33.618275,
+            "Speed": 12.244591,
+            "Heading": 1.6419674,
+            "Yaw": 0.38236156,
+            "Beta": 0.0018200217,
+            "Wheel": 50.767660886683544,
+            "Shaft": 408.3810327281081,
+            "Steer": 0.10134041,
+            "Lean": 0.37683102660895107,
+            "Sweep": 4.9291251985819455,
+            "Outer": 10.798746412771637,
+            "Inner": 4.99285555057389,
+            "Active": {
+              "SteeringRadians": 0.043534677,
+              "Drive": 1
+            }
+          },
+          "Sweep": 4.9291251985819455
+        }
+      }
+    },
+    {
+      "variant": "H27-N",
+      "radius": 32,
+      "speedKph": 60,
+      "count": 4,
+      "best": {
+        "Variant": "H27-N",
+        "Radius": 32,
+        "SpeedKph": 60,
+        "Gas": 0.75,
+        "Status": "QuasiSteadyCandidate",
+        "ScaledNorm": 4.7015973424510416e-06,
+        "Residual": [
+          -4.0266248930720393e-07,
+          4.679709672927857e-06,
+          1.655949607992646e-08,
+          -1.6221833927687613e-07,
+          -1.2887536942685075e-07
+        ],
+        "Heading": 1.597244,
+        "Direction": 1.5696312183839933,
+        "Beta": 0.027612805,
+        "Yaw": 0.5208333,
+        "Steer": 0.18504418,
+        "SteeringRequest": 0.041534733,
+        "Wheel": 62.471873647772455,
+        "Shaft": 501.5607738789076,
+        "EngineRpm": 4794.742731920202,
+        "Kappa": 0.23730802322021682,
+        "Tangential": 3.6256651878356934,
+        "Normal": 8.680551528930664,
+        "NetYaw": 5.9758606,
+        "FrontLateral": 595.47076,
+        "RearLongitudinal": 773.03705,
+        "RearLateral": 672.89764,
+        "TyreLoads": {
+          "EffectiveFrictionCoefficient": 1.605625033378601,
+          "FrontNormalNewtons": 431.7223842996565,
+          "RearNormalNewtons": 1010.3476157003437,
+          "FrontCapacityNewtons": 693.1842677014251,
+          "RearCapacityNewtons": 1622.2394241828542,
+          "TotalCapacityNewtons": 2315.4236918842794
+        },
+        "LongitudinalLossJoules": 30.600716402659494,
+        "Combined": null,
+        "Subsequent": {
+          "Outcome": null,
+          "End": {
+            "Time": 6.409999999999999,
+            "S": 86.69080334593497,
+            "X": 69.1329,
+            "Y": 34.684284,
+            "Speed": 17.385311,
+            "Heading": 1.7036844,
+            "Yaw": 0.5431895,
+            "Beta": 0.028814929,
+            "Wheel": 65.31309155021397,
+            "Shaft": 524.3131317929528,
+            "Steer": 0.20197162,
+            "Lean": 0.5672080825607324,
+            "Sweep": 4.857130608886538,
+            "Outer": 10.834404414043348,
+            "Inner": 4.9474089095294955,
+            "Active": {
+              "SteeringRadians": 0.041534733,
+              "Drive": 0.75
+            }
+          },
+          "Sweep": 4.857130608886538
+        }
+      }
+    },
+    {
+      "variant": "H27-N",
+      "radius": 38,
+      "speedKph": 40,
+      "count": 5,
+      "best": {
+        "Variant": "H27-N",
+        "Radius": 38,
+        "SpeedKph": 40,
+        "Gas": 1,
+        "Status": "QuasiSteadyCandidate",
+        "ScaledNorm": 1.9882976257366513e-07,
+        "Residual": [
+          7.990662971302243e-08,
+          1.4603137969970704e-07,
+          2.3814714325554043e-08,
+          -1.0608215688989731e-07,
+          -1.57369856879086e-09
+        ],
+        "Heading": 1.5690013,
+        "Direction": 1.5696312183839933,
+        "Beta": -0.00062990136,
+        "Yaw": 0.29239765,
+        "Steer": 0.076108836,
+        "SteeringRequest": 0.03670948,
+        "Wheel": 46.09531387879606,
+        "Shaft": 371.0900768496579,
+        "EngineRpm": 3552.485696596119,
+        "Kappa": 0.3686579618138228,
+        "Tangential": 5.579380035400391,
+        "Normal": 3.248863697052002,
+        "NetYaw": 7.7408752,
+        "FrontLateral": 227.29164,
+        "RearLongitudinal": 901.77606,
+        "RearLateral": 251.50653,
+        "TyreLoads": {
+          "EffectiveFrictionCoefficient": 1.605625033378601,
+          "FrontNormalNewtons": 328.0289970685901,
+          "RearNormalNewtons": 1114.04100293141,
+          "FrontCapacityNewtons": 526.691569367404,
+          "RearCapacityNewtons": 1788.7321225168755,
+          "TotalCapacityNewtons": 2315.4236918842794
+        },
+        "LongitudinalLossJoules": 37.06866296887517,
+        "Combined": null,
+        "Subsequent": {
+          "Outcome": null,
+          "End": {
+            "Time": 6.409999999999999,
+            "S": 85.73666560072678,
+            "X": 69.24282,
+            "Y": 33.619766,
+            "Speed": 12.2546425,
+            "Heading": 1.6304761,
+            "Yaw": 0.32220992,
+            "Beta": 0.0015408102,
+            "Wheel": 50.65049194469802,
+            "Shaft": 407.44354907563303,
+            "Steer": 0.08204004,
+            "Lean": 0.33466274977356597,
+            "Sweep": 4.950252511931707,
+            "Outer": 10.777969819954606,
+            "Inner": 5.013717326467973,
+            "Active": {
+              "SteeringRadians": 0.03670948,
+              "Drive": 1
+            }
+          },
+          "Sweep": 4.950252511931707
+        }
+      }
+    },
+    {
+      "variant": "H27-N",
+      "radius": 38,
+      "speedKph": 60,
+      "count": 4,
+      "best": {
+        "Variant": "H27-N",
+        "Radius": 38,
+        "SpeedKph": 60,
+        "Gas": 0.75,
+        "Status": "QuasiSteadyCandidate",
+        "ScaledNorm": 5.7468651787636905e-06,
+        "Residual": [
+          -3.2176748355539075e-06,
+          -4.515130268900602e-06,
+          1.182009069081169e-06,
+          6.143734137431522e-07,
+          7.155603115620579e-07
+        ],
+        "Heading": 1.5910611,
+        "Direction": 1.5696312183839933,
+        "Beta": 0.021429896,
+        "Yaw": 0.4385965,
+        "Steer": 0.1248335,
+        "SteeringRequest": 0.035157356,
+        "Wheel": 61.736291526724564,
+        "Shaft": 495.6645498130752,
+        "EngineRpm": 4738.8719870536925,
+        "Kappa": 0.22255919001019497,
+        "Tangential": 3.9756391048431396,
+        "Normal": 7.309909343719482,
+        "NetYaw": 5.513397,
+        "FrontLateral": 497.21933,
+        "RearLongitudinal": 764.7101,
+        "RearLateral": 566.39,
+        "TyreLoads": {
+          "EffectiveFrictionCoefficient": 1.605625033378601,
+          "FrontNormalNewtons": 415.53778809908704,
+          "RearNormalNewtons": 1026.5322119009131,
+          "FrontCapacityNewtons": 667.1978748866667,
+          "RearCapacityNewtons": 1648.2258169976128,
+          "TotalCapacityNewtons": 2315.4236918842794
+        },
+        "LongitudinalLossJoules": 28.39961340806977,
+        "Combined": null,
+        "Subsequent": {
+          "Outcome": null,
+          "End": {
+            "Time": 6.409999999999999,
+            "S": 86.69699114244634,
+            "X": 69.16093,
+            "Y": 34.69356,
+            "Speed": 17.462532,
+            "Heading": 1.6808815,
+            "Yaw": 0.45934546,
+            "Beta": 0.022513866,
+            "Wheel": 64.6982654640166,
+            "Shaft": 519.3876642063383,
+            "Steer": 0.13285178,
+            "Lean": 0.5317836254713235,
+            "Sweep": 4.900607654518341,
+            "Outer": 10.790606603931082,
+            "Inner": 4.99083187840029,
+            "Active": {
+              "SteeringRadians": 0.035157356,
+              "Drive": 0.75
+            }
+          },
+          "Sweep": 4.900607654518341
+        }
+      }
+    },
+    {
+      "variant": "H27-N",
+      "radius": 38,
+      "speedKph": 80,
+      "count": 3,
+      "best": {
+        "Variant": "H27-N",
+        "Radius": 38,
+        "SpeedKph": 80,
+        "Gas": 0.5,
+        "Status": "QuasiSteadyCandidate",
+        "ScaledNorm": 0.0001212698563923352,
+        "Residual": [
+          -1.6941878608101034e-05,
+          -7.480429748715036e-06,
+          -3.893536691373933e-05,
+          6.36571404451985e-05,
+          9.378272582439304e-05
+        ],
+        "Heading": 1.6647463,
+        "Direction": 1.5696312183839933,
+        "Beta": 0.095115066,
+        "Yaw": 0.5847953,
+        "Steer": 0.28370345,
+        "SteeringRequest": 0.03463798,
+        "Wheel": 80.9774770308419,
+        "Shaft": 649.0904326245804,
+        "EngineRpm": 6198.363920573975,
+        "Kappa": 0.20792246767940895,
+        "Tangential": 0.003326482605189085,
+        "Normal": 12.995282173156738,
+        "NetYaw": 0.0006713867,
+        "FrontLateral": 907.88055,
+        "RearLongitudinal": 574.12573,
+        "RearLateral": 1016.8567,
+        "TyreLoads": {
+          "EffectiveFrictionCoefficient": 1.605625033378601,
+          "FrontNormalNewtons": 590.6011799593207,
+          "RearNormalNewtons": 851.4688200406795,
+          "FrontCapacityNewtons": 948.2840392856255,
+          "RearCapacityNewtons": 1367.139652598654,
+          "TotalCapacityNewtons": 2315.4236918842794
+        },
+        "LongitudinalLossJoules": 26.37896547963382,
+        "Combined": null,
+        "Subsequent": {
+          "Outcome": null,
+          "End": {
+            "Time": 6.409999999999999,
+            "S": 87.61561658820699,
+            "X": 69.05117,
+            "Y": 35.717976,
+            "Speed": 22.21503,
+            "Heading": 1.7817131,
+            "Yaw": 0.5845017,
+            "Beta": 0.09393235,
+            "Wheel": 81.44426143594228,
+            "Shaft": 652.8101744327059,
+            "Steer": 0.28174335,
+            "Lean": 0.5900884788465335,
+            "Sweep": 4.816796160487421,
+            "Outer": 10.836375107542965,
+            "Inner": 4.93144567352342,
+            "Active": {
+              "SteeringRadians": 0.03463798,
+              "Drive": 0.5
+            }
+          },
+          "Sweep": 4.816796160487421
+        }
+      }
+    },
+    {
+      "variant": "H27-N",
+      "radius": 44,
+      "speedKph": 40,
+      "count": 5,
+      "best": {
+        "Variant": "H27-N",
+        "Radius": 44,
+        "SpeedKph": 40,
+        "Gas": 1,
+        "Status": "QuasiSteadyCandidate",
+        "ScaledNorm": 6.151210157425137e-07,
+        "Residual": [
+          5.306753379397122e-07,
+          2.5751915845029225e-07,
+          8.596234350732868e-08,
+          -5.962122365588129e-08,
+          1.396324386746528e-07
+        ],
+        "Heading": 1.5690397,
+        "Direction": 1.5696312183839933,
+        "Beta": -0.00059151597,
+        "Yaw": 0.25252524,
+        "Steer": 0.06464452,
+        "SteeringRequest": 0.031729937,
+        "Wheel": 46.02751092927589,
+        "Shaft": 370.550411947314,
+        "EngineRpm": 3547.3575367031776,
+        "Kappa": 0.36664621772643796,
+        "Tangential": 5.603557586669922,
+        "Normal": 2.8058414459228516,
+        "NetYaw": 6.71434,
+        "FrontLateral": 196.18182,
+        "RearLongitudinal": 900.7781,
+        "RearLateral": 217.21204,
+        "TyreLoads": {
+          "EffectiveFrictionCoefficient": 1.605625033378601,
+          "FrontNormalNewtons": 326.5431899573607,
+          "RearNormalNewtons": 1115.5268100426395,
+          "FrontCapacityNewtons": 524.3059202748422,
+          "RearCapacityNewtons": 1791.1177716094373,
+          "TotalCapacityNewtons": 2315.4236918842794
+        },
+        "LongitudinalLossJoules": 36.82596514997277,
+        "Combined": null,
+        "Subsequent": {
+          "Outcome": null,
+          "End": {
+            "Time": 6.409999999999999,
+            "S": 85.73697473605716,
+            "X": 69.252464,
+            "Y": 33.620655,
+            "Speed": 12.260481,
+            "Heading": 1.622144,
+            "Yaw": 0.27838627,
+            "Beta": 0.0013523045,
+            "Wheel": 50.58069574140116,
+            "Shaft": 406.88517043779615,
+            "Steer": 0.069277965,
+            "Lean": 0.30243532463740724,
+            "Sweep": 4.964772365529077,
+            "Outer": 10.762945714147872,
+            "Inner": 5.028867609389487,
+            "Active": {
+              "SteeringRadians": 0.031729937,
+              "Drive": 1
+            }
+          },
+          "Sweep": 4.961739017397887
+        }
+      }
+    },
+    {
+      "variant": "H27-N",
+      "radius": 44,
+      "speedKph": 60,
+      "count": 5,
+      "best": {
+        "Variant": "H27-N",
+        "Radius": 44,
+        "SpeedKph": 60,
+        "Gas": 1,
+        "Status": "QuasiSteadyCandidate",
+        "ScaledNorm": 4.6526643134988905e-06,
+        "Residual": [
+          -1.6193197232006185e-06,
+          4.067204215310594e-06,
+          -1.5330634082211247e-06,
+          -3.6338262926705056e-07,
+          2.4665162470682843e-08
+        ],
+        "Heading": 1.5842596,
+        "Direction": 1.5696312183839933,
+        "Beta": 0.014628411,
+        "Yaw": 0.37878788,
+        "Steer": 0.2106446,
+        "SteeringRequest": 0.030797575,
+        "Wheel": 66.77869531240052,
+        "Shaft": 536.6851663796156,
+        "EngineRpm": 5133.828977201567,
+        "Kappa": 0.32221471665628076,
+        "Tangential": 5.792456150054932,
+        "Normal": 6.313115119934082,
+        "NetYaw": 6.942688,
+        "FrontLateral": 436.87698,
+        "RearLongitudinal": 1051.8239,
+        "RearLateral": 486.85556,
+        "TyreLoads": {
+          "EffectiveFrictionCoefficient": 1.605625033378601,
+          "FrontNormalNewtons": 309.4583224987689,
+          "RearNormalNewtons": 1132.6116775012313,
+          "FrontCapacityNewtons": 496.8740293913717,
+          "RearCapacityNewtons": 1818.5496624929078,
+          "TotalCapacityNewtons": 2315.4236918842794
+        },
+        "LongitudinalLossJoules": 56.59813549310508,
+        "Combined": null,
+        "Subsequent": {
+          "Outcome": null,
+          "End": {
+            "Time": 6.409999999999999,
+            "S": 86.72950566722955,
+            "X": 69.18034,
+            "Y": 34.731777,
+            "Speed": 17.829464,
+            "Heading": 1.6627172,
+            "Yaw": 0.4053589,
+            "Beta": 0.016584573,
+            "Wheel": 71.5223561214479,
+            "Shaft": 574.6917576981168,
+            "Steer": 0.22473434,
+            "Lean": 0.5026966341339407,
+            "Sweep": 4.932414035450966,
+            "Outer": 10.755337313721792,
+            "Inner": 5.025721587826242,
+            "Active": {
+              "SteeringRadians": 0.030797575,
+              "Drive": 1
+            }
+          },
+          "Sweep": 4.923724361150175
+        }
+      }
+    },
+    {
+      "variant": "H27-N",
+      "radius": 44,
+      "speedKph": 80,
+      "count": 3,
+      "best": {
+        "Variant": "H27-N",
+        "Radius": 44,
+        "SpeedKph": 80,
+        "Gas": 0.5,
+        "Status": "QuasiSteadyCandidate",
+        "ScaledNorm": 0.0001015346457397109,
+        "Residual": [
+          -4.95664465974599e-05,
+          8.417242629961408e-06,
+          3.687266959748192e-05,
+          4.46311048002368e-05,
+          6.65587890872672e-05
+        ],
+        "Heading": 1.6321462,
+        "Direction": 1.5696312183839933,
+        "Beta": 0.06251502,
+        "Yaw": 0.5050505,
+        "Steer": 0.15099788,
+        "SteeringRequest": 0.029402893,
+        "Wheel": 77.02256795069222,
+        "Shaft": 617.4185837561682,
+        "EngineRpm": 5897.641176904385,
+        "Kappa": 0.14598667007366758,
+        "Tangential": 1.3041011095046997,
+        "Normal": 11.222848892211914,
+        "NetYaw": 1.5670166,
+        "FrontLateral": 760.2699,
+        "RearLongitudinal": 547.23254,
+        "RearLateral": 874.2756,
+        "TyreLoads": {
+          "EffectiveFrictionCoefficient": 1.605625033378601,
+          "FrontNormalNewtons": 544.2442647408425,
+          "RearNormalNewtons": 897.8257352591577,
+          "FrontCapacityNewtons": 873.8522157406275,
+          "RearCapacityNewtons": 1441.571476143652,
+          "TotalCapacityNewtons": 2315.4236918842794
+        },
+        "LongitudinalLossJoules": 17.70891070367508,
+        "Combined": null,
+        "Subsequent": {
+          "Outcome": null,
+          "End": {
+            "Time": 6.409999999999999,
+            "S": 87.63777240071477,
+            "X": 69.08525,
+            "Y": 35.746685,
+            "Speed": 22.473785,
+            "Heading": 1.7337258,
+            "Yaw": 0.51055425,
+            "Beta": 0.061872307,
+            "Wheel": 78.15006039965498,
+            "Shaft": 626.4380340106592,
+            "Steer": 0.15974534,
+            "Lean": 0.5880914631852721,
+            "Sweep": 4.88146021602805,
+            "Outer": 10.76658695347149,
+            "Inner": 4.998776826580581,
+            "Active": {
+              "SteeringRadians": 0.029402893,
+              "Drive": 0.5
+            }
+          },
+          "Sweep": 4.865126258645399
+        }
+      }
+    },
+    {
+      "variant": "H28-C",
+      "radius": 32,
+      "speedKph": 40,
+      "count": 5,
+      "best": {
+        "Variant": "H28-C",
+        "Radius": 32,
+        "SpeedKph": 40,
+        "Gas": 1,
+        "Status": "QuasiSteadyCandidate",
+        "ScaledNorm": 1.3322849390130388e-06,
+        "Residual": [
+          -1.5247015303643252e-07,
+          -1.3232231140136718e-06,
+          2.757189099256152e-08,
+          7.048023711320184e-09,
+          -2.5918878918673728e-09
+        ],
+        "Heading": 1.5718782,
+        "Direction": 1.5696312183839933,
+        "Beta": 0.0022469764,
+        "Yaw": 0.3472222,
+        "Steer": 0.08980974,
+        "SteeringRequest": 0.04353318,
+        "Wheel": 46.20608287141011,
+        "Shaft": 371.9719396033649,
+        "EngineRpm": 3560.856048398109,
+        "Kappa": 0.3719476626397158,
+        "Tangential": 5.53401517868042,
+        "Normal": 3.858023166656494,
+        "NetYaw": 9.11676,
+        "FrontLateral": 268.93826,
+        "RearLongitudinal": 903.51917,
+        "RearLateral": 297.30045,
+        "TyreLoads": {
+          "EffectiveFrictionCoefficient": 1.605625033378601,
+          "FrontNormalNewtons": 330.1268076666197,
+          "RearNormalNewtons": 1111.9431923333805,
+          "FrontCapacityNewtons": 530.0598665788873,
+          "RearCapacityNewtons": 1785.3638253053923,
+          "TotalCapacityNewtons": 2315.42369188428
+        },
+        "LongitudinalLossJoules": 37.470402657902966,
+        "Combined": {
+          "LateralSlip": -0.19677170014485096,
+          "AppliedTyreFxResidual": 1.8709799405769445e-05,
+          "AppliedTyreFyResidual": 1.2319284792283725e-06,
+          "LateralDissipationJoules": 0.6936011120780702,
+          "ProofBoxes": 9,
+          "WheelQueries": 226,
+          "WheelIterations": 474,
+          "PowerTicks": 378,
+          "ProofTicks": 1165
+        },
+        "Subsequent": {
+          "Outcome": null,
+          "End": {
+            "Time": 6.409999999999999,
+            "S": 85.73596875587077,
+            "X": 69.23006,
+            "Y": 33.618267,
+            "Speed": 12.244471,
+            "Heading": 1.6448733,
+            "Yaw": 0.38251573,
+            "Beta": 0.005325883,
+            "Wheel": 50.75124920848776,
+            "Shaft": 408.24997975790205,
+            "Steer": 0.09602763,
+            "Lean": 0.37681539688187604,
+            "Sweep": 4.927761240279343,
+            "Outer": 10.800104104409654,
+            "Inner": 4.99149180083539,
+            "Active": {
+              "SteeringRadians": 0.04353318,
+              "Drive": 1
+            }
+          },
+          "Sweep": 4.927761240279343
+        }
+      }
+    },
+    {
+      "variant": "H28-C",
+      "radius": 32,
+      "speedKph": 60,
+      "count": 4,
+      "best": {
+        "Variant": "H28-C",
+        "Radius": 32,
+        "SpeedKph": 60,
+        "Gas": 0.75,
+        "Status": "QuasiSteadyCandidate",
+        "ScaledNorm": 1.9809056522604064e-06,
+        "Residual": [
+          -9.748670791509539e-07,
+          1.4193356037139893e-06,
+          -2.350220666968994e-07,
+          -5.47957970731261e-07,
+          -7.769263257557669e-07
+        ],
+        "Heading": 1.6048337,
+        "Direction": 1.5696312183839933,
+        "Beta": 0.035202503,
+        "Yaw": 0.5208333,
+        "Steer": 0.17734602,
+        "SteeringRequest": 0.041523438,
+        "Wheel": 62.435726291685434,
+        "Shaft": 501.27169281058394,
+        "EngineRpm": 4791.939212378147,
+        "Kappa": 0.23688710240861477,
+        "Tangential": 3.597719669342041,
+        "Normal": 8.680545806884766,
+        "NetYaw": 5.9281006,
+        "FrontLateral": 592.28625,
+        "RearLongitudinal": 773.39087,
+        "RearLateral": 670.2781,
+        "TyreLoads": {
+          "EffectiveFrictionCoefficient": 1.605625033378601,
+          "FrontNormalNewtons": 429.47934849476474,
+          "RearNormalNewtons": 1012.5906515052354,
+          "FrontCapacityNewtons": 689.5827932623265,
+          "RearCapacityNewtons": 1625.840898621953,
+          "TotalCapacityNewtons": 2315.42369188428
+        },
+        "LongitudinalLossJoules": 30.55032038938825,
+        "Combined": {
+          "LateralSlip": -0.5305728589537829,
+          "AppliedTyreFxResidual": 1.5376711417047773e-05,
+          "AppliedTyreFyResidual": 2.2038693714421242e-05,
+          "LateralDissipationJoules": 6.0263843946795985,
+          "ProofBoxes": 17,
+          "WheelQueries": 345,
+          "WheelIterations": 691,
+          "PowerTicks": 769,
+          "ProofTicks": 2387
+        },
+        "Subsequent": {
+          "Outcome": null,
+          "End": {
+            "Time": 6.409999999999999,
+            "S": 86.6904978517598,
+            "X": 69.13345,
+            "Y": 34.683987,
+            "Speed": 17.383028,
+            "Heading": 1.7112708,
+            "Yaw": 0.54314727,
+            "Beta": 0.03684707,
+            "Wheel": 65.22082818143588,
+            "Shaft": 523.5756155464148,
+            "Steer": 0.18945694,
+            "Lean": 0.5671099968780285,
+            "Sweep": 4.852850280211074,
+            "Outer": 10.838887981898425,
+            "Inner": 4.943116943509074,
+            "Active": {
+              "SteeringRadians": 0.041523438,
+              "Drive": 0.75
+            }
+          },
+          "Sweep": 4.852850280211074
+        }
+      }
+    },
+    {
+      "variant": "H28-C",
+      "radius": 38,
+      "speedKph": 40,
+      "count": 5,
+      "best": {
+        "Variant": "H28-C",
+        "Radius": 38,
+        "SpeedKph": 40,
+        "Gas": 1,
+        "Status": "QuasiSteadyCandidate",
+        "ScaledNorm": 9.037695863348995e-07,
+        "Residual": [
+          -8.499258287830714e-07,
+          1.545799405949788e-07,
+          -1.1168295836749831e-07,
+          -9.383085863845508e-08,
+          -2.2193079888666034e-07
+        ],
+        "Heading": 1.5713688,
+        "Direction": 1.5696312183839933,
+        "Beta": 0.0017375951,
+        "Yaw": 0.29239765,
+        "Steer": 0.07349146,
+        "SteeringRequest": 0.0367092,
+        "Wheel": 46.09328504437005,
+        "Shaft": 371.07399155221634,
+        "EngineRpm": 3552.327130893992,
+        "Kappa": 0.368599558585931,
+        "Tangential": 5.576495170593262,
+        "Normal": 3.248854398727417,
+        "NetYaw": 7.7368774,
+        "FrontLateral": 226.27493,
+        "RearLongitudinal": 901.8136,
+        "RearLateral": 250.38007,
+        "TyreLoads": {
+          "EffectiveFrictionCoefficient": 1.605625033378601,
+          "FrontNormalNewtons": 327.73856733180855,
+          "RearNormalNewtons": 1114.3314326681916,
+          "FrontCapacityNewtons": 526.22524811159,
+          "RearCapacityNewtons": 1789.1984437726894,
+          "TotalCapacityNewtons": 2315.4236918842794
+        },
+        "LongitudinalLossJoules": 37.06388944248925,
+        "Combined": {
+          "LateralSlip": -0.16419607452258939,
+          "AppliedTyreFxResidual": -1.0889360169130669e-05,
+          "AppliedTyreFyResidual": -3.3994619741406495e-06,
+          "LateralDissipationJoules": 0.48760314760720597,
+          "ProofBoxes": 9,
+          "WheelQueries": 226,
+          "WheelIterations": 474,
+          "PowerTicks": 323,
+          "ProofTicks": 334
+        },
+        "Subsequent": {
+          "Outcome": null,
+          "End": {
+            "Time": 6.409999999999999,
+            "S": 85.73663328687189,
+            "X": 69.24326,
+            "Y": 33.619755,
+            "Speed": 12.254515,
+            "Heading": 1.6328647,
+            "Yaw": 0.32236663,
+            "Beta": 0.0044299955,
+            "Wheel": 50.639514598321284,
+            "Shaft": 407.35590148684884,
+            "Steer": 0.07784572,
+            "Lean": 0.3346562741810079,
+            "Sweep": 4.949130147428034,
+            "Outer": 10.779065609085489,
+            "Inner": 5.0125951456807165,
+            "Active": {
+              "SteeringRadians": 0.0367092,
+              "Drive": 1
+            }
+          },
+          "Sweep": 4.949130147428034
+        }
+      }
+    },
+    {
+      "variant": "H28-C",
+      "radius": 38,
+      "speedKph": 60,
+      "count": 4,
+      "best": {
+        "Variant": "H28-C",
+        "Radius": 38,
+        "SpeedKph": 60,
+        "Gas": 0.75,
+        "Status": "QuasiSteadyCandidate",
+        "ScaledNorm": 4.110457560728718e-06,
+        "Residual": [
+          -2.31168423496797e-06,
+          -2.9212942248890704e-06,
+          1.4229477543897806e-06,
+          6.73599312275286e-07,
+          7.345073605904417e-07
+        ],
+        "Heading": 1.5963922,
+        "Direction": 1.5696312183839933,
+        "Beta": 0.026760936,
+        "Yaw": 0.4385965,
+        "Steer": 0.119229145,
+        "SteeringRequest": 0.035154145,
+        "Wheel": 61.719494866385844,
+        "Shaft": 495.53027118136004,
+        "EngineRpm": 4737.565029656103,
+        "Kappa": 0.22238364617620335,
+        "Tangential": 3.9592621326446533,
+        "Normal": 7.309918403625488,
+        "NetYaw": 5.491516,
+        "FrontLateral": 495.1438,
+        "RearLongitudinal": 764.9304,
+        "RearLateral": 564.4156,
+        "TyreLoads": {
+          "EffectiveFrictionCoefficient": 1.605625033378601,
+          "FrontNormalNewtons": 414.20170579285696,
+          "RearNormalNewtons": 1027.8682942071432,
+          "FrontCapacityNewtons": 665.0526276891294,
+          "RearCapacityNewtons": 1650.37106419515,
+          "TotalCapacityNewtons": 2315.4236918842794
+        },
+        "LongitudinalLossJoules": 28.380109890202597,
+        "Combined": {
+          "LateralSlip": -0.41836795526993875,
+          "AppliedTyreFxResidual": 2.9712853120145155e-06,
+          "AppliedTyreFyResidual": -4.030795139442489e-06,
+          "LateralDissipationJoules": 4.002385285383146,
+          "ProofBoxes": 15,
+          "WheelQueries": 321,
+          "WheelIterations": 643,
+          "PowerTicks": 683,
+          "ProofTicks": 467
+        },
+        "Subsequent": {
+          "Outcome": null,
+          "End": {
+            "Time": 6.409999999999999,
+            "S": 86.69676653099822,
+            "X": 69.1614,
+            "Y": 34.693348,
+            "Speed": 17.460617,
+            "Heading": 1.6862184,
+            "Yaw": 0.4593629,
+            "Beta": 0.028195865,
+            "Wheel": 64.65339561363702,
+            "Shaft": 519.0289271118551,
+            "Steer": 0.12505852,
+            "Lean": 0.5317155610925665,
+            "Sweep": 4.897627514269774,
+            "Outer": 10.79363311796301,
+            "Inner": 4.98784225479197,
+            "Active": {
+              "SteeringRadians": 0.035154145,
+              "Drive": 0.75
+            }
+          },
+          "Sweep": 4.897627514269774
+        }
+      }
+    },
+    {
+      "variant": "H28-C",
+      "radius": 38,
+      "speedKph": 80,
+      "count": 2,
+      "best": {
+        "Variant": "H28-C",
+        "Radius": 38,
+        "SpeedKph": 80,
+        "Gas": 0.25,
+        "Status": "QuasiSteadyCandidate",
+        "ScaledNorm": 3.1689966739897633e-06,
+        "Residual": [
+          -3.479455026322853e-07,
+          3.135204315185547e-06,
+          1.8011725874678142e-08,
+          -1.6710163547095647e-07,
+          -2.524289407972446e-07
+        ],
+        "Heading": 1.6953889,
+        "Direction": 1.5696312183839933,
+        "Beta": 0.1257577,
+        "Yaw": 0.5847953,
+        "Steer": 0.071236335,
+        "SteeringRequest": 0.03344184,
+        "Wheel": 72.40815015769964,
+        "Shaft": 579.7903914848861,
+        "EngineRpm": 5534.942929083846,
+        "Kappa": 0.0837984558171143,
+        "Tangential": -1.3237428665161133,
+        "Normal": 12.995448112487793,
+        "NetYaw": -1.8348999,
+        "FrontLateral": 878.77844,
+        "RearLongitudinal": 246.73535,
+        "RearLateral": 1025.7015,
+        "TyreLoads": {
+          "EffectiveFrictionCoefficient": 1.605625033378601,
+          "FrontNormalNewtons": 646.3659506974401,
+          "RearNormalNewtons": 795.7040493025601,
+          "FrontCapacityNewtons": 1037.8213511633685,
+          "RearCapacityNewtons": 1277.6023407209111,
+          "TotalCapacityNewtons": 2315.42369188428
+        },
+        "LongitudinalLossJoules": 4.538097671553689,
+        "Combined": {
+          "LateralSlip": -1.4233152073301982,
+          "AppliedTyreFxResidual": -4.092253448106931e-06,
+          "AppliedTyreFyResidual": -2.549529949646967e-05,
+          "LateralDissipationJoules": 32.187871375020414,
+          "ProofBoxes": 21,
+          "WheelQueries": 330,
+          "WheelIterations": 619,
+          "PowerTicks": 698,
+          "ProofTicks": 607
+        },
+        "Subsequent": {
+          "Outcome": null,
+          "End": {
+            "Time": 6.409999999999999,
+            "S": 87.59210795393972,
+            "X": 69.05225,
+            "Y": 35.691574,
+            "Speed": 21.957485,
+            "Heading": 1.811624,
+            "Yaw": 0.57757926,
+            "Beta": 0.123216905,
+            "Wheel": 71.73405968401129,
+            "Shaft": 574.3911473023915,
+            "Steer": 0.074421555,
+            "Lean": 0.5900884788465335,
+            "Sweep": 4.797737075083429,
+            "Outer": 10.85939255038005,
+            "Inner": 4.911125702448648,
+            "Active": {
+              "SteeringRadians": 0.03344184,
+              "Drive": 0.25
+            }
+          },
+          "Sweep": 4.797737075083429
+        }
+      }
+    },
+    {
+      "variant": "H28-C",
+      "radius": 44,
+      "speedKph": 40,
+      "count": 5,
+      "best": {
+        "Variant": "H28-C",
+        "Radius": 44,
+        "SpeedKph": 40,
+        "Gas": 1,
+        "Status": "QuasiSteadyCandidate",
+        "ScaledNorm": 4.949845719543355e-07,
+        "Residual": [
+          3.876241904787747e-07,
+          -2.7878717942797505e-07,
+          6.349517572834529e-08,
+          -1.8884295194254718e-08,
+          1.1245740557797035e-07
+        ],
+        "Heading": 1.5710533,
+        "Direction": 1.5696312183839933,
+        "Beta": 0.0014220481,
+        "Yaw": 0.25252524,
+        "Steer": 0.06242449,
+        "SteeringRequest": 0.03173025,
+        "Wheel": 46.026079808046916,
+        "Shaft": 370.5390686058484,
+        "EngineRpm": 3547.2455670154554,
+        "Kappa": 0.36660489763269716,
+        "Tangential": 5.601424694061279,
+        "Normal": 2.805840015411377,
+        "NetYaw": 6.711502,
+        "FrontLateral": 195.32657,
+        "RearLongitudinal": 900.80634,
+        "RearLateral": 216.24913,
+        "TyreLoads": {
+          "EffectiveFrictionCoefficient": 1.605625033378601,
+          "FrontNormalNewtons": 326.3298401198622,
+          "RearNormalNewtons": 1115.740159880138,
+          "FrontCapacityNewtons": 523.9633604348872,
+          "RearCapacityNewtons": 1791.4603314493922,
+          "TotalCapacityNewtons": 2315.4236918842794
+        },
+        "LongitudinalLossJoules": 36.82264866803521,
+        "Combined": {
+          "LateralSlip": -0.1410319439922308,
+          "AppliedTyreFxResidual": 3.20824278787768e-05,
+          "AppliedTyreFyResidual": -4.725655259107953e-06,
+          "LateralDissipationJoules": 0.3618186942254169,
+          "ProofBoxes": 7,
+          "WheelQueries": 204,
+          "WheelIterations": 430,
+          "PowerTicks": 300,
+          "ProofTicks": 211
+        },
+        "Subsequent": {
+          "Outcome": null,
+          "End": {
+            "Time": 6.409999999999999,
+            "S": 85.73694395220798,
+            "X": 69.25288,
+            "Y": 33.620644,
+            "Speed": 12.260367,
+            "Heading": 1.6241767,
+            "Yaw": 0.2785336,
+            "Beta": 0.0038169601,
+            "Wheel": 50.57275263218975,
+            "Shaft": 406.82175231382513,
+            "Steer": 0.065778196,
+            "Lean": 0.30243399741766397,
+            "Sweep": 4.963793780193897,
+            "Outer": 10.763836276911627,
+            "Inner": 5.027941395796116,
+            "Active": {
+              "SteeringRadians": 0.03173025,
+              "Drive": 1
+            }
+          },
+          "Sweep": 4.960439413656527
+        }
+      }
+    },
+    {
+      "variant": "H28-C",
+      "radius": 44,
+      "speedKph": 60,
+      "count": 5,
+      "best": {
+        "Variant": "H28-C",
+        "Radius": 44,
+        "SpeedKph": 60,
+        "Gas": 1,
+        "Status": "QuasiSteadyCandidate",
+        "ScaledNorm": 6.781373208189069e-06,
+        "Residual": [
+          -4.5757101130305954e-08,
+          -6.227872588418504e-06,
+          1.3564708228885891e-06,
+          1.747789145696288e-06,
+          1.5178115521052859e-06
+        ],
+        "Heading": 1.5909536,
+        "Direction": 1.5696312183839933,
+        "Beta": 0.02132237,
+        "Yaw": 0.37878788,
+        "Steer": 0.20159414,
+        "SteeringRequest": 0.030791141,
+        "Wheel": 66.73925806440482,
+        "Shaft": 536.3693550325944,
+        "EngineRpm": 5130.792887945458,
+        "Kappa": 0.32159306874934573,
+        "Tangential": 5.782570838928223,
+        "Normal": 6.313130855560303,
+        "NetYaw": 6.925415,
+        "FrontLateral": 433.0173,
+        "RearLongitudinal": 1051.8258,
+        "RearLateral": 483.4114,
+        "TyreLoads": {
+          "EffectiveFrictionCoefficient": 1.605625033378601,
+          "FrontNormalNewtons": 307.54147260604805,
+          "RearNormalNewtons": 1134.5285273939521,
+          "FrontCapacityNewtons": 493.79628721839003,
+          "RearCapacityNewtons": 1821.6274046658896,
+          "TotalCapacityNewtons": 2315.42369188428
+        },
+        "LongitudinalLossJoules": 56.47985692350566,
+        "Combined": {
+          "LateralSlip": -0.3436928931851237,
+          "AppliedTyreFxResidual": 4.0180414771384676e-05,
+          "AppliedTyreFyResidual": 1.3628610020077758e-05,
+          "LateralDissipationJoules": 2.816444884117072,
+          "ProofBoxes": 19,
+          "WheelQueries": 369,
+          "WheelIterations": 824,
+          "PowerTicks": 625,
+          "ProofTicks": 653
+        },
+        "Subsequent": {
+          "Outcome": null,
+          "End": {
+            "Time": 6.409999999999999,
+            "S": 86.7296499684432,
+            "X": 69.18123,
+            "Y": 34.732014,
+            "Speed": 17.833302,
+            "Heading": 1.669429,
+            "Yaw": 0.4055225,
+            "Beta": 0.024025992,
+            "Wheel": 71.42149176021067,
+            "Shaft": 573.8853685971579,
+            "Steer": 0.20403959,
+            "Lean": 0.5026807211650149,
+            "Sweep": 4.928791390467335,
+            "Outer": 10.758749739276759,
+            "Inner": 5.0222518337893005,
+            "Active": {
+              "SteeringRadians": 0.030791141,
+              "Drive": 1
+            }
+          },
+          "Sweep": 4.919377573207352
+        }
+      }
+    },
+    {
+      "variant": "H28-C",
+      "radius": 44,
+      "speedKph": 80,
+      "count": 3,
+      "best": {
+        "Variant": "H28-C",
+        "Radius": 44,
+        "SpeedKph": 80,
+        "Gas": 0.5,
+        "Status": "QuasiSteadyCandidate",
+        "ScaledNorm": 7.673779977522498e-05,
+        "Residual": [
+          -5.080622320878803e-05,
+          3.7285753271797117e-06,
+          3.286824727022353e-05,
+          2.5981831721404447e-05,
+          3.921910332242362e-05
+        ],
+        "Heading": 1.6417502,
+        "Direction": 1.5696312183839933,
+        "Beta": 0.072119,
+        "Yaw": 0.5050505,
+        "Steer": 0.14299339,
+        "SteeringRequest": 0.029388394,
+        "Wheel": 76.94300848584494,
+        "Shaft": 616.7824763324681,
+        "EngineRpm": 5891.488071675029,
+        "Kappa": 0.14554448158420766,
+        "Tangential": 1.246412754058838,
+        "Normal": 11.2228364944458,
+        "NetYaw": 1.4954224,
+        "FrontLateral": 757.6249,
+        "RearLongitudinal": 547.9707,
+        "RearLateral": 872.3792,
+        "TyreLoads": {
+          "EffectiveFrictionCoefficient": 1.605625033378601,
+          "FrontNormalNewtons": 541.2660963207766,
+          "RearNormalNewtons": 900.8039036792236,
+          "FrontCapacityNewtons": 869.070393971752,
+          "RearCapacityNewtons": 1446.3532979125275,
+          "TotalCapacityNewtons": 2315.4236918842794
+        },
+        "LongitudinalLossJoules": 17.66438540854635,
+        "Combined": {
+          "LateralSlip": -0.8593219747174728,
+          "AppliedTyreFxResidual": -8.920680215851462e-06,
+          "AppliedTyreFyResidual": -2.400066387053812e-05,
+          "LateralDissipationJoules": 16.612593119146695,
+          "ProofBoxes": 25,
+          "WheelQueries": 367,
+          "WheelIterations": 723,
+          "PowerTicks": 884,
+          "ProofTicks": 795
+        },
+        "Subsequent": {
+          "Outcome": null,
+          "End": {
+            "Time": 6.409999999999999,
+            "S": 87.63680031486433,
+            "X": 69.08549,
+            "Y": 35.745613,
+            "Speed": 22.463722,
+            "Heading": 1.7433071,
+            "Yaw": 0.5103347,
+            "Beta": 0.071576744,
+            "Wheel": 78.00542538398587,
+            "Shaft": 625.2817911756649,
+            "Steer": 0.1503771,
+            "Lean": 0.5880202975277008,
+            "Sweep": 4.8755205857764015,
+            "Outer": 10.772819857453085,
+            "Inner": 4.992812966066005,
+            "Active": {
+              "SteeringRadians": 0.029388394,
+              "Drive": 0.5
+            }
+          },
+          "Sweep": 4.859083781697346
+        }
+      }
+    }
+  ],
+  "equilibriaStatuses": {
+    "H27-N QuasiSteadyCandidate": 34,
+    "H27-N ResidualAboveDiagnosticTolerance": 11,
+    "H27-N ExcludedByTotalLateralBudget": 6,
+    "H28-C QuasiSteadyCandidate": 33,
+    "H28-C ResidualAboveDiagnosticTolerance": 12,
+    "H28-C ExcludedByTotalLateralBudget": 6
+  },
+  "transientsLastOutcomes": {
+    "H27-N physics: H27-N NoPhysicallyAdmissibleRoot: domain [-12,511537747260519,10,72403296361545], endpoint residuals [-12,118051238029343,-0,0015664345030401705]": 2,
+    "H28-C physics: H28-C NoPhysicallyAdmissibleRoot: H28-C interval exclusion, endpoint residuals [-12,118051238648954,-0,0015713168215061302]": 2,
+    "H27-N None": 50,
+    "H28-C None": 47,
+    "H27-N physics: H27-N NoPhysicallyAdmissibleRoot: domain [-12,492220681222655,10,70747547750023], endpoint residuals [-11,576194838415429,-0,9477433572818068]": 2,
+    "H28-C physics: H28-C NoPhysicallyAdmissibleRoot: H28-C interval exclusion, endpoint residuals [-11,576238101118987,-1,5750780250526013]": 2,
+    "H27-N swept": 16,
+    "H28-C swept": 19
+  }
+}

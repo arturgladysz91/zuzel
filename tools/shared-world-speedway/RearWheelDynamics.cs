@@ -103,6 +103,16 @@ public static class RearWheelDynamics
         double torque, double external, double seconds, RearWheelParameters p, double relaxationSeconds) =>
         SolveContact(forward,0,omega,mass,rearBudget,torque,external,seconds,p,relaxationSeconds);
 
+    // At a coupled root, external + Fx = mass * ax. Substitute this into the
+    // body midpoint, keeping the wheel reaction implicit and using the full Br.
+    public static RearWheelTrial64 EvaluateCombined64(double forward, double normalizedSide, double omega,
+        double mass, double rearBudget, double torque, double acceleration, double seconds, RearWheelParameters p) =>
+        SolveContact(forward,normalizedSide,omega,mass,rearBudget,torque,0,seconds,p,
+            p.MinimumContactRelaxationSeconds,acceleration);
+
+    public static double CoupledLateralForce(double rearBudget, double normalizedSide, RearWheelTrial64 trial) =>
+        -rearBudget*normalizedSide/trial.Denominator;
+
     // The force arguments are projections of the already rounded world vectors sent to Box2D.
     public static RearWheelStep AcceptLongitudinal64(double forward, double omega, double mass, double rearCapacity,
         double torque, double external, double appliedFx, double appliedFy, double seconds, RearWheelParameters p,
@@ -129,14 +139,16 @@ public static class RearWheelDynamics
     }
 
     private static RearWheelTrial64 SolveContact(double forward,double b,double omega,double mass,double rear,
-        double driveTorque,double resistanceForward,double seconds,RearWheelParameters p,double relaxationSeconds)
+        double driveTorque,double resistanceForward,double seconds,RearWheelParameters p,double relaxationSeconds,
+        double? prescribedAcceleration=null)
     {
         var radius=p.WheelRadiusMeters;var inertia=p.WheelInertiaKgMetersSquared;
         var deltaX=LongitudinalScale(forward,mass,rear,p,relaxationSeconds);
         var bearing=1+seconds*p.BearingResistanceNewtonMeterSeconds/(2*inertia);
         var freeMidOmega=(omega+seconds*driveTorque/(2*inertia))/bearing;
-        var freeMidSlip=radius*freeMidOmega-forward-seconds*resistanceForward/(2*mass);
-        var halfMobility=seconds/2*(radius*radius/(inertia*bearing)+1d/mass);
+        var freeMidSlip=radius*freeMidOmega-forward-(prescribedAcceleration is double ax
+            ?seconds/2*ax:seconds*resistanceForward/(2*mass));
+        var halfMobility=seconds/2*(radius*radius/(inertia*bearing)+(prescribedAcceleration.HasValue?0:1d/mass));
         var d=deltaX*Math.Sqrt(1+b*b);var magnitude=Math.Abs(freeMidSlip);var coefficient=halfMobility*rear;
         // Unique monotone scalar root: z + h*A*Br*z/sqrt(d²+z²) = |S|.
         // Starting at the origin tangent approaches the root from below. This

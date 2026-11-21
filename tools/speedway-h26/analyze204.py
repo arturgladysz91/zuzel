@@ -173,7 +173,7 @@ def throttle_summary(path):
                         meanForceUsPerForecastStep=sum(x["ForceTicks"] for x in profile)*1e6/data["Frequency"]/
                         max(1,sum(x["Steps"] for x in profile)),
                         meanSolverUsPerForecastStep=sum(x.get("LoadSolverTicks",0) for x in profile)*1e6/data["Frequency"]/
-                        max(1,sum(x["Steps"] for x in profile)) if physics=="H27-N" else None))
+                        max(1,sum(x["Steps"] for x in profile)) if any("LoadSolverTicks" in x for x in profile) else None))
     return dict(histograms=out,phases=data["Phases"],elapsedSeconds=data["ElapsedSeconds"])
 
 
