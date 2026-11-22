@@ -1,0 +1,4669 @@
+{
+  "Study": 207,
+  "Base": "ea6aaf21debab9f977cec1ed300d0932b0eeef3f",
+  "NativeWorlds": 0,
+  "TrainingStarts": [
+    "nominal",
+    "-1 cm",
+    "+1 cm"
+  ],
+  "EvaluationOffsetsCm": [
+    0,
+    -2,
+    2,
+    -12,
+    12
+  ],
+  "SelectedArm": "pace",
+  "SelectedBranch": 12152,
+  "Arms": {
+    "pilot": {
+      "Budget": {
+        "BeamWidth": 3,
+        "MaxPhaseTrials": 2200,
+        "MaxForecastSteps": 450000,
+        "MaxCpuSeconds": 95,
+        "Parallelism": 4,
+        "MaxRepairs": 1,
+        "Pilot": true
+      },
+      "FirstPhase": 0,
+      "LastLegalPhase": {
+        "Index": 9,
+        "Visit": 0,
+        "Name": "bend exit",
+        "Start": 118.38937497138977,
+        "End": 132.38937497138977,
+        "WindowOrigin": 35
+      },
+      "Periods": 66,
+      "Termination": "bounded CPU/evaluation budget",
+      "Best": 678,
+      "Winner": null,
+      "LockedCandidates": 7,
+      "WallSeconds": 17.0029641,
+      "CpuSeconds": 35.359375,
+      "PhaseTrials": 2199,
+      "NewBranches": 733,
+      "RestoredPhaseTrials": 0,
+      "ForecastSteps": 179896,
+      "FullFixtureTests": 35,
+      "StrictFinishesInAnyLockedCandidate": 0,
+      "FailureCounts": {
+        "swept": 186
+      },
+      "Envelopes": [
+        {
+          "Index": 9,
+          "Visit": 0,
+          "Name": "bend exit",
+          "Start": 118.38937497138977,
+          "End": 132.38937497138977,
+          "WindowOrigin": 35,
+          "CandidateCount": 94,
+          "LegalCandidates": 32,
+          "EnteringHistories": 3,
+          "Retained": [
+            700,
+            673,
+            684
+          ],
+          "RetainedDistinctParents": 1,
+          "LegalBounds": {
+            "Swept": [
+              1.218071319596471,
+              1.9444139535493965
+            ],
+            "CourseError": [
+              0.05603054596069502,
+              0.18737554225065084
+            ],
+            "Yaw": [
+              -0.22411684691905975,
+              0.9335923194885254
+            ],
+            "Beta": [
+              0.003449792042374611,
+              0.07000598311424255
+            ],
+            "Speed": [
+              21.790151596069336,
+              23.62325668334961
+            ],
+            "Outer": [
+              1.3407080645873264,
+              2.055725307746877
+            ],
+            "FrontNormal": [
+              328.9350963753493,
+              617.4742901167964
+            ],
+            "RearFraction": [
+              0.42986396406486965,
+              0.7120089961951516
+            ],
+            "YawMoment": [
+              -118.69673156738281,
+              334.79498291015625
+            ],
+            "SteeringTravel": [
+              0.13601338863372803,
+              0.6071944832801819
+            ],
+            "DriftOneSecond": [
+              1.2254265546798706,
+              4.400478839874268
+            ],
+            "PendingDelay": [
+              0,
+              0
+            ],
+            "Quality": [
+              0.9218355172434228,
+              1.5936153835672284
+            ]
+          },
+          "Failures": {
+            "swept": 186
+          },
+          "FailedProgress": [
+            128.7203409381558,
+            129.68243624553804
+          ]
+        },
+        {
+          "Index": 10,
+          "Visit": 1,
+          "Name": "straight stabilization",
+          "Start": 132.38937497138977,
+          "End": 144.38937497138977,
+          "WindowOrigin": 132.38937497138977,
+          "CandidateCount": 0,
+          "LegalCandidates": 0,
+          "EnteringHistories": 0,
+          "Retained": [],
+          "RetainedDistinctParents": 0,
+          "LegalBounds": {
+            "Swept": null,
+            "CourseError": null,
+            "Yaw": null,
+            "Beta": null,
+            "Speed": null,
+            "Outer": null,
+            "FrontNormal": null,
+            "RearFraction": null,
+            "YawMoment": null,
+            "SteeringTravel": null,
+            "DriftOneSecond": null,
+            "PendingDelay": null,
+            "Quality": null
+          },
+          "Failures": {},
+          "FailedProgress": null
+        },
+        {
+          "Index": 13,
+          "Visit": 1,
+          "Name": "release from yaw core",
+          "Start": 180.38937497138977,
+          "End": 186.38937497138977,
+          "WindowOrigin": 132.38937497138977,
+          "CandidateCount": 0,
+          "LegalCandidates": 0,
+          "EnteringHistories": 0,
+          "Retained": [],
+          "RetainedDistinctParents": 0,
+          "LegalBounds": {
+            "Swept": null,
+            "CourseError": null,
+            "Yaw": null,
+            "Beta": null,
+            "Speed": null,
+            "Outer": null,
+            "FrontNormal": null,
+            "RearFraction": null,
+            "YawMoment": null,
+            "SteeringTravel": null,
+            "DriftOneSecond": null,
+            "PendingDelay": null,
+            "Quality": null
+          },
+          "Failures": {},
+          "FailedProgress": null
+        },
+        {
+          "Index": 34,
+          "Visit": 3,
+          "Name": "turn preparation",
+          "Start": 481.1681249141693,
+          "End": 499.1681249141693,
+          "WindowOrigin": 451.1681249141693,
+          "CandidateCount": 0,
+          "LegalCandidates": 0,
+          "EnteringHistories": 0,
+          "Retained": [],
+          "RetainedDistinctParents": 0,
+          "LegalBounds": {
+            "Swept": null,
+            "CourseError": null,
+            "Yaw": null,
+            "Beta": null,
+            "Speed": null,
+            "Outer": null,
+            "FrontNormal": null,
+            "RearFraction": null,
+            "YawMoment": null,
+            "SteeringTravel": null,
+            "DriftOneSecond": null,
+            "PendingDelay": null,
+            "Quality": null
+          },
+          "Failures": {},
+          "FailedProgress": null
+        },
+        {
+          "Index": 38,
+          "Visit": 3,
+          "Name": "forming slide",
+          "Start": 525.1681249141693,
+          "End": 542.1681249141693,
+          "WindowOrigin": 513.1681249141693,
+          "CandidateCount": 0,
+          "LegalCandidates": 0,
+          "EnteringHistories": 0,
+          "Retained": [],
+          "RetainedDistinctParents": 0,
+          "LegalBounds": {
+            "Swept": null,
+            "CourseError": null,
+            "Yaw": null,
+            "Beta": null,
+            "Speed": null,
+            "Outer": null,
+            "FrontNormal": null,
+            "RearFraction": null,
+            "YawMoment": null,
+            "SteeringTravel": null,
+            "DriftOneSecond": null,
+            "PendingDelay": null,
+            "Quality": null
+          },
+          "Failures": {},
+          "FailedProgress": null
+        },
+        {
+          "Index": 39,
+          "Visit": 3,
+          "Name": "apex",
+          "Start": 542.1681249141693,
+          "End": 561.8628123998642,
+          "WindowOrigin": 513.1681249141693,
+          "CandidateCount": 0,
+          "LegalCandidates": 0,
+          "EnteringHistories": 0,
+          "Retained": [],
+          "RetainedDistinctParents": 0,
+          "LegalBounds": {
+            "Swept": null,
+            "CourseError": null,
+            "Yaw": null,
+            "Beta": null,
+            "Speed": null,
+            "Outer": null,
+            "FrontNormal": null,
+            "RearFraction": null,
+            "YawMoment": null,
+            "SteeringTravel": null,
+            "DriftOneSecond": null,
+            "PendingDelay": null,
+            "Quality": null
+          },
+          "Failures": {},
+          "FailedProgress": null
+        },
+        {
+          "Index": 41,
+          "Visit": 3,
+          "Name": "exit preparation",
+          "Start": 579.3928998947143,
+          "End": 596.5574998855591,
+          "WindowOrigin": 513.1681249141693,
+          "CandidateCount": 0,
+          "LegalCandidates": 0,
+          "EnteringHistories": 0,
+          "Retained": [],
+          "RetainedDistinctParents": 0,
+          "LegalBounds": {
+            "Swept": null,
+            "CourseError": null,
+            "Yaw": null,
+            "Beta": null,
+            "Speed": null,
+            "Outer": null,
+            "FrontNormal": null,
+            "RearFraction": null,
+            "YawMoment": null,
+            "SteeringTravel": null,
+            "DriftOneSecond": null,
+            "PendingDelay": null,
+            "Quality": null
+          },
+          "Failures": {},
+          "FailedProgress": null
+        },
+        {
+          "Index": 42,
+          "Visit": 3,
+          "Name": "bend exit",
+          "Start": 596.5574998855591,
+          "End": 610.5574998855591,
+          "WindowOrigin": 513.1681249141693,
+          "CandidateCount": 0,
+          "LegalCandidates": 0,
+          "EnteringHistories": 0,
+          "Retained": [],
+          "RetainedDistinctParents": 0,
+          "LegalBounds": {
+            "Swept": null,
+            "CourseError": null,
+            "Yaw": null,
+            "Beta": null,
+            "Speed": null,
+            "Outer": null,
+            "FrontNormal": null,
+            "RearFraction": null,
+            "YawMoment": null,
+            "SteeringTravel": null,
+            "DriftOneSecond": null,
+            "PendingDelay": null,
+            "Quality": null
+          },
+          "Failures": {},
+          "FailedProgress": null
+        },
+        {
+          "Index": 43,
+          "Visit": 4,
+          "Name": "straight stabilization",
+          "Start": 610.5574998855591,
+          "End": 622.5574998855591,
+          "WindowOrigin": 610.5574998855591,
+          "CandidateCount": 0,
+          "LegalCandidates": 0,
+          "EnteringHistories": 0,
+          "Retained": [],
+          "RetainedDistinctParents": 0,
+          "LegalBounds": {
+            "Swept": null,
+            "CourseError": null,
+            "Yaw": null,
+            "Beta": null,
+            "Speed": null,
+            "Outer": null,
+            "FrontNormal": null,
+            "RearFraction": null,
+            "YawMoment": null,
+            "SteeringTravel": null,
+            "DriftOneSecond": null,
+            "PendingDelay": null,
+            "Quality": null
+          },
+          "Failures": {},
+          "FailedProgress": null
+        }
+      ],
+      "LockedResults": [
+        {
+          "Fixture": "C",
+          "Complete": false,
+          "Stop": "wide-direction",
+          "Finish": null,
+          "WorstSwept": 0.677183360601033,
+          "LastLegalS": 178.7909996509552,
+          "LegalSweep": 0.6797735044641283,
+          "End": {
+            "Time": 11.02,
+            "S": 179.03408646583557,
+            "X": -11.6447115,
+            "Y": 72.46118,
+            "Speed": 24.316305,
+            "Heading": 3.1407378,
+            "Yaw": 0.23202038,
+            "Beta": 0.014907928,
+            "Wheel": 78.27902968539925,
+            "Shaft": 626.9772847349461,
+            "Steer": 0.027912382,
+            "Lean": 0.474396674409278,
+            "Sweep": 0.677183360601033,
+            "Outer": 0.8004829933887349,
+            "Inner": 10.397917284323805,
+            "Active": {
+              "SteeringRadians": 0.018631313,
+              "Drive": 0.31051815
+            }
+          },
+          "Failure": {
+            "Gate": "corridor-yaw",
+            "Condition": "wide-direction",
+            "Time": 11.02,
+            "S": 179.03408646583557,
+            "State": {
+              "Id": 1,
+              "Position": {
+                "X": -11.6447115,
+                "Y": 72.46118
+              },
+              "Velocity": {
+                "X": -24.313284,
+                "Y": 0.38327742
+              },
+              "Heading": 3.1407378,
+              "AngularVelocity": 0.23202038,
+              "Road": {
+                "Segment": 4,
+                "Progress": 0.752334056362029,
+                "ReferenceMeters": 179.03408646583557,
+                "OffsetMeters": 9.798161472494002,
+                "Heading": 3.141592653589793,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": -1,
+                  "Y": 1.2246469e-16
+                },
+                "Outward": {
+                  "X": 1.2246469e-16,
+                  "Y": 1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 179.03408646583557,
+              "DistanceMeters": 201.97928868444433,
+              "Activity": 0,
+              "Drive": 0.31051815,
+              "TargetOffsetMeters": 9.5,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 24.316305,
+              "ForwardSpeed": 24.313602,
+              "SideSpeed": -0.3624923,
+              "SlideRadians": 0.014907928
+            },
+            "Outer": 0.8004829933887349,
+            "Swept": 0.677183360601033,
+            "RequiredClearance": 0.5,
+            "Corridor": {
+              "Reason": "wide-direction",
+              "Window": {
+                "Start": 132.38937497138977,
+                "End": 194.38937497138977
+              },
+              "CoreFrom": 144.38937497138977,
+              "CoreTo": 186.38937497138977,
+              "CourseError": 0.015762809875266372,
+              "CourseThreshold": 0.06981317007977318,
+              "Yaw": 0.23202037811279297,
+              "YawThreshold": 0.23,
+              "Outer": 0.8004829933887349,
+              "OuterThreshold": 1.8,
+              "CourseExceeded": false,
+              "YawExceeded": true
+            },
+            "Technique": null,
+            "TechniqueWindow": null,
+            "Course": null,
+            "CorrectionSeconds": null,
+            "CourseChange": null
+          },
+          "Contact": null
+        },
+        {
+          "Fixture": "C-hold-plus",
+          "Complete": false,
+          "Stop": "wide-direction",
+          "Finish": null,
+          "WorstSwept": 0.6778113137361133,
+          "LastLegalS": 178.78514218330383,
+          "LegalSweep": 0.6803973135623361,
+          "End": {
+            "Time": 11.02,
+            "S": 179.0282289981842,
+            "X": -11.638854,
+            "Y": 72.46056,
+            "Speed": 24.316229,
+            "Heading": 3.1407483,
+            "Yaw": 0.23149174,
+            "Beta": 0.014852037,
+            "Wheel": 78.28005006811594,
+            "Shaft": 626.98577810254,
+            "Steer": 0.027854642,
+            "Lean": 0.473438379893759,
+            "Sweep": 0.6778113137361133,
+            "Outer": 0.8011077897277173,
+            "Inner": 10.397292481210934,
+            "Active": {
+              "SteeringRadians": 0.01860446,
+              "Drive": 0.3106235
+            }
+          },
+          "Failure": {
+            "Gate": "corridor-yaw",
+            "Condition": "wide-direction",
+            "Time": 11.02,
+            "S": 179.0282289981842,
+            "State": {
+              "Id": 1,
+              "Position": {
+                "X": -11.638854,
+                "Y": 72.46056
+              },
+              "Velocity": {
+                "X": -24.313232,
+                "Y": 0.38166225
+              },
+              "Heading": 3.1407483,
+              "AngularVelocity": 0.23149174,
+              "Road": {
+                "Segment": 4,
+                "Progress": 0.7522395810773296,
+                "ReferenceMeters": 179.0282289981842,
+                "OffsetMeters": 9.79754349153697,
+                "Heading": 3.141592653589793,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": -1,
+                  "Y": 1.2246469e-16
+                },
+                "Outward": {
+                  "X": 1.2246469e-16,
+                  "Y": 1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 179.0282289981842,
+              "DistanceMeters": 201.9776412679421,
+              "Activity": 0,
+              "Drive": 0.3106235,
+              "TargetOffsetMeters": 9.52,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 24.316229,
+              "ForwardSpeed": 24.313545,
+              "SideSpeed": -0.36113223,
+              "SlideRadians": 0.014852037
+            },
+            "Outer": 0.8011077897277173,
+            "Swept": 0.6778113137361133,
+            "RequiredClearance": 0.5,
+            "Corridor": {
+              "Reason": "wide-direction",
+              "Window": {
+                "Start": 132.38937497138977,
+                "End": 194.38937497138977
+              },
+              "CoreFrom": 144.38937497138977,
+              "CoreTo": 186.38937497138977,
+              "CourseError": 0.01569642810354695,
+              "CourseThreshold": 0.06981317007977318,
+              "Yaw": 0.23149174451828003,
+              "YawThreshold": 0.23,
+              "Outer": 0.8011077897277173,
+              "OuterThreshold": 1.8,
+              "CourseExceeded": false,
+              "YawExceeded": true
+            },
+            "Technique": null,
+            "TechniqueWindow": null,
+            "Course": null,
+            "CorrectionSeconds": null,
+            "CourseChange": null
+          },
+          "Contact": null
+        },
+        {
+          "Fixture": "C-hold-minus",
+          "Complete": false,
+          "Stop": "wide-direction",
+          "Finish": null,
+          "WorstSwept": 0.6765791995018665,
+          "LastLegalS": 178.79672074317932,
+          "LegalSweep": 0.6791811337061872,
+          "End": {
+            "Time": 11.02,
+            "S": 179.039808511734,
+            "X": -11.650434,
+            "Y": 72.46178,
+            "Speed": 24.316368,
+            "Heading": 3.1407285,
+            "Yaw": 0.23253709,
+            "Beta": 0.01496312,
+            "Wheel": 78.2780189980654,
+            "Shaft": 626.968880177473,
+            "Steer": 0.027968938,
+            "Lean": 0.4753362548293003,
+            "Sweep": 0.6765791995018665,
+            "Outer": 0.7998818597435869,
+            "Inner": 10.398518424043042,
+            "Active": {
+              "SteeringRadians": 0.0186574,
+              "Drive": 0.3104167
+            }
+          },
+          "Failure": {
+            "Gate": "corridor-yaw",
+            "Condition": "wide-direction",
+            "Time": 11.02,
+            "S": 179.039808511734,
+            "State": {
+              "Id": 1,
+              "Position": {
+                "X": -11.650434,
+                "Y": 72.46178
+              },
+              "Velocity": {
+                "X": -24.313322,
+                "Y": 0.3848464
+              },
+              "Heading": 3.1407285,
+              "AngularVelocity": 0.23253709,
+              "Road": {
+                "Segment": 4,
+                "Progress": 0.7524263474249071,
+                "ReferenceMeters": 179.039808511734,
+                "OffsetMeters": 9.798756565267439,
+                "Heading": 3.141592653589793,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": -1,
+                  "Y": 1.2246469e-16
+                },
+                "Outward": {
+                  "X": 1.2246469e-16,
+                  "Y": 1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 179.039808511734,
+              "DistanceMeters": 201.9809584005343,
+              "Activity": 0,
+              "Drive": 0.3104167,
+              "TargetOffsetMeters": 9.48,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 24.316368,
+              "ForwardSpeed": 24.313644,
+              "SideSpeed": -0.36383516,
+              "SlideRadians": 0.01496312
+            },
+            "Outer": 0.7998818597435869,
+            "Swept": 0.6765791995018665,
+            "RequiredClearance": 0.5,
+            "Corridor": {
+              "Reason": "wide-direction",
+              "Window": {
+                "Start": 132.38937497138977,
+                "End": 194.38937497138977
+              },
+              "CoreFrom": 144.38937497138977,
+              "CoreTo": 186.38937497138977,
+              "CourseError": 0.015827300464232877,
+              "CourseThreshold": 0.06981317007977318,
+              "Yaw": 0.23253709077835083,
+              "YawThreshold": 0.23,
+              "Outer": 0.7998818597435869,
+              "OuterThreshold": 1.8,
+              "CourseExceeded": false,
+              "YawExceeded": true
+            },
+            "Technique": null,
+            "TechniqueWindow": null,
+            "Course": null,
+            "CorrectionSeconds": null,
+            "CourseChange": null
+          },
+          "Contact": null
+        },
+        {
+          "Fixture": "C-alt",
+          "Complete": false,
+          "Stop": "wide-direction",
+          "Finish": null,
+          "WorstSwept": 0.6742782430462145,
+          "LastLegalS": 178.82438588142395,
+          "LegalSweep": 0.6769411161552092,
+          "End": {
+            "Time": 11.02,
+            "S": 179.06747555732727,
+            "X": -11.678101,
+            "Y": 72.464035,
+            "Speed": 24.316685,
+            "Heading": 3.140684,
+            "Yaw": 0.23484334,
+            "Beta": 0.01520302,
+            "Wheel": 78.27296349671231,
+            "Shaft": 626.9269060010196,
+            "Steer": 0.028219549,
+            "Lean": 0.4794921348623592,
+            "Sweep": 0.6742782430462145,
+            "Outer": 0.7975945942140695,
+            "Inner": 10.400805719609815,
+            "Active": {
+              "SteeringRadians": 0.018776234,
+              "Drive": 0.3099266
+            }
+          },
+          "Failure": {
+            "Gate": "corridor-yaw",
+            "Condition": "wide-direction",
+            "Time": 11.02,
+            "S": 179.06747555732727,
+            "State": {
+              "Id": 1,
+              "Position": {
+                "X": -11.678101,
+                "Y": 72.464035
+              },
+              "Velocity": {
+                "X": -24.313528,
+                "Y": 0.39176822
+              },
+              "Heading": 3.140684,
+              "AngularVelocity": 0.23484334,
+              "Road": {
+                "Segment": 4,
+                "Progress": 0.7528725900957661,
+                "ReferenceMeters": 179.06747555732727,
+                "OffsetMeters": 9.801014866048689,
+                "Heading": 3.141592653589793,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": -1,
+                  "Y": 1.2246469e-16
+                },
+                "Outward": {
+                  "X": 1.2246469e-16,
+                  "Y": 1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 179.06747555732727,
+              "DistanceMeters": 201.99116870971193,
+              "Activity": 0,
+              "Drive": 0.3099266,
+              "TargetOffsetMeters": 9.38,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 24.316685,
+              "ForwardSpeed": 24.313875,
+              "SideSpeed": -0.3696728,
+              "SlideRadians": 0.01520302
+            },
+            "Outer": 0.7975945942140695,
+            "Swept": 0.6742782430462145,
+            "RequiredClearance": 0.5,
+            "Corridor": {
+              "Reason": "wide-direction",
+              "Window": {
+                "Start": 132.38937497138977,
+                "End": 194.38937497138977
+              },
+              "CoreFrom": 144.38937497138977,
+              "CoreTo": 186.38937497138977,
+              "CourseError": 0.016111784183211353,
+              "CourseThreshold": 0.06981317007977318,
+              "Yaw": 0.23484334349632263,
+              "YawThreshold": 0.23,
+              "Outer": 0.7975945942140695,
+              "OuterThreshold": 1.8,
+              "CourseExceeded": false,
+              "YawExceeded": true
+            },
+            "Technique": null,
+            "TechniqueWindow": null,
+            "Course": null,
+            "CorrectionSeconds": null,
+            "CourseChange": null
+          },
+          "Contact": null
+        },
+        {
+          "Fixture": "C-alt-plus",
+          "Complete": false,
+          "Stop": "wide-direction",
+          "Finish": null,
+          "WorstSwept": 0.6785874481535064,
+          "LastLegalS": 178.99853539466858,
+          "LegalSweep": 0.6806580696590049,
+          "End": {
+            "Time": 11.03,
+            "S": 179.24173760414124,
+            "X": -11.852363,
+            "Y": 72.46126,
+            "Speed": 24.326931,
+            "Heading": -3.1400514,
+            "Yaw": 0.23665124,
+            "Beta": 0.015303916,
+            "Wheel": 78.23763638839017,
+            "Shaft": 626.5977166629685,
+            "Steer": 0.027685966,
+            "Lean": 0.48204890906585607,
+            "Sweep": 0.6785874481535064,
+            "Outer": 0.8019645221716244,
+            "Inner": 10.396436380545106,
+            "Active": {
+              "SteeringRadians": 0.018472666,
+              "Drive": 0.31115574
+            }
+          },
+          "Failure": {
+            "Gate": "corridor-yaw",
+            "Condition": "wide-direction",
+            "Time": 11.03,
+            "S": 179.24173760414124,
+            "State": {
+              "Id": 1,
+              "Position": {
+                "X": -11.852363,
+                "Y": 72.46126
+              },
+              "Velocity": {
+                "X": -24.324627,
+                "Y": 0.33479193
+              },
+              "Heading": -3.1400514,
+              "AngularVelocity": 0.23665124,
+              "Road": {
+                "Segment": 4,
+                "Progress": 0.755683268270185,
+                "ReferenceMeters": 179.24173760414124,
+                "OffsetMeters": 9.798237766439314,
+                "Heading": 3.141592653589793,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": -1,
+                  "Y": 1.2246469e-16
+                },
+                "Outward": {
+                  "X": 1.2246469e-16,
+                  "Y": 1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 179.24173760414124,
+              "DistanceMeters": 202.21257820563187,
+              "Activity": 0,
+              "Drive": 0.31115574,
+              "TargetOffsetMeters": 9.62,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 24.326931,
+              "ForwardSpeed": 24.324081,
+              "SideSpeed": -0.3722828,
+              "SlideRadians": 0.015303916
+            },
+            "Outer": 0.8019645221716244,
+            "Swept": 0.6785874481535064,
+            "RequiredClearance": 0.5,
+            "Corridor": {
+              "Reason": "wide-direction",
+              "Window": {
+                "Start": 132.38937497138977,
+                "End": 194.38937497138977
+              },
+              "CoreFrom": 144.38937497138977,
+              "CoreTo": 186.38937497138977,
+              "CourseError": 0.013762627960936255,
+              "CourseThreshold": 0.06981317007977318,
+              "Yaw": 0.2366512417793274,
+              "YawThreshold": 0.23,
+              "Outer": 0.8019645221716244,
+              "OuterThreshold": 1.8,
+              "CourseExceeded": false,
+              "YawExceeded": true
+            },
+            "Technique": null,
+            "TechniqueWindow": null,
+            "Course": null,
+            "CorrectionSeconds": null,
+            "CourseChange": null
+          },
+          "Contact": null
+        }
+      ]
+    },
+    "greedy": {
+      "Budget": {
+        "BeamWidth": 1,
+        "MaxPhaseTrials": 48000,
+        "MaxForecastSteps": 7900000,
+        "MaxCpuSeconds": 640,
+        "Parallelism": 5,
+        "MaxRepairs": 2,
+        "Pilot": false
+      },
+      "FirstPhase": 0,
+      "LastLegalPhase": {
+        "Index": 9,
+        "Visit": 0,
+        "Name": "bend exit",
+        "Start": 118.38937497138977,
+        "End": 132.38937497138977,
+        "WindowOrigin": 35
+      },
+      "Periods": 66,
+      "Termination": "no eligible outgoing state at 10:straight stabilization",
+      "Best": 244,
+      "Winner": null,
+      "LockedCandidates": 1,
+      "WallSeconds": 5.540505,
+      "CpuSeconds": 15.8125,
+      "PhaseTrials": 1377,
+      "NewBranches": 459,
+      "RestoredPhaseTrials": 0,
+      "ForecastSteps": 78351,
+      "FullFixtureTests": 5,
+      "StrictFinishesInAnyLockedCandidate": 0,
+      "FailureCounts": {
+        "swept": 639
+      },
+      "Envelopes": [
+        {
+          "Index": 9,
+          "Visit": 0,
+          "Name": "bend exit",
+          "Start": 118.38937497138977,
+          "End": 132.38937497138977,
+          "WindowOrigin": 35,
+          "CandidateCount": 32,
+          "LegalCandidates": 32,
+          "EnteringHistories": 1,
+          "Retained": [
+            244
+          ],
+          "RetainedDistinctParents": 1,
+          "LegalBounds": {
+            "Swept": [
+              1.6515978900051493,
+              2.437440547710052
+            ],
+            "CourseError": [
+              0.08973282913112285,
+              0.20509647665909977
+            ],
+            "Yaw": [
+              -0.078890360891819,
+              0.47801876068115234
+            ],
+            "Beta": [
+              0.001057705725543201,
+              0.04438713192939758
+            ],
+            "Speed": [
+              22.459083557128906,
+              24.046960830688477
+            ],
+            "Outer": [
+              1.768447551501532,
+              2.552692891327348
+            ],
+            "FrontNormal": [
+              365.3488021880173,
+              610.3400042990963
+            ],
+            "RearFraction": [
+              0.24423279943745232,
+              0.6294097481499663
+            ],
+            "YawMoment": [
+              -181.07620239257812,
+              65.71917724609375
+            ],
+            "SteeringTravel": [
+              0.4621305465698242,
+              0.6081559062004089
+            ],
+            "DriftOneSecond": [
+              2.012613534927368,
+              4.808322906494141
+            ],
+            "PendingDelay": [
+              0,
+              0
+            ],
+            "Quality": [
+              1.1798405648094095,
+              1.5522726873314794
+            ]
+          },
+          "Failures": {},
+          "FailedProgress": null
+        },
+        {
+          "Index": 10,
+          "Visit": 1,
+          "Name": "straight stabilization",
+          "Start": 132.38937497138977,
+          "End": 144.38937497138977,
+          "WindowOrigin": 132.38937497138977,
+          "CandidateCount": 213,
+          "LegalCandidates": 0,
+          "EnteringHistories": 1,
+          "Retained": [],
+          "RetainedDistinctParents": 0,
+          "LegalBounds": {
+            "Swept": null,
+            "CourseError": null,
+            "Yaw": null,
+            "Beta": null,
+            "Speed": null,
+            "Outer": null,
+            "FrontNormal": null,
+            "RearFraction": null,
+            "YawMoment": null,
+            "SteeringTravel": null,
+            "DriftOneSecond": null,
+            "PendingDelay": null,
+            "Quality": null
+          },
+          "Failures": {
+            "swept": 639
+          },
+          "FailedProgress": [
+            139.97502064704895,
+            140.96163868904114
+          ]
+        },
+        {
+          "Index": 13,
+          "Visit": 1,
+          "Name": "release from yaw core",
+          "Start": 180.38937497138977,
+          "End": 186.38937497138977,
+          "WindowOrigin": 132.38937497138977,
+          "CandidateCount": 0,
+          "LegalCandidates": 0,
+          "EnteringHistories": 0,
+          "Retained": [],
+          "RetainedDistinctParents": 0,
+          "LegalBounds": {
+            "Swept": null,
+            "CourseError": null,
+            "Yaw": null,
+            "Beta": null,
+            "Speed": null,
+            "Outer": null,
+            "FrontNormal": null,
+            "RearFraction": null,
+            "YawMoment": null,
+            "SteeringTravel": null,
+            "DriftOneSecond": null,
+            "PendingDelay": null,
+            "Quality": null
+          },
+          "Failures": {},
+          "FailedProgress": null
+        },
+        {
+          "Index": 34,
+          "Visit": 3,
+          "Name": "turn preparation",
+          "Start": 481.1681249141693,
+          "End": 499.1681249141693,
+          "WindowOrigin": 451.1681249141693,
+          "CandidateCount": 0,
+          "LegalCandidates": 0,
+          "EnteringHistories": 0,
+          "Retained": [],
+          "RetainedDistinctParents": 0,
+          "LegalBounds": {
+            "Swept": null,
+            "CourseError": null,
+            "Yaw": null,
+            "Beta": null,
+            "Speed": null,
+            "Outer": null,
+            "FrontNormal": null,
+            "RearFraction": null,
+            "YawMoment": null,
+            "SteeringTravel": null,
+            "DriftOneSecond": null,
+            "PendingDelay": null,
+            "Quality": null
+          },
+          "Failures": {},
+          "FailedProgress": null
+        },
+        {
+          "Index": 38,
+          "Visit": 3,
+          "Name": "forming slide",
+          "Start": 525.1681249141693,
+          "End": 542.1681249141693,
+          "WindowOrigin": 513.1681249141693,
+          "CandidateCount": 0,
+          "LegalCandidates": 0,
+          "EnteringHistories": 0,
+          "Retained": [],
+          "RetainedDistinctParents": 0,
+          "LegalBounds": {
+            "Swept": null,
+            "CourseError": null,
+            "Yaw": null,
+            "Beta": null,
+            "Speed": null,
+            "Outer": null,
+            "FrontNormal": null,
+            "RearFraction": null,
+            "YawMoment": null,
+            "SteeringTravel": null,
+            "DriftOneSecond": null,
+            "PendingDelay": null,
+            "Quality": null
+          },
+          "Failures": {},
+          "FailedProgress": null
+        },
+        {
+          "Index": 39,
+          "Visit": 3,
+          "Name": "apex",
+          "Start": 542.1681249141693,
+          "End": 561.8628123998642,
+          "WindowOrigin": 513.1681249141693,
+          "CandidateCount": 0,
+          "LegalCandidates": 0,
+          "EnteringHistories": 0,
+          "Retained": [],
+          "RetainedDistinctParents": 0,
+          "LegalBounds": {
+            "Swept": null,
+            "CourseError": null,
+            "Yaw": null,
+            "Beta": null,
+            "Speed": null,
+            "Outer": null,
+            "FrontNormal": null,
+            "RearFraction": null,
+            "YawMoment": null,
+            "SteeringTravel": null,
+            "DriftOneSecond": null,
+            "PendingDelay": null,
+            "Quality": null
+          },
+          "Failures": {},
+          "FailedProgress": null
+        },
+        {
+          "Index": 41,
+          "Visit": 3,
+          "Name": "exit preparation",
+          "Start": 579.3928998947143,
+          "End": 596.5574998855591,
+          "WindowOrigin": 513.1681249141693,
+          "CandidateCount": 0,
+          "LegalCandidates": 0,
+          "EnteringHistories": 0,
+          "Retained": [],
+          "RetainedDistinctParents": 0,
+          "LegalBounds": {
+            "Swept": null,
+            "CourseError": null,
+            "Yaw": null,
+            "Beta": null,
+            "Speed": null,
+            "Outer": null,
+            "FrontNormal": null,
+            "RearFraction": null,
+            "YawMoment": null,
+            "SteeringTravel": null,
+            "DriftOneSecond": null,
+            "PendingDelay": null,
+            "Quality": null
+          },
+          "Failures": {},
+          "FailedProgress": null
+        },
+        {
+          "Index": 42,
+          "Visit": 3,
+          "Name": "bend exit",
+          "Start": 596.5574998855591,
+          "End": 610.5574998855591,
+          "WindowOrigin": 513.1681249141693,
+          "CandidateCount": 0,
+          "LegalCandidates": 0,
+          "EnteringHistories": 0,
+          "Retained": [],
+          "RetainedDistinctParents": 0,
+          "LegalBounds": {
+            "Swept": null,
+            "CourseError": null,
+            "Yaw": null,
+            "Beta": null,
+            "Speed": null,
+            "Outer": null,
+            "FrontNormal": null,
+            "RearFraction": null,
+            "YawMoment": null,
+            "SteeringTravel": null,
+            "DriftOneSecond": null,
+            "PendingDelay": null,
+            "Quality": null
+          },
+          "Failures": {},
+          "FailedProgress": null
+        },
+        {
+          "Index": 43,
+          "Visit": 4,
+          "Name": "straight stabilization",
+          "Start": 610.5574998855591,
+          "End": 622.5574998855591,
+          "WindowOrigin": 610.5574998855591,
+          "CandidateCount": 0,
+          "LegalCandidates": 0,
+          "EnteringHistories": 0,
+          "Retained": [],
+          "RetainedDistinctParents": 0,
+          "LegalBounds": {
+            "Swept": null,
+            "CourseError": null,
+            "Yaw": null,
+            "Beta": null,
+            "Speed": null,
+            "Outer": null,
+            "FrontNormal": null,
+            "RearFraction": null,
+            "YawMoment": null,
+            "SteeringTravel": null,
+            "DriftOneSecond": null,
+            "PendingDelay": null,
+            "Quality": null
+          },
+          "Failures": {},
+          "FailedProgress": null
+        }
+      ],
+      "LockedResults": [
+        {
+          "Fixture": "C",
+          "Complete": false,
+          "Stop": "swept",
+          "Finish": null,
+          "WorstSwept": 0.47238578075711674,
+          "LastLegalS": 140.23139882087708,
+          "LegalSweep": 0.504932019956501,
+          "End": {
+            "Time": 9.349999999999998,
+            "S": 140.466548204422,
+            "X": 26.922827,
+            "Y": 72.594925,
+            "Speed": 23.766743,
+            "Heading": 3.0238807,
+            "Yaw": 0.3506943,
+            "Beta": 0.027678445,
+            "Wheel": 73.38125187499267,
+            "Shaft": 587.1914033720968,
+            "Steer": 0.025666518,
+            "Lean": 0.5957175351826395,
+            "Sweep": 0.47238578075711674,
+            "Outer": 0.5935886773818962,
+            "Inner": 10.610070563420217,
+            "Active": {
+              "SteeringRadians": 0.022083828,
+              "Drive": 0.114382066
+            }
+          },
+          "Failure": {
+            "Gate": "swept",
+            "Condition": "swept",
+            "Time": 9.349999999999998,
+            "S": 140.466548204422,
+            "State": {
+              "Id": 1,
+              "Position": {
+                "X": 26.922827,
+                "Y": 72.594925
+              },
+              "Velocity": {
+                "X": -23.515991,
+                "Y": 3.443295
+              },
+              "Heading": 3.0238807,
+              "AngularVelocity": 0.3506943,
+              "Road": {
+                "Segment": 4,
+                "Progress": 0.13027698762955203,
+                "ReferenceMeters": 140.466548204422,
+                "OffsetMeters": 9.931904758626814,
+                "Heading": 3.141592653589793,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": -1,
+                  "Y": 1.2246469e-16
+                },
+                "Outward": {
+                  "X": 1.2246469e-16,
+                  "Y": 1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 140.466548204422,
+              "DistanceMeters": 161.78058145219256,
+              "Activity": 0,
+              "Drive": 0.114382066,
+              "TargetOffsetMeters": 9.5,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 23.766743,
+              "ForwardSpeed": 23.75764,
+              "SideSpeed": -0.6577425,
+              "SlideRadians": 0.027678445
+            },
+            "Outer": 0.5935886773818962,
+            "Swept": 0.47238578075711674,
+            "RequiredClearance": 0.5,
+            "Corridor": null,
+            "Technique": null,
+            "TechniqueWindow": null,
+            "Course": null,
+            "CorrectionSeconds": null,
+            "CourseChange": null
+          },
+          "Contact": null
+        },
+        {
+          "Fixture": "C-hold-plus",
+          "Complete": false,
+          "Stop": "swept",
+          "Finish": null,
+          "WorstSwept": 0.4716569406416068,
+          "LastLegalS": 140.23313641548157,
+          "LegalSweep": 0.5041876840197335,
+          "End": {
+            "Time": 9.349999999999998,
+            "S": 140.4682915210724,
+            "X": 26.921083,
+            "Y": 72.59571,
+            "Speed": 23.767035,
+            "Heading": 3.023978,
+            "Yaw": 0.3506899,
+            "Beta": 0.027693165,
+            "Wheel": 73.3805578183348,
+            "Shaft": 587.1856115922209,
+            "Steer": 0.025656879,
+            "Lean": 0.5959511820366769,
+            "Sweep": 0.4716569406416068,
+            "Outer": 0.5928613018419154,
+            "Inner": 10.61078926030792,
+            "Active": {
+              "SteeringRadians": 0.022077985,
+              "Drive": 0.11430182
+            }
+          },
+          "Failure": {
+            "Gate": "swept",
+            "Condition": "swept",
+            "Time": 9.349999999999998,
+            "S": 140.4682915210724,
+            "State": {
+              "Id": 1,
+              "Position": {
+                "X": 26.921083,
+                "Y": 72.59571
+              },
+              "Velocity": {
+                "X": -23.516562,
+                "Y": 3.4413955
+              },
+              "Heading": 3.023978,
+              "AngularVelocity": 0.3506899,
+              "Road": {
+                "Segment": 4,
+                "Progress": 0.13030510564004222,
+                "ReferenceMeters": 140.4682915210724,
+                "OffsetMeters": 9.932690586263533,
+                "Heading": 3.141592653589793,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": -1,
+                  "Y": 1.2246469e-16
+                },
+                "Outward": {
+                  "X": 1.2246469e-16,
+                  "Y": 1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 140.4682915210724,
+              "DistanceMeters": 161.78287027055194,
+              "Activity": 0,
+              "Drive": 0.11430182,
+              "TargetOffsetMeters": 9.52,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 23.767035,
+              "ForwardSpeed": 23.75792,
+              "SideSpeed": -0.65810037,
+              "SlideRadians": 0.027693165
+            },
+            "Outer": 0.5928613018419154,
+            "Swept": 0.4716569406416068,
+            "RequiredClearance": 0.5,
+            "Corridor": null,
+            "Technique": null,
+            "TechniqueWindow": null,
+            "Course": null,
+            "CorrectionSeconds": null,
+            "CourseChange": null
+          },
+          "Contact": null
+        },
+        {
+          "Fixture": "C-hold-minus",
+          "Complete": false,
+          "Stop": "swept",
+          "Finish": null,
+          "WorstSwept": 0.4730476279937364,
+          "LastLegalS": 140.22967839241028,
+          "LegalSweep": 0.505616854015813,
+          "End": {
+            "Time": 9.349999999999998,
+            "S": 140.4648220539093,
+            "X": 26.924553,
+            "Y": 72.59421,
+            "Speed": 23.766476,
+            "Heading": 3.0237865,
+            "Yaw": 0.35071403,
+            "Beta": 0.027666498,
+            "Wheel": 73.38197418854594,
+            "Shaft": 587.1974119465067,
+            "Steer": 0.025676914,
+            "Lean": 0.5955196101798909,
+            "Sweep": 0.4730476279937364,
+            "Outer": 0.5942492549054718,
+            "Inner": 10.609418394827182,
+            "Active": {
+              "SteeringRadians": 0.022090202,
+              "Drive": 0.11445916
+            }
+          },
+          "Failure": {
+            "Gate": "swept",
+            "Condition": "swept",
+            "Time": 9.349999999999998,
+            "S": 140.4648220539093,
+            "State": {
+              "Id": 1,
+              "Position": {
+                "X": 26.924553,
+                "Y": 72.59421
+              },
+              "Velocity": {
+                "X": -23.515444,
+                "Y": 3.44519
+              },
+              "Heading": 3.0237865,
+              "AngularVelocity": 0.35071403,
+              "Road": {
+                "Segment": 4,
+                "Progress": 0.1302491464922505,
+                "ReferenceMeters": 140.4648220539093,
+                "OffsetMeters": 9.931187595540877,
+                "Heading": 3.141592653589793,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": -1,
+                  "Y": 1.2246469e-16
+                },
+                "Outward": {
+                  "X": 1.2246469e-16,
+                  "Y": 1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 140.4648220539093,
+              "DistanceMeters": 161.7783352548795,
+              "Activity": 0,
+              "Drive": 0.11445916,
+              "TargetOffsetMeters": 9.48,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 23.766476,
+              "ForwardSpeed": 23.757381,
+              "SideSpeed": -0.65745115,
+              "SlideRadians": 0.027666498
+            },
+            "Outer": 0.5942492549054718,
+            "Swept": 0.4730476279937364,
+            "RequiredClearance": 0.5,
+            "Corridor": null,
+            "Technique": null,
+            "TechniqueWindow": null,
+            "Course": null,
+            "CorrectionSeconds": null,
+            "CourseChange": null
+          },
+          "Contact": null
+        },
+        {
+          "Fixture": "C-alt",
+          "Complete": false,
+          "Stop": "swept",
+          "Finish": null,
+          "WorstSwept": 0.47640748725691057,
+          "LastLegalS": 140.2208321094513,
+          "LegalSweep": 0.5090688332257046,
+          "End": {
+            "Time": 9.349999999999998,
+            "S": 140.45594906806946,
+            "X": 26.933426,
+            "Y": 72.59057,
+            "Speed": 23.765228,
+            "Heading": 3.0233116,
+            "Yaw": 0.35081604,
+            "Beta": 0.02760723,
+            "Wheel": 73.38581491585876,
+            "Shaft": 587.2292788404966,
+            "Steer": 0.025728473,
+            "Lean": 0.5945715303081429,
+            "Sweep": 0.47640748725691057,
+            "Outer": 0.5976031742901226,
+            "Inner": 10.606106983993465,
+            "Active": {
+              "SteeringRadians": 0.022121584,
+              "Drive": 0.11483899
+            }
+          },
+          "Failure": {
+            "Gate": "swept",
+            "Condition": "swept",
+            "Time": 9.349999999999998,
+            "S": 140.45594906806946,
+            "State": {
+              "Id": 1,
+              "Position": {
+                "X": 26.933426,
+                "Y": 72.59057
+              },
+              "Velocity": {
+                "X": -23.512774,
+                "Y": 3.4547825
+              },
+              "Heading": 3.0233116,
+              "AngularVelocity": 0.35081604,
+              "Road": {
+                "Segment": 4,
+                "Progress": 0.1301060338174143,
+                "ReferenceMeters": 140.45594906806946,
+                "OffsetMeters": 9.92754837434947,
+                "Heading": 3.141592653589793,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": -1,
+                  "Y": 1.2246469e-16
+                },
+                "Outward": {
+                  "X": 1.2246469e-16,
+                  "Y": 1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 140.45594906806946,
+              "DistanceMeters": 161.76740169549157,
+              "Activity": 0,
+              "Drive": 0.11483899,
+              "TargetOffsetMeters": 9.38,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 23.765228,
+              "ForwardSpeed": 23.756172,
+              "SideSpeed": -0.6560087,
+              "SlideRadians": 0.02760723
+            },
+            "Outer": 0.5976031742901226,
+            "Swept": 0.47640748725691057,
+            "RequiredClearance": 0.5,
+            "Corridor": null,
+            "Technique": null,
+            "TechniqueWindow": null,
+            "Course": null,
+            "CorrectionSeconds": null,
+            "CourseChange": null
+          },
+          "Contact": null
+        },
+        {
+          "Fixture": "C-alt-plus",
+          "Complete": false,
+          "Stop": "swept",
+          "Finish": null,
+          "WorstSwept": 0.4679035846596684,
+          "LastLegalS": 140.24095273017883,
+          "LegalSweep": 0.5003414756601946,
+          "End": {
+            "Time": 9.349999999999998,
+            "S": 140.47613644599915,
+            "X": 26.913239,
+            "Y": 72.59974,
+            "Speed": 23.768526,
+            "Heading": 3.0244484,
+            "Yaw": 0.35070348,
+            "Beta": 0.027766677,
+            "Wheel": 73.3776940881648,
+            "Shaft": 587.1615587524477,
+            "Steer": 0.025613222,
+            "Lean": 0.5971504484255941,
+            "Sweep": 0.4679035846596684,
+            "Outer": 0.5891157038217271,
+            "Inner": 10.614492991010929,
+            "Active": {
+              "SteeringRadians": 0.022051496,
+              "Drive": 0.11391665
+            }
+          },
+          "Failure": {
+            "Gate": "swept",
+            "Condition": "swept",
+            "Time": 9.349999999999998,
+            "S": 140.47613644599915,
+            "State": {
+              "Id": 1,
+              "Position": {
+                "X": 26.913239,
+                "Y": 72.59974
+              },
+              "Velocity": {
+                "X": -23.519403,
+                "Y": 3.4322774
+              },
+              "Heading": 3.0244484,
+              "AngularVelocity": 0.35070348,
+              "Road": {
+                "Segment": 4,
+                "Progress": 0.13043163668724797,
+                "ReferenceMeters": 140.47613644599915,
+                "OffsetMeters": 9.936718906576033,
+                "Heading": 3.141592653589793,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": -1,
+                  "Y": 1.2246469e-16
+                },
+                "Outward": {
+                  "X": 1.2246469e-16,
+                  "Y": 1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 140.47613644599915,
+              "DistanceMeters": 161.79399305233528,
+              "Activity": 0,
+              "Drive": 0.11391665,
+              "TargetOffsetMeters": 9.62,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 23.768526,
+              "ForwardSpeed": 23.759367,
+              "SideSpeed": -0.65988827,
+              "SlideRadians": 0.027766677
+            },
+            "Outer": 0.5891157038217271,
+            "Swept": 0.4679035846596684,
+            "RequiredClearance": 0.5,
+            "Corridor": null,
+            "Technique": null,
+            "TechniqueWindow": null,
+            "Course": null,
+            "CorrectionSeconds": null,
+            "CourseChange": null
+          },
+          "Contact": null
+        }
+      ]
+    },
+    "beam": {
+      "Budget": {
+        "BeamWidth": 5,
+        "MaxPhaseTrials": 48000,
+        "MaxForecastSteps": 7900000,
+        "MaxCpuSeconds": 640,
+        "Parallelism": 5,
+        "MaxRepairs": 2,
+        "Pilot": false
+      },
+      "FirstPhase": 0,
+      "LastLegalPhase": {
+        "Index": 42,
+        "Visit": 3,
+        "Name": "bend exit",
+        "Start": 596.5574998855591,
+        "End": 610.5574998855591,
+        "WindowOrigin": 513.1681249141693
+      },
+      "Periods": 66,
+      "Termination": "no eligible outgoing state at 43:straight stabilization",
+      "Best": 7344,
+      "Winner": null,
+      "LockedCandidates": 8,
+      "WallSeconds": 70.0843018,
+      "CpuSeconds": 236.71875,
+      "PhaseTrials": 31758,
+      "NewBranches": 10586,
+      "RestoredPhaseTrials": 0,
+      "ForecastSteps": 1620836,
+      "FullFixtureTests": 40,
+      "StrictFinishesInAnyLockedCandidate": 0,
+      "FailureCounts": {
+        "swept": 12191,
+        "technique-correction": 165,
+        "wide-direction": 2536,
+        "wide-entry": 132,
+        "wide-position": 589
+      },
+      "Envelopes": [
+        {
+          "Index": 9,
+          "Visit": 0,
+          "Name": "bend exit",
+          "Start": 118.38937497138977,
+          "End": 132.38937497138977,
+          "WindowOrigin": 35,
+          "CandidateCount": 160,
+          "LegalCandidates": 41,
+          "EnteringHistories": 5,
+          "Retained": [
+            1098,
+            1213,
+            1190,
+            1103,
+            1120
+          ],
+          "RetainedDistinctParents": 2,
+          "LegalBounds": {
+            "Swept": [
+              0.5106336456356744,
+              2.5556180733058764
+            ],
+            "CourseError": [
+              0.0971311475107558,
+              0.20869418875905257
+            ],
+            "Yaw": [
+              -0.2829168140888214,
+              0.6227333545684814
+            ],
+            "Beta": [
+              0.0030532449018210173,
+              0.07495450228452682
+            ],
+            "Speed": [
+              21.767118453979492,
+              23.96152114868164
+            ],
+            "Outer": [
+              0.6240765229505966,
+              2.6685288233517013
+            ],
+            "FrontNormal": [
+              324.59098025343883,
+              607.3826500791712
+            ],
+            "RearFraction": [
+              0.29446036322223373,
+              0.7853014273286656
+            ],
+            "YawMoment": [
+              -191.40762329101562,
+              286.1204833984375
+            ],
+            "SteeringTravel": [
+              0.10601091384887695,
+              0.6058251857757568
+            ],
+            "DriftOneSecond": [
+              2.1381752490997314,
+              4.782822608947754
+            ],
+            "PendingDelay": [
+              0,
+              0
+            ],
+            "Quality": [
+              0.1681946053320687,
+              1.535146934717475
+            ]
+          },
+          "Failures": {
+            "swept": 357
+          },
+          "FailedProgress": [
+            128.72292915823255,
+            133.23329663276672
+          ]
+        },
+        {
+          "Index": 10,
+          "Visit": 1,
+          "Name": "straight stabilization",
+          "Start": 132.38937497138977,
+          "End": 144.38937497138977,
+          "WindowOrigin": 132.38937497138977,
+          "CandidateCount": 222,
+          "LegalCandidates": 86,
+          "EnteringHistories": 5,
+          "Retained": [
+            1373,
+            1218,
+            1331,
+            1369,
+            1352
+          ],
+          "RetainedDistinctParents": 3,
+          "LegalBounds": {
+            "Swept": [
+              0.5092727257238948,
+              1.6531981878775346
+            ],
+            "CourseError": [
+              -0.06961206892408839,
+              0.06526383130527956
+            ],
+            "Yaw": [
+              -0.14086075127124786,
+              0.20503264665603638
+            ],
+            "Beta": [
+              -0.0039554014801979065,
+              0.025412339717149734
+            ],
+            "Speed": [
+              21.828428268432617,
+              23.62845802307129
+            ],
+            "Outer": [
+              0.7849523212700914,
+              1.7721351905233376
+            ],
+            "FrontNormal": [
+              595.5978479414529,
+              765.248515069635
+            ],
+            "RearFraction": [
+              0.0234204432514908,
+              0.3152842481898157
+            ],
+            "YawMoment": [
+              -26.8343505859375,
+              10.54183578491211
+            ],
+            "SteeringTravel": [
+              0.5952021479606628,
+              0.6108357906341553
+            ],
+            "DriftOneSecond": [
+              -1.5541515350341797,
+              1.5020592212677002
+            ],
+            "PendingDelay": [
+              0,
+              0
+            ],
+            "Quality": [
+              0.4369864089479242,
+              1.5702739312458542
+            ]
+          },
+          "Failures": {
+            "swept": 236,
+            "wide-direction": 172
+          },
+          "FailedProgress": [
+            136.5327980518341,
+            145.41913723945618
+          ]
+        },
+        {
+          "Index": 13,
+          "Visit": 1,
+          "Name": "release from yaw core",
+          "Start": 180.38937497138977,
+          "End": 186.38937497138977,
+          "WindowOrigin": 132.38937497138977,
+          "CandidateCount": 220,
+          "LegalCandidates": 56,
+          "EnteringHistories": 5,
+          "Retained": [
+            1880,
+            2047,
+            2056,
+            1968,
+            2051
+          ],
+          "RetainedDistinctParents": 4,
+          "LegalBounds": {
+            "Swept": [
+              0.5749896434051434,
+              1.1856225233313704
+            ],
+            "CourseError": [
+              -0.02385312743899761,
+              -0.017374925016715375
+            ],
+            "Yaw": [
+              0.12027806043624878,
+              0.20275945961475372
+            ],
+            "Beta": [
+              0.01083951722830534,
+              0.022916892543435097
+            ],
+            "Speed": [
+              23.619956970214844,
+              23.92479133605957
+            ],
+            "Outer": [
+              0.7322748160490787,
+              1.3949841562828253
+            ],
+            "FrontNormal": [
+              566.013907900248,
+              650.1241047929262
+            ],
+            "RearFraction": [
+              0.20904525608549748,
+              0.3881331519562907
+            ],
+            "YawMoment": [
+              -9.221527099609375,
+              14.725601196289062
+            ],
+            "SteeringTravel": [
+              0.5858267545700073,
+              0.6011160016059875
+            ],
+            "DriftOneSecond": [
+              -0.566155731678009,
+              -0.4140211045742035
+            ],
+            "PendingDelay": [
+              0,
+              0
+            ],
+            "Quality": [
+              0.6427237128364608,
+              1.2604180204511635
+            ]
+          },
+          "Failures": {
+            "wide-direction": 492
+          },
+          "FailedProgress": [
+            180.71306824684143,
+            185.76322102546692
+          ]
+        },
+        {
+          "Index": 34,
+          "Visit": 3,
+          "Name": "turn preparation",
+          "Start": 481.1681249141693,
+          "End": 499.1681249141693,
+          "WindowOrigin": 451.1681249141693,
+          "CandidateCount": 220,
+          "LegalCandidates": 73,
+          "EnteringHistories": 5,
+          "Retained": [
+            5965,
+            5815,
+            5857,
+            5947,
+            5912
+          ],
+          "RetainedDistinctParents": 5,
+          "LegalBounds": {
+            "Swept": [
+              0.5138139388682265,
+              1.4665114383754392
+            ],
+            "CourseError": [
+              -0.006126583329035148,
+              0.06160839592249795
+            ],
+            "Yaw": [
+              0.08970607817173004,
+              0.22805345058441162
+            ],
+            "Beta": [
+              -0.0019305238965898752,
+              0.022022390738129616
+            ],
+            "Speed": [
+              23.10796546936035,
+              24.879894256591797
+            ],
+            "Outer": [
+              0.6341855535950399,
+              1.5946780307527688
+            ],
+            "FrontNormal": [
+              681.1099587494904,
+              773.5042795674157
+            ],
+            "RearFraction": [
+              0.022094582699148064,
+              0.2831063873505463
+            ],
+            "YawMoment": [
+              0.8683700561523438,
+              40.80424118041992
+            ],
+            "SteeringTravel": [
+              0.5942050814628601,
+              0.6068124175071716
+            ],
+            "DriftOneSecond": [
+              -0.14918652176856995,
+              1.474334716796875
+            ],
+            "PendingDelay": [
+              0,
+              0
+            ],
+            "Quality": [
+              0.4112740327694062,
+              1.448230336217522
+            ]
+          },
+          "Failures": {
+            "swept": 182,
+            "technique-correction": 24,
+            "wide-direction": 227
+          },
+          "FailedProgress": [
+            490.83429169654846,
+            500.0466945171356
+          ]
+        },
+        {
+          "Index": 38,
+          "Visit": 3,
+          "Name": "forming slide",
+          "Start": 525.1681249141693,
+          "End": 542.1681249141693,
+          "WindowOrigin": 513.1681249141693,
+          "CandidateCount": 160,
+          "LegalCandidates": 160,
+          "EnteringHistories": 5,
+          "Retained": [
+            6688,
+            6656,
+            6624,
+            6720,
+            6742
+          ],
+          "RetainedDistinctParents": 5,
+          "LegalBounds": {
+            "Swept": [
+              3.114800676688776,
+              3.5990094486458926
+            ],
+            "CourseError": [
+              -0.15703602356421684,
+              0.05196590725668412
+            ],
+            "Yaw": [
+              0.02365223877131939,
+              1.1462894678115845
+            ],
+            "Beta": [
+              0.007675545755773783,
+              0.31489384174346924
+            ],
+            "Speed": [
+              20.114971160888672,
+              23.45054817199707
+            ],
+            "Outer": [
+              6.423408434019785,
+              8.474941755740613
+            ],
+            "FrontNormal": [
+              570.934517031133,
+              651.2714112768163
+            ],
+            "RearFraction": [
+              0.4998513620609951,
+              0.9757317420114916
+            ],
+            "YawMoment": [
+              -79.580810546875,
+              460.7295227050781
+            ],
+            "SteeringTravel": [
+              0.1743798851966858,
+              0.5109792947769165
+            ],
+            "DriftOneSecond": [
+              -3.1476807594299316,
+              1.2180805206298828
+            ],
+            "PendingDelay": [
+              0,
+              0
+            ],
+            "Quality": [
+              -2.029297146454721,
+              -0.5876404595197928
+            ]
+          },
+          "Failures": {},
+          "FailedProgress": null
+        },
+        {
+          "Index": 39,
+          "Visit": 3,
+          "Name": "apex",
+          "Start": 542.1681249141693,
+          "End": 561.8628123998642,
+          "WindowOrigin": 513.1681249141693,
+          "CandidateCount": 160,
+          "LegalCandidates": 160,
+          "EnteringHistories": 5,
+          "Retained": [
+            6781,
+            6813,
+            6845,
+            6877,
+            6895
+          ],
+          "RetainedDistinctParents": 5,
+          "LegalBounds": {
+            "Swept": [
+              3.3249606256566597,
+              6.874691512574022
+            ],
+            "CourseError": [
+              -0.1872621665496017,
+              -0.05336080596800472
+            ],
+            "Yaw": [
+              0.03766360133886337,
+              0.8282061815261841
+            ],
+            "Beta": [
+              0.0702173039317131,
+              0.3225569427013397
+            ],
+            "Speed": [
+              19.71030044555664,
+              22.16799545288086
+            ],
+            "Outer": [
+              7.337548419223067,
+              12.166274907771692
+            ],
+            "FrontNormal": [
+              502.88274699615715,
+              654.331274781735
+            ],
+            "RearFraction": [
+              0.7034764015027253,
+              0.9776219629810802
+            ],
+            "YawMoment": [
+              -204.1912841796875,
+              30.27313232421875
+            ],
+            "SteeringTravel": [
+              0.21611443161964417,
+              0.5677124857902527
+            ],
+            "DriftOneSecond": [
+              -3.7932167053222656,
+              -1.1274666786193848
+            ],
+            "PendingDelay": [
+              0,
+              0
+            ],
+            "Quality": [
+              -4.2095966363825985,
+              -1.1878316385605148
+            ]
+          },
+          "Failures": {},
+          "FailedProgress": null
+        },
+        {
+          "Index": 41,
+          "Visit": 3,
+          "Name": "exit preparation",
+          "Start": 579.3928998947143,
+          "End": 596.5574998855591,
+          "WindowOrigin": 513.1681249141693,
+          "CandidateCount": 160,
+          "LegalCandidates": 160,
+          "EnteringHistories": 5,
+          "Retained": [
+            7087,
+            7187,
+            7118,
+            7229,
+            7155
+          ],
+          "RetainedDistinctParents": 5,
+          "LegalBounds": {
+            "Swept": [
+              1.607212139336527,
+              3.229685908701113
+            ],
+            "CourseError": [
+              0.1673339456635929,
+              0.24958185931597818
+            ],
+            "Yaw": [
+              0.4259026348590851,
+              0.8386086225509644
+            ],
+            "Beta": [
+              0.06299125403165817,
+              0.20547698438167572
+            ],
+            "Speed": [
+              23.557016372680664,
+              25.725406646728516
+            ],
+            "Outer": [
+              1.7361850545240707,
+              8.323925123531033
+            ],
+            "FrontNormal": [
+              498.917276329306,
+              644.1809289331245
+            ],
+            "RearFraction": [
+              0.7227057370625403,
+              0.9484345761613299
+            ],
+            "YawMoment": [
+              -81.666748046875,
+              16.76092529296875
+            ],
+            "SteeringTravel": [
+              0.2587945759296417,
+              0.516232430934906
+            ],
+            "DriftOneSecond": [
+              3.985520362854004,
+              6.309727668762207
+            ],
+            "PendingDelay": [
+              0,
+              0
+            ],
+            "Quality": [
+              -2.0183664525016267,
+              1.4021881660114244
+            ]
+          },
+          "Failures": {},
+          "FailedProgress": null
+        },
+        {
+          "Index": 42,
+          "Visit": 3,
+          "Name": "bend exit",
+          "Start": 596.5574998855591,
+          "End": 610.5574998855591,
+          "WindowOrigin": 513.1681249141693,
+          "CandidateCount": 160,
+          "LegalCandidates": 32,
+          "EnteringHistories": 5,
+          "Retained": [
+            7347,
+            7346,
+            7342,
+            7345,
+            7369
+          ],
+          "RetainedDistinctParents": 1,
+          "LegalBounds": {
+            "Swept": [
+              1.4132653896503504,
+              1.60618718060515
+            ],
+            "CourseError": [
+              0.3107468300870597,
+              0.3268570487204199
+            ],
+            "Yaw": [
+              0.6467899680137634,
+              0.8192089200019836
+            ],
+            "Beta": [
+              0.17117173969745636,
+              0.20489351451396942
+            ],
+            "Speed": [
+              24.20724868774414,
+              24.86160659790039
+            ],
+            "Outer": [
+              1.541412634103755,
+              1.732376524757933
+            ],
+            "FrontNormal": [
+              593.9148010753977,
+              652.7815345861417
+            ],
+            "RearFraction": [
+              0.9252474838890478,
+              0.9525127311099899
+            ],
+            "YawMoment": [
+              -51.1884765625,
+              4.52252197265625
+            ],
+            "SteeringTravel": [
+              0.24288606643676758,
+              0.4961680769920349
+            ],
+            "DriftOneSecond": [
+              7.4018449783325195,
+              7.97022819519043
+            ],
+            "PendingDelay": [
+              0,
+              0
+            ],
+            "Quality": [
+              0.6870020852277425,
+              0.8187806541459519
+            ]
+          },
+          "Failures": {
+            "swept": 384
+          },
+          "FailedProgress": [
+            599.5999427585857,
+            605.28539604362
+          ]
+        },
+        {
+          "Index": 43,
+          "Visit": 4,
+          "Name": "straight stabilization",
+          "Start": 610.5574998855591,
+          "End": 622.5574998855591,
+          "WindowOrigin": 610.5574998855591,
+          "CandidateCount": 3182,
+          "LegalCandidates": 0,
+          "EnteringHistories": 15,
+          "Retained": [],
+          "RetainedDistinctParents": 0,
+          "LegalBounds": {
+            "Swept": null,
+            "CourseError": null,
+            "Yaw": null,
+            "Beta": null,
+            "Speed": null,
+            "Outer": null,
+            "FrontNormal": null,
+            "RearFraction": null,
+            "YawMoment": null,
+            "SteeringTravel": null,
+            "DriftOneSecond": null,
+            "PendingDelay": null,
+            "Quality": null
+          },
+          "Failures": {
+            "swept": 9546
+          },
+          "FailedProgress": [
+            614.2653512954712,
+            615.8013029098511
+          ]
+        }
+      ],
+      "LockedResults": [
+        {
+          "Fixture": "C",
+          "Complete": false,
+          "Stop": "swept",
+          "Finish": null,
+          "WorstSwept": 0.4784382719002838,
+          "LastLegalS": 615.0329866409302,
+          "LegalSweep": 0.5221969714765465,
+          "End": {
+            "Time": 32.94,
+            "S": 615.2669305801392,
+            "X": -22.29057,
+            "Y": -10.001661,
+            "Speed": 23.868021,
+            "Heading": 0.006033013,
+            "Yaw": 0.58065575,
+            "Beta": 0.20492259,
+            "Wheel": 90.59986567455601,
+            "Shaft": 726.122512513119,
+            "Steer": 0.23421031,
+            "Lean": 0.9490927651230752,
+            "Sweep": 0.4784382719002838,
+            "Outer": 0.6014670495293964,
+            "Inner": 10.59694678138258,
+            "Active": {
+              "SteeringRadians": 0.026960954,
+              "Drive": 0.5869425
+            }
+          },
+          "Failure": {
+            "Gate": "swept",
+            "Condition": "swept",
+            "Time": 32.94,
+            "S": 615.2669305801392,
+            "State": {
+              "Id": 1,
+              "Position": {
+                "X": -22.29057,
+                "Y": -10.001661
+              },
+              "Velocity": {
+                "X": 23.397501,
+                "Y": -4.7158656
+              },
+              "Heading": 0.006033013,
+              "AngularVelocity": 0.58065575,
+              "Road": {
+                "Segment": 8,
+                "Progress": 0.1744233590585214,
+                "ReferenceMeters": 296.4881806373596,
+                "OffsetMeters": 10.00166130065918,
+                "Heading": 0,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": 1,
+                  "Y": 0
+                },
+                "Outward": {
+                  "X": 0,
+                  "Y": -1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 615.2669305801392,
+              "DistanceMeters": 691.7761009673195,
+              "Activity": 0,
+              "Drive": 0.5869425,
+              "TargetOffsetMeters": 9.5,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 23.868021,
+              "ForwardSpeed": 23.368626,
+              "SideSpeed": -4.8569365,
+              "SlideRadians": 0.20492259
+            },
+            "Outer": 0.6014670495293964,
+            "Swept": 0.4784382719002838,
+            "RequiredClearance": 0.5,
+            "Corridor": null,
+            "Technique": null,
+            "TechniqueWindow": null,
+            "Course": null,
+            "CorrectionSeconds": null,
+            "CourseChange": null
+          },
+          "Contact": null
+        },
+        {
+          "Fixture": "C-hold-plus",
+          "Complete": false,
+          "Stop": "swept",
+          "Finish": null,
+          "WorstSwept": 0.49986685526950875,
+          "LastLegalS": 615.0231924057007,
+          "LegalSweep": 0.5432166704986188,
+          "End": {
+            "Time": 32.94,
+            "S": 615.256947517395,
+            "X": -22.300552,
+            "Y": -9.980951,
+            "Speed": 23.840786,
+            "Heading": 0.0068728765,
+            "Yaw": 0.57428324,
+            "Beta": 0.20407163,
+            "Wheel": 90.67167207136144,
+            "Shaft": 726.7069138298659,
+            "Steer": 0.23787558,
+            "Lean": 0.9444577621839351,
+            "Sweep": 0.49986685526950875,
+            "Outer": 0.6227250002680348,
+            "Inner": 10.575692949505482,
+            "Active": {
+              "SteeringRadians": 0.026645754,
+              "Drive": 0.58990306
+            }
+          },
+          "Failure": {
+            "Gate": "swept",
+            "Condition": "swept",
+            "Time": 32.94,
+            "S": 615.256947517395,
+            "State": {
+              "Id": 1,
+              "Position": {
+                "X": -22.300552,
+                "Y": -9.980951
+              },
+              "Velocity": {
+                "X": 23.378735,
+                "Y": -4.670962
+              },
+              "Heading": 0.0068728765,
+              "AngularVelocity": 0.57428324,
+              "Road": {
+                "Segment": 8,
+                "Progress": 0.1740536159939236,
+                "ReferenceMeters": 296.4781975746155,
+                "OffsetMeters": 9.980951309204102,
+                "Heading": 0,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": 1,
+                  "Y": 0
+                },
+                "Outward": {
+                  "X": 0,
+                  "Y": -1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 615.256947517395,
+              "DistanceMeters": 691.7285994181948,
+              "Activity": 0,
+              "Drive": 0.58990306,
+              "TargetOffsetMeters": 9.52,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 23.840786,
+              "ForwardSpeed": 23.34608,
+              "SideSpeed": -4.8315296,
+              "SlideRadians": 0.20407163
+            },
+            "Outer": 0.6227250002680348,
+            "Swept": 0.49986685526950875,
+            "RequiredClearance": 0.5,
+            "Corridor": null,
+            "Technique": null,
+            "TechniqueWindow": null,
+            "Course": null,
+            "CorrectionSeconds": null,
+            "CourseChange": null
+          },
+          "Contact": null
+        },
+        {
+          "Fixture": "C-hold-minus",
+          "Complete": false,
+          "Stop": "swept",
+          "Finish": null,
+          "WorstSwept": 0.4611741969315961,
+          "LastLegalS": 615.0076742172241,
+          "LegalSweep": 0.5046694346201449,
+          "End": {
+            "Time": 32.94,
+            "S": 615.2412576675415,
+            "X": -22.316242,
+            "Y": -10.020723,
+            "Speed": 23.827604,
+            "Heading": 0.008476418,
+            "Yaw": 0.58019084,
+            "Beta": 0.2065975,
+            "Wheel": 90.76120540622361,
+            "Shaft": 727.4216216909265,
+            "Steer": 0.237733,
+            "Lean": 0.9483149818294645,
+            "Sweep": 0.4611741969315961,
+            "Outer": 0.583999914470167,
+            "Inner": 10.614427388240815,
+            "Active": {
+              "SteeringRadians": 0.02697512,
+              "Drive": 0.5903882
+            }
+          },
+          "Failure": {
+            "Gate": "swept",
+            "Condition": "swept",
+            "Time": 32.94,
+            "S": 615.2412576675415,
+            "State": {
+              "Id": 1,
+              "Position": {
+                "X": -22.316242,
+                "Y": -10.020723
+              },
+              "Velocity": {
+                "X": 23.361492,
+                "Y": -4.6899285
+              },
+              "Heading": 0.008476418,
+              "AngularVelocity": 0.58019084,
+              "Road": {
+                "Segment": 8,
+                "Progress": 0.17347251044379342,
+                "ReferenceMeters": 296.46250772476196,
+                "OffsetMeters": 10.020723342895508,
+                "Heading": 0,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": 1,
+                  "Y": 0
+                },
+                "Outward": {
+                  "X": 0,
+                  "Y": -1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 615.2412576675415,
+              "DistanceMeters": 691.7285377013104,
+              "Activity": 0,
+              "Drive": 0.5903882,
+              "TargetOffsetMeters": 9.48,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 23.827604,
+              "ForwardSpeed": 23.3209,
+              "SideSpeed": -4.887779,
+              "SlideRadians": 0.2065975
+            },
+            "Outer": 0.583999914470167,
+            "Swept": 0.4611741969315961,
+            "RequiredClearance": 0.5,
+            "Corridor": null,
+            "Technique": null,
+            "TechniqueWindow": null,
+            "Course": null,
+            "CorrectionSeconds": null,
+            "CourseChange": null
+          },
+          "Contact": null
+        },
+        {
+          "Fixture": "C-alt",
+          "Complete": false,
+          "Stop": "swept",
+          "Finish": null,
+          "WorstSwept": 0.4668185900477277,
+          "LastLegalS": 615.2496747970581,
+          "LegalSweep": 0.5087830297661393,
+          "End": {
+            "Time": 32.95,
+            "S": 615.4835386276245,
+            "X": -22.073961,
+            "Y": -10.017519,
+            "Speed": 23.823545,
+            "Heading": 0.012061985,
+            "Yaw": 0.5669475,
+            "Beta": 0.20330702,
+            "Wheel": 91.0763490517202,
+            "Shaft": 730.0582460914683,
+            "Steer": 0.24754536,
+            "Lean": 0.9398090049148176,
+            "Sweep": 0.4668185900477277,
+            "Outer": 0.5895487461267249,
+            "Inner": 10.608906539968102,
+            "Active": {
+              "SteeringRadians": 0.026598983,
+              "Drive": 0.5893569
+            }
+          },
+          "Failure": {
+            "Gate": "swept",
+            "Condition": "swept",
+            "Time": 32.95,
+            "S": 615.4835386276245,
+            "State": {
+              "Id": 1,
+              "Position": {
+                "X": -22.073961,
+                "Y": -10.017519
+              },
+              "Velocity": {
+                "X": 23.389202,
+                "Y": -4.5284123
+              },
+              "Heading": 0.012061985,
+              "AngularVelocity": 0.5669475,
+              "Road": {
+                "Segment": 8,
+                "Progress": 0.18244587933575665,
+                "ReferenceMeters": 296.70478868484497,
+                "OffsetMeters": 10.017518997192383,
+                "Heading": 0,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": 1,
+                  "Y": 0
+                },
+                "Outward": {
+                  "X": 0,
+                  "Y": -1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 615.4835386276245,
+              "DistanceMeters": 692.0179441536384,
+              "Activity": 0,
+              "Drive": 0.5893569,
+              "TargetOffsetMeters": 9.38,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 23.823545,
+              "ForwardSpeed": 23.33288,
+              "SideSpeed": -4.8101964,
+              "SlideRadians": 0.20330702
+            },
+            "Outer": 0.5895487461267249,
+            "Swept": 0.4668185900477277,
+            "RequiredClearance": 0.5,
+            "Corridor": null,
+            "Technique": null,
+            "TechniqueWindow": null,
+            "Course": null,
+            "CorrectionSeconds": null,
+            "CourseChange": null
+          },
+          "Contact": null
+        },
+        {
+          "Fixture": "C-alt-plus",
+          "Complete": false,
+          "Stop": "swept",
+          "Finish": null,
+          "WorstSwept": 0.4969258597732312,
+          "LastLegalS": 615.0321474075317,
+          "LegalSweep": 0.5406673634412548,
+          "End": {
+            "Time": 32.94,
+            "S": 615.2661657333374,
+            "X": -22.291334,
+            "Y": -9.982581,
+            "Speed": 23.874636,
+            "Heading": 0.00515474,
+            "Yaw": 0.5783421,
+            "Beta": 0.20383556,
+            "Wheel": 90.54527231051595,
+            "Shaft": 725.6846606861558,
+            "Steer": 0.23401648,
+            "Lean": 0.9475670814882141,
+            "Sweep": 0.4969258597732312,
+            "Outer": 0.6199744761378051,
+            "Inner": 10.57843562095099,
+            "Active": {
+              "SteeringRadians": 0.026830332,
+              "Drive": 0.5863418
+            }
+          },
+          "Failure": {
+            "Gate": "swept",
+            "Condition": "swept",
+            "Time": 32.94,
+            "S": 615.2661657333374,
+            "State": {
+              "Id": 1,
+              "Position": {
+                "X": -22.291334,
+                "Y": -9.982581
+              },
+              "Velocity": {
+                "X": 23.40497,
+                "Y": -4.712287
+              },
+              "Heading": 0.00515474,
+              "AngularVelocity": 0.5783421,
+              "Road": {
+                "Segment": 8,
+                "Progress": 0.17439503139919704,
+                "ReferenceMeters": 296.48741579055786,
+                "OffsetMeters": 9.98258113861084,
+                "Heading": 0,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": 1,
+                  "Y": 0
+                },
+                "Outward": {
+                  "X": 0,
+                  "Y": -1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 615.2661657333374,
+              "DistanceMeters": 691.7682935262637,
+              "Activity": 0,
+              "Drive": 0.5863418,
+              "TargetOffsetMeters": 9.62,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 23.874636,
+              "ForwardSpeed": 23.38037,
+              "SideSpeed": -4.8328705,
+              "SlideRadians": 0.20383556
+            },
+            "Outer": 0.6199744761378051,
+            "Swept": 0.4969258597732312,
+            "RequiredClearance": 0.5,
+            "Corridor": null,
+            "Technique": null,
+            "TechniqueWindow": null,
+            "Course": null,
+            "CorrectionSeconds": null,
+            "CourseChange": null
+          },
+          "Contact": null
+        }
+      ]
+    },
+    "recovery": {
+      "Budget": {
+        "BeamWidth": 5,
+        "MaxPhaseTrials": 36000,
+        "MaxForecastSteps": 5400000,
+        "MaxCpuSeconds": 500,
+        "Parallelism": 5,
+        "MaxRepairs": 2,
+        "Pilot": false,
+        "Recovery": true
+      },
+      "FirstPhase": 39,
+      "LastLegalPhase": {
+        "Index": 42,
+        "Visit": 3,
+        "Name": "bend exit",
+        "Start": 596.5574998855591,
+        "End": 610.5574998855591,
+        "WindowOrigin": 513.1681249141693
+      },
+      "Periods": 66,
+      "Termination": "no eligible outgoing state at 43:straight stabilization",
+      "Best": 11690,
+      "Winner": null,
+      "LockedCandidates": 8,
+      "RestoredPrefixes": [
+        6688,
+        6656,
+        6624,
+        6720,
+        6742,
+        6670,
+        6655,
+        6623,
+        6719,
+        6741
+      ],
+      "WallSeconds": 52.8913038,
+      "CpuSeconds": 107.625,
+      "PhaseTrials": 15906,
+      "NewBranches": 4912,
+      "RestoredPhaseTrials": 1170,
+      "ForecastSteps": 596974,
+      "FullFixtureTests": 40,
+      "StrictFinishesInAnyLockedCandidate": 0,
+      "FailureCounts": {
+        "swept": 12012
+      },
+      "Envelopes": [
+        {
+          "Index": 39,
+          "Visit": 3,
+          "Name": "apex",
+          "Start": 542.1681249141693,
+          "End": 561.8628123998642,
+          "WindowOrigin": 513.1681249141693,
+          "CandidateCount": 160,
+          "LegalCandidates": 160,
+          "EnteringHistories": 5,
+          "Retained": [
+            10603,
+            10635,
+            10667,
+            10699,
+            10717
+          ],
+          "RetainedDistinctParents": 5,
+          "LegalBounds": {
+            "Swept": [
+              3.3249606256566597,
+              6.874691512574022
+            ],
+            "CourseError": [
+              -0.1872621665496017,
+              -0.05336080596800472
+            ],
+            "Yaw": [
+              0.03766360133886337,
+              0.8282061815261841
+            ],
+            "Beta": [
+              0.0702173039317131,
+              0.3225569427013397
+            ],
+            "Speed": [
+              19.71030044555664,
+              22.16799545288086
+            ],
+            "Outer": [
+              7.337548419223067,
+              12.166274907771692
+            ],
+            "FrontNormal": [
+              502.88274699615715,
+              654.331274781735
+            ],
+            "RearFraction": [
+              0.7034764015027253,
+              0.9776219629810802
+            ],
+            "YawMoment": [
+              -204.1912841796875,
+              30.27313232421875
+            ],
+            "SteeringTravel": [
+              0.21611443161964417,
+              0.5677124857902527
+            ],
+            "DriftOneSecond": [
+              -3.7932167053222656,
+              -1.1274666786193848
+            ],
+            "PendingDelay": [
+              0,
+              0
+            ],
+            "Quality": [
+              -4.2095966363825985,
+              -1.1878316385605148
+            ]
+          },
+          "Failures": {},
+          "FailedProgress": null
+        },
+        {
+          "Index": 41,
+          "Visit": 3,
+          "Name": "exit preparation",
+          "Start": 579.3928998947143,
+          "End": 596.5574998855591,
+          "WindowOrigin": 513.1681249141693,
+          "CandidateCount": 340,
+          "LegalCandidates": 340,
+          "EnteringHistories": 5,
+          "Retained": [
+            11147,
+            11330,
+            11239,
+            11375,
+            11220
+          ],
+          "RetainedDistinctParents": 5,
+          "LegalBounds": {
+            "Swept": [
+              1.4006019735267456,
+              3.3262812781459363
+            ],
+            "CourseError": [
+              0.12699822438080569,
+              0.251575210654662
+            ],
+            "Yaw": [
+              0.4259026348590851,
+              0.8783708214759827
+            ],
+            "Beta": [
+              0.06299125403165817,
+              0.23737335205078125
+            ],
+            "Speed": [
+              22.79935073852539,
+              25.748903274536133
+            ],
+            "Outer": [
+              1.532745199077371,
+              8.545288809954608
+            ],
+            "FrontNormal": [
+              498.917276329306,
+              654.2865393050104
+            ],
+            "RearFraction": [
+              0.7184638104017494,
+              0.9586471079192398
+            ],
+            "YawMoment": [
+              -81.666748046875,
+              16.76092529296875
+            ],
+            "SteeringTravel": [
+              0.257689893245697,
+              0.5217238664627075
+            ],
+            "DriftOneSecond": [
+              2.887700080871582,
+              6.391217231750488
+            ],
+            "PendingDelay": [
+              0,
+              0
+            ],
+            "Quality": [
+              -2.3242241644350963,
+              1.1584948293545898
+            ]
+          },
+          "Failures": {},
+          "FailedProgress": null
+        },
+        {
+          "Index": 42,
+          "Visit": 3,
+          "Name": "bend exit",
+          "Start": 596.5574998855591,
+          "End": 610.5574998855591,
+          "WindowOrigin": 513.1681249141693,
+          "CandidateCount": 340,
+          "LegalCandidates": 68,
+          "EnteringHistories": 5,
+          "Retained": [
+            11696,
+            11669,
+            11632,
+            11693,
+            11670
+          ],
+          "RetainedDistinctParents": 1,
+          "LegalBounds": {
+            "Swept": [
+              1.4132653896503504,
+              1.6210247952898564
+            ],
+            "CourseError": [
+              0.31068087814455636,
+              0.3268570487204199
+            ],
+            "Yaw": [
+              0.6467899680137634,
+              0.8256986141204834
+            ],
+            "Beta": [
+              0.17117173969745636,
+              0.21201497316360474
+            ],
+            "Speed": [
+              23.99919319152832,
+              24.86160659790039
+            ],
+            "Outer": [
+              1.541412634103755,
+              1.7462012713660768
+            ],
+            "FrontNormal": [
+              593.9148010753977,
+              665.6362331678353
+            ],
+            "RearFraction": [
+              0.9252474838890478,
+              0.9528084118200593
+            ],
+            "YawMoment": [
+              -51.1884765625,
+              5.49505615234375
+            ],
+            "SteeringTravel": [
+              0.24288606643676758,
+              0.5531178116798401
+            ],
+            "DriftOneSecond": [
+              7.3668928146362305,
+              7.97022819519043
+            ],
+            "PendingDelay": [
+              0,
+              0
+            ],
+            "Quality": [
+              0.6870020852277425,
+              0.8255892780468724
+            ]
+          },
+          "Failures": {
+            "swept": 816
+          },
+          "FailedProgress": [
+            599.0695613176979,
+            607.0001930209821
+          ]
+        },
+        {
+          "Index": 43,
+          "Visit": 4,
+          "Name": "straight stabilization",
+          "Start": 610.5574998855591,
+          "End": 622.5574998855591,
+          "WindowOrigin": 610.5574998855591,
+          "CandidateCount": 3732,
+          "LegalCandidates": 0,
+          "EnteringHistories": 15,
+          "Retained": [],
+          "RetainedDistinctParents": 0,
+          "LegalBounds": {
+            "Swept": null,
+            "CourseError": null,
+            "Yaw": null,
+            "Beta": null,
+            "Speed": null,
+            "Outer": null,
+            "FrontNormal": null,
+            "RearFraction": null,
+            "YawMoment": null,
+            "SteeringTravel": null,
+            "DriftOneSecond": null,
+            "PendingDelay": null,
+            "Quality": null
+          },
+          "Failures": {
+            "swept": 11196
+          },
+          "FailedProgress": [
+            614.2653512954712,
+            615.9718942642212
+          ]
+        }
+      ],
+      "LockedResults": [
+        {
+          "Fixture": "C",
+          "Complete": false,
+          "Stop": "swept",
+          "Finish": null,
+          "WorstSwept": 0.48636472104973755,
+          "LastLegalS": 615.2024488449097,
+          "LegalSweep": 0.5273462783008719,
+          "End": {
+            "Time": 32.95,
+            "S": 615.4344930648804,
+            "X": -22.123007,
+            "Y": -10.018981,
+            "Speed": 23.632784,
+            "Heading": 0.042826816,
+            "Yaw": 0.60401976,
+            "Beta": 0.23304741,
+            "Wheel": 90.02779564748298,
+            "Shaft": 721.6687591713606,
+            "Steer": 0.16383938,
+            "Lean": 0.9291733842690939,
+            "Sweep": 0.48636472104973755,
+            "Outer": 0.6083963745583437,
+            "Inner": 10.590700490678154,
+            "Active": {
+              "SteeringRadians": 0.023777265,
+              "Drive": 0.60239506
+            }
+          },
+          "Failure": {
+            "Gate": "swept",
+            "Condition": "swept",
+            "Time": 32.95,
+            "S": 615.4344930648804,
+            "State": {
+              "Id": 1,
+              "Position": {
+                "X": -22.123007,
+                "Y": -10.018981
+              },
+              "Velocity": {
+                "X": 23.206509,
+                "Y": -4.468381
+              },
+              "Heading": 0.042826816,
+              "AngularVelocity": 0.60401976,
+              "Road": {
+                "Segment": 8,
+                "Progress": 0.1806293770118996,
+                "ReferenceMeters": 296.65574312210083,
+                "OffsetMeters": 10.018980979919434,
+                "Heading": 0,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": 1,
+                  "Y": 0
+                },
+                "Outward": {
+                  "X": 0,
+                  "Y": -1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 615.4344930648804,
+              "DistanceMeters": 691.9426931778507,
+              "Activity": 0,
+              "Drive": 0.60239506,
+              "TargetOffsetMeters": 9.5,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 23.632784,
+              "ForwardSpeed": 22.993921,
+              "SideSpeed": -5.457841,
+              "SlideRadians": 0.23304741
+            },
+            "Outer": 0.6083963745583437,
+            "Swept": 0.48636472104973755,
+            "RequiredClearance": 0.5,
+            "Corridor": null,
+            "Technique": null,
+            "TechniqueWindow": null,
+            "Course": null,
+            "CorrectionSeconds": null,
+            "CourseChange": null
+          },
+          "Contact": null
+        },
+        {
+          "Fixture": "C-hold-plus",
+          "Complete": false,
+          "Stop": "swept",
+          "Finish": null,
+          "WorstSwept": 0.4707434148650901,
+          "LastLegalS": 615.4245958328247,
+          "LegalSweep": 0.5098954599740129,
+          "End": {
+            "Time": 32.96,
+            "S": 615.6564779281616,
+            "X": -21.901022,
+            "Y": -10.040312,
+            "Speed": 23.58053,
+            "Heading": 0.050821435,
+            "Yaw": 0.5827864,
+            "Beta": 0.23302118,
+            "Wheel": 90.7669971225471,
+            "Shaft": 727.5575424998733,
+            "Steer": 0.18230718,
+            "Lean": 0.9129314837981665,
+            "Sweep": 0.4707434148650901,
+            "Outer": 0.592398530782391,
+            "Inner": 10.606982728914781,
+            "Active": {
+              "SteeringRadians": 0.020383617,
+              "Drive": 0.6281599
+            }
+          },
+          "Failure": {
+            "Gate": "swept",
+            "Condition": "swept",
+            "Time": 32.96,
+            "S": 615.6564779281616,
+            "State": {
+              "Id": 1,
+              "Position": {
+                "X": -21.901022,
+                "Y": -10.040312
+              },
+              "Velocity": {
+                "X": 23.190214,
+                "Y": -4.2726355
+              },
+              "Heading": 0.050821435,
+              "AngularVelocity": 0.5827864,
+              "Road": {
+                "Segment": 8,
+                "Progress": 0.18885103861490884,
+                "ReferenceMeters": 296.8777279853821,
+                "OffsetMeters": 10.040311813354492,
+                "Heading": 0,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": 1,
+                  "Y": 0
+                },
+                "Outward": {
+                  "X": 0,
+                  "Y": -1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 615.6564779281616,
+              "DistanceMeters": 692.1308186838942,
+              "Activity": 0,
+              "Drive": 0.6281599,
+              "TargetOffsetMeters": 9.52,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 23.58053,
+              "ForwardSpeed": 22.943224,
+              "SideSpeed": -5.4451714,
+              "SlideRadians": 0.23302118
+            },
+            "Outer": 0.592398530782391,
+            "Swept": 0.4707434148650901,
+            "RequiredClearance": 0.5,
+            "Corridor": null,
+            "Technique": null,
+            "TechniqueWindow": null,
+            "Course": null,
+            "CorrectionSeconds": null,
+            "CourseChange": null
+          },
+          "Contact": null
+        },
+        {
+          "Fixture": "C-hold-minus",
+          "Complete": false,
+          "Stop": "swept",
+          "Finish": null,
+          "WorstSwept": 0.471080348652495,
+          "LastLegalS": 615.1770658493042,
+          "LegalSweep": 0.5117605653702293,
+          "End": {
+            "Time": 32.95,
+            "S": 615.4087381362915,
+            "X": -22.148762,
+            "Y": -10.036364,
+            "Speed": 23.590746,
+            "Heading": 0.04566427,
+            "Yaw": 0.60417354,
+            "Beta": 0.23496327,
+            "Wheel": 90.18099608459539,
+            "Shaft": 722.9054698609436,
+            "Steer": 0.16708212,
+            "Lean": 0.9283471982377085,
+            "Sweep": 0.471080348652495,
+            "Outer": 0.5929039830237185,
+            "Inner": 10.606288264986562,
+            "Active": {
+              "SteeringRadians": 0.023764562,
+              "Drive": 0.6055072
+            }
+          },
+          "Failure": {
+            "Gate": "swept",
+            "Condition": "swept",
+            "Time": 32.95,
+            "S": 615.4087381362915,
+            "State": {
+              "Id": 1,
+              "Position": {
+                "X": -22.148762,
+                "Y": -10.036364
+              },
+              "Velocity": {
+                "X": 23.16933,
+                "Y": -4.4390817
+              },
+              "Heading": 0.04566427,
+              "AngularVelocity": 0.60417354,
+              "Road": {
+                "Segment": 8,
+                "Progress": 0.17967549076786749,
+                "ReferenceMeters": 296.62998819351196,
+                "OffsetMeters": 10.03636360168457,
+                "Heading": 0,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": 1,
+                  "Y": 0
+                },
+                "Outward": {
+                  "X": 0,
+                  "Y": -1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 615.4087381362915,
+              "DistanceMeters": 691.8944825010913,
+              "Activity": 0,
+              "Drive": 0.6055072,
+              "TargetOffsetMeters": 9.48,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 23.590746,
+              "ForwardSpeed": 22.942541,
+              "SideSpeed": -5.4920974,
+              "SlideRadians": 0.23496327
+            },
+            "Outer": 0.5929039830237185,
+            "Swept": 0.471080348652495,
+            "RequiredClearance": 0.5,
+            "Corridor": null,
+            "Technique": null,
+            "TechniqueWindow": null,
+            "Course": null,
+            "CorrectionSeconds": null,
+            "CourseChange": null
+          },
+          "Contact": null
+        },
+        {
+          "Fixture": "C-alt",
+          "Complete": false,
+          "Stop": "swept",
+          "Finish": null,
+          "WorstSwept": 0.4802542927731321,
+          "LastLegalS": 615.4170904159546,
+          "LegalSweep": 0.5194148692259472,
+          "End": {
+            "Time": 32.96,
+            "S": 615.6489915847778,
+            "X": -21.908508,
+            "Y": -10.030653,
+            "Speed": 23.582245,
+            "Heading": 0.050605554,
+            "Yaw": 0.58186495,
+            "Beta": 0.23279977,
+            "Wheel": 90.73863967093033,
+            "Shaft": 727.3302175626264,
+            "Steer": 0.18186602,
+            "Lean": 0.9121782197574423,
+            "Sweep": 0.4802542927731321,
+            "Outer": 0.6019130438138051,
+            "Inner": 10.597459898925212,
+            "Active": {
+              "SteeringRadians": 0.020325612,
+              "Drive": 0.62802523
+            }
+          },
+          "Failure": {
+            "Gate": "swept",
+            "Condition": "swept",
+            "Time": 32.96,
+            "S": 615.6489915847778,
+            "State": {
+              "Id": 1,
+              "Position": {
+                "X": -21.908508,
+                "Y": -10.030653
+              },
+              "Velocity": {
+                "X": 23.191923,
+                "Y": -4.2728176
+              },
+              "Heading": 0.050605554,
+              "AngularVelocity": 0.58186495,
+              "Road": {
+                "Segment": 8,
+                "Progress": 0.18857376663773148,
+                "ReferenceMeters": 296.8702416419983,
+                "OffsetMeters": 10.03065299987793,
+                "Heading": 0,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": 1,
+                  "Y": 0
+                },
+                "Outward": {
+                  "X": 0,
+                  "Y": -1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 615.6489915847778,
+              "DistanceMeters": 692.1815172548013,
+              "Activity": 0,
+              "Drive": 0.62802523,
+              "TargetOffsetMeters": 9.38,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 23.582245,
+              "ForwardSpeed": 22.946096,
+              "SideSpeed": -5.440487,
+              "SlideRadians": 0.23279977
+            },
+            "Outer": 0.6019130438138051,
+            "Swept": 0.4802542927731321,
+            "RequiredClearance": 0.5,
+            "Corridor": null,
+            "Technique": null,
+            "TechniqueWindow": null,
+            "Course": null,
+            "CorrectionSeconds": null,
+            "CourseChange": null
+          },
+          "Contact": null
+        },
+        {
+          "Fixture": "C-alt-plus",
+          "Complete": false,
+          "Stop": "swept",
+          "Finish": null,
+          "WorstSwept": 0.4650404040027459,
+          "LastLegalS": 615.4339723587036,
+          "LegalSweep": 0.5046290489206986,
+          "End": {
+            "Time": 32.96,
+            "S": 615.6661424636841,
+            "X": -21.891357,
+            "Y": -10.0440445,
+            "Speed": 23.617142,
+            "Heading": 0.04817302,
+            "Yaw": 0.5863831,
+            "Beta": 0.23203853,
+            "Wheel": 90.61123807304777,
+            "Shaft": 726.2992117714172,
+            "Steer": 0.17894426,
+            "Lean": 0.9168668783955195,
+            "Sweep": 0.4650404040027459,
+            "Outer": 0.5868966962802963,
+            "Inner": 10.612384976397264,
+            "Active": {
+              "SteeringRadians": 0.020650927,
+              "Drive": 0.62411404
+            }
+          },
+          "Failure": {
+            "Gate": "swept",
+            "Condition": "swept",
+            "Time": 32.96,
+            "S": 615.6661424636841,
+            "State": {
+              "Id": 1,
+              "Position": {
+                "X": -21.891357,
+                "Y": -10.0440445
+              },
+              "Velocity": {
+                "X": 23.219057,
+                "Y": -4.317952
+              },
+              "Heading": 0.04817302,
+              "AngularVelocity": 0.5863831,
+              "Road": {
+                "Segment": 8,
+                "Progress": 0.189208984375,
+                "ReferenceMeters": 296.88739252090454,
+                "OffsetMeters": 10.044044494628906,
+                "Heading": 0,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": 1,
+                  "Y": 0
+                },
+                "Outward": {
+                  "X": 0,
+                  "Y": -1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 615.6661424636841,
+              "DistanceMeters": 692.171530943604,
+              "Activity": 0,
+              "Drive": 0.62411404,
+              "TargetOffsetMeters": 9.62,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 23.617142,
+              "ForwardSpeed": 22.984194,
+              "SideSpeed": -5.4310427,
+              "SlideRadians": 0.23203853
+            },
+            "Outer": 0.5868966962802963,
+            "Swept": 0.4650404040027459,
+            "RequiredClearance": 0.5,
+            "Corridor": null,
+            "Technique": null,
+            "TechniqueWindow": null,
+            "Course": null,
+            "CorrectionSeconds": null,
+            "CourseChange": null
+          },
+          "Contact": null
+        }
+      ]
+    },
+    "pace": {
+      "Budget": {
+        "BeamWidth": 5,
+        "MaxPhaseTrials": 36000,
+        "MaxForecastSteps": 5400000,
+        "MaxCpuSeconds": 500,
+        "Parallelism": 5,
+        "MaxRepairs": 2,
+        "Pilot": false,
+        "Recovery": true,
+        "PaceRecovery": true
+      },
+      "FirstPhase": 39,
+      "LastLegalPhase": {
+        "Index": 42,
+        "Visit": 3,
+        "Name": "bend exit",
+        "Start": 596.5574998855591,
+        "End": 610.5574998855591,
+        "WindowOrigin": 513.1681249141693
+      },
+      "Periods": 66,
+      "Termination": "no eligible outgoing state at 43:straight stabilization",
+      "Best": 12152,
+      "Winner": null,
+      "LockedCandidates": 8,
+      "RestoredPrefixes": [
+        6688,
+        6656,
+        6624,
+        6720,
+        6742,
+        6670,
+        6655,
+        6623,
+        6719,
+        6741
+      ],
+      "WallSeconds": 56.1695753,
+      "CpuSeconds": 139.484375,
+      "PhaseTrials": 18429,
+      "NewBranches": 5753,
+      "RestoredPhaseTrials": 1170,
+      "ForecastSteps": 812771,
+      "FullFixtureTests": 40,
+      "StrictFinishesInAnyLockedCandidate": 0,
+      "FailureCounts": {
+        "no physically admissible root": 14,
+        "swept": 13474
+      },
+      "Envelopes": [
+        {
+          "Index": 39,
+          "Visit": 3,
+          "Name": "apex",
+          "Start": 542.1681249141693,
+          "End": 561.8628123998642,
+          "WindowOrigin": 513.1681249141693,
+          "CandidateCount": 280,
+          "LegalCandidates": 280,
+          "EnteringHistories": 5,
+          "Retained": [
+            10623,
+            10680,
+            10715,
+            10790,
+            10844
+          ],
+          "RetainedDistinctParents": 5,
+          "LegalBounds": {
+            "Swept": [
+              3.1254564049452256,
+              6.874691512574022
+            ],
+            "CourseError": [
+              -0.22046785074468903,
+              -0.05336080596800472
+            ],
+            "Yaw": [
+              0.03766360133886337,
+              0.8298723101615906
+            ],
+            "Beta": [
+              0.053823161870241165,
+              0.33233508467674255
+            ],
+            "Speed": [
+              18.616369247436523,
+              22.16799545288086
+            ],
+            "Outer": [
+              7.292240032872731,
+              12.25846119307042
+            ],
+            "FrontNormal": [
+              502.88274699615715,
+              752.1360353324094
+            ],
+            "RearFraction": [
+              0.6098932710484142,
+              0.9776219629810802
+            ],
+            "YawMoment": [
+              -204.1912841796875,
+              46.888824462890625
+            ],
+            "SteeringTravel": [
+              0.21611443161964417,
+              0.6069599986076355
+            ],
+            "DriftOneSecond": [
+              -4.251791477203369,
+              -1.1274666786193848
+            ],
+            "PendingDelay": [
+              0,
+              0
+            ],
+            "Quality": [
+              -4.329374827193591,
+              -1.175967023350257
+            ]
+          },
+          "Failures": {},
+          "FailedProgress": null
+        },
+        {
+          "Index": 41,
+          "Visit": 3,
+          "Name": "exit preparation",
+          "Start": 579.3928998947143,
+          "End": 596.5574998855591,
+          "WindowOrigin": 513.1681249141693,
+          "CandidateCount": 460,
+          "LegalCandidates": 368,
+          "EnteringHistories": 5,
+          "Retained": [
+            11411,
+            11420,
+            11512,
+            11604,
+            11416
+          ],
+          "RetainedDistinctParents": 4,
+          "LegalBounds": {
+            "Swept": [
+              1.4006019735267456,
+              4.776797686211795
+            ],
+            "CourseError": [
+              -0.02668501860767509,
+              0.24052167313364528
+            ],
+            "Yaw": [
+              -0.2796899378299713,
+              0.8950648307800293
+            ],
+            "Beta": [
+              0.0485391765832901,
+              0.5139323472976685
+            ],
+            "Speed": [
+              19.35575294494629,
+              25.52690315246582
+            ],
+            "Outer": [
+              1.532745199077371,
+              9.110355218828822
+            ],
+            "FrontNormal": [
+              509.30006218661424,
+              656.801267602773
+            ],
+            "RearFraction": [
+              0.6144326854413368,
+              0.9868195394728619
+            ],
+            "YawMoment": [
+              -339.6784362792969,
+              26.2410888671875
+            ],
+            "SteeringTravel": [
+              0.1900375485420227,
+              0.6101008653640747
+            ],
+            "DriftOneSecond": [
+              -0.5217905044555664,
+              6.080745697021484
+            ],
+            "PendingDelay": [
+              0,
+              0
+            ],
+            "Quality": [
+              -2.27901452048912,
+              1.1584948293545898
+            ]
+          },
+          "Failures": {
+            "swept": 276
+          },
+          "FailedProgress": [
+            583.1697053582184,
+            583.1892482904431
+          ]
+        },
+        {
+          "Index": 42,
+          "Visit": 3,
+          "Name": "bend exit",
+          "Start": 596.5574998855591,
+          "End": 610.5574998855591,
+          "WindowOrigin": 513.1681249141693,
+          "CandidateCount": 460,
+          "LegalCandidates": 184,
+          "EnteringHistories": 5,
+          "Retained": [
+            12149,
+            12032,
+            11980,
+            12152,
+            12098
+          ],
+          "RetainedDistinctParents": 2,
+          "LegalBounds": {
+            "Swept": [
+              1.054371270948732,
+              1.7073717676941955
+            ],
+            "CourseError": [
+              0.23567098211635434,
+              0.30499596918307026
+            ],
+            "Yaw": [
+              0.5493177771568298,
+              0.837823212146759
+            ],
+            "Beta": [
+              0.15060721337795258,
+              0.26204320788383484
+            ],
+            "Speed": [
+              23.482147216796875,
+              25.365005493164062
+            ],
+            "Outer": [
+              1.1819315042288596,
+              1.8347455648873399
+            ],
+            "FrontNormal": [
+              577.0910106882645,
+              726.4394837259167
+            ],
+            "RearFraction": [
+              0.9075497213761727,
+              0.9628072362458026
+            ],
+            "YawMoment": [
+              -79.53466796875,
+              6.00823974609375
+            ],
+            "SteeringTravel": [
+              0.23603758215904236,
+              0.602148711681366
+            ],
+            "DriftOneSecond": [
+              5.5961785316467285,
+              7.505329132080078
+            ],
+            "PendingDelay": [
+              0,
+              0
+            ],
+            "Quality": [
+              0.5555943603729425,
+              0.9050550869087918
+            ]
+          },
+          "Failures": {
+            "swept": 828
+          },
+          "FailedProgress": [
+            603.5272834203092,
+            610.8859987258911
+          ]
+        },
+        {
+          "Index": 43,
+          "Visit": 4,
+          "Name": "straight stabilization",
+          "Start": 610.5574998855591,
+          "End": 622.5574998855591,
+          "WindowOrigin": 610.5574998855591,
+          "CandidateCount": 4093,
+          "LegalCandidates": 0,
+          "EnteringHistories": 15,
+          "Retained": [],
+          "RetainedDistinctParents": 0,
+          "LegalBounds": {
+            "Swept": null,
+            "CourseError": null,
+            "Yaw": null,
+            "Beta": null,
+            "Speed": null,
+            "Outer": null,
+            "FrontNormal": null,
+            "RearFraction": null,
+            "YawMoment": null,
+            "SteeringTravel": null,
+            "DriftOneSecond": null,
+            "PendingDelay": null,
+            "Quality": null
+          },
+          "Failures": {
+            "swept": 12279
+          },
+          "FailedProgress": [
+            615.3993291854858,
+            618.186276435852
+          ]
+        }
+      ],
+      "LockedResults": [
+        {
+          "Fixture": "C",
+          "Complete": false,
+          "Stop": "swept",
+          "Finish": null,
+          "WorstSwept": 0.49371618459425476,
+          "LastLegalS": 616.9926538467407,
+          "LegalSweep": 0.5228897986706618,
+          "End": {
+            "Time": 33.11,
+            "S": 617.2293977737427,
+            "X": -20.328102,
+            "Y": -10.038161,
+            "Speed": 23.889343,
+            "Heading": 0.0829782,
+            "Yaw": 0.4543624,
+            "Beta": 0.2170309,
+            "Wheel": 91.99653445686931,
+            "Shaft": 737.4193217728726,
+            "Steer": 0.207958,
+            "Lean": 0.7988547626847529,
+            "Sweep": 0.49371618459425476,
+            "Outer": 0.6162201483776139,
+            "Inner": 10.584794795510824,
+            "Active": {
+              "SteeringRadians": 0.0131332325,
+              "Drive": 0.592006
+            }
+          },
+          "Failure": {
+            "Gate": "swept",
+            "Condition": "swept",
+            "Time": 33.11,
+            "S": 617.2293977737427,
+            "State": {
+              "Id": 1,
+              "Position": {
+                "X": -20.328102,
+                "Y": -10.038161
+              },
+              "Velocity": {
+                "X": 23.675018,
+                "Y": -3.1928484
+              },
+              "Heading": 0.0829782,
+              "AngularVelocity": 0.4543624,
+              "Road": {
+                "Segment": 8,
+                "Progress": 0.24710732919198494,
+                "ReferenceMeters": 298.45064783096313,
+                "OffsetMeters": 10.038161277770996,
+                "Heading": 0,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": 1,
+                  "Y": 0
+                },
+                "Outward": {
+                  "X": 0,
+                  "Y": -1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 617.2293977737427,
+              "DistanceMeters": 696.5183087776022,
+              "Activity": 0,
+              "Drive": 0.592006,
+              "TargetOffsetMeters": 9.5,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 23.889343,
+              "ForwardSpeed": 23.328926,
+              "SideSpeed": -5.1441193,
+              "SlideRadians": 0.2170309
+            },
+            "Outer": 0.6162201483776139,
+            "Swept": 0.49371618459425476,
+            "RequiredClearance": 0.5,
+            "Corridor": null,
+            "Technique": null,
+            "TechniqueWindow": null,
+            "Course": null,
+            "CorrectionSeconds": null,
+            "CourseChange": null
+          },
+          "Contact": null
+        },
+        {
+          "Fixture": "C-hold-plus",
+          "Complete": false,
+          "Stop": "swept",
+          "Finish": null,
+          "WorstSwept": 0.4940506617116943,
+          "LastLegalS": 616.9604120254517,
+          "LegalSweep": 0.5228583474799688,
+          "End": {
+            "Time": 33.11,
+            "S": 617.1970281600952,
+            "X": -20.360472,
+            "Y": -10.039497,
+            "Speed": 23.871664,
+            "Heading": 0.08529902,
+            "Yaw": 0.45319635,
+            "Beta": 0.21789636,
+            "Wheel": 92.03299604673965,
+            "Shaft": 737.7166680062943,
+            "Steer": 0.20880598,
+            "Lean": 0.794945577158278,
+            "Sweep": 0.4940506617116943,
+            "Outer": 0.616461366182841,
+            "Inner": 10.584701808650868,
+            "Active": {
+              "SteeringRadians": 0.012919191,
+              "Drive": 0.59397
+            }
+          },
+          "Failure": {
+            "Gate": "swept",
+            "Condition": "swept",
+            "Time": 33.11,
+            "S": 617.1970281600952,
+            "State": {
+              "Id": 1,
+              "Position": {
+                "X": -20.360472,
+                "Y": -10.039497
+              },
+              "Velocity": {
+                "X": 23.662115,
+                "Y": -3.1560516
+              },
+              "Heading": 0.08529902,
+              "AngularVelocity": 0.45319635,
+              "Road": {
+                "Segment": 8,
+                "Progress": 0.24590845461244937,
+                "ReferenceMeters": 298.4182782173157,
+                "OffsetMeters": 10.039497375488281,
+                "Heading": 0,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": 1,
+                  "Y": 0
+                },
+                "Outward": {
+                  "X": 0,
+                  "Y": -1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 617.1970281600952,
+              "DistanceMeters": 696.5147935936766,
+              "Activity": 0,
+              "Drive": 0.59397,
+              "TargetOffsetMeters": 9.52,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 23.871664,
+              "ForwardSpeed": 23.307205,
+              "SideSpeed": -5.1604857,
+              "SlideRadians": 0.21789636
+            },
+            "Outer": 0.616461366182841,
+            "Swept": 0.4940506617116943,
+            "RequiredClearance": 0.5,
+            "Corridor": null,
+            "Technique": null,
+            "TechniqueWindow": null,
+            "Course": null,
+            "CorrectionSeconds": null,
+            "CourseChange": null
+          },
+          "Contact": null
+        },
+        {
+          "Fixture": "C-hold-minus",
+          "Complete": false,
+          "Stop": "swept",
+          "Finish": null,
+          "WorstSwept": 0.48310222111456047,
+          "LastLegalS": 617.260745048523,
+          "LegalSweep": 0.5113747507371125,
+          "End": {
+            "Time": 33.12,
+            "S": 617.4977540969849,
+            "X": -20.059746,
+            "Y": -10.049687,
+            "Speed": 23.902538,
+            "Heading": 0.08430506,
+            "Yaw": 0.4407059,
+            "Beta": 0.21408035,
+            "Wheel": 92.27248894332669,
+            "Shaft": 739.587369602779,
+            "Steer": 0.22016276,
+            "Lean": 0.7860920787514517,
+            "Sweep": 0.48310222111456047,
+            "Outer": 0.605595612337788,
+            "Inner": 10.595503578999553,
+            "Active": {
+              "SteeringRadians": 0.013221707,
+              "Drive": 0.58869815
+            }
+          },
+          "Failure": {
+            "Gate": "swept",
+            "Condition": "swept",
+            "Time": 33.12,
+            "S": 617.4977540969849,
+            "State": {
+              "Id": 1,
+              "Position": {
+                "X": -20.059746,
+                "Y": -10.049687
+              },
+              "Velocity": {
+                "X": 23.701542,
+                "Y": -3.093259
+              },
+              "Heading": 0.08430506,
+              "AngularVelocity": 0.4407059,
+              "Road": {
+                "Segment": 8,
+                "Progress": 0.2570464522750289,
+                "ReferenceMeters": 298.7190041542053,
+                "OffsetMeters": 10.049687385559082,
+                "Heading": 0,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": 1,
+                  "Y": 0
+                },
+                "Outward": {
+                  "X": 0,
+                  "Y": -1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 617.4977540969849,
+              "DistanceMeters": 696.7473910974877,
+              "Activity": 0,
+              "Drive": 0.58869815,
+              "TargetOffsetMeters": 9.48,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 23.902538,
+              "ForwardSpeed": 23.356895,
+              "SideSpeed": -5.078067,
+              "SlideRadians": 0.21408035
+            },
+            "Outer": 0.605595612337788,
+            "Swept": 0.48310222111456047,
+            "RequiredClearance": 0.5,
+            "Corridor": null,
+            "Technique": null,
+            "TechniqueWindow": null,
+            "Course": null,
+            "CorrectionSeconds": null,
+            "CourseChange": null
+          },
+          "Contact": null
+        },
+        {
+          "Fixture": "C-alt",
+          "Complete": false,
+          "Stop": "swept",
+          "Finish": null,
+          "WorstSwept": 0.47506475383796765,
+          "LastLegalS": 617.1888017654419,
+          "LegalSweep": 0.5026229772446005,
+          "End": {
+            "Time": 33.12,
+            "S": 617.4254503250122,
+            "X": -20.13205,
+            "Y": -10.061244,
+            "Speed": 23.857136,
+            "Heading": 0.089120485,
+            "Yaw": 0.43759078,
+            "Beta": 0.21607323,
+            "Wheel": 92.39441798240269,
+            "Shaft": 740.5732985651782,
+            "Steer": 0.22481787,
+            "Lean": 0.7797139136487539,
+            "Sweep": 0.47506475383796765,
+            "Outer": 0.5973157214820984,
+            "Inner": 10.604100416542542,
+            "Active": {
+              "SteeringRadians": 0.012920799,
+              "Drive": 0.59364927
+            }
+          },
+          "Failure": {
+            "Gate": "swept",
+            "Condition": "swept",
+            "Time": 33.12,
+            "S": 617.4254503250122,
+            "State": {
+              "Id": 1,
+              "Position": {
+                "X": -20.13205,
+                "Y": -10.061244
+              },
+              "Velocity": {
+                "X": 23.665142,
+                "Y": -3.0205998
+              },
+              "Heading": 0.089120485,
+              "AngularVelocity": 0.43759078,
+              "Road": {
+                "Segment": 8,
+                "Progress": 0.2543685347945602,
+                "ReferenceMeters": 298.64670038223267,
+                "OffsetMeters": 10.061244010925293,
+                "Heading": 0,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": 1,
+                  "Y": 0
+                },
+                "Outward": {
+                  "X": 0,
+                  "Y": -1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 617.4254503250122,
+              "DistanceMeters": 696.796739127727,
+              "Activity": 0,
+              "Drive": 0.59364927,
+              "TargetOffsetMeters": 9.38,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 23.857136,
+              "ForwardSpeed": 23.302383,
+              "SideSpeed": -5.1148705,
+              "SlideRadians": 0.21607323
+            },
+            "Outer": 0.5973157214820984,
+            "Swept": 0.47506475383796765,
+            "RequiredClearance": 0.5,
+            "Corridor": null,
+            "Technique": null,
+            "TechniqueWindow": null,
+            "Course": null,
+            "CorrectionSeconds": null,
+            "CourseChange": null
+          },
+          "Contact": null
+        },
+        {
+          "Fixture": "C-alt-plus",
+          "Complete": false,
+          "Stop": "swept",
+          "Finish": null,
+          "WorstSwept": 0.49849050038728343,
+          "LastLegalS": 617.0250406265259,
+          "LegalSweep": 0.5281523183284736,
+          "End": {
+            "Time": 33.11,
+            "S": 617.2619504928589,
+            "X": -20.29555,
+            "Y": -10.031355,
+            "Speed": 23.9128,
+            "Heading": 0.08018168,
+            "Yaw": 0.45763618,
+            "Beta": 0.21623123,
+            "Wheel": 91.93486205833395,
+            "Shaft": 736.9179064362074,
+            "Steer": 0.20483643,
+            "Lean": 0.8030909447831229,
+            "Sweep": 0.49849050038728343,
+            "Outer": 0.621128235813685,
+            "Inner": 10.579713514301986,
+            "Active": {
+              "SteeringRadians": 0.01333977,
+              "Drive": 0.58940417
+            }
+          },
+          "Failure": {
+            "Gate": "swept",
+            "Condition": "swept",
+            "Time": 33.11,
+            "S": 617.2619504928589,
+            "State": {
+              "Id": 1,
+              "Position": {
+                "X": -20.29555,
+                "Y": -10.031355
+              },
+              "Velocity": {
+                "X": 23.691833,
+                "Y": -3.2432985
+              },
+              "Heading": 0.08018168,
+              "AngularVelocity": 0.45763618,
+              "Road": {
+                "Segment": 8,
+                "Progress": 0.24831298545554834,
+                "ReferenceMeters": 298.48320055007935,
+                "OffsetMeters": 10.031354904174805,
+                "Heading": 0,
+                "RadiusMeters": 0,
+                "CornerProgress": 0,
+                "Tangent": {
+                  "X": 1,
+                  "Y": 0
+                },
+                "Outward": {
+                  "X": 0,
+                  "Y": -1
+                },
+                "IsTurn": false
+              },
+              "TotalReferenceMeters": 617.2619504928589,
+              "DistanceMeters": 696.4979952389913,
+              "Activity": 0,
+              "Drive": 0.58940417,
+              "TargetOffsetMeters": 9.62,
+              "Impairment": 0,
+              "Context": 2,
+              "Speed": 23.9128,
+              "ForwardSpeed": 23.355942,
+              "SideSpeed": -5.1304946,
+              "SlideRadians": 0.21623123
+            },
+            "Outer": 0.621128235813685,
+            "Swept": 0.49849050038728343,
+            "RequiredClearance": 0.5,
+            "Corridor": null,
+            "Technique": null,
+            "TechniqueWindow": null,
+            "Course": null,
+            "CorrectionSeconds": null,
+            "CourseChange": null
+          },
+          "Contact": null
+        }
+      ]
+    }
+  },
+  "PartialSportingMeasures": [
+    {
+      "Fixture": "C",
+      "LastLegalReference": 616.9926538467407,
+      "LastLegalTravel": 696.279348332675,
+      "MaxSpeedKmh": 91.8951264,
+      "SecondsAbove100OnStraights": 0,
+      "SteeringRateSaturatedSteps": 361,
+      "SteeringAngleSaturatedSteps": 0,
+      "Forces": {
+        "FxRear": [
+          -92.47030756079083,
+          1713.2469220104608
+        ],
+        "FyRear": [
+          -627.66064453125,
+          1327.1259765625
+        ],
+        "NFront": [
+          43.27799766447788,
+          770.7819982845102
+        ],
+        "Mz": [
+          -420.6881103515625,
+          664.97412109375
+        ]
+      },
+      "LossesJoules": {
+        "CrankDrag": 59359.93582386142,
+        "Clutch": 15444.687111312733,
+        "Transmission": 28266.56382512826,
+        "RearSlip": 93637.93675482308,
+        "Bearing": 3855.123733953568
+      }
+    },
+    {
+      "Fixture": "C-hold-plus",
+      "LastLegalReference": 616.9604120254517,
+      "LastLegalTravel": 696.2760095188933,
+      "MaxSpeedKmh": 91.8502272,
+      "SecondsAbove100OnStraights": 0,
+      "SteeringRateSaturatedSteps": 365,
+      "SteeringAngleSaturatedSteps": 0,
+      "Forces": {
+        "FxRear": [
+          -92.45439922832057,
+          1715.9653389668815
+        ],
+        "FyRear": [
+          -629.6463623046875,
+          1326.7139892578125
+        ],
+        "NFront": [
+          43.27799766447788,
+          770.3717516931378
+        ],
+        "Mz": [
+          -421.9033203125,
+          665.2584228515625
+        ]
+      },
+      "LossesJoules": {
+        "CrankDrag": 59360.9807541201,
+        "Clutch": 15444.909272070963,
+        "Transmission": 28273.472312172016,
+        "RearSlip": 93688.50841207088,
+        "Bearing": 3855.5891411261055
+      }
+    },
+    {
+      "Fixture": "C-hold-minus",
+      "LastLegalReference": 617.260745048523,
+      "LastLegalTravel": 696.5083013551848,
+      "MaxSpeedKmh": 91.9609308,
+      "SecondsAbove100OnStraights": 0,
+      "SteeringRateSaturatedSteps": 368,
+      "SteeringAngleSaturatedSteps": 0,
+      "Forces": {
+        "FxRear": [
+          -92.48556903947258,
+          1712.197694378127
+        ],
+        "FyRear": [
+          -626.0165405273438,
+          1327.8424072265625
+        ],
+        "NFront": [
+          43.27799766447788,
+          770.1029980568079
+        ],
+        "Mz": [
+          -419.6135559082031,
+          667.8900146484375
+        ]
+      },
+      "LossesJoules": {
+        "CrankDrag": 59368.69122058613,
+        "Clutch": 15444.648988944777,
+        "Transmission": 28265.317702175817,
+        "RearSlip": 93576.35827624629,
+        "Bearing": 3855.4896206342514
+      }
+    },
+    {
+      "Fixture": "C-alt",
+      "LastLegalReference": 617.1888017654419,
+      "LastLegalTravel": 696.5581014419513,
+      "MaxSpeedKmh": 91.8481392,
+      "SecondsAbove100OnStraights": 0,
+      "SteeringRateSaturatedSteps": 362,
+      "SteeringAngleSaturatedSteps": 0,
+      "Forces": {
+        "FxRear": [
+          -92.52672430414934,
+          1718.9405379937978
+        ],
+        "FyRear": [
+          -630.0038452148438,
+          1325.7911376953125
+        ],
+        "NFront": [
+          43.27799766447788,
+          770.5834610429891
+        ],
+        "Mz": [
+          -422.5880126953125,
+          667.566650390625
+        ]
+      },
+      "LossesJoules": {
+        "CrankDrag": 59387.302572366076,
+        "Clutch": 15444.857218462017,
+        "Transmission": 28276.38205192803,
+        "RearSlip": 93676.63296506152,
+        "Bearing": 3856.9686347372863
+      }
+    },
+    {
+      "Fixture": "C-alt-plus",
+      "LastLegalReference": 617.0250406265259,
+      "LastLegalTravel": 696.2588013524728,
+      "MaxSpeedKmh": 91.9582776,
+      "SecondsAbove100OnStraights": 0,
+      "SteeringRateSaturatedSteps": 367,
+      "SteeringAngleSaturatedSteps": 0,
+      "Forces": {
+        "FxRear": [
+          -92.46920445483616,
+          1711.1180553223016
+        ],
+        "FyRear": [
+          -625.7738647460938,
+          1327.3338623046875
+        ],
+        "NFront": [
+          43.27799766447788,
+          770.8631936374678
+        ],
+        "Mz": [
+          -419.66497802734375,
+          668.0200805664062
+        ]
+      },
+      "LossesJoules": {
+        "CrankDrag": 59350.72999387102,
+        "Clutch": 15444.570393590464,
+        "Transmission": 28259.177325273606,
+        "RearSlip": 93583.91649714892,
+        "Bearing": 3854.25532932773
+      }
+    }
+  ],
+  "ModelGuardTiming": {
+    "concurrent": [
+      {
+        "Repeat": 1,
+        "Statistics": {
+          "Count": 663,
+          "P50": 2.5271,
+          "P95": 7.1725,
+          "P99": 8.9023,
+          "Max": 10.4193,
+          "Over50": 0
+        },
+        "Rejected": 5,
+        "CpuSeconds": 2.0625,
+        "WallSeconds": 2.0195617
+      },
+      {
+        "Repeat": 2,
+        "Statistics": {
+          "Count": 663,
+          "P50": 2.1674,
+          "P95": 8.0223,
+          "P99": 10.6283,
+          "Max": 54.3493,
+          "Over50": 1
+        },
+        "Rejected": 5,
+        "CpuSeconds": 1.984375,
+        "WallSeconds": 2.0838369
+      },
+      {
+        "Repeat": 3,
+        "Statistics": {
+          "Count": 663,
+          "P50": 2.0521,
+          "P95": 6.1949,
+          "P99": 6.6378,
+          "Max": 6.9832,
+          "Over50": 0
+        },
+        "Rejected": 5,
+        "CpuSeconds": 1.6875,
+        "WallSeconds": 1.686657
+      }
+    ],
+    "isolated": [
+      {
+        "Repeat": 1,
+        "Statistics": {
+          "Count": 663,
+          "P50": 2.0696,
+          "P95": 6.2066,
+          "P99": 6.6242,
+          "Max": 7.2646,
+          "Over50": 0
+        },
+        "Rejected": 5,
+        "CpuSeconds": 1.75,
+        "WallSeconds": 1.6944742
+      },
+      {
+        "Repeat": 2,
+        "Statistics": {
+          "Count": 663,
+          "P50": 2.0493,
+          "P95": 6.2477,
+          "P99": 6.7891,
+          "Max": 10.634,
+          "Over50": 0
+        },
+        "Rejected": 5,
+        "CpuSeconds": 1.6875,
+        "WallSeconds": 1.6982745
+      },
+      {
+        "Repeat": 3,
+        "Statistics": {
+          "Count": 663,
+          "P50": 2.0763,
+          "P95": 6.3773,
+          "P99": 7.1436,
+          "Max": 10.0276,
+          "Over50": 0
+        },
+        "Rejected": 5,
+        "CpuSeconds": 1.734375,
+        "WallSeconds": 1.7389651
+      },
+      {
+        "Repeat": 4,
+        "Statistics": {
+          "Count": 663,
+          "P50": 2.0671,
+          "P95": 6.2922,
+          "P99": 6.762,
+          "Max": 9.1306,
+          "Over50": 0
+        },
+        "Rejected": 5,
+        "CpuSeconds": 1.734375,
+        "WallSeconds": 1.7074359
+      },
+      {
+        "Repeat": 5,
+        "Statistics": {
+          "Count": 663,
+          "P50": 2.0556,
+          "P95": 6.1964,
+          "P99": 6.5453,
+          "Max": 6.7789,
+          "Over50": 0
+        },
+        "Rejected": 5,
+        "CpuSeconds": 1.671875,
+        "WallSeconds": 1.6801577
+      },
+      {
+        "Repeat": 6,
+        "Statistics": {
+          "Count": 663,
+          "P50": 2.0448,
+          "P95": 6.1854,
+          "P99": 6.5571,
+          "Max": 6.7818,
+          "Over50": 0
+        },
+        "Rejected": 5,
+        "CpuSeconds": 1.671875,
+        "WallSeconds": 1.6777436
+      }
+    ]
+  }
+}

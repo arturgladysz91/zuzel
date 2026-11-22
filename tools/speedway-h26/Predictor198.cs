@@ -61,10 +61,14 @@ internal sealed class Predictor198(TrackFrame frame,TrackStateSnapshot surface,W
         Func<RiderView,double,double,string?>? motionConstraint=null) =>
         new(this,start,controls,from,goal,margin,profile,constraint,stepSeconds,motionConstraint);
 
+    internal Cursor198 BeginFeedback207(Start197 start,Func<Start197,FreeRacingAction> feedback,double goal,
+        double margin,bool profile=false) => new(this,start,[],0,goal,margin,profile,null,.01,null,feedback);
+
     internal sealed class Cursor198
     {
         private readonly Predictor198 model;
         private readonly FreeRacingAction[] controls;
+        private readonly Func<Start197,FreeRacingAction>? feedback207;
         private readonly Queue<FreeRacingCommand> pending;
         private readonly double goal,margin,originTime;
         private readonly bool profile;
@@ -86,10 +90,11 @@ internal sealed class Predictor198(TrackFrame frame,TrackStateSnapshot surface,W
 
         internal Cursor198(Predictor198 model,Start197 start,FreeRacingAction[] controls,int from,
             double goal,double margin,bool profile,Func<RiderView,double,string?>? constraint,double stepSeconds,
-            Func<RiderView,double,double,string?>? motionConstraint)
+            Func<RiderView,double,double,string?>? motionConstraint,Func<Start197,FreeRacingAction>? feedback207=null)
         {
             this.model=model;
             this.controls=controls;
+            this.feedback207=feedback207;
             this.goal=goal;
             this.margin=margin;
             this.profile=profile;
@@ -103,6 +108,7 @@ internal sealed class Predictor198(TrackFrame frame,TrackStateSnapshot surface,W
             nextReview=start.Review;
             index=from;
             state=start.State;
+            LastLegalS207=state.Rider.TotalReferenceMeters;
             riderHeightOffsetMeters = start.RiderHeightOffsetMeters;
             shaft=new(LaunchParameters144.Default,state.Shaft,model.Handling.H26?.EngineLoss);
             wheel=ForecastFork148.Wheel(state.Wheel,model.Physics.RearWheel);
@@ -119,6 +125,8 @@ internal sealed class Predictor198(TrackFrame frame,TrackStateSnapshot surface,W
         internal double Sweep { get; private set; }=100;
         internal double MaxBeta { get; private set; }
         internal double PeakForce { get; private set; }
+        internal double LastLegalS207 { get; private set; }
+        internal double LegalSweep207 { get; private set; }=100;
         internal double LastSweep { get; private set; }
         internal int NextIndex=>index;
         internal HeadingSample198 Snapshot=>new(state.Time,state.Rider.TotalReferenceMeters,state.Rider.Position.X,
@@ -186,8 +194,9 @@ internal sealed class Predictor198(TrackFrame frame,TrackStateSnapshot surface,W
             ApplyDue();
             if(t>=nextReview-1e-9)
             {
-                if(index>=controls.Length) {Outcome="commands-ended";return false;}
-                var action=controls[index++];
+                if(feedback207 is null&&index>=controls.Length) {Outcome="commands-ended";return false;}
+                var action=feedback207 is null?controls[index]:feedback207(Checkpoint());
+                index++;
                 double due=model.Timing.Due(nextReview,model.riderReaction,pending.LastOrDefault());
                 pending.Enqueue(new(nextReview,due,action));
                 nextReview+=model.Timing.Period(nextReview);
@@ -275,6 +284,11 @@ internal sealed class Predictor198(TrackFrame frame,TrackStateSnapshot surface,W
                 StrictFailure206=strict.Check(v,limit,edge.Outer,LastSweep,margin,
                     RacingProfile206.Physical(v,limit,step,forces,power),s>=goal);
                 Outcome=StrictFailure206?.Condition;
+                if(Outcome is null&&feedback207 is not null)
+                {
+                    LastLegalS207=s;
+                    LegalSweep207=Math.Min(LegalSweep207,LastSweep);
+                }
                 if(Outcome is null&&s>=goal)
                 {
                     Outcome="goal";
