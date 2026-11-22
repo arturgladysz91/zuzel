@@ -37,6 +37,13 @@ internal static partial class Study191
         researchRepository202=Directory.Exists(Path.Combine(workspace,"tools/speedway-h26"))?workspace:Path.Combine(workspace,"work/zuzel");
         Directory.CreateDirectory(output);
         switch(mode){
+            case "pair-208": Compare208(workspace,output,args.Skip(3).ToArray());break;
+            case "freeze-208": Freeze208(workspace,output,args.Skip(3).ToArray());break;
+            case "native-208": Native208(workspace,output,args[3],args[4]);break;
+            case "audit-208": Audit208(workspace,output);break;
+            case "lock-208": Lock208(workspace,output,args[3]);break;
+            case "time-208": Time208(workspace,output,args[3]);break;
+            case "plan-208": Plan208(workspace,output,args[3],args.Length>4?args[4]:null);break;
             case "plan-207":
                 if(args[3] is not ("pilot" or "greedy" or "beam" or "recovery" or "pace"))
                     throw new ArgumentException("Specify pilot, greedy, beam, recovery, or pace.");
