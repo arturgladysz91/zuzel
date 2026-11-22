@@ -23,17 +23,26 @@ internal static class Entry202
 internal static partial class Study191
 {
     private static HandlingSettings Settings202(string variant)=>Handling with {
-        H26=variant=="H25"?null:H26Configuration.For(variant is "H27-P" or "H27-N" or "H28-C"?"H26-LE":variant),
-        PostureH27 = variant is "H27-P" or "H27-N" or "H28-C" ? new() : null,
-        DoubleContactSolve = variant is "H27-N" or "H28-C",
-        CoupledRearTyre = variant=="H28-C" };
+        H26=variant=="H25"?null:H26Configuration.For(variant is "H27-P" or "H27-N" or "H28-C" or "H28-F"?"H26-LE":variant),
+        PostureH27 = variant is "H27-P" or "H27-N" or "H28-C" or "H28-F" ? new() : null,
+        DoubleContactSolve = variant is "H27-N" or "H28-C" or "H28-F",
+        CoupledRearTyre = variant is "H28-C" or "H28-F",
+        FastCoupledCertificate=variant=="H28-F" };
     internal static void StadiumEntry202(string config,string output)=>Stadium202(config,output);
     internal static void Run202(string[] args)
     {
         string mode=args[0],workspace=args[1],output=args[2];
+        if(args.Skip(3).Contains("H28-F")&&!mode.EndsWith("-206",StringComparison.Ordinal))
+            throw new ArgumentException("H28-F must use the strict study entry points.");
         researchRepository202=Directory.Exists(Path.Combine(workspace,"tools/speedway-h26"))?workspace:Path.Combine(workspace,"work/zuzel");
         Directory.CreateDirectory(output);
         switch(mode){
+            case "parity-206": Parity206(workspace,output);break;
+            case "decisions-206": Decisions206(workspace,output,args[3],args[4],args.Length>5&&args[5]=="detail");break;
+            case "style-206": Style206(workspace,output);break;
+            case "recheck-206": Recheck206(workspace,output,args[3]);break;
+            case "search-206": Search206(workspace,output,args.Length>3?int.Parse(args[3]):2,args.Length>4?args[4]:null);break;
+            case "native-206": NativeStrict206(workspace,output,args[3],args[4]);break;
             case "preflight-205": Preflight205(workspace,output,args.Length>3?args[3]:null);break;
             case "model-205": Audit205(workspace,output,args.Length>3&&args[3]=="focused");break;
             case "certify-205": Certify205(workspace,output);break;

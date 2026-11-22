@@ -21,6 +21,14 @@ public sealed class ContactRootException(ContactRootStatus status, string detail
 
 public readonly record struct ContactResidual64<T>(double Ax, double Residual, T Value);
 
+public sealed class ContactSearchMetrics64
+{
+    public int VisitedBoxes { get; internal set; }
+    public int EarlyExclusions { get; internal set; }
+    public long IsolationTicks { get; internal set; }
+    public long RefinementTicks { get; internal set; }
+}
+
 public static class ContactLoadSolver64
 {
     public const int IterationLimit = 48;
@@ -31,18 +39,31 @@ public static class ContactLoadSolver64
     // prevents acceptance, including when another box exhibited a valid root.
     public static ContactResidual64<T> SolveCertified<T>(double lo,double hi,double tolerance,
         Func<double,ContactResidual64<T>> at,
-        Func<double,double,ContactResidual64<T>,ContactSlope64> enclose,bool bisect=false)
+        Func<double,double,ContactResidual64<T>,ContactSlope64> enclose,bool bisect=false,
+        Func<ContactResidual64<T>,ContactResidual64<T>,bool>? earlyExclude=null,
+        ContactSearchMetrics64? metrics=null)
     {
         if (!double.IsFinite(lo)||!double.IsFinite(hi)||lo>=hi||!double.IsFinite(tolerance)||tolerance<=0)
             throw new ContactRootException(ContactRootStatus.InvalidPhysicalState,"invalid certified contact domain");
+        long started=metrics is null?0:System.Diagnostics.Stopwatch.GetTimestamp();
         var first=at(lo);
         var last=at(hi);
+        if(!double.IsFinite(first.Residual)||!double.IsFinite(last.Residual))
+            throw new ContactRootException(ContactRootStatus.InvalidPhysicalState,"nonfinite certified endpoints");
         var stack=new Stack<(ContactResidual64<T> Low,ContactResidual64<T> High)>();
         stack.Push((first,last));
         (ContactResidual64<T> Low,ContactResidual64<T> High)? bracket=null;
+        ContactResidual64<T> bracketMiddle=default;
         const int boxBudget=512;
         for (int i=0;i<boxBudget&&stack.TryPop(out var box);i++)
         {
+            if(metrics is not null) metrics.VisitedBoxes++;
+            if(earlyExclude is not null&&Math.Sign(box.Low.Residual)==Math.Sign(box.High.Residual)&&
+                box.Low.Residual!=0&&earlyExclude(box.Low,box.High))
+            {
+                if(metrics is not null) metrics.EarlyExclusions++;
+                continue;
+            }
             double a=box.Low.Ax,b=box.High.Ax;
             var mid=at(a+(b-a)/2);
             var enclosure=enclose(a,b,mid);
@@ -58,6 +79,7 @@ public static class ContactLoadSolver64
                     (known.Low.Ax!=candidate.Item1.Ax||known.High.Ax!=candidate.Item2.Ax))
                     throw new ContactRootException(ContactRootStatus.AmbiguousOrMultipleRoots,"distinct isolated contact roots");
                 bracket=candidate;
+                bracketMiddle=mid;
                 continue;
             }
             if (b-a<=1e-9)
@@ -66,20 +88,40 @@ public static class ContactLoadSolver64
             stack.Push((mid,box.High));
             stack.Push((box.Low,mid));
         }
+        if(metrics is not null)
+        {
+            metrics.IsolationTicks=System.Diagnostics.Stopwatch.GetTimestamp()-started;
+            started=System.Diagnostics.Stopwatch.GetTimestamp();
+        }
         if (stack.Count!=0)
             throw new ContactRootException(ContactRootStatus.AmbiguousOrMultipleRoots,"contact enclosure budget exhausted");
         if (bracket is not { } root)
             throw new ContactRootException(ContactRootStatus.NoPhysicallyAdmissibleRoot,
                 $"H28-C interval exclusion, endpoint residuals [{first.Residual:R},{last.Residual:R}]");
-        if(root.Low.Ax==root.High.Ax) return root.Low;
-        // Prefer the exact rest equilibrium over a nearby residual when a vehicle
-        // is held at rest. The enclosing interval has already proved uniqueness.
-        if(root.Low.Ax<0&&root.High.Ax>0)
+        var result=Refine();
+        if(metrics is not null) metrics.RefinementTicks=System.Diagnostics.Stopwatch.GetTimestamp()-started;
+        return result;
+
+        ContactResidual64<T> Refine()
         {
-            var rest=at(0);
-            if(rest.Residual==0) return rest;
+            if(root.Low.Ax==root.High.Ax) return root.Low;
+            if(root.Low.Ax<0&&root.High.Ax>0)
+            {
+                var rest=at(0);
+                if(rest.Residual==0) return rest;
+            }
+            // Preserve the frozen refinement arithmetic, including its grid.
+            // Reuse only exact abscissas from this same immutable contact query.
+            return Solve(root.Low.Ax,root.High.Ax,tolerance,earlyExclude is null?at:Reuse,_=>false,bisect);
         }
-        return Solve(root.Low.Ax,root.High.Ax,tolerance,at,_=>false,bisect);
+
+        ContactResidual64<T> Reuse(double ax)
+        {
+            if(ax==root.Low.Ax) return root.Low;
+            if(ax==root.High.Ax) return root.High;
+            if(ax==bracketMiddle.Ax) return bracketMiddle;
+            return at(ax);
+        }
     }
 
     public static ContactResidual64<T> Solve<T>(double lo, double hi, double tolerance,

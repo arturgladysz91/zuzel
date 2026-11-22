@@ -182,7 +182,16 @@ internal static partial class Study191
         Save(Path.Combine(output,"matched-model.json"),matched);
         if(focused) return;
         var baseShot=shots.First(x=>x.Name=="bend-1-apex");
-        var rows=new List<object>();
+        var rows=Synthetic205(baseShot).Select(x=>new {x.Kappa,x.Beta,x.Yaw,x.SpeedKph,x.FrontNormal,
+            x.Shot.Dt,x.Gas,Results=Physics205.Select(variant=>Measure205(x.Shot,variant,x.FrontNormal)).ToArray()}).ToArray();
+        Save(Path.Combine(output,"synthetic-grid-model.json.gz"),rows,true);
+        Save(Path.Combine(output,"model-info.json"),new {NativeWorlds=0,Stopwatch.Frequency,
+            Seconds=timer.Elapsed.TotalSeconds,GridRows=rows.Length,Matched=shots.Count});
+    }
+
+    private static IEnumerable<(Shot205 Shot,double Kappa,float Beta,float Yaw,double SpeedKph,double FrontNormal,float Gas)>
+        Synthetic205(Shot205 baseShot)
+    {
         foreach(double kappa in new[] {-.50,0,.50})
         foreach(float beta in new[] {-.18f,0,.18f})
         foreach(float yaw in new[] {-.7f,0,.7f})
@@ -199,12 +208,8 @@ internal static partial class Study191
             double omega=(forward+kappa*Math.Sqrt(forward*forward+.25))/.33;
             var state=p with {Rider=p.Rider with {Velocity=v,AngularVelocity=yaw},Wheel=omega};
             var shot=baseShot with {Start=baseShot.Start with {State=state,Active=baseShot.Start.Active with {Drive=gas}},Dt=dt};
-            rows.Add(new {Kappa=kappa,Beta=beta,Yaw=yaw,SpeedKph=speedKph,FrontNormal=fzf,Dt=dt,Gas=gas,
-                Results=Physics205.Select(x=>Measure205(shot,x,fzf)).ToArray()});
+            yield return (shot,kappa,beta,yaw,speedKph,fzf,gas);
         }
-        Save(Path.Combine(output,"synthetic-grid-model.json.gz"),rows,true);
-        Save(Path.Combine(output,"model-info.json"),new {NativeWorlds=0,Stopwatch.Frequency,
-            Seconds=timer.Elapsed.TotalSeconds,GridRows=rows.Count,Matched=shots.Count});
     }
 
     private static void Certify205(string repository,string output)

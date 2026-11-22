@@ -84,7 +84,8 @@ internal sealed class TrafficWorld191 : IDisposable
         samples[i].Add(sample);
         if(time>0 || nextReview[i]>0)observe?.Invoke(i,sample,handling[i].LeanSamples[^1]);
     }
-    public Run144 Run(string name,string variant,Func<FreeRacingInput,CrankClutch144,RiderSpec,WorldSnapshot,Decision144> chooser,Action<int,StartSample144,LeanSample>? observe=null){
+    public Run144 Run(string name,string variant,Func<FreeRacingInput,CrankClutch144,RiderSpec,WorldSnapshot,Decision144> chooser,Action<int,StartSample144,LeanSample>? observe=null,
+        Func<StartSample144,bool,string?>? strictCheck=null){
         this.observe=observe;
         if(ran)throw new InvalidOperationException("Run once, no lap reset.");ran=true;Policy144.Variant(variant);
         var started=Process.GetCurrentProcess().TotalProcessorTime;double controllerCpu=0;int steps=0;long nativeQueries=0,wheelQueries=0,forecastCount=0,forecastQueries=0;
@@ -185,7 +186,10 @@ internal sealed class TrafficWorld191 : IDisposable
                 if(time>RiderController.ReactionSeconds(specs[i])+5&&views[i].Speed<.05)reason="no progress / stalled";
                 if(!FreeLearningExperiment.SteeringStepIsPhysical(forces[i],(float)dt))reason="actuator invariant";
                 if(views[i].Activity==RiderActivity.Crashed)reason="solver contact: crash threshold";
+                reason??=strictCheck?.Invoke(samples[i][^1],referenceCompletes());
                 if(reason is not null&&failure is null){failure=reason;failedRider=i;}
+
+                bool referenceCompletes()=>views[i].TotalReferenceMeters>=options.RequiredLaps*frame.LapMeters;
             }
             var energyTolerance=.05*specs.Length+1e-6*before.Select((v,i)=>TwoContactBikeAudit.BodyKinetic(v,physics.Masses[i],physics.Inertias[i])).Sum();
             if(totalExcess>energyTolerance)throw new InvalidOperationException("Native body/wheel/crank gained unaccounted energy.");

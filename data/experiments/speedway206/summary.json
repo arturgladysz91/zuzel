@@ -1,0 +1,1200 @@
+{
+  "frozen": {
+    "finishes": [
+      {
+        "fixture": "H28-C-learned-C",
+        "measured": {
+          "Variant": "H28-C",
+          "Controller": "Learned feedback with FAST50 receding verification",
+          "Fixture": "C",
+          "Complete": true,
+          "Outcome": "completed",
+          "FinishSeconds": 46.988410280058545,
+          "EndSeconds": 46.99,
+          "TotalCpuSeconds": 20.171875,
+          "CompletedLaps": 3,
+          "NativeSteps": 4711,
+          "Contacts": 0,
+          "MinSweep": 0.6122358785266743,
+          "EndReference": 956.3785577416437,
+          "DecisionP50Milliseconds": 19.1033,
+          "DecisionP95Milliseconds": 44.8148,
+          "DecisionP99Milliseconds": 53.4223,
+          "MaxMilliseconds": 69.1763,
+          "Fingerprint": "353B37EE4776338E668C20EA9EFDCDC1398869B2FF23ABDE107E2BAE793DDF05",
+          "AcceptedPatches": 5,
+          "Decisions": 940,
+          "DeadlineMisses": 21
+        },
+        "residualEvaluations": 166116,
+        "certificateBoxes": 113937
+      },
+      {
+        "fixture": "H28-C-learned-C-hold-minus",
+        "measured": {
+          "Variant": "H28-C",
+          "Controller": "Learned feedback with FAST50 receding verification",
+          "Fixture": "C-hold-minus",
+          "Complete": true,
+          "Outcome": "completed",
+          "FinishSeconds": 46.98841147908511,
+          "EndSeconds": 46.99,
+          "TotalCpuSeconds": 20.1875,
+          "CompletedLaps": 3,
+          "NativeSteps": 4711,
+          "Contacts": 0,
+          "MinSweep": 0.5924150064251006,
+          "EndReference": 956.3785257935511,
+          "DecisionP50Milliseconds": 18.873,
+          "DecisionP95Milliseconds": 45.2763,
+          "DecisionP99Milliseconds": 52.9806,
+          "MaxMilliseconds": 67.5688,
+          "Fingerprint": "4E4ABC3F1819F50203A34CE9BB00B2F30FAC7F04F2891399521104EC90E3C908",
+          "AcceptedPatches": 5,
+          "Decisions": 940,
+          "DeadlineMisses": 22
+        },
+        "residualEvaluations": 166115,
+        "certificateBoxes": 113945
+      }
+    ],
+    "constructions": [
+      {
+        "Slot": 1,
+        "Adapter": "ContactAdapter",
+        "Process": 7164,
+        "Scenario": "H28-C-learned-C"
+      },
+      {
+        "Slot": 2,
+        "Adapter": "ContactAdapter",
+        "Process": 19528,
+        "Scenario": "H28-C-learned-C-hold-minus"
+      }
+    ],
+    "style": [
+      {
+        "Name": "H28-C-learned-C-hold-minus",
+        "ExactSteps": 4711,
+        "CorridorFailure": {
+          "Time": 10.84,
+          "TotalReferenceMeters": 178.36318230628967,
+          "Reason": "wide-direction",
+          "AngularVelocity": 0.23203696
+        },
+        "TechniqueFailure": {
+          "Time": 10.96,
+          "TotalReferenceMeters": 181.28846859931946,
+          "Reason": "technique-correction"
+        }
+      },
+      {
+        "Name": "H28-C-learned-C",
+        "ExactSteps": 4711,
+        "CorridorFailure": {
+          "Time": 10.84,
+          "TotalReferenceMeters": 178.36318230628967,
+          "Reason": "wide-direction",
+          "AngularVelocity": 0.23203696
+        },
+        "TechniqueFailure": {
+          "Time": 10.96,
+          "TotalReferenceMeters": 181.28846859931946,
+          "Reason": "technique-correction"
+        }
+      }
+    ],
+    "offsetPreflights": [
+      {
+        "Fixture": "C",
+        "Outcome": "goal",
+        "End": {
+          "Time": 46.99999999999947,
+          "S": 956.4820542633538,
+          "X": 0.14580444,
+          "Y": -9.800409,
+          "Speed": 26.479025,
+          "Heading": -0.016835319,
+          "Yaw": 0.09756901,
+          "Beta": 0.022456644,
+          "Wheel": 80.27617167069768,
+          "Shaft": 642.190870288966,
+          "Steer": 0.0015744747,
+          "Lean": 0.26468437460719196,
+          "Sweep": 0.6544224442055896,
+          "Outer": 0.7879020926693551,
+          "Inner": 10.4106056074123,
+          "Active": {
+            "SteeringRadians": 0.0018832306,
+            "Drive": 0.063125506
+          }
+        },
+        "Sweep": 0.6108097653136495
+      },
+      {
+        "Fixture": "C-hold-plus",
+        "Outcome": "wide-position",
+        "End": {
+          "Time": 25.11,
+          "S": 476.8849456310272,
+          "X": 9.283179,
+          "Y": 71.464195,
+          "Speed": 24.017067,
+          "Heading": -3.1385138,
+          "Yaw": -0.15928836,
+          "Beta": -0.014090972,
+          "Wheel": 78.29951424319505,
+          "Shaft": 627.2772139462007,
+          "Steer": -0.016591478,
+          "Lean": -0.3498860889604729,
+          "Sweep": 1.6754014143040696,
+          "Outer": 1.8000279671434298,
+          "Inner": 9.39837563499456,
+          "Active": {
+            "SteeringRadians": -0.008119903,
+            "Drive": 0.369772
+          }
+        },
+        "Sweep": 0.6044108973143694
+      },
+      {
+        "Fixture": "C-hold-minus",
+        "Outcome": "goal",
+        "End": {
+          "Time": 46.99999999999947,
+          "S": 956.4820688962932,
+          "X": 0.14581907,
+          "Y": -9.78043,
+          "Speed": 26.479023,
+          "Heading": -0.016835466,
+          "Yaw": 0.09756902,
+          "Beta": 0.022456642,
+          "Wheel": 80.27616655364925,
+          "Shaft": 642.1908294639337,
+          "Steer": 0.0015744758,
+          "Lean": 0.26468434559066906,
+          "Sweep": 0.6744018359399885,
+          "Outer": 0.8078814749061264,
+          "Inner": 10.390626227058197,
+          "Active": {
+            "SteeringRadians": 0.0018832306,
+            "Drive": 0.063125506
+          }
+        },
+        "Sweep": 0.5908207801737728
+      },
+      {
+        "Fixture": "C-alt",
+        "Outcome": "swept",
+        "End": {
+          "Time": 39.26,
+          "S": 783.5167276859285,
+          "X": 21.430147,
+          "Y": 72.65494,
+          "Speed": 24.725815,
+          "Heading": -3.1177635,
+          "Yaw": 0.20545167,
+          "Beta": 0.041374363,
+          "Wheel": 84.08054013250914,
+          "Shaft": 673.9510235133904,
+          "Steer": 0.04192493,
+          "Lean": 0.4636027075537424,
+          "Sweep": 0.49763018184260704,
+          "Outer": 0.6228777776345081,
+          "Inner": 10.575737986659286,
+          "Active": {
+            "SteeringRadians": 0.0036675527,
+            "Drive": 0.50935143
+          }
+        },
+        "Sweep": 0.49763018184260704
+      },
+      {
+        "Fixture": "C-alt-plus",
+        "Outcome": "wide-position",
+        "End": {
+          "Time": 24.93,
+          "S": 472.59474444389343,
+          "X": 13.57338,
+          "Y": 71.48188,
+          "Speed": 23.635561,
+          "Heading": -3.1108363,
+          "Yaw": -0.1386518,
+          "Beta": -0.00556578,
+          "Wheel": 78.80999276492211,
+          "Shaft": 631.648300306175,
+          "Steer": -0.016222857,
+          "Lean": -0.28281477247302245,
+          "Sweep": 1.6733760191641072,
+          "Outer": 1.8005081967376326,
+          "Inner": 9.398251237936018,
+          "Active": {
+            "SteeringRadians": -0.010060137,
+            "Drive": 0.47904557
+          }
+        },
+        "Sweep": 0.504410149377669
+      }
+    ],
+    "throttlePaired": [
+      {
+        "archive": "H27-N-learned-C.json.gz",
+        "horizon": 0.2,
+        "variant": "H27-N",
+        "matched": 889,
+        "sharedBaseline": 889,
+        "local": {
+          "admissible": 889
+        },
+        "legalContinuation": 852,
+        "faster": 113,
+        "sweptWithLastContact": 0,
+        "sweptWithNecessaryYawDeficit": 0,
+        "sweptWithRoadLateralDeficit": 0,
+        "sweptRateLimited": 0
+      },
+      {
+        "archive": "H27-N-learned-C.json.gz",
+        "horizon": 0.2,
+        "variant": "H28-C",
+        "matched": 889,
+        "sharedBaseline": 889,
+        "local": {
+          "admissible": 889
+        },
+        "legalContinuation": 838,
+        "faster": 115,
+        "sweptWithLastContact": 0,
+        "sweptWithNecessaryYawDeficit": 0,
+        "sweptWithRoadLateralDeficit": 0,
+        "sweptRateLimited": 0
+      },
+      {
+        "archive": "H27-N-learned-C.json.gz",
+        "horizon": 0.8,
+        "variant": "H27-N",
+        "matched": 877,
+        "sharedBaseline": 873,
+        "local": {
+          "admissible": 718,
+          "certified-load-domain": 97,
+          "swept": 58
+        },
+        "legalContinuation": 520,
+        "faster": 516,
+        "sweptWithLastContact": 58,
+        "sweptWithNecessaryYawDeficit": 0,
+        "sweptWithRoadLateralDeficit": 0,
+        "sweptRateLimited": 22
+      },
+      {
+        "archive": "H27-N-learned-C.json.gz",
+        "horizon": 0.8,
+        "variant": "H28-C",
+        "matched": 877,
+        "sharedBaseline": 873,
+        "local": {
+          "admissible": 807,
+          "swept": 66
+        },
+        "legalContinuation": 644,
+        "faster": 644,
+        "sweptWithLastContact": 66,
+        "sweptWithNecessaryYawDeficit": 0,
+        "sweptWithRoadLateralDeficit": 1,
+        "sweptRateLimited": 31
+      },
+      {
+        "archive": "H27-N-learned-C.json.gz",
+        "horizon": 1.5,
+        "variant": "H27-N",
+        "matched": 863,
+        "sharedBaseline": 821,
+        "local": {
+          "admissible": 451,
+          "certified-load-domain": 156,
+          "swept": 214
+        },
+        "legalContinuation": 92,
+        "faster": 92,
+        "sweptWithLastContact": 214,
+        "sweptWithNecessaryYawDeficit": 44,
+        "sweptWithRoadLateralDeficit": 107,
+        "sweptRateLimited": 70
+      },
+      {
+        "archive": "H27-N-learned-C.json.gz",
+        "horizon": 1.5,
+        "variant": "H28-C",
+        "matched": 863,
+        "sharedBaseline": 821,
+        "local": {
+          "admissible": 576,
+          "swept": 245
+        },
+        "legalContinuation": 78,
+        "faster": 78,
+        "sweptWithLastContact": 245,
+        "sweptWithNecessaryYawDeficit": 63,
+        "sweptWithRoadLateralDeficit": 140,
+        "sweptRateLimited": 93
+      }
+    ],
+    "throttlePhases": [
+      {
+        "physics": "H27-N",
+        "lap": 0,
+        "index": 0,
+        "baseline": "goal",
+        "full": "swept"
+      },
+      {
+        "physics": "H27-N",
+        "lap": 0,
+        "index": 1,
+        "baseline": "goal",
+        "full": "swept"
+      },
+      {
+        "physics": "H27-N",
+        "lap": 1,
+        "index": 0,
+        "baseline": "goal",
+        "full": "wide-direction"
+      },
+      {
+        "physics": "H27-N",
+        "lap": 1,
+        "index": 1,
+        "baseline": "goal",
+        "full": "swept"
+      },
+      {
+        "physics": "H27-N",
+        "lap": 2,
+        "index": 0,
+        "baseline": "goal",
+        "full": "swept"
+      },
+      {
+        "physics": "H27-N",
+        "lap": 2,
+        "index": 1,
+        "baseline": "goal",
+        "full": "swept"
+      },
+      {
+        "physics": "H28-C",
+        "lap": 0,
+        "index": 0,
+        "baseline": "swept",
+        "full": "swept"
+      },
+      {
+        "physics": "H28-C",
+        "lap": 0,
+        "index": 1,
+        "baseline": "goal",
+        "full": "swept"
+      },
+      {
+        "physics": "H28-C",
+        "lap": 1,
+        "index": 0,
+        "baseline": "goal",
+        "full": "wide-direction"
+      },
+      {
+        "physics": "H28-C",
+        "lap": 1,
+        "index": 1,
+        "baseline": "wide-direction",
+        "full": "swept"
+      },
+      {
+        "physics": "H28-C",
+        "lap": 2,
+        "index": 0,
+        "baseline": "swept",
+        "full": "swept"
+      },
+      {
+        "physics": "H28-C",
+        "lap": 2,
+        "index": 1,
+        "baseline": "swept",
+        "full": "swept"
+      }
+    ]
+  },
+  "profiling": {
+    "C-baseline-1": {
+      "Variant": "H28-C",
+      "Fixture": "C",
+      "Detailed": false,
+      "Mode": "MODEL archived decision snapshots, frozen relaxed gate",
+      "Count": 940,
+      "P50": 18.972,
+      "P95": 44.4952,
+      "P99": 53.3532,
+      "Max": 67.3021,
+      "Over50": 22,
+      "CpuSeconds": 18.734375,
+      "WallSeconds": 18.707493,
+      "RolloutMs": 1543.0226,
+      "Rollout": {
+        "Steps": 4700,
+        "ForceTicks": 0,
+        "IntegrateTicks": 0,
+        "GeometryTicks": 0,
+        "GateTicks": 0,
+        "ClockTicks": 0
+      },
+      "AcceptedPatches": 5,
+      "ActionDivergence": [],
+      "NativeWorlds": 0,
+      "Frequency": 10000000,
+      "ProcessorCount": 16
+    },
+    "C-baseline-2": {
+      "Variant": "H28-C",
+      "Fixture": "C",
+      "Detailed": false,
+      "Mode": "MODEL archived decision snapshots, frozen relaxed gate",
+      "Count": 940,
+      "P50": 18.7814,
+      "P95": 44.4515,
+      "P99": 53.445,
+      "Max": 68.8454,
+      "Over50": 22,
+      "CpuSeconds": 18.640625,
+      "WallSeconds": 18.617776,
+      "RolloutMs": 1542.0421,
+      "Rollout": {
+        "Steps": 4700,
+        "ForceTicks": 0,
+        "IntegrateTicks": 0,
+        "GeometryTicks": 0,
+        "GateTicks": 0,
+        "ClockTicks": 0
+      },
+      "AcceptedPatches": 5,
+      "ActionDivergence": [],
+      "NativeWorlds": 0,
+      "Frequency": 10000000,
+      "ProcessorCount": 16
+    },
+    "C-baseline-detail": {
+      "Variant": "H28-C",
+      "Fixture": "C",
+      "Detailed": true,
+      "Mode": "MODEL archived decision snapshots, frozen relaxed gate",
+      "Count": 940,
+      "P50": 18.8726,
+      "P95": 44.3345,
+      "P99": 53.0099,
+      "Max": 67.3775,
+      "Over50": 19,
+      "CpuSeconds": 18.71875,
+      "WallSeconds": 18.6742878,
+      "RolloutMs": 1539.1611,
+      "Rollout": {
+        "Steps": 4700,
+        "ForceTicks": 11904603,
+        "IntegrateTicks": 427911,
+        "GeometryTicks": 2991176,
+        "GateTicks": 18512,
+        "ClockTicks": 10453,
+        "ResidualForceTicks": 5713474,
+        "LoadSolverTicks": 11821951,
+        "CombinedPowerTicks": 5186244,
+        "CombinedProofTicks": 5330740,
+        "Work206": {
+          "Steps": 4700,
+          "ResidualEvaluations": 165266,
+          "ClutchSolves": 165266,
+          "WheelQueries": 1813103,
+          "WheelIterations": 3589518,
+          "FullBoxes": 113176,
+          "VisitedBoxes": 113176,
+          "EarlyExclusions": 0,
+          "CheapTicks": 0,
+          "IntervalTicks": 5330740,
+          "IsolationTicks": 9982909,
+          "RefinementTicks": 1636427,
+          "BoundaryTicks": 67835,
+          "ForceTicks": 11904603,
+          "PowerTicks": 5186244,
+          "GeometryTicks": 2991176,
+          "StrictGateTicks": 18512,
+          "RateLimited": 342,
+          "NearLoadBoundary": 8
+        }
+      },
+      "AcceptedPatches": 5,
+      "ActionDivergence": [],
+      "NativeWorlds": 0,
+      "Frequency": 10000000,
+      "ProcessorCount": 16,
+      "profile": {
+        "Steps": {
+          "total": 89424,
+          "meanPerDecision": 95.13191489361702,
+          "meanAbove50": 189.21052631578948,
+          "pearsonVsWall": 0.7797074498694322
+        },
+        "ResidualEvaluations": {
+          "total": 3327659,
+          "meanPerDecision": 3540.062765957447,
+          "meanAbove50": 9368.578947368422,
+          "pearsonVsWall": 0.9910233385099502
+        },
+        "ClutchSolves": {
+          "total": 3327659,
+          "meanPerDecision": 3540.062765957447,
+          "meanAbove50": 9368.578947368422,
+          "pearsonVsWall": 0.9910233385099502
+        },
+        "WheelQueries": {
+          "total": 35874511,
+          "meanPerDecision": 38164.37340425532,
+          "meanAbove50": 102350.8947368421,
+          "pearsonVsWall": 0.9880760784070594
+        },
+        "WheelIterations": {
+          "total": 70235197,
+          "meanPerDecision": 74718.29468085106,
+          "meanAbove50": 202708.05263157896,
+          "pearsonVsWall": 0.9856739372005715
+        },
+        "FullBoxes": {
+          "total": 2338112,
+          "meanPerDecision": 2487.3531914893615,
+          "meanAbove50": 7366.894736842105,
+          "pearsonVsWall": 0.9930564784281466
+        },
+        "VisitedBoxes": {
+          "total": 2338112,
+          "meanPerDecision": 2487.3531914893615,
+          "meanAbove50": 7366.894736842105,
+          "pearsonVsWall": 0.9930564784281466
+        },
+        "EarlyExclusions": {
+          "total": 0,
+          "meanPerDecision": 0,
+          "meanAbove50": 0,
+          "pearsonVsWall": null
+        },
+        "CheapTicks": {
+          "total": 0,
+          "meanPerDecision": 0,
+          "meanAbove50": 0,
+          "pearsonVsWall": null
+        },
+        "IntervalTicks": {
+          "total": 76071126,
+          "meanPerDecision": 80926.72978723404,
+          "meanAbove50": 248706.52631578947,
+          "pearsonVsWall": 0.9911122126605476
+        },
+        "IsolationTicks": {
+          "total": 145153137,
+          "meanPerDecision": 154418.23085106382,
+          "meanAbove50": 465955.36842105264,
+          "pearsonVsWall": 0.9953144459505893
+        },
+        "RefinementTicks": {
+          "total": 19853596,
+          "meanPerDecision": 21120.84680851064,
+          "meanAbove50": 41211.73684210526,
+          "pearsonVsWall": 0.7376077741266448
+        },
+        "BoundaryTicks": {
+          "total": 361383,
+          "meanPerDecision": 384.45,
+          "meanAbove50": 1020.6315789473684,
+          "pearsonVsWall": 0.47517179566048956
+        },
+        "ForceTicks": {
+          "total": 166107844,
+          "meanPerDecision": 176710.47234042553,
+          "meanAbove50": 509708.3157894737,
+          "pearsonVsWall": 0.9987379743063436
+        },
+        "PowerTicks": {
+          "total": 70888344,
+          "meanPerDecision": 75413.13191489362,
+          "meanAbove50": 205124.36842105264,
+          "pearsonVsWall": 0.992887961289379
+        },
+        "GeometryTicks": {
+          "total": 17237085,
+          "meanPerDecision": 18337.324468085106,
+          "meanAbove50": 46847.78947368421,
+          "pearsonVsWall": 0.9064072806220077
+        },
+        "StrictGateTicks": {
+          "total": 82149,
+          "meanPerDecision": 87.39255319148936,
+          "meanAbove50": 162,
+          "pearsonVsWall": 0.3470699720667441
+        },
+        "RateLimited": {
+          "total": 5070,
+          "meanPerDecision": 5.3936170212765955,
+          "meanAbove50": 6.315789473684211,
+          "pearsonVsWall": 0.26149172222085243
+        },
+        "NearLoadBoundary": {
+          "total": 48,
+          "meanPerDecision": 0.05106382978723404,
+          "meanAbove50": 0,
+          "pearsonVsWall": 0.025928352634826127
+        }
+      },
+      "workerWallTicks": 140101850,
+      "firstDecisionWallMs": 9.0717,
+      "slowPhases": {
+        "bend": 18,
+        "straight": 1
+      }
+    },
+    "C-fast-1": {
+      "Variant": "H28-F",
+      "Fixture": "C",
+      "Detailed": false,
+      "Mode": "MODEL archived decision snapshots, frozen relaxed gate",
+      "Count": 940,
+      "P50": 11.5414,
+      "P95": 30.5449,
+      "P99": 36.7457,
+      "Max": 46.2518,
+      "Over50": 0,
+      "CpuSeconds": 12.09375,
+      "WallSeconds": 12.0376424,
+      "RolloutMs": 1142.4824,
+      "Rollout": {
+        "Steps": 4700,
+        "ForceTicks": 0,
+        "IntegrateTicks": 0,
+        "GeometryTicks": 0,
+        "GateTicks": 0,
+        "ClockTicks": 0
+      },
+      "AcceptedPatches": 5,
+      "ActionDivergence": [],
+      "NativeWorlds": 0,
+      "Frequency": 10000000,
+      "ProcessorCount": 16
+    },
+    "C-fast-2": {
+      "Variant": "H28-F",
+      "Fixture": "C",
+      "Detailed": false,
+      "Mode": "MODEL archived decision snapshots, frozen relaxed gate",
+      "Count": 940,
+      "P50": 11.4751,
+      "P95": 30.6996,
+      "P99": 37.0991,
+      "Max": 46.5907,
+      "Over50": 0,
+      "CpuSeconds": 12.03125,
+      "WallSeconds": 11.9979785,
+      "RolloutMs": 1139.9656,
+      "Rollout": {
+        "Steps": 4700,
+        "ForceTicks": 0,
+        "IntegrateTicks": 0,
+        "GeometryTicks": 0,
+        "GateTicks": 0,
+        "ClockTicks": 0
+      },
+      "AcceptedPatches": 5,
+      "ActionDivergence": [],
+      "NativeWorlds": 0,
+      "Frequency": 10000000,
+      "ProcessorCount": 16
+    },
+    "C-fast-detail": {
+      "Variant": "H28-F",
+      "Fixture": "C",
+      "Detailed": true,
+      "Mode": "MODEL archived decision snapshots, frozen relaxed gate",
+      "Count": 940,
+      "P50": 11.5061,
+      "P95": 30.4683,
+      "P99": 36.7414,
+      "Max": 46.1299,
+      "Over50": 0,
+      "CpuSeconds": 12.0625,
+      "WallSeconds": 12.0031238,
+      "RolloutMs": 1120.3071,
+      "Rollout": {
+        "Steps": 4700,
+        "ForceTicks": 7276149,
+        "IntegrateTicks": 464180,
+        "GeometryTicks": 3390253,
+        "GateTicks": 20642,
+        "ClockTicks": 11101,
+        "ResidualForceTicks": 1999015,
+        "LoadSolverTicks": 7128306,
+        "CombinedPowerTicks": 1611332,
+        "CombinedProofTicks": 4188309,
+        "Work206": {
+          "Steps": 4700,
+          "ResidualEvaluations": 117222,
+          "ClutchSolves": 117222,
+          "WheelQueries": 1283241,
+          "WheelIterations": 2528395,
+          "FullBoxes": 79160,
+          "VisitedBoxes": 104048,
+          "EarlyExclusions": 24888,
+          "CheapTicks": 217296,
+          "IntervalTicks": 4188309,
+          "IsolationTicks": 6310145,
+          "RefinementTicks": 613272,
+          "BoundaryTicks": 172862,
+          "ForceTicks": 7276149,
+          "PowerTicks": 1611332,
+          "GeometryTicks": 3390253,
+          "StrictGateTicks": 20642,
+          "RateLimited": 342,
+          "NearLoadBoundary": 8
+        }
+      },
+      "AcceptedPatches": 5,
+      "ActionDivergence": [],
+      "NativeWorlds": 0,
+      "Frequency": 10000000,
+      "ProcessorCount": 16,
+      "profile": {
+        "Steps": {
+          "total": 89424,
+          "meanPerDecision": 95.13191489361702,
+          "meanAbove50": null,
+          "pearsonVsWall": 0.7342622718008064
+        },
+        "ResidualEvaluations": {
+          "total": 2394012,
+          "meanPerDecision": 2546.8212765957446,
+          "meanAbove50": null,
+          "pearsonVsWall": 0.9927110652931594
+        },
+        "ClutchSolves": {
+          "total": 2394012,
+          "meanPerDecision": 2546.8212765957446,
+          "meanAbove50": null,
+          "pearsonVsWall": 0.9927110652931594
+        },
+        "WheelQueries": {
+          "total": 25839761,
+          "meanPerDecision": 27489.10744680851,
+          "meanAbove50": null,
+          "pearsonVsWall": 0.9862032007248914
+        },
+        "WheelIterations": {
+          "total": 50468234,
+          "meanPerDecision": 53689.61063829787,
+          "meanAbove50": null,
+          "pearsonVsWall": 0.9851565931019692
+        },
+        "FullBoxes": {
+          "total": 1672455,
+          "meanPerDecision": 1779.2074468085107,
+          "meanAbove50": null,
+          "pearsonVsWall": 0.9913981856240879
+        },
+        "VisitedBoxes": {
+          "total": 2170640,
+          "meanPerDecision": 2309.191489361702,
+          "meanAbove50": null,
+          "pearsonVsWall": 0.9940817266268911
+        },
+        "EarlyExclusions": {
+          "total": 498185,
+          "meanPerDecision": 529.9840425531914,
+          "meanAbove50": null,
+          "pearsonVsWall": 0.8888746530156962
+        },
+        "CheapTicks": {
+          "total": 2293882,
+          "meanPerDecision": 2440.3,
+          "meanAbove50": null,
+          "pearsonVsWall": 0.9890325980929761
+        },
+        "IntervalTicks": {
+          "total": 59010299,
+          "meanPerDecision": 62776.913829787234,
+          "meanAbove50": null,
+          "pearsonVsWall": 0.9920391320738363
+        },
+        "IsolationTicks": {
+          "total": 91000281,
+          "meanPerDecision": 96808.80957446809,
+          "meanAbove50": null,
+          "pearsonVsWall": 0.9936316572960386
+        },
+        "RefinementTicks": {
+          "total": 7183191,
+          "meanPerDecision": 7641.692553191489,
+          "meanAbove50": null,
+          "pearsonVsWall": 0.616824935067183
+        },
+        "BoundaryTicks": {
+          "total": 374780,
+          "meanPerDecision": 398.70212765957444,
+          "meanAbove50": null,
+          "pearsonVsWall": 0.3827572084169344
+        },
+        "ForceTicks": {
+          "total": 99726723,
+          "meanPerDecision": 106092.2585106383,
+          "meanAbove50": null,
+          "pearsonVsWall": 0.9966415419377783
+        },
+        "PowerTicks": {
+          "total": 22508567,
+          "meanPerDecision": 23945.28404255319,
+          "meanAbove50": null,
+          "pearsonVsWall": 0.9864657035046243
+        },
+        "GeometryTicks": {
+          "total": 17004751,
+          "meanPerDecision": 18090.16063829787,
+          "meanAbove50": null,
+          "pearsonVsWall": 0.8854589027406434
+        },
+        "StrictGateTicks": {
+          "total": 101609,
+          "meanPerDecision": 108.09468085106383,
+          "meanAbove50": null,
+          "pearsonVsWall": 0.36452109826774404
+        },
+        "RateLimited": {
+          "total": 5070,
+          "meanPerDecision": 5.3936170212765955,
+          "meanAbove50": null,
+          "pearsonVsWall": 0.24486271993031827
+        },
+        "NearLoadBoundary": {
+          "total": 48,
+          "meanPerDecision": 0.05106382978723404,
+          "meanAbove50": null,
+          "pearsonVsWall": 0.014324675327499483
+        }
+      },
+      "workerWallTicks": 90065561,
+      "firstDecisionWallMs": 5.4739,
+      "slowPhases": {}
+    },
+    "minus-baseline-1": {
+      "Variant": "H28-C",
+      "Fixture": "C-hold-minus",
+      "Detailed": false,
+      "Mode": "MODEL archived decision snapshots, frozen relaxed gate",
+      "Count": 940,
+      "P50": 18.8887,
+      "P95": 44.5337,
+      "P99": 53.0012,
+      "Max": 67.2715,
+      "Over50": 19,
+      "CpuSeconds": 18.890625,
+      "WallSeconds": 18.8321714,
+      "RolloutMs": 1480.0223,
+      "Rollout": {
+        "Steps": 4700,
+        "ForceTicks": 0,
+        "IntegrateTicks": 0,
+        "GeometryTicks": 0,
+        "GateTicks": 0,
+        "ClockTicks": 0
+      },
+      "AcceptedPatches": 5,
+      "ActionDivergence": [],
+      "NativeWorlds": 0,
+      "Frequency": 10000000,
+      "ProcessorCount": 16
+    },
+    "minus-fast-1": {
+      "Variant": "H28-F",
+      "Fixture": "C-hold-minus",
+      "Detailed": false,
+      "Mode": "MODEL archived decision snapshots, frozen relaxed gate",
+      "Count": 940,
+      "P50": 11.4093,
+      "P95": 30.7731,
+      "P99": 36.6751,
+      "Max": 45.7709,
+      "Over50": 0,
+      "CpuSeconds": 12.046875,
+      "WallSeconds": 12.0341928,
+      "RolloutMs": 1188.542,
+      "Rollout": {
+        "Steps": 4700,
+        "ForceTicks": 0,
+        "IntegrateTicks": 0,
+        "GeometryTicks": 0,
+        "GateTicks": 0,
+        "ClockTicks": 0
+      },
+      "AcceptedPatches": 5,
+      "ActionDivergence": [],
+      "NativeWorlds": 0,
+      "Frequency": 10000000,
+      "ProcessorCount": 16
+    }
+  },
+  "parity": {
+    "Total": 72949,
+    "FrozenExact": 72949,
+    "PairExact": 72949,
+    "Determinism": 2346,
+    "ClassificationsChanged": 0,
+    "H28C": {
+      "Accepted": 68772,
+      "Residuals": 1863375,
+      "WheelQueries": 20977216,
+      "FullBoxes": 1112520,
+      "VisitedBoxes": 1112520,
+      "EarlyExclusions": 0,
+      "ForceTicks": 48173678,
+      "SolverTicks": 89342154,
+      "PowerTicks": 43082232,
+      "IntervalTicks": 35172307,
+      "CheapTicks": 0,
+      "IsolationTicks": 71804098,
+      "RefinementTicks": 16809689,
+      "BoundaryTicks": 436740
+    },
+    "H28F": {
+      "Accepted": 68772,
+      "Residuals": 1205786,
+      "WheelQueries": 13597174,
+      "FullBoxes": 659735,
+      "VisitedBoxes": 947210,
+      "EarlyExclusions": 287475,
+      "ForceTicks": 15360802,
+      "SolverTicks": 45155864,
+      "PowerTicks": 12288370,
+      "IntervalTicks": 24205726,
+      "CheapTicks": 975683,
+      "IsolationTicks": 38641207,
+      "RefinementTicks": 5903664,
+      "BoundaryTicks": 371074
+    }
+  },
+  "candidateSearch": {
+    "attempts": 441,
+    "nominalPassed": 0,
+    "nominalFailureCounts": {
+      "wide-direction": 233,
+      "technique-correction": 31,
+      "swept": 56,
+      "wide-position": 116,
+      "wide-entry": 5
+    },
+    "candidateFixtures": [
+      {
+        "id": 434,
+        "predictions": [
+          {
+            "fixture": "C",
+            "outcome": "wide-direction",
+            "time": 26.62,
+            "s": 502.0021188259125,
+            "swept": 0.8389592672212229
+          },
+          {
+            "fixture": "C-hold-plus",
+            "outcome": "wide-direction",
+            "time": 26.62,
+            "s": 502.0021026134491,
+            "swept": 0.8189988378289875
+          },
+          {
+            "fixture": "C-hold-minus",
+            "outcome": "wide-direction",
+            "time": 26.62,
+            "s": 502.00162959098816,
+            "swept": 0.8593157165387884
+          },
+          {
+            "fixture": "C-alt",
+            "outcome": "wide-direction",
+            "time": 26.62,
+            "s": 502.001677274704,
+            "swept": 0.7997496981948782
+          },
+          {
+            "fixture": "C-alt-plus",
+            "outcome": "wide-entry",
+            "time": 11.63,
+            "s": 194.0971863269806,
+            "swept": 0.8807819670702174
+          }
+        ]
+      },
+      {
+        "id": 436,
+        "predictions": [
+          {
+            "fixture": "C",
+            "outcome": "wide-direction",
+            "time": 26.53,
+            "s": 501.5359981060028,
+            "swept": 0.8942673112328825
+          },
+          {
+            "fixture": "C-hold-plus",
+            "outcome": "wide-direction",
+            "time": 26.53,
+            "s": 501.53600001335144,
+            "swept": 0.9142334174912152
+          },
+          {
+            "fixture": "C-hold-minus",
+            "outcome": "wide-direction",
+            "time": 26.53,
+            "s": 501.5353286266327,
+            "swept": 0.873151061195473
+          },
+          {
+            "fixture": "C-alt",
+            "outcome": "wide-direction",
+            "time": 26.53,
+            "s": 501.5357463359833,
+            "swept": 0.7740248481068046
+          },
+          {
+            "fixture": "C-alt-plus",
+            "outcome": "wide-entry",
+            "time": 11.63,
+            "s": 194.0971863269806,
+            "swept": 0.8807819670702174
+          }
+        ]
+      },
+      {
+        "id": 433,
+        "predictions": [
+          {
+            "fixture": "C",
+            "outcome": "wide-direction",
+            "time": 26.580000000000002,
+            "s": 501.38483023643494,
+            "swept": 0.8503412399189016
+          },
+          {
+            "fixture": "C-hold-plus",
+            "outcome": "wide-direction",
+            "time": 26.580000000000002,
+            "s": 501.3848226070404,
+            "swept": 0.8303769771356722
+          },
+          {
+            "fixture": "C-hold-minus",
+            "outcome": "wide-direction",
+            "time": 26.580000000000002,
+            "s": 501.3843858242035,
+            "swept": 0.8677030334470168
+          },
+          {
+            "fixture": "C-alt",
+            "outcome": "wide-direction",
+            "time": 26.580000000000002,
+            "s": 501.38440680503845,
+            "swept": 0.7682097180996742
+          },
+          {
+            "fixture": "C-alt-plus",
+            "outcome": "wide-entry",
+            "time": 11.63,
+            "s": 194.0971863269806,
+            "swept": 0.8807819670702174
+          }
+        ]
+      },
+      {
+        "id": 435,
+        "predictions": [
+          {
+            "fixture": "C",
+            "outcome": "wide-position",
+            "time": 25.47,
+            "s": 475.2286469936371,
+            "swept": 0.9553395841893315
+          },
+          {
+            "fixture": "C-hold-plus",
+            "outcome": "wide-position",
+            "time": 25.44,
+            "s": 474.5148780345917,
+            "swept": 0.9353801062655489
+          },
+          {
+            "fixture": "C-hold-minus",
+            "outcome": "wide-position",
+            "time": 25.5,
+            "s": 475.9438989162445,
+            "swept": 0.9759154015792851
+          },
+          {
+            "fixture": "C-alt",
+            "outcome": "wide-direction",
+            "time": 26.11,
+            "s": 490.59555220603943,
+            "swept": 0.9441581161914392
+          },
+          {
+            "fixture": "C-alt-plus",
+            "outcome": "wide-entry",
+            "time": 11.63,
+            "s": 194.0971863269806,
+            "swept": 0.8807819670702174
+          }
+        ]
+      },
+      {
+        "id": 415,
+        "predictions": [
+          {
+            "fixture": "C",
+            "outcome": "wide-position",
+            "time": 25.01,
+            "s": 465.2233350276947,
+            "swept": 0.9553395841893315
+          },
+          {
+            "fixture": "C-hold-plus",
+            "outcome": "wide-position",
+            "time": 25,
+            "s": 464.9979341030121,
+            "swept": 0.9353801062655489
+          },
+          {
+            "fixture": "C-hold-minus",
+            "outcome": "wide-direction",
+            "time": 25.01,
+            "s": 465.2230851650238,
+            "swept": 0.9759154015792851
+          },
+          {
+            "fixture": "C-alt",
+            "outcome": "wide-position",
+            "time": 18.16,
+            "s": 326.5096163749695,
+            "swept": 0.9441581161914392
+          },
+          {
+            "fixture": "C-alt-plus",
+            "outcome": "wide-entry",
+            "time": 11.63,
+            "s": 194.0971863269806,
+            "swept": 0.8807819670702174
+          }
+        ]
+      }
+    ],
+    "winner": null
+  }
+}

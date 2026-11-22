@@ -18,14 +18,38 @@ internal sealed record Profile198(long Steps,long ForceTicks,long IntegrateTicks
     public long CombinedPowerTicks { get; init; }
     [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
     public long CombinedProofTicks { get; init; }
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+    public ForecastWork206 Work206 { get; init; }
+}
+internal readonly record struct ForecastWork206(long Steps,long ResidualEvaluations,long ClutchSolves,long WheelQueries,
+    long WheelIterations,long FullBoxes,long VisitedBoxes,long EarlyExclusions,long CheapTicks,long IntervalTicks,
+    long IsolationTicks,long RefinementTicks,long BoundaryTicks,long ForceTicks,long PowerTicks,long GeometryTicks,
+    long StrictGateTicks,long RateLimited,long NearLoadBoundary)
+{
+    public static ForecastWork206 operator +(ForecastWork206 a,ForecastWork206 b)=>new(a.Steps+b.Steps,
+        a.ResidualEvaluations+b.ResidualEvaluations,a.ClutchSolves+b.ClutchSolves,a.WheelQueries+b.WheelQueries,
+        a.WheelIterations+b.WheelIterations,a.FullBoxes+b.FullBoxes,a.VisitedBoxes+b.VisitedBoxes,a.EarlyExclusions+b.EarlyExclusions,
+        a.CheapTicks+b.CheapTicks,a.IntervalTicks+b.IntervalTicks,a.IsolationTicks+b.IsolationTicks,
+        a.RefinementTicks+b.RefinementTicks,a.BoundaryTicks+b.BoundaryTicks,a.ForceTicks+b.ForceTicks,
+        a.PowerTicks+b.PowerTicks,a.GeometryTicks+b.GeometryTicks,a.StrictGateTicks+b.StrictGateTicks,
+        a.RateLimited+b.RateLimited,a.NearLoadBoundary+b.NearLoadBoundary);
+
+    public static ForecastWork206 operator -(ForecastWork206 a,ForecastWork206 b)=>new(a.Steps-b.Steps,
+        a.ResidualEvaluations-b.ResidualEvaluations,a.ClutchSolves-b.ClutchSolves,a.WheelQueries-b.WheelQueries,
+        a.WheelIterations-b.WheelIterations,a.FullBoxes-b.FullBoxes,a.VisitedBoxes-b.VisitedBoxes,a.EarlyExclusions-b.EarlyExclusions,
+        a.CheapTicks-b.CheapTicks,a.IntervalTicks-b.IntervalTicks,a.IsolationTicks-b.IsolationTicks,
+        a.RefinementTicks-b.RefinementTicks,a.BoundaryTicks-b.BoundaryTicks,a.ForceTicks-b.ForceTicks,
+        a.PowerTicks-b.PowerTicks,a.GeometryTicks-b.GeometryTicks,a.StrictGateTicks-b.StrictGateTicks,
+        a.RateLimited-b.RateLimited,a.NearLoadBoundary-b.NearLoadBoundary);
 }
 internal sealed record ContactFailure203(HandlingForecast State, FreeRacingAction Action,
     double RiderHeightOffsetMeters, float Dt, string Error);
 
 internal sealed class Predictor198(TrackFrame frame,TrackStateSnapshot surface,WorldParameters physics,
-    HandlingSettings handling,Schedule188 timing,RiderSpec spec,float mass,float inertia)
+    HandlingSettings handling,Schedule188 timing,RiderSpec spec,float mass,float inertia,RacingProfile206? strict=null)
 {
     private readonly RacingLineGeometry boundary=new(frame);
+    private RacingProfile206? StrictProfile=>strict;
     private readonly float positionFactor=(physics.SolverSubsteps+1f)/(2f*physics.SolverSubsteps);
     private readonly double riderReaction=RiderController.ReactionSeconds(spec);
     private readonly TrackSurfaceState grip=surface.SampleSurface(0,2);
@@ -48,6 +72,7 @@ internal sealed class Predictor198(TrackFrame frame,TrackStateSnapshot surface,W
         private readonly Func<RiderView,double,double,string?>? motionConstraint;
         private readonly double stepSeconds;
         private readonly CrankClutch144 shaft;
+        private readonly RacingProfile206.Cursor? strict;
         private RearWheelState wheel;
         private HandlingForecast state;
         private double riderHeightOffsetMeters;
@@ -57,6 +82,7 @@ internal sealed class Predictor198(TrackFrame frame,TrackStateSnapshot surface,W
         private ClearancePair gap;
         private long forceTicks,integrateTicks,geometryTicks,gateTicks,clockTicks;
         private long residualForceTicks,loadSolverTicks,combinedPowerTicks,combinedProofTicks;
+        private ForecastWork206 work206;
 
         internal Cursor198(Predictor198 model,Start197 start,FreeRacingAction[] controls,int from,
             double goal,double margin,bool profile,Func<RiderView,double,string?>? constraint,double stepSeconds,
@@ -69,6 +95,7 @@ internal sealed class Predictor198(TrackFrame frame,TrackStateSnapshot surface,W
             this.profile=profile;
             this.constraint=constraint;
             this.motionConstraint=motionConstraint;
+            strict=model.StrictProfile?.Begin(start);
             this.stepSeconds=stepSeconds;
             originTime=start.State.Time;
             active=start.Active;
@@ -85,6 +112,7 @@ internal sealed class Predictor198(TrackFrame frame,TrackStateSnapshot surface,W
 
         internal string? Outcome { get; private set; }
         internal ContactFailure203? ContactFailure { get; private set; }
+        internal RacingFailure206? StrictFailure206 { get; private set; }
         internal int Steps { get; private set; }
         internal bool Reached=>Outcome=="goal";
         internal double GoalTime { get; private set; }
@@ -98,7 +126,9 @@ internal sealed class Predictor198(TrackFrame frame,TrackStateSnapshot surface,W
             state.Wheel,state.Shaft,state.Steer,state.Lean,LastSweep,gap.Outer,gap.Inner,active);
         internal Profile198 Counters=>new(Steps,forceTicks,integrateTicks,geometryTicks,gateTicks,clockTicks)
             {ResidualForceTicks=residualForceTicks,LoadSolverTicks=loadSolverTicks,
-                CombinedPowerTicks=combinedPowerTicks,CombinedProofTicks=combinedProofTicks};
+                CombinedPowerTicks=combinedPowerTicks,CombinedProofTicks=combinedProofTicks,Work206=model.Handling.ProfileCertificate?Work206:default};
+        internal ForecastWork206 Work206=>work206 with {Steps=Steps,ForceTicks=forceTicks,
+            PowerTicks=combinedPowerTicks,IntervalTicks=combinedProofTicks,GeometryTicks=geometryTicks,StrictGateTicks=gateTicks};
         internal HandlingStep? LastContact { get; private set; }
         internal RiderView LastContactInput { get; private set; }
         internal ClutchStep144? LastPower { get; private set; }
@@ -113,7 +143,7 @@ internal sealed class Predictor198(TrackFrame frame,TrackStateSnapshot surface,W
         {
             ApplyDue();
             return new(state with {Rider=state.Rider with {Drive=active.Drive}},active,pending.ToArray(),nextReview)
-                { RiderHeightOffsetMeters = riderHeightOffsetMeters };
+                { RiderHeightOffsetMeters = riderHeightOffsetMeters,TechniqueHistory=strict?.Capture() };
         }
 
         internal void Advance(int stepBudget,double timeLimit=double.PositiveInfinity)
@@ -125,6 +155,16 @@ internal sealed class Predictor198(TrackFrame frame,TrackStateSnapshot surface,W
                 {
                     if(state.Rider.TotalReferenceMeters>=goal)
                     {
+                        if(strict is not null)
+                        {
+                            StrictFailure206=strict.Check(state.Rider,state.Time,gap.Outer,Math.Min(gap.Inner,gap.Outer),
+                                margin,null,true);
+                            if(StrictFailure206 is not null)
+                            {
+                                Outcome=StrictFailure206.Condition;
+                                return;
+                            }
+                        }
                         Outcome="goal";GoalTime=state.Time;
                         return;
                     }
@@ -171,6 +211,8 @@ internal sealed class Predictor198(TrackFrame frame,TrackStateSnapshot surface,W
             catch (InvalidOperationException failure)
             {
                 ContactFailure = new(state, active, riderHeightOffsetMeters, (float)dt, failure.Message);
+                if(strict is not null)
+                    StrictFailure206=new("physical",failure.Message,state.Time,state.Rider.TotalReferenceMeters,state.Rider,gap.Outer,LastSweep,margin);
                 throw;
             }
             var power=shaft.Prepared;
@@ -189,6 +231,14 @@ internal sealed class Predictor198(TrackFrame frame,TrackStateSnapshot surface,W
                     {
                         combinedPowerTicks+=combined.PowerTicks;
                         combinedProofTicks+=combined.ProofTicks;
+                        if(precision.Search206 is {} search&&contact.LoadH26 is {} load)
+                        {
+                            work206+=new ForecastWork206(0,load.Iterations,load.Iterations,combined.WheelQueries,combined.WheelIterations,
+                                combined.ProofBoxes,search.VisitedBoxes,search.EarlyExclusions,search.CheapTicks,0,
+                                search.IsolationTicks,search.RefinementTicks,search.BoundaryTicks,0,0,0,0,
+                                forces.SteeringRequest!=forces.SteeringAfter?1:0,
+                                Math.Min(load.FrontNormalNewtons,load.RearNormalNewtons)<50?1:0);
+                        }
                     }
                 }
             }
@@ -220,6 +270,19 @@ internal sealed class Predictor198(TrackFrame frame,TrackStateSnapshot surface,W
             Steps++;
             Sweep=Math.Min(Sweep,LastSweep);
             MaxBeta=Math.Max(MaxBeta,Math.Abs(v.SlideRadians));
+            if(strict is not null)
+            {
+                StrictFailure206=strict.Check(v,limit,edge.Outer,LastSweep,margin,
+                    RacingProfile206.Physical(v,limit,step,forces,power),s>=goal);
+                Outcome=StrictFailure206?.Condition;
+                if(Outcome is null&&s>=goal)
+                {
+                    Outcome="goal";
+                    GoalTime=limit-dt*Math.Clamp((s-goal)/(s-before.TotalReferenceMeters),0,1);
+                }
+                if(profile) gateTicks+=Mark()-start;
+                return Outcome is null;
+            }
             if(!double.IsFinite(LastSweep) || !float.IsFinite(v.Speed) || power.Wheel.RearUtilization>1.000001 ||
                 power.ClutchHeatJoules<-.001 || power.Wheel.LongitudinalLossJoules<-.001) Outcome="force-or-energy";
             else if(LastSweep<margin) Outcome="swept";

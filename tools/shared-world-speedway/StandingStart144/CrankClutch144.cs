@@ -55,6 +55,36 @@ public sealed class CrankClutch144
         }
         throw new InvalidOperationException("No nonnegative crank midpoint; no hidden stall reset.");
     }
+    // Every trial in one contact query reads the same accepted engine state.
+    // Precompute the affine segments with the original floating-point grouping.
+    public Func<double,double> EngineMidpointEvaluator64(double throttle,double seconds)
+    {
+        double omega=Omega;
+        if(seconds==0) return _=>omega;
+        double c=2*Parameters.CrankInertiaKgMetersSquared/seconds;
+        var lines=new (double Lo,double Hi,double Numerator,double Denominator)[Engine500.Curve.Count];
+        for(int i=0;i<lines.Length;i++)
+        {
+            var a=Engine500.Curve[i];
+            var b=i+1<lines.Length?Engine500.Curve[i+1]:new EngineTorquePoint(double.PositiveInfinity,0);
+            double lo=a.Rpm*Math.PI/30,hi=b.Rpm*Math.PI/30;
+            double slope=double.IsFinite(hi)?(b.NewtonMeters-a.NewtonMeters)/(hi-lo):0;
+            double intercept=a.NewtonMeters-slope*lo;
+            double denominator=LossH26 is null?c+Parameters.CrankDragNewtonMeterSeconds-throttle*slope:
+                c+LossH26.NetViscosity(throttle)-throttle*slope;
+            lines[i]=(lo,hi,c*omega+throttle*intercept,denominator);
+        }
+        return torque=>
+        {
+            foreach(var line in lines)
+            {
+                double value=(line.Numerator-torque)/line.Denominator;
+                if(value>=line.Lo-1e-9&&value<=line.Hi+1e-9) return Math.Max(0,value);
+            }
+            throw new InvalidOperationException("No nonnegative crank midpoint; no hidden stall reset.");
+        };
+    }
+
     public Engine500Command Prepare(double throttle,double ratio,double efficiency,double seconds,bool released,Func<double,RearWheelStep> wheelAtTorque)
         =>Prepare(throttle,ratio,efficiency,seconds,released,wheelAtTorque,null);
     public Engine500Command Prepare(double throttle,double ratio,double efficiency,double seconds,bool released,Func<double,RearWheelStep> wheelAtTorque,
@@ -65,9 +95,13 @@ public sealed class CrankClutch144
     }
 
     public ClutchTrial64 Evaluate64(double throttle,double ratio,double efficiency,double seconds,bool released,
-        Func<double,RearWheelTrial64> wheelAtTorque)
+        Func<double,RearWheelTrial64> wheelAtTorque) =>
+        Evaluate64(throttle,ratio,efficiency,seconds,released,wheelAtTorque,null);
+
+    public ClutchTrial64 Evaluate64(double throttle,double ratio,double efficiency,double seconds,bool released,
+        Func<double,RearWheelTrial64> wheelAtTorque,Func<double,double>? engineMidpoint)
     {
-        var trial=Solve(throttle,ratio,efficiency,seconds,released,wheelAtTorque,static wheel=>wheel.MidOmega);
+        var trial=Solve(throttle,ratio,efficiency,seconds,released,wheelAtTorque,static wheel=>wheel.MidOmega,engineMidpoint);
         return new(trial.Torque,trial.EngineMid,trial.Engagement,trial.Residual,trial.Queries,trial.Wheel);
     }
 
@@ -83,7 +117,7 @@ public sealed class CrankClutch144
 
     private (double Torque,double EngineMid,double Engagement,double Residual,int Queries,T Wheel) Solve<T>(
         double throttle,double ratio,double efficiency,double seconds,bool released,Func<double,T> wheelAtTorque,
-        Func<T,double> midOmega)
+        Func<T,double> midOmega,Func<double,double>? engineMidpoint=null)
     {
         if(!double.IsFinite(throttle)||throttle is <0 or >1||!double.IsFinite(seconds)||seconds is <0 or >.020001
             ||!double.IsFinite(ratio)||ratio<=0||efficiency is <=0 or >1)throw new ArgumentException("Physical midpoint interval required.");
@@ -91,7 +125,7 @@ public sealed class CrankClutch144
         var engagement=released?fraction*fraction*(3-2*fraction):0;var capacity=p.ClutchCapacityNewtonMeters*engagement;
         int queries=0;
         (double Residual,double EngineMid,T Wheel) At(double torque){
-            var engine=EngineMid(torque,throttle,seconds);var wheel=wheelAtTorque(torque*ratio*(torque>=0?efficiency:1/efficiency));queries++;
+            var engine=engineMidpoint is null?EngineMid(torque,throttle,seconds):engineMidpoint(torque);var wheel=wheelAtTorque(torque*ratio*(torque>=0?efficiency:1/efficiency));queries++;
             var slip=engine-ratio*midOmega(wheel);
             return(torque-Math.Clamp(p.ClutchViscosityNewtonMeterSeconds*engagement*slip,-capacity,capacity),engine,wheel);
         }

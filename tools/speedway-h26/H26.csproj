@@ -21,6 +21,7 @@
     <Compile Include="$(StudyTools)/speedway-controller200/Reservations198.cs" />
     <Compile Include="$(StudyTools)/speedway-study201/Technique200.cs" />
     <Compile Include="$(StudyTools)/speedway-controller200/ModelTypes200.cs" />
+    <InternalsVisibleTo Include="CoreSim.Tests" />
     <EmbeddedResource Include="policies202.json" LogicalName="SpeedwayHandling.Policies202" />
   </ItemGroup>
 </Project>

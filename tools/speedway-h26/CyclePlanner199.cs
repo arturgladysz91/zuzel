@@ -19,7 +19,13 @@ internal sealed class Corridor199(BendMap map,double yawLimit=.23)
         return new Window199(previous.Exit,visit.Entry);
     })).ToArray();
 
-    internal string? Check(RiderView body,double outer)
+    internal sealed record Violation(string Reason,Window199 Window,double CoreFrom,double CoreTo,
+        double CourseError,double CourseThreshold,double Yaw,double YawThreshold,double Outer,double OuterThreshold,
+        bool CourseExceeded,bool YawExceeded);
+
+    internal string? Check(RiderView body,double outer)=>Inspect(body,outer)?.Reason;
+
+    internal Violation? Inspect(RiderView body,double outer)
     {
         var s=body.TotalReferenceMeters;
         foreach(var straight in Windows)
@@ -27,11 +33,20 @@ internal sealed class Corridor199(BendMap map,double yawLimit=.23)
             double phase=s-straight.Start;
             if(phase>=CoreStart && phase<=CoreEnd)
             {
-                if(outer>OuterLimit)return "wide-position";
-                if(body.Speed>3 && (Math.Abs(CourseError(body))>CourseLimit || Math.Abs(body.AngularVelocity)>yawLimit))
-                    return "wide-direction";
+                if(outer>OuterLimit) return Create("wide-position",OuterLimit);
+                if(body.Speed>3)
+                {
+                    double course=CourseError(body);
+                    bool courseExceeded=Math.Abs(course)>CourseLimit,yawExceeded=Math.Abs(body.AngularVelocity)>yawLimit;
+                    if(courseExceeded||yawExceeded)
+                        return new("wide-direction",straight,straight.Start+CoreStart,straight.Start+CoreEnd,
+                            course,CourseLimit,body.AngularVelocity,yawLimit,outer,OuterLimit,courseExceeded,yawExceeded);
+                }
             }
-            if(s>=straight.End-1 && s<=straight.End+.25 && outer>EntryLimit)return "wide-entry";
+            if(s>=straight.End-1 && s<=straight.End+.25 && outer>EntryLimit) return Create("wide-entry",EntryLimit);
+
+            Violation Create(string reason,double outerLimit)=>new(reason,straight,straight.Start+CoreStart,
+                straight.Start+CoreEnd,CourseError(body),CourseLimit,body.AngularVelocity,yawLimit,outer,outerLimit,false,false);
         }
         return null;
     }
@@ -46,7 +61,11 @@ internal sealed record Knot199(Start197 Start,FreeRacingAction Action,double Out
 }
 
 internal sealed record Trial199(bool Legal,string Stop,double Finish,double Progress,double Sweep,
-    double? FirstLap,double? SecondLap,Knot199[]? Knots,FreeRacingAction[]? Controls);
+    double? FirstLap,double? SecondLap,Knot199[]? Knots,FreeRacingAction[]? Controls)
+{
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
+    public RacingFailure206? StrictFailure {get;init;}
+}
 internal sealed record Winner199(string Name,string Variant,Trial199 Result,int Evaluations,
     double TrainingCpu,double WallSeconds);
 internal sealed record Edit199(double Center,double Span,double Gas,double Steer,double Phase,bool Periodic,double OuterBias=0);
@@ -449,8 +468,14 @@ internal sealed class CyclePlanner199(Predictor198 model, double lapMeters,doubl
         return Finish("deadline",cursor);
         Trial199 Finish(string outcome,Predictor198.Cursor198 c) =>
             new(outcome=="goal",outcome,outcome=="goal"?c.GoalTime:c.Snapshot.Time,c.Snapshot.S,min,
-                lap1,lap2,kept?.ToArray(),kept?.Select(x=>x.Action).ToArray());
+                lap1,lap2,kept?.ToArray(),kept?.Select(x=>x.Action).ToArray()) {StrictFailure=c.StrictFailure206};
     }
+    internal Trial199 TryEdits206(Start197 root,Trial199 reference,Edit199[] edits,bool record=false)
+    {
+        var law=new Profile199(reference.Knots!,edits,wheelbase,lapMeters);
+        return Evaluate(root,null,law.At,0,false,record);
+    }
+
     private static double? FirstCrossing(Knot199[]? rows,int stop,double s)
     {
         if(rows is null || stop<2 || rows[stop-1].S<s)return null;

@@ -11,7 +11,7 @@ internal sealed record Decision198(double Time,double S,FreeRacingAction Action,
 
 internal sealed class Receding198(Predictor198 model,Calibration198 calibration,Seed198 seed,
     FreeRacingAction[] initial, double initialFinish,Reservations198? reservations=null,
-    Func<RiderView,double,string?>? style=null)
+    Func<RiderView,double,string?>? style=null,bool profile206=false)
 {
     private const double LocalHorizon=.25;
     private const int BranchBudget=64;
@@ -24,10 +24,15 @@ internal sealed class Receding198(Predictor198 model,Calibration198 calibration,
     internal int AcceptedPatches=>acceptedPatches;
     internal List<Decision198> Journal {get;}=[];
     internal List<PatchLog198> Patches {get;}=[];
+    internal List<DecisionWork206> Work206 {get;}=[];
+    internal RacingFailure206? LastStrictFailure206 {get;private set;}
 
     internal FreeRacingAction Choose(Start197 own,Func<HeadingSample198,bool>? peerCheck=null)
     {
         var timer=Stopwatch.StartNew();
+        var cpu=profile206?Process.GetCurrentProcess().TotalProcessorTime:default;
+        ForecastWork206 localWork=default,workerWork=default;
+        long workerTicks=0;
         double t=own.State.Time;
         int index=(int)Math.Round((t-seed.Start.Review)/Predictor198.Review);
         if(index<0 || index>=incumbent.Length)
@@ -43,6 +48,7 @@ internal sealed class Receding198(Predictor198 model,Calibration198 calibration,
             if(index==worker.Switch && worker.Faster && same)
             {
                 var local=Check(own,worker.Controls,index,reserve,peerCheck,out _,out bool open);
+                if(profile206) localWork+=local.Work206;
                 if(Accepted(local) && open && (reservations is null ||
                     reservations.TryPublish(own.State.Rider.Id,worker.ForecastTrace)))
                 {
@@ -63,17 +69,29 @@ internal sealed class Receding198(Predictor198 model,Calibration198 calibration,
         }
 
         var guard=Check(own,incumbent,index,reserve,peerCheck,out var activation,out bool unoccupied);
+        if(profile206) localWork+=guard.Work206;
         if(!Accepted(guard) || !unoccupied)
         {
+            LastStrictFailure206=guard.StrictFailure206;
+            RecordCost(unoccupied?"no-safe-prefix":"occupied-prefix",0);
             Patches.Add(new(t,t,index,unoccupied?"no-safe-prefix":"occupied-prefix",guard.Outcome,null,null,guard.Steps,liveError));
             throw new InvalidOperationException($"#198 has no certified continuation at {t:F3} s ({(unoccupied?guard.Outcome:"occupied-corridor")}, swept {guard.Sweep:F6}).");
         }
         expectedActivation=activation;
         int steps=0;
+        long workerStarted=profile206?Stopwatch.GetTimestamp():0;
         if(worker is null && finish-t>1.15)
             worker=StartWorker(own,index);
+        int candidateCount=0;
         if(worker is not null)
+        {
+            var previousWork=profile206?worker.Work206:default;
             steps=worker.Advance(BranchBudget);
+            candidateCount=worker.Candidate is null?1:2;
+            if(profile206) workerWork=worker.Work206-previousWork;
+        }
+        if(profile206) workerTicks=Stopwatch.GetTimestamp()-workerStarted;
+        RecordCost(reason,candidateCount);
 
         var action=incumbent[index];
         Journal.Add(new(t,own.State.Rider.TotalReferenceMeters,action,reason,version,timer.Elapsed.TotalMilliseconds,
@@ -81,13 +99,21 @@ internal sealed class Receding198(Predictor198 model,Calibration198 calibration,
             reason=="verified-switch"?finish-t:null,acceptedSweep));
         return action;
 
+        void RecordCost(string outcome,int branches)
+        {
+            if(!profile206) return;
+            var decisionCpu=(Process.GetCurrentProcess().TotalProcessorTime-cpu).TotalSeconds;
+            Work206.Add(new(t,own.State.Rider.TotalReferenceMeters,outcome,branches,timer.Elapsed.TotalMilliseconds,
+                decisionCpu,workerTicks,localWork,workerWork));
+        }
+
         static bool Accepted(Predictor198.Cursor198 trial) => trial.Outcome is null || trial.Reached;
     }
 
     private Predictor198.Cursor198 Check(Start197 own,FreeRacingAction[] actions,int start,double reserve,
         Func<HeadingSample198,bool>? peerCheck,out HeadingSample198 activation,out bool unoccupied)
     {
-        var cursor=model.Begin(own,actions,start,seed.Goal,Predictor198.Clearance+reserve,constraint:style);
+        var cursor=model.Begin(own,actions,start,seed.Goal,Predictor198.Clearance+reserve,profile:profile206,constraint:style);
         cursor.Advance(10,own.State.Time+Predictor198.Review);
         activation=cursor.Snapshot;
         unoccupied=true;
@@ -123,7 +149,7 @@ internal sealed class Receding198(Predictor198 model,Calibration198 calibration,
         double switchAt=seed.Start.Review+change*Predictor198.Review;
         return new(model,own,incumbent,edits,from,change,switchAt,seed.Goal,
             .50+Math.Ceiling((calibration.BaseMargin+calibration.PositionTolerance+
-                .85*calibration.CourseTolerance)*200)/200,reservations is not null,style);
+                .85*calibration.CourseTolerance)*200)/200,reservations is not null,style,profile206);
     }
 
     private bool SameAnchor(Start197 expected,Start197 actual) =>
@@ -135,6 +161,7 @@ internal sealed class Receding198(Predictor198 model,Calibration198 calibration,
         Math.Abs(expected.State.Lean-actual.State.Lean)<=.025 &&
         Math.Abs(expected.State.Wheel-actual.State.Wheel)<=1.2 &&
         Math.Abs(expected.State.Shaft-actual.State.Shaft)<=8 &&
+        expected.TechniqueHistory==actual.TechniqueHistory &&
         expected.Active==actual.Active && expected.Pending.Length==actual.Pending.Length &&
         expected.Pending.Zip(actual.Pending).All(p=>p.First.Action==p.Second.Action &&
             Math.Abs(p.First.ObservedAt-p.Second.ObservedAt)<1e-8 && Math.Abs(p.First.ActivationAt-p.Second.ActivationAt)<1e-8);
@@ -149,6 +176,9 @@ internal sealed class Receding198(Predictor198 model,Calibration198 calibration,
         Math.Abs(BikeAngles.Wrap(expected.Heading-expected.Beta-(actual.Rider.Heading-actual.Rider.SlideRadians)));
 }
 
+internal sealed record DecisionWork206(double Time,double S,string Reason,int ActiveBranches,double WallMs,double CpuSeconds,
+    long WorkerTicks,ForecastWork206 Guards,ForecastWork206 Worker);
+
 internal sealed record PatchLog198(double CreatedAt,double ConsideredAt,int Switch,string Decision,string? Outcome,
     double? CandidateArrival,double? IncumbentArrival,int PhysicsSteps,double? AnchorDistance);
 
@@ -158,7 +188,7 @@ internal sealed class Worker198
     private readonly FreeRacingAction[] original;
     private readonly double switchTime,goal,margin;
     private readonly Predictor198.Cursor198 common;
-    private readonly bool capture;
+    private readonly bool capture,profile206;
     private readonly Func<RiderView,double,string?>? style;
     internal List<HeadingSample198> ForecastTrace {get;}=[];
     internal Start197? Anchor {get;private set;}
@@ -167,12 +197,13 @@ internal sealed class Worker198
     internal FreeRacingAction[] Controls {get;}
     internal int Switch {get;}
     internal double CreatedAt {get;}
+    internal ForecastWork206 Work206=>common.Work206+(Candidate?.Work206??default)+(Baseline?.Work206??default);
     internal int TotalSteps=>common.Steps+(Candidate?.Steps??0)+(Baseline?.Steps??0);
     internal bool Completed=>Candidate?.Outcome is not null && Baseline?.Outcome is not null;
     internal bool Faster=>Completed && Candidate is {Reached:true} &&
         (Baseline is {Reached:false} || Candidate.GoalTime<Baseline!.GoalTime-1e-6);
     internal Worker198(Predictor198 model,Start197 start,FreeRacingAction[] original,FreeRacingAction[] edits,
-        int from,int next,double at,double goal,double margin,bool capture,Func<RiderView,double,string?>? style)
+        int from,int next,double at,double goal,double margin,bool capture,Func<RiderView,double,string?>? style,bool profile206=false)
     {
         this.model=model;
         this.original=original;
@@ -180,11 +211,12 @@ internal sealed class Worker198
         this.goal=goal;
         this.margin=margin;
         this.capture=capture;
+        this.profile206=profile206;
         this.style=style;
         Switch=next;
         Controls=edits;
         CreatedAt=start.State.Time;
-        common=model.Begin(start,original,from,goal,margin,constraint:style);
+        common=model.Begin(start,original,from,goal,margin,profile:profile206,constraint:style);
     }
 
     internal int Advance(int budget)
@@ -196,8 +228,8 @@ internal sealed class Worker198
             if(common.Outcome is not null || common.Snapshot.Time<switchTime-1e-8)return TotalSteps-before;
             Anchor=common.Checkpoint();
             if(common.NextIndex!=Switch) throw new InvalidOperationException("A forecast crossed the proposed switch before certification.");
-            Candidate=model.Begin(Anchor,Controls,Switch,goal,margin,constraint:style);
-            Baseline=model.Begin(Anchor,original,Switch,goal,margin,constraint:style);
+            Candidate=model.Begin(Anchor,Controls,Switch,goal,margin,profile:profile206,constraint:style);
+            Baseline=model.Begin(Anchor,original,Switch,goal,margin,profile:profile206,constraint:style);
             if(capture)ForecastTrace.Add(Candidate.Snapshot);
         }
         if(capture)

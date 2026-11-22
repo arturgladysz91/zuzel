@@ -12,10 +12,15 @@ internal sealed record ContactPrecision64(string Status, double AppliedResidual,
 {
     [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
     public CoupledEvidence? Combined { get; init; }
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
+    public SearchEvidence206? Search206 { get; init; }
 }
 
 internal sealed record CoupledEvidence(double LateralSlip,double AppliedTyreFxResidual,double AppliedTyreFyResidual,
     double LateralDissipationJoules,int ProofBoxes,int WheelQueries,int WheelIterations,long PowerTicks,long ProofTicks);
+
+internal sealed record SearchEvidence206(int VisitedBoxes,int EarlyExclusions,long CheapTicks,
+    long IsolationTicks,long RefinementTicks,long BoundaryTicks);
 
 internal static partial class HandlingContact
 {
@@ -46,7 +51,15 @@ internal static partial class HandlingContact
         private readonly double mass, height, frontAxle, rearAxle, normal, requestedYawMoment, leanRequest, leanAfter,
             steeringBefore, steeringRequest, maxSteering, steeringTravel, heading, frontSlipRatio, time, dt,
             total, rearForward, rearNormalizedSide, rearShare, relaxationSeconds, ratio, efficiency, throttle;
-        private readonly bool released, coupled;
+        private readonly bool released,coupled,fast,detail;
+        private readonly Func<double,double>? preparedEngine;
+        private readonly Func<double,RearWheelTrial64>? preparedWheel;
+        private readonly ContactInterval64 frontProjectionFraction;
+        private double trialCapacity,trialAcceleration;
+        private readonly (double LoadGradient,double HalfDt,double WheelMobility,double Relaxation,
+            double SpeedScaleSquared,double LateralFactor) constants;
+        private readonly double frontSinLimit,dragProjection;
+        private long cheapTicks;
         private readonly double tolerance;
         private readonly double? diagnosticRearNormal;
         private long forceTicks,powerTicks,proofTicks;
@@ -65,6 +78,8 @@ internal static partial class HandlingContact
             this.dt=dt;
             this.shaft=shaft;
             coupled=settings.CoupledRearTyre;
+            fast=settings.FastCoupledCertificate;
+            detail=settings.ProfileCertificate;
             this.diagnosticRearNormal=diagnosticRearNormal;
             tolerance=settings.H26!.AccelerationToleranceMetersPerSecondSquared;
             WheelOmega=wheel.AngularVelocityRadPerSecond;
@@ -116,6 +131,25 @@ internal static partial class HandlingContact
                 !double.IsFinite(height) || height<=0 || !double.IsFinite(dt) || dt is <0 or >.020001 ||
                 !double.IsFinite(requestedYawMoment) || !double.IsFinite(throttle) || throttle is <0 or >1)
                 throw new ContactRootException(ContactRootStatus.InvalidPhysicalState,"nonfinite or out-of-range contact input");
+            if(coupled)
+            {
+                double radius=wheelParameters.WheelRadiusMeters,iw=wheelParameters.WheelInertiaKgMetersSquared;
+                double bearing=1+dt*wheelParameters.BearingResistanceNewtonMeterSeconds/(2*iw);
+                double stiffness=wheelParameters.LongitudinalSlipStiffnessRatio;
+                double low=wheelParameters.LowSpeedMetersPerSecond;
+                constants=(diagnosticRearNormal.HasValue?0:this.original.EffectiveFrictionCoefficient*mass*height/(frontAxle+rearAxle),
+                    dt/2,dt/2*radius*radius/(iw*bearing),
+                    (radius*radius/iw+1/mass)*wheelParameters.MinimumContactRelaxationSeconds,
+                    stiffness*stiffness*(rearForward*rearForward+low*low),1+rearNormalizedSide*rearNormalizedSide);
+                frontSinLimit=Math.Sin(Math.Min(Math.PI/2,Math.Abs(steeringBefore)+steeringTravel/2));
+                dragProjection=Vec64.Dot(resistance,forward);
+                if(fast)
+                {
+                    preparedEngine=shaft.EngineMidpointEvaluator64(throttle,dt);
+                    preparedWheel=FastWheelAtTorque;
+                    frontProjectionFraction=FrontProjectionFraction();
+                }
+            }
         }
 
         private double WheelOmega { get; }
@@ -131,16 +165,26 @@ internal static partial class HandlingContact
         private ClutchTrial64 CoupledPower(double rearCapacity,double ax)
         {
             long start=Stopwatch.GetTimestamp();
-            var power=shaft.Evaluate64(throttle,ratio,efficiency,dt,released,torque=>
+            trialCapacity=rearCapacity;
+            trialAcceleration=ax;
+            var power=shaft.Evaluate64(throttle,ratio,efficiency,dt,released,preparedWheel??(torque=>
             {
                 var trial=RearWheelDynamics.EvaluateCombined64(rearForward,rearNormalizedSide,WheelOmega,mass,rearCapacity,
                     torque,ax,dt,wheelParameters);
                 wheelIterations+=trial.Iterations;
                 return trial;
-            });
+            }),preparedEngine);
             wheelQueries+=power.WheelQueries;
             powerTicks+=Stopwatch.GetTimestamp()-start;
             return power;
+        }
+
+        private RearWheelTrial64 FastWheelAtTorque(double torque)
+        {
+            var trial=RearWheelDynamics.EvaluateCombined64(rearForward,rearNormalizedSide,WheelOmega,mass,trialCapacity,
+                torque,trialAcceleration,dt,wheelParameters);
+            wheelIterations+=trial.Iterations;
+            return trial;
         }
 
         internal ContactResidual64<Trial64> Evaluate(double ax)
@@ -189,31 +233,107 @@ internal static partial class HandlingContact
             return (min,max);
         }
 
+        private bool EarlyExclusion(ContactResidual64<Trial64> low,ContactResidual64<Trial64> high)
+        {
+            long started=detail?Stopwatch.GetTimestamp():0;
+            bool excludes=BoundWithoutMidpoint(low,high).ExcludesZero;
+            if(detail) cheapTicks+=Stopwatch.GetTimestamp()-started;
+            return excludes;
+        }
+
+        private ContactInterval64 BoundWithoutMidpoint(ContactResidual64<Trial64> low,ContactResidual64<Trial64> high)
+        {
+            var cap=CapacityInterval(low.Ax,high.Ax);
+            var axial=new ContactInterval64(low.Ax,high.Ax);
+            var external=FrontProjectionRange(cap)+dragProjection;
+            var limit=new ContactInterval64(-cap.High,cap.High);
+            var raw=axial-(limit+external)/mass;
+            if(raw.ExcludesZero) return raw;
+
+            // |dFx/dax| <= B' + dt/2 max(dFx/dslip). If this upper bound
+            // is below m, ax - Fx/m is strictly increasing throughout the box.
+            // Its extrema then come directly from the already solved endpoints.
+            var (gradient,halfDt,_,k,c,g)=constants;
+            double sensitivity=Sensitivity(cap.High,k,c,g);
+            double slope=gradient+halfDt*sensitivity;
+            if(!double.IsFinite(slope)||slope+1e-7>=mass) return raw;
+            const double endpointSlackNewtons=1e-5;
+            if(!EndpointWithinPadding(low,sensitivity,endpointSlackNewtons)||
+                !EndpointWithinPadding(high,sensitivity,endpointSlackNewtons)) return raw;
+            var fromLow=(ContactInterval64)low.Ax-((ContactInterval64)low.Value.Power.Wheel.Force+
+                new ContactInterval64(-endpointSlackNewtons,endpointSlackNewtons))/mass;
+            var fromHigh=(ContactInterval64)high.Ax-((ContactInterval64)high.Value.Power.Wheel.Force+
+                new ContactInterval64(-endpointSlackNewtons,endpointSlackNewtons))/mass;
+            return new ContactInterval64(fromLow.Low,fromHigh.High)-external/mass;
+        }
+
+        private bool EndpointWithinPadding(ContactResidual64<Trial64> point,double sensitivity,double padding)
+        {
+            // The fixed-torque slip residual and the passive clutch residual
+            // each have slope >= 1 in their respective unknowns. Propagate the
+            // measured errors before relying on a computed endpoint force.
+            var wheel=point.Value.Power.Wheel;
+            double radius=wheelParameters.WheelRadiusMeters;
+            double rim=radius*wheel.MidOmega,bodyStep=constants.HalfDt*point.Ax;
+            double slipDefect=Math.Abs(rim-rearForward-bodyStep-wheel.ConstitutiveSlip);
+            const double roundoff=64*2.220446049250313e-16;
+            slipDefect+=roundoff*(1+Math.Abs(rim)+Math.Abs(rearForward)+Math.Abs(bodyStep)+Math.Abs(wheel.ConstitutiveSlip));
+            double forceError=sensitivity*slipDefect;
+            double rimMobility=constants.WheelMobility/radius;
+            double clutchError=Math.Abs(point.Value.Power.Residual)+
+                shaft.Parameters.ClutchViscosityNewtonMeterSeconds*ratio*rimMobility*forceError;
+            double bound=forceError+sensitivity*rimMobility*ratio/efficiency*clutchError+
+                roundoff*(1+Math.Abs(wheel.Force));
+            return bound<=padding;
+        }
+
+        private ContactInterval64 CapacityInterval(double lo,double hi)
+        {
+            double mu=original.EffectiveFrictionCoefficient;
+            return new(Math.BitDecrement(mu*RearNormal(lo)),Math.BitIncrement(mu*RearNormal(hi)));
+        }
+
+        private ContactInterval64 FrontProjectionFraction()
+        {
+            // Mid-step steering is surely in this interval even when the inverse
+            // saturates anywhere inside the box. The force is linear in Bf for
+            // each angle, so this factor is invariant across the load solve.
+            double halfTravel=steeringTravel/2;
+            var delta=new ContactInterval64(Math.BitDecrement(steeringBefore-halfTravel),
+                Math.BitIncrement(steeringBefore+halfTravel));
+            var sin=delta.Sin();
+            var cos=delta.Cos();
+            double u=Vec64.Dot(frontVelocity,forward),v=Vec64.Dot(frontVelocity,left);
+            var along=u*cos+v*sin;
+            var side=v*cos-u*sin;
+            double relax=total/mass*LateralRelaxationSeconds;
+            var scale2=frontSlipRatio*frontSlipRatio*(along.Square()+.25)+relax*relax;
+            return (sin*side/(side.Square()+scale2).Sqrt()).Clamp(-1,1);
+        }
+
+        private ContactInterval64 FrontProjectionRange(ContactInterval64 rearCapacity) =>
+            (total-rearCapacity)*frontProjectionFraction+new ContactInterval64(-1e-5,1e-5);
+
+        private static double Sensitivity(double upperCapacity,double relaxation,double speedScaleSquared,double lateralFactor) =>
+            upperCapacity/Math.Sqrt(lateralFactor*(speedScaleSquared+relaxation*relaxation*upperCapacity*upperCapacity));
+
         private ContactSlope64 CombinedEnclosure(double lo,double hi,ContactResidual64<Trial64> middle)
         {
             long started=Stopwatch.GetTimestamp();
             proofBoxes++;
-            double mu=original.EffectiveFrictionCoefficient;
-            double gradB=diagnosticRearNormal.HasValue?0:mu*mass*height/(frontAxle+rearAxle);
-            double radius=wheelParameters.WheelRadiusMeters, iw=wheelParameters.WheelInertiaKgMetersSquared;
-            double bearing=1+dt*wheelParameters.BearingResistanceNewtonMeterSeconds/(2*iw);
-            double halfDt=dt/2, wheelMobility=halfDt*radius*radius/(iw*bearing);
-            double k=(radius*radius/iw+1/mass)*wheelParameters.MinimumContactRelaxationSeconds;
-            double stiffness=wheelParameters.LongitudinalSlipStiffnessRatio;
-            double c=stiffness*stiffness*(rearForward*rearForward+
-                wheelParameters.LowSpeedMetersPerSecond*wheelParameters.LowSpeedMetersPerSecond);
-            double b=rearNormalizedSide, g=1+b*b;
-            var cap=new ContactInterval64(Math.BitDecrement(mu*RearNormal(lo)),Math.BitIncrement(mu*RearNormal(hi)));
-            double sensitivity=cap.High/Math.Sqrt(g*(c+k*k*cap.High*cap.High));
+            double radius=wheelParameters.WheelRadiusMeters;
+            var (gradB,halfDt,wheelMobility,k,c,g)=constants;
+            double b=rearNormalizedSide;
+            var cap=CapacityInterval(lo,hi);
+            double sensitivity=Sensitivity(cap.High,k,c,g);
             double halfWidth=Math.Max(middle.Ax-lo,hi-middle.Ax);
             // With passive clutch, d(R*omega_mid)/dFx is in [-wheelMobility,0].
             // Consequently |dFx/dax| <= B' + (dt/2) max(dFx/dslip).
             double forceRadius=(gradB+halfDt*sensitivity)*halfWidth+1e-5;
             double f0=middle.Value.Power.Wheel.Force;
             var fx=new ContactInterval64(f0-forceRadius,f0+forceRadius);
-            double extDrag=Vec64.Dot(resistance,forward);
-            double maximumMidAngle=Math.Min(Math.PI/2,Math.Abs(steeringBefore)+steeringTravel/2);
-            double extRadius=(total-cap.Low)*Math.Sin(maximumMidAngle)+1e-5;
+            double extDrag=dragProjection;
+            double extRadius=(total-cap.Low)*frontSinLimit+1e-5;
             ContactInterval64 ax=new(lo,hi);
             var cheap=ax-(fx+new ContactInterval64(extDrag-extRadius,extDrag+extRadius))/mass;
             if(cheap.ExcludesZero)
@@ -347,24 +467,30 @@ internal static partial class HandlingContact
         {
             long started=Stopwatch.GetTimestamp();
             ContactResidual64<Trial64> point;
+            var metrics=coupled&&detail?new ContactSearchMetrics64():null;
             try
             {
-                point=coupled?ContactLoadSolver64.SolveCertified(lo,hi,1e-8,Evaluate,CombinedEnclosure,bisect):
+                point=coupled?ContactLoadSolver64.SolveCertified(lo,hi,1e-8,Evaluate,CombinedEnclosure,bisect,
+                        fast?EarlyExclusion:null,metrics):
                     ContactLoadSolver64.Solve(lo,hi,tolerance,Evaluate,sign=>ExcludesRoots(lo,hi,sign),bisect);
             }
             catch(ContactRootException failure) when(coupled)
             {
-                throw new ContactRootException(failure.Status,failure.Detail,"H28-C");
+                throw new ContactRootException(failure.Status,failure.Detail,fast?"H28-F":"H28-C");
             }
+            long boundaryStarted=detail?Stopwatch.GetTimestamp():0;
             if (Math.Abs(BoundaryResidual(point))>tolerance)
             {
                 if(!coupled) point=ContactLoadSolver64.Solve(lo,hi,tolerance/2,Evaluate,sign=>ExcludesRoots(lo,hi,sign),bisect);
                 if (Math.Abs(BoundaryResidual(point))>tolerance)
                     throw new ContactRootException(ContactRootStatus.NumericalDiscontinuity,"Box2D boundary residual exceeds tolerance",
-                        coupled?"H28-C":"H27-N");
+                        fast?"H28-F":coupled?"H28-C":"H27-N");
             }
             var result=Apply(point,posture);
             var loads=result.LoadH26!;
+            if(metrics is not null)
+                loads=loads with {Precision=loads.Precision! with {Search206=new(metrics.VisitedBoxes,metrics.EarlyExclusions,
+                    cheapTicks,metrics.IsolationTicks,metrics.RefinementTicks,Stopwatch.GetTimestamp()-boundaryStarted)}};
             return result with {LoadH26=loads with {Precision=loads.Precision! with
                 {ForceTicks=forceTicks,SolverTicks=Stopwatch.GetTimestamp()-started}}};
         }

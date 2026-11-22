@@ -17,6 +17,10 @@ internal sealed record HandlingSettings(double GripScale = 1.25, double YawRespo
     public bool DoubleContactSolve { get; init; }
     [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
     public bool CoupledRearTyre { get; init; }
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+    public bool FastCoupledCertificate { get; init; }
+    [System.Text.Json.Serialization.JsonIgnore]
+    public bool ProfileCertificate { get; init; }
 }
 
 internal sealed record LeanSample(double Seconds, double RequestRadians, double ActualRadians);
@@ -117,7 +121,7 @@ internal static partial class HandlingContact
         // Search stays inside the two-positive-contact domain. A root outside it is rejected, never clamped.
         double lo=-LoadBasedTyreGrip.GravityMetersPerSecondSquared*bike.FrontAxleFromComMeters/height+ContactDomainAccelerationReserveMetersPerSecondSquared;
         double hi= LoadBasedTyreGrip.GravityMetersPerSecondSquared*bike.RearAxleFromComMeters/height-ContactDomainAccelerationReserveMetersPerSecondSquared;
-        if (settings.CoupledRearTyre && !settings.DoubleContactSolve)
+        if (settings.CoupledRearTyre && !settings.DoubleContactSolve || settings.FastCoupledCertificate && !settings.CoupledRearTyre)
             throw new InvalidOperationException("Combined rear tyre requires double-precision contact solving.");
         if (settings.DoubleContactSolve)
             return new ContactQuery64(settings, body, rider, bike, original, mass, inertia, height, time, dt,
