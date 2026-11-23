@@ -82,5 +82,15 @@
     },
     "TestedBinarySHA256": "75c7a193fe7b05373d004d54a6829472a0c189e7e1eacff75ed430cd31c274b8"
   },
-  "HostedCI": "Reported separately after publication; experiment pushes do not match the main-only push trigger. No hosted pass is inferred from local tests."
+  "HostedCI": {
+    "ImplementationCommit": "f264704edba6c4f6210b3a0ef4a5fa7d3eeffb73",
+    "ObservedAtUTC": "2026-11-23T14:53:44.840020+00:00",
+    "WorkflowRuns": 0,
+    "CheckRuns": 0,
+    "StatusContexts": 0,
+    "CombinedStatusState": "pending",
+    "HostedPassClaimed": false,
+    "Snapshot": "validation/hosted-ci.json",
+    "Interpretation": "No hosted CI pass is inferred from local tests. Experiment pushes do not match the main-only push trigger; no pull request or merge was made."
+  }
 }

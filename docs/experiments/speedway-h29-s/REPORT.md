@@ -104,7 +104,7 @@ The controlled fourth straight accelerates from 93.380 to 120.760 km/h over 39.4
 
 ## Controlled arms A–G and bounded search
 
-Development uses nominal and ±1 cm. The first five prescribed starts do not select the parameters. F uses 24 finalists per bend screened on those three development starts plus ±6 and ±16 cm. The fastest F5 development candidate has only 0.503 m suffix swept and fails screening. F5 root 1503 is selected for its faster successful performance with reserve comparable to the protected baseline. F6 screening rejects its fastest development winner as well. This avoids promoting an incomplete or fragile prefix as an S3 improvement.
+Development uses nominal and ±1 cm. The nominal start is shared with the official series; the four nonnominal official offsets are withheld from parameter selection. F uses 24 finalists per bend screened on those three development starts plus ±6 and ±16 cm. The fastest F5 development candidate has only 0.503 m suffix swept and fails screening. F5 root 1503 is selected for its faster successful performance with reserve comparable to the protected baseline. F6 screening rejects its fastest development winner as well. This avoids promoting an incomplete or fragile prefix as an S3 improvement.
 
 | Arm | Intervention | Development result | Registered five-start result; fastest legal MODEL [s] | First demonstrated regression |
 |---|---|---|---|---|
@@ -181,7 +181,7 @@ All **237 replay-viewer tests** and **seven CI-policy tests** pass. H28-C/H28-F 
 
 Fresh Python calibration runs on both exact #208 and #209 execute **448 tests: 404 pass, 39 fail and five error**. All failure and error identities match; there is no added failure/error identity. These are the measured results on this Windows/Python 3.13 environment, not a repetition of the prior report's 400/45/3 aggregate. The historical failures are preserved rather than repaired by changing frozen sources. [Explicit parent/current comparison](../../../data/experiments/speedway209/validation/python-comparison.json), [parent log](../../../data/experiments/speedway209/validation/python-baseline.log.gz), [current log](../../../data/experiments/speedway209/validation/python-current.log.gz).
 
-The experiment branch does not trigger the repository's push-to-`main` workflow. Hosted GitHub Actions status is checked after publication and reported separately; these local results are not a hosted CI pass. No merge or production-default change is made.
+After publication, GitHub's full Actions and checks APIs report **zero workflow runs, zero check runs and zero status contexts** for implementation commit `f264704edba6c4f6210b3a0ef4a5fa7d3eeffb73`. The combined status is `pending` with zero contexts: there is no hosted test result, rather than a running or passing suite. [Dated API snapshot and exact source URLs](../../../data/experiments/speedway209/validation/hosted-ci.json). The experiment branch does not trigger the repository's push-to-`main` workflow; no pull request or merge is made. Local results are reported separately and are not a hosted CI pass. H25 remains the default.
 
 
 ## Verdicts

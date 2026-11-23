@@ -10,7 +10,7 @@ The immutable #208 source is commit `e0607f555de2d4c764b4bf26bd9bcafc420db6ec`. 
 - `diagnostics/`: 108 six-throttle local/suffix pairs and 30 original-straight physical probes. Technique-disabled straight capability is not a full-race certificate.
 - `events/`: paired unchanged and 0.25 s full-throttle suffixes at all 70 >5 percentage-point request drops. Every unchanged suffix finishes.
 - `F5/`, `F6/`: all 1,536 proposals per joint search, parent identity, exact failure/solver details, steps, CPU, wall time and declared bounds. F6 also has durable per-batch records. Search minima are suffix minima, not full-race minima.
-- `F5-screen/`, `F6-screen/`: 24×7 independent development screening results per bend. `F5-screen/robust-root.json` identifies the retained F5 root.
+- `F5-screen/`, `F6-screen/`: 24×7 time-zero development screening results per bend. `F5-screen/robust-root.json` identifies the retained F5 root.
 - `F-held/`: five complete races without the predictive final-exit window.
 - `frozen-candidate.json`: complete #209 shared policy, SHA-256 `F5604A0F89374D14520078C92D7FEAAD04D488D336652603ED4B87D2CBD5D0DD`.
 - `G-provisional/`, `official/`, `official-effective/`: initial fixed-policy five-start check, post-freeze independent recheck, and attribution-only recheck. Their physical trajectories and finish times agree.
