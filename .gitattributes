@@ -291,6 +291,11 @@ docs/experiments/state-maneuver-transfer/** -text
 /tools/replay-viewer/h25.mjs text eol=lf
 /tools/replay-viewer/viewer.mjs text eol=lf
 /tools/replay-viewer/index.html text eol=lf
+
+# Study #209: preserve the frozen baseline, candidate and sampled evidence verbatim.
+/data/experiments/speedway209/** -text whitespace=trailing-space,space-before-tab,cr-at-eol
+/docs/experiments/speedway-h29-s/*.md text eol=lf
+/tests/CoreSim.Tests/ThrottleRecovery209Tests.cs text eol=lf
 /tools/replay-viewer/export_h25.py -text whitespace=trailing-space,space-before-tab,cr-at-eol
 /.gitattributes text eol=lf
 /tools/replay-viewer/serve.py text eol=lf

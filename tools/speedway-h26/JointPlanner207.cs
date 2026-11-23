@@ -200,7 +200,15 @@ internal sealed class GeometryPolicy207
             }
         }
         double gas=power.FeedForward.Drive+move.DriveBias+.11*(current.Speed-v);
-        if(move.ThrottleCeiling is {} ceiling) gas=Math.Min(gas,ceiling);
+        ThrottleTrace209.Current?.Base(power.FeedForward.Drive,move.DriveBias,.11*(current.Speed-v),
+            current.Speed,power.Speed,move.ThrottleCeiling,gas);
+        if(move.ThrottleCeiling is {} ceiling)
+        {
+            double before=gas;
+            gas=Math.Min(gas,ceiling);
+            ThrottleTrace209.Current?.Add("207 ceiling",before,gas);
+        }
+        ThrottleTrace209.Current?.Add("207 actuator bound",gas,Math.Clamp(gas,0,1));
         return new((float)Math.Clamp(requested,-bike.MaximumSteeringRadians,bike.MaximumSteeringRadians),
             (float)Math.Clamp(gas,0,1));
     }

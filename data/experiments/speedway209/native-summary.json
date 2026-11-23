@@ -1,0 +1,164 @@
+{
+  "Runs": [
+    {
+      "Fixture": "C",
+      "Eligible": true,
+      "Finished": true,
+      "Outcome": "completed",
+      "CompletedLaps": 3,
+      "Finish": 49.82443982485655,
+      "Sweep": 0.5939388875152567,
+      "Contacts": 0,
+      "Decisions": {
+        "Count": 997,
+        "P50": 2.0457,
+        "P95": 6.8009,
+        "P99": 10.4222,
+        "Max": 14.8831,
+        "Over50": 0
+      },
+      "FirstFailure": null,
+      "IndependentFailure": null,
+      "Cpu": 3.703125,
+      "Wall": 3.6013106,
+      "PeakKph": 108.630072
+    },
+    {
+      "Fixture": "C-hold-minus",
+      "Eligible": true,
+      "Finished": true,
+      "Outcome": "completed",
+      "CompletedLaps": 3,
+      "Finish": 49.826818579859655,
+      "Sweep": 0.5943812491195353,
+      "Contacts": 0,
+      "Decisions": {
+        "Count": 997,
+        "P50": 2.0975,
+        "P95": 6.808,
+        "P99": 11.2152,
+        "Max": 14.8163,
+        "Over50": 0
+      },
+      "FirstFailure": null,
+      "IndependentFailure": null,
+      "Cpu": 3.765625,
+      "Wall": 3.6434074,
+      "PeakKph": 108.48368520000001
+    },
+    {
+      "Fixture": "C-hold-plus",
+      "Eligible": true,
+      "Finished": true,
+      "Outcome": "completed",
+      "CompletedLaps": 3,
+      "Finish": 49.82879308956126,
+      "Sweep": 0.5957592787485624,
+      "Contacts": 0,
+      "Decisions": {
+        "Count": 997,
+        "P50": 2.1109,
+        "P95": 6.7427,
+        "P99": 11.0318,
+        "Max": 15.761,
+        "Over50": 0
+      },
+      "FirstFailure": null,
+      "IndependentFailure": null,
+      "Cpu": 3.75,
+      "Wall": 3.6514738,
+      "PeakKph": 108.5339412
+    },
+    {
+      "Fixture": "C-alt",
+      "Eligible": true,
+      "Finished": true,
+      "Outcome": "completed",
+      "CompletedLaps": 3,
+      "Finish": 49.82972017326227,
+      "Sweep": 0.5951821422844736,
+      "Contacts": 0,
+      "Decisions": {
+        "Count": 997,
+        "P50": 2.0505,
+        "P95": 6.8497,
+        "P99": 11.0921,
+        "Max": 15.7875,
+        "Over50": 0
+      },
+      "FirstFailure": null,
+      "IndependentFailure": null,
+      "Cpu": 3.78125,
+      "Wall": 3.6651125,
+      "PeakKph": 108.4898268
+    },
+    {
+      "Fixture": "C-alt-plus",
+      "Eligible": true,
+      "Finished": true,
+      "Outcome": "completed",
+      "CompletedLaps": 3,
+      "Finish": 49.82023000308353,
+      "Sweep": 0.5960904573474739,
+      "Contacts": 0,
+      "Decisions": {
+        "Count": 997,
+        "P50": 2.1097,
+        "P95": 6.889,
+        "P99": 9.6226,
+        "Max": 15.2992,
+        "Over50": 0
+      },
+      "FirstFailure": null,
+      "IndependentFailure": null,
+      "Cpu": 3.84375,
+      "Wall": 3.7056672,
+      "PeakKph": 108.80358120000001
+    }
+  ],
+  "Timing": {
+    "Count": 4985,
+    "P50": 2.0855,
+    "P95": 6.8197,
+    "P99": 11.0597,
+    "Maximum": 15.7875,
+    "Over50": 0
+  },
+  "ModelDifferences": [
+    {
+      "Fixture": "C",
+      "Matched": 997,
+      "MaximumXYMeters": 0.09020866712795138,
+      "MaximumSpeedMps": 0.11822300000000041,
+      "NativeMinusModelSeconds": -0.0009776705449340284
+    },
+    {
+      "Fixture": "C-hold-minus",
+      "Matched": 997,
+      "MaximumXYMeters": 0.042345626424106046,
+      "MaximumSpeedMps": 0.03111300000000128,
+      "NativeMinusModelSeconds": -0.00042103107355728753
+    },
+    {
+      "Fixture": "C-hold-plus",
+      "Matched": 997,
+      "MaximumXYMeters": 0.08718071844050519,
+      "MaximumSpeedMps": 0.03673700000000224,
+      "NativeMinusModelSeconds": 0.00021132666781653597
+    },
+    {
+      "Fixture": "C-alt",
+      "Matched": 997,
+      "MaximumXYMeters": 0.013319884257755505,
+      "MaximumSpeedMps": 0.008796000000000248,
+      "NativeMinusModelSeconds": -0.0004314067860633486
+    },
+    {
+      "Fixture": "C-alt-plus",
+      "Matched": 997,
+      "MaximumXYMeters": 0.019341636564676454,
+      "MaximumSpeedMps": 0.013757000000001796,
+      "NativeMinusModelSeconds": 5.4489747739694394e-05
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "MaximumReconstructionError": 2.955398559212341e-08,
+  "At208Output": {
+    "feed-forward": {
+      "PositiveSeconds": 34.760000000000524,
+      "IntegratedThrottleSeconds": 16.194120635577313,
+      "Maximum": 0.9988179605570622
+    },
+    "drive bias": {
+      "PositiveSeconds": 19.199999999999996,
+      "IntegratedThrottleSeconds": 2.354286832586517,
+      "Maximum": 0.24000003933906555
+    },
+    "speed feedback": {
+      "PositiveSeconds": 5.349999999999995,
+      "IntegratedThrottleSeconds": 0.27013401044532614,
+      "Maximum": 0.300828218460083
+    },
+    "ceiling": {
+      "PositiveSeconds": 1.25,
+      "IntegratedThrottleSeconds": 0.5741321171633896,
+      "Maximum": 0.7492372561246157
+    },
+    "coast": {
+      "PositiveSeconds": 6.29999999999977,
+      "IntegratedThrottleSeconds": 3.562535633542408,
+      "Maximum": 1
+    },
+    "mid pace": {
+      "PositiveSeconds": 3.2499999999998863,
+      "IntegratedThrottleSeconds": 1.0868473288188099,
+      "Maximum": 0.6600284278392792
+    },
+    "exit pace": {
+      "PositiveSeconds": 4.39999999999975,
+      "IntegratedThrottleSeconds": 1.9454442980698132,
+      "Maximum": 0.9202741980552673
+    },
+    "ramp": {
+      "PositiveSeconds": 3.149999999999821,
+      "IntegratedThrottleSeconds": 0.8525915570556633,
+      "Maximum": 0.6498141214251518
+    },
+    "recovery gas": {
+      "PositiveSeconds": 1.3499999999999233,
+      "IntegratedThrottleSeconds": 0.07035807264037035,
+      "Maximum": 0.08000004291534424
+    }
+  },
+  "MaskedNegativeRampAcceptedSteps": 240,
+  "Additive": false
+}

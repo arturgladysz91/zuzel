@@ -1,0 +1,1184 @@
+{
+  "Baseline": {
+    "Finish": 51.85324838518148,
+    "PeakKph": 96.83618774414063,
+    "Sweep": 0.5958536800974209,
+    "Duration": 51.86,
+    "RequestedFullPct": 8.098727342846093,
+    "ActiveFullPct": 8.098727342846093,
+    "ActiveZeroSeconds": 7.399999999999838,
+    "RequestedZeroSeconds": 7.3499999999998264,
+    "AcceleratingSeconds": 25.659999999999147,
+    "DeceleratingSeconds": 25.95000000000085,
+    "RequestDropsOverOnePct": 291,
+    "Clamps": {
+      "none": [
+        9.460000000000692,
+        0.0,
+        0
+      ],
+      "207 drive bias": [
+        19.149999999999995,
+        2.5428380831979074,
+        407
+      ],
+      "207 speed feedback": [
+        4.35,
+        0.7091105494288923,
+        151
+      ],
+      "207 actuator bound": [
+        3.499999999999981,
+        1.0322074751037653,
+        188
+      ],
+      "208 boundary blend": [
+        0.0,
+        1.1032841307211866e-16,
+        0
+      ],
+      "208 actuator bound": [
+        0.0,
+        0.0,
+        0
+      ],
+      "207 ceiling": [
+        1.25,
+        0.578899742779754,
+        25
+      ],
+      "208 pace cap": [
+        11.549999999999478,
+        7.882810972497891,
+        237
+      ],
+      "208 ramp and recovery": [
+        2.599999999999852,
+        2.0396718693788802,
+        126
+      ]
+    },
+    "ForceClosureError": 1.6689300537109375e-06,
+    "DecelerationImpulsePerMass": {
+      "ResistanceAcceleration": -23.27007930457656,
+      "FrontAcceleration": -35.160949739093795,
+      "RearAcceleration": 13.930756177004394
+    },
+    "AccelerationBy10Kph": {
+      "0": {
+        "Maximum": 11.296486854553212,
+        "Minimum": 0
+      },
+      "10": {
+        "Maximum": 11.168289184570302,
+        "Minimum": 5.479907989501949
+      },
+      "20": {
+        "Maximum": 5.478811264038142,
+        "Minimum": 5.321216583251949
+      },
+      "30": {
+        "Maximum": 5.766963958740229,
+        "Minimum": 5.317974090576167
+      },
+      "40": {
+        "Maximum": 6.231021881103372,
+        "Minimum": 5.778503417968745
+      },
+      "50": {
+        "Maximum": 6.4685821533215995,
+        "Minimum": -1.1980056762697695
+      },
+      "60": {
+        "Maximum": 6.916999816895907,
+        "Minimum": -4.65602874755952
+      },
+      "70": {
+        "Maximum": 8.335685729980646,
+        "Minimum": -4.753875732421132
+      },
+      "80": {
+        "Maximum": 7.659912109376524,
+        "Minimum": -4.33139801025169
+      },
+      "90": {
+        "Maximum": 4.805374145508768,
+        "Minimum": -2.064514160156661
+      }
+    },
+    "RequestDropsOverFivePct": [
+      {
+        "Time": 3.2999999999999963,
+        "Drop": 0.05373108000000004,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 8.635254957984273,
+        "SpeedChangeInNextHalfSecond": 1.5321879999999979
+      },
+      {
+        "Time": 3.349999999999996,
+        "Drop": 0.09303242,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 8.445442955848762,
+        "SpeedChangeInNextHalfSecond": 1.2442679999999982
+      },
+      {
+        "Time": 3.399999999999996,
+        "Drop": 0.10004343999999998,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 8.24576745616838,
+        "SpeedChangeInNextHalfSecond": 0.9545739999999974
+      },
+      {
+        "Time": 3.4499999999999957,
+        "Drop": 0.09943119999999994,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 8.036837305814174,
+        "SpeedChangeInNextHalfSecond": 0.6787440000000018
+      },
+      {
+        "Time": 3.4999999999999956,
+        "Drop": 0.09379375000000006,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 7.821887809708528,
+        "SpeedChangeInNextHalfSecond": 0.4285679999999985
+      },
+      {
+        "Time": 3.5499999999999954,
+        "Drop": 0.08326449999999996,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 7.639199286102496,
+        "SpeedChangeInNextHalfSecond": 0.21186400000000205
+      },
+      {
+        "Time": 3.599999999999995,
+        "Drop": 0.05111530000000003,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 7.538370186043721,
+        "SpeedChangeInNextHalfSecond": 0.03264400000000123
+      },
+      {
+        "Time": 4.749999999999991,
+        "Drop": 0.06713926999999997,
+        "Dominant": "none",
+        "MetersInNextHalfSecond": 8.77817841681059,
+        "SpeedChangeInNextHalfSecond": 1.666052999999998
+      },
+      {
+        "Time": 4.799999999999991,
+        "Drop": 0.08783053000000007,
+        "Dominant": "207 speed feedback",
+        "MetersInNextHalfSecond": 8.842793174557528,
+        "SpeedChangeInNextHalfSecond": 1.2050739999999998
+      },
+      {
+        "Time": 4.849999999999991,
+        "Drop": 0.09845466999999997,
+        "Dominant": "207 speed feedback",
+        "MetersInNextHalfSecond": 8.885027615068054,
+        "SpeedChangeInNextHalfSecond": 0.7798799999999986
+      },
+      {
+        "Time": 4.899999999999991,
+        "Drop": 0.09682573000000005,
+        "Dominant": "207 speed feedback",
+        "MetersInNextHalfSecond": 8.90803779175883,
+        "SpeedChangeInNextHalfSecond": 0.39765299999999826
+      },
+      {
+        "Time": 4.94999999999999,
+        "Drop": 0.09541235999999997,
+        "Dominant": "207 speed feedback",
+        "MetersInNextHalfSecond": 8.914328517334752,
+        "SpeedChangeInNextHalfSecond": 0.0403589999999987
+      },
+      {
+        "Time": 4.99999999999999,
+        "Drop": 0.09173595999999995,
+        "Dominant": "207 speed feedback",
+        "MetersInNextHalfSecond": 8.906271732755158,
+        "SpeedChangeInNextHalfSecond": -0.27327800000000124
+      },
+      {
+        "Time": 5.04999999999999,
+        "Drop": 0.08108130000000002,
+        "Dominant": "207 speed feedback",
+        "MetersInNextHalfSecond": 8.886463642745355,
+        "SpeedChangeInNextHalfSecond": -0.534395
+      },
+      {
+        "Time": 5.09999999999999,
+        "Drop": 0.06480744,
+        "Dominant": "207 speed feedback",
+        "MetersInNextHalfSecond": 8.857115108518542,
+        "SpeedChangeInNextHalfSecond": -0.7522960000000012
+      },
+      {
+        "Time": 5.249999999999989,
+        "Drop": 0.0625041,
+        "Dominant": "207 speed feedback",
+        "MetersInNextHalfSecond": 8.730523058822769,
+        "SpeedChangeInNextHalfSecond": -1.1678719999999991
+      },
+      {
+        "Time": 5.299999999999989,
+        "Drop": 0.11537282,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 8.679895014014335,
+        "SpeedChangeInNextHalfSecond": -1.260228999999999
+      },
+      {
+        "Time": 5.349999999999989,
+        "Drop": 0.062355439000000006,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 8.62646291704118,
+        "SpeedChangeInNextHalfSecond": -1.3324649999999991
+      },
+      {
+        "Time": 7.399999999999982,
+        "Drop": 0.05187046000000006,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 8.931161932935026,
+        "SpeedChangeInNextHalfSecond": 0.15339999999999776
+      },
+      {
+        "Time": 7.699999999999981,
+        "Drop": 0.05282397999999999,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 8.522781219973467,
+        "SpeedChangeInNextHalfSecond": -0.798566000000001
+      },
+      {
+        "Time": 7.7499999999999805,
+        "Drop": 0.056139510000000004,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 8.456257486065908,
+        "SpeedChangeInNextHalfSecond": -0.9163800000000002
+      },
+      {
+        "Time": 7.79999999999998,
+        "Drop": 0.05608481,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 8.383723099985332,
+        "SpeedChangeInNextHalfSecond": -1.0075970000000005
+      },
+      {
+        "Time": 7.84999999999998,
+        "Drop": 0.05137744,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 8.30673220357977,
+        "SpeedChangeInNextHalfSecond": -1.0668979999999983
+      },
+      {
+        "Time": 8.79999999999999,
+        "Drop": 0.05108345000000003,
+        "Dominant": "none",
+        "MetersInNextHalfSecond": 10.073023561095624,
+        "SpeedChangeInNextHalfSecond": 1.1600439999999992
+      },
+      {
+        "Time": 8.84999999999999,
+        "Drop": 0.06436085000000002,
+        "Dominant": "none",
+        "MetersInNextHalfSecond": 10.345761316026937,
+        "SpeedChangeInNextHalfSecond": 0.8748700000000014
+      },
+      {
+        "Time": 8.899999999999991,
+        "Drop": 0.07464170999999997,
+        "Dominant": "none",
+        "MetersInNextHalfSecond": 10.529148579831599,
+        "SpeedChangeInNextHalfSecond": 0.5804690000000008
+      },
+      {
+        "Time": 8.949999999999992,
+        "Drop": 0.08158593999999997,
+        "Dominant": "none",
+        "MetersInNextHalfSecond": 10.604422897659958,
+        "SpeedChangeInNextHalfSecond": 0.29978800000000305
+      },
+      {
+        "Time": 8.999999999999993,
+        "Drop": 0.08356676000000002,
+        "Dominant": "none",
+        "MetersInNextHalfSecond": 10.623437881469727,
+        "SpeedChangeInNextHalfSecond": 0.04240800000000178
+      },
+      {
+        "Time": 9.049999999999994,
+        "Drop": 0.09954676000000001,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 10.626323699951172,
+        "SpeedChangeInNextHalfSecond": -0.1896570000000004
+      },
+      {
+        "Time": 9.099999999999994,
+        "Drop": 0.16178223,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 10.616350173950195,
+        "SpeedChangeInNextHalfSecond": -0.3890279999999997
+      },
+      {
+        "Time": 9.149999999999995,
+        "Drop": 0.118050114,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 10.5958251953125,
+        "SpeedChangeInNextHalfSecond": -0.5434970000000021
+      },
+      {
+        "Time": 17.05,
+        "Drop": 0.08115732,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 10.105058670043945,
+        "SpeedChangeInNextHalfSecond": -0.4346769999999971
+      },
+      {
+        "Time": 17.1,
+        "Drop": 0.09676134,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 10.082608222961426,
+        "SpeedChangeInNextHalfSecond": -0.45798699999999926
+      },
+      {
+        "Time": 20.55,
+        "Drop": 0.11070142999999999,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 7.716560057887534,
+        "SpeedChangeInNextHalfSecond": -1.4636110000000002
+      },
+      {
+        "Time": 20.6,
+        "Drop": 0.12344739000000005,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 7.6861958731959135,
+        "SpeedChangeInNextHalfSecond": -1.5287630000000014
+      },
+      {
+        "Time": 20.650000000000002,
+        "Drop": 0.05321102999999999,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 7.6535578506079105,
+        "SpeedChangeInNextHalfSecond": -1.5731549999999999
+      },
+      {
+        "Time": 22.7,
+        "Drop": 0.055625440000000026,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 10.038511960919834,
+        "SpeedChangeInNextHalfSecond": 1.2309350000000023
+      },
+      {
+        "Time": 24.8,
+        "Drop": 0.05026438,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 9.823956049861522,
+        "SpeedChangeInNextHalfSecond": -0.6379130000000011
+      },
+      {
+        "Time": 24.85,
+        "Drop": 0.05481549999999999,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 9.901805136054236,
+        "SpeedChangeInNextHalfSecond": -0.6206250000000004
+      },
+      {
+        "Time": 24.900000000000002,
+        "Drop": 0.055323080000000024,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 9.914020538305067,
+        "SpeedChangeInNextHalfSecond": -0.5767440000000015
+      },
+      {
+        "Time": 26.7,
+        "Drop": 0.054570269999999976,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 11.20988655090332,
+        "SpeedChangeInNextHalfSecond": -0.1598969999999973
+      },
+      {
+        "Time": 26.75,
+        "Drop": 0.07465567000000001,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 11.198700904846191,
+        "SpeedChangeInNextHalfSecond": -0.3323400000000021
+      },
+      {
+        "Time": 26.8,
+        "Drop": 0.08925586999999999,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 11.179425716400146,
+        "SpeedChangeInNextHalfSecond": -0.46913999999999945
+      },
+      {
+        "Time": 26.85,
+        "Drop": 0.09557257000000001,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 11.153876304626465,
+        "SpeedChangeInNextHalfSecond": -0.5640169999999998
+      },
+      {
+        "Time": 26.900000000000002,
+        "Drop": 0.086417418,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 11.124069213867188,
+        "SpeedChangeInNextHalfSecond": -0.6148330000000009
+      },
+      {
+        "Time": 27.35,
+        "Drop": 0.058620589999999986,
+        "Dominant": "none",
+        "MetersInNextHalfSecond": 10.088013024083466,
+        "SpeedChangeInNextHalfSecond": -0.6284179999999999
+      },
+      {
+        "Time": 27.400000000000002,
+        "Drop": 0.09227217,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 9.750063198843122,
+        "SpeedChangeInNextHalfSecond": -0.5832699999999988
+      },
+      {
+        "Time": 29.3,
+        "Drop": 0.09496752000000003,
+        "Dominant": "207 speed feedback",
+        "MetersInNextHalfSecond": 7.994184713730647,
+        "SpeedChangeInNextHalfSecond": -1.877324999999999
+      },
+      {
+        "Time": 29.35,
+        "Drop": 0.305779176,
+        "Dominant": "207 ceiling",
+        "MetersInNextHalfSecond": 7.932052212653161,
+        "SpeedChangeInNextHalfSecond": -1.956792
+      },
+      {
+        "Time": 29.400000000000002,
+        "Drop": 0.052615654,
+        "Dominant": "207 ceiling",
+        "MetersInNextHalfSecond": 7.8666833075856175,
+        "SpeedChangeInNextHalfSecond": -2.018868000000001
+      },
+      {
+        "Time": 32.25,
+        "Drop": 0.18596142999999998,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 9.153832593103516,
+        "SpeedChangeInNextHalfSecond": -0.5019209999999994
+      },
+      {
+        "Time": 32.3,
+        "Drop": 0.17432096,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 9.114884746574148,
+        "SpeedChangeInNextHalfSecond": -0.6328809999999976
+      },
+      {
+        "Time": 33.8,
+        "Drop": 0.051456599999999963,
+        "Dominant": "none",
+        "MetersInNextHalfSecond": 12.266770362854004,
+        "SpeedChangeInNextHalfSecond": 0.4822439999999979
+      },
+      {
+        "Time": 33.85,
+        "Drop": 0.06490983000000006,
+        "Dominant": "none",
+        "MetersInNextHalfSecond": 12.283777475357056,
+        "SpeedChangeInNextHalfSecond": 0.17103999999999786
+      },
+      {
+        "Time": 33.9,
+        "Drop": 0.07520187,
+        "Dominant": "none",
+        "MetersInNextHalfSecond": 12.285579323768616,
+        "SpeedChangeInNextHalfSecond": -0.11944199999999938
+      },
+      {
+        "Time": 33.95,
+        "Drop": 0.08072155999999997,
+        "Dominant": "208 pace cap",
+        "MetersInNextHalfSecond": 12.27332490682602,
+        "SpeedChangeInNextHalfSecond": -0.3827120000000015
+      },
+      {
+        "Time": 34,
+        "Drop": 0.42096084,
+        "Dominant": "207 speed feedback",
+        "MetersInNextHalfSecond": 12.248496532440186,
+        "SpeedChangeInNextHalfSecond": -0.613865999999998
+      },
+      {
+        "Time": 38.599999999999945,
+        "Drop": 0.056342299999999956,
+        "Dominant": "208 pace cap",
+        "MetersInNextHalfSecond": 7.796252689367407,
+        "SpeedChangeInNextHalfSecond": 0.4593240000000023
+      },
+      {
+        "Time": 42.54999999999972,
+        "Drop": 0.99795854,
+        "Dominant": "208 pace cap",
+        "MetersInNextHalfSecond": 7.853298187255859,
+        "SpeedChangeInNextHalfSecond": -0.03507600000000011
+      },
+      {
+        "Time": 49.34999999999933,
+        "Drop": 0.0522724,
+        "Dominant": "208 ramp and recovery",
+        "MetersInNextHalfSecond": 9.793993876189347,
+        "SpeedChangeInNextHalfSecond": -0.09527999999999892
+      },
+      {
+        "Time": 49.39999999999933,
+        "Drop": 0.05463537000000007,
+        "Dominant": "208 ramp and recovery",
+        "MetersInNextHalfSecond": 9.745532244698893,
+        "SpeedChangeInNextHalfSecond": -0.2618280000000013
+      },
+      {
+        "Time": 49.44999999999933,
+        "Drop": 0.05513205999999993,
+        "Dominant": "208 ramp and recovery",
+        "MetersInNextHalfSecond": 9.685603794030726,
+        "SpeedChangeInNextHalfSecond": -0.4255420000000001
+      },
+      {
+        "Time": 49.499999999999325,
+        "Drop": 0.05631065000000002,
+        "Dominant": "208 ramp and recovery",
+        "MetersInNextHalfSecond": 9.614557347092955,
+        "SpeedChangeInNextHalfSecond": -0.5935970000000026
+      },
+      {
+        "Time": 49.54999999999932,
+        "Drop": 0.056635979999999975,
+        "Dominant": "208 ramp and recovery",
+        "MetersInNextHalfSecond": 9.532852310983344,
+        "SpeedChangeInNextHalfSecond": -0.7602560000000018
+      },
+      {
+        "Time": 49.59999999999932,
+        "Drop": 0.05545614000000004,
+        "Dominant": "208 ramp and recovery",
+        "MetersInNextHalfSecond": 9.441155449306052,
+        "SpeedChangeInNextHalfSecond": -0.9219620000000006
+      },
+      {
+        "Time": 49.64999999999932,
+        "Drop": 0.05300655999999998,
+        "Dominant": "208 ramp and recovery",
+        "MetersInNextHalfSecond": 9.340443688991854,
+        "SpeedChangeInNextHalfSecond": -1.0719740000000009
+      },
+      {
+        "Time": 51.6999999999992,
+        "Drop": 0.07446534999999999,
+        "Dominant": "none",
+        "MetersInNextHalfSecond": 2.7574266642332077,
+        "SpeedChangeInNextHalfSecond": 0.7805850000000021
+      },
+      {
+        "Time": 51.7499999999992,
+        "Drop": 0.08212130000000006,
+        "Dominant": "none",
+        "MetersInNextHalfSecond": 1.6180468052625656,
+        "SpeedChangeInNextHalfSecond": 0.4342870000000012
+      },
+      {
+        "Time": 51.799999999999194,
+        "Drop": 0.08611829999999998,
+        "Dominant": "none",
+        "MetersInNextHalfSecond": 0.46471424400806427,
+        "SpeedChangeInNextHalfSecond": 0.11766900000000291
+      },
+      {
+        "Time": 51.84999999999919,
+        "Drop": 0.06895549999999995,
+        "Dominant": "none",
+        "MetersInNextHalfSecond": 0.2325754389166832,
+        "SpeedChangeInNextHalfSecond": 0.05808100000000138
+      }
+    ],
+    "StraightOver100": [],
+    "ActivationDelay": {
+      "Count": 1037,
+      "Minimum": 0.04999999999999716,
+      "Maximum": 0.05000000000000071,
+      "Median": 0.04999999999999982
+    }
+  },
+  "Final": {
+    "Finish": 49.82541749540148,
+    "PeakKph": 108.57153625488282,
+    "Sweep": 0.5958536800974209,
+    "Duration": 49.83,
+    "RequestedFullPct": 10.696367650011261,
+    "ActiveFullPct": 10.596026490067457,
+    "ActiveZeroSeconds": 4.25000000000001,
+    "RequestedZeroSeconds": 4.2000000000000055,
+    "AcceleratingSeconds": 26.340000000000078,
+    "DeceleratingSeconds": 23.239999999999917,
+    "RequestDropsOverOnePct": 302,
+    "Clamps": {
+      "none": [
+        7.599999999999982,
+        0.0,
+        0
+      ],
+      "207 drive bias": [
+        19.149999999999995,
+        2.5428380831979074,
+        407
+      ],
+      "207 speed feedback": [
+        5.330000000000629,
+        0.9291544832109196,
+        190
+      ],
+      "207 actuator bound": [
+        3.249999999999995,
+        0.1908733605824404,
+        90
+      ],
+      "208 boundary blend": [
+        0.0,
+        0.014591118250243177,
+        5
+      ],
+      "208 actuator bound": [
+        0.0,
+        0.0,
+        0
+      ],
+      "207 ceiling": [
+        1.25,
+        0.578899742779754,
+        25
+      ],
+      "208 pace cap": [
+        12.349999999999447,
+        4.906819398804919,
+        287
+      ],
+      "208 ramp and recovery": [
+        0.8999999999999488,
+        0.03845252456394098,
+        35
+      ],
+      "209 predictive selection": [
+        0.0,
+        0.0,
+        0
+      ],
+      "209 recovery window": [
+        0.0,
+        0.0,
+        0
+      ]
+    },
+    "ForceClosureError": 1.8477439880371094e-06,
+    "DecelerationImpulsePerMass": {
+      "ResistanceAcceleration": -21.889021062254823,
+      "FrontAcceleration": -35.07166755015664,
+      "RearAcceleration": 17.00552874091369
+    },
+    "AccelerationBy10Kph": {
+      "0": {
+        "Maximum": 11.296486854553212,
+        "Minimum": 0
+      },
+      "10": {
+        "Maximum": 11.168289184570302,
+        "Minimum": 5.479907989501949
+      },
+      "20": {
+        "Maximum": 5.478811264038142,
+        "Minimum": 5.321216583251949
+      },
+      "30": {
+        "Maximum": 5.766963958740229,
+        "Minimum": 5.317974090576167
+      },
+      "40": {
+        "Maximum": 6.231021881103372,
+        "Minimum": 5.778503417968745
+      },
+      "50": {
+        "Maximum": 6.4685821533215995,
+        "Minimum": 6.237125396728649
+      },
+      "60": {
+        "Maximum": 6.916999816895907,
+        "Minimum": -4.65602874755952
+      },
+      "70": {
+        "Maximum": 8.335685729980646,
+        "Minimum": -4.943275451657628
+      },
+      "80": {
+        "Maximum": 6.440544128418106,
+        "Minimum": -4.265403747559442
+      },
+      "90": {
+        "Maximum": 5.200195312833581,
+        "Minimum": -1.9308090209964779
+      },
+      "100": {
+        "Maximum": 6.769752502909342,
+        "Minimum": 4.056930541992995
+      }
+    },
+    "RequestDropsOverFivePct": [
+      {
+        "Time": 3.2999999999999963,
+        "Drop": 0.05373108000000004,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 8.635254957984273,
+        "SpeedChangeInNextHalfSecond": 1.5321879999999979
+      },
+      {
+        "Time": 3.349999999999996,
+        "Drop": 0.09303242,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 8.445442955848762,
+        "SpeedChangeInNextHalfSecond": 1.2442679999999982
+      },
+      {
+        "Time": 3.399999999999996,
+        "Drop": 0.10004343999999998,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 8.24576745616838,
+        "SpeedChangeInNextHalfSecond": 0.9545739999999974
+      },
+      {
+        "Time": 3.4499999999999957,
+        "Drop": 0.09943119999999994,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 8.036837305814174,
+        "SpeedChangeInNextHalfSecond": 0.6787440000000018
+      },
+      {
+        "Time": 3.4999999999999956,
+        "Drop": 0.09379375000000006,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 7.821887809708528,
+        "SpeedChangeInNextHalfSecond": 0.4285679999999985
+      },
+      {
+        "Time": 3.5499999999999954,
+        "Drop": 0.08326449999999996,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 7.639199286102496,
+        "SpeedChangeInNextHalfSecond": 0.21186400000000205
+      },
+      {
+        "Time": 3.599999999999995,
+        "Drop": 0.05111530000000003,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 7.538370186043721,
+        "SpeedChangeInNextHalfSecond": 0.03264400000000123
+      },
+      {
+        "Time": 4.749999999999991,
+        "Drop": 0.06713926999999997,
+        "Dominant": "none",
+        "MetersInNextHalfSecond": 8.77817841681059,
+        "SpeedChangeInNextHalfSecond": 1.666052999999998
+      },
+      {
+        "Time": 4.799999999999991,
+        "Drop": 0.08783053000000007,
+        "Dominant": "207 speed feedback",
+        "MetersInNextHalfSecond": 8.842793174557528,
+        "SpeedChangeInNextHalfSecond": 1.2050739999999998
+      },
+      {
+        "Time": 4.849999999999991,
+        "Drop": 0.09845466999999997,
+        "Dominant": "207 speed feedback",
+        "MetersInNextHalfSecond": 8.885027615068054,
+        "SpeedChangeInNextHalfSecond": 0.7798799999999986
+      },
+      {
+        "Time": 4.899999999999991,
+        "Drop": 0.09682573000000005,
+        "Dominant": "207 speed feedback",
+        "MetersInNextHalfSecond": 8.90803779175883,
+        "SpeedChangeInNextHalfSecond": 0.39765299999999826
+      },
+      {
+        "Time": 4.94999999999999,
+        "Drop": 0.09541235999999997,
+        "Dominant": "207 speed feedback",
+        "MetersInNextHalfSecond": 8.914328517334752,
+        "SpeedChangeInNextHalfSecond": 0.0403589999999987
+      },
+      {
+        "Time": 4.99999999999999,
+        "Drop": 0.09173595999999995,
+        "Dominant": "207 speed feedback",
+        "MetersInNextHalfSecond": 8.906271732755158,
+        "SpeedChangeInNextHalfSecond": -0.27327800000000124
+      },
+      {
+        "Time": 5.04999999999999,
+        "Drop": 0.08108130000000002,
+        "Dominant": "207 speed feedback",
+        "MetersInNextHalfSecond": 8.886463642745355,
+        "SpeedChangeInNextHalfSecond": -0.534395
+      },
+      {
+        "Time": 5.09999999999999,
+        "Drop": 0.06480744,
+        "Dominant": "207 speed feedback",
+        "MetersInNextHalfSecond": 8.857115108518542,
+        "SpeedChangeInNextHalfSecond": -0.7522960000000012
+      },
+      {
+        "Time": 5.249999999999989,
+        "Drop": 0.0625041,
+        "Dominant": "207 speed feedback",
+        "MetersInNextHalfSecond": 8.730523058822769,
+        "SpeedChangeInNextHalfSecond": -1.1678719999999991
+      },
+      {
+        "Time": 5.299999999999989,
+        "Drop": 0.11537282,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 8.679895014014335,
+        "SpeedChangeInNextHalfSecond": -1.260228999999999
+      },
+      {
+        "Time": 5.349999999999989,
+        "Drop": 0.062355439000000006,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 8.62646291704118,
+        "SpeedChangeInNextHalfSecond": -1.3324649999999991
+      },
+      {
+        "Time": 7.399999999999982,
+        "Drop": 0.05187046000000006,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 8.931161932935026,
+        "SpeedChangeInNextHalfSecond": 0.15339999999999776
+      },
+      {
+        "Time": 7.699999999999981,
+        "Drop": 0.05282397999999999,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 8.522781219973467,
+        "SpeedChangeInNextHalfSecond": -0.798566000000001
+      },
+      {
+        "Time": 7.7499999999999805,
+        "Drop": 0.056139510000000004,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 8.456257486065908,
+        "SpeedChangeInNextHalfSecond": -0.9163800000000002
+      },
+      {
+        "Time": 7.79999999999998,
+        "Drop": 0.05608481,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 8.383723099985332,
+        "SpeedChangeInNextHalfSecond": -1.0075970000000005
+      },
+      {
+        "Time": 7.84999999999998,
+        "Drop": 0.05137744,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 8.30673220357977,
+        "SpeedChangeInNextHalfSecond": -1.0668979999999983
+      },
+      {
+        "Time": 8.79999999999999,
+        "Drop": 0.05108345000000003,
+        "Dominant": "none",
+        "MetersInNextHalfSecond": 10.073023561095624,
+        "SpeedChangeInNextHalfSecond": 1.1600439999999992
+      },
+      {
+        "Time": 8.84999999999999,
+        "Drop": 0.06436085000000002,
+        "Dominant": "none",
+        "MetersInNextHalfSecond": 10.345761316026937,
+        "SpeedChangeInNextHalfSecond": 0.8748700000000014
+      },
+      {
+        "Time": 8.899999999999991,
+        "Drop": 0.07464170999999997,
+        "Dominant": "none",
+        "MetersInNextHalfSecond": 10.529148579831599,
+        "SpeedChangeInNextHalfSecond": 0.5804690000000008
+      },
+      {
+        "Time": 8.949999999999992,
+        "Drop": 0.08158593999999997,
+        "Dominant": "none",
+        "MetersInNextHalfSecond": 10.604422897659958,
+        "SpeedChangeInNextHalfSecond": 0.29978800000000305
+      },
+      {
+        "Time": 8.999999999999993,
+        "Drop": 0.08356676000000002,
+        "Dominant": "none",
+        "MetersInNextHalfSecond": 10.623437881469727,
+        "SpeedChangeInNextHalfSecond": 0.04240800000000178
+      },
+      {
+        "Time": 9.049999999999994,
+        "Drop": 0.09954676000000001,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 10.626323699951172,
+        "SpeedChangeInNextHalfSecond": -0.1896570000000004
+      },
+      {
+        "Time": 9.099999999999994,
+        "Drop": 0.16178223,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 10.616350173950195,
+        "SpeedChangeInNextHalfSecond": -0.3890279999999997
+      },
+      {
+        "Time": 9.149999999999995,
+        "Drop": 0.118050114,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 10.5958251953125,
+        "SpeedChangeInNextHalfSecond": -0.5434970000000021
+      },
+      {
+        "Time": 17.05,
+        "Drop": 0.08115732,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 10.105058670043945,
+        "SpeedChangeInNextHalfSecond": -0.4346769999999971
+      },
+      {
+        "Time": 17.1,
+        "Drop": 0.09676134,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 10.082608222961426,
+        "SpeedChangeInNextHalfSecond": -0.45798699999999926
+      },
+      {
+        "Time": 20.55,
+        "Drop": 0.11070142999999999,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 7.716560057887534,
+        "SpeedChangeInNextHalfSecond": -1.4636110000000002
+      },
+      {
+        "Time": 20.6,
+        "Drop": 0.12344739000000005,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 7.6861958731959135,
+        "SpeedChangeInNextHalfSecond": -1.5287630000000014
+      },
+      {
+        "Time": 20.650000000000002,
+        "Drop": 0.05321102999999999,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 7.6535578506079105,
+        "SpeedChangeInNextHalfSecond": -1.5731549999999999
+      },
+      {
+        "Time": 22.7,
+        "Drop": 0.055625440000000026,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 10.038511960919834,
+        "SpeedChangeInNextHalfSecond": 1.2309350000000023
+      },
+      {
+        "Time": 24.8,
+        "Drop": 0.05026438,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 9.823956049861522,
+        "SpeedChangeInNextHalfSecond": -0.6379130000000011
+      },
+      {
+        "Time": 24.85,
+        "Drop": 0.05481549999999999,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 9.901805136054236,
+        "SpeedChangeInNextHalfSecond": -0.6206250000000004
+      },
+      {
+        "Time": 24.900000000000002,
+        "Drop": 0.055323080000000024,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 9.914020538305067,
+        "SpeedChangeInNextHalfSecond": -0.5767440000000015
+      },
+      {
+        "Time": 26.7,
+        "Drop": 0.054570269999999976,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 11.20988655090332,
+        "SpeedChangeInNextHalfSecond": -0.1598969999999973
+      },
+      {
+        "Time": 26.75,
+        "Drop": 0.07465567000000001,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 11.198700904846191,
+        "SpeedChangeInNextHalfSecond": -0.3323400000000021
+      },
+      {
+        "Time": 26.8,
+        "Drop": 0.08925586999999999,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 11.179425716400146,
+        "SpeedChangeInNextHalfSecond": -0.46913999999999945
+      },
+      {
+        "Time": 26.85,
+        "Drop": 0.09557257000000001,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 11.153876304626465,
+        "SpeedChangeInNextHalfSecond": -0.5640169999999998
+      },
+      {
+        "Time": 26.900000000000002,
+        "Drop": 0.086417418,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 11.124069213867188,
+        "SpeedChangeInNextHalfSecond": -0.6148330000000009
+      },
+      {
+        "Time": 27.35,
+        "Drop": 0.058620589999999986,
+        "Dominant": "none",
+        "MetersInNextHalfSecond": 10.088013024083466,
+        "SpeedChangeInNextHalfSecond": -0.6284179999999999
+      },
+      {
+        "Time": 27.400000000000002,
+        "Drop": 0.09227217,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 9.750063198843122,
+        "SpeedChangeInNextHalfSecond": -0.5832699999999988
+      },
+      {
+        "Time": 29.3,
+        "Drop": 0.09496752000000003,
+        "Dominant": "207 speed feedback",
+        "MetersInNextHalfSecond": 7.994184713730647,
+        "SpeedChangeInNextHalfSecond": -1.877324999999999
+      },
+      {
+        "Time": 29.35,
+        "Drop": 0.305779176,
+        "Dominant": "207 ceiling",
+        "MetersInNextHalfSecond": 7.932052212653161,
+        "SpeedChangeInNextHalfSecond": -1.956792
+      },
+      {
+        "Time": 29.400000000000002,
+        "Drop": 0.052615654,
+        "Dominant": "207 ceiling",
+        "MetersInNextHalfSecond": 7.8666833075856175,
+        "SpeedChangeInNextHalfSecond": -2.018868000000001
+      },
+      {
+        "Time": 32.25,
+        "Drop": 0.18596142999999998,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 9.153832593103516,
+        "SpeedChangeInNextHalfSecond": -0.5019209999999994
+      },
+      {
+        "Time": 32.3,
+        "Drop": 0.17432096,
+        "Dominant": "207 drive bias",
+        "MetersInNextHalfSecond": 9.114884746574148,
+        "SpeedChangeInNextHalfSecond": -0.6328809999999976
+      },
+      {
+        "Time": 33.8,
+        "Drop": 0.051456599999999963,
+        "Dominant": "none",
+        "MetersInNextHalfSecond": 12.222407341003418,
+        "SpeedChangeInNextHalfSecond": 0.292898000000001
+      },
+      {
+        "Time": 33.85,
+        "Drop": 0.06669730000000007,
+        "Dominant": "208 pace cap",
+        "MetersInNextHalfSecond": 12.229917764663696,
+        "SpeedChangeInNextHalfSecond": -0.01818800000000209
+      },
+      {
+        "Time": 33.9,
+        "Drop": 0.17395747999999994,
+        "Dominant": "208 pace cap",
+        "MetersInNextHalfSecond": 12.222262620925903,
+        "SpeedChangeInNextHalfSecond": -0.3080319999999972
+      },
+      {
+        "Time": 33.95,
+        "Drop": 0.32840831000000004,
+        "Dominant": "208 pace cap",
+        "MetersInNextHalfSecond": 12.20074188709259,
+        "SpeedChangeInNextHalfSecond": -0.5621019999999994
+      },
+      {
+        "Time": 34,
+        "Drop": 0.07273101,
+        "Dominant": "207 speed feedback",
+        "MetersInNextHalfSecond": 12.168023109436035,
+        "SpeedChangeInNextHalfSecond": -0.7421930000000003
+      },
+      {
+        "Time": 42.14999999999974,
+        "Drop": 0.06709684000000005,
+        "Dominant": "208 pace cap",
+        "MetersInNextHalfSecond": 10.418890237808228,
+        "SpeedChangeInNextHalfSecond": 0.637041
+      },
+      {
+        "Time": 42.19999999999974,
+        "Drop": 0.11355346,
+        "Dominant": "208 pace cap",
+        "MetersInNextHalfSecond": 10.445363283157349,
+        "SpeedChangeInNextHalfSecond": 0.445095000000002
+      },
+      {
+        "Time": 42.24999999999974,
+        "Drop": 0.12643018,
+        "Dominant": "208 pace cap",
+        "MetersInNextHalfSecond": 10.46306586265564,
+        "SpeedChangeInNextHalfSecond": 0.28569599999999795
+      },
+      {
+        "Time": 42.299999999999734,
+        "Drop": 0.11002601000000001,
+        "Dominant": "208 pace cap",
+        "MetersInNextHalfSecond": 10.474027156829834,
+        "SpeedChangeInNextHalfSecond": 0.17285299999999992
+      },
+      {
+        "Time": 42.34999999999973,
+        "Drop": 0.056190500000000004,
+        "Dominant": "208 pace cap",
+        "MetersInNextHalfSecond": 10.48081922531128,
+        "SpeedChangeInNextHalfSecond": 0.11409000000000091
+      }
+    ],
+    "StraightOver100": [
+      {
+        "From": 49.410000000000004,
+        "To": 49.83,
+        "Seconds": 0.4199999999999946,
+        "Meters": 12.091664761304855,
+        "MinimumKph": 100.087704
+      }
+    ],
+    "ActivationDelay": {
+      "Count": 997,
+      "Minimum": 0.04999999999999716,
+      "Maximum": 0.05000000000000071,
+      "Median": 0.050000000000000044
+    }
+  },
+  "Attribution": "Clamp reductions are ordered command-space contributions. Observed speed changes after reductions are associations; only paired legal rollouts support causal time gains.",
+  "BrakeCommand": false
+}

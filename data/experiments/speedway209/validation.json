@@ -1,0 +1,86 @@
+{
+  "Study": 209,
+  "BaseCommit": "e0607f555de2d4c764b4bf26bd9bcafc420db6ec",
+  "CandidateSHA256": "f5604a0f89374d14520078c92d7feaad04d488d336652603ed4b87d2cbd5d0dd",
+  "ReleaseBuild": {
+    "Solution": true,
+    "StudyTool": true,
+    "WarningsAsErrors": true,
+    "Warnings": 0,
+    "Errors": 0,
+    "SDK": "10.0.101",
+    "Target": "net8.0",
+    "Runtime": "8.0.26",
+    "Restore": "locked study packages; local advisory lookup disabled with NuGetAudit=false"
+  },
+  "FocusedDotNet": {
+    "Passed": 51,
+    "Existing": 41,
+    "New": 10
+  },
+  "CoreDotNet": {
+    "BaseTotal": 2271,
+    "BasePassed": 2050,
+    "CurrentTotal": 2281,
+    "CurrentPassed": 2060,
+    "InheritedFailures": 221,
+    "WorldGuardBlocked": 219,
+    "HistoricalHashFailures": 2,
+    "NewFailureIdentities": []
+  },
+  "Python": {
+    "Total": 448,
+    "Passed": 404,
+    "Failures": 39,
+    "Errors": 5,
+    "NewFailureIdentities": [],
+    "NewErrorIdentities": []
+  },
+  "ReplayViewer": {
+    "Passed": 237,
+    "Failures": 0
+  },
+  "CiPolicy": {
+    "Passed": 7,
+    "Failures": 0
+  },
+  "PhysicsParity": {
+    "ArchivedExact": 72949,
+    "SyntheticExact": 16200,
+    "DeterministicRechecks": 2346,
+    "PhysicalDifferences": 0,
+    "ClassificationDifferences": 0,
+    "FrozenSourceFiles": 316,
+    "EmbeddedPoliciesPassed": 3
+  },
+  "PolicyReconstruction": {
+    "BaselineNativeCommands": 5190,
+    "FinalNativeCommands": 4985,
+    "Differences": 0
+  },
+  "Model": {
+    "StrictFinishes": 5,
+    "Starts": 5,
+    "MinSwept": 0.594836953490018
+  },
+  "Native": {
+    "StrictFinishes": 5,
+    "Starts": 5,
+    "WorldConstructions": 5,
+    "WorldCap": 8,
+    "Contacts": 0,
+    "MinSwept": 0.5939388875152567,
+    "BestSeconds": 49.82023000308353,
+    "PeakKph": 108.80358120000001,
+    "Timing": {
+      "Count": 4985,
+      "P50": 2.0855,
+      "P95": 6.8197,
+      "P99": 11.0597,
+      "Maximum": 15.7875,
+      "Over50": 0
+    },
+    "TestedBinarySHA256": "75c7a193fe7b05373d004d54a6829472a0c189e7e1eacff75ed430cd31c274b8"
+  },
+  "HostedCI": "Reported separately after publication; experiment pushes do not match the main-only push trigger. No hosted pass is inferred from local tests."
+}

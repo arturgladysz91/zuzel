@@ -30,7 +30,7 @@ internal static partial class Study191
     private sealed record Suffix208(Recovery208 Recovery,Leg208[] Runs);
     private sealed record Proposal208(int Id,int? Parent,int Round,Maneuver208 Maneuver,Leg208[] Runs,
         Suffix208[]? Successors=null);
-    private sealed record CandidatePlan208(Plan207 Base,Maneuver208[] Maneuvers);
+    private sealed record CandidatePlan208(Plan207 Base,Maneuver208[] Maneuvers,RecoveryWindow209[]? Recovery209=null);
     private sealed record Locked208(CandidatePlan208 Plan,Leg208[] Results);
     private sealed record Arm208(string Arm,int Visit,Budget208 Budget,string[] Training,Start197[] Prefixes,
         int[] Retained,Proposal208[] Trials,int? Winner,int Best,int Calls,int Steps,double CpuSeconds,double WallSeconds,string Stop);

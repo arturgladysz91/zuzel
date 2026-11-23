@@ -55,6 +55,7 @@ internal sealed class ExitPolicy208
     }
 
     internal BendVisit Bend(int visit)=>map.At(visit/map.Count,visit%map.Count);
+    internal ExitPolicy208 WithBaseline(Func<Start197,FreeRacingAction> law)=>new(map,lapMeters,law,learned,geometry);
     internal int Visit(BendVisit bend)=>bend.Lap*map.Count+bend.Index;
     internal BendVisit Previous(int visit)=>Bend(visit-1);
     internal RoadPoint ExitRoad(BendVisit bend)=>map.Locate(bend.Exit+1).Road;
@@ -153,9 +154,17 @@ internal sealed class ExitPolicy208
             double reduced=Math.Min(q.Drive,cap);
             double paceBlend=Gate((cut+m.MidPace*apex+m.ExitPace*exit)/1.4);
             drive=Lerp(q.Drive,reduced,paceBlend);
+            ThrottleTrace209.Current?.Pace(proposal.Visit,original.Speed,cut,m.MidPace*apex,m.ExitPace*exit,
+                speed,cap,paceBlend,wl,q.Drive,drive);
+            double beforeRamp=drive;
             drive+=m.Ramp*Pulse(e,-36,-10,14)+Gate(e/3)*proposal.Recovery.Gas;
+            ThrottleTrace209.Current?.ExitAdjustments(m.Ramp*Pulse(e,-36,-10,14),Gate(e/3)*proposal.Recovery.Gas);
+            ThrottleTrace209.Current?.Add("208 ramp and recovery",beforeRamp,drive);
         }
-        return Bound(Lerp(q.SteeringRadians,steer,wl),Lerp(q.Drive,drive,wl));
+        double blended=Lerp(q.Drive,drive,wl);
+        ThrottleTrace209.Current?.Add("208 boundary blend",drive,blended);
+        ThrottleTrace209.Current?.Add("208 actuator bound",blended,Math.Clamp(blended,0,1));
+        return Bound(Lerp(q.SteeringRadians,steer,wl),blended);
     }
 
     private RoutePoint208 AtRoute(RoutePoint208[] guide,double s,int lap)
