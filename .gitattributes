@@ -297,6 +297,11 @@ docs/experiments/state-maneuver-transfer/** -text
 /docs/experiments/speedway-h29-p/*.md text eol=lf
 /tests/CoreSim.Tests/ExitPace210Tests.cs text eol=lf
 
+# Study #211 preserves the measured evidence bytes.
+/data/experiments/speedway211/** -text whitespace=trailing-space,space-before-tab,cr-at-eol
+/docs/experiments/speedway-h30-c/*.md text eol=lf
+/tests/CoreSim.Tests/CornerLink211Tests.cs text eol=lf
+
 # Study #209: preserve the frozen baseline, candidate and sampled evidence verbatim.
 /data/experiments/speedway209/** -text whitespace=trailing-space,space-before-tab,cr-at-eol
 /docs/experiments/speedway-h29-s/*.md text eol=lf

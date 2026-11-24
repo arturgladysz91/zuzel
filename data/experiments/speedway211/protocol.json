@@ -1,0 +1,17 @@
+{
+  "Study": 211,
+  "Parent": "490e3578e7e67c837da88c2788857e49d136991d",
+  "Training": ["nominal", "-1 cm", "+1 cm"],
+  "DevelopmentScreen": ["nominal", "-1 cm", "+1 cm", "-6 cm", "+6 cm", "-16 cm", "+16 cm"],
+  "RegisteredRegression": ["nominal", "-2 cm", "+2 cm", "-12 cm", "+12 cm"],
+  "FreshModelOffsetsMeters": [-0.035, 0.035, -0.145, 0.145],
+  "FreshModelDisturbances": [
+    {"OffsetMeters": -0.035, "ObservedSeconds": 1.35, "DriveDelta": -0.015, "SteeringDeltaRadians": 0.001},
+    {"OffsetMeters": 0.145, "ObservedSeconds": 17.5, "DriveDelta": -0.015, "SteeringDeltaRadians": -0.001}
+  ],
+  "DisturbanceSemantics": "One issued request is changed before entering the unchanged activation queue. No physical state, parameters or clocks are overwritten.",
+  "Selection": "Complete strict finishes first. Compare worst development time, clearance and sustained speed. Prefer 0.55 m when within 0.15 s of the fastest eligible development candidate. Also show 0.52 and 0.59 m targets. Never use fresh or registered nonnominal results to tune.",
+  "FocusedProposalCap": 84,
+  "FinalNativeWorldsReserved": 5,
+  "WorldCap": 8
+}
