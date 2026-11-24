@@ -131,6 +131,8 @@ Dynamic rider movement requires a separate moving mass with coupled generalized 
 
 The locked restore used the local package cache with advisories disabled for that command because the NuGet service was unreachable. Release builds treated warnings as errors. All 16 focused tests passed, including seven new sagittal/contact tests. The separately built exact #212 parent passed 2,066 of 2,287 core tests. H32-P passed 2,073 of 2,294. The same 221 cases failed in both runs. They comprise 219 native cases excluded by the Box2D construction guard and two inherited frozen-source assertions. There were zero new failures. The protected H28-F, strict observer and native-adapter source blobs match the parent. [Regression comparison](../../../data/experiments/speedway213/regression.json) · [Construction ledger](../../../data/experiments/speedway213/world-ledger.json)
 
+GitHub confirmed implementation commit `70efbf4505897b342e7fff474f95947ad5b4d0df` and returned zero workflow runs, check runs and status contexts. The combined status at the 2026-11-24 snapshot was `pending`. The push CI workflow targets `main`. The build and test results above are local. [Hosted CI snapshot](../../../data/experiments/speedway213/hosted-ci.json)
+
 ## Reproduce and inspect
 
 ```powershell
