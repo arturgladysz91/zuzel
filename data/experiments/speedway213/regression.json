@@ -1,0 +1,1137 @@
+{
+  "parentCommit": "3c6e445c9e07e84ca2e96716ca711c0482c15627",
+  "filter": "Shard=core",
+  "parent": {
+    "total": 2287,
+    "passed": 2066,
+    "failed": 221
+  },
+  "current": {
+    "total": 2294,
+    "passed": 2073,
+    "failed": 221
+  },
+  "focused": {
+    "total": 16,
+    "passed": 16,
+    "failed": 0
+  },
+  "retainedDisabledBlobs": {
+    "tools/speedway-handling/HandlingContact.cs": "131edf1ac7b5c4f4eb84ec8acf6c6b834f685219",
+    "tools/speedway-handling/HandlingContact64.cs": "a187e5cc19c0b1e0e70af4db626c105f6d950aaa",
+    "tools/shared-world-speedway/ContactLoadSolver64.cs": "5ec2da635492ff753475b5d441d9160055935bc2",
+    "tools/speedway-h26/Predictor198.cs": "668d16d68682117a56a21baa90532a35b2c73a55",
+    "tools/speedway-h26/RacingProfile206.cs": "ddeb47c8e86b27405d5a332a9051bb2eb8454b57",
+    "tools/speedway-study201/Technique200.cs": "d332d82f60af0eb2316fb1d47f996de2815e466f",
+    "tools/shared-world-speedway/ContactAdapter.cs": "585e9d76118ad09627e95d5fe431791a90be17ee"
+  },
+  "inheritedFailures": [
+    {
+      "test": "CoreSim.Tests.AdaptiveRiderControlTests :: CoreSim.Tests.AdaptiveRiderControlTests.NativeControlUsesOriginalContactForcesAndSingleWheelCommit",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.AdaptiveRiderControlTests :: CoreSim.Tests.AdaptiveRiderControlTests.NativeReplayAndObservationalDiagnosticsDoNotChangeFingerprint",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.AutonomousAcceleration141Tests :: CoreSim.Tests.AutonomousAcceleration141Tests.PreviouslyFrozenRuntimeSourcesAreUnchanged",
+      "guardedNative": false,
+      "firstMessage": "Assert.Equal() Failure: Strings differ"
+    },
+    {
+      "test": "CoreSim.Tests.AutonomousRacingLineTests :: CoreSim.Tests.AutonomousRacingLineTests.AdaptiveFollowing94AlsoRetainsItsExactTrajectoryWithAutonomyOff",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.AutonomousRacingLineTests :: CoreSim.Tests.AutonomousRacingLineTests.AutonomousSuggestionsNeverReopenTheIndependentThrottleOrReplaceEmergency",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.AutonomousRacingLineTests :: CoreSim.Tests.AutonomousRacingLineTests.BendHorizonReachesTheExitAndTwentyReferenceMetersOfStraight",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.AutonomousRacingLineTests :: CoreSim.Tests.AutonomousRacingLineTests.FlagIsOffAndOnlyRequiresExperimentalTactics",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.AutonomousRacingLineTests :: CoreSim.Tests.AutonomousRacingLineTests.FlagOffPreservesFiveFrozen94HeatsExactly",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.AutonomousRacingLineTests :: CoreSim.Tests.AutonomousRacingLineTests.HoldingTheInnerSoloLineDoesNotInventACommandOrSpeedBonus",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.AutonomousRacingLineTests :: CoreSim.Tests.AutonomousRacingLineTests.OccupiedNeighborBlocksUsefulCandidateAndActiveOppositeAttackWins",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.AutonomousRacingLineTests :: CoreSim.Tests.AutonomousRacingLineTests.ReturnsUseSeparateAutonomousGoalAndPreserveHistoricalHomeOff",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.AutonomousRacingLineTests :: CoreSim.Tests.AutonomousRacingLineTests.ReversedInputKeepsExactStatesCommandsContactsAndNoPostFinishActivation",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.AutonomousRacingLineTests :: CoreSim.Tests.AutonomousRacingLineTests.SoloPreparesBeforeTheBendAndExecutesFiniteDelayedLateralMovement",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.CloseRacingFollowingGapTests :: CoreSim.Tests.CloseRacingFollowingGapTests.ImmediateThreatStillCrashesAfterTheSamePhysicalReaction",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.CloseRacingFollowingGapTests :: CoreSim.Tests.CloseRacingFollowingGapTests.NewFlagOffPreservesAllEightFrozen93OnHeatsExactly",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.CloseRacingFollowingGapTests :: CoreSim.Tests.CloseRacingFollowingGapTests.ReversedRollingInputPreservesAcceptedStatesCommandsAndContacts",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.CloseRacingFollowingGapTests :: CoreSim.Tests.CloseRacingFollowingGapTests.RollingPackHasValidWholeCapsulesAndDoesNotCountItsInitialOrderAsAPass",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.CloseRacingFollowingGapTests :: CoreSim.Tests.CloseRacingFollowingGapTests.SevenFrozenSituationsKeepFiniteCommandsAndTheCompleteReactionDelay(index: 0)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.CloseRacingFollowingGapTests :: CoreSim.Tests.CloseRacingFollowingGapTests.SevenFrozenSituationsKeepFiniteCommandsAndTheCompleteReactionDelay(index: 1)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.CloseRacingFollowingGapTests :: CoreSim.Tests.CloseRacingFollowingGapTests.SevenFrozenSituationsKeepFiniteCommandsAndTheCompleteReactionDelay(index: 2)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.CloseRacingFollowingGapTests :: CoreSim.Tests.CloseRacingFollowingGapTests.SevenFrozenSituationsKeepFiniteCommandsAndTheCompleteReactionDelay(index: 3)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.CloseRacingFollowingGapTests :: CoreSim.Tests.CloseRacingFollowingGapTests.SevenFrozenSituationsKeepFiniteCommandsAndTheCompleteReactionDelay(index: 4)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.CloseRacingFollowingGapTests :: CoreSim.Tests.CloseRacingFollowingGapTests.SevenFrozenSituationsKeepFiniteCommandsAndTheCompleteReactionDelay(index: 5)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.CloseRacingFollowingGapTests :: CoreSim.Tests.CloseRacingFollowingGapTests.SevenFrozenSituationsKeepFiniteCommandsAndTheCompleteReactionDelay(index: 6)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.CloseRacingFollowingGapTests :: CoreSim.Tests.CloseRacingFollowingGapTests.SoloHasNoGapForceProbesOrNewCommands",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.CoupledSlipInverseTests :: CoreSim.Tests.CoupledSlipInverseTests.BracketedRootsHaveTheCorrectSignAndSmallResidual(degrees: -10)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.CoupledSlipInverseTests :: CoreSim.Tests.CoupledSlipInverseTests.BracketedRootsHaveTheCorrectSignAndSmallResidual(degrees: 0)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.CoupledSlipInverseTests :: CoreSim.Tests.CoupledSlipInverseTests.BracketedRootsHaveTheCorrectSignAndSmallResidual(degrees: 10)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.CoupledSlipInverseTests :: CoreSim.Tests.CoupledSlipInverseTests.NonmonotoneEnvelopeRejectsBelowScalarBudgetAndChoosesTheLowSlideBranch",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.CoupledSlipInverseTests :: CoreSim.Tests.CoupledSlipInverseTests.OriginalContactProjectionIncludesFxAndUsesTheFiniteInterval",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.CoupledSlipInverseTests :: CoreSim.Tests.CoupledSlipInverseTests.ShortNativeWorldRepeatsWithOneWheelCommitPerStepAndNoExtraActuator",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.CoupledSlipInverseTests :: CoreSim.Tests.CoupledSlipInverseTests.SolveDoesNotAllocateOrChangeItsInputAndRepeatsExactly",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.DynamicAxleLoadTests :: CoreSim.Tests.DynamicAxleLoadTests.OneCacheUpdatePerAcceptedStateIsReusedByEveryInverseQueryAndPreservesEnergy",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.ExtendedLearningTests :: CoreSim.Tests.ExtendedLearningTests.ContinuousRolloutPreservesQueueAndActuatorsAcrossFirstExit",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.FeasibleCornerEntryTests :: CoreSim.Tests.FeasibleCornerEntryTests.AiObserverCannotChangeTheAcceptedFingerprint",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.FeasibleCornerEntryTests :: CoreSim.Tests.FeasibleCornerEntryTests.ExplicitCombinedTrialRemainsExactWithFlagOff",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.FeasibleCornerEntryTests :: CoreSim.Tests.FeasibleCornerEntryTests.NativeAiCompletesFirstBendWithDelayedControlsAndOriginalForces",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.FullContactYawTests :: CoreSim.Tests.FullContactYawTests.FlagChangesOnlyYawNotForceTargetWheelOrGuardCreditAtTheSameState",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.FullContactYawTests :: CoreSim.Tests.FullContactYawTests.FullContactNativeRepeatKeepsOneBodyAndWheelCommitPerAcceptedStep",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.FullContactYawTests :: CoreSim.Tests.FullContactYawTests.OffRetainsTheShortFingerprintCapturedBeforeChangingTravelYaw",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.FullHeatSoloAuditTests :: CoreSim.Tests.FullHeatSoloAuditTests.CrashIsInterruptedWithoutInventingDnfClassification",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.FullHeatSoloAuditTests :: CoreSim.Tests.FullHeatSoloAuditTests.ObserverAgreesWithFinishTimingAndPreservesExactWorldHashOnAFullHeat",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.FullThrottleLearningTests :: CoreSim.Tests.FullThrottleLearningTests.RequestedFullThrottleReopensOnlyAfterFullReactionAndPreservesPending",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.FullThrottleSlideAuditTests :: CoreSim.Tests.FullThrottleSlideAuditTests.BodySlideAndDrivenWheelSlipAreDistinctAndCombinedRearBudgetIsShared",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.FullThrottleSlideAuditTests :: CoreSim.Tests.FullThrottleSlideAuditTests.FullDriveCanDecelerateAtModerateSlideWithSteadyWheelButDoesNotProveStableBodyMotion",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.FullThrottleSlideAuditTests :: CoreSim.Tests.FullThrottleSlideAuditTests.OriginalBodyAndWheelPowerCloseWithoutAddingADriftBrake",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.FullThrottleSlideAuditTests :: CoreSim.Tests.FullThrottleSlideAuditTests.RawSurfaceInputsCollapseToEffectiveGripButLowerGripAlsoChangesRegularization",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.InverseFeasibilityTests :: CoreSim.Tests.InverseFeasibilityTests.EquivalentInitialStatesAreActualStraightEquilibriaAndNoPoseIsCorrected",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.InverseFeasibilityTests :: CoreSim.Tests.InverseFeasibilityTests.NativeReplayKeepsOriginalGuardsAndRepeatsWithoutObservers",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.InverseFeasibilityTests :: CoreSim.Tests.InverseFeasibilityTests.OioC2KnotRequiresNonzeroYawRateJumpEvenAtTheLowerSpeed",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.InverseFeasibilityTests :: CoreSim.Tests.InverseFeasibilityTests.OriginalForceBalanceCanPassScalarGripWhileWheelTorqueIsUnavailable",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.LocalOffsetLimitTests :: CoreSim.Tests.LocalOffsetLimitTests.ExperimentalCommandsCanExceed95ButUnsafeTargetsAreRejected",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.LocalOffsetLimitTests :: CoreSim.Tests.LocalOffsetLimitTests.FullRunSafetyRejectsTheUnsafeOuterPlanWithoutRepairingItsPath",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.LocalOffsetLimitTests :: CoreSim.Tests.LocalOffsetLimitTests.LocalRulesAreDeterministicAndLegacyBaselineIsUnchanged",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.MotorcyclePerformanceTests :: CoreSim.Tests.MotorcyclePerformanceTests.NativeEnergyAndSingleCommitRemainCorrectAcrossTheAttribution(variant: \"A-engine\")",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.MotorcyclePerformanceTests :: CoreSim.Tests.MotorcyclePerformanceTests.NativeEnergyAndSingleCommitRemainCorrectAcrossTheAttribution(variant: \"B-tyres\")",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.MotorcyclePerformanceTests :: CoreSim.Tests.MotorcyclePerformanceTests.NativeEnergyAndSingleCommitRemainCorrectAcrossTheAttribution(variant: \"C-both\")",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.MotorcyclePerformanceTests :: CoreSim.Tests.MotorcyclePerformanceTests.NativeEnergyAndSingleCommitRemainCorrectAcrossTheAttribution(variant: \"baseline\")",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.NaturalRacingLineTests :: CoreSim.Tests.NaturalRacingLineTests.NewPathUsesDriveOneAndOriginalControllerWithoutPoseCorrections",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.NaturalRacingLineTests :: CoreSim.Tests.NaturalRacingLineTests.OrdinaryRollingInitialStateAndNativePrefixMatchBothHistoricalInnerRuns",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.PhysicalSteeringControlTests :: CoreSim.Tests.PhysicalSteeringControlTests.HistoricalTwoContactNativeFingerprintIsUnchangedWhenNewControlIsOff",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.PhysicalSteeringControlTests :: CoreSim.Tests.PhysicalSteeringControlTests.NativeSteeringGeneratesOnlyContactMomentsWithinUnchangedBudgetsAndEnergy",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.PhysicsDrivenRacingLineTests :: CoreSim.Tests.PhysicsDrivenRacingLineTests.LandmarkCommandsUseAcceptedCrossingsWithoutTeleportOrAnExtraStep",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.PhysicsDrivenRacingLineTests :: CoreSim.Tests.PhysicsDrivenRacingLineTests.OfflineSelectionUsesMeasuredTimeRejectsUnsafeAndReplaysDeterministically",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.PhysicsDrivenRacingLineTests :: CoreSim.Tests.PhysicsDrivenRacingLineTests.SpatialSchedulingIsIndependentOfRiderOrderAndDoesNotBlockOtherRiders",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.ProgressiveBendWidthTests :: CoreSim.Tests.ProgressiveBendWidthTests.RealDynamicsKeepRejectedMaximalTrajectoriesAndCertifyTightening",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.ProportionalThrottleTests :: CoreSim.Tests.ProportionalThrottleTests.AQueuedLineOpeningCannotOverwriteNewerPartialThrottle",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.ProportionalThrottleTests :: CoreSim.Tests.ProportionalThrottleTests.AllEightOffHeatsPreserveFrozen92BodiesCommandsContactsAndFinishTimes",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.ProportionalThrottleTests :: CoreSim.Tests.ProportionalThrottleTests.BlockedFollowingUsesPartialDriveAndRetainsWholeBikeSeparation",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.ProportionalThrottleTests :: CoreSim.Tests.ProportionalThrottleTests.EmergencyUsesFullReactionAndDoesNotHideTheUnavoidableCrash",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.ProportionalThrottleTests :: CoreSim.Tests.ProportionalThrottleTests.FollowingDoesNotBlockLaterOffensiveCommands",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.ProportionalThrottleTests :: CoreSim.Tests.ProportionalThrottleTests.NewEmergencyCancelsQueuedOrdinaryDriveWithoutPostponingTheSafetyCommand",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.ProportionalThrottleTests :: CoreSim.Tests.ProportionalThrottleTests.NoOpponentLeavesAnExactSoloTrajectoryAndNoThrottleCommands",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.ProportionalThrottleTests :: CoreSim.Tests.ProportionalThrottleTests.ReobservingDangerDoesNotCancelAnAlreadyQueuedSafetyLine",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.ProportionalThrottleTests :: CoreSim.Tests.ProportionalThrottleTests.RepeatAndInputReversalPreserveCommandsContactsAndExactAcceptedHash",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.ProportionalThrottleTests :: CoreSim.Tests.ProportionalThrottleTests.SafeParallelLinesRetainDriveAndSideContestCandidates",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.ProportionalThrottleTests :: CoreSim.Tests.ProportionalThrottleTests.StableClosePairDoesNotLoseThrottleBeforeGeometryChanges",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.ProportionalThrottleTests :: CoreSim.Tests.ProportionalThrottleTests.StraightBendBoundaryHasFiniteThrottleAndGapMeasures",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.ProportionalThrottleTests :: CoreSim.Tests.ProportionalThrottleTests.ThrottleUpdatesAreIndependentOfLateralHysteresisAndNeverPrecedeTheirDeadline",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.RacingLineRootCauseTests :: CoreSim.Tests.RacingLineRootCauseTests.AuthoredPathBoundaryRejectsUnsupportedWorldsAndRetainsTheHistoricalDefault",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.RacingLineRootCauseTests :: CoreSim.Tests.RacingLineRootCauseTests.DiagnosticPreviewImprovesTheControlledFixtureAndPreservesBudgetsAndDeterminism",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.RacingObjective142Tests :: CoreSim.Tests.RacingObjective142Tests.EveryPreviouslyFrozen141RuntimeSourceIsUnchanged",
+      "guardedNative": false,
+      "firstMessage": "Assert.Equal() Failure: Strings differ"
+    },
+    {
+      "test": "CoreSim.Tests.RearWheelDynamicsTests :: CoreSim.Tests.RearWheelDynamicsTests.AShortenedCurvatureIntervalCannotAdvanceTheWheelByTheNominalTick",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.RearWheelDynamicsTests :: CoreSim.Tests.RearWheelDynamicsTests.ContactAndCrashNeverResetTheIndependentWheelOrAddASecondIntegration",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.RearWheelDynamicsTests :: CoreSim.Tests.RearWheelDynamicsTests.LaunchBuildsActualSpinAndTheChassisReceivesOnlyTheContactForce",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.RearWheelDynamicsTests :: CoreSim.Tests.RearWheelDynamicsTests.OneAcceptedClockAndZeroDriveEnergyRemainStable(step: 0,0050000000000000001)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.RearWheelDynamicsTests :: CoreSim.Tests.RearWheelDynamicsTests.OneAcceptedClockAndZeroDriveEnergyRemainStable(step: 0,01)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.RearWheelDynamicsTests :: CoreSim.Tests.RearWheelDynamicsTests.OneAcceptedClockAndZeroDriveEnergyRemainStable(step: 0,02)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.RearWheelDynamicsTests :: CoreSim.Tests.RearWheelDynamicsTests.RearWheelForcesAllocateNothingAndTheirGuardAccountsForWheelEnergy",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.RearWheelDynamicsTests :: CoreSim.Tests.RearWheelDynamicsTests.TheNewWorldRepeatsFlyingLapsAndRetainsActualOffTrackTrajectories",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.RearWheelDynamicsTests :: CoreSim.Tests.RearWheelDynamicsTests.ThrottleReplaysTheWholeBodyAndWheelPrefixAndActsThroughTorqueFirst",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.RearWheelDynamicsTests :: CoreSim.Tests.RearWheelDynamicsTests.WheelRequiresSlipAndStartsAtTheActualLongitudinalRollingSpeed",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldDynamicsTests :: CoreSim.Tests.SharedWorldDynamicsTests.AuthoredCommandsAreCausalAtOffGridDeadlinesAndDoNotAlterAttributes",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldDynamicsTests :: CoreSim.Tests.SharedWorldDynamicsTests.OneActualBodyUsesBox2DSemiImplicitForceIntegration(step: 0,0050000000000000001)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldDynamicsTests :: CoreSim.Tests.SharedWorldDynamicsTests.OneActualBodyUsesBox2DSemiImplicitForceIntegration(step: 0,01)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldDynamicsTests :: CoreSim.Tests.SharedWorldDynamicsTests.OneActualBodyUsesBox2DSemiImplicitForceIntegration(step: 0,02)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldDynamicsTests :: CoreSim.Tests.SharedWorldDynamicsTests.SmallLocalBoundaryStepsImproveLapPositionVelocityHeadingAndFinishTogether",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldSpeedwayTests :: CoreSim.Tests.SharedWorldSpeedwayTests.B_RealObservationDelayedControlAndGradualMotionAvoidTheCounterfactualContact(step: 0,01)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldSpeedwayTests :: CoreSim.Tests.SharedWorldSpeedwayTests.B_RealObservationDelayedControlAndGradualMotionAvoidTheCounterfactualContact(step: 0,02)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldSpeedwayTests :: CoreSim.Tests.SharedWorldSpeedwayTests.BulletFlagsAndInternalSubstepsAloneMissTheFastDynamicCrossing",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldSpeedwayTests :: CoreSim.Tests.SharedWorldSpeedwayTests.C_OneLightEpisodePersistsWithoutRepeatedConsequencesOrBounce(step: 0,0050000000000000001)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldSpeedwayTests :: CoreSim.Tests.SharedWorldSpeedwayTests.C_OneLightEpisodePersistsWithoutRepeatedConsequencesOrBounce(step: 0,01)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldSpeedwayTests :: CoreSim.Tests.SharedWorldSpeedwayTests.C_OneLightEpisodePersistsWithoutRepeatedConsequencesOrBounce(step: 0,02)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldSpeedwayTests :: CoreSim.Tests.SharedWorldSpeedwayTests.D_BendImpactUsesSolverApproachSpeedAndExistingReserveThenRecovers(step: 0,01)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldSpeedwayTests :: CoreSim.Tests.SharedWorldSpeedwayTests.D_BendImpactUsesSolverApproachSpeedAndExistingReserveThenRecovers(step: 0,02)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldSpeedwayTests :: CoreSim.Tests.SharedWorldSpeedwayTests.E_TwoFastDynamicBodiesDoNotTunnelWithCommonLocalSubsteps(step: 0,0050000000000000001)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldSpeedwayTests :: CoreSim.Tests.SharedWorldSpeedwayTests.E_TwoFastDynamicBodiesDoNotTunnelWithCommonLocalSubsteps(step: 0,01)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldSpeedwayTests :: CoreSim.Tests.SharedWorldSpeedwayTests.E_TwoFastDynamicBodiesDoNotTunnelWithCommonLocalSubsteps(step: 0,02)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldSpeedwayTests :: CoreSim.Tests.SharedWorldSpeedwayTests.F_CloseNonclosingTrafficDoesNotInventCorrections(step: 0,01)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldSpeedwayTests :: CoreSim.Tests.SharedWorldSpeedwayTests.F_CloseNonclosingTrafficDoesNotInventCorrections(step: 0,02)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldSpeedwayTests :: CoreSim.Tests.SharedWorldSpeedwayTests.FourActualGatesCompleteLapAndHeatInsideTheExistingTrack(step: 0,01)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldSpeedwayTests :: CoreSim.Tests.SharedWorldSpeedwayTests.FourActualGatesCompleteLapAndHeatInsideTheExistingTrack(step: 0,02)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldSpeedwayTests :: CoreSim.Tests.SharedWorldSpeedwayTests.G_FourRidersActuallyTraverseFirstBendAndAreOrderIndependent(step: 0,01)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldSpeedwayTests :: CoreSim.Tests.SharedWorldSpeedwayTests.G_FourRidersActuallyTraverseFirstBendAndAreOrderIndependent(step: 0,02)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldSpeedwayTests :: CoreSim.Tests.SharedWorldSpeedwayTests.SustainedContactUsesSolverSupportWithoutRepeatedGameplayImpact",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldStabilityTests :: CoreSim.Tests.SharedWorldStabilityTests.FiniteBendImpactUsesPeakPointApproachRatherThanFirstFractionOfImpulse(step: 0,0050000000000000001)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldStabilityTests :: CoreSim.Tests.SharedWorldStabilityTests.FiniteBendImpactUsesPeakPointApproachRatherThanFirstFractionOfImpulse(step: 0,01)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldStabilityTests :: CoreSim.Tests.SharedWorldStabilityTests.FiniteBendImpactUsesPeakPointApproachRatherThanFirstFractionOfImpulse(step: 0,02)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldStabilityTests :: CoreSim.Tests.SharedWorldStabilityTests.OffGridTapeDeadlineIsAnActualCommonWorldBoundary(step: 0,0050000000000000001)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldStabilityTests :: CoreSim.Tests.SharedWorldStabilityTests.OffGridTapeDeadlineIsAnActualCommonWorldBoundary(step: 0,01)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldStabilityTests :: CoreSim.Tests.SharedWorldStabilityTests.OffGridTapeDeadlineIsAnActualCommonWorldBoundary(step: 0,02)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldStabilityTests :: CoreSim.Tests.SharedWorldStabilityTests.OptionalForceAndContactObserversDoNotChangeAcceptedPhysics",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldStabilityTests :: CoreSim.Tests.SharedWorldStabilityTests.RearmRequiresRealCapsuleSeparationAndContextsFollowPhysicalTrackProgress",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldStabilityTests :: CoreSim.Tests.SharedWorldStabilityTests.RoadFrameDoesNotRotatePropulsionIntoSmallLateralLaunchVelocityAndBoundsCombinedForce",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldStabilityTests :: CoreSim.Tests.SharedWorldStabilityTests.SmallPhysicalClosingChangeCrossesUnchangedCrashThresholdConsistently(speedFactor: 0,94999999999999996, crash: False)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldStabilityTests :: CoreSim.Tests.SharedWorldStabilityTests.SmallPhysicalClosingChangeCrossesUnchangedCrashThresholdConsistently(speedFactor: 1,05, crash: True)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldStabilityTests :: CoreSim.Tests.SharedWorldStabilityTests.UnchangedDenseInputHasBoundedEarlyMotionAndDecreasingStepError",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldTacticalTests :: CoreSim.Tests.SharedWorldTacticalTests.ActualMotoarenaGatesAreObservedTogetherWithoutInventedPassingFromTiedStart",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldTacticalTests :: CoreSim.Tests.SharedWorldTacticalTests.AttackQualityAndRiskChangeChoicesWithoutAddingPhysicalForce",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldTacticalTests :: CoreSim.Tests.SharedWorldTacticalTests.BothBendSidesProduceActualPassesWithExistingTyreBudget(outside: False)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldTacticalTests :: CoreSim.Tests.SharedWorldTacticalTests.BothBendSidesProduceActualPassesWithExistingTyreBudget(outside: True)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldTacticalTests :: CoreSim.Tests.SharedWorldTacticalTests.BothBlockedCorridorsCauseLiftAndNoInventedPass",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldTacticalTests :: CoreSim.Tests.SharedWorldTacticalTests.DefenseAloneChangesAnEarlyChoiceAndActualMotionWithoutGuaranteeingAWin",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldTacticalTests :: CoreSim.Tests.SharedWorldTacticalTests.DriveHysteresisPreventsImmediateLiftResumeLoopsDuringRealDuels",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldTacticalTests :: CoreSim.Tests.SharedWorldTacticalTests.FasterRiderActuallyPassesWholeBikeOnStraightAndHoldsLeadWithoutLeaderYield(step: 0,0050000000000000001)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldTacticalTests :: CoreSim.Tests.SharedWorldTacticalTests.FasterRiderActuallyPassesWholeBikeOnStraightAndHoldsLeadWithoutLeaderYield(step: 0,01)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldTacticalTests :: CoreSim.Tests.SharedWorldTacticalTests.FasterRiderActuallyPassesWholeBikeOnStraightAndHoldsLeadWithoutLeaderYield(step: 0,02)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldTacticalTests :: CoreSim.Tests.SharedWorldTacticalTests.FirstCrashEndsDiagnosticAtContactInsteadOfSimulatingFallenBikes",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldTacticalTests :: CoreSim.Tests.SharedWorldTacticalTests.NewImmediateThreatCancelsPendingTacticAndStartsANewReactionDelay",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldTacticalTests :: CoreSim.Tests.SharedWorldTacticalTests.OpponentFutureTargetsAreInvisibleAndStalledAttackCanBeAbandoned",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldTacticalTests :: CoreSim.Tests.SharedWorldTacticalTests.ParallelCloseRidingKeepsFrozenFingerprintAndNoNeedlessControls",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldTacticalTests :: CoreSim.Tests.SharedWorldTacticalTests.SameSnapshotDecisionsRepeatAndIgnoreInputOrdering(index: 0)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldTacticalTests :: CoreSim.Tests.SharedWorldTacticalTests.SameSnapshotDecisionsRepeatAndIgnoreInputOrdering(index: 4)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldTacticalTests :: CoreSim.Tests.SharedWorldTacticalTests.SameSnapshotDecisionsRepeatAndIgnoreInputOrdering(index: 5)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SharedWorldTacticalTests :: CoreSim.Tests.SharedWorldTacticalTests.SameSnapshotDecisionsRepeatAndIgnoreInputOrdering(index: 6)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SideBySideRacingTests :: CoreSim.Tests.SideBySideRacingTests.AReactionCanStillBeTooLateAndPhysicalContactHasOneConsequence",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SideBySideRacingTests :: CoreSim.Tests.SideBySideRacingTests.ActualDecisionSnapshotCanStraddleStraightAndArcWithoutZeroRadiusOrIntentChatter(innerFirst: False)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SideBySideRacingTests :: CoreSim.Tests.SideBySideRacingTests.ActualDecisionSnapshotCanStraddleStraightAndArcWithoutZeroRadiusOrIntentChatter(innerFirst: True)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SideBySideRacingTests :: CoreSim.Tests.SideBySideRacingTests.ActualParallelEntryHasCausalControlAndMeasurableMotionBeyondNaturalStartingOrder(step: 0,0050000000000000001)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SideBySideRacingTests :: CoreSim.Tests.SideBySideRacingTests.ActualParallelEntryHasCausalControlAndMeasurableMotionBeyondNaturalStartingOrder(step: 0,01)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SideBySideRacingTests :: CoreSim.Tests.SideBySideRacingTests.ActualParallelEntryHasCausalControlAndMeasurableMotionBeyondNaturalStartingOrder(step: 0,02)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SideBySideRacingTests :: CoreSim.Tests.SideBySideRacingTests.ExistingBrushMajorSaveAndCrashRemainPhysicalWithFeatureEnabled(index: 0)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SideBySideRacingTests :: CoreSim.Tests.SideBySideRacingTests.ExistingBrushMajorSaveAndCrashRemainPhysicalWithFeatureEnabled(index: 1)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SideBySideRacingTests :: CoreSim.Tests.SideBySideRacingTests.ExistingBrushMajorSaveAndCrashRemainPhysicalWithFeatureEnabled(index: 2)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SideBySideRacingTests :: CoreSim.Tests.SideBySideRacingTests.HoldWithNoActuatorChangeNeverRepartitionsPhysicsBeforeRealManeuver",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SideBySideRacingTests :: CoreSim.Tests.SideBySideRacingTests.InnerAndOuterHoldChoicesUseActualReferencePaceAndDoNotForceYield",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SideBySideRacingTests :: CoreSim.Tests.SideBySideRacingTests.NoGainAndExistingCloseParallelRidingKeepExactMotionWithoutUnneededCommands",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SideBySideRacingTests :: CoreSim.Tests.SideBySideRacingTests.OccupiedAlongsideCutHoldsOwnSpaceAfterReactionWithoutAutomaticThrottleLift",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SideBySideRacingTests :: CoreSim.Tests.SideBySideRacingTests.OpponentFutureCommandsCannotFreeSpaceOccupiedNow",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SideBySideRacingTests :: CoreSim.Tests.SideBySideRacingTests.PendingAttackCancellationStillStartsANewReactionWithSideFeatureEnabled",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SideBySideRacingTests :: CoreSim.Tests.SideBySideRacingTests.SideBySideDecisionsRepeatAndIgnoreInitialInputOrder",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SideBySideRacingTests :: CoreSim.Tests.SideBySideRacingTests.VariedRealGatesHaveAnAutonomousFirstBendManeuverAndExactUnchangedPrefix(step: 0,0050000000000000001)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SideBySideRacingTests :: CoreSim.Tests.SideBySideRacingTests.VariedRealGatesHaveAnAutonomousFirstBendManeuverAndExactUnchangedPrefix(step: 0,01)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SideBySideRacingTests :: CoreSim.Tests.SideBySideRacingTests.VariedRealGatesHaveAnAutonomousFirstBendManeuverAndExactUnchangedPrefix(step: 0,02)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SlipControlValidationTests :: CoreSim.Tests.SlipControlValidationTests.AuthoredLineCommandChangesIntentAtItsDeadlineWithoutTeleporting",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SlipControlValidationTests :: CoreSim.Tests.SlipControlValidationTests.DiagnosticStagesExerciseBothLimitsWithoutChangingTheReturnedTorqueOrAllocating",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SlipControlValidationTests :: CoreSim.Tests.SlipControlValidationTests.FourIndividualLapsAreDeterministicAndRealActiveContactIsResolved",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SlipControlValidationTests :: CoreSim.Tests.SlipControlValidationTests.ReadOnlyStagesPreserve97ForcesAndExactlyAccountForBox2DTorque",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SlipControlValidationTests :: CoreSim.Tests.SlipControlValidationTests.ThrottleTrialsReplayExactlyTheSameAcceptedPrefixAndActivateCausally",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SlipCoupledDynamicsTests :: CoreSim.Tests.SlipCoupledDynamicsTests.ActualSlipGivesTheCorrectTurnSignAndOpposesSideVelocity(heading: -0,100000001)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SlipCoupledDynamicsTests :: CoreSim.Tests.SlipCoupledDynamicsTests.ActualSlipGivesTheCorrectTurnSignAndOpposesSideVelocity(heading: 0,100000001)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SlipCoupledDynamicsTests :: CoreSim.Tests.SlipCoupledDynamicsTests.DiagnosticsAndInputOrderCannotChangeTheWorldAndContactsRemainPhysical",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SlipCoupledDynamicsTests :: CoreSim.Tests.SlipCoupledDynamicsTests.ForcesDoNotAllocateAndTargetOrientationDoesNotReplaceAcceptedSlip",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SlipCoupledDynamicsTests :: CoreSim.Tests.SlipCoupledDynamicsTests.HeadingControlIsContinuousAtTheLowSpeedTravelDirectionThreshold",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SlipCoupledDynamicsTests :: CoreSim.Tests.SlipCoupledDynamicsTests.InfeasibleSpeedCannotBeHeldOnTheRequestedRadius",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SlipCoupledDynamicsTests :: CoreSim.Tests.SlipCoupledDynamicsTests.LowSpeedAndStraightCornerStraightTransitionsRemainFiniteAndOnTrack(speed: 0, step: 0,01)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SlipCoupledDynamicsTests :: CoreSim.Tests.SlipCoupledDynamicsTests.LowSpeedAndStraightCornerStraightTransitionsRemainFiniteAndOnTrack(speed: 0,100000001, step: 0,01)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SlipCoupledDynamicsTests :: CoreSim.Tests.SlipCoupledDynamicsTests.LowSpeedAndStraightCornerStraightTransitionsRemainFiniteAndOnTrack(speed: 18, step: 0,0050000000000000001)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SlipCoupledDynamicsTests :: CoreSim.Tests.SlipCoupledDynamicsTests.LowSpeedAndStraightCornerStraightTransitionsRemainFiniteAndOnTrack(speed: 18, step: 0,01)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SlipCoupledDynamicsTests :: CoreSim.Tests.SlipCoupledDynamicsTests.LowSpeedAndStraightCornerStraightTransitionsRemainFiniteAndOnTrack(speed: 18, step: 0,02)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SlipCoupledDynamicsTests :: CoreSim.Tests.SlipCoupledDynamicsTests.LowSpeedSideSlipCannotNumericallyCreateEnergyWithZeroDrive(step: 0,0050000000000000001)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SlipCoupledDynamicsTests :: CoreSim.Tests.SlipCoupledDynamicsTests.LowSpeedSideSlipCannotNumericallyCreateEnergyWithZeroDrive(step: 0,01)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SlipCoupledDynamicsTests :: CoreSim.Tests.SlipCoupledDynamicsTests.LowSpeedSideSlipCannotNumericallyCreateEnergyWithZeroDrive(step: 0,02)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SlipCoupledDynamicsTests :: CoreSim.Tests.SlipCoupledDynamicsTests.OffAlsoMatchesTheUnmodifiedHistorical95AutonomousReplay",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SlipCoupledDynamicsTests :: CoreSim.Tests.SlipCoupledDynamicsTests.OffPreservesEveryFrozenAcceptedStateAndForce",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SlipCoupledDynamicsTests :: CoreSim.Tests.SlipCoupledDynamicsTests.TyreIsContinuousAtZeroSlipAndSharesOneSaturatingCircleWithDrive",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SlipCoupledDynamicsTests :: CoreSim.Tests.SlipCoupledDynamicsTests.ZeroDriveBox2DEnergyDoesNotIncreaseIncludingRotation",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SlipCoupledDynamicsTests :: CoreSim.Tests.SlipCoupledDynamicsTests.ZeroDriveCannotGenerateMechanicalPowerAndForwardThrottlePowerIsMonotone",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SpeedGripCrossoverTests :: CoreSim.Tests.SpeedGripCrossoverTests.ExtremeCoastRunsWideAndEveryVelocityIncrementComesFromTheRecordedForce",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.SpeedGripCrossoverTests :: CoreSim.Tests.SpeedGripCrossoverTests.SlowerConstructivePairIsSafeTracksAndRepeatsWithoutObservers",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.TacticalQualityTests :: CoreSim.Tests.TacticalQualityTests.FlagOffPreservesFrozen90TrajectoryHash(name: \"SA-entry-parallel\", expected: \"2BFDD3671C4947F552AD1D301CDEE24B12824AF5BEE39AD1A6\"\u00b7\u00b7\u00b7)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.TacticalQualityTests :: CoreSim.Tests.TacticalQualityTests.FlagOffPreservesFrozen90TrajectoryHash(name: \"SF-varied-Motoarena\", expected: \"5492318C86C479D17F6112B59004B697A0CCC8A14E968AAF16\"\u00b7\u00b7\u00b7)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.TacticalQualityTests :: CoreSim.Tests.TacticalQualityTests.FlagOffPreservesFrozen90TrajectoryHash(name: \"SG-F-close\", expected: \"CD70ED3D351B4347CC01EB95C858234327217A9EFFC0B392B6\"\u00b7\u00b7\u00b7)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.TacticalQualityTests :: CoreSim.Tests.TacticalQualityTests.LoadedTighteningHasTransientCostDespiteFasterLegacyTerminalRate(name: \"C-loaded-tighten\")",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.TacticalQualityTests :: CoreSim.Tests.TacticalQualityTests.LoadedTighteningHasTransientCostDespiteFasterLegacyTerminalRate(name: \"H-original-F\")",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.TacticalQualityTests :: CoreSim.Tests.TacticalQualityTests.PhysicalConsequenceFixturesAreUnchangedWithQualityEnabled(name: \"Brush\")",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.TacticalQualityTests :: CoreSim.Tests.TacticalQualityTests.PhysicalConsequenceFixturesAreUnchangedWithQualityEnabled(name: \"Crash\")",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.TacticalQualityTests :: CoreSim.Tests.TacticalQualityTests.PhysicalConsequenceFixturesAreUnchangedWithQualityEnabled(name: \"MajorSave\")",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.TacticalQualityTests :: CoreSim.Tests.TacticalQualityTests.QualityIsDeterministicAndIndependentOfInputOrder(name: \"SA-entry-parallel\")",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.TacticalQualityTests :: CoreSim.Tests.TacticalQualityTests.QualityIsDeterministicAndIndependentOfInputOrder(name: \"SC-late-reaction\")",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.TacticalQualityTests :: CoreSim.Tests.TacticalQualityTests.QualityIsDeterministicAndIndependentOfInputOrder(name: \"SF-varied-Motoarena\")",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.TacticalQualityTests :: CoreSim.Tests.TacticalQualityTests.QualityIsDeterministicAndIndependentOfInputOrder(name: \"SG-F-close\")",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.TacticalQualityTests :: CoreSim.Tests.TacticalQualityTests.UsefulEntryManeuverSurvivesAndRealGatesPreservePrefixUntilChangedActivation",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.TrackGeometryVariantTests :: CoreSim.Tests.TrackGeometryVariantTests.BaselineGeometryAndWheelScenarioStayExactlyAsIn100",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.TrackGeometryVariantTests :: CoreSim.Tests.TrackGeometryVariantTests.NewWorldRepeatsAndReplayUsesItsOwnGeometry",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.TravelDirectionSteeringTests :: CoreSim.Tests.TravelDirectionSteeringTests.AchievableNativeArcPreservesContactEnergySteeringAndSingleCommitInvariants",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.TravelDirectionSteeringTests :: CoreSim.Tests.TravelDirectionSteeringTests.ExplicitCoastActionRecoversWhileSteeringNeverChangesThrottle",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.TravelDirectionSteeringTests :: CoreSim.Tests.TravelDirectionSteeringTests.PerformanceCOffAcceptedPrefixRemainsExact",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.TwoContactBikeDynamicsTests :: CoreSim.Tests.TwoContactBikeDynamicsTests.AxleVelocitiesIncludeBodySpinAndSmallSteeringInitiatesBothTurnSigns",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.TwoContactBikeDynamicsTests :: CoreSim.Tests.TwoContactBikeDynamicsTests.FeatureRequiresOriginalWheelAndExcludesLegacyYawInverseVariants",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.TwoContactBikeDynamicsTests :: CoreSim.Tests.TwoContactBikeDynamicsTests.LocalContactWorkIncludesRotationExactlyOnceAndNeverAddsFreeEnergy(speed: 0, betaDegrees: 0, spin: 0)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.TwoContactBikeDynamicsTests :: CoreSim.Tests.TwoContactBikeDynamicsTests.LocalContactWorkIncludesRotationExactlyOnceAndNeverAddsFreeEnergy(speed: 0, betaDegrees: 0, spin: 2)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.TwoContactBikeDynamicsTests :: CoreSim.Tests.TwoContactBikeDynamicsTests.LocalContactWorkIncludesRotationExactlyOnceAndNeverAddsFreeEnergy(speed: 0,050000000000000003, betaDegrees: 50, spin: 0,20000000000000001)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.TwoContactBikeDynamicsTests :: CoreSim.Tests.TwoContactBikeDynamicsTests.LocalContactWorkIncludesRotationExactlyOnceAndNeverAddsFreeEnergy(speed: 12, betaDegrees: 35, spin: 0)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.TwoContactBikeDynamicsTests :: CoreSim.Tests.TwoContactBikeDynamicsTests.LowSpeedAndPureBodySpinRemainPassiveAtTheResolutionEndpoints(h: 0,0050000000000000001)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.TwoContactBikeDynamicsTests :: CoreSim.Tests.TwoContactBikeDynamicsTests.LowSpeedAndPureBodySpinRemainPassiveAtTheResolutionEndpoints(h: 0,02)",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.TwoContactBikeDynamicsTests :: CoreSim.Tests.TwoContactBikeDynamicsTests.NativeResultsRepeatAndConvergeWithSmallerHeldIntervals",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.TwoContactBikeDynamicsTests :: CoreSim.Tests.TwoContactBikeDynamicsTests.OffRetainsHistoricalInitialStatesAndNativeForcePrefixes",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.TwoContactBikeDynamicsTests :: CoreSim.Tests.TwoContactBikeDynamicsTests.SteeringIsLimitedInAngleAndRateWithoutABodyAngleLimit",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.TwoContactBikeDynamicsTests :: CoreSim.Tests.TwoContactBikeDynamicsTests.StraightWithNoSteeringDoesNotTurnWithOrWithoutPower",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    },
+    {
+      "test": "CoreSim.Tests.TwoContactBikeDynamicsTests :: CoreSim.Tests.TwoContactBikeDynamicsTests.WheelspinChangesRearSideForceAndItsPhysicalMomentAtAnIdenticalBodyState",
+      "guardedNative": true,
+      "firstMessage": "System.InvalidOperationException : Box2D construction forbidden during MODEL validation."
+    }
+  ],
+  "newFailures": [],
+  "recoveredFailures": []
+}
