@@ -8,6 +8,14 @@ using WholeCorner171;
 namespace SpeedwayHandling;
 
 internal sealed record Window199(double Start,double End);
+[Flags]
+internal enum RacingRestriction206
+{
+    None = 0, StraightPosition = 1, EntryPosition = 2, StraightCourse = 4, StraightYaw = 8,
+    Correction = 16, Turn = 32, Slip = 64,
+    All = StraightPosition | EntryPosition | StraightCourse | StraightYaw | Correction | Turn | Slip
+}
+
 internal sealed class Corridor199(BendMap map,double yawLimit=.23)
 {
     internal const double CoreStart=12, CoreEnd=54, OuterLimit=1.80, EntryLimit=2.20;
@@ -25,7 +33,7 @@ internal sealed class Corridor199(BendMap map,double yawLimit=.23)
 
     internal string? Check(RiderView body,double outer)=>Inspect(body,outer)?.Reason;
 
-    internal Violation? Inspect(RiderView body,double outer)
+    internal Violation? Inspect(RiderView body,double outer,RacingRestriction206 omit=RacingRestriction206.None)
     {
         var s=body.TotalReferenceMeters;
         foreach(var straight in Windows)
@@ -33,17 +41,20 @@ internal sealed class Corridor199(BendMap map,double yawLimit=.23)
             double phase=s-straight.Start;
             if(phase>=CoreStart && phase<=CoreEnd)
             {
-                if(outer>OuterLimit) return Create("wide-position",OuterLimit);
+                if(outer>OuterLimit && !omit.HasFlag(RacingRestriction206.StraightPosition))
+                    return Create("wide-position",OuterLimit);
                 if(body.Speed>3)
                 {
                     double course=CourseError(body);
-                    bool courseExceeded=Math.Abs(course)>CourseLimit,yawExceeded=Math.Abs(body.AngularVelocity)>yawLimit;
+                    bool courseExceeded=Math.Abs(course)>CourseLimit && !omit.HasFlag(RacingRestriction206.StraightCourse);
+                    bool yawExceeded=Math.Abs(body.AngularVelocity)>yawLimit && !omit.HasFlag(RacingRestriction206.StraightYaw);
                     if(courseExceeded||yawExceeded)
                         return new("wide-direction",straight,straight.Start+CoreStart,straight.Start+CoreEnd,
                             course,CourseLimit,body.AngularVelocity,yawLimit,outer,OuterLimit,courseExceeded,yawExceeded);
                 }
             }
-            if(s>=straight.End-1 && s<=straight.End+.25 && outer>EntryLimit) return Create("wide-entry",EntryLimit);
+            if(s>=straight.End-1 && s<=straight.End+.25 && outer>EntryLimit && !omit.HasFlag(RacingRestriction206.EntryPosition))
+                return Create("wide-entry",EntryLimit);
 
             Violation Create(string reason,double outerLimit)=>new(reason,straight,straight.Start+CoreStart,
                 straight.Start+CoreEnd,CourseError(body),CourseLimit,body.AngularVelocity,yawLimit,outer,outerLimit,false,false);

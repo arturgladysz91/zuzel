@@ -48,7 +48,8 @@ internal static partial class Study191
     }
 
     private static Run209 Follow209(string fixture,Predictor198 model,Start197 initial,double goal,
-        Func<Start197,FreeRacingAction> law,bool capture=false,double horizon=double.PositiveInfinity)
+        Func<Start197,FreeRacingAction> law,bool capture=false,double horizon=double.PositiveInfinity,
+        Func<Start197,PostureCommand212>? posture=null)
     {
         ThrottleTrace209? command=null;
         double requestAt=initial.State.Time,requested=initial.Active.Drive,previousRequest=requested;
@@ -61,7 +62,7 @@ internal static partial class Study191
             previousRequest=requested;
             return result.Action;
         }
-        var cursor=model.BeginFeedback207(initial,capture?Observe:law,goal,.5,profile:capture);
+        var cursor=model.BeginFeedback207(initial,capture?Observe:law,goal,.5,profile:capture,posture:posture);
         List<Tick209>? rows=capture?[]:null;
         var passages=new List<Passage209>();
         var marks=(from visit in Enumerable.Range(0,6) let bend=Map199.At(visit/Map199.Count,visit%Map199.Count)

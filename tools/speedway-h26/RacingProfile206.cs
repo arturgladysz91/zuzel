@@ -14,16 +14,18 @@ internal sealed class RacingProfile206
 {
     private readonly Corridor199 corridor;
     private readonly Technique200 technique;
+    private readonly RacingRestriction206 omit;
 
-    internal RacingProfile206(BendMap map)
+    internal RacingProfile206(BendMap map,RacingRestriction206 omit=RacingRestriction206.None)
     {
+        this.omit=omit;
         corridor=new(map);
         technique=new(corridor.Windows);
     }
 
     internal Cursor Begin(Start197 start)
     {
-        if(start.TechniqueHistory is {} state) return new(corridor,technique.Restore(state));
+        if(start.TechniqueHistory is {} state) return new(corridor,technique.Restore(state),omit);
         if(Math.Abs(start.State.Time)>1e-8)
             throw new InvalidOperationException("Strict interior forecast requires the observed technique checkpoint.");
         var cursor=Begin();
@@ -31,7 +33,7 @@ internal sealed class RacingProfile206
         return cursor;
     }
 
-    internal Cursor Begin()=>new(corridor,technique.Begin());
+    internal Cursor Begin()=>new(corridor,technique.Begin(),omit);
 
     internal static string? Physical(RiderView body,double time,float dt,TwoContactForces forces,ClutchStep144 power)
     {
@@ -45,7 +47,7 @@ internal sealed class RacingProfile206
         return null;
     }
 
-    internal sealed class Cursor(Corridor199 corridor,Technique200.Cursor observer)
+    internal sealed class Cursor(Corridor199 corridor,Technique200.Cursor observer,RacingRestriction206 omit)
     {
         internal Technique200.Checkpoint Capture()=>observer.Capture();
 
@@ -70,14 +72,16 @@ internal sealed class RacingProfile206
 
         private RacingFailure206? InspectCorridor(RiderView body,double time,double outer,double swept,double clearance)
         {
-            if(corridor.Inspect(body,outer) is not {} violation) return null;
+            if(corridor.Inspect(body,outer,omit) is not {} violation) return null;
             string gate=violation.YawExceeded?"corridor-yaw":"course";
             return new(gate,violation.Reason,time,body.TotalReferenceMeters,body,outer,swept,clearance,Corridor:violation);
         }
 
         private RacingFailure206? InspectTechnique(RiderView body,double time,double outer,double swept,double clearance,bool finish)
         {
-            string? reason=observer.Observe(body,time)??(finish?observer.Finish():null);
+            bool turn=omit.HasFlag(RacingRestriction206.Turn), slip=omit.HasFlag(RacingRestriction206.Slip);
+            string? reason=observer.Observe(body,time,omit.HasFlag(RacingRestriction206.Correction),turn,slip)
+                ??(finish?observer.Finish(turn,slip):null);
             if(reason is null) return null;
             var history=observer.Capture();
             double course=Corridor199.CourseError(body);

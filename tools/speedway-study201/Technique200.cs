@@ -32,20 +32,22 @@ internal sealed class Technique200(Window199[] windows)
         }
         internal Checkpoint Capture()=>new(index,stableSince,correctionSince,turnSince,slipSince,
             settled,turned,slid,correctionCourse,correctionSign);
-        internal string? Finish()=>index>=windows.Length?null:
-            !turned||index<windows.Length-1?"technique-turn":!slid?"technique-slip":null;
+        internal string? Finish(bool omitTurn=false,bool omitSlip=false)=>index>=windows.Length?null:
+            !omitTurn && (!turned||index<windows.Length-1)?"technique-turn":
+            !omitSlip && (!slid||index<windows.Length-1)?"technique-slip":null;
 
         private double? stableSince, correctionSince, turnSince, slipSince;
         private bool settled, turned, slid;
         private double correctionCourse;
         private int correctionSign;
 
-        internal string? Observe(RiderView body,double time)
+        internal string? Observe(RiderView body,double time,bool omitCorrection=false,bool omitTurn=false,bool omitSlip=false)
         {
             double s=body.TotalReferenceMeters;
             while(index<windows.Length && s>windows[index].End+78)
             {
-                if(!turned || !slid)return !turned?"technique-turn":"technique-slip";
+                if(!turned && !omitTurn)return "technique-turn";
+                if(!slid && !omitSlip)return "technique-slip";
                 index++;
                 stableSince=correctionSince=turnSince=slipSince=null;
                 settled=turned=slid=false;
@@ -70,7 +72,8 @@ internal sealed class Technique200(Window199[] windows)
                         correctionSince=time;
                         correctionCourse=course;
                     }
-                    if(time-correctionSince>=RequiredSeconds && Math.Abs(BikeAngles.Wrap(course-correctionCourse))>CorrectionCourseLimit)
+                    if(!omitCorrection && time-correctionSince>=RequiredSeconds &&
+                        Math.Abs(BikeAngles.Wrap(course-correctionCourse))>CorrectionCourseLimit)
                         return "technique-correction";
                 }
                 else correctionSince=null;

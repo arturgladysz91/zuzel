@@ -62,13 +62,15 @@ internal sealed class Predictor198(TrackFrame frame,TrackStateSnapshot surface,W
         new(this,start,controls,from,goal,margin,profile,constraint,stepSeconds,motionConstraint);
 
     internal Cursor198 BeginFeedback207(Start197 start,Func<Start197,FreeRacingAction> feedback,double goal,
-        double margin,bool profile=false) => new(this,start,[],0,goal,margin,profile,null,.01,null,feedback);
+        double margin,bool profile=false,Func<Start197,PostureCommand212>? posture=null) =>
+        new(this,start,[],0,goal,margin,profile,null,.01,null,feedback,posture);
 
     internal sealed class Cursor198
     {
         private readonly Predictor198 model;
         private readonly FreeRacingAction[] controls;
         private readonly Func<Start197,FreeRacingAction>? feedback207;
+        private readonly Func<Start197,PostureCommand212>? posture212;
         private readonly Queue<FreeRacingCommand> pending;
         private readonly double goal,margin,originTime;
         private readonly bool profile;
@@ -80,6 +82,7 @@ internal sealed class Predictor198(TrackFrame frame,TrackStateSnapshot surface,W
         private RearWheelState wheel;
         private HandlingForecast state;
         private double riderHeightOffsetMeters;
+        private double riderForeAftMeters;
         private FreeRacingAction active;
         private double nextReview;
         private int index;
@@ -90,11 +93,13 @@ internal sealed class Predictor198(TrackFrame frame,TrackStateSnapshot surface,W
 
         internal Cursor198(Predictor198 model,Start197 start,FreeRacingAction[] controls,int from,
             double goal,double margin,bool profile,Func<RiderView,double,string?>? constraint,double stepSeconds,
-            Func<RiderView,double,double,string?>? motionConstraint,Func<Start197,FreeRacingAction>? feedback207=null)
+            Func<RiderView,double,double,string?>? motionConstraint,Func<Start197,FreeRacingAction>? feedback207=null,
+            Func<Start197,PostureCommand212>? posture212=null)
         {
             this.model=model;
             this.controls=controls;
             this.feedback207=feedback207;
+            this.posture212=posture212;
             this.goal=goal;
             this.margin=margin;
             this.profile=profile;
@@ -110,6 +115,7 @@ internal sealed class Predictor198(TrackFrame frame,TrackStateSnapshot surface,W
             state=start.State;
             LastLegalS207=state.Rider.TotalReferenceMeters;
             riderHeightOffsetMeters = start.RiderHeightOffsetMeters;
+            riderForeAftMeters = start.RiderForeAftMeters;
             shaft=new(LaunchParameters144.Default,state.Shaft,model.Handling.H26?.EngineLoss);
             wheel=ForecastFork148.Wheel(state.Wheel,model.Physics.RearWheel);
             var first=model.boundary.Clearance(state.Rider);
@@ -151,7 +157,8 @@ internal sealed class Predictor198(TrackFrame frame,TrackStateSnapshot surface,W
         {
             ApplyDue();
             return new(state with {Rider=state.Rider with {Drive=active.Drive}},active,pending.ToArray(),nextReview)
-                { RiderHeightOffsetMeters = riderHeightOffsetMeters,TechniqueHistory=strict?.Capture() };
+                { RiderHeightOffsetMeters = riderHeightOffsetMeters, RiderForeAftMeters = riderForeAftMeters,
+                    TechniqueHistory=strict?.Capture() };
         }
 
         internal void Advance(int stepBudget,double timeLimit=double.PositiveInfinity)
@@ -207,6 +214,13 @@ internal sealed class Predictor198(TrackFrame frame,TrackStateSnapshot surface,W
             double dt=limit-t;
             if(dt<=1e-9) {Outcome="clock";return false;}
             var before=state.Rider with {Drive=active.Drive};
+            PostureCommand212? desiredPosture=posture212?.Invoke(Checkpoint());
+            double foreAftAfter=desiredPosture is {} requested
+                ? Math.Clamp(requested.ForeAftMeters, riderForeAftMeters - PostureCommand212.RateMetersPerSecond * dt,
+                    riderForeAftMeters + PostureCommand212.RateMetersPerSecond * dt)
+                : riderForeAftMeters;
+            double chassisTranslation=Math.Max(Math.Abs(riderForeAftMeters),Math.Abs(foreAftAfter)) *
+                model.Spec.Profile.Gameplay.Physical.MassKg / model.Mass;
             if(profile) clockTicks+=Mark()-start;
 
             start=Mark();
@@ -215,7 +229,7 @@ internal sealed class Predictor198(TrackFrame frame,TrackStateSnapshot surface,W
             {
                 contact=HandlingContact.Prepare(model.Handling,model.grip,before,model.Spec,model.Physics,t,
                     model.Mass,model.Inertia,wheel,state.Steer,state.Lean,(float)dt,active.SteeringRadians,shaft,model.riderReaction,
-                    riderHeightOffsetMeters);
+                    riderHeightOffsetMeters, desiredPosture?.Crouch, (riderForeAftMeters + foreAftAfter) / 2);
             }
             catch (InvalidOperationException failure)
             {
@@ -266,12 +280,16 @@ internal sealed class Predictor198(TrackFrame frame,TrackStateSnapshot surface,W
             wheel=ForecastFork148.Wheel(power.Wheel.AfterOmega,wheel.Parameters);
             shaft.Commit();
             riderHeightOffsetMeters = contact.PostureH27?.RiderHeightOffsetAfterMeters ?? 0;
+            riderForeAftMeters = foreAftAfter;
             state=new(v,limit,wheel.AngularVelocityRadPerSecond,forces.SteeringAfter,contact.LeanAfter,shaft.Omega);
             if(profile) integrateTicks+=Mark()-start;
 
             start=Mark();
             var edge=model.boundary.Clearance(v);
             LastSweep=Clearance153.SweepLowerBound(before,v,dt,(gap.Inner,gap.Outer),edge);
+            // The stock silhouette is centered on the nominal COM. A translated chassis
+            // can be closer to either edge by at most the magnitude of the COM shift.
+            LastSweep-=chassisTranslation;
             gap=new(edge.Inner,edge.Outer);
             if(profile) geometryTicks+=Mark()-start;
 
@@ -325,6 +343,11 @@ internal sealed class Predictor198(TrackFrame frame,TrackStateSnapshot surface,W
     private float Mass=>mass;
     private float Inertia=>inertia;
     private readonly record struct ClearancePair(double Inner,double Outer);
+}
+
+internal readonly record struct PostureCommand212(double Crouch,double ForeAftMeters)
+{
+    internal const double RateMetersPerSecond=.50;
 }
 
 internal sealed record HeadingSample198(double Time,double S,float X,float Y,float Speed,float Heading,

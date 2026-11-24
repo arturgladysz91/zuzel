@@ -1,0 +1,61 @@
+{
+  "frozen211": {
+    "Finish": 48.94288044161751,
+    "LastLegalS": 956.5509777367096,
+    "Sweep": 0.5576869874011356,
+    "Steps": 4895
+  },
+  "traceChecks": {
+    "baseline.json.gz": {
+      "steps": 4895,
+      "maximumWeightResidualNewtons": 0,
+      "maximumMomentumResidualNewtonSecondsPerAxis": 0.00037180000009673364,
+      "maximumShaftEnergyResidualJoules": 7.759126674500294e-12
+    },
+    "straight-pulse-None.json.gz": {
+      "steps": 3094,
+      "maximumWeightResidualNewtons": 0,
+      "maximumMomentumResidualNewtonSecondsPerAxis": 0.0003360000016847664,
+      "maximumShaftEnergyResidualJoules": 4.1673331452329876e-12
+    },
+    "bend-pulse-None.json.gz": {
+      "steps": 3098,
+      "maximumWeightResidualNewtons": 0,
+      "maximumMomentumResidualNewtonSecondsPerAxis": 0.00033839999882356864,
+      "maximumShaftEnergyResidualJoules": 3.723243935382925e-12
+    },
+    "slide-4-16-None-more.json.gz": {
+      "steps": 145,
+      "maximumWeightResidualNewtons": 0,
+      "maximumMomentumResidualNewtonSecondsPerAxis": 0.0002579999974354763,
+      "maximumShaftEnergyResidualJoules": 2.312816604899126e-12
+    },
+    "slide-4-16-None-forward-posture.json.gz": {
+      "steps": 145,
+      "maximumWeightResidualNewtons": 0,
+      "maximumMomentumResidualNewtonSecondsPerAxis": 0.0002899999945995546,
+      "maximumShaftEnergyResidualJoules": 2.5579538487363607e-12
+    },
+    "slide-4-16-None-rearward-posture.json.gz": {
+      "steps": 44,
+      "maximumWeightResidualNewtons": 0,
+      "maximumMomentumResidualNewtonSecondsPerAxis": 0.0003289999900708551,
+      "maximumShaftEnergyResidualJoules": 2.0534685063466895e-12
+    }
+  },
+  "focusedTests": 9,
+  "sha256": {
+    "classifications.json.gz": "1753396b60c71d5cf826dc811d2a815f7c86c8076c9e0ca27f3e1fb18fe1c685",
+    "coarse-bend-pulse-search.json.gz": "219e8cde30eba7a3a0d3f46728a0dd6f6f46570143945ddc6a9a39125293be3a",
+    "forward-posture-witness.json.gz": "8714e9480988813123ea1abc56f787e8db4399972bc996185d0334de353842a5",
+    "matched-replays.json": "3fb70c5d8eefd7d7682f64cd5e29572f62f6bec450f7cd52318505173c5007e0",
+    "metrics.json.gz": "d0bd9e56089ce7cb9a8caac814af9ccd3acf7ce984bd7e65c051f4e411e2ec07",
+    "protocol.json": "97e6d99dd9983b1d51c96474208ccf29f8a6159e7ba361c731b64c75aa39e7b0",
+    "pulse-search.json.gz": "9e8da8fbff09b66a466a16564b850b50a3b0a58ea46c1e4ffbd4ec6b8d6373bf",
+    "rearward-posture-witness.json.gz": "039b8886c48694220791d26baeefc794be2d1b7c9cb58277d9c8536cd4c7342b",
+    "steering-search.json.gz": "de1a8d66612e619da3b16a3097ae5cef165e66e417b3d9529d3fe8e060e29331",
+    "strict-bend-pulses.json.gz": "cf769dc201e5127c3f077af64856f2c4db3bfb665f2b57b1aab1ec3cb556e86e",
+    "strict-slide-witness.json.gz": "4effd461be37b7a64470422345f3623008efa98b57ab3ef251f51e13d6cf7f6e",
+    "strict-straight-pulses.json.gz": "288fd7f79f2a2575c0148fa444a25a110b327d70a354f85d82297e1e42acf079"
+  }
+}

@@ -9,6 +9,8 @@ internal sealed record Start197(HandlingForecast State,FreeRacingAction Active,F
 {
     [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
     public double RiderHeightOffsetMeters { get; init; }
+    [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+    public double RiderForeAftMeters { get; init; }
     [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
     public Technique200.Checkpoint? TechniqueHistory {get;init;}
 }

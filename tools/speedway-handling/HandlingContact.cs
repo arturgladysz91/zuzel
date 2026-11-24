@@ -76,6 +76,7 @@ internal sealed class HandlingRig(HandlingSettings settings)
 
 internal static partial class HandlingContact
 {
+    internal const double MaximumRiderForeAftMeters = .18;
     private const double FrontSlipRatio = .115;
     private const double RearSlipRatio = .104;
     private const double LateralRelaxationSeconds = .03;
@@ -88,7 +89,7 @@ internal static partial class HandlingContact
     internal static HandlingStep Prepare(HandlingSettings settings, TrackSurfaceState surface, RiderView body, RiderSpec rider,
         WorldParameters parameters, double time, float mass, float inertia, RearWheelState wheel,
         float steering, double lean, float dt, float request, CrankClutch144 shaft, double release,
-        double riderHeightOffsetMeters = 0)
+        double riderHeightOffsetMeters = 0, double? crouchRequest = null, double riderForeAftMeters = 0)
     {
         if(settings.H26 is {} explicitH26){
             explicitH26.Validate();
@@ -100,10 +101,17 @@ internal static partial class HandlingContact
         if(settings.H26 is not {DynamicLoads:true} h26)
             return AtLoads(settings,surface,body,rider,parameters,time,mass,inertia,wheel,steering,lean,dt,request,shaft,release,null);
         h26.Validate();
-        var posture = settings.PostureH27?.Prepare(mass, rider.Profile.Gameplay.Physical.MassKg,
-            h26.ComHeightMeters, riderHeightOffsetMeters, body.Drive, dt);
+        double riderMass = rider.Profile.Gameplay.Physical.MassKg;
+        var posture = settings.PostureH27?.Prepare(mass, riderMass,
+            h26.ComHeightMeters, riderHeightOffsetMeters, crouchRequest ?? body.Drive, dt);
         double height = posture?.CombinedMidpointHeightMeters ?? h26.ComHeightMeters;
         var bike=parameters.TwoContactBike??TwoContactBikeParameters.Default;
+        if (riderForeAftMeters != 0)
+        {
+            if (!settings.DoubleContactSolve)
+                throw new ArgumentException("Fore-aft rider displacement requires the double-contact model.");
+            bike = AxlesAtForeAft(bike, riderMass / mass, riderForeAftMeters);
+        }
         var original=LoadBasedTyreGrip.Budget(mass,surface,bike,parameters.LoadBasedTyres);
         double normal=mass*LoadBasedTyreGrip.GravityMetersPerSecondSquared;
         var forward=new Vector2(MathF.Cos(body.Heading),MathF.Sin(body.Heading));
@@ -149,6 +157,18 @@ internal static partial class HandlingContact
         var final=accepted.Forces.TyreLoads!;
         return accepted with {LoadH26=new(time,ax,point.Residual,iterations,final.FrontNormalNewtons,final.RearNormalNewtons),
             PostureH27 = posture};
+    }
+
+    internal static TwoContactBikeParameters AxlesAtForeAft(TwoContactBikeParameters bike, double riderMassFraction,
+        double riderForeAftMeters)
+    {
+        if (!double.IsFinite(riderForeAftMeters) || Math.Abs(riderForeAftMeters) > MaximumRiderForeAftMeters ||
+            !double.IsFinite(riderMassFraction) || riderMassFraction is <= 0 or >= 1)
+            throw new ArgumentException("Finite, bounded fore-aft rider displacement required.");
+        // The contact solver uses the same translated arms for normal loads and yaw moments.
+        double shift = riderMassFraction * riderForeAftMeters;
+        return bike with { FrontAxleFromComMeters = (float)(bike.FrontAxleFromComMeters - shift),
+            RearAxleFromComMeters = (float)(bike.RearAxleFromComMeters + shift) };
     }
 
     internal static HandlingStep AtLoads(HandlingSettings settings, TrackSurfaceState surface, RiderView body, RiderSpec rider,

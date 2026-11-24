@@ -1,4 +1,5 @@
 using SharedWorldSpeedway;
+using SpeedwayHandling;
 using Xunit;
 
 namespace CoreSim.Tests;
@@ -6,6 +7,27 @@ namespace CoreSim.Tests;
 [Trait("Shard","core")]
 public sealed class H26PhysicsTests
 {
+    [Fact]
+    public void SagittalPostureTransfersStaticLoadThroughFixedWheelbase()
+    {
+        var neutral = TwoContactBikeParameters.Default;
+        const double massFraction = .46;
+        const double displacement = .15;
+        var front = HandlingContact.AxlesAtForeAft(neutral, massFraction, displacement);
+        var rear = HandlingContact.AxlesAtForeAft(neutral, massFraction, -displacement);
+        double wheelbase = (double)neutral.FrontAxleFromComMeters + neutral.RearAxleFromComMeters;
+        var forwardLoad = DynamicAxleLoad.AtAcceleration(0, front);
+        var neutralLoad = DynamicAxleLoad.AtAcceleration(0, neutral);
+        var rearLoad = DynamicAxleLoad.AtAcceleration(0, rear);
+        Assert.Equal(wheelbase, (double)front.FrontAxleFromComMeters + front.RearAxleFromComMeters, 6);
+        Assert.Equal(wheelbase, (double)rear.FrontAxleFromComMeters + rear.RearAxleFromComMeters, 6);
+        Assert.Equal(1, forwardLoad.FrontFraction + forwardLoad.RearFraction, 14);
+        Assert.Equal(1, rearLoad.FrontFraction + rearLoad.RearFraction, 14);
+        Assert.Equal(massFraction * displacement / wheelbase, forwardLoad.FrontFraction - neutralLoad.FrontFraction, 6);
+        Assert.Equal(massFraction * displacement / wheelbase, neutralLoad.FrontFraction - rearLoad.FrontFraction, 6);
+        Assert.Throws<ArgumentException>(() => HandlingContact.AxlesAtForeAft(neutral, massFraction, .19));
+    }
+
     [Fact]
     public void LoadTransferConservesWeightAndRejectsWheelLiftAsOutsideAssumptions()
     {
