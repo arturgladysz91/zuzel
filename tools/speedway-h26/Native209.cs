@@ -48,23 +48,28 @@ internal static partial class Study191
             return;
         }
 
+        RunNativeFeedback210(root,output,fixture,"H29-S",preflight,Law209(source,geometry,plan),
+            Law209(source,geometry,plan with {Recovery209=null}));
+    }
+
+    private static void RunNativeFeedback210(string root,string output,string fixture,string label,Run209[] preflight,
+        Func<Start197,FreeRacingAction> law,Func<Start197,FreeRacingAction> fallback)
+    {
         int fixtureIndex=Array.IndexOf(Official208,fixture);
         foreach(var previous in Official208.Take(fixtureIndex))
         {
-            string resultPath=Path.Combine(output,"H29-S-"+previous+".result.json");
+            string resultPath=Path.Combine(output,label+"-"+previous+".result.json");
             if(!File.Exists(resultPath)||JsonSerializer.Deserialize<NativeResult208>(File.ReadAllText(resultPath),Json) is not {Finished:true,Contacts:0})
                 throw new InvalidOperationException("Native series requires every previous fixture to finish without a technical failure.");
         }
 
         var (seed,gate,spec)=Fixture206(root,fixture);
-        var law=Law209(source,geometry,plan);
-        var fallback=Law209(source,geometry,plan with {Recovery209=null});
         var settings=Settings202("H28-F");
         var strict=new RacingProfile206(Map199);
         var online=strict.Begin(seed.Start);
         var model=Model208(spec,timing:true);
         var rig=new HandlingRig(settings);
-        string scenario="H29-S-"+fixture;
+        string scenario=label+"-"+fixture;
         RequireLedger203(scenario);
         // A reservation is made by the central adapter immediately before construction.
         using var world=new Cyclic172.TrafficWorld191(seed.Archive.Run.Options,Frame,[spec],[rig],Timing,[gate]);

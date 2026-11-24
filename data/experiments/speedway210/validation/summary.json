@@ -1,0 +1,71 @@
+{
+  "Base": "3f668b43a5ead239133a52f5c9a0149d24f5c1ad",
+  "Focused": {
+    "total": 53,
+    "passed": 53,
+    "failed": 0
+  },
+  "Core": {
+    "Base": {
+      "total": 2281,
+      "passed": 2060,
+      "failed": 221
+    },
+    "Current": {
+      "total": 2283,
+      "passed": 2062,
+      "failed": 221
+    },
+    "Added": [],
+    "Removed": []
+  },
+  "CoreGuardBlocks": 219,
+  "Python": {
+    "Base": {
+      "Total": 448,
+      "Pass": 404,
+      "Fail": 39,
+      "Error": 5
+    },
+    "Current": {
+      "Total": 448,
+      "Pass": 404,
+      "Fail": 39,
+      "Error": 5
+    },
+    "Added": [],
+    "Removed": []
+  },
+  "Viewer": {
+    "tests": 237,
+    "pass": 237,
+    "fail": 0
+  },
+  "CiPolicy": 7,
+  "PhysicalParity": {
+    "Total": 72949,
+    "PairExact": 72949,
+    "FrozenExact": 72949,
+    "Determinism": 2346,
+    "PhysicalDifferences": 0,
+    "ClassificationsChanged": 0,
+    "Synthetic": {
+      "Total": 16200,
+      "Exact": 16200,
+      "Accepted": 16200,
+      "First": null
+    }
+  },
+  "FrozenFiles": 482,
+  "Release": {
+    "Warnings": 0,
+    "Errors": 0,
+    "SDK": "10.0.101",
+    "Target": "net8.0",
+    "Restore": "local NuGet advisory lookup disabled for both arms"
+  },
+  "Hosted": {
+    "PushTrigger": "main",
+    "Actions": "Checked and recorded after upload"
+  }
+}
