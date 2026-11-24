@@ -127,7 +127,7 @@ Compared with #210, the peak increased from 107.867 to 108.747 km/h while the na
 
 Release solution and H26 builds treated warnings as errors. The focused suites passed 56/56. Full core parent/current passes were 2062/2283 and 2065/2286. The comparison records 219 world-budget exclusions and exact inherited or added failure identities. Python parent/current reported 404/39/5 and 404/39/5 passes/failures/errors. Viewer passed 237/237 and CI policy passed 7/7. All 72,949 archived contact comparisons, 16,200 synthetic state checks and 2,346 deterministic rechecks matched. The frozen source and historical evidence seal covers 576 files. [Local logs and source integrity](../../../data/experiments/speedway211/validation)
 
-Hosted CI is recorded after publication. Local test results describe the experiments above.
+GitHub returned **0 workflow runs, 0 check runs and 0 status contexts** for implementation commit `992a611389e3f689a1a5385f61bbda5f822b6fb7`. Its combined status is `pending`. The repository push workflow targets main. The validation results above were measured locally. [Dated GitHub API snapshot](../../../data/experiments/speedway211/validation/hosted-ci.json).
 
 ## Answers
 
