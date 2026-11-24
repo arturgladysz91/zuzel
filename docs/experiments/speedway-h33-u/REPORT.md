@@ -89,6 +89,8 @@ The Release build passed with warnings as errors. The 24 focused tests include e
 
 [Regression evidence](../../../data/experiments/speedway214/regression.json) · [Determinism evidence](../../../data/experiments/speedway214/determinism.json) · [World ledger](../../../data/experiments/speedway214/world-ledger.json)
 
+GitHub confirmed implementation commit `8ef26276795675dfa53d41017a80c343c402cc57` and reported zero workflow runs, check runs and status contexts on 2026-11-24. The combined status was `pending`. Push CI targets `main`. The tests and mechanics evidence above are local. [Hosted CI snapshot](../../../data/experiments/speedway214/hosted-ci.json)
+
 ## Reproduce and inspect
 
 ```powershell
