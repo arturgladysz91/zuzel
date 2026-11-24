@@ -1,0 +1,25 @@
+{
+  "SupportToMidpointCounts": {
+    "3->3": 10484,
+    "2->2": 1162
+  },
+  "MaxAbsolutePitchRadiansAndTrace": [
+    1.0655333877355586,
+    "launch-full-rearward-5000.json.gz"
+  ],
+  "MaxStepEnergyResidualJoules": 0.005213365036937034,
+  "MaxCumulativeEnergyResidualJoulesAndTrace": [
+    0.05929981239515669,
+    "bend-3-212-rearward-5000.json.gz"
+  ],
+  "EndpointOnlyAdversarial": {
+    "IntervalSeconds": [
+      0,
+      1
+    ],
+    "Gap": "(t-.37)^2-.003",
+    "BothEndpointsPositive": true,
+    "FirstClosing": 0.3152277442494834,
+    "FocusedTest": "InteriorGapCrossingIsFoundWithPositiveEndpointsAndGrazingIsIgnored"
+  }
+}
