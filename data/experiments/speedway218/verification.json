@@ -1,0 +1,174 @@
+{
+  "traces": {
+    "archive-77.json.gz": {
+      "steps": 3978,
+      "balanced": true,
+      "exactRequests": 160,
+      "requests": 160
+    },
+    "archive-91.json.gz": {
+      "steps": 1419,
+      "balanced": false,
+      "exactRequests": 56,
+      "requests": 56
+    },
+    "speed-100-frontier.json.gz": {
+      "steps": 1554,
+      "balanced": false,
+      "exactRequests": 62,
+      "requests": 62
+    },
+    "speed-70-proposal-24.json.gz": {
+      "steps": 4380,
+      "balanced": true,
+      "exactRequests": 176,
+      "requests": 176
+    },
+    "speed-70-proposal-4.json.gz": {
+      "steps": 4362,
+      "balanced": true,
+      "exactRequests": 175,
+      "requests": 175
+    },
+    "speed-70-proposal-6.json.gz": {
+      "steps": 4376,
+      "balanced": true,
+      "exactRequests": 176,
+      "requests": 176
+    },
+    "speed-80-frontier.json.gz": {
+      "steps": 4238,
+      "balanced": true,
+      "exactRequests": 169,
+      "requests": 169
+    },
+    "speed-90-frontier.json.gz": {
+      "steps": 1682,
+      "balanced": false,
+      "exactRequests": 68,
+      "requests": 68
+    },
+    "wide-90-frontier.json.gz": {
+      "steps": 1955,
+      "balanced": false,
+      "exactRequests": 75,
+      "requests": 75
+    },
+    "trim-90-frontier.json.gz": {
+      "steps": 2096,
+      "balanced": false,
+      "exactRequests": 81,
+      "requests": 81
+    },
+    "exit-80-proposal-16.json.gz": {
+      "steps": 4166,
+      "balanced": true,
+      "exactRequests": 167,
+      "requests": 167
+    },
+    "exit-80-proposal-6.json.gz": {
+      "steps": 4160,
+      "balanced": true,
+      "exactRequests": 167,
+      "requests": 167
+    },
+    "exit-80-proposal-8.json.gz": {
+      "steps": 4164,
+      "balanced": true,
+      "exactRequests": 167,
+      "requests": 167
+    },
+    "settle-80-proposal-16.json.gz": {
+      "steps": 4166,
+      "balanced": true,
+      "exactRequests": 167,
+      "requests": 167
+    },
+    "settle-80-proposal-6.json.gz": {
+      "steps": 4160,
+      "balanced": true,
+      "exactRequests": 167,
+      "requests": 167
+    },
+    "settle-80-proposal-8.json.gz": {
+      "steps": 4164,
+      "balanced": true,
+      "exactRequests": 167,
+      "requests": 167
+    },
+    "boot-70-deployed.json.gz": {
+      "steps": 6085,
+      "balanced": true,
+      "exactRequests": 194,
+      "requests": 194
+    },
+    "boot-70-parked.json.gz": {
+      "steps": 10261,
+      "balanced": true,
+      "exactRequests": 191,
+      "requests": 191
+    },
+    "boot-80-deployed.json.gz": {
+      "steps": 2954,
+      "balanced": false,
+      "exactRequests": 74,
+      "requests": 74
+    },
+    "boot-80-parked.json.gz": {
+      "steps": 10285,
+      "balanced": true,
+      "exactRequests": 183,
+      "requests": 183
+    }
+  },
+  "runouts": {
+    "speed-70-proposal-24-runout.json.gz": {
+      "steps": 477,
+      "stable": true
+    },
+    "speed-70-proposal-4-runout.json.gz": {
+      "steps": 478,
+      "stable": true
+    },
+    "speed-70-proposal-6-runout.json.gz": {
+      "steps": 476,
+      "stable": true
+    },
+    "exit-80-proposal-16-runout.json.gz": {
+      "steps": 477,
+      "stable": false
+    },
+    "exit-80-proposal-6-runout.json.gz": {
+      "steps": 477,
+      "stable": false
+    },
+    "exit-80-proposal-8-runout.json.gz": {
+      "steps": 477,
+      "stable": false
+    },
+    "settle-80-proposal-16-runout.json.gz": {
+      "steps": 873,
+      "stable": false
+    },
+    "settle-80-proposal-6-runout.json.gz": {
+      "steps": 873,
+      "stable": false
+    },
+    "settle-80-proposal-8-runout.json.gz": {
+      "steps": 873,
+      "stable": false
+    },
+    "terminal-80-runout.json.gz": {
+      "steps": 874,
+      "stable": true
+    }
+  },
+  "focusedTests": {
+    "total": 30,
+    "passed": 30,
+    "failed": 0
+  },
+  "detailedApproachSteps": 84605,
+  "matchedProbes": 100,
+  "probeSteps": 11496
+}

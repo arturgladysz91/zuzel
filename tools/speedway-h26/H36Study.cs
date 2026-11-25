@@ -26,11 +26,17 @@ internal static partial class Study191
         double PeakUtilization, double PeakNormalizedWheelspin, double MinFrontLoad, double MinRearLoad,
         double PeakMuscleForce, double PeakMusclePower, double PeakBootForce, double FullDriveInBend,
         double SlidingSeconds, double LongestSlide, double MaxEnergyError, int Steps, int ForecastSteps);
-    private sealed record Trace36(Corner36 Summary, State215 Seed, Activation215[] Commands, Step215[] Trace);
+    private sealed record Trace36(Corner36 Summary, State215 Seed, Activation215[] Commands, Step215[] Trace)
+    {
+        [System.Text.Json.Serialization.JsonIgnore]
+        internal double[]? ReferenceSamples { get; init; }
+    }
     private sealed record Equilibrium36(double Speed, double Radius, double Residual, double LateralAcceleration,
         double Roll, double TyreUtilization, double FrontRollingForce, double Steering, double FrontYawBand,
         double FrontRollBand, double Drift, double Rpm, double Drive, double Seconds);
     private sealed record Forecast36(State215 State, Forces215? Forces, int Steps, string? Error);
+    private readonly record struct RollReference36(double Curvature, double Roll, double PreviewMeters,
+        double SpeedTargetKph, float Drive, Vec215 Rider, double Boot);
     private sealed record Stage36(double RequestedKph, int Proposals, int Balanced, int Sliding, string Outcome,
         int ActualSteps, int ForecastSteps, Corner36? Best, Corner36? HighestEntry, Corner36? FullDriveWitness,
         double CpuSeconds, double WallSeconds);
@@ -364,14 +370,16 @@ internal static partial class Study191
 
     private static Trace36 RunH36(int id, string name, double requested, Tune36 tune, Geometry215 g, UnifiedModel215 model,
         State215 seed, BendVisit visit, RacingLineGeometry track, CornerCourse216 course, float equilibriumDrive,
-        Activation215[]? replay, bool exact, Activation215[]? prefix = null)
+        Activation215[]? replay, bool exact, Activation215[]? prefix = null, Preparation37? preparation = null,
+        double startingMeters = H36StartBeforeEntry)
     {
         var state = seed;
         Activation215[] queue = replay ?? prefix ?? [];
         double lastPrefixRequest = prefix is { Length: > 0 } ? prefix[^1].Requested : double.NegativeInfinity;
         var trace = new List<Step215>();
+        var referenceSamples = preparation is null ? null : new List<double>();
         var mark = course.Mark(state, g);
-        double s = visit.Entry - H36StartBeforeEntry;
+        double s = visit.Entry - startingMeters;
         var origin = Sample(state, mark, s);
         double next = state.Time, end = state.Time + 24;
         double gap = H36Footprint.Clearance(track, g, state, exact), min = gap, ground = H36Footprint.GroundMargin(g, state);
@@ -386,7 +394,7 @@ internal static partial class Study191
             {
                 if (replay is null && state.Time > lastPrefixRequest + 1e-10)
                 {
-                    var control = H36Control(state, g, model, mark, s, visit, tune, requested, equilibriumDrive, queue, course);
+                    var control = H36Control(state, g, model, mark, s, visit, tune, requested, equilibriumDrive, queue, course, preparation);
                     forecastSteps += control.Steps;
                     if (control.Command is not { } command) { stop = control.Stop!; break; }
                     queue = [.. queue, new(state.Time, state.Time + ReactionSeconds216, command)];
@@ -409,6 +417,7 @@ internal static partial class Study191
                 min = Math.Min(min, swept);
                 ground = Math.Min(ground, groundSweep);
                 trace.Add(row);
+                referenceSamples?.Add(refAfter);
                 double dt = Duration215(row);
                 var sample = Sample(row.After, tail, refAfter);
                 if (approach is null && refAfter >= visit.Entry - H36CheckpointBeforeEntry) approach = sample;
@@ -453,7 +462,7 @@ internal static partial class Study191
             Max(r => r.Forces.Rider.Norm + Math.Abs(r.Forces.LeftFoot?.MuscleForce ?? 0)),
             Max(r => r.Forces.LeftFoot?.AbsoluteMusclePower ?? Math.Abs(r.ActuatorPower)),
             Max(r => r.Forces.LeftFoot?.Contact.NormalForce ?? 0), wot, slip, bestSlip, peak, trace.Count, forecastSteps);
-        return new(summary, seed, queue, trace.ToArray());
+        return new(summary, seed, queue, trace.ToArray()) { ReferenceSamples = referenceSamples?.ToArray() };
 
         static Sample36 Sample(State215 position, RiderView body, double reference) =>
             new(position.Time, reference, body.Speed * 3.6, position.Pose.Roll, body.AngularVelocity, body.Road.OffsetMeters);
@@ -461,7 +470,8 @@ internal static partial class Study191
 
     private static (Command215? Command, int Steps, string? Stop) H36Control(State215 state, Geometry215 g,
         UnifiedModel215 model, RiderView mark, double reference, BendVisit bend, Tune36 tune, double requested,
-        float equilibriumDrive, Activation215[] pending, CornerCourse216 course)
+        float equilibriumDrive, Activation215[] pending, CornerCourse216 course, Preparation37? preparation = null,
+        Action<RollReference36>? observe = null, double rollReferenceScale = 1)
     {
         double activation = state.Time + ReactionSeconds216;
         var lead = Simulate(state, pending, activation);
@@ -470,32 +480,19 @@ internal static partial class Study191
         var x = lead.State;
         var body = course.Mark(x, g);
         double s = reference + Frame.UnwrapDelta(mark.Road.ReferenceMeters, body.Road.ReferenceMeters);
-        double speed = body.Speed;
-        double fraction = Math.Clamp((s - bend.Entry) / bend.Length, 0, 1);
-        double ahead = s + tune.Lookahead;
-        double fAhead = Math.Clamp((ahead - bend.Entry) / bend.Length, 0, 1);
-        double lane = tune.Lane - tune.Apex * Math.Sin(Math.PI * fAhead) * Math.Sin(Math.PI * fAhead);
-        var aim = Frame.At(ahead, lane).Position - body.Position;
-        double curvature = 2 * ((double)body.Velocity.X * aim.Y - (double)body.Velocity.Y * aim.X) /
-            Math.Max(1e-9, speed * aim.LengthSquared());
-        double desiredRoll = -Math.Atan(speed * speed * curvature / Gravity216);
+        var guide = preparation is null ? Reference36(body, s, bend, tune, requested, equilibriumDrive) :
+            Reference37(body, s, bend, tune, requested, equilibriumDrive, preparation);
+        if (rollReferenceScale != 1) guide = guide with { Roll = guide.Roll * rollReferenceScale };
+        if (preparation is { GroundReserveMeters: > 0 })
+            guide = guide with { Roll = ClearanceRoll37(g, x, guide.Roll, preparation.GroundReserveMeters) };
+        observe?.Invoke(guide);
         var m = g.Motion(x);
-        double rate = RollRate(x, m.BodyRate);
+        double rate = RollRate36(x, m.BodyRate);
         const double response = .065;
-        double demand = rate + response * (tune.RollGain * (desiredRoll - x.Pose.Roll) - tune.Damping * rate);
+        double demand = rate + response * (tune.RollGain * (guide.Roll - x.Pose.Roll) - tune.Damping * rate);
         double steerTravel = response * Steering217.SteeringRateRadiansPerSecond;
         double lo = Math.Max(-Steering217.MaximumSteeringRadians, x.Steer - steerTravel);
         double hi = Math.Min(Steering217.MaximumSteeringRadians, x.Steer + steerTravel);
-        double paceRamp = Math.Clamp((s - bend.Entry + 1) / 9, 0, 1);
-        double desiredSpeed = (requested - tune.ApexPaceDropKph * paceRamp +
-            tune.ApproachSpeedCorrectionKph * (1 - paceRamp)) / 3.6;
-        // The offline plan can request a slower pace in the bend.
-        // The drivetrain and contact forces determine actual speed.
-        float drive = (float)Math.Clamp(equilibriumDrive + .16 * (desiredSpeed - speed), 0, 1);
-        if (s < bend.Exit && bend.Exit - s <= tune.FullDriveExitMeters) drive = 1;
-        double phase = Math.Sin(Math.PI * fraction);
-        var args = new Vec215(tune.Fore * phase, tune.Side * phase, tune.Vertical * phase);
-        double q = tune.Boot * phase * phase;
         var low = Test(lo);
         var high = Test(hi);
         if (low.Error is not null && high.Error is not null)
@@ -505,13 +502,13 @@ internal static partial class Study191
         }
         if (low.Error is not null) return (Command(hi), count, null);
         if (high.Error is not null) return (Command(lo), count, null);
-        double left = RollRate(low.State, g.Motion(low.State).BodyRate);
-        double right = RollRate(high.State, g.Motion(high.State).BodyRate);
+        double left = RollRate36(low.State, g.Motion(low.State).BodyRate);
+        double right = RollRate36(high.State, g.Motion(high.State).BodyRate);
         double steer = Math.Abs(right - left) < 1e-7 ? x.Steer :
             lo + Math.Clamp((demand - left) / (right - left), 0, 1) * (hi - lo);
         return (Command(steer), count, null);
 
-        Command215 Command(double angle) => new(new((float)angle, drive), args) { LeftFoot = q };
+        Command215 Command(double angle) => new(new((float)angle, guide.Drive), guide.Rider) { LeftFoot = guide.Boot };
 
         Forecast36 Test(double angle)
         {
@@ -539,7 +536,35 @@ internal static partial class Study191
             catch (InvalidOperationException e) { return new(s, f, steps, e.Message); }
         }
 
-        static double RollRate(State215 s, Vec215 w) =>
-            w.X - Math.Tan(s.Pose.Pitch) * (Math.Sin(s.Pose.Roll) * w.Y + Math.Cos(s.Pose.Roll) * w.Z);
     }
+
+    private static RollReference36 Reference36(RiderView body, double reference, BendVisit bend, Tune36 tune,
+        double requested, float equilibriumDrive)
+    {
+        double fraction = Math.Clamp((reference - bend.Entry) / bend.Length, 0, 1);
+        double ahead = reference + tune.Lookahead;
+        double fAhead = Math.Clamp((ahead - bend.Entry) / bend.Length, 0, 1);
+        double lane = tune.Lane - tune.Apex * Math.Sin(Math.PI * fAhead) * Math.Sin(Math.PI * fAhead);
+        double curvature = PreviewCurvature36(body, ahead, lane);
+        double speed = body.Speed;
+        double desiredRoll = -Math.Atan(speed * speed * curvature / Gravity216);
+        double paceRamp = Math.Clamp((reference - bend.Entry + 1) / 9, 0, 1);
+        double desiredSpeed = (requested - tune.ApexPaceDropKph * paceRamp +
+            tune.ApproachSpeedCorrectionKph * (1 - paceRamp)) / 3.6;
+        float drive = (float)Math.Clamp(equilibriumDrive + .16 * (desiredSpeed - speed), 0, 1);
+        if (reference < bend.Exit && bend.Exit - reference <= tune.FullDriveExitMeters) drive = 1;
+        double phase = Math.Sin(Math.PI * fraction);
+        return new(curvature, desiredRoll, tune.Lookahead, desiredSpeed * 3.6, drive,
+            new(tune.Fore * phase, tune.Side * phase, tune.Vertical * phase), tune.Boot * phase * phase);
+    }
+
+    private static double PreviewCurvature36(RiderView body, double ahead, double lane)
+    {
+        var aim = Frame.At(ahead, lane).Position - body.Position;
+        return 2 * ((double)body.Velocity.X * aim.Y - (double)body.Velocity.Y * aim.X) /
+            Math.Max(1e-9, (double)body.Speed * aim.LengthSquared());
+    }
+
+    private static double RollRate36(State215 s, Vec215 w) =>
+        w.X - Math.Tan(s.Pose.Pitch) * (Math.Sin(s.Pose.Roll) * w.Y + Math.Cos(s.Pose.Roll) * w.Z);
 }

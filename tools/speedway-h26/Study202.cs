@@ -37,6 +37,7 @@ internal static partial class Study191
         researchRepository202=Directory.Exists(Path.Combine(workspace,"tools/speedway-h26"))?workspace:Path.Combine(workspace,"work/zuzel");
         Directory.CreateDirectory(output);
         switch(mode){
+            case "preparation-218":PreparationStudy218(workspace,output,args.Length > 3 ? args[3] : "all");break;
             case "h36-217":H36Study(workspace,output,args.Length > 3 ? args[3] : "all");break;
             case "controller-217":ControllerAudit217(workspace,output);break;
             case "support-216":Support216(workspace,output,args.Length > 3 ? args[3] : "all");break;
