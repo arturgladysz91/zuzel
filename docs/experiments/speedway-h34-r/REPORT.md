@@ -363,6 +363,16 @@ hashes match the base. Zero native worlds were created.
 [Determinism](../../../data/experiments/speedway215/determinism.json) ·
 [Regression](../../../data/experiments/speedway215/regression.json)
 
+## Publication
+
+GitHub confirmed the implementation commit
+`e7bc8eeed91ba46f7ccfa6ccce5ef7b79212e27a` on
+`experiment/speedway-215` on 2026-11-25. GitHub reported zero
+workflow runs, check runs or status contexts and a combined status
+of `pending`. The core push workflow targets `main`.
+The test results in this report come from the local Windows run.
+[Hosted CI receipt](../../../data/experiments/speedway215/hosted-ci.json)
+
 ~~~powershell
 $env:SPEEDWAY_BOX2D_NO_WORLDS='1'
 dotnet build tools/speedway-h26/H26.csproj -c Release -m:1
