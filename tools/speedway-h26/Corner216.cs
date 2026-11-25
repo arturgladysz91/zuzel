@@ -27,8 +27,7 @@ internal static partial class Study191
     private static void CornerStudy216(string root, string output, Fixture216 fixture)
     {
         var visit = Map199.At(2, 0);
-        var track = new RacingLineGeometry(Frame);
-        var template = RootFor210(root, "C").State.State.Rider;
+        var course = new CornerCourse216(new RacingLineGeometry(Frame), RootFor210(root, "C").State.State.Rider);
         const double horizon = 9;
         var attempts = new List<CornerOutcome216>();
         int id = 0;
@@ -140,108 +139,125 @@ internal static partial class Study191
         }
 
         CornerTrace216 Run(int attempt, string scenario, double? request, Geometry215 g, UnifiedModel215 model, State215 start,
-            double initialS, BendVisit target, CornerTuning216 tuning, double seconds)
-        {
-            var state = start;
-            var steps = new List<Step215>();
-            Activation215[] commands = [];
-            var mark = Mark(state, g);
-            double s = initialS, next = state.Time, here = Clearance(mark), minimum = here;
-            double? entrySpeed = null, exitSpeed = null, minimumBend = null;
-            bool entry = false, exit = false;
-            double end = start.Time + seconds;
-            double wot = 0, wotDecel = 0, inBend = 0, straight = 0, straightWot = 0, slide = 0, consecutive = 0, bestSlide = 0;
-            double maxYaw = 0, maxCurve = 0, maxLat = 0, footSeconds = 0, energy = 0, maxEnergy = 0;
-            string stop = "time budget";
-            while (state.Time < end - 1e-9 && steps.Count < 30_000)
-            {
-                if (here < .50) { stop = "swept boundary clearance"; break; }
-                if (state.Time >= next - 1e-10)
-                {
-                    var motion = g.Motion(state);
-                    var previous = steps.Count > 0 ? steps[^1].Forces : null;
-                    var act = Control216(g, state, motion, mark.Road, s, target, tuning, previous);
-                    commands = [.. commands, new(state.Time, state.Time + ReactionSeconds216, act)];
-                    next += ControlPeriod216;
-                }
-                try
-                {
-                    double interval = Math.Min(Math.Min(StepSeconds216, end - state.Time), next - state.Time);
-                    var row = model.Step(state, commands, interval);
-                    double dt = Duration215(row);
-                    if (dt <= 0) throw new InvalidOperationException("clock stalled");
-                    var after = Mark(row.After, g);
-                    var delta = Frame.UnwrapDelta(mark.Road.ReferenceMeters, after.Road.ReferenceMeters);
-                    double sAfter = s + delta;
-                    double endClearance = Clearance(after);
-                    double swept = Math.Min(here, endClearance) - (row.After.Center - row.Before.Center).Plane.Norm / 2;
-                    minimum = Math.Min(minimum, swept);
-                    steps.Add(row);
-                    var v = row.Midpoint.Momentum.Plane / g.Base.Mass;
-                    var accel = (row.After.Momentum - row.Before.Momentum).Plane / (dt * g.Base.Mass);
-                    double lateral = v.Cross(accel) / Math.Max(.25, v.Norm);
-                    maxLat = Math.Max(maxLat, Math.Abs(lateral));
-                    maxCurve = Math.Max(maxCurve, Math.Abs(lateral) / Math.Max(.0625, v.Dot(v)));
-                    maxYaw = Math.Max(maxYaw, Math.Abs(after.AngularVelocity));
-                    energy += row.EnergyResidual;
-                    maxEnergy = Math.Max(maxEnergy, Math.Abs(energy));
-                    if (row.Forces.LeftFoot?.Contact.NormalForce > 0) footSeconds += dt;
-                    if (s < target.Entry && sAfter >= target.Entry) { entry = true; entrySpeed = 3.6 * after.Speed; }
-                    if (s < target.Exit && sAfter >= target.Exit) { exit = true; exitSpeed = 3.6 * after.Speed; }
-                    if ((s + sAfter) / 2 >= target.Entry && (s + sAfter) / 2 < target.Exit)
-                    {
-                        inBend += dt;
-                        minimumBend = Math.Min(minimumBend ?? double.PositiveInfinity, after.Speed * 3.6);
-                        if (row.Before.Command.Bike.Drive >= .9999)
-                        {
-                            wot += dt;
-                            if (accel.Dot(v) < 0) wotDecel += dt;
-                        }
-                        if (Math.Abs(after.SlideRadians) >= Math.PI / 30 && row.Forces.Rear.Normal > 20)
-                        {
-                            slide += dt;
-                            consecutive += dt;
-                            bestSlide = Math.Max(bestSlide, consecutive);
-                        }
-                        else consecutive = 0;
-                    }
-                    else { straight += dt; if (row.Before.Command.Bike.Drive >= .9999) straightWot += dt; }
-                    state = row.After;
-                    mark = after;
-                    s = sAfter;
-                    here = endClearance;
-                    if (swept < .50) { stop = "swept boundary clearance"; break; }
-                    if (Math.Abs(after.SlideRadians) > Math.PI / 4) { stop = "sideslip envelope"; break; }
-                    if (Vector2.Dot(after.Road.Tangent, after.Velocity) < .15) { stop = "lost forward progress"; break; }
-                    if (s >= target.Exit + ExitRunout216)
-                    {
-                        stop = !entry ? "exit diagnostic only" : bestSlide < .12 ? "no sustained slide" :
-                            Math.Abs(state.Pose.Roll) > .22 || Math.Abs(after.AngularVelocity) > .28 ?
-                                "exit balance gate" : "completed corner";
-                        break;
-                    }
-                }
-                catch (InvalidOperationException error) { stop = error.Message; break; }
-            }
-            if (steps.Count >= 30_000) stop = "step budget";
-            double Max(Func<Step215, double> f) => steps.Select(f).DefaultIfEmpty(0).Max();
-            double Min(Func<Step215, double> f) => steps.Select(f).DefaultIfEmpty(0).Min();
-            double peakSpeed = Math.Max(3.6 * start.Momentum.Plane.Norm / g.Base.Mass,
-                Max(row => 3.6 * row.After.Momentum.Plane.Norm / g.Base.Mass));
-            var summary = new CornerOutcome216(attempt, scenario, request, tuning, start, state, stop, entry, exit,
-                stop == "completed corner", initialS, s, target.Entry, target.Exit, state.Time - start.Time,
-                entrySpeed, minimumBend, exitSpeed, peakSpeed,
-                inBend, wot, wotDecel, straight, straightWot, slide, bestSlide, minimum,
-                Max(r => Math.Abs(r.Forces.RearSlip)), Max(r => Math.Abs(r.After.Pose.Roll)), state.Pose.Roll, maxYaw,
-                maxCurve, maxLat, Max(r => r.Forces.Rider.Norm + Math.Abs(r.Forces.LeftFoot?.MuscleForce ?? 0)),
-                Max(r => r.Forces.LeftFoot?.AbsoluteMusclePower ?? Math.Abs(r.ActuatorPower)),
-                Min(r => r.Forces.Front.Normal), Min(r => r.Forces.Rear.Normal),
-                Max(r => r.Forces.LeftFoot?.Contact.NormalForce ?? 0), footSeconds,
-                steps.Sum(r => (r.Forces.PassiveSupport?.Loss ?? 0) * Duration215(r)), energy, maxEnergy, steps.Count);
-            return new(summary, steps.ToArray());
-        }
+            double initialS, BendVisit target, CornerTuning216 tuning, double seconds) =>
+            RunCorner216(attempt, scenario, request, g, model, start, initialS, target, tuning, seconds, course);
 
-        RiderView Mark(State215 state, Geometry215 g)
+        static bool Rank(CornerOutcome216 candidate, CornerOutcome216 best) =>
+            candidate.QualifiedCorner != best.QualifiedCorner ? candidate.QualifiedCorner :
+            candidate.QualifiedCorner ? candidate.Seconds < best.Seconds : candidate.FinalReference > best.FinalReference;
+    }
+
+    private static CornerTrace216 RunCorner216(int attempt, string scenario, double? request, Geometry215 g, UnifiedModel215 model, State215 start,
+        double initialS, BendVisit target, CornerTuning216 tuning, double seconds, CornerCourse216 course,
+        Func<CornerObservation217, Command215?>? controller = null, Activation215[]? pending = null,
+        Forces215? lastObserved = null)
+    {
+        var state = start;
+        var steps = new List<Step215>();
+        Activation215[] commands = pending ?? [];
+        var mark = course.Mark(state, g);
+        double s = initialS, next = state.Time, here = course.Clearance(mark), minimum = here;
+        double? entrySpeed = null, exitSpeed = null, minimumBend = null;
+        bool entry = false, exit = false;
+        double end = start.Time + seconds;
+        double wot = 0, wotDecel = 0, inBend = 0, straight = 0, straightWot = 0, slide = 0, consecutive = 0, bestSlide = 0;
+        double maxYaw = 0, maxCurve = 0, maxLat = 0, footSeconds = 0, energy = 0, maxEnergy = 0;
+        string stop = "time budget";
+        while (state.Time < end - 1e-9 && steps.Count < 30_000)
+        {
+            if (here < CornerCourse216.RequiredClearance) { stop = "swept boundary clearance"; break; }
+            if (state.Time >= next - 1e-10)
+            {
+                var motion = g.Motion(state);
+                var previous = steps.Count > 0 ? steps[^1].Forces : lastObserved;
+                Command215? act = controller is null
+                    ? Control216(g, state, motion, mark.Road, s, target, tuning, previous)
+                    : controller(new(g, state, mark, s, target, tuning, previous, commands, here));
+                if (act is not { } command) { stop = "controller abstained"; break; }
+                commands = [.. commands, new(state.Time, state.Time + ReactionSeconds216, command)];
+                next += ControlPeriod216;
+            }
+            try
+            {
+                double interval = Math.Min(Math.Min(StepSeconds216, end - state.Time), next - state.Time);
+                var row = model.Step(state, commands, interval);
+                double dt = Duration215(row);
+                if (dt <= 0) throw new InvalidOperationException("clock stalled");
+                var after = course.Mark(row.After, g);
+                var delta = Frame.UnwrapDelta(mark.Road.ReferenceMeters, after.Road.ReferenceMeters);
+                double sAfter = s + delta;
+                double endClearance = course.Clearance(after);
+                double swept = CornerCourse216.Swept(here, endClearance, row);
+                minimum = Math.Min(minimum, swept);
+                steps.Add(row);
+                var v = row.Midpoint.Momentum.Plane / g.Base.Mass;
+                var accel = (row.After.Momentum - row.Before.Momentum).Plane / (dt * g.Base.Mass);
+                double lateral = v.Cross(accel) / Math.Max(.25, v.Norm);
+                maxLat = Math.Max(maxLat, Math.Abs(lateral));
+                maxCurve = Math.Max(maxCurve, Math.Abs(lateral) / Math.Max(.0625, v.Dot(v)));
+                maxYaw = Math.Max(maxYaw, Math.Abs(after.AngularVelocity));
+                energy += row.EnergyResidual;
+                maxEnergy = Math.Max(maxEnergy, Math.Abs(energy));
+                if (row.Forces.LeftFoot?.Contact.NormalForce > 0) footSeconds += dt;
+                if (s < target.Entry && sAfter >= target.Entry) { entry = true; entrySpeed = 3.6 * after.Speed; }
+                if (s < target.Exit && sAfter >= target.Exit) { exit = true; exitSpeed = 3.6 * after.Speed; }
+                if ((s + sAfter) / 2 >= target.Entry && (s + sAfter) / 2 < target.Exit)
+                {
+                    inBend += dt;
+                    minimumBend = Math.Min(minimumBend ?? double.PositiveInfinity, after.Speed * 3.6);
+                    if (row.Before.Command.Bike.Drive >= .9999)
+                    {
+                        wot += dt;
+                        if (accel.Dot(v) < 0) wotDecel += dt;
+                    }
+                    if (Math.Abs(after.SlideRadians) >= Math.PI / 30 && row.Forces.Rear.Normal > 20)
+                    {
+                        slide += dt;
+                        consecutive += dt;
+                        bestSlide = Math.Max(bestSlide, consecutive);
+                    }
+                    else consecutive = 0;
+                }
+                else { straight += dt; if (row.Before.Command.Bike.Drive >= .9999) straightWot += dt; }
+                state = row.After;
+                mark = after;
+                s = sAfter;
+                here = endClearance;
+                if (CornerCourse216.Violation(after, swept) is { } violation) { stop = violation; break; }
+                if (s >= target.Exit + ExitRunout216)
+                {
+                    stop = !entry ? "exit diagnostic only" : bestSlide < .12 ? "no sustained slide" :
+                        Math.Abs(state.Pose.Roll) > .22 || Math.Abs(after.AngularVelocity) > .28 ?
+                            "exit balance gate" : "completed corner";
+                    break;
+                }
+            }
+            catch (InvalidOperationException error) { stop = error.Message; break; }
+        }
+        if (steps.Count >= 30_000) stop = "step budget";
+        double Max(Func<Step215, double> f) => steps.Select(f).DefaultIfEmpty(0).Max();
+        double Min(Func<Step215, double> f) => steps.Select(f).DefaultIfEmpty(0).Min();
+        double peakSpeed = Math.Max(3.6 * start.Momentum.Plane.Norm / g.Base.Mass,
+            Max(row => 3.6 * row.After.Momentum.Plane.Norm / g.Base.Mass));
+        var summary = new CornerOutcome216(attempt, scenario, request, tuning, start, state, stop, entry, exit,
+            stop == "completed corner", initialS, s, target.Entry, target.Exit, state.Time - start.Time,
+            entrySpeed, minimumBend, exitSpeed, peakSpeed,
+            inBend, wot, wotDecel, straight, straightWot, slide, bestSlide, minimum,
+            Max(r => Math.Abs(r.Forces.RearSlip)), Max(r => Math.Abs(r.After.Pose.Roll)), state.Pose.Roll, maxYaw,
+            maxCurve, maxLat, Max(r => r.Forces.Rider.Norm + Math.Abs(r.Forces.LeftFoot?.MuscleForce ?? 0)),
+            Max(r => r.Forces.LeftFoot?.AbsoluteMusclePower ?? Math.Abs(r.ActuatorPower)),
+            Min(r => r.Forces.Front.Normal), Min(r => r.Forces.Rear.Normal),
+            Max(r => r.Forces.LeftFoot?.Contact.NormalForce ?? 0), footSeconds,
+            steps.Sum(r => (r.Forces.PassiveSupport?.Loss ?? 0) * Duration215(r)), energy, maxEnergy, steps.Count);
+        return new(summary, steps.ToArray());
+    }
+
+
+    private sealed class CornerCourse216(RacingLineGeometry track, RiderView template)
+    {
+        internal const double RequiredClearance = .50;
+
+        internal RiderView Mark(State215 state, Geometry215 g)
         {
             var point = new Vector2((float)state.Center.X, (float)state.Center.Y);
             var heading = state.Pose.Apply(Vec215.Forward);
@@ -254,55 +270,22 @@ internal static partial class Study191
             };
         }
 
-        double Clearance(RiderView s)
+        internal double Clearance(RiderView s)
         {
             var (inner, outer) = track.Clearance(s);
             return Math.Min(inner, outer) - FootprintRadius216;
         }
 
-        static bool Rank(CornerOutcome216 candidate, CornerOutcome216 best) =>
-            candidate.QualifiedCorner != best.QualifiedCorner ? candidate.QualifiedCorner :
-            candidate.QualifiedCorner ? candidate.Seconds < best.Seconds : candidate.FinalReference > best.FinalReference;
+        internal static double Swept(double before, double after, Step215 row) =>
+            Math.Min(before, after) - (row.After.Center - row.Before.Center).Plane.Norm / 2;
+
+        internal static string? Violation(RiderView body, double swept) =>
+            swept < RequiredClearance ? "swept boundary clearance" :
+            Math.Abs(body.SlideRadians) > Math.PI / 4 ? "sideslip envelope" :
+            Vector2.Dot(body.Road.Tangent, body.Velocity) < .15 ? "lost forward progress" : null;
     }
 
-    private static Command215 Control216(Geometry215 geometry, State215 s, Kinematics215 motion, RoadPoint road,
-        double reference, BendVisit bend, CornerTuning216 tuning, Forces215? observed)
-    {
-        var speed = s.Momentum.Plane.Norm / geometry.Base.Mass;
-        var heading = Math.Atan2(s.Momentum.Y, s.Momentum.X);
-        double phase = Math.Clamp((reference - bend.Entry) / bend.Length, 0, 1);
-        double line = tuning.Lane - 1.60 * Math.Sin(phase * Math.PI);
-        double radius = Frame.RoadAt(Math.Clamp(reference + 5, bend.Entry + .01, bend.Exit - .01), line).RadiusMeters;
-        double turnWeight = Math.Clamp((reference - bend.Entry + 8) / 13, 0, 1) *
-            Math.Clamp((bend.Exit + 1 - reference) / 9, 0, 1);
-        double course = road.Heading + Math.Atan2(road.OffsetMeters - line, 11);
-        double correction = Math.Clamp(BikeAngles.Wrap(course - heading), -.34, .34);
-        double centripetal = turnWeight * speed * speed / Math.Max(15, radius);
-        double targetLean = -Math.Atan(Math.Clamp(centripetal + 1.8 * speed * correction, -10.5, 11.8) / Gravity216);
-        double roll = s.Pose.Roll;
-        double desiredRate = tuning.RollGain * (targetLean - roll - ReactionSeconds216 * motion.BodyRate.X) -
-            5 * motion.BodyRate.X;
-        var unsteered = geometry.Contact(s with { Steer = 0 }, motion, true, 0);
-        double aligned = Math.Atan2(unsteered.Velocity.Dot(unsteered.Side), Math.Max(1, unsteered.Velocity.Dot(unsteered.Forward)));
-        double steer = aligned - .036 * roll + .034 * desiredRate;
-        if (observed is { Front.Capacity: > 40 } last)
-        {
-            var front = last.Front;
-            var world = front.Patch.Arm.Cross(Vec215.Up * front.Normal) +
-                last.Rear.Patch.Arm.Cross(last.Rear.Force) +
-                (last.LeftFoot is { } boot ? boot.Arm.Cross(boot.Force) : default);
-            double existing = s.Pose.Body(world).X;
-            double lever = s.Pose.Body(unsteered.Arm.Cross(unsteered.Side)).X;
-            double gyro = motion.BodyRate.Cross(s.Pose.Body(s.Angular)).X;
-            double moment = 20 * desiredRate + gyro;
-            double utilization = Math.Clamp((moment - existing) / (Math.Max(.15, lever) * front.Capacity), -.90, .90);
-            steer = aligned + Math.Atan(.115 * utilization / Math.Sqrt(1 - utilization * utilization));
-        }
-        float drive = tuning.BendDrive;
-        if (reference < bend.Entry + 2 && centripetal > 10.5) drive = 0;
-        if (reference > bend.Exit - 8) drive = (float)Math.Min(1, drive + .35);
-        var move = new Vec215(.085 - .085 * phase, -.10 * targetLean, -.025 * turnWeight);
-        double foot = tuning.Leg ? Math.Clamp((Math.Abs(targetLean) - .24) * 1.23, 0, .75) : 0;
-        return new Command215(new((float)Math.Clamp(steer, -.37, .37), drive), move) { LeftFoot = foot };
-    }
+    private static Command215 Control216(Geometry215 geometry, State215 state, Kinematics215 motion, RoadPoint road,
+        double reference, BendVisit bend, CornerTuning216 tuning, Forces215? observed) =>
+        LegacyControl217(geometry, state, motion, road, reference, bend, tuning, observed).Command;
 }

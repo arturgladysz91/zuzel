@@ -55,13 +55,18 @@ internal enum Axes215 { Fixed = 0, Longitudinal = 1, Lateral = 2, Vertical = 4, 
 
 internal readonly record struct Command215(FreeRacingAction Bike, Vec215 Target)
 {
+    internal const double MaximumForwardTarget = .22;
+    internal const double MaximumLateralTarget = .20;
+    internal const double MaximumVerticalTarget = .18;
+
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public double LeftFoot { get; init; }
 
     internal void Validate()
     {
         if (!float.IsFinite(Bike.SteeringRadians) || !float.IsFinite(Bike.Drive) || Bike.Drive is < 0 or > 1 ||
-            !double.IsFinite(Target.Norm) || Math.Abs(Target.X) > .22 || Math.Abs(Target.Y) > .20 || Math.Abs(Target.Z) > .18 ||
+            !double.IsFinite(Target.Norm) || Math.Abs(Target.X) > MaximumForwardTarget ||
+            Math.Abs(Target.Y) > MaximumLateralTarget || Math.Abs(Target.Z) > MaximumVerticalTarget ||
             !double.IsFinite(LeftFoot) || LeftFoot is < 0 or > 1)
             throw new ArgumentOutOfRangeException(nameof(Command215));
     }
