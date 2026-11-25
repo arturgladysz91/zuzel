@@ -21,6 +21,10 @@ internal sealed class CurveBoundaryAudit
     public (double Inner,double Outer) Clearance(RiderView v)
     {
         var bike=BikeFootprint.Create(new(v.Position.X,v.Position.Y),v.Heading,SpeedwayBikeDimensions.Reference);
+        return Clearance([bike.Chassis, bike.Handlebar]);
+    }
+    internal (double Inner, double Outer) Clearance(ReadOnlySpan<MechanicalCapsule> capsules)
+    {
         double inside=double.PositiveInfinity,outside=double.PositiveInfinity;
         void Capsule(MechanicalCapsule c){
             var margin=c.RadiusMeters+ChordAllowanceMeters+RacingLineGeometry.NumericalAllowanceMeters;
@@ -30,7 +34,8 @@ internal sealed class CurveBoundaryAudit
                 if(road.OffsetMeters>frame.PhysicalWidthMeters(road)-1)outside=Math.Min(outside,frame.PhysicalWidthMeters(road)-1-road.OffsetMeters-margin);}
             Sign(c.Start);Sign(c.End);
         }
-        Capsule(bike.Chassis);Capsule(bike.Handlebar);return(inside,outside);
+        foreach (var capsule in capsules) Capsule(capsule);
+        return(inside,outside);
     }
     internal double OuterPointDistance(MeterPoint p)
         =>outer.Distance(p,p)-ChordAllowanceMeters-RacingLineGeometry.NumericalAllowanceMeters;

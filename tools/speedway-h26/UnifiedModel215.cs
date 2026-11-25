@@ -242,7 +242,7 @@ internal sealed class UnifiedModel215(Geometry215 geometry, RiderSpec rider, Han
         if (!double.IsFinite(s.Center.Norm + s.Angular.Norm + m.BodyRate.Norm + m.RiderRate.Norm) ||
             Math.Abs(s.Pose.Roll) > Geometry215.MaxRoll || Math.Abs(s.Pose.Pitch) > Geometry215.MaxPitch)
             throw new InvalidOperationException("orientation envelope");
-        if (!geometry.ChassisClear(s)) throw new InvalidOperationException("chassis-ground envelope");
+        if (!geometry.ChassisClear(s)) throw new ChassisEnvelope36(s);
         if (Math.Abs(offset.X) > .36 || Math.Abs(offset.Y) > .34 || Math.Abs(offset.Z) > .30)
             throw new InvalidOperationException("rider travel envelope");
         if (geometry.Contact(s, m, true, 0).Gap < -Geometry215.MaxCompression ||

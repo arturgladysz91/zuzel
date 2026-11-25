@@ -85,7 +85,7 @@ internal readonly record struct Kinematics215(Vec215 BodyRate, Vec215 WorldRate,
 internal readonly record struct Patch215(Vec215 Arm, Vec215 Radial, Vec215 Axle, Vec215 Forward, Vec215 Side,
     Vec215 Velocity, Vec215 SteerJacobian, double Gap, double NormalSpeed);
 
-internal sealed class Geometry215(Geometry214 inherited, Axes215 axes, Leg216? leg = null)
+internal sealed class Geometry215(Geometry214 inherited, Axes215 axes, Leg216? leg = null, SpatialBike36? spatial = null)
 {
     internal const double RollInertia = 12;
     internal const double MaxRoll = Math.PI / 3;
@@ -205,6 +205,7 @@ internal sealed class Geometry215(Geometry214 inherited, Axes215 axes, Leg216? l
 
     internal bool ChassisClear(State215 s)
     {
+        if (spatial is not null) return spatial.GroundMargin(this, s) > 0;
         // Four frame-envelope witnesses with dimensions in metres. Rubber contact is handled separately.
         double Height(Vec215 x) => s.Center.Z + s.Pose.Apply(x - s.Rider * inherited.RiderFraction).Z;
         return Height(new(.46, .19, -.21)) > 0 && Height(new(.46, -.19, -.21)) > 0 &&

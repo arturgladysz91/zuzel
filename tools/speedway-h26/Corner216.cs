@@ -150,7 +150,7 @@ internal static partial class Study191
     private static CornerTrace216 RunCorner216(int attempt, string scenario, double? request, Geometry215 g, UnifiedModel215 model, State215 start,
         double initialS, BendVisit target, CornerTuning216 tuning, double seconds, CornerCourse216 course,
         Func<CornerObservation217, Command215?>? controller = null, Activation215[]? pending = null,
-        Forces215? lastObserved = null)
+        Forces215? lastObserved = null, Action<ChassisEnvelope36>? rejectedChassis = null)
     {
         var state = start;
         var steps = new List<Step215>();
@@ -232,7 +232,12 @@ internal static partial class Study191
                     break;
                 }
             }
-            catch (InvalidOperationException error) { stop = error.Message; break; }
+            catch (InvalidOperationException error)
+            {
+                if (error is ChassisEnvelope36 chassis) rejectedChassis?.Invoke(chassis);
+                stop = error.Message;
+                break;
+            }
         }
         if (steps.Count >= 30_000) stop = "step budget";
         double Max(Func<Step215, double> f) => steps.Select(f).DefaultIfEmpty(0).Max();

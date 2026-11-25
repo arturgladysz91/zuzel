@@ -56,6 +56,37 @@ public sealed class RacingLineGeometry
         }
         return(inside,outside);
     }
+
+    /// <summary>Clearance of supplied horizontal capsule projections against this straight/arc course.</summary>
+    public double ProjectedClearance(ReadOnlySpan<MechanicalCapsule> capsules)
+    {
+        if (curve is not null)
+        {
+            var (inside, outside) = curve.Clearance(capsules);
+            return Math.Min(inside, outside);
+        }
+        double clearance = double.PositiveInfinity;
+        foreach (var capsule in capsules)
+        {
+            double inside = Against(capsule, inner);
+            double outside = Against(capsule, outer);
+            var a = frame.Project(new((float)capsule.Start.X, (float)capsule.Start.Y));
+            var b = frame.Project(new((float)capsule.End.X, (float)capsule.End.Y));
+            if (Math.Min(a.OffsetMeters, b.OffsetMeters) < -1) inside = -inside;
+            if (a.OffsetMeters > frame.PhysicalWidthMeters(a) - 1 || b.OffsetMeters > frame.PhysicalWidthMeters(b) - 1)
+                outside = -outside;
+            clearance = Math.Min(clearance, Math.Min(inside, outside) - capsule.RadiusMeters);
+        }
+        return clearance - NumericalAllowanceMeters;
+
+        static double Against(MechanicalCapsule capsule, List<Edge> edges)
+        {
+            double minimum = double.PositiveInfinity;
+            foreach (var edge in edges)
+                minimum = Math.Min(minimum, Distance(capsule.Start, capsule.End, edge));
+            return minimum;
+        }
+    }
     // Query used only while constructing the optional #102 target table. Native arcs
     // include width-step connectors; shaped tracks use the same bounded edge BVH.
     internal double OuterPointDistance(MeterPoint p)
