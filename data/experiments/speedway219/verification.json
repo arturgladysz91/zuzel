@@ -1,0 +1,146 @@
+{
+  "archives": 6,
+  "baselineSteps": 45374,
+  "forceCells": 15960,
+  "syntheticStarts": 54,
+  "postureTrials": 64,
+  "matchedRequests": 60,
+  "proposalCommandHistories": 120,
+  "extendedStraightPasses": 5,
+  "parent": {
+    "total": 50,
+    "passed": 40,
+    "failed": 10
+  },
+  "current": {
+    "total": 50,
+    "passed": 40,
+    "failed": 10
+  },
+  "guardedNativeBlocked": [
+    "CoreSim.Tests.RearWheelDynamicsTests.AShortenedCurvatureIntervalCannotAdvanceTheWheelByTheNominalTick",
+    "CoreSim.Tests.RearWheelDynamicsTests.ContactAndCrashNeverResetTheIndependentWheelOrAddASecondIntegration",
+    "CoreSim.Tests.RearWheelDynamicsTests.LaunchBuildsActualSpinAndTheChassisReceivesOnlyTheContactForce",
+    "CoreSim.Tests.RearWheelDynamicsTests.OneAcceptedClockAndZeroDriveEnergyRemainStable(step: 0,0050000000000000001)",
+    "CoreSim.Tests.RearWheelDynamicsTests.OneAcceptedClockAndZeroDriveEnergyRemainStable(step: 0,01)",
+    "CoreSim.Tests.RearWheelDynamicsTests.OneAcceptedClockAndZeroDriveEnergyRemainStable(step: 0,02)",
+    "CoreSim.Tests.RearWheelDynamicsTests.RearWheelForcesAllocateNothingAndTheirGuardAccountsForWheelEnergy",
+    "CoreSim.Tests.RearWheelDynamicsTests.TheNewWorldRepeatsFlyingLapsAndRetainsActualOffTrackTrajectories",
+    "CoreSim.Tests.RearWheelDynamicsTests.ThrottleReplaysTheWholeBodyAndWheelPrefixAndActsThroughTorqueFirst",
+    "CoreSim.Tests.RearWheelDynamicsTests.WheelRequiresSlipAndStartsAtTheActualLongitudinalRollingSpeed"
+  ],
+  "series": {
+    "holdout-1.json.gz": {
+      "steps": 1707,
+      "commands": 68,
+      "energyPeakJoules": 0.00010976554710428977,
+      "balancedBend": false,
+      "stableTwenty": false
+    },
+    "holdout-2.json.gz": {
+      "steps": 2239,
+      "commands": 90,
+      "energyPeakJoules": 0.0001180132810589748,
+      "balancedBend": false,
+      "stableTwenty": false
+    },
+    "holdout-3.json.gz": {
+      "steps": 1633,
+      "commands": 65,
+      "energyPeakJoules": 0.00010856510681099649,
+      "balancedBend": false,
+      "stableTwenty": false
+    },
+    "holdout-4.json.gz": {
+      "steps": 2607,
+      "commands": 105,
+      "energyPeakJoules": 6.9225245935511e-05,
+      "balancedBend": false,
+      "stableTwenty": false
+    },
+    "qualified-straight-holdout-1.json.gz": {
+      "steps": 944,
+      "commands": 209,
+      "energyPeakJoules": 1.7487039208896604e-06,
+      "balancedBend": false,
+      "stableTwenty": false
+    },
+    "qualified-straight-holdout-2.json.gz": {
+      "steps": 929,
+      "commands": 208,
+      "energyPeakJoules": 1.0213388693391945e-06,
+      "balancedBend": false,
+      "stableTwenty": false
+    },
+    "qualified-straight-holdout-3.json.gz": {
+      "steps": 930,
+      "commands": 209,
+      "energyPeakJoules": 1.2010579730492577e-06,
+      "balancedBend": false,
+      "stableTwenty": false
+    },
+    "qualified-straight-holdout-4.json.gz": {
+      "steps": 947,
+      "commands": 208,
+      "energyPeakJoules": 1.277549000578554e-06,
+      "balancedBend": false,
+      "stableTwenty": false
+    },
+    "qualified-straight-nominal.json.gz": {
+      "steps": 938,
+      "commands": 208,
+      "energyPeakJoules": 5.720155724087128e-07,
+      "balancedBend": true,
+      "stableTwenty": false
+    },
+    "recourse-holdout-1.json.gz": {
+      "steps": 6583,
+      "commands": 183,
+      "energyPeakJoules": 0.0008059547700518283,
+      "balancedBend": true,
+      "stableTwenty": false
+    },
+    "recourse-holdout-2.json.gz": {
+      "steps": 6135,
+      "commands": 182,
+      "energyPeakJoules": 0.000707532902288437,
+      "balancedBend": true,
+      "stableTwenty": false
+    },
+    "recourse-holdout-3.json.gz": {
+      "steps": 6175,
+      "commands": 183,
+      "energyPeakJoules": 0.0008224876417269022,
+      "balancedBend": true,
+      "stableTwenty": false
+    },
+    "recourse-holdout-4.json.gz": {
+      "steps": 6570,
+      "commands": 182,
+      "energyPeakJoules": 0.0005205834977029495,
+      "balancedBend": true,
+      "stableTwenty": false
+    },
+    "recourse-nominal.json.gz": {
+      "steps": 6010,
+      "commands": 182,
+      "energyPeakJoules": 0.0008100377097484693,
+      "balancedBend": true,
+      "stableTwenty": true
+    },
+    "reference-powered.json.gz": {
+      "steps": 6431,
+      "commands": 183,
+      "energyPeakJoules": 0.0008551545580208603,
+      "balancedBend": true,
+      "stableTwenty": false
+    },
+    "whole-training-replay.json.gz": {
+      "steps": 3308,
+      "commands": 133,
+      "energyPeakJoules": 9.370806509183946e-05,
+      "balancedBend": false,
+      "stableTwenty": false
+    }
+  }
+}
