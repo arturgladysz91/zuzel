@@ -6,20 +6,26 @@ internal static partial class Study191
     private sealed record Balance215(State215 State, double Residual, int Iterations, double[] Balance);
 
     private static Balance215 SteadyCircle215(UnifiedModel215 engine, Geometry215 geometry, State215 initial,
-        double speed, double yawRate, double time, double ratio)
+        double speed, double yawRate, double time, double ratio, bool balanceRider = false)
     {
         var g = geometry.Base;
         var yaw = Vec215.Up * yawRate;
         // Variables are roll, pitch, COM height, steer, velocity heading, relative wheel and
         // crank rates, then Drive. Residuals are co-rotating Newton/Euler and shaft balance.
         double rim = speed / g.Radius;
-        double[] x = [-Math.Atan(speed * yawRate / Gravity215), initial.Pose.Pitch, .528,
+        double bank = -Math.Atan(speed * yawRate / Gravity215);
+        var supported = balanceRider
+            ? geometry.Supported(initial with { Pose = Attitude215.Pose(0, initial.Pose.Pitch, bank) },
+                Gravity215, UnifiedModel215.Stiffness)
+            : initial;
+        double[] x = [bank, supported.Pose.Pitch, balanceRider ? supported.Center.Z : .528,
             .050, -.015, rim * 1.015, rim * 1.015 * ratio, .15];
+        if (balanceRider) x = [.. x, initial.Rider.X, initial.Rider.Y, initial.Rider.Z];
         double[] sample = Get(x).Balance;
         int i = 0;
         for (; i < 45 && Norm(sample) > 2e-4; i++)
         {
-            const int n = 8;
+            int n = x.Length;
             var matrix = new double[n, n + 1];
             for (int j = 0; j < n; j++)
             {
@@ -57,21 +63,30 @@ internal static partial class Study191
             {
                 Time = time, Pose = pose, Center = new(0, 0, a[2]), Momentum = v * g.Mass,
                 Steer = (float)a[3], Command = new(new((float)a[3], (float)a[7]), default),
-                Crank = (a[6] + w.Y) * g.CrankInertia, Wheel = (a[5] + w.Y) * g.WheelInertia
+                Crank = (a[6] + w.Y) * g.CrankInertia, Wheel = (a[5] + w.Y) * g.WheelInertia,
+                Rider = balanceRider ? new(a[8], a[9], a[10]) : initial.Rider
             };
             s = geometry.WithRates(s, w, default);
             try
             {
-                var f = engine.Step(s, [], .0001).Forces;
+                const double h = .0001;
+                var step = engine.Step(s, [], h);
+                var f = step.Forces;
                 var force = (f.Front.Force + f.Rear.Force + f.Drag) / g.Mass -
                     Vec215.Up * Gravity215 - yaw.Cross(v);
                 var moment = (f.Front.Patch.Arm.Cross(f.Front.Force) + f.Rear.Patch.Arm.Cross(f.Rear.Force) -
                     yaw.Cross(s.Angular)) / (g.Mass * .55);
-                return (s, [force.X, force.Y, force.Z, moment.X, moment.Y, moment.Z, f.WheelDerivative / 50, f.CrankDerivative / 10]);
+                double[] residual = [force.X, force.Y, force.Z, moment.X, moment.Y, moment.Z, f.WheelDerivative / 50, f.CrankDerivative / 10];
+                if (balanceRider)
+                {
+                    var r = (step.After.RiderMomentum - s.RiderMomentum) / (h * g.RiderMass);
+                    residual = [.. residual, r.X, r.Y, r.Z];
+                }
+                return (s, residual);
             }
             catch (InvalidOperationException)
             {
-                return (s, Enumerable.Repeat(1000d, 8).ToArray());
+                return (s, Enumerable.Repeat(1000d, a.Length).ToArray());
             }
         }
 

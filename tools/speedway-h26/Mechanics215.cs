@@ -1,5 +1,6 @@
 
 using SharedWorldSpeedway;
+using System.Text.Json.Serialization;
 
 namespace SpeedwayHandling;
 
@@ -54,23 +55,32 @@ internal enum Axes215 { Fixed = 0, Longitudinal = 1, Lateral = 2, Vertical = 4, 
 
 internal readonly record struct Command215(FreeRacingAction Bike, Vec215 Target)
 {
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public double LeftFoot { get; init; }
+
     internal void Validate()
     {
         if (!float.IsFinite(Bike.SteeringRadians) || !float.IsFinite(Bike.Drive) || Bike.Drive is < 0 or > 1 ||
-            !double.IsFinite(Target.Norm) || Math.Abs(Target.X) > .22 || Math.Abs(Target.Y) > .20 || Math.Abs(Target.Z) > .18)
+            !double.IsFinite(Target.Norm) || Math.Abs(Target.X) > .22 || Math.Abs(Target.Y) > .20 || Math.Abs(Target.Z) > .18 ||
+            !double.IsFinite(LeftFoot) || LeftFoot is < 0 or > 1)
             throw new ArgumentOutOfRangeException(nameof(Command215));
     }
 }
 internal readonly record struct Activation215(double Requested, double Time, Command215 Command);
 
 internal sealed record State215(double Time, Vec215 Center, Vec215 Momentum, Attitude215 Pose, Vec215 Angular,
-    Vec215 Rider, Vec215 RiderMomentum, double Crank, double Wheel, double Steer, Command215 Command, int Next = 0);
+    Vec215 Rider, Vec215 RiderMomentum, double Crank, double Wheel, double Steer, Command215 Command, int Next = 0)
+{
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public LegState216 Leg { get; init; }
+}
 
-internal readonly record struct Kinematics215(Vec215 BodyRate, Vec215 WorldRate, Vec215 RiderRate, Vec215 RelativeMomentum);
+internal readonly record struct Kinematics215(Vec215 BodyRate, Vec215 WorldRate, Vec215 RiderRate, Vec215 RelativeMomentum,
+    double LegRate = 0);
 internal readonly record struct Patch215(Vec215 Arm, Vec215 Radial, Vec215 Axle, Vec215 Forward, Vec215 Side,
     Vec215 Velocity, Vec215 SteerJacobian, double Gap, double NormalSpeed);
 
-internal sealed class Geometry215(Geometry214 inherited, Axes215 axes)
+internal sealed class Geometry215(Geometry214 inherited, Axes215 axes, Leg216? leg = null)
 {
     internal const double RollInertia = 12;
     internal const double MaxRoll = Math.PI / 3;
@@ -78,6 +88,7 @@ internal sealed class Geometry215(Geometry214 inherited, Axes215 axes)
     internal const double MaxCompression = .075;
     internal Geometry214 Base => inherited;
     internal Axes215 Axes => axes;
+    internal Leg216? Leg => leg;
     internal Vec215 Neutral => new(inherited.RiderNeutral.X, 0, inherited.RiderNeutral.Y);
     internal Vec215 Central => new(RollInertia, inherited.PitchCentral, inherited.YawCentral);
     internal Vec215 Free(Vec215 v) => new(axes.HasFlag(Axes215.Longitudinal) ? v.X : 0,
@@ -90,9 +101,18 @@ internal sealed class Geometry215(Geometry214 inherited, Axes215 axes)
         var right = s.Pose.Body(s.Angular) - s.Rider.Cross(p) - Vec215.Left * (s.Crank + s.Wheel);
         var diag = Central;
         double d12 = 0, d13 = 0, d23 = 0;
-        if (!axes.HasFlag(Axes215.Longitudinal)) Add(s.Rider.Cross(Vec215.Forward));
-        if (!axes.HasFlag(Axes215.Lateral)) Add(s.Rider.Cross(Vec215.Left));
-        if (!axes.HasFlag(Axes215.Vertical)) Add(s.Rider.Cross(Vec215.Up));
+        if (!axes.HasFlag(Axes215.Longitudinal)) Add(s.Rider.Cross(Vec215.Forward), mu);
+        if (!axes.HasFlag(Axes215.Lateral)) Add(s.Rider.Cross(Vec215.Left), mu);
+        if (!axes.HasFlag(Axes215.Vertical)) Add(s.Rider.Cross(Vec215.Up), mu);
+        var linkage = leg?.At(this, s.Leg.Extension);
+        if (linkage is { } a)
+        {
+            Add(a.Separation.Cross(Vec215.Forward), a.ReducedMass);
+            Add(a.Separation.Cross(Vec215.Left), a.ReducedMass);
+            Add(a.Separation.Cross(Vec215.Up), a.ReducedMass);
+            Add(a.Coupling, -1 / a.Inertia);
+            right -= a.Coupling * (s.Leg.Momentum / a.Inertia);
+        }
         // LDLᵀ solve of the positive definite locked-coordinate inertia.
         double l21 = d12 / diag.X, l31 = d13 / diag.X;
         double d2 = diag.Y - l21 * d12, d3Half = diag.Z - l31 * d13;
@@ -102,22 +122,29 @@ internal sealed class Geometry215(Geometry214 inherited, Axes215 axes)
         double y = r2 / d2 - l32 * z;
         var w = new Vec215(right.X / diag.X - l21 * y - l31 * z, y, z);
         var wr = w.Cross(s.Rider);
-        return new(w, s.Pose.Apply(w), Free(p / mu - wr), p + (wr - Free(wr)) * mu);
+        double qRate = linkage is { } b ? (s.Leg.Momentum - b.Coupling.Dot(w)) / b.Inertia : 0;
+        return new(w, s.Pose.Apply(w), Free(p / mu - wr), p + (wr - Free(wr)) * mu, qRate);
 
-        void Add(Vec215 row)
+        void Add(Vec215 row, double weight)
         {
-            diag += new Vec215(row.X * row.X, row.Y * row.Y, row.Z * row.Z) * mu;
-            d12 += mu * row.X * row.Y;
-            d13 += mu * row.X * row.Z;
-            d23 += mu * row.Y * row.Z;
+            diag += new Vec215(row.X * row.X, row.Y * row.Y, row.Z * row.Z) * weight;
+            d12 += weight * row.X * row.Y;
+            d13 += weight * row.X * row.Z;
+            d23 += weight * row.Y * row.Z;
         }
     }
 
-    internal State215 WithRates(State215 s, Vec215 bodyRate, Vec215 riderRate)
+    internal State215 WithRates(State215 s, Vec215 bodyRate, Vec215 riderRate, double extensionRate = 0)
     {
         var p = (Free(riderRate) + bodyRate.Cross(s.Rider)) * inherited.ReducedMass;
         var i = Central;
         var spin = new Vec215(i.X * bodyRate.X, i.Y * bodyRate.Y, i.Z * bodyRate.Z);
+        if (leg is { } m)
+        {
+            var a = m.At(this, s.Leg.Extension);
+            spin += a.Separation.Cross(a.RelativeVelocity(bodyRate, extensionRate)) * a.ReducedMass;
+            s = s with { Leg = s.Leg with { Momentum = a.Coupling.Dot(bodyRate) + a.Inertia * extensionRate } };
+        }
         return s with { RiderMomentum = Free(p), Angular = s.Pose.Apply(spin + s.Rider.Cross(p) + Vec215.Left * (s.Crank + s.Wheel)) };
     }
 
@@ -158,10 +185,17 @@ internal sealed class Geometry215(Geometry214 inherited, Axes215 axes)
         var w = m.BodyRate;
         var f = Math.Min(0, Contact(s, m, true, 0).Gap);
         var r = Math.Min(0, Contact(s, m, false, 0).Gap);
-        return .5 * (s.Momentum.Dot(s.Momentum) / inherited.Mass + i.X * w.X * w.X +
+        double energy = .5 * (s.Momentum.Dot(s.Momentum) / inherited.Mass + i.X * w.X * w.X +
             i.Y * w.Y * w.Y + i.Z * w.Z * w.Z + m.RelativeMomentum.Dot(m.RelativeMomentum) / inherited.ReducedMass +
             s.Crank * s.Crank / inherited.CrankInertia + s.Wheel * s.Wheel / inherited.WheelInertia +
             stiffness * (f * f + r * r)) + inherited.Mass * gravity * s.Center.Z;
+        if (leg is { } model)
+        {
+            var a = model.At(this, s.Leg.Extension);
+            var v = a.RelativeVelocity(w, m.LegRate);
+            energy += .5 * a.ReducedMass * v.Dot(v) + model.Potential(this, s, m);
+        }
+        return energy;
     }
 
     internal bool ChassisClear(State215 s)
@@ -200,9 +234,9 @@ internal readonly record struct Actuator215(double MaxForce, double MaxPower, do
     internal static readonly Actuator215 Responsive = new(6000, 4000, 8200, 1000);
     internal static readonly Actuator215 Limited = new(700, 350, 8200, 1000);
 
-    internal Vec215 Force(Geometry215 g, State215 s, Vec215 rate)
+    internal Vec215 Force(Geometry215 g, State215 s, Vec215 rate, Vec215? seatedReference = null)
     {
-        var force = g.Free((g.Neutral + s.Command.Target - s.Rider) * PositionGain - rate * VelocityGain);
+        var force = g.Free(((seatedReference ?? g.Neutral) + s.Command.Target - s.Rider) * PositionGain - rate * VelocityGain);
         // Bound positive and negative mechanical power. Zero speed only invokes the force bound.
         double power = Math.Abs(force.Dot(rate));
         double factor = Math.Min(1, Math.Min(MaxForce / Math.Max(1e-12, force.Norm), MaxPower / Math.Max(1e-12, power)));

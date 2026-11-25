@@ -1,6 +1,7 @@
 
 using CoreSim;
 using SharedWorldSpeedway;
+using System.Text.Json.Serialization;
 
 namespace SpeedwayHandling;
 
@@ -17,12 +18,22 @@ internal sealed record Forces215(Tyre215 Front, Tyre215 Rear, Vec215 Rider, Vec2
     double EnginePower, double EngineLoss, double TransmissionLoss, double BearingLoss, double SlideLoss,
     double SteeringPower, double FrontYawBand, double FrontRollBand)
 {
-    internal double Loss => EngineLoss + TransmissionLoss + BearingLoss + SlideLoss + Front.NormalLoss + Rear.NormalLoss;
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public SupportLoads216? PassiveSupport { get; init; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public LegLoads216? LeftFoot { get; init; }
+    internal double Loss => EngineLoss + TransmissionLoss + BearingLoss + SlideLoss + Front.NormalLoss + Rear.NormalLoss +
+        (PassiveSupport?.Loss ?? 0) + (LeftFoot is { } foot ? foot.StopLoss + foot.Contact.Dissipation : 0);
+    internal Vec215 GroundForce => Front.Force + Rear.Force + (LeftFoot?.Force ?? default);
 }
 
 internal sealed record GeometryReceipt215(Attitude215 Before, Attitude215 Midpoint, Attitude215 After,
     double FrontCurvatureBound, double RearCurvatureBound, double ProjectedBodyYaw, Vec215 FrontArm, Vec215 RearArm);
-internal readonly record struct ContactEvent215(bool Front, bool Touchdown, double Seconds);
+internal readonly record struct ContactEvent215(bool Front, bool Touchdown, double Seconds)
+{
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public bool Foot { get; init; }
+}
 internal sealed record Step215(State215 Before, State215 Midpoint, State215 After, Forces215 Forces,
     HorizontalPlan214 Plan, HorizontalReceipt214 Horizontal, GeometryReceipt215 Geometry, ContactEvent215[] Contacts,
     double EnergyBefore, double EnergyAfter, double ActuatorPower, double EnergyResidual, Vec215 RollPitchYawMoment,
@@ -30,17 +41,20 @@ internal sealed record Step215(State215 Before, State215 Midpoint, State215 Afte
 
 internal sealed class UnifiedModel215(Geometry215 geometry, RiderSpec rider, HandlingSettings settings,
     WorldParameters physics, TrackSurfaceState surface, Actuator215 actuator, double release,
-    bool drivetrain, double gravity, bool inheritedLeanScale = false, double stiffness = UnifiedModel215.Stiffness)
+    bool drivetrain, double gravity, bool inheritedLeanScale = false, double stiffness = UnifiedModel215.Stiffness,
+    RiderSupport216? support = null)
 {
     internal const double Stiffness = 150_000;
     internal const double Damping = 1500;
     private const double DamperRampMeters = .002;
     private const double EventTimeTolerance = 2e-7;
     private const double MinimumStep = 2e-8;
+    private const double SupportWorkErrorWatts = .25;
     private readonly ModelHorizontal214 horizontal = new();
     private readonly RearWheelParameters wheel = physics.RearWheel ?? RearWheelParameters.Default;
     private readonly TwoContactBikeParameters steer = physics.TwoContactBike ?? TwoContactBikeParameters.Default;
     private readonly EngineLossH26 loss = settings.H26!.EngineLoss!;
+    private readonly Vec215? seatedReference = support?.SeatedReference(geometry, LoadBasedTyreGrip.GravityMetersPerSecondSquared);
     private readonly double grip = LoadBasedTyreGrip.Budget((float)geometry.Base.Mass, surface,
         physics.TwoContactBike ?? TwoContactBikeParameters.Default, physics.LoadBasedTyres).EffectiveFrictionCoefficient *
         settings.GripScale;
@@ -77,7 +91,8 @@ internal sealed class UnifiedModel215(Geometry215 geometry, RiderSpec rider, Han
                 var next = Advance(start, mid, motion, f, duration / 2);
                 double error = (next.Momentum - mid.Momentum).Norm + (next.Angular - mid.Angular).Norm +
                     (next.RiderMomentum - mid.RiderMomentum).Norm + Math.Abs(next.Crank - mid.Crank) + Math.Abs(next.Wheel - mid.Wheel) +
-                    (next.Center - mid.Center).Norm + (next.Rider - mid.Rider).Norm + (next.Pose.V - mid.Pose.V).Norm;
+                    (next.Center - mid.Center).Norm + (next.Rider - mid.Rider).Norm + (next.Pose.V - mid.Pose.V).Norm +
+                    Math.Abs(next.Leg.Momentum - mid.Leg.Momentum) + Math.Abs(next.Leg.Extension - mid.Leg.Extension);
                 mid = next;
                 motion = geometry.Motion(mid);
                 f = Evaluate(start, mid, motion, duration, steeringRate, impairment);
@@ -93,23 +108,39 @@ internal sealed class UnifiedModel215(Geometry215 geometry, RiderSpec rider, Han
             var drift = start with { Momentum = mid.Momentum };
             double fb = geometry.GapBound(drift, motion, true, steeringRate, duration);
             double rb = geometry.GapBound(drift, motion, false, steeringRate, duration);
-            var events = new[] { Find(true, fb), Find(false, rb) }.OfType<ContactEvent215>()
+            var events = new[] { Find(true, fb), Find(false, rb), FindFoot() }.OfType<ContactEvent215>()
                 .OrderBy(e => e.Seconds).ThenByDescending(e => e.Front).ToArray();
             if (events.Length > 0 && events[0].Seconds > EventTimeTolerance &&
                 events[0].Seconds < duration - EventTimeTolerance)
             {
-                duration = events[0].Seconds;
+                // If several nearby contacts keep moving the root on re-solving,
+                // advance a demonstrably earlier prefix and recheck the event there.
+                duration = support != null && subdivisions >= 5 ? Math.Min(events[0].Seconds, duration / 2) : events[0].Seconds;
                 continue;
             }
 
             var end = Advance(start, mid, motion, f, duration);
             Validate(end);
+            double e0 = StoredEnergy(start), e1 = StoredEnergy(end);
+            double work = f.LeftFoot?.MusclePower ?? f.Rider.Dot(motion.RiderRate);
+            double energyResidual = e1 - e0 - (f.EnginePower - f.Loss + work + f.SteeringPower) * duration;
+            // Fast engagement of a pad can otherwise fall between force evaluations.
+            // Reject the interval before committing any impulses or advancing the clock.
+            if (support != null && Math.Abs(energyResidual) > SupportWorkErrorWatts * duration + 1e-8)
+            {
+                if (duration <= MinimumStep) throw new InvalidOperationException("support work quadrature did not converge");
+                duration /= 2;
+                continue;
+            }
             var front = new ForcePoint214(f.Front.Force.Plane, f.Front.Patch.Arm.Plane);
             var rear = new ForcePoint214(f.Rear.Force.Plane, f.Rear.Patch.Arm.Plane);
             var initialPlane = new Plane214(start.Center.Plane, (start.Momentum / parameters.Mass).Plane,
                 start.Pose.Yaw, start.Angular.Z);
             var request = new HorizontalPlan214(start.Time, duration, initialPlane, parameters.Mass,
-                parameters.YawCentral, front, rear, f.Drag.Plane);
+                parameters.YawCentral, front, rear, f.Drag.Plane)
+            {
+                Foot = f.LeftFoot is { } foot ? new(foot.Force.Plane, foot.Arm.Plane) : default
+            };
             var receipt = horizontal.Preview(request);
             // Yaw angle is a projection of the single integrated orientation. Only L_z is delegated
             // to the shared planar impulse accounting; the scalar H33 yaw drift is superseded.
@@ -131,9 +162,8 @@ internal sealed class UnifiedModel215(Geometry215 geometry, RiderSpec rider, Han
 
             var beforeMotion = geometry.Motion(start);
             var afterMotion = geometry.Motion(end);
-            double e0 = geometry.Energy(start, gravity, stiffness), e1 = geometry.Energy(end, gravity, stiffness);
-            double work = f.Rider.Dot(motion.RiderRate);
-            double energyResidual = e1 - e0 - (f.EnginePower - f.Loss + work + f.SteeringPower) * duration;
+            e1 = StoredEnergy(end);
+            energyResidual = e1 - e0 - (f.EnginePower - f.Loss + work + f.SteeringPower) * duration;
             var projected = new GeometryReceipt215(start.Pose, mid.Pose, end.Pose, fb, rb, end.Pose.Yaw,
                 f.Front.Patch.Arm, f.Rear.Patch.Arm);
             return new(start, mid, end, f, request, receipt, projected, events, e0, e1, work, energyResidual,
@@ -152,6 +182,21 @@ internal sealed class UnifiedModel215(Geometry215 geometry, RiderSpec rider, Han
                 }, duration, bound);
                 return when.HasValue ? new(frontWheel, sign > 0, when.Value) : null;
             }
+
+            ContactEvent215? FindFoot()
+            {
+                if (geometry.Leg is not { } leg) return null;
+                var first = leg.Foot(geometry, drift, motion, leg.At(geometry, drift.Leg.Extension));
+                double sign = first.Gap >= 0 ? 1 : -1;
+                double bound = leg.GapBound(geometry, drift, motion, duration);
+                var hit = GapEvent214.First(t =>
+                {
+                    var pose = Drift(drift, motion, steeringRate, t);
+                    var p = leg.Foot(geometry, pose, motion, leg.At(geometry, pose.Leg.Extension));
+                    return (sign * p.Gap, sign * p.ClosingVelocity);
+                }, duration, bound);
+                return hit.HasValue ? new ContactEvent215(false, sign > 0, hit.Value) { Foot = true } : null;
+            }
         }
         throw new InvalidOperationException("H34-R contact event subdivision budget");
     }
@@ -160,25 +205,35 @@ internal sealed class UnifiedModel215(Geometry215 geometry, RiderSpec rider, Han
     {
         Time = s.Time + dt, Center = s.Center + s.Momentum * (dt / geometry.Base.Mass),
         Pose = s.Pose.Advance(m.WorldRate, dt), Rider = s.Rider + m.RiderRate * dt,
-        Steer = s.Steer + steerRate * dt
+        Steer = s.Steer + steerRate * dt, Leg = s.Leg with { Extension = s.Leg.Extension + m.LegRate * dt }
     };
 
     private State215 Advance(State215 start, State215 mid, Kinematics215 motion, Forces215 f, double dt)
     {
-        var contact = f.Front.Force + f.Rear.Force;
-        var force = contact + f.Drag - Vec215.Up * (geometry.Base.Mass * gravity);
-        var relativeForce = geometry.Free(f.Rider - motion.BodyRate.Cross(motion.RelativeMomentum) -
-            mid.Pose.Body(contact) * geometry.Base.RiderFraction);
+        var wheels = f.Front.Force + f.Rear.Force;
+        var force = f.GroundForce + f.Drag - Vec215.Up * (geometry.Base.Mass * gravity);
+        var relativeForce = geometry.Free(f.Rider + (f.PassiveSupport?.Force ?? default) - motion.BodyRate.Cross(motion.RelativeMomentum) -
+            mid.Pose.Body(wheels) * geometry.Base.RiderFraction + (f.LeftFoot?.RelativeForce ?? default));
         var position = Drift(start with { Momentum = mid.Momentum }, motion, f.SteerRate, dt);
         return position with
         {
             Momentum = start.Momentum + force * dt, Angular = start.Angular + Moment(f) * dt,
             RiderMomentum = start.RiderMomentum + relativeForce * dt, Crank = start.Crank + f.CrankDerivative * dt,
-            Wheel = start.Wheel + f.WheelDerivative * dt
+            Wheel = start.Wheel + f.WheelDerivative * dt,
+            Leg = position.Leg with { Momentum = start.Leg.Momentum + (f.LeftFoot?.MomentumDerivative ?? 0) * dt }
         };
     }
 
-    private static Vec215 Moment(Forces215 f) => f.Front.Patch.Arm.Cross(f.Front.Force) + f.Rear.Patch.Arm.Cross(f.Rear.Force);
+    private static Vec215 Moment(Forces215 f) => f.Front.Patch.Arm.Cross(f.Front.Force) + f.Rear.Patch.Arm.Cross(f.Rear.Force) +
+        (f.LeftFoot is { } foot ? foot.Arm.Cross(foot.Force) : default);
+
+    private double StoredEnergy(State215 state) => geometry.Energy(state, gravity, stiffness) +
+        (Pads(state, default, 0)?.Energy ?? 0);
+
+    private SupportLoads216? Pads(State215 state, Kinematics215 motion, double steerRate) =>
+        support == null ? null :
+        geometry.Leg is { } leg ? leg.Pads(support, geometry, state, motion, steerRate) :
+        support.Evaluate(state.Rider, motion.RiderRate, state.Steer, steerRate);
 
     private void Validate(State215 s)
     {
@@ -193,6 +248,7 @@ internal sealed class UnifiedModel215(Geometry215 geometry, RiderSpec rider, Han
         if (geometry.Contact(s, m, true, 0).Gap < -Geometry215.MaxCompression ||
             geometry.Contact(s, m, false, 0).Gap < -Geometry215.MaxCompression)
             throw new InvalidOperationException("tyre compression envelope");
+        geometry.Leg?.Validate(geometry, s, m);
     }
 
     private Forces215 Evaluate(State215 initial, State215 s, Kinematics215 m, double dt, double steeringRate, double impairment)
@@ -243,12 +299,18 @@ internal sealed class UnifiedModel215(Geometry215 geometry, RiderSpec rider, Han
         var left = SteeringMoment(-1);
         var right = SteeringMoment(1);
         var center = SteeringMoment(0);
-        return new(ff, rr, actuator.Force(geometry, s, m.RiderRate), drag, rpm, gross - viscous,
+        var passive = Pads(s, m, steeringRate);
+        var (muscle, legLoads) = geometry.Leg is { } leg
+            ? leg.Evaluate(geometry, s, m, seatedReference ?? geometry.Neutral, actuator, passive)
+            : (actuator.Force(geometry, s, m.RiderRate, seatedReference), (LegLoads216?)null);
+        double steeringPower = -ff.Force.Dot(front.SteerJacobian) * steeringRate;
+        if (passive is { } pads) steeringPower += pads.SteerPower;
+        return new(ff, rr, muscle, drag, rpm, gross - viscous,
             crankDerivative, wheelDerivative, slip / Math.Sqrt(u * u + wheel.LowSpeedMetersPerSecond * wheel.LowSpeedMetersPerSecond),
             steeringRate, gross * crank, viscous * crank,
             trial.Torque * (crank - ratio * rim) + (trial.Torque * ratio - drive) * rim,
-            bearing * rim, slideLoss - drag.Dot(p), -ff.Force.Dot(front.SteerJacobian) * steeringRate,
-            Span(left.Z, center.Z, right.Z), Span(left.X, center.X, right.X));
+            bearing * rim, slideLoss - drag.Dot(p), steeringPower,
+            Span(left.Z, center.Z, right.Z), Span(left.X, center.X, right.X)) { PassiveSupport = passive, LeftFoot = legLoads };
 
         Vec215 SteeringMoment(int sign)
         {

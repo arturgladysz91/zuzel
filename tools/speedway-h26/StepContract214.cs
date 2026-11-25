@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace SpeedwayHandling;
 
 internal readonly record struct ForcePoint214(Vec214 Force, Vec214 Arm)
@@ -8,8 +10,10 @@ internal readonly record struct ForcePoint214(Vec214 Force, Vec214 Arm)
 internal readonly record struct HorizontalPlan214(double Start, double Duration, Plane214 Initial, double Mass,
     double MidpointYawInertia, ForcePoint214 Front, ForcePoint214 Rear, Vec214 Drag)
 {
-    internal Vec214 Force => Front.Force + Rear.Force + Drag;
-    internal double Moment => Front.YawMoment + Rear.YawMoment;
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public ForcePoint214 Foot { get; init; }
+    internal Vec214 Force => Front.Force + Rear.Force + Drag + Foot.Force;
+    internal double Moment => Front.YawMoment + Rear.YawMoment + Foot.YawMoment;
 }
 
 internal sealed record HorizontalReceipt214(double End, Plane214 Plane, Vec214 AppliedImpulse, double AppliedYawImpulse,
