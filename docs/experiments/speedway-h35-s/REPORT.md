@@ -249,8 +249,18 @@ dwie odziedziczone asercje zamrożonych źródeł. Program
 dalej domyślnie wybiera H25.
 [Walidacja impulsów](../../../data/experiments/speedway216/validation.json) ·
 [Powtarzalność](../../../data/experiments/speedway216/determinism.json) ·
-[Parzystość H34-R](../../../data/experiments/speedway216/baseline.json) ·
+[Zgodność z H34-R](../../../data/experiments/speedway216/baseline.json) ·
 [Regresja i wyniki TRX](../../../data/experiments/speedway216/regression.json)
+
+## Publikacja
+
+GitHub potwierdził commit implementacji
+`3c1d2b38acd04009ec75edd78b4c2b5991f7b817` na
+`experiment/speedway-216` 25 listopada 2026. Dla
+commita nie odnotowano uruchomień workflow, kontroli ani
+statusów zewnętrznych. Łączny status GitHuba to `pending`.
+Wyniki testów pochodzą z lokalnej kompilacji Windows.
+[Zapis kontroli CI](../../../data/experiments/speedway216/hosted-ci.json)
 
 ~~~powershell
 $env:SPEEDWAY_BOX2D_NO_WORLDS='1'
