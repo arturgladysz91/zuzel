@@ -210,7 +210,7 @@ internal sealed class Geometry215(Geometry214 inherited, Axes215 axes, Leg216? l
             energy += .5 * a.ReducedMass * v.Dot(v) + model.Potential(this, s, m);
         }
         if (frontContact.PolarInertiaKgM2 > 0) energy += .5 * s.FrontWheel * s.FrontWheel / frontContact.PolarInertiaKgM2;
-        if (frontContact.RelaxationMeters > 0) energy += .5 * frontContact.ShearStiffness * s.FrontShearMeters * s.FrontShearMeters;
+        if (frontContact.HasLateralMemory) energy += .5 * frontContact.ShearStiffness * s.FrontShearMeters * s.FrontShearMeters;
         return energy;
     }
 

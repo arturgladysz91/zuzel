@@ -7,7 +7,7 @@ internal readonly record struct FrontResponse221(double RotorTorqueNm, double Re
 /// <summary>Independent research variants. Zero parameters select the original contact.</summary>
 internal readonly record struct FrontContact221
 {
-    internal FrontContact221(double PolarInertiaKgM2 = 0, double RelaxationMeters = 0)
+    internal FrontContact221(double PolarInertiaKgM2 = 0, double RelaxationMeters = 0, bool SteadyLateral = false)
     {
         if (!double.IsFinite(PolarInertiaKgM2) || PolarInertiaKgM2 < 0)
             throw new ArgumentOutOfRangeException(nameof(PolarInertiaKgM2));
@@ -16,11 +16,16 @@ internal readonly record struct FrontContact221
         if (PolarInertiaKgM2 > 0 && RelaxationMeters > 0)
             throw new ArgumentException("Validate the front rotor and front tread memory independently.");
         this.PolarInertiaKgM2 = PolarInertiaKgM2;
+        if (SteadyLateral && RelaxationMeters <= 0)
+            throw new ArgumentException("The steady comparison needs the paired relaxation parameter.");
         this.RelaxationMeters = RelaxationMeters;
+        this.SteadyLateral = SteadyLateral;
     }
 
     public double PolarInertiaKgM2 { get; }
     public double RelaxationMeters { get; }
+    public bool SteadyLateral { get; }
+    internal bool HasLateralMemory => RelaxationMeters > 0 && !SteadyLateral;
     private const double LongitudinalRegularizationMetersPerSecond = .65;
     private const double LowSpeedTransportMetersPerSecond = .75;
     private const double ReferencePaceMetersPerSecond = 20;
@@ -56,6 +61,14 @@ internal readonly record struct FrontContact221
         double forwardSpeed = patch.Velocity.Dot(patch.Forward);
         double transport = Math.Sqrt(forwardSpeed * forwardSpeed +
             LowSpeedTransportMetersPerSecond * LowSpeedTransportMetersPerSecond) / RelaxationMeters;
+        if (SteadyLateral)
+        {
+            // Eliminating q at equilibrium gives this exact same force curve,
+            // including the saturated branch of the load-limited spring.
+            double force = -Math.Clamp(ShearStiffness * side / transport, -capacity, capacity);
+            response = new(0, 0, forwardSpeed, 0, 0, -force * side, 0);
+            return new(patch, normal, 0, force, capacity, normalLoss);
+        }
         double strain = state.FrontShearMeters;
         double spring = ShearStiffness * strain;
         double scale = capacity <= 0 ? 0 : Math.Min(1, capacity / Math.Max(1e-9, Math.Abs(spring)));

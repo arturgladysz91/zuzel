@@ -45,7 +45,9 @@ internal static partial class Study191
     }
 
     private static (Command215? Action, Decision40 Receipt) DecideLink40(Lab38 lab, Geometry215 g, UnifiedModel215 model,
-        Setup40 setup, Checkpoint38 at, Activation215[] tape, BendVisit bend, Forces215? last)
+        Setup40 setup, Checkpoint38 at, Activation215[] tape, BendVisit bend, Forces215? last,
+        Limit42 ablation = Limit42.None, Func<RollReference36, RiderView, double, RollReference36>? refine = null,
+        double extraDamping = 0)
     {
         var state = at.State;
         var road = lab.Course.Mark(state, g);
@@ -65,7 +67,7 @@ internal static partial class Study191
         double preview = distance < 0 ? 22 + 5 * preparation : 23 - 5 * turn + 3 * exit;
         if (setup.Method == Prep40.Coast) preview += 4;
         double gain = setup.Method == Prep40.Force ? 25 : 20;
-        double damping = setup.Method == Prep40.Force ? 13 : 9;
+        double damping = (setup.Method == Prep40.Force ? 13 : 9) + extraDamping;
         var tune = new Tune36(setup.Lane, preview, gain, damping, 0, 0, 0, apex, 0, true);
         var target = Plan(road, reference);
         int forecasts = 0;
@@ -116,19 +118,27 @@ internal static partial class Study191
             double curve = PreviewCurvature36(body, s + preview, line);
             double normalDemand = body.Speed * body.Speed * curve;
             double roll = -Math.Atan(normalDemand / Gravity216);
-            roll = ClearanceRoll37(g, state, roll, .009);
+            roll = ClearanceRoll37(g, state, roll, ablation == Limit42.GroundReserve ? .001 : .009);
             double corner = setup.CornerRequestKph;
-            double predictedCurve = Math.Max(.010, Math.Abs(PreviewCurvature36(body, s + 29, line)));
-            double forceLimit = Math.Min(11.4, 7.8 + .45 * Math.Max(0, reserve));
-            double compatible = Math.Min(corner + 10, 3.6 * Math.Sqrt(forceLimit / predictedCurve));
-            double availableDecel = 1.45 + .00009 * speed * speed;
+            double predictedCurve = Math.Max(ablation == Limit42.CurvatureFloor ? .001 : .010,
+                Math.Abs(PreviewCurvature36(body, s + 29, line)));
+            double forceLimit = 7.8 + .45 * Math.Max(0, reserve);
+            if (ablation == Limit42.ScalarReserve && last is not null)
+                forceLimit = ProjectForce42(g, state, last).MaximumInward;
+            if (ablation != Limit42.AccelerationCap) forceLimit = Math.Min(11.4, forceLimit);
+            forceLimit = Math.Max(.001, forceLimit);
+            double compatible = 3.6 * Math.Sqrt(forceLimit / predictedCurve);
+            if (ablation != Limit42.CornerCeiling) compatible = Math.Min(corner + 10, compatible);
+            double availableDecel = ablation == Limit42.Deceleration && last is not null
+                ? Math.Max(.05, -(last.Drag + last.Front.Force).Plane.Dot(state.Momentum.Plane / state.Momentum.Plane.Norm) / g.Base.Mass)
+                : 1.45 + .00009 * speed * speed;
             double approachSpeed = Math.Sqrt(Math.Pow(compatible / 3.6, 2) +
                 2 * availableDecel * Math.Max(0, toEntry - 2)) * 3.6;
             double request = local < 0 ? Math.Min(setup.PeakRequestKph, approachSpeed) :
-                corner - 5 * turn + exit * 11;
+                corner - (ablation == Limit42.BendDrop ? 0 : 5) * turn + exit * 11;
             if (setup.Method == Prep40.Pace && local < 0)
                 request = setup.PeakRequestKph + (corner - setup.PeakRequestKph) * preparation;
-            if (reference > bend.Exit) request = 94;
+            if (reference > bend.Exit) request = ablation == Limit42.ExitReference ? body.Speed * 3.6 + 18 : 94;
             double drive = Math.Clamp(.17 + .16 * (request / 3.6 - body.Speed), 0, 1);
             if (local < 0)
             {
@@ -138,21 +148,22 @@ internal static partial class Study191
                     if (toEntry <= 17)
                         drive = Math.Min(drive, Math.Clamp(.17 + .013 * toEntry - .014 * Math.Max(0, speed - 84), .10, .42));
                 }
-                if (setup.Method == Prep40.Coast && preparation > .12 && body.Speed * 3.6 > compatible - 2)
+                if (ablation != Limit42.Coast && setup.Method == Prep40.Coast && preparation > .12 && body.Speed * 3.6 > compatible - 2)
                     drive = 0;
                 if (setup.Method == Prep40.Force && (fz < 275 || rearSlip > .25 || Math.Abs(rs) > .65))
                     drive *= Math.Clamp(fz / 425, .18, 1) * Math.Clamp(1.15 - rearSlip, .25, 1);
             }
             else
             {
-                drive *= Math.Clamp(1.25 - .65 * Math.Max(0, rearSlip), .16, 1);
+                if (ablation != Limit42.RearSlip) drive *= Math.Clamp(1.25 - .65 * Math.Max(0, rearSlip), .16, 1);
                 if (exit > .35 && fz > 280 && Math.Abs(rs) < .8)
                     drive = Math.Max(drive, setup.Boost * exit);
             }
             if (reference > bend.Exit + 6 && (fz < 190 || Math.Abs(rs) > .65)) drive = Math.Min(drive, .28);
             double bodyShape = Math.Max(.70 * preparation * (1 - turn), Math.Sin(Math.PI * progress)) * (1 - exit);
-            return new(curve, roll, preview, request, (float)drive,
+            var guide = new RollReference36(curve, roll, preview, request, (float)drive,
                 new Vec215(.055 * bodyShape, .025 * bodyShape, -.030 * bodyShape), .45 * bodyShape * bodyShape);
+            return refine?.Invoke(guide, body, s) ?? guide;
         }
     }
 

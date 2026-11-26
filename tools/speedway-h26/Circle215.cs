@@ -24,7 +24,7 @@ internal static partial class Study191
         int frontVariable = x.Length;
         var front = geometry.FrontContact;
         if (front.PolarInertiaKgM2 > 0) x = [.. x, rim];
-        if (front.RelaxationMeters > 0) x = [.. x, 0d];
+        if (front.HasLateralMemory) x = [.. x, 0d];
         double[] sample = Get(x).Balance;
         int i = 0;
         for (; i < 45 && Norm(sample) > 2e-4; i++)
@@ -72,7 +72,7 @@ internal static partial class Study191
             };
             if (front.PolarInertiaKgM2 > 0)
                 s = s with { FrontWheel = a[frontVariable] * front.PolarInertiaKgM2 };
-            if (front.RelaxationMeters > 0)
+            if (front.HasLateralMemory)
                 s = s with { FrontShearMeters = a[frontVariable] };
             s = geometry.WithRates(s, w, default);
             try
@@ -91,7 +91,7 @@ internal static partial class Study191
                     residual = [.. residual, r.X, r.Y, r.Z];
                 }
                 if (front.PolarInertiaKgM2 > 0) residual = [.. residual, f.FrontResponse.RotorTorqueNm / 50];
-                if (front.RelaxationMeters > 0) residual = [.. residual, f.FrontResponse.StrainRateMetersPerSecond * 10];
+                if (front.HasLateralMemory) residual = [.. residual, f.FrontResponse.StrainRateMetersPerSecond * 10];
                 return (s, residual);
             }
             catch (InvalidOperationException)
