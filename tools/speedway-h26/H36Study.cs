@@ -471,7 +471,8 @@ internal static partial class Study191
     private static (Command215? Command, int Steps, string? Stop) H36Control(State215 state, Geometry215 g,
         UnifiedModel215 model, RiderView mark, double reference, BendVisit bend, Tune36 tune, double requested,
         float equilibriumDrive, Activation215[] pending, CornerCourse216 course, Preparation37? preparation = null,
-        Action<RollReference36>? observe = null, double rollReferenceScale = 1, Command215? commandBasis = null)
+        Action<RollReference36>? observe = null, double rollReferenceScale = 1, Command215? commandBasis = null,
+        Func<RiderView, double, RollReference36>? referenceBasis = null)
     {
         double activation = state.Time + ReactionSeconds216;
         var lead = Simulate(state, pending, activation);
@@ -480,8 +481,9 @@ internal static partial class Study191
         var x = lead.State;
         var body = course.Mark(x, g);
         double s = reference + Frame.UnwrapDelta(mark.Road.ReferenceMeters, body.Road.ReferenceMeters);
-        var guide = preparation is null ? Reference36(body, s, bend, tune, requested, equilibriumDrive) :
-            Reference37(body, s, bend, tune, requested, equilibriumDrive, preparation);
+        var guide = referenceBasis?.Invoke(body, s) ?? (preparation is null
+            ? Reference36(body, s, bend, tune, requested, equilibriumDrive)
+            : Reference37(body, s, bend, tune, requested, equilibriumDrive, preparation));
         if (rollReferenceScale != 1) guide = guide with { Roll = guide.Roll * rollReferenceScale };
         if (preparation is { GroundReserveMeters: > 0 })
             guide = guide with { Roll = ClearanceRoll37(g, x, guide.Roll, preparation.GroundReserveMeters) };

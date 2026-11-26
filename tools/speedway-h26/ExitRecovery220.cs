@@ -194,7 +194,7 @@ internal static partial class Study191
     }
 
     private static Trial39 RunExit39(Lab38 lab, Witnesses39? f, Geometry215 g, Plan39 plan, Checkpoint38 seed,
-        Checkpoint38 initial, Activation215[] pending, Step215[] prefix, double[] prefixDistances)
+        Checkpoint38 initial, Activation215[] pending, Step215[] prefix, double[] prefixDistances, double? finishOverride = null)
     {
         var model = lab.Engine(g);
         var state = initial;
@@ -203,7 +203,7 @@ internal static partial class Study191
         var distances = new List<double>(prefixDistances);
         double edge = H36Footprint.Clearance(lab.Track, g, state.State, false);
         double hard = H36Footprint.GroundMargin(g, state.State);
-        double end = lab.Bend.NextEntry - lab.Bend.Entry + 4;
+        double end = finishOverride ?? (lab.Bend.NextEntry - lab.Bend.Entry + 4);
         double endTime = state.State.Time + 12;
         double lane = Lane39(lab, g, state, plan.Objective);
         int forecast = 0, decisions = 0;

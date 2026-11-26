@@ -21,6 +21,10 @@ internal static partial class Study191
         double[] x = [bank, supported.Pose.Pitch, balanceRider ? supported.Center.Z : .528,
             .050, -.015, rim * 1.015, rim * 1.015 * ratio, .15];
         if (balanceRider) x = [.. x, initial.Rider.X, initial.Rider.Y, initial.Rider.Z];
+        int frontVariable = x.Length;
+        var front = geometry.FrontContact;
+        if (front.PolarInertiaKgM2 > 0) x = [.. x, rim];
+        if (front.RelaxationMeters > 0) x = [.. x, 0d];
         double[] sample = Get(x).Balance;
         int i = 0;
         for (; i < 45 && Norm(sample) > 2e-4; i++)
@@ -29,7 +33,7 @@ internal static partial class Study191
             var matrix = new double[n, n + 1];
             for (int j = 0; j < n; j++)
             {
-                double h = j is 5 or 6 ? .002 : .00002;
+                double h = j is 5 or 6 || (front.PolarInertiaKgM2 > 0 && j == frontVariable) ? .002 : .00002;
                 var shifted = (double[])x.Clone();
                 shifted[j] += h;
                 var result = Get(shifted).Balance;
@@ -66,6 +70,10 @@ internal static partial class Study191
                 Crank = (a[6] + w.Y) * g.CrankInertia, Wheel = (a[5] + w.Y) * g.WheelInertia,
                 Rider = balanceRider ? new(a[8], a[9], a[10]) : initial.Rider
             };
+            if (front.PolarInertiaKgM2 > 0)
+                s = s with { FrontWheel = a[frontVariable] * front.PolarInertiaKgM2 };
+            if (front.RelaxationMeters > 0)
+                s = s with { FrontShearMeters = a[frontVariable] };
             s = geometry.WithRates(s, w, default);
             try
             {
@@ -82,6 +90,8 @@ internal static partial class Study191
                     var r = (step.After.RiderMomentum - s.RiderMomentum) / (h * g.RiderMass);
                     residual = [.. residual, r.X, r.Y, r.Z];
                 }
+                if (front.PolarInertiaKgM2 > 0) residual = [.. residual, f.FrontResponse.RotorTorqueNm / 50];
+                if (front.RelaxationMeters > 0) residual = [.. residual, f.FrontResponse.StrainRateMetersPerSecond * 10];
                 return (s, residual);
             }
             catch (InvalidOperationException)

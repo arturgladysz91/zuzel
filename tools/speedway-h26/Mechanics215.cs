@@ -78,6 +78,10 @@ internal sealed record State215(double Time, Vec215 Center, Vec215 Momentum, Att
 {
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public LegState216 Leg { get; init; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public double FrontWheel { get; init; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public double FrontShearMeters { get; init; }
 }
 
 internal readonly record struct Kinematics215(Vec215 BodyRate, Vec215 WorldRate, Vec215 RiderRate, Vec215 RelativeMomentum,
@@ -85,7 +89,8 @@ internal readonly record struct Kinematics215(Vec215 BodyRate, Vec215 WorldRate,
 internal readonly record struct Patch215(Vec215 Arm, Vec215 Radial, Vec215 Axle, Vec215 Forward, Vec215 Side,
     Vec215 Velocity, Vec215 SteerJacobian, double Gap, double NormalSpeed);
 
-internal sealed class Geometry215(Geometry214 inherited, Axes215 axes, Leg216? leg = null, SpatialBike36? spatial = null)
+internal sealed class Geometry215(Geometry214 inherited, Axes215 axes, Leg216? leg = null, SpatialBike36? spatial = null,
+    FrontContact221 frontContact = default)
 {
     internal const double RollInertia = 12;
     internal const double MaxRoll = Math.PI / 3;
@@ -94,6 +99,8 @@ internal sealed class Geometry215(Geometry214 inherited, Axes215 axes, Leg216? l
     internal Geometry214 Base => inherited;
     internal Axes215 Axes => axes;
     internal Leg216? Leg => leg;
+    internal FrontContact221 FrontContact => frontContact;
+    internal static Vec215 FrontAxle(double steer) => new(-Math.Sin(steer), Math.Cos(steer), 0);
     internal Vec215 Neutral => new(inherited.RiderNeutral.X, 0, inherited.RiderNeutral.Y);
     internal Vec215 Central => new(RollInertia, inherited.PitchCentral, inherited.YawCentral);
     internal Vec215 Free(Vec215 v) => new(axes.HasFlag(Axes215.Longitudinal) ? v.X : 0,
@@ -104,6 +111,7 @@ internal sealed class Geometry215(Geometry214 inherited, Axes215 axes, Leg216? l
         double mu = inherited.ReducedMass;
         var p = Free(s.RiderMomentum);
         var right = s.Pose.Body(s.Angular) - s.Rider.Cross(p) - Vec215.Left * (s.Crank + s.Wheel);
+        if (frontContact.PolarInertiaKgM2 > 0) right -= FrontAxle(s.Steer) * s.FrontWheel;
         var diag = Central;
         double d12 = 0, d13 = 0, d23 = 0;
         if (!axes.HasFlag(Axes215.Longitudinal)) Add(s.Rider.Cross(Vec215.Forward), mu);
@@ -150,12 +158,13 @@ internal sealed class Geometry215(Geometry214 inherited, Axes215 axes, Leg216? l
             spin += a.Separation.Cross(a.RelativeVelocity(bodyRate, extensionRate)) * a.ReducedMass;
             s = s with { Leg = s.Leg with { Momentum = a.Coupling.Dot(bodyRate) + a.Inertia * extensionRate } };
         }
+        if (frontContact.PolarInertiaKgM2 > 0) spin += FrontAxle(s.Steer) * s.FrontWheel;
         return s with { RiderMomentum = Free(p), Angular = s.Pose.Apply(spin + s.Rider.Cross(p) + Vec215.Left * (s.Crank + s.Wheel)) };
     }
 
     internal Patch215 Contact(State215 s, Kinematics215 motion, bool front, double steerRate)
     {
-        var axle = s.Pose.Apply(front ? new(-Math.Sin(s.Steer), Math.Cos(s.Steer), 0) : Vec215.Left);
+        var axle = s.Pose.Apply(front ? FrontAxle(s.Steer) : Vec215.Left);
         var direction = axle.Cross(Vec215.Up);
         if (direction.Norm < .25) throw new InvalidOperationException("thin-ring geometry envelope");
         var radial = (Vec215.Up - axle * axle.Z) * (-inherited.Radius / direction.Norm);
@@ -200,6 +209,8 @@ internal sealed class Geometry215(Geometry214 inherited, Axes215 axes, Leg216? l
             var v = a.RelativeVelocity(w, m.LegRate);
             energy += .5 * a.ReducedMass * v.Dot(v) + model.Potential(this, s, m);
         }
+        if (frontContact.PolarInertiaKgM2 > 0) energy += .5 * s.FrontWheel * s.FrontWheel / frontContact.PolarInertiaKgM2;
+        if (frontContact.RelaxationMeters > 0) energy += .5 * frontContact.ShearStiffness * s.FrontShearMeters * s.FrontShearMeters;
         return energy;
     }
 

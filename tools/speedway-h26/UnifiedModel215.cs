@@ -22,8 +22,11 @@ internal sealed record Forces215(Tyre215 Front, Tyre215 Rear, Vec215 Rider, Vec2
     public SupportLoads216? PassiveSupport { get; init; }
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public LegLoads216? LeftFoot { get; init; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public FrontResponse221 FrontResponse { get; init; }
     internal double Loss => EngineLoss + TransmissionLoss + BearingLoss + SlideLoss + Front.NormalLoss + Rear.NormalLoss +
-        (PassiveSupport?.Loss ?? 0) + (LeftFoot is { } foot ? foot.StopLoss + foot.Contact.Dissipation : 0);
+        (PassiveSupport?.Loss ?? 0) + (LeftFoot is { } foot ? foot.StopLoss + foot.Contact.Dissipation : 0) +
+        FrontResponse.RelaxationLossWatts;
     internal Vec215 GroundForce => Front.Force + Rear.Force + (LeftFoot?.Force ?? default);
 }
 
@@ -93,6 +96,8 @@ internal sealed class UnifiedModel215(Geometry215 geometry, RiderSpec rider, Han
                     (next.RiderMomentum - mid.RiderMomentum).Norm + Math.Abs(next.Crank - mid.Crank) + Math.Abs(next.Wheel - mid.Wheel) +
                     (next.Center - mid.Center).Norm + (next.Rider - mid.Rider).Norm + (next.Pose.V - mid.Pose.V).Norm +
                     Math.Abs(next.Leg.Momentum - mid.Leg.Momentum) + Math.Abs(next.Leg.Extension - mid.Leg.Extension);
+                if (geometry.FrontContact.Enabled) error += Math.Abs(next.FrontWheel - mid.FrontWheel) +
+                    Math.Abs(next.FrontShearMeters - mid.FrontShearMeters);
                 mid = next;
                 motion = geometry.Motion(mid);
                 f = Evaluate(start, mid, motion, duration, steeringRate, impairment);
@@ -220,6 +225,8 @@ internal sealed class UnifiedModel215(Geometry215 geometry, RiderSpec rider, Han
             Momentum = start.Momentum + force * dt, Angular = start.Angular + Moment(f) * dt,
             RiderMomentum = start.RiderMomentum + relativeForce * dt, Crank = start.Crank + f.CrankDerivative * dt,
             Wheel = start.Wheel + f.WheelDerivative * dt,
+            FrontWheel = start.FrontWheel + f.FrontResponse.RotorTorqueNm * dt,
+            FrontShearMeters = start.FrontShearMeters + f.FrontResponse.StrainRateMetersPerSecond * dt,
             Leg = position.Leg with { Momentum = start.Leg.Momentum + (f.LeftFoot?.MomentumDerivative ?? 0) * dt }
         };
     }
@@ -279,7 +286,7 @@ internal sealed class UnifiedModel215(Geometry215 geometry, RiderSpec rider, Han
         }
         double fx = drivetrain ? trial.Wheel.Force : 0;
         double fy = drivetrain ? RearWheelDynamics.CoupledLateralForce(cr, side, trial.Wheel) : -cr * side / Math.Sqrt(1 + side * side);
-        var ff = FrontTyre(front);
+        var ff = FrontTyre(front, out var frontResponse);
         var rr = new Tyre215(rear, nr, fx, fy, cr, dr);
         double rpm = crank * 30 / Math.PI;
         double viscous = drivetrain ? loss.Mechanical(crank) + loss.Pumping(crank, throttle) : 0;
@@ -290,7 +297,8 @@ internal sealed class UnifiedModel215(Geometry215 geometry, RiderSpec rider, Han
         double wheelDerivative = drive - bearing + rear.Axle.Dot(rear.Radial.Cross(rr.Force));
         if (!drivetrain) wheelDerivative = 0;
         double slip = geometry.Base.Radius * rim - u;
-        double slideLoss = -ff.Force.Plane.Dot(front.Velocity.Plane) + fx * slip - fy * v;
+        double slideLoss = geometry.FrontContact.Enabled ? frontResponse.ContactLossWatts + fx * slip - fy * v :
+            -ff.Force.Plane.Dot(front.Velocity.Plane) + fx * slip - fy * v;
         var p = s.Momentum / geometry.Base.Mass;
         double speed = p.Plane.Norm;
         var drag = drivetrain ? new Vec215(p.X, p.Y, 0) * (-(LongitudinalDynamics.ProvisionalBaseResistanceForceNewtons +
@@ -305,26 +313,30 @@ internal sealed class UnifiedModel215(Geometry215 geometry, RiderSpec rider, Han
             : (actuator.Force(geometry, s, m.RiderRate, seatedReference), (LegLoads216?)null);
         double steeringPower = -ff.Force.Dot(front.SteerJacobian) * steeringRate;
         if (passive is { } pads) steeringPower += pads.SteerPower;
+        if (geometry.FrontContact.PolarInertiaKgM2 > 0) steeringPower += frontResponse.SteeringReactionWatts;
         return new(ff, rr, muscle, drag, rpm, gross - viscous,
             crankDerivative, wheelDerivative, slip / Math.Sqrt(u * u + wheel.LowSpeedMetersPerSecond * wheel.LowSpeedMetersPerSecond),
             steeringRate, gross * crank, viscous * crank,
             trial.Torque * (crank - ratio * rim) + (trial.Torque * ratio - drive) * rim,
             bearing * rim, slideLoss - drag.Dot(p), steeringPower,
-            Span(left.Z, center.Z, right.Z), Span(left.X, center.X, right.X)) { PassiveSupport = passive, LeftFoot = legLoads };
+            Span(left.Z, center.Z, right.Z), Span(left.X, center.X, right.X)) { PassiveSupport = passive, LeftFoot = legLoads, FrontResponse = frontResponse };
 
         Vec215 SteeringMoment(int sign)
         {
             double angle = Math.Clamp(initial.Steer + sign * steer.SteeringRateRadiansPerSecond * dt / 2,
                 -steer.MaximumSteeringRadians, steer.MaximumSteeringRadians);
             var patch = geometry.Contact(s with { Steer = angle }, m, true, steeringRate);
-            var tyre = FrontTyre(patch);
+            var tyre = FrontTyre(patch, out _);
             return s.Pose.Body(patch.Arm.Cross(tyre.Force));
         }
 
-        Tyre215 FrontTyre(Patch215 patch)
+        Tyre215 FrontTyre(Patch215 patch, out FrontResponse221 response)
         {
             double sideSpeed = patch.Velocity.Dot(patch.Side);
             double scale = HandlingContact.Scale(patch.Velocity.Dot(patch.Forward), sf, gripAcceleration);
+            if (geometry.FrontContact.Enabled)
+                return geometry.FrontContact.Evaluate(s, m, patch, nf, df, cf, scale, steeringRate, out response);
+            response = default;
             return new(patch, nf, 0, -cf * sideSpeed / Math.Sqrt(sideSpeed * sideSpeed + scale * scale), cf, df);
         }
     }
