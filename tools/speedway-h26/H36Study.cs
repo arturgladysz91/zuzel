@@ -471,7 +471,7 @@ internal static partial class Study191
     private static (Command215? Command, int Steps, string? Stop) H36Control(State215 state, Geometry215 g,
         UnifiedModel215 model, RiderView mark, double reference, BendVisit bend, Tune36 tune, double requested,
         float equilibriumDrive, Activation215[] pending, CornerCourse216 course, Preparation37? preparation = null,
-        Action<RollReference36>? observe = null, double rollReferenceScale = 1)
+        Action<RollReference36>? observe = null, double rollReferenceScale = 1, Command215? commandBasis = null)
     {
         double activation = state.Time + ReactionSeconds216;
         var lead = Simulate(state, pending, activation);
@@ -508,7 +508,9 @@ internal static partial class Study191
             lo + Math.Clamp((demand - left) / (right - left), 0, 1) * (hi - lo);
         return (Command(steer), count, null);
 
-        Command215 Command(double angle) => new(new((float)angle, guide.Drive), guide.Rider) { LeftFoot = guide.Boot };
+        Command215 Command(double angle) => commandBasis is { } input
+            ? input with { Bike = input.Bike with { SteeringRadians = (float)angle } }
+            : new(new((float)angle, guide.Drive), guide.Rider) { LeftFoot = guide.Boot };
 
         Forecast36 Test(double angle)
         {
