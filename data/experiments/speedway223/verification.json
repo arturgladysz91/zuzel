@@ -1,0 +1,87 @@
+{
+  "stages": {
+    "A": {
+      "screened": 64,
+      "exact": 5,
+      "linked": 0
+    },
+    "B": {
+      "screened": 64,
+      "exact": 10,
+      "linked": 0
+    },
+    "C": {
+      "screened": 64,
+      "exact": 5,
+      "linked": 7
+    },
+    "D": {
+      "screened": 64,
+      "exact": 5,
+      "linked": 0
+    }
+  },
+  "replays": {
+    "shoot-selected": {
+      "rows": 10629,
+      "commands": 330,
+      "maximumEnergyErrorJ": 0.0009473464182641058,
+      "minimumHardPartM": 0.003360131127904078,
+      "stop": "completed linked horizon"
+    },
+    "shoot-repair-selected": {
+      "rows": 10622,
+      "commands": 330,
+      "maximumEnergyErrorJ": 0.0009473464182641058,
+      "minimumHardPartM": 0.003360131127904078,
+      "stop": "completed linked horizon"
+    },
+    "speed-highest": {
+      "rows": 7256,
+      "commands": 339,
+      "maximumEnergyErrorJ": 0.0016370148840581813,
+      "minimumHardPartM": 0.007152026778163533,
+      "stop": "swept boundary clearance"
+    },
+    "periodic-selected": {
+      "rows": 12641,
+      "commands": 955,
+      "maximumEnergyErrorJ": 0.007367897553146071,
+      "minimumHardPartM": 0.0017619807334905255,
+      "stop": "swept boundary clearance"
+    },
+    "periodic-closure-selected": {
+      "rows": 12083,
+      "commands": 691,
+      "maximumEnergyErrorJ": 0.0009473464182641058,
+      "minimumHardPartM": 2.715193026753531e-05,
+      "stop": "swept hard-part ground"
+    },
+    "periodic-closure-local-selected": {
+      "rows": 12083,
+      "commands": 691,
+      "maximumEnergyErrorJ": 0.0009473464182641058,
+      "minimumHardPartM": 2.715193026753531e-05,
+      "stop": "swept hard-part ground"
+    },
+    "feedback-nominal": {
+      "rows": 11636,
+      "commands": 353,
+      "maximumEnergyErrorJ": 0.0009473464182641058,
+      "minimumHardPartM": 0.003360131127904078,
+      "stop": "state-dependent short-horizon candidates exhausted"
+    }
+  },
+  "parent": {
+    "total": 60,
+    "passed": 50,
+    "failed": 10
+  },
+  "current": {
+    "total": 60,
+    "passed": 50,
+    "failed": 10
+  },
+  "frozenRuns": 5,
+  "frozenLinked": 1
+}
