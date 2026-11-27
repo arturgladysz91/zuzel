@@ -168,7 +168,7 @@ def publish(raw, target):
                 line_losses[stem] = measure_line(archive)
     baseline = Path(__file__).resolve().parents[2] / "data/experiments/speedway224/line-selected.json.gz"
     line_losses["frozen-h43"] = measure_line(read(baseline))
-    (target / "line-losses.json").write_text(json.dumps(line_losses, indent=2) + "\n", encoding="utf-8")
+    (target / "line-losses.json").write_text(json.dumps(line_losses, indent=2) + "\n", encoding="utf-8", newline="\n")
     for stage in ("lines", "transition"):
         file = raw / f"{stage}.json.gz"
         if not file.exists():
@@ -184,6 +184,12 @@ def publish(raw, target):
             receipt = raw / f"{name}-decisions.json.gz"
             if receipt.exists():
                 profiles.append((f"{'ABCD'[family]} {plan['Id']}", read(receipt)["Profile"]))
+    final_ranking = raw / "best-laps.json.gz"
+    if final_ranking.exists():
+        chosen = read(final_ranking)["ByLap"][0]["Plan"]
+        label = f"{'ABCD'[chosen['Line']]} {chosen['Id']} (fastest lap)"
+        receipt = raw / f"best-lap-{chosen['Id']}-decisions.json.gz"
+        profiles.append((label, read(receipt)["Profile"]))
     if profiles:
         chart(target, profiles)
     checksums = {}
@@ -191,7 +197,7 @@ def publish(raw, target):
         if path.is_file() and path.name != "manifest.json":
             with path.open("rb") as source:
                 checksums[path.name] = {"bytes": path.stat().st_size, "sha256": hashlib.file_digest(source, "sha256").hexdigest()}
-    (target / "manifest.json").write_text(json.dumps(checksums, indent=2) + "\n", encoding="utf-8")
+    (target / "manifest.json").write_text(json.dumps(checksums, indent=2) + "\n", encoding="utf-8", newline="\n")
 
 
 if __name__ == "__main__":

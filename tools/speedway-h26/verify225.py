@@ -60,6 +60,9 @@ def verify(root):
     parent = regression(root / "parent.trx.gz")
     current = regression(root / "current.trx.gz")
     assert parent == current
+    counters, failures = current
+    assert counters == {"total": 60, "passed": 50, "failed": 10}
+    assert all("Box2D construction forbidden" in message for message in failures.values())
     manifest = read(root / "manifest.json")
     for path, expected in manifest.items():
         with (root / path).open("rb") as source:
@@ -69,7 +72,7 @@ def verify(root):
     assert proofs and all(p["PositionErrorM"] < .002 and p["Boundary"] >= .50 and p["Ground"] > 0 for p in proofs)
     assert all(p["Energy"]["MaximumMuscleN"] <= 700.00001 and p["Energy"]["MaximumMuscleWatts"] <= 350.00001 for p in proofs)
     return {"stages": stages, "tapes": tapes, "recheckedSupport": len(rechecked), "independentReplays": len(proofs),
-            "regression": current, "checkedDigests": len(manifest)}
+            "regression": {**counters, "nativeGuardFailures": sorted(failures)}, "checkedDigests": len(manifest)}
 
 
 if __name__ == "__main__":

@@ -204,9 +204,10 @@ internal static partial class Study191
         var outputScores = new List<Summary45>();
         foreach (var score in new[] { byLap[0], byPair[0] }.DistinctBy(x => x.Plan.Id))
         {
-            var run = Certify45(lab, g, Ride45(lab, g, root, reports[0].Fork, score.Plan, score.Finish, exact: true));
-            var result = Summarize45(lab, g, run, score.Finish, SecondExit44(lab));
-            if (Math.Abs(score.Station - result.Station) > .003)
+            var run = Certify45(lab, g, Ride45(lab, g, root, reports[0].Fork, score.Plan, Pair45, exact: true));
+            var result = Summarize45(lab, g, run, Pair45, SecondExit44(lab));
+            if (!result.Finished || result.Laps[1].Seconds is not { } seconds ||
+                Math.Abs(score.Laps[1].Seconds.GetValueOrDefault() - seconds) > .003)
                 throw new InvalidOperationException($"Complete lap {score.Plan.Id} failed its independent roll-out.");
             SaveRun45(lab, g, output, "best-lap-" + score.Plan.Id, run, result);
             outputScores.Add(result);
