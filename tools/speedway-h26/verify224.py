@@ -1,8 +1,10 @@
 """Validate H43 MODEL receipts, independent replays and file digests."""
 
 import argparse
+import gzip
 import hashlib
 import math
+import re
 from pathlib import Path
 
 from verify219 import regression
@@ -71,6 +73,18 @@ def feedback(root):
         label = "nominal" if i == 0 else f"holdout-{i}"
         event = read(root / f"feedback-{label}-decisions.json.gz")
         assert case["Condition"] == event["Condition"]
+        if i == 0 and (root / "feedback-nominal-equivalence.json").is_file():
+            pair = read(root / "feedback-nominal-equivalence.json")
+            trace = root / pair["ArchivedTrace"]
+            with gzip.open(trace, "rb") as stream:
+                start = re.sub(rb'^\{"Name":"[^"]+",', b"{", stream.read(300), count=1)
+                digest = hashlib.sha256(start)
+                while block := stream.read(1 << 20):
+                    digest.update(block)
+            assert pair["ExactTelemetryExcludingDisplayName"] and digest.hexdigest() == pair["CanonicalMotionSha256"]
+            motion = read(trace)
+            assert motion["Seed"] == event["Root"]["State"] and motion["Commands"] == event["Tape"]
+            assert motion["Rows"][-1]["State"] == event["Final"]["State"]
         tape(event["Tape"])
         assert case["H43Timing"]["Count"] == len(event["H43Decisions"])
         if case["CarrierRetained"] is not None:
