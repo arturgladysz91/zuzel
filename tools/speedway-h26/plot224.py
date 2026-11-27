@@ -30,10 +30,13 @@ def main():
     fig, axes = plt.subplots(2, 2, figsize=(10.7, 6.6), sharex=True, layout="constrained")
     routes = [("#222 return", old, "#8e365a", "--"),
               ("#224 selected return", results[winner], "#137a73", "-")]
-    if "four-attempt" in results and any(p["Station"] >= 2 * seam for p in results["four-attempt"]):
-        fourth = [{**p, "Station": p["Station"] - 2 * seam} for p in results["four-attempt"]
-                  if 3 * seam - 52 <= p["Station"] <= 3 * seam + 40]
-        if fourth:
+    later = [results[name] for name in ("initial-four", "four-attempt", "support-recourse-selected",
+                                        "support-certification-selected") if name in results]
+    if later:
+        longest = max(later, key=lambda trace: trace[-1]["Station"])
+        if longest[-1]["Station"] >= 3 * seam:
+            fourth = [{**p, "Station": p["Station"] - 2 * seam} for p in longest
+                      if 3 * seam - 52 <= p["Station"] <= 3 * seam + 40]
             routes.append(("#224 approach to lap four", fourth, "#c66b1b", "-."))
     for label, data, colour, style in routes:
         rows = [r for r in data if -52 <= r["Station"] - seam <= 40]
@@ -48,7 +51,7 @@ def main():
     axes[0, 0].legend(loc="best", fontsize=8)
     for ax in axes[1]:
         ax.set_xlabel("Course metres from flying entry")
-    fig.suptitle("H43-P · Repeated bend approach and recovery", fontsize=15, fontweight="bold")
+    fig.suptitle("H43-P Â· Repeated bend approach and recovery", fontsize=15, fontweight="bold")
     fig.savefig(root / "periodic-entry.png", dpi=165)
 
 
