@@ -124,7 +124,8 @@ internal static partial class Study191
     }
 
     private static Attempt38 PulseRun38(Lab38 lab, Archive38 archive, Candidate37 parent, PulsePlan38 plan, Geometry215 g,
-        Checkpoint38 start, Activation215[] before, bool includePrefix, float steadyDrive)
+        Checkpoint38 start, Activation215[] before, bool includePrefix, float steadyDrive,
+        Action<LegacyStep46>? observed = null)
     {
         var model = lab.Engine(g);
         var s = start;
@@ -166,7 +167,7 @@ internal static partial class Study191
                 if (selected.Command is { } on) c = on;
             }
             queue = Submit38(s, queue, c);
-            var flight = Window38(lab, g, model, s, queue, Cadence38, finishAt: stopAt);
+            var flight = Window38(lab, g, model, s, queue, Cadence38, finishAt: stopAt, observed: observed);
             s = flight.Final;
             states.AddRange(flight.Steps);
             distances.AddRange(flight.Distances);

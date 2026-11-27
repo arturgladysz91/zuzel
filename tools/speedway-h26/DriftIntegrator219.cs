@@ -20,7 +20,7 @@ internal static partial class Study191
     private static Flight38 Window38(Lab38 lab, Geometry215 g, UnifiedModel215 model,
         Checkpoint38 start, Activation215[] commands, double seconds, SpatialBike36? envelope = null,
         bool exact = false, bool forecast = false, double finishAt = double.PositiveInfinity,
-        Action<RejectedStep45>? rejected = null)
+        Action<RejectedStep45>? rejected = null, Action<LegacyStep46>? observed = null)
     {
         var shape = envelope ?? H36Footprint;
         var state = start.State;
@@ -38,6 +38,7 @@ internal static partial class Study191
             try
             {
                 var row = model.Step(state, commands, duration);
+                observed?.Invoke(new(state, row, end, duration, t));
                 var tail = lab.Course.Mark(row.After, g);
                 double nextEdge = shape.Clearance(lab.Track, g, row.After, exact);
                 double nextGround = shape.GroundMargin(g, row.After);

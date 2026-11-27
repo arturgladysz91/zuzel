@@ -19,7 +19,8 @@ internal static partial class Study191
         return new(book, parent, pulse, carrier);
     }
 
-    private static Fork40 FirstArc42(Lab38 lab, Geometry215 g, Input42 book, HeldSeed38 h)
+    private static Fork40 FirstArc42(Lab38 lab, Geometry215 g, Input42 book, HeldSeed38 h,
+        Action<LegacyStep46>? observed = null)
     {
         var rest = SteadyCircle215(lab.Engine(g), g, lab.Fixture.Rest(g, NominalSupport216), (40 + h.SpeedKph) / 3.6, 0,
             book.Reference.Seed.State.Time, lab.Fixture.Ratio, balanceRider: true);
@@ -27,10 +28,10 @@ internal static partial class Study191
         var seed = new Checkpoint38(Place36(rest.State, lab.Bend.Entry + book.Reference.Seed.Distance, 8.2 + h.LaneMeters),
             book.Reference.Seed.Distance);
         var prior = book.Reference.InitialCommands.Select(x => x with { Time = x.Time + h.QueueDelaySeconds }).ToArray();
-        var prefix = ReplayTape38(lab, g, seed, prior, book.Reference.Initial.State.Time);
+        var prefix = ReplayTape38(lab, g, seed, prior, book.Reference.Initial.State.Time, observed: observed);
         if (prefix.Stop != "verified interval") return new(h.Name, seed, prefix, prior);
         var arc = PulseRun38(lab, book.Base.Reference, book.Base.Parent, book.Prefix, g, prefix.Final, prior, false,
-            book.Base.EquilibriumDrive);
+            book.Base.EquilibriumDrive, observed);
         return new(h.Name, seed, arc.Trail with { Steps = [.. prefix.Steps, .. arc.Trail.Steps],
             Distances = [.. prefix.Distances, .. arc.Trail.Distances],
             Boundary = Math.Min(prefix.Boundary, arc.Trail.Boundary), Ground = Math.Min(prefix.Ground, arc.Trail.Ground) },
@@ -38,7 +39,8 @@ internal static partial class Study191
     }
 
     private static Run40 Adaptive42(Lab38 lab, Geometry215 g, Fork40 arc, Plan39 carrier, Policy42 policy,
-        double? end = null, VerifiedCache42? cache = null, bool keepPoweredExit = false)
+        double? end = null, VerifiedCache42? cache = null, bool keepPoweredExit = false,
+        Action<LegacyStep46>? observed = null)
     {
         double station = keepPoweredExit ? lab.Bend.Length + 20 : carrier.Start;
         if (arc.Flight.Final.Distance < station)
@@ -46,13 +48,13 @@ internal static partial class Study191
         var start = Slice42(arc, station);
         double activate = lab.Bend.NextEntry - lab.Bend.Entry - policy.Line.PreparationMeters;
         if (start.At.Distance >= activate)
-            return Ride42(lab, g, arc.Seed, start.At, start.Prefix, start.Distances, start.Commands, policy, end, cache);
+            return Ride42(lab, g, arc.Seed, start.At, start.Prefix, start.Distances, start.Commands, policy, end, cache, observed);
         var drive = RunExit39(lab, null, g, carrier, arc.Seed, start.At, start.Commands, start.Prefix, start.Distances,
-            finishOverride: activate);
+            finishOverride: activate, observed: observed);
         var f = drive.Flight;
         if (f.Final.Distance < activate)
             return new(policy.Line, arc.Seed, start.At, start.Commands, drive.Commands, f, []);
-        return Ride42(lab, g, arc.Seed, f.Final, f.Steps, f.Distances, drive.Commands, policy, end, cache);
+        return Ride42(lab, g, arc.Seed, f.Final, f.Steps, f.Distances, drive.Commands, policy, end, cache, observed);
     }
 
     private static Score40 Score42(Lab38 lab, Geometry215 geometry, Run40 r, Policy42 policy) =>

@@ -62,10 +62,12 @@ internal sealed class UnifiedModel215(Geometry215 geometry, RiderSpec rider, Han
         physics.TwoContactBike ?? TwoContactBikeParameters.Default, physics.LoadBasedTyres).EffectiveFrictionCoefficient *
         settings.GripScale;
 
-    internal Step215 Step(State215 start, Activation215[] queue, double duration, double impairment = 0)
+    internal Step215 Step(State215 start, Activation215[] queue, double duration, double impairment = 0,
+        SolveTrace46? audit = null)
     {
         if (!double.IsFinite(duration) || duration is <= 0 or > .005001)
             throw new ArgumentOutOfRangeException(nameof(duration));
+        if (audit is not null) audit.Requested = duration;
         while (start.Next < queue.Length && queue[start.Next].Time <= start.Time + 5e-12)
         {
             var command = queue[start.Next];
@@ -82,6 +84,12 @@ internal sealed class UnifiedModel215(Geometry215 geometry, RiderSpec rider, Han
         double steeringTravel = target - start.Steer;
         double steeringRate = Math.Abs(steeringTravel) > 1e-10 ? Math.CopySign(steer.SteeringRateRadiansPerSecond, steeringTravel) : 0;
         if (steeringRate != 0) duration = Math.Min(duration, Math.Abs(steeringTravel / steeringRate));
+        if (audit is not null)
+        {
+            audit.Active = start;
+            audit.Capped = duration;
+            audit.NextActivation = start.Next < queue.Length ? queue[start.Next] : null;
+        }
         Validate(start);
         for (int subdivisions = 0; subdivisions <= 28; subdivisions++)
         {
@@ -89,10 +97,12 @@ internal sealed class UnifiedModel215(Geometry215 geometry, RiderSpec rider, Han
             var motion = geometry.Motion(mid);
             var f = Evaluate(start, mid, motion, duration, steeringRate, impairment);
             bool converged = false;
-            for (int iteration = 0; iteration < 36; iteration++)
+            int iteration = 0;
+            double error = 0;
+            for (; iteration < 36; iteration++)
             {
                 var next = Advance(start, mid, motion, f, duration / 2);
-                double error = (next.Momentum - mid.Momentum).Norm + (next.Angular - mid.Angular).Norm +
+                error = (next.Momentum - mid.Momentum).Norm + (next.Angular - mid.Angular).Norm +
                     (next.RiderMomentum - mid.RiderMomentum).Norm + Math.Abs(next.Crank - mid.Crank) + Math.Abs(next.Wheel - mid.Wheel) +
                     (next.Center - mid.Center).Norm + (next.Rider - mid.Rider).Norm + (next.Pose.V - mid.Pose.V).Norm +
                     Math.Abs(next.Leg.Momentum - mid.Leg.Momentum) + Math.Abs(next.Leg.Extension - mid.Leg.Extension);
@@ -106,10 +116,15 @@ internal sealed class UnifiedModel215(Geometry215 geometry, RiderSpec rider, Han
 
             if (!converged && duration > MinimumStep)
             {
+                audit?.Attempts.Add(new(duration, iteration, error, "midpoint bisection", [], null));
                 duration /= 2;
                 continue;
             }
-            if (!converged) throw new InvalidOperationException("coupled midpoint did not converge");
+            if (!converged)
+            {
+                audit?.Attempts.Add(new(duration, iteration, error, "midpoint rejected", [], null));
+                throw new InvalidOperationException("coupled midpoint did not converge");
+            }
             var drift = start with { Momentum = mid.Momentum };
             double fb = geometry.GapBound(drift, motion, true, steeringRate, duration);
             double rb = geometry.GapBound(drift, motion, false, steeringRate, duration);
@@ -118,6 +133,7 @@ internal sealed class UnifiedModel215(Geometry215 geometry, RiderSpec rider, Han
             if (events.Length > 0 && events[0].Seconds > EventTimeTolerance &&
                 events[0].Seconds < duration - EventTimeTolerance)
             {
+                audit?.Attempts.Add(new(duration, iteration + 1, error, "contact split", events, null));
                 // If several nearby contacts keep moving the root on re-solving,
                 // advance a demonstrably earlier prefix and recheck the event there.
                 duration = support != null && subdivisions >= 5 ? Math.Min(events[0].Seconds, duration / 2) : events[0].Seconds;
@@ -125,6 +141,7 @@ internal sealed class UnifiedModel215(Geometry215 geometry, RiderSpec rider, Han
             }
 
             var end = Advance(start, mid, motion, f, duration);
+            if (audit is not null) audit.Candidate = end;
             Validate(end);
             double e0 = StoredEnergy(start), e1 = StoredEnergy(end);
             double work = f.LeftFoot?.MusclePower ?? f.Rider.Dot(motion.RiderRate);
@@ -133,6 +150,7 @@ internal sealed class UnifiedModel215(Geometry215 geometry, RiderSpec rider, Han
             // Reject the interval before committing any impulses or advancing the clock.
             if (support != null && Math.Abs(energyResidual) > SupportWorkErrorWatts * duration + 1e-8)
             {
+                audit?.Attempts.Add(new(duration, iteration + 1, error, "work bisection", events, energyResidual));
                 if (duration <= MinimumStep) throw new InvalidOperationException("support work quadrature did not converge");
                 duration /= 2;
                 continue;
@@ -171,6 +189,7 @@ internal sealed class UnifiedModel215(Geometry215 geometry, RiderSpec rider, Han
             energyResidual = e1 - e0 - (f.EnginePower - f.Loss + work + f.SteeringPower) * duration;
             var projected = new GeometryReceipt215(start.Pose, mid.Pose, end.Pose, fb, rb, end.Pose.Yaw,
                 f.Front.Patch.Arm, f.Rear.Patch.Arm);
+            audit?.Attempts.Add(new(duration, iteration + 1, error, "accepted", events, energyResidual));
             return new(start, mid, end, f, request, receipt, projected, events, e0, e1, work, energyResidual,
                 Moment(f), (afterMotion.RiderRate - beforeMotion.RiderRate) / duration,
                 (afterMotion.WorldRate - beforeMotion.WorldRate) / duration, subdivisions);

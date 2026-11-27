@@ -7,7 +7,8 @@ namespace SpeedwayHandling;
 internal static partial class Study191
 {
     private static Run40 Ride42(Lab38 lab, Geometry215 g, Checkpoint38 root, Checkpoint38 initial, Step215[] prefix,
-        double[] stations, Activation215[] earlier, Policy42 policy, double? targetEnd = null, VerifiedCache42? cache = null)
+        double[] stations, Activation215[] earlier, Policy42 policy, double? targetEnd = null, VerifiedCache42? cache = null,
+        Action<LegacyStep46>? observed = null)
     {
         var model = lab.Engine(g);
         var next = Map199.At(2, 1);
@@ -33,7 +34,7 @@ internal static partial class Study191
             decisions.Add(summary with { Milliseconds = Stopwatch.GetElapsedTime(started).TotalMilliseconds });
             if (action is not { } command) { stop = summary.Refusal ?? "controller candidate exhaustion"; break; }
             tape = Submit38(s, tape, command);
-            var r = Window38(lab, g, model, s, tape, Cadence38, finishAt: end);
+            var r = Window38(lab, g, model, s, tape, Cadence38, finishAt: end, observed: observed);
             s = r.Final;
             steps.AddRange(r.Steps);
             distances.AddRange(r.Distances);

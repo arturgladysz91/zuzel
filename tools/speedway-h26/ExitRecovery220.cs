@@ -194,7 +194,8 @@ internal static partial class Study191
     }
 
     private static Trial39 RunExit39(Lab38 lab, Witnesses39? f, Geometry215 g, Plan39 plan, Checkpoint38 seed,
-        Checkpoint38 initial, Activation215[] pending, Step215[] prefix, double[] prefixDistances, double? finishOverride = null)
+        Checkpoint38 initial, Activation215[] pending, Step215[] prefix, double[] prefixDistances, double? finishOverride = null,
+        Action<LegacyStep46>? observed = null)
     {
         var model = lab.Engine(g);
         var state = initial;
@@ -226,7 +227,7 @@ internal static partial class Study191
             forecast += next.Steps;
             if (next.Command is not { } c) { stop = "no feasible proposed recovery"; break; }
             commands = Submit38(state, commands, c);
-            var window = Window38(lab, g, model, state, commands, Cadence38, finishAt: end);
+            var window = Window38(lab, g, model, state, commands, Cadence38, finishAt: end, observed: observed);
             state = window.Final;
             steps.AddRange(window.Steps);
             distances.AddRange(window.Distances);
