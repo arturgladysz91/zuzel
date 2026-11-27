@@ -212,7 +212,7 @@ internal static partial class Study191
             .08 + .52 * q(47), start, band, speed && i % 4 == 3);
     }
 
-    private static T Persist44<T>(string directory, int id, Func<T> run)
+    private static T Persist44<T>(string directory, int id, Func<T> run) where T : notnull
     {
         string file = Path.Combine(directory, id.ToString() + ".json");
         if (File.Exists(file)) return ReadPlain214<T>(file);

@@ -51,7 +51,7 @@ def main():
     axes[0, 0].legend(loc="best", fontsize=8)
     for ax in axes[1]:
         ax.set_xlabel("Course metres from flying entry")
-    fig.suptitle("H43-P Â· Repeated bend approach and recovery", fontsize=15, fontweight="bold")
+    fig.suptitle("H43-P | Repeated bend approach and recovery", fontsize=15, fontweight="bold")
     fig.savefig(root / "periodic-entry.png", dpi=165)
 
 
