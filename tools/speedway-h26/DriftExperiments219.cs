@@ -237,7 +237,8 @@ internal static partial class Study191
     }
 
     private static Flight38 ReplayTape38(Lab38 lab, Geometry215 g, Checkpoint38 seed, Activation215[] tape,
-        double until, SpatialBike36? shape = null, bool exact = false, double endDistance = double.PositiveInfinity)
+        double until, SpatialBike36? shape = null, bool exact = false, double endDistance = double.PositiveInfinity,
+        Action<RejectedStep45>? rejected = null)
     {
         shape ??= H36Footprint;
         var engine = lab.Engine(g);
@@ -251,7 +252,8 @@ internal static partial class Study191
         {
             if (state.Distance >= endDistance) break;
             if (split - state.State.Time <= 1e-9) continue;
-            var flight = Window38(lab, g, engine, state, tape, split - state.State.Time, shape, exact, finishAt: endDistance);
+            var flight = Window38(lab, g, engine, state, tape, split - state.State.Time, shape, exact,
+                finishAt: endDistance, rejected: rejected);
             all.AddRange(flight.Steps);
             distances.AddRange(flight.Distances);
             state = flight.Final;

@@ -19,7 +19,8 @@ internal static partial class Study191
 
     private static Flight38 Window38(Lab38 lab, Geometry215 g, UnifiedModel215 model,
         Checkpoint38 start, Activation215[] commands, double seconds, SpatialBike36? envelope = null,
-        bool exact = false, bool forecast = false, double finishAt = double.PositiveInfinity)
+        bool exact = false, bool forecast = false, double finishAt = double.PositiveInfinity,
+        Action<RejectedStep45>? rejected = null)
     {
         var shape = envelope ?? H36Footprint;
         var state = start.State;
@@ -33,16 +34,22 @@ internal static partial class Study191
         while (state.Time < end - 1e-9 && t < finishAt)
         {
             if (steps.Count > 2200) { reason = "integration step budget"; break; }
+            double duration = Math.Min(end - state.Time, forecast ? .005 : StepSeconds216);
             try
             {
-                var row = model.Step(state, commands, Math.Min(end - state.Time, forecast ? .005 : StepSeconds216));
+                var row = model.Step(state, commands, duration);
                 var tail = lab.Course.Mark(row.After, g);
                 double nextEdge = shape.Clearance(lab.Track, g, row.After, exact);
                 double nextGround = shape.GroundMargin(g, row.After);
                 double sweptEdge = Math.Min(edge, nextEdge) - shape.TransportBound(g, row) / 2;
                 double sweptGround = Math.Min(floor, nextGround) - shape.TransportBound(g, row, groundOnly: true) / 2;
-                if (sweptGround <= 0) { reason = "swept hard-part ground"; break; }
-                if (CornerCourse216.Violation(tail, sweptEdge) is { } failure) { reason = failure; break; }
+                string? failure = sweptGround <= 0 ? "swept hard-part ground" : CornerCourse216.Violation(tail, sweptEdge);
+                if (failure is not null)
+                {
+                    reason = failure;
+                    rejected?.Invoke(new(failure, t, duration, state, row.After, row, sweptEdge, sweptGround));
+                    break;
+                }
                 t += Frame.UnwrapDelta(mark.Road.ReferenceMeters, tail.Road.ReferenceMeters);
                 state = row.After;
                 mark = tail;
@@ -53,7 +60,12 @@ internal static partial class Study191
                 steps.Add(row);
                 distances.Add(t);
             }
-            catch (InvalidOperationException error) { reason = error.Message; break; }
+            catch (InvalidOperationException error)
+            {
+                reason = error.Message;
+                rejected?.Invoke(new(reason, t, duration, state, (error as ChassisEnvelope36)?.Candidate, null, null, null));
+                break;
+            }
         }
         return new(new(state, t), steps.ToArray(), distances.ToArray(), reason, minEdge, minGround);
     }

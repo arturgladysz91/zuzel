@@ -39,13 +39,14 @@ internal static partial class Study191
         return a + (b - a) * blend;
     }
 
-    private static LinePoint44 LineAt44(Lab38 lab, Route44 p, double reference)
+    private static LinePoint44 LineAt44(Lab38 lab, Route44 p, double reference, Func<double, double>? custom = null)
     {
         const double sample = 2.8;
-        var a = Frame.At(reference - sample, Lane44(lab, p, reference - sample)).Position;
-        double lane = Lane44(lab, p, reference);
+        double Offset(double at) => custom?.Invoke(at) ?? Lane44(lab, p, at);
+        var a = Frame.At(reference - sample, Offset(reference - sample)).Position;
+        double lane = Offset(reference);
         var middle = Frame.At(reference, lane).Position;
-        var b = Frame.At(reference + sample, Lane44(lab, p, reference + sample)).Position;
+        var b = Frame.At(reference + sample, Offset(reference + sample)).Position;
         var l = middle - a;
         var r = b - middle;
         double curv = 2 * ((double)l.X * r.Y - (double)l.Y * r.X) /
@@ -55,7 +56,8 @@ internal static partial class Study191
     }
 
     private static Choice44 Choose44(Lab38 lab, Geometry215 g, UnifiedModel215 model, SpatialBike36 shape,
-        Checkpoint38 at, Forces215? last, Activation215[] tape, Route44 p)
+        Checkpoint38 at, Forces215? last, Activation215[] tape, Route44 p, Plan45? plan = null,
+        Action<PaceAudit45>? audit = null)
     {
         var s = at.State;
         var mark = lab.Course.Mark(s, g);
@@ -69,6 +71,8 @@ internal static partial class Study191
         double slip = ContactSlip39(g, s);
         double heading = Difference38(Heading38(s), Math.Atan2(mark.Road.Tangent.Y, mark.Road.Tangent.X));
         var force = last is null ? null : ProjectForce42(g, s, last);
+        Func<double, double>? offsetAt = plan is { Line: not Line45.A }
+            ? station => Lerp44(Lane44(lab, plan.InheritedLine ?? p, station), Lane45(lab, plan, station), plan.Blend) : null;
         double floor = ClearanceRoll37(g, s, -Geometry215.MaxRoll, ground < .028 ? .012 : .009);
         double outwardAuthority = force is null ? 6 : Math.Clamp(force.RollMaximum / Geometry215.RollInertia, 3, 13);
         double oscillation = Math.Max(0, -rollRate);
@@ -109,7 +113,8 @@ internal static partial class Study191
         {
             var gains = rescue == 0 ? tune : tune with { Damping = tune.Damping + 2.5 * rescue };
             var result = H36Control(s, g, model, mark, reference, bend, gains, p.StraightKph, .16f, tape, lab.Course,
-                observe: q => guide = q, referenceBasis: (body, station) => Target(body, station, rescue));
+                observe: q => guide = q, referenceBasis: (body, station) => Target(body, station, rescue),
+                responseSeconds: rescue == 0 ? plan?.FeedbackSeconds ?? .065 : .065);
             forecasts += result.Steps;
             return result;
         }
@@ -146,8 +151,8 @@ internal static partial class Study191
             double future = station + preview;
             // Near the join, let the next bend's planned path take over through the
             // projected heading, while the current state supplies the lateral correction.
-            var aim = LineAt44(lab, p, future);
-            double crossError = Lane44(lab, p, station) - body.Road.OffsetMeters;
+            var aim = LineAt44(lab, p, future, offsetAt);
+            double crossError = (offsetAt?.Invoke(station) ?? Lane44(lab, p, station)) - body.Road.OffsetMeters;
             double settle = Math.Clamp(fromLastExit / Math.Max(8, (Half44 - lab.Bend.Length) * .42), 0, 1);
             double offset = aim.Offset;
             if (p.Guide == Guide44.PriorBlend)
@@ -158,7 +163,7 @@ internal static partial class Study191
             }
             desiredOffset = offset;
             double pursuit = PreviewCurvature36(body, future, offset);
-            double middle = LineAt44(lab, p, station + .58 * preview).Curvature;
+            double middle = LineAt44(lab, p, station + .58 * preview, offsetAt).Curvature;
             double curve = p.Guide switch
             {
                 Guide44.Continuous => .76 * pursuit + .24 * middle,
@@ -172,7 +177,8 @@ internal static partial class Study191
             if (p.Guide == Guide44.Measured && force is not null)
                 curve += .0012 * Math.Clamp((force.CurrentInward - speed * speed * curve) / 5, -1, 1);
             double lean = -Math.Atan(p.LeanScale * speed * speed * curve / Gravity216);
-            lean = Math.Clamp(lean, floor, .43);
+            double rawLean = lean;
+            lean = Math.Clamp(lean, plan?.Ablation == Limit45.Lean ? -Geometry215.MaxRoll : floor, .43);
             if (rescue > 0 || (aperture < .018 && rollRate < -.14))
             {
                 double brake = Math.Clamp(.026 - aperture, 0, .30);
@@ -184,24 +190,32 @@ internal static partial class Study191
             if (p.Guide == Guide44.Measured && force is not null)
                 available = Math.Min(available, Math.Max(.67 * available,
                     force.MaximumInward + .64 * (last?.Rear.Normal ?? 0) * Grip42 / g.Base.Mass));
-            double targetSpeed = p.StraightKph / 3.6;
+            double targetSpeed = plan?.Ablation == Limit45.Straight ? 140 / 3.6 : p.StraightKph / 3.6;
+            if (plan?.Ablation == Limit45.Turn) available += 4;
+            double deceleration = p.Deceleration + (plan?.Ablation == Limit45.Deceleration ? 3 : 0);
+            double envelopeSpeed = double.PositiveInfinity;
             // A curve farther downstream is reachable after a physical coast interval.
             // The horizon is tied to distance and tyre load, independently of the endpoint.
             foreach (double look in new[] { 4d, 10, 18, 29, 42 })
             {
-                double nextCurve = Math.Max(.001, LineAt44(lab, p, station + look).Curvature);
-                double compatible = Math.Sqrt(available / nextCurve + 2 * p.Deceleration * look);
-                targetSpeed = Math.Min(targetSpeed, compatible);
+                double nextCurve = Math.Max(.001, LineAt44(lab, p, station + look, offsetAt).Curvature);
+                double compatible = Math.Sqrt(available / nextCurve + 2 * deceleration * look);
+                envelopeSpeed = Math.Min(envelopeSpeed, compatible);
+                if (plan?.Ablation != Limit45.Lookahead) targetSpeed = Math.Min(targetSpeed, compatible);
             }
             double free = Math.Clamp(.16 + .19 * (targetSpeed - speed) + p.ThrottleBias * settle, 0, 1);
+            double afterPace = free;
             if (p.PreserveFrontier && distanceToTurn > 17 && distanceToTurn < 42 && frontLoad > 250)
                 free = Math.Max(free, Math.Clamp((distanceToTurn - 17) / 17, 0, 1) * .88);
             double leave = bend.Exit - station;
-            if (leave >= -4 && leave < 16 && frontLoad > 225 && Math.Abs(rollRate) < .85)
+            if (plan?.Ablation != Limit45.ExitFloor && leave >= -4 && leave < 16 && frontLoad > 225 && Math.Abs(rollRate) < .85)
                 free = Math.Max(free, p.ExitDrive * Smooth37((16 - leave) / 20));
             if (settling && fromLastExit >= -3 && fromLastExit < 10 && frontLoad > 130)
                 free = Math.Max(free, .27 * (1 - .4 * settle));
-            free *= Math.Clamp(1 - 1.4 * Math.Max(0, slip - .23), .24, 1);
+            double afterFloor = free;
+            if (plan?.Ablation != Limit45.Slip)
+                free *= Math.Clamp(1 - 1.4 * Math.Max(0, slip - .23), .24, 1);
+            double afterSlip = free;
             if (rescue > 0) free = Math.Min(free, rescue == 1 ? .28 : rescue == 2 ? .14 : 0);
             if (aperture < -.05 && rollRate < -.50) free = Math.Min(free, .15);
             double phase = Math.Sin(Math.PI * Math.Clamp(local / bend.Length, 0, 1));
@@ -221,6 +235,11 @@ internal static partial class Study191
                 free = Math.Min(free, 1 - .94 * blend);
                 posture += new Vec215(.08, 0, -.018) * blend;
             }
+            if (plan is { } proposal)
+                Adjust45(lab, g, proposal, s, motion, last, body, station, frontLoad, slip, aperture,
+                    rollRate, curve, ref free, ref lean, ref posture);
+            audit?.Invoke(new(station - lab.Bend.Entry, available, deceleration, envelopeSpeed * 3.6,
+                targetSpeed * 3.6, afterPace, afterFloor, afterSlip, free, rawLean, lean, slip, rescue));
             return new(curve, lean, preview, 3.6 * targetSpeed, (float)Math.Clamp(free, 0, 1), posture, .35 * phase * phase);
         }
     }

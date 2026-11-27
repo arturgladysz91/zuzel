@@ -472,7 +472,7 @@ internal static partial class Study191
         UnifiedModel215 model, RiderView mark, double reference, BendVisit bend, Tune36 tune, double requested,
         float equilibriumDrive, Activation215[] pending, CornerCourse216 course, Preparation37? preparation = null,
         Action<RollReference36>? observe = null, double rollReferenceScale = 1, Command215? commandBasis = null,
-        Func<RiderView, double, RollReference36>? referenceBasis = null)
+        Func<RiderView, double, RollReference36>? referenceBasis = null, double responseSeconds = .065)
     {
         double activation = state.Time + ReactionSeconds216;
         var lead = Simulate(state, pending, activation);
@@ -490,7 +490,7 @@ internal static partial class Study191
         observe?.Invoke(guide);
         var m = g.Motion(x);
         double rate = RollRate36(x, m.BodyRate);
-        const double response = .065;
+        double response = responseSeconds;
         double demand = rate + response * (tune.RollGain * (guide.Roll - x.Pose.Roll) - tune.Damping * rate);
         double steerTravel = response * Steering217.SteeringRateRadiansPerSecond;
         double lo = Math.Max(-Steering217.MaximumSteeringRadians, x.Steer - steerTravel);
