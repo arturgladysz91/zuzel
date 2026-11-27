@@ -67,6 +67,35 @@ internal static partial class Study191
         Console.WriteLine($"H43 rider support recourse: {result.Station:F3} m, {result.Stop}.");
     }
 
+    private sealed record SupportTrial44(Route44 Policy, Candidate44 Facts);
+    private sealed record SupportSearch44(SupportTrial44[] Proposals, Candidate44 Exact, bool FourPass);
+
+    private static void CertifySupport44(Lab38 lab, string output)
+    {
+        var screening = ReadPlain214<SupportSearch44>(Path.Combine(output, "support-recourse.json"));
+        double end = 4 * Frame.LapMeters + PostMarkerMeters43;
+        var candidates = screening.Proposals.Where(x => x.Facts.Station >= end && x.Policy.Id != screening.Exact.Id).ToArray();
+        if (candidates.Length == 0) return;
+        var g = lab.Geometry(true);
+        var root = ReadMotion42(lab, Path.Combine(output, "initial-four.json.gz"), "initial four-lap attempt");
+        var examined = candidates.AsParallel().WithDegreeOfParallelism(Math.Min(Jobs44, candidates.Length)).Select(item =>
+        {
+            var p = item.Policy;
+            var exact = ExactReplay44(lab, g, Ride44(lab, g, root, p.StartStation, [new(p.StartStation, p)], end));
+            return new Exact44(Measure44(lab, g, exact, false), exact);
+        }).OrderByDescending(x => x.Score.Station >= end).ThenBy(x =>
+            x.Score.Station >= end ? x.Score.Seconds : -x.Score.Station).ThenBy(x => x.Score.Id).ToArray();
+        var winner = examined[0];
+        var m = winner.Run.Motion;
+        Save(Path.Combine(output, "support-certification.json"), new
+        {
+            InitialExact = screening.Exact, Exact = examined.Select(x => x.Score), Selected = winner.Score,
+            FourPass = winner.Score.Station >= end - .001, NativeWorlds = 0
+        });
+        WriteEvidence39(lab, output, "support-certification-selected", g, m.Seed, m.Tape, m.Flight);
+        Console.WriteLine($"H43 additional rider checks: {examined.Length} exact, top {winner.Score.Station:F3} m, {winner.Score.Stop}.");
+    }
+
     private static void Replan44(Lab38 lab, string output)
     {
         var g = lab.Geometry(true);

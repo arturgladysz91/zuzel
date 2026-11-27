@@ -59,6 +59,11 @@ def stages(root):
         result[name] = {"screened": len(proposals), "verified": len(exact),
                         "fastestAcceptedSeconds": min((x["Seconds"] for x in exact if x["Pass"]), default=None),
                         "passed": sum(p["Pass"] for p in exact)}
+    if (root / "support-certification.json").is_file():
+        assist = read(root / "support-recourse.json")
+        cert = read(root / "support-certification.json")
+        assert len(assist["Proposals"]) == 3 and len(cert["Exact"]) == 2
+        assert cert["InitialExact"] == assist["Exact"] and cert["NativeWorlds"] == 0
     return result
 
 

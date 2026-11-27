@@ -42,12 +42,14 @@ internal static partial class Study191
         if (mode is "repeat" or "all") RepeatLine44(lab, output);
         if (mode == "support-recourse" || (mode == "all" && File.Exists(Path.Combine(output, "initial-four.json.gz"))))
             SupportRecourse44(lab, output);
+        if (mode == "support-checks" || (mode == "all" && File.Exists(Path.Combine(output, "support-recourse.json"))))
+            CertifySupport44(lab, output);
         if (mode is "recourse" or "all") Replan44(lab, output);
         if (mode is "speed-recourse" or "all") SpeedRecourse44(lab, output);
         if (mode is "feedback" or "all") Hold44(lab, output);
         if (mode is "verify" or "all") VerifyStudy44(lab, output);
-        if (mode is not ("references" or "speed-references" or "queued-references" or "review-references" or "line" or "speed" or "repeat" or "support-recourse" or "recourse" or "speed-recourse" or "feedback" or "verify" or "all"))
-            throw new ArgumentException("Use references, speed-references, queued-references, review-references, line, speed, repeat, support-recourse, recourse, speed-recourse, feedback, verify or all.");
+        if (mode is not ("references" or "speed-references" or "queued-references" or "review-references" or "line" or "speed" or "repeat" or "support-recourse" or "support-checks" or "recourse" or "speed-recourse" or "feedback" or "verify" or "all"))
+            throw new ArgumentException("Use references, speed-references, queued-references, review-references, line, speed, repeat, support-recourse, support-checks, recourse, speed-recourse, feedback, verify or all.");
     }
 
     private static double SecondExit44(Lab38 lab) => Map199.At(2, 1).Exit - lab.Bend.Entry;
