@@ -158,7 +158,10 @@ def publish(raw, target):
                          "support.json.gz", "support-exact.json.gz", "sustain.json.gz", "speed-recovery.json.gz", "runtime.json", "feedback-freeze.json", "holdouts.json",
                          "standing.json", "reproduced-feedback.json", "best-laps.json.gz", "sporting-gates.json",
                          "independent-proof.json"}:
-            shutil.copyfile(path, target / path.name)
+            if path.suffix == ".json":
+                (target / path.name).write_bytes(path.read_bytes().replace(b"\r\n", b"\n"))
+            else:
+                shutil.copyfile(path, target / path.name)
             continue
         stem = path.name.removesuffix(".json.gz")
         if path.name.endswith(".json.gz") and stem.startswith(("lines-", "transition-", "speed-", "support-", "sustain-", "best-lap-", "runtime-",
