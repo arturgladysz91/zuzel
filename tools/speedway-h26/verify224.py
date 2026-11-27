@@ -130,6 +130,18 @@ def main():
     stage = stages(root)
     control = feedback(root)
     independent = proofs(root)
+    full_root_count = len(independent)
+    extra = root / "support-certification.json"
+    if extra.is_file():
+        cert = read(extra)
+        chosen = cert["Selected"]
+        assert chosen in cert["Exact"]
+        trace = root / "support-certification-selected.json.gz"
+        rows = read(trace)["Rows"]
+        assert math.isclose(rows[-1]["ReferenceMeters"], chosen["Station"], abs_tol=1e-8)
+        assert chosen["Swept"] >= .5 and chosen["Hard"] > 0
+        assert cert["FourPass"] == (chosen["Station"] >= 4 * 318.77874994277954 + 22 - .001)
+        independent["support-certification-selected"] = verified(trace)
     prior, parent_failures = regression(root / "parent.trx.gz")
     current, current_failures = regression(root / "current.trx.gz")
     assert prior == current and current["passed"] == 50 and current["failed"] == 10
@@ -144,7 +156,8 @@ def main():
                 manifest[path.relative_to(root).as_posix()] = {
                     "bytes": path.stat().st_size, "sha256": hashlib.file_digest(stream, "sha256").hexdigest()}
     write(root / "manifest.json", manifest)
-    print(f"{len(independent)} independently replayed trajectories, 192 staged proposals, {len(manifest)} evidence files.")
+    print(f"{full_root_count} independent full-root replays, {len(independent)} checked traces, "
+          f"192 staged proposals, {len(manifest)} evidence files.")
 
 
 if __name__ == "__main__":
