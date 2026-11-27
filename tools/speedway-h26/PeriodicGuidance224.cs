@@ -209,6 +209,18 @@ internal static partial class Study191
                 (1 - Smooth37(Math.Max(0, local) / 19));
             var posture = new Vec215(.045 * phase + p.RiderBias * prepare, .020 * phase + .005 * Math.Clamp(-crossError, -2, 2),
                 -.025 * phase - .32 * p.RiderBias * prepare);
+            if (p.SupportReserve > 0)
+            {
+                double rearward = g.Neutral.X - s.Rider.X - .10 * motion.RiderRate.X;
+                double urgency = Smooth37((rearward - .025) / .095);
+                double coursePhase = station - lab.Bend.Entry;
+                coursePhase -= Half44 * Math.Floor(coursePhase / Half44);
+                double fromExit = coursePhase - lab.Bend.Length;
+                double exitWindow = Smooth37((fromExit + 18) / 18) * (1 - Smooth37((fromExit - 4) / 22));
+                double blend = Math.Max(urgency, .42 * exitWindow) * p.SupportReserve;
+                free = Math.Min(free, 1 - .94 * blend);
+                posture += new Vec215(.08, 0, -.018) * blend;
+            }
             return new(curve, lean, preview, 3.6 * targetSpeed, (float)Math.Clamp(free, 0, 1), posture, .35 * phase * phase);
         }
     }

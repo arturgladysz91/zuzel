@@ -14,7 +14,7 @@ internal static partial class Study191
     private sealed record Route44(int Id, Guide44 Guide, double EntryOutside, double Inside, double ExitOutside,
         double LeadMeters, double PreviewMeters, double StraightKph, double TurnAcceleration, double Deceleration,
         double LeanScale, double Damping, double ThrottleBias, double RiderBias, double EarlyHeading, double ExitDrive,
-        double StartStation, double? Band = null, bool PreserveFrontier = false);
+        double StartStation, double? Band = null, bool PreserveFrontier = false, double SupportReserve = 0);
     private sealed record Piece44(double Start, Route44 Route);
     private sealed record StateDecision44(double Time, double Station, int Route, float Drive, double Steering,
         double TargetOffset, double TargetRoll, double AimSpeed, double Heading, double Aperture,
@@ -39,13 +39,15 @@ internal static partial class Study191
         if (mode is "queued-references" or "all") TrackerSet44(lab, output, queued: true);
         if (mode is "line" or "all") Explore44(lab, output, highSpeed: false);
         if (mode is "speed" or "all") Explore44(lab, output, highSpeed: true);
-        if (mode == "repeat") RepeatLine44(lab, output);
+        if (mode is "repeat" or "all") RepeatLine44(lab, output);
+        if (mode == "support-recourse" || (mode == "all" && File.Exists(Path.Combine(output, "initial-four.json.gz"))))
+            SupportRecourse44(lab, output);
         if (mode is "recourse" or "all") Replan44(lab, output);
         if (mode is "speed-recourse" or "all") SpeedRecourse44(lab, output);
         if (mode is "feedback" or "all") Hold44(lab, output);
         if (mode is "verify" or "all") VerifyStudy44(lab, output);
-        if (mode is not ("references" or "speed-references" or "queued-references" or "review-references" or "line" or "speed" or "repeat" or "recourse" or "speed-recourse" or "feedback" or "verify" or "all"))
-            throw new ArgumentException("Use references, speed-references, queued-references, review-references, line, speed, repeat, recourse, speed-recourse, feedback, verify or all.");
+        if (mode is not ("references" or "speed-references" or "queued-references" or "review-references" or "line" or "speed" or "repeat" or "support-recourse" or "recourse" or "speed-recourse" or "feedback" or "verify" or "all"))
+            throw new ArgumentException("Use references, speed-references, queued-references, review-references, line, speed, repeat, support-recourse, recourse, speed-recourse, feedback, verify or all.");
     }
 
     private static double SecondExit44(Lab38 lab) => Map199.At(2, 1).Exit - lab.Bend.Entry;

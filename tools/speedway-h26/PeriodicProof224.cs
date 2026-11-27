@@ -11,7 +11,7 @@ internal static partial class Study191
     {
         var g = lab.Geometry(true);
         var names = new[] { "line-selected", "speed-selected", "speed-peak-diagnostic", "recourse-selected",
-            "initial-four", "four-attempt", "speed-recourse-selected", "feedback-nominal", "carrier-retained-nominal" };
+            "initial-four", "support-recourse-selected", "four-attempt", "speed-recourse-selected", "feedback-nominal", "carrier-retained-nominal" };
         var recovered = names.Where(n => File.Exists(Path.Combine(output, n + ".json.gz"))).AsParallel().AsOrdered()
             .WithDegreeOfParallelism(Jobs44).Select(name =>
         {

@@ -15,7 +15,10 @@ internal static partial class Study191
         var g = lab.Geometry(true);
         var search = Read199<Stage44>(Path.Combine(output, "line-search.json.gz"));
         if (!search.Winner.Pass)
-            throw new InvalidOperationException("The exact initial line must pass two laps before a four-lap test.");
+        {
+            Console.WriteLine("H43 initial repeat skipped at the exact two-lap gate.");
+            return;
+        }
         var selected = search.Winner.Schedule;
         var seed = Archived44(lab, "speedway222/qualification/nominal", "frozen H41 carrier source");
         double finish = 4 * Frame.LapMeters + PostMarkerMeters43;
@@ -29,6 +32,39 @@ internal static partial class Study191
         });
         WriteEvidence39(lab, output, "initial-four", g, m.Seed, m.Tape, m.Flight);
         Console.WriteLine($"H43 initial four-lap test: {facts.Station:F3} m, {facts.Stop}.");
+    }
+
+    private static void SupportRecourse44(Lab38 lab, string output)
+    {
+        var g = lab.Geometry(true);
+        var initial = ReadMotion42(lab, Path.Combine(output, "initial-four.json.gz"), "initial four-lap attempt");
+        var route = ReadPlain214<Piece44[]>(Path.Combine(output, "line-selected-policy.json"))[0].Route;
+        double end = 4 * Frame.LapMeters + PostMarkerMeters43;
+        double firstExit = 2 * Frame.LapMeters + lab.Bend.Length;
+        // Change commands from valid states well before the recorded loss of rearward travel.
+        var selected = new[] { (BeforeExit: 31d, Reserve: .95), (BeforeExit: 22d, Reserve: 1d), (BeforeExit: 11d, Reserve: .68) };
+        var plans = selected.Select((p, n) => route with { Id = 475 + n,
+            StartStation = Math.Min(firstExit - p.BeforeExit, initial.Flight.Final.Distance - 12),
+            SupportReserve = p.Reserve }).ToArray();
+        var screen = plans.AsParallel().WithDegreeOfParallelism(3).Select(p =>
+        {
+            var r = Ride44(lab, g, initial, p.StartStation, [new(p.StartStation, p)], end);
+            return (Policy: p, Facts: Measure44(lab, g, r, false));
+        }).OrderByDescending(t => t.Facts.Station >= end).ThenBy(t =>
+            t.Facts.Station >= end ? t.Facts.Seconds : -t.Facts.Station).ThenBy(t => t.Policy.Id).ToArray();
+        var best = screen[0].Policy;
+        var exact = ExactReplay44(lab, g, Ride44(lab, g, initial, best.StartStation, [new(best.StartStation, best)], end));
+        var key = "support-recourse-selected";
+        var m = exact.Motion;
+        var result = Measure44(lab, g, exact, false);
+        Save(Path.Combine(output, "support-recourse.json"), new
+        {
+            FirstStop = initial.Flight.Stop, InitialStation = initial.Flight.Final.Distance,
+            Proposals = screen.Select(t => new { t.Policy, t.Facts }), Exact = result,
+            FourPass = result.Station >= end - .001, NativeWorlds = 0
+        });
+        WriteEvidence39(lab, output, key, g, m.Seed, m.Tape, m.Flight);
+        Console.WriteLine($"H43 rider support recourse: {result.Station:F3} m, {result.Stop}.");
     }
 
     private static void Replan44(Lab38 lab, string output)
