@@ -5,7 +5,7 @@ internal static partial class Study191
     private sealed record TraceProof44(string Name, bool ExactTerminal, double PositionError, double LinearError,
         double AngularError, double Boundary, double Ground, double MaximumEnergyError,
         double MaximumMuscleForce, double MaximumMusclePower, double Station, int Steps, int Commands,
-        double AcceptedPathMeters, LapReceipt44[] Laps, string Stop);
+        double AcceptedPathMeters, LapReceipt44[] Laps, Phase43[] Seams, string Stop);
 
     private static void VerifyStudy44(Lab38 lab, string output)
     {
@@ -36,7 +36,10 @@ internal static partial class Study191
             var proof = new TraceProof44(name, a == b, (a.Center - b.Center).Norm, (a.Momentum - b.Momentum).Norm,
                 (a.Angular - b.Angular).Norm, f.Boundary, f.Ground, work, force, power, station, records.Length, m.Tape.Length,
                 records.Skip(mark + 1).Sum(r => (r.After.Center - r.Before.Center).Plane.Norm),
-                Enumerable.Range(0, laps).Select(n => Lap44(lab, g, m, n)).ToArray(), f.Stop);
+                Enumerable.Range(0, laps).Select(n => Lap44(lab, g, m, n)).ToArray(),
+                Enumerable.Range(0, laps + 1).Select(n => n * Frame.LapMeters)
+                    .Where(mark => mark <= station).Select(mark => AtPhase43(lab, g, m, mark)).ToArray(),
+                f.Stop);
             return (Motion: m, Data: proof);
         }).ToArray();
         Save(Path.Combine(output, "replay-proof.json"), new { Base = Base44, Proofs = recovered.Select(r => r.Data), NativeWorlds = 0 });

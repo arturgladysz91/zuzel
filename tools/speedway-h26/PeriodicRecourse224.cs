@@ -148,13 +148,13 @@ internal static partial class Study191
         var baseFile = Path.Combine(lab.Root, "data/experiments/speedway222/qualification/freeze.json");
         var baseline = ReadPlain214<Qualification42>(Path.Combine(lab.Root, "data/experiments/speedway222/qualification/qualification.json")).Policy;
         var input = MatchInputs42(lab);
-        var schedule = ReadPlain214<Piece44[]>(Path.Combine(output, "recourse-combined-policy.json"));
+        var schedule = ReadPlain214<Piece44[]>(Path.Combine(output, "line-selected-policy.json"));
         double linkEnd = SecondExit44(lab) + PostMarkerMeters43;
         double horizon = 2 * Frame.LapMeters + PostMarkerMeters43;
         double feasibleFork = Math.Min(schedule[0].Start, linkEnd - .15);
         HeldSeed38[] held = [new("new inside lower", -.23, -.057, .0043), new("new outside faster", .24, .064, .0060),
             new("new outside lower", -.15, .084, .0082), new("new inside faster", .32, -.091, .0102)];
-        var frozen = new Frozen44("H41 policy 58 carrier with H43 reachability-gated continuation", schedule,
+        var frozen = new Frozen44("H41 policy 58 carrier with the first exact H43 two-lap line", schedule,
             feasibleFork, horizon, baseline, held);
         Save(Path.Combine(output, "feedback-freeze.json"), new { frozen, ParentPolicyFile = Path.GetFileName(Path.GetDirectoryName(baseFile)),
             CarrierRetainedThroughSecondExitPlus22 = true, NativeWorlds = 0 });
