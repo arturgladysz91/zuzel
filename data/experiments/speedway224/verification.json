@@ -1,0 +1,109 @@
+{
+  "stages": {
+    "line": {
+      "screened": 64,
+      "verified": 6,
+      "fastestAcceptedSeconds": 37.6243853319649,
+      "passed": 5
+    },
+    "speed": {
+      "screened": 64,
+      "verified": 12,
+      "fastestAcceptedSeconds": null,
+      "passed": 0
+    },
+    "recourse": {
+      "screened": 64,
+      "verified": 6,
+      "fastestAcceptedSeconds": 37.15251033196461,
+      "passed": 3
+    }
+  },
+  "feedback": {
+    "carrierLinked": 5,
+    "experimentalLinked": 5,
+    "retainedLinked": 5
+  },
+  "replays": {
+    "line-selected": {
+      "rows": 24052,
+      "commands": 687,
+      "maximumEnergyErrorJ": 0.0009670354428146801,
+      "minimumHardPartM": 0.003360131127904078,
+      "stop": "completed linked horizon"
+    },
+    "speed-selected": {
+      "rows": 12118,
+      "commands": 310,
+      "maximumEnergyErrorJ": 0.0011126178181510723,
+      "minimumHardPartM": 0.005067727179636112,
+      "stop": "swept boundary clearance"
+    },
+    "speed-peak-diagnostic": {
+      "rows": 8595,
+      "commands": 234,
+      "maximumEnergyErrorJ": 0.003925243545491045,
+      "minimumHardPartM": 0.0016118997513600312,
+      "stop": "adaptive candidate exhaustion: swept hard-part ground"
+    },
+    "initial-four": {
+      "rows": 27271,
+      "commands": 1299,
+      "maximumEnergyErrorJ": 0.009540177625496976,
+      "minimumHardPartM": 0.0021598053149626062,
+      "stop": "rider travel envelope"
+    },
+    "speed-recourse-selected": {
+      "rows": 8536,
+      "commands": 236,
+      "maximumEnergyErrorJ": 0.00391311866600947,
+      "minimumHardPartM": 0.002611660697735017,
+      "stop": "adaptive candidate exhaustion: swept boundary clearance"
+    },
+    "carrier-retained-nominal": {
+      "rows": 14317,
+      "commands": 399,
+      "maximumEnergyErrorJ": 0.00482633235143991,
+      "minimumHardPartM": 0.0005755019812252364,
+      "stop": "adaptive candidate exhaustion: swept hard-part ground"
+    },
+    "recourse-selected": {
+      "rows": 23992,
+      "commands": 679,
+      "maximumEnergyErrorJ": 0.0010040555427672988,
+      "minimumHardPartM": 0.003360131127904078,
+      "stop": "completed linked horizon"
+    },
+    "four-attempt": {
+      "rows": 24573,
+      "commands": 699,
+      "maximumEnergyErrorJ": 0.001203419473902894,
+      "minimumHardPartM": 0.0002759621637180793,
+      "stop": "swept hard-part ground"
+    },
+    "support-recourse-selected": {
+      "rows": 33946,
+      "commands": 1305,
+      "maximumEnergyErrorJ": 0.0029492826162665162,
+      "minimumHardPartM": 0.0031885011970190415,
+      "stop": "swept hard-part ground"
+    },
+    "support-certification-selected": {
+      "rows": 34120,
+      "commands": 1308,
+      "maximumEnergyErrorJ": 0.0009734799188607869,
+      "minimumHardPartM": 0.0003520624269399738,
+      "stop": "swept hard-part ground"
+    }
+  },
+  "parent": {
+    "total": 60,
+    "passed": 50,
+    "failed": 10
+  },
+  "current": {
+    "total": 60,
+    "passed": 50,
+    "failed": 10
+  }
+}
