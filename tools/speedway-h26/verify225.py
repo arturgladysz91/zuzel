@@ -1,6 +1,5 @@
 """Check Study #225 evidence and the paired native gate."""
 import argparse
-import gzip
 import hashlib
 import json
 from pathlib import Path
@@ -37,7 +36,11 @@ def check_stage(root, name, expected):
 
 def verify(root):
     stages = {n: check_stage(root, n, count)
-              for n, count in [("lines", 64), ("transition", 64), ("support", 56), ("speed", 60)]}
+              for n, count in [("lines", 64), ("transition", 64), ("support", 56), ("sustain", 56), ("speed", 60)]}
+    support = read(root / "support.json.gz")
+    rechecked = read(root / "support-exact.json.gz")["Proofs"]
+    assert {r["Id"] for r in rechecked} == ({r["Plan"]["Id"] for r in support["Screen"] if r["Finished"]}
+                                           - {r["Plan"]["Id"] for r in support["Exact"]})
     speed = read(root / "speed.json.gz")
     assert {r["Plan"]["SpeedBand"] for r in speed["Screen"]} == {100, 105, 110, 115, 120}
     continuation = read(root / "speed-recovery.json.gz")
@@ -46,6 +49,10 @@ def verify(root):
     references = read(root / "references.json")
     assert references["NativeWorlds"] == 0 and len(references["Reproduced"]) == 8
     assert all(r["PositionError"] < .002 and r["MomentumError"] <= .12 for r in references["Reproduced"])
+    reproduced = read(root / "reproduced-feedback.json")["Reproduced"]
+    assert len(reproduced) == 5 and all(all(x["Comparisons"].values()) for x in reproduced)
+    for case in read(root / "discrepancies.json.gz")["Cases"]:
+        assert case["ReducedRoot"] == case["Exact"] and case["Rejected"]["SweptGround"] <= 0
     holdouts = read(root / "holdouts.json")
     assert holdouts["freeze"] == read(root / "feedback-freeze.json")
     assert len(holdouts["Trials"]) == 4
@@ -58,7 +65,11 @@ def verify(root):
         with (root / path).open("rb") as source:
             assert hashlib.file_digest(source, "sha256").hexdigest() == expected["sha256"]
         assert (root / path).stat().st_size == expected["bytes"]
-    return {"stages": stages, "tapes": tapes, "regression": current, "checkedDigests": len(manifest)}
+    proofs = read(root / "independent-proof.json")["Proofs"]
+    assert proofs and all(p["PositionErrorM"] < .002 and p["Boundary"] >= .50 and p["Ground"] > 0 for p in proofs)
+    assert all(p["Energy"]["MaximumMuscleN"] <= 700.00001 and p["Energy"]["MaximumMuscleWatts"] <= 350.00001 for p in proofs)
+    return {"stages": stages, "tapes": tapes, "recheckedSupport": len(rechecked), "independentReplays": len(proofs),
+            "regression": current, "checkedDigests": len(manifest)}
 
 
 if __name__ == "__main__":

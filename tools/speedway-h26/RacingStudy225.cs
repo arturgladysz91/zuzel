@@ -54,7 +54,9 @@ internal static partial class Study191
             case "holdouts": Holdouts45(lab, g, output); break;
             case "standing": Standing45(lab, g, output); break;
             case "verify": Verify45(lab, g, output); break;
-            default: throw new ArgumentException("Use references, discrepancies, limits, lines, transition, support, support-exact, sustain, speed, speed-recovery, runtime, holdouts, standing or verify.");
+            case "gates": SportingGates45(lab, g, output); break;
+            case "best-lap": BestLaps45(lab, g, output); break;
+            default: throw new ArgumentException("Use references, discrepancies, limits, lines, transition, support, support-exact, sustain, speed, speed-recovery, runtime, holdouts, standing, verify, gates or best-lap.");
         }
     }
 

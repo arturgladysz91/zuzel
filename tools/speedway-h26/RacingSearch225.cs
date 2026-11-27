@@ -191,6 +191,29 @@ internal static partial class Study191
         Save(Path.Combine(output, "support-exact.json.gz"), new { Proofs = result.Select(x => x.Proof) }, true);
     }
 
+    private static void BestLaps45(Lab38 lab, Geometry215 g, string output)
+    {
+        var paths = new[] { "lines", "transition", "support", "sustain" };
+        var reports = paths.Select(n => Read199<Stage45>(Path.Combine(output, n + ".json.gz"))).ToArray();
+        var supplemental = Read199<SupportCertificate45>(Path.Combine(output, "support-exact.json.gz"));
+        var collected = reports.SelectMany(x => x.Exact).Concat(supplemental.Proofs.Select(x => x.Exact))
+            .Where(x => x.Station >= Pair45 - .001 && x.Laps.Length >= 2 && x.Laps[1].Seconds.HasValue).ToArray();
+        var byLap = collected.OrderBy(x => x.Laps[1].Seconds).ToArray();
+        var byPair = collected.OrderBy(x => x.Laps[0].Seconds + x.Laps[1].Seconds).ToArray();
+        var root = Archived44(lab, "speedway222/qualification/nominal", "best complete lap carrier");
+        var outputScores = new List<Summary45>();
+        foreach (var score in new[] { byLap[0], byPair[0] }.DistinctBy(x => x.Plan.Id))
+        {
+            var run = Certify45(lab, g, Ride45(lab, g, root, reports[0].Fork, score.Plan, score.Finish, exact: true));
+            var result = Summarize45(lab, g, run, score.Finish, SecondExit44(lab));
+            if (Math.Abs(score.Station - result.Station) > .003)
+                throw new InvalidOperationException($"Complete lap {score.Plan.Id} failed its independent roll-out.");
+            SaveRun45(lab, g, output, "best-lap-" + score.Plan.Id, run, result);
+            outputScores.Add(result);
+        }
+        Save(Path.Combine(output, "best-laps.json.gz"), new { ByLap = byLap, ByPair = byPair, Reproduced = outputScores }, true);
+    }
+
     private static void SaveRun45(Lab38 lab, Geometry215 g, string output, string name, Running45 run, Summary45 score)
     {
         var m = run.Motion;
@@ -252,7 +275,7 @@ internal static partial class Study191
         var carrier = ReadPlain214<Qualification42>(
             Path.Combine(lab.Root, "data/experiments/speedway222/qualification/qualification.json")).Policy;
         var input = MatchInputs42(lab);
-        var trials = freeze.Starts.Select((h, n) =>
+        var trials = freeze.Starts.AsParallel().AsOrdered().WithDegreeOfParallelism(4).Select((h, n) =>
         {
             long cpu = ThreadTicks43();
             var parent = Adaptive42(lab, g, FirstArc42(lab, g, input, h), input.Carrier, carrier);

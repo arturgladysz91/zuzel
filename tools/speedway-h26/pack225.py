@@ -3,7 +3,9 @@ import argparse
 import gzip
 import hashlib
 import json
+import math
 import shutil
+import struct
 from pathlib import Path
 
 import matplotlib
@@ -39,6 +41,41 @@ def compact(raw, output, name):
         "MinimumHard": min(r["SweptGround"] for r in rows),
     })
     return archive
+
+
+def measure_line(archive):
+    # Stock fixture mass and the float-valued constants used in UnifiedModel215.
+    mass_kg, base_resistance_n = 147, 40
+    (quadratic_resistance,) = struct.unpack("f", struct.pack("f", .20))
+    sections = [(232.7787499428, 256.7787499428), (256.7787499428, 278.7787499428),
+                (318.7787499428, 637.5574998856)]
+    results = []
+    for begin, end in sections:
+        tyre = drag = seconds = 0.0
+        direction, reversals = 0, 0
+        prior = archive["Seed"]
+        for row in archive["Rows"]:
+            state, station = row["State"], row["ReferenceMeters"]
+            if station >= begin:
+                dt = state["Time"] - prior["Time"]
+                average_momentum = [(.5 * (state["Momentum"][axis] + prior["Momentum"][axis])) for axis in "XY"]
+                speed = math.hypot(*average_momentum) / mass_kg
+                drag_power = (base_resistance_n + quadratic_resistance * speed * speed) * speed * speed / math.sqrt(speed * speed + .25)
+                tyre += (row["ContactAndDragLoss"] - drag_power) * dt
+                drag += drag_power * dt
+                seconds += dt
+                steer = state["Steer"]
+                current = 1 if steer > .0015 else -1 if steer < -.0015 else 0
+                if current:
+                    reversals += int(direction != 0 and direction != current)
+                    direction = current
+                if station >= end:
+                    break
+            prior = state
+        results.append({"Begin": begin, "End": end, "Completed": station >= end, "IntegratedSeconds": seconds,
+                        "TyreShearJ": tyre, "ResistanceJ": drag, "SteeringSignReversals": reversals,
+                        "SteeringDeadbandRad": .0015})
+    return results
 
 
 def chart(directory, lines):
@@ -79,7 +116,7 @@ def rider_chart(directory, history):
     original = [r for r in original if 724.5 <= r["Station"]]
     keys = [
         ("ActiveDrive", "Active Drive", lambda r: r["ActiveDrive"]),
-        ("Front and pads", "Load (N)", lambda r: r["Front"]),
+        ("Front normal load", "Load (N)", lambda r: r["Front"]),
         ("Pitch", "Pitch (rad)", lambda r: r["Pitch"]),
         ("Rider travel", "Relative rider X (m)", lambda r: r["RelativePosition"]["X"]),
         ("Power", "Muscle power (W)", lambda r: r["AbsolutePower"]),
@@ -92,6 +129,8 @@ def rider_chart(directory, history):
     pads = ["Seat", "LeftPeg", "RightPeg", "LeftGrip", "RightGrip"]
     axes[1].plot([r["Station"] for r in original],
                  [sum(max(0, (r[p] or {}).get("Z", 0)) for p in pads) for r in original], label="Pad vertical total")
+    axes[1].plot([r["Station"] for r in original], [r["Rear"] for r in original],
+                 linewidth=.9, linestyle="--", label="Rear normal load")
     axes[1].legend()
     axes[3].axhline(-.36, color="#aa2d2d", linestyle="--")
     axes[4].axhline(350, color="#aa2d2d", linestyle="--")
@@ -109,6 +148,7 @@ def publish(raw, target):
         rider_chart(target, audit)
     else:
         profiles = []
+    line_losses = {}
     for path in sorted(raw.glob("*.json*")):
         if path.name.endswith("-decisions.json.gz") or path.name.startswith("discrepancy-"):
             shutil.copyfile(path, target / path.name)
@@ -116,13 +156,19 @@ def publish(raw, target):
         if path.name in {"references.json", "rider-history.json.gz", "guide-geometry.json.gz", "discrepancies.json.gz",
                          "matched-limits.json.gz", "lines.json.gz", "transition.json.gz", "speed.json.gz",
                          "support.json.gz", "support-exact.json.gz", "sustain.json.gz", "speed-recovery.json.gz", "runtime.json", "feedback-freeze.json", "holdouts.json",
-                         "standing.json", "reproduced-feedback.json"}:
+                         "standing.json", "reproduced-feedback.json", "best-laps.json.gz", "sporting-gates.json",
+                         "independent-proof.json"}:
             shutil.copyfile(path, target / path.name)
             continue
         stem = path.name.removesuffix(".json.gz")
-        if path.name.endswith(".json.gz") and stem.startswith(("lines-", "transition-", "speed-", "support-", "sustain-", "runtime-",
+        if path.name.endswith(".json.gz") and stem.startswith(("lines-", "transition-", "speed-", "support-", "sustain-", "best-lap-", "runtime-",
                                                                "holdout-", "standing-")):
-            compact(raw, target, stem)
+            archive = compact(raw, target, stem)
+            if stem.startswith(("lines-", "transition-", "best-lap-")):
+                line_losses[stem] = measure_line(archive)
+    baseline = Path(__file__).resolve().parents[2] / "data/experiments/speedway224/line-selected.json.gz"
+    line_losses["frozen-h43"] = measure_line(read(baseline))
+    (target / "line-losses.json").write_text(json.dumps(line_losses, indent=2) + "\n", encoding="utf-8")
     for stage in ("lines", "transition"):
         file = raw / f"{stage}.json.gz"
         if not file.exists():

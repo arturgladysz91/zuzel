@@ -34,6 +34,22 @@ internal static partial class Study191
 
     private sealed record SupportCertificate45(SupportProof45[] Proofs);
 
+    private static void SportingGates45(Lab38 lab, Geometry215 g, string output)
+    {
+        double linked = SecondExit44(lab) + PostMarkerMeters43;
+        var files = Directory.GetFiles(output, "*-tape.json.gz")
+            .Where(p => !Path.GetFileName(p).StartsWith("discrepancy-"));
+        var scores = files.AsParallel().AsOrdered().WithDegreeOfParallelism(4).Select(path =>
+        {
+            var tape = Read199<Tape45>(path);
+            var seed = new Checkpoint38(tape.Seed, tape.SeedStation);
+            var flight = ReplayTape38(lab, g, seed, tape.Commands, tape.Terminal.Time, exact: true, endDistance: linked);
+            var run = new Fork40(tape.Name, seed, flight, tape.Commands);
+            return new { tape.Name, Horizon = linked, Score = Score43(lab, g, run) };
+        }).ToArray();
+        Save(Path.Combine(output, "sporting-gates.json"), new { Gates = scores, NativeWorlds = 0 });
+    }
+
     private static void Verify45(Lab38 lab, Geometry215 g, string output)
     {
         var files = Directory.GetFiles(output, "*-tape.json.gz").Where(p => !Path.GetFileName(p).StartsWith("discrepancy-")).ToArray();
